@@ -1,9 +1,9 @@
-name: res / public-boundary intake
+name: main / public-boundary receipt
 
 on:
   pull_request:
     branches:
-      - research
+      - main
     types:
       - opened
       - synchronize
@@ -19,9 +19,14 @@ concurrency:
 
 jobs:
   intake:
-    if: github.event.pull_request.draft == false
+    if: >-
+      vars.ACTIONS_BUDGET_MAIN == 'true' &&
+      github.event.pull_request.draft == false
     runs-on: ubuntu-24.04
     timeout-minutes: 2
+    environment:
+      name: main
+      deployment: false
     env:
       PYTHONDONTWRITEBYTECODE: "1"
     steps:
