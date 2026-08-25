@@ -1,0 +1,49 @@
+name: res / public-boundary intake
+
+on:
+  pull_request:
+    branches:
+      - research
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: res-public-boundary-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  intake:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - name: Receive the candidate revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Read public-boundary evidence
+        run: >-
+          python3 .github/public-boundary/check.py
+          --policy .github/public-boundary/policy.json
+          --receipt "$RUNNER_TEMP/res-public-boundary-receipt.json"
+          --summary "$GITHUB_STEP_SUMMARY"
+
+      - name: Retain the bounded receipt
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: res-public-boundary-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/res-public-boundary-receipt.json
+          if-no-files-found: error
+          retention-days: 1
