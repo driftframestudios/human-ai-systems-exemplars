@@ -113,9 +113,9 @@ their own reviewable changes.
 From August 25 through August 31, 2026, the successor repository has 200
 GitHub-hosted Actions minutes within the shared 2,000-minute profile envelope.
 The `res / public-boundary intake` workflow reads tracked text on non-draft pull
-requests targeting `research` and through purposeful manual dispatch. It uses
-one Linux job with a two-minute ceiling, read-only contents permission,
-superseded-run cancellation, and a one-day aggregate receipt.
+requests targeting `research`. It uses one Linux job with a two-minute ceiling,
+read-only contents permission, superseded-run cancellation, and a one-day
+aggregate receipt.
 
 Findings carry advisory standing during this first evidence window while merge
 authority stays with current reviewers. A profile threshold notification or
