@@ -75,3 +75,11 @@ Enterprise capability. The `prod` branch therefore supplies the present
 approval boundary: one approving pull-request review, stale-approval dismissal,
 and administrator inclusion. The empty `prod` environment awaits a later
 deployment job and the platform approval capability suited to it.
+
+## Sources
+
+- [GitHub deployments and environments](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments)
+- [GitHub configuration-variable timing](https://docs.github.com/en/actions/reference/workflows-and-actions/variables)
+- [GitHub Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions)
+- [Cloudflare Wrangler environments and configuration](https://developers.cloudflare.com/workers/wrangler/configuration/)
+- [Cloudflare Workers through GitHub Actions](https://developers.cloudflare.com/workers/ci-cd/external-cicd/github-actions/)
