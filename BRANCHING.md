@@ -33,10 +33,13 @@ only through a named service decision.
 review, revise, and merge bounded feature-level pull requests into it when the
 scope, evidence question, publication boundary, and recovery path are explicit.
 
-Use `research/<feature-slug>` for an isolated feature branch. A feature-level
-change answers one bounded question or supplies one locally reversible
-capability. Ordinary trunk collaboration may still target `main` directly when
-the current collaboration is already the complete receiving form.
+Use `res/<feature-slug>` for an isolated feature branch formed from current
+`research` and received through a pull request back into `research`. Git's ref
+hierarchy treats `research` as the complete long-lived ref, while the `res`
+environment label gives short-lived work a feasible and legible prefix. A
+feature-level change answers one bounded question or supplies one locally
+reversible capability. Ordinary trunk collaboration may still target `main`
+directly when the current collaboration is already the complete receiving form.
 
 Use `epic/<semantic-name>` for a target future spanning several features or
 materially changing repository architecture, schema posture, workflow, service,
@@ -104,6 +107,21 @@ Package verification and implementation or integration checks are welcome in
 publication secrets remain with dedicated environments. Workflow installation,
 budget expansion, branch rules, environment bindings, and deployments receive
 their own reviewable changes.
+
+### Approved first evidence window
+
+From August 25 through August 31, 2026, the successor repository has 200
+GitHub-hosted Actions minutes within the shared 2,000-minute profile envelope.
+The `res / public-boundary intake` workflow reads tracked text on non-draft pull
+requests targeting `research`. It uses one Linux job with a two-minute ceiling,
+read-only contents permission, superseded-run cancellation, and a one-day
+aggregate receipt.
+
+Findings carry advisory standing during this first evidence window while merge
+authority stays with current reviewers. A profile threshold notification or
+200 successor minutes returns hosted runs to rest; the same standard-library
+checker remains available for local evidence. A later receipt can propose
+required-check standing, wider triggers, or a longer budget.
 
 ## Working answers
 

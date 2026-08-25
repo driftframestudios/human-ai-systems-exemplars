@@ -1,0 +1,16 @@
+{
+  "contract": "public-boundary-intake/v1",
+  "repository": "driftframestudios/human-ai-systems-exemplars",
+  "repository_posture": "public-possible",
+  "standing": "advisory",
+  "evidence_window": {
+    "starts_on": "2026-08-25",
+    "ends_on": "2026-08-31",
+    "successor_minutes": 200,
+    "shared_profile_minutes": 2000
+  },
+  "max_text_file_bytes": 2000000,
+  "accepted_external_github_receivers": [
+    "github/gitignore"
+  ]
+}
