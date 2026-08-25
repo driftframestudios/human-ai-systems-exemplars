@@ -33,10 +33,13 @@ only through a named service decision.
 review, revise, and merge bounded feature-level pull requests into it when the
 scope, evidence question, publication boundary, and recovery path are explicit.
 
-Use `research/<feature-slug>` for an isolated feature branch. A feature-level
-change answers one bounded question or supplies one locally reversible
-capability. Ordinary trunk collaboration may still target `main` directly when
-the current collaboration is already the complete receiving form.
+Use `res/<feature-slug>` for an isolated feature branch formed from current
+`research` and received through a pull request back into `research`. Git's ref
+hierarchy treats `research` as the complete long-lived ref, while the `res`
+environment label gives short-lived work a feasible and legible prefix. A
+feature-level change answers one bounded question or supplies one locally
+reversible capability. Ordinary trunk collaboration may still target `main`
+directly when the current collaboration is already the complete receiving form.
 
 Use `epic/<semantic-name>` for a target future spanning several features or
 materially changing repository architecture, schema posture, workflow, service,
