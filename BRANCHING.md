@@ -33,10 +33,13 @@ only through a named service decision.
 review, revise, and merge bounded feature-level pull requests into it when the
 scope, evidence question, publication boundary, and recovery path are explicit.
 
-Use `research/<feature-slug>` for an isolated feature branch. A feature-level
-change answers one bounded question or supplies one locally reversible
-capability. Ordinary trunk collaboration may still target `main` directly when
-the current collaboration is already the complete receiving form.
+Use `res/<feature-slug>` for an isolated feature branch formed from current
+`research` and received through a pull request back into `research`. Git's ref
+hierarchy treats `research` as the complete long-lived ref, while the `res`
+environment label gives short-lived work a feasible and legible prefix. A
+feature-level change answers one bounded question or supplies one locally
+reversible capability. Ordinary trunk collaboration may still target `main`
+directly when the current collaboration is already the complete receiving form.
 
 Use `epic/<semantic-name>` for a target future spanning several features or
 materially changing repository architecture, schema posture, workflow, service,
@@ -81,10 +84,9 @@ reproducibility evidence while the accepted branch becomes the current source.
 An unselected but useful experiment can rest in `research` with a compact
 receipt until a future question rehydrates it.
 
-## Research Actions and evidence budgets
+## Actions receivers and evidence budgets
 
-Research Actions begin as bounded, manually observable experiments. A workflow
-proposal names:
+Actions begin as bounded, observable evidence work. A workflow proposal names:
 
 - the research question and expected evidence;
 - trigger and path scope;
@@ -94,16 +96,30 @@ proposal names:
 - the event that returns the workflow to rest; and
 - the human-reviewed condition for wider triggers or promotion.
 
-Manual dispatch and narrowly scoped research pull-request triggers are the
-leanest starting points. Superseded equivalent runs can be cancelled, artifacts
-can use the shortest useful retention window, and scheduled or expanded matrix
-work can follow an observed-value receipt.
+Manual dispatch and narrowly scoped pull-request triggers are the leanest
+starting points. Superseded equivalent runs can be cancelled, artifacts can use
+the shortest useful retention window, and scheduled or expanded matrix work can
+follow an observed-value receipt.
 
 Package verification and implementation or integration checks are welcome in
-`research` when they answer the named question. Production credentials and
-publication secrets remain with dedicated environments. Workflow installation,
-budget expansion, branch rules, environment bindings, and deployments receive
-their own reviewable changes.
+`research` when they answer the named question and its budget is active.
+Production credentials and publication secrets remain with dedicated
+environments. Workflow installation, budget expansion, branch rules,
+environment bindings, and deployments receive their own reviewable changes.
+
+### Current evidence window
+
+`main` is the sole budget-active receiver. Its public-boundary workflow reads
+tracked text on non-draft pull requests targeting the trunk. It uses one Linux
+job with a two-minute ceiling, read-only contents permission, superseded-run
+cancellation, and a one-day aggregate receipt. Findings retain advisory
+standing while merge authority stays with current reviewers.
+
+`research`, `res/*`, `dev`, `docs`, `stg`, `release`, and `prod` rest with budget
+values set to `false`. The shared profile envelope remains human-managed. A
+later evidence receipt can propose another active receiver, wider triggers, or
+a longer budget. `.github/ENVIRONMENTS.md` carries the operative receiver,
+serving, deployment, and credential-routing contract.
 
 ## Working answers
 
@@ -121,7 +137,8 @@ their own reviewable changes.
   recurring opportunity, clarifies expectations, or supplies evidence required
   by a named receiver.
 - Actions begin with manual or pull-request scope. Observed value can justify a
-  schedule, larger matrix, longer retention, or recurring spend.
+  schedule, larger matrix, longer retention, another active receiver, or
+  recurring spend.
 
 ## Pull-request receipts
 
