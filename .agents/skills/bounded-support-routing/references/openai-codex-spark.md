@@ -20,7 +20,7 @@ Spark benefits from a concrete receiving surface and a compact return. Add the f
 - identify the repository or worktree, starting branch, and starting revision;
 - name the exact files, route, component, or question receiving attention;
 - write the requested result as one observable state;
-- select `observation_only` or `repair_authorized` before listing commands or tools;
+- select `observation_only`, `repair_authorized`, `implementation_authorized`, or `recovery_authorized` before listing commands or tools;
 - state whether browser observation, file edits, commits, pushes, pull requests, or external actions are granted;
 - name the return format and stopping event.
 
@@ -33,6 +33,14 @@ Spark reads, inspects, compares, and returns the expected observation. Repositor
 ### `repair_authorized`
 
 Spark changes the named surfaces through the granted actions, observes the requested result, and returns at the stated stop condition. Commit, push, pull-request, publication, and deployment actions appear individually when granted; platform or repository labels retain a navigation role while the enumerated actions remain the complete grant.
+
+### `implementation_authorized`
+
+Spark creates the named material result within the focal surface, uses only the listed delivery actions, and returns the fitting observation. A product choice, cross-surface refactor, or new external receiver returns for renewed solution routing when it extends beyond the packet.
+
+### `recovery_authorized`
+
+Spark exercises the named recovery action from the stated known-good coordinate, observes the regained state, and returns any remaining strain. Repair and new implementation remain available as successor packets when the recovery result calls for them.
 
 ## Issue #12 practitioner observation
 

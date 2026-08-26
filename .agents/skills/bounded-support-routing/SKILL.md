@@ -31,7 +31,7 @@ Use ordinary prose when it keeps the relationships clear. The labels below are a
 **Focal surface:** Which artifact, behavior, decision, or question receives attention?
 **Requested result:** What should be materially different or newly legible at return?
 **Route:** Solution | Implementation | Recovery
-**Action mode:** observation_only | repair_authorized
+**Action mode:** observation_only | repair_authorized | implementation_authorized | recovery_authorized
 **Granted actions:** Which specific reads, tools, edits, commands, or handoff actions are available?
 **Held boundaries:** Which adjacent states stay intact, and where should an out-of-scope finding go?
 **Expected observation:** What evidence or receiving state should the collaborator return?
@@ -54,7 +54,9 @@ A packet selects the route that owns the current result. Evidence or a fresh cue
 | Action mode | Available contribution | Boundary and replacement route |
 | --- | --- | --- |
 | `observation_only` | Read, inspect, compare, and return the expected observation. | Repository and external state remain as found. A repair opportunity returns as a bounded recommendation or proposed `repair_authorized` packet. |
-| `repair_authorized` | Perform the granted repair actions, observe the requested result proportionately, and return the changed surface. | Adjacent state stays intact. Any materially wider change returns to the owner for a fresh scope decision. |
+| `repair_authorized` | Correct the named defect through the granted repair actions, observe the result proportionately, and return the changed surface. | Adjacent state stays intact. A materially wider change returns to the owner for a fresh scope decision. |
+| `implementation_authorized` | Create the named material result through the granted implementation and delivery actions. | The packet's focal surface and receiving result bound the implementation. A broader product or system decision returns for renewed solution routing. |
+| `recovery_authorized` | Exercise the named recovery action, observe the regained state, and return remaining strain. | The known-good coordinate and recovery target lead. Follow-on repair or implementation receives its own packet. |
 
 Granted actions name concrete operations. A route label, issue label, skill name, model name, or workflow state provides orientation while the grant retains its stated size.
 
@@ -75,7 +77,7 @@ The receiver keeps a known-good point, records any remaining strain, and hands a
 1. **Frame the opportunity:** Name the useful condition this finite contribution can create.
 2. **Focalize the surface:** Identify the exact artifact, behavior, decision, or question and the adjacent state that stays intact.
 3. **Set expectation:** State the requested result, current route, and expected observation.
-4. **Bind action:** Select `observation_only` or `repair_authorized`, then enumerate the actions actually granted.
+4. **Bind action:** Select the narrowest action mode that carries the requested contribution, then enumerate the actions actually granted.
 5. **Prepare return:** Name the known-good point, recovery route, handback owner, and stop condition.
 6. **Carry the route:** Work only through the selected mode, return decision-changing evidence, and stop when the packet's event is observed.
 
