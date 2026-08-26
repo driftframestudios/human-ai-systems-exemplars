@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/collaboration-skills/0.1.0/collaboration-account.schema.json",
+  "title": "Collaboration account projection",
+  "description": "A compact typed account of an observation that changed a collaboration decision or skill route. The referenced human-readable account remains semantic authority.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "id",
+    "kind",
+    "name",
+    "observedOn",
+    "sourceRef",
+    "observation",
+    "decisionEffect",
+    "currentOwnerRef",
+    "route",
+    "smallestAction",
+    "evidenceBand",
+    "transferBoundary",
+    "reentryTrigger",
+    "relatedRefs"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "0.1.0"
+    },
+    "id": {
+      "type": "string",
+      "format": "uri"
+    },
+    "kind": {
+      "const": "collaboration_account"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observedOn": {
+      "type": "string",
+      "format": "date"
+    },
+    "sourceRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decisionEffect": {
+      "type": "string",
+      "minLength": 1
+    },
+    "currentOwnerRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "route": {
+      "enum": [
+        "create_now",
+        "iterate_now",
+        "queue_with_trigger",
+        "observe",
+        "settle_or_fold",
+        "merge_or_retire"
+      ]
+    },
+    "smallestAction": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidenceBand": {
+      "enum": [
+        "observed",
+        "human_declared",
+        "source_supported",
+        "inferred",
+        "open"
+      ]
+    },
+    "transferBoundary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reentryTrigger": {
+      "type": "string",
+      "minLength": 1
+    },
+    "relatedRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "additionalProperties": false
+}

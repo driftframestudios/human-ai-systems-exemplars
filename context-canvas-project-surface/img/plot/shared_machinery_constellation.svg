@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="shared-machinery-title shared-machinery-desc">
+  <title id="shared-machinery-title">Ten instruments route work by the change it must carry</title>
+  <desc id="shared-machinery-desc">A non-sequential route map groups ten Shared Machinery instruments into framing and selection, shaping and inspection, and staging and recovery. Each instrument names its durable object, changed ability, and stewardship investment.</desc>
+  <defs>
+    <pattern id="shared-machinery-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#2855f3" stroke-opacity=".07"/>
+    </pattern>
+    <filter id="shared-machinery-paper" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence baseFrequency=".7" numOctaves="1" seed="17" type="fractalNoise" result="noise"/>
+      <feColorMatrix in="noise" type="saturate" values="0" result="mono"/>
+      <feComponentTransfer in="mono"><feFuncA type="table" tableValues="0 .035"/></feComponentTransfer>
+      <feBlend in="SourceGraphic" mode="multiply"/>
+    </filter>
+    <style>
+      .ink{fill:#16345e}.muted{fill:#4c678d}.paper{fill:#fffdf7}.field{fill:#f4f7fd}.sea{fill:#dbf0f0}.powder{fill:#dbe9ff}.cream{fill:#fff0cf}.blush{fill:#ffd3d0}.lime{fill:#f2ff67}.cobalt{fill:#2855f3}.rule{stroke:#16345e;stroke-width:2}.route{stroke:#2855f3;stroke-width:3;fill:none}.shadow{fill:#16345e}.h1{font:700 38px Futura,Arial,sans-serif;letter-spacing:-.5px}.h2{font:700 20px Futura,Arial,sans-serif}.h3{font:700 17px Futura,Arial,sans-serif}.body{font:15px Arial,sans-serif}.small{font:13px Arial,sans-serif}.mono{font:700 12px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.2px}.white{fill:#fff}.caps{text-transform:uppercase}
+    </style>
+  </defs>
+
+  <rect width="1600" height="1120" class="field"/>
+  <rect x="32" y="32" width="1536" height="1056" rx="20" class="paper rule" filter="url(#shared-machinery-paper)"/>
+  <rect x="32" y="32" width="1536" height="168" rx="20" class="cobalt"/>
+  <rect x="32" y="176" width="1536" height="24" class="cobalt"/>
+  <g role="group" aria-labelledby="shared-machinery-header">
+    <title id="shared-machinery-header">Shared Machinery scope</title>
+    <text x="72" y="78" class="mono white">SHARED MACHINERY · TEN SOURCE-NATIVE INSTRUMENTS</text>
+    <text x="72" y="125" class="h1 white">Route by the work that must change</text>
+    <text x="72" y="160" class="body white">Choose a fitting frame, reading form, visual, staging surface, recovery condition, or handoff contract.</text>
+    <rect x="1260" y="72" width="252" height="78" rx="10" class="lime rule"/>
+    <text x="1282" y="101" class="mono ink">NON-SEQUENTIAL ROUTE MAP</text>
+    <text x="1282" y="126" class="small ink">Local nouns and boundaries</text>
+    <text x="1282" y="146" class="small ink">travel with each instrument.</text>
+  </g>
+
+  <g role="group" aria-labelledby="shared-machinery-object-title">
+    <title id="shared-machinery-object-title">The shared receiving object</title>
+    <rect x="412" y="222" width="784" height="86" rx="12" class="shadow" transform="translate(8 8)"/>
+    <rect x="412" y="222" width="784" height="86" rx="12" class="cream rule"/>
+    <text x="804" y="254" text-anchor="middle" class="mono ink">RECEIVING OBJECT</text>
+    <text x="804" y="284" text-anchor="middle" class="h2 ink">A reading, decision, or artifact that must remain usable as it travels</text>
+  </g>
+
+  <path d="M804 308V338H274V356H258V328H794V308Z" class="cobalt" aria-hidden="true"/>
+  <path d="M804 308V356H796V328H804V308Z" class="cobalt" aria-hidden="true"/>
+  <path d="M804 308V338H1344V356H1328V328H814V308Z" class="cobalt" aria-hidden="true"/>
+
+  <g role="group" aria-labelledby="frame-select-title">
+    <title id="frame-select-title">Frame and select instruments</title>
+    <rect x="72" y="356" width="456" height="502" rx="16" class="shadow" transform="translate(8 8)"/>
+    <rect x="72" y="356" width="456" height="502" rx="16" class="powder rule"/>
+    <text x="100" y="394" class="mono ink">FRAME + SELECT</text>
+    <text x="100" y="422" class="body ink">Name the ask, the scan, or the cognitive move.</text>
+
+    <rect x="100" y="452" width="400" height="112" rx="10" class="paper rule"/>
+    <text x="120" y="480" class="mono ink">PODA</text>
+    <text x="120" y="509" class="h3 ink">Carry the investment ask</text>
+    <text x="120" y="535" class="small muted">Purpose · Objectives · Discoverables · Activities</text>
+
+    <rect x="100" y="582" width="400" height="112" rx="10" class="paper rule"/>
+    <text x="120" y="610" class="mono ink">METADATA BLOCKS</text>
+    <text x="120" y="639" class="h3 ink">Make claims and obligations scannable</text>
+    <text x="120" y="659" class="small muted">Era · population · pivots · outcome</text>
+    <text x="120" y="680" class="small muted">Disclosure · currentness · rules when applicable</text>
+
+    <rect x="100" y="712" width="400" height="112" rx="10" class="paper rule"/>
+    <text x="120" y="740" class="mono ink">ORIENTATION INDEX</text>
+    <text x="120" y="769" class="h3 ink">Choose the smallest adequate architecture</text>
+    <text x="120" y="795" class="small muted">Cognitive move · fitting architecture · recovery route</text>
+  </g>
+
+  <g role="group" aria-labelledby="shape-inspect-title">
+    <title id="shape-inspect-title">Shape and inspect instruments</title>
+    <rect x="572" y="356" width="456" height="502" rx="16" class="shadow" transform="translate(8 8)"/>
+    <rect x="572" y="356" width="456" height="502" rx="16" class="sea rule"/>
+    <text x="600" y="394" class="mono ink">SHAPE + INSPECT</text>
+    <text x="600" y="422" class="body ink">Choose the form that preserves consequence and use.</text>
+
+    <rect x="600" y="452" width="400" height="112" rx="10" class="paper rule"/>
+    <text x="620" y="480" class="mono ink">COMPOSABLE READINGS</text>
+    <text x="620" y="509" class="h3 ink">Fit the reading to its consequence</text>
+    <text x="620" y="535" class="small muted">Eight teaching forms · local openings, spines, closes</text>
+
+    <rect x="600" y="582" width="400" height="112" rx="10" class="paper rule"/>
+    <text x="620" y="610" class="mono ink">VISUAL FIDELITY ATLAS</text>
+    <text x="620" y="639" class="h3 ink">Fit the visual to the cognitive move</text>
+    <text x="620" y="665" class="small muted">Data shape · audience · stakes · uncertainty</text>
+
+    <rect x="600" y="712" width="400" height="112" rx="10" class="paper rule"/>
+    <text x="620" y="740" class="mono ink">PLANNING SURFACE</text>
+    <text x="620" y="769" class="h3 ink">Make the area resolvable and transferable</text>
+    <text x="620" y="795" class="small muted">Entry · landmarks · reading anatomy · completeness</text>
+  </g>
+
+  <g role="group" aria-labelledby="stage-recover-title">
+    <title id="stage-recover-title">Stage and recover instruments</title>
+    <rect x="1072" y="356" width="456" height="502" rx="16" class="shadow" transform="translate(8 8)"/>
+    <rect x="1072" y="356" width="456" height="502" rx="16" class="blush rule"/>
+    <text x="1100" y="394" class="mono ink">STAGE + RECOVER</text>
+    <text x="1100" y="422" class="body ink">Keep unfinished, resting, and cross-tool work resumable.</text>
+
+    <rect x="1100" y="448" width="400" height="84" rx="10" class="paper rule"/>
+    <text x="1120" y="476" class="mono ink">CONCEPT NURSERY</text>
+    <text x="1120" y="506" class="small ink">Grow work before its final home is known</text>
+
+    <rect x="1100" y="544" width="400" height="84" rx="10" class="paper rule"/>
+    <text x="1120" y="572" class="mono ink">RESTING CONCEPTS</text>
+    <text x="1120" y="602" class="small ink">Park with a visible return condition</text>
+
+    <rect x="1100" y="640" width="400" height="84" rx="10" class="paper rule"/>
+    <text x="1120" y="668" class="mono ink">COLLABORATION CYCLE</text>
+    <text x="1120" y="698" class="small ink">Carry decisions across tool boundaries</text>
+
+    <rect x="1100" y="736" width="400" height="84" rx="10" class="lime rule"/>
+    <text x="1120" y="764" class="mono ink">REGISTRY × GOAL FIDELITY</text>
+    <text x="1120" y="794" class="small ink">Recover from the last sound position</text>
+  </g>
+
+  <g role="group" aria-labelledby="shared-machinery-investment-title">
+    <title id="shared-machinery-investment-title">Shared stewardship investment</title>
+    <rect x="72" y="902" width="1456" height="142" rx="14" class="shadow" transform="translate(8 8)"/>
+    <rect x="72" y="902" width="1456" height="142" rx="14" class="cream rule"/>
+    <text x="100" y="936" class="mono ink">SHARED STEWARDSHIP</text>
+    <text x="100" y="972" class="h3 ink">Source + currentness</text>
+    <text x="100" y="998" class="small muted">Names, dates, bounds</text>
+    <text x="430" y="972" class="h3 ink">Accessible equivalents</text>
+    <text x="430" y="998" class="small muted">Structure, text, focus</text>
+    <text x="790" y="972" class="h3 ink">Identity + version</text>
+    <text x="790" y="998" class="small muted">Stable routes and manifests</text>
+    <text x="1140" y="972" class="h3 ink">Decision propagation</text>
+    <text x="1140" y="998" class="small muted">Owner, dependency, return</text>
+    <text x="100" y="1026" class="body ink">The instrument stays small; the ownership needed to keep it useful remains explicit.</text>
+  </g>
+</svg>

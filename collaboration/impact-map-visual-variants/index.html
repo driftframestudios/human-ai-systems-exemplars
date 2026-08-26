@@ -1,0 +1,3228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Impact Map visual variants</title>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Shared interface */
+      --white: #ffffff;
+      --black: #17191d;
+      --ui-page: #f3efe8;
+      --ui-surface: #fffdf9;
+      --ui-ink: #24231f;
+      --ui-muted: #6d665d;
+      --ui-line: #d8d0c4;
+      --ui-line-strong: #a79d8e;
+      --ui-focus: #bd7419;
+      --ui-active: #155c63;
+      --ui-active-ink: #ffffff;
+
+      /* Warm editorial */
+      --warm-paper: #fbfaf7;
+      --warm-field: #f4f1eb;
+      --warm-ink: #25231f;
+      --warm-muted: #5f594f;
+      --warm-line: #a79d8e;
+      --warm-line-soft: #d8d0c4;
+      --warm-edge: #8d8477;
+      --warm-route: #155c63;
+      --warm-goal: #fff0cf;
+      --warm-actor: #e7f0f0;
+      --warm-impact: #f0ede7;
+      --warm-discoverable: #edf3de;
+      --warm-lane-a: #f6f2ea;
+      --warm-lane-b: #fbfaf7;
+
+      /* High-contrast evidence */
+      --cobalt-field: #f4f7fd;
+      --cobalt-paper: #fffdf7;
+      --cobalt-paper-blue: #f4f8ff;
+      --cobalt-goal: #dbe9ff;
+      --cobalt-actor: #edf4ff;
+      --cobalt-impact: #fffdf7;
+      --cobalt-discoverable: #f7faff;
+      --cobalt-line: #215fbb;
+      --cobalt-line-soft: #8aaee9;
+      --cobalt-ink: #16345e;
+      --cobalt-muted: #4c678d;
+      --cobalt-rule: #8aaee9;
+      --cobalt-shadow-near: #c3d2ea;
+      --cobalt-shadow-far: #dbe4f2;
+
+      /* Soft Color Blocking contract + supplied-image fidelity */
+      --soft-contract-blush: #f8cbc7;
+      --soft-contract-paper: #f9e8e5;
+      --soft-contract-cobalt: #3157ed;
+      --soft-contract-chartreuse: #ebff4f;
+      --soft-contract-coral: #ff6b63;
+      --soft-contract-dusty-yellow: #ded575;
+      --soft-contract-pale-rose: #f7d7d4;
+      --soft-contract-warm-white: #fff7f4;
+      --soft-blush-field: #ffd3d0;
+      --soft-blush-paper-01: #fdebe9;
+      --soft-blush-paper-02: #feeae9;
+      --soft-cobalt-01: #2855f3;
+      --soft-cobalt-02: #2955f4;
+      --soft-acid-lime: #f2ff67;
+      --soft-coral: #fa7065;
+      --soft-sand: #e9cf9e;
+      --soft-ink: #183a78;
+      --soft-edge: #3157ed;
+
+      /* Smooth blueprint vellum */
+      --blueprint-extra-dark: #00375b;
+      --blueprint-darksome: #092160;
+      --blueprint-midnight: #141c5b;
+      --blueprint-luminous: #3057e1;
+      --blueprint-original: #4a6de5;
+      --blueprint-cream: #ced8f7;
+      --blueprint-tech-dark: #002082;
+      --blueprint-white: #f8fbff;
+      --blueprint-yellow: #f2ff67;
+      --blueprint-muted: #aebdea;
+
+      /* Calm review */
+      --sea-glass-mist: #f1f9f9;
+      --sea-glass-foam: #dbf0f0;
+      --sea-glass-glass: #bddbdb;
+      --sea-glass-tide: #afc8c8;
+      --sea-glass-silt: #cdd7d7;
+      --sea-glass-stone: #888b8b;
+      --sea-glass-line: #717676;
+      --sea-glass-ink: #555959;
+      --sea-glass-deep-ink: #263f42;
+
+      /* Colors sampled from the supplied focus/presentation images */
+      --presentation-page: #f9f8f6;
+      --presentation-blush-scrim: #edceca;
+      --presentation-panel: #f8ece7;
+      --presentation-blue: #2135cc;
+      --presentation-blue-muted: #505dd2;
+      --presentation-blue-muted-alt: #4e57cc;
+      --presentation-lavender-blue: #7b78cb;
+      --presentation-yellow: #e9e94f;
+      --presentation-gold: #ebdd85;
+      --presentation-yellow-dim: #ecea70;
+      --presentation-yellow-warm: #eae36a;
+      --presentation-mint: #d3e4cb;
+      --presentation-mint-dim: #dbe6d1;
+      --presentation-lilac: #e4d1dc;
+      --presentation-lilac-alt-a: #e3d8ea;
+      --presentation-lilac-alt-b: #e0d2e4;
+      --presentation-peach: #f1d6c7;
+      --presentation-salmon: #da9c8b;
+      --presentation-cream: #f5ebdf;
+
+      /* Colors sampled from the supplied actor-lanes image */
+      --lane-canvas: #f1e9d2;
+      --lane-card: #f8f1d9;
+      --lane-info: #d3e4f2;
+      --lane-context: #ebe3d1;
+      --lane-route: #dde9e8;
+      --lane-cream-shadow: #ece5d4;
+      --lane-neutral: #d2cdc2;
+      --lane-ink: #213252;
+      --lane-ink-strong: #1f325b;
+      --lane-blue-muted: #556788;
+      --lane-slate: #73849c;
+      --lane-warm-ink: #5e5023;
+      --lane-warm-muted: #887c57;
+      --lane-teal-ink: #274444;
+
+      /* Route accents */
+      --route-service: #2855f3;
+      --route-ai: #6f63c7;
+      --route-software: #42745a;
+      --route-specification: #c35149;
+      --route-unit: #914b68;
+      --route-cross-channel: #8c731f;
+
+      /* Active rendering aliases */
+      --active-page: var(--warm-paper);
+      --active-frame: var(--warm-line-soft);
+      --active-ink: var(--warm-ink);
+      --active-muted: var(--warm-muted);
+      --active-edge: var(--warm-edge);
+      --active-route: var(--warm-route);
+      --active-pattern-line: var(--warm-line);
+      --active-pattern-glow: var(--white);
+      --active-mobile-card: var(--warm-paper);
+      --active-mobile-actor: var(--warm-actor);
+      --active-mobile-impact: var(--warm-impact);
+      --active-mobile-discoverable: var(--warm-discoverable);
+
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.5rem;
+      --space-6: 2rem;
+      --radius-sm: 0.5rem;
+      --radius-md: 0.9rem;
+      --radius-lg: 1.25rem;
+      --font-sans: "Arial Nova", "Avenir Next", Futura, "Century Gothic", Arial, sans-serif;
+      font-family: var(--font-sans);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--ui-page);
+      color: var(--ui-ink);
+      font-family: var(--font-sans);
+      text-rendering: optimizeLegibility;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .icon-bank {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+
+    main {
+      width: 100%;
+      max-width: none;
+      margin: 0 auto;
+      padding: clamp(0.75rem, 1.35vw, 1.5rem);
+    }
+
+    .masthead {
+      display: grid;
+      gap: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .title-row,
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3) var(--space-5);
+    }
+
+    .title-copy {
+      display: grid;
+      gap: var(--space-1);
+      max-width: 55rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 2.1vw, 2rem);
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+    }
+
+    .variant-controls,
+    .view-controls,
+    .pattern-controls,
+    .report-controls,
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .control-cluster {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .control-label {
+      color: var(--ui-muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    html[data-map-view="axonometric"] .pattern-cluster,
+    html[data-map-view="narrative"] .pattern-cluster {
+      display: none;
+    }
+
+    button {
+      appearance: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      min-height: 2.35rem;
+      border: 1px solid var(--ui-line);
+      border-radius: var(--radius-sm);
+      background: var(--ui-surface);
+      color: var(--ui-ink);
+      padding: 0.55rem 0.76rem;
+      font-size: 0.84rem;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    button:hover {
+      border-color: var(--ui-line-strong);
+    }
+
+    button[aria-pressed="true"] {
+      border-color: var(--ui-active);
+      background: var(--ui-active);
+      color: var(--ui-active-ink);
+    }
+
+    button:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--ui-focus) 42%, transparent);
+      outline-offset: 2px;
+    }
+
+    .icon-button {
+      width: 2.35rem;
+      padding: 0;
+    }
+
+    .button-icon {
+      width: 1.05rem;
+      height: 1.05rem;
+      flex: 0 0 auto;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .legend {
+      color: var(--ui-muted);
+      font-size: 0.82rem;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .status-shape {
+      display: inline-block;
+      width: 0.62rem;
+      height: 0.62rem;
+      border: 2px solid currentColor;
+    }
+
+    .status-shape.known {
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .status-shape.assumed {
+      border-radius: 50%;
+      border-style: dashed;
+    }
+
+    .status-shape.surface {
+      border-radius: 0.12rem;
+    }
+
+    .map-shell {
+      width: 100%;
+      border-radius: var(--radius-lg);
+      background: var(--active-page);
+      box-shadow: 0 12px 34px color-mix(in srgb, var(--black) 8%, transparent);
+      overflow: hidden;
+    }
+
+    #impact-map,
+    #axonometric-map,
+    #narrative-map {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+      shape-rendering: geometricPrecision;
+    }
+
+    #impact-map text,
+    #axonometric-map text,
+    #narrative-map text {
+      font-family: var(--font-sans);
+    }
+
+    #axonometric-map,
+    #narrative-sequence {
+      display: none;
+    }
+
+    .map-shell[data-view="axonometric"] #impact-map,
+    .map-shell[data-view="axonometric"] .mobile-map,
+    .map-shell[data-view="narrative"] #impact-map,
+    .map-shell[data-view="narrative"] #axonometric-map,
+    .map-shell[data-view="narrative"] .mobile-map {
+      display: none;
+    }
+
+    .map-shell[data-view="axonometric"] #axonometric-map {
+      display: block;
+    }
+
+    .map-shell[data-view="narrative"] #narrative-sequence {
+      display: block;
+    }
+
+    .narrative-sequence {
+      width: 100%;
+      background: var(--active-page);
+      color: var(--active-ink);
+    }
+
+    .narrative-stage {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: var(--active-page);
+    }
+
+    #narrative-map [data-narrative-kind],
+    #narrative-map [data-narrative-fracture] {
+      transition: opacity 180ms ease;
+    }
+
+    .narrative-controls {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4) var(--space-4);
+      border-top: 1px solid var(--active-frame);
+      background: var(--active-page);
+    }
+
+    .narrative-step-control {
+      min-width: 6.6rem;
+      border-color: var(--active-frame);
+      background: var(--active-page);
+      color: var(--active-ink);
+    }
+
+    .narrative-step-control:hover {
+      border-color: var(--active-route);
+    }
+
+    .narrative-step-control:disabled {
+      cursor: default;
+      opacity: 0.34;
+    }
+
+    .narrative-position {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.42rem;
+    }
+
+    .narrative-marker {
+      width: 2rem;
+      min-width: 2rem;
+      min-height: 2rem;
+      border-color: transparent;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--active-muted);
+      padding: 0;
+      font-size: 0.75rem;
+    }
+
+    .narrative-marker:hover {
+      border-color: var(--active-route);
+      color: var(--active-ink);
+    }
+
+    .narrative-marker[aria-current="step"] {
+      border-color: var(--active-route);
+      background: var(--active-route);
+      color: var(--active-page);
+    }
+
+    .narrative-counter {
+      min-width: 5.2rem;
+      color: var(--active-muted);
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .mobile-map {
+      display: none;
+      padding: var(--space-4);
+      background: var(--active-page);
+      color: var(--active-ink);
+    }
+
+    .mobile-goal,
+    .mobile-branch {
+      border: 1px solid var(--active-frame);
+      border-radius: var(--radius-md);
+      background: var(--active-mobile-card);
+    }
+
+    .mobile-goal {
+      margin-bottom: var(--space-5);
+      padding: var(--space-5);
+      border-left: 0.35rem solid var(--active-route);
+      font-size: 1.08rem;
+      font-weight: 750;
+      line-height: 1.42;
+    }
+
+    .mobile-branch {
+      display: grid;
+      gap: var(--space-3);
+      margin-bottom: var(--space-5);
+      padding: var(--space-4);
+    }
+
+    .mobile-actor {
+      display: grid;
+      place-items: center;
+      min-height: 5rem;
+      border-radius: var(--radius-sm);
+      background: var(--active-mobile-actor);
+      padding: var(--space-4);
+      text-align: center;
+      font-size: 1.12rem;
+      font-weight: 800;
+    }
+
+    .mobile-impact,
+    .mobile-discoverable {
+      border-radius: var(--radius-sm);
+      padding: var(--space-4);
+      line-height: 1.42;
+    }
+
+    .mobile-impact {
+      background: var(--active-mobile-impact);
+      color: var(--active-ink);
+    }
+
+    .mobile-discoverable {
+      background: var(--active-mobile-discoverable);
+    }
+
+    .mobile-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 0.65rem;
+      margin-top: var(--space-2);
+      color: var(--active-muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .mobile-route {
+      color: var(--active-route);
+    }
+
+    @media (max-width: 980px) {
+      main {
+        padding: var(--space-4);
+      }
+
+      .map-shell[data-view="branch"] #impact-map {
+        display: none;
+      }
+
+      .map-shell[data-view="branch"] .mobile-map {
+        display: block;
+      }
+
+      .map-shell[data-view="axonometric"] {
+        overflow-x: auto;
+      }
+
+      .map-shell[data-view="axonometric"] #axonometric-map,
+      .map-shell[data-view="narrative"] #narrative-sequence {
+        display: block;
+        min-width: 1020px;
+      }
+
+      .map-shell[data-view="narrative"] {
+        overflow-x: auto;
+      }
+
+      .title-row,
+      .control-row {
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .variant-controls {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+      }
+
+      .variant-controls button {
+        width: 100%;
+      }
+
+      .report-controls .button-label {
+        display: none;
+      }
+
+      .report-controls button {
+        width: 2.35rem;
+        padding: 0;
+      }
+
+      .narrative-controls {
+        grid-template-columns: auto auto;
+      }
+
+      .narrative-position {
+        grid-column: 1 / -1;
+        grid-row: 1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      #narrative-map [data-narrative-kind],
+      #narrative-map [data-narrative-fracture] {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <svg class="icon-bank" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-target" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"></circle>
+        <circle cx="12" cy="12" r="6"></circle>
+        <circle cx="12" cy="12" r="2"></circle>
+      </symbol>
+      <symbol id="i-user-round" viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="5"></circle>
+        <path d="M3 21a9 9 0 0 1 18 0"></path>
+      </symbol>
+      <symbol id="i-trending-up" viewBox="0 0 24 24">
+        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+        <polyline points="16 7 22 7 22 13"></polyline>
+      </symbol>
+      <symbol id="i-lightbulb" viewBox="0 0 24 24">
+        <path d="M9 18h6"></path>
+        <path d="M10 22h4"></path>
+        <path d="M8.6 15.3A7 7 0 1 1 15.4 15.3C14.5 16 14 17 14 18h-4c0-1-.5-2-1.4-2.7Z"></path>
+      </symbol>
+      <symbol id="i-eye-off" viewBox="0 0 24 24">
+        <path d="m2 2 20 20"></path>
+        <path d="M10.6 10.7a2 2 0 0 0 2.7 2.7"></path>
+        <path d="M9.9 4.2A10.5 10.5 0 0 1 12 4c7 0 10 8 10 8a16 16 0 0 1-2.1 3.4"></path>
+        <path d="M6.6 6.6C3.7 8.4 2 12 2 12s3 8 10 8a10 10 0 0 0 5.4-1.5"></path>
+      </symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+        <path d="M3 9h18M3 15h18M9 3v18M15 3v18"></path>
+      </symbol>
+      <symbol id="i-sparkles" viewBox="0 0 24 24">
+        <path d="m12 3-1.4 3.6L7 8l3.6 1.4L12 13l1.4-3.6L17 8l-3.6-1.4Z"></path>
+        <path d="m5 14-.8 2.2L2 17l2.2.8L5 20l.8-2.2L8 17l-2.2-.8Z"></path>
+        <path d="m19 13-1 2.8-3 1.2 3 1.2 1 2.8 1-2.8 3-1.2-3-1.2Z"></path>
+      </symbol>
+      <symbol id="i-columns" viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+        <path d="M9 4v16M15 4v16"></path>
+      </symbol>
+      <symbol id="i-shapes" viewBox="0 0 24 24">
+        <circle cx="6" cy="6" r="3"></circle>
+        <rect x="13" y="3" width="6" height="6" rx="1"></rect>
+        <path d="m6 14-4 7h8Z"></path>
+        <path d="m16 14-3 3 3 3 3-3Z"></path>
+      </symbol>
+      <symbol id="i-workflow" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="6" height="6" rx="1"></rect>
+        <rect x="15" y="15" width="6" height="6" rx="1"></rect>
+        <path d="M9 6h4a4 4 0 0 1 4 4v5"></path>
+        <path d="m14 12 3 3 3-3"></path>
+      </symbol>
+      <symbol id="i-speckles" viewBox="0 0 24 24">
+        <circle cx="5" cy="6" r="1.2" fill="currentColor" stroke="none"></circle>
+        <circle cx="13" cy="4" r="0.8" fill="currentColor" stroke="none"></circle>
+        <circle cx="19" cy="9" r="1.4" fill="currentColor" stroke="none"></circle>
+        <circle cx="8" cy="14" r="1" fill="currentColor" stroke="none"></circle>
+        <circle cx="16" cy="18" r="1.2" fill="currentColor" stroke="none"></circle>
+        <circle cx="4" cy="20" r="0.7" fill="currentColor" stroke="none"></circle>
+      </symbol>
+      <symbol id="i-contours" viewBox="0 0 24 24">
+        <path d="M3 13c1.5-6 7-9 12-7 4 1.5 7 5 6 9-1 4-5 6-10 5-5-1-9-3-8-7Z"></path>
+        <path d="M7 13c1-3.5 4.5-5 8-4 2.5.8 4 2.7 3.5 5-.5 2.2-3 3.3-6 2.8-3-.4-6-1.5-5.5-3.8Z"></path>
+      </symbol>
+      <symbol id="i-frame" viewBox="0 0 24 24">
+        <path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"></path>
+        <rect x="8" y="8" width="8" height="8" rx="1"></rect>
+      </symbol>
+      <symbol id="i-external-link" viewBox="0 0 24 24">
+        <path d="M15 3h6v6M10 14 21 3"></path>
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+      </symbol>
+      <symbol id="i-file-down" viewBox="0 0 24 24">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path>
+        <path d="M14 2v6h6M12 11v6M9 14l3 3 3-3"></path>
+      </symbol>
+    </defs>
+  </svg>
+
+  <main>
+    <header class="masthead">
+      <div class="title-row">
+        <div class="title-copy">
+          <h1>Impact Map visual variants</h1>
+        </div>
+        <div class="report-controls" aria-label="Leave-behind options">
+          <button type="button" data-action="open-report">
+            <svg class="button-icon" aria-hidden="true"><use href="#i-external-link"></use></svg>
+            <span class="button-label">Open leave-behind</span>
+          </button>
+          <button type="button" data-action="download-report">
+            <svg class="button-icon" aria-hidden="true"><use href="#i-file-down"></use></svg>
+            <span class="button-label">Download HTML</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="variant-controls" role="group" aria-label="Visual treatment">
+        <button type="button" data-variant="warm" aria-pressed="true">Warm editorial</button>
+        <button type="button" data-variant="cobalt" aria-pressed="false">High-contrast evidence</button>
+        <button type="button" data-variant="routes" aria-pressed="false">Route-forward</button>
+        <button type="button" data-variant="lanes" aria-pressed="false">Actor lanes</button>
+        <button type="button" data-variant="vellum" aria-pressed="false">Dark review</button>
+        <button type="button" data-variant="pop" aria-pressed="false">Bold blueprint</button>
+      </div>
+
+      <div class="control-row">
+        <div class="control-cluster">
+          <span class="control-label">View</span>
+          <div class="view-controls" role="group" aria-label="Diagram view">
+            <button type="button" data-view="branch" aria-pressed="true">Branch map</button>
+            <button type="button" data-view="axonometric" aria-pressed="false">Axonometric portfolio</button>
+            <button type="button" data-view="narrative" aria-pressed="false">Narrative sequence</button>
+          </div>
+        </div>
+        <div class="control-cluster pattern-cluster">
+          <span class="control-label">Background</span>
+          <div class="pattern-controls" role="group" aria-label="Background pattern">
+            <button class="icon-button" type="button" data-pattern="none" aria-pressed="true" title="No pattern" aria-label="No background pattern">
+              <svg class="button-icon" aria-hidden="true"><use href="#i-eye-off"></use></svg>
+            </button>
+            <button class="icon-button" type="button" data-pattern="quintile" aria-pressed="false" title="Quintile-ruled graph paper" aria-label="Quintile-ruled graph paper">
+              <svg class="button-icon" aria-hidden="true"><use href="#i-grid"></use></svg>
+            </button>
+            <button class="icon-button" type="button" data-pattern="sheen" aria-pressed="false" title="Soft sheen from top-left" aria-label="Soft sheen from top-left">
+              <svg class="button-icon" aria-hidden="true"><use href="#i-sparkles"></use></svg>
+            </button>
+            <button class="icon-button" type="button" data-pattern="columns" aria-pressed="false" title="Column banding" aria-label="Column background banding">
+              <svg class="button-icon" aria-hidden="true"><use href="#i-columns"></use></svg>
+            </button>
+            <button class="icon-button" type="button" data-pattern="speckles" aria-pressed="false" title="Fine speckle texture" aria-label="Fine speckle texture">
+              <svg class="button-icon" aria-hidden="true"><use href="#i-speckles"></use></svg>
+            </button>
+            <button class="icon-button" type="button" data-pattern="topography" aria-pressed="false" title="Sparse topographic lines" aria-label="Sparse topographic line texture">
+              <svg class="button-icon" aria-hidden="true"><use href="#i-contours"></use></svg>
+            </button>
+            <button class="icon-button" type="button" data-pattern="drafting" aria-pressed="false" title="Technical drafting frame" aria-label="Technical drafting frame">
+              <svg class="button-icon" aria-hidden="true"><use href="#i-frame"></use></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="legend" aria-label="Discoverable status legend">
+          <span class="legend-item"><i class="status-shape known" aria-hidden="true"></i> known</span>
+          <span class="legend-item"><i class="status-shape assumed" aria-hidden="true"></i> assumed</span>
+          <span class="legend-item"><i class="status-shape surface" aria-hidden="true"></i> needs to surface</span>
+        </div>
+      </div>
+    </header>
+
+    <div id="map-shell" class="map-shell" data-view="branch">
+      <svg id="impact-map" viewBox="0 0 1760 1940" role="img" aria-labelledby="map-title map-description">
+        <title id="map-title">Impact Map</title>
+        <desc id="map-description">One goal connects to four actors, four impacts, and seven discoverable questions with statuses and next-architecture routes.</desc>
+      </svg>
+      <svg id="axonometric-map" viewBox="0 0 1760 1240" role="img" aria-labelledby="axonometric-title axonometric-description">
+        <title id="axonometric-title">Axonometric Impact Map portfolio</title>
+        <desc id="axonometric-description">Multiple goals connect across upright cards on Actor, Impact, Discoverable, and Deliverable lanes.</desc>
+      </svg>
+      <section id="narrative-sequence" class="narrative-sequence" aria-label="Impact Map narrative still sequence">
+        <div class="narrative-stage">
+          <svg id="narrative-map" viewBox="0 0 1600 900" role="img" aria-labelledby="narrative-title-accessible narrative-description-accessible">
+            <title id="narrative-title-accessible">Impact Map narrative sequence</title>
+            <desc id="narrative-description-accessible">A nine-frame visual narrative moves from the review goal through four actor perspectives, their impacts, discoverable questions, routes, and a connected result.</desc>
+          </svg>
+        </div>
+        <nav class="narrative-controls" aria-label="Narrative frames">
+          <button class="narrative-step-control" type="button" data-narrative-action="previous">← Previous</button>
+          <div class="narrative-position">
+            <div id="narrative-markers" class="narrative-position" aria-label="Choose a narrative frame"></div>
+            <span id="narrative-counter" class="narrative-counter" aria-live="polite">Frame 1 of 9</span>
+          </div>
+          <button class="narrative-step-control" type="button" data-narrative-action="next">Next →</button>
+        </nav>
+      </section>
+      <div id="mobile-map" class="mobile-map" aria-label="Impact Map text view"></div>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const svg = document.getElementById('impact-map');
+      const axonometricSvg = document.getElementById('axonometric-map');
+      const narrativeSvg = document.getElementById('narrative-map');
+      const mapShell = document.getElementById('map-shell');
+      const mobileMap = document.getElementById('mobile-map');
+      const variantButtons = Array.from(document.querySelectorAll('[data-variant]'));
+      const patternButtons = Array.from(document.querySelectorAll('[data-pattern]'));
+      const viewButtons = Array.from(document.querySelectorAll('[data-view]'));
+      const narrativeMarkers = document.getElementById('narrative-markers');
+      const narrativeCounter = document.getElementById('narrative-counter');
+      const narrativePrevious = document.querySelector('[data-narrative-action="previous"]');
+      const narrativeNext = document.querySelector('[data-narrative-action="next"]');
+      const ns = 'http://www.w3.org/2000/svg';
+      const root = document.documentElement;
+
+      const MAP = {
+        width: 1760,
+        height: 1940,
+        inset: 24,
+        headingY: 70,
+        contentTop: 132,
+        rowHeight: 206,
+        rowStep: 220,
+        branchGap: 54,
+        lanePadY: 30,
+        columns: {
+          goal: { x: 50, w: 300, h: 176 },
+          actor: { x: 430, w: 320, h: 186 },
+          impact: { x: 830, w: 340, h: 190 },
+          discoverable: { x: 1250, w: 450, h: 206 }
+        }
+      };
+
+      const NARRATIVE = {
+        width: 1600,
+        height: 900,
+        headingY: 170,
+        columns: {
+          goal: { x: 70, w: 270, h: 120 },
+          actor: { x: 390, w: 250, h: 80 },
+          impact: { x: 720, w: 310, h: 100 },
+          discoverable: { x: 1120, w: 420, h: 80 }
+        },
+        discoverableY: [195, 282, 386, 490, 577, 681, 768]
+      };
+
+      const data = {
+        goal: 'Improve confidence, traceability, and review quality in variant interpretation workflows.',
+        actors: [
+          {
+            actor: 'Molecular pathologist',
+            impact: 'Can review variant evidence with clearer provenance and fewer hidden assumptions.',
+            discoverables: [
+              { text: 'Which provenance fields must be visible during review?', route: 'Service-design Blueprint', status: 'surface' },
+              { text: 'Where should AI-generated text show source boundaries and reviewer status?', route: 'AI Systems Service Blueprint', status: 'surface' }
+            ]
+          },
+          {
+            actor: 'Bioinformatics analyst',
+            impact: 'Can preserve and communicate assumptions behind filtering, classification, and prioritization.',
+            discoverables: [
+              { text: 'Which pipeline assumptions need to be inspectable by downstream reviewers?', route: 'Software Architecture Views', status: 'assumed' }
+            ]
+          },
+          {
+            actor: 'Research coordinator',
+            impact: 'Can identify sample, consent, and study-status issues before they block review.',
+            discoverables: [
+              { text: 'Where do consent-state changes enter the review workflow?', route: 'Service-design Blueprint', status: 'surface' },
+              { text: 'Which exception types need coordinator-visible status?', route: 'Specification-by-Example', status: 'assumed' }
+            ]
+          },
+          {
+            actor: 'Data steward',
+            impact: 'Can maintain provenance, auditability, and dataset readiness across review states.',
+            discoverables: [
+              { text: 'Which audit events must be recorded?', route: 'Unit-test-first Design', status: 'known' },
+              { text: 'Which shared data assets support multiple workflow surfaces?', route: 'Cross-channel Blueprint', status: 'surface' }
+            ]
+          }
+        ]
+      };
+
+      const reportEnrichment = {
+        'Molecular pathologist': {
+          quote: 'Every minute spent reconstructing provenance is a minute I am not interpreting the variant.',
+          scenario: 'Review a variant without reconstructing its evidence trail',
+          markers: ['@decision-critical', '@provenance', '@ai-boundary', '@needs-to-surface'],
+          given: 'a variant claim combines source-backed evidence, locally measured findings, and AI-generated synthesis',
+          when: 'the pathologist opens the claim to classify or sign out',
+          then: 'each assertion exposes its source boundary, provenance, transformation history, and reviewer state at the point of decision',
+          columns: ['Evidence condition', 'Required surface', 'Supported action'],
+          options: [
+            ['Source-backed', 'Source, version, cited span', 'Inspect / accept'],
+            ['Locally measured', 'Assay, sample, QC state', 'Compare / qualify'],
+            ['AI-generated', 'Input sources, model version, human-review state', 'Review / hold']
+          ]
+        },
+        'Bioinformatics analyst': {
+          quote: 'A threshold no one can see is a decision no one can defend.',
+          scenario: 'Preserve pipeline assumptions through downstream review',
+          markers: ['@pipeline-assumption', '@traceability', '@downstream-review', '@assumed'],
+          given: 'pipeline output is shaped by reference, caller, filter, threshold, and ranking choices',
+          when: 'a reviewer inspects an included call or asks why an expected candidate is absent',
+          then: 'the applicable assumptions and exclusion reasons remain beside the result and traceable to the originating run',
+          columns: ['Result state', 'Required context', 'Supported action'],
+          options: [
+            ['Retained', 'Caller and filter versions, satisfied rule, observed value', 'Compare / approve'],
+            ['Excluded', 'Failed rule, observed value, threshold', 'Reopen / retain'],
+            ['Reprioritized', 'Ranking criteria, previous score, current score', 'Restore / accept']
+          ]
+        },
+        'Research coordinator': {
+          quote: 'A consent change discovered at sign-out is not an exception; it is a workflow failure.',
+          scenario: 'Surface consent and study-state changes before they block review',
+          markers: ['@consent-state', '@exception-routing', '@time-critical', '@needs-to-surface'],
+          given: 'a sample enters review with a recorded consent version, study status, and jurisdiction',
+          when: 'that state changes or a sample, scheduling, or jurisdiction conflict is detected',
+          then: 'affected work receives an explicit hold or reroute and its scope, owner, timing, and resolution options remain visible',
+          columns: ['Exception', 'Coordinator-visible state', 'Supported action'],
+          options: [
+            ['Consent scope changed', 'Effective version, timestamp, affected scope', 'Re-confirm / restrict / hold'],
+            ['Sample discrepancy', 'Affected sample, mismatch, accountable owner', 'Reconcile / reject'],
+            ['Study paused', 'Reason, effective time, impacted work', 'Queue / withdraw']
+          ]
+        },
+        'Data steward': {
+          quote: 'An audit trail assembled after the fact is a narrative, not evidence.',
+          scenario: 'Keep shared assets auditable and ready across review states',
+          markers: ['@audit-event', '@lineage', '@shared-asset', '@release-readiness'],
+          given: 'a shared data asset is reused across workflow surfaces and produces derived records through multiple review states',
+          when: 'an asset, derivation, or review decision changes',
+          then: 'the event records who changed what, when, and from which version; dependent assets are identified and readiness is recomputed',
+          columns: ['Event', 'Minimum record', 'Readiness option'],
+          options: [
+            ['Source version changed', 'Asset, version, difference, dependents', 'Mark stale / reprocess'],
+            ['Review decision recorded', 'Actor, decision, evidence set, timestamp', 'Advance / reopen'],
+            ['Derived dataset published', 'Inputs, transforms, QC state, consent scope', 'Release / hold']
+          ]
+        }
+      };
+
+      const narrativeFrames = [
+        {
+          mode: 'goal',
+          eyebrow: '01 · The goal',
+          title: 'Improve confidence, traceability, and review quality in variant interpretation workflows.',
+          deck: ''
+        },
+        {
+          mode: 'fracture',
+          eyebrow: '02 · The result arrives',
+          title: 'The call is visible. The conditions that shaped it are not.',
+          deck: 'Missing context turns review into reconstruction.'
+        },
+        {
+          mode: 'branch',
+          branch: 0,
+          eyebrow: '03 · Molecular pathologist',
+          title: 'Clearer provenance. Fewer hidden assumptions.',
+          deck: '“If I cannot see what shaped the call, I cannot judge the call.”'
+        },
+        {
+          mode: 'branch',
+          branch: 1,
+          eyebrow: '04 · Bioinformatics analyst',
+          title: 'Assumptions must travel with the result.',
+          deck: '“A threshold without its reason becomes somebody else’s guess.”'
+        },
+        {
+          mode: 'branch',
+          branch: 2,
+          eyebrow: '05 · Research coordinator',
+          title: 'Surface blockers before they stop review.',
+          deck: '“A sample can be ready in the lab and still blocked in the study.”'
+        },
+        {
+          mode: 'branch',
+          branch: 3,
+          eyebrow: '06 · Data steward',
+          title: 'Keep every review state reconstructable.',
+          deck: '“If a review state cannot be reconstructed, it cannot be trusted.”'
+        },
+        {
+          mode: 'full',
+          eyebrow: '07 · One review, four dependencies',
+          title: 'The hidden dependencies meet at review.',
+          deck: 'Provenance · Pipeline assumptions · Consent state · Audit readiness'
+        },
+        {
+          mode: 'routes',
+          eyebrow: '08 · Questions become routes',
+          title: 'Each open question points toward the view that can make it inspectable.',
+          deck: ''
+        },
+        {
+          mode: 'resolution',
+          eyebrow: '09 · The trace arrives with the result',
+          title: 'Confidence is a connected property.',
+          deck: 'The reviewer can see what shaped the call, what changed, and what remains unresolved.'
+        }
+      ];
+
+      const portfolioData = {
+        lanes: [
+          {
+            id: 'goals',
+            label: 'Goals',
+            items: [
+              { id: 'g1', label: 'Traceable interpretation', detail: 'Make every interpretation decision traceable to its evidence, method, and reviewer judgment.' },
+              { id: 'g2', label: 'Faster review, visible uncertainty', detail: 'Shorten review cycles without compressing clinical judgment or hiding uncertainty.' },
+              { id: 'g3', label: 'Constraint-aware work', detail: 'Surface consent, sample, and study-state constraints before they invalidate downstream work.' },
+              { id: 'g4', label: 'Reproducible handoffs', detail: 'Make interpretation handoffs reproducible across people, systems, and review states.' }
+            ]
+          },
+          {
+            id: 'actors',
+            label: 'Actors',
+            items: [
+              { id: 'a1', label: 'Molecular pathologist' },
+              { id: 'a2', label: 'Bioinformatics analyst' },
+              { id: 'a3', label: 'Research coordinator' },
+              { id: 'a4', label: 'Data steward' },
+              { id: 'a5', label: 'Variant curator' },
+              { id: 'a6', label: 'Clinical laboratory director' }
+            ]
+          },
+          {
+            id: 'impacts',
+            label: 'Impacts',
+            items: [
+              { id: 'i1', label: 'Evidence, synthesis, and judgment stay distinct' },
+              { id: 'i2', label: 'Pipeline assumptions survive handoff' },
+              { id: 'i3', label: 'Blocking exceptions surface before review' },
+              { id: 'i4', label: 'Lineage and readiness survive state changes' },
+              { id: 'i5', label: 'Classification changes retain their reasoning' },
+              { id: 'i6', label: 'Quality risk and stalled work surface early' }
+            ]
+          },
+          {
+            id: 'discoverables',
+            label: 'Discoverables',
+            items: [
+              { id: 'd1', label: 'Decision-critical provenance fields' },
+              { id: 'd2', label: 'AI sources, uncertainty, and review state' },
+              { id: 'd3', label: 'Classification-sensitive pipeline parameters' },
+              { id: 'd4', label: 'Interpretation handoff packet' },
+              { id: 'd5', label: 'Consent and sample invalidation rules' },
+              { id: 'd6', label: 'Exception owner, age, and next action' },
+              { id: 'd7', label: 'Audit reconstruction events' },
+              { id: 'd8', label: 'Assertion and classification deltas' },
+              { id: 'd9', label: 'Escalation and secondary-review signals' },
+              { id: 'd10', label: 'Re-analysis triggers' }
+            ]
+          },
+          {
+            id: 'deliverables',
+            label: 'Deliverables',
+            items: [
+              { id: 'l1', label: 'Evidence Review Service Blueprint' },
+              { id: 'l2', label: 'Claim-Boundary Interaction Contract' },
+              { id: 'l3', label: 'Pipeline Assumption Architecture View' },
+              { id: 'l4', label: 'Interpretation Handoff State Model' },
+              { id: 'l5', label: 'Consent & Exception Examples' },
+              { id: 'l6', label: 'Audit Event & Readiness Model' },
+              { id: 'l7', label: 'Classification Delta Decision Record' },
+              { id: 'l8', label: 'Re-analysis Trigger Matrix' }
+            ]
+          }
+        ],
+        links: [
+          ['g1','a1'], ['g1','a2'], ['g1','a4'], ['g1','a5'], ['g1','a6'],
+          ['g2','a1'], ['g2','a2'], ['g2','a5'], ['g2','a6'],
+          ['g3','a1'], ['g3','a3'], ['g3','a4'],
+          ['g4','a2'], ['g4','a3'], ['g4','a4'], ['g4','a5'], ['g4','a6'],
+          ['a1','i1'], ['a2','i2'], ['a3','i3'], ['a4','i4'], ['a5','i5'], ['a6','i6'],
+          ['i1','d1'], ['i1','d2'], ['i1','d4'], ['i1','d9'],
+          ['i2','d3'], ['i2','d4'],
+          ['i3','d5'], ['i3','d6'],
+          ['i4','d1'], ['i4','d7'], ['i4','d10'],
+          ['i5','d2'], ['i5','d8'], ['i5','d10'],
+          ['i6','d6'], ['i6','d9'], ['i6','d10'],
+          ['d1','l1'], ['d1','l2'], ['d2','l2'], ['d3','l3'], ['d4','l4'],
+          ['d5','l5'], ['d6','l5'], ['d6','l6'], ['d7','l6'], ['d8','l7'],
+          ['d9','l7'], ['d10','l8']
+        ]
+      };
+
+      const routeColors = {
+        'Service-design Blueprint': 'var(--route-service)',
+        'AI Systems Service Blueprint': 'var(--route-ai)',
+        'Software Architecture Views': 'var(--route-software)',
+        'Specification-by-Example': 'var(--route-specification)',
+        'Unit-test-first Design': 'var(--route-unit)',
+        'Cross-channel Blueprint': 'var(--route-cross-channel)'
+      };
+
+      const variants = {
+        warm: {
+          label: 'Warm editorial',
+          background: 'var(--warm-paper)',
+          frame: 'var(--warm-line-soft)',
+          ink: 'var(--warm-ink)',
+          muted: 'var(--warm-muted)',
+          headingInk: 'var(--warm-muted)',
+          goalFill: 'var(--warm-goal)',
+          actorFill: 'var(--warm-actor)',
+          impactFill: 'var(--warm-impact)',
+          discoverableFills: ['var(--warm-discoverable)'],
+          nodeStroke: 'var(--warm-line)',
+          actorStroke: 'var(--warm-route)',
+          edge: 'var(--warm-edge)',
+          route: 'var(--warm-route)',
+          icon: 'var(--warm-route)',
+          laneFills: ['var(--warm-lane-a)', 'var(--warm-lane-b)'],
+          patternLine: 'var(--warm-line)',
+          patternGlow: 'var(--white)',
+          radius: 17,
+          edgeMode: 'curve',
+          edgeWidth: 3.6,
+          headingSize: 22,
+          actorSize: 19,
+          shadow: false,
+          rules: false,
+          lanes: false,
+          icons: false,
+          routeForward: false,
+          allowPatterns: true
+        },
+        cobalt: {
+          label: 'High-contrast evidence',
+          background: 'var(--cobalt-field)',
+          frame: 'var(--cobalt-line-soft)',
+          ink: 'var(--cobalt-ink)',
+          muted: 'var(--cobalt-muted)',
+          headingInk: 'var(--cobalt-line)',
+          goalFill: 'var(--cobalt-goal)',
+          actorFill: 'var(--cobalt-actor)',
+          impactFill: 'var(--cobalt-impact)',
+          discoverableFills: ['var(--cobalt-discoverable)'],
+          nodeStroke: 'var(--cobalt-line)',
+          actorStroke: 'var(--cobalt-line)',
+          edge: 'var(--cobalt-line)',
+          route: 'var(--cobalt-ink)',
+          icon: 'var(--cobalt-line)',
+          laneFills: ['var(--cobalt-paper-blue)', 'var(--cobalt-field)'],
+          patternLine: 'var(--cobalt-line-soft)',
+          patternGlow: 'var(--white)',
+          radius: 5,
+          edgeMode: 'orthogonal',
+          edgeWidth: 3.8,
+          headingSize: 22,
+          actorSize: 19,
+          shadow: true,
+          rules: true,
+          lanes: false,
+          icons: false,
+          routeForward: false,
+          allowPatterns: true
+        },
+        routes: {
+          label: 'Route-forward',
+          background: 'var(--soft-blush-field)',
+          frame: 'var(--soft-cobalt-01)',
+          ink: 'var(--soft-ink)',
+          muted: 'var(--soft-ink)',
+          headingInk: 'var(--soft-cobalt-01)',
+          goalFill: 'var(--soft-cobalt-01)',
+          goalInk: 'var(--white)',
+          actorFill: 'var(--soft-contract-warm-white)',
+          impactFill: 'var(--soft-contract-pale-rose)',
+          discoverableFills: ['var(--soft-blush-paper-01)', 'var(--soft-blush-paper-02)'],
+          nodeStroke: 'var(--soft-cobalt-01)',
+          actorStroke: 'var(--soft-cobalt-01)',
+          edge: 'var(--soft-edge)',
+          route: 'var(--soft-cobalt-01)',
+          icon: 'var(--soft-cobalt-01)',
+          laneFills: ['var(--soft-contract-paper)', 'var(--soft-contract-pale-rose)'],
+          patternLine: 'var(--soft-cobalt-01)',
+          patternGlow: 'var(--soft-contract-warm-white)',
+          radius: 9,
+          edgeMode: 'curve',
+          edgeWidth: 4,
+          headingSize: 23,
+          actorSize: 19,
+          shadow: false,
+          rules: false,
+          lanes: false,
+          icons: false,
+          routeForward: true,
+          allowPatterns: true
+        },
+        lanes: {
+          label: 'Actor lanes · Calm review',
+          background: 'var(--sea-glass-mist)',
+          frame: 'var(--sea-glass-tide)',
+          ink: 'var(--sea-glass-deep-ink)',
+          muted: 'var(--sea-glass-ink)',
+          headingInk: 'var(--sea-glass-ink)',
+          goalFill: 'var(--sea-glass-glass)',
+          actorFill: 'var(--sea-glass-foam)',
+          impactFill: 'var(--sea-glass-mist)',
+          discoverableFills: ['var(--sea-glass-silt)', 'var(--sea-glass-foam)'],
+          nodeStroke: 'var(--sea-glass-line)',
+          actorStroke: 'var(--sea-glass-deep-ink)',
+          edge: 'var(--sea-glass-line)',
+          route: 'var(--sea-glass-deep-ink)',
+          icon: 'var(--sea-glass-ink)',
+          laneFills: ['var(--sea-glass-foam)', 'var(--sea-glass-mist)'],
+          patternLine: 'var(--sea-glass-tide)',
+          patternGlow: 'var(--white)',
+          radius: 11,
+          edgeMode: 'curve',
+          edgeWidth: 3.8,
+          headingSize: 22,
+          actorSize: 20,
+          shadow: false,
+          rules: false,
+          lanes: true,
+          icons: false,
+          routeForward: false,
+          allowPatterns: true
+        },
+        vellum: {
+          label: 'Dark review',
+          background: 'var(--blueprint-extra-dark)',
+          frame: 'var(--blueprint-original)',
+          ink: 'var(--blueprint-white)',
+          muted: 'var(--blueprint-muted)',
+          headingInk: 'var(--blueprint-yellow)',
+          goalFill: 'var(--blueprint-darksome)',
+          actorFill: 'var(--blueprint-midnight)',
+          impactFill: 'var(--blueprint-darksome)',
+          discoverableFills: ['var(--blueprint-extra-dark)'],
+          nodeStroke: 'var(--blueprint-original)',
+          actorStroke: 'var(--blueprint-yellow)',
+          edge: 'var(--blueprint-yellow)',
+          route: 'var(--blueprint-cream)',
+          icon: 'var(--blueprint-yellow)',
+          laneFills: ['var(--blueprint-darksome)', 'var(--blueprint-midnight)'],
+          patternLine: 'var(--blueprint-original)',
+          patternGlow: 'var(--blueprint-luminous)',
+          radius: 3,
+          edgeMode: 'orthogonal',
+          edgeWidth: 4.4,
+          headingSize: 31,
+          actorSize: 23,
+          shadow: false,
+          rules: false,
+          lanes: false,
+          icons: true,
+          routeForward: false,
+          allowPatterns: false
+        },
+        pop: {
+          label: 'Bold blueprint',
+          background: 'var(--soft-blush-field)',
+          frame: 'var(--blueprint-midnight)',
+          ink: 'var(--blueprint-midnight)',
+          muted: 'var(--blueprint-tech-dark)',
+          headingInk: 'var(--blueprint-midnight)',
+          goalFill: 'var(--soft-acid-lime)',
+          actorFill: 'var(--soft-cobalt-01)',
+          actorInk: 'var(--white)',
+          impactFill: 'var(--blueprint-cream)',
+          discoverableFills: ['var(--soft-coral)', 'var(--soft-sand)', 'var(--presentation-mint)', 'var(--soft-blush-paper-01)'],
+          nodeStroke: 'var(--blueprint-midnight)',
+          actorStroke: 'var(--blueprint-midnight)',
+          edge: 'var(--blueprint-midnight)',
+          route: 'var(--blueprint-tech-dark)',
+          icon: 'var(--blueprint-midnight)',
+          laneFills: ['var(--presentation-panel)', 'var(--soft-contract-pale-rose)'],
+          patternLine: 'var(--blueprint-midnight)',
+          patternGlow: 'var(--soft-contract-warm-white)',
+          radius: 16,
+          edgeMode: 'curve',
+          edgeWidth: 4.2,
+          headingSize: 25,
+          actorSize: 21,
+          shadow: false,
+          rules: false,
+          lanes: false,
+          icons: true,
+          routeForward: false,
+          allowPatterns: true
+        }
+      };
+
+      const statusLabels = {
+        known: 'KNOWN',
+        assumed: 'ASSUMED',
+        surface: 'SURFACE'
+      };
+
+      let activeVariant = 'warm';
+      let activePattern = 'none';
+      let activeView = 'branch';
+      let activeNarrativeFrame = 0;
+      let measureContext = null;
+
+      function el(name, attrs) {
+        const node = document.createElementNS(ns, name);
+        Object.entries(attrs || {}).forEach((entry) => {
+          node.setAttribute(entry[0], entry[1]);
+        });
+        return node;
+      }
+
+      function htmlEl(name, className, text) {
+        const node = document.createElement(name);
+        if (className) node.className = className;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+
+      function measuredTextWidth(text, fontSize, weight) {
+        try {
+          if (!measureContext) {
+            const canvas = document.createElement('canvas');
+            measureContext = canvas.getContext ? canvas.getContext('2d') : null;
+          }
+          if (measureContext) {
+            measureContext.font = String(weight) + ' ' + String(fontSize) + 'px Arial Nova, Avenir Next, Arial, sans-serif';
+            return measureContext.measureText(text).width;
+          }
+        } catch (error) {
+          measureContext = null;
+        }
+        return Array.from(text).reduce((sum, character) => {
+          if (character === ' ') return sum + fontSize * 0.29;
+          if (/[MW@#%&]/.test(character)) return sum + fontSize * 0.72;
+          if (/[ilI1.,:;]/.test(character)) return sum + fontSize * 0.31;
+          return sum + fontSize * 0.56;
+        }, 0);
+      }
+
+      function wrapLines(text, maxWidth, maxLines, fontSize, weight) {
+        const words = text.trim().split(/\s+/);
+        const lines = [];
+        let line = '';
+        words.forEach((word) => {
+          const next = line ? line + ' ' + word : word;
+          if (line && measuredTextWidth(next, fontSize, weight) > maxWidth) {
+            lines.push(line);
+            line = word;
+          } else {
+            line = next;
+          }
+        });
+        if (line) lines.push(line);
+        if (lines.length > maxLines) {
+          const clipped = lines.slice(0, maxLines);
+          clipped[maxLines - 1] = clipped[maxLines - 1].replace(/[.,;:]?$/, '') + '…';
+          return clipped;
+        }
+        return lines;
+      }
+
+      function addText(group, text, options) {
+        const settings = Object.assign({
+          x: 0,
+          y: 0,
+          maxWidth: 240,
+          maxLines: 5,
+          fontSize: 16,
+          lineHeight: 20,
+          weight: 500,
+          fill: 'var(--active-ink)',
+          anchor: 'start',
+          verticalCenter: false
+        }, options || {});
+        const lines = wrapLines(text, settings.maxWidth, settings.maxLines, settings.fontSize, settings.weight);
+        const firstY = settings.verticalCenter
+          ? settings.y - ((lines.length - 1) * settings.lineHeight) / 2
+          : settings.y;
+        const textNode = el('text', {
+          x: settings.x,
+          y: firstY,
+          fill: settings.fill,
+          'font-size': settings.fontSize,
+          'font-weight': settings.weight,
+          'text-anchor': settings.anchor
+        });
+        lines.forEach((line, index) => {
+          const span = el('tspan', {
+            x: settings.x,
+            dy: index === 0 ? 0 : settings.lineHeight
+          });
+          span.textContent = line;
+          textNode.appendChild(span);
+        });
+        group.appendChild(textNode);
+        return textNode;
+      }
+
+      function addIcon(group, iconId, x, y, size, color, opacity) {
+        const icon = el('use', {
+          href: '#' + iconId,
+          x: x,
+          y: y,
+          width: size,
+          height: size,
+          color: color,
+          fill: 'none',
+          stroke: 'currentColor',
+          'stroke-width': 2,
+          opacity: opacity === undefined ? 1 : opacity
+        });
+        group.appendChild(icon);
+        return icon;
+      }
+
+      function layout() {
+        const discoverables = [];
+        const actorRows = [];
+        let cursor = MAP.contentTop;
+        data.actors.forEach((branch, actorIndex) => {
+          const branchRows = [];
+          branch.discoverables.forEach((discoverable) => {
+            const node = {
+              x: MAP.columns.discoverable.x,
+              y: cursor,
+              w: MAP.columns.discoverable.w,
+              h: MAP.columns.discoverable.h,
+              text: discoverable.text,
+              route: discoverable.route,
+              status: discoverable.status,
+              actorIndex: actorIndex
+            };
+            discoverables.push(node);
+            branchRows.push(node);
+            cursor += MAP.rowStep;
+          });
+          actorRows.push(branchRows);
+          cursor += MAP.branchGap;
+        });
+
+        const actors = [];
+        const impacts = [];
+        actorRows.forEach((rows, actorIndex) => {
+          const firstCenter = rows[0].y + rows[0].h / 2;
+          const lastCenter = rows[rows.length - 1].y + rows[rows.length - 1].h / 2;
+          const center = (firstCenter + lastCenter) / 2;
+          actors.push({
+            x: MAP.columns.actor.x,
+            y: center - MAP.columns.actor.h / 2,
+            w: MAP.columns.actor.w,
+            h: MAP.columns.actor.h,
+            text: data.actors[actorIndex].actor
+          });
+          impacts.push({
+            x: MAP.columns.impact.x,
+            y: center - MAP.columns.impact.h / 2,
+            w: MAP.columns.impact.w,
+            h: MAP.columns.impact.h,
+            text: data.actors[actorIndex].impact
+          });
+        });
+
+        const firstCenter = discoverables[0].y + discoverables[0].h / 2;
+        const lastCenter = discoverables[discoverables.length - 1].y + discoverables[discoverables.length - 1].h / 2;
+        const goal = {
+          x: MAP.columns.goal.x,
+          y: (firstCenter + lastCenter) / 2 - MAP.columns.goal.h / 2,
+          w: MAP.columns.goal.w,
+          h: MAP.columns.goal.h,
+          text: data.goal
+        };
+
+        return {
+          goal: goal,
+          actors: actors,
+          impacts: impacts,
+          discoverables: discoverables,
+          actorRows: actorRows
+        };
+      }
+
+      function distance(a, b) {
+        return Math.hypot(b.x - a.x, b.y - a.y);
+      }
+
+      function unitNormal(a, b) {
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const length = Math.hypot(dx, dy) || 1;
+        return { x: -dy / length, y: dx / length };
+      }
+
+      function trimForArrowhead(points, headLength) {
+        const cleaned = points.filter((point, index) => index === 0 || distance(point, points[index - 1]) > 0.01);
+        let total = 0;
+        let index;
+        for (index = 1; index < cleaned.length; index += 1) total += distance(cleaned[index - 1], cleaned[index]);
+        const target = Math.max(0, total - headLength);
+        const body = [cleaned[0]];
+        let travelled = 0;
+        for (index = 1; index < cleaned.length; index += 1) {
+          const segment = distance(cleaned[index - 1], cleaned[index]);
+          if (travelled + segment >= target) {
+            const ratio = segment ? (target - travelled) / segment : 0;
+            body.push({
+              x: cleaned[index - 1].x + (cleaned[index].x - cleaned[index - 1].x) * ratio,
+              y: cleaned[index - 1].y + (cleaned[index].y - cleaned[index - 1].y) * ratio
+            });
+            break;
+          }
+          body.push(cleaned[index]);
+          travelled += segment;
+        }
+        return { body: body, tip: cleaned[cleaned.length - 1] };
+      }
+
+      function offsetPoint(points, index, halfWidth, side) {
+        if (index === 0) {
+          const normal = unitNormal(points[0], points[1]);
+          return {
+            x: points[0].x + normal.x * halfWidth * side,
+            y: points[0].y + normal.y * halfWidth * side
+          };
+        }
+        if (index === points.length - 1) {
+          const normal = unitNormal(points[index - 1], points[index]);
+          return {
+            x: points[index].x + normal.x * halfWidth * side,
+            y: points[index].y + normal.y * halfWidth * side
+          };
+        }
+        const before = unitNormal(points[index - 1], points[index]);
+        const after = unitNormal(points[index], points[index + 1]);
+        const mixX = before.x + after.x;
+        const mixY = before.y + after.y;
+        const mixLength = Math.hypot(mixX, mixY);
+        if (mixLength < 0.001) {
+          return {
+            x: points[index].x + after.x * halfWidth * side,
+            y: points[index].y + after.y * halfWidth * side
+          };
+        }
+        const miterX = mixX / mixLength;
+        const miterY = mixY / mixLength;
+        const denominator = Math.max(0.38, Math.abs(miterX * after.x + miterY * after.y));
+        const miterLength = Math.min(halfWidth / denominator, halfWidth * 2.1);
+        return {
+          x: points[index].x + miterX * miterLength * side,
+          y: points[index].y + miterY * miterLength * side
+        };
+      }
+
+      function solidArrowPath(points, bodyWidth, headLength, headWidth) {
+        const trimmed = trimForArrowhead(points, headLength);
+        const body = trimmed.body;
+        if (body.length < 2) return '';
+        const half = bodyWidth / 2;
+        const left = body.map((point, index) => offsetPoint(body, index, half, 1));
+        const right = body.map((point, index) => offsetPoint(body, index, half, -1));
+        const base = body[body.length - 1];
+        const headNormal = unitNormal(body[body.length - 2], base);
+        const headLeft = {
+          x: base.x + headNormal.x * headWidth / 2,
+          y: base.y + headNormal.y * headWidth / 2
+        };
+        const headRight = {
+          x: base.x - headNormal.x * headWidth / 2,
+          y: base.y - headNormal.y * headWidth / 2
+        };
+        const commands = ['M ' + left[0].x.toFixed(2) + ' ' + left[0].y.toFixed(2)];
+        left.slice(1).forEach((point) => {
+          commands.push('L ' + point.x.toFixed(2) + ' ' + point.y.toFixed(2));
+        });
+        commands.push('L ' + headLeft.x.toFixed(2) + ' ' + headLeft.y.toFixed(2));
+        commands.push('L ' + trimmed.tip.x.toFixed(2) + ' ' + trimmed.tip.y.toFixed(2));
+        commands.push('L ' + headRight.x.toFixed(2) + ' ' + headRight.y.toFixed(2));
+        right.reverse().forEach((point) => {
+          commands.push('L ' + point.x.toFixed(2) + ' ' + point.y.toFixed(2));
+        });
+        commands.push('Z');
+        return commands.join(' ');
+      }
+
+      function cubicPoints(from, to, steps) {
+        const start = { x: from.x + from.w - 2, y: from.y + from.h / 2 };
+        const end = { x: to.x + 5, y: to.y + to.h / 2 };
+        const middle = (start.x + end.x) / 2;
+        const controlA = { x: middle, y: start.y };
+        const controlB = { x: middle, y: end.y };
+        const points = [];
+        const count = steps || 64;
+        let step;
+        for (step = 0; step <= count; step += 1) {
+          const t = step / count;
+          const mt = 1 - t;
+          points.push({
+            x: mt * mt * mt * start.x + 3 * mt * mt * t * controlA.x + 3 * mt * t * t * controlB.x + t * t * t * end.x,
+            y: mt * mt * mt * start.y + 3 * mt * mt * t * controlA.y + 3 * mt * t * t * controlB.y + t * t * t * end.y
+          });
+        }
+        return points;
+      }
+
+      function orthogonalPoints(from, to) {
+        const start = { x: from.x + from.w - 2, y: from.y + from.h / 2 };
+        const end = { x: to.x + 5, y: to.y + to.h / 2 };
+        const middle = Math.round((start.x + end.x) / 2);
+        return [
+          start,
+          { x: middle, y: start.y },
+          { x: middle, y: end.y },
+          end
+        ];
+      }
+
+      function drawArrow(layer, from, to, treatment, color, width) {
+        const points = treatment.edgeMode === 'orthogonal'
+          ? orthogonalPoints(from, to)
+          : cubicPoints(from, to, 64);
+        layer.appendChild(el('path', {
+          d: solidArrowPath(points, width || treatment.edgeWidth, 16, 16),
+          fill: color,
+          stroke: 'none',
+          opacity: 0.97
+        }));
+      }
+
+      function addPatternDefs(defs) {
+        const grid = el('pattern', {
+          id: 'quintile-pattern',
+          width: 100,
+          height: 100,
+          patternUnits: 'userSpaceOnUse'
+        });
+        grid.appendChild(el('path', {
+          d: 'M20 0V100M40 0V100M60 0V100M80 0V100M0 20H100M0 40H100M0 60H100M0 80H100',
+          fill: 'none',
+          stroke: 'var(--active-pattern-line)',
+          'stroke-width': 0.65,
+          opacity: 0.12
+        }));
+        grid.appendChild(el('path', {
+          d: 'M0 0H100V100H0Z',
+          fill: 'none',
+          stroke: 'var(--active-pattern-line)',
+          'stroke-width': 1.3,
+          opacity: 0.22
+        }));
+        defs.appendChild(grid);
+
+        const sheen = el('radialGradient', {
+          id: 'soft-sheen',
+          cx: '12%',
+          cy: '8%',
+          r: '78%'
+        });
+        sheen.appendChild(el('stop', {
+          offset: '0%',
+          'stop-color': 'var(--active-pattern-glow)',
+          'stop-opacity': 0.82
+        }));
+        sheen.appendChild(el('stop', {
+          offset: '45%',
+          'stop-color': 'var(--active-pattern-glow)',
+          'stop-opacity': 0.16
+        }));
+        sheen.appendChild(el('stop', {
+          offset: '100%',
+          'stop-color': 'var(--active-pattern-glow)',
+          'stop-opacity': 0
+        }));
+        defs.appendChild(sheen);
+
+        const speckles = el('pattern', {
+          id: 'speckle-pattern',
+          width: 168,
+          height: 168,
+          patternUnits: 'userSpaceOnUse'
+        });
+        [
+          [18, 22, 1.5], [64, 18, 0.8], [128, 34, 1.1], [148, 82, 0.7],
+          [96, 78, 1.7], [38, 104, 0.9], [72, 146, 1.2], [138, 136, 1.5],
+          [14, 154, 0.6], [116, 112, 0.75]
+        ].forEach((dot) => {
+          speckles.appendChild(el('circle', {
+            cx: dot[0],
+            cy: dot[1],
+            r: dot[2],
+            fill: 'var(--active-pattern-line)',
+            stroke: 'none',
+            opacity: 0.13
+          }));
+        });
+        defs.appendChild(speckles);
+
+        const topography = el('pattern', {
+          id: 'topography-pattern',
+          width: 460,
+          height: 340,
+          patternUnits: 'userSpaceOnUse'
+        });
+        [
+          'M22 184C54 78 168 42 280 66C374 86 442 142 426 210C410 278 326 316 216 300C96 284 -2 250 22 184Z',
+          'M58 184C82 108 172 78 266 94C344 108 398 148 388 202C378 252 308 282 220 270C126 258 40 234 58 184Z',
+          'M98 184C116 134 182 112 254 124C312 134 354 158 348 198C340 232 286 254 222 244C154 236 86 218 98 184Z',
+          'M144 184C156 156 198 142 246 150C284 156 310 170 306 196C302 220 268 232 224 226C180 220 136 206 144 184Z'
+        ].forEach((pathData, index) => {
+          topography.appendChild(el('path', {
+            d: pathData,
+            fill: 'none',
+            stroke: 'var(--active-pattern-line)',
+            'stroke-width': index === 0 ? 1.2 : 0.9,
+            opacity: 0.12
+          }));
+        });
+        defs.appendChild(topography);
+      }
+
+      function drawBackgroundPattern(layer, pattern, treatment) {
+        if (pattern === 'none') return;
+        if (pattern === 'quintile') {
+          layer.appendChild(el('rect', {
+            x: MAP.inset,
+            y: MAP.inset,
+            width: MAP.width - MAP.inset * 2,
+            height: MAP.height - MAP.inset * 2,
+            rx: 15,
+            fill: 'url(#quintile-pattern)',
+            stroke: 'none'
+          }));
+          return;
+        }
+        if (pattern === 'sheen') {
+          layer.appendChild(el('rect', {
+            x: 2,
+            y: 2,
+            width: MAP.width - 4,
+            height: MAP.height - 4,
+            rx: 20,
+            fill: 'url(#soft-sheen)',
+            stroke: 'none'
+          }));
+          return;
+        }
+        if (pattern === 'columns') {
+          const columns = Object.values(MAP.columns).map((column) => ({
+            x: column.x - 22,
+            w: column.w + 44
+          }));
+          columns.forEach((column, index) => {
+            if (index % 2 === 0) {
+              layer.appendChild(el('rect', {
+                x: column.x,
+                y: 112,
+                width: column.w,
+                height: MAP.height - 152,
+                rx: 18,
+                fill: 'var(--active-pattern-line)',
+                stroke: 'none',
+                opacity: 0.055
+              }));
+            }
+          });
+          return;
+        }
+        if (pattern === 'speckles') {
+          layer.appendChild(el('rect', {
+            x: MAP.inset,
+            y: MAP.inset,
+            width: MAP.width - MAP.inset * 2,
+            height: MAP.height - MAP.inset * 2,
+            rx: 15,
+            fill: 'url(#speckle-pattern)',
+            stroke: 'none'
+          }));
+          return;
+        }
+        if (pattern === 'topography') {
+          layer.appendChild(el('rect', {
+            x: MAP.inset,
+            y: MAP.inset,
+            width: MAP.width - MAP.inset * 2,
+            height: MAP.height - MAP.inset * 2,
+            rx: 15,
+            fill: 'url(#topography-pattern)',
+            stroke: 'none'
+          }));
+          return;
+        }
+        if (pattern === 'drafting') {
+          const frameRight = MAP.width - MAP.inset;
+          const frameBottom = MAP.height - MAP.inset;
+          const centers = Object.values(MAP.columns).map((column) => column.x + column.w / 2);
+          const dividers = [
+            (centers[0] + centers[1]) / 2,
+            (centers[1] + centers[2]) / 2,
+            (centers[2] + centers[3]) / 2
+          ];
+          layer.appendChild(el('rect', {
+            x: MAP.inset,
+            y: MAP.inset,
+            width: MAP.width - MAP.inset * 2,
+            height: MAP.height - MAP.inset * 2,
+            rx: 8,
+            fill: 'none',
+            stroke: 'var(--active-pattern-line)',
+            'stroke-width': 1.6,
+            opacity: 0.46
+          }));
+          layer.appendChild(el('rect', {
+            x: MAP.inset,
+            y: MAP.inset,
+            width: MAP.width - MAP.inset * 2,
+            height: 100,
+            rx: 0,
+            fill: 'var(--active-pattern-glow)',
+            stroke: 'var(--active-pattern-line)',
+            'stroke-width': 1.2,
+            opacity: 0.16
+          }));
+          dividers.forEach((x) => {
+            layer.appendChild(el('path', {
+              d: 'M ' + x + ' ' + MAP.inset + ' V 124',
+              fill: 'none',
+              stroke: 'var(--active-pattern-line)',
+              'stroke-width': 1.1,
+              opacity: 0.46
+            }));
+          });
+          const ticks = [];
+          let tickIndex = 0;
+          let x;
+          for (x = MAP.inset + 12; x < frameRight - 12; x += 24) {
+            const length = tickIndex % 5 === 0 ? 14 : 7;
+            ticks.push('M ' + x + ' ' + MAP.inset + ' V ' + (MAP.inset + length));
+            tickIndex += 1;
+          }
+          layer.appendChild(el('path', {
+            d: ticks.join(' '),
+            fill: 'none',
+            stroke: 'var(--active-pattern-line)',
+            'stroke-width': 1,
+            opacity: 0.48
+          }));
+          layer.appendChild(el('path', {
+            d: 'M ' + MAP.inset + ' 64 H ' + (MAP.inset + 34) +
+              ' M ' + MAP.inset + ' ' + MAP.inset + ' V ' + (MAP.inset + 34) +
+              ' M ' + (frameRight - 34) + ' ' + MAP.inset + ' H ' + frameRight +
+              ' M ' + frameRight + ' ' + MAP.inset + ' V ' + (MAP.inset + 34) +
+              ' M ' + MAP.inset + ' ' + (frameBottom - 34) + ' V ' + frameBottom +
+              ' M ' + MAP.inset + ' ' + frameBottom + ' H ' + (MAP.inset + 34) +
+              ' M ' + (frameRight - 34) + ' ' + frameBottom + ' H ' + frameRight +
+              ' M ' + frameRight + ' ' + (frameBottom - 34) + ' V ' + frameBottom,
+            fill: 'none',
+            stroke: 'var(--active-pattern-line)',
+            'stroke-width': 2.6,
+            opacity: 0.56
+          }));
+        }
+      }
+
+      function drawLaneBackgrounds(layer, map, treatment) {
+        if (!treatment.lanes) return;
+        map.actorRows.forEach((rows, actorIndex) => {
+          const top = rows[0].y - MAP.lanePadY;
+          const last = rows[rows.length - 1];
+          const bottom = last.y + last.h + MAP.lanePadY;
+          const laneX = MAP.columns.actor.x - 32;
+          const laneRight = MAP.columns.discoverable.x + MAP.columns.discoverable.w + 24;
+          layer.appendChild(el('rect', {
+            x: laneX,
+            y: top,
+            width: laneRight - laneX,
+            height: bottom - top,
+            rx: 20,
+            fill: treatment.laneFills[actorIndex % treatment.laneFills.length],
+            stroke: treatment.nodeStroke,
+            'stroke-width': 1.2,
+            'stroke-opacity': 0.55,
+            opacity: 1
+          }));
+        });
+      }
+
+      function drawStatus(group, node, treatment) {
+        const pillX = node.x + node.w - 126;
+        const pillY = node.y + 14;
+        const color = treatment.routeForward ? routeColors[node.route] : treatment.route;
+        group.appendChild(el('rect', {
+          x: pillX,
+          y: pillY,
+          width: 108,
+          height: 26,
+          rx: 13,
+          fill: color,
+          stroke: color,
+          'stroke-width': 1,
+          opacity: activeVariant === 'vellum' ? 0.22 : 0.12
+        }));
+
+        const glyphX = pillX + 14;
+        const glyphY = pillY + 13;
+        if (node.status === 'known') {
+          group.appendChild(el('circle', {
+            cx: glyphX,
+            cy: glyphY,
+            r: 4.5,
+            fill: color,
+            stroke: color,
+            'stroke-width': 1.8
+          }));
+        } else if (node.status === 'assumed') {
+          group.appendChild(el('circle', {
+            cx: glyphX,
+            cy: glyphY,
+            r: 4.5,
+            fill: 'none',
+            stroke: color,
+            'stroke-width': 1.8,
+            'stroke-dasharray': '3 2'
+          }));
+        } else {
+          group.appendChild(el('rect', {
+            x: glyphX - 4.5,
+            y: glyphY - 4.5,
+            width: 9,
+            height: 9,
+            rx: 1,
+            fill: 'none',
+            stroke: color,
+            'stroke-width': 1.8
+          }));
+        }
+
+        const label = el('text', {
+          x: pillX + 27,
+          y: pillY + 17.5,
+          fill: color,
+          'font-size': 10.5,
+          'font-weight': 800,
+          'letter-spacing': 0.8
+        });
+        label.textContent = statusLabels[node.status];
+        group.appendChild(label);
+      }
+
+      function drawCardSurface(group, node, treatment, fill, stroke, kind) {
+        if (treatment.shadow) {
+          group.appendChild(el('rect', {
+            x: node.x + 9,
+            y: node.y + 11,
+            width: node.w,
+            height: node.h,
+            rx: treatment.radius,
+            fill: 'var(--cobalt-shadow-far)',
+            stroke: 'none',
+            opacity: 0.62
+          }));
+          group.appendChild(el('rect', {
+            x: node.x + 5,
+            y: node.y + 6,
+            width: node.w,
+            height: node.h,
+            rx: treatment.radius,
+            fill: 'var(--cobalt-shadow-near)',
+            stroke: 'none',
+            opacity: 0.72
+          }));
+        }
+
+        group.appendChild(el('rect', {
+          x: node.x,
+          y: node.y,
+          width: node.w,
+          height: node.h,
+          rx: treatment.radius,
+          fill: fill,
+          stroke: stroke,
+          'stroke-width': kind === 'actor' ? 3 : 1.9
+        }));
+
+        if (treatment.rules && kind !== 'actor') {
+          [0.36, 0.56, 0.76].forEach((position) => {
+            const y = node.y + node.h * position;
+            group.appendChild(el('path', {
+              d: 'M ' + (node.x + 12) + ' ' + y + ' H ' + (node.x + node.w - 12),
+              fill: 'none',
+              stroke: 'var(--cobalt-rule)',
+              'stroke-width': 1,
+              opacity: 0.18
+            }));
+          });
+        }
+      }
+
+      function drawNode(layer, node, treatment, kind, index) {
+        const group = el('g', {
+          class: 'node ' + kind,
+          'data-kind': kind
+        });
+        const discoverableFill = treatment.discoverableFills[index % treatment.discoverableFills.length];
+        const fill = kind === 'goal'
+          ? treatment.goalFill
+          : kind === 'actor'
+            ? treatment.actorFill
+            : kind === 'impact'
+              ? treatment.impactFill
+              : discoverableFill;
+        const routeColor = kind === 'discoverable' && treatment.routeForward
+          ? routeColors[node.route]
+          : treatment.route;
+        const stroke = kind === 'actor'
+          ? treatment.actorStroke
+          : kind === 'discoverable' && treatment.routeForward
+            ? routeColor
+            : treatment.nodeStroke;
+        const ink = kind === 'goal' && treatment.goalInk
+          ? treatment.goalInk
+          : kind === 'actor' && treatment.actorInk
+            ? treatment.actorInk
+            : treatment.ink;
+
+        drawCardSurface(group, node, treatment, fill, stroke, kind);
+
+        if (kind === 'actor') {
+          if (treatment.icons) {
+            addIcon(group, 'i-user-round', node.x + 17, node.y + 17, 24, treatment.icon, 0.92);
+          }
+          addText(group, node.text, {
+            x: node.x + node.w / 2,
+            y: node.y + node.h / 2 + 2,
+            maxWidth: node.w - 48,
+            maxLines: 3,
+            fontSize: treatment.actorSize,
+            lineHeight: treatment.actorSize * 1.2,
+            weight: 800,
+            fill: ink,
+            anchor: 'middle',
+            verticalCenter: true
+          });
+        } else if (kind === 'discoverable') {
+          if (treatment.icons) {
+            addIcon(group, 'i-lightbulb', node.x + 18, node.y + 15, 26, treatment.icon, 0.94);
+          }
+          drawStatus(group, node, treatment);
+          addText(group, node.text, {
+            x: node.x + 18,
+            y: node.y + 64,
+            maxWidth: node.w - 36,
+            maxLines: 4,
+            fontSize: activeVariant === 'vellum' ? 17 : 16.5,
+            lineHeight: 20.5,
+            weight: activeVariant === 'vellum' ? 650 : 560,
+            fill: ink
+          });
+          group.appendChild(el('rect', {
+            x: node.x + 1,
+            y: node.y + node.h - 40,
+            width: node.w - 2,
+            height: 39,
+            rx: Math.max(2, treatment.radius - 2),
+            fill: routeColor,
+            stroke: 'none',
+            opacity: treatment.routeForward ? 0.16 : 0.1
+          }));
+          const routeText = el('text', {
+            x: node.x + 18,
+            y: node.y + node.h - 15,
+            fill: routeColor,
+            'font-size': 13.2,
+            'font-weight': 760
+          });
+          routeText.textContent = '→ ' + node.route;
+          group.appendChild(routeText);
+        } else {
+          const iconId = kind === 'goal' ? 'i-target' : 'i-trending-up';
+          const iconOffset = treatment.icons ? 44 : 0;
+          if (treatment.icons) {
+            addIcon(group, iconId, node.x + 17, node.y + 18, 25, treatment.icon, 0.96);
+          }
+          addText(group, node.text, {
+            x: node.x + 18 + iconOffset,
+            y: node.y + node.h / 2 + 1,
+            maxWidth: node.w - 36 - iconOffset,
+            maxLines: kind === 'goal' ? 5 : 6,
+            fontSize: kind === 'goal' && activeVariant === 'vellum' ? 20 : 16.8,
+            lineHeight: kind === 'goal' && activeVariant === 'vellum' ? 24 : 20.5,
+            weight: kind === 'goal' ? 720 : 560,
+            fill: ink,
+            verticalCenter: true
+          });
+        }
+
+        layer.appendChild(group);
+      }
+
+      function setActiveCss(treatment) {
+        root.style.setProperty('--active-page', treatment.background);
+        root.style.setProperty('--active-frame', treatment.frame);
+        root.style.setProperty('--active-ink', treatment.ink);
+        root.style.setProperty('--active-muted', treatment.muted);
+        root.style.setProperty('--active-edge', treatment.edge);
+        root.style.setProperty('--active-route', treatment.route);
+        root.style.setProperty('--active-pattern-line', treatment.patternLine);
+        root.style.setProperty('--active-pattern-glow', treatment.patternGlow);
+        root.style.setProperty('--active-mobile-card', treatment.background);
+        root.style.setProperty('--active-mobile-actor', treatment.actorFill);
+        root.style.setProperty('--active-mobile-impact', treatment.impactFill);
+        root.style.setProperty('--active-mobile-discoverable', treatment.discoverableFills[0]);
+      }
+
+      function renderMobile(treatment) {
+        mobileMap.textContent = '';
+        const goal = htmlEl('div', 'mobile-goal', data.goal);
+        mobileMap.appendChild(goal);
+
+        data.actors.forEach((branch) => {
+          const section = htmlEl('section', 'mobile-branch');
+          section.id = 'mobile-' + branch.actor.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+          section.appendChild(htmlEl('div', 'mobile-actor', branch.actor));
+          section.appendChild(htmlEl('div', 'mobile-impact', branch.impact));
+          branch.discoverables.forEach((item) => {
+            const discoverable = htmlEl('div', 'mobile-discoverable', item.text);
+            const meta = htmlEl('span', 'mobile-meta');
+            meta.appendChild(htmlEl('span', 'mobile-status', item.status === 'surface' ? 'needs to surface' : item.status));
+            meta.appendChild(htmlEl('span', 'mobile-route', '→ ' + item.route));
+            discoverable.appendChild(meta);
+            section.appendChild(discoverable);
+          });
+          mobileMap.appendChild(section);
+        });
+        mobileMap.dataset.variant = treatment.label;
+      }
+
+      function axonometricCardSize(laneId) {
+        const sizes = {
+          goals: { w: 240, h: 92 },
+          actors: { w: 190, h: 78 },
+          impacts: { w: 200, h: 90 },
+          discoverables: { w: 116, h: 74 },
+          deliverables: { w: 164, h: 80 }
+        };
+        return sizes[laneId];
+      }
+
+      function axonometricLaneFill(treatment, laneId, index) {
+        if (laneId === 'goals') return treatment.goalFill;
+        if (laneId === 'actors') return treatment.actorFill;
+        if (laneId === 'impacts') return treatment.impactFill;
+        if (laneId === 'discoverables') {
+          return treatment.discoverableFills[index % treatment.discoverableFills.length];
+        }
+        return treatment.background;
+      }
+
+      function axonometricCardInk(treatment, laneId) {
+        if (laneId === 'goals' && treatment.goalInk) return treatment.goalInk;
+        if (laneId === 'actors' && treatment.actorInk) return treatment.actorInk;
+        return treatment.ink;
+      }
+
+      function axonometricLayout() {
+        const run = { x: 1320, y: -340 };
+        const laneThickness = { x: 46, y: 74 };
+        const nodes = {};
+        const lanes = [];
+        const endByLane = {
+          goals: 0.88,
+          actors: 0.93,
+          impacts: 0.93,
+          discoverables: 0.95,
+          deliverables: 0.94
+        };
+
+        portfolioData.lanes.forEach((lane, laneIndex) => {
+          const base = {
+            x: 50 + laneIndex * 70,
+            y: 390 + laneIndex * 170
+          };
+          const laneGeometry = {
+            id: lane.id,
+            label: lane.label,
+            index: laneIndex,
+            base: base,
+            run: run,
+            thickness: laneThickness,
+            points: [
+              base,
+              { x: base.x + run.x, y: base.y + run.y },
+              { x: base.x + run.x + laneThickness.x, y: base.y + run.y + laneThickness.y },
+              { x: base.x + laneThickness.x, y: base.y + laneThickness.y }
+            ]
+          };
+          lanes.push(laneGeometry);
+
+          const size = axonometricCardSize(lane.id);
+          const start = 0.05;
+          const end = endByLane[lane.id];
+          lane.items.forEach((item, itemIndex) => {
+            const ratio = lane.items.length === 1 ? 0.5 : itemIndex / (lane.items.length - 1);
+            const t = start + (end - start) * ratio;
+            const anchor = {
+              x: base.x + run.x * t + laneThickness.x * 0.52,
+              y: base.y + run.y * t + laneThickness.y * 0.5
+            };
+            nodes[item.id] = {
+              id: item.id,
+              laneId: lane.id,
+              laneIndex: laneIndex,
+              itemIndex: itemIndex,
+              label: item.label,
+              detail: item.detail || item.label,
+              x: anchor.x - size.w / 2,
+              y: anchor.y - size.h,
+              w: size.w,
+              h: size.h
+            };
+          });
+        });
+
+        return { lanes: lanes, nodes: nodes };
+      }
+
+      function cubicBetweenCards(source, target, linkIndex) {
+        const sourceCenterY = source.y + source.h / 2;
+        const targetCenterY = target.y + target.h / 2;
+        const targetBelow = targetCenterY >= sourceCenterY;
+        const start = {
+          x: source.x + source.w / 2,
+          y: targetBelow ? source.y + source.h - 2 : source.y + 2
+        };
+        const end = {
+          x: target.x + target.w / 2,
+          y: targetBelow ? target.y + 2 : target.y + target.h - 2
+        };
+        const dx = end.x - start.x;
+        const dy = end.y - start.y;
+        const drift = ((linkIndex % 5) - 2) * 3;
+        const controlA = {
+          x: start.x + dx * 0.36,
+          y: start.y + dy * 0.34 + drift
+        };
+        const controlB = {
+          x: start.x + dx * 0.64,
+          y: end.y - dy * 0.34 - drift
+        };
+        const points = [];
+        const steps = 42;
+        let step;
+        for (step = 0; step <= steps; step += 1) {
+          const t = step / steps;
+          const mt = 1 - t;
+          points.push({
+            x: mt * mt * mt * start.x + 3 * mt * mt * t * controlA.x + 3 * mt * t * t * controlB.x + t * t * t * end.x,
+            y: mt * mt * mt * start.y + 3 * mt * mt * t * controlA.y + 3 * mt * t * t * controlB.y + t * t * t * end.y
+          });
+        }
+        return points;
+      }
+
+      function drawAxonometricCard(layer, node, treatment) {
+        const group = el('g', {
+          class: 'axonometric-card ' + node.laneId,
+          'data-node-id': node.id
+        });
+        const title = el('title');
+        title.textContent = node.detail;
+        group.appendChild(title);
+
+        const fill = axonometricLaneFill(treatment, node.laneId, node.itemIndex);
+        const ink = axonometricCardInk(treatment, node.laneId);
+        const stroke = node.laneId === 'actors' ? treatment.actorStroke : treatment.nodeStroke;
+        group.appendChild(el('polygon', {
+          points:
+            (node.x + node.w) + ',' + (node.y + 7) + ' ' +
+            (node.x + node.w + 9) + ',' + (node.y + 13) + ' ' +
+            (node.x + node.w + 9) + ',' + (node.y + node.h + 6) + ' ' +
+            (node.x + node.w) + ',' + (node.y + node.h),
+          fill: treatment.edge,
+          stroke: 'none',
+          opacity: 0.2
+        }));
+        group.appendChild(el('rect', {
+          x: node.x,
+          y: node.y,
+          width: node.w,
+          height: node.h,
+          rx: Math.min(7, treatment.radius),
+          fill: fill,
+          stroke: stroke,
+          'stroke-width': node.laneId === 'actors' ? 2.2 : 1.25
+        }));
+        group.appendChild(el('rect', {
+          x: node.x,
+          y: node.y,
+          width: node.w,
+          height: 6,
+          rx: 0,
+          fill: node.laneId === 'deliverables' ? treatment.route : stroke,
+          stroke: 'none',
+          opacity: 0.9
+        }));
+
+        const fontSize = node.laneId === 'goals'
+          ? 14
+          : node.laneId === 'actors'
+            ? 14.5
+            : node.laneId === 'discoverables'
+              ? 10.8
+              : 11.8;
+        addText(group, node.label, {
+          x: node.x + node.w / 2,
+          y: node.y + node.h / 2 + 4,
+          maxWidth: node.w - 16,
+          maxLines: node.laneId === 'discoverables' ? 4 : 3,
+          fontSize: fontSize,
+          lineHeight: fontSize * 1.17,
+          weight: node.laneId === 'actors' ? 800 : 680,
+          fill: ink,
+          anchor: 'middle',
+          verticalCenter: true
+        });
+        layer.appendChild(group);
+      }
+
+      function renderAxonometric(treatment) {
+        const axo = axonometricLayout();
+        axonometricSvg.textContent = '';
+
+        const title = el('title', { id: 'axonometric-title' });
+        title.textContent = treatment.label + ' axonometric Impact Map portfolio';
+        axonometricSvg.appendChild(title);
+        const description = el('desc', { id: 'axonometric-description' });
+        description.textContent = 'Four goals connect to six actors, six impacts, ten discoverables, and eight deliverables. Upright cards face the viewer across five receding lanes.';
+        axonometricSvg.appendChild(description);
+
+        const defs = el('defs');
+        const clip = el('clipPath', { id: 'axonometric-arrow-clip' });
+        clip.appendChild(el('path', {
+          d: 'M 18 360 L 1460 2 L 1742 812 L 354 1222 L 18 1164 Z',
+          fill: 'var(--active-page)',
+          stroke: 'none'
+        }));
+        defs.appendChild(clip);
+        axonometricSvg.appendChild(defs);
+
+        axonometricSvg.appendChild(el('rect', {
+          x: 1,
+          y: 1,
+          width: 1758,
+          height: 1238,
+          rx: 22,
+          fill: treatment.background,
+          stroke: treatment.frame,
+          'stroke-width': 2
+        }));
+
+        const planes = el('g', { class: 'axonometric-lanes' });
+        axo.lanes.forEach((lane, laneIndex) => {
+          const fill = axonometricLaneFill(treatment, lane.id, laneIndex);
+          const points = lane.points.map((point) => point.x + ',' + point.y).join(' ');
+          planes.appendChild(el('polygon', {
+            points: points,
+            fill: fill,
+            stroke: treatment.nodeStroke,
+            'stroke-width': 1.35,
+            opacity: 0.72
+          }));
+          const frontA = lane.points[3];
+          const frontB = lane.points[2];
+          planes.appendChild(el('polygon', {
+            points:
+              frontA.x + ',' + frontA.y + ' ' +
+              frontB.x + ',' + frontB.y + ' ' +
+              frontB.x + ',' + (frontB.y + 10) + ' ' +
+              frontA.x + ',' + (frontA.y + 10),
+            fill: treatment.edge,
+            stroke: 'none',
+            opacity: 0.22
+          }));
+          const laneLabel = el('text', {
+            x: lane.base.x + 20,
+            y: lane.base.y + lane.thickness.y + 21,
+            fill: treatment.headingInk,
+            'font-size': 17,
+            'font-weight': 820,
+            'letter-spacing': 1.1,
+            transform: 'rotate(-14.45 ' + (lane.base.x + 20) + ' ' + (lane.base.y + lane.thickness.y + 21) + ')'
+          });
+          laneLabel.textContent = lane.label;
+          planes.appendChild(laneLabel);
+        });
+        axonometricSvg.appendChild(planes);
+
+        const links = el('g', {
+          class: 'axonometric-links',
+          'clip-path': 'url(#axonometric-arrow-clip)'
+        });
+        portfolioData.links.forEach((pair, linkIndex) => {
+          const source = axo.nodes[pair[0]];
+          const target = axo.nodes[pair[1]];
+          const points = cubicBetweenCards(source, target, linkIndex);
+          links.appendChild(el('path', {
+            d: solidArrowPath(points, 1.35, 9, 8),
+            fill: treatment.edge,
+            stroke: 'none',
+            opacity: activeVariant === 'vellum' ? 0.34 : 0.24,
+            'data-source': source.id,
+            'data-target': target.id
+          }));
+        });
+        axonometricSvg.appendChild(links);
+
+        const cards = el('g', { class: 'axonometric-cards' });
+        portfolioData.lanes.forEach((lane) => {
+          lane.items.forEach((item) => {
+            drawAxonometricCard(cards, axo.nodes[item.id], treatment);
+          });
+        });
+        axonometricSvg.appendChild(cards);
+      }
+
+      function narrativeLayout() {
+        const discoverables = [];
+        const actors = [];
+        const impacts = [];
+        let discoverableIndex = 0;
+
+        data.actors.forEach((branch, branchIndex) => {
+          const branchDiscoverables = branch.discoverables.map((item) => {
+            const node = {
+              id: 'narrative-discoverable-' + discoverableIndex,
+              kind: 'discoverable',
+              branch: branchIndex,
+              x: NARRATIVE.columns.discoverable.x,
+              y: NARRATIVE.discoverableY[discoverableIndex],
+              w: NARRATIVE.columns.discoverable.w,
+              h: NARRATIVE.columns.discoverable.h,
+              text: item.text,
+              route: item.route,
+              status: item.status,
+              itemIndex: discoverableIndex
+            };
+            discoverables.push(node);
+            discoverableIndex += 1;
+            return node;
+          });
+          const firstCenter = branchDiscoverables[0].y + branchDiscoverables[0].h / 2;
+          const lastCenter = branchDiscoverables[branchDiscoverables.length - 1].y + branchDiscoverables[branchDiscoverables.length - 1].h / 2;
+          const center = (firstCenter + lastCenter) / 2;
+          actors.push({
+            id: 'narrative-actor-' + branchIndex,
+            kind: 'actor',
+            branch: branchIndex,
+            x: NARRATIVE.columns.actor.x,
+            y: center - NARRATIVE.columns.actor.h / 2,
+            w: NARRATIVE.columns.actor.w,
+            h: NARRATIVE.columns.actor.h,
+            text: branch.actor
+          });
+          impacts.push({
+            id: 'narrative-impact-' + branchIndex,
+            kind: 'impact',
+            branch: branchIndex,
+            x: NARRATIVE.columns.impact.x,
+            y: center - NARRATIVE.columns.impact.h / 2,
+            w: NARRATIVE.columns.impact.w,
+            h: NARRATIVE.columns.impact.h,
+            text: branch.impact
+          });
+        });
+
+        const firstCenter = discoverables[0].y + discoverables[0].h / 2;
+        const lastCenter = discoverables[discoverables.length - 1].y + discoverables[discoverables.length - 1].h / 2;
+        const center = (firstCenter + lastCenter) / 2;
+        const goal = {
+          id: 'narrative-goal',
+          kind: 'goal',
+          branch: -1,
+          x: NARRATIVE.columns.goal.x,
+          y: center - NARRATIVE.columns.goal.h / 2,
+          w: NARRATIVE.columns.goal.w,
+          h: NARRATIVE.columns.goal.h,
+          text: data.goal
+        };
+
+        return {
+          goal: goal,
+          actors: actors,
+          impacts: impacts,
+          discoverables: discoverables
+        };
+      }
+
+      function narrativeCardFill(node, treatment) {
+        if (node.kind === 'goal') return treatment.goalFill;
+        if (node.kind === 'actor') return treatment.actorFill;
+        if (node.kind === 'impact') return treatment.impactFill;
+        return treatment.discoverableFills[node.itemIndex % treatment.discoverableFills.length];
+      }
+
+      function narrativeCardInk(node, treatment) {
+        if (node.kind === 'goal' && treatment.goalInk) return treatment.goalInk;
+        if (node.kind === 'actor' && treatment.actorInk) return treatment.actorInk;
+        return treatment.ink;
+      }
+
+      function drawNarrativeCard(layer, node, treatment) {
+        const group = el('g', {
+          'data-narrative-kind': node.kind,
+          'data-narrative-branch': node.branch,
+          'data-narrative-node': node.id
+        });
+        const fill = narrativeCardFill(node, treatment);
+        const ink = narrativeCardInk(node, treatment);
+        const stroke = node.kind === 'actor' ? treatment.actorStroke : treatment.nodeStroke;
+        const radius = Math.min(15, treatment.radius);
+
+        group.appendChild(el('rect', {
+          x: node.x,
+          y: node.y,
+          width: node.w,
+          height: node.h,
+          rx: radius,
+          fill: fill,
+          stroke: stroke,
+          'stroke-width': node.kind === 'actor' ? 2.2 : 1.5
+        }));
+
+        if (node.kind === 'discoverable') {
+          const statusShape = node.status === 'known'
+            ? el('circle', {
+              cx: node.x + 17,
+              cy: node.y + 14,
+              r: 5,
+              fill: treatment.route,
+              stroke: treatment.route,
+              'stroke-width': 1.5
+            })
+            : el('rect', {
+              x: node.x + 12,
+              y: node.y + 9,
+              width: 10,
+              height: 10,
+              rx: node.status === 'assumed' ? 5 : 1.5,
+              fill: node.status === 'surface' ? 'none' : treatment.background,
+              stroke: treatment.route,
+              'stroke-width': 1.5,
+              'stroke-dasharray': node.status === 'assumed' ? '2.5 2' : 'none'
+            });
+          group.appendChild(statusShape);
+          const status = el('text', {
+            x: node.x + 31,
+            y: node.y + 18,
+            fill: treatment.muted,
+            'font-size': 9.8,
+            'font-weight': 820,
+            'letter-spacing': 0.7
+          });
+          status.textContent = statusLabels[node.status];
+          group.appendChild(status);
+          addText(group, node.text, {
+            x: node.x + 14,
+            y: node.y + 37,
+            maxWidth: node.w - 28,
+            maxLines: 2,
+            fontSize: 13.8,
+            lineHeight: 15.5,
+            weight: 650,
+            fill: ink
+          });
+
+          const routeGroup = el('g', { 'data-narrative-route': 'true' });
+          const routeColor = routeColors[node.route] || treatment.route;
+          routeGroup.appendChild(el('rect', {
+            x: node.x + 1,
+            y: node.y + node.h - 20,
+            width: node.w - 2,
+            height: 19,
+            rx: Math.max(2, radius - 2),
+            fill: routeColor,
+            stroke: 'none',
+            opacity: 0.14
+          }));
+          const route = el('text', {
+            x: node.x + 14,
+            y: node.y + node.h - 6,
+            fill: routeColor,
+            'font-size': 10.5,
+            'font-weight': 790
+          });
+          route.textContent = '→ ' + node.route;
+          routeGroup.appendChild(route);
+          group.appendChild(routeGroup);
+        } else {
+          const fontSize = node.kind === 'actor' ? 17 : node.kind === 'goal' ? 17 : 14.5;
+          addText(group, node.text, {
+            x: node.x + node.w / 2,
+            y: node.y + node.h / 2 + 2,
+            maxWidth: node.w - 30,
+            maxLines: node.kind === 'goal' ? 5 : node.kind === 'impact' ? 5 : 3,
+            fontSize: fontSize,
+            lineHeight: fontSize * 1.18,
+            weight: node.kind === 'actor' ? 820 : node.kind === 'goal' ? 740 : 590,
+            fill: ink,
+            anchor: 'middle',
+            verticalCenter: true
+          });
+        }
+        layer.appendChild(group);
+      }
+
+      function drawNarrativeEdge(layer, from, to, branchIndex, treatment, route) {
+        const points = treatment.edgeMode === 'orthogonal'
+          ? orthogonalPoints(from, to)
+          : cubicPoints(from, to, 56);
+        const color = treatment.routeForward && route
+          ? routeColors[route] || treatment.edge
+          : treatment.edge;
+        layer.appendChild(el('path', {
+          d: solidArrowPath(points, Math.max(2.2, treatment.edgeWidth * 0.76), 13, 13),
+          fill: color,
+          stroke: 'none',
+          'data-narrative-kind': 'edge',
+          'data-narrative-branch': branchIndex
+        }));
+      }
+
+      function drawNarrativeFracture(layer, treatment) {
+        const group = el('g', {
+          'data-narrative-fracture': 'true',
+          opacity: 0
+        });
+        const conditions = [
+          { text: 'Provenance', y: 296 },
+          { text: 'Pipeline assumptions', y: 376 },
+          { text: 'Consent state', y: 456 },
+          { text: 'Audit history', y: 536 }
+        ];
+        conditions.forEach((condition) => {
+          group.appendChild(el('rect', {
+            x: 720,
+            y: condition.y,
+            width: 250,
+            height: 48,
+            rx: 24,
+            fill: treatment.background,
+            stroke: treatment.nodeStroke,
+            'stroke-width': 1.4,
+            'stroke-dasharray': '5 6'
+          }));
+          const label = el('text', {
+            x: 845,
+            y: condition.y + 30,
+            fill: treatment.muted,
+            'font-size': 14,
+            'font-weight': 760,
+            'text-anchor': 'middle'
+          });
+          label.textContent = condition.text;
+          group.appendChild(label);
+          group.appendChild(el('path', {
+            d: 'M 970 ' + (condition.y + 24) + ' C 1038 ' + (condition.y + 24) + ', 1056 490, 1150 490',
+            fill: 'none',
+            stroke: treatment.edge,
+            'stroke-width': 2,
+            'stroke-dasharray': '7 10',
+            opacity: 0.42
+          }));
+        });
+
+        group.appendChild(el('rect', {
+          x: 1150,
+          y: 430,
+          width: 330,
+          height: 122,
+          rx: Math.min(15, treatment.radius),
+          fill: treatment.discoverableFills[0],
+          stroke: treatment.nodeStroke,
+          'stroke-width': 2
+        }));
+        const label = el('text', {
+          x: 1172,
+          y: 458,
+          fill: treatment.muted,
+          'font-size': 10.5,
+          'font-weight': 850,
+          'letter-spacing': 1.1
+        });
+        label.textContent = 'INTERPRETATION RESULT';
+        group.appendChild(label);
+        addText(group, 'Variant call: likely pathogenic', {
+          x: 1172,
+          y: 493,
+          maxWidth: 286,
+          maxLines: 2,
+          fontSize: 19,
+          lineHeight: 23,
+          weight: 820,
+          fill: treatment.ink
+        });
+        const ready = el('text', {
+          x: 1172,
+          y: 530,
+          fill: treatment.route,
+          'font-size': 12.5,
+          'font-weight': 760
+        });
+        ready.textContent = 'Ready for review — context incomplete';
+        group.appendChild(ready);
+        layer.appendChild(group);
+      }
+
+      function renderNarrativeCaption(treatment, frame) {
+        const oldLayer = narrativeSvg.querySelector('[data-narrative-caption]');
+        if (oldLayer) oldLayer.remove();
+        const layer = el('g', { 'data-narrative-caption': 'true' });
+        const eyebrow = el('text', {
+          x: 70,
+          y: 34,
+          fill: treatment.route,
+          'font-size': 13,
+          'font-weight': 860,
+          'letter-spacing': 1.5
+        });
+        eyebrow.textContent = frame.eyebrow.toUpperCase();
+        layer.appendChild(eyebrow);
+        addText(layer, frame.title, {
+          x: 70,
+          y: 70,
+          maxWidth: 1230,
+          maxLines: 2,
+          fontSize: frame.mode === 'goal' ? 27 : 29,
+          lineHeight: 31,
+          weight: 830,
+          fill: treatment.ink
+        });
+        if (frame.deck) {
+          addText(layer, frame.deck, {
+            x: 70,
+            y: 132,
+            maxWidth: 1240,
+            maxLines: 1,
+            fontSize: 16.5,
+            lineHeight: 20,
+            weight: 590,
+            fill: treatment.muted
+          });
+        }
+        const count = el('text', {
+          x: 1530,
+          y: 34,
+          fill: treatment.muted,
+          'font-size': 13,
+          'font-weight': 800,
+          'text-anchor': 'end'
+        });
+        count.textContent = String(activeNarrativeFrame + 1).padStart(2, '0') + ' / ' + String(narrativeFrames.length).padStart(2, '0');
+        layer.appendChild(count);
+        layer.appendChild(el('line', {
+          x1: 70,
+          y1: 151,
+          x2: 1530,
+          y2: 151,
+          stroke: treatment.frame,
+          'stroke-width': 1
+        }));
+        narrativeSvg.appendChild(layer);
+      }
+
+      function applyNarrativeFrame() {
+        const frame = narrativeFrames[activeNarrativeFrame];
+        const treatment = variants[activeVariant];
+        const items = Array.from(narrativeSvg.querySelectorAll('[data-narrative-kind]'));
+        items.forEach((item) => {
+          const kind = item.dataset.narrativeKind;
+          const branch = Number(item.dataset.narrativeBranch);
+          let opacity = 1;
+          if (frame.mode === 'goal') {
+            opacity = kind === 'goal' ? 1 : kind === 'edge' ? 0.025 : 0.045;
+          } else if (frame.mode === 'fracture') {
+            opacity = kind === 'goal' ? 0.22 : kind === 'edge' ? 0.018 : 0.035;
+          } else if (frame.mode === 'branch') {
+            if (kind === 'goal') {
+              opacity = 0.92;
+            } else if (branch === frame.branch) {
+              opacity = kind === 'edge' ? 0.9 : 1;
+            } else if (branch < frame.branch) {
+              opacity = kind === 'edge' ? 0.13 : 0.2;
+            } else {
+              opacity = kind === 'edge' ? 0.025 : 0.045;
+            }
+          } else if (frame.mode === 'full') {
+            opacity = kind === 'edge' ? 0.62 : 0.96;
+          } else if (frame.mode === 'routes') {
+            if (kind === 'goal') opacity = 0.58;
+            else if (kind === 'discoverable') opacity = 1;
+            else opacity = kind === 'edge' ? 0.4 : 0.52;
+          } else if (frame.mode === 'resolution') {
+            if (kind === 'goal' || branch === 0) opacity = kind === 'edge' ? 0.95 : 1;
+            else opacity = kind === 'edge' ? 0.32 : 0.66;
+          }
+          item.setAttribute('opacity', opacity);
+        });
+
+        const fracture = narrativeSvg.querySelector('[data-narrative-fracture]');
+        if (fracture) fracture.setAttribute('opacity', frame.mode === 'fracture' ? 1 : 0);
+        narrativeSvg.querySelectorAll('[data-narrative-route]').forEach((route) => {
+          route.setAttribute('opacity', frame.mode === 'routes' ? 1 : 0.78);
+        });
+
+        renderNarrativeCaption(treatment, frame);
+        narrativeMarkers.querySelectorAll('[data-narrative-frame]').forEach((button) => {
+          if (Number(button.dataset.narrativeFrame) === activeNarrativeFrame) {
+            button.setAttribute('aria-current', 'step');
+          } else {
+            button.removeAttribute('aria-current');
+          }
+        });
+        narrativeCounter.textContent = 'Frame ' + (activeNarrativeFrame + 1) + ' of ' + narrativeFrames.length;
+        narrativePrevious.disabled = activeNarrativeFrame === 0;
+        narrativeNext.disabled = activeNarrativeFrame === narrativeFrames.length - 1;
+
+        const accessibleTitle = narrativeSvg.querySelector('#narrative-title-accessible');
+        const accessibleDescription = narrativeSvg.querySelector('#narrative-description-accessible');
+        if (accessibleTitle) accessibleTitle.textContent = frame.eyebrow + ': ' + frame.title;
+        if (accessibleDescription) {
+          accessibleDescription.textContent = frame.deck || 'Impact Map narrative frame ' + (activeNarrativeFrame + 1) + ' of ' + narrativeFrames.length + '.';
+        }
+      }
+
+      function setNarrativeFrame(frameIndex) {
+        activeNarrativeFrame = Math.max(0, Math.min(narrativeFrames.length - 1, frameIndex));
+        applyNarrativeFrame();
+      }
+
+      function ensureNarrativeMarkers() {
+        if (narrativeMarkers.children.length) return;
+        narrativeFrames.forEach((frame, index) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'narrative-marker';
+          button.dataset.narrativeFrame = index;
+          button.setAttribute('aria-label', 'Frame ' + (index + 1) + ': ' + frame.eyebrow.replace(/^\d+\s*·\s*/, ''));
+          button.textContent = index + 1;
+          button.addEventListener('click', () => setNarrativeFrame(index));
+          narrativeMarkers.appendChild(button);
+        });
+      }
+
+      function renderNarrative(treatment) {
+        ensureNarrativeMarkers();
+        narrativeSvg.textContent = '';
+
+        const title = el('title', { id: 'narrative-title-accessible' });
+        title.textContent = 'Impact Map narrative still sequence';
+        narrativeSvg.appendChild(title);
+        const description = el('desc', { id: 'narrative-description-accessible' });
+        description.textContent = 'A nine-frame narrative reveals the goal, four actor branches, their discoverable questions, routes, and a connected review result.';
+        narrativeSvg.appendChild(description);
+        narrativeSvg.appendChild(el('rect', {
+          x: 1,
+          y: 1,
+          width: NARRATIVE.width - 2,
+          height: NARRATIVE.height - 2,
+          rx: 22,
+          fill: treatment.background,
+          stroke: treatment.frame,
+          'stroke-width': 2
+        }));
+
+        const headings = el('g', { 'data-narrative-headings': 'true' });
+        const labels = ['Goal', 'Actor', 'Impact', 'Discoverable'];
+        const columns = Object.values(NARRATIVE.columns);
+        labels.forEach((label, index) => {
+          const heading = el('text', {
+            x: columns[index].x + columns[index].w / 2,
+            y: NARRATIVE.headingY,
+            fill: treatment.headingInk,
+            'font-size': 15,
+            'font-weight': 810,
+            'letter-spacing': 0.7,
+            'text-anchor': 'middle'
+          });
+          heading.textContent = label;
+          headings.appendChild(heading);
+        });
+        narrativeSvg.appendChild(headings);
+
+        const map = narrativeLayout();
+        const edges = el('g', { class: 'narrative-edges' });
+        map.actors.forEach((actor, branchIndex) => {
+          drawNarrativeEdge(edges, map.goal, actor, branchIndex, treatment);
+          drawNarrativeEdge(edges, actor, map.impacts[branchIndex], branchIndex, treatment);
+        });
+        map.discoverables.forEach((discoverable) => {
+          drawNarrativeEdge(
+            edges,
+            map.impacts[discoverable.branch],
+            discoverable,
+            discoverable.branch,
+            treatment,
+            discoverable.route
+          );
+        });
+        narrativeSvg.appendChild(edges);
+
+        const nodes = el('g', { class: 'narrative-nodes' });
+        drawNarrativeCard(nodes, map.goal, treatment);
+        map.actors.forEach((node) => drawNarrativeCard(nodes, node, treatment));
+        map.impacts.forEach((node) => drawNarrativeCard(nodes, node, treatment));
+        map.discoverables.forEach((node) => drawNarrativeCard(nodes, node, treatment));
+        narrativeSvg.appendChild(nodes);
+
+        const fracture = el('g', { class: 'narrative-fracture' });
+        drawNarrativeFracture(fracture, treatment);
+        narrativeSvg.appendChild(fracture);
+        applyNarrativeFrame();
+      }
+
+      function setView(viewName) {
+        activeView = ['branch', 'axonometric', 'narrative'].includes(viewName) ? viewName : 'branch';
+        mapShell.dataset.view = activeView;
+        root.dataset.mapView = activeView;
+        viewButtons.forEach((button) => {
+          button.setAttribute('aria-pressed', String(button.dataset.view === activeView));
+        });
+      }
+
+      function render(variantName) {
+        activeVariant = variants[variantName] ? variantName : 'warm';
+        const treatment = variants[activeVariant];
+        const map = layout();
+        const renderedPattern = treatment.allowPatterns ? activePattern : 'none';
+        setActiveCss(treatment);
+        svg.textContent = '';
+
+        const title = el('title', { id: 'map-title' });
+        title.textContent = treatment.label + ' Impact Map';
+        svg.appendChild(title);
+        const description = el('desc', { id: 'map-description' });
+        description.textContent = 'Goal, Actor, Impact, and Discoverable remain fixed. Actors are centered and emphasized. Each connector is one filled shape so arrow body and head share the same geometry.';
+        svg.appendChild(description);
+
+        const defs = el('defs');
+        addPatternDefs(defs);
+        svg.appendChild(defs);
+
+        svg.appendChild(el('rect', {
+          x: 1,
+          y: 1,
+          width: MAP.width - 2,
+          height: MAP.height - 2,
+          rx: 22,
+          fill: treatment.background,
+          stroke: treatment.frame,
+          'stroke-width': 2
+        }));
+
+        const backgroundLayer = el('g', { class: 'background-pattern' });
+        drawBackgroundPattern(backgroundLayer, renderedPattern, treatment);
+        svg.appendChild(backgroundLayer);
+
+        const mapGround = el('g', { class: 'map-ground' });
+        drawLaneBackgrounds(mapGround, map, treatment);
+        svg.appendChild(mapGround);
+
+        const headings = ['Goal', 'Actor', 'Impact', 'Discoverable'];
+        const headingX = [
+          MAP.columns.goal.x + MAP.columns.goal.w / 2,
+          MAP.columns.actor.x + MAP.columns.actor.w / 2,
+          MAP.columns.impact.x + MAP.columns.impact.w / 2,
+          MAP.columns.discoverable.x + MAP.columns.discoverable.w / 2
+        ];
+        headings.forEach((heading, index) => {
+          const label = el('text', {
+            x: headingX[index],
+            y: activeVariant === 'vellum' ? MAP.headingY + 4 : MAP.headingY,
+            fill: treatment.headingInk,
+            'text-anchor': 'middle',
+            'font-size': treatment.headingSize,
+            'font-weight': activeVariant === 'vellum' ? 850 : 760,
+            'letter-spacing': activeVariant === 'vellum' ? 1.5 : 0.2
+          });
+          label.textContent = heading;
+          svg.appendChild(label);
+        });
+
+        const edges = el('g', { class: 'edges' });
+        map.actors.forEach((actor, actorIndex) => {
+          drawArrow(edges, map.goal, actor, treatment, treatment.edge);
+          drawArrow(edges, actor, map.impacts[actorIndex], treatment, treatment.edge);
+        });
+        map.discoverables.forEach((discoverable) => {
+          const color = treatment.routeForward ? routeColors[discoverable.route] : treatment.edge;
+          drawArrow(
+            edges,
+            map.impacts[discoverable.actorIndex],
+            discoverable,
+            treatment,
+            color,
+            treatment.routeForward ? 4.5 : treatment.edgeWidth
+          );
+        });
+        svg.appendChild(edges);
+
+        const nodes = el('g', { class: 'nodes' });
+        drawNode(nodes, map.goal, treatment, 'goal', 0);
+        map.actors.forEach((node, index) => drawNode(nodes, node, treatment, 'actor', index));
+        map.impacts.forEach((node, index) => drawNode(nodes, node, treatment, 'impact', index));
+        map.discoverables.forEach((node, index) => drawNode(nodes, node, treatment, 'discoverable', index));
+        svg.appendChild(nodes);
+
+        variantButtons.forEach((button) => {
+          button.setAttribute('aria-pressed', String(button.dataset.variant === activeVariant));
+        });
+        patternButtons.forEach((button) => {
+          button.setAttribute('aria-pressed', String(
+            treatment.allowPatterns &&
+            button.dataset.pattern === activePattern
+          ));
+          button.disabled = !treatment.allowPatterns;
+        });
+        root.dataset.variant = activeVariant;
+        history.replaceState(null, '', '#' + activeVariant);
+        renderMobile(treatment);
+        renderAxonometric(treatment);
+        renderNarrative(treatment);
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      function safeId(value) {
+        return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      }
+
+      function resolvedColor(value) {
+        const match = String(value).match(/^var\((--[^)]+)\)$/);
+        if (!match) return value;
+        return getComputedStyle(root).getPropertyValue(match[1]).trim() || value;
+      }
+
+      function reportHtml() {
+        const treatment = variants[activeVariant];
+        const pages = [
+          {
+            id: 'overview',
+            type: 'overview',
+            eyebrow: 'Impact Map',
+            title: 'Trace from goal to discoverable',
+            body: '<p class="goal">' + escapeHtml(data.goal) + '</p><div class="overview-grid">' +
+              data.actors.map((branch) => {
+                return '<a class="actor-link" href="#' + safeId(branch.actor) + '"><span>' +
+                  escapeHtml(branch.actor) + '</span><small>' + branch.discoverables.length +
+                  (branch.discoverables.length === 1 ? ' discoverable' : ' discoverables') + '</small></a>';
+              }).join('') + '</div>'
+          }
+        ];
+
+        data.actors.forEach((branch) => {
+          const enrichment = reportEnrichment[branch.actor];
+          const discoverables = branch.discoverables.map((item) => {
+            const status = item.status === 'surface' ? 'needs to surface' : item.status;
+            return '<article class="discoverable"><div class="status">' + escapeHtml(status) +
+              '</div><h3>' + escapeHtml(item.text) + '</h3><p class="route">→ ' +
+              escapeHtml(item.route) + '</p></article>';
+          }).join('');
+          const markers = enrichment.markers.map((marker) => {
+            return '<span>' + escapeHtml(marker) + '</span>';
+          }).join('');
+          const optionHead = enrichment.columns.map((column) => {
+            return '<th scope="col">' + escapeHtml(column) + '</th>';
+          }).join('');
+          const optionRows = enrichment.options.map((row) => {
+            return '<tr>' + row.map((cell) => '<td>' + escapeHtml(cell) + '</td>').join('') + '</tr>';
+          }).join('');
+          pages.push({
+            id: safeId(branch.actor),
+            type: 'actor',
+            eyebrow: 'Actor',
+            title: escapeHtml(branch.actor),
+            body: '<div class="actor-layout"><div class="actor-left"><p class="impact"><strong>Impact</strong>' +
+              escapeHtml(branch.impact) + '</p><div class="discoverable-grid">' + discoverables +
+              '</div></div><aside class="actor-right"><blockquote>“' + escapeHtml(enrichment.quote) +
+              '”<cite>— ' + escapeHtml(branch.actor) + '</cite></blockquote><section class="scenario">' +
+              '<div class="markers">' + markers + '</div><h2><span>Scenario</span>' +
+              escapeHtml(enrichment.scenario) + '</h2><dl class="gherkin"><div><dt>Given</dt><dd>' +
+              escapeHtml(enrichment.given) + '</dd></div><div><dt>When</dt><dd>' +
+              escapeHtml(enrichment.when) + '</dd></div><div><dt>Then</dt><dd>' +
+              escapeHtml(enrichment.then) + '</dd></div></dl><div class="table-wrap"><table><caption>Examples</caption><thead><tr>' +
+              optionHead + '</tr></thead><tbody>' + optionRows +
+              '</tbody></table></div></section></aside></div>'
+          });
+        });
+
+        const pageMarkup = pages.map((page, index) => {
+          const previous = pages[index - 1] || pages[pages.length - 1];
+          const next = pages[index + 1] || pages[0];
+          return '<section class="page page-' + page.type + '" id="' + page.id + '" data-page="' + (index + 1) + '">' +
+            '<div class="page-inner"><p class="eyebrow">' + page.eyebrow + '</p><h1>' + page.title +
+            '</h1>' + page.body + '<footer><a href="#' + previous.id + '">← Previous</a><span>Page ' +
+            (index + 1) + ' of ' + pages.length + '</span><a href="#' + next.id +
+            '">Next →</a></footer></div></section>';
+        }).join('');
+
+        const jumpLinks = pages.map((page, index) => {
+          return '<a href="#' + page.id + '" aria-label="Page ' + (index + 1) + ': ' +
+            page.title.replace(/<[^>]+>/g, '') + '"' + (index === 0 ? ' aria-current="page"' : '') +
+            '>' + (index + 1) + '</a>';
+        }).join('');
+
+        const pageColor = resolvedColor(treatment.background);
+        const inkColor = resolvedColor(treatment.ink);
+        const mutedColor = resolvedColor(treatment.muted);
+        const actorColor = resolvedColor(treatment.actorFill);
+        const impactColor = resolvedColor(treatment.impactFill);
+        const discoverableColor = resolvedColor(treatment.discoverableFills[0]);
+        const accentColor = resolvedColor(treatment.route);
+        const frameColor = resolvedColor(treatment.frame);
+
+        return '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
+          '<meta name="viewport" content="width=device-width, initial-scale=1">' +
+          '<title>Impact Map leave-behind — ' + escapeHtml(treatment.label) + '</title>' +
+          '<style>:root{--page:' + pageColor + ';--ink:' + inkColor + ';--muted:' + mutedColor +
+          ';--actor:' + actorColor + ';--impact:' + impactColor + ';--discoverable:' + discoverableColor +
+          ';--accent:' + accentColor + ';--frame:' + frameColor +
+          ';font-family:"Arial Nova","Avenir Next",Futura,"Century Gothic",Arial,sans-serif}' +
+          '*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-snap-type:y proximity}' +
+          'body{margin:0;background:var(--page);color:var(--ink)}.jump{position:fixed;z-index:10;top:1rem;right:1rem;display:flex;gap:.4rem;padding:.5rem;border:1px solid var(--frame);border-radius:999px;background:var(--page)}' +
+          '.jump a{display:grid;place-items:center;width:2rem;height:2rem;border:1px solid transparent;border-radius:50%;color:var(--ink);text-decoration:none;font-weight:800;opacity:.64}.jump a:hover{background:var(--actor);opacity:1}.jump a[aria-current="page"]{border-color:var(--accent);background:var(--accent);color:var(--page);opacity:1;box-shadow:0 0 0 3px color-mix(in srgb,var(--page) 72%,transparent)}.jump a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}' +
+          '.page{min-height:100svh;scroll-snap-align:start;display:grid;place-items:center;padding:clamp(2rem,6vw,6rem)}' +
+          '.page-inner{width:min(100%,94rem);display:grid;gap:1.3rem}.eyebrow{margin:0;color:var(--accent);font-size:.8rem;font-weight:850;letter-spacing:.14em;text-transform:uppercase}' +
+          'h1{max-width:20ch;margin:0;font-size:clamp(2.2rem,5vw,5rem);line-height:.98;letter-spacing:-.045em}h2{margin:0;font-size:1.08rem;line-height:1.25}h2 span{display:block;margin-bottom:.35rem;color:var(--accent);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}h3{margin:.65rem 0;font-size:clamp(1.02rem,1.55vw,1.4rem);line-height:1.2}' +
+          '.goal{max-width:36ch;margin:0;padding:1.5rem;border-left:.55rem solid var(--accent);font-size:clamp(1.4rem,3vw,2.5rem);font-weight:750;line-height:1.25}' +
+          '.overview-grid,.discoverable-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.actor-layout{display:grid;grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);gap:clamp(1.5rem,4vw,4rem);align-items:start}.actor-left,.actor-right{display:grid;gap:1rem}.actor-link,.discoverable,.impact,.scenario{border:1px solid var(--frame);border-radius:1rem;padding:1.2rem}' +
+          '.actor-link{display:grid;gap:.35rem;background:var(--actor);color:var(--ink);text-decoration:none;font-size:1.1rem;font-weight:800}.actor-link small{color:var(--muted);font-size:.8rem}' +
+          '.impact{margin:0;background:var(--impact);font-size:clamp(1rem,1.55vw,1.3rem);line-height:1.42}.impact strong{display:block;margin-bottom:.45rem;color:var(--accent);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase}' +
+          '.discoverable{background:var(--discoverable)}.status{color:var(--muted);font-size:.68rem;font-weight:850;letter-spacing:.1em;text-transform:uppercase}.route{margin:0;color:var(--accent);font-size:.86rem;font-weight:800}' +
+          'blockquote{margin:0;padding:.35rem 0 1rem;border-bottom:4px solid var(--accent);font-size:clamp(1.55rem,2.8vw,2.8rem);font-weight:800;line-height:1.08;letter-spacing:-.025em}blockquote cite{display:block;margin-top:1rem;color:var(--muted);font-size:.75rem;font-style:normal;font-weight:750;letter-spacing:.08em;text-transform:uppercase}' +
+          '.scenario{display:grid;gap:.85rem;background:color-mix(in srgb,var(--actor) 35%,var(--page))}.markers{display:flex;flex-wrap:wrap;gap:.3rem .65rem;color:var(--accent);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.7rem;font-weight:800}.gherkin{display:grid;gap:.55rem;margin:0}.gherkin div{display:grid;grid-template-columns:3.6rem 1fr;gap:.65rem}.gherkin dt{color:var(--accent);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:900}.gherkin dd{margin:0;line-height:1.35}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.73rem;line-height:1.3}caption{padding:.35rem 0;text-align:left;color:var(--accent);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:900}th,td{padding:.48rem .4rem;border-top:1px solid var(--frame);text-align:left;vertical-align:top}th{color:var(--muted);font-size:.66rem;letter-spacing:.04em;text-transform:uppercase}' +
+          'footer{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:1rem;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--frame);color:var(--muted);font-size:.82rem}footer a{color:var(--accent);font-weight:800;text-decoration:none}footer a:last-child{text-align:right}' +
+          '@media(max-width:920px){.actor-layout{grid-template-columns:1fr}.overview-grid,.discoverable-grid{grid-template-columns:1fr}.jump{top:auto;bottom:.8rem}.page{padding:2rem 1rem 5rem}}' +
+          '@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}' +
+          '@media print{@page{size:landscape;margin:.4in}.jump{display:none}.page{min-height:auto;height:7.15in;page-break-after:always;padding:.12in}.page:last-child{page-break-after:auto}.page-inner{gap:.8rem}.actor-layout{grid-template-columns:.94fr 1.06fr;gap:1.1rem}blockquote{font-size:1.45rem}.scenario{padding:.8rem}.gherkin{font-size:.75rem}table{font-size:.62rem}footer{margin-top:auto}html{scroll-snap-type:none}}' +
+          '</style></head><body><nav class="jump" aria-label="Report pages">' + jumpLinks +
+          '</nav>' + pageMarkup +
+          '<script>(()=>{const p=[...document.querySelectorAll(".page")],l=[...document.querySelectorAll(".jump a")];function current(id){l.forEach(a=>{if(a.hash==="#" + id)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")})}function go(d){const y=scrollY+innerHeight*.45;let i=p.findIndex(n=>n.offsetTop+n.offsetHeight>y);if(i<0)i=0;i=Math.max(0,Math.min(p.length-1,i+d));current(p[i].id);location.hash=p[i].id}addEventListener("hashchange",()=>current(location.hash.slice(1)||p[0].id));if("IntersectionObserver" in window){const ratios=new Map;const observer=new IntersectionObserver(entries=>{entries.forEach(e=>ratios.set(e.target.id,e.intersectionRatio));let best=p[0].id,score=-1;ratios.forEach((ratio,id)=>{if(ratio>score){score=ratio;best=id}});current(best)},{threshold:[.25,.45,.65,.85]});p.forEach(page=>observer.observe(page))}current(location.hash.slice(1)||p[0].id);addEventListener("keydown",e=>{if(["ArrowRight","ArrowDown","PageDown"].includes(e.key)){e.preventDefault();go(1)}if(["ArrowLeft","ArrowUp","PageUp"].includes(e.key)){e.preventDefault();go(-1)}if(e.key==="Home"){e.preventDefault();current(p[0].id);location.hash=p[0].id}if(e.key==="End"){e.preventDefault();current(p[p.length-1].id);location.hash=p[p.length-1].id}})})();<\/script>' +
+          '</body></html>';
+      }
+
+      function createReportUrl() {
+        return URL.createObjectURL(new Blob([reportHtml()], { type: 'text/html' }));
+      }
+
+      variantButtons.forEach((button) => {
+        button.addEventListener('click', () => render(button.dataset.variant));
+      });
+
+      patternButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          activePattern = button.dataset.pattern;
+          render(activeVariant);
+        });
+      });
+
+      viewButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          setView(button.dataset.view);
+        });
+      });
+
+      narrativePrevious.addEventListener('click', () => {
+        setNarrativeFrame(activeNarrativeFrame - 1);
+      });
+
+      narrativeNext.addEventListener('click', () => {
+        setNarrativeFrame(activeNarrativeFrame + 1);
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (activeView !== 'narrative') return;
+        if (event.target && /^(INPUT|SELECT|TEXTAREA|BUTTON)$/.test(event.target.tagName)) return;
+        if (event.key === 'ArrowRight' || event.key === 'PageDown') {
+          event.preventDefault();
+          setNarrativeFrame(activeNarrativeFrame + 1);
+        }
+        if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+          event.preventDefault();
+          setNarrativeFrame(activeNarrativeFrame - 1);
+        }
+        if (event.key === 'Home') {
+          event.preventDefault();
+          setNarrativeFrame(0);
+        }
+        if (event.key === 'End') {
+          event.preventDefault();
+          setNarrativeFrame(narrativeFrames.length - 1);
+        }
+      });
+
+      document.querySelector('[data-action="open-report"]').addEventListener('click', () => {
+        const url = createReportUrl();
+        window.open(url, '_blank', 'noopener');
+        window.setTimeout(() => URL.revokeObjectURL(url), 120000);
+      });
+
+      document.querySelector('[data-action="download-report"]').addEventListener('click', () => {
+        const url = createReportUrl();
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'impact-map-leave-behind-' + activeVariant + '.html';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 2000);
+      });
+
+      const initialVariant = variants[location.hash.slice(1)] ? location.hash.slice(1) : 'warm';
+      render(initialVariant);
+      setView('branch');
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Choose the working posture; preserve one product and one access model</title>
+  <desc id="desc">Five working-posture cards sit above independent identity, tenant, entitlement, and presentation boundaries. A directed handoff joins Humatics specialists to customer technicians through shared site objects, followed by a cross-functional investment map.</desc>
+  <defs>
+    <pattern id="soft-dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="4" r="1.4" fill="#3157ed" opacity="0.10"/>
+      <circle cx="19" cy="16" r="0.9" fill="#3157ed" opacity="0.07"/>
+    </pattern>
+    <pattern id="draft-lines" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M0 20H20M20 0V20" fill="none" stroke="#8aaee9" stroke-width="1" opacity="0.16"/>
+    </pattern>
+    <clipPath id="handoff-clip"><rect x="440" y="620" width="1090" height="382" rx="24"/></clipPath>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}
+      .ink{fill:#15335b}.blue{fill:#215fbb}.muted{fill:#4c678d}.white{fill:#fffdf7}
+      .title{font-size:37px;font-weight:800;letter-spacing:-.6px}.subtitle{font-size:18px;font-weight:560}
+      .eyebrow{font-size:13px;font-weight:800;letter-spacing:1.6px}.card-title{font-size:22px;font-weight:800}
+      .body{font-size:17px;font-weight:570}.small{font-size:14px;font-weight:650}.tiny{font-size:12px;font-weight:760}
+      .rule{stroke:#215fbb;stroke-width:2}.soft-rule{stroke:#8aaee9;stroke-width:1.5}
+    </style>
+  </defs>
+
+  <rect width="1600" height="1200" fill="#ffd3d0"/>
+  <rect width="1600" height="1200" fill="url(#soft-dots)"/>
+  <rect x="30" y="30" width="1540" height="1140" rx="36" fill="#fdebe9" stroke="#3157ed" stroke-width="2"/>
+
+  <g class="sans">
+    <text x="72" y="92" class="title ink">Choose the working posture; preserve one product and one access model</text>
+    <text x="72" y="126" class="subtitle muted">One set of shared objects supports five orientations to the work.</text>
+    <text x="72" y="160" class="eyebrow blue">CHOOSE YOUR PLAYER · WORKING POSTURE</text>
+
+    <g aria-label="Five working postures">
+      <rect x="72" y="184" width="260" height="214" rx="22" fill="#f7d7d4" stroke="#3157ed" stroke-width="2"/>
+      <text x="94" y="220" class="eyebrow blue">PROJECT ADMINISTRATION</text>
+      <text x="94" y="265" class="card-title ink"><tspan x="94">Organize clients,</tspan><tspan x="94" dy="30">sites, and</tspan><tspan x="94" dy="30">assignments</tspan></text>
+      <text x="94" y="370" class="tiny muted">ORIENTATION 1 / 5</text>
+
+      <rect x="356" y="184" width="260" height="214" rx="22" fill="#f2ff67" stroke="#3157ed" stroke-width="2"/>
+      <text x="378" y="220" class="eyebrow blue">PLANNING</text>
+      <text x="378" y="265" class="card-title ink"><tspan x="378">Define installation</tspan><tspan x="378" dy="30">intent, constraints,</tspan><tspan x="378" dy="30">and zones</tspan></text>
+      <text x="378" y="370" class="tiny muted">ORIENTATION 2 / 5</text>
+
+      <rect x="648" y="192" width="260" height="214" rx="22" fill="#183a78" opacity="0.25"/>
+      <rect x="640" y="184" width="260" height="214" rx="22" fill="#2855f3" stroke="#16345e" stroke-width="4"/>
+      <text x="662" y="220" class="eyebrow white">DEPLOYMENT · SELECTED</text>
+      <text x="662" y="265" class="card-title white"><tspan x="662">Place, calibrate,</tspan><tspan x="662" dy="30">and commission</tspan><tspan x="662" dy="30">equipment</tspan></text>
+      <text x="662" y="370" class="tiny white">ORIENTATION 3 / 5</text>
+
+      <rect x="924" y="184" width="260" height="214" rx="22" fill="#fa7065" stroke="#3157ed" stroke-width="2"/>
+      <text x="946" y="220" class="eyebrow ink">SUPPORT</text>
+      <text x="946" y="265" class="card-title ink"><tspan x="946">Inspect evidence,</tspan><tspan x="946" dy="30">conversation, and</tspan><tspan x="946" dy="30">exceptions</tspan></text>
+      <text x="946" y="370" class="tiny ink">ORIENTATION 4 / 5</text>
+
+      <rect x="1208" y="184" width="260" height="214" rx="22" fill="#e9cf9e" stroke="#3157ed" stroke-width="2"/>
+      <text x="1230" y="220" class="eyebrow ink">OPERATIONS</text>
+      <text x="1230" y="265" class="card-title ink"><tspan x="1230">Monitor the live</tspan><tspan x="1230" dy="30">site and act</tspan><tspan x="1230" dy="30">on status</tspan></text>
+      <text x="1230" y="370" class="tiny ink">ORIENTATION 5 / 5</text>
+    </g>
+
+    <g aria-label="Independent access and presentation boundaries">
+      <rect x="72" y="438" width="350" height="112" rx="18" fill="#fff7f4" stroke="#8aaee9" stroke-width="2"/>
+      <text x="94" y="472" class="eyebrow blue">VERIFIED IDENTITY</text>
+      <text x="94" y="510" class="body ink">Known person and account</text>
+      <path d="M422 490H433V483L447 494L433 505V498H422Z" fill="#215fbb"/>
+
+      <rect x="440" y="438" width="350" height="112" rx="18" fill="#fff7f4" stroke="#8aaee9" stroke-width="2"/>
+      <text x="462" y="472" class="eyebrow blue">ACTIVE TENANT MEMBERSHIP</text>
+      <text x="462" y="510" class="body ink">Current organization boundary</text>
+      <path d="M790 490H801V483L815 494L801 505V498H790Z" fill="#215fbb"/>
+
+      <rect x="808" y="438" width="350" height="112" rx="18" fill="#fff7f4" stroke="#8aaee9" stroke-width="2"/>
+      <text x="830" y="472" class="eyebrow blue">ENTITLEMENTS</text>
+      <text x="830" y="510" class="body ink">Access authority</text>
+      <path d="M1158 490H1169V483L1183 494L1169 505V498H1158Z" fill="#215fbb"/>
+
+      <rect x="1176" y="438" width="292" height="112" rx="18" fill="#dbe9ff" stroke="#215fbb" stroke-width="3"/>
+      <text x="1198" y="472" class="eyebrow blue">WORKING POSTURE</text>
+      <text x="1198" y="510" class="body ink">Selected view arrangement</text>
+    </g>
+
+    <rect x="382" y="574" width="836" height="54" rx="27" fill="#fffdf7" stroke="#3157ed" stroke-width="2"/>
+    <text x="800" y="608" text-anchor="middle" class="body ink">Working posture changes presentation. Entitlement remains the access authority.</text>
+
+    <g aria-label="Shared objects" transform="translate(72 658)">
+      <rect width="340" height="334" rx="24" fill="#fff7f4" stroke="#3157ed" stroke-width="2"/>
+      <rect width="340" height="334" rx="24" fill="url(#draft-lines)"/>
+      <text x="24" y="42" class="eyebrow blue">SHARED PRODUCT MODEL</text>
+      <text x="24" y="77" class="card-title ink">Objects remain stable</text>
+      <g class="small ink">
+        <rect x="24" y="103" width="128" height="48" rx="24" fill="#dbf0f0" stroke="#215fbb"/>
+        <text x="88" y="133" text-anchor="middle">Client</text>
+        <rect x="166" y="103" width="146" height="48" rx="24" fill="#dbf0f0" stroke="#215fbb"/>
+        <text x="239" y="133" text-anchor="middle">Site</text>
+        <rect x="24" y="165" width="288" height="48" rx="24" fill="#f2ff67" stroke="#215fbb"/>
+        <text x="168" y="195" text-anchor="middle">Installation</text>
+        <rect x="24" y="227" width="132" height="48" rx="24" fill="#f7d7d4" stroke="#215fbb"/>
+        <text x="90" y="257" text-anchor="middle">Beacon</text>
+        <rect x="170" y="227" width="142" height="48" rx="24" fill="#e9cf9e" stroke="#215fbb"/>
+        <text x="241" y="257" text-anchor="middle">Zone</text>
+      </g>
+      <text x="24" y="308" class="small muted">Five projections; one object graph.</text>
+    </g>
+
+    <g clip-path="url(#handoff-clip)" aria-label="Directed specialist to customer handoff">
+      <rect x="440" y="658" width="1090" height="334" rx="24" fill="#fff7f4" stroke="#3157ed" stroke-width="2"/>
+      <rect x="440" y="658" width="1090" height="334" rx="24" fill="url(#draft-lines)"/>
+      <text x="468" y="700" class="eyebrow blue">SITE OWNERSHIP HANDOFF</text>
+
+      <rect x="468" y="724" width="264" height="106" rx="18" fill="#dbe9ff" stroke="#215fbb" stroke-width="2"/>
+      <text x="490" y="758" class="card-title ink">Humatics specialist</text>
+      <text x="490" y="787" class="small muted"><tspan x="490">Works across authorized</tspan><tspan x="490" dy="20">clients and sites</tspan></text>
+
+      <path d="M732 774H758V768L772 777L758 786V780H732Z" fill="#215fbb"/>
+      <rect x="772" y="738" width="112" height="78" rx="16" fill="#f2ff67" stroke="#215fbb" stroke-width="2"/>
+      <text x="828" y="783" text-anchor="middle" class="body ink">Plan</text>
+      <path d="M884 774H902V768L916 777L902 786V780H884Z" fill="#215fbb"/>
+      <rect x="916" y="738" width="112" height="78" rx="16" fill="#2855f3" stroke="#16345e" stroke-width="2"/>
+      <text x="972" y="783" text-anchor="middle" class="body white">Deploy</text>
+      <path d="M1028 774H1046V768L1060 777L1046 786V780H1028Z" fill="#215fbb"/>
+      <rect x="1060" y="738" width="112" height="78" rx="16" fill="#fa7065" stroke="#215fbb" stroke-width="2"/>
+      <text x="1116" y="783" text-anchor="middle" class="body ink">Support</text>
+      <path d="M1172 774H1190V768L1204 777L1190 786V780H1172Z" fill="#215fbb"/>
+      <rect x="1204" y="738" width="112" height="78" rx="16" fill="#e9cf9e" stroke="#215fbb" stroke-width="2"/>
+      <text x="1260" y="783" text-anchor="middle" class="body ink">Operate</text>
+      <path d="M1316 774H1334V768L1348 777L1334 786V780H1316Z" fill="#215fbb"/>
+
+      <rect x="1348" y="724" width="154" height="106" rx="18" fill="#dbf0f0" stroke="#215fbb" stroke-width="2"/>
+      <text x="1370" y="756" class="body ink"><tspan x="1370">Customer</tspan><tspan x="1370" dy="23">technician</tspan></text>
+      <text x="1370" y="811" class="tiny muted">PERMITTED SITES</text>
+
+      <g transform="translate(468 862)">
+        <text x="0" y="0" class="eyebrow blue">EDGE CONDITIONS THAT CHANGE DURING HANDOFF</text>
+        <line x1="0" y1="18" x2="1034" y2="18" class="soft-rule"/>
+        <text x="0" y="48" class="small muted">OWNER</text><text x="150" y="48" class="small ink">Humatics lead</text><text x="480" y="48" class="small ink">Shared during deployment</text><text x="866" y="48" class="small ink">Customer lead</text>
+        <text x="0" y="76" class="small muted">EDITABLE BY</text><text x="150" y="76" class="small ink">Specialists</text><text x="480" y="76" class="small ink">Authorized site team</text><text x="866" y="76" class="small ink">Permitted operators</text>
+        <text x="0" y="104" class="small muted">HISTORY</text><text x="150" y="104" class="small ink">Plan decisions</text><text x="480" y="104" class="small ink">Commissioning evidence</text><text x="866" y="104" class="small ink">Retained for support</text>
+      </g>
+    </g>
+
+    <path d="M412 820H426V814L440 823L426 832V826H412Z" fill="#215fbb"/>
+
+    <g aria-label="Cross-functional investment" transform="translate(72 1030)">
+      <rect width="1456" height="112" rx="22" fill="#16345e"/>
+      <text x="22" y="31" class="eyebrow white">CROSS-FUNCTIONAL INVESTMENT</text>
+      <g class="tiny white">
+        <text x="22" y="62">PRODUCT</text><text x="22" y="83" font-weight="520">names objects + journeys</text>
+        <text x="300" y="62">FIELD ENGINEERING</text><text x="300" y="83" font-weight="520">defines coordinate + commissioning truth</text>
+        <text x="658" y="62">DESIGN</text><text x="658" y="83" font-weight="520">makes role + recovery visible</text>
+        <text x="892" y="62">PLATFORM</text><text x="892" y="83" font-weight="520">enforces tenant + entitlement boundaries</text>
+        <text x="1202" y="62">CUSTOMER OPS</text><text x="1202" y="83" font-weight="520">validates ownership after handoff</text>
+      </g>
+      <text x="728" y="103" text-anchor="middle" class="tiny" fill="#f2ff67">INVEST ONCE IN SHARED PRIMITIVES; VARY PROJECTIONS BY WORK.</text>
+    </g>
+  </g>
+</svg>

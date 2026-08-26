@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Keep local geometry authoritative from capture through display</title>
+  <desc id="desc">A technical site drawing in a local engineering frame passes through a calibrated transform to a derived geographic view. Authority fields and a three-event, three-layer time contract make provenance, late arrival, and display semantics inspectable.</desc>
+  <defs>
+    <pattern id="cobalt-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#8aaee9" stroke-width="1" opacity="0.22"/>
+      <circle cx="1" cy="1" r="1" fill="#215fbb" opacity="0.16"/>
+    </pattern>
+    <pattern id="sea-topography" width="120" height="84" patternUnits="userSpaceOnUse">
+      <path d="M-12 62C22 38 48 36 82 54S130 72 148 48M-18 78C16 54 49 52 78 68s54 18 78-4" fill="none" stroke="#717676" stroke-width="1.4" opacity="0.13"/>
+    </pattern>
+    <clipPath id="site-clip"><rect x="72" y="182" width="650" height="532" rx="24"/></clipPath>
+    <clipPath id="map-clip"><rect x="1054" y="182" width="474" height="532" rx="24"/></clipPath>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}
+      .ink{fill:#16345e}.blue{fill:#215fbb}.muted{fill:#4c678d}.deep{fill:#263f42}.paper{fill:#fffdf7}
+      .title{font-size:38px;font-weight:820;letter-spacing:-.7px}.subtitle{font-size:18px;font-weight:560}
+      .eyebrow{font-size:13px;font-weight:820;letter-spacing:1.6px}.panel-title{font-size:22px;font-weight:800}
+      .body{font-size:16px;font-weight:560}.small{font-size:14px;font-weight:620}.tiny{font-size:12px;font-weight:730}
+      .line{stroke:#215fbb;stroke-width:2;fill:none}.soft-line{stroke:#8aaee9;stroke-width:1.5;fill:none}
+    </style>
+  </defs>
+
+  <rect width="1600" height="1200" fill="#f4f7fd"/>
+  <rect width="1600" height="1200" fill="url(#cobalt-grid)"/>
+  <rect x="30" y="30" width="1540" height="1140" rx="34" fill="#fffdf7" stroke="#215fbb" stroke-width="2"/>
+
+  <g class="sans">
+    <text x="72" y="91" class="title ink">Keep local geometry authoritative from capture through display</text>
+    <text x="72" y="126" class="subtitle muted">A coordinate is operational evidence only when its frame, calibration, uncertainty, sequence, and time remain attached.</text>
+
+    <g clip-path="url(#site-clip)" aria-label="Site-local engineering geometry">
+      <rect x="72" y="182" width="650" height="532" rx="24" fill="#dbf0f0" stroke="#215fbb" stroke-width="2"/>
+      <rect x="72" y="182" width="650" height="532" rx="24" fill="url(#sea-topography)"/>
+      <text x="96" y="222" class="eyebrow blue">SITE-LOCAL ENGINEERING TRUTH</text>
+      <text x="96" y="257" class="small deep">site-local-enu-v1 · right-handed · integer millimetres</text>
+
+      <path d="M132 604L222 336L492 285L656 420L582 634L302 664Z" fill="#bddbdb" stroke="#263f42" stroke-width="3"/>
+      <path d="M192 566L255 388L470 347L587 436L533 574L321 611Z" fill="#f1f9f9" stroke="#717676" stroke-width="2" stroke-dasharray="8 7"/>
+      <text x="357" y="470" class="eyebrow deep" text-anchor="middle">INSTALLATION ZONE</text>
+
+      <g aria-label="Beacon ranges">
+        <circle cx="254" cy="423" r="70" fill="none" stroke="#215fbb" stroke-width="2" opacity="0.34"/>
+        <circle cx="254" cy="423" r="42" fill="none" stroke="#215fbb" stroke-width="2" opacity="0.46"/>
+        <circle cx="254" cy="423" r="10" fill="#215fbb"/>
+        <text x="220" y="326" class="tiny blue">BEACON A</text>
+        <circle cx="520" cy="506" r="76" fill="none" stroke="#215fbb" stroke-width="2" opacity="0.34"/>
+        <circle cx="520" cy="506" r="44" fill="none" stroke="#215fbb" stroke-width="2" opacity="0.46"/>
+        <circle cx="520" cy="506" r="10" fill="#215fbb"/>
+        <text x="546" y="593" class="tiny blue">BEACON B</text>
+      </g>
+
+      <g aria-label="Local point">
+        <path d="M406 377c0-24 19-43 43-43s43 19 43 43c0 32-43 72-43 72s-43-40-43-72Z" fill="#fff0cf" stroke="#215fbb" stroke-width="3"/>
+        <circle cx="449" cy="377" r="12" fill="#215fbb"/>
+        <rect x="342" y="455" width="257" height="75" rx="12" fill="#fffdf7" stroke="#215fbb" stroke-width="2"/>
+        <text x="361" y="481" class="eyebrow blue">PIN-22</text>
+        <text x="361" y="512" class="mono small ink">x 12,450 · y 8,300 · z 2,700 mm</text>
+      </g>
+
+      <g aria-label="Local coordinate axes">
+        <circle cx="134" cy="648" r="5" fill="#16345e"/>
+        <path d="M134 648H207V643L222 651L207 659V654H134Z" fill="#215fbb"/>
+        <path d="M134 648V584H129L137 569L145 584H140V648Z" fill="#215fbb"/>
+        <path d="M134 648L94 611L90 615L84 598L101 605L97 609L137 646Z" fill="#215fbb"/>
+        <text x="226" y="657" class="tiny blue">+X EAST</text>
+        <text x="111" y="565" class="tiny blue">+Y NORTH</text>
+        <text x="78" y="591" class="tiny blue">+Z UP</text>
+      </g>
+    </g>
+
+    <g aria-label="Calibrated transform" transform="translate(758 252)">
+      <rect width="258" height="394" rx="24" fill="#f4f8ff" stroke="#215fbb" stroke-width="2"/>
+      <text x="129" y="48" text-anchor="middle" class="eyebrow blue">CALIBRATED TRANSFORM</text>
+      <line x1="28" y1="68" x2="230" y2="68" class="soft-line"/>
+      <g class="small ink">
+        <text x="28" y="105">Frame ID + revision</text>
+        <text x="28" y="140">Origin + heading</text>
+        <text x="28" y="175">Calibration validity</text>
+        <text x="28" y="210">Residual error</text>
+        <text x="28" y="245">Uncertainty</text>
+      </g>
+      <path d="M42 294H201V282L230 301L201 320V308H42Z" fill="#215fbb"/>
+      <text x="129" y="352" text-anchor="middle" class="tiny muted">LOCAL → GEOGRAPHIC</text>
+      <text x="129" y="374" text-anchor="middle" class="tiny muted">WITH AN EXPLICIT VERSION</text>
+    </g>
+
+    <path d="M722 438H742V432L758 441L742 450V444H722Z" fill="#215fbb"/>
+    <path d="M1016 438H1036V432L1054 441L1036 450V444H1016Z" fill="#215fbb"/>
+
+    <g clip-path="url(#map-clip)" aria-label="Derived geographic display">
+      <rect x="1054" y="182" width="474" height="532" rx="24" fill="#f4f1eb" stroke="#215fbb" stroke-width="2"/>
+      <rect x="1054" y="182" width="474" height="532" rx="24" fill="url(#cobalt-grid)"/>
+      <text x="1078" y="222" class="eyebrow blue">GEOGRAPHIC INTERCHANGE / DERIVED VIEW</text>
+      <path d="M1092 276C1160 240 1215 300 1277 269s123-18 215 36M1072 565c88-49 178-26 251-60s116-57 217-17" fill="none" stroke="#8d8477" stroke-width="18" opacity="0.42"/>
+      <path d="M1108 622C1194 559 1244 452 1319 410s112-102 181-150" fill="none" stroke="#215fbb" stroke-width="10" opacity="0.25"/>
+      <path d="M1270 396c0-28 22-50 50-50s50 22 50 50c0 37-50 84-50 84s-50-47-50-84Z" fill="#fff0cf" stroke="#215fbb" stroke-width="3"/>
+      <circle cx="1320" cy="396" r="13" fill="#215fbb"/>
+      <rect x="1130" y="493" width="330" height="62" rx="12" fill="#fffdf7" stroke="#8aaee9" stroke-width="2"/>
+      <text x="1150" y="518" class="eyebrow blue">COORDINATE ENTRY</text>
+      <text x="1150" y="542" class="mono small ink">42.3601° N · 71.0589° W</text>
+      <rect x="1130" y="570" width="330" height="62" rx="12" fill="#fffdf7" stroke="#8aaee9" stroke-width="2"/>
+      <text x="1150" y="595" class="eyebrow blue">ADDRESS ENTRY</text>
+      <text x="1150" y="619" class="small ink">Search remains a separate input path</text>
+      <text x="1130" y="679" class="small muted">Display coordinates inherit transform provenance.</text>
+    </g>
+
+    <g aria-label="Authority envelope" transform="translate(72 750)">
+      <rect width="1456" height="106" rx="22" fill="#16345e"/>
+      <text x="22" y="31" class="eyebrow paper">MINIMUM AUTHORITY ENVELOPE</text>
+      <line x1="22" y1="45" x2="1434" y2="45" stroke="#8aaee9" stroke-width="1" opacity="0.55"/>
+      <g class="mono tiny paper">
+        <text x="22" y="72">tenant · site · device · event · sequence</text>
+        <text x="389" y="72">frame ID · revision · unit · handedness · axes</text>
+        <text x="838" y="72">calibration ID · validity interval · residual</text>
+        <text x="1227" y="72">horizontal + vertical uncertainty</text>
+      </g>
+      <text x="22" y="94" class="tiny" fill="#bddbdb">Fields travel with the position so downstream readers can judge provenance.</text>
+    </g>
+
+    <g aria-label="Three event times and three display layers" transform="translate(72 890)">
+      <text x="0" y="0" class="eyebrow blue">EVENT TIME CONTRACT</text>
+      <rect x="0" y="22" width="416" height="82" rx="16" fill="#dbe9ff" stroke="#215fbb" stroke-width="2"/>
+      <text x="22" y="52" class="eyebrow blue">DEVICE</text><text x="22" y="82" class="panel-title ink">observedAt</text>
+      <path d="M416 60H478V53L494 63L478 73V66H416Z" fill="#215fbb"/>
+      <rect x="494" y="22" width="416" height="82" rx="16" fill="#dbf0f0" stroke="#215fbb" stroke-width="2"/>
+      <text x="516" y="52" class="eyebrow blue">INGRESS</text><text x="516" y="82" class="panel-title ink">receivedAt</text>
+      <path d="M910 60H972V53L988 63L972 73V66H910Z" fill="#215fbb"/>
+      <rect x="988" y="22" width="468" height="82" rx="16" fill="#fff0cf" stroke="#215fbb" stroke-width="2"/>
+      <text x="1010" y="52" class="eyebrow blue">LEDGER / OUTBOX</text><text x="1010" y="82" class="panel-title ink">committedAt</text>
+
+      <rect x="0" y="124" width="1456" height="76" rx="16" fill="#f4f8ff" stroke="#8aaee9" stroke-width="2"/>
+      <text x="22" y="154" class="eyebrow blue">STORAGE</text><text x="128" y="154" class="small ink">UTC</text>
+      <path d="M304 148H380V143L394 151L380 159V154H304Z" fill="#8aaee9"/>
+      <text x="430" y="154" class="eyebrow blue">WIRE</text><text x="505" y="154" class="small ink">ISO 8601 UTC</text>
+      <path d="M745 148H821V143L835 151L821 159V154H745Z" fill="#8aaee9"/>
+      <text x="872" y="154" class="eyebrow blue">DISPLAY</text><text x="970" y="154" class="small ink">explicit site timezone</text>
+      <text x="22" y="185" class="small muted">Late arrival preserves event time and sequence; gaps remain visible.</text>
+      <text x="1434" y="185" text-anchor="end" class="small muted">Observed, received, and committed time answer different operational questions.</text>
+    </g>
+
+    <g transform="translate(72 1124)">
+      <rect width="1456" height="38" rx="19" fill="#edf4ff" stroke="#215fbb" stroke-width="1.5"/>
+      <text x="728" y="25" text-anchor="middle" class="small ink">Geographic display follows a calibrated transform; an SRID label alone leaves coordinates untransformed.</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,107 @@
+{
+  "baseFixture": "three-channel-reviewed.example.v2.json",
+  "cases": [
+    {
+      "id": "root-closed-shape",
+      "path": "/unpublishedField",
+      "value": true,
+      "expected": "outside the published schema"
+    },
+    {
+      "id": "meta-title-bound",
+      "path": "/meta/title",
+      "value": { "$repeat": "T", "count": 161 },
+      "expected": "at most 160 characters"
+    },
+    {
+      "id": "dimension-label-bound",
+      "path": "/dimensions/0/label",
+      "value": { "$repeat": "L", "count": 121 },
+      "expected": "at most 120 characters"
+    },
+    {
+      "id": "anchor-bound",
+      "path": "/dimensions/0/anchors/low",
+      "value": { "$repeat": "A", "count": 601 },
+      "expected": "at most 600 characters"
+    },
+    {
+      "id": "session-receipt-bound",
+      "path": "/extensions/contextCanvas/collaboration/session/decisionReceipt",
+      "value": { "$repeat": "R", "count": 4001 },
+      "expected": "at most 4000 characters"
+    },
+    {
+      "id": "participant-alias-bound",
+      "path": "/extensions/contextCanvas/collaboration/participants/0/alias",
+      "value": { "$repeat": "P", "count": 97 },
+      "expected": "at most 96 characters"
+    },
+    {
+      "id": "participant-closed-shape",
+      "path": "/extensions/contextCanvas/collaboration/participants/0/privateValue",
+      "value": "held local",
+      "expected": "outside the published schema"
+    },
+    {
+      "id": "round-required-status",
+      "path": "/extensions/contextCanvas/collaboration/rounds/0/status",
+      "operation": "delete",
+      "expected": "status is required"
+    },
+    {
+      "id": "ballot-channel-constant",
+      "path": "/extensions/contextCanvas/collaboration/ballots/round-current-one/participant-alder/channel",
+      "value": "AI proposal",
+      "expected": "must equal \"human-ballot\""
+    },
+    {
+      "id": "scenario-dimension-reference",
+      "path": "/extensions/contextCanvas/collaboration/scenarios/0/values/unlisted-dimension",
+      "value": 5,
+      "expected": "references unknown dimension"
+    },
+    {
+      "id": "accepted-scenario-standing",
+      "path": "/extensions/contextCanvas/collaboration/acceptedScenario/standing",
+      "value": "system aggregate",
+      "expected": "acceptedScenario must match exactly one published shape"
+    },
+    {
+      "id": "note-body-bound",
+      "path": "/extensions/contextCanvas/collaboration/notes/0/body",
+      "value": { "$repeat": "N", "count": 4001 },
+      "expected": "at most 4000 characters"
+    },
+    {
+      "id": "event-type-bound",
+      "path": "/extensions/contextCanvas/collaboration/events/0/type",
+      "value": { "$repeat": "E", "count": 121 },
+      "expected": "at most 120 characters"
+    },
+    {
+      "id": "ai-standing-constant",
+      "path": "/extensions/contextCanvas/aiCollaboration/standing",
+      "value": "system-derived aggregate",
+      "expected": "AI-attributed proposal"
+    },
+    {
+      "id": "ai-proposal-note-bound",
+      "path": "/extensions/contextCanvas/aiCollaboration/proposalNote",
+      "value": { "$repeat": "Q", "count": 4001 },
+      "expected": "at most 4000 characters"
+    },
+    {
+      "id": "reviewed-lifecycle-requires-snapshot",
+      "path": "/lifecycle/status",
+      "value": "reviewed",
+      "expected": "requires reviewedSnapshot"
+    },
+    {
+      "id": "reviewed-snapshot-nested-contract",
+      "path": "/lifecycle/reviewedSnapshot",
+      "value": {},
+      "expected": "reviewedSnapshot must match exactly one published shape"
+    }
+  ]
+}

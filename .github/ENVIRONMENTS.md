@@ -6,6 +6,9 @@ different jobs:
 
 - `ACTIONS_BUDGET_<RECEIVER>` decides whether a workflow for that receiver may
   acquire a GitHub-hosted runner.
+- `PROTOTYPE_UNIT_TESTS_AUTOMATIC` independently selects whether matching
+  non-draft pull requests acquire the Core and Narrative unit runner. Explicit
+  manual dispatch remains available.
 - `DEPLOYMENT_ACTIVE_RECEIVERS` is a JSON list of receivers currently allowed to
   publish or deploy. Its resting value is `[]`.
 - a job references its GitHub environment with `deployment: false` when it needs
@@ -16,7 +19,7 @@ The current budget posture is:
 
 | Receiver | Budget | Current service job |
 | --- | --- | --- |
-| `main` | `true` | One bounded, read-only public-boundary receipt on a non-draft pull request |
+| `main` | `true` | Bounded public-boundary and advisory schema-route receipts, plus the independently configurable Core and Narrative unit receiver |
 | `research` | `false` | Canonical future-state receiver at rest |
 | `res/*` | `false` | Short-lived intake; inherits the `research` posture |
 | `dev` | `false` | Sustained feature integration at rest |
@@ -34,12 +37,29 @@ Environment-level variables arrive after a job starts, so they fit runtime
 configuration. Repository-level budget values provide the pre-run spend gate
 and keep resting receivers from acquiring a runner.
 
+## Public-reference configuration at rest
+
+The current public-reference build reads ignored `.env.public` locally. A later
+authorized documentation or Context Canvas delivery can supply the same
+`PUBLIC_URL_REGISTRY_*` names as environment-scoped variables after its
+repository-level budget gate admits the job. The materializer reads only keys
+required by authored source and keeps their values out of logs and retained
+receipts.
+
+These destinations become ordinary public links in a delivered artifact, so
+the build seam is a history and change boundary rather than a secrecy claim.
+Human review still confirms Registry ancestry, public-possible content
+standing, signed-out availability, and audience. Credential material, should a
+future synchronization runtime need it, receives a distinct environment secret
+and never shares a destination variable.
+
 ## Serving posture
 
 One stable published surface is the fitting present form. `docs` remains the
-generated GitHub Pages projection, while the other branches express promotion
-and evidence posture. GitHub treats standard Pages runner use as free; the
-`docs` evidence budget can rest while the accepted projection continues.
+generated GitHub Pages projection at `schemas.radiantnull.com`, while the other
+branches express promotion and evidence posture. GitHub treats standard Pages
+runner use as free; the `docs` evidence budget can rest while the accepted
+projection continues.
 Additional always-on surfaces follow a reader or operator job that benefits
 from them.
 
@@ -69,12 +89,11 @@ receiver list carries publication authority.
 
 ## Production boundary
 
-The current private-repository plan supports environments and their variables;
-environment-level required reviewers for private repositories begin with the
-Enterprise capability. The `prod` branch therefore supplies the present
-approval boundary: one approving pull-request review, stale-approval dismissal,
-and administrator inclusion. The empty `prod` environment awaits a later
-deployment job and the platform approval capability suited to it.
+The current repository plan supports environments and their variables. The
+`prod` branch supplies the present approval boundary: one approving
+pull-request review, stale-approval dismissal, and administrator inclusion. The
+empty `prod` environment awaits a later deployment job and the platform
+approval capability suited to it.
 
 ## Sources
 

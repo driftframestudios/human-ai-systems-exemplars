@@ -1,0 +1,1199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Distributed Inspection Harness for Field Technicians | Context Canvas</title>
+    <meta name="description" content="A prospective teaching exemplar for designing an offline-first vehicle-inspection record, its operating contracts, and its path into valuation, listing, and arbitration.">
+    <meta name="author" content="Driftframe Studios">
+    <meta name="application-name" content="Context Canvas Project Surface">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/distributed-inspection-harness.html">
+    <meta property="og:site_name" content="Context Canvas Project Surface">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Distributed Inspection Harness for Field Technicians | Context Canvas">
+    <meta property="og:description" content="Design the inspection record before the app: guided capture, human-confirmed assistance, offline durability, ordered sync, and downstream use.">
+    <meta property="og:url" content="https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/distributed-inspection-harness.html">
+    <meta property="og:image" content="https://schemas.radiantnull.com/context-canvas-project-surface/img/plot/distributed_inspection_record_flow.svg">
+    <meta property="og:image:type" content="image/svg+xml">
+    <meta property="og:image:width" content="1600">
+    <meta property="og:image:height" content="1120">
+    <meta property="og:image:alt" content="Three lanes show a field technician creating a durable inspection record, the platform accepting and publishing it, and valuation, listing, and arbitration consuming the same record.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Distributed Inspection Harness for Field Technicians | Context Canvas">
+    <meta name="twitter:description" content="A prospective teaching exemplar for an offline-first inspection system.">
+    <meta name="twitter:image" content="https://schemas.radiantnull.com/context-canvas-project-surface/img/plot/distributed_inspection_record_flow.svg">
+    <meta name="twitter:image:alt" content="A stable inspection record crosses technician, platform, and downstream decision lanes.">
+    <meta property="article:section" content="Prospective Site Readings">
+    <meta property="article:tag" content="solution architecture">
+    <meta property="article:tag" content="implementation architecture">
+    <meta property="article:tag" content="offline-first mobile">
+    <meta property="article:tag" content="field inspection">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="expanded.css">
+    <link rel="stylesheet" href="styles/components/debrief-reading.css">
+    <style>
+      .distributed-inspection-page {
+        --inspection-rose: #ffd3d0;
+        --inspection-paper: #fdebe9;
+        --inspection-quiet: #feeae9;
+        --inspection-warm-white: #fff7f4;
+        --inspection-cobalt: #2855f3;
+        --inspection-cobalt-deep: #153fbe;
+        --inspection-blue-ink: #183a78;
+        --inspection-ink: #141c5b;
+        --inspection-iron: #1f2421;
+        --inspection-dark-cobalt: #0f2147;
+        --inspection-mid-cobalt: #17345f;
+        --inspection-acid: #f2ff67;
+        --inspection-coral: #fa7065;
+      }
+
+      .distributed-inspection-page .inspection-teaching-hero {
+        background:
+          radial-gradient(circle at 12% 18%, rgba(255, 211, 208, .18) 0 .38rem, transparent .42rem),
+          linear-gradient(135deg, #141c5b 0%, #0f2147 66%, #1f2421 100%);
+        border-block-end: .6rem solid var(--inspection-rose);
+      }
+
+      .distributed-inspection-page .debrief-at-glance {
+        background: var(--inspection-ink);
+        border-color: var(--inspection-ink);
+      }
+
+      .distributed-inspection-page .debrief-at-glance > div:nth-child(3n + 1) {
+        background: var(--inspection-warm-white);
+        border-block-start: .24rem solid var(--inspection-cobalt);
+      }
+
+      .distributed-inspection-page .debrief-at-glance > div:nth-child(3n + 2) {
+        background: var(--inspection-paper);
+        border-block-start: .24rem solid var(--inspection-coral);
+      }
+
+      .distributed-inspection-page .debrief-at-glance > div:nth-child(3n) {
+        background: var(--inspection-quiet);
+        border-block-start: .24rem solid var(--inspection-ink);
+      }
+
+      .distributed-inspection-page main [id] { scroll-margin-block-start: 6rem; }
+
+      .inspection-track-label,
+      .inspection-field-label {
+        color: var(--inspection-blue-ink);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: .76rem;
+        font-weight: 800;
+        letter-spacing: .075em;
+        line-height: 1.45;
+        text-transform: uppercase;
+      }
+
+      .inspection-track-label {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: .55rem;
+        margin-block: 0 1rem;
+      }
+
+      .inspection-track-label span {
+        background: var(--inspection-cobalt);
+        border: .125rem solid var(--inspection-ink);
+        border-radius: 999px;
+        color: var(--inspection-warm-white);
+        padding: .3rem .65rem;
+      }
+
+      .inspection-solution-field {
+        color: var(--inspection-blue-ink);
+      }
+
+      .inspection-solution-field--rose { background: var(--inspection-rose); }
+      .inspection-solution-field--paper { background: var(--inspection-paper); }
+      .inspection-solution-field--quiet { background: var(--inspection-quiet); }
+
+      .inspection-solution-field :is(.architecture-track-title, .beat-title, .txt-h3, .txt-h4) {
+        color: var(--inspection-ink);
+      }
+
+      .inspection-solution-field .architecture-track-title {
+        border-block-end-color: var(--inspection-cobalt);
+      }
+
+      .inspection-implementation-field { color: var(--inspection-warm-white); }
+      .inspection-implementation-field--iron { background: var(--inspection-iron); }
+      .inspection-implementation-field--cobalt { background: var(--inspection-mid-cobalt); }
+      .inspection-implementation-field--deep { background: var(--inspection-dark-cobalt); }
+
+      .inspection-implementation-field :is(h2, h3, h4, p, li, dt, dd, figcaption, caption) {
+        color: var(--inspection-warm-white);
+      }
+
+      .inspection-implementation-field .architecture-track-title {
+        border-block-end-color: var(--inspection-coral);
+      }
+
+      .inspection-track-label--dark { color: #cfe2ff; }
+      .inspection-track-label--dark span {
+        background: var(--inspection-acid);
+        color: var(--inspection-ink);
+      }
+
+      .inspection-implementation-field a,
+      .inspection-implementation-field a:visited { color: var(--inspection-acid); }
+
+      .inspection-implementation-field :is(.table-figure, .story-visual) {
+        color: var(--inspection-ink);
+      }
+
+      .inspection-beat-grid,
+      .inspection-card-grid,
+      .inspection-cost-grid {
+        display: grid;
+        gap: clamp(1rem, 2.5vw, 1.75rem);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-block: 1.5rem;
+        min-inline-size: 0;
+      }
+
+      .inspection-beat-grid > *,
+      .inspection-card-grid > *,
+      .inspection-cost-grid > * { min-inline-size: 0; }
+
+      .inspection-beat {
+        background: var(--inspection-warm-white);
+        border: .125rem solid var(--inspection-ink);
+        border-radius: .8rem;
+        box-shadow: .45rem .45rem 0 var(--inspection-coral);
+        color: var(--inspection-blue-ink);
+        padding: clamp(1rem, 2.5vw, 1.5rem);
+      }
+
+      .inspection-beat:nth-child(2n) { box-shadow: .45rem .45rem 0 var(--inspection-cobalt); }
+      .inspection-beat:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+      .inspection-beat__heading {
+        align-items: center;
+        display: flex;
+        gap: .75rem;
+        margin-block-end: 1rem;
+      }
+
+      .inspection-beat__marker {
+        align-items: center;
+        background: var(--inspection-rose);
+        border: .125rem solid var(--inspection-ink);
+        border-radius: 50%;
+        color: var(--inspection-ink);
+        display: inline-flex;
+        flex: 0 0 2.7rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-weight: 900;
+        block-size: 2.7rem;
+        inline-size: 2.7rem;
+        justify-content: center;
+      }
+
+      .inspection-beat h3,
+      .inspection-beat h4 { margin: 0; }
+
+      .inspection-beat dl {
+        display: grid;
+        gap: .75rem;
+        margin: 0;
+      }
+
+      .inspection-beat dt {
+        border-block-end: .125rem dashed var(--inspection-coral);
+        color: var(--inspection-ink);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: .75rem;
+        font-weight: 900;
+        letter-spacing: .065em;
+        padding-block-end: .3rem;
+        text-transform: uppercase;
+      }
+
+      .inspection-beat dt:nth-of-type(2) { border-block-end-style: solid; border-block-end-width: .25rem; border-block-end-color: var(--inspection-cobalt); }
+      .inspection-beat dd { color: var(--inspection-blue-ink); margin: 0; max-inline-size: 68ch; }
+
+      .inspection-implementation-field .inspection-beat {
+        background: var(--inspection-mid-cobalt);
+        border-color: #8db4ef;
+        border-radius: .35rem;
+        box-shadow: .45rem .45rem 0 var(--inspection-acid);
+        color: var(--inspection-warm-white);
+      }
+
+      .inspection-implementation-field .inspection-beat:nth-child(2n) { box-shadow: .45rem .45rem 0 var(--inspection-coral); }
+      .inspection-implementation-field .inspection-beat__marker {
+        background: var(--inspection-acid);
+        border-color: var(--inspection-warm-white);
+        border-radius: .18rem;
+      }
+
+      .inspection-implementation-field .inspection-beat :is(h3, h4, dt, dd, p, li) { color: var(--inspection-warm-white); }
+      .inspection-implementation-field .inspection-beat dt { border-block-end-color: var(--inspection-coral); }
+      .inspection-implementation-field .inspection-beat dt:nth-of-type(2) { border-block-end-color: var(--inspection-acid); }
+
+      .inspection-beat__boundary {
+        border-block-start: 1px solid currentColor;
+        font-size: .93rem;
+        margin-block-start: 1rem;
+        padding-block-start: .85rem;
+      }
+
+      .inspection-card-grid article,
+      .inspection-cost-grid article,
+      .inspection-evidence-boundary,
+      .inspection-source-docket {
+        background: var(--inspection-warm-white);
+        border: .125rem solid var(--inspection-ink);
+        border-radius: .7rem;
+        box-shadow: .38rem .38rem 0 var(--inspection-cobalt);
+        padding: clamp(1rem, 2.5vw, 1.5rem);
+      }
+
+      .inspection-card-grid article > :first-child,
+      .inspection-cost-grid article > :first-child { margin-block-start: 0; }
+      .inspection-card-grid article > :last-child,
+      .inspection-cost-grid article > :last-child { margin-block-end: 0; }
+
+      .inspection-implementation-field .inspection-card-grid article {
+        background: var(--inspection-warm-white);
+        color: var(--inspection-ink);
+      }
+
+      .inspection-implementation-field .inspection-card-grid article :is(h3, h4, p, li) { color: var(--inspection-ink); }
+
+      .inspection-story-visual img {
+        background: var(--inspection-warm-white);
+        border: .125rem solid var(--inspection-ink);
+        border-radius: .75rem;
+        box-shadow: .5rem .5rem 0 var(--inspection-coral);
+      }
+
+      .inspection-implementation-field .inspection-story-visual img {
+        border-color: #8db4ef;
+        box-shadow: .5rem .5rem 0 var(--inspection-acid);
+      }
+
+      .inspection-implementation-field pre {
+        background: #081833;
+        border: .125rem solid #8db4ef;
+        border-radius: .5rem;
+        color: #f7fbff;
+        overflow: auto;
+        padding: 1rem;
+      }
+
+      .inspection-implementation-field pre code { color: inherit; }
+
+      .inspection-interpretive-aside {
+        background: var(--inspection-warm-white);
+        border: .125rem solid var(--inspection-ink);
+        border-inline-start: .55rem solid var(--inspection-coral);
+        border-radius: .55rem;
+        box-shadow: .35rem .35rem 0 var(--inspection-ink);
+        color: var(--inspection-blue-ink);
+        margin-block: 1.5rem;
+        padding: 1rem 1.25rem;
+      }
+
+      .inspection-interpretive-aside > :first-child { margin-block-start: 0; }
+      .inspection-interpretive-aside > :last-child { margin-block-end: 0; }
+
+      .inspection-source-docket ol {
+        columns: 2 24rem;
+        column-gap: 2rem;
+        padding-inline-start: 1.35rem;
+      }
+
+      .inspection-source-docket li { break-inside: avoid; margin-block-end: .85rem; }
+
+      .distributed-inspection-page :is(section, .inspection-interpretive-aside, .inspection-evidence-boundary, .inspection-source-docket) > p {
+        max-inline-size: min(75ch, 100%);
+      }
+
+      .inspection-evidence-boundary {
+        border-inline-start: .65rem solid var(--inspection-coral);
+        box-shadow: .42rem .42rem 0 var(--inspection-ink);
+      }
+
+      @media screen and (max-width: 48rem) {
+        .inspection-beat-grid,
+        .inspection-card-grid,
+        .inspection-cost-grid { grid-template-columns: 1fr; }
+        .inspection-beat:last-child:nth-child(odd) { grid-column: auto; }
+        .distributed-inspection-page :is(.inspection-solution-field, .inspection-implementation-field) h2[id] {
+          scroll-margin-block-start: 10rem;
+        }
+      }
+
+      @media screen and (max-width: 30rem) {
+        .inspection-beat,
+        .inspection-card-grid article,
+        .inspection-cost-grid article,
+        .inspection-evidence-boundary,
+        .inspection-source-docket,
+        .inspection-story-visual img { box-shadow: .28rem .28rem 0 var(--inspection-ink); }
+      }
+
+      @media (forced-colors: active) {
+        .inspection-beat,
+        .inspection-card-grid article,
+        .inspection-cost-grid article,
+        .inspection-evidence-boundary,
+        .inspection-source-docket,
+        .inspection-story-visual img { border-color: CanvasText; box-shadow: none; }
+        .inspection-beat__marker { border-color: CanvasText; }
+      }
+
+      @media print {
+        .distributed-inspection-page :is(.inspection-teaching-hero, .inspection-solution-field, .inspection-implementation-field) {
+          background: #fff !important;
+          color: #000 !important;
+        }
+        .distributed-inspection-page :is(.inspection-teaching-hero, .inspection-solution-field, .inspection-implementation-field) :is(h1, h2, h3, h4, p, li, dt, dd, figcaption, caption, a, code) {
+          color: #000 !important;
+        }
+        .distributed-inspection-page :is(.inspection-beat, .inspection-card-grid article, .inspection-cost-grid article, .inspection-evidence-boundary, .inspection-source-docket, .inspection-story-visual img) {
+          box-shadow: none;
+          break-inside: avoid;
+        }
+      }
+    </style>
+    <link rel="stylesheet" href="canvas-shell.css">
+  <script src="canvas-shell.js" defer></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": ["Article", "TechArticle"],
+        "@id": "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/distributed-inspection-harness.html#article",
+        "url": "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/distributed-inspection-harness.html",
+        "headline": "Distributed Inspection Harness for Field Technicians",
+        "alternativeHeadline": "Design the Inspection Record Before the App",
+        "description": "A prospective teaching exemplar for designing an offline-first vehicle-inspection record, its operating contracts, and its path into valuation, listing, and arbitration.",
+        "dateModified": "2026-08-26",
+        "inLanguage": "en-US",
+        "author": {
+          "@type": "Organization",
+          "name": "Driftframe Studios",
+          "url": "https://github.com/driftframestudios/human-ai-systems-exemplars"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Driftframe Studios",
+          "url": "https://github.com/driftframestudios/human-ai-systems-exemplars"
+        },
+        "image": "https://schemas.radiantnull.com/context-canvas-project-surface/img/plot/distributed_inspection_record_flow.svg",
+        "about": [
+          "distributed field inspection",
+          "offline-first mobile architecture",
+          "human-confirmed optical assistance",
+          "ordered resumable synchronization",
+          "condition grading"
+        ],
+        "isBasedOn": [
+          "{{PUBLIC_URL_REGISTRY_DISTRIBUTED_INSPECTION_HARNESS_AN_OFFLINE_FIRST_FIELD_OPERATIONS_TEACHING_EXEMPLAR}}"
+        ],
+        "isPartOf": {
+          "@type": "WebSite",
+          "name": "Context Canvas Project Surface",
+          "url": "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/"
+        }
+      }
+    </script>
+</head>
+  <body class="page__container blog distributed-inspection-page">
+    <a class="skip-link" href="#main-content">Skip to the prospective reading</a>
+
+    <header class="nav__top--sticky">
+      <nav aria-label="Primary">
+        <ul class="nav__container">
+          <li><a href="index.html" class="anchor_index">About</a></li>
+          <li><a href="ai-systems.html" class="anchor_ai_systems">AI Systems</a></li>
+          <li><a href="debriefs.html" class="anchor_debriefs" aria-current="page">Debriefs</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+      <header class="non-index-hero__container debrief-hero inspection-teaching-hero">
+        <p class="debrief-kicker">Prospective Site Reading · Teaching exemplar · Version 0.1.0</p>
+        <h1 class="txt-h1 h1-spaced h1-hero">Distributed Inspection Harness for Field Technicians</h1>
+        <p class="tag-line">Design the inspection record before the app</p>
+        <p class="debrief-lead">
+          A lender-and-auction remarketing operation needs consistent vehicle inspections across lots, driveways, and storage
+          yards where connectivity varies. This prospective reading works backward from named public grading standards,
+          publicly documented inspection capabilities, and public remarketing practice to make one common build inspectable
+          before implementation begins.
+        </p>
+      </header>
+
+      <div class="content__container">
+        <div class="content content--editorial">
+          <section aria-labelledby="glance-title">
+            <h2 id="glance-title" class="txt-h2">At a glance</h2>
+            <dl class="debrief-at-glance">
+              <div>
+                <dt>Standing</dt>
+                <dd>Prospective teaching exemplar, version 0.1.0, developing toward convergence.</dd>
+              </div>
+              <div>
+                <dt>Purpose</dt>
+                <dd>Teach a human–AI team how a source-native Site Reading can pre-solve a familiar build before code.</dd>
+              </div>
+              <div>
+                <dt>Domain unit</dt>
+                <dd>One inspection record with stable identity, human-confirmed observations, a human-owned grade, media hashes, and explicit sync state.</dd>
+              </div>
+              <div>
+                <dt>Operating environment</dt>
+                <dd>Field technicians, intermittent connectivity, low-end devices, large media queues, and downstream valuation, listing, and arbitration.</dd>
+              </div>
+              <div>
+                <dt>Public anchors</dt>
+                <dd>Published-style 0–5 condition grading, point-based damage grading, common inspection-app capabilities, and as-is remarketing practice.</dd>
+              </div>
+              <div>
+                <dt>Claim posture</dt>
+                <dd>The system and its consequences are proposed designs for a future implementation; this reading stands before delivery as a design instrument.</dd>
+              </div>
+            </dl>
+            <aside class="debrief-quote debrief-quote--orientation" aria-label="Architectural thesis">
+              <p>The inspection record is the shared unit that keeps human judgment, offline work, media, synchronization, and downstream use coherent.</p>
+              <footer>Prospective design hypothesis for a distributed field-inspection system</footer>
+            </aside>
+          </section>
+
+          <nav aria-labelledby="reading-index-title">
+            <h2 id="reading-index-title" class="txt-h2">Read the system</h2>
+            <ol class="track-index">
+              <li><a href="#scenario-title">I. Scenario + ontology<br>The objects the operation shares</a></li>
+              <li><a href="#changed-work-title">II. Changed work<br>The source-native Then → Now form</a></li>
+              <li><a href="#solution-title">III. Solution Architecture<br>Five beats from situation to consequence</a></li>
+              <li><a href="#implementation-title">IV. Implementation Architecture<br>Five beats from state to recovery</a></li>
+              <li><a href="#contracts-title">V. Contracts + authority<br>Human, system, and recovery boundaries</a></li>
+              <li><a href="#population-title">VI. Populations + quality<br>Who sees, decides, checks, and learns</a></li>
+              <li><a href="#costing-title">VII. Cost + consequence<br>Sequencing, downstream value, and validation</a></li>
+              <li><a href="#source-basis-title">VIII. Source docket<br>One orientation and nine supporting pages</a></li>
+            </ol>
+          </nav>
+
+          <figure class="story-visual inspection-story-visual table-span-all">
+            <img src="../img/plot/distributed_inspection_ten_beat_arc.svg" width="1600" height="1180" loading="eager" alt="Two labeled architecture tracks show five Solution beats and five Implementation beats. Each numbered beat preserves a Then condition and a Now design response. Circle markers identify Solution beats; square markers identify Implementation beats.">
+            <figcaption class="table-note">
+              Figure 1. The complete source-native arc. The upper track carries operating intent and changed work;
+              the lower track carries implementation state, recovery, and downstream contracts. Written labels, S/I prefixes,
+              distinct marker shapes, and Then/Now rules preserve the distinction beyond color.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="content__container bg__adjust--tiffany">
+        <div class="content content--editorial">
+          <article class="prose-flow" aria-labelledby="scenario-title">
+            <h2 id="scenario-title" class="txt-h2 architecture-track-title">I. Scenario + ontology — One record, several operating contexts</h2>
+            <p>
+              Vehicles arrive through off-lease returns, repossessions, trade-ins, and consignments. A technician establishes
+              condition on site, often beyond dependable network coverage, and records exterior, interior, mechanical,
+              frame, tire, damage, and photographic evidence. The accepted record then supports a condition grade,
+              valuation, listing, and a later arbitration window.
+            </p>
+
+            <figure class="table-figure table-span-all">
+              <div class="table-scroll" role="region" tabindex="0" aria-label="Distributed inspection harness vocabulary">
+                <table class="table--reading table--comfortable">
+                  <caption>The reading’s self-contained operating vocabulary</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Term</th>
+                      <th scope="col">Meaning in this reading</th>
+                      <th scope="col">Why it changes the architecture</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Intake channel</th>
+                      <td>How a vehicle arrives: off-lease, repossession, trade-in, or consignment.</td>
+                      <td class="table-ability">Capture stays consistent while arrival context remains explicit.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Inspection record</th>
+                      <td>The complete standardized capture for one vehicle at one point in time.</td>
+                      <td class="table-ability">Every retry, image, correction, grade, and downstream event shares one stable identity.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Condition grade</th>
+                      <td>A 0–5 rollup derived from section scores and declared damage points.</td>
+                      <td class="table-ability">The human-owned summary stays traceable to its inputs.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Beauty shot</th>
+                      <td>A marketing-quality photograph captured in a fixed sequence.</td>
+                      <td class="table-ability">Media capture serves both condition evidence and listing presentation.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Capture kit</th>
+                      <td>The technician’s device, guided form, camera, and optical readers.</td>
+                      <td class="table-ability">Device and field constraints become part of the solution boundary.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Sync envelope</th>
+                      <td>A signed, ordered batch of records and media queued for upload.</td>
+                      <td class="table-ability">Offline work can resume, retry, and settle into an inspectable state.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Arbitration window</th>
+                      <td>The post-sale period in which condition disputes are adjudicated.</td>
+                      <td class="table-ability">The accepted record must remain reconstructable after listing and sale.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <figcaption class="table-note">Table 1. The ontology keeps one reading self-contained across technicians, reviewers, platforms, and downstream consumers.</figcaption>
+            </figure>
+
+            <div class="inspection-card-grid table-span-all" aria-label="Public anchors and published-style condition scale">
+              <article>
+                <p class="inspection-field-label">Public-source horizon</p>
+                <h3 class="txt-h3">What the exemplar works backward from</h3>
+                <ul>
+                  <li>Published-style 0–5 grading across interior, exterior, mechanical, frame or underbody, and tires.</li>
+                  <li>Point-based damage grading administered through shared remarketing inventory services.</li>
+                  <li>Common public inspection-app capabilities: VIN or plate reads, guided photographs, damage labels, summaries, offline capture, and later synchronization.</li>
+                  <li>Off-lease and repossession remarketing practice, including as-is disclosure sensitivity and valuation against published loan and retail guides.</li>
+                </ul>
+              </article>
+              <article>
+                <p class="inspection-field-label">Condition-grade vocabulary</p>
+                <h3 class="txt-h3">The published-style 0–5 scale</h3>
+                <div class="table-scroll" role="region" tabindex="0" aria-label="Published-style condition grade vocabulary">
+                  <table class="table--reading table--comfortable">
+                    <caption>Table 2. Grade labels used by this reading</caption>
+                    <thead><tr><th scope="col">Grade</th><th scope="col">Meaning</th></tr></thead>
+                    <tbody>
+                      <tr><th scope="row">5</th><td>Excellent condition</td></tr>
+                      <tr><th scope="row">4</th><td>Better than average</td></tr>
+                      <tr><th scope="row">3</th><td>Normal wear and tear</td></tr>
+                      <tr><th scope="row">2</th><td>Excessive wear and tear</td></tr>
+                      <tr><th scope="row">1</th><td>Signs of severe abuse</td></tr>
+                      <tr><th scope="row">0</th><td>Inoperative</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+            </div>
+
+            <h2 id="changed-work-title" class="txt-h2 architecture-track-title">II. Then → Now — Changed work at a glance</h2>
+            <figure class="table-figure table-figure--wide table-span-all">
+              <div class="table-scroll" role="region" tabindex="0" aria-label="Then and Now inspection harness comparison">
+                <table class="table--comparison table--comfortable">
+                  <caption>From assembled tools to a purpose-built inspection harness</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Dimension</th>
+                      <th scope="col">Then — assembled tools</th>
+                      <th scope="col">Now — purpose-built harness</th>
+                      <th scope="col">Changed ability</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Capture</th>
+                      <td>Low-code form builder plus a spreadsheet backend.</td>
+                      <td>Native offline-first mobile app for iOS and Android.</td>
+                      <td class="table-ability">The inspection becomes a first-class domain object.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Optical reads</th>
+                      <td>Manual VIN and odometer entry.</td>
+                      <td>On-device OCR for VIN, odometer, and tire codes with human confirmation.</td>
+                      <td class="table-ability">Assistance accelerates entry while the technician makes the final committed entry.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Connectivity</th>
+                      <td>Signal required; re-keying follows failure.</td>
+                      <td>Offline queue with ordered, resumable sync envelopes.</td>
+                      <td class="table-ability">Captured work persists across interruption and return.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Media</th>
+                      <td>Ad hoc photos in a gallery.</td>
+                      <td>Guided beauty-shot sequence, content-hashed, de-duplicated, and CDN-served.</td>
+                      <td class="table-ability">Condition evidence and listing media remain addressed to the same record.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Grading</th>
+                      <td>Manual scoring with variable application.</td>
+                      <td>Assisted rollup to a 0–5 grade with an audit trail.</td>
+                      <td class="table-ability">The final grade remains human-owned and reconstructable.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Downstream</th>
+                      <td>Copy-paste into valuation and listing.</td>
+                      <td>Event stream into valuation, arbitration, and listing.</td>
+                      <td class="table-ability">Every consumer receives the same accepted inspection identity.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <figcaption class="table-note">Table 3. Each Now statement is a prospective design target whose field performance remains to be tested.</figcaption>
+            </figure>
+
+            <figure class="story-visual table-span-all">
+              <img src="../img/plot/distributed_inspection_record_flow.svg" width="1600" height="1120" loading="eager" alt="Three lanes show intake, guided capture, human-confirmed optical reads, a durable local record and sync envelope; platform validation, a human-owned condition grade, canonical media and an accepted event; then valuation, listing with media, and arbitration consuming the same record.">
+              <figcaption class="table-note">
+                Figure 2. The technician commits observations and the final grade. The platform preserves durable state, ordered transfer,
+                accepted identity, canonical media, and the correction trail. Downstream systems consume one reconstructable record.
+              </figcaption>
+            </figure>
+          </article>
+        </div>
+      </div>
+
+      <div class="content__container inspection-solution-field inspection-solution-field--rose">
+        <div class="content content--editorial">
+          <article class="prose-flow" aria-labelledby="solution-title">
+            <p class="inspection-track-label"><span>S · Solution Architecture</span> Operating intent and changed work</p>
+            <h2 id="solution-title" class="txt-h2 architecture-track-title">III. Solution Architecture — Why the harness takes this shape</h2>
+            <p>
+              The solution reading stays independent of a particular stack. It names the capabilities, boundaries, and
+              integral decisions that make field work durable and downstream use coherent.
+            </p>
+
+            <figure class="table-figure table-span-all">
+              <div class="table-scroll" role="region" tabindex="0" aria-label="Solution architecture capability map">
+                <table class="table--reading table--comfortable">
+                  <caption>Capabilities the solution must carry</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Capability</th>
+                      <th scope="col">Responsibility</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><th scope="row">Guided capture</th><td>Walk a technician through a consistent inspection regardless of intake channel.</td></tr>
+                    <tr><th scope="row">Optical assist</th><td>Read VIN, odometer, and tire codes, always with human confirmation.</td></tr>
+                    <tr><th scope="row">Offline durability</th><td>Preserve the record while the network is unavailable.</td></tr>
+                    <tr><th scope="row">Ordered sync</th><td>Upload records and media in a resumable, tamper-evident order.</td></tr>
+                    <tr><th scope="row">Grade rollup</th><td>Derive a defensible 0–5 grade with an audit trail.</td></tr>
+                    <tr><th scope="row">Downstream fan-out</th><td>Feed valuation, listing, and arbitration from one accepted source.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <figcaption class="table-note">Table 4. Six solution capabilities establish the operating contract before a stack is selected.</figcaption>
+            </figure>
+
+            <h3 id="solution-beats-title" class="txt-h3 beat-title">The source-native five beats</h3>
+            <div class="inspection-beat-grid table-span-all" aria-labelledby="solution-beats-title">
+              <article class="inspection-beat">
+                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">S1</span><h4 class="txt-h3">Situation · make capture a domain concern</h4></div>
+                <dl>
+                  <dt>Then · assembled tools</dt>
+                  <dd>A form builder and spreadsheet can collect rows, yet the vehicle, one inspection event, its photographs, its grade, and its correction history remain only loosely related. Each handoff asks people to reconstruct which artifacts belong together.</dd>
+                  <dt>Now · purpose-built harness</dt>
+                  <dd>The inspection becomes a first-class domain object with a stable identity. Guided sections, optical suggestions, committed observations, media references, grade, and sync state all address the same record. Intake channel remains explicit while capture grammar stays consistent.</dd>
+                </dl>
+                <p class="inspection-beat__boundary"><strong>Boundary to validate.</strong> The record model must fit off-lease, repossession, trade-in, and consignment work while preserving channel-specific evidence.</p>
+              </article>
+
+              <article class="inspection-beat">
+                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">S2</span><h4 class="txt-h3">Tension · keep field work durable</h4></div>
+                <dl>
+                  <dt>Then · operational fracture</dt>
+                  <dd>Connectivity gaps interrupt capture, re-keying adds labor, ad hoc photographs lose their place, and variable application of grading criteria creates dispute exposure. The technician must carry too much system state in memory.</dd>
+                  <dt>Now · explicit assistance and state</dt>
+                  <dd>Offline-first capture treats the network as intermittent. Optical reads prefill VIN, odometer, and tire values for human confirmation. The grade remains human-owned while the system preserves the scoring inputs and correction trail.</dd>
+                </dl>
+                <p class="inspection-beat__boundary"><strong>Authority.</strong> Assistance proposes; the technician commits. A reviewer can later distinguish the machine suggestion, the accepted value, and the final human-owned grade.</p>
+              </article>
+
+              <article class="inspection-beat">
+                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">S3</span><h4 class="txt-h3">Turn · organize around one shared unit</h4></div>
+                <dl>
+                  <dt>Then · accumulated fixes</dt>
+                  <dd>Each repair bolts another tool onto the stack: one place for data entry, another for photographs, another for retry, and new copy-paste paths for every downstream consumer. Local improvements create additional seams.</dd>
+                  <dt>Now · compounding contract</dt>
+                  <dd>The inspection record becomes the unit of capture, synchronization, review, and publication. New capabilities strengthen the same contract: media hashes address the record, sync envelopes carry it, and versioned events publish its accepted state.</dd>
+                </dl>
+                <p class="inspection-beat__boundary"><strong>First responsible version.</strong> Offline capture, optical confirmation, ordered sync, and grade rollup enter first. Automated damage detection, multi-language capture, and a buyer self-serve view remain deferred.</p>
+              </article>
+
+              <article class="inspection-beat">
+                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">S4</span><h4 class="txt-h3">Resolution · make review an exception route</h4></div>
+                <dl>
+                  <dt>Then · review as compensation</dt>
+                  <dd>The operation responds to uncertain identity, transfer, and grading by adding broad manual review. Reviewers spend attention rediscovering ordinary state before they can examine consequential exceptions.</dd>
+                  <dt>Now · inspectable ordinary path</dt>
+                  <dd>Signed, ordered envelopes make transfer state visible. A grade trail keeps rollup and override reasons together. Acknowledged records settle through the ordinary path; exhausted retries and questionable records park in an explicit human-review queue.</dd>
+                </dl>
+                <p class="inspection-beat__boundary"><strong>Expectation.</strong> The technician needs reassurance that work is safe; the reviewer needs a defensible exception; the arbiter needs a reconstructable trail.</p>
+              </article>
+
+              <article class="inspection-beat">
+                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">S5</span><h4 class="txt-h3">Consequence · turn scale into a measured question</h4></div>
+                <dl>
+                  <dt>Then · scale multiplies seams</dt>
+                  <dd>Additional inspections multiply entry labor, media handling, review, bespoke integrations, and the number of places where a condition dispute can lose its evidence trail.</dd>
+                  <dt>Now · shared capability creates leverage</dt>
+                  <dd>A durable record and common fan-out create the conditions for lower marginal inspection cost, faster time-to-sale, trusted listings, lower arbitration cost, and a structured condition-data asset. Their current standing is opportunity hypothesis; field evidence establishes outcomes.</dd>
+                </dl>
+                <p class="inspection-beat__boundary"><strong>Measurement boundary.</strong> Field throughput, dispute rate, review rate, time-to-sale, post-sale mismatch, and per-inspection cost establish whether the proposed consequence appears.</p>
+              </article>
+            </div>
+
+          </article>
+        </div>
+      </div>
+
+      <div class="content__container inspection-implementation-field inspection-implementation-field--iron">
+        <div class="content content--editorial">
+          <article class="prose-flow" aria-labelledby="implementation-title">
+            <p class="inspection-track-label inspection-track-label--dark"><span>I · Implementation Architecture</span> State, recovery, and local decision authority</p>
+            <h2 id="implementation-title" class="txt-h2 architecture-track-title">IV. Implementation Architecture — How the shape becomes buildable</h2>
+            <p>
+              The implementation reading makes the data model, local persistence, transfer protocol, media route, and access
+              boundaries concrete. Each technology choice serves an operating contract named above.
+            </p>
+
+            <figure class="table-figure table-span-all">
+              <div class="table-scroll" role="region" tabindex="0" aria-label="Reference implementation shape">
+                <table class="table--reading table--comfortable">
+                  <caption>A prospective reference stack for the Now track</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Layer</th>
+                      <th scope="col">Choice</th>
+                      <th scope="col">Reason</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><th scope="row">Mobile</th><td>React Native with a thin Swift camera and OCR module.</td><td class="table-ability">Shared application code with native optics where it matters.</td></tr>
+                    <tr><th scope="row">Local store</th><td>SQLite with a write-ahead log.</td><td class="table-ability">Durable offline capture.</td></tr>
+                    <tr><th scope="row">Sync</th><td>Signed, ordered envelopes over HTTPS with resumable upload.</td><td class="table-ability">Tamper-evident and connectivity-tolerant transfer.</td></tr>
+                    <tr><th scope="row">Ingest</th><td>Stateless API behind a queue.</td><td class="table-ability">Returning technicians can create a burst while acknowledged work remains durable.</td></tr>
+                    <tr><th scope="row">Media</th><td>Content-hashed object storage plus CDN.</td><td class="table-ability">De-duplicated storage and fast signed delivery.</td></tr>
+                    <tr><th scope="row">Access</th><td>Role-based access control.</td><td class="table-ability">Technician, reviewer, and arbiter responsibilities remain distinct.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <figcaption class="table-note">Table 5. Each reference-stack choice is accountable to a named field, recovery, media, or authority requirement.</figcaption>
+            </figure>
+
+            <div class="inspection-card-grid table-span-all" aria-label="Implementation contracts in code-shaped form">
+              <article>
+                <p class="inspection-field-label">Inspectable state · record contract</p>
+                <h3 class="txt-h3">The record names committed human judgment</h3>
+                <pre tabindex="0"><code>type InspectionRecord = {
+  id: string
+  channel: "off_lease" | "repossession" |
+           "trade_in" | "consignment"
+  opticalReads: {
+    field: "vin" | "odometer" | "tire"
+    raw: string
+    confirmedByHuman: boolean
+  }[]
+  sections: {
+    exterior: number; interior: number
+    mechanical: number; frame: number; tires: number
+  }
+  damagePoints: number
+  grade: 0 | 1 | 2 | 3 | 4 | 5
+  mediaHashes: string[]
+  syncState: "local" | "queued" | "acked"
+}</code></pre>
+                <p>The client-generated ID stays stable across retry. Raw optical suggestions and human confirmation state remain distinguishable. The grade is a human-owned summary whose inputs remain available for review.</p>
+              </article>
+
+              <article>
+                <p class="inspection-field-label">Recovery contract · ordered envelope</p>
+                <h3 class="txt-h3">Retry has a bounded path and a human landing place</h3>
+                <pre tabindex="0"><code>for attempt in 1..6:
+  upload ordered envelope resumably
+  if acknowledged:
+    mark envelope acked
+    publish accepted record
+    stop
+  wait exponential backoff + full jitter
+
+park exhausted envelope for manual review</code></pre>
+                <p>The queue absorbs returning-device bursts. Record identity lets ingest recognize retries. Bounded backoff shapes demand and gives each exhausted envelope a visible review state.</p>
+              </article>
+            </div>
+
+            <h3 id="implementation-beats-title" class="txt-h3 beat-title">The source-native five beats</h3>
+            <div class="inspection-beat-grid table-span-all" aria-labelledby="implementation-beats-title">
+              <article class="inspection-beat">
+                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">I1</span><h4 class="txt-h3">Situation · give every inspection stable identity</h4></div>
+                <dl>
+                  <dt>Then · manually keyed rows</dt>
+                  <dd>Spreadsheet rows depend on hand-entered keys and positional context. A retry, copied row, or renamed photograph can create multiple plausible identities for the same inspection.</dd>
+                  <dt>Now · typed record</dt>
+                  <dd>A client-generated identifier exists before network contact and remains stable across synchronization. A typed record constrains intake channel, optical reads, section scores, grade, media hashes, and sync state into one addressable object.</dd>
+                </dl>
+                <p class="inspection-beat__boundary"><strong>Validation.</strong> Duplicate delivery must resolve to the same record identity while later corrections remain explicit supersessions.</p>
+              </article>
+
+              <article class="inspection-beat">
+                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">I2</span><h4 class="txt-h3">Tension · persist before transfer</h4></div>
+                <dl>
+                  <dt>Then · connection-coupled work</dt>
+                  <dd>A lost signal interrupts capture and can force the technician to reconstruct work. “Saved” and “received by the platform” collapse into one ambiguous state.</dd>
+                  <dt>Now · local write-ahead log</dt>
+                  <dd>SQLite with a write-ahead log commits field work locally. A queued sync envelope separates local durability from platform acknowledgement, allowing the interface to state local, queued, and acknowledged conditions in words and status markers.</dd>
+                </dl>
+                <p class="inspection-beat__boundary"><strong>Field drill.</strong> A forced-offline inspection should retain every committed field and media reference and return with an explicit queued state.</p>
+              </article>
+
+              <article class="inspection-beat">
+                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">I3</span><h4 class="txt-h3">Turn · address media by content</h4></div>
+                <dl>
+                  <dt>Then · duplicate photographs</dt>
+                  <dd>Ad hoc gallery images rely on filenames and folders. Repeat capture and repeat transfer bloat storage, and the relationship between an image, its required view, and its inspection can drift.</dd>
+                  <dt>Now · content-hashed objects</dt>
+                  <dd>The edge computes media hashes, the platform de-duplicates objects, and required beauty-shot positions remain named. Object storage plus a content delivery network serves canonical media while the inspection record retains the references.</dd>
+                </dl>
+                <p class="inspection-beat__boundary"><strong>Validation.</strong> Repeat upload of the same content should preserve one canonical object and retain the record’s ordered view references.</p>
+              </article>
+
+              <article class="inspection-beat">
+                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">I4</span><h4 class="txt-h3">Resolution · shape retry and expose exhaustion</h4></div>
+                <dl>
+                  <dt>Then · synchronized retry surge</dt>
+                  <dd>Returning technicians and recovering devices can retry together, hammering ingest at the moment connectivity resumes. A generic failure message leaves the recovery object unnamed.</dd>
+                  <dt>Now · backoff, jitter, and parking</dt>
+                  <dd>Signed, ordered envelopes upload resumably. Exponential backoff with full jitter distributes retries. Server-side de-duplication uses record identity. After the bounded retry path, the envelope parks for manual review with its record and error context intact.</dd>
+                </dl>
+                <p class="inspection-beat__boundary"><strong>Quality authority.</strong> The reviewer resolves a named envelope; the system preserves attempt and acknowledgement state.</p>
+              </article>
+
+              <article class="inspection-beat">
+                <div class="inspection-beat__heading"><span class="inspection-beat__marker" aria-hidden="true">I5</span><h4 class="txt-h3">Consequence · publish one accepted event</h4></div>
+                <dl>
+                  <dt>Then · bespoke integrations</dt>
+                  <dd>Valuation, listing, and arbitration each receive hand-translated data. Their copies can disagree about grade, media, event time, or whether a later correction superseded the first record.</dd>
+                  <dt>Now · versioned fan-out</dt>
+                  <dd>A stateless ingest path validates and acknowledges the envelope, the human-owned grade remains traceable to inputs, and one accepted inspection event carries stable identity, canonical media, timestamps, and corrections to downstream consumers.</dd>
+                </dl>
+                <p class="inspection-beat__boundary"><strong>Validation.</strong> Each consumer must trace the same accepted record and identify a later supersession directly from versioned event history.</p>
+              </article>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="content__container bg__adjust--tiffany">
+        <div class="content content--editorial">
+          <section aria-labelledby="contracts-title">
+            <h2 id="contracts-title" class="txt-h2 architecture-track-title">V. Operating contracts — What survives each boundary</h2>
+            <p>
+              A technology choice is useful here when it makes one of these contracts easier to keep under weak signal,
+              duplicate delivery, human correction, large media transfer, or later dispute review.
+            </p>
+            <figure class="table-figure table-figure--wide">
+              <div class="table-scroll" role="region" tabindex="0" aria-label="Distributed inspection harness operating contracts">
+                <table class="table--matrix table--comfortable">
+                  <caption>Seven contracts that keep one inspection reconstructable</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Contract</th>
+                      <th scope="col">Human responsibility</th>
+                      <th scope="col">System responsibility</th>
+                      <th scope="col">Recoverable state</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Record identity</th>
+                      <td>Select the correct vehicle and intake context.</td>
+                      <td>Create a stable client identifier that survives retries.</td>
+                      <td class="table-ability">Every correction and downstream event returns to one record.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Optical confirmation</th>
+                      <td>Confirm or replace the suggested VIN, odometer, and tire values.</td>
+                      <td>Preserve raw suggestion, committed value, and confirmation state.</td>
+                      <td class="table-ability">A reviewer can distinguish machine suggestion from human commitment.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Local durability</th>
+                      <td>Complete the inspection while connectivity changes.</td>
+                      <td>Commit each field and media reference to durable local storage.</td>
+                      <td class="table-ability">A forced-offline drill returns to an explicit local or queued state with committed fields intact.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Ordered sync</th>
+                      <td>Resolve a parked envelope when the system requests review.</td>
+                      <td>Sign, order, retry, de-duplicate, acknowledge, and park envelopes.</td>
+                      <td class="table-ability">The transfer resumes with each accepted record represented exactly once.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Condition grade</th>
+                      <td>Own the final 0–5 grade and any override reason.</td>
+                      <td>Assist the rollup and retain its inputs and correction trail.</td>
+                      <td class="table-ability">A dispute can reconstruct how the accepted grade was formed.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Canonical media</th>
+                      <td>Capture the required views in sequence.</td>
+                      <td>Hash, de-duplicate, store, and deliver media against the record.</td>
+                      <td class="table-ability">Condition evidence and listing images retain a stable source.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Event fan-out</th>
+                      <td>Review the accepted record where professional judgment is required.</td>
+                      <td>Publish one versioned event to valuation, listing, and arbitration consumers.</td>
+                      <td class="table-ability">Every consumer can identify the same accepted inspection and later supersession.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <figcaption class="table-note">Table 6. Human judgment, system state, and recoverable evidence stay explicit at each boundary.</figcaption>
+            </figure>
+          </section>
+
+          <section aria-labelledby="population-title">
+            <h2 id="population-title" class="txt-h2 architecture-track-title">VI. Populations + quality — Who sees, decides, checks, and learns</h2>
+            <p>
+              The harness serves several populations through different attention instruments. Field authority stays with the
+              person making and reviewing the condition judgment; system authority stays with persistence, transfer state,
+              provenance, and consistent publication.
+            </p>
+
+            <figure class="table-figure table-figure--wide">
+              <div class="table-scroll" role="region" tabindex="0" aria-label="Population cartography for the distributed inspection harness">
+                <table class="table--matrix table--comfortable">
+                  <caption>Population cartography: surface, attention need, authority, and quality question</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Population</th>
+                      <th scope="col">Primary surface</th>
+                      <th scope="col">Attention need</th>
+                      <th scope="col">Authority</th>
+                      <th scope="col">Quality question</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><th scope="row">Field technician</th><td>Guided capture + sync status</td><td>Next required field, speed, and reassurance that committed work is safe.</td><td class="table-ability">Confirms optical reads and owns the final condition grade.</td><td>Can the technician finish in weak signal and distinguish local, queued, and acknowledged state?</td></tr>
+                    <tr><th scope="row">Reviewer</th><td>Exception queue + grade audit</td><td>Records that need judgment and the evidence that explains why.</td><td class="table-ability">Resolves parked envelopes and reviews grade inputs or overrides.</td><td>Does one record make transfer state explicit enough to resolve the exception?</td></tr>
+                    <tr><th scope="row">Remarketing lead</th><td>Grade + dispute view</td><td>Consistency, operating throughput, and arbitration exposure.</td><td class="table-ability">Sets operational thresholds and commissions corrective work.</td><td>Are review, dispute, and post-sale mismatch signals moving together or diverging?</td></tr>
+                    <tr><th scope="row">Buyer</th><td>Listing + canonical media</td><td>Trustworthy condition presentation.</td><td class="table-ability">Uses the published evidence; professional grading remains upstream.</td><td>Does the listing match the accepted record and its selected media?</td></tr>
+                    <tr><th scope="row">Arbiter</th><td>Inspection audit trail</td><td>Evidence, event time, correction history, and disclosure context.</td><td class="table-ability">Adjudicates the post-sale condition dispute.</td><td>Can the accepted grade be reconstructed from committed observations and later supersessions?</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <figcaption class="table-note">Table 7. The same record supports different focalizations; each surface presents the state needed for that population’s decision.</figcaption>
+            </figure>
+
+            <figure class="table-figure table-figure--wide">
+              <div class="table-scroll" role="region" tabindex="0" aria-label="Quality and validation boundary matrix">
+                <table class="table--matrix table--comfortable">
+                  <caption>Quality posture: target condition, source-earned check, and evidence state</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Target condition</th>
+                      <th scope="col">Check carried by the reading</th>
+                      <th scope="col">Human decision</th>
+                      <th scope="col">Evidence state</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><th scope="row">Durable field work</th><td>Forced-offline drill: complete a record beyond signal, restore connectivity, and inspect local → queued → acknowledged transitions.</td><td class="table-ability">Technician confirms the restored record represents the work completed.</td><td>Acceptance test for a future implementation.</td></tr>
+                    <tr><th scope="row">Human-confirmed optical reads</th><td>Present high-confidence OCR as prefill and route low-confidence reads to manual entry; retain raw and committed values.</td><td class="table-ability">Technician confirms or replaces each read.</td><td>Operating contract defined; field error distribution remains to be measured.</td></tr>
+                    <tr><th scope="row">Consistent, defensible grades</th><td>Retain section scores, damage points, rollup, final grade, and override reason in one trail.</td><td class="table-ability">Technician owns grade; reviewer examines exceptions; arbiter adjudicates disputes.</td><td>Mechanism proposed; dispute and mismatch rates remain future evidence.</td></tr>
+                    <tr><th scope="row">Ordered resumable transfer</th><td>Retry a signed envelope with bounded exponential backoff and full jitter; park exhaustion for review.</td><td class="table-ability">Reviewer resolves the named parked envelope.</td><td>Protocol proposed; burst and recovery behavior require implementation tests.</td></tr>
+                    <tr><th scope="row">Canonical media</th><td>Repeat content delivery and verify one content hash while ordered beauty-shot references remain attached to the record.</td><td class="table-ability">Technician verifies required views; reviewer verifies exception context.</td><td>Data contract proposed; storage and retrieval behavior remain to be exercised.</td></tr>
+                    <tr><th scope="row">Coherent downstream use</th><td>Trace one accepted inspection identity through valuation, listing, and arbitration; publish corrections as explicit supersessions.</td><td class="table-ability">Domain reviewers confirm the downstream representation remains fit for each decision.</td><td>Fan-out shape proposed; consumer compatibility remains future work.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <figcaption class="table-note">Table 8. “Good” is stated as a checkable condition. Delivered performance enters this page only after a built system produces evidence.</figcaption>
+            </figure>
+
+            <h3 id="instrument-register-title" class="txt-h3">The applied instrument register</h3>
+            <figure class="table-figure table-figure--wide">
+              <div class="table-scroll" role="region" tabindex="0" aria-label="Core architecture and narrative instrument register">
+                <table class="table--reading table--comfortable">
+                  <caption>How the reading’s core and narrative instruments constrain the build</caption>
+                  <thead><tr><th scope="col">Instrument</th><th scope="col">Applied result</th><th scope="col">Decision it keeps visible</th></tr></thead>
+                  <tbody>
+                    <tr><th scope="row">PODA</th><td>Purpose: consistent edge condition. Objective: defensible grade and complete media. Discoverables: channel, sections, reads, media, grade, sync. Activities: capture, confirm, grade, sync, fan out.</td><td class="table-ability">Which work belongs to the first responsible version?</td></tr>
+                    <tr><th scope="row">Context Tree</th><td>Remarketing operation → intake, inspection, valuation, sale + arbitration; inspection → technician, capture kit, sync.</td><td class="table-ability">Where does context change authority or vocabulary?</td></tr>
+                    <tr><th scope="row">Alignment Worksheet</th><td>Technician: forgiving capture. Lead: consistent grades. Buyer: trustworthy condition.</td><td class="table-ability">Whose fear becomes a requirement or validation route?</td></tr>
+                    <tr><th scope="row">Strategy Canvas</th><td>Raise capture speed, grade consistency, and offline tolerance; reduce integration cost.</td><td class="table-ability">Which factors should changed work actually alter?</td></tr>
+                    <tr><th scope="row">Shared Surface Priority Map</th><td>1 guided capture; 2 sync status; 3 grade review.</td><td class="table-ability">Where does the next design and quality hour go?</td></tr>
+                    <tr><th scope="row"><abbr title="Happiness, Engagement, Adoption, Retention, and Task success">HEART</abbr> Chart</th><td>Technician-reported ease, inspections per shift, channel adoption, 90-day technician retention, and the share of records that reach acknowledged state through the ordinary path.</td><td class="table-ability">Which signals can reveal a consequence after launch?</td></tr>
+                    <tr><th scope="row">Technology-fit + semantic sampling</th><td>Offline store fits dead-signal capture; OCR stays human-confirmed; “synced,” “grade 3,” “beauty shot,” and “as-is” need shared meanings.</td><td class="table-ability">Does the technology fit the moment, and do humans and systems mean the same thing?</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <figcaption class="table-note">Table 9. The instrument set keeps operating purpose, fit, vocabulary, attention, and measurement connected.</figcaption>
+            </figure>
+          </section>
+
+          <section aria-labelledby="costing-title">
+            <h2 id="costing-title" class="txt-h2 architecture-track-title">VII. Cost + consequence — Purchase useful capability in an evidence-bearing order</h2>
+            <p>
+              The source compares two sequencing plans. Its figures carry illustrative planning authority.
+              A build-specific estimate still needs operating volume, incumbent constraints, team capacity, labor rates,
+              integration access, quality scope, and the cost of keeping the current path running through transition.
+            </p>
+            <div class="inspection-cost-grid">
+              <article>
+                <p class="inspection-field-label">Recommended source plan · durable contracts first</p>
+                <h3 class="txt-h3">Foundation first</h3>
+                <p><strong>Best when:</strong> the operation intends to scale and wants the durable boundaries established before the field interface expands.</p>
+                <ol>
+                  <li><strong>Foundation · low–mid five figures:</strong> ingest API, queue, object storage, <abbr title="Content Delivery Network">CDN</abbr>, sync contract, and internal package hosting.</li>
+                  <li><strong>Edge app · mid five figures:</strong> React Native capture, offline store, optical confirmation, and guided media.</li>
+                  <li><strong>Grade + downstream · low–mid five figures:</strong> rollup, audit trail, and event fan-out.</li>
+                  <li><strong>Hardening · low five figures:</strong> role boundaries, drills, de-duplication, and observability.</li>
+                </ol>
+                <p><strong>Gate before expansion:</strong> the shared identity, persistence, sync, and media contracts survive the forced-offline and duplicate-delivery checks.</p>
+              </article>
+              <article>
+                <p class="inspection-field-label">Alternative source plan · bounded field learning first</p>
+                <h3 class="txt-h3">Thin pilot first</h3>
+                <p><strong>Best when:</strong> the operation needs field learning before committing to the shared foundation.</p>
+                <ol>
+                  <li><strong>Pilot capture · low five figures:</strong> offline capture and bounded manual transfer for one intake channel.</li>
+                  <li><strong>Prove the grade · low five figures:</strong> assisted rollup and review for the pilot channel.</li>
+                  <li><strong>Expand · mid five figures:</strong> generalize the record, transfer contract, and foundation across all channels.</li>
+                </ol>
+                <p><strong>Gate before expansion:</strong> the pilot reveals channel-specific evidence, capture time, optical-confirmation burden, grade-review needs, and transfer exceptions.</p>
+              </article>
+            </div>
+
+            <aside class="inspection-interpretive-aside" aria-labelledby="sampling-decision-title">
+              <p class="inspection-field-label">Interpretive aside · option space before commitment</p>
+              <h3 id="sampling-decision-title" class="txt-h3">The two plans earn a Verbalized Sampling decision</h3>
+              <p>
+                Ask an AI collaborator to enumerate foundation-first, thin-pilot-first, and any bounded hybrid; name the
+                probability of reaching a specific outcome such as “field learning while preserving the durable record
+                contract”; state the key assumption and one falsifier for each; then recommend a sequence. The source-defined
+                plans constrain the candidate set, while the sampling move makes the reasoning visible before capital commits
+                (Zhang et al., 2025 — Verbalized Sampling).
+              </p>
+            </aside>
+
+            <h3 id="downstream-title" class="txt-h3">Downstream consequences remain hypotheses with named evidence</h3>
+            <figure class="table-figure table-figure--wide">
+              <div class="table-scroll" role="region" tabindex="0" aria-label="Downstream opportunity and evidence ledger">
+                <table class="table--matrix table--comfortable">
+                  <caption>Opportunity ledger: what the proposed harness can unlock and what would demonstrate it</caption>
+                  <thead><tr><th scope="col">Prospective opportunity</th><th scope="col">Unlocked by</th><th scope="col">Second-order value</th><th scope="col">Evidence to collect</th></tr></thead>
+                  <tbody>
+                    <tr><th scope="row">Lower arbitration cost</th><td>Consistent, audited grades.</td><td class="table-ability">Direct margin recovery and fewer reconstruction hours.</td><td>Dispute rate, time per dispute, and cases resolved from the record trail.</td></tr>
+                    <tr><th scope="row">Faster time-to-sale</th><td>Accepted-event fan-out.</td><td class="table-ability">Less depreciation while holding.</td><td>Elapsed time from accepted inspection to valuation and listing.</td></tr>
+                    <tr><th scope="row">Trusted listings</th><td>Guided beauty shots tied to the accepted grade.</td><td class="table-ability">Higher buyer confidence and clearer condition representation.</td><td>Post-sale mismatch, missing-media exceptions, and buyer-facing correction frequency.</td></tr>
+                    <tr><th scope="row">Condition data asset</th><td>Structured records accumulated over time.</td><td class="table-ability">Valuation and operating trend insight.</td><td>Coverage, semantic consistency, correction history, and downstream reuse.</td></tr>
+                    <tr><th scope="row">Future computer-vision assist</th><td>A labeled, provenance-bearing media corpus.</td><td class="table-ability">Optional assistance after the human-owned grading path is stable.</td><td>Label quality, representative coverage, error distribution, and a maintained human-confirmation route.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <figcaption class="table-note">Table 10. The opportunity page names second-order value; this surface keeps each claim paired with the future evidence that can earn it.</figcaption>
+            </figure>
+
+            <div class="inspection-evidence-boundary" role="note" aria-labelledby="cost-evidence-title">
+              <p class="inspection-field-label">Evidence Boundary · investment</p>
+              <h3 id="cost-evidence-title" class="txt-h3">The bands orient a planning conversation</h3>
+              <p>
+                Source figures describe order-of-magnitude planning bands for an exemplar. Priced proposal, production
+                staffing plan, signed pilot, and measured return remain future work. Automated damage detection, a buyer self-serve
+                condition view, and multi-language capture remain deferred costs. A real estimate names roles, hours,
+                loaded rates, quality work, run cost, contingency, incumbent continuity, and the evidence required at each gate.
+              </p>
+            </div>
+          </section>
+
+          <section aria-labelledby="source-basis-title">
+            <h2 id="source-basis-title" class="txt-h2">VIII. Source docket + evidence boundary — One orientation with nine direct readings</h2>
+            <p>
+              Docket 08 distinguishes this teaching exemplar from the separate Field Inspection Harness Re-platform. This
+              page precipitates the canonical orientation and all nine pages directly beneath it. The collection remains at
+              version 0.1.0 with the reserved standing “exemplar in progress, developing toward convergence.”
+            </p>
+            <p>Read <a href="{{PUBLIC_URL_REGISTRY_DISTRIBUTED_INSPECTION_HARNESS_AN_OFFLINE_FIRST_FIELD_OPERATIONS_TEACHING_EXEMPLAR}}">Distributed Inspection Harness — An Offline-First Field-Operations Teaching Exemplar</a> to explore expectation, focalization, opportunity, costing, and cross-platform collaboration through one connected architecture account.</p>
+
+            <div class="inspection-source-docket">
+              <p class="inspection-field-label">Canonical reading order · ten pages</p>
+              <ol>
+                <li><strong>Exemplar Prospective Site Reading — Distributed Inspection Harness for Field Technicians</strong><br>Orientation, PODA, scenario, ontology, dual track, public-source posture, and reading order.</li>
+                <li><strong>Solution Architecture Site Reading — Distributed Inspection Harness</strong><br>Capabilities, integral decisions, and the five operating beats.</li>
+                <li><strong>Implementation Architecture Site Reading — Distributed Inspection Harness</strong><br>Reference stack, typed record, sync protocol, optical pipeline, and five build beats.</li>
+                <li><strong>Core Architectures — Distributed Inspection Harness</strong><br>PODA, Context Tree, Alignment Worksheet, Strategy Canvas, priority map, HEART, and first responsible version.</li>
+                <li><strong>Narrative Architecture Prototypes — Technology-Fit and Semantic Sampling Tableaux</strong><br>Technology fit at sampled work moments and vocabulary stability across humans and systems.</li>
+                <li><strong>Expectation Architecture — Distributed Inspection Harness</strong><br>Floor, comparative, and aspirational expectations made checkable.</li>
+                <li><strong>Focalization Architecture — Distributed Inspection Harness</strong><br>Attention instruments and population cartography for technicians, reviewers, leads, buyers, and arbiters.</li>
+                <li><strong>Opportunity Architecture — Distributed Inspection Harness</strong><br>Second-order value and the capabilities that could unlock it.</li>
+                <li><strong>Costing Plans — Distributed Inspection Harness</strong><br>Foundation-first and thin-pilot sequencing, planning bands, and deferred costs.</li>
+                <li><strong>Collaboration Cycle — Distributed Inspection Harness</strong><br>Coordinator, contributor, reviewer, comments, quiet ledger, and cross-platform handoff.</li>
+              </ol>
+              <p><strong>Costing companion:</strong> <a href="initiative-costing.html#staged-example-title">Initiative Costing — stage capital against the next useful proof</a>.</p>
+            </div>
+
+            <h3 id="collaboration-record-title" class="txt-h3">Collaboration and recovery remain part of the architecture</h3>
+            <div class="inspection-card-grid" aria-labelledby="collaboration-record-title">
+              <article><p class="inspection-field-label">Coordinator</p><h4 class="txt-h3">Hold the through-line</h4><p>Record intent before edits, keep the reading order intact, and preserve the prospective boundary across turns and platforms.</p></article>
+              <article><p class="inspection-field-label">Contributor + reviewer</p><h4 class="txt-h3">Land scoped work and settle questions</h4><p>Contributors change a bounded page or artifact. Reviewers use comments for open questions and the quiet ledger for durable decisions that must survive resolved discussion.</p></article>
+            </div>
+
+            <figure class="table-figure table-figure--wide">
+              <div class="table-scroll" role="region" tabindex="0" aria-label="Quiet ledger for the distributed inspection harness">
+                <table class="table--ledger table--comfortable">
+                  <caption>Quiet ledger decisions preserved from the source collaboration cycle</caption>
+                  <thead><tr><th scope="col">Date</th><th scope="col">Decision</th><th scope="col">Durable consequence</th></tr></thead>
+                  <tbody>
+                    <tr><td>2026-07-23</td><td>Precipitate the exemplar as a vehicle-remarketing field-inspection harness.</td><td>Scenario and ontology remain self-contained and non-identifying.</td></tr>
+                    <tr><td>2026-07-23</td><td>Keep grading human-owned; defer fully automated damage detection.</td><td>Optical and grading assistance preserve a visible confirmation route and human authority.</td></tr>
+                    <tr><td>2026-07-23</td><td>Recommend foundation-first sequencing.</td><td>Identity, ingest, storage, sync, and package contracts precede expansion of the edge application.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <figcaption class="table-note">Table 11. The ledger retains the few decisions that shape every subsequent artifact and recovery turn.</figcaption>
+            </figure>
+
+            <div class="inspection-evidence-boundary" role="note" aria-labelledby="reading-evidence-title">
+              <p class="inspection-field-label">Evidence Boundary · whole reading</p>
+              <h3 id="reading-evidence-title" class="txt-h3">Prospective design, public anchors, future field evidence</h3>
+              <p>
+                This reading is a speculative teaching instrument worked backward from published-style condition-grading
+                scales, point-based damage grading, publicly documented inspection-app capabilities, and public remarketing
+                practice. Proprietary material and organization identity remain outside its evidence horizon. Its Now track
+                describes a design to build and test. Delivered outcomes, production staffing, signed pilots, commercial proof, measured
+                cost curves, dispute reduction, and return on investment remain future evidence.
+              </p>
+              <p>
+                The adjacent <a href="field-inspection-harness-replatform.html">Field Inspection Harness Re-platform</a> is a
+                separate, build-specific reading with a named incumbent and staged-capital apparatus. The two pages share
+                anatomy and some vocabulary; each keeps its own standing, scope, claims, and decision authority.
+              </p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer__container">
+      <div class="content">
+        <p>Context Canvas · Prospective readings make architecture, operating contracts, and investment order discussable before implementation.</p>
+        <nav aria-label="Footer">
+          <a href="debriefs.html">All debriefs</a>
+          <a href="ai-systems.html">AI Systems</a>
+          <a href="index.html">About</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

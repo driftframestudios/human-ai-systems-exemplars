@@ -1,0 +1,224 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" role="img" aria-labelledby="operating-map-title operating-map-desc">
+  <title id="operating-map-title">Field inspection platform operating map</title>
+  <desc id="operating-map-desc">A prospective operating map preserves Clappia through a controlled bridge while an offline inspector and managed platform become supportable. Capture, queue, sync, ingest, and grade form the central flow. Structured records use idempotent envelopes and per-entity conflict handling. Media follows an explicit state machine into canonical private S3. Canada-market assistance recognizes a positive National Safety Mark signal or returns UNKNOWN for human confirmation.</desc>
+  <defs>
+    <pattern id="operating-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#2855f3" stroke-width="1" opacity="0.08"/>
+      <circle cx="1" cy="1" r="1" fill="#2855f3" opacity="0.1"/>
+    </pattern>
+    <pattern id="operating-speckle" width="38" height="38" patternUnits="userSpaceOnUse">
+      <circle cx="7" cy="8" r="1.2" fill="#b78946" opacity="0.18"/>
+      <circle cx="29" cy="21" r="1" fill="#b78946" opacity="0.12"/>
+      <circle cx="17" cy="34" r="0.8" fill="#b78946" opacity="0.12"/>
+    </pattern>
+    <pattern id="operating-topography" width="150" height="92" patternUnits="userSpaceOnUse">
+      <path d="M-16 59C20 34 54 34 88 52s62 20 86-7M-18 78C18 52 52 53 84 70s60 18 94-7" fill="none" stroke="#2f6668" stroke-width="1.4" opacity="0.12"/>
+    </pattern>
+    <clipPath id="structured-lane-clip"><rect x="72" y="524" width="704" height="448" rx="24"/></clipPath>
+    <clipPath id="media-lane-clip"><rect x="792" y="524" width="736" height="448" rx="24"/></clipPath>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}
+      .ink{fill:#17345f}.muted{fill:#5d6f8b}.cobalt{fill:#2855f3}.sea{fill:#2f6668}.paper{fill:#fffdf8}.sand{fill:#9a4c3f}
+      .title{font-size:38px;font-weight:820;letter-spacing:-.7px}.subtitle{font-size:18px;font-weight:560}
+      .eyebrow{font-size:13px;font-weight:820;letter-spacing:1.5px}.lane-title{font-size:23px;font-weight:820}
+      .card-title{font-size:20px;font-weight:800}.body{font-size:15.5px;font-weight:560}.small{font-size:13.5px;font-weight:620}.tiny{font-size:11.5px;font-weight:760;letter-spacing:.35px}
+      .card{fill:#fffdf8;stroke:#17345f;stroke-width:2}.card-sea{fill:#d9efea;stroke:#2f6668;stroke-width:2}.card-blue{fill:#e7efff;stroke:#2855f3;stroke-width:2}.card-sand{fill:#fff5de;stroke:#9a4c3f;stroke-width:2}
+      .rule{stroke:#88a6d6;stroke-width:1.5}.rule-sea{stroke:#79a6a5;stroke-width:1.5}.arrow{fill:#2855f3}.arrow-sea{fill:#2f6668}.arrow-sand{fill:#fa7065}
+    </style>
+  </defs>
+
+  <rect width="1600" height="1200" fill="#17345f"/>
+  <rect x="30" y="30" width="1540" height="1140" rx="34" fill="#fffaf2" stroke="#cfe7f7" stroke-width="2"/>
+
+  <g class="sans">
+    <text x="72" y="88" class="title ink">Field inspection platform: preserve field truth through every handoff</text>
+    <text x="72" y="124" class="subtitle muted">A prospective operating map for Clappia continuity, offline capture, ordered sync, private media, and human-confirmed market signals.</text>
+    <g transform="translate(1306 64)" aria-label="Prospective planning status">
+      <rect x="7" y="7" width="222" height="62" rx="16" fill="#17345f" aria-hidden="true"/>
+      <rect width="222" height="62" rx="16" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+      <text x="111" y="26" text-anchor="middle" class="eyebrow sea">PROSPECTIVE DESIGN</text>
+      <text x="111" y="48" text-anchor="middle" class="tiny muted">PLANNING SURFACE · v0.1</text>
+    </g>
+
+    <g role="group" aria-labelledby="operating-continuity-title">
+      <title id="operating-continuity-title">Continuity rail from retained Clappia to an accepted target system of record</title>
+      <rect x="80" y="170" width="1456" height="104" rx="22" fill="#17345f" aria-hidden="true"/>
+      <rect x="72" y="162" width="1456" height="104" rx="22" fill="#fff5de" stroke="#9a4c3f" stroke-width="2"/>
+      <rect x="72" y="162" width="1456" height="104" rx="22" fill="url(#operating-speckle)"/>
+      <text x="96" y="190" class="eyebrow sand">CONTINUITY RAIL</text>
+
+      <g transform="translate(96 204)">
+        <rect width="378" height="44" rx="12" fill="#fffdf8" stroke="#9a4c3f" stroke-width="1.5"/>
+        <text x="18" y="19" class="small ink">Clappia remains live</text>
+        <text x="18" y="36" class="tiny muted">dealer bridge · native pilot · recoverable fallback</text>
+      </g>
+      <path class="arrow-sand" d="M474 221H506V213L530 226L506 239V231H474Z"/>
+      <g transform="translate(530 204)">
+        <rect width="410" height="44" rx="12" fill="#fff5de" stroke="#9a4c3f" stroke-width="1.5"/>
+        <text x="18" y="19" class="small ink">Parity + reconciliation result</text>
+        <text x="18" y="36" class="tiny muted">restore test · runbook · controlled cohort · handoff state</text>
+      </g>
+      <path class="arrow-sand" d="M940 221H972V213L996 226L972 239V231H940Z"/>
+      <g transform="translate(996 204)">
+        <rect width="508" height="44" rx="12" fill="#d9efea" stroke="#2f6668" stroke-width="1.5"/>
+        <text x="18" y="19" class="small ink">Target becomes system of record</text>
+        <text x="18" y="36" class="tiny muted">reconciled records · accepted restore · support readiness</text>
+      </g>
+    </g>
+
+    <g role="group" aria-labelledby="operating-pipeline-title">
+      <title id="operating-pipeline-title">Five-station field-to-platform pipeline with written ownership at every station</title>
+      <text x="72" y="310" class="eyebrow cobalt">FIELD-TO-PLATFORM PIPELINE</text>
+      <text x="72" y="342" class="lane-title ink">The device is the source of truth during the visit</text>
+
+      <g transform="translate(72 370)" aria-label="Capture station">
+        <rect width="250" height="116" rx="18" class="card-sand"/>
+        <text x="20" y="31" class="eyebrow sand">01 · LOCAL</text>
+        <text x="20" y="62" class="card-title ink">Capture</text>
+        <text x="20" y="87" class="small muted">Write answers, defects,</text>
+        <text x="20" y="106" class="small muted">measurements, media metadata.</text>
+      </g>
+      <path class="arrow" d="M322 418H350V408L378 428L350 448V438H322Z"/>
+      <g transform="translate(378 370)" aria-label="Queue station">
+        <rect width="250" height="116" rx="18" class="card-blue"/>
+        <text x="20" y="31" class="eyebrow cobalt">02 · LOCAL</text>
+        <text x="20" y="62" class="card-title ink">Queue</text>
+        <text x="20" y="87" class="small muted">Order mutations; bind media;</text>
+        <text x="20" y="106" class="small muted">preserve replay dependencies.</text>
+      </g>
+      <path class="arrow" d="M628 418H656V408L684 428L656 448V438H628Z"/>
+      <g transform="translate(684 370)" aria-label="Sync station">
+        <rect width="250" height="116" rx="18" fill="#2855f3" stroke="#17345f" stroke-width="2"/>
+        <text x="20" y="31" class="eyebrow" fill="#dbe9ff">03 · CONTRACT</text>
+        <text x="20" y="62" class="card-title paper">Sync</text>
+        <text x="20" y="87" class="small" fill="#e7efff">Push transactionally;</text>
+        <text x="20" y="106" class="small" fill="#e7efff">pull by monotonic cursor.</text>
+      </g>
+      <path class="arrow-sea" d="M934 418H962V408L990 428L962 448V438H934Z"/>
+      <g transform="translate(990 370)" aria-label="Ingest station">
+        <rect width="250" height="116" rx="18" class="card-sea"/>
+        <text x="20" y="31" class="eyebrow sea">04 · PLATFORM</text>
+        <text x="20" y="62" class="card-title ink">Ingest</text>
+        <text x="20" y="87" class="small muted">Validate, deduplicate,</text>
+        <text x="20" y="106" class="small muted">acknowledge, publish.</text>
+      </g>
+      <path class="arrow-sea" d="M1240 418H1268V408L1296 428L1268 448V438H1240Z"/>
+      <g transform="translate(1296 370)" aria-label="Grade station">
+        <rect width="232" height="116" rx="18" class="card-sand"/>
+        <text x="20" y="31" class="eyebrow sand">05 · HUMAN OWNED</text>
+        <text x="20" y="62" class="card-title ink">Grade</text>
+        <text x="20" y="87" class="small muted">Commit a traceable</text>
+        <text x="20" y="106" class="small muted">condition decision.</text>
+      </g>
+    </g>
+
+    <g role="group" aria-labelledby="structured-records-title">
+      <title id="structured-records-title">Structured-record lane with envelope, transfer, delete, and conflict contracts</title>
+      <rect x="80" y="532" width="704" height="448" rx="24" fill="#17345f" aria-hidden="true"/>
+      <rect x="72" y="524" width="704" height="448" rx="24" fill="#e7efff" stroke="#2855f3" stroke-width="2"/>
+      <g clip-path="url(#structured-lane-clip)"><rect x="72" y="524" width="704" height="448" fill="url(#operating-grid)"/></g>
+      <text x="98" y="558" class="eyebrow cobalt">LANE 01 · STRUCTURED RECORDS</text>
+      <text x="98" y="590" class="lane-title ink">Idempotent envelopes preserve ordered work</text>
+
+      <g transform="translate(98 614)" aria-label="Sync envelope contract">
+        <rect width="652" height="96" rx="16" class="card"/>
+        <text x="20" y="29" class="eyebrow cobalt">SYNC ENVELOPE</text>
+        <text x="20" y="54" class="mono small ink">operation_id · idempotency_key · org/device/actor/entity_id</text>
+        <text x="20" y="76" class="mono small ink">entity/base_version · local_time · schema_version · payload_hash</text>
+      </g>
+
+      <g transform="translate(98 734)" aria-label="Sync transfer contract">
+        <rect width="184" height="78" rx="14" class="card-blue"/>
+        <text x="16" y="28" class="eyebrow cobalt">PUSH</text>
+        <text x="16" y="53" class="body ink">Transactional batch</text>
+        <text x="16" y="70" class="tiny muted">atomic acknowledgement</text>
+      </g>
+      <path class="arrow" d="M282 763H304V755L328 773L304 791V783H282Z"/>
+      <g transform="translate(328 734)" aria-label="Pull cursor contract">
+        <rect width="184" height="78" rx="14" class="card-blue"/>
+        <text x="16" y="28" class="eyebrow cobalt">PULL</text>
+        <text x="16" y="53" class="body ink">Monotonic cursor</text>
+        <text x="16" y="70" class="tiny muted">consistent snapshot</text>
+      </g>
+      <path class="arrow" d="M512 763H534V755L558 773L534 791V783H512Z"/>
+      <g transform="translate(558 734)" aria-label="Delete semantics">
+        <rect width="192" height="78" rx="14" class="card-blue"/>
+        <text x="16" y="28" class="eyebrow cobalt">DELETE</text>
+        <text x="16" y="53" class="body ink">Tombstone</text>
+        <text x="16" y="70" class="tiny muted">replayable absence</text>
+      </g>
+
+      <g transform="translate(98 836)" aria-label="Per entity conflict resolution">
+        <rect width="652" height="106" rx="16" fill="#17345f"/>
+        <text x="20" y="29" class="eyebrow" fill="#dbe9ff">PER-ENTITY CONFLICT</text>
+        <text x="20" y="56" class="body paper">Draft fields: latest safe merge · workflow state: explicit transition</text>
+        <text x="20" y="80" class="body paper">Grade or identity: park for human resolution · retain both versions</text>
+        <text x="20" y="99" class="tiny" fill="#b9cee9">Conflict policy follows the entity; a global last-write rule does not.</text>
+      </g>
+    </g>
+
+    <g role="group" aria-labelledby="media-signal-title">
+      <title id="media-signal-title">Media and market-signal lane with explicit object states and human review boundary</title>
+      <rect x="800" y="532" width="736" height="448" rx="24" fill="#17345f" aria-hidden="true"/>
+      <rect x="792" y="524" width="736" height="448" rx="24" fill="#d9efea" stroke="#2f6668" stroke-width="2"/>
+      <g clip-path="url(#media-lane-clip)"><rect x="792" y="524" width="736" height="448" fill="url(#operating-topography)"/></g>
+      <text x="818" y="558" class="eyebrow sea">LANE 02 · MEDIA + MARKET SIGNALS</text>
+      <text x="818" y="590" class="lane-title ink">Object state stays explicit from lens to record</text>
+
+      <g aria-label="Media state machine">
+        <g transform="translate(818 614)"><rect width="84" height="48" rx="11" class="card-sea"/><text x="42" y="29" text-anchor="middle" class="tiny ink">captured</text></g>
+        <path class="arrow-sea" d="M902 631H912V625L926 638L912 651V645H902Z"/>
+        <g transform="translate(926 614)"><rect width="76" height="48" rx="11" class="card-sea"/><text x="38" y="29" text-anchor="middle" class="tiny ink">hashed</text></g>
+        <path class="arrow-sea" d="M1002 631H1012V625L1026 638L1012 651V645H1002Z"/>
+        <g transform="translate(1026 614)"><rect width="78" height="48" rx="11" class="card-sea"/><text x="39" y="29" text-anchor="middle" class="tiny ink">queued</text></g>
+        <path class="arrow-sea" d="M1104 631H1114V625L1128 638L1114 651V645H1104Z"/>
+        <g transform="translate(1128 614)"><rect width="92" height="48" rx="11" class="card-sea"/><text x="46" y="29" text-anchor="middle" class="tiny ink">uploading</text></g>
+        <path class="arrow-sea" d="M1220 631H1230V625L1244 638L1230 651V645H1220Z"/>
+        <g transform="translate(1244 614)"><rect width="88" height="48" rx="11" class="card-sea"/><text x="44" y="29" text-anchor="middle" class="tiny ink">uploaded</text></g>
+        <path class="arrow-sea" d="M1332 631H1342V625L1356 638L1342 651V645H1332Z"/>
+        <g transform="translate(1356 614)"><rect width="82" height="48" rx="11" class="card-sea"/><text x="41" y="29" text-anchor="middle" class="tiny ink">verified</text></g>
+        <path class="arrow-sea" d="M1438 631H1448V625L1462 638L1448 651V645H1438Z"/>
+        <g transform="translate(1462 614)"><rect width="64" height="48" rx="11" fill="#2f6668" stroke="#17345f" stroke-width="2"/><text x="32" y="29" text-anchor="middle" class="tiny paper">attached</text></g>
+        <text x="818" y="687" class="tiny sea">EXCEPTION STATES</text>
+        <text x="959" y="687" class="small ink">failed → retry with cause</text>
+        <text x="1163" y="687" class="small ink">quarantined → isolate and review</text>
+      </g>
+
+      <g transform="translate(818 716)" aria-label="Canonical private S3">
+        <rect width="312" height="218" rx="18" class="card"/>
+        <text x="20" y="30" class="eyebrow sea">CANONICAL PRIVATE S3</text>
+        <text x="20" y="61" class="card-title ink">Immutable originals</text>
+        <line x1="20" y1="76" x2="292" y2="76" class="rule-sea"/>
+        <text x="20" y="102" class="small ink">Presigned multipart / resumable</text>
+        <text x="20" y="125" class="small ink">Checksum before verified</text>
+        <text x="20" y="148" class="small ink">Derivatives + lifecycle + versioning</text>
+        <text x="20" y="171" class="small ink">Signed retrieval</text>
+        <text x="20" y="192" class="tiny muted"><tspan x="20">UUID keys · raw VIN/contact</tspan><tspan x="20" dy="15">stay at controlled source</tspan></text>
+      </g>
+
+      <g transform="translate(1152 716)" aria-label="Canada market signal boundary">
+        <rect width="360" height="218" rx="18" class="card-sand"/>
+        <text x="20" y="30" class="eyebrow sand">CANADA-MARKET BOUNDARY</text>
+        <text x="20" y="58" class="body ink">Verified National Safety Mark</text>
+        <path class="arrow-sand" d="M20 72H42V66L60 79L42 92V86H20Z"/>
+        <text x="68" y="84" class="small ink">positive signal → human confirm</text>
+        <line x1="20" y1="105" x2="340" y2="105" stroke="#d4ab72" stroke-width="1.5"/>
+        <text x="20" y="132" class="body ink">Missing · partial · blur · glare</text>
+        <path class="arrow-sand" d="M20 146H42V140L60 153L42 166V160H20Z"/>
+        <text x="68" y="158" class="small ink">UNKNOWN → human confirm</text>
+        <text x="20" y="188" class="tiny muted">Typed separately: manufacture country · intended</text>
+        <text x="20" y="205" class="tiny muted">market · conformity · import · registration · listing</text>
+      </g>
+    </g>
+
+    <g transform="translate(72 1014)" role="group" aria-labelledby="operating-contract-title">
+      <title id="operating-contract-title">Operating contract preserving field observation and human decision authority</title>
+      <rect x="8" y="8" width="1456" height="112" rx="22" fill="#fa7065" aria-hidden="true"/>
+      <rect width="1456" height="112" rx="22" fill="#17345f"/>
+      <text x="24" y="34" class="eyebrow" fill="#dbe9ff">OPERATING CONTRACT</text>
+      <text x="24" y="64" class="body paper">Reliable capture and reconstructable synchronization form the core product. Machine assistance may prefill or recognize;</text>
+      <text x="24" y="88" class="body paper">the technician confirms field observations, the reviewer owns the grade, and the platform preserves every accepted or unresolved state.</text>
+    </g>
+  </g>
+</svg>

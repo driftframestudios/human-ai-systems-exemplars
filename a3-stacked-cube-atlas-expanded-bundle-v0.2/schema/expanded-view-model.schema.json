@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json",
+  "title": "A3 expanded visualization view model",
+  "type": "object",
+  "required": [
+    "version",
+    "asOf",
+    "method",
+    "frames",
+    "lenses",
+    "capabilities",
+    "assuranceGates",
+    "migrationGates",
+    "runtimeItems",
+    "discrepancies",
+    "sources"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "const": "0.2.0" },
+    "asOf": { "type": "string", "format": "date" },
+    "method": {
+      "type": "object",
+      "required": ["name", "version", "url"],
+      "properties": {
+        "name": { "$ref": "#/$defs/text" },
+        "version": { "$ref": "#/$defs/text" },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Public source URI or stable source-key URN."
+        }
+      },
+      "additionalProperties": false
+    },
+    "frames": { "$ref": "#/$defs/labeledNotes" },
+    "lenses": { "$ref": "#/$defs/labeledNotes" },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "short", "family", "states", "evidence"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "label": { "$ref": "#/$defs/text" },
+          "short": { "$ref": "#/$defs/text" },
+          "family": { "$ref": "#/$defs/text" },
+          "states": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": { "enum": ["legacy", "seam", "shadow", "new", "retained", "unknown"] }
+          },
+          "evidence": { "$ref": "#/$defs/text" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "assuranceGates": { "$ref": "#/$defs/evidenceItems" },
+    "migrationGates": { "$ref": "#/$defs/migrationItems" },
+    "runtimeItems": { "$ref": "#/$defs/evidenceItems" },
+    "discrepancies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "question", "values", "confidence", "falsifier", "sources"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "question": { "$ref": "#/$defs/text" },
+          "values": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": { "type": "integer", "minimum": 0, "maximum": 100 }
+          },
+          "confidence": { "$ref": "#/$defs/text" },
+          "falsifier": { "$ref": "#/$defs/text" },
+          "sources": { "$ref": "#/$defs/sourceRefs" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "url", "role", "boundary"],
+        "properties": {
+          "id": { "$ref": "#/$defs/sourceRef" },
+          "title": { "$ref": "#/$defs/text" },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public source URI or stable source-key URN."
+          },
+          "role": { "$ref": "#/$defs/text" },
+          "boundary": { "$ref": "#/$defs/text" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "text": { "type": "string", "minLength": 1 },
+    "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
+    "sourceRef": { "type": "string", "pattern": "^SRC-[A-Z0-9]+(?:-[A-Z0-9]+)*$" },
+    "sourceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/sourceRef" }
+    },
+    "labeledNotes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "note"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "label": { "$ref": "#/$defs/text" },
+          "note": { "$ref": "#/$defs/text" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "evidenceItems": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "status", "summary", "boundary", "sources"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "label": { "$ref": "#/$defs/text" },
+          "status": { "$ref": "#/$defs/text" },
+          "summary": { "$ref": "#/$defs/text" },
+          "boundary": { "$ref": "#/$defs/text" },
+          "sources": { "$ref": "#/$defs/sourceRefs" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "migrationItems": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "status", "summary", "sources"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "label": { "$ref": "#/$defs/text" },
+          "status": { "$ref": "#/$defs/text" },
+          "summary": { "$ref": "#/$defs/text" },
+          "sources": { "$ref": "#/$defs/sourceRefs" }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

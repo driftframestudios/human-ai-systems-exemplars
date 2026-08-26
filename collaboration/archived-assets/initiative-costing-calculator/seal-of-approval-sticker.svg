@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Archived from the visitor execution path after removal of the approval interaction. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 336" role="img" aria-labelledby="seal-sticker-title seal-sticker-desc" shape-rendering="crispEdges">
+  <title id="seal-sticker-title">Seal of approval sticker</title>
+  <desc id="seal-sticker-desc">A friendly gray seal holds an approved sign inside an elaborate gold, cobalt, and tiffany pixel-art crest. A banner below reads Seal of Approval.</desc>
+
+  <!-- Pixel sparks and the crest's square silhouette keep the outer canvas transparent. -->
+  <g aria-hidden="true" fill="#f5bf42">
+    <path d="M24 48h8V32h8v16h16v8H40v16h-8V56h-8z"/>
+    <path d="M310 36h6V24h6v12h12v6h-12v12h-6V42h-6z"/>
+    <path d="M302 100h6v-6h6v6h6v6h-6v6h-6v-6h-6z"/>
+    <path d="M44 116h6v-6h6v6h6v6h-6v6h-6v-6h-6z"/>
+    <rect x="68" y="25" width="7" height="7"/>
+    <rect x="286" y="67" width="7" height="7"/>
+    <rect x="320" y="145" width="6" height="6"/>
+    <rect x="35" y="161" width="6" height="6"/>
+  </g>
+
+  <!-- Laurel sprigs. -->
+  <g aria-hidden="true" fill="#bc6f1c" stroke="#16233f" stroke-width="5" stroke-linejoin="miter">
+    <path d="M74 208H50v12H38v20h12v14h18v-12h14v-18h-8z"/>
+    <path d="M286 208h24v12h12v20h-12v14h-18v-12h-14v-18h8z"/>
+    <path d="M84 236H62v18H50v18h22v-12h22z"/>
+    <path d="M276 236h22v18h12v18h-22v-12h-22z"/>
+  </g>
+  <g aria-hidden="true" fill="#f5bf42">
+    <rect x="46" y="223" width="19" height="11"/>
+    <rect x="54" y="247" width="22" height="10"/>
+    <rect x="295" y="223" width="19" height="11"/>
+    <rect x="284" y="247" width="22" height="10"/>
+  </g>
+
+  <!-- Elaborate pixel crest: shadow, stepped gold horseshoe, and a pale open center. -->
+  <path aria-hidden="true" d="M120 18h120v8h32v12h24v16h16v24h12v32h8v88h-8v32h-12v24h-16v16h-24v12H88v-12H64v-16H48v-24H36v-32h-8v-88h8V78h12V54h16V38h24V26h32z" fill="#16233f"/>
+  <path aria-hidden="true" d="M120 28h120v8h32v14h24v24h14v32h8v96h-8v32h-14v24h-24v14H88v-14H64v-24H50v-32h-8v-96h8V74h14V50h24V36h32z" fill="#f5bf42"/>
+  <path aria-hidden="true" d="M120 42h120v8h30v12h22v22h12v30h8v80h-8v30h-12v22h-22v12H90v-12H68v-22H56v-30h-8v-80h8V84h12V62h22V50h30z" fill="#bc6f1c"/>
+  <path aria-hidden="true" d="M120 54h120v8h28v12h20v20h12v28h6v64h-6v28h-12v20h-20v12H92v-12H72v-20H60v-28h-6v-64h6V94h12V74h20V62h28z" fill="#ffe48b"/>
+  <path aria-hidden="true" d="M118 68h124v8h28v16h16v24h8v76h-8v24h-16v16h-28v8H118v-8H90v-16H74v-24h-8v-76h8V92h16V76h28z" fill="#16233f"/>
+  <path aria-hidden="true" d="M120 78h120v8h26v16h12v22h8v60h-8v22h-12v16h-26v8H120v-8H94v-16H82v-22h-8v-60h8v-22h12V86h26z" fill="#fffdf7"/>
+
+  <!-- Crest gems and studs. -->
+  <g aria-hidden="true" stroke="#16233f" stroke-width="4">
+    <rect x="111" y="38" width="18" height="18" fill="#56d8c9"/>
+    <rect x="231" y="38" width="18" height="18" fill="#56d8c9"/>
+    <rect x="59" y="126" width="16" height="16" fill="#fa7065"/>
+    <rect x="285" y="126" width="16" height="16" fill="#fa7065"/>
+    <rect x="75" y="210" width="16" height="16" fill="#56d8c9"/>
+    <rect x="269" y="210" width="16" height="16" fill="#56d8c9"/>
+  </g>
+  <g aria-hidden="true" fill="#16233f">
+    <rect x="84" y="82" width="8" height="8"/>
+    <rect x="268" y="82" width="8" height="8"/>
+    <rect x="48" y="174" width="8" height="8"/>
+    <rect x="304" y="174" width="8" height="8"/>
+    <rect x="100" y="244" width="8" height="8"/>
+    <rect x="252" y="244" width="8" height="8"/>
+  </g>
+
+  <!-- Friendly harbor seal: a rounded body, pale belly, fore flippers, whiskered muzzle, and split hind flippers. -->
+  <g aria-hidden="true" stroke="#16233f" stroke-width="6" stroke-linejoin="miter">
+    <path d="M139 64h46v6h18v10h13v15h10v22h7v33h5v49h-6v20h-10v17h-13v13h-20v9h-43v-7h-18v-12h-13v-18h-8v-25h-6v-43h5v-35h7V96h10V80h16z" fill="#7895a7"/>
+    <path d="M141 153h37v8h18v17h10v25h-6v22h-13v16h-42v-7h-15v-17h-8v-28h7v-23h12z" fill="#e8eee5" stroke="none"/>
+    <path d="M136 74h43v7h18v10h10v18h-16V99h-14v-8h-31v6h-14v12h-13V94h7V81h10z" fill="#9fb8c5" stroke="none"/>
+    <path d="M193 245h25v-10h14v-15h17v7h12v9h20v16h-9v9h-27l-12-8-10 10h-34z" fill="#7895a7"/>
+    <path d="M238 229h11v7h15v9h-25l-9-6z" fill="#9fb8c5" stroke="none"/>
+  </g>
+
+  <!-- Earless round face, muzzle, and long whiskers make the animal legible at sticker scale. -->
+  <g aria-hidden="true" fill="#16233f">
+    <rect x="139" y="105" width="11" height="14"/>
+    <rect x="191" y="105" width="11" height="14"/>
+    <path d="M158 124h25v7h-5v8h-15v-8h-5z"/>
+    <rect x="166" y="136" width="8" height="9"/>
+    <path d="M145 143h12v7h11v-8h8v8h11v-7h12v10h-8v8h-13v-6h-13v6h-13v-8h-7z"/>
+    <rect x="109" y="133" width="45" height="4"/>
+    <rect x="113" y="145" width="42" height="4"/>
+    <rect x="187" y="133" width="45" height="4"/>
+    <rect x="186" y="145" width="42" height="4"/>
+  </g>
+  <g aria-hidden="true" fill="#fffdf7">
+    <rect x="141" y="107" width="4" height="5"/>
+    <rect x="193" y="107" width="4" height="5"/>
+    <rect x="151" y="127" width="14" height="8"/>
+    <rect x="178" y="127" width="14" height="8"/>
+  </g>
+  <g aria-hidden="true" fill="#fa8d86">
+    <rect x="124" y="125" width="20" height="7"/>
+    <rect x="197" y="125" width="20" height="7"/>
+  </g>
+
+  <!-- Approved placard: offset like the reference so the seal's body, belly, flipper, and tail remain visible. -->
+  <g aria-hidden="true">
+    <rect x="232" y="216" width="13" height="43" fill="#16233f"/>
+    <path d="M145 158h155v8h9v54h-9v9H145v-9h-9v-54h9z" fill="#16233f"/>
+    <rect x="148" y="168" width="149" height="49" fill="#bc6f1c"/>
+    <rect x="156" y="176" width="133" height="33" fill="#fffdf7"/>
+    <rect x="156" y="176" width="133" height="6" fill="#ffe48b"/>
+    <text x="222.5" y="201" text-anchor="middle" fill="#16233f" font-family="'Courier New',monospace" font-size="20" font-weight="900" letter-spacing="1">APPROVED</text>
+  </g>
+  <!-- Flippers wrap over the sign instead of disappearing behind it. -->
+  <g aria-hidden="true" stroke="#16233f" stroke-width="6" stroke-linejoin="miter">
+    <path d="M108 170h20l31 17v18h-17l-24-11-17-13v-8z" fill="#9fb8c5"/>
+    <path d="M292 178h12v29h-12l-8-8v-13z" fill="#9fb8c5"/>
+  </g>
+
+  <!-- Banner plate. -->
+  <g aria-hidden="true">
+    <path d="M38 267h22v-10h240v10h22v54h-22v9H60v-9H38z" fill="#16233f"/>
+    <path d="M50 275h20v-8h220v8h20v36h-20v9H70v-9H50z" fill="#bc6f1c"/>
+    <rect x="70" y="274" width="220" height="38" fill="#2855f3"/>
+    <rect x="78" y="282" width="204" height="22" fill="#16233f"/>
+    <rect x="78" y="282" width="204" height="5" fill="#56d8c9"/>
+    <text x="180" y="301" text-anchor="middle" fill="#ffe48b" font-family="'Courier New',monospace" font-size="17" font-weight="900" letter-spacing="1">SEAL OF APPROVAL</text>
+  </g>
+</svg>

@@ -1,0 +1,32 @@
+{
+  "sampleId": "FMI-LIMS-S06",
+  "title": "Benchling exact-body verification and durable event work creation",
+  "temporalClass": "current_2026",
+  "evidenceClass": "illustrative",
+  "executionClass": "tested_excerpt",
+  "executionScope": "vendor_shaped_fake_verifier",
+  "qualificationStage": "sandbox_open",
+  "codePaths": ["src/lims_eln_reference/adapters/benchling.py"],
+  "testPaths": ["tests/test_vendor_adapters.py"],
+  "trustBoundaries": [
+    "The platform webhook crosses an exact-byte signature-verification boundary.",
+    "A durable inbox record and current-resource refresh job exist before acknowledgement."
+  ],
+  "failureModes": [
+    "Invalid signature, invalid envelope, and changed duplicate event identity are rejected.",
+    "Event payload freshness is resolved by a current-resource retrieval job."
+  ],
+  "receipts": [
+    "receipts/validation-report.json",
+    "provenance/vendor-source-register.json"
+  ],
+  "affectedPopulations": [
+    "scientist",
+    "engineer",
+    "security",
+    "operations",
+    "quality"
+  ],
+  "regulatoryScope": "determination_owned_by_quality_and_regulatory"
+}
+

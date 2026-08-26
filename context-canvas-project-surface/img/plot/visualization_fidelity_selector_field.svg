@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1080" viewBox="0 0 1600 1080" role="img" aria-labelledby="vfa-title vfa-desc">
+  <title id="vfa-title">Visualization Fidelity Atlas selection guide</title>
+  <desc id="vfa-desc">A five-question route moves from cognitive move through data shape, audience and stakes, uncertainty, and AI companion need. It produces Recommended, Conditional, and Reserved options with written reasons. A four-tier ladder shows ascending production commitment from portable text-embedded diagrams to high-fidelity renders.</desc>
+  <defs>
+    <pattern id="vfa-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#cfe7f7" stroke-opacity="0.42"/>
+      <circle cx="0" cy="0" r="1.4" fill="#f1b88e" fill-opacity="0.28"/>
+    </pattern>
+    <filter id="vfa-shadow" x="-12%" y="-18%" width="124%" height="145%">
+      <feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#071a35" flood-opacity="0.28"/>
+    </filter>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}.eyebrow{font-size:14px;font-weight:800;letter-spacing:1.8px}.title{font-size:39px;font-weight:820;letter-spacing:-.8px}.lead{font-size:17px;font-weight:620}.lane{font-size:15px;font-weight:850;letter-spacing:1.3px}.kicker{font-size:12px;font-weight:850;letter-spacing:1px}.card{font-size:15px;font-weight:700}.copy{font-size:14px;font-weight:620}.tier{font-size:14px;font-weight:760}.micro{font-size:12px;font-weight:680}.ink{fill:#17345f}.body{fill:#304a71}.white{fill:#fffdf8}.muted{fill:#5d6f8b}
+    </style>
+  </defs>
+  <rect width="1600" height="1080" fill="#fffaf2"/>
+  <rect x="28" y="28" width="1544" height="1024" rx="28" fill="#17345f"/>
+  <rect x="20" y="20" width="1544" height="1024" rx="28" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+  <rect x="21" y="21" width="1542" height="1022" rx="27" fill="url(#vfa-grid)"/>
+
+  <path d="M20 48Q20 20 48 20H1536Q1564 20 1564 48V174H20Z" fill="#2855f3"/>
+  <text x="56" y="57" class="mono eyebrow white">VISUAL FIDELITY ATLAS · QUALITATIVE ROUTER</text>
+  <text x="56" y="105" class="sans title white">Data shape → cognitive move → visual form</text>
+  <text x="56" y="141" class="sans lead white">Choose from the question and data shape, then make the result readable by people and machines.</text>
+  <rect x="1240" y="51" width="274" height="80" rx="14" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+  <text x="1262" y="81" class="mono kicker ink">OUTPUT POSTURE</text>
+  <text x="1262" y="108" class="sans copy body">Qualitative fit · written reasons</text>
+
+  <g id="selector-route" role="group" aria-labelledby="selector-title">
+    <title id="selector-title">Five-question selector route</title>
+    <text x="56" y="218" class="mono lane ink">ASK IN THIS ORDER</text>
+    <g filter="url(#vfa-shadow)">
+      <rect x="56" y="242" width="264" height="132" rx="14" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+      <circle cx="82" cy="270" r="15" fill="#17345f"/><text x="82" y="275" text-anchor="middle" class="mono kicker white">1</text>
+      <text x="108" y="274" class="sans card ink">Cognitive move</text>
+      <text x="78" y="311" class="sans copy body"><tspan x="78">Compare, rank, change,</tspan><tspan x="78" dy="22">compose, profile, explain?</tspan></text>
+      <path d="M326 292H342V281L366 308L342 335V324H326Z" fill="#2855f3"/>
+
+      <rect x="368" y="242" width="264" height="132" rx="14" fill="#cfe7f7" stroke="#17345f" stroke-width="2"/>
+      <circle cx="394" cy="270" r="15" fill="#17345f"/><text x="394" y="275" text-anchor="middle" class="mono kicker white">2</text>
+      <text x="420" y="274" class="sans card ink">Data shape</text>
+      <text x="390" y="311" class="sans copy body"><tspan x="390">Fields, dimensions, order,</tspan><tspan x="390" dy="22">distribution, relationship.</tspan></text>
+      <path d="M638 292H654V281L678 308L654 335V324H638Z" fill="#2855f3"/>
+
+      <rect x="680" y="242" width="264" height="132" rx="14" fill="#e7efff" stroke="#17345f" stroke-width="2"/>
+      <circle cx="706" cy="270" r="15" fill="#17345f"/><text x="706" y="275" text-anchor="middle" class="mono kicker white">3</text>
+      <text x="732" y="274" class="sans card ink">Audience + stakes</text>
+      <text x="702" y="311" class="sans copy body"><tspan x="702">Who reads, what decision,</tspan><tspan x="702" dy="22">and what consequence?</tspan></text>
+      <path d="M950 292H966V281L990 308L966 335V324H950Z" fill="#2855f3"/>
+
+      <rect x="992" y="242" width="264" height="132" rx="14" fill="#fff5de" stroke="#17345f" stroke-width="2"/>
+      <circle cx="1018" cy="270" r="15" fill="#17345f"/><text x="1018" y="275" text-anchor="middle" class="mono kicker white">4</text>
+      <text x="1044" y="274" class="sans card ink">Uncertainty</text>
+      <text x="1014" y="311" class="sans copy body"><tspan x="1014">Which range, caveat, or</tspan><tspan x="1014" dy="22">missingness must remain?</tspan></text>
+      <path d="M1262 292H1278V281L1302 308L1278 335V324H1262Z" fill="#2855f3"/>
+
+      <rect x="1304" y="242" width="232" height="132" rx="14" fill="#ffd3d0" stroke="#17345f" stroke-width="2"/>
+      <circle cx="1330" cy="270" r="15" fill="#17345f"/><text x="1330" y="275" text-anchor="middle" class="mono kicker white">5</text>
+      <text x="1356" y="274" class="sans card ink">AI companion</text>
+      <text x="1326" y="311" class="sans copy body"><tspan x="1326">Structured table, caption,</tspan><tspan x="1326" dy="22">units, provenance?</tspan></text>
+    </g>
+  </g>
+
+  <g id="qualitative-outcomes" role="group" aria-labelledby="outcomes-title">
+    <title id="outcomes-title">Three qualitative selection outcomes</title>
+    <rect x="56" y="416" width="1480" height="210" rx="18" fill="#17345f"/>
+    <text x="80" y="451" class="mono lane" fill="#f2ff67">RETURN A FIT JUDGMENT AND ITS REASON</text>
+    <g filter="url(#vfa-shadow)">
+      <rect x="80" y="475" width="448" height="122" rx="13" fill="#d9efea" stroke="#fffdf8" stroke-width="2"/>
+      <rect x="98" y="493" width="142" height="28" rx="14" fill="#17345f"/><text x="169" y="512" text-anchor="middle" class="mono kicker white">RECOMMENDED</text>
+      <text x="100" y="550" class="sans copy ink"><tspan x="100">Best carries this comparison burden for</tspan><tspan x="100" dy="22">this reader, decision, and data shape.</tspan></text>
+      <rect x="576" y="475" width="448" height="122" rx="13" fill="#fff5de" stroke="#fffdf8" stroke-width="2"/>
+      <rect x="594" y="493" width="134" height="28" rx="14" fill="#17345f"/><text x="661" y="512" text-anchor="middle" class="mono kicker white">CONDITIONAL</text>
+      <text x="596" y="550" class="sans copy ink"><tspan x="596">Useful when the named audience, context,</tspan><tspan x="596" dy="22">or exact-value need supports the tradeoff.</tspan></text>
+      <rect x="1072" y="475" width="440" height="122" rx="13" fill="#ffd3d0" stroke="#fffdf8" stroke-width="2"/>
+      <rect x="1090" y="493" width="112" height="28" rx="14" fill="#17345f"/><text x="1146" y="512" text-anchor="middle" class="mono kicker white">RESERVED</text>
+      <text x="1092" y="550" class="sans copy ink"><tspan x="1092">Use rarely; the form adds perceptual or</tspan><tspan x="1092" dy="22">interpretive burden for this decision.</tspan></text>
+    </g>
+  </g>
+
+  <g id="fidelity-ladder" role="group" aria-labelledby="ladder-title">
+    <title id="ladder-title">F0 to F3 fidelity ladder</title>
+    <text x="56" y="676" class="mono lane ink">FIDELITY LADDER · ASCENDING PRODUCTION COMMITMENT</text>
+    <g filter="url(#vfa-shadow)">
+      <rect x="56" y="702" width="350" height="238" rx="15" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+      <rect x="56" y="702" width="350" height="54" rx="15" fill="#d9efea"/><path d="M56 741H406V756H56Z" fill="#d9efea"/>
+      <text x="80" y="737" class="mono lane ink">F0 · TEXT-EMBEDDED</text>
+      <text x="80" y="788" class="sans tier ink">Portable default · always available</text>
+      <text x="80" y="824" class="sans copy body"><tspan x="80">Mermaid, timeline, or mindmap</tspan><tspan x="80" dy="22">embedded with the reading.</tspan></text>
+      <text x="80" y="890" class="mono micro muted"><tspan x="80">MINIMUM</tspan><tspan x="80" dy="19">portable text-defined diagram</tspan></text>
+
+      <rect x="428" y="682" width="350" height="258" rx="15" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+      <rect x="428" y="682" width="350" height="54" rx="15" fill="#cfe7f7"/><path d="M428 721H778V736H428Z" fill="#cfe7f7"/>
+      <text x="452" y="717" class="mono lane ink">F1 · SCHEMATIC VECTOR</text>
+      <text x="452" y="768" class="sans tier ink">Precise layout beyond text diagrams</text>
+      <text x="452" y="804" class="sans copy body"><tspan x="452">SVG-ready layout brief with labels</tspan><tspan x="452" dy="22">quoted from the source page.</tspan></text>
+      <text x="452" y="890" class="mono micro muted"><tspan x="452">MINIMUM</tspan><tspan x="452" dy="19">labeled vector layout contract</tspan></text>
+
+      <rect x="800" y="662" width="350" height="278" rx="15" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+      <rect x="800" y="662" width="350" height="54" rx="15" fill="#fff5de"/><path d="M800 701H1150V716H800Z" fill="#fff5de"/>
+      <text x="824" y="697" class="mono lane ink">F2 · STYLED PRESENTATION</text>
+      <text x="824" y="748" class="sans tier ink">Stakeholder-facing artifact</text>
+      <text x="824" y="784" class="sans copy body"><tspan x="824">Styled brief keyed to the page’s</tspan><tspan x="824" dy="22">palette and type scale.</tspan></text>
+      <text x="824" y="890" class="mono micro muted"><tspan x="824">MINIMUM</tspan><tspan x="824" dy="19">presentation brief + visual system</tspan></text>
+
+      <rect x="1172" y="642" width="364" height="298" rx="15" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+      <rect x="1172" y="642" width="364" height="54" rx="15" fill="#ffd3d0"/><path d="M1172 681H1536V696H1172Z" fill="#ffd3d0"/>
+      <text x="1196" y="677" class="mono lane ink">F3 · HIGH-FIDELITY RENDER</text>
+      <text x="1196" y="728" class="sans tier ink">Hero or rendered visual surface</text>
+      <text x="1196" y="764" class="sans copy body"><tspan x="1196">Full composition, palette, subject,</tspan><tspan x="1196" dy="22">containment, and exclusion contract.</tspan></text>
+      <text x="1196" y="890" class="mono micro muted"><tspan x="1196">MINIMUM</tspan><tspan x="1196" dy="19">complete render-ready specification</tspan></text>
+    </g>
+  </g>
+
+  <rect x="56" y="974" width="1480" height="44" rx="12" fill="#17345f"/>
+  <circle cx="82" cy="996" r="6" fill="#f2ff67"/>
+  <text x="101" y="1002" class="sans copy white">Every clean exemplar carries its question, population, units, labels, source data, uncertainty, text equivalent, AI summary, fit reason, caveat, provenance, and citations.</text>
+</svg>

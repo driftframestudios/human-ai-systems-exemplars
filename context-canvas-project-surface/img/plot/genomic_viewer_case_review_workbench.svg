@@ -1,0 +1,291 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="gv-workbench-title gv-workbench-desc">
+  <title id="gv-workbench-title">Genomic case review workbench and service substrate</title>
+  <desc id="gv-workbench-desc">A profile-scoped genomic case-review surface connects a React and Java service boundary, Amazon Aurora PostgreSQL-Compatible operational state, private Amazon S3 genomic-object buckets, and recoverable event delivery through a transactional outbox and Amazon SQS.</desc>
+
+  <defs>
+    <clipPath id="gv-workbench-frame-clip">
+      <rect x="18" y="18" width="1564" height="1084" rx="28"/>
+    </clipPath>
+    <pattern id="gv-workbench-speckle" width="36" height="36" patternUnits="userSpaceOnUse">
+      <circle cx="7" cy="10" r="1" fill="#17345f" opacity=".12"/>
+      <circle cx="28" cy="25" r=".8" fill="#2855f3" opacity=".1"/>
+    </pattern>
+    <pattern id="gv-workbench-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#2855f3" stroke-width="1" opacity=".09"/>
+    </pattern>
+    <style>
+      .paper{fill:#fffaf2}.grain{fill:url(#gv-workbench-speckle)}.grid{fill:url(#gv-workbench-grid)}
+      .frame{fill:none;stroke:#17345f;stroke-width:3}.cobalt{fill:#2855f3}.cobalt-dark{fill:#153fbe}
+      .cobalt-pale{fill:#e7efff}.powder{fill:#cfe7f7}.cream{fill:#fff5de}.salmon{fill:#ffd3d0}
+      .acid{fill:#f2ff67}.sea{fill:#d9efea}.coral{fill:#fa7065}.ink-fill{fill:#17345f}.white{fill:#fffdf8}
+      .outline{stroke:#17345f;stroke-width:2;fill:#fffdf8}.outline-soft{stroke:#7893bc;stroke-width:1.3;fill:#fffdf8}
+      .outline-cobalt{stroke:#2855f3;stroke-width:2;fill:#e7efff}.outline-sea{stroke:#3f7775;stroke-width:1.5;fill:#d9efea}
+      .outline-coral{stroke:#a84139;stroke-width:1.6;fill:#ffd3d0}.outline-acid{stroke:#17345f;stroke-width:1.7;fill:#f2ff67}
+      .shadow{fill:#17345f}.hairline{stroke:#9aacc8;stroke-width:1.2;fill:none}.rule{stroke:#17345f;stroke-width:1.4}
+      .eyebrow{font:700 13px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.45px;fill:#5d6f8b}
+      .eyebrow-on{font:700 13px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.45px;fill:#dbe7ff}
+      .title{font:780 35px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf8}
+      .subtitle{font:520 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#e8efff}
+      .section-title{font:770 19px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .card-title{font:750 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .card-title-on{font:750 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf8}
+      .body{font:520 14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}
+      .body-strong{font:660 14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .body-on{font:570 14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf8}
+      .micro{font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.65px;fill:#5d6f8b}
+      .micro-cobalt{font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.65px;fill:#153fbe}
+      .micro-on{font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.65px;fill:#e8efff}
+      .chip{font:700 12px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .chip-on{font:700 12px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf8}
+      .metric{font:760 22px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .architecture-title{font:760 16px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .architecture-body{font:520 13px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}
+      .architecture-micro{font:700 10px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.55px;fill:#5d6f8b}
+      .source{font:500 12px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#5d6f8b}
+    </style>
+  </defs>
+
+  <g clip-path="url(#gv-workbench-frame-clip)">
+    <rect class="paper" x="18" y="18" width="1564" height="1084"/>
+    <rect class="grain" x="18" y="18" width="1564" height="1084"/>
+    <rect class="cobalt" x="18" y="18" width="1564" height="142"/>
+    <rect class="grid" x="18" y="18" width="1564" height="142"/>
+  </g>
+  <rect class="frame" x="18" y="18" width="1564" height="1084" rx="28"/>
+
+  <g role="group" aria-labelledby="gv-workbench-heading">
+    <title id="gv-workbench-heading">Case review workbench heading</title>
+    <text class="eyebrow-on" x="54" y="54">GENOMIC VIEWER · PROFILE-SCOPED CASE REVIEW</text>
+    <text class="title" x="54" y="97">Case review keeps judgment, context, and handoff together</text>
+    <text class="subtitle" x="54" y="128">Profile-scoped review · evidence at the decision · recoverable service handoff</text>
+
+    <rect class="acid" x="1260" y="48" width="268" height="34" rx="7"/>
+    <text class="chip" x="1281" y="70">SOLID-TUMOR NGS · CURRENT</text>
+    <rect class="salmon" x="1260" y="91" width="268" height="27" rx="6"/>
+    <text class="micro" x="1281" y="109">3 REVIEW ITEMS · 1 SIGN-OFF</text>
+  </g>
+
+  <g role="group" aria-labelledby="gv-workbench-scope-title">
+    <title id="gv-workbench-scope-title">Visible population and case-scope filters</title>
+    <text class="eyebrow" x="54" y="192">GROUP FILTERS</text>
+    <rect class="ink-fill" x="54" y="207" width="172" height="31" rx="15"/>
+    <circle cx="73" cy="222.5" r="5" fill="#f2ff67"/>
+    <text class="chip-on" x="86" y="227">Curators / CBO</text>
+    <rect class="outline" x="236" y="207" width="116" height="31" rx="15"/>
+    <circle cx="255" cy="222.5" r="5" fill="#fa7065"/>
+    <text class="chip" x="268" y="227">Pathology</text>
+    <rect class="outline" x="362" y="207" width="112" height="31" rx="15"/>
+    <circle cx="381" cy="222.5" r="5" fill="#cfe7f7"/>
+    <text class="chip" x="394" y="227">Lab Ops</text>
+    <rect class="outline" x="484" y="207" width="104" height="31" rx="15"/>
+    <circle cx="503" cy="222.5" r="5" fill="#e9cf9e"/>
+    <text class="chip" x="516" y="227">Quality</text>
+
+    <text class="eyebrow" x="716" y="192">CURRENT PROFILE CONTRACT</text>
+    <rect class="outline-cobalt" x="716" y="207" width="224" height="31" rx="15"/>
+    <text class="chip" x="735" y="227">Solid-tumor NGS · production</text>
+    <rect class="outline-sea" x="950" y="207" width="187" height="31" rx="15"/>
+    <text class="chip" x="969" y="227">North America · active</text>
+    <rect class="outline-acid" x="1147" y="207" width="381" height="31" rx="15"/>
+    <text class="chip" x="1166" y="227">Server-evaluated before visibility or action</text>
+  </g>
+
+  <g role="group" aria-labelledby="gv-workbench-queue-title">
+    <title id="gv-workbench-queue-title">Profile-scoped work queue</title>
+    <rect class="shadow" x="62" y="272" width="292" height="508" rx="17"/>
+    <rect class="outline" x="54" y="264" width="292" height="508" rx="17"/>
+    <rect class="cream" x="56" y="266" width="288" height="72" rx="15"/>
+    <text class="micro" x="74" y="291">PROFILE-SCOPED WORK</text>
+    <text class="section-title" x="74" y="320">Cases this profile may act on</text>
+
+    <rect class="outline-soft" x="74" y="354" width="252" height="38" rx="8"/>
+    <text class="body" x="94" y="378">Search case, sample, or study…</text>
+
+    <rect class="outline-acid" x="74" y="410" width="252" height="92" rx="11"/>
+    <text class="micro" x="90" y="434">ASSIGNED · IN REVIEW</text>
+    <text class="card-title" x="90" y="460">S-043 · Solid tumor panel</text>
+    <text class="body" x="90" y="484">Case state current · 3 review items</text>
+
+    <rect class="outline-soft" x="74" y="514" width="252" height="92" rx="11"/>
+    <text class="micro" x="90" y="538">ASSIGNED · QC CONTEXT OPEN</text>
+    <text class="card-title" x="90" y="564">S-046 · Liquid biopsy</text>
+    <text class="body" x="90" y="588">Origin question attached to case</text>
+
+    <rect class="outline-soft" x="74" y="618" width="252" height="92" rx="11"/>
+    <text class="micro" x="90" y="642">AVAILABLE · PROFILE MATCH</text>
+    <text class="card-title" x="90" y="668">S-052 · Solid tumor panel</text>
+    <text class="body" x="90" y="692">Eligible for assignment</text>
+
+    <text class="micro-cobalt" x="74" y="745">VISIBLE WORK FOLLOWS CURRENT SIGN-OFF</text>
+  </g>
+
+  <g role="group" aria-labelledby="gv-workbench-case-title">
+    <title id="gv-workbench-case-title">Genomic case review surface</title>
+    <rect class="shadow" x="388" y="272" width="770" height="508" rx="17"/>
+    <rect class="outline" x="380" y="264" width="770" height="508" rx="17"/>
+    <rect class="powder" x="382" y="266" width="766" height="94" rx="15"/>
+    <text class="micro-cobalt" x="404" y="292">CASE S-043 · REVIEW CONTEXT</text>
+    <text class="section-title" x="404" y="323">Solid tumor panel review</text>
+    <text class="body" x="404" y="347">Sample SP-043-02 · specimen block B7 · tumor content 75% · assay ST-NGS-04</text>
+    <rect class="white" x="1000" y="286" width="123" height="49" rx="9" stroke="#17345f" stroke-width="1.4"/>
+    <text class="micro" x="1015" y="306">CASE STATE</text>
+    <text class="body-strong" x="1015" y="327">IN REVIEW</text>
+
+    <line class="hairline" x1="404" y1="386" x2="1126" y2="386"/>
+    <rect class="ink-fill" x="404" y="370" width="100" height="32" rx="7"/>
+    <text class="chip-on" x="425" y="391">Summary</text>
+    <text class="chip" x="532" y="391">Variants 3</text>
+    <text class="chip" x="638" y="391">QC</text>
+    <text class="chip" x="696" y="391">Conversation</text>
+    <text class="chip" x="816" y="391">History</text>
+
+    <rect class="outline-cobalt" x="404" y="421" width="454" height="126" rx="12"/>
+    <text class="micro-cobalt" x="422" y="446">REVIEW ITEM 01 · SMALL VARIANT</text>
+    <text class="card-title" x="422" y="473">KRAS p.G12C · VAF 18.4%</text>
+    <text class="body" x="422" y="498">Identity: HGVS + GA4GH VRS · assembly GRCh38</text>
+    <text class="body" x="422" y="520">Context: applicable knowledge at report release</text>
+    <rect class="acid" x="721" y="438" width="118" height="24" rx="5"/>
+    <text class="micro" x="735" y="454">REVIEW NEEDED</text>
+
+    <rect class="outline-soft" x="404" y="561" width="454" height="88" rx="12"/>
+    <text class="micro" x="422" y="584">REVIEW ITEM 02 · SMALL VARIANT</text>
+    <text class="card-title" x="422" y="611">TP53 p.R273H · VAF 46.9%</text>
+    <text class="body" x="422" y="633">Origin context remains attached to the review item</text>
+
+    <rect class="outline-soft" x="404" y="663" width="454" height="82" rx="12"/>
+    <text class="micro" x="422" y="686">REVIEW ITEM 03 · ASSAY-DERIVED MEASURE</text>
+    <text class="card-title" x="422" y="713">TMB 11.2 mut/Mb</text>
+    <text class="body" x="422" y="735">Assay, pipeline version, and threshold travel together</text>
+
+    <rect class="salmon" x="878" y="421" width="248" height="324" rx="12" stroke="#17345f" stroke-width="1.6"/>
+    <text class="micro" x="898" y="448">CONTEXT DRAWER</text>
+    <text class="card-title" x="898" y="476">Evidence at the decision</text>
+    <line class="rule" x1="898" y1="492" x2="1106" y2="492"/>
+
+    <text class="micro" x="898" y="521">IDENTITY CROSSWALK</text>
+    <text class="body-strong" x="898" y="543">HGVS · VRS · assembly</text>
+    <text class="body" x="898" y="562">
+      <tspan x="898">Equivalent representations</tspan>
+      <tspan x="898" dy="18">stay linked.</tspan>
+    </text>
+
+    <text class="micro" x="898" y="594">PIPELINE PROVENANCE</text>
+    <text class="body-strong" x="898" y="616">Caller · filter · reference</text>
+    <text class="body" x="898" y="635">
+      <tspan x="898">Detected-to-reported lineage</tspan>
+      <tspan x="898" dy="18">remains visible.</tspan>
+    </text>
+
+    <text class="micro" x="898" y="667">KNOWLEDGE DIFF</text>
+    <text class="body-strong" x="898" y="689">Issued state → current state</text>
+    <text class="body" x="898" y="708">
+      <tspan x="898">The reviewer sees what changed</tspan>
+      <tspan x="898" dy="18">before reuse.</tspan>
+    </text>
+  </g>
+
+  <g role="group" aria-labelledby="gv-workbench-contract-title">
+    <title id="gv-workbench-contract-title">Profile, permission, assignment, and sign-off contract</title>
+    <rect class="shadow" x="1193" y="272" width="335" height="508" rx="17"/>
+    <rect class="outline" x="1185" y="264" width="335" height="508" rx="17"/>
+    <rect class="cobalt-dark" x="1187" y="266" width="331" height="72" rx="15"/>
+    <text class="micro-on" x="1207" y="291">DECISION CONTRACT</text>
+    <text class="card-title-on" x="1207" y="320">Profile and sign-off resolve action</text>
+
+    <text class="micro" x="1207" y="373">CURRENT PROFILE</text>
+    <text class="body-strong" x="1207" y="397">Curator · solid-tumor NGS · production</text>
+    <line class="hairline" x1="1207" y1="414" x2="1498" y2="414"/>
+
+    <text class="micro" x="1207" y="444">ASSIGNMENT</text>
+    <text class="body-strong" x="1207" y="468">S-043 → reviewer C-017</text>
+    <text class="body" x="1207" y="488">Primary review assignment · revision 17</text>
+    <line class="hairline" x1="1207" y1="506" x2="1498" y2="506"/>
+
+    <text class="micro" x="1207" y="536">ALLOWED NOW</text>
+    <rect class="sea" x="1207" y="549" width="74" height="27" rx="6"/>
+    <text class="chip" x="1221" y="568">Review</text>
+    <rect class="sea" x="1289" y="549" width="82" height="27" rx="6"/>
+    <text class="chip" x="1303" y="568">Annotate</text>
+    <rect class="sea" x="1379" y="549" width="119" height="27" rx="6"/>
+    <text class="chip" x="1393" y="568">Request context</text>
+
+    <text class="micro" x="1207" y="612">GUARDED ACTIONS</text>
+    <text class="body-strong" x="1207" y="636">Reassign → manager permission</text>
+    <text class="body-strong" x="1207" y="658">Release report → current signatory</text>
+
+    <rect class="outline-coral" x="1207" y="681" width="291" height="65" rx="10"/>
+    <text class="micro" x="1223" y="704">HUMAN SIGN-OFF BOUNDARY</text>
+    <text class="body-strong" x="1223" y="722">
+      <tspan x="1223">Report consequence stays with</tspan>
+      <tspan x="1223" dy="18">a qualified human.</tspan>
+    </text>
+  </g>
+
+  <g role="group" aria-labelledby="gv-workbench-substrate-title">
+    <title id="gv-workbench-substrate-title">Case review service substrate</title>
+    <text class="eyebrow" x="54" y="830">CASE REVIEW SERVICE PATH · STATE, ARTIFACTS, EVENTS, RECOVERY</text>
+
+    <rect class="shadow" x="62" y="864" width="340" height="178" rx="14"/>
+    <rect class="outline" x="54" y="856" width="340" height="178" rx="14"/>
+    <rect class="powder" x="56" y="858" width="336" height="45" rx="12"/>
+    <text class="architecture-micro" x="74" y="881">01 · INTERFACE + SERVICE BOUNDARY</text>
+    <text class="architecture-title" x="74" y="928">React / Next.js · Java services</text>
+    <text class="architecture-body" x="74" y="953">
+      <tspan x="74">Server evaluates profile and permission,</tspan>
+      <tspan x="74" dy="19">assignment, and sign-off before reads</tspan>
+      <tspan x="74" dy="19">or writes are returned.</tspan>
+    </text>
+    <text class="architecture-micro" x="74" y="1008">TYPED API · CURRENT CONTRACT VERSION</text>
+
+    <path class="cobalt" aria-hidden="true" d="M394 928H416V916L438 945L416 974V962H394Z"/>
+
+    <rect class="shadow" x="446" y="864" width="340" height="178" rx="14"/>
+    <rect class="outline" x="438" y="856" width="340" height="178" rx="14"/>
+    <rect class="sea" x="440" y="858" width="336" height="45" rx="12"/>
+    <text class="architecture-micro" x="458" y="881">02 · RELATIONAL OPERATIONAL STATE</text>
+    <text class="architecture-title" x="458" y="920">
+      <tspan x="458">Amazon Aurora</tspan>
+      <tspan x="458" dy="19">PostgreSQL-Compatible</tspan>
+    </text>
+    <text class="architecture-body" x="458" y="963">
+      <tspan x="458">Cases, profiles, assignments, and status</tspan>
+      <tspan x="458" dy="19">remain relational with sign-off references.</tspan>
+    </text>
+    <text class="architecture-micro" x="458" y="1008">TRANSACTIONS · CURRENT READS · VERSIONED RULES</text>
+
+    <path class="cobalt" aria-hidden="true" d="M778 928H800V916L822 945L800 974V962H778Z"/>
+
+    <rect class="shadow" x="830" y="864" width="340" height="178" rx="14"/>
+    <rect class="outline" x="822" y="856" width="340" height="178" rx="14"/>
+    <rect class="salmon" x="824" y="858" width="336" height="45" rx="12"/>
+    <text class="architecture-micro" x="842" y="881">03 · GENOMIC + EVIDENCE OBJECTS</text>
+    <text class="architecture-title" x="842" y="928">Private Amazon S3 buckets</text>
+    <text class="architecture-body" x="842" y="953">
+      <tspan x="842">BAM / CRAM / VCF and evidence packages</tspan>
+      <tspan x="842" dy="19">retain object version, encryption, and</tspan>
+      <tspan x="842" dy="19">environment scope.</tspan>
+    </text>
+    <text class="architecture-micro" x="842" y="1008">SIGNED ACCESS · RANGE READS · OBJECT VERSION</text>
+
+    <path class="cobalt" aria-hidden="true" d="M1162 928H1184V916L1206 945L1184 974V962H1162Z"/>
+
+    <rect class="shadow" x="1214" y="864" width="314" height="178" rx="14"/>
+    <rect class="outline" x="1206" y="856" width="314" height="178" rx="14"/>
+    <rect class="acid" x="1208" y="858" width="310" height="45" rx="12"/>
+    <text class="architecture-micro" x="1226" y="881">04 · EVENT DELIVERY + RECOVERY</text>
+    <text class="architecture-title" x="1226" y="928">Transactional outbox → Amazon SQS</text>
+    <text class="architecture-body" x="1226" y="953">
+      <tspan x="1226">Stable event identity supports idempotent</tspan>
+      <tspan x="1226" dy="19">apply; quarantine and replay preserve</tspan>
+      <tspan x="1226" dy="19">recoverable movement after failures.</tspan>
+    </text>
+    <text class="architecture-micro" x="1226" y="1008">OUTBOX · IDEMPOTENT APPLY · QUARANTINE · REPLAY</text>
+  </g>
+
+  <g role="group" aria-labelledby="gv-workbench-investment-title">
+    <title id="gv-workbench-investment-title">Investment path across the workbench</title>
+    <rect class="cobalt-pale" x="54" y="1053" width="1466" height="42" rx="7"/>
+    <text class="architecture-micro" x="70" y="1078">INVESTMENT PATH</text>
+    <text class="body-strong" x="210" y="1079">Product + clinical informatics shape review context · platform binds profiles and state · data engineering preserves artifacts and events · operations carries recovery</text>
+  </g>
+</svg>

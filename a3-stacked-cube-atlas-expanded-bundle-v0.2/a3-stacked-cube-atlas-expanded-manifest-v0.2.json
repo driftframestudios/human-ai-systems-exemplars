@@ -1,0 +1,160 @@
+{
+  "id": "a3-stacked-cube-atlas-expanded.manifest.v0.2",
+  "title": "A3 Stacked Cube Atlas Expanded Bundle",
+  "version": "0.2.0",
+  "status": "source_lineage_candidate",
+  "generated_on": "2026-08-25",
+  "canonical_type": "atlas_expanded_authority_and_evidence_research_surface",
+  "entrypoint": "index.html",
+  "files": {
+    "prototype": "index.html",
+    "canonical": "model/a3-stacked-cube-expanded-canonical-delta-v0.2.json",
+    "schema": "schema/expanded-delta.schema.json",
+    "context": "schema/a3-stacked-cube.context.jsonld",
+    "validation_report": "validation/validation-report.json"
+  },
+  "extends": {
+    "artifact_id": "A3-CUBE-MANIFEST",
+    "version": "0.1.0",
+    "local_source": "model/a3-stacked-cube-canonical-v0.1.json",
+    "preserve_stable_ids": true
+  },
+  "source_reference": {
+    "repository": "urn:source-key:prototype-exemplars",
+    "consulted_commit": "e029455bb1ec0d41616f08e52123363cd0876c92",
+    "consulted_path": "core-architectures-chimeric-prototype-current-pack-v0.1/"
+  },
+  "publication": {
+    "repository": "driftframestudios/human-ai-systems-exemplars",
+    "repository_path": "a3-stacked-cube-atlas-expanded-bundle-v0.2/"
+  },
+  "runtime_contract": {
+    "self_contained_primary_html": true,
+    "executable_remote_dependencies": [],
+    "primary_visual": "inline_svg"
+  },
+  "inventory": [
+    {
+      "path": "embed.html",
+      "media_type": "text/html",
+      "role": "embeddable_host_fragment",
+      "bytes": 35399,
+      "sha256": "5f800bd65f26026c64e981bb9c1cdc20a6a15cfd7efecca005bb07198a072732"
+    },
+    {
+      "path": "index.html",
+      "media_type": "text/html",
+      "role": "primary_prototype",
+      "bytes": 81488,
+      "sha256": "1891b8af4ed5a6adf2658aa0b8758eb0c34749f4a4815c12610ce05b54069567"
+    },
+    {
+      "path": "model/a3-stacked-cube-canonical-v0.1.json",
+      "media_type": "application/json",
+      "role": "supporting_artifact",
+      "bytes": 24124,
+      "sha256": "c95bb72e83689bc3c9365895d7c4d56f2b6baffe0cad4c6bb8da2e61a393d319"
+    },
+    {
+      "path": "model/a3-stacked-cube-expanded-canonical-delta-v0.2.json",
+      "media_type": "application/json",
+      "role": "canonical_model",
+      "bytes": 15469,
+      "sha256": "dacea783131ccf4a9ad550294da00c397e86e108cc343acf1f45a2502f5dc87a"
+    },
+    {
+      "path": "model/a3-stacked-cube-expanded-view-model-v0.2.json",
+      "media_type": "application/json",
+      "role": "rendering_view_model",
+      "bytes": 30418,
+      "sha256": "228a9f4ea7ef0ea5c882114d59aecd17657c0670b9beb30b0c4697f9a2b2cc5b"
+    },
+    {
+      "path": "README.md",
+      "media_type": "text/markdown",
+      "role": "human_readme",
+      "bytes": 4113,
+      "sha256": "a188712bb015385cd6d807910df6f944bd1d02c150a01f3b66943efeb94300fb"
+    },
+    {
+      "path": "research/coverage-ledger-v0.2.json",
+      "media_type": "application/json",
+      "role": "research_coverage_ledger",
+      "bytes": 15041,
+      "sha256": "b4861c3411ce90da317a261131356be1e88a8b572831e4c1ddb436da774a14d0"
+    },
+    {
+      "path": "research/research-plan-v0.2.md",
+      "media_type": "text/markdown",
+      "role": "research_plan",
+      "bytes": 6218,
+      "sha256": "2924c964e229ec4a0c0966155dca82fdf37606f511ca664fc544153f0cb0b13e"
+    },
+    {
+      "path": "research/source-registry-v0.2.json",
+      "media_type": "application/json",
+      "role": "source_registry",
+      "bytes": 12296,
+      "sha256": "23a0c3d97964c30c6b91246617e96ddc2b5fb802f3105ee2adccfdc4fff2b25d"
+    },
+    {
+      "path": "schema/a3-stacked-cube.context.jsonld",
+      "media_type": "application/ld+json",
+      "role": "jsonld_context",
+      "bytes": 2482,
+      "sha256": "3d00d6adccb7e401d66d3d26cd9ac02b4b8c3854c7d3a93ad64bfd2d07d1ff7c"
+    },
+    {
+      "path": "schema/coverage-ledger.schema.json",
+      "media_type": "application/schema+json",
+      "role": "research_coverage_ledger",
+      "bytes": 1574,
+      "sha256": "02dba1dd1e225c3f2e25dfd39cf8ccf5153e7000595dd9062ff14b2e8aafd230"
+    },
+    {
+      "path": "schema/expanded-delta.schema.json",
+      "media_type": "application/schema+json",
+      "role": "canonical_schema",
+      "bytes": 7210,
+      "sha256": "76552eb1f00056f9ae574fca5273f92bd1f0e3389f5f0c7d3cdca63729c355d1"
+    },
+    {
+      "path": "schema/expanded-view-model.schema.json",
+      "media_type": "application/schema+json",
+      "role": "rendering_view_model",
+      "bytes": 5184,
+      "sha256": "a61e277fb2bf153117622bcb61d471531508ca45dad23a83f8f43c270a3d1ac1"
+    },
+    {
+      "path": "schema/source-registry.schema.json",
+      "media_type": "application/schema+json",
+      "role": "source_registry",
+      "bytes": 1300,
+      "sha256": "e5961a3c74fe5d304162e576ef5d3f4182eb8d90dc43dbec13956d3c5221fc9e"
+    },
+    {
+      "path": "validation/validation-report.json",
+      "media_type": "application/json",
+      "role": "validation_receipt",
+      "bytes": 2608,
+      "sha256": "88db5d5de5448f7b69ff8f15731485d49428cec9ceea366ba339d87316aa7bba"
+    }
+  ],
+  "validation": {
+    "report": "validation/validation-report.json",
+    "result": "awaiting_human_cue",
+    "scope": "2026-08-25 source-lineage revision",
+    "prior_receipt": {
+      "report": "validation/validation-report.json",
+      "result": "pass",
+      "executed_on": "2026-07-27",
+      "scope": "bundle revision before source-lineage projection"
+    }
+  },
+  "notes": [
+    "index.html is the complete self-contained surface; embed.html is a host fragment.",
+    "The canonical base plus additive delta preserve historical assertions separately from conditional research claims.",
+    "The extracted view model is authoritative for reproducing the current rendering projection.",
+    "The 2026-08-25 manifest refresh covers locator-safe source identifiers and byte/hash inventory; the validation report retains its 2026-07-27 execution scope."
+  ]
+}

@@ -1,0 +1,193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tone Goal",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_version",
+    "id",
+    "title",
+    "artifact_type",
+    "version",
+    "status",
+    "semantic_attractor_contract",
+    "source_band",
+    "population_context",
+    "tone_dimensions",
+    "register_dimensions",
+    "evidence_stance",
+    "structural_counterweights",
+    "fidelity_anchors"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1"
+    },
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "artifact_type": {
+      "const": "tone_goal"
+    },
+    "version": {
+      "const": "0.1.0"
+    },
+    "status": {
+      "enum": [
+        "curated_exemplar",
+        "reference_surface"
+      ]
+    },
+    "semantic_attractor_contract": {
+      "type": "object",
+      "required": [
+        "target_state",
+        "boundary_condition",
+        "replacement_state",
+        "verification_signals"
+      ],
+      "properties": {
+        "target_state": {
+          "type": "string"
+        },
+        "boundary_condition": {
+          "type": "string"
+        },
+        "replacement_state": {
+          "type": "string"
+        },
+        "verification_signals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "source_band": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "population_context": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tone_dimensions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "desired_state",
+          "linguistic_signals",
+          "reader_effect",
+          "calibration_cues"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "desired_state": {
+            "type": "string"
+          },
+          "linguistic_signals": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reader_effect": {
+            "type": "string"
+          },
+          "calibration_cues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "register_dimensions": {
+      "description": "Instruction-bearing analysis such as rhetorical temperature; linguistic, narrative, organizational, epistemic, and critical registers; and contextually useful extensions.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "desired_state",
+          "linguistic_signals",
+          "reader_effect",
+          "calibration_cues"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "examples": [
+              "rhetorical_temperature",
+              "linguistic_register",
+              "narrative_register",
+              "organizational_register",
+              "epistemic_register",
+              "critical_register",
+              "audience_relationship",
+              "role_calibrated_agency",
+              "temporal_and_recovery_rhythm"
+            ]
+          },
+          "desired_state": {
+            "type": "string"
+          },
+          "linguistic_signals": {
+            "description": "Observable wording, cadence, structure, or discourse signals associated with the dimension.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reader_effect": {
+            "type": "string"
+          },
+          "calibration_cues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "instruction_implications": {
+            "description": "Constructive prompt moves that activate or calibrate this dimension.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "evidence_stance": {
+      "type": "string"
+    },
+    "structural_counterweights": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "fidelity_anchors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lims-eln-enterprise-reference-v0-1"
+version = "0.2.0"
+description = "Synthetic enterprise LIMS/ELN architecture and integration exemplars"
+requires-python = ">=3.12"
+dependencies = [
+  "jsonschema[format]==4.26.0",
+  "PyYAML==6.0.3",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

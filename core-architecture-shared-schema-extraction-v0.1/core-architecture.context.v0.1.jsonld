@@ -1,0 +1,171 @@
+{
+  "@context": {
+    "ca": "https://example.org/core-architectures#",
+    "schema": "https://schema.org/",
+    "id": "@id",
+    "type": "@type",
+    "name": "schema:name",
+    "description": "schema:description",
+    "text": "schema:text",
+    "CreativeWork": "schema:CreativeWork",
+    "Dataset": "schema:Dataset",
+    "Action": "schema:Action",
+    "DefinedTerm": "schema:DefinedTerm",
+    "CoreArchitectureArtifact": "ca:CoreArchitectureArtifact",
+    "CoreArchitectureFamilyIndex": "ca:CoreArchitectureFamilyIndex",
+    "CoreArchitectureCard": "ca:CoreArchitectureCard",
+    "ArtifactIdentity": "ca:ArtifactIdentity",
+    "QuickUse": "ca:QuickUse",
+    "RecipeSpine": "ca:RecipeSpine",
+    "RelationshipContract": "ca:RelationshipContract",
+    "RecoveryCalibration": "ca:RecoveryCalibration",
+    "SourceNote": "ca:SourceNote",
+    "SemanticLocality": "ca:SemanticLocality",
+    "AIContextPacket": "ca:AIContextPacket",
+    "ViewConfiguration": "ca:ViewConfiguration",
+    "HandoffRoute": "ca:HandoffRoute",
+    "StrainCue": "ca:StrainCue",
+    "FailureGeometry": "ca:FailureGeometry",
+    "RecoveryMove": "ca:RecoveryMove",
+    "RestoredState": "ca:RestoredState",
+    "Discoverable": "ca:Discoverable",
+    "StatusMarker": "ca:StatusMarker",
+    "VeracityStatus": "ca:VeracityStatus",
+    "ImpactMap": "ca:ImpactMap",
+    "Goal": "ca:Goal",
+    "Actor": "ca:Actor",
+    "Impact": "ca:Impact",
+    "ContextTree": "ca:ContextTree",
+    "Group": "ca:Group",
+    "ContextQuestion": "ca:ContextQuestion",
+    "ContextCell": "ca:ContextCell",
+    "StrategyCanvas": "ca:StrategyCanvas",
+    "Dimension": "ca:Dimension",
+    "FirstResponsibleVersionMatrix": "ca:FirstResponsibleVersionMatrix",
+    "ThresholdCard": "ca:ThresholdCard",
+    "CrossChannelBlueprint": "ca:CrossChannelBlueprint",
+    "SharedSurfacePriorityMap": "ca:SharedSurfacePriorityMap",
+    "Stage": "ca:Stage",
+    "Surface": "ca:Surface",
+    "HeatmapCell": "ca:HeatmapCell",
+    "SharedAsset": "ca:SharedAsset",
+    "ServiceDesignBlueprint": "ca:ServiceDesignBlueprint",
+    "ServiceStage": "ca:ServiceStage",
+    "ServiceLayer": "ca:ServiceLayer",
+    "ServiceCell": "ca:ServiceCell",
+    "AISystemsServiceBlueprint": "ca:AISystemsServiceBlueprint",
+    "AISystemComponent": "ca:AISystemComponent",
+    "SpecificationByExample": "ca:SpecificationByExample",
+    "Rule": "ca:Rule",
+    "Scenario": "ca:Scenario",
+    "Given": "ca:Given",
+    "When": "ca:When",
+    "Then": "ca:Then",
+    "SoftwareArchitectureViews": "ca:SoftwareArchitectureViews",
+    "ModeledElement": "ca:ModeledElement",
+    "ArchitectureView": "ca:ArchitectureView",
+    "Attachment": "ca:Attachment",
+    "HEARTChart": "ca:HEARTChart",
+    "HEARTRow": "ca:HEARTRow",
+    "PlusDelta": "ca:PlusDelta",
+    "FeedbackObservation": "ca:FeedbackObservation",
+    "PractitionerJudgmentProbes": "ca:PractitionerJudgmentProbes",
+    "PractitionerJudgmentProbe": "ca:PractitionerJudgmentProbe",
+    "PatternProblemSurfaceMatrix": "ca:PatternProblemSurfaceMatrix",
+    "PopulationColumn": "ca:PopulationColumn",
+    "ExperiencePattern": "ca:ExperiencePattern",
+    "ProblemSurfaceCell": "ca:ProblemSurfaceCell",
+    "JobsToBeDoneTreemap": "ca:JobsToBeDoneTreemap",
+    "Job": "ca:Job",
+    "UnitTestFirstDesign": "ca:UnitTestFirstDesign",
+    "TestTarget": "ca:TestTarget",
+    "UpstreamRevisionLoop": "ca:UpstreamRevisionLoop",
+    "RevisionEntry": "ca:RevisionEntry",
+    "PODA": "ca:PODA",
+    "Purpose": "ca:Purpose",
+    "Objective": "ca:Objective",
+    "Activity": "ca:Activity",
+    "AlignmentWorksheet": "ca:AlignmentWorksheet",
+    "PremiseBlank": "ca:PremiseBlank",
+    "AlignmentOption": "ca:AlignmentOption",
+    "InverseStatePass": "ca:InverseStatePass",
+    "hasIdentity": {
+      "@id": "ca:hasIdentity",
+      "@type": "@id"
+    },
+    "hasQuickUse": {
+      "@id": "ca:hasQuickUse",
+      "@type": "@id"
+    },
+    "hasRecipe": {
+      "@id": "ca:hasRecipe",
+      "@type": "@id"
+    },
+    "hasRelationshipContract": {
+      "@id": "ca:hasRelationshipContract",
+      "@type": "@id"
+    },
+    "hasRecoveryCalibration": {
+      "@id": "ca:hasRecoveryCalibration",
+      "@type": "@id"
+    },
+    "hasSourceNote": {
+      "@id": "ca:hasSourceNote",
+      "@type": "@id"
+    },
+    "hasSemanticLocality": {
+      "@id": "ca:hasSemanticLocality",
+      "@type": "@id"
+    },
+    "hasAIContextPacket": {
+      "@id": "ca:hasAIContextPacket",
+      "@type": "@id"
+    },
+    "hasViewConfiguration": {
+      "@id": "ca:hasViewConfiguration",
+      "@type": "@id"
+    },
+    "activeView": {
+      "@id": "ca:activeView",
+      "@type": "@id"
+    },
+    "handsTo": {
+      "@id": "ca:handsTo",
+      "@type": "@id"
+    },
+    "hasStatus": "ca:hasStatus",
+    "status": "ca:status",
+    "evidence": "ca:evidence",
+    "reason": "ca:reason",
+    "routeReason": "ca:routeReason",
+    "sourceBand": "ca:sourceBand",
+    "family": "ca:family",
+    "placement": "ca:placement",
+    "primaryCognitiveMove": "ca:primaryCognitiveMove",
+    "stableId": "ca:stableId",
+    "canonicalOrder": "ca:canonicalOrder",
+    "displayOrder": "ca:displayOrder",
+    "visibleInActiveView": "ca:visibleInActiveView",
+    "hiddenInActiveView": "ca:hiddenInActiveView",
+    "columnOrder": "ca:columnOrder",
+    "rowOrder": "ca:rowOrder",
+    "hiddenColumn": {
+      "@id": "ca:hiddenColumn",
+      "@type": "@id"
+    },
+    "hiddenRow": {
+      "@id": "ca:hiddenRow",
+      "@type": "@id"
+    },
+    "selectedItem": {
+      "@id": "ca:selectedItem",
+      "@type": "@id"
+    },
+    "textMode": "ca:textMode",
+    "preferredPhrase": "ca:preferredPhrase",
+    "replacementStateGuidance": "ca:replacementStateGuidance",
+    "probabilityOfWhat": "ca:probabilityOfWhat",
+    "probabilityEstimate": "ca:probabilityEstimate",
+    "technicalVeracityStatus": "ca:technicalVeracityStatus"
+  }
+}

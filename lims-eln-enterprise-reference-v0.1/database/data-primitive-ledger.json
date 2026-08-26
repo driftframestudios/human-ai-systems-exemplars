@@ -1,0 +1,551 @@
+{
+  "ledgerId": "lims-eln-data-primitives-v0.2",
+  "schemaVersion": "1.0.0",
+  "reviewedAt": "2026-08-04T00:00:00Z",
+  "scope": [
+    "database",
+    "src/lims_eln_reference",
+    "schema",
+    "receipts",
+    "scripts/validate_pack.py",
+    "scripts/run_database_rehearsal.sh",
+    ".github/workflows/lims-eln-enterprise-reference.yml"
+  ],
+  "severityPolicy": {
+    "critical": "A promotion-blocking integrity, tenancy, evidence, migration, or recoverability gap.",
+    "high": "A material correctness or operability gap requiring an accepted disposition before production qualification.",
+    "medium": "A bounded maintainability or scale concern tracked through the responsible release."
+  },
+  "findings": [
+    {
+      "id": "DB-001",
+      "severity": "critical",
+      "coordinate": "database/flyway; database/release-provenance.json; database/migrations",
+      "currentPrimitive": "Ordered bootstrap files without durable migration history",
+      "materialEffect": "Applied order, checksum drift, supported baseline, and recovery posture remain implicit.",
+      "desiredState": "Checksummed versioned migrations, serialized deployment, supported baselines, and one schema fingerprint.",
+      "disposition": "flyway_history_with_release_provenance_and_semantic_verification",
+      "verification": ["Flyway checksum validation", "SHA-256 release provenance", "Flyway PostgreSQL lock proof", "empty install", "v0.1 upgrade", "semantic fingerprint parity"]
+    },
+    {
+      "id": "DB-002",
+      "severity": "critical",
+      "coordinate": "database/legacy/v0.1 timestamp columns; database/upgrades/v0_1_to_v0_2/V002__backfill.sql",
+      "currentPrimitive": "Seven event instants stored as text",
+      "materialEffect": "Ordering, range predicates, timezone arithmetic, retention, and partition keys depend on application formatting.",
+      "desiredState": "Recorded and occurred instants use the finite timestamptz domain; strict RFC 3339 ingress preserves an explicit offset; civil schedules retain local time and IANA zone explicitly.",
+      "disposition": "native_temporal_contract",
+      "verification": ["catalog type assertion", "equivalent-instant round trip", "DST fixture"]
+    },
+    {
+      "id": "DB-003",
+      "severity": "critical",
+      "coordinate": "all tenant-owned database relations",
+      "currentPrimitive": "Free-text tenant keys with predicate-dependent isolation",
+      "materialEffect": "A missed application predicate can expose another tenant's records.",
+      "desiredState": "UUID tenant identity, tenant-preserving composite foreign keys, forced row security, and workload roles carrying NOBYPASSRLS.",
+      "disposition": "tenant_boundary_enforced",
+      "verification": ["cross-tenant direct SQL test", "owner/workload role test", "foreign-key isolation test"]
+    },
+    {
+      "id": "DB-004",
+      "severity": "critical",
+      "coordinate": "database model compared with domain.py, instrument.py, evidence.py, and migration.py",
+      "currentPrimitive": "Persistence omits lineage, structured location, assay observations, units, artifacts, approvals, and migration state",
+      "materialEffect": "The published domain cannot be reconstructed from durable storage.",
+      "desiredState": "One canonical relational contract represents scientific lineage, quantities, custody, approvals, artifacts, migration control, and evidence.",
+      "disposition": "canonical_model_expanded",
+      "verification": ["domain-to-DDL mapping review", "round-trip fixtures", "referential-integrity tests"]
+    },
+    {
+      "id": "DB-005",
+      "severity": "critical",
+      "coordinate": "specimen_event, custody_event, approval_decision, execution_receipt, migration_receipt",
+      "currentPrimitive": "Ordinary update and delete remain possible",
+      "materialEffect": "Historical intent and regulated evidence can be rewritten in place.",
+      "desiredState": "Append-only tables with superseding correction records and direct-DML denial.",
+      "disposition": "append_only_enforced",
+      "verification": ["update rejection", "delete rejection", "supersession lineage"]
+    },
+    {
+      "id": "DB-006",
+      "severity": "critical",
+      "coordinate": "release approval domain and lifecycle flow",
+      "currentPrimitive": "Mutable approval enum and unconstrained signature wording",
+      "materialEffect": "Signer identity, decision time, signed payload, meaning, and separation of duties are unavailable for review.",
+      "desiredState": "Append-only approval decisions bind signer issuer, meaning code, payload digest, policy, evidence, and recorded instant.",
+      "disposition": "approval_ledger_with_explicit_signature_verification_boundary",
+      "verification": ["decision shape checks", "performer-reviewer separation", "target-event binding", "DB-051 canonical-bytes and signature qualification boundary"]
+    },
+    {
+      "id": "DB-007",
+      "severity": "critical",
+      "coordinate": "scripts/validate_pack.py and continuous integration",
+      "currentPrimitive": "SQL is hashed but never executed",
+      "materialEffect": "Syntax, catalog shape, row security, constraints, and upgrade behavior have no database receipt.",
+      "desiredState": "Ephemeral PostgreSQL executes clean install, legacy upgrade, catalog verification, tenant isolation, and immutability tests.",
+      "disposition": "minimum_and_maximum_database_ci_added",
+      "verification": ["PostgreSQL 16 workflow", "PostgreSQL 18 workflow", "psql verification scripts", "migration receipt"]
+    },
+    {
+      "id": "DB-008",
+      "severity": "critical",
+      "coordinate": "schema/execution-receipt.schema.json and receipts/validation-report.json",
+      "currentPrimitive": "Checked receipt contains fields outside its closed schema",
+      "materialEffect": "The evidence artifact violates its advertised contract.",
+      "desiredState": "One closed receipt schema validates every checked-in and generated receipt.",
+      "disposition": "receipt_contract_unified",
+      "verification": ["strict schema check", "golden receipt round trip"]
+    },
+    {
+      "id": "DB-009",
+      "severity": "critical",
+      "coordinate": "evidence.py, execution-receipt schema, validation report",
+      "currentPrimitive": "Three incompatible execution-receipt shapes",
+      "materialEffect": "Consumers cannot bind to a stable evidence contract.",
+      "desiredState": "Versioned DTO mapping produces the schema and persistence envelope with explicit compatibility tests.",
+      "disposition": "canonical_receipt_mapping_required",
+      "verification": ["schema validation", "Python-to-JSON golden fixture", "backward compatibility test"]
+    },
+    {
+      "id": "DB-010",
+      "severity": "critical",
+      "coordinate": "migration.py",
+      "currentPrimitive": "Migration checkpoints, exceptions, approvals, and restore references are process-local",
+      "materialEffect": "Restart, reconciliation, cutover authorization, and recovery evidence disappear with the process.",
+      "desiredState": "Durable migration run, batch, record map, exception, reconciliation, restore, and acceptance ledgers.",
+      "disposition": "migration_control_plane_persisted",
+      "verification": ["interrupted-batch resume", "idempotent replay", "acceptance-to-receipt binding"]
+    },
+    {
+      "id": "DB-011",
+      "severity": "high",
+      "coordinate": "all legacy *_id text columns",
+      "currentPrimitive": "Internal and external identities share unrestricted text",
+      "materialEffect": "Empty, whitespace, case-variant, and source-renamed values can masquerade as durable identity.",
+      "desiredState": "Internal UUIDs and constrained tenant/source-scoped external identities have separate columns.",
+      "disposition": "identity_contract_split",
+      "verification": ["UUID catalog check", "nonblank external identity check", "namespace uniqueness"]
+    },
+    {
+      "id": "DB-012",
+      "severity": "high",
+      "coordinate": "all SHA-256 fields",
+      "currentPrimitive": "Hex text constrained only by character count",
+      "materialEffect": "Non-hex content can pass and canonicalization metadata is absent.",
+      "desiredState": "Thirty-two digest bytes travel with algorithm and canonicalization version.",
+      "disposition": "binary_digest_contract",
+      "verification": ["octet length check", "algorithm and canonicalization metadata co-storage", "DB-051 governs document-to-byte-to-digest equality"]
+    },
+    {
+      "id": "DB-013",
+      "severity": "high",
+      "coordinate": "lifecycle, integration, evidence, and qualification states",
+      "currentPrimitive": "Evolving and operational vocabularies use unrestricted strings",
+      "materialEffect": "Typos and contradictory state transitions become durable data.",
+      "desiredState": "Tight operational states use named checks; evolving vocabularies use versioned reference records.",
+      "disposition": "controlled_vocabulary_contract",
+      "verification": ["invalid state rejection", "reference revision linkage", "transition test"]
+    },
+    {
+      "id": "DB-014",
+      "severity": "high",
+      "coordinate": "receipt, outbox, and limitation documents",
+      "currentPrimitive": "Queryable JSON stored as text",
+      "materialEffect": "Shape validation, indexed queries, and typed access are unavailable.",
+      "desiredState": "Queryable envelopes use jsonb with version checks; exact raw bytes retain a separate object reference and digest.",
+      "disposition": "structured_document_contract",
+      "verification": ["json object check", "schema-version check", "raw digest parity"]
+    },
+    {
+      "id": "DB-015",
+      "severity": "high",
+      "coordinate": "version and attempt counters",
+      "currentPrimitive": "Several counters permit invalid ranges",
+      "materialEffect": "Negative or zero revisions weaken optimistic concurrency and recovery metrics.",
+      "desiredState": "Named range checks align each counter with its semantic starting point and upper bound.",
+      "disposition": "bounded_integer_contract",
+      "verification": ["boundary fixtures", "constraint-name assertion"]
+    },
+    {
+      "id": "DB-016",
+      "severity": "high",
+      "coordinate": "status-dependent integration and approval columns",
+      "currentPrimitive": "Cross-field contradictions remain representable",
+      "materialEffect": "Committed reservations, delivered messages, quarantine, and approvals can lack their required evidence.",
+      "desiredState": "Named checks and controlled write procedures enforce state-specific evidence fields.",
+      "disposition": "exhaustive_state_matrices_and_governed_writes_added",
+      "verification": ["contradictory-row rejection", "valid state matrix", "lease expiry transition", "terminal attempt budget"]
+    },
+    {
+      "id": "DB-017",
+      "severity": "high",
+      "coordinate": "specimen_event",
+      "currentPrimitive": "Event envelope omits correlation, causation, recording time, schema version, payload, and authorization evidence",
+      "materialEffect": "Intent replay and decision reconstruction are incomplete.",
+      "desiredState": "Versioned immutable envelope captures business time, recording time, command, actor, authorization, correlation, causation, and payload digest.",
+      "disposition": "event_envelope_and_receipt_binding_expanded",
+      "verification": ["projection replay", "causation linkage", "tenant-preserving authorization receipt foreign key"]
+    },
+    {
+      "id": "DB-018",
+      "severity": "high",
+      "coordinate": "custody_position.location_path",
+      "currentPrimitive": "Structured location flattened with a delimiter",
+      "materialEffect": "Delimiter collisions and missing referential integrity make canonical position ambiguous.",
+      "desiredState": "Stable location UUID references a normalized hierarchy; display path is derived.",
+      "disposition": "location_hierarchy_added",
+      "verification": ["hierarchy FK", "tenant preservation", "derived path fixture"]
+    },
+    {
+      "id": "DB-019",
+      "severity": "high",
+      "coordinate": "integration_inbox and integration_outbox",
+      "currentPrimitive": "Recovery fields, payload lineage, leases, and confirmation are incomplete",
+      "materialEffect": "Workers can duplicate delivery or lose the evidence needed to recover a quarantined item.",
+      "desiredState": "Claim token, fencing token, lease expiry, next attempt, payload reference, source event, confirmation, and terminal reason are durable.",
+      "disposition": "queue_contract_and_reclamation_path_expanded",
+      "verification": ["concurrent lease test", "expired lease recovery", "attempt-budget terminal state", "payload lineage"]
+    },
+    {
+      "id": "DB-020",
+      "severity": "high",
+      "coordinate": "trace_link",
+      "currentPrimitive": "One row forces requirement, risk, control, and test into a Cartesian tuple",
+      "materialEffect": "Independent cardinalities and source revisions are lost.",
+      "desiredState": "Versioned trace nodes and typed directed edges represent exact relationships.",
+      "disposition": "trace_graph_normalized",
+      "verification": ["node FK", "edge-type check", "reverse traversal index"]
+    },
+    {
+      "id": "DB-021",
+      "severity": "high",
+      "coordinate": "open_receipt",
+      "currentPrimitive": "Mutable current row lacks scope, chronology, closure decision, and evidence bundle",
+      "materialEffect": "Receipt accountability and closure provenance cannot be reconstructed.",
+      "desiredState": "Scoped receipt plus append-only status events bind owner, due date, reviewer, evidence, and supersession.",
+      "disposition": "receipt_status_history_added",
+      "verification": ["status event immutability", "closure evidence check", "scope query"]
+    },
+    {
+      "id": "DB-022",
+      "severity": "high",
+      "coordinate": "database query surfaces",
+      "currentPrimitive": "Operational indexes are absent",
+      "materialEffect": "Tenant/state, queue, event-time, open-receipt, and reverse-trace paths become full scans as data grows.",
+      "desiredState": "Workload-derived composite and partial indexes support bounded operational paths.",
+      "disposition": "operational_indexes_added",
+      "verification": ["representative EXPLAIN plans", "index catalog assertion"]
+    },
+    {
+      "id": "DB-023",
+      "severity": "medium",
+      "coordinate": "append-oriented event, queue, and evidence tables",
+      "currentPrimitive": "Retention and partitioning decision is undocumented",
+      "materialEffect": "Growth response can force a late semantic key change.",
+      "desiredState": "Volume and retention estimates drive a recorded partition decision; tenant and time keys preserve future options.",
+      "disposition": "decision_record_required_before_scale_threshold",
+      "verification": ["volume model", "retention approval", "partition rehearsal when threshold is met"]
+    },
+    {
+      "id": "DB-024",
+      "severity": "medium",
+      "coordinate": "execution_receipt.synthetic_data",
+      "currentPrimitive": "Boolean encoded as integer",
+      "materialEffect": "Numeric and truth semantics can collapse across consumers.",
+      "desiredState": "PostgreSQL boolean and JSON boolean preserve one truth contract.",
+      "disposition": "native_boolean_contract",
+      "verification": ["catalog type assertion", "strict JSON type test"]
+    },
+    {
+      "id": "DB-025",
+      "severity": "high",
+      "coordinate": "instrument.py measured values",
+      "currentPrimitive": "Unbounded Decimal accepts non-finite values and lacks assay precision, qualifier, and detection-limit meaning",
+      "materialEffect": "Scientifically invalid values can become accepted observations.",
+      "desiredState": "Finite exact quantities bind raw and canonical UCUM units, method revision, precision, qualifier, limits, and conversion provenance.",
+      "disposition": "governed_assay_conversion_write_path_added",
+      "verification": ["NaN/infinity rejection", "scale boundary", "unit-method composite foreign key", "derived conversion provenance", "direct insert denial"]
+    },
+    {
+      "id": "DB-026",
+      "severity": "high",
+      "coordinate": "domain and adapter JSON boundaries",
+      "currentPrimitive": "Default JSON accepts duplicate keys, non-finite numbers, and Python-specific fallback stringification",
+      "materialEffect": "Semantically distinct payloads can hash or parse ambiguously.",
+      "desiredState": "Strict, versioned canonical JSON rejects duplicates and non-finite numbers and has explicit encoders for domain values.",
+      "disposition": "strict_canonical_json_required",
+      "verification": ["duplicate-key rejection", "non-finite rejection", "canonical digest golden vectors"]
+    },
+    {
+      "id": "DB-027",
+      "severity": "high",
+      "coordinate": "artifact port idempotency",
+      "currentPrimitive": "Request fingerprint omits specimen, purpose, media type, and length",
+      "materialEffect": "The same key and bytes can replay a receipt created for a different artifact intent.",
+      "desiredState": "Fingerprint binds tenant, aggregate, purpose, digest, media type, length, and idempotency key atomically.",
+      "disposition": "full_intent_fingerprint_required",
+      "verification": ["conflicting reuse test", "concurrent identical replay"]
+    },
+    {
+      "id": "DB-028",
+      "severity": "high",
+      "coordinate": "custody repository boundary",
+      "currentPrimitive": "Aggregate load accepts specimen ID without tenant identity",
+      "materialEffect": "A repository implementation can resolve the same specimen key across tenant scopes.",
+      "desiredState": "Every port accepts a tenant-bound aggregate identity.",
+      "disposition": "tenant_bound_port_required",
+      "verification": ["type contract", "cross-tenant repository test"]
+    },
+    {
+      "id": "DB-029",
+      "severity": "critical",
+      "coordinate": "migration.py source pagination",
+      "currentPrimitive": "Lexicographic source ID cursor lacks a source snapshot or stable watermark",
+      "materialEffect": "Concurrent inserts, updates, collation changes, and non-monotonic IDs can leave records unrepresented.",
+      "desiredState": "A captured source snapshot and stable compound cursor advance transactionally with the target checkpoint.",
+      "disposition": "repeatable_read_artifacts_and_digest_bound_cutover",
+      "verification": ["repeatable-read artifact boundary", "post-validation source digest guard", "crash-resume", "complete population proof"]
+    },
+    {
+      "id": "DB-030",
+      "severity": "critical",
+      "coordinate": "migration reconciliation",
+      "currentPrimitive": "Counts, IDs, and basic checksums are the complete comparison set",
+      "materialEffect": "Relationship, null, vocabulary, quantity, attachment, and population errors can pass cutover.",
+      "desiredState": "Versioned reconciliation covers structural, semantic, statistical, artifact, relationship, and sampled human-review criteria.",
+      "disposition": "all_supported_source_populations_receive_mapping_or_exception",
+      "verification": ["exact per-population counts", "source manifest SHA-256", "representation manifest SHA-256", "orphan checks", "typed value parity", "exception ownership"]
+    },
+    {
+      "id": "DB-031",
+      "severity": "critical",
+      "coordinate": "migration cutover authorization",
+      "currentPrimitive": "Identity strings stand in for approvals and restore acceptance",
+      "materialEffect": "Role, separation, evidence, expiry, and invalidation are unverified.",
+      "desiredState": "Distinct authenticated decisions bind role, evidence bundle, restore receipt, schema head, expiry, and policy version.",
+      "disposition": "receipt_bound_five_domain_contract_authorization",
+      "verification": ["separation-of-duty test", "migration and restore receipt foreign keys", "five-domain acceptance binding", "compatibility-window guard", "schema-change invalidation"]
+    },
+    {
+      "id": "DB-032",
+      "severity": "high",
+      "coordinate": "schema/sample-manifest.schema.json and path validation",
+      "currentPrimitive": "Repository paths permit traversal, absolute paths, and duplicates",
+      "materialEffect": "Validation can resolve content outside the declared pack or count one artifact repeatedly.",
+      "desiredState": "Normalized repository-relative unique paths resolve within the pack and reject symbolic-link escape.",
+      "disposition": "safe_path_contract_required",
+      "verification": ["traversal rejection", "absolute path rejection", "symlink escape rejection", "duplicate rejection"]
+    },
+    {
+      "id": "DB-033",
+      "severity": "high",
+      "coordinate": "schema/machine-node.schema.json",
+      "currentPrimitive": "Open extension shapes and untyped receipt arrays accept contract drift",
+      "materialEffect": "Misspelled or incompatible machine-facing coordinates remain valid.",
+      "desiredState": "Closed typed receipt unions and an explicit namespaced extension object carry future additions.",
+      "disposition": "schema_closure_required",
+      "verification": ["unknown-field mutation test", "typed receipt fixture"]
+    },
+    {
+      "id": "DB-034",
+      "severity": "high",
+      "coordinate": "in-memory consistency doubles",
+      "currentPrimitive": "Unsynchronized dictionaries and lists are the only concurrency evidence",
+      "materialEffect": "Atomicity, lease fencing, idempotency, and replay claims remain unproven under concurrent sessions.",
+      "desiredState": "Unit doubles remain fast while PostgreSQL concurrent-session tests verify every advertised consistency boundary.",
+      "disposition": "database_concurrency_suite_required",
+      "verification": ["optimistic write race", "outbox lease race", "idempotency conflict", "checkpoint race"]
+    },
+    {
+      "id": "DB-035",
+      "severity": "high",
+      "coordinate": "legacy sibling reference pack",
+      "currentPrimitive": "Two divergent v0.1 packages advertise overlapping authority",
+      "materialEffect": "Tenant, assay, receipt, and migration contracts can drift silently between exemplars.",
+      "desiredState": "This pack is canonical; the sibling is marked historical and scientifically valuable assay concepts enter one conformance gate.",
+      "disposition": "lineage_and_conformance_decision_required",
+      "verification": ["lineage declaration", "shared contract suite", "duplicate authority scan"]
+    },
+    {
+      "id": "DB-036",
+      "severity": "critical",
+      "coordinate": "database/flyway; database/release-provenance.json; scripts/run_database_rehearsal.sh",
+      "currentPrimitive": "Repository-specific migration execution duplicated mature framework responsibilities",
+      "materialEffect": "A migration could execute from changed bytes, outside the declared order, or without durable history.",
+      "desiredState": "Pinned Flyway Community owns ordering, checksums, transactions, serialization, validation, and schema history; repository probes own catalog attestation, semantic convergence, security, recovery, and release provenance.",
+      "disposition": "flyway_community_replaces_custom_migration_engine",
+      "verification": ["pinned version and image digest", "Flyway naming and checksum validation", "populated baseline attestation before explicit baseline", "distinct canonical and legacy histories", "Flyway group transaction for backfill through cutover", "PostgreSQL advisory-lock execution"]
+    },
+    {
+      "id": "DB-037",
+      "severity": "critical",
+      "coordinate": "database/migrations/V005__operational_indexes_and_catalog.sql; database/migrations/V006__semantic_integrity_and_runtime_boundaries.sql",
+      "currentPrimitive": "Schema comparison represented column shape while omitting behavior-bearing constraints, policies, routines, triggers, ownership, and privileges",
+      "materialEffect": "Clean and upgraded databases could share a fingerprint while enforcing different security or integrity semantics.",
+      "desiredState": "Deterministic SHA-256 catalogs separately cover canonical runtime semantics and migration-only evidence semantics with stable object identities.",
+      "disposition": "canonical_and_migration_evidence_fingerprints_added",
+      "verification": ["catalog coverage assertion", "column ACL and view-option coverage", "stable ordering", "canonical clean-upgrade parity", "migration evidence cutover-to-contract parity"]
+    },
+    {
+      "id": "DB-038",
+      "severity": "critical",
+      "coordinate": "database/bootstrap/roles.sql; database/migrations/V006__semantic_integrity_and_runtime_boundaries.sql; database/verify/security_contract.sql",
+      "currentPrimitive": "Domain ownership, default privileges, routine execution, and relation grants lacked a closed catalog proof",
+      "materialEffect": "PUBLIC or a broad workload role could inherit authority outside its bounded duty, and schema ownership could drift silently.",
+      "desiredState": "NOLOGIN workload roles, explicit schema and type usage, closed PUBLIC ACLs, hardened security-definer routines, bounded DML, and catalog-level ownership proofs.",
+      "disposition": "closed_ownership_and_privilege_contract_added",
+      "verification": ["role attribute catalog proof", "ownership proof", "PUBLIC ACL proof", "security-definer search path proof", "bounded caller grant proof"]
+    },
+    {
+      "id": "DB-039",
+      "severity": "high",
+      "coordinate": "database/verify/tenant_and_immutability_contract.sql",
+      "currentPrimitive": "Several SQL proofs relied on planner-sensitive arithmetic failure branches",
+      "materialEffect": "The optimizer could evaluate a failure expression outside the intended branch and make the proof version-sensitive.",
+      "desiredState": "Procedural assertions evaluate observed state explicitly and raise a named exception only when the invariant differs.",
+      "disposition": "planner_safe_procedural_assertions_added",
+      "verification": ["static arithmetic trap rejection", "PostgreSQL 16 execution", "PostgreSQL 18 execution"]
+    },
+    {
+      "id": "DB-040",
+      "severity": "critical",
+      "coordinate": "database/upgrades/v0_1_to_v0_2/V001__expand.sql; database/upgrades/v0_1_to_v0_2/V002__backfill.sql",
+      "currentPrimitive": "Legacy identities used random defaults and temporal text relied on ambient parsing behavior",
+      "materialEffect": "Retries could assign different target keys, ambiguous timestamp text could inherit a session timezone, and invalid rows could abort a cohort before receiving an owned disposition.",
+      "desiredState": "Length-prefixed SHA-256-derived UUIDs, digest-bounded compound identities, staged predicate-safe conversion, explicit offsets, document-correct digests with legacy provenance, and mapping-or-exception identity make retry outcomes deterministic.",
+      "disposition": "deterministic_staged_legacy_conversion_added",
+      "verification": ["collision-safe UUID recomputation", "compound-identity bound", "invalid timestamp exception fixture", "offset-required timestamp fixture", "retry identity parity", "stored-document and source-row SHA-256"]
+    },
+    {
+      "id": "DB-041",
+      "severity": "critical",
+      "coordinate": "database/upgrades/v0_1_to_v0_2/V003__validate.sql; database/upgrades/v0_1_to_v0_2/V004__cutover.sql",
+      "currentPrimitive": "Upgrade reconciliation covered a subset of legacy tables and cutover lacked a post-validation source-change guard",
+      "materialEffect": "Unrepresented source populations or rows changed after validation could disappear behind a successful cutover.",
+      "desiredState": "Every supported source table enters mapping or exception accounting; immutable validation binds full canonical target projections; cutover recomputes source and representation digests while the grouped source lock remains held.",
+      "disposition": "complete_population_target_semantics_and_drift_proof_added",
+      "verification": ["nine source-population equations", "full specimen/event/custody projection assertions", "target semantic manifests", "source and representation recomputation under cutover lock", "open-exception cutover gate"]
+    },
+    {
+      "id": "DB-042",
+      "severity": "high",
+      "coordinate": "database/migrations/V006__semantic_integrity_and_runtime_boundaries.sql",
+      "currentPrimitive": "Foreign keys proved object existence while omitting shared specimen, event, assay, unit, migration-run, or restore coordinates",
+      "materialEffect": "Individually valid identifiers could be combined into a semantically false relationship.",
+      "desiredState": "Composite foreign keys carry each shared domain coordinate across the relationship.",
+      "disposition": "semantic_tuple_foreign_keys_added",
+      "verification": ["cross-specimen event rejection", "custody position event binding", "assay run and conversion binding", "migration run and restore binding"]
+    },
+    {
+      "id": "DB-043",
+      "severity": "high",
+      "coordinate": "laboratory.database_migration_exception; laboratory.acceptance_condition",
+      "currentPrimitive": "Lifecycle meaning lived in a root-row state even though the root was append-only",
+      "materialEffect": "A closure or disposition either required prohibited mutation or lacked ordered supersession evidence.",
+      "desiredState": "Immutable versioned status events advance through explicit terminal transition matrices, monotonic finite decision time, optimistic concurrency, evidence-bound closure, and current-state views.",
+      "disposition": "versioned_status_event_ledgers_added",
+      "verification": ["append-only status event test", "transition-matrix rejection", "version race test", "monotonic decision-time test", "evidence-required closure test", "current-state projection"]
+    },
+    {
+      "id": "DB-044",
+      "severity": "high",
+      "coordinate": "laboratory.integration_outbox; laboratory.outbox_delivery_attempt",
+      "currentPrimitive": "Leases could expire without a durable reclaim path, attempt budget, or complete state-field matrix",
+      "materialEffect": "A message could remain stranded, exceed an implicit retry budget, or lose the evidence for a worker attempt.",
+      "desiredState": "Reclamation records each expired attempt, advances fencing, enforces a bounded attempt budget, and routes exhaustion to recovery ownership.",
+      "disposition": "lease_reclamation_and_attempt_budget_added",
+      "verification": ["expired lease reclaim", "attempt receipt insertion", "fencing advance", "budget exhaustion route", "complete state matrix"]
+    },
+    {
+      "id": "DB-045",
+      "severity": "high",
+      "coordinate": "laboratory.result_observation; laboratory.record_result_observation",
+      "currentPrimitive": "A broad writer could supply canonical assay values and conversion provenance independently",
+      "materialEffect": "Raw evidence and canonical values could disagree while satisfying narrow foreign keys.",
+      "desiredState": "An append-protected assay and conversion contract binds run membership, validity window, state, exact raw scale and range, derived canonical value, and conversion digest into one composite-linked observation.",
+      "disposition": "governed_exact_scientific_conversion_boundary_added",
+      "verification": ["direct insert denial", "run/specimen membership", "validity and completed-run gates", "26+12 exact boundary", "13-scale and 27-integer rejection", "NaN and Infinity rejection", "raw/canonical/digest equality", "conversion digest foreign key"]
+    },
+    {
+      "id": "DB-046",
+      "severity": "critical",
+      "coordinate": "database/upgrades/v0_1_to_v0_2/V004__cutover.sql; database/upgrades/v0_1_to_v0_2/V006__contract.sql",
+      "currentPrimitive": "A session setting represented approval for destructive compatibility cleanup",
+      "materialEffect": "The cleanup decision lacked durable actor, archive, restore, evidence-bundle, compatibility-window, and accountable-domain coordinates.",
+      "desiredState": "Persisted authorization links each source tenant to exact canonical and migration-evidence fingerprints, an unchanged guarded source archive, an accepted run with batch receipts, five receipt-bound reconciliations, an equivalent restore, five-domain acceptance, and an elapsed policy window.",
+      "disposition": "receipt_bound_rehearsal_and_contract_guard_added",
+      "verification": ["authorization recording and minimum-window checks", "source archive digest recomputation", "row and TRUNCATE guard", "migration batch receipt", "five reconciliation criteria", "restore head/fingerprint/row-manifest parity", "five-domain acceptance and condition gates", "atomic contract receipt"]
+    },
+    {
+      "id": "DB-047",
+      "severity": "high",
+      "coordinate": ".github/workflows/lims-eln-enterprise-reference.yml; scripts/run_database_rehearsal.sh",
+      "currentPrimitive": "Database execution covered one middle PostgreSQL major and omitted a complete contract cleanup rehearsal",
+      "materialEffect": "Compatibility claims at the declared boundaries and destructive-phase guards lacked executable evidence.",
+      "desiredState": "Pinned PostgreSQL 16 and 18 jobs separately provision a disposable reconstructed v0.1 baseline, attest and adopt its populated state, then run clean, upgrade, and synthetic contract-authorized databases through schema, security, exact numeric, history, and convergence proofs.",
+      "disposition": "attested_compatibility_boundary_and_contract_ci_added",
+      "verification": ["PostgreSQL 16 job", "PostgreSQL 18 job", "baseline attestation", "explicit Flyway baseline and distinct histories", "live exact numeric boundary proof", "clean-upgrade-contract convergence", "retained rehearsal receipt"]
+    },
+    {
+      "id": "DB-048",
+      "severity": "critical",
+      "coordinate": "database/migrations/V006__semantic_integrity_and_runtime_boundaries.sql",
+      "currentPrimitive": "Append-only triggers were installed before owned semantic backfills, while an established result guard also covered the derived-column update",
+      "materialEffect": "A populated upgrade would stop at the first conversion or observation row even though an empty-schema rehearsal succeeded.",
+      "desiredState": "The migration preflights the established guard, opens one transaction-bounded maintenance lane, restores the guard, and installs new append-only guards after deterministic backfills complete.",
+      "disposition": "populated_backfill_guard_sequence_corrected",
+      "verification": ["trigger identity preflight", "transaction-bounded maintenance lane", "guard restoration", "post-backfill trigger installation", "populated v0.1 adoption rehearsal"]
+    },
+    {
+      "id": "DB-049",
+      "severity": "critical",
+      "coordinate": "database/migrations/V001__foundation.sql; database/migrations/V006__semantic_integrity_and_runtime_boundaries.sql; database/verify/schema_contract.sql; database/verify/tenant_and_immutability_contract.sql",
+      "currentPrimitive": "Persistent timestamptz columns admitted PostgreSQL positive- and negative-infinity sentinels while finite checks covered selected decision paths",
+      "materialEffect": "An unbounded sentinel could satisfy open-ended ordering and compatibility-window predicates, strand leases, or make evidence chronology diverge from an accountable real-world instant.",
+      "desiredState": "One finite-instant domain governs every persistent control and laboratory instant, adoption preflights established values deterministically, and runtime mutation proofs exercise both infinity boundaries including contract authorization.",
+      "disposition": "finite_instant_domain_and_exhaustive_catalog_adoption_added",
+      "verification": ["domain base-type and isfinite constraint", "catalog-driven preflight", "deterministic domain conversion", "zero bare persistent control and laboratory timestamptz columns", "stable routine result-type projection", "positive- and negative-infinity mutation rejection", "contract authorization window rejection"]
+    },
+    {
+      "id": "DB-050",
+      "severity": "critical",
+      "coordinate": "database/migrations/V001__foundation.sql; database/upgrades/v0_1_to_v0_2/V002__backfill.sql; database/upgrades/v0_1_to_v0_2/V003__validate.sql; scripts/run_database_rehearsal.sh",
+      "currentPrimitive": "The v0.1 classifier delegated textual casting to session parsing after testing only an offset-shaped suffix",
+      "materialEffect": "Permissive PostgreSQL input forms and session DateStyle could classify source text differently across environments or normalize an unintended lexical form into canonical evidence.",
+      "desiredState": "A single strict, offset-bearing RFC 3339 grammar classifies and converts source text identically under every supported DateStyle, with invalid dates and excess precision routed to the owned exception path.",
+      "disposition": "datestyle_independent_rfc3339_ingress_boundary_added",
+      "verification": ["exact grammar recognition", "calendar-validity check", "microsecond precision ceiling", "offset requirement", "SQL MDY proof", "SQL DMY proof", "equal representative instant projection"]
+    },
+    {
+      "id": "DB-051",
+      "severity": "critical",
+      "coordinate": "laboratory.record_specimen_transition; laboratory.approval_decision; database/migrations/V004__security_and_write_boundaries.sql",
+      "currentPrimitive": "Governed transition and approval writes accept JSON documents, canonicalization labels, and digest bytes produced beyond the database boundary",
+      "materialEffect": "A correctly shaped digest can describe bytes that differ from the stored JSON meaning, and an approval digest can arrive without database-verifiable signature evidence.",
+      "desiredState": "A released canonical-byte envelope binds schema version, canonicalization profile, exact bytes, digest, signer key and algorithm, signature, target object, and verification receipt through shared golden vectors.",
+      "disposition": "open_cross_runtime_canonical_bytes_and_signature_verification_boundary",
+      "verification": ["RFC 8785 or successor profile decision", "Unicode, decimal, ordering, and normalization golden vectors", "document-to-canonical-bytes equality", "digest recomputation", "trusted-key signature verification", "target-object and policy binding", "configured runtime qualification receipt"]
+    },
+    {
+      "id": "DB-052",
+      "severity": "high",
+      "coordinate": "database/migrations/V007__security_definer_resolution_boundary.sql; database/upgrades/v0_1_to_v0_2/V005__security_resolution_head_attestation.sql; database/verify/security_contract.sql; database/verify/tenant_and_immutability_contract.sql",
+      "currentPrimitive": "The catalog proof accepted any SECURITY DEFINER search_path setting",
+      "materialEffect": "A future privileged routine could enter the release with a caller-writable resolution path while satisfying the broad catalog assertion.",
+      "desiredState": "A closed privileged-routine allowlist binds each reviewed identity to pg_catalog first and pg_temp last, while release-attested, schema-qualified bodies and a workload session exercise same-named temporary relations.",
+      "disposition": "exact_security_definer_allowlist_and_live_shadow_proof_added",
+      "verification": ["exact identity cardinality", "exact fixed-path array", "unexpected privileged routine rejection", "temporary tenant-grant shadow proof", "temporary aggregate, event, and outbox write-shadow proof"]
+    },
+    {
+      "id": "DB-053",
+      "severity": "high",
+      "coordinate": "control.legacy_upgrade_receipt; control.legacy_upgrade_head_attestation; database/migrations/V008__bounded_migration_row_security.sql; database/upgrades/v0_1_to_v0_2/V005__security_resolution_head_attestation.sql",
+      "currentPrimitive": "The immutable populated-baseline cutover receipt records V006 while the forward security corrections advance the effective canonical head to V008",
+      "materialEffect": "Reading the historical cutover receipt alone can understate the effective migration head even though its canonical fingerprint includes the forward correction.",
+      "desiredState": "An append-only successor attestation preserves the V006 cutover fact and binds it to V008, the current canonical fingerprint, and the current migration-evidence fingerprint.",
+      "disposition": "successor_upgrade_head_attestation_added",
+      "verification": ["immutable V006 predecessor receipt", "unique V006-to-V008 attestation", "canonical fingerprint equality", "migration-evidence fingerprint equality", "clean and populated baseline rehearsal"]
+    }
+  ]
+}
