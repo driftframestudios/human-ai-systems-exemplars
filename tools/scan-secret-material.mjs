@@ -639,7 +639,7 @@ export async function runRepositorySecretScan({
   if (repositoryRoot !== REPOSITORY_ROOT) {
     throw new SecretScanError(
       "SECRET_SCANNER_REPOSITORY_BOUNDARY",
-      "this scanner contract is rooted at Prototype Exemplars",
+      "this scanner contract is rooted at Human-AI Systems Exemplars",
     );
   }
   await assertSingleSuppressionSurface(repositoryRoot);

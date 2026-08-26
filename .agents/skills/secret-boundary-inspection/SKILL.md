@@ -86,7 +86,7 @@ And the credential owner receives the private response route before cleanup or c
 
 ## Conditional context
 
-In Prototype Exemplars, load the [repository secret-material boundary](../../../threadkeeping/repository-secret-material-boundary.md) before invoking or changing the scanner. It owns the current Betterleaks version, exact commands, scope topology, reviewed exception surface, safe-output contract, evidence limits, and successor handoff.
+In Human-AI Systems Exemplars, load the [repository secret-material boundary](../../../threadkeeping/repository-secret-material-boundary.md) before invoking or changing the scanner. It owns the current Betterleaks version, exact commands, scope topology, reviewed exception surface, safe-output contract, evidence limits, and successor handoff.
 
 ## Completion
 

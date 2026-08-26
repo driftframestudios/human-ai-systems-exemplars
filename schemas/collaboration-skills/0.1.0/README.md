@@ -32,10 +32,10 @@ The schemas describe structure. Tool authority, publication rights, and executio
 
 ## Version posture
 
-`0.1.0` is the first receiving-use version. Exact-version schema bytes become immutable after publication. A structural change receives another exact-version directory. Example revisions that would change the represented contract also move with a reviewed family version so a cross-platform receiver can rely on the published shape.
+`0.1.0` is the first receiving-use version. This pre-publication settlement changes branch-bound repository locators into repository-local references while preserving the represented contracts. Exact-version schema bytes become immutable after publication. A structural change receives another exact-version directory. Example revisions that change the represented contract also move with a reviewed family version so a cross-platform receiver can rely on the published shape.
 
-This version purposefully leaves JSON-LD, a registry, routing service, composition graph, hosted workflow, and compatibility automation outside the family. A material receiver can earn one of those forms later.
+This version concentrates on typed exchange contracts and collaboration accounts. JSON-LD, a registry, a routing service, a composition graph, a hosted workflow, and compatibility automation remain available as later forms when a material receiver calls for them.
 
 ## Observation posture
 
-The existing repository schema command continues to cover the published Prototype Exemplars and Context Canvas v1 families. The human cue for extending automated schema coverage remains open, so Collaboration Skills 0.1.0 is purposefully outside that command in this wave. Source review, the linked visitor adoption kit, and natural cross-platform use provide its current observation surface. A later request for automated structural checking extends the existing command rather than forming another checker or workflow.
+The existing repository schema command covers the Prototype Exemplars, Context Canvas, and Collaboration Skills families in one focused surface. It compiles both Collaboration Skills schemas, validates all three representative examples, affirms repository-local references resolve, and keeps hosted delivery identities independent from source-tree routes. Source review, the linked visitor adoption kit, and natural cross-platform use continue to provide the semantic observation surface.

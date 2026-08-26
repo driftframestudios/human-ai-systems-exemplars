@@ -14,6 +14,7 @@ These notes remain provisional field evidence. Repeated use can earn a skill rev
 - [Unit-test collaboration foundation](2026-08-25-unit-test-collaboration-foundation.md) — a source-audit-shaped route to direct tests, four material-use returns, an affirmative-evidence skill revision, and the earned behavior-contract skill route before cross-prototype exchange.
 - [Locator-boundary stewardship and paired-receiver settlement](2026-08-25-locator-boundary-paired-receiver-settlement.md) — repeated public-artifact and authorized-resolver uses, the `iterate_now` route, an operator-blind name decision, and the forge condition for a later independent contract.
 - [Secret-boundary inspection formation](2026-08-26-secret-boundary-inspection.md) — accepted executable behavior, human review, the successor's near receiving use, and the `create_now` route for a canary-proven scope receipt.
+- [Machine-reference settlement at successor authority](2026-08-26-machine-reference-settlement.md) — successor-local source routes, preserved upstream lineage and delivery identities, representative-use schema coverage, and the action-mode return for bounded support.
 
 ## Return condition
 
