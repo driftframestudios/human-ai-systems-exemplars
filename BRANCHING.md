@@ -9,6 +9,7 @@ adapt research, integration, staging, release, and delivery to particular jobs.
 | Branch | Primary job | Service relation |
 | --- | --- | --- |
 | `main` | Canonical collaboration trunk and authored current source | Radiant Null collaboration family |
+| `snapshot` | Named stable-core baseline copied from an accepted `main` tip | Quiet comparison and re-entry receiver for the next preflight; no independent service role |
 | `research` | Future-state projection and AI research-integration environment | Preview artifacts or a later purpose-bound research route |
 | `dev` | Sustained feature integration | Radiant Null collaboration family |
 | `stg` | Deployment candidates and Cloudflare Worker pilots | Vik Guru schema family |
@@ -26,6 +27,19 @@ A GitHub Pages custom domain is repository-level. These groups describe source,
 promotion, and delivery intent rather than separate Pages sites for every
 branch. `research` begins with preview artifacts and receives a stable route
 only through a named service decision.
+
+## Snapshot baseline
+
+`snapshot` is a deliberately quiet copy of a selected `main` revision. It is
+created or advanced only after the source changes for a stable-core wave have
+settled and the next preflight has a named receiver. Work begins from the
+fitting living branch rather than from `snapshot`.
+
+Each refresh records the source `main` revision, observation date, and receiving
+preflight in the current Issue or pull-request receipt. The branch preserves a
+clear comparison and re-entry point; it does not change semantic authority,
+publication standing, delivery configuration, or the successor's authored
+source relationship.
 
 ## Research flow
 
