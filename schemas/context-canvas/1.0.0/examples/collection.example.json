@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "1.0.0",
+  "@context": "../context-canvas.context.jsonld",
+  "id": "urn:example:context-canvas:collection",
+  "kind": "collection",
+  "name": "Context Canvas illustrative collection",
+  "description": "A synthetic machine-oriented reading of the Canvas as a collection of visitor surfaces, design inputs, embedded instruments, and reference artifacts.",
+  "experienceIntent": {
+    "desiredState": "A collaborator can locate the Canvas entry surface, understand how its routes differ, and choose the smallest useful receiving page or instrument.",
+    "useConditions": [
+      "A visitor is entering the Canvas for the first time.",
+      "A human or AI collaborator needs to trace a page to its design input, contract, or embedded prototype."
+    ],
+    "primaryCognitiveMove": "orient across a related collection without flattening page-specific intent",
+    "intendedReaders": [
+      "enterprise practitioner",
+      "design or engineering collaborator",
+      "AI collaborator"
+    ],
+    "recognitionSignals": [
+      "The collection entry, design-input pages, prototype library, and contract routes are distinguishable.",
+      "A next surface can be selected from intended use rather than filename familiarity."
+    ],
+    "boundaries": [
+      "The identity and retrieval locations in this example are synthetic.",
+      "Individual pages retain their own source, visual character, authority, and evidence standing."
+    ],
+    "preservedQualities": [
+      "route-specific variation",
+      "source locality",
+      "human decision authority"
+    ],
+    "opportunity": {
+      "availableMoves": [
+        "enter through the public collection",
+        "choose a design-input route",
+        "inspect a canonical prototype and its receiving projection"
+      ],
+      "handoffRefs": [
+        "urn:example:context-canvas:grammar-family",
+        "urn:example:context-canvas:strategy-canvas"
+      ]
+    }
+  },
+  "firstUsePrior": {
+    "probabilityOf": "where the artifact's first useful work usually begins",
+    "solution": 0.8,
+    "implementation": 0.15,
+    "recovery": 0.05,
+    "basis": "Editorial routing based on the collection's orientation role: most first use begins by locating the right problem frame and receiving surface.",
+    "reviewTrigger": "Observed entry paths show that implementation or recovery work regularly begins at this collection surface."
+  },
+  "standing": {
+    "claimStatus": "illustrative",
+    "evidenceClass": "repository_source_modeled_example",
+    "sourceRefs": [
+      "context-canvas-project-surface/context-canvas/README.md",
+      "context-canvas-project-surface/context-canvas/index.html",
+      "context-canvas-project-surface/context-canvas/prototypes/index.html"
+    ],
+    "currentness": {
+      "state": "current_with_caveats",
+      "basis": "The example reflects the current repository orientation while its public identities and locators remain reserved for publication review.",
+      "asOf": "2026-08-23",
+      "reviewTrigger": "The Canvas entry surface, route map, or public identity changes."
+    },
+    "reviewState": "working",
+    "visibility": "public_safe_summary",
+    "lifecycleStatus": "candidate"
+  },
+  "authority": {
+    "humanMeaningAuthorityRef": "urn:example:role:canvas-steward",
+    "schemaAuthorityRef": "https://schemas.vik.guru/context-canvas/1.0.0/context-canvas.schema.json",
+    "contentAuthorityRef": "context-canvas-project-surface/context-canvas/",
+    "decisionAuthorityRole": "named human repository steward",
+    "automationRole": "orientation, validation, and bounded proposal",
+    "scope": [
+      "Human collaborators retain meaning, publication, and consequential adoption authority.",
+      "The schema describes shared exchange fields and leaves page design with its named source owner."
+    ]
+  },
+  "representations": [
+    {
+      "kind": "canonical_html",
+      "locator": "https://example.invalid/context-canvas/",
+      "mediaType": "text/html",
+      "status": "planned",
+      "sourceRef": "context-canvas-project-surface/context-canvas/index.html"
+    },
+    {
+      "kind": "machine_representation",
+      "locator": "https://example.invalid/context-canvas/collection.json",
+      "mediaType": "application/json",
+      "status": "planned",
+      "sourceRef": "schemas/context-canvas/1.0.0/examples/collection.example.json"
+    }
+  ],
+  "relations": [
+    {
+      "type": "profiles",
+      "targetRef": "urn:example:context-canvas:grammar-family",
+      "note": "The composable-reading guide demonstrates a design-input and visitor-reference profile."
+    },
+    {
+      "type": "profiles",
+      "targetRef": "urn:example:context-canvas:strategy-canvas",
+      "note": "The Strategy Canvas demonstrates canonical source and Context projection."
+    }
+  ],
+  "contractRefs": [
+    {
+      "type": "visual_fidelity",
+      "ref": "visual-fidelity-contracts/README.md",
+      "application": "The atlas supplies composition guidance while route-specific treatments remain available."
+    },
+    {
+      "type": "source_boundary",
+      "ref": "context-canvas-project-surface/context-canvas/README.md",
+      "application": "The nearest README names page source, generated artifacts, and local prototype roles."
+    }
+  ],
+  "recoveryRoutes": [
+    {
+      "strainCue": "A collaborator can see many routes but cannot identify the intended entry surface.",
+      "smallestUsefulMove": "Return to the Context Canvas README and select the surface from its role and use condition.",
+      "receivingSurfaceRef": "context-canvas-project-surface/context-canvas/README.md",
+      "revisitCondition": "A route remains ambiguous after reading the collection map."
+    }
+  ],
+  "extensions": {
+    "urn:example:context-canvas:surface-profile": {
+      "value": "public_primary_collection"
+    }
+  }
+}

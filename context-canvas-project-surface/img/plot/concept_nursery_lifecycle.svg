@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920" viewBox="0 0 1600 920" role="img" aria-labelledby="nursery-title nursery-desc">
+  <title id="nursery-title">Concept Nursery lifecycle</title>
+  <desc id="nursery-desc">A six-move lifecycle makes unsettled work findable. A collaborator creates a clearly titled page, names its intended home and authoring platform, grows and reviews it, settles it, moves it to the intended target or Resting Concepts, and records the move. An empty register keeps Page, Intended home, Author platform, and Status ready without inventing entries.</desc>
+  <defs>
+    <pattern id="nursery-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#cfe7f7" stroke-opacity=".42"/><circle cx="0" cy="0" r="1.4" fill="#f1b88e" fill-opacity=".26"/></pattern>
+    <filter id="nursery-shadow" x="-12%" y="-18%" width="124%" height="145%"><feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#071a35" flood-opacity=".27"/></filter>
+    <style>.sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}.eyebrow{font-size:14px;font-weight:800;letter-spacing:1.8px}.title{font-size:39px;font-weight:820;letter-spacing:-.8px}.lead{font-size:17px;font-weight:620}.lane{font-size:15px;font-weight:850;letter-spacing:1.2px}.kicker{font-size:12px;font-weight:850;letter-spacing:1px}.card{font-size:16px;font-weight:760}.copy{font-size:14px;font-weight:620}.micro{font-size:12px;font-weight:680}.ink{fill:#17345f}.body{fill:#304a71}.white{fill:#fffdf8}.muted{fill:#5d6f8b}</style>
+  </defs>
+  <rect width="1600" height="920" fill="#fffaf2"/><rect x="28" y="28" width="1544" height="864" rx="28" fill="#17345f"/><rect x="20" y="20" width="1544" height="864" rx="28" fill="#fffdf8" stroke="#17345f" stroke-width="2"/><rect x="21" y="21" width="1542" height="862" rx="27" fill="url(#nursery-grid)"/>
+  <path d="M20 48Q20 20 48 20H1536Q1564 20 1564 48V176H20Z" fill="#2855f3"/>
+  <text x="56" y="57" class="mono eyebrow white">CONCEPT NURSERY · SHARED STAGING</text><text x="56" y="105" class="sans title white">Give unsettled work a findable, continuable place</text><text x="56" y="141" class="sans lead white">A shared bench for work that must exist before its final home is known.</text>
+  <rect x="1212" y="51" width="302" height="84" rx="14" fill="#fffdf8" stroke="#17345f" stroke-width="2"/><text x="1235" y="81" class="mono kicker ink">BOUNDARY</text><text x="1235" y="107" class="sans copy body">Staging · not archive,</text><text x="1235" y="127" class="sans copy body">backlog, or approval queue</text>
+  <g id="lifecycle" role="group" aria-labelledby="lifecycle-title"><title id="lifecycle-title">Six-move staging lifecycle</title>
+    <text x="56" y="220" class="mono lane ink">LIFECYCLE · EACH MOVE LEAVES THE NEXT COLLABORATOR ORIENTED</text>
+    <g filter="url(#nursery-shadow)">
+      <rect x="56" y="246" width="228" height="150" rx="14" fill="#d9efea" stroke="#17345f" stroke-width="2"/><circle cx="82" cy="274" r="15" fill="#17345f"/><text x="82" y="279" text-anchor="middle" class="mono kicker white">1</text><text x="108" y="278" class="sans card ink">Create</text><text x="80" y="320" class="sans copy body"><tspan x="80">Use a clear title that</tspan><tspan x="80" dy="22">makes the concept</tspan><tspan x="80" dy="22">discoverable.</tspan></text>
+      <path d="M290 305H306V294L330 321L306 348V337H290Z" fill="#2855f3"/>
+      <rect x="332" y="246" width="228" height="150" rx="14" fill="#cfe7f7" stroke="#17345f" stroke-width="2"/><circle cx="358" cy="274" r="15" fill="#17345f"/><text x="358" y="279" text-anchor="middle" class="mono kicker white">2</text><text x="384" y="278" class="sans card ink">Place intent</text><text x="356" y="320" class="sans copy body"><tspan x="356">Name intended home</tspan><tspan x="356" dy="22">and authoring</tspan><tspan x="356" dy="22">platform.</tspan></text>
+      <path d="M566 305H582V294L606 321L582 348V337H566Z" fill="#2855f3"/>
+      <rect x="608" y="246" width="228" height="150" rx="14" fill="#e7efff" stroke="#17345f" stroke-width="2"/><circle cx="634" cy="274" r="15" fill="#17345f"/><text x="634" y="279" text-anchor="middle" class="mono kicker white">3</text><text x="660" y="278" class="sans card ink">Grow + review</text><text x="632" y="320" class="sans copy body"><tspan x="632">Develop the page with</tspan><tspan x="632" dy="22">the receiving context</tspan><tspan x="632" dy="22">still visible.</tspan></text>
+      <path d="M842 305H858V294L882 321L858 348V337H842Z" fill="#2855f3"/>
+      <rect x="884" y="246" width="228" height="150" rx="14" fill="#fff5de" stroke="#17345f" stroke-width="2"/><circle cx="910" cy="274" r="15" fill="#17345f"/><text x="910" y="279" text-anchor="middle" class="mono kicker white">4</text><text x="936" y="278" class="sans card ink">Settle</text><text x="908" y="320" class="sans copy body"><tspan x="908">Resolve the concept’s</tspan><tspan x="908" dy="22">use, shape, and</tspan><tspan x="908" dy="22">receiving conditions.</tspan></text>
+      <path d="M1118 305H1134V294L1158 321L1134 348V337H1118Z" fill="#2855f3"/>
+      <rect x="1160" y="246" width="228" height="150" rx="14" fill="#ffd3d0" stroke="#17345f" stroke-width="2"/><circle cx="1186" cy="274" r="15" fill="#17345f"/><text x="1186" y="279" text-anchor="middle" class="mono kicker white">5</text><text x="1212" y="278" class="sans card ink">Move</text><text x="1184" y="320" class="sans copy body"><tspan x="1184">Send to the target or</tspan><tspan x="1184" dy="22">to Resting Concepts</tspan><tspan x="1184" dy="22">with reason visible.</tspan></text>
+      <path d="M1394 305H1410V294L1434 321L1410 348V337H1394Z" fill="#2855f3"/>
+      <rect x="1436" y="246" width="100" height="150" rx="14" fill="#f2ff67" stroke="#17345f" stroke-width="2"/><circle cx="1462" cy="274" r="15" fill="#17345f"/><text x="1462" y="279" text-anchor="middle" class="mono kicker white">6</text><text x="1455" y="314" class="sans card ink"><tspan x="1455">Record</tspan><tspan x="1455" dy="22">move</tspan></text>
+    </g>
+  </g>
+  <g id="register" role="group" aria-labelledby="register-title"><title id="register-title">Empty source register</title>
+    <rect x="56" y="448" width="1480" height="250" rx="18" fill="#17345f"/><text x="82" y="485" class="mono lane" fill="#f2ff67">SOURCE REGISTER · CURRENT SNAPSHOT</text>
+    <rect x="82" y="510" width="1428" height="54" rx="10" fill="#cfe7f7" stroke="#fffdf8" stroke-width="2"/>
+    <text x="108" y="544" class="mono kicker ink">PAGE</text><text x="488" y="544" class="mono kicker ink">INTENDED HOME</text><text x="874" y="544" class="mono kicker ink">AUTHOR PLATFORM</text><text x="1254" y="544" class="mono kicker ink">STATUS</text>
+    <rect x="82" y="576" width="1428" height="88" rx="10" fill="#fffdf8" stroke="#fffdf8" stroke-width="2"/><text x="796" y="629" text-anchor="middle" class="sans card muted">(none yet)</text>
+  </g>
+  <g id="status-key" role="group" aria-labelledby="status-title"><title id="status-title">Presentation status cues</title>
+    <text x="56" y="751" class="mono lane ink">PRESENTATION STATUS CUES</text>
+    <rect x="56" y="773" width="260" height="62" rx="13" fill="#d9efea" stroke="#17345f" stroke-width="2"/><text x="186" y="810" text-anchor="middle" class="sans card ink">Growing</text>
+    <rect x="336" y="773" width="300" height="62" rx="13" fill="#cfe7f7" stroke="#17345f" stroke-width="2"/><text x="486" y="810" text-anchor="middle" class="sans card ink">Ready to place</text>
+    <rect x="656" y="773" width="260" height="62" rx="13" fill="#f2ff67" stroke="#17345f" stroke-width="2"/><text x="786" y="810" text-anchor="middle" class="sans card ink">Moved</text>
+    <rect x="936" y="773" width="260" height="62" rx="13" fill="#ffd3d0" stroke="#17345f" stroke-width="2"/><text x="1066" y="810" text-anchor="middle" class="sans card ink">Resting</text>
+    <rect x="1216" y="773" width="320" height="62" rx="13" fill="#fffdf8" stroke="#17345f" stroke-width="2"/><text x="1376" y="800" text-anchor="middle" class="mono kicker ink">MINIMUM STEWARDSHIP</text><text x="1376" y="820" text-anchor="middle" class="sans micro body">title · home · platform · status · move</text>
+  </g>
+</svg>

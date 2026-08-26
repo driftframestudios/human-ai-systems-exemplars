@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://driftframe.studio/schemas/lims-eln-execution-receipt-v0.2.json",
+  "title": "LIMS/ELN execution receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "receiptId",
+    "generatedAt",
+    "sourceDigest",
+    "sourceScope",
+    "runtime",
+    "executionClass",
+    "executionScope",
+    "result",
+    "sampleManifests",
+    "databaseMigrations",
+    "dataPrimitiveLedger",
+    "schemaContracts",
+    "houseSyntax",
+    "limitations",
+    "failures"
+  ],
+  "properties": {
+    "receiptId": {"type": "string", "minLength": 1},
+    "generatedAt": {"type": "string", "format": "date-time"},
+    "sourceDigest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "sourceScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "files", "rule"],
+      "properties": {
+        "algorithm": {"const": "sha256"},
+        "files": {"type": "integer", "minimum": 1},
+        "rule": {"type": "string", "minLength": 1}
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["python", "dependencies"],
+      "properties": {
+        "python": {"type": "string", "minLength": 1},
+        "dependencies": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["jsonschema", "PyYAML"],
+          "properties": {
+            "jsonschema": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$"},
+            "PyYAML": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$"}
+          }
+        }
+      }
+    },
+    "executionClass": {"const": "verified_running"},
+    "executionScope": {"const": "local_offline_synthetic"},
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["testsRun", "failures", "errors", "successful"],
+      "properties": {
+        "testsRun": {"type": "integer", "minimum": 1},
+        "failures": {"type": "integer", "minimum": 0},
+        "errors": {"type": "integer", "minimum": 0},
+        "successful": {"type": "boolean"}
+      }
+    },
+    "sampleManifests": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["validated", "expected"],
+      "properties": {
+        "validated": {"type": "integer", "minimum": 0},
+        "expected": {"type": "integer", "minimum": 1}
+      }
+    },
+    "databaseMigrations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["validated", "expected", "supportedBaselines", "executionScope"],
+      "properties": {
+        "validated": {"type": "integer", "minimum": 0},
+        "expected": {"const": 8},
+        "supportedBaselines": {
+          "type": "array",
+          "items": {"enum": ["empty", "v0.1"]},
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "executionScope": {"const": "static_offline"}
+      }
+    },
+    "dataPrimitiveLedger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["validated", "expected"],
+      "properties": {
+        "validated": {"type": "integer", "minimum": 0},
+        "expected": {"const": 53}
+      }
+    },
+    "schemaContracts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["validated", "expected", "draft", "formatAssertions"],
+      "properties": {
+        "validated": {"type": "integer", "minimum": 0},
+        "expected": {"const": 4},
+        "draft": {"const": "2020-12"},
+        "formatAssertions": {"const": true}
+      }
+    },
+    "houseSyntax": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["successful"],
+      "properties": {
+        "successful": {"type": "boolean"}
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "failures": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    }
+  }
+}

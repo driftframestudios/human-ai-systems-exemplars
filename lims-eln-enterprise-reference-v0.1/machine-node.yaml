@@ -1,0 +1,107 @@
+"@id": "@driftframe/prototype-exemplars/lims-eln-enterprise-reference-v0.1"
+schema_version: "2.0"
+type: "EnterpriseReferencePack"
+name: "LIMS/ELN Enterprise Reference v0.2"
+
+parent_ref: "urn:source-key:lims-src-001"
+hands_to:
+  - "samples/README.md"
+  - "README.md"
+  - "docs/evidence-basis.md"
+  - "docs/qualification-ladder.md"
+  - "manifest.json"
+
+version_band: "2026.08"
+status: "active"
+contract: "Every accepted laboratory state change is attributable, replay-safe, versioned, recoverable, and connected to evidence whose execution and qualification scope is explicit."
+
+source_fragments:
+  - "urn:source-key:lims-src-001"
+
+campaigns:
+  - "FMI LIMS/ELN Re-platforming — Enterprise Python Reference Pack"
+
+negation_aware: true
+temporal_layers:
+  - "lived_2021_2022"
+  - "historically_reconstructed"
+  - "current_2026"
+  - "illustrative_future"
+evidence_classes:
+  - "observed"
+  - "historically_reconstructed"
+  - "current_companion"
+  - "illustrative"
+  - "counterexample"
+execution_classes:
+  - "not_applicable"
+  - "illustrative_pseudocode"
+  - "illustrative_compilable"
+  - "tested_excerpt"
+  - "verified_running"
+execution_class: "verified_running"
+execution_scope: "local_offline_synthetic_reference"
+qualification_stage: "tenant_open"
+
+artifact_class: "enterprise_python_and_postgresql_reference_pack"
+verification_status: "local_reference_verified_database_rehearsal_defined_adoption_receipts_open"
+
+receipts:
+  - id: "offline-reference-suite"
+    kind: "generated_validation_receipt"
+    environment: "python_3.12_standard_library_synthetic_fixtures"
+    observed_at: "2026-08-04"
+    result: "100_tests_7_canonical_6_upgrade_migrations_53_findings_passed"
+    locator: "receipts/validation-report.json"
+    supports: "The declared local domain, adapter, migration, security, evidence, and recovery contracts execute successfully."
+  - id: "sample-registry"
+    kind: "schema_validated_manifest_inventory"
+    environment: "repository"
+    observed_at: "2026-08-04"
+    result: "9_manifests_4_schemas_passed"
+    locator: "manifest.json"
+    supports: "Every registered sample exposes its proof boundary, failure modes, affected populations, and open qualification receipts."
+  - id: "database-migration-contract"
+    kind: "postgresql_migration_and_schema_convergence_receipt"
+    environment: "postgresql_18_synthetic_clean_and_v0_1_upgrade"
+    observed_at: "generated_by_hosted_rehearsal"
+    result: "clean_upgrade_tenant_immutability_and_fingerprint_contract_defined"
+    locator: "database/release-provenance.json"
+    supports: "Flyway-managed canonical migrations, attested upgrade paths, tenant authority, append-only evidence, and schema convergence are executable."
+
+open_receipts:
+  - "github_pull_request_and_ci"
+  - "sapio_tenant_compatibility_and_sandbox"
+  - "benchling_sandbox_conformance"
+  - "labkey_sandbox_conformance"
+  - "organization_dataset_migration_and_restore_rehearsal"
+  - "backup_restore_and_data_exit_rehearsal"
+  - "production_security_privacy_and_observability"
+  - "quality_regulatory_scientific_and_business_acceptance"
+
+affected_populations:
+  - "executive"
+  - "evaluator"
+  - "scientist"
+  - "pathologist"
+  - "quality"
+  - "regulatory"
+  - "engineer"
+  - "security"
+  - "operations"
+  - "support"
+
+regulatory_scope: "The pack demonstrates engineering control patterns. Accountable quality, regulatory, scientific, security, operations, and business owners determine intended use, applicability, validation depth, release authority, and production acceptance."
+last_reviewed: "2026-08-04"
+last_stabilized: "2026-08-04"
+supersedes: null
+superseded_by: null
+
+github:
+  repository: "https://github.com/driftframestudios/human-ai-systems-exemplars"
+  reference_path: "lims-eln-enterprise-reference-v0.1/"
+  merge_target: "main"
+  branch_name: "main"
+  branch_url: "https://github.com/driftframestudios/human-ai-systems-exemplars/tree/main/lims-eln-enterprise-reference-v0.1"
+  commit_sha: "supplied_by_git_commit"
+  pull_request_url: "supplied_by_release_receipt"

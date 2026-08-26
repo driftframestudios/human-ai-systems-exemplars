@@ -1,0 +1,98 @@
+{
+  "$schema": "../schema/schema-registry.schema.v0.1.json",
+  "schema_version": "0.1",
+  "registry_id": "schema-registry:supportive-change:v0.1",
+  "registry_type": "schemas",
+  "version": "0.1.0",
+  "purpose": "Register the schemas that describe the collection's shared artifact shapes.",
+  "semantic_attractor_contract": {
+    "target_state": "Collaborators can find the schema associated with each artifact type.",
+    "boundary_condition": "Schemas describe a shared starting shape while remaining open to contextual extension.",
+    "replacement_state": "Use repository paths and plain descriptions to interpret an artifact's metadata.",
+    "verification_signals": [
+      "Schema paths support discovery."
+    ]
+  },
+  "entries": [
+    {
+      "id": "schema:documentation-surface.schema.v0.1",
+      "path": "../schema/documentation-surface.schema.v0.1.json",
+      "describes": "Markdown navigation, context, evidence, strategy, and assessment surfaces"
+    },
+    {
+      "id": "schema:tone-goal.schema.v0.1",
+      "path": "../schema/tone-goal.schema.v0.1.json",
+      "describes": "Structured tone-goal artifacts with register dimensions and instruction implications"
+    },
+    {
+      "id": "schema:instruction-tranche.schema.v0.1",
+      "path": "../schema/instruction-tranche.schema.v0.1.json",
+      "describes": "Instruction-engineering tranches with optional register-dimension references"
+    },
+    {
+      "id": "schema:essay-context-capsule.schema.v0.1",
+      "path": "../schema/essay-context-capsule.schema.v0.1.json",
+      "describes": "Evidence-aware comparative essay prompt capsule with tone and register references"
+    },
+    {
+      "id": "schema:aesthetic-prompt-capsule.schema.v0.1",
+      "path": "../schema/aesthetic-prompt-capsule.schema.v0.1.json",
+      "describes": "Bringhurst-informed PDF art-direction capsule"
+    },
+    {
+      "id": "schema:writing-artifact-exemplar.schema.v0.1",
+      "path": "../schema/writing-artifact-exemplar.schema.v0.1.json",
+      "describes": "Essay exemplars"
+    },
+    {
+      "id": "schema:testimonial-blurb-set.schema.v0.1",
+      "path": "../schema/testimonial-blurb-set.schema.v0.1.json",
+      "describes": "Short and long testimonial-style draft sets"
+    },
+    {
+      "id": "schema:writing-exemplar-registry.schema.v0.1",
+      "path": "../schema/writing-exemplar-registry.schema.v0.1.json",
+      "describes": "Writing exemplar registry"
+    },
+    {
+      "id": "schema:contextual-relation-registry.schema.v0.1",
+      "path": "../schema/contextual-relation-registry.schema.v0.1.json",
+      "describes": "Typed contextual relation registry"
+    },
+    {
+      "id": "schema:instruction-tranche-registry.schema.v0.1",
+      "path": "../schema/instruction-tranche-registry.schema.v0.1.json",
+      "describes": "Instruction tranche registry"
+    },
+    {
+      "id": "schema:tone-goal-registry.schema.v0.1",
+      "path": "../schema/tone-goal-registry.schema.v0.1.json",
+      "describes": "Tone-goal registry"
+    },
+    {
+      "id": "schema:prompt-capsule-registry.schema.v0.1",
+      "path": "../schema/prompt-capsule-registry.schema.v0.1.json",
+      "describes": "Prompt capsule registry"
+    },
+    {
+      "id": "schema:artifact-registry.schema.v0.1",
+      "path": "../schema/artifact-registry.schema.v0.1.json",
+      "describes": "Rendered PDF artifact registry"
+    },
+    {
+      "id": "schema:schema-registry.schema.v0.1",
+      "path": "../schema/schema-registry.schema.v0.1.json",
+      "describes": "JSON Schema registry"
+    },
+    {
+      "id": "schema:branch-reference-set-registry.schema.v0.1",
+      "path": "../schema/branch-reference-set-registry.schema.v0.1.json",
+      "describes": "Branch reference-set registry"
+    },
+    {
+      "id": "schema:collection-manifest.schema.v0.1",
+      "path": "../schema/collection-manifest.schema.v0.1.json",
+      "describes": "Collection manifest and navigation map"
+    }
+  ]
+}

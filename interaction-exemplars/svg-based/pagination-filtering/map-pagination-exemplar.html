@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Regional service locations — core HTML, CSS, and SVG pagination exemplar</title>
+  <style>
+    @layer reset, tokens, base, shell, pagination, collection, adaptations;
+
+    @layer reset {
+      *, *::before, *::after { box-sizing: border-box; }
+      html { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      body, h1, h2, h3, p, figure, dl { margin: 0; }
+      ol, ul { margin: 0; padding: 0; list-style: none; }
+      svg { display: block; max-inline-size: 100%; }
+    }
+
+    @layer tokens {
+      :root {
+        --ink: #17211d;
+        --muted: #5b6861;
+        --paper: #f3f6f1;
+        --surface: #ffffff;
+        --surface-soft: #eef3ec;
+        --line: #c8d2ca;
+        --accent: #155b4f;
+        --accent-strong: #0c453b;
+        --accent-soft: #dcefe7;
+        --water: #d9edf2;
+        --land: #e7eadc;
+        --route: #7b8981;
+        --focus: #7b35d3;
+        --current: #b95322;
+        --radius: 1rem;
+        --shadow: 0 1rem 2.8rem rgb(27 58 46 / 0.09);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --ink: #edf4ef;
+          --muted: #b7c5bc;
+          --paper: #111713;
+          --surface: #19221d;
+          --surface-soft: #202b25;
+          --line: #3c4a42;
+          --accent: #92d8c5;
+          --accent-strong: #b6eadb;
+          --accent-soft: #203d34;
+          --water: #1c3941;
+          --land: #30382d;
+          --route: #aab8b0;
+          --focus: #d3b4ff;
+          --current: #f19a6f;
+          --shadow: 0 1rem 2.8rem rgb(0 0 0 / 0.28);
+        }
+      }
+    }
+
+    @layer base {
+      html { scroll-behavior: auto; }
+
+      body {
+        min-block-size: 100svh;
+        padding-inline-start: max(1rem, env(safe-area-inset-left, 0px));
+        padding-inline-end: max(1rem, env(safe-area-inset-right, 0px));
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 12% 4%, color-mix(in srgb, var(--accent-soft) 72%, transparent), transparent 28rem),
+          var(--paper);
+        line-height: 1.55;
+      }
+
+      a { color: var(--accent-strong); }
+
+      :focus-visible {
+        outline: 0.2rem solid var(--focus);
+        outline-offset: 0.2rem;
+      }
+
+      .skip-link {
+        position: fixed;
+        inset-block-start: calc(0.75rem + env(safe-area-inset-top, 0px));
+        inset-inline-start: calc(0.75rem + env(safe-area-inset-left, 0px));
+        z-index: 30;
+        translate: 0 -180%;
+        padding: 0.65rem 0.9rem;
+        border-radius: 0.55rem;
+        color: var(--surface);
+        background: var(--ink);
+      }
+
+      .skip-link:focus { translate: 0; }
+
+      header, main, footer {
+        inline-size: min(78rem, 100%);
+        margin-inline: auto;
+      }
+
+      header { padding-block: clamp(2.6rem, 8vw, 6.5rem) 2rem; }
+
+      .eyebrow {
+        color: var(--accent-strong);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-inline-size: 16ch;
+        margin-block-start: 0.55rem;
+        font-size: clamp(2.25rem, 6vw, 5.2rem);
+        line-height: 0.97;
+        letter-spacing: -0.045em;
+      }
+
+      header > p:last-child {
+        max-inline-size: 72ch;
+        margin-block-start: 1.15rem;
+        color: var(--muted);
+        font-size: clamp(1rem, 2vw, 1.15rem);
+      }
+
+      h2 { font-size: clamp(1.35rem, 3vw, 2rem); line-height: 1.15; }
+      h3 { font-size: 1rem; }
+
+      .visually-hidden {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+    }
+
+    @layer shell {
+      .demo-shell {
+        container: pagination-demo / inline-size;
+        padding: clamp(0.85rem, 2.4vw, 1.6rem);
+        border: 1px solid var(--line);
+        border-radius: calc(var(--radius) + 0.45rem);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .state-strip {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.65rem;
+        margin-block-end: 1rem;
+      }
+
+      .state-strip div {
+        min-inline-size: 0;
+        padding: 0.8rem;
+        border: 1px solid var(--line);
+        border-radius: 0.75rem;
+        background: var(--surface-soft);
+      }
+
+      .state-strip dt { color: var(--muted); font-size: 0.75rem; font-weight: 750; text-transform: uppercase; }
+      .state-strip dd { margin: 0.1rem 0 0; font-weight: 800; }
+
+      .route-note {
+        margin-block-end: 1rem;
+        padding: 0.85rem 1rem;
+        border-inline-start: 0.3rem solid var(--accent);
+        background: var(--accent-soft);
+        color: var(--muted);
+      }
+
+      .route-note strong { color: var(--ink); }
+
+      .pagination-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+        align-items: start;
+      }
+
+      .content-stack { min-inline-size: 0; }
+    }
+
+    @layer pagination {
+      /*
+        TARGET: anchors own durable page destinations, the URL carries collection
+        state, and exactly one link identifies the current page.
+
+        TARGET: the same source order produces compact horizontal and spacious
+        vertical presentations. Visible order and focus order stay aligned.
+
+        GUARD: this static page represents the document for page 3. Its direct
+        query links demonstrate the production route grammar; a server renders
+        the requested slice at each destination.
+      */
+      .pager {
+        min-inline-size: 0;
+        padding: 0.8rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface-soft);
+      }
+
+      .pager-heading { color: var(--muted); font-size: 0.78rem; font-weight: 800; text-transform: uppercase; }
+
+      .page-position {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-block-start: 0.25rem;
+      }
+
+      .page-position strong { font-size: 1.15rem; }
+      .page-position span { color: var(--muted); font-size: 0.86rem; }
+
+      .progress-rail {
+        margin-block: 0.65rem 0.8rem;
+        padding: 0.35rem;
+        border-radius: 0.6rem;
+        background: var(--surface);
+      }
+
+      .progress-rail svg { inline-size: 100%; block-size: auto; }
+      .rail-line { stroke: var(--line); stroke-width: 5; stroke-linecap: round; }
+      .rail-dot { fill: var(--surface); stroke: var(--muted); stroke-width: 2.5; }
+      .rail-dot-current { fill: var(--current); stroke: var(--surface); stroke-width: 3.5; }
+
+      .page-list {
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        gap: 0.35rem;
+      }
+
+      .page-list li { min-inline-size: 0; }
+
+      .page-list a,
+      .page-list .boundary,
+      .page-list .gap {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-inline-size: 2.75rem;
+        min-block-size: 2.75rem;
+        padding: 0.45rem 0.68rem;
+        border: 1px solid var(--line);
+        border-radius: 0.65rem;
+        color: var(--ink);
+        background: var(--surface);
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .page-list a:hover { border-color: var(--accent); background: var(--accent-soft); }
+
+      .page-list a[aria-current="page"] {
+        border-color: var(--current);
+        color: var(--surface);
+        background: var(--current);
+        font-weight: 850;
+      }
+
+      .page-list .gap {
+        min-inline-size: 1.65rem;
+        padding-inline: 0.15rem;
+        border-color: transparent;
+        background: transparent;
+      }
+
+      .page-list .boundary { color: var(--muted); background: transparent; }
+      .optional-page { display: none; }
+      .sequence-word { display: none; }
+
+      .pager-detail {
+        margin-block-start: 0.75rem;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+    }
+
+    @layer collection {
+      .result-heading {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.3rem 0 1rem;
+      }
+
+      .result-heading p { color: var(--muted); }
+
+      .map-card {
+        padding: clamp(0.75rem, 2vw, 1rem);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface-soft);
+      }
+
+      .map-card figure { display: grid; gap: 0.7rem; }
+
+      .map-frame {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 0.75rem;
+        background: var(--water);
+      }
+
+      .map-frame > svg { inline-size: 100%; block-size: auto; }
+      .land { fill: var(--land); stroke: var(--line); stroke-width: 2; }
+      .road { fill: none; stroke: var(--route); stroke-width: 2; stroke-dasharray: 5 7; opacity: 0.65; }
+      .site circle { fill: var(--surface); stroke: var(--accent); stroke-width: 4; vector-effect: non-scaling-stroke; }
+      .site text { fill: var(--ink); font: 750 14px ui-sans-serif, system-ui, sans-serif; paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+      figcaption { color: var(--muted); font-size: 0.9rem; }
+
+      .card-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.75rem;
+        margin-block-start: 0.85rem;
+      }
+
+      .location-card {
+        min-inline-size: 0;
+        padding: 0.9rem;
+        border: 1px solid var(--line);
+        border-radius: 0.8rem;
+        background: var(--surface);
+      }
+
+      .card-topline { display: flex; justify-content: space-between; gap: 0.65rem; }
+      .record-id { color: var(--muted); font-size: 0.78rem; font-variant-numeric: tabular-nums; }
+      .status { color: var(--accent-strong); font-size: 0.78rem; font-weight: 800; }
+      .location-card h3 { margin-block-start: 0.55rem; font-size: 1.08rem; }
+      .location-card p { margin-block-start: 0.25rem; color: var(--muted); font-size: 0.9rem; }
+
+      .boundary-lab {
+        margin-block-start: 1rem;
+        padding: clamp(0.9rem, 2.5vw, 1.25rem);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface-soft);
+      }
+
+      .boundary-lab > p { max-inline-size: 72ch; margin-block-start: 0.45rem; color: var(--muted); }
+
+      .boundary-grid { display: grid; gap: 0.65rem; margin-block-start: 0.85rem; }
+      .boundary-grid article { padding: 0.8rem; border-radius: 0.65rem; background: var(--surface); }
+      .boundary-grid p { margin-block-start: 0.25rem; color: var(--muted); font-size: 0.88rem; }
+
+      footer { padding-block: 1.5rem 4rem; color: var(--muted); font-size: 0.9rem; }
+    }
+
+    @layer adaptations {
+      @container pagination-demo (min-width: 25rem) {
+        .sequence-word { display: inline; }
+      }
+
+      @container pagination-demo (min-width: 42rem) {
+        .state-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .optional-page { display: list-item; }
+        .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .boundary-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      }
+
+      @container pagination-demo (min-width: 56rem) {
+        .pagination-layout { grid-template-columns: minmax(13.5rem, 0.24fr) minmax(0, 1fr); }
+
+        .pager {
+          position: sticky;
+          inset-block-start: calc(1rem + env(safe-area-inset-top, 0px));
+          max-block-size: calc(100dvh - 2rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+          overflow: auto;
+        }
+
+        .progress-rail svg { min-block-size: 4rem; }
+        .page-list { display: grid; align-items: stretch; }
+        .page-list a, .page-list .boundary, .page-list .gap { inline-size: 100%; justify-content: flex-start; }
+        .page-list a[aria-current="page"]::after { content: "Current"; margin-inline-start: auto; font-size: 0.72rem; font-weight: 800; }
+        .page-list .gap { justify-content: center; }
+        .card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        html { scroll-behavior: smooth; }
+        .page-list a { transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease; }
+      }
+
+      @media (forced-colors: active) {
+        .page-list a[aria-current="page"] { border-width: 0.22rem; }
+        .rail-dot, .rail-dot-current { fill: Canvas; stroke: CanvasText; }
+        .land { fill: Canvas; stroke: CanvasText; }
+        .site circle { fill: Canvas; stroke: LinkText; }
+        .site text { fill: CanvasText; stroke: Canvas; }
+      }
+
+      @media print {
+        body { padding: 0; background: white; color: black; }
+        .demo-shell { box-shadow: none; }
+        .pagination-layout { display: block; }
+        .pager { position: static; margin-block-end: 1rem; }
+        .page-list { display: flex; flex-wrap: wrap; }
+        .optional-page { display: list-item; }
+      }
+    }
+  </style>
+</head>
+<body id="page-top">
+  <a class="skip-link" href="#results">Skip to page 3 results</a>
+
+  <header>
+    <p class="eyebrow">Standalone practitioner exemplar · HTML, CSS, and SVG</p>
+    <h1>Core pagination and collection traversal</h1>
+    <p>A complete page-three document for a 72-location regional service collection. Native links carry durable query state; one responsive navigation becomes compact and horizontal on narrow viewports, then expands into a vertical rail when space supports it.</p>
+  </header>
+
+  <main>
+    <section class="demo-shell" aria-labelledby="demo-title">
+      <h2 class="visually-hidden" id="demo-title">Regional service location pagination demonstration</h2>
+
+      <dl class="state-strip">
+        <div><dt>Collection</dt><dd>72 locations</dd></div>
+        <div><dt>Page size</dt><dd>6 records</dd></div>
+        <div><dt>Current slice</dt><dd>13–18</dd></div>
+        <div><dt>Position</dt><dd>Page 3 of 12</dd></div>
+      </dl>
+
+      <p class="route-note"><strong>Route contract:</strong> every destination preserves <code>concern=all</code>, <code>sort=name</code>, <code>size=6</code>, and <code>view=cards</code>. This standalone artifact represents page 3; a production route renders the requested slice for each query URL.</p>
+
+      <div class="pagination-layout">
+        <nav class="pager" aria-labelledby="pagination-heading">
+          <p class="pager-heading" id="pagination-heading">Location result pages</p>
+          <p class="page-position"><strong>Page 3</strong><span>13–18 of 72</span></p>
+
+          <div class="progress-rail">
+            <svg viewBox="0 0 456 56" role="img" aria-labelledby="rail-title rail-desc">
+              <title id="rail-title">Page progress</title>
+              <desc id="rail-desc">Page 3 is current in a sequence of 12 pages.</desc>
+              <path class="rail-line" d="M24 28H432"/>
+              <circle class="rail-dot" cx="24" cy="28" r="7"/>
+              <circle class="rail-dot" cx="61" cy="28" r="7"/>
+              <circle class="rail-dot-current" cx="98" cy="28" r="10"/>
+              <circle class="rail-dot" cx="135" cy="28" r="7"/>
+              <circle class="rail-dot" cx="172" cy="28" r="7"/>
+              <circle class="rail-dot" cx="209" cy="28" r="7"/>
+              <circle class="rail-dot" cx="246" cy="28" r="7"/>
+              <circle class="rail-dot" cx="283" cy="28" r="7"/>
+              <circle class="rail-dot" cx="320" cy="28" r="7"/>
+              <circle class="rail-dot" cx="357" cy="28" r="7"/>
+              <circle class="rail-dot" cx="394" cy="28" r="7"/>
+              <circle class="rail-dot" cx="432" cy="28" r="7"/>
+            </svg>
+          </div>
+
+          <ol class="page-list">
+            <li><a rel="prev" href="?concern=all&amp;sort=name&amp;size=6&amp;view=cards&amp;page=2#results"><span aria-hidden="true">←</span><span class="sequence-word"> Previous</span><span class="visually-hidden"> page, page 2</span></a></li>
+            <li class="optional-page"><a href="?concern=all&amp;sort=name&amp;size=6&amp;view=cards&amp;page=1#results"><span class="visually-hidden">Page </span>1</a></li>
+            <li class="optional-page"><a href="?concern=all&amp;sort=name&amp;size=6&amp;view=cards&amp;page=2#results"><span class="visually-hidden">Page </span>2</a></li>
+            <li><a aria-current="page" href="?concern=all&amp;sort=name&amp;size=6&amp;view=cards&amp;page=3#results"><span class="visually-hidden">Page </span>3</a></li>
+            <li class="optional-page"><a href="?concern=all&amp;sort=name&amp;size=6&amp;view=cards&amp;page=4#results"><span class="visually-hidden">Page </span>4</a></li>
+            <li class="optional-page"><a href="?concern=all&amp;sort=name&amp;size=6&amp;view=cards&amp;page=5#results"><span class="visually-hidden">Page </span>5</a></li>
+            <li class="optional-page"><span class="gap"><span aria-hidden="true">…</span><span class="visually-hidden">Pages 6 through 11 omitted</span></span></li>
+            <li class="optional-page"><a href="?concern=all&amp;sort=name&amp;size=6&amp;view=cards&amp;page=12#results"><span class="visually-hidden">Page </span>12</a></li>
+            <li><a rel="next" href="?concern=all&amp;sort=name&amp;size=6&amp;view=cards&amp;page=4#results"><span class="sequence-word">Next </span><span aria-hidden="true">→</span><span class="visually-hidden"> page, page 4</span></a></li>
+          </ol>
+          <p class="pager-detail">The page links are the control surface. The SVG rail supplies a visual summary of the same documented position.</p>
+        </nav>
+
+        <div class="content-stack">
+          <section id="results" aria-labelledby="results-heading" tabindex="-1">
+            <div class="result-heading">
+              <div>
+                <p class="eyebrow">Alphabetical order</p>
+                <h2 id="results-heading">Locations 13–18</h2>
+              </div>
+              <p>6 records on this page · 72 total</p>
+            </div>
+
+            <div class="map-card">
+              <figure>
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="map-title map-desc">
+                    <title id="map-title">Page 3 regional service map</title>
+                    <desc id="map-desc">Six locations from records 13 through 18 appear across a schematic regional service area: Cedar Exchange, Civic Core, East Market, Harbor Edge, Lake Plain, and North Crossing.</desc>
+                    <path class="land" d="M55 78 192 28 347 55 555 29 705 113 675 243 722 334 566 367 391 345 242 377 91 332 40 204Z"/>
+                    <path class="road" d="M78 281C205 205 332 249 465 146S635 93 688 121"/>
+                    <path class="road" d="M158 52C220 154 214 258 276 360"/>
+                    <path class="road" d="M510 52C462 162 527 253 586 351"/>
+                    <g class="site" transform="translate(176 103)"><circle r="11"/><text x="18" y="5">North Crossing</text></g>
+                    <g class="site" transform="translate(495 93)"><circle r="11"/><text x="18" y="5">Lake Plain</text></g>
+                    <g class="site" transform="translate(365 195)"><circle r="11"/><text x="18" y="5">Civic Core</text></g>
+                    <g class="site" transform="translate(136 272)"><circle r="11"/><text x="18" y="5">Cedar Exchange</text></g>
+                    <g class="site" transform="translate(556 305)"><circle r="11"/><text x="-113" y="35">Harbor Edge</text></g>
+                    <g class="site" transform="translate(321 323)"><circle r="11"/><text x="18" y="5">East Market</text></g>
+                  </svg>
+                </div>
+                <figcaption>The map adds spatial orientation. The six cards below provide the complete current-page record names and readiness summaries.</figcaption>
+              </figure>
+            </div>
+
+            <ol class="card-grid" start="13">
+              <li class="location-card">
+                <p class="card-topline"><span class="record-id">Record 13</span><span class="status">Ready</span></p>
+                <h3>Cedar Exchange</h3><p>West corridor · Transit transfer and cooling support.</p>
+              </li>
+              <li class="location-card">
+                <p class="card-topline"><span class="record-id">Record 14</span><span class="status">Watch</span></p>
+                <h3>Civic Core</h3><p>Central district · Public-service continuity planning.</p>
+              </li>
+              <li class="location-card">
+                <p class="card-topline"><span class="record-id">Record 15</span><span class="status">Ready</span></p>
+                <h3>East Market</h3><p>East corridor · Supplies, shade, and pedestrian access.</p>
+              </li>
+              <li class="location-card">
+                <p class="card-topline"><span class="record-id">Record 16</span><span class="status">Review</span></p>
+                <h3>Harbor Edge</h3><p>South coast · Tide-sensitive access route review.</p>
+              </li>
+              <li class="location-card">
+                <p class="card-topline"><span class="record-id">Record 17</span><span class="status">Ready</span></p>
+                <h3>Lake Plain</h3><p>North-east basin · Shelter and water distribution.</p>
+              </li>
+              <li class="location-card">
+                <p class="card-topline"><span class="record-id">Record 18</span><span class="status">Watch</span></p>
+                <h3>North Crossing</h3><p>North corridor · Bridge and transfer-point monitoring.</p>
+              </li>
+            </ol>
+          </section>
+
+          <section class="boundary-lab" aria-labelledby="boundary-heading">
+            <h2 id="boundary-heading">Boundary states retain honest controls</h2>
+            <p>The endpoint renders links only when destinations exist. Boundary text communicates sequence position without presenting an unavailable route.</p>
+            <div class="boundary-grid">
+              <article><h3>First page</h3><p>“Previous” becomes boundary text. Page 2 and “Next” remain links.</p></article>
+              <article><h3>Middle page</h3><p>Page 3 exposes valid previous and next routes while identifying one current page.</p></article>
+              <article><h3>Final page</h3><p>“Next” becomes boundary text. Page 11 and “Previous” remain links.</p></article>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Pagination changes the requested collection slice. Layout changes only its presentation.</p>
+  </footer>
+</body>
+</html>

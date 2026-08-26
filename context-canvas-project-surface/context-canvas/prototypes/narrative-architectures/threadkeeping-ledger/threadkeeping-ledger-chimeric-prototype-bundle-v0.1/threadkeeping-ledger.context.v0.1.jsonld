@@ -1,0 +1,49 @@
+{
+  "@context": {
+    "fg": "https://schemas.driftframestudios.org/fg#",
+    "na": "https://schemas.driftframestudios.org/na#",
+    "ca": "https://schemas.driftframestudios.org/ca#",
+    "schema": "https://schema.org/",
+    "id": "@id",
+    "type": "@type",
+    "name": "schema:name",
+    "description": "schema:description",
+    "ThreadkeepingLedger": "fg:ThreadkeepingLedger",
+    "Threadkeeper": "fg:Threadkeeper",
+    "ThreadkeeperEntry": "fg:ThreadkeeperEntry",
+    "NextCandidate": "na:NextCandidate",
+    "CoordinationHorizon": "na:CoordinationHorizon",
+    "ContextContinuityAssessment": "na:ContextContinuityAssessment",
+    "ThreadkeeperHydrationPacket": "fg:ThreadkeeperHydrationPacket",
+    "RelationshipContract": "ca:RelationshipContract",
+    "RecoveryCalibration": "ca:RecoveryCalibration",
+    "centralContractRef": {
+      "@id": "ca:centralContractRef",
+      "@type": "@id"
+    },
+    "nextCandidateRef": {
+      "@id": "na:nextCandidateRef",
+      "@type": "@id"
+    },
+    "supersedes": {
+      "@id": "ca:supersedes",
+      "@type": "@id"
+    },
+    "supersededBy": {
+      "@id": "ca:supersededBy",
+      "@type": "@id"
+    },
+    "reentryPoint": {
+      "@id": "na:reentryPoint",
+      "@type": "@id"
+    },
+    "sourceBand": "ca:sourceBand",
+    "sourceOfTruthBand": "ca:sourceOfTruthBand",
+    "publicationStatus": "ca:publicationStatus",
+    "accessConfidence": "ca:accessConfidence",
+    "horizonPosition": "na:horizonPosition",
+    "readinessState": "na:readinessState",
+    "reviewTrigger": "fg:reviewTrigger",
+    "rationale": "fg:rationale"
+  }
+}

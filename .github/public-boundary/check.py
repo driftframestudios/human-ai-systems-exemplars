@@ -73,6 +73,10 @@ GITHUB_REPOSITORY_PATTERNS = (
         r"(?i)https?://raw\.githubusercontent\.com/"
         r"(?P<owner>[A-Za-z0-9_.-]+)/(?P<repo>[A-Za-z0-9_.-]+)"
     ),
+    re.compile(
+        r"(?i)(?:[\"']?repository[\"']?\s*[:=]\s*[\"']?|--repo(?:sitory)?\s+)"
+        r"(?P<owner>[A-Za-z0-9_.-]+)/(?P<repo>[A-Za-z0-9_.-]+)"
+    ),
 )
 REPOSITORY_SLUG_PATTERN = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
 
@@ -358,10 +362,12 @@ def self_test() -> None:
     workstation = "file" + ":///" + "Users" + "/operator/source.md"
     external = "https" + "://github.com/example/receiver/issues/4"
     same_repository = "https" + "://github.com/" + repository + "/issues/1"
+    bare_repository = "repository" + ": " + "example" + "/receiver"
     cases = (
         (gated, {"gated_workspace_coordinate"}),
         (workstation, {"workstation_coordinate"}),
         (external, {"external_github_coordinate"}),
+        (bare_repository, {"external_github_coordinate"}),
         (same_repository, set()),
         ("A complete repository-local explanation.", set()),
     )

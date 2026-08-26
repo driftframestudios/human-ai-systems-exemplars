@@ -1,0 +1,212 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="960" viewBox="0 0 1600 960" role="img" aria-labelledby="diff-title diff-desc">
+  <title id="diff-title">Structured human edits reveal where the coordination substrate should improve</title>
+  <desc id="diff-desc">A five-stage operating comparison follows incoming partner fields into an initial rule state, Data Manager review, a final rule state, and a structured comparison. The comparison reveals the number and shape of human edits across planned epochs while the numeric result remains undisclosed. A lower band explains the population, comparison, operating signal, changed work, and investment.</desc>
+
+  <defs>
+    <clipPath id="diff-frame-clip">
+      <rect x="18" y="18" width="1564" height="924" rx="28"/>
+    </clipPath>
+    <pattern id="diff-speckle" width="38" height="38" patternUnits="userSpaceOnUse">
+      <circle cx="7" cy="10" r="1" fill="#17345f" opacity=".11"/>
+      <circle cx="30" cy="27" r=".8" fill="#2855f3" opacity=".09"/>
+    </pattern>
+    <pattern id="diff-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#2855f3" stroke-width="1" opacity=".09"/>
+    </pattern>
+    <style>
+      .paper{fill:#fffaf2}.speckle{fill:url(#diff-speckle)}.grid{fill:url(#diff-grid)}
+      .frame{fill:none;stroke:#17345f;stroke-width:3}.outline{stroke:#17345f;stroke-width:2;fill:#fffdf8}
+      .shadow{fill:#17345f}.cobalt{fill:#2855f3}.cobalt-dark{fill:#153fbe}.cobalt-pale{fill:#e7efff}
+      .cream{fill:#fff5de}.powder{fill:#cfe7f7}.sea{fill:#d9efea}.blush{fill:#ffd3d0}
+      .coral{fill:#fa7065}.acid{fill:#f2ff67}.white{fill:#fffdf8}
+      .hairline{stroke:#7893bc;stroke-width:1.2}.rule{stroke:#17345f;stroke-width:1.4}
+      .arrow{fill:#2855f3}.arrow-sea{fill:#4b918b}.arrow-coral{fill:#fa7065}
+      .eyebrow{font:700 13px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.45px;fill:#405574}
+      .eyebrow-on{font:700 13px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.45px;fill:#e8efff}
+      .title{font:780 35px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf8}
+      .subtitle{font:520 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#e8efff}
+      .section{font:760 15px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.1px;fill:#17345f}
+      .card-title{font:760 18px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .card-copy{font:520 13px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}
+      .body{font:520 14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}
+      .body-strong{font:680 14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .micro{font:700 10.5px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.62px;fill:#405574}
+      .micro-on{font:700 10.5px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.62px;fill:#e8efff}
+      .band-title{font:760 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .band-copy{font:520 13px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}
+    </style>
+  </defs>
+
+  <g clip-path="url(#diff-frame-clip)" aria-hidden="true">
+    <rect class="paper" x="18" y="18" width="1564" height="924"/>
+    <rect class="speckle" x="18" y="18" width="1564" height="924"/>
+    <rect class="cobalt" x="18" y="18" width="1564" height="142"/>
+    <rect class="grid" x="18" y="18" width="1564" height="142"/>
+  </g>
+  <rect class="frame" x="18" y="18" width="1564" height="924" rx="28"/>
+
+  <g role="group" aria-labelledby="diff-heading-title">
+    <title id="diff-heading-title">Human and automation measurement heading</title>
+    <text class="eyebrow-on" x="54" y="54">CLINICAL TRIAL COORDINATION · HUMAN / AUTOMATION CONTRACT</text>
+    <text class="title" x="54" y="98">Structured human edits reveal where the substrate should improve</text>
+    <text class="subtitle" x="54" y="128">Automate the first population · retain qualified review · learn from the structured difference</text>
+    <rect class="acid" x="1268" y="48" width="260" height="34" rx="7"/>
+    <text class="body-strong" x="1288" y="70">OPERATING SIGNAL</text>
+    <rect class="blush" x="1268" y="91" width="260" height="27" rx="6"/>
+    <text class="micro" x="1288" y="109">NUMERIC VALUE · UNDISCLOSED</text>
+  </g>
+
+  <g role="group" aria-labelledby="diff-sequence-title">
+    <title id="diff-sequence-title">Five-stage sequence from partner input to structured difference</title>
+    <text class="section" x="54" y="195">THE MEASUREMENT PATH</text>
+
+    <rect class="shadow" x="62" y="222" width="270" height="290" rx="15"/>
+    <rect class="outline cream" x="54" y="214" width="270" height="290" rx="15"/>
+    <rect class="cobalt-dark" x="56" y="216" width="266" height="44" rx="13"/>
+    <text class="micro-on" x="74" y="243">01 · PARTNER INPUT</text>
+    <text class="card-title" x="74" y="298">Partner field payload</text>
+    <text class="card-copy" x="74" y="325">
+      <tspan x="74">Partner terminology enters through</tspan>
+      <tspan x="74" dy="18">the governed template-copy contract.</tspan>
+    </text>
+    <rect class="white" x="74" y="374" width="230" height="104" rx="8" stroke="#17345f" stroke-width="1.4"/>
+    <text class="micro" x="90" y="397">SOURCE FIELD</text><text class="micro" x="218" y="397">MEANING</text>
+    <line class="hairline" x1="90" y1="407" x2="288" y2="407"/>
+    <text class="card-copy" x="90" y="430">site_location</text><text class="card-copy" x="218" y="430">site</text>
+    <text class="card-copy" x="90" y="452">location_site</text><text class="card-copy" x="218" y="452">site</text>
+    <text class="card-copy" x="90" y="474">site_eval_location</text><text class="card-copy" x="218" y="474">site</text>
+
+    <rect class="shadow" x="358" y="222" width="270" height="290" rx="15"/>
+    <rect class="outline powder" x="350" y="214" width="270" height="290" rx="15"/>
+    <rect class="cobalt-dark" x="352" y="216" width="266" height="44" rx="13"/>
+    <text class="micro-on" x="370" y="243">02 · INITIAL POPULATION</text>
+    <text class="card-title" x="370" y="298">Automated first state</text>
+    <text class="card-copy" x="370" y="325">
+      <tspan x="370">Mappings populate the reusable</tspan>
+      <tspan x="370" dy="18">coordination component before review.</tspan>
+    </text>
+    <rect class="white" x="370" y="374" width="230" height="104" rx="8" stroke="#17345f" stroke-width="1.4"/>
+    <text class="micro" x="386" y="397">INITIAL RULE STATE</text>
+    <text class="card-copy" x="386" y="426">partner fields mapped</text>
+    <text class="card-copy" x="386" y="448">boolean elements populated</text>
+    <text class="card-copy" x="386" y="470">ready for human review</text>
+
+    <rect class="shadow" x="654" y="222" width="270" height="290" rx="15"/>
+    <rect class="outline sea" x="646" y="214" width="270" height="290" rx="15"/>
+    <rect class="cobalt-dark" x="648" y="216" width="266" height="44" rx="13"/>
+    <text class="micro-on" x="666" y="243">03 · QUALIFIED REVIEW</text>
+    <text class="card-title" x="666" y="298">Human review + edit</text>
+    <text class="card-copy" x="666" y="325">
+      <tspan x="666">A Data Manager confirms meaning,</tspan>
+      <tspan x="666" dy="18">corrects scope, and retains judgment.</tspan>
+    </text>
+    <rect class="white" x="666" y="374" width="230" height="104" rx="8" stroke="#17345f" stroke-width="1.4"/>
+    <text class="micro" x="682" y="397">HUMAN EDIT</text>
+    <text class="card-copy" x="682" y="426">initial · mapped field</text>
+    <rect class="acid" x="678" y="441" width="206" height="25" rx="5"/>
+    <text class="body-strong" x="690" y="459">final · corrected meaning</text>
+    <text class="micro" x="682" y="491">REASON · PARTNER CONTEXT</text>
+
+    <rect class="shadow" x="950" y="222" width="270" height="290" rx="15"/>
+    <rect class="outline blush" x="942" y="214" width="270" height="290" rx="15"/>
+    <rect class="cobalt-dark" x="944" y="216" width="266" height="44" rx="13"/>
+    <text class="micro-on" x="962" y="243">04 · PROMOTED STATE</text>
+    <text class="card-title" x="962" y="298">Ship-ready rule state</text>
+    <text class="card-copy" x="962" y="325">
+      <tspan x="962">The final state carries the reviewed</tspan>
+      <tspan x="962" dy="18">coordination meaning forward.</tspan>
+    </text>
+    <rect class="white" x="962" y="374" width="230" height="104" rx="8" stroke="#17345f" stroke-width="1.4"/>
+    <text class="micro" x="978" y="397">FINAL RULE STATE</text>
+    <text class="card-copy" x="978" y="426">reviewed by · Data Manager</text>
+    <text class="card-copy" x="978" y="448">meaning · coordination-ready</text>
+    <rect class="cobalt-pale" x="974" y="459" width="206" height="25" rx="5"/>
+    <text class="body-strong" x="986" y="477">state · ship-ready</text>
+
+    <rect class="shadow" x="1246" y="222" width="282" height="290" rx="15"/>
+    <rect class="outline acid" x="1238" y="214" width="282" height="290" rx="15"/>
+    <rect class="cobalt-dark" x="1240" y="216" width="278" height="44" rx="13"/>
+    <text class="micro-on" x="1258" y="243">05 · OPERATING SIGNAL</text>
+    <text class="card-title" x="1258" y="298">Structured diff</text>
+    <text class="card-copy" x="1258" y="325">
+      <tspan x="1258">Compare the initial and final states</tspan>
+      <tspan x="1258" dy="18">across planned operating epochs.</tspan>
+    </text>
+    <rect class="white" x="1258" y="374" width="242" height="104" rx="8" stroke="#17345f" stroke-width="1.4"/>
+    <rect class="sea" x="1274" y="390" width="96" height="25" rx="5"/>
+    <text class="micro" x="1282" y="407">EDIT COUNT</text>
+    <rect class="powder" x="1380" y="390" width="104" height="25" rx="5"/>
+    <text class="micro" x="1392" y="407">EDIT SHAPE</text>
+    <rect class="blush" x="1274" y="425" width="96" height="25" rx="5"/>
+    <text class="micro" x="1280" y="442">REPEATED RULE</text>
+    <rect class="cream" x="1380" y="425" width="104" height="25" rx="5"/>
+    <text class="micro" x="1395" y="442">EXPERT CASE</text>
+    <text class="micro" x="1274" y="470">NUMERIC VALUE · UNDISCLOSED</text>
+  </g>
+
+  <g aria-hidden="true">
+    <path class="arrow" d="M324 340H334V330L346 353L334 376V366H324Z"/>
+    <path class="arrow-sea" d="M620 340H630V330L642 353L630 376V366H620Z"/>
+    <path class="arrow" d="M916 340H926V330L938 353L926 376V366H916Z"/>
+    <path class="arrow-coral" d="M1212 340H1222V330L1234 353L1222 376V366H1212Z"/>
+  </g>
+
+  <g role="group" aria-labelledby="measurement-contract-title">
+    <title id="measurement-contract-title">Population, comparison, signal, and operating use for the structured difference</title>
+    <text class="section" x="54" y="550">THE OPERATING COMPARISON</text>
+    <rect class="shadow" x="62" y="578" width="1466" height="180" rx="15"/>
+    <rect class="outline white" x="54" y="570" width="1466" height="180" rx="15"/>
+
+    <rect class="cream" x="72" y="590" width="338" height="140" rx="10" stroke="#17345f" stroke-width="1.4"/>
+    <text class="micro" x="90" y="615">POPULATION</text>
+    <text class="band-title" x="90" y="646">Partner-fed initial states</text>
+    <text class="band-copy" x="90" y="672">
+      <tspan x="90">Planned epochs compare incoming</tspan>
+      <tspan x="90" dy="18">population with the reviewed final state.</tspan>
+    </text>
+
+    <rect class="powder" x="434" y="590" width="338" height="140" rx="10" stroke="#17345f" stroke-width="1.4"/>
+    <text class="micro" x="452" y="615">COMPARISON</text>
+    <text class="band-title" x="452" y="646">Initial → final rule state</text>
+    <text class="band-copy" x="452" y="672">
+      <tspan x="452">Measure the number and shape of</tspan>
+      <tspan x="452" dy="18">Data Manager edits.</tspan>
+    </text>
+
+    <rect class="sea" x="796" y="590" width="338" height="140" rx="10" stroke="#17345f" stroke-width="1.4"/>
+    <text class="micro" x="814" y="615">SIGNAL</text>
+    <text class="band-title" x="814" y="646">Repeatable rule or exception</text>
+    <text class="band-copy" x="814" y="672">
+      <tspan x="814">Repeated edits indicate mapping work;</tspan>
+      <tspan x="814" dy="18">context-specific edits retain judgment.</tspan>
+    </text>
+
+    <rect class="blush" x="1158" y="590" width="342" height="140" rx="10" stroke="#17345f" stroke-width="1.4"/>
+    <text class="micro" x="1176" y="615">OPERATING USE</text>
+    <text class="band-title" x="1176" y="646">Improve the substrate</text>
+    <text class="band-copy" x="1176" y="672">
+      <tspan x="1176">Prioritize mapping rules, field definitions,</tspan>
+      <tspan x="1176" dy="18">component behavior, and review support.</tspan>
+    </text>
+  </g>
+
+  <g role="group" aria-labelledby="diff-investment-title">
+    <title id="diff-investment-title">Changed work and sustained investment</title>
+    <rect class="shadow" x="62" y="788" width="1466" height="136" rx="14"/>
+    <rect class="outline white" x="54" y="780" width="1466" height="136" rx="14"/>
+    <rect class="cobalt-dark" x="56" y="782" width="1462" height="38" rx="12"/>
+    <text class="micro-on" x="76" y="807">CHANGED WORK + INVESTMENT</text>
+
+    <text class="band-title" x="76" y="856">Changed work</text>
+    <text class="band-copy" x="218" y="856">
+      <tspan x="218">Data Managers review populated meaning rather than transcribing every field;</tspan>
+      <tspan x="218" dy="19">their edits become a structured input to product and mapping decisions.</tspan>
+    </text>
+    <line class="hairline" x1="786" y1="838" x2="786" y2="897"/>
+    <text class="band-title" x="816" y="856">Sustained investment</text>
+    <text class="band-copy" x="1020" y="856">
+      <tspan x="1020">Partner operations maintains field semantics and review reasons;</tspan>
+      <tspan x="1020" dy="19">product and engineering turn recurrent diffs into substrate improvements.</tspan>
+    </text>
+  </g>
+</svg>

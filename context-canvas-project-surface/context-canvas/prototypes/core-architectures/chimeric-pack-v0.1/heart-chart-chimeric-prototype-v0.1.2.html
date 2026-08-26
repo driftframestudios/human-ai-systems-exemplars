@@ -1,0 +1,1065 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HEART Chart — Signal-to-Metric Calibration · Chimeric Prototype v0.1.2</title>
+  <style>
+    :root {
+      --bg: #f7f4ee;
+      --panel: #fffdf8;
+      --panel-2: #fbf7ef;
+      --ink: #27231d;
+      --muted: #6f675c;
+      --line: #d8cfc0;
+      --line-strong: #b7aa97;
+      --accent: #365f5b;
+      --accent-2: #6d5c3d;
+      --accent-soft: #e6efec;
+      --warn-soft: #f5ead2;
+      --danger-soft: #f2dfdc;
+      --ok-soft: #e6eedf;
+      --shadow: 0 10px 28px rgba(53, 45, 32, .08);
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      background: radial-gradient(circle at top left, rgba(54,95,91,.12), transparent 32rem), var(--bg);
+      color: var(--ink);
+      line-height: 1.45;
+    }
+    a { color: var(--accent); }
+    header.hero {
+      padding: 44px clamp(18px, 4vw, 56px) 24px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(255,253,248,.92), rgba(245,239,228,.72));
+    }
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 750;
+      margin: 0 0 10px;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-weight: 650;
+      font-size: clamp(36px, 5.6vw, 74px);
+      line-height: .98;
+      margin: 0;
+      letter-spacing: -.04em;
+    }
+    .subtitle {
+      margin: 12px 0 0;
+      font-size: clamp(18px, 2vw, 26px);
+      color: var(--muted);
+      max-width: 980px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr);
+      gap: 22px;
+      align-items: end;
+      margin-top: 26px;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+    }
+    .meta-pill, .status-chip, .route-pill {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 650;
+    }
+    .route-pill {
+      border-radius: 5px;
+      padding: 8px;
+      color: var(--ink);
+      background: #f6f1e8;
+      line-height: 1.25;
+    }
+    main {
+      padding: 24px clamp(14px, 2.6vw, 38px) 60px;
+      display: grid;
+      gap: 22px;
+    }
+    .panel {
+      background: rgba(255,253,248,.88);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: clamp(16px, 2vw, 24px);
+    }
+    .panel h2, .panel h3 {
+      margin-top: 0;
+      letter-spacing: -.02em;
+    }
+    .panel h2 {
+      font-family: var(--serif);
+      font-size: clamp(24px, 3vw, 36px);
+      margin-bottom: 10px;
+    }
+    .panel h3 { font-size: 16px; margin-bottom: 8px; }
+    .lede { color: var(--muted); max-width: 1080px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
+    .quick-card {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 14px;
+    }
+    .quick-card strong { display: block; font-size: 13px; color: var(--accent); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .05em; }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 12px 0;
+    }
+    button, .button-like {
+      appearance: none;
+      border: 1px solid var(--line-strong);
+      background: #fffaf0;
+      color: var(--ink);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    button:hover { background: #f4eadb; border-color: #9e907b; }
+    button:active { transform: translateY(1px); }
+    button.secondary { background: #f7f4ee; color: var(--muted); }
+    button.danger { background: var(--danger-soft); }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    label { font-size: 12px; font-weight: 750; color: var(--muted); display: block; margin-bottom: 4px; }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 9px;
+      background: #fffefb;
+      color: var(--ink);
+      font: inherit;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    textarea { min-height: 66px; resize: vertical; }
+    input:focus, textarea:focus, select:focus, button:focus {
+      outline: 3px solid rgba(54,95,91,.22);
+      outline-offset: 2px;
+    }
+    .matrix-wrap, .svg-wrap {
+      width: 100%;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: #fffdf8;
+    }
+    .chart-stage {
+      width: calc(100vw - 32px);
+      max-width: 1860px;
+      /*margin-left: 50%;*/
+      /*transform: translateX(-50%);*/
+      background: rgba(255,253,248,.94);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    .chart-stage .svg-wrap { max-height: 76vh; }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 1500px;
+    }
+    th, td {
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      padding: 9px;
+      background: rgba(255,253,248,.9);
+    }
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #f2eadc;
+      text-align: left;
+      font-size: 12px;
+      color: #5f5547;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    th:first-child, td:first-child { border-left: 0; }
+    tr:last-child td { border-bottom: 0; }
+    .row-card td:first-child {
+      min-width: 190px;
+      background: #faf5ec;
+    }
+    .category-badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #203f3b;
+      background: var(--accent-soft);
+      border: 1px solid #c6d8d4;
+      margin: 2px 0 8px;
+      max-width: 100%;
+      white-space: normal;
+      line-height: 1.25;
+    }
+    .status-chip { border-radius: 7px; padding: 5px 7px; white-space: normal; }
+    .status-known { background: var(--ok-soft); }
+    .status-assumed { background: var(--warn-soft); }
+    .status-needs_to_surface { background: #e9e1f2; }
+    .status-disputed { background: #f2dfdc; }
+    .status-ready_to_route { background: var(--accent-soft); }
+    .mini-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+    .mini-controls button { font-size: 12px; padding: 6px; }
+    .hidden-list, .legend, .pill-list { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .hidden-item {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      border: 1px dashed var(--line-strong);
+      border-radius: 999px;
+      padding: 5px 6px 5px 10px;
+      background: #fffdf8;
+      font-size: 12px;
+    }
+    .inspector-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 16px; }
+    .inspector-box {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--panel-2);
+      padding: 14px;
+    }
+    .read-table td { max-width: 360px; }
+    .clamp {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .full-text[hidden] { display: none; }
+    .full-text { margin-top: 8px; padding: 8px; border-radius: 8px; background: #f7f2e8; white-space: pre-wrap; }
+    .codebox, pre, .export-area {
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      background: #211f1b;
+      color: #f7f0e3;
+      border-radius: var(--radius-md);
+      padding: 14px;
+      overflow: auto;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .export-area { min-height: 240px; width: 100%; }
+    .prompt-area { min-height: 300px; background: #fffefb; color: var(--ink); border: 1px solid var(--line); font-family: var(--mono); }
+    .note { color: var(--muted); font-size: 13px; }
+    .small { font-size: 12px; color: var(--muted); }
+    .sr-only { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+    .source-note ul, .semantic ul { margin-top: 6px; }
+    .visually-selected { outline: 3px solid rgba(54,95,91,.38); outline-offset: 2px; }
+    .score-input { max-width: 74px; }
+    .nowrap { white-space: nowrap; }
+    @media (max-width: 980px) {
+      .hero-grid, .grid-2, .grid-3, .inspector-grid { grid-template-columns: 1fr; }
+      .chart-stage { width: calc(100vw - 18px); }
+      header.hero { padding-top: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <p class="eyebrow">Core Architecture · Chimeric Prototype v0.1.2</p>
+    <h1>HEART Chart</h1>
+    <p class="subtitle">Signal-to-Metric Calibration — a goal/signal/metric matrix for interpreting experience evidence without collapsing meaning into a single metric.</p>
+    <div class="hero-grid">
+      <div class="lede">
+        <p>This prototype is a human-readable, SVG-visible, JSON/JSON-LD-ready artifact for hybrid teams. It keeps metrics connected to goals, signals, interpretation, tolerance, counter-signals, qualitative companions, and architecture routes.</p>
+      </div>
+      <div class="meta-grid" aria-label="Artifact metadata">
+        <span class="meta-pill">Family · Measurement, Reflection, and Judgment</span>
+        <span class="meta-pill">Placement · Implementation / Recovery</span>
+        <span class="meta-pill">Scale · 0–10</span>
+        <span class="meta-pill">Drag-and-drop · Not used</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel" aria-labelledby="quick-use-title">
+      <h2 id="quick-use-title">Quick Use</h2>
+      <div class="grid-3">
+        <div class="quick-card"><strong>Use this when</strong><span>A team has metrics, observations, prototype evidence, workflow data, AI-evaluation notes, or feedback and needs to interpret what the evidence is signaling.</span></div>
+        <div class="quick-card"><strong>This restores</strong><span>Measurement as coordinated evidence rather than premature judgment.</span></div>
+        <div class="quick-card"><strong>Good next question</strong><span>What signal is this metric approximating, and what would make the metric misleading?</span></div>
+      </div>
+    </section>
+
+    <section class="chart-stage" aria-labelledby="svg-title">
+      <h2 id="svg-title">SVG Signal-to-Metric Matrix</h2>
+      <p class="note">The SVG is generated from the same data as the editable matrix. It now reads as a scannable signal-to-metric table rather than a flow. Full text remains in the table, inspector, JSON, and JSON-LD.</p>
+      <div id="svgContainer" class="svg-wrap"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="controls-title">
+      <h2 id="controls-title">Editable HEART Rows</h2>
+      <p class="lede">Rows can be reordered or hidden for a focus view. Stable row IDs remain semantic identity; order and visibility are presentation state. Hiding a row is not deletion or redaction.</p>
+      <div class="controls">
+        <button type="button" data-action="add-row">Add HEART row</button>
+        <button type="button" data-action="show-all">Show all rows</button>
+        <button type="button" data-action="reset-order" class="secondary">Reset row order</button>
+      </div>
+      <div class="legend" aria-label="Status legend">
+        <span class="status-chip status-known">known</span>
+        <span class="status-chip status-assumed">assumed</span>
+        <span class="status-chip status-needs_to_surface">needs to surface</span>
+        <span class="status-chip status-disputed">disputed</span>
+        <span class="status-chip status-ready_to_route">ready to route</span>
+      </div>
+      <div id="hiddenRowsPanel" class="hidden-list" style="margin-top: 12px;"></div>
+      <div id="editTable" class="matrix-wrap" style="margin-top: 14px;"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="inspector-title">
+      <h2 id="inspector-title">Selected HEART Row Inspector</h2>
+      <div id="inspector" class="inspector-grid"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="read-title">
+      <h2 id="read-title">Text / Table Equivalent</h2>
+      <p class="note">This reading surface preserves full text with reveal controls, while the SVG remains a compact visual map.</p>
+      <div id="readableTable" class="matrix-wrap"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="json-title">
+      <h2 id="json-title">JSON Export / Import</h2>
+      <div class="grid-2">
+        <div>
+          <div class="controls">
+            <button type="button" data-action="copy-json">Copy JSON</button>
+          </div>
+          <textarea id="jsonExport" class="export-area" aria-label="JSON export"></textarea>
+        </div>
+        <div>
+          <label for="jsonImport">Import JSON</label>
+          <textarea id="jsonImport" class="export-area" placeholder="Paste a HEART Chart JSON export here."></textarea>
+          <div class="controls">
+            <input id="jsonFile" type="file" accept="application/json,.json" />
+            <button type="button" data-action="import-json">Import pasted JSON</button>
+          </div>
+          <p id="importMessage" class="note" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="jsonld-title">
+      <h2 id="jsonld-title">JSON-LD</h2>
+      <p class="note">Local Core Architecture vocabulary is used first, with schema.org as an outward compatibility layer.</p>
+      <div class="controls"><button type="button" data-action="copy-jsonld">Copy JSON-LD</button></div>
+      <textarea id="jsonLdExport" class="export-area" aria-label="JSON-LD export"></textarea>
+      <script id="embedded-jsonld" type="application/ld+json"></script>
+    </section>
+
+    <section class="panel" aria-labelledby="ai-title">
+      <h2 id="ai-title">AI Collaboration Prompt Capsule</h2>
+      <p class="note">This full prompt remains visible for manual copy. It includes visible/hidden row scope and the probability-of-what instruction.</p>
+      <div class="controls"><button type="button" data-action="copy-prompt">Copy AI prompt</button></div>
+      <textarea id="aiPrompt" class="prompt-area" aria-label="AI collaboration prompt"></textarea>
+    </section>
+
+    <section class="panel source-note" aria-labelledby="source-title">
+      <h2 id="source-title">Source Note</h2>
+      <p><strong>Source band:</strong> inherited method + author-adapted method + implementation/recovery bridge.</p>
+      <ul>
+        <li><strong>Public anchor:</strong> Google HEART framework, associated with Kerry Rodden, Hilary Hutchinson, and Xin Fu, and the Goals → Signals → Metrics process.</li>
+        <li><strong>Inherited language to preserve:</strong> Happiness, Engagement, Adoption, Retention, Task Success, Goals, Signals, Metrics.</li>
+        <li><strong>Local adaptation:</strong> Signal-to-Metric Calibration makes interpretation, tolerance, counter-signal, qualitative companion, and recovery route first-class.</li>
+        <li><strong>Local boundary:</strong> This artifact supports signal interpretation and recovery routing. It is not a complete analytics program.</li>
+      </ul>
+    </section>
+
+    <section class="panel semantic" aria-labelledby="semantic-title">
+      <h2 id="semantic-title">Semantic Locality</h2>
+      <div class="grid-2">
+        <div>
+          <h3>Preferred phrasing</h3>
+          <ul>
+            <li>What signal is this metric approximating?</li>
+            <li>What goal gives this signal meaning?</li>
+            <li>What would make this metric misleading?</li>
+            <li>What tolerance or tradeoff is acceptable here?</li>
+            <li>Which qualitative companion should travel with this metric?</li>
+            <li>Which adjacent architecture can make this signal more inspectable?</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Replacement-state guidance</h3>
+          <ul>
+            <li><strong>Instead of:</strong> “The metric proves this.” <br><strong>Use:</strong> “The metric is evidence for a signal, interpreted against a goal, tolerance, and counter-signal.”</li>
+            <li><strong>Instead of:</strong> “Time-on-task went up, so the experience weakened.” <br><strong>Use:</strong> “Time-on-task increased; interpret it alongside error rate, confidence, review quality, and tolerance for slower but safer work.”</li>
+            <li><strong>Instead of:</strong> “The AI eval is good.” <br><strong>Use:</strong> “Which AI behavior, human goal, evaluation check, and counter-signal does the score represent?”</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="recovery-title">
+      <h2 id="recovery-title">Recovery Calibration</h2>
+      <div class="grid-2">
+        <div>
+          <h3>Strain cues</h3>
+          <ul>
+            <li>One metric is treated as the whole meaning.</li>
+            <li>Time-on-task increases and the team reads it as immediate weakening.</li>
+            <li>Qualitative feedback and quantitative data point in different directions.</li>
+            <li>AI evaluation scores improve while human review trust remains soft.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Stabilizing read</h3>
+          <p>Metrics become useful when they are connected to goals, interpreted against context, paired with counter-signals, and placed inside tolerances that reflect the work.</p>
+          <h3>Named Failure Geometries</h3>
+          <div class="pill-list">
+            <span class="route-pill">Signal / Metric Collapse</span>
+            <span class="route-pill">Experience Goal-Fit Drift</span>
+            <span class="route-pill">Upstream Revision Hesitancy</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+<script>
+(function(){
+  const routeRegistry = [
+    {label:'PODA', family:'Orientation and Tracing'},
+    {label:'Alignment Worksheet', family:'Orientation and Tracing'},
+    {label:'Impact Map', family:'Orientation and Tracing'},
+    {label:'Context Tree', family:'Orientation and Tracing'},
+    {label:'Strategy Canvas', family:'Comparison and Threshold'},
+    {label:'First Responsible Version Matrix', family:'Comparison and Threshold'},
+    {label:'Cross-channel Blueprint', family:'Shared Surfaces and Topology'},
+    {label:'Service-design Blueprint', family:'Shared Surfaces and Topology'},
+    {label:'AI Systems Service Blueprint', family:'Shared Surfaces and Topology'},
+    {label:'Software Architecture Views', family:'Shared Surfaces and Topology'},
+    {label:'Participatory Design Kit', family:'Participatory Elicitation and Specification'},
+    {label:'Specification-by-Example', family:'Participatory Elicitation and Specification'},
+    {label:'HEART Chart', family:'Measurement, Reflection, and Judgment'},
+    {label:'Plus / Delta', family:'Measurement, Reflection, and Judgment'},
+    {label:'Practitioner Judgment Probes', family:'Measurement, Reflection, and Judgment'},
+    {label:'Pattern–Problem Surface Matrix', family:'Pattern Fit and Behavior Protection'},
+    {label:'Jobs-to-be-Done Treemap', family:'Pattern Fit and Behavior Protection'},
+    {label:'Unit-test-first Design', family:'Pattern Fit and Behavior Protection'},
+    {label:'Upstream Revision Loop', family:'Recovery Routing and Revision'},
+    {label:'Recovery Routing Atlas', family:'Recovery Routing and Revision'}
+  ];
+  const statusOptions = ['known','assumed','needs_to_surface','disputed','ready_to_route'];
+  const heartCategories = ['Happiness','Engagement','Adoption','Retention','Task Success'];
+  const clamp = (n,min,max) => Math.max(min, Math.min(max, Number(n) || 0));
+  const slug = (s) => String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,48) || 'item';
+  const uid = (prefix) => prefix + '-' + Math.random().toString(36).slice(2,8) + '-' + Date.now().toString(36).slice(-4);
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+  let addLock = false;
+  let data = seedData();
+  normalizeData(data);
+
+  function seedData(){
+    return {
+      artifact_identity: {
+        id: 'ca-artifact-heart-chart-genomics-001',
+        display_name: 'HEART Chart',
+        subtitle: 'Signal-to-Metric Calibration',
+        version: '0.1.2',
+        family: 'Measurement, Reflection, and Judgment',
+        placement: 'Implementation Architecture / Recovery Routing Atlas participant',
+        primary_cognitive_move: 'signal-to-metric calibration',
+        source_band: ['inherited_method','author_adapted_method','implementation_recovery_bridge']
+      },
+      quick_use: {
+        use_when: 'Metrics, observations, user feedback, workflow data, test results, prototype evidence, or AI-evaluation notes need interpretation.',
+        restores: 'Measurement as coordinated evidence rather than premature judgment.',
+        good_next_question: 'What signal is this metric approximating, and what would make the metric misleading?'
+      },
+      rows: [
+        {
+          id:'heart-happiness-source-confidence', canonical_order:1, category:'Happiness',
+          goal:'Reviewers feel confident distinguishing AI-generated suggestions from accepted evidence.',
+          signal:'Reviewers can explain which summary claims are source-supported, generated, or human-confirmed.',
+          metric:'Confidence rating after review session; source-boundary comprehension check; clarification requests about AI-generated summaries.',
+          interpretation:'Higher confidence is useful when paired with source-boundary comprehension.',
+          tolerance:'Confidence should be interpreted alongside comprehension so the experience supports informed trust.',
+          counter_signal:'Confidence increases while source-boundary comprehension remains soft; reviewers accept summaries quickly but ask fewer source questions.',
+          qualitative_companion:'Reviewer interview; Plus / Delta reflection; source-boundary walkthrough.',
+          status:'known', handoff:'AI Systems Service Blueprint', custom_route:'', reason:'This signal may require runtime, knowledge, evaluation, and source-boundary support.'
+        },
+        {
+          id:'heart-engagement-evidence-support', canonical_order:2, category:'Engagement',
+          goal:'Reviewers meaningfully interact with evidence support surfaces without excessive navigation.',
+          signal:'Reviewers use source details, provenance panels, and exception routing where those supports fit the work.',
+          metric:'Evidence-support interactions per review; interaction sequence around AI summaries; exception routing follow-through.',
+          interpretation:'More engagement is useful when it reflects meaningful review support; high interaction can also signal confusion.',
+          tolerance:'Higher interaction is acceptable during learning and complex cases when errors or rework decrease.',
+          counter_signal:'High interaction paired with low confidence; high interaction paired with repeated backtracking.',
+          qualitative_companion:'Workflow observation; Participatory Design Kit session; Plus / Delta.',
+          status:'assumed', handoff:'Participatory Design Kit', custom_route:'', reason:'Interaction patterns may need lived workflow interpretation.'
+        },
+        {
+          id:'heart-adoption-provenance-panel', canonical_order:3, category:'Adoption',
+          goal:'Intended reviewer groups begin using the provenance panel and source-boundary expansion.',
+          signal:'Reviewers open source details during review when AI-generated summaries are present.',
+          metric:'Source-detail expansion rate; percentage of AI-assisted reviews with source-detail interaction.',
+          interpretation:'Expansion rate may indicate that reviewers are using the provenance support surface.',
+          tolerance:'Lower expansion may be acceptable when source boundaries are already visible enough for routine cases.',
+          counter_signal:'Low expansion because reviewers overlook the control; high expansion because summaries are unclear.',
+          qualitative_companion:'Session observation; Plus / Delta; pattern-fit review.',
+          status:'assumed', handoff:'Pattern–Problem Surface Matrix', custom_route:'', reason:'Source-detail interaction may point to pattern fit or pattern strain.'
+        },
+        {
+          id:'heart-retention-repeat-review-use', canonical_order:4, category:'Retention',
+          goal:'Review teams continue using the workflow after initial novelty.',
+          signal:'Teams return to the workflow for subsequent review cycles.',
+          metric:'Repeat use across review cycles; continued use by role group.',
+          interpretation:'Retention is meaningful when paired with task-success and confidence signals.',
+          tolerance:'Lower early retention may be acceptable if the workflow is still being piloted with a small reviewer group.',
+          counter_signal:'Continued use because the workflow is mandated rather than useful; drop-off because critical data is missing rather than because the workflow is weak.',
+          qualitative_companion:'Role-specific Context Tree update; Plus / Delta with different groups.',
+          status:'needs_to_surface', handoff:'Upstream Revision Loop', custom_route:'', reason:'Retention differences may reveal role-context or framing updates.'
+        },
+        {
+          id:'heart-task-success-review-quality', canonical_order:5, category:'Task Success',
+          goal:'Reviewers can complete variant review with clearer provenance and fewer downstream corrections.',
+          signal:'Review decisions contain fewer metadata-related corrections and fewer unsupported evidence claims.',
+          metric:'Metadata correction count per review cycle; unsupported-claim routing rate; review completion with required provenance fields present.',
+          interpretation:'A lower correction count suggests improved review readiness when provenance fields remain complete.',
+          tolerance:'Review time may increase during early adoption if metadata corrections and unsupported claims decrease.',
+          counter_signal:'Corrections decrease because reviewers defer ambiguous cases rather than resolving them; provenance is visible but hard to interpret.',
+          qualitative_companion:'Plus / Delta review with molecular pathologists; reviewer confidence notes.',
+          status:'known', handoff:'Specification-by-Example', custom_route:'', reason:'Task-success signals can become observable behavior examples and acceptance conditions.'
+        }
+      ],
+      view_state: {
+        active_view_id: 'view-default',
+        views: [{
+          id:'view-default', name:'Default focus view',
+          row_order: ['heart-task-success-review-quality','heart-happiness-source-confidence','heart-adoption-provenance-panel','heart-retention-repeat-review-use','heart-engagement-evidence-support'],
+          hidden_row_ids: [],
+          text_mode: 'preview_with_reveal',
+          selected_row_id: 'heart-task-success-review-quality'
+        }]
+      },
+      semantic_locality: {
+        preferred_phrasing: [
+          'What signal is this metric approximating?',
+          'What goal gives this signal meaning?',
+          'What would make this metric misleading?',
+          'What tolerance or tradeoff is acceptable here?'
+        ],
+        replacement_state_guidance: [
+          {common_phrase:'The metric proves this.', stronger_phrase:'The metric is evidence for a signal, interpreted against a goal, tolerance, and counter-signal.'},
+          {common_phrase:'The AI eval is good.', stronger_phrase:'Which AI behavior, human goal, evaluation check, and counter-signal does the score represent?'}
+        ]
+      },
+      recovery_calibration: {
+        strain_cues: ['one metric is treated as the whole meaning','time-on-task increases and the team assumes weakening','qualitative feedback and quantitative data point in different directions'],
+        stabilizing_read: 'Metrics become useful when connected to goals, interpreted against context, paired with counter-signals, and placed inside tolerances.',
+        restored_state: 'Metrics are interpreted as proxies connected to goals and signals.',
+        named_failure_geometries: ['Signal / Metric Collapse','Experience Goal-Fit Drift','Upstream Revision Hesitancy']
+      }
+    };
+  }
+
+  function activeView(source=data){ return source.view_state.views.find(v => v.id === source.view_state.active_view_id) || source.view_state.views[0]; }
+  function normalizeData(d){
+    d.rows = Array.isArray(d.rows) ? d.rows : [];
+    d.rows.forEach((r,i)=>{
+      r.id = r.id || uid('heart-row');
+      r.canonical_order = Number.isFinite(Number(r.canonical_order)) ? Number(r.canonical_order) : i+1;
+      r.category = r.category || 'Happiness';
+      r.goal = r.goal || '';
+      r.signal = r.signal || '';
+      r.metric = r.metric || '';
+      r.interpretation = r.interpretation || '';
+      r.tolerance = r.tolerance || '';
+      r.counter_signal = r.counter_signal || '';
+      r.qualitative_companion = r.qualitative_companion || '';
+      r.status = statusOptions.includes(r.status) ? r.status : 'assumed';
+      r.handoff = r.handoff || '';
+      r.custom_route = r.custom_route || '';
+      r.reason = r.reason || '';
+    });
+    d.view_state = d.view_state || {active_view_id:'view-default', views:[]};
+    if (!Array.isArray(d.view_state.views) || d.view_state.views.length === 0) {
+      d.view_state.views = [{id:'view-default', name:'Default focus view', row_order:d.rows.map(r=>r.id), hidden_row_ids:[], text_mode:'preview_with_reveal', selected_row_id:d.rows[0]?.id || ''}];
+      d.view_state.active_view_id = 'view-default';
+    }
+    const v = activeView(d);
+    const allIds = d.rows.map(r=>r.id);
+    v.row_order = Array.isArray(v.row_order) ? v.row_order.filter(id => allIds.includes(id)) : [];
+    allIds.forEach(id => { if (!v.row_order.includes(id)) v.row_order.push(id); });
+    v.hidden_row_ids = Array.isArray(v.hidden_row_ids) ? v.hidden_row_ids.filter(id => allIds.includes(id)) : [];
+    v.text_mode = v.text_mode || 'preview_with_reveal';
+    if (v.selected_row_id && !allIds.includes(v.selected_row_id)) v.selected_row_id = '';
+  }
+  function orderedRows(){
+    const v = activeView();
+    const byId = new Map(data.rows.map(r=>[r.id,r]));
+    return v.row_order.map(id=>byId.get(id)).filter(Boolean);
+  }
+  function visibleRows(){
+    const v = activeView();
+    return orderedRows().filter(r=>!v.hidden_row_ids.includes(r.id));
+  }
+  function rowFamily(row){
+    const label = effectiveRoute(row);
+    return routeRegistry.find(r=>r.label===label)?.family || (label ? 'Custom route' : 'No route selected');
+  }
+  function effectiveRoute(row){ return routeRegistry.some(r=>r.label===row.handoff) ? row.handoff : (row.handoff || row.custom_route || ''); }
+  function selectOptions(value){
+    const families = [...new Set(routeRegistry.map(r=>r.family))];
+    let html = '<option value="">No route selected</option>';
+    families.forEach(f=>{
+      html += `<optgroup label="${esc(f)}">`;
+      routeRegistry.filter(r=>r.family===f).forEach(r=> html += `<option value="${esc(r.label)}" ${value===r.label?'selected':''}>${esc(r.label)}</option>`);
+      html += '</optgroup>';
+    });
+    const isCustom = value && !routeRegistry.some(r=>r.label===value);
+    html += `<option value="__custom__" ${isCustom?'selected':''}>Custom route…</option>`;
+    return html;
+  }
+
+  function render(){
+    normalizeData(data);
+    renderHiddenRows();
+    renderEditTable();
+    renderSvg();
+    renderInspector();
+    renderReadableTable();
+    renderExports();
+  }
+  function renderHiddenRows(){
+    const v = activeView();
+    const hidden = orderedRows().filter(r=>v.hidden_row_ids.includes(r.id));
+    const el = document.getElementById('hiddenRowsPanel');
+    if (!hidden.length) { el.innerHTML = '<span class="note">No hidden HEART rows in the current focus view.</span>'; return; }
+    el.innerHTML = '<strong class="small">Hidden rows:</strong> ' + hidden.map(r => `<span class="hidden-item">${esc(r.category)} · ${esc(short(r.goal,42))}<button type="button" data-action="show-row" data-row-id="${esc(r.id)}">Show</button></span>`).join('');
+  }
+  function renderEditTable(){
+    const rows = visibleRows();
+    const html = `<table aria-label="Editable HEART chart rows"><thead><tr>
+      <th>Focus controls</th><th>HEART area</th><th>Goal</th><th>Signal</th><th>Metric</th><th>Interpretation</th><th>Tolerance</th><th>Counter-signal</th><th>Qualitative companion</th><th>Status</th><th>Route</th>
+    </tr></thead><tbody>${rows.map((r,idx)=>editRow(r,idx,rows.length)).join('')}</tbody></table>`;
+    document.getElementById('editTable').innerHTML = html;
+  }
+  function editRow(r,idx,total){
+    return `<tr class="row-card" data-row-id="${esc(r.id)}">
+      <td>
+        <span class="category-badge">${esc(r.category)}</span>
+        <div class="mini-controls">
+          <button type="button" data-action="move-up" data-row-id="${esc(r.id)}" ${idx===0?'disabled':''}>Move earlier</button>
+          <button type="button" data-action="move-down" data-row-id="${esc(r.id)}" ${idx===total-1?'disabled':''}>Move later</button>
+          <button type="button" data-action="select-row" data-row-id="${esc(r.id)}">Inspect</button>
+          <button type="button" data-action="hide-row" data-row-id="${esc(r.id)}">Hide</button>
+          <button type="button" data-action="remove-row" data-row-id="${esc(r.id)}" class="danger">Remove</button>
+        </div>
+        <p class="small">ID: <code>${esc(r.id)}</code></p>
+      </td>
+      <td><label>Category<select data-field="category" data-row-id="${esc(r.id)}">${heartCategories.map(c=>`<option value="${esc(c)}" ${r.category===c?'selected':''}>${esc(c)}</option>`).join('')}</select></label></td>
+      <td><textarea data-field="goal" data-row-id="${esc(r.id)}">${esc(r.goal)}</textarea></td>
+      <td><textarea data-field="signal" data-row-id="${esc(r.id)}">${esc(r.signal)}</textarea></td>
+      <td><textarea data-field="metric" data-row-id="${esc(r.id)}">${esc(r.metric)}</textarea></td>
+      <td><textarea data-field="interpretation" data-row-id="${esc(r.id)}">${esc(r.interpretation)}</textarea></td>
+      <td><textarea data-field="tolerance" data-row-id="${esc(r.id)}">${esc(r.tolerance)}</textarea></td>
+      <td><textarea data-field="counter_signal" data-row-id="${esc(r.id)}">${esc(r.counter_signal)}</textarea></td>
+      <td><textarea data-field="qualitative_companion" data-row-id="${esc(r.id)}">${esc(r.qualitative_companion)}</textarea></td>
+      <td><select data-field="status" data-row-id="${esc(r.id)}">${statusOptions.map(s=>`<option value="${s}" ${r.status===s?'selected':''}>${s.replaceAll('_',' ')}</option>`).join('')}</select></td>
+      <td>
+        <select data-field="handoff" data-row-id="${esc(r.id)}">${selectOptions(r.handoff)}</select>
+        <label style="margin-top:8px;">Custom route<input data-field="custom_route" data-row-id="${esc(r.id)}" value="${esc(r.custom_route || (!routeRegistry.some(rr=>rr.label===r.handoff)?r.handoff:''))}" placeholder="Custom route if needed" /></label>
+        <label style="margin-top:8px;">Route reason<textarea data-field="reason" data-row-id="${esc(r.id)}">${esc(r.reason)}</textarea></label>
+      </td>
+    </tr>`;
+  }
+
+  function renderSvg(){
+    const rows = visibleRows();
+    const selected = activeView().selected_row_id;
+    const columns = [
+      {key:'category', label:'HEART area', width:170},
+      {key:'goal', label:'Goal', width:210},
+      {key:'signal', label:'Signal', width:210},
+      {key:'metric', label:'Metric', width:210},
+      {key:'interpretation', label:'Interpretation', width:210},
+      {key:'tolerance', label:'Tolerance', width:190},
+      {key:'counter_signal', label:'Counter-signal', width:210},
+      {key:'qualitative_companion', label:'Qualitative companion', width:210},
+      {key:'route', label:'Route', width:190}
+    ];
+    const margin = 18;
+    const headerH = 78;
+    const rowH = 152;
+    const width = columns.reduce((sum,c)=>sum+c.width,0) + margin*2;
+    const height = headerH + rows.length*rowH + margin*2 + 24;
+    const statusFill = {
+      known:'#e6eedf', assumed:'#f5ead2', needs_to_surface:'#e9e1f2', disputed:'#f2dfdc', ready_to_route:'#e6efec'
+    };
+    let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="100%" role="img" aria-labelledby="heartSvgTitle heartSvgDesc">
+      <title id="heartSvgTitle">HEART Chart signal-to-metric matrix</title>
+      <desc id="heartSvgDesc">A matrix of visible HEART rows. Columns show HEART area, goal, signal, metric, interpretation, tolerance, counter-signal, qualitative companion, and route.</desc>
+      <rect x="0" y="0" width="${width}" height="${height}" rx="22" fill="#fffdf8"/>
+      <rect x="${margin}" y="${margin}" width="${width-margin*2}" height="${height-margin*2}" rx="18" fill="#fbf7ef" stroke="#d8cfc0"/>
+      <text x="${margin+12}" y="${margin+25}" font-size="13" font-weight="800" fill="#365f5b" letter-spacing="1.2">SIGNAL-TO-METRIC MATRIX</text>`;
+    let x = margin;
+    const headerY = margin + 42;
+    columns.forEach((col, ci)=>{
+      const fill = ci===0 ? '#e6efec' : '#f2eadc';
+      svg += `<rect x="${x}" y="${headerY}" width="${col.width}" height="${headerH-42}" fill="${fill}" stroke="#d8cfc0"/>
+        <text x="${x+10}" y="${headerY+22}" font-size="10.5" font-weight="900" fill="#5f5547" letter-spacing=".9">${esc(col.label.toUpperCase())}</text>`;
+      x += col.width;
+    });
+    const startY = headerY + headerH - 42;
+    rows.forEach((r, ri)=>{
+      const y = startY + ri*rowH;
+      const isSel = r.id === selected;
+      let cx = margin;
+      svg += `<g data-row-id="${esc(r.id)}" tabindex="0" role="button" aria-label="Select ${esc(r.category)} row">`;
+      columns.forEach((col, ci)=>{
+        const cellFill = isSel ? '#eef6f3' : (ri % 2 ? '#fffaf0' : '#fffdf8');
+        const stroke = isSel ? '#365f5b' : '#d8cfc0';
+        const sw = isSel ? 2 : 1;
+        svg += `<rect x="${cx}" y="${y}" width="${col.width}" height="${rowH}" fill="${cellFill}" stroke="${stroke}" stroke-width="${sw}"/>`;
+        if (col.key === 'category') {
+          const badgeFill = statusFill[r.status] || '#f5ead2';
+          svg += `<rect x="${cx+12}" y="${y+14}" width="${col.width-24}" height="34" rx="17" fill="#e6efec" stroke="#c6d8d4"/>
+            <text x="${cx+24}" y="${y+36}" font-size="12" font-weight="900" fill="#203f3b">${esc(r.category)}</text>
+            <rect x="${cx+12}" y="${y+58}" width="${col.width-24}" height="28" rx="8" fill="${badgeFill}" stroke="#d8cfc0"/>
+            <text x="${cx+23}" y="${y+77}" font-size="10.5" font-weight="800" fill="#5f5547">${esc(r.status.replaceAll('_',' '))}</text>
+            <text x="${cx+14}" y="${y+112}" font-size="9.5" fill="#6f675c">${esc(r.id)}</text>`;
+        } else {
+          let value = '';
+          if (col.key === 'route') value = effectiveRoute(r) || 'No route selected';
+          else value = r[col.key] || '';
+          svg += svgWrappedText(value, cx+12, y+24, col.width-24, 7, 13);
+        }
+        cx += col.width;
+      });
+      svg += `</g>`;
+    });
+    if (!rows.length) {
+      svg += `<text x="${margin+16}" y="${startY+42}" font-size="14" fill="#6f675c">No visible HEART rows. Use Show all rows or add a new row.</text>`;
+    }
+    svg += `</svg>`;
+    document.getElementById('svgContainer').innerHTML = svg;
+    document.querySelectorAll('#svgContainer g[data-row-id]').forEach(g=>{
+      g.addEventListener('click', ()=> selectRow(g.getAttribute('data-row-id')));
+      g.addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); selectRow(g.getAttribute('data-row-id')); } });
+    });
+  }
+
+  function svgWrappedText(str,x,y,maxW,maxLines,lineH){
+    const words = String(str||'').split(/\s+/).filter(Boolean);
+    const approx = Math.max(8, Math.floor(maxW/6.3));
+    let lines = [], line='';
+    words.forEach(w=>{
+      if ((line+' '+w).trim().length > approx && line) { lines.push(line); line = w; }
+      else line = (line+' '+w).trim();
+    });
+    if (line) lines.push(line);
+    const clipped = lines.length > maxLines;
+    lines = lines.slice(0,maxLines);
+    if (clipped && lines.length) lines[lines.length-1] = lines[lines.length-1].replace(/\s+\S*$/,'') + '…';
+    return lines.map((l,i)=>`<text x="${x}" y="${y+i*lineH}" font-size="11" fill="#27231d">${esc(l)}</text>`).join('') + `<title>${esc(str)}</title>`;
+  }
+
+  function renderInspector(){
+    const id = activeView().selected_row_id;
+    const r = data.rows.find(row=>row.id===id);
+    const el = document.getElementById('inspector');
+    if(!r){ el.innerHTML = `<div class="inspector-box"><p class="note">Select a HEART row from the table or SVG to inspect full content and stable IDs.</p></div>`; return; }
+    const v = activeView();
+    const ordered = orderedRows();
+    const visible = visibleRows();
+    const displayOrder = ordered.findIndex(x=>x.id===r.id)+1;
+    const visibleOrder = visible.findIndex(x=>x.id===r.id)+1;
+    const hidden = v.hidden_row_ids.includes(r.id);
+    el.innerHTML = `<div class="inspector-box">
+      <h3>${esc(r.category)}</h3>
+      <p><span class="status-chip status-${esc(r.status)}">${esc(r.status.replaceAll('_',' '))}</span></p>
+      <p><strong>Route:</strong> ${effectiveRoute(r)?`<span class="route-pill">${esc(effectiveRoute(r))}</span>`:'No route selected'}</p>
+      <p><strong>Route family:</strong> ${esc(rowFamily(r))}</p>
+      <p><strong>Canonical order:</strong> ${esc(r.canonical_order)}</p>
+      <p><strong>Display order:</strong> ${displayOrder || 'not in view order'}</p>
+      <p><strong>Visible order:</strong> ${hidden ? 'hidden in current focus view' : visibleOrder}</p>
+      <p><strong>Row ID:</strong><br><code>${esc(r.id)}</code></p>
+    </div>
+    <div class="inspector-box">
+      <h3>Full row content</h3>
+      ${['goal','signal','metric','interpretation','tolerance','counter_signal','qualitative_companion','reason'].map(f=>`<p><strong>${labelFor(f)}:</strong><br>${esc(r[f])}</p>`).join('')}
+    </div>`;
+  }
+
+  function renderReadableTable(){
+    const rows = visibleRows();
+    const cols = ['goal','signal','metric','interpretation','tolerance','counter_signal','qualitative_companion'];
+    const html = `<table class="read-table" aria-label="Readable HEART chart table"><thead><tr><th>HEART area</th>${cols.map(c=>`<th>${esc(labelFor(c))}</th>`).join('')}<th>Status</th><th>Route</th></tr></thead><tbody>${rows.map(r=>`<tr><td><strong>${esc(r.category)}</strong><br><code>${esc(r.id)}</code></td>${cols.map(c=>readCell(r,c)).join('')}<td><span class="status-chip status-${esc(r.status)}">${esc(r.status.replaceAll('_',' '))}</span></td><td>${effectiveRoute(r)?`<span class="route-pill">${esc(effectiveRoute(r))}</span>`:''}</td></tr>`).join('')}</tbody></table>`;
+    document.getElementById('readableTable').innerHTML = html;
+  }
+  function readCell(r,field){
+    const txt = String(r[field]||'');
+    const needs = txt.length > 120;
+    const id = `full-${r.id}-${field}`;
+    return `<td><div class="clamp">${esc(txt)}</div>${needs?`<button type="button" data-action="toggle-full" data-target="${id}" aria-controls="${id}" aria-expanded="false">Show full text</button><div id="${id}" class="full-text" hidden>${esc(txt)}</div>`:''}</td>`;
+  }
+
+  function toExport(){
+    normalizeData(data);
+    const v = activeView();
+    const ordered = orderedRows();
+    const visible = visibleRows();
+    const visibleIds = new Set(visible.map(r=>r.id));
+    return {
+      artifact_identity: data.artifact_identity,
+      quick_use: data.quick_use,
+      heart_chart: {
+        scale: '0–10 semantic interpretation scale; numeric scores are not required in this prototype',
+        rows: data.rows.map(r=>({
+          ...r,
+          visible_in_active_view: visibleIds.has(r.id),
+          display_order: ordered.findIndex(x=>x.id===r.id)+1,
+          visible_order: visible.findIndex(x=>x.id===r.id)+1 || null,
+          route_family: rowFamily(r)
+        }))
+      },
+      view_state: data.view_state,
+      route_registry: routeRegistry,
+      text_handling: {
+        full_text_preserved: true,
+        table_preview: 'clamped preview with reveal controls',
+        svg_preview: 'matrix-style SVG cells with wrapped preview and ellipsis in fixed visual cells',
+        source_of_truth: ['data model','HTML table','JSON export','JSON-LD graph']
+      },
+      semantic_locality: data.semantic_locality,
+      recovery_calibration: data.recovery_calibration
+    };
+  }
+  function toJsonLd(){
+    const exp = toExport();
+    const base = '#';
+    return {
+      '@context': {
+        ca:'https://example.org/core-architectures#', schema:'https://schema.org/', id:'@id', type:'@type', name:'schema:name', description:'schema:description', text:'schema:text',
+        CoreArchitectureArtifact:'ca:CoreArchitectureArtifact', HEARTChart:'ca:HEARTChart', HEARTRow:'ca:HEARTRow', HandoffRoute:'ca:HandoffRoute', ViewConfiguration:'ca:ViewConfiguration',
+        hasHEARTRow:{'@id':'ca:hasHEARTRow','@type':'@id'}, activeView:{'@id':'ca:activeView','@type':'@id'}, rowOrder:'ca:rowOrder', hiddenRow:'ca:hiddenRow', textMode:'ca:textMode',
+        heartCategory:'ca:heartCategory', goal:'ca:goal', signal:'ca:signal', metric:'ca:metric', interpretation:'ca:interpretation', tolerance:'ca:tolerance', counterSignal:'ca:counterSignal', qualitativeCompanion:'ca:qualitativeCompanion', status:'ca:status', visibleInActiveView:'ca:visibleInActiveView', handsTo:'ca:handsTo', reason:'ca:reason'
+      },
+      '@graph': [
+        {id:base+exp.artifact_identity.id, type:['CoreArchitectureArtifact','HEARTChart','schema:CreativeWork'], name:exp.artifact_identity.display_name, description:exp.artifact_identity.subtitle, 'ca:version':exp.artifact_identity.version, 'ca:family':exp.artifact_identity.family, 'ca:placement':exp.artifact_identity.placement, 'ca:primaryCognitiveMove':exp.artifact_identity.primary_cognitive_move, hasHEARTRow: exp.heart_chart.rows.map(r=>base+r.id), activeView: base+activeView().id},
+        {id:base+activeView().id, type:'ViewConfiguration', name:activeView().name, rowOrder: activeView().row_order.map(id=>base+id), hiddenRow: activeView().hidden_row_ids.map(id=>base+id), textMode: activeView().text_mode},
+        ...exp.heart_chart.rows.flatMap(r=>{
+          const nodes = [{id:base+r.id, type:'HEARTRow', name:r.category, heartCategory:r.category, goal:r.goal, signal:r.signal, metric:r.metric, interpretation:r.interpretation, tolerance:r.tolerance, counterSignal:r.counter_signal, qualitativeCompanion:r.qualitative_companion, status:r.status, visibleInActiveView:r.visible_in_active_view, handsTo: r.handoff ? base+'route-'+slug(effectiveRoute(r)) : undefined}];
+          if (effectiveRoute(r)) nodes.push({id:base+'route-'+slug(effectiveRoute(r)), type:'HandoffRoute', name:effectiveRoute(r), reason:r.reason});
+          return nodes;
+        })
+      ]
+    };
+  }
+  function renderExports(){
+    const json = JSON.stringify(toExport(), null, 2);
+    document.getElementById('jsonExport').value = json;
+    const jsonLd = JSON.stringify(toJsonLd(), null, 2);
+    document.getElementById('jsonLdExport').value = jsonLd;
+    document.getElementById('embedded-jsonld').textContent = jsonLd;
+    document.getElementById('aiPrompt').value = aiPrompt();
+  }
+
+  function aiPrompt(){
+    const v = activeView();
+    const visible = visibleRows();
+    const hidden = orderedRows().filter(r=>v.hidden_row_ids.includes(r.id));
+    const lines = [];
+    lines.push('Use this HEART Chart as the current Core Architecture context.');
+    lines.push('');
+    lines.push('Preserve:');
+    lines.push('- the distinction between goal, signal, metric, interpretation, tolerance, counter-signal, and qualitative companion');
+    lines.push('- metric-as-proxy language rather than metric-as-verdict language');
+    lines.push('- visible/hidden row scope; hidden rows remain in the source artifact unless an export says otherwise');
+    lines.push('- handoff routes and route reasons');
+    lines.push('- stable semantic IDs even when focus view changes');
+    lines.push('');
+    lines.push('Visible HEART rows in this focus view:');
+    visible.forEach(r=>{
+      lines.push(`- ${r.category} (${r.id})`);
+      lines.push(`  Goal: ${r.goal}`);
+      lines.push(`  Signal: ${r.signal}`);
+      lines.push(`  Metric: ${r.metric}`);
+      lines.push(`  Counter-signal: ${r.counter_signal}`);
+      if (effectiveRoute(r)) lines.push(`  Route: ${effectiveRoute(r)} — ${r.reason}`);
+    });
+    if (hidden.length) {
+      lines.push('');
+      lines.push('Hidden rows in this focus view, preserved in source data:');
+      hidden.forEach(r=>lines.push(`- ${r.category} (${r.id})`));
+    }
+    lines.push('');
+    lines.push('Help make the next decision inspectable: which signals need Plus / Delta reflection, Specification-by-Example, Pattern–Problem Surface Matrix, Unit-test-first Design, AI Systems Service Blueprint, or Upstream Revision Loop?');
+    lines.push('When proposing options, state probability of what before assigning probabilities.');
+    return lines.join('\n');
+  }
+
+  function labelFor(f){ return ({goal:'Goal',signal:'Signal',metric:'Metric',interpretation:'Interpretation',tolerance:'Tolerance',counter_signal:'Counter-signal',qualitative_companion:'Qualitative companion',reason:'Route reason'}[f] || f); }
+  function short(s,n){ s=String(s||''); return s.length>n ? s.slice(0,n-1)+'…' : s; }
+  function selectRow(id){ activeView().selected_row_id = id; renderSvg(); renderInspector(); renderExports(); document.getElementById('inspector-title').scrollIntoView({block:'start', behavior:'smooth'}); }
+  function updateRow(id, field, value){
+    const r = data.rows.find(x=>x.id===id); if(!r) return;
+    if (field === 'handoff') {
+      if (value === '__custom__') { r.handoff = r.custom_route || 'Custom route'; }
+      else { r.handoff = value; }
+    } else if (field === 'custom_route') {
+      r.custom_route = value;
+      if (!routeRegistry.some(rr=>rr.label===r.handoff)) r.handoff = value;
+    } else {
+      r[field] = value;
+    }
+    renderSvg(); renderInspector(); renderReadableTable(); renderExports();
+  }
+  function moveRow(id, dir){
+    const v = activeView(); const idx = v.row_order.indexOf(id); if(idx<0) return;
+    const ni = idx + dir; if(ni<0 || ni>=v.row_order.length) return;
+    [v.row_order[idx], v.row_order[ni]] = [v.row_order[ni], v.row_order[idx]];
+    render();
+  }
+  function hideRow(id){
+    const v = activeView(); if(!v.hidden_row_ids.includes(id)) v.hidden_row_ids.push(id);
+    if(v.selected_row_id === id) v.selected_row_id = '';
+    if(visibleRows().length === 0) v.hidden_row_ids = v.hidden_row_ids.filter(x=>x!==id);
+    render();
+  }
+  function showRow(id){ activeView().hidden_row_ids = activeView().hidden_row_ids.filter(x=>x!==id); render(); }
+  function addRow(){
+    if(addLock) return; addLock = true; setTimeout(()=>{ addLock=false; }, 250);
+    const id = uid('heart-row');
+    const r = {id, canonical_order:data.rows.length+1, category:'Task Success', goal:'New goal to calibrate.', signal:'Signal to detect.', metric:'Metric proxy.', interpretation:'Interpret metric movement in context.', tolerance:'Acceptable range or tradeoff.', counter_signal:'Evidence that could make the metric misleading.', qualitative_companion:'Plus / Delta or field observation companion.', status:'assumed', handoff:'HEART Chart', custom_route:'', reason:'New row needs calibration.'};
+    data.rows.push(r); activeView().row_order.push(id); activeView().selected_row_id = id; render();
+  }
+  function removeRow(id){
+    if(!confirm('Remove this HEART row? This is permanent deletion.')) return;
+    data.rows = data.rows.filter(r=>r.id!==id);
+    const v=activeView(); v.row_order = v.row_order.filter(x=>x!==id); v.hidden_row_ids = v.hidden_row_ids.filter(x=>x!==id); if(v.selected_row_id===id) v.selected_row_id = data.rows[0]?.id || '';
+    render();
+  }
+  function resetOrder(){ const v=activeView(); v.row_order = [...data.rows].sort((a,b)=>a.canonical_order-b.canonical_order).map(r=>r.id); render(); }
+
+  document.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button[data-action]'); if(!btn) return;
+    e.preventDefault();
+    const a = btn.dataset.action, id = btn.dataset.rowId;
+    if(a==='add-row') addRow();
+    if(a==='show-all'){ activeView().hidden_row_ids=[]; render(); }
+    if(a==='reset-order') resetOrder();
+    if(a==='move-up') moveRow(id,-1);
+    if(a==='move-down') moveRow(id,1);
+    if(a==='hide-row') hideRow(id);
+    if(a==='show-row') showRow(id);
+    if(a==='select-row') selectRow(id);
+    if(a==='remove-row') removeRow(id);
+    if(a==='toggle-full') toggleFull(btn);
+    if(a==='copy-json') copyText(document.getElementById('jsonExport').value, 'JSON copied.');
+    if(a==='copy-jsonld') copyText(document.getElementById('jsonLdExport').value, 'JSON-LD copied.');
+    if(a==='copy-prompt') copyText(document.getElementById('aiPrompt').value, 'AI prompt copied.');
+    if(a==='import-json') importJson(document.getElementById('jsonImport').value);
+  });
+  document.addEventListener('input', (e)=>{
+    const el = e.target; if(!el.dataset || !el.dataset.field) return;
+    updateRow(el.dataset.rowId, el.dataset.field, el.value);
+  });
+  document.getElementById('jsonFile').addEventListener('change', async (e)=>{
+    const file = e.target.files[0]; if(!file) return;
+    const text = await file.text(); document.getElementById('jsonImport').value = text; importJson(text);
+  });
+  function toggleFull(btn){
+    const target = document.getElementById(btn.dataset.target); if(!target) return;
+    const open = target.hidden; target.hidden = !open; btn.setAttribute('aria-expanded', String(open)); btn.textContent = open ? 'Collapse' : 'Show full text';
+  }
+  function heartCandidate(text){
+    const parsed = JSON.parse(text);
+    if(!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('The candidate needs to be a JSON object.');
+    const rows = parsed.heart_chart?.rows || parsed.rows;
+    if(!Array.isArray(rows)) throw new Error('heart_chart.rows needs to be an array.');
+    const candidate = structuredClone(data);
+    if(parsed.artifact_identity){
+      if(typeof parsed.artifact_identity !== 'object' || Array.isArray(parsed.artifact_identity) || typeof parsed.artifact_identity.id !== 'string' || !parsed.artifact_identity.id.trim()) throw new Error('artifact_identity needs a stable id.');
+      candidate.artifact_identity = structuredClone(parsed.artifact_identity);
+    }
+    const ids = new Set();
+    candidate.rows = rows.map(({visible_in_active_view,display_order,visible_order,route_family,...row}, index)=>{
+      if(!row || typeof row !== 'object' || Array.isArray(row) || typeof row.id !== 'string' || !row.id.trim()) throw new Error(`HEART row ${index + 1} needs a stable id.`);
+      if(ids.has(row.id)) throw new Error(`HEART row id ${row.id} is repeated.`);
+      ids.add(row.id);
+      for(const field of ['category','goal','signal','metric','interpretation','tolerance','counter_signal','qualitative_companion']) if(typeof row[field] !== 'string') throw new Error(`HEART row ${row.id} needs text for ${field}.`);
+      for(const field of ['handoff','custom_route','reason']) if(typeof row[field] !== 'string') throw new Error(`HEART row ${row.id} needs text for ${field}.`);
+      if(!statusOptions.includes(row.status)) throw new Error(`HEART row ${row.id} needs a current status.`);
+      return structuredClone(row);
+    });
+    candidate.view_state = parsed.view_state ? structuredClone(parsed.view_state) : {active_view_id:'view-default', views:[{id:'view-default', name:'Default focus view', row_order:candidate.rows.map(row=>row.id), hidden_row_ids:[], text_mode:'preview_with_reveal', selected_row_id:candidate.rows[0]?.id||''}]};
+    if(!candidate.view_state || !Array.isArray(candidate.view_state.views) || candidate.view_state.views.length === 0) throw new Error('view_state needs at least one focus view.');
+    if(!candidate.view_state.views.some(view => view && view.id === candidate.view_state.active_view_id)) throw new Error('view_state.active_view_id needs a current focus view.');
+    const rowIds = new Set(candidate.rows.map(row => row.id));
+    const viewIds = new Set();
+    for(const view of candidate.view_state.views){
+      if(!view || typeof view.id !== 'string' || !view.id.trim()) throw new Error('Every focus view needs a stable id.');
+      if(viewIds.has(view.id)) throw new Error(`Focus view id ${view.id} is repeated.`);
+      viewIds.add(view.id);
+      for(const field of ['row_order','hidden_row_ids']) if(!Array.isArray(view[field])) throw new Error(`Focus view ${view.id} needs an array for ${field}.`);
+      if(view.row_order.length !== rowIds.size || new Set(view.row_order).size !== view.row_order.length || view.row_order.some(id => !rowIds.has(id))) throw new Error(`Focus view ${view.id} needs each current HEART row exactly once in row_order.`);
+      if(new Set(view.hidden_row_ids).size !== view.hidden_row_ids.length || view.hidden_row_ids.some(id => !rowIds.has(id))) throw new Error(`Focus view ${view.id} needs unique current row ids in hidden_row_ids.`);
+      if(view.selected_row_id && !rowIds.has(view.selected_row_id)) throw new Error(`Focus view ${view.id} needs a current selected_row_id.`);
+    }
+    normalizeData(candidate);
+    return candidate;
+  }
+  function importJson(text){
+    const message = document.getElementById('importMessage');
+    try{
+      data = heartCandidate(text);
+      render();
+      message.textContent = 'HEART Chart imported. Row identity, order, focus state, signals, metrics, and routes are available.';
+    } catch(err){ message.textContent = 'The current HEART Chart remains available. Supply a complete HEART Chart export to continue: ' + err.message; }
+  }
+  async function copyText(text,msg){
+    try { await navigator.clipboard.writeText(text); alert(msg); }
+    catch(e){ alert('Copy was not available in this browser. The text remains visible for manual copy.'); }
+  }
+  render();
+})();
+</script>
+</body>
+</html>

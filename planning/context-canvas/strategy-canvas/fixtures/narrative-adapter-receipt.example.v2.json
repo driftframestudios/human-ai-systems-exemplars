@@ -1,0 +1,33 @@
+{
+  "adapterId": "narrative-now-next-later-to-strategy-canvas-2.0",
+  "sourceDialect": "narrative-composer/0.1",
+  "targetDialect": "strategy-canvas/2.0",
+  "mapping": {
+    "now": "dimensions[].scores.current",
+    "next": "dimensions[].scores.goodEnough",
+    "later": "dimensions[].scores.desired",
+    "action": "dimensions[].action"
+  },
+  "mappedFields": [
+    "id",
+    "label",
+    "now→current",
+    "next→goodEnough",
+    "later→desired",
+    "action"
+  ],
+  "synthesizedFields": [
+    "definition",
+    "anchors",
+    "consequenceWeight",
+    "evidenceBasis"
+  ],
+  "extensionTargets": {
+    "projection": "extensions.narrativeProjection",
+    "humanAndSystemCollaboration": "extensions.contextCanvas.collaboration",
+    "aiProposalChannel": "extensions.contextCanvas.aiCollaboration"
+  },
+  "networkPolicy": "local-only",
+  "reviewRequired": true,
+  "reviewCondition": "Confirm dimension meaning, anchors, evidence standing, and decision horizon before opening a human-first sealed round."
+}

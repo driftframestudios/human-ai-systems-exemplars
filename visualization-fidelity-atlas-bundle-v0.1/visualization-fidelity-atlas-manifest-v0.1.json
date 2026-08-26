@@ -1,0 +1,21 @@
+{
+  "id": "visualization-fidelity-atlas.manifest.v0.1",
+  "title": "Visualization Fidelity Atlas Bundle",
+  "version": "0.1",
+  "files": {
+    "prototype": "visualization-fidelity-atlas-chimeric-prototype-v0.1.html",
+    "schema": "visualization-fidelity-atlas.schema.v0.1.json",
+    "context": "visualization-fidelity-atlas.context.v0.1.jsonld"
+  },
+  "source_documents": [
+    "Picking the Right Visualization - Why Pie Charts are Undesirable.md",
+    "Below is a research-grounded version of the argument.md",
+    "Visual & Data Communication Stabilizers (Notion)",
+    "Core Architectures and Site Readings"
+  ],
+  "recommended_repository_paths": {
+    "field_guide": "packages/field-guide/src/stabilizers/visual-data-communication/",
+    "schema": "packages/schema/src/schemas/visualization/",
+    "gist_registry": "collections/data-visualization-exemplars/"
+  }
+}

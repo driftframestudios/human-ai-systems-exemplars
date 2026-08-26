@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Alignment Worksheet preview</title>
+  <desc id="desc">Six premise blanks carry a team from affected group and current path toward a restored state and broad approach, with a backward recovery route.</desc>
+  <style>.bg{fill:#fffdf7}.ink{fill:#16345e}.cobalt{fill:#2855f3}.sea{fill:#bfe7e4}.powder{fill:#dbe9ff}.rose{fill:#ffd3d0}.lime{fill:#efff66}.cream{fill:#fff0cf}.rule{stroke:#16345e;stroke-width:3}.route{stroke:#2855f3;stroke-width:5;fill:none}.cap{font:700 16px ui-monospace,monospace;letter-spacing:.5px}.head{font:700 27px Arial,sans-serif}.small{font:16px Arial,sans-serif}</style>
+  <rect width="960" height="600" class="bg"/>
+  <text x="48" y="54" class="cap ink">FORWARD / BACKWARD PREMISE SURFACE</text><text x="48" y="89" class="head ink">Which world are we describing?</text>
+  <g class="rule">
+    <rect x="48" y="126" width="260" height="100" rx="14" class="sea"/><rect x="350" y="126" width="260" height="100" rx="14" class="lime"/><rect x="652" y="126" width="260" height="100" rx="14" class="powder"/>
+    <rect x="48" y="270" width="260" height="100" rx="14" class="rose"/><rect x="350" y="270" width="260" height="100" rx="14" class="cobalt"/><rect x="652" y="270" width="260" height="100" rx="14" class="cream"/>
+  </g>
+  <text x="70" y="160" class="cap ink">01 · IDENTIFIED GROUP</text><text x="70" y="194" class="small ink">Who is in which situation?</text>
+  <text x="372" y="160" class="cap ink">02 · DESIRED OUTCOME</text><text x="372" y="194" class="small ink">What capacity should return?</text>
+  <text x="674" y="160" class="cap ink">03 · CURRENT PATH</text><text x="674" y="194" class="small ink">How do they proceed today?</text>
+  <text x="70" y="304" class="cap ink">04 · CHANGE REASON</text><text x="70" y="338" class="small ink">What asks for a new path?</text>
+  <text x="372" y="304" class="cap" fill="#fff">05 · RESTORED STATE</text><text x="372" y="338" class="small" fill="#fff">What becomes available?</text>
+  <text x="674" y="304" class="cap ink">06 · BROAD APPROACH</text><text x="674" y="338" class="small ink">What may connect the states?</text>
+  <path d="M178 226V250H782V270" class="route"/><path d="M782 270l-14-23h28z" class="cobalt"/>
+  <rect x="48" y="416" width="864" height="104" rx="16" class="bg rule"/><text x="74" y="452" class="cap ink">INVERSE-STATE PASS</text><path d="M840 482H170" class="route"/><path d="M170 482l24-15v30z" class="cobalt"/><text x="74" y="506" class="small ink">Start from observed strain and move backward to the premise blank that needs revision.</text>
+  <text x="480" y="568" text-anchor="middle" class="cap ink">MARK THE MOST UNCERTAIN BLANK · ROUTE IT ONWARD</text>
+</svg>

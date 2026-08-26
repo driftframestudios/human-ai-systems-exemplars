@@ -1,0 +1,58 @@
+title = "Prototype Exemplars secret-material boundary"
+betterleaksMinVersion = "1.8.1"
+
+# The authored tree and ignored build outputs remain in scope. Only repository
+# internals, the pinned scanner cache, and installed dependency trees rest.
+prefilter = '''
+filter.matchesAny(get(attributes, "path", ""), [
+  `^\.git(?:[\\/]|$)`,
+  `^\.tools(?:[\\/]|$)`,
+  `(?:^|[\\/])node_modules(?:[\\/]|$)`
+])
+'''
+
+# These narrow cases are purpose-built non-credentials. They are retained as
+# executable fixtures rather than a finding-count baseline:
+#
+# - named LIMS/ELN test and workflow surfaces use values bearing "synthetic";
+# - the Compose runtime reads a password from /run/secrets instead of carrying it;
+# - the retained SQL fixture names a runtime-supplied psql variable rather than
+#   carrying its value.
+filter = '''
+(
+  filter.matchesAny(get(attributes, "path", ""), [
+    `^\.github[\\/]workflows[\\/]lims-eln-enterprise-reference\.yml$`,
+    `^lims-eln-functional-nucleus[\\/]lims-eln-enterprise-implementation[\\/]\.github[\\/]workflows[\\/]ci\.yml$`,
+    `^lims-eln-functional-nucleus[\\/]lims-eln-enterprise-implementation[\\/]infra[\\/]docker-compose\.yml$`,
+    `^lims-eln-functional-nucleus[\\/]lims-eln-program-specification[\\/]tests[\\/]test_program\.py$`,
+    `^lims-eln-functional-nucleus[\\/]site-reading-governance[\\/]tests[\\/]test_governance\.py$`
+  ]) &&
+  filter.matchesAny(finding["secret"], [`(?i)synthetic`])
+)
+||
+(
+  filter.matchesAny(get(attributes, "path", ""), [
+    `^lims-eln-functional-nucleus[\\/]lims-eln-enterprise-implementation[\\/]infra[\\/]docker-compose\.yml$`
+  ]) &&
+  filter.containsAny(finding["secret"], ["/run/secrets/"])
+)
+||
+(
+  filter.matchesAny(get(attributes, "path", ""), [
+    `^lims-eln-functional-nucleus[\\/]lims-eln-program-specification[\\/]tests[\\/]test_program\.py$`,
+    `^lims-eln-functional-nucleus[\\/]site-reading-governance[\\/]tests[\\/]test_governance\.py$`
+  ]) &&
+  filter.containsAny(finding["secret"], ["secretsmanager://"])
+)
+||
+(
+  filter.matchesAny(get(attributes, "path", ""), [
+    `^lims-eln-enterprise-reference-v0\.1[\\/]database[\\/]verify[\\/]tenant_and_immutability_contract\.sql$`
+  ]) &&
+  finding["rule_id"] == "generic-password" &&
+  finding["secret"] == "tenant_password"
+)
+'''
+
+[extend]
+useDefault = true

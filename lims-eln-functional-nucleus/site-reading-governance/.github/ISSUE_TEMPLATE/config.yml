@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Private security advisory
+    url: https://github.com/driftframestudios/human-ai-systems-exemplars/security/advisories/new
+    about: Share vulnerability details through the governed private response channel.

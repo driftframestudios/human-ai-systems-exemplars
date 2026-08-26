@@ -1,0 +1,59 @@
+{
+  "id": "cc.core-architectures.chimeric-pack.local-manifest.v0.1",
+  "title": "Core Architectures Chimeric Pack - Context Canvas Copy",
+  "version": "0.1",
+  "created": "2026-08-19",
+  "sourceRevision": "562f0cd979cf588015bcbb316f0199fd358cc554",
+  "pathContract": {
+    "sourcePath": "manifest-directory",
+    "localPath": "repository-root",
+    "entryFile": "localPath",
+    "sourceManifest": "localPath",
+    "usedByPages": "manifest-directory"
+  },
+  "publicationPosture": "visitor-linked-through-receiving-pages",
+  "archive": {"status": "not-applicable"},
+  "integrity": {"algorithm": "sha256", "entryFile": "da5d7ef227fb4682a8efdb28880f8e0f0ae16511b00415170860f44f254d034a"},
+  "canonicalStatus": "adapted_copy",
+  "sourcePath": "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/",
+  "localPath": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/",
+  "entryFile": "core-architectures-chimeric-prototype-pack-index-v0.1.html",
+  "sourceManifest": "core-architectures-chimeric-prototype-manifest-v0.1.json",
+  "localAdaptations": [
+    "Pack index links are same-directory relative.",
+    "No-script fallback links for PODA and Core Architecture Family Index route to local Context Canvas pages.",
+    "Strategy Canvas 2.0 uses a Context-specific collaboration workbench while preserving the shared schema, validator, and core state contract.",
+    "The Strategy Canvas 0.1.1 route is an accessible compatibility path to the current collaboration field."
+  ],
+  "divergence": {
+    "status": "adapted_copy",
+    "changedPaths": [
+      "core-architectures-chimeric-prototype-pack-index-v0.1.html",
+      "poda-chimeric-prototype-v0.1.html",
+      "core-architecture-family-index-chimeric-prototype-v0.1.html",
+      "strategy-canvas-chimeric-prototype-v0.1.1.html",
+      "strategy-canvas-chimeric-prototype-v0.2.0.html",
+      "strategy-canvas-context-workbench-v0.2.css",
+      "strategy-canvas-context-workbench-v0.2.js",
+      "core-architectures-chimeric-prototype-manifest-v0.1.json"
+    ]
+  },
+  "usedByPages": [
+    "../../../ai-systems.html",
+    "../../../concept-nursery.html",
+    "../../../core-architectures-orientation-index.html",
+    "../../../cross-platform-collaboration-cycle.html",
+    "../../../debriefs.html",
+    "../../../exemplar-brief-exploration.html",
+    "../../../exemplar-gallery-list.html",
+    "../../../exemplar-ideal-debrief.html",
+    "../../../exemplar-index-landing.html",
+    "../../../exemplar-maximal-debrief.html",
+    "../../../exemplar-maximal-information-radiator.html",
+    "../../../fmi-lims-eln-replatforming.html",
+    "../../../grammar-family.html",
+    "../../../planning-surface.html",
+    "../../../poda.html",
+    "../../../who-to-believe-reviews-platform.html"
+  ]
+}

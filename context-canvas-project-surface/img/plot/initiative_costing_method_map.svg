@@ -1,0 +1,245 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1050" viewBox="0 0 1600 1050" role="img" aria-labelledby="initiative-costing-title initiative-costing-desc">
+  <title id="initiative-costing-title">Initiative costing decision cycle</title>
+  <desc id="initiative-costing-desc">Eight numbered stations form a clockwise costing route. At every station, a decision question leads down to a costing method and then to a decision-ready output. A semantic table beside the visual carries the full working detail.</desc>
+  <defs>
+    <pattern id="cobalt-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#2855f3" stroke-opacity="0.075" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1.5" fill="#fa7065" fill-opacity="0.2"/>
+    </pattern>
+    <style>
+      .sans { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .page-title { font-size: 35px; font-weight: 760; letter-spacing: -0.025em; }
+      .subtitle { font-size: 16px; font-weight: 540; }
+      .eyebrow { font-size: 12px; font-weight: 800; letter-spacing: 0.12em; }
+      .route-number { font-size: 13px; font-weight: 850; letter-spacing: 0.08em; }
+      .route-label { font-size: 11px; font-weight: 820; letter-spacing: 0.09em; }
+      .station-copy { font-size: 13.5px; font-weight: 660; }
+      .method-copy { font-size: 13.5px; font-weight: 780; }
+      .output-copy { font-size: 13px; font-weight: 650; }
+      .hub-title { font-size: 22px; font-weight: 790; letter-spacing: -0.015em; }
+      .hub-copy { font-size: 13px; font-weight: 650; }
+      .footer-copy { font-size: 14px; font-weight: 680; }
+    </style>
+  </defs>
+
+  <g role="group" aria-labelledby="field-title">
+    <title id="field-title">Initiative costing questions and clockwise route</title>
+    <rect width="1600" height="1050" fill="#fffaf2"/>
+    <rect width="1600" height="1050" fill="url(#cobalt-grid)"/>
+    <rect x="38" y="38" width="1532" height="982" rx="28" fill="#17345f" aria-hidden="true"/>
+    <rect x="30" y="30" width="1532" height="982" rx="28" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <rect x="30" y="30" width="1532" height="10" rx="5" fill="#2855f3" aria-hidden="true"/>
+    <rect x="30" y="40" width="960" height="5" fill="#fa7065" aria-hidden="true"/>
+    <text x="70" y="76" class="mono eyebrow" fill="#153fbe">INITIATIVE COSTING · METHOD COMPASS</text>
+    <text x="70" y="116" class="sans page-title" fill="#17345f">Route the question before estimating.</text>
+    <text x="70" y="146" class="sans subtitle" fill="#304a71">Move clockwise across eight decision routes; inside each station, read question → method → output.</text>
+    <rect x="1214" y="74" width="306" height="70" rx="12" fill="#17345f" aria-hidden="true"/>
+    <rect x="1208" y="68" width="306" height="70" rx="12" fill="#e7efff" stroke="#17345f" stroke-width="2"/>
+    <text x="1228" y="94" class="mono eyebrow" fill="#153fbe">CLOCKWISE DECISION CYCLE</text>
+    <text x="1228" y="119" class="sans footer-copy" fill="#17345f">Q ↓ M ↓ O at every station</text>
+  </g>
+
+  <g role="group" aria-labelledby="cycle-title">
+    <title id="cycle-title">Clockwise route connecting all eight stations</title>
+    <path d="M800 270L1165 335L1355 525L1165 745L800 805L435 745L245 525L435 335Z" fill="none" stroke="#17345f" stroke-width="38" stroke-linejoin="round" opacity="0.98" aria-hidden="true"/>
+    <path d="M800 270L1165 335L1355 525L1165 745L800 805L435 745L245 525L435 335Z" fill="none" stroke="#cfe7f7" stroke-width="28" stroke-linejoin="round" aria-hidden="true"/>
+    <path d="M-32-7H9V-16L34 0L9 16V7H-32Z" fill="#2855f3" transform="translate(982 302) rotate(10)" aria-hidden="true"/>
+    <path d="M-32-7H9V-16L34 0L9 16V7H-32Z" fill="#2855f3" transform="translate(1270 430) rotate(45)" aria-hidden="true"/>
+    <path d="M-32-7H9V-16L34 0L9 16V7H-32Z" fill="#2855f3" transform="translate(1280 640) rotate(131)" aria-hidden="true"/>
+    <path d="M-32-7H9V-16L34 0L9 16V7H-32Z" fill="#2855f3" transform="translate(982 775) rotate(171)" aria-hidden="true"/>
+    <path d="M-32-7H9V-16L34 0L9 16V7H-32Z" fill="#2855f3" transform="translate(618 775) rotate(189)" aria-hidden="true"/>
+    <path d="M-32-7H9V-16L34 0L9 16V7H-32Z" fill="#2855f3" transform="translate(320 640) rotate(229)" aria-hidden="true"/>
+    <path d="M-32-7H9V-16L34 0L9 16V7H-32Z" fill="#2855f3" transform="translate(330 430) rotate(315)" aria-hidden="true"/>
+    <path d="M-32-7H9V-16L34 0L9 16V7H-32Z" fill="#2855f3" transform="translate(618 302) rotate(350)" aria-hidden="true"/>
+  </g>
+
+  <g id="route-01" role="group" aria-labelledby="route-01-title">
+    <title id="route-01-title">Route 1. Where does the money go? Bottom-up resource-loaded work breakdown. Base estimate and staffing shape.</title>
+    <rect x="643" y="183" width="330" height="190" rx="17" fill="#17345f" aria-hidden="true"/>
+    <rect x="635" y="175" width="330" height="190" rx="17" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <path d="M635 192Q635 175 652 175H948Q965 175 965 192V211H635Z" fill="#2855f3"/>
+    <text x="654" y="199" class="mono route-number" fill="#fffdf8">ROUTE 01</text>
+    <rect x="650" y="220" width="28" height="22" rx="6" fill="#f2ff67" stroke="#17345f" stroke-width="1.5"/>
+    <text x="658" y="235" class="mono route-label" fill="#17345f">Q</text>
+    <text x="692" y="235" class="sans station-copy" fill="#17345f">Where does the money go?</text>
+    <path d="M660 244H668V251H674L664 262L654 251H660Z" fill="#2855f3" aria-hidden="true"/>
+    <line x1="692" y1="252" x2="948" y2="252" stroke="#cfe7f7" stroke-width="1.5"/>
+    <rect x="650" y="264" width="28" height="22" rx="6" fill="#d9efea" stroke="#17345f" stroke-width="1.5"/>
+    <text x="658" y="279" class="mono route-label" fill="#17345f">M</text>
+    <text x="692" y="278" class="sans method-copy" fill="#17345f"><tspan x="692" dy="0">Bottom-up resource-loaded</tspan><tspan x="692" dy="16">work breakdown</tspan></text>
+    <path d="M660 302H668V309H674L664 320L654 309H660Z" fill="#2855f3" aria-hidden="true"/>
+    <line x1="692" y1="309" x2="948" y2="309" stroke="#cfe7f7" stroke-width="1.5"/>
+    <rect x="650" y="322" width="28" height="22" rx="6" fill="#fff5de" stroke="#17345f" stroke-width="1.5"/>
+    <text x="658" y="337" class="mono route-label" fill="#17345f">O</text>
+    <text x="692" y="338" class="sans output-copy" fill="#17345f">Base estimate + staffing shape</text>
+  </g>
+
+  <g id="route-02" role="group" aria-labelledby="route-02-title">
+    <title id="route-02-title">Route 2. What could move the commitment? Risk-register reserve plus sensitivity. Separate reserve plus movement drivers.</title>
+    <rect x="1008" y="248" width="330" height="190" rx="17" fill="#17345f" aria-hidden="true"/>
+    <rect x="1000" y="240" width="330" height="190" rx="17" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <path d="M1000 257Q1000 240 1017 240H1313Q1330 240 1330 257V276H1000Z" fill="#153fbe"/>
+    <text x="1019" y="264" class="mono route-number" fill="#fffdf8">ROUTE 02</text>
+    <rect x="1015" y="285" width="28" height="22" rx="6" fill="#f2ff67" stroke="#17345f" stroke-width="1.5"/>
+    <text x="1023" y="300" class="mono route-label" fill="#17345f">Q</text>
+    <text x="1057" y="298" class="sans station-copy" fill="#17345f"><tspan x="1057" dy="0">What could move</tspan><tspan x="1057" dy="16">the commitment?</tspan></text>
+    <path d="M1025 309H1033V316H1039L1029 327L1019 316H1025Z" fill="#2855f3" aria-hidden="true"/>
+    <line x1="1057" y1="317" x2="1313" y2="317" stroke="#cfe7f7" stroke-width="1.5"/>
+    <rect x="1015" y="329" width="28" height="22" rx="6" fill="#d9efea" stroke="#17345f" stroke-width="1.5"/>
+    <text x="1023" y="344" class="mono route-label" fill="#17345f">M</text>
+    <text x="1057" y="343" class="sans method-copy" fill="#17345f"><tspan x="1057" dy="0">Risk-register reserve</tspan><tspan x="1057" dy="16">+ sensitivity</tspan></text>
+    <path d="M1025 367H1033V374H1039L1029 385L1019 374H1025Z" fill="#2855f3" aria-hidden="true"/>
+    <line x1="1057" y1="374" x2="1313" y2="374" stroke="#cfe7f7" stroke-width="1.5"/>
+    <rect x="1015" y="387" width="28" height="22" rx="6" fill="#fff5de" stroke="#17345f" stroke-width="1.5"/>
+    <text x="1023" y="402" class="mono route-label" fill="#17345f">O</text>
+    <text x="1057" y="402" class="sans output-copy" fill="#17345f"><tspan x="1057" dy="0">Separate reserve</tspan><tspan x="1057" dy="16">+ movement drivers</tspan></text>
+  </g>
+
+  <g id="route-03" role="group" aria-labelledby="route-03-title">
+    <title id="route-03-title">Route 3. What range should the sponsor carry? Ranged commitment model. Planning band and tail drivers.</title>
+    <rect x="1188" y="438" width="350" height="190" rx="17" fill="#17345f" aria-hidden="true"/>
+    <rect x="1180" y="430" width="350" height="190" rx="17" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <path d="M1180 447Q1180 430 1197 430H1513Q1530 430 1530 447V466H1180Z" fill="#2855f3"/>
+    <text x="1199" y="454" class="mono route-number" fill="#fffdf8">ROUTE 03</text>
+    <rect x="1195" y="475" width="28" height="22" rx="6" fill="#f2ff67" stroke="#17345f" stroke-width="1.5"/>
+    <text x="1203" y="490" class="mono route-label" fill="#17345f">Q</text>
+    <text x="1237" y="488" class="sans station-copy" fill="#17345f"><tspan x="1237" dy="0">What range should</tspan><tspan x="1237" dy="16">the sponsor carry?</tspan></text>
+    <path d="M1205 499H1213V506H1219L1209 517L1199 506H1205Z" fill="#2855f3" aria-hidden="true"/>
+    <line x1="1237" y1="507" x2="1513" y2="507" stroke="#cfe7f7" stroke-width="1.5"/>
+    <rect x="1195" y="519" width="28" height="22" rx="6" fill="#d9efea" stroke="#17345f" stroke-width="1.5"/>
+    <text x="1203" y="534" class="mono route-label" fill="#17345f">M</text>
+    <text x="1237" y="535" class="sans method-copy" fill="#17345f">Ranged commitment model</text>
+    <path d="M1205 557H1213V564H1219L1209 575L1199 564H1205Z" fill="#2855f3" aria-hidden="true"/>
+    <line x1="1237" y1="564" x2="1513" y2="564" stroke="#cfe7f7" stroke-width="1.5"/>
+    <rect x="1195" y="577" width="28" height="22" rx="6" fill="#fff5de" stroke="#17345f" stroke-width="1.5"/>
+    <text x="1203" y="592" class="mono route-label" fill="#17345f">O</text>
+    <text x="1237" y="593" class="sans output-copy" fill="#17345f">Planning band + tail drivers</text>
+  </g>
+
+  <g id="route-04" role="group" aria-labelledby="route-04-title">
+    <title id="route-04-title">Route 4. Which route has the strongest whole-system economics? Three-branch comparative total cost. Buy, build, or hybrid on one basis.</title>
+    <rect x="1008" y="658" width="330" height="190" rx="17" fill="#17345f" aria-hidden="true"/>
+    <rect x="1000" y="650" width="330" height="190" rx="17" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <path d="M1000 667Q1000 650 1017 650H1313Q1330 650 1330 667V686H1000Z" fill="#153fbe"/>
+    <text x="1019" y="674" class="mono route-number" fill="#fffdf8">ROUTE 04</text>
+    <rect x="1015" y="695" width="28" height="22" rx="6" fill="#f2ff67" stroke="#17345f" stroke-width="1.5"/>
+    <text x="1023" y="710" class="mono route-label" fill="#17345f">Q</text>
+    <text x="1057" y="708" class="sans station-copy" fill="#17345f"><tspan x="1057" dy="0">Which route has the strongest</tspan><tspan x="1057" dy="16">whole-system economics?</tspan></text>
+    <path d="M1025 719H1033V726H1039L1029 737L1019 726H1025Z" fill="#2855f3" aria-hidden="true"/>
+    <line x1="1057" y1="727" x2="1313" y2="727" stroke="#cfe7f7" stroke-width="1.5"/>
+    <rect x="1015" y="739" width="28" height="22" rx="6" fill="#d9efea" stroke="#17345f" stroke-width="1.5"/>
+    <text x="1023" y="754" class="mono route-label" fill="#17345f">M</text>
+    <text x="1057" y="753" class="sans method-copy" fill="#17345f"><tspan x="1057" dy="0">Three-branch comparative</tspan><tspan x="1057" dy="16">total cost</tspan></text>
+    <path d="M1025 777H1033V784H1039L1029 795L1019 784H1025Z" fill="#2855f3" aria-hidden="true"/>
+    <line x1="1057" y1="784" x2="1313" y2="784" stroke="#cfe7f7" stroke-width="1.5"/>
+    <rect x="1015" y="797" width="28" height="22" rx="6" fill="#fff5de" stroke="#17345f" stroke-width="1.5"/>
+    <text x="1023" y="812" class="mono route-label" fill="#17345f">O</text>
+    <text x="1057" y="813" class="sans output-copy" fill="#17345f">Buy / build / hybrid on one basis</text>
+  </g>
+
+  <g id="route-05" role="group" aria-labelledby="route-05-title">
+    <title id="route-05-title">Route 5. What does the capability cost across its useful life? Whole-life total cost plus operations and scale. Lifecycle total plus annual run curve.</title>
+    <rect x="643" y="718" width="330" height="190" rx="17" fill="#17345f" aria-hidden="true"/>
+    <rect x="635" y="710" width="330" height="190" rx="17" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <path d="M635 727Q635 710 652 710H948Q965 710 965 727V746H635Z" fill="#2855f3"/>
+    <text x="654" y="734" class="mono route-number" fill="#fffdf8">ROUTE 05</text>
+    <rect x="650" y="755" width="28" height="22" rx="6" fill="#f2ff67" stroke="#17345f" stroke-width="1.5"/>
+    <text x="658" y="770" class="mono route-label" fill="#17345f">Q</text>
+    <text x="692" y="768" class="sans station-copy" fill="#17345f"><tspan x="692" dy="0">What does the capability cost</tspan><tspan x="692" dy="16">across its useful life?</tspan></text>
+    <path d="M660 779H668V786H674L664 797L654 786H660Z" fill="#2855f3" aria-hidden="true"/>
+    <line x1="692" y1="787" x2="948" y2="787" stroke="#cfe7f7" stroke-width="1.5"/>
+    <rect x="650" y="799" width="28" height="22" rx="6" fill="#d9efea" stroke="#17345f" stroke-width="1.5"/>
+    <text x="658" y="814" class="mono route-label" fill="#17345f">M</text>
+    <text x="692" y="813" class="sans method-copy" fill="#17345f"><tspan x="692" dy="0">Whole-life total cost</tspan><tspan x="692" dy="16">+ operations and scale</tspan></text>
+    <path d="M660 837H668V844H674L664 855L654 844H660Z" fill="#2855f3" aria-hidden="true"/>
+    <line x1="692" y1="844" x2="948" y2="844" stroke="#cfe7f7" stroke-width="1.5"/>
+    <rect x="650" y="857" width="28" height="22" rx="6" fill="#fff5de" stroke="#17345f" stroke-width="1.5"/>
+    <text x="658" y="872" class="mono route-label" fill="#17345f">O</text>
+    <text x="692" y="871" class="sans output-copy" fill="#17345f"><tspan x="692" dy="0">Lifecycle total</tspan><tspan x="692" dy="16">+ annual run curve</tspan></text>
+  </g>
+
+  <g id="route-06" role="group" aria-labelledby="route-06-title">
+    <title id="route-06-title">Route 6. What does each sample, inspection, or transaction cost? Activity-based unit economics. Unit cost and volume curve.</title>
+    <rect x="278" y="658" width="330" height="190" rx="17" fill="#17345f" aria-hidden="true"/>
+    <rect x="270" y="650" width="330" height="190" rx="17" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <path d="M270 667Q270 650 287 650H583Q600 650 600 667V686H270Z" fill="#153fbe"/>
+    <text x="289" y="674" class="mono route-number" fill="#fffdf8">ROUTE 06</text>
+    <rect x="285" y="695" width="28" height="22" rx="6" fill="#f2ff67" stroke="#17345f" stroke-width="1.5"/>
+    <text x="293" y="710" class="mono route-label" fill="#17345f">Q</text>
+    <text x="327" y="708" class="sans station-copy" fill="#17345f"><tspan x="327" dy="0">What does each sample, inspection,</tspan><tspan x="327" dy="16">or transaction cost?</tspan></text>
+    <path d="M295 719H303V726H309L299 737L289 726H295Z" fill="#2855f3" aria-hidden="true"/>
+    <line x1="327" y1="727" x2="583" y2="727" stroke="#cfe7f7" stroke-width="1.5"/>
+    <rect x="285" y="739" width="28" height="22" rx="6" fill="#d9efea" stroke="#17345f" stroke-width="1.5"/>
+    <text x="293" y="754" class="mono route-label" fill="#17345f">M</text>
+    <text x="327" y="753" class="sans method-copy" fill="#17345f"><tspan x="327" dy="0">Activity-based</tspan><tspan x="327" dy="16">unit economics</tspan></text>
+    <path d="M295 777H303V784H309L299 795L289 784H295Z" fill="#2855f3" aria-hidden="true"/>
+    <line x1="327" y1="784" x2="583" y2="784" stroke="#cfe7f7" stroke-width="1.5"/>
+    <rect x="285" y="797" width="28" height="22" rx="6" fill="#fff5de" stroke="#17345f" stroke-width="1.5"/>
+    <text x="293" y="812" class="mono route-label" fill="#17345f">O</text>
+    <text x="327" y="813" class="sans output-copy" fill="#17345f">Unit cost + volume curve</text>
+  </g>
+
+  <g id="route-07" role="group" aria-labelledby="route-07-title">
+    <title id="route-07-title">Route 7. What does the current state cost, and what value can return? Status quo plus benefit realization. Priced baseline plus realized-value path.</title>
+    <rect x="78" y="438" width="350" height="190" rx="17" fill="#17345f" aria-hidden="true"/>
+    <rect x="70" y="430" width="350" height="190" rx="17" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <path d="M70 447Q70 430 87 430H403Q420 430 420 447V466H70Z" fill="#2855f3"/>
+    <text x="89" y="454" class="mono route-number" fill="#fffdf8">ROUTE 07</text>
+    <rect x="85" y="475" width="28" height="22" rx="6" fill="#f2ff67" stroke="#17345f" stroke-width="1.5"/>
+    <text x="93" y="490" class="mono route-label" fill="#17345f">Q</text>
+    <text x="127" y="488" class="sans station-copy" fill="#17345f"><tspan x="127" dy="0">What does the current state cost,</tspan><tspan x="127" dy="16">and what value can return?</tspan></text>
+    <path d="M95 499H103V506H109L99 517L89 506H95Z" fill="#2855f3" aria-hidden="true"/>
+    <line x1="127" y1="507" x2="403" y2="507" stroke="#cfe7f7" stroke-width="1.5"/>
+    <rect x="85" y="519" width="28" height="22" rx="6" fill="#d9efea" stroke="#17345f" stroke-width="1.5"/>
+    <text x="93" y="534" class="mono route-label" fill="#17345f">M</text>
+    <text x="127" y="533" class="sans method-copy" fill="#17345f"><tspan x="127" dy="0">Status quo +</tspan><tspan x="127" dy="16">benefit realization</tspan></text>
+    <path d="M95 557H103V564H109L99 575L89 564H95Z" fill="#2855f3" aria-hidden="true"/>
+    <line x1="127" y1="564" x2="403" y2="564" stroke="#cfe7f7" stroke-width="1.5"/>
+    <rect x="85" y="577" width="28" height="22" rx="6" fill="#fff5de" stroke="#17345f" stroke-width="1.5"/>
+    <text x="93" y="592" class="mono route-label" fill="#17345f">O</text>
+    <text x="127" y="591" class="sans output-copy" fill="#17345f"><tspan x="127" dy="0">Priced baseline</tspan><tspan x="127" dy="16">+ realized-value path</tspan></text>
+  </g>
+
+  <g id="route-08" role="group" aria-labelledby="route-08-title">
+    <title id="route-08-title">Route 8. What must a committee decide? Executive one-page business case. Basis, ask, timing, and consequences.</title>
+    <rect x="278" y="248" width="330" height="190" rx="17" fill="#17345f" aria-hidden="true"/>
+    <rect x="270" y="240" width="330" height="190" rx="17" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <path d="M270 257Q270 240 287 240H583Q600 240 600 257V276H270Z" fill="#153fbe"/>
+    <text x="289" y="264" class="mono route-number" fill="#fffdf8">ROUTE 08</text>
+    <rect x="285" y="285" width="28" height="22" rx="6" fill="#f2ff67" stroke="#17345f" stroke-width="1.5"/>
+    <text x="293" y="300" class="mono route-label" fill="#17345f">Q</text>
+    <text x="327" y="300" class="sans station-copy" fill="#17345f">What must a committee decide?</text>
+    <path d="M295 309H303V316H309L299 327L289 316H295Z" fill="#2855f3" aria-hidden="true"/>
+    <line x1="327" y1="317" x2="583" y2="317" stroke="#cfe7f7" stroke-width="1.5"/>
+    <rect x="285" y="329" width="28" height="22" rx="6" fill="#d9efea" stroke="#17345f" stroke-width="1.5"/>
+    <text x="293" y="344" class="mono route-label" fill="#17345f">M</text>
+    <text x="327" y="343" class="sans method-copy" fill="#17345f"><tspan x="327" dy="0">Executive one-page</tspan><tspan x="327" dy="16">business case</tspan></text>
+    <path d="M295 367H303V374H309L299 385L289 374H295Z" fill="#2855f3" aria-hidden="true"/>
+    <line x1="327" y1="374" x2="583" y2="374" stroke="#cfe7f7" stroke-width="1.5"/>
+    <rect x="285" y="387" width="28" height="22" rx="6" fill="#fff5de" stroke="#17345f" stroke-width="1.5"/>
+    <text x="293" y="402" class="mono route-label" fill="#17345f">O</text>
+    <text x="327" y="401" class="sans output-copy" fill="#17345f"><tspan x="327" dy="0">Basis + ask + timing</tspan><tspan x="327" dy="16">+ consequences</tspan></text>
+  </g>
+
+  <g role="group" aria-labelledby="hub-title">
+    <title id="hub-title">Shared decision record at the center</title>
+    <circle cx="808" cy="543" r="126" fill="#17345f" aria-hidden="true"/>
+    <circle cx="800" cy="535" r="126" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <circle cx="800" cy="535" r="108" fill="#e7efff" stroke="#2855f3" stroke-width="2"/>
+    <text x="800" y="492" class="mono eyebrow" fill="#153fbe" text-anchor="middle">SHARED COST RECORD</text>
+    <text x="800" y="526" class="sans hub-title" fill="#17345f" text-anchor="middle"><tspan x="800" dy="0">Choose the decision</tspan><tspan x="800" dy="25">before the number.</tspan></text>
+    <line x1="724" y1="568" x2="876" y2="568" stroke="#fa7065" stroke-width="4"/>
+    <text x="800" y="591" class="sans hub-copy" fill="#304a71" text-anchor="middle">basis · horizon · reserve</text>
+    <text x="800" y="612" class="sans hub-copy" fill="#304a71" text-anchor="middle">baseline · date · next decision</text>
+  </g>
+
+  <g role="group" aria-labelledby="doctrine-title">
+    <title id="doctrine-title">Costing doctrine</title>
+    <rect x="78" y="938" width="1452" height="52" rx="12" fill="#17345f" aria-hidden="true"/>
+    <rect x="70" y="930" width="1452" height="52" rx="12" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+    <rect x="86" y="944" width="24" height="24" rx="6" fill="#f2ff67" stroke="#17345f" stroke-width="1.5"/>
+    <text x="94" y="961" class="mono route-label" fill="#17345f">✓</text>
+    <text x="126" y="962" class="sans footer-copy" fill="#17345f">Every output travels with its basis, horizon, reserve, comparison baseline, date, and next decision.</text>
+  </g>
+</svg>

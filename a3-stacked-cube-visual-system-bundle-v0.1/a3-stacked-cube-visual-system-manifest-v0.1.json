@@ -1,0 +1,105 @@
+{
+  "id": "a3-stacked-cube-visual-system.manifest.v0.1",
+  "title": "A3 Stacked Cube Visual System Bundle",
+  "version": "0.1.0",
+  "status": "source_lineage_candidate",
+  "generated_on": "2026-08-25",
+  "canonical_type": "authority_storyboard_visual_system",
+  "entrypoint": "a3-stacked-cube-visual-system-chimeric-prototype-v0.1.html",
+  "files": {
+    "prototype": "a3-stacked-cube-visual-system-chimeric-prototype-v0.1.html",
+    "canonical": "data/a3-stacked-cube-canonical-v0.1.json",
+    "schema": "schema/a3-stacked-cube-state-schema-v0.1.json",
+    "context": "schema/a3-stacked-cube-visual-system.context.v0.1.jsonld",
+    "validation_report": "a3-stacked-cube-validation-report-v0.1.json"
+  },
+  "extends": null,
+  "source_reference": {
+    "repository": "urn:source-key:prototype-exemplars",
+    "consulted_commit": "e029455bb1ec0d41616f08e52123363cd0876c92",
+    "consulted_path": "core-architectures-chimeric-prototype-current-pack-v0.1/"
+  },
+  "publication": {
+    "repository": "driftframestudios/human-ai-systems-exemplars",
+    "repository_path": "a3-stacked-cube-visual-system-bundle-v0.1/"
+  },
+  "runtime_contract": {
+    "self_contained_primary_html": true,
+    "executable_remote_dependencies": [],
+    "primary_visual": "inline_svg"
+  },
+  "inventory": [
+    {
+      "path": "a3-stacked-cube-validation-report-v0.1.json",
+      "media_type": "application/json",
+      "role": "validation_receipt",
+      "bytes": 3352,
+      "sha256": "b5f90adeef5a0feea75870b5928722e0e30c4345b522ed6b627ebce03fa8de78"
+    },
+    {
+      "path": "a3-stacked-cube-visual-system-chimeric-prototype-v0.1.html",
+      "media_type": "text/html",
+      "role": "primary_prototype",
+      "bytes": 58389,
+      "sha256": "cdd63ab0d4c3fe35bd1a57769246c7902924ce88aad3eaaeb90a33770d127679"
+    },
+    {
+      "path": "assets/a3-stacked-cube-four-state-v0.1.svg",
+      "media_type": "image/svg+xml",
+      "role": "static_visual_derivative",
+      "bytes": 15088,
+      "sha256": "84d0464c5d3213074b1ecb235868f21ab8cb3ceb36d37f765a6f38617dd1f6bb"
+    },
+    {
+      "path": "assets/a3-stacked-cube-triptych-v0.1.svg",
+      "media_type": "image/svg+xml",
+      "role": "static_visual_derivative",
+      "bytes": 13701,
+      "sha256": "f754d021313c18d923b472c8cea4cee8db832b17e1e0ec6384cf4fdbcad60020"
+    },
+    {
+      "path": "data/a3-stacked-cube-canonical-v0.1.json",
+      "media_type": "application/json",
+      "role": "canonical_model",
+      "bytes": 24124,
+      "sha256": "c95bb72e83689bc3c9365895d7c4d56f2b6baffe0cad4c6bb8da2e61a393d319"
+    },
+    {
+      "path": "README.md",
+      "media_type": "text/markdown",
+      "role": "human_readme",
+      "bytes": 3694,
+      "sha256": "e7b66c0eeb8e9c10c3e28c28eeb582f1223647b235c8c071bf0040aa475e03af"
+    },
+    {
+      "path": "schema/a3-stacked-cube-state-schema-v0.1.json",
+      "media_type": "application/schema+json",
+      "role": "canonical_schema",
+      "bytes": 13212,
+      "sha256": "29412224ba56ec6f4289821bf34d44acedc56c9ae9eee76ae33cb7e276e24426"
+    },
+    {
+      "path": "schema/a3-stacked-cube-visual-system.context.v0.1.jsonld",
+      "media_type": "application/ld+json",
+      "role": "jsonld_context",
+      "bytes": 1884,
+      "sha256": "ddb6097af0ae6b55549dde46034e20a1598207dfb1b9ed274de7976fa85fe38b"
+    }
+  ],
+  "validation": {
+    "report": "a3-stacked-cube-validation-report-v0.1.json",
+    "result": "awaiting_human_cue",
+    "scope": "2026-08-25 source-lineage revision",
+    "prior_receipt": {
+      "report": "a3-stacked-cube-validation-report-v0.1.json",
+      "result": "pass",
+      "executed_on": "2026-07-27",
+      "scope": "bundle revision before source-lineage projection"
+    }
+  },
+  "notes": [
+    "Primary HTML is a direct single-file artifact with no executable remote dependency.",
+    "Static SVG derivatives share the protected F0–F3 authority semantics.",
+    "The 2026-08-25 manifest refresh covers locator-safe source identifiers and the sealed artifact byte/hash inventory; revision-bound PROVENANCE.md remains outside that inventory, and the validation report retains its 2026-07-27 execution scope."
+  ]
+}

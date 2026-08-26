@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Instruction Tranche",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_version",
+    "id",
+    "title",
+    "artifact_type",
+    "version",
+    "status",
+    "semantic_attractor_contract",
+    "source_band",
+    "tranche_id",
+    "applies_to",
+    "linked_tone_goal_refs",
+    "prompt_kernel",
+    "verification_signals"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1"
+    },
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "artifact_type": {
+      "const": "instruction_tranche"
+    },
+    "version": {
+      "const": "0.1.0"
+    },
+    "status": {
+      "enum": [
+        "curated_exemplar",
+        "reference_surface"
+      ]
+    },
+    "semantic_attractor_contract": {
+      "type": "object",
+      "required": [
+        "target_state",
+        "boundary_condition",
+        "replacement_state",
+        "verification_signals"
+      ],
+      "properties": {
+        "target_state": {
+          "type": "string"
+        },
+        "boundary_condition": {
+          "type": "string"
+        },
+        "replacement_state": {
+          "type": "string"
+        },
+        "verification_signals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "source_band": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tranche_id": {
+      "type": "string",
+      "pattern": "^T[0-9]{2}$"
+    },
+    "applies_to": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "linked_tone_goal_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "register_dimension_refs": {
+      "description": "Local tone-goal dimension references foregrounded by this tranche.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "prompt_kernel": {
+      "type": "string"
+    },
+    "verification_signals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

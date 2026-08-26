@@ -1,0 +1,40 @@
+# Local integrated runtime
+**/.git/
+.venv/
+venv/
+env/
+ENV/
+
+# Python and test products
+**/__pycache__/
+**/*.py[cod]
+**/*.egg-info/
+**/.eggs/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/.tox/
+**/.nox/
+**/.hypothesis/
+**/.coverage
+**/.coverage.*
+**/coverage.xml
+**/nosetests.xml
+**/htmlcov/
+
+# Package and dependency products
+**/build/
+**/dist/
+**/wheels/
+**/*.whl
+**/node_modules/
+**/.cache/
+
+# Local operating-system and tool metadata
+**/.DS_Store
+**/*.pyo
+**/*.pyd
+**/pip-log.txt
+**/npm-debug.log
+**/yarn-debug.log*
+**/yarn-error.log*

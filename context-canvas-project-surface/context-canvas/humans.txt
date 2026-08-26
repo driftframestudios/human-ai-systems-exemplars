@@ -1,0 +1,14 @@
+/* STEWARDSHIP */
+Organization: Driftframe Studios
+Role: Context Canvas steward
+Repository: https://github.com/driftframestudios/human-ai-systems-exemplars
+Location: New York, USA
+
+/* PUBLICATION BOUNDARY */
+Identity: Portfolio names and portraits remain explicitly illustrative until a named person authorizes publication.
+Source use: Human stewards approve audience, source authority, sensitive material, and consequential claims.
+
+/* SITE */
+Last Update: 2026-08-23
+Standards: HTML5, CSS3, SVG, JSON-LD
+Runtime: Static documents with progressive JavaScript enhancement

@@ -1,0 +1,177 @@
+{
+  "id": "na:technology-fit-sampling-tableau-validation-report/v0.1",
+  "title": "Technology Fit Sampling Tableau validation report",
+  "version": "0.1",
+  "generatedAt": "2026-06-21T16:49:30.495872+00:00",
+  "result": "pass",
+  "checks": {
+    "yamlParse": {
+      "result": "pass",
+      "file": "technology-fit-sampling-tableau-prototype-profile-v0.1.yaml",
+      "topLevelKeys": [
+        "prototype",
+        "probabilityObjects",
+        "invariantRegions",
+        "controls",
+        "visualizationContract",
+        "gapModel",
+        "probeContract",
+        "accessibility",
+        "sourceOfTruth",
+        "validation",
+        "handoffs"
+      ]
+    },
+    "jsonSchemaMetaValidation": {
+      "result": "pass",
+      "draft": "2020-12",
+      "file": "technology-fit-sampling-tableau-state.schema.v0.1.json"
+    },
+    "exampleStateValidation": {
+      "result": "pass",
+      "file": "front-end-stack-selection.example.v0.1.json",
+      "errorCount": 0
+    },
+    "jsonLdParse": {
+      "result": "pass",
+      "file": "front-end-stack-selection.example.v0.1.jsonld",
+      "tripleCount": 518
+    },
+    "routeRegistry": {
+      "result": "pass",
+      "familyCount": 7,
+      "coreArchitectureCount": 20,
+      "allTechnologyRoutesEnriched": true
+    },
+    "probeRegistry": {
+      "result": "pass",
+      "probeCount": 7,
+      "shapeFields": [
+        "question",
+        "whatItReveals",
+        "technicalCore",
+        "edgeCasesAndComplexity",
+        "aiCollaborationDirective",
+        "evidenceNeeded",
+        "abstentionCondition",
+        "routesTo"
+      ],
+      "allNamedSourcePagesPresent": true
+    },
+    "probabilityContracts": {
+      "result": "pass",
+      "runTotals": [
+        {
+          "runId": "run-sparse-default-brief",
+          "listedDefaultSum": 0.98,
+          "tailMass": 0.02,
+          "normalizedTotal": 1.0,
+          "fitSemantics": "independent_events"
+        },
+        {
+          "runId": "run-evidence-enriched-brief",
+          "listedDefaultSum": 0.98,
+          "tailMass": 0.02,
+          "normalizedTotal": 1.0,
+          "fitSemantics": "independent_events"
+        }
+      ]
+    },
+    "dimensionWeights": {
+      "result": "pass",
+      "total": 1.0,
+      "dimensionCount": 8
+    },
+    "gapClasses": {
+      "result": "pass",
+      "classes": [
+        "methodological",
+        "technical",
+        "organizational",
+        "evidence",
+        "boundary"
+      ],
+      "technicalGapCount": 4,
+      "methodologicalGapCount": 2
+    },
+    "lowFidelitySpikes": {
+      "result": "pass",
+      "spikeCount": 5,
+      "selectedCandidateCount": 2
+    },
+    "browserSmoke": {
+      "result": "pass",
+      "checks": {
+        "title": "Technology Fit Sampling Tableau · Chimeric Prototype v0.1",
+        "candidate_cards_initial": 7,
+        "route_cards_initial": 20,
+        "probe_cards_initial": 7,
+        "gap_cards_initial": 9,
+        "spike_rows_initial": 5,
+        "run_tabs_initial": 2,
+        "candidate_cards_after_add": 8,
+        "run_tabs_after_duplicate": 3,
+        "candidate_cards_after_compose": 9,
+        "technical_gap_cards": 4,
+        "json_preview_parses": true,
+        "jsonld_preview_parses": true,
+        "run_tabs_after_ai_import": 4,
+        "ai_response_status": "Successor run imported. AI-proposed values remain explicitly marked.",
+        "responsive_widths": {
+          "390": {
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "bodyScroll": 390
+          },
+          "768": {
+            "scrollWidth": 768,
+            "clientWidth": 768,
+            "bodyScroll": 768
+          },
+          "1280": {
+            "scrollWidth": 1280,
+            "clientWidth": 1280,
+            "bodyScroll": 1280
+          }
+        },
+        "body_h1": "Technology Fit\nSampling Tableau"
+      },
+      "console_errors": [],
+      "page_errors": []
+    },
+    "javascriptSyntax": {
+      "result": "pass",
+      "runtime": "node --check"
+    },
+    "remoteDependencyCheck": {
+      "result": "pass",
+      "externalScripts": 0,
+      "externalStylesheets": 0
+    },
+    "responsiveOverflow": {
+      "result": "pass",
+      "viewports": {
+        "390": {
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "bodyScroll": 390
+        },
+        "768": {
+          "scrollWidth": 768,
+          "clientWidth": 768,
+          "bodyScroll": 768
+        },
+        "1280": {
+          "scrollWidth": 1280,
+          "clientWidth": 1280,
+          "bodyScroll": 1280
+        }
+      }
+    }
+  },
+  "notes": [
+    "Candidate probabilities, intervals, and scores are illustrative planning records rather than calibrated forecasts.",
+    "Browser tests used Playwright with system Chromium and page.set_content because local URL navigation is restricted in the execution environment.",
+    "The preview image is a convenience artifact and is not a semantic source of truth."
+  ]
+}

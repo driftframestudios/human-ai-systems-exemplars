@@ -1,0 +1,164 @@
+# Context Canvas — open questions and current leanings
+
+This is a continual planning surface. The original twenty-one questions remain intact so future collaborators can recover the terrain that produced the current responses. A working response narrows a question while leaving room for use, evidence, and later collaboration to change the answer. Questions surfaced by the changed situation begin at 22.
+
+These questions are kept to be heard. They act as collaboration handles; immediate resolution arises when a receiving activity needs it.
+
+## Current collaboration posture — 2026-08-25
+
+- `vik.guru` is the intended human-facing origin. `iframes.vik.guru` has successfully served the About surface from the mirrored repository structure through Cloudflare-backed DNS and the current server. The successful iframe used `allow-scripts` and `allow-popups`; further permissions should be earned by a prototype capability.
+- The GitHub repository and its `main` branch remain the portable, locally usable source. The server can mirror that directory structure so local, GitHub-hosted, and CDN-fronted routes retain a legible relationship.
+- Prototype metadata stays beside each prototype. System fonts remain a deliberate dependency-minimizing choice.
+- One bounded GitHub Pages schema workflow now publishes documentation changes within the **$0 paid-overage** boundary. Other hosted checks and schedules remain dormant; proportional local evidence and pull-request descriptions carry their collaboration receipts.
+- AI collaboration on accessibility stays focused on sound semantic HTML and ordinary keyboard structure. Human collaborators own broader accessibility judgment and observation across current Chrome, Safari, Firefox, and Edge.
+- Session continuity across related prototypes is desirable. The carrier still needs to be chosen deliberately because an embedded origin's browser storage can be partitioned by the top-level site.
+- Field Inspection now owns the first physically separated route stylesheet. Context Canvas identity/browser metadata, stewardship, section orientation, and `404.html` recovery are repaired.
+- The [settled CSS route](css-modularization-and-visual-reference-plan.md) begins with a complete 39-page visual cutoff, then extracts About and demonstrated families into readable core, component, contract, and route source. The same plan carries the visual-reference utility, contract discoverability, and Debriefs badge-height correction.
+- The all-page images remain ignored, local, and cycle-scoped. They record initial visitor states at narrow, desktop, and wide dimensions; focus-state permutations and portable screenshot storage remain outside the current wave. A durable image surface returns after the human calculates likely Cloudflare transformations and explicitly reopens storage.
+- A deterministic 14-file Field Inspection Static Assets pilot now builds, checks byte parity and exact membership, and completes a Wrangler dry-run. Its no-index, `frame-ancestors 'none'` headers describe a direct-view proving surface; cross-origin framing remains a later exact-origin change.
+- The visual-cutoff to modular-CSS wave has landed, including the Debriefs badge correction. Initiative Costing's direct receipts, compact reading, and coordinating route have settled for this cycle; the [visitor and serving collaboration ledger](open-issue-collaboration-waves.md) retains prototype delivery, and the Open Lesson Field navigation idea remains available after a direct human cue.
+
+### Repository return — 2026-08-25
+
+- The About and AI Systems stylesheet ownership waves have landed. Initiative Costing has settled through the summary-tab refactor for this cycle.
+- The twelve-route source-to-Registry packet settled its public destinations and private Notion return; exact workspace lineage stays in the private resolver while repository records remain locator-free.
+- The eighteen-reading Site Reading packet now uses direct substantive children for `cc-site-reading-01` through `15`, the settled two-depth Prompt-Side route for `16`, and the shared parent for resolver-open `17` and `18`. The parent continues as family map and fallback. This semantic-receiver return raises the current visitor-facing tree from 37 to 52 Notion identities while preserving 93 occurrences; signed-out publication receives a separate acceptance receipt.
+- The Prompt-Side packet advances to a concise Field Watch route plus a full Generated Research & Atlases synthesis. The Grammar Family packet lands one atlas and eight stable teaching specimens. Their one-for-one route exchange keeps the intermediate inventory at 72 identities and 140 occurrences while every cited form gains a Registry-facing reader job and explicit current-content-false standing.
+- The Visual Fidelity packet and canonical Core and Narrative packet settle HEART, Shared Surface, Service Blueprint, PODA, and Threadkeeping counterparts. Five comparison routes fold into cleaned canonical pages; one distinct public-grade PODA practice companion preserves the investment-and-organizational-return job; and the intermediate inventory becomes 67 identities across 135 occurrences in 34 HTML files.
+- The [current Registry disposition](notion-registry-link-handoff.md#collaboration-chain-settlement) keeps 52 visitor-facing Notion identities across 93 occurrences in 31 HTML files. Thirty private working identities retire from visitor retrieval because the local Context Canvas surfaces already carry their useful explanation; thirteen canonical Core and Narrative receivers receive a reader-facing publication pass; fifteen direct Site Reading children add semantic precision. Exact lineage and return triggers remain private. The [public-history rehearsal](../locator-free-public-history-rehearsal.md) receives this complete handoff.
+- Prototype Exemplars v1 and Context Canvas v1 are published through the GitHub-backed schema route. Canonical identity, authored source, publication, delivery, and current retrieval remain distinct; the [schema contract plan](../schema-contract-research-and-implementation-plan.md) retains the operator-host handoff.
+- `source-authority-mapping` is the tenth portable contract. Three material corpora established its source-to-receiver job, and a small Collaboration Skills 0.1.0 family gives cross-platform collaborators a typed projection while human-readable skill and account sources retain meaning.
+- `issue-chain-stewardship` is the eleventh portable contract. Several distinct issue families and the live Registry disposition → repository-wide current-tree receipt → human-held history selection establish its receiving job. The chain names current front, evidenced relations, held decisions, transition receipt, next receiver, and release event; each receiver keeps its own acceptance and authority boundary.
+- `locator-boundary-stewardship` is the twelfth portable contract. The repeated public-record and authorized-resolver pattern now carries a named **paired-receiver settlement** method: one operator-blind key, complementary information diets, receiver-specific acceptance, and one partial-or-settled receipt. A distinct skill can form later if paired acceptance becomes an independently routable job beyond locator and publication-boundary work.
+- Planning activity as inventory remains a named skill billet. Opportunity capture, lower rediscovery or experimentation cost, and clearer expectation negotiation are now explicit contribution tests. A non-Canvas cycle that accepts the inventory itself as a decision-bearing deliverable can reopen formation.
+- The [root source-ownership map](../../README.md#source-ownership-and-receiving-routes) is the current human-readable answer for cross-repository ownership. Published Prototype Exemplars v1 bytes remain stable; a later schema version or mutable discovery surface can receive a machine projection when a consumer needs it.
+
+## Original twenty-one questions
+
+1. Which hostname should become the durable human-facing authority for the Context Canvas, and should the GitHub Pages URL remain only a deployment substrate?
+2. Which origins should eventually hold the Canvas, collaborative prototypes, schemas, and static assets, and which of those boundaries materially improve security or collaboration?
+3. Should the first public release use GitHub Pages behind Cloudflare, Cloudflare Pages directly, or a deliberately temporary combination while the schema constellation settles?
+4. Which repository artifacts are meant to be publicly retrievable source material, and which should be represented only by a commit-pinned link or manifest record?
+5. What is the smallest publication registry that can become authoritative without creating a new templating system for page content?
+6. Which metadata should remain authored near each page because local editorial judgment matters, and which metadata should be generated because drift is the larger risk?
+7. What monthly or per-collaboration GitHub Actions budget feels supportive across the human's full project constellation?
+8. Which events genuinely earn remote verification: a ready-for-review transition, a human-applied label, a manual dispatch, a merge to `main`, a publication change, or some combination?
+9. When `[skip ci]` is used, what compact local receipt should travel with the commit so another collaborator can understand what was exercised?
+10. Which checks, if any, need to be required on GitHub rather than human-reviewed and locally evidenced, given that a skipped required workflow can remain pending?
+11. How should a collaborator who can read only `main` discover an active branch's relevant planning without turning `main` into a project diary?
+12. Which shared files warrant an additional review because they are coordination hotspots, and how can ownership route expertise without centralizing authority in one person?
+13. Which browser and assistive-technology versions constitute the explicit support horizon before legacy prefixes, floats, or fallbacks are removed?
+14. Are Futura and Arial Nova intended as optional system character, or does repeatable editorial wrapping eventually justify licensed, self-hosted webfonts?
+15. Which computed styles and component states best represent each visual fidelity contract in a regression suite without freezing healthy expression?
+16. Which first CSS family should be extracted from `expanded.css` because it has clear ownership and the smallest cross-route cascade footprint?
+17. Which schema terms are stable enough for immutable public `$id` URLs, and which should remain local vocabulary until the constellation repository absorbs them?
+18. What should a prototype be allowed to remember across visits once it moves to a separate subdomain, and what state should remain deliberately ephemeral?
+19. Which `postMessage` capability is the first real need—height, ready state, shared selection, leave-behind request, or navigation—and can the parent stay the decision owner?
+20. What would make offline use valuable enough to justify a service worker, cache-version policy, stale-content recovery, and update notification?
+21. Which immediate next steps are bounded enough to become GitHub Issues now, and which still need to remain planning questions because an Issue would narrow the terrain too early?
+
+## Working responses to the original questions
+
+1. **Hostname.** Use `vik.guru` as the durable human-facing authority. The GitHub-hosted version carries the collaboration and source route; `vik.guru` carries the complete public-origin role.
+2. **Initial origin map.** Begin with `vik.guru` and `iframes.vik.guru`. The source repository is intentionally composed of public collaboration material. Separate origins should express an actual iframe, schema, or asset boundary; origin count alone adds little value.
+3. **First public route.** The first bounded Cloudflare route is now the 14-file Field Inspection Static Assets pilot. It remains undeployed until a named human authorizes its audience. GitHub continues to expose the repository-shaped source; `vik.guru`, `iframes.vik.guru`, and `schemas.vik.guru` remain distinct broader-origin options rather than prerequisites for this direct-view proof.
+4. **Public and pinned artifacts.** Visitor HTML, CSS, JavaScript, SVG, deliberately public schemas, invented fixtures, and a web app manifest are candidates for ordinary retrieval. Schema releases consumed by another system, research payloads whose claims depend on a revision, deployment receipts, and externally referenced collaboration packets are candidates for commit-pinned URLs. Planning and threadkeeping remain source context and stay outside the public site tree.
+5. **Publication registry.** The repository tree, Git history, and a small route or deployment receipt are sufficient for the current cycle. A new page-templating registry would solve a larger problem than the present publication path presents.
+6. **Metadata locality.** Keep prototype identity, source standing, boundaries, and version-adjacent metadata with the prototype. Generate only metadata whose value is mechanical and whose drift has already become consequential.
+7. **Remote automation budget.** The paid-overage boundary remains $0. One bounded GitHub Pages schema publication path can use the included allowance; additional hosted work still requires a named need and explicit human direction.
+8. **Remote verification events.** Documentation changes to the published schema route can activate its bounded Pages job. Human review and proportional local evidence carry the remaining repository collaboration; another named proof or deployment can earn its own activation later.
+9. **Local-proof receipt.** Use the pull-request description: changed surface, direct observation or source receipt, preserved behavior, and a useful re-entry point. The current resting state requires no skipped-CI convention because no automatic hosted run is scheduled.
+10. **Required checks.** The general required-check set remains empty. The connected schema Pages job is a publication route rather than a repository-wide compliance gate; other checks form only when a receiving need calls for them.
+11. **Branch discovery.** `main` carries durable planning and links to active Issues. Branch-specific proposals remain in their pull requests. Those two routes are sufficient for current discovery.
+12. **Coordination hotspots.** `expanded.css` remains the clearest shared hotspot, while `field-inspection.css` now demonstrates route-owned review. Route each change through the family it affects while expertise and authority remain distributed.
+13. **Support horizon.** AI collaborators focus on semantic accessibility and ordinary keyboard structure. Human collaborators handle broader accessibility observation. Use current Chrome, Safari, Firefox, and Edge as the contemporaneous browser horizon and prefer stable standards over fragile browser-specific branches.
+14. **Fonts.** Futura and Arial Nova are optional system character. The system-font stack is the intended primary treatment and preserves the low-dependency posture.
+15. **Visual contracts.** The existing browser-level harness covers named interaction behaviors and known regression families. The all-page visual-reference utility adds the complementary orientation surface: every top-level page at narrow, desktop, and wide dimensions, grouped for browsing and bound to a source revision. These references support composition review while route-level expression remains open to intentional change.
+16. **CSS extraction sequence.** Field Inspection is the first physical extraction. About is the settled next family because its large, visually distinctive Tiffany-owned region offers meaningful first-paint and ownership value with a clear canonical contract. Shared Machinery, AI Systems, Hiring, Debriefs, and the legacy remainder follow.
+17. **Public schema identity.** Strategy Canvas schema v2 is the strongest internally stabilized candidate. Public immutable `$id` URLs should follow a settled hostname route and migration policy. Working `example.org` identities and broader shared-envelope vocabulary remain local until that move is explicit.
+18. **Remembered state.** Related prototypes may carry a session together through expectation, focalization, opportunity, lesson planning, or strategy work. Protected or person-specific material travels through approved channels. Generic browser persistence can receive an inspectable capsule, explicit import/export, or parent-held session whose behavior stays visible across origins.
+19. **First message capability.** Begin the repository's parent/child `postMessage` protocol with a versioned `ready` and capability message. The first consequential payload is likely an offered collaboration-capsule snapshot; height can remain a layout concern until a real embed demonstrates otherwise. The parent validates the exact child origin and decides whether to receive or route the capsule.
+20. **Offline value.** A repository checkout or downloadable self-contained folder is the first offline proof. A service worker becomes useful when a named team needs installed, updateable offline use and there is a clear stale-content recovery experience. A web app manifest describes application identity and launch behavior; a source folder or service worker carries offline behavior.
+21. **Bounded next collaborations.** The all-page utility, modular CSS, and Debriefs correction formed one structural sequence. Direct state receipts and the compact Investment Reading formed one Initiative Costing sequence. Those groups have landed for this cycle. Prototype delivery retains direct view and later framing; the Open Lesson Field navigation idea retains its human-cued return; repository identity remains a separate selection.
+
+## Questions surfaced by the changed situation
+
+22. What exact receipt closes the Initiative Costing cycle: merged direct state receipts and compact Investment Reading, an updated coordination route map, one ordinary full-view reading, and one About-iframe reading—or a smaller combination?
+23. What human cue should reopen prototype-wide iteration after the planning-directory activities begin, so the resting cycle retains an explicit invitation to resume?
+24. Which stabilized prototype should become the first formal `iframes.vik.guru` pilot after the successful About experiment: Initiative Costing, Open Lesson Field, or a smaller self-contained instrument?
+25. Which capability did the current `.htaccess` CORS header enable, and which part of the successful result came from ordinary iframe embedding? The answer should keep cross-origin resource access, frame permission, and parent/child DOM isolation as separate mechanisms.
+26. Which exact parent origins may embed production iframe documents—`https://vik.guru`, a GitHub preview, a local development origin, or a small reviewed set—and where should the `Content-Security-Policy: frame-ancestors` contract live?
+27. What is the deployable closure for an iframe prototype: its own HTML/CSS/JavaScript/assets folder, a mirrored repository subtree, or a hybrid with explicit shared primitives?
+28. Which route invariant lets repository-relative assets, full-view links, downloads, and onward readings behave the same under a local checkout, GitHub, `vik.guru`, and `iframes.vik.guru`?
+29. Which lightweight revision receipt should connect a served iframe to source: a response header, an HTML `meta` value, a visible footer, a commit-pinned source link, or two complementary forms?
+30. Which cache policy should distinguish HTML, mutable JSON/schema routes, and content-addressed assets, and what is the recovery move after a response-header change? Has any custom cache key explicitly excluded the request `Origin` header?
+31. Can the first useful route stay within two active Transform Rules—one wildcard path rewrite and one document-header rule—while a third exact CORS rule remains conditional on a real cross-origin asset fetch?
+32. Which session state belongs in the child, which belongs in a top-level collaboration capsule, and which should travel only through explicit export/import when browser storage is partitioned by top-level site?
+33. What is the smallest versioned `postMessage` envelope that supports `ready`, declared capabilities, an optional capsule offer, exact-origin validation, and a visible receiving decision?
+34. What should a fully local team handoff contain—source folder, asset closure, schema/fixture subset, instructions, and revision receipt—before a service worker is considered?
+35. Which sandbox permissions are earned by each prototype capability—scripts, popups, downloads, clipboard, forms, or same-origin access—and which current embeds can converge on a smaller shared baseline?
+36. Is the application-identity proposal intended to supply identity metadata and resolve linked-manifest 404s, or to begin an installable application experience? What name, `id`, `scope`, `start_url`, icon family, and standard-browser `display` posture represent the whole Context Canvas rather than one route?
+37. After the human calculates likely unique Cloudflare transformations and reopens durable image storage, which source-accessible form would give cross-platform collaborators useful orientation with proportionate transformation and retention cost?
+38. Which external AI or collaboration environment should become the first receiver that loads a Collaboration Skills JSON projection and returns a material account?
+39. Does source-authority mapping reduce reconciliation cost in a fourth corpus whose boundaries differ from schemas, Notion links, and repository promotion?
+40. Which non-Canvas planning cycle could accept a planning inventory as the decision-bearing deliverable and test opportunity capture, experimentation cost, and expectation negotiation directly?
+41. Which skill-catalog growth or misrouting observation would make a router more useful than the current ten-description scan?
+42. When does composition require a typed facet or profile, and when do peer skills plus direct context remain the clearer route?
+43. Which receiving use would justify another Collaboration Skills version, JSON-LD semantics, or hosted resolution while preserving the human-readable source as semantic authority?
+44. What smallest share or publication receipt should distinguish Registry ancestry, public-possible content standing, and signed-out visitor availability while keeping access confirmation proportionate to the route?
+45. Which public-history route best preserves the useful current tree: a clean successor, a focused rewrite, or a same-repository re-root with an explicit retained copy?
+46. Which live branches, tags, releases, Pages routes, and commit-pinned schema links must remain addressable after that route is selected?
+47. Which decision-bearing commit rationales need a public-safe Issue before any ancestry rewrite, and which are already carried by merged pull requests and planning pages?
+48. What exact recovery receipt—retained clone, named ref, bundle, or complementary form—would make the selected history operation calmly reversible?
+
+### Settlements from this cycle
+
+- **Question 24 — first formal Static Assets surface.** Field Inspection is the selected direct-view pilot. Its exact 14-file closure keeps the first delivery observation smaller than an iframe migration.
+- **Question 26 — framing authority.** The pilot currently declares `frame-ancestors 'none'`. A later change will name the exact parent origin before it opens framing.
+- **Question 27 — deployable closure.** The first answer is a hybrid explicit allowlist: route-local HTML/CSS plus the shared shell, foundation, icons, and three diagrams, with delivery-owned headers and 404.
+- **Question 36 — manifest posture.** Context Canvas now declares its own name, relative `id`, scope and start route, local icon family, and `display: "browser"`. This settles identity and linked assets while leaving offline installability for a named future journey.
+- **Question 15 — visual-contract reference posture.** Focused checks retain interactive and alternate-mode depth. The new all-page sweep supplies initial-state visual way-finding and CSS before/after comparison without creating a pixel gate.
+- **Question 16 — next CSS family.** About follows Field Inspection, using the full-page cutoff and Tiffany contract as its receiving context.
+- **Question 45 — selected route.** The initialized cross-slug successor is selected as Option A: retain the source repository privately, preserve the successor curated coordination history, add the accepted source tree through an ordinary snapshot commit, and follow it with the named Public-baseline revision-link settlement. Option B, the technical-collaboration replay, proceeds independently after an observed undertaking exists. Current-tree disposition, receiver mapping, recovery preparation, and revision-link first forms are accepted; Issue work:public-baseline-rehearsal owns the focused cutoff refresh and the operation packet. Remote commits, merge, visibility, rules, Pages, and publication changes retain their direct human cue.
+- **Questions 46–48 — public-history preparation.** The [locator-free public-history rehearsal](../locator-free-public-history-rehearsal.md) preserves the original parentless experiment as historical tree-serialization evidence and records the selected additive route as current direction. The accepted candidate carries 15 relative first forms across two files plus three baseline-history statements. Receipt `public-baseline-revision-links.v1` binds those routes to the later additive-snapshot revision in one follow-up commit. The rehearsal also accounts for current retained and successor branches and pull refs, both `docs` services, tag and release standing, stored commit identities, GitHub-native collaboration surfaces, recovery, and a commit-preserving merge. Exact refreshed tips, reviewer, recovery receipt, and remote authorization remain with Issue work:public-baseline-rehearsal and the named human cue.
+
+## Current option range for dependency-minimizing delivery
+
+These current decision weights total 100%. The direct-view Field Inspection pilot supplies the first deployable-closure evidence; an explicit iframe pilot can move the framing and origin weights later.
+
+| Option | Current weight | Why it may fit now | What would move the weight |
+| --- | ---: | --- | --- |
+| Mirror the repository route tree behind `vik.guru` and `iframes.vik.guru` | 50% | Preserves relative links, local parity, source legibility, and the fewest new concepts | Repeated route exceptions or public exposure of source-only folders |
+| Treat each iframe prototype folder as a deployable closure | 25% | Strong portability, easy local handoff, and clear asset ownership | Material duplication of shared assets or difficult cross-prototype navigation |
+| Use a hybrid: shared stable primitives plus prototype-local distinctive assets | 20% | Balances cache reuse with self-contained collaboration surfaces | A clear shared-asset contract and enough repeated pilots to show its value |
+| Generate, inline, or route assets through a Worker per request | 5% | Useful for bounded request-specific variation | A demonstrated dynamic requirement whose value exceeds added runtime and routing complexity |
+
+The working preference is to preserve repository-shaped paths first. Asset colocation is valuable when it makes a prototype a complete collaboration handoff; CDN centralization is valuable when the same stable byte is shared broadly. A single global rule is less useful than an explicit deployable-closure decision for each prototype family.
+
+## Five-or-fewer Transform Rules
+
+Cloudflare currently makes Transform Rules available on every plan, with ten active rules on Free. Wildcard rewrite syntax provides path capture on Free, while regular expressions begin on higher plans. A five-rule planning ceiling fits comfortably while preserving room for unrelated domain work.
+
+1. **Path rewrite.** Map one `iframes.vik.guru` wildcard path family to the mirrored repository subtree while preserving the captured remainder.
+2. **Iframe document headers.** Apply the reviewed `frame-ancestors`, referrer, `X-Content-Type-Options`, and related document response headers to the iframe HTML path family. One response-header rule can carry multiple header operations.
+3. **Shared-asset CORS, conditional.** Restrict one exact `Access-Control-Allow-Origin` policy to assets that are actually fetched cross-origin. A dynamic allowlist belongs in a Worker or Snippet when a fixed value no longer fits.
+4. **Reserved path family.** Reserve one position for a second proven route family.
+5. **Reserved response difference.** Reserve one position for an observed header distinction.
+
+Cache behavior belongs in Cache Rules, redirects belong in Redirect Rules, and Static Assets can carry source-owned headers in a `_headers` file. Keeping those mechanisms distinct makes the rule set easier to reason about.
+
+One earlier concern now has a more precise answer: Cloudflare's default cache key includes the request `Origin` header for CORS support unless a custom cache key explicitly excludes it. The immediate question is therefore whether any custom rule has removed that variance. When CORS headers change at the origin, use a versioned URL or the documented purge route so the revised response headers reach the edge.
+
+## Research routes for the next return
+
+- [Cloudflare cache keys](https://developers.cloudflare.com/cache/how-to/cache-keys/) — the default key includes host, path/query, and request `Origin`; custom header cache-key controls vary by plan.
+- [Cloudflare CORS and cached assets](https://developers.cloudflare.com/cache/cache-security/cors/) — cached CORS response headers and recovery after an origin-header change.
+- [Cloudflare Transform Rules](https://developers.cloudflare.com/rules/transform/) and [wildcard URL rewrites](https://developers.cloudflare.com/rules/transform/examples/rewrite-moved-section/) — current availability, ordering, and path-capture behavior.
+- [Workers Static Assets headers](https://developers.cloudflare.com/workers/static-assets/headers/) and [Worker-first routing](https://developers.cloudflare.com/workers/static-assets/routing/worker-script/) — `_headers`, default revalidation, selective middleware, and the assets binding.
+- [MDN iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe) and [`frame-ancestors`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/frame-ancestors) — same-origin isolation, cross-origin messaging, sandbox behavior, and who may embed a document.
+- [MDN state partitioning](https://developer.mozilla.org/en-US/docs/Web/Privacy/Guides/State_Partitioning) — why an embedded origin should avoid assuming one globally shared browser-storage area.
+- [W3C Web Application Manifest](https://www.w3.org/TR/appmanifest/) — identity, scope, launch, icon, and display metadata; offline behavior remains a separate design decision.
+
+## Re-entry
+
+Use this ledger for conversational responses and new terrain. A question moves into its own Issue when it has a bounded visitor outcome, source boundary, and receiving collaborator. The current packet returns through the [repository skill architecture](../repository-skill-architecture.md), [Collaboration Skills visitor page](../../context-canvas-project-surface/context-canvas/collaboration-skills.html), [Collaboration Skills schema](../../schemas/collaboration-skills/0.1.0/README.md), and [root source-ownership map](../../README.md#source-ownership-and-receiving-routes). The Registry handoff supplied its final 37 / 93 / 31 Context Canvas HTML receipt; repository-wide source settlement supplied a zero-shape exact-locator receipt and 15 readable revision-link first forms for the tracked current tree. Issue work:public-baseline-rehearsal accepted that receipt and is now the current front. The [reversible rehearsal](../locator-free-public-history-rehearsal.md) carries refs, the named Public-baseline revision-link settlement, recovery, and adjacent-surface work. Question 45 carries the selected route while exact refs, recovery form, remote operation, and direct cue arrive together. Self-contained iframe publication and dynamic delivery remain distinct receivers. Questions 38–44 remain planning handles until a named receiver makes one materially current.

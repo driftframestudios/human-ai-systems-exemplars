@@ -9,7 +9,7 @@ adapt research, integration, staging, release, and delivery to particular jobs.
 | Branch | Primary job | Service relation |
 | --- | --- | --- |
 | `main` | Canonical collaboration trunk and authored current source | Radiant Null collaboration family |
-| `snapshot` | Named stable-core baseline copied from an accepted `main` tip | Quiet comparison and re-entry receiver for the next preflight; no independent service role |
+| `snapshot` | Exact selected `main` revision for stable-core comparison and recovery re-entry | Comparison input for a named preflight; feature work returns through a living branch |
 | `research` | Future-state projection and AI research-integration environment | Preview artifacts or a later purpose-bound research route |
 | `dev` | Sustained feature integration | Radiant Null collaboration family |
 | `stg` | Deployment candidates and Cloudflare Worker pilots | Vik Guru schema family |
@@ -30,16 +30,20 @@ only through a named service decision.
 
 ## Snapshot baseline
 
-`snapshot` is a deliberately quiet copy of a selected `main` revision. It is
-created or advanced only after the source changes for a stable-core wave have
-settled and the next preflight has a named receiver. Work begins from the
-fitting living branch rather than from `snapshot`.
+`snapshot` is a deliberately quiet copy of a selected `main` revision. Before
+using it, compare the exact `main` and `snapshot` commit IDs and record the
+result in the receiving Issue or pull request. A recovery, population, or
+preflight branch consumes the selected baseline by branching from `snapshot`
+or merging that exact snapshot revision into its living branch. Accepted
+feature work returns through the living pull-request branch; `snapshot` remains
+a comparison input.
 
-Each refresh records the source `main` revision, observation date, and receiving
-preflight in the current Issue or pull-request receipt. The branch preserves a
-clear comparison and re-entry point; it does not change semantic authority,
-publication standing, delivery configuration, or the successor's authored
-source relationship.
+After a stable-core wave settles on `main`, fast-forward `snapshot` to that
+accepted revision. When its history has diverged, recreate the ref only after a
+recorded human cue names the previous revision, replacement revision,
+observation date, and receiving use. This preserves a legible recovery point
+while source authority, publication standing, and delivery configuration stay
+with their named branches and settings.
 
 ## Research flow
 
@@ -123,11 +127,22 @@ environment bindings, and deployments receive their own reviewable changes.
 
 ### Current evidence window
 
-`main` is the sole budget-active receiver. Its public-boundary workflow reads
-tracked text on non-draft pull requests targeting the trunk. It uses one Linux
-job with a two-minute ceiling, read-only contents permission, superseded-run
-cancellation, and a one-day aggregate receipt. Findings retain advisory
-standing while merge authority stays with current reviewers.
+`main` is the sole budget-active evidence receiver. Its public-boundary workflow
+reads tracked text on non-draft pull requests targeting the trunk. A companion
+schema-route receipt reads matching schema changes through the existing schema
+surface contract and Pages projection. Both use read-only contents permission, superseded-run
+cancellation, and advisory findings while merge authority stays with current
+reviewers. Their ceilings are two and six minutes respectively; the boundary
+reader retains its aggregate receipt for one day.
+
+The complete source-owned Actions family also travels with the trunk: `docs`
+can publish the schema surface, Core and Narrative units remain manually
+selectable with their pull-request receiver resting behind
+`PROTOTYPE_UNIT_TESTS_AUTOMATIC`, and two LIMS/ELN proof paths retain explicit
+dispatch and confirmation. Every external action is pinned to a full reviewed
+commit SHA. These routes have distinct activation controls and leave the main
+public-boundary intake and schema-route receipt as the bounded automatic
+readers.
 
 `research`, `res/*`, `dev`, `docs`, `stg`, `release`, and `prod` rest with budget
 values set to `false`. The shared profile envelope remains human-managed. A

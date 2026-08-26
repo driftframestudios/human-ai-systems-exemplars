@@ -1,0 +1,32 @@
+{
+  "sampleId": "FMI-LIMS-S01",
+  "title": "Attributable specimen lifecycle with exact command replay",
+  "temporalClass": "current_2026",
+  "evidenceClass": "current_companion",
+  "executionClass": "verified_running",
+  "executionScope": "local_offline_synthetic",
+  "qualificationStage": "executable_offline",
+  "codePaths": [
+    "src/lims_eln_reference/domain.py",
+    "src/lims_eln_reference/lifecycle.py"
+  ],
+  "testPaths": ["tests/test_lifecycle_custody.py"],
+  "trustBoundaries": [
+    "Tenant-bound actor identity crosses into the canonical lifecycle service.",
+    "Release authority crosses from scientific and quality review into durable state."
+  ],
+  "failureModes": [
+    "Changed reuse of a command identifier raises a concurrency conflict.",
+    "Stale version, cross-tenant actor, missing reason, and missing signature evidence close the transition."
+  ],
+  "receipts": ["receipts/validation-report.json"],
+  "affectedPopulations": [
+    "bench_scientist",
+    "pathologist",
+    "quality",
+    "engineer",
+    "evaluator"
+  ],
+  "regulatoryScope": "determination_owned_by_quality_and_regulatory"
+}
+

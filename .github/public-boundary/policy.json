@@ -11,6 +11,32 @@
   },
   "max_text_file_bytes": 2000000,
   "accepted_external_github_receivers": [
-    "github/gitignore"
+    "ankane/strong_migrations",
+    "benchling/benchling-sdk",
+    "betterleaks/betterleaks",
+    "chalk/supports-color",
+    "cloudflare/workers-chat-demo",
+    "cloudflare/workers-for-platforms-example",
+    "cloudflare/workers-sdk",
+    "flyway/flyway",
+    "gitleaks/gitleaks",
+    "github/gitignore",
+    "githubnext/testpilot",
+    "json-schema-org/JSON-Schema-Test-Suite",
+    "LabKey/labkey-api-python",
+    "mattpocock/skills",
+    "npgsql/efcore.pg",
+    "opennextjs/opennextjs-cloudflare",
+    "postgres/postgres",
+    "PrefectHQ/prefect",
+    "sapiosciences/sapio-py-tutorials",
+    "sindresorhus/is",
+    "secretlint/secretlint",
+    "sponsors/antfu",
+    "sponsors/epoberezkin",
+    "sponsors/fastify",
+    "trufflesecurity/trufflehog",
+    "vale-cli/vale",
+    "Yelp/detect-secrets"
   ]
 }
