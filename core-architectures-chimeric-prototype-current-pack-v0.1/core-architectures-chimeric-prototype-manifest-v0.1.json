@@ -98,8 +98,8 @@
       "schema": "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
       "expression": "canonical",
       "exists": true,
-      "size_bytes": 130221,
-      "sha256": "98ccea5c6f764b147a5edae895ee6121cb0b13f6570a159a2684882df20b9bed"
+      "size_bytes": 130173,
+      "sha256": "4d0887d699a00f8be0cb6489644513d0e437d65eb63bac4317bc69464c4f675d"
     },
     {
       "id": "first-responsible-version-matrix",
