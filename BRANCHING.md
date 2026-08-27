@@ -171,6 +171,11 @@ serving, deployment, and credential-routing contract.
 
 ## Pull-request receipts
 
+Every review-ready pull request carries one receiving milestone and the
+smallest meaningful label set. Metadata supports navigation; the body remains
+the durable receipt for the material result, related issues, change boundary,
+fitting evidence and its coverage boundary, recovery path, and next receiver.
+
 A feature receipt names the question, bounded change, fitting evidence, recovery
 path, and next receiver. An epic receipt adds the included features,
 architecture or service delta, Actions usage, unresolved boundaries, and the

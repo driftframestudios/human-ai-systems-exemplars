@@ -221,7 +221,7 @@ need reconciliation.
 | [`.agents/skills/`](.agents/skills/) | Portable, on-demand collaboration contracts |
 | [`tests/`](tests/README.md) | Source-grounded Core, Narrative, public-reference, and secret-boundary behavior contracts |
 | [`tools/`](tools/) | Repository-owned builders, test runners, visual observers, research receipts, and security wrappers |
-| [`.github/`](.github/AUTOMATION.md) | Hosted automation, Actions policy, environments, and issue templates |
+| [`.github/`](.github/AUTOMATION.md) | Hosted automation, Actions policy, environments, and pull-request writing guidance |
 | [`cloudflare/context-canvas-field-pilot/`](cloudflare/context-canvas-field-pilot/README.md) | A bounded Static Assets build and dry-run path for a future Context Canvas delivery receiver |
 | [`planning/`](planning/README.md) | Prospective design and implementation terrain |
 | [`threadkeeping/`](threadkeeping/README.md) | Settled rationale, collaboration accounts, promotion receipts, and re-entry |
