@@ -282,7 +282,6 @@ export async function downloadAsset(
 ) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
-  timeout.unref?.();
   try {
     const response = await fetchImpl(url, {
       redirect: "follow",

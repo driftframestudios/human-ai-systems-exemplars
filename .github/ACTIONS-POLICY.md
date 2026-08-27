@@ -20,9 +20,9 @@ before use.
 
 ## Immutable GitHub-owned actions
 
-The public-boundary, schema receiver-route, schema publication, prototype-unit,
-and two LIMS/ELN proof workflows use only these reviewed GitHub-owned action
-revisions:
+The public-boundary, schema receiver-route, schema publication, schema delivery,
+prototype-unit, and two LIMS/ELN proof workflows use only these reviewed
+GitHub-owned action revisions:
 
 | Action | Reviewed tag | Pinned commit |
 |---|---|---|
@@ -40,7 +40,7 @@ through `jobs.<job_id>.uses`.
 
 ## Receiver and budget boundary
 
-`main` is the current budget-active evidence receiver. Its successor-owned
+`main` remains a budget-active evidence receiver. Its successor-owned
 public-boundary job has a two-minute ceiling and a one-day aggregate receipt.
 Its schema receiver-route job has a six-minute ceiling, reads the shared route
 map through the schema check and Pages build, and contributes an advisory
@@ -50,12 +50,23 @@ The prototype-unit job has its own resting switch:
 rest while explicit dispatch remains available. The LIMS/ELN proof jobs require
 both `ENABLE_GITHUB_ACTIONS=true` and a selected confirmation.
 
+`release` and `prod` each have an approved 300-minute allocation for the current
+collaboration cycle. One shared schema-delivery workflow gives both branches a
+12-minute automatic contract and an eight-minute connected deployment ceiling.
+The contract stays with the established schema, Static Assets, Wrangler, and
+secret-material readers. Visual review, unit proof, scheduling, and broader
+package questions retain their own deliberately selected routes. Superseded
+contracts cancel; deployments serialize by receiver and finish their current
+upload.
+
 The Pages workflow remains the standing `docs` publication path. Evidence
 budgets and deployment authority stay independent:
-`DEPLOYMENT_ACTIVE_RECEIVERS=[]` keeps Worker and other future deployments at
-rest. The repository's paid-overage boundary remains $0; a named human can
-allocate included Actions minutes and return any receiver variable to its
-resting value after the useful receipt arrives.
+`DEPLOYMENT_ACTIVE_RECEIVERS=[]` currently lets release and production checks
+run while their Worker uploads rest. Naming a receiver in that list admits its
+connected deployment only after the matching branch-restricted environment
+provides its account coordinate and least-privilege token. The repository's
+paid-overage boundary remains $0; a named human can return a receiver variable
+to its resting value when its allocation or useful receipt settles.
 
 Third-party Marketplace actions, external actions outside the allowed
 organizations, hosted visual sweeps, broad package validation, and recurring

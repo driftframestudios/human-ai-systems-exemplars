@@ -127,13 +127,15 @@ environment bindings, and deployments receive their own reviewable changes.
 
 ### Current evidence window
 
-`main` is the sole budget-active evidence receiver. Its public-boundary workflow
+`main` remains a budget-active evidence receiver. Its public-boundary workflow
 reads tracked text on non-draft pull requests targeting the trunk. A companion
 schema-route receipt reads matching schema changes through the existing schema
-surface contract and Pages projection. Both use read-only contents permission, superseded-run
-cancellation, and advisory findings while merge authority stays with current
-reviewers. Their ceilings are two and six minutes respectively; the boundary
-reader retains its aggregate receipt for one day.
+surface contract and Pages projection. Both use read-only contents permission,
+superseded-run cancellation, and advisory findings while merge authority stays
+with current reviewers. Their ceilings are two and six minutes respectively;
+the boundary reader retains its aggregate receipt for one day. `release` and
+`prod` are the two additional budget-active receivers for the bounded schema
+delivery contract described below.
 
 The complete source-owned Actions family also travels with the trunk: `docs`
 can publish the schema surface, Core and Narrative units remain manually
@@ -144,10 +146,14 @@ commit SHA. These routes have distinct activation controls and leave the main
 public-boundary intake and schema-route receipt as the bounded automatic
 readers.
 
-`research`, `res/*`, `dev`, `docs`, `stg`, `release`, and `prod` rest with budget
-values set to `false`. The shared profile envelope remains human-managed. A
-later evidence receipt can propose another active receiver, wider triggers, or
-a longer budget. `.github/ENVIRONMENTS.md` carries the operative receiver,
+`release` and `prod` each carry an approved 300-minute Actions allocation and
+the shared automatic schema-delivery contract. Deployment remains a separate
+receiver choice: `release` uploads to its un-routed integration Worker and
+`prod` passes through its exact-branch environment and accepted human handoff
+when their names enter
+`DEPLOYMENT_ACTIVE_RECEIVERS`. `research`, `res/*`, `dev`, `docs`, and `stg`
+retain their resting budget values. The shared profile envelope remains
+human-managed. `.github/ENVIRONMENTS.md` carries the operative receiver,
 serving, deployment, and credential-routing contract.
 
 ## Working answers
