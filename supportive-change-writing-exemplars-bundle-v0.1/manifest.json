@@ -1,0 +1,126 @@
+{
+  "$schema": "schema/collection-manifest.schema.v0.1.json",
+  "schema_version": "0.1",
+  "id": "collection:supportive-change-writing-exemplars:v0.1",
+  "title": "Supportive Change Writing Exemplars",
+  "version": "0.1.0",
+  "status": "working_exemplar",
+  "purpose": "Preserve the collection's voice, conceptual range, evidence context, relationships, machine-oriented guidance, and material reading character.",
+  "audience": [
+    "adults_at_work",
+    "enterprises",
+    "businesses",
+    "corporate_environments",
+    "life_to_work_transitions"
+  ],
+  "entry_points": {
+    "collection_context": "context/README.md",
+    "testimonial_library": "blurbs/README.md",
+    "essay_index": "exemplars/README.md",
+    "reading_pathways": "PATHWAYS.md",
+    "tone_goals": "tone-goals/",
+    "instruction_tranches": "instruction-tranches/README.md",
+    "prompt_capsules": "prompt-capsules/",
+    "editorial_assessments": "assessments/",
+    "schema_registry": "registry/schema-registry.v0.1.yaml",
+    "pdf_index": "artifacts/pdf/README.md"
+  },
+  "probability_context": {
+    "architecture_assessment_ref": "assessments/publication-architecture-assessment.v0.1.md",
+    "essay_embodiment_assessment_ref": "assessments/latent-quality-embodiment-assessment.v0.1.md",
+    "referent": "Editorial likelihood judgments about preservation choices and the recognizable presence of the requested supportive qualities."
+  },
+  "branches": [
+    {
+      "id": "executive-culture",
+      "title": "Executive Culture and Transformation",
+      "overview_ref": "exemplars/01-executive-culture/overview.md",
+      "essay_refs": [
+        "exemplars/01-executive-culture/essays/01-culture-as-a-coordination-system.md",
+        "exemplars/01-executive-culture/essays/02-power-capacity-and-a-fair-settlement.md",
+        "exemplars/01-executive-culture/essays/03-executive-attention-as-a-form-of-stewardship.md"
+      ],
+      "reference_set_ref": "exemplars/01-executive-culture/references.md",
+      "reader_pdf_ref": "artifacts/pdf/01-executive-culture-and-transformation.pdf",
+      "accent": "#315B73"
+    },
+    {
+      "id": "frontline-teams",
+      "title": "Frontline and High-Pressure Teams",
+      "overview_ref": "exemplars/02-frontline-teams/overview.md",
+      "essay_refs": [
+        "exemplars/02-frontline-teams/essays/01-reliability-is-a-social-achievement.md",
+        "exemplars/02-frontline-teams/essays/02-capacity-turns-ingenuity-into-reliable-work.md",
+        "exemplars/02-frontline-teams/essays/03-the-pause-that-keeps-a-team-adaptive.md"
+      ],
+      "reference_set_ref": "exemplars/02-frontline-teams/references.md",
+      "reader_pdf_ref": "artifacts/pdf/02-frontline-and-high-pressure-teams.pdf",
+      "accent": "#9B612F"
+    },
+    {
+      "id": "cross-functional-collaboration",
+      "title": "Cross-Functional Collaboration",
+      "overview_ref": "exemplars/03-cross-functional-collaboration/overview.md",
+      "essay_refs": [
+        "exemplars/03-cross-functional-collaboration/essays/01-the-work-between-functions.md",
+        "exemplars/03-cross-functional-collaboration/essays/02-systems-that-make-collaboration-possible.md",
+        "exemplars/03-cross-functional-collaboration/essays/03-the-handoff-as-a-place-of-learning.md"
+      ],
+      "reference_set_ref": "exemplars/03-cross-functional-collaboration/references.md",
+      "reader_pdf_ref": "artifacts/pdf/03-cross-functional-collaboration.pdf",
+      "accent": "#39756F"
+    },
+    {
+      "id": "sustainable-well-being",
+      "title": "Sustainable Well-Being",
+      "overview_ref": "exemplars/04-sustainable-well-being/overview.md",
+      "essay_refs": [
+        "exemplars/04-sustainable-well-being/essays/01-well-being-that-can-survive-the-work.md",
+        "exemplars/04-sustainable-well-being/essays/02-build-recovery-into-the-system.md",
+        "exemplars/04-sustainable-well-being/essays/03-small-openings-in-a-demanding-day.md"
+      ],
+      "reference_set_ref": "exemplars/04-sustainable-well-being/references.md",
+      "reader_pdf_ref": "artifacts/pdf/04-sustainable-well-being.pdf",
+      "accent": "#5F7742"
+    },
+    {
+      "id": "customer-community-service",
+      "title": "Customer and Community Service",
+      "overview_ref": "exemplars/05-customer-and-community-service/overview.md",
+      "essay_refs": [
+        "exemplars/05-customer-and-community-service/essays/01-service-as-a-sensing-system.md",
+        "exemplars/05-customer-and-community-service/essays/02-fair-systems-make-courtesy-consequential.md",
+        "exemplars/05-customer-and-community-service/essays/03-the-quiet-need-at-the-counter.md"
+      ],
+      "reference_set_ref": "exemplars/05-customer-and-community-service/references.md",
+      "reader_pdf_ref": "artifacts/pdf/05-customer-and-community-service.pdf",
+      "accent": "#75598A"
+    },
+    {
+      "id": "small-business-leadership",
+      "title": "Small-Business and Entrepreneurial Leadership",
+      "overview_ref": "exemplars/06-small-business-leadership/overview.md",
+      "essay_refs": [
+        "exemplars/06-small-business-leadership/essays/01-resourcefulness-with-a-full-cost-view-of-scarcity.md",
+        "exemplars/06-small-business-leadership/essays/02-viability-beyond-endurance.md",
+        "exemplars/06-small-business-leadership/essays/03-stewardship-and-the-next-viable-move.md"
+      ],
+      "reference_set_ref": "exemplars/06-small-business-leadership/references.md",
+      "reader_pdf_ref": "artifacts/pdf/06-small-business-and-entrepreneurial-leadership.pdf",
+      "accent": "#965448"
+    },
+    {
+      "id": "personal-work-transitions",
+      "title": "Personal-to-Work Transitions",
+      "overview_ref": "exemplars/07-personal-to-work-transitions/overview.md",
+      "essay_refs": [
+        "exemplars/07-personal-to-work-transitions/essays/01-re-entering-work-with-a-whole-life-intact.md",
+        "exemplars/07-personal-to-work-transitions/essays/02-adjustment-as-a-shared-organizational-capacity.md",
+        "exemplars/07-personal-to-work-transitions/essays/03-the-provisional-self-at-work.md"
+      ],
+      "reference_set_ref": "exemplars/07-personal-to-work-transitions/references.md",
+      "reader_pdf_ref": "artifacts/pdf/07-personal-to-work-transitions.pdf",
+      "accent": "#4E6478"
+    }
+  ]
+}

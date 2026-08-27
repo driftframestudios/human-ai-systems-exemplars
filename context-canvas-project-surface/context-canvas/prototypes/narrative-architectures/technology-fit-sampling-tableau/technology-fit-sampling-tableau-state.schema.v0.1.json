@@ -1,0 +1,1007 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.driftframestudios.org/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json",
+  "title": "Technology Fit Sampling Tableau State",
+  "description": "State contract for a Narrative Sampling Tableau profile that compares front-end technology possibilities through separate default-likelihood and collaboration-fit probability objects, dimensional fit, composable stack layers, low-fidelity spikes, technical and methodological gaps, practitioner probes, Core Architecture routes, and reversible decision records.",
+  "type": "object",
+  "required": [
+    "id",
+    "type",
+    "profileOf",
+    "displayName",
+    "version",
+    "status",
+    "centralContract",
+    "promptCapsule",
+    "dimensions",
+    "runs",
+    "activeRunId",
+    "comparison",
+    "stackPalette",
+    "lowFidelitySpikes",
+    "gaps",
+    "probeRegistryRef",
+    "routingRegistryRef",
+    "gapPolicy",
+    "decision",
+    "viewState",
+    "publication",
+    "validation"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "const": "TechnologyFitSamplingSurface"
+    },
+    "profileOf": {
+      "const": "na:narrative-sampling-tableau"
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "asOf": {
+      "type": "string",
+      "format": "date"
+    },
+    "centralContract": {
+      "type": "string"
+    },
+    "sourcePage": {
+      "type": "object"
+    },
+    "promptCapsule": {
+      "$ref": "#/$defs/AIPromptCapsule"
+    },
+    "dimensions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/FitDimension"
+      }
+    },
+    "runs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/SamplingRun"
+      }
+    },
+    "activeRunId": {
+      "type": "string"
+    },
+    "comparison": {
+      "$ref": "#/$defs/RunComparison"
+    },
+    "stackPalette": {
+      "$ref": "#/$defs/StackLayerPalette"
+    },
+    "lowFidelitySpikes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/LowFidelitySpike"
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/GapRecord"
+      }
+    },
+    "probeRegistryRef": {
+      "type": "string"
+    },
+    "routingRegistryRef": {
+      "type": "string"
+    },
+    "selectedProbeIds": {
+      "$ref": "#/$defs/UniqueStringArray"
+    },
+    "selectedRouteIds": {
+      "$ref": "#/$defs/UniqueStringArray"
+    },
+    "formalStatisticalFitBoundary": {
+      "$ref": "#/$defs/FormalStatisticalFitBoundary"
+    },
+    "gapPolicy": {
+      "$ref": "#/$defs/GapPolicy"
+    },
+    "decision": {
+      "$ref": "#/$defs/TechnologyDecisionRecord"
+    },
+    "viewState": {
+      "$ref": "#/$defs/ViewState"
+    },
+    "publication": {
+      "$ref": "#/$defs/PublicationState"
+    },
+    "validation": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "StringArray": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "UniqueStringArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "ProbabilityDefinition": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "statement",
+        "candidateSetSemantics",
+        "normalizationRule",
+        "measurementStatus"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "statement": {
+          "type": "string"
+        },
+        "candidateSetSemantics": {
+          "type": "string",
+          "enum": [
+            "closed_exclusive_exhaustive",
+            "open_exclusive",
+            "independent_events",
+            "composable_portfolio",
+            "ranked_nonprobabilistic",
+            "mixed_requires_decomposition"
+          ]
+        },
+        "normalizationRule": {
+          "type": "string"
+        },
+        "measurementStatus": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "AIPromptCapsule": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "displayName",
+        "currentDecision",
+        "probabilityObjects",
+        "population",
+        "horizon",
+        "conditions",
+        "candidateCountRequested",
+        "diversityInstruction",
+        "tailInstruction",
+        "dimensionInstruction",
+        "gapInstruction",
+        "iterationInstruction",
+        "comparisonInstruction",
+        "returnShape"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "const": "AIContextProjection"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "currentDecision": {
+          "type": "string"
+        },
+        "probabilityObjects": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/ProbabilityDefinition"
+          }
+        },
+        "population": {
+          "type": "string"
+        },
+        "horizon": {
+          "type": "string"
+        },
+        "conditions": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "exclusions": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "candidateCountRequested": {
+          "type": "integer",
+          "minimum": 2
+        },
+        "diversityInstruction": {
+          "type": "string"
+        },
+        "tailInstruction": {
+          "type": "string"
+        },
+        "dimensionInstruction": {
+          "type": "string"
+        },
+        "gapInstruction": {
+          "type": "string"
+        },
+        "iterationInstruction": {
+          "type": "string"
+        },
+        "comparisonInstruction": {
+          "type": "string"
+        },
+        "returnShape": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "FitDimension": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "weight",
+        "definition",
+        "evidenceClass"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "definition": {
+          "type": "string"
+        },
+        "evidenceClass": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "Estimate": {
+      "type": "object",
+      "required": [
+        "estimate",
+        "intervalLow",
+        "intervalHigh",
+        "estimateKind",
+        "measurementStatus",
+        "calibrationState",
+        "basis"
+      ],
+      "properties": {
+        "estimate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "intervalLow": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "intervalHigh": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "estimateKind": {
+          "type": "string"
+        },
+        "measurementStatus": {
+          "type": "string"
+        },
+        "calibrationState": {
+          "type": "string"
+        },
+        "basis": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "StackLayers": {
+      "type": "object",
+      "required": [
+        "runtime",
+        "framework",
+        "styling",
+        "components",
+        "stateData",
+        "buildDeploy",
+        "testing"
+      ],
+      "properties": {
+        "runtime": {
+          "type": "string"
+        },
+        "framework": {
+          "type": "string"
+        },
+        "styling": {
+          "type": "string"
+        },
+        "components": {
+          "type": "string"
+        },
+        "stateData": {
+          "type": "string"
+        },
+        "buildDeploy": {
+          "type": "string"
+        },
+        "testing": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "TechnologyCandidate": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "shortName",
+        "semanticCluster",
+        "summary",
+        "layers",
+        "dimensionScores",
+        "strengths",
+        "tradeoffs",
+        "replacementSeam",
+        "defaultLikelihood",
+        "sixMonthFit",
+        "decisionState",
+        "evidenceStatus",
+        "assumptions",
+        "evidenceWouldMove"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "shortName": {
+          "type": "string"
+        },
+        "semanticCluster": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "layers": {
+          "$ref": "#/$defs/StackLayers"
+        },
+        "dimensionScores": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          }
+        },
+        "strengths": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "tradeoffs": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "replacementSeam": {
+          "type": "string"
+        },
+        "defaultLikelihood": {
+          "$ref": "#/$defs/Estimate"
+        },
+        "sixMonthFit": {
+          "$ref": "#/$defs/Estimate"
+        },
+        "decisionState": {
+          "type": "string",
+          "enum": [
+            "unreviewed",
+            "selected_for_spike",
+            "held",
+            "declined",
+            "selected",
+            "superseded"
+          ]
+        },
+        "evidenceStatus": {
+          "type": "string"
+        },
+        "assumptions": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "evidenceWouldMove": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "componentCandidateRefs": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "createdByComposition": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "SamplingRun": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "asOf",
+        "status",
+        "promptCondition",
+        "samplingCondition",
+        "candidateSetSemantics",
+        "otherOrTailMass",
+        "defaultProbabilityObject",
+        "fitProbabilityObject",
+        "candidates",
+        "missingModeClasses",
+        "runNotes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "parentRunRef": {
+          "type": "string",
+          "description": "Stable identity of the source run used to form this successor."
+        },
+        "variantRef": {
+          "type": "string",
+          "description": "Stable identity of the successor relationship represented by this run."
+        },
+        "name": {
+          "type": "string"
+        },
+        "asOf": {
+          "type": "string",
+          "format": "date"
+        },
+        "status": {
+          "type": "string"
+        },
+        "promptCondition": {
+          "type": "string"
+        },
+        "samplingCondition": {
+          "type": "string"
+        },
+        "candidateSetSemantics": {
+          "type": "string",
+          "enum": [
+            "open_exclusive",
+            "closed_exclusive_exhaustive"
+          ]
+        },
+        "otherOrTailMass": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "defaultProbabilityObject": {
+          "type": "string"
+        },
+        "fitProbabilityObject": {
+          "type": "string"
+        },
+        "candidates": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/TechnologyCandidate"
+          }
+        },
+        "missingModeClasses": {
+          "$ref": "#/$defs/StringArray"
+        },
+        "runNotes": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "RunComparison": {
+      "type": "object",
+      "required": [
+        "baselineRunId",
+        "comparisonRunId",
+        "comparisonQuestion"
+      ],
+      "properties": {
+        "baselineRunId": {
+          "type": "string"
+        },
+        "comparisonRunId": {
+          "type": "string"
+        },
+        "comparisonQuestion": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "LayerChoice": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "notes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "StackLayer": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "choices"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "choices": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/LayerChoice"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "StackLayerPalette": {
+      "type": "object",
+      "required": [
+        "id",
+        "rule",
+        "layers",
+        "currentComposition"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "rule": {
+          "type": "string"
+        },
+        "layers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/StackLayer"
+          }
+        },
+        "currentComposition": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "SpikeCandidateState": {
+      "type": "object",
+      "required": [
+        "status",
+        "evidence"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "planned",
+            "illustrative_walkthrough",
+            "in_progress",
+            "observed",
+            "verified",
+            "blocked",
+            "deferred"
+          ]
+        },
+        "evidence": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "LowFidelitySpike": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "decisionQuestion",
+        "architectureRefs",
+        "acceptanceCriteria",
+        "candidateStates"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "decisionQuestion": {
+          "type": "string"
+        },
+        "architectureRefs": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "acceptanceCriteria": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "candidateStates": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/SpikeCandidateState"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "GapRecord": {
+      "type": "object",
+      "required": [
+        "id",
+        "gapClass",
+        "gapType",
+        "title",
+        "description",
+        "consequence",
+        "gapUtility",
+        "currentHandling",
+        "routeTargetId",
+        "resolutionState",
+        "severity"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "gapClass": {
+          "type": "string",
+          "enum": [
+            "methodological",
+            "technical",
+            "organizational",
+            "evidence",
+            "boundary"
+          ]
+        },
+        "gapType": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "consequence": {
+          "type": "string"
+        },
+        "gapUtility": {
+          "type": "string",
+          "enum": [
+            "generative",
+            "neutral",
+            "coordination_gap",
+            "harmful",
+            "unknown"
+          ]
+        },
+        "currentHandling": {
+          "type": "string"
+        },
+        "routeTargetId": {
+          "type": "string"
+        },
+        "probeRef": {
+          "type": "string"
+        },
+        "resolutionState": {
+          "type": "string",
+          "enum": [
+            "open",
+            "held_open",
+            "reviewing",
+            "resolved",
+            "superseded",
+            "retired"
+          ]
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "low",
+            "moderate",
+            "high",
+            "boundary_critical"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "FormalStatisticalFitBoundary": {
+      "type": "object",
+      "required": [
+        "id",
+        "status",
+        "currentState",
+        "minimumForFormalFit",
+        "replacementState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "currentState": {
+          "type": "string"
+        },
+        "minimumForFormalFit": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "replacementState": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "GapPolicy": {
+      "type": "object",
+      "required": [
+        "baseType",
+        "classes",
+        "determination"
+      ],
+      "properties": {
+        "baseType": {
+          "const": "GapRecord"
+        },
+        "classes": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "methodological",
+              "technical",
+              "organizational",
+              "evidence",
+              "boundary"
+            ]
+          }
+        },
+        "determination": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "TechnologyDecisionRecord": {
+      "type": "object",
+      "required": [
+        "id",
+        "decisionState",
+        "selectedCandidateIds",
+        "heldCandidateIds",
+        "declinedCandidateIds",
+        "decisionRule",
+        "rationale",
+        "evidenceRequiredBeforeCommitment",
+        "reviewAfter",
+        "valueOrigin",
+        "reviewState"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "decisionState": {
+          "type": "string",
+          "enum": [
+            "exploring",
+            "prepare_equal_spikes",
+            "spikes_in_progress",
+            "provisional_selection",
+            "selected",
+            "deferred",
+            "reopened"
+          ]
+        },
+        "selectedCandidateIds": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "heldCandidateIds": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "declinedCandidateIds": {
+          "$ref": "#/$defs/UniqueStringArray"
+        },
+        "decisionRule": {
+          "type": "string"
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "dissentOrMinorityRead": {
+          "type": "string"
+        },
+        "evidenceRequiredBeforeCommitment": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "reviewAfter": {
+          "type": "string"
+        },
+        "valueOrigin": {
+          "type": "string"
+        },
+        "reviewState": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "ViewState": {
+      "type": "object",
+      "required": [
+        "selectedCandidateId",
+        "selectedProbeId",
+        "selectedGapClass",
+        "selectedRouteFamily",
+        "showIntervals",
+        "showHeldCandidates",
+        "activeTab"
+      ],
+      "properties": {
+        "selectedCandidateId": {
+          "type": "string"
+        },
+        "selectedProbeId": {
+          "type": "string"
+        },
+        "selectedGapClass": {
+          "type": "string"
+        },
+        "selectedRouteFamily": {
+          "type": "string"
+        },
+        "showIntervals": {
+          "type": "boolean"
+        },
+        "showHeldCandidates": {
+          "type": "boolean"
+        },
+        "activeTab": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "PublicationState": {
+      "type": "object",
+      "required": [
+        "visibility",
+        "sourceBand",
+        "sourceOfTruthBand",
+        "privateLocatorsIncluded",
+        "unreviewedInferenceIncludedAsFact",
+        "note"
+      ],
+      "properties": {
+        "visibility": {
+          "type": "string",
+          "enum": [
+            "private",
+            "internal",
+            "public_safe",
+            "public"
+          ]
+        },
+        "sourceBand": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourceOfTruthBand": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "privateLocatorsIncluded": {
+          "const": false
+        },
+        "unreviewedInferenceIncludedAsFact": {
+          "const": false
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

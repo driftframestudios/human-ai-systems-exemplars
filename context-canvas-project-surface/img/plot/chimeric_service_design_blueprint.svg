@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Service-design Blueprint preview</title>
+  <desc id="desc">A service stage is read across actor, frontstage, backstage, system, data and evidence, governance, and handoff lanes.</desc>
+  <style>.bg{fill:#fffdf7}.ink{fill:#16345e}.cobalt{fill:#2855f3}.sea{fill:#bfe7e4}.powder{fill:#dbe9ff}.rose{fill:#ffd3d0}.cream{fill:#fff0cf}.rule{stroke:#16345e;stroke-width:3}.dash{stroke:#2855f3;stroke-width:4;stroke-dasharray:14 10}.cap{font:700 16px ui-monospace,monospace;letter-spacing:.6px}.small{font:17px Arial,sans-serif}</style>
+  <rect width="960" height="600" class="bg"/>
+  <rect x="42" y="32" width="876" height="58" rx="12" class="cobalt rule"/><text x="68" y="68" class="cap" fill="#fff">SERVICE STAGE · REQUEST → REVIEW → HANDOFF</text>
+  <g class="rule"><rect x="42" y="112" width="184" height="70" class="sea"/><rect x="226" y="112" width="692" height="70" class="bg"/><rect x="42" y="182" width="184" height="70" class="powder"/><rect x="226" y="182" width="692" height="70" class="powder"/></g>
+  <text x="62" y="154" class="cap ink">ACTOR ACTION</text><text x="252" y="154" class="small ink">Frames a request and checks the returned evidence</text>
+  <text x="62" y="224" class="cap ink">FRONTSTAGE</text><text x="252" y="224" class="small ink">Visible prompt, progress, source receipt, review controls</text>
+  <path d="M42 270H918" fill="none" class="dash"/><text x="700" y="290" class="cap ink">LINE OF VISIBILITY</text>
+  <g class="rule"><rect x="42" y="310" width="184" height="62" class="cream"/><rect x="226" y="310" width="692" height="62" class="cream"/><rect x="42" y="372" width="184" height="62" class="sea"/><rect x="226" y="372" width="692" height="62" class="sea"/><rect x="42" y="434" width="184" height="62" class="rose"/><rect x="226" y="434" width="692" height="62" class="rose"/></g>
+  <text x="62" y="348" class="cap ink">BACKSTAGE</text><text x="252" y="348" class="small ink">Triage, exception handling, escalation, recovery</text>
+  <text x="62" y="410" class="cap ink">DATA + EVIDENCE</text><text x="252" y="410" class="small ink">Source standing, retrieval, provenance, retention</text>
+  <text x="62" y="472" class="cap ink">GOVERNANCE</text><text x="252" y="472" class="small ink">Named owner, rule, audit point, consequential decision</text>
+  <rect x="42" y="520" width="876" height="48" rx="12" class="ink"/><text x="480" y="551" text-anchor="middle" class="small" fill="#fffdf7">Every visible step has a support layer and a receiving handoff.</text>
+</svg>

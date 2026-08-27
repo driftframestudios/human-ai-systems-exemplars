@@ -1,0 +1,272 @@
+{
+  "schema_version": "0.2.0",
+  "as_of": "2026-07-24",
+  "method": "Deep Research Atlas — Self-Contained Payload (v1.2)",
+  "status": "complete_for_external_primary_source_pass",
+  "rows": [
+    {
+      "source_name": "A3 · Appendix — Stacked Cube Model (Strangler-Fig Storyboards)",
+      "address_attempted": "Authorized resolver source key SRC-A3",
+      "accessed": true,
+      "read_depth": "full",
+      "role_in_analysis": "protected historical and semantic baseline",
+      "report_section": "authority topology",
+      "citation": "urn:source-key:SRC-A3",
+      "failure_state": null,
+      "failure_citation": null
+    },
+    {
+      "source_name": "Deep Research Atlas — Self-Contained Payload (v1.2)",
+      "address_attempted": "Authorized resolver source key SRC-ATLAS",
+      "accessed": true,
+      "read_depth": "full",
+      "role_in_analysis": "research protocol, evidence classes, disconfirmation, provenance, completion gate",
+      "report_section": "method",
+      "citation": "urn:source-key:SRC-ATLAS",
+      "failure_state": null,
+      "failure_citation": null
+    },
+    {
+      "source_name": "A3 Stacked Cube canonical registry v0.1",
+      "address_attempted": "local canonical JSON",
+      "accessed": true,
+      "read_depth": "full",
+      "role_in_analysis": "machine-readable protected baseline and regeneration source",
+      "report_section": "authority topology",
+      "citation": "a3-stacked-cube-canonical-v0.1.json",
+      "failure_state": null,
+      "failure_citation": null
+    },
+    {
+      "source_name": "FDA Quality Management System Regulation",
+      "address_attempted": "official FDA QMSR page",
+      "accessed": true,
+      "read_depth": "full_page",
+      "role_in_analysis": "current quality-system context; effective 2026-02-02",
+      "report_section": "scope and assurance",
+      "citation": "https://www.fda.gov/medical-devices/postmarket-requirements-devices/quality-management-system-regulation-qmsr",
+      "failure_state": "incorporated ISO 13485:2016 normative text not reproduced on the FDA page",
+      "failure_citation": "https://www.fda.gov/medical-devices/postmarket-requirements-devices/quality-management-system-regulation-qmsr"
+    },
+    {
+      "source_name": "FDA Premarket Submissions for Device Software Functions",
+      "address_attempted": "official FDA PDF",
+      "accessed": true,
+      "read_depth": "deep_targeted",
+      "role_in_analysis": "architecture, requirements, traceability, verification, version history, anomaly disposition",
+      "report_section": "software evidence bundle",
+      "citation": "https://www.fda.gov/media/153781/download",
+      "failure_state": "product-specific documentation level unresolved",
+      "failure_citation": "https://www.fda.gov/media/153781/download"
+    },
+    {
+      "source_name": "FDA Computer Software Assurance for Production and Quality Management System Software",
+      "address_attempted": "official FDA February 2026 PDF",
+      "accessed": true,
+      "read_depth": "deep_targeted",
+      "role_in_analysis": "intended use, foreseeable failure, risk-proportional assurance, evidence records",
+      "report_section": "assurance lens",
+      "citation": "https://www.fda.gov/media/188844/download",
+      "failure_state": "applies to production and QMS software, not device software functions themselves",
+      "failure_citation": "https://www.fda.gov/media/188844/download"
+    },
+    {
+      "source_name": "FDA Cybersecurity in Medical Devices",
+      "address_attempted": "official FDA February 2026 PDF",
+      "accessed": true,
+      "read_depth": "deep",
+      "role_in_analysis": "threat modeling, architecture views, SBOM, logging, recovery, vulnerability management",
+      "report_section": "security evidence gate",
+      "citation": "https://www.fda.gov/media/119933/download",
+      "failure_state": "section 524B obligations depend on cyber-device status",
+      "failure_citation": "https://www.fda.gov/media/119933/download"
+    },
+    {
+      "source_name": "FDA Human Factors Engineering Program Submission Information",
+      "address_attempted": "official FDA May 2026 PDF",
+      "accessed": true,
+      "read_depth": "deep_targeted",
+      "role_in_analysis": "critical tasks, UI-change assessment, use-related risk analysis, validation evidence",
+      "report_section": "human-factors delta gate",
+      "citation": "https://www.fda.gov/media/163694/download",
+      "failure_state": "within stated operationalization interval until 2026-08-01 on the as-of date",
+      "failure_citation": "https://www.fda.gov/media/163694/download"
+    },
+    {
+      "source_name": "FDA Clinical Decision Support Software",
+      "address_attempted": "official FDA January 2026 PDF",
+      "accessed": true,
+      "read_depth": "deep",
+      "role_in_analysis": "intended use, independent review, time-criticality, automation bias, genomic examples",
+      "report_section": "regulatory-context gate",
+      "citation": "https://www.fda.gov/media/109618/download",
+      "failure_state": "device or non-device status cannot be concluded without intended use and actual function",
+      "failure_citation": "https://www.fda.gov/media/109618/download"
+    },
+    {
+      "source_name": "IMDRF Software as a Medical Device Clinical Evaluation",
+      "address_attempted": "official IMDRF document page",
+      "accessed": true,
+      "read_depth": "targeted",
+      "role_in_analysis": "valid clinical association, analytical validation, clinical validation",
+      "report_section": "clinical evidence gate",
+      "citation": "https://www.imdrf.org/documents/software-medical-device-samd-clinical-evaluation",
+      "failure_state": "international technical document, not a standalone US legal requirement",
+      "failure_citation": "https://www.imdrf.org/documents/software-medical-device-samd-clinical-evaluation"
+    },
+    {
+      "source_name": "21 CFR 11.10 and FDA Part 11 scope guidance",
+      "address_attempted": "official eCFR section and FDA guidance",
+      "accessed": true,
+      "read_depth": "full_section_plus_scope_guidance",
+      "role_in_analysis": "record validation, copies, retention, access, audit trail, authority and sequence checks",
+      "report_section": "records and audit gate",
+      "citation": "https://www.ecfr.gov/current/title-21/part-11/section-11.10",
+      "failure_state": "predicate-rule and record-scope applicability unresolved",
+      "failure_citation": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/part-11-electronic-records-electronic-signatures-scope-and-application"
+    },
+    {
+      "source_name": "45 CFR 164.308 and 164.312",
+      "address_attempted": "official eCFR sections",
+      "accessed": true,
+      "read_depth": "full_sections",
+      "role_in_analysis": "risk analysis, access management, contingency, audit, integrity, authentication, transmission security",
+      "report_section": "records and security gates",
+      "citation": "https://www.ecfr.gov/current/title-45/part-164/section-164.308",
+      "failure_state": "HIPAA applicability depends on entity, relationship, and ePHI scope",
+      "failure_citation": "https://www.ecfr.gov/current/title-45/part-164/section-164.312"
+    },
+    {
+      "source_name": "NIST Secure Software Development Framework 1.1",
+      "address_attempted": "official NIST publication",
+      "accessed": true,
+      "read_depth": "targeted",
+      "role_in_analysis": "secure development, provenance, verification, vulnerability response",
+      "report_section": "software and security evidence gates",
+      "citation": "https://csrc.nist.gov/pubs/sp/800/218/final",
+      "failure_state": "voluntary framework, not a compliance certification; draft 1.2 excluded",
+      "failure_citation": "https://csrc.nist.gov/pubs/sp/800/218/final"
+    },
+    {
+      "source_name": "Fowler, AWS, and first-party Strangler / abstraction patterns",
+      "address_attempted": "original pattern descriptions and AWS prescriptive guidance",
+      "accessed": true,
+      "read_depth": "full_pages",
+      "role_in_analysis": "interception seam, incremental authority change, abstraction, limitations",
+      "report_section": "authority and runtime lenses",
+      "citation": "https://martinfowler.com/bliki/OriginalStranglerFigApplication.html",
+      "failure_state": "pattern guidance does not establish product-specific separability",
+      "failure_citation": "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/strangler-fig.html"
+    },
+    {
+      "source_name": "LaunchDarkly multi-stage migrations",
+      "address_attempted": "first-party migration flag guidance",
+      "accessed": true,
+      "read_depth": "deep",
+      "role_in_analysis": "old-only, dual-write, shadow, live, ramp-down, complete stages and selectable profiles",
+      "report_section": "runtime/data lens",
+      "citation": "https://launchdarkly.com/docs/guides/flags/migrations",
+      "failure_state": "not every migration can support simultaneous implementations",
+      "failure_citation": "https://launchdarkly.com/docs/guides/flags/migrations"
+    },
+    {
+      "source_name": "AWS transactional outbox and Debezium",
+      "address_attempted": "first-party pattern and documentation",
+      "accessed": true,
+      "read_depth": "deep_targeted",
+      "role_in_analysis": "dual-write risk, atomic state/event commit, duplicate delivery, idempotency, ordering",
+      "report_section": "runtime/data lens",
+      "citation": "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html",
+      "failure_state": "engine and connector limitations remain implementation-specific",
+      "failure_citation": "https://debezium.io/documentation/reference/stable/features.html"
+    },
+    {
+      "source_name": "PostgreSQL 18 logical replication restrictions and conflicts",
+      "address_attempted": "official PostgreSQL documentation",
+      "accessed": true,
+      "read_depth": "full_relevant_sections",
+      "role_in_analysis": "schema, sequence, large-object, view, conflict, and skipped-transaction limitations",
+      "report_section": "data readiness gate",
+      "citation": "https://www.postgresql.org/docs/current/logical-replication-restrictions.html",
+      "failure_state": "database-specific evidence; not proof that PostgreSQL is used here",
+      "failure_citation": "https://www.postgresql.org/docs/current/logical-replication-conflicts.html"
+    },
+    {
+      "source_name": "Istio traffic mirroring and Google SRE canary guidance",
+      "address_attempted": "first-party platform and SRE documentation",
+      "accessed": true,
+      "read_depth": "deep_targeted",
+      "role_in_analysis": "non-authoritative mirrored responses, side-effect risk, canary/control separation, observation windows",
+      "report_section": "runtime evidence gate",
+      "citation": "https://istio.io/latest/docs/tasks/traffic-management/mirroring/",
+      "failure_state": "mirroring and canary guidance do not prove an applicable mechanism is deployed",
+      "failure_citation": "https://sre.google/workbook/canarying-releases/"
+    },
+    {
+      "source_name": "OpenAPI and Pact",
+      "address_attempted": "official specifications and first-party provider-verification documentation",
+      "accessed": true,
+      "read_depth": "targeted",
+      "role_in_analysis": "declared contracts versus current verified contracts",
+      "report_section": "contract readiness gate",
+      "citation": "https://spec.openapis.org/oas/latest.html",
+      "failure_state": "contract verification does not replace data, security, production, or end-to-end evidence",
+      "failure_citation": "https://docs.pact.io/getting_started/verifying_pacts"
+    },
+    {
+      "source_name": "NIST Zero Trust Architecture and OAuth Security BCP",
+      "address_attempted": "official NIST publication and RFC",
+      "accessed": true,
+      "read_depth": "targeted",
+      "role_in_analysis": "per-request authorization, policy decision/enforcement, least privilege, audience restriction",
+      "report_section": "security and runtime lenses",
+      "citation": "https://csrc.nist.gov/pubs/sp/800/207/final",
+      "failure_state": "general security architecture; product-specific policy topology unresolved",
+      "failure_citation": "https://www.rfc-editor.org/rfc/rfc9700.html"
+    },
+    {
+      "source_name": "W3C PROV-O",
+      "address_attempted": "official W3C Recommendation",
+      "accessed": true,
+      "read_depth": "targeted",
+      "role_in_analysis": "entities, activities, agents, derivation, usage, attribution, responsibility",
+      "report_section": "evidence provenance lens",
+      "citation": "https://www.w3.org/TR/prov-o/",
+      "failure_state": null,
+      "failure_citation": null
+    },
+    {
+      "source_name": "W3C WCAG 2.2, SVG 2, and complex-image guidance",
+      "address_attempted": "official W3C recommendations and WAI guidance",
+      "accessed": true,
+      "read_depth": "targeted",
+      "role_in_analysis": "text equivalents, reflow, keyboard/focus, title and description, redundant color encoding",
+      "report_section": "interaction and accessibility",
+      "citation": "https://www.w3.org/TR/WCAG22/",
+      "failure_state": "APG examples and WAI tutorials are informative guidance, not standalone conformance proof",
+      "failure_citation": "https://www.w3.org/TR/SVG/struct.html"
+    },
+    {
+      "source_name": "AWS and Microsoft workload retirement guidance",
+      "address_attempted": "first-party cloud migration guidance",
+      "accessed": true,
+      "read_depth": "deep_targeted",
+      "role_in_analysis": "dependency discovery, controlled stop, approvals, rollback grace, archival, recovery testing",
+      "report_section": "recovery and retirement lens",
+      "citation": "https://docs.aws.amazon.com/prescriptive-guidance/latest/migration-retiring-applications/best-practice-4.html",
+      "failure_state": "general cloud retirement guidance; retention rules and business-cycle thresholds remain system-specific",
+      "failure_citation": "https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/migrate/decommission-source-workload"
+    },
+    {
+      "source_name": "FDA-recognized IEC 62304, ISO 14971, IEC 62366-1, and AAMI SW96",
+      "address_attempted": "official FDA recognition records",
+      "accessed": true,
+      "read_depth": "recognition_summaries_only",
+      "role_in_analysis": "recognized lifecycle, safety-risk, usability, and security-risk domains",
+      "report_section": "assurance source register",
+      "citation": "https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfstandards/detail.cfm?standard__identification_no=38829",
+      "failure_state": "licensed normative texts were unavailable; recognition does not establish conformance",
+      "failure_citation": "https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfstandards/detail.cfm?standard__identification_no=41349"
+    }
+  ]
+}

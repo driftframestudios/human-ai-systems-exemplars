@@ -1,0 +1,56 @@
+{
+  "id": "na.narrative-capsules-chimeric-prototype.bundle.v0.1",
+  "title": "Narrative Capsules Chimeric Prototype",
+  "version": "0.1",
+  "status": "working_prototype",
+  "source_package": "@driftframe/narrative-architecture",
+  "target_package": "@driftframe/core-architectures",
+  "shared_schema_package": "@driftframe/schema",
+  "source_nursery": "@fieldform/loam-layer",
+  "files": {
+    "prototype": "narrative-capsules-chimeric-prototype-v0.1.html",
+    "profile": "narrative-capsules-prototype-profile-v0.1.yaml",
+    "composition_schema": "narrative-capsule-composition.schema.v0.1.json",
+    "jsonld_context": "narrative-capsule-composition.context.v0.1.jsonld",
+    "target_pair_registry": "core-architecture-target-pair-registry.v0.1.json",
+    "seed_example": "expectation-opportunity-to-strategy-canvas.example.v0.1.json",
+    "strategy_canvas_adapter": "strategy-canvas-v2-adapter.js",
+    "strategy_canvas_schema_version": "strategy-canvas/2.0",
+    "strategy_canvas_schema_ref": "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+    "strategy_canvas_validator_ref": "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-validator.js",
+    "strategy_canvas_current_ref": "../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.0.html",
+    "strategy_canvas_compatibility_ref": "companions/strategy-canvas-chimeric-prototype-v0.1.1.html",
+    "planning_addendum": "narrative-capsules-composition-addendum-v0.1.md",
+    "companions": [
+      "companions/core-architecture-family-index-chimeric-prototype-v0.1.html",
+      "companions/strategy-canvas-chimeric-prototype-v0.1.1.html",
+      "companions/strategy-canvas-chimeric-prototype-v0.2.0.html",
+      "companions/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      "companions/strategy-canvas-system-v0.2/strategy-canvas-validator.js"
+    ]
+  },
+  "seed_composition": {
+    "source_capsules": [
+      "Expectation Capsule",
+      "Opportunity Capsule"
+    ],
+    "target": "Strategy Canvas",
+    "readiness": "ready_with_caveats"
+  },
+  "load_bearing_determinations": [
+    "Strategy Canvas is the first exemplar target rather than a universal default.",
+    "Core Architecture selection remains cognitive-move-first.",
+    "Named module capsules are Narrative Capsule profile aliases, not new top-level classes.",
+    "Several capsule versions compose through CapsuleCompositionRecord.",
+    "AI Prompt Capsule is an enriched multi-source AIContextProjection.",
+    "Structured capsule versions remain source truth.",
+    "Target-specific requirements resolve from ProjectionTargetProfile.",
+    "Target-local values carry provisional origin.",
+    "NOW, NEXT, and LATER map to current, good-enough, and desired through a named Strategy Canvas 2.0 adapter and migration receipt.",
+    "Context workshop state remains in the extensions.contextCanvas namespace.",
+    "Human ballots, system-derived aggregates, and AI-attributed proposals retain separate entity standing.",
+    "The optional AIShadowRound interaction follows human reveal, uses reviewed consent scope, remains local-only, and stays outside aggregate calculations.",
+    "Strategy Canvas 2.0 serializes that interaction as one extensions.contextCanvas.aiCollaboration record with attributed proposals.",
+    "Gaps, boundaries, receipt, and return remain explicit."
+  ]
+}

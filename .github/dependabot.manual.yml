@@ -1,0 +1,47 @@
+# Activation template: review this scope, then rename the file to `dependabot.yml`.
+# The noncanonical filename keeps scheduled dependency updates at rest.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 3
+    groups:
+      npm-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 3
+    groups:
+      github-actions-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: pip
+    directory: /lims-eln-functional-nucleus/lims-eln-program-specification
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 2
+
+  - package-ecosystem: pip
+    directory: /lims-eln-functional-nucleus/lims-eln-enterprise-implementation
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 2
+
+  - package-ecosystem: pip
+    directory: /lims-eln-enterprise-reference-v0.1
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 2

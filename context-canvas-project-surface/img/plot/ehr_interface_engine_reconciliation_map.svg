@@ -1,0 +1,263 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="engine-title engine-desc">
+  <title id="engine-title">Every result is reconciled before the backbone changes</title>
+  <desc id="engine-desc">HL7v2 ORU, ADT, and ORM feeds enter a shadow splitter that sends the same message to authoritative Mirth Connect and shadow Rhapsody paths. A canonicalized diff harness separates matched behavior from mismatch quarantine and human review. Channels that sustain their match window move to Rhapsody, while unreconciled Z-segment behavior remains in a bounded legacy island with explicit ownership.</desc>
+
+  <defs>
+    <pattern id="engine-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#2855f3" stroke-opacity=".055" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <style>
+    .field { fill: #fffaf2; }
+    .grid { fill: url(#engine-grid); }
+    .frame { fill: none; stroke: #17345f; stroke-width: 2; }
+    .header { fill: #2855f3; }
+    .panel { fill: #fffdf8; stroke: #17345f; stroke-width: 2; }
+    .shadow { fill: #17345f; }
+    .card { fill: #fffdf8; stroke: #7893bc; stroke-width: 1.5; }
+    .powder { fill: #cfe7f7; }
+    .sea { fill: #d9efea; }
+    .cream { fill: #fff5de; }
+    .pale { fill: #e7efff; }
+    .blush { fill: #ffd3d0; }
+    .acid { fill: #f2ff67; }
+    .coral { fill: #fa7065; }
+    .ink-fill { fill: #17345f; }
+    .cobalt-fill { fill: #2855f3; }
+    .title { fill: #fffdf8; font: 750 35px/1.1 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .subtitle { fill: #e7efff; font: 500 15px/1.35 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .eyebrow-on { fill: #f2ff67; font: 750 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: 1.4px; }
+    .eyebrow { fill: #5d6f8b; font: 750 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: 1.1px; }
+    .section { fill: #17345f; font: 750 20px/1.2 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .card-title { fill: #17345f; font: 750 16px/1.2 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .body { fill: #304a71; font: 500 13.5px/1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .body-strong { fill: #17345f; font: 700 13.5px/1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .mono { fill: #304a71; font: 650 11.5px/1.3 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .mono-on { fill: #fffdf8; font: 700 11.5px/1.3 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: .4px; }
+    .chip { fill: #fffdf8; stroke: #17345f; stroke-width: 1.5; }
+    .chip-text { fill: #17345f; font: 700 12px/1 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .rule { stroke: #9aacc8; stroke-width: 1; }
+    .arrow { fill: #2855f3; }
+    .arrow-coral { fill: #fa7065; }
+  </style>
+
+  <rect class="field" width="1600" height="1120"/>
+  <rect class="grid" x="20" y="20" width="1560" height="1080" rx="28"/>
+  <rect class="frame" x="20" y="20" width="1560" height="1080" rx="28"/>
+
+  <g role="group" aria-labelledby="engine-heading-title">
+    <title id="engine-heading-title">Interface-engine reconciliation heading</title>
+    <path class="header" d="M20 48a28 28 0 0 1 28-28h1504a28 28 0 0 1 28 28v116H20Z"/>
+    <text class="eyebrow-on" x="54" y="58">GENOMICS INTERFACE ENGINE · PARALLEL-RUN RECONCILIATION</text>
+    <text class="title" x="54" y="103">Every result is reconciled before the backbone changes</text>
+    <text class="subtitle" x="54" y="134">Observe both engines · compare behavior channel by channel · promote after sustained agreement</text>
+  </g>
+
+  <g role="group" aria-labelledby="engine-scope-title">
+    <title id="engine-scope-title">Migration scope and operating guardrails</title>
+    <text class="eyebrow" x="54" y="196">OPERATING SCOPE</text>
+    <rect class="chip" x="54" y="210" width="172" height="34" rx="17"/>
+    <text class="chip-text" x="76" y="232">Mirth → Rhapsody</text>
+    <rect class="chip" x="240" y="210" width="198" height="34" rx="17"/>
+    <text class="chip-text" x="262" y="232">Genomic result feeds</text>
+    <rect class="chip sea" x="452" y="210" width="178" height="34" rx="17"/>
+    <text class="chip-text" x="474" y="232">Parallel authority</text>
+    <rect class="chip acid" x="644" y="210" width="214" height="34" rx="17"/>
+    <text class="chip-text" x="666" y="232">Per-channel exit criteria</text>
+    <rect class="chip blush" x="872" y="210" width="210" height="34" rx="17"/>
+    <text class="chip-text" x="894" y="232">Mismatch → quarantine</text>
+  </g>
+
+  <g role="group" aria-labelledby="engine-feeds-title">
+    <title id="engine-feeds-title">Clinical message feeds entering the migration</title>
+    <rect class="shadow" x="62" y="290" width="236" height="466" rx="17"/>
+    <rect class="panel" x="54" y="282" width="236" height="466" rx="17"/>
+    <path class="powder" d="M71 282h202a17 17 0 0 1 17 17v66H54v-66a17 17 0 0 1 17-17Z"/>
+    <text class="eyebrow" x="76" y="312">CLINICAL FEEDS</text>
+    <text class="section" x="76" y="343">Messages in flight</text>
+
+    <rect class="card" x="76" y="390" width="192" height="80" rx="11"/>
+    <text class="eyebrow" x="94" y="414">ORU</text>
+    <text class="card-title" x="94" y="441">Genomic results</text>
+    <text class="mono" x="94" y="461">OBR + OBX findings</text>
+
+    <rect class="card" x="76" y="486" width="192" height="80" rx="11"/>
+    <text class="eyebrow" x="94" y="510">ADT</text>
+    <text class="card-title" x="94" y="537">Identity context</text>
+    <text class="mono" x="94" y="557">patient + encounter</text>
+
+    <rect class="card" x="76" y="582" width="192" height="80" rx="11"/>
+    <text class="eyebrow" x="94" y="606">ORM</text>
+    <text class="card-title" x="94" y="633">Order context</text>
+    <text class="mono" x="94" y="653">test + destination</text>
+
+    <text class="body" x="76" y="698">Clinical meaning and routing</text>
+    <text class="body" x="76" y="718">must remain stable through</text>
+    <text class="body" x="76" y="738">the engine transition.</text>
+  </g>
+
+  <path class="arrow" aria-hidden="true" d="M306 500H326V486L354 514L326 542V528H306Z"/>
+
+  <g role="group" aria-labelledby="engine-split-title">
+    <title id="engine-split-title">Shadow splitter that presents the same message to both engines</title>
+    <rect class="shadow" x="362" y="290" width="184" height="466" rx="17"/>
+    <rect class="panel cream" x="354" y="282" width="184" height="466" rx="17"/>
+    <text class="eyebrow" x="376" y="314">SHADOW SPLITTER</text>
+    <text class="section" x="376" y="346">One message,</text>
+    <text class="section" x="376" y="371">two observations</text>
+    <line class="rule" x1="376" y1="396" x2="516" y2="396"/>
+    <text class="body" x="376" y="426">The authoritative path</text>
+    <text class="body" x="376" y="446">continues serving.</text>
+    <text class="body" x="376" y="482">The same inbound</text>
+    <text class="body" x="376" y="502">message enters the</text>
+    <text class="body" x="376" y="522">shadow path.</text>
+
+    <rect class="card pale" x="376" y="558" width="140" height="94" rx="11"/>
+    <text class="eyebrow" x="394" y="583">COMPARISON UNIT</text>
+    <text class="body-strong" x="394" y="610">Message behavior</text>
+    <text class="body" x="394" y="632">within one channel</text>
+
+    <rect class="card sea" x="376" y="668" width="140" height="56" rx="11"/>
+    <text class="mono" x="394" y="692">PARALLEL RUN</text>
+    <text class="body-strong" x="394" y="714">Authority retained</text>
+  </g>
+
+  <g aria-hidden="true">
+    <path class="arrow" d="M554 356H574V342L602 370L574 398V384H554Z"/>
+    <path class="arrow" d="M554 612H574V598L602 626L574 654V640H554Z"/>
+  </g>
+
+  <g role="group" aria-labelledby="engine-pair-title">
+    <title id="engine-pair-title">Authoritative Mirth Connect and shadow Rhapsody engines</title>
+    <rect class="shadow" x="610" y="290" width="292" height="210" rx="17"/>
+    <rect class="panel" x="602" y="282" width="292" height="210" rx="17"/>
+    <path class="powder" d="M619 282h258a17 17 0 0 1 17 17v58H602v-58a17 17 0 0 1 17-17Z"/>
+    <text class="eyebrow" x="624" y="312">AUTHORITATIVE PATH</text>
+    <text class="section" x="624" y="343">Mirth Connect</text>
+    <text class="body-strong" x="624" y="388">Existing channel behavior</text>
+    <text class="body" x="624" y="414">JavaScript transformers and routing</text>
+    <text class="body" x="624" y="435">continue serving downstream systems.</text>
+    <rect class="card cream" x="624" y="450" width="246" height="26" rx="7"/>
+    <text class="mono" x="638" y="468">OBSERVED BEHAVIOR · CURRENT</text>
+
+    <rect class="shadow" x="610" y="546" width="292" height="210" rx="17"/>
+    <rect class="panel" x="602" y="538" width="292" height="210" rx="17"/>
+    <path class="sea" d="M619 538h258a17 17 0 0 1 17 17v58H602v-58a17 17 0 0 1 17-17Z"/>
+    <text class="eyebrow" x="624" y="568">SHADOW PATH</text>
+    <text class="section" x="624" y="599">Rhapsody</text>
+    <text class="body-strong" x="624" y="644">Rebuilt channel behavior</text>
+    <text class="body" x="624" y="670">Rhapsody mappings follow observed</text>
+    <text class="body" x="624" y="691">behavior and approved examples.</text>
+    <rect class="card pale" x="624" y="706" width="246" height="26" rx="7"/>
+    <text class="mono" x="638" y="724">OBSERVABILITY · TARGET</text>
+  </g>
+
+  <g aria-hidden="true">
+    <path class="arrow" d="M910 356H930V342L958 370L930 398V384H910Z"/>
+    <path class="arrow" d="M910 612H930V598L958 626L930 654V640H910Z"/>
+  </g>
+
+  <g role="group" aria-labelledby="engine-diff-title">
+    <title id="engine-diff-title">Canonicalized comparison, match gate, quarantine, and human review</title>
+    <rect class="shadow" x="966" y="290" width="292" height="466" rx="17"/>
+    <rect class="panel" x="958" y="282" width="292" height="466" rx="17"/>
+    <path class="cobalt-fill" d="M975 282h258a17 17 0 0 1 17 17v76H958v-76a17 17 0 0 1 17-17Z"/>
+    <text class="mono-on" x="980" y="312">RECONCILIATION GATE</text>
+    <text class="title" x="980" y="338" style="font-size:21px">Canonicalized</text>
+    <text class="title" x="980" y="363" style="font-size:21px">diff harness</text>
+
+    <text class="eyebrow" x="980" y="401">COMPARE OBSERVED BEHAVIOR</text>
+    <text class="body" x="980" y="429">Transformed payload</text>
+    <text class="body" x="980" y="453">Routing destination</text>
+    <text class="body" x="980" y="477">Clinical filing meaning</text>
+    <text class="body" x="980" y="501">Channel error behavior</text>
+
+    <rect class="card acid" x="980" y="524" width="246" height="76" rx="11"/>
+    <text class="eyebrow" x="998" y="549">MATCH</text>
+    <text class="body-strong" x="998" y="575">Enter the per-channel</text>
+    <text class="body-strong" x="998" y="593">observation window.</text>
+
+    <rect class="card blush" x="980" y="616" width="246" height="108" rx="11"/>
+    <text class="eyebrow" x="998" y="641">MISMATCH</text>
+    <text class="body-strong" x="998" y="667">Quarantine + owner review</text>
+    <text class="body" x="998" y="691">Approved behavior becomes an</text>
+    <text class="body" x="998" y="711">example, mapping, and replay.</text>
+  </g>
+
+  <g aria-hidden="true">
+    <path class="arrow" d="M1266 356H1286V342L1314 370L1286 398V384H1266Z"/>
+    <path class="arrow-coral" d="M1266 612H1286V598L1314 626L1286 654V640H1266Z"/>
+  </g>
+
+  <g role="group" aria-labelledby="engine-outcomes-title">
+    <title id="engine-outcomes-title">Promotion path and bounded legacy island</title>
+    <rect class="shadow" x="1322" y="290" width="224" height="210" rx="17"/>
+    <rect class="panel acid" x="1314" y="282" width="224" height="210" rx="17"/>
+    <text class="eyebrow" x="1336" y="314">SUSTAINED MATCH</text>
+    <text class="section" x="1336" y="348">Promote Rhapsody</text>
+    <text class="body" x="1336" y="382">Authority moves one</text>
+    <text class="body" x="1336" y="402">channel at a time.</text>
+    <line class="rule" x1="1336" y1="425" x2="1516" y2="425"/>
+    <text class="body-strong" x="1336" y="452">Downstream filing keeps</text>
+    <text class="body-strong" x="1336" y="472">the approved behavior.</text>
+
+    <rect class="shadow" x="1322" y="546" width="224" height="210" rx="17"/>
+    <rect class="panel cream" x="1314" y="538" width="224" height="210" rx="17"/>
+    <text class="eyebrow" x="1336" y="570">RESIDUAL STATE</text>
+    <text class="section" x="1336" y="602">Bounded legacy</text>
+    <text class="section" x="1336" y="626">island</text>
+    <text class="body" x="1336" y="658">Unreconciled Z-segment</text>
+    <text class="body" x="1336" y="678">behavior remains on Mirth.</text>
+    <line class="rule" x1="1336" y1="696" x2="1516" y2="696"/>
+    <text class="body-strong" x="1336" y="722">Ownership and retirement</text>
+    <text class="body-strong" x="1336" y="742">conditions stay explicit.</text>
+  </g>
+
+  <g role="group" aria-labelledby="engine-investment-title">
+    <title id="engine-investment-title">Changed work and sustained investment</title>
+    <rect class="cobalt-fill" x="54" y="794" width="1492" height="62" rx="12"/>
+    <text class="mono-on" x="78" y="822">CHANGED WORK + INVESTMENT</text>
+    <text class="title" x="78" y="848" style="font-size:19px">Tacit transformer behavior becomes observable examples, reviewable differences, and channel-level exit criteria.</text>
+
+    <rect class="card pale" x="54" y="872" width="278" height="194" rx="11"/>
+    <text class="eyebrow" x="74" y="897">INTEGRATION OWNER</text>
+    <text class="body-strong" x="74" y="924">Validate observed behavior</text>
+    <text class="body-strong" x="74" y="944">and approve examples.</text>
+    <text class="body" x="74" y="974">Domain knowledge becomes</text>
+    <text class="body" x="74" y="994">a reusable test asset.</text>
+    <text class="mono" x="74" y="1038">INVESTMENT · REVIEW CAPACITY</text>
+
+    <rect class="card sea" x="348" y="872" width="278" height="194" rx="11"/>
+    <text class="eyebrow" x="368" y="897">SRE + OPERATIONS</text>
+    <text class="body-strong" x="368" y="924">Run observability, quarantine,</text>
+    <text class="body-strong" x="368" y="944">and replay.</text>
+    <text class="body" x="368" y="974">Message-level evidence replaces</text>
+    <text class="body" x="368" y="994">late discovery.</text>
+    <text class="mono" x="368" y="1038">INVESTMENT · DUAL-RUN CAPACITY</text>
+
+    <rect class="card cream" x="642" y="872" width="278" height="194" rx="11"/>
+    <text class="eyebrow" x="662" y="897">QUALITY + DOMAIN EXPERTS</text>
+    <text class="body-strong" x="662" y="924">Define clinical equivalence</text>
+    <text class="body-strong" x="662" y="944">for edge-case messages.</text>
+    <text class="body" x="662" y="974">Approved behavior carries</text>
+    <text class="body" x="662" y="994">through every cutover.</text>
+    <text class="mono" x="662" y="1038">INVESTMENT · SCENARIO COVERAGE</text>
+
+    <rect class="card acid" x="936" y="872" width="278" height="194" rx="11"/>
+    <text class="eyebrow" x="956" y="897">PLATFORM ENGINEERING</text>
+    <text class="body-strong" x="956" y="924">Maintain the diff harness,</text>
+    <text class="body-strong" x="956" y="944">mappings, and promotion gates.</text>
+    <text class="body" x="956" y="974">Each channel earns authority</text>
+    <text class="body" x="956" y="994">through observed agreement.</text>
+    <text class="mono" x="956" y="1038">INVESTMENT · TARGET PLATFORM</text>
+
+    <rect class="card blush" x="1230" y="872" width="316" height="194" rx="11"/>
+    <text class="eyebrow" x="1250" y="897">LEGACY STEWARDSHIP</text>
+    <text class="body-strong" x="1250" y="924">Keep residual channels bounded,</text>
+    <text class="body-strong" x="1250" y="944">observable, and owned.</text>
+    <text class="body" x="1250" y="974">Retirement follows reconciled</text>
+    <text class="body" x="1250" y="994">behavior and a safe exit.</text>
+    <text class="mono" x="1250" y="1038">INVESTMENT · SHRINKING ESTATE</text>
+  </g>
+</svg>

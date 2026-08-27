@@ -1,0 +1,508 @@
+/*
+ * Contract owner: composed Debrief movement and evidence surfaces.
+ *
+ * Seven Debriefs opt into this layer after their foundation, component, route,
+ * and shell sources. It composes solution, implementation, temporal,
+ * and cross-system languages while each route retains its palette, rhythm,
+ * density, source basis, and local composition.
+ *
+ * Related visual contract:
+ * ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md
+ */
+
+.debrief-composition-page {
+  --debrief-rose: #ffd3d0;
+  --debrief-rose-paper: #fdebe9;
+  --debrief-rose-quiet: #fff7f4;
+  --debrief-cobalt: #2855f3;
+  --debrief-cobalt-deep: #153fbe;
+  --debrief-cobalt-ink: #17345f;
+  --debrief-cobalt-body: #304a71;
+  --debrief-cobalt-pale: #e7efff;
+  --debrief-paper: #fffdf8;
+  --debrief-cream: #fff5de;
+  --debrief-sea: #d9efea;
+  --debrief-powder: #cfe7f7;
+  --debrief-coral: #fa7065;
+  --debrief-acid: #f2ff67;
+  --debrief-rule: #7893bc;
+}
+
+@media screen {
+  /* Keep wide, locally scrollable evidence tables from creating page-level drift. */
+  .debrief-composition-page #main-content {
+    overflow-x: clip;
+  }
+}
+
+.debrief-composition-page .debrief-track-label {
+  align-items: center;
+  color: var(--debrief-cobalt-ink);
+  display: flex;
+  flex-wrap: wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: .78rem;
+  font-weight: 750;
+  gap: .5rem .8rem;
+  letter-spacing: .075em;
+  line-height: 1.45;
+  margin-block: 0 clamp(1rem, 2.5vw, 1.5rem);
+  max-inline-size: none;
+  text-transform: uppercase;
+}
+
+.debrief-composition-page .debrief-track-label span {
+  background: var(--debrief-cobalt-ink);
+  border: .125rem solid var(--debrief-cobalt-ink);
+  border-radius: 999px;
+  color: var(--debrief-paper);
+  padding: .38rem .72rem;
+}
+
+.debrief-composition-page .debrief-track-label strong {
+  color: inherit;
+}
+
+.debrief-composition-page .debrief-track-label small {
+  color: color-mix(in srgb, currentColor 72%, transparent);
+  font: inherit;
+  letter-spacing: .035em;
+}
+
+.debrief-composition-page .debrief-outcome-banner {
+  align-items: start;
+  background: var(--debrief-paper);
+  border: .125rem solid var(--debrief-cobalt-ink);
+  border-inline-start: .65rem solid var(--debrief-coral);
+  border-radius: .75rem;
+  box-shadow: .45rem .45rem 0 var(--debrief-cobalt-ink);
+  display: grid;
+  gap: .4rem clamp(1rem, 3vw, 2rem);
+  grid-template-columns: minmax(8.5rem, .32fr) minmax(0, 1fr);
+  margin-block: clamp(1.5rem, 3vw, 2.25rem);
+  padding: clamp(1.1rem, 2.8vw, 1.65rem);
+}
+
+.debrief-composition-page .debrief-outcome-banner > * {
+  margin: 0;
+}
+
+.debrief-composition-page .debrief-outcome-banner__label {
+  color: var(--debrief-cobalt-deep);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: .76rem;
+  font-weight: 800;
+  grid-row: 1 / span 2;
+  letter-spacing: .09em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.debrief-composition-page .debrief-outcome-banner__label::before {
+  background: var(--debrief-coral);
+  border: .125rem solid var(--debrief-cobalt-ink);
+  border-radius: 50%;
+  content: "";
+  display: block;
+  block-size: 1.05rem;
+  inline-size: 1.05rem;
+  margin-block-end: .6rem;
+}
+
+.debrief-composition-page .debrief-outcome-banner strong {
+  color: var(--debrief-cobalt-ink);
+  font-size: clamp(1.08rem, 1rem + .35vw, 1.35rem);
+  line-height: 1.3;
+}
+
+.debrief-composition-page .debrief-outcome-banner p:last-child {
+  color: var(--debrief-cobalt-body);
+  line-height: 1.55;
+}
+
+.debrief-composition-page .debrief-outcome-banner--partial {
+  border-inline-start-color: var(--debrief-powder);
+}
+
+.debrief-composition-page .debrief-outcome-banner--partial .debrief-outcome-banner__label::before {
+  background: var(--debrief-powder);
+  border-radius: .22rem;
+}
+
+.debrief-composition-page .debrief-outcome-banner--pivoted {
+  border-inline-start-color: var(--debrief-acid);
+}
+
+.debrief-composition-page .debrief-outcome-banner--pivoted .debrief-outcome-banner__label::before {
+  background: var(--debrief-acid);
+  border-radius: 0;
+  transform: rotate(45deg) scale(.78);
+}
+
+.debrief-composition-page .debrief-outcome-banner--successful {
+  border-inline-start-color: var(--debrief-sea);
+}
+
+.debrief-composition-page .debrief-outcome-banner--successful .debrief-outcome-banner__label::before {
+  background: var(--debrief-sea);
+}
+
+.debrief-composition-page .debrief-outcome-banner--failed {
+  border-inline-start-color: var(--debrief-coral);
+}
+
+.debrief-composition-page .debrief-outcome-banner--failed .debrief-outcome-banner__label::before {
+  background: transparent;
+  border-color: var(--debrief-coral);
+  border-radius: 0;
+  border-width: .22rem;
+}
+
+.debrief-composition-page .series-reading-index a[aria-current="page"] {
+  background: var(--debrief-acid);
+  border-color: var(--debrief-cobalt-ink);
+  box-shadow: .3rem .3rem 0 var(--debrief-cobalt-ink);
+  color: var(--debrief-cobalt-ink);
+  position: relative;
+  transform: translate(-.12rem, -.12rem);
+}
+
+.debrief-composition-page .series-reading-index a[aria-current="page"]::before {
+  content: "Current reading · ";
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+}
+
+.debrief-composition-page .debrief-track--solution {
+  background: var(--debrief-rose-paper);
+}
+
+.debrief-composition-page .debrief-track--solution .architecture-track-title {
+  border-block-end-color: var(--debrief-cobalt-ink);
+  color: var(--debrief-cobalt-ink);
+}
+
+.debrief-composition-page .debrief-track--solution :is(.beat-title, .txt-h4) {
+  color: var(--debrief-cobalt-ink);
+}
+
+.debrief-composition-page .debrief-track--solution .story-visual img {
+  background: var(--debrief-rose-quiet);
+  border: .125rem solid var(--debrief-cobalt-ink);
+  border-radius: .75rem;
+  box-shadow: .5rem .5rem 0 var(--debrief-cobalt-ink);
+}
+
+.debrief-composition-page .debrief-track--solution .architecture-pair article {
+  background: var(--debrief-rose-quiet);
+  border-color: var(--debrief-cobalt-ink);
+}
+
+.debrief-composition-page .debrief-track--implementation {
+  background-color: var(--debrief-cobalt-deep);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .045) 1px, transparent 1px);
+  background-size: 28px 28px;
+  color: var(--debrief-paper);
+}
+
+.debrief-composition-page .debrief-track--implementation .debrief-track-label,
+.debrief-composition-page .debrief-track--implementation .content > .prose-flow > :is(h2, h3, h4, p, ul, ol, blockquote),
+.debrief-composition-page .debrief-track--implementation .content > article.prose-flow > :is(h2, h3, h4, p, ul, ol, blockquote) {
+  color: var(--debrief-paper);
+}
+
+.debrief-composition-page .debrief-track--implementation .debrief-track-label span {
+  background: var(--debrief-acid);
+  border-color: var(--debrief-paper);
+  color: var(--debrief-cobalt-ink);
+}
+
+.debrief-composition-page .debrief-track--implementation .architecture-track-title {
+  border-block-end-color: var(--debrief-acid);
+}
+
+.debrief-composition-page .debrief-track--implementation .content > .prose-flow > :is(ul, ol),
+.debrief-composition-page .debrief-track--implementation .content > article.prose-flow > :is(ul, ol) {
+  color: var(--debrief-paper);
+}
+
+.debrief-composition-page .debrief-track--implementation :is(a, a:visited) {
+  color: var(--debrief-acid);
+}
+
+.debrief-composition-page .debrief-track--implementation code {
+  color: var(--debrief-cobalt-ink);
+}
+
+.debrief-composition-page .debrief-track--implementation :is(
+  .architecture-pair article,
+  .implementation-moves article,
+  .implementation-companion,
+  .interpretive-aside,
+  .cobalt-operating-field__aside,
+  .cobalt-operating-field__table
+) {
+  background: var(--debrief-paper);
+  border-color: var(--debrief-cobalt-ink);
+  color: var(--debrief-cobalt-ink);
+}
+
+.debrief-composition-page .debrief-track--implementation :is(
+  .architecture-pair article,
+  .implementation-moves article,
+  .implementation-companion,
+  .interpretive-aside,
+  .cobalt-operating-field__aside,
+  .cobalt-operating-field__table
+) :is(h3, h4, p, li) {
+  color: var(--debrief-cobalt-ink);
+}
+
+.debrief-composition-page .debrief-track--implementation .table-scroll {
+  background: var(--debrief-paper);
+  border: .125rem solid var(--debrief-cobalt-ink);
+  color: var(--debrief-cobalt-ink);
+}
+
+.debrief-composition-page .debrief-track--implementation .table-scroll :is(caption, th, td) {
+  color: var(--debrief-cobalt-ink);
+}
+
+.debrief-composition-page .debrief-track--implementation .story-visual figcaption {
+  color: var(--debrief-paper);
+}
+
+.debrief-composition-page .debrief-evidence-boundary {
+  background: var(--debrief-rose-quiet);
+  border: .125rem solid var(--debrief-cobalt-ink);
+  border-inline-start: .65rem solid var(--debrief-coral);
+  border-radius: .65rem;
+  break-inside: avoid;
+  margin-block: clamp(2rem, 4vw, 3.25rem) 0;
+  padding: clamp(1.15rem, 2.8vw, 1.75rem);
+}
+
+.debrief-composition-page .debrief-evidence-boundary > :first-child,
+.debrief-composition-page .debrief-evidence-boundary > :last-child {
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+.debrief-composition-page .debrief-evidence-boundary__label {
+  color: var(--debrief-cobalt-deep);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: .76rem;
+  font-weight: 800;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.debrief-composition-page .debrief-evidence-boundary h3 {
+  color: var(--debrief-cobalt-ink);
+  font-size: clamp(1.05rem, .98rem + .25vw, 1.25rem);
+  margin-block: .45rem .55rem;
+}
+
+.debrief-composition-page .debrief-evidence-boundary p:last-child {
+  color: var(--debrief-cobalt-body);
+  line-height: 1.58;
+}
+
+.debrief-composition-page .debrief-track--implementation .debrief-evidence-boundary {
+  background: var(--debrief-cream);
+  box-shadow: .45rem .45rem 0 #0b225f;
+}
+
+.debrief-composition-page .debrief-track--implementation .debrief-evidence-boundary :is(h3, p) {
+  color: var(--debrief-cobalt-ink);
+}
+
+.debrief-composition-page .movement-register {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-block: clamp(1.5rem, 3vw, 2.4rem);
+}
+
+.debrief-composition-page .movement-register article {
+  background: var(--debrief-paper);
+  border: .125rem solid var(--debrief-cobalt-ink);
+  border-block-start-width: .5rem;
+  border-radius: .65rem;
+  min-inline-size: 0;
+  padding: 1rem 1.1rem;
+}
+
+.debrief-composition-page .movement-register article:nth-child(1) {
+  border-block-start-color: var(--debrief-coral);
+}
+
+.debrief-composition-page .movement-register article:nth-child(2) {
+  border-block-start-color: var(--debrief-cobalt);
+}
+
+.debrief-composition-page .movement-register article:nth-child(3) {
+  border-block-start-color: var(--debrief-acid);
+}
+
+.debrief-composition-page .movement-register :is(h3, p) {
+  color: var(--debrief-cobalt-ink);
+  margin-block: 0;
+}
+
+.debrief-composition-page .movement-register h3 {
+  font-size: 1rem;
+  margin-block-end: .4rem;
+}
+
+.debrief-composition-page .movement-register p {
+  font-size: .94rem;
+  line-height: 1.5;
+}
+
+.debrief-composition-page .debrief-track--narrative {
+  background: var(--debrief-rose-paper);
+}
+
+.debrief-composition-page .debrief-track--solution-neutral {
+  background: var(--debrief-rose-quiet);
+}
+
+.debrief-composition-page .debrief-track--narrative .story-visual img,
+.debrief-composition-page .debrief-track--solution-neutral .story-visual img {
+  border: .125rem solid var(--debrief-cobalt-ink);
+  border-radius: .75rem;
+  box-shadow: .5rem .5rem 0 var(--debrief-cobalt-ink);
+}
+
+.debrief-composition-page .track-handoff {
+  background: var(--debrief-cobalt-ink);
+  color: var(--debrief-paper);
+  margin-block: clamp(1.75rem, 3.5vw, 2.75rem) 0;
+  padding: 1rem 1.2rem;
+}
+
+.debrief-composition-page .track-handoff p {
+  color: inherit;
+  margin: 0;
+}
+
+@media screen and (max-width: 48rem) {
+  .debrief-composition-page .debrief-outcome-banner,
+  .debrief-composition-page .movement-register {
+    grid-template-columns: 1fr;
+  }
+
+  .debrief-composition-page .debrief-outcome-banner__label {
+    grid-row: auto;
+  }
+
+  .debrief-composition-page .debrief-outcome-banner__label::before {
+    display: inline-block;
+    margin-block: 0;
+    margin-inline-end: .55rem;
+    vertical-align: -.13rem;
+  }
+
+  .debrief-composition-page .debrief-track-label {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .debrief-composition-page .series-reading-index a[aria-current="page"] {
+    transform: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .debrief-composition-page :is(
+    .debrief-outcome-banner,
+    .debrief-evidence-boundary,
+    .movement-register article,
+    .debrief-track--solution .story-visual img,
+    .debrief-track--narrative .story-visual img,
+    .debrief-track--solution-neutral .story-visual img
+  ) {
+    border-color: CanvasText;
+    box-shadow: none;
+    forced-color-adjust: auto;
+  }
+
+  .debrief-composition-page .debrief-track--implementation {
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  .debrief-composition-page .debrief-track--implementation .content > .prose-flow > :is(h2, h3, h4, p, ul, ol, blockquote),
+  .debrief-composition-page .debrief-track--implementation .content > article.prose-flow > :is(h2, h3, h4, p, ul, ol, blockquote),
+  .debrief-composition-page .debrief-track--implementation :is(a, a:visited, .debrief-track-label) {
+    color: CanvasText;
+  }
+
+  .debrief-composition-page .debrief-track-label span,
+  .debrief-composition-page .debrief-track--implementation .debrief-track-label span {
+    background: Canvas;
+    border-color: CanvasText;
+    color: CanvasText;
+  }
+
+  .debrief-composition-page .series-reading-index a[aria-current="page"] {
+    border: .2rem double CanvasText;
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+@media print {
+  .debrief-composition-page .debrief-track--solution,
+  .debrief-composition-page .debrief-track--implementation,
+  .debrief-composition-page .debrief-track--narrative,
+  .debrief-composition-page .debrief-track--solution-neutral {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .debrief-composition-page .debrief-track--implementation .content > .prose-flow > :is(h2, h3, h4, p, ul, ol, blockquote),
+  .debrief-composition-page .debrief-track--implementation .content > article.prose-flow > :is(h2, h3, h4, p, ul, ol, blockquote),
+  .debrief-composition-page .debrief-track--implementation :is(a, a:visited, .debrief-track-label),
+  .debrief-composition-page .debrief-track--implementation .story-visual figcaption {
+    color: #000 !important;
+  }
+
+  .debrief-composition-page :is(
+    .debrief-outcome-banner,
+    .debrief-evidence-boundary,
+    .movement-register article,
+    .debrief-track--solution .story-visual img,
+    .debrief-track--narrative .story-visual img,
+    .debrief-track--solution-neutral .story-visual img,
+    .debrief-track--implementation .debrief-evidence-boundary
+  ) {
+    background: #fff !important;
+    border-color: #000 !important;
+    box-shadow: none !important;
+    color: #000 !important;
+  }
+
+  .debrief-composition-page .debrief-track-label span,
+  .debrief-composition-page .debrief-track--implementation .debrief-track-label span {
+    background: #fff !important;
+    border-color: #000 !important;
+    color: #000 !important;
+  }
+
+  .debrief-composition-page .series-reading-index a[aria-current="page"] {
+    background: #fff !important;
+    border: .15rem double #000;
+    box-shadow: none;
+    color: #000 !important;
+    transform: none;
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "reviewedAt": "2026-07-28",
+  "sources": [
+    {
+      "platform": "Sapio",
+      "artifact": "sapiopylib",
+      "releaseState": "final_pypi",
+      "version": "2026.6.3.307",
+      "url": "https://pypi.org/project/sapiopylib/",
+      "repository": "https://github.com/sapiosciences/sapio-py-tutorials",
+      "license": "MPL-2.0",
+      "supports": [
+        "version-bounded SDK compatibility",
+        "record-model and ELN adapter vocabulary"
+      ]
+    },
+    {
+      "platform": "Benchling",
+      "artifact": "benchling-sdk",
+      "releaseState": "stable_pypi",
+      "version": "1.25.0",
+      "url": "https://pypi.org/project/benchling-sdk/",
+      "repository": "https://github.com/benchling/benchling-sdk",
+      "license": "Apache-2.0",
+      "supports": [
+        "typed platform client boundary",
+        "event and webhook integration posture"
+      ]
+    },
+    {
+      "platform": "LabKey",
+      "artifact": "labkey",
+      "releaseState": "stable_pypi",
+      "version": "4.2.0",
+      "url": "https://pypi.org/project/labkey/",
+      "repository": "https://github.com/LabKey/labkey-api-python",
+      "license": "Apache-2.0",
+      "supports": [
+        "published stable dependency posture"
+      ]
+    },
+    {
+      "platform": "LabKey",
+      "artifact": "labkey",
+      "releaseState": "upstream_develop_declared",
+      "version": "4.3.0",
+      "url": "https://github.com/LabKey/labkey-api-python/blob/develop/pyproject.toml",
+      "repository": "https://github.com/LabKey/labkey-api-python",
+      "license": "Apache-2.0",
+      "supports": [
+        "development-branch observation kept distinct from stable PyPI"
+      ]
+    }
+  ],
+  "boundary": "Public source inspection supports vendor-shaped code. Sandbox and production behavior require separate tenant receipts."
+}
+

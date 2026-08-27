@@ -1,0 +1,29 @@
+{
+  "sampleId": "FMI-LIMS-S02",
+  "title": "Custody transfer with state, event, and outbox consistency",
+  "temporalClass": "current_2026",
+  "evidenceClass": "current_companion",
+  "executionClass": "verified_running",
+  "executionScope": "local_offline_synthetic",
+  "qualificationStage": "executable_offline",
+  "codePaths": ["src/lims_eln_reference/custody.py"],
+  "testPaths": ["tests/test_lifecycle_custody.py"],
+  "trustBoundaries": [
+    "Physical location authority crosses from an accountable actor into custody state.",
+    "Committed custody evidence crosses into asynchronous downstream delivery."
+  ],
+  "failureModes": [
+    "Changed command replay, stale source location, cross-tenant actor, and noncontiguous commit stay explicit.",
+    "A successful plan emits one new location, one event, and one outbox message."
+  ],
+  "receipts": ["receipts/validation-report.json"],
+  "affectedPopulations": [
+    "accessioning",
+    "bench_scientist",
+    "operations",
+    "quality",
+    "engineer"
+  ],
+  "regulatoryScope": "determination_owned_by_quality_and_regulatory"
+}
+

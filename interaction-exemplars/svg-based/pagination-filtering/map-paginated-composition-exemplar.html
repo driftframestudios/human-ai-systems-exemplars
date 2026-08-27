@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Regional service locations — paginated collection composition exemplar</title>
+  <style>
+    @layer reset, tokens, base, shell, controls, navigation, results, states, enhancements;
+
+    @layer reset {
+      *, *::before, *::after { box-sizing: border-box; }
+      html { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      body, h1, h2, h3, p, figure, fieldset, dl { margin: 0; }
+      ol, ul { margin: 0; padding: 0; list-style: none; }
+      button, input, select { font: inherit; }
+      svg { display: block; max-inline-size: 100%; }
+    }
+
+    @layer tokens {
+      :root {
+        --ink: #17211d;
+        --muted: #5a6760;
+        --paper: #f4f6f1;
+        --surface: #ffffff;
+        --surface-soft: #eef3ec;
+        --line: #c7d2ca;
+        --accent: #155b4f;
+        --accent-strong: #0c453b;
+        --accent-soft: #dcefe7;
+        --flood: #176f8c;
+        --flood-soft: #dceef4;
+        --current: #b65325;
+        --water: #d8edf2;
+        --land: #e7eadc;
+        --focus: #7a35d1;
+        --danger: #9b3f32;
+        --radius: 1rem;
+        --shadow: 0 1rem 3rem rgb(25 56 44 / 0.1);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --ink: #edf4ef;
+          --muted: #b7c4bc;
+          --paper: #111713;
+          --surface: #19221d;
+          --surface-soft: #202b25;
+          --line: #3b4941;
+          --accent: #91d8c4;
+          --accent-strong: #b7eadc;
+          --accent-soft: #203d34;
+          --flood: #77c2dc;
+          --flood-soft: #1c3842;
+          --current: #f09a70;
+          --water: #1b3941;
+          --land: #30382d;
+          --focus: #d3b4ff;
+          --danger: #f2a494;
+          --shadow: 0 1rem 3rem rgb(0 0 0 / 0.28);
+        }
+      }
+    }
+
+    @layer base {
+      html {
+        scroll-behavior: auto;
+        scroll-padding-block-end: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+      }
+
+      body {
+        min-block-size: 100svh;
+        padding-inline-start: max(1rem, env(safe-area-inset-left, 0px));
+        padding-inline-end: max(1rem, env(safe-area-inset-right, 0px));
+        padding-block-end: calc(6.5rem + env(safe-area-inset-bottom, 0px));
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 88% 2%, color-mix(in srgb, var(--flood-soft) 78%, transparent), transparent 30rem),
+          var(--paper);
+        line-height: 1.55;
+      }
+
+      a { color: var(--accent-strong); }
+
+      :focus-visible {
+        outline: 0.2rem solid var(--focus);
+        outline-offset: 0.2rem;
+      }
+
+      .skip-link {
+        position: fixed;
+        inset-block-start: calc(0.75rem + env(safe-area-inset-top, 0px));
+        inset-inline-start: calc(0.75rem + env(safe-area-inset-left, 0px));
+        z-index: 50;
+        translate: 0 -180%;
+        padding: 0.65rem 0.9rem;
+        border-radius: 0.55rem;
+        color: var(--surface);
+        background: var(--ink);
+      }
+
+      .skip-link:focus { translate: 0; }
+
+      header, main, footer {
+        inline-size: min(80rem, 100%);
+        margin-inline: auto;
+      }
+
+      header { padding-block: clamp(2.6rem, 8vw, 6.5rem) 2rem; }
+
+      .eyebrow {
+        color: var(--accent-strong);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-inline-size: 16ch;
+        margin-block-start: 0.55rem;
+        font-size: clamp(2.25rem, 6vw, 5.2rem);
+        line-height: 0.97;
+        letter-spacing: -0.045em;
+      }
+
+      header > p:last-child {
+        max-inline-size: 75ch;
+        margin-block-start: 1.15rem;
+        color: var(--muted);
+        font-size: clamp(1rem, 2vw, 1.15rem);
+      }
+
+      h2 { font-size: clamp(1.35rem, 3vw, 2rem); line-height: 1.15; }
+      h3 { font-size: 1rem; }
+
+      .visually-hidden {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+    }
+
+    @layer shell {
+      .composition-shell {
+        container: composition / inline-size;
+        padding: clamp(0.85rem, 2.5vw, 1.6rem);
+        border: 1px solid var(--line);
+        border-radius: calc(var(--radius) + 0.45rem);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .collection-summary {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.65rem;
+        margin-block-end: 1rem;
+      }
+
+      .collection-summary div {
+        min-inline-size: 0;
+        padding: 0.8rem;
+        border: 1px solid var(--line);
+        border-radius: 0.75rem;
+        background: var(--surface-soft);
+      }
+
+      .collection-summary dt { color: var(--muted); font-size: 0.74rem; font-weight: 800; text-transform: uppercase; }
+      .collection-summary dd { margin: 0.12rem 0 0; font-weight: 850; }
+
+      .result-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; align-items: start; }
+      .result-content { min-inline-size: 0; }
+    }
+
+    @layer controls {
+      /*
+        TARGET: named GET controls own filter, sort, size, and view values. A
+        hidden page=1 value makes collection recomputation begin at a valid slice.
+
+        TARGET: the endpoint filters and sorts all 72 records before selecting a
+        six-record page. The document presents that server-owned result.
+
+        GUARD: CSS supplies layout and optional motion. Collection totals, page
+        windows, URL state, and result announcements receive a server owner.
+      */
+      .filter-panel {
+        padding: clamp(0.9rem, 2.5vw, 1.25rem);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface-soft);
+        scroll-margin-block-start: 1rem;
+      }
+
+      .filter-panel > p { max-inline-size: 72ch; margin-block-start: 0.4rem; color: var(--muted); }
+      fieldset { min-inline-size: 0; padding: 0; border: 0; }
+      legend { font-weight: 800; }
+
+      .filter-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; margin-block-start: 1rem; }
+
+      .field { display: grid; gap: 0.3rem; min-inline-size: 0; }
+      .field label { font-size: 0.82rem; font-weight: 800; }
+
+      select {
+        inline-size: 100%;
+        min-block-size: 2.75rem;
+        padding: 0.55rem 2rem 0.55rem 0.7rem;
+        border: 1px solid var(--line);
+        border-radius: 0.6rem;
+        color: var(--ink);
+        background: var(--surface);
+      }
+
+      .form-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.65rem; margin-block-start: 1rem; }
+
+      .primary-action,
+      .secondary-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-block-size: 2.75rem;
+        padding: 0.6rem 0.95rem;
+        border-radius: 0.65rem;
+        font-weight: 800;
+      }
+
+      .primary-action { border: 1px solid var(--accent); color: var(--surface); background: var(--accent); cursor: pointer; }
+      .secondary-action { border: 1px solid var(--line); color: var(--ink); background: var(--surface); text-decoration: none; }
+
+      .pipeline {
+        margin-block: 1rem;
+        padding: 0.9rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+      }
+
+      .pipeline h2 { font-size: 1.05rem; }
+      .pipeline ol { display: grid; gap: 0.5rem; margin-block-start: 0.7rem; counter-reset: pipeline; }
+      .pipeline li { position: relative; min-inline-size: 0; padding: 0.65rem 0.7rem 0.65rem 2.5rem; border-radius: 0.6rem; background: var(--surface-soft); }
+      .pipeline li::before { counter-increment: pipeline; content: counter(pipeline); position: absolute; inset-inline-start: 0.7rem; display: grid; place-items: center; inline-size: 1.25rem; block-size: 1.25rem; border-radius: 50%; color: var(--surface); background: var(--accent); font-size: 0.72rem; font-weight: 850; }
+      .pipeline strong { display: block; }
+      .pipeline span { color: var(--muted); font-size: 0.85rem; }
+    }
+
+    @layer navigation {
+      .navigation-rail {
+        min-inline-size: 0;
+        display: grid;
+        gap: 0.8rem;
+        padding: 0.8rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface-soft);
+      }
+
+      .navigation-rail > nav,
+      .view-links,
+      .page-links {
+        min-inline-size: 0;
+        max-inline-size: 100%;
+      }
+
+      .navigation-label { color: var(--muted); font-size: 0.74rem; font-weight: 800; text-transform: uppercase; }
+
+      .view-links,
+      .page-links { display: flex; gap: 0.35rem; overflow-x: auto; padding: 0.25rem; scrollbar-width: thin; }
+
+      .view-links li,
+      .page-links li { flex: 0 0 auto; }
+
+      .view-links a,
+      .page-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-block-size: 2.75rem;
+        min-inline-size: 2.75rem;
+        padding: 0.5rem 0.72rem;
+        border: 1px solid var(--line);
+        border-radius: 0.65rem;
+        color: var(--ink);
+        background: var(--surface);
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .view-links a:hover,
+      .page-links a:hover { border-color: var(--accent); background: var(--accent-soft); }
+
+      .view-links a[aria-current="location"] {
+        border-color: var(--accent);
+        color: var(--accent-strong);
+        background: var(--accent-soft);
+        font-weight: 850;
+      }
+
+      .page-links a[aria-current="page"] {
+        border-color: var(--current);
+        color: var(--surface);
+        background: var(--current);
+        font-weight: 850;
+      }
+
+      .view-note, .pagination-note { color: var(--muted); font-size: 0.82rem; }
+      .rail-divider { block-size: 1px; border: 0; background: var(--line); }
+    }
+
+    @layer results {
+      .result-heading {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.25rem 0 1rem;
+      }
+
+      .result-heading p:last-child { color: var(--muted); }
+
+      .active-query {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        margin-block: 0 0.8rem;
+      }
+
+      .query-chip { padding: 0.32rem 0.58rem; border: 1px solid var(--flood); border-radius: 999px; color: var(--flood); background: var(--flood-soft); font-size: 0.78rem; font-weight: 800; }
+
+      .map-card { padding: 0.85rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-soft); }
+      .map-frame { overflow: hidden; border: 1px solid var(--line); border-radius: 0.75rem; background: var(--water); }
+      .map-frame > svg { inline-size: 100%; block-size: auto; }
+      .land { fill: var(--land); stroke: var(--line); stroke-width: 2; }
+      .road { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 5 7; opacity: 0.6; }
+      .site circle { fill: var(--surface); stroke: var(--flood); stroke-width: 4; vector-effect: non-scaling-stroke; }
+      .site text { fill: var(--ink); font: 750 14px ui-sans-serif, system-ui, sans-serif; paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+      figcaption { margin-block-start: 0.6rem; color: var(--muted); font-size: 0.88rem; }
+
+      .card-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; margin-block-start: 0.85rem; }
+
+      .location-card { min-inline-size: 0; padding: 0.9rem; border: 1px solid var(--line); border-radius: 0.8rem; background: var(--surface); }
+      .card-topline { display: flex; justify-content: space-between; gap: 0.65rem; }
+      .record-id { color: var(--muted); font-size: 0.78rem; font-variant-numeric: tabular-nums; }
+      .hazard { color: var(--flood); font-size: 0.78rem; font-weight: 850; }
+      .location-card h3 { margin-block-start: 0.55rem; font-size: 1.08rem; }
+      .location-card p:last-child { margin-block-start: 0.25rem; color: var(--muted); font-size: 0.9rem; }
+
+      .collection-boundary { margin-block-start: 1rem; padding: clamp(0.9rem, 2.5vw, 1.25rem); border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-soft); }
+      .collection-boundary > p { max-inline-size: 74ch; margin-block-start: 0.4rem; color: var(--muted); }
+      .state-grid { display: grid; gap: 0.65rem; margin-block-start: 0.85rem; }
+      .state-grid article { padding: 0.8rem; border-radius: 0.65rem; background: var(--surface); }
+      .state-grid p { margin-block-start: 0.25rem; color: var(--muted); font-size: 0.87rem; }
+
+      footer { padding-block: 1.5rem 1rem; color: var(--muted); font-size: 0.9rem; }
+    }
+
+    @layer states {
+      .fab-link,
+      .fab-button {
+        position: fixed;
+        inset-inline-end: calc(1rem + env(safe-area-inset-right, 0px));
+        inset-block-end: calc(1rem + env(safe-area-inset-bottom, 0px));
+        z-index: 35;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-block-size: 3rem;
+        min-inline-size: 3rem;
+        padding: 0.65rem 0.9rem;
+        border: 1px solid var(--accent);
+        border-radius: 999px;
+        color: var(--surface);
+        background: var(--accent);
+        box-shadow: 0 0.75rem 2rem rgb(15 55 45 / 0.28);
+        font-weight: 850;
+        text-decoration: none;
+      }
+
+      .fab-link { display: inline-flex; }
+      .fab-button { display: none; cursor: pointer; }
+      .fab-link svg, .fab-button svg { inline-size: 1.2rem; block-size: 1.2rem; }
+
+      #quick-filters {
+        inline-size: min(28rem, calc(100% - 2rem));
+        max-block-size: calc(100dvh - 2rem);
+        margin: auto;
+        padding: 1rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        color: var(--ink);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      #quick-filters::backdrop { background: rgb(11 24 18 / 0.45); }
+      #quick-filters h2 { font-size: 1.35rem; }
+      #quick-filters > p { margin-block-start: 0.35rem; color: var(--muted); }
+      .quick-options { display: grid; gap: 0.5rem; margin-block-start: 0.9rem; }
+      .quick-option { display: flex; align-items: center; gap: 0.55rem; min-block-size: 2.75rem; padding: 0.55rem 0.7rem; border: 1px solid var(--line); border-radius: 0.6rem; }
+      .quick-option input { inline-size: 1.1rem; block-size: 1.1rem; accent-color: var(--accent); }
+      .popover-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-block-start: 1rem; }
+
+      @supports selector(:popover-open) {
+        .fab-link { display: none; }
+        .fab-button { display: inline-flex; }
+      }
+    }
+
+    @layer enhancements {
+      @container composition (min-width: 36rem) {
+        .collection-summary { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .pipeline ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .state-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+
+      @container composition (min-width: 56rem) {
+        .filter-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .pipeline ol { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+        .result-layout { grid-template-columns: minmax(13rem, 0.22fr) minmax(0, 1fr); }
+
+        .navigation-rail {
+          position: sticky;
+          inset-block-start: calc(1rem + env(safe-area-inset-top, 0px));
+          max-block-size: calc(100dvh - 2rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+          overflow: auto;
+        }
+
+        .view-links, .page-links { display: grid; overflow: visible; }
+        .view-links a, .page-links a { inline-size: 100%; justify-content: flex-start; }
+        .page-links a[aria-current="page"]::after { content: "Current"; margin-inline-start: auto; font-size: 0.72rem; }
+        .card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .state-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+      }
+
+      .location-card[data-record="13"] { view-transition-name: record-13; }
+      .location-card[data-record="14"] { view-transition-name: record-14; }
+      .location-card[data-record="15"] { view-transition-name: record-15; }
+      .location-card[data-record="16"] { view-transition-name: record-16; }
+      .location-card[data-record="17"] { view-transition-name: record-17; }
+      .location-card[data-record="18"] { view-transition-name: record-18; }
+
+      @media (prefers-reduced-motion: no-preference) {
+        @view-transition { navigation: auto; }
+        html { scroll-behavior: smooth; }
+        .view-links a, .page-links a, .primary-action, .secondary-action { transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease; }
+        ::view-transition-group(*) { animation-duration: 220ms; }
+      }
+
+      @media (forced-colors: active) {
+        .view-links a[aria-current="location"], .page-links a[aria-current="page"] { border-width: 0.22rem; }
+        .land { fill: Canvas; stroke: CanvasText; }
+        .site circle { fill: Canvas; stroke: LinkText; }
+        .site text { fill: CanvasText; stroke: Canvas; }
+        .query-chip { border-width: 0.18rem; }
+      }
+
+      @media print {
+        body { padding: 0; background: white; color: black; }
+        .composition-shell { box-shadow: none; }
+        .result-layout { display: block; }
+        .navigation-rail { position: static; margin-block-end: 1rem; }
+        .fab-link, .fab-button, #quick-filters { display: none; }
+      }
+    }
+  </style>
+</head>
+<body id="page-top">
+  <a class="skip-link" href="#results">Skip to filtered page results</a>
+
+  <header>
+    <p class="eyebrow">Standalone practitioner exemplar · HTML, CSS, and SVG</p>
+    <h1>Paginated collection composition</h1>
+    <p>A filterable card-and-map view for the same 72 regional service locations. GET controls define collection state, page links preserve that state, addressable view links retain native navigation behavior, and a floating quick-filter button uses the declarative Popover API when available.</p>
+  </header>
+
+  <main>
+    <section class="composition-shell" aria-labelledby="composition-title">
+      <h2 class="visually-hidden" id="composition-title">Regional service location collection composition demonstration</h2>
+
+      <dl class="collection-summary">
+        <div><dt>Full collection</dt><dd>72 locations</dd></div>
+        <div><dt>Flood filter</dt><dd>24 matches</dd></div>
+        <div><dt>Current slice</dt><dd>13–18</dd></div>
+        <div><dt>Position</dt><dd>Page 3 of 4</dd></div>
+      </dl>
+
+      <search class="filter-panel" id="collection-controls" aria-labelledby="filter-heading">
+        <h2 id="filter-heading">Collection controls</h2>
+        <p>Submitting this named GET form creates a shareable query and begins at page 1. The endpoint filters and sorts the complete collection before selecting a six-record page.</p>
+        <form action="" method="get">
+          <input type="hidden" name="view" value="cards">
+          <input type="hidden" name="page" value="1">
+          <fieldset>
+            <legend class="visually-hidden">Filter and sort regional locations</legend>
+            <div class="filter-grid">
+              <div class="field">
+                <label for="concern">Readiness concern</label>
+                <select id="concern" name="concern">
+                  <option value="all">All concerns</option>
+                  <option value="flood" selected>Flood readiness</option>
+                  <option value="heat">Heat readiness</option>
+                  <option value="wind">Wind readiness</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="region">Region</label>
+                <select id="region" name="region">
+                  <option value="all" selected>All regions</option>
+                  <option value="north">North</option>
+                  <option value="central">Central</option>
+                  <option value="south">South</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="sort">Sort order</label>
+                <select id="sort" name="sort">
+                  <option value="name" selected>Name, A–Z</option>
+                  <option value="region">Region</option>
+                  <option value="readiness">Readiness status</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="size">Results per page</label>
+                <select id="size" name="size">
+                  <option value="6" selected>6 results</option>
+                  <option value="12">12 results</option>
+                  <option value="24">24 results</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+          <div class="form-actions">
+            <button class="primary-action" type="submit">Apply to collection</button>
+            <a class="secondary-action" href="?concern=all&amp;region=all&amp;sort=name&amp;size=6&amp;view=cards&amp;page=1#results">Clear filters</a>
+          </div>
+        </form>
+      </search>
+
+      <section class="pipeline" aria-labelledby="pipeline-heading">
+        <h2 id="pipeline-heading">Visible collection pipeline</h2>
+        <ol>
+          <li><strong>Read URL values</strong><span>Flood · all regions · name order</span></li>
+          <li><strong>Filter 72 records</strong><span>24 locations match flood readiness</span></li>
+          <li><strong>Apply stable order</strong><span>Name plus record ID tie-breaker</span></li>
+          <li><strong>Select page 3</strong><span>Records 13–18 of the match set</span></li>
+          <li><strong>Render one document</strong><span>Controls, cards, map, range, and links agree</span></li>
+        </ol>
+      </section>
+
+      <div class="result-layout">
+        <aside class="navigation-rail" aria-label="Collection view and page controls">
+          <nav aria-labelledby="view-heading">
+            <p class="navigation-label" id="view-heading">Collection view</p>
+            <ul class="view-links">
+              <li><a aria-current="location" href="?concern=flood&amp;region=all&amp;sort=name&amp;size=6&amp;view=cards&amp;page=3#results">Cards</a></li>
+              <li><a href="?concern=flood&amp;region=all&amp;sort=name&amp;size=6&amp;view=map&amp;page=3#results">Map</a></li>
+              <li><a href="?concern=flood&amp;region=all&amp;sort=name&amp;size=6&amp;view=list&amp;page=3#results">List</a></li>
+            </ul>
+            <p class="view-note">These are addressable view links. Actual tab semantics remain available for a behavior layer that supplies the full tab keyboard contract.</p>
+          </nav>
+
+          <hr class="rail-divider">
+
+          <nav aria-labelledby="page-heading">
+            <p class="navigation-label" id="page-heading">Filtered result pages</p>
+            <ol class="page-links">
+              <li><a rel="prev" href="?concern=flood&amp;region=all&amp;sort=name&amp;size=6&amp;view=cards&amp;page=2#results"><span aria-hidden="true">←</span><span class="visually-hidden">Previous page, page 2</span></a></li>
+              <li><a href="?concern=flood&amp;region=all&amp;sort=name&amp;size=6&amp;view=cards&amp;page=1#results"><span class="visually-hidden">Page </span>1</a></li>
+              <li><a href="?concern=flood&amp;region=all&amp;sort=name&amp;size=6&amp;view=cards&amp;page=2#results"><span class="visually-hidden">Page </span>2</a></li>
+              <li><a aria-current="page" href="?concern=flood&amp;region=all&amp;sort=name&amp;size=6&amp;view=cards&amp;page=3#results"><span class="visually-hidden">Page </span>3</a></li>
+              <li><a href="?concern=flood&amp;region=all&amp;sort=name&amp;size=6&amp;view=cards&amp;page=4#results"><span class="visually-hidden">Page </span>4</a></li>
+              <li><a rel="next" href="?concern=flood&amp;region=all&amp;sort=name&amp;size=6&amp;view=cards&amp;page=4#results"><span aria-hidden="true">→</span><span class="visually-hidden">Next page, page 4</span></a></li>
+            </ol>
+            <p class="pagination-note">Every link preserves concern, region, sort, size, and view state.</p>
+          </nav>
+        </aside>
+
+        <div class="result-content">
+          <section id="results" aria-labelledby="results-heading" tabindex="-1">
+            <div class="result-heading">
+              <div>
+                <p class="eyebrow">Flood readiness · cards view</p>
+                <h2 id="results-heading">Locations 13–18 of 24 matches</h2>
+              </div>
+              <p>Page 3 of 4 · 72 locations total</p>
+            </div>
+
+            <ul class="active-query" aria-label="Active collection values">
+              <li class="query-chip">Concern: flood</li>
+              <li class="query-chip">Region: all</li>
+              <li class="query-chip">Sort: name</li>
+              <li class="query-chip">Page size: 6</li>
+            </ul>
+
+            <div class="map-card">
+              <figure>
+                <div class="map-frame">
+                  <svg viewBox="0 0 760 390" role="img" aria-labelledby="map-title map-desc">
+                    <title id="map-title">Flood-readiness page 3 mini-map</title>
+                    <desc id="map-desc">The same six locations represented by the cards appear on a schematic regional map: Cedar Exchange, Civic Core, East Market, Harbor Edge, Lake Plain, and North Crossing.</desc>
+                    <path class="land" d="M55 78 192 28 347 55 555 29 705 113 675 243 722 334 566 367 391 345 242 377 91 332 40 204Z"/>
+                    <path class="road" d="M78 281C205 205 332 249 465 146S635 93 688 121"/>
+                    <path class="road" d="M158 52C220 154 214 258 276 360"/>
+                    <path class="road" d="M510 52C462 162 527 253 586 351"/>
+                    <g class="site" data-record="18" transform="translate(176 103)"><circle r="11"/><text x="18" y="5">North Crossing</text></g>
+                    <g class="site" data-record="17" transform="translate(495 93)"><circle r="11"/><text x="18" y="5">Lake Plain</text></g>
+                    <g class="site" data-record="14" transform="translate(365 195)"><circle r="11"/><text x="18" y="5">Civic Core</text></g>
+                    <g class="site" data-record="13" transform="translate(136 272)"><circle r="11"/><text x="18" y="5">Cedar Exchange</text></g>
+                    <g class="site" data-record="16" transform="translate(556 305)"><circle r="11"/><text x="-113" y="35">Harbor Edge</text></g>
+                    <g class="site" data-record="15" transform="translate(321 323)"><circle r="11"/><text x="18" y="5">East Market</text></g>
+                  </svg>
+                </div>
+                <figcaption>Marker record IDs and card record IDs describe one server-selected slice. The map adds spatial context; the cards carry the complete text summaries.</figcaption>
+              </figure>
+            </div>
+
+            <ol class="card-grid" start="13">
+              <li class="location-card" data-record="13">
+                <p class="card-topline"><span class="record-id">Record 13</span><span class="hazard">Flood</span></p>
+                <h3>Cedar Exchange</h3><p>West corridor · Elevated transfer point and alternate bus route.</p>
+              </li>
+              <li class="location-card" data-record="14">
+                <p class="card-topline"><span class="record-id">Record 14</span><span class="hazard">Flood</span></p>
+                <h3>Civic Core</h3><p>Central district · Public-service continuity and dry access.</p>
+              </li>
+              <li class="location-card" data-record="15">
+                <p class="card-topline"><span class="record-id">Record 15</span><span class="hazard">Flood</span></p>
+                <h3>East Market</h3><p>East corridor · Supply staging above the local drainage basin.</p>
+              </li>
+              <li class="location-card" data-record="16">
+                <p class="card-topline"><span class="record-id">Record 16</span><span class="hazard">Flood</span></p>
+                <h3>Harbor Edge</h3><p>South coast · Tide-sensitive routes and alternate access.</p>
+              </li>
+              <li class="location-card" data-record="17">
+                <p class="card-topline"><span class="record-id">Record 17</span><span class="hazard">Flood</span></p>
+                <h3>Lake Plain</h3><p>North-east basin · Shelter access and water distribution.</p>
+              </li>
+              <li class="location-card" data-record="18">
+                <p class="card-topline"><span class="record-id">Record 18</span><span class="hazard">Flood</span></p>
+                <h3>North Crossing</h3><p>North corridor · Bridge monitoring and transfer continuity.</p>
+              </li>
+            </ol>
+          </section>
+
+          <section class="collection-boundary" aria-labelledby="state-heading">
+            <h2 id="state-heading">Collection states keep recovery close</h2>
+            <p>Each response preserves the controls, a clear result heading, and a route toward a valid slice. The endpoint applies one documented policy consistently.</p>
+            <div class="state-grid">
+              <article><h3>First page</h3><p>Previous becomes boundary text; valid forward destinations remain links.</p></article>
+              <article><h3>Middle page</h3><p>Previous, current, and next positions remain explicit and addressable.</p></article>
+              <article><h3>Final page</h3><p>Next becomes boundary text; a valid backward route remains available.</p></article>
+              <article><h3>Zero matches</h3><p>The result heading reports zero, while filters and “Clear filters” stay available.</p></article>
+              <article><h3>Out of range</h3><p>The endpoint returns its documented normalization or error response with a valid recovery link.</p></article>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button class="fab-button" type="button" popovertarget="quick-filters" aria-label="Open quick filters">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <span>Quick filters</span>
+  </button>
+  <a class="fab-link" href="#collection-controls">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <span>Filters</span>
+  </a>
+
+  <aside id="quick-filters" popover aria-labelledby="quick-heading">
+    <h2 id="quick-heading">Quick readiness filter</h2>
+    <p>Submitting starts at page 1 and retains the current sort, page size, and cards view.</p>
+    <form action="" method="get">
+      <input type="hidden" name="region" value="all">
+      <input type="hidden" name="sort" value="name">
+      <input type="hidden" name="size" value="6">
+      <input type="hidden" name="view" value="cards">
+      <input type="hidden" name="page" value="1">
+      <fieldset>
+        <legend>Readiness concern</legend>
+        <div class="quick-options">
+          <label class="quick-option"><input type="radio" name="concern" value="all">All concerns</label>
+          <label class="quick-option"><input type="radio" name="concern" value="flood" checked>Flood readiness</label>
+          <label class="quick-option"><input type="radio" name="concern" value="heat">Heat readiness</label>
+          <label class="quick-option"><input type="radio" name="concern" value="wind">Wind readiness</label>
+        </div>
+      </fieldset>
+      <div class="popover-actions">
+        <button class="primary-action" type="submit">Apply filter</button>
+        <button class="secondary-action" type="button" popovertarget="quick-filters" popovertargetaction="hide">Close</button>
+      </div>
+    </form>
+  </aside>
+
+  <footer>
+    <p>Filtering changes the collection before pagination selects a slice. CSS presents the returned state across viewport sizes.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "human-ai-systems-schema-delivery",
+  "compatibility_date": "2026-08-27",
+  "workers_dev": false,
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "none",
+    "not_found_handling": "404-page"
+  },
+  "env": {
+    "release": {
+      "workers_dev": false,
+      "routes": []
+    }
+  }
+}

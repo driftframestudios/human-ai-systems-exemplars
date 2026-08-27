@@ -1,0 +1,16 @@
+# Activation template: review this schedule, then rename the file to `dependabot.yml`.
+# The manual filename keeps scheduled dependency updates at rest.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    groups:
+      github-actions-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch

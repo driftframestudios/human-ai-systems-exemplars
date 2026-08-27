@@ -1,0 +1,42 @@
+{
+  "contract": "public-boundary-intake/v1",
+  "repository": "driftframestudios/human-ai-systems-exemplars",
+  "repository_posture": "public-possible",
+  "standing": "advisory",
+  "evidence_window": {
+    "starts_on": "2026-08-25",
+    "ends_on": "2026-08-31",
+    "successor_minutes": 200,
+    "shared_profile_minutes": 2000
+  },
+  "max_text_file_bytes": 2000000,
+  "accepted_external_github_receivers": [
+    "ankane/strong_migrations",
+    "benchling/benchling-sdk",
+    "betterleaks/betterleaks",
+    "chalk/supports-color",
+    "cloudflare/workers-chat-demo",
+    "cloudflare/workers-for-platforms-example",
+    "cloudflare/workers-sdk",
+    "flyway/flyway",
+    "gitleaks/gitleaks",
+    "github/gitignore",
+    "githubnext/testpilot",
+    "json-schema-org/JSON-Schema-Test-Suite",
+    "LabKey/labkey-api-python",
+    "mattpocock/skills",
+    "npgsql/efcore.pg",
+    "opennextjs/opennextjs-cloudflare",
+    "postgres/postgres",
+    "PrefectHQ/prefect",
+    "sapiosciences/sapio-py-tutorials",
+    "sindresorhus/is",
+    "secretlint/secretlint",
+    "sponsors/antfu",
+    "sponsors/epoberezkin",
+    "sponsors/fastify",
+    "trufflesecurity/trufflehog",
+    "vale-cli/vale",
+    "Yelp/detect-secrets"
+  ]
+}

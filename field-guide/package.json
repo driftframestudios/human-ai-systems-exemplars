@@ -1,0 +1,10 @@
+{
+  "name": "@driftframe/field-guide",
+  "version": "0.1.0",
+  "description": "Reader-facing orientation, semantic attractors, collaboration postures, visual/data stabilizers.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json"
+  }
+}

@@ -1,0 +1,629 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/core-architectures/schemas/core-architecture-envelope.v0.1.schema.json",
+  "title": "Core Architecture Chimeric Artifact Envelope v0.1",
+  "description": "Shared envelope for Core Architecture chimeric artifacts. Card-specific entities live under artifact_model.entities while shared recipe, route, recovery, semantic-locality, source, view-state, and AI-collaboration fields remain consistent.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "artifact_identity",
+    "quick_use",
+    "recipe",
+    "relationship_contract",
+    "recovery_calibration",
+    "source_note",
+    "semantic_locality",
+    "ai_collaboration",
+    "view_state",
+    "artifact_model"
+  ],
+  "properties": {
+    "artifact_identity": {
+      "$ref": "#/$defs/ArtifactIdentity"
+    },
+    "quick_use": {
+      "$ref": "#/$defs/QuickUse"
+    },
+    "recipe": {
+      "$ref": "#/$defs/RecipeSpine"
+    },
+    "relationship_contract": {
+      "$ref": "#/$defs/RelationshipContract"
+    },
+    "recovery_calibration": {
+      "$ref": "#/$defs/RecoveryCalibration"
+    },
+    "source_note": {
+      "$ref": "#/$defs/SourceNote"
+    },
+    "semantic_locality": {
+      "$ref": "#/$defs/SemanticLocality"
+    },
+    "ai_collaboration": {
+      "$ref": "#/$defs/AIContextPacket"
+    },
+    "view_state": {
+      "$ref": "#/$defs/ViewState"
+    },
+    "artifact_model": {
+      "$ref": "#/$defs/ArtifactSpecificModel"
+    },
+    "route_registry": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/RegisteredRoute"
+      }
+    },
+    "revision_history": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/RevisionNote"
+      }
+    },
+    "validation": {
+      "$ref": "#/$defs/ValidationStatus"
+    }
+  },
+  "$defs": {
+    "ID": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:#\\-]*$"
+    },
+    "StringList": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "Status": {
+      "type": "string",
+      "enum": [
+        "known",
+        "assumed",
+        "needs_to_surface",
+        "disputed",
+        "ready_to_route",
+        "stable_for_now",
+        "revised",
+        "observed",
+        "likely",
+        "recurring",
+        "routed",
+        "restored_for_now",
+        "candidate",
+        "accepted",
+        "implemented",
+        "passing",
+        "needs_revision",
+        "intentionally_unprotected",
+        "source_supported",
+        "source_specific",
+        "local_measurement_needed",
+        "hypothesis",
+        "author_experience",
+        "hold_for_research_appendix",
+        "verified",
+        "draft_probe",
+        "correction_needed"
+      ]
+    },
+    "ArtifactIdentity": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "display_name",
+        "subtitle",
+        "version",
+        "family",
+        "placement",
+        "primary_cognitive_move",
+        "source_band"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/ID"
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        },
+        "placement": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "primary_cognitive_move": {
+          "type": "string"
+        },
+        "secondary_cognitive_moves": {
+          "$ref": "#/$defs/StringList"
+        },
+        "source_band": {
+          "$ref": "#/$defs/StringList"
+        },
+        "aliases": {
+          "$ref": "#/$defs/StringList"
+        },
+        "prototype_file": {
+          "type": "string"
+        }
+      }
+    },
+    "QuickUse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "use_when",
+        "restores",
+        "good_next_question",
+        "usually_hands_to",
+        "strain_cues"
+      ],
+      "properties": {
+        "use_when": {
+          "$ref": "#/$defs/StringList"
+        },
+        "restores": {
+          "$ref": "#/$defs/StringList"
+        },
+        "good_next_question": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "usually_hands_to": {
+          "$ref": "#/$defs/StringList"
+        },
+        "strain_cues": {
+          "$ref": "#/$defs/StringList"
+        }
+      }
+    },
+    "RecipeSpine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "debrief",
+        "the_snag",
+        "the_read",
+        "the_move",
+        "the_cure"
+      ],
+      "properties": {
+        "debrief": {
+          "type": "string"
+        },
+        "the_snag": {
+          "type": "string"
+        },
+        "the_read": {
+          "type": "string"
+        },
+        "the_move": {
+          "type": "string"
+        },
+        "the_cure": {
+          "type": "string"
+        }
+      }
+    },
+    "HandoffRoute": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "target_label",
+        "reason"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/ID"
+        },
+        "target_id": {
+          "type": "string"
+        },
+        "target_label": {
+          "type": "string"
+        },
+        "target_family": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "custom": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "RegisteredRoute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "family"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/ID"
+        },
+        "label": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        },
+        "current_prototype_file": {
+          "type": "string"
+        }
+      }
+    },
+    "RelationshipContract": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "consumes",
+        "produces",
+        "receives_from",
+        "hands_to"
+      ],
+      "properties": {
+        "consumes": {
+          "$ref": "#/$defs/StringList"
+        },
+        "produces": {
+          "$ref": "#/$defs/StringList"
+        },
+        "receives_from": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HandoffRoute"
+          }
+        },
+        "hands_to": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HandoffRoute"
+          }
+        }
+      }
+    },
+    "RecoveryCalibration": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "strain_cues",
+        "stabilizing_read",
+        "restored_state",
+        "recovery_moves",
+        "adjacent_architectures",
+        "named_failure_geometries"
+      ],
+      "properties": {
+        "strain_cues": {
+          "$ref": "#/$defs/StringList"
+        },
+        "stabilizing_read": {
+          "type": "string"
+        },
+        "restored_state": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "recovery_moves": {
+          "$ref": "#/$defs/StringList"
+        },
+        "adjacent_architectures": {
+          "$ref": "#/$defs/StringList"
+        },
+        "named_failure_geometries": {
+          "$ref": "#/$defs/StringList"
+        }
+      }
+    },
+    "SourceNote": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "source_band",
+        "public_anchor",
+        "author_adaptation",
+        "local_recipe_boundary"
+      ],
+      "properties": {
+        "source_band": {
+          "$ref": "#/$defs/StringList"
+        },
+        "public_anchor": {
+          "type": [
+            "string",
+            "array",
+            "object"
+          ]
+        },
+        "author_adaptation": {
+          "type": [
+            "string",
+            "object"
+          ]
+        },
+        "local_recipe_boundary": {
+          "type": "string"
+        },
+        "provenance_questions": {
+          "$ref": "#/$defs/StringList"
+        },
+        "technical_veracity_status": {
+          "type": "string"
+        },
+        "visual_reference": {
+          "type": "object"
+        }
+      }
+    },
+    "SemanticLocality": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "glossary_terms",
+        "preferred_phrasing",
+        "replacement_state_guidance",
+        "retrieval_aliases",
+        "avoid_or_translate"
+      ],
+      "properties": {
+        "glossary_terms": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "preferred_phrasing": {
+          "$ref": "#/$defs/StringList"
+        },
+        "replacement_state_guidance": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "retrieval_aliases": {
+          "$ref": "#/$defs/StringList"
+        },
+        "avoid_or_translate": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "AIContextPacket": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "current_context_summary",
+        "preserve",
+        "revise_or_explore",
+        "open_discoverables",
+        "next_decision",
+        "output_request"
+      ],
+      "properties": {
+        "current_context_summary": {
+          "type": "string"
+        },
+        "visible_scope": {
+          "type": "object"
+        },
+        "hidden_scope": {
+          "type": "object"
+        },
+        "preserve": {
+          "$ref": "#/$defs/StringList"
+        },
+        "revise_or_explore": {
+          "$ref": "#/$defs/StringList"
+        },
+        "open_discoverables": {
+          "$ref": "#/$defs/StringList"
+        },
+        "next_decision": {
+          "type": "string"
+        },
+        "output_request": {
+          "type": "string"
+        },
+        "probability_instruction": {
+          "type": "string",
+          "default": "State probability of what before assigning probabilities."
+        }
+      }
+    },
+    "ViewState": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "active_view_id",
+        "views"
+      ],
+      "properties": {
+        "active_view_id": {
+          "type": "string"
+        },
+        "views": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ViewConfiguration"
+          }
+        },
+        "principle": {
+          "type": "string",
+          "default": "Stable IDs describe what a thing is. View state describes where and whether it appears."
+        }
+      }
+    },
+    "ViewConfiguration": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/ID"
+        },
+        "name": {
+          "type": "string"
+        },
+        "order": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "hidden": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "selected": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "text_mode": {
+          "type": "string",
+          "enum": [
+            "preview_with_reveal",
+            "full_text",
+            "compact",
+            "screenshot"
+          ],
+          "default": "preview_with_reveal"
+        },
+        "display_options": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "active_intensity_bases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ArtifactSpecificModel": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "shape_type",
+        "model_version",
+        "entities"
+      ],
+      "properties": {
+        "shape_type": {
+          "type": "string"
+        },
+        "model_version": {
+          "type": "string",
+          "default": "0.1"
+        },
+        "entities": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "relations": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "completion_signals": {
+          "$ref": "#/$defs/StringList"
+        }
+      }
+    },
+    "RevisionNote": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "revision_id",
+        "reason"
+      ],
+      "properties": {
+        "revision_id": {
+          "$ref": "#/$defs/ID"
+        },
+        "timestamp": {
+          "type": "string"
+        },
+        "previous_read": {
+          "type": "string"
+        },
+        "revised_read": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        }
+      }
+    },
+    "ValidationStatus": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "schema_version": {
+          "type": "string"
+        },
+        "checked_at": {
+          "type": "string"
+        },
+        "warnings": {
+          "$ref": "#/$defs/StringList"
+        },
+        "errors": {
+          "$ref": "#/$defs/StringList"
+        }
+      }
+    }
+  }
+}

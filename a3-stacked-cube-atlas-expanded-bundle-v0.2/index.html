@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>A3 Stacked Cube Model — Atlas-expanded authority and evidence research document</title>
+  <style>
+    :root {
+      --paper: #fffaf6;
+      --paper-2: #f7f2ee;
+      --ink: #132746;
+      --muted: #647083;
+      --line: #cdd4dc;
+      --line-strong: #8995a5;
+      --blue: #2757eb;
+      --blue-soft: #dbe5ff;
+      --blue-mid: #9db7ff;
+      --coral: #ef695f;
+      --coral-soft: #ffe2de;
+      --lime: #e8f55a;
+      --lime-soft: #f5f9b8;
+      --mint: #dff2e5;
+      --mint-line: #4d9f67;
+      --amber: #d58a24;
+      --amber-soft: #ffe9c6;
+      --violet: #7446d6;
+      --violet-soft: #eee4ff;
+      --gray-soft: #e8ebef;
+      --unknown: #f9f9f7;
+      --focus: #0b6cff;
+      --shadow: 0 12px 28px rgba(38, 48, 72, .10);
+      --radius: 14px;
+      --measure: 72ch;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --paper: #111827;
+        --paper-2: #182235;
+        --ink: #f5f7fb;
+        --muted: #b7c0ce;
+        --line: #43516a;
+        --line-strong: #8f9db2;
+        --blue: #88a7ff;
+        --blue-soft: #243d78;
+        --blue-mid: #4d6fca;
+        --coral: #ff8d83;
+        --coral-soft: #613532;
+        --lime: #deed63;
+        --lime-soft: #444b24;
+        --mint: #243f31;
+        --mint-line: #83ce98;
+        --amber: #f4b65f;
+        --amber-soft: #503b21;
+        --violet: #b9a0ff;
+        --violet-soft: #3b2d5f;
+        --gray-soft: #29354a;
+        --unknown: #151e2c;
+        --focus: #7bb0ff;
+        --shadow: 0 14px 30px rgba(0, 0, 0, .24);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.46;
+      text-rendering: optimizeLegibility;
+    }
+    button, select { font: inherit; }
+    button:focus-visible, summary:focus-visible, a:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+    a { color: var(--blue); text-underline-offset: .16em; }
+    .page {
+      width: min(1440px, 100%);
+      margin: 0 auto;
+      padding: clamp(18px, 3vw, 42px);
+    }
+    .eyebrow {
+      margin: 0 0 .55rem;
+      color: var(--blue);
+      font-size: .77rem;
+      font-weight: 760;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 22ch;
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 4.5rem);
+      line-height: .98;
+      letter-spacing: -.045em;
+      font-weight: 720;
+    }
+    .dek {
+      max-width: var(--measure);
+      margin: 1.15rem 0 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.5vw, 1.23rem);
+    }
+    .meta-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      margin: 1.6rem 0 1.1rem;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--line);
+    }
+    .meta-strip > div {
+      min-height: 72px;
+      padding: .9rem 1rem;
+      background: var(--paper-2);
+    }
+    .meta-strip strong, .micro {
+      display: block;
+      margin-bottom: .28rem;
+      font-size: .72rem;
+      font-weight: 760;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .meta-strip span { color: var(--muted); font-size: .92rem; }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .5rem;
+      padding: .7rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper-2);
+    }
+    .toolbar-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .42rem;
+      align-items: center;
+    }
+    .toolbar-sep { width: 1px; align-self: stretch; background: var(--line); margin: 0 .2rem; }
+    .control {
+      min-height: 42px;
+      padding: .58rem .82rem;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .control:hover { border-color: var(--blue); }
+    .control[aria-pressed="true"] {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: var(--paper);
+    }
+    .control.secondary { border-style: dashed; }
+    .frame-note {
+      display: flex;
+      align-items: baseline;
+      gap: .7rem;
+      margin: .85rem 0;
+      color: var(--muted);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: .25rem .58rem;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--ink);
+      font-size: .82rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .diagram-shell {
+      position: relative;
+      min-height: 420px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 4px);
+      background:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px),
+        var(--paper);
+      background-size: 32px 32px;
+      box-shadow: var(--shadow);
+    }
+    #diagram { width: 100%; height: auto; display: block; }
+    #diagram text {
+      fill: var(--ink);
+      font-family: inherit;
+      font-size: 14px;
+    }
+    #diagram .label { font-size: 13px; font-weight: 730; letter-spacing: .045em; }
+    #diagram .small { font-size: 12px; fill: var(--muted); }
+    #diagram .tiny { font-size: 10.5px; fill: var(--muted); }
+    #diagram .hero { font-size: 18px; font-weight: 720; }
+    #diagram .node { cursor: pointer; }
+    #diagram .node:focus-visible { outline: none; }
+    #diagram .node:focus-visible .focus-ring,
+    #diagram .node.selected .focus-ring {
+      stroke: var(--focus);
+      stroke-width: 4;
+    }
+    #diagram .zone { fill: var(--paper); stroke: var(--line); }
+    #diagram .legacy { fill: var(--gray-soft); stroke: var(--line-strong); }
+    #diagram .new { fill: var(--blue-soft); stroke: var(--blue); stroke-width: 2; }
+    #diagram .retained { fill: var(--coral-soft); stroke: var(--coral); }
+    #diagram .seam { fill: var(--paper); stroke: var(--amber); stroke-width: 2; stroke-dasharray: 7 5; }
+    #diagram .shadowed { fill: url(#hatch-blue); stroke: var(--blue); stroke-width: 2; }
+    #diagram .human { fill: var(--mint); stroke: var(--mint-line); }
+    #diagram .unknown { fill: var(--unknown); stroke: var(--line-strong); stroke-dasharray: 6 5; }
+    #diagram .conditional { fill: var(--amber-soft); stroke: var(--amber); }
+    #diagram .evidence { fill: var(--violet-soft); stroke: var(--violet); }
+    #diagram .rail { fill: var(--paper-2); stroke: var(--line); }
+    #diagram .route { fill: none; stroke: var(--ink); stroke-width: 2.4; marker-end: url(#arrow); }
+    #diagram .route.fallback { stroke: var(--coral); stroke-dasharray: 8 6; marker-end: url(#arrow-coral); }
+    #diagram .route.mirror { stroke: var(--blue); stroke-dasharray: 3 6; marker-end: url(#arrow-blue); }
+    #diagram .route.evidence-line { stroke: var(--violet); stroke-dasharray: 2 5; marker-end: url(#arrow-violet); }
+    #diagram .route.authorization { stroke: var(--mint-line); stroke-dasharray: 9 4 2 4; marker-end: url(#arrow-mint); }
+    #diagram .axis { stroke: var(--line-strong); stroke-width: 1.2; }
+    #diagram .prob-h1 { fill: var(--coral); }
+    #diagram .prob-h2 { fill: var(--amber); }
+    #diagram .prob-h3 { fill: var(--violet); }
+    #diagram .prob-benign { fill: var(--mint-line); }
+    .under-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(260px, .75fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .inspector, .legend-card {
+      min-height: 160px;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper-2);
+    }
+    .inspector h2 {
+      margin: .1rem 0 .45rem;
+      font-size: 1.23rem;
+      line-height: 1.15;
+    }
+    .inspector p { max-width: var(--measure); margin: .4rem 0; }
+    .inspector .boundary { color: var(--muted); }
+    .source-links { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .75rem; }
+    .source-links a,
+    .source-links .source-key {
+      padding: .28rem .5rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      font-size: .78rem;
+      text-decoration: none;
+    }
+    .source-key code { font-size: inherit; }
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .55rem .8rem;
+      margin-top: .65rem;
+      font-size: .82rem;
+    }
+    .legend span { display: flex; align-items: center; gap: .45rem; }
+    .swatch { width: 18px; height: 18px; flex: 0 0 auto; border: 1px solid var(--line-strong); }
+    .swatch.legacy { background: var(--gray-soft); }
+    .swatch.new { background: var(--blue-soft); border-color: var(--blue); }
+    .swatch.retained { background: var(--coral-soft); border-color: var(--coral); }
+    .swatch.seam { background: var(--paper); border: 2px dashed var(--amber); }
+    .swatch.shadowed { background: repeating-linear-gradient(135deg, var(--blue-soft), var(--blue-soft) 4px, transparent 4px, transparent 8px); border-color: var(--blue); }
+    .swatch.unknown { background: var(--unknown); border-style: dashed; }
+    details {
+      margin-top: 1rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper-2);
+    }
+    summary {
+      cursor: pointer;
+      padding: 1rem 1.1rem;
+      font-weight: 720;
+    }
+    details > div { padding: 0 1.1rem 1.1rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin: .25rem 0 1rem; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    caption { padding: .4rem 0 .7rem; text-align: left; color: var(--muted); }
+    th, td { padding: .62rem .66rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; }
+    td:first-child { font-weight: 650; }
+    .text-equivalent { max-width: 88ch; }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 150px 1fr 260px;
+      gap: 1.2rem;
+      align-items: center;
+      margin-top: 1.4rem;
+    }
+    .stamp {
+      display: grid;
+      place-items: center;
+      width: 132px;
+      aspect-ratio: 1;
+      border: 2px solid var(--coral);
+      border-radius: 50%;
+      color: var(--coral);
+      font-size: .68rem;
+      font-weight: 760;
+      letter-spacing: .08em;
+      text-align: center;
+      text-transform: uppercase;
+      transform: rotate(-4deg);
+    }
+    .next-box {
+      min-height: 112px;
+      padding: 1rem;
+      border: 2px solid var(--blue);
+      color: var(--blue);
+    }
+    .next-box strong { display: block; margin-bottom: .55rem; }
+    .next-box span { font-size: 1.7rem; line-height: 1; }
+    .quiet { color: var(--muted); font-size: .88rem; }
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+    @media (max-width: 820px) {
+      .meta-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .under-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 132px 1fr; }
+      .next-box { grid-column: 1 / -1; }
+    }
+    @media (max-width: 520px) {
+      .page { padding: 15px; }
+      .meta-strip { grid-template-columns: 1fr; }
+      .toolbar { align-items: stretch; }
+      .toolbar-group { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+      .toolbar-sep { display: none; }
+      .control { border-radius: 10px; }
+      .frame-note { align-items: flex-start; flex-direction: column; }
+      .legend { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+    @media print {
+      .toolbar, .actions { display: none !important; }
+      .diagram-shell { box-shadow: none; break-inside: avoid; }
+      details { display: block; }
+      details > div { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <p class="eyebrow">A3 Appendix · Atlas-expanded research surface · v0.2</p>
+    <h1>Authority is one layer of the migration.</h1>
+    <p class="dek">The protected four-frame Strangler-Fig story remains intact. New lenses expose the assurance, runtime, data, provenance, recovery, and human-authorization evidence that a selective authority transfer may require—without claiming that conditional regulatory regimes already apply.</p>
+
+    <section class="meta-strip" aria-label="Research and artifact metadata">
+      <div><strong>As-of</strong><span>24 July 2026</span></div>
+      <div><strong>Protected baseline</strong><span>A3 Stacked Cube v0.1 · F0–F3</span></div>
+      <div><strong>Research method</strong><span>Deep Research Atlas v1.2</span></div>
+      <div><strong>Regulatory scope</strong><span>Unresolved · badges are conditional</span></div>
+    </section>
+
+    <div class="toolbar" aria-label="Diagram controls">
+      <div class="toolbar-group" id="lens-controls" aria-label="Diagram lens">
+        <button class="control" type="button" data-lens="authority" aria-pressed="true">Authority</button>
+        <button class="control" type="button" data-lens="assurance" aria-pressed="false">Assurance</button>
+        <button class="control" type="button" data-lens="runtime" aria-pressed="false">Runtime + data</button>
+        <button class="control" type="button" data-lens="recovery" aria-pressed="false">Recovery</button>
+        <button class="control" type="button" data-lens="evidence" aria-pressed="false">Evidence</button>
+      </div>
+      <span class="toolbar-sep" aria-hidden="true"></span>
+      <div class="toolbar-group" id="frame-controls" aria-label="Historical authority frame">
+        <button class="control" type="button" data-frame="F0" aria-pressed="true">1 · Current</button>
+        <button class="control" type="button" data-frame="F1" aria-pressed="false">2 · Seam</button>
+        <button class="control" type="button" data-frame="F2" aria-pressed="false">3 · Shadow</button>
+        <button class="control" type="button" data-frame="F3" aria-pressed="false">4 · Validated</button>
+      </div>
+    </div>
+
+    <div class="frame-note" aria-live="polite">
+      <span class="badge" id="active-label">Authority topology · Current authority</span>
+      <span id="active-note">Locate current execution and decision authority without treating position as value, maturity, effort, safety, or priority.</span>
+    </div>
+
+    <figure style="margin:0">
+      <div class="diagram-shell" id="diagram-shell">
+        <svg id="diagram" role="img" aria-labelledby="diagram-title diagram-desc"></svg>
+      </div>
+      <figcaption class="sr-only" id="diagram-caption">Interactive diagram. Use the lens and frame buttons, or tab to a diagram object and press Enter or Space. A complete text equivalent and registry follow the visual.</figcaption>
+    </figure>
+
+    <div class="under-grid">
+      <section class="inspector" id="inspector" aria-live="polite"></section>
+      <aside class="legend-card">
+        <span class="micro">Redundant state encoding</span>
+        <div class="legend">
+          <span><i class="swatch legacy" aria-hidden="true"></i>Legacy authority</span>
+          <span><i class="swatch seam" aria-hidden="true"></i>Seam / conditional</span>
+          <span><i class="swatch shadowed" aria-hidden="true"></i>Shadow / dual-run</span>
+          <span><i class="swatch new" aria-hidden="true"></i>New authority</span>
+          <span><i class="swatch retained" aria-hidden="true"></i>Retained legacy</span>
+          <span><i class="swatch unknown" aria-hidden="true"></i>UNKNOWN / unresolved</span>
+        </div>
+      </aside>
+    </div>
+
+    <details>
+      <summary>Research receipt, text equivalent, and exports</summary>
+      <div>
+        <p class="text-equivalent" id="text-equivalent"></p>
+        <div class="actions">
+          <button class="control secondary" type="button" id="copy-model">Copy embedded canonical delta</button>
+          <button class="control secondary" type="button" id="download-svg">Download current SVG</button>
+          <button class="control secondary" type="button" id="print-view">Print / save as PDF</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <caption>Atlas discrepancy register. These are conditional research estimates—not probabilities of migration success, compliance, safety, effort, or schedule.</caption>
+            <thead><tr><th>Question</th><th>H1 omitted control</th><th>H2 unstable boundary</th><th>H3 contextual evidence</th><th>Benign</th><th>Confidence / falsifier</th></tr></thead>
+            <tbody id="discrepancy-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Complete capability registry and protected semantics</summary>
+      <div class="table-wrap">
+        <table>
+          <caption>Original A3 capability and service-dependency registry. New research does not silently turn human work into software cubes.</caption>
+          <thead><tr><th>Capability</th><th>Family</th><th>F0</th><th>F1</th><th>F2</th><th>F3</th><th>Evidence posture</th></tr></thead>
+          <tbody id="capability-body"></tbody>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary>Primary-source coverage ledger</summary>
+      <div class="table-wrap">
+        <table>
+          <caption>Selected primary and first-party sources used for the broadened content. Private-lineage rows show stable source keys; the authorized resolver retains exact coordinates. Product-specific applicability remains a separate internal evidence task.</caption>
+          <thead><tr><th>Source</th><th>Role in analysis</th><th>Boundary / failure state</th></tr></thead>
+          <tbody id="source-body"></tbody>
+        </table>
+      </div>
+    </details>
+
+    <footer class="footer-grid">
+      <div class="stamp" aria-label="Atlas research pass, sourced as of 24 July 2026">Atlas pass<br>24 Jul 2026<br>Sourced</div>
+      <p class="quiet">The external research identifies evidence categories and architecture distinctions. The next high-value pass is internal: running contracts, schemas, tests, telemetry, validation records, SOPs, audit definitions, and named product owners. Until then, new regulated claims remain conditional or UNKNOWN.</p>
+      <div class="next-box"><strong>Next evidence</strong><span aria-hidden="true">→</span><br>Internal source and runtime tranche</div>
+    </footer>
+  </main>
+
+  <script type="application/json" id="a3-model">
+  {
+    "version": "0.2.0",
+    "asOf": "2026-07-24",
+    "method": {
+      "name": "Deep Research Atlas — Self-Contained Payload",
+      "version": "1.2",
+      "url": "urn:source-key:SRC-ATLAS"
+    },
+    "frames": [
+      {"id":"F0","label":"Current authority","note":"Most capabilities remain under legacy or human authority. Coupling and unknowns are explicit."},
+      {"id":"F1","label":"Seam identified","note":"The operational and assignment seam is bounded. Dependencies, evidence, and rollback are named before routing changes."},
+      {"id":"F2","label":"Shadow / dual-run","note":"The candidate mirrors or receives bounded traffic while legacy remains authoritative and rollback stays available."},
+      {"id":"F3","label":"Validated authority","note":"Authority transfers only for the validated capability. Risky, coupled, human, and unknown work remains deliberately visible."}
+    ],
+    "lenses": [
+      {"id":"authority","label":"Authority topology","note":"Locate execution and decision authority without treating position as value, maturity, effort, safety, or priority."},
+      {"id":"assurance","label":"Assurance gates","note":"Seven independent evidence gates surround the transfer. Their categories are research-backed; applicability and pass/fail remain product-specific."},
+      {"id":"runtime","label":"Runtime + data","note":"Read, write, response, record, authorization, comparison, and fallback relationships are distinct. Shadow never implies stateful safety."},
+      {"id":"recovery","label":"Recovery + retirement","note":"A cutover is followed by observation, rollback holding, controlled stop, retention, and owner authorization before decommission."},
+      {"id":"evidence","label":"Evidence provenance","note":"Every broadened assertion exposes source class, boundary, disconfirmation, and the evidence that could change the decision."}
+    ],
+    "capabilities": [
+      {"id":"CAP-OP-ASSIGN","label":"Profiles, permissions & case assignment","short":"Operational / assignment","family":"Operational bridge","states":["legacy","seam","shadow","new"],"evidence":"Historical source assertion; first bounded candidate"},
+      {"id":"CAP-SEARCH","label":"Standard and advanced search","short":"Search","family":"Viewer surface","states":["legacy","legacy","legacy","legacy"],"evidence":"Candidate only; separability not demonstrated"},
+      {"id":"CAP-SPECIMEN","label":"Specimen details and overview","short":"Specimen overview","family":"Viewer surface","states":["legacy","retained","retained","retained"],"evidence":"Listed, not bounded"},
+      {"id":"CAP-SOP-NOTES","label":"SOPs, notes, and comments","short":"SOPs / notes","family":"Viewer surface","states":["legacy","retained","retained","retained"],"evidence":"Listed, not bounded"},
+      {"id":"CAP-VARIANT","label":"Variant detail views and status rules","short":"Variant details","family":"Scientific business logic","states":["legacy","retained","retained","retained"],"evidence":"Explicit risk; deeply coupled"},
+      {"id":"CAP-QC","label":"Quality control","short":"Quality control","family":"Scientific business logic","states":["legacy","retained","retained","retained"],"evidence":"Listed; coupling unresolved"},
+      {"id":"CAP-BIOMARKER","label":"Biomarkers","short":"Biomarkers","family":"Scientific business logic","states":["legacy","retained","retained","retained"],"evidence":"Listed; coupling unresolved"},
+      {"id":"CAP-NON-HUMAN","label":"Non-human workflows","short":"Non-human","family":"Viewer surface","states":["unknown","unknown","unknown","unknown"],"evidence":"UNKNOWN / unbounded"},
+      {"id":"CAP-PGX","label":"Pharmacogenomics","short":"Pharmacogenomics","family":"Scientific business logic","states":["legacy","retained","retained","retained"],"evidence":"Listed; coupling unresolved"},
+      {"id":"CAP-PLUGINS","label":"Plugins and arbitrary code","short":"Plugins / arbitrary code","family":"Viewer surface","states":["legacy","retained","retained","retained"],"evidence":"Explicit risk; deeply coupled"},
+      {"id":"SVC-IAM","label":"Identity and access management","short":"IAM","family":"Service underpinning","states":["legacy","seam","shadow","new"],"evidence":"Material dependency of first candidate"},
+      {"id":"SVC-NOTIFY","label":"Notifications and realtime transport","short":"Notifications","family":"Service underpinning","states":["legacy","retained","retained","retained"],"evidence":"Listed, not bounded"},
+      {"id":"SVC-API","label":"API and service layer","short":"API / service layer","family":"Service underpinning","states":["legacy","seam","shadow","new"],"evidence":"Material contract surface"},
+      {"id":"SVC-MVC","label":"MVC factories and visitor patterns","short":"MVC factories / visitors","family":"Service underpinning","states":["legacy","retained","retained","retained"],"evidence":"Deeply coupled dependency"},
+      {"id":"SVC-SPRING","label":"Framework-handled serialization","short":"Spring serialization","family":"Service underpinning","states":["legacy","retained","retained","retained"],"evidence":"Deeply coupled dependency"},
+      {"id":"SVC-ERROR","label":"Error handling and HTTP responses","short":"Error / HTTP behavior","family":"Service underpinning","states":["legacy","retained","retained","retained"],"evidence":"Material failure behavior; not bounded"},
+      {"id":"SVC-REG","label":"Regulatory-grade logout and data obscuring","short":"Regulatory constraints","family":"Regulatory control","states":["legacy","retained","retained","retained"],"evidence":"Explicit control; retained legacy"}
+    ],
+    "assuranceGates": [
+      {"id":"AG-01","label":"Regulatory + intended-use context","status":"UNRESOLVED","summary":"Research or clinical; display or recommend; HCP or patient; time-critical or deliberative; established or uncertain genomic relevance.","boundary":"External guidance cannot determine device status, intended use, jurisdiction, or pathway for this system.","sources":["SRC-FDA-CDS","SRC-FDA-SW","SRC-QMSR","SRC-CLIA"]},
+      {"id":"AG-02","label":"Clinical evidence","status":"CONDITIONAL","summary":"Keep valid clinical association, analytical validation, and clinical validation distinct.","boundary":"May sit outside a bounded operational capability if it has no clinical interpretation or patient-facing effect.","sources":["SRC-IMDRF-SAMD","SRC-FDA-CDS"]},
+      {"id":"AG-03","label":"Software evidence bundle","status":"DEPTH UNRESOLVED","summary":"Requirements; interfaces and data flows; traceability; configuration; test results; anomalies; rollback.","boundary":"The exact documentation level depends on intended use, risk, and applicable pathway.","sources":["SRC-FDA-SW","SRC-FDA-CSA","SRC-NIST-SSDF"]},
+      {"id":"AG-04","label":"Human-factors critical-task delta","status":"APPLICABILITY UNRESOLVED","summary":"Perception, cognition, physical interaction, and critical-task sequence changes; URRA and validation method.","boundary":"A documented assessment may show no UI or critical-task delta for the bounded change.","sources":["SRC-FDA-HF-2026","SRC-FDA-HFE"]},
+      {"id":"AG-05","label":"Safety + cybersecurity","status":"SEPARATE, LINKED","summary":"Safety hazards; threat model; trust boundaries; SBOM; testing; logging; recovery; patchability; ownership.","boundary":"Cyber-device obligations are conditional; generic security architecture remains relevant but is not compliance proof.","sources":["SRC-FDA-CYBER","SRC-NIST-SSDF","SRC-NIST-ZTA","SRC-RFC9700"]},
+      {"id":"AG-06","label":"Records, audit + genomic custody","status":"REGIME UNRESOLVED","summary":"Actor, authority, action, time, reason, prior/resulting state, source version, retention, access, recovery, data-use limits.","boundary":"Part 11, HIPAA, CLIA, and NIH controlled-access applicability require separate scope determinations.","sources":["SRC-PART11","SRC-HIPAA","SRC-NIH-DATA","SRC-PROV"]},
+      {"id":"AG-07","label":"Change authorization","status":"NAMED DECISION","summary":"Intended-use change; new risk; pathway rationale; HF and security impact; approvers; release criteria; monitoring; rollback trigger.","boundary":"A bounded non-device operational change may need a smaller evidence set, but must still preserve authority, audit, and rollback semantics.","sources":["SRC-FDA-CHANGE","SRC-FDA-PCCP","SRC-AWS-RETIRE","SRC-AZURE-RETIRE"]}
+    ],
+    "migrationGates": [
+      {"id":"G0","label":"Seam readiness","status":"PARTIAL HISTORICAL EVIDENCE","summary":"Stable identity; routable interception or abstraction; owner and dependency map; known system of record.","sources":["SRC-FOWLER-STRANGLER","SRC-AWS-STRANGLER","SRC-FOWLER-ABSTRACTION"]},
+      {"id":"G1","label":"Data readiness","status":"UNKNOWN","summary":"Backfill scope; schema compatibility; lag; conflicts; reconciliation; idempotency.","sources":["SRC-AWS-OUTBOX","SRC-DEBEZIUM","SRC-PG-REPL"]},
+      {"id":"G2","label":"Contract readiness","status":"UNKNOWN","summary":"Declared interface; current provider verification; failure behavior; version compatibility.","sources":["SRC-OPENAPI","SRC-PACT"]},
+      {"id":"G3","label":"Runtime readiness","status":"UNKNOWN","summary":"Canary/control separation; user-centered indicators; adequate window; parity and error-budget verdict.","sources":["SRC-GOOGLE-CANARY","SRC-GOOGLE-SLO","SRC-ISTIO-MIRROR"]},
+      {"id":"G4","label":"Security readiness","status":"UNKNOWN","summary":"Per-request authorization equivalence; least privilege; audience and scope; telemetry boundary.","sources":["SRC-NIST-ZTA","SRC-RFC9700","SRC-FDA-CYBER"]},
+      {"id":"G5","label":"Authority transfer","status":"HISTORICALLY ASSERTED FOR ONE CANDIDATE","summary":"Rollback rehearsed; residual risk reviewed; named domain, operations, quality, and security authorization.","sources":["SRC-A3","SRC-FDA-SW","SRC-GOOGLE-CANARY"]},
+      {"id":"G6","label":"Retirement readiness","status":"NOT CLAIMED","summary":"No unresolved dependencies; controlled stop; archive retrieval; retention and owner approvals; temporary controls retired.","sources":["SRC-AWS-RETIRE","SRC-AZURE-RETIRE"]}
+    ],
+    "runtimeItems": [
+      {"id":"RT-ROUTER","label":"Interception router / abstraction","status":"Candidate control","summary":"A routable seam or branch-by-abstraction boundary separates candidate behavior without asserting that the domain is already separable.","boundary":"Proxy, ACL, bottleneck, and unclear-domain risks remain.","sources":["SRC-AWS-STRANGLER","SRC-FOWLER-ABSTRACTION"]},
+      {"id":"RT-LEGACY","label":"Legacy execution + decision authority","status":"Protected baseline","summary":"Legacy serves the authoritative result until the named gate authorizes a bounded transfer.","boundary":"Physical deployment does not itself define authority.","sources":["SRC-A3"]},
+      {"id":"RT-NEW","label":"Target implementation","status":"Candidate / selectively authoritative","summary":"In F2 it may receive non-authoritative mirrored traffic; in F3 only the evidenced operational capability is shown as authoritative.","boundary":"No broader clinical, scientific, data-store, or retirement authority is implied.","sources":["SRC-A3","SRC-ISTIO-MIRROR"]},
+      {"id":"RT-COMPARE","label":"Contract + response comparator","status":"Evidence plane","summary":"Declared contract, current provider verification, and old/new result comparison are different evidence objects.","boundary":"Passing contracts does not replace data, security, production, or end-to-end evidence.","sources":["SRC-OPENAPI","SRC-PACT","SRC-GOOGLE-CANARY"]},
+      {"id":"RT-DATA","label":"Data transition + reconciliation","status":"UNKNOWN for this system","summary":"Backfill, outbox/CDC, idempotent consumption, lag, conflicts, and parity require explicit evidence if state moves.","boundary":"Uncoordinated dual writes are not assumed; CDC is not complete replication.","sources":["SRC-AWS-OUTBOX","SRC-DEBEZIUM","SRC-PG-REPL"]},
+      {"id":"RT-AUTH","label":"Policy decision + enforcement","status":"Per-request control","summary":"Authentication and authorization remain explicit at each protected resource; they do not move implicitly with a cube.","boundary":"Product-specific identity topology and policies were not available.","sources":["SRC-NIST-ZTA","SRC-RFC9700"]},
+      {"id":"RT-PROV","label":"Provenance + audit ledger","status":"Evidence plane","summary":"Record entities, activities, agents, derivations, versions, observations, decisions, and accountable owners.","boundary":"A provenance model does not itself establish retention, Part 11, HIPAA, or clinical-record applicability.","sources":["SRC-PROV","SRC-PART11"]},
+      {"id":"RT-CONTROL","label":"Cohort, promotion + rollback controls","status":"Temporary control plane","summary":"Cohort and traffic selection support evidence-bounded promotion and reversible rollback; temporary controls need retirement.","boundary":"Applicable two-, four-, six-, or eight-stage profile remains an internal decision.","sources":["SRC-LD-MIGRATION","SRC-GOOGLE-CANARY","SRC-AWS-RETIRE"]}
+    ],
+    "discrepancies": [
+      {"id":"DR-01","question":"Does generic shadow hide distinct read, write, response, and record-authority transitions here?","values":[45,25,20,10],"confidence":"Low—internal runtime evidence absent.","falsifier":"Internal contracts and data flows show that the capability is stateless or that all authority dimensions move atomically.","sources":["SRC-LD-MIGRATION","SRC-AWS-OUTBOX","SRC-ISTIO-MIRROR"]},
+      {"id":"DR-02","question":"Does validated authority need post-release stabilization and retirement readiness?","values":[60,15,5,20],"confidence":"Medium—independent migration and retirement sources concur.","falsifier":"The artifact is explicitly scoped only to pre-retirement authority and links to a separately governed retirement model.","sources":["SRC-GOOGLE-CANARY","SRC-AWS-RETIRE","SRC-AZURE-RETIRE"]},
+      {"id":"DR-03","question":"Do all seven regulated-assurance gates apply to the operational capability?","values":[25,45,10,20],"confidence":"Low—regulatory scope unresolved.","falsifier":"A documented applicability assessment places one or more gates outside the product or record boundary.","sources":["SRC-FDA-CDS","SRC-PART11","SRC-HIPAA","SRC-CLIA"]}
+    ],
+    "sources": [
+      {"id":"SRC-A3","title":"A3 · Appendix — Stacked Cube Model","url":"urn:source-key:SRC-A3","role":"Protected historical and semantic baseline.","boundary":"Internal source assertion; operational evidence still required for new claims."},
+      {"id":"SRC-ATLAS","title":"Deep Research Atlas v1.2","url":"urn:source-key:SRC-ATLAS","role":"Coverage ledger, confounders, disconfirmation, probability referent, provenance, completion gate.","boundary":"Research protocol; domain evidence remains with the cited sources."},
+      {"id":"SRC-QMSR","title":"FDA Quality Management System Regulation","url":"https://www.fda.gov/medical-devices/postmarket-requirements-devices/quality-management-system-regulation-qmsr","role":"Current quality-system context; effective 2 February 2026.","boundary":"Incorporated ISO text was not reproduced in the page."},
+      {"id":"SRC-FDA-SW","title":"FDA Premarket Submissions for Device Software Functions","url":"https://www.fda.gov/media/153781/download","role":"Architecture, requirements, traceability, verification, versions, anomaly disposition.","boundary":"Product-specific documentation level unresolved."},
+      {"id":"SRC-FDA-CSA","title":"FDA Computer Software Assurance, February 2026","url":"https://www.fda.gov/media/188844/download","role":"Risk-proportional assurance and evidence records.","boundary":"Applies to production/QMS software, not device software functions themselves."},
+      {"id":"SRC-FDA-CYBER","title":"FDA Cybersecurity in Medical Devices, February 2026","url":"https://www.fda.gov/media/119933/download","role":"Threat model, architecture, SBOM, testing, logging, recovery, vulnerability management.","boundary":"Section 524B duties depend on cyber-device status."},
+      {"id":"SRC-FDA-HF-2026","title":"FDA Human Factors Submission Information, May 2026","url":"https://www.fda.gov/media/163694/download","role":"Critical-task delta, URRA, validation evidence.","boundary":"Within stated operationalization interval through 1 August 2026."},
+      {"id":"SRC-FDA-HFE","title":"FDA Applying Human Factors and Usability Engineering","url":"https://www.fda.gov/regulatory-information/search-fda-guidance-documents/applying-human-factors-and-usability-engineering-medical-devices","role":"Use-related risk foundation.","boundary":"Does not itself determine submission category."},
+      {"id":"SRC-FDA-CDS","title":"FDA Clinical Decision Support Software, January 2026","url":"https://www.fda.gov/media/109618/download","role":"Non-Device CDS criteria, independent review, time criticality, genomic examples.","boundary":"Device status cannot be concluded without intended use and actual function."},
+      {"id":"SRC-IMDRF-SAMD","title":"IMDRF SaMD Clinical Evaluation","url":"https://www.imdrf.org/documents/software-medical-device-samd-clinical-evaluation","role":"Clinical association, analytical validation, clinical validation.","boundary":"International technical document, not a standalone US legal requirement."},
+      {"id":"SRC-PART11","title":"21 CFR 11.10","url":"https://www.ecfr.gov/current/title-21/part-11/section-11.10","role":"Validation, copies, retention, access, audit trail, authority and sequence checks.","boundary":"Predicate-rule and record-scope analysis required."},
+      {"id":"SRC-HIPAA","title":"45 CFR 164.308 and 164.312","url":"https://www.ecfr.gov/current/title-45/part-164/section-164.308","role":"Risk analysis, access, contingency, audit, integrity, authentication, transmission security.","boundary":"Applicability depends on entity, relationship, and ePHI."},
+      {"id":"SRC-NIH-DATA","title":"NIH Controlled-Access Data Requirements","url":"https://www.grants.nih.gov/policy-and-compliance/policy-topics/sharing-policies/accessing-data/requirements","role":"Approved use, security, incident reporting, institutional accountability.","boundary":"Conditional on controlled-access data and agreements."},
+      {"id":"SRC-CLIA","title":"CMS Clinical Laboratory Improvement Amendments","url":"https://www.cms.gov/medicare/quality/clinical-laboratory-improvement-amendments","role":"US human-laboratory testing boundary.","boundary":"No genomic-viewer-specific software rule was established by this page."},
+      {"id":"SRC-NIST-SSDF","title":"NIST SSDF 1.1","url":"https://csrc.nist.gov/pubs/sp/800/218/final","role":"Secure development, provenance, verification, response.","boundary":"Voluntary framework, not certification; draft 1.2 excluded."},
+      {"id":"SRC-NIST-ZTA","title":"NIST SP 800-207 Zero Trust Architecture","url":"https://csrc.nist.gov/pubs/sp/800/207/final","role":"Per-request policy decisions and enforcement; least privilege.","boundary":"General architecture; product policy topology unresolved."},
+      {"id":"SRC-RFC9700","title":"RFC 9700 OAuth 2.0 Security BCP","url":"https://www.rfc-editor.org/rfc/rfc9700.html","role":"Audience-restricted and sender-constrained token guidance.","boundary":"Does not establish the product’s identity protocol."},
+      {"id":"SRC-FOWLER-STRANGLER","title":"Fowler — Original Strangler Fig Application","url":"https://martinfowler.com/bliki/OriginalStranglerFigApplication.html","role":"Gradual replacement and frequent release framing.","boundary":"Pattern description, not proof of product separability."},
+      {"id":"SRC-AWS-STRANGLER","title":"AWS Strangler Fig Pattern","url":"https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/strangler-fig.html","role":"Proxy and anti-corruption seam with risks and limitations.","boundary":"Implementation choice and domain boundary remain product-specific."},
+      {"id":"SRC-FOWLER-ABSTRACTION","title":"Fowler — Branch by Abstraction","url":"https://martinfowler.com/bliki/BranchByAbstraction.html","role":"Inner seam, coexisting implementations, feature-flagged switching.","boundary":"Requires a viable abstraction; not always available."},
+      {"id":"SRC-LD-MIGRATION","title":"LaunchDarkly Multi-stage Migrations","url":"https://launchdarkly.com/docs/guides/flags/migrations","role":"Old-only, dual-write, shadow, live, ramp-down, complete; selectable profiles.","boundary":"Not all systems support coexisting implementations."},
+      {"id":"SRC-AWS-OUTBOX","title":"AWS Transactional Outbox","url":"https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html","role":"Avoid uncoordinated dual writes; atomic state and event commit.","boundary":"Duplicate delivery still requires idempotent consumers."},
+      {"id":"SRC-DEBEZIUM","title":"Debezium Outbox and CDC Features","url":"https://debezium.io/documentation/reference/stable/features.html","role":"Change capture, deletes, transaction metadata, engine limitations.","boundary":"Connector-specific constraints remain."},
+      {"id":"SRC-PG-REPL","title":"PostgreSQL Logical Replication Restrictions","url":"https://www.postgresql.org/docs/current/logical-replication-restrictions.html","role":"DDL, sequence, large-object, view, and conflict limitations.","boundary":"Database-specific; PostgreSQL use is not asserted."},
+      {"id":"SRC-ISTIO-MIRROR","title":"Istio Traffic Mirroring","url":"https://istio.io/latest/docs/tasks/traffic-management/mirroring/","role":"Fire-and-forget mirror whose response is discarded.","boundary":"Does not prevent stateful side effects by itself."},
+      {"id":"SRC-GOOGLE-CANARY","title":"Google SRE Workbook — Canarying Releases","url":"https://sre.google/workbook/canarying-releases/","role":"Canary/control separation, representative metrics, evaluation windows.","boundary":"Operational practice, not product validation or compliance proof."},
+      {"id":"SRC-GOOGLE-SLO","title":"Google SRE — Service Level Objectives","url":"https://sre.google/sre-book/service-level-objectives/","role":"User-centered indicators, SLOs, and error-budget release posture.","boundary":"Thresholds must be locally defined."},
+      {"id":"SRC-OPENAPI","title":"OpenAPI Specification","url":"https://spec.openapis.org/oas/latest.html","role":"Language-neutral interface description.","boundary":"Declared contract is not a verified contract."},
+      {"id":"SRC-PACT","title":"Pact Provider Verification","url":"https://docs.pact.io/getting_started/verifying_pacts","role":"Replay consumer assumptions against the provider.","boundary":"Does not replace data, security, production, or end-to-end evidence."},
+      {"id":"SRC-PROV","title":"W3C PROV-O","url":"https://www.w3.org/TR/prov-o/","role":"Entities, activities, agents, usage, derivation, attribution, responsibility.","boundary":"Provenance semantics do not establish a regulatory regime."},
+      {"id":"SRC-AWS-RETIRE","title":"AWS Controlled Stop and Retirement Guidance","url":"https://docs.aws.amazon.com/prescriptive-guidance/latest/migration-retiring-applications/best-practice-4.html","role":"Dependency evidence and reversible controlled stop.","boundary":"Business cycles and retention thresholds remain system-specific."},
+      {"id":"SRC-AZURE-RETIRE","title":"Microsoft Decommission Source Workloads","url":"https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/migrate/decommission-source-workload","role":"Approvals, success criteria, rollback grace, archival, recovery testing.","boundary":"General cloud guidance, not regulated-product approval."},
+      {"id":"SRC-FDA-CHANGE","title":"FDA Deciding When to Submit a 510(k) for a Software Change","url":"https://www.fda.gov/media/99785/download","role":"Intended-use and risk-change assessment; change records.","boundary":"Specific to covered existing devices."},
+      {"id":"SRC-FDA-PCCP","title":"FDA AI-Enabled Device PCCP Guidance","url":"https://www.fda.gov/regulatory-information/search-fda-guidance-documents/marketing-submission-recommendations-predetermined-change-control-plan-artificial-intelligence","role":"Authorized modification description, protocol, criteria, impact assessment.","boundary":"Conditional branch only; not a generic migration shortcut."},
+      {"id":"SRC-WCAG","title":"W3C WCAG 2.2 and complex-image guidance","url":"https://www.w3.org/TR/WCAG22/","role":"Keyboard/focus, reflow, contrast, redundant color, text equivalents.","boundary":"Conformance requires testing beyond this artifact’s design intent."},
+      {"id":"SRC-SVG2","title":"W3C SVG 2 Document Structure","url":"https://www.w3.org/TR/SVG/struct.html","role":"Title and description semantics for meaningful SVG groups.","boundary":"Assistive-technology behavior still requires testing."}
+    ]
+  }
+  </script>
+
+  <script>
+  (() => {
+    "use strict";
+    const M = JSON.parse(document.getElementById("a3-model").textContent);
+    const svg = document.getElementById("diagram");
+    const shell = document.getElementById("diagram-shell");
+    const inspector = document.getElementById("inspector");
+    const activeLabel = document.getElementById("active-label");
+    const activeNote = document.getElementById("active-note");
+    const frameControls = document.getElementById("frame-controls");
+    const NS = "http://www.w3.org/2000/svg";
+    let activeLens = "authority";
+    let activeFrame = "F0";
+    let selectedId = "CAP-OP-ASSIGN";
+    let compact = false;
+
+    const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+    const frame = () => M.frames.find(item => item.id === activeFrame);
+    const lens = () => M.lenses.find(item => item.id === activeLens);
+    const cap = id => M.capabilities.find(item => item.id === id);
+    const src = id => M.sources.find(item => item.id === id);
+    const sourceReference = item => item.url.startsWith("urn:source-key:")
+      ? `<span class="source-key"><code>${esc(item.id)}</code> · ${esc(item.title)}</span>`
+      : `<a href="${esc(item.url)}" target="_blank" rel="noreferrer">${esc(item.title)}</a>`;
+    const frameIndex = () => M.frames.findIndex(item => item.id === activeFrame);
+
+    const defs = () => `
+      <defs>
+        <pattern id="hatch-blue" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect width="8" height="8" fill="var(--blue-soft)"></rect><line x1="0" y1="0" x2="0" y2="8" stroke="var(--blue)" stroke-width="2"></line>
+        </pattern>
+        <pattern id="hatch-amber" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect width="9" height="9" fill="var(--amber-soft)"></rect><line x1="0" y1="0" x2="0" y2="9" stroke="var(--amber)" stroke-width="2"></line>
+        </pattern>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="var(--ink)"></path></marker>
+        <marker id="arrow-coral" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="var(--coral)"></path></marker>
+        <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="var(--blue)"></path></marker>
+        <marker id="arrow-violet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="var(--violet)"></path></marker>
+        <marker id="arrow-mint" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="var(--mint-line)"></path></marker>
+      </defs>`;
+
+    function wrapText(text, x, y, maxChars, cls = "", lineHeight = 18, maxLines = 4) {
+      const words = String(text).split(/\s+/);
+      const lines = [];
+      let line = "";
+      words.forEach(word => {
+        const trial = line ? `${line} ${word}` : word;
+        if (trial.length > maxChars && line) {
+          lines.push(line);
+          line = word;
+        } else line = trial;
+      });
+      if (line) lines.push(line);
+      const visible = lines.slice(0, maxLines);
+      if (lines.length > maxLines) visible[maxLines - 1] = visible[maxLines - 1].replace(/[.…]*$/, "") + "…";
+      return `<text x="${x}" y="${y}" class="${cls}">${visible.map((item, i) => `<tspan x="${x}" dy="${i ? lineHeight : 0}">${esc(item)}</tspan>`).join("")}</text>`;
+    }
+
+    function node(id, x, y, w, h, cls, title, subtitle = "", opts = {}) {
+      const selected = id === selectedId ? " selected" : "";
+      const rx = opts.rx ?? 10;
+      const titleY = y + (opts.titleOffset ?? 30);
+      const maxChars = opts.maxChars ?? Math.max(12, Math.floor(w / 8.2));
+      const subtitleLines = opts.subtitleLines ?? 2;
+      const subtitleStart = y + h - (opts.subtitleBottom ?? 18) - ((subtitleLines - 1) * 15);
+      return `<g class="node${selected}" data-item="${esc(id)}" role="button" tabindex="0" aria-label="${esc(title)}">
+        <title>${esc(title)}${subtitle ? ` — ${esc(subtitle)}` : ""}</title>
+        <rect class="${cls} focus-ring" x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}"></rect>
+        ${wrapText(title, x + 14, titleY, maxChars, opts.titleClass ?? "label", opts.lineHeight ?? 17, opts.maxLines ?? 2)}
+        ${subtitle ? wrapText(subtitle, x + 14, subtitleStart, maxChars + 4, "tiny", 15, subtitleLines) : ""}
+      </g>`;
+    }
+
+    function cubeNode(item, state, x, y, w = 300, h = 55) {
+      const cls = ({legacy:"legacy",seam:"seam",shadow:"shadowed",new:"new",retained:"retained",unknown:"unknown"}[state] || "unknown");
+      const d = 10;
+      const selected = item.id === selectedId ? " selected" : "";
+      return `<g class="node${selected}" data-item="${esc(item.id)}" role="button" tabindex="0" aria-label="${esc(item.label)}">
+        <title>${esc(item.label)} — ${esc(state)}</title>
+        <path class="${cls}" d="M${x} ${y}L${x+d} ${y-d}H${x+w+d}L${x+w} ${y}Z"></path>
+        <path class="${cls}" d="M${x+w} ${y}L${x+w+d} ${y-d}V${y+h-d}L${x+w} ${y+h}Z"></path>
+        <rect class="${cls} focus-ring" x="${x}" y="${y}" width="${w}" height="${h}" rx="7"></rect>
+        ${wrapText(item.short, x + 14, y + 32, Math.floor(w / 8), "label", 17, 2)}
+      </g>`;
+    }
+
+    function diagramHead(title, desc, w, h) {
+      svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+      return `${defs()}<title id="diagram-title">${esc(title)}</title><desc id="diagram-desc">${esc(desc)}</desc>`;
+    }
+
+    function renderAuthorityWide() {
+      const f = frame();
+      const i = frameIndex();
+      const retained = ["CAP-SEARCH","CAP-SPECIMEN","CAP-VARIANT","CAP-QC","CAP-PLUGINS","CAP-NON-HUMAN"].map(cap);
+      const candidate = cap("CAP-OP-ASSIGN");
+      let out = diagramHead(`Authority topology — ${f.label}`, `${f.note} Position encodes authority only. Human work remains a separate ribbon.`, 1160, 700);
+      out += `<rect class="zone" x="18" y="18" width="360" height="520" rx="14"></rect>
+        <rect class="zone" x="400" y="18" width="338" height="520" rx="14"></rect>
+        <rect class="zone" x="760" y="18" width="382" height="520" rx="14"></rect>
+        <text x="40" y="52" class="label">LEGACY AUTHORITY</text>
+        <text x="424" y="52" class="label">STRANGLER / CONTRACT</text>
+        <text x="784" y="52" class="label">NEW AUTHORITY</text>`;
+      retained.forEach((item, idx) => {
+        const state = item.states[i];
+        out += cubeNode(item, state, 40, 82 + idx * 68, 310, 50);
+      });
+      if (activeFrame !== "F3") out += cubeNode(candidate, "legacy", 40, 490, 310, 50);
+      if (activeFrame === "F0") {
+        out += node("G0", 435, 218, 268, 100, "unknown", "No verified seam", "UNKNOWN remains explicit.", {titleOffset:34, maxChars:27});
+        out += wrapText("No authority transfer is claimed.", 806, 250, 34, "small", 18, 2);
+      }
+      if (activeFrame === "F1") {
+        out += cubeNode(candidate, "seam", 435, 100, 268, 55);
+        out += node("G0", 435, 205, 268, 150, "conditional", "Operational / assignment gate", "Stable identity · dependencies · parity · audit · rollback · human review", {titleOffset:34, maxChars:30, subtitleBottom:42, subtitleLines:3});
+        out += `<path class="route mirror" d="M350 515 C400 515 395 128 425 128"></path>`;
+        out += wrapText("Candidate boundary; no move yet.", 806, 250, 34, "small", 18, 2);
+      }
+      if (activeFrame === "F2") {
+        out += cubeNode(candidate, "shadow", 435, 100, 268, 55);
+        out += node("G3", 435, 205, 268, 150, "conditional", "Evidence period", "Mirror ≠ authority · compare · observe · preserve fallback · isolate side effects", {titleOffset:34, maxChars:30, subtitleBottom:42, subtitleLines:3});
+        out += `<path class="route mirror" d="M350 515 C400 515 395 128 425 128"></path>
+          <path class="route evidence-line" d="M703 128 C760 128 760 248 804 248"></path>`;
+        out += node("RT-COMPARE", 804, 190, 298, 120, "evidence", "Non-authoritative evidence", "Legacy response served; comparison is scoped and time-stamped.", {titleOffset:34, maxChars:31, subtitleBottom:36, subtitleLines:3});
+      }
+      if (activeFrame === "F3") {
+        out += cubeNode(candidate, "new", 804, 100, 298, 62);
+        out += node("G5", 435, 205, 268, 150, "conditional", "Bounded authority gate", "One historical candidate · named scope · rollback remains · retirement not claimed", {titleOffset:34, maxChars:30, subtitleBottom:42, subtitleLines:3});
+        out += `<path class="route" d="M703 270 C750 270 750 131 794 131"></path>
+          <path class="route fallback" d="M824 174 C810 440 394 450 350 515"></path>`;
+        out += wrapText("Response / decision authority", 816, 192, 30, "small", 17, 2);
+        out += wrapText("Fallback remains available", 474, 425, 32, "small", 17, 2);
+      }
+      out += `<rect class="human" x="18" y="560" width="1124" height="112" rx="14"></rect>
+        <text x="42" y="594" class="label">HUMAN WORKFLOW AUTHORITY — NOT CONVERTED INTO SOFTWARE CUBES</text>
+        ${wrapText("Capacity · quality assessment · NCR/CAPA · rerun/requeue · variant and contamination review · clinical-trial support · operational tools and SQL", 42, 626, 135, "small", 19, 2)}`;
+      return out;
+    }
+
+    function renderAssuranceWide() {
+      let out = diagramHead("Seven assurance gates around a bounded authority transfer", "Regulatory applicability and gate outcomes remain unresolved. Human authority sits above, provenance below.", 1160, 700);
+      out += `<rect class="unknown" x="20" y="18" width="1120" height="64" rx="12"></rect>
+        <text x="42" y="45" class="label">SCOPE / APPLICABILITY — UNRESOLVED</text>
+        ${wrapText("Intended use · jurisdiction · device status · Part 11 · HIPAA · CLIA · NIH controlled-access data", 42, 67, 136, "small", 16, 1)}
+        <rect class="human" x="20" y="98" width="1120" height="66" rx="12"></rect>
+        <text x="42" y="126" class="label">NAMED HUMAN AUTHORITY</text>
+        ${wrapText("Regulatory · clinical/scientific · quality · human factors · security · records/privacy · operations · release owner", 42, 149, 132, "small", 16, 1)}`;
+      const positions = [
+        [30,190],[30,325],[30,460],
+        [830,190],[830,325],[830,460],
+        [430,475]
+      ];
+      M.assuranceGates.forEach((gate, idx) => {
+        const [x,y] = positions[idx];
+        const w = idx === 6 ? 300 : 300;
+        const h = idx === 6 ? 95 : 110;
+        const cls = gate.status.includes("UNRESOLVED") || gate.status.includes("DEPTH") || gate.status.includes("REGIME") ? "unknown" : "conditional";
+        out += node(gate.id, x, y, w, h, cls, `${idx + 1} · ${gate.label}`, gate.status, {titleOffset:31, maxChars:32, subtitleBottom:16, subtitleLines:1});
+        const sx = x < 400 ? x + w : x;
+        const sy = y + h/2;
+        const ex = x < 400 ? 425 : 735;
+        const ey = 350;
+        if (idx !== 6) out += `<path class="route evidence-line" d="M${sx} ${sy} C${x < 400 ? 380 : 780} ${sy}, ${x < 400 ? 390 : 770} ${ey}, ${ex} ${ey}"></path>`;
+      });
+      out += `<g class="node${selectedId === "CAP-OP-ASSIGN" ? " selected" : ""}" data-item="CAP-OP-ASSIGN" role="button" tabindex="0" aria-label="Bounded authority transfer candidate">
+        <rect class="new focus-ring" x="425" y="245" width="310" height="205" rx="18"></rect>
+        <text x="450" y="278" class="label">BOUNDED AUTHORITY CANDIDATE</text>
+        ${wrapText("Profiles, permissions & case assignment", 450, 317, 29, "hero", 23, 2)}
+        ${wrapText("Gate categories are research-backed. Pass/fail and applicability are not asserted.", 450, 390, 37, "small", 18, 3)}
+      </g>
+      <path class="route evidence-line" d="M580 475 L580 458"></path>
+      <rect class="evidence" x="20" y="590" width="1120" height="82" rx="12"></rect>
+      <text x="42" y="620" class="label">IMMUTABLE PROVENANCE / AUDIT RAIL</text>
+      ${wrapText("source entity → requirement/risk → design/control → test/observation → named decision → resulting authority → rollback or retirement record", 42, 650, 137, "small", 17, 2)}`;
+      return out;
+    }
+
+    function renderRuntimeWide() {
+      const f = activeFrame;
+      let out = diagramHead(`Runtime and data semantics — ${frame().label}`, "Read, write, response, record, authorization, comparison, and fallback are distinct relations.", 1160, 700);
+      out += `<rect class="rail" x="20" y="18" width="1120" height="96" rx="12"></rect>
+        <text x="42" y="47" class="label">MIGRATION CONTROL PLANE</text>
+        ${node("RT-CONTROL", 260, 36, 620, 60, "conditional", "Cohort / promotion / rollback controls", "Temporary, scoped, reversible; retire after the migration.", {titleOffset:25, maxChars:70, subtitleBottom:12, subtitleLines:1})}
+        <text x="28" y="151" class="label">REQUEST / RESPONSE PLANE</text>`;
+      out += node("RT-CLIENT", 30, 190, 140, 90, "zone", "User / caller", "requests", {titleOffset:31, maxChars:15});
+      out += node("RT-ROUTER", 230, 175, 190, 120, f === "F0" ? "unknown" : "seam", "Interception seam", f === "F0" ? "not established" : "router / abstraction", {titleOffset:34, maxChars:20, subtitleBottom:20});
+      out += node("RT-LEGACY", 500, 145, 220, 110, f === "F3" ? "retained" : "legacy", "Legacy implementation", f === "F3" ? "fallback retained" : "authoritative", {titleOffset:34, maxChars:23, subtitleBottom:20});
+      out += node("RT-NEW", 500, 295, 220, 110, f === "F0" ? "unknown" : (f === "F1" ? "seam" : (f === "F2" ? "shadowed" : "new")), "Target implementation", f === "F2" ? "mirrored response discarded" : (f === "F3" ? "bounded authority only" : "candidate"), {titleOffset:34, maxChars:23, subtitleBottom:20, subtitleLines:2});
+      out += node("RT-COMPARE", 790, 205, 190, 120, "evidence", "Contract + response evidence", "declared · verified · compared", {titleOffset:34, maxChars:20, subtitleBottom:20});
+      out += node("RT-AUTH", 1000, 175, 135, 150, "human", "PDP / PEP", "authorize and enforce per request", {titleOffset:34, maxChars:14, subtitleBottom:30, subtitleLines:3});
+      if (f === "F0") {
+        out += `<path class="route" d="M170 235 L490 200"></path>`;
+      } else {
+        out += `<path class="route" d="M170 235 L220 235"></path>`;
+        if (f === "F1" || f === "F2") out += `<path class="route" d="M420 225 L490 200"></path>`;
+        if (f === "F2") out += `<path class="route mirror" d="M420 245 C455 245 455 350 490 350"></path>
+          <path class="route evidence-line" d="M720 200 C760 200 750 242 780 242"></path>
+          <path class="route evidence-line" d="M720 350 C760 350 750 288 780 288"></path>`;
+        if (f === "F3") out += `<path class="route" d="M420 245 C455 245 455 350 490 350"></path>
+          <path class="route fallback" d="M500 370 C450 440 390 330 420 260"></path>
+          <path class="route evidence-line" d="M720 350 C760 350 750 288 780 288"></path>`;
+      }
+      out += `<path class="route authorization" d="M1000 235 C930 145 820 165 730 190"></path>
+        <path class="route authorization" d="M1000 265 C930 390 820 370 730 350"></path>
+        <text x="28" y="449" class="label">DATA / RECORD PLANE</text>`;
+      out += node("RT-DATA-LEGACY", 90, 490, 230, 105, "legacy", "Legacy record authority", f === "F3" ? "retained / exact scope unresolved" : "current system of record", {titleOffset:34, maxChars:24, subtitleBottom:20, subtitleLines:2});
+      out += node("RT-DATA", 410, 475, 310, 135, "unknown", "Backfill · outbox / CDC · reconciliation", "NOT ASSERTED FOR THIS SYSTEM", {titleOffset:34, maxChars:34, subtitleBottom:22});
+      out += node("RT-DATA-NEW", 810, 490, 230, 105, f === "F3" ? "unknown" : "unknown", "Target record authority", "UNKNOWN until internal evidence", {titleOffset:34, maxChars:24, subtitleBottom:20, subtitleLines:2});
+      out += `<path class="route mirror" d="M320 542 L400 542"></path>
+        <path class="route mirror" d="M720 542 L800 542"></path>`;
+      out += node("RT-PROV", 280, 630, 600, 52, "evidence", "Provenance / audit ledger", "entities · activities · agents · versions · observations · decisions", {titleOffset:23, maxChars:72, subtitleBottom:9, subtitleLines:1});
+      return out;
+    }
+
+    function renderRecoveryWide() {
+      let out = diagramHead("Recovery and retirement evidence path", "The original F0–F3 history is preserved; these gates are orthogonal readiness checks, not asserted new historical frames.", 1160, 690);
+      out += `<rect class="human" x="20" y="20" width="1120" height="76" rx="12"></rect>
+        <text x="42" y="50" class="label">HUMAN AUTHORIZATION / RESIDUAL-RISK OWNERSHIP</text>
+        ${wrapText("Domain boundary · clinical/scientific equivalence · security · data retention · operational readiness · rollback rehearsal · controlled-stop observation · decommission approval", 42, 76, 135, "small", 16, 1)}
+        <line class="axis" x1="74" y1="160" x2="1085" y2="160"></line>`;
+      M.migrationGates.forEach((gate, idx) => {
+        const x = 35 + idx * 160;
+        const cls = gate.status.includes("UNKNOWN") || gate.status.includes("NOT CLAIMED") ? "unknown" : (idx === 5 ? "new" : "conditional");
+        out += `<circle cx="${x+55}" cy="160" r="13" class="${cls}"></circle>`;
+        out += node(gate.id, x, 190, 130, 165, cls, `${gate.id} · ${gate.label}`, gate.status, {titleOffset:29, maxChars:14, subtitleBottom:25, subtitleLines:3, maxLines:3, lineHeight:16});
+      });
+      out += `<text x="36" y="405" class="label">POST-TRANSFER STATES — DISTINCT FROM A PASS BADGE</text>
+        ${node("RC-MONITOR", 35, 438, 230, 105, "evidence", "Released with monitoring", "scoped verdict · evidence freshness", {titleOffset:34, maxChars:24, subtitleBottom:20, subtitleLines:2})}
+        ${node("RC-HOLD", 315, 438, 230, 105, "conditional", "Rollback holding", "fallback live · rehearsal current", {titleOffset:34, maxChars:24, subtitleBottom:20, subtitleLines:2})}
+        ${node("RC-STOP", 595, 438, 230, 105, "seam", "Controlled stop", "reversible dormancy · observe full cycles", {titleOffset:34, maxChars:24, subtitleBottom:20, subtitleLines:2})}
+        ${node("RC-ARCHIVE", 875, 438, 230, 105, "retained", "Retired but readable", "archive · retention · recovery tested", {titleOffset:34, maxChars:24, subtitleBottom:20, subtitleLines:2})}
+        <path class="route" d="M265 490 L305 490"></path>
+        <path class="route" d="M545 490 L585 490"></path>
+        <path class="route" d="M825 490 L865 490"></path>
+        <path class="route fallback" d="M615 555 C520 635 350 635 280 545"></path>
+        <rect class="unknown" x="35" y="590" width="1070" height="70" rx="12"></rect>
+        <text x="57" y="620" class="label">SAFE-TO-DELETE IS NOT IMPLIED</text>
+        ${wrapText("No universal mismatch, lag, observation-window, SLO, business-cycle, or retention threshold was found. Local owners must define and approve them.", 57, 646, 128, "small", 16, 1)}`;
+      return out;
+    }
+
+    function renderEvidenceWide() {
+      let out = diagramHead("Evidence provenance and Atlas discrepancy register", "Sources become claims, candidate diagram elements, explicit decisions, and a derived artifact. Discrepancy probabilities refer only to explanation fit.", 1160, 700);
+      const chain = [
+        ["EV-SOURCE","Source entity","authority · version · scope","evidence"],
+        ["EV-CLAIM","Claim / requirement","fact · inference · estimate","conditional"],
+        ["EV-CANDIDATE","Candidate element","node · edge · gate · UNKNOWN","unknown"],
+        ["EV-DECISION","Inclusion decision","overview · layer · inspector · exclude","new"],
+        ["EV-ARTIFACT","Derived artifact","SVG · table · text equivalent","evidence"]
+      ];
+      chain.forEach((item, idx) => {
+        const x = 25 + idx * 228;
+        out += node(item[0], x, 65, 190, 110, item[3], item[1], item[2], {titleOffset:34, maxChars:20, subtitleBottom:20, subtitleLines:2});
+        if (idx < chain.length - 1) out += `<path class="route evidence-line" d="M${x+190} 120 L${x+218} 120"></path>`;
+      });
+      out += `<rect class="rail" x="25" y="205" width="1110" height="95" rx="12"></rect>
+        <text x="45" y="235" class="label">EVIDENCE STATE — NEVER COLOR ALONE</text>
+        ${wrapText("● verified fact · ◉ corroborated inference · ○ single-source claim · ▧ estimate · ╌ unresolved · ◷ stale · ◌ not exercised", 45, 270, 126, "small", 18, 2)}
+        <text x="25" y="350" class="label">CANDIDATE-EXPLANATION DISTRIBUTIONS</text>
+        <text x="25" y="373" class="small">Research estimates conditional on reviewed evidence. H1 = omitted control · H2 = unstable boundary · H3 = contextual/stale · green = benign.</text>`;
+      M.discrepancies.forEach((d, idx) => {
+        const y = 410 + idx * 87;
+        const x = 380;
+        const w = 740;
+        out += `<g class="node${selectedId === d.id ? " selected" : ""}" data-item="${d.id}" role="button" tabindex="0" aria-label="${esc(d.question)}">
+          <rect class="zone focus-ring" x="25" y="${y-27}" width="1110" height="72" rx="10"></rect>
+          ${wrapText(`${idx+1} · ${d.question}`, 43, y, 43, "label", 16, 3)}
+        `;
+        let offset = 0;
+        const classes = ["prob-h1","prob-h2","prob-h3","prob-benign"];
+        d.values.forEach((value, vIdx) => {
+          const width = w * value / 100;
+          out += `<rect class="${classes[vIdx]}" x="${x+offset}" y="${y-14}" width="${width}" height="28"></rect>`;
+          if (width > 44) out += `<text x="${x+offset+width/2}" y="${y+5}" text-anchor="middle" style="fill:var(--paper);font-weight:750;font-size:11px">${value}%</text>`;
+          offset += width;
+        });
+        out += `</g>`;
+      });
+      return out;
+    }
+
+    function compactCards(title, description, items, type) {
+      const h = 190 + items.length * 112;
+      let out = diagramHead(title, description, 360, h);
+      out += `<rect class="unknown" x="12" y="16" width="336" height="92" rx="12"></rect>
+        ${wrapText(title, 28, 44, 33, "label", 17, 3)}
+        ${wrapText("Compact view preserves semantic order; the wide view shows topology.", 28, 86, 38, "tiny", 15, 2)}`;
+      items.forEach((item, idx) => {
+        const y = 132 + idx * 112;
+        const cls = item.cls || (item.status?.includes("UNKNOWN") || item.status?.includes("UNRESOLVED") || item.status?.includes("NOT CLAIMED") ? "unknown" : "conditional");
+        out += node(item.id, 16, y, 328, 92, cls, item.title || item.label, item.subtitle || item.status || item.summary || "", {titleOffset:29, maxChars:35, subtitleBottom:18, subtitleLines:2, maxLines:2, lineHeight:16});
+        if (idx < items.length - 1) out += `<path class="route ${type === "evidence" ? "evidence-line" : ""}" d="M180 ${y+92} L180 ${y+108}"></path>`;
+      });
+      return out;
+    }
+
+    function renderCompact() {
+      if (activeLens === "authority") {
+        const i = frameIndex();
+        const ids = ["CAP-SEARCH","CAP-SPECIMEN","CAP-VARIANT","CAP-QC","CAP-OP-ASSIGN","CAP-NON-HUMAN"];
+        const items = ids.map(id => {
+          const c = cap(id);
+          const state = c.states[i];
+          return {id:c.id,title:c.short,subtitle:state.replace("_"," "),cls:({legacy:"legacy",seam:"seam",shadow:"shadowed",new:"new",retained:"retained",unknown:"unknown"}[state] || "unknown")};
+        });
+        items.push({id:"HUMAN",title:"Human workflow authority",subtitle:"Separate ribbon; not a software cube.",cls:"human"});
+        return compactCards(`Authority · ${frame().label}`, frame().note, items, "authority");
+      }
+      if (activeLens === "assurance") return compactCards("Seven assurance gates", lens().note, M.assuranceGates.map(g => ({...g,title:g.label})), "evidence");
+      if (activeLens === "runtime") return compactCards(`Runtime + data · ${frame().label}`, lens().note, M.runtimeItems.map(r => ({...r,title:r.label,cls:r.status.includes("UNKNOWN") ? "unknown" : "evidence"})), "runtime");
+      if (activeLens === "recovery") return compactCards("Recovery + retirement", lens().note, M.migrationGates.map(g => ({...g,title:`${g.id} · ${g.label}`})), "recovery");
+      const items = M.discrepancies.map((d, idx) => ({id:d.id,title:`${idx+1} · Explanation distribution`,subtitle:d.values.map((v,i)=>`${["H1","H2","H3","benign"][i]} ${v}%`).join(" · "),cls:"evidence"}));
+      return compactCards("Evidence provenance", lens().note, items, "evidence");
+    }
+
+    function itemFor(id) {
+      const c = cap(id);
+      if (c) return {id:c.id,title:c.label,status:c.states[frameIndex()],summary:`${c.family}. ${c.evidence}.`,boundary:"Protected A3 baseline. Position encodes authority only; separability and broader readiness are not implied.",sources:["SRC-A3"]};
+      const gate = M.assuranceGates.find(x => x.id === id);
+      if (gate) return {id:gate.id,title:gate.label,status:gate.status,summary:gate.summary,boundary:gate.boundary,sources:gate.sources};
+      const mg = M.migrationGates.find(x => x.id === id);
+      if (mg) return {id:mg.id,title:`${mg.id} · ${mg.label}`,status:mg.status,summary:mg.summary,boundary:"Gate status is scoped to available evidence. UNKNOWN, stale, and not-exercised are valid outcomes.",sources:mg.sources};
+      const rt = M.runtimeItems.find(x => x.id === id);
+      if (rt) return {id:rt.id,title:rt.label,status:rt.status,summary:rt.summary,boundary:rt.boundary,sources:rt.sources};
+      const dr = M.discrepancies.find(x => x.id === id);
+      if (dr) return {id:dr.id,title:dr.question,status:`${dr.confidence} H1/H2/H3/benign = ${dr.values.join("/")}.`,summary:"Probability referent: which candidate explanation best fits the apparent content gap, conditional on reviewed evidence.",boundary:`Falsifier: ${dr.falsifier}`,sources:dr.sources};
+      const generic = {
+        "RT-CLIENT":{title:"User / caller",status:"Actor",summary:"Origin of a request. This does not imply clinical user type or device status.",boundary:"Actual user, task, time criticality, and decision context are unresolved.",sources:["SRC-FDA-CDS"]},
+        "RT-DATA-LEGACY":{title:"Legacy record authority",status:"Current / retained",summary:"The protected source identifies legacy authority but does not provide a complete data-object authority matrix.",boundary:"Material records, schemas, retention, and system-of-record ownership require internal evidence.",sources:["SRC-A3","SRC-PROV"]},
+        "RT-DATA-NEW":{title:"Target record authority",status:"UNKNOWN",summary:"No product-specific source in this pass proves that persistence or record authority moves with the operational capability.",boundary:"Do not infer data authority from response authority.",sources:["SRC-AWS-OUTBOX","SRC-PG-REPL"]},
+        "RC-MONITOR":{title:"Released with monitoring",status:"Post-transfer state",summary:"Scoped, time-stamped runtime evidence continues after release.",boundary:"A passing window expires as software, data, dependencies, and traffic change.",sources:["SRC-GOOGLE-CANARY","SRC-GOOGLE-SLO"]},
+        "RC-HOLD":{title:"Rollback holding",status:"Recovery state",summary:"Legacy fallback and reconciliation remain available for a named grace period.",boundary:"The window and rehearsal age must be locally defined.",sources:["SRC-AZURE-RETIRE"]},
+        "RC-STOP":{title:"Controlled stop",status:"Retirement test",summary:"A reversible shutdown exposes hidden dependencies before deletion.",boundary:"Observation must cover locally relevant business cycles.",sources:["SRC-AWS-RETIRE"]},
+        "RC-ARCHIVE":{title:"Retired but readable",status:"Preserved evidence",summary:"Runtime authority is removed while records, retention, retrieval, and recovery remain governed.",boundary:"Safe-to-delete is a later decision, not a visual consequence of cutover.",sources:["SRC-AZURE-RETIRE","SRC-PART11"]},
+        "EV-SOURCE":{title:"Source entity",status:"Provenance start",summary:"Record authority, version, scope, access date, and read depth.",boundary:"A URL without scope and version can still be misleading.",sources:["SRC-PROV","SRC-ATLAS"]},
+        "EV-CLAIM":{title:"Claim / requirement",status:"Evidence-classified",summary:"Verified fact, corroborated inference, single-source claim, estimate, or unresolved.",boundary:"No evidence class means no promoted visual assertion.",sources:["SRC-ATLAS"]},
+        "EV-CANDIDATE":{title:"Candidate diagram element",status:"Confounder-gated",summary:"Node, edge, gate, state, human ribbon, or explicit UNKNOWN.",boundary:"Strongest disconfirmation is written before inclusion.",sources:["SRC-ATLAS"]},
+        "EV-DECISION":{title:"Inclusion decision",status:"Progressive disclosure",summary:"Overview, selectable layer, inspector, UNKNOWN, or exclude.",boundary:"Research breadth does not require hero-level visual density.",sources:["SRC-ATLAS","SRC-WCAG"]},
+        "EV-ARTIFACT":{title:"Derived artifact",status:"Regenerable",summary:"SVG, complete table, text equivalent, and embedded model derive from the same evidence surface.",boundary:"Visual parity and accessibility still require rendering and user testing.",sources:["SRC-PROV","SRC-SVG2","SRC-WCAG"]}
+      }[id];
+      if (generic) return {id,...generic};
+      if (id === "HUMAN") return {id,title:"Human workflow authority",status:"Protected separate surface",summary:"Clinical judgment, residual-risk acceptance, approval, incident escalation, and retirement authorization remain named human acts.",boundary:"Human activity is never rendered as a software cube merely because software participates.",sources:["SRC-A3","SRC-FDA-HF-2026","SRC-FDA-SW"]};
+      return {id,title:"Diagram surface",status:"Context",summary:lens().note,boundary:"Select a labeled node for its evidence and boundary.",sources:["SRC-ATLAS"]};
+    }
+
+    function renderInspector() {
+      const item = itemFor(selectedId);
+      const links = (item.sources || []).map(id => src(id)).filter(Boolean);
+      inspector.innerHTML = `<span class="micro">${esc(item.id)} · ${esc(item.status)}</span>
+        <h2>${esc(item.title)}</h2>
+        <p>${esc(item.summary)}</p>
+        <p class="boundary"><strong>Boundary / falsifier.</strong> ${esc(item.boundary)}</p>
+        <div class="source-links">${links.map(sourceReference).join("")}</div>`;
+    }
+
+    function textEquivalent() {
+      const prefix = `${lens().label}. ${lens().note}`;
+      if (activeLens === "authority") return `${prefix} ${frame().label}: ${frame().note} The operational and assignment capability is ${cap("CAP-OP-ASSIGN").states[frameIndex()]}. Search, specimen, variant, quality-control, plugin, non-human, and regulatory work remains legacy, retained, or unknown. Human workflows remain a separate authority ribbon.`;
+      if (activeLens === "assurance") return `${prefix} Seven gates cover intended-use and regulatory context; clinical evidence; software evidence; human factors; safety and cybersecurity; records and genomic-data custody; and named change authorization. Product-specific scope and gate outcomes remain unresolved.`;
+      if (activeLens === "runtime") return `${prefix} The visual separates the request router, legacy and target implementations, contract and response comparison, per-request authorization, legacy and target record authority, a possible data-transition and reconciliation surface, provenance, promotion, and rollback. In ${frame().label}, only the original A3 authority claim is treated as historical evidence; data movement is not asserted.`;
+      if (activeLens === "recovery") return `${prefix} Gates G0 through G6 cover seam, data, contract, runtime, security, authority transfer, and retirement readiness. G5 is historically asserted for one bounded candidate; detailed gate outcomes remain unknown and retirement is not claimed. Post-transfer states include monitoring, rollback holding, controlled stop, and retired-but-readable preservation.`;
+      return `${prefix} Provenance runs from source entity to classified claim, candidate element, inclusion decision, and derived artifact. Three explanation distributions are low- or medium-confidence research estimates with explicit falsifiers; they are not probabilities of migration success or compliance.`;
+    }
+
+    function bindNodes() {
+      svg.querySelectorAll("[data-item]").forEach(el => {
+        const select = () => {
+          selectedId = el.dataset.item;
+          render();
+          svg.querySelector(`[data-item="${CSS.escape(selectedId)}"]`)?.focus();
+        };
+        el.addEventListener("click", select);
+        el.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            select();
+          }
+        });
+      });
+    }
+
+    function render() {
+      compact = shell.getBoundingClientRect().width < 620;
+      let content;
+      if (compact) content = renderCompact();
+      else if (activeLens === "authority") content = renderAuthorityWide();
+      else if (activeLens === "assurance") content = renderAssuranceWide();
+      else if (activeLens === "runtime") content = renderRuntimeWide();
+      else if (activeLens === "recovery") content = renderRecoveryWide();
+      else content = renderEvidenceWide();
+      svg.innerHTML = content;
+      document.querySelectorAll("[data-lens]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.lens === activeLens)));
+      document.querySelectorAll("[data-frame]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.frame === activeFrame)));
+      frameControls.hidden = !(activeLens === "authority" || activeLens === "runtime");
+      activeLabel.textContent = `${lens().label}${frameControls.hidden ? "" : ` · ${frame().label}`}`;
+      activeNote.textContent = lens().note;
+      document.getElementById("text-equivalent").textContent = textEquivalent();
+      renderInspector();
+      bindNodes();
+    }
+
+    document.querySelectorAll("[data-lens]").forEach(button => button.addEventListener("click", () => {
+      activeLens = button.dataset.lens;
+      selectedId = activeLens === "authority" ? "CAP-OP-ASSIGN" : activeLens === "assurance" ? "AG-01" : activeLens === "runtime" ? "RT-ROUTER" : activeLens === "recovery" ? "G0" : "DR-01";
+      render();
+    }));
+    document.querySelectorAll("[data-frame]").forEach(button => button.addEventListener("click", () => {
+      activeFrame = button.dataset.frame;
+      render();
+    }));
+
+    function copyText(value) {
+      if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(value);
+      const area = document.createElement("textarea");
+      area.value = value;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand("copy");
+      area.remove();
+      return Promise.resolve();
+    }
+    document.getElementById("copy-model").addEventListener("click", () => copyText(JSON.stringify(M, null, 2)));
+    document.getElementById("download-svg").addEventListener("click", () => {
+      const copy = svg.cloneNode(true);
+      copy.setAttribute("xmlns", NS);
+      const style = document.createElementNS(NS, "style");
+      style.textContent = Array.from(document.styleSheets).flatMap(sheet => {
+        try { return Array.from(sheet.cssRules).map(rule => rule.cssText); } catch { return []; }
+      }).join("\n");
+      copy.insertBefore(style, copy.firstChild);
+      const blob = new Blob([new XMLSerializer().serializeToString(copy)], {type:"image/svg+xml"});
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `a3-atlas-${activeLens}-${activeFrame.toLowerCase()}.svg`;
+      link.click();
+      URL.revokeObjectURL(url);
+    });
+    document.getElementById("print-view").addEventListener("click", () => window.print());
+
+    document.getElementById("discrepancy-body").innerHTML = M.discrepancies.map(d => `<tr>
+      <td>${esc(d.question)}</td><td>${d.values[0]}%</td><td>${d.values[1]}%</td><td>${d.values[2]}%</td><td>${d.values[3]}%</td><td>${esc(d.confidence)} ${esc(d.falsifier)}</td>
+    </tr>`).join("");
+    document.getElementById("capability-body").innerHTML = M.capabilities.map(c => `<tr>
+      <td>${esc(c.label)}</td><td>${esc(c.family)}</td>${c.states.map(s => `<td>${esc(s)}</td>`).join("")}<td>${esc(c.evidence)}</td>
+    </tr>`).join("");
+    document.getElementById("source-body").innerHTML = M.sources.map(s => `<tr>
+      <td>${sourceReference(s)}</td><td>${esc(s.role)}</td><td>${esc(s.boundary)}</td>
+    </tr>`).join("");
+
+    let lastCompact = null;
+    new ResizeObserver(() => {
+      const next = shell.getBoundingClientRect().width < 620;
+      if (next !== lastCompact) {
+        lastCompact = next;
+        render();
+      }
+    }).observe(shell);
+    render();
+  })();
+  </script>
+</body>
+</html>

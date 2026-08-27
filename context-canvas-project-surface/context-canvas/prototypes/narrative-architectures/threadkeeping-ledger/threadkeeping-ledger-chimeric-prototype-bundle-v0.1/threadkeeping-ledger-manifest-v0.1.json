@@ -1,0 +1,33 @@
+{
+  "id": "fg.threadkeeping-ledger.chimeric-prototype.manifest.v0.1",
+  "title": "Threadkeeping Ledger Chimeric Prototype",
+  "version": "0.1",
+  "files": {
+    "prototype": "threadkeeping-ledger-chimeric-prototype-v0.1.html",
+    "schema": "threadkeeping-ledger.schema.v0.1.json",
+    "context": "threadkeeping-ledger.context.v0.1.jsonld"
+  },
+  "package": "@driftframe/field-guide",
+  "related_package": "@driftframe/narrative-architecture",
+  "source_nursery": "@fieldform/loam-layer",
+  "features": [
+    "editable threadkeeper entries",
+    "duplicate-guarded entry and next-candidate creation",
+    "Now–Next–Later Coordination Horizon",
+    "button-based column visibility and order controls",
+    "fixed-cell full-text reveal dialog",
+    "selected inspector",
+    "review queue",
+    "continuity assessment",
+    "supersession fields",
+    "plain-text equivalent",
+    "visible hydration packet and AI prompt capsule",
+    "JSON import/export",
+    "JSON-LD graph"
+  ],
+  "next_candidates": [
+    "hands-on usage observation in loam-layer",
+    "Stable Identity and the Contract-Bearing Node",
+    "Narrative Coordination Surface chimeric prototype"
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Writing Exemplar Registry",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_version",
+    "registry_id",
+    "registry_type",
+    "version",
+    "purpose",
+    "semantic_attractor_contract",
+    "entries"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1"
+    },
+    "registry_id": {
+      "type": "string"
+    },
+    "registry_type": {
+      "const": "writing_exemplars"
+    },
+    "version": {
+      "const": "0.1.0"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "semantic_attractor_contract": {
+      "type": "object",
+      "required": [
+        "target_state",
+        "boundary_condition",
+        "replacement_state",
+        "verification_signals"
+      ],
+      "properties": {
+        "target_state": {
+          "type": "string"
+        },
+        "boundary_condition": {
+          "type": "string"
+        },
+        "replacement_state": {
+          "type": "string"
+        },
+        "verification_signals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "artifact_type",
+          "title",
+          "path",
+          "schema_ref"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "artifact_type": {
+            "enum": [
+              "essay_exemplar",
+              "testimonial_blurb_set"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "schema_ref": {
+            "type": "string"
+          },
+          "branch_id": {
+            "type": "string"
+          },
+          "essay_mode": {
+            "enum": [
+              "integrative",
+              "critical_systems",
+              "human_horizon"
+            ]
+          },
+          "format": {
+            "enum": [
+              "short",
+              "long"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

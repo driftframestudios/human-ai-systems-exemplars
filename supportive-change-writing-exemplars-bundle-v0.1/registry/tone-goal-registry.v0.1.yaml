@@ -1,0 +1,43 @@
+{
+  "$schema": "../schema/tone-goal-registry.schema.v0.1.json",
+  "schema_version": "0.1",
+  "registry_id": "tone-goal-registry:supportive-change:v0.1",
+  "registry_type": "tone_goals",
+  "version": "0.1.0",
+  "purpose": "Connect tone goals with their associated register and evidence contexts.",
+  "semantic_attractor_contract": {
+    "target_state": "Collaborators can resolve tone lineage through stable goal IDs and paths.",
+    "boundary_condition": "Every entry carries a stable identity and a resolvable local path or endpoint.",
+    "replacement_state": "Use registered IDs and paths for human–AI traversal.",
+    "verification_signals": [
+      "IDs are unique.",
+      "Paths and endpoints resolve."
+    ]
+  },
+  "entries": [
+    {
+      "id": "tone-goal:warm-practical-register-and-humane-structural-awareness:v0.1",
+      "title": "Warm Practical Register and Humane Structural Awareness",
+      "path": "../tone-goals/warm-practical-register-and-humane-structural-awareness.v0.1.md",
+      "schema_ref": "../schema/tone-goal.schema.v0.1.json"
+    },
+    {
+      "id": "tone-goal:register-and-felt-temperature:v0.1",
+      "title": "Register and Felt Temperature",
+      "path": "../tone-goals/register-and-felt-temperature.v0.1.md",
+      "schema_ref": "../schema/tone-goal.schema.v0.1.json"
+    },
+    {
+      "id": "tone-goal:evidence-and-structural-balance:v0.1",
+      "title": "Evidence and Structural Balance",
+      "path": "../tone-goals/evidence-and-structural-balance.v0.1.md",
+      "schema_ref": "../schema/tone-goal.schema.v0.1.json"
+    },
+    {
+      "id": "tone-goal:relational-agency-and-realistic-hope:v0.1",
+      "title": "Relational Agency and Realistic Hope",
+      "path": "../tone-goals/relational-agency-and-realistic-hope.v0.1.md",
+      "schema_ref": "../schema/tone-goal.schema.v0.1.json"
+    }
+  ]
+}

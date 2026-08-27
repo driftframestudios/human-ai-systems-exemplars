@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1040" role="img" aria-labelledby="poda-title poda-desc">
+  <title id="poda-title">PODA carries a cross-functional investment ask from purpose to activities</title>
+  <desc id="poda-desc">A four-zone Purpose, Objectives, Discoverables, Activities flow connects a shared purpose to inspectable surfaces and research activities. A revision route returns new evidence to every zone, while an investment band names the people whose time sustains the work.</desc>
+  <defs>
+    <pattern id="poda-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#2855f3" stroke-width="1" opacity="0.08"/>
+    </pattern>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}.mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}.ink{fill:#17345f}.body{fill:#304a71}.muted{fill:#5d6f8b}.white{fill:#fffdf8}.eyebrow{font-size:13px;font-weight:700;letter-spacing:1.8px}.title{font-size:36px;font-weight:780;letter-spacing:-.5px}.lead{font-size:17px}.card-title{font-size:22px;font-weight:760}.card-copy{font-size:15px}.small{font-size:13px}.chip{font-size:12px;font-weight:700;letter-spacing:.7px}.outline{stroke:#17345f;stroke-width:2}.soft-outline{stroke:#6f85a8;stroke-width:1.4}.shadow{fill:#17345f}.arrow{fill:#2855f3}.quiet-line{fill:none;stroke:#2855f3;stroke-width:3}.dash{fill:none;stroke:#5d6f8b;stroke-width:2;stroke-dasharray:8 8}
+    </style>
+  </defs>
+  <rect width="1600" height="1040" rx="28" fill="#fffaf2"/>
+  <rect width="1600" height="1040" rx="28" fill="url(#poda-grid)"/>
+
+  <g role="group" aria-labelledby="poda-header-title">
+    <title id="poda-header-title">Purpose and use</title>
+    <rect x="32" y="30" width="1536" height="154" rx="20" fill="#2855f3"/>
+    <text x="72" y="72" class="mono eyebrow white">PODA · ORIENTATION AND TRACING</text>
+    <text x="72" y="120" class="sans title white">Make the investment legible before choosing the artifact.</text>
+    <text x="72" y="154" class="sans lead white">Four revisable zones keep the reason, goals, learning surfaces, and work distinct enough to negotiate.</text>
+    <rect x="1320" y="67" width="190" height="50" rx="25" fill="#f2ff67" stroke="#17345f" stroke-width="2"/>
+    <text x="1415" y="98" text-anchor="middle" class="mono chip ink">LIVING ORIENTATION</text>
+  </g>
+
+  <g role="group" aria-labelledby="poda-zones-title">
+    <title id="poda-zones-title">Purpose, Objectives, Discoverables, and Activities</title>
+
+    <rect x="64" y="240" width="320" height="284" rx="17" class="shadow"/>
+    <rect x="56" y="232" width="320" height="284" rx="17" fill="#fff5de" class="outline"/>
+    <rect x="78" y="254" width="112" height="30" rx="15" fill="#ffd3d0" stroke="#17345f" stroke-width="1.4"/>
+    <text x="134" y="274" text-anchor="middle" class="mono chip ink">01 · PURPOSE</text>
+    <text x="80" y="318" class="sans card-title ink"><tspan x="80">Why does this work</tspan><tspan x="80" dy="26">matter?</tspan></text>
+    <text x="80" y="365" class="sans card-copy body">
+      <tspan x="80" dy="0">Name the larger state this work</tspan>
+      <tspan x="80" dy="24">supports and should preserve.</tspan>
+    </text>
+    <line x1="80" y1="424" x2="344" y2="424" stroke="#6f85a8" stroke-width="1.3"/>
+    <text x="80" y="454" class="mono small muted">DECISION RECEIPT</text>
+    <text x="80" y="483" class="sans card-copy ink">A shared reason for proceeding</text>
+
+    <path d="M386 344H416V326L450 374L416 422V404H386Z" class="arrow" aria-hidden="true"/>
+
+    <rect x="466" y="240" width="320" height="284" rx="17" class="shadow"/>
+    <rect x="458" y="232" width="320" height="284" rx="17" fill="#e7efff" class="outline"/>
+    <rect x="480" y="254" width="132" height="30" rx="15" fill="#cfe7f7" stroke="#17345f" stroke-width="1.4"/>
+    <text x="546" y="274" text-anchor="middle" class="mono chip ink">02 · OBJECTIVES</text>
+    <text x="482" y="318" class="sans card-title ink"><tspan x="482">Which goals belong</tspan><tspan x="482" dy="26">now?</tspan></text>
+    <text x="482" y="365" class="sans card-copy body">
+      <tspan x="482" dy="0">Separate this phase’s outcome</tspan>
+      <tspan x="482" dy="24">from the work used to explore it.</tspan>
+    </text>
+    <line x1="482" y1="424" x2="746" y2="424" stroke="#6f85a8" stroke-width="1.3"/>
+    <text x="482" y="454" class="mono small muted">DECISION RECEIPT</text>
+    <text x="482" y="483" class="sans card-copy ink">A phase-appropriate goal set</text>
+
+    <path d="M788 344H818V326L852 374L818 422V404H788Z" class="arrow" aria-hidden="true"/>
+
+    <rect x="868" y="240" width="320" height="284" rx="17" class="shadow"/>
+    <rect x="860" y="232" width="320" height="284" rx="17" fill="#d9efea" class="outline"/>
+    <rect x="882" y="254" width="156" height="30" rx="15" fill="#f2ff67" stroke="#17345f" stroke-width="1.4"/>
+    <text x="960" y="274" text-anchor="middle" class="mono chip ink">03 · DISCOVERABLES</text>
+    <text x="884" y="318" class="sans card-title ink"><tspan x="884">What must become</tspan><tspan x="884" dy="26">inspectable?</tspan></text>
+    <text x="884" y="365" class="sans card-copy body">
+      <tspan x="884" dy="0">Name the learning surfaces before</tspan>
+      <tspan x="884" dy="24">committing to an artifact form.</tspan>
+    </text>
+    <line x1="884" y1="424" x2="1148" y2="424" stroke="#6f85a8" stroke-width="1.3"/>
+    <text x="884" y="454" class="mono small muted">DECISION RECEIPT</text>
+    <text x="884" y="483" class="sans card-copy ink">An open learning surface + route</text>
+
+    <path d="M1190 344H1220V326L1254 374L1220 422V404H1190Z" class="arrow" aria-hidden="true"/>
+
+    <rect x="1270" y="240" width="282" height="284" rx="17" class="shadow"/>
+    <rect x="1262" y="232" width="282" height="284" rx="17" fill="#fffdf8" class="outline"/>
+    <rect x="1284" y="254" width="130" height="30" rx="15" fill="#ffd3d0" stroke="#17345f" stroke-width="1.4"/>
+    <text x="1349" y="274" text-anchor="middle" class="mono chip ink">04 · ACTIVITIES</text>
+    <text x="1286" y="318" class="sans card-title ink"><tspan x="1286">Which work</tspan><tspan x="1286" dy="26">surfaces it?</tspan></text>
+    <text x="1286" y="365" class="sans card-copy body">
+      <tspan x="1286" dy="0">Choose sessions, maps, tests,</tspan>
+      <tspan x="1286" dy="24">prototypes, or reviews.</tspan>
+    </text>
+    <line x1="1286" y1="424" x2="1518" y2="424" stroke="#6f85a8" stroke-width="1.3"/>
+    <text x="1286" y="454" class="mono small muted">DECISION RECEIPT</text>
+    <text x="1286" y="483" class="sans card-copy ink">A costed learning plan</text>
+  </g>
+
+  <g role="group" aria-labelledby="poda-revision-title">
+    <title id="poda-revision-title">Evidence revision route</title>
+    <rect x="216" y="570" width="1168" height="110" rx="17" fill="#fffdf8" class="outline"/>
+    <rect x="238" y="592" width="218" height="62" rx="12" fill="#ffd3d0" class="soft-outline"/>
+    <text x="260" y="617" class="mono eyebrow ink">NEW EVIDENCE</text>
+    <text x="260" y="642" class="sans small body">A finding changes the frame.</text>
+    <path d="M476 607H586V590L622 625L586 660V643H476Z" class="arrow" aria-hidden="true"/>
+    <text x="650" y="615" class="sans card-title ink">Revise the zone the evidence changes.</text>
+    <text x="650" y="646" class="sans card-copy body">The four zones stay distinct, connected, and revisable.</text>
+    <rect x="1154" y="592" width="204" height="64" rx="12" fill="#f2ff67" stroke="#17345f" stroke-width="1.6"/>
+    <text x="1256" y="619" text-anchor="middle" class="mono chip ink">RETURN TO 01–04</text>
+    <text x="1256" y="643" text-anchor="middle" class="sans small body">where the finding belongs</text>
+  </g>
+
+  <g role="group" aria-labelledby="poda-investment-title">
+    <title id="poda-investment-title">Investment and population band</title>
+    <rect x="48" y="734" width="1512" height="250" rx="20" fill="#153fbe"/>
+    <text x="80" y="776" class="mono eyebrow white">THE ASK IN PEOPLE’S OWN UNITS</text>
+    <text x="80" y="814" class="sans card-title white">Research is a cross-functional investment in attention, access, interpretation, and follow-through.</text>
+
+    <rect x="80" y="846" width="330" height="96" rx="12" fill="#fff5de" stroke="#17345f" stroke-width="2"/>
+    <text x="102" y="877" class="mono chip ink">PARTICIPANTS + AFFECTED USERS</text>
+    <text x="102" y="906" class="sans small body">Domain time, lived workflow, expectations,</text>
+    <text x="102" y="927" class="sans small body">and the right to see what follows.</text>
+
+    <rect x="438" y="846" width="330" height="96" rx="12" fill="#cfe7f7" stroke="#17345f" stroke-width="2"/>
+    <text x="460" y="877" class="mono chip ink">PRACTITIONER + RESEARCH LEAD</text>
+    <text x="460" y="906" class="sans small body">Scope, facilitation, synthesis, routing,</text>
+    <text x="460" y="927" class="sans small body">and rapid action on critical findings.</text>
+
+    <rect x="796" y="846" width="330" height="96" rx="12" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+    <text x="818" y="877" class="mono chip ink">DIRECTORS + DECISION-MAKERS</text>
+    <text x="818" y="906" class="sans small body">Capacity, sequencing, opportunity cost,</text>
+    <text x="818" y="927" class="sans small body">and an explicit commitment boundary.</text>
+
+    <rect x="1154" y="846" width="366" height="96" rx="12" fill="#f2ff67" stroke="#17345f" stroke-width="2"/>
+    <text x="1176" y="877" class="mono chip ink">AI COLLABORATOR</text>
+    <text x="1176" y="906" class="sans small body">Stable context, named uncertainty, and</text>
+    <text x="1176" y="927" class="sans small body">routes that preserve source boundaries.</text>
+  </g>
+</svg>

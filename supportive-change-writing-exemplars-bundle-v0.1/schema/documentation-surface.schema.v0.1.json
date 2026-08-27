@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Documentation Surface",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_version",
+    "id",
+    "title",
+    "artifact_type",
+    "version",
+    "status",
+    "semantic_attractor_contract",
+    "source_band"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.1"
+    },
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "artifact_type": {
+      "const": "documentation_surface"
+    },
+    "version": {
+      "const": "0.1.0"
+    },
+    "status": {
+      "enum": [
+        "curated_exemplar",
+        "reference_surface"
+      ]
+    },
+    "semantic_attractor_contract": {
+      "type": "object",
+      "required": [
+        "target_state",
+        "boundary_condition",
+        "replacement_state",
+        "verification_signals"
+      ],
+      "properties": {
+        "target_state": {
+          "type": "string"
+        },
+        "boundary_condition": {
+          "type": "string"
+        },
+        "replacement_state": {
+          "type": "string"
+        },
+        "verification_signals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "source_band": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

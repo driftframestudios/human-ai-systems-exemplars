@@ -1,0 +1,223 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="front-doors-title front-doors-desc">
+  <title id="front-doors-title">One clinical truth crosses three EHR front doors</title>
+  <desc id="front-doors-desc">A reference genomics lab names an order, result, discrete finding, and patient identity once. A canonical order-and-result contract then emits conformant integrations to Epic, Oracle Health Cerner, and athenahealth while preserving terminology, identity, tenant scope, and each vendor program gate. A final band connects the architecture to changed work and sustained investment.</desc>
+
+  <defs>
+    <pattern id="front-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#2855f3" stroke-opacity=".055" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <style>
+    .field { fill: #fffaf2; }
+    .grid { fill: url(#front-grid); }
+    .frame { fill: none; stroke: #17345f; stroke-width: 2; }
+    .header { fill: #2855f3; }
+    .panel { fill: #fffdf8; stroke: #17345f; stroke-width: 2; }
+    .shadow { fill: #17345f; }
+    .card { fill: #fffdf8; stroke: #7893bc; stroke-width: 1.5; }
+    .powder { fill: #cfe7f7; }
+    .sea { fill: #d9efea; }
+    .cream { fill: #fff5de; }
+    .pale { fill: #e7efff; }
+    .blush { fill: #ffd3d0; }
+    .acid { fill: #f2ff67; }
+    .coral { fill: #fa7065; }
+    .ink-fill { fill: #17345f; }
+    .cobalt-fill { fill: #2855f3; }
+    .title { fill: #fffdf8; font: 750 35px/1.1 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .subtitle { fill: #e7efff; font: 500 15px/1.35 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .eyebrow-on { fill: #f2ff67; font: 750 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: 1.4px; }
+    .eyebrow { fill: #5d6f8b; font: 750 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: 1.1px; }
+    .section { fill: #17345f; font: 750 20px/1.2 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .card-title { fill: #17345f; font: 750 16px/1.2 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .body { fill: #304a71; font: 500 13.5px/1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .body-strong { fill: #17345f; font: 700 13.5px/1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .mono { fill: #304a71; font: 650 11.5px/1.3 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .mono-on { fill: #fffdf8; font: 700 11.5px/1.3 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: .4px; }
+    .chip { fill: #fffdf8; stroke: #17345f; stroke-width: 1.5; }
+    .chip-text { fill: #17345f; font: 700 12px/1 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .rule { stroke: #9aacc8; stroke-width: 1; }
+    .arrow { fill: #2855f3; }
+    .arrow-coral { fill: #fa7065; }
+  </style>
+
+  <rect class="field" width="1600" height="1120"/>
+  <rect class="grid" x="20" y="20" width="1560" height="1080" rx="28"/>
+  <rect class="frame" x="20" y="20" width="1560" height="1080" rx="28"/>
+
+  <g role="group" aria-labelledby="front-heading-title">
+    <title id="front-heading-title">EHR integration map heading</title>
+    <path class="header" d="M20 48a28 28 0 0 1 28-28h1504a28 28 0 0 1 28 28v116H20Z"/>
+    <text class="eyebrow-on" x="54" y="58">EHR INTEGRATION · CANONICAL ORDER + RESULT CONTRACT</text>
+    <text class="title" x="54" y="103">One clinical truth crosses three EHR front doors</text>
+    <text class="subtitle" x="54" y="134">Name the order, result, finding, and identity once · preserve clinical meaning at every receiving system</text>
+  </g>
+
+  <g role="group" aria-labelledby="front-scope-title">
+    <title id="front-scope-title">Scope of the integration</title>
+    <text class="eyebrow" x="54" y="196">OPERATING SCOPE</text>
+    <rect class="chip" x="54" y="210" width="196" height="34" rx="17"/>
+    <text class="chip-text" x="76" y="232">Reference genomics lab</text>
+    <rect class="chip" x="264" y="210" width="200" height="34" rx="17"/>
+    <text class="chip-text" x="286" y="232">Order + result return</text>
+    <rect class="chip" x="478" y="210" width="202" height="34" rx="17"/>
+    <text class="chip-text" x="500" y="232">Discrete genomic findings</text>
+    <rect class="chip" x="694" y="210" width="166" height="34" rx="17"/>
+    <text class="chip-text" x="716" y="232">Three EHR targets</text>
+    <rect class="chip acid" x="874" y="210" width="222" height="34" rx="17"/>
+    <text class="chip-text" x="896" y="232">Identity remains safety-critical</text>
+  </g>
+
+  <g role="group" aria-labelledby="front-lab-title">
+    <title id="front-lab-title">Shared clinical objects from the reference lab</title>
+    <rect class="shadow" x="62" y="282" width="300" height="568" rx="17"/>
+    <rect class="panel" x="54" y="274" width="300" height="568" rx="17"/>
+    <path class="powder" d="M71 274h266a17 17 0 0 1 17 17v58H54v-58a17 17 0 0 1 17-17Z"/>
+    <text class="eyebrow" x="76" y="302">REFERENCE LAB</text>
+    <text class="section" x="76" y="330">Shared clinical objects</text>
+
+    <rect class="card" x="76" y="370" width="256" height="88" rx="11"/>
+    <text class="eyebrow" x="94" y="393">ORDER</text>
+    <text class="card-title" x="94" y="417">Test requisition</text>
+    <text class="mono" x="94" y="441">ORM / ServiceRequest</text>
+
+    <rect class="card" x="76" y="472" width="256" height="88" rx="11"/>
+    <text class="eyebrow" x="94" y="495">RESULT SET</text>
+    <text class="card-title" x="94" y="519">Genomic report</text>
+    <text class="mono" x="94" y="543">ORU / DiagnosticReport</text>
+
+    <rect class="card" x="76" y="574" width="256" height="106" rx="11"/>
+    <text class="eyebrow" x="94" y="597">DISCRETE FINDING</text>
+    <text class="card-title" x="94" y="621">Variant or biomarker</text>
+    <text class="mono" x="94" y="645">OBX / Observation</text>
+    <text class="mono" x="94" y="663">LOINC-coded clinical meaning</text>
+
+    <rect class="card blush" x="76" y="694" width="256" height="122" rx="11"/>
+    <text class="eyebrow" x="94" y="717">PATIENT IDENTITY</text>
+    <text class="card-title" x="94" y="741">Subject + MRN context</text>
+    <text class="mono" x="94" y="765">PID / FHIR Patient</text>
+    <text class="body" x="94" y="789">Match stewardship precedes</text>
+    <text class="body" x="94" y="807">clinical filing.</text>
+  </g>
+
+  <path class="arrow" aria-hidden="true" d="M372 538H402V524L430 552L402 580V566H372Z"/>
+
+  <g role="group" aria-labelledby="front-contract-title">
+    <title id="front-contract-title">Canonical order, result, terminology, and identity contract</title>
+    <rect class="shadow" x="438" y="282" width="426" height="568" rx="17"/>
+    <rect class="panel" x="430" y="274" width="426" height="568" rx="17"/>
+    <path class="cobalt-fill" d="M447 274h392a17 17 0 0 1 17 17v74H430v-74a17 17 0 0 1 17-17Z"/>
+    <text class="mono-on" x="454" y="306">CANONICAL CLINICAL CONTRACT</text>
+    <text class="title" x="454" y="341" style="font-size:24px">Normalize once. Emit by target.</text>
+
+    <rect class="card pale" x="454" y="390" width="378" height="116" rx="11"/>
+    <text class="eyebrow" x="474" y="415">SHARED MEANING</text>
+    <text class="body-strong" x="474" y="442">Order and result remain one clinical promise.</text>
+    <text class="body" x="474" y="466">LOINC-coded findings stay discrete while each</text>
+    <text class="body" x="474" y="486">target receives its conformant carrier.</text>
+
+    <rect class="card sea" x="454" y="522" width="180" height="132" rx="11"/>
+    <text class="eyebrow" x="474" y="547">IDENTITY MEMBRANE</text>
+    <text class="card-title" x="474" y="575">EMPI + PIX/PDQ</text>
+    <text class="body" x="474" y="600">Patient match and</text>
+    <text class="body" x="474" y="619">exception stewardship</text>
+    <text class="body" x="474" y="638">travel with the result.</text>
+
+    <rect class="card cream" x="652" y="522" width="180" height="132" rx="11"/>
+    <text class="eyebrow" x="672" y="547">TARGET CONTRACT</text>
+    <text class="card-title" x="672" y="575">Transformer + tests</text>
+    <text class="body" x="672" y="600">Each EHR becomes a</text>
+    <text class="body" x="672" y="619">conformance target with</text>
+    <text class="body" x="672" y="638">its own program gate.</text>
+
+    <rect class="card acid" x="454" y="670" width="378" height="142" rx="11"/>
+    <text class="eyebrow" x="474" y="695">SAFE EXIT CRITERIA</text>
+    <text class="body-strong" x="474" y="721">Clinical meaning remains equivalent.</text>
+    <text class="body" x="474" y="746">Patient and tenant context remain scoped.</text>
+    <text class="body" x="474" y="771">Discrete findings remain queryable.</text>
+    <text class="body" x="474" y="796">Vendor calendar remains visible to delivery.</text>
+  </g>
+
+  <g aria-hidden="true">
+    <path class="arrow" d="M866 342H900V328L928 356L900 384V370H866Z"/>
+    <path class="arrow" d="M866 538H900V524L928 552L900 580V566H866Z"/>
+    <path class="arrow" d="M866 734H900V720L928 748L900 776V762H866Z"/>
+  </g>
+
+  <g role="group" aria-labelledby="front-targets-title">
+    <title id="front-targets-title">Epic, Oracle Health Cerner, and athenahealth receiving systems</title>
+
+    <rect class="shadow" x="936" y="282" width="610" height="174" rx="17"/>
+    <rect class="panel" x="928" y="274" width="610" height="174" rx="17"/>
+    <rect class="powder" x="928" y="274" width="164" height="174" rx="16"/>
+    <text class="eyebrow" x="950" y="303">FRONT DOOR 01</text>
+    <text class="section" x="950" y="334">Epic</text>
+    <text class="mono" x="950" y="360">PER-ORG GATE</text>
+    <text class="card-title" x="1120" y="307">Bridges → Genomics module</text>
+    <text class="body" x="1120" y="333">HL7v2 ORU carries discrete results; Epic on FHIR</text>
+    <text class="body" x="1120" y="354">and SMART carry the point-of-care application.</text>
+    <line class="rule" x1="1120" y1="370" x2="1514" y2="370"/>
+    <text class="mono" x="1120" y="394">PROGRAM · VENDOR SERVICES / SHOWROOM / CONNECTION HUB</text>
+    <text class="body-strong" x="1120" y="423">Organization-specific review remains a delivery calendar.</text>
+
+    <rect class="shadow" x="936" y="478" width="610" height="174" rx="17"/>
+    <rect class="panel" x="928" y="470" width="610" height="174" rx="17"/>
+    <rect class="sea" x="928" y="470" width="164" height="174" rx="16"/>
+    <text class="eyebrow" x="950" y="499">FRONT DOOR 02</text>
+    <text class="section" x="950" y="530">Oracle Health</text>
+    <text class="card-title" x="950" y="554">Cerner</text>
+    <text class="mono" x="950" y="581">PER-ORG GATE</text>
+    <text class="card-title" x="1120" y="503">Open Interface → discrete result</text>
+    <text class="body" x="1120" y="529">COI receives HL7v2 ORU; Millennium FHIR R4</text>
+    <text class="body" x="1120" y="550">supports the program’s mature API surfaces.</text>
+    <line class="rule" x1="1120" y1="566" x2="1514" y2="566"/>
+    <text class="mono" x="1120" y="590">PROGRAM · ORACLE DEVELOPER PROGRAM / OPN VALIDATION</text>
+    <text class="body-strong" x="1120" y="619">PowerForm and discrete landing set the fidelity ceiling.</text>
+
+    <rect class="shadow" x="936" y="674" width="610" height="174" rx="17"/>
+    <rect class="panel" x="928" y="666" width="610" height="174" rx="17"/>
+    <rect class="cream" x="928" y="666" width="164" height="174" rx="16"/>
+    <text class="eyebrow" x="950" y="695">FRONT DOOR 03</text>
+    <text class="section" x="950" y="726">athenahealth</text>
+    <text class="mono" x="950" y="752">MULTI-TENANT</text>
+    <text class="card-title" x="1120" y="699">Marketplace → athenaClinicals</text>
+    <text class="body" x="1120" y="725">HL7, FHIR, and platform APIs carry order and result</text>
+    <text class="body" x="1120" y="746">work across a single-instance cloud.</text>
+    <line class="rule" x1="1120" y1="762" x2="1514" y2="762"/>
+    <text class="mono" x="1120" y="786">DISTRIBUTION · CERTIFY ONCE / REACH MANY PRACTICES</text>
+    <text class="body-strong" x="1120" y="815">Tenant scope stays explicit at every identity boundary.</text>
+  </g>
+
+  <g role="group" aria-labelledby="front-investment-title">
+    <title id="front-investment-title">Changed work and sustained investment</title>
+    <rect class="cobalt-fill" x="54" y="884" width="1492" height="62" rx="12"/>
+    <text class="mono-on" x="78" y="912">CHANGED WORK + INVESTMENT</text>
+    <text class="title" x="78" y="938" style="font-size:19px">A new EHR becomes a conformance target, while clinical truth remains governed once.</text>
+
+    <rect class="card pale" x="54" y="962" width="278" height="106" rx="11"/>
+    <text class="eyebrow" x="74" y="987">CLINICAL INFORMATICS</text>
+    <text class="body-strong" x="74" y="1013">Validate equivalent clinical meaning</text>
+    <text class="body" x="74" y="1035">across every receiving surface.</text>
+
+    <rect class="card cream" x="348" y="962" width="278" height="106" rx="11"/>
+    <text class="eyebrow" x="368" y="987">TERMINOLOGY STEWARDSHIP</text>
+    <text class="body-strong" x="368" y="1013">Maintain LOINC and discrete maps</text>
+    <text class="body" x="368" y="1035">as assays and targets evolve.</text>
+
+    <rect class="card blush" x="642" y="962" width="278" height="106" rx="11"/>
+    <text class="eyebrow" x="662" y="987">IDENTITY OPERATIONS</text>
+    <text class="body-strong" x="662" y="1013">Steward EMPI exceptions and</text>
+    <text class="body" x="662" y="1035">tenant-scoped reconciliation.</text>
+
+    <rect class="card sea" x="936" y="962" width="278" height="106" rx="11"/>
+    <text class="eyebrow" x="956" y="987">INTEGRATION ENGINEERING</text>
+    <text class="body-strong" x="956" y="1013">Version transformers, examples,</text>
+    <text class="body" x="956" y="1035">and per-target conformance tests.</text>
+
+    <rect class="card acid" x="1230" y="962" width="316" height="106" rx="11"/>
+    <text class="eyebrow" x="1250" y="987">PROGRAM DELIVERY</text>
+    <text class="body-strong" x="1250" y="1013">Fund vendor gates, parallel calendars,</text>
+    <text class="body" x="1250" y="1035">and organization-specific rollout.</text>
+  </g>
+</svg>
