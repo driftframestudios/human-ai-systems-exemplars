@@ -19,7 +19,7 @@ description: Composes a finite support packet with an explicit action mode, obse
 - **Smallest useful dose:** One current route, one action mode, the packet fields that change behavior, and one observable stop condition.
 - **Foregrounds:** **Expectation** makes the promised result and return legible. **Focalization** names the surface receiving attention. **Opportunity** names the useful condition the support can create.
 - **May under-attend:** The packet sharpens one receiving moment; wider system effects remain with the surrounding task unless the packet names them.
-- **Interactions:** `repository-reentry` can establish current ground; `supportive-change-writing` can shape a humane handoff; `collaboration-accounting` can receive decision-changing observations about this skill.
+- **Interactions:** `repository-reentry` can establish current ground; `supportive-change-writing` can shape a humane handoff; `issue-chain-stewardship` can carry the transition to a next receiver; `collaboration-accounting` can receive decision-changing observations about this skill.
 - **Rest or release when:** The stop condition is observed, the receiving owner accepts the return, or direct reasoning becomes the smaller adequate route.
 
 ## Working packet
@@ -107,6 +107,8 @@ And the named handback surface receives the evidence and a renewed Solution rout
 And mutation begins only through a fresh packet whose requested result fits the observed ground
 
 ## Conditional context
+
+The skill loads [references/github-issue-label-routing.md](references/github-issue-label-routing.md) when a GitHub Issue is the support packet or named handback surface. That reference supplies a small, composable label projection for packet type, receiving surface, and return state while the named Issue surface and posted receipt retain the operative contract and evidence.
 
 The skill loads [references/openai-codex-spark.md](references/openai-codex-spark.md) when OpenAI Codex Spark is selected or considered as the receiving collaborator. That reference carries current platform details and refreshes against official OpenAI documentation when model identity, availability, surfaces, or recommended use changes.
 

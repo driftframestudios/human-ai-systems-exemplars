@@ -133,7 +133,7 @@ consequential decisions; and the receiver records what it accepted.
 | Compare or restart from an accepted stable core | Verify the named `snapshot` revision, then create a receiving branch from it or merge from it as described in [branch topology](BRANCHING.md#snapshot-baseline) |
 | Explore future architecture or experiments | [Planning](planning/README.md) and the `research` / `res/*` routes in [branch topology](BRANCHING.md) |
 | Recover settled rationale or hand off a cycle | [Threadkeeping](threadkeeping/README.md) |
-| Work through a recurring collaboration concern | [Repository skills](.agents/skills/) and the [skills catalog below](#fourteen-skills-route-recurring-work-while-judgment-remains-contextual) |
+| Work through a recurring collaboration concern | [Repository skills](.agents/skills/) and the [skills catalog below](#fifteen-skills-route-recurring-work-while-judgment-remains-contextual) |
 | Prepare approved public references | [Configured Context Canvas references](#approved-public-references-form-through-semantic-keys) |
 | Inspect source, history, or an artifact for secret-shaped material | [Secret-material boundary](#secret-material-inspection-binds-a-clean-result-to-its-scope) |
 
@@ -267,7 +267,7 @@ expectation and what each command establishes. A passing command is evidence
 for that mechanism and revision; artifact quality, publication standing, and
 human acceptance retain their own observations and decision holders.
 
-### Fourteen skills route recurring work while judgment remains contextual
+### Fifteen skills route recurring work while judgment remains contextual
 
 Skills are portable instructions for recurring work. They become active when
 their trigger fits; current user intent, repository evidence, and granted tool
@@ -287,6 +287,7 @@ adequate route when no skill is needed.
 | [`schema-contract-authoring`](.agents/skills/schema-contract-authoring/SKILL.md) | A schema family, context, example, retrieval route, or compatibility boundary changes | A bounded contract with identity, authority, dependency closure, and proportional use checks |
 | [`source-authority-mapping`](.agents/skills/source-authority-mapping/SKILL.md) | Mirrors, snapshots, workspaces, or delivery routes obscure ownership and lineage | A trace from semantic owner through source, projection, delivery, receiving use, and promotion |
 | [`issue-chain-stewardship`](.agents/skills/issue-chain-stewardship/SKILL.md) | Several Issues form a decision-bearing work route | A current front, transition receipt, next receiver, and release event without merging Issue contracts |
+| [`bounded-support-routing`](.agents/skills/bounded-support-routing/SKILL.md) | One finite observation, repair, implementation, or recovery contribution needs an explicit action boundary and return | A compact packet, observable handback, known-good point, and stopping event |
 | [`locator-boundary-stewardship`](.agents/skills/locator-boundary-stewardship/SKILL.md) | Public collaboration records cross gated or private locator boundaries | Locator-safe prose with stable semantic keys and resolver-held exact lineage |
 | [`stateful-artifact-behavior-contracts`](.agents/skills/stateful-artifact-behavior-contracts/SKILL.md) | Owned state crosses import, edit, render, export, machine-readable, or recovery boundaries | The smallest source-grounded executable behavior contract |
 | [`secret-boundary-inspection`](.agents/skills/secret-boundary-inspection/SKILL.md) | A repository, exact index, local history, or generated artifact approaches snapshot, publication, or delivery | Canary-proven scope evidence and a safe receipt or private finding route |
