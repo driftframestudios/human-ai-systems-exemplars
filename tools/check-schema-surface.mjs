@@ -84,14 +84,16 @@ function findReferenceValues(value, location = "$") {
   return findings;
 }
 
-async function assertReferenceRoutes(label, instance) {
+async function assertReferenceRoutes(label, instance, allowedExternalReferences = new Map()) {
   const uriScheme = /^[a-z][a-z0-9+.-]*:/i;
   for (const reference of findReferenceValues(instance)) {
-    if (reference.value.includes("github.com/driftframestudios/human-ai-systems-exemplars/blob/")) {
-      throw new Error(`${label} contains a branch-bound repository reference at ${reference.location}.`);
-    }
     if (uriScheme.test(reference.value)) {
-      continue;
+      if (allowedExternalReferences.get(reference.location) === reference.value) {
+        continue;
+      }
+      throw new Error(
+        `${label} contains an external reference without a declared retrieval role at ${reference.location}: ${reference.value}`
+      );
     }
     if (path.isAbsolute(reference.value)) {
       throw new Error(`${label} contains an absolute local reference at ${reference.location}.`);
@@ -107,6 +109,15 @@ async function assertReferenceRoutes(label, instance) {
       throw new Error(`${label} points to an unavailable repository route at ${reference.location}: ${reference.value}`);
     }
   }
+}
+
+async function assertReferenceRoutesInvalid(label, instance, allowedExternalReferences = new Map()) {
+  try {
+    await assertReferenceRoutes(label, instance, allowedExternalReferences);
+  } catch {
+    return;
+  }
+  throw new Error(`${label} unexpectedly accepted its reference routes.`);
 }
 
 function assertValid(label, validate, instance) {
@@ -159,6 +170,12 @@ const repositoryExample = await readJson(paths.repositoryExample);
 const contextExamples = await Promise.all(paths.contextExamples.map(readJson));
 const collaborationSkillExamples = await Promise.all(paths.collaborationSkillExamples.map(readJson));
 const collaborationAccountExample = await readJson(paths.collaborationAccountExample);
+const collaborationAccountExternalReferences = new Map([
+  [
+    "$.relatedRefs[1]",
+    "https://schemas.vik.guru/collaboration-skills/0.1.0/examples/portable-skill.example.json"
+  ]
+]);
 await readJson(paths.contextContext);
 
 assertValid(paths.repositoryExample, validateRepository, repositoryExample);
@@ -174,8 +191,29 @@ for (const [examplePath, example] of [
   ...paths.collaborationSkillExamples.map((examplePath, index) => [examplePath, collaborationSkillExamples[index]]),
   [paths.collaborationAccountExample, collaborationAccountExample]
 ]) {
-  await assertReferenceRoutes(examplePath, example);
+  const externalReferences =
+    examplePath === paths.collaborationAccountExample
+      ? collaborationAccountExternalReferences
+      : new Map();
+  await assertReferenceRoutes(examplePath, example, externalReferences);
 }
+
+const branchBoundAuthorityReference = structuredClone(collaborationSkillExamples[0]);
+branchBoundAuthorityReference.semanticAuthorityRef =
+  "https://github.com/driftframestudios/human-ai-systems-exemplars/tree/main/.agents/skills/source-authority-mapping/SKILL.md";
+await assertReferenceRoutesInvalid(
+  "branch-bound current authority reference boundary",
+  branchBoundAuthorityReference
+);
+
+const misplacedRetrievalReference = structuredClone(collaborationAccountExample);
+misplacedRetrievalReference.currentOwnerRef =
+  "https://schemas.vik.guru/collaboration-skills/0.1.0/examples/portable-skill.example.json";
+await assertReferenceRoutesInvalid(
+  "retrieval reference role boundary",
+  misplacedRetrievalReference,
+  collaborationAccountExternalReferences
+);
 
 const servingAuthorityBoundary = structuredClone(repositoryExample);
 delete servingAuthorityBoundary.servedProjections[0].deliveryAuthorityRef;
@@ -251,5 +289,5 @@ if (limsResult.status !== 0) {
 }
 
 console.log(
-  `Schema surface check passed: 4 strict schemas, 7 representative schema instances, 1 Supportive instance, 1 LIMS/ELN instance, 7 boundary probes, and ${schemaReceiverRoutes.length} receiver identities.`
+  `Schema surface check passed: 4 strict schemas, 7 representative schema instances, 1 Supportive instance, 1 LIMS/ELN instance, 9 boundary probes, and ${schemaReceiverRoutes.length} receiver identities.`
 );

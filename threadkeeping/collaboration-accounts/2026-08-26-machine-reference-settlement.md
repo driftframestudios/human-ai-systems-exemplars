@@ -51,11 +51,14 @@ and retained lineage. The material implementation also sharpened one boundary:
 a branch-bound link to the current repository is a delivery-shaped locator where
 a repository-relative reference provides the more durable exchange value.
 
-The earlier Spark preflight supplied a successful hosted and local behavior
-receipt, then continued from observation into repair. That outcome becomes a
-routing observation for `bounded-support-routing`: a future support packet names
-`observation_only` or `repair_authorized`, its stop condition, and its natural
-return so the supporting collaborator can contribute at the intended boundary.
+The earlier Spark preflight began as a local observation, found the Strategy
+Canvas receipt mismatch, continued into a branch repair, and returned the five
+requested local commands successfully. Pull request #17 later supplied the
+hosted confirmation. Collaboration accounting now carries that action-boundary
+observation, and successor Issue #19 receives the separately reviewed
+`bounded-support-routing` candidate. Its next support packet names the action
+mode, granted delivery actions, stop condition, and natural return so the
+supporting collaborator can contribute at the intended boundary.
 
 ## Return condition
 
