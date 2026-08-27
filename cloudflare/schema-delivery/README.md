@@ -44,7 +44,7 @@ The static runtime reads public assets only. A connected GitHub deployment token
 
 `.github/workflows/schema-delivery.yml` checks every eligible `release` and `prod` candidate against the same schema, asset, Wrangler, and secret-material contracts. A successful push can deploy only when the corresponding repository budget is active and `DEPLOYMENT_ACTIVE_RECEIVERS` names that receiver. The `release` job targets the un-routed Wrangler environment automatically. The `prod` job passes through its exact-branch GitHub environment and the human handoff accepted before connected production activation.
 
-The connected jobs use the repository's locked Wrangler version and strict deployment mode. Release and production credentials remain environment-scoped: `CLOUDFLARE_ACCOUNT_ID` is a non-sensitive variable and `CLOUDFLARE_API_TOKEN` is a least-privilege secret. Each value enters only the credential-confirmation and deployment steps. Worker version history receives the repository and commit coordinate while retained receipts keep credential values within their environment.
+The connected jobs use the repository's locked Wrangler version and strict deployment mode. Release and production credentials remain environment-scoped: `CLOUDFLARE_ACCOUNT_ID` is a non-sensitive variable and `CLOUDFLARE_API_TOKEN` is a least-privilege secret. Credential values live exclusively in matching GitHub environment settings and briefly enter process memory for confirmation and deployment. Repository content and retained receipts carry the binding names, repository coordinate, and redacted state only.
 
 ## Evidence boundary
 

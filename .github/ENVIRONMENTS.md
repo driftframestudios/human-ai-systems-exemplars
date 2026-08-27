@@ -99,6 +99,11 @@ deployment activation are independent decisions; a receipt budget carries
 evidence authority while the receiver list carries upload or publication
 authority.
 
+Credential values live exclusively in GitHub environment settings and briefly
+enter process memory for those two steps. Repository files, generated assets,
+caches, logs, and retained receipts carry binding names and redacted state
+only.
+
 ## Production boundary
 
 The `prod` branch supplies the source approval boundary: one approving
