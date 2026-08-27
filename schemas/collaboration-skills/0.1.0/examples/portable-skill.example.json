@@ -4,8 +4,8 @@
   "kind": "portable_skill_contract",
   "name": "source-authority-mapping",
   "description": "Traces a claim, artifact, or contract through semantic ownership, source location, projections, delivery routes, receiving use, and promotion.",
-  "semanticAuthorityRef": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/.agents/skills/source-authority-mapping/SKILL.md",
-  "sourceRef": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md",
+  "semanticAuthorityRef": ".agents/skills/source-authority-mapping/SKILL.md",
+  "sourceRef": "threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md",
   "contract": {
     "what": "A portable method for making the authority and receiving path of a claim, artifact, or contract legible across several systems.",
     "when": [
@@ -32,8 +32,8 @@
   "evidence": {
     "band": "observed",
     "sourceRefs": [
-      "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md",
-      "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/README.md"
+      "threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md",
+      "README.md"
     ]
   },
   "transferBoundary": "This projection carries local instruction yield; publication rights remain with their stewards, and another system may retain its own ownership vocabulary."

@@ -80,12 +80,18 @@
         ]
       },
       "then": {
+        "properties": {
+          "projection": {}
+        },
         "required": [
           "projection"
         ]
       },
       "else": {
         "not": {
+          "properties": {
+            "projection": {}
+          },
           "required": [
             "projection"
           ]

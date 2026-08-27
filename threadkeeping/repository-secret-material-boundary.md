@@ -4,7 +4,7 @@
 
 Repository source, exact proposed commits, locally available history, and named
 generated artifacts can receive one repeatable secret-material observation
-before they move toward a successor or publication receiver. Each observation
+before they move toward another receiving branch or publication surface. Each observation
 first proves that its detector path is alive with a newly generated synthetic
 canary. A clean result stays tied to the engine version, reviewed configuration,
 named scope, and the collaboration receipt that records the observation.
@@ -19,7 +19,7 @@ service controls.
 
 ## Selected mechanism
 
-Issue #188 selects Betterleaks 1.8.1 as the repository inspection engine. The scanner is a
+The retained-source secret-boundary issue selected Betterleaks 1.8.1 as the repository inspection engine. The scanner is a
 pinned external binary rather than part of the dependency-free materializer.
 The repository-owned installer:
 
@@ -156,11 +156,20 @@ passed. It does not establish:
 
 Those claims retain their fitting evidence and decision owners.
 
-The candidate branch observation on 2026-08-26 passed 24 focused tests, then
-returned clean for the working tree and ignored local material, exact staged
-index, diff-visible history across all locally available refs, and the generated
-Context Canvas public-reference artifact. The configuration receipt was
+The accepted population branch observation on 2026-08-26 passed 24 focused
+tests, then returned clean for the working tree and ignored local material,
+exact staged index, diff-visible history across all locally available refs, and
+the generated Context Canvas public-reference artifact. Its configuration
+receipt was
 `sha256:38e3984625c576e83c8b74423979d990dbb5dba0fa9db857350338001c7bb93d`.
+
+Successor settlement commit `607b5da17ecfdb312c9df6dfc61b53c8bcf5a171`
+then received the pinned installer under Human-AI Systems Exemplars ownership
+and ran the complete local boundary. The synthetic canary was detected and
+fully redacted; the working tree and ignored material were clean; the exact
+index was resting; and diff-visible history across every locally available ref
+was clean. The successor configuration receipt is
+`sha256:b779df05840d6774ba6980859038fa52b3a4aafe48cee2aae466de08b9ee5a05`.
 
 ## Finding response
 
@@ -207,11 +216,13 @@ the lineage as a serious candidate while remaining version-, corpus-, and
 task-bounded; the repository's generated canary and adversarial fixtures carry
 the current executable claim.
 
-## Automation and successor receiver
+## Automation and later receivers
 
 Local and manual use is the standing route. The current Actions policy admits
 GitHub-owned actions at full commit SHAs and blocks third-party Marketplace
-actions, so this pass adds no Betterleaks Action and no new runner receiver.
+actions. This settlement keeps Betterleaks use within the repository-owned
+installer and local wrapper while the current hosted workflows retain their
+existing jobs.
 
 A later named receiver can run the repository-owned installer after an
 admitted checkout, fetch the complete refs required for its stated history
@@ -220,11 +231,12 @@ and require the canary before interpreting a clean result. It first receives a
 repository-level budget, activation event, timeout, evidence-retention choice,
 and explicit off switch.
 
-After successor population, the receiving repository reruns the install
-verification, focused tests, canary, tree, exact index, diff-visible history,
-and any publication artifact observation. Its receipt goes to the successor's
-own Issue. It does not rely on the retained repository's clean result as a
-substitute for observing the assembled successor tree.
+The populated successor has now rerun installer verification, focused tests,
+canary, tree, exact index, and diff-visible history under its own package,
+configuration, and receipt ownership. The retained observation remains useful
+lineage; the successor-local receipt carries the current assembled tree. A
+later publication artifact or hosted scanner receiver repeats the scopes named
+in its own delivery packet.
 
 ## Skill accounting
 
@@ -234,11 +246,11 @@ human review, and the successor's named reception issues establish a distinct
 job: prove detector liveness, bind a material scope, keep scanner output on a
 narrow information diet, and return a safe receipt or private finding route.
 
-The skill routes this repository-owned behavior; it does not replace the
-scripts, tests, configuration, or this durable boundary as behavior authority.
-Successor adoption is its first outside use. Return that material result through
-the [formation account](collaboration-accounts/2026-08-26-secret-boundary-inspection.md)
-when the receiver records its own observation.
+The skill routes this repository-owned behavior while the scripts, tests,
+configuration, and this durable boundary continue to define executable
+behavior. Successor adoption supplies its first receiving use. The
+[formation account](collaboration-accounts/2026-08-26-secret-boundary-inspection.md)
+can now receive this successor-local configuration and scope observation.
 
 ## Re-entry
 
@@ -248,7 +260,7 @@ Return here when one of these events occurs:
 - Betterleaks or its bundled rules change;
 - a real finding tests the information diet or response order;
 - a hosted receiver gains a named budget and evidence job;
-- the successor accepts the implementation and supplies its own observation;
+- another repository or hosted receiver accepts the implementation and supplies its own observation;
   or
 - another repository use exposes a distinct decision, friction, or fold path.
 

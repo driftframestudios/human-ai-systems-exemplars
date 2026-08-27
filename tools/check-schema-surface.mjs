@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -19,6 +19,14 @@ const paths = {
     "schemas/context-canvas/1.0.0/examples/visitor-surface.example.json",
     "schemas/context-canvas/1.0.0/examples/prototype.example.json"
   ],
+  collaborationSkillSchema: "schemas/collaboration-skills/0.1.0/collaboration-skill.schema.json",
+  collaborationAccountSchema: "schemas/collaboration-skills/0.1.0/collaboration-account.schema.json",
+  collaborationSkillExamples: [
+    "schemas/collaboration-skills/0.1.0/examples/portable-skill.example.json",
+    "schemas/collaboration-skills/0.1.0/examples/retired-projection.example.json"
+  ],
+  collaborationAccountExample:
+    "schemas/collaboration-skills/0.1.0/examples/collaboration-account.example.json",
   supportiveSchema: "supportive-change-writing-exemplars-bundle-v0.1/schema/collection-manifest.schema.v0.1.json",
   supportiveInstance: "supportive-change-writing-exemplars-bundle-v0.1/manifest.json"
 };
@@ -51,6 +59,67 @@ function findExternalRefs(value, location = "$") {
   return findings;
 }
 
+function findReferenceValues(value, location = "$") {
+  const findings = [];
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => findings.push(...findReferenceValues(item, `${location}[${index}]`)));
+    return findings;
+  }
+  if (!value || typeof value !== "object") {
+    return findings;
+  }
+  for (const [key, item] of Object.entries(value)) {
+    const nextLocation = `${location}.${key}`;
+    if (key.endsWith("Ref") && typeof item === "string") {
+      findings.push({ location: nextLocation, value: item });
+    } else if (key.endsWith("Refs") && Array.isArray(item)) {
+      item.forEach((reference, index) => {
+        if (typeof reference === "string") {
+          findings.push({ location: `${nextLocation}[${index}]`, value: reference });
+        }
+      });
+    }
+    findings.push(...findReferenceValues(item, nextLocation));
+  }
+  return findings;
+}
+
+async function assertReferenceRoutes(label, instance, allowedExternalReferences = new Map()) {
+  const uriScheme = /^[a-z][a-z0-9+.-]*:/i;
+  for (const reference of findReferenceValues(instance)) {
+    if (uriScheme.test(reference.value)) {
+      if (allowedExternalReferences.get(reference.location) === reference.value) {
+        continue;
+      }
+      throw new Error(
+        `${label} contains an external reference without a declared retrieval role at ${reference.location}: ${reference.value}`
+      );
+    }
+    if (path.isAbsolute(reference.value)) {
+      throw new Error(`${label} contains an absolute local reference at ${reference.location}.`);
+    }
+    const resolvedPath = path.resolve(repositoryRoot, reference.value);
+    const routeFromRoot = path.relative(repositoryRoot, resolvedPath);
+    if (routeFromRoot.startsWith("..") || path.isAbsolute(routeFromRoot)) {
+      throw new Error(`${label} leaves the repository at ${reference.location}.`);
+    }
+    try {
+      await access(resolvedPath);
+    } catch {
+      throw new Error(`${label} points to an unavailable repository route at ${reference.location}: ${reference.value}`);
+    }
+  }
+}
+
+async function assertReferenceRoutesInvalid(label, instance, allowedExternalReferences = new Map()) {
+  try {
+    await assertReferenceRoutes(label, instance, allowedExternalReferences);
+  } catch {
+    return;
+  }
+  throw new Error(`${label} unexpectedly accepted its reference routes.`);
+}
+
 function assertValid(label, validate, instance) {
   if (!validate(instance)) {
     throw new Error(`${label} failed validation:\n${JSON.stringify(validate.errors, null, 2)}`);
@@ -74,10 +143,14 @@ const strictAjv = new Ajv2020({
 
 const repositorySchema = await readJson(paths.repositorySchema);
 const contextSchema = await readJson(paths.contextSchema);
+const collaborationSkillSchema = await readJson(paths.collaborationSkillSchema);
+const collaborationAccountSchema = await readJson(paths.collaborationAccountSchema);
 
 for (const [label, schema] of [
   [paths.repositorySchema, repositorySchema],
-  [paths.contextSchema, contextSchema]
+  [paths.contextSchema, contextSchema],
+  [paths.collaborationSkillSchema, collaborationSkillSchema],
+  [paths.collaborationAccountSchema, collaborationAccountSchema]
 ]) {
   const externalRefs = findExternalRefs(schema);
   if (externalRefs.length > 0) {
@@ -90,15 +163,57 @@ for (const [label, schema] of [
 
 const validateRepository = strictAjv.compile(repositorySchema);
 const validateContext = strictAjv.compile(contextSchema);
+const validateCollaborationSkill = strictAjv.compile(collaborationSkillSchema);
+const validateCollaborationAccount = strictAjv.compile(collaborationAccountSchema);
 
 const repositoryExample = await readJson(paths.repositoryExample);
 const contextExamples = await Promise.all(paths.contextExamples.map(readJson));
+const collaborationSkillExamples = await Promise.all(paths.collaborationSkillExamples.map(readJson));
+const collaborationAccountExample = await readJson(paths.collaborationAccountExample);
+const collaborationAccountExternalReferences = new Map([
+  [
+    "$.relatedRefs[1]",
+    "https://schemas.vik.guru/collaboration-skills/0.1.0/examples/portable-skill.example.json"
+  ]
+]);
 await readJson(paths.contextContext);
 
 assertValid(paths.repositoryExample, validateRepository, repositoryExample);
 paths.contextExamples.forEach((examplePath, index) => {
   assertValid(examplePath, validateContext, contextExamples[index]);
 });
+paths.collaborationSkillExamples.forEach((examplePath, index) => {
+  assertValid(examplePath, validateCollaborationSkill, collaborationSkillExamples[index]);
+});
+assertValid(paths.collaborationAccountExample, validateCollaborationAccount, collaborationAccountExample);
+
+for (const [examplePath, example] of [
+  ...paths.collaborationSkillExamples.map((examplePath, index) => [examplePath, collaborationSkillExamples[index]]),
+  [paths.collaborationAccountExample, collaborationAccountExample]
+]) {
+  const externalReferences =
+    examplePath === paths.collaborationAccountExample
+      ? collaborationAccountExternalReferences
+      : new Map();
+  await assertReferenceRoutes(examplePath, example, externalReferences);
+}
+
+const branchBoundAuthorityReference = structuredClone(collaborationSkillExamples[0]);
+branchBoundAuthorityReference.semanticAuthorityRef =
+  "https://github.com/driftframestudios/human-ai-systems-exemplars/tree/main/.agents/skills/source-authority-mapping/SKILL.md";
+await assertReferenceRoutesInvalid(
+  "branch-bound current authority reference boundary",
+  branchBoundAuthorityReference
+);
+
+const misplacedRetrievalReference = structuredClone(collaborationAccountExample);
+misplacedRetrievalReference.currentOwnerRef =
+  "https://schemas.vik.guru/collaboration-skills/0.1.0/examples/portable-skill.example.json";
+await assertReferenceRoutesInvalid(
+  "retrieval reference role boundary",
+  misplacedRetrievalReference,
+  collaborationAccountExternalReferences
+);
 
 const servingAuthorityBoundary = structuredClone(repositoryExample);
 delete servingAuthorityBoundary.servedProjections[0].deliveryAuthorityRef;
@@ -174,5 +289,5 @@ if (limsResult.status !== 0) {
 }
 
 console.log(
-  `Schema surface check passed: 2 strict v1 schemas, 4 v1 instances, 1 Supportive instance, 1 LIMS/ELN instance, 7 boundary probes, and ${schemaReceiverRoutes.length} receiver identities.`
+  `Schema surface check passed: 4 strict schemas, 7 representative schema instances, 1 Supportive instance, 1 LIMS/ELN instance, 9 boundary probes, and ${schemaReceiverRoutes.length} receiver identities.`
 );

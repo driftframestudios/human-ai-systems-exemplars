@@ -39,7 +39,7 @@ export const BETTERLEAKS_RELEASE = Object.freeze({
   tool: "betterleaks",
   version: "1.8.1",
   releaseUrl: "https://github.com/betterleaks/betterleaks/releases/tag/v1.8.1",
-  owner: "prototype-exemplars:betterleaks-installer",
+  owner: "human-ai-systems-exemplars:betterleaks-installer",
   receiptFormat: 1,
   assets: Object.freeze({
     "darwin-arm64": Object.freeze({
@@ -286,7 +286,7 @@ export async function downloadAsset(
   try {
     const response = await fetchImpl(url, {
       redirect: "follow",
-      headers: { "user-agent": "prototype-exemplars-secret-boundary-installer" },
+      headers: { "user-agent": "human-ai-systems-exemplars-secret-boundary-installer" },
       signal: controller.signal,
     });
     if (!response.ok) {

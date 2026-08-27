@@ -4,8 +4,8 @@
   "kind": "task_bound_skill_projection",
   "name": "prototype-exemplars-schema-v1-projection",
   "description": "A settled task-bound projection that carried schema-contract authoring into the Prototype Exemplars v1 and Context Canvas v1 publication wave.",
-  "semanticAuthorityRef": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/.agents/skills/schema-contract-authoring/SKILL.md",
-  "sourceRef": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/threadkeeping/collaboration-accounts/2026-08-23-schema-contract-authoring.md",
+  "semanticAuthorityRef": ".agents/skills/schema-contract-authoring/SKILL.md",
+  "sourceRef": "threadkeeping/collaboration-accounts/2026-08-23-schema-contract-authoring.md",
   "contract": {
     "what": "Apply the portable schema contract to two repository schema roots, adjacent-family use, and a dual-host handoff.",
     "when": [
@@ -32,13 +32,13 @@
   "evidence": {
     "band": "observed",
     "sourceRefs": [
-      "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/threadkeeping/collaboration-accounts/2026-08-23-schema-contract-authoring.md",
-      "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/schemas/README.md"
+      "threadkeeping/collaboration-accounts/2026-08-23-schema-contract-authoring.md",
+      "schemas/README.md"
     ]
   },
   "transferBoundary": "The retired projection demonstrates bounded lineage and disposition; active routing remains with its portable source contract.",
   "projection": {
-    "sourceContractRef": "https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/.agents/skills/schema-contract-authoring/SKILL.md",
+    "sourceContractRef": ".agents/skills/schema-contract-authoring/SKILL.md",
     "selectedBehavior": [
       "Keep identity, location, and authority independent.",
       "Carry dependency closure.",

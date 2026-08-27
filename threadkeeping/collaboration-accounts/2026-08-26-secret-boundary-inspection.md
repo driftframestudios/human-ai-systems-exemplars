@@ -4,13 +4,13 @@
 collaboration_account:
   id: "prototype-exemplars.skill-use.secret-boundary-inspection.2026-08-26"
   observed_on: "2026-08-26"
-  standing: "portable contract formed; successor reception is the first outside use"
+  standing: "portable contract formed and received by the populated successor"
   work_surface: "repository, exact-index, local-history, and generated-artifact secret-material observation"
-  source_state: "main after accepted pull request 189"
+  source_state: "successor settlement commit 607b5da17ecfdb312c9df6dfc61b53c8bcf5a171"
   routes:
     secret_boundary_inspection: "create_now"
     externalized_reference_materialization: "observe_hold"
-  next_return: "after successor re-observation, a real finding, or changed engine and scope behavior"
+  next_return: "after a real finding or changed engine, configuration, and scope behavior"
 ```
 
 ## Working moment
@@ -24,10 +24,12 @@ artifact. The wrapper keeps raw scanner reports and diagnostics ephemeral and
 returns only a narrow, allowlisted receipt.
 
 Focused tests and live clean observations established implementation behavior.
-Human review and acceptance of pull request #189 supplied an independent
-decision signal. The successor's issues #10 and #11 supply a near, materially
-different receiver: an assembled repository must repeat the observation rather
-than inherit the retained repository's clean result.
+Human review and acceptance of retained pull request #189 supplied an
+independent decision signal. Successor pull request #15 then received the
+assembled repository, installed the pinned scanner, and returned its own clean
+canary, tree, index, and locally available history receipt. Settlement commit
+`607b5da17ecfdb312c9df6dfc61b53c8bcf5a171` repeated the complete boundary
+under successor-owned package, configuration, and installer identity.
 
 ## Formation decision
 
@@ -35,7 +37,8 @@ than inherit the retained repository's clean result.
 `secret-boundary-inspection`. The catalog did not yet own the distinct job of
 joining detector liveness, a generated canary, scope identity, sensitive report
 handling, a safe receipt, and receiving-repository re-observation at one
-handoff boundary.
+handoff boundary. The successor return now supplies the contract's first
+materially different receiving use.
 
 The resulting skill remains instruction-only. Repository scripts, tests,
 configuration, and the durable secret-material boundary continue to define
@@ -70,9 +73,8 @@ authority to rotate credentials or rewrite history.
 
 ## Return condition
 
-Return after the successor records its own canary and scope receipt, a real
-finding tests the information diet and response order, or an engine,
-configuration, clone, platform, or artifact difference changes a decision.
+Return after a real finding tests the information diet and response order, or
+an engine, configuration, clone, platform, or artifact difference changes a decision.
 Revise the skill only for residue that would improve another material use. If
 the receiving commands and repository ground carry the job without distinct
 instruction yield, retain the executable affordance and let the portable
