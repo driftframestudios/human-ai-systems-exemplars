@@ -606,16 +606,20 @@ routes](.github/ENVIRONMENTS.md) are the settings-adjacent authority.
 | `schema-pages.yml` | Connected schema check, static build, artifact upload, and Pages deployment from `docs` |
 | `res-public-boundary-intake.yml` | Advisory aggregate public-boundary receipt for eligible pull requests into `main` while its repository budget is active |
 | `schema-receiver-routes.yml` | Advisory schema identity, receiver-route, and mapped-build receipt for matching `main` changes |
+| `schema-delivery.yml` | Automatic schema, Static Assets, Wrangler, and secret-material contract for `release` and `prod`, followed by separately activated environment deployment |
 | `prototype-unit-tests.yml` | Explicit Core/Narrative dispatch and optional matching pull-request receiver controlled by `PROTOTYPE_UNIT_TESTS_AUTOMATIC` |
 | `lims-eln-enterprise-reference.yml` | Human-confirmed manual enterprise-reference proof |
 | `lims-eln-functional-nucleus.yml` | Human-confirmed manual selected-member or integrated nucleus proof |
 
 GitHub-owned actions are pinned to full commit SHAs. Third-party Marketplace
 actions remain outside the selected-actions policy. The paid-overage boundary
-is $0. `main` is the current metered evidence receiver; other long-lived
-receivers and `res/*` rest until a named evidence question and approved budget
-activate them. Local commands remain the immediate route for application,
-visual, materializer, and secret-boundary work.
+is $0. `main` retains its bounded evidence readers; `release` and `prod` each
+carry a 300-minute allocation for the connected schema contract. Their upload
+authority remains independently selected through the deployment receiver list
+and branch-restricted environments. Other long-lived receivers and `res/*`
+rest until a named evidence question and approved budget activate them. Local
+commands remain the immediate route for application, visual, materializer, and
+other secret-boundary work.
 
 ### Generated material has an explicit resting place
 
