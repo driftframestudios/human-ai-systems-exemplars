@@ -1,0 +1,268 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "urn:driftframe:schema-collection:prototype-exemplars",
+  "kind": "prototype_exemplars_collection",
+  "name": "Prototype Exemplars",
+  "description": "A working collection of visitor surfaces, collaboration instruments, enterprise reference packs, and schema-bearing prototypes for hybrid human-AI teams.",
+  "authority": {
+    "humanAuthorityRef": "AGENTS.md",
+    "semanticOwnerRef": "urn:driftframe:repository:prototype-exemplars",
+    "scope": [
+      "Human collaborators retain purpose, interpretation, publication, and consequential adoption authority.",
+      "Repository source retains the accepted structure and version history."
+    ]
+  },
+  "source": {
+    "repository": "https://github.com/driftframestudios/human-ai-systems-exemplars",
+    "revision": "schema-version-1.0.0-working",
+    "path": "schemas/"
+  },
+  "entryPoints": [
+    {
+      "name": "Repository orientation",
+      "role": "repository_orientation",
+      "path": "README.md",
+      "useWhen": "The collection map and principal working surfaces are needed."
+    },
+    {
+      "name": "Repository collaboration ground",
+      "role": "collaboration_ground",
+      "path": "AGENTS.md",
+      "useWhen": "A human or AI collaborator is preparing to assess, plan, write, or change repository material."
+    },
+    {
+      "name": "Context Canvas",
+      "role": "visitor_surface",
+      "path": "context-canvas-project-surface/context-canvas/README.md",
+      "useWhen": "The work concerns a public-facing page, design input, embedded instrument, or route family."
+    },
+    {
+      "name": "Schema discovery",
+      "role": "schema_discovery",
+      "path": "schemas/README.md",
+      "useWhen": "A versioned contract, semantic context, example, source authority, or retrieval route is needed."
+    },
+    {
+      "name": "Planning",
+      "role": "planning_surface",
+      "path": "planning/README.md",
+      "useWhen": "Prospective options, sequencing, or purposefully deferred terrain enters scope."
+    },
+    {
+      "name": "Threadkeeping",
+      "role": "settled_rationale",
+      "path": "threadkeeping/README.md",
+      "useWhen": "A collaboration cycle needs settled rationale, a re-entry position, or decision-changing field observations."
+    }
+  ],
+  "servedProjections": [
+    {
+      "projectionKind": "canonical_identity",
+      "href": "https://schemas.vik.guru/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+      "status": "planned",
+      "authoritativeSourceRef": "schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+      "publicationAuthorityRef": "urn:driftframe:authority:prototype-exemplars-schema-publication",
+      "deliveryAuthorityRef": "urn:driftframe:operator:vik-guru",
+      "environment": "prod",
+      "branch": "prod"
+    },
+    {
+      "projectionKind": "github_pages_mirror",
+      "href": "https://schemas.radiantnull.com/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+      "status": "planned",
+      "authoritativeSourceRef": "schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+      "publicationAuthorityRef": "urn:github:workflow:driftframestudios/human-ai-systems-exemplars/schema-pages",
+      "deliveryAuthorityRef": "https://pages.github.com/",
+      "environment": "main",
+      "branch": "docs"
+    },
+    {
+      "projectionKind": "source_file",
+      "repositoryPath": "schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+      "status": "active",
+      "revision": "schema-version-1.0.0-working"
+    }
+  ],
+  "families": [
+    {
+      "id": "urn:driftframe:schema-family:prototype-exemplars",
+      "name": "Prototype Exemplars repository collection",
+      "description": "The repository orientation contract rather than a union of every contained schema.",
+      "authorityClass": "repository_owned_public_contract",
+      "authority": {
+        "humanAuthorityRef": "AGENTS.md",
+        "semanticOwnerRef": "urn:driftframe:repository:prototype-exemplars",
+        "scope": [
+          "Repository entry points, schema-family authority, publication routes, and observed uses."
+        ]
+      },
+      "canonicalVersion": "1.0.0",
+      "lifecycleStatus": "candidate",
+      "visibility": "public_safe_summary",
+      "reviewState": "working",
+      "source": {
+        "repository": "https://github.com/driftframestudios/human-ai-systems-exemplars",
+        "revision": "schema-version-1.0.0-working",
+        "path": "schemas/prototype-exemplars/1.0.0/"
+      },
+      "representativeSchemaRef": "schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+      "servedProjections": [
+        {
+          "projectionKind": "source_file",
+          "repositoryPath": "schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+          "status": "active"
+        }
+      ],
+      "sourceBand": "repository-authored candidate",
+      "valueOrigin": "human_ai_collaborative",
+      "usage": [
+        {
+          "artifactRef": "schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+          "instanceRef": "schemas/prototype-exemplars/1.0.0/prototype-exemplars.example.json",
+          "use": "Orient a cold collaborator across the repository's schema families and divided authority.",
+          "state": "validated",
+          "validationMechanism": "npm run check:schemas",
+          "evidenceBoundary": "One repository-truthful example exercises the v1 collection contract.",
+          "revisitCondition": "A new owning family or retrieval state changes repository orientation."
+        }
+      ]
+    },
+    {
+      "id": "urn:driftframe:schema-family:context-canvas",
+      "name": "Context Canvas artifact",
+      "description": "Collection, visitor-surface, prototype-surface, and reference-artifact contracts for the Canvas as visitor surface and design input.",
+      "authorityClass": "repository_owned_public_contract",
+      "authority": {
+        "humanAuthorityRef": "context-canvas-project-surface/context-canvas/README.md",
+        "semanticOwnerRef": "urn:driftframe:surface:context-canvas",
+        "scope": [
+          "Experience intent, standing, authority, representations, relations, fidelity contracts, and recovery routes."
+        ]
+      },
+      "canonicalVersion": "1.0.0",
+      "lifecycleStatus": "candidate",
+      "visibility": "public_safe_summary",
+      "reviewState": "working",
+      "source": {
+        "repository": "https://github.com/driftframestudios/human-ai-systems-exemplars",
+        "revision": "schema-version-1.0.0-working",
+        "path": "schemas/context-canvas/1.0.0/"
+      },
+      "representativeSchemaRef": "schemas/context-canvas/1.0.0/context-canvas.schema.json",
+      "servedProjections": [
+        {
+          "projectionKind": "source_file",
+          "repositoryPath": "schemas/context-canvas/1.0.0/context-canvas.schema.json",
+          "status": "active"
+        }
+      ],
+      "sourceBand": "repository-authored candidate",
+      "valueOrigin": "human_ai_collaborative"
+    },
+    {
+      "id": "urn:driftframe:schema-family:supportive-change-writing",
+      "name": "Supportive Change Writing collection manifest",
+      "description": "Writing-artifact and documentation contracts incubated through lived repository use until Kindlight Systems establishes the receiving authority.",
+      "authorityClass": "provisional_repository_projection",
+      "authority": {
+        "humanAuthorityRef": "supportive-change-writing-exemplars-bundle-v0.1/README.md",
+        "semanticOwnerRef": "urn:driftframe:family:supportive-change-writing",
+        "scope": [
+          "Writing-artifact meaning and package-local schema interpretation."
+        ]
+      },
+      "canonicalVersion": "0.1.0",
+      "lifecycleStatus": "active",
+      "visibility": "public_safe_summary",
+      "reviewState": "working",
+      "source": {
+        "repository": "https://github.com/driftframestudios/human-ai-systems-exemplars",
+        "revision": "0.1.0",
+        "path": "supportive-change-writing-exemplars-bundle-v0.1/"
+      },
+      "representativeSchemaRef": "supportive-change-writing-exemplars-bundle-v0.1/schema/collection-manifest.schema.v0.1.json",
+      "servedProjections": [
+        {
+          "projectionKind": "source_file",
+          "repositoryPath": "supportive-change-writing-exemplars-bundle-v0.1/schema/collection-manifest.schema.v0.1.json",
+          "status": "active"
+        }
+      ],
+      "sourceBand": "working exemplar",
+      "valueOrigin": "human_ai_collaborative",
+      "usage": [
+        {
+          "artifactRef": "supportive-change-writing-exemplars-bundle-v0.1/schema/collection-manifest.schema.v0.1.json",
+          "instanceRef": "supportive-change-writing-exemplars-bundle-v0.1/manifest.json",
+          "use": "Validate the existing collection navigation contract without changing package authority.",
+          "state": "validated",
+          "validationMechanism": "npm run check:schemas",
+          "evidenceBoundary": "One real manifest demonstrates current vocabulary and structural compatibility; the use does not normalize the source schema.",
+          "revisitCondition": "The family moves to Kindlight Systems, gains a canonical identifier, or changes its collection contract."
+        }
+      ],
+      "intendedReceivingEcosystemRef": "urn:driftframe:ecosystem:kindlight-systems",
+      "revisitConditions": [
+        "A Kindlight Systems schema authority exists.",
+        "Observed terminology or extension pressure changes the receiving contract."
+      ]
+    },
+    {
+      "id": "urn:driftframe:schema-family:lims-eln-site-reading",
+      "name": "LIMS/ELN Site Reading machine node",
+      "description": "A cross-owner machine-node contract exercised by the integrated functional nucleus while five standalone repositories retain durable source and release authority.",
+      "authorityClass": "provisional_repository_projection",
+      "authority": {
+        "humanAuthorityRef": "lims-eln-functional-nucleus/README.md",
+        "semanticOwnerRef": "urn:driftframe:family:lims-eln-site-reading-governance",
+        "scope": [
+          "Site Reading machine-node meaning, package-local schema interpretation, and cross-repository instance binding."
+        ]
+      },
+      "canonicalVersion": "2.0.1",
+      "lifecycleStatus": "active",
+      "visibility": "public_safe_summary",
+      "reviewState": "reviewed",
+      "source": {
+        "repository": "https://github.com/driftframestudios/human-ai-systems-exemplars",
+        "revision": "functional-nucleus-v0.3",
+        "path": "lims-eln-functional-nucleus/site-reading-governance/"
+      },
+      "representativeSchemaRef": "lims-eln-functional-nucleus/site-reading-governance/schemas/machine-node.schema.json",
+      "servedProjections": [
+        {
+          "projectionKind": "source_file",
+          "repositoryPath": "lims-eln-functional-nucleus/site-reading-governance/schemas/machine-node.schema.json",
+          "status": "active"
+        }
+      ],
+      "sourceBand": "integrated snapshot with standalone source authorities",
+      "valueOrigin": "imported",
+      "relations": [
+        {
+          "type": "consumed_by",
+          "targetRef": "lims-eln-functional-nucleus/lims-eln-program-specification/machine-node.json",
+          "note": "The downstream program instance binds to the governance schema through the native validator mapping."
+        }
+      ],
+      "usage": [
+        {
+          "artifactRef": "lims-eln-functional-nucleus/site-reading-governance/schemas/machine-node.schema.json",
+          "instanceRef": "lims-eln-functional-nucleus/lims-eln-program-specification/machine-node.json",
+          "use": "Exercise a real schema across package and repository roles with its relative dependency closure intact.",
+          "state": "validated",
+          "validationMechanism": "site-reading-governance/tools/validate_governance.py with common.schema.json",
+          "evidenceBoundary": "One downstream instance demonstrates the cross-owner contract; standalone repositories retain source and release authority.",
+          "revisitCondition": "The source schema version, common dependency, or public LIMS/ELN publication route changes."
+        }
+      ],
+      "intendedReceivingEcosystemRef": "urn:driftframe:ecosystem:kindlight-systems",
+      "revisitConditions": [
+        "A Kindlight Systems schema authority exists.",
+        "The Site Reading source schema or its dependency closure changes.",
+        "The constellation reconciles the five standalone repository authorities."
+      ]
+    }
+  ],
+  "extensions": {}
+}

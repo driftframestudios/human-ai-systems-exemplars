@@ -1,0 +1,161 @@
+{
+  "schemaVersion": "1.0.0",
+  "@context": "../context-canvas.context.jsonld",
+  "id": "urn:example:context-canvas:grammar-family",
+  "kind": "visitor_surface",
+  "name": "Composable Site Readings and Debriefs illustrative surface",
+  "description": "A synthetic representation modeled from a design-input page that helps collaborators choose a reading form and delivery posture.",
+  "experienceIntent": {
+    "desiredState": "A practitioner can choose a reading form and delivery posture that preserve source distinctions, participant authority, and a recoverable return path.",
+    "useConditions": [
+      "A body of evidence needs a legible reading surface.",
+      "A static page, embedded instrument, or coordinated runtime is being selected."
+    ],
+    "primaryCognitiveMove": "choose the smallest reading form and runtime posture that fit the receiving decision",
+    "intendedReaders": [
+      "principal practitioner",
+      "design or engineering lead",
+      "AI collaborator"
+    ],
+    "recognitionSignals": [
+      "The reading-form choice, source basis, authority boundary, and recovery route are visible together.",
+      "Cloudflare delivery claims remain distinguished from observed repository behavior."
+    ],
+    "boundaries": [
+      "The public locator and identities in this example are reserved synthetic values.",
+      "Runtime latency, caching, data placement, cost, tenant isolation, and rollback become implementation-specific after deployment and observation."
+    ],
+    "preservedQualities": [
+      "source distinctions",
+      "reader agency",
+      "return path"
+    ],
+    "expectation": {
+      "readerCanExpect": [
+        "A comparison among static reading, embedded interaction, and coordinated runtime postures.",
+        "A bounded next move rather than a universal delivery prescription."
+      ],
+      "revisionCues": [
+        "A deployed surface produces evidence that changes the delivery fit."
+      ]
+    },
+    "focalization": {
+      "lensRef": "urn:example:lens:delivery-posture-selection",
+      "vantage": "the practitioner choosing a useful receiving surface",
+      "foregrounds": [
+        "reading-form fit",
+        "source basis",
+        "human authority",
+        "recovery"
+      ],
+      "holdsAside": [
+        "host-specific performance and cost claims until observed"
+      ],
+      "useCondition": "The receiving decision concerns how a known body of evidence should become legible and actionable.",
+      "handoffRef": "urn:example:context-canvas:conditioning-field"
+    },
+    "opportunity": {
+      "availableMoves": [
+        "select a static site reading",
+        "embed a bounded instrument",
+        "prepare a coordinated room or durable undertaking"
+      ],
+      "enablingConditions": [
+        "The receiving reader and decision are named.",
+        "Source and recovery expectations are available."
+      ],
+      "handoffRefs": [
+        "urn:example:context-canvas:conditioning-field"
+      ]
+    }
+  },
+  "firstUsePrior": {
+    "probabilityOf": "where the artifact's first useful work usually begins",
+    "solution": 0.6,
+    "implementation": 0.25,
+    "recovery": 0.15,
+    "basis": "Editorial routing based on the surface's role in selecting a reading form and delivery posture before implementation details settle.",
+    "reviewTrigger": "Observed use shows that teams usually arrive with a settled reading form and primarily need implementation or recovery guidance."
+  },
+  "standing": {
+    "claimStatus": "illustrative",
+    "evidenceClass": "source_supported_design_input",
+    "sourceRefs": [
+      "context-canvas-project-surface/context-canvas/grammar-family.html",
+      "context-canvas-project-surface/context-canvas/README.md"
+    ],
+    "currentness": {
+      "state": "current_with_caveats",
+      "basis": "The design-input page and repository sources are current; configured runtime performance and delivery behavior await direct observation.",
+      "asOf": "2026-08-23",
+      "reviewTrigger": "A referenced source changes or a deployed delivery environment supplies new observed behavior."
+    },
+    "reviewState": "working",
+    "visibility": "public_safe_summary",
+    "lifecycleStatus": "candidate"
+  },
+  "authority": {
+    "humanMeaningAuthorityRef": "urn:example:role:grammar-steward",
+    "schemaAuthorityRef": "https://schemas.vik.guru/context-canvas/1.0.0/context-canvas.schema.json",
+    "contentAuthorityRef": "context-canvas-project-surface/context-canvas/grammar-family.html",
+    "decisionAuthorityRole": "named human practitioner selecting the delivery posture",
+    "automationRole": "retrieval, comparison, and bounded implementation proposal",
+    "scope": [
+      "Human collaborators establish purpose, participants, evidence standing, and publication authority.",
+      "Runtime implementation claims remain attached to configured and observed environments."
+    ]
+  },
+  "representations": [
+    {
+      "kind": "canonical_html",
+      "locator": "https://example.invalid/context-canvas/grammar-family.html",
+      "mediaType": "text/html",
+      "status": "planned",
+      "sourceRef": "context-canvas-project-surface/context-canvas/grammar-family.html"
+    },
+    {
+      "kind": "machine_representation",
+      "locator": "https://example.invalid/context-canvas/grammar-family.json",
+      "mediaType": "application/json",
+      "status": "planned",
+      "sourceRef": "schemas/context-canvas/1.0.0/examples/visitor-surface.example.json"
+    }
+  ],
+  "relations": [
+    {
+      "type": "hands_to",
+      "targetRef": "urn:example:context-canvas:conditioning-field",
+      "note": "A selected reading form can hand to an instrument that demonstrates the collaboration move."
+    },
+    {
+      "type": "references",
+      "targetRef": "urn:example:source:cloudflare-workers",
+      "note": "Official delivery sources support the design input while deployment-specific claims await observation."
+    }
+  ],
+  "contractRefs": [
+    {
+      "type": "visual_fidelity",
+      "ref": "visual-fidelity-contracts/cobalt-operating-field.md",
+      "application": "The operating-map visual contract keeps actors, decision context, service movement, recovery, and authority legible within a dense technical reading."
+    },
+    {
+      "type": "source_boundary",
+      "ref": "context-canvas-project-surface/context-canvas/grammar-family.html#runtime-boundary-title",
+      "application": "Runtime claims retain direct source routes and explicit observation limits."
+    }
+  ],
+  "recoveryRoutes": [
+    {
+      "strainCue": "The delivery mechanism begins to lead the decision before the reader, evidence, and authority are clear.",
+      "smallestUsefulMove": "Return to the reading-form choice and restate the receiving reader, decision use, and source basis.",
+      "receivingSurfaceRef": "urn:example:context-canvas:grammar-family",
+      "revisitCondition": "The selected posture still requires an unobserved implementation claim."
+    }
+  ],
+  "extensions": {
+    "urn:example:context-canvas:surface-profile": {
+      "value": "public_design_input"
+    }
+  }
+}
