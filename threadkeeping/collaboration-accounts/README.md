@@ -15,7 +15,7 @@ These notes remain provisional field evidence. Repeated use can earn a skill rev
 - [Locator-boundary stewardship and paired-receiver settlement](2026-08-25-locator-boundary-paired-receiver-settlement.md) — repeated public-artifact and authorized-resolver uses, the `iterate_now` route, an operator-blind name decision, and the forge condition for a later independent contract.
 - [Secret-boundary inspection formation](2026-08-26-secret-boundary-inspection.md) — accepted executable behavior, successor-local canary and scope receipts, and the `create_now` route's first materially different receiving use.
 - [Machine-reference settlement at successor authority](2026-08-26-machine-reference-settlement.md) — successor-local source routes, preserved upstream lineage and delivery identities, representative-use schema coverage, and the action-mode return for bounded support.
-- [Bounded support routing — first returns](2026-08-26-bounded-support-routing-first-returns.md) — two practiced support packets, the `iterate_now` route, stop-condition precedence, premise-aware route return, and a named handback surface.
+- [Bounded support routing — first returns](2026-08-26-bounded-support-routing-first-returns.md) — three practiced support packets, a `retain` recommendation with the `settle_or_fold` route, stop-condition precedence, premise-aware route return, a named handback surface, and a receipt-bearing Issue label projection.
 
 ## Return condition
 
