@@ -40,6 +40,7 @@ The on-demand workflows live in `.agents/skills/`:
 - `schema-contract-authoring` shapes bounded schema families through distinct identity, authority, retrieval, dependency closure, examples, semantic context, and proportional material-use checks.
 - `source-authority-mapping` traces a claim, artifact, or contract through semantic ownership, source location, projections, delivery, receiving use, and promotion.
 - `issue-chain-stewardship` makes decision-bearing relations among issues legible through a current front, transition receipt, next receiver, and release event while each issue retains its own contract.
+- `bounded-support-routing` composes a finite support packet with an explicit action mode, observable return, and stopping event for a focused solution, implementation, or recovery route.
 - `locator-boundary-stewardship` produces locator-safe public collaboration records while stable semantic keys and an authorized resolver preserve exact gated lineage.
 - `stateful-artifact-behavior-contracts` selects focused source-grounded tests for self-roundtrip validity, minimum usable state, semantic-twin agreement, and retained-state recovery.
 - `secret-boundary-inspection` produces a canary-proven, scope-explicit secret-material receipt or private finding route before a repository handoff.

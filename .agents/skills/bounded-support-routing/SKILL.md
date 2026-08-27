@@ -1,0 +1,101 @@
+---
+name: bounded-support-routing
+description: Composes a finite support packet with an explicit action mode, observable return, and stopping event. Applies when a focused solution, implementation, or recovery route needs clear expectations, bounded attention, and a natural handback.
+---
+
+# Bounded support routing
+
+## Contract
+
+- **What:** A compact support packet that carries one opportunity through a named focal surface to an observable result and return.
+- **When:** A collaborator needs a sharply bounded observation, repair, or recovery contribution while ownership of the wider undertaking stays with its named steward.
+- **Boundaries:** Current intent, repository ground, source evidence, and granted tool authority govern the work. Route and skill labels aid navigation; they carry no execution, mutation, publication, merge, or deployment authority. The no-skill/direct-reasoning route remains available when it can produce the same result with less structure.
+- **Result:** The receiver can identify the opportunity, focal surface, requested result, action mode, granted actions, held boundaries, expected observation, recovery and return route, and stop condition in one pass.
+
+## Fit and attention
+
+- **Useful when:** A finite contribution must arrive cleanly inside a larger collaboration, particularly when observation and repair could otherwise blend together.
+- **Poor fit when:** Standing guidance or direct reasoning already supplies the next move, or the undertaking needs open-ended ownership rather than a bounded handback.
+- **Smallest useful dose:** One current route, one action mode, the packet fields that change behavior, and one observable stop condition.
+- **Foregrounds:** **Expectation** makes the promised result and return legible. **Focalization** names the surface receiving attention. **Opportunity** names the useful condition the support can create.
+- **May under-attend:** The packet sharpens one receiving moment; wider system effects remain with the surrounding task unless the packet names them.
+- **Interactions:** `repository-reentry` can establish current ground; `supportive-change-writing` can shape a humane handoff; `collaboration-accounting` can receive decision-changing observations about this skill.
+- **Rest or release when:** The stop condition is observed, the receiving owner accepts the return, or direct reasoning becomes the smaller adequate route.
+
+## Working packet
+
+Use ordinary prose when it keeps the relationships clear. The labels below are a readable prompt palette rather than a required schema.
+
+```markdown
+**Opportunity:** What useful condition can this support create now?
+**Focal surface:** Which artifact, behavior, decision, or question receives attention?
+**Requested result:** What should be materially different or newly legible at return?
+**Route:** Solution | Implementation | Recovery
+**Action mode:** observation_only | repair_authorized | implementation_authorized | recovery_authorized
+**Granted actions:** Which specific reads, tools, edits, commands, or handoff actions are available?
+**Held boundaries:** Which adjacent states stay intact, and where should an out-of-scope finding go?
+**Expected observation:** What evidence or receiving state should the collaborator return?
+**Recovery and return:** How does the work regain a legible state and hand attention back?
+**Stop condition:** Which observable event completes this packet?
+```
+
+## Rules
+
+### Rule: One route owns the current return
+
+- **Solution** shapes or compares a desired outcome until one bounded recommendation, decision surface, or open question is ready to return.
+- **Implementation** creates the requested material change and a proportionate observation of its behavior.
+- **Recovery** restores a legible working state, preserves remaining strain, and returns the undertaking to its named owner.
+
+A packet selects the route that owns the current result. Evidence or a fresh cue can form a successor packet for another route; the transition remains visible rather than implicit.
+
+### Rule: Action mode precedes tool use
+
+| Action mode | Available contribution | Boundary and replacement route |
+| --- | --- | --- |
+| `observation_only` | Read, inspect, compare, and return the expected observation. | Repository and external state remain as found. A repair opportunity returns as a bounded recommendation or proposed `repair_authorized` packet. |
+| `repair_authorized` | Correct the named defect through the granted repair actions, observe the result proportionately, and return the changed surface. | Adjacent state stays intact. A materially wider change returns to the owner for a fresh scope decision. |
+| `implementation_authorized` | Create the named material result through the granted implementation and delivery actions. | The packet's focal surface and receiving result bound the implementation. A broader product or system decision returns for renewed solution routing. |
+| `recovery_authorized` | Exercise the named recovery action, observe the regained state, and return remaining strain. | The known-good coordinate and recovery target lead. Follow-on repair or implementation receives its own packet. |
+
+Granted actions name concrete operations. A route label, issue label, skill name, model name, or workflow state provides orientation while the grant retains its stated size.
+
+### Rule: Held boundaries preserve a useful continuation
+
+Each consequential boundary names the state to preserve and the path available for the adjacent need. Privacy, safety, destructive action, publication, and external coordination boundaries remain explicit because they carry material meaning.
+
+### Rule: The expected observation closes the evidence loop
+
+The packet states what the chosen check can establish. An unobserved claim remains open and returns with the smallest fitting next observation rather than borrowing confidence from route completion.
+
+### Rule: Recovery and return are part of the result
+
+The receiver keeps a known-good point, records any remaining strain, and hands attention back when the stop condition arrives. Support closes at that handback, and standing ownership stays with its named steward.
+
+## Operating sequence
+
+1. **Frame the opportunity:** Name the useful condition this finite contribution can create.
+2. **Focalize the surface:** Identify the exact artifact, behavior, decision, or question and the adjacent state that stays intact.
+3. **Set expectation:** State the requested result, current route, and expected observation.
+4. **Bind action:** Select the narrowest action mode that carries the requested contribution, then enumerate the actions actually granted.
+5. **Prepare return:** Name the known-good point, recovery route, handback owner, and stop condition.
+6. **Carry the route:** Work only through the selected mode, return decision-changing evidence, and stop when the packet's event is observed.
+
+## Representative scenario
+
+### Scenario: Observation reveals a repair opportunity
+
+Given an `observation_only` packet asks for a focused repository finding<br>
+And the inspection reveals a small repair that would improve the requested outcome<br>
+When the expected observation is complete<br>
+Then the collaborator returns the finding and smallest repair route<br>
+And the repository remains at its known-good point<br>
+And implementation begins through a fresh `repair_authorized` packet when the owner grants that action
+
+## Conditional context
+
+The skill loads [references/openai-codex-spark.md](references/openai-codex-spark.md) when OpenAI Codex Spark is selected or considered as the receiving collaborator. That reference carries current platform details and refreshes against official OpenAI documentation when model identity, availability, surfaces, or recommended use changes.
+
+## Completion
+
+Bounded support completes when the requested result and expected observation have returned, held boundaries remain legible, recovery leaves a usable state, and the stop condition has occurred. A changed platform, crossed action boundary, or materially different receiving use can reopen the contract through collaboration accounting; otherwise the skill rests and direct reasoning remains available.
