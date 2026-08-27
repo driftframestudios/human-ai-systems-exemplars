@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1040" role="img" aria-labelledby="strategy-title strategy-desc">
+  <title id="strategy-title">Genomic viewer Strategy Canvas: where the re-platforming posture moves attention</title>
+  <desc id="strategy-desc">A qualitative four-action canvas groups ten source-named strategy dimensions. Legacy coupling is reduced. Clinical task continuity and explicit validation evidence are preserved. Identity fidelity, accessibility and cognitive load, and staffing reach are raised. Authorization explicitness, release independence, and observability and recovery are created. Operating cost remains an open question. The groupings are a 2026 synthesis rather than measured historical scores.</desc>
+  <defs>
+    <filter id="hard-shadow" x="-10%" y="-10%" width="125%" height="130%">
+      <feDropShadow dx="8" dy="8" stdDeviation="0" flood-color="#141c5b" flood-opacity="1"/>
+    </filter>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}
+      .eyebrow{font-size:16px;font-weight:800;letter-spacing:2px}
+      .title{font-size:50px;font-weight:850;letter-spacing:-1.5px}
+      .lead{font-size:22px;font-weight:500}
+      .column-title{font-size:25px;font-weight:850;letter-spacing:.4px}
+      .action{font-size:14px;font-weight:850;letter-spacing:1.5px}
+      .card-title{font-size:19px;font-weight:800}
+      .body{font-size:16px;font-weight:500}
+      .note{font-size:14px;font-weight:650}
+      .ink{fill:#141c5b}.blue-ink{fill:#183a78}.white{fill:#fff7f4}.cobalt{fill:#2855f3}.coral{fill:#fa7065}
+    </style>
+  </defs>
+
+  <rect width="1600" height="1040" fill="#ffd3d0"/>
+  <rect x="0" y="0" width="1600" height="198" fill="#2855f3"/>
+  <g role="group" aria-labelledby="canvas-heading">
+    <title id="canvas-heading">Strategy Canvas heading and evidence class</title>
+    <text x="60" y="50" class="mono eyebrow white">STATIC STRATEGY CANVAS · QUALITATIVE PORTFOLIO POSTURE</text>
+    <text x="60" y="112" class="sans title white">Where attention moves</text>
+    <text x="60" y="156" class="sans lead white">Source-named dimensions · proposed 2026 synthesis · no historical score is implied</text>
+    <rect x="1270" y="52" width="272" height="82" rx="10" fill="#f2ff67" stroke="#141c5b" stroke-width="3"/>
+    <text x="1292" y="82" class="mono action ink">DECISION USE</text>
+    <text x="1292" y="105" class="sans body ink"><tspan x="1292">Funding posture</tspan><tspan x="1292" dy="19">not a cost model</tspan></text>
+  </g>
+
+  <g role="group" aria-labelledby="reduce-title" transform="translate(60 244)">
+    <title id="reduce-title">Reduce legacy coupling</title>
+    <rect width="330" height="552" rx="16" fill="#fff7f4" stroke="#141c5b" stroke-width="3" filter="url(#hard-shadow)"/>
+    <rect width="330" height="92" rx="14" fill="#fa7065"/>
+    <path d="M0 76H330" stroke="#141c5b" stroke-width="3"/>
+    <text x="24" y="34" class="mono action ink">01 · REDUCE</text>
+    <text x="24" y="67" class="sans column-title ink">Bounded transfer</text>
+    <rect x="22" y="126" width="286" height="174" rx="12" fill="#feeae9" stroke="#141c5b" stroke-width="2"/>
+    <text x="42" y="160" class="sans card-title ink">Legacy coupling</text>
+    <text x="42" y="194" class="sans body blue-ink"><tspan x="42">Move bounded capability families</tspan><tspan x="42" dy="25">without pretending the whole</tspan><tspan x="42" dy="25">diagnostic surface moved.</tspan></text>
+    <path d="M42 342H288" stroke="#fa7065" stroke-width="5"/>
+    <text x="42" y="382" class="mono action blue-ink">WRITTEN LIMIT</text>
+    <text x="42" y="414" class="sans body blue-ink"><tspan x="42">Deep business logic, variant</tspan><tspan x="42" dy="25">status, quality control, and</tspan><tspan x="42" dy="25">plugins remain visible.</tspan></text>
+  </g>
+
+  <g role="group" aria-labelledby="preserve-title" transform="translate(430 244)">
+    <title id="preserve-title">Preserve clinical task continuity and make validation evidence explicit</title>
+    <rect width="330" height="552" rx="16" fill="#fff7f4" stroke="#141c5b" stroke-width="3" filter="url(#hard-shadow)"/>
+    <rect width="330" height="92" rx="14" fill="#e9cf9e"/>
+    <path d="M0 76H330" stroke="#141c5b" stroke-width="3"/>
+    <text x="24" y="34" class="mono action ink">02 · PRESERVE / EXPLICIT</text>
+    <text x="24" y="67" class="sans column-title ink">Continuity + evidence</text>
+    <rect x="22" y="126" width="286" height="126" rx="12" fill="#fff7f4" stroke="#141c5b" stroke-width="2"/>
+    <text x="42" y="160" class="sans card-title ink">Clinical task continuity</text>
+    <text x="42" y="194" class="sans body blue-ink"><tspan x="42">Keep consequential work usable</tspan><tspan x="42" dy="25">while seams are bounded.</tspan></text>
+    <rect x="22" y="278" width="286" height="168" rx="12" fill="#feeae9" stroke="#141c5b" stroke-width="2"/>
+    <text x="42" y="312" class="sans card-title ink">Validation evidence burden</text>
+    <text x="42" y="346" class="sans body blue-ink"><tspan x="42">Name the gate, owner, parity</tspan><tspan x="42" dy="25">evidence, rollback, and retained</tspan><tspan x="42" dy="25">authority for each move.</tspan></text>
+    <text x="42" y="496" class="mono action blue-ink">CONTINUITY ≠ CUTOVER</text>
+  </g>
+
+  <g role="group" aria-labelledby="raise-title" transform="translate(800 244)">
+    <title id="raise-title">Raise identity fidelity, accessibility and cognitive support, and staffing reach</title>
+    <rect width="330" height="552" rx="16" fill="#fff7f4" stroke="#141c5b" stroke-width="3" filter="url(#hard-shadow)"/>
+    <rect width="330" height="92" rx="14" fill="#d3e4cb"/>
+    <path d="M0 76H330" stroke="#141c5b" stroke-width="3"/>
+    <text x="24" y="34" class="mono action ink">03 · RAISE</text>
+    <text x="24" y="67" class="sans column-title ink">Fidelity and reach</text>
+    <rect x="22" y="126" width="286" height="104" rx="12" fill="#fff7f4" stroke="#141c5b" stroke-width="2"/>
+    <text x="42" y="160" class="sans card-title ink">Identity fidelity</text>
+    <text x="42" y="194" class="sans body blue-ink">Reference-aware domain contract</text>
+    <rect x="22" y="252" width="286" height="126" rx="12" fill="#feeae9" stroke="#141c5b" stroke-width="2"/>
+    <text x="42" y="286" class="sans card-title ink">Accessibility + cognition</text>
+    <text x="42" y="320" class="sans body blue-ink"><tspan x="42">Dense inspection without losing</tspan><tspan x="42" dy="25">row, case, or evidence context</tspan></text>
+    <rect x="22" y="400" width="286" height="104" rx="12" fill="#ced8f7" stroke="#141c5b" stroke-width="2"/>
+    <text x="42" y="434" class="sans card-title ink">Staffing reach</text>
+    <text x="42" y="468" class="sans body blue-ink">Typed contribution path</text>
+  </g>
+
+  <g role="group" aria-labelledby="create-title" transform="translate(1170 244)">
+    <title id="create-title">Create authorization explicitness, release independence, and observability and recovery</title>
+    <rect width="370" height="552" rx="16" fill="#fff7f4" stroke="#141c5b" stroke-width="3" filter="url(#hard-shadow)"/>
+    <rect width="370" height="92" rx="14" fill="#f2ff67"/>
+    <path d="M0 76H370" stroke="#141c5b" stroke-width="3"/>
+    <text x="24" y="34" class="mono action ink">04 · CREATE</text>
+    <text x="24" y="67" class="sans column-title ink">Dependable abilities</text>
+    <rect x="22" y="126" width="326" height="114" rx="12" fill="#fff7f4" stroke="#141c5b" stroke-width="2"/>
+    <text x="42" y="160" class="sans card-title ink">Authorization explicitness</text>
+    <text x="42" y="194" class="sans body blue-ink"><tspan x="42">Profile, assay, jurisdiction, action</tspan><tspan x="42" dy="25">and current qualification</tspan></text>
+    <rect x="22" y="264" width="326" height="104" rx="12" fill="#ced8f7" stroke="#141c5b" stroke-width="2"/>
+    <text x="42" y="298" class="sans card-title ink">Release independence</text>
+    <text x="42" y="332" class="sans body blue-ink">Bounded components and services</text>
+    <rect x="22" y="392" width="326" height="114" rx="12" fill="#d3e4cb" stroke="#141c5b" stroke-width="2"/>
+    <text x="42" y="426" class="sans card-title ink">Observability + recovery</text>
+    <text x="42" y="460" class="sans body blue-ink"><tspan x="42">Current state, failure visibility,</tspan><tspan x="42" dy="25">rollback, and revision signals</tspan></text>
+  </g>
+
+  <g role="group" aria-labelledby="open-title">
+    <title id="open-title">Operating cost remains open</title>
+    <rect x="60" y="844" width="1480" height="128" rx="14" fill="#fff7f4" stroke="#141c5b" stroke-width="3" stroke-dasharray="12 9"/>
+    <path d="M112 880l24 24-24 24-24-24z" fill="#ffd3d0" stroke="#141c5b" stroke-width="3"/>
+    <text x="164" y="894" class="mono action ink">OPEN QUESTION · OPERATING COST</text>
+    <text x="164" y="930" class="sans body blue-ink">Estimate migration, parallel operation, validation, support, and retirement separately; this canvas does not convert them into a score.</text>
+  </g>
+
+  <text x="60" y="1010" class="mono note blue-ink">EVIDENCE BOUNDARY · DIMENSIONS ARE SOURCE-NAMED; ACTION GROUPINGS ARE AN INSPECTABLE 2026 SYNTHESIS, NOT A 2019 BASELINE OR MEASURED OUTCOME.</text>
+</svg>

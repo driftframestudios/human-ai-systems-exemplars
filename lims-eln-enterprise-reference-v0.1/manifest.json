@@ -1,0 +1,41 @@
+{
+  "packId": "lims-eln-enterprise-reference-v0.1",
+  "title": "LIMS/ELN Enterprise Reference",
+  "version": "0.2.0",
+  "schemaVersion": "2.0",
+  "status": "verified_running_offline_database_rehearsal_defined",
+  "campaigns": [
+    "FMI LIMS/ELN Re-platforming — Enterprise Python Reference Pack"
+  ],
+  "sampleCount": 9,
+  "sampleNamespace": "FMI-LIMS-S",
+  "validation": {
+    "command": "PYTHONPATH=src python3 scripts/validate_pack.py",
+    "receipt": "receipts/validation-report.json",
+    "databaseCommand": "./scripts/run_database_rehearsal.sh",
+    "databaseReleaseProvenance": "database/release-provenance.json",
+    "flywayConfiguration": "database/flyway/flyway.conf"
+  },
+  "schemas": [
+    "schema/sample-manifest.schema.json",
+    "schema/execution-receipt.schema.json",
+    "schema/machine-node.schema.json",
+    "schema/data-primitive-ledger.schema.json"
+  ],
+  "evidenceBoundary": "Offline execution uses synthetic fixtures and validates migration integrity statically. Hosted PostgreSQL provides clean-install, representative upgrade, tenancy, immutability, and schema-convergence evidence. Adoption datasets, vendor sandboxes, restore objectives, and production acceptance retain separate accountable receipts.",
+  "vendorStates": {
+    "sapiopylib": {
+      "stable": "2026.6.3.307",
+      "qualification": "tenant_open"
+    },
+    "benchling-sdk": {
+      "stable": "1.25.0",
+      "qualification": "sandbox_open"
+    },
+    "labkey": {
+      "pypiStable": "4.2.0",
+      "upstreamDevelopDeclared": "4.3.0",
+      "qualification": "sandbox_open"
+    }
+  }
+}

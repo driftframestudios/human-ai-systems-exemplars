@@ -1,0 +1,39 @@
+{
+  "id": "cc.narrative-architectures.threadkeeping-ledger.local-manifest.v0.1",
+  "title": "Threadkeeping Ledger — Context Canvas Projection",
+  "version": "0.1",
+  "created": "2026-08-19",
+  "sourceAuthority": {
+    "contractOwner": "@driftframe/field-guide",
+    "implementationOwner": "Context Canvas",
+    "relationship": "context_canvas_owned_projection"
+  },
+  "pathContract": {
+    "sourcePath": "manifest-directory",
+    "localPath": "repository-root",
+    "entryFile": "localPath",
+    "sourceManifest": "localPath",
+    "usedByPages": "manifest-directory"
+  },
+  "publicationPosture": "visitor-linked-through-receiving-pages",
+  "archive": {"status": "rebuilt-local-snapshot", "path": "threadkeeping-ledger-chimeric-prototype-bundle-v0.1.zip"},
+  "integrity": {"algorithm": "sha256", "entryFile": "2e537290048e736bb98a6911dca1e4e228296550a9136bd41776d13ee1c93812"},
+  "canonicalStatus": "context_canvas_owned_projection",
+  "sourcePath": ".",
+  "localPath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/",
+  "entryFile": "threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html",
+  "sourceManifest": "threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-manifest-v0.1.json",
+  "localAdaptations": [
+    "Public example records use portable collaborator roles while exact private lineage remains in the authorized resolver."
+  ],
+  "divergence": {
+    "status": "context_canvas_owned_projection",
+    "changedPaths": [
+      "threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html",
+      "threadkeeping-ledger-chimeric-prototype-bundle-v0.1.zip"
+    ]
+  },
+  "usedByPages": [
+    "../../../metadata-blocks.html"
+  ]
+}

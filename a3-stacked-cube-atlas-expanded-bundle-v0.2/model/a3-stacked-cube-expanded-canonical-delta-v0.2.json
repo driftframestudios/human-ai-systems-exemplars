@@ -1,0 +1,353 @@
+{
+  "schema_version": "0.2.0",
+  "as_of": "2026-07-24",
+  "artifact_id": "A3-CUBE-EXPANDED",
+  "extends": {
+    "artifact_id": "A3-CUBE-MANIFEST",
+    "version": "0.1.0",
+    "local_source": "a3-stacked-cube-canonical-v0.1.json",
+    "preserve_stable_ids": true
+  },
+  "method": {
+    "name": "Deep Research Atlas — Self-Contained Payload",
+    "version": "1.2",
+    "source": "urn:source-key:SRC-ATLAS",
+    "claim_evidence_pair": "diagram assertion versus operational evidence",
+    "probability_referent": "probability that an apparent content gap is best explained by each candidate hypothesis, conditional on reviewed evidence; never probability of migration success, compliance, safety, effort, or schedule"
+  },
+  "protected_semantics": [
+    "A cube is a bounded software capability or service dependency, not a team, screen, or human activity.",
+    "Position encodes current execution or decision authority only.",
+    "Migration is a reversible routing and authority change through an explicit seam, validation gate, and rollback route.",
+    "Visible gaps imply verified separability.",
+    "Human work remains a separate ribbon unless a bounded software capability is separately evidenced.",
+    "UNKNOWN is visible and durable.",
+    "F0–F3 remain the protected historical authority spine."
+  ],
+  "scope_statement": {
+    "system": "regulated genomic-viewer Strangler-Fig migration",
+    "intended_use": "unresolved",
+    "jurisdiction": "unresolved",
+    "device_or_non_device_status": "unresolved",
+    "part_11_applicability": "unresolved",
+    "hipaa_applicability": "unresolved",
+    "clia_applicability": "unresolved",
+    "nih_controlled_access_applicability": "unresolved",
+    "warning": "External authorities define conditional obligations and evidence categories; they do not establish that any named regime applies to this system."
+  },
+  "lenses": [
+    {
+      "id": "authority",
+      "label": "Authority topology",
+      "question": "Where do execution and decision authority reside in the selected historical frame?"
+    },
+    {
+      "id": "assurance",
+      "label": "Assurance gates",
+      "question": "What independent evidence must be resolved before authority can transfer?"
+    },
+    {
+      "id": "runtime",
+      "label": "Runtime and data",
+      "question": "Which routing, read, write, response, comparison, and authorization relationships must not be conflated?"
+    },
+    {
+      "id": "recovery",
+      "label": "Recovery and retirement",
+      "question": "What evidence preserves rollback, supports stabilization, and eventually permits controlled retirement?"
+    },
+    {
+      "id": "evidence",
+      "label": "Evidence provenance",
+      "question": "Which source supports each visual assertion, with what confidence, boundary, and falsifier?"
+    }
+  ],
+  "assurance_gates": [
+    {
+      "id": "AG-01",
+      "label": "Regulatory and intended-use context",
+      "status": "unresolved",
+      "checks": [
+        "research or clinical use",
+        "display or analyze/recommend",
+        "health-care professional or patient user",
+        "time-critical or deliberative decision",
+        "established or uncertain genomic relevance"
+      ],
+      "human_authority": "regulatory and clinical owner",
+      "falsifier": "A documented intended-use and applicability assessment may narrow or remove this gate.",
+      "source_ids": ["SRC-FDA-CDS", "SRC-FDA-SW", "SRC-QMSR", "SRC-CLIA"]
+    },
+    {
+      "id": "AG-02",
+      "label": "Clinical evidence",
+      "status": "conditional",
+      "checks": [
+        "valid clinical association",
+        "analytical validation",
+        "clinical validation"
+      ],
+      "human_authority": "clinical and scientific owner",
+      "falsifier": "If the bounded capability has no clinical interpretation or patient-facing effect, these evidence claims may sit outside its authority gate.",
+      "source_ids": ["SRC-IMDRF-SAMD", "SRC-FDA-CDS"]
+    },
+    {
+      "id": "AG-03",
+      "label": "Software evidence bundle",
+      "status": "required_category_thresholds_unresolved",
+      "checks": [
+        "requirements and intended inputs/outputs",
+        "architecture, interfaces, data flows, external dependencies",
+        "requirement–risk–design–test traceability",
+        "configuration and version history",
+        "test results and acceptance criteria",
+        "unresolved-anomaly disposition",
+        "exercised rollback route"
+      ],
+      "human_authority": "quality and software owner",
+      "falsifier": "The exact documentation level and evidence depth depend on intended use, risk, and applicable pathway.",
+      "source_ids": ["SRC-FDA-SW", "SRC-FDA-CSA", "SRC-NIST-SSDF"]
+    },
+    {
+      "id": "AG-04",
+      "label": "Human-factors critical-task delta",
+      "status": "applicability_unresolved",
+      "checks": [
+        "perception change",
+        "cognition change",
+        "physical interaction change",
+        "critical-task sequence change",
+        "use-related risk analysis and validation method"
+      ],
+      "human_authority": "human-factors and clinical owner",
+      "falsifier": "A documented assessment showing no user-interface or critical-task delta may close this branch.",
+      "source_ids": ["SRC-FDA-HF-2026", "SRC-FDA-HFE"]
+    },
+    {
+      "id": "AG-05",
+      "label": "Safety and cybersecurity",
+      "status": "separate_linked_analyses",
+      "checks": [
+        "safety hazards and controls",
+        "threat model and trust boundaries",
+        "SBOM and support status",
+        "security test evidence",
+        "event logging and recovery",
+        "patchability and vulnerability ownership"
+      ],
+      "human_authority": "safety and security owners",
+      "falsifier": "Cyber-device obligations are conditional, but authorization, threat boundaries, and security regression evidence remain material architecture concerns.",
+      "source_ids": ["SRC-FDA-CYBER", "SRC-NIST-SSDF", "SRC-NIST-ZTA", "SRC-RFC9700"]
+    },
+    {
+      "id": "AG-06",
+      "label": "Records, audit, and genomic-data custody",
+      "status": "regime_applicability_unresolved",
+      "checks": [
+        "actor, authority, action, time, and reason",
+        "prior and resulting state",
+        "source and software version",
+        "append-only reconstructable history",
+        "retention, access, and recovery",
+        "data-use and disclosure restrictions"
+      ],
+      "human_authority": "records, privacy, and data-custody owners",
+      "falsifier": "Predicate-rule, covered-entity, clinical-use, and controlled-access analyses may narrow the applicable badges.",
+      "source_ids": ["SRC-PART11", "SRC-HIPAA", "SRC-NIH-DATA", "SRC-PROV"]
+    },
+    {
+      "id": "AG-07",
+      "label": "Change authorization",
+      "status": "named_decision_required",
+      "checks": [
+        "intended-use change assessment",
+        "new or changed safety/effectiveness risk",
+        "submission or change-path rationale",
+        "human-factors and security impact",
+        "named approvers",
+        "release criteria and observation window",
+        "rollback trigger"
+      ],
+      "human_authority": "named cross-functional release authority",
+      "falsifier": "A bounded non-device operational change may require a smaller evidence set, but must still preserve authorization, audit, and rollback semantics.",
+      "source_ids": ["SRC-FDA-CHANGE", "SRC-FDA-PCCP", "SRC-AWS-RETIRE", "SRC-AZURE-RETIRE"]
+    }
+  ],
+  "migration_gates": [
+    {
+      "id": "G0",
+      "label": "Seam readiness",
+      "status": "partially_evidenced_historical",
+      "requires": ["stable identity", "routable interception or abstraction", "owner and dependency map", "known system of record"]
+    },
+    {
+      "id": "G1",
+      "label": "Data readiness",
+      "status": "unknown",
+      "requires": ["backfill scope", "schema compatibility", "lag and conflicts", "record reconciliation", "idempotency where duplicate delivery is possible"]
+    },
+    {
+      "id": "G2",
+      "label": "Contract readiness",
+      "status": "unknown",
+      "requires": ["declared interface", "current consumer/provider verification", "representative failure behavior", "version compatibility"]
+    },
+    {
+      "id": "G3",
+      "label": "Runtime readiness",
+      "status": "unknown",
+      "requires": ["canary and control separated", "user-centered service indicators", "adequate observation window", "parity and error-budget verdict"]
+    },
+    {
+      "id": "G4",
+      "label": "Security readiness",
+      "status": "unknown",
+      "requires": ["per-request authorization equivalence", "least privilege", "audience and scope validation", "sensitive telemetry boundary"]
+    },
+    {
+      "id": "G5",
+      "label": "Authority transfer",
+      "status": "historically_asserted_for_one_bounded_candidate",
+      "requires": ["rollback rehearsed", "residual risk reviewed", "domain, operations, quality, and security authorization", "scope-stamped evidence"]
+    },
+    {
+      "id": "G6",
+      "label": "Retirement readiness",
+      "status": "not_claimed",
+      "requires": ["no unresolved dependency traffic over full business cycles", "controlled stop succeeds", "archive retrieval tested", "retention and owner approvals recorded", "temporary controls retired"]
+    }
+  ],
+  "runtime_semantics": {
+    "authority_dimensions": [
+      "read authority",
+      "write authority",
+      "response authority",
+      "decision authority",
+      "record authority",
+      "fallback authority"
+    ],
+    "candidate_elements": [
+      "interception router or branch-by-abstraction seam",
+      "anti-corruption adapter",
+      "migration flag and cohort selector",
+      "legacy and target systems of record",
+      "backfill or snapshot worker",
+      "change-data-capture or transactional outbox",
+      "idempotent consumer",
+      "response and record-parity comparators",
+      "replication-lag and conflict monitor",
+      "policy decision and enforcement points",
+      "provenance/audit ledger",
+      "controlled-stop and archive/recovery route"
+    ],
+    "typed_connectors": [
+      "route-authoritative",
+      "route-fallback",
+      "mirror-nonauthoritative",
+      "read-from",
+      "write-authoritative",
+      "write-redundant",
+      "backfill",
+      "replicate-cdc",
+      "publish-outbox",
+      "consume-idempotently",
+      "compare-contract",
+      "compare-response",
+      "reconcile-data",
+      "observe",
+      "authorize",
+      "enforce",
+      "attest-provenance",
+      "promote",
+      "hold",
+      "rollback",
+      "controlled-stop",
+      "decommission"
+    ],
+    "guardrails": [
+      "Mirrored traffic is non-authoritative and may still cause side effects unless isolated.",
+      "Uncoordinated dual writes are not a safe default.",
+      "Change-data capture does not imply complete schema or sequence replication.",
+      "A current contract verification does not replace data, security, production, or end-to-end evidence.",
+      "Authentication and authorization do not move implicitly with a cube.",
+      "Validated is a scoped, time-stamped verdict, not a permanent terminal state.",
+      "Complete runtime transfer does not mean safe-to-delete."
+    ]
+  },
+  "evidence_classes": [
+    {"id": "verified", "label": "Verified fact", "visual": "solid marker"},
+    {"id": "corroborated_inference", "label": "Corroborated inference", "visual": "paired marker"},
+    {"id": "single_source", "label": "Single-source claim", "visual": "outlined marker"},
+    {"id": "estimate", "label": "Estimate", "visual": "hatched marker"},
+    {"id": "unresolved", "label": "Unresolved", "visual": "dashed marker"},
+    {"id": "stale", "label": "Stale", "visual": "faded clock marker"},
+    {"id": "not_exercised", "label": "Not exercised", "visual": "open marker"}
+  ],
+  "discrepancy_register": [
+    {
+      "id": "DR-01",
+      "question": "Does the generic shadow state hide distinct read, write, response, and record-authority transitions in this system?",
+      "confidence": "low_due_to_missing_internal_runtime_evidence",
+      "basis": "External primary sources show the distinction is material in stateful migrations; no internal runtime contracts or data-flow evidence were available in this pass.",
+      "distribution": {
+        "H1_real_omitted_boundary_or_control": 45,
+        "H2_real_behavior_unstable_boundary": 25,
+        "H3_stale_or_contextual_evidence": 20,
+        "H_benign_no_new_object_needed": 10
+      },
+      "falsifier": "Internal routing, write, and system-of-record evidence showing that the capability is stateless or all authority dimensions move atomically."
+    },
+    {
+      "id": "DR-02",
+      "question": "Does validated authority need an explicit post-release stabilization and retirement-readiness layer?",
+      "confidence": "medium",
+      "basis": "Independent primary migration and retirement sources distinguish transfer, monitoring, controlled stop, archival, and decommission approval.",
+      "distribution": {
+        "H1_real_omitted_boundary_or_control": 60,
+        "H2_real_behavior_unstable_boundary": 15,
+        "H3_stale_or_contextual_evidence": 5,
+        "H_benign_no_new_object_needed": 20
+      },
+      "falsifier": "The artifact is explicitly scoped only to the pre-retirement authority decision and links to a separate governed retirement model."
+    },
+    {
+      "id": "DR-03",
+      "question": "Should all seven regulated-assurance gates apply to the bounded operational/assignment capability?",
+      "confidence": "low_due_to_unresolved_regulatory_scope",
+      "basis": "The sources support the categories, but applicability depends on intended use, device status, records scope, data custody, clinical use, and jurisdiction.",
+      "distribution": {
+        "H1_real_omitted_boundary_or_control": 25,
+        "H2_real_behavior_unstable_boundary": 45,
+        "H3_stale_or_contextual_evidence": 10,
+        "H_benign_no_new_object_needed": 20
+      },
+      "falsifier": "A documented scope and applicability assessment demonstrating that one or more gates are outside the capability’s product and regulatory boundary."
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "DD-01",
+      "decision": "Retain the original four frames as the authority lens.",
+      "evidence_state": "verified",
+      "reason": "They are the protected historical narrative and remain directionally sound."
+    },
+    {
+      "id": "DD-02",
+      "decision": "Add selectable assurance, runtime/data, recovery, and evidence lenses.",
+      "evidence_state": "corroborated_inference",
+      "reason": "The source record supports orthogonal semantic planes; adding hero-level cubes would conflate content and overwhelm the default cognitive move."
+    },
+    {
+      "id": "DD-03",
+      "decision": "Do not claim an eight-stage product-specific migration state machine.",
+      "evidence_state": "corroborated_inference",
+      "reason": "External sources show useful detailed stages, but the applicable two-, four-, six-, or eight-stage profile depends on internal runtime and data evidence."
+    },
+    {
+      "id": "DD-04",
+      "decision": "Show every external regulatory regime as conditional or unresolved.",
+      "evidence_state": "verified",
+      "reason": "No intended-use, jurisdiction, predicate-record, covered-entity, clinical-use, or controlled-access determination was available."
+    }
+  ]
+}

@@ -1,0 +1,607 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1700 1000" width="1700" height="1000">
+
+<defs>
+  <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="3.2" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="wideGlow" x="-80%" y="-80%" width="260%" height="260%">
+    <feGaussianBlur stdDeviation="7" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L8,3 L0,6 Z" fill="currentColor"/>
+  </marker>
+</defs>
+
+
+<style>
+  .phase1 { animation: phase1 8s ease-in-out infinite; }
+  .phase2 { animation: phase2 8s ease-in-out infinite; }
+  .phase3 { animation: phase3 6s ease-in-out infinite; }
+  .phase4 { animation: phase4 6s ease-in-out infinite; }
+  .phase5 { animation: phase5 6s ease-in-out infinite; }
+
+  .one1 { animation: one1 6s ease-in-out infinite; }
+  .one2 { animation: one2 6s ease-in-out infinite; }
+  .one3 { animation: one3 6s ease-in-out infinite; }
+  .one4 { animation: one4 6s ease-in-out infinite; }
+  .one5 { animation: one5 6s ease-in-out infinite; }
+
+  .cell1 { animation: cell1 6s ease-in-out infinite; }
+  .cell2 { animation: cell2 6s ease-in-out infinite; }
+  .cell3 { animation: cell3 6s ease-in-out infinite; }
+  .cell4 { animation: cell4 6s ease-in-out infinite; }
+  .cell5 { animation: cell5 6s ease-in-out infinite; }
+
+  .comp1 { animation: comp1 18s ease-in-out infinite; transform-box: fill-box; transform-origin:center; }
+  .comp2 { animation: comp2 18s ease-in-out infinite; transform-box: fill-box; transform-origin:center; }
+  .comp3 { animation: comp3 16s ease-in-out infinite; transform-box: fill-box; transform-origin:center; }
+  .comp4 { animation: comp4 16s ease-in-out infinite; transform-box: fill-box; transform-origin:center; }
+  .comp5 { animation: comp5 16s ease-in-out infinite; transform-box: fill-box; transform-origin:center; }
+
+  .spring1 { animation: spring1 8s cubic-bezier(.18,1.4,.45,1) infinite; transform-box: fill-box; transform-origin:left center; }
+  .spring2 { animation: spring2 6s cubic-bezier(.18,1.4,.45,1) infinite; transform-box: fill-box; transform-origin:left center; }
+  .spring3 { animation: spring3 6s cubic-bezier(.18,1.4,.45,1) infinite; transform-box: fill-box; transform-origin:left center; }
+  .spring4 { animation: spring4 6s cubic-bezier(.18,1.4,.45,1) infinite; transform-box: fill-box; transform-origin:left center; }
+  .spring5 { animation: spring5 6s cubic-bezier(.18,1.4,.45,1) infinite; transform-box: fill-box; transform-origin:left center; }
+
+  .dash { stroke-dasharray: 6 12; }
+  .softGlow { filter:url(#softGlow); }
+  .wideGlow { filter:url(#wideGlow); }
+
+  @keyframes phase1 { 0%,3%{opacity:0; transform:scale(.96)} 5%,15%{opacity:1; transform:scale(1)} 18%,100%{opacity:0; transform:scale(.96)} }
+  @keyframes phase2 { 0%,20%{opacity:0; transform:scale(.96)} 22%,34%{opacity:1; transform:scale(1)} 37%,100%{opacity:0; transform:scale(.96)} }
+  @keyframes phase3 { 0%,40%{opacity:0; transform:scale(.96)} 42%,54%{opacity:1; transform:scale(1)} 57%,100%{opacity:0; transform:scale(.96)} }
+  @keyframes phase4 { 0%,60%{opacity:0; transform:scale(.96)} 62%,74%{opacity:1; transform:scale(1)} 77%,100%{opacity:0; transform:scale(.96)} }
+  @keyframes phase5 { 0%,80%{opacity:0; transform:scale(.96)} 82%,94%{opacity:1; transform:scale(1)} 97%,100%{opacity:0; transform:scale(.96)} }
+
+  @keyframes one1 { 0%,3%{opacity:0; fill:#2a2a2a} 5%,15%{opacity:1; fill:#2a2a2a} 18%,100%{opacity:0; fill:#2a2a2a} }
+  @keyframes one2 { 0%,20%{opacity:0; fill:#2a2a2a} 22%,34%{opacity:1; fill:#2a2a2a} 37%,100%{opacity:0; fill:#2a2a2a} }
+  @keyframes one3 { 0%,40%{opacity:0; fill:#2a2a2a} 42%,54%{opacity:1; fill:#2a2a2a} 57%,100%{opacity:0; fill:#2a2a2a} }
+  @keyframes one4 { 0%,60%{opacity:0; fill:#2a2a2a} 62%,74%{opacity:1; fill:#2a2a2a} 77%,100%{opacity:0; fill:#2a2a2a} }
+  @keyframes one5 { 0%,80%{opacity:0; fill:#2a2a2a} 82%,94%{opacity:1; fill:#2a2a2a} 97%,100%{opacity:0; fill:#2a2a2a} }
+
+  @keyframes cell1 { 0%,3%{opacity:.08} 5%,15%{opacity:.95} 18%,100%{opacity:.08} }
+  @keyframes cell2 { 0%,20%{opacity:.08} 22%,34%{opacity:.95} 37%,100%{opacity:.08} }
+  @keyframes cell3 { 0%,40%{opacity:.08} 42%,54%{opacity:.95} 57%,100%{opacity:.08} }
+  @keyframes cell4 { 0%,60%{opacity:.08} 62%,74%{opacity:.95} 77%,100%{opacity:.08} }
+  @keyframes cell5 { 0%,80%{opacity:.08} 82%,94%{opacity:.95} 97%,100%{opacity:.08} }
+
+  @keyframes comp1 { 0%,3%{opacity:.34; transform:scale(1)} 5%,15%{opacity:1; transform:scale(1.03)} 18%,100%{opacity:.34; transform:scale(1)} }
+  @keyframes comp2 { 0%,20%{opacity:.34; transform:scale(1)} 22%,34%{opacity:1; transform:scale(1.03)} 37%,100%{opacity:.34; transform:scale(1)} }
+  @keyframes comp3 { 0%,40%{opacity:.34; transform:scale(1)} 42%,54%{opacity:1; transform:scale(1.03)} 57%,100%{opacity:.34; transform:scale(1)} }
+  @keyframes comp4 { 0%,60%{opacity:.34; transform:scale(1)} 62%,74%{opacity:1; transform:scale(1.03)} 77%,100%{opacity:.34; transform:scale(1)} }
+  @keyframes comp5 { 0%,80%{opacity:.34; transform:scale(1)} 82%,94%{opacity:1; transform:scale(1.03)} 97%,100%{opacity:.34; transform:scale(1)} }
+
+  @keyframes spring1 { 0%,3%{opacity:0; transform:scaleX(.75)} 5%{opacity:1; transform:scaleX(1.12)} 8%,15%{opacity:.85; transform:scaleX(1)} 18%,100%{opacity:0; transform:scaleX(.9)} }
+  @keyframes spring2 { 0%,20%{opacity:0; transform:scaleX(.75)} 22%{opacity:1; transform:scaleX(1.12)} 25%,34%{opacity:.85; transform:scaleX(1)} 37%,100%{opacity:0; transform:scaleX(.9)} }
+  @keyframes spring3 { 0%,40%{opacity:0; transform:scaleX(.75)} 42%{opacity:1; transform:scaleX(1.12)} 45%,54%{opacity:.85; transform:scaleX(1)} 57%,100%{opacity:0; transform:scaleX(.9)} }
+  @keyframes spring4 { 0%,60%{opacity:0; transform:scaleX(.75)} 62%{opacity:1; transform:scaleX(1.12)} 65%,74%{opacity:.85; transform:scaleX(1)} 77%,100%{opacity:0; transform:scaleX(.9)} }
+  @keyframes spring5 { 0%,80%{opacity:0; transform:scaleX(.75)} 82%{opacity:1; transform:scaleX(1.12)} 85%,94%{opacity:.85; transform:scaleX(1)} 97%,100%{opacity:0; transform:scaleX(.9)} }
+
+  @keyframes dashFlow { from{stroke-dashoffset:90} to{stroke-dashoffset:0} }
+</style>
+
+<rect x="0" y="0" width="1700" height="1000" rx="0" fill="#fff7f8" stroke="none" stroke-width="0" opacity="1" />
+<text x="60" y="58" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700" fill="#2a2a2a" text-anchor="start" opacity="1" >Emergent Decision-Making Environment Schematic</text>
+<text x="60" y="90" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="400" fill="#76656a" text-anchor="start" opacity="1">
+<tspan x="60" dy="0">Using one-hot encoded component specifications for agentic AI orchestration and routing.</tspan>
+</text>
+<text x="1580" y="58" font-family="DejaVu Sans Mono" font-size="14" font-weight="700" fill="#76656a" text-anchor="end" opacity="1" >v3b2_columns_pale_coral_viewlets</text>
+<rect x="48" y="135" width="720" height="735" rx="22" fill="#ffffff" stroke="#ffd7df" stroke-width="1.1" opacity="0.98" />
+<rect x="800" y="135" width="640" height="735" rx="22" fill="#ffffff" stroke="#ffd7df" stroke-width="1.1" opacity="0.98" />
+<text x="84" y="180" font-family="Inter, Arial, sans-serif" font-size="21" font-weight="700" fill="#2a2a2a" text-anchor="start" opacity="1" >Encoded AI Instructions</text>
+<text x="830" y="180" font-family="Inter, Arial, sans-serif" font-size="21" font-weight="700" fill="#2a2a2a" text-anchor="start" opacity="1" >Directed Component Graph </text>
+<g class="phase1">
+<rect x="505" y="154" width="210" height="30" rx="9" fill="#fff0f3" stroke="#ff7a97" stroke-width="1" opacity="1" />
+<text x="610" y="174" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" >review ready</text>
+</g>
+<g class="phase2">
+<rect x="505" y="154" width="210" height="30" rx="9" fill="#fff0f3" stroke="#d4af37" stroke-width="1" opacity="1" />
+<text x="610" y="174" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" >integrity signal</text>
+</g>
+<g class="phase3">
+<rect x="505" y="154" width="210" height="30" rx="9" fill="#fff0f3" stroke="#e85a7a" stroke-width="1" opacity="1" />
+<text x="610" y="174" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" >adverse event route</text>
+</g>
+<g class="phase4">
+<rect x="505" y="154" width="210" height="30" rx="9" fill="#fff0f3" stroke="#7dd3ce" stroke-width="1" opacity="1" />
+<text x="610" y="174" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" >data rights</text>
+</g>
+<g class="phase5">
+<rect x="505" y="154" width="210" height="30" rx="9" fill="#fff0f3" stroke="#4db8b3" stroke-width="1" opacity="1" />
+<text x="610" y="174" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" >restart / resume</text>
+</g>
+<rect x="82" y="230" width="165" height="88" rx="0" fill="#fff0f3" stroke="#f0c9d2" stroke-width="1.05" opacity="1" />
+<path d="M82 230 L247 318" fill="none" stroke="#f0c9d2" stroke-width="1" opacity="1"/>
+<text x="96" y="302" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#76656a" text-anchor="start" opacity="1" >signal</text>
+<text x="233" y="254" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#76656a" text-anchor="end" opacity="1" >route</text>
+<rect x="247" y="230" width="75" height="88" rx="0" fill="#fff0f3" stroke="#f0c9d2" stroke-width="1.05" opacity="1" />
+<text x="284.5" y="279.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="800" fill="#2a2a2a" text-anchor="middle" opacity="1" >ReviewSvc</text>
+<rect x="322" y="230" width="75" height="88" rx="0" fill="#fff0f3" stroke="#f0c9d2" stroke-width="1.05" opacity="1" />
+<text x="359.5" y="279.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="800" fill="#2a2a2a" text-anchor="middle" opacity="1" >Integrity</text>
+<rect x="397" y="230" width="75" height="88" rx="0" fill="#fff0f3" stroke="#f0c9d2" stroke-width="1.05" opacity="1" />
+<text x="434.5" y="279.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="800" fill="#2a2a2a" text-anchor="middle" opacity="1" >SafetySvc</text>
+<rect x="472" y="230" width="75" height="88" rx="0" fill="#fff0f3" stroke="#f0c9d2" stroke-width="1.05" opacity="1" />
+<text x="509.5" y="267.0" font-family="Inter, Arial, sans-serif" font-size="10.6" font-weight="800" fill="#2a2a2a" text-anchor="middle" opacity="1" >Steward</text>
+<text x="509.5" y="288.0" font-family="Inter, Arial, sans-serif" font-size="10.6" font-weight="800" fill="#2a2a2a" text-anchor="middle" opacity="1" >Queue</text>
+<rect x="547" y="230" width="75" height="88" rx="0" fill="#fff0f3" stroke="#f0c9d2" stroke-width="1.05" opacity="1" />
+<text x="584.5" y="279.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="800" fill="#2a2a2a" text-anchor="middle" opacity="1" >AuditLog</text>
+<rect x="622" y="230" width="75" height="88" rx="0" fill="#fff0f3" stroke="#f0c9d2" stroke-width="1.05" opacity="1" />
+<text x="659.5" y="267.0" font-family="Inter, Arial, sans-serif" font-size="10.6" font-weight="800" fill="#2a2a2a" text-anchor="middle" opacity="1" >Syndication</text>
+<text x="659.5" y="288.0" font-family="Inter, Arial, sans-serif" font-size="10.6" font-weight="800" fill="#2a2a2a" text-anchor="middle" opacity="1" >RPC</text>
+<rect x="697" y="230" width="75" height="88" rx="0" fill="#fff0f3" stroke="#f0c9d2" stroke-width="1.05" opacity="1" />
+<text x="734.5" y="279.0" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="800" fill="#2a2a2a" text-anchor="middle" opacity="1" >DataRights</text>
+<rect x="82" y="318" width="165" height="52" rx="0" fill="#fff7f8" stroke="#f0c9d2" stroke-width="1.05" opacity="1" />
+<text x="235" y="337.0" font-family="Inter, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2a2a2a" text-anchor="end" opacity="1" >Review</text>
+<text x="235" y="357.0" font-family="Inter, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2a2a2a" text-anchor="end" opacity="1" >response</text>
+<rect x="247" y="318" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="284.5" y="352.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="251" y="322" width="67" height="44" rx="6" fill="#ff7a97" stroke="#ff7a97" stroke-width="0" opacity="1" class="cell1" />
+<text x="284.5" y="352.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one1" >1</text>
+<rect x="251" y="322" width="67" height="44" rx="6" fill="#ff7a97" stroke="#ff7a97" stroke-width="0" opacity="1" class="cell5" />
+<text x="284.5" y="352.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one5" >1</text>
+<rect x="322" y="318" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="359.5" y="352.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="397" y="318" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="434.5" y="352.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="472" y="318" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="509.5" y="352.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="547" y="318" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="584.5" y="352.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="551" y="322" width="67" height="44" rx="6" fill="#7dd3ce" stroke="#7dd3ce" stroke-width="0" opacity="1" class="cell1" />
+<text x="584.5" y="352.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one1" >1</text>
+<rect x="622" y="318" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="659.5" y="352.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="626" y="322" width="67" height="44" rx="6" fill="#ff7a97" stroke="#ff7a97" stroke-width="0" opacity="1" class="cell1" />
+<text x="659.5" y="352.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one1" >1</text>
+<rect x="697" y="318" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="734.5" y="352.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="82" y="370" width="165" height="52" rx="0" fill="#fff7f8" stroke="#f0c9d2" stroke-width="1.05" opacity="1" />
+<text x="235" y="389.0" font-family="Inter, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2a2a2a" text-anchor="end" opacity="1" >Participant</text>
+<text x="235" y="409.0" font-family="Inter, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2a2a2a" text-anchor="end" opacity="1" >profile</text>
+<rect x="247" y="370" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="284.5" y="404.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="322" y="370" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="359.5" y="404.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="326" y="374" width="67" height="44" rx="6" fill="#d4af37" stroke="#d4af37" stroke-width="0" opacity="1" class="cell2" />
+<text x="359.5" y="404.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one2" >1</text>
+<rect x="397" y="370" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="434.5" y="404.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="472" y="370" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="509.5" y="404.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="547" y="370" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="584.5" y="404.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="622" y="370" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="659.5" y="404.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="697" y="370" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="734.5" y="404.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="701" y="374" width="67" height="44" rx="6" fill="#d4af37" stroke="#d4af37" stroke-width="0" opacity="1" class="cell4" />
+<text x="734.5" y="404.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one4" >1</text>
+<rect x="82" y="422" width="165" height="52" rx="0" fill="#fff7f8" stroke="#f0c9d2" stroke-width="1.05" opacity="1" />
+<text x="235" y="441.0" font-family="Inter, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2a2a2a" text-anchor="end" opacity="1" >Product</text>
+<text x="235" y="461.0" font-family="Inter, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2a2a2a" text-anchor="end" opacity="1" >sample</text>
+<rect x="247" y="422" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="284.5" y="456.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="322" y="422" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="359.5" y="456.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="397" y="422" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="434.5" y="456.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="401" y="426" width="67" height="44" rx="6" fill="#e85a7a" stroke="#e85a7a" stroke-width="0" opacity="1" class="cell3" />
+<text x="434.5" y="456.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one3" >1</text>
+<rect x="472" y="422" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="509.5" y="456.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="547" y="422" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="584.5" y="456.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="622" y="422" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="659.5" y="456.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="697" y="422" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="734.5" y="456.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="82" y="474" width="165" height="52" rx="0" fill="#fff7f8" stroke="#f0c9d2" stroke-width="1.05" opacity="1" />
+<text x="235" y="493.0" font-family="Inter, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2a2a2a" text-anchor="end" opacity="1" >Integrity</text>
+<text x="235" y="513.0" font-family="Inter, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2a2a2a" text-anchor="end" opacity="1" >signal</text>
+<rect x="247" y="474" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="284.5" y="508.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="322" y="474" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="359.5" y="508.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="326" y="478" width="67" height="44" rx="6" fill="#d4af37" stroke="#d4af37" stroke-width="0" opacity="1" class="cell2" />
+<text x="359.5" y="508.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one2" >1</text>
+<rect x="397" y="474" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="434.5" y="508.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="472" y="474" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="509.5" y="508.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="476" y="478" width="67" height="44" rx="6" fill="#d4af37" stroke="#d4af37" stroke-width="0" opacity="1" class="cell2" />
+<text x="509.5" y="508.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one2" >1</text>
+<rect x="547" y="474" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="584.5" y="508.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="551" y="478" width="67" height="44" rx="6" fill="#d4af37" stroke="#d4af37" stroke-width="0" opacity="1" class="cell2" />
+<text x="584.5" y="508.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one2" >1</text>
+<rect x="622" y="474" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="659.5" y="508.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="697" y="474" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="734.5" y="508.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="82" y="526" width="165" height="52" rx="0" fill="#fff7f8" stroke="#f0c9d2" stroke-width="1.05" opacity="1" />
+<text x="235" y="545.0" font-family="Inter, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2a2a2a" text-anchor="end" opacity="1" >AE / safety</text>
+<text x="235" y="565.0" font-family="Inter, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2a2a2a" text-anchor="end" opacity="1" >report</text>
+<rect x="247" y="526" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="284.5" y="560.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="322" y="526" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="359.5" y="560.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="397" y="526" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="434.5" y="560.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="401" y="530" width="67" height="44" rx="6" fill="#e85a7a" stroke="#e85a7a" stroke-width="0" opacity="1" class="cell3" />
+<text x="434.5" y="560.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one3" >1</text>
+<rect x="472" y="526" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="509.5" y="560.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="476" y="530" width="67" height="44" rx="6" fill="#e85a7a" stroke="#e85a7a" stroke-width="0" opacity="1" class="cell3" />
+<text x="509.5" y="560.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one3" >1</text>
+<rect x="547" y="526" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="584.5" y="560.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="551" y="530" width="67" height="44" rx="6" fill="#e85a7a" stroke="#e85a7a" stroke-width="0" opacity="1" class="cell3" />
+<text x="584.5" y="560.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one3" >1</text>
+<rect x="622" y="526" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="659.5" y="560.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="697" y="526" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="734.5" y="560.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="82" y="578" width="165" height="52" rx="0" fill="#fff7f8" stroke="#f0c9d2" stroke-width="1.05" opacity="1" />
+<text x="235" y="597.0" font-family="Inter, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2a2a2a" text-anchor="end" opacity="1" >Consent /</text>
+<text x="235" y="617.0" font-family="Inter, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2a2a2a" text-anchor="end" opacity="1" >GDPR</text>
+<rect x="247" y="578" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="284.5" y="612.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="322" y="578" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="359.5" y="612.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="397" y="578" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="434.5" y="612.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="472" y="578" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="509.5" y="612.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="547" y="578" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="584.5" y="612.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="551" y="582" width="67" height="44" rx="6" fill="#7dd3ce" stroke="#7dd3ce" stroke-width="0" opacity="1" class="cell4" />
+<text x="584.5" y="612.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one4" >1</text>
+<rect x="622" y="578" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="659.5" y="612.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="697" y="578" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="734.5" y="612.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="701" y="582" width="67" height="44" rx="6" fill="#7dd3ce" stroke="#7dd3ce" stroke-width="0" opacity="1" class="cell4" />
+<text x="734.5" y="612.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one4" >1</text>
+<rect x="82" y="630" width="165" height="52" rx="0" fill="#fff7f8" stroke="#f0c9d2" stroke-width="1.05" opacity="1" />
+<text x="235" y="649.0" font-family="Inter, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2a2a2a" text-anchor="end" opacity="1" >Restart /</text>
+<text x="235" y="669.0" font-family="Inter, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2a2a2a" text-anchor="end" opacity="1" >retry</text>
+<rect x="247" y="630" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="284.5" y="664.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="322" y="630" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="359.5" y="664.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="326" y="634" width="67" height="44" rx="6" fill="#d4af37" stroke="#d4af37" stroke-width="0" opacity="1" class="cell5" />
+<text x="359.5" y="664.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one5" >1</text>
+<rect x="397" y="630" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="434.5" y="664.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="472" y="630" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="509.5" y="664.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="476" y="634" width="67" height="44" rx="6" fill="#e85a7a" stroke="#e85a7a" stroke-width="0" opacity="1" class="cell5" />
+<text x="509.5" y="664.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one5" >1</text>
+<rect x="547" y="630" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="584.5" y="664.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="551" y="634" width="67" height="44" rx="6" fill="#7dd3ce" stroke="#7dd3ce" stroke-width="0" opacity="1" class="cell5" />
+<text x="584.5" y="664.0" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="900" fill="#2a2a2a" text-anchor="middle" opacity="1" class="one5" >1</text>
+<rect x="622" y="630" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="659.5" y="664.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="697" y="630" width="75" height="52" rx="0" fill="#ffffff" stroke="#f0c9d2" stroke-width="1.0" opacity="1" />
+<text x="734.5" y="664.0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#b4979f" text-anchor="middle" opacity="0.5" >0</text>
+<rect x="920" y="245" width="155" height="88" rx="18" fill="#fff8fa" stroke="#ff7a97" stroke-width="1.8" opacity="1" class="comp1" />
+<rect x="934" y="258" width="46" height="8" rx="4" fill="#ff7a97" stroke="#ff7a97" stroke-width="0" opacity="0.85" class="comp1" />
+<text x="997.5" y="290" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#2a2a2a" text-anchor="middle" opacity="1">
+<tspan x="997.5" dy="0">Review</tspan>
+<tspan x="997.5" dy="16.52">Service</tspan>
+</text>
+<text x="997.5" y="315" font-family="DejaVu Sans Mono" font-size="9" font-weight="700" fill="#76656a" text-anchor="middle" opacity="1" >component</text>
+<rect x="1210" y="245" width="165" height="88" rx="18" fill="#fff8fa" stroke="#d4af37" stroke-width="1.8" opacity="1" class="comp2" />
+<rect x="1224" y="258" width="46" height="8" rx="4" fill="#d4af37" stroke="#d4af37" stroke-width="0" opacity="0.85" class="comp2" />
+<text x="1292.5" y="290" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#2a2a2a" text-anchor="middle" opacity="1">
+<tspan x="1292.5" dy="0">Integrity</tspan>
+<tspan x="1292.5" dy="16.52">Service</tspan>
+</text>
+<text x="1292.5" y="315" font-family="DejaVu Sans Mono" font-size="9" font-weight="700" fill="#76656a" text-anchor="middle" opacity="1" >component</text>
+<rect x="920" y="470" width="165" height="88" rx="18" fill="#fff8fa" stroke="#e85a7a" stroke-width="1.8" opacity="1" class="comp3" />
+<rect x="934" y="483" width="46" height="8" rx="4" fill="#e85a7a" stroke="#e85a7a" stroke-width="0" opacity="0.85" class="comp3" />
+<text x="1002.5" y="515" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#2a2a2a" text-anchor="middle" opacity="1">
+<tspan x="1002.5" dy="0">Safety</tspan>
+<tspan x="1002.5" dy="16.52">Intake</tspan>
+</text>
+<text x="1002.5" y="540" font-family="DejaVu Sans Mono" font-size="9" font-weight="700" fill="#76656a" text-anchor="middle" opacity="1" >care route</text>
+<rect x="1215" y="470" width="165" height="88" rx="18" fill="#fff8fa" stroke="#e85a7a" stroke-width="1.8" opacity="1" class="comp3" />
+<rect x="1229" y="483" width="46" height="8" rx="4" fill="#e85a7a" stroke="#e85a7a" stroke-width="0" opacity="0.85" class="comp3" />
+<text x="1297.5" y="515" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#2a2a2a" text-anchor="middle" opacity="1">
+<tspan x="1297.5" dy="0">Human</tspan>
+<tspan x="1297.5" dy="16.52">Steward</tspan>
+</text>
+<text x="1297.5" y="540" font-family="DejaVu Sans Mono" font-size="9" font-weight="700" fill="#76656a" text-anchor="middle" opacity="1" >judgment</text>
+<rect x="920" y="690" width="165" height="88" rx="18" fill="#fff8fa" stroke="#7dd3ce" stroke-width="1.8" opacity="1" class="comp4" />
+<rect x="934" y="703" width="46" height="8" rx="4" fill="#7dd3ce" stroke="#7dd3ce" stroke-width="0" opacity="0.85" class="comp4" />
+<text x="1002.5" y="735" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#2a2a2a" text-anchor="middle" opacity="1">
+<tspan x="1002.5" dy="0">Data</tspan>
+<tspan x="1002.5" dy="16.52">Rights</tspan>
+</text>
+<text x="1002.5" y="760" font-family="DejaVu Sans Mono" font-size="9" font-weight="700" fill="#76656a" text-anchor="middle" opacity="1" >GDPR</text>
+<rect x="1210" y="690" width="165" height="88" rx="18" fill="#fff8fa" stroke="#4db8b3" stroke-width="1.8" opacity="1" class="comp5" />
+<rect x="1224" y="703" width="46" height="8" rx="4" fill="#4db8b3" stroke="#4db8b3" stroke-width="0" opacity="0.85" class="comp5" />
+<text x="1292.5" y="735" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#2a2a2a" text-anchor="middle" opacity="1">
+<tspan x="1292.5" dy="0">Restart</tspan>
+<tspan x="1292.5" dy="16.52">Worker</tspan>
+</text>
+<text x="1292.5" y="760" font-family="DejaVu Sans Mono" font-size="9" font-weight="700" fill="#76656a" text-anchor="middle" opacity="1" >resume</text>
+<path d="M997.5 289.0 C1000.0 319.0 1000.0 484.0 1002.5 514.0" fill="none" stroke="#e85a7a" stroke-width="1.8" opacity="0.85" stroke-dasharray="6 10" marker-end="url(#arrow)" class="spring3 dash"/>
+<path d="M1292.5 289.0 C1295.0 319.0 1295.0 484.0 1297.5 514.0" fill="none" stroke="#d4af37" stroke-width="1.8" opacity="0.85" stroke-dasharray="6 10" marker-end="url(#arrow)" class="spring2 dash"/>
+<path d="M1002.5 514.0 C1150.0 544.0 1150.0 484.0 1297.5 514.0" fill="none" stroke="#e85a7a" stroke-width="1.8" opacity="0.85" stroke-dasharray="6 10" marker-end="url(#arrow)" class="spring3 dash"/>
+<path d="M1297.5 514.0 C1150.0 544.0 1150.0 704.0 1002.5 734.0" fill="none" stroke="#7dd3ce" stroke-width="1.8" opacity="0.85" stroke-dasharray="6 10" marker-end="url(#arrow)" class="spring4 dash"/>
+<path d="M997.5 289.0 C1145.0 319.0 1145.0 704.0 1292.5 734.0" fill="none" stroke="#4db8b3" stroke-width="1.8" opacity="0.85" stroke-dasharray="6 10" marker-end="url(#arrow)" class="spring5 dash"/>
+<path d="M997.5 289.0 C1000.0 319.0 1000.0 704.0 1002.5 734.0" fill="none" stroke="#7dd3ce" stroke-width="1.8" opacity="0.85" stroke-dasharray="6 10" marker-end="url(#arrow)" class="spring1 dash"/>
+<path d="M730 330 C790 310 825 269.0 912.5 289.0" fill="none" stroke="#ff7a97" stroke-width="3.0" opacity="1" stroke-dasharray="5 10" marker-end="url(#arrow)" class="spring1 dash"/>
+<path d="M730 410 C790 390 825 269.0 1207.5 289.0" fill="none" stroke="#d4af37" stroke-width="3.0" opacity="1" stroke-dasharray="5 10" marker-end="url(#arrow)" class="spring2 dash"/>
+<path d="M730 500 C790 480 825 494.0 917.5 514.0" fill="none" stroke="#e85a7a" stroke-width="3.0" opacity="1" stroke-dasharray="5 10" marker-end="url(#arrow)" class="spring3 dash"/>
+<path d="M730 590 C790 570 825 714.0 917.5 734.0" fill="none" stroke="#7dd3ce" stroke-width="3.0" opacity="1" stroke-dasharray="5 10" marker-end="url(#arrow)" class="spring4 dash"/>
+<path d="M730 670 C790 650 825 714.0 1207.5 734.0" fill="none" stroke="#4db8b3" stroke-width="3.0" opacity="1" stroke-dasharray="5 10" marker-end="url(#arrow)" class="spring5 dash"/>
+<g class="phase1">
+<rect x="835" y="130" width="126" height="96" rx="8" fill="#ffffff" stroke="#ff7a97" stroke-width="1.3" opacity="1" />
+<line x1="835" y1="150" x2="961" y2="150" stroke="#ff7a97" stroke-width="0.9" opacity="0.75"/>
+<circle cx="846" cy="140" r="3.2" fill="#ffffff" stroke="#ff7a97" stroke-width="0.8" opacity="1"/>
+<circle cx="857" cy="140" r="3.2" fill="#ffffff" stroke="#ff7a97" stroke-width="0.8" opacity="1"/>
+<circle cx="868" cy="140" r="3.2" fill="#ffffff" stroke="#ff7a97" stroke-width="0.8" opacity="1"/>
+<rect x="847" y="160" width="102" height="8" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="0.8" />
+<rect x="847" y="176" width="102" height="8" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="0.8" />
+<rect x="847" y="192" width="102" height="8" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="0.8" />
+<rect x="847" y="208" width="102" height="8" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="0.8" />
+<rect x="863" y="232" width="70" height="10" rx="4" fill="#4db8b3" stroke="#4db8b3" stroke-width="0" opacity="0.85" />
+<text x="898.0" y="240" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="600" fill="#76656a" text-anchor="middle" opacity="1" >review form</text>
+</g>
+<path d="M997.5 289.0 C947.75 254.0 947.75 213.0 898.0 178.0" fill="none" stroke="#ff7a97" stroke-width="1.2" opacity="0.75" stroke-dasharray="4 8" class="phase1"/>
+<g class="phase1">
+<rect x="835" y="250" width="126" height="96" rx="8" fill="#ffffff" stroke="#ff7a97" stroke-width="1.3" opacity="1" />
+<line x1="835" y1="270" x2="961" y2="270" stroke="#ff7a97" stroke-width="0.9" opacity="0.75"/>
+<circle cx="846" cy="260" r="3.2" fill="#ffffff" stroke="#ff7a97" stroke-width="0.8" opacity="1"/>
+<circle cx="857" cy="260" r="3.2" fill="#ffffff" stroke="#ff7a97" stroke-width="0.8" opacity="1"/>
+<circle cx="868" cy="260" r="3.2" fill="#ffffff" stroke="#ff7a97" stroke-width="0.8" opacity="1"/>
+<circle cx="855" cy="288" r="7" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1"/>
+<rect x="869" y="283" width="82" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1" />
+<rect x="869" y="291" width="54" height="5" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1" />
+<circle cx="855" cy="306" r="7" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1"/>
+<rect x="869" y="301" width="82" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1" />
+<rect x="869" y="309" width="54" height="5" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1" />
+<circle cx="855" cy="324" r="7" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1"/>
+<rect x="869" y="319" width="82" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1" />
+<rect x="869" y="327" width="54" height="5" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1" />
+<circle cx="855" cy="342" r="7" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1"/>
+<rect x="869" y="337" width="82" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1" />
+<rect x="869" y="345" width="54" height="5" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1" />
+<text x="898.0" y="362" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="600" fill="#76656a" text-anchor="middle" opacity="1" >moderation</text>
+</g>
+<path d="M997.5 289.0 C947.75 254.0 947.75 333.0 898.0 298.0" fill="none" stroke="#ff7a97" stroke-width="1.2" opacity="0.75" stroke-dasharray="4 8" class="phase1"/>
+<g class="phase1">
+<rect x="835" y="370" width="126" height="96" rx="8" fill="#ffffff" stroke="#ff7a97" stroke-width="1.3" opacity="1" />
+<line x1="835" y1="390" x2="961" y2="390" stroke="#ff7a97" stroke-width="0.9" opacity="0.75"/>
+<circle cx="846" cy="380" r="3.2" fill="#ffffff" stroke="#ff7a97" stroke-width="0.8" opacity="1"/>
+<circle cx="857" cy="380" r="3.2" fill="#ffffff" stroke="#ff7a97" stroke-width="0.8" opacity="1"/>
+<circle cx="868" cy="380" r="3.2" fill="#ffffff" stroke="#ff7a97" stroke-width="0.8" opacity="1"/>
+<rect x="847.0" y="400" width="27.0" height="21" rx="4" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="0.75" />
+<rect x="879.0" y="400" width="27.0" height="21" rx="4" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="0.75" />
+<rect x="911.0" y="400" width="27.0" height="21" rx="4" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="0.75" />
+<rect x="847.0" y="430" width="27.0" height="21" rx="4" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="0.75" />
+<rect x="879.0" y="430" width="27.0" height="21" rx="4" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="0.75" />
+<rect x="911.0" y="430" width="27.0" height="21" rx="4" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="0.75" />
+<rect x="855" y="470" width="86" height="7" rx="3" fill="#4db8b3" stroke="#4db8b3" stroke-width="0" opacity="0.85" />
+<text x="898.0" y="476" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="600" fill="#76656a" text-anchor="middle" opacity="1" >syndication</text>
+</g>
+<path d="M997.5 289.0 C947.75 254.0 947.75 453.0 898.0 418.0" fill="none" stroke="#ff7a97" stroke-width="1.2" opacity="0.75" stroke-dasharray="4 8" class="phase1"/>
+<g class="phase2">
+<rect x="1010" y="130" width="126" height="96" rx="8" fill="#ffffff" stroke="#d4af37" stroke-width="1.3" opacity="1" />
+<line x1="1010" y1="150" x2="1136" y2="150" stroke="#d4af37" stroke-width="0.9" opacity="0.75"/>
+<circle cx="1021" cy="140" r="3.2" fill="#ffffff" stroke="#d4af37" stroke-width="0.8" opacity="1"/>
+<circle cx="1032" cy="140" r="3.2" fill="#ffffff" stroke="#d4af37" stroke-width="0.8" opacity="1"/>
+<circle cx="1043" cy="140" r="3.2" fill="#ffffff" stroke="#d4af37" stroke-width="0.8" opacity="1"/>
+<rect x="1022" y="160" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1080" y="160" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<circle cx="1119" cy="163" r="5" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1"/>
+<rect x="1022" y="175" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1080" y="175" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<circle cx="1119" cy="178" r="5" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1"/>
+<rect x="1022" y="190" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1080" y="190" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<circle cx="1119" cy="193" r="5" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1"/>
+<rect x="1022" y="205" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1080" y="205" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<circle cx="1119" cy="208" r="5" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1"/>
+<rect x="1022" y="220" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1080" y="220" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<circle cx="1119" cy="223" r="5" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1"/>
+<text x="1073.0" y="242" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="600" fill="#76656a" text-anchor="middle" opacity="1" >campaign fit</text>
+</g>
+<path d="M1292.5 289.0 C1182.75 254.0 1182.75 213.0 1073.0 178.0" fill="none" stroke="#d4af37" stroke-width="1.2" opacity="0.75" stroke-dasharray="4 8" class="phase2"/>
+<g class="phase2">
+<rect x="1010" y="250" width="126" height="96" rx="8" fill="#ffffff" stroke="#d4af37" stroke-width="1.3" opacity="1" />
+<line x1="1010" y1="270" x2="1136" y2="270" stroke="#d4af37" stroke-width="0.9" opacity="0.75"/>
+<circle cx="1021" cy="260" r="3.2" fill="#ffffff" stroke="#d4af37" stroke-width="0.8" opacity="1"/>
+<circle cx="1032" cy="260" r="3.2" fill="#ffffff" stroke="#d4af37" stroke-width="0.8" opacity="1"/>
+<circle cx="1043" cy="260" r="3.2" fill="#ffffff" stroke="#d4af37" stroke-width="0.8" opacity="1"/>
+<rect x="1022" y="280" width="43" height="54" rx="4" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1" />
+<rect x="1076" y="285" width="54" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1" />
+<rect x="1076" y="297" width="54" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1" />
+<rect x="1076" y="309" width="54" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1" />
+<rect x="1076" y="321" width="54" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="1" />
+<rect x="1076" y="341" width="42" height="10" rx="4" fill="#4db8b3" stroke="#4db8b3" stroke-width="0" opacity="0.85" />
+<text x="1073.0" y="362" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="600" fill="#76656a" text-anchor="middle" opacity="1" >household check</text>
+</g>
+<path d="M1292.5 289.0 C1182.75 254.0 1182.75 333.0 1073.0 298.0" fill="none" stroke="#d4af37" stroke-width="1.2" opacity="0.75" stroke-dasharray="4 8" class="phase2"/>
+<g class="phase2">
+<rect x="1010" y="370" width="126" height="96" rx="8" fill="#ffffff" stroke="#d4af37" stroke-width="1.3" opacity="1" />
+<line x1="1010" y1="390" x2="1136" y2="390" stroke="#d4af37" stroke-width="0.9" opacity="0.75"/>
+<circle cx="1021" cy="380" r="3.2" fill="#ffffff" stroke="#d4af37" stroke-width="0.8" opacity="1"/>
+<circle cx="1032" cy="380" r="3.2" fill="#ffffff" stroke="#d4af37" stroke-width="0.8" opacity="1"/>
+<circle cx="1043" cy="380" r="3.2" fill="#ffffff" stroke="#d4af37" stroke-width="0.8" opacity="1"/>
+<rect x="1022" y="405" width="98" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1022" y="418" width="98" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1022" y="431" width="98" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1022" y="444" width="98" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1022" y="457" width="98" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1036" y="473" width="72" height="10" rx="4" fill="#4db8b3" stroke="#4db8b3" stroke-width="0" opacity="0.85" />
+<text x="1073.0" y="482" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="600" fill="#76656a" text-anchor="middle" opacity="1" >human review</text>
+</g>
+<path d="M1292.5 289.0 C1182.75 254.0 1182.75 453.0 1073.0 418.0" fill="none" stroke="#d4af37" stroke-width="1.2" opacity="0.75" stroke-dasharray="4 8" class="phase2"/>
+<g class="phase3">
+<rect x="1185" y="130" width="126" height="96" rx="8" fill="#ffffff" stroke="#e85a7a" stroke-width="1.3" opacity="1" />
+<line x1="1185" y1="150" x2="1311" y2="150" stroke="#e85a7a" stroke-width="0.9" opacity="0.75"/>
+<circle cx="1196" cy="140" r="3.2" fill="#ffffff" stroke="#e85a7a" stroke-width="0.8" opacity="1"/>
+<circle cx="1207" cy="140" r="3.2" fill="#ffffff" stroke="#e85a7a" stroke-width="0.8" opacity="1"/>
+<circle cx="1218" cy="140" r="3.2" fill="#ffffff" stroke="#e85a7a" stroke-width="0.8" opacity="1"/>
+<path d="M1248.0 165 L1277.0 218 L1219.0 218 Z" fill="#fff4f6" stroke="#e85a7a" stroke-width="1.2"/>
+<text x="1248.0" y="205" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="900" fill="#e85a7a" text-anchor="middle" opacity="1" >!</text>
+<rect x="1218.0" y="226" width="60" height="10" rx="4" fill="#4db8b3" stroke="#4db8b3" stroke-width="0" opacity="0.85" />
+<text x="1248.0" y="242" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="600" fill="#76656a" text-anchor="middle" opacity="1" >AE intake</text>
+</g>
+<path d="M1002.5 514.0 C1125.25 479.0 1125.25 213.0 1248.0 178.0" fill="none" stroke="#e85a7a" stroke-width="1.2" opacity="0.75" stroke-dasharray="4 8" class="phase3"/>
+<g class="phase3">
+<rect x="1185" y="250" width="126" height="96" rx="8" fill="#ffffff" stroke="#e85a7a" stroke-width="1.3" opacity="1" />
+<line x1="1185" y1="270" x2="1311" y2="270" stroke="#e85a7a" stroke-width="0.9" opacity="0.75"/>
+<circle cx="1196" cy="260" r="3.2" fill="#ffffff" stroke="#e85a7a" stroke-width="0.8" opacity="1"/>
+<circle cx="1207" cy="260" r="3.2" fill="#ffffff" stroke="#e85a7a" stroke-width="0.8" opacity="1"/>
+<circle cx="1218" cy="260" r="3.2" fill="#ffffff" stroke="#e85a7a" stroke-width="0.8" opacity="1"/>
+<rect x="1197" y="298" width="102" height="13" rx="5" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1197" y="298" width="58.13999999999999" height="13" rx="5" fill="#4db8b3" stroke="#4db8b3" stroke-width="0" opacity="0.85" />
+<circle cx="1248.0" cy="338" r="18" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1"/>
+<text x="1248.0" y="362" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="600" fill="#76656a" text-anchor="middle" opacity="1" >safety queue</text>
+</g>
+<path d="M1002.5 514.0 C1125.25 479.0 1125.25 333.0 1248.0 298.0" fill="none" stroke="#e85a7a" stroke-width="1.2" opacity="0.75" stroke-dasharray="4 8" class="phase3"/>
+<g class="phase3">
+<rect x="1185" y="370" width="126" height="96" rx="8" fill="#ffffff" stroke="#e85a7a" stroke-width="1.3" opacity="1" />
+<line x1="1185" y1="390" x2="1311" y2="390" stroke="#e85a7a" stroke-width="0.9" opacity="0.75"/>
+<circle cx="1196" cy="380" r="3.2" fill="#ffffff" stroke="#e85a7a" stroke-width="0.8" opacity="1"/>
+<circle cx="1207" cy="380" r="3.2" fill="#ffffff" stroke="#e85a7a" stroke-width="0.8" opacity="1"/>
+<circle cx="1218" cy="380" r="3.2" fill="#ffffff" stroke="#e85a7a" stroke-width="0.8" opacity="1"/>
+<rect x="1197" y="405" width="98" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1197" y="418" width="98" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1197" y="431" width="98" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1197" y="444" width="98" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1197" y="457" width="98" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1211" y="473" width="72" height="10" rx="4" fill="#4db8b3" stroke="#4db8b3" stroke-width="0" opacity="0.85" />
+<text x="1248.0" y="482" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="600" fill="#76656a" text-anchor="middle" opacity="1" >follow-up</text>
+</g>
+<path d="M1002.5 514.0 C1125.25 479.0 1125.25 453.0 1248.0 418.0" fill="none" stroke="#e85a7a" stroke-width="1.2" opacity="0.75" stroke-dasharray="4 8" class="phase3"/>
+<g class="phase4">
+<rect x="835" y="625" width="126" height="96" rx="8" fill="#ffffff" stroke="#7dd3ce" stroke-width="1.3" opacity="1" />
+<line x1="835" y1="645" x2="961" y2="645" stroke="#7dd3ce" stroke-width="0.9" opacity="0.75"/>
+<circle cx="846" cy="635" r="3.2" fill="#ffffff" stroke="#7dd3ce" stroke-width="0.8" opacity="1"/>
+<circle cx="857" cy="635" r="3.2" fill="#ffffff" stroke="#7dd3ce" stroke-width="0.8" opacity="1"/>
+<circle cx="868" cy="635" r="3.2" fill="#ffffff" stroke="#7dd3ce" stroke-width="0.8" opacity="1"/>
+<rect x="847" y="655" width="102" height="8" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="0.8" />
+<rect x="847" y="671" width="102" height="8" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="0.8" />
+<rect x="847" y="687" width="102" height="8" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="0.8" />
+<rect x="847" y="703" width="102" height="8" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.8" opacity="0.8" />
+<rect x="863" y="727" width="70" height="10" rx="4" fill="#4db8b3" stroke="#4db8b3" stroke-width="0" opacity="0.85" />
+<text x="898.0" y="737" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="600" fill="#76656a" text-anchor="middle" opacity="1" >consent</text>
+</g>
+<path d="M1002.5 734.0 C950.25 699.0 950.25 708.0 898.0 673.0" fill="none" stroke="#7dd3ce" stroke-width="1.2" opacity="0.75" stroke-dasharray="4 8" class="phase4"/>
+<g class="phase4">
+<rect x="1010" y="625" width="126" height="96" rx="8" fill="#ffffff" stroke="#7dd3ce" stroke-width="1.3" opacity="1" />
+<line x1="1010" y1="645" x2="1136" y2="645" stroke="#7dd3ce" stroke-width="0.9" opacity="0.75"/>
+<circle cx="1021" cy="635" r="3.2" fill="#ffffff" stroke="#7dd3ce" stroke-width="0.8" opacity="1"/>
+<circle cx="1032" cy="635" r="3.2" fill="#ffffff" stroke="#7dd3ce" stroke-width="0.8" opacity="1"/>
+<circle cx="1043" cy="635" r="3.2" fill="#ffffff" stroke="#7dd3ce" stroke-width="0.8" opacity="1"/>
+<rect x="1022" y="655" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1080" y="655" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<circle cx="1119" cy="658" r="5" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1"/>
+<rect x="1022" y="670" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1080" y="670" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<circle cx="1119" cy="673" r="5" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1"/>
+<rect x="1022" y="685" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1080" y="685" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<circle cx="1119" cy="688" r="5" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1"/>
+<rect x="1022" y="700" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1080" y="700" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<circle cx="1119" cy="703" r="5" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1"/>
+<rect x="1022" y="715" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1080" y="715" width="46" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<circle cx="1119" cy="718" r="5" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1"/>
+<text x="1073.0" y="737" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="600" fill="#76656a" text-anchor="middle" opacity="1" >deletion</text>
+</g>
+<path d="M1002.5 734.0 C1037.75 699.0 1037.75 708.0 1073.0 673.0" fill="none" stroke="#7dd3ce" stroke-width="1.2" opacity="0.75" stroke-dasharray="4 8" class="phase4"/>
+<g class="phase4">
+<rect x="1185" y="625" width="126" height="96" rx="8" fill="#ffffff" stroke="#7dd3ce" stroke-width="1.3" opacity="1" />
+<line x1="1185" y1="645" x2="1311" y2="645" stroke="#7dd3ce" stroke-width="0.9" opacity="0.75"/>
+<circle cx="1196" cy="635" r="3.2" fill="#ffffff" stroke="#7dd3ce" stroke-width="0.8" opacity="1"/>
+<circle cx="1207" cy="635" r="3.2" fill="#ffffff" stroke="#7dd3ce" stroke-width="0.8" opacity="1"/>
+<circle cx="1218" cy="635" r="3.2" fill="#ffffff" stroke="#7dd3ce" stroke-width="0.8" opacity="1"/>
+<rect x="1197" y="660" width="98" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1197" y="673" width="98" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1197" y="686" width="98" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1197" y="699" width="98" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1197" y="712" width="98" height="6" rx="3" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1211" y="728" width="72" height="10" rx="4" fill="#4db8b3" stroke="#4db8b3" stroke-width="0" opacity="0.85" />
+<text x="1248.0" y="737" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="600" fill="#76656a" text-anchor="middle" opacity="1" >retention note</text>
+</g>
+<path d="M1002.5 734.0 C1125.25 699.0 1125.25 708.0 1248.0 673.0" fill="none" stroke="#7dd3ce" stroke-width="1.2" opacity="0.75" stroke-dasharray="4 8" class="phase4"/>
+<g class="phase5">
+<rect x="1010" y="765" width="126" height="96" rx="8" fill="#ffffff" stroke="#4db8b3" stroke-width="1.3" opacity="1" />
+<line x1="1010" y1="785" x2="1136" y2="785" stroke="#4db8b3" stroke-width="0.9" opacity="0.75"/>
+<circle cx="1021" cy="775" r="3.2" fill="#ffffff" stroke="#4db8b3" stroke-width="0.8" opacity="1"/>
+<circle cx="1032" cy="775" r="3.2" fill="#ffffff" stroke="#4db8b3" stroke-width="0.8" opacity="1"/>
+<circle cx="1043" cy="775" r="3.2" fill="#ffffff" stroke="#4db8b3" stroke-width="0.8" opacity="1"/>
+<line x1="1022" y1="802" x2="1124" y2="822" stroke="#e85a7a" stroke-width="0.8" opacity="0.65"/>
+<line x1="1030" y1="795" x2="1050" y2="873" stroke="#e85a7a" stroke-width="0.8" opacity="0.65"/>
+<line x1="1022" y1="820" x2="1124" y2="840" stroke="#e85a7a" stroke-width="0.8" opacity="0.65"/>
+<line x1="1051" y1="795" x2="1071" y2="873" stroke="#e85a7a" stroke-width="0.8" opacity="0.65"/>
+<line x1="1022" y1="838" x2="1124" y2="858" stroke="#e85a7a" stroke-width="0.8" opacity="0.65"/>
+<line x1="1072" y1="795" x2="1092" y2="873" stroke="#e85a7a" stroke-width="0.8" opacity="0.65"/>
+<line x1="1022" y1="856" x2="1124" y2="876" stroke="#e85a7a" stroke-width="0.8" opacity="0.65"/>
+<line x1="1093" y1="795" x2="1113" y2="873" stroke="#e85a7a" stroke-width="0.8" opacity="0.65"/>
+<circle cx="1073.0" cy="813.0" r="9" fill="#fff4f6" stroke="#4db8b3" stroke-width="1" opacity="1"/>
+<text x="1073.0" y="877" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="600" fill="#76656a" text-anchor="middle" opacity="1" >hash route</text>
+</g>
+<path d="M1292.5 734.0 C1182.75 699.0 1182.75 848.0 1073.0 813.0" fill="none" stroke="#4db8b3" stroke-width="1.2" opacity="0.75" stroke-dasharray="4 8" class="phase5"/>
+<g class="phase5">
+<rect x="1185" y="765" width="126" height="96" rx="8" fill="#ffffff" stroke="#4db8b3" stroke-width="1.3" opacity="1" />
+<line x1="1185" y1="785" x2="1311" y2="785" stroke="#4db8b3" stroke-width="0.9" opacity="0.75"/>
+<circle cx="1196" cy="775" r="3.2" fill="#ffffff" stroke="#4db8b3" stroke-width="0.8" opacity="1"/>
+<circle cx="1207" cy="775" r="3.2" fill="#ffffff" stroke="#4db8b3" stroke-width="0.8" opacity="1"/>
+<circle cx="1218" cy="775" r="3.2" fill="#ffffff" stroke="#4db8b3" stroke-width="0.8" opacity="1"/>
+<rect x="1197" y="813" width="102" height="13" rx="5" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1" />
+<rect x="1197" y="813" width="58.13999999999999" height="13" rx="5" fill="#4db8b3" stroke="#4db8b3" stroke-width="0" opacity="0.85" />
+<circle cx="1248.0" cy="853" r="18" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="1"/>
+<text x="1248.0" y="877" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="600" fill="#76656a" text-anchor="middle" opacity="1" >retry worker</text>
+</g>
+<path d="M1292.5 734.0 C1270.25 699.0 1270.25 848.0 1248.0 813.0" fill="none" stroke="#4db8b3" stroke-width="1.2" opacity="0.75" stroke-dasharray="4 8" class="phase5"/>
+<g class="phase5">
+<rect x="1360" y="765" width="126" height="96" rx="8" fill="#ffffff" stroke="#4db8b3" stroke-width="1.3" opacity="1" />
+<line x1="1360" y1="785" x2="1486" y2="785" stroke="#4db8b3" stroke-width="0.9" opacity="0.75"/>
+<circle cx="1371" cy="775" r="3.2" fill="#ffffff" stroke="#4db8b3" stroke-width="0.8" opacity="1"/>
+<circle cx="1382" cy="775" r="3.2" fill="#ffffff" stroke="#4db8b3" stroke-width="0.8" opacity="1"/>
+<circle cx="1393" cy="775" r="3.2" fill="#ffffff" stroke="#4db8b3" stroke-width="0.8" opacity="1"/>
+<rect x="1372" y="795" width="16" height="13" rx="2" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="0.8" />
+<rect x="1394" y="795" width="16" height="13" rx="2" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="0.8" />
+<rect x="1416" y="795" width="16" height="13" rx="2" fill="#4db8b3" stroke="#e85a7a" stroke-width="0.7" opacity="0.8" />
+<rect x="1438" y="795" width="16" height="13" rx="2" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="0.8" />
+<rect x="1372" y="813" width="16" height="13" rx="2" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="0.8" />
+<rect x="1394" y="813" width="16" height="13" rx="2" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="0.8" />
+<rect x="1416" y="813" width="16" height="13" rx="2" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="0.8" />
+<rect x="1438" y="813" width="16" height="13" rx="2" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="0.8" />
+<rect x="1372" y="831" width="16" height="13" rx="2" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="0.8" />
+<rect x="1394" y="831" width="16" height="13" rx="2" fill="#4db8b3" stroke="#e85a7a" stroke-width="0.7" opacity="0.8" />
+<rect x="1416" y="831" width="16" height="13" rx="2" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="0.8" />
+<rect x="1438" y="831" width="16" height="13" rx="2" fill="#fff4f6" stroke="#e85a7a" stroke-width="0.7" opacity="0.8" />
+<text x="1423.0" y="877" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="600" fill="#76656a" text-anchor="middle" opacity="1" >checkpoint</text>
+</g>
+<path d="M1292.5 734.0 C1357.75 699.0 1357.75 848.0 1423.0 813.0" fill="none" stroke="#4db8b3" stroke-width="1.2" opacity="0.75" stroke-dasharray="4 8" class="phase5"/>
+<rect x="60" y="900" width="1380" height="58" rx="13" fill="#fff0f3" stroke="#ffd7df" stroke-width="1.1" opacity="0.96" />
+<text x="78" y="924" font-family="DejaVu Sans Mono" font-size="12" font-weight="400" fill="#76656a" text-anchor="start" opacity="1">
+<tspan x="78" dy="0">legend to go here</tspan>
+<tspan x="78" dy="14.16">· legend subtitle ·</tspan>
+</text>
+<circle cx="1482" cy="62" r="6" fill="#ff7a97" stroke="none" stroke-width="0" opacity="0.9"/>
+  <text x="78" y="32" font-family="DejaVu Sans Mono" font-size="12" font-weight="400" fill="#76656a" text-anchor="start" opacity="1">
+    <tspan x="980" dy="50">labels here</tspan>
+    <tspan x="1000" dy="14.16">· label here ·</tspan>
+  </text>
+<circle cx="1506" cy="62" r="6" fill="#4db8b3" stroke="none" stroke-width="0" opacity="0.9"/>
+<circle cx="1530" cy="62" r="6" fill="#d4af37" stroke="none" stroke-width="0" opacity="0.9"/>
+<circle cx="1554" cy="62" r="6" fill="#ffaab8" stroke="none" stroke-width="0" opacity="0.9"/>
+<circle cx="1578" cy="62" r="6" fill="#7dd3ce" stroke="none" stroke-width="0" opacity="0.9"/>
+<circle cx="1602" cy="62" r="6" fill="#999999" stroke="none" stroke-width="0" opacity="0.9"/>
+</svg>

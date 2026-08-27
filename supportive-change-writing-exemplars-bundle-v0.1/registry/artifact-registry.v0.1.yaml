@@ -1,0 +1,82 @@
+{
+  "$schema": "../schema/artifact-registry.schema.v0.1.json",
+  "schema_version": "0.1",
+  "registry_id": "artifact-registry:supportive-change:v0.1",
+  "registry_type": "rendered_artifacts",
+  "version": "0.1.0",
+  "purpose": "Connect finished PDF readers with stable identities and repository paths.",
+  "semantic_attractor_contract": {
+    "target_state": "Collaborators can locate each finished reader through a stable ID and path.",
+    "boundary_condition": "Every entry carries a stable identity and a resolvable local path or endpoint.",
+    "replacement_state": "Use registered IDs and paths for human–AI traversal.",
+    "verification_signals": [
+      "IDs are unique.",
+      "Paths and endpoints resolve."
+    ]
+  },
+  "entries": [
+    {
+      "id": "artifact:pdf:testimonial-blurb-library",
+      "title": "Testimonial Blurb Library",
+      "path": "../artifacts/pdf/testimonial-blurb-library.pdf",
+      "media_type": "application/pdf",
+      "role": "rendered_reader"
+    },
+    {
+      "id": "artifact:pdf:comparative-anthology",
+      "title": "Comparative Branch Essays Anthology",
+      "path": "../artifacts/pdf/00-comparative-branch-essays-anthology.pdf",
+      "media_type": "application/pdf",
+      "role": "rendered_reader"
+    },
+    {
+      "id": "artifact:pdf:executive-culture",
+      "title": "Executive Culture",
+      "path": "../artifacts/pdf/01-executive-culture-and-transformation.pdf",
+      "media_type": "application/pdf",
+      "role": "rendered_reader"
+    },
+    {
+      "id": "artifact:pdf:frontline-teams",
+      "title": "Frontline Teams",
+      "path": "../artifacts/pdf/02-frontline-and-high-pressure-teams.pdf",
+      "media_type": "application/pdf",
+      "role": "rendered_reader"
+    },
+    {
+      "id": "artifact:pdf:cross-functional-collaboration",
+      "title": "Cross Functional Collaboration",
+      "path": "../artifacts/pdf/03-cross-functional-collaboration.pdf",
+      "media_type": "application/pdf",
+      "role": "rendered_reader"
+    },
+    {
+      "id": "artifact:pdf:sustainable-well-being",
+      "title": "Sustainable Well Being",
+      "path": "../artifacts/pdf/04-sustainable-well-being.pdf",
+      "media_type": "application/pdf",
+      "role": "rendered_reader"
+    },
+    {
+      "id": "artifact:pdf:customer-community-service",
+      "title": "Customer Community Service",
+      "path": "../artifacts/pdf/05-customer-and-community-service.pdf",
+      "media_type": "application/pdf",
+      "role": "rendered_reader"
+    },
+    {
+      "id": "artifact:pdf:small-business-leadership",
+      "title": "Small Business Leadership",
+      "path": "../artifacts/pdf/06-small-business-and-entrepreneurial-leadership.pdf",
+      "media_type": "application/pdf",
+      "role": "rendered_reader"
+    },
+    {
+      "id": "artifact:pdf:personal-work-transitions",
+      "title": "Personal Work Transitions",
+      "path": "../artifacts/pdf/07-personal-to-work-transitions.pdf",
+      "media_type": "application/pdf",
+      "role": "rendered_reader"
+    }
+  ]
+}

@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Genomic viewer Context Tree — populations, scenarios, and architecture</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --field: #ffd3d0;
+      --paper: #fdebe9;
+      --paper-2: #feeae9;
+      --warm-white: #fff7f4;
+      --cobalt: #2855f3;
+      --cobalt-2: #2955f4;
+      --lime: #f2ff67;
+      --coral: #fa7065;
+      --sand: #e9cf9e;
+      --mint: #d3e4cb;
+      --periwinkle: #ced8f7;
+      --ink: #141c5b;
+      --blue-ink: #183a78;
+      --muted: #4c678d;
+      --line: #183a78;
+      --soft-line: #9aa9d0;
+      --shadow: #183a78;
+      --font-sans: "Arial Nova", "Avenir Next", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--field);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      line-height: 1.45;
+    }
+    button { font: inherit; }
+    button:focus-visible, summary:focus-visible, [tabindex="0"]:focus-visible {
+      outline: 3px solid var(--ink);
+      outline-offset: 3px;
+      box-shadow: 0 0 0 6px var(--warm-white);
+    }
+    .skip-link {
+      position: fixed;
+      z-index: 100;
+      inset-block-start: .7rem;
+      inset-inline-start: .7rem;
+      transform: translateY(-180%);
+      background: var(--ink);
+      color: white;
+      padding: .65rem .85rem;
+    }
+    .skip-link:focus { transform: translateY(0); }
+    .app { min-height: 100vh; }
+    .masthead {
+      display: grid;
+      gap: .65rem;
+      padding: clamp(1.15rem, 2.4vw, 2.25rem);
+      border-block-end: 2px solid var(--line);
+      background:
+        radial-gradient(circle at 92% 18%, rgba(242, 255, 103, .92) 0 5.5rem, transparent 5.65rem),
+        linear-gradient(135deg, var(--paper), var(--field));
+    }
+    .eyebrow, .rail-label, .facet-label, .slug, .meta, .state, .route-chip, .count {
+      font-family: var(--font-mono);
+    }
+    .eyebrow {
+      color: var(--blue-ink);
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0; font-size: clamp(1.65rem, 1.2rem + 2vw, 3.2rem); line-height: 1.04; }
+    .masthead p { max-width: 68rem; margin: 0; color: var(--blue-ink); font-size: clamp(.98rem, .91rem + .3vw, 1.2rem); }
+    .outcome {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: .7rem 1rem;
+      align-items: baseline;
+      max-width: 72rem;
+      margin-block-start: .45rem;
+      padding-block-start: .75rem;
+      border-block-start: 1px solid color-mix(in srgb, var(--line) 45%, transparent);
+    }
+    .outcome span { color: var(--muted); font-family: var(--font-mono); font-size: .72rem; font-weight: 800; text-transform: uppercase; }
+    .outcome strong { color: var(--ink); }
+
+    .control-deck {
+      position: sticky;
+      z-index: 40;
+      top: 0;
+      display: grid;
+      gap: .75rem;
+      padding: .9rem clamp(.8rem, 2vw, 1.6rem);
+      border-block-end: 2px solid var(--line);
+      background: color-mix(in srgb, var(--paper) 94%, transparent);
+      backdrop-filter: blur(12px);
+    }
+    .control-row { display: grid; grid-template-columns: 8rem minmax(0, 1fr); gap: .65rem; align-items: start; }
+    .rail-label { padding-block-start: .46rem; color: var(--muted); font-size: .68rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+    .control-group { display: flex; flex-wrap: wrap; gap: .45rem; }
+    .control-button, .filter-chip {
+      min-height: 2.35rem;
+      border: 2px solid var(--line);
+      border-radius: .45rem;
+      background: var(--warm-white);
+      color: var(--blue-ink);
+      cursor: pointer;
+      font-size: .78rem;
+      font-weight: 780;
+      padding: .42rem .7rem;
+    }
+    .control-button[aria-checked="true"] {
+      background: var(--cobalt);
+      color: white;
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+    .filter-chip[aria-pressed="true"] { background: var(--lime); color: var(--ink); }
+    .filter-chip[data-all][aria-pressed="true"] { background: var(--cobalt); color: white; }
+
+    main { padding: clamp(.8rem, 2vw, 1.5rem); }
+    .surface-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1rem;
+      align-items: end;
+      margin-block-end: 1rem;
+    }
+    .surface-heading h2 { margin: 0; font-size: clamp(1.35rem, 1.1rem + .9vw, 2.1rem); }
+    .surface-heading p { max-width: 64rem; margin: .35rem 0 0; color: var(--blue-ink); }
+    .count { color: var(--muted); font-size: .72rem; white-space: nowrap; }
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(17rem, 22rem);
+      gap: 1rem;
+      align-items: start;
+    }
+    .map-shell {
+      min-width: 0;
+      min-height: 48rem;
+      overflow: hidden;
+      border: 2px solid var(--line);
+      border-radius: 1.15rem;
+      background:
+        radial-gradient(circle, color-mix(in srgb, var(--cobalt) 22%, transparent) 0 1px, transparent 1.4px) 0 0 / 79px 67px,
+        var(--paper);
+      padding: clamp(.75rem, 1.8vw, 1.4rem);
+    }
+    .inspector {
+      position: sticky;
+      top: 9.6rem;
+      border: 2px solid var(--line);
+      border-radius: 1rem;
+      background: var(--warm-white);
+      box-shadow: 7px 7px 0 var(--shadow);
+      padding: 1rem;
+    }
+    .inspector h2 { margin: 0 0 .35rem; font-size: 1.05rem; }
+    .inspector p { margin: .45rem 0; color: var(--blue-ink); font-size: .88rem; }
+    .inspector dl { display: grid; gap: .6rem; margin: 1rem 0 0; }
+    .inspector dt { color: var(--muted); font-family: var(--font-mono); font-size: .65rem; font-weight: 800; text-transform: uppercase; }
+    .inspector dd { margin: .12rem 0 0; font-size: .86rem; }
+
+    .actor-board { display: flex; gap: 1.25rem; overflow-x: auto; padding: .35rem .35rem 1.35rem; scroll-snap-type: x proximity; }
+    .actor-column {
+      flex: 0 0 min(24rem, calc(100vw - 5rem));
+      min-height: 47rem;
+      border: 2px solid var(--line);
+      border-radius: 1.3rem;
+      background: var(--warm-white);
+      box-shadow: 8px 8px 0 var(--shadow);
+      padding: 1rem;
+      scroll-snap-align: start;
+    }
+    .actor-column:nth-child(3n+2) { background: color-mix(in srgb, var(--warm-white) 80%, var(--sand)); }
+    .actor-column:nth-child(3n) { background: color-mix(in srgb, var(--warm-white) 82%, var(--periwinkle)); }
+    .actor-header { margin-block-end: .85rem; }
+    .actor-header button { width: 100%; border: 0; background: transparent; color: var(--ink); cursor: pointer; font-size: 1.22rem; font-weight: 850; padding: 0; text-align: left; }
+    .slug { display: block; margin-block-start: .25rem; color: var(--muted); font-size: .68rem; }
+    .impact { margin: .55rem 0 0; padding-block-start: .55rem; border-block-start: 1px solid var(--soft-line); color: var(--blue-ink); font-size: .82rem; }
+    .facets { display: grid; gap: .65rem; }
+    .facet { display: grid; gap: .4rem; padding: .75rem; border-radius: .75rem; background: var(--paper-2); }
+    .facet:nth-child(1), .facet:nth-child(3) { background: color-mix(in srgb, var(--warm-white) 76%, var(--lime)); }
+    .facet:nth-child(4) { background: color-mix(in srgb, var(--warm-white) 68%, var(--coral)); }
+    .facet:nth-child(6) { background: color-mix(in srgb, var(--warm-white) 62%, var(--sand)); }
+    .facet-label { margin: 0; color: var(--blue-ink); font-size: .66rem; font-weight: 850; letter-spacing: .07em; line-height: 1.35; text-transform: uppercase; }
+    .context-card {
+      width: 100%;
+      border: 1.5px solid var(--line);
+      border-radius: .5rem;
+      background: var(--warm-white);
+      color: var(--ink);
+      cursor: pointer;
+      padding: .6rem;
+      text-align: left;
+    }
+    .context-card:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--shadow); }
+    .state { display: block; margin-block-end: .3rem; color: var(--muted); font-size: .62rem; font-weight: 800; text-transform: uppercase; }
+    .context-card strong { display: block; font-size: .88rem; line-height: 1.38; }
+    .context-card[aria-current="true"] { outline: 4px solid var(--cobalt); outline-offset: 2px; }
+
+    .table-wrap { overflow-x: auto; padding-block-end: .7rem; }
+    table { width: 100%; border-collapse: collapse; color: var(--ink); background: var(--warm-white); }
+    caption { padding: 0 0 .8rem; font-weight: 800; text-align: left; }
+    th, td { padding: .75rem; border-block-end: 1px solid var(--soft-line); text-align: left; vertical-align: top; }
+    thead th { border-block-end: 2px solid var(--line); background: var(--periwinkle); font-size: .76rem; }
+    tbody th { min-width: 12rem; color: var(--blue-ink); font-size: .76rem; }
+    td { min-width: 15rem; font-size: .82rem; }
+    .matrix td { background: color-mix(in srgb, var(--warm-white) 84%, var(--paper)); }
+    .matrix th:first-child { position: sticky; z-index: 3; left: 0; background: var(--warm-white); }
+    .matrix thead th:first-child { z-index: 4; background: var(--periwinkle); }
+
+    .shared-grid, .assembly-grid, .route-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+    .shared-card, .assembly-column, .route-card {
+      min-width: 0;
+      border: 2px solid var(--line);
+      border-radius: .8rem;
+      background: var(--warm-white);
+      box-shadow: 6px 6px 0 var(--shadow);
+      padding: 1rem;
+    }
+    .shared-card:nth-child(3n+1), .assembly-column:nth-child(3n+1) { border-block-start: .65rem solid var(--cobalt); }
+    .shared-card:nth-child(3n+2), .assembly-column:nth-child(3n+2) { border-block-start: .65rem solid var(--coral); }
+    .shared-card:nth-child(3n), .assembly-column:nth-child(3n) { border-block-start: .65rem solid var(--lime); }
+    .shared-card h3, .assembly-column h3, .route-card h3 { margin: 0 0 .5rem; font-size: 1rem; }
+    .shared-card p, .assembly-column p, .route-card p { margin: .4rem 0; color: var(--blue-ink); font-size: .84rem; }
+    .chip-list { display: flex; flex-wrap: wrap; gap: .3rem; margin-block-start: .75rem; }
+    .meta, .route-chip { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--blue-ink); font-size: .62rem; font-weight: 800; padding: .22rem .45rem; }
+    .route-card { border-block-start: .65rem solid var(--cobalt); }
+    .route-chip { background: var(--lime); color: var(--ink); }
+    .empty { color: var(--muted); font-style: italic; }
+
+    .semantic { margin-block-start: 1rem; border: 1px solid var(--line); background: var(--warm-white); }
+    .semantic summary { cursor: pointer; font-weight: 800; padding: .85rem 1rem; }
+    .semantic .table-wrap { padding: 0 1rem 1rem; }
+    .semantic table { font-size: .78rem; }
+    .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0 0 0 0) !important; white-space: nowrap !important; border: 0 !important; }
+
+    @media (max-width: 1100px) {
+      .workspace { grid-template-columns: 1fr; }
+      .inspector { position: static; }
+      .shared-grid, .assembly-grid, .route-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 720px) {
+      .control-deck { position: static; }
+      .control-row { grid-template-columns: 1fr; gap: .25rem; }
+      .control-group {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: .2rem .2rem .55rem;
+        scroll-snap-type: x proximity;
+      }
+      .control-button, .filter-chip { flex: 0 0 auto; scroll-snap-align: start; }
+      .surface-heading { grid-template-columns: 1fr; }
+      .count { white-space: normal; }
+      .shared-grid, .assembly-grid, .route-grid { grid-template-columns: 1fr; }
+      .actor-column { flex-basis: calc(100vw - 3.7rem); }
+      .outcome { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    @media (forced-colors: active) {
+      .control-button[aria-checked="true"], .filter-chip[aria-pressed="true"], .context-card[aria-current="true"] { outline: 3px solid Highlight; }
+      .actor-column, .shared-card, .assembly-column, .route-card { box-shadow: 6px 6px 0 CanvasText; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#surface">Skip to Context Tree</a>
+  <div class="app" id="app">
+    <header class="masthead">
+      <div class="eyebrow">Context Tree · Genomic viewer receiving surface</div>
+      <h1>Role-local context, shared operating truth</h1>
+      <p>Trace how the same genomic-review situation changes across judgment, coordination, implementation, and reuse. The case-review surface keeps the profile model visible while preserving what each population needs to decide and act.</p>
+      <div class="outcome"><span>Shared outcome</span><strong>Make qualified work, decision context, operational state, and revision history inspectable at the point where judgment occurs.</strong></div>
+    </header>
+
+    <section class="control-deck" aria-label="Context Tree comparison controls">
+      <div class="control-row">
+        <div class="rail-label" id="views-label">View</div>
+        <div class="control-group" id="view-controls" role="radiogroup" aria-labelledby="views-label"></div>
+      </div>
+      <div class="control-row">
+        <div class="rail-label" id="groups-label">Group filters</div>
+        <div class="control-group" id="group-controls" role="group" aria-labelledby="groups-label"></div>
+      </div>
+    </section>
+
+    <main id="surface" tabindex="-1">
+      <div class="surface-heading">
+        <div><h2 id="view-title">Actor Context Board</h2><p id="view-description"></p></div>
+        <div class="count" id="view-count"></div>
+      </div>
+      <div class="workspace">
+        <section class="map-shell" id="visual-surface" aria-labelledby="view-title"></section>
+        <aside class="inspector" id="inspector" aria-labelledby="inspector-title">
+          <h2 id="inspector-title">Actor Context Board</h2>
+          <p>Select a population or context to inspect its scenario, changed capability, and receiving architecture.</p>
+        </aside>
+      </div>
+      <details class="semantic" id="semantic-equivalent">
+        <summary>Compare all populations and decision contexts as a table</summary>
+        <div class="table-wrap" id="semantic-table"></div>
+      </details>
+    </main>
+  </div>
+
+  <script type="application/json" id="presentation-model">
+  {
+    "views": [
+      {"id":"board","label":"Actor Context Board","description":"Compare the decision, boundary, visible context, scenario, changed capability, and receiving architecture carried by each population."},
+      {"id":"matrix","label":"Role–Knowledge Matrix","description":"Hold the questions still while the population changes, making local needs and cross-role asymmetries easy to compare."},
+      {"id":"shared","label":"Shared Context","description":"See which operating concepts must retain one meaning while crossing scientific, operational, product, and partner boundaries."},
+      {"id":"assembly","label":"Context Assembly","description":"Regroup the same context by the role it plays in the current decision: load-bearing, orienting, provisional, time-bound, or intentionally held aside."},
+      {"id":"routes","label":"Architecture Routes","description":"Follow each population’s scenario into the smallest architecture and product surface able to make the next decision more precise."},
+      {"id":"blueprint","label":"Stage–Layer Blueprint","description":"Place people, interface, service, data, and handoff behavior across assignment, review, sign-off, and learning."}
+    ],
+    "questions": [
+      {"id":"decision","label":"Who carries the decision?"},
+      {"id":"boundary","label":"Which organizational boundary shapes the work?"},
+      {"id":"visible","label":"What must be visible before action?"},
+      {"id":"scenario","label":"Which scenario exposes the hidden state?"},
+      {"id":"change","label":"Which capability changed, and which responsibility remains?"},
+      {"id":"route","label":"Which architecture and product surface receives the contract?"}
+    ],
+    "groups": [
+      {"id":"curators","label":"CBO / Curators","slug":"curation.primary-review","impact":"Interpret and route genomic findings with assay, modality, and operating context attached.","items":{"decision":"Classify and prepare findings for qualified review.","boundary":"Profile, assay, product, applicable body, lifecycle, and permitted action.","visible":"Eligible work, QC, identity crosswalk, modality-specific evidence, and change since prior review.","scenario":"A plate-wide hold changes eligibility across dispersed cases.","change":"Profile-scoped queues, dashboard, Floating Drawer, and Collaboration; scientific interpretation remains accountable human judgment.","route":"First Responsible Version Matrix · Service-design Blueprint"}},
+      {"id":"pathology","label":"Pathology","slug":"diagnostic.sign-out","impact":"Connect molecular findings to diagnostic context and a reportable interpretation.","items":{"decision":"Resolve report context and sign out the diagnostic interpretation.","boundary":"Specimen adequacy, tumor context, assay limits, and curator-to-pathologist handoff.","visible":"Classification history, genomic identity, QC, IGV/COSMIC context, and unresolved alternatives.","scenario":"Current knowledge changes while the issued interpretation remains part of the case record.","change":"A consistent sign-out surface; issued state remains distinct from a proposed update.","route":"Cross-channel Blueprint · Specification-by-Example"}},
+      {"id":"managers","label":"Curator managers","slug":"curation.assignment","impact":"Keep qualification, jurisdiction, assignment, and capacity current across a reviewer population.","items":{"decision":"Determine who can see, receive, and act on each class of work.","boundary":"Qualification, applicable body, assay sign-off, primary/secondary role, and workload.","visible":"Eligible reviewers, assignment state, holds, reassignment reason, and coverage gaps.","scenario":"A qualification or jurisdiction change affects a population of reviewers before launch.","change":"Batch profile administration makes eligibility inspectable; managers keep qualification current.","route":"First Responsible Version Matrix · HEART Chart"}},
+      {"id":"cbi","label":"Computational biology","slug":"pipeline.explanation","impact":"Explain how an event moved through detection, filtering, interpretation, and reporting.","items":{"decision":"Determine whether a divergence belongs to caller output, filtering, representation, or report policy.","boundary":"Pipeline version, filter rules, assembly, transcript, truth set, and assay performance envelope.","visible":"Raw and derived measures, caller/filter lineage, canonical identity, and benchmark limits.","scenario":"A benchmark alteration is detected by two pipelines and reported by one.","change":"Detected, filtered, interpreted, and reported become distinct inspectable states.","route":"Software Architecture Views · Specification-by-Example"}},
+      {"id":"automation","label":"Process / Automation","slug":"operations.containment","impact":"Gather distributed cases into one investigation and restore review flow.","items":{"decision":"Contain a plate-level anomaly, identify affected work, and choose rerun or release paths.","boundary":"Plate, sample, control, pipeline run, queue, owner, and recovery state.","visible":"Discordance signal, affected cases, containment boundary, current owner, and rerun status.","scenario":"One contamination or discordance signal spans cases assigned across many people.","change":"Profile-scoped dashboards replace recurring reconstruction; recovery remains an explicit operating action.","route":"Service-design Blueprint · Cross-channel Blueprint"}},
+      {"id":"quality","label":"QA / incoming managers","slug":"quality.release","impact":"Connect intended use, issued state, changed behavior, and a qualified release decision.","items":{"decision":"Determine which change can enter the operating surface and which released work it affects.","boundary":"Intended use, product, assay, applicable body, release object, and implementation revision.","visible":"Changed rule or component, affected scenarios, issued version, proposed version, and reviewer state.","scenario":"A production defect exposes an undescribed component state.","change":"Scenario, test, Storybook state, and component advance together; the released state stays reconstructable.","route":"Unit-test-first Design · Upstream Revision Loop"}},
+      {"id":"engineers","label":"Platform engineers","slug":"platform.migration","impact":"Move bounded capabilities across the GWT/React seam while stable services remain available.","items":{"decision":"Choose the smallest capability family that can move cleanly and improve current work.","boundary":"Interop seam, DTO, lifecycle, validation, payload, paint cost, service ownership, and retirement path.","visible":"Typed contract, known legacy owner, loading/failure/recovery states, and testable boundary.","scenario":"A dense genomic component crosses frameworks while Java services remain in use.","change":"Typed bounded components and a living library widen safe contribution; migration scope remains explicit.","route":"Software Architecture Views · Upstream Revision Loop"}},
+      {"id":"clients","label":"Client Services / Medical Affairs","slug":"customer.explanation","impact":"Explain case state, scientific context, and next action without reconstructing several systems.","items":{"decision":"Answer where review stands and route scientific questions to the fitting population.","boundary":"Customer context, report state, operating status, scientific interpretation, and communication channel.","visible":"Current summary, hold or review reason, responsible group, expected next move, and source context.","scenario":"A customer asks why a case is held and which question needs scientific review.","change":"Summary and Digest reduce multi-system reconstruction; scientific questions retain a qualified route.","route":"Cross-channel Blueprint · Service-design Blueprint"}},
+      {"id":"partners","label":"Sponsors / trial operations","slug":"partner.cohort","impact":"Find eligible cohorts and partner-relevant operating signals without clipped local workarounds.","items":{"decision":"Determine whether a cohort result is complete enough to support partner or trial operations.","boundary":"Assay coverage, query definition, trial criteria, knowledge date, partner entitlement, and result limits.","visible":"Query, pagination, excluded population, assay coverage, retrieval date, and reason for inclusion.","scenario":"A cohort query exceeds a prior service limit or changes after a knowledge refresh.","change":"Paginated Advanced Search and shared dashboards expand operational reach; partner interpretation remains contextual.","route":"Service-design Blueprint · Cross-channel Blueprint"}},
+      {"id":"ai","label":"AI assistance","slug":"assistance.proposal","impact":"Suggest identity matches, relevant sources, and scenario extensions with an inspectable handoff.","items":{"decision":"Propose candidate context for a qualified person to inspect, shape, or dismiss.","boundary":"Visible source set, retrieval date, affected object, uncertainty, reviewer state, and allowed action.","visible":"Source boundary, proposed match, affected variants or cases, uncertainty, and current reviewer state.","scenario":"Two source-native variant forms may describe the same alteration.","change":"AI can propose an identity crosswalk or missing scenario; accountable interpretation and release remain with relevant people.","route":"AI Systems Service Blueprint · Specification-by-Example"}}
+    ],
+    "shared": [
+      {"id":"qualification","label":"Qualification and authorization","groups":["curators","managers","quality"],"consequence":"Eligible work, assignable work, and allowed action change from the same profile contract."},
+      {"id":"operational-state","label":"Operational state","groups":["curators","automation","clients"],"consequence":"Held, investigating, rerun, reassigned, and ready states stay visible across the handoff."},
+      {"id":"decision-provenance","label":"Decision provenance","groups":["curators","pathology","quality"],"consequence":"Issued interpretation, current knowledge, source, and revision retain distinct identities."},
+      {"id":"evidence-point","label":"Evidence at the judgment point","groups":["curators","pathology","cbi","ai"],"consequence":"Identity, assay, modality, source, and retrieval date arrive beside the decision."},
+      {"id":"component-contract","label":"Component behavior contract","groups":["quality","engineers","automation"],"consequence":"Scenario, test, story, component, and revision rehearse one consequential behavior."},
+      {"id":"cohort-context","label":"Cohort and partner context","groups":["cbi","partners","clients"],"consequence":"Query scope, assay coverage, pagination, and partner boundaries travel with the result."},
+      {"id":"migration-boundary","label":"Migration boundary","groups":["engineers","quality","managers"],"consequence":"New capability and retained legacy ownership remain visible during staged movement."}
+    ],
+    "assembly": [
+      {"id":"load","label":"Load-bearing","meaning":"Omission changes the next decision.","contexts":["Qualification and authorization","Operational state","Decision provenance","Evidence at the judgment point"]},
+      {"id":"background","label":"Orienting","meaning":"Improves interpretation without deciding the case.","contexts":["Cohort and partner context","Migration boundary"]},
+      {"id":"provisional","label":"Provisional","meaning":"A working interpretation or proposal remains open to revision.","contexts":["AI identity match","Current-knowledge difference","Candidate trial relevance"]},
+      {"id":"expiring","label":"Time-bound","meaning":"Use depends on an explicit date, revision, or validity interval.","contexts":["Knowledge retrieval date","Assay sign-off interval","Trial-status date"]},
+      {"id":"held","label":"Held aside by design","meaning":"The operating model stays legible while protected records remain in their fitting systems.","contexts":["Patient-identifying detail","Restricted partner terms"]}
+    ],
+    "blueprint": {
+      "stages":["Assignment","Evidence review","Interpretation & sign-off","Operations & learning"],
+      "layers":[
+        {"label":"People","cells":["Manager establishes eligible primary and secondary reviewers.","Curator and CBI inspect source and pipeline context.","Pathology carries the accountable interpretation.","QA and managers absorb defects, updates, and workload signals."]},
+        {"label":"Interface","cells":["Profile-scoped queue and persistent case header.","Identity crosswalk, multimodal evidence, and point-of-use references.","Issued interpretation and current-knowledge difference.","Dashboard, investigation, reassignment, and recovery state."]},
+        {"label":"Service","cells":["Java policy service resolves profile, qualification, and assignment.","Java services preserve caller/filter lineage and assertion context.","Report service emits structured result exchange and immutable revision identity.","PostgreSQL projections serve current state, pagination, and cohort queries."]},
+        {"label":"Data & provenance","cells":["PostgreSQL: profile · assay · product · applicable body · lifecycle.","Private Amazon S3: versioned specimen, pipeline, and evidence artifacts with manifest digest.","PostgreSQL + S3: assertion state, issued revision, report object, and exact source versions.","Amazon SQS + durable outbox/inbox: event · owner · reason · sequence · recovery receipt."]},
+        {"label":"Handoff","cells":["Manager → curator","CBI / curator → pathology","Pathology → report / downstream systems","Operations → scenario / test / story / component revision"]}
+      ]
+    }
+  }
+  </script>
+  <script>
+    (() => {
+      "use strict";
+      const model = JSON.parse(document.getElementById("presentation-model").textContent);
+      const state = readUrlState();
+      let selected = { type: "group", id: state.groups[0] || model.groups[0].id };
+      const viewControls = document.getElementById("view-controls");
+      const groupControls = document.getElementById("group-controls");
+      const surface = document.getElementById("visual-surface");
+      const inspector = document.getElementById("inspector");
+
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>'"]/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[character]);
+      }
+      function readUrlState() {
+        const params = new URLSearchParams(location.search);
+        const requestedView = params.get("view");
+        const view = model.views.some(item => item.id === requestedView) ? requestedView : "board";
+        const requestedGroups = (params.get("groups") || "").split(",").filter(Boolean);
+        const valid = requestedGroups.filter(id => model.groups.some(group => group.id === id));
+        return { view, groups: valid.length ? valid : model.groups.map(group => group.id) };
+      }
+      function updateUrl() {
+        const params = new URLSearchParams();
+        params.set("view", state.view);
+        if (state.groups.length !== model.groups.length) params.set("groups", state.groups.join(","));
+        history.replaceState(null, "", `${location.pathname}?${params.toString()}`);
+      }
+      function visibleGroups() { return model.groups.filter(group => state.groups.includes(group.id)); }
+      function groupById(id) { return model.groups.find(group => group.id === id); }
+      function currentView() { return model.views.find(view => view.id === state.view); }
+      function setView(id, focus = false) {
+        if (!model.views.some(view => view.id === id)) return;
+        state.view = id;
+        updateUrl();
+        render();
+        if (focus) document.querySelector(`[data-view="${id}"]`)?.focus();
+      }
+      function toggleGroup(id) {
+        if (id === "all") {
+          state.groups = model.groups.map(group => group.id);
+        } else if (state.groups.includes(id) && state.groups.length > 1) {
+          state.groups = state.groups.filter(groupId => groupId !== id);
+        } else if (!state.groups.includes(id)) {
+          state.groups = [...state.groups, id];
+        }
+        const selectedGroupId = selected.type === "item" ? selected.id.split(":")[0] : selected.id;
+        if (!state.groups.includes(selectedGroupId)) selected = { type: "group", id: state.groups[0] };
+        updateUrl();
+        render();
+        document.querySelector(`[data-group-filter="${id}"]`)?.focus();
+      }
+      function select(type, id) { selected = { type, id }; renderInspector(); renderSelection(); }
+      function renderControls() {
+        viewControls.innerHTML = model.views.map((view, index) => `<button class="control-button" type="button" role="radio" data-view="${view.id}" aria-checked="${view.id === state.view}" tabindex="${view.id === state.view ? 0 : -1}">${escapeHtml(view.label)}</button>`).join("");
+        const allVisible = state.groups.length === model.groups.length;
+        groupControls.innerHTML = `<button class="filter-chip" type="button" data-all data-group-filter="all" aria-pressed="${allVisible}">All groups</button>` + model.groups.map(group => `<button class="filter-chip" type="button" data-group-filter="${group.id}" aria-pressed="${state.groups.includes(group.id)}">${escapeHtml(group.label)}</button>`).join("");
+      }
+      function contextButton(group, question) {
+        const selectedNow = selected.type === "item" && selected.id === `${group.id}:${question.id}`;
+        return `<button class="context-card" type="button" data-select="item" data-id="${group.id}:${question.id}" aria-current="${selectedNow}"><span class="state">${question.id === "scenario" ? "repeatable scenario" : question.id === "route" ? "receiving route" : "decision context"}</span><strong>${escapeHtml(group.items[question.id])}</strong></button>`;
+      }
+      function renderBoard() {
+        return `<div class="actor-board">${visibleGroups().map(group => `<article class="actor-column"><header class="actor-header"><button type="button" data-select="group" data-id="${group.id}">${escapeHtml(group.label)}</button><span class="slug">${escapeHtml(group.slug)}</span><p class="impact">${escapeHtml(group.impact)}</p></header><div class="facets">${model.questions.map(question => `<section class="facet"><h3 class="facet-label">${escapeHtml(question.label)}</h3>${contextButton(group, question)}</section>`).join("")}</div></article>`).join("")}</div>`;
+      }
+      function renderMatrix() {
+        const groups = visibleGroups();
+        return `<div class="table-wrap"><table class="matrix"><caption>Role-local context across the visible populations</caption><thead><tr><th scope="col">Context question</th>${groups.map(group => `<th scope="col">${escapeHtml(group.label)}</th>`).join("")}</tr></thead><tbody>${model.questions.map(question => `<tr><th scope="row">${escapeHtml(question.label)}</th>${groups.map(group => `<td>${escapeHtml(group.items[question.id])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+      }
+      function renderShared() {
+        const visible = new Set(state.groups);
+        const cards = model.shared.filter(item => item.groups.some(id => visible.has(id))).map(item => {
+          const groups = item.groups.filter(id => visible.has(id)).map(groupById).filter(Boolean);
+          return `<article class="shared-card"><h3>${escapeHtml(item.label)}</h3><p>${escapeHtml(item.consequence)}</p><div class="chip-list">${groups.map(group => `<span class="meta">${escapeHtml(group.label)}</span>`).join("")}</div></article>`;
+        }).join("");
+        return `<div class="shared-grid">${cards || '<p class="empty">Choose groups to reveal their shared context.</p>'}</div>`;
+      }
+      function renderAssembly() {
+        return `<div class="assembly-grid">${model.assembly.map(item => `<article class="assembly-column"><h3>${escapeHtml(item.label)}</h3><p>${escapeHtml(item.meaning)}</p><div class="chip-list">${item.contexts.map(context => `<span class="meta">${escapeHtml(context)}</span>`).join("")}</div></article>`).join("")}</div>`;
+      }
+      function renderRoutes() {
+        return `<div class="route-grid">${visibleGroups().map(group => { const [architecture, product = "Genomic viewer"] = group.items.route.split(" · "); return `<article class="route-card"><span class="state">${escapeHtml(group.label)}</span><h3>${escapeHtml(group.items.scenario)}</h3><p>${escapeHtml(group.items.change)}</p><div class="chip-list"><span class="route-chip">${escapeHtml(architecture)}</span><span class="route-chip">${escapeHtml(product)}</span></div></article>`; }).join("")}</div>`;
+      }
+      function renderBlueprint() {
+        const data = model.blueprint;
+        return `<div class="table-wrap"><table><caption>Stage–layer projection of the same operating context</caption><thead><tr><th scope="col">Layer / stage</th>${data.stages.map(stage => `<th scope="col">${escapeHtml(stage)}</th>`).join("")}</tr></thead><tbody>${data.layers.map(layer => `<tr><th scope="row">${escapeHtml(layer.label)}</th>${layer.cells.map(cell => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+      }
+      function renderSelection() {
+        surface.querySelectorAll("[aria-current]").forEach(element => element.setAttribute("aria-current", "false"));
+        const target = surface.querySelector(`[data-select="${selected.type}"][data-id="${CSS.escape(selected.id)}"]`);
+        if (target) target.setAttribute("aria-current", "true");
+      }
+      function renderInspector() {
+        let title = "Read one context in full";
+        let copy = "Select a population or context card to retain its decision, boundary, scenario, and receiving architecture together.";
+        let details = "";
+        if (selected.type === "group") {
+          const group = groupById(selected.id);
+          if (group) {
+            title = group.label;
+            copy = group.impact;
+            details = `<dl><div><dt>Scenario</dt><dd>${escapeHtml(group.items.scenario)}</dd></div><div><dt>Changed capability</dt><dd>${escapeHtml(group.items.change)}</dd></div><div><dt>Route</dt><dd>${escapeHtml(group.items.route)}</dd></div></dl>`;
+          }
+        } else if (selected.type === "item") {
+          const [groupId, questionId] = selected.id.split(":");
+          const group = groupById(groupId);
+          const question = model.questions.find(item => item.id === questionId);
+          if (group && question) {
+            title = question.label;
+            copy = group.items[questionId];
+            details = `<dl><div><dt>Population</dt><dd>${escapeHtml(group.label)}</dd></div><div><dt>Decision effect</dt><dd>${escapeHtml(group.impact)}</dd></div><div><dt>Receiving route</dt><dd>${escapeHtml(group.items.route)}</dd></div></dl>`;
+          }
+        }
+        inspector.innerHTML = `<h2 id="inspector-title">${escapeHtml(title)}</h2><p>${escapeHtml(copy)}</p>${details}`;
+      }
+      function renderSemanticTable() {
+        document.getElementById("semantic-table").innerHTML = `<table><caption>Genomic-viewer populations and decision context</caption><thead><tr><th scope="col">Population</th>${model.questions.map(question => `<th scope="col">${escapeHtml(question.label)}</th>`).join("")}</tr></thead><tbody>${model.groups.map(group => `<tr><th scope="row">${escapeHtml(group.label)}</th>${model.questions.map(question => `<td>${escapeHtml(group.items[question.id])}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+      }
+      function render() {
+        renderControls();
+        const view = currentView();
+        document.getElementById("view-title").textContent = view.label;
+        document.getElementById("view-description").textContent = view.description;
+        const systemWide = state.view === "assembly" || state.view === "blueprint";
+        document.getElementById("view-count").textContent = systemWide
+          ? "System-wide projection · group filters remain available for population views"
+          : `${state.groups.length} of ${model.groups.length} populations in view`;
+        const renderers = { board: renderBoard, matrix: renderMatrix, shared: renderShared, assembly: renderAssembly, routes: renderRoutes, blueprint: renderBlueprint };
+        surface.innerHTML = renderers[state.view]();
+        renderSelection();
+        renderInspector();
+        renderSemanticTable();
+      }
+      document.addEventListener("click", event => {
+        const viewButton = event.target.closest("[data-view]");
+        if (viewButton) return setView(viewButton.dataset.view, true);
+        const groupButton = event.target.closest("[data-group-filter]");
+        if (groupButton) return toggleGroup(groupButton.dataset.groupFilter);
+        const selection = event.target.closest("[data-select]");
+        if (selection) select(selection.dataset.select, selection.dataset.id);
+      });
+      viewControls.addEventListener("keydown", event => {
+        if (!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)) return;
+        event.preventDefault();
+        const index = model.views.findIndex(view => view.id === state.view);
+        const delta = ['ArrowRight','ArrowDown'].includes(event.key) ? 1 : -1;
+        setView(model.views[(index + delta + model.views.length) % model.views.length].id, true);
+      });
+      render();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "$schema": "./contracts/provenance.v1.schema.json",
+  "schema_version": "1.0.0",
+  "repository_role": "actual_implementation",
+  "created_as_of": "2026-07-28",
+  "seed": {
+    "repository": "urn:source-key:lims-reference-pack-integration-v0.1",
+    "review": "urn:source-key:lims-reference-pack-review-v0.1",
+    "source_key": "lims-reference-pack-integration-v0.1",
+    "source_pack": "lims-eln-enterprise-reference-v0.1",
+    "source_validation": {
+      "tests_passed": 69,
+      "python_versions": ["3.12", "3.13"],
+      "source_digest": "e5fec68e639e9c056dc503335e0b60ef2d229c65ed4b72e7269df0bf7e2d5329"
+    }
+  },
+  "independence_boundary": {
+    "runtime_source_imported_from_simulation": false,
+    "shared_surface": "versioned_contracts_and_synthetic_fixtures",
+    "evidence_namespace": "observed_actual"
+  }
+}

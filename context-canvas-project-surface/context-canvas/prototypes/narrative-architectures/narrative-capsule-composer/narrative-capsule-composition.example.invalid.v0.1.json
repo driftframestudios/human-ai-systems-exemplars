@@ -1,0 +1,38 @@
+{
+  "id": "composition-missing-binding-review-example",
+  "type": "CapsuleCompositionRecord",
+  "sourceCapsuleVersionRefs": [
+    "na:capsules/expectation-modernization/v0.1"
+  ],
+  "compositionMode": "single_capsule",
+  "resultMode": "projection_only",
+  "targetPairRef": "ca:strategy-canvas",
+  "sourceSelections": [
+    {
+      "id": "module-expectation-001",
+      "sourceCapsuleVersionRef": "na:capsules/expectation-modernization/v0.1",
+      "moduleKind": "expectation",
+      "inclusionState": "included",
+      "role": "primary",
+      "valueOrigin": "human_declared",
+      "reviewState": "working"
+    }
+  ],
+  "targetBindings": [
+    {
+      "id": "binding-strategy-canvas-dimensions",
+      "targetSlotRef": "ca:strategy-canvas/slots/dimensions",
+      "sourceSelectionRefs": [
+        "module-expectation-001"
+      ],
+      "bindingState": "bound",
+      "valueOrigin": "human_declared",
+      "humanReviewRequired": true
+    }
+  ],
+  "gapRefs": [],
+  "aiContextProjectionRef": "projection-missing-binding-review-example",
+  "readinessState": "needs_binding_review",
+  "createdAt": "2026-08-26T00:00:00Z",
+  "reviewState": "working"
+}

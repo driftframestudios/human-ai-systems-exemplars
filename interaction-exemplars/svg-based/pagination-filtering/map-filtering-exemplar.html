@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Regional readiness map — HTML and CSS filtering exemplar</title>
+  <style>
+    @layer reset, tokens, base, components, states, adaptations;
+
+    @layer reset {
+      *, *::before, *::after { box-sizing: border-box; }
+      html { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      body, h1, h2, p, figure, fieldset { margin: 0; }
+      ul { margin-block: 0; }
+      button, input { font: inherit; }
+      svg { display: block; max-inline-size: 100%; }
+    }
+
+    @layer tokens {
+      :root {
+        --ink: #17201d;
+        --muted: #58645f;
+        --paper: #f7f8f4;
+        --surface: #ffffff;
+        --line: #c9d2cc;
+        --accent: #155b4f;
+        --accent-soft: #dff0e8;
+        --water: #d9eef4;
+        --land: #e8eadf;
+        --flood: #16789b;
+        --heat: #b85b22;
+        --wind: #6b53a3;
+        --focus: #8a3ffc;
+        --radius: 1rem;
+        --shadow: 0 1rem 2.5rem rgb(20 45 36 / 0.1);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --ink: #eef4ef;
+          --muted: #b7c4bc;
+          --paper: #121714;
+          --surface: #19211d;
+          --line: #3d4a43;
+          --accent: #8ed4c1;
+          --accent-soft: #203e35;
+          --water: #1d3942;
+          --land: #30382e;
+          --flood: #71c4df;
+          --heat: #f29a66;
+          --wind: #b8a1ed;
+          --focus: #d5b6ff;
+          --shadow: 0 1rem 2.5rem rgb(0 0 0 / 0.28);
+        }
+      }
+    }
+
+    @layer base {
+      body {
+        min-block-size: 100svh;
+        color: var(--ink);
+        background: var(--paper);
+        line-height: 1.55;
+      }
+
+      a { color: var(--accent); }
+
+      :focus-visible {
+        outline: 0.2rem solid var(--focus);
+        outline-offset: 0.2rem;
+      }
+
+      .skip-link {
+        position: fixed;
+        inset-block-start: 0.75rem;
+        inset-inline-start: 0.75rem;
+        z-index: 10;
+        translate: 0 -180%;
+        padding: 0.65rem 0.9rem;
+        border-radius: 0.5rem;
+        color: var(--surface);
+        background: var(--ink);
+      }
+
+      .skip-link:focus { translate: 0; }
+
+      header, main {
+        inline-size: min(74rem, calc(100% - 2rem));
+        margin-inline: auto;
+      }
+
+      header { padding-block: clamp(2rem, 6vw, 4.5rem) 1.5rem; }
+
+      h1 {
+        max-inline-size: 18ch;
+        font-size: clamp(2rem, 5vw, 4rem);
+        line-height: 1.02;
+        letter-spacing: -0.035em;
+      }
+
+      header p { max-inline-size: 68ch; margin-block-start: 1rem; color: var(--muted); }
+    }
+
+    @layer components {
+      .filter-shell {
+        container: filter-lab / inline-size;
+        margin-block-end: 4rem;
+        padding: clamp(1rem, 3vw, 2rem);
+        border: 1px solid var(--line);
+        border-radius: calc(var(--radius) + 0.35rem);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .filter-fallback {
+        padding: 0.85rem 1rem;
+        border-inline-start: 0.3rem solid var(--accent);
+        background: var(--accent-soft);
+      }
+
+      .filter-controls { display: none; }
+
+      fieldset { min-inline-size: 0; padding: 0; border: 0; }
+
+      legend { font-size: 1.1rem; font-weight: 750; }
+
+      .filter-help, .state-boundary, .map-caption, .status { color: var(--muted); }
+      .filter-help { margin-block-start: 0.25rem; }
+
+      .filter-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        margin-block-start: 1rem;
+      }
+
+      .filter-option {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        min-block-size: 2.75rem;
+        padding: 0.55rem 0.9rem;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--surface);
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .filter-option input {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      .filter-option::before {
+        content: "";
+        inline-size: 0.72rem;
+        block-size: 0.72rem;
+        margin-inline-end: 0.5rem;
+        border: 0.14rem solid currentColor;
+        border-radius: 50%;
+        background: transparent;
+      }
+
+      .filter-option:has(input:checked) {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: var(--accent-soft);
+        font-weight: 750;
+      }
+
+      .filter-option:has(input:checked)::before { background: currentColor; }
+
+      .filter-option:has(input:focus-visible) {
+        outline: 0.2rem solid var(--focus);
+        outline-offset: 0.2rem;
+      }
+
+      .state-boundary {
+        max-inline-size: 78ch;
+        margin-block-start: 0.85rem;
+        font-size: 0.92rem;
+      }
+
+      .result-layout {
+        display: grid;
+        gap: 1.25rem;
+        margin-block-start: 1.5rem;
+      }
+
+      .map-panel, .result-panel {
+        min-inline-size: 0;
+        padding: 1rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+      }
+
+      .map-frame {
+        margin-block-start: 0.75rem;
+        border: 1px solid var(--line);
+        border-radius: 0.75rem;
+        background: var(--water);
+        overflow: hidden;
+      }
+
+      .map-frame > svg { display: block; inline-size: 100%; block-size: auto; }
+
+      .map-land { fill: var(--land); stroke: var(--line); stroke-width: 2; }
+      .map-road { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 5 7; opacity: 0.55; }
+      .map-marker circle { fill: var(--surface); stroke: var(--muted); stroke-width: 4; }
+      .map-marker text { fill: var(--ink); font: 700 14px ui-sans-serif, system-ui, sans-serif; paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+
+      .map-caption { margin-block-start: 0.65rem; font-size: 0.92rem; }
+
+      .result-panel h2 { font-size: 1.15rem; }
+      .status { margin-block-start: 0.35rem; }
+      .status-filtered { display: none; }
+
+      .result-list { padding-inline-start: 1.2rem; margin-block-start: 0.85rem; }
+      .result-list li { padding-block: 0.4rem; }
+      .result-list strong { display: block; }
+      .result-list span { color: var(--muted); }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem 1rem;
+        padding: 0;
+        margin-block-start: 0.75rem;
+        list-style: none;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .legend li { display: inline-flex; align-items: center; gap: 0.4rem; }
+      .legend i { inline-size: 0.8rem; block-size: 0.8rem; border-radius: 50%; background: currentColor; }
+      .legend .flood { color: var(--flood); }
+      .legend .heat { color: var(--heat); }
+      .legend .wind { color: var(--wind); }
+    }
+
+    @layer states {
+      /*
+        TARGET: a checked native radio owns one small, finite local state.
+        Data attributes describe each feature; scoped selectors project that state
+        into both the map and its companion list.
+
+        TARGET: checked state supplies durable filtering. Opacity supplies visual
+        transitions; display:none lets excluded results leave layout and the
+        accessibility tree together.
+
+        CONTRAST (diagnostic): focus and hover are transient interaction cues, so
+        they supply weak durable filter state.
+
+        GUARD: filtered features leave layout and the accessibility tree together.
+        URL persistence, result announcements, and large multi-facet logic receive
+        a server or script layer.
+      */
+      @supports selector(.filter-shell:has(#hazard-all:checked)) {
+        .filter-controls { display: block; }
+        .filter-fallback { display: none; }
+
+        .filter-shell:has(#hazard-flood:checked) [data-hazards]:not([data-hazards~="flood"]),
+        .filter-shell:has(#hazard-heat:checked) [data-hazards]:not([data-hazards~="heat"]),
+        .filter-shell:has(#hazard-wind:checked) [data-hazards]:not([data-hazards~="wind"]) {
+          display: none;
+        }
+
+        .filter-shell:has(#hazard-flood:checked) .map-marker circle { stroke: var(--flood); }
+        .filter-shell:has(#hazard-heat:checked) .map-marker circle { stroke: var(--heat); }
+        .filter-shell:has(#hazard-wind:checked) .map-marker circle { stroke: var(--wind); }
+
+        .filter-shell:has(#hazard-all:checked) .status-all,
+        .filter-shell:has(#hazard-flood:checked) .status-flood,
+        .filter-shell:has(#hazard-heat:checked) .status-heat,
+        .filter-shell:has(#hazard-wind:checked) .status-wind {
+          display: block;
+        }
+
+        .filter-shell:has(#hazard-flood:checked) .status-all,
+        .filter-shell:has(#hazard-heat:checked) .status-all,
+        .filter-shell:has(#hazard-wind:checked) .status-all {
+          display: none;
+        }
+      }
+    }
+
+    @layer adaptations {
+      @container filter-lab (min-width: 48rem) {
+        .result-layout { grid-template-columns: minmax(0, 1.35fr) minmax(16rem, 0.65fr); }
+      }
+
+      @media (forced-colors: active) {
+        .filter-option:has(input:checked) { border-width: 0.2rem; }
+        .map-marker circle { fill: Canvas; stroke: CanvasText; }
+        .map-marker text { fill: CanvasText; stroke: Canvas; }
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#filter-results">Skip to filtered locations</a>
+
+  <header>
+    <p>Standalone practitioner exemplar · HTML and CSS only</p>
+    <h1>Regional readiness map</h1>
+    <p>A native radio group filters a compact, finite set of map locations. The visual map and companion text list share the same public metadata and the same visibility state.</p>
+  </header>
+
+  <main>
+    <section class="filter-shell" aria-labelledby="filter-heading">
+      <h2 id="filter-heading">Filter by readiness concern</h2>
+
+      <p class="filter-fallback">All six locations remain available in this browser. A production endpoint can accept the same named values as GET parameters.</p>
+
+      <search class="filter-controls">
+        <form action="" method="get">
+          <fieldset aria-describedby="filter-help state-boundary">
+            <legend>Readiness concern</legend>
+            <p class="filter-help" id="filter-help">Choose one concern. Arrow keys move within the native radio group.</p>
+            <div class="filter-options">
+              <label class="filter-option">
+                <input id="hazard-all" type="radio" name="concern" value="all" checked>
+                All locations
+              </label>
+              <label class="filter-option">
+                <input id="hazard-flood" type="radio" name="concern" value="flood">
+                Flood readiness
+              </label>
+              <label class="filter-option">
+                <input id="hazard-heat" type="radio" name="concern" value="heat">
+                Heat readiness
+              </label>
+              <label class="filter-option">
+                <input id="hazard-wind" type="radio" name="concern" value="wind">
+                Wind readiness
+              </label>
+            </div>
+          </fieldset>
+        </form>
+        <p class="state-boundary" id="state-boundary">This local selection lasts for the current document. A production GET route carries equivalent state in the URL for reload, sharing, server rendering, and reliable result announcements.</p>
+      </search>
+
+      <div class="result-layout">
+        <figure class="map-panel" aria-labelledby="map-title map-caption">
+          <h2 id="map-title">Schematic service area</h2>
+          <div class="map-frame">
+            <svg viewBox="0 0 680 430" width="680" height="430" aria-hidden="true" focusable="false">
+              <path class="map-land" d="M54 77 190 28 342 56 502 25 625 112 597 247 648 355 505 401 345 369 221 407 83 335 38 205Z"/>
+              <path class="map-road" d="M75 279 C195 214 315 247 422 151 S563 86 610 119"/>
+              <path class="map-road" d="M157 48 C214 151 203 267 259 391"/>
+              <path class="map-road" d="M438 55 C398 165 457 250 517 384"/>
+
+              <g class="map-marker" data-hazards="flood wind" transform="translate(178 104)">
+                <circle r="11"/><text x="18" y="5">North River</text>
+              </g>
+              <g class="map-marker" data-hazards="flood" transform="translate(485 95)">
+                <circle r="11"/><text x="18" y="5">Lake Plain</text>
+              </g>
+              <g class="map-marker" data-hazards="heat" transform="translate(349 210)">
+                <circle r="11"/><text x="18" y="5">Civic Core</text>
+              </g>
+              <g class="map-marker" data-hazards="wind" transform="translate(122 270)">
+                <circle r="11"/><text x="18" y="5">West Ridge</text>
+              </g>
+              <g class="map-marker" data-hazards="flood heat" transform="translate(515 315)">
+                <circle r="11"/><text x="18" y="5">Harbor Edge</text>
+              </g>
+              <g class="map-marker" data-hazards="heat" transform="translate(286 344)">
+                <circle r="11"/><text x="18" y="5">South Market</text>
+              </g>
+            </svg>
+          </div>
+          <ul class="legend" aria-label="Concern legend">
+            <li class="flood"><i aria-hidden="true"></i>Flood</li>
+            <li class="heat"><i aria-hidden="true"></i>Heat</li>
+            <li class="wind"><i aria-hidden="true"></i>Wind</li>
+          </ul>
+          <figcaption class="map-caption" id="map-caption">The active concern supplies marker color; All uses neutral markers. The companion list carries the same six locations in document order.</figcaption>
+        </figure>
+
+        <section class="result-panel" id="filter-results" aria-labelledby="result-heading">
+          <h2 id="result-heading">Locations</h2>
+          <p class="status status-all">6 locations across all concerns</p>
+          <p class="status status-filtered status-flood">3 locations with flood readiness work</p>
+          <p class="status status-filtered status-heat">3 locations with heat readiness work</p>
+          <p class="status status-filtered status-wind">2 locations with wind readiness work</p>
+          <ul class="result-list">
+            <li data-hazards="flood wind"><strong>North River</strong><span>Flood and wind readiness</span></li>
+            <li data-hazards="flood"><strong>Lake Plain</strong><span>Flood readiness</span></li>
+            <li data-hazards="heat"><strong>Civic Core</strong><span>Heat readiness</span></li>
+            <li data-hazards="wind"><strong>West Ridge</strong><span>Wind readiness</span></li>
+            <li data-hazards="flood heat"><strong>Harbor Edge</strong><span>Flood and heat readiness</span></li>
+            <li data-hazards="heat"><strong>South Market</strong><span>Heat readiness</span></li>
+          </ul>
+        </section>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

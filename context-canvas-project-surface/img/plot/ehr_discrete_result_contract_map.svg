@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="sr1-map-title sr1-map-desc">
+  <title id="sr1-map-title">The discrete result needs an object chain, a match membrane, and two visible calendars</title>
+  <desc id="sr1-map-desc">A reference genomics laboratory names an order, specimen, report, discrete finding, and patient identity. Terminology and patient matching are checked before filing. A SMART context pilot can proceed on an earlier path while the certified discrete Epic connection completes a separate vendor review and live-connection path. A final band names the people and investments that keep the result dependable.</desc>
+
+  <defs>
+    <pattern id="sr1-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#2855f3" stroke-opacity=".06" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <style>
+    .field{fill:#fffaf2}.grid{fill:url(#sr1-grid)}.frame{fill:none;stroke:#17345f;stroke-width:2}.header{fill:#2855f3}.panel{fill:#fffdf8;stroke:#17345f;stroke-width:2}.shadow{fill:#17345f}.card{fill:#fffdf8;stroke:#7893bc;stroke-width:1.5}.rose{fill:#ffd3d0}.powder{fill:#cfe7f7}.sea{fill:#d9efea}.cream{fill:#fff5de}.pale{fill:#e7efff}.acid{fill:#f2ff67}.coral{fill:#fa7065}.cobalt{fill:#2855f3}.deep{fill:#153fbe}.ink{fill:#17345f}.rule{stroke:#9aacc8;stroke-width:1.2}.title{fill:#fffdf8;font:750 35px/1.1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.subtitle{fill:#e7efff;font:500 15px/1.35 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.eyebrow-on{fill:#f2ff67;font:750 12px/1.2 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:1.4px}.eyebrow{fill:#5d6f8b;font:750 12px/1.2 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:1.1px}.section{fill:#17345f;font:750 20px/1.2 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.card-title{fill:#17345f;font:750 16px/1.2 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.body{fill:#304a71;font:500 13.5px/1.4 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.body-strong{fill:#17345f;font:700 13.5px/1.4 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.mono{fill:#304a71;font:650 11.5px/1.3 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}.mono-on{fill:#fffdf8;font:700 11.5px/1.3 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:.4px}.chip{fill:#fffdf8;stroke:#17345f;stroke-width:1.5}.chip-text{fill:#17345f;font:700 12px/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.arrow{fill:#2855f3}.arrow-coral{fill:#fa7065}
+  </style>
+
+  <rect class="field" width="1600" height="1120"/>
+  <rect class="grid" x="20" y="20" width="1560" height="1080" rx="28"/>
+  <rect class="frame" x="20" y="20" width="1560" height="1080" rx="28"/>
+
+  <g role="group" aria-labelledby="sr1-heading-title">
+    <title id="sr1-heading-title">Discrete result contract heading</title>
+    <path class="header" d="M20 48a28 28 0 0 1 28-28h1504a28 28 0 0 1 28 28v116H20Z"/>
+    <text class="eyebrow-on" x="54" y="58">EHR INTEGRATION · SR1 · PARTIAL OUTCOME</text>
+    <text class="title" x="54" y="103">The PDF is a symptom; the missing object contract is the work</text>
+    <text class="subtitle" x="54" y="134">Name the clinical chain · steward identity before filing · let the movable and gated paths keep separate calendars</text>
+  </g>
+
+  <g role="group" aria-labelledby="sr1-object-chain-title">
+    <title id="sr1-object-chain-title">Shared clinical object chain</title>
+    <text class="eyebrow" x="54" y="198">SHARED CLINICAL OBJECT CHAIN</text>
+
+    <rect class="shadow" x="62" y="220" width="278" height="128" rx="14"/>
+    <rect class="panel cream" x="54" y="212" width="278" height="128" rx="14"/>
+    <text class="eyebrow" x="76" y="239">01 · ORDER</text>
+    <text class="card-title" x="76" y="270">Test requisition</text>
+    <text class="mono" x="76" y="295">ORM / ServiceRequest</text>
+    <text class="body" x="76" y="319">Intent and requested service stay linked.</text>
+
+    <path class="arrow" aria-hidden="true" d="M348 262H372V250L400 276L372 302V290H348Z"/>
+
+    <rect class="shadow" x="416" y="220" width="248" height="128" rx="14"/>
+    <rect class="panel powder" x="408" y="212" width="248" height="128" rx="14"/>
+    <text class="eyebrow" x="430" y="239">02 · SPECIMEN</text>
+    <text class="card-title" x="430" y="270">Accession + material</text>
+    <text class="mono" x="430" y="295">SPM / Specimen</text>
+    <text class="body" x="430" y="319">Collection context follows the case.</text>
+
+    <path class="arrow" aria-hidden="true" d="M672 262H696V250L724 276L696 302V290H672Z"/>
+
+    <rect class="shadow" x="740" y="220" width="278" height="128" rx="14"/>
+    <rect class="panel pale" x="732" y="212" width="278" height="128" rx="14"/>
+    <text class="eyebrow" x="754" y="239">03 · RESULT SET</text>
+    <text class="card-title" x="754" y="270">Genomic report</text>
+    <text class="mono" x="754" y="295">ORU / DiagnosticReport</text>
+    <text class="body" x="754" y="319">Finality and report context remain explicit.</text>
+
+    <path class="arrow" aria-hidden="true" d="M1026 262H1050V250L1078 276L1050 302V290H1026Z"/>
+
+    <rect class="shadow" x="1094" y="220" width="452" height="128" rx="14"/>
+    <rect class="panel acid" x="1086" y="212" width="452" height="128" rx="14"/>
+    <text class="eyebrow" x="1108" y="239">04 · DISCRETE FINDING</text>
+    <text class="card-title" x="1108" y="270">Variant, biomarker, interpretation, and status</text>
+    <text class="mono" x="1108" y="295">OBX / Observation · LOINC-coded clinical meaning</text>
+    <text class="body" x="1108" y="319">The finding can be searched and reviewed without re-keying.</text>
+  </g>
+
+  <g role="group" aria-labelledby="sr1-match-title">
+    <title id="sr1-match-title">Terminology and patient identity match membrane</title>
+    <rect class="shadow" x="62" y="392" width="480" height="342" rx="17"/>
+    <rect class="panel" x="54" y="384" width="480" height="342" rx="17"/>
+    <path class="deep" d="M71 384h446a17 17 0 0 1 17 17v68H54v-68a17 17 0 0 1 17-17Z"/>
+    <text class="mono-on" x="78" y="416">SAFETY MEMBRANE · BEFORE CLINICAL FILING</text>
+    <text class="title" x="78" y="448" style="font-size:23px">Meaning and identity settle first</text>
+
+    <rect class="card pale" x="78" y="493" width="200" height="104" rx="11"/>
+    <text class="eyebrow" x="98" y="518">TERMINOLOGY</text>
+    <text class="card-title" x="98" y="545">Versioned coded map</text>
+    <text class="body" x="98" y="570">Gene, alteration, interpretation,</text>
+    <text class="body" x="98" y="589">and status remain testable.</text>
+
+    <rect class="card rose" x="294" y="493" width="216" height="104" rx="11"/>
+    <text class="eyebrow" x="314" y="518">PATIENT IDENTITY</text>
+    <text class="card-title" x="314" y="545">EMPI + exception route</text>
+    <text class="body" x="314" y="570">Subject evidence precedes</text>
+    <text class="body" x="314" y="589">chart filing and replay.</text>
+
+    <rect class="card sea" x="78" y="615" width="432" height="86" rx="11"/>
+    <text class="eyebrow" x="98" y="640">WRITTEN EXIT STATE</text>
+    <text class="body-strong" x="98" y="666">MATCHED · coded meaning and chart identity are settled</text>
+    <text class="body" x="98" y="688">or HELD · mismatch keeps the full result out of clinical filing.</text>
+  </g>
+
+  <g aria-hidden="true">
+    <path class="arrow" d="M550 492H582V478L612 506L582 534V520H550Z"/>
+    <path class="arrow" d="M550 624H582V610L612 638L582 666V652H550Z"/>
+  </g>
+
+  <g role="group" aria-labelledby="sr1-paths-title">
+    <title id="sr1-paths-title">Separate SMART context and certified discrete-result paths</title>
+    <rect class="shadow" x="628" y="392" width="910" height="148" rx="17"/>
+    <rect class="panel" x="620" y="384" width="910" height="148" rx="17"/>
+    <rect class="sea" x="620" y="384" width="214" height="148" rx="16"/>
+    <text class="eyebrow" x="644" y="414">MOVABLE PATH</text>
+    <text class="section" x="644" y="446">SMART context pilot</text>
+    <text class="mono" x="644" y="472">EARLIER · BOUNDED</text>
+    <text class="card-title" x="862" y="418">Report context near the clinician</text>
+    <text class="body" x="862" y="445">Least-privilege launch can test placement while the</text>
+    <text class="body" x="862" y="466">certified result channel follows its separate program path.</text>
+    <rect class="acid" x="862" y="483" width="300" height="28" rx="14"/>
+    <text class="mono" x="878" y="502">LEARNING STATE · PLACEMENT + WORKFLOW</text>
+    <text class="body-strong" x="1190" y="500">Does context arrive where work needs it?</text>
+
+    <rect class="shadow" x="628" y="558" width="910" height="168" rx="17"/>
+    <rect class="panel" x="620" y="550" width="910" height="168" rx="17"/>
+    <rect class="powder" x="620" y="550" width="214" height="168" rx="16"/>
+    <text class="eyebrow" x="644" y="580">GATED PATH</text>
+    <text class="section" x="644" y="604">Certified</text>
+    <text class="section" x="644" y="629">discrete result</text>
+    <text class="mono" x="644" y="655">LONGER · PROGRAM-BOUND</text>
+    <text class="card-title" x="862" y="584">Conformant ORU → Epic genomics surface</text>
+    <text class="body" x="862" y="611">Security review, representative conformance, and the live</text>
+    <text class="body" x="862" y="632">connection remain first-class delivery work.</text>
+    <rect class="cream" x="862" y="651" width="280" height="38" rx="8"/>
+    <text class="mono" x="878" y="675">VENDOR REVIEW · EXTERNAL CALENDAR</text>
+    <path class="arrow-coral" aria-hidden="true" d="M1160 653H1190V641L1218 670L1190 699V687H1160Z"/>
+    <rect class="rose" x="1234" y="651" width="272" height="38" rx="8"/>
+    <text class="mono" x="1250" y="675">LIVE CONNECTION · REMAINING GATE</text>
+  </g>
+
+  <g role="group" aria-labelledby="sr1-calendar-title">
+    <title id="sr1-calendar-title">Two-calendar interpretation</title>
+    <rect class="panel rose" x="54" y="770" width="1492" height="106" rx="14"/>
+    <text class="eyebrow" x="78" y="800">TWO CALENDARS · ONE PARTIAL OUTCOME</text>
+    <text class="section" x="78" y="830">The earlier context pilot buys workflow learning; the certified path buys durable discrete filing.</text>
+    <text class="body" x="78" y="856">Neither path stands in for the other. The remaining vendor gate stays visible in the plan, the outcome, and the evidence boundary.</text>
+  </g>
+
+  <g role="group" aria-labelledby="sr1-investment-title">
+    <title id="sr1-investment-title">Changed work and sustained investment</title>
+    <rect class="cobalt" x="54" y="906" width="1492" height="58" rx="12"/>
+    <text class="mono-on" x="78" y="932">CHANGED WORK + INVESTMENT</text>
+    <text class="title" x="78" y="954" style="font-size:18px">A useful result depends on meaning, identity, placement, conformance, and recovery being staffed together.</text>
+
+    <rect class="card pale" x="54" y="982" width="278" height="92" rx="11"/>
+    <text class="eyebrow" x="74" y="1008">CLINICAL INFORMATICS</text>
+    <text class="body-strong" x="74" y="1034">Validate meaning and placement</text>
+    <text class="body" x="74" y="1055">with representative findings.</text>
+
+    <rect class="card cream" x="348" y="982" width="278" height="92" rx="11"/>
+    <text class="eyebrow" x="368" y="1008">TERMINOLOGY</text>
+    <text class="body-strong" x="368" y="1034">Maintain the coded map</text>
+    <text class="body" x="368" y="1055">as assays and targets evolve.</text>
+
+    <rect class="card rose" x="642" y="982" width="278" height="92" rx="11"/>
+    <text class="eyebrow" x="662" y="1008">IDENTITY OPERATIONS</text>
+    <text class="body-strong" x="662" y="1034">Own match exceptions</text>
+    <text class="body" x="662" y="1055">before filing and replay.</text>
+
+    <rect class="card sea" x="936" y="982" width="278" height="92" rx="11"/>
+    <text class="eyebrow" x="956" y="1008">INTEGRATION</text>
+    <text class="body-strong" x="956" y="1034">Version carrier and fixtures</text>
+    <text class="body" x="956" y="1055">with observable recovery.</text>
+
+    <rect class="card acid" x="1230" y="982" width="316" height="92" rx="11"/>
+    <text class="eyebrow" x="1250" y="1008">PROGRAM DELIVERY</text>
+    <text class="body-strong" x="1250" y="1034">Fund the external gate</text>
+    <text class="body" x="1250" y="1055">as a separate calendar.</text>
+  </g>
+</svg>

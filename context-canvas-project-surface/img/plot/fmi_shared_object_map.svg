@@ -1,0 +1,210 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="title desc">
+  <title id="title">Shared-Object Investment Map for the FMI LIMS and ELN re-platforming decision</title>
+  <desc id="desc">A many-to-many map connects five shared laboratory objects—sample, plate, reagent, run or worklist, and sign-off—to the system surfaces that carry them, the abilities created by a coherent target state, and the labor, risk, and investment exposed when the object grammar fragments. A cross-functional rail and whole-initiative cost band complete the map.</desc>
+  <defs>
+    <clipPath id="frame-clip">
+      <rect x="18" y="18" width="1564" height="1084" rx="28"/>
+    </clipPath>
+    <pattern id="field-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#2855f3" stroke-opacity=".055" stroke-width="1"/>
+    </pattern>
+    <style>
+      .frame{fill:none;stroke:#17345f;stroke-width:2}.paper{fill:#fffaf2}.grain{fill:url(#field-grid)}
+      .header{fill:#2855f3}.shadow{fill:#17345f}.group{fill:#d9efea;stroke:#17345f;stroke-width:1.5}.row{fill:#fffdf8;stroke:#17345f;stroke-width:2}
+      .object{fill:#fff5de;stroke:#17345f;stroke-width:2}.systems{fill:#e7efff;stroke:#17345f;stroke-width:2}
+      .system-chip{fill:#fffdf8;stroke:#7893bc;stroke-width:1.2}.ability{fill:#d9efea;stroke:#17345f;stroke-width:2}
+      .cost{fill:#ffd3d0;stroke:#17345f;stroke-width:2}.cost-chip{fill:#fff5de;stroke:#17345f;stroke-width:1.2}
+      .separate{fill:#e7efff;stroke:#17345f;stroke-width:1.5}.arrow{fill:#2855f3}
+      .crosslink{fill:none;stroke:#7893bc;stroke-width:1.35;opacity:.48}.junction{fill:#2855f3;opacity:.58}
+      .eyebrow{font:700 16px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.7px;fill:#5d6f8b}
+      .eyebrow-on{font:700 16px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.7px;fill:#f2ff67}
+      .title{font:760 32px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf8}
+      .subtitle{font:500 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#e7efff}
+      .group-label{font:650 15px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .object-title{font:760 21px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .label{font:700 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .small{font:500 15px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}
+      .chip{font:650 13px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}
+      .ability-text{font:650 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .cost-text{font:650 16px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .footer-label{font:700 13px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.1px;fill:#5d6f8b}
+      .footer-chip{font:650 12px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+    </style>
+  </defs>
+
+  <g clip-path="url(#frame-clip)">
+    <rect class="paper" x="18" y="18" width="1564" height="1084"/>
+    <rect class="grain" x="18" y="18" width="1564" height="1084"/>
+  </g>
+  <rect class="frame" x="18" y="18" width="1564" height="1084" rx="28" fill="none"/>
+
+  <g role="group" aria-labelledby="heading-title">
+    <title id="heading-title">Shared-object investment map heading</title>
+    <path class="header" d="M18 46a28 28 0 0 1 28-28h1508a28 28 0 0 1 28 28v104H18Z"/>
+    <text class="eyebrow-on" x="50" y="62">SHARED-OBJECT INVESTMENT MAP</text>
+    <text class="title" x="50" y="100">One grammar exposes system fit, changed ability, and whole-life cost</text>
+    <text class="subtitle" x="50" y="130">A platform earns its place by carrying the same objects coherently across groups, systems, states, exceptions, and review.</text>
+  </g>
+
+  <g role="group" aria-labelledby="groups-title">
+    <title id="groups-title">Cross-functional groups contributing local knowledge</title>
+    <text class="eyebrow" x="50" y="166">CROSS-FUNCTIONAL RAIL · SIX-PLUS GROUPS CONTRIBUTED LOCAL KNOWLEDGE</text>
+    <rect class="group" x="50" y="178" width="214" height="38" rx="19"/><text class="group-label" x="67" y="202">Molecular technologists</text>
+    <rect class="group" x="278" y="178" width="220" height="38" rx="19"/><text class="group-label" x="295" y="202">US + German lab operations</text>
+    <rect class="group" x="512" y="178" width="142" height="38" rx="19"/><text class="group-label" x="529" y="202">CDx DevOps</text>
+    <rect class="group" x="668" y="178" width="218" height="38" rx="19"/><text class="group-label" x="685" y="202">Automation Development</text>
+    <rect class="group" x="900" y="178" width="142" height="38" rx="19"/><text class="group-label" x="917" y="202">Lab Systems</text>
+    <rect class="group" x="1056" y="178" width="218" height="38" rx="19"/><text class="group-label" x="1073" y="202">Quality + lab leadership</text>
+  </g>
+
+  <g role="group" aria-labelledby="columns-title">
+    <title id="columns-title">Corridor columns</title>
+    <text class="eyebrow" x="40" y="256">SHARED OBJECT</text>
+    <text class="eyebrow" x="340" y="256">SYSTEM SURFACES · MANY-TO-MANY</text>
+    <text class="eyebrow" x="760" y="256">CHANGED ABILITY</text>
+    <text class="eyebrow" x="1180" y="256">COST EXPOSURE WHEN GRAMMAR FORKS</text>
+  </g>
+
+  <!-- Shared-system spines make repeated surfaces visible across object corridors. -->
+  <g aria-hidden="true">
+    <path class="crosslink" d="M393 326 C320 375 320 442 393 471 S466 568 393 616 S320 713 393 761 S466 858 393 906"/>
+    <path class="crosslink" d="M505 326 C575 375 575 442 505 471"/>
+    <path class="crosslink" d="M589 616 C660 665 660 713 589 761"/>
+    <circle class="junction" cx="393" cy="326" r="4"/><circle class="junction" cx="393" cy="471" r="4"/><circle class="junction" cx="393" cy="616" r="4"/><circle class="junction" cx="393" cy="761" r="4"/><circle class="junction" cx="393" cy="906" r="4"/>
+  </g>
+
+  <!-- Sample corridor -->
+  <g role="group" aria-labelledby="sample-corridor-title">
+  <title id="sample-corridor-title">Sample corridor from identity and lifecycle surfaces to changed ability and cost exposure</title>
+  <rect class="shadow" aria-hidden="true" x="40" y="280" width="1536" height="126" rx="16"/>
+  <rect class="row" x="32" y="272" width="1536" height="126" rx="16"/>
+  <rect class="object" x="40" y="282" width="270" height="106" rx="14"/>
+  <text class="eyebrow" x="60" y="309">01</text><text class="object-title" x="60" y="338">Sample</text>
+  <text class="small" x="60" y="364">identity · location · state</text>
+  <path class="arrow" d="M310 333 H328 V327 L340 335 L328 343 V337 H310 Z"/>
+  <rect class="systems" x="340" y="282" width="390" height="106" rx="14"/>
+  <text class="label" x="360" y="309">Carries identity and lifecycle</text>
+  <rect class="system-chip" x="360" y="317" width="68" height="27" rx="8"/><text class="chip" x="378" y="335">LIMS</text>
+  <rect class="system-chip" x="438" y="317" width="128" height="27" rx="8"/><text class="chip" x="451" y="335">Sample Monitor</text>
+  <rect class="system-chip" x="576" y="317" width="56" height="27" rx="8"/><text class="chip" x="592" y="335">EBR</text>
+  <rect class="system-chip" x="360" y="351" width="157" height="27" rx="8"/><text class="chip" x="374" y="369">custody event history</text>
+  <path class="arrow" d="M730 333 H748 V327 L760 335 L748 343 V337 H730 Z"/>
+  <rect class="ability" x="760" y="282" width="390" height="106" rx="14"/>
+  <text class="ability-text" x="782" y="321"><tspan x="782">One state history answers location,</tspan><tspan x="782" dy="24">stage, connected work, and owner.</tspan></text>
+  <path class="arrow" d="M1150 333 H1168 V327 L1180 335 L1168 343 V337 H1150 Z"/>
+  <rect class="cost" x="1180" y="282" width="380" height="106" rx="14"/>
+  <text class="cost-text" x="1202" y="318"><tspan x="1202">Search labor · recollection risk</tspan><tspan x="1202" dy="24">partner delay · avoidable rework</tspan></text>
+  </g>
+
+  <!-- Plate corridor -->
+  <g role="group" aria-labelledby="plate-corridor-title">
+  <title id="plate-corridor-title">Plate corridor from movement and lineage surfaces to changed ability and cost exposure</title>
+  <rect class="shadow" aria-hidden="true" x="40" y="425" width="1536" height="126" rx="16"/>
+  <rect class="row" x="32" y="417" width="1536" height="126" rx="16"/>
+  <rect class="object" x="40" y="427" width="270" height="106" rx="14"/>
+  <text class="eyebrow" x="60" y="454">02</text><text class="object-title" x="60" y="483">Plate</text>
+  <text class="small" x="60" y="509">container · lineage · move</text>
+  <path class="arrow" d="M310 478 H328 V472 L340 480 L328 488 V482 H310 Z"/>
+  <rect class="systems" x="340" y="427" width="390" height="106" rx="14"/>
+  <text class="label" x="360" y="454">Carries movement and lineage</text>
+  <rect class="system-chip" x="360" y="462" width="68" height="27" rx="8"/><text class="chip" x="378" y="480">LIMS</text>
+  <rect class="system-chip" x="438" y="462" width="128" height="27" rx="8"/><text class="chip" x="451" y="480">Sample Monitor</text>
+  <rect class="system-chip" x="360" y="496" width="137" height="27" rx="8"/><text class="chip" x="374" y="514">movement service</text>
+  <path class="arrow" d="M730 478 H748 V472 L760 480 L748 488 V482 H730 Z"/>
+  <rect class="ability" x="760" y="427" width="390" height="106" rx="14"/>
+  <text class="ability-text" x="782" y="466"><tspan x="782">Atomic moves preserve custody,</tspan><tspan x="782" dy="24">lineage, and a recovery path.</tspan></text>
+  <path class="arrow" d="M1150 478 H1168 V472 L1180 480 L1168 488 V482 H1150 Z"/>
+  <rect class="cost" x="1180" y="427" width="380" height="106" rx="14"/>
+  <text class="cost-text" x="1202" y="463"><tspan x="1202">Data repair · incident response</tspan><tspan x="1202" dy="24">downtime · revalidation</tspan></text>
+  </g>
+
+  <!-- Reagent corridor -->
+  <g role="group" aria-labelledby="reagent-corridor-title">
+  <title id="reagent-corridor-title">Reagent corridor from supply and handling surfaces to changed ability and cost exposure</title>
+  <rect class="shadow" aria-hidden="true" x="40" y="570" width="1536" height="126" rx="16"/>
+  <rect class="row" x="32" y="562" width="1536" height="126" rx="16"/>
+  <rect class="object" x="40" y="572" width="270" height="106" rx="14"/>
+  <text class="eyebrow" x="60" y="599">03</text><text class="object-title" x="60" y="628">Reagent</text>
+  <text class="small" x="60" y="654">lot · thaw state · constraint</text>
+  <path class="arrow" d="M310 623 H328 V617 L340 625 L328 633 V627 H310 Z"/>
+  <rect class="systems" x="340" y="572" width="390" height="106" rx="14"/>
+  <text class="label" x="360" y="599">Carries supply and handling state</text>
+  <rect class="system-chip" x="360" y="607" width="68" height="27" rx="8"/><text class="chip" x="378" y="625">LIMS</text>
+  <rect class="system-chip" x="438" y="607" width="56" height="27" rx="8"/><text class="chip" x="454" y="625">EBR</text>
+  <rect class="system-chip" x="504" y="607" width="154" height="27" rx="8"/><text class="chip" x="517" y="625">instrument adapter</text>
+  <rect class="system-chip" x="360" y="641" width="135" height="27" rx="8"/><text class="chip" x="374" y="659">inventory service</text>
+  <path class="arrow" d="M730 623 H748 V617 L760 625 L748 633 V627 H730 Z"/>
+  <rect class="ability" x="760" y="572" width="390" height="106" rx="14"/>
+  <text class="ability-text" x="782" y="611"><tspan x="782">Capture and range constraints</tspan><tspan x="782" dy="24">protect the qualified handling window.</tspan></text>
+  <path class="arrow" d="M1150 623 H1168 V617 L1180 625 L1168 633 V627 H1150 Z"/>
+  <rect class="cost" x="1180" y="572" width="380" height="106" rx="14"/>
+  <text class="cost-text" x="1202" y="608"><tspan x="1202">Thaw waste · reconciliation labor</tspan><tspan x="1202" dy="24">rescan time · supply disruption</tspan></text>
+  </g>
+
+  <!-- Run corridor -->
+  <g role="group" aria-labelledby="run-corridor-title">
+  <title id="run-corridor-title">Run and worklist corridor from execution surfaces to changed ability and cost exposure</title>
+  <rect class="shadow" aria-hidden="true" x="40" y="715" width="1536" height="126" rx="16"/>
+  <rect class="row" x="32" y="707" width="1536" height="126" rx="16"/>
+  <rect class="object" x="40" y="717" width="270" height="106" rx="14"/>
+  <text class="eyebrow" x="60" y="744">04</text><text class="object-title" x="60" y="773">Run / worklist</text>
+  <text class="small" x="60" y="799">instrument work · skip · rerun</text>
+  <path class="arrow" d="M310 768 H328 V762 L340 770 L328 778 V772 H310 Z"/>
+  <rect class="systems" x="340" y="717" width="390" height="106" rx="14"/>
+  <text class="label" x="360" y="744">Carries execution and exceptions</text>
+  <rect class="system-chip" x="360" y="752" width="68" height="27" rx="8"/><text class="chip" x="378" y="770">LIMS</text>
+  <rect class="system-chip" x="438" y="752" width="56" height="27" rx="8"/><text class="chip" x="454" y="770">EBR</text>
+  <rect class="system-chip" x="504" y="752" width="154" height="27" rx="8"/><text class="chip" x="517" y="770">instrument adapter</text>
+  <rect class="system-chip" x="360" y="786" width="142" height="27" rx="8"/><text class="chip" x="374" y="804">notification service</text>
+  <path class="arrow" d="M730 768 H748 V762 L760 770 L748 778 V772 H730 Z"/>
+  <rect class="ability" x="760" y="717" width="390" height="106" rx="14"/>
+  <text class="ability-text" x="782" y="756"><tspan x="782">Skips and reruns become explicit;</tspan><tspan x="782" dy="24">capture starts at the instrument.</tspan></text>
+  <path class="arrow" d="M1150 768 H1168 V762 L1180 770 L1168 778 V772 H1150 Z"/>
+  <rect class="cost" x="1180" y="717" width="380" height="106" rx="14"/>
+  <text class="cost-text" x="1202" y="753"><tspan x="1202">Hidden defects · manual checks</tspan><tspan x="1202" dy="24">integration work · release delay</tspan></text>
+  </g>
+
+  <!-- Sign-off corridor -->
+  <g role="group" aria-labelledby="signoff-corridor-title">
+  <title id="signoff-corridor-title">Sign-off and approval corridor from review surfaces to changed ability and cost exposure</title>
+  <rect class="shadow" aria-hidden="true" x="40" y="860" width="1536" height="126" rx="16"/>
+  <rect class="row" x="32" y="852" width="1536" height="126" rx="16"/>
+  <rect class="object" x="40" y="862" width="270" height="106" rx="14"/>
+  <text class="eyebrow" x="60" y="889">05</text><text class="object-title" x="60" y="918">Sign-off / approval</text>
+  <text class="small" x="60" y="944">actor · time · meaning · version</text>
+  <path class="arrow" d="M310 913 H328 V907 L340 915 L328 923 V917 H310 Z"/>
+  <rect class="systems" x="340" y="862" width="390" height="106" rx="14"/>
+  <text class="label" x="360" y="889">Carries review context</text>
+  <rect class="system-chip" x="360" y="897" width="68" height="27" rx="8"/><text class="chip" x="378" y="915">LIMS</text>
+  <rect class="system-chip" x="438" y="897" width="56" height="27" rx="8"/><text class="chip" x="454" y="915">ELN</text>
+  <rect class="system-chip" x="504" y="897" width="131" height="27" rx="8"/><text class="chip" x="517" y="915">QA / submission</text>
+  <rect class="system-chip" x="360" y="931" width="119" height="27" rx="8"/><text class="chip" x="374" y="949">review history</text>
+  <path class="arrow" d="M730 913 H748 V907 L760 915 L748 923 V917 H730 Z"/>
+  <rect class="ability" x="760" y="862" width="390" height="106" rx="14"/>
+  <text class="ability-text" x="782" y="901"><tspan x="782">Actor, time, reason, and meaning</tspan><tspan x="782" dy="24">travel with the transition.</tspan></text>
+  <path class="arrow" d="M1150 913 H1168 V907 L1180 915 L1168 923 V917 H1150 Z"/>
+  <rect class="cost" x="1180" y="862" width="380" height="106" rx="14"/>
+  <text class="cost-text" x="1202" y="898"><tspan x="1202">Review delay · SOP change</tspan><tspan x="1202" dy="24">audit preparation · reassignment</tspan></text>
+  </g>
+
+  <!-- Whole-initiative investment lines -->
+  <g role="group" aria-labelledby="investment-title">
+  <title id="investment-title">Whole-initiative investment lines and coordinated laboratory transformation</title>
+  <rect class="shadow" aria-hidden="true" x="40" y="1000" width="1536" height="92" rx="16"/>
+  <rect class="row" x="32" y="992" width="1536" height="92" rx="16"/>
+  <text class="footer-label" x="50" y="1017">WHOLE-INITIATIVE COST LINES</text>
+  <g>
+    <rect class="cost-chip" x="50" y="1030" width="108" height="28" rx="8"/><text class="footer-chip" x="65" y="1049">configuration</text>
+    <rect class="cost-chip" x="167" y="1030" width="94" height="28" rx="8"/><text class="footer-chip" x="184" y="1049">integration</text>
+    <rect class="cost-chip" x="270" y="1030" width="86" height="28" rx="8"/><text class="footer-chip" x="288" y="1049">migration</text>
+    <rect class="cost-chip" x="365" y="1030" width="80" height="28" rx="8"/><text class="footer-chip" x="384" y="1049">training</text>
+    <rect class="cost-chip" x="454" y="1030" width="88" height="28" rx="8"/><text class="footer-chip" x="471" y="1049">downtime</text>
+    <rect class="cost-chip" x="551" y="1030" width="88" height="28" rx="8"/><text class="footer-chip" x="568" y="1049">validation</text>
+    <rect class="cost-chip" x="648" y="1030" width="166" height="28" rx="8"/><text class="footer-chip" x="662" y="1049">SOP + work instructions</text>
+    <rect class="cost-chip" x="823" y="1030" width="104" height="28" rx="8"/><text class="footer-chip" x="840" y="1049">maintenance</text>
+  </g>
+  <text class="footer-label" x="1000" y="1017">SEPARATE BUT COORDINATED</text>
+  <rect class="separate" x="1000" y="1030" width="540" height="28" rx="8"/>
+  <text class="footer-chip" x="1016" y="1049">Lab Systems Transformation · instruments + physical laboratory</text>
+  </g>
+</svg>

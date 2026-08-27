@@ -1,0 +1,268 @@
+/* Context Canvas component: instrument atlas ------------------------------
+   Consumers: ai-systems.html and shared-machinery.html through
+   .instrument-atlas-table, .instrument-prototype-grid, and
+   .instrument-atlas-card variants.
+   Owns: atlas table width, card structure, responsive variants, interaction,
+   reduced motion, forced colors, and print behavior.
+   Load order: expanded.css, this component, styles/routes/ai-systems.css,
+   optional styles/routes/ai-systems-entry.css, then canvas-shell.css.
+   Contract: ../../../../visual-fidelity-contracts/cobalt-operating-field.md.
+   The component keeps the shared inspection grammar stable while each route
+   retains authority over field color, rhythm, density, and new compositions. */
+
+.instrument-atlas-table {
+    min-inline-size: 88rem;
+}
+
+.instrument-atlas-table thead th {
+    background: var(--blueprint-ink);
+    color: #fff;
+}
+
+/*.instrument-atlas-table tbody tr:nth-child(3n + 1) > * {*/
+/*    background: color-mix(in srgb, var(--blueprint-sky) 42%, #fff 58%);*/
+/*}*/
+
+/*.instrument-atlas-table tbody tr:nth-child(3n + 2) > * {*/
+/*    background: color-mix(in srgb, #ffe0e6 42%, #fff 58%);*/
+/*}*/
+
+/*.instrument-atlas-table tbody tr:nth-child(3n) > * {*/
+/*    background: color-mix(in srgb, var(--blueprint-sea) 52%, #fff 48%);*/
+/*}*/
+
+.instrument-atlas-table tbody th {
+    border-inline-start: .3rem solid var(--blueprint-cobalt);
+    min-inline-size: 12rem;
+}
+
+.instrument-prototype-grid {
+    display: grid;
+    gap: clamp(1rem, 2.25vw, 1.5rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    margin-block: var(--canvas-section-space);
+}
+
+.instrument-prototype-grid a,
+.instrument-prototype-grid a:visited {
+    border: .125rem solid var(--blueprint-ink);
+    border-radius: .75rem;
+    color: var(--blueprint-cobalt);
+    display: block;
+    min-block-size: 8.75rem;
+    padding: clamp(1rem, 2vw, 1.4rem);
+    /*text-decoration: none;*/
+}
+
+/* Color assignments express FRAME + SELECT, SHAPE + INSPECT, STAGE + RECOVER,
+   or SHARED STEWARDSHIP. Navigation color follows the same role mapping. */
+/*.instrument-prototype-grid a:nth-child(3n + 2) {*/
+/*    background: #ffe0e6;*/
+/*    box-shadow: .4rem .4rem 0 var(--blueprint-cobalt);*/
+/*}*/
+
+/*.instrument-prototype-grid a:nth-child(3n) {*/
+/*    background: var(--blueprint-sea);*/
+/*    box-shadow: .4rem .4rem 0 var(--blueprint-cobalt);*/
+/*}*/
+
+.instrument-prototype-grid a:hover,
+.instrument-prototype-grid a:focus-visible {
+    filter: none;
+    color: var(--blueprint-cobalt-deep);
+    background: var(--blueprint-acid-yellow);
+    box-shadow: .4rem .4rem 0 var(--blueprint-cobalt);
+    transform: translate(-.12rem, -.12rem);
+}
+
+.instrument-prototype-grid strong,
+.instrument-prototype-grid span {
+    display: block;
+}
+
+.instrument-prototype-grid strong {
+    font-family: Futura, Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 1.15rem;
+    margin-block-end: .65rem;
+}
+
+.instrument-prototype-grid span {
+    line-height: 1.45;
+}
+
+.ai-systems-page .instrument-prototype-grid .instrument-atlas-card,
+.ai-systems-page .instrument-prototype-grid .instrument-atlas-card:visited {
+    border-color: var(--blueprint-cobalt);
+    box-shadow: .4rem .4rem 0 var(--blueprint-cobalt);
+    color: var(--blueprint-ink);
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto auto;
+    min-block-size: 23rem;
+    position: relative;
+    text-decoration: none;
+}
+
+.ai-systems-page .instrument-atlas-card:nth-child(3n + 2),
+.ai-systems-page .instrument-atlas-card:nth-child(3n) {
+    box-shadow: .4rem .4rem 0 var(--blueprint-cobalt);
+}
+
+.ai-systems-page .instrument-atlas-card__art {
+    background: #fffdf8;
+    block-size: 8.5rem;
+    border: .1rem solid var(--blueprint-ink);
+    border-radius: .45rem;
+    color: var(--blueprint-cobalt-deep);
+    inline-size: 100%;
+    margin-block-end: 1rem;
+    object-fit: contain;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.ai-systems-page .instrument-atlas-card__scan {
+    color: var(--blueprint-cobalt-deep);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: .74rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    margin-block-end: .55rem;
+    text-transform: uppercase;
+}
+
+.ai-systems-page .instrument-atlas-card strong {
+    text-decoration: underline;
+    text-decoration-thickness: .1em;
+    text-underline-offset: .18em;
+}
+
+.ai-systems-page .instrument-atlas-card p {
+    line-height: 1.48;
+    margin: 0 0 .85rem;
+}
+
+.ai-systems-page .instrument-atlas-card__route {
+    border-block-start: .1rem solid currentColor;
+    font-size: .84rem;
+    font-weight: 750;
+    margin-block-start: .25rem;
+    padding-block-start: .7rem;
+    text-decoration: underline;
+    text-decoration-thickness: .08em;
+    text-underline-offset: .16em;
+}
+
+.ai-systems-page .instrument-atlas-card__arrow {
+    color: var(--blueprint-cobalt-deep);
+    font-size: 1.75rem;
+    font-weight: 850;
+    justify-self: end;
+    line-height: 1;
+    margin-block-start: .8rem;
+    text-decoration: none;
+}
+
+.ai-systems-page .ai-systems-entry-grid,
+.ai-systems-page .chimeric-prototype-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ai-systems-page .instrument-atlas-card--gateway,
+.ai-systems-page .instrument-atlas-card--gateway:visited {
+    background: color-mix(in srgb, var(--blueprint-sea) 68%, #fff 32%);
+    border-color: var(--blueprint-cobalt-deep);
+    box-shadow: .55rem .55rem 0 var(--blueprint-coral);
+    grid-column: span 2;
+}
+
+.ai-systems-page .instrument-atlas-card--gateway .instrument-atlas-card__art {
+    block-size: 10.25rem;
+    border-color: var(--blueprint-cobalt-deep);
+}
+
+.ai-systems-page .chimeric-prototype-grid .chimeric-prototype-card {
+    grid-template-rows: auto auto auto auto 1fr auto auto;
+    min-block-size: 31rem;
+}
+
+.ai-systems-page .prototype-card__use-label {
+    color: var(--blueprint-cobalt-deep);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: .72rem;
+    font-weight: 850;
+    letter-spacing: .06em;
+    margin-block-end: .18rem;
+    text-transform: uppercase;
+}
+
+@media screen and (max-width: 64rem) {
+    .ai-systems-page .ai-systems-entry-grid,
+    .ai-systems-page .chimeric-prototype-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media screen and (max-width: 44rem) {
+    .ai-systems-page .ai-systems-entry-grid,
+    .ai-systems-page .chimeric-prototype-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ai-systems-page .instrument-atlas-card--gateway {
+        grid-column: auto;
+    }
+}
+
+@media screen and (max-width: 30rem) {
+    .instrument-prototype-grid a {
+        box-shadow: .3rem .3rem 0 var(--blueprint-ink);
+        min-block-size: auto;
+    }
+
+    .ai-systems-page .instrument-prototype-grid .instrument-atlas-card {
+        min-block-size: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ai-systems-page .instrument-atlas-card {
+        transition: none;
+    }
+}
+
+@media (forced-colors: active) {
+    .instrument-prototype-grid a {
+        border: .125rem solid CanvasText;
+        box-shadow: none;
+    }
+
+    .ai-systems-page .instrument-prototype-grid .instrument-atlas-card {
+        border-color: CanvasText;
+        box-shadow: none;
+    }
+}
+
+@media print {
+    .instrument-prototype-grid a {
+        box-shadow: none;
+        break-inside: avoid;
+    }
+
+    .ai-systems-page .instrument-prototype-grid .instrument-atlas-card {
+        box-shadow: none;
+        min-block-size: auto;
+    }
+
+    .ai-systems-page .instrument-atlas-table {
+        min-inline-size: 0;
+    }
+
+    .ai-systems-page .instrument-atlas-table thead th {
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .ai-systems-page .instrument-prototype-grid a {
+        box-shadow: none;
+    }
+}

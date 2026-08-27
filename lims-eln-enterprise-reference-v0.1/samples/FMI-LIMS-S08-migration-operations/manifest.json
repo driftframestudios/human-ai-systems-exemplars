@@ -1,0 +1,32 @@
+{
+  "sampleId": "FMI-LIMS-S08",
+  "title": "Checkpointed migration, reconciled cutover, retry, and restore evidence",
+  "temporalClass": "current_2026",
+  "evidenceClass": "current_companion",
+  "executionClass": "verified_running",
+  "executionScope": "local_offline_synthetic",
+  "qualificationStage": "migration_rehearsal_open",
+  "codePaths": [
+    "src/lims_eln_reference/migration.py",
+    "src/lims_eln_reference/operations.py"
+  ],
+  "testPaths": ["tests/test_migration_operations.py"],
+  "trustBoundaries": [
+    "Historical records cross into a canonical snapshot through a deterministic cursor and checksum.",
+    "Cutover authority crosses only after reconciliation, restore evidence, and two accountable approvals."
+  ],
+  "failureModes": [
+    "Duplicate identity, source exception, checksum mismatch, and missing approval keep cutover closed.",
+    "Exhausted delivery enters quarantine with an explicit recovery owner."
+  ],
+  "receipts": ["receipts/validation-report.json"],
+  "affectedPopulations": [
+    "quality",
+    "operations",
+    "engineer",
+    "executive",
+    "evaluator"
+  ],
+  "regulatoryScope": "determination_owned_by_quality_and_regulatory"
+}
+

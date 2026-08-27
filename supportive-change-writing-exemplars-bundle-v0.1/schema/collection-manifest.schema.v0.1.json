@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Supportive Change Writing Collection Manifest",
+  "description": "A descriptive navigation map for the collection.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_version",
+    "id",
+    "title",
+    "version",
+    "purpose",
+    "entry_points",
+    "branches"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "entry_points": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "probability_context": {
+      "type": "object",
+      "properties": {
+        "architecture_assessment_ref": {
+          "type": "string"
+        },
+        "essay_embodiment_assessment_ref": {
+          "type": "string"
+        },
+        "referent": {
+          "type": "string"
+        }
+      }
+    },
+    "branches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "overview_ref": {
+            "type": "string"
+          },
+          "essay_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reference_set_ref": {
+            "type": "string"
+          },
+          "reader_pdf_ref": {
+            "type": "string"
+          },
+          "accent": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "semantic_attractor_contract": {
+      "type": "object",
+      "properties": {
+        "target_state": {
+          "type": "string"
+        },
+        "boundary_condition": {
+          "type": "string"
+        },
+        "replacement_state": {
+          "type": "string"
+        },
+        "verification_signals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

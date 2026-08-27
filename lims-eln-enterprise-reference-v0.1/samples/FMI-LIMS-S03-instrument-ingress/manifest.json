@@ -1,0 +1,28 @@
+{
+  "sampleId": "FMI-LIMS-S03",
+  "title": "Instrument observation ingress with raw checksum and quarantine",
+  "temporalClass": "current_2026",
+  "evidenceClass": "current_companion",
+  "executionClass": "verified_running",
+  "executionScope": "local_offline_synthetic_csv",
+  "qualificationStage": "executable_offline",
+  "codePaths": ["src/lims_eln_reference/instrument.py"],
+  "testPaths": ["tests/test_instrument_ports.py"],
+  "trustBoundaries": [
+    "Instrument-produced bytes remain untrusted until schema, time, unit, and QC vocabulary checks complete.",
+    "Tenant-scoped message identity binds the raw checksum to one durable disposition."
+  ],
+  "failureModes": [
+    "Unsupported unit, naïve source time, malformed payload, and changed duplicate enter named exception paths.",
+    "A valid QC-fail observation remains validly ingested while its scientific disposition stays reviewable."
+  ],
+  "receipts": ["receipts/validation-report.json"],
+  "affectedPopulations": [
+    "bench_scientist",
+    "automation_engineer",
+    "quality",
+    "operations"
+  ],
+  "regulatoryScope": "determination_owned_by_quality_and_regulatory"
+}
+
