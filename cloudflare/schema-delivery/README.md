@@ -27,17 +27,24 @@ Run from the repository root:
 npm run build:schema-delivery
 npm run check:schema-delivery
 npm run dry-run:schema-delivery
+npm run dry-run:schema-delivery:release
 ```
 
 The first two commands use Node.js only. The dry run uses the repository's locked Wrangler dependency after `npm ci` has prepared the local toolchain.
 
 ## Delivery posture
 
-`wrangler.jsonc` declares an asset-only package. Its authored surface contains the distribution directory and delivery behavior; a Worker entry point, binding, storage resource, route, and runtime secret remain outside this packet. `workers_dev: false` leaves public routing to a separately reviewed receiver. That receiver can add the accepted Custom Domain and production environment after its branch, credential, budget, and rollback decisions are ready.
+`wrangler.jsonc` declares an asset-only package. Its authored surface contains the distribution directory and delivery behavior; application logic, bindings, storage resources, routes, and runtime secrets each retain their own receiving work. `workers_dev: false` leaves public routing to a separately reviewed receiver. The named `release` environment carries an explicit empty route set and uploads an independently versioned, un-routed integration Worker. The top-level configuration remains the production receiver and can add the accepted Custom Domain after its branch, credential, budget, and rollback decisions are ready.
 
 Cloudflare recommends a Custom Domain when a Worker is the origin. That route can serve the exact Vik Guru paths directly and preserve Worker-version rollback. A Bulk Redirect remains a contingency for specific paths; it redirects rather than serving Vik Guru bytes and executes after the WAF.
 
-The static runtime has no reader job for a secret. A future GitHub deployment token belongs to the narrow protected environment that performs the deployment. Cloudflare Secrets Store becomes useful when later Worker behavior needs a runtime credential for another service.
+The static runtime reads public assets only. A connected GitHub deployment token belongs to the narrow protected environment that performs the deployment. Cloudflare Secrets Store becomes useful when later Worker behavior needs a runtime credential for another service.
+
+## Connected release path
+
+`.github/workflows/schema-delivery.yml` checks every eligible `release` and `prod` candidate against the same schema, asset, Wrangler, and secret-material contracts. A successful push can deploy only when the corresponding repository budget is active and `DEPLOYMENT_ACTIVE_RECEIVERS` names that receiver. The `release` job targets the un-routed Wrangler environment automatically. The `prod` job passes through its exact-branch GitHub environment and the human handoff accepted before connected production activation.
+
+The connected jobs use the repository's locked Wrangler version and strict deployment mode. Release and production credentials remain environment-scoped: `CLOUDFLARE_ACCOUNT_ID` is a non-sensitive variable and `CLOUDFLARE_API_TOKEN` is a least-privilege secret. Credential values live exclusively in matching GitHub environment settings and briefly enter process memory for confirmation and deployment. Repository content and retained receipts carry the binding names, repository coordinate, and redacted state only.
 
 ## Evidence boundary
 
