@@ -1,0 +1,380 @@
+{
+  "artifactIdentity": {
+    "id": "na-artifact-narrative-capsule-composer-001",
+    "displayName": "Narrative Capsule Composer",
+    "subtitle": "Architecture-band selection and Core Architecture landing surface",
+    "version": "0.1",
+    "chassisVersion": "0.1",
+    "sourceBand": [
+      "author_created",
+      "collaboration_stabilized"
+    ],
+    "publicationStatus": "working_private"
+  },
+  "capsuleEnvelope": {
+    "capsuleId": "na:capsules/strategy-canvas-modernization-composition",
+    "capsuleVersion": "0.1",
+    "displayName": "Modernization Strategy Canvas Landing Capsule",
+    "contractNodeRef": "na:contract/modernization-planning",
+    "currentContractRef": "na:contract/modernization-planning/v0.3",
+    "architectureInstanceRef": "na:instance/modernization-planning-001",
+    "capsuleKind": "core_architecture",
+    "compositionMode": "multi_capsule",
+    "resultMode": "projection_only",
+    "landingTargetId": "strategy-canvas",
+    "sourceBoundary": "internal_working",
+    "visibility": "internal",
+    "reentryPoint": "Review target gaps, agree on focal dimensions, then open the Strategy Canvas twin.",
+    "compressionDisclosure": "This projection carries selected expectation and opportunity state. Current-state evidence, focalization differences, and defensibility details remain available as explicit gaps or source references.",
+    "freshnessState": "current_with_caveats",
+    "promptRole": "generate"
+  },
+  "modules": [
+    {
+      "id": "module-expectation-001",
+      "kind": "expectation",
+      "displayName": "Expectation Capsule",
+      "sourceCapsuleVersionRef": "na:capsules/expectation-modernization/v0.1",
+      "inclusionState": "included",
+      "role": "primary",
+      "summary": "The next responsible system makes accessibility, extensibility, modularity, security, and evidence traceability visible enough for collaborators to agree on a good-enough threshold.",
+      "freshnessState": "current",
+      "valueOrigin": "human_declared",
+      "sourceBand": [
+        "author_created",
+        "collaboration_stabilized"
+      ],
+      "protected": false,
+      "reviewState": "working"
+    },
+    {
+      "id": "module-focalization-001",
+      "kind": "focalization",
+      "displayName": "Focalization Capsule",
+      "sourceCapsuleVersionRef": "na:capsules/focalization-modernization/v0.1",
+      "inclusionState": "omitted",
+      "role": "contextual",
+      "summary": "Research, operations, engineering, accessibility, and governance participants may weight the dimensions differently.",
+      "freshnessState": "unknown",
+      "valueOrigin": "unresolved",
+      "sourceBand": [
+        "source_note_only"
+      ],
+      "protected": false,
+      "reviewState": "working"
+    },
+    {
+      "id": "module-indeterminacy-001",
+      "kind": "indeterminacy",
+      "displayName": "Ambiguity Capsule",
+      "sourceCapsuleVersionRef": "na:capsules/indeterminacy-modernization/v0.1",
+      "inclusionState": "omitted",
+      "role": "contextual",
+      "summary": "",
+      "freshnessState": "unknown",
+      "valueOrigin": "unresolved",
+      "sourceBand": [
+        "source_note_only"
+      ],
+      "protected": false,
+      "reviewState": "working"
+    },
+    {
+      "id": "module-blending-001",
+      "kind": "blending",
+      "displayName": "Blending Capsule",
+      "sourceCapsuleVersionRef": "na:capsules/blending-modernization/v0.1",
+      "inclusionState": "omitted",
+      "role": "contextual",
+      "summary": "",
+      "freshnessState": "unknown",
+      "valueOrigin": "unresolved",
+      "sourceBand": [
+        "source_note_only"
+      ],
+      "protected": false,
+      "reviewState": "working"
+    },
+    {
+      "id": "module-opportunity-001",
+      "kind": "opportunity",
+      "displayName": "Opportunity Capsule",
+      "sourceCapsuleVersionRef": "na:capsules/opportunity-modernization/v0.1",
+      "inclusionState": "included",
+      "role": "primary",
+      "summary": "Raise accessibility and evidence traceability, create clearer extension seams, reduce coupled workflows, and preserve security as a continuous constraint.",
+      "freshnessState": "current",
+      "valueOrigin": "human_declared",
+      "sourceBand": [
+        "author_created",
+        "collaboration_stabilized"
+      ],
+      "protected": false,
+      "reviewState": "working"
+    },
+    {
+      "id": "module-relational-001",
+      "kind": "relational",
+      "displayName": "Relational Capsule",
+      "sourceCapsuleVersionRef": "na:capsules/relational-modernization/v0.1",
+      "inclusionState": "omitted",
+      "role": "contextual",
+      "summary": "",
+      "freshnessState": "unknown",
+      "valueOrigin": "unresolved",
+      "sourceBand": [
+        "source_note_only"
+      ],
+      "protected": false,
+      "reviewState": "working"
+    },
+    {
+      "id": "module-temporal-001",
+      "kind": "temporal",
+      "displayName": "Temporal Capsule",
+      "sourceCapsuleVersionRef": "na:capsules/temporal-modernization/v0.1",
+      "inclusionState": "omitted",
+      "role": "contextual",
+      "summary": "",
+      "freshnessState": "unknown",
+      "valueOrigin": "unresolved",
+      "sourceBand": [
+        "source_note_only"
+      ],
+      "protected": false,
+      "reviewState": "working"
+    },
+    {
+      "id": "module-continuity-001",
+      "kind": "continuity",
+      "displayName": "Continuity Capsule",
+      "sourceCapsuleVersionRef": "na:capsules/continuity-modernization/v0.1",
+      "inclusionState": "omitted",
+      "role": "contextual",
+      "summary": "",
+      "freshnessState": "unknown",
+      "valueOrigin": "unresolved",
+      "sourceBand": [
+        "source_note_only"
+      ],
+      "protected": false,
+      "reviewState": "working"
+    },
+    {
+      "id": "module-affordance-001",
+      "kind": "affordance",
+      "displayName": "Affordance Capsule",
+      "sourceCapsuleVersionRef": "na:capsules/affordance-modernization/v0.1",
+      "inclusionState": "omitted",
+      "role": "contextual",
+      "summary": "",
+      "freshnessState": "unknown",
+      "valueOrigin": "unresolved",
+      "sourceBand": [
+        "source_note_only"
+      ],
+      "protected": false,
+      "reviewState": "working"
+    },
+    {
+      "id": "module-evidence-001",
+      "kind": "evidence",
+      "displayName": "Evidence Capsule",
+      "sourceCapsuleVersionRef": "na:capsules/evidence-modernization/v0.1",
+      "inclusionState": "omitted",
+      "role": "contextual",
+      "summary": "Current-state scores and counter-signals remain target-local until source-supported observations are attached.",
+      "freshnessState": "unknown",
+      "valueOrigin": "unresolved",
+      "sourceBand": [
+        "source_note_only"
+      ],
+      "protected": false,
+      "reviewState": "working"
+    },
+    {
+      "id": "module-defensibility-001",
+      "kind": "defensibility",
+      "displayName": "Defensibility Capsule",
+      "sourceCapsuleVersionRef": "na:capsules/defensibility-modernization/v0.1",
+      "inclusionState": "omitted",
+      "role": "contextual",
+      "summary": "Security, publication boundaries, accessibility verification, and migration cost remain active constraints.",
+      "freshnessState": "unknown",
+      "valueOrigin": "unresolved",
+      "sourceBand": [
+        "source_note_only"
+      ],
+      "protected": false,
+      "reviewState": "working"
+    },
+    {
+      "id": "module-open_question-001",
+      "kind": "open_question",
+      "displayName": "Open Question Capsule",
+      "sourceCapsuleVersionRef": "na:capsules/open_question-modernization/v0.1",
+      "inclusionState": "omitted",
+      "role": "contextual",
+      "summary": "Which dimensions should remain separate, and who may set the good-enough threshold?",
+      "freshnessState": "unknown",
+      "valueOrigin": "unresolved",
+      "sourceBand": [
+        "source_note_only"
+      ],
+      "protected": false,
+      "reviewState": "working"
+    },
+    {
+      "id": "module-unasked_question-001",
+      "kind": "unasked_question",
+      "displayName": "Unasked Question Capsule",
+      "sourceCapsuleVersionRef": "na:capsules/unasked_question-modernization/v0.1",
+      "inclusionState": "omitted",
+      "role": "contextual",
+      "summary": "",
+      "freshnessState": "unknown",
+      "valueOrigin": "unresolved",
+      "sourceBand": [
+        "source_note_only"
+      ],
+      "protected": false,
+      "reviewState": "working"
+    },
+    {
+      "id": "module-recovery-001",
+      "kind": "recovery",
+      "displayName": "Recovery Capsule",
+      "sourceCapsuleVersionRef": "na:capsules/recovery-modernization/v0.1",
+      "inclusionState": "omitted",
+      "role": "contextual",
+      "summary": "",
+      "freshnessState": "unknown",
+      "valueOrigin": "unresolved",
+      "sourceBand": [
+        "source_note_only"
+      ],
+      "protected": false,
+      "reviewState": "working"
+    }
+  ],
+  "strategyDimensions": [
+    {
+      "id": "dim-accessibility",
+      "label": "Accessibility",
+      "definition": "Participants can perceive, operate, understand, and recover the intended collaboration routes under the locally reviewed conditions.",
+      "anchors": {
+        "low": "Access depends on exceptional help or an undisclosed workaround.",
+        "middle": "Primary routes are usable with known gaps and review points.",
+        "high": "Primary and recovery routes are operable, understandable, and verified with relevant participants."
+      },
+      "now": 4,
+      "next": 7,
+      "later": 9,
+      "consequenceWeight": 5,
+      "action": "raise",
+      "evidenceBasis": "Attach participant, keyboard, touch, assistive-technology, zoom, and recovery receipts before consequential review.",
+      "origin": "target_local_provisional"
+    },
+    {
+      "id": "dim-extensibility",
+      "label": "Extensibility",
+      "definition": "A bounded local variation can enter through a documented contract while the shared behavior remains coherent.",
+      "anchors": {
+        "low": "A local change requires broad coupled edits.",
+        "middle": "Known variants use selected extension points.",
+        "high": "Documented seams support local variation with parity, ownership, and recovery checks."
+      },
+      "now": 3,
+      "next": 7,
+      "later": 9,
+      "consequenceWeight": 4,
+      "action": "raise",
+      "evidenceBasis": "Trace one representative extension from local need through implementation, verification, and upgrade.",
+      "origin": "target_local_provisional"
+    },
+    {
+      "id": "dim-modularity",
+      "label": "Modularity",
+      "definition": "Responsibilities and state transitions have boundaries that collaborators can understand, change, and verify independently.",
+      "anchors": {
+        "low": "Responsibilities and state changes are broadly entangled.",
+        "middle": "Primary responsibilities have named modules with some shared-state coupling.",
+        "high": "Boundaries, inputs, outputs, ownership, and verification contracts are explicit."
+      },
+      "now": 4,
+      "next": 7,
+      "later": 8,
+      "consequenceWeight": 4,
+      "action": "raise",
+      "evidenceBasis": "Follow a change across source, state, rendering, export, and consumer boundaries.",
+      "origin": "target_local_provisional"
+    },
+    {
+      "id": "dim-security",
+      "label": "Security",
+      "definition": "Data, authority, imports, exports, and embedded operations follow an explicit least-capability collaboration contract.",
+      "anchors": {
+        "low": "Trust and authority boundaries remain implicit.",
+        "middle": "Principal data and embed boundaries are declared with known open conditions.",
+        "high": "Input, storage, export, embed, identity, authorization, and recovery paths are verified together."
+      },
+      "now": 6,
+      "next": 8,
+      "later": 9,
+      "consequenceWeight": 5,
+      "action": "hold",
+      "evidenceBasis": "Review import safety, literal-text handling, local persistence, iframe permissions, export scope, and service boundaries.",
+      "origin": "target_local_provisional"
+    },
+    {
+      "id": "dim-evidence",
+      "label": "Evidence traceability",
+      "definition": "A consequential reading carries a visible route to its source, transformation, standing, limits, and reviewer.",
+      "anchors": {
+        "low": "Basis depends on recollection or unlinked material.",
+        "middle": "Principal readings link to partial evidence and named open conditions.",
+        "high": "Source, transformation, evidence standing, counter-signals, and review history remain inspectable."
+      },
+      "now": 3,
+      "next": 8,
+      "later": 9,
+      "consequenceWeight": 5,
+      "action": "create",
+      "evidenceBasis": "Sample material readings and recover each claim, source, interpretation, and review state.",
+      "origin": "target_local_provisional"
+    }
+  ],
+  "targetLocalValues": {
+    "currentStateStatus": "provisional",
+    "scoreScale": "0–10"
+  },
+  "strategyCanvasAdapter": {
+    "id": "narrative-now-next-later-to-strategy-canvas-2.0",
+    "targetSchemaVersion": "strategy-canvas/2.0",
+    "mapping": {
+      "now": "dimensions[].scores.current",
+      "next": "dimensions[].scores.goodEnough",
+      "later": "dimensions[].scores.desired",
+      "action": "dimensions[].action",
+      "consequenceWeight": "dimensions[].consequenceWeight"
+    },
+    "extensionTargets": {
+      "humanAndSystemCollaboration": "extensions.contextCanvas.collaboration",
+      "aiProposalChannel": "extensions.contextCanvas.aiCollaboration"
+    },
+    "reviewCondition": "Confirm dimension meaning, anchors, evidence standing, and decision horizon before opening a human-first sealed round.",
+    "networkPolicy": "local-only"
+  },
+  "viewState": {
+    "familyFilter": "all",
+    "search": "",
+    "selectedModuleId": "module-expectation-001",
+    "selectedTargetId": "strategy-canvas"
+  },
+  "boundary": {
+    "privateLocatorsIncluded": false,
+    "sourceLocalAnnotationIncluded": false,
+    "unreviewedInferenceIncluded": false,
+    "publicSafeSourceMarker": "Selected source-linked capsule modules; protected details remain in their source boundary."
+  }
+}

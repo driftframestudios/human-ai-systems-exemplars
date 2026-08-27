@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://driftframe.studio/schemas/lims-eln-sample-manifest-v0.1.json",
+  "title": "LIMS/ELN sample manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "sampleId",
+    "title",
+    "temporalClass",
+    "evidenceClass",
+    "executionClass",
+    "executionScope",
+    "qualificationStage",
+    "codePaths",
+    "testPaths",
+    "trustBoundaries",
+    "failureModes",
+    "receipts",
+    "affectedPopulations",
+    "regulatoryScope"
+  ],
+  "properties": {
+    "sampleId": {
+      "type": "string",
+      "pattern": "^FMI-LIMS-S[0-9]{2}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 12
+    },
+    "temporalClass": {
+      "enum": ["current_2026", "illustrative_future"]
+    },
+    "evidenceClass": {
+      "enum": ["current_companion", "illustrative"]
+    },
+    "executionClass": {
+      "enum": [
+        "illustrative_compilable",
+        "tested_excerpt",
+        "verified_running"
+      ]
+    },
+    "executionScope": {
+      "type": "string",
+      "minLength": 8
+    },
+    "qualificationStage": {
+      "enum": [
+        "executable_offline",
+        "tenant_open",
+        "sandbox_open",
+        "migration_rehearsal_open",
+        "production_open"
+      ]
+    },
+    "codePaths": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    },
+    "testPaths": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    },
+    "trustBoundaries": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    },
+    "failureModes": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    },
+    "receipts": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    },
+    "affectedPopulations": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    },
+    "regulatoryScope": {
+      "const": "determination_owned_by_quality_and_regulatory"
+    }
+  }
+}
+

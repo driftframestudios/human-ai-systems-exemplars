@@ -1,0 +1,97 @@
+{
+  "id": "na:narrative-sampling-tableau/chimeric-prototype-bundle/v0.1",
+  "title": "Narrative Sampling Tableau",
+  "canonicalType": "NarrativeSamplingSurface",
+  "methodRef": "na:verbalized-sampling",
+  "version": "0.1",
+  "status": "working_chimeric_prototype",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1806,
+      "sha256": "fad4336ae127460e630369957c3e869e458b9f8977c8e773eb7e842d4a3fbb16"
+    },
+    {
+      "path": "narrative-sampling-tableau-chimeric-prototype-v0.1.html",
+      "bytes": 163175,
+      "sha256": "37167111950198417842d8b72efb8a1570c923cf893bbd5c010214ed2b9f5be3"
+    },
+    {
+      "path": "narrative-sampling-tableau-prototype-addendum-v0.1.md",
+      "bytes": 4884,
+      "sha256": "c1342b533e584f7b7947e47c5efb5b802ffa23eb5cd986d7efc31c3180ca09b6"
+    },
+    {
+      "path": "narrative-sampling-tableau-prototype-profile-v0.1.yaml",
+      "bytes": 6646,
+      "sha256": "82b12daf7c5b89afea8de96096e3ee5569c5136752f509c43faddf2da544d0f9"
+    },
+    {
+      "path": "narrative-sampling-tableau-state.schema.v0.1.json",
+      "bytes": 23983,
+      "sha256": "f311a682f356d351ad690191f8943a556b349020d0e95c21832b7853bec936c4"
+    },
+    {
+      "path": "narrative-sampling-tableau.context.v0.1.jsonld",
+      "bytes": 4396,
+      "sha256": "429c9b84872626dfa8a5d7bbaa47081eb18e6246adb73ec3753284b37fa6a2f0"
+    },
+    {
+      "path": "core-architecture-routing-registry.v0.1.json",
+      "bytes": 22759,
+      "sha256": "47a5be21dac7457f422b734665b12a81c502205a4adcf5c51d1df39333c70e4a"
+    },
+    {
+      "path": "conation-motion-naming-sampling.example.v0.1.json",
+      "bytes": 39649,
+      "sha256": "7b7a0e544ad88b9acd0062651ef0c9e9da2707f6fb3d2cffa58e6f002ad5eb84"
+    },
+    {
+      "path": "conation-motion-naming-sampling.example.v0.1.jsonld",
+      "bytes": 18781,
+      "sha256": "deabb8361d8af2847ee209046875078359f3df95c5cb4a29185106dfeb7ba4b6"
+    },
+    {
+      "path": "narrative-sampling-tableau-validation-report-v0.1.json",
+      "bytes": 1372,
+      "sha256": "99e6a1104254fa64e8571d1022a795874f0770c2c241268082cdba6f6f24eea1"
+    }
+  ],
+  "loadBearingDeterminations": [
+    "Verbalized Sampling remains the method name and research anchor.",
+    "Narrative Sampling Surface is the canonical schema type.",
+    "Narrative Sampling Tableau is the human-facing artifact name.",
+    "Every probability remains attached to a fully stated outcome.",
+    "Candidate-set semantics determine normalization behavior.",
+    "Probability, confidence, dimensional fit, statistical fit, desirability, and priority remain distinct.",
+    "Open sets carry explicit tail mass and missing-mode records.",
+    "Probability shifts remain hypotheses until appropriate evidence supports a stronger causal status.",
+    "Routing follows cognitive move and active gaps.",
+    "The route registry preserves seven Core Architecture families and twenty cards.",
+    "S/I/R values describe primary cognitive origin rather than fixed identity.",
+    "Recovery is a full family that also acts as a cross-system routing layer.",
+    "Visual comparison uses common scales and accessible table equivalents.",
+    "Stable identities survive sorting, filtering, blending, and version comparison.",
+    "Public-safe projection excludes private locators, source-local annotation, and unreviewed inference before rendering."
+  ],
+  "researchAnchor": {
+    "id": "arxiv:2510.01171",
+    "title": "Verbalized Sampling: How to Mitigate Mode Collapse and Unlock LLM Diversity",
+    "role": "Canonical grounding for the generative-diversity technique."
+  },
+  "sourceHydration": {
+    "coreArchitecturePage": "ca-artifact-core-architecture-family-index-001",
+    "planningExemplars": [
+      "na:indeterminate-slot-map-planning-proposal/v0.1",
+      "na:terminological-registry-planning-proposal/v0.1",
+      "na:conation-motion-naming-exemplar/v0.1"
+    ]
+  },
+  "validationReport": "narrative-sampling-tableau-validation-report-v0.1.json",
+  "nextUse": [
+    "Run the Prompt Capsule across several model contexts and import the results as new runs.",
+    "Route the naming terrain into Strategy Canvas and the Terminological Registry.",
+    "Collect target receipts and return observations.",
+    "Exercise architecture-selection and methodological-gap scenarios."
+  ]
+}

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">HEART signal-to-metric calibration preview</title>
+  <desc id="desc">A goal flows to a signal and metric, then opens into a tolerance band, counter-signal, and qualitative companion.</desc>
+  <style>.bg{fill:#fffdf7}.ink{fill:#16345e}.line{stroke:#16345e;stroke-width:5;fill:none}.cobalt{fill:#2855f3}.sea{fill:#bfe7e4}.rose{fill:#ffd3d0}.lime{fill:#efff66}.card{stroke:#16345e;stroke-width:4}.cap{font:700 20px ui-monospace,monospace;letter-spacing:1px}.head{font:700 30px Arial,sans-serif}.small{font:18px Arial,sans-serif}</style>
+  <rect width="960" height="600" class="bg"/>
+  <text x="54" y="58" class="cap ink">GOAL → SIGNAL → METRIC</text>
+  <rect x="54" y="96" width="230" height="116" rx="18" class="sea card"/><text x="82" y="145" class="head ink">Goal</text><text x="82" y="178" class="small ink">Clearer review</text>
+  <path d="M284 154H350" class="line"/><path d="M350 154l-24-15v30z" class="cobalt"/>
+  <rect x="350" y="96" width="230" height="116" rx="18" class="lime card"/><text x="378" y="145" class="head ink">Signal</text><text x="378" y="178" class="small ink">Fewer corrections</text>
+  <path d="M580 154H646" class="line"/><path d="M646 154l-24-15v30z" class="cobalt"/>
+  <rect x="646" y="96" width="260" height="116" rx="18" class="rose card"/><text x="674" y="145" class="head ink">Metric</text><text x="674" y="178" class="small ink">Correction rate</text>
+  <path d="M776 212V274H230V302" class="line"/><path d="M776 274H730V302" class="line"/>
+  <rect x="54" y="302" width="352" height="180" rx="18" class="bg card"/><text x="82" y="348" class="cap ink">TOLERANCE</text><rect x="82" y="378" width="294" height="32" rx="16" class="sea"/><rect x="218" y="378" width="92" height="32" rx="16" class="cobalt"/><text x="82" y="449" class="small ink">Slower review can be acceptable</text>
+  <rect x="442" y="302" width="464" height="180" rx="18" class="rose card"/><text x="470" y="348" class="cap ink">COUNTER-SIGNAL</text><text x="470" y="394" class="head ink">Deferrals rise</text><text x="470" y="432" class="small ink">Pair the number with field evidence.</text>
+  <rect x="54" y="518" width="852" height="42" rx="12" class="ink"/><text x="480" y="546" text-anchor="middle" class="small" fill="#fffdf7">Interpret movement against goal, context, tolerance, and counter-signal.</text>
+</svg>

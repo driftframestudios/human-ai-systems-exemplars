@@ -1,0 +1,261 @@
+{
+  "$schema": "../schema/source-registry.schema.json",
+  "schema_version": "0.2.0",
+  "as_of": "2026-07-24",
+  "artifact_id": "A3-CUBE-EXPANDED",
+  "extracted_from": "../index.html#a3-model",
+  "sources": [
+    {
+      "id": "SRC-A3",
+      "title": "A3 · Appendix — Stacked Cube Model",
+      "url": "urn:source-key:SRC-A3",
+      "role": "Protected historical and semantic baseline.",
+      "boundary": "Internal source assertion; operational evidence still required for new claims."
+    },
+    {
+      "id": "SRC-ATLAS",
+      "title": "Deep Research Atlas v1.2",
+      "url": "urn:source-key:SRC-ATLAS",
+      "role": "Coverage ledger, confounders, disconfirmation, probability referent, provenance, completion gate.",
+      "boundary": "Research protocol; domain evidence remains with the cited sources."
+    },
+    {
+      "id": "SRC-QMSR",
+      "title": "FDA Quality Management System Regulation",
+      "url": "https://www.fda.gov/medical-devices/postmarket-requirements-devices/quality-management-system-regulation-qmsr",
+      "role": "Current quality-system context; effective 2 February 2026.",
+      "boundary": "Incorporated ISO text was not reproduced in the page."
+    },
+    {
+      "id": "SRC-FDA-SW",
+      "title": "FDA Premarket Submissions for Device Software Functions",
+      "url": "https://www.fda.gov/media/153781/download",
+      "role": "Architecture, requirements, traceability, verification, versions, anomaly disposition.",
+      "boundary": "Product-specific documentation level unresolved."
+    },
+    {
+      "id": "SRC-FDA-CSA",
+      "title": "FDA Computer Software Assurance, February 2026",
+      "url": "https://www.fda.gov/media/188844/download",
+      "role": "Risk-proportional assurance and evidence records.",
+      "boundary": "Applies to production/QMS software, not device software functions themselves."
+    },
+    {
+      "id": "SRC-FDA-CYBER",
+      "title": "FDA Cybersecurity in Medical Devices, February 2026",
+      "url": "https://www.fda.gov/media/119933/download",
+      "role": "Threat model, architecture, SBOM, testing, logging, recovery, vulnerability management.",
+      "boundary": "Section 524B duties depend on cyber-device status."
+    },
+    {
+      "id": "SRC-FDA-HF-2026",
+      "title": "FDA Human Factors Submission Information, May 2026",
+      "url": "https://www.fda.gov/media/163694/download",
+      "role": "Critical-task delta, URRA, validation evidence.",
+      "boundary": "Within stated operationalization interval through 1 August 2026."
+    },
+    {
+      "id": "SRC-FDA-HFE",
+      "title": "FDA Applying Human Factors and Usability Engineering",
+      "url": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/applying-human-factors-and-usability-engineering-medical-devices",
+      "role": "Use-related risk foundation.",
+      "boundary": "Does not itself determine submission category."
+    },
+    {
+      "id": "SRC-FDA-CDS",
+      "title": "FDA Clinical Decision Support Software, January 2026",
+      "url": "https://www.fda.gov/media/109618/download",
+      "role": "Non-Device CDS criteria, independent review, time criticality, genomic examples.",
+      "boundary": "Device status cannot be concluded without intended use and actual function."
+    },
+    {
+      "id": "SRC-IMDRF-SAMD",
+      "title": "IMDRF SaMD Clinical Evaluation",
+      "url": "https://www.imdrf.org/documents/software-medical-device-samd-clinical-evaluation",
+      "role": "Clinical association, analytical validation, clinical validation.",
+      "boundary": "International technical document, not a standalone US legal requirement."
+    },
+    {
+      "id": "SRC-PART11",
+      "title": "21 CFR 11.10",
+      "url": "https://www.ecfr.gov/current/title-21/part-11/section-11.10",
+      "role": "Validation, copies, retention, access, audit trail, authority and sequence checks.",
+      "boundary": "Predicate-rule and record-scope analysis required."
+    },
+    {
+      "id": "SRC-HIPAA",
+      "title": "45 CFR 164.308 and 164.312",
+      "url": "https://www.ecfr.gov/current/title-45/part-164/section-164.308",
+      "role": "Risk analysis, access, contingency, audit, integrity, authentication, transmission security.",
+      "boundary": "Applicability depends on entity, relationship, and ePHI."
+    },
+    {
+      "id": "SRC-NIH-DATA",
+      "title": "NIH Controlled-Access Data Requirements",
+      "url": "https://www.grants.nih.gov/policy-and-compliance/policy-topics/sharing-policies/accessing-data/requirements",
+      "role": "Approved use, security, incident reporting, institutional accountability.",
+      "boundary": "Conditional on controlled-access data and agreements."
+    },
+    {
+      "id": "SRC-CLIA",
+      "title": "CMS Clinical Laboratory Improvement Amendments",
+      "url": "https://www.cms.gov/medicare/quality/clinical-laboratory-improvement-amendments",
+      "role": "US human-laboratory testing boundary.",
+      "boundary": "No genomic-viewer-specific software rule was established by this page."
+    },
+    {
+      "id": "SRC-NIST-SSDF",
+      "title": "NIST SSDF 1.1",
+      "url": "https://csrc.nist.gov/pubs/sp/800/218/final",
+      "role": "Secure development, provenance, verification, response.",
+      "boundary": "Voluntary framework, not certification; draft 1.2 excluded."
+    },
+    {
+      "id": "SRC-NIST-ZTA",
+      "title": "NIST SP 800-207 Zero Trust Architecture",
+      "url": "https://csrc.nist.gov/pubs/sp/800/207/final",
+      "role": "Per-request policy decisions and enforcement; least privilege.",
+      "boundary": "General architecture; product policy topology unresolved."
+    },
+    {
+      "id": "SRC-RFC9700",
+      "title": "RFC 9700 OAuth 2.0 Security BCP",
+      "url": "https://www.rfc-editor.org/rfc/rfc9700.html",
+      "role": "Audience-restricted and sender-constrained token guidance.",
+      "boundary": "Does not establish the product’s identity protocol."
+    },
+    {
+      "id": "SRC-FOWLER-STRANGLER",
+      "title": "Fowler — Original Strangler Fig Application",
+      "url": "https://martinfowler.com/bliki/OriginalStranglerFigApplication.html",
+      "role": "Gradual replacement and frequent release framing.",
+      "boundary": "Pattern description, not proof of product separability."
+    },
+    {
+      "id": "SRC-AWS-STRANGLER",
+      "title": "AWS Strangler Fig Pattern",
+      "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/strangler-fig.html",
+      "role": "Proxy and anti-corruption seam with risks and limitations.",
+      "boundary": "Implementation choice and domain boundary remain product-specific."
+    },
+    {
+      "id": "SRC-FOWLER-ABSTRACTION",
+      "title": "Fowler — Branch by Abstraction",
+      "url": "https://martinfowler.com/bliki/BranchByAbstraction.html",
+      "role": "Inner seam, coexisting implementations, feature-flagged switching.",
+      "boundary": "Requires a viable abstraction; not always available."
+    },
+    {
+      "id": "SRC-LD-MIGRATION",
+      "title": "LaunchDarkly Multi-stage Migrations",
+      "url": "https://launchdarkly.com/docs/guides/flags/migrations",
+      "role": "Old-only, dual-write, shadow, live, ramp-down, complete; selectable profiles.",
+      "boundary": "Not all systems support coexisting implementations."
+    },
+    {
+      "id": "SRC-AWS-OUTBOX",
+      "title": "AWS Transactional Outbox",
+      "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html",
+      "role": "Avoid uncoordinated dual writes; atomic state and event commit.",
+      "boundary": "Duplicate delivery still requires idempotent consumers."
+    },
+    {
+      "id": "SRC-DEBEZIUM",
+      "title": "Debezium Outbox and CDC Features",
+      "url": "https://debezium.io/documentation/reference/stable/features.html",
+      "role": "Change capture, deletes, transaction metadata, engine limitations.",
+      "boundary": "Connector-specific constraints remain."
+    },
+    {
+      "id": "SRC-PG-REPL",
+      "title": "PostgreSQL Logical Replication Restrictions",
+      "url": "https://www.postgresql.org/docs/current/logical-replication-restrictions.html",
+      "role": "DDL, sequence, large-object, view, and conflict limitations.",
+      "boundary": "Database-specific; PostgreSQL use is not asserted."
+    },
+    {
+      "id": "SRC-ISTIO-MIRROR",
+      "title": "Istio Traffic Mirroring",
+      "url": "https://istio.io/latest/docs/tasks/traffic-management/mirroring/",
+      "role": "Fire-and-forget mirror whose response is discarded.",
+      "boundary": "Does not prevent stateful side effects by itself."
+    },
+    {
+      "id": "SRC-GOOGLE-CANARY",
+      "title": "Google SRE Workbook — Canarying Releases",
+      "url": "https://sre.google/workbook/canarying-releases/",
+      "role": "Canary/control separation, representative metrics, evaluation windows.",
+      "boundary": "Operational practice, not product validation or compliance proof."
+    },
+    {
+      "id": "SRC-GOOGLE-SLO",
+      "title": "Google SRE — Service Level Objectives",
+      "url": "https://sre.google/sre-book/service-level-objectives/",
+      "role": "User-centered indicators, SLOs, and error-budget release posture.",
+      "boundary": "Thresholds must be locally defined."
+    },
+    {
+      "id": "SRC-OPENAPI",
+      "title": "OpenAPI Specification",
+      "url": "https://spec.openapis.org/oas/latest.html",
+      "role": "Language-neutral interface description.",
+      "boundary": "Declared contract is not a verified contract."
+    },
+    {
+      "id": "SRC-PACT",
+      "title": "Pact Provider Verification",
+      "url": "https://docs.pact.io/getting_started/verifying_pacts",
+      "role": "Replay consumer assumptions against the provider.",
+      "boundary": "Does not replace data, security, production, or end-to-end evidence."
+    },
+    {
+      "id": "SRC-PROV",
+      "title": "W3C PROV-O",
+      "url": "https://www.w3.org/TR/prov-o/",
+      "role": "Entities, activities, agents, usage, derivation, attribution, responsibility.",
+      "boundary": "Provenance semantics do not establish a regulatory regime."
+    },
+    {
+      "id": "SRC-AWS-RETIRE",
+      "title": "AWS Controlled Stop and Retirement Guidance",
+      "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/migration-retiring-applications/best-practice-4.html",
+      "role": "Dependency evidence and reversible controlled stop.",
+      "boundary": "Business cycles and retention thresholds remain system-specific."
+    },
+    {
+      "id": "SRC-AZURE-RETIRE",
+      "title": "Microsoft Decommission Source Workloads",
+      "url": "https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/migrate/decommission-source-workload",
+      "role": "Approvals, success criteria, rollback grace, archival, recovery testing.",
+      "boundary": "General cloud guidance, not regulated-product approval."
+    },
+    {
+      "id": "SRC-FDA-CHANGE",
+      "title": "FDA Deciding When to Submit a 510(k) for a Software Change",
+      "url": "https://www.fda.gov/media/99785/download",
+      "role": "Intended-use and risk-change assessment; change records.",
+      "boundary": "Specific to covered existing devices."
+    },
+    {
+      "id": "SRC-FDA-PCCP",
+      "title": "FDA AI-Enabled Device PCCP Guidance",
+      "url": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/marketing-submission-recommendations-predetermined-change-control-plan-artificial-intelligence",
+      "role": "Authorized modification description, protocol, criteria, impact assessment.",
+      "boundary": "Conditional branch only; not a generic migration shortcut."
+    },
+    {
+      "id": "SRC-WCAG",
+      "title": "W3C WCAG 2.2 and complex-image guidance",
+      "url": "https://www.w3.org/TR/WCAG22/",
+      "role": "Keyboard/focus, reflow, contrast, redundant color, text equivalents.",
+      "boundary": "Conformance requires testing beyond this artifact’s design intent."
+    },
+    {
+      "id": "SRC-SVG2",
+      "title": "W3C SVG 2 Document Structure",
+      "url": "https://www.w3.org/TR/SVG/struct.html",
+      "role": "Title and description semantics for meaningful SVG groups.",
+      "boundary": "Assistive-technology behavior still requires testing."
+    }
+  ]
+}

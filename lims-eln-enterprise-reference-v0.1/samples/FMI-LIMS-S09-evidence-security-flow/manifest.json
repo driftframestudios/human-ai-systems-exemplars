@@ -1,0 +1,35 @@
+{
+  "sampleId": "FMI-LIMS-S09",
+  "title": "Traceable evidence, tenant boundary, safe telemetry, and composed flow",
+  "temporalClass": "current_2026",
+  "evidenceClass": "current_companion",
+  "executionClass": "verified_running",
+  "executionScope": "local_offline_synthetic",
+  "qualificationStage": "production_open",
+  "codePaths": [
+    "src/lims_eln_reference/evidence.py",
+    "src/lims_eln_reference/security.py",
+    "src/lims_eln_reference/workflow.py"
+  ],
+  "testPaths": ["tests/test_evidence_security_workflow.py"],
+  "trustBoundaries": [
+    "Tenant and role context precede resource access.",
+    "Operational evidence carries allowlisted fields and redacts sensitive values."
+  ],
+  "failureModes": [
+    "Cross-tenant access and missing roles close the request.",
+    "Receipts keep source revision, test links, synthetic-data posture, and limitations visible."
+  ],
+  "receipts": ["receipts/validation-report.json"],
+  "affectedPopulations": [
+    "scientist",
+    "security",
+    "privacy",
+    "quality",
+    "engineer",
+    "executive",
+    "evaluator"
+  ],
+  "regulatoryScope": "determination_owned_by_quality_and_regulatory"
+}
+

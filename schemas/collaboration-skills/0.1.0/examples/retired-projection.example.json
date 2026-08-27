@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/collaboration-skills/0.1.0/examples/prototype-exemplars-schema-v1-projection",
+  "kind": "task_bound_skill_projection",
+  "name": "prototype-exemplars-schema-v1-projection",
+  "description": "A settled task-bound projection that carried schema-contract authoring into the Prototype Exemplars v1 and Context Canvas v1 publication wave.",
+  "semanticAuthorityRef": ".agents/skills/schema-contract-authoring/SKILL.md",
+  "sourceRef": "threadkeeping/collaboration-accounts/2026-08-23-schema-contract-authoring.md",
+  "contract": {
+    "what": "Apply the portable schema contract to two repository schema roots, adjacent-family use, and a dual-host handoff.",
+    "when": [
+      "The schema-authority, v1 schema-root, dual-retrieval, and semantic-settlement work formed one bounded schema receiving task."
+    ],
+    "boundaries": [
+      "Human publication authority remained explicit.",
+      "Source-family schemas retained local authority.",
+      "The projection remained one routing edge from its portable contract."
+    ],
+    "result": "Published exact-version contracts, examples, semantic context, and a bounded operator-host handoff."
+  },
+  "receivingUse": {
+    "job": "Carry schema-contract decisions through the initial repository schema publication tranche.",
+    "materialResult": "Prototype Exemplars v1, Context Canvas v1, and the active GitHub-backed retrieval projection.",
+    "completion": "Publication settled, page graphs migrated, durable observations returned upstream, and the remaining operator route reached its issue owner."
+  },
+  "standing": {
+    "routingStatus": "retired",
+    "contractVersionStatus": "published",
+    "evidenceMaturity": "Three related material uses recorded in one collaboration account.",
+    "wakeTrigger": "A new receiving task may form a fresh projection from the portable contract."
+  },
+  "evidence": {
+    "band": "observed",
+    "sourceRefs": [
+      "threadkeeping/collaboration-accounts/2026-08-23-schema-contract-authoring.md",
+      "schemas/README.md"
+    ]
+  },
+  "transferBoundary": "The retired projection demonstrates bounded lineage and disposition; active routing remains with its portable source contract.",
+  "projection": {
+    "sourceContractRef": ".agents/skills/schema-contract-authoring/SKILL.md",
+    "selectedBehavior": [
+      "Keep identity, location, and authority independent.",
+      "Carry dependency closure.",
+      "Use one material instance early."
+    ],
+    "receivingTask": "Prototype Exemplars and Context Canvas v1 schema functional nucleus",
+    "platformAndTools": [
+      "repository source",
+      "GitHub Pages projection"
+    ],
+    "authorityScope": [
+      "repository schema authoring",
+      "human-cued publication"
+    ],
+    "projectionDepth": 1,
+    "lifetime": "Initial schema authoring, publication, and first page-graph migration",
+    "exitEvent": "Receiving pull request merged and durable observations returned to schema-contract-authoring.",
+    "defaultDisposition": "retire",
+    "upstreamReturn": "Identity and retrieval, exact-version immutability, literal semantic membership, and proportional material-use rules.",
+    "routingState": "retired"
+  }
+}

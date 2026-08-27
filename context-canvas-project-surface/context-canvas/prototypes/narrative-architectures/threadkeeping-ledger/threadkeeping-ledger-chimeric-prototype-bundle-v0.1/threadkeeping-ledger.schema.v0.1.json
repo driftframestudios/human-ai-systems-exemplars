@@ -1,0 +1,450 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.driftframestudios.org/fg/schema/threadkeeping-ledger.schema.v0.1.json",
+  "title": "Threadkeeping Ledger",
+  "description": "Schema for a threadkeeper, durable entries, next candidates, coordination horizon, continuity assessments, and hydration projections.",
+  "type": "object",
+  "required": [
+    "artifactIdentity",
+    "quickUse",
+    "threadkeeper"
+  ],
+  "properties": {
+    "artifactIdentity": {
+      "$ref": "#/$defs/ArtifactIdentity"
+    },
+    "quickUse": {
+      "type": "object"
+    },
+    "threadkeeper": {
+      "$ref": "#/$defs/Threadkeeper"
+    },
+    "relationshipContract": {
+      "type": "object"
+    },
+    "recoveryCalibration": {
+      "type": "object"
+    },
+    "sourceNote": {
+      "type": "object"
+    },
+    "viewState": {
+      "$ref": "#/$defs/ViewState"
+    }
+  },
+  "$defs": {
+    "ArtifactIdentity": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "displayName",
+        "version",
+        "package",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "package": {
+          "type": "string"
+        },
+        "relatedPackage": {
+          "type": "string"
+        },
+        "sourceNursery": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "sourceBand": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Threadkeeper": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "title",
+        "centralContract",
+        "entries",
+        "nextCandidates",
+        "continuityAssessments"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "const": "Threadkeeper"
+        },
+        "title": {
+          "type": "string"
+        },
+        "steward": {
+          "type": "string"
+        },
+        "centralContractRef": {
+          "type": "string"
+        },
+        "centralContract": {
+          "type": "string"
+        },
+        "sourceBand": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourceOfTruthBand": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "publicationStatus": {
+          "type": "string"
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ThreadkeeperEntry"
+          }
+        },
+        "nextCandidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NextCandidate"
+          }
+        },
+        "continuityAssessments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ContextContinuityAssessment"
+          }
+        }
+      }
+    },
+    "ThreadkeeperEntry": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "entryType",
+        "title",
+        "summary",
+        "status",
+        "horizonPosition"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "const": "ThreadkeeperEntry"
+        },
+        "entryType": {
+          "type": "string",
+          "enum": [
+            "decision",
+            "rationale",
+            "assumption",
+            "constraint",
+            "open_question",
+            "unasked_question",
+            "source_pointer",
+            "evidence_pointer",
+            "next_candidate",
+            "review_trigger",
+            "continuity_observation",
+            "handoff",
+            "supersession",
+            "future_self_note"
+          ]
+        },
+        "title": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "stable_for_now",
+            "provisional",
+            "needs_review",
+            "superseded",
+            "retired"
+          ]
+        },
+        "horizonPosition": {
+          "type": "string",
+          "enum": [
+            "now",
+            "next",
+            "later"
+          ]
+        },
+        "centralContractRef": {
+          "type": "string"
+        },
+        "sourceBand": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourceOfTruthBand": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "accessConfidence": {
+          "type": "string"
+        },
+        "publicationStatus": {
+          "type": "string"
+        },
+        "recordedBy": {
+          "type": "string"
+        },
+        "recordedAt": {
+          "type": "string"
+        },
+        "asOf": {
+          "type": "string"
+        },
+        "reviewTrigger": {
+          "type": "string"
+        },
+        "reviewAfter": {
+          "type": "string"
+        },
+        "supersedes": {
+          "type": "string"
+        },
+        "supersededBy": {
+          "type": "string"
+        },
+        "sourceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "openQuestionRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "nextCandidateRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reentryPoint": {
+          "type": "string"
+        }
+      }
+    },
+    "NextCandidate": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "title",
+        "reason",
+        "candidateType",
+        "readinessState",
+        "horizonPosition"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "const": "NextCandidate"
+        },
+        "title": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "candidateType": {
+          "type": "string"
+        },
+        "readinessState": {
+          "type": "string"
+        },
+        "horizonPosition": {
+          "type": "string",
+          "enum": [
+            "next",
+            "later"
+          ]
+        },
+        "inheritsFrom": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "requiredInputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "blockedBy": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "preferred": {
+          "type": "boolean"
+        },
+        "reviewRequired": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "reviewAfter": {
+          "type": "string"
+        },
+        "reactivationTrigger": {
+          "type": "string"
+        },
+        "supersededBy": {
+          "type": "string"
+        },
+        "retirementReason": {
+          "type": "string"
+        }
+      }
+    },
+    "ContextContinuityAssessment": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "assessorType",
+        "band",
+        "basis",
+        "recommendedMove",
+        "asOf"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "const": "ContextContinuityAssessment"
+        },
+        "assessorType": {
+          "type": "string",
+          "enum": [
+            "human",
+            "ai_collaborator",
+            "mechanical",
+            "mixed"
+          ]
+        },
+        "band": {
+          "type": "string",
+          "enum": [
+            "breathable",
+            "compressed",
+            "thinning",
+            "threadbare",
+            "rehydration_required"
+          ]
+        },
+        "basis": {
+          "type": "string"
+        },
+        "atRiskElements": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "observedLoss": {
+          "type": "string"
+        },
+        "recommendedMove": {
+          "type": "string"
+        },
+        "reviewState": {
+          "type": "string"
+        },
+        "asOf": {
+          "type": "string"
+        }
+      }
+    },
+    "ViewState": {
+      "type": "object",
+      "properties": {
+        "selectedEntryId": {
+          "type": "string"
+        },
+        "selectedCandidateId": {
+          "type": "string"
+        },
+        "filters": {
+          "type": "object"
+        },
+        "columnOrder": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hiddenColumns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,165 @@
+/* Cobalt Operating Field — portable visual tokens and small layout primitives. */
+
+:root {
+  --cof-field: #fffaf2;
+  --cof-panel: #fffdf8;
+  --cof-cobalt: #2855f3;
+  --cof-cobalt-deep: #153fbe;
+  --cof-ink: #17345f;
+  --cof-body: #304a71;
+  --cof-muted: #5d6f8b;
+  --cof-line: #7893bc;
+  --cof-line-soft: #9aacc8;
+  --cof-cobalt-pale: #e7efff;
+  --cof-powder: #cfe7f7;
+  --cof-sea: #d9efea;
+  --cof-cream: #fff5de;
+  --cof-blush: #ffd3d0;
+  --cof-coral: #fa7065;
+  --cof-acid: #f2ff67;
+
+  --cof-font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --cof-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --cof-text-xs: clamp(.6875rem, .66rem + .12vw, .8125rem);
+  --cof-text-sm: clamp(.8125rem, .78rem + .14vw, .9375rem);
+  --cof-text-md: clamp(.9375rem, .88rem + .2vw, 1.0625rem);
+  --cof-text-lg: clamp(1.0625rem, .98rem + .3vw, 1.25rem);
+  --cof-text-title: clamp(1.75rem, 1.3rem + 1.4vw, 2.75rem);
+
+  --cof-reading-measure: 66ch;
+  --cof-lead-measure: 58ch;
+  --cof-heading-measure: 32ch;
+
+  --cof-space-1: .375rem;
+  --cof-space-2: .625rem;
+  --cof-space-3: 1rem;
+  --cof-space-4: 1.5rem;
+  --cof-space-5: 2rem;
+
+  --cof-radius-frame: 1.75rem;
+  --cof-radius-panel: 1.0625rem;
+  --cof-radius-card: .75rem;
+  --cof-radius-chip: 999px;
+
+  --cof-border-panel: 2px solid var(--cof-ink);
+  --cof-border-card: 1.5px solid var(--cof-line);
+  --cof-shadow-x: .5rem;
+  --cof-shadow-y: .5rem;
+  --cof-hard-shadow: var(--cof-shadow-x) var(--cof-shadow-y) 0 var(--cof-ink);
+  --cof-focus-ring: 3px solid var(--cof-cobalt);
+  --cof-focus-offset: 4px;
+
+  --cof-workbench-columns: minmax(15rem, 18rem) minmax(34rem, 1fr) minmax(18rem, 21rem);
+  --cof-transition: 160ms ease;
+}
+
+.cof-field {
+  color-scheme: light;
+  container-type: inline-size;
+  background: var(--cof-field);
+  color: var(--cof-ink);
+  font-family: var(--cof-font-sans);
+}
+
+.cof-field :where(p, li, dd, figcaption, blockquote) {
+  max-inline-size: min(100%, var(--cof-reading-measure));
+}
+
+.cof-field :where(h1, h2, h3, h4) {
+  max-inline-size: min(100%, var(--cof-heading-measure));
+  text-wrap: balance;
+}
+
+.cof-workbench {
+  display: grid;
+  grid-template-columns: var(--cof-workbench-columns);
+  gap: var(--cof-space-4);
+  align-items: start;
+}
+
+.cof-panel {
+  min-width: 0;
+  padding: var(--cof-space-4);
+  border: var(--cof-border-panel);
+  border-radius: var(--cof-radius-panel);
+  background: var(--cof-panel);
+  box-shadow: var(--cof-hard-shadow);
+}
+
+.cof-card {
+  padding: var(--cof-space-3);
+  border: var(--cof-border-card);
+  border-radius: var(--cof-radius-card);
+  background: var(--cof-panel);
+}
+
+.cof-card[aria-current="true"],
+.cof-card[data-state="selected"] {
+  border-color: var(--cof-ink);
+  background: var(--cof-acid);
+}
+
+.cof-chip {
+  display: inline-flex;
+  gap: var(--cof-space-1);
+  align-items: center;
+  min-block-size: 2rem;
+  padding-inline: .875rem;
+  border: 1.5px solid var(--cof-ink);
+  border-radius: var(--cof-radius-chip);
+  background: var(--cof-panel);
+  color: var(--cof-ink);
+  font: 700 var(--cof-text-sm)/1 var(--cof-font-sans);
+}
+
+.cof-eyebrow {
+  color: var(--cof-muted);
+  font: 700 var(--cof-text-xs)/1.3 var(--cof-font-mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.cof-investment-band {
+  padding: var(--cof-space-3) var(--cof-space-4);
+  border-radius: .5rem;
+  background: var(--cof-cobalt-pale);
+  color: var(--cof-ink);
+}
+
+.cof-arrow {
+  fill: var(--cof-cobalt);
+}
+
+.cof-field :focus-visible {
+  outline: var(--cof-focus-ring);
+  outline-offset: var(--cof-focus-offset);
+}
+
+@container (max-width: 72rem) {
+  .cof-workbench {
+    grid-template-columns: minmax(15rem, 18rem) minmax(0, 1fr);
+  }
+
+  .cof-workbench__contract,
+  .cof-workbench__substrate,
+  .cof-investment-band {
+    grid-column: 1 / -1;
+  }
+}
+
+@container (max-width: 48rem) {
+  .cof-workbench {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cof-panel {
+    box-shadow: .375rem .375rem 0 var(--cof-ink);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --cof-transition: 0ms;
+  }
+}

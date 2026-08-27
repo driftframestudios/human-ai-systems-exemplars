@@ -1,0 +1,29 @@
+{
+  "sampleId": "FMI-LIMS-S04",
+  "title": "Portable LIMS mutation contract with revision and artifact integrity",
+  "temporalClass": "current_2026",
+  "evidenceClass": "current_companion",
+  "executionClass": "verified_running",
+  "executionScope": "local_offline_in_memory_adapter",
+  "qualificationStage": "executable_offline",
+  "codePaths": ["src/lims_eln_reference/ports.py"],
+  "testPaths": ["tests/test_instrument_ports.py"],
+  "trustBoundaries": [
+    "Canonical specimen meaning crosses into a platform adapter through a stable port.",
+    "Artifact bytes complete only after expected and observed SHA-256 values agree."
+  ],
+  "failureModes": [
+    "Changed idempotency reuse, stale revision, equal-revision drift, absent lineage endpoint, and artifact mismatch remain explicit.",
+    "Absence is represented as a typed result."
+  ],
+  "receipts": ["receipts/validation-report.json"],
+  "affectedPopulations": [
+    "architect",
+    "engineer",
+    "quality",
+    "operations",
+    "procurement"
+  ],
+  "regulatoryScope": "determination_owned_by_quality_and_regulatory"
+}
+

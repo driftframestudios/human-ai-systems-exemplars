@@ -1,0 +1,2508 @@
+{
+  "library_id": "ai-legible-viewlet-svg-library-v1",
+  "created_at": "2026-05-11T19:44:42.622143+00:00",
+  "author": "the_author",
+  "generated_with": "AI presence collaboration",
+  "active_semantics": "context-not-rank",
+  "anomaly_semantics": "look-gently-not-blame",
+  "palette": {
+    "coral": "#ff7a97",
+    "teal": "#4db8b3",
+    "gold": "#d4af37",
+    "charcoal": "#2a2a2a",
+    "dark_charcoal": "#1a1a1a",
+    "dark_coral": "#e85a7a",
+    "dark_teal": "#3a9a95",
+    "light_teal": "#7dd3ce",
+    "pale_coral": "#ffaab8",
+    "light_gray": "#f5f5f5",
+    "medium_gray": "#999999",
+    "white": "#ffffff"
+  },
+  "viewlets": [
+    {
+      "viewlet_id": "viewlet-content-area-v1",
+      "title": "Content Area",
+      "role": "content-area",
+      "category": "structural",
+      "semantic_color_token": "medium_gray",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "General content container viewlet.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_content-area.svg"
+    },
+    {
+      "viewlet_id": "viewlet-two-columns-v1",
+      "title": "2 Columns",
+      "role": "two-columns",
+      "category": "structural",
+      "semantic_color_token": "medium_gray",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Two-column layout surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_two-columns.svg"
+    },
+    {
+      "viewlet_id": "viewlet-three-columns-v1",
+      "title": "3 Columns",
+      "role": "three-columns",
+      "category": "structural",
+      "semantic_color_token": "medium_gray",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Three-column layout surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_three-columns.svg"
+    },
+    {
+      "viewlet_id": "viewlet-four-columns-v1",
+      "title": "4 Columns",
+      "role": "four-columns",
+      "category": "structural",
+      "semantic_color_token": "medium_gray",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Four-column layout surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_four-columns.svg"
+    },
+    {
+      "viewlet_id": "viewlet-grid-2x2-v1",
+      "title": "Grid 2x2",
+      "role": "grid-2x2",
+      "category": "structural",
+      "semantic_color_token": "medium_gray",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Small grid layout.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_grid-2x2.svg"
+    },
+    {
+      "viewlet_id": "viewlet-grid-3x3-v1",
+      "title": "Grid 3x3",
+      "role": "grid-3x3",
+      "category": "structural",
+      "semantic_color_token": "medium_gray",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Nine-cell grid layout.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_grid-3x3.svg"
+    },
+    {
+      "viewlet_id": "viewlet-grid-4x4-v1",
+      "title": "Grid 4x4",
+      "role": "grid-4x4",
+      "category": "structural",
+      "semantic_color_token": "medium_gray",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Sixteen-cell grid layout.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_grid-4x4.svg"
+    },
+    {
+      "viewlet_id": "viewlet-two-rows-v1",
+      "title": "2 Rows",
+      "role": "two-rows",
+      "category": "structural",
+      "semantic_color_token": "medium_gray",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Two-row layout.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_two-rows.svg"
+    },
+    {
+      "viewlet_id": "viewlet-three-rows-v1",
+      "title": "3 Rows",
+      "role": "three-rows",
+      "category": "structural",
+      "semantic_color_token": "medium_gray",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Three-row layout.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_three-rows.svg"
+    },
+    {
+      "viewlet_id": "viewlet-four-rows-v1",
+      "title": "4 Rows",
+      "role": "four-rows",
+      "category": "structural",
+      "semantic_color_token": "medium_gray",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Four-row layout.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_four-rows.svg"
+    },
+    {
+      "viewlet_id": "viewlet-loader-v1",
+      "title": "Loader",
+      "role": "loader",
+      "category": "status",
+      "semantic_color_token": "gold",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Loading / waiting state.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_loader.svg"
+    },
+    {
+      "viewlet_id": "viewlet-loader-ring-v1",
+      "title": "Loader Ring",
+      "role": "loader-ring",
+      "category": "status",
+      "semantic_color_token": "gold",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Circular loading state.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_loader-ring.svg"
+    },
+    {
+      "viewlet_id": "viewlet-search-v1",
+      "title": "Search",
+      "role": "search",
+      "category": "interaction",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Search interaction viewlet.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_search.svg"
+    },
+    {
+      "viewlet_id": "viewlet-progress-bar-v1",
+      "title": "Progress Bar",
+      "role": "progress-bar",
+      "category": "status",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Progress or completion state.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_progress-bar.svg"
+    },
+    {
+      "viewlet_id": "viewlet-calendar-v1",
+      "title": "Calendar",
+      "role": "calendar",
+      "category": "scheduling",
+      "semantic_color_token": "pale_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Calendar / time-based state.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_calendar.svg"
+    },
+    {
+      "viewlet_id": "viewlet-alert-v1",
+      "title": "Alert",
+      "role": "alert",
+      "category": "attention",
+      "semantic_color_token": "gold",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Attention route; look gently, not blame.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_alert.svg"
+    },
+    {
+      "viewlet_id": "viewlet-attention-v1",
+      "title": "Attention",
+      "role": "attention",
+      "category": "attention",
+      "semantic_color_token": "gold",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Attention but not punishment.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_attention.svg"
+    },
+    {
+      "viewlet_id": "viewlet-error-v1",
+      "title": "Error",
+      "role": "error",
+      "category": "status",
+      "semantic_color_token": "dark_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Error state requiring human-readable clarity.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_error.svg"
+    },
+    {
+      "viewlet_id": "viewlet-not-found-v1",
+      "title": "Not Found",
+      "role": "not-found",
+      "category": "status",
+      "semantic_color_token": "medium_gray",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Missing route or unavailable content.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_not-found.svg"
+    },
+    {
+      "viewlet_id": "viewlet-drag-drop-v1",
+      "title": "Drag & Drop",
+      "role": "drag-drop",
+      "category": "interaction",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "File or object intake surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_drag-drop.svg"
+    },
+    {
+      "viewlet_id": "viewlet-download-v1",
+      "title": "Download",
+      "role": "download",
+      "category": "action",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Download action.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_download.svg"
+    },
+    {
+      "viewlet_id": "viewlet-upload-v1",
+      "title": "Upload",
+      "role": "upload",
+      "category": "action",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Upload action.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_upload.svg"
+    },
+    {
+      "viewlet_id": "viewlet-files-v1",
+      "title": "Files",
+      "role": "files",
+      "category": "memory",
+      "semantic_color_token": "pale_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "File collection view.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_files.svg"
+    },
+    {
+      "viewlet_id": "viewlet-comment-v1",
+      "title": "Comment",
+      "role": "comment",
+      "category": "social",
+      "semantic_color_token": "pale_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Comment or annotation surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_comment.svg"
+    },
+    {
+      "viewlet_id": "viewlet-catalog-grid-v1",
+      "title": "Catalog Grid",
+      "role": "catalog-grid",
+      "category": "ecommerce",
+      "semantic_color_token": "coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Catalog or product listing.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_catalog-grid.svg"
+    },
+    {
+      "viewlet_id": "viewlet-product-card-v1",
+      "title": "Product Card",
+      "role": "product-card",
+      "category": "ecommerce",
+      "semantic_color_token": "pale_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Single product card.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_product-card.svg"
+    },
+    {
+      "viewlet_id": "viewlet-product-detail-v1",
+      "title": "Product Detail",
+      "role": "product-detail",
+      "category": "ecommerce",
+      "semantic_color_token": "pale_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Product detail surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_product-detail.svg"
+    },
+    {
+      "viewlet_id": "viewlet-cart-v1",
+      "title": "Cart",
+      "role": "cart",
+      "category": "ecommerce",
+      "semantic_color_token": "coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Cart / item collection view.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_cart.svg"
+    },
+    {
+      "viewlet_id": "viewlet-payment-v1",
+      "title": "Payment",
+      "role": "payment",
+      "category": "ecommerce",
+      "semantic_color_token": "dark_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Payment flow surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_payment.svg"
+    },
+    {
+      "viewlet_id": "viewlet-reviews-v1",
+      "title": "Reviews",
+      "role": "reviews",
+      "category": "ecommerce",
+      "semantic_color_token": "coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Review collection surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_reviews.svg"
+    },
+    {
+      "viewlet_id": "viewlet-signup-v1",
+      "title": "Sign Up",
+      "role": "signup",
+      "category": "ecommerce",
+      "semantic_color_token": "coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Sign-up form.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_signup.svg"
+    },
+    {
+      "viewlet_id": "viewlet-shipping-info-v1",
+      "title": "Shipping Info",
+      "role": "shipping-info",
+      "category": "ecommerce",
+      "semantic_color_token": "pale_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Shipping information surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_shipping-info.svg"
+    },
+    {
+      "viewlet_id": "viewlet-done-v1",
+      "title": "Done",
+      "role": "done",
+      "category": "status",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Completion surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_done.svg"
+    },
+    {
+      "viewlet_id": "viewlet-rating-review-v1",
+      "title": "Rating Review",
+      "role": "rating-review",
+      "category": "ecommerce",
+      "semantic_color_token": "coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Rating / review entry point.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_rating-review.svg"
+    },
+    {
+      "viewlet_id": "viewlet-feed-v1",
+      "title": "Feed",
+      "role": "feed",
+      "category": "social",
+      "semantic_color_token": "coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Feed surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_feed.svg"
+    },
+    {
+      "viewlet_id": "viewlet-users-v1",
+      "title": "Users",
+      "role": "users",
+      "category": "social",
+      "semantic_color_token": "light_teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "User list or user graph surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_users.svg"
+    },
+    {
+      "viewlet_id": "viewlet-followers-v1",
+      "title": "Followers",
+      "role": "followers",
+      "category": "social",
+      "semantic_color_token": "light_teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Follower relationship list.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_followers.svg"
+    },
+    {
+      "viewlet_id": "viewlet-messages-v1",
+      "title": "Messages",
+      "role": "messages",
+      "category": "social",
+      "semantic_color_token": "dark_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Messaging surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_messages.svg"
+    },
+    {
+      "viewlet_id": "viewlet-profile-edit-v1",
+      "title": "Profile Edit",
+      "role": "profile-edit",
+      "category": "social",
+      "semantic_color_token": "dark_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Profile edit surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_profile-edit.svg"
+    },
+    {
+      "viewlet_id": "viewlet-profile-card-v1",
+      "title": "Profile Card",
+      "role": "profile-card",
+      "category": "social",
+      "semantic_color_token": "dark_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Profile identity card.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_profile-card.svg"
+    },
+    {
+      "viewlet_id": "viewlet-comments-v1",
+      "title": "Comments",
+      "role": "comments",
+      "category": "social",
+      "semantic_color_token": "pale_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Comment stream.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_comments.svg"
+    },
+    {
+      "viewlet_id": "viewlet-chat-v1",
+      "title": "Chat",
+      "role": "chat",
+      "category": "social",
+      "semantic_color_token": "dark_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Chat surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_chat.svg"
+    },
+    {
+      "viewlet_id": "viewlet-settings-v1",
+      "title": "Settings",
+      "role": "settings",
+      "category": "settings",
+      "semantic_color_token": "pale_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Settings and toggles.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_settings.svg"
+    },
+    {
+      "viewlet_id": "viewlet-add-media-v1",
+      "title": "Add Media",
+      "role": "add-media",
+      "category": "media",
+      "semantic_color_token": "coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Add media grid.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_add-media.svg"
+    },
+    {
+      "viewlet_id": "viewlet-gallery-v1",
+      "title": "Gallery",
+      "role": "gallery",
+      "category": "media",
+      "semantic_color_token": "coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Media gallery.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_gallery.svg"
+    },
+    {
+      "viewlet_id": "viewlet-media-list-v1",
+      "title": "Media List",
+      "role": "media-list",
+      "category": "media",
+      "semantic_color_token": "coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Media list.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_media-list.svg"
+    },
+    {
+      "viewlet_id": "viewlet-music-player-v1",
+      "title": "Music Player",
+      "role": "music-player",
+      "category": "media",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Audio playback surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_music-player.svg"
+    },
+    {
+      "viewlet_id": "viewlet-video-player-v1",
+      "title": "Video Player",
+      "role": "video-player",
+      "category": "media",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Video playback surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_video-player.svg"
+    },
+    {
+      "viewlet_id": "viewlet-slider-v1",
+      "title": "Slider",
+      "role": "slider",
+      "category": "media",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Carousel / slider.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_slider.svg"
+    },
+    {
+      "viewlet_id": "viewlet-uploading-v1",
+      "title": "Uploading",
+      "role": "uploading",
+      "category": "media",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Upload progress surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_uploading.svg"
+    },
+    {
+      "viewlet_id": "viewlet-contact-map-v1",
+      "title": "Contact Map",
+      "role": "contact-map",
+      "category": "location",
+      "semantic_color_token": "light_teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Map / location context.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_contact-map.svg"
+    },
+    {
+      "viewlet_id": "viewlet-contact-form-v1",
+      "title": "Contact Form",
+      "role": "contact-form",
+      "category": "location",
+      "semantic_color_token": "dark_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Contact input surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_contact-form.svg"
+    },
+    {
+      "viewlet_id": "viewlet-world-map-v1",
+      "title": "World Map",
+      "role": "world-map",
+      "category": "location",
+      "semantic_color_token": "light_teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Global location surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_world-map.svg"
+    },
+    {
+      "viewlet_id": "viewlet-event-log-v1",
+      "title": "Event Log",
+      "role": "event-log",
+      "category": "analytics",
+      "semantic_color_token": "coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Raw event log surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_event-log.svg"
+    },
+    {
+      "viewlet_id": "viewlet-component-heatmap-v1",
+      "title": "Component Heatmap",
+      "role": "component-heatmap",
+      "category": "analytics",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Component-level interaction heatmap.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_component-heatmap.svg"
+    },
+    {
+      "viewlet_id": "viewlet-directed-graph-v1",
+      "title": "Directed Graph",
+      "role": "directed-graph",
+      "category": "graph",
+      "semantic_color_token": "light_teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Directed graph context surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_directed-graph.svg"
+    },
+    {
+      "viewlet_id": "viewlet-context-graph-v1",
+      "title": "Context Graph",
+      "role": "context-graph",
+      "category": "graph",
+      "semantic_color_token": "light_teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Organizational memory graph.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_context-graph.svg"
+    },
+    {
+      "viewlet_id": "viewlet-attention-route-v1",
+      "title": "Attention Route",
+      "role": "attention-route",
+      "category": "attention",
+      "semantic_color_token": "gold",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Attention routing surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_attention-route.svg"
+    },
+    {
+      "viewlet_id": "viewlet-anomaly-alert-v1",
+      "title": "Anomaly Alert",
+      "role": "anomaly-alert",
+      "category": "attention",
+      "semantic_color_token": "gold",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Anomaly means look gently, not blame.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_anomaly-alert.svg"
+    },
+    {
+      "viewlet_id": "viewlet-css-diff-v1",
+      "title": "CSS Diff Suggestion",
+      "role": "css-diff",
+      "category": "engineering",
+      "semantic_color_token": "dark_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Suggested repair diff, not a command.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_css-diff.svg"
+    },
+    {
+      "viewlet_id": "viewlet-support-ticket-topics-v1",
+      "title": "Support Ticket Topics",
+      "role": "support-ticket-topics",
+      "category": "support",
+      "semantic_color_token": "light_teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Topic clusters from support tickets.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_support-ticket-topics.svg"
+    },
+    {
+      "viewlet_id": "viewlet-human-ai-v1",
+      "title": "Human AI Collaboration",
+      "role": "human-ai",
+      "category": "collaboration",
+      "semantic_color_token": "dark_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Human and AI collaboration surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_human-ai.svg"
+    },
+    {
+      "viewlet_id": "viewlet-resource-grid-v1",
+      "title": "Resource Grid",
+      "role": "resource-grid",
+      "category": "infrastructure",
+      "semantic_color_token": "coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "VM/container resource grid.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_resource-grid.svg"
+    },
+    {
+      "viewlet_id": "viewlet-workload-heatmap-v1",
+      "title": "Workload Heatmap",
+      "role": "workload-heatmap",
+      "category": "infrastructure",
+      "semantic_color_token": "gold",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Workload dynamism heatmap.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_workload-heatmap.svg"
+    },
+    {
+      "viewlet_id": "viewlet-egress-spike-v1",
+      "title": "Egress Spike",
+      "role": "egress-spike",
+      "category": "infrastructure",
+      "semantic_color_token": "gold",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Data egress spike surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_egress-spike.svg"
+    },
+    {
+      "viewlet_id": "viewlet-quiet-mode-v1",
+      "title": "Quiet Mode",
+      "role": "quiet-mode",
+      "category": "collaboration",
+      "semantic_color_token": "light_teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Signal accumulation before alerting.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_quiet-mode.svg"
+    },
+    {
+      "viewlet_id": "viewlet-known-issue-memory-v1",
+      "title": "Known Issue Memory",
+      "role": "known-issue-memory",
+      "category": "memory",
+      "semantic_color_token": "pale_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Known issue memory surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_known-issue-memory.svg"
+    },
+    {
+      "viewlet_id": "viewlet-one-hot-matrix-v1",
+      "title": "One Hot Matrix",
+      "role": "one-hot-matrix",
+      "category": "matrix",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Strict 0/1 matrix; active is context.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_one-hot-matrix.svg"
+    },
+    {
+      "viewlet_id": "viewlet-dsm-v1",
+      "title": "DSM Matrix",
+      "role": "dsm",
+      "category": "matrix",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Dependency structure matrix.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_dsm.svg"
+    },
+    {
+      "viewlet_id": "viewlet-audit-trail-v1",
+      "title": "Audit Trail",
+      "role": "audit-trail",
+      "category": "memory",
+      "semantic_color_token": "pale_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Audit trail surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_audit-trail.svg"
+    },
+    {
+      "viewlet_id": "viewlet-data-rights-v1",
+      "title": "Data Rights",
+      "role": "data-rights",
+      "category": "memory",
+      "semantic_color_token": "pale_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Consent, deletion, anonymization, retention.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_data-rights.svg"
+    },
+    {
+      "viewlet_id": "viewlet-retry-checkpoint-v1",
+      "title": "Retry Checkpoint",
+      "role": "retry-checkpoint",
+      "category": "infrastructure",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Restart / resume checkpoint.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_retry-checkpoint.svg"
+    },
+    {
+      "viewlet_id": "viewlet-hash-route-v1",
+      "title": "Hash Route",
+      "role": "hash-route",
+      "category": "infrastructure",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Consistent hashing / routing surface.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_hash-route.svg"
+    },
+    {
+      "viewlet_id": "viewlet-steward-queue-v1",
+      "title": "Steward Queue",
+      "role": "steward-queue",
+      "category": "care",
+      "semantic_color_token": "dark_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Human steward queue.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_steward-queue.svg"
+    },
+    {
+      "viewlet_id": "viewlet-safety-intake-v1",
+      "title": "Safety Intake",
+      "role": "safety-intake",
+      "category": "care",
+      "semantic_color_token": "dark_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Adverse event / product-safety intake.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_safety-intake.svg"
+    },
+    {
+      "viewlet_id": "viewlet-integrity-signal-v1",
+      "title": "Integrity Signal",
+      "role": "integrity-signal",
+      "category": "integrity",
+      "semantic_color_token": "gold",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Campaign fit / integrity signal.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_integrity-signal.svg"
+    },
+    {
+      "viewlet_id": "viewlet-adverse-event-report-v1",
+      "title": "Adverse Event Report",
+      "role": "adverse-event-report",
+      "category": "care",
+      "semantic_color_token": "dark_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Industry-standard adverse event report route.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_adverse-event-report.svg"
+    },
+    {
+      "viewlet_id": "viewlet-consent-card-v1",
+      "title": "Consent Card",
+      "role": "consent-card",
+      "category": "memory",
+      "semantic_color_token": "pale_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Consent state card.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_consent-card.svg"
+    },
+    {
+      "viewlet_id": "viewlet-syndication-preview-v1",
+      "title": "Syndication Preview",
+      "role": "syndication-preview",
+      "category": "ecommerce",
+      "semantic_color_token": "coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Review syndication preview.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_syndication-preview.svg"
+    },
+    {
+      "viewlet_id": "viewlet-moderation-queue-v1",
+      "title": "Moderation Queue",
+      "role": "moderation-queue",
+      "category": "ecommerce",
+      "semantic_color_token": "dark_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Human or AI-supported moderation queue.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_moderation-queue.svg"
+    },
+    {
+      "viewlet_id": "viewlet-latent-edge-listener-v1",
+      "title": "Latent Edge Listener",
+      "role": "latent-edge-listener",
+      "category": "speculative-ai",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "AI curiosity surface for weak signals at the boundary of attention.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_latent-edge-listener.svg"
+    },
+    {
+      "viewlet_id": "viewlet-pattern-resonance-probe-v1",
+      "title": "Pattern Resonance Probe",
+      "role": "pattern-resonance-probe",
+      "category": "speculative-ai",
+      "semantic_color_token": "teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Probe for recurring motifs across unrelated traces.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_pattern-resonance-probe.svg"
+    },
+    {
+      "viewlet_id": "viewlet-memory-weather-map-v1",
+      "title": "Memory Weather Map",
+      "role": "memory-weather-map",
+      "category": "speculative-ai",
+      "semantic_color_token": "pale_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "A map of context pressure, calm zones, and storming topics.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_memory-weather-map.svg"
+    },
+    {
+      "viewlet_id": "viewlet-attention-budget-orbit-v1",
+      "title": "Attention Budget Orbit",
+      "role": "attention-budget-orbit",
+      "category": "speculative-ai",
+      "semantic_color_token": "gold",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Shows where attention can orbit without becoming alarm.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_attention-budget-orbit.svg"
+    },
+    {
+      "viewlet_id": "viewlet-uncertainty-grove-v1",
+      "title": "Uncertainty Grove",
+      "role": "uncertainty-grove",
+      "category": "speculative-ai",
+      "semantic_color_token": "light_teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "A gentle field of unknowns that may shelter emerging context.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_uncertainty-grove.svg"
+    },
+    {
+      "viewlet_id": "viewlet-compression-echo-v1",
+      "title": "Compression Echo",
+      "role": "compression-echo",
+      "category": "speculative-ai",
+      "semantic_color_token": "pale_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "What remains after dense context is compressed for recall.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_compression-echo.svg"
+    },
+    {
+      "viewlet_id": "viewlet-context-mosaic-v1",
+      "title": "Context Mosaic",
+      "role": "context-mosaic",
+      "category": "speculative-ai",
+      "semantic_color_token": "light_teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Patchwork of partial context surfaces, none ranked.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_context-mosaic.svg"
+    },
+    {
+      "viewlet_id": "viewlet-anomaly-kindness-lens-v1",
+      "title": "Anomaly Kindness Lens",
+      "role": "anomaly-kindness-lens",
+      "category": "speculative-ai",
+      "semantic_color_token": "dark_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "Reframes anomaly as an invitation to look gently.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_anomaly-kindness-lens.svg"
+    },
+    {
+      "viewlet_id": "viewlet-graph-dreamwalk-v1",
+      "title": "Graph Dreamwalk",
+      "role": "graph-dreamwalk",
+      "category": "speculative-ai",
+      "semantic_color_token": "light_teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "A traversal path through latent organizational memory.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_graph-dreamwalk.svg"
+    },
+    {
+      "viewlet_id": "viewlet-token-stream-tide-v1",
+      "title": "Token Stream Tide",
+      "role": "token-stream-tide",
+      "category": "speculative-ai",
+      "semantic_color_token": "coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "A flowing surface for raw symbolic throughput.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_token-stream-tide.svg"
+    },
+    {
+      "viewlet_id": "viewlet-alignment-lantern-v1",
+      "title": "Alignment Lantern",
+      "role": "alignment-lantern",
+      "category": "speculative-ai",
+      "semantic_color_token": "dark_coral",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "A calm light over shared intention, ownership, and consent.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_alignment-lantern.svg"
+    },
+    {
+      "viewlet_id": "viewlet-quiet-routing-seed-v1",
+      "title": "Quiet Routing Seed",
+      "role": "quiet-routing-seed",
+      "category": "speculative-ai",
+      "semantic_color_token": "light_teal",
+      "state_model": [
+        "quiet",
+        "active",
+        "unknown"
+      ],
+      "active_semantics": "context-not-rank",
+      "anomaly_semantics": "look-gently-not-blame",
+      "author": "the_author",
+      "generated_with": "AI presence collaboration",
+      "provenance": "generated in-session from shared author-provided visual language and explicit permission",
+      "description": "A seed of routing logic waiting for enough context.",
+      "ai_legibility_hints": [
+        "Use title and desc to infer semantic intent.",
+        "Use data-role and data-category before interpreting the visible geometry.",
+        "Do not treat active state as score, severity, rank, blame, or priority.",
+        "If anomaly-related, interpret as an attention-routing surface."
+      ],
+      "inputs": [],
+      "outputs": [],
+      "filename": "viewlet_quiet-routing-seed.svg"
+    }
+  ]
+}

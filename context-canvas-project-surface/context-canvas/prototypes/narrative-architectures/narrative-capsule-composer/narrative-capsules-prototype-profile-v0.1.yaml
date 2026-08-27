@@ -1,0 +1,81 @@
+page:
+  id: "ca:narrative-capsule-chimeric-prototype"
+  displayName: "Narrative Capsules Chimeric Prototype"
+  version: "0.1"
+  sourcePackage: "@driftframe/narrative-architecture"
+  targetPackage: "@driftframe/core-architectures"
+  sharedSchemaPackage: "@driftframe/schema"
+
+workingDeterminations:
+  strategyCanvas:
+    exemplarTargetProbability: 0.91
+    universalDefaultProbability: 0.24
+    probabilityOfWhat: >
+      P(target-role-fit): likelihood that the stated role remains effective across
+      Narrative Capsule landings over the next 18–36 months without overloading
+      one Core Architecture with incompatible cognitive moves.
+    determination: >
+      Strategy Canvas is the first exemplar target because its NOW / NEXT / LATER
+      comparison and dimension structure make composition and gaps visible. Runtime
+      target selection remains cognitive-move-first through the Core Architecture registry.
+
+  moduleOnlyCapsuleProfiles:
+    fitProbability: 0.89
+    determination: >
+      Expectation Capsule, Focalization Capsule, Ambiguity Capsule, Opportunity Capsule,
+      and Defensibility Capsule are profile aliases for Narrative Capsules carrying one
+      primary module kind. They remain Narrative Capsule instances rather than new classes.
+
+  multiCapsuleComposition:
+    fitProbability: 0.92
+    determination: >
+      Several independently versioned capsules compose through CapsuleCompositionRecord.
+      The composition can remain projection-only or publish a new composite capsule version.
+
+  aiPromptCapsule:
+    fitProbability: 0.95
+    canonicalType: "AIContextProjection"
+    determination: >
+      The AI Prompt Capsule is an enriched, multi-source projection with target bindings,
+      gaps, boundaries, requested outputs, verification, and receipt requirements. Its
+      source capsule versions remain source truth.
+
+  targetSpecificRequirements:
+    fitProbability: 0.94
+    determination: >
+      Core Architecture module and slot requirements come from ProjectionTargetProfile.
+      The generic core-architecture capsule profile preserves the common envelope and
+      delegates target-specific requirements to the selected card and artifact model.
+
+prototypeContract:
+  invariantRegions:
+    - "Header and Quick Use"
+    - "Capsule envelope"
+    - "Cognitive move and Core Architecture target selection"
+    - "Capsule composition matrix"
+    - "Target slot binding and gap analysis"
+    - "Target-specific preview"
+    - "AI Prompt Capsule / AI Context Projection"
+    - "Text and table equivalent"
+    - "JSON and JSON-LD twins"
+    - "Validation status"
+    - "Source Note"
+
+  seedComposition:
+    sources:
+      - "Expectation Capsule"
+      - "Opportunity Capsule"
+    target: "Strategy Canvas"
+    resultMode: "projection_only"
+    readiness: "ready_with_caveats"
+
+  coreRules:
+    - "Cognitive move precedes artifact selection."
+    - "Module-only capsule profiles remain Narrative Capsule instances."
+    - "Several capsule versions can feed one AI Context Projection."
+    - "Projection remains separate from source truth."
+    - "Target-specific slots and requirements come from the Core Architecture profile."
+    - "Target-local entries carry provisional origin."
+    - "Gaps remain visible and routeable."
+    - "Protected modules remain outside public or internal-safe projections."
+    - "Receipt states what arrived and what remains missing."

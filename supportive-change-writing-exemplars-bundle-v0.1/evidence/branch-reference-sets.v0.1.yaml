@@ -1,0 +1,103 @@
+{
+  "$schema": "../schema/branch-reference-set-registry.schema.v0.1.json",
+  "schema_version": "0.1",
+  "registry_id": "reference-set-registry:supportive-change:v0.1",
+  "registry_type": "branch_reference_sets",
+  "version": "0.1.0",
+  "purpose": "Connect each branch with its complete evidence set and main conceptual domains.",
+  "semantic_attractor_contract": {
+    "target_state": "Each branch essay can resolve its reference file and main evidence domains.",
+    "boundary_condition": "Reference files preserve published bibliographic wording and stable links where available.",
+    "replacement_state": "Use the branch reference file as the complete local evidence context.",
+    "verification_signals": [
+      "Branch reference paths support discovery.",
+      "Evidence domains remain visible."
+    ]
+  },
+  "entries": [
+    {
+      "branch_id": "executive-culture",
+      "branch_title": "Executive Culture and Transformation",
+      "path": "../exemplars/01-executive-culture/references.md",
+      "evidence_domains": [
+        "sensemaking",
+        "employee_voice",
+        "psychological_safety",
+        "collective_efficacy",
+        "compassion_organizing"
+      ]
+    },
+    {
+      "branch_id": "frontline-teams",
+      "branch_title": "Frontline and High-Pressure Teams",
+      "path": "../exemplars/02-frontline-teams/references.md",
+      "evidence_domains": [
+        "team_reliability",
+        "psychological_safety",
+        "job_demands_resources",
+        "debriefing",
+        "collective_efficacy"
+      ]
+    },
+    {
+      "branch_id": "cross-functional-collaboration",
+      "branch_title": "Cross-Functional Collaboration",
+      "path": "../exemplars/03-cross-functional-collaboration/references.md",
+      "evidence_domains": [
+        "shared_cognition",
+        "relational_coordination",
+        "boundary_spanning",
+        "transactive_memory",
+        "learning_handoffs"
+      ]
+    },
+    {
+      "branch_id": "sustainable-well-being",
+      "branch_title": "Sustainable Well-Being",
+      "path": "../exemplars/04-sustainable-well-being/references.md",
+      "evidence_domains": [
+        "job_demands_resources",
+        "self_determination",
+        "recovery",
+        "psychosocial_safety_climate",
+        "positive_emotion"
+      ]
+    },
+    {
+      "branch_id": "customer-community-service",
+      "branch_title": "Customer and Community Service",
+      "path": "../exemplars/05-customer-and-community-service/references.md",
+      "evidence_domains": [
+        "service_climate",
+        "emotional_labor",
+        "perspective_taking",
+        "voice",
+        "dignity"
+      ]
+    },
+    {
+      "branch_id": "small-business-leadership",
+      "branch_title": "Small-Business and Entrepreneurial Leadership",
+      "path": "../exemplars/06-small-business-leadership/references.md",
+      "evidence_domains": [
+        "effectuation",
+        "bricolage",
+        "entrepreneurial_self_efficacy",
+        "resource_conservation",
+        "recovery"
+      ]
+    },
+    {
+      "branch_id": "personal-work-transitions",
+      "branch_title": "Personal-to-Work Transitions",
+      "path": "../exemplars/07-personal-to-work-transitions/references.md",
+      "evidence_domains": [
+        "work_role_transitions",
+        "conservation_of_resources",
+        "career_adaptability",
+        "identity_work",
+        "job_crafting"
+      ]
+    }
+  ]
+}

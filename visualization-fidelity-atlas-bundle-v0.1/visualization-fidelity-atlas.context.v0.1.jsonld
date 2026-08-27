@@ -1,0 +1,50 @@
+{
+  "@context": {
+    "viz": "https://schemas.radiantnull.com/visualization#",
+    "ca": "https://schemas.driftframestudios.org/ca#",
+    "schema": "https://schema.org/",
+    "id": "@id",
+    "type": "@type",
+    "name": "schema:name",
+    "description": "schema:description",
+    "VisualizationFidelityAtlas": "viz:VisualizationFidelityAtlas",
+    "DataPrimitive": "viz:DataPrimitive",
+    "DataShape": "viz:DataShape",
+    "CognitiveMove": "viz:CognitiveMove",
+    "VisualForm": "viz:VisualForm",
+    "VisualRecommendation": "viz:VisualRecommendation",
+    "VisualizationExemplar": "viz:VisualizationExemplar",
+    "CitationAnchor": "viz:CitationAnchor",
+    "VisualizationFidelityReview": "viz:VisualizationFidelityReview",
+    "hasPrimitive": {
+      "@id": "viz:hasPrimitive",
+      "@type": "@id"
+    },
+    "hasDataShape": {
+      "@id": "viz:hasDataShape",
+      "@type": "@id"
+    },
+    "supportsCognitiveMove": {
+      "@id": "viz:supportsCognitiveMove",
+      "@type": "@id"
+    },
+    "recommendsVisualForm": {
+      "@id": "viz:recommendsVisualForm",
+      "@type": "@id"
+    },
+    "hasExemplar": {
+      "@id": "viz:hasExemplar",
+      "@type": "@id"
+    },
+    "hasCitation": {
+      "@id": "viz:hasCitation",
+      "@type": "@id"
+    },
+    "fidelityScore": "viz:fidelityScore",
+    "accessibilityScore": "viz:accessibilityScore",
+    "aiReadinessScore": "viz:aiReadinessScore",
+    "sourceBand": "ca:sourceBand",
+    "semanticLocality": "ca:semanticLocality",
+    "aiPromptCapsule": "ca:aiPromptCapsule"
+  }
+}

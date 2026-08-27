@@ -1,0 +1,192 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 900" width="1500" height="900" role="img" aria-labelledby="forest-compare-title forest-compare-desc" data-role="forest-method-comparison" data-category="method" data-current-state="comparison-visible" data-state-model="stream-updated|batch-compared|look-here|human-review|recorded" data-anomaly-cue="look-here" data-source-family="ai-legible-viewlet-svg-library-v1" data-provenance="adapted-from-author-provided-viewlet-atlas">
+  <title id="forest-compare-title">Random Cut Forest and Isolation Forest surface different interaction questions</title>
+  <desc id="forest-compare-desc">A side-by-side method comparison maps Random Cut Forest for a changing event stream against Isolation Forest for a batch feature matrix. The streaming method asks whether a new arrival changed the forest; the batch method asks whether a sparse combination was isolated quickly. Both routes lead through a written Anomaly, Look Here state to contextual interpretation, human review, and an auditable next step. Slow emphasis moves across the comparison while every element remains visible.</desc>
+  <metadata type="application/json"><![CDATA[
+    {
+      "artifact_id": "random-cut-isolation-forest-comparison-v2",
+      "methods": ["Random Cut Forest", "Isolation Forest"],
+      "source_family": "ai-legible-viewlet-svg-library-v1",
+      "source_viewlets": ["viewlet-component-heatmap-v1", "viewlet-anomaly-kindness-lens-v1", "viewlet-human-ai-v1", "viewlet-audit-trail-v1"],
+      "state_model": ["stream-updated", "batch-compared", "look-here", "human-review", "recorded"],
+      "anomaly_cue": "look-here",
+      "provenance": "Canonical viewlet geometry and semantics adapted from the author-provided AI-Legible Viewlet SVG Atlas."
+    }
+  ]]></metadata>
+  <style>
+    :root {
+      --ink:#10233f; --cobalt:#2855f3; --deep:#153fbe; --paper:#fffdf8;
+      --pale:#e7efff; --sea:#d9efea; --tiffany:#73e0d1; --acid:#f2ff67;
+      --blush:#ffdbe3; --muted:#49627f; --grid:#cbdaf1;
+    }
+    text { font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill:var(--ink); }
+    .mono { font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace; letter-spacing:.075em; }
+    .background { fill:#f7fbff; }
+    .shadow { fill:var(--ink); }
+    .header { fill:var(--deep); stroke:var(--ink); stroke-width:3; }
+    .header-text { fill:#fff; }
+    .surface { fill:var(--paper); stroke:var(--ink); stroke-width:2.5; }
+    .panel-left { fill:var(--pale); stroke:var(--ink); stroke-width:2; }
+    .panel-right { fill:var(--sea); stroke:var(--ink); stroke-width:2; }
+    .card,.window { fill:#fff; stroke:var(--ink); stroke-width:2; }
+    .window { stroke:var(--cobalt); }
+    .window-line,.ui-line { stroke:var(--cobalt); fill:none; stroke-width:2; vector-effect:non-scaling-stroke; }
+    .quiet-line { stroke:var(--grid); fill:none; stroke-width:2; vector-effect:non-scaling-stroke; }
+    .stream-line { stroke:var(--deep); fill:none; stroke-width:4.5; stroke-linecap:round; stroke-linejoin:round; }
+    .cut { stroke:var(--muted); stroke-width:3; stroke-dasharray:9 7; opacity:.7; }
+    .cut-strong { stroke:var(--cobalt); stroke-width:4; stroke-dasharray:9 7; }
+    .point { fill:var(--sea); stroke:var(--deep); stroke-width:2; }
+    .sparse-point { fill:var(--acid); stroke:var(--ink); stroke-width:3; }
+    .look-ring { fill:none; stroke:var(--cobalt); stroke-width:4; opacity:.42; transform-box:fill-box; transform-origin:center; animation:look-ring 14s ease-in-out infinite; }
+    .arrow { fill:var(--cobalt); }
+    .state-chip { fill:var(--acid); stroke:var(--ink); stroke-width:2; }
+    .quiet-chip { fill:#fff; stroke:var(--ink); stroke-width:2; }
+    .title { font-size:35px; font-weight:900; }
+    .subtitle { font-size:17px; font-weight:650; }
+    .kicker { font-size:13px; font-weight:850; }
+    .section-title { font-size:23px; font-weight:900; }
+    .body { font-size:16px; font-weight:650; }
+    .small { font-size:14px; font-weight:700; }
+    .micro { font-size:11px; font-weight:850; }
+    .compare-stage,.route-stage { opacity:.86; animation-duration:14s; animation-timing-function:ease-in-out; animation-iteration-count:infinite; }
+    .compare-stage--stream,.route-stage--1 { animation-name:attention-one; }
+    .compare-stage--batch,.route-stage--2 { animation-name:attention-two; }
+    .route-stage--3 { animation-name:attention-three; }
+    .route-stage--4 { animation-name:attention-four; }
+    @keyframes attention-one { 0%,100%{opacity:.86} 5%,23%{opacity:1} 29%{opacity:.86} }
+    @keyframes attention-two { 0%,26%,100%{opacity:.86} 33%,49%{opacity:1} 55%{opacity:.86} }
+    @keyframes attention-three { 0%,52%,100%{opacity:.86} 59%,74%{opacity:1} 80%{opacity:.86} }
+    @keyframes attention-four { 0%,77%,100%{opacity:.86} 84%,96%{opacity:1} }
+    @keyframes look-ring { 0%,26%,58%,100%{opacity:.34;transform:scale(1)} 36%,50%{opacity:.88;transform:scale(1.14)} }
+    @media (prefers-reduced-motion:reduce) {
+      .compare-stage,.route-stage,.look-ring { animation:none !important; }
+      .compare-stage,.route-stage { opacity:1; }
+      .look-ring { opacity:.7; transform:none !important; }
+    }
+    @media (forced-colors:active) {
+      .background,.surface,.panel-left,.panel-right,.card,.window,.quiet-chip { fill:Canvas; stroke:CanvasText; }
+      .header { fill:Highlight; stroke:CanvasText; }
+      .header-text { fill:HighlightText !important; }
+      text { fill:CanvasText !important; }
+      .window-line,.ui-line,.quiet-line,.stream-line,.cut,.cut-strong,.look-ring { stroke:CanvasText; }
+      .point,.sparse-point,.state-chip { fill:Highlight; stroke:CanvasText; }
+      .arrow,.shadow { fill:CanvasText; }
+    }
+  </style>
+
+  <rect class="background" width="1500" height="900" aria-hidden="true"/>
+  <g role="group" aria-labelledby="forest-header-title">
+    <title id="forest-header-title">Comparison orientation and shared review posture</title>
+    <rect class="shadow" x="52" y="52" width="1400" height="118" rx="18" aria-hidden="true"/>
+    <rect class="header" x="40" y="40" width="1400" height="118" rx="18"/>
+    <text class="mono kicker header-text" x="72" y="76">METHOD COMPARISON · DATA SHAPE BEFORE MODEL CHOICE</text>
+    <text class="title header-text" x="72" y="118">Two forests surface two different interaction questions</text>
+    <text class="subtitle header-text" x="72" y="145">Streaming shape change and batch sparsity both lead to accountable review.</text>
+  </g>
+
+  <g class="compare-stage compare-stage--stream" role="group" aria-labelledby="rcf-compare-panel-title" data-method="random-cut-forest" data-current-state="stream-updated" transform="translate(52 194)">
+    <title id="rcf-compare-panel-title">Random Cut Forest evaluates how a new arrival changes a stream</title>
+    <rect class="shadow" x="9" y="9" width="680" height="432" rx="20" aria-hidden="true"/>
+    <rect class="panel-left" width="680" height="432" rx="20"/>
+    <text class="mono kicker" x="28" y="36">A · CHANGING EVENT STREAM</text>
+    <text class="section-title" x="28" y="69">Random Cut Forest</text>
+    <text class="body" x="28" y="94">Did this arrival change the shape of the forest?</text>
+    <rect class="card" x="28" y="116" width="624" height="226" rx="13"/>
+    <line class="quiet-line" x1="54" y1="177" x2="628" y2="177" aria-hidden="true"/>
+    <line class="quiet-line" x1="54" y1="238" x2="628" y2="238" aria-hidden="true"/>
+    <line class="cut" x1="264" y1="137" x2="264" y2="321"/>
+    <line class="cut" x1="54" y1="259" x2="628" y2="259"/>
+    <line class="cut-strong" x1="508" y1="137" x2="508" y2="321"/>
+    <polyline class="stream-line" points="60,287 108,276 156,282 204,250 252,262 300,229 348,243 396,207 444,220 492,190 540,207 588,157 626,179"/>
+    <g aria-hidden="true">
+      <circle class="point" cx="60" cy="287" r="6"/><circle class="point" cx="108" cy="276" r="6"/><circle class="point" cx="156" cy="282" r="6"/><circle class="point" cx="204" cy="250" r="6"/><circle class="point" cx="252" cy="262" r="6"/><circle class="point" cx="300" cy="229" r="6"/><circle class="point" cx="348" cy="243" r="6"/><circle class="point" cx="396" cy="207" r="6"/><circle class="point" cx="444" cy="220" r="6"/><circle class="point" cx="492" cy="190" r="6"/><circle class="point" cx="540" cy="207" r="6"/><circle class="point" cx="588" cy="157" r="6"/><circle class="sparse-point" cx="626" cy="179" r="10"/>
+    </g>
+    <rect class="quiet-chip" x="28" y="360" width="250" height="42" rx="9"/>
+    <text class="mono small" x="48" y="386">STATE · STREAM UPDATED</text>
+    <text class="small" x="300" y="378"><tspan x="300">Useful when arrival order</tspan><tspan x="300" dy="19">and recency matter.</tspan></text>
+  </g>
+
+  <g class="compare-stage compare-stage--batch" role="group" aria-labelledby="if-compare-panel-title" data-method="isolation-forest" data-current-state="look-here" transform="translate(768 194)">
+    <title id="if-compare-panel-title">Isolation Forest evaluates whether a sparse batch combination is isolated quickly</title>
+    <rect class="shadow" x="9" y="9" width="680" height="432" rx="20" aria-hidden="true"/>
+    <rect class="panel-right" width="680" height="432" rx="20"/>
+    <text class="mono kicker" x="28" y="36">B · BATCH FEATURE MATRIX</text>
+    <text class="section-title" x="28" y="69">Isolation Forest</text>
+    <text class="body" x="28" y="94">Which sparse combination is isolated in fewer cuts?</text>
+    <rect class="card" x="28" y="116" width="624" height="226" rx="13"/>
+    <line class="cut" x1="430" y1="137" x2="430" y2="321"/>
+    <line class="cut" x1="54" y1="257" x2="628" y2="257"/>
+    <line class="cut-strong" x1="548" y1="137" x2="548" y2="257"/>
+    <line class="cut-strong" x1="548" y1="205" x2="628" y2="205"/>
+    <g aria-hidden="true">
+      <circle class="point" cx="102" cy="267" r="7"/><circle class="point" cx="142" cy="243" r="7"/><circle class="point" cx="174" cy="284" r="7"/><circle class="point" cx="208" cy="231" r="7"/><circle class="point" cx="244" cy="266" r="7"/><circle class="point" cx="279" cy="213" r="7"/><circle class="point" cx="313" cy="249" r="7"/><circle class="point" cx="347" cy="222" r="7"/><circle class="point" cx="378" cy="277" r="7"/><circle class="point" cx="401" cy="237" r="7"/><circle class="point" cx="461" cy="279" r="7"/><circle class="point" cx="483" cy="235" r="7"/>
+      <circle class="look-ring" cx="594" cy="169" r="25"/>
+      <circle class="sparse-point" cx="594" cy="169" r="11"/>
+    </g>
+    <text class="mono micro" x="492" y="155">ANOMALY · LOOK HERE</text>
+    <rect class="state-chip" x="28" y="360" width="260" height="42" rx="9"/>
+    <text class="mono small" x="48" y="386">STATE · LOOK HERE</text>
+    <text class="small" x="310" y="378"><tspan x="310">Useful for a fixed comparison</tspan><tspan x="310" dy="19">across tabular features.</tspan></text>
+  </g>
+
+  <g role="group" aria-labelledby="shared-handoff-title" transform="translate(52 660)">
+    <title id="shared-handoff-title">Shared component-level handoff through context, interpretation, human review, and an audit trail</title>
+    <rect class="shadow" x="9" y="9" width="1396" height="188" rx="18" aria-hidden="true"/>
+    <rect class="surface" width="1396" height="188" rx="18"/>
+    <text class="mono kicker" x="28" y="32">SAME ACCOUNTABLE HANDOFF · COMPONENT-LEVEL CONTEXT STAYS ATTACHED</text>
+    <text class="body" x="28" y="57">The method changes with the data shape; the review route preserves the same source, receiver, and recovery obligations.</text>
+
+    <g class="route-stage route-stage--1" role="group" aria-labelledby="heatmap-viewlet-title" data-role="component-heatmap" data-category="analytics" data-current-state="compared" transform="translate(28 77)">
+      <title id="heatmap-viewlet-title">Component heatmap preserves the observed comparison</title>
+      <rect class="window" width="250" height="88" rx="10"/>
+      <line class="window-line" x1="0" y1="23" x2="250" y2="23"/>
+      <circle class="point" cx="14" cy="11" r="3"/><circle class="point" cx="27" cy="11" r="3"/><circle class="point" cx="40" cy="11" r="3"/>
+      <g aria-hidden="true">
+        <rect x="20" y="36" width="25" height="13" rx="3" fill="var(--sea)" stroke="var(--ink)"/><rect x="53" y="36" width="25" height="13" rx="3" fill="var(--pale)" stroke="var(--ink)"/><rect x="86" y="36" width="25" height="13" rx="3" fill="var(--acid)" stroke="var(--ink)"/><rect x="119" y="36" width="25" height="13" rx="3" fill="var(--blush)" stroke="var(--ink)"/><rect x="152" y="36" width="25" height="13" rx="3" fill="var(--sea)" stroke="var(--ink)"/><rect x="185" y="36" width="25" height="13" rx="3" fill="var(--pale)" stroke="var(--ink)"/>
+        <rect x="20" y="55" width="25" height="13" rx="3" fill="var(--pale)" stroke="var(--ink)"/><rect x="53" y="55" width="25" height="13" rx="3" fill="var(--sea)" stroke="var(--ink)"/><rect x="86" y="55" width="25" height="13" rx="3" fill="var(--pale)" stroke="var(--ink)"/><rect x="119" y="55" width="25" height="13" rx="3" fill="var(--acid)" stroke="var(--ink)"/><rect x="152" y="55" width="25" height="13" rx="3" fill="var(--blush)" stroke="var(--ink)"/><rect x="185" y="55" width="25" height="13" rx="3" fill="var(--sea)" stroke="var(--ink)"/>
+      </g>
+      <text class="mono micro" x="230" y="79" text-anchor="end">01 · COMPARE</text>
+    </g>
+
+    <path class="arrow" d="M293 111H320V100L342 121L320 142V131H293Z" aria-hidden="true"/>
+
+    <g class="route-stage route-stage--2" role="group" aria-labelledby="kindness-viewlet-title" data-role="anomaly-kindness-lens" data-category="speculative-ai" data-current-state="look-here" transform="translate(352 77)">
+      <title id="kindness-viewlet-title">Anomaly lens turns a sparse pattern into a Look Here inquiry</title>
+      <rect class="window" width="250" height="88" rx="10"/>
+      <line class="window-line" x1="0" y1="23" x2="250" y2="23"/>
+      <circle cx="70" cy="53" r="23" fill="var(--pale)" stroke="var(--cobalt)" stroke-width="2"/>
+      <circle cx="180" cy="53" r="23" fill="var(--acid)" stroke="var(--ink)" stroke-width="2"/>
+      <path class="arrow" d="M99 47H145V39L160 53L145 67V59H99Z" aria-hidden="true"/>
+      <text class="mono micro" x="230" y="79" text-anchor="end">02 · LOOK HERE</text>
+    </g>
+
+    <path class="arrow" d="M617 111H644V100L666 121L644 142V131H617Z" aria-hidden="true"/>
+
+    <g class="route-stage route-stage--3" role="group" aria-labelledby="human-viewlet-title" data-role="human-ai" data-category="collaboration" data-current-state="human-review" transform="translate(676 77)">
+      <title id="human-viewlet-title">Human and AI collaboration keeps interpretation with an accountable reviewer</title>
+      <rect class="window" width="250" height="88" rx="10"/>
+      <line class="window-line" x1="0" y1="23" x2="250" y2="23"/>
+      <circle cx="68" cy="53" r="22" fill="var(--pale)" stroke="var(--cobalt)" stroke-width="2"/>
+      <text class="mono micro" x="68" y="57" text-anchor="middle">AI</text>
+      <path class="arrow" d="M96 47H144V39L160 53L144 67V59H96Z" aria-hidden="true"/>
+      <circle cx="184" cy="53" r="22" fill="var(--sea)" stroke="var(--ink)" stroke-width="2"/>
+      <text class="mono micro" x="184" y="57" text-anchor="middle">OWNER</text>
+      <text class="mono micro" x="230" y="79" text-anchor="end">03 · REVIEW</text>
+    </g>
+
+    <path class="arrow" d="M941 111H968V100L990 121L968 142V131H941Z" aria-hidden="true"/>
+
+    <g class="route-stage route-stage--4" role="group" aria-labelledby="audit-viewlet-title" data-role="audit-trail" data-category="memory" data-current-state="recorded" transform="translate(1000 77)">
+      <title id="audit-viewlet-title">Audit trail records the decision, exception, and next evidence need</title>
+      <rect class="window" width="368" height="88" rx="10"/>
+      <line class="window-line" x1="0" y1="23" x2="368" y2="23"/>
+      <g class="ui-line">
+        <rect x="18" y="34" width="17" height="11" rx="3"/><line x1="48" y1="39" x2="252" y2="39"/>
+        <rect x="18" y="51" width="17" height="11" rx="3"/><line x1="48" y1="56" x2="228" y2="56"/>
+        <rect x="18" y="68" width="17" height="11" rx="3"/><line x1="48" y1="73" x2="204" y2="73"/>
+      </g>
+      <rect class="quiet-chip" x="266" y="34" width="82" height="43" rx="7"/>
+      <text class="mono micro" x="307" y="51" text-anchor="middle">04</text>
+      <text class="mono micro" x="307" y="68" text-anchor="middle">RECORD</text>
+    </g>
+  </g>
+</svg>

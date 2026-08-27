@@ -1,0 +1,703 @@
+{
+  "id": "ca-artifact-core-architecture-family-index-001",
+  "title": "Core Architecture routes for Narrative Sampling Tableau",
+  "version": "0.1",
+  "sourcePointer": "ca-artifact-core-architecture-family-index-001",
+  "probabilityTarget": "P(primary cognitive origin): probability that a skilled collaborator's first useful use of the architecture primarily begins in Solution, Implementation, or Recovery work.",
+  "families": [
+    {
+      "id": "orientation-and-tracing",
+      "displayName": "Orientation and Tracing",
+      "cognitiveMove": "Enter the terrain, establish shared context, and trace actors, purpose, impacts, knowledge, and gaps."
+    },
+    {
+      "id": "comparison-and-threshold",
+      "displayName": "Comparison and Threshold",
+      "cognitiveMove": "Compare dimensions, negotiate boundaries, and make current, future, and good-enough states visible."
+    },
+    {
+      "id": "shared-surfaces-and-topology",
+      "displayName": "Shared Surfaces and Topology",
+      "cognitiveMove": "Expose shared assets, service layers, dependencies, runtime boundaries, and cross-system topology."
+    },
+    {
+      "id": "participatory-elicitation-and-specification",
+      "displayName": "Participatory Elicitation and Specification",
+      "cognitiveMove": "Externalize tacit workflow and convert discussion into manipulable or executable behavior structures."
+    },
+    {
+      "id": "measurement-reflection-and-judgment",
+      "displayName": "Measurement, Reflection, and Judgment",
+      "cognitiveMove": "Calibrate outcomes, reflect on work, and hydrate experienced practitioner judgment."
+    },
+    {
+      "id": "pattern-fit-and-behavior-protection",
+      "displayName": "Pattern Fit and Behavior Protection",
+      "cognitiveMove": "Relate patterns and jobs to problem surfaces, then protect consequential behavior."
+    },
+    {
+      "id": "recovery-routing-and-revision",
+      "displayName": "Recovery Routing and Revision",
+      "cognitiveMove": "Recognize strain, revise upstream framing, and route to the smallest adequate stabilizing architecture."
+    }
+  ],
+  "coreArchitectures": [
+    {
+      "id": "ca:poda",
+      "displayName": "PODA",
+      "subtitle": "Purpose, Objectives, Discoverables, Activities",
+      "family": "orientation-and-tracing",
+      "move": "Narrative orientation and discoverable scoping",
+      "solution": 0.78,
+      "implementation": 0.15,
+      "recovery": 0.07,
+      "useWhen": "The decision lacks a compact shared purpose, objective, discoverable surface, or activity frame.",
+      "returns": [
+        "shared purpose",
+        "discoverable terrain",
+        "activity frame"
+      ],
+      "gapTypes": [
+        "probability_object_undefined",
+        "decision_rule_implicit"
+      ],
+      "keywords": [
+        "purpose",
+        "objective",
+        "discoverable",
+        "orientation"
+      ],
+      "prototype": "poda-chimeric-prototype-v0.1.html"
+    },
+    {
+      "id": "ca:alignment-worksheet",
+      "displayName": "Alignment Worksheet",
+      "subtitle": "Forward / Backward Premise Surface",
+      "family": "orientation-and-tracing",
+      "move": "Problem-premise surfacing",
+      "solution": 0.82,
+      "implementation": 0.08,
+      "recovery": 0.1,
+      "useWhen": "Collaborators disagree about who is affected, what they want, or what they currently have to do.",
+      "returns": [
+        "premise comparison",
+        "affected-population statement",
+        "current-activity statement"
+      ],
+      "gapTypes": [
+        "population_undefined",
+        "human_vocabulary_gap",
+        "decision_rule_implicit"
+      ],
+      "keywords": [
+        "premise",
+        "affected",
+        "current activity",
+        "alignment"
+      ],
+      "prototype": "alignment-worksheet-chimeric-prototype-v0.1.html"
+    },
+    {
+      "id": "ca:impact-map",
+      "displayName": "Impact Map",
+      "subtitle": "Actor–Impact–Discoverable Trace",
+      "family": "orientation-and-tracing",
+      "move": "Actor–impact–discoverable mapping",
+      "solution": 0.75,
+      "implementation": 0.15,
+      "recovery": 0.1,
+      "useWhen": "A possibility needs to connect a goal to actors, expected impacts, and discoverable work.",
+      "returns": [
+        "goal trace",
+        "actor map",
+        "impact chain",
+        "discoverable candidates"
+      ],
+      "gapTypes": [
+        "population_undefined",
+        "candidate_range_narrow",
+        "decision_rule_implicit"
+      ],
+      "keywords": [
+        "actor",
+        "impact",
+        "goal",
+        "discoverable"
+      ],
+      "prototype": "impact-map-chimeric-prototype-v0.1.1.html"
+    },
+    {
+      "id": "ca:context-tree",
+      "displayName": "Context Tree",
+      "subtitle": "Role–Knowledge Context Map",
+      "family": "orientation-and-tracing",
+      "move": "Context-gap and collaboration mapping",
+      "solution": 0.82,
+      "implementation": 0.1,
+      "recovery": 0.08,
+      "useWhen": "Population, collaborators, knowledge needs, or missing context are weakly specified.",
+      "returns": [
+        "population map",
+        "relationship context",
+        "knowledge needs",
+        "missing-context ledger"
+      ],
+      "gapTypes": [
+        "population_undefined",
+        "population_mismatch",
+        "human_vocabulary_gap",
+        "ai_inferred_gap"
+      ],
+      "keywords": [
+        "population",
+        "knowledge",
+        "missing context",
+        "who"
+      ],
+      "prototype": "context-tree-chimeric-prototype-v0.1.3.html"
+    },
+    {
+      "id": "ca:strategy-canvas",
+      "displayName": "Strategy Canvas",
+      "subtitle": "Current / Future State Tuning Surface",
+      "family": "comparison-and-threshold",
+      "move": "Comparative current/future-state shaping",
+      "solution": 0.68,
+      "implementation": 0.22,
+      "recovery": 0.1,
+      "useWhen": "Candidates differ across consequential dimensions or dimension weights need deliberate comparison.",
+      "returns": [
+        "dimension landscape",
+        "current/future comparison",
+        "raise/reduce/create moves",
+        "good-enough thresholds"
+      ],
+      "gapTypes": [
+        "dimensions_missing",
+        "weights_implicit",
+        "decision_rule_implicit",
+        "runs_not_commensurate"
+      ],
+      "keywords": [
+        "dimension",
+        "compare",
+        "current",
+        "future",
+        "good enough",
+        "weight"
+      ],
+      "prototype": "strategy-canvas-chimeric-prototype-v0.2.0.html"
+    },
+    {
+      "id": "ca:first-responsible-version-matrix",
+      "displayName": "First Responsible Version Matrix",
+      "subtitle": "Threshold Alignment Surface",
+      "family": "comparison-and-threshold",
+      "move": "Threshold negotiation and scope-boundary setting",
+      "solution": 0.7,
+      "implementation": 0.22,
+      "recovery": 0.08,
+      "useWhen": "A possibility set needs an above-the-line / below-the-line threshold and a responsible first boundary.",
+      "returns": [
+        "threshold boundary",
+        "responsible minimum",
+        "deferred set",
+        "scope rationale"
+      ],
+      "gapTypes": [
+        "decision_rule_implicit",
+        "weights_implicit",
+        "candidate_range_narrow"
+      ],
+      "keywords": [
+        "threshold",
+        "responsible",
+        "scope",
+        "minimum",
+        "priority"
+      ],
+      "prototype": "first-responsible-version-matrix-chimeric-prototype-v0.1.html"
+    },
+    {
+      "id": "ca:shared-surface-priority-map",
+      "displayName": "Shared Surface Priority Map",
+      "subtitle": "Cross-channel Blueprint",
+      "family": "shared-surfaces-and-topology",
+      "move": "Shared-surface priority mapping",
+      "solution": 0.62,
+      "implementation": 0.3,
+      "recovery": 0.08,
+      "useWhen": "Candidates affect several channels or processes and shared assets need explicit priority.",
+      "returns": [
+        "channel/process matrix",
+        "shared-asset line",
+        "priority intensity",
+        "cross-surface dependencies"
+      ],
+      "gapTypes": [
+        "target_model_mismatch",
+        "dimensions_missing",
+        "population_mismatch"
+      ],
+      "keywords": [
+        "channel",
+        "shared",
+        "priority",
+        "asset",
+        "surface"
+      ],
+      "prototype": "shared-surface-priority-map-chimeric-prototype-v0.1.html"
+    },
+    {
+      "id": "ca:service-design-blueprint",
+      "displayName": "Service-design Blueprint",
+      "subtitle": "Service Topology Map",
+      "family": "shared-surfaces-and-topology",
+      "move": "Multi-actor service topology and operational separation",
+      "solution": 0.55,
+      "implementation": 0.36,
+      "recovery": 0.09,
+      "useWhen": "A candidate spans people, channels, operations, AI, support processes, or data stores.",
+      "returns": [
+        "frontstage/backstage map",
+        "support processes",
+        "service dependencies",
+        "handoff topology"
+      ],
+      "gapTypes": [
+        "target_model_mismatch",
+        "population_mismatch",
+        "causal_support_missing"
+      ],
+      "keywords": [
+        "service",
+        "frontstage",
+        "backstage",
+        "operations",
+        "handoff",
+        "data store"
+      ],
+      "prototype": "service-design-blueprint-chimeric-prototype-v0.2.html"
+    },
+    {
+      "id": "ca:ai-systems-service-blueprint",
+      "displayName": "AI Systems Service Blueprint",
+      "subtitle": "Runtime–Knowledge–Infrastructure Topology Map",
+      "family": "shared-surfaces-and-topology",
+      "move": "AI system component topology and operational boundary mapping",
+      "solution": 0.34,
+      "implementation": 0.52,
+      "recovery": 0.14,
+      "useWhen": "A possibility depends on model runtime, knowledge, infrastructure, evaluation, observability, budget, or containment.",
+      "returns": [
+        "runtime map",
+        "knowledge path",
+        "evaluation boundary",
+        "observability and containment layers"
+      ],
+      "gapTypes": [
+        "model_or_version_unknown",
+        "technical_veracity_gap",
+        "causal_support_missing",
+        "publication_boundary_gap"
+      ],
+      "keywords": [
+        "model",
+        "runtime",
+        "knowledge",
+        "evaluation",
+        "observability",
+        "AI"
+      ],
+      "prototype": "ai-systems-service-blueprint-chimeric-prototype-v0.1.html"
+    },
+    {
+      "id": "ca:software-architecture-views",
+      "displayName": "Software Architecture Views",
+      "subtitle": "Feature Instantiation / Dependency Shape Map",
+      "family": "shared-surfaces-and-topology",
+      "move": "Boundary, dependency, and hidden-coupling exposure",
+      "solution": 0.3,
+      "implementation": 0.55,
+      "recovery": 0.15,
+      "useWhen": "A selected possibility needs dependency, feature-boundary, data-flow, or coupling inspection.",
+      "returns": [
+        "dependency view",
+        "boundary map",
+        "hidden coupling",
+        "instantiation shape"
+      ],
+      "gapTypes": [
+        "target_model_mismatch",
+        "technical_veracity_gap",
+        "causal_support_missing"
+      ],
+      "keywords": [
+        "dependency",
+        "boundary",
+        "software",
+        "coupling",
+        "architecture"
+      ],
+      "prototype": "software-architecture-views-chimeric-prototype-v0.1.html"
+    },
+    {
+      "id": "ca:participatory-design-kit",
+      "displayName": "Participatory Design Kit",
+      "subtitle": "Tacit Workflow Elicitation Kit",
+      "family": "participatory-elicitation-and-specification",
+      "move": "Externalizing tacit workflow through manipulable artifacts",
+      "solution": 0.58,
+      "implementation": 0.33,
+      "recovery": 0.09,
+      "useWhen": "Documentation and proposed flows need to be tested against live participant knowledge.",
+      "returns": [
+        "workflow lanes",
+        "dependencies",
+        "salience map",
+        "affordance placement",
+        "participant alternatives"
+      ],
+      "gapTypes": [
+        "human_vocabulary_gap",
+        "population_mismatch",
+        "candidate_range_narrow",
+        "decision_rule_implicit"
+      ],
+      "keywords": [
+        "workflow",
+        "participant",
+        "tacit",
+        "timeline",
+        "dependency",
+        "affordance"
+      ],
+      "prototype": "participatory-design-kit-chimeric-prototype-v0.1.1.html"
+    },
+    {
+      "id": "ca:specification-by-example",
+      "displayName": "Specification-by-Example",
+      "subtitle": "Behavior Example Bridge",
+      "family": "participatory-elicitation-and-specification",
+      "move": "Behavior example discovery and executable verification",
+      "solution": 0.33,
+      "implementation": 0.61,
+      "recovery": 0.06,
+      "useWhen": "A selected possibility needs observable context, event, outcome, edge-case, or executable behavior contracts.",
+      "returns": [
+        "Given/When/Then examples",
+        "edge cases",
+        "acceptance boundaries",
+        "living specification"
+      ],
+      "gapTypes": [
+        "causal_support_missing",
+        "decision_rule_implicit",
+        "technical_veracity_gap"
+      ],
+      "keywords": [
+        "behavior",
+        "given",
+        "when",
+        "then",
+        "example",
+        "specification"
+      ],
+      "prototype": "specification-by-example-chimeric-prototype-v0.1.1.html"
+    },
+    {
+      "id": "ca:heart-chart",
+      "displayName": "HEART Chart",
+      "subtitle": "Signal-to-Metric Calibration",
+      "family": "measurement-reflection-and-judgment",
+      "move": "Outcome-to-signal-to-metric translation",
+      "solution": 0.32,
+      "implementation": 0.58,
+      "recovery": 0.1,
+      "useWhen": "The probability object is behaviorally vague or signals, counter-signals, tolerances, and metrics need definition.",
+      "returns": [
+        "experience goal",
+        "signal",
+        "metric",
+        "counter-signal",
+        "tolerance"
+      ],
+      "gapTypes": [
+        "probability_object_undefined",
+        "calibration_absent",
+        "statistical_method_missing",
+        "evidence_stale"
+      ],
+      "keywords": [
+        "signal",
+        "metric",
+        "measure",
+        "outcome",
+        "tolerance",
+        "calibration"
+      ],
+      "prototype": "heart-chart-chimeric-prototype-v0.1.2.html"
+    },
+    {
+      "id": "ca:plus-delta",
+      "displayName": "Plus / Delta",
+      "subtitle": "Working / Needs-to-Change Review",
+      "family": "measurement-reflection-and-judgment",
+      "move": "Retrospective calibration and improvement routing",
+      "solution": 0.25,
+      "implementation": 0.46,
+      "recovery": 0.29,
+      "useWhen": "Repeated sampling runs or decisions need a concise reflection on what worked and what should change.",
+      "returns": [
+        "working-state record",
+        "change candidates",
+        "practice adjustments",
+        "next review"
+      ],
+      "gapTypes": [
+        "prompt_order_effect",
+        "runs_not_commensurate",
+        "evidence_stale"
+      ],
+      "keywords": [
+        "reflection",
+        "review",
+        "worked",
+        "change",
+        "retrospective"
+      ],
+      "prototype": "plus-delta-chimeric-prototype-v0.1.html"
+    },
+    {
+      "id": "ca:practitioner-judgment-probes",
+      "displayName": "Practitioner Judgment Probes",
+      "subtitle": "Interview Questions as Propensities",
+      "family": "measurement-reflection-and-judgment",
+      "move": "Principal judgment hydration",
+      "solution": 0.42,
+      "implementation": 0.42,
+      "recovery": 0.16,
+      "useWhen": "Technical dimensions, failure modes, artifact literacy, or implementation maturity need experienced review.",
+      "returns": [
+        "principal-level questions",
+        "cross-cutting concerns",
+        "technical-veracity gaps",
+        "judgment hydration"
+      ],
+      "gapTypes": [
+        "technical_veracity_gap",
+        "model_or_version_unknown",
+        "causal_support_missing",
+        "ai_inferred_gap"
+      ],
+      "keywords": [
+        "technical",
+        "practitioner",
+        "judgment",
+        "cross-cutting",
+        "veracity",
+        "maturity"
+      ],
+      "prototype": "practitioner-judgment-probes-chimeric-prototype-v0.1.html"
+    },
+    {
+      "id": "ca:pattern-problem-surface-matrix",
+      "displayName": "Pattern–Problem Surface Matrix",
+      "subtitle": "Experience Design Patterns as Problem Surfaces",
+      "family": "pattern-fit-and-behavior-protection",
+      "move": "Pattern-to-problem-to-metric translation",
+      "solution": 0.44,
+      "implementation": 0.46,
+      "recovery": 0.1,
+      "useWhen": "A candidate depends on interface or experience patterns whose problem, executive consequence, and metric should be explicit.",
+      "returns": [
+        "pattern map",
+        "design-level problem",
+        "organizational consequence",
+        "likely metric"
+      ],
+      "gapTypes": [
+        "dimensions_missing",
+        "technical_veracity_gap",
+        "candidate_range_narrow"
+      ],
+      "keywords": [
+        "pattern",
+        "interface",
+        "problem surface",
+        "metric",
+        "experience"
+      ],
+      "prototype": "pattern-problem-surface-matrix-chimeric-prototype-v0.1.html"
+    },
+    {
+      "id": "ca:jobs-to-be-done-treemap",
+      "displayName": "Jobs-to-be-Done Treemap",
+      "subtitle": "Purpose-Weighted Job Map",
+      "family": "pattern-fit-and-behavior-protection",
+      "move": "Workflow-purpose weighting",
+      "solution": 0.58,
+      "implementation": 0.34,
+      "recovery": 0.08,
+      "useWhen": "Possibilities need to be weighted by their contribution to the overall workflow or purpose.",
+      "returns": [
+        "purpose-weighted jobs",
+        "relative impact",
+        "workflow coverage",
+        "candidate priorities"
+      ],
+      "gapTypes": [
+        "weights_implicit",
+        "population_undefined",
+        "candidate_range_narrow"
+      ],
+      "keywords": [
+        "job",
+        "purpose",
+        "workflow",
+        "impact",
+        "weight"
+      ],
+      "prototype": "jobs-to-be-done-treemap-chimeric-prototype-v0.1.html"
+    },
+    {
+      "id": "ca:unit-test-first-design",
+      "displayName": "Unit-test-first Design",
+      "subtitle": "Business Rule Protection",
+      "family": "pattern-fit-and-behavior-protection",
+      "move": "Verification-first behavior preservation",
+      "solution": 0.12,
+      "implementation": 0.78,
+      "recovery": 0.1,
+      "useWhen": "A selected possibility must protect vital behavior and expose fear-of-unknown constraints.",
+      "returns": [
+        "platform-agnostic tests",
+        "business-rule boundaries",
+        "protected behavior",
+        "change confidence"
+      ],
+      "gapTypes": [
+        "technical_veracity_gap",
+        "causal_support_missing",
+        "decision_rule_implicit"
+      ],
+      "keywords": [
+        "test",
+        "business rule",
+        "behavior",
+        "verification",
+        "unknown"
+      ],
+      "prototype": "unit-test-first-design-chimeric-prototype-v0.1.html"
+    },
+    {
+      "id": "ca:upstream-revision-loop",
+      "displayName": "Upstream Revision Loop",
+      "subtitle": "Revisiting Solution Artifacts",
+      "family": "recovery-routing-and-revision",
+      "move": "Feedback-loop correction",
+      "solution": 0.45,
+      "implementation": 0.35,
+      "recovery": 0.2,
+      "useWhen": "Comparison, implementation, or new evidence reveals that the original framing should be revised.",
+      "returns": [
+        "revision path",
+        "source artifact to revisit",
+        "changed premise",
+        "successor state"
+      ],
+      "gapTypes": [
+        "decision_delta",
+        "runs_not_commensurate",
+        "evidence_stale",
+        "population_mismatch"
+      ],
+      "keywords": [
+        "revise",
+        "upstream",
+        "premise",
+        "feedback",
+        "revisit"
+      ],
+      "prototype": "upstream-revision-loop-chimeric-prototype-v0.1.html"
+    },
+    {
+      "id": "ca:recovery-routing-atlas",
+      "displayName": "Recovery Routing Atlas",
+      "subtitle": "Failure Geometries and Strain Cues",
+      "family": "recovery-routing-and-revision",
+      "move": "Strain recognition and architecture route selection",
+      "solution": 0.08,
+      "implementation": 0.17,
+      "recovery": 0.75,
+      "useWhen": "The possibility terrain collapsed, numbers gained unsupported authority, or the next adequate recovery route is unclear.",
+      "returns": [
+        "strain geometry",
+        "smallest adequate recovery move",
+        "route target",
+        "restored state"
+      ],
+      "gapTypes": [
+        "false_exclusivity",
+        "missing_tail",
+        "candidate_range_narrow",
+        "typicality_bias",
+        "runs_not_commensurate",
+        "decision_rule_implicit",
+        "calibration_absent"
+      ],
+      "keywords": [
+        "recovery",
+        "collapse",
+        "strain",
+        "route",
+        "unsupported authority"
+      ],
+      "prototype": "recovery-routing-atlas-chimeric-prototype-v0.1.html"
+    }
+  ],
+  "adjacentRoutes": [
+    {
+      "id": "ra:research-atlas",
+      "displayName": "Research Atlas",
+      "routeType": "research",
+      "move": "Turn unresolved empirical claims into an investigation plan, coverage ledger, and completion gate.",
+      "gapTypes": [
+        "calibration_absent",
+        "statistical_method_missing",
+        "evidence_stale",
+        "population_mismatch",
+        "causal_support_missing",
+        "legal_or_collision_review"
+      ]
+    },
+    {
+      "id": "is:terminological-registry",
+      "displayName": "Terminological Registry",
+      "routeType": "stewardship",
+      "move": "Resolve canonical, display, technical, authored, alias, collision, and promotion states.",
+      "gapTypes": [
+        "human_vocabulary_gap",
+        "legal_or_collision_review",
+        "candidate_range_narrow",
+        "semantic_role_unclear"
+      ]
+    },
+    {
+      "id": "na:affordance-stewardship-and-research-ledger",
+      "displayName": "Affordance Stewardship and Research Ledger",
+      "routeType": "stewardship",
+      "move": "Preserve origin, authority, contextual use, research keys, and lifecycle decisions.",
+      "gapTypes": [
+        "evidence_stale",
+        "model_or_version_unknown",
+        "semantic_role_unclear"
+      ]
+    }
+  ],
+  "notes": [
+    "Families are canonical card homes; S/I/R distributions describe primary cognitive origin.",
+    "Recovery is a full family that also operates as a cross-system routing layer.",
+    "Prototype filenames are local working references, not public canonical IRIs."
+  ]
+}

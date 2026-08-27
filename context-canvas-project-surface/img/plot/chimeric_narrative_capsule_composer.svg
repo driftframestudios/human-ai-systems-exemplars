@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Narrative Capsule Composer preview</title>
+  <desc id="desc">Settled state, open conditions, evidence and authority, and the next move are composed into a capsule that crosses a session boundary and is checked at its receiving surface.</desc>
+  <style>.bg{fill:#fffdf7}.ink{fill:#16345e}.cobalt{fill:#2855f3}.sea{fill:#bfe7e4}.powder{fill:#dbe9ff}.rose{fill:#ffd3d0}.lime{fill:#efff66}.cream{fill:#fff0cf}.rule{stroke:#16345e;stroke-width:4}.path{stroke:#2855f3;stroke-width:6;fill:none}.dash{stroke:#16345e;stroke-width:3;stroke-dasharray:12 9}.cap{font:700 17px ui-monospace,monospace;letter-spacing:.7px}.head{font:700 26px Arial,sans-serif}.small{font:16px Arial,sans-serif}</style>
+  <rect width="960" height="600" class="bg"/>
+  <text x="48" y="56" class="cap ink">NARRATIVE CAPSULE · STATE THAT CAN CROSS A BOUNDARY</text>
+  <g class="rule"><rect x="48" y="94" width="268" height="86" rx="14" class="sea"/><rect x="48" y="196" width="268" height="86" rx="14" class="rose"/><rect x="48" y="298" width="268" height="86" rx="14" class="cream"/><rect x="48" y="400" width="268" height="86" rx="14" class="lime"/></g>
+  <text x="70" y="128" class="cap ink">SETTLED STATE</text><text x="70" y="157" class="small ink">accepted decisions + bounds</text>
+  <text x="70" y="230" class="cap ink">OPEN CONDITIONS</text><text x="70" y="259" class="small ink">questions + live gaps</text>
+  <text x="70" y="332" class="cap ink">EVIDENCE + AUTHORITY</text><text x="70" y="361" class="small ink">source standing + receiver</text>
+  <text x="70" y="434" class="cap ink">NEXT MOVE</text><text x="70" y="463" class="small ink">authorized continuation</text>
+  <path d="M316 137H372M316 239H372M316 341H372M316 443H372" class="path"/>
+  <rect x="372" y="120" width="258" height="348" rx="28" class="powder rule"/><text x="501" y="166" text-anchor="middle" class="cap ink">COMPOSED CAPSULE</text><path d="M400 198H602M400 236H576M400 274H596M400 312H558M400 350H590M400 388H548" class="dash"/>
+  <path d="M630 294H704" class="path"/><path d="M704 294l-25-16v32z" class="cobalt"/>
+  <rect x="704" y="120" width="208" height="348" rx="20" class="cobalt rule"/><text x="808" y="170" text-anchor="middle" class="cap" fill="#fff">NEXT SESSION</text><text x="808" y="224" text-anchor="middle" class="head" fill="#fff">Read first</text><text x="808" y="263" text-anchor="middle" class="small" fill="#fff">inspect landing</text><text x="808" y="291" text-anchor="middle" class="small" fill="#fff">resume at edge</text><rect x="740" y="336" width="136" height="72" rx="12" class="lime rule"/><text x="808" y="368" text-anchor="middle" class="cap ink">FIT CHECK</text><text x="808" y="393" text-anchor="middle" class="small ink">usable here?</text>
+  <text x="480" y="548" text-anchor="middle" class="cap ink">CAPSULE ≠ SOURCE · CAPSULE ≠ THE PERSISTENT COORDINATION SURFACE</text>
+</svg>

@@ -1,0 +1,63 @@
+/* Context Canvas component: Debrief reading routes -----------------------
+   Consumers: Debrief catalog, composed Debriefs, and enterprise readings
+   using .track-index, .source-basis, or .debrief-quote--orientation.
+   Owns: shared reading-route cards, source-basis lists, orientation-reading
+   measure and placement, and print grouping.
+   Load order: expanded.css, this component, the relevant route bundle, then
+   canvas-shell.css; styles/contracts/debrief-composition.css may follow for composed readings.
+   Contract: ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md.
+   The component keeps navigation and evidence orientation stable while each
+   route retains authority over palette, rhythm, density, and composition. */
+
+.track-index {
+    display: grid;
+    gap: .75rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.track-index a {
+    background: var(--canvas-paper);
+    border: 1px solid var(--canvas-rule-strong);
+    border-block-start: .28rem solid var(--canvas-accent);
+    color: var(--canvas-ink-strong);
+    display: block;
+    font-weight: 700;
+    min-block-size: 100%;
+    padding: 1rem 1.1rem;
+    text-decoration: none;
+}
+
+.track-index a:hover,
+.track-index a:focus-visible {
+    background: color-mix(in srgb, var(--canvas-field) 18%, var(--canvas-paper) 82%);
+    text-decoration: underline;
+    text-decoration-thickness: .12em;
+    text-underline-offset: .18em;
+}
+
+.source-basis {
+    display: grid;
+    gap: .7rem;
+    list-style: none;
+    margin: 1.25rem 0 0;
+    padding: 0;
+}
+
+.source-basis li {
+    border-block-start: 1px solid var(--canvas-rule);
+    padding-block-start: .7rem;
+}
+
+.debrief-quote--orientation {
+    margin-block: clamp(1.5rem, 3vw, 2.5rem);
+    max-inline-size: var(--canvas-reading-measure);
+}
+
+@media print {
+    .track-index {
+        break-inside: avoid;
+    }
+}

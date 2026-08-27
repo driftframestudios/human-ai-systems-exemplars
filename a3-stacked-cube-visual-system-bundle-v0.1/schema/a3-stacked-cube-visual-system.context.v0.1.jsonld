@@ -1,0 +1,77 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@base": "https://driftframe.studio/a3/",
+    "a3": {
+      "@id": "https://driftframe.studio/a3#",
+      "@prefix": true
+    },
+    "schema": {
+      "@id": "https://schema.org/",
+      "@prefix": true
+    },
+    "id": "@id",
+    "type": "@type",
+    "schema_version": "schema:version",
+    "artifact_identity": "a3:artifactIdentity",
+    "source_revision": "a3:sourceRevision",
+    "semantic_contract": "a3:semanticContract",
+    "storyboard_frames": {
+      "@id": "a3:storyboardFrame",
+      "@container": "@set"
+    },
+    "authority_states": {
+      "@id": "a3:authorityState",
+      "@container": "@set"
+    },
+    "gates": {
+      "@id": "a3:evidenceGate",
+      "@container": "@set"
+    },
+    "capability_cubes": {
+      "@id": "a3:capabilityCube",
+      "@container": "@set"
+    },
+    "human_workflows": {
+      "@id": "a3:humanWorkflow",
+      "@container": "@set"
+    },
+    "typed_connectors": {
+      "@id": "a3:typedConnector",
+      "@container": "@set"
+    },
+    "view_state": "a3:viewState",
+    "semantic_locality": "a3:semanticLocality",
+    "recovery_calibration": "a3:recoveryCalibration",
+    "label": "schema:name",
+    "display_name": "schema:name",
+    "description": "schema:description",
+    "annotation": "schema:description",
+    "version": "schema:version",
+    "sequence": "schema:position",
+    "canonical_order": "schema:position",
+    "kind": "a3:kind",
+    "family": "a3:family",
+    "frame_states": "a3:frameStates",
+    "active_frame_id": {
+      "@id": "a3:activeFrame",
+      "@type": "@id"
+    },
+    "gate_id": {
+      "@id": "a3:evidenceGate",
+      "@type": "@id"
+    },
+    "from": {
+      "@id": "a3:from",
+      "@type": "@id"
+    },
+    "to": {
+      "@id": "a3:to",
+      "@type": "@id"
+    },
+    "source_refs": {
+      "@id": "a3:sourceReference",
+      "@container": "@set"
+    }
+  }
+}

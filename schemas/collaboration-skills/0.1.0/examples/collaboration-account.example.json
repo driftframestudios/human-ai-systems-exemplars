@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/collaboration-skills/0.1.0/examples/source-authority-mapping-account",
+  "kind": "collaboration_account",
+  "name": "Source authority mapping formation",
+  "observedOn": "2026-08-24",
+  "sourceRef": "threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md",
+  "observation": "Schema delivery, workspace-link routing, and repository ownership required the same source-to-receiver authority distinctions across three material corpora.",
+  "decisionEffect": "The resting source-authority-mapping candidate formed one portable skill contract with the source-ownership and promotion-route work as its first natural use.",
+  "currentOwnerRef": ".agents/skills/source-authority-mapping/SKILL.md",
+  "route": "create_now",
+  "smallestAction": "Create one instruction-first skill, one typed exchange example, and one material ownership map.",
+  "evidenceBand": "observed",
+  "transferBoundary": "The account records local instruction yield and leaves publication rights and source authority with their existing stewards.",
+  "reentryTrigger": "Another cross-system promotion creates an authority ambiguity or a receiver cannot reconstruct lineage.",
+  "relatedRefs": [
+    "README.md",
+    "https://schemas.vik.guru/collaboration-skills/0.1.0/examples/portable-skill.example.json",
+    "planning/repository-skill-architecture.md"
+  ]
+}

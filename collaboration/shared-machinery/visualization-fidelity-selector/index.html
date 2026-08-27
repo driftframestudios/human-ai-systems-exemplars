@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <meta name="robots" content="noindex">
+    <title>Visual Fidelity Atlas · Qualitative Selector</title>
+    <style>
+      :root{--ink:#17345f;--cobalt:#2855f3;--paper:#fffdf8;--cream:#fffaf2;--aqua:#d9efea;--blue:#cfe7f7;--mist:#e7efff;--gold:#fff5de;--coral:#ffd3d0;--lime:#f2ff67;--body:#304a71;--muted:#5d6f8b;--shadow:0 12px 28px rgba(7,26,53,.16)}
+      *{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.shell{min-height:100vh;padding:1.25rem}.frame{max-width:1400px;margin:0 auto;border:2px solid var(--ink);border-radius:24px;background:var(--paper);box-shadow:var(--shadow);overflow:hidden}.mast{background:var(--cobalt);color:white;padding:1.3rem 1.5rem;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem;align-items:end}.eyebrow,.label{font:800 .76rem/1.2 "SFMono-Regular",Consolas,monospace;letter-spacing:.12em;text-transform:uppercase}.mast h1{margin:.35rem 0 0;font-size:clamp(1.6rem,3vw,2.6rem);line-height:1.05}.mast p{margin:.6rem 0 0;max-width:72ch}.posture{background:var(--paper);color:var(--ink);border:2px solid var(--ink);border-radius:12px;padding:.75rem 1rem;font-weight:750}.workspace{display:grid;grid-template-columns:minmax(290px,380px) minmax(0,1fr)}form{padding:1.25rem;background:var(--mist);border-right:2px solid var(--ink)}fieldset{border:0;padding:0;margin:0 0 1rem}legend{font-weight:850;margin-bottom:.45rem}label{display:block;font-weight:700;margin:.65rem 0 .3rem}select{width:100%;padding:.75rem;border:2px solid var(--ink);border-radius:9px;background:var(--paper);color:var(--ink);font:inherit}input{accent-color:var(--cobalt)}.check{display:flex;gap:.55rem;align-items:flex-start;background:var(--paper);border:2px solid var(--ink);border-radius:9px;padding:.7rem}.check label{margin:0;font-weight:650}button{width:100%;border:2px solid var(--ink);border-radius:9px;background:var(--lime);color:var(--ink);padding:.85rem;font:850 .9rem/1 "SFMono-Regular",Consolas,monospace;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}.results{padding:1.25rem;min-width:0}.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}.summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;margin-bottom:1rem}.summary div{border:2px solid var(--ink);border-radius:11px;padding:.75rem}.summary strong{display:block;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase}.summary span{display:block;margin-top:.35rem;font-weight:700}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.card{border:2px solid var(--ink);border-radius:14px;padding:1rem;box-shadow:var(--shadow);min-width:0}.card h2{margin:.3rem 0 .7rem;font-size:1.15rem}.card ul{margin:.5rem 0;padding-left:1.2rem}.card li+li{margin-top:.35rem}.recommended{background:var(--aqua)}.conditional{background:var(--gold)}.reserved{background:var(--coral)}.reason{margin-top:1rem;border:2px solid var(--ink);border-radius:14px;padding:1rem;background:var(--paper)}.reason h2{margin:.2rem 0 .6rem;font-size:1.05rem}.companion{margin-top:1rem;background:var(--ink);color:white;border-radius:14px;padding:1rem}.companion strong{color:var(--lime)}.boundary{margin-top:1rem;color:var(--body);font-size:.92rem}.noscript{margin:1rem;border:2px solid var(--ink);padding:1rem;background:var(--gold)}@media(max-width:880px){.mast,.workspace{grid-template-columns:1fr}.posture{justify-self:start}form{border-right:0;border-bottom:2px solid var(--ink)}.cards,.summary{grid-template-columns:1fr}}@media(forced-colors:active){*{box-shadow:none!important}.card,.summary div,.reason,select,button{forced-color-adjust:auto}}@media print{body,.shell{background:#fff}.shell{padding:0}.frame{border:0;box-shadow:none}.mast{background:#fff;color:var(--ink);border-bottom:2px solid var(--ink)}.posture,form button{display:none}.workspace{display:block}form{border:0;background:#fff;padding:0}.cards,.summary{grid-template-columns:repeat(3,minmax(0,1fr))}.card,.reason{box-shadow:none;break-inside:avoid}.companion{background:#fff;color:var(--ink);border:2px solid var(--ink)}.companion strong{color:var(--ink)}}
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <div class="frame">
+        <header class="mast">
+          <div><div class="eyebrow">Visual Fidelity Atlas · presentation selector</div><h1>Choose from the question and data shape</h1><p>Set the receiving conditions, then inspect a qualitative fit judgment and the reason it holds.</p></div>
+          <div class="posture">Qualitative fit · written reasons</div>
+        </header>
+        <noscript><p class="noscript">This selector needs JavaScript for live routing. The parent reading carries the complete static mapping, tier ladder, data table, and source basis.</p></noscript>
+        <div class="workspace">
+          <form id="selector" aria-label="Visualization selection conditions">
+            <fieldset><legend>Decision task</legend>
+              <label for="move">Cognitive move</label><select id="move" name="move"><option value="compare">Compare or rank</option><option value="change">Show change over time</option><option value="before-after">Compare before and after</option><option value="composition">Show composition</option><option value="profile">Compare profiles</option><option value="distribution">Show distribution</option><option value="uncertainty">Show uncertainty</option><option value="sensitivity">Show sensitivity</option><option value="threshold">Judge a threshold</option></select>
+              <label for="shape">Data shape</label><select id="shape" name="shape"><option value="category">Categories + values</option><option value="time">Ordered time + values</option><option value="pairs">Paired states</option><option value="parts">Parts of a whole</option><option value="matrix">Entities × dimensions</option><option value="values">Raw or grouped values</option><option value="ranges">Estimate + range</option><option value="drivers">Drivers + impact</option><option value="target">Actual + threshold + target</option></select>
+            </fieldset>
+            <fieldset><legend>Receiving conditions</legend>
+              <label for="audience">Audience</label><select id="audience" name="audience"><option value="mixed">Mixed or public</option><option value="executive">Executive decision maker</option><option value="practitioner">Domain practitioner</option><option value="trained">Trained analytical reader</option></select>
+              <label for="stakes">Decision stakes</label><select id="stakes" name="stakes"><option value="material">Material operational decision</option><option value="exploratory">Exploratory sensemaking</option><option value="informational">Informational scan</option></select>
+              <label for="uncertainty">Uncertainty treatment</label><select id="uncertainty" name="uncertainty"><option value="visible">Range or caveat must remain visible</option><option value="none">No estimated range; state that explicitly</option></select>
+              <div class="check"><input id="ai" name="ai" type="checkbox" checked><label for="ai">A human and AI collaborator must recover the same evidence path.</label></div>
+            </fieldset>
+            <button type="submit">Route the visual</button>
+          </form>
+          <section class="results" aria-labelledby="result-title">
+            <h2 id="result-title">Selection return</h2>
+            <p id="selection-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+            <div class="summary" id="summary"></div>
+            <div class="cards">
+              <article class="card recommended"><div class="label">Recommended</div><h2>Use these first</h2><ul id="recommended"></ul></article>
+              <article class="card conditional"><div class="label">Conditional</div><h2>Use when the condition holds</h2><ul id="conditional"></ul></article>
+              <article class="card reserved"><div class="label">Reserved</div><h2>Keep rare and explicit</h2><ul id="reserved"></ul></article>
+            </div>
+            <article class="reason"><div class="label">Why this route</div><h2 id="reason-title"></h2><p id="reason-copy"></p></article>
+            <aside class="companion"><strong>Companion contract</strong><p id="companion-copy"></p></aside>
+            <p class="boundary">This selector supports authoring judgment. The source data, claim, accountable reader, and domain review remain authoritative.</p>
+          </section>
+        </div>
+      </div>
+    </main>
+    <script>
+      // Interaction selects a qualitative view of this fixed route registry; source data and evidence remain outside this presentation schema.
+      const routes={
+        compare:{shape:"category",recommended:["Sorted bar","Dot plot","Ordered table"],conditional:["Lollipop when a lighter field helps"],reserved:["Circular composition view"],title:"Use one shared scale for order and magnitude",reason:"Aligned position and length let mixed audiences compare categories without legend hunting or shape estimation."},
+        change:{shape:"time",recommended:["Line chart","Sparkline + table"],conditional:["Slope chart for two states","Small multiples on one stable scale"],reserved:["Radial profile"],title:"Keep time ordered on a stable axis",reason:"Sequence is part of the evidence, so the form must preserve direction, timing, and magnitude."},
+        "before-after":{shape:"pairs",recommended:["Dumbbell chart","Slope chart"],conditional:["Sorted bars with explicit pairing"],reserved:["Radial profile"],title:"Keep each pair on the same scale",reason:"The reader should see both states and the distance between them without reconstructing pairs across panels."},
+        composition:{shape:"parts",recommended:["100% stacked bar","Ordered table"],conditional:["Sorted contribution bars"],reserved:["Pie or donut for consequential comparison"],title:"Preserve the whole and the exact parts",reason:"Repeated baselines and a value companion support part-to-whole comparison while controlling category count."},
+        profile:{shape:"matrix",recommended:["Heatmap + values","Profile table","Small multiples"],conditional:["Parallel coordinates for trained readers"],reserved:["Radial profile"],title:"Keep every dimension separately readable",reason:"A labeled matrix or repeated scale preserves dimensions instead of asking the reader to treat a closed shape as evidence."},
+        distribution:{shape:"values",recommended:["Histogram","Box plot"],conditional:["Ordered values for a small dataset"],reserved:["Circular composition view"],title:"Show spread, shape, and outliers",reason:"Distribution work needs bins, ranges, or summaries that keep variation visible rather than collapsing it to an average."},
+        uncertainty:{shape:"ranges",recommended:["Interval plot","Range plot + values"],conditional:["Uncertainty band over time"],reserved:["Single confident mark"],title:"Make the range part of the evidence",reason:"Estimate and range should be read together; the caveat should not depend on a footnote."},
+        sensitivity:{shape:"drivers",recommended:["Tornado chart","Sorted bar"],conditional:["Ordered table with assumptions"],reserved:["Radial profile"],title:"Order the drivers by material movement",reason:"A shared baseline makes direction and impact visible so the reader can triage the largest sensitivity drivers."},
+        threshold:{shape:"target",recommended:["Bullet chart","Sparkline + table"],conditional:["Ordered table with the decision rule"],reserved:["Radial gauge"],title:"Align actual, threshold, and target",reason:"The decision rule becomes inspectable when all three values share one direct scale."}
+      };
+      const form=document.getElementById("selector");
+      const $=id=>document.getElementById(id);
+      const fill=(id,items)=>{$(id).replaceChildren(...items.map(item=>{const li=document.createElement("li");li.textContent=item;return li}))};
+      function render(){const move=$("move").value;const route=routes[move];const selectedShape=$("shape").value;const audience=$("audience").selectedOptions[0].textContent;const stakes=$("stakes").selectedOptions[0].textContent;const uncertainty=$("uncertainty").value;const ai=$("ai").checked;$("summary").innerHTML=`<div><strong>Cognitive move</strong><span>${$("move").selectedOptions[0].textContent}</span></div><div><strong>Data shape</strong><span>${$("shape").selectedOptions[0].textContent}</span></div><div><strong>Receiver</strong><span>${audience}</span></div>`;fill("recommended",route.recommended);fill("conditional",route.conditional);fill("reserved",route.reserved);$("reason-title").textContent=route.title;const mismatch=selectedShape!==route.shape?" The chosen data shape differs from the route’s ordinary shape; reconcile the fields before selecting a final form.":"";const high=stakes==="material"?" Material stakes favor direct labels, a recoverable source table, and a low training burden.":"";$("reason-copy").textContent=route.reason+mismatch+high+(uncertainty==="visible"?" Keep the range or caveat beside the mark and exact values.":" State that no range was estimated rather than implying certainty.");$("companion-copy").textContent=ai?"Include the structured source table, question-title, population and context, units, direct labels, uncertainty statement, text equivalent, AI summary, fit reason, caveat, provenance, and citations.":"Include a caption, units, source note, uncertainty statement, and a text route even when no AI companion is required.";$("selection-status").textContent=`Visual route updated: ${route.title}. ${route.recommended.length} recommended forms.`}
+      form.addEventListener("submit",event=>{event.preventDefault();render()});form.addEventListener("change",render);render();
+    </script>
+  </body>
+</html>
