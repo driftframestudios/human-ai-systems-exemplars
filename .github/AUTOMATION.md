@@ -1,9 +1,10 @@
 # Bounded hosted automation
 
 The repository carries two bounded automatic `main` receipts, one standing
-publication path, one configurable prototype-unit receiver, and two explicitly
-dispatched proof paths. Every external action reference uses a reviewed
-full-length commit SHA. Local commands remain the immediate edit loop.
+documentation publication path, one connected release-and-production schema
+path, one configurable prototype-unit receiver, and two explicitly dispatched
+proof paths. Every external action reference uses a reviewed full-length commit
+SHA. Local commands remain the immediate edit loop.
 
 ## Main public-boundary receipt
 
@@ -55,6 +56,28 @@ Pages settings remain the custom-domain authority. The current collaboration
 family is `schemas.radiantnull.com`; `schemas.vik.guru` remains the later
 staging, release, and production family described in
 [ENVIRONMENTS.md](ENVIRONMENTS.md).
+
+## Release and production schema delivery
+
+`schema-delivery.yml` receives every non-draft pull request into and every push
+to `release` or `prod` while that receiver's approved budget is active. One
+read-only contract job installs the locked toolchain, checks the mapped schema
+surface, verifies the explicit Static Assets closure, dry-runs the matching
+Wrangler environment, proves the pinned secret-material reader with a fresh
+canary, and observes the candidate tree and locally available history.
+
+The contract has a twelve-minute ceiling and cancels superseded candidates.
+The connected deployment has an eight-minute ceiling and serializes by
+receiver. A release push targets an un-routed named Wrangler environment. A
+production push targets the top-level Worker through the exact-branch `prod`
+GitHub environment and its accepted human handoff. Both deployment jobs also
+require their name in
+`DEPLOYMENT_ACTIVE_RECEIVERS`; the current empty list keeps uploads resting
+while automatic contracts begin using their approved 300-minute allocations.
+
+The workflow uses GitHub-owned checkout and Node setup actions at the reviewed
+full commit SHAs, then calls the repository's locked Wrangler CLI directly.
+Environment-scoped Cloudflare credentials enter only the deployment job.
 
 ## Secret-material inspection posture
 
@@ -148,8 +171,9 @@ The dependency-update template remains discoverable as
 `dependabot.manual.yml`. A future dependency-update receiver may rename it only
 after the downstream pull-request cadence has an accepted job and budget.
 
-Hosted visual checks, Cloudflare operations, resolver inspection, history
-operations, and broader recurring CI remain local, manual, or dormant until a
-distinct receiving use and approved budget activates them. The effective action
+Hosted visual checks, resolver inspection, broader history operations, and
+general recurring CI retain their local, manual, or dormant routes. The named
+schema delivery is the current Cloudflare exception, bounded by its two branch
+receivers, budgets, credentials, and deployment switch. The effective action
 allow list, immutable revisions, and billing posture live in
 [ACTIONS-POLICY.md](ACTIONS-POLICY.md).

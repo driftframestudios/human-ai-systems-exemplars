@@ -6,6 +6,9 @@ different jobs:
 
 - `ACTIONS_BUDGET_<RECEIVER>` decides whether a workflow for that receiver may
   acquire a GitHub-hosted runner.
+- `ACTIONS_BUDGET_<RECEIVER>_MINUTES` records a human-approved cycle allocation
+  for legible receipts. Per-job timeouts bound individual runs; the account
+  threshold and budget switch remain the cumulative stop mechanism.
 - `PROTOTYPE_UNIT_TESTS_AUTOMATIC` independently selects whether matching
   non-draft pull requests acquire the Core and Narrative unit runner. Explicit
   manual dispatch remains available.
@@ -25,17 +28,22 @@ The current budget posture is:
 | `dev` | `false` | Sustained feature integration at rest |
 | `docs` | `false` | Metered evidence at rest; standing Pages projection continues |
 | `stg` | `false` | Candidate serving and Worker pilots at rest |
-| `release` | `false` | Accepted integration at rest |
-| `prod` | `false` | Accepted production receiver at rest |
+| `release` | `true` · 300 minutes | Automatic schema contract; connected un-routed release Worker deployment |
+| `prod` | `true` · 300 minutes | Automatic schema contract; protected production deployment receiver |
 
-Each dormant GitHub environment accepts deployment configuration only from its
-matching long-lived branch. `res/*` carries no deployment environment or
-credential boundary; it becomes eligible for `research` configuration only
-after a reviewed merge reaches the canonical receiver.
+Each GitHub environment accepts deployment configuration only from its matching
+long-lived branch. `res/*` uses the `research` configuration after a reviewed
+merge reaches the canonical receiver.
 
 Environment-level variables arrive after a job starts, so they fit runtime
 configuration. Repository-level budget values provide the pre-run spend gate
 and keep resting receivers from acquiring a runner.
+
+The release and production allocation markers describe the current approved
+collaboration pool; GitHub remains the billing record. Their shared workflow
+has a twelve-minute contract ceiling and an eight-minute deployment ceiling.
+The normal path uses substantially less; a profile threshold notification can
+return either budget switch to `false`.
 
 ## Public-reference configuration at rest
 
@@ -49,9 +57,9 @@ receipts.
 These destinations become ordinary public links in a delivered artifact, so
 the build seam is a history and change boundary rather than a secrecy claim.
 Human review still confirms Registry ancestry, public-possible content
-standing, signed-out availability, and audience. Credential material, should a
-future synchronization runtime need it, receives a distinct environment secret
-and never shares a destination variable.
+standing, signed-out availability, and audience. Credential material for a
+future synchronization runtime receives its own environment secret, separate
+from destination variables.
 
 ## Serving posture
 
@@ -77,23 +85,34 @@ GitHub environment that needs them:
   variables;
 - a least-privilege Cloudflare API token becomes an environment secret;
 - `dev` or `stg` credentials reach preview resources only;
-- `release` credentials support an accepted upload or integration rehearsal;
+- `release` credentials support an accepted upload to the named, un-routed
+  Wrangler environment after a passing contract;
 - `prod` credentials reach the production resource only after the protected
-  branch transition and an available deployment-approval boundary.
+  branch transition and environment approval.
 
-Worker configuration will declare required secret names per Wrangler
-environment when a Worker exists. Secret values remain in their receiving
-environment. Evidence-budget activation and deployment activation are
-independent decisions; a receipt budget carries evidence authority while the
-receiver list carries publication authority.
+The asset-only Worker operates entirely from public static assets. Each
+connected deployment uses the non-sensitive `CLOUDFLARE_ACCOUNT_ID` variable
+and a least-privilege `CLOUDFLARE_API_TOKEN` secret from its matching GitHub
+environment. Secret values remain in that receiver and enter only the
+credential-confirmation and deployment steps. Evidence-budget activation and
+deployment activation are independent decisions; a receipt budget carries
+evidence authority while the receiver list carries upload or publication
+authority.
+
+Credential values live exclusively in GitHub environment settings and briefly
+enter process memory for those two steps. Repository files, generated assets,
+caches, logs, and retained receipts carry binding names and redacted state
+only.
 
 ## Production boundary
 
-The current repository plan supports environments and their variables. The
-`prod` branch supplies the present approval boundary: one approving
-pull-request review, stale-approval dismissal, and administrator inclusion. The
-empty `prod` environment awaits a later deployment job and the platform
-approval capability suited to it.
+The `prod` branch supplies the source approval boundary: one approving
+pull-request review, stale-approval dismissal, and administrator inclusion. Its
+GitHub environment accepts deployment only from the exact `prod` branch. Before
+connected production activation, that environment receives its named human
+reviewer and the selected administrator-bypass posture. Release deployment is
+automatic after its contract and activation switch; production deployment
+retains both source review and a separately accepted environment handoff.
 
 ## Sources
 
