@@ -42,7 +42,13 @@ test("Core prototype carriers keep a minimal explicit iframe boundary", async ()
       const tag = match[0];
       const src = attributeValue(tag, "src");
       if (!src?.includes("prototypes/core-architectures/chimeric-pack-v0.1/")) continue;
-      carriers.push({ page, html, tag, src });
+      const figureStart = html.lastIndexOf("<figure", match.index);
+      const figureEnd = html.indexOf("</figure>", match.index);
+      const figure =
+        figureStart >= 0 && figureEnd >= match.index
+          ? html.slice(figureStart, figureEnd + "</figure>".length)
+          : "";
+      carriers.push({ page, figure, tag, src });
     }
   }
 
@@ -80,9 +86,9 @@ test("Core prototype carriers keep a minimal explicit iframe boundary", async ()
       `${label} uses the exact route Permissions Policy profile`,
     );
     assert.match(
-      carrier.html,
+      carrier.figure,
       new RegExp(`href=["']${escapeExpression(carrier.src)}["']`, "i"),
-      `${label} keeps a direct full-view route`,
+      `${label} keeps its local full-view route in the owning figure`,
     );
 
     const hostedKey = attributeValue(carrier.tag, "data-public-src");
@@ -91,7 +97,7 @@ test("Core prototype carriers keep a minimal explicit iframe boundary", async ()
     assert.equal(route.id, "heart-chart");
   }
 
-  const hub = carriers.find(({ src }) => basename(src) === "core-architectures-chimeric-prototype-pack-index-v0.1.html");
+  const hub = carriers.find(({ src }) => basename(src) === "core-architectures-chimeric-prototype-pack-index-v0.1.1.html");
   assert.ok(hub, "the pack hub carrier is present");
   assert.equal(attributeValue(hub.tag, "sandbox"), "", "the scriptless hub receives an empty sandbox");
   assert.doesNotMatch(attributeValue(hub.tag, "title"), /interactive/i, "the hub title does not promise interaction");

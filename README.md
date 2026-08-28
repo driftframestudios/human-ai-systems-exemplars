@@ -402,7 +402,9 @@ Hosted Core companions use a parallel `PUBLIC_URL_IFRAME_*` namespace. An
 authored iframe and its full-view link retain complete repository-local
 `src` and `href` fallbacks; `data-public-src` and `data-public-href` identify
 the build-time destination without making the tracked page depend on a live
-host. The first carrier binds the HEART Chart to
+host. Materialization directs only the iframe `src` to that hosted destination;
+the adjacent full-view `href` continues to open the Context Canvas base
+prototype. The first carrier binds the HEART Chart to
 `PUBLIC_URL_IFRAME_CORE_HEART_CHART`.
 
 The eighteen Site Reading routes enter the public-possible collection through

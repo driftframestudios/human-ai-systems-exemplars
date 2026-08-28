@@ -178,7 +178,7 @@ test("materializes one resolved value into HTML and JSON-LD without changing sou
   assert.deepEqual(await readFile(join(paths.outputRoot, "asset.bin")), asset);
 });
 
-test("materializes paired hosted iframe carriers while authored local fallbacks stay intact", async (t) => {
+test("materializes a hosted iframe while its full-view route stays on the local base artifact", async (t) => {
   const source = pageWithIframeTwins();
   const paths = await fixture(t, source);
 
@@ -200,7 +200,14 @@ test("materializes paired hosted iframe carriers while authored local fallbacks 
   );
   assert.match(generated, /src="https:\/\/iframes\.vik\.guru\/v1\/core\/heart-chart\/"/);
   assert.match(generated, /data-public-src="https:\/\/iframes\.vik\.guru\/v1\/core\/heart-chart\/"/);
-  assert.match(generated, /href="https:\/\/iframes\.vik\.guru\/v1\/core\/heart-chart\/"/);
+  assert.match(
+    generated,
+    /href="prototypes\/core-architectures\/chimeric-pack-v0\.1\/heart-chart\.html"/,
+  );
+  assert.equal(
+    htmlAttribute(generated.match(/<a\b[^>]*>/i)?.[0] ?? "", "href"),
+    "prototypes/core-architectures/chimeric-pack-v0.1/heart-chart.html",
+  );
   assert.match(generated, /data-public-href="https:\/\/iframes\.vik\.guru\/v1\/core\/heart-chart\/"/);
   assert.match(generated, /title="HEART Chart"/);
   assert.match(generated, /loading="lazy"/);
@@ -280,7 +287,7 @@ test("rejects globally narrow iframe policies that drift from their exact route 
   }
 });
 
-test("keeps an iframe destination aligned across embed, full-view, and JSON-LD carriers", async (t) => {
+test("keeps hosted-route metadata aligned while the full-view route stays local", async (t) => {
   const source = pageWithIframeTwins().replace(
     "  </body>",
     `    <script type="application/ld+json">{"contentUrl":"{{${IFRAME_KEY}}}"}</script>\n  </body>`,
@@ -303,6 +310,14 @@ test("keeps an iframe destination aligned across embed, full-view, and JSON-LD c
   assert.deepEqual(jsonLdBodies(generated).map((body) => JSON.parse(body)), [
     { contentUrl: IFRAME_ROUTE },
   ]);
+  assert.match(
+    generated,
+    /<a href="prototypes\/core-architectures\/chimeric-pack-v0\.1\/heart-chart\.html" data-public-href="https:\/\/iframes\.vik\.guru\/v1\/core\/heart-chart\/">/,
+  );
+  assert.equal(
+    htmlAttribute(generated.match(/<a\b[^>]*>/i)?.[0] ?? "", "href"),
+    "prototypes/core-architectures/chimeric-pack-v0.1/heart-chart.html",
+  );
 });
 
 test("treats a different Windows drive as a separate tree", () => {

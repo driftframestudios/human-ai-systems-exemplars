@@ -19,6 +19,10 @@ const [template, compatibility, css, schemaText, validatorTemplate, core, canoni
 
 const schema = JSON.parse(schemaText);
 const validator = validatorTemplate.replace('/*__STRATEGY_CANVAS_SCHEMA__*/ null', () => JSON.stringify(schema));
+const compatibilityOutput = compatibility.replaceAll(
+  '../strategy-canvas-chimeric-prototype-v0.2.0.html',
+  'strategy-canvas-chimeric-prototype-v0.2.0.html'
+);
 if (validator.includes('/*__STRATEGY_CANVAS_SCHEMA__*/')) {
   throw new Error('The Strategy Canvas validator contains an unresolved schema marker.');
 }
@@ -51,7 +55,7 @@ if (process.argv.includes('--check')) {
     readFile(compatibilityPath, 'utf8'),
     readFile(validatorPath, 'utf8')
   ]);
-  if (current !== output || currentCompatibility !== compatibility || currentValidator !== validator) {
+  if (current !== output || currentCompatibility !== compatibilityOutput || currentValidator !== validator) {
     console.error('Generated Strategy Canvas distributions differ from their source files.');
     process.exitCode = 1;
   } else {
@@ -61,7 +65,7 @@ if (process.argv.includes('--check')) {
 } else {
   await Promise.all([
     writeFile(outputPath, output, 'utf8'),
-    writeFile(compatibilityPath, compatibility, 'utf8'),
+    writeFile(compatibilityPath, compatibilityOutput, 'utf8'),
     writeFile(validatorPath, validator, 'utf8')
   ]);
   console.log(`Generated ${outputPath} and compatibility route ${compatibilityPath}`);

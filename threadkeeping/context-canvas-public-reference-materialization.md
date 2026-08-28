@@ -51,14 +51,15 @@ configuration receiver supplies the delivery destination.
   `context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html`
 - Semantic key: `PUBLIC_URL_IFRAME_CORE_HEART_CHART`
 - Local iframe and full-view fallback:
-  `prototypes/core-architectures/chimeric-pack-v0.1/heart-chart-chimeric-prototype-v0.1.2.html`
+  `prototypes/core-architectures/chimeric-pack-v0.1/heart-chart-chimeric-prototype-v0.1.3.html`
 - Approved destination shape:
   `https://iframes.vik.guru/v1/core/heart-chart/`
 
 The iframe `src` and full-view anchor `href` stay local in tracked source.
 Their explicit `data-public-src` and `data-public-href` twins identify the
-same key. A configured generation resolves all four attributes to the hosted
-route, while the route validator checks the host, standard HTTPS authority,
+same key. A configured generation resolves both data attributes and the
+iframe `src` to the hosted route while keeping the full-view `href` on the
+Context Canvas base prototype. The route validator checks the host, standard HTTPS authority,
 versioned normalized path, trailing slash, and semantic-key agreement. The
 source inventory discovers the carriers directly rather than relying on a
 frozen route count.

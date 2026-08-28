@@ -34,8 +34,15 @@ on:
       - ".github/workflows/prototype-unit-tests.yml"
       - "package.json"
       - "package-lock.json"
+      - "AUTHORS"
+      - "CITATION.cff"
+      - "GOVERNANCE.md"
+      - "LICENSE"
+      - "attribution.yml"
+      - "tests/attribution/**"
       - "tests/core-architectures/**"
       - "tests/context-canvas/iframe-carriers.test.mjs"
+      - "tests/iframe-routes/**"
       - "tests/narrative-architectures/**"
       - "tools/core-architecture-browser-helper.mjs"
       - "tools/core-decision-canvas-contract.mjs"
@@ -43,16 +50,13 @@ on:
       - "tools/core-planning-instrument-contract.mjs"
       - "tools/core-reference-instrument-contract.mjs"
       - "tools/materialize-public-references.mjs"
+      - "tools/package-iframe-routes.mjs"
+      - "tools/attribution-contract.mjs"
       - "tools/cross-prototype-exchange-contract.mjs"
       - "tools/narrative-architecture-contract.mjs"
       - "core-architectures-chimeric-prototype-current-pack-v0.1/**"
-      - "context-canvas-project-surface/context-canvas/concept-nursery.html"
-      - "context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html"
-      - "context-canvas-project-surface/context-canvas/cross-platform-collaboration-cycle.html"
-      - "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html"
-      - "context-canvas-project-surface/context-canvas/grammar-family.html"
-      - "context-canvas-project-surface/context-canvas/planning-surface.html"
-      - "context-canvas-project-surface/context-canvas/poda.html"
+      - "participatory-design-kit-chimeric-prototype-set-v0.1/**"
+      - "context-canvas-project-surface/context-canvas/*.html"
       - "context-canvas-project-surface/context-canvas/prototypes/core-architectures/**"
       - "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/**"
       - "context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json"
@@ -103,6 +107,9 @@ jobs:
 
           case "$SELECTED_SUITE" in
             core)
+              npm run test:attribution
+              npm run test:iframe-routes
+              npm run check:iframe-routes
               npm run test:core-architectures
               if [[ "$INCLUDE_BROWSER" == "true" ]]; then npm run test:core-browser; fi
               ;;
@@ -111,6 +118,9 @@ jobs:
               if [[ "$INCLUDE_BROWSER" == "true" ]]; then npm run test:narrative-browser; fi
               ;;
             all)
+              npm run test:attribution
+              npm run test:iframe-routes
+              npm run check:iframe-routes
               npm run test:prototype-units
               if [[ "$INCLUDE_BROWSER" == "true" ]]; then
                 npm run test:core-browser

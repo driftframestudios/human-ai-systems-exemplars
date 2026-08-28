@@ -1040,11 +1040,14 @@ export function materializePublicReferenceHtml(
 
       if (tagName === "iframe") iframeCount += 1;
       else anchorCount += 1;
-      return replaceHtmlAttribute(
-        replaceHtmlAttribute(tag, localName, value),
-        publicName,
-        value,
-      );
+      const materializedCarrier = replaceHtmlAttribute(tag, publicName, value);
+      if (tagName === "a") {
+        // The hosted route belongs to the embedded view. The adjacent full-view
+        // link deliberately keeps its Context Canvas prototype fallback so a
+        // visitor can open the base artifact rather than a second hosted copy.
+        return materializedCarrier;
+      }
+      return replaceHtmlAttribute(materializedCarrier, localName, value);
     },
   );
 

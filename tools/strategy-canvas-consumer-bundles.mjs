@@ -29,6 +29,10 @@ const technologyContext = join(
   repositoryRoot,
   "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau",
 );
+const threadkeepingContext = join(
+  repositoryRoot,
+  "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger",
+);
 
 function source(path) {
   return { kind: "source", path };
@@ -171,6 +175,20 @@ function technologyBundle(base, archivePath) {
   };
 }
 
+function threadkeepingBundle(base, archivePath) {
+  return {
+    name: relative(repositoryRoot, archivePath),
+    archivePath,
+    root: "",
+    entries: [
+      ["threadkeeping-ledger-chimeric-prototype-v0.1.html", source(join(base, "threadkeeping-ledger-chimeric-prototype-v0.1.html"))],
+      ["threadkeeping-ledger-manifest-v0.1.json", source(join(base, "threadkeeping-ledger-manifest-v0.1.json"))],
+      ["threadkeeping-ledger.context.v0.1.jsonld", source(join(base, "threadkeeping-ledger.context.v0.1.jsonld"))],
+      ["threadkeeping-ledger.schema.v0.1.json", source(join(base, "threadkeeping-ledger.schema.v0.1.json"))],
+    ],
+  };
+}
+
 const bundles = [
   narrativeBundle(
     narrativeContext,
@@ -180,6 +198,10 @@ const bundles = [
   ),
   semanticBundle(semanticContext, join(semanticContext, "narrative-sampling-tableau-chimeric-prototype-bundle-v0.1.zip")),
   technologyBundle(technologyContext, join(technologyContext, "technology-fit-sampling-tableau-chimeric-prototype-bundle-v0.1.zip")),
+  threadkeepingBundle(
+    join(threadkeepingContext, "threadkeeping-ledger-chimeric-prototype-bundle-v0.1"),
+    join(threadkeepingContext, "threadkeeping-ledger-chimeric-prototype-bundle-v0.1.zip"),
+  ),
 ];
 
 function readLegacy(archive, entry) {
@@ -210,7 +232,7 @@ async function verifyManifestReceipts(bundle) {
 }
 
 async function buildBundle(bundle, temporaryRoot) {
-  const stage = join(temporaryRoot, bundle.root);
+  const stage = bundle.root ? join(temporaryRoot, bundle.root) : temporaryRoot;
   await mkdir(stage, { recursive: true });
   const archiveEntries = [];
 
@@ -222,7 +244,7 @@ async function buildBundle(bundle, temporaryRoot) {
     await writeFile(destination, bytes);
     await chmod(destination, 0o644);
     await utimes(destination, fixedTime, fixedTime);
-    archiveEntries.push(`${bundle.root}/${entryPath}`);
+    archiveEntries.push(bundle.root ? `${bundle.root}/${entryPath}` : entryPath);
   }
 
   const output = join(temporaryRoot, "bundle.zip");

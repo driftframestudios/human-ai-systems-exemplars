@@ -280,12 +280,12 @@ export function validateRouteContract(contract, sourceManifest) {
   );
   assertExactString(
     contract.carrier_contract.held_capability_posture,
-    "Source-visible capabilities remain ungranted until a route-local inline replacement removes the dependency.",
+    "Every current route resolves source-visible capability holds before iframe packaging; an eligible route cannot retain a hold.",
     "Carrier held-capability posture",
   );
   assertExactString(
     contract.carrier_contract.full_view_posture,
-    "A carrier keeps a direct full-view route beside the embedded view.",
+    "A visitor carrier sends its iframe to the approved public alias while its adjacent full-view link keeps the repository-local Context Canvas prototype.",
     "Carrier full-view posture",
   );
 
@@ -402,6 +402,14 @@ export function validateRouteContract(contract, sourceManifest) {
       supportedHeldCapabilities,
       `Route ${route.id} held capabilities`,
     );
+    if (
+      route.activation_standing === "eligible" &&
+      route.carrier_policy.held_capabilities.length > 0
+    ) {
+      fail(
+        `Eligible route ${route.id} must resolve every held capability before activation.`,
+      );
+    }
 
     assertBoundedRelativePath(route.source_file, `Source file for route ${route.id}`, ".html");
     if (routeFiles.has(route.source_file)) {
@@ -480,11 +488,11 @@ export function validateRouteContract(contract, sourceManifest) {
       if (route.public_alias !== contract.base_path) {
         fail("The hub route must occupy the exact base path.");
       }
-      if (route.source_file !== "core-architectures-chimeric-prototype-pack-index-v0.1.html") {
+      if (route.source_file !== "core-architectures-chimeric-prototype-pack-index-v0.1.1.html") {
         fail("The hub route must name the current Core pack index.");
       }
-      if (route.source_version !== "0.1") {
-        fail("The hub route must name source version 0.1.");
+      if (route.source_version !== "0.1.1") {
+        fail("The hub route must name source version 0.1.1.");
       }
     } else if (route.kind === "prototype") {
       const source = sourceById.get(route.id);
@@ -896,6 +904,12 @@ export function scanPackageClosure(html, packageReadings, label = "HTML artifact
   const targets = new Set(packageReadings.keys());
   const root = scanHtmlClosure(html, targets, label, { requireAllTargets: false });
   const reachable = new Set(root.package_targets);
+  for (const href of extractAnchorHrefs(html)) {
+    const classification = classifyResourceReference(href);
+    if (classification.kind === "package" && targets.has(classification.target)) {
+      reachable.add(classification.target);
+    }
+  }
   const queue = [...reachable];
   let inlineReferences = root.inline_references;
 

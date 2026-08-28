@@ -3,7 +3,7 @@
 import assert from "node:assert/strict";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, relative } from "node:path";
 
 import { chromium } from "@playwright/test";
 
@@ -46,6 +46,7 @@ async function run() {
   const temporaryRoot = await mkdtemp(join(tmpdir(), "core-iframe-carrier-"));
   const outputRoot = join(temporaryRoot, "context-canvas-project-surface");
   let server;
+  let sourceServer;
   let browser;
   let context;
 
@@ -104,7 +105,73 @@ async function run() {
       "the tested carrier is the resolved materialized page",
     );
     server = await startStaticServer(outputRoot);
+    sourceServer = await startStaticServer(repositoryRoot);
     browser = await chromium.launch({ headless: true });
+
+    const populationContext = await browser.newContext({
+      viewport: { width: 1280, height: 1000 },
+    });
+    await populationContext.route("**/*", async (route) => {
+      if (new URL(route.request().url()).origin === sourceServer.origin) {
+        await route.continue();
+        return;
+      }
+      await route.abort("blockedbyclient");
+    });
+    try {
+      for (const routeProfile of routeManifest.routes) {
+        assert.deepEqual(
+          routeProfile.carrier_policy.held_capabilities,
+          [],
+          `${routeProfile.id} resolves held browser capabilities before iframe readiness`,
+        );
+        for (const [projectionLabel, projectionDirectory] of [
+          ["Core source", coreRoot],
+          ["Context projection", projectionRoot],
+        ]) {
+          const page = await populationContext.newPage();
+          page.setDefaultTimeout(7000);
+          const telemetry = monitor(page);
+          const sourceUrl = new URL(
+            `${relative(repositoryRoot, projectionDirectory)}/${routeProfile.source_file}`,
+            `${sourceServer.origin}/`,
+          ).href;
+          const sandbox = routeProfile.carrier_policy.sandbox_tokens.join(" ");
+          const permissions = routeProfile.carrier_policy.permissions_policy.join("; ");
+          await page.setContent(
+            `<iframe title="${routeProfile.display_name}" sandbox="${sandbox}"${
+              permissions ? ` allow="${permissions}"` : ""
+            } referrerpolicy="no-referrer" src="${sourceUrl}" style="display:block;width:100%;height:900px;border:0"></iframe>`,
+            { waitUntil: "domcontentloaded" },
+          );
+          const frame = page.frameLocator("iframe");
+          await frame.locator("body").waitFor();
+          assert.equal(
+            await frame.locator("html").evaluate(() => globalThis.origin),
+            "null",
+            `${projectionLabel} ${routeProfile.id} keeps an opaque sandbox origin`,
+          );
+          for (const width of [1280, 800, 480, 390, 320]) {
+            await page.setViewportSize({ width, height: 1000 });
+            const containment = await frame.locator("html").evaluate((root) => ({
+              clientWidth: root.clientWidth,
+              scrollWidth: root.scrollWidth,
+            }));
+            assert.ok(
+              containment.scrollWidth <= containment.clientWidth + 1,
+              `${projectionLabel} ${routeProfile.id} contains document overflow at ${width}px ` +
+                `(${containment.scrollWidth}/${containment.clientWidth})`,
+            );
+          }
+          await page.waitForLoadState("networkidle", { timeout: 4000 }).catch(() => {});
+          assertTelemetry(telemetry);
+          await page.close();
+        }
+      }
+    } finally {
+      await populationContext.close();
+    }
+
     context = await browser.newContext({ viewport: { width: 1280, height: 1000 } });
     await context.route("**/*", async (route) => {
       const request = route.request();
@@ -170,9 +237,12 @@ async function run() {
       routeManifest.carrier_contract.referrer_policy,
     );
     assert.equal(await carrier.getAttribute("src"), heartRoute);
+    const localFullView =
+      `prototypes/core-architectures/chimeric-pack-v0.1/${heartProfile.source_file}`;
     assert.equal(
       await page.locator(`a[data-public-href="${heartRoute}"]`).getAttribute("href"),
-      heartRoute,
+      localFullView,
+      "the materialized carrier keeps its full-view navigation on the Context Canvas base artifact",
     );
 
     const frame = page.frameLocator(carrierSelector);
@@ -186,7 +256,7 @@ async function run() {
       "the carrier keeps the framed document on an opaque sandbox origin",
     );
 
-    for (const width of [1280, 800]) {
+    for (const width of [1280, 800, 480, 390, 320]) {
       await page.setViewportSize({ width, height: 1000 });
       await carrier.scrollIntoViewIfNeeded();
       const parentContainment = await page.evaluate(() => ({
@@ -271,13 +341,14 @@ async function run() {
     await context?.close();
     await browser?.close();
     await server?.close();
+    await sourceServer?.close();
     await rm(temporaryRoot, { recursive: true, force: true });
   }
 }
 
 try {
   await run();
-  console.log("Core iframe carrier browser contract: 1/1 passed.");
+  console.log("Core iframe carrier browser contract: 45/45 carrier paths passed.");
 } catch (error) {
   console.error(error?.stack || error?.message || String(error));
   process.exitCode = 1;

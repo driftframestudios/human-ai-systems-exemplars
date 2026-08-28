@@ -42,10 +42,14 @@
       }
     },
     "context_canvas_top_level_glob": "context-canvas-project-surface/context-canvas/*.html",
+    "context_canvas_prototype_root": "context-canvas-project-surface/context-canvas/prototypes",
     "core_route_manifest": "core-architectures-chimeric-prototype-current-pack-v0.1/public-iframe-route-manifest-v1.json",
     "core_projection_roots": [
       "core-architectures-chimeric-prototype-current-pack-v0.1",
       "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1"
+    ],
+    "standalone_prototype_roots": [
+      "participatory-design-kit-chimeric-prototype-set-v0.1"
     ],
     "canonical_templates": [
       "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/canonical.template.html"

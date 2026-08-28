@@ -10,7 +10,7 @@ the artifact itself supplies runtime behavior.
 
 - `core-architectures-chimeric-prototype-manifest-v0.1.json` names the current
   pack entries, versions, paths, and material byte or digest receipts.
-- `core-architectures-chimeric-prototype-pack-index-v0.1.html` provides the
+- `core-architectures-chimeric-prototype-pack-index-v0.1.1.html` provides the
   human-facing pack route.
 - `strategy-canvas-system-v0.2/` owns the shared Strategy Canvas schema,
   validator, state engine, canonical source, and build contract.
@@ -34,10 +34,11 @@ publication.
 
 Strategy Canvas is maintained through its canonical template and stylesheet;
 the generated current distribution inherits the contract. The current visitor
-set covers Strategy Canvas v0.2.0; the v0.1.1 compatibility route retains its
-prior bytes as a separate resting carrier. Its Context Canvas workbench retains
-its adapted document and style owners. The repository-root `LICENSE` remains
-the complete license text.
+set covers Strategy Canvas v0.2.0. The resting v0.1.1 compatibility route is
+generated from its system-local source, including a location-correct link and
+the same attribution contract. Its Context Canvas workbench retains its
+adapted document and style owners. The repository-root `LICENSE` remains the
+complete license text.
 
 ## Public iframe route projection
 
@@ -50,12 +51,12 @@ package does not activate a route.
 The same manifest carries each route's minimal carrier policy. The scriptless
 pack hub uses an empty sandbox. A prototype with executable behavior grants
 `allow-scripts`, and a route that writes clipboard text delegates only the
-`clipboard-write` Permissions Policy feature. Native browser dialogs remain a
-held capability while each affected route moves toward an ordinary inline
-notice, input, or confirmation; that replacement establishes interaction
-parity while the carrier keeps the smaller sandbox. The policy vocabulary is
-intentionally narrow, so a newly observed capability returns to source review
-and an explicit contract revision before activation.
+`clipboard-write` Permissions Policy feature. Every current route now uses an
+ordinary inline notice, input, or two-step confirmation instead of native
+browser dialogs, so no route retains a held capability. An `eligible` route is
+invalid when any hold remains. The policy vocabulary stays intentionally
+narrow: a newly observed capability returns to source review and an explicit
+contract revision before activation.
 
 Build the ignored, dependency-free projection:
 
@@ -70,7 +71,8 @@ hub alone receives projection-local links to its 21 sibling routes and
 projection digests, static-resource evidence, activation standing, and
 unresolved user-activated local navigation. It also records the observed
 runtime capabilities beside the exact carrier policy, making policy drift
-visible in the upload-ready receipt.
+visible in the upload-ready receipt. The Strategy Canvas route also carries its
+explicitly linked JSON Schema as one route-local, content-typed companion.
 
 Verify the complete package in a temporary directory without retaining output:
 
@@ -84,7 +86,9 @@ Runtime resources remain inline unless a route declares an exact
 packager copies those regular files byte-for-byte beneath that route and
 rejects statically observable ambient or network references, path escape,
 symbolic links, missing files, and unused declarations. Ordinary citations and
-user-activated links are observed separately from runtime resources. This lets
+user-activated links are observed separately from runtime resources; an exact
+route-local companion named in `package_files` is also retained when an anchor
+reaches it. This lets
 parity and navigation decisions stay visible without silently rewriting an
 adapted receiver.
 
