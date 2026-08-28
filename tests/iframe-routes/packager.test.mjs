@@ -67,7 +67,7 @@ test("the route plan agrees one-to-one with the current Core population", async 
 
   assert.equal(firstPlan.contract.routes.length, 22);
   assert.equal(prototypeRoutes.length, 21);
-  assert.equal(firstPlan.outputFiles.size, 24);
+  assert.equal(firstPlan.outputFiles.size, 25);
   assert.equal(firstPlan.receipt.package_contract.primary_routes, 22);
   assert.equal(firstPlan.receipt.package_contract.prototype_routes, 21);
   assert.equal(firstPlan.receipt.package_contract.compatibility_aliases_generated, false);
@@ -156,12 +156,18 @@ test("the route receipt exposes unresolved local navigation without rewriting it
       projected_target: "context-canvas-project-surface/context-canvas/poda.html",
     },
   ]);
-  assert.deepEqual(byId.get("strategy-canvas").navigation.unresolved_local_links, [
-    {
-      href: "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
-      projected_target: "strategy-canvas/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
-    },
-  ]);
+  assert.deepEqual(byId.get("strategy-canvas").navigation.unresolved_local_links, []);
+  const strategySchema = await readFile(path.join(
+    defaultPaths.sourceRoot,
+    "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+  ));
+  assert.deepEqual(byId.get("strategy-canvas").static_resource_closure.package_files, [{
+    source_file: "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+    target_file: "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+    content_type: "application/schema+json",
+    bytes: strategySchema.byteLength,
+    sha256: sha256(strategySchema),
+  }]);
   assert.deepEqual(byId.get("core-architecture-family-index").navigation.unresolved_local_links, [
     {
       href: "../context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html",
@@ -196,7 +202,7 @@ test("every route receipt carries its observed minimal carrier policy", async ()
   assert.equal(
     plan.receipt.routes.filter(({ carrier_policy }) =>
       carrier_policy.held_capabilities.includes("native-modals")).length,
-    19,
+    0,
   );
   assert.equal(
     plan.receipt.routes.filter(({ carrier_policy }) =>
@@ -240,7 +246,7 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   await writePackagePlan(plan, temporaryRoot);
   const verification = await verifyPackagePlan(plan, temporaryRoot);
 
-  assert.deepEqual(verification, { files: 24, bytes: 1556378 });
+  assert.deepEqual(verification, { files: 25, bytes: 1615866 });
   await writeFile(path.join(temporaryRoot, "unexpected.txt"), "outside the plan\n");
   await assert.rejects(
     verifyPackagePlan(plan, temporaryRoot),
@@ -323,6 +329,17 @@ test("route validation rejects alias and source-identity drift", async () => {
     /only unique supported values/,
   );
 
+  const eligibleWithHeldCapability = structuredClone(contract);
+  const eligibleAlignment = eligibleWithHeldCapability.routes.find(
+    ({ id }) => id === "alignment-worksheet",
+  );
+  eligibleAlignment.activation_standing = "eligible";
+  eligibleAlignment.carrier_policy.held_capabilities.push("native-modals");
+  assert.throws(
+    () => validateRouteContract(eligibleWithHeldCapability, sourceManifest),
+    /must resolve every held capability before activation/,
+  );
+
   const reservedTarget = structuredClone(contract);
   reservedTarget.routes[0].package_files = [{
     source_file: "README.md",
@@ -353,7 +370,7 @@ test("route validation rejects alias and source-identity drift", async () => {
       content_type: "image/svg+xml",
     },
     {
-      source_file: "poda-chimeric-prototype-v0.1.html",
+      source_file: "poda-chimeric-prototype-v0.1.1.html",
       target_file: "media/plot.svg",
       content_type: "image/svg+xml",
     },
@@ -409,7 +426,7 @@ test("package planning rejects source bytes that drift from the authored receipt
   t.after(() => rm(temporaryRoot, { recursive: true, force: true }));
   const fixtureRoot = path.join(temporaryRoot, "core");
   await cp(defaultPaths.sourceRoot, fixtureRoot, { recursive: true });
-  const fixtureSource = path.join(fixtureRoot, "poda-chimeric-prototype-v0.1.html");
+  const fixtureSource = path.join(fixtureRoot, "poda-chimeric-prototype-v0.1.1.html");
   const source = await readFile(fixtureSource);
   await writeFile(fixtureSource, Buffer.concat([source, Buffer.from("\n<!-- drift -->\n")]));
 
@@ -591,7 +608,7 @@ test("declared package media travels through planning, output, and receipt", asy
   await mkdir(path.join(fixtureRoot, "media"));
   await writeFile(path.join(fixtureRoot, mediaRelativePath), mediaBytes);
 
-  const sourcePath = path.join(fixtureRoot, "poda-chimeric-prototype-v0.1.html");
+  const sourcePath = path.join(fixtureRoot, "poda-chimeric-prototype-v0.1.1.html");
   const revisedSource = (await readFile(sourcePath, "utf8")).replace(
     "</body>",
     `<img src="${mediaRelativePath}" alt="">\n</body>`,
@@ -621,7 +638,7 @@ test("declared package media travels through planning, output, and receipt", asy
     routeManifestPath,
     sourceManifestPath,
   });
-  assert.equal(plan.outputFiles.size, 25);
+  assert.equal(plan.outputFiles.size, 26);
   assert.ok(plan.outputFiles.get(`poda/${mediaRelativePath}`).equals(mediaBytes));
   const podaReceipt = plan.receipt.routes.find(({ id }) => id === "poda");
   assert.deepEqual(podaReceipt.static_resource_closure.package_files, [{
@@ -633,7 +650,7 @@ test("declared package media travels through planning, output, and receipt", asy
   }]);
 
   await writePackagePlan(plan, outputRoot);
-  assert.equal((await verifyPackagePlan(plan, outputRoot)).files, 25);
+  assert.equal((await verifyPackagePlan(plan, outputRoot)).files, 26);
   assert.ok((await readFile(path.join(outputRoot, `poda/${mediaRelativePath}`))).equals(mediaBytes));
 });
 
