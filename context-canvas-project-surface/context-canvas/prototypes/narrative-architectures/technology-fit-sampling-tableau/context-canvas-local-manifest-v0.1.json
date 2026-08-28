@@ -17,7 +17,7 @@
   },
   "publicationPosture": "visitor-linked-through-receiving-pages",
   "archive": {"status": "rebuilt-local-snapshot", "path": "technology-fit-sampling-tableau-chimeric-prototype-bundle-v0.1.zip"},
-  "integrity": {"algorithm": "sha256", "entryFile": "0e4f5fdc1cd5104d61e2010651ffe79e5e39011f88317db9618f090980c7d41c"},
+  "integrity": {"algorithm": "sha256", "entryFile": "1e9654238f65b11df9d2e55a2185790d6b5edbe6af7e7dacc6fe3d334d5e11b6"},
   "canonicalStatus": "context_canvas_owned_projection",
   "sourcePath": ".",
   "localPath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/",

@@ -16,7 +16,7 @@ import {
 const artifactNames = {
   impact: "impact-map-chimeric-prototype-v0.1.1.html",
   service: "service-design-blueprint-chimeric-prototype-v0.2.html",
-  heart: "heart-chart-chimeric-prototype-v0.1.2.html",
+  heart: "heart-chart-chimeric-prototype-v0.1.3.html",
   specification: "specification-by-example-chimeric-prototype-v0.1.1.html"
 };
 const checks = [];

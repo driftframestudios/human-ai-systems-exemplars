@@ -223,7 +223,7 @@ test("Core manifests resolve current files, byte counts, and published digests",
       const currentIdentities = {
         "impact-map": ["impact-map-chimeric-prototype-v0.1.1.html", "0.1.1"],
         "service-design-blueprint": ["service-design-blueprint-chimeric-prototype-v0.2.html", "0.2"],
-        "heart-chart": ["heart-chart-chimeric-prototype-v0.1.2.html", "0.1.2"],
+        "heart-chart": ["heart-chart-chimeric-prototype-v0.1.3.html", "0.1.3"],
         "specification-by-example": ["specification-by-example-chimeric-prototype-v0.1.1.html", "0.1.1"]
       };
       for (const [id, identity] of Object.entries(currentIdentities)) {

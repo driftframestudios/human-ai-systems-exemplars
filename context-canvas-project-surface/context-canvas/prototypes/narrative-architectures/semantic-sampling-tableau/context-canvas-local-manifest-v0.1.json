@@ -17,7 +17,7 @@
   },
   "publicationPosture": "repository-local-experimental-projection",
   "archive": {"status": "rebuilt-local-snapshot", "path": "terminology-exploration/narrative-sampling-tableau-chimeric-prototype-bundle-v0.1.zip"},
-  "integrity": {"algorithm": "sha256", "entryFile": "37167111950198417842d8b72efb8a1570c923cf893bbd5c010214ed2b9f5be3"},
+  "integrity": {"algorithm": "sha256", "entryFile": "6141b0cc438dbf32f6ef51bf7cead7d574670d30fa62386db463b68d86a4b4ee"},
   "canonicalStatus": "context_canvas_owned_experimental_projection",
   "sourcePath": ".",
   "localPath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/semantic-sampling-tableau/",
