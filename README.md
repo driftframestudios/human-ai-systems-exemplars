@@ -303,14 +303,14 @@ The following responsibility map clarifies the repository's existing working
 relationship. Current intent, source ownership, and named human decisions
 remain its authority.
 
-| Concern | Human collaborator | AI collaborator | Shared receipt |
+| Concern | Human collaborator | AI collaborator | Shared return |
 | --- | --- | --- | --- |
 | Purpose and consequence | Names the undertaking, affected people, acceptable consequence, and held decisions | Reconstructs current truth, surfaces implications, and identifies missing evidence | One bounded question and its receiving surface |
 | Source and identity | Confirms semantic ownership where identity or lineage is consequential | Traces source, projection, delivery, and receiving use from repository evidence | A source-authority map or nearest-manifest update |
 | Change | Selects material direction and authorizes consequential outward actions | Implements within granted scope, preserves unrelated work, and keeps extension seams visible | Reviewable source change with a recovery path |
-| Evidence | Decides what confidence is sufficient for the receiving use | Runs the smallest fitting observation and states what it establishes | Command, revision, result, coverage boundary, and ignored artifact path when relevant |
+| Evidence | Decides what confidence is sufficient for the receiving use | Runs the smallest fitting observation and states what it establishes | Repository-defined check or sanitized command shape, public revision when needed, normalized result, coverage boundary, and controlled repository-relative artifact reference when useful |
 | Language | Supplies lived context, audience knowledge, and correction | Uses desired-state, negation-aware, evidence-calibrated prose | A surface people can scan once and still act from |
-| Publication and access | Holds audience, ancestry, credential, domain, and release decisions | Checks configured mechanics and reports exact unresolved boundaries | Accepted publication or deliberate resting receipt |
+| Publication and access | Holds audience, ancestry, credential, domain, and release decisions | Checks configured mechanics and reports bounded unresolved conditions | Accepted publication or deliberate resting return |
 | Finding or failure | Coordinates affected people and provider actions | Keeps sensitive values in private triage, maps scope, and supports recovery | Containment state, changed scopes, rerun evidence, and one next move |
 
 AI collaborators may perform ordinary, reversible implementation and
@@ -319,6 +319,12 @@ history operations, production promotion, and epic-boundary merges retain
 their explicit human cue. When evidence is incomplete, the useful result is a
 bounded statement plus the smallest next observation; this is more useful than
 a generalized readiness judgment.
+
+One public-safe receiving surface is sufficient. Link an existing pull-request
+body, workflow summary, task response, or Issue comment instead of duplicating
+the result. Raw diagnostics, protected coordinates, inline values, browser
+state, and user-specific paths remain local or with an existing
+access-controlled owner.
 
 ### Source, projection, and delivery retain separate ownership
 
@@ -561,9 +567,12 @@ npm run visual:context-canvas-reference -- --phase before
 ```
 
 Every visual run writes screenshots, measurements, and browser errors beneath
-ignored `.visual-runs/`. The durable receipt is the command, source revision,
-result, relevant artifact path, and the page change, rather than the generated
-images as permanent repository content.
+ignored `.visual-runs/`. These local artifacts can contain URLs, paths, console
+text, or browser diagnostics. The durable public return names the repository
+check, public source revision when needed, normalized result, controlled
+repository-relative artifact reference when useful, and the page change. It
+does not copy generated images or raw diagnostic payloads into permanent
+repository content.
 
 #### Research and bounded delivery experiments
 

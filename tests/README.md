@@ -73,7 +73,7 @@ adapter and compiles the governed Narrative schemas with the repository's
 installed Ajv 2020-12 implementation. Material valid and invalid cases stay
 close to the contracts they exercise.
 
-Standard `node:test` output is the complete local receipt. Focused browser
+Standard `node:test` output is the complete local observation. Focused browser
 contracts remain available for behavior that requires a rendered page:
 
 ```sh
@@ -85,6 +85,10 @@ npm run test:strategy-canvas
 npm run test:narrative-browser
 npm run test:prototype-exchanges
 ```
+
+A durable public handback names the selected repository script, public revision
+when needed, normalized result, and scope boundary without copying runner output
+or local diagnostic coordinates.
 
 The Core aggregate opens both declared projections of twenty tranche-owned
 artifacts in fresh browser contexts. Strategy Canvas keeps its dedicated
