@@ -79,7 +79,7 @@
     <circle cx="102" cy="260" r="25" fill="#17345f"/>
     <text x="102" y="267" text-anchor="middle" class="mono route-number white">1</text>
     <text x="143" y="252" class="sans route-title ink">Shape the collaboration</text>
-    <text x="143" y="279" class="sans route-copy body">Shared language, pacing, or recovery is missing.</text>
+    <text x="143" y="279" class="sans route-copy body">Bring shared language, pacing, and recovery into view.</text>
     <text x="143" y="313" class="mono route-outcome ink">MAKE THE NEXT MOVE EASIER TO SHARE</text>
   </g>
 
@@ -89,7 +89,7 @@
     <circle cx="102" cy="446" r="25" fill="#17345f"/>
     <text x="102" y="453" text-anchor="middle" class="mono route-number white">2</text>
     <text x="143" y="438" class="sans route-title ink">Cross a publication boundary</text>
-    <text x="143" y="465" class="sans route-copy body">Material needs audience fit and proportionate review.</text>
+    <text x="143" y="465" class="sans route-copy body">Match material to its audience with proportionate review.</text>
     <text x="143" y="499" class="mono route-outcome ink">KEEP SOURCE STANDING AND CONSEQUENCE VISIBLE</text>
   </g>
 
@@ -99,7 +99,7 @@
     <circle cx="102" cy="635" r="25" fill="#17345f"/>
     <text x="102" y="642" text-anchor="middle" class="mono route-number white">3</text>
     <text x="143" y="624" class="sans route-title ink">Choose an architecture</text>
-    <text x="143" y="651" class="sans route-copy body">A consequential problem needs a fitting way to think.</text>
+    <text x="143" y="651" class="sans route-copy body">Give a consequential problem a fitting way to think.</text>
     <text x="143" y="685" class="mono route-outcome ink">CONNECT THE QUESTION TO A USEFUL FORM</text>
   </g>
 
@@ -109,7 +109,7 @@
     <circle cx="102" cy="822" r="25" fill="#17345f"/>
     <text x="102" y="831" text-anchor="middle" class="mono route-number white">4</text>
     <text x="143" y="810" class="sans route-title ink">Carry context forward</text>
-    <text x="143" y="837" class="sans route-copy body">Long-running work needs identity and continuity.</text>
+    <text x="143" y="837" class="sans route-copy body">Carry identity and continuity across long-running work.</text>
     <text x="143" y="871" class="mono route-outcome ink">PRESERVE WHAT THE NEXT READER MUST RECOVER</text>
   </g>
 
@@ -119,7 +119,7 @@
     <circle cx="1071" cy="305" r="25" fill="#17345f"/>
     <text x="1071" y="312" text-anchor="middle" class="mono route-number white">5</text>
     <text x="1112" y="298" class="sans route-title ink">Test a technical decision</text>
-    <text x="1112" y="325" class="sans route-copy body">The choice needs deeper questions and evidence cues.</text>
+    <text x="1112" y="325" class="sans route-copy body">Bring deeper questions and evidence cues to the choice.</text>
     <text x="1112" y="359" class="mono route-outcome ink">MAKE JUDGMENT AND TRADE-OFFS INSPECTABLE</text>
   </g>
 
