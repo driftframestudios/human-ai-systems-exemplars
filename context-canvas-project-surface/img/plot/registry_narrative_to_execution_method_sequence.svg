@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100" role="img" aria-labelledby="ntx-title ntx-desc">
   <title id="ntx-title">How a public claim becomes a dated, evidence-bearing account</title>
-  <desc id="ntx-desc">An eight-stage sequence numbered consistently from zero through seven: establish the time and ownership world; extract the strategic narrative; read execution through several lenses; form candidate explanations; run a disconfirmation pass; compare with fitting peers; read silence carefully; and present the relationship. The final account retains alternatives, counterevidence, and currentness rather than reducing the analysis to a verdict.</desc>
+  <desc id="ntx-desc">An eight-stage sequence numbered consistently from zero through seven: establish the time and ownership world; extract the strategic narrative; read execution through several lenses; form candidate explanations; run a disconfirmation pass; compare with fitting peers; read silence carefully; and present the relationship. The final account keeps alternatives, counterevidence, and currentness visible together.</desc>
 
   <defs>
     <pattern id="ntx-grid" width="32" height="32" patternUnits="userSpaceOnUse">
@@ -40,7 +40,7 @@
     <path d="M20 48Q20 20 48 20H1536Q1564 20 1564 48V190H20Z" fill="#2855f3"/>
     <text x="58" y="61" class="mono eyebrow white">KEEP CLAIMS, EVIDENCE, AND ALTERNATIVES TOGETHER</text>
     <text x="58" y="108" class="sans headline white">How does a public claim become a dated account?</text>
-    <text x="58" y="148" class="sans deck white">Follow the sequence without collapsing the evidence into a single verdict.</text>
+    <text x="58" y="148" class="sans deck white">Follow the sequence while keeping alternatives and counterevidence in view.</text>
     <rect x="1266" y="50" width="236" height="104" rx="16" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
     <text x="1295" y="84" class="mono stage-kind ink">READING KEY</text>
     <text x="1295" y="112" class="sans stage-copy ink">One number, one move.</text>
@@ -123,7 +123,7 @@
     <circle cx="144" cy="855.5" r="29" fill="#17345f"/>
     <text x="144" y="862.5" text-anchor="middle" class="mono stage-number white">6</text>
     <text x="198" y="847" class="sans stage-title ink">Read silence carefully</text>
-    <text x="198" y="873" class="sans stage-copy body">Treat absence as signal only when disclosure is expected and fitting peers address it.</text>
+    <text x="198" y="873" class="sans stage-copy body">Read absence as potentially informative when disclosure is expected and fitting peers address it.</text>
     <text x="1472" y="860" text-anchor="end" class="mono stage-kind ink">INTERPRET ABSENCE</text>
   </g>
 
@@ -139,7 +139,7 @@
 
   <g id="ntx-footer" role="group" aria-labelledby="ntx-footer-title">
     <title id="ntx-footer-title">How to read the sequence</title>
-    <text x="84" y="1033" class="sans foot ink">Candidate probabilities are comparative judgments within the analysis—not measures of organizational truth.</text>
-    <text x="1516" y="1033" text-anchor="end" class="sans foot body">Dated and comparative—not a score.</text>
+    <text x="84" y="1033" class="sans foot ink">Candidate probabilities express comparative judgments within this analysis.</text>
+    <text x="1516" y="1033" text-anchor="end" class="sans foot body">The result is a dated, comparative account.</text>
   </g>
 </svg>
