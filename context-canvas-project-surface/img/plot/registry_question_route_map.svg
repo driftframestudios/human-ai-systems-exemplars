@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100" role="img" aria-labelledby="rrm-title rrm-desc">
+  <title id="rrm-title">Where should I begin in the Enterprise Human-AI Practitioner Registry?</title>
+  <desc id="rrm-desc">A route map begins from the question that is most alive now and offers seven entrances: shape a collaboration, cross a publication boundary, choose an architecture, carry context forward, test a technical decision, read a system change, or track an emerging signal. Each entrance opens a small useful surface with deeper evidence available.</desc>
+
+  <defs>
+    <pattern id="rrm-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#cfe7f7" stroke-width="1" opacity="0.52"/>
+    </pattern>
+    <marker id="rrm-arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10Z" fill="#7893bc"/>
+    </marker>
+    <filter id="rrm-shadow" x="-10%" y="-10%" width="130%" height="140%">
+      <feDropShadow dx="6" dy="6" stdDeviation="0" flood-color="#17345f" flood-opacity="1"/>
+    </filter>
+    <style>
+      .sans { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .mono { font-family: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+      .white { fill: #fffdf8; }
+      .ink { fill: #17345f; }
+      .body { fill: #304a71; }
+      .muted { fill: #5d6f8b; }
+      .eyebrow { font-size: 15px; font-weight: 700; letter-spacing: 1.7px; }
+      .headline { font-size: 45px; font-weight: 700; letter-spacing: -1px; }
+      .deck { font-size: 20px; font-weight: 500; }
+      .route-title { font-size: 23px; font-weight: 700; letter-spacing: -0.2px; }
+      .route-copy { font-size: 16px; font-weight: 500; }
+      .route-outcome { font-size: 14px; font-weight: 700; letter-spacing: 0.55px; }
+      .route-number { font-size: 18px; font-weight: 700; }
+      .center-title { font-size: 28px; font-weight: 700; letter-spacing: -0.4px; }
+      .center-copy { font-size: 17px; font-weight: 500; }
+      .foot { font-size: 15px; font-weight: 500; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1100" fill="#fffaf2"/>
+  <rect x="28" y="28" width="1544" height="1044" rx="28" fill="#17345f"/>
+  <rect x="20" y="20" width="1544" height="1044" rx="28" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+  <rect x="21" y="21" width="1542" height="1042" rx="27" fill="url(#rrm-grid)" opacity="0.62"/>
+
+  <g id="rrm-heading" role="group" aria-labelledby="rrm-heading-title">
+    <title id="rrm-heading-title">Registry orientation</title>
+    <path d="M20 48Q20 20 48 20H1536Q1564 20 1564 48V190H20Z" fill="#2855f3"/>
+    <text x="58" y="63" class="mono eyebrow white">ENTER THROUGH THE QUESTION</text>
+    <text x="58" y="112" class="sans headline white">Where should I begin?</text>
+    <text x="58" y="151" class="sans deck white">Choose the need that sounds closest to yours. Deeper evidence stays within reach.</text>
+    <rect x="1168" y="53" width="334" height="100" rx="15" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <rect x="1182" y="66" width="8" height="74" rx="4" fill="#f2ff67"/>
+    <text x="1210" y="89" class="sans route-copy ink">Start with what needs</text>
+    <text x="1210" y="112" class="sans route-copy ink">to become clearer now.</text>
+    <text x="1210" y="135" class="sans route-copy body">One route is enough to begin.</text>
+  </g>
+
+  <g aria-hidden="true" fill="none" stroke="#7893bc" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#rrm-arrow)">
+    <path d="M676 430H614V280H576"/>
+    <path d="M676 470H624V466H576"/>
+    <path d="M676 510H614V652H576"/>
+    <path d="M676 550H604V838H576"/>
+    <path d="M924 450H986V326H1024"/>
+    <path d="M924 510H996V558H1024"/>
+    <path d="M924 570H986V790H1024"/>
+  </g>
+
+  <g id="rrm-center" role="group" aria-labelledby="rrm-center-title" filter="url(#rrm-shadow)">
+    <title id="rrm-center-title">Begin with the need that is most alive now</title>
+    <rect x="676" y="350" width="248" height="300" rx="26" fill="#17345f"/>
+    <circle cx="800" cy="405" r="29" fill="#f2ff67" stroke="#fffdf8" stroke-width="2"/>
+    <path d="M800 386L807 398L821 405L807 412L800 426L793 412L779 405L793 398Z" fill="#17345f"/>
+    <text x="800" y="462" text-anchor="middle" class="sans center-title white">What needs</text>
+    <text x="800" y="495" text-anchor="middle" class="sans center-title white">to become</text>
+    <text x="800" y="528" text-anchor="middle" class="sans center-title white">legible?</text>
+    <line x1="721" y1="552" x2="879" y2="552" stroke="#cfe7f7" stroke-width="2"/>
+    <text x="800" y="582" text-anchor="middle" class="sans center-copy" fill="#cfe7f7">Choose the smallest</text>
+    <text x="800" y="606" text-anchor="middle" class="sans center-copy" fill="#cfe7f7">useful entrance.</text>
+  </g>
+
+  <g id="rrm-route-1" role="group" aria-labelledby="rrm-route-1-title" filter="url(#rrm-shadow)">
+    <title id="rrm-route-1-title">Route one: Shape the collaboration</title>
+    <rect x="58" y="216" width="518" height="128" rx="17" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+    <circle cx="102" cy="260" r="25" fill="#17345f"/>
+    <text x="102" y="267" text-anchor="middle" class="mono route-number white">1</text>
+    <text x="143" y="252" class="sans route-title ink">Shape the collaboration</text>
+    <text x="143" y="279" class="sans route-copy body">Shared language, pacing, or recovery is missing.</text>
+    <text x="143" y="313" class="mono route-outcome ink">MAKE THE NEXT MOVE EASIER TO SHARE</text>
+  </g>
+
+  <g id="rrm-route-2" role="group" aria-labelledby="rrm-route-2-title" filter="url(#rrm-shadow)">
+    <title id="rrm-route-2-title">Route two: Cross a publication boundary</title>
+    <rect x="58" y="402" width="518" height="128" rx="17" fill="#cfe7f7" stroke="#17345f" stroke-width="2"/>
+    <rect x="77" y="421" width="50" height="50" rx="11" fill="#17345f"/>
+    <text x="102" y="453" text-anchor="middle" class="mono route-number white">2</text>
+    <text x="143" y="438" class="sans route-title ink">Cross a publication boundary</text>
+    <text x="143" y="465" class="sans route-copy body">Material needs audience fit and proportionate review.</text>
+    <text x="143" y="499" class="mono route-outcome ink">KEEP SOURCE STANDING AND CONSEQUENCE VISIBLE</text>
+  </g>
+
+  <g id="rrm-route-3" role="group" aria-labelledby="rrm-route-3-title" filter="url(#rrm-shadow)">
+    <title id="rrm-route-3-title">Route three: Choose an architecture</title>
+    <rect x="58" y="588" width="518" height="128" rx="17" fill="#e7efff" stroke="#17345f" stroke-width="2"/>
+    <path d="M102 607L130 635L102 663L74 635Z" fill="#17345f"/>
+    <text x="102" y="642" text-anchor="middle" class="mono route-number white">3</text>
+    <text x="143" y="624" class="sans route-title ink">Choose an architecture</text>
+    <text x="143" y="651" class="sans route-copy body">A consequential problem needs a fitting way to think.</text>
+    <text x="143" y="685" class="mono route-outcome ink">CONNECT THE QUESTION TO A USEFUL FORM</text>
+  </g>
+
+  <g id="rrm-route-4" role="group" aria-labelledby="rrm-route-4-title" filter="url(#rrm-shadow)">
+    <title id="rrm-route-4-title">Route four: Carry context forward</title>
+    <rect x="58" y="774" width="518" height="128" rx="17" fill="#fff5de" stroke="#17345f" stroke-width="2"/>
+    <path d="M79 822Q79 797 102 797Q125 797 125 822Q125 847 102 872Q79 847 79 822Z" fill="#17345f"/>
+    <text x="102" y="831" text-anchor="middle" class="mono route-number white">4</text>
+    <text x="143" y="810" class="sans route-title ink">Carry context forward</text>
+    <text x="143" y="837" class="sans route-copy body">Long-running work needs identity and continuity.</text>
+    <text x="143" y="871" class="mono route-outcome ink">PRESERVE WHAT THE NEXT READER MUST RECOVER</text>
+  </g>
+
+  <g id="rrm-route-5" role="group" aria-labelledby="rrm-route-5-title" filter="url(#rrm-shadow)">
+    <title id="rrm-route-5-title">Route five: Test a technical decision</title>
+    <rect x="1024" y="262" width="518" height="128" rx="17" fill="#ffd3d0" stroke="#17345f" stroke-width="2"/>
+    <path d="M1045 279H1097V331H1045Z" fill="#17345f"/>
+    <path d="M1055 289H1087V321H1055Z" fill="#ffd3d0"/>
+    <text x="1071" y="311" text-anchor="middle" class="mono route-number ink">5</text>
+    <text x="1112" y="298" class="sans route-title ink">Test a technical decision</text>
+    <text x="1112" y="325" class="sans route-copy body">The choice needs deeper questions and evidence cues.</text>
+    <text x="1112" y="359" class="mono route-outcome ink">MAKE JUDGMENT AND TRADE-OFFS INSPECTABLE</text>
+  </g>
+
+  <g id="rrm-route-6" role="group" aria-labelledby="rrm-route-6-title" filter="url(#rrm-shadow)">
+    <title id="rrm-route-6-title">Route six: Read a system change</title>
+    <rect x="1024" y="494" width="518" height="128" rx="17" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+    <path d="M1071 512L1098 528V560L1071 576L1044 560V528Z" fill="#17345f"/>
+    <text x="1071" y="551" text-anchor="middle" class="mono route-number white">6</text>
+    <text x="1112" y="530" class="sans route-title ink">Read a system change</text>
+    <text x="1112" y="557" class="sans route-copy body">A lived enterprise situation offers the best entrance.</text>
+    <text x="1112" y="591" class="mono route-outcome ink">FOLLOW PEOPLE, DECISIONS, AND OUTCOMES</text>
+  </g>
+
+  <g id="rrm-route-7" role="group" aria-labelledby="rrm-route-7-title" filter="url(#rrm-shadow)">
+    <title id="rrm-route-7-title">Route seven: Track an emerging signal</title>
+    <rect x="1024" y="726" width="518" height="128" rx="17" fill="#f2ff67" stroke="#17345f" stroke-width="2"/>
+    <circle cx="1071" cy="790" r="27" fill="#17345f"/>
+    <text x="1071" y="797" text-anchor="middle" class="mono route-number white">7</text>
+    <text x="1112" y="762" class="sans route-title ink">Track an emerging signal</text>
+    <text x="1112" y="789" class="sans route-copy body">An early change may affect a decision.</text>
+    <text x="1112" y="823" class="mono route-outcome ink">READ THE EVIDENCE AND RETURN DATE TOGETHER</text>
+  </g>
+
+  <g id="rrm-footer" role="group" aria-labelledby="rrm-footer-title">
+    <title id="rrm-footer-title">How to continue</title>
+    <rect x="58" y="955" width="1484" height="72" rx="16" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <rect x="58" y="955" width="12" height="72" rx="6" fill="#fa7065"/>
+    <text x="94" y="988" class="sans foot ink">Each entrance opens the smallest useful surface first.</text>
+    <text x="94" y="1012" class="sans foot body">The companion table names the destination, what it makes available, and where deeper evidence continues.</text>
+    <text x="1498" y="1002" text-anchor="end" class="mono route-outcome muted">CURRENT REGISTRY ORIENTATION</text>
+  </g>
+</svg>
