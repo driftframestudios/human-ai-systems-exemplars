@@ -19,6 +19,18 @@ import {
   writePackagePlan,
 } from "../../tools/package-iframe-routes.mjs";
 
+const contextProjectionRoot = path.join(
+  defaultPaths.repositoryRoot,
+  "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1",
+);
+const artifactAuthor = "Driftframe Studios, Limited Liability Company";
+const artifactLicense = "https://www.apache.org/licenses/LICENSE-2.0";
+const artifactAttribution = "© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).";
+
+function occurrenceCount(source, pattern) {
+  return [...source.matchAll(pattern)].length;
+}
+
 async function loadManifests() {
   const [contractBytes, sourceManifestBytes] = await Promise.all([
     readFile(defaultPaths.routeManifestPath),
@@ -75,6 +87,37 @@ test("the route plan agrees one-to-one with the current Core population", async 
   );
 });
 
+test("every current Core carrier owns one visible authorship and license declaration", async () => {
+  const { contract } = await loadManifests();
+  const projections = [defaultPaths.sourceRoot, contextProjectionRoot];
+
+  for (const route of contract.routes) {
+    for (const projectionRoot of projections) {
+      const label = `${path.relative(defaultPaths.repositoryRoot, projectionRoot)}/${route.source_file}`;
+      const source = await readFile(path.join(projectionRoot, route.source_file), "utf8");
+
+      assert.equal(occurrenceCount(source, /<meta\b[^>]*\bname=["']author["'][^>]*>/gi), 1, `${label} author count`);
+      assert.match(
+        source,
+        new RegExp(`<meta\\b[^>]*\\bname=["']author["'][^>]*\\bcontent=["']${artifactAuthor.replaceAll(".", "\\.")}["'][^>]*>`, "i"),
+        `${label} author value`,
+      );
+      assert.equal(occurrenceCount(source, /<link\b[^>]*\brel=["']license["'][^>]*>/gi), 1, `${label} license count`);
+      assert.match(
+        source,
+        new RegExp(`<link\\b[^>]*\\brel=["']license["'][^>]*\\bhref=["']${artifactLicense.replaceAll(".", "\\.").replaceAll("/", "\\/")}["'][^>]*>`, "i"),
+        `${label} license target`,
+      );
+      assert.equal(
+        occurrenceCount(source, /<footer\b[^>]*\bclass=["'][^"']*\bartifact-attribution\b[^"']*["'][^>]*>/gi),
+        1,
+        `${label} attribution footer count`,
+      );
+      assert.equal(source.split(artifactAttribution).length - 1, 1, `${label} visible notice count`);
+    }
+  }
+});
+
 test("the hub adapts only its route and manifest href values", async () => {
   const plan = await createPackagePlan();
   const hub = plan.outputFiles.get("index.html").toString("utf8");
@@ -126,7 +169,7 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   await writePackagePlan(plan, temporaryRoot);
   const verification = await verifyPackagePlan(plan, temporaryRoot);
 
-  assert.deepEqual(verification, { files: 24, bytes: 1525059 });
+  assert.deepEqual(verification, { files: 24, bytes: 1547070 });
   await writeFile(path.join(temporaryRoot, "unexpected.txt"), "outside the plan\n");
   await assert.rejects(
     verifyPackagePlan(plan, temporaryRoot),

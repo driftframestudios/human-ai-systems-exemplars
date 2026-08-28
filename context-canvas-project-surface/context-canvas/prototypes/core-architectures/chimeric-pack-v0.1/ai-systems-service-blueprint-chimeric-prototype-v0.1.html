@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
+<meta name="author" content="Driftframe Studios, Limited Liability Company">
+<link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>AI Systems Service Blueprint · Runtime–Knowledge–Infrastructure Topology Map · Chimeric Prototype v0.1</title>
 <style>
@@ -155,6 +157,30 @@
   .split { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   @media (max-width: 800px) { .split { grid-template-columns: 1fr; } }
   .footer-note { max-width: 1680px; margin: 24px auto; color: var(--muted); }
+
+  .artifact-attribution {
+    position: static;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .artifact-attribution__notice {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 82rem;
+    margin: clamp(1.5rem, 4vw, 3rem) auto 0;
+    padding: 1rem clamp(1rem, 3vw, 1.75rem) 1.5rem;
+    color: var(--muted, currentColor);
+    font-size: .78rem;
+    line-height: 1.55;
+    text-align: center;
+  }
+  @media print {
+    .artifact-attribution__notice { color: #000; }
+  }
+  @media (forced-colors: active) {
+    .artifact-attribution__notice { color: CanvasText; }
+  }
 </style>
 </head>
 <body>
@@ -667,5 +693,8 @@
   renderAll();
 })();
 </script>
+  <footer class="artifact-attribution">
+    <p class="artifact-attribution__notice">© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p>
+  </footer>
 </body>
 </html>

@@ -13,7 +13,7 @@
   },
   "publicationPosture": "visitor-linked-through-receiving-pages",
   "archive": {"status": "not-applicable"},
-  "integrity": {"algorithm": "sha256", "entryFile": "da5d7ef227fb4682a8efdb28880f8e0f0ae16511b00415170860f44f254d034a"},
+  "integrity": {"algorithm": "sha256", "entryFile": "4dd79c06144f8f67a07f6b472bdbbf282af7972aedf0654bc0de6bea61cfaae0"},
   "canonicalStatus": "adapted_copy",
   "sourcePath": "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/",
   "localPath": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/",

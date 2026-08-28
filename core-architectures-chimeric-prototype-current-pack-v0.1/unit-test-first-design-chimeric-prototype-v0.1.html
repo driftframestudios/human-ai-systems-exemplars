@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
+<meta name="author" content="Driftframe Studios, Limited Liability Company">
+<link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Unit-test-first Design · Business Rule Protection · Chimeric Prototype v0.1</title>
 <style>
@@ -169,6 +171,30 @@
   .source-note a { color: #244f56; }
   .notice { border-left: 4px solid var(--accent-2); padding: 10px 12px; background: var(--soft-2); border-radius: 10px; color: #25484d; }
   .warning { border-left: 4px solid #9f7a3b; padding: 10px 12px; background: #fbf0d8; border-radius: 10px; color: #5c4522; }
+
+  .artifact-attribution {
+    position: static;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .artifact-attribution__notice {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 82rem;
+    margin: clamp(1.5rem, 4vw, 3rem) auto 0;
+    padding: 1rem clamp(1rem, 3vw, 1.75rem) 1.5rem;
+    color: var(--muted, currentColor);
+    font-size: .78rem;
+    line-height: 1.55;
+    text-align: center;
+  }
+  @media print {
+    .artifact-attribution__notice { color: #000; }
+  }
+  @media (forced-colors: active) {
+    .artifact-attribution__notice { color: CanvasText; }
+  }
 </style>
 </head>
 <body>
@@ -1031,5 +1057,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 })();
 </script>
+  <footer class="artifact-attribution">
+    <p class="artifact-attribution__notice">© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p>
+  </footer>
 </body>
 </html>

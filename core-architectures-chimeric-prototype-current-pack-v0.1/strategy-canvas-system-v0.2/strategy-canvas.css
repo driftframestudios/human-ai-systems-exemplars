@@ -288,3 +288,27 @@
     .sc-footer { margin-top: 1rem; }
   }
 }
+
+.artifact-attribution {
+    position: static;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .artifact-attribution__notice {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 82rem;
+    margin: clamp(1.5rem, 4vw, 3rem) auto 0;
+    padding: 1rem clamp(1rem, 3vw, 1.75rem) 1.5rem;
+    color: var(--muted, currentColor);
+    font-size: .78rem;
+    line-height: 1.55;
+    text-align: center;
+  }
+  @media print {
+    .artifact-attribution__notice { color: #000; }
+  }
+  @media (forced-colors: active) {
+    .artifact-attribution__notice { color: CanvasText; }
+  }

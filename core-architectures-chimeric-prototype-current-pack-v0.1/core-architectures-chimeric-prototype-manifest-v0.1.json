@@ -34,7 +34,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 68064
+      "size_bytes": 69071
     },
     {
       "id": "alignment-worksheet",
@@ -46,7 +46,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 62399
+      "size_bytes": 63406
     },
     {
       "id": "impact-map",
@@ -61,7 +61,7 @@
         "impact-map-chimeric-prototype-v0.1.html"
       ],
       "exists": true,
-      "size_bytes": 42610
+      "size_bytes": 43617
     },
     {
       "id": "context-tree",
@@ -78,7 +78,7 @@
         "context-tree-chimeric-prototype-v0.1.2.html"
       ],
       "exists": true,
-      "size_bytes": 79715
+      "size_bytes": 80698
     },
     {
       "id": "strategy-canvas",
@@ -98,8 +98,8 @@
       "schema": "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
       "expression": "canonical",
       "exists": true,
-      "size_bytes": 130173,
-      "sha256": "4d0887d699a00f8be0cb6489644513d0e437d65eb63bac4317bc69464c4f675d"
+      "size_bytes": 131151,
+      "sha256": "657dca03d495cee71d43a34ceaa21bc54360a83b81c6230c3e4a4ee63d552535"
     },
     {
       "id": "first-responsible-version-matrix",
@@ -111,7 +111,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 58387
+      "size_bytes": 59368
     },
     {
       "id": "cross-channel-blueprint",
@@ -123,7 +123,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 100155
+      "size_bytes": 101135
     },
     {
       "id": "service-design-blueprint",
@@ -138,7 +138,7 @@
         "service-design-blueprint-chimeric-prototype-v0.1.html"
       ],
       "exists": true,
-      "size_bytes": 87215
+      "size_bytes": 88220
     },
     {
       "id": "ai-systems-service-blueprint",
@@ -150,7 +150,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 61715
+      "size_bytes": 62720
     },
     {
       "id": "software-architecture-views",
@@ -162,7 +162,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 75674
+      "size_bytes": 76681
     },
     {
       "id": "participatory-design-kit",
@@ -174,7 +174,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 65225
+      "size_bytes": 66230
     },
     {
       "id": "specification-by-example",
@@ -189,7 +189,7 @@
         "specification-by-example-chimeric-prototype-v0.1.html"
       ],
       "exists": true,
-      "size_bytes": 64464
+      "size_bytes": 65469
     },
     {
       "id": "heart-chart",
@@ -205,7 +205,7 @@
         "heart-chart-chimeric-prototype-v0.1.1.html"
       ],
       "exists": true,
-      "size_bytes": 59485
+      "size_bytes": 60492
     },
     {
       "id": "plus-delta",
@@ -217,7 +217,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 44063
+      "size_bytes": 45070
     },
     {
       "id": "practitioner-judgment-probes",
@@ -229,7 +229,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 63320
+      "size_bytes": 64327
     },
     {
       "id": "pattern-problem-surface-matrix",
@@ -241,7 +241,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 91534
+      "size_bytes": 92541
     },
     {
       "id": "jobs-to-be-done-treemap",
@@ -253,7 +253,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 62798
+      "size_bytes": 63805
     },
     {
       "id": "unit-test-first-design",
@@ -265,7 +265,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 62327
+      "size_bytes": 63332
     },
     {
       "id": "upstream-revision-loop",
@@ -277,7 +277,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 54353
+      "size_bytes": 55360
     },
     {
       "id": "recovery-routing-atlas",
@@ -289,7 +289,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 70028
+      "size_bytes": 71035
     },
     {
       "id": "core-architecture-family-index",
@@ -301,7 +301,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 71845
+      "size_bytes": 72852
     }
   ],
   "recommended_next_steps": [

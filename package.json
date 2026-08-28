@@ -28,6 +28,7 @@
     "security:secrets:public-references": "node tools/scan-secret-material.mjs artifact .public-reference-build/context-canvas-project-surface",
     "test:open-lesson-field": "node tools/open-lesson-field-contract.mjs",
     "test:public-reference-materializer": "node --test tests/public-references/materializer.test.mjs",
+    "test:context-canvas": "node --test tests/context-canvas/*.test.mjs",
     "test:iframe-routes": "node --test tests/iframe-routes/*.test.mjs",
     "test:secret-material": "node --test tests/security/secret-material.test.mjs",
     "test:strategy-canvas": "node tools/strategy-canvas-contract.mjs",

@@ -34,7 +34,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 68024
+      "size_bytes": 69031
     },
     {
       "id": "alignment-worksheet",
@@ -46,7 +46,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 62399
+      "size_bytes": 63406
     },
     {
       "id": "impact-map",
@@ -61,7 +61,7 @@
         "impact-map-chimeric-prototype-v0.1.html"
       ],
       "exists": true,
-      "size_bytes": 42610
+      "size_bytes": 43617
     },
     {
       "id": "context-tree",
@@ -78,7 +78,7 @@
         "context-tree-chimeric-prototype-v0.1.2.html"
       ],
       "exists": true,
-      "size_bytes": 79715
+      "size_bytes": 80698
     },
     {
       "id": "strategy-canvas",
@@ -98,8 +98,8 @@
       "canonical_schema": "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
       "expression": "context-canvas",
       "exists": true,
-      "size_bytes": 7258,
-      "sha256": "6984a8996e0b850774c8d8ef00c1cb42dc35cc88bad3cadf88280e28819953e6"
+      "size_bytes": 7661,
+      "sha256": "76adbdaee77ff418ae0f7a2bd506983b7d03bbc466ace23216b69092f0dc67cf"
     },
     {
       "id": "first-responsible-version-matrix",
@@ -111,7 +111,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 58387
+      "size_bytes": 59368
     },
     {
       "id": "cross-channel-blueprint",
@@ -123,7 +123,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 100155
+      "size_bytes": 101135
     },
     {
       "id": "service-design-blueprint",
@@ -138,7 +138,7 @@
         "service-design-blueprint-chimeric-prototype-v0.1.html"
       ],
       "exists": true,
-      "size_bytes": 87215
+      "size_bytes": 88220
     },
     {
       "id": "ai-systems-service-blueprint",
@@ -150,7 +150,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 61715
+      "size_bytes": 62720
     },
     {
       "id": "software-architecture-views",
@@ -162,7 +162,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 75674
+      "size_bytes": 76681
     },
     {
       "id": "participatory-design-kit",
@@ -174,7 +174,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 65225
+      "size_bytes": 66230
     },
     {
       "id": "specification-by-example",
@@ -189,7 +189,7 @@
         "specification-by-example-chimeric-prototype-v0.1.html"
       ],
       "exists": true,
-      "size_bytes": 64464
+      "size_bytes": 65469
     },
     {
       "id": "heart-chart",
@@ -205,7 +205,7 @@
         "heart-chart-chimeric-prototype-v0.1.1.html"
       ],
       "exists": true,
-      "size_bytes": 59485
+      "size_bytes": 60492
     },
     {
       "id": "plus-delta",
@@ -217,7 +217,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 44063
+      "size_bytes": 45070
     },
     {
       "id": "practitioner-judgment-probes",
@@ -229,7 +229,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 63320
+      "size_bytes": 64327
     },
     {
       "id": "pattern-problem-surface-matrix",
@@ -241,7 +241,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 91534
+      "size_bytes": 92541
     },
     {
       "id": "jobs-to-be-done-treemap",
@@ -253,7 +253,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 62798
+      "size_bytes": 63805
     },
     {
       "id": "unit-test-first-design",
@@ -265,7 +265,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 62327
+      "size_bytes": 63332
     },
     {
       "id": "upstream-revision-loop",
@@ -277,7 +277,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 54353
+      "size_bytes": 55360
     },
     {
       "id": "recovery-routing-atlas",
@@ -289,7 +289,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 70028
+      "size_bytes": 71035
     },
     {
       "id": "core-architecture-family-index",
@@ -301,7 +301,7 @@
       "version": "0.1",
       "status": "current",
       "exists": true,
-      "size_bytes": 71808
+      "size_bytes": 72815
     }
   ],
   "recommended_next_steps": [

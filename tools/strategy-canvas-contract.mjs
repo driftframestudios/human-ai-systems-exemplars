@@ -15,6 +15,9 @@ const NARRATIVE_COMPOSERS = [
 ];
 const SCHEMA_NEGATIVE_FIXTURE = "planning/context-canvas/strategy-canvas/fixtures/schema-validator-negative-cases.v2.json";
 const SHARED_STRATEGY_CORE = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-core.js";
+const ARTIFACT_AUTHOR = "Driftframe Studios, Limited Liability Company";
+const ARTIFACT_LICENSE = "https://www.apache.org/licenses/LICENSE-2.0";
+const ARTIFACT_ATTRIBUTION = "© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).";
 const VIEWPORTS = [
   { name: "mobile", width: 390, height: 844 },
   { name: "desktop", width: 1440, height: 1000 },
@@ -138,6 +141,8 @@ async function openPage(browser, url, viewport, options = {}) {
 async function layoutReceipt(page) {
   return page.evaluate(() => {
     const root = document.documentElement;
+    const footer = document.querySelector("footer.artifact-attribution");
+    const footerStyle = footer ? getComputedStyle(footer) : null;
     const visible = (element) => {
       const style = getComputedStyle(element);
       const rect = element.getBoundingClientRect();
@@ -156,7 +161,16 @@ async function layoutReceipt(page) {
     return {
       clientWidth: root.clientWidth,
       scrollWidth: root.scrollWidth,
-      smallTargets
+      smallTargets,
+      authorValues: [...document.querySelectorAll('meta[name="author"]')].map(element => element.content),
+      licenseTargets: [...document.querySelectorAll('link[rel="license"]')].map(element => element.href),
+      footerCount: document.querySelectorAll("footer.artifact-attribution").length,
+      noticeCount: document.querySelectorAll("footer.artifact-attribution .artifact-attribution__notice").length,
+      noticeText: footer?.querySelector(".artifact-attribution__notice")?.textContent.trim() || "",
+      footerPosition: footerStyle?.position || "",
+      footerVisible: Boolean(footer && visible(footer)),
+      footerClientWidth: footer?.clientWidth || 0,
+      footerScrollWidth: footer?.scrollWidth || 0
     };
   });
 }
@@ -165,6 +179,13 @@ async function assertLayout(page, label) {
   const receipt = await layoutReceipt(page);
   assert(receipt.scrollWidth <= receipt.clientWidth + 2, `${label} should contain document width (${receipt.scrollWidth}/${receipt.clientWidth}).`);
   assert(receipt.smallTargets.length === 0, `${label} interactive targets should be at least 44×44. ${receipt.smallTargets.join("; ")}`);
+  assert(same(receipt.authorValues, [ARTIFACT_AUTHOR]), `${label} should expose one exact author metadata value.`);
+  assert(same(receipt.licenseTargets, [ARTIFACT_LICENSE]), `${label} should expose one exact license relation.`);
+  assert(receipt.footerCount === 1 && receipt.noticeCount === 1, `${label} should expose one attribution footer and notice.`);
+  assert(receipt.noticeText === ARTIFACT_ATTRIBUTION, `${label} should preserve the exact visible attribution notice.`);
+  assert(receipt.footerPosition === "static", `${label} attribution should stay in document flow.`);
+  assert(receipt.footerVisible, `${label} attribution should remain visible.`);
+  assert(receipt.footerScrollWidth <= receipt.footerClientWidth + 1, `${label} attribution should contain its content.`);
 }
 
 async function zoomReceipt(page) {
