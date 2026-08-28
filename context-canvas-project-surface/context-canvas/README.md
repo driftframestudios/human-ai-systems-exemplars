@@ -27,9 +27,9 @@ The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) sup
 - Human stewards retain authority over identity, source use, sensitive material, publication, and consequential decisions. Automated checks report observable behavior and leave those decisions visible.
 
 Every top-level visitor route carries one source-authored ownership and
-Apache-2.0 notice that remains available without JavaScript. `AUTHORS` is the
-authorship authority, and the repository-root `LICENSE` remains the complete
-license text.
+Apache-2.0 notice in its static HTML, preserving the notice in the baseline
+reading. `AUTHORS` is the copyright-holder authority, and the repository-root
+`LICENSE` remains the complete license text.
 
 ## Document head order
 
@@ -181,7 +181,7 @@ The Context Canvas test protects source-authored visitor metadata and the
 About-page identity seam. The generic visual check records the requested
 surface at desktop and mobile widths, document containment, and browser
 errors. The interaction contracts cover their named collaboration systems in
-depth; they do not stand in for unrelated page evidence.
+depth. Choose the fitting check for each other page behavior.
 
 A useful verification note names the command, viewport-relevant result, and ignored `.visual-runs/` artifact directory. A new check joins the shared harness when a reproduced visitor-facing defect gives it a stable purpose.
 

@@ -7,7 +7,7 @@ export const attributionContract = Object.freeze(
 );
 
 function requireValue(condition, message) {
-  if (!condition) throw new Error(`Invalid attribution projection: ${message}`);
+  if (!condition) throw new Error(`Attribution projection requirement: ${message}`);
 }
 
 requireValue(attributionContract.schema_version === "1", "schema_version must be 1");

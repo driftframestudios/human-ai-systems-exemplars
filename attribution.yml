@@ -51,6 +51,11 @@
       "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/canonical.template.html"
     ]
   },
+  "contribution_credit_placements": [
+    "truthful_git_author_metadata",
+    "agreed_co_authored_by_trailers",
+    "reviewed_pull_requests"
+  ],
   "excluded_placements": [
     "commit_message_standing_notice",
     "ordinary_code_comment_banner",

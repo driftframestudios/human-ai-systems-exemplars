@@ -34,7 +34,7 @@ test("central attribution sources name the current holder and contribution patte
   assert.match(governance, /\[`AUTHORS`\]\(AUTHORS\)/u);
   assert.match(governance, /\[`LICENSE`\]\(LICENSE\)/u);
   assert.match(governance, /truthful Git identity/u);
-  assert.match(governance, /does not use\s+unresolved/u);
+  assert.match(governance, /Public artifacts carry resolved\s+publication identity/u);
   assert.match(citation, /given-names: "Vikrant Varun"/u);
   assert.match(citation, /family-names: "Kudesia"/u);
   assert.ok(citation.includes(`name: "${publishingCompany}"`));
@@ -45,7 +45,7 @@ test("central attribution sources name the current holder and contribution patte
   assert.equal(attributionContract.license.url, artifactLicense);
 });
 
-test("the machine-readable projection resolves its declared scope and exclusions", async () => {
+test("the machine-readable projection resolves its scope and placement boundaries", async () => {
   assert.deepEqual(attributionContract.public_html.required_placements, {
     author_metadata: {
       location: "document_head",
@@ -62,6 +62,11 @@ test("the machine-readable projection resolves its declared scope and exclusions
       value_from: "public_html.visible_notice",
     },
   });
+  assert.deepEqual(attributionContract.contribution_credit_placements, [
+    "truthful_git_author_metadata",
+    "agreed_co_authored_by_trailers",
+    "reviewed_pull_requests",
+  ]);
   assert.deepEqual(attributionContract.excluded_placements, [
     "commit_message_standing_notice",
     "ordinary_code_comment_banner",

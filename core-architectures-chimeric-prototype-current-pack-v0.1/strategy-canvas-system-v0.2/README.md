@@ -14,12 +14,12 @@ This directory provides the authoritative source boundary for the neutral canoni
 
 The canonical template owns Strategy Canvas authorship metadata, its license
 relation, and the semantic attribution footer. `strategy-canvas.css` owns the
-footer's non-fixed visual treatment. The generated current distribution
-inherits those source-owned declarations; edit the template or stylesheet and
-rebuild rather than patching that distribution directly. The compatibility
-route remains unchanged and outside the current visitor set. The adapted
-Context Canvas workbench keeps the current declarations in its local document
-and stylesheet.
+footer's in-flow visual treatment. The generated current distribution inherits
+those source-owned declarations. Edit the template or stylesheet, rebuild the
+distribution, and run the parity check. The current visitor set covers v0.2.0;
+the v0.1.1 compatibility route retains its prior bytes as a separate resting
+carrier. The adapted Context Canvas workbench keeps the current declarations
+in its local document and stylesheet.
 
 Generate the distribution:
 

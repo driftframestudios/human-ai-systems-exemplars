@@ -29,14 +29,15 @@ authorship and licensing context: one `author` metadata value, one Apache-2.0
 license relation, and one semantic `footer.artifact-attribution` with the full
 visitor-visible notice. The same contract is present in each Context Canvas
 projection, including its four intentional adaptations. The notice therefore
-travels with each self-contained HTML carrier without a runtime fetch or a
-shared publication dependency.
+travels directly with each self-contained HTML carrier across projections and
+publication.
 
 Strategy Canvas is maintained through its canonical template and stylesheet;
-the generated current distribution inherits the contract, while the unchanged
-compatibility route remains outside the current visitor set. Its Context
-Canvas workbench retains its adapted document and style owners. The
-repository-root `LICENSE` remains the complete license text.
+the generated current distribution inherits the contract. The current visitor
+set covers Strategy Canvas v0.2.0; the v0.1.1 compatibility route retains its
+prior bytes as a separate resting carrier. Its Context Canvas workbench retains
+its adapted document and style owners. The repository-root `LICENSE` remains
+the complete license text.
 
 ## Public iframe route projection
 

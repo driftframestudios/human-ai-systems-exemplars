@@ -1,5 +1,5 @@
 cff-version: "1.2.0"
-message: "Please cite this repository using the metadata in this file. See AUTHORS and GOVERNANCE.md for copyright-holder and contribution guidance."
+message: "Use this metadata to cite Human–AI Systems Exemplars. AUTHORS identifies copyright holders, and GOVERNANCE.md explains contribution and publication attribution."
 type: software
 title: "Human–AI Systems Exemplars"
 authors:
