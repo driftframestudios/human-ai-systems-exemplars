@@ -18,6 +18,10 @@ description: Accounts for decision-changing collaboration observations and route
 
 An account records an observation when it changes a routing decision, a skill instruction, or a future return condition. Smooth use can remain simply useful. The durable residue is the decision, evidence, consequence, and re-entry trigger rather than a turn transcript.
 
+### Rule: Persistence names its receiver and material effect
+
+A skill, account, manifest, ledger, gate, validator, inventory, or recurring review earns persistence when it changes a decision, protects observable behavior, serves a named consumer, reduces a named risk, or preserves a real re-entry need. Existing Git, GitHub, repository, and platform surfaces remain the default carriers when they already preserve the required state. When proposed structure primarily reports the collaboration or justifies its own continuation, preserve the decision-bearing residue on the nearest existing surface and return attention to material work. Security, privacy, destructive-operation, and production boundaries retain consequence-fitting depth.
+
 ### Rule: Skills remain provisional affordance surfaces
 
 The collaboration affordance can outlive its current transport format. A portable skill contract makes one working method routable in the present repository; it does not establish truth, competence, permission, priority, or organizational policy. Current intent, repository ground, independent evidence, and granted tools retain those roles.
