@@ -134,12 +134,13 @@ family commands documented for local use.
 Matching non-draft pull requests into `main` can run the complete unit baseline
 when `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true`. The unset or `false` value keeps
 automatic execution at rest while manual selection remains available. An
-active pull-request receiver includes the two rendered family contracts so its
-result covers direct and browser-owned behavior. Path filters cover the two
-source families, their tests and browser contracts, package lock,
-cross-prototype exchange tool, and workflow. One read-only job, one standard
-Linux runner, superseded-run cancellation, and a ten-minute ceiling keep the
-receiver proportional to the protected behavior.
+active pull-request receiver includes the two rendered family aggregates and
+the dedicated Strategy Canvas browser contract, so its result covers direct
+and browser-owned behavior. Path filters cover the two source families, their
+tests and browser contracts, the governed Strategy Canvas negative-case
+fixture, package lock, cross-prototype exchange tool, and workflow. One
+read-only job, one standard Linux runner, superseded-run cancellation, and a
+ten-minute ceiling keep the receiver proportional to the protected behavior.
 
 Local commands keep the focused route close to the source:
 

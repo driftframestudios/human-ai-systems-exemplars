@@ -52,6 +52,8 @@ For current Core or Narrative prototype work, the existing [Core and Narrative p
 
 Local Spark sessions can carry repository reading and other available checks. When a packet has established local browser-launch capability, the same focused browser check can run there. A browser-launch constraint with a named next receiver returns `friction` and that receiver; absence of an authorized executable lane returns `blocker`. When another observation is sufficient, return that evidence instead.
 
+When browser launch itself returns `friction` or `blocker`, the receipt names the observation lane and OS image; Node, Playwright, and browser channel or build; exact command and exit, signal, or error; candidate branch and full revision; and whether that revision passed in another separately authorized lane. The receipt stops at the named handback. A lane switch or external dispatch begins only through its own grant.
+
 ### `observation_only`
 
 Spark reads, inspects, compares, and returns the expected observation. Repository state remains at the named starting point. A repair opportunity becomes a smallest repair proposal with the exact surface and suggested observation, ready for a follow-on `repair_authorized` packet.
