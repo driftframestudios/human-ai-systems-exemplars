@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100" role="img" aria-labelledby="nrm-title nrm-desc">
   <title id="nrm-title">Five parts of a shared, resumable collaboration</title>
-  <desc id="nrm-desc">A relationship map distinguishes five roles without presenting them as stages. Narrative Architecture governs a repeatable collaboration span. Narrative Affordance defines a possible move. Affordance Activation records one use or disposition of that move. A Narrative Architecture Instance records one concrete occurrence and carries activations. A Narrative Coordination Surface makes the instance inspectable, revisable, and resumable.</desc>
+  <desc id="nrm-desc">A relationship map shows five distinct roles working together. Narrative Architecture governs a repeatable collaboration span. Narrative Affordance defines a possible move. Affordance Activation records one use or disposition of that move. A Narrative Architecture Instance records one concrete occurrence and carries activations. A Narrative Coordination Surface makes the instance inspectable, revisable, and resumable.</desc>
 
   <defs>
     <pattern id="nrm-grid" width="32" height="32" patternUnits="userSpaceOnUse">
@@ -42,12 +42,12 @@
     <path d="M20 48Q20 20 48 20H1536Q1564 20 1564 48V190H20Z" fill="#2855f3"/>
     <text x="58" y="61" class="mono eyebrow white">FIVE DISTINCT ROLES</text>
     <text x="58" y="110" class="sans headline white">Five parts of a shared, resumable collaboration</text>
-    <text x="58" y="150" class="sans deck white">Different roles, related through the work—not stages in a fixed sequence.</text>
+    <text x="58" y="150" class="sans deck white">Each role contributes a distinct layer of shared, resumable work.</text>
     <rect x="1252" y="51" width="250" height="102" rx="16" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
     <rect x="1266" y="64" width="8" height="76" rx="4" fill="#f2ff67"/>
-    <text x="1294" y="88" class="sans node-copy ink">Each role answers</text>
-    <text x="1294" y="113" class="sans node-copy ink">a different question.</text>
-    <text x="1294" y="137" class="sans node-copy body">None is a synonym.</text>
+    <text x="1294" y="88" class="sans node-copy ink">Each role clarifies</text>
+    <text x="1294" y="113" class="sans node-copy ink">a different part of</text>
+    <text x="1294" y="137" class="sans node-copy body">shared, resumable work.</text>
   </g>
 
   <g id="nrm-architecture" role="group" aria-labelledby="nrm-architecture-title">
@@ -72,8 +72,6 @@
     <text x="732" y="439" text-anchor="middle" class="mono relation muted">DEFINITION / USE</text>
     <rect x="742" y="617" width="258" height="30" rx="15" fill="#fffdf8"/>
     <text x="871" y="638" text-anchor="middle" class="mono relation muted">INSTANCE CARRIES ACTIVATIONS</text>
-    <rect x="1060" y="612" width="330" height="30" rx="15" fill="#fffdf8"/>
-    <text x="1225" y="633" text-anchor="middle" class="mono relation muted">MADE INSPECTABLE THROUGH THE VIEW</text>
   </g>
 
   <g id="nrm-affordance" role="group" aria-labelledby="nrm-affordance-title" filter="url(#nrm-shadow)">
@@ -130,6 +128,6 @@
   <g id="nrm-footer" role="group" aria-labelledby="nrm-footer-title">
     <title id="nrm-footer-title">How to read the map</title>
     <text x="72" y="1025" class="sans foot ink">The companion definitions preserve the complete distinctions and states.</text>
-    <text x="1528" y="1025" text-anchor="end" class="sans foot body">A relationship map—not a maturity ladder or fixed workflow.</text>
+    <text x="1528" y="1025" text-anchor="end" class="sans foot body">Read each role, then follow the relationships among them.</text>
   </g>
 </svg>
