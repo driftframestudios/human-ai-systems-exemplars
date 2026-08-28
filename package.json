@@ -7,6 +7,8 @@
   "scripts": {
     "playwright:install": "playwright install chromium",
     "build:public-references": "node tools/materialize-public-references.mjs",
+    "build:iframe-routes": "node tools/package-iframe-routes.mjs",
+    "check:iframe-routes": "node tools/package-iframe-routes.mjs --check",
     "build:schema-pages": "node tools/build-schema-pages.mjs",
     "build:schema-delivery": "node cloudflare/schema-delivery/build.mjs",
     "check:schema-delivery": "node cloudflare/schema-delivery/build.mjs --check",
@@ -26,6 +28,7 @@
     "security:secrets:public-references": "node tools/scan-secret-material.mjs artifact .public-reference-build/context-canvas-project-surface",
     "test:open-lesson-field": "node tools/open-lesson-field-contract.mjs",
     "test:public-reference-materializer": "node --test tests/public-references/materializer.test.mjs",
+    "test:iframe-routes": "node --test tests/iframe-routes/*.test.mjs",
     "test:secret-material": "node --test tests/security/secret-material.test.mjs",
     "test:strategy-canvas": "node tools/strategy-canvas-contract.mjs",
     "test:core-decision-canvases": "node tools/core-decision-canvas-contract.mjs",
