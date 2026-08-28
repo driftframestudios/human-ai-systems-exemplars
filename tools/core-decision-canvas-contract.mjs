@@ -16,7 +16,7 @@ import {
 const artifactNames = {
   impact: "impact-map-chimeric-prototype-v0.1.1.html",
   service: "service-design-blueprint-chimeric-prototype-v0.2.html",
-  heart: "heart-chart-chimeric-prototype-v0.1.2.html",
+  heart: "heart-chart-chimeric-prototype-v0.1.3.html",
   specification: "specification-by-example-chimeric-prototype-v0.1.1.html"
 };
 const checks = [];
@@ -149,7 +149,12 @@ async function servicePath(browser, origin, route) {
 }
 
 async function heartPath(browser, origin, route) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(
+    browser,
+    origin,
+    route,
+    { captureClipboard: true },
+  );
   try {
     for (const width of [1280, 800]) {
       await page.setViewportSize({ width, height: 1000 });
@@ -178,6 +183,64 @@ async function heartPath(browser, origin, route) {
     const view = initial.view_state.views[0];
     const firstId = view.row_order[0];
     const secondId = view.row_order[1];
+    await page.locator('[data-action="copy-json"]').click();
+    assert.equal(
+      await page.evaluate(() => globalThis.__coreClipboard),
+      await page.locator("#jsonExport").inputValue(),
+    );
+    assert.equal(await page.locator("#jsonCopyMessage").textContent(), "JSON copied.");
+
+    await page.locator('[data-action="add-row"]').click();
+    const withAddedRow = await valueJson(page, "#jsonExport");
+    const addedId = withAddedRow.heart_chart.rows.at(-1).id;
+    const expectedFocusId = withAddedRow.view_state.views[0].row_order.at(-2);
+    const removeButton = page.locator(`[data-action="remove-row"][data-row-id="${addedId}"]`);
+    await removeButton.click();
+    assert.equal(await removeButton.textContent(), "Confirm removal");
+    assert.ok((await valueJson(page, "#jsonExport")).heart_chart.rows.some(({ id }) => id === addedId));
+    assert.match(await page.locator("#rowActionMessage").textContent(), /remains available until then/);
+
+    const firstRemoveButton = page.locator(`[data-action="remove-row"][data-row-id="${firstId}"]`);
+    await firstRemoveButton.click();
+    assert.equal(await removeButton.textContent(), "Remove");
+    assert.equal(await firstRemoveButton.textContent(), "Confirm removal");
+    assert.equal(await page.getByRole("button", { name: "Confirm removal" }).count(), 1);
+    assert.ok((await valueJson(page, "#jsonExport")).heart_chart.rows.some(({ id }) => id === addedId));
+    await page.locator("#jsonImport").fill("{}");
+    assert.equal(await firstRemoveButton.textContent(), "Remove");
+    assert.match(await page.locator("#rowActionMessage").textContent(), /confirmation cleared/i);
+
+    await removeButton.click();
+    assert.equal(await removeButton.textContent(), "Confirm removal");
+    await removeButton.click();
+    assert.equal((await valueJson(page, "#jsonExport")).heart_chart.rows.some(({ id }) => id === addedId), false);
+    assert.match(await page.locator("#rowActionMessage").textContent(), /row removed/);
+    assert.deepEqual(
+      await page.evaluate(() => ({
+        action: document.activeElement?.dataset?.action,
+        rowId: document.activeElement?.dataset?.rowId,
+      })),
+      { action: "remove-row", rowId: expectedFocusId },
+    );
+
+    await page.evaluate(() => {
+      Object.defineProperty(Navigator.prototype, "clipboard", {
+        configurable: true,
+        get: () => ({
+          writeText: async () => {
+            throw new Error("clipboard unavailable");
+          },
+        }),
+      });
+    });
+    const visibleJson = await page.locator("#jsonExport").inputValue();
+    await page.locator('[data-action="copy-json"]').click();
+    await assert.doesNotReject(() => page.waitForFunction(
+      () => document.querySelector("#jsonCopyMessage")?.textContent?.includes("manual copy"),
+    ));
+    assert.equal(await page.locator("#jsonExport").inputValue(), visibleJson);
+
+    await page.locator(`[data-action="select-row"][data-row-id="${firstId}"]`).click();
     const literal = "Metric <img src=x onerror=globalThis.__coreProbe=1> remains contextual";
     const route = "Recovery Routing Atlas";
     const routeReason = "Route <strong>signal strain</strong> through a visible recovery path";

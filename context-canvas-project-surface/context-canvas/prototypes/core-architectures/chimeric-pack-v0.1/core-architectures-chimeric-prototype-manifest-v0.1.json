@@ -197,15 +197,16 @@
       "subtitle": "Signal-to-Metric Calibration",
       "family": "Measurement, Reflection, and Judgment",
       "shape": "goal-signal-metric matrix",
-      "file": "heart-chart-chimeric-prototype-v0.1.2.html",
-      "version": "0.1.2",
+      "file": "heart-chart-chimeric-prototype-v0.1.3.html",
+      "version": "0.1.3",
       "status": "current",
       "previous": [
         "heart-chart-chimeric-prototype-v0.1.html",
-        "heart-chart-chimeric-prototype-v0.1.1.html"
+        "heart-chart-chimeric-prototype-v0.1.1.html",
+        "heart-chart-chimeric-prototype-v0.1.2.html"
       ],
       "exists": true,
-      "size_bytes": 60468
+      "size_bytes": 62511
     },
     {
       "id": "plus-delta",

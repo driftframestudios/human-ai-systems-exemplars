@@ -16,6 +16,15 @@
     "activation_owner": "Issue #72 and human review",
     "neighboring_path_posture": "unmatched"
   },
+  "carrier_contract": {
+    "title": "context_specific_non_empty",
+    "loading": "lazy",
+    "referrer_policy": "no-referrer",
+    "sandbox_posture": "exact_per_route_allowlist",
+    "permissions_policy_posture": "exact_per_route_allowlist",
+    "held_capability_posture": "Source-visible capabilities remain ungranted until a route-local inline replacement removes the dependency.",
+    "full_view_posture": "A carrier keeps a direct full-view route beside the embedded view."
+  },
   "standing_values": {
     "receiver": [
       "byte_identical",
@@ -41,6 +50,11 @@
       "public_alias": "/v1/core/",
       "receiver_standing": "context_adapted",
       "activation_standing": "parity_review",
+      "carrier_policy": {
+        "sandbox_tokens": [],
+        "permissions_policy": [],
+        "held_capabilities": []
+      },
       "reader_job": "Navigate the current Core Architectures pack and its exact sibling routes."
     },
     {
@@ -52,6 +66,11 @@
       "public_alias": "/v1/core/poda/",
       "receiver_standing": "context_adapted",
       "activation_standing": "parity_review",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Trace purpose, objectives, discoverables, and activities in one editable orientation."
     },
     {
@@ -63,6 +82,11 @@
       "public_alias": "/v1/core/alignment-worksheet/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Compare forward and backward premises before selecting an option."
     },
     {
@@ -74,6 +98,11 @@
       "public_alias": "/v1/core/impact-map/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Trace actors, desired impacts, and discoverables through a directed graph."
     },
     {
@@ -85,6 +114,11 @@
       "public_alias": "/v1/core/context-tree/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Map role-specific knowledge and context before a consequential decision."
     },
     {
@@ -96,6 +130,11 @@
       "public_alias": "/v1/core/strategy-canvas/",
       "receiver_standing": "context_adapted",
       "activation_standing": "parity_review",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": []
+      },
       "reader_job": "Compare several options across anchored dimensions in the canonical collaboration field."
     },
     {
@@ -107,6 +146,11 @@
       "public_alias": "/v1/core/first-responsible-version-matrix/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Make the first responsible delivery threshold inspectable."
     },
     {
@@ -118,6 +162,11 @@
       "public_alias": "/v1/core/cross-channel-blueprint/",
       "receiver_standing": "byte_identical",
       "activation_standing": "provenance_review",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Compare shared surfaces and channel-specific responsibilities across a service topology."
     },
     {
@@ -129,6 +178,11 @@
       "public_alias": "/v1/core/service-design-blueprint/",
       "receiver_standing": "byte_identical",
       "activation_standing": "visitor_copy_review",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Inspect a layered service topology and its visible and supporting work."
     },
     {
@@ -140,6 +194,11 @@
       "public_alias": "/v1/core/ai-systems-service-blueprint/",
       "receiver_standing": "reserve",
       "activation_standing": "navigation_observation",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": [],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Inspect runtime, knowledge, and infrastructure responsibilities across an AI system."
     },
     {
@@ -151,6 +210,11 @@
       "public_alias": "/v1/core/software-architecture-views/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Compare feature instantiation and dependency shape across several architecture views."
     },
     {
@@ -162,6 +226,11 @@
       "public_alias": "/v1/core/participatory-design-kit/",
       "receiver_standing": "reserve",
       "activation_standing": "visitor_copy_review",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Elicit tacit workflow knowledge through participatory activities and evidence fragments."
     },
     {
@@ -173,17 +242,27 @@
       "public_alias": "/v1/core/specification-by-example/",
       "receiver_standing": "byte_identical",
       "activation_standing": "navigation_observation",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Connect business rules to concrete behavior examples and protected outcomes."
     },
     {
       "id": "heart-chart",
       "display_name": "HEART Chart",
       "kind": "prototype",
-      "source_file": "heart-chart-chimeric-prototype-v0.1.2.html",
-      "source_version": "0.1.2",
+      "source_file": "heart-chart-chimeric-prototype-v0.1.3.html",
+      "source_version": "0.1.3",
       "public_alias": "/v1/core/heart-chart/",
       "receiver_standing": "byte_identical",
       "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": []
+      },
       "reader_job": "Calibrate goals, signals, and metrics without collapsing them into one proxy."
     },
     {
@@ -195,6 +274,11 @@
       "public_alias": "/v1/core/plus-delta/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Separate practices worth preserving from changes worth exploring."
     },
     {
@@ -206,6 +290,11 @@
       "public_alias": "/v1/core/practitioner-judgment-probes/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Use interview questions as evidence-bearing propensities rather than answer keys."
     },
     {
@@ -217,6 +306,11 @@
       "public_alias": "/v1/core/pattern-problem-surface-matrix/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Compare experience-design patterns by the problem surfaces they address."
     },
     {
@@ -228,6 +322,11 @@
       "public_alias": "/v1/core/jobs-to-be-done-treemap/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Compare jobs by purpose, weight, and relation to a decision."
     },
     {
@@ -239,6 +338,11 @@
       "public_alias": "/v1/core/unit-test-first-design/",
       "receiver_standing": "reserve",
       "activation_standing": "navigation_observation",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Protect business rules by connecting them to focused executable examples."
     },
     {
@@ -250,6 +354,11 @@
       "public_alias": "/v1/core/upstream-revision-loop/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Carry downstream evidence back to the solution artifact that can absorb it."
     },
     {
@@ -261,6 +370,11 @@
       "public_alias": "/v1/core/recovery-routing-atlas/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Recognize a strain cue and select the smallest fitting recovery route."
     },
     {
@@ -272,6 +386,11 @@
       "public_alias": "/v1/core/core-architecture-family-index/",
       "receiver_standing": "context_adapted",
       "activation_standing": "parity_review",
+      "carrier_policy": {
+        "sandbox_tokens": ["allow-scripts"],
+        "permissions_policy": ["clipboard-write"],
+        "held_capabilities": ["native-modals"]
+      },
       "reader_job": "Browse the full family and select a fitting cognitive move."
     }
   ],

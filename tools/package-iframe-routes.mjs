@@ -48,6 +48,9 @@ const expectedActivationStandings = new Set([
   "reader_job_required",
   "visitor_copy_review",
 ]);
+const supportedSandboxTokens = new Set(["allow-scripts"]);
+const supportedPermissionsPolicyFeatures = new Set(["clipboard-write"]);
+const supportedHeldCapabilities = new Set(["native-modals"]);
 const expectedRouteAliases = new Map([
   ["core-architectures-pack", "/v1/core/"],
   ["poda", "/v1/core/poda/"],
@@ -158,6 +161,34 @@ function assertArrayMatchesSet(values, expected, label) {
   }
 }
 
+function assertSupportedStringArray(values, supported, label) {
+  if (!Array.isArray(values)) {
+    fail(`${label} must be an array.`);
+  }
+  const unique = new Set(values);
+  if (
+    unique.size !== values.length ||
+    values.some((value) => typeof value !== "string" || !supported.has(value))
+  ) {
+    fail(`${label} must contain only unique supported values.`);
+  }
+  const sorted = [...values].sort(compareCodeUnits);
+  if (values.some((value, index) => value !== sorted[index])) {
+    fail(`${label} must use stable lexical order.`);
+  }
+}
+
+function assertExactArray(actual, expected, label) {
+  if (
+    actual.length !== expected.length ||
+    actual.some((value, index) => value !== expected[index])
+  ) {
+    fail(
+      `${label} must be ${JSON.stringify(expected)}; received ${JSON.stringify(actual)}.`,
+    );
+  }
+}
+
 function routeDirectory(contract, route) {
   if (route.public_alias === contract.base_path) {
     return "";
@@ -221,6 +252,41 @@ export function validateRouteContract(contract, sourceManifest) {
     contract.projection_contract.neighboring_path_posture,
     "unmatched",
     "Neighboring path posture",
+  );
+
+  if (!isObject(contract.carrier_contract)) {
+    fail("carrier_contract must be an object.");
+  }
+  assertExactString(
+    contract.carrier_contract.title,
+    "context_specific_non_empty",
+    "Carrier title posture",
+  );
+  assertExactString(contract.carrier_contract.loading, "lazy", "Carrier loading posture");
+  assertExactString(
+    contract.carrier_contract.referrer_policy,
+    "no-referrer",
+    "Carrier referrer posture",
+  );
+  assertExactString(
+    contract.carrier_contract.sandbox_posture,
+    "exact_per_route_allowlist",
+    "Carrier sandbox posture",
+  );
+  assertExactString(
+    contract.carrier_contract.permissions_policy_posture,
+    "exact_per_route_allowlist",
+    "Carrier Permissions Policy posture",
+  );
+  assertExactString(
+    contract.carrier_contract.held_capability_posture,
+    "Source-visible capabilities remain ungranted until a route-local inline replacement removes the dependency.",
+    "Carrier held-capability posture",
+  );
+  assertExactString(
+    contract.carrier_contract.full_view_posture,
+    "A carrier keeps a direct full-view route beside the embedded view.",
+    "Carrier full-view posture",
   );
 
   assertArrayMatchesSet(
@@ -318,6 +384,24 @@ export function validateRouteContract(contract, sourceManifest) {
     if (!expectedActivationStandings.has(route.activation_standing)) {
       fail(`Route ${route.id} has unsupported activation standing ${route.activation_standing}.`);
     }
+    if (!isObject(route.carrier_policy)) {
+      fail(`Route ${route.id} must carry a carrier_policy object.`);
+    }
+    assertSupportedStringArray(
+      route.carrier_policy.sandbox_tokens,
+      supportedSandboxTokens,
+      `Route ${route.id} sandbox tokens`,
+    );
+    assertSupportedStringArray(
+      route.carrier_policy.permissions_policy,
+      supportedPermissionsPolicyFeatures,
+      `Route ${route.id} Permissions Policy features`,
+    );
+    assertSupportedStringArray(
+      route.carrier_policy.held_capabilities,
+      supportedHeldCapabilities,
+      `Route ${route.id} held capabilities`,
+    );
 
     assertBoundedRelativePath(route.source_file, `Source file for route ${route.id}`, ".html");
     if (routeFiles.has(route.source_file)) {
@@ -531,6 +615,64 @@ function attributeValue(tag, attributeName) {
     new RegExp(`(?:^|\\s)${escapedName}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, "i"),
   );
   return match?.[1] ?? match?.[2] ?? match?.[3] ?? null;
+}
+
+export function observeIframeRuntimeCapabilities(html) {
+  if (typeof html !== "string") {
+    fail("Iframe runtime capability observation requires HTML text.");
+  }
+
+  const executableBodies = [];
+  let executableScripts = false;
+  for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi)) {
+    const type = (attributeValue(match[1], "type") ?? "").trim().toLowerCase();
+    if (["application/json", "application/ld+json", "importmap", "speculationrules"].includes(type)) {
+      continue;
+    }
+    const isJavaScript =
+      type === "" ||
+      type === "module" ||
+      /^(?:text|application)\/(?:x-)?(?:java|ecma)script(?:[0-9.]*)$/.test(type);
+    if (!isJavaScript) {
+      fail(`Iframe runtime observation encountered an unsupported script type: ${type}.`);
+    }
+    executableScripts = true;
+    executableBodies.push(match[2]);
+  }
+
+  const executableSource = executableBodies.join("\n");
+  const capabilities = [];
+  if (executableScripts) capabilities.push("executable-scripts");
+  if (/\bnavigator\.clipboard\b[\s\S]{0,120}?\bwriteText\s*\(/.test(executableSource)) {
+    capabilities.push("clipboard-write");
+  }
+  if (/(?:^|[^\w.])(?:(?:window|globalThis)\.)?(?:alert|confirm|prompt)\s*\(/m.test(executableSource)) {
+    capabilities.push("native-modals");
+  }
+  return capabilities;
+}
+
+function validateCarrierPolicyAgainstCapabilities(route, capabilities) {
+  const observed = new Set(capabilities);
+  const expectedSandbox = observed.has("executable-scripts") ? ["allow-scripts"] : [];
+  const expectedPermissions = observed.has("clipboard-write") ? ["clipboard-write"] : [];
+  const expectedHeld = observed.has("native-modals") ? ["native-modals"] : [];
+
+  assertExactArray(
+    route.carrier_policy.sandbox_tokens,
+    expectedSandbox,
+    `Route ${route.id} sandbox tokens for observed runtime`,
+  );
+  assertExactArray(
+    route.carrier_policy.permissions_policy,
+    expectedPermissions,
+    `Route ${route.id} Permissions Policy for observed runtime`,
+  );
+  assertExactArray(
+    route.carrier_policy.held_capabilities,
+    expectedHeld,
+    `Route ${route.id} held capabilities for observed runtime`,
+  );
 }
 
 function srcsetReferences(value) {
@@ -973,6 +1115,8 @@ export async function createPackagePlan(options = {}) {
     await assertRegularFileWithin(paths.sourceRoot, sourcePath, `HTML source for route ${route.id}`);
     const sourceBytes = await readFile(sourcePath);
     const sourceText = sourceBytes.toString("utf8");
+    const runtimeCapabilities = observeIframeRuntimeCapabilities(sourceText);
+    validateCarrierPolicyAgainstCapabilities(route, runtimeCapabilities);
     const projectionText = route.kind === "hub" ? rewriteHub(sourceText, contract) : sourceText;
     const projectionBytes = route.kind === "hub"
       ? Buffer.from(projectionText, "utf8")
@@ -1038,6 +1182,7 @@ export async function createPackagePlan(options = {}) {
       sourceBytes,
       projectionBytes,
       closure,
+      runtimeCapabilities,
       packageReceipts,
     });
   }
@@ -1068,6 +1213,8 @@ export async function createPackagePlan(options = {}) {
       receiver_standing: reading.route.receiver_standing,
       activation_standing: reading.route.activation_standing,
       activation_eligible: reading.route.activation_standing === "eligible",
+      carrier_policy: reading.route.carrier_policy,
+      observed_runtime_capabilities: reading.runtimeCapabilities,
       projection_file: reading.indexOutputPath,
       projection_kind: reading.route.kind === "hub" ? "navigation_adapted" : "source_identical",
       source_bytes: reading.sourceBytes.byteLength,

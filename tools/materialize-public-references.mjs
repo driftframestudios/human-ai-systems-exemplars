@@ -11,10 +11,12 @@ import {
   writeFile,
 } from "node:fs/promises";
 import {
+  basename,
   dirname,
   extname,
   isAbsolute,
   join,
+  posix,
   relative,
   resolve,
   sep,
@@ -38,6 +40,11 @@ export const PUBLIC_REFERENCE_OUTPUT = join(
   "context-canvas-project-surface",
 );
 export const PUBLIC_REFERENCE_CONFIG = join(REPOSITORY_ROOT, ".env.public");
+export const PUBLIC_IFRAME_ROUTE_MANIFEST = join(
+  REPOSITORY_ROOT,
+  "core-architectures-chimeric-prototype-current-pack-v0.1",
+  "public-iframe-route-manifest-v1.json",
+);
 export const PUBLIC_REFERENCE_NAMESPACE = "PUBLIC_URL_REGISTRY_";
 export const PUBLIC_IFRAME_NAMESPACE = "PUBLIC_URL_IFRAME_";
 
@@ -47,6 +54,8 @@ const PUBLIC_REFERENCE_NAMESPACES = [
   PUBLIC_REFERENCE_NAMESPACE,
   PUBLIC_IFRAME_NAMESPACE,
 ];
+const PUBLIC_IFRAME_LOCAL_ROOT =
+  "context-canvas/prototypes/core-architectures/chimeric-pack-v0.1";
 const EXACT_TOKEN = /^PUBLIC_URL_(?:REGISTRY|IFRAME)_[A-Z0-9_]+$/;
 const EXACT_IFRAME_TOKEN = /^PUBLIC_URL_IFRAME_[A-Z0-9_]+$/;
 const TOKEN_OCCURRENCE = /\{\{(PUBLIC_URL[^{}\s]*)\}\}/g;
@@ -406,12 +415,115 @@ function iframeTokenCarriers(html, safePath) {
       key: token[1],
       localFallback: localMatches[0][2],
       tagName,
+      tag,
     });
   }
   return carriers;
 }
 
-export function inspectPublicReferenceHtml(html, safePath = "Context Canvas HTML") {
+function requiredHostedIframeAttribute(tag, name, key, safePath, { allowEmpty = false } = {}) {
+  const matches = attributeMatches(tag, name);
+  if (
+    matches.length !== 1 ||
+    (!allowEmpty && matches[0][2].trim().length === 0) ||
+    matches[0][2].trim() !== matches[0][2]
+  ) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_IFRAME_POLICY",
+      `${key} needs one explicit ${name} attribute on its hosted iframe in ${safePath}`,
+    );
+  }
+  return matches[0][2];
+}
+
+function assertHostedIframePolicy(carrier, safePath, iframeCarrierPolicies = null) {
+  const { key, tag } = carrier;
+  requiredHostedIframeAttribute(tag, "title", key, safePath);
+  const loading = requiredHostedIframeAttribute(tag, "loading", key, safePath);
+  const sandbox = requiredHostedIframeAttribute(
+    tag,
+    "sandbox",
+    key,
+    safePath,
+    { allowEmpty: true },
+  );
+  const referrerPolicy = requiredHostedIframeAttribute(
+    tag,
+    "referrerpolicy",
+    key,
+    safePath,
+  );
+
+  if (loading !== "lazy" || referrerPolicy !== "no-referrer") {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_IFRAME_POLICY",
+      `${key} needs loading=lazy and referrerpolicy=no-referrer in ${safePath}`,
+    );
+  }
+
+  const sandboxTokens = sandbox.split(/\s+/).filter(Boolean);
+  if (
+    new Set(sandboxTokens).size !== sandboxTokens.length ||
+    sandboxTokens.some((token) => token !== "allow-scripts")
+  ) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_IFRAME_POLICY",
+      `${key} may grant only its observed allow-scripts sandbox capability in ${safePath}`,
+    );
+  }
+
+  const allowMatches = attributeMatches(tag, "allow");
+  if (allowMatches.length > 1) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_IFRAME_POLICY",
+      `${key} may carry at most one narrow allow attribute in ${safePath}`,
+    );
+  }
+  const allowFeatures = (allowMatches[0]?.[2] ?? "")
+    .split(";")
+    .map((value) => value.trim())
+    .filter(Boolean);
+  if (
+    new Set(allowFeatures).size !== allowFeatures.length ||
+    allowFeatures.some((feature) => feature !== "clipboard-write")
+  ) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_IFRAME_POLICY",
+      `${key} may delegate only the observed clipboard-write feature in ${safePath}`,
+    );
+  }
+
+  if (iframeCarrierPolicies === null) return;
+  const expected = iframeCarrierPolicies.get(key);
+  if (expected === undefined) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_IFRAME_POLICY",
+      `${key} needs a route-manifest carrier profile in ${safePath}`,
+    );
+  }
+  const normalizedSafePath = safePath.split(sep).join("/");
+  const normalizedFallback = posix.normalize(
+    posix.join(posix.dirname(normalizedSafePath), carrier.localFallback),
+  );
+  if (
+    normalizedFallback !== expected.localFallback ||
+    sandboxTokens.length !== expected.sandboxTokens.length ||
+    sandboxTokens.some((token, index) => token !== expected.sandboxTokens[index]) ||
+    allowFeatures.length !== expected.allowFeatures.length ||
+    allowFeatures.some((feature, index) => feature !== expected.allowFeatures[index])
+  ) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_IFRAME_POLICY",
+      `${key} must match the route source and exact sandbox and Permissions Policy profile in ${safePath}`,
+    );
+  }
+}
+
+export function inspectPublicReferenceHtml(
+  html,
+  safePath = "Context Canvas HTML",
+  iframeCarrierPolicies = null,
+) {
   if (containsDirectNotionPageUrl(html)) {
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_DIRECT_NOTION_URL",
@@ -476,6 +588,9 @@ export function inspectPublicReferenceHtml(html, safePath = "Context Canvas HTML
       );
     }
   }
+  for (const carrier of iframeCarriers.filter(({ tagName }) => tagName === "iframe")) {
+    assertHostedIframePolicy(carrier, safePath, iframeCarrierPolicies);
+  }
   for (const carrier of jsonCarriers) {
     if (EXACT_IFRAME_TOKEN.test(carrier.key) && !iframeKeys.has(carrier.key)) {
       throw new PublicReferenceContractError(
@@ -520,7 +635,7 @@ export function inspectPublicReferenceHtml(html, safePath = "Context Canvas HTML
   };
 }
 
-async function inventoryTree(sourceRoot, htmlRoot) {
+async function inventoryTree(sourceRoot, htmlRoot, iframeCarrierPolicies = null) {
   const sourceState = await lstatIfPresent(sourceRoot);
   if (!sourceState?.isDirectory() || sourceState.isSymbolicLink()) {
     throw new PublicReferenceOperationalError(
@@ -598,7 +713,11 @@ async function inventoryTree(sourceRoot, htmlRoot) {
       }
 
       const html = searchable;
-      const inspection = inspectPublicReferenceHtml(html, safePath);
+      const inspection = inspectPublicReferenceHtml(
+        html,
+        safePath,
+        iframeCarrierPolicies,
+      );
       htmlFiles.push({ path, safePath, inspection, source: html });
       occurrenceCount += inspection.occurrenceCount;
       anchorCount += inspection.anchorCount;
@@ -869,8 +988,13 @@ export function materializePublicReferenceHtml(
   html,
   destinations,
   safePath = "Context Canvas HTML",
+  iframeCarrierPolicies = null,
 ) {
-  const expected = inspectPublicReferenceHtml(html, safePath);
+  const expected = inspectPublicReferenceHtml(
+    html,
+    safePath,
+    iframeCarrierPolicies,
+  );
   let anchorCount = 0;
   let iframeCount = 0;
   let jsonLdCount = 0;
@@ -1042,6 +1166,102 @@ async function publishGeneration(
   }
 }
 
+async function loadIframeRouteProfiles(manifestPath) {
+  if (manifestPath === null) return null;
+
+  let manifest;
+  try {
+    manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      throw new PublicReferenceContractError(
+        "PUBLIC_REFERENCE_IFRAME_POLICY_MANIFEST",
+        "the iframe route manifest must contain valid JSON",
+      );
+    }
+    throw new PublicReferenceOperationalError(
+      "PUBLIC_REFERENCE_IFRAME_POLICY_MANIFEST_READ",
+      "the iframe route manifest could not be read",
+      { cause: error },
+    );
+  }
+
+  const fail = (message) => {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_IFRAME_POLICY_MANIFEST",
+      message,
+    );
+  };
+  if (
+    manifest === null ||
+    typeof manifest !== "object" ||
+    Array.isArray(manifest) ||
+    manifest.host !== "iframes.vik.guru" ||
+    manifest.carrier_contract?.sandbox_posture !== "exact_per_route_allowlist" ||
+    manifest.carrier_contract?.permissions_policy_posture !== "exact_per_route_allowlist" ||
+    !Array.isArray(manifest.routes)
+  ) {
+    fail("the iframe route manifest needs its expected host, exact carrier postures, and routes");
+  }
+
+  const profiles = new Map();
+  for (const route of manifest.routes) {
+    const policy = route?.carrier_policy;
+    if (
+      typeof route?.source_file !== "string" ||
+      basename(route.source_file) !== route.source_file ||
+      typeof route?.public_alias !== "string" ||
+      !Array.isArray(policy?.sandbox_tokens) ||
+      !Array.isArray(policy?.permissions_policy) ||
+      policy.sandbox_tokens.some((value) => typeof value !== "string") ||
+      policy.permissions_policy.some((value) => typeof value !== "string")
+    ) {
+      fail("each iframe route needs a regular source name, public alias, and carrier policy arrays");
+    }
+
+    let routeUrl;
+    try {
+      routeUrl = new URL(route.public_alias, `https://${manifest.host}`);
+    } catch {
+      fail("each iframe route alias must form a URL on the declared host");
+    }
+    if (
+      routeUrl.origin !== `https://${manifest.host}` ||
+      routeUrl.pathname !== route.public_alias ||
+      routeUrl.search !== "" ||
+      routeUrl.hash !== "" ||
+      !route.public_alias.startsWith("/v1/") ||
+      !route.public_alias.endsWith("/") ||
+      profiles.has(routeUrl.href)
+    ) {
+      fail("each iframe route alias must be unique, normalized, versioned, and host-local");
+    }
+    profiles.set(routeUrl.href, {
+      localFallback: `${PUBLIC_IFRAME_LOCAL_ROOT}/${route.source_file}`,
+      sandboxTokens: [...policy.sandbox_tokens],
+      allowFeatures: [...policy.permissions_policy],
+    });
+  }
+  return profiles;
+}
+
+function carrierPoliciesForDestinations(destinations, routeProfiles) {
+  if (routeProfiles === null) return null;
+  const policies = new Map();
+  for (const [key, destination] of destinations) {
+    if (!key.startsWith(PUBLIC_IFRAME_NAMESPACE)) continue;
+    const profile = routeProfiles.get(destination);
+    if (profile === undefined) {
+      throw new PublicReferenceContractError(
+        "PUBLIC_REFERENCE_IFRAME_POLICY",
+        `${key} needs an exact profile in the iframe route manifest`,
+      );
+    }
+    policies.set(key, profile);
+  }
+  return policies;
+}
+
 export async function inspectPublicReferenceSource({
   sourceRoot = PUBLIC_REFERENCE_SOURCE,
   htmlRoot = join(sourceRoot, "context-canvas"),
@@ -1057,11 +1277,17 @@ export async function materializePublicReferences({
   environment = process.env,
   outputBoundaryRoot = REPOSITORY_ROOT,
   publishRename = rename,
+  iframeRouteManifestPath,
 } = {}) {
   const source = resolve(sourceRoot);
   const html = resolve(htmlRoot);
   const output = resolve(outputRoot);
   const config = resolve(configPath);
+  const carrierManifest = iframeRouteManifestPath ?? (
+    source === resolve(PUBLIC_REFERENCE_SOURCE)
+      ? PUBLIC_IFRAME_ROUTE_MANIFEST
+      : null
+  );
   assertSeparateTrees(source, output);
   if (!isPublicReferencePathWithin(source, html)) {
     throw new PublicReferenceContractError(
@@ -1092,6 +1318,13 @@ export async function materializePublicReferences({
       config,
       environment,
     );
+    const routeProfiles = await loadIframeRouteProfiles(
+      carrierManifest,
+    );
+    const iframeCarrierPolicies = carrierPoliciesForDestinations(
+      destinations,
+      routeProfiles,
+    );
 
     for (const record of inventory.htmlFiles) {
       if (record.inspection.occurrenceCount === 0) continue;
@@ -1099,6 +1332,7 @@ export async function materializePublicReferences({
         record.source,
         destinations,
         record.safePath,
+        iframeCarrierPolicies,
       );
       await writeFile(join(stagedOutput, record.safePath), materialized, "utf8");
     }

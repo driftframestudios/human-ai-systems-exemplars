@@ -18,6 +18,7 @@ import {
   createPackagePlan,
   defaultPaths,
   navigationObservation,
+  observeIframeRuntimeCapabilities,
   scanHtmlClosure,
   scanPackageClosure,
   sha256,
@@ -171,6 +172,66 @@ test("the route receipt exposes unresolved local navigation without rewriting it
   assert.deepEqual(byId.get("heart-chart").navigation.unresolved_local_links, []);
 });
 
+test("every route receipt carries its observed minimal carrier policy", async () => {
+  const plan = await createPackagePlan();
+  const byId = new Map(plan.receipt.routes.map((route) => [route.id, route]));
+
+  assert.deepEqual(byId.get("core-architectures-pack").observed_runtime_capabilities, []);
+  assert.deepEqual(byId.get("core-architectures-pack").carrier_policy, {
+    sandbox_tokens: [],
+    permissions_policy: [],
+    held_capabilities: [],
+  });
+  assert.deepEqual(byId.get("heart-chart").observed_runtime_capabilities, [
+    "executable-scripts",
+    "clipboard-write",
+  ]);
+  assert.deepEqual(byId.get("heart-chart").carrier_policy, {
+    sandbox_tokens: ["allow-scripts"],
+    permissions_policy: ["clipboard-write"],
+    held_capabilities: [],
+  });
+  assert.deepEqual(byId.get("strategy-canvas").carrier_policy.held_capabilities, []);
+  assert.deepEqual(byId.get("ai-systems-service-blueprint").carrier_policy.permissions_policy, []);
+  assert.equal(
+    plan.receipt.routes.filter(({ carrier_policy }) =>
+      carrier_policy.held_capabilities.includes("native-modals")).length,
+    19,
+  );
+  assert.equal(
+    plan.receipt.routes.filter(({ carrier_policy }) =>
+      carrier_policy.permissions_policy.includes("clipboard-write")).length,
+    20,
+  );
+  assert.equal(
+    plan.receipt.routes.some(({ carrier_policy }) =>
+      carrier_policy.sandbox_tokens.some((token) =>
+        ["allow-same-origin", "allow-forms", "allow-popups", "allow-top-navigation"].includes(token))),
+    false,
+  );
+});
+
+test("runtime observation distinguishes executable behavior from embedded data", () => {
+  assert.deepEqual(
+    observeIframeRuntimeCapabilities('<script type="application/ld+json">{"name":"data"}</script>'),
+    [],
+  );
+  assert.deepEqual(
+    observeIframeRuntimeCapabilities('<script type="importmap">{"imports":{}}</script>'),
+    [],
+  );
+  assert.deepEqual(
+    observeIframeRuntimeCapabilities(
+      '<script>navigator.clipboard.writeText("value"); confirm("Continue?");</script>',
+    ),
+    ["executable-scripts", "clipboard-write", "native-modals"],
+  );
+  assert.throws(
+    () => observeIframeRuntimeCapabilities('<script type="application/x-custom-data">value</script>'),
+    /unsupported script type/,
+  );
+});
+
 test("a materialized plan has the exact allowlist and expected bytes", async (t) => {
   const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), "iframe-route-test-"));
   t.after(() => rm(temporaryRoot, { recursive: true, force: true }));
@@ -179,7 +240,7 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   await writePackagePlan(plan, temporaryRoot);
   const verification = await verifyPackagePlan(plan, temporaryRoot);
 
-  assert.deepEqual(verification, { files: 24, bytes: 1546542 });
+  assert.deepEqual(verification, { files: 24, bytes: 1556378 });
   await writeFile(path.join(temporaryRoot, "unexpected.txt"), "outside the plan\n");
   await assert.rejects(
     verifyPackagePlan(plan, temporaryRoot),
@@ -239,6 +300,27 @@ test("route validation rejects alias and source-identity drift", async () => {
   assert.throws(
     () => validateRouteContract(duplicateStanding, sourceManifest),
     /supported standing values/,
+  );
+
+  const missingCarrierPolicy = structuredClone(contract);
+  delete missingCarrierPolicy.routes[0].carrier_policy;
+  assert.throws(
+    () => validateRouteContract(missingCarrierPolicy, sourceManifest),
+    /must carry a carrier_policy object/,
+  );
+
+  const dangerousSandboxToken = structuredClone(contract);
+  dangerousSandboxToken.routes[1].carrier_policy.sandbox_tokens.push("allow-same-origin");
+  assert.throws(
+    () => validateRouteContract(dangerousSandboxToken, sourceManifest),
+    /only unique supported values/,
+  );
+
+  const duplicatePermission = structuredClone(contract);
+  duplicatePermission.routes[1].carrier_policy.permissions_policy.push("clipboard-write");
+  assert.throws(
+    () => validateRouteContract(duplicatePermission, sourceManifest),
+    /only unique supported values/,
   );
 
   const reservedTarget = structuredClone(contract);
@@ -341,6 +423,30 @@ test("package planning rejects source bytes that drift from the authored receipt
       ),
     }),
     /the Core source manifest records/,
+  );
+});
+
+test("package planning rejects carrier policy that understates observed behavior", async (t) => {
+  const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), "iframe-route-policy-drift-"));
+  t.after(() => rm(temporaryRoot, { recursive: true, force: true }));
+  const fixtureRoot = path.join(temporaryRoot, "core");
+  await cp(defaultPaths.sourceRoot, fixtureRoot, { recursive: true });
+  const routeManifestPath = path.join(fixtureRoot, "public-iframe-route-manifest-v1.json");
+  const routeManifest = JSON.parse(await readFile(routeManifestPath, "utf8"));
+  routeManifest.routes.find(({ id }) => id === "heart-chart")
+    .carrier_policy.permissions_policy = [];
+  await writeFile(routeManifestPath, `${JSON.stringify(routeManifest, null, 2)}\n`);
+
+  await assert.rejects(
+    createPackagePlan({
+      sourceRoot: fixtureRoot,
+      routeManifestPath,
+      sourceManifestPath: path.join(
+        fixtureRoot,
+        "core-architectures-chimeric-prototype-manifest-v0.1.json",
+      ),
+    }),
+    /Permissions Policy for observed runtime must be \["clipboard-write"\]/,
   );
 });
 

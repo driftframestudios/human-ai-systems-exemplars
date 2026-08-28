@@ -23,7 +23,8 @@ export const coreProjections = [
   }
 ];
 
-export async function startStaticServer() {
+export async function startStaticServer(contentRoot = repositoryRoot) {
+  const root = resolve(contentRoot);
   const contentTypes = {
     ".css": "text/css; charset=utf-8",
     ".html": "text/html; charset=utf-8",
@@ -37,8 +38,8 @@ export async function startStaticServer() {
       const requestUrl = new URL(request.url || "/", "http://127.0.0.1");
       let pathname = decodeURIComponent(requestUrl.pathname);
       if (pathname.endsWith("/")) pathname += "index.html";
-      const absolutePath = resolve(repositoryRoot, `.${pathname}`);
-      const repositoryPath = relative(repositoryRoot, absolutePath);
+      const absolutePath = resolve(root, `.${pathname}`);
+      const repositoryPath = relative(root, absolutePath);
       if (repositoryPath.startsWith("..") || repositoryPath === "") {
         response.writeHead(403).end("Forbidden");
         return;

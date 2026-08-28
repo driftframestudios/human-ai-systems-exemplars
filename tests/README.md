@@ -25,6 +25,7 @@ Core iframe route packaging has a separate dependency-free boundary:
 ```sh
 npm run test:iframe-routes
 npm run check:iframe-routes
+npm run test:iframe-carriers
 ```
 
 The focused suite verifies exact agreement among the 21-entry Core manifest,
@@ -32,10 +33,16 @@ the pack hub, and the 22-route projection contract. It covers normalized and
 collision-free aliases, bounded regular-file inputs, explicit package-local
 media, static runtime-resource observation, byte-identical prototype
 projections, hub-only link adaptation, deterministic receipts, unresolved
-local-navigation observation, and exclusion of the resting compatibility
-alias. The check forms the real package in a temporary directory and leaves
-live delivery unchanged. Dynamic request behavior remains a browser and
-delivery-policy activation check.
+local-navigation observation, observed carrier-capability agreement, minimal
+sandbox and Permissions Policy profiles, and exclusion of the resting
+compatibility alias. The check forms the real package in a temporary directory
+and leaves live delivery unchanged. The carrier contract materializes the real
+Context Canvas source, supplies the authored HEART bytes at its cross-origin
+route, and exercises that page inside the declared sandbox. It checks paired
+URLs, opaque-origin execution, keyboard interaction, copy fallback, local
+overflow containment, request closure, and browser telemetry without retaining
+generated output. Live response headers and cache behavior remain delivery
+activation checks.
 
 Secret-material inspection has its own focused behavior contract:
 
