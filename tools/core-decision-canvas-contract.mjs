@@ -151,7 +151,7 @@ async function servicePath(browser, origin, route) {
 async function heartPath(browser, origin, route) {
   const { context, page, telemetry } = await openFresh(browser, origin, route);
   try {
-    for (const width of [1440, 800]) {
+    for (const width of [1280, 800]) {
       await page.setViewportSize({ width, height: 1000 });
       const containment = await page.evaluate(() => {
         const root = document.documentElement;
