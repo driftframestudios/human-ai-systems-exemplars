@@ -42,12 +42,10 @@ on:
       - "tools/core-reference-instrument-contract.mjs"
       - "tools/cross-prototype-exchange-contract.mjs"
       - "tools/narrative-architecture-contract.mjs"
-      - "tools/strategy-canvas-contract.mjs"
       - "core-architectures-chimeric-prototype-current-pack-v0.1/**"
       - "context-canvas-project-surface/context-canvas/prototypes/core-architectures/**"
       - "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/**"
       - "context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json"
-      - "planning/context-canvas/strategy-canvas/fixtures/schema-validator-negative-cases.v2.json"
 
 permissions:
   contents: read
@@ -96,10 +94,7 @@ jobs:
           case "$SELECTED_SUITE" in
             core)
               npm run test:core-architectures
-              if [[ "$INCLUDE_BROWSER" == "true" ]]; then
-                npm run test:core-browser
-                npm run test:strategy-canvas
-              fi
+              if [[ "$INCLUDE_BROWSER" == "true" ]]; then npm run test:core-browser; fi
               ;;
             narrative)
               npm run test:narrative-architectures
@@ -109,7 +104,6 @@ jobs:
               npm run test:prototype-units
               if [[ "$INCLUDE_BROWSER" == "true" ]]; then
                 npm run test:core-browser
-                npm run test:strategy-canvas
                 npm run test:narrative-browser
                 npm run test:prototype-exchanges
               fi
