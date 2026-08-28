@@ -22,6 +22,52 @@ Artifact variation is part of the family: route-specific layout, color,
 density, interaction, and evidence posture remain available while stable IDs,
 current versions, and declared source relationships keep the pack legible.
 
+## Public iframe route projection
+
+`public-iframe-route-manifest-v1.json` binds the pack hub and 21 current
+prototypes to 22 exact aliases beneath `https://iframes.vik.guru/v1/core/`.
+It keeps four relations separate: authored source identity, transferable route
+projection, per-route activation standing, and live delivery. Forming the
+package does not activate a route.
+
+Build the ignored, dependency-free projection:
+
+```sh
+npm run build:iframe-routes
+```
+
+The build writes `.iframe-route-build/iframes.vik.guru/v1/core/`. Each
+prototype becomes its route-local `index.html` without changing its bytes. The
+hub alone receives projection-local links to its 21 sibling routes and
+`manifest.json`. A deterministic `route-manifest.json` records source and
+projection digests, static-resource evidence, activation standing, and
+unresolved user-activated local navigation.
+
+Verify the complete package in a temporary directory without retaining output:
+
+```sh
+npm run check:iframe-routes
+npm run test:iframe-routes
+```
+
+Runtime resources remain inline unless a route declares an exact
+`package_files` source-to-target allowlist with an explicit content type. The
+packager copies those regular files byte-for-byte beneath that route and
+rejects statically observable ambient or network references, path escape,
+symbolic links, missing files, and unused declarations. Ordinary citations and
+user-activated links are observed separately from runtime resources. This lets
+parity and navigation decisions stay visible without silently rewriting an
+adapted receiver.
+
+The source scan covers resource-bearing markup, CSS and SVG dependency graphs,
+and selected JavaScript network primitives. It does not claim to prove every
+dynamic browser request. A browser request graph and the intended delivery
+policy remain required activation evidence for every selected route.
+
+The optional Strategy Canvas v0.1.1 compatibility alias remains resting and is
+not generated. Upload, Cloudflare configuration, neighboring-path behavior,
+receiver repointing, and public activation remain later review steps.
+
 ## Direct checks
 
 Run the DOM-independent Core cases and current identity examples:

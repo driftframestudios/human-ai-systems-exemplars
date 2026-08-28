@@ -20,6 +20,23 @@ Context Canvas source without retaining or reporting configured destinations.
 The repository case discovers its keys and occurrences from source; migration
 counts remain a historical observation rather than a release threshold.
 
+Core iframe route packaging has a separate dependency-free boundary:
+
+```sh
+npm run test:iframe-routes
+npm run check:iframe-routes
+```
+
+The focused suite verifies exact agreement among the 21-entry Core manifest,
+the pack hub, and the 22-route projection contract. It covers normalized and
+collision-free aliases, bounded regular-file inputs, explicit package-local
+media, static runtime-resource observation, byte-identical prototype
+projections, hub-only link adaptation, deterministic receipts, unresolved
+local-navigation observation, and exclusion of the resting compatibility
+alias. The check forms the real package in a temporary directory and leaves
+live delivery unchanged. Dynamic request behavior remains a browser and
+delivery-policy activation check.
+
 Secret-material inspection has its own focused behavior contract:
 
 ```sh

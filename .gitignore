@@ -210,6 +210,9 @@ test-results/
 # Materialized Context Canvas public-reference artifact
 .public-reference-build/
 
+# Materialized Core Architectures iframe-route package
+.iframe-route-build/
+
 # Local GitHub Pages build artifact
 .schema-pages/
 .schema_pages/
