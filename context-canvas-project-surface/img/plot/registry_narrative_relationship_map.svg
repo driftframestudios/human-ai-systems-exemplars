@@ -95,8 +95,9 @@
     <text x="990" y="390" class="sans node-title ink">Affordance Activation</text>
     <text x="990" y="428" class="sans node-copy body">One recorded use or</text>
     <text x="990" y="453" class="sans node-copy body">disposition of that move.</text>
-    <text x="890" y="524" class="sans node-copy body">Proposed · accepted · declined · completed · superseded</text>
-    <text x="890" y="557" class="mono relation ink">WHAT HAPPENED TO THE MOVE?</text>
+    <text x="890" y="510" class="sans node-copy body">Proposed · accepted · declined</text>
+    <text x="890" y="534" class="sans node-copy body">Completed · superseded</text>
+    <text x="890" y="563" class="mono relation ink">WHAT HAPPENED TO THE MOVE?</text>
   </g>
 
   <g id="nrm-instance" role="group" aria-labelledby="nrm-instance-title" filter="url(#nrm-shadow)">
