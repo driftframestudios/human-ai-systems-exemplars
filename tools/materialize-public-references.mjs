@@ -39,10 +39,16 @@ export const PUBLIC_REFERENCE_OUTPUT = join(
 );
 export const PUBLIC_REFERENCE_CONFIG = join(REPOSITORY_ROOT, ".env.public");
 export const PUBLIC_REFERENCE_NAMESPACE = "PUBLIC_URL_REGISTRY_";
+export const PUBLIC_IFRAME_NAMESPACE = "PUBLIC_URL_IFRAME_";
 
 const OUTPUT_MARKER = ".public-reference-materialization.json";
 const OUTPUT_FORMAT = 1;
-const EXACT_TOKEN = /^PUBLIC_URL_REGISTRY_[A-Z0-9_]+$/;
+const PUBLIC_REFERENCE_NAMESPACES = [
+  PUBLIC_REFERENCE_NAMESPACE,
+  PUBLIC_IFRAME_NAMESPACE,
+];
+const EXACT_TOKEN = /^PUBLIC_URL_(?:REGISTRY|IFRAME)_[A-Z0-9_]+$/;
+const EXACT_IFRAME_TOKEN = /^PUBLIC_URL_IFRAME_[A-Z0-9_]+$/;
 const TOKEN_OCCURRENCE = /\{\{(PUBLIC_URL[^{}\s]*)\}\}/g;
 const PUBLIC_KEY_LOOKALIKE = /PUBLIC_URL(?:_[A-Za-z0-9]+)+/;
 const URL_CANDIDATE = /(?:\bhttps?:)?\/\/[^\s"'<>]+/gi;
@@ -301,12 +307,106 @@ function tokenBearingJsonBlocks(html) {
   return blocks;
 }
 
-function anchorTokenCarriers(html) {
+function registryAnchorTokenCarriers(html) {
   const carriers = [];
   for (const match of html.matchAll(/<a\b[^>]*>/gi)) {
     const tag = match[0];
-    const href = /\bhref\s*=\s*(["'])\{\{(PUBLIC_URL[^{}\s]*)\}\}\1/i.exec(tag);
+    const href = /\bhref\s*=\s*(["'])\{\{(PUBLIC_URL_REGISTRY_[A-Z0-9_]+)\}\}\1/i.exec(tag);
     if (href) carriers.push({ key: href[2] });
+  }
+  return carriers;
+}
+
+function attributeMatches(tag, name) {
+  const pattern = new RegExp(
+    `(?:^|\\s)${name}\\s*=\\s*(["'])([\\s\\S]*?)\\1`,
+    "gi",
+  );
+  return [...tag.matchAll(pattern)];
+}
+
+function assertLocalIframeFallback(value, key, safePath, attribute) {
+  if (
+    typeof value !== "string" ||
+    value === "" ||
+    value.trim() !== value ||
+    /[\x00-\x1F\x7F]/.test(value) ||
+    value.startsWith("//") ||
+    value.startsWith("#") ||
+    value.startsWith("?") ||
+    value.includes("&") ||
+    value.includes("\\") ||
+    /^[A-Za-z][A-Za-z0-9+.-]*:/.test(value) ||
+    value.includes("{{PUBLIC_URL")
+  ) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_IFRAME_FALLBACK",
+      `${key} needs one complete repository-local ${attribute} fallback in ${safePath}`,
+    );
+  }
+}
+
+function iframeTokenCarriers(html, safePath) {
+  const carriers = [];
+  for (const match of html.matchAll(/<([A-Za-z][A-Za-z0-9:-]*)\b[^>]*>/g)) {
+    const tag = match[0];
+    const tagName = match[1].toLowerCase();
+    const publicSrc = attributeMatches(tag, "data-public-src");
+    const publicHref = attributeMatches(tag, "data-public-href");
+    if (publicSrc.length === 0 && publicHref.length === 0) continue;
+
+    const expected =
+      tagName === "iframe"
+        ? {
+            publicMatches: publicSrc,
+            publicName: "data-public-src",
+            localName: "src",
+          }
+        : tagName === "a"
+          ? {
+              publicMatches: publicHref,
+              publicName: "data-public-href",
+              localName: "href",
+            }
+          : null;
+    const hasUnexpectedCarrier =
+      publicSrc.length + publicHref.length !== 1 ||
+      (tagName === "iframe" && publicHref.length > 0) ||
+      (tagName === "a" && publicSrc.length > 0);
+    if (!expected || hasUnexpectedCarrier) {
+      throw new PublicReferenceContractError(
+        "PUBLIC_REFERENCE_IFRAME_CARRIER",
+        `${safePath} pairs data-public-src with iframe src and data-public-href with anchor href`,
+      );
+    }
+
+    const publicValue = expected.publicMatches[0][2];
+    const token = /^\{\{(PUBLIC_URL[^{}\s]*)\}\}$/.exec(publicValue);
+    if (!token || !EXACT_IFRAME_TOKEN.test(token[1])) {
+      throw new PublicReferenceContractError(
+        "PUBLIC_REFERENCE_IFRAME_CARRIER",
+        `${safePath} carries each hosted iframe destination as one complete ${PUBLIC_IFRAME_NAMESPACE} token`,
+      );
+    }
+
+    const localMatches = attributeMatches(tag, expected.localName);
+    if (localMatches.length !== 1) {
+      throw new PublicReferenceContractError(
+        "PUBLIC_REFERENCE_IFRAME_FALLBACK",
+        `${token[1]} needs one complete repository-local ${expected.localName} fallback in ${safePath}`,
+      );
+    }
+    assertLocalIframeFallback(
+      localMatches[0][2],
+      token[1],
+      safePath,
+      expected.localName,
+    );
+    carriers.push({
+      key: token[1],
+      localFallback: localMatches[0][2],
+      tagName,
+    });
   }
   return carriers;
 }
@@ -324,25 +424,69 @@ export function inspectPublicReferenceHtml(html, safePath = "Context Canvas HTML
     if (!EXACT_TOKEN.test(token.key)) {
       throw new PublicReferenceContractError(
         "PUBLIC_REFERENCE_TOKEN_NAMESPACE",
-        `${safePath} contains a public-reference token outside ${PUBLIC_REFERENCE_NAMESPACE}`,
+        `${safePath} contains a public-reference token outside ${PUBLIC_REFERENCE_NAMESPACES.join(" or ")}`,
       );
     }
   }
 
-  const anchors = anchorTokenCarriers(html);
+  const registryAnchors = registryAnchorTokenCarriers(html);
+  const iframeCarriers = iframeTokenCarriers(html, safePath);
   const jsonBlocks = tokenBearingJsonBlocks(html);
   const jsonCarriers = jsonBlocks.flatMap((block) => block.carriers);
-  const carrierCount = anchors.length + jsonCarriers.length;
+  const carrierCount =
+    registryAnchors.length + iframeCarriers.length + jsonCarriers.length;
 
   if (carrierCount !== tokens.length) {
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_TOKEN_CARRIER",
-      `${safePath} must carry each public-reference token as a complete anchor href or JSON-LD string value`,
+      `${safePath} must carry each public-reference token as a complete Registry anchor, hosted iframe data carrier, or JSON-LD string value`,
     );
   }
 
+  const embeddedIframeKeys = new Set(
+    iframeCarriers
+      .filter((carrier) => carrier.tagName === "iframe")
+      .map((carrier) => carrier.key),
+  );
+  const fullViewIframeKeys = new Set(
+    iframeCarriers
+      .filter((carrier) => carrier.tagName === "a")
+      .map((carrier) => carrier.key),
+  );
+  const iframeKeys = new Set([
+    ...embeddedIframeKeys,
+    ...fullViewIframeKeys,
+  ]);
+  for (const key of iframeKeys) {
+    if (!embeddedIframeKeys.has(key) || !fullViewIframeKeys.has(key)) {
+      throw new PublicReferenceContractError(
+        "PUBLIC_REFERENCE_IFRAME_KEY_MISMATCH",
+        `${key} must identify both the hosted iframe and its full-view anchor in ${safePath}`,
+      );
+    }
+    const localFallbacks = new Set(
+      iframeCarriers
+        .filter((carrier) => carrier.key === key)
+        .map((carrier) => carrier.localFallback),
+    );
+    if (localFallbacks.size !== 1) {
+      throw new PublicReferenceContractError(
+        "PUBLIC_REFERENCE_IFRAME_FALLBACK",
+        `${key} must use the same repository-local fallback for its iframe and full-view anchor in ${safePath}`,
+      );
+    }
+  }
+  for (const carrier of jsonCarriers) {
+    if (EXACT_IFRAME_TOKEN.test(carrier.key) && !iframeKeys.has(carrier.key)) {
+      throw new PublicReferenceContractError(
+        "PUBLIC_REFERENCE_IFRAME_KEY_MISMATCH",
+        `${carrier.key} appears in JSON-LD without a matching hosted iframe carrier in ${safePath}`,
+      );
+    }
+  }
+
   const withoutExactTokens = html.replace(
-    /\{\{PUBLIC_URL_REGISTRY_[A-Z0-9_]+\}\}/g,
+    /\{\{PUBLIC_URL_(?:REGISTRY|IFRAME)_[A-Z0-9_]+\}\}/g,
     "",
   );
   if (PUBLIC_KEY_LOOKALIKE.test(withoutExactTokens)) {
@@ -366,7 +510,12 @@ export function inspectPublicReferenceHtml(html, safePath = "Context Canvas HTML
   return {
     keys: new Set(tokens.map((token) => token.key)),
     occurrenceCount: tokens.length,
-    anchorCount: anchors.length,
+    anchorCount:
+      registryAnchors.length +
+      iframeCarriers.filter((carrier) => carrier.tagName === "a").length,
+    iframeCount: iframeCarriers.filter(
+      (carrier) => carrier.tagName === "iframe",
+    ).length,
     jsonLdCount: jsonCarriers.length,
   };
 }
@@ -391,6 +540,7 @@ async function inventoryTree(sourceRoot, htmlRoot) {
   const keys = new Set();
   let occurrenceCount = 0;
   let anchorCount = 0;
+  let iframeCount = 0;
   let jsonLdCount = 0;
 
   async function visit(directory) {
@@ -452,6 +602,7 @@ async function inventoryTree(sourceRoot, htmlRoot) {
       htmlFiles.push({ path, safePath, inspection, source: html });
       occurrenceCount += inspection.occurrenceCount;
       anchorCount += inspection.anchorCount;
+      iframeCount += inspection.iframeCount;
       jsonLdCount += inspection.jsonLdCount;
       for (const key of inspection.keys) keys.add(key);
     }
@@ -479,6 +630,7 @@ async function inventoryTree(sourceRoot, htmlRoot) {
     keys,
     occurrenceCount,
     anchorCount,
+    iframeCount,
     jsonLdCount,
   };
 }
@@ -571,6 +723,63 @@ function validateDestination(key, value) {
   return url.href;
 }
 
+function validateIframeDestination(key, value) {
+  const normalized = validateDestination(key, value);
+  const url = new URL(normalized);
+  const authority = /^https:\/\/([^/?#]+)/i.exec(value)?.[1] ?? "";
+
+  if (url.hostname !== "iframes.vik.guru") {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_IFRAME_HOST",
+      `${key} must use the approved iframes.vik.guru host`,
+    );
+  }
+  if (authority.includes(":")) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_IFRAME_PORT",
+      `${key} must use the host's standard HTTPS port without an explicit port`,
+    );
+  }
+  if (value.includes("?") || value.includes("#")) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_IFRAME_ROUTE",
+      `${key} must use a path-only hosted iframe destination`,
+    );
+  }
+  if (normalized !== value) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_IFRAME_ROUTE",
+      `${key} must use an already-normalized hosted iframe destination`,
+    );
+  }
+
+  const pathSegments = url.pathname.slice(1, -1).split("/");
+  const hasVersionedRoute =
+    url.pathname.endsWith("/") &&
+    pathSegments[0] === "v1" &&
+    pathSegments.length === 3 &&
+    /^[a-z0-9]+$/.test(pathSegments[1]) &&
+    /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(pathSegments[2]);
+  if (!hasVersionedRoute) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_IFRAME_ROUTE",
+      `${key} must use one normalized /v1/{family}/{route}/ destination with a trailing slash`,
+    );
+  }
+
+  const expectedKey = `${PUBLIC_IFRAME_NAMESPACE}${pathSegments
+    .slice(1)
+    .map((segment) => segment.replaceAll("-", "_").toUpperCase())
+    .join("_")}`;
+  if (key !== expectedKey) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_IFRAME_KEY_MISMATCH",
+      `${key} does not match its configured hosted iframe route`,
+    );
+  }
+  return normalized;
+}
+
 async function resolveConfiguration(keys, configPath, environment) {
   let fileSource = "";
   try {
@@ -604,12 +813,17 @@ async function resolveConfiguration(keys, configPath, environment) {
   }
 
   const outsideNamespace = [...assignmentInfo.assignments]
-    .filter((key) => !key.startsWith(PUBLIC_REFERENCE_NAMESPACE))
+    .filter(
+      (key) =>
+        !PUBLIC_REFERENCE_NAMESPACES.some((namespace) =>
+          key.startsWith(namespace),
+        ),
+    )
     .sort();
   if (outsideNamespace.length > 0) {
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_CONFIG_NAMESPACE",
-      `the configuration includes public keys outside ${PUBLIC_REFERENCE_NAMESPACE}: ${outsideNamespace.join(", ")}`,
+      `the configuration includes public keys outside ${PUBLIC_REFERENCE_NAMESPACES.join(" or ")}: ${outsideNamespace.join(", ")}`,
     );
   }
 
@@ -617,7 +831,12 @@ async function resolveConfiguration(keys, configPath, environment) {
   for (const key of [...keys].sort()) {
     const processValue = Object.hasOwn(environment, key) ? environment[key] : undefined;
     const value = processValue === undefined ? fileValues[key] : processValue;
-    resolved.set(key, validateDestination(key, value));
+    resolved.set(
+      key,
+      key.startsWith(PUBLIC_IFRAME_NAMESPACE)
+        ? validateIframeDestination(key, value)
+        : validateDestination(key, value),
+    );
   }
   return resolved;
 }
@@ -636,6 +855,16 @@ function jsonStringForHtml(value) {
   return JSON.stringify(value).replaceAll("<", "\\u003C");
 }
 
+function replaceHtmlAttribute(tag, name, value) {
+  const pattern = new RegExp(
+    `(\\s${name}\\s*=\\s*)(["'])([\\s\\S]*?)\\2`,
+    "i",
+  );
+  return tag.replace(pattern, (_carrier, prefix, quote) =>
+    `${prefix}${quote}${escapeHtmlAttribute(value, quote)}${quote}`,
+  );
+}
+
 export function materializePublicReferenceHtml(
   html,
   destinations,
@@ -643,6 +872,7 @@ export function materializePublicReferenceHtml(
 ) {
   const expected = inspectPublicReferenceHtml(html, safePath);
   let anchorCount = 0;
+  let iframeCount = 0;
   let jsonLdCount = 0;
 
   let materialized = html.replace(/<a\b[^>]*>/gi, (tag) =>
@@ -663,11 +893,43 @@ export function materializePublicReferenceHtml(
   );
 
   materialized = materialized.replace(
+    /<(iframe|a)\b[^>]*>/gi,
+    (tag, rawTagName) => {
+      const tagName = rawTagName.toLowerCase();
+      const publicName =
+        tagName === "iframe" ? "data-public-src" : "data-public-href";
+      const localName = tagName === "iframe" ? "src" : "href";
+      const publicMatches = attributeMatches(tag, publicName);
+      if (publicMatches.length === 0) return tag;
+
+      const token = /^\{\{(PUBLIC_URL_IFRAME_[A-Z0-9_]+)\}\}$/.exec(
+        publicMatches[0][2],
+      );
+      const key = token?.[1];
+      const value = key === undefined ? undefined : destinations.get(key);
+      if (value === undefined) {
+        throw new PublicReferenceContractError(
+          "PUBLIC_REFERENCE_VALUE_MISSING",
+          `${key ?? PUBLIC_IFRAME_NAMESPACE} needs an approved destination before ${safePath} can materialize`,
+        );
+      }
+
+      if (tagName === "iframe") iframeCount += 1;
+      else anchorCount += 1;
+      return replaceHtmlAttribute(
+        replaceHtmlAttribute(tag, localName, value),
+        publicName,
+        value,
+      );
+    },
+  );
+
+  materialized = materialized.replace(
     /(<script\b[^>]*\btype\s*=\s*(["'])application\/ld\+json\2[^>]*>)([\s\S]*?)(<\/script>)/gi,
     (script, open, _quote, body, close) => {
       if (!body.includes("PUBLIC_URL")) return script;
       const transformed = body.replace(
-        /"\{\{(PUBLIC_URL_REGISTRY_[A-Z0-9_]+)\}\}"/g,
+        /"\{\{(PUBLIC_URL_(?:REGISTRY|IFRAME)_[A-Z0-9_]+)\}\}"/g,
         (carrier, key) => {
           const value = destinations.get(key);
           if (value === undefined) {
@@ -700,11 +962,12 @@ export function materializePublicReferenceHtml(
   }
   if (
     anchorCount !== expected.anchorCount ||
+    iframeCount !== expected.iframeCount ||
     jsonLdCount !== expected.jsonLdCount
   ) {
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_CARRIER_COUNT",
-      `${safePath} did not materialize every accepted anchor and JSON-LD carrier`,
+      `${safePath} did not materialize every accepted anchor, iframe, and JSON-LD carrier`,
     );
   }
 
@@ -883,6 +1146,7 @@ export async function materializePublicReferences({
     keyCount: inventory.keys.size,
     occurrenceCount: inventory.occurrenceCount,
     anchorCount: inventory.anchorCount,
+    iframeCount: inventory.iframeCount,
     jsonLdCount: inventory.jsonLdCount,
     keys: [...inventory.keys].sort(),
   };
@@ -897,6 +1161,7 @@ Usage:
 Inputs:
   .env.public                 optional ignored file
   PUBLIC_URL_REGISTRY_*       process values override matching file values
+  PUBLIC_URL_IFRAME_*         approved iframes.vik.guru/v1/ route values
 
 Output:
   .public-reference-build/context-canvas-project-surface

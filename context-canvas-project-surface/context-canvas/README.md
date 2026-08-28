@@ -92,6 +92,13 @@ neighboring explanation, and semantic key keep the source legible before a
 public build; materialization supplies the ordinary external link. Direct
 Notion page routes stay outside this authored visitor tree.
 
+Hosted iframe carriers use `PUBLIC_URL_IFRAME_*` keys in explicit
+`data-public-src` and `data-public-href` attributes. Their ordinary `src` and
+`href` attributes remain complete repository-local fallbacks, so the authored
+page and its full-view route continue to work without hosted configuration.
+The generated page resolves both carrier twins to one approved
+`https://iframes.vik.guru/v1/.../` destination.
+
 The accepted Notion boundary is concise: only the Enterprise Human-AI
 Practitioner Registry root and its descendants are public-possible. A key name
 expresses that scope but cannot prove ancestry, content standing, or anonymous
@@ -112,9 +119,12 @@ entry, which keeps the same build seam available to a later delivery receiver.
 The materializer never prints configured values. It rejects incomplete,
 malformed, non-HTTPS, userinfo-bearing, recognized credential-parameter,
 duplicate, or out-of-namespace public settings before replacing an accepted
-generation. Unused Registry-scoped settings remain additive; authored HTML
-continues to define the required set. Human review keeps path-shaped access
-coordinates and unfamiliar signing conventions outside approved destinations.
+generation. Hosted iframe routes additionally carry their approved host,
+versioned path, trailing slash, and matching semantic key without an explicit
+port, query, or fragment. Unused scoped settings remain additive; authored
+HTML continues to define the required set. Human review keeps path-shaped
+access coordinates and unfamiliar signing conventions outside approved
+Registry destinations.
 
 The ignored output is
 `.public-reference-build/context-canvas-project-surface/`. The builder copies

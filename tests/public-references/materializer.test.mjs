@@ -14,6 +14,7 @@ import { dirname, join, win32 } from "node:path";
 import test from "node:test";
 
 import {
+  PUBLIC_IFRAME_NAMESPACE,
   PUBLIC_REFERENCE_NAMESPACE,
   PUBLIC_REFERENCE_SOURCE,
   inspectPublicReferenceSource,
@@ -23,6 +24,8 @@ import {
 
 const PRIMARY_KEY = "PUBLIC_URL_REGISTRY_EXAMPLE_READING";
 const SECONDARY_KEY = "PUBLIC_URL_REGISTRY_SECOND_READING";
+const IFRAME_KEY = "PUBLIC_URL_IFRAME_CORE_HEART_CHART";
+const IFRAME_ROUTE = "https://iframes.vik.guru/v1/core/heart-chart/";
 const APP_NOTION_HOST = ["app", "notion", "com"].join(".");
 const WORKSPACE_NOTION_HOST = ["workspace", "notion", "so"].join(".");
 const SITE_NOTION_HOST = ["registry-example", "notion", "site"].join(".");
@@ -51,6 +54,17 @@ function pageWithTwin(key = PRIMARY_KEY) {
 <html>
   <body><a href="{{${key}}}">Read the public orientation</a></body>
   <script type="application/ld+json">{"citation":"{{${key}}}"}</script>
+</html>\n`;
+}
+
+function pageWithIframeTwins(key = IFRAME_KEY) {
+  const local = "prototypes/core/heart-chart.html";
+  return `<!doctype html>
+<html>
+  <body>
+    <iframe src="${local}" data-public-src="{{${key}}}" title="HEART Chart"></iframe>
+    <a href="${local}" data-public-href="{{${key}}}">Open HEART Chart</a>
+  </body>
 </html>\n`;
 }
 
@@ -126,6 +140,58 @@ test("materializes one resolved value into HTML and JSON-LD without changing sou
   const [jsonLd] = jsonLdBodies(generated).map((body) => JSON.parse(body));
   assert.equal(jsonLd.citation, approved);
   assert.deepEqual(await readFile(join(paths.outputRoot, "asset.bin")), asset);
+});
+
+test("materializes paired hosted iframe carriers while authored local fallbacks stay intact", async (t) => {
+  const source = pageWithIframeTwins();
+  const paths = await fixture(t, source);
+
+  const result = await materializePublicReferences({
+    ...paths,
+    environment: { [IFRAME_KEY]: IFRAME_ROUTE },
+  });
+
+  assert.equal(result.keyCount, 1);
+  assert.equal(result.occurrenceCount, 2);
+  assert.equal(result.anchorCount, 1);
+  assert.equal(result.iframeCount, 1);
+  assert.deepEqual(result.keys, [IFRAME_KEY]);
+  assert.equal(await readFile(join(paths.htmlRoot, "index.html"), "utf8"), source);
+
+  const generated = await readFile(
+    join(paths.outputRoot, "context-canvas", "index.html"),
+    "utf8",
+  );
+  assert.match(generated, /src="https:\/\/iframes\.vik\.guru\/v1\/core\/heart-chart\/"/);
+  assert.match(generated, /data-public-src="https:\/\/iframes\.vik\.guru\/v1\/core\/heart-chart\/"/);
+  assert.match(generated, /href="https:\/\/iframes\.vik\.guru\/v1\/core\/heart-chart\/"/);
+  assert.match(generated, /data-public-href="https:\/\/iframes\.vik\.guru\/v1\/core\/heart-chart\/"/);
+  assert.equal(generated.includes("{{PUBLIC_URL"), false);
+});
+
+test("keeps an iframe destination aligned across embed, full-view, and JSON-LD carriers", async (t) => {
+  const source = pageWithIframeTwins().replace(
+    "  </body>",
+    `    <script type="application/ld+json">{"contentUrl":"{{${IFRAME_KEY}}}"}</script>\n  </body>`,
+  );
+  const paths = await fixture(t, source);
+
+  const result = await materializePublicReferences({
+    ...paths,
+    environment: { [IFRAME_KEY]: IFRAME_ROUTE },
+  });
+  assert.equal(result.occurrenceCount, 3);
+  assert.equal(result.anchorCount, 1);
+  assert.equal(result.iframeCount, 1);
+  assert.equal(result.jsonLdCount, 1);
+
+  const generated = await readFile(
+    join(paths.outputRoot, "context-canvas", "index.html"),
+    "utf8",
+  );
+  assert.deepEqual(jsonLdBodies(generated).map((body) => JSON.parse(body)), [
+    { contentUrl: IFRAME_ROUTE },
+  ]);
 });
 
 test("treats a different Windows drive as a separate tree", () => {
@@ -230,7 +296,123 @@ test("rejects unsuitable destinations without echoing their values", async (t) =
   }
 });
 
-test("accepts only Registry tokens in complete anchor or JSON-LD carriers", async (t) => {
+test("rejects hosted iframe destinations outside their exact route contract", async (t) => {
+  const cases = [
+    ["http://iframes.vik.guru/v1/core/heart-chart/", "PUBLIC_REFERENCE_VALUE_PROTOCOL"],
+    [
+      "https://reader:private-value@iframes.vik.guru/v1/core/heart-chart/",
+      "PUBLIC_REFERENCE_VALUE_CREDENTIAL",
+    ],
+    [
+      "https://iframes.vik.guru:8443/v1/core/heart-chart/",
+      "PUBLIC_REFERENCE_IFRAME_PORT",
+    ],
+    [
+      "https://iframes.vik.guru:443/v1/core/heart-chart/",
+      "PUBLIC_REFERENCE_IFRAME_PORT",
+    ],
+    ["https://cdn.vik.guru/v1/core/heart-chart/", "PUBLIC_REFERENCE_IFRAME_HOST"],
+    ["https://iframes.vik.guru/cdn-raster/heart-chart/", "PUBLIC_REFERENCE_IFRAME_ROUTE"],
+    ["https://iframes.vik.guru/v1/core/heart-chart", "PUBLIC_REFERENCE_IFRAME_ROUTE"],
+    [
+      "https://iframes.vik.guru/v1/core/../core/heart-chart/",
+      "PUBLIC_REFERENCE_IFRAME_ROUTE",
+    ],
+    ["https://iframes.vik.guru/v1/core/heart/chart/", "PUBLIC_REFERENCE_IFRAME_ROUTE"],
+    [
+      "https://iframes.vik.guru/v1/core/heart-chart/?width=960",
+      "PUBLIC_REFERENCE_IFRAME_ROUTE",
+    ],
+    [
+      "https://iframes.vik.guru/v1/core/heart-chart/#detail",
+      "PUBLIC_REFERENCE_IFRAME_ROUTE",
+    ],
+    [
+      "https://iframes.vik.guru/v1/core/strategy-canvas/",
+      "PUBLIC_REFERENCE_IFRAME_KEY_MISMATCH",
+    ],
+  ];
+
+  for (const [value, code] of cases) {
+    await t.test(code, async (t) => {
+      const paths = await fixture(t, pageWithIframeTwins());
+      await assertContractFailure(
+        materializePublicReferences({
+          ...paths,
+          environment: { [IFRAME_KEY]: value },
+        }),
+        code,
+        value,
+      );
+    });
+  }
+});
+
+test("requires explicit hosted iframe carriers and complete local fallbacks", async (t) => {
+  const cases = [
+    [
+      `<iframe data-public-src="{{${IFRAME_KEY}}}" title="HEART Chart"></iframe>`,
+      "PUBLIC_REFERENCE_IFRAME_FALLBACK",
+    ],
+    [
+      `<a href="prototypes/core/heart-chart.html" data-public-src="{{${IFRAME_KEY}}}">Open</a>`,
+      "PUBLIC_REFERENCE_IFRAME_CARRIER",
+    ],
+    [
+      `<iframe src="https://example.test/heart-chart.html" data-public-src="{{${IFRAME_KEY}}}"></iframe>`,
+      "PUBLIC_REFERENCE_IFRAME_FALLBACK",
+    ],
+    [
+      `<iframe src="javascript&#58;alert(1)" data-public-src="{{${IFRAME_KEY}}}"></iframe>`,
+      "PUBLIC_REFERENCE_IFRAME_FALLBACK",
+    ],
+    [
+      `<iframe src="prototypes/core/heart-chart.html" data-public-src="${IFRAME_KEY}"></iframe>`,
+      "PUBLIC_REFERENCE_IFRAME_CARRIER",
+    ],
+    [
+      `<iframe src="prototypes/core/heart-chart.html" data-public-src="{{${PRIMARY_KEY}}}"></iframe>`,
+      "PUBLIC_REFERENCE_IFRAME_CARRIER",
+    ],
+    [
+      `<iframe src="prototypes/core/heart-chart.html" data-public-src="{{${IFRAME_KEY}}}"></iframe>`,
+      "PUBLIC_REFERENCE_IFRAME_KEY_MISMATCH",
+    ],
+    [
+      `<a href="prototypes/core/heart-chart.html" data-public-href="{{${IFRAME_KEY}}}">Open</a>`,
+      "PUBLIC_REFERENCE_IFRAME_KEY_MISMATCH",
+    ],
+    [
+      `<iframe src="prototypes/core/heart-chart.html" data-public-src="{{${IFRAME_KEY}}}"></iframe>
+       <a href="prototypes/core/strategy-canvas.html" data-public-href="{{PUBLIC_URL_IFRAME_CORE_STRATEGY_CANVAS}}">Open</a>`,
+      "PUBLIC_REFERENCE_IFRAME_KEY_MISMATCH",
+    ],
+    [
+      `<iframe src="prototypes/core/heart-chart.html" data-public-src="{{${IFRAME_KEY}}}"></iframe>
+       <a href="prototypes/core/other-chart.html" data-public-href="{{${IFRAME_KEY}}}">Open</a>`,
+      "PUBLIC_REFERENCE_IFRAME_FALLBACK",
+    ],
+    [
+      `<script type="application/ld+json">{"contentUrl":"{{${IFRAME_KEY}}}"}</script>`,
+      "PUBLIC_REFERENCE_IFRAME_KEY_MISMATCH",
+    ],
+  ];
+
+  for (const [html, code] of cases) {
+    await t.test(code, async (t) => {
+      const paths = await fixture(t, html);
+      await assertContractFailure(
+        materializePublicReferences({
+          ...paths,
+          environment: { [IFRAME_KEY]: IFRAME_ROUTE },
+        }),
+        code,
+      );
+    });
+  }
+});
+
+test("accepts only scoped public tokens in their complete carriers", async (t) => {
   const cases = [
     [
       '<a href="{{PUBLIC_URL_OTHER_READING}}">Reading</a>',
@@ -357,7 +539,7 @@ test("rejects ambiguous file configuration while ignoring unrelated process valu
     );
   });
 
-  await t.test("public key outside the Registry namespace", async (t) => {
+  await t.test("public key outside the supported namespaces", async (t) => {
     const paths = await fixture(t, pageWithTwin());
     await writeFile(
       paths.configPath,
@@ -541,8 +723,65 @@ test("the repository source materializes from discovered keys without frozen rou
   assert.ok(inventory.keys.size > 0);
   assert.ok(inventory.occurrenceCount > 0);
   for (const key of inventory.keys) {
-    assert.equal(key.startsWith(PUBLIC_REFERENCE_NAMESPACE), true);
+    assert.equal(
+      key.startsWith(PUBLIC_REFERENCE_NAMESPACE) ||
+        key.startsWith(PUBLIC_IFRAME_NAMESPACE),
+      true,
+    );
   }
+  assert.equal(inventory.keys.has(IFRAME_KEY), true);
+  assert.equal(inventory.iframeCount, 1);
+
+  const repositoryRoot = dirname(PUBLIC_REFERENCE_SOURCE);
+  const routeManifest = JSON.parse(
+    await readFile(
+      join(
+        repositoryRoot,
+        "core-architectures-chimeric-prototype-current-pack-v0.1",
+        "public-iframe-route-manifest-v1.json",
+      ),
+      "utf8",
+    ),
+  );
+  const heartRoute = routeManifest.routes.find((route) => route.id === "heart-chart");
+  assert.ok(heartRoute);
+  assert.equal(
+    `https://${routeManifest.host}${heartRoute.public_alias}`,
+    IFRAME_ROUTE,
+  );
+  const expectedLocalFallback =
+    `prototypes/core-architectures/chimeric-pack-v0.1/${heartRoute.source_file}`;
+  const escapedLocalFallback = expectedLocalFallback.replace(
+    /[.*+?^${}()|[\]\\]/g,
+    "\\$&",
+  );
+  const carrierSource = await readFile(
+    join(
+      PUBLIC_REFERENCE_SOURCE,
+      "context-canvas/core-architectures-orientation-index.html",
+    ),
+    "utf8",
+  );
+  assert.match(
+    carrierSource,
+    new RegExp(
+      `src=["']${escapedLocalFallback}["'][^>]*data-public-src=["']\\{\\{${IFRAME_KEY}\\}\\}["']`,
+    ),
+  );
+  assert.match(
+    carrierSource,
+    new RegExp(
+      `href=["']${escapedLocalFallback}["'][^>]*data-public-href=["']\\{\\{${IFRAME_KEY}\\}\\}["']`,
+    ),
+  );
+  await readFile(
+    join(
+      PUBLIC_REFERENCE_SOURCE,
+      "context-canvas",
+      expectedLocalFallback,
+    ),
+    "utf8",
+  );
 
   const example = await readFile(
     join(dirname(PUBLIC_REFERENCE_SOURCE), ".env.public.example"),
@@ -566,7 +805,9 @@ test("the repository source materializes from discovered keys without frozen rou
   const environment = Object.fromEntries(
     [...inventory.keys].map((key) => [
       key,
-      `https://registry.example/readings/${key.slice(PUBLIC_REFERENCE_NAMESPACE.length).toLowerCase()}`,
+      key.startsWith(PUBLIC_IFRAME_NAMESPACE)
+        ? IFRAME_ROUTE
+        : `https://registry.example/readings/${key.slice(PUBLIC_REFERENCE_NAMESPACE.length).toLowerCase()}`,
     ]),
   );
   const outputRoot = join(root, "context-canvas-project-surface");
