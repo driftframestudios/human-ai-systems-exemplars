@@ -104,6 +104,13 @@ page and its full-view route continue to work without hosted configuration.
 The generated page resolves both carrier twins to one approved
 `https://iframes.vik.guru/v1/.../` destination.
 
+The authored iframe keeps the behavioral boundary visible: a contextual
+title, intentional lazy loading, an explicit sandbox, a route-matched narrow
+Permissions Policy when needed, and `referrerpolicy="no-referrer"`. The
+materializer validates those attributes and changes only the paired URL
+values. This leaves a cold-start collaborator able to inspect the source and
+see the same carrier policy that reaches the generated visitor surface.
+
 The accepted Notion boundary is concise: only the Enterprise Human-AI
 Practitioner Registry root and its descendants are public-possible. A key name
 expresses that scope but cannot prove ancestry, content standing, or anonymous

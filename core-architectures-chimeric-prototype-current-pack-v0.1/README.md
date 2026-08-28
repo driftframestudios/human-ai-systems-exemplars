@@ -47,6 +47,16 @@ It keeps four relations separate: authored source identity, transferable route
 projection, per-route activation standing, and live delivery. Forming the
 package does not activate a route.
 
+The same manifest carries each route's minimal carrier policy. The scriptless
+pack hub uses an empty sandbox. A prototype with executable behavior grants
+`allow-scripts`, and a route that writes clipboard text delegates only the
+`clipboard-write` Permissions Policy feature. Native browser dialogs remain a
+held capability while each affected route moves toward an ordinary inline
+notice, input, or confirmation; that replacement establishes interaction
+parity while the carrier keeps the smaller sandbox. The policy vocabulary is
+intentionally narrow, so a newly observed capability returns to source review
+and an explicit contract revision before activation.
+
 Build the ignored, dependency-free projection:
 
 ```sh
@@ -58,7 +68,9 @@ prototype becomes its route-local `index.html` without changing its bytes. The
 hub alone receives projection-local links to its 21 sibling routes and
 `manifest.json`. A deterministic `route-manifest.json` records source and
 projection digests, static-resource evidence, activation standing, and
-unresolved user-activated local navigation.
+unresolved user-activated local navigation. It also records the observed
+runtime capabilities beside the exact carrier policy, making policy drift
+visible in the upload-ready receipt.
 
 Verify the complete package in a temporary directory without retaining output:
 

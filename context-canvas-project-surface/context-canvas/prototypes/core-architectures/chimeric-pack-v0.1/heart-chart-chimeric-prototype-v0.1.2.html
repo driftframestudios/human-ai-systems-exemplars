@@ -366,6 +366,7 @@
         <button type="button" data-action="show-all">Show all rows</button>
         <button type="button" data-action="reset-order" class="secondary">Reset row order</button>
       </div>
+      <p id="rowActionMessage" class="note" role="status" aria-live="polite" aria-atomic="true"></p>
       <div class="legend" aria-label="Status legend">
         <span class="status-chip status-known">known</span>
         <span class="status-chip status-assumed">assumed</span>
@@ -395,6 +396,7 @@
           <div class="controls">
             <button type="button" data-action="copy-json">Copy JSON</button>
           </div>
+          <p id="jsonCopyMessage" class="note" role="status" aria-live="polite" aria-atomic="true"></p>
           <textarea id="jsonExport" class="export-area" aria-label="JSON export"></textarea>
         </div>
         <div>
@@ -413,6 +415,7 @@
       <h2 id="jsonld-title">JSON-LD</h2>
       <p class="note">Local Core Architecture vocabulary is used first, with schema.org as an outward compatibility layer.</p>
       <div class="controls"><button type="button" data-action="copy-jsonld">Copy JSON-LD</button></div>
+      <p id="jsonLdCopyMessage" class="note" role="status" aria-live="polite" aria-atomic="true"></p>
       <textarea id="jsonLdExport" class="export-area" aria-label="JSON-LD export"></textarea>
       <script id="embedded-jsonld" type="application/ld+json"></script>
     </section>
@@ -421,6 +424,7 @@
       <h2 id="ai-title">AI Collaboration Prompt Capsule</h2>
       <p class="note">This full prompt remains visible for manual copy. It includes visible/hidden row scope and the probability-of-what instruction.</p>
       <div class="controls"><button type="button" data-action="copy-prompt">Copy AI prompt</button></div>
+      <p id="promptCopyMessage" class="note" role="status" aria-live="polite" aria-atomic="true"></p>
       <textarea id="aiPrompt" class="prompt-area" aria-label="AI collaboration prompt"></textarea>
     </section>
 
@@ -518,6 +522,7 @@
   const esc = (s) => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
   let addLock = false;
+  let pendingRemovalId = '';
   let data = seedData();
   normalizeData(data);
 
@@ -717,7 +722,7 @@
           <button type="button" data-action="move-down" data-row-id="${esc(r.id)}" ${idx===total-1?'disabled':''}>Move later</button>
           <button type="button" data-action="select-row" data-row-id="${esc(r.id)}">Inspect</button>
           <button type="button" data-action="hide-row" data-row-id="${esc(r.id)}">Hide</button>
-          <button type="button" data-action="remove-row" data-row-id="${esc(r.id)}" class="danger">Remove</button>
+          <button type="button" data-action="remove-row" data-row-id="${esc(r.id)}" class="danger">${pendingRemovalId===r.id?'Confirm removal':'Remove'}</button>
         </div>
         <p class="small">ID: <code>${esc(r.id)}</code></p>
       </td>
@@ -998,11 +1003,32 @@
     const r = {id, canonical_order:data.rows.length+1, category:'Task Success', goal:'New goal to calibrate.', signal:'Signal to detect.', metric:'Metric proxy.', interpretation:'Interpret metric movement in context.', tolerance:'Acceptable range or tradeoff.', counter_signal:'Evidence that could make the metric misleading.', qualitative_companion:'Plus / Delta or field observation companion.', status:'assumed', handoff:'HEART Chart', custom_route:'', reason:'New row needs calibration.'};
     data.rows.push(r); activeView().row_order.push(id); activeView().selected_row_id = id; render();
   }
+  function clearPendingRemoval(){
+    if(!pendingRemovalId) return;
+    pendingRemovalId = '';
+    document.querySelectorAll('[data-action="remove-row"]').forEach(button=>{ button.textContent = 'Remove'; });
+    document.getElementById('rowActionMessage').textContent = 'Removal confirmation cleared. The current rows remain available.';
+  }
   function removeRow(id){
-    if(!confirm('Remove this HEART row? This is permanent deletion.')) return;
+    const message = document.getElementById('rowActionMessage');
+    const row = data.rows.find(r=>r.id===id);
+    if(pendingRemovalId !== id){
+      pendingRemovalId = id;
+      renderEditTable();
+      [...document.querySelectorAll('[data-action="remove-row"]')].find(candidate=>candidate.dataset.rowId===id)?.focus();
+      message.textContent = `Select Confirm removal to remove ${row?.category || 'this HEART'} row. The current row remains available until then.`;
+      return;
+    }
+    const visible = visibleRows();
+    const index = visible.findIndex(candidate=>candidate.id===id);
+    const focusId = visible[index+1]?.id || visible[index-1]?.id || '';
+    pendingRemovalId = '';
     data.rows = data.rows.filter(r=>r.id!==id);
     const v=activeView(); v.row_order = v.row_order.filter(x=>x!==id); v.hidden_row_ids = v.hidden_row_ids.filter(x=>x!==id); if(v.selected_row_id===id) v.selected_row_id = data.rows[0]?.id || '';
     render();
+    message.textContent = `${row?.category || 'HEART'} row removed. The JSON and JSON-LD exports now reflect the current chart.`;
+    const focusTarget = [...document.querySelectorAll('[data-action="remove-row"]')].find(candidate=>candidate.dataset.rowId===focusId) || document.querySelector('[data-action="add-row"]');
+    focusTarget?.focus();
   }
   function resetOrder(){ const v=activeView(); v.row_order = [...data.rows].sort((a,b)=>a.canonical_order-b.canonical_order).map(r=>r.id); render(); }
 
@@ -1010,6 +1036,7 @@
     const btn = e.target.closest('button[data-action]'); if(!btn) return;
     e.preventDefault();
     const a = btn.dataset.action, id = btn.dataset.rowId;
+    if(a!=='remove-row') clearPendingRemoval();
     if(a==='add-row') addRow();
     if(a==='show-all'){ activeView().hidden_row_ids=[]; render(); }
     if(a==='reset-order') resetOrder();
@@ -1020,16 +1047,18 @@
     if(a==='select-row') selectRow(id);
     if(a==='remove-row') removeRow(id);
     if(a==='toggle-full') toggleFull(btn);
-    if(a==='copy-json') copyText(document.getElementById('jsonExport').value, 'JSON copied.');
-    if(a==='copy-jsonld') copyText(document.getElementById('jsonLdExport').value, 'JSON-LD copied.');
-    if(a==='copy-prompt') copyText(document.getElementById('aiPrompt').value, 'AI prompt copied.');
+    if(a==='copy-json') copyText(document.getElementById('jsonExport').value, 'JSON copied.', 'jsonCopyMessage');
+    if(a==='copy-jsonld') copyText(document.getElementById('jsonLdExport').value, 'JSON-LD copied.', 'jsonLdCopyMessage');
+    if(a==='copy-prompt') copyText(document.getElementById('aiPrompt').value, 'AI prompt copied.', 'promptCopyMessage');
     if(a==='import-json') importJson(document.getElementById('jsonImport').value);
   });
   document.addEventListener('input', (e)=>{
+    clearPendingRemoval();
     const el = e.target; if(!el.dataset || !el.dataset.field) return;
     updateRow(el.dataset.rowId, el.dataset.field, el.value);
   });
   document.getElementById('jsonFile').addEventListener('change', async (e)=>{
+    clearPendingRemoval();
     const file = e.target.files[0]; if(!file) return;
     const text = await file.text(); document.getElementById('jsonImport').value = text; importJson(text);
   });
@@ -1082,9 +1111,10 @@
       message.textContent = 'HEART Chart imported. Row identity, order, focus state, signals, metrics, and routes are available.';
     } catch(err){ message.textContent = 'The current HEART Chart remains available. Supply a complete HEART Chart export to continue: ' + err.message; }
   }
-  async function copyText(text,msg){
-    try { await navigator.clipboard.writeText(text); alert(msg); }
-    catch(e){ alert('Copy was not available in this browser. The text remains visible for manual copy.'); }
+  async function copyText(text,msg,messageId){
+    const message = document.getElementById(messageId);
+    try { await navigator.clipboard.writeText(text); message.textContent = msg; }
+    catch(e){ message.textContent = 'Copy was not available in this browser. The text remains visible for manual copy.'; }
   }
   render();
 })();

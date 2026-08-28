@@ -58,14 +58,43 @@ function pageWithTwin(key = PRIMARY_KEY) {
 }
 
 function pageWithIframeTwins(key = IFRAME_KEY) {
-  const local = "prototypes/core/heart-chart.html";
+  const local = "prototypes/core-architectures/chimeric-pack-v0.1/heart-chart.html";
   return `<!doctype html>
 <html>
   <body>
-    <iframe src="${local}" data-public-src="{{${key}}}" title="HEART Chart"></iframe>
+    <iframe src="${local}" data-public-src="{{${key}}}" title="HEART Chart" loading="lazy" sandbox="allow-scripts" allow="clipboard-write" referrerpolicy="no-referrer"></iframe>
     <a href="${local}" data-public-href="{{${key}}}">Open HEART Chart</a>
   </body>
 </html>\n`;
+}
+
+async function iframeRouteManifest(paths, {
+  publicAlias = "/v1/core/heart-chart/",
+  sourceFile = "heart-chart.html",
+  sandboxTokens = ["allow-scripts"],
+  permissionsPolicy = ["clipboard-write"],
+} = {}) {
+  const manifestPath = join(paths.root, "public-iframe-route-manifest-v1.json");
+  await writeFile(
+    manifestPath,
+    `${JSON.stringify({
+      host: "iframes.vik.guru",
+      carrier_contract: {
+        sandbox_posture: "exact_per_route_allowlist",
+        permissions_policy_posture: "exact_per_route_allowlist",
+      },
+      routes: [{
+        source_file: sourceFile,
+        public_alias: publicAlias,
+        carrier_policy: {
+          sandbox_tokens: sandboxTokens,
+          permissions_policy: permissionsPolicy,
+        },
+      }],
+    })}\n`,
+    "utf8",
+  );
+  return manifestPath;
 }
 
 function jsonLdBodies(html) {
@@ -80,6 +109,13 @@ function jsonLdBodies(html) {
     bodies.push(script.slice(openEnd + 1, closeStart));
   }
   return bodies;
+}
+
+function htmlAttribute(tag, name) {
+  const match = tag.match(
+    new RegExp(`(?:^|\\s)${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)')`, "i"),
+  );
+  return match?.[1] ?? match?.[2] ?? null;
 }
 
 async function assertContractFailure(promise, code, hiddenValue) {
@@ -166,7 +202,82 @@ test("materializes paired hosted iframe carriers while authored local fallbacks 
   assert.match(generated, /data-public-src="https:\/\/iframes\.vik\.guru\/v1\/core\/heart-chart\/"/);
   assert.match(generated, /href="https:\/\/iframes\.vik\.guru\/v1\/core\/heart-chart\/"/);
   assert.match(generated, /data-public-href="https:\/\/iframes\.vik\.guru\/v1\/core\/heart-chart\/"/);
+  assert.match(generated, /title="HEART Chart"/);
+  assert.match(generated, /loading="lazy"/);
+  assert.match(generated, /sandbox="allow-scripts"/);
+  assert.match(generated, /allow="clipboard-write"/);
+  assert.match(generated, /referrerpolicy="no-referrer"/);
   assert.equal(generated.includes("{{PUBLIC_URL"), false);
+});
+
+test("materializes a hosted iframe only when its configured route profile matches exactly", async (t) => {
+  const source = pageWithIframeTwins();
+  const paths = await fixture(t, source);
+  const iframeRouteManifestPath = await iframeRouteManifest(paths);
+
+  const result = await materializePublicReferences({
+    ...paths,
+    iframeRouteManifestPath,
+    environment: { [IFRAME_KEY]: IFRAME_ROUTE },
+  });
+
+  assert.equal(result.iframeCount, 1);
+  assert.match(
+    await readFile(join(paths.outputRoot, "context-canvas", "index.html"), "utf8"),
+    /sandbox="allow-scripts" allow="clipboard-write"/,
+  );
+});
+
+test("rejects globally narrow iframe policies that drift from their exact route profile", async (t) => {
+  const cases = [
+    {
+      name: "missing script grant",
+      source: pageWithIframeTwins().replace('sandbox="allow-scripts"', 'sandbox=""'),
+      manifest: {},
+    },
+    {
+      name: "missing clipboard delegation",
+      source: pageWithIframeTwins().replace(' allow="clipboard-write"', ""),
+      manifest: {},
+    },
+    {
+      name: "unexpected clipboard delegation",
+      source: pageWithIframeTwins().replace('sandbox="allow-scripts"', 'sandbox=""'),
+      manifest: { sandboxTokens: [], permissionsPolicy: [] },
+    },
+    {
+      name: "unmatched configured route",
+      source: pageWithIframeTwins(),
+      manifest: { publicAlias: "/v1/core/strategy-canvas/", sourceFile: "strategy-canvas.html" },
+    },
+    {
+      name: "wrong local path with the expected basename",
+      source: pageWithIframeTwins().replaceAll(
+        "prototypes/core-architectures/chimeric-pack-v0.1/heart-chart.html",
+        "prototypes/alternate-pack/heart-chart.html",
+      ),
+      manifest: {},
+    },
+  ];
+
+  for (const entry of cases) {
+    await t.test(entry.name, async (t) => {
+      const paths = await fixture(t, entry.source);
+      const iframeRouteManifestPath = await iframeRouteManifest(paths, entry.manifest);
+      await assertContractFailure(
+        materializePublicReferences({
+          ...paths,
+          iframeRouteManifestPath,
+          environment: { [IFRAME_KEY]: IFRAME_ROUTE },
+        }),
+        "PUBLIC_REFERENCE_IFRAME_POLICY",
+      );
+      await assert.rejects(
+        readFile(join(paths.outputRoot, ".public-reference-materialization.json")),
+        { code: "ENOENT" },
+      );
+    });
+  }
 });
 
 test("keeps an iframe destination aligned across embed, full-view, and JSON-LD carriers", async (t) => {
@@ -407,6 +518,32 @@ test("requires explicit hosted iframe carriers and complete local fallbacks", as
           environment: { [IFRAME_KEY]: IFRAME_ROUTE },
         }),
         code,
+      );
+    });
+  }
+});
+
+test("requires a minimal explicit policy on hosted iframe carriers", async (t) => {
+  const source = pageWithIframeTwins();
+  const cases = [
+    source.replace(' title="HEART Chart"', ""),
+    source.replace(' loading="lazy"', ""),
+    source.replace(' sandbox="allow-scripts"', ""),
+    source.replace(' referrerpolicy="no-referrer"', ""),
+    source.replace(' loading="lazy"', ' loading="auto"'),
+    source.replace(' sandbox="allow-scripts"', ' sandbox="allow-scripts allow-same-origin"'),
+    source.replace(' allow="clipboard-write"', ' allow="camera"'),
+  ];
+
+  for (const [index, html] of cases.entries()) {
+    await t.test(`policy case ${index + 1}`, async (t) => {
+      const paths = await fixture(t, html);
+      await assertContractFailure(
+        materializePublicReferences({
+          ...paths,
+          environment: { [IFRAME_KEY]: IFRAME_ROUTE },
+        }),
+        "PUBLIC_REFERENCE_IFRAME_POLICY",
       );
     });
   }
@@ -773,6 +910,24 @@ test("the repository source materializes from discovered keys without frozen rou
     new RegExp(
       `href=["']${escapedLocalFallback}["'][^>]*data-public-href=["']\\{\\{${IFRAME_KEY}\\}\\}["']`,
     ),
+  );
+  const heartCarrier = carrierSource.match(
+    new RegExp(`<iframe\\b[^>]*src=["']${escapedLocalFallback}["'][^>]*>`, "i"),
+  )?.[0];
+  assert.ok(heartCarrier, "the HEART hosted iframe carrier is present");
+  assert.equal(
+    htmlAttribute(heartCarrier, "sandbox"),
+    heartRoute.carrier_policy.sandbox_tokens.join(" "),
+  );
+  assert.equal(
+    htmlAttribute(heartCarrier, "allow") ?? "",
+    heartRoute.carrier_policy.permissions_policy.join("; "),
+  );
+  assert.ok(htmlAttribute(heartCarrier, "title")?.trim());
+  assert.equal(htmlAttribute(heartCarrier, "loading"), routeManifest.carrier_contract.loading);
+  assert.equal(
+    htmlAttribute(heartCarrier, "referrerpolicy"),
+    routeManifest.carrier_contract.referrer_policy,
   );
   await readFile(
     join(
