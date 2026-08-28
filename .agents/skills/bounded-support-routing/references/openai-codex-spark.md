@@ -11,7 +11,7 @@ Official OpenAI documentation currently presents Codex Spark as a fast path for 
 - [Make granular UI changes](https://learn.chatgpt.com/use-cases/make-granular-ui-changes) describes small, focused UI adjustments in an existing application, with one change and one verification loop at a time.
 - [Models](https://learn.chatgpt.com/docs/models) currently lists 5.3 Codex Spark as a text-only research-preview model optimized for near-instant, real-time coding iteration and available to ChatGPT Pro users. The page also carries supported surfaces and model-selection guidance.
 
-These details were reviewed on 2026-08-26. Model names, access, surfaces, and recommended uses remain platform-owned facts. Refresh both pages before a materially similar packet relies on a current specification; keep changed facts in this reference so the generic skill remains portable.
+These details were reviewed on 2026-08-28. Model names, access, surfaces, and recommended uses remain platform-owned facts. Refresh both pages before a materially similar packet relies on a current specification; keep changed facts in this reference so the generic skill remains portable.
 
 ## Packet translation for Spark
 
@@ -23,10 +23,34 @@ Spark benefits from a concrete receiving surface and a compact return. Add the f
 - select `observation_only`, `repair_authorized`, `implementation_authorized`, or `recovery_authorized` before listing commands or tools;
 - state whether browser observation, file edits, commits, pushes, pull requests, or external actions are granted;
 - name the Issue, comment, or other surface that receives the handback;
-- name the return format and stopping event; and
+- state the required post-action response, return format, and stopping event;
+- when browser evidence is required, name the executable browser lane, command, revision, and returned evidence; and
 - make each sequence gate explicit: a stop observation suspends the steps that follow it even when those actions were initially granted.
 
-The official granular-UI use case includes browser verification. Repository ground and the current packet determine whether that observation fits. When the packet grants a browser check, keep it focused on the named behavior; when another observation is sufficient, return that evidence instead.
+### Required return
+
+Every Spark packet states the post-action response directly: after performing the named work, post one new `pass`, `friction`, or `blocker` receipt to the named handback surface. The receipt identifies the observed revision, actions actually performed, evidence and outcomes, remaining strain, and smallest available follow-on. An acknowledgement or restatement of the packet is preparation; the lifecycle remains `bounded support: awaiting return` until the post-action receipt arrives.
+
+For a structured return, the packet can supply this compact shape:
+
+```markdown
+**Result:** pass | friction | blocker
+**Revision observed:** <branch@full-sha>
+**Observation lane:** local | CI <workflow/job> | host browser worker <name>
+**Checks and evidence:** <action → outcome>
+**Remaining strain:** none | <exact finding and reproduction>
+**Smallest follow-on:** none | <bounded proposal>
+```
+
+An `observation_only` packet still completes through this receipt. A blocker receipt names the attempted action, exact failure, preserved known-good coordinate, and an executable recovery lane.
+
+### Browser observation lane
+
+The official granular-UI use case includes browser verification. For this repository, every Spark packet that requires browser evidence selects a named CI job or host browser worker with Chromium launch permission as the primary observation lane. The packet identifies whether Spark may dispatch the lane or reads an already-produced result, and names the command, route or viewport, artifact or log, and handback surface. “Non-sandboxed” describes the browser-launch capability of that worker; action authority remains limited to the packet's granted operations.
+
+For current Core or Narrative prototype work, the existing [Core and Narrative prototype units](../../../../.github/workflows/prototype-unit-tests.yml) workflow is the standing CI lane. A dispatch packet pins the revision, selects `core`, `narrative`, or `all`, sets `confirm_run=true` and `include_browser=true`, and names the workflow run or artifact that supplies the return. Dispatch is an external action and appears in the grant; an `observation_only` packet reads the resulting run unless dispatch is explicitly authorized.
+
+Local Spark sessions can carry repository reading and other available checks. When a packet has established local browser-launch capability, the same focused browser check can run there. A browser-launch constraint with a named next receiver returns `friction` and that receiver; absence of an authorized executable lane returns `blocker`. When another observation is sufficient, return that evidence instead.
 
 ### `observation_only`
 
@@ -55,6 +79,12 @@ The receiving improvement is an explicit action mode. `observation_only` now ret
 A later `repair_authorized` packet supplied an exact base revision, one-file boundary, focused commands, and a sequence for correcting a retained Strategy Canvas receipt. The initial artifact observation matched the packet's stated stop condition: receiver-specific schema locators made the retained artifact 48 bytes longer than its successor counterpart. Spark reported that evidence and the resulting focused-test failure, while also completing the manifest edit and pull-request delivery actions that followed the gate.
 
 This observation's transfer limit is one practitioner case; general Spark behavior remains an open question. The packet needs stop-condition precedence expressed as an execution gate. Once a stop condition forms, the remaining sequence pauses and the named Issue or handback surface receives a concise pass, friction, or blocker result. When the evidence disproves the requested-result premise, a `repair_authorized` or `implementation_authorized` packet returns to Solution before a revised grant begins. A branch or pull request can preserve useful evidence while the named handback still receives the return.
+
+## Issue #73 practitioner observation
+
+A repository-local `observation_only` packet initially received a summary of its working disposition rather than the requested comparison. An explicit post-action comment contract then produced a blocker receipt: the local Spark sandbox could read the repository, while Playwright Chromium exited at launch with a macOS bootstrap permission error. Running the same three contract checks through a browser-capable worker produced a complete `pass` receipt for all four receivers.
+
+This observation's transfer limit is one repository collaboration wave; it does not establish a universal difference among Spark, other Codex models, or every sandbox. The receiving improvement is Spark-specific: state that a fresh post-action receipt is required, and route browser-dependent checks to a named CI or host browser worker at packet formation. The worker's wider launch capability leaves repository mutation, network use, publication, and external writes governed by the packet's explicit grants.
 
 ## Refresh and return
 
