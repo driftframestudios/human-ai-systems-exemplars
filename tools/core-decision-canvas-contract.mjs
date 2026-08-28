@@ -151,6 +151,29 @@ async function servicePath(browser, origin, route) {
 async function heartPath(browser, origin, route) {
   const { context, page, telemetry } = await openFresh(browser, origin, route);
   try {
+    for (const width of [1440, 800]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const containment = await page.evaluate(() => {
+        const root = document.documentElement;
+        const editTable = document.querySelector("#editTable");
+        return {
+          rootClientWidth: root.clientWidth,
+          rootScrollWidth: root.scrollWidth,
+          tableClientWidth: editTable.clientWidth,
+          tableScrollWidth: editTable.scrollWidth
+        };
+      });
+      assert.ok(
+        containment.rootScrollWidth <= containment.rootClientWidth,
+        `HEART page should keep two-dimensional overflow local at ${width}px`
+      );
+      assert.ok(
+        containment.tableScrollWidth > containment.tableClientWidth,
+        `HEART editable matrix should retain its local horizontal scroll region at ${width}px`
+      );
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 });
+
     const initial = await valueJson(page, "#jsonExport");
     const view = initial.view_state.views[0];
     const firstId = view.row_order[0];
