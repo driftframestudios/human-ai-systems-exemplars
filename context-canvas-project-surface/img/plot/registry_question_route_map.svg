@@ -86,7 +86,7 @@
   <g id="rrm-route-2" role="group" aria-labelledby="rrm-route-2-title" filter="url(#rrm-shadow)">
     <title id="rrm-route-2-title">Route two: Cross a publication boundary</title>
     <rect x="58" y="402" width="518" height="128" rx="17" fill="#cfe7f7" stroke="#17345f" stroke-width="2"/>
-    <rect x="77" y="421" width="50" height="50" rx="11" fill="#17345f"/>
+    <circle cx="102" cy="446" r="25" fill="#17345f"/>
     <text x="102" y="453" text-anchor="middle" class="mono route-number white">2</text>
     <text x="143" y="438" class="sans route-title ink">Cross a publication boundary</text>
     <text x="143" y="465" class="sans route-copy body">Material needs audience fit and proportionate review.</text>
@@ -96,7 +96,7 @@
   <g id="rrm-route-3" role="group" aria-labelledby="rrm-route-3-title" filter="url(#rrm-shadow)">
     <title id="rrm-route-3-title">Route three: Choose an architecture</title>
     <rect x="58" y="588" width="518" height="128" rx="17" fill="#e7efff" stroke="#17345f" stroke-width="2"/>
-    <path d="M102 607L130 635L102 663L74 635Z" fill="#17345f"/>
+    <circle cx="102" cy="635" r="25" fill="#17345f"/>
     <text x="102" y="642" text-anchor="middle" class="mono route-number white">3</text>
     <text x="143" y="624" class="sans route-title ink">Choose an architecture</text>
     <text x="143" y="651" class="sans route-copy body">A consequential problem needs a fitting way to think.</text>
@@ -106,7 +106,7 @@
   <g id="rrm-route-4" role="group" aria-labelledby="rrm-route-4-title" filter="url(#rrm-shadow)">
     <title id="rrm-route-4-title">Route four: Carry context forward</title>
     <rect x="58" y="774" width="518" height="128" rx="17" fill="#fff5de" stroke="#17345f" stroke-width="2"/>
-    <path d="M79 822Q79 797 102 797Q125 797 125 822Q125 847 102 872Q79 847 79 822Z" fill="#17345f"/>
+    <circle cx="102" cy="822" r="25" fill="#17345f"/>
     <text x="102" y="831" text-anchor="middle" class="mono route-number white">4</text>
     <text x="143" y="810" class="sans route-title ink">Carry context forward</text>
     <text x="143" y="837" class="sans route-copy body">Long-running work needs identity and continuity.</text>
@@ -116,9 +116,8 @@
   <g id="rrm-route-5" role="group" aria-labelledby="rrm-route-5-title" filter="url(#rrm-shadow)">
     <title id="rrm-route-5-title">Route five: Test a technical decision</title>
     <rect x="1024" y="262" width="518" height="128" rx="17" fill="#ffd3d0" stroke="#17345f" stroke-width="2"/>
-    <path d="M1045 279H1097V331H1045Z" fill="#17345f"/>
-    <path d="M1055 289H1087V321H1055Z" fill="#ffd3d0"/>
-    <text x="1071" y="311" text-anchor="middle" class="mono route-number ink">5</text>
+    <circle cx="1071" cy="305" r="25" fill="#17345f"/>
+    <text x="1071" y="312" text-anchor="middle" class="mono route-number white">5</text>
     <text x="1112" y="298" class="sans route-title ink">Test a technical decision</text>
     <text x="1112" y="325" class="sans route-copy body">The choice needs deeper questions and evidence cues.</text>
     <text x="1112" y="359" class="mono route-outcome ink">MAKE JUDGMENT AND TRADE-OFFS INSPECTABLE</text>
@@ -127,7 +126,7 @@
   <g id="rrm-route-6" role="group" aria-labelledby="rrm-route-6-title" filter="url(#rrm-shadow)">
     <title id="rrm-route-6-title">Route six: Read a system change</title>
     <rect x="1024" y="494" width="518" height="128" rx="17" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
-    <path d="M1071 512L1098 528V560L1071 576L1044 560V528Z" fill="#17345f"/>
+    <circle cx="1071" cy="544" r="25" fill="#17345f"/>
     <text x="1071" y="551" text-anchor="middle" class="mono route-number white">6</text>
     <text x="1112" y="530" class="sans route-title ink">Read a system change</text>
     <text x="1112" y="557" class="sans route-copy body">A lived enterprise situation offers the best entrance.</text>
@@ -137,7 +136,7 @@
   <g id="rrm-route-7" role="group" aria-labelledby="rrm-route-7-title" filter="url(#rrm-shadow)">
     <title id="rrm-route-7-title">Route seven: Track an emerging signal</title>
     <rect x="1024" y="726" width="518" height="128" rx="17" fill="#f2ff67" stroke="#17345f" stroke-width="2"/>
-    <circle cx="1071" cy="790" r="27" fill="#17345f"/>
+    <circle cx="1071" cy="790" r="25" fill="#17345f"/>
     <text x="1071" y="797" text-anchor="middle" class="mono route-number white">7</text>
     <text x="1112" y="762" class="sans route-title ink">Track an emerging signal</text>
     <text x="1112" y="789" class="sans route-copy body">An early change may affect a decision.</text>
