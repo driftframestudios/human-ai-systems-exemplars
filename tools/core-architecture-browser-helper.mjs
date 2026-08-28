@@ -4,6 +4,12 @@ import { readFile } from "node:fs/promises";
 import { dirname, extname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import {
+  artifactAuthor,
+  artifactAttribution,
+  artifactLicense,
+} from "./attribution-contract.mjs";
+
 export const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 export const coreProjections = [
@@ -82,6 +88,33 @@ export function assertTelemetry(telemetry) {
   assert.deepEqual(observations, [], observations.join(" | "));
 }
 
+async function assertArtifactAttribution(page, route) {
+  const receipt = await page.evaluate(() => {
+    const footer = document.querySelector("footer.artifact-attribution");
+    const style = footer ? getComputedStyle(footer) : null;
+    return {
+      authorValues: [...document.querySelectorAll('meta[name="author"]')].map(element => element.content),
+      licenseTargets: [...document.querySelectorAll('link[rel="license"]')].map(element => element.href),
+      footerCount: document.querySelectorAll("footer.artifact-attribution").length,
+      noticeCount: document.querySelectorAll("footer.artifact-attribution .artifact-attribution__notice").length,
+      noticeText: footer?.querySelector(".artifact-attribution__notice")?.textContent.trim() || "",
+      position: style?.position || "",
+      visible: Boolean(footer && style?.display !== "none" && style?.visibility !== "hidden" && footer.getBoundingClientRect().height > 0),
+      clientWidth: footer?.clientWidth || 0,
+      scrollWidth: footer?.scrollWidth || 0
+    };
+  });
+
+  assert.deepEqual(receipt.authorValues, [artifactAuthor], `${route} author metadata`);
+  assert.deepEqual(receipt.licenseTargets, [artifactLicense], `${route} license relation`);
+  assert.equal(receipt.footerCount, 1, `${route} attribution footer count`);
+  assert.equal(receipt.noticeCount, 1, `${route} attribution notice count`);
+  assert.equal(receipt.noticeText, artifactAttribution, `${route} attribution notice`);
+  assert.equal(receipt.position, "static", `${route} attribution stays in document flow`);
+  assert.equal(receipt.visible, true, `${route} attribution is visible`);
+  assert.ok(receipt.scrollWidth <= receipt.clientWidth + 1, `${route} attribution contains its content`);
+}
+
 export async function openFresh(browser, origin, route, { captureClipboard = false } = {}) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
   if (captureClipboard) {
@@ -102,6 +135,7 @@ export async function openFresh(browser, origin, route, { captureClipboard = fal
   const telemetry = monitor(page);
   await page.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("networkidle", { timeout: 4000 }).catch(() => {});
+  await assertArtifactAttribution(page, route);
   return { context, page, telemetry };
 }
 

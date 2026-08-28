@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <meta name="author" content="Vikrant Varun Kudesia">
+  <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light" />
   <title>Strategy Canvas · Canonical collaboration instrument</title>
@@ -296,6 +298,30 @@
     .sc-footer { margin-top: 1rem; }
   }
 }
+
+.artifact-attribution {
+    position: static;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .artifact-attribution__notice {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 82rem;
+    margin: clamp(1.5rem, 4vw, 3rem) auto 0;
+    padding: 1rem clamp(1rem, 3vw, 1.75rem) 1.5rem;
+    color: var(--muted, currentColor);
+    font-size: .78rem;
+    line-height: 1.55;
+    text-align: center;
+  }
+  @media print {
+    .artifact-attribution__notice { color: #000; }
+  }
+  @media (forced-colors: active) {
+    .artifact-attribution__notice { color: CanvasText; }
+  }
   </style>
   <noscript><style>.sc-workbench, [data-sc-role="status"] { display: none; }</style></noscript>
   <script type="application/ld+json" data-sc-jsonld>{}</script>
@@ -495,9 +521,10 @@
 
     <p class="sc-live" data-sc-role="live" aria-live="polite" aria-atomic="true"></p>
 
-    <footer class="sc-footer">
+    <footer class="sc-footer artifact-attribution">
       <p><strong>Method boundary.</strong> This canonical artifact supports two declared postures. Market strategy compares locally defined factors and relative offering levels. Internal collaboration tuning compares current support, a next-phase good-enough threshold, and a desired condition. Naming the posture keeps the interpretation available to every participant and receiving AI collaborator.</p>
       <p>Eliminate, Reduce, Raise, and Create form an action lens applied after the baseline shape becomes inspectable. Hold and Open are local extensions for continuity and inquiry.</p>
+      <p class="artifact-attribution__notice">© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p>
     </footer>
   </main>
 

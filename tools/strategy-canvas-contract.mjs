@@ -5,6 +5,12 @@ import { createServer } from "node:http";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { extname, relative, resolve } from "node:path";
 
+import {
+  artifactAuthor,
+  artifactAttribution,
+  artifactLicense,
+} from "./attribution-contract.mjs";
+
 const CANONICAL = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.0.html";
 const CONTEXT = "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.0.html";
 const NARRATIVE_COMPOSERS = [
@@ -138,6 +144,8 @@ async function openPage(browser, url, viewport, options = {}) {
 async function layoutReceipt(page) {
   return page.evaluate(() => {
     const root = document.documentElement;
+    const footer = document.querySelector("footer.artifact-attribution");
+    const footerStyle = footer ? getComputedStyle(footer) : null;
     const visible = (element) => {
       const style = getComputedStyle(element);
       const rect = element.getBoundingClientRect();
@@ -156,7 +164,16 @@ async function layoutReceipt(page) {
     return {
       clientWidth: root.clientWidth,
       scrollWidth: root.scrollWidth,
-      smallTargets
+      smallTargets,
+      authorValues: [...document.querySelectorAll('meta[name="author"]')].map(element => element.content),
+      licenseTargets: [...document.querySelectorAll('link[rel="license"]')].map(element => element.href),
+      footerCount: document.querySelectorAll("footer.artifact-attribution").length,
+      noticeCount: document.querySelectorAll("footer.artifact-attribution .artifact-attribution__notice").length,
+      noticeText: footer?.querySelector(".artifact-attribution__notice")?.textContent.trim() || "",
+      footerPosition: footerStyle?.position || "",
+      footerVisible: Boolean(footer && visible(footer)),
+      footerClientWidth: footer?.clientWidth || 0,
+      footerScrollWidth: footer?.scrollWidth || 0
     };
   });
 }
@@ -165,6 +182,13 @@ async function assertLayout(page, label) {
   const receipt = await layoutReceipt(page);
   assert(receipt.scrollWidth <= receipt.clientWidth + 2, `${label} should contain document width (${receipt.scrollWidth}/${receipt.clientWidth}).`);
   assert(receipt.smallTargets.length === 0, `${label} interactive targets should be at least 44×44. ${receipt.smallTargets.join("; ")}`);
+  assert(same(receipt.authorValues, [artifactAuthor]), `${label} should expose one exact author metadata value.`);
+  assert(same(receipt.licenseTargets, [artifactLicense]), `${label} should expose one exact license relation.`);
+  assert(receipt.footerCount === 1 && receipt.noticeCount === 1, `${label} should expose one attribution footer and notice.`);
+  assert(receipt.noticeText === artifactAttribution, `${label} should preserve the exact visible attribution notice.`);
+  assert(receipt.footerPosition === "static", `${label} attribution should stay in document flow.`);
+  assert(receipt.footerVisible, `${label} attribution should remain visible.`);
+  assert(receipt.footerScrollWidth <= receipt.footerClientWidth + 1, `${label} attribution should contain its content.`);
 }
 
 async function zoomReceipt(page) {

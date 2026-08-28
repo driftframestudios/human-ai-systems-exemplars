@@ -44,6 +44,7 @@ The on-demand workflows live in `.agents/skills/`:
 - `locator-boundary-stewardship` produces locator-safe public collaboration records while stable semantic keys and an authorized resolver preserve exact gated lineage.
 - `stateful-artifact-behavior-contracts` selects focused source-grounded tests for self-roundtrip validity, minimum usable state, semantic-twin agreement, and retained-state recovery.
 - `secret-boundary-inspection` produces a canary-proven, scope-explicit secret-material receipt or private finding route before a repository handoff.
+- `repository-attribution-stewardship` distinguishes copyright-holder records, citation metadata, contribution credit, public copy-local notices, and bounded machine projections before a repository attribution change.
 
 These entries are the standing portable skill contracts: current routing surfaces for collaboration affordances rather than claims of competence, truth, priority, or permission. Current user intent, repository evidence, and granted tool authority govern each activation. Direct reasoning remains a valid route when the smallest adequate move needs no skill.
 
@@ -58,3 +59,32 @@ A task-bound projection binds one contract to a named receiving task and exit ev
 - Add a script, validator, manifest, or recurring harness when repeated work demonstrates real turn savings or protects a consequential boundary.
 - Give each review-ready pull request one receiving milestone and the smallest meaningful label set. Metadata supports navigation; the body remains the durable return for the result, related issues, change boundary, fitting evidence and its coverage boundary, recovery path, and next receiver.
 - Close a collaboration cycle with the changed surface, the relevant observation, the current issue or pull request, and one clear re-entry move.
+
+## Keep attribution legible and proportional
+
+- Read [`AUTHORS`](AUTHORS) for copyright-holder identity,
+  [`GOVERNANCE.md`](GOVERNANCE.md#how-to-attribute-contributions) for the
+  contribution and publication pattern, and [`attribution.yml`](attribution.yml)
+  for their bounded machine-readable projection.
+- Use [`CITATION.cff`](CITATION.cff) when a person or tool asks how to cite the
+  repository. Use truthful Git author metadata, agreed `Co-authored-by`
+  trailers, and reviewed pull requests for contribution credit.
+- Treat an independently renderable public HTML document's `<head>` as its
+  file header. Current visitor carriers and their canonical generator
+  templates carry the human author in metadata and the approved attribution
+  in visible content.
+- Let Git author metadata, agreed `Co-authored-by` trailers, and reviewed pull
+  requests credit the people who made a change. Keep commit prose focused on
+  the change.
+- Keep ordinary scripts, stylesheets, tests, schemas, manifests, and source
+  comments focused on their behavior. The centralized carriers above hold
+  standing personal-name attribution. A source comment earns its place when a
+  material provenance or generation boundary changes how the file should be
+  edited.
+- Preserve upstream notices in forks and adaptations, then add truthful
+  adaptation credit where appropriate. Write resolved publication identity
+  directly into source and generated visitor artifacts.
+- Use `attribution.yml` as the bounded machine-readable projection and
+  validation input. `AUTHORS`, `LICENSE`, `GOVERNANCE.md`, `CITATION.cff`, Git
+  history, and copy-local notices retain their named authority and carrier
+  roles.

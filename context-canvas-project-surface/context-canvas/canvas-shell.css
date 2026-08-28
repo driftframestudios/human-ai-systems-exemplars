@@ -34,6 +34,19 @@
     margin-block: .35rem;
 }
 
+.site-attribution {
+    font-size: .78rem;
+    line-height: 1.5;
+    max-inline-size: 80rem;
+    overflow-wrap: anywhere;
+}
+
+.super-footer__local .site-attribution {
+    border-block-start: .0625rem solid rgb(255 250 242 / .38);
+    margin-block-start: 1rem;
+    padding-block-start: 1rem;
+}
+
 .super-footer__grid {
     display: grid;
     gap: clamp(1.5rem, 3vw, 3rem);

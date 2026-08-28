@@ -26,6 +26,11 @@ The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) sup
 - Prototype scripts own local interaction state. Sandboxed iframes declare the capabilities each instrument actually uses.
 - Human stewards retain authority over identity, source use, sensitive material, publication, and consequential decisions. Automated checks report observable behavior and leave those decisions visible.
 
+Every top-level visitor route carries one source-authored ownership and
+Apache-2.0 notice in its static HTML, preserving the notice in the baseline
+reading. `AUTHORS` is the copyright-holder authority, and the repository-root
+`LICENSE` remains the complete license text.
+
 ## Document head order
 
 Top-level routes usually present charset and viewport, compact page metadata, first-paint stylesheets in their established cascade order, deferred `canvas-shell.js`, and then inline JSON-LD. This sequence gives visitor resources an early discovery path while structured data remains a descriptive projection of the visible document. Route-local material can occupy an earlier position when embedding, cascade, or execution behavior depends on it; the affected page carries that reason beside the dependency.
@@ -165,13 +170,18 @@ carries that observation into a receiving repository.
 Choose the existing check that answers the page question under review:
 
 ```bash
+npm run test:context-canvas
 npm run visual:check -- path/to/page.html --selector "main"
 npm run visual:rail-labels
 npm run test:open-lesson-field
 npm run test:strategy-canvas
 ```
 
-The generic visual check records the requested surface at desktop and mobile widths, document containment, and browser errors. The two interaction contracts cover their named collaboration systems in depth; they do not stand in for unrelated page evidence.
+The Context Canvas test protects source-authored visitor metadata and the
+About-page identity seam. The generic visual check records the requested
+surface at desktop and mobile widths, document containment, and browser
+errors. The interaction contracts cover their named collaboration systems in
+depth. Choose the fitting check for each other page behavior.
 
 A useful verification note names the command, viewport-relevant result, and ignored `.visual-runs/` artifact directory. A new check joins the shared harness when a reproduced visitor-facing defect gives it a stable purpose.
 

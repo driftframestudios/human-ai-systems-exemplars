@@ -22,6 +22,23 @@ Artifact variation is part of the family: route-specific layout, color,
 density, interaction, and evidence posture remain available while stable IDs,
 current versions, and declared source relationships keep the pack legible.
 
+## Visitor-visible authorship and license
+
+The pack hub and each of the 21 current prototype documents carry their own
+authorship and licensing context: one `author` metadata value, one Apache-2.0
+license relation, and one semantic `footer.artifact-attribution` with the full
+visitor-visible notice. The same contract is present in each Context Canvas
+projection, including its four intentional adaptations. The notice therefore
+travels directly with each self-contained HTML carrier across projections and
+publication.
+
+Strategy Canvas is maintained through its canonical template and stylesheet;
+the generated current distribution inherits the contract. The current visitor
+set covers Strategy Canvas v0.2.0; the v0.1.1 compatibility route retains its
+prior bytes as a separate resting carrier. Its Context Canvas workbench retains
+its adapted document and style owners. The repository-root `LICENSE` remains
+the complete license text.
+
 ## Public iframe route projection
 
 `public-iframe-route-manifest-v1.json` binds the pack hub and 21 current
