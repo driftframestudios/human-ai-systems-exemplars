@@ -72,6 +72,16 @@ Each consequential boundary names the state to preserve and the path available f
 
 The packet states what the chosen check can establish. An unobserved claim remains open and returns with the smallest fitting next observation rather than borrowing confidence from route completion.
 
+### Rule: Public handbacks are safe and proportionate
+
+A durable public or public-possible handback carries only the result that changes the receiver's next decision: a public reference when needed, the repository-defined check or sanitized command shape, normalized outcome or bounded failure class, what the observation establishes, its coverage boundary, and the next move when one exists. A one-sentence return is complete when it answers the receiving question.
+
+Raw output, logs, traces, HAR files, screenshots, DOM or storage state, source bundles, inline environment or header values, cookies or authentication material, signed or query-bearing URLs, private routes or network coordinates, browser profiles, and user-specific paths remain local or with an existing access-controlled owner. The public return names the bounded condition and controlled follow-up owner without reproducing the sensitive material.
+
+One receiving surface is enough. An existing public-safe pull-request body, workflow summary, task response, or Issue comment can satisfy the handback; link it instead of producing a parallel receipt. Remaining strain forms a successor packet only when it creates a materially new decision, authority need, or receiving job.
+
+Use optional `Public return` or `Sensitive evidence receiver` packet labels only when they change behavior. They remain part of the prompt palette rather than required fields.
+
 ### Rule: Recovery and named return are part of the result
 
 The receiver keeps a known-good point, records any remaining strain, and hands attention back when the stop condition arrives. The packet's named handback surface receives a concise pass, friction, or blocker result even when a branch, diff, or pull request preserves useful work. Support closes at that handback, and standing ownership stays with its named steward.
@@ -84,7 +94,7 @@ The receiver keeps a known-good point, records any remaining strain, and hands a
 4. **Bind action:** Select the narrowest action mode that carries the requested contribution, then enumerate the actions actually granted.
 5. **Prepare return:** Name the known-good point, recovery route, handback owner, handback surface, and stop condition.
 6. **Carry the route:** Evaluate the stop condition before each state-changing action, work only through the selected mode, and pause the remaining grant when the stop event forms.
-7. **Complete the handback:** Return decision-changing evidence to the named surface as a pass, friction, or blocker and identify any fresh packet the owner can form.
+7. **Complete the handback:** Return the smallest public-safe, decision-changing result to one named surface as a pass, friction, or blocker. Link an existing sufficient result, and identify a fresh packet only when a materially new decision or authority need remains.
 
 ## Representative scenario
 
@@ -114,4 +124,4 @@ The skill loads [references/openai-codex-spark.md](references/openai-codex-spark
 
 ## Completion
 
-Bounded support completes when a pass, friction, or blocker handback has returned to the named surface; the requested result has either formed or moved into a fresh packet; held boundaries remain legible; and recovery leaves a usable state. A changed platform, crossed action boundary, or materially different receiving use can reopen the contract through collaboration accounting; otherwise the skill rests and direct reasoning remains available.
+Bounded support completes when one sufficient public-safe pass, friction, or blocker handback is available from the named surface; the requested result has formed or a materially new need has moved into a fresh packet; held boundaries remain legible; and recovery leaves a usable state. A changed platform, crossed action boundary, or materially different receiving use can reopen the contract through collaboration accounting; otherwise the skill rests and direct reasoning remains available.

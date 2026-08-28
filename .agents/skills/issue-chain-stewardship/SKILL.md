@@ -42,9 +42,9 @@ Represent parallel work, contained tranches, optional enrichments, and return pa
 
 Name the decision, the evidence available to support it, and the event that invites it. The chain preserves the boundary; the named human owner resolves the decision.
 
-### Rule: Transitions carry a receipt
+### Rule: Transitions reuse a sufficient public return
 
-A passing issue states the material result, changed paths or surfaces, remaining boundary, and receiving issue. The receiver records acceptance or the exact condition that keeps the handoff open.
+A passing issue states the material result, public-safe changed surfaces, remaining boundary, and receiving issue. A linked pull-request body, workflow summary, task response, or Issue comment can satisfy the transition when it already carries the pass condition. The receiver records acceptance or the bounded condition that keeps the handoff open. Sensitive diagnostics and protected coordinates remain with their existing local or access-controlled owner rather than being reproduced in the chain.
 
 ### Rule: Chains finish
 
@@ -56,7 +56,7 @@ The chain exits when the next receiver accepts the transition or the relationshi
 2. **Name the route:** State the desired end state, current front, and why that front is current.
 3. **Type the relationships:** Name what each issue owns, receives, and passes, using ordinary relation language.
 4. **Separate terrain:** Make blockers, held conditions, parallel work, optional enrichments, and human-held decisions visible.
-5. **Write the receipt:** Record the evidence that satisfies the current pass condition and the next receiver.
+5. **Reuse or write the return:** Link an existing sufficient public-safe result, or record only the decision-changing evidence that satisfies the current pass condition and names the next receiver.
 6. **Release or return:** Close the chain when the receiver accepts it; preserve one concrete re-entry event when the route remains open.
 
 ## Working capsule
@@ -68,7 +68,7 @@ The chain exits when the next receiver accepts the transition or the relationshi
 **Current front:**
 **Why this issue is current:**
 
-| Issue | Relation | Owns | Receives | Passes when | Receipt |
+| Issue | Relation | Owns | Receives | Passes when | Return |
 | --- | --- | --- | --- | --- | --- |
 
 **Held condition or blocker:**
@@ -91,4 +91,4 @@ And the chain exits when the receiver accepts the handoff or names a remaining c
 
 ## Completion
 
-Issue chain stewardship completes when the current front, evidenced relations, issue-owned contracts, held decisions, transition receipt, next receiver, and release event are legible, dependencies remain evidence-backed, and authority remains with its existing owners. A materially different receiving use, a missed branch, or a stale transition can reopen the contract through collaboration accounting.
+Issue chain stewardship completes when the current front, evidenced relations, issue-owned contracts, held decisions, one sufficient transition return, next receiver, and release event are legible, dependencies remain evidence-backed, and authority remains with its existing owners. A materially different receiving use, a missed branch, or a stale transition can reopen the contract through collaboration accounting.
