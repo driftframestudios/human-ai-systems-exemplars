@@ -58,3 +58,30 @@ A task-bound projection binds one contract to a named receiving task and exit ev
 - Add a script, validator, manifest, or recurring harness when repeated work demonstrates real turn savings or protects a consequential boundary.
 - Give each review-ready pull request one receiving milestone and the smallest meaningful label set. Metadata supports navigation; the body remains the durable return for the result, related issues, change boundary, fitting evidence and its coverage boundary, recovery path, and next receiver.
 - Close a collaboration cycle with the changed surface, the relevant observation, the current issue or pull request, and one clear re-entry move.
+
+## Keep attribution legible and proportional
+
+- Read [`AUTHORS`](AUTHORS) for copyright-holder identity,
+  [`GOVERNANCE.md`](GOVERNANCE.md#how-to-attribute-contributions) for the
+  contribution and publication pattern, and [`attribution.yml`](attribution.yml)
+  for their bounded machine-readable projection.
+- Use [`CITATION.cff`](CITATION.cff) when a person or tool asks how to cite the
+  repository. Do not treat its author list as a complete contributor ledger.
+- Treat an independently renderable public HTML document's `<head>` as its
+  file header. Current visitor carriers and their canonical generator
+  templates carry the human author in metadata and the approved attribution
+  in visible content.
+- Let Git author metadata, agreed `Co-authored-by` trailers, and reviewed pull
+  requests credit the people who made a change. Keep commit prose focused on
+  the change.
+- Keep ordinary scripts, stylesheets, tests, schemas, manifests, and source
+  comments free of repeated personal-name banners. Add a source comment only
+  when it explains a material provenance or generation boundary.
+- Preserve upstream notices in forks and adaptations, then add truthful
+  adaptation credit where appropriate. Resolve new publication identity
+  directly; do not introduce name tokens that can survive into a visitor
+  artifact.
+- Treat `attribution.yml` as a projection, not a generator, ownership proof,
+  release ledger, or replacement for copy-local notices. Its authority paths
+  must continue to resolve to `AUTHORS`, `LICENSE`, `GOVERNANCE.md`, and the
+  standard citation surface.

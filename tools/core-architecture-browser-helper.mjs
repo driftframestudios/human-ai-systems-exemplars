@@ -4,11 +4,13 @@ import { readFile } from "node:fs/promises";
 import { dirname, extname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+import {
+  artifactAuthor,
+  artifactAttribution,
+  artifactLicense,
+} from "./attribution-contract.mjs";
 
-const artifactAuthor = "Driftframe Studios, Limited Liability Company";
-const artifactLicense = "https://www.apache.org/licenses/LICENSE-2.0";
-const artifactAttribution = "© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).";
+export const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 export const coreProjections = [
   {

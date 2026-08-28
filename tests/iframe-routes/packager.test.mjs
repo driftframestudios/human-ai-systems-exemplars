@@ -5,6 +5,13 @@ import path from "node:path";
 import test from "node:test";
 
 import {
+  artifactAuthor,
+  artifactAttribution,
+  artifactLicense,
+  attributionContract,
+} from "../../tools/attribution-contract.mjs";
+
+import {
   assertOwnedPackageDirectory,
   assertRegularFile,
   assertRegularFileWithin,
@@ -19,14 +26,9 @@ import {
   writePackagePlan,
 } from "../../tools/package-iframe-routes.mjs";
 
-const contextProjectionRoot = path.join(
-  defaultPaths.repositoryRoot,
-  "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1",
-);
-const artifactAuthor = "Driftframe Studios, Limited Liability Company";
-const artifactLicense = "https://www.apache.org/licenses/LICENSE-2.0";
-const artifactAttribution = "© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).";
-
+const [coreSourceRoot, contextProjectionPath] =
+  attributionContract.public_html.core_projection_roots;
+const contextProjectionRoot = path.join(defaultPaths.repositoryRoot, contextProjectionPath);
 function occurrenceCount(source, pattern) {
   return [...source.matchAll(pattern)].length;
 }
@@ -50,6 +52,14 @@ function routeIndexPath(contract, route) {
 }
 
 test("the route plan agrees one-to-one with the current Core population", async () => {
+  assert.equal(
+    path.relative(defaultPaths.repositoryRoot, defaultPaths.sourceRoot),
+    coreSourceRoot,
+  );
+  assert.equal(
+    path.relative(defaultPaths.repositoryRoot, defaultPaths.routeManifestPath),
+    attributionContract.public_html.core_route_manifest,
+  );
   const firstPlan = await createPackagePlan();
   const secondPlan = await createPackagePlan();
   const prototypeRoutes = firstPlan.contract.routes.filter(({ kind }) => kind === "prototype");
@@ -169,7 +179,7 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   await writePackagePlan(plan, temporaryRoot);
   const verification = await verifyPackagePlan(plan, temporaryRoot);
 
-  assert.deepEqual(verification, { files: 24, bytes: 1547070 });
+  assert.deepEqual(verification, { files: 24, bytes: 1546542 });
   await writeFile(path.join(temporaryRoot, "unexpected.txt"), "outside the plan\n");
   await assert.rejects(
     verifyPackagePlan(plan, temporaryRoot),

@@ -3,6 +3,15 @@
 Public-possible exemplars of design processes, research systems, collaboration
 instruments, and portable schemas for hybrid human–AI teams.
 
+Authorship and contribution guidance is centralized in [`AUTHORS`](AUTHORS)
+and the working [`GOVERNANCE.md`](GOVERNANCE.md). The bounded
+[`attribution.yml`](attribution.yml) projection makes the current identity,
+license, carrier scope, and exclusions machine-readable without replacing
+those authorities. [`CITATION.cff`](CITATION.cff) supplies the standard
+repository citation surface. Independently renderable visitor documents carry
+their approved document metadata and visible notice; Git history and reviewed
+pull requests carry ordinary contribution credit.
+
 The collection makes difficult seams inspectable: whose contribution a system
 is carrying, which source owns meaning, what an observation establishes, how
 state survives exchange, and where a human-held publication or adoption

@@ -3,17 +3,21 @@ import { readFile, readdir } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import test from "node:test";
 
+import {
+  artifactAuthor,
+  artifactAttribution,
+  artifactLicense,
+  attributionContract,
+} from "../../tools/attribution-contract.mjs";
+
 const repositoryRoot = resolve(import.meta.dirname, "../..");
-const visitorRoot = join(
-  repositoryRoot,
-  "context-canvas-project-surface/context-canvas"
-);
-const attribution =
-  "© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).";
+const visitorGlob = attributionContract.public_html.context_canvas_top_level_glob;
+assert.match(visitorGlob, /\/\*\.html$/u);
+const visitorRoot = resolve(repositoryRoot, visitorGlob.slice(0, -"/*.html".length));
 const authorMeta =
-  '<meta name="author" content="Driftframe Studios, Limited Liability Company">';
+  `<meta name="author" content="${artifactAuthor}">`;
 const licenseLink =
-  '<link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">';
+  `<link rel="license" href="${artifactLicense}">`;
 
 function occurrenceCount(source, value) {
   return source.split(value).length - 1;
@@ -30,7 +34,7 @@ test("top-level Context Canvas routes expose one consistent authorship and licen
 
   for (const route of routes) {
     const html = await readFile(join(visitorRoot, route), "utf8");
-    assert.equal(occurrenceCount(html, attribution), 1, `${route} should carry one visible attribution`);
+    assert.equal(occurrenceCount(html, artifactAttribution), 1, `${route} should carry one visible attribution`);
     assert.equal(occurrenceCount(html, authorMeta), 1, `${route} should carry one author metadata element`);
     assert.equal(occurrenceCount(html, licenseLink), 1, `${route} should carry one Apache-2.0 license link`);
   }
