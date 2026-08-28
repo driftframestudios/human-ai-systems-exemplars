@@ -39,8 +39,10 @@ description: Distinguishes and aligns copyright-holder records, citation metadat
 ### Rule: Distinct jobs keep distinct carriers
 
 - `LICENSE` supplies the repository's current license terms.
-- `AUTHORS` carries the role defined by its own header and local governance. In
-  this repository, it records copyright holders.
+- `AUTHORS` is a repository convention whose own header and local governance
+  define its role. In this repository, it records copyright holders. GitHub's
+  platform contributor metadata comes from commit author emails and merged
+  history.
 - `CITATION.cff` supplies standard repository citation metadata from a
   confirmed citation decision.
 - Git author metadata, agreed `Co-authored-by` trailers, and reviewed pull
