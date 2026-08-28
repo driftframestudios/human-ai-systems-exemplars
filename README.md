@@ -382,6 +382,13 @@ uses stable `PUBLIC_URL_REGISTRY_*` keys for those candidates and carries
 direct Notion page URLs to exactly zero pages. All other Notion pages remain
 outside the Context Canvas in both this repository and the retained source.
 
+Hosted Core companions use a parallel `PUBLIC_URL_IFRAME_*` namespace. An
+authored iframe and its full-view link retain complete repository-local
+`src` and `href` fallbacks; `data-public-src` and `data-public-href` identify
+the build-time destination without making the tracked page depend on a live
+host. The first carrier binds the HEART Chart to
+`PUBLIC_URL_IFRAME_CORE_HEART_CHART`.
+
 The eighteen Site Reading routes enter the public-possible collection through
 their approved Registry destinations: fifteen use direct counterparts,
 Prompt-Side Conditions offers Field Watch and full-research depths, and two
@@ -401,11 +408,15 @@ npm run test:public-reference-materializer
 
 The dependency-free
 [materializer](tools/materialize-public-references.mjs) discovers required keys
-from authored HTML, resolves anchor and JSON-LD carriers together, and writes
-the validated result beneath ignored `.public-reference-build/`. It reports
-semantic key names without destination values. A configuration or build
-failure preserves the prior tool-owned generation; a final rename failure
-retains and names its recovery directory.
+from authored HTML, resolves Registry anchors, hosted iframe twins, and
+JSON-LD carriers together, and writes the validated result beneath ignored
+`.public-reference-build/`. Hosted iframe values use credential-free
+`https://iframes.vik.guru/v1/.../` routes whose normalized path agrees with
+their semantic key; explicit ports, query strings, and fragments stay outside
+that route contract. The builder reports semantic key names without
+destination values. A configuration or build failure preserves the prior
+tool-owned generation; a final rename failure retains and names its recovery
+directory.
 
 Materialization establishes source-to-destination substitution, carrier
 agreement, containment, and recoverable generation. Human review establishes
