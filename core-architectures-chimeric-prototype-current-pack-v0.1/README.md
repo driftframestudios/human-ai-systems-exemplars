@@ -34,7 +34,7 @@ publication.
 
 Strategy Canvas is maintained through its canonical template and stylesheet;
 the generated current distribution inherits the contract. The current visitor
-set covers Strategy Canvas v0.2.0. The resting v0.1.1 compatibility route is
+set covers Strategy Canvas v0.2.1. The resting v0.1.1 compatibility route is
 generated from its system-local source, including a location-correct link and
 the same attribution contract. Its Context Canvas workbench retains its
 adapted document and style owners. The repository-root `LICENSE` remains the

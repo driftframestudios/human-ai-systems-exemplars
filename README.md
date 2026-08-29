@@ -143,7 +143,7 @@ consequential decisions; and the receiver records what it accepted.
 | Compare or restart from an accepted stable core | Verify the named `snapshot` revision, then create a receiving branch from it or merge from it as described in [branch topology](BRANCHING.md#snapshot-baseline) |
 | Explore future architecture or experiments | [Planning](planning/README.md) and the `research` / `res/*` routes in [branch topology](BRANCHING.md) |
 | Recover settled rationale or hand off a cycle | [Threadkeeping](threadkeeping/README.md) |
-| Work through a recurring collaboration concern | [Repository skills](.agents/skills/) and the [skills catalog below](#fifteen-skills-route-recurring-work-while-judgment-remains-contextual) |
+| Work through a recurring collaboration concern | [Repository skills](.agents/skills/), [AI collaboration runbooks](.agents/runbooks/), and the [skills catalog below](#skills-route-recurring-work-while-judgment-remains-contextual) |
 | Prepare approved public references | [Configured Context Canvas references](#approved-public-references-form-through-semantic-keys) |
 | Inspect source, history, or an artifact for secret-shaped material | [Secret-material boundary](#secret-material-inspection-binds-a-clean-result-to-its-scope) |
 
@@ -277,7 +277,7 @@ expectation and what each command establishes. A passing command is evidence
 for that mechanism and revision; artifact quality, publication standing, and
 human acceptance retain their own observations and decision holders.
 
-### Fifteen skills route recurring work while judgment remains contextual
+### Skills route recurring work while judgment remains contextual
 
 Skills are portable instructions for recurring work. They become active when
 their trigger fits; current user intent, repository evidence, and granted tool
@@ -301,11 +301,15 @@ adequate route when no skill is needed.
 | [`locator-boundary-stewardship`](.agents/skills/locator-boundary-stewardship/SKILL.md) | Public collaboration records cross gated or private locator boundaries | Locator-safe prose with stable semantic keys and resolver-held exact lineage |
 | [`stateful-artifact-behavior-contracts`](.agents/skills/stateful-artifact-behavior-contracts/SKILL.md) | Owned state crosses import, edit, render, export, machine-readable, or recovery boundaries | The smallest source-grounded executable behavior contract |
 | [`secret-boundary-inspection`](.agents/skills/secret-boundary-inspection/SKILL.md) | A repository, exact index, local history, or generated artifact approaches snapshot, publication, or delivery | Canary-proven scope evidence and a safe receipt or private finding route |
+| [`repository-attribution-stewardship`](.agents/skills/repository-attribution-stewardship/SKILL.md) | Copyright-holder records, citation metadata, contribution credit, public notices, or machine-readable attribution change | Distinct carrier roles, proportionate attribution, and an evidence-calibrated governance return |
+| [`collaboration-runbook-authoring`](.agents/skills/collaboration-runbook-authoring/SKILL.md) | A known multi-phase route must stay re-entrant across source owners, Issues, checks, recovery, and handbacks | A versioned public-possible or internal-only procedure that supplies sufficient orientation while existing Issues retain scope and acceptance |
 
 [The Context Canvas skill catalog](context-canvas-project-surface/context-canvas/collaboration-skills.html)
 provides the corresponding visitor-facing reading surface. Collaboration
 accounts in [`threadkeeping/`](threadkeeping/collaboration-accounts/README.md)
 record why a skill formed, changed, continued under observation, or settled.
+[AI collaboration runbooks](.agents/runbooks/) carry known multi-phase
+procedures; Issues remain their current docket and acceptance surface.
 
 ### Hybrid teams share context while consequential decisions stay legible
 
@@ -659,6 +663,7 @@ other secret-boundary work.
 | `.tools/` | Checksum-verified external tool binaries and receipts |
 | `.visual-runs/` | Cycle-scoped screenshots, measurements, and browser diagnostics |
 | `.public-reference-build/` | Materialized Context Canvas source with approved references |
+| `.iframe-route-build/` | Deterministic Core iframe route package and receipts |
 | `.schema-pages/` | Current local schema publication build |
 | `.schema_pages/` | Ignored alternate spelling; the current builder leaves it at rest |
 | `cloudflare/context-canvas-field-pilot/dist/` | Bounded local Static Assets pilot closure |

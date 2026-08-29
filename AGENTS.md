@@ -45,8 +45,13 @@ The on-demand workflows live in `.agents/skills/`:
 - `stateful-artifact-behavior-contracts` selects focused source-grounded tests for self-roundtrip validity, minimum usable state, semantic-twin agreement, and retained-state recovery.
 - `secret-boundary-inspection` produces a canary-proven, scope-explicit secret-material receipt or private finding route before a repository handoff.
 - `repository-attribution-stewardship` distinguishes copyright-holder records, citation metadata, contribution credit, public copy-local notices, and bounded machine projections before a repository attribution change.
+- `collaboration-runbook-authoring` converts a settled multi-phase route into a versioned AI-legible procedure with explicit entry, authority, checks, recovery, stop, and handback.
 
 These entries are the standing portable skill contracts: current routing surfaces for collaboration affordances rather than claims of competence, truth, priority, or permission. Current user intent, repository evidence, and granted tool authority govern each activation. Direct reasoning remains a valid route when the smallest adequate move needs no skill.
+
+Versioned AI collaboration runbooks live in `.agents/runbooks/`. They route a
+known procedure across existing owners; GitHub Issues retain outcomes and
+acceptance, and bounded support requests retain each finite invocation.
 
 A task-bound projection binds one contract to a named receiving task and exit event. Routable projections remain one derivation edge from a portable contract, then leave active routing when the task settles or its handoff is accepted. Git history and proportionate threadkeeping preserve useful lineage. Natural use, human correction, receiving-artifact behavior, and independent sources can reopen a contract; reuse count and self-authored examples remain routing observations.
 
