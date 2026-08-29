@@ -6,6 +6,8 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, extname, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
+import { collectRailRevealFailures } from "./rail-label-failures.mjs";
+
 const DEFAULT_TARGET = "context-canvas-project-surface/context-canvas/conditioning-field.html";
 const DEFAULT_SELECTOR = ".ladder-table";
 const VIEWPORTS = [
@@ -150,13 +152,28 @@ async function measureRailReveal(page) {
       }
 
       const link = document.querySelectorAll(".page-section-rail__link")[index];
-      const rail = document.querySelector(".page-section-rail");
-      const isSourceMode = rail?.classList.contains("page-section-rail--source");
+      const rail = link?.closest(".page-section-rail") || null;
+      const railMode = rail === null
+        ? "missing"
+        : rail.classList.contains("page-section-rail--source")
+          ? "source"
+          : "standard";
       const label = link?.querySelector(".page-section-rail__label");
-      const readout = document.querySelector(".page-section-rail__readout");
+      const readout = rail === null
+        ? null
+        : rail.querySelector(".page-section-rail__readout");
       const compact = window.matchMedia("(max-width: 56rem)").matches;
 
-      const target = compact && !isSourceMode ? label : readout;
+      const targetKind = railMode === "missing"
+        ? null
+        : compact && railMode === "standard"
+          ? "label"
+          : "readout";
+      const target = targetKind === "label"
+        ? label
+        : targetKind === "readout"
+          ? readout
+          : null;
       const targetStyle = target ? window.getComputedStyle(target) : null;
       const targetRect = target ? target.getBoundingClientRect() : null;
       const targetClippedRect = target ? clippedRect(target) : null;
@@ -168,11 +185,10 @@ async function measureRailReveal(page) {
       return {
         index,
         compact,
-        isSourceMode,
-        targetKind: compact && !isSourceMode ? "label" : "readout",
+        railMode,
+        targetKind,
         slug: link?.dataset.sectionSlug || link?.getAttribute("aria-label") || "",
         targetText,
-        railExists: Boolean(rail),
         linkVisible: Boolean(linkRect && linkRect.width > 0 && linkRect.height > 0),
         targetVisible,
         targetDisplay: targetStyle?.display || "",
@@ -230,7 +246,12 @@ async function measureRailReveal(page) {
     const focusDeparture = await observe(index);
 
     results.push({
-      ...hover,
+      index: hover.index,
+      compact: hover.compact,
+      railMode: hover.railMode,
+      targetKind: hover.targetKind,
+      slug: hover.slug,
+      linkVisible: hover.linkVisible,
       states: {
         hover,
         pointerDeparture,
@@ -554,43 +575,7 @@ function collectFailures(result) {
   }
 
   if (result.railReveal) {
-    if (!result.railReveal.count) failures.push("Rail label check requested, but no page-section-rail links were found.");
-    if (result.railReveal.resting?.targetVisible) {
-      failures.push(`Rail ${result.railReveal.resting.targetKind} is visible before pointer or keyboard inspection.`);
-    }
-    for (const reveal of result.railReveal.results) {
-      const label = reveal.slug || `rail link ${reveal.index + 1}`;
-      if (!reveal.railExists) failures.push("Rail label check requested, but the page-section-rail was not found.");
-      if (!reveal.linkVisible) failures.push(`Rail tick "${label}" is not visibly rendered.`);
-      if (!reveal.targetText) failures.push(`Rail tick "${label}" has no way-finding slug text.`);
-      if (!reveal.targetVisible) {
-        failures.push(`Rail tick "${label}" does not reveal a visible ${reveal.targetKind} on hover.`);
-      }
-      if (reveal.targetRect && reveal.targetRect.width > 0 && reveal.clippedRatio < 0.92) {
-        failures.push(`Rail ${reveal.targetKind} "${label}" is clipped on hover: ${(reveal.clippedRatio * 100).toFixed(0)}% visible.`);
-      }
-      if (reveal.states.pointerDeparture.targetVisible) {
-        failures.push(`Rail ${reveal.targetKind} "${label}" remains visible after pointer departure without rail focus.`);
-      }
-      if (!reveal.states.focus.targetVisible) {
-        failures.push(`Rail tick "${label}" does not reveal a visible ${reveal.targetKind} on keyboard focus.`);
-      }
-      if (reveal.states.focus.targetRect && reveal.states.focus.targetRect.width > 0 && reveal.states.focus.clippedRatio < 0.92) {
-        failures.push(`Rail ${reveal.targetKind} "${label}" is clipped on keyboard focus: ${(reveal.states.focus.clippedRatio * 100).toFixed(0)}% visible.`);
-      }
-      if (!reveal.states.pointerDepartureWithFocus.targetVisible) {
-        failures.push(`Rail ${reveal.targetKind} "${label}" disappears when the pointer leaves while keyboard focus remains.`);
-      }
-      if (reveal.states.focusDeparture.targetVisible) {
-        failures.push(`Rail ${reveal.targetKind} "${label}" remains visible after rail focus departs.`);
-      }
-      if (reveal.isSourceMode && !/^(Current|Preview) · /.test(reveal.targetText)) {
-        failures.push(`Source rail readout "${label}" does not identify its Current or Preview relationship on hover.`);
-      }
-      if (reveal.isSourceMode && !/^(Current|Preview) · /.test(reveal.states.focus.targetText)) {
-        failures.push(`Source rail readout "${label}" does not identify its Current or Preview relationship on keyboard focus.`);
-      }
-    }
+    failures.push(...collectRailRevealFailures(result.railReveal));
   }
 
   return failures;
