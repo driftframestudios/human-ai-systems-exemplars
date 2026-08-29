@@ -272,6 +272,7 @@
       var itemEnd = itemStart + item.offsetHeight;
       if (itemStart < list.scrollTop) list.scrollTop = itemStart;
       else if (itemEnd > list.scrollTop + list.clientHeight) list.scrollTop = itemEnd - list.clientHeight;
+      showSourceReadout();
     }
 
     if (railSource.source) {

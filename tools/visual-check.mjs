@@ -100,10 +100,8 @@ async function measureRailReveal(page) {
   const count = await links.count();
   const results = [];
 
-  for (let index = 0; index < count; index += 1) {
-    await links.nth(index).hover();
-    await page.waitForTimeout(180);
-    results.push(await page.evaluate((linkIndex) => {
+  async function observe(linkIndex) {
+    return page.evaluate((index) => {
       function rectObject(rect) {
         return {
           top: rect.top,
@@ -151,28 +149,27 @@ async function measureRailReveal(page) {
         return visible;
       }
 
-      const link = document.querySelectorAll(".page-section-rail__link")[linkIndex];
+      const link = document.querySelectorAll(".page-section-rail__link")[index];
       const rail = document.querySelector(".page-section-rail");
       const isSourceMode = rail?.classList.contains("page-section-rail--source");
       const label = link?.querySelector(".page-section-rail__label");
       const readout = document.querySelector(".page-section-rail__readout");
       const compact = window.matchMedia("(max-width: 56rem)").matches;
-      
-      // In source mode at compact width, use readout; otherwise use per-link label
-      const target = isSourceMode && compact ? readout : label;
+
+      const target = compact && !isSourceMode ? label : readout;
       const targetStyle = target ? window.getComputedStyle(target) : null;
       const targetRect = target ? target.getBoundingClientRect() : null;
       const targetClippedRect = target ? clippedRect(target) : null;
       const linkRect = link ? link.getBoundingClientRect() : null;
       const targetText = target?.textContent?.trim() || "";
-      const targetVisible = Boolean(target && targetRect.width > 0 && targetRect.height > 0 && targetStyle.display !== "none" && targetStyle.visibility !== "hidden" && Number(targetStyle.opacity) > 0);
+      const targetVisible = Boolean(target && targetRect.width > 0 && targetRect.height > 0 && targetStyle.display !== "none" && targetStyle.visibility !== "hidden" && Number(targetStyle.opacity) > 0.85);
       const clippedRatio = targetRect && targetRect.width ? targetClippedRect.width / targetRect.width : 0;
 
       return {
-        index: linkIndex,
+        index,
         compact,
         isSourceMode,
-        targetKind: isSourceMode && compact ? "readout" : (compact ? "label" : "readout"),
+        targetKind: compact && !isSourceMode ? "label" : "readout",
         slug: link?.dataset.sectionSlug || link?.getAttribute("aria-label") || "",
         targetText,
         railExists: Boolean(rail),
@@ -185,10 +182,71 @@ async function measureRailReveal(page) {
         targetClippedRect,
         clippedRatio
       };
-    }, index));
+    }, linkIndex);
   }
 
-  return { count, results };
+  async function focusOutsideRail() {
+    await page.evaluate(() => {
+      const target = document.querySelector("main") || document.body;
+      if (!(target instanceof HTMLElement)) return;
+      target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+    });
+  }
+
+  const viewport = page.viewportSize();
+  const neutralPoint = {
+    x: Math.max(1, Math.floor((viewport?.width || 400) / 2)),
+    y: 4
+  };
+
+  await focusOutsideRail();
+  await page.mouse.move(neutralPoint.x, neutralPoint.y);
+  await page.waitForTimeout(180);
+  const resting = count ? await observe(0) : null;
+
+  for (let index = 0; index < count; index += 1) {
+    await links.nth(index).hover();
+    await page.waitForTimeout(180);
+    const hover = await observe(index);
+
+    await page.mouse.move(neutralPoint.x, neutralPoint.y);
+    await page.waitForTimeout(180);
+    const pointerDeparture = await observe(index);
+
+    await page.keyboard.press("Tab");
+    await links.nth(index).focus();
+    await page.waitForTimeout(180);
+    const focus = await observe(index);
+
+    await links.nth(index).hover();
+    await page.waitForTimeout(180);
+    await page.mouse.move(neutralPoint.x, neutralPoint.y);
+    await page.waitForTimeout(180);
+    const pointerDepartureWithFocus = await observe(index);
+
+    await focusOutsideRail();
+    await page.waitForTimeout(180);
+    const focusDeparture = await observe(index);
+
+    results.push({
+      ...hover,
+      states: {
+        hover,
+        pointerDeparture,
+        focus,
+        pointerDepartureWithFocus,
+        focusDeparture
+      }
+    });
+  }
+
+  if (count) {
+    await links.first().hover();
+    await page.waitForTimeout(180);
+  }
+
+  return { count, resting, results };
 }
 
 function measureReadableControls(selectors) {
@@ -497,6 +555,9 @@ function collectFailures(result) {
 
   if (result.railReveal) {
     if (!result.railReveal.count) failures.push("Rail label check requested, but no page-section-rail links were found.");
+    if (result.railReveal.resting?.targetVisible) {
+      failures.push(`Rail ${result.railReveal.resting.targetKind} is visible before pointer or keyboard inspection.`);
+    }
     for (const reveal of result.railReveal.results) {
       const label = reveal.slug || `rail link ${reveal.index + 1}`;
       if (!reveal.railExists) failures.push("Rail label check requested, but the page-section-rail was not found.");
@@ -507,6 +568,27 @@ function collectFailures(result) {
       }
       if (reveal.targetRect && reveal.targetRect.width > 0 && reveal.clippedRatio < 0.92) {
         failures.push(`Rail ${reveal.targetKind} "${label}" is clipped on hover: ${(reveal.clippedRatio * 100).toFixed(0)}% visible.`);
+      }
+      if (reveal.states.pointerDeparture.targetVisible) {
+        failures.push(`Rail ${reveal.targetKind} "${label}" remains visible after pointer departure without rail focus.`);
+      }
+      if (!reveal.states.focus.targetVisible) {
+        failures.push(`Rail tick "${label}" does not reveal a visible ${reveal.targetKind} on keyboard focus.`);
+      }
+      if (reveal.states.focus.targetRect && reveal.states.focus.targetRect.width > 0 && reveal.states.focus.clippedRatio < 0.92) {
+        failures.push(`Rail ${reveal.targetKind} "${label}" is clipped on keyboard focus: ${(reveal.states.focus.clippedRatio * 100).toFixed(0)}% visible.`);
+      }
+      if (!reveal.states.pointerDepartureWithFocus.targetVisible) {
+        failures.push(`Rail ${reveal.targetKind} "${label}" disappears when the pointer leaves while keyboard focus remains.`);
+      }
+      if (reveal.states.focusDeparture.targetVisible) {
+        failures.push(`Rail ${reveal.targetKind} "${label}" remains visible after rail focus departs.`);
+      }
+      if (reveal.isSourceMode && !/^(Current|Preview) · /.test(reveal.targetText)) {
+        failures.push(`Source rail readout "${label}" does not identify its Current or Preview relationship on hover.`);
+      }
+      if (reveal.isSourceMode && !/^(Current|Preview) · /.test(reveal.states.focus.targetText)) {
+        failures.push(`Source rail readout "${label}" does not identify its Current or Preview relationship on keyboard focus.`);
       }
     }
   }
