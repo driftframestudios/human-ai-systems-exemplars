@@ -249,10 +249,18 @@
 
     function showSourceReadout() {
       var previewLink = [focusedPreview, pointerPreview].find(function (link) {
-        return link && link !== currentLink;
+        return linkIsAvailable(link);
       }) || null;
-      var link = previewLink || currentLink || firstAvailableLink();
-      showReadout(link, previewLink ? "Preview · " : "Current · ");
+
+      if (!previewLink) {
+        hideReadout();
+        return;
+      }
+
+      showReadout(
+        previewLink,
+        previewLink === currentLink ? "Current · " : "Preview · "
+      );
     }
 
     function setCurrentLink(link) {
@@ -264,13 +272,11 @@
       var itemEnd = itemStart + item.offsetHeight;
       if (itemStart < list.scrollTop) list.scrollTop = itemStart;
       else if (itemEnd > list.scrollTop + list.clientHeight) list.scrollTop = itemEnd - list.clientHeight;
-
       showSourceReadout();
     }
 
     if (railSource.source) {
       currentLink = firstAvailableLink();
-      showSourceReadout();
 
       nav.addEventListener("pointerover", function (event) {
         pointerPreview = linkFromEvent(event);

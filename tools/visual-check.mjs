@@ -6,6 +6,8 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, extname, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
+import { collectRailRevealFailures } from "./rail-label-failures.mjs";
+
 const DEFAULT_TARGET = "context-canvas-project-surface/context-canvas/conditioning-field.html";
 const DEFAULT_SELECTOR = ".ladder-table";
 const VIEWPORTS = [
@@ -100,10 +102,8 @@ async function measureRailReveal(page) {
   const count = await links.count();
   const results = [];
 
-  for (let index = 0; index < count; index += 1) {
-    await links.nth(index).hover();
-    await page.waitForTimeout(180);
-    results.push(await page.evaluate((linkIndex) => {
+  async function observe(linkIndex) {
+    return page.evaluate((index) => {
       function rectObject(rect) {
         return {
           top: rect.top,
@@ -151,12 +151,29 @@ async function measureRailReveal(page) {
         return visible;
       }
 
-      const link = document.querySelectorAll(".page-section-rail__link")[linkIndex];
-      const rail = document.querySelector(".page-section-rail");
+      const link = document.querySelectorAll(".page-section-rail__link")[index];
+      const rail = link?.closest(".page-section-rail") || null;
+      const railMode = rail === null
+        ? "missing"
+        : rail.classList.contains("page-section-rail--source")
+          ? "source"
+          : "standard";
       const label = link?.querySelector(".page-section-rail__label");
-      const readout = document.querySelector(".page-section-rail__readout");
+      const readout = rail === null
+        ? null
+        : rail.querySelector(".page-section-rail__readout");
       const compact = window.matchMedia("(max-width: 56rem)").matches;
-      const target = compact ? label : readout;
+
+      const targetKind = railMode === "missing"
+        ? null
+        : compact && railMode === "standard"
+          ? "label"
+          : "readout";
+      const target = targetKind === "label"
+        ? label
+        : targetKind === "readout"
+          ? readout
+          : null;
       const targetStyle = target ? window.getComputedStyle(target) : null;
       const targetRect = target ? target.getBoundingClientRect() : null;
       const targetClippedRect = target ? clippedRect(target) : null;
@@ -166,12 +183,12 @@ async function measureRailReveal(page) {
       const clippedRatio = targetRect && targetRect.width ? targetClippedRect.width / targetRect.width : 0;
 
       return {
-        index: linkIndex,
+        index,
         compact,
-        targetKind: compact ? "label" : "readout",
+        railMode,
+        targetKind,
         slug: link?.dataset.sectionSlug || link?.getAttribute("aria-label") || "",
         targetText,
-        railExists: Boolean(rail),
         linkVisible: Boolean(linkRect && linkRect.width > 0 && linkRect.height > 0),
         targetVisible,
         targetDisplay: targetStyle?.display || "",
@@ -181,10 +198,76 @@ async function measureRailReveal(page) {
         targetClippedRect,
         clippedRatio
       };
-    }, index));
+    }, linkIndex);
   }
 
-  return { count, results };
+  async function focusOutsideRail() {
+    await page.evaluate(() => {
+      const target = document.querySelector("main") || document.body;
+      if (!(target instanceof HTMLElement)) return;
+      target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+    });
+  }
+
+  const viewport = page.viewportSize();
+  const neutralPoint = {
+    x: Math.max(1, Math.floor((viewport?.width || 400) / 2)),
+    y: 4
+  };
+
+  await focusOutsideRail();
+  await page.mouse.move(neutralPoint.x, neutralPoint.y);
+  await page.waitForTimeout(180);
+  const resting = count ? await observe(0) : null;
+
+  for (let index = 0; index < count; index += 1) {
+    await links.nth(index).hover();
+    await page.waitForTimeout(180);
+    const hover = await observe(index);
+
+    await page.mouse.move(neutralPoint.x, neutralPoint.y);
+    await page.waitForTimeout(180);
+    const pointerDeparture = await observe(index);
+
+    await page.keyboard.press("Tab");
+    await links.nth(index).focus();
+    await page.waitForTimeout(180);
+    const focus = await observe(index);
+
+    await links.nth(index).hover();
+    await page.waitForTimeout(180);
+    await page.mouse.move(neutralPoint.x, neutralPoint.y);
+    await page.waitForTimeout(180);
+    const pointerDepartureWithFocus = await observe(index);
+
+    await focusOutsideRail();
+    await page.waitForTimeout(180);
+    const focusDeparture = await observe(index);
+
+    results.push({
+      index: hover.index,
+      compact: hover.compact,
+      railMode: hover.railMode,
+      targetKind: hover.targetKind,
+      slug: hover.slug,
+      linkVisible: hover.linkVisible,
+      states: {
+        hover,
+        pointerDeparture,
+        focus,
+        pointerDepartureWithFocus,
+        focusDeparture
+      }
+    });
+  }
+
+  if (count) {
+    await links.first().hover();
+    await page.waitForTimeout(180);
+  }
+
+  return { count, resting, results };
 }
 
 function measureReadableControls(selectors) {
@@ -492,19 +575,7 @@ function collectFailures(result) {
   }
 
   if (result.railReveal) {
-    if (!result.railReveal.count) failures.push("Rail label check requested, but no page-section-rail links were found.");
-    for (const reveal of result.railReveal.results) {
-      const label = reveal.slug || `rail link ${reveal.index + 1}`;
-      if (!reveal.railExists) failures.push("Rail label check requested, but the page-section-rail was not found.");
-      if (!reveal.linkVisible) failures.push(`Rail tick "${label}" is not visibly rendered.`);
-      if (!reveal.targetText) failures.push(`Rail tick "${label}" has no way-finding slug text.`);
-      if (!reveal.targetVisible) {
-        failures.push(`Rail tick "${label}" does not reveal a visible ${reveal.targetKind} on hover.`);
-      }
-      if (reveal.targetRect && reveal.targetRect.width > 0 && reveal.clippedRatio < 0.92) {
-        failures.push(`Rail ${reveal.targetKind} "${label}" is clipped on hover: ${(reveal.clippedRatio * 100).toFixed(0)}% visible.`);
-      }
-    }
+    failures.push(...collectRailRevealFailures(result.railReveal));
   }
 
   return failures;
