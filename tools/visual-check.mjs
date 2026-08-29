@@ -153,22 +153,26 @@ async function measureRailReveal(page) {
 
       const link = document.querySelectorAll(".page-section-rail__link")[linkIndex];
       const rail = document.querySelector(".page-section-rail");
+      const isSourceMode = rail?.classList.contains("page-section-rail--source");
       const label = link?.querySelector(".page-section-rail__label");
       const readout = document.querySelector(".page-section-rail__readout");
       const compact = window.matchMedia("(max-width: 56rem)").matches;
-      const target = compact ? label : readout;
+      
+      // In source mode at compact width, use readout; otherwise use per-link label
+      const target = isSourceMode && compact ? readout : label;
       const targetStyle = target ? window.getComputedStyle(target) : null;
       const targetRect = target ? target.getBoundingClientRect() : null;
       const targetClippedRect = target ? clippedRect(target) : null;
       const linkRect = link ? link.getBoundingClientRect() : null;
       const targetText = target?.textContent?.trim() || "";
-      const targetVisible = Boolean(target && targetRect.width > 0 && targetRect.height > 0 && targetStyle.display !== "none" && targetStyle.visibility !== "hidden" && Number(targetStyle.opacity) > 0.85);
+      const targetVisible = Boolean(target && targetRect.width > 0 && targetRect.height > 0 && targetStyle.display !== "none" && targetStyle.visibility !== "hidden" && Number(targetStyle.opacity) > 0);
       const clippedRatio = targetRect && targetRect.width ? targetClippedRect.width / targetRect.width : 0;
 
       return {
         index: linkIndex,
         compact,
-        targetKind: compact ? "label" : "readout",
+        isSourceMode,
+        targetKind: isSourceMode && compact ? "readout" : (compact ? "label" : "readout"),
         slug: link?.dataset.sectionSlug || link?.getAttribute("aria-label") || "",
         targetText,
         railExists: Boolean(rail),
