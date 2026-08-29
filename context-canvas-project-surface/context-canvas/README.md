@@ -97,22 +97,19 @@ neighboring explanation, and semantic key keep the source legible before a
 public build; materialization supplies the ordinary external link. Direct
 Notion page routes stay outside this authored visitor tree.
 
-Hosted iframe carriers use `PUBLIC_URL_IFRAME_*` keys in explicit
-`data-public-src` and `data-public-href` attributes. Their ordinary `src` and
-`href` attributes remain complete repository-local fallbacks, so the authored
-page and its full-view route continue to work without hosted configuration.
-The generated page sends the iframe `src` to the approved
-`https://iframes.vik.guru/v1/.../` destination. Its adjacent full-view `href`
-continues to open the repository-local base prototype; the resolved
-`data-public-href` records the pairing without changing visitor navigation.
+Activated Core iframe carriers use the public route manifest directly. Their
+`src` values point to stable `https://iframes.vik.guru/v1/core/.../` aliases,
+while each adjacent full-view `href` continues to open the repository-local
+base prototype. A contextual title, intentional lazy loading, exact
+route-matched sandbox, narrow Permissions Policy when needed, and
+`referrerpolicy="no-referrer"` keep the behavioral boundary visible in
+authored source. The multi-route pack index opens as a non-embedded full view;
+this keeps its sibling destinations from inheriting one shared iframe policy.
 
-The authored iframe keeps the behavioral boundary visible: a contextual
-title, intentional lazy loading, an explicit sandbox, a route-matched narrow
-Permissions Policy when needed, and `referrerpolicy="no-referrer"`. The
-materializer validates those attributes and changes only the public route
-metadata plus the iframe `src`. This leaves a cold-start collaborator able to
-inspect the source and see the same carrier policy that reaches the generated
-visitor surface.
+The dependency-free materializer retains a tested hosted-iframe twin seam for
+an explicitly late-bound future receiver. Current Core carriers no longer need
+that configuration seam: their activated route is inspectable and testable in
+tracked HTML before publication.
 
 The accepted Notion boundary is concise: only the Enterprise Human-AI
 Practitioner Registry root and its descendants are public-possible. A key name
@@ -134,12 +131,9 @@ entry, which keeps the same build seam available to a later delivery receiver.
 The materializer never prints configured values. It rejects incomplete,
 malformed, non-HTTPS, userinfo-bearing, recognized credential-parameter,
 duplicate, or out-of-namespace public settings before replacing an accepted
-generation. Hosted iframe routes additionally carry their approved host,
-versioned path, trailing slash, and matching semantic key without an explicit
-port, query, or fragment. Unused scoped settings remain additive; authored
-HTML continues to define the required set. Human review keeps path-shaped
-access coordinates and unfamiliar signing conventions outside approved
-Registry destinations.
+generation. Unused scoped settings remain additive; authored HTML continues
+to define the required set. Human review keeps path-shaped access coordinates
+and unfamiliar signing conventions outside approved Registry destinations.
 
 The ignored output is
 `.public-reference-build/context-canvas-project-surface/`. The builder copies

@@ -35,7 +35,7 @@ self-contained surface before asking you to learn the repository around it.
 | Start here | What you can do | Why continue |
 | --- | --- | --- |
 | [Field Inspection Harness Re-platform](context-canvas-project-surface/context-canvas/field-inspection-harness-replatform.html) | Trace offline field capture through solution architecture, synchronization and conflict contracts, staged capital, validation gates, and affected populations. | Design, engineering, quality, operations, and investment leads can inspect one conditional proposal while their decision rights remain distinct. |
-| [Strategy Canvas collaboration workbench](context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.0.html) | Gather independent human readings; reveal count, median, range, and missingness; shape a reversible scenario; keep AI-attributed proposals separate; authorize a reviewed export. | A senior room can move from disagreement to a provenance-bearing handoff while private ballots remain local. |
+| [Strategy Canvas collaboration workbench](context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.1.html) | Gather independent human readings; reveal count, median, range, and missingness; shape a reversible scenario; keep AI-attributed proposals separate; authorize a reviewed export. | A senior room can move from disagreement to a provenance-bearing handoff while private ballots remain local. |
 | [Cross-Functional Investment Studio](collaboration/initiative-costing-calculator/index.html) | Edit roles, allocations, loaded rates, activities, disruption and recovery, quality attention, named unknowns, and the human receiver for each AI contribution. | Coordination load becomes visible beside the planning band; budget and staffing authority remain with named people. |
 | [A3 migration-authority storyboard](a3-stacked-cube-visual-system-bundle-v0.1/a3-stacked-cube-visual-system-chimeric-prototype-v0.1.html) | Walk four frames from current authority to a validated capability transfer, with seams, evidence gates, `UNKNOWN`, retained legacy, and rollback visible. | Architecture migration becomes a reviewable transfer of authority rather than only a future-state picture. |
 | [LIMS/ELN Functional Nucleus](lims-eln-functional-nucleus/README.md) | Run the Golden Specimen thread through shared contracts, simulation, implementation, comparison, and governance across five independently governed repository roles. | Scientific, engineering, quality, regulatory, security, and operations collaborators can distinguish synthetic engineering evidence from accountable acceptance. |
@@ -398,14 +398,13 @@ uses stable `PUBLIC_URL_REGISTRY_*` keys for those candidates and carries
 direct Notion page URLs to exactly zero pages. All other Notion pages remain
 outside the Context Canvas in both this repository and the retained source.
 
-Hosted Core companions use a parallel `PUBLIC_URL_IFRAME_*` namespace. An
-authored iframe and its full-view link retain complete repository-local
-`src` and `href` fallbacks; `data-public-src` and `data-public-href` identify
-the build-time destination without making the tracked page depend on a live
-host. Materialization directs only the iframe `src` to that hosted destination;
-the adjacent full-view `href` continues to open the Context Canvas base
-prototype. The first carrier binds the HEART Chart to
-`PUBLIC_URL_IFRAME_CORE_HEART_CHART`.
+Activated Core companions use their manifest-owned
+`https://iframes.vik.guru/v1/core/.../` routes directly in iframe `src`
+attributes. Each adjacent full-view `href` continues to open the current
+versioned Context Canvas base prototype. Eight current carriers use seven
+hosted routes and their exact route sandbox profiles. The pack index stays a
+non-embedded full-view navigation surface so its sibling prototypes do not
+inherit one union capability boundary.
 
 The eighteen Site Reading routes enter the public-possible collection through
 their approved Registry destinations: fifteen use direct counterparts,
@@ -426,21 +425,20 @@ npm run test:public-reference-materializer
 
 The dependency-free
 [materializer](tools/materialize-public-references.mjs) discovers required keys
-from authored HTML, resolves Registry anchors, hosted iframe twins, and
-JSON-LD carriers together, and writes the validated result beneath ignored
-`.public-reference-build/`. Hosted iframe values use credential-free
-`https://iframes.vik.guru/v1/.../` routes whose normalized path agrees with
-their semantic key; explicit ports, query strings, and fragments stay outside
-that route contract. The builder reports semantic key names without
-destination values. A configuration or build failure preserves the prior
-tool-owned generation; a final rename failure retains and names its recovery
-directory.
+from authored HTML, resolves Registry anchors and JSON-LD carriers together,
+and writes the validated result beneath ignored `.public-reference-build/`.
+The builder reports semantic key names without destination values. A
+configuration or build failure preserves the prior tool-owned generation; a
+final rename failure retains and names its recovery directory. The generic
+hosted-iframe twin validator remains covered for an explicitly late-bound
+future receiver; the activated Core routes no longer depend on that build-time
+substitution.
 
-Materialization establishes source-to-destination substitution, carrier
-agreement, containment, and recoverable generation. Human review establishes
-Registry ancestry, content standing, audience, signed-out reachability, and
-publication approval. A delivery receiver owns complete adjacent-asset
-closure, configuration, upload, and its publication receipt.
+Materialization establishes Registry source-to-destination substitution,
+carrier agreement, containment, and recoverable generation. Human review
+establishes Registry ancestry, content standing, audience, signed-out
+reachability, and publication approval. A delivery receiver owns complete
+adjacent-asset closure, configuration, upload, and its publication receipt.
 
 [The Context Canvas orientation](context-canvas-project-surface/context-canvas/README.md#materialize-approved-public-references)
 and [durable materialization account](threadkeeping/context-canvas-public-reference-materialization.md)

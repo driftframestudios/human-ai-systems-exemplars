@@ -21,7 +21,7 @@ const artifactNames = {
   matrix: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.1.html",
   unitTestFirst: "unit-test-first-design-chimeric-prototype-v0.1.1.html",
   recoveryAtlas: "recovery-routing-atlas-chimeric-prototype-v0.1.1.html",
-  familyIndex: "core-architecture-family-index-chimeric-prototype-v0.1.1.html"
+  familyIndex: "core-architecture-family-index-chimeric-prototype-v0.1.2.html"
 };
 
 const packIndexName = "core-architectures-chimeric-prototype-pack-index-v0.1.1.html";

@@ -42,8 +42,8 @@ An AIShadowRound is the optional post-reveal interaction that prepares a portabl
 
 | Consumer | Current route or contract | Compatibility posture |
 | --- | --- | --- |
-| Canonical pack index and manifest | `strategy-canvas-chimeric-prototype-v0.2.0.html` | v0.1.1 remains an accessible compatibility route |
-| Context pack index and manifest | `strategy-canvas-chimeric-prototype-v0.2.0.html` | v0.1.1 remains an accessible compatibility route |
+| Canonical pack index and manifest | `strategy-canvas-chimeric-prototype-v0.2.1.html` | v0.1.1 remains an accessible compatibility route |
+| Context pack index and manifest | `strategy-canvas-chimeric-prototype-v0.2.1.html` | v0.1.1 remains an accessible compatibility route |
 | Shared artifact-model registry | `strategy-canvas/2.0`; `extensions.contextCanvas` | recommended entities include migration and review concepts |
 | Narrative Capsule Composer | `strategy-canvas-v2-adapter.js` | NOW/NEXT/LATER mapping is named and receipted |
 | Grammar Family | Context v0.2.0 embed | iframe permissions follow implemented capabilities |

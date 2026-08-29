@@ -5,7 +5,7 @@
 <meta name="author" content="Vikrant Varun Kudesia">
 <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Service-design Blueprint · Service Topology Map · Chimeric Prototype v0.2.1</title>
+<title>Service-design Blueprint · Service Topology Map · Chimeric Prototype v0.2.2</title>
 <style>
   :root {
     --paper: #fffdf8;
@@ -157,6 +157,10 @@
   .identity-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
   .identity-card { border: 1px solid var(--line); border-radius: 14px; padding: 10px; background: #fffefb; }
   .identity-card code { font-size: .82rem; }
+  @media (max-width: 520px) {
+    .identity-grid, .checkbox-grid { grid-template-columns: minmax(0, 1fr); }
+    .identity-card, .checkbox-line { min-width: 0; }
+  }
   .focus-note { border-left: 4px solid var(--accent-strong); padding: 8px 10px; background: #f4fafa; border-radius: 10px; }
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
@@ -188,7 +192,7 @@
 <body>
 <header>
   <div class="wrap hero">
-    <p class="subtitle">Core Architecture Chimeric Prototype v0.2.1</p>
+    <p class="subtitle">Core Architecture Chimeric Prototype v0.2.2</p>
     <h1 id="pageTitle">Service-design Blueprint</h1>
     <p class="subtitle" id="pageSubtitle">Service Topology Map</p>
     <p class="deck">A layered service map that shows visible experience, backstage work, AI or agent participation, system behavior, data and evidence, governance surfaces, and handoffs across a service journey. The HTML table is the reading and editing surface; the SVG is a compact visual companion generated from the same stable IDs.</p>
@@ -229,7 +233,7 @@
     <div class="grid-2">
       <div>
         <h3>Service stages</h3>
-        <p class="small-note">Stages are semantic sequence columns. For v0.2.1 they can be hidden for focus, but not reordered casually.</p>
+        <p class="small-note">Stages are semantic sequence columns. For v0.2.2 they can be hidden for focus, but not reordered casually.</p>
         <div class="toolbar" style="margin:10px 0;"><button id="addStage">Add stage</button><button id="showAllStages" class="secondary">Show all stages</button></div>
         <div id="stageControls" class="controls-list"></div>
         <div id="hiddenStages" class="hidden-panel"></div>
@@ -409,7 +413,7 @@ const state = {
     id: 'ca-artifact-service-design-blueprint-genomics-001',
     display_name: 'Topology',
     subtitle: 'Service Design Blueprint',
-    version: '0.2.1',
+    version: '0.2.2',
     family: 'Shared Surfaces and Topology',
     placement: 'Bridge Architecture',
     primary_cognitive_move: 'multi-layer service topology mapping',

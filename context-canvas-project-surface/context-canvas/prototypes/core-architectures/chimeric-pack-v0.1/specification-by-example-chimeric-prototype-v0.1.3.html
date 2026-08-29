@@ -5,7 +5,7 @@
 <meta name="author" content="Vikrant Varun Kudesia">
 <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Specification-by-Example · Behavior Example Bridge · Chimeric Prototype v0.1.2</title>
+<title>Specification-by-Example · Behavior Example Bridge · Chimeric Prototype v0.1.3</title>
 <style>
   :root {
     --paper:#fffdf8; --ink:#25231f; --muted:#686258; --line:#d8d0c1; --line-strong:#bcb3a2;
@@ -28,12 +28,13 @@
   .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:14px}.summary-card{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fffefb}.summary-card strong{display:block;font-size:.88rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
   .wide-area{width:100%;max-width:100%;margin-inline:auto}.diagram-panel{padding:16px}.svg-wrap{width:100%;max-width:100%;min-width:0;overflow:auto;border:1px solid var(--line);border-radius:16px;background:#fffefb;padding:10px} svg{display:block;max-width:none}
   .editor-list{display:grid;gap:12px}.rule-card,.scenario-card{border:1px solid var(--line);border-radius:16px;background:#fffefb;padding:14px}.scenario-card[hidden]{display:none}.card-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}.card-head h3{margin:0}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}@media(max-width:860px){.field-grid{grid-template-columns:1fr}}.scenario-text-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}@media(max-width:980px){.scenario-text-grid{grid-template-columns:1fr}}
+  @media(max-width:560px){.editor-list>*{min-width:0}.card-head>*{min-width:0}.card-head{flex-wrap:wrap}}
   .table-wrap{width:100%;max-width:100%;min-width:0;overflow:auto;border:1px solid var(--line);border-radius:16px;background:#fffefb} table{border-collapse:separate;border-spacing:0;width:100%;min-width:1080px} th,td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:12px;text-align:left;vertical-align:top} th{background:#f8f3ea;font-weight:850} tr:last-child td{border-bottom:0} th:last-child,td:last-child{border-right:0}.clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.reveal{margin-top:8px}.reveal summary{cursor:pointer;font-weight:760;color:var(--accent-ink)}
   .inspector{position:sticky;top:12px}.kv{display:grid;grid-template-columns:170px minmax(0,1fr);gap:8px 12px;border-top:1px solid var(--line);padding-top:12px}.kv div:nth-child(odd){font-weight:820;color:var(--muted)}
   .hidden-list{display:flex;flex-wrap:wrap;gap:8px}.hidden-chip{border:1px solid var(--line);background:var(--soft);border-radius:14px;padding:8px;display:inline-flex;gap:8px;align-items:center}.notice{border-left:4px solid var(--accent-strong);padding:10px 12px;background:#f2f7f7;border-radius:12px;color:var(--accent-ink);font-weight:650}.codebox{width:100%;min-width:0;min-height:240px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9rem;white-space:pre;overflow:auto}.promptbox{white-space:pre-wrap;border:1px solid var(--line);border-radius:16px;background:#fffefb;padding:14px;max-height:520px;overflow:auto}.split{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.65fr);gap:18px}@media(max-width:1100px){.split{grid-template-columns:minmax(0,1fr)}.inspector{position:static}}
   .svg-scenario{cursor:pointer}.svg-scenario:focus{outline:3px solid #2f646c;outline-offset:3px}.selected-svg rect.outer{stroke:#2f646c;stroke-width:4}.legend-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}.status-mini{padding:8px;border:1px solid var(--line);border-radius:12px;background:#fffefb}.mutedbox{background:#fbf8f0;border:1px solid var(--line);border-radius:14px;padding:12px}
 
-  /* v0.1.2 refinements: bounded status labels and clearer rule/scenario distinction */
+  /* v0.1.3 refinements: bounded status labels, clearer rule/scenario distinction, and narrow-carrier containment */
   .status-pill { white-space: normal; max-width: 100%; line-height: 1.15; border-radius: 10px; }
   .status-cell { min-width: 132px; max-width: 154px; }
   .rule-band-label { text-transform: uppercase; letter-spacing: .05em; font-size: .76rem; color: var(--muted); font-weight: 860; }
@@ -68,7 +69,7 @@
 <body>
 <header>
   <div class="wrap hero">
-    <div class="pill">Chimeric Prototype v0.1.2</div>
+    <div class="pill">Chimeric Prototype v0.1.3</div>
     <h1>Specification-by-Example</h1>
     <div class="subtitle">Behavior Example Bridge</div>
     <p class="deck">A bridge architecture that turns verbal agreement into concrete examples, then lets accepted examples become living specifications, tests, or implementation guidance. This single-file artifact preserves human-readable editing, SVG visualization, JSON/JSON-LD structure, semantic locality, recovery calibration, and an AI collaboration prompt capsule.</p>
@@ -90,7 +91,7 @@
     <div class="grid-3">
       <div><label for="artifactTitle">Artifact title</label><input id="artifactTitle" type="text" value="Specification-by-Example" data-artifact-field="display_name"></div>
       <div><label for="artifactSubtitle">Subtitle</label><input id="artifactSubtitle" type="text" value="Behavior Example Bridge" data-artifact-field="subtitle"></div>
-      <div><label for="artifactVersion">Version</label><input id="artifactVersion" type="text" value="0.1.2" data-artifact-field="version"></div>
+      <div><label for="artifactVersion">Version</label><input id="artifactVersion" type="text" value="0.1.3" data-artifact-field="version"></div>
     </div>
     <div class="toolbar" style="margin-top:14px">
       <button id="addRuleBtn" type="button">Add rule</button>
@@ -271,7 +272,7 @@
 
   let state = {
     artifact_identity: {
-      id:'ca-artifact-specification-by-example-genomics-001', display_name:'Specification-by-Example', subtitle:'Behavior Example Bridge', version:'0.1.2', family:'Participatory Elicitation and Specification', placement:'Bridge Architecture', primary_cognitive_move:'behavior example discovery and executable verification', source_band:['inherited_method','author_adapted_method','central_bridge_artifact']
+      id:'ca-artifact-specification-by-example-genomics-001', display_name:'Specification-by-Example', subtitle:'Behavior Example Bridge', version:'0.1.3', family:'Participatory Elicitation and Specification', placement:'Bridge Architecture', primary_cognitive_move:'behavior example discovery and executable verification', source_band:['inherited_method','author_adapted_method','central_bridge_artifact']
     },
     rules: [
       { id:'rule-consent-aware-review', label:'Consent-aware variant review', description:'Review behavior should respect current consent context and route sensitive actions to review when needed.', canonical_order:1 },
