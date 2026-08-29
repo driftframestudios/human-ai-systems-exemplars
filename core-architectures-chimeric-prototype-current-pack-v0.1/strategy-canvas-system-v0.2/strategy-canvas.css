@@ -121,6 +121,8 @@
   .sc-chart-section { padding: clamp(0.65rem, 2vw, 1.5rem); }
   .sc-editor-section, .sc-data-section, .sc-transfer-section { padding: clamp(1rem, 2.5vw, 2rem); border-top: 1px solid var(--sc-line); }
   .sc-editor-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(19rem, 25rem); gap: 1.25rem; align-items: start; }
+  .sc-editor-grid > * { min-width: 0; }
+  .sc-field :is(input, textarea, select) { width: 100%; min-width: 0; }
   .sc-transfer-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
   .sc-footer { max-width: var(--sc-readable); margin: 3rem auto 0; color: var(--sc-muted); font-size: 0.9rem; }
   @media (max-width: 900px) {

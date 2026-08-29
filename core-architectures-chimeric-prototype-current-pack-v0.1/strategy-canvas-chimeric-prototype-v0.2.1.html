@@ -131,6 +131,8 @@
   .sc-chart-section { padding: clamp(0.65rem, 2vw, 1.5rem); }
   .sc-editor-section, .sc-data-section, .sc-transfer-section { padding: clamp(1rem, 2.5vw, 2rem); border-top: 1px solid var(--sc-line); }
   .sc-editor-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(19rem, 25rem); gap: 1.25rem; align-items: start; }
+  .sc-editor-grid > * { min-width: 0; }
+  .sc-field :is(input, textarea, select) { width: 100%; min-width: 0; }
   .sc-transfer-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
   .sc-footer { max-width: var(--sc-readable); margin: 3rem auto 0; color: var(--sc-muted); font-size: 0.9rem; }
   @media (max-width: 900px) {
@@ -650,14 +652,14 @@
   }
 
   global.StrategyCanvasSchemaValidator = Object.freeze({
-    version: '0.2.0',
+    version: '0.2.1',
     schemaId: PUBLISHED_SCHEMA.$id,
     validate
   });
 })(typeof window !== 'undefined' ? window : globalThis);
   </script>
   <script>
-/* Strategy Canvas shared state engine v0.2.0 — dependency-free and DOM-independent. */
+/* Strategy Canvas shared state engine v0.2.1 — dependency-free and DOM-independent. */
 (function exposeStrategyCanvasCore(global) {
   'use strict';
 
@@ -1437,7 +1439,7 @@
   }
 
   global.StrategyCanvasCore = Object.freeze({
-    version: '0.2.0',
+    version: '0.2.1',
     schemaVersion: SCHEMA_VERSION,
     series: SERIES,
     errcActions: ACTIONS,
@@ -1460,7 +1462,7 @@
 })(typeof window !== 'undefined' ? window : globalThis);
   </script>
   <script>
-/* Canonical Strategy Canvas controller v0.2.0 — safe DOM rendering over StrategyCanvasCore. */
+/* Canonical Strategy Canvas controller v0.2.1 — safe DOM rendering over StrategyCanvasCore. */
 (function exposeStrategyCanvasCanonical(global) {
   'use strict';
 
@@ -2168,7 +2170,7 @@
     root.dataset.scEnhancementState = 'mounted';
 
     return Object.freeze({
-      version: '0.2.0',
+      version: '0.2.1',
       schemaVersion: core.schemaVersion,
       getState: () => core.clone(store.getState()),
       getValidation: () => core.validateState(store.getState()),
@@ -2178,7 +2180,7 @@
     });
   }
 
-  global.StrategyCanvasCanonical = Object.freeze({ version: '0.2.0', mount });
+  global.StrategyCanvasCanonical = Object.freeze({ version: '0.2.1', mount });
 })(typeof window !== 'undefined' ? window : globalThis);
   </script>
   <script>

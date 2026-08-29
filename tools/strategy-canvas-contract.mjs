@@ -11,8 +11,8 @@ import {
   artifactLicense,
 } from "./attribution-contract.mjs";
 
-const CANONICAL = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.0.html";
-const CONTEXT = "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.0.html";
+const CANONICAL = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.1.html";
+const CONTEXT = "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.1.html";
 const NARRATIVE_COMPOSERS = [
   {
     name: "Context",
@@ -1070,8 +1070,8 @@ async function compatibilityContract(browser, origin) {
     await verify(`compatibility route · ${route}`, async () => {
       const { context, page, telemetry } = await openPage(browser, `${origin}/${route}`, VIEWPORTS[0]);
       try {
-        const redirected = page.url().endsWith("strategy-canvas-chimeric-prototype-v0.2.0.html");
-        const link = page.locator('a[href*="strategy-canvas-chimeric-prototype-v0.2.0.html"]').first();
+        const redirected = page.url().endsWith("strategy-canvas-chimeric-prototype-v0.2.1.html");
+        const link = page.locator('a[href*="strategy-canvas-chimeric-prototype-v0.2.1.html"]').first();
         const linkVisible = await link.isVisible().catch(() => false);
         assert(redirected || linkVisible, "Compatibility route should redirect or expose a direct current-version link.");
         if (linkVisible) assert((await link.textContent()).trim().length > 8, "Compatibility link should carry a readable name.");

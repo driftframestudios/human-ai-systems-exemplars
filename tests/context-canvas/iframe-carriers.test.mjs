@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
-import { basename, join, resolve } from "node:path";
+import { join, resolve } from "node:path";
 import test from "node:test";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
@@ -27,8 +27,11 @@ function escapeExpression(value) {
 
 test("Core prototype carriers keep a minimal explicit iframe boundary", async () => {
   const manifest = JSON.parse(await readFile(routeManifestPath, "utf8"));
-  const routeBySource = new Map(
-    manifest.routes.map((route) => [route.source_file, route]),
+  const routeByPublicUrl = new Map(
+    manifest.routes.map((route) => [
+      `https://${manifest.host}${route.public_alias}`,
+      route,
+    ]),
   );
   const pages = (await readdir(contextRoot, { withFileTypes: true }))
     .filter((entry) => entry.isFile() && entry.name.endsWith(".html"))
@@ -41,7 +44,7 @@ test("Core prototype carriers keep a minimal explicit iframe boundary", async ()
     for (const match of html.matchAll(/<iframe\b[^>]*>/gi)) {
       const tag = match[0];
       const src = attributeValue(tag, "src");
-      if (!src?.includes("prototypes/core-architectures/chimeric-pack-v0.1/")) continue;
+      if (!src?.startsWith(`https://${manifest.host}${manifest.base_path}`)) continue;
       const figureStart = html.lastIndexOf("<figure", match.index);
       const figureEnd = html.indexOf("</figure>", match.index);
       const figure =
@@ -52,11 +55,16 @@ test("Core prototype carriers keep a minimal explicit iframe boundary", async ()
     }
   }
 
-  assert.equal(carriers.length, 9, "the current Context Canvas owns nine Core carriers");
+  assert.equal(carriers.length, 8, "the current Context Canvas owns eight hosted Core carriers");
+  assert.equal(
+    new Set(carriers.map(({ src }) => src)).size,
+    7,
+    "the eight carriers use seven manifest-owned public routes",
+  );
 
   for (const carrier of carriers) {
-    const label = `${carrier.page} → ${basename(carrier.src)}`;
-    const route = routeBySource.get(basename(carrier.src));
+    const route = routeByPublicUrl.get(carrier.src);
+    const label = `${carrier.page} → ${route?.id ?? carrier.src}`;
     const title = attributeValue(carrier.tag, "title");
     const sandbox = attributeValue(carrier.tag, "sandbox");
     const allow = attributeValue(carrier.tag, "allow");
@@ -68,54 +76,58 @@ test("Core prototype carriers keep a minimal explicit iframe boundary", async ()
     assert.equal(attributeValue(carrier.tag, "loading"), "lazy", `${label} loads intentionally`);
     assert.notEqual(sandbox, null, `${label} declares a sandbox even when its token list is empty`);
     assert.equal(attributeValue(carrier.tag, "referrerpolicy"), "no-referrer", `${label} sends no referrer`);
+    assert.equal(attributeValue(carrier.tag, "data-public-src"), null, `${label} uses its active stable route directly`);
     assert.doesNotMatch(
       sandbox,
       /allow-(?:same-origin|forms|popups|top-navigation|storage-access)/,
       `${label} avoids unrelated sandbox capabilities`,
     );
-    const expectedSandbox = [...route.carrier_policy.sandbox_tokens];
-    if (route.id === "strategy-canvas") expectedSandbox.push("allow-downloads");
     assert.deepEqual(
       sandboxTokens,
-      expectedSandbox,
-      `${label} uses its route profile and only its adapted local capability`,
+      route.carrier_policy.sandbox_tokens,
+      `${label} uses its exact public-route sandbox profile`,
     );
     assert.deepEqual(
       allowFeatures,
       route.carrier_policy.permissions_policy,
       `${label} uses the exact route Permissions Policy profile`,
     );
+    const localFullView =
+      `prototypes/core-architectures/chimeric-pack-v0.1/${route.source_file}`;
     assert.match(
       carrier.figure,
-      new RegExp(`href=["']${escapeExpression(carrier.src)}["']`, "i"),
-      `${label} keeps its local full-view route in the owning figure`,
+      new RegExp(`href=["']${escapeExpression(localFullView)}["']`, "i"),
+      `${label} keeps its repository-local full-view route in the owning figure`,
     );
-
-    const hostedKey = attributeValue(carrier.tag, "data-public-src");
-    if (hostedKey === null) continue;
-    assert.equal(hostedKey, "{{PUBLIC_URL_IFRAME_CORE_HEART_CHART}}");
-    assert.equal(route.id, "heart-chart");
+    assert.doesNotMatch(
+      carrier.figure,
+      /data-public-(?:src|href)=/i,
+      `${label} does not retain a superseded late-binding carrier`,
+    );
   }
 
-  const hub = carriers.find(({ src }) => basename(src) === "core-architectures-chimeric-prototype-pack-index-v0.1.1.html");
-  assert.ok(hub, "the pack hub carrier is present");
-  assert.equal(attributeValue(hub.tag, "sandbox"), "", "the scriptless hub receives an empty sandbox");
-  assert.doesNotMatch(attributeValue(hub.tag, "title"), /interactive/i, "the hub title does not promise interaction");
+  const hubRoute = manifest.routes.find(({ id }) => id === "core-architectures-pack");
+  assert.ok(hubRoute, "the pack hub route remains in the public route manifest");
+  assert.equal(
+    carriers.some(({ src }) => src === `https://${manifest.host}${hubRoute.public_alias}`),
+    false,
+    "the multi-route pack index is presented as a full view rather than one union-capability iframe",
+  );
+  const orientationHtml = await readFile(
+    join(contextRoot, "core-architectures-orientation-index.html"),
+    "utf8",
+  );
+  assert.match(
+    orientationHtml,
+    new RegExp(
+      `href=["']prototypes/core-architectures/chimeric-pack-v0\\.1/${escapeExpression(hubRoute.source_file)}["']`,
+      "i",
+    ),
+    "the pack index keeps a direct repository-local full-view route",
+  );
 
   const downloadCarriers = carriers.filter(({ tag }) =>
     (attributeValue(tag, "sandbox") ?? "").split(/\s+/).includes("allow-downloads"),
   );
-  assert.equal(downloadCarriers.length, 2, "only the two adapted Strategy carriers allow downloads");
-  assert.ok(
-    downloadCarriers.every(({ src }) => basename(src) === "strategy-canvas-chimeric-prototype-v0.2.0.html"),
-  );
-  const strategyRuntime = await readFile(
-    join(
-      contextRoot,
-      "prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-context-workbench-v0.2.js",
-    ),
-    "utf8",
-  );
-  assert.match(strategyRuntime, /new Blob\s*\(/, "the adapted Strategy runtime forms a local download");
-  assert.match(strategyRuntime, /\.download\s*=/, "the adapted Strategy runtime names its local download");
+  assert.equal(downloadCarriers.length, 0, "hosted Core carriers do not retain local-only download permission");
 });

@@ -1354,7 +1354,7 @@
   if (initialHashPhase) replaceState((state, collaboration) => { collaboration.session.phase = initialHashPhase; }, { history: false, reopens: false });
   renderAll();
   window.StrategyCanvasWorkbench = Object.freeze({
-    version: '0.2.0',
+    version: '0.2.1',
     schemaVersion: Core.schemaVersion,
     getState: () => clone(currentState()),
     getValidation: () => clone(Core.validateState(currentState())),

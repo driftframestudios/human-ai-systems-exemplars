@@ -226,7 +226,7 @@
         "good enough",
         "weight"
       ],
-      "prototype": "strategy-canvas-chimeric-prototype-v0.2.0.html",
+      "prototype": "strategy-canvas-chimeric-prototype-v0.2.1.html",
       "technologyUseWhen": "Candidate stacks need aligned comparison across current emphasis, desired emphasis, and good-enough thresholds.",
       "technologyReturns": [
         "dimension landscape",

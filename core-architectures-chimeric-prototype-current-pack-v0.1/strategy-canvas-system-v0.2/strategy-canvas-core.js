@@ -1,4 +1,4 @@
-/* Strategy Canvas shared state engine v0.2.0 — dependency-free and DOM-independent. */
+/* Strategy Canvas shared state engine v0.2.1 — dependency-free and DOM-independent. */
 (function exposeStrategyCanvasCore(global) {
   'use strict';
 
@@ -778,7 +778,7 @@
   }
 
   global.StrategyCanvasCore = Object.freeze({
-    version: '0.2.0',
+    version: '0.2.1',
     schemaVersion: SCHEMA_VERSION,
     series: SERIES,
     errcActions: ACTIONS,

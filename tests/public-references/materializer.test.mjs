@@ -423,10 +423,15 @@ test("rejects unsuitable destinations without echoing their values", async (t) =
 });
 
 test("rejects hosted iframe destinations outside their exact route contract", async (t) => {
+  const credentialedDestination = new URL(
+    "https://iframes.vik.guru/v1/core/heart-chart/",
+  );
+  credentialedDestination.username = "route-contract-test";
+
   const cases = [
     ["http://iframes.vik.guru/v1/core/heart-chart/", "PUBLIC_REFERENCE_VALUE_PROTOCOL"],
     [
-      "https://reader:private-value@iframes.vik.guru/v1/core/heart-chart/",
+      credentialedDestination.href,
       "PUBLIC_REFERENCE_VALUE_CREDENTIAL",
     ],
     [
@@ -881,28 +886,11 @@ test("the repository source materializes from discovered keys without frozen rou
       true,
     );
   }
-  assert.equal(inventory.keys.has(IFRAME_KEY), true);
-  assert.equal(inventory.iframeCount, 1);
+  assert.equal(inventory.keys.has(IFRAME_KEY), false);
+  assert.equal(inventory.iframeCount, 0);
 
-  const repositoryRoot = dirname(PUBLIC_REFERENCE_SOURCE);
-  const routeManifest = JSON.parse(
-    await readFile(
-      join(
-        repositoryRoot,
-        "core-architectures-chimeric-prototype-current-pack-v0.1",
-        "public-iframe-route-manifest-v1.json",
-      ),
-      "utf8",
-    ),
-  );
-  const heartRoute = routeManifest.routes.find((route) => route.id === "heart-chart");
-  assert.ok(heartRoute);
-  assert.equal(
-    `https://${routeManifest.host}${heartRoute.public_alias}`,
-    IFRAME_ROUTE,
-  );
   const expectedLocalFallback =
-    `prototypes/core-architectures/chimeric-pack-v0.1/${heartRoute.source_file}`;
+    "prototypes/core-architectures/chimeric-pack-v0.1/heart-chart-chimeric-prototype-v0.1.3.html";
   const escapedLocalFallback = expectedLocalFallback.replace(
     /[.*+?^${}()|[\]\\]/g,
     "\\$&",
@@ -916,34 +904,13 @@ test("the repository source materializes from discovered keys without frozen rou
   );
   assert.match(
     carrierSource,
-    new RegExp(
-      `src=["']${escapedLocalFallback}["'][^>]*data-public-src=["']\\{\\{${IFRAME_KEY}\\}\\}["']`,
-    ),
+    new RegExp(`src=["']${IFRAME_ROUTE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`),
   );
   assert.match(
     carrierSource,
-    new RegExp(
-      `href=["']${escapedLocalFallback}["'][^>]*data-public-href=["']\\{\\{${IFRAME_KEY}\\}\\}["']`,
-    ),
+    new RegExp(`href=["']${escapedLocalFallback}["']`),
   );
-  const heartCarrier = carrierSource.match(
-    new RegExp(`<iframe\\b[^>]*src=["']${escapedLocalFallback}["'][^>]*>`, "i"),
-  )?.[0];
-  assert.ok(heartCarrier, "the HEART hosted iframe carrier is present");
-  assert.equal(
-    htmlAttribute(heartCarrier, "sandbox"),
-    heartRoute.carrier_policy.sandbox_tokens.join(" "),
-  );
-  assert.equal(
-    htmlAttribute(heartCarrier, "allow") ?? "",
-    heartRoute.carrier_policy.permissions_policy.join("; "),
-  );
-  assert.ok(htmlAttribute(heartCarrier, "title")?.trim());
-  assert.equal(htmlAttribute(heartCarrier, "loading"), routeManifest.carrier_contract.loading);
-  assert.equal(
-    htmlAttribute(heartCarrier, "referrerpolicy"),
-    routeManifest.carrier_contract.referrer_policy,
-  );
+  assert.doesNotMatch(carrierSource, /data-public-(?:src|href)=/i);
   await readFile(
     join(
       PUBLIC_REFERENCE_SOURCE,
@@ -975,9 +942,7 @@ test("the repository source materializes from discovered keys without frozen rou
   const environment = Object.fromEntries(
     [...inventory.keys].map((key) => [
       key,
-      key.startsWith(PUBLIC_IFRAME_NAMESPACE)
-        ? IFRAME_ROUTE
-        : `https://registry.example/readings/${key.slice(PUBLIC_REFERENCE_NAMESPACE.length).toLowerCase()}`,
+      `https://registry.example/readings/${key.slice(PUBLIC_REFERENCE_NAMESPACE.length).toLowerCase()}`,
     ]),
   );
   const outputRoot = join(root, "context-canvas-project-surface");
@@ -997,4 +962,22 @@ test("the repository source materializes from discovered keys without frozen rou
       if (body.includes("https://registry.example/")) JSON.parse(body);
     }
   }
+
+  const generatedCarrierSource = await readFile(
+    join(
+      outputRoot,
+      "context-canvas/core-architectures-orientation-index.html",
+    ),
+    "utf8",
+  );
+  assert.match(
+    generatedCarrierSource,
+    new RegExp(`src=["']${IFRAME_ROUTE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`),
+    "Registry-link materialization preserves the active iframe route",
+  );
+  assert.match(
+    generatedCarrierSource,
+    new RegExp(`href=["']${escapedLocalFallback}["']`),
+    "Registry-link materialization preserves the repository-local full view",
+  );
 });

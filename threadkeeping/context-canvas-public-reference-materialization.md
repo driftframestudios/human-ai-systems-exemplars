@@ -40,38 +40,36 @@ public. Private lineage remains recoverable through the authorized resolver.
   assembler still owns adjacent repository dependencies, audience selection,
   upload, and recovery.
 
-## Hosted iframe first receiver
+## Hosted iframe receiver transition
 
-The first hosted iframe carrier extends this same materializer without adding
-a second route registry or build authority. The Core route manifest retains
-projection identity; the authored page retains local behavior; and the ignored
-configuration receiver supplies the delivery destination.
+The HEART carrier first proved the late-bound iframe twin seam through
+`PUBLIC_URL_IFRAME_CORE_HEART_CHART`. That seam established the distinction
+between a hosted iframe destination and its repository-local full view before
+the public receiver was active.
 
-- Authored carrier:
-  `context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html`
-- Semantic key: `PUBLIC_URL_IFRAME_CORE_HEART_CHART`
-- Local iframe and full-view fallback:
-  `prototypes/core-architectures/chimeric-pack-v0.1/heart-chart-chimeric-prototype-v0.1.3.html`
-- Approved destination shape:
-  `https://iframes.vik.guru/v1/core/heart-chart/`
+The receiver is now active and its versioned Core routes are stable. Current
+authored carriers therefore use manifest-owned
+`https://iframes.vik.guru/v1/core/.../` values directly in `src`, while their
+adjacent full-view anchors continue to open the current Context Canvas
+prototype under `prototypes/...`. The HEART-only configuration key and data
+attributes are retired. The generic twin seam remains covered by focused
+materializer tests for a future receiver that is genuinely late-bound.
 
-The iframe `src` and full-view anchor `href` stay local in tracked source.
-Their explicit `data-public-src` and `data-public-href` twins identify the
-same key. A configured generation resolves both data attributes and the
-iframe `src` to the hosted route while keeping the full-view `href` on the
-Context Canvas base prototype. The route validator checks the host, standard HTTPS authority,
-versioned normalized path, trailing slash, and semantic-key agreement. The
-source inventory discovers the carriers directly rather than relying on a
-frozen route count.
+Eight iframe instances currently use seven hosted routes. Each declares the
+exact sandbox and Permissions Policy recorded by its route profile. The Core
+pack index is not embedded: it opens as a full-view navigation surface so a
+visitor can enter each sibling prototype without making the index carrier hold
+the union of every reachable capability.
 
 ## Evidence and evidence boundary
 
 The migration began with 52 Registry identities across 93 anchor and JSON-LD
 occurrences in 31 Context Canvas HTML files. That observation established the
 initial scope and confirmed one shared semantic-key family. The runnable check
-now discovers the live key and occurrence set from source, exercises a complete
-synthetic materialization, parses only token-bearing JSON-LD, and confirms that
-authored input remains unchanged.
+now discovers the live Registry-key and occurrence set from source, exercises
+a complete synthetic materialization, parses only token-bearing JSON-LD, and
+confirms that authored input and activated iframe destinations remain
+unchanged.
 
 The build establishes deterministic substitution, context-appropriate escaping,
 and retained-generation recovery. It does not establish Registry ancestry,
