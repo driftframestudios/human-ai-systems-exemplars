@@ -96,12 +96,14 @@ test("route bundles leave bare inline-code appearance with the shared owner", as
   assert.doesNotMatch(routeCss, /:is\(a,\s*a:visited,\s*code\)/u);
 });
 
-test("the About hero keeps its initial composition with a compact supporting portrait", async () => {
+test("the About hero keeps its initial composition with a local identity lockup", async () => {
   const [css, html] = await Promise.all([
     readCanvasFile("styles/routes/about.css"),
     readCanvasFile("index.html"),
   ]);
   const heroRule = cssRule(css, ".about-hero");
+  const identityRule = cssRule(css, ".about-hero__identity");
+  const headingRule = cssRule(css, ".about-hero h1");
   const portraitRule = cssRule(css, ".about-portrait");
   const portraitImageRule = cssRule(css, ".about-portrait img");
 
@@ -111,17 +113,23 @@ test("the About hero keeps its initial composition with a compact supporting por
   );
   assert.equal(declarationValue(heroRule, "gap"), "clamp(1.5rem, 5vw, 4rem)");
   assert.equal(
+    declarationValue(identityRule, "grid-template-columns"),
+    "max-content max-content",
+  );
+  assert.equal(
+    declarationValue(identityRule, "column-gap"),
+    "clamp(1.5rem, 2vw, 2.5rem)",
+  );
+  assert.equal(declarationValue(headingRule, "margin"), "0");
+  assert.equal(
     declarationValue(portraitRule, "inline-size"),
     "clamp(7.75rem, 11vw, 10rem)",
   );
-  assert.equal(
-    declarationValue(portraitRule, "margin-inline"),
-    "clamp(-3.25rem, -4vw, -2rem) 0",
-  );
+  assert.equal(declarationValue(portraitRule, "margin-inline"), "0");
   assert.equal(declarationValue(portraitImageRule, "block-size"), "auto");
   assert.match(
     html,
-    /<figure class="about-portrait"><img src="portrait001\.jpg" width="2666" height="3556"/u,
+    /<div class="about-hero__identity"><h1 id="about-title"><span class="about-title__line">About<\/span> <span class="about-title__line about-title__line--name">Vikrant<\/span> <span class="about-title__line about-title__line--name">Kudesia<\/span><\/h1><figure class="about-portrait"><img src="portrait001\.jpg" width="2666" height="3556"/u,
   );
 });
 

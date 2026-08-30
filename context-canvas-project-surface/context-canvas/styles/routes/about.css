@@ -176,17 +176,29 @@
     padding-block: clamp(4rem, 9vw, 8rem);
 }
 
+.about-hero__identity {
+    align-items: end;
+    column-gap: clamp(1.5rem, 2vw, 2.5rem);
+    display: grid;
+    grid-template-columns: max-content max-content;
+    inline-size: max-content;
+    margin: .5rem 0 1.4rem;
+    max-inline-size: 100%;
+}
+
 .about-hero h1 {
     font-size: clamp(3rem, 8vw, 7.5rem);
     letter-spacing: -.065em;
     line-height: .88;
-    margin: .5rem 0 1.4rem;
-    max-inline-size: 9ch;
+    margin: 0;
 }
 
-.about-hero h1 span {
-    color: var(--about-cobalt);
+.about-title__line {
     display: block;
+}
+
+.about-title__line--name {
+    color: var(--about-cobalt);
 }
 
 .about-deck {
@@ -241,7 +253,7 @@ p#on-dark-iron-ore {
     box-shadow: var(--about-shadow);
     inline-size: clamp(7.75rem, 11vw, 10rem);
     margin-block: 0;
-    margin-inline: clamp(-3.25rem, -4vw, -2rem) 0;
+    margin-inline: 0;
     padding: .65rem;
     position: relative;
     rotate: 1.4deg;
@@ -804,7 +816,6 @@ p#on-dark-iron-ore {
 
     .about-portrait {
         justify-self: end;
-        margin-inline-start: 0;
     }
 
     .about-continue {
@@ -832,6 +843,14 @@ p#on-dark-iron-ore {
 
     .about-footer {
         display: grid;
+    }
+}
+
+@media screen and (max-width: 24rem) {
+    .about-hero__identity {
+        grid-template-columns: 1fr;
+        inline-size: 100%;
+        row-gap: 1.25rem;
     }
 }
 
