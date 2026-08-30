@@ -126,23 +126,27 @@ function assertPortableProjectionPath(relativePath, label) {
   return safePath;
 }
 
-function assertPrimarySourcePath(sourcePath) {
+function assertRepositoryInputPath(sourcePath, label) {
   const safePath = assertPortableProjectionPath(
     sourcePath,
-    "Primary projection source path",
+    `${label} path`,
   );
   const components = safePath.split(path.posix.sep);
   const rootKey = components[0].normalize("NFC").toLowerCase();
   if (excludedPrimaryRoots.has(rootKey)) {
-    fail(`Primary projection source stays outside repository-only root ${components[0]}.`);
+    fail(`${label} stays outside repository-only root ${components[0]}.`);
   }
   if (components.some((component) => {
     const key = component.normalize("NFC").toLowerCase();
     return key === ".env" || key.startsWith(".env.");
   })) {
-    fail(`Primary projection source stays outside environment files: ${sourcePath}.`);
+    fail(`${label} stays outside environment files: ${sourcePath}.`);
   }
   return safePath;
+}
+
+function assertPrimarySourcePath(sourcePath) {
+  return assertRepositoryInputPath(sourcePath, "Primary projection source");
 }
 
 function assertMediaType(relativePath, mediaType, label) {
@@ -165,9 +169,9 @@ function validateConfiguration(configuration) {
   if (configuration.id !== configurationId || configuration.version !== "1") {
     fail(`Production projection configuration must use ${configurationId} version 1.`);
   }
-  configuration.primary_manifest = assertPortableProjectionPath(
+  configuration.primary_manifest = assertRepositoryInputPath(
     configuration.primary_manifest,
-    "Primary manifest path",
+    "Primary manifest",
   );
   return configuration;
 }
@@ -237,18 +241,9 @@ export function validatePrimaryManifest(primaryManifest) {
   };
 }
 
-async function readJsonWithin(root, relativePath, label) {
-  const filePath = path.resolve(root, ...relativePath.split(path.posix.sep));
+function parseJsonBytes(bytes, label) {
   try {
-    await assertRegularFileWithin(root, filePath, label);
-  } catch (error) {
-    if (error?.code === "ENOENT") {
-      fail(`${label} is unavailable at ${relativePath}.`);
-    }
-    throw error;
-  }
-  try {
-    return JSON.parse(await readFile(filePath, "utf8"));
+    return JSON.parse(bytes.toString("utf8"));
   } catch (error) {
     fail(
       `${label} must contain valid JSON: ${error instanceof Error ? error.message : error}`,
@@ -261,6 +256,16 @@ export async function loadProductionProjectionInputs(
   options = {},
 ) {
   const root = path.resolve(options.repositoryRoot ?? repositoryRoot);
+  const sourceSha = await readRepositorySourceSha(root);
+  if (
+    options.sourceSha !== undefined &&
+    (typeof options.sourceSha !== "string" ||
+      options.sourceSha.toLowerCase() !== sourceSha)
+  ) {
+    fail("Production projection selection SHA differs from the clean repository HEAD.");
+  }
+  const trackedBlobs = options.trackedBlobs ??
+    await readTrackedBlobIndex(root, sourceSha);
   const resolvedConfiguration = path.resolve(configurationPath);
   const relativeConfiguration = path.relative(root, resolvedConfiguration);
   if (
@@ -271,14 +276,49 @@ export async function loadProductionProjectionInputs(
   ) {
     fail("Production projection configuration must remain inside the repository.");
   }
-  const portableConfiguration = relativeConfiguration.split(path.sep).join(path.posix.sep);
+  const portableConfiguration = assertRepositoryInputPath(
+    relativeConfiguration.split(path.sep).join(path.posix.sep),
+    "Production projection configuration",
+  );
+  const configurationInput = await readTrackedRepositoryInput(
+    root,
+    trackedBlobs,
+    portableConfiguration,
+    "Production projection configuration",
+  );
   const configuration = validateConfiguration(
-    await readJsonWithin(root, portableConfiguration, "Production projection configuration"),
+    parseJsonBytes(configurationInput.bytes, "Production projection configuration"),
+  );
+  const primaryManifestInput = await readTrackedRepositoryInput(
+    root,
+    trackedBlobs,
+    configuration.primary_manifest,
+    "Primary route manifest",
   );
   const primaryManifest = validatePrimaryManifest(
-    await readJsonWithin(root, configuration.primary_manifest, "Primary route manifest"),
+    parseJsonBytes(primaryManifestInput.bytes, "Primary route manifest"),
   );
-  return { configuration, primaryManifest };
+  return {
+    sourceSha,
+    configuration,
+    primaryManifest,
+    binding: {
+      configuration: {
+        source_path: portableConfiguration,
+        git_blob_id: configurationInput.object,
+        sha256: sha256(configurationInput.bytes),
+      },
+      primary_manifest: {
+        source_path: configuration.primary_manifest,
+        git_blob_id: primaryManifestInput.object,
+        sha256: sha256(primaryManifestInput.bytes),
+      },
+    },
+    trackedInputs: new Map([
+      [portableConfiguration, configurationInput],
+      [configuration.primary_manifest, primaryManifestInput],
+    ]),
+  };
 }
 
 export async function readRepositorySourceSha(root = repositoryRoot) {
@@ -325,7 +365,12 @@ async function readTrackedBlobIndex(root, sourceSha) {
   return entries;
 }
 
-async function readTrackedPrimaryInput(root, sourceSha, trackedBlobs, sourcePath) {
+async function readTrackedRepositoryInput(
+  root,
+  trackedBlobs,
+  sourcePath,
+  label,
+) {
   const entry = trackedBlobs.get(sourcePath);
   if (
     !entry ||
@@ -333,20 +378,21 @@ async function readTrackedPrimaryInput(root, sourceSha, trackedBlobs, sourcePath
     !["100644", "100755"].includes(entry.mode) ||
     !/^[a-f0-9]{40}(?:[a-f0-9]{24})?$/.test(entry.object)
   ) {
-    fail(`Primary projection source must be a regular tracked blob: ${sourcePath}.`);
+    fail(`${label} must be a regular tracked blob: ${sourcePath}.`);
   }
   const sourceFile = path.resolve(root, ...sourcePath.split(path.posix.sep));
-  await assertRegularFileWithin(root, sourceFile, "Primary projection source");
-  const [{ stdout: trackedBytes }, worktreeBytes] = await Promise.all([
-    execFileAsync("git", ["cat-file", "blob", entry.object], {
+  await assertRegularFileWithin(root, sourceFile, label);
+  const { stdout: trackedBytes } = await execFileAsync(
+    "git",
+    ["cat-file", "blob", entry.object],
+    {
       cwd: root,
       encoding: "buffer",
       maxBuffer: 128 * 1024 * 1024,
-    }),
-    readFile(sourceFile),
-  ]);
-  if (!Buffer.isBuffer(trackedBytes) || !worktreeBytes.equals(trackedBytes)) {
-    fail(`Primary projection source differs from its tracked blob: ${sourcePath}.`);
+    },
+  );
+  if (!Buffer.isBuffer(trackedBytes)) {
+    fail(`${label} could not be read from its tracked blob: ${sourcePath}.`);
   }
   return { bytes: trackedBytes, object: entry.object };
 }
@@ -367,11 +413,17 @@ async function verifyRepositorySourceState(
     }
     const sourceFile = path.resolve(root, ...sourcePath.split(path.posix.sep));
     await assertRegularFileWithin(root, sourceFile, "Primary projection source revalidation");
-    const currentBytes = await readFile(sourceFile);
-    if (!currentBytes.equals(input.bytes)) {
-      fail("Production projection source bytes changed during composition.");
-    }
   }
+}
+
+function canonicalJson(value) {
+  if (Array.isArray(value)) return value.map(canonicalJson);
+  if (!isPlainObject(value)) return value;
+  return Object.fromEntries(
+    Object.keys(value)
+      .sort()
+      .map((key) => [key, canonicalJson(value[key])]),
+  );
 }
 
 function assertAggregatePlan(aggregatePlan) {
@@ -388,7 +440,10 @@ function assertAggregatePlan(aggregatePlan) {
     receipt.host !== "iframes.vik.guru" ||
     receipt.base_path !== "/v1/" ||
     !Array.isArray(receipt.package_contract?.family_directories) ||
-    receipt.package_contract.family_directories.join(",") !== "core,canvas"
+    receipt.package_contract.family_directories.length !== 2 ||
+    receipt.package_contract.family_directories.some(
+      (family, index) => family !== ["core", "canvas"][index],
+    )
   ) {
     fail("Production projection requires the accepted Core and Canvas aggregate package.");
   }
@@ -398,7 +453,8 @@ function assertAggregatePlan(aggregatePlan) {
       fail(`Aggregate iframe package must include ${family}/route-manifest.json.`);
     }
   }
-  if (!Buffer.isBuffer(aggregatePlan.outputFiles.get("route-manifest.json"))) {
+  const aggregateReceiptBytes = aggregatePlan.outputFiles.get("route-manifest.json");
+  if (!Buffer.isBuffer(aggregateReceiptBytes)) {
     fail("Aggregate iframe package must include root route-manifest.json bytes.");
   }
   for (const relativePath of aggregatePlan.outputFiles.keys()) {
@@ -413,8 +469,64 @@ function assertAggregatePlan(aggregatePlan) {
     ) {
       fail(`Aggregate iframe package contains an undeclared family path: ${safePath}.`);
     }
+    if (!Buffer.isBuffer(aggregatePlan.outputFiles.get(relativePath))) {
+      fail(`Aggregate iframe package output must be bytes: ${relativePath}.`);
+    }
+  }
+  let serializedReceipt;
+  try {
+    serializedReceipt = JSON.parse(aggregateReceiptBytes.toString("utf8"));
+  } catch {
+    fail("Aggregate iframe package root receipt must contain valid JSON.");
+  }
+  if (
+    JSON.stringify(canonicalJson(serializedReceipt)) !==
+    JSON.stringify(canonicalJson(receipt))
+  ) {
+    fail("Aggregate iframe package receipt bytes differ from its plan receipt.");
+  }
+  const generatedBytes = [...aggregatePlan.outputFiles.values()].reduce(
+    (total, bytes) => total + (Buffer.isBuffer(bytes) ? bytes.byteLength : 0),
+    0,
+  );
+  if (
+    receipt.package_contract.generated_files !== aggregatePlan.outputFiles.size ||
+    receipt.package_contract.generated_bytes !== generatedBytes ||
+    !Array.isArray(receipt.families) ||
+    receipt.families.length !== 2
+  ) {
+    fail("Aggregate iframe package receipt totals differ from its output plan.");
+  }
+  for (const family of ["core", "canvas"]) {
+    const familyReceipt = receipt.families.find(({ id }) => id === family);
+    const files = [...aggregatePlan.outputFiles.entries()].filter(
+      ([relativePath]) => relativePath.startsWith(`${family}/`),
+    );
+    const routeReceipt = aggregatePlan.outputFiles.get(`${family}/route-manifest.json`);
+    const bytes = files.reduce((total, [, fileBytes]) => total + fileBytes.byteLength, 0);
+    if (
+      !familyReceipt ||
+      familyReceipt.base_path !== `/v1/${family}/` ||
+      familyReceipt.route_receipt_file !== `${family}/route-manifest.json` ||
+      familyReceipt.route_receipt_sha256 !== sha256(routeReceipt) ||
+      familyReceipt.files !== files.length ||
+      familyReceipt.bytes !== bytes
+    ) {
+      fail(`Aggregate iframe package ${family} receipt differs from its output plan.`);
+    }
   }
   return aggregatePlan;
+}
+
+function aggregateClosureSha256(outputFiles) {
+  const closure = [...outputFiles.entries()]
+    .sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0)
+    .map(([relativePath, bytes]) => ({
+      path: relativePath,
+      bytes: bytes.byteLength,
+      sha256: sha256(bytes),
+    }));
+  return sha256(Buffer.from(JSON.stringify(closure), "utf8"));
 }
 
 function aggregateMediaTypes(aggregatePlan) {
@@ -485,6 +597,9 @@ function serializeManifest(manifest) {
 
 export async function createProductionProjectionPlan(options = {}) {
   const root = path.resolve(options.repositoryRoot ?? repositoryRoot);
+  if (Object.hasOwn(options, "primaryManifest")) {
+    fail("Production projection membership must come from its tracked configuration and manifest.");
+  }
   if (options.aggregatePlan === undefined && root !== repositoryRoot) {
     fail("An alternate repository root requires an injected aggregate iframe plan.");
   }
@@ -500,23 +615,33 @@ export async function createProductionProjectionPlan(options = {}) {
     fail("Production projection requires one full Git source SHA.");
   }
   const trackedBlobs = await readTrackedBlobIndex(root, sourceSha);
-  const primaryManifest = validatePrimaryManifest(structuredClone(options.primaryManifest));
+  const configurationPath = options.configurationPath ?? path.join(
+    root,
+    "deployment/cpanel/production-projection.config.json",
+  );
+  const selection = await loadProductionProjectionInputs(configurationPath, {
+    repositoryRoot: root,
+    sourceSha,
+    trackedBlobs,
+  });
+  const primaryManifest = selection.primaryManifest;
   const aggregatePlan = assertAggregatePlan(
     options.aggregatePlan ?? await createAggregatePackagePlan(),
   );
+  const aggregateClosure = aggregateClosureSha256(aggregatePlan.outputFiles);
   const outputFiles = new Map();
   const portablePaths = new Set();
   const outputs = [];
-  const trackedInputs = new Map();
+  const trackedInputs = new Map(selection.trackedInputs);
   let primaryBytes = 0;
   let iframeBytes = 0;
 
   for (const file of primaryManifest.files) {
-    const trackedInput = await readTrackedPrimaryInput(
+    const trackedInput = await readTrackedRepositoryInput(
       root,
-      sourceSha,
       trackedBlobs,
       file.source_path,
+      "Primary projection source",
     );
     const bytes = trackedInput.bytes;
     trackedInputs.set(file.source_path, trackedInput);
@@ -574,15 +699,19 @@ export async function createProductionProjectionPlan(options = {}) {
     version: "1",
     source_sha: sourceSha,
     inputs: {
+      configuration: selection.binding.configuration,
       primary_manifest: {
         id: primaryManifest.id,
         version: primaryManifest.version,
+        ...selection.binding.primary_manifest,
       },
       iframe_package: {
         id: aggregatePlan.receipt.id,
         host: aggregatePlan.receipt.host,
         base_path: aggregatePlan.receipt.base_path,
+        source_relationship: "independent_plan_bound_input",
         receipt_sha256: sha256(aggregateReceiptBytes),
+        closure_sha256: aggregateClosure,
       },
     },
     surfaces: {
@@ -760,10 +889,7 @@ function parseArguments(args) {
 
 async function main() {
   const { mode, configurationPath } = parseArguments(process.argv.slice(2));
-  const { primaryManifest } = await loadProductionProjectionInputs(
-    configurationPath,
-  );
-  const plan = await createProductionProjectionPlan({ primaryManifest });
+  const plan = await createProductionProjectionPlan({ configurationPath });
   const verification = mode === "check"
     ? await checkProductionProjection(plan)
     : await persistProductionProjection(plan);

@@ -81,14 +81,22 @@ missing-configuration result while the primary route selection is open. A
 custom repository-owned fixture or future accepted configuration can be named
 with `-- --config path/to/config.json`.
 
-Each generated deployment manifest binds the Git source SHA, the aggregate
-iframe receipt, and every projected file's surface, source path, output path,
-media type, byte count, digest, and byte-preserved standing. Schema identities
-and literal `https://iframes.vik.guru/v1/...` carrier URLs travel unchanged in
-this baseline because selected primary and iframe files retain their exact
-bytes. Each byte-preserved primary input is read from a regular tracked blob at
-that clean source SHA and compared with its worktree bytes before and after
-composition.
+Each generated deployment manifest binds the Git source SHA; the tracked
+configuration and primary manifest paths, Git blob IDs, and SHA-256 digests;
+and every projected file's surface, source path, output path, media type, byte
+count, digest, and byte-preserved standing. Selection and primary payload bytes
+come from regular Git blobs at that accepted SHA. A clean checkout may apply a
+line-ending or content filter, so checkout bytes are required to remain regular
+files while the projection uses the immutable Git-blob bytes.
+
+The aggregate iframe plan is a separately composed input. Its root receipt
+digest and deterministic closure digest bind its sorted output paths and bytes;
+the deployment manifest calls this an `independent_plan_bound_input` instead
+of implying that the primary repository `source_sha` establishes its lineage.
+The assembler also checks the aggregate receipt's family routes, counts, byte
+totals, and receipt files against the supplied plan. Schema identities and
+literal `https://iframes.vik.guru/v1/...` carrier URLs travel unchanged in this
+baseline because selected primary and iframe files retain their exact bytes.
 
 When publication-owned URL transformations join the assembler, their manifest
 rows will carry both source and projection digests with generated standing.
