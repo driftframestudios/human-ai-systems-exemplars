@@ -170,8 +170,8 @@
 .about-hero {
     align-items: end;
     display: grid;
-    gap: clamp(1.5rem, 5vw, 4rem);
-    grid-template-columns: minmax(0, 1.3fr) minmax(15rem, .7fr);
+    gap: clamp(.75rem, 2vw, 1.5rem);
+    grid-template-columns: minmax(0, 1fr) max-content;
     min-block-size: min(48rem, calc(100vh - 4rem));
     padding-block: clamp(4rem, 9vw, 8rem);
 }
@@ -235,16 +235,22 @@ p#on-dark-iron-ore {
 }
 
 .about-portrait {
+    align-self: end;
     background: var(--about-paper);
     border: .15rem solid var(--about-ink);
     box-shadow: var(--about-shadow);
-    margin: 0;
+    inline-size: clamp(7.75rem, 11vw, 10rem);
+    margin-block: 0;
+    margin-inline: clamp(-3.25rem, -4vw, -2rem) 0;
     padding: .65rem;
+    position: relative;
     rotate: 1.4deg;
+    z-index: 2;
 }
 
 .about-portrait img {
     aspect-ratio: 4 / 5;
+    block-size: auto;
     display: block;
     inline-size: 100%;
     object-fit: cover;
@@ -686,7 +692,8 @@ p#on-dark-iron-ore {
     }
 
     .about-portrait {
-        inline-size: min(100%, 22rem);
+        justify-self: end;
+        margin-inline-start: 0;
     }
 
     .about-continue {

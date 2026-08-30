@@ -175,8 +175,8 @@
     border-block-end-color: var(--inspection-coral);
 }
 
-.field-inspection-implementation-field :is(a, a:visited, code),
-.field-inspection-assurance-field :is(a, a:visited, code) {
+.field-inspection-implementation-field :is(a, a:visited),
+.field-inspection-assurance-field :is(a, a:visited) {
     color: var(--inspection-acid);
 }
 

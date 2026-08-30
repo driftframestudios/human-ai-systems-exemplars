@@ -2220,23 +2220,27 @@ body {
     }
 }
 
-code,
-pre {
-    color: #333333
-}
-
-pre code {
-    background: 0 0;
-    border: 0
-}
-
 code {
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-    background-color: #e0e0e0; /* Light gray background rgba(27, 31, 35, 0.05) */
-    color: #D6783A; /* Optional: #d73a49 red color for code text */
-    padding: 0.2em 0.4em; /* Spacing around the code */
-    border-radius: 6px; /* Rounded corners */
-    font-size: 85%; /* Slightly smaller than body text */
+    background-color: var(--canvas-paper-soft);
+    border: 1px solid var(--canvas-rule);
+    border-radius: .375rem;
+    color: var(--canvas-ink);
+    font-size: 85%;
+    padding: .2em .4em;
+}
+
+pre {
+    color: var(--canvas-ink);
+}
+
+pre > code {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    color: inherit;
+    font-size: inherit;
+    padding: 0;
 }
 
 /**
