@@ -2625,6 +2625,39 @@ abbr {
     font-style: normal;
 }
 
+.cornerstone-definition {
+    background: color-mix(in srgb, var(--canvas-paper) 92%, var(--canvas-field) 8%);
+    border-block: 1px solid var(--canvas-rule);
+    border-inline-end: 1px solid var(--canvas-rule);
+    margin-block: clamp(1.25rem, 3vw, 2rem);
+    padding: clamp(.9rem, 2vw, 1.25rem);
+}
+
+.cornerstone-definition p {
+    font-size: clamp(1.05rem, .95rem + .45vw, 1.4rem);
+    font-weight: 550;
+    max-inline-size: var(--canvas-lead-measure);
+}
+
+.cornerstone-definition dfn {
+    color: var(--canvas-ink-strong);
+    font-style: normal;
+    font-weight: 800;
+}
+
+.cornerstone-definition + .cornerstone-consequence {
+    border-inline-start: .2rem solid var(--canvas-rule-strong);
+    max-inline-size: var(--canvas-reading-measure);
+    padding-inline-start: 1rem;
+}
+
+@media (forced-colors: active) {
+    .cornerstone-definition,
+    .cornerstone-definition + .cornerstone-consequence {
+        border-color: CanvasText;
+    }
+}
+
 .architecture-track-title {
     border-block-end: .22rem solid var(--canvas-ink-strong);
     margin-block-end: clamp(1.75rem, 4vw, 3.25rem);
