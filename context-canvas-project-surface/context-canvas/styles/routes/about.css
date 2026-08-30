@@ -178,7 +178,7 @@
 
 .about-hero__identity {
     align-items: end;
-    column-gap: clamp(1.5rem, 2vw, 2.5rem);
+    column-gap: clamp(1.6875rem, calc(2vw + .1875rem), 2.6875rem);
     display: grid;
     grid-template-columns: max-content max-content;
     inline-size: max-content;
@@ -851,6 +851,10 @@ p#on-dark-iron-ore {
         grid-template-columns: 1fr;
         inline-size: 100%;
         row-gap: 1.25rem;
+    }
+
+    .about-portrait {
+        margin-inline-end: 1rem;
     }
 }
 

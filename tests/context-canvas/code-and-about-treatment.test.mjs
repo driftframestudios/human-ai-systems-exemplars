@@ -118,7 +118,7 @@ test("the About hero keeps its initial composition with a local identity lockup"
   );
   assert.equal(
     declarationValue(identityRule, "column-gap"),
-    "clamp(1.5rem, 2vw, 2.5rem)",
+    "clamp(1.6875rem, calc(2vw + .1875rem), 2.6875rem)",
   );
   assert.equal(declarationValue(headingRule, "margin"), "0");
   assert.equal(
