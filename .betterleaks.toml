@@ -17,7 +17,10 @@ filter.matchesAny(get(attributes, "path", ""), [
 # - named LIMS/ELN test and workflow surfaces use values bearing "synthetic";
 # - the Compose runtime reads a password from /run/secrets instead of carrying it;
 # - the retained SQL fixture names a runtime-supplied psql variable rather than
-#   carrying its value.
+#   carrying its value; and
+# - one owner-confirmed, non-issued credential-URI fixture remains in three
+#   immutable history observations. Its exact path, rule, value, and commit set
+#   keep the exception historical while later occurrences remain observable.
 filter = '''
 (
   filter.matchesAny(get(attributes, "path", ""), [
@@ -51,6 +54,17 @@ filter = '''
   ]) &&
   finding["rule_id"] == "generic-password" &&
   finding["secret"] == "tenant_password"
+)
+||
+(
+  filter.matchesAny(get(attributes, "path", ""), [
+    `^tests[\\/]public-references[\\/]materializer\.test\.mjs$`
+  ]) &&
+  filter.matchesAny(get(attributes, "git.sha", ""), [
+    `^(?:a7047741c3e104423630bde07ebd86c336be941d|f4b0651ccca63b74f3b761488f14f434094996e9|e0488e202c711e5491ac7fbd508e8b8c3698c24f)$`
+  ]) &&
+  finding["rule_id"] == "generic-credential-uri" &&
+  finding["secret"] == "private-value"
 )
 '''
 

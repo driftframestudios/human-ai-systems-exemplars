@@ -122,18 +122,14 @@
     registry.appendChild(document.createTextNode("The Enterprise Human–AI Practitioner Registry continues at "));
     var kindlight = element("a", "", "kindlight.systems");
     kindlight.href = "https://kindlight.systems/";
-    kindlight.target = "_blank";
-    kindlight.rel = "noopener noreferrer";
-    kindlight.setAttribute("aria-label", "Visit kindlight.systems; opens in a new tab");
+    kindlight.setAttribute("aria-label", "Visit kindlight.systems");
     registry.appendChild(kindlight);
     registry.appendChild(document.createTextNode(". This link leaves the Context Canvas."));
 
     var network = document.createElement("p");
     var github = element("a", "", "GitHub");
     github.href = "https://github.com/driftframestudios/human-ai-systems-exemplars";
-    github.target = "_blank";
-    github.rel = "noopener noreferrer";
-    github.setAttribute("aria-label", "View the prototype-exemplars repository on GitHub; opens in a new tab");
+    github.setAttribute("aria-label", "View human-ai-systems-exemplars on GitHub");
     network.appendChild(github);
     network.appendChild(document.createTextNode(" · "));
     var linkedin = element("span", "super-footer__reserved", "LinkedIn route reserved");
