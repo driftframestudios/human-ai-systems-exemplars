@@ -17,6 +17,23 @@ Generated output rests beneath
 replaceable, ignored build material: change a tracked source or manifest and
 run the command again instead of editing a generated route.
 
+After an authorized receiver uploads the complete closure, compare the live
+host with a fresh in-memory build:
+
+```sh
+npm run verify:iframe-routes:live
+npm run verify:iframe-routes:policy
+```
+
+The first command fails on a missing route, redirect, byte mismatch, or media
+type mismatch while reporting the current response-policy standing. The second
+also requires the bounded hosted policy owned by Issue #102: UTF-8 HTML,
+nosniff, no-referrer, the approved `vik.guru` frame ancestor, no conflicting
+X-Frame-Options value, deliberate revalidation, and no CORS header without a
+named fetch reader. The verifier is fixed to `https://iframes.vik.guru/v1/`
+and returns one public-safe summary; it does not write a receipt or become an
+upload authority.
+
 Current delivery families are:
 
 - `core` — the Core pack, its hub, and the explicitly supplemental
