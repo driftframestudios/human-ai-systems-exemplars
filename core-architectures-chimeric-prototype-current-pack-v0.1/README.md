@@ -67,8 +67,12 @@ Build the ignored, dependency-free projection:
 npm run build:iframe-routes
 ```
 
-The build writes `.iframe-route-build/iframes.vik.guru/v1/core/`. Each
-prototype becomes its route-local `index.html` without changing its bytes. The
+The root build stages and replaces the complete
+`.iframe-route-build/iframes.vik.guru/v1/` closure. This Core family is written
+to its `core/` child beside the separately declared
+[`canvas/`](../iframe-route-families/canvas/README.md) family and one aggregate
+receipt. Each Core prototype becomes its route-local `index.html` without
+changing its bytes. The
 hub alone receives projection-local links to its 21 sibling routes and
 `manifest.json`. The Conditioning Field receives a deterministic embedded
 single-file projection that leaves its standalone Context Canvas page
