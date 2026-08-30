@@ -26,6 +26,8 @@
       ["Recovery and Re-entry", "registry-goal-fidelity-routing.html"],
       ["Conditioning Field", "conditioning-field.html"],
       ["Prompt-Side Practice", "prompt-side-conditions-practice.html"],
+      ["Benchmark Orientation", "benchmark-orientation.html"],
+      ["MAPS Evaluations", "maps-evaluations.html"],
       ["Hiring Surfaces", "hiring-surfaces-talent-agent-intake.html"]
     ],
     debriefs: [
@@ -46,6 +48,8 @@
       ["Three-Way Comparative & The Return", "three-way-comparative-return.html"],
       ["Narrative–Execution Gap Research Atlas", "narrative-execution-gap-research-atlas.html"],
       ["Prompt-Side Conditions Practice", "prompt-side-conditions-practice.html"],
+      ["Benchmark Orientation", "benchmark-orientation.html"],
+      ["MAPS Evaluations", "maps-evaluations.html"],
       ["Brief Exploration exemplar", "exemplar-brief-exploration.html"],
       ["Gallery List exemplar", "exemplar-gallery-list.html"]
     ]

@@ -6,7 +6,7 @@
   </url>
   <url>
     <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/ai-systems.html</loc>
-    <lastmod>2026-08-24</lastmod>
+    <lastmod>2026-08-29</lastmod>
   </url>
   <url>
     <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/collaboration-skills.html</loc>
@@ -58,7 +58,7 @@
   </url>
   <url>
     <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/debriefs.html</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-29</lastmod>
   </url>
   <url>
     <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/registry-goal-fidelity-routing.html</loc>
@@ -78,7 +78,15 @@
   </url>
   <url>
     <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/prompt-side-conditions-practice.html</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-08-29</lastmod>
+  </url>
+  <url>
+    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/benchmark-orientation.html</loc>
+    <lastmod>2026-08-29</lastmod>
+  </url>
+  <url>
+    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/maps-evaluations.html</loc>
+    <lastmod>2026-08-29</lastmod>
   </url>
   <url>
     <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html</loc>
