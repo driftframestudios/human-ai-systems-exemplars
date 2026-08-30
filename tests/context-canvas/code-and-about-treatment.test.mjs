@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
@@ -52,6 +53,10 @@ function contrastRatio(first, second) {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
+function sha256(bytes) {
+  return createHash("sha256").update(bytes).digest("hex");
+}
+
 test("shared inline code keeps a readable paper-and-ink treatment", async () => {
   const css = await readCanvasFile("expanded.css");
   const rootRule = cssRule(css, ":root");
@@ -91,30 +96,117 @@ test("route bundles leave bare inline-code appearance with the shared owner", as
   assert.doesNotMatch(routeCss, /:is\(a,\s*a:visited,\s*code\)/u);
 });
 
-test("the About portrait is a bounded supporting mark with intrinsic dimensions", async () => {
+test("the About hero keeps its initial composition with a local identity lockup", async () => {
   const [css, html] = await Promise.all([
     readCanvasFile("styles/routes/about.css"),
     readCanvasFile("index.html"),
   ]);
   const heroRule = cssRule(css, ".about-hero");
+  const identityRule = cssRule(css, ".about-hero__identity");
+  const headingRule = cssRule(css, ".about-hero h1");
   const portraitRule = cssRule(css, ".about-portrait");
   const portraitImageRule = cssRule(css, ".about-portrait img");
 
   assert.equal(
     declarationValue(heroRule, "grid-template-columns"),
-    "minmax(0, 1fr) max-content",
+    "minmax(0, 1.3fr) minmax(15rem, .7fr)",
   );
+  assert.equal(declarationValue(heroRule, "gap"), "clamp(1.5rem, 5vw, 4rem)");
+  assert.equal(
+    declarationValue(identityRule, "grid-template-columns"),
+    "max-content max-content",
+  );
+  assert.equal(
+    declarationValue(identityRule, "column-gap"),
+    "clamp(1.6875rem, calc(2vw + .1875rem), 2.6875rem)",
+  );
+  assert.equal(declarationValue(headingRule, "margin"), "0");
   assert.equal(
     declarationValue(portraitRule, "inline-size"),
     "clamp(7.75rem, 11vw, 10rem)",
   );
-  assert.equal(
-    declarationValue(portraitRule, "margin-inline"),
-    "clamp(-3.25rem, -4vw, -2rem) 0",
-  );
+  assert.equal(declarationValue(portraitRule, "margin-inline"), "0");
   assert.equal(declarationValue(portraitImageRule, "block-size"), "auto");
   assert.match(
     html,
-    /<figure class="about-portrait"><img src="portrait001\.jpg" width="2666" height="3556"/u,
+    /<div class="about-hero__identity"><h1 id="about-title"><span class="about-title__line">About<\/span> <span class="about-title__line about-title__line--name">Vikrant<\/span> <span class="about-title__line about-title__line--name">Kudesia<\/span><\/h1><figure class="about-portrait"><img src="portrait-of-vvk-technology-leader\.jpg" width="300" height="300" alt="Black-and-white head-and-shoulders portrait of a smiling person wearing glasses"/u,
   );
+});
+
+test("the About visual sequence begins as a still and loads motion after visitor action", async () => {
+  const [css, html, script, gif, poster, source, generator] = await Promise.all([
+    readCanvasFile("styles/routes/about.css"),
+    readCanvasFile("index.html"),
+    readCanvasFile("about-media.js"),
+    readFile(resolve(
+      repositoryRoot,
+      "context-canvas-project-surface/img/media/impact-map-style-cycle-calm.gif",
+    )),
+    readFile(resolve(
+      repositoryRoot,
+      "context-canvas-project-surface/img/media/impact-map-style-cycle-poster.jpg",
+    )),
+    readFile(resolve(
+      repositoryRoot,
+      "collaboration/impact-map-visual-variants/movie/impact-map-style-cycle-movie.mp4",
+    )),
+    readFile(resolve(
+      repositoryRoot,
+      "collaboration/impact-map-visual-variants/movie/render_about_style_cycle_gif.py",
+    ), "utf8"),
+  ]);
+
+  const section = html.match(
+    /<section class="about-field about-field--ledger" aria-labelledby="background-title">.*?<\/section>/su,
+  )?.[0];
+  assert.ok(section, "Expected the first About ledger section");
+
+  const headingEnd = section.indexOf("</h2>");
+  const figureStart = section.indexOf('<figure class="about-media"');
+  const firstProse = section.indexOf("<p>Twenty years");
+  assert.ok(headingEnd < figureStart && figureStart < firstProse);
+  assert.match(
+    section,
+    /src="\.\.\/img\/media\/impact-map-style-cycle-poster\.jpg"[^>]+data-motion-src="\.\.\/img\/media\/impact-map-style-cycle-calm\.gif"[^>]+data-motion-duration-ms="10000"[^>]+width="640" height="360"/u,
+  );
+  assert.match(
+    section,
+    /<button class="about-media__toggle" data-about-media-toggle type="button" aria-pressed="false" hidden>/u,
+  );
+
+  assert.equal(gif.subarray(0, 6).toString("ascii"), "GIF89a");
+  assert.equal(gif.readUInt16LE(6), 640);
+  assert.equal(gif.readUInt16LE(8), 360);
+  assert.ok(gif.byteLength < 1_000_000, "Expected the landing GIF to remain below 1 MB");
+  assert.equal(gif.includes(Buffer.from("NETSCAPE2.0", "ascii")), false);
+  assert.equal(
+    sha256(gif),
+    "3cc27eda90c11583c30ca5a6a163be6a6799e97133a1785235657cf2ec79f514",
+  );
+  assert.equal(
+    sha256(poster),
+    "d616089f5e36b6616b6a989c0d3105340b25a23b0651270313146b5ec1b660fa",
+  );
+  assert.equal(
+    sha256(source),
+    "d839f2872c5bb88ddfb9483b1c58e484d4c4db374a918bfec217031453eba0dd",
+  );
+  assert.match(
+    generator,
+    /SOURCE_SHA256 = "d839f2872c5bb88ddfb9483b1c58e484d4c4db374a918bfec217031453eba0dd"/u,
+  );
+
+  assert.match(script, /button\.hidden = reducedMotion\.matches \|\| printMedia\.matches/u);
+  assert.match(script, /button\.addEventListener\("click"/u);
+  assert.match(script, /prefers-reduced-motion: reduce/u);
+  assert.match(script, /window\.matchMedia\("print"\)/u);
+  assert.match(script, /window\.setTimeout\(\(\) => setMotionState\(false\), motionDuration\)/u);
+  assert.match(script, /window\.addEventListener\("beforeprint"/u);
+  assert.match(script, /document\.addEventListener\("visibilitychange"/u);
+
+  assert.match(css, /\.about-media\s*\{[^}]*inline-size:\s*min\(100%, 40rem\)/su);
+  assert.match(css, /\.about-media__frame\s*\{[^}]*aspect-ratio:\s*16 \/ 9/su);
+  assert.match(css, /\.about-media__toggle\[hidden\]\s*\{[^}]*display:\s*none/su);
+  assert.match(css, /@media \(forced-colors: active\)[\s\S]*?\.about-media/su);
+  assert.match(css, /@media print[\s\S]*?\.about-media__toggle\s*\{[^}]*display:\s*none/su);
 });

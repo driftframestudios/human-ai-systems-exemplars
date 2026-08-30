@@ -2139,7 +2139,7 @@ td details > summary {
 }
 
 .footer__container {
-    text-align: center;
+    text-align: left;
     background: var(--about-deep-forest-charcoal);
     box-shadow: 0 0 10px rgba(0, 0, 0, .5);
     color: var(--canvas-cream)

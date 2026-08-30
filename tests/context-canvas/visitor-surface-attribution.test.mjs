@@ -42,5 +42,8 @@ test("top-level Context Canvas routes expose one consistent authorship and licen
 
 test("the About hero uses the named dark-and-cobalt heading treatment", async () => {
   const html = await readFile(join(visitorRoot, "index.html"), "utf8");
-  assert.match(html, /<h1 id="about-title">About <span>Vikrant Kudesia<\/span><\/h1>/u);
+  assert.match(
+    html,
+    /<h1 id="about-title"><span class="about-title__line">About<\/span> <span class="about-title__line about-title__line--name">Vikrant<\/span> <span class="about-title__line about-title__line--name">Kudesia<\/span><\/h1>/u,
+  );
 });
