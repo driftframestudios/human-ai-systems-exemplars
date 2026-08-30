@@ -23,11 +23,23 @@ function firstJsonLd(source) {
   return JSON.parse(match[1]);
 }
 
+function labelledSection(source, id) {
+  const pattern = new RegExp(
+    `<section class="benchmark-boundary" aria-labelledby="${id}">[\\s\\S]*?<\\/section>`,
+    "u",
+  );
+  const match = source.match(pattern);
+  assert.ok(match, `Expected a benchmark-boundary section labelled by ${id}`);
+  return match[0];
+}
+
 test("benchmark readings expose source-grounded coordinates and shared visitor conventions", async () => {
   const [benchmark, maps] = await Promise.all([
     readCanvasFile("benchmark-orientation.html"),
     readCanvasFile("maps-evaluations.html"),
   ]);
+  const benchmarkWhy = labelledSection(benchmark, "benchmark-why-title");
+  const mapsWhy = labelledSection(maps, "maps-why-title");
 
   for (const [route, html] of [
     ["benchmark-orientation.html", benchmark],
@@ -43,19 +55,34 @@ test("benchmark readings expose source-grounded coordinates and shared visitor c
 
   assert.equal(countMatches(benchmark, /<li><strong>[^<]+<\/strong><p>/gu), 6);
   assert.equal(countMatches(benchmark.match(/<dl class="benchmark-result-profile[\s\S]*?<\/dl>/u)[0], /<div>/gu), 8);
+  assert.equal(countMatches(benchmarkWhy, />Why this matters</gu), 1);
+  assert.match(benchmarkWhy, /Initial Public Draft benchmark-practice guidance/u);
+  assert.match(benchmarkWhy, /NIST\.AI\.800-2\.ipd\.pdf/u);
+  assert.match(benchmarkWhy, /https:\/\/doi\.org\/10\.6028\/NIST\.AI\.800-3/u);
+  assert.match(benchmarkWhy, /supports reproduction, like-for-like comparison, and error finding/u);
+  assert.match(benchmarkWhy, /What did this score actually test\?/u);
+  assert.match(benchmark, /the producing conditions travel with the benchmark result/u);
   assert.match(benchmark, /Benchmark accuracy stays attached to the sampled items/u);
   assert.match(benchmark, /Generalized accuracy names a target population/u);
   assert.match(benchmark, /code-based, model-based, and human graders/u);
-  assert.match(benchmark, /signals, not access controls, licenses, certificates, or guarantees/u);
+  assert.match(benchmark, /Access controls enforce access; applicable license terms define permissions; corpus-composition evidence supports exclusion claims; and the full validity assessment supports result interpretation/u);
   assert.match(benchmark, /https:\/\/doi\.org\/10\.6028\/NIST\.AI\.800-3/u);
   assert.match(benchmark, /NIST\.AI\.800-2\.ipd\.pdf/u);
   assert.match(benchmark, /training_on_test_set\/README\.md/u);
 
   assert.equal(countMatches(maps, /class="benchmark-source-lane"/gu), 2);
   assert.equal(countMatches(maps.match(/<dl class="benchmark-result-profile[\s\S]*?<\/dl>/u)[0], /<div>/gu), 6);
+  assert.equal(countMatches(mapsWhy, />Why this matters</gu), 1);
+  assert.match(mapsWhy, /Evaluation material remains useful when its provenance is traceable/u);
+  assert.match(mapsWhy, /https:\/\/www\.alignment\.org\/canary\//u);
+  assert.match(mapsWhy, /training_on_test_set\/README\.md/u);
+  assert.match(mapsWhy, /Prior exposure can change the interpretation of a score/u);
+  assert.match(mapsWhy, /contribute complementary exposure evidence/u);
+  assert.match(maps, /Collection controls constrain collection; exclusion records document intended removals; corpus-composition evidence supports claims about included material; access controls enforce access; applicable license terms define permissions; and the full validity assessment supports result interpretation/u);
   assert.match(maps, /Misaligned Powerseeking Evaluations\s*\(MAPS\)/u);
-  assert.match(maps, /does not publish a MAPS task catalog, scorer, classifier, result set, or probe definition/u);
-  assert.match(maps, /it does not describe present model capability/u);
+  assert.match(maps, /Task, scorer, classifier, result, and probe specifications remain unspecified there/u);
+  assert.match(maps, /present capability requires current evaluation evidence/u);
+  assert.match(maps, /Each record retains the\s+evaluation identity it publishes/u);
   assert.match(maps, /https:\/\/www\.alignment\.org\/canary\//u);
   assert.match(maps, /Evaluating_LMAs_Realistic_Tasks\.pdf/u);
   assert.doesNotMatch(maps, /MAPS suite/iu);
