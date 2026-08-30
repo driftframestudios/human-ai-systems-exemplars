@@ -13,18 +13,18 @@
     },
     {
       "path": "narrative-sampling-tableau-chimeric-prototype-v0.1.html",
-      "bytes": 164036,
-      "sha256": "c5dcbfea18ca0e40ab5f35a04943344a0c140bc6ab8f34c9c31b7c8c1d0bf0e9"
+      "bytes": 163268,
+      "sha256": "f14cb40725e14ac20a70d524777694cecb1e7c168ed5610448b6e40a65e22e68"
     },
     {
       "path": "narrative-sampling-tableau-prototype-addendum-v0.1.md",
       "bytes": 4884,
-      "sha256": "c1342b533e584f7b7947e47c5efb5b802ffa23eb5cd986d7efc31c3180ca09b6"
+      "sha256": "873797939d15f77346f841c76be8f6af2c82ac78888136c2ef8f302ead56ddb6"
     },
     {
       "path": "narrative-sampling-tableau-prototype-profile-v0.1.yaml",
       "bytes": 6646,
-      "sha256": "82b12daf7c5b89afea8de96096e3ee5569c5136752f509c43faddf2da544d0f9"
+      "sha256": "016440013226cb45a8e6ab84325222547e1dabf00350f75b32fe9002e938ebf2"
     },
     {
       "path": "narrative-sampling-tableau-state.schema.v0.1.json",
@@ -39,12 +39,12 @@
     {
       "path": "core-architecture-routing-registry.v0.1.json",
       "bytes": 22759,
-      "sha256": "be549c87da00b7819e1e72543a8ddca9d46c0bc2440552851a870a0a37a8714e"
+      "sha256": "7e8c360c395378c8e4beab3f7b6951f0d3af28ce267bd7586014feb76ba9ec5a"
     },
     {
       "path": "conation-motion-naming-sampling.example.v0.1.json",
       "bytes": 39649,
-      "sha256": "7b7a0e544ad88b9acd0062651ef0c9e9da2707f6fb3d2cffa58e6f002ad5eb84"
+      "sha256": "8de2c9ff390362fa88759a11d8ba98f550a747077c83dc2af732b38655fb03d0"
     },
     {
       "path": "conation-motion-naming-sampling.example.v0.1.jsonld",

@@ -488,11 +488,11 @@ export function validateRouteContract(contract, sourceManifest) {
       if (route.public_alias !== contract.base_path) {
         fail("The hub route must occupy the exact base path.");
       }
-      if (route.source_file !== "core-architectures-chimeric-prototype-pack-index-v0.1.1.html") {
+      if (route.source_file !== "core-architectures-chimeric-prototype-pack-index-v0.1.2.html") {
         fail("The hub route must name the current Core pack index.");
       }
-      if (route.source_version !== "0.1.1") {
-        fail("The hub route must name source version 0.1.1.");
+      if (route.source_version !== "0.1.2") {
+        fail("The hub route must name source version 0.1.2.");
       }
     } else if (route.kind === "prototype") {
       const source = sourceById.get(route.id);

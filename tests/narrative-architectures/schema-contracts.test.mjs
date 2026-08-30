@@ -185,6 +185,20 @@ test("Technology Fit material state has a meaningful required-field boundary", a
   ));
 });
 
+test("Technology Fit inline seed is an exact projection of its canonical example state", async () => {
+  const canonical = await json(
+    resolve(technologyRoot, "front-end-stack-selection.example.v0.1.json")
+  );
+  const html = await readFile(
+    resolve(technologyRoot, "technology-fit-sampling-tableau-chimeric-prototype-v0.2.html"),
+    "utf8"
+  );
+  const match = html.match(/^const SEED=(.+);$/mu);
+  assert.ok(match, "Technology Fit publishes one adjacent SEED projection");
+  assert.deepEqual(JSON.parse(match[1]), canonical);
+  assert.deepEqual(canonical.runs.map(({ status }) => status), ["sample_state", "sample_state"]);
+});
+
 test("Threadkeeping Ledger material state has a meaningful identity boundary", async () => {
   const validate = await compile(schemaPaths.threadkeeping);
   const valid = await threadkeepingExample();

@@ -17,12 +17,12 @@
   },
   "integrity": {
     "algorithm": "sha256",
-    "entryFile": "895d57cb8f09f5d137f4b1707eeff84b923e6e76dffb11be855f8a8ede3e78c6"
+    "entryFile": "e8bb7015fc70a855d29636637fce99626fdd747d71d6251de30dc68f1c301c03"
   },
   "canonicalStatus": "adapted_copy",
   "sourcePath": "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/",
   "localPath": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/",
-  "entryFile": "core-architectures-chimeric-prototype-pack-index-v0.1.1.html",
+  "entryFile": "core-architectures-chimeric-prototype-pack-index-v0.1.2.html",
   "sourceManifest": "core-architectures-chimeric-prototype-manifest-v0.1.json",
   "localAdaptations": [
     "Pack index links are same-directory relative.",
@@ -33,11 +33,11 @@
   "divergence": {
     "status": "adapted_copy",
     "changedPaths": [
-      "core-architectures-chimeric-prototype-pack-index-v0.1.1.html",
-      "poda-chimeric-prototype-v0.1.1.html",
-      "core-architecture-family-index-chimeric-prototype-v0.1.2.html",
+      "core-architectures-chimeric-prototype-pack-index-v0.1.2.html",
+      "poda-chimeric-prototype-v0.1.2.html",
+      "core-architecture-family-index-chimeric-prototype-v0.1.3.html",
       "strategy-canvas-chimeric-prototype-v0.1.1.html",
-      "strategy-canvas-chimeric-prototype-v0.2.1.html",
+      "strategy-canvas-chimeric-prototype-v0.2.2.html",
       "strategy-canvas-context-workbench-v0.2.css",
       "strategy-canvas-context-workbench-v0.2.js",
       "core-architectures-chimeric-prototype-manifest-v0.1.json"

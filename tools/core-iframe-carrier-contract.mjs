@@ -215,6 +215,104 @@ async function exerciseHeartCarrier(page, carrier, frame, heartFrame) {
   );
 }
 
+async function inspectConditioningFooter(scope, label) {
+  const footer = scope.locator("footer");
+  assert.equal(await footer.count(), 1, `${label} renders one footer`);
+  await footer.waitFor({ state: "visible" });
+  const order = await footer.evaluate((element) => {
+    const selectors = [
+      ".super-footer__local",
+      ".super-footer__grid",
+      '[data-visitor-boundary-marker="maps"]',
+      '[data-visitor-boundary-marker="big-bench"]',
+      ".site-attribution",
+    ];
+    const nodes = selectors.map(selector => element.querySelector(selector));
+    return {
+      complete: nodes.every(Boolean),
+      ordered: nodes.every((node, index) =>
+        index === nodes.length - 1 ||
+        Boolean(node.compareDocumentPosition(nodes[index + 1]) & Node.DOCUMENT_POSITION_FOLLOWING)
+      ),
+    };
+  });
+  assert.deepEqual(
+    order,
+    { complete: true, ordered: true },
+    `${label} keeps local content and routes before MAPS, BIG-bench, and final attribution`,
+  );
+  assert.equal(
+    await footer.locator('[data-visitor-boundary-marker="maps"]').isVisible(),
+    true,
+    `${label} exposes the MAPS marker`,
+  );
+  assert.equal(
+    await footer.locator('[data-visitor-boundary-marker="big-bench"]').isVisible(),
+    true,
+    `${label} exposes the BIG-bench marker`,
+  );
+  assert.equal(
+    await footer.locator(".site-attribution").isVisible(),
+    true,
+    `${label} exposes final attribution`,
+  );
+}
+
+async function exerciseConditioningFooter(context, serverOrigin) {
+  const page = await context.newPage();
+  page.setDefaultTimeout(7000);
+  const telemetry = monitor(page);
+  try {
+    await page.goto(`${serverOrigin}/context-canvas/conditioning-field.html`, {
+      waitUntil: "domcontentloaded",
+    });
+    await inspectConditioningFooter(page, "Conditioning Field screen reading");
+
+    await page.setViewportSize({ width: 320, height: 1000 });
+    const containment = await page.locator("html").evaluate((root) => ({
+      clientWidth: root.clientWidth,
+      scrollWidth: root.scrollWidth,
+    }));
+    assert.ok(
+      containment.scrollWidth <= containment.clientWidth + 1,
+      `Conditioning Field footer contains narrow-screen overflow (${containment.scrollWidth}/${containment.clientWidth})`,
+    );
+
+    await page.emulateMedia({ media: "print" });
+    await inspectConditioningFooter(page, "Conditioning Field print reading");
+    await page.emulateMedia({ media: "screen", forcedColors: "active" });
+    await inspectConditioningFooter(page, "Conditioning Field forced-color reading");
+    assertTelemetry(telemetry);
+  } finally {
+    await page.close();
+  }
+
+  const carrierPage = await context.newPage();
+  carrierPage.setDefaultTimeout(7000);
+  const carrierTelemetry = monitor(carrierPage);
+  try {
+    await carrierPage.setViewportSize({ width: 320, height: 1000 });
+    await carrierPage.setContent(
+      `<iframe title="Conditioning Field embedded reading" src="${serverOrigin}/context-canvas/conditioning-field.html" style="display:block;width:100%;height:900px;border:0"></iframe>`,
+      { waitUntil: "domcontentloaded" },
+    );
+    const frame = carrierPage.frameLocator("iframe");
+    await frame.locator("html.is-embedded").waitFor();
+    await inspectConditioningFooter(frame, "Conditioning Field embedded reading");
+    const containment = await frame.locator("html").evaluate((root) => ({
+      clientWidth: root.clientWidth,
+      scrollWidth: root.scrollWidth,
+    }));
+    assert.ok(
+      containment.scrollWidth <= containment.clientWidth + 1,
+      `Conditioning Field footer contains embedded overflow (${containment.scrollWidth}/${containment.clientWidth})`,
+    );
+    assertTelemetry(carrierTelemetry);
+  } finally {
+    await carrierPage.close();
+  }
+}
+
 async function run() {
   const temporaryRoot = await mkdtemp(join(tmpdir(), "core-iframe-carrier-"));
   const outputRoot = join(temporaryRoot, "context-canvas-project-surface");
@@ -511,7 +609,8 @@ async function run() {
     }
 
     assert.equal(heartInteractions, 1, "the representative HEART interaction runs once");
-    return routeManifest.routes.length * 2 + carriers.length;
+    await exerciseConditioningFooter(context, server.origin);
+    return routeManifest.routes.length * 2 + carriers.length + 2;
   } finally {
     await context?.close();
     await browser?.close();

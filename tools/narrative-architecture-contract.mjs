@@ -488,16 +488,33 @@ async function technologyPath(browser, origin) {
     assert.equal(restored.activeRunId, successor.activeRunId);
     assert.equal(restored.runs.length, successor.runs.length);
 
-    const invalid = structuredClone(restored);
-    delete invalid.id;
+    const legacy = structuredClone(restored);
+    legacy.promptCapsule.probabilityObjects[0].measurementStatus = "illustrative_verbalized_sample";
+    legacy.promptCapsule.probabilityObjects[1].measurementStatus = "illustrative_planning_estimate";
+    const legacyRun = legacy.runs.find(item => item.id === legacy.activeRunId);
+    legacyRun.candidates[0].evidenceStatus = "illustrative_seed";
+    const legacySpikeCandidateId = Object.keys(legacy.lowFidelitySpikes[0].candidateStates)[0];
+    legacy.lowFidelitySpikes[0].candidateStates[legacySpikeCandidateId].status = "illustrative_walkthrough";
     await page.locator("details:has(#stateImportInput) > summary").click();
+    await page.locator("#stateImportInput").fill(JSON.stringify(legacy));
+    await page.locator("#importStateBtn").click();
+    assert.match(await page.locator("#importStatus").textContent(), /Technology-fit state imported/);
+    const migrated = await downloadedJson(page, "#downloadStateBtn");
+    assert.equal(migrated.promptCapsule.probabilityObjects[0].measurementStatus, "uncalibrated_verbalized_sample");
+    assert.equal(migrated.promptCapsule.probabilityObjects[1].measurementStatus, "uncalibrated_planning_estimate");
+    assert.equal(migrated.runs.find(item => item.id === migrated.activeRunId).candidates[0].evidenceStatus, "sample_state");
+    assert.equal(migrated.lowFidelitySpikes[0].candidateStates[legacySpikeCandidateId].status, "working_example");
+    assert.doesNotMatch(JSON.stringify(migrated), /illustrative_(?:verbalized_sample|planning_estimate|seed|walkthrough)/);
+
+    const invalid = structuredClone(migrated);
+    delete invalid.id;
     await page.locator("#stateImportInput").fill(JSON.stringify(invalid));
     await page.locator("#importStateBtn").click();
     assert.match(await page.locator("#importStatus").textContent(), /Current technology-fit state is still available/);
     const recovered = await previewJson(page, "#jsonPreview");
-    assert.equal(recovered.id, restored.id);
-    assert.equal(recovered.activeRunId, restored.activeRunId);
-    assert.equal(recovered.runs.length, restored.runs.length);
+    assert.equal(recovered.id, migrated.id);
+    assert.equal(recovered.activeRunId, migrated.activeRunId);
+    assert.equal(recovered.runs.length, migrated.runs.length);
     assertTelemetry(telemetry);
   } finally {
     await context.close();

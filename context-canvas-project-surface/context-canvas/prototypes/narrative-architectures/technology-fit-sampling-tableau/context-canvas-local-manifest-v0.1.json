@@ -16,8 +16,14 @@
     "usedByPages": "manifest-directory"
   },
   "publicationPosture": "visitor-linked-through-receiving-pages",
-  "archive": {"status": "rebuilt-local-snapshot", "path": "technology-fit-sampling-tableau-chimeric-prototype-bundle-v0.1.zip"},
-  "integrity": {"algorithm": "sha256", "entryFile": "b6e3ee882ff70e0905963f1177a352d6f1f6cb2d8b21a78a9a07e91bba6b287b"},
+  "archive": {
+    "status": "rebuilt-local-snapshot",
+    "path": "technology-fit-sampling-tableau-chimeric-prototype-bundle-v0.1.zip"
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "entryFile": "a2de19abcac29e4718a5298ebd837e4a3b04028cb903f7040e97b98fd2c7ad27"
+  },
   "canonicalStatus": "context_canvas_owned_projection",
   "sourcePath": ".",
   "localPath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/",

@@ -17,12 +17,12 @@ probabilityObjects:
     id: P(generic-LLM-first-recommendation)
     candidateSetSemantics: open_exclusive
     normalization: listed candidates + other/tail = 1
-    status: verbalized_distribution
+    status: uncalibrated_verbalized_sample
   sixMonthFit:
     id: P(six-month-fit-without-structural-rewrite)
     candidateSetSemantics: independent_events
     normalization: none
-    status: contextual_planning_estimate
+    status: uncalibrated_planning_estimate
 invariantRegions:
 - Header and Quick Use
 - Technology Decision Contract

@@ -1,6 +1,8 @@
 (function () {
   "use strict";
 
+  var visitorBoundaryContract = window.ContextCanvasVisitorBoundary;
+
   var routes = {
     about: [
       ["About", "index.html#about-title"],
@@ -26,6 +28,8 @@
       ["Recovery and Re-entry", "registry-goal-fidelity-routing.html"],
       ["Conditioning Field", "conditioning-field.html"],
       ["Prompt-Side Practice", "prompt-side-conditions-practice.html"],
+      ["Benchmark Orientation", "benchmark-orientation.html"],
+      ["MAPS Evaluations", "maps-evaluations.html"],
       ["Hiring Surfaces", "hiring-surfaces-talent-agent-intake.html"]
     ],
     debriefs: [
@@ -46,6 +50,8 @@
       ["Three-Way Comparative & The Return", "three-way-comparative-return.html"],
       ["Narrative–Execution Gap Research Atlas", "narrative-execution-gap-research-atlas.html"],
       ["Prompt-Side Conditions Practice", "prompt-side-conditions-practice.html"],
+      ["Benchmark Orientation", "benchmark-orientation.html"],
+      ["MAPS Evaluations", "maps-evaluations.html"],
       ["Brief Exploration exemplar", "exemplar-brief-exploration.html"],
       ["Gallery List exemplar", "exemplar-gallery-list.html"]
     ]
@@ -75,15 +81,29 @@
   }
 
   function installFooter() {
-    var footer = document.querySelector("body > footer[role='contentinfo'], body > footer.footer__container, body > footer.about-footer, body > footer");
+    var footer = document.querySelector("body > footer[role='contentinfo'], body > footer.footer__container, body > footer.about-footer, body > footer, .page-shell > footer[role='contentinfo'], .page-shell > footer.footer__container, .page-shell > footer.about-footer, .page-shell > footer");
     if (footer && footer.querySelector(".super-footer__grid")) return;
     if (!footer) {
       footer = element("footer", "");
       footer.setAttribute("role", "contentinfo");
       document.body.appendChild(footer);
     }
+    if (footer.parentElement !== document.body) document.body.appendChild(footer);
     footer.classList.add("super-footer");
     footer.setAttribute("aria-label", "Context Canvas site map and page footer");
+
+    var boundarySelector = visitorBoundaryContract ? visitorBoundaryContract.rootSelector : "[data-visitor-boundary]";
+    var visitorBoundary = footer.querySelector(":scope > " + boundarySelector + ", :scope > * > " + boundarySelector);
+    var attribution = footer.querySelector(":scope > .site-attribution, :scope > * > .site-attribution");
+    if (visitorBoundary && visitorBoundaryContract) {
+      var markers = Array.prototype.slice.call(visitorBoundary.querySelectorAll(visitorBoundaryContract.markerSelector));
+      var exact = markers.length === visitorBoundaryContract.markers.length && markers.every(function (marker, index) {
+        return marker.innerText.replace(/\r\n?/g, "\n").trim() === visitorBoundaryContract.markers[index].lines.join("\n");
+      });
+      visitorBoundary.dataset.visitorBoundaryState = exact ? "verified" : "authored";
+    }
+    if (visitorBoundary) visitorBoundary.remove();
+    if (attribution) attribution.remove();
 
     if (footer.childNodes.length) {
       var local = element("div", "super-footer__local");
@@ -121,6 +141,9 @@
     closing.appendChild(registry);
     closing.appendChild(network);
     footer.appendChild(closing);
+
+    if (visitorBoundary) footer.appendChild(visitorBoundary);
+    if (attribution) footer.appendChild(attribution);
   }
 
   function uniqueMajorSections(main) {

@@ -45,8 +45,8 @@ function legacy(archive, entry) {
 function portableNarrativeText(value) {
   return value
     .replaceAll(
-      "../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.1.html",
-      "companions/strategy-canvas-chimeric-prototype-v0.2.1.html",
+      "../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
+      "companions/strategy-canvas-chimeric-prototype-v0.2.2.html",
     )
     .replaceAll(
       "../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",
@@ -57,8 +57,8 @@ function portableNarrativeText(value) {
       "companions/core-architecture-family-index-chimeric-prototype-v0.1.html",
     )
     .replaceAll(
-      "../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.1.html",
-      "companions/strategy-canvas-chimeric-prototype-v0.2.1.html",
+      "../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
+      "companions/strategy-canvas-chimeric-prototype-v0.2.2.html",
     )
     .replaceAll(
       "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
@@ -94,7 +94,7 @@ function narrativeBundle(base, archivePath, familyIndex, compatibility) {
     entries: [
       ["companions/core-architecture-family-index-chimeric-prototype-v0.1.html", source(familyIndex)],
       ["companions/strategy-canvas-chimeric-prototype-v0.1.1.html", source(compatibility)],
-      ["companions/strategy-canvas-chimeric-prototype-v0.2.1.html", source(join(rootCanonicalPack, "strategy-canvas-chimeric-prototype-v0.2.1.html"))],
+      ["companions/strategy-canvas-chimeric-prototype-v0.2.2.html", source(join(rootCanonicalPack, "strategy-canvas-chimeric-prototype-v0.2.2.html"))],
       ["companions/strategy-canvas-system-v0.2/strategy-canvas.schema.json", source(join(rootCanonicalPack, "strategy-canvas-system-v0.2/strategy-canvas.schema.json"))],
       ["companions/strategy-canvas-system-v0.2/strategy-canvas-validator.js", source(join(rootCanonicalPack, "strategy-canvas-system-v0.2/strategy-canvas-validator.js"))],
       ["core-architecture-target-pair-registry.v0.1.json", source(join(base, "core-architecture-target-pair-registry.v0.1.json"))],
@@ -119,8 +119,8 @@ function narrativeBundle(base, archivePath, familyIndex, compatibility) {
       let value = portableNarrativeText(buffer.toString("utf8"));
       if (path.startsWith("companions/")) {
         value = value.replaceAll(
-          "../../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.1.html",
-          "strategy-canvas-chimeric-prototype-v0.2.1.html",
+          "../../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
+          "strategy-canvas-chimeric-prototype-v0.2.2.html",
         );
       }
       return Buffer.from(value);

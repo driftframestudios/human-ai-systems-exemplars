@@ -186,7 +186,7 @@
         "good enough",
         "weight"
       ],
-      "prototype": "strategy-canvas-chimeric-prototype-v0.2.1.html"
+      "prototype": "strategy-canvas-chimeric-prototype-v0.2.2.html"
     },
     {
       "id": "ca:first-responsible-version-matrix",
@@ -372,7 +372,7 @@
         "dependency",
         "affordance"
       ],
-      "prototype": "participatory-design-kit-chimeric-prototype-v0.1.1.html"
+      "prototype": "participatory-design-kit-chimeric-prototype-v0.1.2.html"
     },
     {
       "id": "ca:specification-by-example",
@@ -436,7 +436,7 @@
         "tolerance",
         "calibration"
       ],
-      "prototype": "heart-chart-chimeric-prototype-v0.1.3.html"
+      "prototype": "heart-chart-chimeric-prototype-v0.1.4.html"
     },
     {
       "id": "ca:plus-delta",
