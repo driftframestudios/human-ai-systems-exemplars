@@ -167,20 +167,35 @@
     margin-inline: auto;
 }
 
+/* The left reading field carries identity and orientation. The open second
+   column is the extension point for compact framed hero media. */
 .about-hero {
     align-items: end;
     display: grid;
-    gap: clamp(.75rem, 2vw, 1.5rem);
-    grid-template-columns: minmax(0, 1fr) max-content;
+    gap: clamp(1.5rem, 5vw, 4rem);
+    grid-template-columns: minmax(0, 1.3fr) minmax(15rem, .7fr);
     min-block-size: min(48rem, calc(100vh - 4rem));
     padding-block: clamp(4rem, 9vw, 8rem);
+}
+
+.about-hero__copy {
+    grid-column: 1;
+    min-inline-size: 0;
+}
+
+.about-identity {
+    align-items: end;
+    display: grid;
+    gap: clamp(.85rem, 2vw, 1.5rem);
+    grid-template-columns: minmax(0, 1fr) auto;
+    margin-block-end: 1.4rem;
 }
 
 .about-hero h1 {
     font-size: clamp(3rem, 8vw, 7.5rem);
     letter-spacing: -.065em;
     line-height: .88;
-    margin: .5rem 0 1.4rem;
+    margin: .5rem 0 0;
     max-inline-size: 9ch;
 }
 
@@ -228,6 +243,10 @@ p#on-dark-iron-ore {
     inline-size: 1.4rem;
 }
 
+.about-boundary {
+    inline-size: 100%;
+}
+
 .about-boundary p,
 .about-static-equivalent {
     font-size: .82rem;
@@ -240,8 +259,9 @@ p#on-dark-iron-ore {
     border: .15rem solid var(--about-ink);
     box-shadow: var(--about-shadow);
     inline-size: clamp(7.75rem, 11vw, 10rem);
+    justify-self: end;
     margin-block: 0;
-    margin-inline: clamp(-3.25rem, -4vw, -2rem) 0;
+    margin-inline: 0;
     padding: .65rem;
     position: relative;
     rotate: 1.4deg;
@@ -691,11 +711,6 @@ p#on-dark-iron-ore {
         min-block-size: auto;
     }
 
-    .about-portrait {
-        justify-self: end;
-        margin-inline-start: 0;
-    }
-
     .about-continue {
         grid-template-columns: 1fr;
     }
@@ -721,6 +736,17 @@ p#on-dark-iron-ore {
 
     .about-footer {
         display: grid;
+    }
+}
+
+@media screen and (max-width: 26rem) {
+    .about-identity {
+        gap: .75rem;
+    }
+
+    .about-portrait {
+        inline-size: clamp(6.5rem, 32vw, 7.75rem);
+        padding: .45rem;
     }
 }
 

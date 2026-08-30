@@ -91,30 +91,39 @@ test("route bundles leave bare inline-code appearance with the shared owner", as
   assert.doesNotMatch(routeCss, /:is\(a,\s*a:visited,\s*code\)/u);
 });
 
-test("the About portrait is a bounded supporting mark with intrinsic dimensions", async () => {
+test("the About portrait supports the heading inside the restored left reading field", async () => {
   const [css, html] = await Promise.all([
     readCanvasFile("styles/routes/about.css"),
     readCanvasFile("index.html"),
   ]);
   const heroRule = cssRule(css, ".about-hero");
+  const heroCopyRule = cssRule(css, ".about-hero__copy");
+  const identityRule = cssRule(css, ".about-identity");
+  const boundaryRule = cssRule(css, ".about-boundary");
   const portraitRule = cssRule(css, ".about-portrait");
   const portraitImageRule = cssRule(css, ".about-portrait img");
 
   assert.equal(
     declarationValue(heroRule, "grid-template-columns"),
-    "minmax(0, 1fr) max-content",
+    "minmax(0, 1.3fr) minmax(15rem, .7fr)",
   );
+  assert.equal(declarationValue(heroCopyRule, "grid-column"), "1");
+  assert.equal(
+    declarationValue(identityRule, "grid-template-columns"),
+    "minmax(0, 1fr) auto",
+  );
+  assert.equal(declarationValue(boundaryRule, "inline-size"), "100%");
   assert.equal(
     declarationValue(portraitRule, "inline-size"),
     "clamp(7.75rem, 11vw, 10rem)",
   );
   assert.equal(
     declarationValue(portraitRule, "margin-inline"),
-    "clamp(-3.25rem, -4vw, -2rem) 0",
+    "0",
   );
   assert.equal(declarationValue(portraitImageRule, "block-size"), "auto");
   assert.match(
     html,
-    /<figure class="about-portrait"><img src="portrait001\.jpg" width="2666" height="3556"/u,
+    /<div class="about-identity"><h1 id="about-title">.*?<figure class="about-portrait"><img src="portrait001\.jpg" width="2666" height="3556"/u,
   );
 });
