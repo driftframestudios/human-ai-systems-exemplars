@@ -26,6 +26,9 @@ const PRIMARY_KEY = "PUBLIC_URL_REGISTRY_EXAMPLE_READING";
 const SECONDARY_KEY = "PUBLIC_URL_REGISTRY_SECOND_READING";
 const IFRAME_KEY = "PUBLIC_URL_IFRAME_CORE_HEART_CHART";
 const IFRAME_ROUTE = "https://iframes.vik.guru/v1/core/heart-chart/";
+const CONDITIONING_IFRAME_KEY = "PUBLIC_URL_IFRAME_CORE_CONDITIONING_FIELD";
+const CONDITIONING_IFRAME_ROUTE =
+  "https://iframes.vik.guru/v1/core/conditioning-field/";
 const APP_NOTION_HOST = ["app", "notion", "com"].join(".");
 const WORKSPACE_NOTION_HOST = ["workspace", "notion", "so"].join(".");
 const SITE_NOTION_HOST = ["registry-example", "notion", "site"].join(".");
@@ -71,6 +74,8 @@ function pageWithIframeTwins(key = IFRAME_KEY) {
 async function iframeRouteManifest(paths, {
   publicAlias = "/v1/core/heart-chart/",
   sourceFile = "heart-chart.html",
+  kind = "prototype",
+  sourceRoot,
   sandboxTokens = ["allow-scripts"],
   permissionsPolicy = ["clipboard-write"],
 } = {}) {
@@ -84,6 +89,8 @@ async function iframeRouteManifest(paths, {
         permissions_policy_posture: "exact_per_route_allowlist",
       },
       routes: [{
+        kind,
+        ...(sourceRoot === undefined ? {} : { source_root: sourceRoot }),
         source_file: sourceFile,
         public_alias: publicAlias,
         carrier_policy: {
@@ -233,6 +240,41 @@ test("materializes a hosted iframe only when its configured route profile matche
     await readFile(join(paths.outputRoot, "context-canvas", "index.html"), "utf8"),
     /sandbox="allow-scripts" allow="clipboard-write"/,
   );
+});
+
+test("materializes a supplemental Context Canvas iframe with its local full view", async (t) => {
+  const local = "conditioning-field.html";
+  const source = `<!doctype html>
+<html>
+  <body>
+    <iframe src="${local}" data-public-src="{{${CONDITIONING_IFRAME_KEY}}}" title="Conditioning Field" loading="lazy" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe>
+    <a href="${local}" data-public-href="{{${CONDITIONING_IFRAME_KEY}}}">Open Conditioning Field</a>
+  </body>
+</html>\n`;
+  const paths = await fixture(t, source);
+  const iframeRouteManifestPath = await iframeRouteManifest(paths, {
+    publicAlias: "/v1/core/conditioning-field/",
+    sourceFile: "conditioning-field.html",
+    kind: "supplemental_instrument",
+    sourceRoot: "context-canvas-project-surface/context-canvas",
+    permissionsPolicy: [],
+  });
+
+  const result = await materializePublicReferences({
+    ...paths,
+    iframeRouteManifestPath,
+    environment: { [CONDITIONING_IFRAME_KEY]: CONDITIONING_IFRAME_ROUTE },
+  });
+
+  assert.equal(result.iframeCount, 1);
+  const generated = await readFile(
+    join(paths.outputRoot, "context-canvas", "index.html"),
+    "utf8",
+  );
+  assert.match(generated, /src="https:\/\/iframes\.vik\.guru\/v1\/core\/conditioning-field\/"/);
+  assert.match(generated, /href="conditioning-field\.html"/);
+  assert.match(generated, /sandbox="allow-scripts"/);
+  assert.doesNotMatch(generated, /\sallow=/);
 });
 
 test("rejects globally narrow iframe policies that drift from their exact route profile", async (t) => {

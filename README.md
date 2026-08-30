@@ -416,8 +416,10 @@ outside the Context Canvas in both this repository and the retained source.
 Activated Core companions use their manifest-owned
 `https://iframes.vik.guru/v1/core/.../` routes directly in iframe `src`
 attributes. Each adjacent full-view `href` continues to open the current
-versioned Context Canvas base prototype. Eight current carriers use seven
-hosted routes and their exact route sandbox profiles. The pack index stays a
+repository-local base artifact. Nine current carriers use eight hosted routes
+and their exact route sandbox profiles. Seven routes carry Core prototypes;
+the eighth carries the supplemental Conditioning Field without adding it to
+the Core source manifest. The pack index stays a
 non-embedded full-view navigation surface so its sibling prototypes do not
 inherit one union capability boundary.
 

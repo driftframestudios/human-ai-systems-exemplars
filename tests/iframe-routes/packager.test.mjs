@@ -17,8 +17,10 @@ import {
   assertRegularFileWithin,
   createPackagePlan,
   defaultPaths,
+  deriveConditioningFieldProjection,
   navigationObservation,
   observeIframeRuntimeCapabilities,
+  rewriteHub,
   scanHtmlClosure,
   scanPackageClosure,
   sha256,
@@ -52,7 +54,7 @@ function routeIndexPath(contract, route) {
   return path.posix.join(relative, "index.html");
 }
 
-test("the route plan agrees one-to-one with the current Core population", async () => {
+test("the route plan preserves the Core population and adds one supplemental instrument", async () => {
   assert.equal(
     path.relative(defaultPaths.repositoryRoot, defaultPaths.sourceRoot),
     coreSourceRoot,
@@ -64,12 +66,17 @@ test("the route plan agrees one-to-one with the current Core population", async 
   const firstPlan = await createPackagePlan();
   const secondPlan = await createPackagePlan();
   const prototypeRoutes = firstPlan.contract.routes.filter(({ kind }) => kind === "prototype");
+  const supplementalRoutes = firstPlan.contract.routes.filter(
+    ({ kind }) => kind === "supplemental_instrument",
+  );
 
-  assert.equal(firstPlan.contract.routes.length, 22);
+  assert.equal(firstPlan.contract.routes.length, 23);
   assert.equal(prototypeRoutes.length, 21);
-  assert.equal(firstPlan.outputFiles.size, 25);
-  assert.equal(firstPlan.receipt.package_contract.primary_routes, 22);
+  assert.equal(supplementalRoutes.length, 1);
+  assert.equal(firstPlan.outputFiles.size, 26);
+  assert.equal(firstPlan.receipt.package_contract.primary_routes, 23);
   assert.equal(firstPlan.receipt.package_contract.prototype_routes, 21);
+  assert.equal(firstPlan.receipt.package_contract.supplemental_instrument_routes, 1);
   assert.equal(firstPlan.receipt.package_contract.compatibility_aliases_generated, false);
   assert.equal(firstPlan.receipt.package_contract.live_cloudflare_mutation, false);
   assert.equal(firstPlan.receipt.package_contract.neighboring_path_posture, "unmatched");
@@ -91,6 +98,8 @@ test("the route plan agrees one-to-one with the current Core population", async 
 
   const sourceManifest = await readFile(defaultPaths.sourceManifestPath);
   assert.ok(firstPlan.outputFiles.get("manifest.json").equals(sourceManifest));
+  assert.equal(firstPlan.sourceManifest.prototypes.length, 21);
+  assert.equal(firstPlan.sourceManifest.counts.current_prototypes, 21);
   assert.equal(
     [...firstPlan.outputFiles.keys()].some((file) => file.includes("v0.1.1/index.html")),
     false,
@@ -98,11 +107,83 @@ test("the route plan agrees one-to-one with the current Core population", async 
   );
 });
 
+test("the Conditioning Field projection is deterministic, self-contained, and embedded-safe", async () => {
+  const firstPlan = await createPackagePlan();
+  const secondPlan = await createPackagePlan();
+  const route = firstPlan.contract.routes.find(({ id }) => id === "conditioning-field");
+  const sourcePath = path.join(
+    defaultPaths.repositoryRoot,
+    route.source_root,
+    route.source_file,
+  );
+  const source = await readFile(sourcePath, "utf8");
+  const firstProjection = firstPlan.outputFiles.get("conditioning-field/index.html");
+  const secondProjection = secondPlan.outputFiles.get("conditioning-field/index.html");
+  const projection = firstProjection.toString("utf8");
+  const receipt = firstPlan.receipt.routes.find(({ id }) => id === "conditioning-field");
+
+  assert.ok(firstProjection.equals(secondProjection));
+  assert.equal(deriveConditioningFieldProjection(source), projection);
+  assert.notEqual(projection, source);
+  assert.match(projection, /<style data-iframe-route-projection>/u);
+  assert.match(projection, /id=["']mainContent["']/u);
+  assert.match(projection, /id=["']conditioningFieldSchema["']/u);
+  assert.match(projection, /data-visitor-boundary-marker=["']maps["']/u);
+  assert.match(projection, /data-visitor-boundary-marker=["']big-bench["']/u);
+  assert.equal(projection.split(artifactAttribution).length - 1, 1);
+  assert.doesNotMatch(
+    projection,
+    /canvas-shell\.css|canvas-shell\.js|visitor-boundary-contract\.js/u,
+  );
+  assert.doesNotMatch(projection, /\{\{PUBLIC_URL_[A-Z0-9_]+\}\}/u);
+  assert.doesNotMatch(projection, /\btarget=["']_blank["']/iu);
+  assert.deepEqual(scanHtmlClosure(projection, new Set(), "Conditioning Field projection"), {
+    inline_references: 0,
+    package_targets: [],
+  });
+  assert.deepEqual(receipt.carrier_policy, {
+    sandbox_tokens: ["allow-scripts"],
+    permissions_policy: [],
+    held_capabilities: [],
+  });
+  assert.deepEqual(receipt.observed_runtime_capabilities, ["executable-scripts"]);
+  assert.equal(receipt.projection_kind, "embedded_single_file");
+  assert.equal(receipt.activation_eligible, true);
+  assert.deepEqual(receipt.static_resource_closure.package_files, []);
+  assert.deepEqual(receipt.navigation.unresolved_local_links, []);
+
+  const messagingSource = source.replace(
+    "</body>",
+    '<script>window.parent.postMessage({type: "conditioning-state"}, "*");</script>\n</body>',
+  );
+  assert.throws(
+    () => deriveConditioningFieldProjection(messagingSource),
+    /must not initiate cross-document messaging/,
+  );
+});
+
+test("adding the supplemental route does not change the existing Core hub projection", async () => {
+  const { contract } = await loadManifests();
+  const hubRoute = contract.routes.find(({ kind }) => kind === "hub");
+  const source = await readFile(
+    path.join(defaultPaths.sourceRoot, hubRoute.source_file),
+    "utf8",
+  );
+  const coreOnlyContract = structuredClone(contract);
+  coreOnlyContract.routes = coreOnlyContract.routes.filter(
+    ({ kind }) => kind !== "supplemental_instrument",
+  );
+
+  assert.equal(rewriteHub(source, contract), rewriteHub(source, coreOnlyContract));
+});
+
 test("every current Core carrier owns one visible authorship and license declaration", async () => {
   const { contract } = await loadManifests();
   const projections = [defaultPaths.sourceRoot, contextProjectionRoot];
 
-  for (const route of contract.routes) {
+  for (const route of contract.routes.filter(
+    ({ kind }) => kind !== "supplemental_instrument",
+  )) {
     for (const projectionRoot of projections) {
       const label = `${path.relative(defaultPaths.repositoryRoot, projectionRoot)}/${route.source_file}`;
       const source = await readFile(path.join(projectionRoot, route.source_file), "utf8");
@@ -223,6 +304,10 @@ test("runtime observation distinguishes executable behavior from embedded data",
     [],
   );
   assert.deepEqual(
+    observeIframeRuntimeCapabilities('<script type="application/schema+json">{"type":"object"}</script>'),
+    [],
+  );
+  assert.deepEqual(
     observeIframeRuntimeCapabilities('<script type="importmap">{"imports":{}}</script>'),
     [],
   );
@@ -246,7 +331,7 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   await writePackagePlan(plan, temporaryRoot);
   const verification = await verifyPackagePlan(plan, temporaryRoot);
 
-  assert.deepEqual(verification, { files: 25, bytes: 1649710 });
+  assert.deepEqual(verification, { files: 26, bytes: 1740871 });
   await writeFile(path.join(temporaryRoot, "unexpected.txt"), "outside the plan\n");
   await assert.rejects(
     verifyPackagePlan(plan, temporaryRoot),
@@ -338,6 +423,34 @@ test("route validation rejects alias and source-identity drift", async () => {
   assert.throws(
     () => validateRouteContract(eligibleWithHeldCapability, sourceManifest),
     /must resolve every held capability before activation/,
+  );
+
+  const supplementalSourceRootDrift = structuredClone(contract);
+  supplementalSourceRootDrift.routes.find(({ id }) => id === "conditioning-field")
+    .source_root = "core-architectures-chimeric-prototype-current-pack-v0.1";
+  assert.throws(
+    () => validateRouteContract(supplementalSourceRootDrift, sourceManifest),
+    /Conditioning Field source root must be/,
+  );
+
+  const supplementalProjectionDrift = structuredClone(contract);
+  supplementalProjectionDrift.routes.find(({ id }) => id === "conditioning-field")
+    .projection = "source_identical";
+  assert.throws(
+    () => validateRouteContract(supplementalProjectionDrift, sourceManifest),
+    /Conditioning Field projection kind must be/,
+  );
+
+  const supplementalPackageFile = structuredClone(contract);
+  supplementalPackageFile.routes.find(({ id }) => id === "conditioning-field")
+    .package_files = [{
+      source_file: "canvas-shell.css",
+      target_file: "canvas-shell.css",
+      content_type: "text/css",
+    }];
+  assert.throws(
+    () => validateRouteContract(supplementalPackageFile, sourceManifest),
+    /must remain a single-file closure/,
   );
 
   const reservedTarget = structuredClone(contract);
@@ -638,7 +751,7 @@ test("declared package media travels through planning, output, and receipt", asy
     routeManifestPath,
     sourceManifestPath,
   });
-  assert.equal(plan.outputFiles.size, 26);
+  assert.equal(plan.outputFiles.size, 27);
   assert.ok(plan.outputFiles.get(`poda/${mediaRelativePath}`).equals(mediaBytes));
   const podaReceipt = plan.receipt.routes.find(({ id }) => id === "poda");
   assert.deepEqual(podaReceipt.static_resource_closure.package_files, [{
@@ -650,7 +763,7 @@ test("declared package media travels through planning, output, and receipt", asy
   }]);
 
   await writePackagePlan(plan, outputRoot);
-  assert.equal((await verifyPackagePlan(plan, outputRoot)).files, 26);
+  assert.equal((await verifyPackagePlan(plan, outputRoot)).files, 27);
   assert.ok((await readFile(path.join(outputRoot, `poda/${mediaRelativePath}`))).equals(mediaBytes));
 });
 

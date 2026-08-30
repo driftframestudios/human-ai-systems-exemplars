@@ -25,7 +25,7 @@ function escapeExpression(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-test("Core prototype carriers keep a minimal explicit iframe boundary", async () => {
+test("manifest-owned prototype carriers keep a minimal explicit iframe boundary", async () => {
   const manifest = JSON.parse(await readFile(routeManifestPath, "utf8"));
   const routeByPublicUrl = new Map(
     manifest.routes.map((route) => [
@@ -55,11 +55,11 @@ test("Core prototype carriers keep a minimal explicit iframe boundary", async ()
     }
   }
 
-  assert.equal(carriers.length, 8, "the current Context Canvas owns eight hosted Core carriers");
+  assert.equal(carriers.length, 9, "the current Context Canvas owns nine hosted iframe carriers");
   assert.equal(
     new Set(carriers.map(({ src }) => src)).size,
-    7,
-    "the eight carriers use seven manifest-owned public routes",
+    8,
+    "the nine carriers use eight manifest-owned public routes",
   );
 
   for (const carrier of carriers) {
@@ -92,8 +92,9 @@ test("Core prototype carriers keep a minimal explicit iframe boundary", async ()
       route.carrier_policy.permissions_policy,
       `${label} uses the exact route Permissions Policy profile`,
     );
-    const localFullView =
-      `prototypes/core-architectures/chimeric-pack-v0.1/${route.source_file}`;
+    const localFullView = route.id === "conditioning-field"
+      ? "conditioning-field.html"
+      : `prototypes/core-architectures/chimeric-pack-v0.1/${route.source_file}`;
     assert.match(
       carrier.figure,
       new RegExp(`href=["']${escapeExpression(localFullView)}["']`, "i"),
@@ -105,6 +106,35 @@ test("Core prototype carriers keep a minimal explicit iframe boundary", async ()
       `${label} does not retain a superseded late-binding carrier`,
     );
   }
+
+  const conditioningRoute = "https://iframes.vik.guru/v1/core/conditioning-field/";
+  const conditioningCarrier = carriers.find(({ src }) => src === conditioningRoute);
+  assert.ok(conditioningCarrier, "AI Systems embeds the hosted Conditioning Field route");
+  assert.equal(conditioningCarrier.page, "ai-systems.html");
+  assert.equal(attributeValue(conditioningCarrier.tag, "sandbox"), "allow-scripts");
+  assert.equal(attributeValue(conditioningCarrier.tag, "allow"), null);
+  assert.equal(attributeValue(conditioningCarrier.tag, "referrerpolicy"), "no-referrer");
+  assert.match(
+    conditioningCarrier.figure,
+    /href=["']conditioning-field\.html["']/i,
+    "the hosted Conditioning Field keeps its local standalone full view",
+  );
+  const aiSystemsHtml = await readFile(join(contextRoot, "ai-systems.html"), "utf8");
+  assert.doesNotMatch(
+    aiSystemsHtml,
+    /<link\b[^>]*rel=["']prefetch["'][^>]*href=["']conditioning-field\.html["']/i,
+    "AI Systems does not prefetch the local fallback ahead of its lazy hosted carrier",
+  );
+  const conditioningParentRuntime = [
+    aiSystemsHtml,
+    await readFile(join(contextRoot, "visitor-boundary-contract.js"), "utf8"),
+    await readFile(join(contextRoot, "canvas-shell.js"), "utf8"),
+  ].join("\n");
+  assert.doesNotMatch(
+    conditioningParentRuntime,
+    /(?:addEventListener\s*\(\s*["']message["']|\bonmessage\s*=|\b(?:BroadcastChannel|MessageChannel)\s*\()/u,
+    "the Conditioning Field parent and its shared runtime install no cross-document message receiver",
+  );
 
   const hubRoute = manifest.routes.find(({ id }) => id === "core-architectures-pack");
   assert.ok(hubRoute, "the pack hub route remains in the public route manifest");
@@ -129,5 +159,5 @@ test("Core prototype carriers keep a minimal explicit iframe boundary", async ()
   const downloadCarriers = carriers.filter(({ tag }) =>
     (attributeValue(tag, "sandbox") ?? "").split(/\s+/).includes("allow-downloads"),
   );
-  assert.equal(downloadCarriers.length, 0, "hosted Core carriers do not retain local-only download permission");
+  assert.equal(downloadCarriers.length, 0, "hosted iframe carriers do not retain local-only download permission");
 });

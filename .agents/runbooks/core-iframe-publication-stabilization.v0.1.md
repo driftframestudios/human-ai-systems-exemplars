@@ -92,6 +92,7 @@ rest.
 | Conditional Humatics implementation excerpt | [#128](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/128) | An accepted HASE visitor excerpt and exact external canonical-source continuation when that input is ready at source lock |
 | Public-bound Core namespace | [#110](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/110) | One owned JSON-LD namespace and migration boundary |
 | Core source and route package | [Core pack README](../../core-architectures-chimeric-prototype-current-pack-v0.1/README.md), `public-iframe-route-manifest-v1.json`, and [#71](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/71) | Canonical prototype sources, generator ownership, package membership, and build contract |
+| Supplemental Context Canvas iframe source | [#134](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/134) | Conditioning Field source ownership, deterministic embedded projection, exact carrier policy, and route membership without Core-source reclassification |
 | Hosted carrier hardening | [#102](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/102) | Route-scoped response, cache, header, and parent-carrier posture |
 | Hosted route activation | [#72](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/72) | Accepted package activation, signed-out direct and parent observation, and accepted live return |
 | Parallel production-source treatment | [#117](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/117) | Accepted inline-code and About presentation that travels with the selected visitor source |
@@ -103,7 +104,7 @@ rest.
 The standalone Participatory Design Kit set receives the universal footer
 stack in the source-wide pass. [#111](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/111)
 retains its later functional reconciliation and any future route-candidacy
-decision; that set remains outside the 22-route Core iframe package.
+decision; that set remains outside the 23-route iframe package.
 
 `gist-registry` is an external code-source. Its accepted GitHub Pages or Gist
 projection remains independently published; neither enters a HASE cPanel
@@ -168,7 +169,7 @@ remains with Phase 4.
 Generated iframe material is builder-owned. Change canonical source or its
 owning generator, then use `build:iframe-routes`; leave files beneath
 `.iframe-route-build/` free of hand edits. Keep the stable `/v1/core/` aliases,
-the 22 declared routes, package-local Strategy Canvas schema, manifest-owned
+the 23 declared routes, package-local Strategy Canvas schema, manifest-owned
 sandbox profiles, and the smallest behavior-supported Permissions Policy. The
 accepted manifest, receipt, membership, and bytes form the exact package
 coordinate consumed by Phase 3. The ignored build tree remains a generated
@@ -306,7 +307,7 @@ dependency pauses activation. Return the bounded condition to #72/#102/#118
 without publishing raw headers, protected coordinates, browser state, or
 account details. Restore or redeploy only an accepted complete closure.
 
-The current repository has no dedicated deterministic live 22-route byte and
+The current repository has no dedicated deterministic live 23-route byte and
 header sweep. #72 may form one focused checker after a repeated verification
 need demonstrates its value; the current observation can remain an explicit,
 bounded route pass.

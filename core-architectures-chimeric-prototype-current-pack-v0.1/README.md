@@ -42,11 +42,14 @@ complete license text.
 
 ## Public iframe route projection
 
-`public-iframe-route-manifest-v1.json` binds the pack hub and 21 current
-prototypes to 22 exact aliases beneath `https://iframes.vik.guru/v1/core/`.
+`public-iframe-route-manifest-v1.json` binds the pack hub, 21 current Core
+prototypes, and one supplemental Context Canvas instrument to 23 exact aliases
+beneath `https://iframes.vik.guru/v1/core/`.
 It keeps four relations separate: authored source identity, transferable route
 projection, per-route activation standing, and live delivery. Forming the
-package does not activate a route.
+package does not activate a route. Supplemental delivery membership identifies
+the source owner explicitly; it does not add the Conditioning Field to the
+21-member Core Architecture source manifest.
 
 The same manifest carries each route's minimal carrier policy. The scriptless
 pack hub uses an empty sandbox. A prototype with executable behavior grants
@@ -67,7 +70,10 @@ npm run build:iframe-routes
 The build writes `.iframe-route-build/iframes.vik.guru/v1/core/`. Each
 prototype becomes its route-local `index.html` without changing its bytes. The
 hub alone receives projection-local links to its 21 sibling routes and
-`manifest.json`. A deterministic `route-manifest.json` records source and
+`manifest.json`. The Conditioning Field receives a deterministic embedded
+single-file projection that leaves its standalone Context Canvas page
+authoritative while omitting shared navigation, popup exits, and runtime
+subresources. A deterministic `route-manifest.json` records source and
 projection digests, static-resource evidence, activation standing, and
 unresolved user-activated local navigation. It also records the observed
 runtime capabilities beside the exact carrier policy, making policy drift

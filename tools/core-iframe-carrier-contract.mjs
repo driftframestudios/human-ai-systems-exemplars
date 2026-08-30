@@ -13,7 +13,10 @@ import {
   inspectPublicReferenceSource,
   materializePublicReferences,
 } from "./materialize-public-references.mjs";
-import { assertRegularFileWithin } from "./package-iframe-routes.mjs";
+import {
+  assertRegularFileWithin,
+  createPackagePlan,
+} from "./package-iframe-routes.mjs";
 import {
   assertTelemetry,
   monitor,
@@ -21,13 +24,9 @@ import {
   startStaticServer,
 } from "./core-architecture-browser-helper.mjs";
 
-const routeManifestPath = join(
-  repositoryRoot,
-  "core-architectures-chimeric-prototype-current-pack-v0.1",
-  "public-iframe-route-manifest-v1.json",
-);
 const contextCanvasDirectory = "context-canvas";
 const expectedCarrierRouteCounts = [
+  ["conditioning-field", 1],
   ["core-architecture-family-index", 1],
   ["cross-channel-blueprint", 1],
   ["heart-chart", 1],
@@ -64,6 +63,19 @@ function publicRouteUrl(routeManifest, routeProfile) {
   return `https://${routeManifest.host}${routeProfile.public_alias}`;
 }
 
+function routeProjectionPath(routeManifest, routeProfile) {
+  if (routeProfile.public_alias === routeManifest.base_path) return "index.html";
+  return `${routeProfile.public_alias
+    .slice(routeManifest.base_path.length)
+    .replace(/\/$/, "")}/index.html`;
+}
+
+function routeSourceRoot(routeProfile, coreRoot) {
+  return routeProfile.source_root
+    ? join(repositoryRoot, routeProfile.source_root)
+    : coreRoot;
+}
+
 function sortedRouteCounts(carriers) {
   const counts = new Map();
   for (const { routeProfile } of carriers) {
@@ -80,7 +92,7 @@ function sortedRequests(requests) {
   );
 }
 
-async function discoverPublicCoreCarriers(outputRoot, routeManifest) {
+async function discoverPublicIframeCarriers(outputRoot, routeManifest) {
   const contextRoot = join(outputRoot, contextCanvasDirectory);
   const publicBase = `https://${routeManifest.host}${routeManifest.base_path}`;
   const routeByPublicUrl = new Map(
@@ -116,13 +128,13 @@ async function discoverPublicCoreCarriers(outputRoot, routeManifest) {
 
   assert.equal(
     carriers.length,
-    8,
-    "the materialized Context Canvas exposes eight actual Core iframe instances",
+    9,
+    "the materialized Context Canvas exposes nine actual iframe instances",
   );
   assert.deepEqual(
     sortedRouteCounts(carriers),
     expectedCarrierRouteCounts,
-    "the eight actual carriers use the seven activated public routes",
+    "the nine actual carriers use the eight activated public routes",
   );
   assert.equal(
     carriers.some(({ routeProfile }) => routeProfile.id === "core-architectures-pack"),
@@ -213,6 +225,174 @@ async function exerciseHeartCarrier(page, carrier, frame, heartFrame) {
     matrixContainment.scrollWidth > matrixContainment.clientWidth,
     "the HEART matrix retains local two-dimensional access at the narrow viewport",
   );
+}
+
+async function exerciseConditioningCarrier(page, frame) {
+  const fifthRung = frame.locator('[data-rung-id="rung-5"]');
+  await fifthRung.focus();
+  await page.keyboard.press("Enter");
+  assert.equal(
+    await fifthRung.getAttribute("aria-pressed"),
+    "true",
+    "the hosted Conditioning Field changes its selected formulation rung",
+  );
+  assert.equal(
+    JSON.parse(await frame.locator("#stateContract").textContent()).selectedRungId,
+    "rung-5",
+    "the hosted Conditioning Field exposes the selected rung in its local state contract",
+  );
+
+  const repair = frame.locator('[data-failure-button-id="failure-authority"]');
+  await repair.focus();
+  await page.keyboard.press("Enter");
+  assert.equal(
+    await repair.getAttribute("aria-pressed"),
+    "true",
+    "the hosted Conditioning Field changes its selected repair",
+  );
+  assert.equal(
+    JSON.parse(await frame.locator("#stateContract").textContent()).selectedFailureId,
+    "failure-authority",
+    "the hosted Conditioning Field exposes the selected repair in its local state contract",
+  );
+
+  const inspectorControl = frame.locator("#inspectRung");
+  await inspectorControl.focus();
+  await page.keyboard.press("Enter");
+  assert.equal(
+    await frame.locator("#stateInspector").evaluate((element) => element === document.activeElement),
+    true,
+    "the hosted Conditioning Field moves focus into its state inspector",
+  );
+  assert.equal(
+    JSON.parse(await frame.locator("#stateContract").textContent()).lastAction.kind,
+    "open-inspector",
+    "the hosted Conditioning Field records its inspector transition",
+  );
+  await page.keyboard.press("Escape");
+  assert.equal(
+    await inspectorControl.evaluate((element) => element === document.activeElement),
+    true,
+    "the hosted Conditioning Field restores focus to the inspector control",
+  );
+  assert.equal(
+    JSON.parse(await frame.locator("#stateContract").textContent()).lastAction.kind,
+    "restore-focus",
+    "the hosted Conditioning Field records its focus restoration",
+  );
+
+  for (const width of [1280, 320]) {
+    await page.setViewportSize({ width, height: 1000 });
+    const footerRows = await frame.locator("footer").evaluate((footer) => {
+      const summaryRows = [...footer.querySelectorAll(":scope > span")]
+        .map((node) => node.getBoundingClientRect());
+      const boundary = footer.querySelector("[data-visitor-boundary]")?.getBoundingClientRect();
+      const maps = footer.querySelector('[data-visitor-boundary-marker="maps"]')
+        ?.getBoundingClientRect();
+      const bigBench = footer.querySelector('[data-visitor-boundary-marker="big-bench"]')
+        ?.getBoundingClientRect();
+      const attribution = footer.querySelector(".site-attribution")?.getBoundingClientRect();
+      const footerBox = footer.getBoundingClientRect();
+      return {
+        attributionTop: attribution?.top ?? -1,
+        bigBenchBottom: bigBench?.bottom ?? -1,
+        bigBenchTop: bigBench?.top ?? -1,
+        boundaryTop: boundary?.top ?? -1,
+        boundaryWidth: boundary?.width ?? -1,
+        footerWidth: footerBox.width,
+        mapsTop: maps?.top ?? -1,
+        summaryBottom: Math.max(...summaryRows.map(({ bottom }) => bottom), -1),
+      };
+    });
+    assert.ok(
+      footerRows.boundaryTop >= footerRows.summaryBottom - 1,
+      `the hosted Conditioning Field begins its visitor boundary on a full row after its summary at ${width}px`,
+    );
+    assert.ok(
+      footerRows.boundaryWidth >= footerRows.footerWidth - 1,
+      `the hosted Conditioning Field visitor boundary spans the footer width at ${width}px`,
+    );
+    assert.ok(
+      footerRows.mapsTop < footerRows.bigBenchTop &&
+        footerRows.bigBenchBottom <= footerRows.attributionTop + 1,
+      `the hosted Conditioning Field stacks MAPS, BIG-bench, and attribution as readable rows at ${width}px`,
+    );
+  }
+}
+
+async function exerciseConditioningWithoutScripts(browser, routeUrl, projectionBytes) {
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 1280, height: 1000 },
+  });
+  const requests = [];
+  await context.route("**/*", async (route) => {
+    const request = route.request();
+    requests.push({
+      method: request.method(),
+      resourceType: request.resourceType(),
+      url: request.url(),
+    });
+    if (request.url() === routeUrl && request.resourceType() === "document") {
+      await route.fulfill({
+        status: 200,
+        contentType: "text/html; charset=utf-8",
+        body: projectionBytes,
+      });
+      return;
+    }
+    await route.abort("blockedbyclient");
+  });
+  try {
+    const page = await context.newPage();
+    await page.goto(routeUrl, { waitUntil: "domcontentloaded" });
+    assert.equal(
+      await page.locator("#noscriptTitle").isVisible(),
+      true,
+      "the packaged Conditioning Field exposes its substantive non-script reading",
+    );
+    const ladderSummary = page.locator("details:has(.ladder-table) > summary");
+    assert.equal(
+      await ladderSummary.isVisible(),
+      true,
+      "the packaged Conditioning Field exposes its semantic-ladder disclosure without JavaScript",
+    );
+    await ladderSummary.focus();
+    await page.keyboard.press("Enter");
+    assert.equal(
+      await page.locator(".ladder-table").isVisible(),
+      true,
+      "the packaged Conditioning Field opens its semantic ladder by keyboard without JavaScript",
+    );
+    assert.equal(
+      await page.locator(".failure-table").isVisible(),
+      true,
+      "the packaged Conditioning Field keeps the semantic repair table without JavaScript",
+    );
+    assert.equal(
+      await page.locator("[data-js-only]:visible").count(),
+      0,
+      "the packaged Conditioning Field hides inactive controls without JavaScript",
+    );
+    for (const width of [1280, 320]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const containment = await page.locator("html").evaluate((root) => ({
+        clientWidth: root.clientWidth,
+        scrollWidth: root.scrollWidth,
+      }));
+      assert.ok(
+        containment.scrollWidth <= containment.clientWidth + 1,
+        `the non-script Conditioning Field contains document overflow at ${width}px`,
+      );
+    }
+    assert.deepEqual(requests, [{
+      method: "GET",
+      resourceType: "document",
+      url: routeUrl,
+    }], "the non-script Conditioning Field loads only its single packaged document");
+  } finally {
+    await context.close();
+  }
 }
 
 async function inspectConditioningFooter(scope, label) {
@@ -322,7 +502,8 @@ async function run() {
   let context;
 
   try {
-    const routeManifest = JSON.parse(await readFile(routeManifestPath, "utf8"));
+    const iframePackage = await createPackagePlan();
+    const routeManifest = iframePackage.contract;
     assert.equal(
       routeManifest.carrier_contract.title,
       "context_specific_non_empty",
@@ -357,7 +538,7 @@ async function run() {
         `${name} is a resolved materialized page`,
       );
     }
-    const carriers = await discoverPublicCoreCarriers(outputRoot, routeManifest);
+    const carriers = await discoverPublicIframeCarriers(outputRoot, routeManifest);
     const routeByPublicUrl = new Map(
       routeManifest.routes.map((routeProfile) => [
         publicRouteUrl(routeManifest, routeProfile),
@@ -366,11 +547,15 @@ async function run() {
     );
     const canonicalBytesByPublicUrl = new Map();
     for (const routeProfile of routeManifest.routes) {
-      const source = join(coreRoot, routeProfile.source_file);
-      await assertRegularFileWithin(coreRoot, source, `${routeProfile.id} route source`);
+      const sourceRoot = routeSourceRoot(routeProfile, coreRoot);
+      const source = join(sourceRoot, routeProfile.source_file);
+      await assertRegularFileWithin(sourceRoot, source, `${routeProfile.id} route source`);
+      const projectionPath = routeProjectionPath(routeManifest, routeProfile);
+      const projectionBytes = iframePackage.outputFiles.get(projectionPath);
+      assert.ok(projectionBytes, `${routeProfile.id} has packaged hosted bytes`);
       canonicalBytesByPublicUrl.set(
         publicRouteUrl(routeManifest, routeProfile),
-        await readFile(source),
+        projectionBytes,
       );
     }
 
@@ -395,10 +580,14 @@ async function run() {
           [],
           `${routeProfile.id} resolves held browser capabilities before iframe readiness`,
         );
-        for (const [projectionLabel, projectionDirectory] of [
-          ["Core source", coreRoot],
-          ["Context projection", projectionRoot],
-        ]) {
+        const sourceRoot = routeSourceRoot(routeProfile, coreRoot);
+        const sourceProjections = routeProfile.source_root
+          ? [["Context Canvas source", sourceRoot]]
+          : [
+              ["Core source", coreRoot],
+              ["Context projection", projectionRoot],
+            ];
+        for (const [projectionLabel, projectionDirectory] of sourceProjections) {
           const page = await populationContext.newPage();
           page.setDefaultTimeout(7000);
           const telemetry = monitor(page);
@@ -491,6 +680,7 @@ async function run() {
       carriersByPage.set(carrier.page, pageCarriers);
     }
     let heartInteractions = 0;
+    let conditioningInteractions = 0;
 
     for (const [pagePath, pageCarriers] of carriersByPage) {
       const page = await context.newPage();
@@ -588,6 +778,10 @@ async function run() {
             await exerciseHeartCarrier(page, carrier, frame, childFrame);
             heartInteractions += 1;
           }
+          if (routeProfile.id === "conditioning-field") {
+            await exerciseConditioningCarrier(page, frame);
+            conditioningInteractions += 1;
+          }
         }
 
         await page.waitForLoadState("networkidle", { timeout: 4000 }).catch(() => {});
@@ -609,8 +803,22 @@ async function run() {
     }
 
     assert.equal(heartInteractions, 1, "the representative HEART interaction runs once");
+    assert.equal(
+      conditioningInteractions,
+      1,
+      "the Conditioning Field carrier interaction runs once",
+    );
     await exerciseConditioningFooter(context, server.origin);
-    return routeManifest.routes.length * 2 + carriers.length + 2;
+    const conditioningRoute = routeManifest.routes.find(
+      ({ id }) => id === "conditioning-field",
+    );
+    const conditioningRouteUrl = publicRouteUrl(routeManifest, conditioningRoute);
+    await exerciseConditioningWithoutScripts(
+      browser,
+      conditioningRouteUrl,
+      canonicalBytesByPublicUrl.get(conditioningRouteUrl),
+    );
+    return routeManifest.routes.length * 2 + carriers.length + 3;
   } finally {
     await context?.close();
     await browser?.close();

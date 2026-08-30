@@ -4,7 +4,7 @@
   "host": "iframes.vik.guru",
   "base_path": "/v1/core/",
   "source_manifest": "core-architectures-chimeric-prototype-manifest-v0.1.json",
-  "source_authority": "The current-pack manifest indexes current identity and version. Each HTML artifact remains the authority for its runtime behavior.",
+  "source_authority": "The current-pack manifest indexes the 21 Core prototype identities and versions. A supplemental route declares its repository-bounded source owner directly. Each HTML artifact remains the authority for its runtime behavior.",
   "projection_contract": {
     "entry_file": "index.html",
     "hub_source_manifest_file": "manifest.json",
@@ -481,6 +481,26 @@
         "held_capabilities": []
       },
       "reader_job": "Browse the full family and select a fitting cognitive move."
+    },
+    {
+      "id": "conditioning-field",
+      "display_name": "Conditioning Field",
+      "kind": "supplemental_instrument",
+      "source_root": "context-canvas-project-surface/context-canvas",
+      "source_file": "conditioning-field.html",
+      "source_version": "unversioned-current",
+      "projection": "embedded_single_file",
+      "public_alias": "/v1/core/conditioning-field/",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [],
+        "held_capabilities": []
+      },
+      "reader_job": "Shape task, desired state, human referents, evidence horizon, uncertainty, and authority before an AI collaboration converges."
     }
   ],
   "compatibility_aliases": [

@@ -20,6 +20,9 @@ const coreRoot = path.join(
   repositoryRoot,
   "core-architectures-chimeric-prototype-current-pack-v0.1",
 );
+const conditioningFieldSourceRootRelative =
+  "context-canvas-project-surface/context-canvas";
+const conditioningFieldRouteId = "conditioning-field";
 
 export const defaultPaths = Object.freeze({
   repositoryRoot,
@@ -74,6 +77,7 @@ const expectedRouteAliases = new Map([
   ["upstream-revision-loop", "/v1/core/upstream-revision-loop/"],
   ["recovery-routing-atlas", "/v1/core/recovery-routing-atlas/"],
   ["core-architecture-family-index", "/v1/core/core-architecture-family-index/"],
+  [conditioningFieldRouteId, "/v1/core/conditioning-field/"],
 ]);
 const resourceLinkRelationships = new Set([
   "apple-touch-icon",
@@ -187,6 +191,132 @@ function assertExactArray(actual, expected, label) {
       `${label} must be ${JSON.stringify(expected)}; received ${JSON.stringify(actual)}.`,
     );
   }
+}
+
+function replaceExactOnce(source, search, replacement, label) {
+  const first = source.indexOf(search);
+  if (first === -1 || source.indexOf(search, first + search.length) !== -1) {
+    fail(`${label} must appear exactly once in the Conditioning Field source.`);
+  }
+  return `${source.slice(0, first)}${replacement}${source.slice(first + search.length)}`;
+}
+
+function replacePatternOnce(source, pattern, replacement, label) {
+  let replacements = 0;
+  const rewritten = source.replace(pattern, (...arguments_) => {
+    replacements += 1;
+    return typeof replacement === "function"
+      ? replacement(...arguments_)
+      : replacement;
+  });
+  if (replacements !== 1) {
+    fail(`${label} must appear exactly once in the Conditioning Field source; received ${replacements}.`);
+  }
+  return rewritten;
+}
+
+const conditioningFieldProjectionStyle = `  <style data-iframe-route-projection>
+    html.is-embedded .embed-context {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .visitor-boundary {
+      border-block-start: .0625rem solid rgb(255 250 242 / .38);
+      box-sizing: border-box;
+      display: grid;
+      flex: 1 0 100%;
+      gap: .75rem;
+      grid-column: 1 / -1;
+      inline-size: 100%;
+      margin: 2rem auto 0;
+      max-inline-size: 80rem;
+      overflow-wrap: anywhere;
+      padding-block-start: 1rem;
+      user-select: text;
+    }
+
+    .visitor-boundary__marker {
+      box-sizing: border-box;
+      color: inherit;
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      line-height: 1.55;
+      margin: 0;
+      max-inline-size: 100%;
+    }
+
+    @media (forced-colors: active) {
+      .visitor-boundary {
+        color: CanvasText;
+      }
+    }
+
+    @media print {
+      .visitor-boundary {
+        color: #000;
+      }
+    }
+  </style>
+`;
+
+export function deriveConditioningFieldProjection(html) {
+  if (typeof html !== "string") {
+    fail("Conditioning Field projection requires HTML text.");
+  }
+
+  let projected = html;
+  for (const dependency of [
+    '  <link rel="stylesheet" href="canvas-shell.css">\n',
+    '  <script src="visitor-boundary-contract.js" defer></script>\n',
+    '  <script src="canvas-shell.js" defer></script>\n',
+  ]) {
+    projected = replaceExactOnce(
+      projected,
+      dependency,
+      "",
+      `Shared shell dependency ${dependency.trim()}`,
+    );
+  }
+
+  projected = replacePatternOnce(
+    projected,
+    /,\n\s*"isBasedOn":\s*"\{\{PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_FOR_RELIABLE_HUMAN_LLM_INTERACTION\}\}"(?=\n\s*\})/gu,
+    "",
+    "Unresolved Conditioning Field JSON-LD public reference",
+  );
+  projected = replacePatternOnce(
+    projected,
+    /^\s*<a href="conditioning-field\.html" target="_blank" rel="noopener noreferrer">Open the full field · new tab<\/a>\r?\n/gmu,
+    "",
+    "Embedded full-view popup exit",
+  );
+  projected = replacePatternOnce(
+    projected,
+    /<a href="prompt-side-conditions-practice\.html#sources-title" target="_blank" rel="noopener noreferrer">Read the public research and field-source register <span class="new-tab-note">\(opens in a new tab\)<\/span><\/a>/gu,
+    "Read the public research and field-source register",
+    "Embedded research popup exit",
+  );
+  projected = replaceExactOnce(
+    projected,
+    "  <noscript><style>\n",
+    `${conditioningFieldProjectionStyle}  <noscript><style>\n`,
+    "Projection-local visitor-boundary style insertion point",
+  );
+
+  if (
+    /\b(?:canvas-shell\.css|canvas-shell\.js|visitor-boundary-contract\.js)\b/u.test(projected) ||
+    /\{\{PUBLIC_URL_[A-Z0-9_]+\}\}/u.test(projected) ||
+    /\btarget=["']_blank["']/iu.test(projected)
+  ) {
+    fail("Conditioning Field embedded projection retained shared shell, unresolved public-reference, or popup navigation state.");
+  }
+  if (
+    /\bpostMessage\s*\(/u.test(projected) ||
+    /\b(?:BroadcastChannel|MessageChannel)\s*\(/u.test(projected)
+  ) {
+    fail("Conditioning Field embedded projection must not initiate cross-document messaging.");
+  }
+  return projected;
 }
 
 function routeDirectory(contract, route) {
@@ -306,8 +436,8 @@ export function validateRouteContract(contract, sourceManifest) {
   if (sourceManifest.counts?.current_prototypes !== 21) {
     fail("The Core source manifest current_prototypes count must be 21.");
   }
-  if (!Array.isArray(contract.routes) || contract.routes.length !== 22) {
-    fail("The public iframe route manifest must contain exactly 22 primary routes.");
+  if (!Array.isArray(contract.routes) || contract.routes.length !== 23) {
+    fail("The public iframe route manifest must contain exactly 23 primary routes.");
   }
 
   const sourceById = new Map();
@@ -351,6 +481,7 @@ export function validateRouteContract(contract, sourceManifest) {
   const portableOutputPaths = new Set(["manifest.json", "route-manifest.json"]);
   const prototypeIds = new Set();
   let hubCount = 0;
+  let supplementalInstrumentCount = 0;
   if (!Array.isArray(contract.runtime_exclusions)) {
     fail("runtime_exclusions must be an array.");
   }
@@ -485,6 +616,9 @@ export function validateRouteContract(contract, sourceManifest) {
 
     if (route.kind === "hub") {
       hubCount += 1;
+      if (route.source_root !== undefined || route.projection !== undefined) {
+        fail("The Core hub must retain its current-pack source owner and navigation-only projection.");
+      }
       if (route.public_alias !== contract.base_path) {
         fail("The hub route must occupy the exact base path.");
       }
@@ -495,6 +629,9 @@ export function validateRouteContract(contract, sourceManifest) {
         fail("The hub route must name source version 0.1.2.");
       }
     } else if (route.kind === "prototype") {
+      if (route.source_root !== undefined || route.projection !== undefined) {
+        fail(`Core prototype route ${route.id} must retain its current-pack source owner and byte-identical projection.`);
+      }
       const source = sourceById.get(route.id);
       if (!source) {
         fail(`Prototype route ${route.id} is absent from the Core source manifest.`);
@@ -507,6 +644,32 @@ export function validateRouteContract(contract, sourceManifest) {
         fail(
           `Prototype route ${route.id} does not match source identity ${source.file} at ${source.version}.`,
         );
+      }
+    } else if (route.kind === "supplemental_instrument") {
+      supplementalInstrumentCount += 1;
+      assertExactString(route.id, conditioningFieldRouteId, "Supplemental instrument id");
+      assertExactString(
+        route.source_root,
+        conditioningFieldSourceRootRelative,
+        "Conditioning Field source root",
+      );
+      assertExactString(
+        route.source_file,
+        "conditioning-field.html",
+        "Conditioning Field source file",
+      );
+      assertExactString(
+        route.source_version,
+        "unversioned-current",
+        "Conditioning Field source standing",
+      );
+      assertExactString(
+        route.projection,
+        "embedded_single_file",
+        "Conditioning Field projection kind",
+      );
+      if (packageFilesFor(route).length !== 0) {
+        fail("The Conditioning Field embedded projection must remain a single-file closure.");
       }
     } else {
       fail(`Route ${route.id} has unsupported kind ${JSON.stringify(route.kind)}.`);
@@ -569,6 +732,12 @@ export function validateRouteContract(contract, sourceManifest) {
   }
   if (prototypeIds.size !== 21) {
     fail(`The public iframe route manifest must contain 21 prototype routes; received ${prototypeIds.size}.`);
+  }
+  if (supplementalInstrumentCount !== 1) {
+    fail(
+      `The public iframe route manifest must contain one supplemental instrument route; ` +
+      `received ${supplementalInstrumentCount}.`,
+    );
   }
   for (const id of sourceById.keys()) {
     if (!prototypeIds.has(id)) {
@@ -634,7 +803,15 @@ export function observeIframeRuntimeCapabilities(html) {
   let executableScripts = false;
   for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi)) {
     const type = (attributeValue(match[1], "type") ?? "").trim().toLowerCase();
-    if (["application/json", "application/ld+json", "importmap", "speculationrules"].includes(type)) {
+    if (
+      [
+        "application/json",
+        "application/ld+json",
+        "application/schema+json",
+        "importmap",
+        "speculationrules",
+      ].includes(type)
+    ) {
       continue;
     }
     const isJavaScript =
@@ -1102,6 +1279,13 @@ async function readJsonFile(root, filePath, label) {
   return { bytes, value };
 }
 
+function sourceRootForRoute(paths, route) {
+  if (route.kind === "supplemental_instrument") {
+    return path.join(paths.repositoryRoot, route.source_root);
+  }
+  return paths.sourceRoot;
+}
+
 export async function createPackagePlan(options = {}) {
   const paths = { ...defaultPaths, ...options };
   const [routeManifestReading, sourceManifestReading] = await Promise.all([
@@ -1125,16 +1309,25 @@ export async function createPackagePlan(options = {}) {
   const sourceById = new Map(sourceManifest.prototypes.map((entry) => [entry.id, entry]));
   const routeReadings = [];
   for (const route of contract.routes) {
-    const sourcePath = path.join(paths.sourceRoot, route.source_file);
-    await assertRegularFileWithin(paths.sourceRoot, sourcePath, `HTML source for route ${route.id}`);
+    const routeSourceRoot = sourceRootForRoute(paths, route);
+    const sourcePath = path.join(routeSourceRoot, route.source_file);
+    await assertRegularFileWithin(
+      routeSourceRoot,
+      sourcePath,
+      `HTML source for route ${route.id}`,
+    );
     const sourceBytes = await readFile(sourcePath);
     const sourceText = sourceBytes.toString("utf8");
-    const runtimeCapabilities = observeIframeRuntimeCapabilities(sourceText);
+    const projectionText = route.kind === "hub"
+      ? rewriteHub(sourceText, contract)
+      : route.kind === "supplemental_instrument"
+        ? deriveConditioningFieldProjection(sourceText)
+        : sourceText;
+    const projectionBytes = route.kind === "prototype"
+      ? sourceBytes
+      : Buffer.from(projectionText, "utf8");
+    const runtimeCapabilities = observeIframeRuntimeCapabilities(projectionText);
     validateCarrierPolicyAgainstCapabilities(route, runtimeCapabilities);
-    const projectionText = route.kind === "hub" ? rewriteHub(sourceText, contract) : sourceText;
-    const projectionBytes = route.kind === "hub"
-      ? Buffer.from(projectionText, "utf8")
-      : sourceBytes;
     if (route.kind === "prototype" && sourceBytes.byteLength !== sourceById.get(route.id).size_bytes) {
       fail(
         `HTML source for route ${route.id} has ${sourceBytes.byteLength} bytes; ` +
@@ -1157,9 +1350,9 @@ export async function createPackagePlan(options = {}) {
     const packageReceipts = [];
     const packageReadings = new Map();
     for (const packageFile of packageFilesFor(route)) {
-      const packageSourcePath = path.join(paths.sourceRoot, packageFile.source_file);
+      const packageSourcePath = path.join(routeSourceRoot, packageFile.source_file);
       await assertRegularFileWithin(
-        paths.sourceRoot,
+        routeSourceRoot,
         packageSourcePath,
         `Package source for route ${route.id}`,
       );
@@ -1223,6 +1416,9 @@ export async function createPackagePlan(options = {}) {
       id: reading.route.id,
       public_alias: reading.route.public_alias,
       source_file: reading.route.source_file,
+      ...(reading.route.kind === "supplemental_instrument"
+        ? { source_root: reading.route.source_root }
+        : {}),
       source_version: reading.route.source_version,
       receiver_standing: reading.route.receiver_standing,
       activation_standing: reading.route.activation_standing,
@@ -1230,7 +1426,11 @@ export async function createPackagePlan(options = {}) {
       carrier_policy: reading.route.carrier_policy,
       observed_runtime_capabilities: reading.runtimeCapabilities,
       projection_file: reading.indexOutputPath,
-      projection_kind: reading.route.kind === "hub" ? "navigation_adapted" : "source_identical",
+      projection_kind: reading.route.kind === "hub"
+        ? "navigation_adapted"
+        : reading.route.kind === "supplemental_instrument"
+          ? "embedded_single_file"
+          : "source_identical",
       source_bytes: reading.sourceBytes.byteLength,
       source_sha256: sha256(reading.sourceBytes),
       projection_bytes: reading.projectionBytes.byteLength,
@@ -1261,6 +1461,9 @@ export async function createPackagePlan(options = {}) {
     package_contract: {
       primary_routes: routeReceipts.length,
       prototype_routes: routeReceipts.filter(({ projection_kind }) => projection_kind === "source_identical").length,
+      supplemental_instrument_routes: routeReceipts.filter(
+        ({ projection_kind }) => projection_kind === "embedded_single_file",
+      ).length,
       generated_files: generatedFileCount,
       compatibility_aliases_generated: false,
       live_cloudflare_mutation: false,

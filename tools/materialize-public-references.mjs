@@ -56,6 +56,8 @@ const PUBLIC_REFERENCE_NAMESPACES = [
 ];
 const PUBLIC_IFRAME_LOCAL_ROOT =
   "context-canvas/prototypes/core-architectures/chimeric-pack-v0.1";
+const PUBLIC_IFRAME_CONTEXT_CANVAS_SOURCE_ROOT =
+  "context-canvas-project-surface/context-canvas";
 const EXACT_TOKEN = /^PUBLIC_URL_(?:REGISTRY|IFRAME)_[A-Z0-9_]+$/;
 const EXACT_IFRAME_TOKEN = /^PUBLIC_URL_IFRAME_[A-Z0-9_]+$/;
 const TOKEN_OCCURRENCE = /\{\{(PUBLIC_URL[^{}\s]*)\}\}/g;
@@ -1210,9 +1212,16 @@ async function loadIframeRouteProfiles(manifestPath) {
   const profiles = new Map();
   for (const route of manifest.routes) {
     const policy = route?.carrier_policy;
+    const ownsContextCanvasSource =
+      route?.kind === "supplemental_instrument" &&
+      route?.source_root === PUBLIC_IFRAME_CONTEXT_CANVAS_SOURCE_ROOT;
+    const ownsCorePackSource =
+      ["hub", "prototype"].includes(route?.kind) &&
+      route?.source_root === undefined;
     if (
       typeof route?.source_file !== "string" ||
       basename(route.source_file) !== route.source_file ||
+      (!ownsCorePackSource && !ownsContextCanvasSource) ||
       typeof route?.public_alias !== "string" ||
       !Array.isArray(policy?.sandbox_tokens) ||
       !Array.isArray(policy?.permissions_policy) ||
@@ -1239,8 +1248,11 @@ async function loadIframeRouteProfiles(manifestPath) {
     ) {
       fail("each iframe route alias must be unique, normalized, versioned, and host-local");
     }
+    const localFallback = ownsContextCanvasSource
+      ? `context-canvas/${route.source_file}`
+      : `${PUBLIC_IFRAME_LOCAL_ROOT}/${route.source_file}`;
     profiles.set(routeUrl.href, {
-      localFallback: `${PUBLIC_IFRAME_LOCAL_ROOT}/${route.source_file}`,
+      localFallback,
       sandboxTokens: [...policy.sandbox_tokens],
       allowFeatures: [...policy.permissions_policy],
     });

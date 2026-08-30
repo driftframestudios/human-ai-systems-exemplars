@@ -70,7 +70,10 @@ async function governedHtmlFiles() {
   const sourceCompatibility = sourceManifest.prototypes.find(({ id }) => id === "strategy-canvas").compatibility_route;
   const projectionCompatibility = projectionManifest.prototypes.find(({ id }) => id === "strategy-canvas").compatibility_route;
 
-  routeManifest.routes.forEach(({ source_file }) => paths.add(resolve(sourceRoot, source_file)));
+  routeManifest.routes.forEach(({ source_file, source_root }) => paths.add(resolve(
+    source_root === undefined ? sourceRoot : resolve(repositoryRoot, source_root),
+    source_file,
+  )));
   paths.add(resolve(sourceRoot, sourceCompatibility));
   paths.add(resolve(sourceRoot, "strategy-canvas-system-v0.2/compatibility-v0.1.1.html"));
   attributionContract.public_html.canonical_templates.forEach(path => paths.add(resolve(repositoryRoot, path)));
