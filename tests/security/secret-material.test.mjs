@@ -656,6 +656,117 @@ test("raw index materialization does not execute configured smudge filters", asy
   await assert.rejects(readFile(marker), (error) => error?.code === "ENOENT");
 });
 
+test("the reviewed credential-URI exception stays bound to immutable history", async (t) => {
+  let installation;
+  try {
+    installation = await verifyBetterleaksInstall();
+  } catch (error) {
+    if (error instanceof BetterleaksInstallError) {
+      t.skip("run `npm run security:secrets:install` for the Betterleaks integration case");
+      return;
+    }
+    throw error;
+  }
+
+  const historicalCommits = [
+    "a7047741c3e104423630bde07ebd86c336be941d",
+    "f4b0651ccca63b74f3b761488f14f434094996e9",
+    "e0488e202c711e5491ac7fbd508e8b8c3698c24f",
+  ];
+  const sourceCommit = historicalCommits[2];
+  const fixturePath = "tests/public-references/materializer.test.mjs";
+  const repositoryGit = (...args) =>
+    spawnSync("git", args, {
+      cwd: REPOSITORY_ROOT,
+      encoding: "utf8",
+      maxBuffer: 16 * 1024 * 1024,
+    });
+
+  const commitsAvailable = historicalCommits.every(
+    (commit) => repositoryGit("cat-file", "-e", `${commit}^{commit}`).status === 0,
+  );
+  if (!commitsAvailable) {
+    t.skip("the immutable history fixture is unavailable in this clone");
+    return;
+  }
+
+  const historicalBlob = repositoryGit("show", `${sourceCommit}:${fixturePath}`);
+  assert.equal(historicalBlob.status, 0);
+  const currentBlob = await readFile(join(REPOSITORY_ROOT, fixturePath), "utf8");
+  const credentialUriPattern =
+    /[a-z][a-z0-9+.-]*:\/\/[^\s/@:]+:[^\s/@]+@[^\s/]+/giu;
+  const historicalUris = [...historicalBlob.stdout.matchAll(credentialUriPattern)]
+    .map((match) => match[0]);
+  const currentUris = new Set(
+    [...currentBlob.matchAll(credentialUriPattern)].map((match) => match[0]),
+  );
+  const historicalOnlyUris = historicalUris.filter(
+    (candidate) => !currentUris.has(candidate),
+  );
+  assert.equal(historicalOnlyUris.length, 1);
+  const historicalCredentialUri = historicalOnlyUris[0];
+
+  for (const commit of historicalCommits) {
+    const patch = repositoryGit(
+      "show",
+      "--format=",
+      "--diff-merges=separate",
+      commit,
+      "--",
+      fixturePath,
+    );
+    assert.equal(patch.status, 0);
+    assert.equal(patch.stdout.includes(historicalCredentialUri), true);
+  }
+
+  const settledHistory = await executeSecretScan({
+    binaryPath: installation.binaryPath,
+    scannerArguments: [
+      "git",
+      REPOSITORY_ROOT,
+      `--log-opts=--no-walk --full-history --diff-merges=separate --diff-filter=tuxdb ${historicalCommits.join(" ")}`,
+      "--isolate-rule",
+      "generic-credential-uri",
+    ],
+    scope: "reviewed immutable history fixture",
+  });
+  assert.deepEqual(settledHistory.findings, []);
+
+  const repository = await mkdtemp(join(tmpdir(), "betterleaks-history-exception-test-"));
+  t.after(() => rm(repository, { recursive: true, force: true }));
+  const git = (...args) =>
+    spawnSync("git", args, { cwd: repository, encoding: "utf8" });
+  assert.equal(git("init", "--quiet").status, 0);
+  assert.equal(git("config", "user.name", "Synthetic Canary").status, 0);
+  assert.equal(git("config", "user.email", "canary@example.invalid").status, 0);
+  const fixture = join(repository, fixturePath);
+  await mkdir(dirname(fixture), { recursive: true });
+  await writeFile(
+    fixture,
+    `export const historicalCredentialUri = ${JSON.stringify(`${historicalCredentialUri}/v1/core/heart-chart/`)};\n`,
+  );
+  assert.equal(git("add", fixturePath).status, 0);
+  assert.equal(git("commit", "--quiet", "-m", "regenerate synthetic URI fixture").status, 0);
+  const regeneratedCommit = git("rev-parse", "HEAD").stdout.trim();
+  assert.equal(historicalCommits.includes(regeneratedCommit), false);
+
+  const regenerated = await executeSecretScan({
+    binaryPath: installation.binaryPath,
+    scannerArguments: [
+      "git",
+      repository,
+      "--log-opts=--all --full-history --diff-merges=separate --diff-filter=tuxdb",
+      "--isolate-rule",
+      "generic-credential-uri",
+    ],
+    scope: "regenerated history fixture",
+  });
+  assert.equal(regenerated.findings.length, 1);
+  assert.equal(regenerated.findings[0].rule, "generic-credential-uri");
+  assert.equal(regenerated.findings[0].commit, regeneratedCommit.slice(0, 12));
+  assert.equal(JSON.stringify(regenerated).includes(historicalCredentialUri), false);
+});
+
 test("the all-ref history options observe a secret introduced by merge resolution", async (t) => {
   let installation;
   try {
