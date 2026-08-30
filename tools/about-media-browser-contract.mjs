@@ -110,9 +110,54 @@ try {
   assertTelemetry(reduced.telemetry);
   await reduced.context.close();
 
+  const narrow = await openPage(browser, server.origin, {
+    viewport: { width: 390, height: 844 },
+  });
+  const narrowBounds = await narrow.page.evaluate(() => {
+    const media = document.querySelector("[data-about-media]");
+    const rect = media?.getBoundingClientRect();
+    return {
+      left: rect?.left ?? -1,
+      right: rect?.right ?? Number.POSITIVE_INFINITY,
+      viewportWidth: window.innerWidth,
+      pageClientWidth: document.documentElement.clientWidth,
+      pageScrollWidth: document.documentElement.scrollWidth,
+    };
+  });
+  assert.ok(narrowBounds.left >= 0, "narrow media stays inside the left viewport edge");
+  assert.ok(
+    narrowBounds.right <= narrowBounds.viewportWidth,
+    "narrow media stays inside the right viewport edge",
+  );
+  assert.ok(
+    narrowBounds.pageScrollWidth <= narrowBounds.pageClientWidth,
+    "the narrow page has no horizontal overflow",
+  );
+  assert.equal(narrow.motionRequests.length, 0, "narrow initial reading stays still");
+  assertTelemetry(narrow.telemetry);
+  await narrow.context.close();
+
+  const forced = await openPage(browser, server.origin, { forcedColors: "active" });
+  const forcedPresentation = await forced.page.evaluate(() => {
+    const media = document.querySelector("[data-about-media]");
+    const style = media ? window.getComputedStyle(media) : null;
+    return {
+      borderStyle: style?.borderTopStyle || "",
+      borderWidth: Number.parseFloat(style?.borderTopWidth || "0"),
+      boxShadow: style?.boxShadow || "",
+    };
+  });
+  assert.notEqual(forcedPresentation.borderStyle, "none");
+  assert.ok(forcedPresentation.borderWidth > 0);
+  assert.equal(forcedPresentation.boxShadow, "none");
+  assert.equal(forced.motionRequests.length, 0, "forced-color initial reading stays still");
+  assertTelemetry(forced.telemetry);
+  await forced.context.close();
+
   console.log(
     "About media browser contract passed: initial still, keyboard activation, "
-    + "print reset, one-cycle reset, and reduced-motion still.",
+    + "print reset, one-cycle reset, reduced-motion still, narrow containment, "
+    + "and forced-color presentation.",
   );
 } finally {
   await browser.close();
