@@ -34,6 +34,7 @@ test("About uses visitor-facing setting, role, and handoff language", async () =
   assert.match(html, /people across roles gain/u);
   assert.match(html, /work, memory, and judgment held together/u);
   assert.match(html, /evidence notes and decision handoffs carry the source/u);
+  assert.match(html, /href="hiring-surfaces-talent-agent-intake\.html#amplified-hiring-reach"/u);
   assert.doesNotMatch(html, /\brooms?\b|\bviewlets?\b/iu);
 });
 
@@ -70,6 +71,47 @@ test("viewlet remains specialist vocabulary outside the About route", async () =
   );
   assert.match(gallery, /AI-Legible Viewlet Atlas/u);
   assert.match(gallery, /class="viewlet-rack"/u);
+});
+
+test("current autobiographical debriefs use a first-person perspective", async () => {
+  assert.deepEqual(
+    await topLevelHtmlFilesContaining(/\b(?:Narrator(?: role| posture)?|[Tt]he author)\b/u),
+    [
+      "exemplar-ideal-debrief.html",
+      "exemplar-maximal-debrief.html",
+    ],
+    "Only the explicitly labeled legacy example text retains a generic author",
+  );
+
+  const routes = [
+    "choose-your-player-humatics.html",
+    "fmi-clinical-trial-coordination.html",
+    "fmi-lims-eln-replatforming.html",
+    "genomic-viewer-replatforming.html",
+    "three-way-comparative-return.html",
+    "who-to-believe-reviews-platform.html",
+  ];
+  for (const route of routes) {
+    const html = await readCanvasFile(route);
+    assert.match(html, /<dt>My (?:role|posture)<\/dt>/u, route);
+    assert.match(html, /<dd>I\b/u, route);
+  }
+
+  const scenarioRoutes = [
+    "ehr-discrete-genomic-result.html",
+    "ehr-interface-engine-replatform.html",
+    "ehr-pgx-alert-failure.html",
+    "ehr-three-front-doors.html",
+    "ehr-two-charts-one-result.html",
+  ];
+  for (const route of scenarioRoutes) {
+    const html = await readCanvasFile(route);
+    assert.match(html, /<dt>My interpretation<\/dt><dd>I read this scenario/u, route);
+  }
+
+  const debriefs = await readCanvasFile("debriefs.html");
+  assert.match(debriefs, /The interpretations throughout this collection are mine\./u);
+  assert.match(debriefs, /AI collaboration supported a bounded public-source\s+search/u);
 });
 
 test("curated visitor prose states findings directly while citations carry provenance", async () => {
