@@ -75,8 +75,9 @@ promotion branches select the durable result:
 
 1. `main` receives accepted contracts and concise research receipts so
    main-only collaborators can understand and continue the work.
-2. `dev` integrates a chosen sustained feature direction.
-3. `stg` receives a selected deployment candidate or Worker pilot.
+2. `dev` optionally integrates a chosen sustained feature direction.
+3. `stg` receives a selected deployment candidate or Worker pilot, directly
+   from `main` when a sustained `dev` lane adds no useful integration step.
 4. `release` binds the accepted source, evidence, and integration result.
 5. An accepted `release` update produces the `docs` projection.
 6. A separately reviewed move advances accepted release material to `prod`.
@@ -88,6 +89,23 @@ with their named branch, setting, or human-reviewed operation. Generated
 Selected promotion pull requests are the standing bridge from research. A bulk
 merge of accumulated research becomes fitting only when a human-reviewed epic
 receipt selects that complete target future.
+
+### cPanel production carrier
+
+The cPanel visitor deployment follows `main → stg → release → prod`; `dev`
+remains available when sustained integration earns it. The reviewed source
+promotion into `prod` establishes source commit `S`. A following pull request,
+started from exact `S`, changes only the generated
+`deployment/cpanel/carrier/**` closure. Its merged release commit `R` must keep
+`S` as first parent (`R^1 = S`) and pass the carrier verifier before cPanel
+receives it.
+
+Carrier bytes remain downstream, generated `prod` release material. They do
+not promote backward into source branches and the assembler excludes them from
+production inputs. cPanel deploys `R`, while the carried manifest identifies
+`S`. If `prod` moves before the carrier merge, regenerate from the new source
+coordinate. The complete sequence and host boundary live in
+[`deployment/cpanel/README.md`](deployment/cpanel/README.md).
 
 ## Synchronization and re-entry
 

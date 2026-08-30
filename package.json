@@ -13,6 +13,8 @@
     "verify:iframe-routes:policy": "node tools/verify-live-iframe-routes.mjs --require-policy",
     "build:prod-projection": "node tools/build-prod-projection.mjs --build",
     "check:prod-projection": "node tools/build-prod-projection.mjs --check",
+    "stage:prod-carrier": "node tools/build-prod-projection.mjs --stage-carrier",
+    "check:prod-carrier": "node tools/build-prod-projection.mjs --check-carrier",
     "build:schema-pages": "node tools/build-schema-pages.mjs",
     "build:schema-delivery": "node cloudflare/schema-delivery/build.mjs",
     "check:schema-delivery": "node cloudflare/schema-delivery/build.mjs --check",

@@ -9,7 +9,7 @@ import {
 } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { promisify } from "node:util";
+import { promisify, TextDecoder } from "node:util";
 import { fileURLToPath } from "node:url";
 
 import {
@@ -29,6 +29,11 @@ const configurationId = "prod-projection.configuration.v1";
 const primaryManifestId = "prod-projection.primary-route-manifest.v1";
 const deploymentManifestId = "prod-projection.deployment-manifest.v1";
 const aggregateReceiptId = "iframe-routes.aggregate-package-receipt.v1";
+const carrierRelativeRoot = "deployment/cpanel/carrier";
+const carrierManifestRelativePath = `${carrierRelativeRoot}/deployment-manifest.json`;
+const carrierIndexRelativePath = `${carrierRelativeRoot}/deployment-files.tsv`;
+const deploymentFileIndexHeader =
+  "deployment_manifest_sha256\tsource_sha\tsurface\tprojected_path\tbytes\tsha256\tmedia_type\n";
 
 const excludedPrimaryRoots = new Set([
   ".agents",
@@ -45,6 +50,8 @@ const excludedPrimaryRoots = new Set([
   "threadkeeping",
   "tools",
 ]);
+
+const excludedRepositoryPrefixes = [carrierRelativeRoot];
 
 const mediaTypesByExtension = new Map([
   [".avif", new Set(["image/avif"])],
@@ -83,6 +90,7 @@ export const productionProjectionDefaults = Object.freeze({
     "deployment/cpanel/production-projection.config.json",
   ),
   outputRoot: path.join(repositoryRoot, ".prod-projection-build"),
+  carrierRoot: path.join(repositoryRoot, ...carrierRelativeRoot.split("/")),
 });
 
 function fail(message) {
@@ -107,6 +115,10 @@ function assertExactKeys(value, expectedKeys, label) {
 
 function portablePathKey(relativePath) {
   return relativePath.normalize("NFC").toLowerCase();
+}
+
+export function compareUtf8Paths(left, right) {
+  return Buffer.compare(Buffer.from(left, "utf8"), Buffer.from(right, "utf8"));
 }
 
 function assertPortableProjectionPath(relativePath, label) {
@@ -141,6 +153,13 @@ function assertRepositoryInputPath(sourcePath, label) {
     return key === ".env" || key.startsWith(".env.");
   })) {
     fail(`${label} stays outside environment files: ${sourcePath}.`);
+  }
+  const portableKey = portablePathKey(safePath);
+  for (const excludedPrefix of excludedRepositoryPrefixes) {
+    const prefixKey = portablePathKey(excludedPrefix);
+    if (portableKey === prefixKey || portableKey.startsWith(`${prefixKey}/`)) {
+      fail(`${label} stays outside generated carrier root ${excludedPrefix}.`);
+    }
   }
   return safePath;
 }
@@ -256,12 +275,23 @@ export async function loadProductionProjectionInputs(
   options = {},
 ) {
   const root = path.resolve(options.repositoryRoot ?? repositoryRoot);
-  const sourceSha = await readRepositorySourceSha(root);
+  const currentSha = await readRepositorySourceSha(root, {
+    allowCarrierOnlyDirty: options.allowCarrierOnlyDirty === true,
+  });
   if (
     options.sourceSha !== undefined &&
-    (typeof options.sourceSha !== "string" ||
-      options.sourceSha.toLowerCase() !== sourceSha)
+    typeof options.sourceSha !== "string"
   ) {
+    fail("Production projection selection requires one full Git source SHA.");
+  }
+  const sourceSha = options.sourceSha?.toLowerCase() ?? currentSha;
+  if (
+    typeof sourceSha !== "string" ||
+    !/^[a-f0-9]{40}(?:[a-f0-9]{24})?$/.test(sourceSha)
+  ) {
+    fail("Production projection selection requires one full Git source SHA.");
+  }
+  if (sourceSha !== currentSha && options.allowHistoricalSource !== true) {
     fail("Production projection selection SHA differs from the clean repository HEAD.");
   }
   const trackedBlobs = options.trackedBlobs ??
@@ -321,14 +351,89 @@ export async function loadProductionProjectionInputs(
   };
 }
 
-export async function readRepositorySourceSha(root = repositoryRoot) {
+function decodeGitPath(pathBytes) {
+  try {
+    const decoded = new TextDecoder("utf-8", { fatal: true }).decode(pathBytes);
+    if (decoded.length === 0) fail("Git status returned an empty path.");
+    return decoded;
+  } catch (error) {
+    if (error instanceof TypeError) {
+      fail("Git status returned a path that is not valid UTF-8.");
+    }
+    throw error;
+  }
+}
+
+function splitNulTerminatedGitRecords(bytes, label) {
+  if (!Buffer.isBuffer(bytes)) fail(`${label} must return raw bytes.`);
+  if (bytes.byteLength === 0) return [];
+  if (bytes.at(-1) !== 0) fail(`${label} returned an unterminated path record.`);
+  const records = [];
+  let start = 0;
+  for (let index = 0; index < bytes.byteLength; index += 1) {
+    if (bytes[index] !== 0) continue;
+    records.push(bytes.subarray(start, index));
+    start = index + 1;
+  }
+  return records;
+}
+
+function parseGitStatusPaths(statusBytes) {
+  const records = splitNulTerminatedGitRecords(statusBytes, "Git status");
+
+  const paths = [];
+  for (let index = 0; index < records.length; index += 1) {
+    const record = records[index];
+    if (
+      record.byteLength < 4 ||
+      record[2] !== 0x20 ||
+      !" MADRCUT?!".includes(String.fromCharCode(record[0])) ||
+      !" MADRCUT?!".includes(String.fromCharCode(record[1]))
+    ) {
+      fail("Git status returned an unsupported porcelain record.");
+    }
+    const state = String.fromCharCode(record[0], record[1]);
+    paths.push(decodeGitPath(record.subarray(3)));
+    if (/[RC]/.test(state)) {
+      index += 1;
+      if (index >= records.length || records[index].byteLength === 0) {
+        fail("Git status returned an incomplete rename or copy record.");
+      }
+      paths.push(decodeGitPath(records[index]));
+    }
+  }
+  return paths;
+}
+
+export function assertCarrierOnlyDirtyStatus(statusBytes) {
+  for (const dirtyPath of parseGitStatusPaths(statusBytes)) {
+    if (
+      dirtyPath !== carrierRelativeRoot &&
+      !dirtyPath.startsWith(`${carrierRelativeRoot}/`)
+    ) {
+      fail(`Production carrier staging found an open path outside its owned root: ${dirtyPath}.`);
+    }
+  }
+}
+
+export async function readRepositorySourceSha(
+  root = repositoryRoot,
+  options = {},
+) {
   const { stdout: status } = await execFileAsync(
     "git",
-    ["status", "--porcelain=v1", "--untracked-files=normal"],
-    { cwd: root, encoding: "utf8" },
+    ["status", "--porcelain=v1", "-z", "--untracked-files=all"],
+    {
+      cwd: root,
+      encoding: "buffer",
+      maxBuffer: 128 * 1024 * 1024,
+    },
   );
-  if (status.length > 0) {
-    fail("Production projection requires a clean Git worktree for its source coordinate.");
+  if (status.byteLength > 0) {
+    if (options.allowCarrierOnlyDirty !== true) {
+      fail("Production projection requires a clean Git worktree for its source coordinate.");
+    }
+    assertCarrierOnlyDirtyStatus(status);
   }
   const { stdout } = await execFileAsync("git", ["rev-parse", "HEAD"], {
     cwd: root,
@@ -348,12 +453,22 @@ async function readTrackedBlobIndex(root, sourceSha) {
     { cwd: root, encoding: "buffer", maxBuffer: 128 * 1024 * 1024 },
   );
   const entries = new Map();
-  for (const record of stdout.toString("utf8").split("\0")) {
-    if (record.length === 0) continue;
-    const separator = record.indexOf("\t");
-    const metadata = record.slice(0, separator).split(" ");
-    const sourcePath = record.slice(separator + 1);
-    if (separator < 0 || metadata.length !== 3 || entries.has(sourcePath)) {
+  for (const record of splitNulTerminatedGitRecords(stdout, "Git source tree")) {
+    const separator = record.indexOf(0x09);
+    const metadata = separator < 0
+      ? []
+      : record.subarray(0, separator).toString("ascii").split(" ");
+    const sourcePath = separator < 0
+      ? ""
+      : decodeGitPath(record.subarray(separator + 1));
+    if (
+      separator < 0 ||
+      metadata.length !== 3 ||
+      !/^[0-7]{6}$/.test(metadata[0]) ||
+      !/^(?:blob|commit|tree)$/.test(metadata[1]) ||
+      !/^[a-f0-9]{40}(?:[a-f0-9]{24})?$/.test(metadata[2]) ||
+      entries.has(sourcePath)
+    ) {
       fail("Git source tree returned an ambiguous tracked-file record.");
     }
     entries.set(sourcePath, {
@@ -401,12 +516,19 @@ async function verifyRepositorySourceState(
   root,
   sourceSha,
   trackedInputs,
+  options = {},
 ) {
-  const currentSha = await readRepositorySourceSha(root);
-  if (currentSha !== sourceSha) {
+  const currentSha = await readRepositorySourceSha(root, {
+    allowCarrierOnlyDirty: options.allowCarrierOnlyDirty === true,
+  });
+  const expectedCurrentSha = options.currentSha ?? sourceSha;
+  if (currentSha !== expectedCurrentSha) {
     fail("Production projection source coordinate changed during composition.");
   }
-  const currentBlobs = await readTrackedBlobIndex(root, currentSha);
+  if (currentSha !== sourceSha && options.allowHistoricalSource !== true) {
+    fail("Production projection source coordinate changed during composition.");
+  }
+  const currentBlobs = await readTrackedBlobIndex(root, sourceSha);
   for (const [sourcePath, input] of trackedInputs) {
     if (currentBlobs.get(sourcePath)?.object !== input.object) {
       fail("Production projection tracked blob changed during composition.");
@@ -608,6 +730,60 @@ function serializeManifest(manifest) {
   return Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 }
 
+async function assertCarrierReleaseRelationship(root, sourceSha, releaseSha) {
+  if (
+    typeof sourceSha !== "string" ||
+    typeof releaseSha !== "string" ||
+    !/^[a-f0-9]{40}(?:[a-f0-9]{24})?$/.test(sourceSha) ||
+    !/^[a-f0-9]{40}(?:[a-f0-9]{24})?$/.test(releaseSha) ||
+    sourceSha === releaseSha
+  ) {
+    fail("Production carrier requires distinct full source and release Git SHAs.");
+  }
+
+  let firstParent;
+  try {
+    const { stdout } = await execFileAsync(
+      "git",
+      ["rev-parse", "--verify", `${releaseSha}^1`],
+      { cwd: root, encoding: "utf8" },
+    );
+    firstParent = stdout.trim().toLowerCase();
+  } catch {
+    fail("Production carrier release must have its bound source as a first parent.");
+  }
+  if (firstParent !== sourceSha) {
+    fail("Production carrier release must have its bound source as a first parent.");
+  }
+
+  const { stdout: changedBytes } = await execFileAsync(
+    "git",
+    ["diff", "--name-only", "--no-renames", "-z", sourceSha, releaseSha, "--"],
+    { cwd: root, encoding: "buffer", maxBuffer: 128 * 1024 * 1024 },
+  );
+  const changedPaths = splitNulTerminatedGitRecords(
+    changedBytes,
+    "Production carrier release diff",
+  ).map(decodeGitPath);
+  if (changedPaths.length === 0) {
+    fail("Production carrier release must change its owned carrier root.");
+  }
+  for (const changedPath of changedPaths) {
+    if (
+      changedPath !== carrierRelativeRoot &&
+      !changedPath.startsWith(`${carrierRelativeRoot}/`)
+    ) {
+      fail(`Production carrier release changes a path outside its owned root: ${changedPath}.`);
+    }
+  }
+  for (const requiredPath of [carrierManifestRelativePath, carrierIndexRelativePath]) {
+    if (!changedPaths.includes(requiredPath)) {
+      fail(`Production carrier release must change ${requiredPath}.`);
+    }
+  }
+  return { sourceSha, releaseSha, changedPaths };
+}
+
 export async function createProductionProjectionPlan(options = {}) {
   const root = path.resolve(options.repositoryRoot ?? repositoryRoot);
   if (Object.hasOwn(options, "primaryManifest")) {
@@ -616,17 +792,35 @@ export async function createProductionProjectionPlan(options = {}) {
   if (options.aggregatePlan === undefined && root !== repositoryRoot) {
     fail("An alternate repository root requires an injected aggregate iframe plan.");
   }
-  const sourceSha = await readRepositorySourceSha(root);
+  const allowCarrierOnlyDirty = options.allowCarrierOnlyDirty === true;
+  const currentSha = await readRepositorySourceSha(root, {
+    allowCarrierOnlyDirty,
+  });
   if (
     options.sourceSha !== undefined &&
-    (typeof options.sourceSha !== "string" ||
-      options.sourceSha.toLowerCase() !== sourceSha)
+    typeof options.sourceSha !== "string"
+  ) {
+    fail("Production projection requires one full Git source SHA.");
+  }
+  if (
+    options.carrierReleaseSha !== undefined &&
+    typeof options.carrierReleaseSha !== "string"
+  ) {
+    fail("Production projection carrier release requires one full Git SHA.");
+  }
+  const sourceSha = options.sourceSha?.toLowerCase() ?? currentSha;
+  if (
+    sourceSha !== currentSha &&
+    options.carrierReleaseSha?.toLowerCase() !== currentSha
   ) {
     fail("Production projection expected source SHA differs from the clean repository HEAD.");
   }
   if (!/^[a-f0-9]{40}(?:[a-f0-9]{24})?$/.test(sourceSha)) {
     fail("Production projection requires one full Git source SHA.");
   }
+  const carrierRelationship = sourceSha === currentSha
+    ? null
+    : await assertCarrierReleaseRelationship(root, sourceSha, currentSha);
   const trackedBlobs = await readTrackedBlobIndex(root, sourceSha);
   const configurationPath = options.configurationPath ?? path.join(
     root,
@@ -636,6 +830,8 @@ export async function createProductionProjectionPlan(options = {}) {
     repositoryRoot: root,
     sourceSha,
     trackedBlobs,
+    allowHistoricalSource: carrierRelationship !== null,
+    allowCarrierOnlyDirty,
   });
   const primaryManifest = selection.primaryManifest;
   const aggregatePlan = assertAggregatePlan(
@@ -705,7 +901,11 @@ export async function createProductionProjectionPlan(options = {}) {
         ? 1
         : 0,
   );
-  await verifyRepositorySourceState(root, sourceSha, trackedInputs);
+  await verifyRepositorySourceState(root, sourceSha, trackedInputs, {
+    currentSha,
+    allowHistoricalSource: carrierRelationship !== null,
+    allowCarrierOnlyDirty,
+  });
   const aggregateReceiptBytes = aggregatePlan.outputFiles.get("route-manifest.json");
   const manifest = {
     id: deploymentManifestId,
@@ -790,23 +990,14 @@ async function assertOwnedProjection(directory) {
   }
 }
 
-export async function persistProductionProjection(
+async function replaceOwnedProjection(
   plan,
-  destination = plan.outputRoot,
-  options = {},
+  destination,
+  { installation, transactionPrefix, remove = rm },
 ) {
-  const remove = options.remove ?? rm;
-  const root = path.resolve(destination, "..");
-  if (
-    destination !== plan.outputRoot ||
-    path.basename(destination) !== ".prod-projection-build"
-  ) {
-    fail(`Refusing an unexpected production projection destination: ${destination}.`);
-  }
-  await ensureRegularDirectory(root);
-  const transaction = await mkdtemp(
-    path.join(root, ".prod-projection-transaction-"),
-  );
+  const parent = path.resolve(destination, "..");
+  await ensureRegularDirectory(parent);
+  const transaction = await mkdtemp(path.join(parent, transactionPrefix));
   const stage = path.join(transaction, "next");
   const previous = path.join(transaction, "previous");
   let movedPrevious = false;
@@ -850,7 +1041,7 @@ export async function persistProductionProjection(
     } catch {
       cleanup = "incomplete";
     }
-    return { ...verification, installation: "installed", cleanup };
+    return { ...verification, installation, cleanup };
   } catch (error) {
     if (!preserveTransaction) {
       try {
@@ -861,6 +1052,24 @@ export async function persistProductionProjection(
     }
     throw error;
   }
+}
+
+export async function persistProductionProjection(
+  plan,
+  destination = plan.outputRoot,
+  options = {},
+) {
+  if (
+    destination !== plan.outputRoot ||
+    path.basename(destination) !== ".prod-projection-build"
+  ) {
+    fail(`Refusing an unexpected production projection destination: ${destination}.`);
+  }
+  return await replaceOwnedProjection(plan, destination, {
+    installation: "installed",
+    transactionPrefix: ".prod-projection-transaction-",
+    remove: options.remove,
+  });
 }
 
 export async function checkProductionProjection(plan) {
@@ -875,12 +1084,245 @@ export async function checkProductionProjection(plan) {
   }
 }
 
+function serializeDeploymentFileIndex(plan) {
+  if (
+    !isPlainObject(plan?.manifest) ||
+    plan.manifest.id !== deploymentManifestId ||
+    plan.manifest.version !== "1" ||
+    !Array.isArray(plan.manifest.outputs) ||
+    !(plan.outputFiles instanceof Map)
+  ) {
+    fail("Production carrier requires one validated production projection plan.");
+  }
+  const manifestBytes = plan.outputFiles.get("deployment-manifest.json");
+  if (
+    !Buffer.isBuffer(manifestBytes) ||
+    !manifestBytes.equals(serializeManifest(plan.manifest))
+  ) {
+    fail("Production carrier index requires exact deployment manifest bytes.");
+  }
+  const manifestSha256 = sha256(manifestBytes);
+  const sourceSha = plan.manifest.source_sha;
+  if (!/^[a-f0-9]{40}(?:[a-f0-9]{24})?$/.test(sourceSha)) {
+    fail("Production carrier index requires the deployment manifest source SHA.");
+  }
+  const rows = [];
+  const indexedPaths = new Set();
+  for (const output of [...plan.manifest.outputs].sort((left, right) =>
+    compareUtf8Paths(left.projected_path, right.projected_path),
+  )) {
+    const projectedPath = assertPortableProjectionPath(
+      output.projected_path,
+      "Production carrier indexed path",
+    );
+    if (
+      !["primary", "iframe"].includes(output.surface) ||
+      (output.surface === "primary" && !projectedPath.startsWith("primary-public/")) ||
+      (output.surface === "iframe" && !projectedPath.startsWith("iframe-public/")) ||
+      indexedPaths.has(projectedPath)
+    ) {
+      fail(`Production carrier has an invalid indexed output: ${projectedPath}.`);
+    }
+    const bytes = plan.outputFiles.get(projectedPath);
+    if (
+      !Buffer.isBuffer(bytes) ||
+      !Number.isSafeInteger(output.bytes) ||
+      output.bytes < 0 ||
+      output.bytes !== bytes.byteLength ||
+      !/^[a-f0-9]{64}$/.test(output.sha256) ||
+      output.sha256 !== sha256(bytes) ||
+      typeof output.media_type !== "string" ||
+      /[\t\r\n]/.test(output.media_type)
+    ) {
+      fail(`Production carrier indexed metadata differs from ${projectedPath}.`);
+    }
+    assertMediaType(projectedPath, output.media_type, "Production carrier output");
+    indexedPaths.add(projectedPath);
+    rows.push([
+      manifestSha256,
+      sourceSha,
+      output.surface,
+      projectedPath,
+      String(output.bytes),
+      output.sha256,
+      output.media_type,
+    ].join("\t"));
+  }
+  const publicPaths = [...plan.outputFiles.keys()]
+    .filter((relativePath) => relativePath !== "deployment-manifest.json")
+    .sort();
+  if (
+    publicPaths.length !== indexedPaths.size ||
+    publicPaths.some((relativePath) => !indexedPaths.has(relativePath))
+  ) {
+    fail("Production carrier index differs from the production projection outputs.");
+  }
+  return Buffer.from(
+    `${deploymentFileIndexHeader}${rows.length ? `${rows.join("\n")}\n` : ""}`,
+    "utf8",
+  );
+}
+
+export function createProductionCarrierPlan(projectionPlan) {
+  if (
+    typeof projectionPlan?.outputRoot !== "string" ||
+    path.basename(projectionPlan.outputRoot) !== ".prod-projection-build"
+  ) {
+    fail("Production carrier requires the repository-owned projection output root.");
+  }
+  const manifestBytes = projectionPlan.outputFiles?.get("deployment-manifest.json");
+  if (
+    !Buffer.isBuffer(manifestBytes) ||
+    !manifestBytes.equals(serializeManifest(projectionPlan.manifest))
+  ) {
+    fail("Production carrier requires exact deployment manifest bytes.");
+  }
+  const outputFiles = new Map(projectionPlan.outputFiles);
+  outputFiles.set("deployment-files.tsv", serializeDeploymentFileIndex(projectionPlan));
+  return {
+    manifest: projectionPlan.manifest,
+    outputFiles,
+    outputRoot: path.join(
+      path.dirname(projectionPlan.outputRoot),
+      ...carrierRelativeRoot.split("/"),
+    ),
+  };
+}
+
+export async function stageProductionCarrier(
+  projectionPlan,
+  destination,
+  options = {},
+) {
+  const carrierPlan = createProductionCarrierPlan(projectionPlan);
+  const target = destination ?? carrierPlan.outputRoot;
+  if (path.resolve(target) !== path.resolve(carrierPlan.outputRoot)) {
+    fail(`Refusing an unexpected production carrier destination: ${target}.`);
+  }
+  const result = await replaceOwnedProjection(carrierPlan, target, {
+    installation: "staged",
+    transactionPrefix: ".carrier-transaction-",
+    remove: options.remove,
+  });
+  return { ...result, source_sha: projectionPlan.manifest.source_sha };
+}
+
+export async function stageProductionCarrierFromRepository(options = {}) {
+  const {
+    destination,
+    stageOptions,
+    ...projectionOptions
+  } = options;
+  const projectionPlan = await createProductionProjectionPlan({
+    ...projectionOptions,
+    allowCarrierOnlyDirty: true,
+  });
+  const verification = await stageProductionCarrier(
+    projectionPlan,
+    destination,
+    stageOptions,
+  );
+  return { projectionPlan, verification };
+}
+
+async function verifyTrackedCarrierPlan(root, releaseSha, carrierPlan) {
+  const trackedBlobs = await readTrackedBlobIndex(root, releaseSha);
+  const expectedPaths = [...carrierPlan.outputFiles.keys()]
+    .map((relativePath) => `${carrierRelativeRoot}/${relativePath}`)
+    .sort();
+  const actualPaths = [...trackedBlobs.keys()]
+    .filter((sourcePath) => sourcePath.startsWith(`${carrierRelativeRoot}/`))
+    .sort();
+  const missing = expectedPaths.filter((sourcePath) => !actualPaths.includes(sourcePath));
+  const extra = actualPaths.filter((sourcePath) => !expectedPaths.includes(sourcePath));
+  if (missing.length || extra.length) {
+    fail([
+      "Tracked production carrier differs from its exact allowlist.",
+      missing.length ? `Missing: ${missing.join(", ")}` : "",
+      extra.length ? `Extra: ${extra.join(", ")}` : "",
+    ].filter(Boolean).join("\n"));
+  }
+
+  let totalBytes = 0;
+  for (const [relativePath, expectedBytes] of carrierPlan.outputFiles) {
+    const sourcePath = `${carrierRelativeRoot}/${relativePath}`;
+    const entry = trackedBlobs.get(sourcePath);
+    if (entry?.mode !== "100644" || entry.type !== "blob") {
+      fail(`Tracked production carrier output must be a regular non-executable blob: ${sourcePath}.`);
+    }
+    const trackedInput = await readTrackedRepositoryInput(
+      root,
+      trackedBlobs,
+      sourcePath,
+      "Tracked production carrier output",
+    );
+    if (!trackedInput.bytes.equals(expectedBytes)) {
+      fail(`Tracked production carrier output differs from its source plan: ${sourcePath}.`);
+    }
+    totalBytes += trackedInput.bytes.byteLength;
+  }
+  return { files: actualPaths.length, bytes: totalBytes };
+}
+
+export async function checkProductionCarrier(options = {}) {
+  const root = path.resolve(options.repositoryRoot ?? repositoryRoot);
+  const releaseSha = await readRepositorySourceSha(root);
+  const releaseBlobs = await readTrackedBlobIndex(root, releaseSha);
+  const manifestInput = await readTrackedRepositoryInput(
+    root,
+    releaseBlobs,
+    carrierManifestRelativePath,
+    "Tracked production carrier manifest",
+  );
+  const carriedManifest = parseJsonBytes(
+    manifestInput.bytes,
+    "Tracked production carrier manifest",
+  );
+  if (
+    carriedManifest.id !== deploymentManifestId ||
+    carriedManifest.version !== "1" ||
+    typeof carriedManifest.source_sha !== "string" ||
+    !/^[a-f0-9]{40}(?:[a-f0-9]{24})?$/.test(carriedManifest.source_sha)
+  ) {
+    fail("Tracked production carrier manifest requires its exact v1 identity and source SHA.");
+  }
+  const sourceSha = carriedManifest.source_sha;
+  await assertCarrierReleaseRelationship(root, sourceSha, releaseSha);
+  const projectionPlan = await createProductionProjectionPlan({
+    repositoryRoot: root,
+    sourceSha,
+    carrierReleaseSha: releaseSha,
+    configurationPath: options.configurationPath ?? path.join(
+      root,
+      "deployment/cpanel/production-projection.config.json",
+    ),
+    aggregatePlan: options.aggregatePlan,
+  });
+  const carrierPlan = createProductionCarrierPlan(projectionPlan);
+  const verification = await verifyTrackedCarrierPlan(
+    root,
+    releaseSha,
+    carrierPlan,
+  );
+  return {
+    ...verification,
+    source_sha: sourceSha,
+    release_sha: releaseSha,
+    relationship: "source_first_parent_carrier_only",
+  };
+}
+
 function parseArguments(args) {
   let mode = null;
   let configurationPath = productionProjectionDefaults.configurationPath;
   for (let index = 0; index < args.length; index += 1) {
     const argument = args[index];
-    if (argument === "--build" || argument === "--check") {
+    if (
+      argument === "--build" ||
+      argument === "--check" ||
+      argument === "--stage-carrier" ||
+      argument === "--check-carrier"
+    ) {
       if (mode !== null) fail("Choose exactly one production projection mode.");
       mode = argument.slice(2);
       continue;
@@ -895,28 +1337,56 @@ function parseArguments(args) {
     fail(`Unknown production projection argument: ${argument}.`);
   }
   if (mode === null) {
-    fail(`Usage: node ${path.relative(repositoryRoot, toolPath)} (--build|--check) [--config file]`);
+    fail(
+      `Usage: node ${path.relative(repositoryRoot, toolPath)} ` +
+      `(--build|--check|--stage-carrier|--check-carrier) [--config file]`,
+    );
   }
   return { mode, configurationPath };
 }
 
 async function main() {
   const { mode, configurationPath } = parseArguments(process.argv.slice(2));
-  const plan = await createProductionProjectionPlan({ configurationPath });
-  const verification = mode === "check"
-    ? await checkProductionProjection(plan)
-    : await persistProductionProjection(plan);
+  if (mode === "check-carrier") {
+    const verification = await checkProductionCarrier({ configurationPath });
+    console.log([
+      `Production carrier verified: ${verification.files} files, ${verification.bytes} bytes.`,
+      `Source: ${verification.source_sha}.`,
+      `Release: ${verification.release_sha}.`,
+      `Relationship: ${verification.relationship}.`,
+      "Deployment activation: none.",
+    ].join("\n"));
+    return;
+  }
+  const carrierMode = mode === "stage-carrier";
+  let plan;
+  let verification;
+  if (carrierMode) {
+    ({ projectionPlan: plan, verification } =
+      await stageProductionCarrierFromRepository({ configurationPath }));
+  } else {
+    plan = await createProductionProjectionPlan({ configurationPath });
+    verification = mode === "check"
+      ? await checkProductionProjection(plan)
+      : await persistProductionProjection(plan);
+  }
   console.log([
-    `Production projection ${mode === "check" ? "verified" : "built"}: ${verification.files} files, ${verification.bytes} bytes.`,
+    carrierMode
+      ? `Production carrier staged: ${verification.files} files, ${verification.bytes} bytes.`
+      : `Production projection ${mode === "check" ? "verified" : "built"}: ${verification.files} files, ${verification.bytes} bytes.`,
     `Source: ${plan.manifest.source_sha}.`,
     `Primary files: ${plan.manifest.surfaces.primary.files}.`,
     `Iframe files: ${plan.manifest.surfaces.iframe.files}.`,
     mode === "check"
       ? "Destination: temporary verification directory (not persisted)."
-      : `Destination: ${path.relative(repositoryRoot, plan.outputRoot)}.`,
+      : carrierMode
+        ? `Destination: ${carrierRelativeRoot}.`
+        : `Destination: ${path.relative(repositoryRoot, plan.outputRoot)}.`,
     mode === "build"
       ? `Installation: ${verification.installation}; transaction cleanup: ${verification.cleanup}.`
-      : "Plan verification: complete.",
+      : carrierMode
+        ? `Installation: ${verification.installation}; transaction cleanup: ${verification.cleanup}.`
+        : "Plan verification: complete.",
     "Deployment activation: none.",
   ].join("\n"));
 }

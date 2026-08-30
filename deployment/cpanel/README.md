@@ -8,16 +8,18 @@ disjoint, reviewable, production-shaped document-root closures:
 - `iframe-public/v1/` carries the exact aggregate Core and Canvas package from
   the repository's iframe-route builders.
 
-The generated root is `.prod-projection-build/`. It is an ignored delivery
+The generated local preview is `.prod-projection-build/`, an ignored delivery
 artifact. Authored files keep their existing repository locations, and the
 assembler reads iframe bytes from `createAggregatePackagePlan()` instead of
 walking the ignored `.iframe-route-build/` directory.
 
-An ignored local artifact is outside cPanel's Git pull. A later accepted
-release receiver must carry the verified projection through a tracked release
-projection or another protected handoff before cPanel can install it. This
-baseline supplies the deterministic assembly seam; it does not select that
-release carrier.
+cPanel receives the same projection through the tracked, generated
+`deployment/cpanel/carrier/` closure. The deployment manifest binds an accepted
+source commit `S`; a following carrier-only release commit `R` transports those
+bytes. Verification requires `R^1 = S`, an `S..R` diff confined to the carrier
+root, and exact agreement among the manifest, the Bash-readable index, and
+every carried file. This two-coordinate form avoids asking a commit to contain
+its own identifier.
 
 ## Current entry condition
 
@@ -71,6 +73,8 @@ unresolved token.
 npm run test:prod-deployment
 npm run check:prod-projection
 npm run build:prod-projection
+npm run stage:prod-carrier
+npm run check:prod-carrier
 ```
 
 `check:prod-projection` writes and verifies the newly composed plan in
@@ -80,6 +84,39 @@ replaces only `.prod-projection-build/`. Both commands stop with a clear
 missing-configuration result while the primary route selection is open. A
 custom repository-owned fixture or future accepted configuration can be named
 with `-- --config path/to/config.json`.
+
+`stage:prod-carrier` transactionally replaces only the tracked carrier root.
+It may be repeated while that root is the worktree's only open change.
+`check:prod-carrier` runs after the carrier is committed and proves the source,
+release, diff, manifest, index, and file closure without activating a host.
+
+## Accepted release sequence
+
+1. Promote the reviewed source through `main`, `stg`, and `release` into
+   `prod`. The resulting accepted `prod` commit is `S`; it is not yet a fresh
+   cPanel delivery candidate.
+2. Start one carrier branch from exact `S`, run `npm run stage:prod-carrier`,
+   and commit only `deployment/cpanel/carrier/**`.
+3. Run `npm run check:prod-carrier` on that branch and review the generated
+   manifest, index, and projection changes.
+4. Merge the carrier pull request only while `prod` still names `S`. The
+   repository's ordinary reviewed merge form is valid because the resulting
+   `R` keeps `S` as its first parent and changes only the carrier root.
+5. Check the exact merged `R`, then let cPanel perform **Update from Remote**
+   followed by **Deploy HEAD Commit**.
+
+If `prod` advances before step 4, begin again from the new accepted source and
+regenerate the carrier. Updating the older carrier branch would weaken the
+`R^1 = S` relationship that makes the handoff inspectable.
+
+The top-level `.cpanel.yml` delegates to one repository-relative Bash script.
+Real document roots, state paths, and first-cutover allowances live in a
+data-only private configuration beside the managed clone; the tracked
+`host-config.example` supplies its keys. The first legacy-site backup or
+quarantine remains a separate human host action. The installer then accepts an
+empty receiving surface plus explicitly named host-owned paths, deploys from
+verified Git blobs, and records only bounded current/pending release state
+outside the clone.
 
 Each generated deployment manifest binds the Git source SHA; the tracked
 configuration and primary manifest paths, Git blob IDs, and SHA-256 digests;
@@ -106,7 +143,13 @@ either `complete` or `incomplete`. An incomplete cleanup result still reports
 the installed closure as successful and leaves transaction cleanup as a
 visible local follow-up.
 
-This local contract establishes deterministic membership and bytes for the
-two closures. cPanel document roots, credentials, legacy-site takeover,
-deployment activation, cache behavior, and live route observations remain
-with their separately authorized receiver.
+This repository contract establishes deterministic membership, carried bytes,
+and a fail-closed host installer for the two closures. Exact cPanel paths,
+credentials, the first legacy-site backup, activation, cache behavior, and live
+route observations remain with their separately authorized receiver.
+
+## cPanel references
+
+- [Guide to Git Deployment](https://docs.cpanel.net/knowledge-base/web-services/guide-to-git-deployment/)
+- [Git Version Control](https://docs.cpanel.net/cpanel/files/git-version-control/)
+- [Git advanced configuration and troubleshooting](https://docs.cpanel.net/knowledge-base/web-services/guide-to-git-advanced-configuration-and-troubleshooting/)

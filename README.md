@@ -88,7 +88,7 @@ use Node 22 or newer and install the locked root dependencies plus the focused
 Chromium runtime:
 
 ```sh
-npm install
+npm ci --ignore-scripts
 npm run playwright:install
 ```
 
@@ -687,6 +687,7 @@ other secret-boundary work.
 | `.visual-runs/` | Cycle-scoped screenshots, measurements, and browser diagnostics |
 | `.public-reference-build/` | Materialized Context Canvas source with approved references |
 | `.iframe-route-build/` | Deterministic Core and Canvas iframe route packages with one aggregate receipt |
+| `.prod-projection-build/` | Deterministic local primary and iframe production projection |
 | `.schema-pages/` | Current local schema publication build |
 | `.schema_pages/` | Ignored alternate spelling; the current builder leaves it at rest |
 | `cloudflare/context-canvas-field-pilot/dist/` | Bounded local Static Assets pilot closure |
@@ -696,6 +697,11 @@ other secret-boundary work.
 These paths are working material. A named builder or test owns their content;
 source promotion happens through tracked inputs and an accepted receiving
 operation.
+
+The tracked [`deployment/cpanel/carrier/`](deployment/cpanel/README.md) is the
+deliberate production-release exception. It is generated only after an
+accepted `prod` source coordinate so cPanel's Git pull can receive the exact
+reviewed projection; it remains excluded from authored production inputs.
 
 The three Strategy Canvas receiving archives are the deliberate exception:
 their builder generates deterministic ZIP files that remain tracked as
