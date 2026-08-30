@@ -1,5 +1,5 @@
 /* Context Canvas shared component: navigation shell ----------------------
-   Consumers: 39 top-level Context Canvas routes loading canvas-shell.css.
+   Consumers: 41 top-level Context Canvas routes loading canvas-shell.css.
    Owns: the progressively generated route shelf, shared footer, section rail,
    source-derived rail mode, and their responsive, reduced-motion,
    forced-color, and print behavior.
