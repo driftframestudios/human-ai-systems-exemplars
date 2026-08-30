@@ -227,10 +227,6 @@
     color: var(--genomic-acid);
 }
 
-.genomic-implementation-field code {
-    color: var(--genomic-acid);
-}
-
 .genomic-implementation-field .debrief-quote {
     border-inline-start-color: var(--genomic-coral);
 }

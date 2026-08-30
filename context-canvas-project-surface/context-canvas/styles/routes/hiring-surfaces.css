@@ -173,12 +173,6 @@
     text-align: end;
 }
 
-.hiring-surfaces-page .function-word-table code {
-    color: var(--hiring-cobalt-deep);
-    font-size: 1em;
-    font-weight: 750;
-}
-
 @media screen and (max-width: 64rem) {
     .hiring-surfaces-page .prototype-embed--blueprint iframe {
         min-block-size: 40rem;

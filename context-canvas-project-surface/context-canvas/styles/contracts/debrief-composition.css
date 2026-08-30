@@ -235,10 +235,6 @@
   color: var(--debrief-acid);
 }
 
-.debrief-composition-page .debrief-track--implementation code {
-  color: var(--debrief-cobalt-ink);
-}
-
 .debrief-composition-page .debrief-track--implementation :is(
   .architecture-pair article,
   .implementation-moves article,
