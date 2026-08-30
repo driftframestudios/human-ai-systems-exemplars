@@ -104,7 +104,7 @@
     {
       "name": "technology-fit-sampling-tableau-chimeric-prototype-v0.2.html",
       "bytes": 238087,
-      "sha256": "290b3ea8baa2e2d916fb1aea34e0f4c8213d44d8f00ff7d5241cfb601ed96890",
+      "sha256": "a2de19abcac29e4718a5298ebd837e4a3b04028cb903f7040e97b98fd2c7ad27",
       "role": "interactive_prototype"
     },
     {
@@ -146,7 +146,7 @@
     {
       "name": "front-end-stack-selection.example.v0.1.json",
       "bytes": 80687,
-      "sha256": "4efeec2be5aae4bec84dea255b0f5e96141bd12eb456aaa4f8e4769800301846",
+      "sha256": "16bed0b35e30b64b39655e7b3584ee53facff2900069a9db396cc35aa5b043c5",
       "role": "example_state"
     },
     {

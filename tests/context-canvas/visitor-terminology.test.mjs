@@ -71,3 +71,25 @@ test("viewlet remains specialist vocabulary outside the About route", async () =
   assert.match(gallery, /AI-Legible Viewlet Atlas/u);
   assert.match(gallery, /class="viewlet-rack"/u);
 });
+
+test("curated visitor prose states findings directly while citations carry provenance", async () => {
+  const routes = (await readdir(canvasRoot, { withFileTypes: true }))
+    .filter(entry => entry.isFile() && entry.name.endsWith(".html"))
+    .map(entry => entry.name)
+    .sort();
+  const genericSourceNarrator = /\b(?:the|this) source (?:says|states|reports|describes|frames|positions|treats|names|shows|asks|requires|compares|assigns|supports|keeps|establishes)\b/iu;
+
+  for (const route of routes) {
+    assert.doesNotMatch(await readCanvasFile(route), genericSourceNarrator, route);
+  }
+
+  const [about, fieldInspection, hiring] = await Promise.all([
+    readCanvasFile("index.html"),
+    readCanvasFile("field-inspection-harness-replatform.html"),
+    readCanvasFile("hiring-surfaces-talent-agent-intake.html"),
+  ]);
+  assert.match(about, /<title>Technology leadership portfolio \| Context Canvas<\/title>/u);
+  assert.match(about, /<th scope="col">Reported consequence<\/th>/u);
+  assert.match(fieldInspection, /Global invariants and candidate performance targets become testable against a bounded corpus/u);
+  assert.match(hiring, /Vendor descriptions reviewed in public material from 2025–2026/u);
+});

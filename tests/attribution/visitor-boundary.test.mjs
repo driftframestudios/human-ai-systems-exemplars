@@ -154,6 +154,51 @@ test("enhanced routes load one contract and preserve the authored boundary as th
   assert.ok(appendBoundary < appendAttribution, "enhancement closes with boundary then attribution");
 });
 
+test("governed visitor language is direct except for exact non-rendered Technology Fit import aliases", async () => {
+  const paths = await governedHtmlFiles();
+  const technologyPath = resolve(
+    repositoryRoot,
+    "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/technology-fit-sampling-tableau-chimeric-prototype-v0.2.html",
+  );
+  const acceptedLegacyAliases = [
+    'illustrative_verbalized_sample:"uncalibrated_verbalized_sample"',
+    'illustrative_planning_estimate:"uncalibrated_planning_estimate"',
+    'illustrative_seed:"sample_state"',
+    'illustrative_walkthrough:"working_example"',
+  ];
+
+  for (const path of paths) {
+    const html = await readFile(path, "utf8");
+    const label = relative(repositoryRoot, path);
+    if (path !== technologyPath) {
+      assert.doesNotMatch(html, /illustrative/iu, `${label} direct visitor language`);
+      continue;
+    }
+
+    const aliasBlock = html.match(/const legacyTechnologyVocabulary=Object\.freeze\(\{([\s\S]*?)\}\);/u);
+    assert.ok(aliasBlock, `${label} explicit legacy import adapter`);
+    acceptedLegacyAliases.forEach(alias => assert.ok(aliasBlock[1].includes(alias), `${label} ${alias}`));
+    assert.equal((aliasBlock[1].match(/illustrative/giu) || []).length, 4, `${label} exact alias count`);
+    assert.doesNotMatch(html.replace(aliasBlock[0], ""), /illustrative/iu, `${label} aliases never enter visitor copy`);
+  }
+
+  const adjacentVisitorFiles = [
+    "collaboration/about-heatmap-comparison/index.html",
+    "collaboration/career-quality-visual-variants/index.html",
+    "context-canvas-project-surface/context-canvas/README.md",
+    "context-canvas-project-surface/context-canvas/humans.txt",
+    "context-canvas-project-surface/site-readings/exemplars/index-exemplar--cobalt-temporal-field.html",
+    "context-canvas-project-surface/img/plot/inspection_staged_capital_map.svg",
+    "context-canvas-project-surface/img/plot/site_reading_grammar_small_multiples.svg",
+    "context-canvas-project-surface/img/plot/v3b2_gold_note_viewlets.svg",
+    "visual-fidelity-contracts/rose-quartz-editorial-field.md",
+    "visual-fidelity-contracts/tiffany-ledger-field.md",
+  ];
+  for (const entry of adjacentVisitorFiles) {
+    assert.doesNotMatch(await readFile(resolve(repositoryRoot, entry), "utf8"), /illustrative/iu, entry);
+  }
+});
+
 test("shared and self-contained styles preserve selectable narrow, print, and forced-color readings", async () => {
   const paths = await governedHtmlFiles();
   const selfContained = paths.filter(path => dirname(path) !== visitorRoot || path.endsWith("/404.html"));

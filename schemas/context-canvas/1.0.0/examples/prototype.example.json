@@ -73,7 +73,7 @@
   "authority": {
     "humanMeaningAuthorityRef": "urn:example:role:strategy-canvas-steward",
     "schemaAuthorityRef": "https://schemas.vik.guru/context-canvas/1.0.0/context-canvas.schema.json",
-    "contentAuthorityRef": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
+    "contentAuthorityRef": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.1.html",
     "decisionAuthorityRole": "named human facilitator and accountable reviewer",
     "automationRole": "bounded proposal, aggregation support, validation, and state projection",
     "scope": [
@@ -87,7 +87,7 @@
       "locator": "https://example.invalid/prototypes/strategy-canvas.html",
       "mediaType": "text/html",
       "status": "planned",
-      "sourceRef": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html"
+      "sourceRef": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.1.html"
     },
     {
       "kind": "machine_representation",
@@ -101,7 +101,7 @@
       "locator": "https://example.invalid/context-canvas/prototypes/strategy-canvas.html",
       "mediaType": "text/html",
       "status": "planned",
-      "sourceRef": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
+      "sourceRef": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.1.html",
       "branch": "main",
       "environment": "main"
     },

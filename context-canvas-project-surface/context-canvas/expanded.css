@@ -2227,7 +2227,9 @@ code {
     border-radius: .375rem;
     color: var(--canvas-ink);
     font-size: 85%;
+    overflow-wrap: anywhere;
     padding: .2em .4em;
+    word-break: break-word;
 }
 
 pre {
@@ -2240,7 +2242,9 @@ pre > code {
     border-radius: 0;
     color: inherit;
     font-size: inherit;
+    overflow-wrap: normal;
     padding: 0;
+    word-break: normal;
 }
 
 /**

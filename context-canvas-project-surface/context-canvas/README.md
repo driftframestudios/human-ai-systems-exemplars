@@ -4,7 +4,7 @@ Context Canvas is a static, progressively enhanced enterprise reading system. HT
 
 ## Start with the reading surface
 
-- [`index.html`](index.html) introduces the illustrative portfolio and the Context Canvas method.
+- [`index.html`](index.html) introduces the technology leadership portfolio and the Context Canvas method.
 - [`ai-systems.html`](ai-systems.html) gathers the AI-legible architecture and related instrument routes.
 - [`benchmark-orientation.html`](benchmark-orientation.html) connects benchmark revision, model and harness conditions, scoring, aggregation, uncertainty, and receiving use in one result coordinate.
 - [`maps-evaluations.html`](maps-evaluations.html) begins with Alignment Research Center's canonical MAPS canary record and keeps adjacent public ARA evaluation work source-bounded.
@@ -210,6 +210,6 @@ The pilot measures delivery behavior. The broader Cloudflare delivery architectu
 
 ## Public evidence boundary
 
-Public routes name illustrative identity, prospective estimates, source authority, and unresolved implementation questions directly. Internal planning, historical logs, credentials, and sensitive source material remain outside the published asset closure. A named human steward approves any change that expands audience, identity, data handling, embedding authority, or deployment scope.
+Public routes name identity, prospective estimates, source authority, and unresolved implementation questions directly. Internal planning, historical logs, credentials, and sensitive source material remain outside the published asset closure. A named human steward approves any change that expands audience, identity, data handling, embedding authority, or deployment scope.
 
 The next move stays bounded and revisable: improve one visible reading or runtime boundary, observe it with the narrowest useful evidence, and carry the result into the next design decision.

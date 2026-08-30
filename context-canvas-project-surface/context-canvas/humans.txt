@@ -5,7 +5,7 @@ Repository: https://github.com/driftframestudios/human-ai-systems-exemplars
 Location: New York, USA
 
 /* PUBLICATION BOUNDARY */
-Authorship: Visitor-surface authorship is named in the page footer; the portrait remains illustrative.
+Authorship: Visitor-surface authorship is named in page metadata and the visible footer; the portrait depicts a close-up gray tabby cat as the page's visual perspective.
 Source use: Human stewards approve audience, source authority, sensitive material, and consequential claims.
 
 /* SITE */
