@@ -26,6 +26,7 @@ The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) sup
 - CSS owns the visual contract, reflow, print behavior, forced-color behavior, and reduced-motion response.
 - `visitor-boundary-contract.js` carries the exact ordered canary definition used to verify each source-authored visitor boundary.
 - `canvas-shell.js` progressively installs the route shelf, section rail, and shared footer, then preserves the verified visitor boundary immediately before attribution. Ordinary links and authored page content remain the durable path.
+- `about-media.js` keeps the About visual-treatment loop on its authored poster until a visitor requests motion, then returns to the still image through the same visible control.
 - Prototype scripts own local interaction state. Sandboxed iframes declare the capabilities each instrument actually uses.
 - Human stewards retain authority over identity, source use, sensitive material, publication, and consequential decisions. Automated checks report observable behavior and leave those decisions visible.
 

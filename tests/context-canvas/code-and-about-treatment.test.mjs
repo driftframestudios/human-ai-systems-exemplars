@@ -118,3 +118,50 @@ test("the About portrait is a bounded supporting mark with intrinsic dimensions"
     /<figure class="about-portrait"><img src="portrait001\.jpg" width="2666" height="3556"/u,
   );
 });
+
+test("the About visual-treatment loop begins as a still and loads motion after visitor action", async () => {
+  const [css, html, script, gif] = await Promise.all([
+    readCanvasFile("styles/routes/about.css"),
+    readCanvasFile("index.html"),
+    readCanvasFile("about-media.js"),
+    readFile(resolve(
+      repositoryRoot,
+      "context-canvas-project-surface/img/media/impact-map-style-cycle-calm.gif",
+    )),
+  ]);
+
+  const section = html.match(
+    /<section class="about-field about-field--ledger" aria-labelledby="background-title">.*?<\/section>/su,
+  )?.[0];
+  assert.ok(section, "Expected the first About ledger section");
+
+  const headingEnd = section.indexOf("</h2>");
+  const figureStart = section.indexOf('<figure class="about-media"');
+  const firstProse = section.indexOf("<p>Twenty years");
+  assert.ok(headingEnd < figureStart && figureStart < firstProse);
+  assert.match(
+    section,
+    /src="\.\.\/img\/media\/impact-map-style-cycle-poster\.jpg"[^>]+data-motion-src="\.\.\/img\/media\/impact-map-style-cycle-calm\.gif"[^>]+width="640" height="360"/u,
+  );
+  assert.match(
+    section,
+    /<button class="about-media__toggle" data-about-media-toggle type="button" aria-pressed="false" hidden>/u,
+  );
+
+  assert.equal(gif.subarray(0, 6).toString("ascii"), "GIF89a");
+  assert.equal(gif.readUInt16LE(6), 640);
+  assert.equal(gif.readUInt16LE(8), 360);
+  assert.ok(gif.byteLength < 1_000_000, "Expected the landing GIF to remain below 1 MB");
+
+  assert.match(script, /button\.hidden = false/u);
+  assert.match(script, /button\.addEventListener\("click"/u);
+  assert.match(script, /prefers-reduced-motion: reduce/u);
+  assert.match(script, /window\.addEventListener\("beforeprint"/u);
+  assert.match(script, /document\.addEventListener\("visibilitychange"/u);
+
+  assert.match(css, /\.about-media\s*\{[^}]*inline-size:\s*min\(100%, 40rem\)/su);
+  assert.match(css, /\.about-media__frame\s*\{[^}]*aspect-ratio:\s*16 \/ 9/su);
+  assert.match(css, /\.about-media__toggle\[hidden\]\s*\{[^}]*display:\s*none/su);
+  assert.match(css, /@media \(forced-colors: active\)[\s\S]*?\.about-media/su);
+  assert.match(css, /@media print[\s\S]*?\.about-media__toggle\s*\{[^}]*display:\s*none/su);
+});
