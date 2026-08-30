@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
+import { writeFileSync } from "node:fs";
 import {
   mkdir,
   mkdtemp,
@@ -23,8 +24,21 @@ import {
 } from "../../tools/build-prod-projection.mjs";
 import { sha256 } from "../../tools/iframe-route-package-engine.mjs";
 
-const sourceSha = "a".repeat(40);
 const execFileAsync = promisify(execFile);
+
+async function git(root, args) {
+  const { stdout = "" } = await execFileAsync("git", args, {
+    cwd: root,
+    encoding: "utf8",
+  });
+  return stdout.trim();
+}
+
+async function commitFixture(root, message) {
+  await git(root, ["add", "-A"]);
+  await git(root, ["commit", "--quiet", "-m", message]);
+  return await git(root, ["rev-parse", "HEAD"]);
+}
 
 function primaryManifest(files) {
   return {
@@ -105,6 +119,9 @@ function aggregateFixture() {
 
 async function createFixtureRoot() {
   const root = await mkdtemp(path.join(os.tmpdir(), "prod-projection-fixture-"));
+  await git(root, ["init", "--quiet"]);
+  await git(root, ["config", "user.name", "Projection Test"]);
+  await git(root, ["config", "user.email", "projection@example.test"]);
   await mkdir(path.join(root, "visitor"), { recursive: true });
   const index = [
     "<!doctype html>",
@@ -123,7 +140,8 @@ async function createFixtureRoot() {
     `${JSON.stringify(schema)}\n`,
     "utf8",
   );
-  return { root, index, schema };
+  const sourceSha = await commitFixture(root, "Accept fixture");
+  return { root, index, schema, sourceSha };
 }
 
 test("the production plan deterministically combines an explicit primary closure with the aggregate iframe plan", async () => {
@@ -144,13 +162,13 @@ test("the production plan deterministically combines an explicit primary closure
     const aggregatePlan = aggregateFixture();
     const first = await createProductionProjectionPlan({
       repositoryRoot: fixture.root,
-      sourceSha,
+      sourceSha: fixture.sourceSha,
       primaryManifest: manifest,
       aggregatePlan,
     });
     const second = await createProductionProjectionPlan({
       repositoryRoot: fixture.root,
-      sourceSha,
+      sourceSha: fixture.sourceSha,
       primaryManifest: manifest,
       aggregatePlan,
     });
@@ -180,7 +198,7 @@ test("the production plan deterministically combines an explicit primary closure
           ),
         ),
     );
-    assert.equal(first.manifest.source_sha, sourceSha);
+    assert.equal(first.manifest.source_sha, fixture.sourceSha);
     assert.equal(
       first.manifest.inputs.iframe_package.receipt_sha256,
       sha256(aggregatePlan.outputFiles.get("route-manifest.json")),
@@ -285,6 +303,161 @@ test("the automatic source coordinate is a clean full Git SHA", async () => {
   }
 });
 
+test("an ignored primary file remains outside the captured tracked source", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    await mkdir(path.join(fixture.root, "private"));
+    await writeFile(path.join(fixture.root, ".gitignore"), "private/\n", "utf8");
+    await writeFile(path.join(fixture.root, "private/index.html"), "private", "utf8");
+    const ignoredSourceSha = await commitFixture(fixture.root, "Ignore private fixture");
+
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: ignoredSourceSha,
+        primaryManifest: primaryManifest([
+          {
+            source_path: "private/index.html",
+            projected_path: "index.html",
+            media_type: "text/html",
+          },
+        ]),
+        aggregatePlan: aggregateFixture(),
+      }),
+      /must be a regular tracked blob/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("an untracked primary file keeps the source coordinate open", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    await writeFile(
+      path.join(fixture.root, "visitor/untracked.html"),
+      "untracked",
+      "utf8",
+    );
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        primaryManifest: primaryManifest([
+          {
+            source_path: "visitor/untracked.html",
+            projected_path: "index.html",
+            media_type: "text/html",
+          },
+        ]),
+        aggregatePlan: aggregateFixture(),
+      }),
+      /requires a clean Git worktree/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("an alternate repository root requires its aggregate plan to be injected", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        primaryManifest: primaryManifest([
+          {
+            source_path: "visitor/index.html",
+            projected_path: "index.html",
+            media_type: "text/html",
+          },
+        ]),
+      }),
+      /alternate repository root requires an injected aggregate iframe plan/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("source revalidation catches a tracked-file mutation during composition", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const aggregatePlan = aggregateFixture();
+    const originalFiles = aggregatePlan.outputFiles;
+    aggregatePlan.outputFiles = new class extends Map {
+      *entries() {
+        let mutated = false;
+        for (const entry of super.entries()) {
+          if (!mutated) {
+            writeFileSync(
+              path.join(fixture.root, "visitor/index.html"),
+              "changed during composition",
+              "utf8",
+            );
+            mutated = true;
+          }
+          yield entry;
+        }
+      }
+    }(originalFiles);
+
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        primaryManifest: primaryManifest([
+          {
+            source_path: "visitor/index.html",
+            projected_path: "index.html",
+            media_type: "text/html",
+          },
+        ]),
+        aggregatePlan,
+      }),
+      /requires a clean Git worktree|changed during composition/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("conflicting iframe media declarations stay outside the production manifest", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const aggregatePlan = aggregateFixture();
+    aggregatePlan.familyPlans.get("core").receipt.routes.push({
+      projection_file: "strategy-canvas/index.html",
+      static_resource_closure: {
+        package_files: [
+          {
+            target_file: "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+            content_type: "application/json",
+          },
+        ],
+      },
+    });
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        primaryManifest: primaryManifest([
+          {
+            source_path: "visitor/index.html",
+            projected_path: "index.html",
+            media_type: "text/html",
+          },
+        ]),
+        aggregatePlan,
+      }),
+      /media type declarations conflict/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
 test("primary selection rejects path escape, repository-only roots, nonportable paths, collisions, and missing root index", () => {
   const file = {
     source_path: "visitor/index.html",
@@ -299,12 +472,25 @@ test("primary selection rejects path escape, repository-only roots, nonportable 
     () => validatePrimaryManifest(primaryManifest([{ ...file, source_path: "tools/index.html" }])),
     /repository-only root tools/,
   );
+  for (const sourcePath of [".ENV/private.html", ".GIT/config.html", ".AgEnTs/guide.html"]) {
+    assert.throws(
+      () => validatePrimaryManifest(primaryManifest([{ ...file, source_path: sourcePath }])),
+      /environment files|repository-only root/,
+      sourcePath,
+    );
+  }
   for (const projectedPath of [
     "line\nbreak.html",
     "caf\u0065\u0301.html",
     "CON.html",
     "trailing-dot.",
     "drive:C.html",
+    "bad<name.html",
+    "bad>name.html",
+    "bad\"name.html",
+    "bad|name.html",
+    "bad?name.html",
+    "bad*name.html",
   ]) {
     assert.throws(
       () => validatePrimaryManifest(primaryManifest([
@@ -314,6 +500,12 @@ test("primary selection rejects path escape, repository-only roots, nonportable 
       projectedPath,
     );
   }
+  assert.throws(
+    () => validatePrimaryManifest(primaryManifest([
+      { ...file, projected_path: "bad\\name.html" },
+    ])),
+    /must stay relative and normalized/,
+  );
   assert.throws(
     () => validatePrimaryManifest(primaryManifest([
       file,
@@ -335,10 +527,11 @@ test("primary source traversal through a symbolic link stays outside the project
   try {
     await writeFile(path.join(outside, "index.html"), "outside", "utf8");
     await symlink(path.join(outside, "index.html"), path.join(fixture.root, "visitor/link.html"));
+    const linkedSourceSha = await commitFixture(fixture.root, "Track symbolic fixture");
     await assert.rejects(
       createProductionProjectionPlan({
         repositoryRoot: fixture.root,
-        sourceSha,
+        sourceSha: linkedSourceSha,
         primaryManifest: primaryManifest([
           {
             source_path: "visitor/link.html",
@@ -348,7 +541,7 @@ test("primary source traversal through a symbolic link stays outside the project
         ]),
         aggregatePlan: aggregateFixture(),
       }),
-      /must not traverse a symbolic link/,
+      /must be a regular tracked blob/,
     );
   } finally {
     await rm(fixture.root, { recursive: true, force: true });
@@ -361,7 +554,7 @@ test("check uses temporary storage while explicit build transactionally replaces
   try {
     const plan = await createProductionProjectionPlan({
       repositoryRoot: fixture.root,
-      sourceSha,
+      sourceSha: fixture.sourceSha,
       primaryManifest: primaryManifest([
         {
           source_path: "visitor/index.html",
@@ -381,6 +574,10 @@ test("check uses temporary storage while explicit build transactionally replaces
     const built = await persistProductionProjection(plan);
     assert.equal(built.files, plan.outputFiles.size);
     assert.deepEqual(
+      { installation: built.installation, cleanup: built.cleanup },
+      { installation: "installed", cleanup: "complete" },
+    );
+    assert.deepEqual(
       JSON.parse(await readFile(path.join(plan.outputRoot, "deployment-manifest.json"), "utf8")),
       plan.manifest,
     );
@@ -394,12 +591,48 @@ test("check uses temporary storage while explicit build transactionally replaces
   }
 });
 
+test("a post-install cleanup failure returns installed with cleanup incomplete", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const plan = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      primaryManifest: primaryManifest([
+        {
+          source_path: "visitor/index.html",
+          projected_path: "index.html",
+          media_type: "text/html",
+        },
+      ]),
+      aggregatePlan: aggregateFixture(),
+    });
+    const result = await persistProductionProjection(
+      plan,
+      plan.outputRoot,
+      {
+        remove: async () => {
+          throw new Error("fixture cleanup interruption");
+        },
+      },
+    );
+
+    assert.equal(result.installation, "installed");
+    assert.equal(result.cleanup, "incomplete");
+    assert.deepEqual(
+      JSON.parse(await readFile(path.join(plan.outputRoot, "deployment-manifest.json"), "utf8")),
+      plan.manifest,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
 test("explicit build preserves a pre-existing output outside the assembler's ownership", async () => {
   const fixture = await createFixtureRoot();
   try {
     const plan = await createProductionProjectionPlan({
       repositoryRoot: fixture.root,
-      sourceSha,
+      sourceSha: fixture.sourceSha,
       primaryManifest: primaryManifest([
         {
           source_path: "visitor/index.html",
@@ -433,10 +666,11 @@ test("an unresolved public-reference token keeps the primary closure at its conf
       '<a href="{{PUBLIC_URL_REGISTRY_WELCOME_MAT}}">Registry</a>',
       "utf8",
     );
+    const tokenSourceSha = await commitFixture(fixture.root, "Add unresolved token fixture");
     await assert.rejects(
       createProductionProjectionPlan({
         repositoryRoot: fixture.root,
-        sourceSha,
+        sourceSha: tokenSourceSha,
         primaryManifest: primaryManifest([
           {
             source_path: "visitor/index.html",

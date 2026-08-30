@@ -86,11 +86,17 @@ iframe receipt, and every projected file's surface, source path, output path,
 media type, byte count, digest, and byte-preserved standing. Schema identities
 and literal `https://iframes.vik.guru/v1/...` carrier URLs travel unchanged in
 this baseline because selected primary and iframe files retain their exact
-bytes.
+bytes. Each byte-preserved primary input is read from a regular tracked blob at
+that clean source SHA and compared with its worktree bytes before and after
+composition.
 
 When publication-owned URL transformations join the assembler, their manifest
 rows will carry both source and projection digests with generated standing.
 The byte-preserved standing in this baseline remains reserved for exact copies.
+After an explicit build installs the new closure, transaction cleanup reports
+either `complete` or `incomplete`. An incomplete cleanup result still reports
+the installed closure as successful and leaves transaction cleanup as a
+visible local follow-up.
 
 This local contract establishes deterministic membership and bytes for the
 two closures. cPanel document roots, credentials, legacy-site takeover,

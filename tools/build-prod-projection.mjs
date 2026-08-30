@@ -116,7 +116,7 @@ function assertPortableProjectionPath(relativePath, label) {
   }
   for (const component of safePath.split(path.posix.sep)) {
     if (
-      /[\u0000-\u001f\u007f:]/.test(component) ||
+      /[\u0000-\u001f\u007f<>:"/\\|?*]/.test(component) ||
       /[. ]$/.test(component) ||
       /^(?:con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(component)
     ) {
@@ -132,10 +132,14 @@ function assertPrimarySourcePath(sourcePath) {
     "Primary projection source path",
   );
   const components = safePath.split(path.posix.sep);
-  if (excludedPrimaryRoots.has(components[0])) {
+  const rootKey = components[0].normalize("NFC").toLowerCase();
+  if (excludedPrimaryRoots.has(rootKey)) {
     fail(`Primary projection source stays outside repository-only root ${components[0]}.`);
   }
-  if (components.some((component) => component === ".env" || component.startsWith(".env."))) {
+  if (components.some((component) => {
+    const key = component.normalize("NFC").toLowerCase();
+    return key === ".env" || key.startsWith(".env.");
+  })) {
     fail(`Primary projection source stays outside environment files: ${sourcePath}.`);
   }
   return safePath;
@@ -297,6 +301,79 @@ export async function readRepositorySourceSha(root = repositoryRoot) {
   return sourceSha;
 }
 
+async function readTrackedBlobIndex(root, sourceSha) {
+  const { stdout } = await execFileAsync(
+    "git",
+    ["ls-tree", "-r", "-z", "--full-tree", sourceSha],
+    { cwd: root, encoding: "buffer", maxBuffer: 128 * 1024 * 1024 },
+  );
+  const entries = new Map();
+  for (const record of stdout.toString("utf8").split("\0")) {
+    if (record.length === 0) continue;
+    const separator = record.indexOf("\t");
+    const metadata = record.slice(0, separator).split(" ");
+    const sourcePath = record.slice(separator + 1);
+    if (separator < 0 || metadata.length !== 3 || entries.has(sourcePath)) {
+      fail("Git source tree returned an ambiguous tracked-file record.");
+    }
+    entries.set(sourcePath, {
+      mode: metadata[0],
+      type: metadata[1],
+      object: metadata[2],
+    });
+  }
+  return entries;
+}
+
+async function readTrackedPrimaryInput(root, sourceSha, trackedBlobs, sourcePath) {
+  const entry = trackedBlobs.get(sourcePath);
+  if (
+    !entry ||
+    entry.type !== "blob" ||
+    !["100644", "100755"].includes(entry.mode) ||
+    !/^[a-f0-9]{40}(?:[a-f0-9]{24})?$/.test(entry.object)
+  ) {
+    fail(`Primary projection source must be a regular tracked blob: ${sourcePath}.`);
+  }
+  const sourceFile = path.resolve(root, ...sourcePath.split(path.posix.sep));
+  await assertRegularFileWithin(root, sourceFile, "Primary projection source");
+  const [{ stdout: trackedBytes }, worktreeBytes] = await Promise.all([
+    execFileAsync("git", ["cat-file", "blob", entry.object], {
+      cwd: root,
+      encoding: "buffer",
+      maxBuffer: 128 * 1024 * 1024,
+    }),
+    readFile(sourceFile),
+  ]);
+  if (!Buffer.isBuffer(trackedBytes) || !worktreeBytes.equals(trackedBytes)) {
+    fail(`Primary projection source differs from its tracked blob: ${sourcePath}.`);
+  }
+  return { bytes: trackedBytes, object: entry.object };
+}
+
+async function verifyRepositorySourceState(
+  root,
+  sourceSha,
+  trackedInputs,
+) {
+  const currentSha = await readRepositorySourceSha(root);
+  if (currentSha !== sourceSha) {
+    fail("Production projection source coordinate changed during composition.");
+  }
+  const currentBlobs = await readTrackedBlobIndex(root, currentSha);
+  for (const [sourcePath, input] of trackedInputs) {
+    if (currentBlobs.get(sourcePath)?.object !== input.object) {
+      fail("Production projection tracked blob changed during composition.");
+    }
+    const sourceFile = path.resolve(root, ...sourcePath.split(path.posix.sep));
+    await assertRegularFileWithin(root, sourceFile, "Primary projection source revalidation");
+    const currentBytes = await readFile(sourceFile);
+    if (!currentBytes.equals(input.bytes)) {
+      fail("Production projection source bytes changed during composition.");
+    }
+  }
+}
+
 function assertAggregatePlan(aggregatePlan) {
   if (
     !aggregatePlan ||
@@ -341,20 +418,33 @@ function assertAggregatePlan(aggregatePlan) {
 }
 
 function aggregateMediaTypes(aggregatePlan) {
-  const mediaTypes = new Map([
-    ["route-manifest.json", "application/json"],
-    ["core/manifest.json", "application/json"],
-    ["core/route-manifest.json", "application/json"],
-    ["canvas/route-manifest.json", "application/json"],
-  ]);
+  const mediaTypes = new Map();
+  const declare = (relativePath, mediaType, label) => {
+    assertPortableProjectionPath(relativePath, `${label} path`);
+    assertMediaType(relativePath, mediaType, label);
+    const existing = mediaTypes.get(relativePath);
+    if (existing !== undefined && existing !== mediaType) {
+      fail(`Iframe package media type declarations conflict at ${relativePath}.`);
+    }
+    mediaTypes.set(relativePath, mediaType);
+  };
+  declare("route-manifest.json", "application/json", "Aggregate route manifest");
+  declare("core/manifest.json", "application/json", "Core source manifest");
+  declare("core/route-manifest.json", "application/json", "Core route manifest");
+  declare("canvas/route-manifest.json", "application/json", "Canvas route manifest");
   for (const [family, familyPlan] of aggregatePlan.familyPlans ?? []) {
     for (const route of familyPlan.receipt?.routes ?? []) {
-      mediaTypes.set(`${family}/${route.projection_file}`, "text/html");
+      declare(
+        `${family}/${route.projection_file}`,
+        "text/html",
+        `Iframe route ${family}/${route.projection_file}`,
+      );
       for (const group of ["package_files", "navigation_files"]) {
         for (const file of route.static_resource_closure?.[group] ?? []) {
-          mediaTypes.set(
+          declare(
             `${family}/${path.posix.join(path.posix.dirname(route.projection_file), file.target_file)}`,
             file.content_type,
+            `Iframe package file ${family}/${file.target_file}`,
           );
         }
       }
@@ -395,10 +485,21 @@ function serializeManifest(manifest) {
 
 export async function createProductionProjectionPlan(options = {}) {
   const root = path.resolve(options.repositoryRoot ?? repositoryRoot);
-  const sourceSha = (options.sourceSha ?? await readRepositorySourceSha(root)).toLowerCase();
+  if (options.aggregatePlan === undefined && root !== repositoryRoot) {
+    fail("An alternate repository root requires an injected aggregate iframe plan.");
+  }
+  const sourceSha = await readRepositorySourceSha(root);
+  if (
+    options.sourceSha !== undefined &&
+    (typeof options.sourceSha !== "string" ||
+      options.sourceSha.toLowerCase() !== sourceSha)
+  ) {
+    fail("Production projection expected source SHA differs from the clean repository HEAD.");
+  }
   if (!/^[a-f0-9]{40}(?:[a-f0-9]{24})?$/.test(sourceSha)) {
     fail("Production projection requires one full Git source SHA.");
   }
+  const trackedBlobs = await readTrackedBlobIndex(root, sourceSha);
   const primaryManifest = validatePrimaryManifest(structuredClone(options.primaryManifest));
   const aggregatePlan = assertAggregatePlan(
     options.aggregatePlan ?? await createAggregatePackagePlan(),
@@ -406,13 +507,19 @@ export async function createProductionProjectionPlan(options = {}) {
   const outputFiles = new Map();
   const portablePaths = new Set();
   const outputs = [];
+  const trackedInputs = new Map();
   let primaryBytes = 0;
   let iframeBytes = 0;
 
   for (const file of primaryManifest.files) {
-    const sourceFile = path.resolve(root, ...file.source_path.split(path.posix.sep));
-    await assertRegularFileWithin(root, sourceFile, "Primary projection source");
-    const bytes = await readFile(sourceFile);
+    const trackedInput = await readTrackedPrimaryInput(
+      root,
+      sourceSha,
+      trackedBlobs,
+      file.source_path,
+    );
+    const bytes = trackedInput.bytes;
+    trackedInputs.set(file.source_path, trackedInput);
     assertResolvedPrimaryBytes(bytes, file.source_path);
     const projectedPath = `primary-public/${file.projected_path}`;
     assertPortableOutputCollision(projectedPath, outputFiles, portablePaths);
@@ -440,11 +547,13 @@ export async function createProductionProjectionPlan(options = {}) {
     assertPortableOutputCollision(projectedPath, outputFiles, portablePaths);
     outputFiles.set(projectedPath, bytes);
     iframeBytes += bytes.byteLength;
+    const mediaType = iframeMediaTypes.get(relativePath) ?? inferredMediaType(relativePath);
+    assertMediaType(relativePath, mediaType, "Iframe package output");
     outputs.push({
       surface: "iframe",
       source_path: `iframe-package:v1/${relativePath}`,
       projected_path: projectedPath,
-      media_type: iframeMediaTypes.get(relativePath) ?? inferredMediaType(relativePath),
+      media_type: mediaType,
       bytes: bytes.byteLength,
       sha256: sha256(bytes),
       standing: "byte_preserved",
@@ -458,6 +567,7 @@ export async function createProductionProjectionPlan(options = {}) {
         ? 1
         : 0,
   );
+  await verifyRepositorySourceState(root, sourceSha, trackedInputs);
   const aggregateReceiptBytes = aggregatePlan.outputFiles.get("route-manifest.json");
   const manifest = {
     id: deploymentManifestId,
@@ -541,7 +651,9 @@ async function assertOwnedProjection(directory) {
 export async function persistProductionProjection(
   plan,
   destination = plan.outputRoot,
+  options = {},
 ) {
+  const remove = options.remove ?? rm;
   const root = path.resolve(destination, "..");
   if (
     destination !== plan.outputRoot ||
@@ -590,11 +702,20 @@ export async function persistProductionProjection(
       }
       throw error;
     }
-    await rm(transaction, { recursive: true, force: true });
-    return verification;
+    let cleanup = "complete";
+    try {
+      await remove(transaction, { recursive: true, force: true });
+    } catch {
+      cleanup = "incomplete";
+    }
+    return { ...verification, installation: "installed", cleanup };
   } catch (error) {
     if (!preserveTransaction) {
-      await rm(transaction, { recursive: true, force: true });
+      try {
+        await remove(transaction, { recursive: true, force: true });
+      } catch {
+        // The original pre-installation failure retains precedence.
+      }
     }
     throw error;
   }
@@ -654,6 +775,9 @@ async function main() {
     mode === "check"
       ? "Destination: temporary verification directory (not persisted)."
       : `Destination: ${path.relative(repositoryRoot, plan.outputRoot)}.`,
+    mode === "build"
+      ? `Installation: ${verification.installation}; transaction cleanup: ${verification.cleanup}.`
+      : "Plan verification: complete.",
     "Deployment activation: none.",
   ].join("\n"));
 }
