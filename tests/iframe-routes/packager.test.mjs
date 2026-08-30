@@ -317,6 +317,30 @@ test("runtime observation distinguishes executable behavior from embedded data",
     ),
     ["executable-scripts", "clipboard-write", "native-modals"],
   );
+  assert.deepEqual(
+    observeIframeRuntimeCapabilities(
+      '<button type="button" onclick="confirm(\'Continue?\')">Continue</button>',
+    ),
+    ["executable-scripts", "native-modals"],
+  );
+  assert.deepEqual(
+    observeIframeRuntimeCapabilities(
+      '<a href="javascript:navigator.clipboard.writeText(\'value\')">Copy</a>',
+    ),
+    ["executable-scripts", "clipboard-write"],
+  );
+  assert.deepEqual(
+    observeIframeRuntimeCapabilities(
+      '<button onclick="navigator.clipboard.writeText&#40;\'value\'&#41;">Copy</button>',
+    ),
+    ["executable-scripts", "clipboard-write"],
+  );
+  assert.deepEqual(
+    observeIframeRuntimeCapabilities(
+      '<a href="javascript&#58;fetch&#40;\'state.json\'&#41;">Load</a>',
+    ),
+    ["executable-scripts"],
+  );
   assert.throws(
     () => observeIframeRuntimeCapabilities('<script type="application/x-custom-data">value</script>'),
     /unsupported script type/,
@@ -612,6 +636,38 @@ test("closure scanning accepts declared package media and rejects ambient depend
   );
   assert.throws(
     () => scanHtmlClosure(`<script>fetch("state.json")</script>`, new Set(), "fixture"),
+    /runtime network primitive/,
+  );
+  assert.throws(
+    () => scanHtmlClosure(
+      `<button type="button" onclick="fetch('https://outside.example/state')">Load</button>`,
+      new Set(),
+      "fixture",
+    ),
+    /runtime network primitive/,
+  );
+  assert.throws(
+    () => scanHtmlClosure(
+      `<a href="javascript:fetch('https://outside.example/state')">Load</a>`,
+      new Set(),
+      "fixture",
+    ),
+    /runtime network primitive/,
+  );
+  assert.throws(
+    () => scanHtmlClosure(
+      `<button onclick="fetch&#40;'https://outside.example/state'&#41;">Load</button>`,
+      new Set(),
+      "fixture",
+    ),
+    /runtime network primitive/,
+  );
+  assert.throws(
+    () => scanHtmlClosure(
+      `<a href="javascript&#58;fetch&#40;'https://outside.example/state'&#41;">Load</a>`,
+      new Set(),
+      "fixture",
+    ),
     /runtime network primitive/,
   );
   assert.throws(

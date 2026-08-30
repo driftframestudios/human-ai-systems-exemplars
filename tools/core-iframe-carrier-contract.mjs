@@ -17,6 +17,7 @@ import {
   assertRegularFileWithin,
   createPackagePlan,
 } from "./package-iframe-routes.mjs";
+import { createCanvasPackagePlan } from "./package-canvas-iframe-routes.mjs";
 import {
   assertTelemetry,
   monitor,
@@ -76,20 +77,44 @@ function routeSourceRoot(routeProfile, coreRoot) {
     : coreRoot;
 }
 
+function packageContentType(relativePath) {
+  if (relativePath.endsWith(".html")) return "text/html; charset=utf-8";
+  if (relativePath.endsWith(".svg")) return "image/svg+xml";
+  if (relativePath.endsWith(".json")) return "application/json";
+  if (relativePath.endsWith(".css")) return "text/css; charset=utf-8";
+  if (relativePath.endsWith(".js") || relativePath.endsWith(".mjs")) {
+    return "text/javascript; charset=utf-8";
+  }
+  throw new Error(`Iframe carrier contract needs an explicit content type for ${relativePath}.`);
+}
+
+function publicPackageFiles(packagePlan) {
+  const { contract, outputFiles } = packagePlan;
+  const files = new Map();
+  for (const [relativePath, bytes] of outputFiles) {
+    files.set(`https://${contract.host}${contract.base_path}${relativePath}`, {
+      bytes,
+      contentType: packageContentType(relativePath),
+    });
+  }
+  for (const routeProfile of contract.routes) {
+    const projectionPath = routeProjectionPath(contract, routeProfile);
+    const bytes = outputFiles.get(projectionPath);
+    assert.ok(bytes, `${routeProfile.id} has packaged hosted bytes`);
+    files.set(publicRouteUrl(contract, routeProfile), {
+      bytes,
+      contentType: "text/html; charset=utf-8",
+    });
+  }
+  return files;
+}
+
 function sortedRouteCounts(carriers) {
   const counts = new Map();
   for (const { routeProfile } of carriers) {
     counts.set(routeProfile.id, (counts.get(routeProfile.id) ?? 0) + 1);
   }
   return [...counts].sort(([left], [right]) => left.localeCompare(right));
-}
-
-function sortedRequests(requests) {
-  return [...requests].sort((left, right) =>
-    `${left.url}\u0000${left.method}\u0000${left.resourceType}`.localeCompare(
-      `${right.url}\u0000${right.method}\u0000${right.resourceType}`,
-    ),
-  );
 }
 
 async function discoverPublicIframeCarriers(outputRoot, routeManifest) {
@@ -503,6 +528,7 @@ async function run() {
 
   try {
     const iframePackage = await createPackagePlan();
+    const canvasIframePackage = await createCanvasPackagePlan();
     const routeManifest = iframePackage.contract;
     assert.equal(
       routeManifest.carrier_contract.title,
@@ -545,6 +571,10 @@ async function run() {
         routeProfile,
       ]),
     );
+    const hostedFilesByPublicUrl = new Map([
+      ...publicPackageFiles(iframePackage),
+      ...publicPackageFiles(canvasIframePackage),
+    ]);
     const canonicalBytesByPublicUrl = new Map();
     for (const routeProfile of routeManifest.routes) {
       const sourceRoot = routeSourceRoot(routeProfile, coreRoot);
@@ -652,21 +682,22 @@ async function run() {
         await route.fulfill({ response: sourceResponse });
         return;
       }
-      const routeProfile = routeByPublicUrl.get(request.url());
+      const hostedFile = hostedFilesByPublicUrl.get(request.url());
       if (
-        routeProfile &&
+        hostedFile &&
         request.method() === "GET" &&
-        request.resourceType() === "document"
+        ["document", "image", "stylesheet", "script", "fetch", "xhr", "other"]
+          .includes(request.resourceType())
       ) {
         await route.fulfill({
           status: 200,
-          contentType: "text/html; charset=utf-8",
+          contentType: hostedFile.contentType,
           headers: {
             "access-control-allow-origin": "*",
             "cache-control": "no-store",
             "x-content-type-options": "nosniff",
           },
-          body: canonicalBytesByPublicUrl.get(request.url()),
+          body: hostedFile.bytes,
         });
         return;
       }
@@ -785,17 +816,35 @@ async function run() {
         }
 
         await page.waitForLoadState("networkidle", { timeout: 4000 }).catch(() => {});
-        const expectedRequests = pageCarriers.map(({ src }) => ({
-          method: "GET",
-          referer: null,
-          resourceType: "document",
-          url: src,
-        }));
-        assert.deepEqual(
-          sortedRequests(outsideRequests),
-          sortedRequests(expectedRequests),
-          `${pagePath} requests only its declared public iframe documents`,
-        );
+        const declaredHostedUrls = new Set(await page
+          .locator('iframe[src^="https://iframes.vik.guru/v1/"]')
+          .evaluateAll((elements) => elements.map((element) => element.src)));
+        for (const request of outsideRequests) {
+          assert.equal(request.method, "GET", `${pagePath} uses read-only hosted requests`);
+          assert.equal(
+            hostedFilesByPublicUrl.has(request.url),
+            true,
+            `${pagePath} requests only generated iframe package files (${request.url})`,
+          );
+          assert.equal(
+            [...declaredHostedUrls].some(
+              (routeUrl) => request.url === routeUrl || request.url.startsWith(routeUrl),
+            ),
+            true,
+            `${pagePath} requests files only within its declared iframe routes (${request.url})`,
+          );
+          if (declaredHostedUrls.has(request.url)) {
+            assert.equal(request.resourceType, "document");
+            assert.equal(request.referer, null, `${request.url} suppresses its parent referrer`);
+          }
+        }
+        for (const { src } of pageCarriers) {
+          assert.equal(
+            outsideRequests.filter(({ url }) => url === src).length,
+            1,
+            `${pagePath} requests each exercised Core iframe document once (${src})`,
+          );
+        }
         assertTelemetry(telemetry);
       } finally {
         await page.close();

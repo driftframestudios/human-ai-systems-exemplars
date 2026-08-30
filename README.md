@@ -247,7 +247,7 @@ need reconciliation.
 | [`planning/`](planning/README.md) | Prospective design and implementation terrain |
 | [`threadkeeping/`](threadkeeping/README.md) | Settled rationale, collaboration accounts, promotion receipts, and re-entry |
 
-### Core and Narrative behavior has a proportional executable baseline
+### Prototype and iframe behavior has a proportional executable baseline
 
 The direct unit baseline protects dependency-free seams that can run without a
 browser:
@@ -271,6 +271,8 @@ Rendered behavior keeps its own source-grounded observations:
 
 ```sh
 npm run test:core-browser
+npm run test:canvas-iframe-routes
+npm run test:iframe-browser
 npm run test:strategy-canvas
 npm run test:narrative-browser
 npm run test:prototype-exchanges
@@ -278,10 +280,13 @@ npm run test:prototype-exchanges
 
 The Core aggregate observes twenty named artifacts across their root
 and Context projections; Strategy Canvas retains its deeper collaboration
-contract. The Narrative aggregate carries ten fresh-context journeys across
-all four projections. The exchange contract follows one serialized Strategy
-Canvas boundary through the Narrative adapter into the Composer while
-preserving producer, adapter, and receiver identity.
+contract. The Canvas iframe route contract exercises all 15 generated routes,
+their finite file closure, exact carrier capabilities, narrow containment, and
+representative interactions; `test:iframe-browser` pairs that contract with the
+Core iframe carrier. The Narrative aggregate carries ten fresh-context
+journeys across all four projections. The exchange contract follows one
+serialized Strategy Canvas boundary through the Narrative adapter into the
+Composer while preserving producer, adapter, and receiver identity.
 
 [The test ownership map](tests/README.md) says which source owns every
 expectation and what each command establishes. A passing command is evidence
@@ -413,15 +418,18 @@ uses stable `PUBLIC_URL_REGISTRY_*` keys for those candidates and carries
 direct Notion page URLs to exactly zero pages. All other Notion pages remain
 outside the Context Canvas in both this repository and the retained source.
 
-Activated Core companions use their manifest-owned
-`https://iframes.vik.guru/v1/core/.../` routes directly in iframe `src`
-attributes. Each adjacent full-view `href` continues to open the current
-repository-local base artifact. Nine current carriers use eight hosted routes
-and their exact route sandbox profiles. Seven routes carry Core prototypes;
-the eighth carries the supplemental Conditioning Field without adding it to
-the Core source manifest. The pack index stays a
-non-embedded full-view navigation surface so its sibling prototypes do not
-inherit one union capability boundary.
+Iframe companions use manifest-owned `https://iframes.vik.guru/v1/core/.../`
+or `https://iframes.vik.guru/v1/canvas/.../` routes directly in `src`
+attributes. Each adjacent full-view `href` continues to open the corresponding
+repository-local base artifact for the future primary-site projection. The
+complete static inventory contains 28 carriers and 23 distinct hosted routes:
+nine Core-family occurrences use eight aliases, while 19 Canvas-family
+occurrences use 15 aliases. The `canvas` token describes a receiving delivery
+family; it does not recast the included Collaboration, Narrative Architecture,
+Visualization, or contextual Core sources as one semantic family. Every
+carrier uses its exact route-minimal sandbox and Permissions Policy profile.
+The pack index stays a non-embedded full-view navigation surface so sibling
+prototypes do not inherit one union capability boundary.
 
 The eighteen Site Reading routes enter the public-possible collection through
 their approved Registry destinations: fifteen use direct counterparts,
@@ -549,6 +557,8 @@ npm run build:strategy-canvas-consumer-bundles
 
 ```sh
 npm run test:core-browser
+npm run test:canvas-iframe-routes
+npm run test:iframe-browser
 npm run test:strategy-canvas
 npm run test:narrative-browser
 npm run test:prototype-exchanges
@@ -654,7 +664,7 @@ routes](.github/ENVIRONMENTS.md) are the settings-adjacent authority.
 | `res-public-boundary-intake.yml` | Advisory aggregate public-boundary receipt for eligible pull requests into `main` while its repository budget is active |
 | `schema-receiver-routes.yml` | Advisory schema identity, receiver-route, and mapped-build receipt for matching `main` changes |
 | `schema-delivery.yml` | Automatic schema, Static Assets, Wrangler, and secret-material contract for `release` and `prod`, followed by separately activated environment deployment |
-| `prototype-unit-tests.yml` | Explicit Core/Narrative dispatch and optional matching pull-request receiver controlled by `PROTOTYPE_UNIT_TESTS_AUTOMATIC` |
+| `prototype-unit-tests.yml` | Explicit Core/iframe/Narrative dispatch and optional matching pull-request receiver controlled by `PROTOTYPE_UNIT_TESTS_AUTOMATIC` |
 | `lims-eln-enterprise-reference.yml` | Human-confirmed manual enterprise-reference proof |
 | `lims-eln-functional-nucleus.yml` | Human-confirmed manual selected-member or integrated nucleus proof |
 
@@ -676,7 +686,7 @@ other secret-boundary work.
 | `.tools/` | Checksum-verified external tool binaries and receipts |
 | `.visual-runs/` | Cycle-scoped screenshots, measurements, and browser diagnostics |
 | `.public-reference-build/` | Materialized Context Canvas source with approved references |
-| `.iframe-route-build/` | Deterministic Core iframe route package and receipts |
+| `.iframe-route-build/` | Deterministic Core and Canvas iframe route packages with one aggregate receipt |
 | `.schema-pages/` | Current local schema publication build |
 | `.schema_pages/` | Ignored alternate spelling; the current builder leaves it at rest |
 | `cloudflare/context-canvas-field-pilot/dist/` | Bounded local Static Assets pilot closure |

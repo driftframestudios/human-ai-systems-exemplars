@@ -20,29 +20,34 @@ Context Canvas source without retaining or reporting configured destinations.
 The repository case discovers its keys and occurrences from source; migration
 counts remain a historical observation rather than a release threshold.
 
-Core iframe route packaging has a separate dependency-free boundary:
+Public iframe route packaging has a separate dependency-free boundary:
 
 ```sh
 npm run test:iframe-routes
 npm run check:iframe-routes
 npm run test:iframe-carriers
+npm run test:canvas-iframe-routes
+npm run test:iframe-browser
 ```
 
-The focused suite verifies exact agreement among the 21-entry Core manifest,
-the pack hub, and the 22-route projection contract. It covers normalized and
-collision-free aliases, bounded regular-file inputs, explicit package-local
-media, static runtime-resource observation, byte-identical prototype
-projections, hub-only link adaptation, deterministic receipts, unresolved
-local-navigation observation, observed carrier-capability agreement, minimal
-sandbox and Permissions Policy profiles, and exclusion of the resting
-compatibility alias. The check forms the real package in a temporary directory
-and leaves live delivery unchanged. The carrier contract materializes the real
-Context Canvas source, supplies the authored HEART bytes at its cross-origin
-route, and exercises that page inside the declared sandbox. It checks paired
-URLs, opaque-origin execution, keyboard interaction, copy fallback, local
-overflow containment, request closure, and browser telemetry without retaining
-generated output. Live response headers and cache behavior remain delivery
-activation checks.
+The focused suite verifies exact agreement across the 23-route Core family,
+the 15-route Canvas family, and their aggregate `/v1/` receipt. It covers
+normalized and collision-free aliases, bounded regular-file inputs, explicit
+package-local media, static runtime-resource observation, byte-identical and
+generated projections, deterministic receipts, unresolved local navigation,
+observed carrier-capability agreement, and exclusion of undeclared routes. The
+check forms the complete package in a temporary directory and leaves live
+delivery unchanged. The static carrier inventory accounts for all 28 iframe
+occurrences and 23 distinct hosted aliases while preserving adjacent local
+full-view links.
+
+The Core carrier contract exercises its cross-origin route inside the declared
+sandbox. The Canvas route contract exercises all 15 generated documents inside
+their exact sandbox and Permissions Policy profiles, including package media,
+popup, clipboard, download, modal, print, scriptless, keyboard, request-closure,
+telemetry, and 320-pixel containment observations. `test:iframe-browser` runs
+both rendered delivery contracts. Live response headers, cache behavior, and
+deployed-parent behavior remain delivery activation checks.
 
 Secret-material inspection has its own focused behavior contract:
 
@@ -85,6 +90,8 @@ contracts remain available for behavior that requires a rendered page:
 
 ```sh
 npm run test:core-browser
+npm run test:canvas-iframe-routes
+npm run test:iframe-browser
 npm run test:core-decision-canvases
 npm run test:core-planning-instruments
 npm run test:core-reference-instruments
