@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
@@ -50,6 +51,10 @@ function contrastRatio(first, second) {
   const lighter = Math.max(relativeLuminance(first), relativeLuminance(second));
   const darker = Math.min(relativeLuminance(first), relativeLuminance(second));
   return (lighter + 0.05) / (darker + 0.05);
+}
+
+function sha256(bytes) {
+  return createHash("sha256").update(bytes).digest("hex");
 }
 
 test("shared inline code keeps a readable paper-and-ink treatment", async () => {
@@ -119,8 +124,8 @@ test("the About portrait is a bounded supporting mark with intrinsic dimensions"
   );
 });
 
-test("the About visual-treatment loop begins as a still and loads motion after visitor action", async () => {
-  const [css, html, script, gif] = await Promise.all([
+test("the About visual sequence begins as a still and loads motion after visitor action", async () => {
+  const [css, html, script, gif, poster, source, generator] = await Promise.all([
     readCanvasFile("styles/routes/about.css"),
     readCanvasFile("index.html"),
     readCanvasFile("about-media.js"),
@@ -128,6 +133,18 @@ test("the About visual-treatment loop begins as a still and loads motion after v
       repositoryRoot,
       "context-canvas-project-surface/img/media/impact-map-style-cycle-calm.gif",
     )),
+    readFile(resolve(
+      repositoryRoot,
+      "context-canvas-project-surface/img/media/impact-map-style-cycle-poster.jpg",
+    )),
+    readFile(resolve(
+      repositoryRoot,
+      "collaboration/impact-map-visual-variants/movie/impact-map-style-cycle-movie.mp4",
+    )),
+    readFile(resolve(
+      repositoryRoot,
+      "collaboration/impact-map-visual-variants/movie/render_about_style_cycle_gif.py",
+    ), "utf8"),
   ]);
 
   const section = html.match(
@@ -141,7 +158,7 @@ test("the About visual-treatment loop begins as a still and loads motion after v
   assert.ok(headingEnd < figureStart && figureStart < firstProse);
   assert.match(
     section,
-    /src="\.\.\/img\/media\/impact-map-style-cycle-poster\.jpg"[^>]+data-motion-src="\.\.\/img\/media\/impact-map-style-cycle-calm\.gif"[^>]+width="640" height="360"/u,
+    /src="\.\.\/img\/media\/impact-map-style-cycle-poster\.jpg"[^>]+data-motion-src="\.\.\/img\/media\/impact-map-style-cycle-calm\.gif"[^>]+data-motion-duration-ms="10000"[^>]+width="640" height="360"/u,
   );
   assert.match(
     section,
@@ -152,10 +169,29 @@ test("the About visual-treatment loop begins as a still and loads motion after v
   assert.equal(gif.readUInt16LE(6), 640);
   assert.equal(gif.readUInt16LE(8), 360);
   assert.ok(gif.byteLength < 1_000_000, "Expected the landing GIF to remain below 1 MB");
+  assert.equal(gif.includes(Buffer.from("NETSCAPE2.0", "ascii")), false);
+  assert.equal(
+    sha256(gif),
+    "3cc27eda90c11583c30ca5a6a163be6a6799e97133a1785235657cf2ec79f514",
+  );
+  assert.equal(
+    sha256(poster),
+    "d616089f5e36b6616b6a989c0d3105340b25a23b0651270313146b5ec1b660fa",
+  );
+  assert.equal(
+    sha256(source),
+    "d839f2872c5bb88ddfb9483b1c58e484d4c4db374a918bfec217031453eba0dd",
+  );
+  assert.match(
+    generator,
+    /SOURCE_SHA256 = "d839f2872c5bb88ddfb9483b1c58e484d4c4db374a918bfec217031453eba0dd"/u,
+  );
 
-  assert.match(script, /button\.hidden = false/u);
+  assert.match(script, /button\.hidden = reducedMotion\.matches \|\| printMedia\.matches/u);
   assert.match(script, /button\.addEventListener\("click"/u);
   assert.match(script, /prefers-reduced-motion: reduce/u);
+  assert.match(script, /window\.matchMedia\("print"\)/u);
+  assert.match(script, /window\.setTimeout\(\(\) => setMotionState\(false\), motionDuration\)/u);
   assert.match(script, /window\.addEventListener\("beforeprint"/u);
   assert.match(script, /document\.addEventListener\("visibilitychange"/u);
 

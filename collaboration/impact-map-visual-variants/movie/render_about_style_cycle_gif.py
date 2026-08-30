@@ -27,6 +27,7 @@ PALETTE_COLORS = 96
 HOLD_SECONDS = 1.5
 TRANSITION_SECONDS = 1.0
 FRAME_DURATION_PATTERN_MS = (170, 170, 160)
+SOURCE_SHA256 = "d839f2872c5bb88ddfb9483b1c58e484d4c4db374a918bfec217031453eba0dd"
 
 # Each time lands on a settled frame between the source film's internal title
 # banners: warm paper, cobalt, sea glass, and coral presentation treatments.
@@ -136,7 +137,6 @@ def write_gif(frames: list[Image.Image], output: Path) -> float:
         save_all=True,
         append_images=frames[1:],
         duration=durations_ms,
-        loop=0,
         disposal=2,
         optimize=True,
     )
@@ -154,6 +154,12 @@ def sha256(path: Path) -> str:
 def build(source: Path, gif_output: Path, poster_output: Path) -> None:
     if not source.is_file():
         raise FileNotFoundError(f"Source film not found: {source}")
+    source_digest = sha256(source)
+    if source_digest != SOURCE_SHA256:
+        raise ValueError(
+            "Source film SHA-256 differs from the accepted input: "
+            f"expected {SOURCE_SHA256}, received {source_digest}."
+        )
 
     gif_output.parent.mkdir(parents=True, exist_ok=True)
     poster_output.parent.mkdir(parents=True, exist_ok=True)
