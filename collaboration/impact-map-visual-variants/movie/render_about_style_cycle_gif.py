@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import math
 import tempfile
 from pathlib import Path
 
@@ -27,6 +26,7 @@ OUTPUT_FPS = 6
 PALETTE_COLORS = 96
 HOLD_SECONDS = 1.5
 TRANSITION_SECONDS = 1.0
+FRAME_DURATION_PATTERN_MS = (170, 170, 160)
 
 # Each time lands on a settled frame between the source film's internal title
 # banners: warm paper, cobalt, sea glass, and coral presentation treatments.
@@ -124,17 +124,23 @@ def quantize_frames(frames: list[Image.Image]) -> list[Image.Image]:
     ]
 
 
-def write_gif(frames: list[Image.Image], output: Path) -> None:
-    duration_ms = math.floor(1000 / OUTPUT_FPS / 10) * 10
+def write_gif(frames: list[Image.Image], output: Path) -> float:
+    # GIF delays use 10 ms units. Repeating 170, 170, 160 ms gives six
+    # frames per second without shortening the full loop.
+    durations_ms = [
+        FRAME_DURATION_PATTERN_MS[index % len(FRAME_DURATION_PATTERN_MS)]
+        for index in range(len(frames))
+    ]
     frames[0].save(
         output,
         save_all=True,
         append_images=frames[1:],
-        duration=duration_ms,
+        duration=durations_ms,
         loop=0,
         disposal=2,
         optimize=True,
     )
+    return sum(durations_ms) / 1000
 
 
 def sha256(path: Path) -> str:
@@ -159,7 +165,7 @@ def build(source: Path, gif_output: Path, poster_output: Path) -> None:
         temporary_gif = temporary_root / gif_output.name
         temporary_poster = temporary_root / poster_output.name
 
-        write_gif(frames, temporary_gif)
+        loop_seconds = write_gif(frames, temporary_gif)
         keyframes[0].save(
             temporary_poster,
             format="JPEG",
@@ -171,7 +177,6 @@ def build(source: Path, gif_output: Path, poster_output: Path) -> None:
         temporary_gif.replace(gif_output)
         temporary_poster.replace(poster_output)
 
-    loop_seconds = len(frames) / OUTPUT_FPS
     print(
         f"GIF {OUTPUT_WIDTH}x{OUTPUT_HEIGHT} · {len(frames)} frames · "
         f"{loop_seconds:.1f}s · {gif_output.stat().st_size} bytes · "
