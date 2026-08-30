@@ -96,7 +96,7 @@ test("route bundles leave bare inline-code appearance with the shared owner", as
   assert.doesNotMatch(routeCss, /:is\(a,\s*a:visited,\s*code\)/u);
 });
 
-test("the About portrait is a bounded supporting mark with intrinsic dimensions", async () => {
+test("the About hero keeps its initial composition with a compact supporting portrait", async () => {
   const [css, html] = await Promise.all([
     readCanvasFile("styles/routes/about.css"),
     readCanvasFile("index.html"),
@@ -107,8 +107,9 @@ test("the About portrait is a bounded supporting mark with intrinsic dimensions"
 
   assert.equal(
     declarationValue(heroRule, "grid-template-columns"),
-    "minmax(0, 1fr) max-content",
+    "minmax(0, 1.3fr) minmax(15rem, .7fr)",
   );
+  assert.equal(declarationValue(heroRule, "gap"), "clamp(1.5rem, 5vw, 4rem)");
   assert.equal(
     declarationValue(portraitRule, "inline-size"),
     "clamp(7.75rem, 11vw, 10rem)",

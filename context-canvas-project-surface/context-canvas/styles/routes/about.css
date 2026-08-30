@@ -170,8 +170,8 @@
 .about-hero {
     align-items: end;
     display: grid;
-    gap: clamp(.75rem, 2vw, 1.5rem);
-    grid-template-columns: minmax(0, 1fr) max-content;
+    gap: clamp(1.5rem, 5vw, 4rem);
+    grid-template-columns: minmax(0, 1.3fr) minmax(15rem, .7fr);
     min-block-size: min(48rem, calc(100vh - 4rem));
     padding-block: clamp(4rem, 9vw, 8rem);
 }
