@@ -653,7 +653,7 @@
           "type": "string",
           "enum": [
             "planned",
-            "illustrative_walkthrough",
+            "working_example",
             "in_progress",
             "observed",
             "verified",

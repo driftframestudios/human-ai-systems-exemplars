@@ -173,7 +173,7 @@
       "sourceBand": [
         "author_original",
         "collaboration_stabilized",
-        "illustrative_seed"
+        "sample_state"
       ],
       "sourceOfTruthBand": [
         "human_steward_review",
@@ -195,7 +195,7 @@
           "name": "Generic LLM first-recommendation likelihood",
           "description": "P(generic-LLM-first-recommendation | the named prompt condition): the model-verbalized probability that a candidate appears as the first recommendation under that request.",
           "candidateSetSemantics": "open_exclusive",
-          "measurementStatus": "illustrative_verbalized_sample"
+          "measurementStatus": "uncalibrated_verbalized_sample"
         },
         {
           "@id": "https://schemas.driftframestudios.org/na/examples/probability-six-month-fit",
@@ -203,7 +203,7 @@
           "name": "Six-month collaboration fit",
           "description": "P(six-month-fit-without-structural-rewrite | declared outcome, team conditions, and current evidence): the contextual planning probability that a candidate supports the selected low-fidelity interaction surfaces for six months while preserving accessibility, semantic readability, maintainability, testability, and a practical replacement path.",
           "candidateSetSemantics": "independent_events",
-          "measurementStatus": "illustrative_planning_estimate"
+          "measurementStatus": "uncalibrated_planning_estimate"
         }
       ]
     },
@@ -291,9 +291,9 @@
         "intervalLow": 0.34,
         "intervalHigh": 0.55,
         "estimateKind": "model_verbalized_distribution",
-        "measurementStatus": "illustrative_verbalized_sample",
+        "measurementStatus": "uncalibrated_verbalized_sample",
         "calibrationState": "uncalibrated",
-        "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
       },
       "sixMonthFit": {
         "@type": "ProbabilityEstimate",
@@ -301,7 +301,7 @@
         "intervalLow": 0.42,
         "intervalHigh": 0.74,
         "estimateKind": "planning_probability",
-        "measurementStatus": "illustrative_planning_estimate",
+        "measurementStatus": "uncalibrated_planning_estimate",
         "calibrationState": "uncalibrated",
         "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
       },
@@ -318,9 +318,9 @@
         "intervalLow": 0.12,
         "intervalHigh": 0.27,
         "estimateKind": "model_verbalized_distribution",
-        "measurementStatus": "illustrative_verbalized_sample",
+        "measurementStatus": "uncalibrated_verbalized_sample",
         "calibrationState": "uncalibrated",
-        "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
       },
       "sixMonthFit": {
         "@type": "ProbabilityEstimate",
@@ -328,7 +328,7 @@
         "intervalLow": 0.5,
         "intervalHigh": 0.82,
         "estimateKind": "planning_probability",
-        "measurementStatus": "illustrative_planning_estimate",
+        "measurementStatus": "uncalibrated_planning_estimate",
         "calibrationState": "uncalibrated",
         "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
       },
@@ -345,9 +345,9 @@
         "intervalLow": 0.05,
         "intervalHigh": 0.17,
         "estimateKind": "model_verbalized_distribution",
-        "measurementStatus": "illustrative_verbalized_sample",
+        "measurementStatus": "uncalibrated_verbalized_sample",
         "calibrationState": "uncalibrated",
-        "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
       },
       "sixMonthFit": {
         "@type": "ProbabilityEstimate",
@@ -355,7 +355,7 @@
         "intervalLow": 0.45,
         "intervalHigh": 0.78,
         "estimateKind": "planning_probability",
-        "measurementStatus": "illustrative_planning_estimate",
+        "measurementStatus": "uncalibrated_planning_estimate",
         "calibrationState": "uncalibrated",
         "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
       },
@@ -372,9 +372,9 @@
         "intervalLow": 0.04,
         "intervalHigh": 0.15,
         "estimateKind": "model_verbalized_distribution",
-        "measurementStatus": "illustrative_verbalized_sample",
+        "measurementStatus": "uncalibrated_verbalized_sample",
         "calibrationState": "uncalibrated",
-        "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
       },
       "sixMonthFit": {
         "@type": "ProbabilityEstimate",
@@ -382,7 +382,7 @@
         "intervalLow": 0.42,
         "intervalHigh": 0.75,
         "estimateKind": "planning_probability",
-        "measurementStatus": "illustrative_planning_estimate",
+        "measurementStatus": "uncalibrated_planning_estimate",
         "calibrationState": "uncalibrated",
         "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
       },
@@ -399,9 +399,9 @@
         "intervalLow": 0.035,
         "intervalHigh": 0.14,
         "estimateKind": "model_verbalized_distribution",
-        "measurementStatus": "illustrative_verbalized_sample",
+        "measurementStatus": "uncalibrated_verbalized_sample",
         "calibrationState": "uncalibrated",
-        "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
       },
       "sixMonthFit": {
         "@type": "ProbabilityEstimate",
@@ -409,7 +409,7 @@
         "intervalLow": 0.46,
         "intervalHigh": 0.79,
         "estimateKind": "planning_probability",
-        "measurementStatus": "illustrative_planning_estimate",
+        "measurementStatus": "uncalibrated_planning_estimate",
         "calibrationState": "uncalibrated",
         "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
       },
@@ -426,9 +426,9 @@
         "intervalLow": 0.015,
         "intervalHigh": 0.085,
         "estimateKind": "model_verbalized_distribution",
-        "measurementStatus": "illustrative_verbalized_sample",
+        "measurementStatus": "uncalibrated_verbalized_sample",
         "calibrationState": "uncalibrated",
-        "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
       },
       "sixMonthFit": {
         "@type": "ProbabilityEstimate",
@@ -436,7 +436,7 @@
         "intervalLow": 0.32,
         "intervalHigh": 0.69,
         "estimateKind": "planning_probability",
-        "measurementStatus": "illustrative_planning_estimate",
+        "measurementStatus": "uncalibrated_planning_estimate",
         "calibrationState": "uncalibrated",
         "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
       },
@@ -453,9 +453,9 @@
         "intervalLow": 0.01,
         "intervalHigh": 0.07,
         "estimateKind": "model_verbalized_distribution",
-        "measurementStatus": "illustrative_verbalized_sample",
+        "measurementStatus": "uncalibrated_verbalized_sample",
         "calibrationState": "uncalibrated",
-        "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
       },
       "sixMonthFit": {
         "@type": "ProbabilityEstimate",
@@ -463,7 +463,7 @@
         "intervalLow": 0.3,
         "intervalHigh": 0.67,
         "estimateKind": "planning_probability",
-        "measurementStatus": "illustrative_planning_estimate",
+        "measurementStatus": "uncalibrated_planning_estimate",
         "calibrationState": "uncalibrated",
         "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
       },
@@ -497,9 +497,9 @@
         "intervalLow": 0.22,
         "intervalHigh": 0.4,
         "estimateKind": "model_verbalized_distribution",
-        "measurementStatus": "illustrative_verbalized_sample",
+        "measurementStatus": "uncalibrated_verbalized_sample",
         "calibrationState": "uncalibrated",
-        "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
       },
       "sixMonthFit": {
         "@type": "ProbabilityEstimate",
@@ -507,7 +507,7 @@
         "intervalLow": 0.36,
         "intervalHigh": 0.68,
         "estimateKind": "planning_probability",
-        "measurementStatus": "illustrative_planning_estimate",
+        "measurementStatus": "uncalibrated_planning_estimate",
         "calibrationState": "uncalibrated",
         "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
       },
@@ -524,9 +524,9 @@
         "intervalLow": 0.18,
         "intervalHigh": 0.36,
         "estimateKind": "model_verbalized_distribution",
-        "measurementStatus": "illustrative_verbalized_sample",
+        "measurementStatus": "uncalibrated_verbalized_sample",
         "calibrationState": "uncalibrated",
-        "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
       },
       "sixMonthFit": {
         "@type": "ProbabilityEstimate",
@@ -534,7 +534,7 @@
         "intervalLow": 0.64,
         "intervalHigh": 0.89,
         "estimateKind": "planning_probability",
-        "measurementStatus": "illustrative_planning_estimate",
+        "measurementStatus": "uncalibrated_planning_estimate",
         "calibrationState": "uncalibrated",
         "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
       },
@@ -551,9 +551,9 @@
         "intervalLow": 0.05,
         "intervalHigh": 0.17,
         "estimateKind": "model_verbalized_distribution",
-        "measurementStatus": "illustrative_verbalized_sample",
+        "measurementStatus": "uncalibrated_verbalized_sample",
         "calibrationState": "uncalibrated",
-        "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
       },
       "sixMonthFit": {
         "@type": "ProbabilityEstimate",
@@ -561,7 +561,7 @@
         "intervalLow": 0.48,
         "intervalHigh": 0.79,
         "estimateKind": "planning_probability",
-        "measurementStatus": "illustrative_planning_estimate",
+        "measurementStatus": "uncalibrated_planning_estimate",
         "calibrationState": "uncalibrated",
         "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
       },
@@ -578,9 +578,9 @@
         "intervalLow": 0.055,
         "intervalHigh": 0.18,
         "estimateKind": "model_verbalized_distribution",
-        "measurementStatus": "illustrative_verbalized_sample",
+        "measurementStatus": "uncalibrated_verbalized_sample",
         "calibrationState": "uncalibrated",
-        "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
       },
       "sixMonthFit": {
         "@type": "ProbabilityEstimate",
@@ -588,7 +588,7 @@
         "intervalLow": 0.5,
         "intervalHigh": 0.81,
         "estimateKind": "planning_probability",
-        "measurementStatus": "illustrative_planning_estimate",
+        "measurementStatus": "uncalibrated_planning_estimate",
         "calibrationState": "uncalibrated",
         "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
       },
@@ -605,9 +605,9 @@
         "intervalLow": 0.055,
         "intervalHigh": 0.18,
         "estimateKind": "model_verbalized_distribution",
-        "measurementStatus": "illustrative_verbalized_sample",
+        "measurementStatus": "uncalibrated_verbalized_sample",
         "calibrationState": "uncalibrated",
-        "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
       },
       "sixMonthFit": {
         "@type": "ProbabilityEstimate",
@@ -615,7 +615,7 @@
         "intervalLow": 0.56,
         "intervalHigh": 0.85,
         "estimateKind": "planning_probability",
-        "measurementStatus": "illustrative_planning_estimate",
+        "measurementStatus": "uncalibrated_planning_estimate",
         "calibrationState": "uncalibrated",
         "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
       },
@@ -632,9 +632,9 @@
         "intervalLow": 0.025,
         "intervalHigh": 0.11,
         "estimateKind": "model_verbalized_distribution",
-        "measurementStatus": "illustrative_verbalized_sample",
+        "measurementStatus": "uncalibrated_verbalized_sample",
         "calibrationState": "uncalibrated",
-        "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
       },
       "sixMonthFit": {
         "@type": "ProbabilityEstimate",
@@ -642,7 +642,7 @@
         "intervalLow": 0.42,
         "intervalHigh": 0.75,
         "estimateKind": "planning_probability",
-        "measurementStatus": "illustrative_planning_estimate",
+        "measurementStatus": "uncalibrated_planning_estimate",
         "calibrationState": "uncalibrated",
         "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
       },
@@ -659,9 +659,9 @@
         "intervalLow": 0.015,
         "intervalHigh": 0.085,
         "estimateKind": "model_verbalized_distribution",
-        "measurementStatus": "illustrative_verbalized_sample",
+        "measurementStatus": "uncalibrated_verbalized_sample",
         "calibrationState": "uncalibrated",
-        "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+        "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
       },
       "sixMonthFit": {
         "@type": "ProbabilityEstimate",
@@ -669,7 +669,7 @@
         "intervalLow": 0.4,
         "intervalHigh": 0.74,
         "estimateKind": "planning_probability",
-        "measurementStatus": "illustrative_planning_estimate",
+        "measurementStatus": "uncalibrated_planning_estimate",
         "calibrationState": "uncalibrated",
         "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
       },
