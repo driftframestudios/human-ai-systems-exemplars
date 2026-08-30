@@ -106,7 +106,20 @@ test("current autobiographical debriefs use a first-person perspective", async (
   ];
   for (const route of scenarioRoutes) {
     const html = await readCanvasFile(route);
-    assert.match(html, /<dt>My interpretation<\/dt><dd>I read this scenario/u, route);
+    assert.match(html, /<dt>My interpretation<\/dt><dd>I read this as a principal-level design and engineering problem/u, route);
+  }
+
+  const [aiSystems, hiring, threeWay] = await Promise.all([
+    readCanvasFile("ai-systems.html"),
+    readCanvasFile("hiring-surfaces-talent-agent-intake.html"),
+    readCanvasFile("three-way-comparative-return.html"),
+  ]);
+  assert.match(aiSystems, /I build open-source software, multi-agent orchestration environments, and decision-making surfaces/u);
+  assert.match(hiring, /hiring research with inspectable work in open-source software, multi-agent orchestration environments, and decision-making surfaces/u);
+  assert.match(threeWay, /building shared decision-making surfaces and translating among specialized teams/u);
+
+  for (const html of [aiSystems, hiring, threeWay, ...await Promise.all(scenarioRoutes.map(readCanvasFile))]) {
+    assert.doesNotMatch(html, /Registry steward|systems practitioner|substrate builder|principal product designer and engineer/u);
   }
 
   const debriefs = await readCanvasFile("debriefs.html");
