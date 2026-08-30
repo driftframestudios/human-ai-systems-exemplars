@@ -17,7 +17,7 @@ The files in this directory keep their existing paths. Collaboration notes, sour
 - [Genomic Viewer repeatability research payload](genomic-viewer-repeatability-deep-research-payload.md) — research questions, claim classes, and receiving-surface consequences.
 - [Core and Narrative unit-test foundation](unit-testing-collaboration-foundation.md) — source-owned expectations, direct local tests, current contract findings, the lean issue route, and the next research-branch re-entry move.
 - [Context Canvas public-reference materialization](context-canvas-public-reference-materialization.md) — Registry-scoped semantic keys, ignored build configuration, recoverable staged materialization, successor reception, delivery re-entry, and the current skill observation.
-- [Core iframe route stability](core-iframe-route-stability.md) — the 22-route source/projection contract, dependency-free package closure, activation standings, adapted-navigation observations, and the pinned Spark return point.
+- [Core iframe route stability](core-iframe-route-stability.md) — the 23-route source/projection contract, dependency-free package closure, activation standings, adapted-navigation observations, and the pinned Spark return point.
 - [Repository secret-material boundary](repository-secret-material-boundary.md) — pinned Betterleaks installation, generated-canary proof, exact tree/index/history/artifact scopes, safe diagnostics, successor reception, and the formed `secret-boundary-inspection` contract.
 
 ## Situated collaboration accounts

@@ -109,6 +109,9 @@ route-matched sandbox, narrow Permissions Policy when needed, and
 `referrerpolicy="no-referrer"` keep the behavioral boundary visible in
 authored source. The multi-route pack index opens as a non-embedded full view;
 this keeps its sibling destinations from inheriting one shared iframe policy.
+The Conditioning Field is a supplemental Context Canvas instrument in that
+delivery bundle: its hosted projection uses `allow-scripts` only, while its
+adjacent full view remains `conditioning-field.html`.
 
 The dependency-free materializer retains a tested hosted-iframe twin seam for
 an explicitly late-bound future receiver. Current Core carriers no longer need

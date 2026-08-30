@@ -55,11 +55,13 @@ prototype under `prototypes/...`. The HEART-only configuration key and data
 attributes are retired. The generic twin seam remains covered by focused
 materializer tests for a future receiver that is genuinely late-bound.
 
-Eight iframe instances currently use seven hosted routes. Each declares the
+Nine iframe instances currently use eight hosted routes. Each declares the
 exact sandbox and Permissions Policy recorded by its route profile. The Core
 pack index is not embedded: it opens as a full-view navigation surface so a
 visitor can enter each sibling prototype without making the index carrier hold
-the union of every reachable capability.
+the union of every reachable capability. The additional route carries the
+Conditioning Field as a supplemental Context Canvas source with a generated
+single-file receiver; its adjacent full-view route remains local.
 
 ## Evidence and evidence boundary
 

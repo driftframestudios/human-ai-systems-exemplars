@@ -5,21 +5,25 @@
 The current Core Architectures pack can travel as a finite iframe population
 without changing authored prototype identity or turning packaging into public
 activation. One tracked contract names the pack hub and 21 current prototypes,
-their exact versioned aliases, their source versions, their reader jobs, and
-their present activation standing.
+plus one supplemental Context Canvas instrument. It records exact versioned
+aliases, source owners and standings, reader jobs, and present activation
+standing without recasting the supplemental instrument as a Core Architecture.
 
 The first route family is `https://iframes.vik.guru/v1/core/`. Its version token
 names a stable public grammar rather than a Cloudflare implementation detail.
-Paths outside the 22 declared aliases remain unmatched by this package.
+Paths outside the 23 declared aliases remain unmatched by this package.
 
 ## Package contract
 
 - `public-iframe-route-manifest-v1.json` is the delivery projection contract;
   the existing Core pack manifest remains the current source-identity index.
 - The dependency-free packager validates one hub and 21 one-to-one prototype
-  records before reading any artifact into the projection.
+  records before reading any artifact into the projection. It separately
+  validates the one supplemental Context Canvas source owner.
 - Each prototype is emitted byte-for-byte as its route-local `index.html`.
-  Only the hub receives projection-local sibling and manifest links.
+  Only the hub receives projection-local sibling and manifest links. The
+  supplemental Conditioning Field receives a deterministic, single-file
+  embedded projection with its shared shell and popup exits omitted.
 - `manifest.json` preserves the authored source manifest. The generated
   `route-manifest.json` records deterministic source and projection digests,
   static-resource observations, navigation observations, and activation
@@ -32,7 +36,7 @@ Paths outside the 22 declared aliases remain unmatched by this package.
   authored files unchanged, and the persistent builder stages a complete
   generation before replacing its prior tool-owned directory.
 
-The resting Strategy Canvas v0.1.1 compatibility alias is not part of the 22
+The resting Strategy Canvas v0.1.1 compatibility alias is not part of the 23
 primary routes and is not generated. Nested Strategy build inputs and other
 repository HTML remain outside this population.
 
@@ -64,7 +68,7 @@ and activation remain independently reviewable work.
 The focused unit suite proves manifest agreement, pinned alias identity, path
 portability and symbolic-link safety, explicit static package-resource graphs,
 source preservation, deterministic output, hub navigation, and the exact
-output allowlist. The real check forms 22 route entries across 24 files in a
+output allowlist. The real check forms 23 route entries across 26 files in a
 temporary directory. The persistent build writes the same package beneath
 `.iframe-route-build/`.
 
