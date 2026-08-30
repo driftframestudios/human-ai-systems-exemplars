@@ -113,6 +113,24 @@ test("keeps policy friction distinct from an exact delivery pass", async () => {
   });
   assert.equal(extraAncestor.policy.approvedFrameAncestor.passed, 0);
   assert.equal(extraAncestor.ok, false);
+
+  for (const ambiguousContentType of [
+    "text/html; charset=windows-1252; charset=utf-8",
+    'text/html; note="; charset=utf-8"',
+  ]) {
+    const ambiguousCharset = await verifyLiveIframeRoutes({
+      plan: fixturePlan(),
+      requirePolicy: true,
+      fetchImplementation: async (url) =>
+        url.pathname.endsWith("/")
+          ? response(html, ambiguousContentType, strictHeaders({
+              "content-security-policy": "frame-ancestors https://vik.guru",
+            }))
+          : response(schema, "application/schema+json", strictHeaders()),
+    });
+    assert.equal(ambiguousCharset.policy.htmlCharsetUtf8.passed, 0);
+    assert.equal(ambiguousCharset.ok, false);
+  }
 });
 
 test("reports byte, status, media, and request failures without response payloads", async () => {
@@ -168,6 +186,17 @@ test("rejects alternate receivers and unbounded concurrency", async () => {
     }),
     /must stay relative and normalized/,
   );
+  for (const escapedPath of [
+    "http:evil.example/index.html",
+    "core/%2e%2e/escaped/index.html",
+  ]) {
+    await assert.rejects(
+      verifyLiveIframeRoutes({
+        plan: { outputFiles: new Map([[escapedPath, html]]) },
+      }),
+      /must stay relative and normalized/,
+    );
+  }
   await assert.rejects(
     verifyLiveIframeRoutes({
       plan: { outputFiles: new Map([[htmlPath, "not bytes"]]) },

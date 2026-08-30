@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { MIMEType } from "node:util";
 
 import { createAggregatePackagePlan } from "./package-v1-iframe-routes.mjs";
 
@@ -15,6 +16,16 @@ function sha256(bytes) {
 
 function mediaType(value) {
   return value?.split(";", 1)[0]?.trim().toLowerCase() ?? null;
+}
+
+function hasUnambiguousUtf8Charset(value) {
+  if (!value) return false;
+  try {
+    const parsed = new MIMEType(value);
+    return parsed.params.get("charset")?.trim().toLowerCase() === "utf-8";
+  } catch {
+    return false;
+  }
 }
 
 export function expectedMediaTypeForPath(relativePath) {
@@ -55,9 +66,7 @@ function policyObservation(relativePath, headers) {
   const contentType = headers.get("content-type");
   return {
     html,
-    htmlCharsetUtf8:
-      !html ||
-      /(?:^|;)\s*charset\s*=\s*["']?utf-8["']?(?:\s*;|\s*$)/i.test(contentType ?? ""),
+    htmlCharsetUtf8: !html || hasUnambiguousUtf8Charset(contentType),
     nosniff: headers.get("x-content-type-options")?.trim().toLowerCase() === "nosniff",
     noReferrer: headers.get("referrer-policy")?.trim().toLowerCase() === "no-referrer",
     approvedFrameAncestor:
@@ -110,6 +119,7 @@ function assertPackageEntry(relativePath, bytes) {
     typeof relativePath !== "string" ||
     relativePath.length === 0 ||
     relativePath.startsWith("/") ||
+    !/^[A-Za-z0-9._/-]+$/.test(relativePath) ||
     relativePath.includes("\\") ||
     relativePath.includes("?") ||
     relativePath.includes("#") ||
@@ -127,6 +137,22 @@ function publicRequestPath(relativePath) {
   return relativePath.endsWith("/index.html")
     ? relativePath.slice(0, -"index.html".length)
     : relativePath;
+}
+
+function publicRequestUrl(relativePath, baseUrl) {
+  const requestUrl = new URL(publicRequestPath(relativePath), baseUrl);
+  const receiver = new URL(baseUrl);
+  if (
+    requestUrl.origin !== receiver.origin ||
+    requestUrl.username !== "" ||
+    requestUrl.password !== "" ||
+    !requestUrl.pathname.startsWith(receiver.pathname) ||
+    requestUrl.search !== "" ||
+    requestUrl.hash !== ""
+  ) {
+    throw new Error(`Live iframe package path escaped ${baseUrl}: ${relativePath}.`);
+  }
+  return requestUrl;
 }
 
 async function cancelBody(response) {
@@ -208,11 +234,12 @@ export async function verifyLiveIframeRoutes({
       cursor += 1;
       const [relativePath, expectedBytes] = entries[index];
       const requestPath = publicRequestPath(relativePath);
+      const requestUrl = publicRequestUrl(relativePath, baseUrl);
       const expectedMediaType = expectedMediaTypeForPath(relativePath);
       const expectedSha256 = sha256(expectedBytes);
       let response;
       try {
-        response = await fetchImplementation(new URL(requestPath, baseUrl), {
+        response = await fetchImplementation(requestUrl, {
           headers: {
             "accept-encoding": "identity",
             "user-agent": "human-ai-systems-exemplars-live-verifier/1",
