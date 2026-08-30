@@ -9,6 +9,8 @@
     "build:public-references": "node tools/materialize-public-references.mjs",
     "build:iframe-routes": "node tools/package-v1-iframe-routes.mjs",
     "check:iframe-routes": "node tools/package-v1-iframe-routes.mjs --check",
+    "verify:iframe-routes:live": "node tools/verify-live-iframe-routes.mjs",
+    "verify:iframe-routes:policy": "node tools/verify-live-iframe-routes.mjs --require-policy",
     "build:prod-projection": "node tools/build-prod-projection.mjs --build",
     "check:prod-projection": "node tools/build-prod-projection.mjs --check",
     "build:schema-pages": "node tools/build-schema-pages.mjs",
