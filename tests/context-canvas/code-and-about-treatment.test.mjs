@@ -129,7 +129,7 @@ test("the About hero keeps its initial composition with a local identity lockup"
   assert.equal(declarationValue(portraitImageRule, "block-size"), "auto");
   assert.match(
     html,
-    /<div class="about-hero__identity"><h1 id="about-title"><span class="about-title__line">About<\/span> <span class="about-title__line about-title__line--name">Vikrant<\/span> <span class="about-title__line about-title__line--name">Kudesia<\/span><\/h1><figure class="about-portrait"><img src="portrait001\.jpg" width="2666" height="3556"/u,
+    /<div class="about-hero__identity"><h1 id="about-title"><span class="about-title__line">About<\/span> <span class="about-title__line about-title__line--name">Vikrant<\/span> <span class="about-title__line about-title__line--name">Kudesia<\/span><\/h1><figure class="about-portrait"><img src="portrait-of-vvk-technology-leader\.jpg" width="300" height="300" alt="Black-and-white head-and-shoulders portrait of a smiling person wearing glasses"/u,
   );
 });
 
