@@ -430,6 +430,7 @@ function assertAggregatePlan(aggregatePlan) {
   if (
     !aggregatePlan ||
     !(aggregatePlan.outputFiles instanceof Map) ||
+    !(aggregatePlan.familyPlans instanceof Map) ||
     !isPlainObject(aggregatePlan.receipt)
   ) {
     fail("Production projection requires an aggregate iframe package plan.");
@@ -437,6 +438,7 @@ function assertAggregatePlan(aggregatePlan) {
   const receipt = aggregatePlan.receipt;
   if (
     receipt.id !== aggregateReceiptId ||
+    receipt.version !== "1" ||
     receipt.host !== "iframes.vik.guru" ||
     receipt.base_path !== "/v1/" ||
     !Array.isArray(receipt.package_contract?.family_directories) ||
@@ -499,21 +501,32 @@ function assertAggregatePlan(aggregatePlan) {
   }
   for (const family of ["core", "canvas"]) {
     const familyReceipt = receipt.families.find(({ id }) => id === family);
+    const familyPlan = aggregatePlan.familyPlans.get(family);
     const files = [...aggregatePlan.outputFiles.entries()].filter(
       ([relativePath]) => relativePath.startsWith(`${family}/`),
     );
     const routeReceipt = aggregatePlan.outputFiles.get(`${family}/route-manifest.json`);
     const bytes = files.reduce((total, [, fileBytes]) => total + fileBytes.byteLength, 0);
+    const routes = familyPlan?.receipt?.package_contract?.primary_routes;
     if (
       !familyReceipt ||
+      !Number.isSafeInteger(routes) ||
+      routes < 1 ||
       familyReceipt.base_path !== `/v1/${family}/` ||
       familyReceipt.route_receipt_file !== `${family}/route-manifest.json` ||
       familyReceipt.route_receipt_sha256 !== sha256(routeReceipt) ||
+      familyReceipt.routes !== routes ||
       familyReceipt.files !== files.length ||
       familyReceipt.bytes !== bytes
     ) {
       fail(`Aggregate iframe package ${family} receipt differs from its output plan.`);
     }
+  }
+  if (
+    receipt.package_contract.primary_routes !==
+    receipt.families.reduce((total, family) => total + family.routes, 0)
+  ) {
+    fail("Aggregate iframe package route total differs from its family plans.");
   }
   return aggregatePlan;
 }

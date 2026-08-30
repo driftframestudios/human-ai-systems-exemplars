@@ -126,6 +126,7 @@ function aggregateFixture(options = {}) {
         "core",
         {
           receipt: {
+            package_contract: { primary_routes: 1 },
             routes: [
               {
                 projection_file: "strategy-canvas/index.html",
@@ -146,6 +147,7 @@ function aggregateFixture(options = {}) {
         "canvas",
         {
           receipt: {
+            package_contract: { primary_routes: 1 },
             routes: [
               {
                 projection_file: "demo/index.html",
@@ -374,6 +376,18 @@ test("the independent iframe-plan binding changes for a same-length payload muta
         aggregatePlan: inconsistent,
       }),
       /receipt totals differ|canvas receipt differs/,
+    );
+
+    const routeDrift = aggregateFixture();
+    routeDrift.familyPlans.get("core").receipt.package_contract.primary_routes = 2;
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: routeDrift,
+      }),
+      /core receipt differs from its output plan/,
     );
   } finally {
     await rm(fixture.root, { recursive: true, force: true });
