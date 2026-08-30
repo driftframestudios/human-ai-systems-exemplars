@@ -952,12 +952,19 @@
 
     footer {
       display: flex;
+      flex-wrap: wrap;
       gap: 1rem;
       align-items: center;
       justify-content: space-between;
       padding: 1.2rem 0 0;
       color: var(--cof-muted);
       font-size: 0.8rem;
+    }
+
+    footer > .site-attribution {
+      flex: 1 0 100%;
+      margin: 0;
+      text-align: center;
     }
 
     .print-only {

@@ -218,3 +218,12 @@ test("shared and self-contained styles preserve selectable narrow, print, and fo
   assert.match(css, /@media \(forced-colors:\s*active\)[\s\S]*?\.visitor-boundary/u);
   assert.match(css, /@media print[\s\S]*?\.visitor-boundary/u);
 });
+
+test("the embedded Conditioning Field fallback keeps canaries and attribution in full-width rows", async () => {
+  const html = await readFile(resolve(visitorRoot, "conditioning-field.html"), "utf8");
+  assert.match(html, /footer\s*\{[^}]*flex-wrap:\s*wrap;/u);
+  assert.match(
+    html,
+    /footer\s*>\s*\.site-attribution\s*\{[^}]*flex:\s*1 0 100%;[^}]*text-align:\s*center;/u,
+  );
+});
