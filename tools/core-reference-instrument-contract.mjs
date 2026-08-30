@@ -15,16 +15,16 @@ import {
 } from "./core-architecture-browser-helper.mjs";
 
 const artifactNames = {
-  contextTree: "context-tree-chimeric-prototype-v0.1.4.html",
-  treemap: "jobs-to-be-done-treemap-chimeric-prototype-v0.1.1.html",
-  probes: "practitioner-judgment-probes-chimeric-prototype-v0.1.1.html",
-  matrix: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.1.html",
-  unitTestFirst: "unit-test-first-design-chimeric-prototype-v0.1.1.html",
-  recoveryAtlas: "recovery-routing-atlas-chimeric-prototype-v0.1.1.html",
-  familyIndex: "core-architecture-family-index-chimeric-prototype-v0.1.2.html"
+  contextTree: "context-tree-chimeric-prototype-v0.1.5.html",
+  treemap: "jobs-to-be-done-treemap-chimeric-prototype-v0.1.2.html",
+  probes: "practitioner-judgment-probes-chimeric-prototype-v0.1.2.html",
+  matrix: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.2.html",
+  unitTestFirst: "unit-test-first-design-chimeric-prototype-v0.1.2.html",
+  recoveryAtlas: "recovery-routing-atlas-chimeric-prototype-v0.1.2.html",
+  familyIndex: "core-architecture-family-index-chimeric-prototype-v0.1.3.html"
 };
 
-const packIndexName = "core-architectures-chimeric-prototype-pack-index-v0.1.1.html";
+const packIndexName = "core-architectures-chimeric-prototype-pack-index-v0.1.2.html";
 const manifestName = "core-architectures-chimeric-prototype-manifest-v0.1.json";
 const checks = [];
 const failures = [];

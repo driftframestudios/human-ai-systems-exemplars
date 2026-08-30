@@ -13,8 +13,8 @@
     },
     {
       "path": "narrative-sampling-tableau-chimeric-prototype-v0.1.html",
-      "bytes": 164036,
-      "sha256": "7292c8c09849f1185c2f9b2b8e6ae7f6728c9566f2145123304d8a03d1f43781"
+      "bytes": 163268,
+      "sha256": "f14cb40725e14ac20a70d524777694cecb1e7c168ed5610448b6e40a65e22e68"
     },
     {
       "path": "narrative-sampling-tableau-prototype-addendum-v0.1.md",
@@ -39,7 +39,7 @@
     {
       "path": "core-architecture-routing-registry.v0.1.json",
       "bytes": 22759,
-      "sha256": "be549c87da00b7819e1e72543a8ddca9d46c0bc2440552851a870a0a37a8714e"
+      "sha256": "7e8c360c395378c8e4beab3f7b6951f0d3af28ce267bd7586014feb76ba9ec5a"
     },
     {
       "path": "conation-motion-naming-sampling.example.v0.1.json",

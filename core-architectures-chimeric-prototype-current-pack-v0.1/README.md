@@ -10,7 +10,7 @@ the artifact itself supplies runtime behavior.
 
 - `core-architectures-chimeric-prototype-manifest-v0.1.json` names the current
   pack entries, versions, paths, and material byte or digest receipts.
-- `core-architectures-chimeric-prototype-pack-index-v0.1.1.html` provides the
+- `core-architectures-chimeric-prototype-pack-index-v0.1.2.html` provides the
   human-facing pack route.
 - `strategy-canvas-system-v0.2/` owns the shared Strategy Canvas schema,
   validator, state engine, canonical source, and build contract.
@@ -34,7 +34,7 @@ publication.
 
 Strategy Canvas is maintained through its canonical template and stylesheet;
 the generated current distribution inherits the contract. The current visitor
-set covers Strategy Canvas v0.2.1. The resting v0.1.1 compatibility route is
+set covers Strategy Canvas v0.2.2. The resting v0.1.1 compatibility route is
 generated from its system-local source, including a location-correct link and
 the same attribution contract. Its Context Canvas workbench retains its
 adapted document and style owners. The repository-root `LICENSE` remains the

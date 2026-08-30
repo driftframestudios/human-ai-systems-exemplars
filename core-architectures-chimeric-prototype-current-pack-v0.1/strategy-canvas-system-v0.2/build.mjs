@@ -4,7 +4,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const sourceDirectory = dirname(fileURLToPath(import.meta.url));
-const outputPath = resolve(sourceDirectory, '..', 'strategy-canvas-chimeric-prototype-v0.2.1.html');
+const outputPath = resolve(sourceDirectory, '..', 'strategy-canvas-chimeric-prototype-v0.2.2.html');
 const compatibilityPath = resolve(sourceDirectory, '..', 'strategy-canvas-chimeric-prototype-v0.1.1.html');
 const validatorPath = resolve(sourceDirectory, 'strategy-canvas-validator.js');
 const [template, compatibility, css, schemaText, validatorTemplate, core, canonical] = await Promise.all([
@@ -20,8 +20,8 @@ const [template, compatibility, css, schemaText, validatorTemplate, core, canoni
 const schema = JSON.parse(schemaText);
 const validator = validatorTemplate.replace('/*__STRATEGY_CANVAS_SCHEMA__*/ null', () => JSON.stringify(schema));
 const compatibilityOutput = compatibility.replaceAll(
-  '../strategy-canvas-chimeric-prototype-v0.2.1.html',
-  'strategy-canvas-chimeric-prototype-v0.2.1.html'
+  '../strategy-canvas-chimeric-prototype-v0.2.2.html',
+  'strategy-canvas-chimeric-prototype-v0.2.2.html'
 );
 if (validator.includes('/*__STRATEGY_CANVAS_SCHEMA__*/')) {
   throw new Error('The Strategy Canvas validator contains an unresolved schema marker.');

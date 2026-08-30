@@ -18,13 +18,13 @@
     "strategy_canvas_schema_version": "strategy-canvas/2.0",
     "strategy_canvas_schema_ref": "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
     "strategy_canvas_validator_ref": "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-validator.js",
-    "strategy_canvas_current_ref": "../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.1.html",
+    "strategy_canvas_current_ref": "../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
     "strategy_canvas_compatibility_ref": "companions/strategy-canvas-chimeric-prototype-v0.1.1.html",
     "planning_addendum": "narrative-capsules-composition-addendum-v0.1.md",
     "companions": [
       "companions/core-architecture-family-index-chimeric-prototype-v0.1.html",
       "companions/strategy-canvas-chimeric-prototype-v0.1.1.html",
-      "companions/strategy-canvas-chimeric-prototype-v0.2.1.html",
+      "companions/strategy-canvas-chimeric-prototype-v0.2.2.html",
       "companions/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
       "companions/strategy-canvas-system-v0.2/strategy-canvas-validator.js"
     ]

@@ -18,6 +18,7 @@
     background: var(--about-deep-forest-charcoal, #242a24);
     border-block-start: .3rem solid var(--about-tiffany, #56d8c9);
     color: #fffaf2;
+    display: block;
     inline-size: 100%;
     /*margin-block-start: clamp(3rem, 0vw, 7rem);*/
     padding: clamp(1.5rem, 4vw, 3.5rem);
@@ -110,6 +111,46 @@
 
 .super-footer__reserved {
     color: #d4d8d2;
+}
+
+.visitor-boundary {
+    border-block-start: .0625rem solid rgb(255 250 242 / .38);
+    box-sizing: border-box;
+    display: grid;
+    flex: 1 0 100%;
+    gap: .75rem;
+    grid-column: 1 / -1;
+    inline-size: 100%;
+    margin: 2rem auto 0;
+    max-inline-size: 80rem;
+    overflow-wrap: anywhere;
+    padding-block-start: 1rem;
+    user-select: text;
+}
+
+.visitor-boundary__marker {
+    box-sizing: border-box;
+    color: inherit;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: .7rem;
+    line-height: 1.55;
+    margin: 0;
+    max-inline-size: 100%;
+}
+
+.about-footer {
+    flex-wrap: wrap;
+}
+
+.about-footer > .site-attribution,
+.super-footer > .site-attribution {
+    border-block-start: .0625rem solid rgb(255 250 242 / .38);
+    inline-size: 100%;
+    flex: 1 0 100%;
+    grid-column: 1 / -1;
+    margin: 1rem auto 0;
+    max-inline-size: 80rem;
+    padding-block-start: 1rem;
 }
 
 .page-section-rail {
@@ -387,6 +428,13 @@ h2.super-footer__heading {
     .page-section-rail__link:focus-visible {
         outline-color: Highlight;
     }
+
+    .visitor-boundary,
+    .about-footer > .site-attribution,
+    .super-footer > .site-attribution {
+        border-color: CanvasText;
+        color: CanvasText;
+    }
 }
 
 @media print {
@@ -402,6 +450,13 @@ h2.super-footer__heading {
     }
 
     .super-footer :is(a, a:visited, .super-footer__heading, .super-footer__reserved) {
+        color: #000;
+    }
+
+    .visitor-boundary,
+    .about-footer > .site-attribution,
+    .super-footer > .site-attribution {
+        border-color: #000;
         color: #000;
     }
 }
