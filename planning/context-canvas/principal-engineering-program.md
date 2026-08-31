@@ -580,7 +580,7 @@ The twenty-one questions retained for continued collaboration live in [Open ques
 - `threadkeeping/` and the new `threadkeeping/README.md`
 - `field-guide/src/practitioner-probes-entry/`
 - `field-guide/src/collaboration-postures/`
-- Driftframe Constellation — current package and schema source; its package-shape continuation carries the external organization and the [root source-ownership map](../../README.md#source-ownership-and-receiving-routes) carries the cross-repository handoff. The authorized resolver retains its exact source coordinate under `urn:source-key:driftframe-constellation`.
+- Driftframe Constellation — current package and schema source; its package-shape continuation carries the external organization and the [root source-ownership map](../../README.md#source-projection-and-delivery-retain-separate-ownership) carries the cross-repository handoff. The authorized resolver retains its exact source coordinate under `urn:source-key:driftframe-constellation`.
 - `visual-fidelity-contracts/`
 - `context-canvas-project-surface/context-canvas/`
 - **On Planning Response From AI Collaborator**, supplied 2026-08-20

@@ -2,7 +2,7 @@
 
 This planning surface preserves the relationships, implementation options, and useful re-entry across the Context Canvas visitor and serving work. Semantic working names carry the durable account; active GitHub Issues can receive bounded next changes without becoming the only way to understand the system.
 
-Snapshot: 2026-08-25.
+Snapshot: 2026-08-31.
 
 ## Working posture
 
@@ -27,6 +27,7 @@ The all-page reference utility arose from one concrete cross-platform need: coll
 | Repository identity selection | independent | Public-history preparation | Carry the selected name and retained-private standing with the cutover packet |
 | All-page visual-reference utility | settled | Context Canvas orientation | The [focused CSS plan](css-modularization-and-visual-reference-plan.md) preserves its cutoff and return account |
 | Modular CSS and route-family source | active on demonstrated re-entry | Context Canvas source ownership | The focused plan and [threadkeeping settlement](../../threadkeeping/context-canvas-css-and-visual-reference-settlement.md) carry owners and return conditions |
+| Contrast convergence and visual consistency | #51 is the current front; milestone 22 follows | Painted-owner roles, visual-state evidence, reading comfort, and semantic-visual agreement | The [contrast plan](contrast-convergence-and-visual-consistency-plan.md) carries the approved implementation, research, issue chain, and release event |
 | Debriefs badge-height correction | settled | Debriefs catalog component | One component-owned end-margin correction remains a known-answer cascade account |
 | Later skill cultivation | natural-use return | Repository collaboration affordances | The [repository skill architecture](../repository-skill-architecture.md) carries earn conditions |
 
@@ -52,6 +53,22 @@ Terrain resting beside this wave keeps a route back:
 - Prototype delivery continues independently. Stable shared CDN CSS follows source boundaries that have held through use.
 - Repository identity remains a separate selection carried by the [public-history rehearsal](../locator-free-public-history-rehearsal.md).
 - LIMS/ELN collaboration returns through its dedicated reassessment surface.
+
+## Contrast convergence to visual consistency
+
+Issue #51 now carries the review-ready two-level foreground-role architecture. Four immutable light/dark palette roles feed two inherited active roles; each painted owner declares a complete unvisited/visited pair, and a nested owner that changes paint resets both. The same cycle repairs print role leakage, the salmon hover foreground, compact rail targets, and narrow table-caption containment.
+
+The complete Context Canvas reference produced 126 of 126 captures across 42 routes at narrow, desktop, and wide dimensions. Focused Chromium, Firefox, and WebKit observations cover the consequential role, hover, print, forced-color, rail, and caption cases. Resting screenshots remain initial-state evidence; interaction and alternate-media claims retain their focused checks.
+
+After the contrast pull request associated with #51 merges, milestone [22 Visual Consistency and Semantic-Visual Agreement](https://github.com/driftframestudios/human-ai-systems-exemplars/milestone/22) opens three parallel receivers:
+
+1. [#151](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/151) evolves the role/state/mode/geometry visual contract and receives real Windows High Contrast, text-spacing, and reflow questions.
+2. [#150](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/150) probes reading comfort, hierarchy, information scent, fatigue, and commitment across representative page archetypes.
+3. [#149](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/149) compares human-visible tasks with semantic/AX, DOM-geometry, and screenshot-agent observation channels.
+
+Issues #147 and #148 continue in milestone 4 as iframe-carrier work. They can later enrich representative cases and do not block the first visual-consistency cycle. Issue #58 receives only skill-disposition evidence that changes formation, revision, candidacy, folding, or release.
+
+The milestone closes when its three issues return durable contracts or explicit no-change decisions with re-entry triggers. Skill promotion and iframe delivery keep their own completion events.
 
 ## Visitor and serving continuation plans
 

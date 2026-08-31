@@ -16,6 +16,7 @@ These notes remain provisional field evidence. Repeated use can earn a skill rev
 - [Secret-boundary inspection formation](2026-08-26-secret-boundary-inspection.md) — accepted executable behavior, successor-local canary and scope receipts, and the `create_now` route's first materially different receiving use.
 - [Machine-reference settlement at successor authority](2026-08-26-machine-reference-settlement.md) — successor-local source routes, preserved upstream lineage and delivery identities, representative-use schema coverage, and the action-mode return for bounded support.
 - [Bounded support routing — first returns](2026-08-26-bounded-support-routing-first-returns.md) — three practiced support packets, a `retain` recommendation with the `settle_or_fold` route, stop-condition precedence, premise-aware route return, a named handback surface, and a receipt-bearing Issue label projection.
+- [Context Canvas contrast convergence and visual-verification formation](2026-08-31-context-canvas-contrast-convergence.md) — the approved two-level foreground roles, debate and browser evidence, `create_now` visual-verification contract, existing-owner revisions, public skill billets, and milestone-22 receivers.
 
 ## Return condition
 

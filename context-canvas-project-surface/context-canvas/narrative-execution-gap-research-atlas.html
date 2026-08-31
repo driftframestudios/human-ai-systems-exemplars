@@ -71,6 +71,8 @@
       outline-offset: .25rem;
     }
     .neg-hero {
+      --canvas-link-color: var(--canvas-link-on-dark);
+      --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
       background-color: var(--neg-deep);
       background-image:
         linear-gradient(rgba(255,255,255,.09) 1px, transparent 1px),
@@ -85,8 +87,7 @@
     .neg-hero__copy { max-inline-size: 72rem; }
     .neg-hero .debrief-kicker,
     .neg-hero h1,
-    .neg-hero p,
-    .neg-hero a { color: #fff; }
+    .neg-hero p { color: #fff; }
     .neg-hero h1 {
       font-size: clamp(2.35rem, 5.4vw, 6.1rem);
       letter-spacing: -.052em;
@@ -124,6 +125,8 @@
     }
     .neg-jump-list a:hover { background: #fff; color: var(--neg-deep); }
     .neg-run-card {
+      --canvas-link-color: var(--canvas-link-on-light);
+      --canvas-link-visited-color: var(--canvas-link-visited-on-light);
       align-self: end;
       background: var(--neg-panel);
       border: .16rem solid var(--neg-ink);
@@ -170,7 +173,12 @@
     .neg-band--blue { background: var(--neg-blue); }
     .neg-band--sea { background: var(--neg-sea); }
     .neg-band--cream { background: var(--neg-cream); }
-    .neg-band--ink { background: var(--neg-ink); color: #fff; }
+    .neg-band--ink {
+      --canvas-link-color: var(--canvas-link-on-dark);
+      --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
+      background: var(--neg-ink);
+      color: #fff;
+    }
     .neg-inner {
       inline-size: min(100%, 92rem);
       margin-inline: auto;
@@ -188,8 +196,7 @@
     .neg-band--ink h2,
     .neg-band--ink h3,
     .neg-band--ink p,
-    .neg-band--ink li,
-    .neg-band--ink a { color: #fff; }
+    .neg-band--ink li { color: #fff; }
     .neg-deck {
       font-size: clamp(1.05rem, 1.4vw, 1.25rem);
       line-height: 1.65;
@@ -479,7 +486,12 @@
       .neg-jump-list,
       .neg-next-links { display: none; }
       .neg-hero,
-      .neg-band--ink { background: #fff; color: #000; }
+      .neg-band--ink {
+        --canvas-link-color: var(--canvas-link-on-light);
+        --canvas-link-visited-color: var(--canvas-link-visited-on-light);
+        background: #fff;
+        color: #000;
+      }
       .neg-hero .debrief-kicker,
       .neg-hero h1,
       .neg-hero p,

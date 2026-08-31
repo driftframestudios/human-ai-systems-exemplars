@@ -16,7 +16,7 @@ Context Canvas is a static, progressively enhanced enterprise reading system. HT
 
 Each public page remains useful when enhancement is unavailable. Embedded prototypes pair their interactive surface with a semantic orientation or static equivalent in the parent page.
 
-The repository's [Visual Fidelity Contracts](../../visual-fidelity-contracts/README.md) describe stable semantic and composition contracts with canonical examples. The contracts support orientation while each route retains authority over color, rhythm, density, layout, and source-earned experimentation. The [Context Canvas surface-reading](../../.agents/skills/context-canvas-surface-reading/SKILL.md) and [CSS-ownership](../../.agents/skills/context-canvas-css-ownership/SKILL.md) skills provide compact collaboration routes into this terrain.
+The repository's [Visual Fidelity Contracts](../../visual-fidelity-contracts/README.md) describe stable semantic and composition contracts with canonical examples. The contracts support orientation while each route retains authority over color, rhythm, density, layout, and source-earned experimentation. The [Context Canvas surface-reading](../../.agents/skills/context-canvas-surface-reading/SKILL.md), [CSS-ownership](../../.agents/skills/context-canvas-css-ownership/SKILL.md), and [visual-verification](../../.agents/skills/context-canvas-visual-verification/SKILL.md) skills provide compact collaboration routes into this terrain.
 
 The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) supplies collection, visitor-surface, prototype-surface, and reference-artifact profiles. [Collaboration Skills 0.1.0](../../schemas/collaboration-skills/0.1.0/README.md) carries one portable contract, one retired projection, and one route-changing account into a cross-platform adoption kit. Human-readable page, skill, and account sources remain semantic authorities for their meaning. The GitHub-backed exact-version projection is active at `schemas.radiantnull.com`; issue work:schema-retrieval-and-page-migration carries renewed operator-host observation and final dual-route parity.
 
@@ -65,6 +65,8 @@ Current high-signal ownership:
 | [`field-inspection.css`](field-inspection.css) | [`field-inspection-harness-replatform.html`](field-inspection-harness-replatform.html) | Field Inspection route treatment, loaded after the shared foundation. |
 
 Existing companions such as `fmi-lims-eln-replatforming.css` remain focused on their named surfaces.
+
+Shared visitor links use four immutable light/dark unvisited/visited palette roles and two inherited active roles in `expanded.css`. A painted surface declares its background plus the complete active pair; a nested surface that changes the paint resets both active roles. Route owners can assign local active values when their art direction calls for a different audited foreground. The CSS-ownership skill's [surface color and state reference](../../.agents/skills/context-canvas-css-ownership/references/surface-color-and-state-roles.md) carries the state, print, forced-color, visited-privacy, and modern-CSS decision boundary.
 
 Use an existing semantic component when its visual role fits. Add a selector when the page demonstrates a material gap. Sustained prose uses the shared reading measures; tables, diagrams, ledgers, and direct-manipulation instruments retain local two-dimensional space when that space carries meaning.
 

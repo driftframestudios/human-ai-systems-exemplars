@@ -30,6 +30,8 @@
 }
 
 .debrief-system-summary {
+    --canvas-link-color: var(--canvas-link-on-dark);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
     background:
         linear-gradient(90deg, rgba(242, 255, 103, .18) 0 1px, transparent 1px 100%) 0 0 / 6rem 100%,
         var(--debrief-cobalt-deep);
@@ -663,6 +665,8 @@
     .debrief-catalog,
     .debrief-catalog__header,
     .debrief-catalog__card.project__media {
+        --canvas-link-color: var(--canvas-link-on-light);
+        --canvas-link-visited-color: var(--canvas-link-visited-on-light);
         background: #fff;
         box-shadow: none;
         color: #000;

@@ -30,6 +30,13 @@
     --canvas-sea-glass: #dbf0f0;
     --canvas-warning: #9a4f00;
     --canvas-cobalt: #2855f3;
+    /* Palette roles stay fixed; painted surfaces override both active roles. */
+    --canvas-link-on-light: #003f5a;
+    --canvas-link-visited-on-light: #6c0051;
+    --canvas-link-on-dark: #f2ff67;
+    --canvas-link-visited-on-dark: #feeae9;
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
     --canvas-rose-pink: #feedf1;
     --canvas-cool-blue: #e9f0ff;
     --canvas-mint-green: #e6f5f1;
@@ -212,21 +219,17 @@ p:last-child {
     margin-bottom: 0
 }
 
-a,
-a:visited {
+a {
     background: 0 0;
-    color: #0086b3
+    color: var(--canvas-link-color)
 }
 
 a:visited {
-    color: #B30086
+    color: var(--canvas-link-visited-color)
 }
 
-a:active,
-a:hover,
-a:visited:active,
-a:visited:hover {
-    filter: brightness(80%)
+a:is(:active, :hover) {
+    text-decoration-thickness: .14em
 }
 
 .salmoned {
@@ -235,10 +238,6 @@ a:visited:hover {
 
 .tiffany {
     color: #4db8b3
-}
-
-.content__container.bg__adjust--lightsalmon a:hover {
-    color:#fff;
 }
 
 a:focus,
@@ -1013,6 +1012,8 @@ small {
 }
 
 .hero__container {
+    --canvas-link-color: var(--canvas-link-on-dark);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
     top: 0;
     left: 0;
     /*background: url(desk.jpg) no-repeat fixed;
@@ -1474,6 +1475,8 @@ figcaption {
 }
 
 table {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
     background: var(--canvas-paper);
     border-collapse: separate;
     border-spacing: 0;
@@ -1493,6 +1496,13 @@ caption {
     max-inline-size: var(--canvas-reading-measure);
     padding-block-end: .8rem;
     text-align: start;
+}
+
+@media screen and (max-width: 40rem) {
+    .table-scroll > table > caption {
+        inline-size: min(var(--canvas-reading-measure), calc(100vw - (2 * var(--canvas-page-gutter))));
+        max-inline-size: calc(100vw - (2 * var(--canvas-page-gutter)));
+    }
 }
 
 
@@ -2630,6 +2640,8 @@ abbr {
 }
 
 .cornerstone-definition {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
     background: color-mix(in srgb, var(--canvas-paper) 92%, var(--canvas-field) 8%);
     border-block: 1px solid var(--canvas-rule);
     border-inline-end: 1px solid var(--canvas-rule);
@@ -2755,6 +2767,8 @@ main [id] {
 }
 
 .interpretive-aside {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
     background: color-mix(in srgb, var(--canvas-field) 20%, var(--canvas-paper) 80%);
     border-block: 1px solid var(--canvas-rule-strong);
     margin-block: clamp(1.75rem, 4vw, 3rem);
@@ -2788,6 +2802,8 @@ main [id] {
 }
 
 .architecture-pair article {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
     background: color-mix(in srgb, var(--canvas-paper) 94%, var(--canvas-field) 6%);
     border: 1px solid var(--canvas-rule-strong);
     border-block-start: .3rem solid var(--canvas-ink-strong);
@@ -2812,6 +2828,8 @@ main [id] {
 }
 
 .cobalt-operating-field-cards article {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
     background: var(--operating-field-cream);
     border: .125rem solid var(--operating-field-ink);
     border-radius: .75rem;
@@ -2852,6 +2870,8 @@ main [id] {
  * these tokens preserve the visual grammar without prescribing the story.
  */
 .cobalt-operating-field {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
     --operating-field-cobalt: #2855f3;
     --operating-field-cobalt-strong: #153fbe;
     --operating-field-ink: #17345f;
@@ -2861,8 +2881,7 @@ main [id] {
     background: #eef3fa;
 }
 
-.cobalt-operating-field .beat-title,
-.cobalt-operating-field a {
+.cobalt-operating-field .beat-title {
     color: var(--about-ink-strong);
 }
 
@@ -2876,6 +2895,8 @@ main [id] {
 }
 
 .repeatability-cards article {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
     background: var(--operating-field-cream);
     border: .125rem solid var(--operating-field-ink);
     border-radius: .75rem;
@@ -2924,6 +2945,8 @@ main [id] {
 }
 
 .implementation-moves article {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
     background: var(--canvas-paper);
     border: 1px solid var(--canvas-rule-strong);
     border-block-start: .3rem solid var(--canvas-accent);
@@ -2958,6 +2981,8 @@ main [id] {
 }
 
 .implementation-companion {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
     background: color-mix(in srgb, var(--canvas-field) 24%, var(--canvas-paper) 76%);
     border: 1px solid var(--canvas-rule-strong);
     border-inline-start: .35rem solid var(--canvas-ink-strong);
@@ -3003,6 +3028,8 @@ main [id] {
 
 .cobalt-operating-field__table,
 .cobalt-operating-field__aside {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
     background: var(--operating-field-cream, #fff5de);
     border: .125rem solid var(--operating-field-ink, #17345f);
     border-radius: .75rem;
@@ -3121,6 +3148,11 @@ main [id] {
 }
 
 @media print {
+    .hero__container {
+        --canvas-link-color: var(--canvas-link-on-light);
+        --canvas-link-visited-color: var(--canvas-link-visited-on-light);
+    }
+
     .skip-link,
     .prototype-embed iframe {
         display: none;

@@ -111,6 +111,7 @@
 }
 
 :where(.ai-systems-solution-field) {
+    --canvas-ink-muted: var(--blueprint-ink);
     background: var(--blueprint-sea);
 }
 
@@ -330,7 +331,6 @@
 .ai-systems-page .ai-systems-reading-path a:hover,
 .ai-systems-page .ai-systems-reading-path a:focus-visible {
     background: var(--blueprint-sky);
-    filter: none;
     text-decoration: underline;
     text-decoration-thickness: .12em;
     text-underline-offset: .18em;

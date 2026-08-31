@@ -43,6 +43,8 @@
     <link rel="stylesheet" href="styles/components/debrief-reading.css">
     <style>
       .wtb-orientation-field {
+        --canvas-link-color: #fff8e8;
+        --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
         background:
           linear-gradient(rgba(112, 151, 207, .12) 1px, transparent 1px) 0 0 / 34px 34px,
           linear-gradient(90deg, rgba(112, 151, 207, .12) 1px, transparent 1px) 0 0 / 34px 34px,
@@ -52,10 +54,11 @@
       .wtb-orientation-field :is(.txt-h2, .txt-h3, .debrief-lead, p) { color: inherit; }
       .wtb-orientation-field .debrief-kicker { color: #6adfd0; }
       .wtb-orientation-field .debrief-quote--orientation {
+        --canvas-ink-muted: #304a71;
+        --canvas-ink-strong: #17345f;
         border-inline-start-color: #6adfd0;
-        color: inherit;
+        color: var(--canvas-ink-strong);
       }
-      .wtb-orientation-field .debrief-quote--orientation :is(cite, footer) { color: #d8e4f2; }
       .wtb-context-embed {
         border: .125rem solid #7ba0d5;
         border-radius: .8rem;
@@ -65,8 +68,9 @@
       .wtb-context-embed iframe { block-size: clamp(42rem, 78vh, 62rem); border: 0; }
       .wtb-context-embed figcaption { color: #d8e4f2; padding: .8rem 1rem 1rem; }
       .wtb-context-actions { display: flex; flex-wrap: wrap; gap: .65rem 1.25rem; margin-block-start: .9rem; }
-      .wtb-context-actions a { color: #fff8e8; font-weight: 700; }
+      .wtb-context-actions a { font-weight: 700; }
       .wtb-solution-track {
+        --canvas-ink-muted: #304a71;
         background:
           radial-gradient(circle at 92% 8%, rgba(242, 255, 103, .72) 0 5.5rem, transparent 5.65rem),
           linear-gradient(135deg, #fdebe9, #ffd3d0 58%, #f6e4df);
@@ -82,6 +86,8 @@
       .wtb-prompt-example summary { cursor: pointer; font-weight: 750; min-block-size: 2.75rem; padding-block: .65rem; }
       .wtb-prompt-example blockquote { margin-inline: 0; padding: 1rem 1.1rem; background: #fff8e8; border-inline-start: .3rem solid #2855f3; }
       .wtb-implementation-track {
+        --canvas-link-color: #7ce5d8;
+        --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
         --canvas-paper: #fff8e8;
         --canvas-field: #17263b;
         --canvas-rule: #7698c7;
@@ -96,8 +102,9 @@
       }
       .wtb-implementation-track :is(p, li, .architecture-track-title, .beat-title) { color: #edf3fb; }
       .wtb-implementation-track .architecture-track-title { border-block-end-color: #ff806f; }
-      .wtb-implementation-track a { color: #7ce5d8; }
       .wtb-implementation-track :is(.implementation-moves article, .implementation-companion) {
+        --canvas-link-color: var(--canvas-link-on-light);
+        --canvas-link-visited-color: var(--canvas-link-visited-on-light);
         background: #fff8e8;
         border-color: #193a62;
         color: #17345f;
@@ -107,7 +114,14 @@
       .wtb-implementation-track .implementation-companion__eyebrow { color: #2855f3; }
       .wtb-implementation-track :is(.table-figure, .story-visual) { color: #dce7f5; }
       .wtb-implementation-track :is(.table-note, .story-visual figcaption) { color: #dce7f5; }
-      .wtb-implementation-track .table-scroll { background: #fff8e8; color: #17345f; }
+      .wtb-implementation-track .table-scroll {
+        --canvas-link-color: var(--canvas-link-on-light);
+        --canvas-link-visited-color: var(--canvas-link-visited-on-light);
+        --canvas-ink: #304a71;
+        --canvas-ink-strong: #17345f;
+        background: #fff8e8;
+        color: #17345f;
+      }
       .wtb-implementation-track table { color: #17345f; }
       .wtb-implementation-track .story-visual img {
         border: .125rem solid #7ce5d8;
@@ -122,7 +136,12 @@
       }
       @media print {
         .wtb-context-embed iframe { display: none; }
-        .wtb-orientation-field, .wtb-implementation-track { background: #fff; color: #000; }
+        .wtb-orientation-field, .wtb-implementation-track {
+          --canvas-link-color: var(--canvas-link-on-light);
+          --canvas-link-visited-color: var(--canvas-link-visited-on-light);
+          background: #fff;
+          color: #000;
+        }
         .wtb-orientation-field .debrief-quote--orientation :is(cite, footer) { color: #000; }
         .wtb-implementation-track :is(p, li, .architecture-track-title, .beat-title) { color: #000; }
         .wtb-trust-aside, .wtb-implementation-track :is(.implementation-moves article, .implementation-companion) { box-shadow: none; }
