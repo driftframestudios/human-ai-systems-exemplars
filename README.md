@@ -151,6 +151,7 @@ consequential decisions; and the receiver records what it accepted.
 | Browse and understand the primary visitor system | [Context Canvas orientation](context-canvas-project-surface/context-canvas/README.md) |
 | Change an artifact or interaction | Its nearest README or manifest, then the focused command in [the test map](tests/README.md) |
 | Re-enter ongoing repository work | [Repository collaboration ground](AGENTS.md), current Git state, and the active GitHub Issue or pull request |
+| Begin a full cold or resumed collaboration cycle | [Repository collaboration cycle runbook](.agents/runbooks/repository-collaboration-cycle.v0.1.md), then the active Issue and its material source owner |
 | Compare or restart from an accepted stable core | Verify the named `snapshot` revision, then create a receiving branch from it or merge from it as described in [branch topology](BRANCHING.md#snapshot-baseline) |
 | Explore future architecture or experiments | [Planning](planning/README.md) and the `research` / `res/*` routes in [branch topology](BRANCHING.md) |
 | Recover settled rationale or hand off a cycle | [Threadkeeping](threadkeeping/README.md) |
@@ -205,7 +206,11 @@ shared baseline is verified.
 
 The [`repository-reentry` skill](.agents/skills/repository-reentry/SKILL.md)
 expands this sequence when branches, plans, ledgers, Issues, and pull requests
-need reconciliation.
+need reconciliation. The
+[`repository-collaboration-cycle` skill](.agents/skills/repository-collaboration-cycle/SKILL.md)
+and its [full-cycle runbook](.agents/runbooks/repository-collaboration-cycle.v0.1.md)
+carry a cold or resumed task from that current-truth map through conditional
+setup, source-owned work, evidence, delivery, and an exact continuation.
 
 ### Owned repository areas compose the collection
 
@@ -303,6 +308,7 @@ adequate route when no skill is needed.
 | Skill | Use it when… | It returns… |
 | --- | --- | --- |
 | [`repository-reentry`](.agents/skills/repository-reentry/SKILL.md) | Work resumes across source, Git, GitHub, planning, or threadkeeping | A reconciled current-truth map and one bounded next move |
+| [`repository-collaboration-cycle`](.agents/skills/repository-collaboration-cycle/SKILL.md) | A cold or resumed AI collaborator should complete a full authorized repository cycle after re-entry | One receiver-ready change, finding, or held route with proportionate evidence and exact re-entry |
 | [`context-canvas-surface-reading`](.agents/skills/context-canvas-surface-reading/SKILL.md) | A Context Canvas page, iframe, or related route group enters assessment or change | A visitor-surface reading grounded in every material owner |
 | [`context-canvas-css-ownership`](.agents/skills/context-canvas-css-ownership/SKILL.md) | CSS cascade, selector migration, route bundles, or visual-contract mapping enters scope | Legible style ownership and a focused rendered comparison |
 | [`context-canvas-visual-verification`](.agents/skills/context-canvas-visual-verification/SKILL.md) | Layout, responsive behavior, interaction state, print, forced colors, or a visible regression needs review | Proportionate source-bound visual evidence with limits, risk, and a next receiver |

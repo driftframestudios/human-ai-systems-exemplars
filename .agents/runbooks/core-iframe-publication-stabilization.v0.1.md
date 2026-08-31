@@ -63,12 +63,12 @@ packet, and leave repository and external state as found.
 
 ## Conditional preparation
 
-Use Node 22 or newer. Install the locked root dependencies with `npm ci` when
-they are absent and the current task permits dependency installation. Install
-the focused Chromium runtime with `npm run playwright:install` when a named
-browser check requires it. Prepare the Betterleaks helper with
-`npm run security:secrets:install` only when the named secret-boundary check
-requires it and the helper is unavailable.
+Use Node 22 or newer. Install the locked root dependencies with
+`npm ci --ignore-scripts` when they are absent and the current task permits
+dependency installation. Install the focused Chromium runtime with
+`npm run playwright:install` when a named browser check requires it. Prepare
+the Betterleaks helper with `npm run security:secrets:install` only when the
+named secret-boundary check requires it and the helper is unavailable.
 
 When local dependency download or browser launch is unavailable, route the
 exact check through the approved bounded-support or CI browser worker. Retain

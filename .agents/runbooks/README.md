@@ -39,6 +39,7 @@ Git preserves chronology; the active Issue preserves the work decision.
 
 | Runbook | Use it when | Standing |
 | --- | --- | --- |
+| [Repository collaboration cycle](repository-collaboration-cycle.v0.1.md) | A cold or resumed AI collaborator should carry one authorized repository task from current truth through route selection, conditional setup, source-owned execution, evidence, delivery, and exact re-entry | Working; fresh-context traversal is the first exercise |
 | [Core iframe publication stabilization](core-iframe-publication-stabilization.v0.1.md) | The accepted visitor/prototype source wave must pass through one final Core iframe package, hosted observation, primary-site projection, public route documentation, and long-lived branch return | Exercised through a read-only cold-start traversal; live implementation follows its active Issues |
 
 The
