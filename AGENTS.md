@@ -30,6 +30,7 @@ This repository holds self-contained design-process and research-system exemplar
 The on-demand workflows live in `.agents/skills/`:
 
 - `repository-reentry` reconstructs current truth across branches, plans, ledgers, issues, and pull requests.
+- `repository-collaboration-cycle` carries an authorized task from re-entry through route selection, conditional environment preparation, source-owned execution, proportionate evidence, delivery, and exact continuation.
 - `context-canvas-surface-reading` maps a page as visitor surface and design input.
 - `context-canvas-css-ownership` guides CSS ownership, extraction, selector migration, and visual comparison.
 - `context-canvas-visual-verification` selects proportionate initial-state, focused interaction, alternate-media, viewport, and cross-engine evidence for a visitor-surface change.

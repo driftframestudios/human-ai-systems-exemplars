@@ -4,7 +4,7 @@
 planning_surface:
   id: "prototype-exemplars.repository-skills.v0.1"
   as_of: "2026-08-31"
-  status: "eighteen portable contracts; two settled projections; first typed exchange family active"
+  status: "nineteen portable contracts; two settled projections; first typed exchange family active"
   standing_ground: "AGENTS.md"
   skill_root: ".agents/skills"
   later_tranche_issue: work:repository-skill-tranche
@@ -328,6 +328,7 @@ The lean repository probe keeps five fields: question, why it matters, mechanism
 | Skill | Coherent job | Typical trigger | Useful result |
 | --- | --- | --- | --- |
 | `repository-reentry` | Reconstruct current truth across repository and GitHub surfaces | Resume, handoff, status reconciliation, stale plan | Settled/current/open/next model with one re-entry route |
+| `repository-collaboration-cycle` | Carry one authorized task from re-entry through route selection, conditional setup, source-owned execution, evidence, delivery, and exact continuation | A cold or resumed collaborator is expected to complete a full repository cycle | One receiver-ready change, finding, or held route with proportionate evidence and exact re-entry |
 | `context-canvas-surface-reading` | Read one page or family as visitor surface and design input | Assessment, planning, material Canvas change | Standing, visitor ability, evidence, owners, fingerprint, family effects |
 | `context-canvas-css-ownership` | Make CSS ownership, extraction, and selector migration legible | `expanded.css`, first paint, cascade, rename, contract map | Consumer map, receiving module, affected-family comparison |
 | `context-canvas-visual-verification` | Select proportionate source-bound visual and browser evidence | Layout, responsive behavior, interaction state, print, forced colors, visible regression | Fitting reference or focused check, interpreted result, limits, risk, and next receiver |
@@ -346,16 +347,23 @@ The lean repository probe keeps five fields: question, why it matters, mechanism
 | `repository-attribution-stewardship` | Align copyright-holder, citation, contribution, notice, and bounded machine-projection carriers | Repository attribution, citation metadata, contributor credit, or adaptation guidance changes | Distinct carrier roles, proportionate attribution, and an evidence-calibrated governance return |
 | `collaboration-runbook-authoring` | Convert a settled multi-phase route into a re-entrant versioned procedure | Known work spans several source owners, Issues, checks, recovery paths, and handbacks | AI-legible entry, authority, action modes, checks, recovery, stop, and handback |
 
-Eighteen portable skill contracts now form the standing catalog. The first
-eight began as instruction-only experiments. Ten later contracts joined after
+Nineteen portable skill contracts now form the standing catalog. The first
+eight began as instruction-only experiments. Eleven later contracts joined after
 material work established distinct receiving jobs:
 `schema-contract-authoring`, `source-authority-mapping`,
 `issue-chain-stewardship`, `bounded-support-routing`,
 `locator-boundary-stewardship`, `stateful-artifact-behavior-contracts`,
 `secret-boundary-inspection`, `repository-attribution-stewardship`,
-`collaboration-runbook-authoring`, and
-`context-canvas-visual-verification`. Each remains a revisable transport
+`collaboration-runbook-authoring`, `context-canvas-visual-verification`, and
+`repository-collaboration-cycle`. Each remains a revisable transport
 surface whose contribution is read through the receiving work.
+
+The [repository collaboration cycle option analysis](repository-collaboration-cycle-options.md)
+records the distinct full-cycle receiving job, selected one-runbook
+architecture, conditional domain overlays, and capacity-aware bounded-support
+branch. `repository-reentry` retains truth reconstruction;
+`bounded-support-routing` retains each finite packet; material skills retain
+their source behavior.
 
 ### Settled task-bound projections
 
@@ -397,7 +405,7 @@ records the source evidence, private/public Registry boundary, and next natural
 uses.
 
 This candidate ledger preserves later skill terrain as a collaboration
-surface. Eighteen portable contracts form the standing experiment; the two
+surface. Nineteen portable contracts form the standing experiment; the two
 retired projections remain available as use evidence through Git history and
 threadkeeping.
 
@@ -414,7 +422,7 @@ Fresh-context comparison remains occasional and human-visible. It enters when a 
 - **Skill version manifests and changelogs:** Git history owns repository-local evolution. Version metadata returns when compatibility or external distribution requires it.
 - **Further machine-readable skill architecture:** Collaboration Skills 0.1.0 now carries one portable contract, one retired projection, and one collaboration account into a named visitor-facing adoption kit. JSON-LD, composition objects, registries, routing services, and hosted workflows return only when another material receiver needs them.
 - **Projection registry:** each projection declares its own binding profile and exit event. A separate inventory returns only if concurrent projections make re-entry materially difficult.
-- **Router skill:** eighteen distinct descriptions remain easy for a human and model to scan. Observed misrouting or further material catalog growth can earn a router.
+- **Router skill:** nineteen distinct descriptions remain easy for a human and model to scan. Observed misrouting or further material catalog growth can earn a router.
 - **Plugin packaging:** local practice should stabilize the useful vocabulary first.
 - **Cross-model conformance matrix:** the portable `SKILL.md` form is sufficient for now; another target environment can earn its own reading.
 - **CI and hosted evaluations:** the prototype unit-test workflow is manually dispatchable, and its pull-request receiver rests by default. Setting `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` activates the bounded automatic path within the approved standard-runner Actions budget; local checks remain the ordinary development path.

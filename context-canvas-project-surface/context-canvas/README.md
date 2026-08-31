@@ -77,7 +77,7 @@ The settled [CSS modularization plan](../../planning/context-canvas/css-modulari
 From the repository root, use Node 22 or newer:
 
 ```bash
-npm install
+npm ci --ignore-scripts
 npm run playwright:install
 python3 -m http.server 8000
 ```
