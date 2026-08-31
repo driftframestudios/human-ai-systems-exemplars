@@ -207,12 +207,10 @@
       var slug = conciseSectionLabel(label);
       var li = document.createElement("li");
       var link = element("a", "page-section-rail__link");
-      var visible = element("span", "page-section-rail__label", slug);
       link.href = "#" + id;
       link.setAttribute("aria-label", label);
       link.dataset.sectionTarget = id;
       link.dataset.sectionSlug = slug;
-      link.appendChild(visible);
       li.appendChild(link);
       list.appendChild(li);
       entry.railItem = li;
@@ -236,6 +234,32 @@
       return Boolean(link && item && !item.hidden);
     }
 
+    function keepFocusPaintInsideList(link) {
+      if (!linkIsAvailable(link)) return;
+      var linkBox = link.getBoundingClientRect();
+      var listBox = list.getBoundingClientRect();
+      var linkStyle = getComputedStyle(link);
+      var outlineWidth = parseFloat(linkStyle.outlineWidth) || 0;
+      var outlineOffset = parseFloat(linkStyle.outlineOffset) || 0;
+      var paintReserve = Math.max(0, outlineWidth + outlineOffset);
+      var minimumTop = listBox.top + paintReserve;
+      var maximumBottom = listBox.bottom - paintReserve;
+      if (linkBox.top < minimumTop) list.scrollTop -= Math.ceil(minimumTop - linkBox.top);
+      else if (linkBox.bottom > maximumBottom) list.scrollTop += Math.ceil(linkBox.bottom - maximumBottom);
+    }
+
+    function cssLengthInPixels(element, value) {
+      var numericValue = parseFloat(value);
+      if (!isFinite(numericValue)) return 0;
+      if (/rem$/i.test(value)) {
+        return numericValue * (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16);
+      }
+      if (/em$/i.test(value)) {
+        return numericValue * (parseFloat(getComputedStyle(element).fontSize) || 16);
+      }
+      return numericValue;
+    }
+
     function showReadout(link, prefix) {
       if (!linkIsAvailable(link)) {
         hideReadout();
@@ -243,42 +267,53 @@
       }
       var navBox = nav.getBoundingClientRect();
       var linkBox = link.getBoundingClientRect();
+      var desiredCenter = linkBox.top - navBox.top + (linkBox.height / 2);
       readout.textContent = (prefix || "") + (link.dataset.sectionSlug || link.getAttribute("aria-label"));
-      readout.style.insetBlockStart = (linkBox.top - navBox.top + (linkBox.height / 2)) + "px";
+      readout.style.insetBlockStart = desiredCenter + "px";
       readout.classList.add("is-visible");
+      var readoutBox = readout.getBoundingClientRect();
+      var paintReserve = cssLengthInPixels(
+        readout,
+        getComputedStyle(readout).getPropertyValue("--page-section-rail-readout-paint-reserve")
+      );
+      var minimumCenter = (readoutBox.height / 2) + paintReserve;
+      var maximumCenter = navBox.height - (readoutBox.height / 2) - paintReserve;
+      var availableCenter = maximumCenter >= minimumCenter
+        ? Math.min(Math.max(desiredCenter, minimumCenter), maximumCenter)
+        : navBox.height / 2;
+      readout.style.insetBlockStart = availableCenter + "px";
     }
 
     function hideReadout() {
       readout.classList.remove("is-visible");
     }
 
-    function restoreFocusedReadout() {
-      var focused = railLinkFromNode(document.activeElement);
-      if (focused) showReadout(focused);
-      else hideReadout();
-    }
-
     var currentLink = null;
     var focusedPreview = null;
     var pointerPreview = null;
+    var disclosureDismissed = false;
+    var dismissedPointerLink = null;
+    var pointerDepartureTimer = null;
 
     function firstAvailableLink() {
       return links.find(function (link) { return linkIsAvailable(link); }) || null;
     }
 
-    function showSourceReadout() {
+    function syncReadout() {
       var previewLink = [focusedPreview, pointerPreview].find(function (link) {
         return linkIsAvailable(link);
       }) || null;
 
-      if (!previewLink) {
+      if (disclosureDismissed || !previewLink) {
         hideReadout();
         return;
       }
 
       showReadout(
         previewLink,
-        previewLink === currentLink ? "Current · " : "Preview · "
+        railSource.source
+          ? previewLink === currentLink ? "Current · " : "Preview · "
+          : ""
       );
     }
 
@@ -291,56 +326,89 @@
       var itemEnd = itemStart + item.offsetHeight;
       if (itemStart < list.scrollTop) list.scrollTop = itemStart;
       else if (itemEnd > list.scrollTop + list.clientHeight) list.scrollTop = itemEnd - list.clientHeight;
-      showSourceReadout();
+      syncReadout();
     }
 
-    if (railSource.source) {
-      currentLink = firstAvailableLink();
+    if (railSource.source) currentLink = firstAvailableLink();
 
-      nav.addEventListener("pointerover", function (event) {
-        pointerPreview = linkFromEvent(event);
-        if (pointerPreview) showSourceReadout();
-      });
-      nav.addEventListener("pointerout", function (event) {
-        var link = linkFromEvent(event);
-        if (link && (!event.relatedTarget || !link.contains(event.relatedTarget))) {
-          pointerPreview = railLinkFromNode(event.relatedTarget);
-          showSourceReadout();
-        }
-      });
-      nav.addEventListener("focusin", function (event) {
-        focusedPreview = linkFromEvent(event);
-        if (focusedPreview) showSourceReadout();
-      });
-      nav.addEventListener("focusout", function (event) {
-        var link = linkFromEvent(event);
-        if (link && (!event.relatedTarget || !link.contains(event.relatedTarget))) {
-          focusedPreview = railLinkFromNode(event.relatedTarget);
-          showSourceReadout();
-        }
-      });
-    } else {
-      nav.addEventListener("pointerover", function (event) {
-        var link = linkFromEvent(event);
-        if (link) showReadout(link);
-      });
-      nav.addEventListener("pointerout", function (event) {
-        var link = linkFromEvent(event);
-        if (link && (!event.relatedTarget || !link.contains(event.relatedTarget))) restoreFocusedReadout();
-      });
-      nav.addEventListener("focusin", function (event) {
-        var link = linkFromEvent(event);
-        if (link) showReadout(link);
-      });
-      nav.addEventListener("focusout", function (event) {
-        var link = linkFromEvent(event);
-        if (link && (!event.relatedTarget || !link.contains(event.relatedTarget))) {
-          var next = railLinkFromNode(event.relatedTarget);
-          if (next) showReadout(next);
-          else hideReadout();
-        }
-      });
+    function cancelPointerDeparture() {
+      if (pointerDepartureTimer === null) return;
+      window.clearTimeout(pointerDepartureTimer);
+      pointerDepartureTimer = null;
     }
+
+    function schedulePointerDeparture(nextLink) {
+      cancelPointerDeparture();
+      pointerDepartureTimer = window.setTimeout(function () {
+        pointerDepartureTimer = null;
+        pointerPreview = nextLink;
+        if (!nextLink) dismissedPointerLink = null;
+        syncReadout();
+      }, 120);
+    }
+
+    nav.addEventListener("pointerover", function (event) {
+      var link = linkFromEvent(event);
+      if (!link) {
+        if (event.target === readout) cancelPointerDeparture();
+        return;
+      }
+      cancelPointerDeparture();
+      if (disclosureDismissed && link === dismissedPointerLink) {
+        syncReadout();
+        return;
+      }
+      disclosureDismissed = false;
+      dismissedPointerLink = null;
+      pointerPreview = link;
+      syncReadout();
+    });
+    nav.addEventListener("pointerout", function (event) {
+      var link = linkFromEvent(event);
+      if (link && (!event.relatedTarget || !link.contains(event.relatedTarget))) {
+        if (readout.contains(event.relatedTarget)) return;
+        var nextLink = railLinkFromNode(event.relatedTarget);
+        if (nextLink) {
+          pointerPreview = nextLink;
+          syncReadout();
+        } else {
+          schedulePointerDeparture(null);
+        }
+        return;
+      }
+      if (event.target === readout && (!event.relatedTarget || !readout.contains(event.relatedTarget))) {
+        var relatedLink = railLinkFromNode(event.relatedTarget);
+        if (relatedLink) {
+          pointerPreview = relatedLink;
+          syncReadout();
+        } else {
+          schedulePointerDeparture(null);
+        }
+      }
+    });
+    nav.addEventListener("focusin", function (event) {
+      var link = linkFromEvent(event);
+      if (!link) return;
+      disclosureDismissed = false;
+      dismissedPointerLink = null;
+      keepFocusPaintInsideList(link);
+      focusedPreview = link;
+      syncReadout();
+    });
+    nav.addEventListener("focusout", function (event) {
+      var link = linkFromEvent(event);
+      if (link && (!event.relatedTarget || !link.contains(event.relatedTarget))) {
+        focusedPreview = railLinkFromNode(event.relatedTarget);
+        syncReadout();
+      }
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key !== "Escape" || !readout.classList.contains("is-visible")) return;
+      cancelPointerDeparture();
+      disclosureDismissed = true;
+      dismissedPointerLink = pointerPreview;
+      hideReadout();
+    });
 
     function selectTarget() {
       var id = window.location.hash ? decodeURIComponent(window.location.hash.slice(1)) : "";
@@ -373,7 +441,7 @@
       if (!linkIsAvailable(focusedPreview)) focusedPreview = null;
       if (!linkIsAvailable(pointerPreview)) pointerPreview = null;
       selectTarget();
-      showSourceReadout();
+      syncReadout();
     }
 
     if (railSource.source) {
@@ -394,7 +462,7 @@
             return linkIsAvailable(link) && link.classList.contains("is-in-view");
           });
           if (inViewLink) setCurrentLink(inViewLink);
-          else showSourceReadout();
+          else syncReadout();
         }
       }, { rootMargin: "-16% 0px -68% 0px", threshold: [0, 0.01] });
       sections.forEach(function (entry) { observer.observe(entry.section); });

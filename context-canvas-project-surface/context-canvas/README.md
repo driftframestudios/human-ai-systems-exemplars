@@ -185,17 +185,22 @@ Choose the existing check that answers the page question under review:
 
 ```bash
 npm run test:context-canvas
+npm run test:context-canvas-narrow-rails
 npm run visual:check -- path/to/page.html --selector "main"
 npm run visual:rail-labels
 npm run test:open-lesson-field
 npm run test:strategy-canvas
 ```
 
-The Context Canvas test protects source-authored visitor metadata and the
-About-page identity seam. The generic visual check records the requested
-surface at desktop and mobile widths, document containment, and browser
-errors. The interaction contracts cover their named collaboration systems in
-depth. Choose the fitting check for each other page behavior.
+The Context Canvas source suite protects source-authored visitor metadata,
+shared rail ownership, and the About-page identity seam. The narrow-rail
+contract is the lightweight all-route check for generated rail disclosure,
+clipping, scroll reachability, the 56rem seam, forced colors, and print. The
+generic visual check records the requested surface at desktop and mobile
+widths, document containment, and browser errors; `visual:rail-labels` adds
+screenshot-bearing ordinary-rail interaction evidence. The other interaction
+contracts cover their named collaboration systems in depth. Choose the fitting
+check for each page behavior.
 
 A useful verification note names the command, viewport-relevant result, and ignored `.visual-runs/` artifact directory. A new check joins the shared harness when a reproduced visitor-facing defect gives it a stable purpose.
 

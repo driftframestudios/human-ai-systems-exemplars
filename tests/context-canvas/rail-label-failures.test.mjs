@@ -5,18 +5,27 @@ import { collectRailRevealFailures } from "../../tools/rail-label-failures.mjs";
 
 function observation(targetVisible, targetText = "Current · Section") {
   return {
+    escapeDefaultPrevented: false,
+    escapeReachedWindow: true,
+    linkFocused: true,
     targetVisible,
     targetText,
     targetRect: { width: 120 },
-    clippedRatio: 1
+    clippedRatio: 1,
+    paintedClippedRatio: 1,
+    focusIndicator: { visible: true, visibleRatio: 1 }
   };
 }
 
 function sourceReveal() {
   const states = {
     hover: observation(true),
+    pointerBridge: observation(true),
+    readoutHover: observation(true),
+    escapeDismissal: observation(false),
     pointerDeparture: observation(false),
     focus: observation(true),
+    focusEscapeDismissal: observation(false),
     pointerDepartureWithFocus: observation(true),
     focusDeparture: observation(false)
   };
@@ -25,6 +34,9 @@ function sourceReveal() {
     railMode: "source",
     targetKind: "readout",
     slug: "Section",
+    accessibleName: "Section",
+    expectedAccessibleName: "Section",
+    targetOutsideList: true,
     linkVisible: true,
     states
   };
@@ -33,6 +45,8 @@ function sourceReveal() {
 function sourceRailReveal() {
   return {
     count: 1,
+    testedCount: 1,
+    coverage: "all",
     resting: {
       targetKind: "readout",
       targetVisible: false
@@ -46,10 +60,53 @@ const singleFailureScenarios = [
     name: "missing rail links",
     mutate(railReveal) {
       railReveal.count = 0;
+      railReveal.testedCount = 0;
       railReveal.resting = null;
       railReveal.results = [];
     },
     failure: "Rail label check requested, but no page-section-rail links were found."
+  },
+  {
+    name: "readout without a durable pointer bridge",
+    mutate(railReveal) {
+      railReveal.results[0].states.pointerBridge.targetVisible = false;
+    },
+    failure: 'Rail readout "Section" does not remain visible across the pointer bridge.'
+  },
+  {
+    name: "readout that cannot be hovered",
+    mutate(railReveal) {
+      railReveal.results[0].states.readoutHover.targetVisible = false;
+    },
+    failure: 'Rail readout "Section" does not remain visible when the pointer enters it.'
+  },
+  {
+    name: "readout that remains after Escape",
+    mutate(railReveal) {
+      railReveal.results[0].states.escapeDismissal.targetVisible = true;
+    },
+    failure: 'Rail readout "Section" remains visible after Escape dismissal.'
+  },
+  {
+    name: "focused readout that remains after Escape",
+    mutate(railReveal) {
+      railReveal.results[0].states.focusEscapeDismissal.targetVisible = true;
+    },
+    failure: 'Rail readout "Section" remains visible after focused Escape dismissal.'
+  },
+  {
+    name: "focused Escape that moves link focus",
+    mutate(railReveal) {
+      railReveal.results[0].states.focusEscapeDismissal.linkFocused = false;
+    },
+    failure: 'Rail tick "Section" loses keyboard focus when Escape dismisses its readout.'
+  },
+  {
+    name: "Escape dismissal that consumes the key",
+    mutate(railReveal) {
+      railReveal.results[0].states.escapeDismissal.escapeDefaultPrevented = true;
+    },
+    failure: 'Rail Escape dismissal for "Section" does not reach the window without preventing its default.'
   },
   {
     name: "visible resting readout",
@@ -81,8 +138,12 @@ const singleFailureScenarios = [
     mutate(railReveal) {
       const reveal = railReveal.results[0];
       reveal.railMode = "standard";
-      reveal.targetKind = "label";
+      reveal.targetKind = "readout";
       reveal.states.hover.targetText = "";
+      reveal.states.pointerBridge.targetText = "Section";
+      reveal.states.readoutHover.targetText = "Section";
+      reveal.states.focus.targetText = "Section";
+      reveal.states.pointerDepartureWithFocus.targetText = "Section";
     },
     failure: 'Rail tick "Section" has no way-finding slug text.'
   },
@@ -229,7 +290,7 @@ test("rail diagnostics name an absent state collection as an incomplete observat
   railReveal.results[0].states = null;
 
   assert.deepEqual(collectRailRevealFailures(railReveal), [
-    'Rail tick "Section" should provide complete interaction observations; required: hover, pointerDeparture, focus, pointerDepartureWithFocus, focusDeparture.'
+    'Rail tick "Section" should provide complete interaction observations; required: hover, pointerBridge, readoutHover, escapeDismissal, pointerDeparture, focus, focusEscapeDismissal, pointerDepartureWithFocus, focusDeparture.'
   ]);
 });
 
@@ -246,9 +307,113 @@ test("standard rails use the same interaction expectations without source relati
   const railReveal = sourceRailReveal();
   const reveal = railReveal.results[0];
   reveal.railMode = "standard";
-  reveal.targetKind = "label";
+  reveal.targetKind = "readout";
   reveal.states.hover.targetText = "Section";
+  reveal.states.pointerBridge.targetText = "Section";
+  reveal.states.readoutHover.targetText = "Section";
   reveal.states.focus.targetText = "Section";
+  reveal.states.pointerDepartureWithFocus.targetText = "Section";
 
   assert.deepEqual(collectRailRevealFailures(railReveal), []);
+});
+
+test("rail diagnostics reject a readout that remains inside the scroll list", () => {
+  const railReveal = sourceRailReveal();
+  railReveal.results[0].targetOutsideList = false;
+
+  assert.deepEqual(collectRailRevealFailures(railReveal), [
+    'Rail readout "Section" remains inside the scrollable rail list.'
+  ]);
+});
+
+test("rail diagnostics reject vacuous sampled coverage", () => {
+  const railReveal = sourceRailReveal();
+  railReveal.testedCount = 0;
+  railReveal.coverage = "sampled";
+  railReveal.results = [];
+
+  assert.deepEqual(collectRailRevealFailures(railReveal), [
+    "Rail label check found links but exercised no interaction targets."
+  ]);
+});
+
+test("rail diagnostics reject incomplete full coverage", () => {
+  const railReveal = sourceRailReveal();
+  railReveal.count = 2;
+
+  assert.deepEqual(collectRailRevealFailures(railReveal), [
+    "Rail label check requested complete coverage but exercised 1 of 2 links."
+  ]);
+});
+
+test("rail diagnostics require the visible slug to match the accessible name", () => {
+  const railReveal = sourceRailReveal();
+  railReveal.results[0].accessibleName = "Different section";
+
+  assert.deepEqual(collectRailRevealFailures(railReveal), [
+    'Rail tick "Section" accessible name does not match its complete destination label "Section".'
+  ]);
+});
+
+test("rail diagnostics reject a truncated accessible name that matches only the slug", () => {
+  const railReveal = sourceRailReveal();
+  const reveal = railReveal.results[0];
+  reveal.slug = "This deliberately truncated section title…";
+  reveal.accessibleName = "This deliberately truncated section title…";
+  reveal.expectedAccessibleName = "This deliberately truncated section title with a complete ending";
+  for (const state of ["hover", "pointerBridge", "readoutHover", "focus", "pointerDepartureWithFocus"]) {
+    reveal.states[state].targetText = `Current · ${reveal.slug}`;
+  }
+
+  assert.deepEqual(collectRailRevealFailures(railReveal), [
+    'Rail tick "This deliberately truncated section title…" accessible name does not match its complete destination label "This deliberately truncated section title with a complete ending".'
+  ]);
+});
+
+test("rail diagnostics require exact ordinary readout text", () => {
+  const railReveal = sourceRailReveal();
+  const reveal = railReveal.results[0];
+  reveal.railMode = "standard";
+  reveal.states.hover.targetText = "Section plus stale text";
+  reveal.states.pointerBridge.targetText = "Section";
+  reveal.states.readoutHover.targetText = "Section";
+  reveal.states.focus.targetText = "Section";
+  reveal.states.pointerDepartureWithFocus.targetText = "Section";
+
+  assert.deepEqual(collectRailRevealFailures(railReveal), [
+    'Rail readout "Section" exposes unexpected text during hover: "Section plus stale text".'
+  ]);
+});
+
+test("rail diagnostics reject blank ordinary focus text", () => {
+  const railReveal = sourceRailReveal();
+  const reveal = railReveal.results[0];
+  reveal.railMode = "standard";
+  reveal.states.hover.targetText = "Section";
+  reveal.states.pointerBridge.targetText = "Section";
+  reveal.states.readoutHover.targetText = "Section";
+  reveal.states.focus.targetText = "";
+  reveal.states.pointerDepartureWithFocus.targetText = "Section";
+
+  assert.deepEqual(collectRailRevealFailures(railReveal), [
+    'Rail readout "Section" exposes unexpected text during focus: "".'
+  ]);
+});
+
+test("rail diagnostics account for readout paint clipping", () => {
+  const railReveal = sourceRailReveal();
+  railReveal.results[0].states.hover.paintedClippedRatio = 0.98;
+
+  assert.deepEqual(collectRailRevealFailures(railReveal), [
+    'Rail readout "Section" paint is clipped during hover: 98% visible.'
+  ]);
+});
+
+test("rail diagnostics require a keyboard focus outline", () => {
+  const railReveal = sourceRailReveal();
+  railReveal.results[0].states.focus.focusIndicator.visible = false;
+
+  assert.deepEqual(collectRailRevealFailures(railReveal), [
+    'Rail tick "Section" has no visible outline on keyboard focus.'
+  ]);
 });
