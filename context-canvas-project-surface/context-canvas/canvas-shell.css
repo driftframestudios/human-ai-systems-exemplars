@@ -254,7 +254,7 @@ main :where([id]) {
 }
 
 h2.super-footer__heading {
-    color: var(--about-teal, #009485);
+    color: var(--about-tiffany, #56d8c9);
 }
 
 @media screen and (max-width: 56rem) {
@@ -274,20 +274,22 @@ h2.super-footer__heading {
 
     .page-section-rail ol {
         align-content: center;
+        align-content: safe center;
         block-size: 100%;
         display: grid;
-        gap: clamp(.08rem, .35vh, .22rem);
-        inline-size: 1.25rem;
-        overflow: visible;
+        gap: 0;
+        inline-size: 1.75rem;
+        overflow-y: auto;
         padding: .35rem 0;
+        scrollbar-width: thin;
     }
 
     .page-section-rail__link {
         background: transparent;
         border: 0;
-        block-size: clamp(.72rem, 1.8vh, 1.05rem);
+        block-size: 1.5rem;
         color: var(--canvas-ink, #17345f);
-        inline-size: 1.25rem;
+        inline-size: 1.5rem;
         justify-content: flex-start;
         isolation: isolate;
         padding: 0;

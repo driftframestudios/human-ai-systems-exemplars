@@ -20,7 +20,7 @@ The planning surface references source material instead of becoming a second cop
 ## Current planning areas
 
 - [Cross-repository LIMS/ELN functional nucleus](functional-nucleus-assessment-horizon.md)
-- [Context Canvas — principal engineering and publication](context-canvas/README.md)
+- [Context Canvas — principal engineering and publication](context-canvas/README.md) — includes the approved contrast architecture, visual-consistency milestone, and skill-cultivation continuations.
 - [Core and Narrative unit-test collaboration](unit-testing/README.md) — source-owned expectations, direct Node/Ajv seams, current contract findings, Practitioner Registry and external research, focused browser behavior, milestones, and purposeful holds.
 - [Repository skill architecture and research spike](repository-skill-architecture.md)
 - [Schema contract research and implementation](schema-contract-research-and-implementation-plan.md) — the v1 schema nucleus, dual retrieval model, evidence-grounded pitfalls, and three receiving collaboration waves.
@@ -57,5 +57,5 @@ An individual planning file may be long. Its directory README stays compact and 
 - `threadkeeping/` — local decision and continuity ledgers.
 - `field-guide/src/practitioner-probes-entry/` — reader-entry and source-ownership boundaries.
 - `field-guide/src/collaboration-postures/` — collaboration-memory extraction posture.
-- Driftframe Constellation — current package authority for reference-first schema, interpretive, narrative, research-atlas, and publication-boundary work; its package-shape continuation carries the external organization and the [root source-ownership map](../README.md#source-ownership-and-receiving-routes) carries the cross-repository handoff. The authorized resolver retains its exact source coordinate under `urn:source-key:driftframe-constellation`.
+- Driftframe Constellation — current package authority for reference-first schema, interpretive, narrative, research-atlas, and publication-boundary work; its package-shape continuation carries the external organization and the [root source-ownership map](../README.md#source-projection-and-delivery-retain-separate-ownership) carries the cross-repository handoff. The authorized resolver retains its exact source coordinate under `urn:source-key:driftframe-constellation`.
 - Human-AI Collaboration Field Guide: **Threadkeeping & Collaboration Memory**, **Folding — Continual Writing Surfaces for Incremental Collaboration**, and **Practitioner Probes**.

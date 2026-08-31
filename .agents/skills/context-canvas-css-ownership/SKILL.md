@@ -77,6 +77,8 @@ And source identity remains in content and metadata rather than the CSS namespac
 
 The skill loads [references/scenarios.md](references/scenarios.md) when the work includes the three-movement Debrief namespace or the Debriefs Reading types badge-height probe.
 
+The skill loads [references/surface-color-and-state-roles.md](references/surface-color-and-state-roles.md) when painted backgrounds, color roles, link states, contrast, print, forced colors, or emerging CSS adoption enter the ownership decision.
+
 ## Completion
 
 CSS ownership completes when class, owner, consumers, load position, contract relationship, and extension point are easy to find; cascade seams preserve their intended winning declarations; affected routes load less unrelated CSS; and the family retains meaningful visual behavior.

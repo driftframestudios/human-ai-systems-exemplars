@@ -30,6 +30,10 @@ HTML owns meaning and reading order. CSS owns presentation and modes. Progressiv
 
 A catalog or full-family question begins with aggregate route, class, asset, iframe, stylesheet, and runtime inventory. Complete source reading then deepens around exceptions, affected consumers, and relationships capable of changing the decision. A material change to one page still receives its complete shaping source.
 
+### Rule: Semantic and rendered observations stay reconcilable
+
+Document meaning, accessibility-tree or DOM representation, rendered visibility, geometry, and screenshot content are distinct observation channels. Agreement in one channel leaves the others open. When an AI-visitor claim enters, the reading identifies the agent's actual channel and version, compares it with the corresponding human-visible task, and treats benchmark architecture as a hypothesis source until a local task supplies behavior evidence.
+
 ## Operating sequence
 
 1. **Orientation:** The reading begins at `context-canvas-project-surface/context-canvas/README.md`.

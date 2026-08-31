@@ -32,6 +32,7 @@ The on-demand workflows live in `.agents/skills/`:
 - `repository-reentry` reconstructs current truth across branches, plans, ledgers, issues, and pull requests.
 - `context-canvas-surface-reading` maps a page as visitor surface and design input.
 - `context-canvas-css-ownership` guides CSS ownership, extraction, selector migration, and visual comparison.
+- `context-canvas-visual-verification` selects proportionate initial-state, focused interaction, alternate-media, viewport, and cross-engine evidence for a visitor-surface change.
 - `practitioner-probe` turns an ambiguous technical concern into a decision-changing question and observation.
 - `supportive-change-writing` shapes repository prose and instruction surfaces.
 - `evidence-grounded-research-spike` converts current external evidence into a bounded repository decision.
