@@ -27,7 +27,7 @@ The all-page reference utility arose from one concrete cross-platform need: coll
 | Repository identity selection | independent | Public-history preparation | Carry the selected name and retained-private standing with the cutover packet |
 | All-page visual-reference utility | settled | Context Canvas orientation | The [focused CSS plan](css-modularization-and-visual-reference-plan.md) preserves its cutoff and return account |
 | Modular CSS and route-family source | active on demonstrated re-entry | Context Canvas source ownership | The focused plan and [threadkeeping settlement](../../threadkeeping/context-canvas-css-and-visual-reference-settlement.md) carry owners and return conditions |
-| Contrast convergence and visual consistency | #51 is the current front; milestone 22 follows | Painted-owner roles, visual-state evidence, reading comfort, and semantic-visual agreement | The [contrast plan](contrast-convergence-and-visual-consistency-plan.md) carries the approved implementation, research, issue chain, and release event |
+| Contrast convergence and visual consistency | PR #152's contrast tranche is settled; #51 remains active modular-CSS terrain; #155 is the current medium-viewport front inside milestone 22 | Painted-owner roles, responsive geometry, visual-state evidence, reading comfort, and semantic-visual agreement | The [contrast plan](contrast-convergence-and-visual-consistency-plan.md) and Issue #155 carry the accepted role architecture and its first breakpoint-adjacent geometry exercise |
 | Debriefs badge-height correction | settled | Debriefs catalog component | One component-owned end-margin correction remains a known-answer cascade account |
 | Later skill cultivation | natural-use return | Repository collaboration affordances | The [repository skill architecture](../repository-skill-architecture.md) carries earn conditions |
 
@@ -56,19 +56,30 @@ Terrain resting beside this wave keeps a route back:
 
 ## Contrast convergence to visual consistency
 
-Issue #51 now carries the review-ready two-level foreground-role architecture. Four immutable light/dark palette roles feed two inherited active roles; each painted owner declares a complete unvisited/visited pair, and a nested owner that changes paint resets both. The same cycle repairs print role leakage, the salmon hover foreground, compact rail targets, and narrow table-caption containment.
+Issue #51 and merged pull request #152 carry the two-level foreground-role architecture. Four immutable light/dark palette roles feed two inherited active roles; each painted owner declares a complete unvisited/visited pair, and a nested owner that changes paint resets both. The same cycle repairs print role leakage, the salmon hover foreground, compact rail targets, and narrow table-caption containment.
 
 The complete Context Canvas reference produced 126 of 126 captures across 42 routes at narrow, desktop, and wide dimensions. Focused Chromium, Firefox, and WebKit observations cover the consequential role, hover, print, forced-color, rail, and caption cases. Resting screenshots remain initial-state evidence; interaction and alternate-media claims retain their focused checks.
 
-After the contrast pull request associated with #51 merges, milestone [22 Visual Consistency and Semantic-Visual Agreement](https://github.com/driftframestudios/human-ai-systems-exemplars/milestone/22) opens three parallel receivers:
+Milestone [22 Visual Consistency and Semantic-Visual Agreement](https://github.com/driftframestudios/human-ai-systems-exemplars/milestone/22) now holds four parallel receivers:
 
 1. [#151](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/151) evolves the role/state/mode/geometry visual contract and receives real Windows High Contrast, text-spacing, and reflow questions.
 2. [#150](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/150) probes reading comfort, hierarchy, information scent, fatigue, and commitment across representative page archetypes.
 3. [#149](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/149) compares human-visible tasks with semantic/AX, DOM-geometry, and screenshot-agent observation channels.
+4. [#155](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/155) keeps wide Debrief evidence clear of generated and route-authored rails through breakpoint-adjacent geometry evidence.
 
 Issues #147 and #148 continue in milestone 4 as iframe-carrier work. They can later enrich representative cases and do not block the first visual-consistency cycle. Issue #58 receives only skill-disposition evidence that changes formation, revision, candidacy, folding, or release.
 
-The milestone closes when its three issues return durable contracts or explicit no-change decisions with re-entry triggers. Skill promotion and iframe delivery keep their own completion events.
+The milestone closes when its four issues return durable contracts or explicit no-change decisions with re-entry triggers. Skill promotion and iframe delivery keep their own completion events.
+
+### Medium-viewport rail and evidence containment
+
+Issue #155 is the first independent exercise of `context-canvas-visual-verification`. A family sweep distinguished two mechanisms: the generated shell rail could occupy the right edge of shared wide figures from tablet through laptop widths, while the FMI LIMS / ELN route's larger custom rail reserved 15rem inside the content container and pushed nine viewport-relative evidence frames beyond the left edge from 1200px through 1728px.
+
+The repair keeps ownership local. `canvas-shell.css` reserves a centered outer gutter of at least 5rem for shared wide figures while the generated rail uses its right-side mode; the paint-sensitive check keeps the common half-rem hard shadow visibly separate from the rail. `fmi-lims-eln-replatforming.css` subtracts the custom rail's 15rem reserve from the route's 92vw evidence measure. Local table scrolling continues inside contained outer figures.
+
+`npm run test:context-canvas-medium-containment` observes every current top-level wide-field route at the 56rem, 64rem, and 75rem seams, common laptop widths, and the FMI return to its wide composition. Stable FMI, Genomic Viewer, and Prompt-Side anchors keep dynamic discovery observable. Its outer-frame, half-rem paint-reserve, and rail-clearance checks establish the condition that page-level overflow alone leaves open under clipped composition owners.
+
+This exercise revises the existing visual-verification skill with a breakpoint-bracketing rule and representative scenario. The repository collaboration runbook continues to own entry, authority, recovery, and handback; CSS ownership and surface reading continue to own source and visitor interpretation. A new runbook or portable skill would repeat those receiving jobs, so those candidates rest until a distinct task exposes an uncovered result.
 
 ## Visitor and serving continuation plans
 

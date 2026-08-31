@@ -249,6 +249,20 @@
     outline-offset: .05rem;
 }
 
+/*
+ * The generated rail owns the right-side medium-viewport gutter. Shared wide
+ * evidence fields stay centered while their border box and common .5rem hard
+ * shadow end before the rail; tables and diagrams keep any two-dimensional
+ * overflow inside that frame.
+ */
+@media screen and (min-width: 56.0625rem) {
+    .page-section-rail + main :is(.table-figure--wide, .story-visual) {
+        inline-size: min(calc(100vw - 10rem), var(--canvas-editorial-measure));
+        margin-inline: 50%;
+        transform: translateX(-50%);
+    }
+}
+
 main :where([id]) {
     scroll-margin-block-start: 6rem;
 }

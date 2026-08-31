@@ -4,15 +4,14 @@
 collaboration_account:
   id: "prototype-exemplars.skill-use.context-canvas-contrast-convergence.2026-08-31"
   observed_on: "2026-08-31"
-  standing: "first natural use and human-approved architectural result"
+  standing: "first natural use, human-approved architectural result, and first independent responsive-geometry exercise"
   work_surface: "Context Canvas link contrast, adjacent accessibility, and visual-consistency planning"
-  issues: [51, 58, 147, 148, 149, 150, 151]
+  issues: [51, 58, 147, 148, 149, 150, 151, 155]
   routes:
-    create_now: "context-canvas-visual-verification"
-    iterate_now: ["context-canvas-css-ownership", "context-canvas-surface-reading"]
+    iterate_now: ["context-canvas-visual-verification", "context-canvas-css-ownership", "context-canvas-surface-reading"]
     queue_with_trigger: ["semantic-information-surface-authoring", "agent-observation-channel-agreement"]
     observe: ["surface-color-state-stewardship"]
-  next_return: "after milestone-22 issue 151 exercises visual verification or issues 150/149 change a billet disposition"
+  next_return: "after issue 155 review/merge, issue 151 broadens the contract, or issues 150/149 change a billet disposition"
 ```
 
 ## Working moment
@@ -76,17 +75,32 @@ The [visual consistency skill-cultivation plan](../../planning/context-canvas/vi
 
 ## Issue and milestone consequence
 
-Milestone 22, **Visual Consistency and Semantic-Visual Agreement**, receives three bounded issues after the contrast pull request associated with #51 merges:
+Milestone 22, **Visual Consistency and Semantic-Visual Agreement**, receives four bounded issues after merged pull request #152 settles #51's contrast tranche:
 
 - #151 evolves the visual-state contract;
-- #150 probes reading comfort and scan support; and
-- #149 establishes the first semantic-visual agreement probe.
+- #150 probes reading comfort and scan support;
+- #149 establishes the first semantic-visual agreement probe; and
+- #155 keeps wide evidence frames clear of medium-viewport reading rails.
+
+Issue #51 remains active for its broader modular-CSS acceptance.
 
 Existing #147 and #148 keep iframe carrier work in milestone 4. Issue #58 receives skill-disposition evidence rather than a duplicate generic skill issue.
 
+## Natural-use return — medium-viewport Debrief containment
+
+Issue #155 supplied the first independent exercise before #151 began its broader contract work. The accepted narrow, desktop, and wide reference matrix had left exact responsive thresholds open. At the FMI route's 75rem transition, the custom reading rail reserved 15rem inside each content container while shared wide fields remained viewport-relative. The population frame moved from about 48px inside the viewport at 1199px to 72px beyond the left edge at 1200px and remained clipped through 1728px. Shared generated rails also occupied the right edge of wide evidence frames across representative Debriefs.
+
+Two bounded Spark Solution packets returned observation-only support after availability resumed. One identified the visual-check viewport gap and proposed a focused regression shape. One confirmed that existing visual-verification, CSS-ownership, surface-reading, collaboration-accounting, and repository-cycle owners already cover the collaboration result. Their stop conditions arrived before repository mutation; architectural synthesis and implementation remained with this cycle.
+
+The resulting evidence route brackets the 56rem, 64rem, and 75rem source seams, samples common laptop widths, measures each outer figure and a half-rem inline-end paint reserve against the viewport and active rail, and preserves local table scrolling. Stable FMI, Genomic Viewer, and Prompt-Side anchors keep the dynamic family sweep from becoming vacuous. The existing visual-verification skill receives the breakpoint-adjacent rule. A new skill or runbook remains at rest because it would duplicate an exercised receiving owner.
+
+The focused local Chromium return covers 32 top-level wide-field routes, 419 route/viewport observations, and 2,276 visible of 2,276 matched outer-frame observations, with a 6.03px minimum gap after the half-rem inline-end paint reserve. It establishes non-vacuous anchor discovery, frame presence and visibility, expected-rail presence, viewport containment, painted-frame clearance, the FMI compact-left-rail boundary, and retained local table-scroll ownership across the named matrix. Other browser engines and human reading comfort retain their milestone-22 receivers.
+
+The source repair remains split by ownership: `canvas-shell.css` reserves the generated rail's medium-width field, and `fmi-lims-eln-replatforming.css` subtracts the custom rail reserve from the route's viewport-relative evidence measure. Prototype and iframe-document interiors retain their existing owners.
+
 ## Present limits
 
-- The formed visual-verification skill has one complete natural use and remains an exercised draft.
+- The formed visual-verification skill has one formation cycle and one independent responsive-geometry exercise; it remains an exercised draft.
 - Fatigue and commitment retain interpretive and human-evidence boundaries.
 - BrowserGym, WebArena, and VisualWebArena describe observation-channel possibilities; no local agent-task outcome has yet formed.
 - Real Windows High Contrast, text-spacing, and 200%/400% reflow remain milestone-22 observations.
@@ -94,6 +108,6 @@ Existing #147 and #148 keep iframe carrier work in milestone 4. Issue #58 receiv
 
 ## Re-entry
 
-Return after the contrast pull request associated with #51 merges and issue #151 selects its first independent surface. A trigger, evidence, coverage, or handoff friction can revise visual verification. Issue #150 can precipitate semantic information-surface authoring only after distinct intervention and human/task evidence appear. Issue #149 can precipitate agent observation-channel agreement only after a local cross-channel divergence materially changes a repair or automation decision.
+Return after Issue #155 receives review and merge disposition, or when #151 selects a broader visual-state surface. A trigger, evidence, coverage, or handoff friction can revise visual verification. Issue #150 can precipitate semantic information-surface authoring after distinct intervention and human/task evidence appear. Issue #149 can precipitate agent observation-channel agreement after a local cross-channel divergence materially changes a repair or automation decision.
 
 Another stewardship pass closes quickly when the same evidence leaves these dispositions unchanged. The milestone issues and material visitor work remain the primary source of new signal.

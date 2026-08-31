@@ -4,8 +4,8 @@
 planning_surface:
   id: "context-canvas.visual-consistency-skill-cultivation.v0.1"
   as_of: "2026-08-31"
-  evidence_source: "Context Canvas contrast convergence on Issue #51"
-  active_catalog_after_change: 18
+  evidence_source: "Context Canvas contrast convergence on Issue #51 and medium-viewport exercise on Issue #155"
+  active_catalog_after_change: 19
   candidate_receiver: "Issue #58 — Steward repository skill candidates through natural receiving use"
   private_lineage: "authorized Enterprise Human-AI Practitioner Registry resolver"
   public_plan: "planning/repository-skill-architecture.md"
@@ -55,7 +55,20 @@ The Collaboration Skills 0.1.0 schema already distinguishes candidate/routable/r
 - **Boundaries:** Authored source owns intent; screenshots are comparison evidence; resting captures leave interaction states open; prototype interiors retain separate owners.
 - **Result:** A source-bound all-page, affected-family, or focused observation with exact command, normalized result, coverage limit, environment risk, and next receiver.
 
-The skill forms as an exercised draft. The contrast cycle is its first natural-use account, and milestone-22 issue #151 is its next independent use. A near miss—such as using the all-page screenshot run to claim hover or print behavior—can change its routing or evidence rules.
+The skill forms as an exercised draft. The contrast cycle is its first natural-use account. Milestone-22 issue #155 is its first independent use, and #151 remains the broader contract-evolution receiver. A near miss—such as using the all-page screenshot run to claim hover or print behavior—can change its routing or evidence rules.
+
+## First independent exercise — Issue #155
+
+The medium-viewport Debrief repair changed one evidence-selection decision. Standing narrow, desktop, and wide captures had left the 75rem source seam unobserved. A focused browser probe bracketed 1199px and 1200px, then showed that the FMI population frame stayed beyond the left viewport edge through 1728px. A consumer sweep also showed shared generated-rail contact across several Debrief routes and exercised every current top-level wide-field route.
+
+The existing skill receives an `iterate_now` revision:
+
+- bracket a media-query or container-query threshold with the last practical width before it and the first width at or after it;
+- add a representative width inside the affected interval when the condition persists;
+- measure the outer frame and the neighboring fixed or sticky surface that can cover it; and
+- preserve a wide table's local two-dimensional scrolling while its outer figure remains contained.
+
+The focused browser contract is implementation evidence rather than a new skill. The repository collaboration cycle already supplies the full-cycle runbook; CSS ownership supplies the cascade owner; surface reading supplies the visitor and observation channels. This use therefore revises visual verification and leaves new runbook and candidate-skill formation at rest.
 
 The former `Visual-reference cycle` billet precipitates into this broader contract. `Visual-fingerprint stewardship` folds into its fingerprint-versus-regression rule. The new name reflects the receiving job rather than one tool or artifact.
 
@@ -112,7 +125,7 @@ The repository cannot truthfully mutate the exact private Registry without its a
 
 | Public semantic identity | Private Registry contribution to preserve | Public receiving surface | Acceptance event |
 | --- | --- | --- | --- |
-| Context Canvas visual verification | First natural use, boundary cases, environment limits, and next independent exercise | Active skill, this plan, #151, and the collaboration account | Private Registry owner records the exercised-draft standing or returns a correction |
+| Context Canvas visual verification | First natural use, Issue #155 breakpoint-adjacent exercise, boundary cases, and environment limits | Active skill, this plan, #155, #151, and the collaboration account | Private Registry owner records the exercised-draft standing or returns a correction |
 | Surface color and state ownership | Two-level role architecture, owner invariant, print/visited/forced-color evidence split | CSS-ownership reference and #151 | Private Registry owner accepts the existing-owner revision |
 | Reading attention ergonomics | Fatigue and scanning evidence with the non-prescriptive F-pattern boundary | This billet and #150 | A natural use supplies human/task evidence or returns the billet to rest |
 | Agent observation channel agreement | BrowserGym/WebArena/VisualWebArena source evidence and local-task forge condition | This billet and #149 | A cross-channel task changes a repair or automation decision |
@@ -121,7 +134,7 @@ The public records carry semantic identity, contribution, evidence standing, and
 
 ## Natural-use observation plan
 
-The next materially similar cycles answer these questions:
+The next materially similar cycles answer these questions. Issue #155 supplies an initial affirmative observation for questions 1 and 2 while leaving transfer open:
 
 1. Does the visual-verification description activate for a real visual state and stay quiet for behavior-neutral source work?
 2. Does a collaborator choose an affected-family or focused check instead of defaulting to a full matrix?
@@ -134,8 +147,9 @@ A decision-changing friction returns through #58 and the collaboration account. 
 
 ## Hand forward
 
-- The review-ready #51 pull request carries the formed skill and existing-owner revisions.
-- #151 exercises the visual-verification contract after merge.
+- Merged pull request #152 carries the formed skill and existing-owner revisions from #51.
+- #155 supplies the first independent breakpoint-adjacent exercise and focused geometry contract.
+- #151 continues the wider visual-state-contract evolution.
 - #150 and #149 carry the two public billets' forge conditions.
 - #58 receives the public disposition account.
 - Milestone 14 can receive a later cross-platform exercise after one other environment uses the formed contract or a billet precipitates.
