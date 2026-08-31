@@ -513,6 +513,15 @@
         padding-inline-end: 15rem;
     }
 
+    /*
+     * The full reading rail reserves 15rem from the viewport-relative field.
+     * Centering on the remaining canvas then preserves the shared 4vw start
+     * gutter instead of sending evidence beyond the viewport edge.
+     */
+    .fmi-lims-eln-page :is(.table-figure--wide, .story-visual) {
+        inline-size: min(calc(92vw - 15rem), var(--canvas-editorial-measure));
+    }
+
     .fmi-reading-rail {
         border: .125rem solid var(--fmi-ink);
         box-shadow: .4rem .4rem 0 var(--fmi-ink);
