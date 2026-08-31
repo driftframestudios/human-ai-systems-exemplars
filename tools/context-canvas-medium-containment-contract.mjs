@@ -11,6 +11,11 @@ const FMI_EDGE_WIDTHS = Object.freeze([1280, 1776, 1777]);
 const FMI_ROUTE = "fmi-lims-eln-replatforming.html";
 const FRAME_SELECTOR = ".table-figure--wide, .story-visual";
 const TOLERANCE = 1;
+const ANCHOR_ROUTES = Object.freeze([
+  FMI_ROUTE,
+  "genomic-viewer-replatforming.html",
+  "prompt-side-conditions-practice.html"
+]);
 const RAIL_OPTIONAL_ROUTES = new Set([
   // This information-radiator exemplar has one authored section destination,
   // so canvas-shell.js intentionally leaves the generated rail at rest.
@@ -69,6 +74,7 @@ async function observeGeometry(page) {
     }
 
     const viewportWidth = document.documentElement.clientWidth;
+    const rootFontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize);
     const matchedFrames = Array.from(document.querySelectorAll(frameSelector));
     const frames = matchedFrames.flatMap((element, index) => {
       const rect = element.getBoundingClientRect();
@@ -111,6 +117,9 @@ async function observeGeometry(page) {
     return {
       viewportWidth,
       documentScrollWidth: document.documentElement.scrollWidth,
+      // Shared Cobalt and Debrief evidence owners paint a .5rem inline-end
+      // hard shadow beyond DOMRect. Keep that owned paint clear of the rail.
+      inlineEndPaintReserve: rootFontSize * 0.5,
       matchedFrameCount: matchedFrames.length,
       frames,
       rail,
@@ -139,7 +148,7 @@ function collectFailures(route, width, observation) {
   const failures = [];
   const prefix = `${route} at ${width}px`;
   const viewportEscapes = [];
-  const rightRailEntries = [];
+  const rightRailPaintEntries = [];
   const leftRailEntries = [];
   const expectedRailClass = route === FMI_ROUTE
     ? "fmi-reading-rail"
@@ -171,8 +180,11 @@ function collectFailures(route, width, observation) {
     if (frame.rect.left < -TOLERANCE || frame.rect.right > observation.viewportWidth + TOLERANCE) {
       viewportEscapes.push(`${label} (${frame.rect.left.toFixed(2)}px to ${frame.rect.right.toFixed(2)}px)`);
     }
-    if (observation.rail?.side === "right" && frame.rect.right > observation.rail.rect.left + TOLERANCE) {
-      rightRailEntries.push(`${label} (${frame.rect.right.toFixed(2)}px / ${observation.rail.rect.left.toFixed(2)}px)`);
+    const paintedRight = frame.rect.right + observation.inlineEndPaintReserve;
+    if (observation.rail?.side === "right" && paintedRight > observation.rail.rect.left + TOLERANCE) {
+      rightRailPaintEntries.push(
+        `${label} (${paintedRight.toFixed(2)}px painted / ${observation.rail.rect.left.toFixed(2)}px rail)`
+      );
     }
     if (
       observation.rail?.side === "left" &&
@@ -188,8 +200,11 @@ function collectFailures(route, width, observation) {
   if (viewportEscapes.length) {
     failures.push(`${prefix}: ${viewportEscapes.length} wide frame(s) escape the viewport; first: ${viewportEscapes[0]}.`);
   }
-  if (rightRailEntries.length) {
-    failures.push(`${prefix}: ${rightRailEntries.length} wide frame(s) enter the right rail field; first frame/rail edges: ${rightRailEntries[0]}.`);
+  if (rightRailPaintEntries.length) {
+    failures.push(
+      `${prefix}: ${rightRailPaintEntries.length} wide frame paint reserve(s) enter the right rail field; ` +
+      `first painted frame/rail edges: ${rightRailPaintEntries[0]}.`
+    );
   }
   if (leftRailEntries.length) {
     failures.push(`${prefix}: ${leftRailEntries.length} wide frame(s) enter the left rail field; first frame/rail edges: ${leftRailEntries[0]}.`);
@@ -237,11 +252,19 @@ function collectFailures(route, width, observation) {
 
 async function main() {
   const surfaceRoutes = await discoverWideFieldRoutes();
+  if (!surfaceRoutes.length) {
+    throw new Error("Context Canvas medium containment contract discovered zero wide-field routes.");
+  }
+  const missingAnchors = ANCHOR_ROUTES.filter((route) => !surfaceRoutes.includes(route));
+  if (missingAnchors.length) {
+    throw new Error(`Context Canvas medium containment anchors are missing: ${missingAnchors.join(", ")}.`);
+  }
   const browser = await chromium.launch();
   const failures = [];
   let observations = 0;
   let framesObserved = 0;
   let framesMatched = 0;
+  let minimumRightRailPaintGap = Number.POSITIVE_INFINITY;
 
   try {
     for (const route of surfaceRoutes) {
@@ -257,6 +280,14 @@ async function main() {
         observations += 1;
         framesObserved += observation.frames.length;
         framesMatched += observation.matchedFrameCount;
+        if (observation.rail?.side === "right") {
+          for (const frame of observation.frames) {
+            minimumRightRailPaintGap = Math.min(
+              minimumRightRailPaintGap,
+              observation.rail.rect.left - (frame.rect.right + observation.inlineEndPaintReserve)
+            );
+          }
+        }
         failures.push(...collectFailures(route, width, observation));
       }
 
@@ -275,7 +306,8 @@ async function main() {
 
   console.log(
     `Context Canvas medium containment contract passed in ${ENGINE_LABEL}: ${surfaceRoutes.length} wide-field routes, ` +
-    `${observations} route/viewport observations, ${framesObserved}/${framesMatched} visible/matched wide-frame observations.`
+    `${observations} route/viewport observations, ${framesObserved}/${framesMatched} visible/matched wide-frame observations, ` +
+    `${minimumRightRailPaintGap.toFixed(2)}px minimum painted rail gap.`
   );
 }
 

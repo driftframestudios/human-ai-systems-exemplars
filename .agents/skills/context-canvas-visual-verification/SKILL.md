@@ -35,7 +35,7 @@ One affected route and one standing viewport often suffice for a localized repai
 
 When a media query, container query, or responsive owner changes geometry, observe the last practical width before the threshold and the first width at or after it. Add a representative width inside the affected interval when the condition can persist beyond the seam. Named device categories support review; source-adjacent widths establish whether the responsive transition itself is continuous and contained.
 
-Measure the outer frame and any fixed or sticky neighbor that can cover it. A wide table may remain larger than its local scroll region, while the scroll region and its outer figure stay inside the available visitor field. Page-level `scrollWidth` establishes one useful boundary and leaves negative-positioned content under `overflow: clip` open for direct geometry observation.
+Measure the outer frame, its visible paint extent, and any fixed or sticky neighbor that can cover it. Borders, outlines, and shadows can paint beyond `getBoundingClientRect()`, so a geometry contract names the reserve it adds or pairs the measurement with a paint-sensitive comparison. A wide table may remain larger than its local scroll region, while the scroll region and its outer figure stay inside the available visitor field. Page-level `scrollWidth` establishes one useful boundary and leaves negative-positioned content under `overflow: clip` open for direct geometry observation.
 
 ### Rule: Fingerprint and regression remain distinct
 
@@ -96,6 +96,7 @@ Given a fixed reading rail changes geometry at a named responsive threshold<br>
 And a wide evidence frame uses viewport-relative sizing inside the affected content field<br>
 When the route is observed immediately before and after that threshold<br>
 Then the outer frame remains inside the viewport and clear of the rail<br>
+And its owned border, outline, and shadow paint remain clear of that rail<br>
 And any wider table content remains available through its named local scroll region<br>
 And one representative width inside the affected interval establishes whether the condition persists beyond the seam
 
