@@ -211,13 +211,11 @@
     box-shadow: 0 0 0 .125rem var(--canvas-paper, #fffaf2), 0 0 0 .25rem var(--canvas-cobalt, #2855f3);
 }
 
-.page-section-rail__label {
-    display: none;
-}
-
 .page-section-rail__readout {
+    --page-section-rail-readout-paint-reserve: .25rem;
     background: var(--about-deep-forest-charcoal, #242a24);
     border: .0625rem solid #fffaf2;
+    box-sizing: border-box;
     box-shadow: .2rem .2rem 0 rgb(23 52 95 / .28);
     color: #fffaf2;
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
@@ -236,15 +234,26 @@
     transform: translate(.35rem, -50%);
     transition: opacity .14s ease, transform .14s ease;
     visibility: hidden;
+    overflow-wrap: anywhere;
+    z-index: 2;
 }
 
 .page-section-rail__readout.is-visible {
     opacity: 1;
+    pointer-events: auto;
     transform: translate(0, -50%);
     visibility: visible;
 }
 
-.page-section-rail__link:focus-visible {
+.page-section-rail__readout::before {
+    content: "";
+    inline-size: 1rem;
+    inset-block: 0;
+    inset-inline-start: 100%;
+    position: absolute;
+}
+
+.page-section-rail .page-section-rail__link:focus-visible {
     outline: .2rem solid var(--canvas-cobalt, #2855f3);
     outline-offset: .05rem;
 }
@@ -328,40 +337,20 @@ h2.super-footer__heading {
         inline-size: 1.16rem;
     }
 
-    .page-section-rail__label {
-        background: var(--about-deep-forest-charcoal, #242a24);
-        border: .0625rem solid #fffaf2;
-        box-shadow: .18rem .18rem 0 rgb(23 52 95 / .28);
-        color: #fffaf2;
+    .page-section-rail__readout {
         display: block;
-        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-        font-size: .68rem;
-        font-weight: 800;
-        inline-size: max-content;
-        inset-block-start: 50%;
         inset-inline: calc(100% + .4rem) auto;
-        line-height: 1.35;
-        max-inline-size: min(19rem, calc(100vw - 3rem));
-        opacity: 0;
-        padding: .35rem .5rem;
-        pointer-events: none;
-        position: absolute;
-        text-wrap: balance;
+        max-inline-size: min(19rem, calc(100vw - 3rem - env(safe-area-inset-left) - env(safe-area-inset-right)));
         transform: translate(-.3rem, -50%);
-        transition: opacity .14s ease, transform .14s ease, visibility .14s ease;
-        visibility: hidden;
-        z-index: 2;
     }
 
-    .page-section-rail__readout {
-        display: none;
+    .page-section-rail__readout::before {
+        inline-size: .75rem;
+        inset-inline: auto 100%;
     }
 
     .page-section-rail--source .page-section-rail__readout {
-        display: block;
-        inset-inline: calc(100% + .4rem) auto;
-        max-inline-size: min(16rem, calc(100vw - 3rem));
-        transform: translate(-.3rem, -50%);
+        max-inline-size: min(16rem, calc(100vw - 3rem - env(safe-area-inset-left) - env(safe-area-inset-right)));
     }
 
     .page-section-rail--source ol {
@@ -379,23 +368,13 @@ h2.super-footer__heading {
         transform: translate(0, -50%);
     }
 
-    .page-section-rail--source .page-section-rail__label {
-        display: none;
-    }
-
-    .page-section-rail__link:is(:hover, :focus-visible) .page-section-rail__label {
-        opacity: 1;
-        transform: translate(0, -50%);
-        visibility: visible;
-    }
-
     .page-section-rail__link:is(:hover, :focus-visible) {
         z-index: 3;
     }
 
-    .page-section-rail__link:focus-visible {
+    .page-section-rail .page-section-rail__link:focus-visible {
         background: var(--canvas-paper, #fffaf2);
-        outline-offset: 0;
+        outline-offset: -.2rem;
     }
 }
 
@@ -407,9 +386,9 @@ h2.super-footer__heading {
 
 @media (prefers-reduced-motion: reduce) {
     .page-section-rail__readout,
-    .page-section-rail__label,
+    .page-section-rail__link,
     .page-section-rail__link::before {
-        transition: none;
+        transition: none !important;
     }
 }
 
@@ -419,8 +398,7 @@ h2.super-footer__heading {
         border-color: CanvasText;
     }
 
-    .page-section-rail__readout,
-    .page-section-rail__label {
+    .page-section-rail__readout {
         background: Canvas;
         border-color: CanvasText;
         color: CanvasText;
