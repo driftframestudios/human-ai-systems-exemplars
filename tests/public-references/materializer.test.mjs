@@ -14,6 +14,7 @@ import { dirname, join, win32 } from "node:path";
 import test from "node:test";
 
 import {
+  PUBLIC_AUTHOR_PROFILE_KEY,
   PUBLIC_IFRAME_NAMESPACE,
   PUBLIC_REFERENCE_NAMESPACE,
   PUBLIC_REFERENCE_SOURCE,
@@ -29,6 +30,7 @@ const IFRAME_ROUTE = "https://iframes.vik.guru/v1/core/heart-chart/";
 const CONDITIONING_IFRAME_KEY = "PUBLIC_URL_IFRAME_CORE_CONDITIONING_FIELD";
 const CONDITIONING_IFRAME_ROUTE =
   "https://iframes.vik.guru/v1/core/conditioning-field/";
+const PROFILE_ROUTE = "https://profiles.example/practitioner";
 const APP_NOTION_HOST = ["app", "notion", "com"].join(".");
 const WORKSPACE_NOTION_HOST = ["workspace", "notion", "so"].join(".");
 const SITE_NOTION_HOST = ["registry-example", "notion", "site"].join(".");
@@ -69,6 +71,33 @@ function pageWithIframeTwins(key = IFRAME_KEY) {
     <a href="${local}" data-public-href="{{${key}}}">Open HEART Chart</a>
   </body>
 </html>\n`;
+}
+
+function professionalProfileScript(key = PUBLIC_AUTHOR_PROFILE_KEY) {
+  return `(function () {
+  "use strict";
+  var professionalProfileRoute = "{{${key}}}";
+  if (professionalProfileRoute.indexOf("{{PUBLIC_URL_") === -1) {
+    var professionalProfileLink = element("a", "", "Professional profile");
+    professionalProfileLink.href = professionalProfileRoute;
+    professionalProfileLink.setAttribute("aria-label", "View the author's professional profile");
+    network.appendChild(professionalProfileLink);
+  } else {
+    network.appendChild(
+      element(
+        "span",
+        "super-footer__reserved",
+        "Professional profile available in the public build",
+      ),
+    );
+  }
+}());\n`;
+}
+
+async function addProfessionalProfileScript(paths, source = professionalProfileScript()) {
+  const path = join(paths.htmlRoot, "canvas-shell.js");
+  await writeFile(path, source, "utf8");
+  return { path, source };
 }
 
 async function iframeRouteManifest(paths, {
@@ -183,6 +212,173 @@ test("materializes one resolved value into HTML and JSON-LD without changing sou
   const [jsonLd] = jsonLdBodies(generated).map((body) => JSON.parse(body));
   assert.equal(jsonLd.citation, approved);
   assert.deepEqual(await readFile(join(paths.outputRoot, "asset.bin")), asset);
+});
+
+test("materializes the exact shared professional-profile carrier without changing authored JavaScript", async (t) => {
+  const paths = await fixture(t, "<!doctype html><html><body></body></html>\n");
+  const authored = await addProfessionalProfileScript(paths);
+
+  const result = await materializePublicReferences({
+    ...paths,
+    environment: { [PUBLIC_AUTHOR_PROFILE_KEY]: PROFILE_ROUTE },
+  });
+
+  assert.equal(result.keyCount, 1);
+  assert.equal(result.occurrenceCount, 1);
+  assert.equal(result.anchorCount, 1);
+  assert.equal(result.affectedHtmlFileCount, 0);
+  assert.equal(result.affectedScriptFileCount, 1);
+  assert.equal(result.affectedSourceFileCount, 1);
+  assert.deepEqual(result.keys, [PUBLIC_AUTHOR_PROFILE_KEY]);
+  assert.equal(await readFile(authored.path, "utf8"), authored.source);
+
+  const generated = await readFile(
+    join(paths.outputRoot, "context-canvas", "canvas-shell.js"),
+    "utf8",
+  );
+  assert.match(
+    generated,
+    /var professionalProfileRoute = "https:\/\/profiles\.example\/practitioner";/,
+  );
+  assert.match(
+    generated,
+    /professionalProfileLink\.href\s*=\s*professionalProfileRoute/,
+  );
+  assert.equal(generated.includes("{{PUBLIC_URL_AUTHOR"), false);
+});
+
+test("preserves replacement-significant characters in a professional-profile destination", async (t) => {
+  const paths = await fixture(t, "<!doctype html><html><body></body></html>\n");
+  await addProfessionalProfileScript(paths);
+  const configured = "https://profiles.example/practitioner/$&?context=$'";
+  const expected = new URL(configured).href;
+
+  await materializePublicReferences({
+    ...paths,
+    environment: { [PUBLIC_AUTHOR_PROFILE_KEY]: configured },
+  });
+
+  const generated = await readFile(
+    join(paths.outputRoot, "context-canvas", "canvas-shell.js"),
+    "utf8",
+  );
+  const assignment = generated.match(
+    /var professionalProfileRoute = ("(?:[^"\\]|\\.)*");/u,
+  );
+  assert.ok(assignment);
+  assert.equal(JSON.parse(assignment[1]), expected);
+});
+
+test("keeps the professional-profile key within one exact script carrier", async (t) => {
+  await t.test("carrier outside the shared shell", async (t) => {
+    const paths = await fixture(t, "<!doctype html><html><body></body></html>\n");
+    await writeFile(
+      join(paths.htmlRoot, "route.js"),
+      `export const route = "{{${PUBLIC_AUTHOR_PROFILE_KEY}}}";\n`,
+      "utf8",
+    );
+    await assertContractFailure(
+      materializePublicReferences({
+        ...paths,
+        environment: { [PUBLIC_AUTHOR_PROFILE_KEY]: PROFILE_ROUTE },
+      }),
+      "PUBLIC_REFERENCE_TOKEN_SCOPE",
+    );
+  });
+
+  await t.test("second carrier in the shared shell", async (t) => {
+    const paths = await fixture(t, "<!doctype html><html><body></body></html>\n");
+    await addProfessionalProfileScript(
+      paths,
+      professionalProfileScript().replace(
+        'if (professionalProfileRoute.indexOf("{{PUBLIC_URL_") === -1) {',
+        `var secondProfileRoute = "{{${PUBLIC_AUTHOR_PROFILE_KEY}}}";\n  if (professionalProfileRoute.indexOf("{{PUBLIC_URL_") === -1) {`,
+      ),
+    );
+    await assertContractFailure(
+      materializePublicReferences({
+        ...paths,
+        environment: { [PUBLIC_AUTHOR_PROFILE_KEY]: PROFILE_ROUTE },
+      }),
+      "PUBLIC_REFERENCE_PROFILE_CARRIER",
+    );
+  });
+
+  for (const [label, mutate] of [
+    [
+      "inverted authored-token guard",
+      (source) => source.replace("=== -1", "!== -1"),
+    ],
+    [
+      "missing source-mode fallback",
+      (source) => source.replace(/\s*else\s*\{[\s\S]*?\n  \}\n\}\(\)\);/u, "\n  }\n}());"),
+    ],
+    [
+      "additional destination sink",
+      (source) => source.replace(
+        "professionalProfileLink.href = professionalProfileRoute;",
+        "professionalProfileLink.href = professionalProfileRoute;\n    navigator.sendBeacon(professionalProfileRoute);",
+      ),
+    ],
+    [
+      "additional indirect link sink",
+      (source) => source.replace(
+        "network.appendChild(professionalProfileLink);",
+        "navigator.sendBeacon(professionalProfileLink.href);\n    network.appendChild(professionalProfileLink);",
+      ),
+    ],
+  ]) {
+    await t.test(label, async (t) => {
+      const paths = await fixture(t, "<!doctype html><html><body></body></html>\n");
+      await addProfessionalProfileScript(paths, mutate(professionalProfileScript()));
+      await assertContractFailure(
+        materializePublicReferences({
+          ...paths,
+          environment: { [PUBLIC_AUTHOR_PROFILE_KEY]: PROFILE_ROUTE },
+        }),
+        "PUBLIC_REFERENCE_PROFILE_CARRIER",
+      );
+    });
+  }
+
+  await t.test("unsupported sibling key", async (t) => {
+    const paths = await fixture(t, "<!doctype html><html><body></body></html>\n");
+    await addProfessionalProfileScript(
+      paths,
+      professionalProfileScript("PUBLIC_URL_AUTHOR_OTHER_PROFILE"),
+    );
+    await assertContractFailure(
+      materializePublicReferences({ ...paths, environment: {} }),
+      "PUBLIC_REFERENCE_TOKEN_NAMESPACE",
+    );
+  });
+
+  await t.test("missing destination", async (t) => {
+    const paths = await fixture(t, "<!doctype html><html><body></body></html>\n");
+    await addProfessionalProfileScript(paths);
+    await assertContractFailure(
+      materializePublicReferences({ ...paths, environment: {} }),
+      "PUBLIC_REFERENCE_VALUE_MISSING",
+    );
+  });
+
+  for (const [label, value, code] of [
+    ["requires an absolute HTTPS destination", "profiles.example/practitioner", "PUBLIC_REFERENCE_VALUE_URL"],
+    ["requires a credential-free destination", "https://person:secret@profiles.example/practitioner", "PUBLIC_REFERENCE_VALUE_CREDENTIAL"],
+  ]) {
+    await t.test(label, async (t) => {
+      const paths = await fixture(t, "<!doctype html><html><body></body></html>\n");
+      await addProfessionalProfileScript(paths);
+      await assertContractFailure(
+        materializePublicReferences({
+          ...paths,
+          environment: { [PUBLIC_AUTHOR_PROFILE_KEY]: value },
+        }),
+        code,
+        value,
+      );
+    });
+  }
 });
 
 test("materializes a hosted iframe while its full-view route stays on the local base artifact", async (t) => {
@@ -626,6 +822,10 @@ test("accepts only scoped public tokens in their complete carriers", async (t) =
       "PUBLIC_REFERENCE_TOKEN_LOOKALIKE",
     ],
     [
+      "<p>{{PUBLIC_URL_</p>",
+      "PUBLIC_REFERENCE_UNRESOLVED",
+    ],
+    [
       `<a href="https://${APP_NOTION_HOST}/p/private-coordinate">Reading</a>`,
       "PUBLIC_REFERENCE_DIRECT_NOTION_URL",
     ],
@@ -924,7 +1124,8 @@ test("the repository source materializes from discovered keys without frozen rou
   for (const key of inventory.keys) {
     assert.equal(
       key.startsWith(PUBLIC_REFERENCE_NAMESPACE) ||
-        key.startsWith(PUBLIC_IFRAME_NAMESPACE),
+        key.startsWith(PUBLIC_IFRAME_NAMESPACE) ||
+        key === PUBLIC_AUTHOR_PROFILE_KEY,
       true,
     );
   }
@@ -974,7 +1175,11 @@ test("the repository source materializes from discovered keys without frozen rou
   }
 
   const before = new Map();
-  for (const record of inventory.htmlFiles) {
+  const materializedRecords = [
+    ...inventory.htmlFiles,
+    ...inventory.scriptFiles,
+  ];
+  for (const record of materializedRecords) {
     if (record.inspection.occurrenceCount === 0) continue;
     before.set(record.path, await readFile(record.path, "utf8"));
   }
@@ -984,7 +1189,9 @@ test("the repository source materializes from discovered keys without frozen rou
   const environment = Object.fromEntries(
     [...inventory.keys].map((key) => [
       key,
-      `https://registry.example/readings/${key.slice(PUBLIC_REFERENCE_NAMESPACE.length).toLowerCase()}`,
+      key === PUBLIC_AUTHOR_PROFILE_KEY
+        ? PROFILE_ROUTE
+        : `https://registry.example/readings/${key.slice(PUBLIC_REFERENCE_NAMESPACE.length).toLowerCase()}`,
     ]),
   );
   const outputRoot = join(root, "context-canvas-project-surface");
@@ -995,15 +1202,22 @@ test("the repository source materializes from discovered keys without frozen rou
     environment,
   });
 
-  for (const record of inventory.htmlFiles) {
+  for (const record of materializedRecords) {
     if (record.inspection.occurrenceCount === 0) continue;
     assert.equal(await readFile(record.path, "utf8"), before.get(record.path));
     const generated = await readFile(join(outputRoot, record.safePath), "utf8");
-    assert.equal(generated.includes("{{PUBLIC_URL"), false);
+    assert.doesNotMatch(generated, /\{\{PUBLIC_URL_[A-Z0-9_]+\}\}/);
     for (const body of jsonLdBodies(generated)) {
       if (body.includes("https://registry.example/")) JSON.parse(body);
     }
   }
+
+  const generatedShell = await readFile(
+    join(outputRoot, "context-canvas/canvas-shell.js"),
+    "utf8",
+  );
+  assert.match(generatedShell, /var professionalProfileRoute = "https:\/\/profiles\.example\/practitioner";/);
+  assert.match(generatedShell, /professionalProfileLink\.href\s*=\s*professionalProfileRoute/);
 
   const generatedCarrierSource = await readFile(
     join(

@@ -98,11 +98,18 @@ Serving the repository root preserves the relative paths used by shared images, 
 
 ## Materialize approved public references
 
-Authored Context Canvas HTML carries stable `PUBLIC_URL_REGISTRY_*` semantic
-keys as complete anchor `href` values and JSON-LD strings. The visible label,
-neighboring explanation, and semantic key keep the source legible before a
-public build; materialization supplies the ordinary external link. Direct
-Notion page routes stay outside this authored visitor tree.
+Authored Context Canvas sources carry stable public-reference keys. Registry
+keys appear as complete anchor `href` values and JSON-LD strings. One exact
+`PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE` key appears in the shared footer
+script. The visible label, neighboring explanation, and key keep local source
+useful before a public build; materialization supplies each approved external
+destination. Direct Notion page routes stay with the authorized resolver.
+
+The authored footer describes the professional profile as available in the
+public build. A materialized build changes that same shared carrier into an
+ordinary, same-tab “Professional profile” link with a descriptive accessible
+name. Its destination lives only in ignored `.env.public` or the delivery
+process environment.
 
 Activated Core iframe carriers use the public route manifest directly. Their
 `src` values point to stable `https://iframes.vik.guru/v1/core/.../` aliases,
@@ -140,21 +147,22 @@ An explicit process-environment value overrides the matching `.env.public`
 entry, which keeps the same build seam available to a later delivery receiver.
 The materializer never prints configured values. It rejects incomplete,
 malformed, non-HTTPS, userinfo-bearing, recognized credential-parameter,
-duplicate, or out-of-namespace public settings before replacing an accepted
-generation. Unused scoped settings remain additive; authored HTML continues
+duplicate, or unsupported public-reference settings before replacing an accepted
+generation. Unused scoped settings remain additive; authored source continues
 to define the required set. Human review keeps path-shaped access coordinates
-and unfamiliar signing conventions outside approved Registry destinations.
+and unfamiliar signing conventions with their approved receiver.
 
 The ignored output is
 `.public-reference-build/context-canvas-project-surface/`. The builder copies
-the complete `context-canvas-project-surface/` subtree, transforms only
-Context Canvas HTML, preserves other regular files byte-for-byte, validates
-the token-bearing JSON-LD, scans every copied regular file for direct Notion
-routes, and replaces the prior generation only after the complete result
-succeeds. Configuration stays outside the copied tree. Symbolic links and
-special filesystem entries stay outside this build boundary. Tracked input
-remains byte-unchanged. An operational restore failure preserves the ignored
-recovery directory for an explicit local recovery.
+the complete `context-canvas-project-surface/` subtree, transforms approved
+Context Canvas HTML carriers and the one shared footer-script carrier, and
+preserves every other regular file byte-for-byte. It validates token-bearing
+JSON-LD, scans every copied regular file for direct Notion routes, and replaces
+the prior generation only after the complete result succeeds. Configuration
+stays outside the copied tree. Symbolic links and special filesystem entries
+stay outside this build boundary. Tracked input remains byte-unchanged. An
+operational restore failure preserves the ignored recovery directory for an
+explicit local recovery.
 
 This output is a materialized subtree, not an audience decision or a complete
 delivery closure. Some Context Canvas routes intentionally reference schemas,
