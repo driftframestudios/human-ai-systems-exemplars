@@ -16,19 +16,25 @@ public. Private lineage remains recoverable through the authorized resolver.
 
 - Complete anchor `href` values and token-bearing JSON-LD strings carry one
   `PUBLIC_URL_REGISTRY_*` key per semantic receiver.
+- The shared footer script carries the exact
+  `PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE` key once. Local source presents a
+  useful availability label; a configured build presents the ordinary profile
+  link with its descriptive accessible name.
 - Visible link text and neighboring explanation keep the unmaterialized source
   orienting; the generated artifact supplies navigation to the external route.
-- Required keys are discovered from authored HTML. No separate route manifest,
-  ancestry registry, or recurring workspace census owns that truth.
+- Required keys are discovered from authored HTML and the one approved shared
+  script carrier. No separate route manifest, ancestry registry, or recurring
+  workspace census owns that truth.
 - Ignored `.env.public` values or matching process-environment values supply
   human-approved credential-free HTTPS destinations.
 - The materializer rejects URL userinfo and recognized credential-bearing query
   or fragment parameters without printing configured values. Human review owns
   path-shaped access coordinates and unfamiliar signing conventions.
 - The dependency-free Node 22 materializer copies the
-  `context-canvas-project-surface/` subtree, transforms Context Canvas HTML in a
-  temporary sibling generation, validates every accepted carrier, and then
-  replaces only an output generation bearing its ownership marker.
+  `context-canvas-project-surface/` subtree, transforms approved Context Canvas
+  HTML carriers and the shared footer-script carrier in a temporary sibling
+  generation, validates every accepted carrier, and then replaces only an
+  output generation bearing its ownership marker.
 - A configuration or validation failure leaves the prior accepted generation
   available. Diagnostics carry semantic keys and safe paths while destination
   values remain in their configured receiver.
@@ -68,10 +74,10 @@ single-file receiver; its adjacent full-view route remains local.
 The migration began with 52 Registry identities across 93 anchor and JSON-LD
 occurrences in 31 Context Canvas HTML files. That observation established the
 initial scope and confirmed one shared semantic-key family. The runnable check
-now discovers the live Registry-key and occurrence set from source, exercises
-a complete synthetic materialization, parses only token-bearing JSON-LD, and
-confirms that authored input and activated iframe destinations remain
-unchanged.
+now discovers the live Registry and professional-profile key set from source,
+exercises a complete synthetic materialization, parses only token-bearing
+JSON-LD, and confirms that authored input and activated iframe destinations
+remain unchanged.
 
 The build establishes deterministic substitution, context-appropriate escaping,
 and retained-generation recovery. It does not establish Registry ancestry,
@@ -128,8 +134,10 @@ authority layer.
 ## Re-entry
 
 Re-enter at the materializer's nearest README and test before changing build
-behavior. Reopen delivery architecture when a named public receiver owns a
-complete asset closure and approved configuration. Reopen runtime routing when
-instant rotation, vanity paths, contextual fallback, access observation, or an
-authenticated synchronization job creates a visitor or operator benefit that a
-rebuild cannot supply.
+behavior. The professional-profile destination remains in ignored local or
+delivery configuration and is ready for the production assembler’s eventual
+materialize-then-select seam. Reopen delivery architecture when a named public
+receiver owns a complete asset closure and approved configuration. Reopen
+runtime routing when instant rotation, vanity paths, contextual fallback,
+access observation, or an authenticated synchronization job creates a visitor
+or operator benefit that a rebuild cannot supply.

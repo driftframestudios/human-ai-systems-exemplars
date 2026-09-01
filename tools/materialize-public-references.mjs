@@ -47,6 +47,8 @@ export const PUBLIC_IFRAME_ROUTE_MANIFEST = join(
 );
 export const PUBLIC_REFERENCE_NAMESPACE = "PUBLIC_URL_REGISTRY_";
 export const PUBLIC_IFRAME_NAMESPACE = "PUBLIC_URL_IFRAME_";
+export const PUBLIC_AUTHOR_PROFILE_KEY =
+  "PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE";
 
 const OUTPUT_MARKER = ".public-reference-materialization.json";
 const OUTPUT_FORMAT = 1;
@@ -58,6 +60,10 @@ const PUBLIC_IFRAME_LOCAL_ROOT =
   "context-canvas/prototypes/core-architectures/chimeric-pack-v0.1";
 const PUBLIC_IFRAME_CONTEXT_CANVAS_SOURCE_ROOT =
   "context-canvas-project-surface/context-canvas";
+const PUBLIC_AUTHOR_PROFILE_SCRIPT_PATH = posix.join(
+  "context-canvas",
+  "canvas-shell.js",
+);
 const EXACT_TOKEN = /^PUBLIC_URL_(?:REGISTRY|IFRAME)_[A-Z0-9_]+$/;
 const EXACT_IFRAME_TOKEN = /^PUBLIC_URL_IFRAME_[A-Z0-9_]+$/;
 const TOKEN_OCCURRENCE = /\{\{(PUBLIC_URL[^{}\s]*)\}\}/g;
@@ -606,6 +612,12 @@ export function inspectPublicReferenceHtml(
     /\{\{PUBLIC_URL_(?:REGISTRY|IFRAME)_[A-Z0-9_]+\}\}/g,
     "",
   );
+  if (withoutExactTokens.includes("{{PUBLIC_URL")) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_UNRESOLVED",
+      `${safePath} contains an incomplete public-reference token`,
+    );
+  }
   if (PUBLIC_KEY_LOOKALIKE.test(withoutExactTokens)) {
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_TOKEN_LOOKALIKE",
@@ -637,6 +649,91 @@ export function inspectPublicReferenceHtml(
   };
 }
 
+function normalizedSafePath(safePath) {
+  return safePath.split(sep).join("/");
+}
+
+function inspectProfessionalProfileScript(
+  source,
+  safePath = PUBLIC_AUTHOR_PROFILE_SCRIPT_PATH,
+) {
+  if (normalizedSafePath(safePath) !== PUBLIC_AUTHOR_PROFILE_SCRIPT_PATH) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_TOKEN_SCOPE",
+      `${safePath} is outside the approved professional-profile script carrier`,
+    );
+  }
+  const tokens = tokenOccurrences(source);
+  if (tokens.length === 0) {
+    if (PUBLIC_KEY_LOOKALIKE.test(source)) {
+      throw new PublicReferenceContractError(
+        "PUBLIC_REFERENCE_TOKEN_LOOKALIKE",
+        `${safePath} contains a public-reference key without its complete token carrier`,
+      );
+    }
+    return {
+      keys: new Set(),
+      occurrenceCount: 0,
+      anchorCount: 0,
+      iframeCount: 0,
+      jsonLdCount: 0,
+    };
+  }
+
+  if (tokens.some((token) => token.key !== PUBLIC_AUTHOR_PROFILE_KEY)) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_TOKEN_NAMESPACE",
+      `${safePath} may carry only the exact ${PUBLIC_AUTHOR_PROFILE_KEY} public-reference token`,
+    );
+  }
+  if (tokens.length !== 1) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_PROFILE_CARRIER",
+      `${safePath} needs exactly one professional-profile token carrier`,
+    );
+  }
+
+  const assignmentPattern = new RegExp(
+    `\\bvar\\s+professionalProfileRoute\\s*=\\s*(["'])\\{\\{${PUBLIC_AUTHOR_PROFILE_KEY}\\}\\}\\1\\s*;`,
+    "g",
+  );
+  const assignments = [...source.matchAll(assignmentPattern)];
+  const routeUses = source.match(/\bprofessionalProfileRoute\b/g) ?? [];
+  const linkUses = source.match(/\bprofessionalProfileLink\b/g) ?? [];
+  const guardedLinkPattern = /if\s*\(professionalProfileRoute\.indexOf\(["']\{\{PUBLIC_URL_["']\)\s*===\s*-1\)\s*\{[\s\S]*?\bvar\s+professionalProfileLink\s*=\s*element\(["']a["'],\s*["']["'],\s*["']Professional profile["']\)\s*;[\s\S]*?\bprofessionalProfileLink\.href\s*=\s*professionalProfileRoute\s*;[\s\S]*?\bnetwork\.appendChild\(professionalProfileLink\)\s*;\s*\}\s*else\s*\{[\s\S]*?\bnetwork\.appendChild\(\s*element\(\s*["']span["'],\s*["']super-footer__reserved["'],\s*["']Professional profile available in the public build["'],?\s*\)\s*,?\s*\)\s*;\s*\}/g;
+  const guardedLinks = [...source.matchAll(guardedLinkPattern)];
+  if (
+    assignments.length !== 1 ||
+    routeUses.length !== 3 ||
+    linkUses.length !== 4 ||
+    guardedLinks.length !== 1
+  ) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_PROFILE_CARRIER",
+      `${safePath} needs one guarded professional-profile link, its source-mode availability text, and no additional destination sinks`,
+    );
+  }
+
+  const withoutExactToken = source.replace(
+    `{{${PUBLIC_AUTHOR_PROFILE_KEY}}}`,
+    "",
+  );
+  if (PUBLIC_KEY_LOOKALIKE.test(withoutExactToken)) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_TOKEN_LOOKALIKE",
+      `${safePath} contains a public-reference key outside its exact professional-profile carrier`,
+    );
+  }
+
+  return {
+    keys: new Set([PUBLIC_AUTHOR_PROFILE_KEY]),
+    occurrenceCount: 1,
+    anchorCount: 1,
+    iframeCount: 0,
+    jsonLdCount: 0,
+  };
+}
+
 async function inventoryTree(sourceRoot, htmlRoot, iframeCarrierPolicies = null) {
   const sourceState = await lstatIfPresent(sourceRoot);
   if (!sourceState?.isDirectory() || sourceState.isSymbolicLink()) {
@@ -654,6 +751,7 @@ async function inventoryTree(sourceRoot, htmlRoot, iframeCarrierPolicies = null)
 
   const files = [];
   const htmlFiles = [];
+  const scriptFiles = [];
   const keys = new Set();
   let occurrenceCount = 0;
   let anchorCount = 0;
@@ -705,6 +803,14 @@ async function inventoryTree(sourceRoot, htmlRoot, iframeCarrierPolicies = null)
         isPublicReferencePathWithin(htmlRoot, path) &&
         extname(path).toLowerCase() === ".html";
       if (!isMaterializedHtml) {
+        if (normalizedSafePath(safePath) === PUBLIC_AUTHOR_PROFILE_SCRIPT_PATH) {
+          const inspection = inspectProfessionalProfileScript(searchable, safePath);
+          scriptFiles.push({ path, safePath, inspection, source: searchable });
+          occurrenceCount += inspection.occurrenceCount;
+          anchorCount += inspection.anchorCount;
+          for (const key of inspection.keys) keys.add(key);
+          continue;
+        }
         if (searchable.includes("{{PUBLIC_URL")) {
           throw new PublicReferenceContractError(
             "PUBLIC_REFERENCE_TOKEN_SCOPE",
@@ -748,6 +854,7 @@ async function inventoryTree(sourceRoot, htmlRoot, iframeCarrierPolicies = null)
   return {
     files,
     htmlFiles,
+    scriptFiles,
     keys,
     occurrenceCount,
     anchorCount,
@@ -933,18 +1040,19 @@ async function resolveConfiguration(keys, configPath, environment) {
     );
   }
 
-  const outsideNamespace = [...assignmentInfo.assignments]
+  const unsupportedAssignments = [...assignmentInfo.assignments]
     .filter(
       (key) =>
+        key !== PUBLIC_AUTHOR_PROFILE_KEY &&
         !PUBLIC_REFERENCE_NAMESPACES.some((namespace) =>
           key.startsWith(namespace),
         ),
     )
     .sort();
-  if (outsideNamespace.length > 0) {
+  if (unsupportedAssignments.length > 0) {
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_CONFIG_NAMESPACE",
-      `the configuration includes public keys outside ${PUBLIC_REFERENCE_NAMESPACES.join(" or ")}: ${outsideNamespace.join(", ")}`,
+      `the configuration includes unsupported public-reference settings: ${unsupportedAssignments.join(", ")}`,
     );
   }
 
@@ -974,6 +1082,13 @@ function escapeHtmlAttribute(value, quote) {
 
 function jsonStringForHtml(value) {
   return JSON.stringify(value).replaceAll("<", "\\u003C");
+}
+
+function jsonStringForJavaScript(value) {
+  return JSON.stringify(value)
+    .replaceAll("<", "\\u003C")
+    .replaceAll("\u2028", "\\u2028")
+    .replaceAll("\u2029", "\\u2029");
 }
 
 function replaceHtmlAttribute(tag, name, value) {
@@ -1100,6 +1215,37 @@ export function materializePublicReferenceHtml(
     );
   }
 
+  return materialized;
+}
+
+function materializeProfessionalProfileScript(
+  source,
+  destinations,
+  safePath = PUBLIC_AUTHOR_PROFILE_SCRIPT_PATH,
+) {
+  const expected = inspectProfessionalProfileScript(source, safePath);
+  if (expected.occurrenceCount === 0) return source;
+
+  const value = destinations.get(PUBLIC_AUTHOR_PROFILE_KEY);
+  if (value === undefined) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_VALUE_MISSING",
+      `${PUBLIC_AUTHOR_PROFILE_KEY} needs an approved destination before ${safePath} can materialize`,
+    );
+  }
+
+  const materialized = source.replace(
+    new RegExp(
+      `(["'])\\{\\{${PUBLIC_AUTHOR_PROFILE_KEY}\\}\\}\\1`,
+    ),
+    () => jsonStringForJavaScript(value),
+  );
+  if (/\{\{PUBLIC_URL_[A-Z0-9_]+\}\}/.test(materialized)) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_UNRESOLVED",
+      `${safePath} contains an unresolved public-reference token after materialization`,
+    );
+  }
   return materialized;
 }
 
@@ -1352,6 +1498,16 @@ export async function materializePublicReferences({
       await writeFile(join(stagedOutput, record.safePath), materialized, "utf8");
     }
 
+    for (const record of inventory.scriptFiles) {
+      if (record.inspection.occurrenceCount === 0) continue;
+      const materialized = materializeProfessionalProfileScript(
+        record.source,
+        destinations,
+        record.safePath,
+      );
+      await writeFile(join(stagedOutput, record.safePath), materialized, "utf8");
+    }
+
     await writeFile(
       join(stagedOutput, OUTPUT_MARKER),
       `${JSON.stringify(
@@ -1389,9 +1545,17 @@ export async function materializePublicReferences({
   return {
     sourceFileCount: inventory.files.length,
     htmlFileCount: inventory.htmlFiles.length,
+    scriptFileCount: inventory.scriptFiles.length,
     affectedHtmlFileCount: inventory.htmlFiles.filter(
       (record) => record.inspection.occurrenceCount > 0,
     ).length,
+    affectedScriptFileCount: inventory.scriptFiles.filter(
+      (record) => record.inspection.occurrenceCount > 0,
+    ).length,
+    affectedSourceFileCount: [
+      ...inventory.htmlFiles,
+      ...inventory.scriptFiles,
+    ].filter((record) => record.inspection.occurrenceCount > 0).length,
     keyCount: inventory.keys.size,
     occurrenceCount: inventory.occurrenceCount,
     anchorCount: inventory.anchorCount,
@@ -1411,6 +1575,8 @@ Inputs:
   .env.public                 optional ignored file
   PUBLIC_URL_REGISTRY_*       process values override matching file values
   PUBLIC_URL_IFRAME_*         approved iframes.vik.guru/v1/ route values
+  PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE
+                              approved professional-profile destination
 
 Output:
   .public-reference-build/context-canvas-project-surface
@@ -1433,7 +1599,7 @@ async function main(arguments_) {
 
   const result = await materializePublicReferences();
   console.log(
-    `Materialized ${result.occurrenceCount} public-reference carriers across ${result.affectedHtmlFileCount} Context Canvas HTML files using ${result.keyCount} semantic keys.`,
+    `Materialized ${result.occurrenceCount} public-reference carriers across ${result.affectedSourceFileCount} Context Canvas source files using ${result.keyCount} semantic keys.`,
   );
   console.log(
     "Generated artifact: .public-reference-build/context-canvas-project-surface",

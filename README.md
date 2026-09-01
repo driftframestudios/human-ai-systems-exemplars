@@ -423,8 +423,11 @@ boundary.
 The complete public-possible Notion boundary is the Enterprise Human-AI
 Practitioner Registry root and its descendants. Authored Context Canvas HTML
 uses stable `PUBLIC_URL_REGISTRY_*` keys for those candidates and carries
-direct Notion page URLs to exactly zero pages. All other Notion pages remain
-outside the Context Canvas in both this repository and the retained source.
+direct Notion page URLs to exactly zero pages. The shared footer script carries
+one exact `PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE` key for its approved public
+profile destination. Configuration supplies that destination during a public
+build; authored source presents a useful availability label beforehand. Other
+Notion pages remain with the authorized resolver.
 
 Iframe companions use manifest-owned `https://iframes.vik.guru/v1/core/.../`
 or `https://iframes.vik.guru/v1/canvas/.../` routes directly in `src`
@@ -458,20 +461,21 @@ npm run test:public-reference-materializer
 
 The dependency-free
 [materializer](tools/materialize-public-references.mjs) discovers required keys
-from authored HTML, resolves Registry anchors and JSON-LD carriers together,
-and writes the validated result beneath ignored `.public-reference-build/`.
-The builder reports semantic key names without destination values. A
+from authored HTML and the one shared footer-script carrier, resolves Registry
+anchors, JSON-LD values, and the professional-profile link together, and writes
+the validated result beneath ignored `.public-reference-build/`. The builder
+reports key names without destination values. A
 configuration or build failure preserves the prior tool-owned generation; a
 final rename failure retains and names its recovery directory. The generic
 hosted-iframe twin validator remains covered for an explicitly late-bound
 future receiver; the activated Core routes no longer depend on that build-time
 substitution.
 
-Materialization establishes Registry source-to-destination substitution,
-carrier agreement, containment, and recoverable generation. Human review
-establishes Registry ancestry, content standing, audience, signed-out
-reachability, and publication approval. A delivery receiver owns complete
-adjacent-asset closure, configuration, upload, and its publication receipt.
+Materialization establishes source-to-destination substitution, carrier
+agreement, containment, and recoverable generation. Human review establishes
+Registry ancestry, content standing, audience, signed-out reachability, and
+publication approval. A delivery receiver owns complete adjacent-asset
+closure, configuration, upload, and its publication receipt.
 
 [The Context Canvas orientation](context-canvas-project-surface/context-canvas/README.md#materialize-approved-public-references)
 and [durable materialization account](threadkeeping/context-canvas-public-reference-materialization.md)

@@ -60,12 +60,13 @@ the complete primary dependency closure before a production build is treated
 as a deployment candidate.
 
 The authored Context Canvas root currently contains Registry publication
-tokens. The complete assembler will call `materializePublicReferences()` with
-approved values inside the same build transaction, then select primary files
-from that exact result. It will provide no fallback value and will not walk an
-ambient `.public-reference-build/` directory. The current baseline keeps that
-future seam visible by stopping when a selected source still contains an
-unresolved token.
+tokens, and its shared footer script contains the professional-profile token.
+The complete assembler will call `materializePublicReferences()` with approved
+values inside the same build transaction, then select primary files from that
+exact result. It will use configured values as the complete receiver and will
+leave an ambient `.public-reference-build/` directory outside its inputs. The
+current baseline keeps that future seam visible by stopping when a selected
+source still contains an unresolved token.
 
 ## Commands
 

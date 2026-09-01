@@ -2,6 +2,7 @@
   "use strict";
 
   var visitorBoundaryContract = window.ContextCanvasVisitorBoundary;
+  var professionalProfileRoute = "{{PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE}}";
 
   var routes = {
     about: [
@@ -132,8 +133,23 @@
     github.setAttribute("aria-label", "View human-ai-systems-exemplars on GitHub");
     network.appendChild(github);
     network.appendChild(document.createTextNode(" · "));
-    var linkedin = element("span", "super-footer__reserved", "LinkedIn route reserved");
-    network.appendChild(linkedin);
+    if (professionalProfileRoute.indexOf("{{PUBLIC_URL_") === -1) {
+      var professionalProfileLink = element("a", "", "Professional profile");
+      professionalProfileLink.href = professionalProfileRoute;
+      professionalProfileLink.setAttribute(
+        "aria-label",
+        "View the author's professional profile",
+      );
+      network.appendChild(professionalProfileLink);
+    } else {
+      network.appendChild(
+        element(
+          "span",
+          "super-footer__reserved",
+          "Professional profile available in the public build",
+        ),
+      );
+    }
     closing.appendChild(registry);
     closing.appendChild(network);
     footer.appendChild(closing);

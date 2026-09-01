@@ -922,3 +922,26 @@ test("an unresolved public-reference token keeps the primary closure at its conf
     await rm(fixture.root, { recursive: true, force: true });
   }
 });
+
+test("an unresolved professional-profile token keeps the primary closure at its configuration boundary", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    await writeFile(
+      path.join(fixture.root, "visitor/index.html"),
+      '<script>var professionalProfileRoute = "{{PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE}}";</script>\n',
+      "utf8",
+    );
+    const tokenSourceSha = await commitFixture(fixture.root, "Add unresolved profile token fixture");
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: tokenSourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /retains an unresolved public URL token/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});

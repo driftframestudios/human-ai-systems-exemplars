@@ -43,6 +43,13 @@ test("ordinary parent links preserve the visitor's browsing-context choice", asy
 test("the shared parent footer emits standard links", async () => {
   const shell = await readFile(join(canvasRoot, "canvas-shell.js"), "utf8");
 
+  assert.match(
+    shell,
+    /var professionalProfileRoute = "\{\{PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE\}\}";/u,
+  );
+  assert.match(shell, /professionalProfileLink\.href = professionalProfileRoute;/u);
+  assert.match(shell, /View the author's professional profile/u);
+  assert.match(shell, /Professional profile available in the public build/u);
   assert.doesNotMatch(shell, /\.target\s*=\s*["']_blank["']/u);
   assert.doesNotMatch(shell, /\.rel\s*=\s*["']noopener noreferrer["']/u);
   assert.doesNotMatch(shell, /opens in a new tab/iu);

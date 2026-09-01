@@ -718,7 +718,7 @@ function assertPortableOutputCollision(relativePath, outputFiles, portablePaths)
 
 function assertResolvedPrimaryBytes(bytes, sourcePath) {
   if (
-    /\{\{PUBLIC_URL_(?:REGISTRY|IFRAME)_[A-Z0-9_]+\}\}/.test(
+    /\{\{PUBLIC_URL_[A-Z0-9_]+\}\}/.test(
       bytes.toString("utf8"),
     )
   ) {
