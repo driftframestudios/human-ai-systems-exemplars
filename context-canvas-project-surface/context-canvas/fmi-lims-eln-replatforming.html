@@ -53,7 +53,7 @@
         "headline": "The Sample Nobody Could Find",
         "alternativeHeadline": "Naming the shared objects before choosing the system",
         "description": "A solution and implementation architecture debrief on naming shared laboratory objects before selecting a LIMS or ELN platform.",
-        "dateModified": "2026-08-30",
+        "dateModified": "2026-09-01",
         "inLanguage": "en-US",
         "author": {
           "@type": "Organization",
@@ -673,9 +673,10 @@
           <section aria-labelledby="implementation-intervention-title">
             <h3 id="implementation-intervention-title" class="txt-h3 beat-title">§c The Intervention — Locally Maximized Technical Moves (Then. ↔ Now.)</h3>
             <p class="debrief-lead">
-              Each move follows a failure that mattered in the working estate into a current implementation posture. The
-              examples use public domain patterns and practitioner-authored code. The private production schema stays with
-              its original operational setting.
+              Each move follows a failure that mattered in the working estate into a current implementation posture. My
+              lived account supplies the 2021–2022 organizational and historical context. The linked Gist Registry examples
+              are independently authored, company-neutral implementation models; their versioned source and tests own the
+              behaviors they demonstrate. The private production schema stays with its original operational setting.
             </p>
 
             <div class="implementation-moves">
@@ -724,7 +725,12 @@ def test_exact_transfer_replay_has_no_second_effect(self):
     transfer = plan_transfer(self.initial, command)
     assert transfer is not None
     self.assertIsNone(plan_transfer(transfer.aggregate, command))</code></pre>
-                <p class="table-note"><a href="../../lims-eln-enterprise-reference-v0.1/tests/test_lifecycle_custody.py">Inspect the complete custody tests</a></p>
+                <p class="table-note">
+                  For one runnable custody move, the versioned Registry example exercises tenant scope, exact replay,
+                  stale-state handling, changed-command reconciliation, and one process-local custody, event, replay, and
+                  outbox publication.
+                  <a href="https://kindlight.io/snippets/specimen-custody-outbox/0.1.0/">Inspect specimen custody and transactional outbox behavior</a>.
+                </p>
               </article>
 
               <article>
@@ -733,6 +739,12 @@ def test_exact_transfer_replay_has_no_second_effect(self):
                 <p><strong>Now.</strong> Capture happens at the instrument boundary, with timestamped and attributable events flowing through the appropriate adapter.</p>
                 <pre><code>Then: instrument → scan → human click → LIMS → EBR reconciliation
 Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pre>
+                <p class="table-note">
+                  Within one running process, the versioned Registry example keeps exact source bytes linked to each result
+                  while transport delivery, logical acquisition, scientific normalization, replay, and quarantine retain
+                  distinct identities.
+                  <a href="https://kindlight.io/snippets/instrument-ingress-integrity/0.1.0/">Inspect instrument-ingress integrity and reviewable quarantine</a>.
+                </p>
               </article>
 
               <article>
@@ -1000,6 +1012,12 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
                 quarantine, a portable LIMS port, three vendor adapters, reversible migration, and tenant-scoped evidence
                 into nine sample manifests. Its checked local synthetic run records <strong>101 tests with zero failures</strong>,
                 nine manifests, four schemas, eight statically inspected migrations, and 53 data-primitive findings.
+              </p>
+              <p>
+                For a smaller runnable cutover boundary, a versioned Registry example compares matching, missing, changed,
+                and extra records, checks supplied restore evidence, and binds one exact cutover request to a distinct
+                approver before activation.
+                <a href="https://kindlight.io/snippets/migration-reconciliation-cutover/0.1.0/">Inspect migration reconciliation and approval-bound cutover</a>.
               </p>
               <p>
                 That receipt establishes local synthetic execution. Configured vendor tenants, a representative
