@@ -509,7 +509,33 @@ async function exerciseLims({ page }) {
   assert.ok(observed.tables >= 1, "LIMS exposes a static semantic table");
 }
 
-async function exerciseGenomic({ page }) {
+async function exerciseGenomic({ carrierPage, page }) {
+  const wayfinding = page.locator(".actor-board__wayfinding");
+  const board = page.locator(".actor-board");
+  assert.equal(await wayfinding.isVisible(), false, "desktop board keeps the narrow cue quiet");
+  assert.equal(await board.getAttribute("role"), "region");
+  assert.equal(await board.getAttribute("aria-label"), "Population groups");
+  assert.equal(await board.getAttribute("tabindex"), "0");
+
+  await carrierPage.setViewportSize({ width: viewports[1].width, height: viewports[1].height });
+  await page.evaluate(() => new Promise((resolve) => {
+    requestAnimationFrame(() => requestAnimationFrame(resolve));
+  }));
+  assert.equal(await wayfinding.isVisible(), true, "narrow board exposes horizontal wayfinding");
+  assert.match(await wayfinding.textContent(), /scroll sideways to compare groups/i);
+  const boardWidth = await board.evaluate((element) => ({
+    client: element.clientWidth,
+    scroll: element.scrollWidth,
+  }));
+  assert.ok(boardWidth.scroll > boardWidth.client, "narrow board has groups available sideways");
+  await board.focus();
+  assert.equal(
+    await board.evaluate((element) => document.activeElement === element),
+    true,
+    "horizontal group region accepts keyboard focus",
+  );
+
+  await carrierPage.setViewportSize({ width: viewports[0].width, height: viewports[0].height });
   await page.locator('[data-view="shared"]').click();
   assert.equal(await page.locator('[data-view="shared"]').getAttribute("aria-checked"), "true");
   assert.equal(new URL(page.url()).searchParams.get("view"), "shared");
