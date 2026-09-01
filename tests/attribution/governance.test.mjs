@@ -92,6 +92,7 @@ test("the machine-readable projection resolves its scope and placement boundarie
     ...attributionContract.public_html.core_projection_roots,
     ...attributionContract.public_html.standalone_prototype_roots,
     ...attributionContract.public_html.canonical_templates,
+    attributionContract.public_html.schema_pages_index,
     attributionContract.public_html.context_canvas_prototype_root,
     attributionContract.public_html.context_canvas_top_level_glob.replace(/\/\*\.html$/u, ""),
   ];

@@ -8,14 +8,22 @@ on:
       - ".github/workflows/schema-pages.yml"
       - "package.json"
       - "package-lock.json"
+      - "AUTHORS"
+      - "CITATION.cff"
+      - "LICENSE"
+      - "AI-DATA-USE.md"
+      - "attribution.yml"
+      - "context-canvas-project-surface/context-canvas/visitor-boundary-contract.js"
       - "schemas/**"
       - "supportive-change-writing-exemplars-bundle-v0.1/manifest.json"
       - "supportive-change-writing-exemplars-bundle-v0.1/schema/**"
       - "lims-eln-functional-nucleus/site-reading-governance/schemas/**"
       - "lims-eln-functional-nucleus/lims-eln-program-specification/machine-node.json"
       - "tools/build-schema-pages.mjs"
+      - "tools/attribution-contract.mjs"
       - "tools/check-schema-surface.mjs"
       - "tools/schema-receiver-routes.mjs"
+      - "tests/schema-pages/**"
   workflow_dispatch:
 
 permissions:
@@ -54,6 +62,9 @@ jobs:
 
       - name: Check schema contracts
         run: npm run check:schemas
+
+      - name: Test schema documentation closure
+        run: npm run test:schema-pages
 
       - name: Build schema documentation
         env:

@@ -1,73 +1,77 @@
-# Schemas
+# Schema registry
 
-This directory is the repository's progressive disclosure route for shared machine contracts. The first layer names families and authority. Each version directory then carries the exact schema, semantic context where useful, and representative examples.
+This directory is the human orientation and source home for the repository's shared machine-readable contracts. Start with the family that matches the work in front of you. Each family then leads to an exact schema, an example where one is available, and an explanation of who owns its meaning.
+
+The [static discovery page](index.html) presents the same first-contact route when this directory is built for the public schema site.
 
 ## Start here
 
-| Family | Human orientation | Contract | Example standing |
-|---|---|---|---|
-| Prototype Exemplars | This page and the root [README](../README.md) | [Repository collection v1](prototype-exemplars/1.0.0/prototype-exemplars.schema.json) | [Repository-truthful collection example](prototype-exemplars/1.0.0/prototype-exemplars.example.json) |
-| Context Canvas | [Context Canvas v1](context-canvas/1.0.0/README.md) | [Artifact schema](context-canvas/1.0.0/context-canvas.schema.json) and [JSON-LD context](context-canvas/1.0.0/context-canvas.context.jsonld) | Synthetic collection, visitor-surface, and prototype profiles under `examples/` |
-| Collaboration Skills | [Collaboration Skills 0.1.0](collaboration-skills/0.1.0/README.md) | [Skill projection](collaboration-skills/0.1.0/collaboration-skill.schema.json) and [collaboration account](collaboration-skills/0.1.0/collaboration-account.schema.json) | One live portable contract, one retired projection, and one route-changing account |
-| Supportive Change Writing | [Bundle orientation](../supportive-change-writing-exemplars-bundle-v0.1/README.md) | [Existing collection-manifest schema](../supportive-change-writing-exemplars-bundle-v0.1/schema/collection-manifest.schema.v0.1.json) | Provisional projection exercised by the existing `manifest.json` |
-| LIMS/ELN | [Functional nucleus orientation](../lims-eln-functional-nucleus/README.md) | [Existing Site Reading machine-node schema](../lims-eln-functional-nucleus/site-reading-governance/schemas/machine-node.schema.json) | Provisional cross-owner projection exercised by the Program Specification machine node |
+| Family | What it describes | Contract and examples |
+|---|---|---|
+| Repository collection 1.0.0 | Repository entry points, related families, source and delivery roles, and lived use | [Schema](prototype-exemplars/1.0.0/prototype-exemplars.schema.json) · [Example](prototype-exemplars/1.0.0/prototype-exemplars.example.json) |
+| Context Canvas 1.0.0 | Collections, visitor surfaces, prototypes, reference artifacts, and intended experience | [Orientation](context-canvas/1.0.0/README.md) · [Schema](context-canvas/1.0.0/context-canvas.schema.json) · [JSON-LD context](context-canvas/1.0.0/context-canvas.context.jsonld) · examples under [`examples/`](context-canvas/1.0.0/examples/) |
+| Collaboration Skills 0.1.0 | Portable collaboration instructions and decision-changing observations about their use | [Orientation](collaboration-skills/0.1.0/README.md) · [Skill schema](collaboration-skills/0.1.0/collaboration-skill.schema.json) · [Collaboration-account schema](collaboration-skills/0.1.0/collaboration-account.schema.json) · examples under [`examples/`](collaboration-skills/0.1.0/examples/) |
+| A3 Expanded 0.2 | Change records, rendered views, source registration, and coverage for the expanded atlas | [Change record](../a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/expanded-delta.schema.json) · [View model](../a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/expanded-view-model.schema.json) · [Source registry](../a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/source-registry.schema.json) · [Coverage record](../a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/coverage-ledger.schema.json) |
+| A3 state 0.1 | Saved state for an A3 stacked-cube decision instrument | [State schema](../a3-stacked-cube-visual-system-bundle-v0.1/schema/a3-stacked-cube-state-schema-v0.1.json) |
+| Visualization Fidelity Atlas 0.1 | Visual treatments and the evidence used to compare or select them | [Atlas schema](../visualization-fidelity-atlas-bundle-v0.1/visualization-fidelity-atlas.schema.v0.1.json) |
+| Strategy Canvas 0.2 | Factors, plotted offerings, weighting, comparison state, and exchange behavior | [Strategy Canvas schema](../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json) |
+| Local prototype manifest | Files and relationships needed to open a self-contained prototype locally | [Manifest schema](../context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json) |
 
-The [static discovery page](index.html) carries the same first-contact route for a served schema origin.
+The public build copies these contracts to their declared receiver paths. It also includes the authorship, citation, license, attribution, and data-use files needed to understand the public artifact on its own.
 
 ## Authority
 
-- The Prototype Exemplars schema describes repository orientation, family relationships, sources, served projections, and lived use. It does not become a union of contained schemas.
-- The Context Canvas schema owns the shared artifact contract for the Canvas. Page HTML, CSS, JavaScript, prototype state, and Visual Fidelity Contracts retain their own source and behavior authority.
-- The Collaboration Skills family carries typed exchange projections. Its referenced `SKILL.md` and collaboration-account sources retain semantic authority, and current user intent and granted tool authority govern activation.
-- Supportive Change Writing and LIMS/ELN remain governed by their existing package and standalone-repository authorities. Their root entries are provisional projections that make current use discoverable.
-- Human collaborators retain meaning, public identity, publication timing, and consequential adoption decisions. Automation can validate, compare, and propose within the named scope.
+- The Repository Collection schema describes repository orientation, family relationships, sources, served copies, and lived use. Each contained schema keeps its own meaning and version.
+- The Context Canvas schema owns the shared artifact structure for the Canvas. Page HTML, CSS, JavaScript, prototype state, and Visual Fidelity Contracts remain the behavior authority for their own surfaces.
+- The Collaboration Skills schemas describe exchangeable records. A skill's `SKILL.md` remains its semantic source, while current user intent and granted tool authority govern each activation.
+- Supportive Change Writing and LIMS/ELN keep their package and repository owners. The root schema check exercises one representative use from each without folding them into this public route family.
+- Human collaborators retain authority for meaning, public identity, publication timing, and consequential adoption. Automation validates, compares, and proposes within a named scope.
 
-Each network `servedProjection` names four distinct relationships: `authoritativeSourceRef` identifies the repository source that defines meaning and exact bytes; `publicationAuthorityRef` identifies the actor or system allowed to publish it; `deliveryAuthorityRef` identifies the route operator; and `environment` identifies where discovery prefers that route. `branch` names the source branch that publishes or prepares the projection. These relationships leave the canonical `$id` unchanged.
+A served copy keeps several relationships separate: the source defines meaning and exact bytes; the publisher decides what may be published; the delivery operator serves the files; and the environment decides which route to prefer. These relationships preserve the contract's declared `$id`.
 
-## Identity and retrieval
+## Identity and delivery
 
-Each settled exact version has one canonical `$id` under `https://schemas.vik.guru/`. The identifier names the contract; it remains unchanged when another route returns the same bytes.
+Each contract keeps the `$id` declared inside its exact-version file. Most current family contracts use `https://schemas.vik.guru/`; earlier contracts preserve their established identifiers under other project domains. A delivery route may change while the identifier, schema vocabulary, and reference behavior remain stable.
 
-| Route | Role | Branch preference | Current standing |
-|---|---|---|---|
-| `https://schemas.vik.guru/` | Canonical identity and intended first-party runtime route | `prod` | Canonical identity retained; DNS and origin require renewed operator observation |
-| `https://schemas.radiantnull.com/` | GitHub-backed public mirror | `docs` publication; `main` discovery preference | Active, HTTPS-enforced, and observed |
-| Repository `schemas/` source | Authored review and local collaboration | all branches | Active |
+| Route | Current role | Source branch |
+|---|---|---|
+| `https://schemas.radiantnull.com/` | Current GitHub Pages mirror | generated `docs` publication |
+| `https://schemas.vik.guru/` | Canonical identity base for most current families and intended first-party route | future `prod` delivery |
+| Repository source | Authored review and local collaboration | accepted working branch |
 
-The Radiant Null mirror currently serves the exact v1 schemas, Context Canvas JSON-LD context, examples, and discovery page from `docs`. Authoritative DNS observation currently finds no `schemas.vik.guru` record, so issue work:schema-retrieval-and-page-migration retains operator-host restoration and byte-parity observation as an external delivery handoff. The intended routes carry identical schema bytes, `$id` values, vocabulary, and reference behavior. `main` discovery can prefer Radiant Null, and `prod` discovery can prefer Vik Guru after the operator route is observable. Branch and environment remain publication and discovery projections; instances and schema meaning stay invariant.
+As observed on 2026-09-01, the Radiant Null mirror serves the registry over HTTPS. The Vik Guru hostname resolves and currently returns a service response rather than the registry homepage and contract routes. The mirror is therefore the dependable public retrieval route for this delivery phase.
 
-Served projections keep network `href` values distinct from repository `repositoryPath` values. This preserves the difference between retrieving a representation and locating its authored source.
+The active GitHub Pages path publishes the generated `docs` branch. The checked-in Pages workflow records a possible Actions-based path; it becomes operative when the checked-out publication branch contains its required package, workflow, and build tools. Until that topology changes through review, an accepted source revision is built deterministically, projected to `docs`, and observed on the public origin.
 
-GitHub Pages publication uses one connected standard-runner job on `docs`: schema check, static build, artifact upload, and deployment. GitHub-owned actions are pinned to full commit SHAs. The private repository consumes included Actions allowance and retains a $0 paid-overage boundary; general CI and Dependabot schedules remain at rest. Local source remains the direct validation and review path.
+## Version and compatibility
 
-## Version and compatibility posture
+- Exact-version bytes remain stable after publication. A byte change receives another exact-version path.
+- The stable core closes at concrete object boundaries. Namespaced `extensions` hold additive local or experimental material.
+- Enums represent deliberately closed routing choices. Descriptive vocabularies remain open where use is still growing.
+- The four strict root schemas compiled by the local checker are self-contained. A family with external dependencies declares its closure; the LIMS/ELN representative use resolves `common.schema.json` through its own package.
+- JSON Schema constrains structure. JSON-LD describes terms and relationships. Human-readable source explains meaning and authority.
 
-- `1.0.0` is published and reviewed through the GitHub-backed exact-version mirror; operator-route parity remains an issue work:schema-retrieval-and-page-migration delivery boundary.
-- Exact-version bytes become immutable after publication. Any byte change receives another exact-version path.
-- The stable core closes at concrete object boundaries. Namespaced `extensions` carry additive local or experimental material.
-- Enums represent intentionally closed routing concepts. Evidence classes, cognitive moves, and authority roles remain descriptive where vocabulary is still growing.
-- Both v1 schemas are self-contained. A family with external dependencies declares its closure; the LIMS/ELN projection currently requires `common.schema.json`.
-- JSON Schema constrains structure. JSON-LD describes semantic terms and relations. Human-readable source explains contested meaning and authority.
+## Local validation and build
 
-The [schema contract research and implementation plan](../planning/schema-contract-research-and-implementation-plan.md) records the supporting evidence, issues work:schema-authority–work:schema-retrieval-and-page-migration waves, compatibility direction, and purposeful deferrals.
-
-## Local use
-
-Install the root development dependencies and run:
+Install the locked root development dependencies, then run:
 
 ```bash
 npm run check:schemas
 ```
 
-The command compiles the two v1 schemas, validates their external examples, checks one existing Supportive Change Writing instance, invokes the native bounded LIMS/ELN use, and exercises seven consequential boundaries across serving authority, S/I/R range, currentness, focalization, core closure, extensions, and identity. Local output remains terminal-only. The same command runs immediately before the schema documentation build in the connected Pages publication job.
+The command compiles four strict schemas, validates seven representative instances, exercises one Supportive Change Writing instance and one LIMS/ELN instance, checks nine consequential boundaries, and confirms every declared receiver identity.
 
-## Alternate projections
+Build the public artifact with its observed deployment base:
 
-JSON remains the authored v1 contract and example format. A YAML example can enter after repeated JSON authoring creates observable friction; it would remain an alternate syntax or generated projection of the same authority. GraphQL begins with a real query or API consumer whose selection, resolver, and nullability requirements can define the receiving boundary.
+```bash
+PAGES_BASE_URL=https://schemas.radiantnull.com npm run build:schema-pages
+```
+
+The builder creates `.schema-pages/`, preserves every declared schema byte, adds the public orientation and attribution carriers, and resolves canonical and social metadata for the receiving origin.
 
 ## Extension shape
 
-Extension keys use a scheme-qualified namespace convention so ownership remains visible:
+Extension keys use a scheme-qualified namespace so ownership remains visible:
 
 ```json
 {
@@ -79,6 +83,4 @@ Extension keys use a scheme-qualified namespace convention so ownership remains 
 }
 ```
 
-The local check establishes the namespace-key shape rather than full IRI conformance. A receiving semantic context can define stronger meaning for its own namespace.
-
-An extension can mature into a later core version after repeated use shows shared meaning across profiles. A family-specific payload can remain namespaced indefinitely when that keeps its owner easier to find.
+The local check establishes the namespace-key shape. A receiving semantic context can define stronger meaning for its own namespace. Repeated use can support a later core version, while family-specific material can remain namespaced when that keeps its owner easy to find.

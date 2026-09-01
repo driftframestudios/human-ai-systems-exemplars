@@ -25,6 +25,7 @@
   },
   "public_html": {
     "visible_notice": "© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).",
+    "schema_pages_index": "schemas/index.html",
     "required_placements": {
       "author_metadata": {
         "location": "document_head",

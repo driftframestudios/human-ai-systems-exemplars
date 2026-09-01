@@ -50,3 +50,7 @@ requireValue(
   artifactAttribution === constructedNotice,
   "visible_notice must agree with its identity, copyright, and license fields",
 );
+requireValue(
+  attributionContract.public_html.schema_pages_index === "schemas/index.html",
+  "schema_pages_index must name the authored registry page",
+);
