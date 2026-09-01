@@ -17,7 +17,7 @@ description: Classifies potentially specialist or inside wording within a bounde
 - **Useful when:** A reader may understand the sentence grammatically while missing the intended object, action, relationship, or consequence.
 - **Poor fit when:** The concern is primarily tone, evidence calibration, information architecture, technical correctness, or governed terminology rather than contextual shorthand.
 - **Smallest useful dose:** Named word families across the files already in scope, plus enough surrounding prose to classify each material occurrence.
-- **Interactions:** `supportive-change-writing` shapes replacement prose. `context-canvas-surface-reading` supplies the visitor job and source owners for Canvas pages. `source-authority-mapping` preserves exact language when another source governs the term. `collaboration-accounting` receives material natural-use evidence.
+- **Interactions:** Desired-state, evidence-calibrated writing shapes replacement prose. `context-canvas-surface-reading` supplies the visitor job and source owners for Canvas pages. `source-authority-mapping` preserves exact language when another source governs the term. `collaboration-accounting` receives material natural-use evidence.
 - **Rest or release when:** A term already performs an exact or useful job, or changing it requires a source-owner or content decision outside the current task. Record the fitting receiver only when the deferral changes continuation.
 
 ## Rules
@@ -72,7 +72,7 @@ Read each changed sentence in its paragraph, heading, table, metadata, or access
 2. **Gather occurrences:** Search each family with enough context to read its actual role.
 3. **Classify:** Mark material occurrences as literal, exact, source-owned, useful compact language, or replaceable shorthand.
 4. **Choose the smallest action:** Retain, define, revise, or defer each decision-changing occurrence.
-5. **Revise in context:** Replace shorthand with concrete nouns, verbs, relationships, or consequences; use `supportive-change-writing` for the resulting prose.
+5. **Revise in context:** Replace shorthand with concrete nouns, verbs, relationships, or consequences; shape the resulting prose around the desired state, evidence, and next useful move.
 6. **Reconcile locally:** Inspect nearby headings, repeated definitions, links, metadata, and accessibility text for agreement.
 7. **Verify:** Re-read the receiving passage, perform a targeted rescan, and run the surface-owned checks.
 8. **Return:** Name the scoped corpus, concrete changes, intentional retentions that matter, validation signal, coverage boundary, and any next receiver.

@@ -1,0 +1,180 @@
+{
+  "schemaVersion": "1",
+  "repository": "human-ai-systems-exemplars",
+  "schemaRef": "schemas/collaboration-skills/0.1.0/collaboration-skill.schema.json",
+  "projectionBase": "https://schemas.vik.guru/skills/",
+  "publicationPolicy": {
+    "catalogScope": "Every repository skill appears in this repository-only selection. Only public-ready entries appear in public artifacts.",
+    "sourceRule": "A public-ready entry carries an exact semantic source and every supporting file declared for this projection.",
+    "possibleRule": "A public-possible entry stays wholly outside public HTML, JSON, source copies, manifests, and links until its complete source package is ready for the same audience.",
+    "readinessRule": "Public-ready describes a publication-safe, internally coherent source package. Evidence maturity remains explicit in each exchange projection.",
+    "authorityRule": "Each SKILL.md remains semantic authority. The generated JSON is an exchange projection, and current intent plus granted authority governs each use.",
+    "closureRule": "Relative links in a published Markdown source resolve within the artifact. Declared workflows, examples, and other supporting files remain inspectable context; their inclusion does not represent them as standalone executable packages."
+  },
+  "catalogDependencies": [
+    "threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md"
+  ],
+  "skills": [
+    {
+      "name": "bounded-support-routing",
+      "sourcePath": ".agents/skills/bounded-support-routing/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        ".agents/skills/bounded-support-routing/references/github-issue-label-routing.md",
+        ".agents/skills/bounded-support-routing/references/openai-codex-spark.md",
+        ".github/workflows/prototype-unit-tests.yml"
+      ]
+    },
+    {
+      "name": "collaboration-accounting",
+      "sourcePath": ".agents/skills/collaboration-accounting/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        ".agents/skills/collaboration-accounting/references/candidacy-and-routing.md",
+        ".agents/skills/collaboration-accounting/references/task-bound-skill-projections.md"
+      ]
+    },
+    {
+      "name": "collaboration-runbook-authoring",
+      "sourcePath": ".agents/skills/collaboration-runbook-authoring/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
+    },
+    {
+      "name": "context-canvas-css-ownership",
+      "sourcePath": ".agents/skills/context-canvas-css-ownership/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        ".agents/skills/context-canvas-css-ownership/references/scenarios.md",
+        ".agents/skills/context-canvas-css-ownership/references/surface-color-and-state-roles.md"
+      ]
+    },
+    {
+      "name": "context-canvas-surface-reading",
+      "sourcePath": ".agents/skills/context-canvas-surface-reading/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
+    },
+    {
+      "name": "context-canvas-visual-verification",
+      "sourcePath": ".agents/skills/context-canvas-visual-verification/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
+    },
+    {
+      "name": "contextual-jargon-scan",
+      "sourcePath": ".agents/skills/contextual-jargon-scan/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
+    },
+    {
+      "name": "declarative-skill-authoring",
+      "sourcePath": ".agents/skills/declarative-skill-authoring/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md"
+      ]
+    },
+    {
+      "name": "evidence-grounded-research-spike",
+      "sourcePath": ".agents/skills/evidence-grounded-research-spike/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
+    },
+    {
+      "name": "issue-chain-stewardship",
+      "sourcePath": ".agents/skills/issue-chain-stewardship/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
+    },
+    {
+      "name": "locator-boundary-stewardship",
+      "sourcePath": ".agents/skills/locator-boundary-stewardship/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        ".agents/skills/locator-boundary-stewardship/references/issue-and-pull-request-practice.md",
+        ".agents/skills/locator-boundary-stewardship/references/public-safe-threadkeeping.md"
+      ]
+    },
+    {
+      "name": "practitioner-probe",
+      "sourcePath": ".agents/skills/practitioner-probe/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
+    },
+    {
+      "name": "repository-attribution-stewardship",
+      "sourcePath": ".agents/skills/repository-attribution-stewardship/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
+    },
+    {
+      "name": "repository-collaboration-cycle",
+      "sourcePath": ".agents/skills/repository-collaboration-cycle/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "Promote after its runbook family has a public-ready source package with public retrieval targets."
+    },
+    {
+      "name": "repository-reentry",
+      "sourcePath": ".agents/skills/repository-reentry/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
+    },
+    {
+      "name": "schema-contract-authoring",
+      "sourcePath": ".agents/skills/schema-contract-authoring/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
+    },
+    {
+      "name": "secret-boundary-inspection",
+      "sourcePath": ".agents/skills/secret-boundary-inspection/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        "threadkeeping/repository-secret-material-boundary.md",
+        "threadkeeping/context-canvas-public-reference-materialization.md",
+        "threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md"
+      ]
+    },
+    {
+      "name": "source-authority-mapping",
+      "sourcePath": ".agents/skills/source-authority-mapping/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
+    },
+    {
+      "name": "stateful-artifact-behavior-contracts",
+      "sourcePath": ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
+    },
+    {
+      "name": "supportive-change-writing",
+      "sourcePath": ".agents/skills/supportive-change-writing/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "Promote after its Semantic Attractor and evidence dependencies have source-owned public adaptations."
+    }
+  ]
+}

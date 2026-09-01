@@ -19,7 +19,7 @@ description: Designs focused executable behavior contracts for stateful artifact
 - **Smallest useful dose:** One material compatible path, plus one incompatible path when the artifact owns a rejection or recovery boundary.
 - **Foregrounds:** Self-roundtrip validity, stable identity and focus, minimum usable state, semantic-twin agreement, detached exchange state, and retained-state recovery.
 - **May under-attend:** Visual composition, performance, accessibility semantics, and cross-system protocol policy; those concerns keep their own evidence and receiving workflows.
-- **Interactions:** `source-authority-mapping` resolves ownership across producers and receivers. `practitioner-probe` clarifies an ambiguous mechanism. `supportive-change-writing` shapes visible recovery. `collaboration-accounting` receives material defects, near misses, and release evidence.
+- **Interactions:** `source-authority-mapping` resolves ownership across producers and receivers. `practitioner-probe` clarifies an ambiguous mechanism. Desired-state writing shapes visible recovery. `collaboration-accounting` receives material defects, near misses, and release evidence.
 - **Rest or release when:** The consequential behavior is already protected by a smaller existing contract, the exchange route leaves active use, or maintenance shows that the test duplicates another owner without finding distinct defects.
 
 ## Rules

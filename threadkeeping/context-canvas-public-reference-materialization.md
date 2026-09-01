@@ -7,10 +7,10 @@ mutable workspace route in durable public-possible history. Stable semantic
 keys preserve the reader job and receiving identity. An authorized build
 supplies the reviewed destination and emits ordinary static links for visitors.
 
-The public-possible Notion boundary is the Enterprise Human-AI Practitioner
-Registry root and its descendants. Authored Context Canvas HTML carries no
-direct Notion page route, including a Registry route that may later become
-public. Private lineage remains recoverable through the authorized resolver.
+The public-possible workspace boundary covers the approved source family and
+its descendants. Authored Context Canvas HTML carries no direct workspace page
+route, including a route that may later become public. Private lineage remains
+recoverable through the authorized resolver.
 
 ## Settled source and build contract
 
@@ -71,13 +71,13 @@ single-file receiver; its adjacent full-view route remains local.
 
 ## Evidence and evidence boundary
 
-The migration began with 52 Registry identities across 93 anchor and JSON-LD
-occurrences in 31 Context Canvas HTML files. That observation established the
-initial scope and confirmed one shared semantic-key family. The runnable check
-now discovers the live Registry and professional-profile key set from source,
-exercises a complete synthetic materialization, parses only token-bearing
-JSON-LD, and confirms that authored input and activated iframe destinations
-remain unchanged.
+The migration began with a bounded set of workspace identities across anchor
+and JSON-LD occurrences in the Context Canvas HTML family. That observation
+established the initial scope and confirmed one shared semantic-key family.
+The runnable check now discovers the live public-reference and
+professional-profile key set from source, exercises a complete synthetic
+materialization, parses only token-bearing JSON-LD, and confirms that authored
+input and activated iframe destinations remain unchanged.
 
 The build establishes deterministic substitution, context-appropriate escaping,
 and retained-generation recovery. It does not establish Registry ancestry,
@@ -85,12 +85,11 @@ content standing, signed-out availability, or publication authority. The
 private resolver and human observation supply those receipts.
 
 The exact proposed-index comparison returned ready in no-additions mode. It
-observed zero tracked Notion-route occurrences, down from 111 occurrences
-across 52 identities and 33 files, with no additions in any other scoped
-locator family. Strict successor readiness remains with the established public-
-baseline chain because the retained repository still carries earlier first-
-party GitHub routes and repository coordinates outside this materializer's
-contract.
+observed zero tracked workspace-platform route occurrences, with no additions
+in any other scoped locator family. Strict successor readiness remains with the
+established public-baseline chain because the retained repository still carries
+earlier first-party GitHub routes and repository coordinates outside this
+materializer's contract.
 
 ## Receiver sequence
 

@@ -5,7 +5,10 @@ on:
     branches:
       - docs
     paths:
+      - ".agents/runbooks/**"
+      - ".agents/skills/**"
       - ".github/workflows/schema-pages.yml"
+      - ".github/workflows/prototype-unit-tests.yml"
       - "package.json"
       - "package-lock.json"
       - "AUTHORS"
@@ -13,6 +16,7 @@ on:
       - "LICENSE"
       - "AI-DATA-USE.md"
       - "attribution.yml"
+      - "context-canvas-project-surface/context-canvas/collaboration-skills.html"
       - "context-canvas-project-surface/context-canvas/visitor-boundary-contract.js"
       - "schemas/**"
       - "supportive-change-writing-exemplars-bundle-v0.1/manifest.json"
@@ -22,8 +26,13 @@ on:
       - "tools/build-schema-pages.mjs"
       - "tools/attribution-contract.mjs"
       - "tools/check-schema-surface.mjs"
+      - "tools/publication-boundary.mjs"
       - "tools/schema-receiver-routes.mjs"
       - "tests/schema-pages/**"
+      - "threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md"
+      - "threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md"
+      - "threadkeeping/context-canvas-public-reference-materialization.md"
+      - "threadkeeping/repository-secret-material-boundary.md"
   workflow_dispatch:
 
 permissions:

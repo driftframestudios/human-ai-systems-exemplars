@@ -17,7 +17,7 @@ description: Converts a settled, repeatable multi-phase collaboration route into
 - **Useful when:** A known route spans several phases or handbacks, its checks and recovery points are stable enough to name, and re-entry cost is materially higher than one short instruction.
 - **Poor fit when:** One Issue already contains the whole procedure, the response path remains uncertain, or direct reasoning can produce the same result with less structure.
 - **Smallest useful dose:** One index entry and one runbook for a real receiving route. A schema, validator, runner, dashboard, or ledger waits for repeated concrete drift.
-- **Interactions:** `repository-reentry` establishes current ground; `issue-chain-stewardship` preserves Issue ownership; `bounded-support-routing` forms one phase-level packet; `supportive-change-writing` shapes desired-state and recovery language; `locator-boundary-stewardship` protects source-band transitions; `collaboration-accounting` receives a decision-changing exercise observation.
+- **Interactions:** `repository-reentry` establishes current ground; `issue-chain-stewardship` preserves Issue ownership; `bounded-support-routing` forms one phase-level packet; desired-state writing shapes recovery language; `locator-boundary-stewardship` protects source-band transitions; `collaboration-accounting` receives a decision-changing exercise observation.
 - **Rest or release when:** The route settles, the source chain changes materially, or one shorter current Issue becomes sufficient.
 
 ## Rules
