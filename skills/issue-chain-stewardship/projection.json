@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/issue-chain-stewardship/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "issue-chain-stewardship",
+  "description": "Makes related repository issues legible as a revisable work route while each issue retains its own outcome, authority, and acceptance boundary. Applies when completion, evidence, or a human-held decision in one issue materially changes whether another issue can begin or settle.",
+  "semanticAuthorityRef": "../source/.agents/skills/issue-chain-stewardship/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/9",
+  "contract": {
+    "what": "A compact account of the current front, typed issue relationships, held conditions, transition evidence, next receiver, and release event.",
+    "when": [
+      "Several issues form a decision-bearing sequence, branch, containment relationship, or return path that an individual issue cannot explain on its own."
+    ],
+    "boundaries": [
+      "Current repository and GitHub evidence establishes relationships. Each issue retains its content, acceptance, execution authority, and priority; the chain coordinates only the transitions. Private lineage remains in its intended surface. A tidy sequence supplies orientation rather than proof that the work must proceed in that order."
+    ],
+    "result": "A receiving collaborator can see why one issue is current, what each issue owns, what passes between them, which terrain runs in parallel, and which event releases the chain."
+  },
+  "receivingUse": {
+    "job": "Several issues form a decision-bearing sequence, branch, containment relationship, or return path that an individual issue cannot explain on its own.",
+    "materialResult": "A receiving collaborator can see why one issue is current, what each issue owns, what passes between them, which terrain runs in parallel, and which event releases the chain.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/issue-chain-stewardship/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/collaboration-accounting/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "collaboration-accounting",
+  "description": "Accounts for decision-changing collaboration observations and routes them into immediate skill creation, existing-skill revision, a named candidate, continued observation, settlement, or retirement. Applies when materially meaningful work exposes a reusable collaboration affordance, an upcoming skill receives new evidence, or skill recursion needs a release decision.",
+  "semanticAuthorityRef": "../source/.agents/skills/collaboration-accounting/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/1",
+  "contract": {
+    "what": "A light stewardship pass that turns working observations into one proportionate skill-lifecycle route.",
+    "when": [
+      "Material work reveals a reusable collaboration move, friction in an active skill, a promising skill billet, overlapping skill territory, or a repeated meta-level pass whose continuation needs justification."
+    ],
+    "boundaries": [
+      "Situated observations remain field evidence rather than collaborator profiles or universal effectiveness claims. Skill creation stays within the current authority and repository scope. Activation, recurrence, polish, and self-authored examples remain routing observations rather than evidence of authority or effectiveness. A first instruction-only attempt is useful evidence, and an unformed or resting candidate remains a valid outcome."
+    ],
+    "result": "One named route, the evidence that supports it, the smallest useful action, and a return condition that leaves the original work easy to resume."
+  },
+  "receivingUse": {
+    "job": "Material work reveals a reusable collaboration move, friction in an active skill, a promising skill billet, overlapping skill territory, or a repeated meta-level pass whose continuation needs justification.",
+    "materialResult": "One named route, the evidence that supports it, the smallest useful action, and a return condition that leaves the original work easy to resume.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/collaboration-accounting/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}
