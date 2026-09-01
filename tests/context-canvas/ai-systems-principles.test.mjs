@@ -126,6 +126,44 @@ function operatingPrinciples(source) {
   )];
 }
 
+function labelledOwner(source, sectionId) {
+  const opening = new RegExp(
+    "<(?<tag>section|article)\\b[^>]*aria-labelledby=\"" + sectionId + "\"[^>]*>",
+    "u",
+  ).exec(source);
+  if (!opening) return null;
+
+  const closing = `</${opening.groups.tag}>`;
+  const end = source.indexOf(closing, opening.index + opening[0].length);
+  if (end < 0) return null;
+
+  return {
+    start: opening.index,
+    end: end + closing.length,
+    tag: opening.groups.tag,
+  };
+}
+
+function atRuleBlocks(source, openingPattern) {
+  const blocks = [];
+  for (const opening of source.matchAll(openingPattern)) {
+    const start = opening.index;
+    let depth = 0;
+    let end = -1;
+    for (let index = source.indexOf("{", start); index < source.length; index += 1) {
+      if (source[index] === "{") depth += 1;
+      if (source[index] === "}") depth -= 1;
+      if (depth === 0) {
+        end = index + 1;
+        break;
+      }
+    }
+    assert.ok(end > start, `unterminated CSS at-rule at ${start}`);
+    blocks.push(source.slice(start, end));
+  }
+  return blocks;
+}
+
 test("the complete AI Systems family carries one principle at its earned body transition", async () => {
   const aiSystemsRoutes = [];
   for (const entry of await readdir(canvasRoot, { withFileTypes: true })) {
@@ -151,15 +189,11 @@ test("the complete AI Systems family carries one principle at its earned body tr
       route,
     );
 
-    const sectionStart = source.search(new RegExp(
-      "<(?:section|article)\\b[^>]*aria-labelledby=\"" + expected.sectionId + "\"",
-      "u",
-    ));
+    const owner = labelledOwner(source, expected.sectionId);
     const principleStart = principles[0].index;
-    const sectionEnd = source.indexOf("</section>", sectionStart);
-    assert.ok(sectionStart >= 0, route + ": missing " + expected.sectionId);
-    assert.ok(principleStart > sectionStart, route + ": principle precedes its section");
-    assert.ok(sectionEnd > principleStart, route + ": principle leaves its section");
+    assert.ok(owner, route + ": missing " + expected.sectionId);
+    assert.ok(principleStart > owner.start, route + ": principle precedes its owner");
+    assert.ok(principleStart < owner.end, route + ": principle leaves its " + owner.tag);
 
     assert.equal(principles[0][1], expected.label, route);
     assert.equal(
@@ -184,13 +218,25 @@ test("the operating-principle modifier has one family owner and route-local Hiri
 
   assert.doesNotMatch(legacyCss, /\.ai-systems-hero \.debrief-quote/u);
   assert.match(familyCss, /\.ai-systems-page \.debrief-quote--operating-principle\s*\{/u);
-  assert.match(
+  const forcedColorBlocks = atRuleBlocks(
     familyCss,
-    /@media \(forced-colors: active\)[\s\S]*?\.ai-systems-page \.debrief-quote--operating-principle/u,
+    /@media \(forced-colors: active\)\s*\{/gu,
   );
-  assert.match(
+  assert.ok(
+    forcedColorBlocks.some((block) => (
+      /\.ai-systems-page \.debrief-quote--operating-principle/u.test(block)
+    )),
+    "forced-colors block owns the operating-principle selector",
+  );
+  const printBlocks = atRuleBlocks(
     familyCss,
-    /@media print[\s\S]*?\.ai-systems-page \.debrief-quote--operating-principle/u,
+    /@media print\s*\{/gu,
+  );
+  assert.ok(
+    printBlocks.some((block) => (
+      /\.ai-systems-page \.debrief-quote--operating-principle/u.test(block)
+    )),
+    "print block owns the operating-principle selector",
   );
   assert.match(
     hiringCss,
@@ -206,11 +252,8 @@ test("the visual reference includes all sixteen AI Systems routes", async () => 
   const family = source.match(
     /id: "ai-systems-and-instruments",[\s\S]*?routes: \[([\s\S]*?)\]\s*\}/u,
   )?.[1] ?? "";
-  for (const route of placements.keys()) {
-    assert.match(
-      family,
-      new RegExp("\"" + route.replaceAll(".", "\\.") + "\"", "u"),
-      route,
-    );
-  }
+  const routes = [...family.matchAll(/"([^"]+\.html)"/gu)]
+    .map((match) => match[1])
+    .sort();
+  assert.deepEqual(routes, [...placements.keys()].sort());
 });
