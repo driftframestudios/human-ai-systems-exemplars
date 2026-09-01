@@ -34,7 +34,7 @@
       "version": "0.1.2",
       "status": "current",
       "exists": true,
-      "size_bytes": 72173,
+      "size_bytes": 72551,
       "previous": [
         "poda-chimeric-prototype-v0.1.html",
         "poda-chimeric-prototype-v0.1.1.html"
@@ -50,7 +50,7 @@
       "version": "0.1.2",
       "status": "current",
       "exists": true,
-      "size_bytes": 66935,
+      "size_bytes": 67313,
       "previous": [
         "alignment-worksheet-chimeric-prototype-v0.1.html",
         "alignment-worksheet-chimeric-prototype-v0.1.1.html"
@@ -71,7 +71,7 @@
         "impact-map-chimeric-prototype-v0.1.2.html"
       ],
       "exists": true,
-      "size_bytes": 45618
+      "size_bytes": 45996
     },
     {
       "id": "context-tree",
@@ -90,7 +90,7 @@
         "context-tree-chimeric-prototype-v0.1.4.html"
       ],
       "exists": true,
-      "size_bytes": 85043
+      "size_bytes": 85419
     },
     {
       "id": "strategy-canvas",
@@ -112,8 +112,8 @@
       "schema": "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
       "expression": "canonical",
       "exists": true,
-      "size_bytes": 132625,
-      "sha256": "6d954acc664b974f25547bfd838a347b9c559be8b8250218e934d969d954cacc"
+      "size_bytes": 133005,
+      "sha256": "7d1a5a1f381e1fafe880dc76a691b40ad24e73226632ff73293e69ae35e59dbe"
     },
     {
       "id": "first-responsible-version-matrix",
@@ -125,7 +125,7 @@
       "version": "0.1.2",
       "status": "current",
       "exists": true,
-      "size_bytes": 62925,
+      "size_bytes": 63301,
       "previous": [
         "first-responsible-version-matrix-chimeric-prototype-v0.1.html",
         "first-responsible-version-matrix-chimeric-prototype-v0.1.1.html"
@@ -141,7 +141,7 @@
       "version": "0.1.2",
       "status": "current",
       "exists": true,
-      "size_bytes": 105755,
+      "size_bytes": 106131,
       "previous": [
         "shared-surface-priority-map-chimeric-prototype-v0.1.html",
         "shared-surface-priority-map-chimeric-prototype-v0.1.1.html"
@@ -163,7 +163,7 @@
         "service-design-blueprint-chimeric-prototype-v0.2.2.html"
       ],
       "exists": true,
-      "size_bytes": 92697
+      "size_bytes": 93075
     },
     {
       "id": "ai-systems-service-blueprint",
@@ -175,7 +175,7 @@
       "version": "0.1.2",
       "status": "current",
       "exists": true,
-      "size_bytes": 66363,
+      "size_bytes": 66741,
       "previous": [
         "ai-systems-service-blueprint-chimeric-prototype-v0.1.html",
         "ai-systems-service-blueprint-chimeric-prototype-v0.1.1.html"
@@ -191,7 +191,7 @@
       "version": "0.1.2",
       "status": "current",
       "exists": true,
-      "size_bytes": 79814,
+      "size_bytes": 80192,
       "previous": [
         "software-architecture-views-chimeric-prototype-v0.1.html",
         "software-architecture-views-chimeric-prototype-v0.1.1.html"
@@ -207,7 +207,7 @@
       "version": "0.1.2",
       "status": "current",
       "exists": true,
-      "size_bytes": 70560,
+      "size_bytes": 70938,
       "previous": [
         "participatory-design-kit-chimeric-prototype-v0.1.html",
         "participatory-design-kit-chimeric-prototype-v0.1.1.html"
@@ -229,7 +229,7 @@
         "specification-by-example-chimeric-prototype-v0.1.3.html"
       ],
       "exists": true,
-      "size_bytes": 69160
+      "size_bytes": 69538
     },
     {
       "id": "heart-chart",
@@ -247,7 +247,7 @@
         "heart-chart-chimeric-prototype-v0.1.3.html"
       ],
       "exists": true,
-      "size_bytes": 63885
+      "size_bytes": 64263
     },
     {
       "id": "plus-delta",
@@ -259,7 +259,7 @@
       "version": "0.1.2",
       "status": "current",
       "exists": true,
-      "size_bytes": 48751,
+      "size_bytes": 49129,
       "previous": [
         "plus-delta-chimeric-prototype-v0.1.html",
         "plus-delta-chimeric-prototype-v0.1.1.html"
@@ -275,7 +275,7 @@
       "version": "0.1.2",
       "status": "current",
       "exists": true,
-      "size_bytes": 68578,
+      "size_bytes": 68956,
       "previous": [
         "practitioner-judgment-probes-chimeric-prototype-v0.1.html",
         "practitioner-judgment-probes-chimeric-prototype-v0.1.1.html"
@@ -291,7 +291,7 @@
       "version": "0.1.2",
       "status": "current",
       "exists": true,
-      "size_bytes": 96088,
+      "size_bytes": 96466,
       "previous": [
         "pattern-problem-surface-matrix-chimeric-prototype-v0.1.html",
         "pattern-problem-surface-matrix-chimeric-prototype-v0.1.1.html"
@@ -307,7 +307,7 @@
       "version": "0.1.2",
       "status": "current",
       "exists": true,
-      "size_bytes": 68134,
+      "size_bytes": 68512,
       "previous": [
         "jobs-to-be-done-treemap-chimeric-prototype-v0.1.html",
         "jobs-to-be-done-treemap-chimeric-prototype-v0.1.1.html"
@@ -323,7 +323,7 @@
       "version": "0.1.2",
       "status": "current",
       "exists": true,
-      "size_bytes": 65882,
+      "size_bytes": 66260,
       "previous": [
         "unit-test-first-design-chimeric-prototype-v0.1.html",
         "unit-test-first-design-chimeric-prototype-v0.1.1.html"
@@ -339,7 +339,7 @@
       "version": "0.1.2",
       "status": "current",
       "exists": true,
-      "size_bytes": 59221,
+      "size_bytes": 59599,
       "previous": [
         "upstream-revision-loop-chimeric-prototype-v0.1.html",
         "upstream-revision-loop-chimeric-prototype-v0.1.1.html"
@@ -355,7 +355,7 @@
       "version": "0.1.2",
       "status": "current",
       "exists": true,
-      "size_bytes": 73697,
+      "size_bytes": 74075,
       "previous": [
         "recovery-routing-atlas-chimeric-prototype-v0.1.html",
         "recovery-routing-atlas-chimeric-prototype-v0.1.1.html"
@@ -371,7 +371,7 @@
       "version": "0.1.3",
       "status": "current",
       "exists": true,
-      "size_bytes": 74558,
+      "size_bytes": 74936,
       "previous": [
         "core-architecture-family-index-chimeric-prototype-v0.1.html",
         "core-architecture-family-index-chimeric-prototype-v0.1.1.html",

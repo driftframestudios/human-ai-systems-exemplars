@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readdir, readFile } from "node:fs/promises";
-import { join, resolve } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import test from "node:test";
 import Ajv2020 from "ajv/dist/2020.js";
 
@@ -230,6 +231,21 @@ test("every Context-local prototype manifest satisfies the shared source relatio
     await t.test(path.slice(repositoryRoot.length + 1), async () => {
       const valid = await json(path);
       assert.equal(validate(valid), true, JSON.stringify(validate.errors, null, 2));
+
+      const manifestDirectory = dirname(path);
+      const entryPath = resolve(manifestDirectory, valid.entryFile);
+      assert.doesNotMatch(
+        relative(manifestDirectory, entryPath),
+        /^\.\.(?:[/\\]|$)/u,
+        "entry file remains inside its local prototype family",
+      );
+      const entryBytes = await readFile(entryPath);
+      assert.equal(valid.integrity.algorithm, "sha256");
+      assert.equal(
+        valid.integrity.entryFile,
+        createHash("sha256").update(entryBytes).digest("hex"),
+        "entry-file integrity resolves to the current material bytes",
+      );
 
       const invalid = clone(valid);
       delete invalid.id;

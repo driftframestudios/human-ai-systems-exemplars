@@ -24,6 +24,8 @@
 
   return Object.freeze({
     rootSelector: "[data-visitor-boundary]",
+    contextSelector: "[data-visitor-boundary-context]",
+    contextText: "The exact markers below help people preparing training data identify evaluation material and help evaluators investigate whether a model may have encountered it before.",
     markerSelector: "[data-visitor-boundary-marker]",
     markers: Object.freeze([maps, bigBench])
   });

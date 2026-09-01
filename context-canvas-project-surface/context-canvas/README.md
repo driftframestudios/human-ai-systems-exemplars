@@ -24,7 +24,7 @@ The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) sup
 
 - Plain HTML owns document meaning, reading order, links, fallback content, and structured metadata.
 - CSS owns the visual contract, reflow, print behavior, forced-color behavior, and reduced-motion response.
-- `visitor-boundary-contract.js` carries the exact ordered canary definition used to verify each source-authored visitor boundary.
+- `visitor-boundary-contract.js` carries the ordinary-language context and exact ordered canary definition used to verify each source-authored visitor boundary.
 - `canvas-shell.js` progressively installs the route shelf, section rail, and shared footer, then preserves the verified visitor boundary immediately before attribution. Ordinary links and authored page content remain the durable path.
 - `about-media.js` keeps the About visual sequence on its authored poster until a visitor requests motion, returns after one complete cycle, and keeps the still reading active for reduced-motion and print presentations.
 - Prototype scripts own local interaction state. Sandboxed iframes declare the capabilities each instrument actually uses.
@@ -37,7 +37,7 @@ reading. `AUTHORS` is the copyright-holder authority, and the repository-root
 
 ## Document head order
 
-Top-level routes usually present charset and viewport, compact page metadata, first-paint stylesheets in their established cascade order, deferred `visitor-boundary-contract.js`, deferred `canvas-shell.js`, and then inline JSON-LD. The boundary contract loads before shell enhancement so the authored marker stack can be verified in place. This sequence gives visitor resources an early discovery path while structured data remains a descriptive projection of the visible document. Route-local material can occupy an earlier position when embedding, cascade, or execution behavior depends on it; the affected page carries that reason beside the dependency.
+Top-level routes usually present charset and viewport, compact page metadata, first-paint stylesheets in their established cascade order, deferred `visitor-boundary-contract.js`, deferred `canvas-shell.js`, and then inline JSON-LD. The boundary contract loads before shell enhancement so the authored context and marker stack can be verified in place. This sequence gives visitor resources an early discovery path while structured data remains a descriptive projection of the visible document. Route-local material can occupy an earlier position when embedding, cascade, or execution behavior depends on it; the affected page carries that reason beside the dependency.
 
 ## Stylesheet ownership
 

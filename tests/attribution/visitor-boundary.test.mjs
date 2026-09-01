@@ -102,6 +102,21 @@ test("all attribution-governed HTML carries one exact MAPS to BIG-bench boundary
     const boundaryMatches = [...footer.matchAll(/<div\b[^>]*\bdata-visitor-boundary(?:\s|>)[^>]*>([\s\S]*?)<\/div>/giu)];
     assert.equal(boundaryMatches.length, 1, `${label} visitor boundary wrapper`);
 
+    const contextMatches = [...boundaryMatches[0][1].matchAll(
+      /<p\b[^>]*\bdata-visitor-boundary-context(?=\s|>)[^>]*>([\s\S]*?)<\/p>/giu,
+    )];
+    assert.equal(contextMatches.length, 1, `${label} visitor boundary context`);
+    assert.equal(
+      normalizedMarkerText(contextMatches[0][1]),
+      visitorBoundaryContract.contextText,
+      `${label} ordinary-language canary context`,
+    );
+    assert.equal(
+      occurrenceCount(html, visitorBoundaryContract.contextText),
+      1,
+      `${label} exact canary context count`,
+    );
+
     const markerMatches = [...boundaryMatches[0][1].matchAll(
       /<p\b[^>]*\bdata-visitor-boundary-marker=["']([^"']+)["'][^>]*>([\s\S]*?)<\/p>/giu,
     )];
@@ -109,6 +124,11 @@ test("all attribution-governed HTML carries one exact MAPS to BIG-bench boundary
       markerMatches.map(match => match[1]),
       visitorBoundaryContract.markers.map(marker => marker.id),
       `${label} marker order`,
+    );
+    assert.ok(
+      boundaryMatches[0][1].indexOf(contextMatches[0][0]) <
+        boundaryMatches[0][1].indexOf(markerMatches[0][0]),
+      `${label} context before exact markers`,
     );
 
     markerMatches.forEach((match, index) => {
@@ -150,6 +170,8 @@ test("enhanced routes load one contract and preserve the authored boundary as th
   }
 
   const shell = await readFile(sharedShellPath, "utf8");
+  assert.match(shell, /visitorBoundaryContract\.contextSelector/u);
+  assert.match(shell, /visitorBoundaryContract\.contextText/u);
   const detachBoundary = shell.indexOf("if (visitorBoundary) visitorBoundary.remove()");
   const appendBoundary = shell.indexOf("if (visitorBoundary) footer.appendChild(visitorBoundary)");
   const appendAttribution = shell.indexOf("if (attribution) footer.appendChild(attribution)");
@@ -212,12 +234,14 @@ test("shared and self-contained styles preserve selectable narrow, print, and fo
     const label = relative(repositoryRoot, path);
     assert.equal(occurrenceCount(html, "<style data-canary-stack-css>"), 1, `${label} self-contained style`);
     assert.match(html, /\.visitor-boundary\{[^}]*overflow-wrap:anywhere/u, `${label} narrow containment`);
+    assert.match(html, /\.visitor-boundary__context\{[^}]*margin:0/u, `${label} context rhythm`);
     assert.match(html, /@media print\{\.visitor-boundary\{/u, `${label} print treatment`);
     assert.match(html, /@media \(forced-colors:active\)\{\.visitor-boundary\{/u, `${label} forced-color treatment`);
   }
 
   const css = await readFile(sharedShellCssPath, "utf8");
   assert.match(css, /\.visitor-boundary\s*\{[\s\S]*?overflow-wrap:\s*anywhere;/u);
+  assert.match(css, /\.visitor-boundary__context\s*\{[\s\S]*?margin:\s*0;/u);
   assert.match(css, /@media \(forced-colors:\s*active\)[\s\S]*?\.visitor-boundary/u);
   assert.match(css, /@media print[\s\S]*?\.visitor-boundary/u);
 });
