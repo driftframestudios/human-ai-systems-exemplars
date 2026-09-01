@@ -1990,23 +1990,6 @@ td details > summary {
     max-inline-size: var(--canvas-lead-measure);
 }
 
-.ai-systems-hero .debrief-quote {
-    background: var(--blueprint-cream);
-    border: .125rem solid var(--blueprint-ink);
-    border-radius: .75rem;
-    box-shadow: .5rem .5rem 0 var(--blueprint-coral);
-    color: var(--blueprint-ink);
-    margin: clamp(2rem, 4vw, 3.5rem) auto .5rem;
-    max-inline-size: var(--canvas-reading-measure);
-    padding: clamp(1rem, 2.5vw, 1.75rem);
-    text-align: start;
-}
-
-.ai-systems-hero .debrief-quote p,
-.ai-systems-hero .debrief-quote footer {
-    color: var(--blueprint-ink);
-}
-
 /* Shared Blueprint embed. The unscoped selector also serves Initiative Costing
    and Prompt Side Conditions, so it remains in the shared sheet. */
 .prototype-embed--blueprint {
@@ -2043,9 +2026,6 @@ td details > summary {
         font-size: clamp(2.45rem, 13vw, 3.45rem);
     }
 
-    .ai-systems-hero .debrief-quote {
-        box-shadow: .3rem .3rem 0 var(--blueprint-ink);
-    }
 }
 
 @media (forced-colors: active) {
