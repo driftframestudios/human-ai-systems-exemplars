@@ -510,11 +510,15 @@ async function exerciseLims({ page }) {
 }
 
 async function exerciseGenomic({ carrierPage, page }) {
+  const carrier = carrierPage.locator("iframe");
+  const deck = page.locator(".control-deck");
   const wayfinding = page.locator(".actor-board__wayfinding");
   const board = page.locator(".actor-board");
   assert.equal(await wayfinding.isVisible(), false, "desktop board keeps the narrow cue quiet");
+  assert.equal(await wayfinding.getAttribute("id"), "actor-board-wayfinding");
   assert.equal(await board.getAttribute("role"), "region");
   assert.equal(await board.getAttribute("aria-label"), "Population groups");
+  assert.equal(await board.getAttribute("aria-describedby"), "actor-board-wayfinding");
   assert.equal(await board.getAttribute("tabindex"), "0");
 
   await carrierPage.setViewportSize({ width: viewports[1].width, height: viewports[1].height });
@@ -535,6 +539,36 @@ async function exerciseGenomic({ carrierPage, page }) {
     "horizontal group region accepts keyboard focus",
   );
 
+  await carrierPage.setViewportSize({ width: 844, height: 390 });
+  await carrier.evaluate((element) => {
+    element.style.height = "390px";
+  });
+  await page.evaluate(() => new Promise((resolve) => {
+    requestAnimationFrame(() => requestAnimationFrame(resolve));
+  }));
+  assert.equal(await wayfinding.isVisible(), true, "landscape board exposes horizontal wayfinding");
+  assert.equal(
+    await deck.evaluate((element) => getComputedStyle(element).position),
+    "static",
+    "landscape controls remain in document flow",
+  );
+  await page.locator(".context-card").first().scrollIntoViewIfNeeded();
+  const landscapeGeometry = await page.evaluate(() => {
+    const deckRect = document.querySelector(".control-deck").getBoundingClientRect();
+    const cardRect = document.querySelector(".context-card").getBoundingClientRect();
+    return {
+      cardTop: cardRect.top,
+      visibleDeckBottom: Math.max(0, deckRect.bottom),
+    };
+  });
+  assert.ok(
+    landscapeGeometry.cardTop >= landscapeGeometry.visibleDeckBottom,
+    "landscape controls leave the first context card unobscured",
+  );
+
+  await carrier.evaluate((element) => {
+    element.style.height = "900px";
+  });
   await carrierPage.setViewportSize({ width: viewports[0].width, height: viewports[0].height });
   await page.locator('[data-view="shared"]').click();
   assert.equal(await page.locator('[data-view="shared"]').getAttribute("aria-checked"), "true");
