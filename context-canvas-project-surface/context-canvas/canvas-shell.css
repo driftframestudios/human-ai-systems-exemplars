@@ -138,6 +138,15 @@
     max-inline-size: 100%;
 }
 
+.visitor-boundary__context {
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: .8rem;
+    line-height: 1.55;
+    margin: 0;
+    max-inline-size: 70ch;
+}
+
 .about-footer {
     flex-wrap: wrap;
 }

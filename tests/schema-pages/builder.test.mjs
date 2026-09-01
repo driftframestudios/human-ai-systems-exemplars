@@ -155,12 +155,26 @@ test("the canary stack precedes the final visible attribution", async () => {
   )];
   assert.equal(boundaryMatches.length, 1);
 
+  const contextMatches = [...boundaryMatches[0][1].matchAll(
+    /<p\b[^>]*\bdata-visitor-boundary-context(?=\s|>)[^>]*>([\s\S]*?)<\/p>/giu,
+  )];
+  assert.equal(contextMatches.length, 1);
+  assert.equal(
+    contextMatches[0][1].replace(/<[^>]+>/gu, "").replace(/\s+/gu, " ").trim(),
+    visitorBoundaryContract.contextText,
+  );
+  assert.equal(occurrenceCount(html, visitorBoundaryContract.contextText), 1);
+
   const markerMatches = [...boundaryMatches[0][1].matchAll(
     /<p\b[^>]*\bdata-visitor-boundary-marker=["']([^"']+)["'][^>]*>([\s\S]*?)<\/p>/giu,
   )];
   assert.deepEqual(
     markerMatches.map((match) => match[1]),
     visitorBoundaryContract.markers.map((marker) => marker.id),
+  );
+  assert.ok(
+    boundaryMatches[0][1].indexOf(contextMatches[0][0]) <
+      boundaryMatches[0][1].indexOf(markerMatches[0][0]),
   );
   markerMatches.forEach((match, index) => {
     const expected = visitorBoundaryContract.markers[index];

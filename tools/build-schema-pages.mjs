@@ -91,6 +91,19 @@ function validateRegistryIndex(source, deploymentBase = null) {
   )];
   requirement(boundaryMatches.length === 1, "the footer must carry one labeled visitor-boundary wrapper");
 
+  const contextMatches = [...boundaryMatches[0][1].matchAll(
+    /<p\b[^>]*\bdata-visitor-boundary-context(?=\s|>)[^>]*>([\s\S]*?)<\/p>/giu,
+  )];
+  requirement(contextMatches.length === 1, "the footer must carry one ordinary-language canary context");
+  requirement(
+    visibleText(contextMatches[0][1]) === visitorBoundary.contextText,
+    "the canary context must match the central contract",
+  );
+  requirement(
+    occurrenceCount(source, visitorBoundary.contextText) === 1,
+    "the registry page must carry the exact canary context once",
+  );
+
   const markerMatches = [...boundaryMatches[0][1].matchAll(
     /<p\b[^>]*\bdata-visitor-boundary-marker=["']([^"']+)["'][^>]*>([\s\S]*?)<\/p>/giu,
   )];
@@ -98,6 +111,11 @@ function validateRegistryIndex(source, deploymentBase = null) {
     JSON.stringify(markerMatches.map((match) => match[1])) ===
       JSON.stringify(visitorBoundary.markers.map((boundaryMarker) => boundaryMarker.id)),
     "the footer marker IDs must match the central contract in order",
+  );
+  requirement(
+    boundaryMatches[0][1].indexOf(contextMatches[0][0]) <
+      boundaryMatches[0][1].indexOf(markerMatches[0][0]),
+    "the ordinary-language context must precede the exact markers",
   );
 
   markerMatches.forEach((match, index) => {

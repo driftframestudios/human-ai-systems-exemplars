@@ -97,8 +97,10 @@
     var visitorBoundary = footer.querySelector(":scope > " + boundarySelector + ", :scope > * > " + boundarySelector);
     var attribution = footer.querySelector(":scope > .site-attribution, :scope > * > .site-attribution");
     if (visitorBoundary && visitorBoundaryContract) {
+      var boundaryContext = visitorBoundary.querySelector(visitorBoundaryContract.contextSelector);
       var markers = Array.prototype.slice.call(visitorBoundary.querySelectorAll(visitorBoundaryContract.markerSelector));
-      var exact = markers.length === visitorBoundaryContract.markers.length && markers.every(function (marker, index) {
+      var exactContext = boundaryContext && boundaryContext.innerText.replace(/\r\n?/g, "\n").trim() === visitorBoundaryContract.contextText;
+      var exact = exactContext && markers.length === visitorBoundaryContract.markers.length && markers.every(function (marker, index) {
         return marker.innerText.replace(/\r\n?/g, "\n").trim() === visitorBoundaryContract.markers[index].lines.join("\n");
       });
       visitorBoundary.dataset.visitorBoundaryState = exact ? "verified" : "authored";
