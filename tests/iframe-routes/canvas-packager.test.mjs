@@ -3,6 +3,7 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import visitorBoundaryContract from "../../context-canvas-project-surface/context-canvas/visitor-boundary-contract.js";
 
 import {
   artifactAttribution,
@@ -90,6 +91,12 @@ test("the Canvas family plan follows the authored 15-route manifest", async () =
     assert.equal(occurrenceCount(html, artifactLicense), 1, `${route.id} license relation`);
     assert.equal(occurrenceCount(html, artifactAttribution), 1, `${route.id} attribution notice`);
     assert.equal(occurrenceCount(html, "data-visitor-boundary aria-label="), 1);
+    assert.equal(occurrenceCount(html, visitorBoundaryContract.contextText), 1);
+    assert.ok(
+      html.indexOf("data-visitor-boundary-context") <
+        html.indexOf("data-visitor-boundary-marker"),
+      `${route.id} context before exact markers`,
+    );
     assert.equal(occurrenceCount(html, "<style data-iframe-route-projection>"), 1);
   }
 

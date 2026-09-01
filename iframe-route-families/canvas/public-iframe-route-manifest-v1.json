@@ -8,7 +8,7 @@
     "entry_file": "index.html",
     "route_receipt_file": "route-manifest.json",
     "html_closure": "declared_package_local",
-    "public_decoration": "A generated public projection carries centralized author metadata, the Apache-2.0 license relation, the exact stacked visitor-boundary markers, and the copy-local attribution notice. The semantic source stays unchanged.",
+    "public_decoration": "A generated public projection carries centralized author metadata, the Apache-2.0 license relation, ordinary-language visitor-boundary context followed by the exact stacked markers, and the copy-local attribution notice. The semantic source stays unchanged.",
     "navigation_posture": "Repository-local onward links are rewritten only when declared below and point to the primary visitor surface. Fragment-only navigation remains route-local.",
     "package_file_allowlist": "Every non-inline resource is copied from an explicitly declared regular repository file to an explicitly declared route-local target with a content type.",
     "static_scan_boundary": "Markup, CSS, and selected JavaScript network primitives are checked during packaging. Browser request-graph, interaction, containment, and delivery-policy checks remain release gates.",

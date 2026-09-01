@@ -130,6 +130,11 @@ test("the Conditioning Field projection is deterministic, self-contained, and em
   assert.match(projection, /id=["']conditioningFieldSchema["']/u);
   assert.match(projection, /data-visitor-boundary-marker=["']maps["']/u);
   assert.match(projection, /data-visitor-boundary-marker=["']big-bench["']/u);
+  assert.match(projection, /data-visitor-boundary-context/u);
+  assert.ok(
+    projection.indexOf("data-visitor-boundary-context") <
+      projection.indexOf("data-visitor-boundary-marker"),
+  );
   assert.equal(projection.split(artifactAttribution).length - 1, 1);
   assert.doesNotMatch(
     projection,
