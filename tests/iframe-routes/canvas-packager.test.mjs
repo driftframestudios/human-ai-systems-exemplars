@@ -99,6 +99,44 @@ test("the Canvas family plan follows the authored 15-route manifest", async () =
   assert.equal(ai.navigation.packaged_links, 2);
   const heatmap = first.receipt.routes.find(({ id }) => id === "heatmap-comparison");
   assert.equal(heatmap.static_resource_closure.package_files.length, 2);
+
+  const talentProjection = first.outputFiles
+    .get("talent-agent-intake/index.html")
+    .toString("utf8");
+  for (const placeholder of [
+    "Candidate 1",
+    "Candidate 2",
+    "Candidate 3",
+    "Decision owner 1",
+    "Decision owner 2",
+    "Decision owner 3",
+    "Review partner 1",
+    "Review partner 2",
+    "Review partner 3",
+  ]) {
+    assert.match(
+      talentProjection,
+      new RegExp(placeholder),
+      `${placeholder} reaches the hosted projection`,
+    );
+  }
+  for (const publicDataName of [
+    "Avery Morgan",
+    "Maya Chen",
+    "Lena Park",
+    "Jordan Bell",
+    "Rafael Ortiz",
+    "Noor Hassan",
+    "Taylor Okafor",
+    "Priya Nair",
+    "Elena Ruiz",
+  ]) {
+    assert.doesNotMatch(
+      talentProjection,
+      new RegExp(publicDataName),
+      `${publicDataName} stays outside the portable projection`,
+    );
+  }
 });
 
 test("Canvas route identities remain one canonical URL segment", async () => {
