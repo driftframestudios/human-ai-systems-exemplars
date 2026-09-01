@@ -334,6 +334,7 @@ The lean repository probe keeps five fields: question, why it matters, mechanism
 | `context-canvas-visual-verification` | Select proportionate source-bound visual and browser evidence | Layout, responsive behavior, interaction state, print, forced colors, visible regression | Fitting reference or focused check, interpreted result, limits, risk, and next receiver |
 | `practitioner-probe` | Turn ambiguous terrain into a decision-changing technical question | Plausible-but-shallow code, unclear gap, issue assessment | Mechanism, observation, instruction yield, bounded route |
 | `supportive-change-writing` | Produce negation-aware, evidence-calibrated repository prose | README, planning, issue, instructions, explanation | Desired state, authority, evidence limit, revisable next move |
+| `contextual-jargon-scan` | Distinguish exact language and useful compact metaphors from replaceable inside shorthand | Public, visitor-facing, cross-team, or durable prose with a bounded reader job | Scoped occurrence map, targeted revisions, intentional retentions, verification, and any material deferral |
 | `evidence-grounded-research-spike` | Convert current evidence into a bounded repository decision | Contemporary technical or collaboration question | Synthesis, evidence map, instruction delta, transfer limits |
 | `declarative-skill-authoring` | Author a transferable skill through contract, rules, workflow, and sparse scenarios | New skill, routing friction, scenario layering, conditional context | Conventional skill with explicit behavior, transfer boundary, and completion |
 | `collaboration-accounting` | Route decision-changing observations through an accretive skill lifecycle | Reusable affordance, active-skill friction, queued candidate, skill recursion | One skill route, smallest action, evidence boundary, and re-entry trigger |
@@ -347,10 +348,10 @@ The lean repository probe keeps five fields: question, why it matters, mechanism
 | `repository-attribution-stewardship` | Align copyright-holder, citation, contribution, notice, and bounded machine-projection carriers | Repository attribution, citation metadata, contributor credit, or adaptation guidance changes | Distinct carrier roles, proportionate attribution, and an evidence-calibrated governance return |
 | `collaboration-runbook-authoring` | Convert a settled multi-phase route into a re-entrant versioned procedure | Known work spans several source owners, Issues, checks, recovery paths, and handbacks | AI-legible entry, authority, action modes, checks, recovery, stop, and handback |
 
-Nineteen portable skill contracts now form the standing catalog. The first
-eight began as instruction-only experiments. Eleven later contracts joined after
+Twenty portable skill contracts now form the standing catalog. The first
+eight began as instruction-only experiments. Twelve later contracts joined after
 material work established distinct receiving jobs:
-`schema-contract-authoring`, `source-authority-mapping`,
+`contextual-jargon-scan`, `schema-contract-authoring`, `source-authority-mapping`,
 `issue-chain-stewardship`, `bounded-support-routing`,
 `locator-boundary-stewardship`, `stateful-artifact-behavior-contracts`,
 `secret-boundary-inspection`, `repository-attribution-stewardship`,
@@ -405,7 +406,7 @@ records the source evidence, private/public Registry boundary, and next natural
 uses.
 
 This candidate ledger preserves later skill terrain as a collaboration
-surface. Nineteen portable contracts form the standing experiment; the two
+surface. Twenty portable contracts form the standing experiment; the two
 retired projections remain available as use evidence through Git history and
 threadkeeping.
 
