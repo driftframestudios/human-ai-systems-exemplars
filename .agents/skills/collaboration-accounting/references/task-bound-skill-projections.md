@@ -117,6 +117,6 @@ And successful local use remains sufficient evidence
 
 ## Research grounding
 
-The [collaboration-accounting source capsule](../../../../planning/repository-skill-architecture.md#collaboration-accounting-source-capsule) carries `ca-ref-001` and `ca-ref-006..008`: the Enterprise Human-AI Practitioner Registry, Narrative Architecture Orientation Index task-projection role, Core Architecture Projections, and Narrative Capsules. Together they supplied the distinctions used here: architecture and affordance, source and projection, profile and instance, selected state and portable capsule, receipt and agreement, and return proposal and source decision.
+The repository-local source capsule carries four operator-blind relations for this projection research. Together they supplied the distinctions used here: architecture and affordance, source and projection, profile and instance, selected state and portable capsule, receipt and agreement, and return proposal and source decision. Exact workspace lineage remains with its authorized resolver.
 
 Additional workspace material informed the release posture without becoming direct repository citation or runtime dependency. The repository-local depth allowance remains a working design choice to be revised through natural use.

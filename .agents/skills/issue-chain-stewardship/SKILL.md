@@ -17,7 +17,7 @@ description: Makes related repository issues legible as a revisable work route w
 - **Useful when:** One issue prepares or blocks another, a tranche contains a smaller issue family, or completed work returns to an umbrella issue.
 - **Poor fit when:** One issue and its acceptance criteria already describe the whole job, or a simple unordered related-issues list preserves enough context.
 - **Smallest useful dose:** One current front, one or more evidenced relations, one pass condition, and one next receiver.
-- **Interactions:** `repository-reentry` resolves each issue's current truth; `source-authority-mapping` traces cross-surface artifacts; `supportive-change-writing` shapes the handoff; `collaboration-accounting` receives promotion, revision, or retirement evidence.
+- **Interactions:** `repository-reentry` resolves each issue's current truth; `source-authority-mapping` traces cross-surface artifacts; desired-state writing shapes the handoff; `collaboration-accounting` receives promotion, revision, or retirement evidence.
 - **Rest or release when:** The next issue accepts the handoff, the relationship dissolves, or new evidence changes the route.
 
 ## Rules

@@ -166,7 +166,7 @@ Metadata informs vocabulary and route separation. The repository skill remains s
 
 ### Corpus cautions
 
-The 2026-08-23 sweep sampled 385 `::fragments` rows, 465 `~loamthread` rows, 6 Generated Research rows, 41 Research Registry rows, 59 Narrative Affordance rows, and 12 Narrative Architecture rows. The larger exploratory corpora rarely propagate every observation into a touched page. The smaller generated-research corpus cannot support empirical skill-effectiveness inference. Blank drift-risk, instruction-implication, research-link, or lifecycle fields remain unclassified state rather than negative evidence.
+A varied workspace sampling pass showed that exploratory collections contribute vocabulary and situated observations while only a small portion changes the artifact in front of the team. Sparse research collections support qualitative route decisions rather than empirical skill-effectiveness inference. Blank drift-risk, instruction-implication, research-link, or lifecycle fields remain unclassified state rather than negative evidence.
 
 These findings support a compact initial skill and natural-use observation. They do not support a performance dashboard or a statistical promotion gate.
 
@@ -240,6 +240,6 @@ And the selected skill action proceeds with the source boundary visible
 
 ## Research grounding
 
-The [collaboration-accounting source capsule](../../../../planning/repository-skill-architecture.md#collaboration-accounting-source-capsule) carries `ca-ref-001..005`: the Enterprise Human-AI Practitioner Registry, Narrative Architecture Orientation Index candidacy role, Practitioner Probes, Affordance Stewardship and Research Ledger, and Verbalized Sampling. Together they supplied the distinctions used here: affordance and activation, proposal and authority, contextual use and promotion, probability and fit, and working preparation and receiving outcome.
+The repository-local source capsule carries five operator-blind relations for the collaboration-accounting research. Together they supplied the distinctions used here: affordance and activation, proposal and authority, contextual use and promotion, probability and fit, and working preparation and receiving outcome. Exact workspace lineage remains with its authorized resolver.
 
 Additional workspace material informed the synthesis without becoming direct repository citation or runtime dependency. The repository-local contract remains the operative routing surface; natural material use remains the outside evidence path.

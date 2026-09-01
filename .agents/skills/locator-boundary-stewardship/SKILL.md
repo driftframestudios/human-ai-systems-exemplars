@@ -18,7 +18,7 @@ description: Produces locator-safe public collaboration records while exact gate
 - **Poor fit when:** Every referenced source is already public in the same durable repository and ordinary relative links provide the complete reader job.
 - **Smallest useful dose:** One reference classification, one semantic replacement, and one scoped receipt.
 - **Foregrounds:** Reader job, publication standing, semantic identity, re-entry, and the difference between public comprehension and exact private resolution.
-- **Interactions:** `source-authority-mapping` selects source standing and receiver topology; `issue-chain-stewardship` owns transitions; `supportive-change-writing` shapes register; `repository-reentry` establishes current truth.
+- **Interactions:** `source-authority-mapping` selects source standing and receiver topology; `issue-chain-stewardship` owns transitions; evidence-calibrated writing shapes the register; `repository-reentry` establishes current truth.
 - **Rest or release when:** The receiving artifact contains only fitting public routes, local explanations, repository-local sources, or stable keys whose private mappings are complete.
 
 ## Rules

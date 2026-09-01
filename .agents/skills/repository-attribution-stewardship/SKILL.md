@@ -26,9 +26,8 @@ description: Distinguishes and aligns copyright-holder records, citation metadat
   and a machine projection.
 - **Smallest useful dose:** Name the need, choose the existing carrier, preserve
   its values, and run the nearest parse, path, or carrier check.
-- **Interactions:** Use
-  [`supportive-change-writing`](../supportive-change-writing/SKILL.md) for
-  material prose and instruction changes. Use
+- **Interactions:** Use desired-state, evidence-calibrated writing for material
+  prose and instruction changes. Use
   [`source-authority-mapping`](../source-authority-mapping/SKILL.md) when an
   artifact crosses repositories, mirrors, or publication systems.
 - **Rest or release when:** The existing carrier already answers the question
