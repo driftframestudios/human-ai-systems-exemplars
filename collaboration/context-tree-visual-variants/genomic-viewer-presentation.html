@@ -254,8 +254,11 @@
       .inspector { position: static; }
       .shared-grid, .assembly-grid, .route-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
-    @media (max-width: 720px) {
+    @media (max-width: 64rem) {
       .control-deck { position: static; }
+      .actor-board__wayfinding { display: flex; gap: .35rem; align-items: center; }
+    }
+    @media (max-width: 720px) {
       .control-row { grid-template-columns: 1fr; gap: .25rem; }
       .control-group {
         flex-wrap: nowrap;
@@ -267,7 +270,6 @@
       .surface-heading { grid-template-columns: 1fr; }
       .count { white-space: normal; }
       .shared-grid, .assembly-grid, .route-grid { grid-template-columns: 1fr; }
-      .actor-board__wayfinding { display: flex; gap: .35rem; align-items: center; }
       .actor-column { flex-basis: calc(100vw - 3.7rem); }
       .outcome { grid-template-columns: 1fr; }
     }
@@ -440,7 +442,7 @@
         return `<button class="context-card" type="button" data-select="item" data-id="${group.id}:${question.id}" aria-current="${selectedNow}"><span class="state">${question.id === "scenario" ? "repeatable scenario" : question.id === "route" ? "receiving route" : "decision context"}</span><strong>${escapeHtml(group.items[question.id])}</strong></button>`;
       }
       function renderBoard() {
-        return `<p class="actor-board__wayfinding">Scroll sideways to compare groups <span aria-hidden="true">→</span></p><div class="actor-board" role="region" aria-label="Population groups" tabindex="0">${visibleGroups().map(group => `<article class="actor-column"><header class="actor-header"><button type="button" data-select="group" data-id="${group.id}">${escapeHtml(group.label)}</button><span class="slug">${escapeHtml(group.slug)}</span><p class="impact">${escapeHtml(group.impact)}</p></header><div class="facets">${model.questions.map(question => `<section class="facet"><h3 class="facet-label">${escapeHtml(question.label)}</h3>${contextButton(group, question)}</section>`).join("")}</div></article>`).join("")}</div>`;
+        return `<p class="actor-board__wayfinding" id="actor-board-wayfinding">Scroll sideways to compare groups <span aria-hidden="true">→</span></p><div class="actor-board" role="region" aria-label="Population groups" aria-describedby="actor-board-wayfinding" tabindex="0">${visibleGroups().map(group => `<article class="actor-column"><header class="actor-header"><button type="button" data-select="group" data-id="${group.id}">${escapeHtml(group.label)}</button><span class="slug">${escapeHtml(group.slug)}</span><p class="impact">${escapeHtml(group.impact)}</p></header><div class="facets">${model.questions.map(question => `<section class="facet"><h3 class="facet-label">${escapeHtml(question.label)}</h3>${contextButton(group, question)}</section>`).join("")}</div></article>`).join("")}</div>`;
       }
       function renderMatrix() {
         const groups = visibleGroups();
