@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/context-canvas-css-ownership/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "context-canvas-css-ownership",
+  "description": "Establishes legible Context Canvas CSS ownership. Applies when expanded.css, cascade diagnosis, selector or token migration, route bundles, first-paint work, or Visual Fidelity Contract mapping enters scope.",
+  "semanticAuthorityRef": "../source/.agents/skills/context-canvas-css-ownership/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/3",
+  "contract": {
+    "what": "A consumer-grounded move from broad CSS terrain into legible core, component, contract, route, or legacy ownership.",
+    "when": [
+      "`expanded.css`, cascade behavior, selector naming, first paint, visual-contract mapping, or route-family bundles enter scope."
+    ],
+    "boundaries": [
+      "Readable authored source remains the collaboration surface. Route fingerprints and meaningful variation remain available. HTML carries an explicit, shallow stylesheet order for first paint."
+    ],
+    "result": "Findable ownership, smaller unrelated route CSS, and an affected-family visual comparison."
+  },
+  "receivingUse": {
+    "job": "`expanded.css`, cascade behavior, selector naming, first paint, visual-contract mapping, or route-family bundles enter scope.",
+    "materialResult": "Findable ownership, smaller unrelated route CSS, and an affected-family visual comparison.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/context-canvas-css-ownership/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

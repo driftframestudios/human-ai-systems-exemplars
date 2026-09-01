@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/repository-reentry/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "repository-reentry",
+  "description": "Reconstructs current truth across source, Git, GitHub, planning, and threadkeeping. Applies during resumed work, handoffs, status reconciliation, stale-plan review, and branch or pull-request re-entry.",
+  "semanticAuthorityRef": "../source/.agents/skills/repository-reentry/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/13",
+  "contract": {
+    "what": "A compact model of settled, current, open, and next terrain.",
+    "when": [
+      "Multi-cycle work resumes or repository records appear to disagree."
+    ],
+    "boundaries": [
+      "Current behavior comes from runnable source and artifacts. Historical records preserve rationale. Repository edits require task authority. Re-entry recovers the current contract and differences without claiming personal memory, complete continuity, or familiarity that the available evidence cannot support."
+    ],
+    "result": "One source path, one live collaboration surface, and one bounded re-entry move."
+  },
+  "receivingUse": {
+    "job": "Multi-cycle work resumes or repository records appear to disagree.",
+    "materialResult": "One source path, one live collaboration surface, and one bounded re-entry move.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/repository-reentry/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

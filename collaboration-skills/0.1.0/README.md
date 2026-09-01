@@ -4,13 +4,15 @@ This family gives cross-platform collaborators a small typed projection of a col
 
 ## Start here
 
+[Browse the repository-local public skills catalog](../../skills/).
+
 | Need | Resource |
 | --- | --- |
-| Read one live portable contract | [Source authority mapping](../../../.agents/skills/source-authority-mapping/SKILL.md) |
+| Read one live portable contract | [Source authority mapping](../../skills/source/.agents/skills/source-authority-mapping/SKILL.md) |
 | Load its typed projection | [Portable skill example](examples/portable-skill.example.json) |
 | Understand the exchange shape | [Collaboration skill schema](collaboration-skill.schema.json) |
 | See bounded projection lineage | [Retired task-bound projection](examples/retired-projection.example.json) |
-| Follow a route-changing observation | [Source authority mapping account](../../../threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md) and its [typed example](examples/collaboration-account.example.json) |
+| Follow a route-changing observation | [Source authority mapping account](../../skills/source/threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md) and its [typed example](examples/collaboration-account.example.json) |
 | Understand the account shape | [Collaboration account schema](collaboration-account.schema.json) |
 
 ## Receiving use

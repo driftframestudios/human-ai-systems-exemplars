@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/collaboration-runbook-authoring/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "collaboration-runbook-authoring",
+  "description": "Converts a settled, repeatable multi-phase collaboration route into a versioned AI-legible runbook with explicit entry, authority, checks, recovery, stop, and handback. Applies when a known procedure spans several source owners, Issues, or bounded support returns and the runbook plus its linked current owners should provide sufficient re-entry orientation.",
+  "semanticAuthorityRef": "../source/.agents/skills/collaboration-runbook-authoring/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/2",
+  "contract": {
+    "what": "A compact, versioned procedure for carrying granted work through a known collaboration route.",
+    "when": [
+      "The desired receiving state and phase sequence are sufficiently settled, several source or Issue owners participate, and a future AI collaborator should be able to enter, act, verify, recover, and return through the runbook and its linked current owners."
+    ],
+    "boundaries": [
+      "The current task grant supplies mutation and external-action authority; the active Issue supplies scope, owners, and acceptance; tool boundaries and repository policy bound operations; the runbook orders the work. Publication, deployment, merge, and destructive actions retain those existing authority surfaces. Exploratory diagnosis remains a playbook or research-spike job; one finite delegation remains a bounded support request."
+    ],
+    "result": "One public-possible or internal-only runbook makes the desired state, entry condition, source owners, action modes, ordered phases, evidence gates, recovery, stop condition, and safe handback legible in one pass."
+  },
+  "receivingUse": {
+    "job": "The desired receiving state and phase sequence are sufficiently settled, several source or Issue owners participate, and a future AI collaborator should be able to enter, act, verify, recover, and return through the runbook and its linked current owners.",
+    "materialResult": "One public-possible or internal-only runbook makes the desired state, entry condition, source owners, action modes, ordered phases, evidence gates, recovery, stop condition, and safe handback legible in one pass.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/collaboration-runbook-authoring/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}
