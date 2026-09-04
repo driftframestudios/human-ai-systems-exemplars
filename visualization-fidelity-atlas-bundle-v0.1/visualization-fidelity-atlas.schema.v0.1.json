@@ -64,9 +64,62 @@
       "items": {
         "$ref": "#/$defs/CitationAnchor"
       }
+    },
+    "view_state": {
+      "$ref": "#/$defs/ViewState"
     }
   },
   "$defs": {
+    "ViewState": {
+      "type": "object",
+      "required": [
+        "selectedMoveId",
+        "selectedShapeId",
+        "selectedExemplarId",
+        "selectedVisualFormId",
+        "showReserved",
+        "audience",
+        "uncertaintyRequired",
+        "aiIngestion"
+      ],
+      "properties": {
+        "selectedMoveId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selectedShapeId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selectedExemplarId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selectedVisualFormId": {
+          "type": "string"
+        },
+        "showReserved": {
+          "type": "boolean"
+        },
+        "audience": {
+          "type": "string",
+          "enum": [
+            "mixed",
+            "executive",
+            "technical",
+            "research",
+            "public"
+          ]
+        },
+        "uncertaintyRequired": {
+          "type": "boolean"
+        },
+        "aiIngestion": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
     "DataPrimitive": {
       "type": "object",
       "required": [

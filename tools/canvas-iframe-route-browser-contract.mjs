@@ -758,6 +758,63 @@ async function exerciseOpenLesson({ page }) {
 }
 
 async function exerciseAtlas({ page }) {
+  assert.match(
+    await page.locator("noscript").textContent(),
+    /complete static selector/i,
+    "Atlas retains a no-script route to the static reading",
+  );
+  const initialExemplarId = await page
+    .locator("#exemplarDetail")
+    .getAttribute("data-selected-exemplar-id");
+  const formChoices = page.locator("[data-select-form]");
+  assert.ok(await formChoices.count() >= 5, "Atlas exposes recommendation forms as controls");
+  for (const control of await formChoices.all()) {
+    assert.equal(await control.evaluate((element) => element.tagName), "BUTTON");
+    assert.equal(await control.getAttribute("type"), "button");
+    assert.equal(await control.getAttribute("aria-controls"), "selectedFormDetail");
+  }
+
+  const lollipop = page.locator('[data-form-id="form-lollipop"]');
+  await lollipop.press("Space");
+  assert.equal(await lollipop.getAttribute("aria-pressed"), "true");
+  assert.match(await page.locator("#selectedFormDetail").textContent(), /lollipop chart/i);
+  assert.match(await page.locator("#selectedFormDetail").textContent(), /aligned scale/i);
+  assert.match(await page.locator("#selectedFormDetail").textContent(), /stands on its own/i);
+  assert.equal(
+    await page.locator("#exemplarDetail").getAttribute("data-selected-exemplar-id"),
+    initialExemplarId,
+    "form selection leaves exemplar selection independent",
+  );
+  assert.match(await page.locator("#selectionStatus").textContent(), /lollipop chart selected/i);
+  assert.notEqual(
+    await lollipop.evaluate((element) => getComputedStyle(element).outlineStyle),
+    "none",
+    "keyboard selection retains visible focus",
+  );
+
+  const secondExemplar = page
+    .locator("[data-select-exemplar]")
+    .filter({ hasText: "Open exemplar" })
+    .first();
+  const secondExemplarId = await secondExemplar.getAttribute("data-select-exemplar");
+  await secondExemplar.click();
+  assert.equal(
+    await page.locator("#exemplarDetail").getAttribute("data-selected-exemplar-id"),
+    secondExemplarId,
+  );
+  assert.equal(
+    await page.locator('[data-form-id="form-lollipop"]').getAttribute("aria-pressed"),
+    "true",
+    "exemplar selection preserves the independently selected visual form",
+  );
+  assert.equal(
+    await page
+      .locator(`[data-select-exemplar="${secondExemplarId}"]`)
+      .last()
+      .getAttribute("aria-pressed"),
+    "true",
+  );
+
   const before = await page.locator("#aiPrompt").inputValue();
   await page.locator("#moveSelect").selectOption({ index: 1 });
   const after = await page.locator("#aiPrompt").inputValue();
@@ -769,9 +826,121 @@ async function exerciseAtlas({ page }) {
     after,
     "Atlas copies its current prompt",
   );
+  assert.match(await page.locator("#actionStatus").textContent(), /clipboard/i);
+  assert.equal(await page.locator("#copyOutput").inputValue(), after);
+
+  await page.locator("#audienceSelect").selectOption("executive");
+  await page.locator('[data-form-id="form-lollipop"]').press("Enter");
+  await page.locator("#resetViewBtn").click();
+  assert.equal(await page.locator("#audienceSelect").inputValue(), "mixed");
+  assert.equal(
+    await page.locator('[data-form-id="form-sorted-bar"]').getAttribute("aria-pressed"),
+    "true",
+  );
+  assert.equal(await page.locator("#uncertaintyToggle").isChecked(), false);
+  assert.equal(await page.locator("#aiToggle").isChecked(), true);
+  assert.match(await page.locator("#selectionStatus").textContent(), /complete default view/i);
+
+  await page.locator("#exportJsonBtn").click();
+  const exportedText = await page.evaluate(() => globalThis.__canvasClipboardWrites.at(-1));
+  const exported = JSON.parse(exportedText);
+  assert.equal(exported.view_state.audience, "mixed");
+  assert.equal(exported.view_state.selectedVisualFormId, "form-sorted-bar");
+  assert.equal(await page.locator("#copyOutput").inputValue(), exportedText);
+  const jsonLd = JSON.parse(await page.locator("#jsonld-data").textContent());
+  const jsonLdView = jsonLd["@graph"].find((node) => node["@type"] === "viz:ViewState");
+  assert.equal(jsonLdView["viz:selectedVisualForm"]["@id"], "viz:form-sorted-bar");
+  assert.equal(
+    jsonLdView["viz:selectedExemplar"]["@id"],
+    `viz:${exported.view_state.selectedExemplarId}`,
+  );
+  assert.equal(jsonLdView["viz:audienceContext"], "mixed");
+
+  await page.locator("#audienceSelect").selectOption("research");
+  await page.locator('[data-form-id="form-lollipop"]').click();
+  await page.locator("#jsonFileInput").setInputFiles({
+    name: "atlas-export.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(exportedText),
+  });
+  await page.locator("#importStatus").filter({ hasText: "accepted" }).waitFor();
+  assert.equal(await page.locator("#audienceSelect").inputValue(), "mixed");
+  assert.equal(
+    await page.locator('[data-form-id="form-sorted-bar"]').getAttribute("aria-pressed"),
+    "true",
+  );
+
+  await page
+    .locator("#jsonImport")
+    .fill(JSON.stringify({ selectedVisualFormId: "form-lollipop" }));
+  await page.locator("#importJsonBtn").click();
+  assert.match(await page.locator("#importStatus").textContent(), /accepted/i);
+  assert.equal(
+    await page.locator('[data-form-id="form-lollipop"]').getAttribute("aria-pressed"),
+    "true",
+  );
+
+  await page.locator("#jsonImport").fill("{");
+  await page.locator("#importJsonBtn").click();
+  assert.match(await page.locator("#importStatus").textContent(), /needs revision/i);
+  assert.equal(
+    await page.locator('[data-form-id="form-lollipop"]').getAttribute("aria-pressed"),
+    "true",
+  );
+
+  const structurallyInvalid = JSON.stringify({ ...exported, data_shapes: [] });
+  await page.locator("#jsonFileInput").setInputFiles({
+    name: "atlas-invalid.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(structurallyInvalid),
+  });
+  await page.locator("#importStatus").filter({ hasText: "needs revision" }).waitFor();
+  assert.equal(
+    await page.locator('[data-form-id="form-lollipop"]').getAttribute("aria-pressed"),
+    "true",
+  );
+
+  await page.locator("#jsonFileInput").setInputFiles({
+    name: "atlas-too-large.json",
+    mimeType: "application/json",
+    buffer: Buffer.alloc(1024 * 1024 + 1, 32),
+  });
+  await page.locator("#importStatus").filter({ hasText: "no larger than" }).waitFor();
+  assert.equal(
+    await page.locator('[data-form-id="form-lollipop"]').getAttribute("aria-pressed"),
+    "true",
+  );
+
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: {
+        writeText: async () => {
+          throw new DOMException("Permission denied", "NotAllowedError");
+        },
+      },
+    });
+  });
+  await page.locator("#exportJsonLdBtn").click();
+  assert.match(await page.locator("#actionStatus").textContent(), /copy field/i);
+  const fallback = await page.locator("#copyOutput").evaluate((element) => ({
+    end: element.selectionEnd,
+    length: element.value.length,
+    start: element.selectionStart,
+  }));
+  assert.equal(fallback.start, 0);
+  assert.equal(fallback.end, fallback.length);
 }
 
 async function exerciseSelector({ page }) {
+  const resultCards = page.locator(".cards .card");
+  assert.equal(await resultCards.count(), 3);
+  assert.equal(
+    await resultCards.locator('button, a, [role="button"]').count(),
+    0,
+    "qualitative result labels remain static reading content",
+  );
+  assert.match(await page.locator("noscript").textContent(), /complete static mapping/i);
   await page.locator("#move").selectOption("uncertainty");
   await page.locator("#shape").selectOption("ranges");
   assert.equal(
