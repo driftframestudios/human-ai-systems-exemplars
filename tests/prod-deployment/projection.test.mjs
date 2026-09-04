@@ -908,6 +908,148 @@ test("selected JSON examples cannot carry machine references into repository-onl
   }
 });
 
+test("the Context Core manifest keeps omitted history as metadata while current coordinates remain closed", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const { canvasRoot } = await enablePublicationFixture(fixture);
+    const familyRoot = `${canvasRoot}/prototypes/core-architectures/chimeric-pack-v0.1`;
+    const currentSource = `${familyRoot}/current.html`;
+    const historicalSource = `${familyRoot}/historical.html`;
+    const manifestSource = `${familyRoot}/core-architectures-chimeric-prototype-manifest-v0.1.json`;
+    const manifestDocument = {
+      prototypes: [{
+        id: "current",
+        file: "current.html",
+        previous: ["historical.html"],
+      }],
+    };
+    for (const [relativePath, source] of [
+      [currentSource, "<!doctype html><title>Current</title>"],
+      [historicalSource, "<!doctype html><title>Historical</title>"],
+      [manifestSource, `${JSON.stringify(manifestDocument, null, 2)}\n`],
+    ]) {
+      const filePath = path.join(fixture.root, ...relativePath.split("/"));
+      await mkdir(path.dirname(filePath), { recursive: true });
+      await writeFile(filePath, source, "utf8");
+    }
+    const manifest = JSON.parse(await readFile(fixture.primaryManifestPath, "utf8"));
+    manifest.files.push(
+      {
+        source_path: currentSource,
+        projected_path: "prototypes/core-architectures/chimeric-pack-v0.1/current.html",
+        media_type: "text/html",
+      },
+      {
+        source_path: manifestSource,
+        projected_path: "prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json",
+        media_type: "application/json",
+      },
+    );
+    await writeFile(fixture.primaryManifestPath, `${JSON.stringify(manifest)}\n`, "utf8");
+    fixture.sourceSha = await commitFixture(fixture.root, "Select current Core family coordinates");
+
+    const plan = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan: aggregateFixture(),
+    });
+    assert.deepEqual(
+      JSON.parse(plan.outputFiles.get(
+        "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json",
+      )),
+      manifestDocument,
+    );
+    assert.equal(
+      plan.outputFiles.has(
+        "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/historical.html",
+      ),
+      false,
+    );
+
+    manifestDocument.prototypes[0].file = "omitted-current.html";
+    await writeFile(
+      path.join(fixture.root, ...`${familyRoot}/omitted-current.html`.split("/")),
+      "<!doctype html><title>Omitted current</title>",
+      "utf8",
+    );
+    await writeFile(
+      path.join(fixture.root, ...manifestSource.split("/")),
+      `${JSON.stringify(manifestDocument, null, 2)}\n`,
+      "utf8",
+    );
+    fixture.sourceSha = await commitFixture(fixture.root, "Name an omitted current Core coordinate");
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /dependency is absent.*manifest-v0\.1\.json -> .*omitted-current\.html/,
+    );
+
+    manifestDocument.prototypes[0].file = "current.html";
+    manifestDocument.prototypes[0].compatibility_route = "historical.html";
+    await writeFile(
+      path.join(fixture.root, ...manifestSource.split("/")),
+      `${JSON.stringify(manifestDocument, null, 2)}\n`,
+      "utf8",
+    );
+    fixture.sourceSha = await commitFixture(fixture.root, "Add a navigable historical coordinate");
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /omitted history metadata overlaps prototypes\.0\.compatibility_route coordinate historical\.html/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("an unrelated JSON previous field retains ordinary closure behavior", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const { canvasRoot } = await enablePublicationFixture(fixture);
+    const historicalSource = `${canvasRoot}/historical.html`;
+    const recordSource = `${canvasRoot}/record.json`;
+    await writeFile(
+      path.join(fixture.root, ...historicalSource.split("/")),
+      "<!doctype html><title>Historical</title>",
+      "utf8",
+    );
+    await writeFile(
+      path.join(fixture.root, ...recordSource.split("/")),
+      `${JSON.stringify({ previous: ["historical.html"] })}\n`,
+      "utf8",
+    );
+    const manifest = JSON.parse(await readFile(fixture.primaryManifestPath, "utf8"));
+    manifest.files.push({
+      source_path: recordSource,
+      projected_path: "record.json",
+      media_type: "application/json",
+    });
+    await writeFile(fixture.primaryManifestPath, `${JSON.stringify(manifest)}\n`, "utf8");
+    fixture.sourceSha = await commitFixture(fixture.root, "Select unrelated previous metadata");
+
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /dependency is absent.*record\.json -> .*historical\.html/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
 test("publication projection fails closed when an authored dependency is absent from the explicit manifest", async () => {
   const fixture = await createFixtureRoot();
   try {

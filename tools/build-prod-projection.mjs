@@ -43,6 +43,8 @@ const deploymentFileIndexHeader =
   "deployment_manifest_sha256\tsource_sha\tsurface\tprojected_path\tbytes\tsha256\tmedia_type\n";
 const productionPublicReferenceConfig = ".env.public";
 const legacyPublicationOrigin = "https://schemas.radiantnull.com/";
+const contextCoreManifestPath =
+  "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json";
 const unsettledCoreAuthorityMarkers = [
   "https://example.org/core-architectures#",
   "https://example.org/core-architectures/",
@@ -1189,7 +1191,8 @@ function rewriteJsonStringReferences(
   projectedPaths,
   options = {},
 ) {
-  return text.replace(/"(?:\\.|[^"\\])*"/g, (token) => {
+  return text.replace(/"(?:\\.|[^"\\])*"/g, (token, offset) => {
+    if (options.nonNavigableJsonStringOffsets?.has(offset)) return token;
     let value;
     try {
       value = JSON.parse(token);
@@ -1206,6 +1209,103 @@ function rewriteJsonStringReferences(
     );
     return rewritten === value ? token : JSON.stringify(rewritten);
   });
+}
+
+function contextCoreHistoryMetadataStringOffsets(
+  text,
+  sourcePath,
+  sourceRoot,
+  trackedBlobs,
+  projectedPaths,
+) {
+  if (sourcePath !== contextCoreManifestPath) return new Set();
+  const document = JSON.parse(text);
+  if (!Array.isArray(document.prototypes)) {
+    fail("Context Core manifest must carry a prototypes array before production projection.");
+  }
+  const currentFiles = new Set();
+  const previousValues = [];
+  for (const [index, prototype] of document.prototypes.entries()) {
+    if (!isPlainObject(prototype) || typeof prototype.file !== "string") {
+      fail(`Context Core manifest prototype ${index + 1} must name one current file.`);
+    }
+    if (currentFiles.has(prototype.file)) {
+      fail(`Context Core manifest repeats current file ${prototype.file}.`);
+    }
+    currentFiles.add(prototype.file);
+    if (!Array.isArray(prototype.previous) ||
+        prototype.previous.some((value) => typeof value !== "string")) {
+      fail(`Context Core manifest prototype ${index + 1} must carry string-valued previous metadata.`);
+    }
+    previousValues.push(...prototype.previous);
+  }
+  for (const previous of previousValues) {
+    if (currentFiles.has(previous)) {
+      fail(`Context Core history metadata overlaps current file ${previous}.`);
+    }
+  }
+
+  const previousTokens = [];
+  for (const field of text.matchAll(
+    /"previous"\s*:\s*(\[(?:\s*"(?:\\.|[^"\\])*"\s*,?)*\s*\])/g,
+  )) {
+    const arrayOffset = field.index + field[0].indexOf(field[1]);
+    for (const token of field[1].matchAll(/"(?:\\.|[^"\\])*"/g)) {
+      previousTokens.push({
+        offset: arrayOffset + token.index,
+        value: JSON.parse(token[0]),
+      });
+    }
+  }
+  if (
+    previousTokens.length !== previousValues.length ||
+    previousTokens.some(({ value }, index) => value !== previousValues[index])
+  ) {
+    fail("Context Core history metadata must remain an exact string-array projection.");
+  }
+
+  const offsets = new Set();
+  const omittedHistoryValues = new Set();
+  for (const token of previousTokens) {
+    const resolution = sourceReferenceResolution(
+      token.value,
+      sourcePath,
+      sourceRoot,
+      trackedBlobs,
+    );
+    if (
+      resolution.standing === "resolved" &&
+      !projectedPaths.has(resolution.target)
+    ) {
+      offsets.add(token.offset);
+      omittedHistoryValues.add(token.value);
+    }
+  }
+  const assertNoOmittedHistoryCoordinate = (value, location = []) => {
+    if (typeof value === "string" && omittedHistoryValues.has(value)) {
+      fail(
+        `Context Core omitted history metadata overlaps ${location.join(".")} coordinate ${value}.`,
+      );
+    }
+    if (Array.isArray(value)) {
+      for (const [index, item] of value.entries()) {
+        assertNoOmittedHistoryCoordinate(item, [...location, index]);
+      }
+      return;
+    }
+    if (!isPlainObject(value)) return;
+    for (const [key, item] of Object.entries(value)) {
+      const prototypeHistoryField =
+        key === "previous" &&
+        location.length === 2 &&
+        location[0] === "prototypes" &&
+        Number.isInteger(location[1]);
+      if (prototypeHistoryField) continue;
+      assertNoOmittedHistoryCoordinate(item, [...location, key]);
+    }
+  };
+  assertNoOmittedHistoryCoordinate(document);
+  return offsets;
 }
 
 function assertJsonMachineReferenceClosure(
@@ -1484,6 +1584,14 @@ function transformPrimaryBytes(
       projectedPaths,
       referenceOptions,
     );
+    referenceOptions.nonNavigableJsonStringOffsets =
+      contextCoreHistoryMetadataStringOffsets(
+        text,
+        file.source_path,
+        publication.source_root,
+        trackedBlobs,
+        projectedPaths,
+      );
   }
   if (file.source_path.startsWith(`${publication.source_root}/`)) {
     const materializerPath = path.posix.relative(
