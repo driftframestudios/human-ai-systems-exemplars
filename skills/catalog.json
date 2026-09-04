@@ -1,45 +1,57 @@
 {
   "schemaVersion": "1",
   "repository": "human-ai-systems-exemplars",
+  "sourceRevision": "b87789e82798fbca625a1257a91236bb53f800cc",
   "schemaRef": "https://schemas.vik.guru/collaboration-skills/0.1.0/collaboration-skill.schema.json",
   "publicationStanding": "public_ready",
   "selectionRule": "A public-ready entry carries an exact semantic source and every supporting file declared for this projection.",
   "skills": [
     {
       "name": "bounded-support-routing",
+      "title": "Bounded support routing",
       "description": "Composes a finite support packet with an explicit action mode, observable return, and stopping event. Applies when a focused solution, implementation, or recovery route needs clear expectations, bounded attention, and a natural handback.",
       "publicationStanding": "public_ready",
+      "pagePath": "bounded-support-routing/",
       "projectionPath": "bounded-support-routing/projection.json",
+      "sourcePath": ".agents/skills/bounded-support-routing/SKILL.md",
       "sourceRoute": "source/.agents/skills/bounded-support-routing/SKILL.md",
       "sourceSha256": "80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402",
       "dependencies": [
         {
+          "sourcePath": ".agents/skills/bounded-support-routing/references/github-issue-label-routing.md",
           "path": "source/.agents/skills/bounded-support-routing/references/github-issue-label-routing.md",
           "sha256": "583d5b8996414680416fcc538e124ea3094ce226ba7caed004f836a74d38a5f8"
         },
         {
+          "sourcePath": ".agents/skills/bounded-support-routing/references/openai-codex-spark.md",
           "path": "source/.agents/skills/bounded-support-routing/references/openai-codex-spark.md",
-          "sha256": "ca84c33443c92c2789bcf99c5b86aa96271e169468c5fac26c22e579b77030ea"
+          "sha256": "d61403946255e22fb5939a4921601dbe32df0e9034c9441f922aae0df539aee1"
         },
         {
-          "path": "source/.github/workflows/prototype-unit-tests.yml",
+          "sourcePath": ".github/workflows/prototype-unit-tests.yml",
+          "path": "source/github/workflows/prototype-unit-tests.yml",
           "sha256": "d6ef3155beb266959d16254aa1e04653ace796f419c69724ba2b5462aebb3eda"
         }
       ]
     },
     {
       "name": "collaboration-accounting",
+      "title": "Collaboration accounting",
       "description": "Accounts for decision-changing collaboration observations and routes them into immediate skill creation, existing-skill revision, a named candidate, continued observation, settlement, or retirement. Applies when materially meaningful work exposes a reusable collaboration affordance, an upcoming skill receives new evidence, or skill recursion needs a release decision.",
       "publicationStanding": "public_ready",
+      "pagePath": "collaboration-accounting/",
       "projectionPath": "collaboration-accounting/projection.json",
+      "sourcePath": ".agents/skills/collaboration-accounting/SKILL.md",
       "sourceRoute": "source/.agents/skills/collaboration-accounting/SKILL.md",
       "sourceSha256": "f081f046652c1b526f1f8f4ad70c42de6a25662bcabd359690e2b71448061089",
       "dependencies": [
         {
+          "sourcePath": ".agents/skills/collaboration-accounting/references/candidacy-and-routing.md",
           "path": "source/.agents/skills/collaboration-accounting/references/candidacy-and-routing.md",
           "sha256": "d4aad9c20dcf1fd93db6f2aff4be1a780d793f9c60ca6f9f3dd903b24c0dfeb7"
         },
         {
+          "sourcePath": ".agents/skills/collaboration-accounting/references/task-bound-skill-projections.md",
           "path": "source/.agents/skills/collaboration-accounting/references/task-bound-skill-projections.md",
           "sha256": "3f67711bf98fad38f9e746ffcacfe4fd6d467803d3aebb4fd7f0dd4d640d0d80"
         }
@@ -47,26 +59,34 @@
     },
     {
       "name": "collaboration-runbook-authoring",
+      "title": "Collaboration runbook authoring",
       "description": "Converts a settled, repeatable multi-phase collaboration route into a versioned AI-legible runbook with explicit entry, authority, checks, recovery, stop, and handback. Applies when a known procedure spans several source owners, Issues, or bounded support returns and the runbook plus its linked current owners should provide sufficient re-entry orientation.",
       "publicationStanding": "public_ready",
+      "pagePath": "collaboration-runbook-authoring/",
       "projectionPath": "collaboration-runbook-authoring/projection.json",
+      "sourcePath": ".agents/skills/collaboration-runbook-authoring/SKILL.md",
       "sourceRoute": "source/.agents/skills/collaboration-runbook-authoring/SKILL.md",
       "sourceSha256": "9e5c5de2277768d2efd1fa639006a7e7179e814fba84f9d1c0ab96f3155bfaf9",
       "dependencies": []
     },
     {
       "name": "context-canvas-css-ownership",
+      "title": "Context Canvas CSS ownership",
       "description": "Establishes legible Context Canvas CSS ownership. Applies when expanded.css, cascade diagnosis, selector or token migration, route bundles, first-paint work, or Visual Fidelity Contract mapping enters scope.",
       "publicationStanding": "public_ready",
+      "pagePath": "context-canvas-css-ownership/",
       "projectionPath": "context-canvas-css-ownership/projection.json",
+      "sourcePath": ".agents/skills/context-canvas-css-ownership/SKILL.md",
       "sourceRoute": "source/.agents/skills/context-canvas-css-ownership/SKILL.md",
       "sourceSha256": "03e8bbc4695aeec710a218b65a0212985662a34e0e3b4b24172c7945e37bf0b3",
       "dependencies": [
         {
+          "sourcePath": ".agents/skills/context-canvas-css-ownership/references/scenarios.md",
           "path": "source/.agents/skills/context-canvas-css-ownership/references/scenarios.md",
           "sha256": "d0a0027bf1febe7e0562ffefe10a0d5ddec4bd334be4d16d82ed248d7d46e93c"
         },
         {
+          "sourcePath": ".agents/skills/context-canvas-css-ownership/references/surface-color-and-state-roles.md",
           "path": "source/.agents/skills/context-canvas-css-ownership/references/surface-color-and-state-roles.md",
           "sha256": "28dc40c0534a7c7d914c7528fec4e53e9be50894ef7fed265f09e5bb60498074"
         }
@@ -74,40 +94,53 @@
     },
     {
       "name": "context-canvas-surface-reading",
+      "title": "Context Canvas surface reading",
       "description": "Reads a Context Canvas page or route family as a visitor surface and primary design input. Applies before assessment, planning, or material changes to a Canvas page, embedded instrument, or family relationship.",
       "publicationStanding": "public_ready",
+      "pagePath": "context-canvas-surface-reading/",
       "projectionPath": "context-canvas-surface-reading/projection.json",
+      "sourcePath": ".agents/skills/context-canvas-surface-reading/SKILL.md",
       "sourceRoute": "source/.agents/skills/context-canvas-surface-reading/SKILL.md",
       "sourceSha256": "b0861479adc855a26c4c2d7a62d49a436f44a803e3c28a406da28c26b83d7188",
       "dependencies": []
     },
     {
       "name": "context-canvas-visual-verification",
+      "title": "Context Canvas visual verification",
       "description": "Selects proportionate visual and browser evidence for Context Canvas visitor-surface changes. Applies when layout, CSS, responsive behavior, interaction state, print, forced colors, or a visible regression needs review.",
       "publicationStanding": "public_ready",
+      "pagePath": "context-canvas-visual-verification/",
       "projectionPath": "context-canvas-visual-verification/projection.json",
+      "sourcePath": ".agents/skills/context-canvas-visual-verification/SKILL.md",
       "sourceRoute": "source/.agents/skills/context-canvas-visual-verification/SKILL.md",
       "sourceSha256": "3ae5ab182f0b0a0136a016b9c2959d8e0ef8e6cc38b97fd607bd5505125293b0",
       "dependencies": []
     },
     {
       "name": "contextual-jargon-scan",
+      "title": "Contextual jargon scan",
       "description": "Classifies potentially specialist or inside wording within a bounded corpus and revises replaceable shorthand into ordinary language. Applies when public, visitor-facing, or cross-team prose may rely on context its reader does not share, including an in-stride review of material already receiving substantive change.",
       "publicationStanding": "public_ready",
+      "pagePath": "contextual-jargon-scan/",
       "projectionPath": "contextual-jargon-scan/projection.json",
+      "sourcePath": ".agents/skills/contextual-jargon-scan/SKILL.md",
       "sourceRoute": "source/.agents/skills/contextual-jargon-scan/SKILL.md",
       "sourceSha256": "af2d00add7e4916e11b8dfe00e97ce180e901b874c99627069d695baa1d4df11",
       "dependencies": []
     },
     {
       "name": "declarative-skill-authoring",
+      "title": "Declarative skill authoring",
       "description": "Authors or revises repository skills as declarative, transferable specifications. Applies when skill metadata, What/When/Boundaries contracts, Rule declarations, optional Given/When/Then examples, conditional context, or experiment-to-helper progression needs definition.",
       "publicationStanding": "public_ready",
+      "pagePath": "declarative-skill-authoring/",
       "projectionPath": "declarative-skill-authoring/projection.json",
+      "sourcePath": ".agents/skills/declarative-skill-authoring/SKILL.md",
       "sourceRoute": "source/.agents/skills/declarative-skill-authoring/SKILL.md",
       "sourceSha256": "153ea23114bd69f57403c548f884b5fede7f1c350d85ffadb0d4337b45ccccca",
       "dependencies": [
         {
+          "sourcePath": ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
           "path": "source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
           "sha256": "04f598a568310f5a6381a3cbc93e3e51333857e9becb066ec8ecb2d9ff5d6843"
         }
@@ -115,35 +148,46 @@
     },
     {
       "name": "evidence-grounded-research-spike",
+      "title": "Evidence-grounded research spike",
       "description": "Converts current expert writing, official documentation, standards, and practiced experience into a bounded repository decision. Applies when contemporary evidence should change a plan, instruction, architecture boundary, or collaboration method.",
       "publicationStanding": "public_ready",
+      "pagePath": "evidence-grounded-research-spike/",
       "projectionPath": "evidence-grounded-research-spike/projection.json",
+      "sourcePath": ".agents/skills/evidence-grounded-research-spike/SKILL.md",
       "sourceRoute": "source/.agents/skills/evidence-grounded-research-spike/SKILL.md",
       "sourceSha256": "844fc0c6b0b956b81984a2c2d47d9252abadeb0a6554c5ef4734d0f1e5f4b531",
       "dependencies": []
     },
     {
       "name": "issue-chain-stewardship",
+      "title": "Issue chain stewardship",
       "description": "Makes related repository issues legible as a revisable work route while each issue retains its own outcome, authority, and acceptance boundary. Applies when completion, evidence, or a human-held decision in one issue materially changes whether another issue can begin or settle.",
       "publicationStanding": "public_ready",
+      "pagePath": "issue-chain-stewardship/",
       "projectionPath": "issue-chain-stewardship/projection.json",
+      "sourcePath": ".agents/skills/issue-chain-stewardship/SKILL.md",
       "sourceRoute": "source/.agents/skills/issue-chain-stewardship/SKILL.md",
       "sourceSha256": "86815b7996c29de1aefce7b58e1276b727d50da75dd2b19985decb6884390c57",
       "dependencies": []
     },
     {
       "name": "locator-boundary-stewardship",
+      "title": "Locator-boundary stewardship",
       "description": "Produces locator-safe public collaboration records while exact gated lineage remains recoverable through stable semantic keys and an authorized resolver. Applies when Issues, pull requests, Threadkeeping, handoffs, or public-history preparation cross publication boundaries.",
       "publicationStanding": "public_ready",
+      "pagePath": "locator-boundary-stewardship/",
       "projectionPath": "locator-boundary-stewardship/projection.json",
+      "sourcePath": ".agents/skills/locator-boundary-stewardship/SKILL.md",
       "sourceRoute": "source/.agents/skills/locator-boundary-stewardship/SKILL.md",
       "sourceSha256": "9a71f2512756ddb1163ef1694effa5ec5b159783b8b8cf46e7aa166884f10723",
       "dependencies": [
         {
+          "sourcePath": ".agents/skills/locator-boundary-stewardship/references/issue-and-pull-request-practice.md",
           "path": "source/.agents/skills/locator-boundary-stewardship/references/issue-and-pull-request-practice.md",
           "sha256": "c78cb01b4361ec308aa29b2cc989e64cf3125dea0ed4b4981925c4a03de7b9b5"
         },
         {
+          "sourcePath": ".agents/skills/locator-boundary-stewardship/references/public-safe-threadkeeping.md",
           "path": "source/.agents/skills/locator-boundary-stewardship/references/public-safe-threadkeeping.md",
           "sha256": "52a1e6f2963fb7947de5cff61f05d8411f2b76da292308fe2263ac552186597a"
         }
@@ -151,57 +195,75 @@
     },
     {
       "name": "practitioner-probe",
+      "title": "Practitioner probe",
       "description": "Converts an ambiguous codebase concern, issue, or plausible-but-shallow implementation into a decision-changing technical probe. Applies when mechanism, affected actor, evidence, or instruction yield remains unclear.",
       "publicationStanding": "public_ready",
+      "pagePath": "practitioner-probe/",
       "projectionPath": "practitioner-probe/projection.json",
+      "sourcePath": ".agents/skills/practitioner-probe/SKILL.md",
       "sourceRoute": "source/.agents/skills/practitioner-probe/SKILL.md",
       "sourceSha256": "348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c",
       "dependencies": []
     },
     {
       "name": "repository-attribution-stewardship",
+      "title": "Repository attribution stewardship",
       "description": "Distinguishes and aligns copyright-holder records, citation metadata, contribution credit, copy-local public notices, and bounded machine projections. Applies during repository attribution changes, fork or adaptation guidance, and cold-start attribution orientation. Legal interpretation and rights decisions remain with a named human receiver or qualified counsel.",
       "publicationStanding": "public_ready",
+      "pagePath": "repository-attribution-stewardship/",
       "projectionPath": "repository-attribution-stewardship/projection.json",
+      "sourcePath": ".agents/skills/repository-attribution-stewardship/SKILL.md",
       "sourceRoute": "source/.agents/skills/repository-attribution-stewardship/SKILL.md",
       "sourceSha256": "6c13f9a54543e973824bc5ce407ae9fe17f8a07d2ef22dccb532f60685c12dfd",
       "dependencies": []
     },
     {
       "name": "repository-reentry",
+      "title": "Repository re-entry",
       "description": "Reconstructs current truth across source, Git, GitHub, planning, and threadkeeping. Applies during resumed work, handoffs, status reconciliation, stale-plan review, and branch or pull-request re-entry.",
       "publicationStanding": "public_ready",
+      "pagePath": "repository-reentry/",
       "projectionPath": "repository-reentry/projection.json",
+      "sourcePath": ".agents/skills/repository-reentry/SKILL.md",
       "sourceRoute": "source/.agents/skills/repository-reentry/SKILL.md",
       "sourceSha256": "211cdbd293c260e95e62d3bc7ed5cb4d6d9ca3debd560a28a74b52364a1bfa90",
       "dependencies": []
     },
     {
       "name": "schema-contract-authoring",
+      "title": "Schema contract authoring",
       "description": "Authors or revises repository schema families as bounded, legible contracts with distinct identity, authority, retrieval, examples, semantic context, dependency closure, and proportional material-use checks. Applies when a schema root, versioned contract, JSON-LD context, example family, publication route, or cross-repository schema projection enters scope.",
       "publicationStanding": "public_ready",
+      "pagePath": "schema-contract-authoring/",
       "projectionPath": "schema-contract-authoring/projection.json",
+      "sourcePath": ".agents/skills/schema-contract-authoring/SKILL.md",
       "sourceRoute": "source/.agents/skills/schema-contract-authoring/SKILL.md",
       "sourceSha256": "46f58b788bd8c04c60fc71ae0dc33e108f9392e98a18e88ef131917500e8dfe9",
       "dependencies": []
     },
     {
       "name": "secret-boundary-inspection",
+      "title": "Secret-boundary inspection",
       "description": "Produces a canary-proven, scope-explicit secret-material observation for a repository, exact proposed index, locally available history, or named artifact. Applies before snapshot, publication, delivery, or receiving-repository handoffs where credential-shaped material could travel.",
       "publicationStanding": "public_ready",
+      "pagePath": "secret-boundary-inspection/",
       "projectionPath": "secret-boundary-inspection/projection.json",
+      "sourcePath": ".agents/skills/secret-boundary-inspection/SKILL.md",
       "sourceRoute": "source/.agents/skills/secret-boundary-inspection/SKILL.md",
       "sourceSha256": "0fc2cc964ed65457fdea77ea1494756b0c1c618d30c0622094ae7c089374405d",
       "dependencies": [
         {
+          "sourcePath": "threadkeeping/repository-secret-material-boundary.md",
           "path": "source/threadkeeping/repository-secret-material-boundary.md",
           "sha256": "7693b7ca340099364b743bee4ab5b7ddfb91d6f0c37c4bdd9665af6196bdc8bb"
         },
         {
+          "sourcePath": "threadkeeping/context-canvas-public-reference-materialization.md",
           "path": "source/threadkeeping/context-canvas-public-reference-materialization.md",
           "sha256": "1ae8eb005b82225fcea0e32983e46f97e6511122cf131136a38c635061d800d5"
         },
         {
+          "sourcePath": "threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md",
           "path": "source/threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md",
           "sha256": "095aadd0b3d7908b3ce7459ec518982981c27918226bde2e5d4309b0e0d12e78"
         }
@@ -209,25 +271,44 @@
     },
     {
       "name": "source-authority-mapping",
+      "title": "Source authority mapping",
       "description": "Traces a claim, artifact, or contract through semantic ownership, source location, projections, delivery routes, receiving use, and promotion. Applies when repositories, workspaces, mirrors, snapshots, or publication surfaces make authority and lineage difficult to distinguish.",
       "publicationStanding": "public_ready",
+      "pagePath": "source-authority-mapping/",
       "projectionPath": "source-authority-mapping/projection.json",
+      "sourcePath": ".agents/skills/source-authority-mapping/SKILL.md",
       "sourceRoute": "source/.agents/skills/source-authority-mapping/SKILL.md",
       "sourceSha256": "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5",
       "dependencies": []
     },
     {
       "name": "stateful-artifact-behavior-contracts",
+      "title": "Stateful artifact behavior contracts",
       "description": "Designs focused executable behavior contracts for stateful artifacts and prototypes. Applies when owned state crosses import, edit, rendered, export, machine-readable, or recovery boundaries and a consequential regression needs the smallest source-grounded observation.",
       "publicationStanding": "public_ready",
+      "pagePath": "stateful-artifact-behavior-contracts/",
       "projectionPath": "stateful-artifact-behavior-contracts/projection.json",
+      "sourcePath": ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
       "sourceRoute": "source/.agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
       "sourceSha256": "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a",
+      "dependencies": []
+    },
+    {
+      "name": "uv-backed-python-execution",
+      "title": "uv-backed Python execution",
+      "description": "Resolves and runs repository-declared Python checks through uv while preserving the host's base Python installation. Applies when a required Python version, existing uv lock, isolated dependency environment, or unwritable default uv cache must be reconciled before validation.",
+      "publicationStanding": "public_ready",
+      "pagePath": "uv-backed-python-execution/",
+      "projectionPath": "uv-backed-python-execution/projection.json",
+      "sourcePath": ".agents/skills/uv-backed-python-execution/SKILL.md",
+      "sourceRoute": "source/.agents/skills/uv-backed-python-execution/SKILL.md",
+      "sourceSha256": "e9d788cae6d2ceb1ed328f8c5ce70c0c34c18d1e0849b4804d89ade6ed42f414",
       "dependencies": []
     }
   ],
   "supportingSources": [
     {
+      "sourcePath": "threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md",
       "path": "source/threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md",
       "sha256": "d9145467ae22bc251bd15c788c628de22b175f0cb2666d63c91cc6c8577c1835"
     }

@@ -8,7 +8,7 @@ This family gives cross-platform collaborators a small typed projection of a col
 
 | Need | Resource |
 | --- | --- |
-| Read one live portable contract | [Source authority mapping](../../skills/source/.agents/skills/source-authority-mapping/SKILL.md) |
+| Read one live portable contract | [Source authority mapping](../../skills/source-authority-mapping/) |
 | Load its typed projection | [Portable skill example](examples/portable-skill.example.json) |
 | Understand the exchange shape | [Collaboration skill schema](collaboration-skill.schema.json) |
 | See bounded projection lineage | [Retired task-bound projection](examples/retired-projection.example.json) |
