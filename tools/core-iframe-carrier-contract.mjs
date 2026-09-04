@@ -40,6 +40,7 @@ const viewports = [1280, 800, 480, 390, 320];
 const strategySourceUrls = new Set([
   "https://www.blueoceanstrategy.com/tools/strategy-canvas/",
   "https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested",
+  "../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
 ]);
 
 function configuredDestination(key) {
@@ -210,11 +211,15 @@ async function exerciseStrategyCarrier(carrier, frame, label) {
     `${label} explains where its embedded source routes continue`,
   );
   const figure = carrier.locator("xpath=ancestor::figure[1]");
-  const sourceLink = figure.locator("[data-strategy-canvas-host-source]").first();
-  assert.equal(await sourceLink.getAttribute("target"), null, `${label} leaves new-context choice with the visitor`);
-  assert.equal(await sourceLink.getAttribute("rel"), null, `${label} uses ordinary parent-page link semantics`);
-  const href = await sourceLink.getAttribute("href");
-  assert.equal(strategySourceUrls.has(href), true, `${label} uses an allowlisted method source`);
+  const sourceLinks = figure.locator("[data-strategy-canvas-host-source]");
+  assert.equal(await sourceLinks.count(), strategySourceUrls.size, `${label} exposes every source and evidence route after the frame`);
+  const hrefs = new Set();
+  for (const sourceLink of await sourceLinks.all()) {
+    assert.equal(await sourceLink.getAttribute("target"), null, `${label} leaves new-context choice with the visitor`);
+    assert.equal(await sourceLink.getAttribute("rel"), null, `${label} uses ordinary parent-page link semantics`);
+    hrefs.add(await sourceLink.getAttribute("href"));
+  }
+  assert.deepEqual(hrefs, strategySourceUrls, `${label} uses the exact source and evidence routes`);
 }
 
 async function exerciseHeartCarrier(page, carrier, frame, heartFrame) {

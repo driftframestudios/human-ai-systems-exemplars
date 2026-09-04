@@ -155,34 +155,50 @@ test("the sitemap identifies exactly the 37 indexable production routes", async 
   for (const route of restingExemplars) assert.equal(routes.includes(route), false);
 });
 
-test("the duplicated Strategy Canvas schema agrees across primary and iframe delivery", async () => {
+test("the duplicated Strategy Canvas contract files agree across primary and iframe delivery", async () => {
   const manifest = await loadPrimaryManifest();
-  const primarySource =
-    "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json";
-  const iframePath =
-    "core/strategy-canvas/strategy-canvas-system-v0.2/strategy-canvas.schema.json";
-  const primary = manifest.files.find(({ source_path }) => source_path === primarySource);
-  assert.ok(primary, "the primary closure carries the shared Strategy Canvas schema");
-  assert.equal(primary.media_type, "application/schema+json");
-
   const aggregate = await createAggregatePackagePlan();
-  const iframeBytes = aggregate.outputFiles.get(iframePath);
-  assert.ok(iframeBytes, "the iframe closure carries the shared Strategy Canvas schema");
-  assert.ok(
-    iframeBytes.equals(await readFile(path.join(repositoryRoot, primarySource))),
-    "both surfaces carry the same schema bytes",
-  );
-  const iframeDeclaration = aggregate.familyPlans
-    .get("core")
-    .receipt.routes
-    .flatMap((route) => (route.static_resource_closure?.package_files ?? []).map(
-      (file) => ({ route, file }),
-    ))
-    .find(({ route, file }) =>
-      `core/${path.posix.join(path.posix.dirname(route.projection_file), file.target_file)}` === iframePath,
+  for (const contractFile of [
+    {
+      basename: "strategy-canvas.schema.json",
+      mediaType: "application/schema+json",
+      label: "schema",
+    },
+    {
+      basename: "strategy-canvas-evidence.v0.1.json",
+      mediaType: "application/json",
+      label: "evidence registry",
+    },
+  ]) {
+    const primarySource =
+      `core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/${contractFile.basename}`;
+    const iframePath =
+      `core/strategy-canvas/strategy-canvas-system-v0.2/${contractFile.basename}`;
+    const primary = manifest.files.find(({ source_path }) => source_path === primarySource);
+    assert.ok(primary, `the primary closure carries the shared Strategy Canvas ${contractFile.label}`);
+    assert.equal(primary.media_type, contractFile.mediaType);
+
+    const iframeBytes = aggregate.outputFiles.get(iframePath);
+    assert.ok(iframeBytes, `the iframe closure carries the shared Strategy Canvas ${contractFile.label}`);
+    assert.ok(
+      iframeBytes.equals(await readFile(path.join(repositoryRoot, primarySource))),
+      `both surfaces carry the same ${contractFile.label} bytes`,
     );
-  assert.ok(iframeDeclaration, "the iframe route contract declares the shared schema");
-  assert.equal(iframeDeclaration.file.content_type, primary.media_type);
+    const iframeDeclaration = aggregate.familyPlans
+      .get("core")
+      .receipt.routes
+      .flatMap((route) => (route.static_resource_closure?.package_files ?? []).map(
+        (file) => ({ route, file }),
+      ))
+      .find(({ route, file }) =>
+        `core/${path.posix.join(path.posix.dirname(route.projection_file), file.target_file)}` === iframePath,
+      );
+    assert.ok(
+      iframeDeclaration,
+      `the iframe route contract declares the shared ${contractFile.label}`,
+    );
+    assert.equal(iframeDeclaration.file.content_type, primary.media_type);
+  }
 });
 
 test("both production origins carry the settled crawler posture through explicit source owners", async () => {

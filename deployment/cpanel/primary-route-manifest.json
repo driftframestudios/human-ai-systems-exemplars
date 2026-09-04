@@ -253,6 +253,11 @@
       "media_type": "text/javascript"
     },
     {
+      "source_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+      "projected_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+      "media_type": "application/json"
+    },
+    {
       "source_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
       "projected_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
       "media_type": "application/schema+json"

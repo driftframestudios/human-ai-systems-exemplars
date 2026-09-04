@@ -204,7 +204,7 @@ test("the aggregate v1 plan preserves exact family bytes and adds one root recei
   }
   assert.deepEqual(aggregate.receipt.package_contract.family_directories, ["core", "canvas"]);
   assert.equal(aggregate.receipt.package_contract.primary_routes, 38);
-  assert.equal(aggregate.receipt.package_contract.generated_files, 67);
+  assert.equal(aggregate.receipt.package_contract.generated_files, 68);
   assert.equal(
     aggregate.receipt.package_contract.generated_bytes,
     [...aggregate.outputFiles.values()].reduce((total, bytes) => total + bytes.byteLength, 0),
@@ -246,6 +246,6 @@ test("the aggregate v1 plan preserves exact family bytes and adds one root recei
   );
 
   const verification = await checkAggregatePackage(aggregate);
-  assert.equal(verification.files, 67);
+  assert.equal(verification.files, 68);
   assert.ok(verification.bytes > 1_740_871);
 });

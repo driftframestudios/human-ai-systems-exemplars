@@ -160,6 +160,11 @@
           "source_file": "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
           "target_file": "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
           "content_type": "application/schema+json"
+        },
+        {
+          "source_file": "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+          "target_file": "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+          "content_type": "application/json"
         }
       ],
       "reader_job": "Compare several options across anchored dimensions in the canonical collaboration field."
