@@ -175,6 +175,13 @@
       "sourceAvailability": "repository_only",
       "dependencies": [],
       "publicationNote": "Promote after its Semantic Attractor and evidence dependencies have source-owned public adaptations."
+    },
+    {
+      "name": "uv-backed-python-execution",
+      "sourcePath": ".agents/skills/uv-backed-python-execution/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": []
     }
   ]
 }

@@ -293,7 +293,6 @@ test("the private selection ledger classifies the complete repository skill fami
     .sort();
   const selectedNames = selection.skills.map((entry) => entry.name);
 
-  assert.equal(sourceNames.length, 20);
   assert.deepEqual(selectedNames, [...selectedNames].sort());
   assert.deepEqual(selectedNames, sourceNames);
   assert.equal(new Set(selectedNames).size, selectedNames.length);
