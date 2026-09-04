@@ -1,0 +1,190 @@
+/* Context Canvas route bundle: benchmark readings -----------------------
+   Consumers: benchmark-orientation.html and maps-evaluations.html.
+   Owns: result-coordinate flow, reusable result profile, source-lane
+   distinction, canary orientation, and narrow-screen/print behavior.
+   Load order: expanded.css, debrief-reading.css, ai-systems.css, this file,
+   then canvas-shell.css. Shared navigation and attribution remain outside
+   this route bundle. */
+
+.benchmark-reading-page {
+    --benchmark-cobalt: #2855f3;
+    --benchmark-ink: #17345f;
+    --benchmark-mint: #d9efea;
+    --benchmark-sky: #cfe7f7;
+    --benchmark-cream: #fff5de;
+    --benchmark-rose: #ffe0e6;
+    --benchmark-lime: #f2ff67;
+}
+
+.benchmark-reading-page .benchmark-flow,
+.benchmark-reading-page .benchmark-result-profile,
+.benchmark-reading-page .benchmark-source-lanes {
+    display: grid;
+    gap: 1rem;
+    list-style: none;
+    margin: clamp(1.4rem, 3vw, 2.4rem) 0;
+    padding: 0;
+}
+
+.benchmark-reading-page .benchmark-flow {
+    counter-reset: benchmark-step;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.benchmark-reading-page .benchmark-flow > li {
+    background: var(--canvas-paper);
+    border: .125rem solid var(--benchmark-ink);
+    border-radius: .65rem;
+    box-shadow: .35rem .35rem 0 var(--benchmark-cobalt);
+    counter-increment: benchmark-step;
+    min-inline-size: 0;
+    padding: 1rem;
+}
+
+.benchmark-reading-page .benchmark-flow > li::before {
+    color: var(--benchmark-cobalt);
+    content: counter(benchmark-step, decimal-leading-zero);
+    display: block;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: .78rem;
+    font-weight: 850;
+    letter-spacing: .08em;
+    margin-block-end: .45rem;
+}
+
+.benchmark-reading-page .benchmark-flow strong {
+    color: var(--benchmark-ink);
+    display: block;
+    margin-block-end: .35rem;
+}
+
+.benchmark-reading-page .benchmark-flow p,
+.benchmark-reading-page .benchmark-result-profile dd,
+.benchmark-reading-page .benchmark-source-lanes p {
+    margin: 0;
+}
+
+.benchmark-reading-page .benchmark-result-profile {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.benchmark-reading-page .benchmark-result-profile > div {
+    background: color-mix(in srgb, var(--benchmark-sky) 38%, var(--canvas-paper) 62%);
+    border-block-start: .25rem solid var(--benchmark-cobalt);
+    padding: 1rem;
+}
+
+.benchmark-reading-page .benchmark-result-profile dt {
+    color: var(--benchmark-ink);
+    font-weight: 800;
+    margin-block-end: .35rem;
+}
+
+.benchmark-reading-page .benchmark-result-profile dd {
+    margin-inline-start: 0;
+}
+
+.benchmark-reading-page .benchmark-source-lanes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.benchmark-reading-page .benchmark-source-lane {
+    background: var(--canvas-paper);
+    border: .125rem solid var(--benchmark-ink);
+    border-radius: .75rem;
+    box-shadow: .45rem .45rem 0 var(--benchmark-ink);
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.benchmark-reading-page .benchmark-source-lane:first-child {
+    background: var(--benchmark-cream);
+    box-shadow: .45rem .45rem 0 var(--benchmark-cobalt);
+}
+
+.benchmark-reading-page .benchmark-source-lane:last-child {
+    background: var(--benchmark-mint);
+}
+
+.benchmark-reading-page .benchmark-source-lane h3 {
+    margin-block: .35rem .65rem;
+}
+
+.benchmark-reading-page .benchmark-source-record {
+    border-block-start: 1px solid var(--canvas-rule-strong);
+    display: grid;
+    gap: .55rem;
+    margin-block-start: 1rem;
+    padding-block-start: 1rem;
+}
+
+.benchmark-reading-page .benchmark-source-record dt {
+    color: var(--benchmark-ink);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: .78rem;
+    font-weight: 850;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.benchmark-reading-page .benchmark-source-record dd {
+    margin: 0;
+}
+
+.benchmark-reading-page .benchmark-boundary {
+    background: var(--benchmark-rose);
+    border: .125rem solid var(--benchmark-ink);
+    border-inline-start: .55rem solid var(--benchmark-cobalt);
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.benchmark-reading-page .benchmark-boundary > :first-child {
+    margin-block-start: 0;
+}
+
+.benchmark-reading-page .benchmark-boundary > :last-child {
+    margin-block-end: 0;
+}
+
+.benchmark-reading-page .benchmark-source-lanes + .benchmark-boundary {
+    margin-block-start: 1.75rem;
+}
+
+@media screen and (max-width: 54rem) {
+    .benchmark-reading-page .benchmark-flow,
+    .benchmark-reading-page .benchmark-result-profile,
+    .benchmark-reading-page .benchmark-source-lanes {
+        grid-template-columns: 1fr;
+    }
+
+    .benchmark-reading-page .benchmark-flow > li {
+        box-shadow: .25rem .25rem 0 var(--benchmark-cobalt);
+    }
+}
+
+@media (forced-colors: active) {
+    .benchmark-reading-page .benchmark-flow > li,
+    .benchmark-reading-page .benchmark-result-profile > div,
+    .benchmark-reading-page .benchmark-source-lane,
+    .benchmark-reading-page .benchmark-boundary {
+        background: Canvas;
+        border-color: CanvasText;
+        box-shadow: none;
+        color: CanvasText;
+    }
+}
+
+@media print {
+    .benchmark-reading-page .benchmark-flow,
+    .benchmark-reading-page .benchmark-result-profile,
+    .benchmark-reading-page .benchmark-source-lanes {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .benchmark-reading-page .benchmark-flow > li,
+    .benchmark-reading-page .benchmark-result-profile > div,
+    .benchmark-reading-page .benchmark-source-lane,
+    .benchmark-reading-page .benchmark-boundary {
+        break-inside: avoid;
+        box-shadow: none;
+    }
+}

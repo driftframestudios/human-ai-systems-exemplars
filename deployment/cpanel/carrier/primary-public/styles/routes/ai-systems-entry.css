@@ -1,0 +1,181 @@
+/* Context Canvas route bundle: AI Systems entry --------------------------
+   Consumer: ai-systems.html only.
+   Owns: entry-route bridges, live-lab summaries, Goal Fidelity table
+   treatment, entry embeds, and their responsive and alternate modes.
+   Load order: expanded.css, styles/components/instrument-atlas.css,
+   ai-systems.css, this entry bundle, then canvas-shell.css.
+   Contract: ../../../../visual-fidelity-contracts/cobalt-operating-field.md.
+   The family bundle supplies shared grammar; this entry retains authority
+   over its lab rhythm, table density, route bridges, and new experiments. */
+
+/* Entry route bridges ---------------------------------------------------- */
+
+.ai-systems-family-route {
+    background: var(--blueprint-lime, #eff8b8);
+    border: .125rem solid var(--blueprint-ink);
+    border-radius: .75rem;
+    box-shadow: .5rem .5rem 0 var(--blueprint-coral);
+}
+
+:where(.ai-systems-family-route) {
+    margin-block: clamp(2rem, 4vw, 3.5rem);
+}
+
+.ai-systems-family-route a {
+    color: var(--blueprint-cobalt-deep);
+    font-weight: 750;
+}
+
+@media screen and (max-width: 30rem) {
+    .ai-systems-family-route {
+        box-shadow: .3rem .3rem 0 var(--hiring-ink, var(--blueprint-ink));
+    }
+}
+
+@media (forced-colors: active) {
+    .ai-systems-family-route {
+        border-color: CanvasText;
+        box-shadow: none;
+    }
+}
+
+@media print {
+    .ai-systems-family-route {
+        box-shadow: none;
+    }
+}
+
+/* Entry labs and Goal Fidelity tables ----------------------------------- */
+
+.goal-fidelity-table thead th {
+    background: var(--blueprint-ink);
+    color: #fff;
+}
+
+.ai-systems-page .ai-systems-prototype-shelf,
+.ai-systems-page .ai-systems-registry-lab,
+.ai-systems-page .ai-systems-conditioning-lab {
+    border-block-start: .18rem solid var(--blueprint-cobalt);
+    margin-block-start: clamp(3rem, 7vw, 6rem);
+    padding-block-start: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.ai-systems-page :is(.registry-embed-summary, .conditioning-embed-summary) {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-block: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.ai-systems-page :is(.registry-embed-summary, .conditioning-embed-summary) div {
+    background: var(--blueprint-cream);
+    border: .125rem solid var(--blueprint-ink);
+    border-radius: .65rem;
+    box-shadow: .35rem .35rem 0 var(--blueprint-cobalt);
+    padding: 1rem;
+}
+
+.ai-systems-page :is(.registry-embed-summary, .conditioning-embed-summary) dt {
+    color: var(--blueprint-cobalt-deep);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: .76rem;
+    font-weight: 850;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+
+.ai-systems-page :is(.registry-embed-summary, .conditioning-embed-summary) dd {
+    line-height: 1.48;
+    margin: .5rem 0 0;
+}
+
+.ai-systems-page .conditioning-field-embed iframe {
+    block-size: clamp(40rem, 78vh, 62rem);
+}
+
+.ai-systems-page .ai-systems-lab-bridge {
+    background: color-mix(in srgb, var(--blueprint-sky) 42%, #fff 58%);
+    border-inline-start: .35rem solid var(--blueprint-cobalt-deep);
+    margin-block: clamp(1.5rem, 3vw, 2.5rem);
+    padding: 1rem 1.15rem;
+}
+
+.goal-fidelity-table {
+    min-inline-size: 76rem;
+}
+
+.goal-fidelity-table tbody th {
+    inline-size: 24%;
+    min-inline-size: 16rem;
+}
+
+@media screen and (max-width: 64rem) {
+    .ai-systems-page :is(.registry-embed-summary, .conditioning-embed-summary) {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (forced-colors: active) {
+    .ai-systems-page :is(.registry-embed-summary, .conditioning-embed-summary) div {
+        border-color: CanvasText;
+        box-shadow: none;
+    }
+}
+
+@media print {
+    .ai-systems-page :is(.registry-embed-summary, .conditioning-embed-summary) div {
+        box-shadow: none;
+        min-block-size: auto;
+    }
+}
+
+/*.goal-fidelity-table tbody tr:nth-child(3n + 1) > * {*/
+/*    background: color-mix(in srgb, var(--blueprint-sky) 42%, #fff 58%);*/
+/*}*/
+
+/*.goal-fidelity-table tbody tr:nth-child(3n + 2) > * {*/
+/*    background: color-mix(in srgb, #ffe0e6 42%, #fff 58%);*/
+/*}*/
+
+/*.goal-fidelity-table tbody tr:nth-child(3n) > * {*/
+/*    background: color-mix(in srgb, var(--blueprint-sea) 52%, #fff 48%);*/
+/*}*/
+
+/* Entry table and route cascade anchors --------------------------------- */
+
+@media print {
+    .ai-systems-page .goal-fidelity-table {
+        min-inline-size: 0;
+    }
+
+    .ai-systems-page .goal-fidelity-table thead th {
+        background: #fff !important;
+        color: #000 !important;
+    }
+}
+
+.ai-systems-page .ai-systems-family-route {
+    background: #E6F5F5;
+    border: .125rem solid var(--blueprint-ink);
+    border-radius: .75rem;
+    box-shadow: .5rem .5rem 0 var(--blueprint-coral);
+}
+
+@media screen and (max-width: 30rem) {
+    .ai-systems-page .ai-systems-family-route {
+        box-shadow: .3rem .3rem 0 var(--hiring-ink, var(--blueprint-ink));
+    }
+}
+
+@media (forced-colors: active) {
+    .ai-systems-page .ai-systems-family-route {
+        border-color: CanvasText;
+        box-shadow: none;
+    }
+}
+
+@media print {
+    .ai-systems-page .ai-systems-family-route {
+        box-shadow: none;
+    }
+}

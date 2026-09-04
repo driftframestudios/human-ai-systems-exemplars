@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="sr2-map-title sr2-map-desc">
+  <title id="sr2-map-title">One canonical genomic result fans out through two governed receiving contracts</title>
+  <desc id="sr2-map-desc">One assay result enters a canonical coded model. Separate Epic and Oracle Health paths each retain their own patient identity membrane, target transformer, conformance examples, recovery queue, and vendor program calendar. A pivot band shows why two bespoke bridges were retired in favor of normalize once and emit by target.</desc>
+
+  <defs>
+    <pattern id="sr2-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#2855f3" stroke-opacity=".06" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <style>
+    .field{fill:#fffaf2}.grid{fill:url(#sr2-grid)}.frame{fill:none;stroke:#17345f;stroke-width:2}.header{fill:#2855f3}.panel{fill:#fffdf8;stroke:#17345f;stroke-width:2}.shadow{fill:#17345f}.card{fill:#fffdf8;stroke:#7893bc;stroke-width:1.5}.rose{fill:#ffd3d0}.powder{fill:#cfe7f7}.sea{fill:#d9efea}.cream{fill:#fff5de}.pale{fill:#e7efff}.acid{fill:#f2ff67}.coral{fill:#fa7065}.cobalt{fill:#2855f3}.deep{fill:#153fbe}.ink{fill:#17345f}.rule{stroke:#9aacc8;stroke-width:1.2}.title{fill:#fffdf8;font:750 35px/1.1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.subtitle{fill:#e7efff;font:500 15px/1.35 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.eyebrow-on{fill:#f2ff67;font:750 12px/1.2 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:1.4px}.eyebrow{fill:#5d6f8b;font:750 12px/1.2 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:1.1px}.section{fill:#17345f;font:750 20px/1.2 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.card-title{fill:#17345f;font:750 16px/1.2 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.body{fill:#304a71;font:500 13.5px/1.4 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.body-strong{fill:#17345f;font:700 13.5px/1.4 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.mono{fill:#304a71;font:650 11.5px/1.3 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}.mono-on{fill:#fffdf8;font:700 11.5px/1.3 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:.4px}.chip{fill:#fffdf8;stroke:#17345f;stroke-width:1.5}.chip-text{fill:#17345f;font:700 12px/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.arrow{fill:#2855f3}.arrow-coral{fill:#fa7065}
+  </style>
+
+  <rect class="field" width="1600" height="1120"/>
+  <rect class="grid" x="20" y="20" width="1560" height="1080" rx="28"/>
+  <rect class="frame" x="20" y="20" width="1560" height="1080" rx="28"/>
+
+  <g role="group" aria-labelledby="sr2-heading-title">
+    <title id="sr2-heading-title">Two-chart fan-out heading</title>
+    <path class="header" d="M20 48a28 28 0 0 1 28-28h1504a28 28 0 0 1 28 28v116H20Z"/>
+    <text class="eyebrow-on" x="54" y="58">EHR INTEGRATION · SR2 · PIVOTED OUTCOME</text>
+    <text class="title" x="54" y="103">Name the result once; govern two receiving boundaries</text>
+    <text class="subtitle" x="54" y="134">One coded model stays shared · identity, conformance, recovery, and vendor calendars remain local to each chart</text>
+  </g>
+
+  <g role="group" aria-labelledby="sr2-input-title">
+    <title id="sr2-input-title">Assay result entering the canonical model</title>
+    <rect class="shadow" x="62" y="214" width="310" height="242" rx="17"/>
+    <rect class="panel cream" x="54" y="206" width="310" height="242" rx="17"/>
+    <text class="eyebrow" x="78" y="238">REFERENCE LAB</text>
+    <text class="section" x="78" y="270">One assay result</text>
+    <rect class="card" x="78" y="294" width="262" height="62" rx="10"/>
+    <text class="mono" x="96" y="319">ORDER · SPECIMEN · REPORT</text>
+    <text class="body-strong" x="96" y="342">one case identity</text>
+    <rect class="card acid" x="78" y="370" width="262" height="54" rx="10"/>
+    <text class="mono" x="96" y="394">CODED FINDING</text>
+    <text class="body-strong" x="96" y="416">variant + interpretation + status</text>
+  </g>
+
+  <path class="arrow" aria-hidden="true" d="M380 302H410V286L444 322L410 358V342H380Z"/>
+
+  <g role="group" aria-labelledby="sr2-core-title">
+    <title id="sr2-core-title">Canonical genomic result model</title>
+    <rect class="shadow" x="460" y="214" width="350" height="532" rx="17"/>
+    <rect class="panel" x="452" y="206" width="350" height="532" rx="17"/>
+    <path class="deep" d="M469 206h316a17 17 0 0 1 17 17v76H452v-76a17 17 0 0 1 17-17Z"/>
+    <text class="mono-on" x="476" y="239">CANONICAL CLINICAL MODEL</text>
+    <text class="title" x="476" y="275" style="font-size:24px">Normalize once</text>
+
+    <rect class="card pale" x="476" y="326" width="302" height="116" rx="11"/>
+    <text class="eyebrow" x="496" y="351">SHARED MEANING</text>
+    <text class="card-title" x="496" y="378">Order + report + coded findings</text>
+    <text class="body" x="496" y="404">LOINC-coded clinical truth has one</text>
+    <text class="body" x="496" y="424">versioned internal representation.</text>
+
+    <rect class="card sea" x="476" y="458" width="302" height="108" rx="11"/>
+    <text class="eyebrow" x="496" y="483">ATTACHED MATCH EVIDENCE</text>
+    <text class="card-title" x="496" y="510">Source identity travels forward</text>
+    <text class="body" x="496" y="536">Each target still resolves within its</text>
+    <text class="body" x="496" y="556">own EMPI and recovery domain.</text>
+
+    <rect class="card acid" x="476" y="582" width="302" height="130" rx="11"/>
+    <text class="eyebrow" x="496" y="607">PIVOTED DELIVERY RULE</text>
+    <text class="body-strong" x="496" y="634">Shared correction → canonical model</text>
+    <text class="body-strong" x="496" y="658">Target correction → transformer</text>
+    <text class="body" x="496" y="684">A third EHR becomes another target,</text>
+    <text class="body" x="496" y="704">not another clinical source of truth.</text>
+  </g>
+
+  <g aria-hidden="true">
+    <path class="arrow" d="M818 310H850V296L882 326L850 356V342H818Z"/>
+    <path class="arrow" d="M818 588H850V574L882 604L850 634V620H818Z"/>
+  </g>
+
+  <g role="group" aria-labelledby="sr2-epic-title">
+    <title id="sr2-epic-title">Epic receiving contract</title>
+    <rect class="shadow" x="898" y="214" width="648" height="260" rx="17"/>
+    <rect class="panel" x="890" y="206" width="648" height="260" rx="17"/>
+    <rect class="powder" x="890" y="206" width="152" height="260" rx="16"/>
+    <text class="eyebrow" x="914" y="238">SYSTEM A</text>
+    <text class="section" x="914" y="270">Epic</text>
+    <text class="mono" x="914" y="296">INDEPENDENT GATE</text>
+
+    <rect class="card rose" x="1066" y="230" width="212" height="92" rx="10"/>
+    <text class="eyebrow" x="1084" y="254">IDENTITY MEMBRANE</text>
+    <text class="card-title" x="1084" y="280">System A EMPI</text>
+    <text class="body" x="1084" y="304">match · hold · steward</text>
+
+    <rect class="card pale" x="1294" y="230" width="220" height="92" rx="10"/>
+    <text class="eyebrow" x="1312" y="254">TRANSFORM + TEST</text>
+    <text class="card-title" x="1312" y="280">Epic-conformant result</text>
+    <text class="body" x="1312" y="304">ORU / supported FHIR surface</text>
+
+    <rect class="card sea" x="1066" y="338" width="212" height="98" rx="10"/>
+    <text class="eyebrow" x="1084" y="362">RECEIVING SURFACE</text>
+    <text class="card-title" x="1084" y="388">Genomics module</text>
+    <text class="body" x="1084" y="413">discrete clinical filing</text>
+
+    <rect class="card cream" x="1294" y="338" width="220" height="98" rx="10"/>
+    <text class="eyebrow" x="1312" y="362">PROGRAM + RECOVERY</text>
+    <text class="card-title" x="1312" y="388">Review + exception queue</text>
+    <text class="body" x="1312" y="413">activate · hold · replay</text>
+  </g>
+
+  <g role="group" aria-labelledby="sr2-oracle-title">
+    <title id="sr2-oracle-title">Oracle Health receiving contract</title>
+    <rect class="shadow" x="898" y="492" width="648" height="260" rx="17"/>
+    <rect class="panel" x="890" y="484" width="648" height="260" rx="17"/>
+    <rect class="sea" x="890" y="484" width="152" height="260" rx="16"/>
+    <text class="eyebrow" x="914" y="516">SYSTEM B</text>
+    <text class="section" x="914" y="548">Oracle Health</text>
+    <text class="card-title" x="914" y="573">Cerner</text>
+    <text class="mono" x="914" y="600">INDEPENDENT GATE</text>
+
+    <rect class="card rose" x="1066" y="508" width="212" height="92" rx="10"/>
+    <text class="eyebrow" x="1084" y="532">IDENTITY MEMBRANE</text>
+    <text class="card-title" x="1084" y="558">System B EMPI</text>
+    <text class="body" x="1084" y="582">match · hold · steward</text>
+
+    <rect class="card pale" x="1294" y="508" width="220" height="92" rx="10"/>
+    <text class="eyebrow" x="1312" y="532">TRANSFORM + TEST</text>
+    <text class="card-title" x="1312" y="558">COI-conformant result</text>
+    <text class="body" x="1312" y="582">ORU / mature FHIR surfaces</text>
+
+    <rect class="card sea" x="1066" y="616" width="212" height="98" rx="10"/>
+    <text class="eyebrow" x="1084" y="640">RECEIVING SURFACE</text>
+    <text class="card-title" x="1084" y="666">Discrete / PowerForm</text>
+    <text class="body" x="1084" y="691">local fidelity remains visible</text>
+
+    <rect class="card cream" x="1294" y="616" width="220" height="98" rx="10"/>
+    <text class="eyebrow" x="1312" y="640">PROGRAM + RECOVERY</text>
+    <text class="card-title" x="1312" y="666">Validation + exception queue</text>
+    <text class="body" x="1312" y="691">activate · hold · replay</text>
+  </g>
+
+  <g role="group" aria-labelledby="sr2-pivot-title">
+    <title id="sr2-pivot-title">Pivot from bespoke bridges to a canonical core</title>
+    <rect class="panel rose" x="54" y="786" width="1492" height="118" rx="14"/>
+    <text class="eyebrow" x="78" y="816">PIVOTED OUTCOME · THE ABANDONED PLAN STAYS VISIBLE</text>
+    <text class="section" x="78" y="846">Two bespoke bridges duplicated semantics, identity assumptions, and recovery logic.</text>
+    <path class="arrow-coral" aria-hidden="true" d="M78 864H1328V852L1360 878L1328 904V892H78Z"/>
+    <rect class="acid" x="1378" y="856" width="144" height="44" rx="8"/>
+    <text class="mono" x="1395" y="883">NORMALIZE ONCE</text>
+  </g>
+
+  <g role="group" aria-labelledby="sr2-investment-title">
+    <title id="sr2-investment-title">Changed work and sustained investment</title>
+    <rect class="cobalt" x="54" y="932" width="1492" height="56" rx="12"/>
+    <text class="mono-on" x="78" y="958">CHANGED WORK + INVESTMENT</text>
+    <text class="title" x="78" y="980" style="font-size:18px">Clinical meaning is governed once; identity, conformance, activation, and recovery are staffed by target.</text>
+
+    <rect class="card pale" x="54" y="1006" width="350" height="68" rx="11"/>
+    <text class="eyebrow" x="74" y="1030">CLINICAL + TERMINOLOGY</text>
+    <text class="body-strong" x="74" y="1054">One coded model and representative findings</text>
+
+    <rect class="card rose" x="420" y="1006" width="350" height="68" rx="11"/>
+    <text class="eyebrow" x="440" y="1030">IDENTITY OPERATIONS</text>
+    <text class="body-strong" x="440" y="1054">Two EMPIs, two exception responsibilities</text>
+
+    <rect class="card sea" x="786" y="1006" width="350" height="68" rx="11"/>
+    <text class="eyebrow" x="806" y="1030">INTEGRATION ENGINEERING</text>
+    <text class="body-strong" x="806" y="1054">Shared core, per-target fixtures and recovery</text>
+
+    <rect class="card acid" x="1152" y="1006" width="394" height="68" rx="11"/>
+    <text class="eyebrow" x="1172" y="1030">PROGRAM DELIVERY</text>
+    <text class="body-strong" x="1172" y="1054">Two independent gates plus explicit pivot capacity</text>
+  </g>
+</svg>

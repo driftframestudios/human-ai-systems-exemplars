@@ -1,0 +1,924 @@
+{
+  "id": "core-architectures.iframe-route-package-receipt.v1",
+  "version": "1",
+  "host": "iframes.vik.guru",
+  "base_path": "/v1/core/",
+  "route_contract": {
+    "file": "public-iframe-route-manifest-v1.json",
+    "sha256": "c207eee18ef3c7fde2fc63406fe4fb7140a389103f5b6ee40352da932567075f"
+  },
+  "source_manifest": {
+    "file": "manifest.json",
+    "source_file": "core-architectures-chimeric-prototype-manifest-v0.1.json",
+    "sha256": "4dd5a7c3afb3ec2f9f4049a98871b90ed56baf9087b495a65ea7208454a37224"
+  },
+  "package_contract": {
+    "primary_routes": 23,
+    "prototype_routes": 21,
+    "supplemental_instrument_routes": 1,
+    "generated_files": 27,
+    "compatibility_aliases_generated": false,
+    "live_cloudflare_mutation": false,
+    "closure_observation": "static_resource_graph",
+    "browser_request_observation_required": true,
+    "neighboring_path_posture": "unmatched"
+  },
+  "routes": [
+    {
+      "id": "core-architectures-pack",
+      "public_alias": "/v1/core/",
+      "source_file": "core-architectures-chimeric-prototype-pack-index-v0.1.3.html",
+      "source_version": "0.1.3",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "parity_review",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [],
+        "permissions_policy": [],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [],
+      "projection_file": "index.html",
+      "projection_kind": "navigation_adapted",
+      "source_bytes": 24095,
+      "source_sha256": "f709c8d9b49f250dd8ebb66275f86ea667d5bb80592fe05f4c851aa132724193",
+      "projection_bytes": 23462,
+      "projection_sha256": "5baa8e2c2d30788a71ac1299fd637efc211683af0cd695182fa9890c7da649d3",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 22,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "poda",
+      "public_alias": "/v1/core/poda/",
+      "source_file": "poda-chimeric-prototype-v0.1.3.html",
+      "source_version": "0.1.3",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "parity_review",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "poda/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 72559,
+      "source_sha256": "75127797592b85c7f22608d92ae6482b6073c523879d621a3e33c133cecbac5b",
+      "projection_bytes": 72559,
+      "projection_sha256": "75127797592b85c7f22608d92ae6482b6073c523879d621a3e33c133cecbac5b",
+      "static_resource_closure": {
+        "inline_references": 3,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": [
+          {
+            "href": "../context-canvas-project-surface/context-canvas/poda.html",
+            "projected_target": "context-canvas-project-surface/context-canvas/poda.html"
+          }
+        ]
+      }
+    },
+    {
+      "id": "alignment-worksheet",
+      "public_alias": "/v1/core/alignment-worksheet/",
+      "source_file": "alignment-worksheet-chimeric-prototype-v0.1.3.html",
+      "source_version": "0.1.3",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "alignment-worksheet/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 67321,
+      "source_sha256": "d95b9dea95e92ab24baf3c286e8ac15d3166056d06b9ee4293b34a99f0400c23",
+      "projection_bytes": 67321,
+      "projection_sha256": "d95b9dea95e92ab24baf3c286e8ac15d3166056d06b9ee4293b34a99f0400c23",
+      "static_resource_closure": {
+        "inline_references": 1,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "impact-map",
+      "public_alias": "/v1/core/impact-map/",
+      "source_file": "impact-map-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "impact-map/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 46004,
+      "source_sha256": "f4d87c54b4113c15076c0dd2e7516859beccf225d354a1723f16c1c4abd31797",
+      "projection_bytes": 46004,
+      "projection_sha256": "f4d87c54b4113c15076c0dd2e7516859beccf225d354a1723f16c1c4abd31797",
+      "static_resource_closure": {
+        "inline_references": 1,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "context-tree",
+      "public_alias": "/v1/core/context-tree/",
+      "source_file": "context-tree-chimeric-prototype-v0.1.6.html",
+      "source_version": "0.1.6",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "context-tree/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 85427,
+      "source_sha256": "c9b4474b0f8b514fd73363e5b5133cf4222e39973b1e7cf32ff640ed9603d7f7",
+      "projection_bytes": 85427,
+      "projection_sha256": "c9b4474b0f8b514fd73363e5b5133cf4222e39973b1e7cf32ff640ed9603d7f7",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "strategy-canvas",
+      "public_alias": "/v1/core/strategy-canvas/",
+      "source_file": "strategy-canvas-chimeric-prototype-v0.2.2.html",
+      "source_version": "0.2.2",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "parity_review",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "strategy-canvas/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 142235,
+      "source_sha256": "93f5e2b138461f85b4980b849550f7c86cc51d7eaf16bf8429d1ea632034372a",
+      "projection_bytes": 142235,
+      "projection_sha256": "93f5e2b138461f85b4980b849550f7c86cc51d7eaf16bf8429d1ea632034372a",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": [
+          {
+            "source_file": "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+            "target_file": "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+            "content_type": "application/schema+json",
+            "bytes": 15432,
+            "sha256": "8fc5d394a0edeb4578d9e5203323ec2572cea2673e525e5c083e2fdf51c5c41c"
+          },
+          {
+            "source_file": "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+            "target_file": "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+            "content_type": "application/json",
+            "bytes": 13480,
+            "sha256": "a0e50582f924d79e39456349cd0e7dd160e46ad5df77bb2a357f20fedf509c7c"
+          }
+        ]
+      },
+      "navigation": {
+        "packaged_links": 2,
+        "fragment_links": 1,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "first-responsible-version-matrix",
+      "public_alias": "/v1/core/first-responsible-version-matrix/",
+      "source_file": "first-responsible-version-matrix-chimeric-prototype-v0.1.3.html",
+      "source_version": "0.1.3",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "first-responsible-version-matrix/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 63309,
+      "source_sha256": "92471bc975e471371023e4ebba6be4a9a0974753e471865f8237c884ff219266",
+      "projection_bytes": 63309,
+      "projection_sha256": "92471bc975e471371023e4ebba6be4a9a0974753e471865f8237c884ff219266",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "cross-channel-blueprint",
+      "public_alias": "/v1/core/cross-channel-blueprint/",
+      "source_file": "shared-surface-priority-map-chimeric-prototype-v0.1.3.html",
+      "source_version": "0.1.3",
+      "receiver_standing": "byte_identical",
+      "activation_standing": "provenance_review",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "cross-channel-blueprint/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 106139,
+      "source_sha256": "06817b6fc7312c32f6c303b1ea562c43c2bf8436a6214b73e03e9b6cb14ec08a",
+      "projection_bytes": 106139,
+      "projection_sha256": "06817b6fc7312c32f6c303b1ea562c43c2bf8436a6214b73e03e9b6cb14ec08a",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "service-design-blueprint",
+      "public_alias": "/v1/core/service-design-blueprint/",
+      "source_file": "service-design-blueprint-chimeric-prototype-v0.2.4.html",
+      "source_version": "0.2.4",
+      "receiver_standing": "byte_identical",
+      "activation_standing": "visitor_copy_review",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "service-design-blueprint/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 93083,
+      "source_sha256": "2641264f0e3471fe24d4e26482229646e80ed26c1ede1a5f804dd1e53bb5bdfd",
+      "projection_bytes": 93083,
+      "projection_sha256": "2641264f0e3471fe24d4e26482229646e80ed26c1ede1a5f804dd1e53bb5bdfd",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "ai-systems-service-blueprint",
+      "public_alias": "/v1/core/ai-systems-service-blueprint/",
+      "source_file": "ai-systems-service-blueprint-chimeric-prototype-v0.1.3.html",
+      "source_version": "0.1.3",
+      "receiver_standing": "reserve",
+      "activation_standing": "navigation_observation",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts"
+      ],
+      "projection_file": "ai-systems-service-blueprint/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 66749,
+      "source_sha256": "4acdc3d83532449f30decc5685c98061a982905b61e4e550d5731ba2d1b43706",
+      "projection_bytes": 66749,
+      "projection_sha256": "4acdc3d83532449f30decc5685c98061a982905b61e4e550d5731ba2d1b43706",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 3,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "software-architecture-views",
+      "public_alias": "/v1/core/software-architecture-views/",
+      "source_file": "software-architecture-views-chimeric-prototype-v0.1.3.html",
+      "source_version": "0.1.3",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "software-architecture-views/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 80200,
+      "source_sha256": "c1fdce7212aa0995cd5e862b9cee00baad5ddfd1b199ca4f3f063488c81ebe0c",
+      "projection_bytes": 80200,
+      "projection_sha256": "c1fdce7212aa0995cd5e862b9cee00baad5ddfd1b199ca4f3f063488c81ebe0c",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "participatory-design-kit",
+      "public_alias": "/v1/core/participatory-design-kit/",
+      "source_file": "participatory-design-kit-chimeric-prototype-v0.1.3.html",
+      "source_version": "0.1.3",
+      "receiver_standing": "reserve",
+      "activation_standing": "visitor_copy_review",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "participatory-design-kit/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 70946,
+      "source_sha256": "d8e9cc9d3e8c354000a48bd62e0b0a023f654596ea223f8acf860b0cd5e75e64",
+      "projection_bytes": 70946,
+      "projection_sha256": "d8e9cc9d3e8c354000a48bd62e0b0a023f654596ea223f8acf860b0cd5e75e64",
+      "static_resource_closure": {
+        "inline_references": 1,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "specification-by-example",
+      "public_alias": "/v1/core/specification-by-example/",
+      "source_file": "specification-by-example-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
+      "receiver_standing": "byte_identical",
+      "activation_standing": "navigation_observation",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "specification-by-example/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 69546,
+      "source_sha256": "0bea8fabc2d06a05117b8289e01d3931e928262c8db6af01fd9c5563d0a9359f",
+      "projection_bytes": 69546,
+      "projection_sha256": "0bea8fabc2d06a05117b8289e01d3931e928262c8db6af01fd9c5563d0a9359f",
+      "static_resource_closure": {
+        "inline_references": 1,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 2,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "heart-chart",
+      "public_alias": "/v1/core/heart-chart/",
+      "source_file": "heart-chart-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
+      "receiver_standing": "byte_identical",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "heart-chart/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 64271,
+      "source_sha256": "a4fecf35cb271d4b36ffd5a6eb22f9c3a6569b4e8551954cad0ffb47a7b87aba",
+      "projection_bytes": 64271,
+      "projection_sha256": "a4fecf35cb271d4b36ffd5a6eb22f9c3a6569b4e8551954cad0ffb47a7b87aba",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "plus-delta",
+      "public_alias": "/v1/core/plus-delta/",
+      "source_file": "plus-delta-chimeric-prototype-v0.1.3.html",
+      "source_version": "0.1.3",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "plus-delta/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 49137,
+      "source_sha256": "6e0574e69d339be3ae1e4d03fb3c2ae535230505e232c09ab8aa704353dad14a",
+      "projection_bytes": 49137,
+      "projection_sha256": "6e0574e69d339be3ae1e4d03fb3c2ae535230505e232c09ab8aa704353dad14a",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "practitioner-judgment-probes",
+      "public_alias": "/v1/core/practitioner-judgment-probes/",
+      "source_file": "practitioner-judgment-probes-chimeric-prototype-v0.1.3.html",
+      "source_version": "0.1.3",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "practitioner-judgment-probes/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 68964,
+      "source_sha256": "d50cfcde73b418a4e2f932a9c1e3a02344afb9ddaccf2cb42ca1e1b1bac51136",
+      "projection_bytes": 68964,
+      "projection_sha256": "d50cfcde73b418a4e2f932a9c1e3a02344afb9ddaccf2cb42ca1e1b1bac51136",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "pattern-problem-surface-matrix",
+      "public_alias": "/v1/core/pattern-problem-surface-matrix/",
+      "source_file": "pattern-problem-surface-matrix-chimeric-prototype-v0.1.3.html",
+      "source_version": "0.1.3",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "pattern-problem-surface-matrix/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 96474,
+      "source_sha256": "25efaa307a2eead01e5779569e79d6c59eae0fd0a094cc256a4ae7dff386ed94",
+      "projection_bytes": 96474,
+      "projection_sha256": "25efaa307a2eead01e5779569e79d6c59eae0fd0a094cc256a4ae7dff386ed94",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "jobs-to-be-done-treemap",
+      "public_alias": "/v1/core/jobs-to-be-done-treemap/",
+      "source_file": "jobs-to-be-done-treemap-chimeric-prototype-v0.1.3.html",
+      "source_version": "0.1.3",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "jobs-to-be-done-treemap/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 68520,
+      "source_sha256": "74f75b9040a7f1bfadd5a52b401f4b364d2c689829b93a147ee6e18c8277b5ab",
+      "projection_bytes": 68520,
+      "projection_sha256": "74f75b9040a7f1bfadd5a52b401f4b364d2c689829b93a147ee6e18c8277b5ab",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "unit-test-first-design",
+      "public_alias": "/v1/core/unit-test-first-design/",
+      "source_file": "unit-test-first-design-chimeric-prototype-v0.1.3.html",
+      "source_version": "0.1.3",
+      "receiver_standing": "reserve",
+      "activation_standing": "navigation_observation",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "unit-test-first-design/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 66268,
+      "source_sha256": "4ef1a9f21f3890468869f306abcd2f13c40572da57ce61edd68c89448abb695d",
+      "projection_bytes": 66268,
+      "projection_sha256": "4ef1a9f21f3890468869f306abcd2f13c40572da57ce61edd68c89448abb695d",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 1,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "upstream-revision-loop",
+      "public_alias": "/v1/core/upstream-revision-loop/",
+      "source_file": "upstream-revision-loop-chimeric-prototype-v0.1.3.html",
+      "source_version": "0.1.3",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "upstream-revision-loop/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 59607,
+      "source_sha256": "b1250002cfd30faa1d9d3cfe6cd43567aef0f60444f7e21d6280ec396af16fa7",
+      "projection_bytes": 59607,
+      "projection_sha256": "b1250002cfd30faa1d9d3cfe6cd43567aef0f60444f7e21d6280ec396af16fa7",
+      "static_resource_closure": {
+        "inline_references": 1,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "recovery-routing-atlas",
+      "public_alias": "/v1/core/recovery-routing-atlas/",
+      "source_file": "recovery-routing-atlas-chimeric-prototype-v0.1.3.html",
+      "source_version": "0.1.3",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "recovery-routing-atlas/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 74083,
+      "source_sha256": "9f1d469773ff03f048d2a9c67f3dd19845ed90a4148bd447ad072dbeecbaf453",
+      "projection_bytes": 74083,
+      "projection_sha256": "9f1d469773ff03f048d2a9c67f3dd19845ed90a4148bd447ad072dbeecbaf453",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "core-architecture-family-index",
+      "public_alias": "/v1/core/core-architecture-family-index/",
+      "source_file": "core-architecture-family-index-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "parity_review",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "core-architecture-family-index/index.html",
+      "projection_kind": "source_identical",
+      "source_bytes": 74944,
+      "source_sha256": "f474cb712ebc632ee3ec1764c15aa8a2829c0cdccbbcbfd6edd0b562eb5fd336",
+      "projection_bytes": 74944,
+      "projection_sha256": "f474cb712ebc632ee3ec1764c15aa8a2829c0cdccbbcbfd6edd0b562eb5fd336",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": [
+          {
+            "href": "../context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html",
+            "projected_target": "context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html"
+          }
+        ]
+      }
+    },
+    {
+      "id": "conditioning-field",
+      "public_alias": "/v1/core/conditioning-field/",
+      "source_file": "conditioning-field.html",
+      "source_root": "context-canvas-project-surface/context-canvas",
+      "source_version": "unversioned-current",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts"
+      ],
+      "projection_file": "conditioning-field/index.html",
+      "projection_kind": "embedded_single_file",
+      "source_bytes": 89730,
+      "source_sha256": "df270685f1195b8e3cd0ef400bda2ce36837c8aaf341bfb90e312f4c9ab2c532",
+      "projection_bytes": 90120,
+      "projection_sha256": "c3169edcca2f4561c8198761d1d55ee215a7c771ca23adc484b4e804a4d8a9c7",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 1,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    }
+  ],
+  "resting_compatibility_aliases": [
+    {
+      "id": "strategy-canvas-v0.1.1",
+      "source_file": "strategy-canvas-chimeric-prototype-v0.1.1.html",
+      "proposed_alias": "/v1/core/strategy-canvas/v0.1.1/",
+      "standing": "resting_optional_migration_alias",
+      "generated": false
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "iframe-routes.aggregate-package-receipt.v1",
+  "version": "1",
+  "host": "iframes.vik.guru",
+  "base_path": "/v1/",
+  "package_contract": {
+    "family_directories": [
+      "core",
+      "canvas"
+    ],
+    "primary_routes": 38,
+    "generated_files": 68,
+    "generated_bytes": 3355861,
+    "live_cloudflare_mutation": false
+  },
+  "families": [
+    {
+      "id": "core",
+      "base_path": "/v1/core/",
+      "family_manifest_sha256": "c207eee18ef3c7fde2fc63406fe4fb7140a389103f5b6ee40352da932567075f",
+      "route_receipt_file": "core/route-manifest.json",
+      "route_receipt_sha256": "383bc032e5cd84763d9d6b6872f861c246b941489e270cdff7ee0db13aabdef2",
+      "routes": 23,
+      "files": 27,
+      "bytes": 1775661
+    },
+    {
+      "id": "canvas",
+      "base_path": "/v1/canvas/",
+      "family_manifest_sha256": "be467209fc9fc3ad8e2110434b70110c86dd20aeecb41c5f45bbcfb365b50557",
+      "route_receipt_file": "canvas/route-manifest.json",
+      "route_receipt_sha256": "efe747dbfbe6b22823b783a65fa37775bdddc0914f9289aed34b985087d775bd",
+      "routes": 15,
+      "files": 40,
+      "bytes": 1579068
+    }
+  ]
+}

@@ -1,0 +1,3036 @@
+{
+  "id": "prod-projection.deployment-manifest.v1",
+  "version": "1",
+  "source_sha": "3c0683afabea645cc62de5700543da494ef774ae",
+  "inputs": {
+    "configuration": {
+      "source_path": "deployment/cpanel/production-projection.config.json",
+      "git_blob_id": "93a7ba06450e57fa737d71c76e47f4f32c2ec68c",
+      "sha256": "30773a93915508580e3714beb0d46469d2c923ab8c44f6fc0178d9e042a526d9"
+    },
+    "primary_manifest": {
+      "id": "prod-projection.primary-route-manifest.v1",
+      "version": "1",
+      "source_path": "deployment/cpanel/primary-route-manifest.json",
+      "git_blob_id": "f9c51db369ec0bce10df73f1d98533d4abf5b349",
+      "sha256": "490912be0ee5c5ec8bba87c68c9af7037565ec67371d69c28e1ef6c0b77df06a"
+    },
+    "public_references": {
+      "source_relationship": "external_digest_bound_input",
+      "configuration_path": ".env.public",
+      "configuration_sha256": "575f47274b52024f02f68896720e556db074d44d309811e9bd46d88b9d705075",
+      "keys": [
+        "PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE",
+        "PUBLIC_URL_REGISTRY_AFFORDANCE_STEWARDSHIP_AND_RESEARCH_LEDGER",
+        "PUBLIC_URL_REGISTRY_AI_SYSTEMS_SERVICE_BLUEPRINT",
+        "PUBLIC_URL_REGISTRY_ALIGNMENT_WORKSHEET",
+        "PUBLIC_URL_REGISTRY_CAMPAIGN_SHAPES_AND_FOLDING",
+        "PUBLIC_URL_REGISTRY_CHOOSE_YOUR_PLAYER",
+        "PUBLIC_URL_REGISTRY_CONTEXT_CANVAS_SITE_READINGS_PUBLIC_POSSIBLE_PRECIPITATION",
+        "PUBLIC_URL_REGISTRY_CORE_ARCHITECTURES_ORIENTATION_INDEX",
+        "PUBLIC_URL_REGISTRY_DISTRIBUTED_INSPECTION_HARNESS_AN_OFFLINE_FIRST_FIELD_OPERATIONS_TEACHING_EXEMPLAR",
+        "PUBLIC_URL_REGISTRY_ENTERPRISE_HUMAN_AI_PRACTITIONER_REGISTRY",
+        "PUBLIC_URL_REGISTRY_EXEMPLAR_EXPLANATORY_DEBRIEF_CONCLUSION_FIRST",
+        "PUBLIC_URL_REGISTRY_EXEMPLAR_GUIDANCE_DEBRIEF_GUIDED_FIVE_PART_ACCOUNT",
+        "PUBLIC_URL_REGISTRY_EXEMPLAR_MAXIMAL_DEBRIEF_DECISION_AND_ARCHITECTURE_DEPTH",
+        "PUBLIC_URL_REGISTRY_EXEMPLAR_MAXIMAL_SITE_READING_REALIZED_BEAT_PAGES",
+        "PUBLIC_URL_REGISTRY_EXEMPLAR_PARALLEL_THEN_VS_NOW_SITE_READING_COORDINATED_TRACKS",
+        "PUBLIC_URL_REGISTRY_EXEMPLAR_PURE_DEBRIEF_FIVE_BEATS_UNLABELED",
+        "PUBLIC_URL_REGISTRY_EXEMPLAR_QUICK_USE_PLUS_RECIPE",
+        "PUBLIC_URL_REGISTRY_EXEMPLAR_SIMPLE_SITE_READING_SINGLE_TRACK",
+        "PUBLIC_URL_REGISTRY_FIRST_REPEAT_AND_RE_ENTRY_ENCOUNTERS",
+        "PUBLIC_URL_REGISTRY_FROM_NARRATIVE_TO_EXECUTION_A_DEEP_RESEARCH_COLLABORATION_ATLAS",
+        "PUBLIC_URL_REGISTRY_FUNDING_A_FIELD_INSPECTION_PLATFORM_IN_RECOVERABLE_STAGES_BRIDGE_FIRST_THEN_NATIVE",
+        "PUBLIC_URL_REGISTRY_GOAL_FIDELITY_UNDER_PARTIAL_CONTEXT",
+        "PUBLIC_URL_REGISTRY_HEART_CHART",
+        "PUBLIC_URL_REGISTRY_HUMAN_AI_COLLABORATION_FIELD_GUIDE",
+        "PUBLIC_URL_REGISTRY_INITIATIVE_COSTING_EIGHT_METHODS_FOR_EVIDENCE_BEARING_PLATFORM_DECISIONS",
+        "PUBLIC_URL_REGISTRY_NARRATIVE_ARCHITECTURE_ORIENTATION_INDEX",
+        "PUBLIC_URL_REGISTRY_NARRATIVE_CAPSULES",
+        "PUBLIC_URL_REGISTRY_NOW_NEXT_LATER",
+        "PUBLIC_URL_REGISTRY_PODA",
+        "PUBLIC_URL_REGISTRY_PODA_IN_PRACTICE_INVESTMENT_PARTICIPATION_AND_ORGANIZATIONAL_RETURN",
+        "PUBLIC_URL_REGISTRY_PRACTITIONER_PROBES",
+        "PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_FOR_RELIABLE_HUMAN_LLM_INTERACTION",
+        "PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_SHAPE_THE_COLLABORATION_BEFORE_THE_ANSWER",
+        "PUBLIC_URL_REGISTRY_RECOVERY_ROUTING",
+        "PUBLIC_URL_REGISTRY_RELATIONAL_GRAMMAR",
+        "PUBLIC_URL_REGISTRY_RE_PLATFORMING_THE_BACKBONE",
+        "PUBLIC_URL_REGISTRY_SERVICE_DESIGN_BLUEPRINT",
+        "PUBLIC_URL_REGISTRY_SHARED_SURFACE_PRIORITY_MAP",
+        "PUBLIC_URL_REGISTRY_SPECIFICATION_BY_EXAMPLE",
+        "PUBLIC_URL_REGISTRY_STRATEGY_CANVAS",
+        "PUBLIC_URL_REGISTRY_THE_ALERT_NOBODY_CLICKED",
+        "PUBLIC_URL_REGISTRY_THE_BOOLEAN_BUILDING_BLOCKS_THAT_WERE_QUIETLY_AN_ETL_SUBSTRATE",
+        "PUBLIC_URL_REGISTRY_THE_DISCRETE_RESULT_THAT_KEPT_ARRIVING_AS_A_PDF",
+        "PUBLIC_URL_REGISTRY_THE_QUEUE_THAT_WAS_SECRETLY_A_STATUS_MACHINE",
+        "PUBLIC_URL_REGISTRY_THE_SAMPLE_NOBODY_COULD_FIND",
+        "PUBLIC_URL_REGISTRY_THREADKEEPING_AND_COLLABORATION_MEMORY_LOGS_JOURNALS_AND_CONTINUITY_SURFACES",
+        "PUBLIC_URL_REGISTRY_THREE_FRONT_DOORS",
+        "PUBLIC_URL_REGISTRY_THREE_WAY_COMPARATIVE_AND_THE_RETURN",
+        "PUBLIC_URL_REGISTRY_TWO_CHARTS_ONE_RESULT",
+        "PUBLIC_URL_REGISTRY_VERBALIZED_SAMPLING",
+        "PUBLIC_URL_REGISTRY_VISUALIZATION_FIDELITY_ATLAS_DATA_SHAPE_TO_COGNITIVE_MOVE_TO_VISUAL_FORM",
+        "PUBLIC_URL_REGISTRY_VISUAL_AND_DATA_COMMUNICATION_STABILIZERS_COGNITIVE_MOVES_FOR_VISUAL_FORMS",
+        "PUBLIC_URL_REGISTRY_WHO_TO_BELIEVE"
+      ]
+    },
+    "iframe_origin_robots": {
+      "source_path": "deployment/cpanel/iframe-origin-robots.txt",
+      "git_blob_id": "09f3f4b3abd25fbe14ee02e7a5de6835ac93f4bc",
+      "sha256": "93a8370615c4de53d5d25d85d79317d3ba8871950d89e51bb47a751e830b1fd4"
+    },
+    "iframe_package": {
+      "id": "iframe-routes.aggregate-package-receipt.v1",
+      "host": "iframes.vik.guru",
+      "base_path": "/v1/",
+      "source_relationship": "independent_plan_bound_input",
+      "receipt_sha256": "357c8ea75fe9d9f4f0c71eb77382b1475d28b4a2b0ebd01655a8c57a157e0a7a",
+      "closure_sha256": "4a11abcba09856b388226284bcbeff0c0056d239d3e275ab62ccb3c9e0dc95a1"
+    }
+  },
+  "surfaces": {
+    "primary": {
+      "root": "primary-public/",
+      "files": 251,
+      "bytes": 22279531
+    },
+    "iframe": {
+      "root": "iframe-public/",
+      "files": 69,
+      "bytes": 3356590
+    }
+  },
+  "outputs": [
+    {
+      "surface": "iframe",
+      "source_path": "deployment/cpanel/iframe-origin-robots.txt",
+      "projected_path": "iframe-public/robots.txt",
+      "media_type": "text/plain",
+      "bytes": 729,
+      "sha256": "93a8370615c4de53d5d25d85d79317d3ba8871950d89e51bb47a751e830b1fd4",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/ai_legible_viewlet_svg_companion.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/ai_legible_viewlet_svg_companion.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 22740,
+      "sha256": "c4094ff502311414e7216b9303b39b4a7e0d2735ee0b47a69a2cabee75da2134",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/random_cut_forest.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/random_cut_forest.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 15362,
+      "sha256": "4e6f2c9f4f01409adac44f5737363a6587bb5939fdf512212cb958152895f77b",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/random_cut_isolation_forest.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/random_cut_isolation_forest.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 16561,
+      "sha256": "81921a00afab5eb4181591add1517bce81a72d408e3ac782cd4185ff94da6926",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/v3b2_gold_note_viewlets.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/v3b2_gold_note_viewlets.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 11640,
+      "sha256": "6f8d921177162c42c4e3a684be9bae72ddbb7f3d6f9397c145cd25bc1f8ed8ae",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/viewlet_anomaly-alert.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/viewlet_anomaly-alert.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3336,
+      "sha256": "d7b70973e3df955f15625c7152c10571a6f234b2ffbddcd78592c34cd3ff22a7",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/viewlet_attention-route.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/viewlet_attention-route.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3328,
+      "sha256": "e6504df3c3afa3c6c48e3dfd570124f4d4ce8532921da8a65e0b7968614d254d",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/viewlet_audit-trail.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/viewlet_audit-trail.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 4658,
+      "sha256": "f74cbc0fda8e67c65204295787327e6ad9e678911ae3b9c614dc9cc0b0e2c22b",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/viewlet_comment.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/viewlet_comment.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3564,
+      "sha256": "04add019528f0e414ff00d51ff355a96738ff0f3097081f45b8134da82985434",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/viewlet_component-heatmap.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/viewlet_component-heatmap.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 6588,
+      "sha256": "7f7dd75ac1fa1599625172a04f51e465eede04e0cc28620546448fe5b2454203",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/viewlet_context-mosaic.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/viewlet_context-mosaic.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 6615,
+      "sha256": "539d73cc2bc7d2e261d57e3116b86fd45cba7df8b513c84922b8f8ca4345aa76",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/viewlet_data-rights.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/viewlet_data-rights.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3669,
+      "sha256": "9a89c889503677d0075be59602cb55268604d80b332c4ce6104349134f8542ae",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/viewlet_directed-graph.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/viewlet_directed-graph.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 4140,
+      "sha256": "6d14e6a765e84c73a90b1fd679819dbacf45e25d1edd4088be586b339ff75cf9",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/viewlet_done.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/viewlet_done.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3184,
+      "sha256": "b085d366baddb6d50c187f4f58d99807cec547329f72481a811983831441451e",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/viewlet_event-log.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/viewlet_event-log.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 4639,
+      "sha256": "6a22aa425a931ffcd8431096e98c5d39d033a06c698e72b39104e8cb4c5d1e64",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/viewlet_human-ai.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/viewlet_human-ai.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3623,
+      "sha256": "f5f9e0f94623854615befb83acd4a0faa495da79f24a37f9e944e1b1e9ac7e76",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/viewlet_known-issue-memory.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/viewlet_known-issue-memory.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3781,
+      "sha256": "f14a0c42bcf73eb28a12c184fc75ad93a09c986e13beb72fe0876e3021d86427",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/viewlet_one-hot-matrix.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/viewlet_one-hot-matrix.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 5769,
+      "sha256": "fab86a7bf33a2ce6b891cbea836ced9f8ab51ddbc11b40598525701fce244871",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/viewlet_pattern-resonance-probe.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/viewlet_pattern-resonance-probe.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 6660,
+      "sha256": "7fed16c047d9d55299837cd5cdcab1d0b6e726839ad4a667295ae38db2469ece",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/viewlet_quiet-routing-seed.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/viewlet_quiet-routing-seed.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3837,
+      "sha256": "bbcfae9b2a3800f437c8cd9057d96893daf9c5180b08f8a7ddbe2ac5a2933048",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/assets/viewlet_steward-queue.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/assets/viewlet_steward-queue.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 4563,
+      "sha256": "6e993d78e65e52d41d90d3416d391e872801f5bd2012f5cb5eeadcd2a032bb11",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/index.html",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/index.html",
+      "media_type": "text/html",
+      "bytes": 42312,
+      "sha256": "88a88ae30693ab5849caa599fbc43a8886d4b17eb1fa32e0623029ba6717261a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/sources/ai_legible_viewlet_atlas.svg",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/sources/ai_legible_viewlet_atlas.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 204898,
+      "sha256": "2a6d2057ce0ffba25f2773a016dceabb635d7aeaac62a502277053dc757d6844",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/ai-method-gallery/sources/viewlet_manifest.json",
+      "projected_path": "iframe-public/v1/canvas/ai-method-gallery/sources/viewlet_manifest.json",
+      "media_type": "application/json",
+      "bytes": 96939,
+      "sha256": "776689bc6c825263a1335d7e8c3f5c583a5b1ab0eda1fffc46d3f3391f47b366",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/cross-functional-investment-model-studio/index.html",
+      "projected_path": "iframe-public/v1/canvas/cross-functional-investment-model-studio/index.html",
+      "media_type": "text/html",
+      "bytes": 81951,
+      "sha256": "5865f853d58a65cce0af3d7ce14017de6083389de969809b7b02233263a56882",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/cross-functional-investment-studio/index.html",
+      "projected_path": "iframe-public/v1/canvas/cross-functional-investment-studio/index.html",
+      "media_type": "text/html",
+      "bytes": 145559,
+      "sha256": "3d41932ee4698b5dbc08578c618db36a58c58530afe78374cd663e754f82f1a0",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/cross-platform-collaboration-cycle/index.html",
+      "projected_path": "iframe-public/v1/canvas/cross-platform-collaboration-cycle/index.html",
+      "media_type": "text/html",
+      "bytes": 15897,
+      "sha256": "a488dc02629630736717d2d820ea5b1eaded3153f9b7429f2c544d1bda4485e0",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/genomic-viewer-context-tree/index.html",
+      "projected_path": "iframe-public/v1/canvas/genomic-viewer-context-tree/index.html",
+      "media_type": "text/html",
+      "bytes": 43560,
+      "sha256": "41cf0becd748128fde5b7fc0dc5e3cb6013e2f23cda4a0d20faf68a8d23c0f65",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/heatmap-comparison/assets/bgr_3b_after_safeway_cool_tri.svg",
+      "projected_path": "iframe-public/v1/canvas/heatmap-comparison/assets/bgr_3b_after_safeway_cool_tri.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 32847,
+      "sha256": "5923c3497de22d0ab726dddbf10d5ca3ef3cf1b3ddffd689dc067574079a2b48",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/heatmap-comparison/assets/bgr_3b_before_safeway_purple.svg",
+      "projected_path": "iframe-public/v1/canvas/heatmap-comparison/assets/bgr_3b_before_safeway_purple.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 32842,
+      "sha256": "122d242cb8499a513a0b6e4c243b2f73913560ed38694c487c9da83d77a35802",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/heatmap-comparison/index.html",
+      "projected_path": "iframe-public/v1/canvas/heatmap-comparison/index.html",
+      "media_type": "text/html",
+      "bytes": 9130,
+      "sha256": "eccb02fccf58bb9eadbd1beb89d96d59b49f26755fc80be24c4eb7bd0d362cb9",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/lims-eln-program-constellation/index.html",
+      "projected_path": "iframe-public/v1/canvas/lims-eln-program-constellation/index.html",
+      "media_type": "text/html",
+      "bytes": 55811,
+      "sha256": "16692b5817d10e8a7910a1ea9a234e3f5dd4aa21438d5e5ca90ac07c5bc87203",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/open-lesson-field/index.html",
+      "projected_path": "iframe-public/v1/canvas/open-lesson-field/index.html",
+      "media_type": "text/html",
+      "bytes": 184188,
+      "sha256": "db6a0b38da269940c96d14d9e7fb85a936b3bc8e1be121c411a398985ff29260",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/prompt-conditions-explorer/index.html",
+      "projected_path": "iframe-public/v1/canvas/prompt-conditions-explorer/index.html",
+      "media_type": "text/html",
+      "bytes": 42389,
+      "sha256": "e652c0ada477c91e20ade0a4304d1cd20447fd2d3d416c2973eaab232ceaf951",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/registry-goal-fidelity/index.html",
+      "projected_path": "iframe-public/v1/canvas/registry-goal-fidelity/index.html",
+      "media_type": "text/html",
+      "bytes": 71003,
+      "sha256": "85fca88f15a98f172120fc1850205a665aa6ced14f23d01c1a785e77322f1271",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/route-manifest.json",
+      "projected_path": "iframe-public/v1/canvas/route-manifest.json",
+      "media_type": "application/json",
+      "bytes": 45524,
+      "sha256": "efe747dbfbe6b22823b783a65fa37775bdddc0914f9289aed34b985087d775bd",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/talent-agent-intake/index.html",
+      "projected_path": "iframe-public/v1/canvas/talent-agent-intake/index.html",
+      "media_type": "text/html",
+      "bytes": 60799,
+      "sha256": "8f4711ae0a3487671349286afa3f365afdba304f9805829bb040af980354574c",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/threadkeeping-ledger/index.html",
+      "projected_path": "iframe-public/v1/canvas/threadkeeping-ledger/index.html",
+      "media_type": "text/html",
+      "bytes": 84779,
+      "sha256": "48a087d0360c97bcb2d46da7bca07ed4c51aa835da496701a5c0bc748a56ae2f",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/visualization-fidelity-atlas/index.html",
+      "projected_path": "iframe-public/v1/canvas/visualization-fidelity-atlas/index.html",
+      "media_type": "text/html",
+      "bytes": 144563,
+      "sha256": "bcc512d967cafe060084938ce03f6ee8cf138c09811e071223cbf4fe3229dbd0",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/visualization-fidelity-selector/index.html",
+      "projected_path": "iframe-public/v1/canvas/visualization-fidelity-selector/index.html",
+      "media_type": "text/html",
+      "bytes": 17014,
+      "sha256": "c142392d36fc9ff2758b32572d4614a0ffe4e8a64b1adb3c24f3bb2477d13557",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/canvas/who-to-believe-context-tree/index.html",
+      "projected_path": "iframe-public/v1/canvas/who-to-believe-context-tree/index.html",
+      "media_type": "text/html",
+      "bytes": 28806,
+      "sha256": "78979615d323ab54dadeac8ff7e93c7b6b47887000d0c21df10168bfd8b728f7",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/ai-systems-service-blueprint/index.html",
+      "projected_path": "iframe-public/v1/core/ai-systems-service-blueprint/index.html",
+      "media_type": "text/html",
+      "bytes": 66749,
+      "sha256": "4acdc3d83532449f30decc5685c98061a982905b61e4e550d5731ba2d1b43706",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/alignment-worksheet/index.html",
+      "projected_path": "iframe-public/v1/core/alignment-worksheet/index.html",
+      "media_type": "text/html",
+      "bytes": 67321,
+      "sha256": "d95b9dea95e92ab24baf3c286e8ac15d3166056d06b9ee4293b34a99f0400c23",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/conditioning-field/index.html",
+      "projected_path": "iframe-public/v1/core/conditioning-field/index.html",
+      "media_type": "text/html",
+      "bytes": 90120,
+      "sha256": "c3169edcca2f4561c8198761d1d55ee215a7c771ca23adc484b4e804a4d8a9c7",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/context-tree/index.html",
+      "projected_path": "iframe-public/v1/core/context-tree/index.html",
+      "media_type": "text/html",
+      "bytes": 85427,
+      "sha256": "c9b4474b0f8b514fd73363e5b5133cf4222e39973b1e7cf32ff640ed9603d7f7",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/core-architecture-family-index/index.html",
+      "projected_path": "iframe-public/v1/core/core-architecture-family-index/index.html",
+      "media_type": "text/html",
+      "bytes": 74944,
+      "sha256": "f474cb712ebc632ee3ec1764c15aa8a2829c0cdccbbcbfd6edd0b562eb5fd336",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/cross-channel-blueprint/index.html",
+      "projected_path": "iframe-public/v1/core/cross-channel-blueprint/index.html",
+      "media_type": "text/html",
+      "bytes": 106139,
+      "sha256": "06817b6fc7312c32f6c303b1ea562c43c2bf8436a6214b73e03e9b6cb14ec08a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/first-responsible-version-matrix/index.html",
+      "projected_path": "iframe-public/v1/core/first-responsible-version-matrix/index.html",
+      "media_type": "text/html",
+      "bytes": 63309,
+      "sha256": "92471bc975e471371023e4ebba6be4a9a0974753e471865f8237c884ff219266",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/heart-chart/index.html",
+      "projected_path": "iframe-public/v1/core/heart-chart/index.html",
+      "media_type": "text/html",
+      "bytes": 64271,
+      "sha256": "a4fecf35cb271d4b36ffd5a6eb22f9c3a6569b4e8551954cad0ffb47a7b87aba",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/impact-map/index.html",
+      "projected_path": "iframe-public/v1/core/impact-map/index.html",
+      "media_type": "text/html",
+      "bytes": 46004,
+      "sha256": "f4d87c54b4113c15076c0dd2e7516859beccf225d354a1723f16c1c4abd31797",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/index.html",
+      "projected_path": "iframe-public/v1/core/index.html",
+      "media_type": "text/html",
+      "bytes": 23462,
+      "sha256": "5baa8e2c2d30788a71ac1299fd637efc211683af0cd695182fa9890c7da649d3",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/jobs-to-be-done-treemap/index.html",
+      "projected_path": "iframe-public/v1/core/jobs-to-be-done-treemap/index.html",
+      "media_type": "text/html",
+      "bytes": 68520,
+      "sha256": "74f75b9040a7f1bfadd5a52b401f4b364d2c689829b93a147ee6e18c8277b5ab",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/manifest.json",
+      "projected_path": "iframe-public/v1/core/manifest.json",
+      "media_type": "application/json",
+      "bytes": 16075,
+      "sha256": "4dd5a7c3afb3ec2f9f4049a98871b90ed56baf9087b495a65ea7208454a37224",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/participatory-design-kit/index.html",
+      "projected_path": "iframe-public/v1/core/participatory-design-kit/index.html",
+      "media_type": "text/html",
+      "bytes": 70946,
+      "sha256": "d8e9cc9d3e8c354000a48bd62e0b0a023f654596ea223f8acf860b0cd5e75e64",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/pattern-problem-surface-matrix/index.html",
+      "projected_path": "iframe-public/v1/core/pattern-problem-surface-matrix/index.html",
+      "media_type": "text/html",
+      "bytes": 96474,
+      "sha256": "25efaa307a2eead01e5779569e79d6c59eae0fd0a094cc256a4ae7dff386ed94",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/plus-delta/index.html",
+      "projected_path": "iframe-public/v1/core/plus-delta/index.html",
+      "media_type": "text/html",
+      "bytes": 49137,
+      "sha256": "6e0574e69d339be3ae1e4d03fb3c2ae535230505e232c09ab8aa704353dad14a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/poda/index.html",
+      "projected_path": "iframe-public/v1/core/poda/index.html",
+      "media_type": "text/html",
+      "bytes": 72559,
+      "sha256": "75127797592b85c7f22608d92ae6482b6073c523879d621a3e33c133cecbac5b",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/practitioner-judgment-probes/index.html",
+      "projected_path": "iframe-public/v1/core/practitioner-judgment-probes/index.html",
+      "media_type": "text/html",
+      "bytes": 68964,
+      "sha256": "d50cfcde73b418a4e2f932a9c1e3a02344afb9ddaccf2cb42ca1e1b1bac51136",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/recovery-routing-atlas/index.html",
+      "projected_path": "iframe-public/v1/core/recovery-routing-atlas/index.html",
+      "media_type": "text/html",
+      "bytes": 74083,
+      "sha256": "9f1d469773ff03f048d2a9c67f3dd19845ed90a4148bd447ad072dbeecbaf453",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/route-manifest.json",
+      "projected_path": "iframe-public/v1/core/route-manifest.json",
+      "media_type": "application/json",
+      "bytes": 31306,
+      "sha256": "383bc032e5cd84763d9d6b6872f861c246b941489e270cdff7ee0db13aabdef2",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/service-design-blueprint/index.html",
+      "projected_path": "iframe-public/v1/core/service-design-blueprint/index.html",
+      "media_type": "text/html",
+      "bytes": 93083,
+      "sha256": "2641264f0e3471fe24d4e26482229646e80ed26c1ede1a5f804dd1e53bb5bdfd",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/software-architecture-views/index.html",
+      "projected_path": "iframe-public/v1/core/software-architecture-views/index.html",
+      "media_type": "text/html",
+      "bytes": 80200,
+      "sha256": "c1fdce7212aa0995cd5e862b9cee00baad5ddfd1b199ca4f3f063488c81ebe0c",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/specification-by-example/index.html",
+      "projected_path": "iframe-public/v1/core/specification-by-example/index.html",
+      "media_type": "text/html",
+      "bytes": 69546,
+      "sha256": "0bea8fabc2d06a05117b8289e01d3931e928262c8db6af01fd9c5563d0a9359f",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/strategy-canvas/index.html",
+      "projected_path": "iframe-public/v1/core/strategy-canvas/index.html",
+      "media_type": "text/html",
+      "bytes": 142235,
+      "sha256": "93f5e2b138461f85b4980b849550f7c86cc51d7eaf16bf8429d1ea632034372a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/strategy-canvas/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+      "projected_path": "iframe-public/v1/core/strategy-canvas/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+      "media_type": "application/json",
+      "bytes": 13480,
+      "sha256": "a0e50582f924d79e39456349cd0e7dd160e46ad5df77bb2a357f20fedf509c7c",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/strategy-canvas/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      "projected_path": "iframe-public/v1/core/strategy-canvas/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      "media_type": "application/schema+json",
+      "bytes": 15432,
+      "sha256": "8fc5d394a0edeb4578d9e5203323ec2572cea2673e525e5c083e2fdf51c5c41c",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/unit-test-first-design/index.html",
+      "projected_path": "iframe-public/v1/core/unit-test-first-design/index.html",
+      "media_type": "text/html",
+      "bytes": 66268,
+      "sha256": "4ef1a9f21f3890468869f306abcd2f13c40572da57ce61edd68c89448abb695d",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/core/upstream-revision-loop/index.html",
+      "projected_path": "iframe-public/v1/core/upstream-revision-loop/index.html",
+      "media_type": "text/html",
+      "bytes": 59607,
+      "sha256": "b1250002cfd30faa1d9d3cfe6cd43567aef0f60444f7e21d6280ec396af16fa7",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "iframe",
+      "source_path": "iframe-package:v1/route-manifest.json",
+      "projected_path": "iframe-public/v1/route-manifest.json",
+      "media_type": "application/json",
+      "bytes": 1132,
+      "sha256": "357c8ea75fe9d9f4f0c71eb77382b1475d28b4a2b0ebd01655a8c57a157e0a7a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/404.html",
+      "projected_path": "primary-public/404.html",
+      "media_type": "text/html",
+      "bytes": 4998,
+      "sha256": "8d786da1c55a2a2b1fa37fd11dffb14f9a3aeb35166782425603c1ad52f59dff",
+      "standing": "generated",
+      "source_sha256": "e7f81cbe575430323d1bca54af8df5cc6440d2a9418d1f8ccc1be12cf5007df8"
+    },
+    {
+      "surface": "primary",
+      "source_path": "a3-stacked-cube-visual-system-bundle-v0.1/a3-stacked-cube-visual-system-chimeric-prototype-v0.1.html",
+      "projected_path": "primary-public/a3-stacked-cube-visual-system-bundle-v0.1/a3-stacked-cube-visual-system-chimeric-prototype-v0.1.html",
+      "media_type": "text/html",
+      "bytes": 58389,
+      "sha256": "cdd63ab0d4c3fe35bd1a57769246c7902924ce88aad3eaaeb90a33770d127679",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "a3-stacked-cube-visual-system-bundle-v0.1/assets/a3-stacked-cube-four-state-v0.1.svg",
+      "projected_path": "primary-public/a3-stacked-cube-visual-system-bundle-v0.1/assets/a3-stacked-cube-four-state-v0.1.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 15088,
+      "sha256": "84d0464c5d3213074b1ecb235868f21ab8cb3ceb36d37f765a6f38617dd1f6bb",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "a3-stacked-cube-visual-system-bundle-v0.1/assets/a3-stacked-cube-triptych-v0.1.svg",
+      "projected_path": "primary-public/a3-stacked-cube-visual-system-bundle-v0.1/assets/a3-stacked-cube-triptych-v0.1.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 13701,
+      "sha256": "f754d021313c18d923b472c8cea4cee8db832b17e1e0ec6384cf4fdbcad60020",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/about-media.js",
+      "projected_path": "primary-public/about-media.js",
+      "media_type": "text/javascript",
+      "bytes": 3037,
+      "sha256": "900dd9968ce8af2041e7a8fd1dfe719aac7430e825b67b150040f1aab6e11260",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/ai-systems.html",
+      "projected_path": "primary-public/ai-systems.html",
+      "media_type": "text/html",
+      "bytes": 88349,
+      "sha256": "94b2f01e1cf7f087acfc5ed82184e09311aead2d7e70ebcd09de70d16d62c062",
+      "standing": "generated",
+      "source_sha256": "66eae16cb5eab67ee0bd3808db691a1cfd2d568913ffbcc4c78684bc9637e4f5"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/android-chrome-144x144.png",
+      "projected_path": "primary-public/android-chrome-144x144.png",
+      "media_type": "image/png",
+      "bytes": 5184,
+      "sha256": "fe2c764bd4f5849fab69544d360d97e01a2dc88df67dd42f3faeebba2f428e9a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/android-chrome-192x192.png",
+      "projected_path": "primary-public/android-chrome-192x192.png",
+      "media_type": "image/png",
+      "bytes": 6855,
+      "sha256": "c96454a2cfa6fcf92fff0b8fd2fb2b74b3d2ce8ad39db0ae5ba89ba847d701ed",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/apple-touch-icon.png",
+      "projected_path": "primary-public/apple-touch-icon.png",
+      "media_type": "image/png",
+      "bytes": 6451,
+      "sha256": "0c6c56aaf80f1c3b7b379809f244b695cd91a6366faf0a48bcd4f2401af5f528",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/benchmark-orientation.html",
+      "projected_path": "primary-public/benchmark-orientation.html",
+      "media_type": "text/html",
+      "bytes": 28555,
+      "sha256": "2af332ec36ff2e0fdc3c2bab29ae45352cd581913547e984f23586f300eb4aae",
+      "standing": "generated",
+      "source_sha256": "3fc94fed61337b297d5a3f06a2516fb76cadb996f488d1f24b6b92ba9dc4dff6"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/browserconfig.xml",
+      "projected_path": "primary-public/browserconfig.xml",
+      "media_type": "application/xml",
+      "bytes": 323,
+      "sha256": "dfa6e688e42c60525bda0ae5639e6b11edeac0617b023f937bc2e3272dc18574",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/canvas-shell.css",
+      "projected_path": "primary-public/canvas-shell.css",
+      "media_type": "text/css",
+      "bytes": 12176,
+      "sha256": "d9873ab1468be03dbdd75a0331aff54b8085ce50a7b2ab2f7cb64f3649d777eb",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/canvas-shell.js",
+      "projected_path": "primary-public/canvas-shell.js",
+      "media_type": "text/javascript",
+      "bytes": 20317,
+      "sha256": "8f4e88aceb894e43adb1b685a7650568c094ac22a8afc14bc60db06fdc417d7c",
+      "standing": "generated",
+      "source_sha256": "a8c1aef5612742707875fffc6b1279e388cf7c2246b9d6599136097b4ac33a4c"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
+      "projected_path": "primary-public/choose-your-player-humatics.html",
+      "media_type": "text/html",
+      "bytes": 54823,
+      "sha256": "8e9228a55e5564946c354be170e495142b2b100063bd660b0cba6ba22fd559ef",
+      "standing": "generated",
+      "source_sha256": "e860f1e0952a21c436f2966aa9df751ee212f4d3fd28cb13a2565ed2aad3aa64"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/collaboration-skills.html",
+      "projected_path": "primary-public/collaboration-skills.html",
+      "media_type": "text/html",
+      "bytes": 39415,
+      "sha256": "844900153f0ef44db67e62d12b56919f6f4c5165c048bf4200463845456d4997",
+      "standing": "generated",
+      "source_sha256": "be5a37a50b022db2bb192da2612a4f92eab49e23251ecc4cf486288466464deb"
+    },
+    {
+      "surface": "primary",
+      "source_path": "collaboration/about-ai-method-gallery/index.html",
+      "projected_path": "primary-public/collaboration/about-ai-method-gallery/index.html",
+      "media_type": "text/html",
+      "bytes": 41878,
+      "sha256": "591f53a5ad606b8e562f0d052e89d7b9e217cb595a42eb44575d2c82df85c6f7",
+      "standing": "generated",
+      "source_sha256": "50b84b31f4bf6f680bf56948b3b3f0b12c1cb44441520c1fd2a067503595873d"
+    },
+    {
+      "surface": "primary",
+      "source_path": "collaboration/about-heatmap-comparison/index.html",
+      "projected_path": "primary-public/collaboration/about-heatmap-comparison/index.html",
+      "media_type": "text/html",
+      "bytes": 6426,
+      "sha256": "9a9eb5727eb4305a695509319d44475a4a5ddf5d3d7c74ed76f40cac9a68721d",
+      "standing": "generated",
+      "source_sha256": "12eed5938a37ef64304454bbe65aab0c8a5d17c1f2c7f5c0b51d4753335d81bc"
+    },
+    {
+      "surface": "primary",
+      "source_path": "collaboration/about-prompt-conditions-explorer/index.html",
+      "projected_path": "primary-public/collaboration/about-prompt-conditions-explorer/index.html",
+      "media_type": "text/html",
+      "bytes": 39510,
+      "sha256": "b1a4610ebb58fca3b8fb2dfcaa4670258aaf470cc02be6b8ca060f56c173266f",
+      "standing": "generated",
+      "source_sha256": "543f5ff7dfdef6b86d3b78be96f6f3033c215cf357f640d591153300ea590123"
+    },
+    {
+      "surface": "primary",
+      "source_path": "collaboration/context-tree-visual-variants/genomic-viewer-presentation.html",
+      "projected_path": "primary-public/collaboration/context-tree-visual-variants/genomic-viewer-presentation.html",
+      "media_type": "text/html",
+      "bytes": 40846,
+      "sha256": "6f1be43bc9f7ba35487acc030c6858b3fdcc6d3adc3961f8c6f5804f864f53af",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "collaboration/context-tree-visual-variants/who-to-believe-presentation.html",
+      "projected_path": "primary-public/collaboration/context-tree-visual-variants/who-to-believe-presentation.html",
+      "media_type": "text/html",
+      "bytes": 26092,
+      "sha256": "0868411523cb639f893dcf8145b45427449cbb2a443b1be1670249f564279948",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "collaboration/cross-functional-investment-model-studio/index.html",
+      "projected_path": "primary-public/collaboration/cross-functional-investment-model-studio/index.html",
+      "media_type": "text/html",
+      "bytes": 79237,
+      "sha256": "6c675d9513840208b9aa346a9e5d90c086c3d636a3e617a635948361d65d91e2",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "collaboration/hiring-surfaces-talent-agent-intake/index.html",
+      "projected_path": "primary-public/collaboration/hiring-surfaces-talent-agent-intake/index.html",
+      "media_type": "text/html",
+      "bytes": 58085,
+      "sha256": "dc643eee8cdc5f4f60cdd8f0412be801977ff309927e4cbdd2d8b448f45ab716",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "collaboration/initiative-costing-calculator/index.html",
+      "projected_path": "primary-public/collaboration/initiative-costing-calculator/index.html",
+      "media_type": "text/html",
+      "bytes": 142768,
+      "sha256": "7a8a9200a22e48310b59bcd0d4b23d83045b87e7d6d8d43eab657df5dfa29919",
+      "standing": "generated",
+      "source_sha256": "ebc3ee44470712eb61563e57dc68fccc0f97212c093d8209a4dbbc0d32264483"
+    },
+    {
+      "surface": "primary",
+      "source_path": "collaboration/lims-eln-program-constellation/index.html",
+      "projected_path": "primary-public/collaboration/lims-eln-program-constellation/index.html",
+      "media_type": "text/html",
+      "bytes": 53097,
+      "sha256": "452e5aa2259b07f25177ac9401bda272403ab96c021b2a38eaf34a1bb6c278dd",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "collaboration/open-lesson-field/index.html",
+      "projected_path": "primary-public/collaboration/open-lesson-field/index.html",
+      "media_type": "text/html",
+      "bytes": 181474,
+      "sha256": "d41af04e4ff011b4869c89a4dc494e3ff4789aa9dc64a6de54f4732df71e6d5b",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "collaboration/registry-goal-fidelity-routing/index.html",
+      "projected_path": "primary-public/collaboration/registry-goal-fidelity-routing/index.html",
+      "media_type": "text/html",
+      "bytes": 68289,
+      "sha256": "a92df214229c8b49e672a92e107ec314191bfd7e0e47a8759f302ea3c7fd7e0b",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "collaboration/shared-machinery/cross-platform-collaboration-cycle/index.html",
+      "projected_path": "primary-public/collaboration/shared-machinery/cross-platform-collaboration-cycle/index.html",
+      "media_type": "text/html",
+      "bytes": 13183,
+      "sha256": "f193977f75bc7d0062968b1c0b54aa79dc7df06030b6dc2b1862c0e054f4cfc0",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "collaboration/shared-machinery/visualization-fidelity-selector/index.html",
+      "projected_path": "primary-public/collaboration/shared-machinery/visualization-fidelity-selector/index.html",
+      "media_type": "text/html",
+      "bytes": 14300,
+      "sha256": "afb7e6b852ee75c70869c3c98eb4f6be416eac865dcf4ae676fea7e3c5f4334a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/concept-nursery.html",
+      "projected_path": "primary-public/concept-nursery.html",
+      "media_type": "text/html",
+      "bytes": 30523,
+      "sha256": "ef1603cb21f150e9cac35f143b70b881bfa21455b3d868b0ea002e999c5fe30e",
+      "standing": "generated",
+      "source_sha256": "bd64c26636a7187c6d00472be5424fd6f386566bf345cacd320dde208092ea8e"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/conditioning-field.html",
+      "projected_path": "primary-public/conditioning-field.html",
+      "media_type": "text/html",
+      "bytes": 89419,
+      "sha256": "1d1ef5274fcf4b207762770c00b4266d52ba900ca100ee94e877ac91ee2e94e7",
+      "standing": "generated",
+      "source_sha256": "df270685f1195b8e3cd0ef400bda2ce36837c8aaf341bfb90e312f4c9ab2c532"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_atlas.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_atlas.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 204898,
+      "sha256": "2a6d2057ce0ffba25f2773a016dceabb635d7aeaac62a502277053dc757d6844",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_anomaly-alert.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_anomaly-alert.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3336,
+      "sha256": "d7b70973e3df955f15625c7152c10571a6f234b2ffbddcd78592c34cd3ff22a7",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_attention-route.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_attention-route.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3328,
+      "sha256": "e6504df3c3afa3c6c48e3dfd570124f4d4ce8532921da8a65e0b7968614d254d",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_audit-trail.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_audit-trail.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 4658,
+      "sha256": "f74cbc0fda8e67c65204295787327e6ad9e678911ae3b9c614dc9cc0b0e2c22b",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_comment.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_comment.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3564,
+      "sha256": "04add019528f0e414ff00d51ff355a96738ff0f3097081f45b8134da82985434",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_component-heatmap.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_component-heatmap.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 6588,
+      "sha256": "7f7dd75ac1fa1599625172a04f51e465eede04e0cc28620546448fe5b2454203",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_context-mosaic.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_context-mosaic.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 6615,
+      "sha256": "539d73cc2bc7d2e261d57e3116b86fd45cba7df8b513c84922b8f8ca4345aa76",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_data-rights.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_data-rights.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3669,
+      "sha256": "9a89c889503677d0075be59602cb55268604d80b332c4ce6104349134f8542ae",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_directed-graph.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_directed-graph.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 4140,
+      "sha256": "6d14e6a765e84c73a90b1fd679819dbacf45e25d1edd4088be586b339ff75cf9",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_done.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_done.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3184,
+      "sha256": "b085d366baddb6d50c187f4f58d99807cec547329f72481a811983831441451e",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_event-log.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_event-log.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 4639,
+      "sha256": "6a22aa425a931ffcd8431096e98c5d39d033a06c698e72b39104e8cb4c5d1e64",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_human-ai.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_human-ai.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3623,
+      "sha256": "f5f9e0f94623854615befb83acd4a0faa495da79f24a37f9e944e1b1e9ac7e76",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_known-issue-memory.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_known-issue-memory.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3781,
+      "sha256": "f14a0c42bcf73eb28a12c184fc75ad93a09c986e13beb72fe0876e3021d86427",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_one-hot-matrix.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_one-hot-matrix.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 5769,
+      "sha256": "fab86a7bf33a2ce6b891cbea836ced9f8ab51ddbc11b40598525701fce244871",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_pattern-resonance-probe.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_pattern-resonance-probe.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 6660,
+      "sha256": "7fed16c047d9d55299837cd5cdcab1d0b6e726839ad4a667295ae38db2469ece",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_quiet-routing-seed.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_quiet-routing-seed.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3837,
+      "sha256": "bbcfae9b2a3800f437c8cd9057d96893daf9c5180b08f8a7ddbe2ac5a2933048",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_steward-queue.svg",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_steward-queue.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 4563,
+      "sha256": "6e993d78e65e52d41d90d3416d391e872801f5bd2012f5cb5eeadcd2a032bb11",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_manifest.json",
+      "projected_path": "primary-public/context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_manifest.json",
+      "media_type": "application/json",
+      "bytes": 96939,
+      "sha256": "776689bc6c825263a1335d7e8c3f5c583a5b1ab0eda1fffc46d3f3391f47b366",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-core.js",
+      "projected_path": "primary-public/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-core.js",
+      "media_type": "text/javascript",
+      "bytes": 42562,
+      "sha256": "bb25b12169f4b3aa8845380e16f4629e4fc080cb30170a7cd928f734bb10d914",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+      "projected_path": "primary-public/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+      "media_type": "application/json",
+      "bytes": 13480,
+      "sha256": "a0e50582f924d79e39456349cd0e7dd160e46ad5df77bb2a357f20fedf509c7c",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-validator.js",
+      "projected_path": "primary-public/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-validator.js",
+      "media_type": "text/javascript",
+      "bytes": 18211,
+      "sha256": "348bb13f6d72b0a531f6cba8351ada70e4d10b0c9af6a6bf72d7fefbbb430e1e",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      "projected_path": "primary-public/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      "media_type": "application/schema+json",
+      "bytes": 15432,
+      "sha256": "8fc5d394a0edeb4578d9e5203323ec2572cea2673e525e5c083e2fdf51c5c41c",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html",
+      "projected_path": "primary-public/core-architectures-orientation-index.html",
+      "media_type": "text/html",
+      "bytes": 35855,
+      "sha256": "f0bea9ef7970d8c5699a9fb739cc0ee9561d6f09f8b8e0bd57292e6efed27414",
+      "standing": "generated",
+      "source_sha256": "83390911a1fa24de37af8ec47cdb1e323e98a9509b7323384a10a131d96495cb"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/cross-platform-collaboration-cycle.html",
+      "projected_path": "primary-public/cross-platform-collaboration-cycle.html",
+      "media_type": "text/html",
+      "bytes": 34097,
+      "sha256": "bf66fa52e742a6d968c5fc11d739b7784d4a44bacdc7131d1569d95e4f4973ca",
+      "standing": "generated",
+      "source_sha256": "b39864de19ae03f786b4a008295b417406790938f3bb2d586bde36df96d62ef3"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/debriefs-catalog.js",
+      "projected_path": "primary-public/debriefs-catalog.js",
+      "media_type": "text/javascript",
+      "bytes": 7841,
+      "sha256": "d5ec244e1c9cce079943531041997d5212fbda7e982512f11e698746f3193587",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/debriefs.html",
+      "projected_path": "primary-public/debriefs.html",
+      "media_type": "text/html",
+      "bytes": 83856,
+      "sha256": "ad4cccbe4649ab98c86b4ea537436140b5939560176e5d9fbe989591e794e189",
+      "standing": "generated",
+      "source_sha256": "c3990e5975aa7b808d5a353fde0ea36925a89dea42f74d7ccbca08492c194e59"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/distributed-inspection-harness.html",
+      "projected_path": "primary-public/distributed-inspection-harness.html",
+      "media_type": "text/html",
+      "bytes": 83877,
+      "sha256": "8cdd5da0567af89a8e5dada50b8630ed33592fdc8f206c2e73534b45c51caddd",
+      "standing": "generated",
+      "source_sha256": "99359cb038de1d3984536a757d21721bbeb6c2a7975e4d40376eec630d1189ad"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/ehr-discrete-genomic-result.html",
+      "projected_path": "primary-public/ehr-discrete-genomic-result.html",
+      "media_type": "text/html",
+      "bytes": 25807,
+      "sha256": "be8464bca837d03cbbf2c60f8d374e7f384c8585478d806fd9861032869c2eae",
+      "standing": "generated",
+      "source_sha256": "ef348928e724c1bd16a9b65857c2ab3243c91cb015ee3c50784942c2d48b1edc"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/ehr-interface-engine-replatform.html",
+      "projected_path": "primary-public/ehr-interface-engine-replatform.html",
+      "media_type": "text/html",
+      "bytes": 26254,
+      "sha256": "f3586c6ab5d56fb1010041f70188e6959fe127b2be69799eb61a7258d3329f39",
+      "standing": "generated",
+      "source_sha256": "67fea01a42a7790c95a45f9a232854e823791d260aa619411711f0bd21b0d73e"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/ehr-pgx-alert-failure.html",
+      "projected_path": "primary-public/ehr-pgx-alert-failure.html",
+      "media_type": "text/html",
+      "bytes": 25245,
+      "sha256": "453b18ec0fe73f44350c6713dcbde09225c0090b50fb21ef39c478633798a0e5",
+      "standing": "generated",
+      "source_sha256": "c9851a0d9dc12741c5fd69162c39aa46f62ff3fd15a77039eecb9003e64c4a7b"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/ehr-three-front-doors.html",
+      "projected_path": "primary-public/ehr-three-front-doors.html",
+      "media_type": "text/html",
+      "bytes": 26929,
+      "sha256": "739afc63b565d6b08fe3305c0870c54d8701dd6fde50c26c0a1ee54561c1aee9",
+      "standing": "generated",
+      "source_sha256": "e7523f53bc959d2c16d7744201df56ca5578862361cb2a8c9ccbe5769a802a9d"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/ehr-two-charts-one-result.html",
+      "projected_path": "primary-public/ehr-two-charts-one-result.html",
+      "media_type": "text/html",
+      "bytes": 26309,
+      "sha256": "d9b924fbb3df46ab7d94db0893a28e500f38699a5e7ffa66f8f9e3f14bc16ebc",
+      "standing": "generated",
+      "source_sha256": "75366bc1b8879dc7e09c43aab3247c93670af072db6f40dc54d0a8d432d67107"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/exemplar-brief-exploration.html",
+      "projected_path": "primary-public/exemplar-brief-exploration.html",
+      "media_type": "text/html",
+      "bytes": 22633,
+      "sha256": "0396d4e95ac802e6115407401a097f12acbcd26ed3929b87667849dad580bf79",
+      "standing": "generated",
+      "source_sha256": "22c9032555e4099879ee14046eb062ae236f0e06a45ab92d07acb0d0b5572c32"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/exemplar-gallery-list.html",
+      "projected_path": "primary-public/exemplar-gallery-list.html",
+      "media_type": "text/html",
+      "bytes": 21997,
+      "sha256": "5907b8c08d8548468440d076e8f5683ab2775c7464b7ef8945ca18c25dd79efb",
+      "standing": "generated",
+      "source_sha256": "6a5a2d9d1ca15cd84d456f9ae1df3a05538a9d0dd8487d5d4ac2d4c682f728b7"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/expanded.css",
+      "projected_path": "primary-public/expanded.css",
+      "media_type": "text/css",
+      "bytes": 68517,
+      "sha256": "4f9f00bcd43bc788e34eb5d4a72657c385829ff7514a663c3c36c0cfbb2cd7be",
+      "standing": "generated",
+      "source_sha256": "1bfb79af805352c1fc043ec9a839e33a77ddb780ea8baa6764f75367547a53b8"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/favicon-32x32.png",
+      "projected_path": "primary-public/favicon-32x32.png",
+      "media_type": "image/png",
+      "bytes": 1371,
+      "sha256": "992b4e819218e2620c8f63e00ecdbb3003c4db82f55ff28f467c0070b5b897fe",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/favicon.ico",
+      "projected_path": "primary-public/favicon.ico",
+      "media_type": "image/x-icon",
+      "bytes": 15086,
+      "sha256": "8730b395c96002adb39f5705e338eb9a7d4ef047f8140db08ab39d0a8452f002",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/field-inspection-harness-replatform.html",
+      "projected_path": "primary-public/field-inspection-harness-replatform.html",
+      "media_type": "text/html",
+      "bytes": 65254,
+      "sha256": "9e34515d60ef3fbe897280d52072f59030550b283ec2de77f10d5385a33299f4",
+      "standing": "generated",
+      "source_sha256": "f00e38ee2b8d8eeeac0cbc9fdf35ac051caaefba09bea8d6810d29f646d2fd70"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/field-inspection.css",
+      "projected_path": "primary-public/field-inspection.css",
+      "media_type": "text/css",
+      "bytes": 13305,
+      "sha256": "9ac53adf7ff66cdbdcafe234a55ca94915f2f312790f3cb9b10bbccbb480c848",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/fmi-clinical-trial-coordination.html",
+      "projected_path": "primary-public/fmi-clinical-trial-coordination.html",
+      "media_type": "text/html",
+      "bytes": 58682,
+      "sha256": "af1d8259dc77f836ae04693221aa1938ddbf81b3d1bd189b817d3ba37ae381f5",
+      "standing": "generated",
+      "source_sha256": "b3ed4c687d7d8645f76155b584b8c5d9cd10082c5296e326d75b3f1d96018b29"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.css",
+      "projected_path": "primary-public/fmi-lims-eln-replatforming.css",
+      "media_type": "text/css",
+      "bytes": 18638,
+      "sha256": "b66c5a5434e4be93e23fc7af515a90672007f8ee913e80b2492562b6b1a4cd80",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
+      "projected_path": "primary-public/fmi-lims-eln-replatforming.html",
+      "media_type": "text/html",
+      "bytes": 88540,
+      "sha256": "e3e1c673bbb79d5945dc19aebf349d998ebdfeccb3b0e19ceb7b9e10e59e579d",
+      "standing": "generated",
+      "source_sha256": "49f03aa747c142f18a55a5f46b83f3893c15bca435dcafa72535a05ebe22c9af"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/forms_upfront.png",
+      "projected_path": "primary-public/forms_upfront.png",
+      "media_type": "image/png",
+      "bytes": 53239,
+      "sha256": "a3971066b093fe19ce7e117bd24e56f6b071846131531773c1ac9165f6a0655f",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html",
+      "projected_path": "primary-public/genomic-viewer-replatforming.html",
+      "media_type": "text/html",
+      "bytes": 65000,
+      "sha256": "5ff3a313ee2316a7b6d72d88f201f338af2a9cd8ff53628e1b2f9569d2da252c",
+      "standing": "generated",
+      "source_sha256": "3e3a25dfa610231421e5eb15dae7dd918b2f19f44294495e6559119eba6011d0"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/grammar-family.html",
+      "projected_path": "primary-public/grammar-family.html",
+      "media_type": "text/html",
+      "bytes": 78238,
+      "sha256": "47c15c44e42fd17734ac2cdab9e515391f1af08e4e1d38d6749f9f8ab36397d6",
+      "standing": "generated",
+      "source_sha256": "32192f532a55e14e17542d0d02338941caaf3c5b9ba84b9beb4bcfcc696ab44e"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/hiring-surfaces-talent-agent-intake.html",
+      "projected_path": "primary-public/hiring-surfaces-talent-agent-intake.html",
+      "media_type": "text/html",
+      "bytes": 62529,
+      "sha256": "f966c239c4c73fbecf0e48b333fc17ea1748e51f785445bc35430c3083a545a7",
+      "standing": "generated",
+      "source_sha256": "531643196ce0c417bbfe1e3205c36ca65e1e0d2df2080cfc5e19f8efdc4d5ac0"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/humans.txt",
+      "projected_path": "primary-public/humans.txt",
+      "media_type": "text/plain",
+      "bytes": 653,
+      "sha256": "41b89178a8db3cb3ec9ca24d0971401c960bc3763eaed3ee0985f8779cc10396",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_2a_after_ember.svg",
+      "projected_path": "primary-public/img/bgr/bgr_2a_after_ember.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 32718,
+      "sha256": "368045d39c478f43888fce7ca261e7a280141849166633cf6257bac68837c7eb",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_3b_after_safeway_cool_tri.svg",
+      "projected_path": "primary-public/img/bgr/bgr_3b_after_safeway_cool_tri.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 32847,
+      "sha256": "5923c3497de22d0ab726dddbf10d5ca3ef3cf1b3ddffd689dc067574079a2b48",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_3b_before_safeway_purple.svg",
+      "projected_path": "primary-public/img/bgr/bgr_3b_before_safeway_purple.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 32842,
+      "sha256": "122d242cb8499a513a0b6e4c243b2f73913560ed38694c487c9da83d77a35802",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_3c_before_cividis.svg",
+      "projected_path": "primary-public/img/bgr/bgr_3c_before_cividis.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 32598,
+      "sha256": "82984fe22aea6c27f29b89a131e017b778678db9e8affe299b4f931d20c4015e",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_about.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_about.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 1282635,
+      "sha256": "bd3da2e4f6103160eb58550f1d7ecebac2cc2693adb62b1980fa41b95439dbc2",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_about415.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_about415.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 129194,
+      "sha256": "42705e9372a163f37b982a683b5aa199906916b11a727ae10b3fbba1a96c0616",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_about770.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_about770.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 1288473,
+      "sha256": "3db8604c44e03fe74c9b11e6d288c54b5541da61b9311aa86fd10b83ff47131f",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_assessment_plan.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_assessment_plan.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 1451433,
+      "sha256": "947868f04260bae1c778a7a58fe383bf075cfa900de9650bd4cdc62a85716f42",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_assessment_plan415.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_assessment_plan415.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 172495,
+      "sha256": "2250833098245c0fca6e21e43cca6d053c2bc2886167d541f5aefc67112dfce5",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_assessment_plan770.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_assessment_plan770.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 1520369,
+      "sha256": "61edbec8b33491f092f04c1d08a4fc56618d551d4927d68f7f7c21dda72c649f",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_casestudy.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_casestudy.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 1401875,
+      "sha256": "aa8768a017f91fec835962041645f3f46d0a4b0c18fb180a16f192e8d09e9d2a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_casestudy415.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_casestudy415.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 122790,
+      "sha256": "216a1a04fc07f6826b5fc4cdf99cd3424d040d8b714ee3d0e5ac1d1d834d46e4",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_casestudy770.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_casestudy770.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 452736,
+      "sha256": "f31f2df21b02b064c9c6c50dca5fdf7cfb53fb132ff5cda06ec7bdfe75af69ba",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_cs_langwhich.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_cs_langwhich.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 335107,
+      "sha256": "8116a0c0a3c8b66fa7a1789b801355b0f7322bea6adda14f93d982fba9b6f7b9",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_cs_langwhich415.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_cs_langwhich415.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 67271,
+      "sha256": "0ca3a9b9a8f748ef744cbb571a952eec5e42ce02ae1abe45d679ef3068401429",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_cs_langwhich770.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_cs_langwhich770.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 155493,
+      "sha256": "05e7acded485edd7b30c302bed9f092709fa91dafcf5104d65401ea1d0a627e2",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_forms.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_forms.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 811285,
+      "sha256": "7575bc87981d623fa365c02d7ccc499123bfe96f507c4ded43f9d54d62678fda",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_forms415.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_forms415.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 84348,
+      "sha256": "aa9def52b7f64826035b713b03e3dcb5da91dcbb26c28a37fbb7d64a578d7b20",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_forms770.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_forms770.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 255819,
+      "sha256": "e8cc254955c7b2077120cba14943a2ff993264004d5c2acb238fbad614baeb6b",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_leaf_surface.png",
+      "projected_path": "primary-public/img/bgr/bgr_leaf_surface.png",
+      "media_type": "image/png",
+      "bytes": 183128,
+      "sha256": "89991e31ac97265876c12602d8e648df3b4033c423ac98f74075795f7ae87df4",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_occipital.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 273745,
+      "sha256": "cb21994a1ebf9d72dd7466e02095664c5e61772c9c6555cf97bc6de335dfe712",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital415.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_occipital415.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 37866,
+      "sha256": "1215b5127db1a7a5b3321c48236bdc5cc4663664f07384de04e8b9216077ef30",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital770.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_occipital770.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 106152,
+      "sha256": "2cc62a973d8f39efd88bb7c2edf8472daf87c2fc6a925e4b933471434daace76",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital_storyboard.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_occipital_storyboard.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 125463,
+      "sha256": "14689bf5508691e7d2d1ca762aaf940a5ab80a6b281d92e18998715b33b69868",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital_storyboard415.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_occipital_storyboard415.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 18181,
+      "sha256": "c15524a23b535f3c35b5f8b79c29d0f33f3fe7aa2a80cf06e044992fcd3d5f8c",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital_storyboard770.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_occipital_storyboard770.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 45541,
+      "sha256": "f1a74d9532316fcb1f653f48372324cd52909cabde967078bf34bb6d949e2bdf",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital_whiteboarding.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_occipital_whiteboarding.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 258882,
+      "sha256": "00d0b2751b3852f3a34f9341ab37cd6e23cd8b0be1b28daab62a36a491576f5b",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital_whiteboarding415.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_occipital_whiteboarding415.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 33170,
+      "sha256": "e9fcd43c800389e606e5cffe037ddf9c53543c5db5ca6f7e24aebfc317b417e2",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital_whiteboarding770.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_occipital_whiteboarding770.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 102114,
+      "sha256": "e9ad5f275b9941aa6507ea10216b03d31d4a7af8754b802877398d968b5b9c84",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_sprint_plan.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_sprint_plan.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 1557089,
+      "sha256": "9052cea90a9b733d86978e2d8e6180e9d794fd2339d05b749e16ca12e7dce15a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_sprint_plan415.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_sprint_plan415.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 201800,
+      "sha256": "f6c4f0136e346f6a5562d1e5caa5fdc780b326d4b134df712d8dd4e211a9cc46",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_sprint_plan770.jpg",
+      "projected_path": "primary-public/img/bgr/bgr_sprint_plan770.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 1641125,
+      "sha256": "e063063b41f069d2d448277c11002fd16418c0d701daba83bc6e597818f2004c",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/bgr/redesigning_reviews_platform.svg",
+      "projected_path": "primary-public/img/bgr/redesigning_reviews_platform.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 5797,
+      "sha256": "028826512ae35e1a1d661ed420f6af390f973069c07f3ff1cc102a657f6691af",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/media/impact-map-style-cycle-calm.gif",
+      "projected_path": "primary-public/img/media/impact-map-style-cycle-calm.gif",
+      "media_type": "image/gif",
+      "bytes": 954296,
+      "sha256": "3cc27eda90c11583c30ca5a6a163be6a6799e97133a1785235657cf2ec79f514",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/media/impact-map-style-cycle-poster.jpg",
+      "projected_path": "primary-public/img/media/impact-map-style-cycle-poster.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 28690,
+      "sha256": "d616089f5e36b6616b6a989c0d3105340b25a23b0651270313146b5ec1b660fa",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/about_prompt_conditions_cartography.svg",
+      "projected_path": "primary-public/img/plot/about_prompt_conditions_cartography.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 11315,
+      "sha256": "0672442ca60e54d3c9456527dc1d234a3a42ed26e0e55a9e5ff340d9cb20dd3b",
+      "standing": "generated",
+      "source_sha256": "41592681249ea215b20a36d89c4325c9a042f61169964717ad7cdd0c8ba7f599"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/ai_legible_viewlet_svg_companion.svg",
+      "projected_path": "primary-public/img/plot/ai_legible_viewlet_svg_companion.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 22740,
+      "sha256": "c4094ff502311414e7216b9303b39b4a7e0d2735ee0b47a69a2cabee75da2134",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/ai_systems_accountability_blueprint.svg",
+      "projected_path": "primary-public/img/plot/ai_systems_accountability_blueprint.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 24325,
+      "sha256": "53c1a5ea074ef2615cdc5e5d755170f287d5e3b0f587ce3cb51d169cbcc28c84",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/benchmark_result_coordinate.svg",
+      "projected_path": "primary-public/img/plot/benchmark_result_coordinate.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 10124,
+      "sha256": "5fbb9d614600b5cf1a0d5646d657ba920c3537feda99a34955299ea579812257",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/chimeric_ai_systems_blueprint.svg",
+      "projected_path": "primary-public/img/plot/chimeric_ai_systems_blueprint.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3056,
+      "sha256": "7aef283809db4955a62bf517454fa5c37307a0dc8aa13e9eafe512e6f4300ce2",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/chimeric_alignment_worksheet.svg",
+      "projected_path": "primary-public/img/plot/chimeric_alignment_worksheet.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 2821,
+      "sha256": "f4e18a2976955b405e3e43d75bf9ca4baf25cefd429f61bd971a755d9cb488cb",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/chimeric_heart_signal_calibration.svg",
+      "projected_path": "primary-public/img/plot/chimeric_heart_signal_calibration.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 2471,
+      "sha256": "bf47e96412822714ce7012e6e2821c51cbbc2055de55881f0c199d4067ac8193",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/chimeric_narrative_capsule_composer.svg",
+      "projected_path": "primary-public/img/plot/chimeric_narrative_capsule_composer.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 3019,
+      "sha256": "fa5729b872864c69029ba1a02abfe238821367dc5d8aaeb2ce0666c44a610c2d",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/chimeric_recovery_routing_atlas.svg",
+      "projected_path": "primary-public/img/plot/chimeric_recovery_routing_atlas.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 2891,
+      "sha256": "c8ce63e2c76c60a49097492fd2b4639cd272b3cc3f37e5d60a2ec55604f5ae63",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/chimeric_service_design_blueprint.svg",
+      "projected_path": "primary-public/img/plot/chimeric_service_design_blueprint.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 2653,
+      "sha256": "d511cc69cd6d70a143fe4494ea9f406407fad04cc94b8b02651a7490d44b1522",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/collaboration_skill_affordance_field.svg",
+      "projected_path": "primary-public/img/plot/collaboration_skill_affordance_field.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 6768,
+      "sha256": "5f8f17b3cd431f3ebb8e2c3aec4fa1d94cdd2b43bb50eac1460a3846c2a92200",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/concept_nursery_lifecycle.svg",
+      "projected_path": "primary-public/img/plot/concept_nursery_lifecycle.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 8342,
+      "sha256": "3a937abe18df9676a9a90da0132db556f2095d7e900d7a159a19877abd393891",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/core_architectures_resolver.svg",
+      "projected_path": "primary-public/img/plot/core_architectures_resolver.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 9591,
+      "sha256": "9a33f437536ab9203a48064b95c7d29d0868bfa1a198000d12564e2d3492f8ea",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/cross_platform_collaboration_turn.svg",
+      "projected_path": "primary-public/img/plot/cross_platform_collaboration_turn.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 9019,
+      "sha256": "f62a8e5a45ae68932aa1c82a81ea9194880e9d51d7685bc5d728117059467f0f",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/distributed_inspection_record_flow.svg",
+      "projected_path": "primary-public/img/plot/distributed_inspection_record_flow.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 12467,
+      "sha256": "ebc04e676a526e66da90af7652cb7e79f6c43474825cbf3393d91853509fa094",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/distributed_inspection_ten_beat_arc.svg",
+      "projected_path": "primary-public/img/plot/distributed_inspection_ten_beat_arc.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 18432,
+      "sha256": "e3324f64a3efd8d00b3ae75f82435dcd690ab00da0211bb6857d6ee988da028a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/ehr_canonical_front_doors_map.svg",
+      "projected_path": "primary-public/img/plot/ehr_canonical_front_doors_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 14430,
+      "sha256": "db77b4942de3d7e12b968d95e97e2e1ea0ca757df8d981384daaab644485e995",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/ehr_discrete_result_contract_map.svg",
+      "projected_path": "primary-public/img/plot/ehr_discrete_result_contract_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 12621,
+      "sha256": "97bdd8249e193112a4c4031d167de2293df1c4a9cee2ef7308595c117e098286",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/ehr_interface_engine_reconciliation_map.svg",
+      "projected_path": "primary-public/img/plot/ehr_interface_engine_reconciliation_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 16325,
+      "sha256": "24b61de691b91857966c9bf706a4ec163dfa2e63d33474a426daab8610b7c701",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/ehr_pgx_attention_failure_map.svg",
+      "projected_path": "primary-public/img/plot/ehr_pgx_attention_failure_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 13810,
+      "sha256": "98615d12c16dc2d46200585a1a42f30d5b1dfdd066a77fb210b00ca56bf497e1",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/ehr_two_charts_fanout_map.svg",
+      "projected_path": "primary-public/img/plot/ehr_two_charts_fanout_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 12011,
+      "sha256": "fe214f07ea3abffb25d5ce2ce97c82115cf12bf44b4e9156ff528c34ece43252",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/field_inspection_authority_validation_map.svg",
+      "projected_path": "primary-public/img/plot/field_inspection_authority_validation_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 14362,
+      "sha256": "cab4506dd03b6347b3c26f18f24103ccdb563cdf908a6818963e2d5cc7a458ef",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/fmi_boolean_etl_substrate_map.svg",
+      "projected_path": "primary-public/img/plot/fmi_boolean_etl_substrate_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 18249,
+      "sha256": "bd82d95ef27c6b9a8a0899f42ab51edc7424025bb3d149babe3915858b71e15b",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/fmi_clinical_trial_coordination_surface.svg",
+      "projected_path": "primary-public/img/plot/fmi_clinical_trial_coordination_surface.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 20720,
+      "sha256": "6fbfd421235885b02d71cf817dd9a7842f7f393f387def658fd3cb883bf83f14",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/fmi_human_automation_diff.svg",
+      "projected_path": "primary-public/img/plot/fmi_human_automation_diff.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 14084,
+      "sha256": "f2ddb266f4cf0a19e84d4e1df34dfe414435be9c255ee582e71d0440f50a8ab6",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/fmi_program_constellation_map.svg",
+      "projected_path": "primary-public/img/plot/fmi_program_constellation_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 17040,
+      "sha256": "3b0c890b3bfd81c887a30827e971be7f2323d8597d753278dcefcfa0b46cf780",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/fmi_shared_object_map.svg",
+      "projected_path": "primary-public/img/plot/fmi_shared_object_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 18100,
+      "sha256": "f638543a2d9ab617cf4fc481cc1cbb9e980efd1530f6dd4e3b3da98bd63e792a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/genomic_viewer_boundary_contract_map.svg",
+      "projected_path": "primary-public/img/plot/genomic_viewer_boundary_contract_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 16080,
+      "sha256": "21b89b1c8d1edc3b9cde172a64cd138755803e6577e04ab42e3c4065aaeb21be",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/genomic_viewer_case_review_workbench.svg",
+      "projected_path": "primary-public/img/plot/genomic_viewer_case_review_workbench.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 18851,
+      "sha256": "7f909a4cfd929bf0aaa4ef0e0db9c53489f0bb7c58d037571a1ae5539f0faa78",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/genomic_viewer_operating_surface_map.svg",
+      "projected_path": "primary-public/img/plot/genomic_viewer_operating_surface_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 16236,
+      "sha256": "9d39a2bc809ddf37a2d5578f3b3206118ddbfa7b1ad4b57cce31b048c9af1f5e",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/genomic_viewer_strategy_canvas.svg",
+      "projected_path": "primary-public/img/plot/genomic_viewer_strategy_canvas.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 10125,
+      "sha256": "61ff22cae6ba20ef30c0ff56814b962bb90660ff562fb7e9205e4cd62c8cea41",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/hiring_two_reader_operating_field.svg",
+      "projected_path": "primary-public/img/plot/hiring_two_reader_operating_field.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 16344,
+      "sha256": "ca2f2015d5a87b0b8546a8a5c912dddb7d5f7f349e1c0da031bfd56accd6ce3a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/humatics_field_collaboration_operating_map.svg",
+      "projected_path": "primary-public/img/plot/humatics_field_collaboration_operating_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 12107,
+      "sha256": "02357503aebdca8d5f1d7fa844ed4ef9ba3f111bdd16cdbae98c2dde50bac689",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/humatics_role_handoff_map.svg",
+      "projected_path": "primary-public/img/plot/humatics_role_handoff_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 11940,
+      "sha256": "e924089033e60b85f8f0c6f8171d69c2d791b0ea870fe354611b736f60825f96",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/humatics_site_truth_and_time_map.svg",
+      "projected_path": "primary-public/img/plot/humatics_site_truth_and_time_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 10793,
+      "sha256": "b7a2f5219e2ebe98ecef1b06256a5569f1cdd8fa82a16ad08bddf4681dc72ef6",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/initiative_costing_method_map.svg",
+      "projected_path": "primary-public/img/plot/initiative_costing_method_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 22287,
+      "sha256": "390687e14cc98aa66cdc6339b56f926a3a6e50b51767368517ee925df2651043",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/inspection_platform_operating_map.svg",
+      "projected_path": "primary-public/img/plot/inspection_platform_operating_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 17178,
+      "sha256": "1d3feab72411cc47c7ebf85b7b63ed51a274668594bb67010abb12b5ad1aacbe",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/inspection_staged_capital_map.svg",
+      "projected_path": "primary-public/img/plot/inspection_staged_capital_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 14383,
+      "sha256": "39136748d7d398c7e128c7f6ce1389b05adecd2226fcefc17ed503547446000f",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/maps_source_boundary.svg",
+      "projected_path": "primary-public/img/plot/maps_source_boundary.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 6985,
+      "sha256": "955dd9ddb1c3c7a9ec90ef35badc5307184c1a476d6900825a9030e85f2a96dc",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/metadata_scan_contract.svg",
+      "projected_path": "primary-public/img/plot/metadata_scan_contract.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 9197,
+      "sha256": "41e33fedcd800464bdd68b7b2c34fe817b9427f8f052933868763cb3dfead079",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/neg_deep_research_collaboration_field.svg",
+      "projected_path": "primary-public/img/plot/neg_deep_research_collaboration_field.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 11989,
+      "sha256": "0baabbe3df2ded7f9542b7b12460bfc7b622c0e139fa309826b530df9b3fa72b",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/poda_investment_flow.svg",
+      "projected_path": "primary-public/img/plot/poda_investment_flow.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 9857,
+      "sha256": "6cdb1805d70e3f074eec4365681fcd231de058e9edabfb64d5da326d7f257c01",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/prompt_side_practice_field.svg",
+      "projected_path": "primary-public/img/plot/prompt_side_practice_field.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 16954,
+      "sha256": "5f82143ef47f224f58cba3b5b626b7591998e85214b2f1972bd218ebe45fdbf3",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/prospective_reading_area_hierarchy.svg",
+      "projected_path": "primary-public/img/plot/prospective_reading_area_hierarchy.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 9140,
+      "sha256": "0d57ac076c64a52ec7fbaa4f0194e3c4714ed478d180de89ae95d95c971749d6",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/random_cut_forest.svg",
+      "projected_path": "primary-public/img/plot/random_cut_forest.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 15362,
+      "sha256": "4e6f2c9f4f01409adac44f5737363a6587bb5939fdf512212cb958152895f77b",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/random_cut_isolation_forest.svg",
+      "projected_path": "primary-public/img/plot/random_cut_isolation_forest.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 16561,
+      "sha256": "81921a00afab5eb4181591add1517bce81a72d408e3ac782cd4185ff94da6926",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/registry_goal_fidelity_operating_field.svg",
+      "projected_path": "primary-public/img/plot/registry_goal_fidelity_operating_field.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 19139,
+      "sha256": "e8ea40a834be73ef1e4e99b7ba05fdc7ff5de0f2cbd8984004a4467e96b74d7b",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/resting_concepts_return_loop.svg",
+      "projected_path": "primary-public/img/plot/resting_concepts_return_loop.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 7576,
+      "sha256": "bcaffb3b8635db274ded598894567865977d9f8890cbbc697e47be94f4128733",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/shared_machinery_constellation.svg",
+      "projected_path": "primary-public/img/plot/shared_machinery_constellation.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 9478,
+      "sha256": "ee0e1f271029def1219a634f8ce12466ee07dbcdde2442ac4fbab9301f6dc5ad",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/shared_machinery_instrument_spectrum.svg",
+      "projected_path": "primary-public/img/plot/shared_machinery_instrument_spectrum.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 6631,
+      "sha256": "387a0aa116dc63a491a6ab3b3fce89c3cf6a4b2051f07665216ac84cc52bdd30",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/site_reading_grammar_small_multiples.svg",
+      "projected_path": "primary-public/img/plot/site_reading_grammar_small_multiples.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 13311,
+      "sha256": "bef91060188e883de5a72133b5a17967476308440cdac21383aba343f18bf84c",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/talent_intake_retrieval_field.svg",
+      "projected_path": "primary-public/img/plot/talent_intake_retrieval_field.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 16959,
+      "sha256": "04ba9898be8a010faa900ce3d84810beabdf18584c6308851035d188fec822b5",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/three_way_comparative_operating_field.svg",
+      "projected_path": "primary-public/img/plot/three_way_comparative_operating_field.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 12071,
+      "sha256": "258ffc585ef66c019edfb88e9439ab8e181704382a0755add3b2dc4bc3034e4b",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/three_way_disagreement_surface.svg",
+      "projected_path": "primary-public/img/plot/three_way_disagreement_surface.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 10846,
+      "sha256": "d35c301e6011a84617262f1a178f51d545bb4fa6e754dd6877e23288a70b70e7",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/three_way_return_motion.svg",
+      "projected_path": "primary-public/img/plot/three_way_return_motion.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 12440,
+      "sha256": "99cbdeee56bdd016d56b2ca33d8748e899ee0dfd98d342facab4d37ace1b0a1b",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/v3b2_columns_pale_coral_viewlets.svg",
+      "projected_path": "primary-public/img/plot/v3b2_columns_pale_coral_viewlets.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 67328,
+      "sha256": "ab8f3a68b10f8a85eefe8e4bbf5a5e9e971c350047b4ebb7e9eea8ad30579aef",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/v3b2_gold_note_viewlets.svg",
+      "projected_path": "primary-public/img/plot/v3b2_gold_note_viewlets.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 11640,
+      "sha256": "6f8d921177162c42c4e3a684be9bae72ddbb7f3d6f9397c145cd25bc1f8ed8ae",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/visualization_fidelity_clean_exemplar.svg",
+      "projected_path": "primary-public/img/plot/visualization_fidelity_clean_exemplar.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 5022,
+      "sha256": "a08261cd4e914b664c5a7d372bfd9ad3e76eefb9f80d89734b6b072cb5725861",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/visualization_fidelity_selector_field.svg",
+      "projected_path": "primary-public/img/plot/visualization_fidelity_selector_field.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 11084,
+      "sha256": "07cfe0722ec43d5393a1b5ae28faafebae79116c6c978525b16a9a52e5497c68",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/who_to_believe_influence_map.svg",
+      "projected_path": "primary-public/img/plot/who_to_believe_influence_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 13606,
+      "sha256": "adb12c616e050d634c363aa625791ad25b110f3ba238c2d5719cbf42b87d0c95",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/who_to_believe_method_compass.svg",
+      "projected_path": "primary-public/img/plot/who_to_believe_method_compass.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 14198,
+      "sha256": "d4a73807dc585eb62bb5dc6df901cb650805d3981b577f9c11fa61522d889012",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/plot/who_to_believe_return_map.svg",
+      "projected_path": "primary-public/img/plot/who_to_believe_return_map.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 12999,
+      "sha256": "54d2a08397d0c5c5b934cf50476ed9ba476235bdf3d94165090393532d6b172a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/img/social_icons.png",
+      "projected_path": "primary-public/img/social_icons.png",
+      "media_type": "image/png",
+      "bytes": 2486,
+      "sha256": "80fc7fb04cd38c11b63cb69149f766aa07f5b773f153ba939e24e3ba39650671",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/index.html",
+      "projected_path": "primary-public/index.html",
+      "media_type": "text/html",
+      "bytes": 53235,
+      "sha256": "8da9f6f319dd699eeadb56e2542d9ac96a54b147e32346e83a5f4fbc156c83e4",
+      "standing": "generated",
+      "source_sha256": "89f39cbe97832756e6875b6cb0f5e47307dc5483ef326c3b3b66e70522fd1132"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/initiative-costing.html",
+      "projected_path": "primary-public/initiative-costing.html",
+      "media_type": "text/html",
+      "bytes": 34357,
+      "sha256": "6a20b3792d0ebe8737ae3d91447fa95510eb986a22182bee86e5ef7849240ad5",
+      "standing": "generated",
+      "source_sha256": "83a6c5b6beb64076baaae50a8fe06eebf4fff9f782136557d203e9217f37898a"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/langwhich_upfront.png",
+      "projected_path": "primary-public/langwhich_upfront.png",
+      "media_type": "image/png",
+      "bytes": 154156,
+      "sha256": "efd1c52d0fef0e935c9e6eac27fac73df9b5d8e020ca33243dff5e9e147c86d2",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "lims-eln-enterprise-reference-v0.1/docs/architecture.md",
+      "projected_path": "primary-public/lims-eln-enterprise-reference-v0.1/docs/architecture.md",
+      "media_type": "text/markdown",
+      "bytes": 6782,
+      "sha256": "651dfed5f8ab9248262587cc8c69ff1e726621f79657c52647d622e15f0b920a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "lims-eln-enterprise-reference-v0.1/docs/data-contract.md",
+      "projected_path": "primary-public/lims-eln-enterprise-reference-v0.1/docs/data-contract.md",
+      "media_type": "text/markdown",
+      "bytes": 7653,
+      "sha256": "239d85d8afdfa8d0067272c12c13daa6b05b6106ebe95f2efe1566413073630f",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "lims-eln-enterprise-reference-v0.1/docs/operations-runbook.md",
+      "projected_path": "primary-public/lims-eln-enterprise-reference-v0.1/docs/operations-runbook.md",
+      "media_type": "text/markdown",
+      "bytes": 5083,
+      "sha256": "e6f3618b42bcda925af9114b58d1eaa6726f409ccd8336fb9b6e36a3fba004c9",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "lims-eln-enterprise-reference-v0.1/receipts/validation-report.json",
+      "projected_path": "primary-public/lims-eln-enterprise-reference-v0.1/receipts/validation-report.json",
+      "media_type": "application/json",
+      "bytes": 1966,
+      "sha256": "9758776919b6e3c73d9cc1df106454c0e9fb5f7c6e898a9ae5404f29cf3f9f3f",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "lims-eln-enterprise-reference-v0.1/samples/README.md",
+      "projected_path": "primary-public/lims-eln-enterprise-reference-v0.1/samples/README.md",
+      "media_type": "text/markdown",
+      "bytes": 920,
+      "sha256": "ec7fc2f2f9c4620df337958b50e3ee2f0e02023b596b929ee7b3d70f52111e75",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/manifest.json",
+      "projected_path": "primary-public/manifest.json",
+      "media_type": "application/manifest+json",
+      "bytes": 707,
+      "sha256": "871e525aeaa7e09b432734cc4bd12ccbf3cc65cbec21e0f26c17b15d7d027bb9",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/maps-evaluations.html",
+      "projected_path": "primary-public/maps-evaluations.html",
+      "media_type": "text/html",
+      "bytes": 27320,
+      "sha256": "182698a203f72a6a8d6f2899302c4a8e28ae5ff6a7628c49f50cd666aa0f3276",
+      "standing": "generated",
+      "source_sha256": "9d1d650c762aeb2ccee034125dcf391c1d34c8956ac1f6e99246668327c4f069"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/metadata-blocks.html",
+      "projected_path": "primary-public/metadata-blocks.html",
+      "media_type": "text/html",
+      "bytes": 33014,
+      "sha256": "81a2dbd99825262217517d1ca0afe3c4c95bbc816e31ec581f23f7f290736007",
+      "standing": "generated",
+      "source_sha256": "475f35787b8832ccdb20ceca29e565bfbd988203bbbabbdca5fcef0345a08d8c"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/mstile-150x150.png",
+      "projected_path": "primary-public/mstile-150x150.png",
+      "media_type": "image/png",
+      "bytes": 4944,
+      "sha256": "ae95141fc1b490ff5392749e6a1779590ad4910c6bdee65cb4fc1ef7ff9c0788",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/mstile-310x150.png",
+      "projected_path": "primary-public/mstile-310x150.png",
+      "media_type": "image/png",
+      "bytes": 5451,
+      "sha256": "14510aa352095e3476c9c6a3870b625397110acd6513277654267dbc1df11f9a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/mstile-310x310.png",
+      "projected_path": "primary-public/mstile-310x310.png",
+      "media_type": "image/png",
+      "bytes": 11022,
+      "sha256": "2a94ea152cfea02bcc1873ef9fea8c1f76d74a78dcf60265a2c9f3f328e2ba13",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/narrative-execution-gap-research-atlas.html",
+      "projected_path": "primary-public/narrative-execution-gap-research-atlas.html",
+      "media_type": "text/html",
+      "bytes": 52461,
+      "sha256": "df682474d17911323936063c4b2d117fb2b828652a15f3f1a0cb379bc14980f6",
+      "standing": "generated",
+      "source_sha256": "525d7eaf3ad992598c07e7816b263989b2e12f7ff915f7663c21ec96f917e4b7"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/occipital.png",
+      "projected_path": "primary-public/occipital.png",
+      "media_type": "image/png",
+      "bytes": 175466,
+      "sha256": "aedb9c0f3981ca1f0fe184ea48c363642329b1642c4728f9cd57496ae4869ee8",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/planning-surface.html",
+      "projected_path": "primary-public/planning-surface.html",
+      "media_type": "text/html",
+      "bytes": 32534,
+      "sha256": "95f60aa9bdc98047d055f8f7e8206ea0caffea011b995d031704eb525a6b453b",
+      "standing": "generated",
+      "source_sha256": "62b1dd5481d5e28b44fb80527243b2e508e088bfc6e171d059480126599702cd"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/poda.html",
+      "projected_path": "primary-public/poda.html",
+      "media_type": "text/html",
+      "bytes": 32945,
+      "sha256": "143f46c34fe3dbb4cf47dbd8666f0ca8398db9750f78164926e98aa344d6b0df",
+      "standing": "generated",
+      "source_sha256": "2ae857c6b43103cffc3fe99b1232acbc63deb211171e4ebfd411e23ce417abd6"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/portrait-of-vvk-technology-leader.jpg",
+      "projected_path": "primary-public/portrait-of-vvk-technology-leader.jpg",
+      "media_type": "image/jpeg",
+      "bytes": 50928,
+      "sha256": "027dde7cbb110cde08fc85ef5bca980b6edb7787836e7de4501f49d3b922ab11",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prompt-side-conditions-practice.css",
+      "projected_path": "primary-public/prompt-side-conditions-practice.css",
+      "media_type": "text/css",
+      "bytes": 13011,
+      "sha256": "7506887593fe06bc4566df72c84abc21360bc71d605bc5795c31897698f9a4bd",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prompt-side-conditions-practice.html",
+      "projected_path": "primary-public/prompt-side-conditions-practice.html",
+      "media_type": "text/html",
+      "bytes": 59237,
+      "sha256": "ac9e28e180bb027d79fe994960a9b0da543f139a81da0b2eebb38bc6b0b7dd87",
+      "standing": "generated",
+      "source_sha256": "eeda86069ca29328441a8bc713596f7f8188fa31b7e680d38f0d06ce8d6ba2e2"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/ai-systems-service-blueprint-chimeric-prototype-v0.1.3.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/ai-systems-service-blueprint-chimeric-prototype-v0.1.3.html",
+      "media_type": "text/html",
+      "bytes": 66749,
+      "sha256": "4acdc3d83532449f30decc5685c98061a982905b61e4e550d5731ba2d1b43706",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/alignment-worksheet-chimeric-prototype-v0.1.3.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/alignment-worksheet-chimeric-prototype-v0.1.3.html",
+      "media_type": "text/html",
+      "bytes": 67321,
+      "sha256": "d95b9dea95e92ab24baf3c286e8ac15d3166056d06b9ee4293b34a99f0400c23",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/context-tree-chimeric-prototype-v0.1.6.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/context-tree-chimeric-prototype-v0.1.6.html",
+      "media_type": "text/html",
+      "bytes": 85427,
+      "sha256": "c9b4474b0f8b514fd73363e5b5133cf4222e39973b1e7cf32ff640ed9603d7f7",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architecture-family-index-chimeric-prototype-v0.1.4.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/core-architecture-family-index-chimeric-prototype-v0.1.4.html",
+      "media_type": "text/html",
+      "bytes": 74907,
+      "sha256": "72195708f75446067ec6ea25bd611bd6f2b8c555bc326e9408574b877650355c",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json",
+      "media_type": "application/json",
+      "bytes": 16234,
+      "sha256": "9802662ffcc98a0df55a4cbf13d950ad3d61fa75cfc8246a29472059918d649e",
+      "standing": "generated",
+      "source_sha256": "d77319d8b123e08f19181831e651aba264bd1d9d63f8fa5558c7e1c97e3ded95"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-pack-index-v0.1.3.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-pack-index-v0.1.3.html",
+      "media_type": "text/html",
+      "bytes": 24100,
+      "sha256": "6cc896252b4f11884e87a774e9f3ec02460b3b18ba1c5c826ca50d21f3b405e4",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/first-responsible-version-matrix-chimeric-prototype-v0.1.3.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/first-responsible-version-matrix-chimeric-prototype-v0.1.3.html",
+      "media_type": "text/html",
+      "bytes": 63309,
+      "sha256": "92471bc975e471371023e4ebba6be4a9a0974753e471865f8237c884ff219266",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/heart-chart-chimeric-prototype-v0.1.5.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/heart-chart-chimeric-prototype-v0.1.5.html",
+      "media_type": "text/html",
+      "bytes": 64271,
+      "sha256": "a4fecf35cb271d4b36ffd5a6eb22f9c3a6569b4e8551954cad0ffb47a7b87aba",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/impact-map-chimeric-prototype-v0.1.4.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/impact-map-chimeric-prototype-v0.1.4.html",
+      "media_type": "text/html",
+      "bytes": 46004,
+      "sha256": "f4d87c54b4113c15076c0dd2e7516859beccf225d354a1723f16c1c4abd31797",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/jobs-to-be-done-treemap-chimeric-prototype-v0.1.3.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/jobs-to-be-done-treemap-chimeric-prototype-v0.1.3.html",
+      "media_type": "text/html",
+      "bytes": 68520,
+      "sha256": "74f75b9040a7f1bfadd5a52b401f4b364d2c689829b93a147ee6e18c8277b5ab",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/participatory-design-kit-chimeric-prototype-v0.1.3.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/participatory-design-kit-chimeric-prototype-v0.1.3.html",
+      "media_type": "text/html",
+      "bytes": 70946,
+      "sha256": "d8e9cc9d3e8c354000a48bd62e0b0a023f654596ea223f8acf860b0cd5e75e64",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/pattern-problem-surface-matrix-chimeric-prototype-v0.1.3.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/pattern-problem-surface-matrix-chimeric-prototype-v0.1.3.html",
+      "media_type": "text/html",
+      "bytes": 96474,
+      "sha256": "25efaa307a2eead01e5779569e79d6c59eae0fd0a094cc256a4ae7dff386ed94",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/plus-delta-chimeric-prototype-v0.1.3.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/plus-delta-chimeric-prototype-v0.1.3.html",
+      "media_type": "text/html",
+      "bytes": 49137,
+      "sha256": "6e0574e69d339be3ae1e4d03fb3c2ae535230505e232c09ab8aa704353dad14a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/poda-chimeric-prototype-v0.1.3.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/poda-chimeric-prototype-v0.1.3.html",
+      "media_type": "text/html",
+      "bytes": 72519,
+      "sha256": "bcc33fdf78718abc54f65477672d164a1962cdf9f588480763b6e69c3ad7d2f9",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/practitioner-judgment-probes-chimeric-prototype-v0.1.3.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/practitioner-judgment-probes-chimeric-prototype-v0.1.3.html",
+      "media_type": "text/html",
+      "bytes": 68964,
+      "sha256": "d50cfcde73b418a4e2f932a9c1e3a02344afb9ddaccf2cb42ca1e1b1bac51136",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/recovery-routing-atlas-chimeric-prototype-v0.1.3.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/recovery-routing-atlas-chimeric-prototype-v0.1.3.html",
+      "media_type": "text/html",
+      "bytes": 74083,
+      "sha256": "9f1d469773ff03f048d2a9c67f3dd19845ed90a4148bd447ad072dbeecbaf453",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/service-design-blueprint-chimeric-prototype-v0.2.4.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/service-design-blueprint-chimeric-prototype-v0.2.4.html",
+      "media_type": "text/html",
+      "bytes": 93083,
+      "sha256": "2641264f0e3471fe24d4e26482229646e80ed26c1ede1a5f804dd1e53bb5bdfd",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/shared-surface-priority-map-chimeric-prototype-v0.1.3.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/shared-surface-priority-map-chimeric-prototype-v0.1.3.html",
+      "media_type": "text/html",
+      "bytes": 106139,
+      "sha256": "06817b6fc7312c32f6c303b1ea562c43c2bf8436a6214b73e03e9b6cb14ec08a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/software-architecture-views-chimeric-prototype-v0.1.3.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/software-architecture-views-chimeric-prototype-v0.1.3.html",
+      "media_type": "text/html",
+      "bytes": 80200,
+      "sha256": "c1fdce7212aa0995cd5e862b9cee00baad5ddfd1b199ca4f3f063488c81ebe0c",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/specification-by-example-chimeric-prototype-v0.1.5.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/specification-by-example-chimeric-prototype-v0.1.5.html",
+      "media_type": "text/html",
+      "bytes": 69546,
+      "sha256": "0bea8fabc2d06a05117b8289e01d3931e928262c8db6af01fd9c5563d0a9359f",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",
+      "media_type": "text/html",
+      "bytes": 3262,
+      "sha256": "073e9ab54c71032dfb23abbd9ae328b27e3a4532553644fd21f1a0c6ab3d44da",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.1.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.1.html",
+      "media_type": "text/html",
+      "bytes": 7625,
+      "sha256": "b122fee07c6f302185ae1b9d34117abe7e5ffed0e58e56ae7f702c18ecede41f",
+      "standing": "generated",
+      "source_sha256": "df381192201ca0ebbda90d4d1e60e6df1c9db58e54bcf8b90affa700c6261274"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
+      "media_type": "text/html",
+      "bytes": 10556,
+      "sha256": "866ce33477382ebfb9647b0928c2fe4fb557602759451bc7efcc44945c3a105b",
+      "standing": "generated",
+      "source_sha256": "14e6dd3264ae1bbd103d905c82022e31eca4551fdcd0f189fbdcefa991012beb"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-context-workbench-v0.2.css",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-context-workbench-v0.2.css",
+      "media_type": "text/css",
+      "bytes": 29362,
+      "sha256": "ec8c93bd4dcdfdd6b21a90e759eaa15bf7bbd67abe54dbe725ec769a7eae4c4b",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-context-workbench-v0.2.js",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-context-workbench-v0.2.js",
+      "media_type": "text/javascript",
+      "bytes": 125193,
+      "sha256": "f93858e0d76cccc5ed661af301be40f3b686e917c486327d2b7d0eb9b8f6913a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/unit-test-first-design-chimeric-prototype-v0.1.3.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/unit-test-first-design-chimeric-prototype-v0.1.3.html",
+      "media_type": "text/html",
+      "bytes": 66268,
+      "sha256": "4ef1a9f21f3890468869f306abcd2f13c40572da57ce61edd68c89448abb695d",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/upstream-revision-loop-chimeric-prototype-v0.1.3.html",
+      "projected_path": "primary-public/prototypes/core-architectures/chimeric-pack-v0.1/upstream-revision-loop-chimeric-prototype-v0.1.3.html",
+      "media_type": "text/html",
+      "bytes": 59607,
+      "sha256": "b1250002cfd30faa1d9d3cfe6cd43567aef0f60444f7e21d6280ec396af16fa7",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/companions/core-architecture-family-index-chimeric-prototype-v0.1.4.html",
+      "projected_path": "primary-public/prototypes/narrative-architectures/narrative-capsule-composer/companions/core-architecture-family-index-chimeric-prototype-v0.1.4.html",
+      "media_type": "text/html",
+      "bytes": 74910,
+      "sha256": "de2b1ebc7ed9de00b8b3c3eeffe4b23b5628d9a09e4fbc556e922173c9039cb9",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/narrative-capsules-chimeric-prototype-v0.1.html",
+      "projected_path": "primary-public/prototypes/narrative-architectures/narrative-capsule-composer/narrative-capsules-chimeric-prototype-v0.1.html",
+      "media_type": "text/html",
+      "bytes": 143535,
+      "sha256": "081a9adc86b23cf2cf1b5516ddb5b2d86b5289a9ee290bd897ff88575a7b2a5f",
+      "standing": "generated",
+      "source_sha256": "48953c40b1c56d345143d057829472595410c166adf001938e9112b0f7a8ab40"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/strategy-canvas-v2-adapter.js",
+      "projected_path": "primary-public/prototypes/narrative-architectures/narrative-capsule-composer/strategy-canvas-v2-adapter.js",
+      "media_type": "text/javascript",
+      "bytes": 15975,
+      "sha256": "623a2ec7e534a4a951a329a7439624416557869ecd088ab66fe4b2b0f15c53af",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/technology-fit-sampling-tableau-chimeric-prototype-v0.2.html",
+      "projected_path": "primary-public/prototypes/narrative-architectures/technology-fit-sampling-tableau/technology-fit-sampling-tableau-chimeric-prototype-v0.2.html",
+      "media_type": "text/html",
+      "bytes": 238463,
+      "sha256": "34a5fc96d92d78a449d63779be16b1a2f9518cc5816acc9ada1c579a79ccc979",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html",
+      "projected_path": "primary-public/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html",
+      "media_type": "text/html",
+      "bytes": 84779,
+      "sha256": "48a087d0360c97bcb2d46da7bca07ed4c51aa835da496701a5c0bc748a56ae2f",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/registry-goal-fidelity-routing.html",
+      "projected_path": "primary-public/registry-goal-fidelity-routing.html",
+      "media_type": "text/html",
+      "bytes": 35933,
+      "sha256": "e0db67001307e2bfbbcb1b0d340886bab1e1b5222448c1ae40a97128650d97e1",
+      "standing": "generated",
+      "source_sha256": "e6ae50d1764c835d543617652e705783b78cdb37b28210672e08f0b2e10072a2"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/resting-concepts.html",
+      "projected_path": "primary-public/resting-concepts.html",
+      "media_type": "text/html",
+      "bytes": 23049,
+      "sha256": "8b65fa7a08644ea32f6d061f618007fd0cc5c2cbaad250a27788eae1d6034847",
+      "standing": "generated",
+      "source_sha256": "825f05c75235a09de0ebf32f86e0854a287baed6debd4434ba051a1723668603"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/robots.txt",
+      "projected_path": "primary-public/robots.txt",
+      "media_type": "text/plain",
+      "bytes": 768,
+      "sha256": "198207ea692346e4a5eb623b44ea6b7b725b36acbd3450b96212c07a4dbe624d",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/safari-pinned-tab.svg",
+      "projected_path": "primary-public/safari-pinned-tab.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 1420,
+      "sha256": "016ed292781aa81e7f4ffa969d511aeb1028e8f4aa008a2ff5d69ad1b385b238",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/shared-machinery.html",
+      "projected_path": "primary-public/shared-machinery.html",
+      "media_type": "text/html",
+      "bytes": 41096,
+      "sha256": "589456ba08bb1ea801a04aa4945cd5133e0b63c825de674d90501b2833863c32",
+      "standing": "generated",
+      "source_sha256": "50733a2d84ff8ca2ae148a2b1902f5ae8b356fc6d02b854b75ec4284dd5ff48a"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/sitemap.xml",
+      "projected_path": "primary-public/sitemap.xml",
+      "media_type": "application/xml",
+      "bytes": 4246,
+      "sha256": "81cdaf3debb7b64cd8553c63cc2c8674900dc82a5276605bd3438feb2c987199",
+      "standing": "generated",
+      "source_sha256": "9ad262bb1f480cb9c0610ddf7e807601488eaf918ad48134b3700145f79515d5"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/styles/components/debrief-reading.css",
+      "projected_path": "primary-public/styles/components/debrief-reading.css",
+      "media_type": "text/css",
+      "bytes": 1937,
+      "sha256": "ed1b96cd46cfa9c8dbcab84c4fbbb772408805b2652266ab3f1c92fe67ef75e3",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/styles/components/instrument-atlas.css",
+      "projected_path": "primary-public/styles/components/instrument-atlas.css",
+      "media_type": "text/css",
+      "bytes": 7812,
+      "sha256": "7d0944b4ffdd0b1142e94062af0a0f781b0fbb1c91dc42d75fb5addb4c073b48",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/styles/contracts/debrief-composition.css",
+      "projected_path": "primary-public/styles/contracts/debrief-composition.css",
+      "media_type": "text/css",
+      "bytes": 15947,
+      "sha256": "bb1463f3fd2fe991492f17b5201f5f7155a25928a1986d268ed272b20c50d80e",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/about-noscript.css",
+      "projected_path": "primary-public/styles/routes/about-noscript.css",
+      "media_type": "text/css",
+      "bytes": 408,
+      "sha256": "0ab9b40c368f36908203e9f33fede45f259e30482847f7ae2b5993da1af80def",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/about.css",
+      "projected_path": "primary-public/styles/routes/about.css",
+      "media_type": "text/css",
+      "bytes": 39600,
+      "sha256": "c28418886e79592b0be5dac1a76c5c6b09d191e6656b19e36aa7fb2ff2701381",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/ai-systems-entry.css",
+      "projected_path": "primary-public/styles/routes/ai-systems-entry.css",
+      "media_type": "text/css",
+      "bytes": 5171,
+      "sha256": "810a79be7ea5b50b6f58dad61c0abb226073da920985a4603a6ee129d3c4f73a",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/ai-systems.css",
+      "projected_path": "primary-public/styles/routes/ai-systems.css",
+      "media_type": "text/css",
+      "bytes": 10611,
+      "sha256": "f6ce888a55d2ec9c9eddf3505f19805dc2635251e5db62d02a2034afb7184b99",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/benchmark-readings.css",
+      "projected_path": "primary-public/styles/routes/benchmark-readings.css",
+      "media_type": "text/css",
+      "bytes": 5641,
+      "sha256": "45477e66a546d9b901a9095dad78f694e3cfeec7be236b98cff2be00af84d308",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/debriefs.css",
+      "projected_path": "primary-public/styles/routes/debriefs.css",
+      "media_type": "text/css",
+      "bytes": 16497,
+      "sha256": "eba895efc0c05b2bc930802883256d42ed1b9032ce7e638cab0d3d087574e968",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/genomic-viewer.css",
+      "projected_path": "primary-public/styles/routes/genomic-viewer.css",
+      "media_type": "text/css",
+      "bytes": 11006,
+      "sha256": "aebe3eed69b8fa5817290ae7ce171249b94f031419fee876f14e37cd7caa439b",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/hiring-surfaces.css",
+      "projected_path": "primary-public/styles/routes/hiring-surfaces.css",
+      "media_type": "text/css",
+      "bytes": 10785,
+      "sha256": "f34f6488951dff423ba486833553d74469dfa4b50261b38dba3fbf2b819191b1",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/three-movement-debrief.css",
+      "projected_path": "primary-public/styles/routes/three-movement-debrief.css",
+      "media_type": "text/css",
+      "bytes": 2821,
+      "sha256": "f9f990288b83aa080ecba7399cd68d7935931928142f940625c214b31743e581",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/three-way-comparative-return.html",
+      "projected_path": "primary-public/three-way-comparative-return.html",
+      "media_type": "text/html",
+      "bytes": 41442,
+      "sha256": "d60d7c476c5f88819d2d39b19d96da912462a9bab9036d0becb13df4075f0416",
+      "standing": "generated",
+      "source_sha256": "a9279b53ed36572d2fc2ba2a8342970f75ae0a7eed319f6fdc93b9705edfa2fe"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/visitor-boundary-contract.js",
+      "projected_path": "primary-public/visitor-boundary-contract.js",
+      "media_type": "text/javascript",
+      "bytes": 1190,
+      "sha256": "883ecb64b534f6037f4cc69e5abcf48420a52fa56876f5ae9f1acc00e336fde2",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "visualization-fidelity-atlas-bundle-v0.1/visualization-fidelity-atlas-chimeric-prototype-v0.1.html",
+      "projected_path": "primary-public/visualization-fidelity-atlas-bundle-v0.1/visualization-fidelity-atlas-chimeric-prototype-v0.1.html",
+      "media_type": "text/html",
+      "bytes": 141849,
+      "sha256": "073f465da36db8f965745819ecf2de70e5ec8bf17bd1561b2d039a052b1b9e55",
+      "standing": "byte_preserved"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/visualization-fidelity-atlas.html",
+      "projected_path": "primary-public/visualization-fidelity-atlas.html",
+      "media_type": "text/html",
+      "bytes": 34868,
+      "sha256": "611a6929fa48c6acf3df90c92dc43a327d9340c823212b492afea55cd250e507",
+      "standing": "generated",
+      "source_sha256": "566d14cc6615178ffba583d76600c133fd8b66ba565c2acdefc847e34c879f95"
+    },
+    {
+      "surface": "primary",
+      "source_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
+      "projected_path": "primary-public/who-to-believe-reviews-platform.html",
+      "media_type": "text/html",
+      "bytes": 62422,
+      "sha256": "52ad921150712063ea33f0cc5b8517eda4cf227df2f5ecd9f0061fa5c5d23076",
+      "standing": "generated",
+      "source_sha256": "fc6dc35c11d34a2832fb4c84fe711c9be83dc99e49b948ee1471e0c7e877ec55"
+    }
+  ]
+}

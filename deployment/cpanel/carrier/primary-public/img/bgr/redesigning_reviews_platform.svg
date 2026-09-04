@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="Charcoal YAML card">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0f1113"/>
+      <stop offset="1" stop-color="#0b0c0d"/>
+    </linearGradient>
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="6" stdDeviation="18" flood-color="#000" flood-opacity="0.7"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
+
+  <!-- Charcoal card -->
+  <g transform="translate(60,50)" filter="url(#softShadow)">
+    <rect rx="14" ry="14" width="1080" height="780" fill="#1b1d1f" stroke="#2a2c2e" stroke-width="1"/>
+  </g>
+
+  <!-- Content group clipped inside card -->
+  <g transform="translate(100,90)">
+    <!-- Left gutter tiny decoration -->
+    <rect x="-20" y="-18" width="8" height="16" rx="2" fill="#26292b" opacity="0.6"/>
+    <rect x="-20" y="8" width="8" height="16" rx="2" fill="#26292b" opacity="0.4"/>
+
+    <!-- Title lines (two dashes as in image) -->
+    <text x="0" y="12" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'Courier New', monospace"
+          font-size="12" fill="#9aa0a6">--</text>
+
+    <!-- YAML block background to help legibility -->
+    <rect x="0" y="24" width="980" height="690" rx="8" ry="8" fill="transparent"/>
+
+    <!-- Text rendering of YAML with syntax coloring -->
+    <!-- We'll render line-by-line with monospace font. Colors chosen to match the screenshot: keys yellow, strings pale green, values pale cyan, comments gray. -->
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'Courier New', monospace"
+       font-size="14" letter-spacing="0.3">
+
+      <!-- Line 1 -->
+      <text x="8" y="46" fill="#ffe08a">metadata:</text>
+
+      <!-- Line 2 -->
+      <text x="28" y="70" fill="#9aa0a6">title:</text>
+      <text x="120" y="70" fill="#c8f7b0">"How We Reduced Signups &amp; Reviews Platforms &amp; Increased Signups 27%?"</text>
+
+      <!-- Line 3 -->
+      <text x="28" y="94" fill="#9aa0a6">date:</text>
+      <text x="120" y="94" fill="#9ad6f0">2024-06</text>
+
+      <!-- Line 4 -->
+      <text x="28" y="118" fill="#9aa0a6">caution_units:</text>
+      <text x="200" y="118" fill="#c8f7b0">15</text>
+
+      <!-- Line 5 -->
+      <text x="28" y="142" fill="#9aa0a6">audience:</text>
+      <text x="120" y="142" fill="#9ad6f0">internal</text>
+
+      <!-- Spacer comment style -->
+      <text x="8" y="170" fill="#6b7074"># repeated fields and descriptors</text>
+
+      <!-- block: persona/fields -->
+      <text x="8" y="196" fill="#ffe08a">- persona/derived fields</text>
+
+      <text x="32" y="220" fill="#9aa0a6">lens:</text>
+      <text x="120" y="220" fill="#c8f7b0">practice_lens</text>
+
+      <text x="32" y="244" fill="#9aa0a6">tense:</text>
+      <text x="120" y="244" fill="#c8f7b0">retrospective</text>
+
+      <text x="32" y="268" fill="#9aa0a6">register:</text>
+      <text x="120" y="268" fill="#c8f7b0">product_designers</text>
+
+      <text x="32" y="292" fill="#9aa0a6">analysis:</text>
+      <text x="120" y="292" fill="#c8f7b0">project</text>
+
+      <text x="32" y="316" fill="#9aa0a6">plan_type:</text>
+      <text x="120" y="316" fill="#c8f7b0">embedded</text>
+
+      <text x="32" y="340" fill="#9aa0a6">scope:</text>
+      <text x="120" y="340" fill="#c8f7b0">was the claim controlled or evidence?</text>
+
+      <!-- Studio extensions -->
+      <text x="8" y="372" fill="#ffe08a">- studio-specific.extensions</text>
+
+      <text x="32" y="396" fill="#9aa0a6">authors:</text>
+      <text x="120" y="396" fill="#c8f7b0">- name: "Walker"</text>
+
+      <text x="120" y="420" fill="#c8f7b0">  role: "Decision Lead"</text>
+
+      <text x="32" y="444" fill="#9aa0a6">org:</text>
+      <text x="120" y="444" fill="#c8f7b0">Review Syndication Platform</text>
+
+      <text x="32" y="468" fill="#9aa0a6">event_type:</text>
+      <text x="120" y="468" fill="#c8f7b0">mid-project company acquisition</text>
+
+      <!-- outcome block -->
+      <text x="8" y="498" fill="#ffe08a">outcomes:</text>
+
+      <text x="32" y="522" fill="#9aa0a6">- metric:</text>
+      <text x="120" y="522" fill="#9ad6f0">signup_increase</text>
+
+      <text x="32" y="546" fill="#9aa0a6">  value:</text>
+      <text x="120" y="546" fill="#c8f7b0">27%</text>
+
+      <text x="32" y="570" fill="#9aa0a6">  evidence:</text>
+      <text x="120" y="570" fill="#c8f7b0">pre-release q2 2024</text>
+
+      <!-- detection/confidence -->
+      <text x="8" y="602" fill="#ffe08a">detection:</text>
+      <text x="32" y="626" fill="#9aa0a6">method:</text>
+      <text x="120" y="626" fill="#c8f7b0">anomaly_detection</text>
+      <text x="32" y="650" fill="#9aa0a6">confidence:</text>
+      <text x="120" y="650" fill="#9ad6f0">medium</text>
+
+      <!-- cross references -->
+      <text x="8" y="684" fill="#ffe08a">cross_refs_notes:</text>
+      <text x="32" y="708" fill="#9aa0a6">- similar_reading:</text>
+      <text x="120" y="708" fill="#c8f7b0">links to sibling site studies for cross-reading</text>
+
+      <!-- footer small details -->
+      <text x="8" y="740" fill="#6b7074" font-size="12"># author assessment: whether the reading still holds</text>
+      <text x="8" y="760" fill="#6b7074" font-size="12"># generated: true</text>
+    </g>
+
+    <!-- Legend / small badges on top-right of card -->
+    <g transform="translate(760,18)">
+      <rect x="0" y="0" width="200" height="34" rx="6" fill="#222426" stroke="#2c2f31"/>
+      <text x="12" y="22" fill="#c8f7b0" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial"
+            font-size="12">metadata • yaml preview</text>
+    </g>
+
+  </g>
+</svg>

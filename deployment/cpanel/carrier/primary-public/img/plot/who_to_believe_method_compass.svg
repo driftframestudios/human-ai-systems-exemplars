@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1120" width="1600" height="1120" role="img" aria-labelledby="method-title method-desc">
+  <title id="method-title">Choose the method by the decision</title>
+  <desc id="method-desc">A method-selection compass maps deterministic policy, directed graphs, streaming anomaly detection, and boosted tree methods around accountable human review. An outer service ring shows participant, interface, evidence, model, review, and learning handoffs. A four-step activity helps a team compare methods this week. Color is reinforced by distinct shapes, labels, and patterns.</desc>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#6e91c4" stroke-width="1" opacity=".2"/>
+    </pattern>
+    <pattern id="rule-pattern" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="12" height="12" fill="#315ed1"/>
+      <rect width="3" height="12" fill="#527cf0"/>
+    </pattern>
+    <pattern id="graph-pattern" width="18" height="18" patternUnits="userSpaceOnUse">
+      <rect width="18" height="18" fill="#bceee7"/>
+      <circle cx="4" cy="5" r="2" fill="#17345f"/>
+      <circle cx="14" cy="13" r="2" fill="#17345f"/>
+      <path d="M5.5 6.5l7 5" stroke="#17345f" stroke-width="1.5"/>
+    </pattern>
+    <pattern id="stream-pattern" width="14" height="14" patternUnits="userSpaceOnUse">
+      <rect width="14" height="14" fill="#ff9a86"/>
+      <path d="M0 11h14" stroke="#7a2c25" stroke-width="3"/>
+    </pattern>
+    <pattern id="tree-pattern" width="16" height="16" patternUnits="userSpaceOnUse">
+      <rect width="16" height="16" fill="#f6d678"/>
+      <path d="M8 2v12M8 6H3M8 10h5" fill="none" stroke="#604c16" stroke-width="2"/>
+    </pattern>
+    <style>
+      .field{fill:#101b2b}.grid{fill:url(#grid)}.frame{fill:none;stroke:#7ba1d7;stroke-width:3}
+      .paper{fill:#fff7e7;stroke:#18395f;stroke-width:2}.paper-blue{fill:#dcecff;stroke:#18395f;stroke-width:2}.paper-sea{fill:#d8f2ed;stroke:#18395f;stroke-width:2}
+      .orbit{fill:none;stroke:#7ba1d7;stroke-width:2.5;stroke-dasharray:10 11}.flow{fill:#7ba1d7}
+      .flow-hot{fill:#69ded0}
+      .eyebrow{font:800 15px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.5px;fill:#69ded0}
+      .title{font:780 34px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fff7e7}
+      .subtitle{font:500 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#b8cae2}
+      .section{font:760 20px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .section-night{font:760 19px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fff7e7}
+      .body{font:500 15px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#263f58}
+      .body-night{font:500 15px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#d8e3f1}
+      .micro{font:800 12px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.7px;fill:#4c678d}
+      .micro-night{font:800 12px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.7px;fill:#a9c3e6}
+      .label{font:760 16px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f;text-anchor:middle}
+      .label-night{font:760 15px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fff7e7;text-anchor:middle}
+      .small{font:500 13px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#4c678d;text-anchor:middle}
+      .number{font:800 24px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f;text-anchor:middle}
+    </style>
+  </defs>
+
+  <rect class="field" x="18" y="18" width="1564" height="1084" rx="28"/>
+  <rect class="grid" x="18" y="18" width="1564" height="1084" rx="28"/>
+  <rect class="frame" x="18" y="18" width="1564" height="1084" rx="28"/>
+
+  <text class="eyebrow" x="52" y="64">WHO TO BELIEVE · METHOD COMPASS · SIGNAL ≠ JUDGMENT</text>
+  <text class="title" x="52" y="104">Choose the method by the decision it must improve</text>
+  <text class="subtitle" x="52" y="134">Begin with authority, consequence, evidence shape, and recovery. A model may focus attention; the accountable review route remains visible.</text>
+
+  <g role="group" aria-labelledby="method-legend-title">
+    <title id="method-legend-title">Color, shape, and text legend for the four method types</title>
+    <rect class="paper" x="1122" y="50" width="414" height="112" rx="16"/>
+    <text class="micro" x="1144" y="77">LEGEND · COLOR + SHAPE + TEXT</text>
+    <rect x="1144" y="92" width="24" height="24" rx="3" fill="url(#rule-pattern)"/>
+    <text class="body" x="1178" y="110">rule / threshold</text>
+    <circle cx="1315" cy="104" r="13" fill="url(#graph-pattern)" stroke="#17345f"/>
+    <text class="body" x="1338" y="110">relationship</text>
+    <path d="M1156 127l14 14-14 14-14-14z" fill="url(#stream-pattern)" stroke="#17345f"/>
+    <text class="body" x="1178" y="146">unusual stream</text>
+    <path d="M1302 128h26v26h-26z" fill="url(#tree-pattern)" stroke="#17345f"/>
+    <text class="body" x="1338" y="146">structured signal</text>
+  </g>
+
+  <!-- Service-design orbit -->
+  <g role="group" aria-labelledby="service-ring-title">
+    <title id="service-ring-title">Outer service-design ring connecting six accountable handoffs</title>
+    <circle class="orbit" cx="790" cy="493" r="315"/>
+    <circle class="orbit" cx="790" cy="493" r="246"/>
+
+    <rect class="paper-blue" x="662" y="164" width="256" height="72" rx="16"/>
+    <text class="micro" x="682" y="189">01 · PARTICIPANT CONTEXT</text>
+    <text class="body" x="682" y="215">purpose · lived transition · appeal</text>
+
+    <rect class="paper" x="1014" y="276" width="250" height="82" rx="16"/>
+    <text class="micro" x="1034" y="302">02 · INTERFACE</text>
+    <text class="body" x="1034" y="327">status · reason · recovery route</text>
+
+    <rect class="paper-sea" x="1034" y="574" width="266" height="82" rx="16"/>
+    <text class="micro" x="1054" y="600">03 · EVIDENCE CONTRACT</text>
+    <text class="body" x="1054" y="625">source · version · denominator</text>
+
+    <rect class="paper-blue" x="658" y="741" width="264" height="82" rx="16"/>
+    <text class="micro" x="678" y="767">04 · REVIEW + APPEAL</text>
+    <text class="body" x="678" y="792">reasons · independence · SLA</text>
+
+    <rect class="paper" x="307" y="574" width="260" height="82" rx="16"/>
+    <text class="micro" x="327" y="600">05 · QUALITY LEARNING</text>
+    <text class="body" x="327" y="625">cohort slices · disagreement</text>
+
+    <rect class="paper-sea" x="326" y="276" width="250" height="82" rx="16"/>
+    <text class="micro" x="346" y="302">06 · AUTHORITY</text>
+    <text class="body" x="346" y="327">named owner · permitted action</text>
+
+    <path class="flow" aria-hidden="true" d="M918 198C957 207 988 232 1004 266L1003 254 1015 278 992 267 1001 268C985 238 957 215 917 203Z"/>
+    <path class="flow" aria-hidden="true" d="M1262 358C1294 430 1298 501 1283 559L1291 550 1282 577 1270 552 1278 559C1293 500 1289 431 1267 357Z"/>
+    <path class="flow" aria-hidden="true" d="M1036 637C998 698 963 725 934 745L946 747 921 753 936 734 934 742C962 721 995 694 1032 633Z"/>
+    <path class="flow" aria-hidden="true" d="M659 779C592 761 534 723 491 665L493 677 482 653 507 664 495 663C536 717 594 755 658 775Z"/>
+    <path class="flow" aria-hidden="true" d="M307 588C280 513 289 431 334 370L324 377 341 354 340 384 337 373C295 433 286 512 311 590Z"/>
+    <path class="flow" aria-hidden="true" d="M574 291C600 267 625 246 648 215L637 220 663 201 650 229 651 216C627 249 603 270 578 297Z"/>
+  </g>
+
+  <!-- Method compass -->
+  <g role="group" aria-labelledby="method-options-title">
+    <title id="method-options-title">Four method options arranged around accountable human review and appeal</title>
+    <path d="M790 280l70 40v80l-70 40-70-40v-80z" fill="url(#rule-pattern)" stroke="#fff7e7" stroke-width="3"/>
+    <rect x="728" y="316" width="124" height="82" rx="11" fill="#17345f" opacity=".9"/>
+    <text class="label-night" x="790" y="341">Deterministic policy</text>
+    <text class="label-night" x="790" y="363">+ bounded reasons</text>
+    <text class="micro-night" x="790" y="389" text-anchor="middle">KNOWN RULE / AUTHORIZATION</text>
+
+    <circle cx="1000" cy="492" r="104" fill="url(#graph-pattern)" stroke="#fff7e7" stroke-width="3"/>
+    <rect x="925" y="449" width="150" height="91" rx="12" fill="#fff7e7" opacity=".9"/>
+    <text class="label" x="1000" y="476">Directed graph</text>
+    <text class="label" x="1000" y="498">+ transition history</text>
+    <text class="micro" x="1000" y="528" text-anchor="middle">RELATIONSHIP / SEQUENCE</text>
+
+    <path d="M790 548l112 112-112 112-112-112z" fill="url(#stream-pattern)" stroke="#fff7e7" stroke-width="3"/>
+    <rect x="710" y="619" width="160" height="89" rx="12" fill="#fff7e7" opacity=".9"/>
+    <text class="label" x="790" y="645">Streaming anomaly</text>
+    <text class="label" x="790" y="667">candidate signal</text>
+    <text class="micro" x="790" y="695" text-anchor="middle">UNUSUAL EVENT COMBINATION</text>
+
+    <rect x="472" y="386" width="208" height="208" rx="20" fill="url(#tree-pattern)" stroke="#fff7e7" stroke-width="3"/>
+    <rect x="495" y="448" width="162" height="91" rx="12" fill="#fff7e7" opacity=".9"/>
+    <text class="label" x="576" y="474">Boosted trees</text>
+    <text class="label" x="576" y="496">structured / categorical</text>
+    <text class="micro" x="576" y="526" text-anchor="middle">CALIBRATED PREDICTION</text>
+
+    <circle cx="790" cy="493" r="128" fill="#17345f" stroke="#69ded0" stroke-width="6"/>
+    <circle cx="790" cy="493" r="107" fill="none" stroke="#69ded0" stroke-width="2" stroke-dasharray="5 7"/>
+    <text class="micro-night" x="790" y="449" text-anchor="middle">ACCOUNTABLE CENTER</text>
+    <text class="section-night" x="790" y="482" text-anchor="middle">Human review</text>
+    <text class="section-night" x="790" y="508" text-anchor="middle">+ appeal</text>
+    <text class="body-night" x="790" y="538" text-anchor="middle">Reason · standing · recovery</text>
+    <path class="flow-hot" aria-hidden="true" d="M788 440H792V417H800L790 405 780 417H788Z"/>
+    <path class="flow-hot" aria-hidden="true" d="M918 491V495H896V503L884 493 896 483V491Z"/>
+    <path class="flow-hot" aria-hidden="true" d="M788 621H792V599H800L790 587 780 599H788Z"/>
+    <path class="flow-hot" aria-hidden="true" d="M662 491V495H684V503L696 493 684 483V491Z"/>
+  </g>
+
+  <g role="group" aria-labelledby="method-boundaries-title">
+    <title id="method-boundaries-title">Selection questions and operating-authority boundary</title>
+    <rect class="paper" x="52" y="183" width="226" height="172" rx="16"/>
+    <text class="micro" x="72" y="210">SELECTION QUESTIONS</text>
+    <text class="body" x="72" y="239"><tspan x="72">• What decision changes?</tspan><tspan x="72" dy="25">• Who may act?</tspan><tspan x="72" dy="25">• Which error costs more?</tspan><tspan x="72" dy="25">• How can it be appealed?</tspan></text>
+    <rect class="paper-blue" x="1307" y="395" width="229" height="210" rx="16"/>
+    <text class="micro" x="1327" y="422">BOUNDARY</text>
+    <text class="section" x="1327" y="452">A score is a cue,</text>
+    <text class="section" x="1327" y="477">not a standing.</text>
+    <text class="body" x="1327" y="509"><tspan x="1327">Prediction earns operating</tspan><tspan x="1327" dy="22">authority only through a</tspan><tspan x="1327" dy="22">named policy, reviewer,</tspan><tspan x="1327" dy="22">quality gate, and recovery.</tspan></text>
+  </g>
+
+  <!-- Do this week activity -->
+  <g role="group" aria-labelledby="method-activity-title">
+    <title id="method-activity-title">A four-step method comparison activity for this week</title>
+    <rect class="paper" x="52" y="858" width="1496" height="205" rx="22"/>
+    <text class="micro" x="78" y="891">DO THIS WEEK · 45 MINUTES · ONE LIVE DECISION</text>
+    <text class="section" x="78" y="923">Make the candidate set visible before choosing the instrument.</text>
+
+    <rect class="paper-blue" x="78" y="943" width="332" height="94" rx="14"/>
+    <circle cx="110" cy="975" r="20" fill="#315ed1"/>
+    <text x="110" y="982" font-family="system-ui,sans-serif" font-size="20" font-weight="800" fill="#fff" text-anchor="middle">1</text>
+    <text class="body" x="142" y="970"><tspan x="142">Name the decision, owner,</tspan><tspan x="142" dy="22">population, and consequence.</tspan></text>
+
+    <rect class="paper-sea" x="432" y="943" width="332" height="94" rx="14"/>
+    <circle cx="464" cy="975" r="20" fill="#279589"/>
+    <text x="464" y="982" font-family="system-ui,sans-serif" font-size="20" font-weight="800" fill="#fff" text-anchor="middle">2</text>
+    <text class="body" x="496" y="970"><tspan x="496">List three candidates, including</tspan><tspan x="496" dy="22">a deterministic baseline.</tspan></text>
+
+    <rect x="786" y="943" width="332" height="94" rx="14" fill="#ffe0d9" stroke="#18395f" stroke-width="2"/>
+    <circle cx="818" cy="975" r="20" fill="#d45848"/>
+    <text x="818" y="982" font-family="system-ui,sans-serif" font-size="20" font-weight="800" fill="#fff" text-anchor="middle">3</text>
+    <text class="body" x="850" y="970"><tspan x="850">For each: named outcome, rough</tspan><tspan x="850" dy="22">probability, assumption, falsifier.</tspan></text>
+
+    <rect x="1140" y="943" width="382" height="94" rx="14" fill="#fff0b9" stroke="#18395f" stroke-width="2"/>
+    <circle cx="1172" cy="975" r="20" fill="#806516"/>
+    <text x="1172" y="982" font-family="system-ui,sans-serif" font-size="20" font-weight="800" fill="#fff" text-anchor="middle">4</text>
+    <text class="body" x="1204" y="970"><tspan x="1204">Rehearse one legitimate transition</tspan><tspan x="1204" dy="22">and one campaign-gaming pattern.</tspan></text>
+  </g>
+
+  <text class="micro-night" x="52" y="1090">PRESENT-DAY METHOD ORIENTATION · VALIDATE STATISTICAL, PRIVACY, SAFETY, ACCESSIBILITY, WORKLOAD, AND REGIONAL FIT BEFORE OPERATING USE</text>
+</svg>

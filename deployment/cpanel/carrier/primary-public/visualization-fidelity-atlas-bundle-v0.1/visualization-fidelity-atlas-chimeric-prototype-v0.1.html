@@ -1,0 +1,2908 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Visualization Fidelity Atlas v0.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="application/ld+json" id="jsonld-data">
+{
+  "@context": {
+    "viz": "https://schemas.radiantnull.com/visualization#",
+    "ca": "https://schemas.driftframestudios.org/ca#",
+    "schema": "https://schema.org/",
+    "id": "@id",
+    "type": "@type",
+    "name": "schema:name",
+    "description": "schema:description",
+    "VisualizationFidelityAtlas": "viz:VisualizationFidelityAtlas",
+    "DataPrimitive": "viz:DataPrimitive",
+    "DataShape": "viz:DataShape",
+    "CognitiveMove": "viz:CognitiveMove",
+    "VisualForm": "viz:VisualForm",
+    "VisualRecommendation": "viz:VisualRecommendation",
+    "VisualizationExemplar": "viz:VisualizationExemplar",
+    "CitationAnchor": "viz:CitationAnchor",
+    "VisualizationFidelityReview": "viz:VisualizationFidelityReview",
+    "ViewState": "viz:ViewState",
+    "hasPrimitive": {
+      "@id": "viz:hasPrimitive",
+      "@type": "@id"
+    },
+    "hasDataShape": {
+      "@id": "viz:hasDataShape",
+      "@type": "@id"
+    },
+    "supportsCognitiveMove": {
+      "@id": "viz:supportsCognitiveMove",
+      "@type": "@id"
+    },
+    "recommendsVisualForm": {
+      "@id": "viz:recommendsVisualForm",
+      "@type": "@id"
+    },
+    "hasExemplar": {
+      "@id": "viz:hasExemplar",
+      "@type": "@id"
+    },
+    "hasCitation": {
+      "@id": "viz:hasCitation",
+      "@type": "@id"
+    },
+    "hasViewState": {
+      "@id": "viz:hasViewState",
+      "@type": "@id"
+    },
+    "selectedCognitiveMove": {
+      "@id": "viz:selectedCognitiveMove",
+      "@type": "@id"
+    },
+    "selectedDataShape": {
+      "@id": "viz:selectedDataShape",
+      "@type": "@id"
+    },
+    "selectedVisualForm": {
+      "@id": "viz:selectedVisualForm",
+      "@type": "@id"
+    },
+    "selectedExemplar": {
+      "@id": "viz:selectedExemplar",
+      "@type": "@id"
+    },
+    "audienceContext": "viz:audienceContext",
+    "uncertaintyRequired": "viz:uncertaintyRequired",
+    "aiIngestion": "viz:aiIngestion",
+    "showReserved": "viz:showReserved",
+    "fidelityScore": "viz:fidelityScore",
+    "accessibilityScore": "viz:accessibilityScore",
+    "aiReadinessScore": "viz:aiReadinessScore",
+    "sourceBand": "ca:sourceBand",
+    "semanticLocality": "ca:semanticLocality",
+    "aiPromptCapsule": "ca:aiPromptCapsule"
+  },
+  "@graph": [
+    {
+      "@id": "viz:viz-atlas-001",
+      "@type": [
+        "viz:VisualizationFidelityAtlas",
+        "schema:CreativeWork"
+      ],
+      "schema:name": "Visualization Fidelity Atlas",
+      "schema:description": "Data Shape → Cognitive Move → Visual Form",
+      "viz:version": "0.1",
+      "ca:sourceBand": [
+        "author_adapted",
+        "research_supported",
+        "field_guide_stabilizer"
+      ],
+      "viz:hasDataShape": [
+        {
+          "@id": "viz:shape-category-quantity"
+        },
+        {
+          "@id": "viz:shape-ranked-values"
+        },
+        {
+          "@id": "viz:shape-time-series"
+        },
+        {
+          "@id": "viz:shape-before-after"
+        },
+        {
+          "@id": "viz:shape-composition"
+        },
+        {
+          "@id": "viz:shape-composition-groups"
+        },
+        {
+          "@id": "viz:shape-multivariate-profile"
+        },
+        {
+          "@id": "viz:shape-distribution"
+        },
+        {
+          "@id": "viz:shape-uncertainty"
+        },
+        {
+          "@id": "viz:shape-risk-drivers"
+        },
+        {
+          "@id": "viz:shape-threshold"
+        }
+      ],
+      "viz:supportsCognitiveMove": [
+        {
+          "@id": "viz:move-compare"
+        },
+        {
+          "@id": "viz:move-rank"
+        },
+        {
+          "@id": "viz:move-change"
+        },
+        {
+          "@id": "viz:move-before-after"
+        },
+        {
+          "@id": "viz:move-composition"
+        },
+        {
+          "@id": "viz:move-composition-groups"
+        },
+        {
+          "@id": "viz:move-profile"
+        },
+        {
+          "@id": "viz:move-distribution"
+        },
+        {
+          "@id": "viz:move-uncertainty"
+        },
+        {
+          "@id": "viz:move-risk"
+        },
+        {
+          "@id": "viz:move-executive-scan"
+        },
+        {
+          "@id": "viz:move-ai-ingestion"
+        }
+      ],
+      "viz:recommendsVisualForm": [
+        {
+          "@id": "viz:form-sorted-bar"
+        },
+        {
+          "@id": "viz:form-dot-plot"
+        },
+        {
+          "@id": "viz:form-lollipop"
+        },
+        {
+          "@id": "viz:form-line"
+        },
+        {
+          "@id": "viz:form-slope"
+        },
+        {
+          "@id": "viz:form-dumbbell"
+        },
+        {
+          "@id": "viz:form-stacked100"
+        },
+        {
+          "@id": "viz:form-ordered-table"
+        },
+        {
+          "@id": "viz:form-heatmap"
+        },
+        {
+          "@id": "viz:form-profile-table"
+        },
+        {
+          "@id": "viz:form-parallel"
+        },
+        {
+          "@id": "viz:form-histogram"
+        },
+        {
+          "@id": "viz:form-box-plot"
+        },
+        {
+          "@id": "viz:form-interval"
+        },
+        {
+          "@id": "viz:form-confidence-band"
+        },
+        {
+          "@id": "viz:form-tornado"
+        },
+        {
+          "@id": "viz:form-bullet"
+        },
+        {
+          "@id": "viz:form-sparkline-table"
+        },
+        {
+          "@id": "viz:form-circular-composition"
+        },
+        {
+          "@id": "viz:form-radial-profile"
+        }
+      ],
+      "viz:hasExemplar": [
+        {
+          "@id": "viz:ex-metadata-corrections-bar"
+        },
+        {
+          "@id": "viz:ex-delay-drivers-dot"
+        },
+        {
+          "@id": "viz:ex-readiness-dumbbell"
+        },
+        {
+          "@id": "viz:ex-weekly-queue-line"
+        },
+        {
+          "@id": "viz:ex-outcome-composition"
+        },
+        {
+          "@id": "viz:ex-support-maturity-heatmap"
+        },
+        {
+          "@id": "viz:ex-exception-interval"
+        },
+        {
+          "@id": "viz:ex-turnaround-tornado"
+        },
+        {
+          "@id": "viz:ex-readiness-bullet"
+        }
+      ],
+      "viz:hasCitation": [
+        {
+          "@id": "viz:cleveland-mcgill-1984"
+        },
+        {
+          "@id": "viz:cleveland-mcgill-1985"
+        },
+        {
+          "@id": "viz:heer-bostock-2010"
+        },
+        {
+          "@id": "viz:simkin-hastie-1987"
+        },
+        {
+          "@id": "viz:spence-1990"
+        },
+        {
+          "@id": "viz:skau-kosara-2016"
+        },
+        {
+          "@id": "viz:mackinlay-1986"
+        },
+        {
+          "@id": "viz:ware-information-vis"
+        },
+        {
+          "@id": "viz:ware-visual-thinking"
+        },
+        {
+          "@id": "viz:tufte-1983"
+        },
+        {
+          "@id": "viz:munzner-2014"
+        },
+        {
+          "@id": "viz:schwabish-2021"
+        },
+        {
+          "@id": "viz:evergreen"
+        },
+        {
+          "@id": "viz:davis-risks-ranking"
+        },
+        {
+          "@id": "viz:visualization-perception-survey"
+        },
+        {
+          "@id": "viz:zeng-battle-2021"
+        },
+        {
+          "@id": "viz:lo-misinformed-vis"
+        },
+        {
+          "@id": "viz:pandey-deceptive-2015"
+        },
+        {
+          "@id": "viz:cairo-2019"
+        },
+        {
+          "@id": "viz:waldner-2019"
+        },
+        {
+          "@id": "viz:inselberg-2009"
+        },
+        {
+          "@id": "viz:w3c-informative-images"
+        },
+        {
+          "@id": "viz:w3c-complex-images"
+        },
+        {
+          "@id": "viz:nguyen-llm-graphical-2025"
+        },
+        {
+          "@id": "viz:zhang-llm-graphical-2025"
+        },
+        {
+          "@id": "viz:chartqa-2022"
+        },
+        {
+          "@id": "viz:few-bullet-chart"
+        }
+      ]
+    },
+    {
+      "@id": "viz:primitive-category",
+      "@type": "viz:DataPrimitive",
+      "schema:name": "Category",
+      "schema:description": "Named groups, roles, stages, outcomes, or classes."
+    },
+    {
+      "@id": "viz:primitive-quantity",
+      "@type": "viz:DataPrimitive",
+      "schema:name": "Quantity",
+      "schema:description": "Numeric value, count, rate, percent, score, or estimate."
+    },
+    {
+      "@id": "viz:primitive-time",
+      "@type": "viz:DataPrimitive",
+      "schema:name": "Time",
+      "schema:description": "Ordered dates, periods, phases, or time intervals."
+    },
+    {
+      "@id": "viz:primitive-composition",
+      "@type": "viz:DataPrimitive",
+      "schema:name": "Composition",
+      "schema:description": "Parts that sum to a whole."
+    },
+    {
+      "@id": "viz:primitive-distribution",
+      "@type": "viz:DataPrimitive",
+      "schema:name": "Distribution",
+      "schema:description": "Spread, variation, outliers, density, or range of values."
+    },
+    {
+      "@id": "viz:primitive-uncertainty",
+      "@type": "viz:DataPrimitive",
+      "schema:name": "Uncertainty",
+      "schema:description": "Intervals, confidence ranges, probability bands, measurement error, or imprecision."
+    },
+    {
+      "@id": "viz:primitive-relationship",
+      "@type": "viz:DataPrimitive",
+      "schema:name": "Relationship",
+      "schema:description": "Association, dependency, flow, correlation, or influence among variables."
+    },
+    {
+      "@id": "viz:primitive-profile",
+      "@type": "viz:DataPrimitive",
+      "schema:name": "Profile",
+      "schema:description": "Multiple dimensions describing one or more entities."
+    },
+    {
+      "@id": "viz:shape-category-quantity",
+      "@type": "viz:DataShape",
+      "schema:name": "One category + one quantity",
+      "viz:hasPrimitive": [
+        {
+          "@id": "viz:primitive-category"
+        },
+        {
+          "@id": "viz:primitive-quantity"
+        }
+      ],
+      "schema:description": "Review delays by driver."
+    },
+    {
+      "@id": "viz:shape-ranked-values",
+      "@type": "viz:DataShape",
+      "schema:name": "Ranked values",
+      "viz:hasPrimitive": [
+        {
+          "@id": "viz:primitive-category"
+        },
+        {
+          "@id": "viz:primitive-quantity"
+        }
+      ],
+      "schema:description": "Top correction causes ordered by count."
+    },
+    {
+      "@id": "viz:shape-time-series",
+      "@type": "viz:DataShape",
+      "schema:name": "Time series",
+      "viz:hasPrimitive": [
+        {
+          "@id": "viz:primitive-time"
+        },
+        {
+          "@id": "viz:primitive-quantity"
+        }
+      ],
+      "schema:description": "Weekly queue volume."
+    },
+    {
+      "@id": "viz:shape-before-after",
+      "@type": "viz:DataShape",
+      "schema:name": "Before / after pairs",
+      "viz:hasPrimitive": [
+        {
+          "@id": "viz:primitive-category"
+        },
+        {
+          "@id": "viz:primitive-quantity"
+        }
+      ],
+      "schema:description": "Readiness before/after validation."
+    },
+    {
+      "@id": "viz:shape-composition",
+      "@type": "viz:DataShape",
+      "schema:name": "Part-to-whole composition",
+      "viz:hasPrimitive": [
+        {
+          "@id": "viz:primitive-composition"
+        },
+        {
+          "@id": "viz:primitive-category"
+        },
+        {
+          "@id": "viz:primitive-quantity"
+        }
+      ],
+      "schema:description": "Review outcomes as share of total."
+    },
+    {
+      "@id": "viz:shape-composition-groups",
+      "@type": "viz:DataShape",
+      "schema:name": "Composition across groups",
+      "viz:hasPrimitive": [
+        {
+          "@id": "viz:primitive-composition"
+        },
+        {
+          "@id": "viz:primitive-category"
+        },
+        {
+          "@id": "viz:primitive-quantity"
+        }
+      ],
+      "schema:description": "Outcome shares across teams."
+    },
+    {
+      "@id": "viz:shape-multivariate-profile",
+      "@type": "viz:DataShape",
+      "schema:name": "Multivariate profile",
+      "viz:hasPrimitive": [
+        {
+          "@id": "viz:primitive-profile"
+        },
+        {
+          "@id": "viz:primitive-category"
+        },
+        {
+          "@id": "viz:primitive-quantity"
+        }
+      ],
+      "schema:description": "Support maturity by role and dimension."
+    },
+    {
+      "@id": "viz:shape-distribution",
+      "@type": "viz:DataShape",
+      "schema:name": "Distribution by group",
+      "viz:hasPrimitive": [
+        {
+          "@id": "viz:primitive-distribution"
+        },
+        {
+          "@id": "viz:primitive-category"
+        },
+        {
+          "@id": "viz:primitive-quantity"
+        }
+      ],
+      "schema:description": "Resolution time spread by queue."
+    },
+    {
+      "@id": "viz:shape-uncertainty",
+      "@type": "viz:DataShape",
+      "schema:name": "Estimate with uncertainty",
+      "viz:hasPrimitive": [
+        {
+          "@id": "viz:primitive-uncertainty"
+        },
+        {
+          "@id": "viz:primitive-category"
+        },
+        {
+          "@id": "viz:primitive-quantity"
+        }
+      ],
+      "schema:description": "Estimated exception resolution time."
+    },
+    {
+      "@id": "viz:shape-risk-drivers",
+      "@type": "viz:DataShape",
+      "schema:name": "Risk / sensitivity drivers",
+      "viz:hasPrimitive": [
+        {
+          "@id": "viz:primitive-category"
+        },
+        {
+          "@id": "viz:primitive-quantity"
+        }
+      ],
+      "schema:description": "Turnaround sensitivity by driver."
+    },
+    {
+      "@id": "viz:shape-threshold",
+      "@type": "viz:DataShape",
+      "schema:name": "Actual vs threshold / target",
+      "viz:hasPrimitive": [
+        {
+          "@id": "viz:primitive-category"
+        },
+        {
+          "@id": "viz:primitive-quantity"
+        }
+      ],
+      "schema:description": "Metadata readiness vs good-enough threshold."
+    },
+    {
+      "@id": "viz:move-compare",
+      "@type": "viz:CognitiveMove",
+      "schema:name": "Compare categories",
+      "schema:description": "Which category is larger, smaller, or different?"
+    },
+    {
+      "@id": "viz:move-rank",
+      "@type": "viz:CognitiveMove",
+      "schema:name": "Rank values",
+      "schema:description": "What order should the reader see?"
+    },
+    {
+      "@id": "viz:move-change",
+      "@type": "viz:CognitiveMove",
+      "schema:name": "Show change over time",
+      "schema:description": "How is the value moving across time or phases?"
+    },
+    {
+      "@id": "viz:move-before-after",
+      "@type": "viz:CognitiveMove",
+      "schema:name": "Compare before and after",
+      "schema:description": "What changed between two states?"
+    },
+    {
+      "@id": "viz:move-composition",
+      "@type": "viz:CognitiveMove",
+      "schema:name": "Show composition",
+      "schema:description": "How do parts relate to the whole?"
+    },
+    {
+      "@id": "viz:move-composition-groups",
+      "@type": "viz:CognitiveMove",
+      "schema:name": "Compare composition across groups",
+      "schema:description": "How do part-to-whole patterns differ across groups?"
+    },
+    {
+      "@id": "viz:move-profile",
+      "@type": "viz:CognitiveMove",
+      "schema:name": "Compare multivariate profiles",
+      "schema:description": "How do several dimensions vary across entities?"
+    },
+    {
+      "@id": "viz:move-distribution",
+      "@type": "viz:CognitiveMove",
+      "schema:name": "Show distribution",
+      "schema:description": "What is the spread, range, or shape of values?"
+    },
+    {
+      "@id": "viz:move-uncertainty",
+      "@type": "viz:CognitiveMove",
+      "schema:name": "Show uncertainty",
+      "schema:description": "What range should remain visible?"
+    },
+    {
+      "@id": "viz:move-risk",
+      "@type": "viz:CognitiveMove",
+      "schema:name": "Show risk drivers",
+      "schema:description": "Which drivers create the largest sensitivity or impact?"
+    },
+    {
+      "@id": "viz:move-executive-scan",
+      "@type": "viz:CognitiveMove",
+      "schema:name": "Support fast scan",
+      "schema:description": "What can be seen quickly without hiding thresholds or caveats?"
+    },
+    {
+      "@id": "viz:move-ai-ingestion",
+      "@type": "viz:CognitiveMove",
+      "schema:name": "Support AI ingestion",
+      "schema:description": "Can a human and AI context holder interpret the same evidence path?"
+    },
+    {
+      "@id": "viz:form-sorted-bar",
+      "@type": "viz:VisualForm",
+      "schema:name": "Sorted bar chart",
+      "schema:description": "Categories have a numeric value and ranking matters.",
+      "viz:fidelityScore": 9,
+      "viz:accessibilityScore": 9,
+      "viz:aiReadinessScore": 9,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:cleveland-mcgill-1984"
+        },
+        {
+          "@id": "viz:heer-bostock-2010"
+        },
+        {
+          "@id": "viz:ware-visual-thinking"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-dot-plot",
+      "@type": "viz:VisualForm",
+      "schema:name": "Dot plot",
+      "schema:description": "Precise position comparison matters and labels can remain compact.",
+      "viz:fidelityScore": 9,
+      "viz:accessibilityScore": 9,
+      "viz:aiReadinessScore": 9,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:cleveland-mcgill-1984"
+        },
+        {
+          "@id": "viz:mackinlay-1986"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-lollipop",
+      "@type": "viz:VisualForm",
+      "schema:name": "Lollipop chart",
+      "schema:description": "A bar-like comparison needs a lighter visual surface.",
+      "viz:fidelityScore": 8,
+      "viz:accessibilityScore": 8,
+      "viz:aiReadinessScore": 8,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:cleveland-mcgill-1984"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-line",
+      "@type": "viz:VisualForm",
+      "schema:name": "Line chart",
+      "schema:description": "Time ordering is meaningful and continuity matters.",
+      "viz:fidelityScore": 9,
+      "viz:accessibilityScore": 8,
+      "viz:aiReadinessScore": 8,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:ware-information-vis"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-slope",
+      "@type": "viz:VisualForm",
+      "schema:name": "Slope chart",
+      "schema:description": "Two time points or states need comparison.",
+      "viz:fidelityScore": 8,
+      "viz:accessibilityScore": 8,
+      "viz:aiReadinessScore": 8,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:tufte-1983"
+        },
+        {
+          "@id": "viz:schwabish-2021"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-dumbbell",
+      "@type": "viz:VisualForm",
+      "schema:name": "Dumbbell chart",
+      "schema:description": "Each category has two comparable values.",
+      "viz:fidelityScore": 9,
+      "viz:accessibilityScore": 8,
+      "viz:aiReadinessScore": 8,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:schwabish-2021"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-stacked100",
+      "@type": "viz:VisualForm",
+      "schema:name": "100% stacked bar",
+      "schema:description": "Parts of a whole are compared across groups and category count is controlled.",
+      "viz:fidelityScore": 7,
+      "viz:accessibilityScore": 7,
+      "viz:aiReadinessScore": 7,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:spence-1990"
+        },
+        {
+          "@id": "viz:evergreen"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-ordered-table",
+      "@type": "viz:VisualForm",
+      "schema:name": "Ordered table",
+      "schema:description": "Labels and exact values matter as much as visual pattern.",
+      "viz:fidelityScore": 8,
+      "viz:accessibilityScore": 10,
+      "viz:aiReadinessScore": 10,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:w3c-complex-images"
+        },
+        {
+          "@id": "viz:schwabish-2021"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-heatmap",
+      "@type": "viz:VisualForm",
+      "schema:name": "Heatmap / matrix",
+      "schema:description": "Profile values form entity × dimension structure and labels can stay visible.",
+      "viz:fidelityScore": 8,
+      "viz:accessibilityScore": 7,
+      "viz:aiReadinessScore": 8,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:munzner-2014"
+        },
+        {
+          "@id": "viz:ware-information-vis"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-profile-table",
+      "@type": "viz:VisualForm",
+      "schema:name": "Profile table",
+      "schema:description": "Exact dimension values and comparability need to survive translation.",
+      "viz:fidelityScore": 8,
+      "viz:accessibilityScore": 10,
+      "viz:aiReadinessScore": 10,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:w3c-complex-images"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-parallel",
+      "@type": "viz:VisualForm",
+      "schema:name": "Parallel coordinates",
+      "schema:description": "Expert users need multivariate pattern detection and can support the complexity.",
+      "viz:fidelityScore": 7,
+      "viz:accessibilityScore": 5,
+      "viz:aiReadinessScore": 6,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:inselberg-2009"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-histogram",
+      "@type": "viz:VisualForm",
+      "schema:name": "Histogram",
+      "schema:description": "Distribution shape and bins matter.",
+      "viz:fidelityScore": 8,
+      "viz:accessibilityScore": 7,
+      "viz:aiReadinessScore": 7,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:munzner-2014"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-box-plot",
+      "@type": "viz:VisualForm",
+      "schema:name": "Box plot",
+      "schema:description": "A trained audience needs compact distribution summaries.",
+      "viz:fidelityScore": 7,
+      "viz:accessibilityScore": 6,
+      "viz:aiReadinessScore": 6,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:munzner-2014"
+        },
+        {
+          "@id": "viz:schwabish-2021"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-interval",
+      "@type": "viz:VisualForm",
+      "schema:name": "Interval plot",
+      "schema:description": "Estimate and range should be seen together.",
+      "viz:fidelityScore": 9,
+      "viz:accessibilityScore": 8,
+      "viz:aiReadinessScore": 8,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:schwabish-2021"
+        },
+        {
+          "@id": "viz:ware-information-vis"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-confidence-band",
+      "@type": "viz:VisualForm",
+      "schema:name": "Confidence band",
+      "schema:description": "Uncertainty changes across a time series.",
+      "viz:fidelityScore": 8,
+      "viz:accessibilityScore": 7,
+      "viz:aiReadinessScore": 7,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:schwabish-2021"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-tornado",
+      "@type": "viz:VisualForm",
+      "schema:name": "Tornado chart",
+      "schema:description": "Drivers have positive/negative or high/low sensitivity impacts.",
+      "viz:fidelityScore": 8,
+      "viz:accessibilityScore": 8,
+      "viz:aiReadinessScore": 8,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:schwabish-2021"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-bullet",
+      "@type": "viz:VisualForm",
+      "schema:name": "Bullet chart",
+      "schema:description": "Actual, good-enough threshold, and target should be scanned together.",
+      "viz:fidelityScore": 8,
+      "viz:accessibilityScore": 8,
+      "viz:aiReadinessScore": 8,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:few-bullet-chart"
+        },
+        {
+          "@id": "viz:schwabish-2021"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-sparkline-table",
+      "@type": "viz:VisualForm",
+      "schema:name": "Sparkline plus table",
+      "schema:description": "Trend and exact values should travel together.",
+      "viz:fidelityScore": 8,
+      "viz:accessibilityScore": 8,
+      "viz:aiReadinessScore": 9,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:tufte-1983"
+        },
+        {
+          "@id": "viz:w3c-complex-images"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-circular-composition",
+      "@type": "viz:VisualForm",
+      "schema:name": "Circular composition view",
+      "schema:description": "Only for rough shape recognition with very few categories and low decision stakes.",
+      "viz:fidelityScore": 3,
+      "viz:accessibilityScore": 4,
+      "viz:aiReadinessScore": 4,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:simkin-hastie-1987"
+        },
+        {
+          "@id": "viz:spence-1990"
+        },
+        {
+          "@id": "viz:skau-kosara-2016"
+        }
+      ]
+    },
+    {
+      "@id": "viz:form-radial-profile",
+      "@type": "viz:VisualForm",
+      "schema:name": "Radial profile view",
+      "schema:description": "Only when the phenomenon is genuinely cyclic or approximate shape recognition is the task.",
+      "viz:fidelityScore": 3,
+      "viz:accessibilityScore": 4,
+      "viz:aiReadinessScore": 4,
+      "viz:hasCitation": [
+        {
+          "@id": "viz:waldner-2019"
+        },
+        {
+          "@id": "viz:inselberg-2009"
+        }
+      ]
+    },
+    {
+      "@id": "viz:rec-compare-category-quantity",
+      "@type": "viz:VisualRecommendation",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-category-quantity"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-compare"
+      },
+      "viz:recommendsVisualForm": [
+        {
+          "@id": "viz:form-sorted-bar"
+        },
+        {
+          "@id": "viz:form-dot-plot"
+        },
+        {
+          "@id": "viz:form-lollipop"
+        }
+      ],
+      "schema:description": "Shared scale and aligned length support direct comparison across categories."
+    },
+    {
+      "@id": "viz:rec-rank-values",
+      "@type": "viz:VisualRecommendation",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-ranked-values"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-rank"
+      },
+      "viz:recommendsVisualForm": [
+        {
+          "@id": "viz:form-sorted-bar"
+        },
+        {
+          "@id": "viz:form-dot-plot"
+        },
+        {
+          "@id": "viz:form-ordered-table"
+        }
+      ],
+      "schema:description": "Ordering should be visible without legend hunting or shape estimation."
+    },
+    {
+      "@id": "viz:rec-time-series",
+      "@type": "viz:VisualRecommendation",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-time-series"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-change"
+      },
+      "viz:recommendsVisualForm": [
+        {
+          "@id": "viz:form-line"
+        }
+      ],
+      "schema:description": "Time ordering should remain visible on a stable axis."
+    },
+    {
+      "@id": "viz:rec-before-after",
+      "@type": "viz:VisualRecommendation",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-before-after"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-before-after"
+      },
+      "viz:recommendsVisualForm": [
+        {
+          "@id": "viz:form-dumbbell"
+        },
+        {
+          "@id": "viz:form-slope"
+        }
+      ],
+      "schema:description": "Paired values should be compared across a shared scale."
+    },
+    {
+      "@id": "viz:rec-composition",
+      "@type": "viz:VisualRecommendation",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-composition"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-composition"
+      },
+      "viz:recommendsVisualForm": [
+        {
+          "@id": "viz:form-stacked100"
+        },
+        {
+          "@id": "viz:form-ordered-table"
+        }
+      ],
+      "schema:description": "Part-to-whole structure should remain visible while keeping values comparable."
+    },
+    {
+      "@id": "viz:rec-composition-groups",
+      "@type": "viz:VisualRecommendation",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-composition-groups"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-composition-groups"
+      },
+      "viz:recommendsVisualForm": [
+        {
+          "@id": "viz:form-stacked100"
+        },
+        {
+          "@id": "viz:form-heatmap"
+        },
+        {
+          "@id": "viz:form-ordered-table"
+        }
+      ],
+      "schema:description": "Composition across groups needs a repeated baseline or a scannable matrix."
+    },
+    {
+      "@id": "viz:rec-profile",
+      "@type": "viz:VisualRecommendation",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-multivariate-profile"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-profile"
+      },
+      "viz:recommendsVisualForm": [
+        {
+          "@id": "viz:form-heatmap"
+        },
+        {
+          "@id": "viz:form-profile-table"
+        },
+        {
+          "@id": "viz:form-dot-plot"
+        }
+      ],
+      "schema:description": "Profile comparison should keep each dimension readable and avoid treating polygon shape as evidence."
+    },
+    {
+      "@id": "viz:rec-distribution",
+      "@type": "viz:VisualRecommendation",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-distribution"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-distribution"
+      },
+      "viz:recommendsVisualForm": [
+        {
+          "@id": "viz:form-histogram"
+        },
+        {
+          "@id": "viz:form-box-plot"
+        }
+      ],
+      "schema:description": "Distribution shape and spread need visible bins, ranges, or summary intervals."
+    },
+    {
+      "@id": "viz:rec-uncertainty",
+      "@type": "viz:VisualRecommendation",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-uncertainty"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-uncertainty"
+      },
+      "viz:recommendsVisualForm": [
+        {
+          "@id": "viz:form-interval"
+        },
+        {
+          "@id": "viz:form-confidence-band"
+        }
+      ],
+      "schema:description": "Uncertainty should be visible as a range, not hidden behind a single confident mark."
+    },
+    {
+      "@id": "viz:rec-risk",
+      "@type": "viz:VisualRecommendation",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-risk-drivers"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-risk"
+      },
+      "viz:recommendsVisualForm": [
+        {
+          "@id": "viz:form-tornado"
+        },
+        {
+          "@id": "viz:form-sorted-bar"
+        }
+      ],
+      "schema:description": "Sensitivity drivers should be ordered so the largest impact is easy to see."
+    },
+    {
+      "@id": "viz:rec-threshold",
+      "@type": "viz:VisualRecommendation",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-threshold"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-executive-scan"
+      },
+      "viz:recommendsVisualForm": [
+        {
+          "@id": "viz:form-bullet"
+        },
+        {
+          "@id": "viz:form-sparkline-table"
+        }
+      ],
+      "schema:description": "Actual, threshold, and target should stay aligned for quick scan and audit."
+    },
+    {
+      "@id": "viz:rec-ai",
+      "@type": "viz:VisualRecommendation",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-category-quantity"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-ai-ingestion"
+      },
+      "viz:recommendsVisualForm": [
+        {
+          "@id": "viz:form-ordered-table"
+        },
+        {
+          "@id": "viz:form-sorted-bar"
+        },
+        {
+          "@id": "viz:form-dot-plot"
+        }
+      ],
+      "schema:description": "AI-assisted interpretation benefits from structured data, labels, units, text equivalent, and recoverable provenance."
+    },
+    {
+      "@id": "viz:ex-metadata-corrections-bar",
+      "@type": "viz:VisualizationExemplar",
+      "schema:name": "Which workflow stages create the most metadata corrections?",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-category-quantity"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-compare"
+      },
+      "viz:recommendsVisualForm": {
+        "@id": "viz:form-sorted-bar"
+      },
+      "schema:description": "Review creates the highest metadata correction rate at 41 corrections per 100 samples, followed by preparation at 31 and analysis at 24.",
+      "viz:hasCitation": [
+        {
+          "@id": "viz:cleveland-mcgill-1984"
+        },
+        {
+          "@id": "viz:heer-bostock-2010"
+        },
+        {
+          "@id": "viz:w3c-complex-images"
+        }
+      ]
+    },
+    {
+      "@id": "viz:ex-delay-drivers-dot",
+      "@type": "viz:VisualizationExemplar",
+      "schema:name": "Which review delay drivers should be triaged first?",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-ranked-values"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-rank"
+      },
+      "viz:recommendsVisualForm": {
+        "@id": "viz:form-dot-plot"
+      },
+      "schema:description": "Missing consent state is the largest review delay driver at 16 hours per case, followed by incomplete sample metadata at 13.",
+      "viz:hasCitation": [
+        {
+          "@id": "viz:cleveland-mcgill-1984"
+        },
+        {
+          "@id": "viz:davis-risks-ranking"
+        }
+      ]
+    },
+    {
+      "@id": "viz:ex-readiness-dumbbell",
+      "@type": "viz:VisualizationExemplar",
+      "schema:name": "Did metadata readiness improve after validation rules changed?",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-before-after"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-before-after"
+      },
+      "viz:recommendsVisualForm": {
+        "@id": "viz:form-dumbbell"
+      },
+      "schema:description": "All readiness dimensions improved. Source provenance rose from 58% to 82%, and consent state rose from 62% to 85%.",
+      "viz:hasCitation": [
+        {
+          "@id": "viz:schwabish-2021"
+        },
+        {
+          "@id": "viz:tufte-1983"
+        }
+      ]
+    },
+    {
+      "@id": "viz:ex-weekly-queue-line",
+      "@type": "viz:VisualizationExemplar",
+      "schema:name": "Is review queue volume stabilizing over time?",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-time-series"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-change"
+      },
+      "viz:recommendsVisualForm": {
+        "@id": "viz:form-line"
+      },
+      "schema:description": "Queue volume peaked in week 3 at 54 items and then declined steadily to 31 by week 8.",
+      "viz:hasCitation": [
+        {
+          "@id": "viz:ware-information-vis"
+        }
+      ]
+    },
+    {
+      "@id": "viz:ex-outcome-composition",
+      "@type": "viz:VisualizationExemplar",
+      "schema:name": "How do review outcomes differ across teams?",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-composition-groups"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-composition-groups"
+      },
+      "viz:recommendsVisualForm": {
+        "@id": "viz:form-stacked100"
+      },
+      "schema:description": "Team C has the highest approved share at 71%; Team B has the highest needs-evidence and escalated shares.",
+      "viz:hasCitation": [
+        {
+          "@id": "viz:spence-1990"
+        },
+        {
+          "@id": "viz:w3c-complex-images"
+        }
+      ]
+    },
+    {
+      "@id": "viz:ex-support-maturity-heatmap",
+      "@type": "viz:VisualizationExemplar",
+      "schema:name": "Where is workflow support strongest by role and dimension?",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-multivariate-profile"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-profile"
+      },
+      "viz:recommendsVisualForm": {
+        "@id": "viz:form-heatmap"
+      },
+      "schema:description": "Data stewards have the strongest metadata and audit support. Coordinators have strong consent support but lower AI boundary support.",
+      "viz:hasCitation": [
+        {
+          "@id": "viz:munzner-2014"
+        },
+        {
+          "@id": "viz:ware-information-vis"
+        },
+        {
+          "@id": "viz:w3c-complex-images"
+        }
+      ]
+    },
+    {
+      "@id": "viz:ex-exception-interval",
+      "@type": "viz:VisualizationExemplar",
+      "schema:name": "What resolution range should remain visible for consent exceptions?",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-uncertainty"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-uncertainty"
+      },
+      "viz:recommendsVisualForm": {
+        "@id": "viz:form-interval"
+      },
+      "schema:description": "Escalation has the longest estimated resolution time and widest range, 40 to 84 hours.",
+      "viz:hasCitation": [
+        {
+          "@id": "viz:schwabish-2021"
+        },
+        {
+          "@id": "viz:visualization-perception-survey"
+        }
+      ]
+    },
+    {
+      "@id": "viz:ex-turnaround-tornado",
+      "@type": "viz:VisualizationExemplar",
+      "schema:name": "Which drivers most affect review turnaround?",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-risk-drivers"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-risk"
+      },
+      "viz:recommendsVisualForm": {
+        "@id": "viz:form-tornado"
+      },
+      "schema:description": "Queue volume and consent completeness create the largest positive turnaround risk, while staffing availability creates a large negative-to-positive range.",
+      "viz:hasCitation": [
+        {
+          "@id": "viz:schwabish-2021"
+        },
+        {
+          "@id": "viz:lo-misinformed-vis"
+        }
+      ]
+    },
+    {
+      "@id": "viz:ex-readiness-bullet",
+      "@type": "viz:VisualizationExemplar",
+      "schema:name": "Is metadata readiness above the good-enough threshold?",
+      "viz:hasDataShape": {
+        "@id": "viz:shape-threshold"
+      },
+      "viz:supportsCognitiveMove": {
+        "@id": "viz:move-executive-scan"
+      },
+      "viz:recommendsVisualForm": {
+        "@id": "viz:form-bullet"
+      },
+      "schema:description": "Metadata readiness is 84%, above the good-enough threshold of 80% and below the desired target of 92%.",
+      "viz:hasCitation": [
+        {
+          "@id": "viz:few-bullet-chart"
+        },
+        {
+          "@id": "viz:schwabish-2021"
+        }
+      ]
+    },
+    {
+      "@id": "viz:cleveland-mcgill-1984",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Cleveland & McGill 1984",
+      "schema:description": "Cleveland, W. S., and McGill, R. “Graphical Perception: Theory, Experimentation, and Application to the Development of Graphical Methods.” Journal of the American Statistical Association, 1984.",
+      "viz:supports": "position/length as reliable quantitative encodings"
+    },
+    {
+      "@id": "viz:cleveland-mcgill-1985",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Cleveland & McGill 1985",
+      "schema:description": "Cleveland, W. S., and McGill, R. “Graphical Perception and Graphical Methods for Analyzing Scientific Data.” Science, 1985.",
+      "viz:supports": "graphical perception and scientific data analysis"
+    },
+    {
+      "@id": "viz:heer-bostock-2010",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Heer & Bostock 2010",
+      "schema:description": "Heer, J., and Bostock, M. “Crowdsourcing Graphical Perception: Using Mechanical Turk to Assess Visualization Design.” CHI, 2010.",
+      "viz:supports": "web-scale graphical perception testing"
+    },
+    {
+      "@id": "viz:simkin-hastie-1987",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Simkin & Hastie 1987",
+      "schema:description": "Simkin, D., and Hastie, R. “An Information-Processing Analysis of Graph Perception.” JASA, 1987.",
+      "viz:supports": "comparison of graph perception tasks"
+    },
+    {
+      "@id": "viz:spence-1990",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Spence 1990",
+      "schema:description": "Spence, I. “Displaying Proportions and Percentages.” Applied Cognitive Psychology, 1990.",
+      "viz:supports": "part-to-whole and percentage display"
+    },
+    {
+      "@id": "viz:skau-kosara-2016",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Skau & Kosara 2016",
+      "schema:description": "Skau, D., and Kosara, R. “Arcs, Angles, or Areas: Individual Data Encodings in Pie and Donut Charts.” Computer Graphics Forum, 2016.",
+      "viz:supports": "pie/donut chart encodings"
+    },
+    {
+      "@id": "viz:mackinlay-1986",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Mackinlay 1986",
+      "schema:description": "Mackinlay, J. D. “Automating the Design of Graphical Presentations of Relational Information.” ACM TOG, 1986.",
+      "viz:supports": "automated visualization design and perceptual encodings"
+    },
+    {
+      "@id": "viz:ware-information-vis",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Ware, Information Visualization",
+      "schema:description": "Ware, C. Information Visualization: Perception for Design. Morgan Kaufmann.",
+      "viz:supports": "visual perception and design"
+    },
+    {
+      "@id": "viz:ware-visual-thinking",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Ware 2008",
+      "schema:description": "Ware, C. Visual Thinking for Design. Morgan Kaufmann, 2008.",
+      "viz:supports": "visual thinking and cognitive design"
+    },
+    {
+      "@id": "viz:tufte-1983",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Tufte 1983",
+      "schema:description": "Tufte, E. R. The Visual Display of Quantitative Information. Graphics Press, 1983.",
+      "viz:supports": "evidence-rich chart design"
+    },
+    {
+      "@id": "viz:munzner-2014",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Munzner 2014",
+      "schema:description": "Munzner, T. Visualization Analysis and Design. CRC Press, 2014.",
+      "viz:supports": "visualization task and data abstraction"
+    },
+    {
+      "@id": "viz:schwabish-2021",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Schwabish 2021",
+      "schema:description": "Schwabish, J. A. Better Data Visualizations. Columbia University Press, 2021.",
+      "viz:supports": "practical chart selection and accessibility"
+    },
+    {
+      "@id": "viz:evergreen",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Evergreen",
+      "schema:description": "Evergreen, S. D. Effective Data Visualization. SAGE.",
+      "viz:supports": "effective and accessible data visualization practices"
+    },
+    {
+      "@id": "viz:davis-risks-ranking",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Davis et al. 2022",
+      "schema:description": "Davis, R., Pu, X., Ding, Y., Hall, B. D., Bonilla, K., Feng, M., Kay, M., and Harrison, L. “The Risks of Ranking.” arXiv:2212.10533, 2022.",
+      "viz:supports": "individual differences in graphical perception and ranking"
+    },
+    {
+      "@id": "viz:visualization-perception-survey",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Quadri & Rosen 2021",
+      "schema:description": "Quadri, G. J., and Rosen, P. “A Survey of Perception-Based Visualization Studies by Task.” arXiv:2107.07477, 2021.",
+      "viz:supports": "perception-based visualization studies by task"
+    },
+    {
+      "@id": "viz:zeng-battle-2021",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Zeng & Battle 2021",
+      "schema:description": "Zeng, Z., and Battle, L. “A Review and Collation of Graphical Perception Knowledge for Visualization Recommendation.” arXiv:2109.01271, 2021.",
+      "viz:supports": "visualization recommendation and graphical perception"
+    },
+    {
+      "@id": "viz:lo-misinformed-vis",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Lo et al. 2022",
+      "schema:description": "Lo, L. Y.-H., Gupta, A., Shigyo, K., Wu, A., Bertini, E., and Qu, H. “Misinformed by Visualization.” arXiv:2204.09548, 2022.",
+      "viz:supports": "misleading visualization taxonomy and governance risk"
+    },
+    {
+      "@id": "viz:pandey-deceptive-2015",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Pandey et al. 2015",
+      "schema:description": "Pandey, A. V., Rall, K., Satterthwaite, M. L., Nov, O., and Bertini, E. “How Deceptive Are Deceptive Visualizations?” CHI, 2015.",
+      "viz:supports": "deceptive visualization techniques"
+    },
+    {
+      "@id": "viz:cairo-2019",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Cairo 2019",
+      "schema:description": "Cairo, A. How Charts Lie. W. W. Norton, 2019.",
+      "viz:supports": "visual claims and misinformation"
+    },
+    {
+      "@id": "viz:waldner-2019",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Waldner et al. 2019",
+      "schema:description": "Waldner, M., Diehl, A., Gracanin, D., Splechtna, R., Delrieux, C., and Matkovic, K. “A Comparison of Radial and Linear Charts for Visualizing Daily Patterns.” arXiv:1907.13534, 2019.",
+      "viz:supports": "radial vs linear chart comparison"
+    },
+    {
+      "@id": "viz:inselberg-2009",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Inselberg 2009",
+      "schema:description": "Inselberg, A. Parallel Coordinates. Springer, 2009.",
+      "viz:supports": "parallel coordinates for multivariate geometry"
+    },
+    {
+      "@id": "viz:w3c-informative-images",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "W3C Informative Images",
+      "schema:description": "W3C WAI. “Images Tutorial: Informative Images.”",
+      "viz:supports": "accessible image guidance"
+    },
+    {
+      "@id": "viz:w3c-complex-images",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "W3C Complex Images",
+      "schema:description": "W3C WAI. “Charts, Graphs, and Maps.”",
+      "viz:supports": "accessible complex images and data tables"
+    },
+    {
+      "@id": "viz:nguyen-llm-graphical-2025",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Nguyen et al. 2025",
+      "schema:description": "Nguyen, R. H., Maeda, K., Geshvadi, M., and Haehn, D. “Evaluating Graphical Perception with Multimodal LLMs.” arXiv:2504.04221, 2025.",
+      "viz:supports": "multimodal LLM graphical perception"
+    },
+    {
+      "@id": "viz:zhang-llm-graphical-2025",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Zhang et al. 2025",
+      "schema:description": "Zhang, Y., et al. “Towards Understanding Graphical Perception in Large Multimodal Models.” arXiv:2503.10857, 2025.",
+      "viz:supports": "large multimodal model chart perception"
+    },
+    {
+      "@id": "viz:chartqa-2022",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Masry et al. 2022",
+      "schema:description": "Masry, A., Do Long, Tan, J. Q., Joty, S., and Hoque, E. “ChartQA.” Findings of ACL, 2022.",
+      "viz:supports": "chart question answering benchmark"
+    },
+    {
+      "@id": "viz:few-bullet-chart",
+      "@type": "viz:CitationAnchor",
+      "schema:name": "Few, Bullet Graph",
+      "schema:description": "Few, S. “Bullet Graph Design Specification.” Perceptual Edge.",
+      "viz:supports": "bullet graph as compact actual/target/threshold display"
+    }
+  ]
+}
+</script>
+<style>
+:root {
+  --bg: #f7f5ef;
+  --panel: #fffdf8;
+  --panel-2: #f0ece2;
+  --ink: #25231f;
+  --muted: #6e685d;
+  --line: #d8d0c0;
+  --line-strong: #a7967e;
+  --accent: #5f6f52;
+  --accent-2: #8a6a42;
+  --accent-3: #5e7286;
+  --soft: #e7e0d2;
+  --soft-green: #e9eee3;
+  --soft-blue: #e5ebef;
+  --soft-amber: #f0e5d3;
+  --danger-soft: #f0ded8;
+  --radius: 18px;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.45;
+}
+header {
+  padding: 34px clamp(18px, 4vw, 56px) 22px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(135deg, #fffdf8 0%, #f0ece2 100%);
+}
+h1 { margin: 0 0 8px; font-size: clamp(2rem, 5vw, 4rem); letter-spacing: -0.045em; }
+h2 { margin: 0 0 14px; font-size: clamp(1.4rem, 3vw, 2.2rem); letter-spacing: -0.025em; }
+h3 { margin: 0 0 8px; font-size: 1.08rem; }
+p { margin: 0 0 12px; }
+a {
+  color: #395d7a;
+  text-decoration-thickness: .11em;
+  text-underline-offset: .18em;
+}
+small { color: var(--muted); }
+main {
+  width: min(1680px, 100%);
+  margin: 0 auto;
+  padding: 20px clamp(12px, 2vw, 28px) 48px;
+}
+.badge-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.badge {
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.65);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: .82rem;
+  color: var(--muted);
+}
+.grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 440px) 1fr;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .grid { grid-template-columns: 1fr; }
+}
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: 0 10px 26px rgba(49, 42, 32, .06);
+}
+.panel + .panel { margin-top: 16px; }
+.controls {
+  display:grid;
+  gap: 12px;
+}
+label {
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 700;
+}
+select, input, textarea, button {
+  font: inherit;
+}
+select, input[type="text"], textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #fffefb;
+  border-radius: 10px;
+  padding: 10px;
+  color: var(--ink);
+}
+textarea { min-height: 120px; resize: vertical; }
+button {
+  border: 1px solid var(--line-strong);
+  background: #fffaf0;
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 9px 11px;
+  cursor: pointer;
+}
+button:hover { background: #f4ead8; }
+button:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+input:focus-visible,
+summary:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--accent-3);
+  outline-offset: 3px;
+}
+.button-row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.kpi-grid {
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 8px;
+}
+.kpi {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px;
+}
+.kpi strong { display:block; font-size: 1.15rem; }
+.kpi span { color: var(--muted); font-size: .78rem; }
+.rec-section {
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 10px;
+}
+@media (max-width: 900px) { .rec-section { grid-template-columns: 1fr; } }
+.rec-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  background: #fffefb;
+}
+.rec-card.recommended { background: var(--soft-green); }
+.rec-card.conditional { background: var(--soft-blue); }
+.rec-card.reserved { background: var(--soft-amber); }
+.form-choice {
+  display:inline-flex;
+  align-items:center;
+  gap: .45rem;
+  border:1px solid var(--line-strong);
+  border-radius: 7px;
+  padding: 7px;
+  margin: 4px 4px 0 0;
+  background: rgba(255,255,255,.72);
+  font-size: .84rem;
+  cursor:pointer;
+}
+.form-choice:hover { background: #fff7e8; }
+.form-choice[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--ink);
+  color: #fff;
+  box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px var(--accent);
+}
+.form-choice__state {
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.selected-form {
+  margin-top: 14px;
+  border: 2px solid var(--accent);
+  border-radius: 14px;
+  padding: 14px;
+  background: var(--panel);
+}
+.selected-form__eyebrow,
+.ex-card__state {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--accent);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.selected-form__guidance {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+.selected-form__guidance > div {
+  border-left: 3px solid var(--line-strong);
+  padding-left: 10px;
+}
+.selected-form__guidance strong { display: block; }
+.status {
+  min-height: 1.45em;
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 700;
+}
+.copy-output { margin-top: 10px; }
+.copy-output textarea { min-height: 96px; }
+.file-input {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fffefb;
+  padding: 10px;
+  color: var(--ink);
+}
+.visual-surface {
+  min-height: 430px;
+  overflow: auto;
+}
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.gallery {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+  gap: 12px;
+}
+.ex-card {
+  border:1px solid var(--line);
+  background:#fffefb;
+  border-radius:14px;
+  padding:12px;
+}
+.ex-card.selected {
+  outline: 3px double var(--accent);
+  border-color: var(--accent);
+}
+.ex-card.selected .ex-card__state { color: var(--ink); }
+.meta {
+  color: var(--muted);
+  font-size: .8rem;
+}
+.table-wrap { overflow:auto; border:1px solid var(--line); border-radius:12px; background:#fffefb; }
+table { width:100%; border-collapse:collapse; font-size:.9rem; }
+th,td { border-bottom:1px solid var(--line); padding:8px 9px; text-align:left; vertical-align:top; }
+th { background:#efe9dc; color:#4d473d; position:sticky; top:0; z-index:1; }
+tr:last-child td { border-bottom:0; }
+.source-chip {
+  display:inline-block;
+  border:1px solid var(--line);
+  border-radius: 5px;
+  padding: 7px;
+  margin: 4px 4px 0 0;
+  font-size: .78rem;
+  background: #fffefb;
+}
+.code {
+  font-family: var(--mono);
+  font-size: .8rem;
+  background: #f1ede5;
+  border: 1px solid var(--line);
+  padding: 2px 5px;
+  border-radius: 6px;
+}
+.checklist {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap:10px;
+}
+.checkitem {
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
+  border:1px solid var(--line);
+  background:#fffefb;
+  border-radius:12px;
+  padding:10px;
+}
+footer {
+  padding: 28px clamp(18px, 4vw, 56px) 54px;
+  background:#ede7dc;
+  border-top:1px solid var(--line);
+}
+details {
+  border:1px solid var(--line);
+  background:#fffefb;
+  border-radius:12px;
+  padding:10px 12px;
+  margin:8px 0;
+}
+summary { cursor:pointer; font-weight:700; }
+.chart-title {
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.chart-subtitle {
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.notice {
+  background:#fff8e9;
+  border:1px solid #e0cfa9;
+  border-radius:14px;
+  padding:12px;
+}
+.noscript-note {
+  width: min(1680px, calc(100% - 24px));
+  margin: 20px auto 0;
+}
+@media (max-width: 520px) {
+  .kpi-grid,
+  .selected-form__guidance { grid-template-columns: 1fr; }
+  .button-row > button { flex: 1 1 12rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+@media (forced-colors: active) {
+  .panel,
+  .rec-card,
+  .selected-form,
+  .ex-card,
+  button,
+  select,
+  textarea,
+  input { forced-color-adjust: auto; }
+  .form-choice[aria-pressed="true"],
+  .ex-card.selected { outline: 3px double CanvasText; }
+}
+@media print {
+  body, header, footer, .panel, .rec-card, .selected-form, .ex-card { background: #fff; }
+  .button-row, .file-input, #jsonImport, .copy-output, .status { display: none; }
+  .panel, .rec-card, .selected-form, .ex-card { box-shadow: none; break-inside: avoid; }
+  .form-choice { border: 0; padding-left: 0; }
+  .form-choice[aria-pressed="true"] { color: #000; box-shadow: none; font-weight: 800; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="badge-row">
+    <span class="badge">Field Guide Stabilizer</span>
+    <span class="badge">Chimeric Prototype v0.1</span>
+    <span class="badge">HTML · SVG · JSON · JSON-LD</span>
+    <span class="badge">Experimental public schema candidate</span>
+  </div>
+  <h1>Visualization Fidelity Atlas</h1>
+  <h2>Data Shape → Cognitive Move → Visual Form</h2>
+  <p>Choose visual forms that make the decision task easier. Start with the question, identify the data shape, then use a chart form that carries the comparison burden with the least avoidable perceptual friction.</p>
+</header>
+<noscript>
+  <p class="notice noscript-note">The complete static selector, form guidance, source table, and evidence boundary remain available in the parent Visualization Fidelity Atlas reading. This full-view prototype adds live selection, import, and copy actions when JavaScript is available.</p>
+</noscript>
+<main>
+  <section class="grid">
+    <aside>
+      <div class="panel">
+        <h3>Quick use</h3>
+        <p><strong>Use this when</strong> building or reviewing a chart, diagram, or data surface for a specific audience.</p>
+        <p><strong>This restores</strong> interpretable visuals: comparison gets easier, sources stay visible, and uncertainty remains in view.</p>
+        <p><strong>Good next question</strong><br>What cognitive move should this visual support, and what would make it breathable rather than crowded?</p>
+      </div>
+      <div class="panel">
+        <h3>Selector</h3>
+        <div class="controls">
+          <label>Cognitive move
+            <select id="moveSelect"></select>
+          </label>
+          <label>Data shape
+            <select id="shapeSelect"></select>
+          </label>
+          <label>Audience / review context
+            <select id="audienceSelect">
+              <option value="mixed">Mixed human-AI review</option>
+              <option value="executive">Executive / fast scan</option>
+              <option value="technical">Technical review</option>
+              <option value="research">Research / methods review</option>
+              <option value="public">Public or broad audience</option>
+            </select>
+          </label>
+          <div class="button-row">
+            <label style="display:flex; gap:7px; align-items:center; font-weight:600;">
+              <input type="checkbox" id="uncertaintyToggle"> Uncertainty should remain visible
+            </label>
+            <label style="display:flex; gap:7px; align-items:center; font-weight:600;">
+              <input type="checkbox" id="aiToggle" checked> AI collaborator may ingest this
+            </label>
+            <label style="display:flex; gap:7px; align-items:center; font-weight:600;">
+              <input type="checkbox" id="reservedToggle" aria-describedby="reservedDescription" checked> Show Reserved recommendations
+            </label>
+          </div>
+          <p id="reservedDescription" class="meta">Reserved forms stay available for the uncommon contexts where their specific fit earns consideration.</p>
+          <button id="resetViewBtn" type="button">Reset selector</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Recommendation scores</h3>
+        <div class="kpi-grid" id="scoreGrid"></div>
+      </div>
+      <div class="panel">
+        <h3>AI prompt capsule</h3>
+        <p class="meta">Visible for manual copy. It includes the current selector state and doctrine.</p>
+        <textarea id="aiPrompt" readonly></textarea>
+        <div class="button-row"><button id="copyPromptBtn" type="button" aria-controls="copyOutput actionStatus">Copy prompt</button><button id="exportJsonBtn" type="button" aria-controls="copyOutput actionStatus">Copy Atlas JSON</button><button id="exportJsonLdBtn" type="button" aria-controls="copyOutput actionStatus">Copy JSON-LD</button></div>
+        <p id="actionStatus" class="status" role="status" aria-live="polite" aria-atomic="true"></p>
+        <label class="copy-output" for="copyOutput">Selected copy content
+          <textarea id="copyOutput" readonly placeholder="Choose a copy action to place its content here."></textarea>
+        </label>
+      </div>
+    </aside>
+    <section>
+      <div class="panel">
+        <h3>Recommendations</h3>
+        <p id="recReason" class="notice"></p>
+        <div class="rec-section" id="recommendations"></div>
+        <p id="selectionStatus" class="status" role="status" aria-live="polite" aria-atomic="true"></p>
+        <div id="selectedFormDetail" class="selected-form" role="region" aria-label="Selected visual form"></div>
+      </div>
+      <div class="panel">
+        <h3>Data-shape ladder</h3>
+        <div id="ladderSurface" class="visual-surface" aria-label="Data shape to visual form ladder"></div>
+      </div>
+      <div class="panel">
+        <h3>Selected exemplar</h3>
+        <div id="exemplarDetail"></div>
+      </div>
+    </section>
+  </section>
+  <section class="panel">
+    <h3>Clean exemplar gallery</h3>
+    <p class="meta">Each exemplar includes a chart, source data, text equivalent, AI-readable summary, and citation chips.</p>
+    <div class="gallery" id="gallery"></div>
+  </section>
+  <section class="panel">
+    <h3>Fidelity review checklist</h3>
+    <div class="checklist" id="checklist"></div>
+  </section>
+  <section class="panel">
+    <h3>JSON import</h3>
+    <p id="importDescription" class="meta">Paste Atlas JSON or choose a local <code>.json</code> file. Both routes use the same 1 MB size limit and checks before anything changes. The accepted Atlas stays active while a new candidate is checked, and imported data stays in this browser.</p>
+    <label for="jsonImport">Pasted JSON
+      <textarea id="jsonImport" aria-describedby="importDescription" placeholder="Paste Atlas JSON or a view-state object here"></textarea>
+    </label>
+    <label for="jsonFileInput">Local JSON file
+      <input class="file-input" id="jsonFileInput" type="file" accept="application/json,.json" aria-describedby="importDescription">
+    </label>
+    <div class="button-row"><button id="importJsonBtn" type="button" aria-controls="importStatus">Import pasted JSON</button></div>
+    <p id="importStatus" class="status" role="status" aria-live="polite" aria-atomic="true"></p>
+  </section>
+  <section class="panel">
+    <h3>Source note</h3>
+    <p>This prototype turns the Field Guide’s <strong>Visual &amp; Data Communication Stabilizers</strong> into a working selector. It combines qualitative review, graphical-perception research, accessibility guidance, and AI-readable evidence to select visual forms by cognitive move and data shape.</p>
+    <p class="meta">The combined prototype includes a human-readable surface, SVG examples, table equivalents, JSON export, a JSON-LD graph, a source note, and an AI prompt capsule.</p>
+  </section>
+</main>
+<footer>
+  <h3>Research anchors and citation footer</h3>
+  <p class="meta">Footer citations are intentionally visible. Exemplar-specific citation chips connect design rules to research anchors. Full bibliographic cleanup should live in the Field Guide Research Registry.</p>
+  <div id="citationFooter"></div>
+</footer>
+<script>
+const ATLAS = {"artifact_identity": {"id": "viz-atlas-001", "type": ["VisualizationFidelityAtlas", "FieldGuideStabilizer", "ChimericPrototype"], "display_name": "Visualization Fidelity Atlas", "subtitle": "Data Shape → Cognitive Move → Visual Form", "version": "0.1", "package_home": "@driftframe/field-guide", "schema_namespace": "https://schemas.radiantnull.com/visualization#", "status": "experimental_public", "primary_cognitive_move": "visualization selection and fidelity review", "source_band": ["author_adapted", "research_supported", "field_guide_stabilizer"]}, "quick_use": {"use_when": "Building or reviewing a chart, diagram, or data surface where the visual should carry meaning honestly for a specific audience.", "restores": "Interpretable visuals: comparison gets easier, sources and transformations stay visible, and uncertainty remains in view.", "good_next_question": "What cognitive move should this visual support, and what would make it breathable rather than crowded?", "hands_to": ["gist-registry", "Field Guide", "HEART Chart", "Shared Surface Priority Map", "AI Systems Service Blueprint"]}, "doctrine": {"short": "Use visual forms that make the decision task easier.", "negation_aware": ["When comparison matters, use a shared scale.", "When composition matters, use ordered structure.", "When profiles matter, keep each dimension readable.", "When uncertainty matters, make the range visible.", "When AI collaboration matters, pair the visual with structured data, captions, units, caveats, and provenance.", "Reserve circular and radial forms for rare, low-precision shape-recognition tasks where the dataset is small, the stakes are low, and direct values remain visible."], "bounded_region_rule": "Use bounded regions for grouping, identity, containment, and attention. When magnitude, rank, or close comparison matters, pair bounded regions with aligned evidence."}, "data_primitives": [{"id": "primitive-category", "label": "Category", "definition": "Named groups, roles, stages, outcomes, or classes."}, {"id": "primitive-quantity", "label": "Quantity", "definition": "Numeric value, count, rate, percent, score, or estimate."}, {"id": "primitive-time", "label": "Time", "definition": "Ordered dates, periods, phases, or time intervals."}, {"id": "primitive-composition", "label": "Composition", "definition": "Parts that sum to a whole."}, {"id": "primitive-distribution", "label": "Distribution", "definition": "Spread, variation, outliers, density, or range of values."}, {"id": "primitive-uncertainty", "label": "Uncertainty", "definition": "Intervals, confidence ranges, probability bands, measurement error, or imprecision."}, {"id": "primitive-relationship", "label": "Relationship", "definition": "Association, dependency, flow, correlation, or influence among variables."}, {"id": "primitive-profile", "label": "Profile", "definition": "Multiple dimensions describing one or more entities."}], "data_shapes": [{"id": "shape-category-quantity", "label": "One category + one quantity", "primitive_ids": ["primitive-category", "primitive-quantity"], "required_fields": ["category", "value"], "example": "Review delays by driver."}, {"id": "shape-ranked-values", "label": "Ranked values", "primitive_ids": ["primitive-category", "primitive-quantity"], "required_fields": ["category", "value", "rank"], "example": "Top correction causes ordered by count."}, {"id": "shape-time-series", "label": "Time series", "primitive_ids": ["primitive-time", "primitive-quantity"], "required_fields": ["time", "value"], "example": "Weekly queue volume."}, {"id": "shape-before-after", "label": "Before / after pairs", "primitive_ids": ["primitive-category", "primitive-quantity"], "required_fields": ["category", "before", "after"], "example": "Readiness before/after validation."}, {"id": "shape-composition", "label": "Part-to-whole composition", "primitive_ids": ["primitive-composition", "primitive-category", "primitive-quantity"], "required_fields": ["part", "percent"], "example": "Review outcomes as share of total."}, {"id": "shape-composition-groups", "label": "Composition across groups", "primitive_ids": ["primitive-composition", "primitive-category", "primitive-quantity"], "required_fields": ["group", "part", "percent"], "example": "Outcome shares across teams."}, {"id": "shape-multivariate-profile", "label": "Multivariate profile", "primitive_ids": ["primitive-profile", "primitive-category", "primitive-quantity"], "required_fields": ["entity", "dimension", "value"], "example": "Support maturity by role and dimension."}, {"id": "shape-distribution", "label": "Distribution by group", "primitive_ids": ["primitive-distribution", "primitive-category", "primitive-quantity"], "required_fields": ["group", "values"], "example": "Resolution time spread by queue."}, {"id": "shape-uncertainty", "label": "Estimate with uncertainty", "primitive_ids": ["primitive-uncertainty", "primitive-category", "primitive-quantity"], "required_fields": ["category", "estimate", "lower", "upper"], "example": "Estimated exception resolution time."}, {"id": "shape-risk-drivers", "label": "Risk / sensitivity drivers", "primitive_ids": ["primitive-category", "primitive-quantity"], "required_fields": ["driver", "impact"], "example": "Turnaround sensitivity by driver."}, {"id": "shape-threshold", "label": "Actual vs threshold / target", "primitive_ids": ["primitive-category", "primitive-quantity"], "required_fields": ["label", "actual", "threshold", "target"], "example": "Metadata readiness vs good-enough threshold."}], "cognitive_moves": [{"id": "move-compare", "label": "Compare categories", "prompt": "Which category is larger, smaller, or different?"}, {"id": "move-rank", "label": "Rank values", "prompt": "What order should the reader see?"}, {"id": "move-change", "label": "Show change over time", "prompt": "How is the value moving across time or phases?"}, {"id": "move-before-after", "label": "Compare before and after", "prompt": "What changed between two states?"}, {"id": "move-composition", "label": "Show composition", "prompt": "How do parts relate to the whole?"}, {"id": "move-composition-groups", "label": "Compare composition across groups", "prompt": "How do part-to-whole patterns differ across groups?"}, {"id": "move-profile", "label": "Compare multivariate profiles", "prompt": "How do several dimensions vary across entities?"}, {"id": "move-distribution", "label": "Show distribution", "prompt": "What is the spread, range, or shape of values?"}, {"id": "move-uncertainty", "label": "Show uncertainty", "prompt": "What range should remain visible?"}, {"id": "move-risk", "label": "Show risk drivers", "prompt": "Which drivers create the largest sensitivity or impact?"}, {"id": "move-executive-scan", "label": "Support fast scan", "prompt": "What can be seen quickly without hiding thresholds or caveats?"}, {"id": "move-ai-ingestion", "label": "Support AI ingestion", "prompt": "Can a human and AI context holder interpret the same evidence path?"}], "visual_forms": [{"id": "form-sorted-bar", "label": "Sorted bar chart", "family": "aligned scale", "best_for": ["move-compare", "move-rank"], "works_when": "Categories have a numeric value and ranking matters.", "citation_ids": ["cleveland-mcgill-1984", "heer-bostock-2010", "ware-visual-thinking"], "fidelity": 9, "accessibility": 9, "ai_readiness": 9}, {"id": "form-dot-plot", "label": "Dot plot", "family": "position on common scale", "best_for": ["move-compare", "move-rank"], "works_when": "Precise position comparison matters and labels can remain compact.", "citation_ids": ["cleveland-mcgill-1984", "mackinlay-1986"], "fidelity": 9, "accessibility": 9, "ai_readiness": 9}, {"id": "form-lollipop", "label": "Lollipop chart", "family": "aligned scale", "best_for": ["move-compare", "move-rank"], "works_when": "A bar-like comparison needs a lighter visual surface.", "citation_ids": ["cleveland-mcgill-1984"], "fidelity": 8, "accessibility": 8, "ai_readiness": 8}, {"id": "form-line", "label": "Line chart", "family": "time series", "best_for": ["move-change"], "works_when": "Time ordering is meaningful and continuity matters.", "citation_ids": ["ware-information-vis"], "fidelity": 9, "accessibility": 8, "ai_readiness": 8}, {"id": "form-slope", "label": "Slope chart", "family": "before / after", "best_for": ["move-before-after", "move-change"], "works_when": "Two time points or states need comparison.", "citation_ids": ["tufte-1983", "schwabish-2021"], "fidelity": 8, "accessibility": 8, "ai_readiness": 8}, {"id": "form-dumbbell", "label": "Dumbbell chart", "family": "paired comparison", "best_for": ["move-before-after"], "works_when": "Each category has two comparable values.", "citation_ids": ["schwabish-2021"], "fidelity": 9, "accessibility": 8, "ai_readiness": 8}, {"id": "form-stacked100", "label": "100% stacked bar", "family": "composition", "best_for": ["move-composition", "move-composition-groups"], "works_when": "Parts of a whole are compared across groups and category count is controlled.", "citation_ids": ["spence-1990", "evergreen"], "fidelity": 7, "accessibility": 7, "ai_readiness": 7}, {"id": "form-ordered-table", "label": "Ordered table", "family": "direct value surface", "best_for": ["move-composition", "move-compare", "move-ai-ingestion"], "works_when": "Labels and exact values matter as much as visual pattern.", "citation_ids": ["w3c-complex-images", "schwabish-2021"], "fidelity": 8, "accessibility": 10, "ai_readiness": 10}, {"id": "form-heatmap", "label": "Heatmap / matrix", "family": "matrix", "best_for": ["move-profile"], "works_when": "Profile values form entity × dimension structure and labels can stay visible.", "citation_ids": ["munzner-2014", "ware-information-vis"], "fidelity": 8, "accessibility": 7, "ai_readiness": 8}, {"id": "form-profile-table", "label": "Profile table", "family": "direct profile", "best_for": ["move-profile", "move-ai-ingestion"], "works_when": "Exact dimension values and comparability need to survive translation.", "citation_ids": ["w3c-complex-images"], "fidelity": 8, "accessibility": 10, "ai_readiness": 10}, {"id": "form-parallel", "label": "Parallel coordinates", "family": "expert multivariate", "best_for": ["move-profile"], "works_when": "Expert users need multivariate pattern detection and can support the complexity.", "citation_ids": ["inselberg-2009"], "fidelity": 7, "accessibility": 5, "ai_readiness": 6}, {"id": "form-histogram", "label": "Histogram", "family": "distribution", "best_for": ["move-distribution"], "works_when": "Distribution shape and bins matter.", "citation_ids": ["munzner-2014"], "fidelity": 8, "accessibility": 7, "ai_readiness": 7}, {"id": "form-box-plot", "label": "Box plot", "family": "distribution", "best_for": ["move-distribution"], "works_when": "A trained audience needs compact distribution summaries.", "citation_ids": ["munzner-2014", "schwabish-2021"], "fidelity": 7, "accessibility": 6, "ai_readiness": 6}, {"id": "form-interval", "label": "Interval plot", "family": "uncertainty", "best_for": ["move-uncertainty"], "works_when": "Estimate and range should be seen together.", "citation_ids": ["schwabish-2021", "ware-information-vis"], "fidelity": 9, "accessibility": 8, "ai_readiness": 8}, {"id": "form-confidence-band", "label": "Confidence band", "family": "uncertainty over time", "best_for": ["move-uncertainty", "move-change"], "works_when": "Uncertainty changes across a time series.", "citation_ids": ["schwabish-2021"], "fidelity": 8, "accessibility": 7, "ai_readiness": 7}, {"id": "form-tornado", "label": "Tornado chart", "family": "sensitivity / risk", "best_for": ["move-risk"], "works_when": "Drivers have positive/negative or high/low sensitivity impacts.", "citation_ids": ["schwabish-2021"], "fidelity": 8, "accessibility": 8, "ai_readiness": 8}, {"id": "form-bullet", "label": "Bullet chart", "family": "threshold scan", "best_for": ["move-executive-scan"], "works_when": "Actual, good-enough threshold, and target should be scanned together.", "citation_ids": ["few-bullet-chart", "schwabish-2021"], "fidelity": 8, "accessibility": 8, "ai_readiness": 8}, {"id": "form-sparkline-table", "label": "Sparkline plus table", "family": "compact trend + values", "best_for": ["move-executive-scan", "move-ai-ingestion"], "works_when": "Trend and exact values should travel together.", "citation_ids": ["tufte-1983", "w3c-complex-images"], "fidelity": 8, "accessibility": 8, "ai_readiness": 9}, {"id": "form-circular-composition", "label": "Circular composition view", "family": "reserved / conditional", "best_for": ["move-composition"], "works_when": "Only for rough shape recognition with very few categories and low decision stakes.", "citation_ids": ["simkin-hastie-1987", "spence-1990", "skau-kosara-2016"], "fidelity": 3, "accessibility": 4, "ai_readiness": 4}, {"id": "form-radial-profile", "label": "Radial profile view", "family": "reserved / conditional", "best_for": ["move-profile"], "works_when": "Only when the phenomenon is genuinely cyclic or approximate shape recognition is the task.", "citation_ids": ["waldner-2019", "inselberg-2009"], "fidelity": 3, "accessibility": 4, "ai_readiness": 4}], "recommendations": [{"id": "rec-compare-category-quantity", "data_shape_id": "shape-category-quantity", "cognitive_move_id": "move-compare", "recommended_visual_form_ids": ["form-sorted-bar", "form-dot-plot", "form-lollipop"], "conditional_visual_form_ids": ["form-ordered-table"], "reserved_visual_form_ids": ["form-circular-composition"], "reasoning": "Shared scale and aligned length support direct comparison across categories.", "fidelity_score": 9, "accessibility_score": 9, "ai_readiness_score": 9}, {"id": "rec-rank-values", "data_shape_id": "shape-ranked-values", "cognitive_move_id": "move-rank", "recommended_visual_form_ids": ["form-sorted-bar", "form-dot-plot", "form-ordered-table"], "conditional_visual_form_ids": ["form-lollipop"], "reserved_visual_form_ids": ["form-circular-composition", "form-radial-profile"], "reasoning": "Ordering should be visible without legend hunting or shape estimation.", "fidelity_score": 9, "accessibility_score": 9, "ai_readiness_score": 9}, {"id": "rec-time-series", "data_shape_id": "shape-time-series", "cognitive_move_id": "move-change", "recommended_visual_form_ids": ["form-line"], "conditional_visual_form_ids": ["form-slope", "form-sparkline-table"], "reserved_visual_form_ids": ["form-radial-profile"], "reasoning": "Time ordering should remain visible on a stable axis.", "fidelity_score": 9, "accessibility_score": 8, "ai_readiness_score": 8}, {"id": "rec-before-after", "data_shape_id": "shape-before-after", "cognitive_move_id": "move-before-after", "recommended_visual_form_ids": ["form-dumbbell", "form-slope"], "conditional_visual_form_ids": ["form-sorted-bar"], "reserved_visual_form_ids": ["form-radial-profile"], "reasoning": "Paired values should be compared across a shared scale.", "fidelity_score": 9, "accessibility_score": 8, "ai_readiness_score": 8}, {"id": "rec-composition", "data_shape_id": "shape-composition", "cognitive_move_id": "move-composition", "recommended_visual_form_ids": ["form-stacked100", "form-ordered-table"], "conditional_visual_form_ids": ["form-sorted-bar"], "reserved_visual_form_ids": ["form-circular-composition"], "reasoning": "Part-to-whole structure should remain visible while keeping values comparable.", "fidelity_score": 7, "accessibility_score": 8, "ai_readiness_score": 8}, {"id": "rec-composition-groups", "data_shape_id": "shape-composition-groups", "cognitive_move_id": "move-composition-groups", "recommended_visual_form_ids": ["form-stacked100", "form-heatmap", "form-ordered-table"], "conditional_visual_form_ids": ["form-sparkline-table"], "reserved_visual_form_ids": ["form-circular-composition"], "reasoning": "Composition across groups needs a repeated baseline or a scannable matrix.", "fidelity_score": 8, "accessibility_score": 7, "ai_readiness_score": 8}, {"id": "rec-profile", "data_shape_id": "shape-multivariate-profile", "cognitive_move_id": "move-profile", "recommended_visual_form_ids": ["form-heatmap", "form-profile-table", "form-dot-plot"], "conditional_visual_form_ids": ["form-parallel"], "reserved_visual_form_ids": ["form-radial-profile"], "reasoning": "Profile comparison should keep each dimension readable and avoid treating polygon shape as evidence.", "fidelity_score": 8, "accessibility_score": 8, "ai_readiness_score": 8}, {"id": "rec-distribution", "data_shape_id": "shape-distribution", "cognitive_move_id": "move-distribution", "recommended_visual_form_ids": ["form-histogram", "form-box-plot"], "conditional_visual_form_ids": ["form-ordered-table"], "reserved_visual_form_ids": ["form-circular-composition"], "reasoning": "Distribution shape and spread need visible bins, ranges, or summary intervals.", "fidelity_score": 8, "accessibility_score": 7, "ai_readiness_score": 7}, {"id": "rec-uncertainty", "data_shape_id": "shape-uncertainty", "cognitive_move_id": "move-uncertainty", "recommended_visual_form_ids": ["form-interval", "form-confidence-band"], "conditional_visual_form_ids": ["form-ordered-table"], "reserved_visual_form_ids": ["form-circular-composition", "form-radial-profile"], "reasoning": "Uncertainty should be visible as a range, not hidden behind a single confident mark.", "fidelity_score": 9, "accessibility_score": 8, "ai_readiness_score": 8}, {"id": "rec-risk", "data_shape_id": "shape-risk-drivers", "cognitive_move_id": "move-risk", "recommended_visual_form_ids": ["form-tornado", "form-sorted-bar"], "conditional_visual_form_ids": ["form-ordered-table"], "reserved_visual_form_ids": ["form-circular-composition", "form-radial-profile"], "reasoning": "Sensitivity drivers should be ordered so the largest impact is easy to see.", "fidelity_score": 8, "accessibility_score": 8, "ai_readiness_score": 8}, {"id": "rec-threshold", "data_shape_id": "shape-threshold", "cognitive_move_id": "move-executive-scan", "recommended_visual_form_ids": ["form-bullet", "form-sparkline-table"], "conditional_visual_form_ids": ["form-ordered-table"], "reserved_visual_form_ids": ["form-radial-profile"], "reasoning": "Actual, threshold, and target should stay aligned for quick scan and audit.", "fidelity_score": 8, "accessibility_score": 8, "ai_readiness_score": 9}, {"id": "rec-ai", "data_shape_id": "shape-category-quantity", "cognitive_move_id": "move-ai-ingestion", "recommended_visual_form_ids": ["form-ordered-table", "form-sorted-bar", "form-dot-plot"], "conditional_visual_form_ids": ["form-sparkline-table"], "reserved_visual_form_ids": ["form-circular-composition", "form-radial-profile"], "reasoning": "AI-assisted interpretation benefits from structured data, labels, units, text equivalent, and recoverable provenance.", "fidelity_score": 9, "accessibility_score": 10, "ai_readiness_score": 10}], "exemplars": [{"id": "ex-metadata-corrections-bar", "title": "Which workflow stages create the most metadata corrections?", "visual_form_id": "form-sorted-bar", "cognitive_move_id": "move-compare", "data_shape_id": "shape-category-quantity", "chart_type": "bar", "unit": "corrections per 100 samples", "dataset": {"columns": ["stage", "value"], "rows": [["Intake", 18], ["Preparation", 31], ["Analysis", 24], ["Review", 41], ["Report", 15], ["Archive", 9]]}, "text_equivalent": "Review creates the highest metadata correction rate at 41 corrections per 100 samples, followed by preparation at 31 and analysis at 24.", "ai_summary": "Use a sorted bar chart because the task is category comparison on a shared scale. The comparison burden is carried by aligned length and direct labels.", "why_fit": "The reader can compare stages against the same horizontal scale and recover exact values from direct labels.", "caveat": "Synthetic example for demonstrating chart form selection.", "citation_ids": ["cleveland-mcgill-1984", "heer-bostock-2010", "w3c-complex-images"]}, {"id": "ex-delay-drivers-dot", "title": "Which review delay drivers should be triaged first?", "visual_form_id": "form-dot-plot", "cognitive_move_id": "move-rank", "data_shape_id": "shape-ranked-values", "chart_type": "dot", "unit": "average delayed hours per case", "dataset": {"columns": ["driver", "value"], "rows": [["Missing consent state", 16], ["Incomplete sample metadata", 13], ["Variant evidence mismatch", 9], ["Queue handoff delay", 7], ["Report formatting", 3]]}, "text_equivalent": "Missing consent state is the largest review delay driver at 16 hours per case, followed by incomplete sample metadata at 13.", "ai_summary": "Use a dot plot because the task is rank and magnitude comparison. Position on a common scale supports quick triage.", "why_fit": "The chart makes rank visible while keeping labels readable.", "caveat": "Synthetic data for demonstrating decision support.", "citation_ids": ["cleveland-mcgill-1984", "davis-risks-ranking"]}, {"id": "ex-readiness-dumbbell", "title": "Did metadata readiness improve after validation rules changed?", "visual_form_id": "form-dumbbell", "cognitive_move_id": "move-before-after", "data_shape_id": "shape-before-after", "chart_type": "dumbbell", "unit": "percent ready at review start", "dataset": {"columns": ["workflow", "before", "after"], "rows": [["Consent state", 62, 85], ["Sample identity", 76, 91], ["Source provenance", 58, 82], ["Audit readiness", 69, 88]]}, "text_equivalent": "All readiness dimensions improved. Source provenance rose from 58% to 82%, and consent state rose from 62% to 85%.", "ai_summary": "Use a dumbbell chart because each category has a before and after value on the same scale.", "why_fit": "The distance between paired dots shows change without forcing the reader to compare separate bars or shapes.", "caveat": "Synthetic data for demonstrating before/after comparison.", "citation_ids": ["schwabish-2021", "tufte-1983"]}, {"id": "ex-weekly-queue-line", "title": "Is review queue volume stabilizing over time?", "visual_form_id": "form-line", "cognitive_move_id": "move-change", "data_shape_id": "shape-time-series", "chart_type": "line", "unit": "items in queue", "dataset": {"columns": ["week", "value"], "rows": [["W1", 42], ["W2", 48], ["W3", 54], ["W4", 51], ["W5", 39], ["W6", 36], ["W7", 33], ["W8", 31]]}, "text_equivalent": "Queue volume peaked in week 3 at 54 items and then declined steadily to 31 by week 8.", "ai_summary": "Use a line chart because the task is temporal change and the sequence itself matters.", "why_fit": "A continuous x-axis and stable y-axis let the reader track trend direction and magnitude.", "caveat": "Synthetic data for demonstrating trend communication.", "citation_ids": ["ware-information-vis"]}, {"id": "ex-outcome-composition", "title": "How do review outcomes differ across teams?", "visual_form_id": "form-stacked100", "cognitive_move_id": "move-composition-groups", "data_shape_id": "shape-composition-groups", "chart_type": "stacked100", "unit": "percent of reviewed cases", "dataset": {"columns": ["team", "Approved", "Needs evidence", "Escalated"], "rows": [["Team A", 64, 26, 10], ["Team B", 58, 30, 12], ["Team C", 71, 21, 8]]}, "text_equivalent": "Team C has the highest approved share at 71%; Team B has the highest needs-evidence and escalated shares.", "ai_summary": "Use 100% stacked bars because the task is composition across groups and each group sums to a whole.", "why_fit": "Each group has the same total width, allowing part-to-whole comparison across groups.", "caveat": "Use direct labels and table companion because stacked segments can still make middle-segment comparison harder.", "citation_ids": ["spence-1990", "w3c-complex-images"]}, {"id": "ex-support-maturity-heatmap", "title": "Where is workflow support strongest by role and dimension?", "visual_form_id": "form-heatmap", "cognitive_move_id": "move-profile", "data_shape_id": "shape-multivariate-profile", "chart_type": "heatmap", "unit": "support maturity score, 0–10", "dataset": {"columns": ["role", "Provenance", "Consent", "Metadata", "AI boundary", "Audit"], "rows": [["Pathologist", 7, 6, 5, 8, 7], ["Analyst", 8, 4, 7, 6, 6], ["Coordinator", 5, 8, 6, 4, 7], ["Data steward", 7, 7, 9, 5, 8]]}, "text_equivalent": "Data stewards have the strongest metadata and audit support. Coordinators have strong consent support but lower AI boundary support.", "ai_summary": "Use a heatmap because the data is role by dimension. Each dimension remains readable, unlike a closed polygon profile.", "why_fit": "The matrix preserves rows and columns so profile comparison does not depend on shape closure.", "caveat": "Provide numeric labels and a table because color intensity alone is insufficient.", "citation_ids": ["munzner-2014", "ware-information-vis", "w3c-complex-images"]}, {"id": "ex-exception-interval", "title": "What resolution range should remain visible for consent exceptions?", "visual_form_id": "form-interval", "cognitive_move_id": "move-uncertainty", "data_shape_id": "shape-uncertainty", "chart_type": "interval", "unit": "hours", "dataset": {"columns": ["queue", "estimate", "lower", "upper"], "rows": [["Standard review", 18, 12, 27], ["Protocol exception", 34, 22, 51], ["External confirmation", 46, 29, 68], ["Escalation", 58, 40, 84]]}, "text_equivalent": "Escalation has the longest estimated resolution time and widest range, 40 to 84 hours.", "ai_summary": "Use an interval plot because the range is part of the evidence, not a footnote.", "why_fit": "The visual keeps estimate and uncertainty visible together.", "caveat": "Synthetic intervals; not inferential confidence intervals.", "citation_ids": ["schwabish-2021", "visualization-perception-survey"]}, {"id": "ex-turnaround-tornado", "title": "Which drivers most affect review turnaround?", "visual_form_id": "form-tornado", "cognitive_move_id": "move-risk", "data_shape_id": "shape-risk-drivers", "chart_type": "tornado", "unit": "hour impact on turnaround", "dataset": {"columns": ["driver", "low", "high"], "rows": [["Queue volume", -8, 14], ["Staffing availability", -10, 9], ["Consent completeness", -6, 12], ["Evidence freshness", -5, 8], ["Report dependency", -3, 5]]}, "text_equivalent": "Queue volume and consent completeness create the largest positive turnaround risk, while staffing availability creates a large negative-to-positive range.", "ai_summary": "Use a tornado chart because the task is ordered sensitivity and risk-driver prioritization.", "why_fit": "Drivers are aligned around a common baseline so magnitude and direction remain visible.", "caveat": "Synthetic sensitivity example; actual model assumptions should be shown.", "citation_ids": ["schwabish-2021", "lo-misinformed-vis"]}, {"id": "ex-readiness-bullet", "title": "Is metadata readiness above the good-enough threshold?", "visual_form_id": "form-bullet", "cognitive_move_id": "move-executive-scan", "data_shape_id": "shape-threshold", "chart_type": "bullet", "unit": "percent ready", "dataset": {"columns": ["label", "actual", "threshold", "target"], "rows": [["Metadata readiness", 84, 80, 92]]}, "text_equivalent": "Metadata readiness is 84%, above the good-enough threshold of 80% and below the desired target of 92%.", "ai_summary": "Use a bullet chart because actual, threshold, and desired target should be compared in one aligned scan.", "why_fit": "The reader sees threshold and target without relying on a radial gauge.", "caveat": "Synthetic threshold example.", "citation_ids": ["few-bullet-chart", "schwabish-2021"]}], "citations": [{"id": "cleveland-mcgill-1984", "label": "Cleveland & McGill 1984", "text": "Cleveland, W. S., and McGill, R. “Graphical Perception: Theory, Experimentation, and Application to the Development of Graphical Methods.” Journal of the American Statistical Association, 1984.", "supports": "position/length as reliable quantitative encodings"}, {"id": "cleveland-mcgill-1985", "label": "Cleveland & McGill 1985", "text": "Cleveland, W. S., and McGill, R. “Graphical Perception and Graphical Methods for Analyzing Scientific Data.” Science, 1985.", "supports": "graphical perception and scientific data analysis"}, {"id": "heer-bostock-2010", "label": "Heer & Bostock 2010", "text": "Heer, J., and Bostock, M. “Crowdsourcing Graphical Perception: Using Mechanical Turk to Assess Visualization Design.” CHI, 2010.", "supports": "web-scale graphical perception testing"}, {"id": "simkin-hastie-1987", "label": "Simkin & Hastie 1987", "text": "Simkin, D., and Hastie, R. “An Information-Processing Analysis of Graph Perception.” JASA, 1987.", "supports": "comparison of graph perception tasks"}, {"id": "spence-1990", "label": "Spence 1990", "text": "Spence, I. “Displaying Proportions and Percentages.” Applied Cognitive Psychology, 1990.", "supports": "part-to-whole and percentage display"}, {"id": "skau-kosara-2016", "label": "Skau & Kosara 2016", "text": "Skau, D., and Kosara, R. “Arcs, Angles, or Areas: Individual Data Encodings in Pie and Donut Charts.” Computer Graphics Forum, 2016.", "supports": "pie/donut chart encodings"}, {"id": "mackinlay-1986", "label": "Mackinlay 1986", "text": "Mackinlay, J. D. “Automating the Design of Graphical Presentations of Relational Information.” ACM TOG, 1986.", "supports": "automated visualization design and perceptual encodings"}, {"id": "ware-information-vis", "label": "Ware, Information Visualization", "text": "Ware, C. Information Visualization: Perception for Design. Morgan Kaufmann.", "supports": "visual perception and design"}, {"id": "ware-visual-thinking", "label": "Ware 2008", "text": "Ware, C. Visual Thinking for Design. Morgan Kaufmann, 2008.", "supports": "visual thinking and cognitive design"}, {"id": "tufte-1983", "label": "Tufte 1983", "text": "Tufte, E. R. The Visual Display of Quantitative Information. Graphics Press, 1983.", "supports": "evidence-rich chart design"}, {"id": "munzner-2014", "label": "Munzner 2014", "text": "Munzner, T. Visualization Analysis and Design. CRC Press, 2014.", "supports": "visualization task and data abstraction"}, {"id": "schwabish-2021", "label": "Schwabish 2021", "text": "Schwabish, J. A. Better Data Visualizations. Columbia University Press, 2021.", "supports": "practical chart selection and accessibility"}, {"id": "evergreen", "label": "Evergreen", "text": "Evergreen, S. D. Effective Data Visualization. SAGE.", "supports": "effective and accessible data visualization practices"}, {"id": "davis-risks-ranking", "label": "Davis et al. 2022", "text": "Davis, R., Pu, X., Ding, Y., Hall, B. D., Bonilla, K., Feng, M., Kay, M., and Harrison, L. “The Risks of Ranking.” arXiv:2212.10533, 2022.", "supports": "individual differences in graphical perception and ranking"}, {"id": "visualization-perception-survey", "label": "Quadri & Rosen 2021", "text": "Quadri, G. J., and Rosen, P. “A Survey of Perception-Based Visualization Studies by Task.” arXiv:2107.07477, 2021.", "supports": "perception-based visualization studies by task"}, {"id": "zeng-battle-2021", "label": "Zeng & Battle 2021", "text": "Zeng, Z., and Battle, L. “A Review and Collation of Graphical Perception Knowledge for Visualization Recommendation.” arXiv:2109.01271, 2021.", "supports": "visualization recommendation and graphical perception"}, {"id": "lo-misinformed-vis", "label": "Lo et al. 2022", "text": "Lo, L. Y.-H., Gupta, A., Shigyo, K., Wu, A., Bertini, E., and Qu, H. “Misinformed by Visualization.” arXiv:2204.09548, 2022.", "supports": "misleading visualization taxonomy and governance risk"}, {"id": "pandey-deceptive-2015", "label": "Pandey et al. 2015", "text": "Pandey, A. V., Rall, K., Satterthwaite, M. L., Nov, O., and Bertini, E. “How Deceptive Are Deceptive Visualizations?” CHI, 2015.", "supports": "deceptive visualization techniques"}, {"id": "cairo-2019", "label": "Cairo 2019", "text": "Cairo, A. How Charts Lie. W. W. Norton, 2019.", "supports": "visual claims and misinformation"}, {"id": "waldner-2019", "label": "Waldner et al. 2019", "text": "Waldner, M., Diehl, A., Gracanin, D., Splechtna, R., Delrieux, C., and Matkovic, K. “A Comparison of Radial and Linear Charts for Visualizing Daily Patterns.” arXiv:1907.13534, 2019.", "supports": "radial vs linear chart comparison"}, {"id": "inselberg-2009", "label": "Inselberg 2009", "text": "Inselberg, A. Parallel Coordinates. Springer, 2009.", "supports": "parallel coordinates for multivariate geometry"}, {"id": "w3c-informative-images", "label": "W3C Informative Images", "text": "W3C WAI. “Images Tutorial: Informative Images.”", "supports": "accessible image guidance"}, {"id": "w3c-complex-images", "label": "W3C Complex Images", "text": "W3C WAI. “Charts, Graphs, and Maps.”", "supports": "accessible complex images and data tables"}, {"id": "nguyen-llm-graphical-2025", "label": "Nguyen et al. 2025", "text": "Nguyen, R. H., Maeda, K., Geshvadi, M., and Haehn, D. “Evaluating Graphical Perception with Multimodal LLMs.” arXiv:2504.04221, 2025.", "supports": "multimodal LLM graphical perception"}, {"id": "zhang-llm-graphical-2025", "label": "Zhang et al. 2025", "text": "Zhang, Y., et al. “Towards Understanding Graphical Perception in Large Multimodal Models.” arXiv:2503.10857, 2025.", "supports": "large multimodal model chart perception"}, {"id": "chartqa-2022", "label": "Masry et al. 2022", "text": "Masry, A., Do Long, Tan, J. Q., Joty, S., and Hoque, E. “ChartQA.” Findings of ACL, 2022.", "supports": "chart question answering benchmark"}, {"id": "few-bullet-chart", "label": "Few, Bullet Graph", "text": "Few, S. “Bullet Graph Design Specification.” Perceptual Edge.", "supports": "bullet graph as compact actual/target/threshold display"}]};
+const JSON_LD_CONTEXT = structuredClone(
+  JSON.parse(document.getElementById("jsonld-data").textContent)["@context"],
+);
+const DEFAULT_VIEW_PREFERENCES = Object.freeze({
+  showReserved: true,
+  audience: "mixed",
+  uncertaintyRequired: false,
+  aiIngestion: true
+});
+const MAX_IMPORT_BYTES = 1024 * 1024;
+const AUDIENCE_IDS = new Set(["mixed", "executive", "technical", "research", "public"]);
+const VIEW_KEYS = new Set([
+  "selectedMoveId",
+  "selectedShapeId",
+  "selectedExemplarId",
+  "selectedVisualFormId",
+  ...Object.keys(DEFAULT_VIEW_PREFERENCES),
+]);
+
+let atlas = structuredClone(ATLAS);
+let view = defaultViewFor(atlas);
+
+const byId = (arr, id) => arr.find(x => x.id === id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = (n) => Number.isFinite(+n) ? (+n).toLocaleString(undefined, {maximumFractionDigits: 1}) : n;
+
+function defaultViewFor(targetAtlas) {
+  const recommendation = targetAtlas.recommendations[0];
+  const selectedVisualFormId =
+    recommendation.recommended_visual_form_ids[0] || targetAtlas.visual_forms[0].id;
+  const matchingExemplar = targetAtlas.exemplars.find(
+    exemplar =>
+      exemplar.cognitive_move_id === recommendation.cognitive_move_id &&
+      exemplar.data_shape_id === recommendation.data_shape_id,
+  );
+  const formExemplar = targetAtlas.exemplars.find(
+    exemplar => exemplar.visual_form_id === selectedVisualFormId,
+  );
+  return {
+    selectedMoveId: recommendation.cognitive_move_id,
+    selectedShapeId: recommendation.data_shape_id,
+    selectedExemplarId: (matchingExemplar || formExemplar || targetAtlas.exemplars[0]).id,
+    selectedVisualFormId,
+    ...DEFAULT_VIEW_PREFERENCES,
+  };
+}
+
+function init() {
+  populateSelectors();
+  bind();
+  renderAll();
+}
+function populateSelectors() {
+  const moveSel = document.getElementById("moveSelect");
+  const shapeSel = document.getElementById("shapeSelect");
+  replaceOptions(moveSel, atlas.cognitive_moves);
+  replaceOptions(shapeSel, atlas.data_shapes);
+  moveSel.value = view.selectedMoveId;
+  shapeSel.value = view.selectedShapeId;
+}
+function replaceOptions(select, items) {
+  const fragment = document.createDocumentFragment();
+  for (const item of items) {
+    const option = document.createElement("option");
+    option.value = item.id;
+    option.textContent = item.label;
+    fragment.append(option);
+  }
+  select.replaceChildren(fragment);
+}
+function bind() {
+  document.getElementById("moveSelect").addEventListener("change", e => {
+    view.selectedMoveId = e.target.value;
+    chooseDefaultSelections();
+    renderAll();
+  });
+  document.getElementById("shapeSelect").addEventListener("change", e => {
+    view.selectedShapeId = e.target.value;
+    chooseDefaultSelections();
+    renderAll();
+  });
+  document.getElementById("audienceSelect").addEventListener("change", e => { view.audience = e.target.value; renderAll(); });
+  document.getElementById("uncertaintyToggle").addEventListener("change", e => {
+    view.uncertaintyRequired = e.target.checked;
+    if (e.target.checked) {
+      const uncertaintyRecommendation = atlas.recommendations.find(recommendation => {
+        const move = byId(atlas.cognitive_moves, recommendation.cognitive_move_id);
+        const shape = byId(atlas.data_shapes, recommendation.data_shape_id);
+        return [move?.id, move?.label, move?.prompt, shape?.id, shape?.label, shape?.example]
+          .filter(Boolean)
+          .some(value => value.toLowerCase().includes("uncertainty"));
+      });
+      if (uncertaintyRecommendation) {
+        view.selectedMoveId = uncertaintyRecommendation.cognitive_move_id;
+        view.selectedShapeId = uncertaintyRecommendation.data_shape_id;
+      }
+    }
+    chooseDefaultSelections();
+    renderAll();
+  });
+  document.getElementById("aiToggle").addEventListener("change", e => { view.aiIngestion = e.target.checked; renderAll(); });
+  document.getElementById("reservedToggle").addEventListener("change", e => {
+    view.showReserved = e.target.checked;
+    renderAll();
+    announce(
+      "selectionStatus",
+      e.target.checked
+        ? "Reserved recommendations are visible for contextual review."
+        : "Recommended and Conditional forms are in focus. Reserved recommendations remain available through the selector control.",
+    );
+  });
+  document.getElementById("resetViewBtn").addEventListener("click", () => {
+    view = defaultViewFor(atlas);
+    renderAll();
+    announce("selectionStatus", "Selector restored to its complete default view.");
+  });
+  document.getElementById("copyPromptBtn").addEventListener("click", () => copyText("Prompt", document.getElementById("aiPrompt").value));
+  document.getElementById("exportJsonBtn").addEventListener("click", () => copyText("Atlas JSON", exportAtlasJson()));
+  document.getElementById("exportJsonLdBtn").addEventListener("click", () => copyText("JSON-LD", document.getElementById("jsonld-data").textContent.trim()));
+  document.getElementById("importJsonBtn").addEventListener("click", () => importText(document.getElementById("jsonImport").value, "Pasted JSON"));
+  document.getElementById("jsonFileInput").addEventListener("change", importFile);
+  document.getElementById("recommendations").addEventListener("click", event => {
+    const control = event.target.closest("[data-select-form]");
+    if (control) selectVisualForm(control.dataset.selectForm);
+  });
+  document.getElementById("selectedFormDetail").addEventListener("click", event => {
+    const control = event.target.closest("[data-select-exemplar]");
+    if (control) selectExemplar(control.dataset.selectExemplar, true);
+  });
+  document.getElementById("gallery").addEventListener("click", event => {
+    const control = event.target.closest("[data-select-exemplar]");
+    if (control) selectExemplar(control.dataset.selectExemplar, true);
+  });
+}
+function chooseDefaultSelections() {
+  const rec = getRecommendation();
+  view.selectedVisualFormId = rec.recommended_visual_form_ids[0] || "";
+  const match = atlas.exemplars.find(ex => ex.cognitive_move_id === view.selectedMoveId && ex.data_shape_id === view.selectedShapeId);
+  const formMatch = atlas.exemplars.find(ex => ex.visual_form_id === view.selectedVisualFormId);
+  view.selectedExemplarId = (match || formMatch || atlas.exemplars[0]).id;
+}
+function getRecommendation() {
+  let rec = atlas.recommendations.find(r => r.cognitive_move_id === view.selectedMoveId && r.data_shape_id === view.selectedShapeId);
+  if (!rec) rec = atlas.recommendations.find(r => r.cognitive_move_id === view.selectedMoveId) || atlas.recommendations[0];
+  return rec;
+}
+function renderAll() {
+  document.getElementById("moveSelect").value = view.selectedMoveId;
+  document.getElementById("shapeSelect").value = view.selectedShapeId;
+  document.getElementById("audienceSelect").value = view.audience;
+  document.getElementById("uncertaintyToggle").checked = view.uncertaintyRequired;
+  document.getElementById("aiToggle").checked = view.aiIngestion;
+  document.getElementById("reservedToggle").checked = view.showReserved;
+  renderRecommendation();
+  renderSelectedForm();
+  renderLadder();
+  renderGallery();
+  renderExemplarDetail();
+  renderChecklist();
+  renderCitations();
+  renderPrompt();
+  renderJsonLd();
+}
+function renderRecommendation() {
+  const rec = getRecommendation();
+  const scoreGrid = document.getElementById("scoreGrid");
+  scoreGrid.innerHTML = [
+    ["Fidelity", rec.fidelity_score],
+    ["Accessibility", rec.accessibility_score],
+    ["AI readiness", rec.ai_readiness_score]
+  ].map(([k,v]) => `<div class="kpi"><strong>${Number.isFinite(v) ? `${v}/10` : "Not scored"}</strong><span>${k}</span></div>`).join("");
+  document.getElementById("recReason").textContent = rec.reasoning;
+  const wrap = document.getElementById("recommendations");
+  const groups = [
+    ["Recommended", rec.recommended_visual_form_ids, "recommended", "Use these first for this task."],
+    ["Conditional", rec.conditional_visual_form_ids || [], "conditional", "Use when context, audience, or exact-value needs support it."],
+  ];
+  if (view.showReserved) {
+    groups.push(["Reserved", rec.reserved_visual_form_ids || [], "reserved", "Keep these rare and context-specific; pair with direct values."]);
+  }
+  wrap.innerHTML = groups.map(([title, ids, cls, hint]) => `
+    <div class="rec-card ${cls}">
+      <h3>${title}</h3>
+      <p class="meta">${hint}</p>
+      <div>${ids.map(id => pillForForm(id)).join("") || '<span class="meta">None listed.</span>'}</div>
+    </div>`).join("");
+}
+function pillForForm(id) {
+  const f = byId(atlas.visual_forms, id);
+  if (!f) return "";
+  const selected = f.id === view.selectedVisualFormId;
+  return `<button type="button" class="form-choice" data-form-id="${esc(f.id)}" data-select-form="${esc(f.id)}" aria-pressed="${selected}" aria-controls="selectedFormDetail"><span>${esc(f.label)}</span>${selected ? '<span class="form-choice__state">Selected</span>' : ""}</button>`;
+}
+function selectVisualForm(id) {
+  const form = byId(atlas.visual_forms, id);
+  if (!form) return;
+  view.selectedVisualFormId = id;
+  renderAll();
+  const replacement = [...document.querySelectorAll("[data-select-form]")].find(control => control.dataset.selectForm === id);
+  replacement?.focus();
+  const matchingExemplar = atlas.exemplars.find(exemplar => exemplar.visual_form_id === id);
+  announce(
+    "selectionStatus",
+    matchingExemplar
+      ? `${form.label} selected. A matching gallery example is available as a separate action.`
+      : `${form.label} selected. Its guidance is ready below, while the gallery continues to show the current exemplar.`,
+  );
+}
+function renderSelectedForm() {
+  const form = byId(atlas.visual_forms, view.selectedVisualFormId);
+  const target = document.getElementById("selectedFormDetail");
+  if (!form) {
+    target.innerHTML = `<span class="selected-form__eyebrow">Selected visual form</span><h3>Choose a form to inspect its fit</h3><p>The form guidance will appear here while the exemplar gallery keeps its own selection.</p>`;
+    return;
+  }
+  const tasks = form.best_for.map(id => byId(atlas.cognitive_moves, id)?.label).filter(Boolean);
+  const matchingExemplar = atlas.exemplars.find(exemplar => exemplar.visual_form_id === form.id);
+  target.innerHTML = `
+    <span class="selected-form__eyebrow">Selected visual form</span>
+    <h3>${esc(form.label)}</h3>
+    <p>${esc(form.works_when)}</p>
+    <div class="selected-form__guidance">
+      <div><strong>Form family:</strong> ${esc(form.family)}</div>
+      <div><strong>Fitting tasks:</strong> ${esc(tasks.join(", ") || "Context-specific review")}</div>
+    </div>
+    ${matchingExemplar
+      ? `<p>The gallery includes a separate example for this form.</p><div class="button-row"><button type="button" data-select-exemplar="${esc(matchingExemplar.id)}" aria-controls="exemplarDetail">Open matching exemplar</button></div>`
+      : `<p>This form stands on its own; the current gallery offers examples for other forms.</p>`}
+  `;
+}
+function renderLadder() {
+  const move = byId(atlas.cognitive_moves, view.selectedMoveId);
+  const shape = byId(atlas.data_shapes, view.selectedShapeId);
+  const rec = getRecommendation();
+  const forms = rec.recommended_visual_form_ids.map(id => byId(atlas.visual_forms,id)).filter(Boolean);
+  const prims = shape.primitive_ids.map(id => byId(atlas.data_primitives,id)).filter(Boolean);
+  const w = 1120, h = 260;
+  const cols = [
+    {x:40, title:"Primitives", items:prims.map(p=>p.label)},
+    {x:310, title:"Data shape", items:[shape.label]},
+    {x:585, title:"Cognitive move", items:[move.label]},
+    {x:850, title:"Visual forms", items:forms.map(f=>f.label)}
+  ];
+  const svg = [`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Data shape ladder from primitive to chart form">`,
+    `<rect x="0" y="0" width="${w}" height="${h}" fill="#fffdf8"/>`];
+  cols.forEach((c,i) => {
+    svg.push(`<rect x="${c.x}" y="35" width="220" height="170" rx="16" fill="${i===3?'#e9eee3':'#f5efe5'}" stroke="#d8d0c0"/>`);
+    svg.push(`<text x="${c.x+14}" y="62" font-size="14" font-weight="700" fill="#5b544a">${esc(c.title)}</text>`);
+    c.items.slice(0,4).forEach((it,j) => svg.push(`<text x="${c.x+14}" y="${92+j*25}" font-size="15" fill="#25231f">${esc(shorten(it,24))}</text>`));
+    if (i<cols.length-1) {
+      svg.push(`<path d="M ${c.x+225} 120 L ${cols[i+1].x-20} 120" stroke="#a7967e" stroke-width="2"/>`);
+      svg.push(`<path d="M ${cols[i+1].x-26} 114 L ${cols[i+1].x-14} 120 L ${cols[i+1].x-26} 126" fill="none" stroke="#a7967e" stroke-width="2"/>`);
+    }
+  });
+  svg.push(`<text x="40" y="235" font-size="13" fill="#6e685d">Doctrine: match visual form to the cognitive move and data shape; keep source data and uncertainty visible.</text>`);
+  svg.push(`</svg>`);
+  document.getElementById("ladderSurface").innerHTML = svg.join("");
+}
+function shorten(s,n) { s=String(s||""); return s.length>n ? s.slice(0,n-1)+"…" : s; }
+function renderGallery() {
+  const gallery = document.getElementById("gallery");
+  gallery.innerHTML = atlas.exemplars.map(ex => {
+    const form = byId(atlas.visual_forms, ex.visual_form_id);
+    const move = byId(atlas.cognitive_moves, ex.cognitive_move_id);
+    const selected = ex.id === view.selectedExemplarId;
+    return `<div class="ex-card ${selected ? "selected" : ""}">
+      ${selected ? '<span class="ex-card__state">Current exemplar</span>' : ""}
+      <h3>${esc(ex.title)}</h3>
+      <p class="meta">${esc(form?.label)} · ${esc(move?.label)} · ${esc(ex.unit)}</p>
+      <p>${esc(ex.why_fit)}</p>
+      <div class="button-row"><button type="button" data-select-exemplar="${esc(ex.id)}" aria-pressed="${selected}" aria-controls="exemplarDetail">${selected ? "Exemplar open" : "Open exemplar"}</button></div>
+    </div>`;
+  }).join("");
+}
+function selectExemplar(id, moveFocus = false) {
+  const exemplar = byId(atlas.exemplars, id);
+  if (!exemplar) return;
+  view.selectedExemplarId = id;
+  renderAll();
+  announce("selectionStatus", `${exemplar.title} is now the current exemplar. The selected visual form remains ${byId(atlas.visual_forms, view.selectedVisualFormId)?.label || "open for selection"}.`);
+  if (moveFocus) {
+    const detail = document.getElementById("exemplarDetail");
+    detail.setAttribute("tabindex", "-1");
+    detail.focus({preventScroll:true});
+    detail.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "nearest",
+    });
+  }
+}
+function renderExemplarDetail() {
+  const ex = byId(atlas.exemplars, view.selectedExemplarId) || atlas.exemplars[0];
+  const form = byId(atlas.visual_forms, ex.visual_form_id);
+  const shape = byId(atlas.data_shapes, ex.data_shape_id);
+  const move = byId(atlas.cognitive_moves, ex.cognitive_move_id);
+  const citations = (ex.citation_ids||[]).map(id => byId(atlas.citations,id)).filter(Boolean);
+  const el = document.getElementById("exemplarDetail");
+  el.dataset.selectedExemplarId = ex.id;
+  el.innerHTML = `
+    <span class="ex-card__state">Current exemplar</span>
+    <div class="chart-title">${esc(ex.title)}</div>
+    <div class="chart-subtitle">${esc(form.label)} · ${esc(shape.label)} · ${esc(move.label)} · Unit: ${esc(ex.unit)}</div>
+    <div class="visual-surface">${renderChart(ex)}</div>
+    <div class="grid" style="grid-template-columns:1fr 1fr; margin-top:12px;">
+      <div>
+        <h3>Text equivalent</h3>
+        <p>${esc(ex.text_equivalent)}</p>
+        <h3>AI-readable summary</h3>
+        <p>${esc(ex.ai_summary)}</p>
+        <h3>Why this fits</h3>
+        <p>${esc(ex.why_fit)}</p>
+        <p class="meta"><strong>Caveat:</strong> ${esc(ex.caveat)}</p>
+      </div>
+      <div>
+        <h3>Source data</h3>
+        ${tableForDataset(ex.dataset)}
+      </div>
+    </div>
+    <div style="margin-top:12px"><h3>Citation chips</h3>${citations.map(c => `<span class="source-chip" title="${esc(c.text)}">${esc(c.label)} · ${esc(c.supports)}</span>`).join("")}</div>
+  `;
+}
+function tableForDataset(ds) {
+  const head = ds.columns.map(c => `<th>${esc(c)}</th>`).join("");
+  const body = ds.rows.map(r => `<tr>${r.map(v=>`<td>${esc(fmt(v))}</td>`).join("")}</tr>`).join("");
+  return `<div class="table-wrap"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+}
+function renderChart(ex) {
+  const type = ex.chart_type;
+  if (type==="bar") return chartBar(ex);
+  if (type==="dot") return chartDot(ex);
+  if (type==="dumbbell") return chartDumbbell(ex);
+  if (type==="line") return chartLine(ex);
+  if (type==="stacked100") return chartStacked100(ex);
+  if (type==="heatmap") return chartHeatmap(ex);
+  if (type==="interval") return chartInterval(ex);
+  if (type==="tornado") return chartTornado(ex);
+  if (type==="bullet") return chartBullet(ex);
+  return `<p>Chart type not implemented.</p>`;
+}
+function chartBar(ex) {
+  const rows = [...ex.dataset.rows].sort((a,b)=>b[1]-a[1]);
+  const w=980,h=360, l=180, r=60, top=30, rowH=42;
+  const max=Math.max(...rows.map(r=>+r[1]))*1.08;
+  let svg=[`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(ex.text_equivalent)}"><rect width="${w}" height="${h}" fill="#fffdf8"/>`];
+  rows.forEach((row,i)=>{
+    const y=top+i*rowH;
+    const bw=(w-l-r)*(row[1]/max);
+    svg.push(`<text x="${l-12}" y="${y+24}" text-anchor="end" font-size="14" fill="#25231f">${esc(row[0])}</text>`);
+    svg.push(`<rect x="${l}" y="${y+8}" width="${bw}" height="24" rx="5" fill="#5f6f52"/>`);
+    svg.push(`<text x="${l+bw+8}" y="${y+25}" font-size="13" fill="#25231f">${fmt(row[1])}</text>`);
+  });
+  svg.push(`<line x1="${l}" y1="${top+rows.length*rowH+5}" x2="${w-r}" y2="${top+rows.length*rowH+5}" stroke="#a7967e"/>`);
+  svg.push(`<text x="${l}" y="${h-18}" font-size="13" fill="#6e685d">${esc(ex.unit)} · shared horizontal scale</text></svg>`);
+  return svg.join("");
+}
+function chartDot(ex) {
+  const rows=[...ex.dataset.rows].sort((a,b)=>b[1]-a[1]);
+  const w=980,h=330,l=230,r=70,top=30,rowH=48,max=Math.max(...rows.map(r=>+r[1]))*1.1;
+  let svg=[`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(ex.text_equivalent)}"><rect width="${w}" height="${h}" fill="#fffdf8"/>`];
+  svg.push(`<line x1="${l}" y1="${h-55}" x2="${w-r}" y2="${h-55}" stroke="#a7967e"/>`);
+  rows.forEach((row,i)=>{
+    const y=top+i*rowH+10, x=l+(w-l-r)*(row[1]/max);
+    svg.push(`<line x1="${l}" x2="${w-r}" y1="${y}" y2="${y}" stroke="#e1d7c7"/>`);
+    svg.push(`<text x="${l-12}" y="${y+5}" text-anchor="end" font-size="14">${esc(row[0])}</text>`);
+    svg.push(`<circle cx="${x}" cy="${y}" r="8" fill="#5e7286"/>`);
+    svg.push(`<text x="${x+14}" y="${y+5}" font-size="13">${fmt(row[1])}</text>`);
+  });
+  svg.push(`<text x="${l}" y="${h-22}" font-size="13" fill="#6e685d">${esc(ex.unit)} · position on common scale</text></svg>`);
+  return svg.join("");
+}
+function chartDumbbell(ex) {
+  const rows=ex.dataset.rows;
+  const w=980,h=330,l=180,r=70,top=35,rowH=55,max=100;
+  let svg=[`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(ex.text_equivalent)}"><rect width="${w}" height="${h}" fill="#fffdf8"/>`];
+  rows.forEach((row,i)=>{
+    const y=top+i*rowH, x1=l+(w-l-r)*(row[1]/max), x2=l+(w-l-r)*(row[2]/max);
+    svg.push(`<text x="${l-12}" y="${y+5}" text-anchor="end" font-size="14">${esc(row[0])}</text>`);
+    svg.push(`<line x1="${l}" x2="${w-r}" y1="${y}" y2="${y}" stroke="#e1d7c7"/>`);
+    svg.push(`<line x1="${x1}" x2="${x2}" y1="${y}" y2="${y}" stroke="#8a6a42" stroke-width="4"/>`);
+    svg.push(`<circle cx="${x1}" cy="${y}" r="7" fill="#b68b56"/><circle cx="${x2}" cy="${y}" r="7" fill="#5f6f52"/>`);
+    svg.push(`<text x="${x1}" y="${y-12}" text-anchor="middle" font-size="12">${fmt(row[1])}</text><text x="${x2}" y="${y+24}" text-anchor="middle" font-size="12">${fmt(row[2])}</text>`);
+  });
+  svg.push(`<text x="${l}" y="${h-22}" font-size="13" fill="#6e685d">before → after, percent scale</text></svg>`);
+  return svg.join("");
+}
+function chartLine(ex) {
+  const rows=ex.dataset.rows, w=980,h=330,l=70,r=45,t=35,b=60;
+  const vals=rows.map(r=>+r[1]), min=Math.min(...vals)*.9, max=Math.max(...vals)*1.05;
+  const x=(i)=>l+(w-l-r)*(i/(rows.length-1));
+  const y=(v)=>h-b-(h-t-b)*((v-min)/(max-min));
+  const pts=rows.map((r,i)=>[x(i), y(+r[1])]);
+  let svg=[`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(ex.text_equivalent)}"><rect width="${w}" height="${h}" fill="#fffdf8"/>`];
+  for(let i=0;i<5;i++){ const yy=t+(h-t-b)*i/4; svg.push(`<line x1="${l}" x2="${w-r}" y1="${yy}" y2="${yy}" stroke="#e8ded0"/>`); }
+  svg.push(`<path d="${pts.map((p,i)=>`${i?'L':'M'} ${p[0]} ${p[1]}`).join(' ')}" fill="none" stroke="#5f6f52" stroke-width="4"/>`);
+  pts.forEach((p,i)=>{ svg.push(`<circle cx="${p[0]}" cy="${p[1]}" r="5" fill="#5f6f52"/><text x="${p[0]}" y="${h-34}" text-anchor="middle" font-size="12">${esc(rows[i][0])}</text>`); });
+  svg.push(`<text x="${l}" y="${h-12}" font-size="13" fill="#6e685d">${esc(ex.unit)} · stable time axis</text></svg>`);
+  return svg.join("");
+}
+function chartStacked100(ex) {
+  const rows=ex.dataset.rows, keys=ex.dataset.columns.slice(1);
+  const w=980,h=290,l=120,r=40,top=35,rowH=55;
+  const fills=["#5f6f52","#8a6a42","#5e7286","#a15d4e"];
+  let svg=[`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(ex.text_equivalent)}"><rect width="${w}" height="${h}" fill="#fffdf8"/>`];
+  rows.forEach((row,i)=>{
+    const y=top+i*rowH; let x=l;
+    svg.push(`<text x="${l-12}" y="${y+24}" text-anchor="end" font-size="14">${esc(row[0])}</text>`);
+    keys.forEach((k,j)=>{ const val=+row[j+1], bw=(w-l-r)*val/100; svg.push(`<rect x="${x}" y="${y+7}" width="${bw}" height="28" fill="${fills[j%fills.length]}" opacity="${.9-j*.08}"/>`); if (bw>55) svg.push(`<text x="${x+bw/2}" y="${y+26}" text-anchor="middle" font-size="12" fill="#fff">${val}%</text>`); x+=bw; });
+  });
+  svg.push(`<text x="${l}" y="${h-24}" font-size="13" fill="#6e685d">${keys.map(key => esc(key)).join(' · ')}</text></svg>`);
+  return svg.join("");
+}
+function chartHeatmap(ex) {
+  const cols=ex.dataset.columns.slice(1), rows=ex.dataset.rows;
+  const w=980,h=430,l=145,t=60,cw=140,ch=62;
+  let svg=[`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(ex.text_equivalent)}"><rect width="${w}" height="${h}" fill="#fffdf8"/>`];
+  cols.forEach((c,j)=>svg.push(`<text x="${l+j*cw+cw/2}" y="34" text-anchor="middle" font-size="13" font-weight="700">${esc(c)}</text>`));
+  rows.forEach((row,i)=>{
+    svg.push(`<text x="${l-12}" y="${t+i*ch+35}" text-anchor="end" font-size="14">${esc(row[0])}</text>`);
+    cols.forEach((c,j)=>{ const v=+row[j+1], alpha=.15+v/12*.75; svg.push(`<rect x="${l+j*cw}" y="${t+i*ch}" width="${cw-8}" height="${ch-8}" rx="8" fill="#5f6f52" opacity="${alpha}"/><text x="${l+j*cw+(cw-8)/2}" y="${t+i*ch+34}" text-anchor="middle" font-size="14" fill="#25231f">${v}</text>`); });
+  });
+  svg.push(`<text x="${l}" y="${h-24}" font-size="13" fill="#6e685d">${esc(ex.unit)} · numeric labels preserve accessibility</text></svg>`);
+  return svg.join("");
+}
+function chartInterval(ex) {
+  const rows=ex.dataset.rows, w=980,h=330,l=190,r=55,top=35,rowH=55,max=Math.max(...rows.map(r=>+r[3]))*1.1;
+  let svg=[`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(ex.text_equivalent)}"><rect width="${w}" height="${h}" fill="#fffdf8"/>`];
+  rows.forEach((row,i)=>{ const y=top+i*rowH, lo=l+(w-l-r)*row[2]/max, hi=l+(w-l-r)*row[3]/max, est=l+(w-l-r)*row[1]/max; svg.push(`<text x="${l-12}" y="${y+5}" text-anchor="end" font-size="14">${esc(row[0])}</text><line x1="${lo}" x2="${hi}" y1="${y}" y2="${y}" stroke="#5e7286" stroke-width="5" stroke-linecap="round"/><circle cx="${est}" cy="${y}" r="7" fill="#5f6f52"/><text x="${hi+8}" y="${y+5}" font-size="12">${row[2]}–${row[3]}</text>`); });
+  svg.push(`<text x="${l}" y="${h-24}" font-size="13" fill="#6e685d">${esc(ex.unit)} · range remains visible</text></svg>`);
+  return svg.join("");
+}
+function chartTornado(ex) {
+  const rows=ex.dataset.rows, w=980,h=330,l=250,r=55,top=35,rowH=50,center=560,max=Math.max(...rows.flatMap(r=>[Math.abs(r[1]),Math.abs(r[2])]))*1.1, scale=(w-center-r)/max;
+  let svg=[`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(ex.text_equivalent)}"><rect width="${w}" height="${h}" fill="#fffdf8"/>`];
+  svg.push(`<line x1="${center}" x2="${center}" y1="20" y2="${h-45}" stroke="#a7967e"/>`);
+  rows.forEach((row,i)=>{ const y=top+i*rowH, lowW=Math.abs(row[1])*scale, highW=Math.abs(row[2])*scale; svg.push(`<text x="${l-12}" y="${y+18}" text-anchor="end" font-size="14">${esc(row[0])}</text><rect x="${center-lowW}" y="${y}" width="${lowW}" height="26" rx="5" fill="#8a6a42"/><rect x="${center}" y="${y}" width="${highW}" height="26" rx="5" fill="#5e7286"/><text x="${center-lowW-8}" y="${y+18}" text-anchor="end" font-size="12">${row[1]}</text><text x="${center+highW+8}" y="${y+18}" font-size="12">+${row[2]}</text>`); });
+  svg.push(`<text x="${l}" y="${h-24}" font-size="13" fill="#6e685d">${esc(ex.unit)} · ordered sensitivity around baseline</text></svg>`);
+  return svg.join("");
+}
+function chartBullet(ex) {
+  const row=ex.dataset.rows[0], w=980,h=220,l=90,r=70,max=100, y=90, barW=(w-l-r);
+  const actual=row[1], threshold=row[2], target=row[3];
+  let svg=[`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(ex.text_equivalent)}"><rect width="${w}" height="${h}" fill="#fffdf8"/>`];
+  svg.push(`<text x="${l}" y="45" font-size="18" font-weight="700">${esc(row[0])}</text>`);
+  svg.push(`<rect x="${l}" y="${y}" width="${barW}" height="36" rx="8" fill="#e8ded0"/>`);
+  svg.push(`<rect x="${l}" y="${y}" width="${barW*actual/max}" height="36" rx="8" fill="#5f6f52"/>`);
+  svg.push(`<line x1="${l+barW*threshold/max}" x2="${l+barW*threshold/max}" y1="${y-10}" y2="${y+48}" stroke="#8a6a42" stroke-width="4"/>`);
+  svg.push(`<line x1="${l+barW*target/max}" x2="${l+barW*target/max}" y1="${y-14}" y2="${y+52}" stroke="#5e7286" stroke-width="4"/>`);
+  svg.push(`<text x="${l+barW*actual/max+8}" y="${y+24}" font-size="13">${actual}%</text><text x="${l+barW*threshold/max}" y="${y+70}" text-anchor="middle" font-size="12">threshold ${threshold}%</text><text x="${l+barW*target/max}" y="${y+86}" text-anchor="middle" font-size="12">target ${target}%</text>`);
+  svg.push(`<text x="${l}" y="${h-18}" font-size="13" fill="#6e685d">actual, threshold, target on one shared scale</text></svg>`);
+  return svg.join("");
+}
+function renderChecklist() {
+  const items = [
+    "The chart states the analytic question clearly.",
+    "The main comparison uses a shared scale or aligned length.",
+    "Values can be ranked without legend hunting.",
+    "Close values remain distinguishable.",
+    "Units, labels, and source notes are present.",
+    "The visual emphasis matches the evidence.",
+    "The chart remains readable in grayscale.",
+    "The chart has a text equivalent.",
+    "Underlying data is recoverable.",
+    "The chart supports the intended decision.",
+    "A skeptical reviewer can audit the claim.",
+    "An AI context holder can interpret the same evidence path."
+  ];
+  document.getElementById("checklist").innerHTML = items.map((it,i)=>`<label class="checkitem"><input type="checkbox"><span>${i+1}. ${esc(it)}</span></label>`).join("");
+}
+function renderCitations() {
+  document.getElementById("citationFooter").innerHTML = atlas.citations.map(c => `<details><summary>${esc(c.label)} — ${esc(c.supports)}</summary><p>${esc(c.text)}</p></details>`).join("");
+}
+function renderPrompt() {
+  const move = byId(atlas.cognitive_moves, view.selectedMoveId);
+  const shape = byId(atlas.data_shapes, view.selectedShapeId);
+  const rec = getRecommendation();
+  const recForms = rec.recommended_visual_form_ids.map(id=>byId(atlas.visual_forms,id)?.label).filter(Boolean).join(", ");
+  const ex = byId(atlas.exemplars, view.selectedExemplarId);
+  const selectedForm = byId(atlas.visual_forms, view.selectedVisualFormId);
+  document.getElementById("aiPrompt").value = `Use this Visualization Fidelity Atlas as context.
+
+Current task:
+- Cognitive move: ${move.label}
+- Data shape: ${shape.label}
+- Audience / review context: ${view.audience}
+- Uncertainty treatment: ${view.uncertaintyRequired ? "range remains visible" : "standard context applies"}
+- AI-readable companion: ${view.aiIngestion ? "included" : "optional in this view"}
+- Reserved recommendations: ${view.showReserved ? "visible in this view" : "available through the selector; current view focuses on Recommended and Conditional forms"}
+
+Recommended visual forms:
+${recForms}
+
+Selected visual form:
+${selectedForm ? selectedForm.label : "Open for selection"}
+
+Doctrine to preserve:
+- Use visual forms that make the decision task easier.
+- When comparison matters, use a shared scale.
+- When composition matters, use ordered structure.
+- When profiles matter, keep each dimension readable.
+- When uncertainty matters, make the range visible.
+- Pair consequential visuals with source data, labels, units, text equivalents, caveats, and provenance.
+- Reserve circular and radial forms for rare, low-precision shape-recognition tasks with small data and low decision stakes.
+
+Selected exemplar:
+${ex ? ex.title : "none"}
+
+Please help choose, revise, or explain a visualization. Preserve source visibility, uncertainty visibility, accessibility, and AI-readable companion data.`;
+}
+function renderJsonLd() {
+  const documentNode = buildJsonLd(atlas, view);
+  document.getElementById("jsonld-data").textContent = JSON.stringify(documentNode, null, 2);
+}
+function jsonLdRef(id) {
+  return {"@id": `viz:${id}`};
+}
+function buildJsonLd(targetAtlas, targetView) {
+  const viewStateId = `viz:${targetAtlas.artifact_identity.id}-view-state`;
+  const atlasNode = {
+    "@id": `viz:${targetAtlas.artifact_identity.id}`,
+    "@type": ["viz:VisualizationFidelityAtlas", "schema:CreativeWork"],
+    "schema:name": targetAtlas.artifact_identity.display_name,
+    "schema:description": targetAtlas.artifact_identity.subtitle,
+    "viz:version": targetAtlas.artifact_identity.version,
+    "ca:sourceBand": targetAtlas.artifact_identity.source_band,
+    "viz:hasDataShape": targetAtlas.data_shapes.map(item => jsonLdRef(item.id)),
+    "viz:supportsCognitiveMove": targetAtlas.cognitive_moves.map(item => jsonLdRef(item.id)),
+    "viz:recommendsVisualForm": targetAtlas.visual_forms.map(item => jsonLdRef(item.id)),
+    "viz:hasExemplar": targetAtlas.exemplars.map(item => jsonLdRef(item.id)),
+    "viz:hasCitation": targetAtlas.citations.map(item => jsonLdRef(item.id)),
+    "viz:hasViewState": {"@id": viewStateId},
+  };
+  const primitiveNodes = targetAtlas.data_primitives.map(item => ({
+    "@id": `viz:${item.id}`,
+    "@type": "viz:DataPrimitive",
+    "schema:name": item.label,
+    "schema:description": item.definition,
+  }));
+  const shapeNodes = targetAtlas.data_shapes.map(item => ({
+    "@id": `viz:${item.id}`,
+    "@type": "viz:DataShape",
+    "schema:name": item.label,
+    "viz:hasPrimitive": item.primitive_ids.map(jsonLdRef),
+    "schema:description": item.example,
+  }));
+  const moveNodes = targetAtlas.cognitive_moves.map(item => ({
+    "@id": `viz:${item.id}`,
+    "@type": "viz:CognitiveMove",
+    "schema:name": item.label,
+    "schema:description": item.prompt,
+  }));
+  const formNodes = targetAtlas.visual_forms.map(item => ({
+    "@id": `viz:${item.id}`,
+    "@type": "viz:VisualForm",
+    "schema:name": item.label,
+    "schema:description": item.works_when,
+    "viz:fidelityScore": item.fidelity,
+    "viz:accessibilityScore": item.accessibility,
+    "viz:aiReadinessScore": item.ai_readiness,
+    "viz:hasCitation": (item.citation_ids || []).map(jsonLdRef),
+  }));
+  const recommendationNodes = targetAtlas.recommendations.map(item => ({
+    "@id": `viz:${item.id}`,
+    "@type": "viz:VisualRecommendation",
+    "viz:hasDataShape": jsonLdRef(item.data_shape_id),
+    "viz:supportsCognitiveMove": jsonLdRef(item.cognitive_move_id),
+    "viz:recommendsVisualForm": item.recommended_visual_form_ids.map(jsonLdRef),
+    "schema:description": item.reasoning,
+  }));
+  const exemplarNodes = targetAtlas.exemplars.map(item => ({
+    "@id": `viz:${item.id}`,
+    "@type": "viz:VisualizationExemplar",
+    "schema:name": item.title,
+    "viz:hasDataShape": jsonLdRef(item.data_shape_id),
+    "viz:supportsCognitiveMove": jsonLdRef(item.cognitive_move_id),
+    "viz:recommendsVisualForm": jsonLdRef(item.visual_form_id),
+    "schema:description": item.text_equivalent,
+    "viz:hasCitation": (item.citation_ids || []).map(jsonLdRef),
+  }));
+  const citationNodes = targetAtlas.citations.map(item => ({
+    "@id": `viz:${item.id}`,
+    "@type": "viz:CitationAnchor",
+    "schema:name": item.label,
+    "schema:description": item.text,
+    "viz:supports": item.supports,
+  }));
+  const viewNode = {
+    "@id": viewStateId,
+    "@type": "viz:ViewState",
+    "viz:selectedCognitiveMove": jsonLdRef(targetView.selectedMoveId),
+    "viz:selectedDataShape": jsonLdRef(targetView.selectedShapeId),
+    "viz:selectedVisualForm": targetView.selectedVisualFormId
+      ? jsonLdRef(targetView.selectedVisualFormId)
+      : null,
+    "viz:selectedExemplar": jsonLdRef(targetView.selectedExemplarId),
+    "viz:audienceContext": targetView.audience,
+    "viz:uncertaintyRequired": targetView.uncertaintyRequired,
+    "viz:aiIngestion": targetView.aiIngestion,
+    "viz:showReserved": targetView.showReserved,
+  };
+  return {
+    "@context": structuredClone(JSON_LD_CONTEXT),
+    "@graph": [
+      atlasNode,
+      ...primitiveNodes,
+      ...shapeNodes,
+      ...moveNodes,
+      ...formNodes,
+      ...recommendationNodes,
+      ...exemplarNodes,
+      ...citationNodes,
+      viewNode,
+    ],
+  };
+}
+function announce(targetId, message) {
+  document.getElementById(targetId).textContent = message;
+}
+function exportAtlasJson() {
+  return JSON.stringify({...atlas, view_state: structuredClone(view)}, null, 2);
+}
+async function copyText(label, text) {
+  const output = document.getElementById("copyOutput");
+  output.value = text;
+  try {
+    if (!navigator.clipboard || typeof navigator.clipboard.writeText !== "function") {
+      throw new Error("Clipboard access is unavailable");
+    }
+    await navigator.clipboard.writeText(text);
+    announce("actionStatus", `${label} is ready in the copy field and clipboard.`);
+  } catch {
+    output.focus();
+    output.select();
+    announce("actionStatus", `${label} is ready in the copy field. Select the text there and copy it manually.`);
+  }
+}
+function isRecord(value) {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+function requireRecord(value, path) {
+  if (!isRecord(value)) throw new Error(`${path} must be an object.`);
+}
+function requireText(value, path) {
+  if (typeof value !== "string" || value.trim() === "") throw new Error(`${path} must be a non-empty string.`);
+}
+function requireArray(value, path, minimum = 0) {
+  if (!Array.isArray(value) || value.length < minimum) throw new Error(`${path} must contain at least ${minimum} item${minimum === 1 ? "" : "s"}.`);
+}
+function requireBoolean(value, path) {
+  if (typeof value !== "boolean") throw new Error(`${path} must be true or false.`);
+}
+function requireFiniteNumber(value, path) {
+  if (typeof value !== "number" || !Number.isFinite(value)) throw new Error(`${path} must be a finite number.`);
+}
+function indexCollection(items, path) {
+  const index = new Map();
+  items.forEach((item, position) => {
+    requireRecord(item, `${path}[${position}]`);
+    requireText(item.id, `${path}[${position}].id`);
+    if (index.has(item.id)) throw new Error(`${path} contains duplicate id ${item.id}.`);
+    index.set(item.id, item);
+  });
+  return index;
+}
+function requireReferences(ids, index, path) {
+  requireArray(ids, path);
+  ids.forEach((id, position) => {
+    requireText(id, `${path}[${position}]`);
+    if (!index.has(id)) throw new Error(`${path}[${position}] references unknown id ${id}.`);
+  });
+}
+function validateAtlas(candidate) {
+  requireRecord(candidate, "Atlas");
+  requireRecord(candidate.artifact_identity, "artifact_identity");
+  requireText(candidate.artifact_identity.id, "artifact_identity.id");
+  if (candidate.artifact_identity.id !== ATLAS.artifact_identity.id) throw new Error(`artifact_identity.id must remain ${ATLAS.artifact_identity.id}.`);
+  const collections = ["data_primitives", "data_shapes", "cognitive_moves", "visual_forms", "recommendations", "exemplars", "citations"];
+  collections.forEach(name => requireArray(candidate[name], name, 1));
+
+  const primitives = indexCollection(candidate.data_primitives, "data_primitives");
+  const shapes = indexCollection(candidate.data_shapes, "data_shapes");
+  const moves = indexCollection(candidate.cognitive_moves, "cognitive_moves");
+  const forms = indexCollection(candidate.visual_forms, "visual_forms");
+  indexCollection(candidate.recommendations, "recommendations");
+  indexCollection(candidate.exemplars, "exemplars");
+  const citations = indexCollection(candidate.citations, "citations");
+
+  candidate.data_primitives.forEach((item, index) => {
+    requireText(item.label, `data_primitives[${index}].label`);
+    requireText(item.definition, `data_primitives[${index}].definition`);
+  });
+  candidate.data_shapes.forEach((item, index) => {
+    requireText(item.label, `data_shapes[${index}].label`);
+    requireReferences(item.primitive_ids, primitives, `data_shapes[${index}].primitive_ids`);
+    requireArray(item.required_fields, `data_shapes[${index}].required_fields`, 1);
+  });
+  candidate.cognitive_moves.forEach((item, index) => {
+    requireText(item.label, `cognitive_moves[${index}].label`);
+    requireText(item.prompt, `cognitive_moves[${index}].prompt`);
+  });
+  candidate.visual_forms.forEach((item, index) => {
+    requireText(item.label, `visual_forms[${index}].label`);
+    requireText(item.family, `visual_forms[${index}].family`);
+    requireText(item.works_when, `visual_forms[${index}].works_when`);
+    requireReferences(item.best_for, moves, `visual_forms[${index}].best_for`);
+    requireReferences(item.citation_ids || [], citations, `visual_forms[${index}].citation_ids`);
+  });
+  candidate.recommendations.forEach((item, index) => {
+    if (!moves.has(item.cognitive_move_id)) throw new Error(`recommendations[${index}].cognitive_move_id references an unknown move.`);
+    if (!shapes.has(item.data_shape_id)) throw new Error(`recommendations[${index}].data_shape_id references an unknown shape.`);
+    requireReferences(item.recommended_visual_form_ids, forms, `recommendations[${index}].recommended_visual_form_ids`);
+    requireReferences(item.conditional_visual_form_ids || [], forms, `recommendations[${index}].conditional_visual_form_ids`);
+    requireReferences(item.reserved_visual_form_ids || [], forms, `recommendations[${index}].reserved_visual_form_ids`);
+    requireText(item.reasoning, `recommendations[${index}].reasoning`);
+    for (const score of ["fidelity_score", "accessibility_score", "ai_readiness_score"]) {
+      if (Object.hasOwn(item, score)) {
+        requireFiniteNumber(item[score], `recommendations[${index}].${score}`);
+      }
+    }
+  });
+  const chartColumns = {bar:2, dot:2, dumbbell:3, line:2, stacked100:2, heatmap:2, interval:4, tornado:3, bullet:4};
+  candidate.exemplars.forEach((item, index) => {
+    requireText(item.title, `exemplars[${index}].title`);
+    if (!forms.has(item.visual_form_id)) throw new Error(`exemplars[${index}].visual_form_id references an unknown form.`);
+    if (!moves.has(item.cognitive_move_id)) throw new Error(`exemplars[${index}].cognitive_move_id references an unknown move.`);
+    if (!shapes.has(item.data_shape_id)) throw new Error(`exemplars[${index}].data_shape_id references an unknown shape.`);
+    requireText(item.chart_type, `exemplars[${index}].chart_type`);
+    requireRecord(item.dataset, `exemplars[${index}].dataset`);
+    requireArray(item.dataset.columns, `exemplars[${index}].dataset.columns`, chartColumns[item.chart_type] || 1);
+    requireArray(item.dataset.rows, `exemplars[${index}].dataset.rows`, item.chart_type === "line" ? 2 : 1);
+    item.dataset.rows.forEach((row, rowIndex) => {
+      requireArray(row, `exemplars[${index}].dataset.rows[${rowIndex}]`, item.dataset.columns.length);
+      if (row.length !== item.dataset.columns.length) throw new Error(`exemplars[${index}].dataset.rows[${rowIndex}] must match the column count.`);
+      row.slice(1).forEach((value, valueIndex) => requireFiniteNumber(value, `exemplars[${index}].dataset.rows[${rowIndex}][${valueIndex + 1}]`));
+    });
+    requireReferences(item.citation_ids || [], citations, `exemplars[${index}].citation_ids`);
+  });
+  candidate.citations.forEach((item, index) => {
+    requireText(item.label, `citations[${index}].label`);
+    requireText(item.text, `citations[${index}].text`);
+    requireText(item.supports, `citations[${index}].supports`);
+  });
+  return structuredClone(candidate);
+}
+function normalizeView(candidate, targetAtlas, baseView = defaultViewFor(targetAtlas)) {
+  requireRecord(candidate, "view_state");
+  const unknownKeys = Object.keys(candidate).filter(key => !VIEW_KEYS.has(key));
+  if (unknownKeys.length) throw new Error(`view_state includes unsupported field ${unknownKeys[0]}.`);
+  const next = {...baseView};
+  for (const key of VIEW_KEYS) if (Object.hasOwn(candidate, key)) next[key] = candidate[key];
+
+  const moveIds = new Set(targetAtlas.cognitive_moves.map(item => item.id));
+  const shapeIds = new Set(targetAtlas.data_shapes.map(item => item.id));
+  const exemplarIds = new Set(targetAtlas.exemplars.map(item => item.id));
+  const formIds = new Set(targetAtlas.visual_forms.map(item => item.id));
+  const selectId = (key, ids, fallback) => {
+    if (Object.hasOwn(candidate, key) && !ids.has(next[key])) throw new Error(`view_state.${key} references an unknown id.`);
+    if (!ids.has(next[key])) next[key] = fallback;
+  };
+  selectId("selectedMoveId", moveIds, targetAtlas.cognitive_moves[0].id);
+  selectId("selectedShapeId", shapeIds, targetAtlas.data_shapes[0].id);
+  selectId("selectedExemplarId", exemplarIds, targetAtlas.exemplars[0].id);
+  if (Object.hasOwn(candidate, "selectedVisualFormId") && next.selectedVisualFormId !== "" && !formIds.has(next.selectedVisualFormId)) throw new Error("view_state.selectedVisualFormId references an unknown id.");
+  if (next.selectedVisualFormId !== "" && !formIds.has(next.selectedVisualFormId)) next.selectedVisualFormId = targetAtlas.visual_forms[0].id;
+  if (!AUDIENCE_IDS.has(next.audience)) throw new Error("view_state.audience must use a documented audience value.");
+  requireBoolean(next.showReserved, "view_state.showReserved");
+  requireBoolean(next.uncertaintyRequired, "view_state.uncertaintyRequired");
+  requireBoolean(next.aiIngestion, "view_state.aiIngestion");
+  return structuredClone(next);
+}
+function prepareImport(parsed) {
+  requireRecord(parsed, "Imported JSON");
+  let nextAtlas = atlas;
+  let viewCandidate;
+  let includesAtlas = false;
+  if (isRecord(parsed.artifact_identity)) {
+    nextAtlas = validateAtlas(parsed);
+    viewCandidate = parsed.view_state || {};
+    includesAtlas = true;
+  } else if (isRecord(parsed.view_state)) {
+    viewCandidate = parsed.view_state;
+  } else if (Object.keys(parsed).some(key => VIEW_KEYS.has(key))) {
+    viewCandidate = parsed;
+  } else {
+    throw new Error("Provide an Atlas export, a view_state object, or a bare view-state object.");
+  }
+  const baseView = includesAtlas ? defaultViewFor(nextAtlas) : view;
+  const nextView = normalizeView(viewCandidate, nextAtlas, baseView);
+  return {atlas: includesAtlas ? nextAtlas : atlas, view: nextView};
+}
+function applyImport(candidate) {
+  const previousAtlas = atlas;
+  const previousView = view;
+  try {
+    atlas = candidate.atlas;
+    view = candidate.view;
+    populateSelectors();
+    renderAll();
+  } catch (error) {
+    atlas = previousAtlas;
+    view = previousView;
+    populateSelectors();
+    renderAll();
+    throw error;
+  }
+}
+function importText(text, sourceLabel) {
+  const byteLength = new Blob([text]).size;
+  if (byteLength > MAX_IMPORT_BYTES) {
+    announce("importStatus", `${sourceLabel} is ${byteLength.toLocaleString()} bytes. Choose a JSON file no larger than ${MAX_IMPORT_BYTES.toLocaleString()} bytes.`);
+    return;
+  }
+  if (text.trim() === "") {
+    announce("importStatus", `${sourceLabel} is ready for content. Add Atlas JSON or choose a local file.`);
+    return;
+  }
+  try {
+    const candidate = prepareImport(JSON.parse(text));
+    applyImport(candidate);
+    announce("importStatus", `${sourceLabel} accepted. The Atlas and visible controls now show the imported state.`);
+  } catch (error) {
+    announce("importStatus", `${sourceLabel} needs revision: ${error instanceof Error ? error.message : "The value could not be read."} The current Atlas remains active.`);
+  }
+}
+async function importFile(event) {
+  const input = event.currentTarget;
+  const file = input.files?.[0];
+  if (!file) return;
+  if (file.size > MAX_IMPORT_BYTES) {
+    announce("importStatus", `${file.name} is ${file.size.toLocaleString()} bytes. Choose a JSON file no larger than ${MAX_IMPORT_BYTES.toLocaleString()} bytes.`);
+    input.value = "";
+    return;
+  }
+  try {
+    importText(await file.text(), file.name);
+  } catch {
+    announce("importStatus", `${file.name} could not be read. Choose a readable local JSON file; the current Atlas remains active.`);
+  } finally {
+    input.value = "";
+  }
+}
+init();
+</script>
+</body>
+</html>

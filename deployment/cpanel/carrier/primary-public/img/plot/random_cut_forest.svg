@@ -1,0 +1,197 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 900" width="1500" height="900" role="img" aria-labelledby="rcf-title rcf-desc" data-role="streaming-anomaly-inquiry" data-category="method" data-current-state="review-route-visible" data-state-model="observed|partitioned|look-here|human-review" data-anomaly-cue="look-here" data-source-family="ai-legible-viewlet-svg-library-v1" data-provenance="adapted-from-author-provided-viewlet-atlas">
+  <title id="rcf-title">Random Cut Forest turns a changing stream into a reviewable attention route</title>
+  <desc id="rcf-desc">A streaming-anomaly diagram follows page-view events through random partitions. A new arrival changes the shape of the forest and opens a written Anomaly, Look Here state. Event-log, attention-route, and human-review viewlets preserve source context and route the signal to accountable review. Slow emphasis moves through four labeled stages; the static presentation retains the complete evidence and route.</desc>
+  <metadata type="application/json"><![CDATA[
+    {
+      "artifact_id": "random-cut-forest-method-field-v2",
+      "method": "Random Cut Forest",
+      "source_family": "ai-legible-viewlet-svg-library-v1",
+      "source_viewlets": ["viewlet-event-log-v1", "viewlet-context-graph-v1", "viewlet-attention-route-v1", "viewlet-human-ai-v1"],
+      "state_model": ["observed", "partitioned", "look-here", "human-review"],
+      "anomaly_cue": "look-here",
+      "provenance": "Canonical viewlet geometry and semantics adapted from the author-provided AI-Legible Viewlet SVG Atlas."
+    }
+  ]]></metadata>
+  <style>
+    :root {
+      --ink:#10233f; --cobalt:#2855f3; --deep:#153fbe; --paper:#fffdf8;
+      --pale:#e7efff; --sea:#d9efea; --tiffany:#73e0d1; --acid:#f2ff67;
+      --blush:#ffdbe3; --muted:#49627f; --grid:#cbdaf1;
+    }
+    text { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill:var(--ink); }
+    .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; letter-spacing:.08em; }
+    .background { fill:#f7fbff; }
+    .shadow { fill:var(--ink); }
+    .header { fill:var(--cobalt); stroke:var(--ink); stroke-width:3; }
+    .header-text { fill:#fff; }
+    .surface { fill:var(--paper); stroke:var(--ink); stroke-width:2.5; }
+    .card { fill:#fff; stroke:var(--ink); stroke-width:2; }
+    .soft-card { fill:var(--pale); stroke:var(--ink); stroke-width:2; }
+    .window { fill:#fff; stroke:var(--cobalt); stroke-width:2; }
+    .window-line,.ui-line { stroke:var(--cobalt); fill:none; stroke-width:2; vector-effect:non-scaling-stroke; }
+    .quiet-line { stroke:var(--grid); fill:none; stroke-width:2; vector-effect:non-scaling-stroke; }
+    .stream-line { stroke:var(--deep); fill:none; stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
+    .cut { stroke:var(--muted); stroke-width:3; stroke-dasharray:10 8; opacity:.62; }
+    .cut--attention { stroke:var(--cobalt); opacity:.9; }
+    .arrow { fill:var(--cobalt); }
+    .stage-chip { fill:var(--sea); stroke:var(--ink); stroke-width:2; }
+    .stage-chip--attention { fill:var(--acid); }
+    .state-label { font-size:17px; font-weight:900; }
+    .stage-detail { font-size:14px; font-weight:700; fill:var(--muted); }
+    .title { font-size:36px; font-weight:900; }
+    .subtitle { font-size:17px; font-weight:650; }
+    .kicker { font-size:13px; font-weight:850; }
+    .section-title { font-size:23px; font-weight:900; }
+    .body { font-size:17px; font-weight:650; }
+    .small { font-size:14px; font-weight:700; }
+    .micro { font-size:12px; font-weight:850; }
+    .point { fill:var(--sea); stroke:var(--deep); stroke-width:2; }
+    .new-point { fill:var(--acid); stroke:var(--ink); stroke-width:3; transform-box:fill-box; transform-origin:center; animation:new-arrival 12s ease-in-out infinite; }
+    .new-ring { fill:none; stroke:var(--cobalt); stroke-width:4; opacity:.32; transform-box:fill-box; transform-origin:center; animation:new-ring 12s ease-in-out infinite; }
+    .route-stage { opacity:.84; animation-duration:12s; animation-timing-function:ease-in-out; animation-iteration-count:infinite; }
+    .route-stage--1 { animation-name:stage-one; }
+    .route-stage--2 { animation-name:stage-two; }
+    .route-stage--3 { animation-name:stage-three; }
+    .route-stage--4 { animation-name:stage-four; }
+    @keyframes stage-one { 0%,100%{opacity:.84} 5%,18%{opacity:1} 23%{opacity:.84} }
+    @keyframes stage-two { 0%,22%,100%{opacity:.84} 29%,42%{opacity:1} 47%{opacity:.84} }
+    @keyframes stage-three { 0%,46%,100%{opacity:.84} 53%,68%{opacity:1} 73%{opacity:.84} }
+    @keyframes stage-four { 0%,72%,100%{opacity:.84} 79%,94%{opacity:1} 98%{opacity:.84} }
+    @keyframes new-arrival { 0%,42%,76%,100%{transform:scale(1)} 53%,68%{transform:scale(1.12)} }
+    @keyframes new-ring { 0%,42%,76%,100%{opacity:.28;transform:scale(1)} 53%,68%{opacity:.82;transform:scale(1.18)} }
+    @media (prefers-reduced-motion:reduce) {
+      .route-stage,.new-point,.new-ring { animation:none !important; }
+      .route-stage { opacity:1; }
+      .new-point,.new-ring { transform:none !important; }
+      .new-ring { opacity:.65; }
+    }
+    @media (forced-colors:active) {
+      .background,.surface,.card,.soft-card,.window,.stage-chip { fill:Canvas; stroke:CanvasText; }
+      .header { fill:Highlight; stroke:CanvasText; }
+      .header-text { fill:HighlightText !important; }
+      text { fill:CanvasText !important; }
+      .stream-line,.cut,.window-line,.ui-line,.quiet-line,.new-ring { stroke:CanvasText; }
+      .point,.new-point,.stage-chip--attention { fill:Highlight; stroke:CanvasText; }
+      .arrow,.shadow { fill:CanvasText; }
+    }
+  </style>
+
+  <rect class="background" width="1500" height="900" aria-hidden="true"/>
+  <g role="group" aria-labelledby="rcf-header-title">
+    <title id="rcf-header-title">Method orientation and evidence boundary</title>
+    <rect class="shadow" x="52" y="52" width="1400" height="118" rx="18" aria-hidden="true"/>
+    <rect class="header" x="40" y="40" width="1400" height="118" rx="18"/>
+    <text class="mono kicker header-text" x="72" y="76">STREAMING METHOD · ATTENTION ROUTE</text>
+    <text class="title header-text" x="72" y="118">Random Cut Forest notices when the stream changes shape</text>
+    <text class="subtitle header-text" x="72" y="145">A changing point opens inquiry and preserves the route to a named reviewer.</text>
+  </g>
+
+  <g role="group" aria-labelledby="rcf-rail-title">
+    <title id="rcf-rail-title">Four written stages from observation to human review</title>
+    <g class="route-stage route-stage--1" data-role="event-log" data-category="analytics" data-current-state="observed" transform="translate(52 190)">
+      <rect class="stage-chip" width="310" height="68" rx="14"/>
+      <text class="mono state-label" x="20" y="29">01 · OBSERVED</text>
+      <text class="stage-detail" x="20" y="52">Event stream retains route and time.</text>
+    </g>
+    <path class="arrow" d="M374 217H407V206L430 224L407 242V231H374Z" aria-hidden="true"/>
+    <g class="route-stage route-stage--2" data-role="context-graph" data-category="graph" data-current-state="partitioned" transform="translate(442 190)">
+      <rect class="stage-chip" width="310" height="68" rx="14"/>
+      <text class="mono state-label" x="20" y="29">02 · PARTITIONED</text>
+      <text class="stage-detail" x="20" y="52">Random cuts revise forest structure.</text>
+    </g>
+    <path class="arrow" d="M764 217H797V206L820 224L797 242V231H764Z" aria-hidden="true"/>
+    <g class="route-stage route-stage--3" data-role="attention-route" data-category="attention" data-current-state="look-here" transform="translate(832 190)">
+      <rect class="stage-chip stage-chip--attention" width="260" height="68" rx="14"/>
+      <text class="mono state-label" x="20" y="29">03 · ANOMALY</text>
+      <text class="stage-detail" x="20" y="52">LOOK HERE · inspect shape change.</text>
+    </g>
+    <path class="arrow" d="M1104 217H1137V206L1160 224L1137 242V231H1104Z" aria-hidden="true"/>
+    <g class="route-stage route-stage--4" data-role="human-ai" data-category="collaboration" data-current-state="human-review" transform="translate(1172 190)">
+      <rect class="stage-chip" width="276" height="68" rx="14"/>
+      <text class="mono state-label" x="20" y="29">04 · HUMAN REVIEW</text>
+      <text class="stage-detail" x="20" y="52">Named owner interprets the signal.</text>
+    </g>
+  </g>
+
+  <g role="group" aria-labelledby="rcf-stream-title" transform="translate(52 286)">
+    <title id="rcf-stream-title">Page-view stream, random partitions, and a new arrival that changes the forest</title>
+    <rect class="shadow" x="9" y="9" width="864" height="526" rx="20" aria-hidden="true"/>
+    <rect class="surface" width="864" height="526" rx="20"/>
+    <text class="mono kicker" x="30" y="38">SOURCE-ORDERED EVENT EVIDENCE</text>
+    <text class="section-title" x="30" y="72">The stream remains visible as the forest asks a new question.</text>
+    <rect class="card" x="30" y="98" width="804" height="332" rx="14"/>
+    <line class="quiet-line" x1="66" y1="174" x2="804" y2="174" aria-hidden="true"/>
+    <line class="quiet-line" x1="66" y1="250" x2="804" y2="250" aria-hidden="true"/>
+    <line class="quiet-line" x1="66" y1="326" x2="804" y2="326" aria-hidden="true"/>
+    <line class="cut" x1="306" y1="122" x2="306" y2="404"/>
+    <line class="cut" x1="66" y1="218" x2="804" y2="218"/>
+    <line class="cut cut--attention" x1="620" y1="122" x2="620" y2="404"/>
+    <line class="cut cut--attention" x1="526" y1="304" x2="804" y2="304"/>
+    <polyline class="stream-line" points="76,326 124,310 172,318 220,286 268,298 316,262 364,274 412,238 460,250 508,222 556,238 604,208 652,227 700,188 748,206 796,144"/>
+    <g aria-hidden="true">
+      <circle class="point" cx="76" cy="326" r="7"/><circle class="point" cx="124" cy="310" r="7"/><circle class="point" cx="172" cy="318" r="7"/><circle class="point" cx="220" cy="286" r="7"/><circle class="point" cx="268" cy="298" r="7"/><circle class="point" cx="316" cy="262" r="7"/><circle class="point" cx="364" cy="274" r="7"/><circle class="point" cx="412" cy="238" r="7"/><circle class="point" cx="460" cy="250" r="7"/><circle class="point" cx="508" cy="222" r="7"/><circle class="point" cx="556" cy="238" r="7"/><circle class="point" cx="604" cy="208" r="7"/><circle class="point" cx="652" cy="227" r="7"/><circle class="point" cx="700" cy="188" r="7"/><circle class="point" cx="748" cy="206" r="7"/>
+      <circle class="new-ring" cx="796" cy="144" r="25"/>
+      <circle class="new-point" cx="796" cy="144" r="11"/>
+    </g>
+    <text class="mono micro" x="706" y="134">NEW ARRIVAL</text>
+    <text class="mono micro" x="76" y="412">EARLIER</text>
+    <text class="mono micro" x="742" y="412">CURRENT</text>
+    <rect class="soft-card" x="30" y="448" width="804" height="52" rx="10"/>
+    <text class="small" x="50" y="471"><tspan x="50">The method surfaces changed partition depth and displacement.</tspan><tspan x="50" dy="19">The source event remains available for review.</tspan></text>
+  </g>
+
+  <g role="group" aria-labelledby="rcf-viewlet-title" transform="translate(952 286)">
+    <title id="rcf-viewlet-title">AI-legible event log, attention route, and human review viewlets</title>
+    <rect class="shadow" x="9" y="9" width="496" height="526" rx="20" aria-hidden="true"/>
+    <rect class="surface" width="496" height="526" rx="20"/>
+    <text class="mono kicker" x="28" y="38">VIEWLET ROUTE · SOURCE + RECEIVER</text>
+
+    <g role="group" aria-labelledby="rcf-event-viewlet-title" data-role="event-log" data-category="analytics" transform="translate(28 62)">
+      <title id="rcf-event-viewlet-title">Observed event log with source fields retained</title>
+      <rect class="window" width="190" height="142" rx="11"/>
+      <line class="window-line" x1="0" y1="26" x2="190" y2="26"/>
+      <circle class="point" cx="15" cy="13" r="4"/><circle class="point" cx="29" cy="13" r="4"/><circle class="point" cx="43" cy="13" r="4"/>
+      <g class="ui-line">
+        <rect x="18" y="42" width="18" height="13" rx="3"/><line x1="48" y1="47" x2="166" y2="47"/>
+        <rect x="18" y="64" width="18" height="13" rx="3"/><line x1="48" y1="69" x2="148" y2="69"/>
+        <rect x="18" y="86" width="18" height="13" rx="3"/><line x1="48" y1="91" x2="158" y2="91"/>
+        <rect x="18" y="108" width="18" height="13" rx="3"/><line x1="48" y1="113" x2="132" y2="113"/>
+      </g>
+      <text class="mono micro" x="95" y="133" text-anchor="middle">OBSERVED · EVENT LOG</text>
+    </g>
+
+    <path class="arrow" d="M235 118H266V106L291 133L266 160V148H235Z" aria-hidden="true"/>
+
+    <g role="group" aria-labelledby="rcf-attention-viewlet-title" data-role="attention-route" data-category="attention" data-current-state="look-here" transform="translate(290 62)">
+      <title id="rcf-attention-viewlet-title">Attention route marked Anomaly, Look Here</title>
+      <rect class="window" width="178" height="142" rx="11"/>
+      <line class="window-line" x1="0" y1="26" x2="178" y2="26"/>
+      <circle class="point" cx="15" cy="13" r="4"/><circle class="point" cx="29" cy="13" r="4"/><circle class="point" cx="43" cy="13" r="4"/>
+      <path d="M89 43L130 110H48Z" fill="var(--acid)" stroke="var(--ink)" stroke-width="3"/>
+      <text class="mono state-label" x="89" y="83" text-anchor="middle">LOOK</text>
+      <text class="mono state-label" x="89" y="103" text-anchor="middle">HERE</text>
+      <text class="mono micro" x="89" y="133" text-anchor="middle">LOOK HERE · INQUIRY</text>
+    </g>
+
+    <path class="arrow" d="M240 208H256V226H270L248 246L226 226H240Z" aria-hidden="true"/>
+
+    <g role="group" aria-labelledby="rcf-review-viewlet-title" data-role="human-ai" data-category="collaboration" data-current-state="human-review" transform="translate(28 246)">
+      <title id="rcf-review-viewlet-title">Human and AI collaboration with a named accountable reviewer</title>
+      <rect class="window" width="440" height="194" rx="11"/>
+      <line class="window-line" x1="0" y1="28" x2="440" y2="28"/>
+      <circle class="point" cx="16" cy="14" r="4"/><circle class="point" cx="31" cy="14" r="4"/><circle class="point" cx="46" cy="14" r="4"/>
+      <circle cx="108" cy="91" r="38" fill="var(--pale)" stroke="var(--cobalt)" stroke-width="3"/>
+      <text class="mono small" x="108" y="88" text-anchor="middle">MODEL</text>
+      <text class="mono micro" x="108" y="106" text-anchor="middle">SURFACES</text>
+      <path class="arrow" d="M155 84H248V72L274 91L248 110V98H155Z" aria-hidden="true"/>
+      <circle cx="332" cy="91" r="38" fill="var(--sea)" stroke="var(--ink)" stroke-width="3"/>
+      <text class="mono small" x="332" y="88" text-anchor="middle">OWNER</text>
+      <text class="mono micro" x="332" y="106" text-anchor="middle">DECIDES</text>
+      <rect class="stage-chip" x="58" y="145" width="324" height="32" rx="8"/>
+      <text class="mono micro" x="220" y="166" text-anchor="middle">REVIEW · EXCEPTION · RECOVERY ROUTE</text>
+    </g>
+    <rect class="soft-card" x="28" y="446" width="440" height="54" rx="10"/>
+    <text class="small" x="47" y="469">Boundary: detection changes where review begins.</text>
+    <text class="small" x="47" y="490">Purpose and intervention remain human decisions.</text>
+  </g>
+</svg>

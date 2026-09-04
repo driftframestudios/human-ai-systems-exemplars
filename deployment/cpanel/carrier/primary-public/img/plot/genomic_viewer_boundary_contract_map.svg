@@ -1,0 +1,263 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="gv-boundary-title gv-boundary-desc">
+  <title id="gv-boundary-title">Sign-off is the routing contract for the genomic viewer</title>
+  <desc id="gv-boundary-desc">A four-column architecture map shows profile inputs flowing through server authorization into visible and assignable work, then into deterministic routing and bounded automation. The populations served are CBO and Genomic Curators, Pathology, Translational Oncology, CBI, and Medical Affairs. A before-and-after band shows the change from diverging rules to one server-evaluated profile contract.</desc>
+
+  <defs>
+    <clipPath id="gv-frame-clip">
+      <rect x="18" y="18" width="1564" height="1084" rx="28"/>
+    </clipPath>
+    <pattern id="gv-speckle" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="6" cy="9" r="1.05" fill="#17345f" opacity=".12"/>
+      <circle cx="25" cy="21" r=".8" fill="#2855f3" opacity=".1"/>
+    </pattern>
+    <pattern id="gv-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#2855f3" stroke-width="1" opacity=".09"/>
+    </pattern>
+    <style>
+      .frame{fill:none;stroke:#17345f;stroke-width:3}.paper{fill:#fffaf2}.grain{fill:url(#gv-speckle)}.grid{fill:url(#gv-grid)}
+      .cobalt{fill:#2855f3}.shadow{fill:#17345f}.population-rail{fill:#cfe7f7;stroke:#17345f;stroke-width:2}.population-chip{fill:#fff5de;stroke:#17345f;stroke-width:1.35}
+      .column{fill:#fffdf8;stroke:#17345f;stroke-width:2}.column-warm{fill:#fff5de;stroke:#17345f;stroke-width:2}
+      .column-cobalt{fill:#e7efff;stroke:#17345f;stroke-width:2}.column-sea{fill:#d9efea;stroke:#17345f;stroke-width:2}
+      .header-warm{fill:#ffd3d0}.header-cobalt{fill:#2855f3}.header-sea{fill:#cfe7f7}.header-ink{fill:#17345f}
+      .input-row{fill:#fffdf8;stroke:#7893bc;stroke-width:1.2}.auth-row{fill:#fffdf8;stroke:#7893bc;stroke-width:1.2}
+      .work-row{fill:#fffdf8;stroke:#3f7775;stroke-width:1.2}.route-card{fill:#e7efff;stroke:#2855f3;stroke-width:1.5}
+      .human-boundary{fill:#ffd3d0;stroke:#17345f;stroke-width:1.7}.before{fill:#ffd3d0;stroke:#17345f;stroke-width:2}
+      .after{fill:#d9efea;stroke:#17345f;stroke-width:2}.investment{fill:#e7efff;stroke:#17345f;stroke-width:1.5}.arrow{fill:#2855f3}.arrow-sea{fill:#3f7775}
+      .eyebrow{font:700 15px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.55px;fill:#5d6f8b}
+      .eyebrow-on{font:700 15px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.55px;fill:#dbe7ff}
+      .title{font:780 35px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf8}
+      .subtitle{font:520 18px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#e8efff}
+      .population{font:650 14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .column-title{font:760 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .column-title-on{font:760 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf8}
+      .card-title{font:740 18px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .body{font:500 15px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}
+      .body-strong{font:650 15px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .micro{font:700 12px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.75px;fill:#5d6f8b}
+      .micro-cobalt{font:700 12px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.75px;fill:#153fbe}
+      .micro-sea{font:700 12px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.75px;fill:#315f5d}
+      .micro-coral{font:700 12px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.75px;fill:#7f302a}
+      .micro-on{font:700 12px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.75px;fill:#e8efff}
+      .chip{font:700 12px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .contrast-title{font:760 20px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .contrast-body{font:550 16px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}
+    </style>
+  </defs>
+
+  <g clip-path="url(#gv-frame-clip)">
+    <rect class="paper" x="18" y="18" width="1564" height="1084"/>
+    <rect class="grain" x="18" y="18" width="1564" height="1084"/>
+    <rect class="cobalt" x="18" y="18" width="1564" height="142"/>
+    <rect class="grid" x="18" y="18" width="1564" height="142"/>
+  </g>
+  <rect class="frame" x="18" y="18" width="1564" height="1084" rx="28"/>
+
+  <text class="eyebrow-on" x="54" y="54">GENOMIC VIEWER · PROFILE · PERMISSION · ROUTING</text>
+  <text class="title" x="54" y="97">Sign-off is the routing contract</text>
+  <text class="subtitle" x="54" y="128">One profile aligns visible work, assignable cases, review authority, and the boundary around automation.</text>
+  <rect x="1270" y="48" width="258" height="34" rx="7" fill="#f2ff67"/>
+  <text class="chip" x="1291" y="70">PROFILE CONTRACT · CURRENT</text>
+  <rect x="1270" y="91" width="258" height="27" rx="6" fill="#ffd3d0"/>
+  <text class="micro" x="1291" y="109">VISIBLE · ROUTED · SIGN-OFF</text>
+
+  <g role="group" aria-labelledby="gv-populations-title">
+    <title id="gv-populations-title">Populations served by the profile and permission contract</title>
+    <rect class="shadow" x="48" y="175" width="1512" height="68" rx="16"/>
+    <rect class="population-rail" x="40" y="167" width="1520" height="76" rx="16"/>
+    <text class="eyebrow" x="58" y="191">POPULATIONS SERVED</text>
+    <rect class="population-chip" x="58" y="202" width="278" height="28" rx="14"/>
+    <text class="population" x="78" y="221">CBO / Genomic Curators</text>
+    <rect class="population-chip" x="350" y="202" width="152" height="28" rx="14"/>
+    <text class="population" x="374" y="221">Pathology</text>
+    <rect class="population-chip" x="516" y="202" width="258" height="28" rx="14"/>
+    <text class="population" x="538" y="221">Translational Oncology</text>
+    <rect class="population-chip" x="788" y="202" width="102" height="28" rx="14"/>
+    <text class="population" x="820" y="221">CBI</text>
+    <rect class="population-chip" x="904" y="202" width="190" height="28" rx="14"/>
+    <text class="population" x="927" y="221">Medical Affairs</text>
+    <text class="body-strong" x="1120" y="220">Different work surfaces; one qualification boundary.</text>
+  </g>
+
+  <g role="group" aria-labelledby="gv-profile-title">
+    <title id="gv-profile-title">Profile inputs</title>
+    <rect class="shadow" x="48" y="284" width="330" height="490" rx="18"/>
+    <rect class="column-warm" x="40" y="276" width="330" height="490" rx="18"/>
+    <rect class="header-warm" x="41" y="277" width="328" height="64" rx="17"/>
+    <text class="micro" x="60" y="303">01 · PROFILE INPUTS</text>
+    <text class="column-title" x="60" y="328">Qualification enters once</text>
+
+    <text class="body" x="60" y="370">
+      <tspan x="60">The profile collects the conditions that</tspan>
+      <tspan x="60" dy="21">shape review authority and case scope.</tspan>
+    </text>
+
+    <rect class="input-row" x="60" y="407" width="290" height="50" rx="10"/>
+    <text class="micro" x="76" y="425">REVIEW QUALIFICATION</text>
+    <text class="card-title" x="76" y="449">Assay sign-off</text>
+
+    <rect class="input-row" x="60" y="461" width="290" height="50" rx="10"/>
+    <text class="micro" x="76" y="479">WORK DOMAIN</text>
+    <text class="card-title" x="76" y="503">Product</text>
+
+    <rect class="input-row" x="60" y="515" width="290" height="50" rx="10"/>
+    <text class="micro" x="76" y="533">OPERATING SCOPE</text>
+    <text class="card-title" x="76" y="557">Geography</text>
+
+    <rect class="input-row" x="60" y="569" width="290" height="50" rx="10"/>
+    <text class="micro" x="76" y="587">DECISION BOUNDARY</text>
+    <text class="card-title" x="76" y="611">Regulatory body</text>
+
+    <rect class="input-row" x="60" y="623" width="290" height="50" rx="10"/>
+    <text class="micro" x="76" y="641">CASE PHASE</text>
+    <text class="card-title" x="76" y="665">Lifecycle</text>
+
+    <text class="micro" x="60" y="727">ONE PROFILE · VERSIONED QUALIFICATION</text>
+  </g>
+
+  <path class="arrow" aria-hidden="true" d="M370 500 H420 V487 L443 508 L420 529 V516 H370 Z"/>
+
+  <g role="group" aria-labelledby="gv-authorization-title">
+    <title id="gv-authorization-title">Server authorization</title>
+    <rect class="shadow" x="458" y="284" width="330" height="490" rx="18"/>
+    <rect class="column-cobalt" x="450" y="276" width="330" height="490" rx="18"/>
+    <rect class="header-cobalt" x="451" y="277" width="328" height="64" rx="17"/>
+    <text class="micro" x="470" y="303" style="fill:#dbe9ff">02 · SERVER AUTHORIZATION</text>
+    <text class="column-title-on" x="470" y="328">The server resolves authority</text>
+
+    <text class="body" x="470" y="370">
+      <tspan x="470">Authorization evaluates the current</tspan>
+      <tspan x="470" dy="21">profile before work is exposed or changed.</tspan>
+    </text>
+
+    <rect class="auth-row" x="470" y="425" width="135" height="96" rx="12"/>
+    <text class="micro-cobalt" x="486" y="451">MAY</text>
+    <text class="card-title" x="486" y="480">Read</text>
+    <text class="body" x="486" y="502">qualified work</text>
+
+    <rect class="auth-row" x="625" y="425" width="135" height="96" rx="12"/>
+    <text class="micro-cobalt" x="641" y="451">MAY</text>
+    <text class="card-title" x="641" y="480">Assign</text>
+    <text class="body" x="641" y="502">eligible cases</text>
+
+    <rect class="auth-row" x="470" y="541" width="135" height="96" rx="12"/>
+    <text class="micro-cobalt" x="486" y="567">MAY</text>
+    <text class="card-title" x="486" y="596">Write</text>
+    <text class="body" x="486" y="618">review state</text>
+
+    <rect class="auth-row" x="625" y="541" width="135" height="96" rx="12"/>
+    <text class="micro-cobalt" x="641" y="567">MAY</text>
+    <text class="card-title" x="641" y="596">Report</text>
+    <text class="body" x="641" y="618">signed findings</text>
+
+    <rect class="route-card" x="470" y="660" width="290" height="71" rx="12"/>
+    <text class="body-strong" x="488" y="686">
+      <tspan x="488">Authority stays server-evaluated;</tspan>
+      <tspan x="488" dy="21">the interface reflects the result.</tspan>
+    </text>
+  </g>
+
+  <path class="arrow-sea" aria-hidden="true" d="M780 500 H830 V487 L853 508 L830 529 V516 H780 Z"/>
+
+  <g role="group" aria-labelledby="gv-visible-work-title">
+    <title id="gv-visible-work-title">Visible and assignable work</title>
+    <rect class="shadow" x="868" y="284" width="330" height="490" rx="18"/>
+    <rect class="column-sea" x="860" y="276" width="330" height="490" rx="18"/>
+    <rect class="header-sea" x="861" y="277" width="328" height="64" rx="17"/>
+    <text class="micro-sea" x="880" y="303">03 · VISIBLE AND ASSIGNABLE WORK</text>
+    <text class="column-title" x="880" y="328">Work matches qualification</text>
+
+    <text class="body" x="880" y="370">
+      <tspan x="880">The same contract shapes what appears,</tspan>
+      <tspan x="880" dy="21">what can be assigned, and who may act.</tspan>
+    </text>
+
+    <rect class="work-row" x="880" y="425" width="290" height="82" rx="12"/>
+    <text class="micro-sea" x="898" y="451">DASHBOARD</text>
+    <text class="body-strong" x="898" y="477">
+      <tspan x="898">Panels match the</tspan>
+      <tspan x="898" dy="20">current profile.</tspan>
+    </text>
+
+    <rect class="work-row" x="880" y="521" width="290" height="82" rx="12"/>
+    <text class="micro-sea" x="898" y="547">CASES</text>
+    <text class="body-strong" x="898" y="573">
+      <tspan x="898">Assignable work matches</tspan>
+      <tspan x="898" dy="20">current assay sign-off.</tspan>
+    </text>
+
+    <rect class="work-row" x="880" y="617" width="290" height="82" rx="12"/>
+    <text class="micro-sea" x="898" y="643">STUDIES</text>
+    <text class="body-strong" x="898" y="669">
+      <tspan x="898">Visibility follows</tspan>
+      <tspan x="898" dy="20">qualification.</tspan>
+    </text>
+
+    <text class="micro-sea" x="880" y="730">VISIBLE · ASSIGNABLE · ACTIONABLE</text>
+  </g>
+
+  <path class="arrow" aria-hidden="true" d="M1190 500 H1240 V487 L1263 508 L1240 529 V516 H1190 Z"/>
+
+  <g role="group" aria-labelledby="gv-routing-title">
+    <title id="gv-routing-title">Routing and automation</title>
+    <rect class="shadow" x="1278" y="284" width="282" height="490" rx="18"/>
+    <rect class="column" x="1270" y="276" width="290" height="490" rx="18"/>
+    <rect class="header-ink" x="1271" y="277" width="288" height="64" rx="17"/>
+    <text class="micro" x="1290" y="303" style="fill:#d8eeec">04 · ROUTING + AUTOMATION</text>
+    <text class="column-title-on" x="1290" y="328">The contract routes work</text>
+
+    <text class="body" x="1290" y="370">
+      <tspan x="1290">Rules and assistance inherit the same</tspan>
+      <tspan x="1290" dy="21">qualification boundary as the reviewer.</tspan>
+    </text>
+
+    <rect class="route-card" x="1290" y="425" width="250" height="108" rx="12"/>
+    <text class="micro-cobalt" x="1308" y="451">DETERMINISTIC ROUTING</text>
+    <text class="body-strong" x="1308" y="480">
+      <tspan x="1308">Eligible cases reach</tspan>
+      <tspan x="1308" dy="21">the matching work surface.</tspan>
+    </text>
+
+    <rect class="route-card" x="1290" y="547" width="250" height="86" rx="12"/>
+    <text class="micro-cobalt" x="1308" y="573">CASE &amp; AUTOMATED ADVICE</text>
+    <text class="body-strong" x="1308" y="602">Assists inside the route.</text>
+
+    <rect class="human-boundary" x="1290" y="641" width="250" height="100" rx="12"/>
+    <text class="micro-coral" x="1308" y="667">HUMAN DECISION BOUNDARY</text>
+    <text class="body-strong" x="1308" y="694">
+      <tspan x="1308">Diagnostic-consequence</tspan>
+      <tspan x="1308" dy="20">decisions remain with a</tspan>
+      <tspan x="1308" dy="20">signed-off human.</tspan>
+    </text>
+  </g>
+
+  <g role="group" aria-labelledby="gv-change-title">
+    <title id="gv-change-title">Before and after operating contrast</title>
+    <text class="eyebrow" x="50" y="814">CHANGED WORK · FROM RECONSTRUCTION TO ONE ROUTING CONTRACT</text>
+
+    <rect class="shadow" x="58" y="842" width="680" height="185" rx="18"/>
+    <rect class="before" x="50" y="834" width="680" height="185" rx="18"/>
+    <text class="micro-coral" x="74" y="865">BEFORE</text>
+    <text class="contrast-title" x="74" y="899">Combined list</text>
+    <text class="contrast-body" x="74" y="934">
+      <tspan x="74">Assay-blind pull · random reassignment ·</tspan>
+      <tspan x="74" dy="24">human queues carrying status.</tspan>
+    </text>
+    <text class="micro-coral" x="74" y="994">STATUS LIVED IN PEOPLE AND QUEUE CONVENTIONS</text>
+
+    <path class="arrow" aria-hidden="true" d="M730 914 H800 V899 L830 926 L800 953 V938 H730 Z"/>
+
+    <rect class="shadow" x="858" y="842" width="692" height="185" rx="18"/>
+    <rect class="after" x="850" y="834" width="700" height="185" rx="18"/>
+    <text class="micro-sea" x="874" y="865">AFTER</text>
+    <text class="contrast-title" x="874" y="899">Qualified work is visible work</text>
+    <text class="contrast-body" x="874" y="934">
+      <tspan x="874">Operational status is</tspan>
+      <tspan x="874" dy="24">first-class data.</tspan>
+    </text>
+    <text class="micro-sea" x="874" y="994">VISIBLE AUTHORITY · DETERMINISTIC ROUTING · BOUNDED ADVICE</text>
+  </g>
+
+  <rect class="investment" x="50" y="1040" width="1500" height="42" rx="7"/>
+  <text class="micro" x="68" y="1066">INVESTMENT PATH</text>
+  <text class="body-strong" x="208" y="1067">Product shapes qualification · platform resolves permissions · operations keeps assignments current · domain leaders retain sign-off</text>
+</svg>

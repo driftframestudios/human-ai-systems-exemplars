@@ -1,0 +1,740 @@
+/*
+ * FMI LIMS/ELN paired Site Reading
+ *
+ * The warm field carries the historical Solution narrative. Dark implementation
+ * fields carry the Implementation substrate. Written labels repeat the track
+ * identity so the distinction never depends on color.
+ */
+
+.fmi-lims-eln-page {
+    --fmi-rose: #ffd3d0;
+    --fmi-rose-paper: #fdebe9;
+    --fmi-rose-quiet: #feeae9;
+    --fmi-warm-white: #fff7f4;
+    --fmi-cobalt: #2855f3;
+    --fmi-cobalt-deep: #10254a;
+    --fmi-iron: #11151d;
+    --fmi-night-ink: #071a35;
+    --fmi-ink: #141c5b;
+    --fmi-blue-ink: #183a78;
+    --fmi-acid: #f2ff67;
+    --fmi-coral: #fa7065;
+    --fmi-constellation-cream: #fff5de;
+    --fmi-constellation-sky: #cfe7f7;
+    --fmi-constellation-sea: #d9efea;
+}
+
+.fmi-track-key {
+    display: grid;
+    gap: .7rem;
+    inline-size: min(100%, 58rem);
+    list-style: none;
+    margin: clamp(1.5rem, 3vw, 2.5rem) auto 0;
+    padding: 0;
+    text-align: start;
+}
+
+.fmi-track-key li {
+    align-items: start;
+    background: color-mix(in srgb, var(--canvas-night) 62%, transparent);
+    border: 1px solid color-mix(in srgb, var(--canvas-on-night) 55%, transparent);
+    border-inline-start: .35rem solid var(--fmi-coral);
+    color: var(--canvas-on-night);
+    display: grid;
+    gap: .25rem;
+    min-inline-size: 0;
+    padding: .9rem 1rem;
+}
+
+.fmi-track-key li:nth-child(2) {
+    border-inline-start-color: var(--fmi-acid);
+}
+
+.fmi-track-key strong {
+    color: var(--canvas-on-night);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .78rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.fmi-track-key span {
+    color: color-mix(in srgb, var(--canvas-on-night) 86%, transparent);
+    font-size: .92rem;
+    line-height: 1.45;
+}
+
+.fmi-reading-rail {
+    background: var(--fmi-warm-white);
+    border-block: .125rem solid var(--fmi-ink);
+    box-shadow: 0 .35rem 0 color-mix(in srgb, var(--fmi-ink) 24%, transparent);
+    color: var(--fmi-ink);
+    inset-block-start: 3.15rem;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    position: sticky;
+    scrollbar-gutter: stable;
+    z-index: 20;
+}
+
+.fmi-reading-rail__label {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    margin: 0;
+    padding: .65rem 1rem 0;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.fmi-reading-rail ol {
+    display: flex;
+    gap: .4rem;
+    list-style: none;
+    margin: 0;
+    padding: .45rem 1rem .75rem;
+    width: max-content;
+}
+
+.fmi-reading-rail li {
+    margin: 0;
+}
+
+.fmi-reading-rail__tick {
+    display: none;
+}
+
+.fmi-reading-rail a,
+.fmi-reading-rail a:visited {
+    align-items: center;
+    background: var(--fmi-warm-white);
+    border: 1px solid color-mix(in srgb, var(--fmi-ink) 48%, transparent);
+    color: var(--fmi-ink);
+    display: inline-flex;
+    font-size: .78rem;
+    font-weight: 760;
+    min-block-size: 2.75rem;
+    padding: .45rem .7rem;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.fmi-reading-rail a:hover,
+.fmi-reading-rail a:focus-visible {
+    background: var(--fmi-acid);
+    color: var(--fmi-ink);
+    outline: .18rem solid var(--fmi-cobalt);
+    outline-offset: .12rem;
+    text-decoration: underline;
+    text-decoration-thickness: .12em;
+    text-underline-offset: .18em;
+}
+
+.fmi-solution-field {
+    color: var(--fmi-blue-ink);
+}
+
+.fmi-solution-field--orientation,
+.fmi-solution-field--rose {
+    background: var(--fmi-rose);
+}
+
+.fmi-solution-field--paper {
+    background: var(--fmi-rose-paper);
+}
+
+.fmi-solution-field--quiet {
+    background: var(--fmi-rose-quiet);
+}
+
+.fmi-solution-field--warm-white {
+    background: var(--fmi-warm-white);
+}
+
+.fmi-solution-field :is(.txt-h2, .txt-h3, .txt-h4, .beat-title, .architecture-track-title) {
+    color: var(--fmi-ink);
+}
+
+.fmi-solution-field .architecture-track-title {
+    border-block-end-color: var(--fmi-cobalt);
+}
+
+.fmi-solution-field :is(.debrief-at-glance, .table-figure, .interpretive-aside, .discovery-callout) {
+    background: var(--fmi-warm-white);
+}
+
+.fmi-solution-field .debrief-at-glance > div {
+    background: var(--fmi-warm-white);
+}
+
+.fmi-solution-field .debrief-quote {
+    border-inline-start-color: var(--fmi-coral);
+}
+
+.fmi-track-marker {
+    align-items: center;
+    color: var(--fmi-ink);
+    display: flex;
+    flex-wrap: wrap;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .8rem;
+    font-weight: 780;
+    gap: .55rem;
+    letter-spacing: .06em;
+    margin-block: 0 1rem;
+    text-transform: uppercase;
+}
+
+.fmi-track-marker span {
+    background: var(--fmi-acid);
+    border: .125rem solid var(--fmi-ink);
+    color: var(--fmi-ink);
+    padding: .35rem .55rem;
+}
+
+.fmi-track-promise {
+    border-inline-start: .3rem solid var(--fmi-coral);
+    color: var(--fmi-blue-ink);
+    font-size: clamp(1.02rem, .98rem + .18vw, 1.16rem);
+    line-height: 1.55;
+    margin-block: 0 1.75rem;
+    max-inline-size: var(--canvas-lead-measure);
+    padding: .35rem 0 .35rem 1rem;
+}
+
+.fmi-implementation-field {
+    --canvas-link-color: var(--canvas-link-on-dark);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
+    color: #edf3fb;
+}
+
+.fmi-implementation-field--iron {
+    background: var(--fmi-iron);
+}
+
+.fmi-implementation-field--cobalt {
+    background: var(--fmi-cobalt-deep);
+}
+
+.fmi-implementation-field--ink {
+    background: var(--fmi-night-ink);
+}
+
+.fmi-implementation-field > .content > :is(section, article) > :is(p, ul, ol),
+.fmi-implementation-field > .content > :is(section, article) > :is(p, ul, ol) :is(li, strong) {
+    color: #edf3fb;
+}
+
+.fmi-implementation-field :is(.beat-title, .architecture-track-title) {
+    border-block-end-color: var(--fmi-coral);
+    color: #fff9ed;
+}
+
+.fmi-implementation-field > .content > section > :is(h2, h3, h4),
+.fmi-implementation-field > .content > article > :is(h2, h3, h4) {
+    color: #fff9ed;
+}
+
+.fmi-implementation-field > .content > section > figure:not(.table-figure) > figcaption {
+    color: #edf3fb;
+}
+
+.fmi-track-marker--implementation {
+    color: #edf3fb;
+}
+
+.fmi-track-marker--implementation span {
+    border-color: #fff9ed;
+}
+
+.fmi-track-promise--implementation {
+    border-inline-start-color: var(--fmi-acid);
+    color: #edf3fb;
+}
+
+.fmi-implementation-field :is(
+    .architecture-pair article,
+    .implementation-moves article,
+    .implementation-companion,
+    .cobalt-operating-field__aside,
+    .cobalt-operating-field__table,
+    .fmi-architecture-carriers,
+    .fmi-carrier-card
+    ) {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
+    color: var(--fmi-ink);
+}
+
+.fmi-implementation-field :is(
+    .architecture-pair article,
+    .implementation-moves article,
+    .implementation-companion,
+    .cobalt-operating-field__aside,
+    .cobalt-operating-field__table,
+    .fmi-evidence-planes,
+    .fmi-architecture-carriers,
+    .fmi-carrier-card
+    ) :is(h3, h4, h5, p, li, dt, dd, strong) {
+    color: var(--fmi-ink);
+}
+
+.fmi-implementation-field .architecture-pair article,
+.fmi-implementation-field .implementation-moves article {
+    background: var(--fmi-warm-white);
+    border-color: var(--fmi-ink);
+}
+
+.fmi-implementation-field .implementation-moves article {
+    border-block-start-color: var(--fmi-cobalt);
+}
+
+.fmi-implementation-field .implementation-moves pre {
+    background: #eef3fa;
+    border-color: color-mix(in srgb, var(--fmi-ink) 45%, transparent);
+}
+
+.fmi-implementation-field .table-figure:not(.cobalt-operating-field__table) {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
+    background: var(--fmi-warm-white);
+    color: var(--fmi-ink);
+    padding: clamp(.7rem, 2vw, 1.2rem);
+}
+
+.fmi-implementation-field .table-figure :is(caption, th, td, figcaption) {
+    color: var(--fmi-ink);
+}
+
+.fmi-evidence-planes {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
+    background: var(--fmi-constellation-cream);
+    border: .125rem solid var(--fmi-ink);
+    border-radius: .75rem;
+    box-shadow: .5rem .5rem 0 var(--fmi-cobalt);
+    color: var(--fmi-ink);
+    margin-block: clamp(1.75rem, 4vw, 3rem);
+    padding: clamp(1.15rem, 3vw, 2rem);
+}
+
+.fmi-evidence-planes > :first-child,
+.fmi-evidence-planes > :last-child {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.fmi-evidence-planes dl {
+    display: grid;
+    gap: .8rem;
+    margin-block: 1.25rem;
+}
+
+.fmi-evidence-planes dl > div {
+    background: var(--fmi-warm-white);
+    border: 1px solid color-mix(in srgb, var(--fmi-ink) 42%, transparent);
+    border-inline-start: .35rem solid var(--fmi-coral);
+    min-inline-size: 0;
+    padding: 1rem;
+}
+
+.fmi-evidence-planes dl > div:nth-child(2) {
+    border-inline-start-color: var(--fmi-cobalt);
+}
+
+.fmi-evidence-planes dl > div:nth-child(3) {
+    border-inline-start-color: var(--fmi-ink);
+    border-inline-start-style: dashed;
+}
+
+.fmi-evidence-planes dt {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .82rem;
+    font-weight: 800;
+    letter-spacing: .04em;
+    margin-block-end: .4rem;
+    text-transform: uppercase;
+}
+
+.fmi-evidence-planes dd {
+    line-height: 1.55;
+    margin: 0;
+}
+
+.fmi-evidence-planes__sources {
+    border-block-start: 1px solid color-mix(in srgb, var(--fmi-ink) 28%, transparent);
+    font-size: .88rem;
+    padding-block-start: .9rem;
+}
+
+.fmi-architecture-carriers {
+    background: #eef3fa;
+    border: .125rem solid var(--fmi-ink);
+    border-radius: .75rem;
+    box-shadow: .5rem .5rem 0 var(--fmi-coral);
+    margin-block: clamp(2rem, 4vw, 3.5rem);
+    padding: clamp(1.15rem, 3vw, 2rem);
+}
+
+.fmi-architecture-carriers > :first-child,
+.fmi-architecture-carriers > :last-child {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.fmi-carrier-grid {
+    display: grid;
+    gap: 1rem;
+    margin-block-start: 1.4rem;
+}
+
+.fmi-carrier-card {
+    background: var(--fmi-constellation-cream);
+    border: .125rem solid var(--fmi-ink);
+    border-block-start: .45rem solid var(--fmi-cobalt);
+    min-inline-size: 0;
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.fmi-carrier-card:nth-child(2) {
+    background: var(--fmi-constellation-sea);
+    border-block-start-color: var(--fmi-coral);
+}
+
+.fmi-carrier-card > :first-child,
+.fmi-carrier-card > :last-child {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.fmi-carrier-card__label {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.fmi-carrier-card h5 {
+    font-size: clamp(1.25rem, 1.1rem + .4vw, 1.55rem);
+    line-height: 1.25;
+    margin-block: .45rem .8rem;
+}
+
+.fmi-carrier-card details {
+    margin-block-start: 1rem;
+}
+
+.fmi-carrier-card summary {
+    align-items: center;
+    background: var(--fmi-warm-white);
+    border: .125rem solid var(--fmi-ink);
+    color: var(--fmi-ink);
+    cursor: pointer;
+    display: flex;
+    font-weight: 780;
+    min-block-size: 2.75rem;
+    padding: .65rem .8rem;
+}
+
+.fmi-carrier-card summary::before {
+    content: "+";
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 1.2rem;
+    font-weight: 900;
+    margin-inline-end: .65rem;
+}
+
+.fmi-carrier-card details[open] summary::before {
+    content: "−";
+}
+
+.fmi-carrier-card summary:focus-visible {
+    outline: .2rem solid var(--fmi-cobalt);
+    outline-offset: .15rem;
+}
+
+.fmi-carrier-embed {
+    margin-block: 1rem 0;
+}
+
+.fmi-carrier-embed iframe {
+    block-size: clamp(36rem, 75vh, 54rem);
+    border: .125rem solid var(--fmi-ink);
+}
+
+.fmi-a3-figure {
+    margin-block: 1.25rem 0;
+}
+
+.fmi-a3-figure > a {
+    border: .125rem solid var(--fmi-ink);
+    display: block;
+    max-inline-size: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+}
+
+.fmi-a3-figure img {
+    block-size: auto;
+    display: block;
+    inline-size: 100%;
+    min-inline-size: 48rem;
+}
+
+.fmi-a3-figure a:focus-visible {
+    outline: .2rem solid var(--fmi-cobalt);
+    outline-offset: .18rem;
+}
+
+.fmi-lims-eln-page main [id] {
+    scroll-margin-block-start: 9rem;
+}
+
+@media screen and (min-width: 42rem) {
+    .fmi-track-key,
+    .fmi-evidence-planes dl {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .fmi-evidence-planes dl > div:last-child {
+        grid-column: 1 / -1;
+    }
+}
+
+@media screen and (min-width: 75rem) {
+    .fmi-lims-eln-page main [id] {
+        scroll-margin-block-start: 7.5rem;
+    }
+
+    .fmi-lims-eln-page main > .content__container {
+        box-sizing: border-box;
+        padding-inline-end: 15rem;
+    }
+
+    /*
+     * The full reading rail reserves 15rem from the viewport-relative field.
+     * Centering on the remaining canvas then preserves the shared 4vw start
+     * gutter instead of sending evidence beyond the viewport edge.
+     */
+    .fmi-lims-eln-page :is(.table-figure--wide, .story-visual) {
+        inline-size: min(calc(92vw - 15rem), var(--canvas-editorial-measure));
+    }
+
+    .fmi-reading-rail {
+        border: .125rem solid var(--fmi-ink);
+        box-shadow: .4rem .4rem 0 var(--fmi-ink);
+        inset-block-start: 6.75rem;
+        inset-inline-end: max(1rem, calc((100vw - 112rem) / 2 + 1rem));
+        max-block-size: calc(100vh - 8rem);
+        min-inline-size: 10rem;
+        overflow: auto;
+        position: fixed;
+        width: min(13rem, calc((100vw - 52rem) / 2 - 1rem));
+    }
+
+    .fmi-reading-rail__label {
+        padding: .85rem .85rem .4rem;
+    }
+
+    .fmi-reading-rail ol {
+        display: grid;
+        gap: .25rem;
+        padding: 0 .55rem .65rem;
+        width: auto;
+    }
+
+    .fmi-reading-rail a,
+    .fmi-reading-rail a:visited {
+        display: flex;
+        inline-size: 100%;
+        white-space: normal;
+    }
+}
+
+@media screen and (min-width: 120rem) {
+    .fmi-carrier-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media screen and (max-width: 30rem) {
+    .fmi-reading-rail__label {
+        padding-inline: .75rem;
+    }
+
+    .fmi-reading-rail ol {
+        padding-inline: .75rem;
+    }
+
+    .fmi-evidence-planes,
+    .fmi-architecture-carriers {
+        border-radius: .4rem;
+        box-shadow: .3rem .3rem 0 var(--fmi-ink);
+    }
+
+    .fmi-carrier-embed iframe {
+        block-size: 34rem;
+    }
+}
+
+@media screen and (max-width: 74.99rem) {
+    .fmi-reading-rail {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        inset-block: max(4.5rem, calc(env(safe-area-inset-top) + 3.75rem)) max(.75rem, env(safe-area-inset-bottom));
+        inset-inline: env(safe-area-inset-left) auto;
+        max-block-size: none;
+        overflow: visible;
+        overscroll-behavior: auto;
+        pointer-events: none;
+        position: fixed;
+        width: 1.75rem;
+        z-index: 60;
+    }
+
+    .fmi-reading-rail__label {
+        display: none;
+    }
+
+    .fmi-reading-rail ol {
+        align-content: center;
+        align-content: safe center;
+        block-size: 100%;
+        display: grid;
+        gap: 0;
+        inline-size: 1.75rem;
+        overflow-y: auto;
+        padding: .35rem 0;
+        scrollbar-width: thin;
+        width: auto;
+    }
+
+    .fmi-reading-rail a,
+    .fmi-reading-rail a:visited {
+        background: transparent;
+        border: 0;
+        block-size: 1.5rem;
+        inline-size: 1.5rem;
+        justify-content: flex-start;
+        min-block-size: 0;
+        padding: 0;
+        pointer-events: auto;
+        position: relative;
+        white-space: normal;
+    }
+
+    .fmi-reading-rail__tick {
+        background: rgb(255 250 242 / .92);
+        border: .125rem solid var(--fmi-cobalt);
+        block-size: .3rem;
+        box-shadow: .08rem .08rem 0 rgb(23 52 95 / .2);
+        display: block;
+        flex: 0 0 auto;
+        inline-size: .6rem;
+    }
+
+    .fmi-reading-rail__text {
+        background: var(--fmi-ink);
+        border: .0625rem solid var(--fmi-warm-white);
+        color: var(--fmi-warm-white);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: .68rem;
+        font-weight: 800;
+        inline-size: max-content;
+        inset-block-start: 50%;
+        inset-inline-start: calc(100% + .4rem);
+        max-inline-size: min(19rem, calc(100vw - 3rem));
+        opacity: 0;
+        padding: .35rem .5rem;
+        pointer-events: none;
+        position: absolute;
+        transform: translate(-.3rem, -50%);
+        transition: opacity .14s ease, transform .14s ease;
+        visibility: hidden;
+    }
+
+    .fmi-reading-rail a:hover,
+    .fmi-reading-rail a:focus-visible {
+        background: var(--fmi-warm-white);
+        outline-offset: 0;
+        text-decoration: none;
+    }
+
+    .fmi-reading-rail a:is(:hover, :focus-visible) .fmi-reading-rail__text {
+        opacity: 1;
+        transform: translate(0, -50%);
+        visibility: visible;
+    }
+}
+
+@media (forced-colors: active) {
+    .fmi-reading-rail,
+    .fmi-track-key li,
+    .fmi-track-marker span,
+    .fmi-evidence-planes,
+    .fmi-architecture-carriers,
+    .fmi-carrier-card,
+    .fmi-a3-figure > a {
+        border-color: CanvasText;
+        box-shadow: none;
+    }
+
+    .fmi-reading-rail a:hover,
+    .fmi-reading-rail a:focus-visible {
+        outline-color: Highlight;
+    }
+
+    .fmi-reading-rail__tick,
+    .fmi-reading-rail__text {
+        background: Canvas;
+        border-color: CanvasText;
+        box-shadow: none;
+        color: CanvasText;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fmi-reading-rail__text {
+        transition: none;
+    }
+}
+
+@media print {
+    .fmi-reading-rail,
+    .fmi-carrier-embed iframe {
+        display: none;
+    }
+
+    .fmi-solution-field,
+    .fmi-implementation-field,
+    .fmi-evidence-planes,
+    .fmi-architecture-carriers,
+    .fmi-carrier-card {
+        --canvas-link-color: var(--canvas-link-on-light);
+        --canvas-link-visited-color: var(--canvas-link-visited-on-light);
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .fmi-lims-eln-page main > .content__container {
+        padding-inline-end: 0;
+    }
+
+    .fmi-implementation-field :is(h2, h3, h4, h5, p, li, dt, dd, strong),
+    .fmi-solution-field :is(h2, h3, h4, h5, p, li, dt, dd, strong) {
+        color: #000 !important;
+    }
+
+    .fmi-evidence-planes,
+    .fmi-architecture-carriers,
+    .fmi-carrier-card {
+        box-shadow: none;
+    }
+
+    .fmi-a3-figure img {
+        min-inline-size: 0;
+    }
+}

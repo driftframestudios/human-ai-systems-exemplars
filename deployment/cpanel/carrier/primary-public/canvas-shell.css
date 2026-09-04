@@ -1,0 +1,465 @@
+/* Context Canvas shared component: navigation shell ----------------------
+   Consumers: 41 top-level Context Canvas routes loading canvas-shell.css.
+   Owns: the progressively generated route shelf, shared footer, section rail,
+   source-derived rail mode, and their responsive, reduced-motion,
+   forced-color, and print behavior.
+   Load order: after expanded.css and applicable component and route bundles;
+   an explicitly documented opt-in composition stylesheet may follow.
+   Current source-derived consumer: debriefs.html. The neutral
+   [data-canvas-page-rail-source] extension exposes direct identified children
+   while ordinary major-section discovery remains the shared fallback.
+   Contract relationship: route bundles and Visual Fidelity Contracts supply
+   palette, rhythm, density, and composition. This component owns navigation
+   behavior and receives route variation through established custom properties.
+   Semantic page content and local footer links remain useful without scripting;
+   canvas-shell.js progressively installs the shared navigation surfaces. */
+
+.super-footer {
+    background: var(--about-deep-forest-charcoal, #242a24);
+    border-block-start: .3rem solid var(--about-tiffany, #56d8c9);
+    color: #fffaf2;
+    display: block;
+    inline-size: 100%;
+    /*margin-block-start: clamp(3rem, 0vw, 7rem);*/
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.super-footer__local {
+    /*border-block-end: .0625rem solid rgb(255 250 242 / .38);*/
+    margin: 0 auto 2rem;
+    max-inline-size: 100rem;
+    padding-block-end: 1rem;
+}
+
+.super-footer__local :is(p, nav) {
+    margin-block: .35rem;
+}
+
+.site-attribution {
+    font-size: .78rem;
+    line-height: 1.5;
+    max-inline-size: 100rem;
+    overflow-wrap: anywhere;
+}
+
+.super-footer__local .site-attribution {
+    border-block-start: .0625rem solid rgb(255 250 242 / .38);
+    margin-block-start: 1rem;
+    padding-block-start: 1rem;
+}
+
+.super-footer__grid {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-inline: auto;
+    max-inline-size: 100rem;
+}
+
+.super-footer__column {
+    min-inline-size: 0;
+}
+
+.super-footer__heading {
+    border-block-end: .125rem solid var(--about-teal, #009485);
+    color: #fffaf2;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: .78rem;
+    letter-spacing: .09em;
+    margin: 0 0 .8rem;
+    padding-block-end: .55rem;
+    text-transform: uppercase;
+}
+
+.super-footer__list {
+    display: grid;
+    text-align: left;
+    gap: .42rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.super-footer a,
+.super-footer a:visited {
+    color: #fffaf2;
+    text-decoration-color: var(--about-tiffany, #56d8c9);
+    text-decoration-thickness: .1em;
+    text-underline-offset: .2em;
+}
+
+.super-footer a:is(:hover, :focus-visible) {
+    color: var(--about-tiffany, #56d8c9);
+}
+
+.super-footer__closing {
+    align-items: end;
+    border-block-start: .0625rem solid rgb(255 250 242 / .38);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    justify-content: space-between;
+    margin: 2rem auto 0;
+    max-inline-size: 100rem;
+    padding-block-start: 1rem;
+}
+
+.super-footer__closing p {
+    margin: 0;
+    max-inline-size: 65ch;
+}
+
+.super-footer__reserved {
+    color: #d4d8d2;
+}
+
+.visitor-boundary {
+    border-block-start: .0625rem solid rgb(255 250 242 / .38);
+    box-sizing: border-box;
+    display: grid;
+    flex: 1 0 100%;
+    gap: .75rem;
+    grid-column: 1 / -1;
+    inline-size: 100%;
+    margin: 2rem auto 0;
+    max-inline-size: 100rem;
+    overflow-wrap: anywhere;
+    padding-block-start: 1rem;
+    user-select: text;
+}
+
+.visitor-boundary__marker {
+    box-sizing: border-box;
+    color: inherit;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: .7rem;
+    line-height: 1.55;
+    margin: 0;
+    max-inline-size: 100%;
+}
+
+.visitor-boundary__context {
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: .8rem;
+    line-height: 1.55;
+    margin: 0;
+    max-inline-size: 70ch;
+}
+
+.about-footer {
+    flex-wrap: wrap;
+}
+
+.about-footer > .site-attribution,
+.super-footer > .site-attribution {
+    border-block-start: .0625rem solid rgb(255 250 242 / .38);
+    inline-size: 100%;
+    flex: 1 0 100%;
+    grid-column: 1 / -1;
+    margin: 1rem auto 0;
+    max-inline-size: 100rem;
+    padding-block-start: 1rem;
+}
+
+.page-section-rail {
+    inset-block-start: 50%;
+    inset-inline-end: max(.45rem, env(safe-area-inset-right));
+    overflow: visible;
+    position: fixed;
+    transform: translateY(-50%);
+    z-index: 40;
+}
+
+.page-section-rail ol {
+    display: grid;
+    gap: .18rem;
+    list-style: none;
+    margin: 0;
+    max-block-size: 80vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: .4rem;
+    scrollbar-width: thin;
+}
+
+.page-section-rail li {
+    margin: 0;
+    min-block-size: 0;
+}
+
+.page-section-rail li[hidden] {
+    display: none;
+}
+
+.page-section-rail__link {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    block-size: 2.75rem;
+    display: flex;
+    inline-size: 2.75rem;
+    justify-content: center;
+    position: relative;
+    text-decoration: none;
+}
+
+.page-section-rail__link::before {
+    background: rgb(255 250 242 / .92);
+    border: .125rem solid var(--canvas-cobalt, #2855f3);
+    block-size: 1.45rem;
+    content: "";
+    inline-size: .48rem;
+}
+
+.page-section-rail__link:is(.is-in-view, .is-target, [aria-current="location"])::before {
+    background: var(--canvas-cobalt, #2855f3);
+}
+
+.page-section-rail__link:is(.is-target, [aria-current="location"])::before {
+    box-shadow: 0 0 0 .125rem var(--canvas-paper, #fffaf2), 0 0 0 .25rem var(--canvas-cobalt, #2855f3);
+}
+
+.page-section-rail__readout {
+    --page-section-rail-readout-paint-reserve: .25rem;
+    background: var(--about-deep-forest-charcoal, #242a24);
+    border: .0625rem solid #fffaf2;
+    box-sizing: border-box;
+    box-shadow: .2rem .2rem 0 rgb(23 52 95 / .28);
+    color: #fffaf2;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: .68rem;
+    font-weight: 800;
+    inline-size: max-content;
+    inset-block-start: 0;
+    inset-inline-end: calc(100% + .55rem);
+    line-height: 1.35;
+    max-inline-size: min(22rem, 72vw);
+    opacity: 0;
+    padding: .35rem .5rem;
+    pointer-events: none;
+    position: absolute;
+    text-wrap: balance;
+    transform: translate(.35rem, -50%);
+    transition: opacity .14s ease, transform .14s ease;
+    visibility: hidden;
+    overflow-wrap: anywhere;
+    z-index: 2;
+}
+
+.page-section-rail__readout.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(0, -50%);
+    visibility: visible;
+}
+
+.page-section-rail__readout::before {
+    content: "";
+    inline-size: 1rem;
+    inset-block: 0;
+    inset-inline-start: 100%;
+    position: absolute;
+}
+
+.page-section-rail .page-section-rail__link:focus-visible {
+    outline: .2rem solid var(--canvas-cobalt, #2855f3);
+    outline-offset: .05rem;
+}
+
+/*
+ * The generated rail owns the right-side medium-viewport gutter. Shared wide
+ * evidence fields stay centered while their border box and common .5rem hard
+ * shadow end before the rail; tables and diagrams keep any two-dimensional
+ * overflow inside that frame.
+ */
+@media screen and (min-width: 56.0625rem) {
+    .page-section-rail + main :is(.table-figure--wide, .story-visual) {
+        inline-size: min(calc(100vw - 10rem), var(--canvas-editorial-measure));
+        margin-inline: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+main :where([id]) {
+    scroll-margin-block-start: 6rem;
+}
+
+h2.super-footer__heading {
+    color: var(--about-tiffany, #56d8c9);
+}
+
+@media screen and (max-width: 56rem) {
+    .page-section-rail {
+        background: transparent;
+        border: 0;
+        inset-block: max(4.5rem, calc(env(safe-area-inset-top) + 3.75rem)) max(.75rem, env(safe-area-inset-bottom));
+        inset-inline: env(safe-area-inset-left) auto;
+        max-block-size: none;
+        overflow: visible;
+        padding: 0;
+        pointer-events: none;
+        position: fixed;
+        transform: none;
+        z-index: 60;
+    }
+
+    .page-section-rail ol {
+        align-content: center;
+        align-content: safe center;
+        block-size: 100%;
+        display: grid;
+        gap: 0;
+        inline-size: 1.75rem;
+        overflow-y: auto;
+        padding: .35rem 0;
+        scrollbar-width: thin;
+    }
+
+    .page-section-rail__link {
+        background: transparent;
+        border: 0;
+        block-size: 1.5rem;
+        color: var(--canvas-ink, #17345f);
+        inline-size: 1.5rem;
+        justify-content: flex-start;
+        isolation: isolate;
+        padding: 0;
+        pointer-events: auto;
+    }
+
+    .page-section-rail__link::before {
+        block-size: .3rem;
+        box-shadow: .08rem .08rem 0 rgb(23 52 95 / .2);
+        flex: 0 0 auto;
+        inline-size: .6rem;
+        transition: inline-size .14s ease, block-size .14s ease, background-color .14s ease;
+    }
+
+    .page-section-rail__link.is-in-view::before {
+        inline-size: .86rem;
+    }
+
+    .page-section-rail__link:is(.is-target, [aria-current="location"])::before {
+        block-size: .42rem;
+        box-shadow: none;
+        inline-size: 1.16rem;
+    }
+
+    .page-section-rail__readout {
+        display: block;
+        inset-inline: calc(100% + .4rem) auto;
+        max-inline-size: min(19rem, calc(100vw - 3rem - env(safe-area-inset-left) - env(safe-area-inset-right)));
+        transform: translate(-.3rem, -50%);
+    }
+
+    .page-section-rail__readout::before {
+        inline-size: .75rem;
+        inset-inline: auto 100%;
+    }
+
+    .page-section-rail--source .page-section-rail__readout {
+        max-inline-size: min(16rem, calc(100vw - 3rem - env(safe-area-inset-left) - env(safe-area-inset-right)));
+    }
+
+    .page-section-rail--source ol {
+        inline-size: 1.75rem;
+        overflow-y: auto;
+        scrollbar-width: thin;
+    }
+
+    .page-section-rail--source .page-section-rail__link {
+        block-size: 1.5rem;
+        inline-size: 1.75rem;
+    }
+
+    .page-section-rail--source .page-section-rail__readout.is-visible {
+        transform: translate(0, -50%);
+    }
+
+    .page-section-rail__link:is(:hover, :focus-visible) {
+        z-index: 3;
+    }
+
+    .page-section-rail .page-section-rail__link:focus-visible {
+        background: var(--canvas-paper, #fffaf2);
+        outline-offset: -.2rem;
+    }
+}
+
+@media screen and (max-width: 40rem) {
+    .super-footer__grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-section-rail__readout,
+    .page-section-rail__link,
+    .page-section-rail__link::before {
+        transition: none !important;
+    }
+}
+
+@media (forced-colors: active) {
+    .page-section-rail__link,
+    .super-footer {
+        border-color: CanvasText;
+    }
+
+    .page-section-rail__readout {
+        background: Canvas;
+        border-color: CanvasText;
+        color: CanvasText;
+    }
+
+    .page-section-rail__link::before {
+        background: Canvas;
+        border-color: CanvasText;
+        box-shadow: none;
+    }
+
+    .page-section-rail__link:is(.is-in-view, .is-target, [aria-current="location"])::before {
+        background: Highlight;
+    }
+
+    .page-section-rail__link:is(.is-target, [aria-current="location"]) {
+        background: Highlight;
+        outline: .125rem solid Canvas;
+    }
+
+    .page-section-rail__link:focus-visible {
+        outline-color: Highlight;
+    }
+
+    .visitor-boundary,
+    .about-footer > .site-attribution,
+    .super-footer > .site-attribution {
+        border-color: CanvasText;
+        color: CanvasText;
+    }
+}
+
+@media print {
+    .page-section-rail {
+        display: none;
+    }
+
+    .super-footer {
+        background: #fff;
+        border-color: #000;
+        color: #000;
+        margin-block-start: 2rem;
+    }
+
+    .super-footer :is(a, a:visited, .super-footer__heading, .super-footer__reserved) {
+        color: #000;
+    }
+
+    .visitor-boundary,
+    .about-footer > .site-attribution,
+    .super-footer > .site-attribution {
+        border-color: #000;
+        color: #000;
+    }
+}
