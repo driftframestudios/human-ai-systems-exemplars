@@ -62,11 +62,10 @@ upload.
 The Pages workflow receives an exact accepted source commit and reviewed
 `docs` commit through manual dispatch. Its read-only job rebuilds and compares
 the complete receiver before an explicit deployment selection gives a separate
-job the minimal Pages permissions. The current live site continues through
-legacy `docs` branch delivery until the workflow publishing source is selected.
-The first hosted pair therefore starts after the workflow and checker reach
-`main` and that exact source is projected to `docs`. The `github-pages`
-environment keeps its `docs` rule and adds `main` before deployment is selected.
+job the minimal Pages permissions. The current live site uses this workflow
+route. Each hosted pair starts after its accepted source reaches `main` and its
+reviewed projection reaches `docs`; the `github-pages` environment keeps both
+branch rules. The recorded legacy `docs:/` source remains the recovery route.
 Evidence budgets and deployment authority stay independent:
 `DEPLOYMENT_ACTIVE_RECEIVERS=[]` currently lets release and production checks
 run while their Worker uploads rest. Naming a receiver in that list admits its

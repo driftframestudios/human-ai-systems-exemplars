@@ -70,7 +70,7 @@ Completion is a usable schema surface and one pull request. This wave closes wit
 ### Wave A2 — final v1 semantic settlement · issue work:schema-semantic-settlement
 
 1. Distinguish authoritative source, publication authority, delivery operator, and environment-specific discovery preference on served projections.
-2. Record `docs` as the GitHub Pages publication branch, `main` as the Radiant Null discovery environment, and `prod` as the Vik Guru discovery environment while preserving one canonical identity and invariant exact-version bytes.
+2. Record `docs` as the reviewed Pages projection and legacy recovery source, `main` as the Actions workflow source for the Radiant Null discovery environment, and `prod` as the Vik Guru discovery environment while preserving one canonical identity and invariant exact-version bytes.
 3. Add the optional Solution / Implementation / Recovery first-use prior as an elicited routing distribution with a basis and review trigger.
 4. Add currentness as a freshness dimension beside evidence, review, visibility, lifecycle, and authority.
 5. Extend focalization as a declared lens with an explicit vantage, foreground, held-aside material, use condition, and handoff while surrounding identity and standing remain intact.

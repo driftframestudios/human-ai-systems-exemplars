@@ -35,13 +35,13 @@ Each contract keeps the `$id` declared inside its exact-version file. Most curre
 
 | Route | Current role | Source branch |
 |---|---|---|
-| `https://schemas.radiantnull.com/` | Current GitHub Pages mirror | generated `docs` publication |
+| `https://schemas.radiantnull.com/` | Current GitHub Pages mirror | reviewed `docs` projection; Actions delivery |
 | `https://schemas.vik.guru/` | Canonical identity base for most current families and intended first-party route | future `prod` delivery |
 | Repository source | Authored review and local collaboration | accepted working branch |
 
-As observed on 2026-09-01, the Radiant Null mirror serves the registry over HTTPS. The Vik Guru hostname resolves and currently returns a service response rather than the registry homepage and contract routes. The mirror is therefore the dependable public retrieval route for this delivery phase.
+As observed on 2026-09-04, the Radiant Null mirror serves the registry over HTTPS through the repository's verified GitHub Actions route. The Vik Guru hostname resolves and currently returns a service response rather than the registry homepage and contract routes. The mirror is therefore the dependable public retrieval route for this delivery phase.
 
-The active GitHub Pages path publishes the generated `docs` branch. The checked-in Pages workflow can independently name an accepted source commit and a reviewed `docs` commit, rebuild with the source toolchain, and require complete path-and-byte agreement. Its default dispatch stops after verification; a separate dispatch selection uploads and deploys the verified artifact. Legacy branch delivery remains active until the repository's Pages setting explicitly selects the workflow route.
+The active Pages workflow names an accepted `main` commit and a reviewed `docs` commit, rebuilds with the source toolchain, and requires complete path-and-byte agreement. Its default dispatch stops after verification; a deliberate deployment selection uploads and serves the verified artifact. The generated `docs` branch remains the reviewed projection and legacy recovery coordinate rather than an independent publication trigger.
 
 ## Version and compatibility
 

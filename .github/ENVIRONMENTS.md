@@ -26,14 +26,16 @@ The current budget posture is:
 | `research` | `false` | Canonical future-state receiver at rest |
 | `res/*` | `false` | Short-lived intake; inherits the `research` posture |
 | `dev` | `false` | Sustained feature integration at rest |
-| `docs` | `false` | Metered evidence at rest; standing Pages projection continues |
+| `docs` | `false` | Metered evidence at rest; reviewed Pages projection continues |
 | `stg` | `false` | Candidate serving and Worker pilots at rest |
 | `release` | `true` · 300 minutes | Automatic schema contract; connected un-routed release Worker deployment |
 | `prod` | `true` · 300 minutes | Automatic schema contract; protected production deployment receiver |
 
-Each GitHub environment accepts deployment configuration only from its matching
-long-lived branch. `res/*` uses the `research` configuration after a reviewed
-merge reaches the canonical receiver.
+The named long-lived environments accept deployment configuration only from
+their matching branches. `res/*` uses the `research` configuration after a
+reviewed merge reaches the canonical receiver. The separate `github-pages`
+environment admits `main` for the verified workflow and retains `docs` as its
+recovery branch.
 
 Environment-level variables arrive after a job starts, so they fit runtime
 configuration. Repository-level budget values provide the pre-run spend gate
@@ -64,8 +66,11 @@ from destination variables.
 ## Serving posture
 
 One stable published surface is the fitting present form. `docs` remains the
-generated GitHub Pages projection at `schemas.radiantnull.com`, while the other
-branches express promotion and evidence posture. GitHub treats standard Pages
+reviewed GitHub Pages projection at `schemas.radiantnull.com`, while the other
+branches express promotion and evidence posture. A deliberate workflow dispatch
+from `main` rebuilds the accepted source, compares it with the named `docs`
+commit, and deploys only after that pair agrees. The recorded `docs:/` source
+setting remains available for legacy recovery. GitHub treats standard Pages
 runner use as free; the `docs` evidence budget can rest while the accepted
 projection continues.
 Additional always-on surfaces follow a reader or operator job that benefits

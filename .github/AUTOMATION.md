@@ -67,20 +67,21 @@ minimal `pages: write` and `id-token: write` permissions needed by GitHub's
 official Pages actions. This keeps publication selection separate from source
 and projection agreement.
 
-The first hosted verification pair begins with a `main` commit that already
-contains this workflow and its receiver checker, followed by the `docs`
-projection built from that commit. Before selecting deployment, retain the
-environment's existing `docs` rule and also allow the workflow's `main` branch
-to enter `github-pages`. Keep legacy branch delivery active through the first
-successful verification-only run; the Pages build-source setting moves to
-GitHub Actions only when the same accepted pair is ready for deployment.
+Each hosted verification pair begins with an accepted `main` commit and the
+reviewed `docs` projection built from it. The `github-pages` environment keeps
+its existing `docs` rule and also admits the workflow's `main` branch. GitHub
+Pages now uses the Actions delivery route: each deployment names both immutable
+commits, rebuilds from source, and requires complete file membership and byte
+equality before upload.
 
 Pages settings remain the custom-domain authority. The current collaboration
 family is `schemas.radiantnull.com`; `schemas.vik.guru` remains the later
 staging, release, and production family described in
-[ENVIRONMENTS.md](ENVIRONMENTS.md). The current live site continues through
-legacy branch delivery until the verified workflow route is explicitly
-selected in the repository's Pages settings.
+[ENVIRONMENTS.md](ENVIRONMENTS.md). The current live site is deployed by that
+verified workflow. The recorded `docs:/` source setting remains the recovery
+coordinate: restore legacy mode, verify the accepted `docs` bytes at the
+ordinary domain, and only then return the environment allowlist to its prior
+state when recovery requires it.
 
 ## Release and production schema delivery
 
