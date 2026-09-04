@@ -28,7 +28,7 @@ Read the nearest runtime guidance, `pyproject.toml` `requires-python`, `.python-
 
 ### Rule: uv mediates the environment
 
-Run repository checks through `uv run`. Keep global `pip`, the base operating-system Python, and unrelated environments outside the execution path. Use `--managed-python` when the task requires a uv-provisioned interpreter or explicit separation from host Python. A compatible host or runner interpreter can remain valid when the repository permits it; record which branch supplied the interpreter.
+Run repository checks through `uv run`. Let uv prepare dependencies and the execution environment while the base operating-system Python installation and global packages remain unchanged. A repository-compatible host or runner interpreter can execute the check when the repository permits it; record whether uv or the host supplied that interpreter. Use `--managed-python` when the task requires a uv-provisioned interpreter or explicit separation from host Python.
 
 ### Rule: Lockfile presence bounds the evidence claim
 
@@ -38,7 +38,7 @@ When a current `uv.lock` exists, prefer a project run that asserts the lock stay
 uv run --project <repository-root> --locked --python <version> -- <named-check>
 ```
 
-Add `--managed-python` when the selected branch requires a uv-managed interpreter. A stale or missing lock ends this lane with an explicit lock-state finding; the validation task does not rewrite it.
+Add `--managed-python` when the selected path requires a uv-managed interpreter. A stale or missing lock ends this path with an explicit lock-state finding; the validation task leaves lock revision to its named owner.
 
 When the repository declares a buildable Python project without a lock, prefer an isolated run that avoids project locking:
 
@@ -52,15 +52,15 @@ uv run --isolated --no-project \
 
 Describe this result as an observation of the dependency versions resolved for that run, and record materially relevant package versions. It establishes behavior for that observed resolution rather than dependency-byte reproducibility.
 
-A local editable or non-editable package build can create ignored backend material such as `*.egg-info` or `build/` inside the checkout. Tracked-tree cleanliness remains the ordinary source observation. When full source-tree stillness matters, run from a disposable worktree or source copy and compare `git status --short --ignored` before and after; identify any permitted build material in the return.
+A local editable or non-editable package build can create ignored backend material such as `*.egg-info` or `build/` inside the checkout. Tracked-tree cleanliness remains the ordinary source observation. When the full tree must remain unchanged, including ignored build material, run from a disposable worktree or source copy and compare `git status --short --ignored` before and after; identify any permitted build material in the return.
 
 ### Rule: Writable runtime state receives an explicit home
 
-If the default cache is unavailable, select an ignored repository cache, an authorized task-temporary cache with `--cache-dir`, or `--no-cache` for a one-time run. Keep cache selection distinct from the Python installation directory and network access needed to acquire an interpreter or dependency. Route either boundary to its existing owner when the current task cannot satisfy it.
+If the default cache is unavailable, select an ignored repository cache, an authorized task-temporary cache with `--cache-dir`, or `--no-cache` for a one-time run. When uv-managed Python storage also needs an authorized location, set `UV_PYTHON_INSTALL_DIR=<authorized-path>` for interpreter installation and every subsequent uv command that must discover it. Keep cache, interpreter storage, and network access as distinct conditions; route each unresolved condition to its existing owner.
 
 ### Rule: Execution evidence stays proportionate
 
-Capture the exact `uv` command, `uv --version`, the executing Python version, materially relevant dependency versions, the named check's result, and `git status --short` before and after. Add `--ignored` when full source-tree stillness is part of the requested result. Report what that run establishes and which operating systems, Python versions, optional groups, or external services it leaves unobserved.
+Capture the exact `uv` command, `uv --version`, the executing Python version, materially relevant dependency versions, the named check's result, and `git status --short` before and after. Add `--ignored` when the requested result includes an unchanged full tree, including ignored build material. Report what that run establishes and which operating systems, Python versions, optional groups, or external services it leaves unobserved.
 
 ### Rule: Another attempt follows a changed signal
 
@@ -70,7 +70,7 @@ Classify a failed run as runtime selection, lock or dependency resolution, cache
 
 1. **Reconcile:** Read repository runtime declarations and name the exact check plus the decision it can change.
 2. **Select:** Choose the checked-lockfile or one-run dependency path, the Python version, and whether `--managed-python` is required.
-3. **Place:** Give cache and any managed-interpreter state an authorized writable location.
+3. **Place:** Give the cache and, when needed, `UV_PYTHON_INSTALL_DIR` authorized writable locations.
 4. **Execute:** Run the named check through `uv` without changing dependency policy or host Python.
 5. **Observe:** Record the small set of environment coordinates that affect interpretation and confirm tracked source state.
 6. **Return:** State the result, evidence boundary, and either completion or one owned recovery step with its re-entry signal.
