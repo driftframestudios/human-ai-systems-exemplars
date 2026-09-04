@@ -91,7 +91,7 @@ async function governedHtmlFiles() {
 
 test("all attribution-governed HTML carries one exact MAPS to BIG-bench boundary before final attribution", async () => {
   const paths = await governedHtmlFiles();
-  assert.equal(paths.length, 104, "the current governed visitor population should remain explicit");
+  assert.equal(paths.length, 105, "the current governed visitor population should remain explicit");
 
   for (const path of paths) {
     const html = await readFile(path, "utf8");
@@ -227,7 +227,7 @@ test("governed visitor language is direct except for exact non-rendered Technolo
 test("shared and self-contained styles preserve selectable narrow, print, and forced-color readings", async () => {
   const paths = await governedHtmlFiles();
   const selfContained = paths.filter(path => dirname(path) !== visitorRoot || path.endsWith("/404.html"));
-  assert.equal(selfContained.length, 63);
+  assert.equal(selfContained.length, 64);
 
   for (const path of selfContained) {
     const html = await readFile(path, "utf8");
