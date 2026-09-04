@@ -84,36 +84,36 @@ Promotion is a new route decision rather than an automatic consequence of surviv
 
 ### Scenario: A bounded task benefits from its own routing entry
 
-Given a portable skill contract owns the durable behavior<br>
-And a named task will receive several materially meaningful collaboration turns<br>
-And local source, scope, tool, and lifetime bindings would save repeated reconstruction<br>
-When the temporary artifact receives an exit event and default disposition<br>
-Then a task-bound skill projection forms at routable depth one<br>
-And the source contract retains durable authority
+- Given a portable skill contract owns the durable behavior
+- And a named task will receive several materially meaningful collaboration turns
+- And local source, scope, tool, and lifetime bindings would save repeated reconstruction
+- When the temporary artifact receives an exit event and default disposition
+- Then a task-bound skill projection forms at routable depth one
+- And the source contract retains durable authority
 
 ### Scenario: One projection suggests another projection
 
-Given an active task-bound projection already sits at routable depth one<br>
-And the task reveals another local distinction<br>
-When that distinction remains part of the same receiving job<br>
-Then a non-routable context capsule carries the additional detail<br>
-And the projection tree remains one routable edge deep
+- Given an active task-bound projection already sits at routable depth one
+- And the task reveals another local distinction
+- When that distinction remains part of the same receiving job
+- Then a non-routable context capsule carries the additional detail
+- And the projection tree remains one routable edge deep
 
 ### Scenario: A local projection reveals a distinct durable job
 
-Given natural use reveals a transferable job with distinct trigger territory<br>
-And that job extends beyond the current receiving task<br>
-When collaboration accounting selects `create_now` from independent evidence<br>
-Then a new portable skill contract forms at depth zero<br>
-And the temporary projection retains its planned exit
+- Given natural use reveals a transferable job with distinct trigger territory
+- And that job extends beyond the current receiving task
+- When collaboration accounting selects `create_now` from independent evidence
+- Then a new portable skill contract forms at depth zero
+- And the temporary projection retains its planned exit
 
 ### Scenario: The task settles without durable learning
 
-Given the projection served its receiving task<br>
-And no observation would change the portable contract or another future decision<br>
-When the exit event occurs<br>
-Then the projection retires through normal review<br>
-And successful local use remains sufficient evidence
+- Given the projection served its receiving task
+- And no observation would change the portable contract or another future decision
+- When the exit event occurs
+- Then the projection retires through normal review
+- And successful local use remains sufficient evidence
 
 ## Research grounding
 

@@ -76,29 +76,29 @@ Existing commands are starting points rather than required ceremony. A new helpe
 
 ### Scenario: A shared color role changes
 
-Given one inherited active role can affect several light and dark surfaces<br>
-When the role or its owner changes<br>
-Then source assertions establish the role and owner contract<br>
-And focused state checks exercise consequential hover, print, or forced-color behavior<br>
-And the complete visual reference checks system-wide composition without becoming a pixel gate
+- Given one inherited active role can affect several light and dark surfaces
+- When the role or its owner changes
+- Then source assertions establish the role and owner contract
+- And focused state checks exercise consequential hover, print, or forced-color behavior
+- And the complete visual reference checks system-wide composition without becoming a pixel gate
 
 ### Scenario: An iframe carrier appears blank
 
-Given an all-page reference reveals a blank embedded field<br>
-And the embedded document lies outside the current change boundary<br>
-When the parent and direct route observations identify a reproducible carrier condition<br>
-Then the current work preserves its source boundary<br>
-And a focused issue returns the condition to the carrier, projection, or embedded-document owner
+- Given an all-page reference reveals a blank embedded field
+- And the embedded document lies outside the current change boundary
+- When the parent and direct route observations identify a reproducible carrier condition
+- Then the current work preserves its source boundary
+- And a focused issue returns the condition to the carrier, projection, or embedded-document owner
 
 ### Scenario: A rail changes sides or reserves width
 
-Given a fixed reading rail changes geometry at a named responsive threshold<br>
-And a wide evidence frame uses viewport-relative sizing inside the affected content field<br>
-When the route is observed immediately before and after that threshold<br>
-Then the outer frame remains inside the viewport and clear of the rail<br>
-And its owned border, outline, and shadow paint remain clear of that rail<br>
-And any wider table content remains available through its named local scroll region<br>
-And one representative width inside the affected interval establishes whether the condition persists beyond the seam
+- Given a fixed reading rail changes geometry at a named responsive threshold
+- And a wide evidence frame uses viewport-relative sizing inside the affected content field
+- When the route is observed immediately before and after that threshold
+- Then the outer frame remains inside the viewport and clear of the rail
+- And its owned border, outline, and shadow paint remain clear of that rail
+- And any wider table content remains available through its named local scroll region
+- And one representative width inside the affected interval establishes whether the condition persists beyond the seam
 
 ## Completion
 

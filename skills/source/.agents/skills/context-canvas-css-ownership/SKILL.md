@@ -67,11 +67,11 @@ Each authored module carries a short header naming owner, neutral consumer scope
 
 ### Scenario: A source-specific selector obscures reusable meaning
 
-Given a selector names the source story rather than its structural role<br>
-And consumer evidence shows a reusable composition or component<br>
-When the selector migrates with its owner<br>
-Then the receiving name describes structural meaning<br>
-And source identity remains in content and metadata rather than the CSS namespace
+- Given a selector names the source story rather than its structural role
+- And consumer evidence shows a reusable composition or component
+- When the selector migrates with its owner
+- Then the receiving name describes structural meaning
+- And source identity remains in content and metadata rather than the CSS namespace
 
 ## Conditional scenarios
 
