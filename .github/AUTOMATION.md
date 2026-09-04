@@ -41,21 +41,46 @@ ceiling, and full-length action pins.
 
 ## Schema publication
 
-`schema-pages.yml` is the standing publication path. A bounded change on `docs`
-runs one connected GitHub Pages job:
+`schema-pages.yml` is the manual source-to-receiver verification and publication
+path. One dispatch names an exact accepted source commit and an exact reviewed
+`docs` commit. The read-only verification job:
 
-1. check out `docs`;
-2. configure Pages and expose the active base URL;
-3. install the locked Node toolchain;
-4. run the existing schema contract check;
-5. build the mapped schema projection;
-6. upload the Pages artifact; and
-7. deploy through the official Pages action.
+1. runs from the accepted `main` workflow definition and requires both
+   coordinates as full lowercase Git SHAs;
+2. checks out complete source and projection histories side by side without
+   retained Git credentials, then uses workflow-owned commands to prove each
+   revision belongs to `main` or `docs` before any selected-source command can
+   run;
+3. installs the locked source toolchain;
+4. checks the schema and Pages behavior;
+5. requires the source CNAME to agree with the active Pages host and rebuilds
+   from the Pages-reported HTTPS base URL;
+6. confirms the projection worktree remains unchanged, then compares complete
+   file membership and bytes with the named `docs` commit;
+   and
+7. proves the checksum-verified secret scanner before inspecting that exact
+   artifact, including its required hidden files.
+
+The default dispatch ends after verification. Selecting deployment uploads the
+verified artifact and gives a separate `github-pages` environment job the
+minimal `pages: write` and `id-token: write` permissions needed by GitHub's
+official Pages actions. This keeps publication selection separate from source
+and projection agreement.
+
+The first hosted verification pair begins with a `main` commit that already
+contains this workflow and its receiver checker, followed by the `docs`
+projection built from that commit. Before selecting deployment, retain the
+environment's existing `docs` rule and also allow the workflow's `main` branch
+to enter `github-pages`. Keep legacy branch delivery active through the first
+successful verification-only run; the Pages build-source setting moves to
+GitHub Actions only when the same accepted pair is ready for deployment.
 
 Pages settings remain the custom-domain authority. The current collaboration
 family is `schemas.radiantnull.com`; `schemas.vik.guru` remains the later
 staging, release, and production family described in
-[ENVIRONMENTS.md](ENVIRONMENTS.md).
+[ENVIRONMENTS.md](ENVIRONMENTS.md). The current live site continues through
+legacy branch delivery until the verified workflow route is explicitly
+selected in the repository's Pages settings.
 
 ## Release and production schema delivery
 
