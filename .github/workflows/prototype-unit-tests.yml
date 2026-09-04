@@ -1,4 +1,4 @@
-name: Core and Narrative prototype units
+name: Prototype and iframe contracts
 
 on:
   workflow_dispatch:
@@ -11,6 +11,7 @@ on:
         options:
           - all
           - core
+          - iframe
           - narrative
       confirm_run:
         description: Acquire a standard runner for this selected suite
@@ -34,18 +35,39 @@ on:
       - ".github/workflows/prototype-unit-tests.yml"
       - "package.json"
       - "package-lock.json"
+      - "AUTHORS"
+      - "CITATION.cff"
+      - "GOVERNANCE.md"
+      - "LICENSE"
+      - "attribution.yml"
+      - "tests/attribution/**"
       - "tests/core-architectures/**"
+      - "tests/context-canvas/iframe-carriers.test.mjs"
+      - "tests/iframe-routes/**"
       - "tests/narrative-architectures/**"
       - "tools/core-architecture-browser-helper.mjs"
       - "tools/core-decision-canvas-contract.mjs"
+      - "tools/core-iframe-carrier-contract.mjs"
       - "tools/core-planning-instrument-contract.mjs"
       - "tools/core-reference-instrument-contract.mjs"
+      - "tools/canvas-iframe-route-browser-contract.mjs"
+      - "tools/iframe-route-package-engine.mjs"
+      - "tools/materialize-public-references.mjs"
+      - "tools/package-canvas-iframe-routes.mjs"
+      - "tools/package-iframe-routes.mjs"
+      - "tools/package-v1-iframe-routes.mjs"
+      - "tools/verify-live-iframe-routes.mjs"
+      - "tools/attribution-contract.mjs"
       - "tools/cross-prototype-exchange-contract.mjs"
       - "tools/narrative-architecture-contract.mjs"
       - "core-architectures-chimeric-prototype-current-pack-v0.1/**"
-      - "context-canvas-project-surface/context-canvas/prototypes/core-architectures/**"
-      - "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/**"
-      - "context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json"
+      - "iframe-route-families/**"
+      - "participatory-design-kit-chimeric-prototype-set-v0.1/**"
+      - "collaboration/**"
+      - "context-canvas-project-surface/**/*.html"
+      - "context-canvas-project-surface/**/*.js"
+      - "context-canvas-project-surface/**/*.mjs"
+      - "visualization-fidelity-atlas-bundle-v0.1/**"
 
 permissions:
   contents: read
@@ -56,7 +78,7 @@ concurrency:
 
 jobs:
   prototype-units:
-    name: Selected prototype unit contract
+    name: Selected prototype or iframe contract
     if: >-
       (github.event_name == 'workflow_dispatch' && inputs.confirm_run) ||
       (github.event_name == 'pull_request' &&
@@ -91,25 +113,40 @@ jobs:
         run: |
           set -euo pipefail
 
+          node --test tests/context-canvas/iframe-carriers.test.mjs
+
           case "$SELECTED_SUITE" in
             core)
+              npm run test:attribution
+              npm run test:iframe-routes
+              npm run check:iframe-routes
               npm run test:core-architectures
               if [[ "$INCLUDE_BROWSER" == "true" ]]; then npm run test:core-browser; fi
+              ;;
+            iframe)
+              npm run test:attribution
+              npm run test:iframe-routes
+              npm run check:iframe-routes
+              if [[ "$INCLUDE_BROWSER" == "true" ]]; then npm run test:iframe-browser; fi
               ;;
             narrative)
               npm run test:narrative-architectures
               if [[ "$INCLUDE_BROWSER" == "true" ]]; then npm run test:narrative-browser; fi
               ;;
             all)
+              npm run test:attribution
+              npm run test:iframe-routes
+              npm run check:iframe-routes
               npm run test:prototype-units
               if [[ "$INCLUDE_BROWSER" == "true" ]]; then
                 npm run test:core-browser
+                npm run test:canvas-iframe-routes
                 npm run test:narrative-browser
                 npm run test:prototype-exchanges
               fi
               ;;
             *)
-              echo "Choose core, narrative, or all."
+              echo "Choose core, iframe, narrative, or all."
               exit 2
               ;;
           esac

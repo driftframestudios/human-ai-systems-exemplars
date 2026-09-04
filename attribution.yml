@@ -1,0 +1,69 @@
+{
+  "schema_version": "1",
+  "contract_role": "machine_readable_projection",
+  "authority": {
+    "copyright_holders": "AUTHORS",
+    "license_terms": "LICENSE",
+    "contribution_guidance": "GOVERNANCE.md#how-to-attribute-contributions",
+    "citation_metadata": "CITATION.cff"
+  },
+  "origin": {
+    "repository": "https://github.com/driftframestudios/human-ai-systems-exemplars",
+    "canonical_branch": "main"
+  },
+  "identity": {
+    "human_author": "Vikrant Varun Kudesia",
+    "publishing_company": "Driftframe Studios, Limited Liability Company"
+  },
+  "copyright": {
+    "start_year": 2003,
+    "through_year": 2026
+  },
+  "license": {
+    "spdx_id": "Apache-2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0"
+  },
+  "public_html": {
+    "visible_notice": "© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).",
+    "schema_pages_index": "schemas/index.html",
+    "required_placements": {
+      "author_metadata": {
+        "location": "document_head",
+        "selector": "meta[name=\"author\"]",
+        "value_from": "identity.human_author"
+      },
+      "license_relation": {
+        "location": "document_head",
+        "selector": "link[rel=\"license\"]",
+        "value_from": "license.url"
+      },
+      "visitor_notice": {
+        "location": "visible_footer",
+        "value_from": "public_html.visible_notice"
+      }
+    },
+    "context_canvas_top_level_glob": "context-canvas-project-surface/context-canvas/*.html",
+    "context_canvas_prototype_root": "context-canvas-project-surface/context-canvas/prototypes",
+    "core_route_manifest": "core-architectures-chimeric-prototype-current-pack-v0.1/public-iframe-route-manifest-v1.json",
+    "core_projection_roots": [
+      "core-architectures-chimeric-prototype-current-pack-v0.1",
+      "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1"
+    ],
+    "standalone_prototype_roots": [
+      "participatory-design-kit-chimeric-prototype-set-v0.1"
+    ],
+    "canonical_templates": [
+      "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/canonical.template.html"
+    ]
+  },
+  "contribution_credit_placements": [
+    "truthful_git_author_metadata",
+    "agreed_co_authored_by_trailers",
+    "reviewed_pull_requests"
+  ],
+  "excluded_placements": [
+    "commit_message_standing_notice",
+    "ordinary_code_comment_banner",
+    "nonpublic_file_header_banner"
+  ]
+}

@@ -6,6 +6,9 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, extname, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
+import { collectRailRevealFailures } from "./rail-label-failures.mjs";
+import { measureRailReveal } from "./rail-reveal-observer.mjs";
+
 const DEFAULT_TARGET = "context-canvas-project-surface/context-canvas/conditioning-field.html";
 const DEFAULT_SELECTOR = ".ladder-table";
 const VIEWPORTS = [
@@ -93,98 +96,6 @@ function parseArgs(argv) {
   if (!options.name) options.name = basename(options.target).replace(/\.[^.]+$/, "") || "visual-check";
   if (!options.selector) throw new Error("--selector requires a CSS selector");
   return options;
-}
-
-async function measureRailReveal(page) {
-  const links = page.locator(".page-section-rail__link");
-  const count = await links.count();
-  const results = [];
-
-  for (let index = 0; index < count; index += 1) {
-    await links.nth(index).hover();
-    await page.waitForTimeout(180);
-    results.push(await page.evaluate((linkIndex) => {
-      function rectObject(rect) {
-        return {
-          top: rect.top,
-          right: rect.right,
-          bottom: rect.bottom,
-          left: rect.left,
-          width: rect.width,
-          height: rect.height
-        };
-      }
-
-      function intersection(a, b) {
-        const left = Math.max(a.left, b.left);
-        const right = Math.min(a.right, b.right);
-        const top = Math.max(a.top, b.top);
-        const bottom = Math.min(a.bottom, b.bottom);
-        return {
-          left,
-          right,
-          top,
-          bottom,
-          width: Math.max(0, right - left),
-          height: Math.max(0, bottom - top)
-        };
-      }
-
-      function clippedRect(element) {
-        let visible = rectObject(element.getBoundingClientRect());
-        visible = intersection(visible, {
-          left: 0,
-          top: 0,
-          right: window.innerWidth,
-          bottom: window.innerHeight,
-          width: window.innerWidth,
-          height: window.innerHeight
-        });
-
-        for (let ancestor = element.parentElement; ancestor; ancestor = ancestor.parentElement) {
-          const style = window.getComputedStyle(ancestor);
-          const overflow = `${style.overflow} ${style.overflowX} ${style.overflowY}`;
-          if (/(hidden|clip|auto|scroll)/.test(overflow)) {
-            visible = intersection(visible, rectObject(ancestor.getBoundingClientRect()));
-          }
-        }
-        return visible;
-      }
-
-      const link = document.querySelectorAll(".page-section-rail__link")[linkIndex];
-      const rail = document.querySelector(".page-section-rail");
-      const label = link?.querySelector(".page-section-rail__label");
-      const readout = document.querySelector(".page-section-rail__readout");
-      const compact = window.matchMedia("(max-width: 56rem)").matches;
-      const target = compact ? label : readout;
-      const targetStyle = target ? window.getComputedStyle(target) : null;
-      const targetRect = target ? target.getBoundingClientRect() : null;
-      const targetClippedRect = target ? clippedRect(target) : null;
-      const linkRect = link ? link.getBoundingClientRect() : null;
-      const targetText = target?.textContent?.trim() || "";
-      const targetVisible = Boolean(target && targetRect.width > 0 && targetRect.height > 0 && targetStyle.display !== "none" && targetStyle.visibility !== "hidden" && Number(targetStyle.opacity) > 0.85);
-      const clippedRatio = targetRect && targetRect.width ? targetClippedRect.width / targetRect.width : 0;
-
-      return {
-        index: linkIndex,
-        compact,
-        targetKind: compact ? "label" : "readout",
-        slug: link?.dataset.sectionSlug || link?.getAttribute("aria-label") || "",
-        targetText,
-        railExists: Boolean(rail),
-        linkVisible: Boolean(linkRect && linkRect.width > 0 && linkRect.height > 0),
-        targetVisible,
-        targetDisplay: targetStyle?.display || "",
-        targetVisibility: targetStyle?.visibility || "",
-        targetOpacity: targetStyle ? Number(targetStyle.opacity) : 0,
-        targetRect: targetRect ? rectObject(targetRect) : null,
-        targetClippedRect,
-        clippedRatio
-      };
-    }, index));
-  }
-
-  return { count, results };
 }
 
 function measureReadableControls(selectors) {
@@ -492,19 +403,7 @@ function collectFailures(result) {
   }
 
   if (result.railReveal) {
-    if (!result.railReveal.count) failures.push("Rail label check requested, but no page-section-rail links were found.");
-    for (const reveal of result.railReveal.results) {
-      const label = reveal.slug || `rail link ${reveal.index + 1}`;
-      if (!reveal.railExists) failures.push("Rail label check requested, but the page-section-rail was not found.");
-      if (!reveal.linkVisible) failures.push(`Rail tick "${label}" is not visibly rendered.`);
-      if (!reveal.targetText) failures.push(`Rail tick "${label}" has no way-finding slug text.`);
-      if (!reveal.targetVisible) {
-        failures.push(`Rail tick "${label}" does not reveal a visible ${reveal.targetKind} on hover.`);
-      }
-      if (reveal.targetRect && reveal.targetRect.width > 0 && reveal.clippedRatio < 0.92) {
-        failures.push(`Rail ${reveal.targetKind} "${label}" is clipped on hover: ${(reveal.clippedRatio * 100).toFixed(0)}% visible.`);
-      }
-    }
+    failures.push(...collectRailRevealFailures(result.railReveal));
   }
 
   return failures;

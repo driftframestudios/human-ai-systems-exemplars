@@ -12,12 +12,17 @@
     "usedByPages": "manifest-directory"
   },
   "publicationPosture": "visitor-linked-through-receiving-pages",
-  "archive": {"status": "not-applicable"},
-  "integrity": {"algorithm": "sha256", "entryFile": "da5d7ef227fb4682a8efdb28880f8e0f0ae16511b00415170860f44f254d034a"},
+  "archive": {
+    "status": "not-applicable"
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "entryFile": "6cc896252b4f11884e87a774e9f3ec02460b3b18ba1c5c826ca50d21f3b405e4"
+  },
   "canonicalStatus": "adapted_copy",
   "sourcePath": "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/",
   "localPath": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/",
-  "entryFile": "core-architectures-chimeric-prototype-pack-index-v0.1.html",
+  "entryFile": "core-architectures-chimeric-prototype-pack-index-v0.1.3.html",
   "sourceManifest": "core-architectures-chimeric-prototype-manifest-v0.1.json",
   "localAdaptations": [
     "Pack index links are same-directory relative.",
@@ -28,11 +33,11 @@
   "divergence": {
     "status": "adapted_copy",
     "changedPaths": [
-      "core-architectures-chimeric-prototype-pack-index-v0.1.html",
-      "poda-chimeric-prototype-v0.1.html",
-      "core-architecture-family-index-chimeric-prototype-v0.1.html",
+      "core-architectures-chimeric-prototype-pack-index-v0.1.3.html",
+      "poda-chimeric-prototype-v0.1.3.html",
+      "core-architecture-family-index-chimeric-prototype-v0.1.4.html",
       "strategy-canvas-chimeric-prototype-v0.1.1.html",
-      "strategy-canvas-chimeric-prototype-v0.2.0.html",
+      "strategy-canvas-chimeric-prototype-v0.2.2.html",
       "strategy-canvas-context-workbench-v0.2.css",
       "strategy-canvas-context-workbench-v0.2.js",
       "core-architectures-chimeric-prototype-manifest-v0.1.json"

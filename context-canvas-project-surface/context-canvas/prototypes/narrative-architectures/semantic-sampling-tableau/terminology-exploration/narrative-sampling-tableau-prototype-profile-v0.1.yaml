@@ -98,7 +98,7 @@ seedScenario:
   comparisonVariant:
     "Canonical, technical, display, and authored labels may remain separate."
   estimateStatus:
-    "Illustrative planning judgments, uncalibrated and explicitly non-empirical."
+    "Uncalibrated planning judgments, uncalibrated and explicitly non-empirical."
 
 routingContract:
   registryFile: "core-architecture-routing-registry.v0.1.json"

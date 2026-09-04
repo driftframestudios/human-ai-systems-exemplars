@@ -1,6 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1040" role="img" aria-labelledby="strategy-title strategy-desc">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" viewBox="0 0 1600 1040" role="img" aria-labelledby="strategy-title strategy-desc">
   <title id="strategy-title">Genomic viewer Strategy Canvas: where the re-platforming posture moves attention</title>
   <desc id="strategy-desc">A qualitative four-action canvas groups ten source-named strategy dimensions. Legacy coupling is reduced. Clinical task continuity and explicit validation evidence are preserved. Identity fidelity, accessibility and cognitive load, and staffing reach are raised. Authorization explicitness, release independence, and observability and recovery are created. Operating cost remains an open question. The groupings are a 2026 synthesis rather than measured historical scores.</desc>
+  <metadata id="strategy-method-source">
+    <rdf:RDF>
+      <rdf:Description rdf:about="">
+        <dc:title>Genomic viewer Strategy Canvas: local qualitative adaptation</dc:title>
+        <dc:source rdf:resource="https://www.blueoceanstrategy.com/tools/strategy-canvas/"/>
+        <dc:description>This static representation adapts the Strategy Canvas method developed by W. Chan Kim and Renée Mauborgne for a qualitative 2026 re-platforming synthesis. Its action groups are local interpretation rather than historical scores, measured outcomes, or a costing model.</dc:description>
+      </rdf:Description>
+    </rdf:RDF>
+  </metadata>
   <defs>
     <filter id="hard-shadow" x="-10%" y="-10%" width="125%" height="130%">
       <feDropShadow dx="8" dy="8" stdDeviation="0" flood-color="#141c5b" flood-opacity="1"/>

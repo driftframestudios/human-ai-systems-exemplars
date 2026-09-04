@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { readdir, readFile } from "node:fs/promises";
-import { join, resolve } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import test from "node:test";
 import Ajv2020 from "ajv/dist/2020.js";
 
@@ -11,6 +13,11 @@ const prototypesRoot = resolve(
 );
 const narrativeRoot = resolve(prototypesRoot, "narrative-architectures");
 const composerRoot = resolve(narrativeRoot, "narrative-capsule-composer");
+const coreRoot = resolve(
+  repositoryRoot,
+  "core-architectures-chimeric-prototype-current-pack-v0.1"
+);
+const contextCoreRoot = resolve(prototypesRoot, "core-architectures/chimeric-pack-v0.1");
 const semanticRoot = resolve(
   narrativeRoot,
   "semantic-sampling-tableau/terminology-exploration"
@@ -68,6 +75,12 @@ async function threadkeepingExample() {
   );
   const match = source.match(/^const INITIAL = (.+);$/m);
   assert.ok(match, "Threadkeeping Ledger publishes one adjacent INITIAL example");
+  return JSON.parse(match[1]);
+}
+
+function familyIndexSeed(source) {
+  const match = source.match(/const seed = (\{[\s\S]+?\n\});\nlet state = structuredClone\(seed\);/u);
+  assert.ok(match, "the family index publishes one adjacent seed");
   return JSON.parse(match[1]);
 }
 
@@ -141,6 +154,71 @@ test("Narrative Capsule AI projections carry the prompt sections needed for exch
   );
 });
 
+test("Narrative Capsule links and bundles the manifest-current Core family index", async () => {
+  const [coreManifest, composerManifest, composer, targetRegistry] = await Promise.all([
+    json(resolve(coreRoot, "core-architectures-chimeric-prototype-manifest-v0.1.json")),
+    json(resolve(composerRoot, "narrative-capsules-chimeric-prototype-manifest-v0.1.json")),
+    readFile(resolve(composerRoot, "narrative-capsules-chimeric-prototype-v0.1.html"), "utf8"),
+    json(resolve(composerRoot, "core-architecture-target-pair-registry.v0.1.json"))
+  ]);
+  const familyIndex = coreManifest.prototypes.find(({ id }) => id === "core-architecture-family-index");
+  const currentCompanion = `companions/${familyIndex.file}`;
+  const priorCompanion = "companions/core-architecture-family-index-chimeric-prototype-v0.1.html";
+
+  assert.ok(composerManifest.files.companions.includes(currentCompanion));
+  assert.ok(!composerManifest.files.companions.includes(priorCompanion));
+  assert.match(composer, new RegExp(`href=["']${currentCompanion.replaceAll(".", "\\.")}["']`, "u"));
+
+  const [companion, acceptedFamilyIndex] = await Promise.all([
+    readFile(resolve(composerRoot, currentCompanion), "utf8"),
+    readFile(resolve(contextCoreRoot, familyIndex.file), "utf8")
+  ]);
+  const expectedCompanion = acceptedFamilyIndex.replace(
+    'href="../../../core-architectures-orientation-index.html"',
+    'href="../../../../core-architectures-orientation-index.html"'
+  );
+  assert.notEqual(expectedCompanion, acceptedFamilyIndex, "the companion owns one local route adaptation");
+  assert.equal(companion, expectedCompanion, "the companion otherwise retains the accepted current index");
+  assert.doesNotMatch(companion, /https:\/\/example\.org\/core-architectures(?:#|\/)/u);
+  assert.match(companion, /https:\/\/vik\.guru\/vocabulary\/core-architectures#/u);
+  const companionSeed = familyIndexSeed(companion);
+  assert.equal(companionSeed.artifact_identity.version, familyIndex.version);
+
+  const currentFiles = new Map(
+    coreManifest.prototypes
+      .filter(({ id }) => id !== "core-architecture-family-index")
+      .map(({ id, file }) => [id, file])
+  );
+  assert.deepEqual(
+    new Map(companionSeed.cards.map(({ id, file }) => [id, file])),
+    currentFiles,
+    "the companion index keeps every current Core artifact coordinate"
+  );
+
+  const heart = coreManifest.prototypes.find(({ id }) => id === "heart-chart");
+  assert.equal(
+    targetRegistry.cards.find(({ id }) => id === heart.id).prototypeRef,
+    heart.file,
+    "the target registry and current family index agree on HEART"
+  );
+
+  const archive = resolve(composerRoot, "narrative-capsules-chimeric-prototype-bundle-v0.1.zip");
+  const archiveRoot = "narrative-capsules-chimeric-prototype-v0.1";
+  const archiveEntries = execFileSync("unzip", ["-Z1", archive], { encoding: "utf8" }).split("\n");
+  assert.ok(archiveEntries.includes(`${archiveRoot}/${currentCompanion}`));
+  assert.ok(!archiveEntries.includes(`${archiveRoot}/${priorCompanion}`));
+  const bundledCompanion = execFileSync(
+    "unzip",
+    ["-p", archive, `${archiveRoot}/${currentCompanion}`],
+    { encoding: "utf8", maxBuffer: 8 * 1024 * 1024 }
+  );
+  assert.doesNotMatch(bundledCompanion, /https:\/\/example\.org\/core-architectures(?:#|\/)/u);
+  assert.deepEqual(familyIndexSeed(bundledCompanion), companionSeed);
+
+  const historicalCompanion = await readFile(resolve(composerRoot, priorCompanion), "utf8");
+  assert.match(historicalCompanion, /https:\/\/example\.org\/core-architectures#/u);
+});
+
 test("Semantic Sampling material state has meaningful identity and run-mode boundaries", async () => {
   const validate = await compile(schemaPaths.semantic);
   const valid = await json(
@@ -185,6 +263,20 @@ test("Technology Fit material state has a meaningful required-field boundary", a
   ));
 });
 
+test("Technology Fit inline seed is an exact projection of its canonical example state", async () => {
+  const canonical = await json(
+    resolve(technologyRoot, "front-end-stack-selection.example.v0.1.json")
+  );
+  const html = await readFile(
+    resolve(technologyRoot, "technology-fit-sampling-tableau-chimeric-prototype-v0.2.html"),
+    "utf8"
+  );
+  const match = html.match(/^const SEED=(.+);$/mu);
+  assert.ok(match, "Technology Fit publishes one adjacent SEED projection");
+  assert.deepEqual(JSON.parse(match[1]), canonical);
+  assert.deepEqual(canonical.runs.map(({ status }) => status), ["sample_state", "sample_state"]);
+});
+
 test("Threadkeeping Ledger material state has a meaningful identity boundary", async () => {
   const validate = await compile(schemaPaths.threadkeeping);
   const valid = await threadkeepingExample();
@@ -216,6 +308,21 @@ test("every Context-local prototype manifest satisfies the shared source relatio
     await t.test(path.slice(repositoryRoot.length + 1), async () => {
       const valid = await json(path);
       assert.equal(validate(valid), true, JSON.stringify(validate.errors, null, 2));
+
+      const manifestDirectory = dirname(path);
+      const entryPath = resolve(manifestDirectory, valid.entryFile);
+      assert.doesNotMatch(
+        relative(manifestDirectory, entryPath),
+        /^\.\.(?:[/\\]|$)/u,
+        "entry file remains inside its local prototype family",
+      );
+      const entryBytes = await readFile(entryPath);
+      assert.equal(valid.integrity.algorithm, "sha256");
+      assert.equal(
+        valid.integrity.entryFile,
+        createHash("sha256").update(entryBytes).digest("hex"),
+        "entry-file integrity resolves to the current material bytes",
+      );
 
       const invalid = clone(valid);
       delete invalid.id;

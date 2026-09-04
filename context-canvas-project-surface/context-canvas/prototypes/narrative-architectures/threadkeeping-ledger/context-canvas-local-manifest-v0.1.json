@@ -17,7 +17,7 @@
   },
   "publicationPosture": "visitor-linked-through-receiving-pages",
   "archive": {"status": "rebuilt-local-snapshot", "path": "threadkeeping-ledger-chimeric-prototype-bundle-v0.1.zip"},
-  "integrity": {"algorithm": "sha256", "entryFile": "2e537290048e736bb98a6911dca1e4e228296550a9136bd41776d13ee1c93812"},
+  "integrity": {"algorithm": "sha256", "entryFile": "48a087d0360c97bcb2d46da7bca07ed4c51aa835da496701a5c0bc748a56ae2f"},
   "canonicalStatus": "context_canvas_owned_projection",
   "sourcePath": ".",
   "localPath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/",

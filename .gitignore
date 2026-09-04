@@ -210,6 +210,13 @@ test-results/
 # Materialized Context Canvas public-reference artifact
 .public-reference-build/
 
+# Materialized Core Architectures iframe-route package
+.iframe-route-build/
+
+# Local production-shaped projection and transactional staging
+.prod-projection-build/
+.prod-projection-transaction-*/
+
 # Local GitHub Pages build artifact
 .schema-pages/
 .schema_pages/

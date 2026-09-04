@@ -67,15 +67,17 @@ Each authored module carries a short header naming owner, neutral consumer scope
 
 ### Scenario: A source-specific selector obscures reusable meaning
 
-Given a selector names the source story rather than its structural role<br>
-And consumer evidence shows a reusable composition or component<br>
-When the selector migrates with its owner<br>
-Then the receiving name describes structural meaning<br>
-And source identity remains in content and metadata rather than the CSS namespace
+- Given a selector names the source story rather than its structural role
+- And consumer evidence shows a reusable composition or component
+- When the selector migrates with its owner
+- Then the receiving name describes structural meaning
+- And source identity remains in content and metadata rather than the CSS namespace
 
 ## Conditional scenarios
 
 The skill loads [references/scenarios.md](references/scenarios.md) when the work includes the three-movement Debrief namespace or the Debriefs Reading types badge-height probe.
+
+The skill loads [references/surface-color-and-state-roles.md](references/surface-color-and-state-roles.md) when painted backgrounds, color roles, link states, contrast, print, forced colors, or emerging CSS adoption enter the ownership decision.
 
 ## Completion
 

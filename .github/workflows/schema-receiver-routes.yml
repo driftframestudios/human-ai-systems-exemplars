@@ -14,6 +14,14 @@ on:
       - ".github/workflows/schema-receiver-routes.yml"
       - "package.json"
       - "package-lock.json"
+      - "AUTHORS"
+      - "CITATION.cff"
+      - "LICENSE"
+      - "AI-DATA-USE.md"
+      - "attribution.yml"
+      - "context-canvas-project-surface/context-canvas/visitor-boundary-contract.js"
+      - "tests/schema-pages/**"
+      - "tools/attribution-contract.mjs"
       - "tools/check-schema-surface.mjs"
       - "tools/build-schema-pages.mjs"
       - "tools/schema-receiver-routes.mjs"
@@ -68,7 +76,7 @@ jobs:
       - name: Read schema identities and build receiver routes
         id: schema
         continue-on-error: true
-        run: npm run check:schemas && npm run build:schema-pages
+        run: npm run check:schemas && npm run test:schema-pages
 
       - name: Describe the advisory receipt
         if: always()

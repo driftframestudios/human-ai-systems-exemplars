@@ -17,6 +17,7 @@ The files in this directory keep their existing paths. Collaboration notes, sour
 - [Genomic Viewer repeatability research payload](genomic-viewer-repeatability-deep-research-payload.md) — research questions, claim classes, and receiving-surface consequences.
 - [Core and Narrative unit-test foundation](unit-testing-collaboration-foundation.md) — source-owned expectations, direct local tests, current contract findings, the lean issue route, and the next research-branch re-entry move.
 - [Context Canvas public-reference materialization](context-canvas-public-reference-materialization.md) — Registry-scoped semantic keys, ignored build configuration, recoverable staged materialization, successor reception, delivery re-entry, and the current skill observation.
+- [Core iframe route stability](core-iframe-route-stability.md) — the 23-route source/projection contract, dependency-free package closure, activation standings, adapted-navigation observations, and the pinned Spark return point.
 - [Repository secret-material boundary](repository-secret-material-boundary.md) — pinned Betterleaks installation, generated-canary proof, exact tree/index/history/artifact scopes, safe diagnostics, successor reception, and the formed `secret-boundary-inspection` contract.
 
 ## Situated collaboration accounts
@@ -27,15 +28,15 @@ The files in this directory keep their existing paths. Collaboration notes, sour
 
 Prospective principal-engineering work now lives in [Planning surfaces](../planning/README.md). The [Context Canvas program](../planning/context-canvas/README.md) links back to these ledgers and carries future design-sprint terrain while completed-cycle history remains intact.
 
-## Local rendered-surface receipts
+## Local rendered-surface observations
 
-When a thread resolves a visible layout regression, include the local Playwright check as a compact receipt: command run, viewport-relevant result, and `.visual-runs/` artifact path. The root [Local visual checks](../README.md#local-visual-checks) affordance supports this with Chromium-rendered screenshots and focused checks for table columns, readable form controls, and Context Canvas rail labels.
+When a thread resolves a visible layout regression, include one compact public-safe result: repository-defined check or sanitized command shape, viewport-relevant outcome, and a controlled repository-relative `.visual-runs/` reference when useful. The root [Local visual checks](../README.md#local-visual-checks) affordance supports this with Chromium-rendered screenshots and focused checks for table columns, readable form controls, and Context Canvas rail labels.
 
 The all-page Context Canvas reference serves a different, equally bounded purpose. One shared runner captures the initial visitor state of every top-level route at narrow, desktop, and wide dimensions before and after CSS modularization, then presents the ignored local images through a family index. The images support cycle-scoped way-finding and comparison. A named moved interaction or reproduced regression can invoke the smallest existing focused check; focus-state permutations remain outside the general pass.
 
 Portable screenshot storage rests until a human-led Cloudflare transformation calculation and an explicit later decision reopen it. The runner remains durable repository source while generated images remain local and disposable.
 
-The useful record stays small: what changed, what rendered observation matters, and where the ignored artifacts landed. Reuse an existing focused check when it answers the page question. A reproduced visitor need can earn the smallest new observation within its repair. This keeps threadkeeping oriented toward re-entry and visitor readability while the runnable page remains the source of behavior and the all-page reference remains outside release gating.
+The useful record stays small: what changed, what rendered observation matters, and the controlled repository-relative artifact location when it changes re-entry. Raw browser diagnostics and generated images remain local unless an authorized receiver has reviewed them. Reuse or link an existing sufficient result rather than creating another receipt. A reproduced visitor need can earn the smallest new observation within its repair. This keeps threadkeeping oriented toward re-entry and visitor readability while the runnable page remains the source of behavior and the all-page reference remains outside release gating.
 
 ## What belongs here
 

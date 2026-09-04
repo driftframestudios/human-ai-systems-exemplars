@@ -59,8 +59,14 @@ package questions retain their own deliberately selected routes. Superseded
 contracts cancel; deployments serialize by receiver and finish their current
 upload.
 
-The Pages workflow remains the standing `docs` publication path. Evidence
-budgets and deployment authority stay independent:
+The Pages workflow receives an exact accepted source commit and reviewed
+`docs` commit through manual dispatch. Its read-only job rebuilds and compares
+the complete receiver before an explicit deployment selection gives a separate
+job the minimal Pages permissions. The current live site uses this workflow
+route. Each hosted pair starts after its accepted source reaches `main` and its
+reviewed projection reaches `docs`; the `github-pages` environment keeps both
+branch rules. The recorded legacy `docs:/` source remains the recovery route.
+Evidence budgets and deployment authority stay independent:
 `DEPLOYMENT_ACTIVE_RECEIVERS=[]` currently lets release and production checks
 run while their Worker uploads rest. Naming a receiver in that list admits its
 connected deployment only after the matching branch-restricted environment
