@@ -1,0 +1,428 @@
+
+/* Field Inspection Harness paired prospective Debrief
+   The warm field carries the source-native Solution account. Dark implementation
+   carries implementation authority, state, recovery, and validation. */
+.field-inspection-page {
+    --inspection-rose: #ffd3d0;
+    --inspection-paper: #fdebe9;
+    --inspection-warm-white: #fff7f4;
+    --inspection-field: #fffaf2;
+    --inspection-cobalt: #2855f3;
+    --inspection-cobalt-deep: #153fbe;
+    --inspection-ink: #17345f;
+    --inspection-blue-ink: #304a71;
+    --inspection-muted: #5d6f8b;
+    --inspection-acid: #f2ff67;
+    --inspection-coral: #fa7065;
+    --inspection-sea: #d9efea;
+    --inspection-cream: #fff5de;
+    --inspection-iron: #1f2421;
+}
+
+.field-inspection-hero {
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255, 211, 208, .15) 0 .38rem, transparent .42rem),
+        linear-gradient(135deg, #17345f 0%, #0f2147 66%, #1f2421 100%);
+    border-block-end: .6rem solid var(--inspection-coral);
+}
+
+.field-inspection-page .debrief-at-glance {
+    background: var(--inspection-ink);
+    border-color: var(--inspection-ink);
+}
+
+.field-inspection-page .debrief-at-glance > div:nth-child(4n + 1) {
+    background: var(--inspection-warm-white);
+    border-block-start: .22rem solid var(--inspection-cobalt);
+}
+
+.field-inspection-page .debrief-at-glance > div:nth-child(4n + 2) {
+    background: var(--inspection-paper);
+    border-block-start: .22rem solid var(--inspection-coral);
+}
+
+.field-inspection-page .debrief-at-glance > div:nth-child(4n + 3) {
+    background: var(--inspection-cream);
+    border-block-start: .22rem solid var(--inspection-ink);
+}
+
+.field-inspection-page .debrief-at-glance > div:nth-child(4n) {
+    background: var(--inspection-sea);
+    border-block-start: .22rem solid var(--inspection-cobalt-deep);
+}
+
+.field-inspection-field-label,
+.field-inspection-track-label {
+    color: var(--inspection-blue-ink);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .77rem;
+    font-weight: 800;
+    letter-spacing: .075em;
+    line-height: 1.5;
+    text-transform: uppercase;
+}
+
+.field-inspection-track-label {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .55rem;
+    margin-block: 0 1rem;
+}
+
+.field-inspection-track-label span {
+    background: var(--inspection-cobalt);
+    border: .125rem solid var(--inspection-ink);
+    border-radius: 999px;
+    color: var(--inspection-warm-white);
+    padding: .32rem .7rem;
+}
+
+.field-inspection-track-label--dark,
+.field-inspection-assurance-field .field-inspection-field-label {
+    color: #cfe7f7;
+}
+
+.field-inspection-track-label--dark span {
+    background: var(--inspection-acid);
+    color: var(--inspection-ink);
+}
+
+.field-inspection-prospective-ledger {
+    background: var(--inspection-rose);
+    border: .125rem solid var(--inspection-ink);
+    border-radius: .8rem;
+    box-shadow: .55rem .55rem 0 var(--inspection-ink);
+    margin-block: clamp(2rem, 5vw, 4rem);
+    padding: clamp(1rem, 3vw, 2rem);
+}
+
+.field-inspection-prospective-ledger > :first-child,
+.field-inspection-prospective-ledger > :last-child {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.field-inspection-prospective-ledger__grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    margin-block-start: 1.25rem;
+}
+
+.field-inspection-prospective-ledger__grid section {
+    background: var(--inspection-warm-white);
+    border: .125rem solid var(--inspection-ink);
+    border-block-start: .35rem solid var(--inspection-cobalt);
+    min-inline-size: 0;
+    padding: 1rem;
+}
+
+.field-inspection-prospective-ledger__grid section:nth-child(2n) {
+    border-block-start-color: var(--inspection-coral);
+}
+
+.field-inspection-prospective-ledger__grid :is(h3, p) {
+    color: var(--inspection-ink);
+}
+
+.field-inspection-prospective-ledger__grid > section > :first-child,
+.field-inspection-prospective-ledger__grid > section > :last-child {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.field-inspection-solution-field {
+    background: var(--inspection-rose);
+    color: var(--inspection-blue-ink);
+}
+
+.field-inspection-solution-field :is(.architecture-track-title, .beat-title, .txt-h4) {
+    color: var(--inspection-ink);
+}
+
+.field-inspection-solution-field .architecture-track-title {
+    border-block-end-color: var(--inspection-cobalt);
+}
+
+.field-inspection-solution-field .interpretive-aside {
+    background: var(--inspection-warm-white);
+    border: .125rem solid var(--inspection-ink);
+    border-inline-start: .55rem solid var(--inspection-coral);
+    border-radius: .6rem;
+    box-shadow: .4rem .4rem 0 var(--inspection-ink);
+}
+
+.field-inspection-solution-field .table-scroll,
+.field-inspection-capital-field .table-scroll,
+.field-inspection-population-field .table-scroll {
+    background: var(--inspection-warm-white);
+    border: .125rem solid var(--inspection-ink);
+    border-radius: .55rem;
+}
+
+.field-inspection-implementation-field {
+    --canvas-link-color: var(--canvas-link-on-dark);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
+    background: var(--inspection-iron);
+    color: var(--inspection-warm-white);
+}
+
+.field-inspection-implementation-field .content > article > :is(h2, h3, p) {
+    color: var(--inspection-warm-white);
+}
+
+.field-inspection-implementation-field .architecture-track-title,
+.field-inspection-assurance-field .architecture-track-title {
+    border-block-end-color: var(--inspection-coral);
+}
+
+.field-inspection-implementation-field .architecture-pair article,
+.field-inspection-implementation-field .implementation-companion {
+    color: var(--inspection-ink);
+}
+
+.field-inspection-implementation-field .architecture-pair article :is(h4, p),
+.field-inspection-implementation-field .implementation-companion :is(h4, p) {
+    color: var(--inspection-ink);
+}
+
+.field-inspection-implementation-field .implementation-companion {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
+    background: var(--inspection-cream);
+    border: .125rem solid var(--inspection-ink);
+    border-inline-start: .55rem solid var(--inspection-coral);
+    border-radius: .7rem;
+    box-shadow: .45rem .45rem 0 var(--inspection-coral);
+}
+
+.field-inspection-implementation-field .table-scroll,
+.field-inspection-assurance-field .table-scroll {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
+    background: var(--inspection-warm-white);
+    border: .125rem solid var(--inspection-ink);
+    border-radius: .55rem;
+    color: var(--inspection-ink);
+}
+
+.field-inspection-implementation-field .table-scroll :is(caption, th, td),
+.field-inspection-assurance-field .table-scroll :is(caption, th, td) {
+    color: var(--inspection-ink);
+}
+
+.field-inspection-capital-field {
+    background: var(--inspection-field);
+}
+
+.field-inspection-capital-field .architecture-track-title,
+.field-inspection-population-field .architecture-track-title {
+    border-block-end-color: var(--inspection-cobalt);
+}
+
+.field-inspection-capital-field .interpretive-aside,
+.field-inspection-sampling-aside {
+    background: var(--inspection-sea);
+    border: .125rem solid var(--inspection-ink);
+    border-inline-start: .55rem solid var(--inspection-cobalt);
+    border-radius: .65rem;
+    box-shadow: .42rem .42rem 0 var(--inspection-ink);
+}
+
+.field-inspection-sampling-aside details {
+    background: var(--inspection-warm-white);
+    border: .125rem solid var(--inspection-ink);
+    margin-block: 1rem;
+    padding: .75rem 1rem;
+}
+
+.field-inspection-sampling-aside summary {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    font-weight: 800;
+    min-block-size: 2.75rem;
+}
+
+.field-inspection-sampling-aside blockquote {
+    border-inline-start: .35rem solid var(--inspection-coral);
+    margin-inline: 0;
+    padding-inline-start: 1rem;
+}
+
+.field-inspection-assurance-field {
+    --canvas-link-color: var(--canvas-link-on-dark);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
+    background: var(--inspection-ink);
+    color: var(--inspection-warm-white);
+}
+
+.field-inspection-assurance-field .content > section > :is(h2, h3, p) {
+    color: var(--inspection-warm-white);
+}
+
+.field-inspection-assurance-field .table-note {
+    color: #dbe7f6;
+}
+
+.field-inspection-population-field {
+    background: #eef3fa;
+}
+
+.field-inspection-visual img {
+    background: var(--inspection-field);
+    border: .125rem solid var(--inspection-ink);
+    border-radius: .8rem;
+    box-shadow: .55rem .55rem 0 var(--inspection-cobalt);
+}
+
+.field-inspection-visual--handoff img {
+    background: var(--inspection-rose);
+    box-shadow: .55rem .55rem 0 var(--inspection-coral);
+}
+
+.field-inspection-visual--dark img {
+    background: #0f2147;
+    border-color: #cfe7f7;
+    box-shadow: .55rem .55rem 0 var(--inspection-coral);
+}
+
+.field-inspection-figure-key {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    margin-block: 1.2rem 0;
+}
+
+.field-inspection-figure-key > div {
+    background: var(--inspection-warm-white);
+    border: .125rem solid var(--inspection-ink);
+    border-block-start: .35rem solid var(--inspection-cobalt);
+    padding: .9rem 1rem;
+}
+
+.field-inspection-figure-key > .field-inspection-figure-key__continuity {
+    border-block-start-color: var(--inspection-coral);
+}
+
+.field-inspection-figure-key > .field-inspection-figure-key__evidence {
+    border-block-start-color: #2f6668;
+}
+
+.field-inspection-figure-key :is(dt, dd) {
+    color: var(--inspection-ink);
+}
+
+.field-inspection-figure-key dt {
+    font-weight: 800;
+}
+
+.field-inspection-figure-key dd {
+    line-height: 1.5;
+    margin: .35rem 0 0;
+}
+
+.field-inspection-evidence-boundary,
+.field-inspection-final-boundary {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
+    background: var(--inspection-warm-white);
+    border: .125rem solid var(--inspection-ink);
+    border-inline-start: .65rem solid var(--inspection-coral);
+    border-radius: .65rem;
+    box-shadow: .45rem .45rem 0 var(--inspection-ink);
+    color: var(--inspection-ink);
+    margin-block: clamp(1.75rem, 4vw, 3rem);
+    padding: clamp(1.1rem, 3vw, 1.8rem);
+}
+
+.field-inspection-evidence-boundary :is(h3, p),
+.field-inspection-final-boundary :is(h3, p) {
+    color: var(--inspection-ink) !important;
+}
+
+.field-inspection-evidence-boundary > :first-child,
+.field-inspection-evidence-boundary > :last-child,
+.field-inspection-final-boundary > :first-child,
+.field-inspection-final-boundary > :last-child {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.field-inspection-evidence-boundary--dark {
+    box-shadow: .45rem .45rem 0 var(--inspection-coral);
+}
+
+.field-inspection-source-basis {
+    border-block-start: .22rem solid var(--inspection-cobalt);
+    margin-block-start: clamp(3rem, 7vw, 6rem);
+    padding-block-start: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.field-inspection-source-basis .source-basis li {
+    break-inside: avoid;
+}
+
+.field-inspection-page :is(#solution-architecture-title, #implementation-architecture-title, #staged-capital-title, #validation-authority-title, #population-cartography-title) {
+    scroll-margin-block-start: 9.5rem;
+}
+
+@media screen and (max-width: 30rem) {
+    .field-inspection-prospective-ledger,
+    .field-inspection-visual img,
+    .field-inspection-evidence-boundary,
+    .field-inspection-final-boundary,
+    .field-inspection-capital-field .interpretive-aside,
+    .field-inspection-sampling-aside {
+        box-shadow: .3rem .3rem 0 var(--inspection-ink);
+    }
+
+    .field-inspection-visual--dark img,
+    .field-inspection-evidence-boundary--dark {
+        box-shadow: .3rem .3rem 0 var(--inspection-coral);
+    }
+}
+
+@media (forced-colors: active) {
+    .field-inspection-prospective-ledger,
+    .field-inspection-prospective-ledger__grid section,
+    .field-inspection-visual img,
+    .field-inspection-figure-key > div,
+    .field-inspection-evidence-boundary,
+    .field-inspection-final-boundary,
+    .field-inspection-sampling-aside,
+    .field-inspection-sampling-aside details {
+        border-color: CanvasText;
+        box-shadow: none;
+    }
+
+    .field-inspection-track-label span {
+        border-color: CanvasText;
+    }
+}
+
+@media print {
+    .field-inspection-page :is(
+        .field-inspection-prospective-ledger,
+        .field-inspection-visual img,
+        .field-inspection-evidence-boundary,
+        .field-inspection-final-boundary,
+        .field-inspection-sampling-aside,
+        .architecture-pair article,
+        .implementation-companion
+        ) {
+        box-shadow: none;
+    }
+
+    .field-inspection-page :is(.field-inspection-implementation-field, .field-inspection-assurance-field) {
+        --canvas-link-color: var(--canvas-link-on-light);
+        --canvas-link-visited-color: var(--canvas-link-visited-on-light);
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .field-inspection-page :is(.field-inspection-implementation-field, .field-inspection-assurance-field) :is(h2, h3, h4, p, a, code, figcaption) {
+        color: #000 !important;
+    }
+}

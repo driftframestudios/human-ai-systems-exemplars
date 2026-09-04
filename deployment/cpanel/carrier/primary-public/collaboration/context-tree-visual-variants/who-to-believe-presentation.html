@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Who To Believe Context Tree</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --field: #111c2d;
+      --field-2: #17263b;
+      --paper: #fff7e7;
+      --paper-blue: #d9ecff;
+      --paper-sea: #d8f2ed;
+      --ink: #142c4c;
+      --ink-soft: #43607f;
+      --night-ink: #f8f2e7;
+      --night-soft: #b9cce4;
+      --cobalt: #336df4;
+      --tiffany: #69ded0;
+      --coral: #ff806f;
+      --gold: #f5c95e;
+      --line: #6f97d0;
+      --shadow: #07101d;
+      --sans: "Arial Nova", "Avenir Next", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        linear-gradient(rgba(101, 146, 208, .12) 1px, transparent 1px) 0 0 / 32px 32px,
+        linear-gradient(90deg, rgba(101, 146, 208, .12) 1px, transparent 1px) 0 0 / 32px 32px,
+        var(--field);
+      color: var(--night-ink);
+      font-family: var(--sans);
+      line-height: 1.45;
+    }
+    button { font: inherit; }
+    button:focus-visible, summary:focus-visible, [tabindex="0"]:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 3px;
+    }
+    .skip-link {
+      position: fixed;
+      z-index: 100;
+      inset: .75rem auto auto .75rem;
+      transform: translateY(-180%);
+      background: var(--paper);
+      color: var(--ink);
+      padding: .65rem .85rem;
+    }
+    .skip-link:focus { transform: translateY(0); }
+    header { padding: clamp(1.15rem, 3vw, 2.4rem); border-block-end: 2px solid var(--line); }
+    .eyebrow, .status, .route, .control-label, .boundary-label {
+      font-family: var(--mono);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .075em;
+      text-transform: uppercase;
+    }
+    .eyebrow { color: var(--tiffany); }
+    h1 { max-width: 62rem; margin: .45rem 0 .7rem; font-size: clamp(1.75rem, 1.2rem + 2.5vw, 3.45rem); line-height: 1.04; }
+    header p { max-width: 68rem; margin: 0; color: var(--night-soft); font-size: clamp(.96rem, .9rem + .25vw, 1.12rem); }
+    .shared-outcome {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: .65rem 1rem;
+      align-items: baseline;
+      max-width: 68rem;
+      margin-block-start: 1rem;
+      padding-block-start: .85rem;
+      border-block-start: 1px solid var(--line);
+    }
+    .shared-outcome span { color: var(--tiffany); font: 800 .7rem var(--mono); text-transform: uppercase; }
+    .controls {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      display: grid;
+      gap: .75rem;
+      padding: .85rem clamp(.8rem, 2.5vw, 1.5rem);
+      border-block-end: 2px solid var(--line);
+      background: color-mix(in srgb, var(--field-2) 94%, transparent);
+      backdrop-filter: blur(12px);
+    }
+    .control-row { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: .55rem; align-items: start; }
+    .control-label { padding-block-start: .56rem; color: var(--night-soft); }
+    .control-group { display: flex; flex-wrap: wrap; gap: .45rem; }
+    .lens, .actor-filter {
+      min-height: 2.75rem;
+      border: 2px solid var(--line);
+      border-radius: .42rem;
+      background: var(--field);
+      color: var(--night-ink);
+      cursor: pointer;
+      font-weight: 760;
+      padding: .5rem .75rem;
+    }
+    .lens[aria-selected="true"] { background: var(--cobalt); border-color: var(--paper); box-shadow: 4px 4px 0 var(--shadow); }
+    .actor-filter[aria-pressed="true"] { background: var(--tiffany); color: var(--ink); border-color: var(--ink); }
+    main { padding: clamp(.85rem, 2.5vw, 1.6rem); }
+    .surface-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem; align-items: end; margin-block-end: 1rem; }
+    .surface-heading h2 { margin: 0; font-size: clamp(1.3rem, 1rem + 1vw, 2rem); }
+    .surface-heading p { max-width: 62rem; margin: .35rem 0 0; color: var(--night-soft); }
+    .view-state { color: var(--tiffany); font: 800 .72rem var(--mono); }
+    .workspace { display: grid; grid-template-columns: minmax(0, 1fr) minmax(17rem, 21rem); gap: 1rem; align-items: start; }
+    .surface {
+      min-width: 0;
+      min-height: 29rem;
+      border: 2px solid var(--line);
+      border-radius: 1rem;
+      background: color-mix(in srgb, var(--field-2) 90%, transparent);
+      padding: clamp(.75rem, 2vw, 1.2rem);
+    }
+    .role-grid, .gap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: .85rem; }
+    .role-card, .gap-card {
+      min-width: 0;
+      border: 2px solid var(--ink);
+      border-radius: .8rem;
+      background: var(--paper);
+      color: var(--ink);
+      box-shadow: 5px 5px 0 var(--shadow);
+      padding: .9rem;
+    }
+    .role-card:nth-child(3n + 2), .gap-card:nth-child(3n + 2) { background: var(--paper-blue); }
+    .role-card:nth-child(3n), .gap-card:nth-child(3n) { background: var(--paper-sea); }
+    .role-card button { width: 100%; border: 0; background: transparent; color: inherit; cursor: pointer; padding: 0; text-align: left; }
+    .role-card button[aria-current="true"] { outline: 4px solid var(--cobalt); outline-offset: 4px; }
+    .role-card h3, .gap-card h3 { margin: .35rem 0 .55rem; font-size: 1rem; line-height: 1.25; }
+    .role-card p, .gap-card p { margin: .35rem 0; font-size: .86rem; }
+    .status { display: inline-flex; align-items: center; gap: .35rem; color: var(--ink-soft); }
+    .status::before { content: ""; width: .62rem; height: .62rem; border: 2px solid currentColor; transform: rotate(45deg); }
+    .route { display: inline-flex; margin-block-start: .45rem; border: 1px solid var(--ink); border-radius: 999px; background: var(--gold); color: var(--ink); padding: .22rem .45rem; }
+    .inspector {
+      position: sticky;
+      top: 10rem;
+      border: 2px solid var(--paper);
+      border-radius: .9rem;
+      background: var(--cobalt);
+      box-shadow: 7px 7px 0 var(--shadow);
+      padding: 1rem;
+    }
+    .inspector h2 { margin: 0 0 .35rem; font-size: 1.1rem; }
+    .inspector p { margin: .45rem 0; color: white; font-size: .88rem; }
+    .inspector dl { display: grid; gap: .7rem; margin: 1rem 0 0; }
+    .inspector dt { color: #cfe0ff; font: 800 .65rem var(--mono); text-transform: uppercase; }
+    .inspector dd { margin: .12rem 0 0; font-size: .86rem; }
+    .table-wrap { overflow-x: auto; padding-block-end: .6rem; }
+    table { width: 100%; min-width: 54rem; border-collapse: separate; border-spacing: 0; background: var(--paper); color: var(--ink); }
+    caption { padding: 0 0 .75rem; color: var(--night-ink); font-weight: 800; text-align: left; }
+    th, td { min-width: 12rem; padding: .75rem; border-block-end: 1px solid #9bb0c8; text-align: left; vertical-align: top; }
+    thead th { background: var(--paper-blue); border-block-end: 2px solid var(--ink); font-size: .78rem; }
+    tbody th { position: sticky; left: 0; z-index: 2; min-width: 10rem; background: var(--paper); font-size: .78rem; }
+    td { font-size: .82rem; }
+    .blueprint td:nth-child(3) { background: #eff8ff; }
+    .blueprint td:nth-child(4) { background: #effbf8; }
+    .semantic { margin-block-start: 1rem; border: 1px solid var(--line); background: var(--field-2); }
+    .semantic summary { cursor: pointer; font-weight: 800; padding: .85rem 1rem; }
+    .semantic .table-wrap { padding: 0 1rem 1rem; }
+    .boundary { margin-block-start: 1rem; padding: .9rem 1rem; border-inline-start: .35rem solid var(--coral); background: var(--field-2); color: var(--night-soft); }
+    .boundary p { margin: .2rem 0; }
+    .boundary-label { color: var(--coral); }
+    .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0 0 0 0) !important; white-space: nowrap !important; border: 0 !important; }
+    @media (max-width: 900px) {
+      .workspace { grid-template-columns: 1fr; }
+      .inspector { position: static; }
+    }
+    @media (max-width: 620px) {
+      .controls { position: static; }
+      .control-row { grid-template-columns: 1fr; }
+      .control-group { flex-wrap: nowrap; overflow-x: auto; padding: .2rem .2rem .55rem; }
+      .lens, .actor-filter { flex: 0 0 auto; }
+      .surface-heading, .shared-outcome { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    @media (forced-colors: active) {
+      .lens[aria-selected="true"], .actor-filter[aria-pressed="true"], .role-card button[aria-current="true"] { outline: 3px solid Highlight; }
+      .role-card, .gap-card, .inspector { box-shadow: 5px 5px 0 CanvasText; }
+    }
+    @media print {
+      .controls, .inspector { display: none; }
+      body { background: white; color: black; }
+      .surface { border: 0; }
+      .role-card, .gap-card { break-inside: avoid; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#context-surface">Skip to the Context Tree</a>
+  <header>
+    <div class="eyebrow">Context Tree · Who To Believe receiving surface</div>
+    <h1>Who needs which context before a score becomes a decision?</h1>
+    <p>Keep participant meaning, campaign fit, evidence provenance, policy reasons, regional purpose, and the receiving team visible across one review path. The tree restores role-local context without flattening everyone into “stakeholders.”</p>
+    <div class="shared-outcome"><span>Shared outcome</span><strong>A consequential roster decision retains enough context to be explained, reviewed, appealed, measured, and revised.</strong></div>
+  </header>
+
+  <section class="controls" aria-label="Context Tree controls">
+    <div class="control-row">
+      <span class="control-label" id="lens-label">Lens</span>
+      <div class="control-group" role="tablist" aria-labelledby="lens-label">
+        <button class="lens" type="button" id="tab-roles" role="tab" aria-selected="true" aria-controls="panel" data-view="roles">Role context</button>
+        <button class="lens" type="button" id="tab-blueprint" role="tab" aria-selected="false" aria-controls="panel" tabindex="-1" data-view="blueprint">Service handoffs</button>
+        <button class="lens" type="button" id="tab-gaps" role="tab" aria-selected="false" aria-controls="panel" tabindex="-1" data-view="gaps">Context still to surface</button>
+      </div>
+    </div>
+    <div class="control-row">
+      <span class="control-label" id="actor-label">Focus</span>
+      <div class="control-group" id="actor-controls" role="group" aria-labelledby="actor-label"></div>
+    </div>
+  </section>
+
+  <main id="context-surface" tabindex="-1">
+    <div class="surface-heading">
+      <div><h2 id="view-title">Role context</h2><p id="view-description">Compare the decision, visible evidence, remaining uncertainty, and handoff carried by each population.</p></div>
+      <div class="view-state" id="view-state">7 populations · all in view</div>
+    </div>
+    <div class="workspace">
+      <section class="surface" id="panel" role="tabpanel" aria-labelledby="tab-roles"></section>
+      <aside class="inspector" id="inspector" aria-labelledby="inspector-title"></aside>
+    </div>
+
+    <details class="semantic">
+      <summary>Inspect the complete role–context matrix</summary>
+      <div class="table-wrap">
+        <table>
+          <caption>Complete Who To Believe Context Tree; evidence classes remain visible in each row.</caption>
+          <thead><tr><th scope="col">Population</th><th scope="col">Decision carried</th><th scope="col">Must be visible</th><th scope="col">Context still to surface</th><th scope="col">Handoff</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Participants &amp; influencers</th><td>Whether the campaign exchange and roster decision fit their lived context.</td><td>Purpose, status, reason, review timing, accessible appeal.</td><td>How marriage, roommates, caregiving, access needs, or therapy history change meaning.</td><td>Review operations · participant support</td></tr>
+            <tr><th scope="row">Review operations</th><td>Whether an ambiguous transition warrants action.</td><td>Minimized evidence, bounded reasons, policy version, comparable lawful context.</td><td>Reviewer disagreement, capacity, service level, and appeal overturn patterns.</td><td>Trust product · independent appeal reviewer</td></tr>
+            <tr><th scope="row">Product &amp; design</th><td>Where friction protects a decision and where it only taxes legitimate work.</td><td>Task, consequence, recovery route, cohort effects, support language.</td><td>Which interaction cues make reasons and alternatives legible.</td><td>Platform engineering · research</td></tr>
+            <tr><th scope="row">Platform engineering</th><td>How identity, purpose, decision, and retries retain one authoritative contract.</td><td>Actor, tenant, region, versions, evidence IDs, immutable decision ID.</td><td>Single-writer migration path, event replay, adapter retirement, drift gates.</td><td>Data stewardship · quality engineering</td></tr>
+            <tr><th scope="row">Privacy &amp; safety</th><td>Which purpose, regional, disclosure, and safety obligations attach.</td><td>Purpose provenance, retention, regional movement, receiving-team status.</td><td>Applicable jurisdiction, controller roles, erasure completion, safety receipt.</td><td>Accountable regulated party · privacy owner</td></tr>
+            <tr><th scope="row">Clients &amp; executives</th><td>Whether the signal is reliable enough to change a campaign or investment.</td><td>Population, denominator, source class, operating cost, unresolved uncertainty.</td><td>Whether a channel metric measures value or recovery from another broken route.</td><td>Product strategy · client operations</td></tr>
+            <tr><th scope="row">AI collaborator</th><td>Which candidate explanation or method should be offered for human inspection.</td><td>Source boundary, named outcome, candidate set, assumptions, falsifiers.</td><td>What evidence and alternatives are outside the current context window.</td><td>Named human receiver · Threadkeeping Ledger</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+    <aside class="boundary" aria-label="Evidence boundary">
+      <p class="boundary-label">Evidence boundary</p>
+      <p>Historical platform details are participant accounts unless a dated source is named. The role-context contract, service blueprint, and AI-collaboration route are present-day interpretive proposals; teams still validate legal, privacy, safety, statistical, accessibility, workload, and regional fit.</p>
+    </aside>
+  </main>
+
+  <p class="visually-hidden" id="status" aria-live="polite"></p>
+  <noscript><p>The complete role–context matrix above preserves the prototype’s content without scripting.</p></noscript>
+  <script type="application/json" id="context-tree-schema">{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"Who To Believe Context Tree state","type":"object","additionalProperties":false,"required":["view","actor"],"properties":{"view":{"enum":["roles","blueprint","gaps"]},"actor":{"type":"string"}}}</script>
+  <script>
+    (() => {
+      "use strict";
+      const actors = [
+        {id:"participants",label:"Participants & influencers",status:"lived context",decision:"Whether the campaign exchange and roster decision fit their lived context.",visible:"Purpose, status, bounded reason, review timing, and accessible appeal.",gap:"How marriage, roommates, caregiving, access needs, or therapy history change the meaning of a transition.",route:"Review operations · participant support"},
+        {id:"review",label:"Review operations",status:"human judgment",decision:"Whether an ambiguous transition warrants action.",visible:"Minimized evidence, policy reasons, model or policy version, and comparable lawful context.",gap:"Reviewer disagreement, capacity, service level, and appeal-overturn patterns.",route:"Trust product · independent appeal"},
+        {id:"product",label:"Product & design",status:"interaction policy",decision:"Where friction protects a decision and where it taxes legitimate work.",visible:"Task, consequence, recovery route, cohort effects, and support language.",gap:"Which cues make reasons, alternatives, and current status legible.",route:"Platform engineering · research"},
+        {id:"engineering",label:"Platform engineering",status:"system authority",decision:"How identity, purpose, decision, and retries retain one authoritative contract.",visible:"Actor, tenant, region, versions, evidence IDs, and immutable decision identity.",gap:"Single-writer migration, event replay, adapter retirement, and drift gates.",route:"Data stewardship · quality engineering"},
+        {id:"governance",label:"Privacy & safety",status:"accountable boundary",decision:"Which purpose, regional, disclosure, and safety obligations attach.",visible:"Purpose provenance, retention, regional movement, and receiving-team status.",gap:"Applicable jurisdiction, controller roles, erasure completion, and safety receipt.",route:"Regulated party · privacy owner"},
+        {id:"executive",label:"Clients & executives",status:"investment decision",decision:"Whether a signal is reliable enough to change a campaign or investment.",visible:"Population, denominator, source class, operating cost, and unresolved uncertainty.",gap:"Whether a channel metric measures value or recovery from another broken route.",route:"Product strategy · client operations"},
+        {id:"ai",label:"AI collaborator",status:"proposal only",decision:"Which candidate explanation or method should be offered for human inspection.",visible:"Source boundary, named outcome, candidate set, assumptions, and falsifiers.",gap:"Which evidence and alternatives sit outside the current context window.",route:"Named human receiver · ledger"}
+      ];
+      const views = {
+        roles:{title:"Role context",description:"Compare the decision, visible evidence, remaining uncertainty, and handoff carried by each population."},
+        blueprint:{title:"Service handoffs",description:"Follow one roster decision through people, interface, services, evidence, review, and learning."},
+        gaps:{title:"Context still to surface",description:"Treat uncertainty as an inspectable work queue with a named receiver rather than as a defect in a person."}
+      };
+      const params = new URLSearchParams(location.search);
+      const state = {
+        view: views[params.get("view")] ? params.get("view") : "roles",
+        actor: actors.some(actor => actor.id === params.get("actor")) ? params.get("actor") : "all"
+      };
+      const panel = document.getElementById("panel");
+      const inspector = document.getElementById("inspector");
+      const status = document.getElementById("status");
+      const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[character]);
+      const visibleActors = () => state.actor === "all" ? actors : actors.filter(actor => actor.id === state.actor);
+      function writeUrl() {
+        const next = new URLSearchParams();
+        next.set("view", state.view);
+        if (state.actor !== "all") next.set("actor", state.actor);
+        history.replaceState(null, "", `${location.pathname}?${next.toString()}`);
+      }
+      function renderControls() {
+        document.querySelectorAll("[data-view]").forEach(button => {
+          const selected = button.dataset.view === state.view;
+          button.setAttribute("aria-selected", String(selected));
+          button.tabIndex = selected ? 0 : -1;
+        });
+        document.getElementById("actor-controls").innerHTML = [{id:"all",label:"All populations"},...actors].map(actor => `<button class="actor-filter" type="button" data-actor="${actor.id}" aria-pressed="${state.actor === actor.id}">${escapeHtml(actor.label)}</button>`).join("");
+      }
+      function roleCards() {
+        return `<div class="role-grid">${visibleActors().map(actor => `<article class="role-card"><button type="button" data-inspect="${actor.id}" aria-current="${state.actor === actor.id}"><span class="status">${escapeHtml(actor.status)}</span><h3>${escapeHtml(actor.label)}</h3><p><strong>Decision:</strong> ${escapeHtml(actor.decision)}</p><p><strong>Visible:</strong> ${escapeHtml(actor.visible)}</p><span class="route">${escapeHtml(actor.route)}</span></button></article>`).join("")}</div>`;
+      }
+      function blueprint() {
+        return `<div class="table-wrap"><table class="blueprint"><caption>One consequential roster decision across the service</caption><thead><tr><th scope="col">Layer</th><th scope="col">Qualify & contribute</th><th scope="col">Focus attention</th><th scope="col">Review & appeal</th><th scope="col">Learn & revise</th></tr></thead><tbody><tr><th scope="row">People</th><td>Participant, influencer, campaign team</td><td>Trust product, review operations</td><td>Reviewer, independent appeal reviewer, support</td><td>Product, quality, privacy, client operations</td></tr><tr><th scope="row">Interface</th><td>Purpose, campaign fit, saved progress</td><td>Status, reason category, review timing</td><td>Minimized evidence, explanation, appeal route</td><td>Cohort scorecard, disagreement, recovery signal</td></tr><tr><th scope="row">Service</th><td>Server-derived actor, tenant, region, purpose</td><td>Transition graph plus versioned policy receipt</td><td>Review-case state machine and independent assignment</td><td>Policy/model version comparison and drift review</td></tr><tr><th scope="row">Evidence</th><td>Minimized transition and provenance</td><td>Evidence IDs, bounded reasons, denominator</td><td>Decision identity, reviewer identity, appeal state</td><td>False-positive/negative slices and source class</td></tr><tr><th scope="row">Handoff</th><td>Participant → campaign</td><td>Signal → reviewer</td><td>Reviewer → participant / appeal</td><td>Quality finding → policy, interface, or model revision</td></tr></tbody></table></div>`;
+      }
+      function gapCards() {
+        return `<div class="gap-grid">${visibleActors().map(actor => `<article class="gap-card"><span class="status">context queue</span><h3>${escapeHtml(actor.label)}</h3><p>${escapeHtml(actor.gap)}</p><span class="route">Route: ${escapeHtml(actor.route)}</span></article>`).join("")}</div>`;
+      }
+      function renderInspector() {
+        const actor = actors.find(item => item.id === state.actor);
+        if (!actor) {
+          inspector.innerHTML = `<h2 id="inspector-title">Read role differences before convergence</h2><p>The tree keeps seven populations visible. Choose one to inspect its decision, evidence need, context queue, and handoff without losing the complete system view.</p><dl><div><dt>Shared invariant</dt><dd>Scores focus attention; people retain consequential judgment.</dd></div><div><dt>Information scent</dt><dd>Reasons, source class, alternatives, and recovery routes stay visible.</dd></div></dl>`;
+          return;
+        }
+        inspector.innerHTML = `<h2 id="inspector-title">${escapeHtml(actor.label)}</h2><p>${escapeHtml(actor.decision)}</p><dl><div><dt>Must be visible</dt><dd>${escapeHtml(actor.visible)}</dd></div><div><dt>Context still to surface</dt><dd>${escapeHtml(actor.gap)}</dd></div><div><dt>Receiving route</dt><dd>${escapeHtml(actor.route)}</dd></div></dl>`;
+      }
+      function render() {
+        renderControls();
+        document.getElementById("view-title").textContent = views[state.view].title;
+        document.getElementById("view-description").textContent = views[state.view].description;
+        document.getElementById("view-state").textContent = state.actor === "all" ? `${actors.length} populations · all in view` : `Focus · ${actors.find(actor => actor.id === state.actor).label}`;
+        panel.setAttribute("aria-labelledby", `tab-${state.view}`);
+        panel.innerHTML = state.view === "roles" ? roleCards() : state.view === "blueprint" ? blueprint() : gapCards();
+        renderInspector();
+        globalThis.contextTreeState = Object.freeze({...state});
+      }
+      function chooseView(id, announce = true) {
+        if (!views[id]) return;
+        state.view = id; writeUrl(); render();
+        if (announce) status.textContent = `${views[id].title} is now visible.`;
+      }
+      function chooseActor(id, announce = true) {
+        if (id !== "all" && !actors.some(actor => actor.id === id)) return;
+        state.actor = id; writeUrl(); render();
+        if (announce) status.textContent = id === "all" ? "All populations are visible." : `${actors.find(actor => actor.id === id).label} is in focus.`;
+      }
+      document.addEventListener("click", event => {
+        const view = event.target.closest("[data-view]");
+        if (view) return chooseView(view.dataset.view);
+        const actor = event.target.closest("[data-actor]");
+        if (actor) return chooseActor(actor.dataset.actor);
+        const inspect = event.target.closest("[data-inspect]");
+        if (inspect) return chooseActor(inspect.dataset.inspect);
+      });
+      document.querySelector('[role="tablist"]').addEventListener("keydown", event => {
+        if (!["ArrowLeft","ArrowRight","Home","End"].includes(event.key)) return;
+        event.preventDefault();
+        const ids = Object.keys(views);
+        const current = ids.indexOf(state.view);
+        const next = event.key === "Home" ? 0 : event.key === "End" ? ids.length - 1 : (current + (event.key === "ArrowRight" ? 1 : -1) + ids.length) % ids.length;
+        chooseView(ids[next]);
+        document.querySelector(`[data-view="${ids[next]}"]`).focus();
+      });
+      render();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+/* STEWARDSHIP */
+Organization: Driftframe Studios, Limited Liability Company
+Role: Context Canvas steward
+Repository: https://github.com/driftframestudios/human-ai-systems-exemplars
+Location: New York, USA
+
+/* PUBLICATION BOUNDARY */
+Authorship: Visitor-surface authorship is named in page metadata and the visible footer; the portrait depicts a close-up gray tabby cat as the page's visual perspective.
+Source use: Human stewards approve audience, source authority, sensitive material, and consequential claims.
+
+/* SITE */
+Last Update: 2026-08-28
+Standards: HTML5, CSS3, SVG, JSON-LD
+Runtime: Static documents with progressive JavaScript enhancement

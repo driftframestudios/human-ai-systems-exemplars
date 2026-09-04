@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1050" role="img" aria-labelledby="title desc">
+  <title id="title">Five prompt-side conditions that make human and AI collaboration inspectable</title>
+  <desc id="desc">A five-column routing diagram connects source selection, positive desired states, role boundaries, input sanitation, and a compact working set to a named human receiver and recoverable decision.</desc>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#b8c8dc" stroke-width="1" opacity=".38"/>
+    </pattern>
+  </defs>
+  <style>
+    .condition-link:focus-visible .condition-surface {
+      stroke: #2855f3;
+      stroke-width: 9;
+    }
+  </style>
+  <rect width="1600" height="1050" fill="#f1e9d2"/>
+  <rect width="1600" height="1050" fill="url(#grid)" aria-hidden="true"/>
+
+  <g role="group" aria-labelledby="prompt-orientation-title">
+    <title id="prompt-orientation-title">Working orientation: reliable collaboration begins before a model answers</title>
+    <rect x="60" y="54" width="1480" height="172" fill="#17345f" stroke="#17345f" stroke-width="3"/>
+    <rect x="72" y="66" width="1480" height="172" fill="none" stroke="#56d8c9" stroke-width="3" aria-hidden="true"/>
+    <text x="105" y="110" fill="#56d8c9" font-family="ui-monospace, monospace" font-size="20" font-weight="800" letter-spacing="2">PROMPT-SIDE CONDITIONS · WORKING ORIENTATION</text>
+    <text x="105" y="163" fill="#fffaf2" font-family="ui-sans-serif, system-ui, sans-serif" font-size="42" font-weight="850">Reliable collaboration begins before a model answers.</text>
+    <text x="105" y="203" fill="#d3e4f2" font-family="ui-sans-serif, system-ui, sans-serif" font-size="23">Condition the source, task, authority, and receiving route so the response remains inspectable and revisable.</text>
+  </g>
+
+  <g role="group" aria-labelledby="prompt-conditions-title">
+    <title id="prompt-conditions-title">Five prompt-side conditions compose an inspectable working context</title>
+    <a class="condition-link" href="../../cross-platform-collaboration-cycle.html" target="_blank" rel="noopener noreferrer" aria-label="Source diet: explore the Cross-Platform Collaboration Cycle (opens in a new tab)">
+    <g role="group" aria-labelledby="source-diet-title">
+      <title id="source-diet-title">Source diet: choose what enters the working context</title>
+      <rect x="62" y="306" width="268" height="474" fill="#17345f" aria-hidden="true"/>
+      <rect class="condition-surface" x="50" y="294" width="268" height="474" fill="#fffaf2" stroke="#17345f" stroke-width="3"/>
+      <rect x="50" y="294" width="268" height="74" fill="#56d8c9" stroke="#17345f" stroke-width="3"/>
+      <text x="76" y="342" fill="#17345f" font-family="ui-monospace, monospace" font-size="24" font-weight="900">01 · SOURCE DIET</text>
+      <text x="76" y="414" fill="#17345f" font-family="ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="850">Choose what enters</text>
+      <text x="76" y="449" fill="#17345f" font-family="ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="850">the working context.</text>
+      <text x="76" y="510" fill="#304a71" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19">Name source, era,</text>
+      <text x="76" y="539" fill="#304a71" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19">population, and scope.</text>
+      <path d="M106 630H240V610L286 650 240 690V670H106Z" fill="#2855f3" aria-hidden="true"/>
+      <text x="76" y="731" fill="#17345f" font-family="ui-monospace, monospace" font-size="16" font-weight="800">SIGNAL BEFORE VOLUME</text>
+    </g>
+    </a>
+
+    <a class="condition-link" href="../../hiring-surfaces-talent-agent-intake.html" target="_blank" rel="noopener noreferrer" aria-label="Desired state: explore Hiring Surfaces (opens in a new tab)">
+    <g role="group" aria-labelledby="desired-state-title">
+      <title id="desired-state-title">Desired state: describe what should become true</title>
+      <rect x="370" y="306" width="268" height="474" fill="#17345f" aria-hidden="true"/>
+      <rect class="condition-surface" x="358" y="294" width="268" height="474" fill="#e7efff" stroke="#17345f" stroke-width="3"/>
+      <rect x="358" y="294" width="268" height="74" fill="#2855f3" stroke="#17345f" stroke-width="3"/>
+      <text x="384" y="342" fill="#fffaf2" font-family="ui-monospace, monospace" font-size="24" font-weight="900">02 · DESIRED STATE</text>
+      <text x="384" y="414" fill="#17345f" font-family="ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="850">Describe what</text>
+      <text x="384" y="449" fill="#17345f" font-family="ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="850">should become true.</text>
+      <text x="384" y="510" fill="#304a71" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19">Pair every boundary</text>
+      <text x="384" y="539" fill="#304a71" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19">with a replacement.</text>
+      <path d="M414 630H548V610L594 650 548 690V670H414Z" fill="#2855f3" aria-hidden="true"/>
+      <text x="384" y="731" fill="#17345f" font-family="ui-monospace, monospace" font-size="16" font-weight="800">POSITIVE PREDICATE</text>
+    </g>
+    </a>
+
+    <a class="condition-link" href="../../core-architectures-orientation-index.html" target="_blank" rel="noopener noreferrer" aria-label="Role boundary: explore the Core Architectures Orientation Index (opens in a new tab)">
+    <g role="group" aria-labelledby="role-boundary-title">
+      <title id="role-boundary-title">Role boundary: set register and decision standing while authority stays named</title>
+      <rect x="678" y="306" width="268" height="474" fill="#17345f" aria-hidden="true"/>
+      <rect class="condition-surface" x="666" y="294" width="268" height="474" fill="#d9efea" stroke="#17345f" stroke-width="3"/>
+      <rect x="666" y="294" width="268" height="74" fill="#17345f" stroke="#17345f" stroke-width="3"/>
+      <text x="692" y="342" fill="#56d8c9" font-family="ui-monospace, monospace" font-size="24" font-weight="900">03 · ROLE BOUNDARY</text>
+      <text x="692" y="414" fill="#17345f" font-family="ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="850">Set register and</text>
+      <text x="692" y="449" fill="#17345f" font-family="ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="850">decision standing.</text>
+      <text x="692" y="510" fill="#304a71" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19">A role shapes conduct;</text>
+      <text x="692" y="539" fill="#304a71" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19">evidence carries truth.</text>
+      <path d="M722 630H856V610L902 650 856 690V670H722Z" fill="#2855f3" aria-hidden="true"/>
+      <text x="692" y="731" fill="#17345f" font-family="ui-monospace, monospace" font-size="16" font-weight="800">AUTHORITY STAYS NAMED</text>
+    </g>
+    </a>
+
+    <a class="condition-link" href="../../grammar-family.html" target="_blank" rel="noopener noreferrer" aria-label="Input sanitation: explore Composable Site Readings and Debriefs (opens in a new tab)">
+    <g role="group" aria-labelledby="input-sanitation-title">
+      <title id="input-sanitation-title">Input sanitation: separate source content from instruction</title>
+      <rect x="986" y="306" width="268" height="474" fill="#17345f" aria-hidden="true"/>
+      <rect class="condition-surface" x="974" y="294" width="268" height="474" fill="#fff5de" stroke="#17345f" stroke-width="3"/>
+      <rect x="974" y="294" width="268" height="74" fill="#fa7065" stroke="#17345f" stroke-width="3"/>
+      <text x="1000" y="342" fill="#17345f" font-family="ui-monospace, monospace" font-size="24" font-weight="900">04 · SANITATION</text>
+      <text x="1000" y="414" fill="#17345f" font-family="ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="850">Separate content</text>
+      <text x="1000" y="449" fill="#17345f" font-family="ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="850">from instruction.</text>
+      <text x="1000" y="510" fill="#304a71" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19">Label quoted material,</text>
+      <text x="1000" y="539" fill="#304a71" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19">tools, and authority.</text>
+      <path d="M1030 630H1164V610L1210 650 1164 690V670H1030Z" fill="#2855f3" aria-hidden="true"/>
+      <text x="1000" y="731" fill="#17345f" font-family="ui-monospace, monospace" font-size="16" font-weight="800">INPUTS KEEP THEIR ROLE</text>
+    </g>
+    </a>
+
+    <a class="condition-link" href="../../metadata-blocks.html" target="_blank" rel="noopener noreferrer" aria-label="Working set: explore Metadata Blocks (opens in a new tab)">
+    <g role="group" aria-labelledby="working-set-title">
+      <title id="working-set-title">Working set: carry only what the decision needs</title>
+      <rect x="1294" y="306" width="268" height="474" fill="#17345f" aria-hidden="true"/>
+      <rect class="condition-surface" x="1282" y="294" width="268" height="474" fill="#cfe7f7" stroke="#17345f" stroke-width="3"/>
+      <rect x="1282" y="294" width="268" height="74" fill="#56d8c9" stroke="#17345f" stroke-width="3"/>
+      <text x="1308" y="342" fill="#17345f" font-family="ui-monospace, monospace" font-size="24" font-weight="900">05 · WORKING SET</text>
+      <text x="1308" y="414" fill="#17345f" font-family="ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="850">Carry only what</text>
+      <text x="1308" y="449" fill="#17345f" font-family="ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="850">the decision needs.</text>
+      <text x="1308" y="510" fill="#304a71" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19">Keep task, evidence,</text>
+      <text x="1308" y="539" fill="#304a71" font-family="ui-sans-serif, system-ui, sans-serif" font-size="19">limits, and receiver.</text>
+      <path d="M1338 630H1472V610L1518 650 1472 690V670H1338Z" fill="#2855f3" aria-hidden="true"/>
+      <text x="1308" y="731" fill="#17345f" font-family="ui-monospace, monospace" font-size="16" font-weight="800">COMPACT · RECOVERABLE</text>
+    </g>
+    </a>
+  </g>
+
+  <g role="group" aria-labelledby="changed-collaboration-title">
+    <title id="changed-collaboration-title">Changed collaboration: a named human receiver can inspect, revise, compare, and carry the decision onward</title>
+    <rect x="72" y="838" width="1480" height="136" fill="#17345f" aria-hidden="true"/>
+    <rect x="60" y="826" width="1480" height="136" fill="#56d8c9" stroke="#17345f" stroke-width="3"/>
+    <text x="104" y="875" fill="#17345f" font-family="ui-monospace, monospace" font-size="19" font-weight="900">CHANGED WORK</text>
+    <text x="104" y="914" fill="#17345f" font-family="ui-sans-serif, system-ui, sans-serif" font-size="25" font-weight="850"><tspan x="104">A named human receiver can inspect the source, revise the prompt, compare candidate framings,</tspan><tspan x="104" dy="30">and carry the decision onward.</tspan></text>
+  </g>
+</svg>

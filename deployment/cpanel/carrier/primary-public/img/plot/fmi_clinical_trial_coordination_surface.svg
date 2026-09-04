@@ -1,0 +1,309 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="coordination-title coordination-desc">
+  <title id="coordination-title">Six teams coordinate through shared clinical-trial objects and visible decisions</title>
+  <desc id="coordination-desc">A six-population clinical-trial coordination surface joins product design and research, account and partner management, data managers, genomics insights, engineering and platform, and coordination leadership to shared study, sample, partner-mapping, and decision contracts. Decision ownership and revisions remain linked; regulatory and audit readers inspect lineage; the patient remains the affected population downstream of authoring. The final band names the investment required to sustain reusable coordination while preserving partner-format heterogeneity.</desc>
+
+  <defs>
+    <clipPath id="coordination-frame-clip">
+      <rect x="18" y="18" width="1564" height="1084" rx="28"/>
+    </clipPath>
+    <pattern id="coordination-speckle" width="38" height="38" patternUnits="userSpaceOnUse">
+      <circle cx="7" cy="10" r="1" fill="#17345f" opacity=".11"/>
+      <circle cx="30" cy="27" r=".8" fill="#2855f3" opacity=".09"/>
+    </pattern>
+    <pattern id="coordination-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#2855f3" stroke-width="1" opacity=".09"/>
+    </pattern>
+    <style>
+      .paper{fill:#fffaf2}.panel{fill:#fffdf8}.speckle{fill:url(#coordination-speckle)}.grid{fill:url(#coordination-grid)}
+      .frame{fill:none;stroke:#17345f;stroke-width:3}.outline{stroke:#17345f;stroke-width:2;fill:#fffdf8}
+      .outline-soft{stroke:#7893bc;stroke-width:1.3;fill:#fffdf8}.shadow{fill:#17345f}
+      .cobalt{fill:#2855f3}.cobalt-dark{fill:#153fbe}.cobalt-pale{fill:#e7efff}.powder{fill:#cfe7f7}
+      .sea{fill:#d9efea}.cream{fill:#fff5de}.blush{fill:#ffd3d0}.coral{fill:#fa7065}.acid{fill:#f2ff67}
+      .ink{fill:#17345f}.white{fill:#fffdf8}.rule{stroke:#17345f;stroke-width:1.5}.hairline{stroke:#7893bc;stroke-width:1.2}
+      .arrow-cobalt{fill:#2855f3}.arrow-coral{fill:#fa7065}.arrow-sea{fill:#4b918b}
+      .eyebrow{font:700 13px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.4px;fill:#405574}
+      .eyebrow-on{font:700 13px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.4px;fill:#e8efff}
+      .title{font:780 35px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf8}
+      .subtitle{font:520 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#e8efff}
+      .section-title{font:770 19px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .card-title{font:750 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .team-title{font:750 16px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .body{font:520 14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}
+      .body-strong{font:680 14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .body-on{font:580 14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf8}
+      .micro{font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.65px;fill:#405574}
+      .micro-cobalt{font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.65px;fill:#153fbe}
+      .micro-on{font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.65px;fill:#e8efff}
+      .chip{font:700 12px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .chip-on{font:700 12px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf8}
+      .small-title{font:760 15px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .small-copy{font:520 13px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}
+    </style>
+  </defs>
+
+  <g clip-path="url(#coordination-frame-clip)">
+    <rect class="paper" x="18" y="18" width="1564" height="1084"/>
+    <rect class="speckle" x="18" y="18" width="1564" height="1084"/>
+    <rect class="cobalt" x="18" y="18" width="1564" height="142"/>
+    <rect class="grid" x="18" y="18" width="1564" height="142"/>
+  </g>
+  <rect class="frame" x="18" y="18" width="1564" height="1084" rx="28"/>
+
+  <g role="group" aria-labelledby="coordination-heading-title">
+    <title id="coordination-heading-title">Clinical-trial coordination heading</title>
+    <text class="eyebrow-on" x="54" y="54">FMI CLINICAL TRIAL COORDINATION · SHARED OPERATING FIELD</text>
+    <text class="title" x="54" y="98">Six teams coordinate through shared objects and visible decisions</text>
+    <text class="subtitle" x="54" y="128">Partner-specific formats remain explicit while reusable components carry agreed meaning</text>
+    <rect class="acid" x="1262" y="48" width="266" height="34" rx="7"/>
+    <text class="body-strong" x="1282" y="70">STUDY · SAMPLE · PARTNER</text>
+    <rect class="blush" x="1262" y="91" width="266" height="27" rx="6"/>
+    <text class="micro" x="1282" y="109">DECISION OWNERSHIP VISIBLE</text>
+  </g>
+
+  <text class="eyebrow" x="54" y="194">WORKING POPULATIONS</text>
+  <text class="eyebrow" x="422" y="194">SHARED COORDINATION SURFACE</text>
+
+  <g id="team-connectors" aria-hidden="true">
+    <path class="arrow-cobalt" d="M364 283H382V271L398 298L382 325V313H364Z"/>
+    <path class="arrow-sea" d="M364 461H382V449L398 476L382 503V491H364Z"/>
+    <path class="arrow-coral" d="M364 639H382V627L398 654L382 681V669H364Z"/>
+    <path class="arrow-cobalt" d="M1234 271H1218V259L1202 286L1218 313V301H1234Z"/>
+    <path class="arrow-sea" d="M1234 449H1218V437L1202 464L1218 491V479H1234Z"/>
+    <path class="arrow-coral" d="M1234 627H1218V615L1202 642L1218 669V657H1234Z"/>
+  </g>
+
+  <g role="group" aria-labelledby="authoring-teams-title">
+    <title id="authoring-teams-title">Six working populations shape the shared clinical-trial coordination field</title>
+
+    <g role="group" aria-labelledby="product-research-title">
+      <title id="product-research-title">Product Design and Research</title>
+      <rect class="shadow" x="62" y="224" width="310" height="164" rx="14"/>
+      <rect class="outline cream" x="54" y="216" width="310" height="164" rx="14"/>
+      <text class="micro" x="74" y="242">TEAM 01 · DISCOVERY + INTERACTION</text>
+      <text class="team-title" x="74" y="273">Product Design / Research</text>
+      <text class="body" x="74" y="301">
+        <tspan x="74">Frames collaborator questions and</tspan>
+        <tspan x="74" dy="19">interaction states. Brings field meaning</tspan>
+        <tspan x="74" dy="19">into the interface before commitment.</tspan>
+      </text>
+      <rect class="acid" x="74" y="346" width="207" height="24" rx="5"/>
+      <text class="micro" x="86" y="363">SCENARIO + FIELD GRAMMAR</text>
+    </g>
+
+    <g role="group" aria-labelledby="account-partner-title">
+      <title id="account-partner-title">Account and Partner Management</title>
+      <rect class="shadow" x="62" y="402" width="310" height="164" rx="14"/>
+      <rect class="outline powder" x="54" y="394" width="310" height="164" rx="14"/>
+      <text class="micro" x="74" y="420">TEAM 02 · PARTNER CONTRACT</text>
+      <text class="team-title" x="74" y="451">Account / Partner Management</text>
+      <text class="body" x="74" y="479">
+        <tspan x="74">Owns partner terms, delivery cadence,</tspan>
+        <tspan x="74" dy="19">and escalation routes. Connects account</tspan>
+        <tspan x="74" dy="19">context to the shared field contract.</tspan>
+      </text>
+      <rect class="acid" x="74" y="524" width="222" height="24" rx="5"/>
+      <text class="micro" x="86" y="541">PARTNER TERMS + ESCALATION</text>
+    </g>
+
+    <g role="group" aria-labelledby="data-managers-title">
+      <title id="data-managers-title">Data Managers</title>
+      <rect class="shadow" x="62" y="580" width="310" height="164" rx="14"/>
+      <rect class="outline sea" x="54" y="572" width="310" height="164" rx="14"/>
+      <text class="micro" x="74" y="598">TEAM 03 · OPERATIONAL MEANING</text>
+      <text class="team-title" x="74" y="629">Data Managers</text>
+      <text class="body" x="74" y="657">
+        <tspan x="74">Maintains sample, subject, study, and</tspan>
+        <tspan x="74" dy="19">disposition meaning. Resolves operational</tspan>
+        <tspan x="74" dy="19">exceptions before field release.</tspan>
+      </text>
+      <rect class="acid" x="74" y="702" width="165" height="24" rx="5"/>
+      <text class="micro" x="86" y="719">OBJECT STEWARDSHIP</text>
+    </g>
+
+    <g role="group" aria-labelledby="genomics-insights-title">
+      <title id="genomics-insights-title">Genomics Insights</title>
+      <rect class="shadow" x="1242" y="224" width="286" height="164" rx="14"/>
+      <rect class="outline cream" x="1234" y="216" width="286" height="164" rx="14"/>
+      <text class="micro" x="1254" y="242">TEAM 04 · SCIENTIFIC CONTEXT</text>
+      <text class="team-title" x="1254" y="273">Genomics Insights</text>
+      <text class="body" x="1254" y="301">
+        <tspan x="1254">Defines assay, report, and</tspan>
+        <tspan x="1254" dy="19">interpretation context. Connects trial</tspan>
+        <tspan x="1254" dy="19">fields to the scientific decision.</tspan>
+      </text>
+      <rect class="acid" x="1254" y="346" width="169" height="24" rx="5"/>
+      <text class="micro" x="1266" y="363">SCIENTIFIC CONTEXT</text>
+    </g>
+
+    <g role="group" aria-labelledby="engineering-platform-title">
+      <title id="engineering-platform-title">Engineering and Platform</title>
+      <rect class="shadow" x="1242" y="402" width="286" height="164" rx="14"/>
+      <rect class="outline powder" x="1234" y="394" width="286" height="164" rx="14"/>
+      <text class="micro" x="1254" y="420">TEAM 05 · COMPONENT SUBSTRATE</text>
+      <text class="team-title" x="1254" y="451">Engineering / Platform</text>
+      <text class="body" x="1254" y="479">
+        <tspan x="1254">Turns objects and boolean rules into</tspan>
+        <tspan x="1254" dy="19">reusable components with explicit</tspan>
+        <tspan x="1254" dy="19">states and error paths.</tspan>
+      </text>
+      <rect class="acid" x="1254" y="524" width="180" height="24" rx="5"/>
+      <text class="micro" x="1266" y="541">COMPONENT SUBSTRATE</text>
+    </g>
+
+    <g role="group" aria-labelledby="coordination-leadership-title">
+      <title id="coordination-leadership-title">Clinical-trial coordination leadership</title>
+      <rect class="shadow" x="1242" y="580" width="286" height="164" rx="14"/>
+      <rect class="outline blush" x="1234" y="572" width="286" height="164" rx="14"/>
+      <text class="micro" x="1254" y="598">TEAM 06 · ROLLOUT + CONTINUITY</text>
+      <text class="team-title" x="1254" y="629">Coordination leadership</text>
+      <text class="body" x="1254" y="657">
+        <tspan x="1254">Connects rollout, training, and</tspan>
+        <tspan x="1254" dy="19">operational continuity across teams.</tspan>
+        <tspan x="1254" dy="19">Keeps the grammar extensible.</tspan>
+      </text>
+      <rect class="acid" x="1254" y="702" width="185" height="24" rx="5"/>
+      <text class="micro" x="1266" y="719">ROLLOUT + CONTINUITY</text>
+    </g>
+  </g>
+
+  <g role="group" aria-labelledby="shared-surface-title">
+    <title id="shared-surface-title">Shared coordination objects, owned decisions, and changed work</title>
+    <rect class="shadow" x="406" y="216" width="796" height="552" rx="17"/>
+    <rect class="outline" x="398" y="208" width="796" height="552" rx="17"/>
+    <rect class="powder" x="400" y="210" width="792" height="64" rx="15"/>
+    <text class="micro-cobalt" x="422" y="235">COORDINATION CONTRACT</text>
+    <text class="section-title" x="422" y="260">Shared objects keep questions, mappings, decisions, and reusable rules together</text>
+
+    <g role="group" aria-labelledby="shared-objects-title">
+      <title id="shared-objects-title">Shared clinical-trial operating objects</title>
+      <rect class="cream" x="422" y="294" width="226" height="296" rx="12" stroke="#17345f" stroke-width="1.5"/>
+      <text class="micro" x="440" y="320">SHARED OBJECTS</text>
+      <text class="card-title" x="440" y="347">Meaning at the handoff</text>
+      <line class="rule" x1="440" y1="361" x2="630" y2="361"/>
+
+      <rect class="outline-soft" x="440" y="376" width="190" height="52" rx="8"/>
+      <text class="small-title" x="454" y="397">Study + cohort</text>
+      <text class="small-copy" x="454" y="417">eligibility · indication</text>
+
+      <rect class="outline-soft" x="440" y="440" width="190" height="52" rx="8"/>
+      <text class="small-title" x="454" y="461">Subject + sample</text>
+      <text class="small-copy" x="454" y="481">identity · consent · status</text>
+
+      <rect class="outline-soft" x="440" y="504" width="190" height="66" rx="8"/>
+      <text class="small-title" x="454" y="525">Partner field map</text>
+      <text class="small-copy" x="454" y="545">source · meaning · rule</text>
+      <text class="small-copy" x="454" y="562">revision · owner</text>
+    </g>
+
+    <g role="group" aria-labelledby="decision-contracts-title">
+      <title id="decision-contracts-title">Owned and revisioned decision contracts</title>
+      <rect class="sea" x="666" y="294" width="228" height="296" rx="12" stroke="#17345f" stroke-width="1.5"/>
+      <text class="micro" x="684" y="320">DECISION CONTRACTS</text>
+      <text class="card-title" x="684" y="347">Owner + revision stay linked</text>
+      <line class="rule" x1="684" y1="361" x2="876" y2="361"/>
+
+      <rect class="outline-soft" x="684" y="376" width="192" height="54" rx="8"/>
+      <text class="small-title" x="698" y="397">Field meaning ready</text>
+      <text class="small-copy" x="698" y="417">meaning · owner · revision</text>
+
+      <rect class="outline-soft" x="684" y="442" width="192" height="54" rx="8"/>
+      <text class="small-title" x="698" y="463">Mapping exception</text>
+      <text class="small-copy" x="698" y="483">reason · scope · route</text>
+
+      <rect class="acid" x="684" y="508" width="192" height="62" rx="8" stroke="#17345f" stroke-width="1.5"/>
+      <text class="small-title" x="698" y="530">Component release</text>
+      <text class="small-copy" x="698" y="550">version · state · release</text>
+      <text class="micro" x="698" y="565">OWNER + REVISION TRAVEL</text>
+    </g>
+
+    <g role="group" aria-labelledby="changed-work-title">
+      <title id="changed-work-title">Changed work made visible by the shared surface</title>
+      <rect class="blush" x="912" y="294" width="258" height="296" rx="12" stroke="#17345f" stroke-width="1.5"/>
+      <text class="micro" x="930" y="320">CHANGED WORK</text>
+      <text class="card-title" x="930" y="347">Changed work stays visible</text>
+      <line class="rule" x1="930" y1="361" x2="1152" y2="361"/>
+
+      <rect class="coral" x="930" y="378" width="7" height="34" rx="3"/>
+      <text class="micro" x="949" y="389">AT HANDOFF</text>
+      <text class="body-strong" x="949" y="408">One field model spans teams</text>
+
+      <rect class="cobalt" x="930" y="426" width="7" height="34" rx="3"/>
+      <text class="micro" x="949" y="437">AT INGEST</text>
+      <text class="body-strong" x="949" y="456">Transforms stay explicit</text>
+
+      <rect class="sea" x="930" y="474" width="7" height="34" rx="3"/>
+      <text class="micro" x="949" y="485">AT REUSE</text>
+      <text class="body-strong" x="949" y="504">Rules travel with components</text>
+
+      <rect class="acid" x="930" y="522" width="7" height="34" rx="3"/>
+      <text class="micro" x="949" y="533">AT RELEASE</text>
+      <text class="body-strong" x="949" y="552">Owner + revision stay linked</text>
+    </g>
+
+    <g role="group" aria-labelledby="heterogeneity-title">
+      <title id="heterogeneity-title">Partner-format heterogeneity retained as a service condition</title>
+      <rect class="cobalt-pale" x="422" y="608" width="748" height="126" rx="12" stroke="#17345f" stroke-width="1.5"/>
+      <text class="micro-cobalt" x="440" y="632">SERVICE CONDITION</text>
+      <text class="card-title" x="440" y="655">Partner heterogeneity stays visible at the mapping boundary</text>
+      <text class="body" x="440" y="676">Source-native names, files, cadence, and constraints retain accountable mappings to shared meaning.</text>
+
+      <rect class="panel" x="440" y="687" width="101" height="24" rx="5" stroke="#17345f" stroke-width="1.2"/>
+      <text class="micro" x="451" y="704">SOURCE FIELD</text>
+      <rect class="panel" x="549" y="687" width="127" height="24" rx="5" stroke="#17345f" stroke-width="1.2"/>
+      <text class="micro" x="560" y="704">AGREED MEANING</text>
+      <rect class="panel" x="684" y="687" width="92" height="24" rx="5" stroke="#17345f" stroke-width="1.2"/>
+      <text class="micro" x="695" y="704">TRANSFORM</text>
+      <rect class="panel" x="784" y="687" width="69" height="24" rx="5" stroke="#17345f" stroke-width="1.2"/>
+      <text class="micro" x="795" y="704">OWNER</text>
+      <rect class="panel" x="861" y="687" width="129" height="24" rx="5" stroke="#17345f" stroke-width="1.2"/>
+      <text class="micro" x="872" y="704">EXCEPTION ROUTE</text>
+      <text class="micro-cobalt" x="440" y="727">SVG / FOREIGNOBJECT · ADOBE UXP / REACT · LUCID CUSTOM SHAPE · AWS DYNAMODB</text>
+    </g>
+  </g>
+
+  <path class="arrow-cobalt" aria-hidden="true" d="M680 764H430V756L404 773L430 790V782H680Z"/>
+  <text class="micro-on" x="474" y="778">DECISION CONSEQUENCE</text>
+
+  <g role="group" aria-labelledby="patient-title">
+    <title id="patient-title">Patient as the affected population downstream of authoring</title>
+    <rect class="shadow" x="62" y="802" width="350" height="118" rx="14"/>
+    <rect class="outline blush" x="54" y="794" width="350" height="118" rx="14"/>
+    <text class="micro" x="74" y="820">AFFECTED POPULATION · DOWNSTREAM</text>
+    <text class="section-title" x="74" y="850">Patient</text>
+    <text class="body" x="74" y="875">
+      <tspan x="74">Consent, eligibility, sample identity,</tspan>
+      <tspan x="74" dy="19">and report timing carry the consequence.</tspan>
+    </text>
+  </g>
+
+  <g role="group" aria-labelledby="regulatory-audit-title">
+    <title id="regulatory-audit-title">Regulatory and audit readers inspect the coordination contract across teams</title>
+    <rect class="shadow" x="452" y="802" width="1076" height="118" rx="14"/>
+    <rect class="outline" x="444" y="794" width="1076" height="118" rx="14"/>
+    <rect class="cobalt-dark" x="446" y="796" width="1072" height="40" rx="12"/>
+    <text class="micro-on" x="466" y="821">CROSS-CUTTING READERS</text>
+    <text class="card-title" x="466" y="861">Regulatory + audit readers inspect lineage across the coordination contract</text>
+    <text class="body" x="466" y="886">Field lineage · decision owner · mapping revision · released state · partner-specific exception</text>
+    <rect class="acid" x="1284" y="851" width="210" height="37" rx="7" stroke="#17345f" stroke-width="1.5"/>
+    <text class="micro" x="1301" y="866">READ ACROSS EVERY TEAM</text>
+    <text class="body-strong" x="1301" y="883">Traceable at point of use</text>
+  </g>
+
+  <g role="group" aria-labelledby="investment-title">
+    <title id="investment-title">Sustained investment that keeps six-team coordination dependable</title>
+    <rect class="shadow" x="62" y="954" width="1466" height="124" rx="14"/>
+    <rect class="cobalt-pale" x="54" y="946" width="1466" height="124" rx="14" stroke="#17345f" stroke-width="2"/>
+    <text class="micro-cobalt" x="74" y="972">SUSTAINED INVESTMENT</text>
+    <text class="section-title" x="74" y="998">Repeatability depends on maintained meaning, mappings, components, and accountable release</text>
+
+    <line class="hairline" x1="74" y1="1012" x2="1500" y2="1012"/>
+    <text class="micro" x="74" y="1032">PRODUCT + RESEARCH</text>
+    <text class="small-copy" x="74" y="1052">Scenario grammar + decision context</text>
+    <text class="micro" x="432" y="1032">DATA + PLATFORM</text>
+    <text class="small-copy" x="432" y="1052">Object definitions + mapping versions</text>
+    <text class="micro" x="790" y="1032">PARTNER + QUALITY</text>
+    <text class="small-copy" x="790" y="1052">Exception routes + field lineage</text>
+    <text class="micro" x="1148" y="1032">DECISION ROLES</text>
+    <text class="small-copy" x="1148" y="1052">Release readiness + accountable change</text>
+  </g>
+</svg>

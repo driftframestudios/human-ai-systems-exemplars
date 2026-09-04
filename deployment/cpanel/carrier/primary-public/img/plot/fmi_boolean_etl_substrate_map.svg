@@ -1,0 +1,286 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="substrate-title substrate-desc">
+  <title id="substrate-title">Coordination objects become a reusable ETL substrate</title>
+  <desc id="substrate-desc">A six-stage operating map moves from an alignment worksheet through time planning, card decomposition, Boolean rules, a partner-safe template-copy gate, and field mapping. A second rail shows the implementation path from live SVG and foreignObject experiments through Adobe XD and UXP with React, Lucid custom shapes, AWS DynamoDB, and a promoted production component. The final band explains the changed work and sustained investment.</desc>
+
+  <defs>
+    <clipPath id="substrate-frame-clip">
+      <rect x="18" y="18" width="1564" height="1084" rx="28"/>
+    </clipPath>
+    <pattern id="substrate-speckle" width="38" height="38" patternUnits="userSpaceOnUse">
+      <circle cx="7" cy="10" r="1" fill="#17345f" opacity=".11"/>
+      <circle cx="30" cy="27" r=".8" fill="#2855f3" opacity=".09"/>
+    </pattern>
+    <pattern id="substrate-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#2855f3" stroke-width="1" opacity=".09"/>
+    </pattern>
+    <style>
+      .paper{fill:#fffaf2}.speckle{fill:url(#substrate-speckle)}.grid{fill:url(#substrate-grid)}
+      .frame{fill:none;stroke:#17345f;stroke-width:3}.outline{stroke:#17345f;stroke-width:2;fill:#fffdf8}
+      .shadow{fill:#17345f}.cobalt{fill:#2855f3}.cobalt-dark{fill:#153fbe}.cobalt-pale{fill:#e7efff}
+      .cream{fill:#fff5de}.powder{fill:#cfe7f7}.sea{fill:#d9efea}.blush{fill:#ffd3d0}
+      .coral{fill:#fa7065}.acid{fill:#f2ff67}.white{fill:#fffdf8}.ink{fill:#17345f}
+      .hairline{stroke:#7893bc;stroke-width:1.2}.rule{stroke:#17345f;stroke-width:1.5}
+      .arrow{fill:#2855f3}.arrow-sea{fill:#4b918b}.arrow-coral{fill:#fa7065}
+      .eyebrow{font:700 13px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.45px;fill:#405574}
+      .eyebrow-on{font:700 13px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.45px;fill:#e8efff}
+      .title{font:780 36px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fffdf8}
+      .subtitle{font:520 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#e8efff}
+      .section{font:760 15px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.1px;fill:#17345f}
+      .card-title{font:760 18px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .card-copy{font:520 13px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}
+      .body{font:520 14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}
+      .body-strong{font:680 14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .micro{font:700 10.5px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.62px;fill:#405574}
+      .micro-on{font:700 10.5px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.62px;fill:#e8efff}
+      .band-title{font:760 17px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#17345f}
+      .band-copy{font:520 13px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#304a71}
+    </style>
+  </defs>
+
+  <g clip-path="url(#substrate-frame-clip)" aria-hidden="true">
+    <rect class="paper" x="18" y="18" width="1564" height="1084"/>
+    <rect class="speckle" x="18" y="18" width="1564" height="1084"/>
+    <rect class="cobalt" x="18" y="18" width="1564" height="142"/>
+    <rect class="grid" x="18" y="18" width="1564" height="142"/>
+  </g>
+  <rect class="frame" x="18" y="18" width="1564" height="1084" rx="28"/>
+
+  <g role="group" aria-labelledby="substrate-heading-title">
+    <title id="substrate-heading-title">Coordination substrate heading</title>
+    <text class="eyebrow-on" x="54" y="54">CLINICAL TRIAL COORDINATION · SHARED OBJECT GRAMMAR</text>
+    <text class="title" x="54" y="98">Coordination objects become a reusable ETL substrate</text>
+    <text class="subtitle" x="54" y="128">Name the work → separate the objects → encode the rules → map partner fields</text>
+    <rect class="acid" x="1242" y="48" width="286" height="34" rx="7"/>
+    <text class="body-strong" x="1262" y="70">SIX TEAMS · ONE OBJECT GRAMMAR</text>
+    <rect class="blush" x="1242" y="91" width="286" height="27" rx="6"/>
+    <text class="micro" x="1262" y="109">PARTNER INPUT → REUSABLE COMPONENTS</text>
+  </g>
+
+  <g role="group" aria-labelledby="substrate-sequence-title">
+    <title id="substrate-sequence-title">Six stages from alignment worksheet to field-mapping substrate</title>
+    <text class="section" x="54" y="195">THE COORDINATION SUBSTRATE</text>
+
+    <rect class="shadow" x="62" y="222" width="220" height="360" rx="15"/>
+    <rect class="outline cream" x="54" y="214" width="220" height="360" rx="15"/>
+    <rect class="cobalt-dark" x="56" y="216" width="216" height="44" rx="13"/>
+    <text class="micro-on" x="74" y="243">01 · ALIGNMENT</text>
+    <text class="card-title" x="74" y="298">Alignment Worksheet</text>
+    <text class="card-copy" x="74" y="326">
+      <tspan x="74">Teams name the shared work</tspan>
+      <tspan x="74" dy="18">before choosing a surface.</tspan>
+    </text>
+    <line class="hairline" x1="74" y1="375" x2="254" y2="375"/>
+    <text class="micro" x="74" y="398">SHARED FIELDS</text>
+    <text class="card-copy" x="74" y="424">
+      <tspan x="74">Owners · stages · handoffs</tspan>
+      <tspan x="74" dy="18">decision rights · exceptions</tspan>
+    </text>
+    <rect class="white" x="74" y="496" width="180" height="48" rx="8" stroke="#17345f" stroke-width="1.5"/>
+    <text class="body-strong" x="90" y="519">Alignment becomes</text>
+    <text class="card-copy" x="90" y="538">an inspectable contract.</text>
+
+    <rect class="shadow" x="313" y="222" width="220" height="360" rx="15"/>
+    <rect class="outline powder" x="305" y="214" width="220" height="360" rx="15"/>
+    <rect class="cobalt-dark" x="307" y="216" width="216" height="44" rx="13"/>
+    <text class="micro-on" x="325" y="243">02 · TIME</text>
+    <text class="card-title" x="325" y="298">Gantt + milestones</text>
+    <text class="card-copy" x="325" y="326">
+      <tspan x="325">Delivery windows and</tspan>
+      <tspan x="325" dy="18">dependencies remain visible</tspan>
+      <tspan x="325" dy="18">across the six-team field.</tspan>
+    </text>
+    <line class="hairline" x1="325" y1="395" x2="505" y2="395"/>
+    <text class="micro" x="325" y="418">TIME OBJECT</text>
+    <rect class="white" x="325" y="437" width="180" height="25" rx="6" stroke="#17345f" stroke-width="1.2"/>
+    <rect class="cobalt" x="337" y="445" width="74" height="9" rx="4"/>
+    <rect class="coral" x="411" y="445" width="52" height="9" rx="4"/>
+    <rect class="acid" x="463" y="445" width="30" height="9" rx="4"/>
+    <text class="card-copy" x="325" y="496">
+      <tspan x="325">Time becomes a property</tspan>
+      <tspan x="325" dy="18">of the shared work object.</tspan>
+    </text>
+
+    <rect class="shadow" x="564" y="222" width="220" height="360" rx="15"/>
+    <rect class="outline sea" x="556" y="214" width="220" height="360" rx="15"/>
+    <rect class="cobalt-dark" x="558" y="216" width="216" height="44" rx="13"/>
+    <text class="micro-on" x="576" y="243">03 · OBJECTS</text>
+    <text class="card-title" x="576" y="298">Card + masonry</text>
+    <text class="card-copy" x="576" y="326">
+      <tspan x="576">Cards separate durable</tspan>
+      <tspan x="576" dy="18">objects from page layout.</tspan>
+    </text>
+    <rect class="white" x="576" y="378" width="82" height="54" rx="7" stroke="#17345f" stroke-width="1.4"/>
+    <text class="micro" x="588" y="400">TRIAL</text>
+    <text class="card-copy" x="588" y="420">protocol</text>
+    <rect class="acid" x="668" y="378" width="88" height="78" rx="7" stroke="#17345f" stroke-width="1.4"/>
+    <text class="micro" x="680" y="400">SITE</text>
+    <text class="card-copy" x="680" y="420">partner</text>
+    <text class="card-copy" x="680" y="438">owner</text>
+    <rect class="blush" x="576" y="442" width="82" height="76" rx="7" stroke="#17345f" stroke-width="1.4"/>
+    <text class="micro" x="588" y="464">EVENT</text>
+    <text class="card-copy" x="588" y="484">milestone</text>
+    <text class="card-copy" x="588" y="502">exception</text>
+    <text class="card-copy" x="576" y="547">Composition can change;</text>
+    <text class="card-copy" x="576" y="565">object identity remains stable.</text>
+
+    <rect class="shadow" x="815" y="222" width="220" height="360" rx="15"/>
+    <rect class="outline acid" x="807" y="214" width="220" height="360" rx="15"/>
+    <rect class="cobalt-dark" x="809" y="216" width="216" height="44" rx="13"/>
+    <text class="micro-on" x="827" y="243">04 · LOGIC</text>
+    <text class="card-title" x="827" y="298">Nested Boolean</text>
+    <text class="card-title" x="827" y="319">grammar</text>
+    <text class="card-copy" x="827" y="347">
+      <tspan x="827">AND, OR, and IF make</tspan>
+      <tspan x="827" dy="18">eligibility and routing</tspan>
+      <tspan x="827" dy="18">inspectable before delivery.</tspan>
+    </text>
+    <rect class="cobalt-dark" x="827" y="398" width="180" height="32" rx="7"/>
+    <text class="micro-on" x="843" y="419">AND · REQUIRED FIELDS</text>
+    <path class="rule" d="M850 430V448M850 448H982" fill="none"/>
+    <rect class="white" x="827" y="448" width="180" height="32" rx="7" stroke="#17345f" stroke-width="1.4"/>
+    <text class="micro" x="843" y="469">OR · COUNTRY / PARTNER</text>
+    <rect class="blush" x="827" y="492" width="180" height="42" rx="7" stroke="#17345f" stroke-width="1.4"/>
+    <text class="micro" x="843" y="512">IF · CONSENT STATE</text>
+    <text class="card-copy" x="843" y="528">then route the exception</text>
+
+    <rect class="shadow" x="1066" y="222" width="220" height="360" rx="15"/>
+    <rect class="outline blush" x="1058" y="214" width="220" height="360" rx="15"/>
+    <rect class="cobalt-dark" x="1060" y="216" width="216" height="44" rx="13"/>
+    <text class="micro-on" x="1078" y="243">05 · COPY GATE</text>
+    <text class="card-title" x="1078" y="298">Partner-safe</text>
+    <text class="card-title" x="1078" y="319">template gate</text>
+    <text class="card-copy" x="1078" y="347">
+      <tspan x="1078">A copied template exposes</tspan>
+      <tspan x="1078" dy="18">agreed fields while partner</tspan>
+      <tspan x="1078" dy="18">values remain scoped.</tspan>
+    </text>
+    <rect class="white" x="1078" y="402" width="180" height="52" rx="8" stroke="#17345f" stroke-width="1.4"/>
+    <text class="micro" x="1094" y="423">COPY CONTRACT</text>
+    <text class="card-copy" x="1094" y="443">schema · roles · visibility</text>
+    <rect class="coral" x="1078" y="470" width="180" height="30" rx="7"/>
+    <text class="micro" x="1094" y="490">BLOCK REQUIRED FIELD GAP</text>
+    <text class="card-copy" x="1078" y="525">
+      <tspan x="1078">The gate preserves</tspan>
+      <tspan x="1078" dy="18">shared meaning while</tspan>
+      <tspan x="1078" dy="18">partner values stay scoped.</tspan>
+    </text>
+
+    <rect class="shadow" x="1317" y="222" width="220" height="360" rx="15"/>
+    <rect class="outline cobalt-pale" x="1309" y="214" width="220" height="360" rx="15"/>
+    <rect class="cobalt-dark" x="1311" y="216" width="216" height="44" rx="13"/>
+    <text class="micro-on" x="1329" y="243">06 · MAP + MOVE</text>
+    <text class="card-title" x="1329" y="298">Field-mapping</text>
+    <text class="card-title" x="1329" y="319">substrate</text>
+    <text class="card-copy" x="1329" y="347">
+      <tspan x="1329">Stable keys map partner</tspan>
+      <tspan x="1329" dy="18">input into reusable objects</tspan>
+      <tspan x="1329" dy="18">and downstream surfaces.</tspan>
+    </text>
+    <rect class="white" x="1329" y="398" width="180" height="128" rx="8" stroke="#17345f" stroke-width="1.4"/>
+    <text class="micro" x="1343" y="420">SOURCE FIELD</text>
+    <text class="micro" x="1460" y="420">MAPS TO</text>
+    <line class="hairline" x1="1343" y1="430" x2="1495" y2="430"/>
+    <text class="card-copy" x="1343" y="453">site_location</text><text class="card-copy" x="1474" y="453">site</text>
+    <text class="card-copy" x="1343" y="477">location_site</text><text class="card-copy" x="1474" y="477">site</text>
+    <text class="card-copy" x="1343" y="501">site_eval_location</text><text class="card-copy" x="1474" y="501">site</text>
+    <text class="body-strong" x="1329" y="553">ETL becomes product logic.</text>
+  </g>
+
+  <g aria-hidden="true">
+    <path class="arrow" d="M274 380H284V370L301 394L284 418V408H274Z"/>
+    <path class="arrow-sea" d="M525 380H535V370L552 394L535 418V408H525Z"/>
+    <path class="arrow" d="M776 380H786V370L803 394L786 418V408H776Z"/>
+    <path class="arrow-coral" d="M1027 380H1037V370L1054 394L1037 418V408H1027Z"/>
+    <path class="arrow" d="M1278 380H1288V370L1305 394L1288 418V408H1278Z"/>
+  </g>
+
+  <g role="group" aria-labelledby="substrate-implementation-title">
+    <title id="substrate-implementation-title">Implementation chain that carried the object grammar into production</title>
+    <text class="section" x="54" y="625">IMPLEMENTATION CHAIN · THE GRAMMAR SURVIVES EACH SURFACE</text>
+
+    <rect class="shadow" x="62" y="658" width="270" height="142" rx="13"/>
+    <rect class="outline powder" x="54" y="650" width="270" height="142" rx="13"/>
+    <text class="micro" x="72" y="676">01 · LIVE WORKSHEET</text>
+    <text class="band-title" x="72" y="709">SVG + foreignObject</text>
+    <text class="band-copy" x="72" y="734">
+      <tspan x="72">Cards and nested logic tested</tspan>
+      <tspan x="72" dy="18">inside a working collaboration context.</tspan>
+    </text>
+
+    <rect class="shadow" x="358" y="658" width="270" height="142" rx="13"/>
+    <rect class="outline sea" x="350" y="650" width="270" height="142" rx="13"/>
+    <text class="micro" x="368" y="676">02 · DESIGN + BEHAVIOR</text>
+    <text class="band-title" x="368" y="709">Adobe XD/UXP + React</text>
+    <text class="band-copy" x="368" y="734">
+      <tspan x="368">The object contract moves into</tspan>
+      <tspan x="368" dy="18">design-tool and product workflows.</tspan>
+    </text>
+
+    <rect class="shadow" x="654" y="658" width="270" height="142" rx="13"/>
+    <rect class="outline cream" x="646" y="650" width="270" height="142" rx="13"/>
+    <text class="micro" x="664" y="676">03 · FAMILIAR ROOM</text>
+    <text class="band-title" x="664" y="709">Lucid custom shape</text>
+    <text class="band-copy" x="664" y="734">
+      <tspan x="664">Teams arrange the same objects</tspan>
+      <tspan x="664" dy="18">where coordination already occurs.</tspan>
+    </text>
+
+    <rect class="shadow" x="950" y="658" width="270" height="142" rx="13"/>
+    <rect class="outline blush" x="942" y="650" width="270" height="142" rx="13"/>
+    <text class="micro" x="960" y="676">04 · DURABLE STATE</text>
+    <text class="band-title" x="960" y="709">AWS DynamoDB</text>
+    <text class="band-copy" x="960" y="734">
+      <tspan x="960">Participant + section + timestamp</tspan>
+      <tspan x="960" dy="18">support structured synthesis.</tspan>
+    </text>
+
+    <rect class="shadow" x="1246" y="658" width="282" height="142" rx="13"/>
+    <rect class="outline acid" x="1238" y="650" width="282" height="142" rx="13"/>
+    <text class="micro" x="1256" y="676">05 · PROMOTED CAPABILITY</text>
+    <text class="band-title" x="1256" y="709">Production component</text>
+    <text class="band-copy" x="1256" y="734">
+      <tspan x="1256">Repeated structure becomes a</tspan>
+      <tspan x="1256" dy="18">shared, maintainable product ability.</tspan>
+    </text>
+
+    <g aria-hidden="true">
+      <path class="arrow" d="M324 708H334V698L346 721L334 744V734H324Z"/>
+      <path class="arrow" d="M620 708H630V698L642 721L630 744V734H620Z"/>
+      <path class="arrow" d="M916 708H926V698L938 721L926 744V734H916Z"/>
+      <path class="arrow" d="M1212 708H1222V698L1234 721L1222 744V734H1212Z"/>
+    </g>
+  </g>
+
+  <g role="group" aria-labelledby="substrate-investment-title">
+    <title id="substrate-investment-title">Changed work, reusable ability, and sustained investment</title>
+    <rect class="shadow" x="62" y="842" width="1466" height="234" rx="14"/>
+    <rect class="outline white" x="54" y="834" width="1466" height="234" rx="14"/>
+    <rect class="cobalt-dark" x="56" y="836" width="1462" height="43" rx="12"/>
+    <text class="micro-on" x="76" y="863">CHANGED WORK + INVESTMENT</text>
+
+    <text class="band-title" x="76" y="916">Six coordination teams</text>
+    <text class="band-copy" x="76" y="942">
+      <tspan x="76">Name shared objects once, then coordinate time,</tspan>
+      <tspan x="76" dy="19">ownership, partner fields, and exceptions through them.</tspan>
+      <tspan x="76" dy="19">New partner launches begin with a governed template copy.</tspan>
+    </text>
+
+    <line class="hairline" x1="533" y1="903" x2="533" y2="1044"/>
+    <text class="band-title" x="563" y="916">Reusable operating ability</text>
+    <text class="band-copy" x="563" y="942">
+      <tspan x="563">Field mappings, Boolean conditions, and component behavior</tspan>
+      <tspan x="563" dy="19">can improve independently of any single page layout.</tspan>
+      <tspan x="563" dy="19">Partner variation becomes explicit mapping work.</tspan>
+    </text>
+
+    <line class="hairline" x1="1034" y1="903" x2="1034" y2="1044"/>
+    <text class="band-title" x="1064" y="916">Sustained investment</text>
+    <text class="band-copy" x="1064" y="942">
+      <tspan x="1064">Product and workflow engineering maintain object identity;</tspan>
+      <tspan x="1064" dy="19">partner operations owns mappings and exceptions;</tspan>
+      <tspan x="1064" dy="19">design systems keeps the grammar portable across surfaces.</tspan>
+    </text>
+    <rect class="acid" x="1064" y="1014" width="418" height="30" rx="7" stroke="#17345f" stroke-width="1.5"/>
+    <text class="micro" x="1082" y="1034">INVESTMENT BUYS A GRAMMAR THAT TRAVELS ACROSS SURFACES</text>
+  </g>
+</svg>

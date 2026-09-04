@@ -1,0 +1,388 @@
+/* Context Canvas route: Genomic Viewer paired Debrief --------------------
+   Consumer: genomic-viewer-replatforming.html under .genomic-viewer-page.
+   Owns: warm solution fields, dark implementation fields,
+   Context Tree and strategy treatments, route modes, and late cascade seams.
+   Load order: expanded.css, debrief-reading.css, this route, canvas-shell.css.
+   Contracts: ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md,
+   ../../../../visual-fidelity-contracts/rose-quartz-editorial-field.md, and
+   ../../../../visual-fidelity-contracts/cobalt-operating-field.md.
+   The paired grammar stays recognizable while palette, rhythm, density,
+   topology, and future source-earned experiments remain route-owned. */
+
+.genomic-viewer-page {
+    --genomic-rose: #ffd3d0;
+    --genomic-paper: #fdebe9;
+    --genomic-quiet-paper: #feeae9;
+    --genomic-warm-white: #fff7f4;
+    --genomic-cobalt: #2855f3;
+    --genomic-cobalt-deep: #153fbe;
+    --genomic-ink: #141c5b;
+    --genomic-blue-ink: #183a78;
+    --genomic-acid: #f2ff67;
+    --genomic-coral: #fa7065;
+    --genomic-iron: #1f2421;
+}
+
+.genomic-viewer-hero {
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255, 211, 208, .15) 0 .4rem, transparent .45rem),
+        linear-gradient(135deg, #141c5b 0%, #0f2147 66%, #1f2421 100%);
+    border-block-end: .6rem solid var(--genomic-rose);
+}
+
+.genomic-viewer-page .debrief-at-glance {
+    background: var(--genomic-ink);
+    border-color: var(--genomic-ink);
+}
+
+.genomic-viewer-page .debrief-at-glance > div:nth-child(3n + 1) {
+    background: var(--genomic-warm-white);
+    border-block-start: .22rem solid var(--genomic-cobalt);
+}
+
+.genomic-viewer-page .debrief-at-glance > div:nth-child(3n + 2) {
+    background: var(--genomic-paper);
+    border-block-start: .22rem solid var(--genomic-coral);
+}
+
+.genomic-viewer-page .debrief-at-glance > div:nth-child(3n) {
+    background: var(--genomic-quiet-paper);
+    border-block-start: .22rem solid var(--genomic-ink);
+}
+
+.genomic-context-tree-feature {
+    background: var(--genomic-rose);
+    border: .125rem solid var(--genomic-ink);
+    border-radius: .9rem;
+    box-shadow: .65rem .65rem 0 var(--genomic-ink);
+    margin-block: clamp(2.5rem, 6vw, 5rem);
+    padding: clamp(1rem, 3.25vw, 2.5rem);
+}
+
+.genomic-context-tree-feature > :first-child {
+    margin-block-start: 0;
+}
+
+.genomic-context-tree-feature > :last-child {
+    margin-block-end: 0;
+}
+
+.genomic-field-label,
+.genomic-track-label {
+    color: var(--genomic-blue-ink);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .76rem;
+    font-weight: 800;
+    letter-spacing: .075em;
+    line-height: 1.45;
+    text-transform: uppercase;
+}
+
+.genomic-track-label {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .55rem;
+    margin-block: 0 1rem;
+}
+
+.genomic-track-label span {
+    background: var(--genomic-cobalt);
+    border: .125rem solid var(--genomic-ink);
+    border-radius: 999px;
+    color: var(--genomic-warm-white);
+    padding: .3rem .65rem;
+}
+
+.prototype-embed--rose {
+    background: var(--genomic-warm-white);
+    border: .125rem solid var(--genomic-ink);
+    border-radius: .7rem;
+    box-shadow: .45rem .45rem 0 var(--genomic-coral);
+    overflow: hidden;
+    padding: clamp(.55rem, 1.5vw, 1rem);
+}
+
+.prototype-embed--rose iframe {
+    border: .1rem solid var(--genomic-ink);
+    border-radius: .4rem;
+}
+
+.prototype-embed--rose figcaption {
+    color: var(--genomic-blue-ink);
+    padding: 1rem .35rem .25rem;
+}
+
+.genomic-solution-field {
+    color: var(--genomic-blue-ink);
+}
+
+.genomic-solution-field--rose {
+    background: var(--genomic-rose);
+}
+
+.genomic-solution-field--paper {
+    background: var(--genomic-paper);
+}
+
+.genomic-solution-field--quiet {
+    background: var(--genomic-quiet-paper);
+}
+
+.genomic-solution-field :is(.architecture-track-title, .beat-title, .txt-h4) {
+    color: var(--genomic-ink);
+}
+
+.genomic-solution-field .architecture-track-title {
+    border-block-end-color: var(--genomic-cobalt);
+}
+
+.genomic-solution-field .debrief-quote {
+    border-inline-start-color: var(--genomic-coral);
+}
+
+.genomic-solution-field .cobalt-operating-field-cards article {
+    background: var(--genomic-warm-white);
+    border-color: var(--genomic-ink);
+    box-shadow: .45rem .45rem 0 var(--genomic-ink);
+}
+
+.genomic-solution-field .cobalt-operating-field-cards article:nth-child(2n) {
+    background: var(--genomic-paper);
+    box-shadow: .45rem .45rem 0 var(--genomic-cobalt);
+}
+
+.genomic-threadkeeping-aside {
+    background: var(--genomic-warm-white);
+    border: .125rem solid var(--genomic-ink);
+    border-inline-start: .55rem solid var(--genomic-coral);
+    border-radius: .6rem;
+    box-shadow: .4rem .4rem 0 var(--genomic-ink);
+}
+
+.genomic-threadkeeping-aside .genomic-field-label {
+    color: var(--genomic-cobalt-deep);
+    margin-block-end: .45rem;
+}
+
+.rose-editorial-visual img {
+    background: var(--genomic-rose);
+    border: .125rem solid var(--genomic-ink);
+    border-radius: .75rem;
+    box-shadow: .5rem .5rem 0 var(--genomic-coral);
+}
+
+.rose-strategy-equivalent {
+    background: var(--genomic-warm-white);
+    border: .125rem solid var(--genomic-ink);
+    border-radius: .7rem;
+    box-shadow: .45rem .45rem 0 var(--genomic-ink);
+    padding: clamp(.8rem, 2vw, 1.25rem);
+}
+
+.rose-strategy-equivalent .table-scroll {
+    margin: 0;
+}
+
+.rose-strategy-equivalent thead th {
+    background: var(--genomic-ink);
+    color: var(--genomic-warm-white);
+}
+
+.rose-strategy-equivalent tbody th {
+    border-inline-start: .3rem solid var(--genomic-coral);
+}
+
+.genomic-implementation-field {
+    --canvas-link-color: var(--canvas-link-on-dark);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
+}
+
+.genomic-implementation-field--iron {
+    background: var(--genomic-iron);
+}
+
+.genomic-implementation-field--cobalt {
+    background: #17345f;
+}
+
+.genomic-implementation-field--deep-cobalt {
+    background: #0f2147;
+}
+
+.genomic-implementation-field .content > section > :is(h2, h3, h4, p, blockquote) {
+    color: var(--genomic-warm-white);
+}
+
+.genomic-implementation-field .architecture-track-title {
+    border-block-end-color: var(--genomic-coral);
+}
+
+.genomic-track-label--dark {
+    color: #cfe7f7 !important;
+}
+
+.genomic-track-label--dark span {
+    background: var(--genomic-acid);
+    color: var(--genomic-ink);
+}
+
+.genomic-implementation-field .debrief-quote {
+    border-inline-start-color: var(--genomic-coral);
+}
+
+.genomic-implementation-field .debrief-quote :is(p, cite) {
+    color: var(--genomic-warm-white);
+}
+
+.genomic-implementation-field .story-visual figcaption {
+    color: #dbe7f6;
+}
+
+.genomic-implementation-field :is(.cobalt-operating-field-cards, .repeatability-cards) :is(h4, p) {
+    color: var(--genomic-ink);
+}
+
+.genomic-implementation-field :is(.cobalt-operating-field__table, .cobalt-operating-field__aside) :is(h4, p, caption, th, td) {
+    color: var(--genomic-ink);
+}
+
+.genomic-stacked-cube-visual img {
+    background: #062c56;
+    border-color: #7aa6c9;
+    box-shadow: .5rem .5rem 0 var(--genomic-coral);
+}
+
+@media screen and (max-width: 30rem) {
+    .genomic-context-tree-feature,
+    .prototype-embed--rose,
+    .rose-editorial-visual img,
+    .rose-strategy-equivalent,
+    .genomic-threadkeeping-aside,
+    .genomic-stacked-cube-visual img {
+        box-shadow: .3rem .3rem 0 var(--genomic-ink);
+    }
+}
+
+@media (forced-colors: active) {
+    .genomic-context-tree-feature,
+    .prototype-embed--rose,
+    .genomic-threadkeeping-aside,
+    .rose-editorial-visual img,
+    .rose-strategy-equivalent,
+    .genomic-stacked-cube-visual img {
+        border-color: CanvasText;
+        box-shadow: none;
+    }
+
+    .genomic-track-label span {
+        border-color: CanvasText;
+    }
+}
+
+@media print {
+    .genomic-viewer-page :is(
+        .genomic-viewer-hero,
+        .genomic-context-tree-feature,
+        .genomic-solution-field,
+        .genomic-implementation-field
+        ) {
+        --canvas-link-color: var(--canvas-link-on-light);
+        --canvas-link-visited-color: var(--canvas-link-visited-on-light);
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .genomic-viewer-page :is(
+        .genomic-viewer-hero,
+        .genomic-context-tree-feature,
+        .genomic-solution-field,
+        .genomic-implementation-field
+        ) :is(h1, h2, h3, h4, p, li, figcaption, cite, a, code) {
+        color: #000 !important;
+    }
+
+    .genomic-viewer-page :is(
+        .genomic-context-tree-feature,
+        .prototype-embed--rose,
+        .genomic-threadkeeping-aside,
+        .rose-editorial-visual img,
+        .rose-strategy-equivalent,
+        .genomic-stacked-cube-visual img,
+        .cobalt-operating-field-cards article,
+        .repeatability-cards article
+        ) {
+        box-shadow: none;
+    }
+
+    .rose-strategy-equivalent table {
+        min-inline-size: 0;
+    }
+}
+
+/* These route-specific anchors retain the paired fields after shared Debrief
+   component defaults from expanded.css. */
+.genomic-viewer-page .genomic-solution-field--rose {
+    background: var(--genomic-rose);
+}
+
+.genomic-viewer-page .genomic-solution-field--paper {
+    background: var(--genomic-paper);
+}
+
+.genomic-viewer-page .genomic-solution-field--quiet {
+    background: var(--genomic-quiet-paper);
+}
+
+.genomic-viewer-page :is(#solution-architecture-title, #implementation-architecture-title) {
+    scroll-margin-block-start: 9.5rem;
+}
+
+.genomic-viewer-page .genomic-implementation-field--iron {
+    background: var(--genomic-iron);
+}
+
+.genomic-viewer-page .genomic-implementation-field--cobalt {
+    background: #17345f;
+}
+
+.genomic-viewer-page .genomic-implementation-field--deep-cobalt {
+    background: #0f2147;
+}
+
+.genomic-viewer-page .prototype-embed--rose iframe {
+    border: .1rem solid var(--genomic-ink);
+}
+
+.genomic-viewer-page .rose-editorial-visual img {
+    background: var(--genomic-rose);
+    border: .125rem solid var(--genomic-ink);
+    box-shadow: .5rem .5rem 0 var(--genomic-coral);
+}
+
+.genomic-viewer-page .genomic-stacked-cube-visual img {
+    background: #062c56;
+    border-color: #7aa6c9;
+    box-shadow: .5rem .5rem 0 var(--genomic-coral);
+}
+
+/* Shared-component seams retain the declarations that followed this route
+   inside expanded.css before extraction. */
+.genomic-viewer-page .genomic-threadkeeping-aside {
+    background: color-mix(in srgb, var(--canvas-field) 20%, var(--canvas-paper) 80%);
+    border-block: 1px solid var(--canvas-rule-strong);
+}
+
+.genomic-viewer-page .genomic-threadkeeping-aside > :first-child,
+.genomic-viewer-page .genomic-threadkeeping-aside > :last-child {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.genomic-viewer-page .genomic-solution-field .cobalt-operating-field-cards .txt-h4 {
+    color: var(--operating-field-ink);
+}
+
+.genomic-viewer-page .genomic-implementation-field .cobalt-operating-field__table :is(thead th:first-child, tbody th[scope="row"]) {
+    color: var(--canvas-ink-strong);
+}

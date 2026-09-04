@@ -1,0 +1,181 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1120" role="img" aria-labelledby="title desc">
+  <title id="title">Narrative Execution Gap deep-research collaboration workflow</title>
+  <desc id="desc">A four-stage lineage moves from a Novartis-specific atlas through a live biopharma research run, a generic industry-profile payload, and a LIMS build-or-buy decision atlas. Below it, a coverage ledger feeds six evidence gates from as-of framing to a source-cited matrix and report.</desc>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#2855f3" stroke-opacity=".11" stroke-width="1"/>
+    </pattern>
+    <style>
+      text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #17345f; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 750; letter-spacing: 1.4px; }
+      .title { font-size: 54px; font-weight: 850; letter-spacing: -1.8px; }
+      .dek { font-size: 22px; font-weight: 620; }
+      .phase { font-size: 15px; font-weight: 850; letter-spacing: 2.2px; }
+      .phase-title { font-size: 25px; font-weight: 820; }
+      .phase-copy { font-size: 18px; font-weight: 590; }
+      .badge { font-size: 20px; font-weight: 850; }
+      .section { font-size: 30px; font-weight: 850; letter-spacing: -.7px; }
+      .small { font-size: 15px; font-weight: 620; }
+      .gate { font-size: 17px; font-weight: 820; }
+      .gate-copy { font-size: 14px; font-weight: 590; }
+      text[fill="#ffffff"] { fill: #ffffff; }
+      text[fill="#2855f3"] { fill: #2855f3; }
+      text[fill="#153fbe"] { fill: #153fbe; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1120" fill="#fffaf2"/>
+  <rect x="20" y="20" width="1560" height="1080" rx="36" fill="url(#grid)" stroke="#17345f" stroke-width="4"/>
+
+  <g role="group" aria-labelledby="neg-orientation-title">
+    <title id="neg-orientation-title">Research Debrief orientation: one method changes altitude four times</title>
+    <text class="mono" x="74" y="82" fill="#2855f3">RESEARCH DEBRIEF · SOURCE-GROUNDED LINEAGE</text>
+    <text class="title" x="74" y="143">One method, four changes in altitude</text>
+    <text class="dek" x="74" y="181">A gap-analysis discipline became a portable research payload, then a decision architecture.</text>
+  </g>
+
+  <!-- The route is painted below the cards so it never crosses their content. -->
+  <g role="group" aria-labelledby="neg-lineage-title">
+  <title id="neg-lineage-title">Four-stage source-grounded lineage from a specific atlas to a reusable decision architecture</title>
+  <path d="M370 326H433V316L452 331 433 346V336H370Z" fill="#17345f" aria-hidden="true"/>
+  <path d="M752 326H815V316L834 331 815 346V336H752Z" fill="#17345f" aria-hidden="true"/>
+  <path d="M1134 326H1197V316L1216 331 1197 346V336H1134Z" fill="#17345f" aria-hidden="true"/>
+  <path d="M566 440C566 470 646 478 720 478H1257V458H1244L1260 438 1276 458H1263V482H720C642 482 562 466 562 440Z" fill="#2855f3" aria-hidden="true"/>
+
+  <g transform="translate(70 222)">
+    <rect width="300" height="218" rx="20" fill="#e7efff" stroke="#17345f" stroke-width="3"/>
+    <circle cx="42" cy="42" r="23" fill="#2855f3" stroke="#17345f" stroke-width="3"/>
+    <text class="badge" x="42" y="49" text-anchor="middle" fill="#ffffff">01</text>
+    <text class="phase" x="78" y="47" fill="#153fbe">SPECIFIC · 01 JUN</text>
+    <text class="phase-title" x="28" y="98">Novartis atlas</text>
+    <text class="phase-copy" x="28" y="131">A constellation replaces</text>
+    <text class="phase-copy" x="28" y="156">one overlong document.</text>
+    <rect x="28" y="176" width="226" height="26" rx="13" fill="#ffffff" stroke="#2855f3" stroke-width="2"/>
+    <text class="small" x="42" y="194">compressed core + packets</text>
+  </g>
+
+  <g transform="translate(452 222)">
+    <rect width="300" height="218" rx="20" fill="#d9efea" stroke="#17345f" stroke-width="3"/>
+    <circle cx="42" cy="42" r="23" fill="#75d8c4" stroke="#17345f" stroke-width="3"/>
+    <text class="badge" x="42" y="49" text-anchor="middle">02</text>
+    <text class="phase" x="78" y="47" fill="#153fbe">EXERCISED · 02 JUN</text>
+    <text class="phase-title" x="28" y="98">Biopharma v1.2 run</text>
+    <text class="phase-copy" x="28" y="131">30 pages · 54 citations</text>
+    <text class="phase-copy" x="28" y="156">≈3.8/10 composite NEG*</text>
+    <rect x="28" y="176" width="242" height="26" rx="13" fill="#ffffff" stroke="#17345f" stroke-width="2"/>
+    <text class="small" x="42" y="194">one historical source-run result</text>
+  </g>
+
+  <g transform="translate(834 222)">
+    <rect width="300" height="218" rx="20" fill="#fff5de" stroke="#17345f" stroke-width="3"/>
+    <circle cx="42" cy="42" r="23" fill="#f2ff67" stroke="#17345f" stroke-width="3"/>
+    <text class="badge" x="42" y="49" text-anchor="middle">03</text>
+    <text class="phase" x="78" y="47" fill="#153fbe">PORTABLE · 03 JUN</text>
+    <text class="phase-title" x="28" y="98">Generic v0.1</text>
+    <text class="phase-copy" x="28" y="131">One Industry Profile</text>
+    <text class="phase-copy" x="28" y="156">becomes the swap-point.</text>
+    <rect x="28" y="176" width="214" height="26" rx="13" fill="#ffffff" stroke="#17345f" stroke-width="2"/>
+    <text class="small" x="42" y="194">four starter profiles</text>
+  </g>
+
+  <g transform="translate(1216 222)">
+    <rect width="300" height="218" rx="20" fill="#ffd3d0" stroke="#17345f" stroke-width="3"/>
+    <circle cx="42" cy="42" r="23" fill="#fa7065" stroke="#17345f" stroke-width="3"/>
+    <text class="badge" x="42" y="49" text-anchor="middle">04</text>
+    <text class="phase" x="78" y="47" fill="#153fbe">REPOINTED · 09 JUN</text>
+    <text class="phase-title" x="28" y="98">LIMS decision atlas</text>
+    <text class="phase-copy" x="28" y="131">Gap measurement becomes</text>
+    <text class="phase-copy" x="28" y="156">buy · build · open source.</text>
+    <rect x="28" y="176" width="242" height="26" rx="13" fill="#ffffff" stroke="#17345f" stroke-width="2"/>
+    <text class="small" x="42" y="194">weighted matrix + falsifiers</text>
+  </g>
+  </g>
+
+  <rect x="70" y="498" width="1446" height="72" rx="18" fill="#153fbe" stroke="#17345f" stroke-width="3"/>
+  <text class="section" x="102" y="543" fill="#ffffff">The invariant: every conclusion keeps its route back to evidence</text>
+
+  <g transform="translate(70 602)" role="group" aria-labelledby="coverage-ledger-title">
+    <title id="coverage-ledger-title">Coverage ledger fields established before research synthesis</title>
+    <rect width="350" height="382" rx="22" fill="#ffffff" stroke="#17345f" stroke-width="4"/>
+    <rect width="350" height="62" rx="18" fill="#2855f3"/>
+    <rect y="44" width="350" height="18" fill="#2855f3"/>
+    <text class="mono" x="28" y="39" fill="#ffffff">COVERAGE LEDGER · BUILT FIRST</text>
+    <g transform="translate(28 88)">
+      <rect width="294" height="46" rx="8" fill="#e7efff" stroke="#7893bc" stroke-width="2"/>
+      <text class="gate" x="16" y="29">Source + locator</text>
+      <rect y="58" width="294" height="46" rx="8" fill="#fff5de" stroke="#7893bc" stroke-width="2"/>
+      <text class="gate" x="16" y="87">Access + read depth</text>
+      <rect y="116" width="294" height="46" rx="8" fill="#d9efea" stroke="#7893bc" stroke-width="2"/>
+      <text class="gate" x="16" y="145">Role + report section</text>
+      <rect y="174" width="294" height="46" rx="8" fill="#ffd3d0" stroke="#7893bc" stroke-width="2"/>
+      <text class="gate" x="16" y="203">Citation + access date</text>
+      <rect y="232" width="294" height="60" rx="8" fill="#ffffff" stroke="#17345f" stroke-width="2" stroke-dasharray="8 6"/>
+      <text class="gate" x="16" y="257">Failure state +</text>
+      <text class="gate" x="16" y="279">failure citation</text>
+    </g>
+  </g>
+
+  <path d="M420 789H481V779L500 794 481 809V799H420Z" fill="#17345f" aria-hidden="true"/>
+
+  <g transform="translate(500 610)" role="group" aria-labelledby="method-spine-title">
+    <title id="method-spine-title">Six accountable method gates from anchoring through delivery</title>
+    <text class="mono" x="0" y="26" fill="#2855f3">METHOD SPINE · SIX ACCOUNTABLE GATES</text>
+    <path d="M76 122H885M76 280H885" fill="none" stroke="#7893bc" stroke-width="3" stroke-dasharray="9 8"/>
+
+    <g transform="translate(0 58)">
+      <rect width="300" height="132" rx="18" fill="#e7efff" stroke="#17345f" stroke-width="3"/>
+      <circle cx="40" cy="38" r="21" fill="#2855f3" stroke="#17345f" stroke-width="2"/>
+      <text class="badge" x="40" y="45" text-anchor="middle" fill="#ffffff">1</text>
+      <text class="gate" x="75" y="36">Anchor</text>
+      <text class="gate-copy" x="24" y="76">As-of date, ownership regime,</text>
+      <text class="gate-copy" x="24" y="98">structure, evidence limits.</text>
+    </g>
+    <g transform="translate(330 58)">
+      <rect width="300" height="132" rx="18" fill="#d9efea" stroke="#17345f" stroke-width="3"/>
+      <circle cx="40" cy="38" r="21" fill="#75d8c4" stroke="#17345f" stroke-width="2"/>
+      <text class="badge" x="40" y="45" text-anchor="middle">2</text>
+      <text class="gate" x="75" y="36">Retrieve</text>
+      <text class="gate-copy" x="24" y="76">Primary sources, direct reading,</text>
+      <text class="gate-copy" x="24" y="98">systematic samples, access trace.</text>
+    </g>
+    <g transform="translate(660 58)">
+      <rect width="300" height="132" rx="18" fill="#fff5de" stroke="#17345f" stroke-width="3"/>
+      <circle cx="40" cy="38" r="21" fill="#f2ff67" stroke="#17345f" stroke-width="2"/>
+      <text class="badge" x="40" y="45" text-anchor="middle">3</text>
+      <text class="gate" x="75" y="36">Gate</text>
+      <text class="gate-copy" x="24" y="76">Confounders, source banding,</text>
+      <text class="gate-copy" x="24" y="98">disclosure and bias conditions.</text>
+    </g>
+
+    <g transform="translate(0 216)">
+      <rect width="300" height="132" rx="18" fill="#ffd3d0" stroke="#17345f" stroke-width="3"/>
+      <circle cx="40" cy="38" r="21" fill="#fa7065" stroke="#17345f" stroke-width="2"/>
+      <text class="badge" x="40" y="45" text-anchor="middle">4</text>
+      <text class="gate" x="75" y="36">Disconfirm</text>
+      <text class="gate-copy" x="24" y="76">Write the strongest case that</text>
+      <text class="gate-copy" x="24" y="98">the candidate gap is ordinary.</text>
+    </g>
+    <g transform="translate(330 216)">
+      <rect width="300" height="132" rx="18" fill="#e7efff" stroke="#17345f" stroke-width="3"/>
+      <circle cx="40" cy="38" r="21" fill="#2855f3" stroke="#17345f" stroke-width="2"/>
+      <text class="badge" x="40" y="45" text-anchor="middle" fill="#ffffff">5</text>
+      <text class="gate" x="75" y="36">Explain</text>
+      <text class="gate-copy" x="24" y="76">Rank intentional, constrained,</text>
+      <text class="gate-copy" x="24" y="98">outdated, and benign candidates.</text>
+    </g>
+    <g transform="translate(660 216)">
+      <rect width="300" height="132" rx="18" fill="#d9efea" stroke="#17345f" stroke-width="3"/>
+      <circle cx="40" cy="38" r="21" fill="#75d8c4" stroke="#17345f" stroke-width="2"/>
+      <text class="badge" x="40" y="45" text-anchor="middle">6</text>
+      <text class="gate" x="75" y="36">Deliver</text>
+      <text class="gate-copy" x="24" y="76">Matrix, confidence band, falsifier,</text>
+      <text class="gate-copy" x="24" y="98">provenance, table-first visuals.</text>
+    </g>
+  </g>
+
+  <g role="group" aria-labelledby="neg-boundary-title">
+    <title id="neg-boundary-title">Evidence boundary: a gap is a finding to explain rather than a verdict</title>
+    <rect x="70" y="1020" width="1446" height="50" rx="14" fill="#17345f"/>
+    <text class="mono" x="94" y="1052" fill="#ffffff">EVIDENCE BOUNDARY · A GAP IS A FINDING TO EXPLAIN, NOT A VERDICT · *DIRECTIONAL, PROVISIONAL, SOURCE-RUN SPECIFIC</text>
+  </g>
+</svg>

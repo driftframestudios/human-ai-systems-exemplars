@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1080" role="img" aria-labelledby="metadata-title metadata-desc">
+  <title id="metadata-title">The metadata scan contract exposes six fields before a reader enters the body</title>
+  <desc id="metadata-desc">Six structured cards show subject and era, participants and population, events and pivots, changed work and outcome, disclosure posture, and last reviewed with currentness. A lower validation rail separates required scan claims from conditional regulatory detail.</desc>
+  <defs>
+    <pattern id="metadata-grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#2855f3" stroke-width="1" opacity="0.08"/></pattern>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}.mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}.ink{fill:#17345f}.body{fill:#304a71}.muted{fill:#5d6f8b}.white{fill:#fffdf8}.eyebrow{font-size:13px;font-weight:700;letter-spacing:1.8px}.title{font-size:36px;font-weight:780}.lead{font-size:17px}.card-title{font-size:20px;font-weight:760}.card-copy{font-size:15px}.small{font-size:13px}.chip{font-size:12px;font-weight:700;letter-spacing:.7px}.outline{stroke:#17345f;stroke-width:2}.soft{stroke:#6f85a8;stroke-width:1.4}.shadow{fill:#17345f}.arrow{fill:#2855f3}
+    </style>
+  </defs>
+  <rect width="1600" height="1080" rx="28" fill="#fffaf2"/>
+  <rect width="1600" height="1080" rx="28" fill="url(#metadata-grid)"/>
+
+  <g role="group" aria-labelledby="metadata-header-title">
+    <title id="metadata-header-title">The scan contract</title>
+    <rect x="32" y="30" width="1536" height="154" rx="20" fill="#2855f3"/>
+    <text x="72" y="72" class="mono eyebrow white">SITE READINGS + DEBRIEFS · CONTENT SCAN LAYER</text>
+    <text x="72" y="120" class="sans title white">Six fields make a reading scannable without flattening it.</text>
+    <text x="72" y="154" class="sans lead white">Each field states a claim a visitor can inspect; the body carries the mechanism, nuance, and consequence.</text>
+  </g>
+
+  <g role="group" aria-labelledby="metadata-six-title">
+    <title id="metadata-six-title">Six visible fields</title>
+    <rect x="64" y="236" width="468" height="184" rx="17" class="shadow"/>
+    <rect x="56" y="228" width="468" height="184" rx="17" fill="#fff5de" class="outline"/>
+    <rect x="80" y="252" width="44" height="30" rx="8" fill="#ffd3d0" class="soft"/>
+    <text x="102" y="273" text-anchor="middle" class="mono chip ink">01</text>
+    <text x="142" y="275" class="sans card-title ink">Subject + era/date/duration</text>
+    <text x="80" y="311" class="sans card-copy body"><tspan x="80">The shared object and source-supported</tspan><tspan x="80" dy="22">time horizon, including duration when known.</tspan></text>
+    <text x="80" y="358" class="mono small muted">VISIBLE CONTRACT</text>
+    <text x="80" y="386" class="sans card-copy ink">What is being read, and when?</text>
+
+    <rect x="574" y="236" width="468" height="184" rx="17" class="shadow"/>
+    <rect x="566" y="228" width="468" height="184" rx="17" fill="#e7efff" class="outline"/>
+    <rect x="590" y="252" width="44" height="30" rx="8" fill="#cfe7f7" class="soft"/>
+    <text x="612" y="273" text-anchor="middle" class="mono chip ink">02</text>
+    <text x="652" y="275" class="sans card-title ink">Participants + population</text>
+    <text x="590" y="311" class="sans card-copy body"><tspan x="590">The groups whose work, knowledge, or</tspan><tspan x="590" dy="22">consequence is present.</tspan></text>
+    <text x="590" y="358" class="mono small muted">VISIBLE CONTRACT</text>
+    <text x="590" y="386" class="sans card-copy ink">Who carried the work or changed state?</text>
+
+    <rect x="1084" y="236" width="468" height="184" rx="17" class="shadow"/>
+    <rect x="1076" y="228" width="468" height="184" rx="17" fill="#d9efea" class="outline"/>
+    <rect x="1100" y="252" width="44" height="30" rx="8" fill="#f2ff67" class="soft"/>
+    <text x="1122" y="273" text-anchor="middle" class="mono chip ink">03</text>
+    <text x="1162" y="275" class="sans card-title ink">Events + pivots</text>
+    <text x="1100" y="311" class="sans card-copy body"><tspan x="1100">Named conditions that materially changed</tspan><tspan x="1100" dy="22">the route or stakes.</tspan></text>
+    <text x="1100" y="358" class="mono small muted">VISIBLE CONTRACT</text>
+    <text x="1100" y="386" class="sans card-copy ink">What changed the reading?</text>
+
+    <rect x="64" y="470" width="468" height="210" rx="17" class="shadow"/>
+    <rect x="56" y="462" width="468" height="210" rx="17" fill="#d9efea" class="outline"/>
+    <rect x="80" y="486" width="44" height="30" rx="8" fill="#f2ff67" class="soft"/>
+    <text x="102" y="507" text-anchor="middle" class="mono chip ink">04</text>
+    <text x="142" y="509" class="sans card-title ink">Changed work + outcome</text>
+    <text x="80" y="550" class="sans card-copy body">The operating difference, with baseline and method when</text>
+    <text x="80" y="574" class="sans card-copy body">a measured outcome is claimed.</text>
+    <text x="80" y="611" class="mono small muted">VISIBLE CONTRACT</text>
+    <text x="80" y="640" class="sans card-copy ink">What became possible, unnecessary, or still open?</text>
+
+    <rect x="574" y="470" width="468" height="210" rx="17" class="shadow"/>
+    <rect x="566" y="462" width="468" height="210" rx="17" fill="#fffdf8" class="outline"/>
+    <rect x="590" y="486" width="44" height="30" rx="8" fill="#ffd3d0" class="soft"/>
+    <text x="612" y="507" text-anchor="middle" class="mono chip ink">05</text>
+    <text x="652" y="509" class="sans card-title ink">Disclosure posture</text>
+    <text x="590" y="550" class="sans card-copy body">Full, redacted, synthetic, or omission-with-placeholder</text>
+    <text x="590" y="574" class="sans card-copy body">state plus any necessary transformation.</text>
+    <text x="590" y="611" class="mono small muted">VISIBLE CONTRACT</text>
+    <text x="590" y="640" class="sans card-copy ink">Can this account travel safely?</text>
+
+    <rect x="1084" y="470" width="468" height="210" rx="17" class="shadow"/>
+    <rect x="1076" y="462" width="468" height="210" rx="17" fill="#ffd3d0" class="outline"/>
+    <rect x="1100" y="486" width="44" height="30" rx="8" fill="#fff5de" class="soft"/>
+    <text x="1122" y="507" text-anchor="middle" class="mono chip ink">06</text>
+    <text x="1162" y="509" class="sans card-title ink">Last reviewed + currentness</text>
+    <text x="1100" y="550" class="sans card-copy body">Review date and currentness state keep the account’s</text>
+    <text x="1100" y="574" class="sans card-copy body">inspection horizon visible.</text>
+    <text x="1100" y="611" class="mono small muted">VISIBLE CONTRACT</text>
+    <text x="1100" y="640" class="sans card-copy ink">Is this account current enough to act on?</text>
+  </g>
+
+  <g role="group" aria-labelledby="metadata-validation-title">
+    <title id="metadata-validation-title">Validation and reading order</title>
+    <rect x="48" y="742" width="1504" height="282" rx="20" fill="#153fbe"/>
+    <text x="80" y="785" class="mono eyebrow white">STACKING + VALIDATION</text>
+    <text x="80" y="822" class="sans card-title white">Name → scan → conditional rules → body</text>
+    <text x="80" y="853" class="sans card-copy white">The scan layer stays compact. Detail earns its place only where it changes interpretation or action.</text>
+
+    <rect x="80" y="886" width="316" height="96" rx="12" fill="#fff5de" class="outline"/>
+    <text x="102" y="918" class="mono chip ink">REQUIRED</text>
+    <text x="102" y="948" class="sans card-copy ink">All six visible fields resolve.</text>
+    <text x="102" y="970" class="sans small body">Unknowns stay explicit.</text>
+    <path d="M410 915H452V900L484 934L452 968V953H410Z" class="arrow" aria-hidden="true"/>
+
+    <rect x="498" y="886" width="316" height="96" rx="12" fill="#cfe7f7" class="outline"/>
+    <text x="520" y="918" class="mono chip ink">CONTROLLED</text>
+    <text x="520" y="948" class="sans card-copy ink">Values match the local vocabulary.</text>
+    <text x="520" y="970" class="sans small body">Dates retain source precision.</text>
+    <path d="M828 915H870V900L902 934L870 968V953H828Z" class="arrow" aria-hidden="true"/>
+
+    <rect x="916" y="886" width="316" height="96" rx="12" fill="#d9efea" class="outline"/>
+    <text x="938" y="918" class="mono chip ink">ERA-BOUND</text>
+    <text x="938" y="948" class="sans card-copy ink">Rules carry authority and applicability.</text>
+    <text x="938" y="970" class="sans small body">Interfaces stay distinct from tools.</text>
+    <path d="M1246 915H1288V900L1320 934L1288 968V953H1246Z" class="arrow" aria-hidden="true"/>
+
+    <rect x="1334" y="886" width="178" height="96" rx="12" fill="#f2ff67" class="outline"/>
+    <text x="1356" y="918" class="mono chip ink">RELEASABLE</text>
+    <text x="1356" y="948" class="sans card-copy ink">Claims can travel</text>
+    <text x="1356" y="970" class="sans small body">with their boundaries.</text>
+  </g>
+</svg>

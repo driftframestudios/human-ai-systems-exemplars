@@ -1,0 +1,2326 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; connect-src 'none'; font-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Open Lesson Field · Local Collaboration Instrument</title>
+  <meta name="description" content="A self-contained educator planning instrument for shaping an evidence-bounded lesson request from invented open-data-shaped teaching fixtures.">
+  <style>
+    :root {
+      --field: #f1e9d2;
+      --paper: #fffdf8;
+      --paper-warm: #fff6df;
+      --ink: #17345f;
+      --body: #304a71;
+      --muted: #5b6e8a;
+      --line: #7590b8;
+      --cobalt: #2855f3;
+      --cobalt-deep: #153fbe;
+      --cobalt-pale: #e7efff;
+      --tiffany: #56d8c9;
+      --sea: #d9efea;
+      --info: #d3e4f2;
+      --coral: #fa7065;
+      --acid: #f2ff67;
+      --white: #fffdf8;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --frame: 2px solid var(--ink);
+      --shadow: 7px 7px 0 var(--ink);
+      --shadow-small: 4px 4px 0 var(--ink);
+      --radius: 18px;
+      --radius-small: 10px;
+      --focus: 3px solid var(--cobalt);
+    }
+
+    *,
+    *::before,
+    *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    html:not(.is-enhanced) .js-only { display: none !important; }
+
+    body {
+      margin: 0;
+      min-width: 0;
+      color: var(--body);
+      background-color: var(--field);
+      background-image:
+        linear-gradient(rgba(40, 85, 243, 0.065) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(40, 85, 243, 0.065) 1px, transparent 1px);
+      background-size: 28px 28px;
+      font: 1rem/1.55 var(--font-sans);
+      overflow-wrap: anywhere;
+    }
+
+    button,
+    input,
+    select,
+    textarea { font: inherit; }
+
+    button,
+    input[type="checkbox"],
+    input[type="radio"],
+    select { cursor: pointer; }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible,
+    summary:focus-visible,
+    a:focus-visible,
+    [tabindex]:focus-visible {
+      outline: var(--focus);
+      outline-offset: 3px;
+    }
+
+    a { color: var(--cobalt-deep); }
+    h1, h2, h3, h4, p { margin-top: 0; }
+    h1, h2, h3, h4 { color: var(--ink); }
+    h1 { margin-bottom: 0.75rem; font-size: clamp(2.5rem, 6vw, 6.3rem); letter-spacing: -0.055em; line-height: 0.9; }
+    h2 { margin-bottom: 0.5rem; font-size: clamp(1.65rem, 3.3vw, 3.2rem); letter-spacing: -0.04em; line-height: 1; }
+    h3 { margin-bottom: 0.45rem; font-size: clamp(1.08rem, 1.8vw, 1.4rem); line-height: 1.15; }
+    h4 { margin-bottom: 0.35rem; font-size: 1rem; line-height: 1.2; }
+    abbr[title] { text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 100;
+      top: 0.75rem;
+      left: 0.75rem;
+      padding: 0.7rem 0.9rem;
+      color: var(--paper);
+      background: var(--ink);
+      border: 2px solid var(--paper);
+      transform: translateY(-180%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .shell { width: min(calc(100% - 2rem), 1880px); margin-inline: auto; padding-block: 1rem 4rem; }
+    .hero, .stage, .route-field, .inspection { border: var(--frame); box-shadow: var(--shadow); }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      padding: clamp(1.4rem, 4vw, 4rem);
+      color: var(--paper);
+      background: var(--cobalt-deep);
+      border-radius: 28px;
+    }
+    .hero::after {
+      position: absolute;
+      z-index: -1;
+      right: -5rem;
+      bottom: -7rem;
+      width: min(45vw, 38rem);
+      min-width: 20rem;
+      aspect-ratio: 1;
+      content: "";
+      background:
+        radial-gradient(circle at 28% 30%, var(--acid) 0 4%, transparent 4.5%),
+        repeating-linear-gradient(135deg, transparent 0 18px, rgba(86, 216, 201, 0.32) 18px 22px);
+      border: 2px solid rgba(255, 253, 248, 0.55);
+      transform: rotate(11deg);
+    }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.55fr); gap: clamp(1.5rem, 4vw, 4rem); align-items: end; }
+    .hero h1, .hero h2, .hero h3 { color: var(--paper); }
+    .hero-deck { max-width: 72ch; margin-bottom: 0; font-size: clamp(1.05rem, 1.6vw, 1.3rem); }
+    .eyebrow, .mono, .stage-label, .chip, .field-label, .source-type, .route-state, .status-label {
+      font-family: var(--font-mono);
+      font-weight: 800;
+      letter-spacing: 0.085em;
+      text-transform: uppercase;
+    }
+    .eyebrow { margin-bottom: 0.6rem; color: var(--tiffany); font-size: 0.78rem; }
+    .hero-contract { display: grid; gap: 0.7rem; margin: 0; }
+    .hero-contract div { padding: 0.8rem; background: rgba(23, 52, 95, 0.72); border: 1.5px solid rgba(255, 253, 248, 0.65); }
+    .hero-contract dt { color: var(--acid); font: 800 0.72rem/1.2 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; }
+    .hero-contract dd { margin: 0.25rem 0 0; color: var(--paper); }
+
+    .route-field { margin-block: 1.5rem; padding: 1rem; background: var(--paper); border-radius: var(--radius); }
+    .route-field > p { margin-bottom: 0.75rem; }
+    .route-scroll { overflow-x: auto; padding: 0.25rem 0.25rem 0.7rem; scrollbar-color: var(--cobalt) var(--cobalt-pale); }
+    .route-scroll ol { display: grid; grid-template-columns: repeat(7, minmax(9rem, 1fr)); gap: 0.65rem; min-width: 70rem; margin: 0; padding: 0; list-style: none; }
+    .route-scroll a {
+      display: grid;
+      min-height: 7rem;
+      grid-template-rows: auto 1fr auto;
+      gap: 0.35rem;
+      padding: 0.75rem;
+      color: var(--ink);
+      background: var(--cobalt-pale);
+      border: 2px solid var(--ink);
+      box-shadow: 3px 3px 0 var(--ink);
+      text-decoration: none;
+    }
+    .route-scroll a::after { content: "Open stage"; color: var(--muted); font: 700 0.69rem/1.2 var(--font-mono); text-transform: uppercase; }
+    .route-scroll a:hover,
+    .route-scroll a:focus-visible { outline: 3px solid var(--cobalt-deep); outline-offset: 3px; }
+    .route-scroll a:hover .route-name,
+    .route-scroll a:focus-visible .route-name { text-decoration: underline; text-decoration-thickness: 0.12em; text-underline-offset: 0.18em; }
+    .route-scroll a[aria-current="step"] {
+      background: var(--tiffany);
+      border-radius: 0.9rem 0.15rem 0.9rem 0.15rem;
+      box-shadow: inset 0 0 0 3px var(--ink), 3px 3px 0 var(--ink);
+      transform: translateY(-2px);
+    }
+    .route-scroll a[aria-current="step"]::after { content: "In view · open stage"; color: var(--ink); }
+    .route-number { font: 900 1.35rem/1 var(--font-mono); }
+    .route-name { font-weight: 850; line-height: 1.15; }
+
+    main { display: grid; gap: 1.5rem; }
+    .stage { scroll-margin-top: 1rem; overflow: clip; background: var(--paper); border-radius: var(--radius); }
+    .stage-head { display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(15rem, 0.48fr); gap: 1rem; align-items: start; padding: clamp(1.1rem, 2.5vw, 2rem); background: var(--cobalt-pale); border-bottom: var(--frame); }
+    .stage-number { display: grid; width: 3.2rem; aspect-ratio: 1; place-items: center; color: var(--paper); background: var(--cobalt-deep); border: 2px solid var(--ink); border-radius: 50%; font: 900 1.15rem/1 var(--font-mono); }
+    .stage-label { display: block; margin-bottom: 0.35rem; color: var(--cobalt-deep); font-size: 0.72rem; }
+    .stage-head p { margin-bottom: 0; }
+    .stage-effect { padding: 0.75rem 0.9rem; color: var(--ink); background: var(--sea); border-left: 5px solid var(--tiffany); font-size: 0.93rem; }
+    .stage-body { padding: clamp(1.1rem, 2.8vw, 2.2rem); }
+    .grid-2, .grid-3, .source-grid, .route-grid, .visual-grid, .handoff-grid { display: grid; gap: 1rem; }
+    .grid-2, .visual-grid, .handoff-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3, .source-grid, .route-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .stack { display: grid; gap: 1rem; }
+
+    fieldset { min-width: 0; margin: 0; padding: 1rem; border: 1.5px solid var(--line); border-radius: var(--radius-small); }
+    legend { padding-inline: 0.35rem; color: var(--ink); font-weight: 850; }
+    label { color: var(--ink); font-weight: 760; }
+    label > span:first-child, .field-label { display: block; margin-bottom: 0.35rem; }
+    input[type="text"], input[type="number"], select, textarea {
+      width: 100%;
+      min-height: 2.8rem;
+      padding: 0.65rem 0.75rem;
+      color: var(--ink);
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      border-radius: 6px;
+    }
+    textarea { min-height: 8rem; resize: vertical; }
+    input[type="checkbox"], input[type="radio"] { width: 1.1rem; height: 1.1rem; margin: 0; accent-color: var(--cobalt); }
+    .form-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
+    .choice-list { display: grid; gap: 0.65rem; }
+    .choice {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 0.7rem;
+      align-items: start;
+      padding: 0.8rem;
+      color: var(--body);
+      background: var(--paper);
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .choice strong { display: block; color: var(--ink); }
+    .choice small { display: block; margin-top: 0.2rem; color: var(--muted); }
+    .effect-line { display: block; margin-top: 0.45rem; color: var(--cobalt-deep); font: 750 0.76rem/1.35 var(--font-mono); }
+
+    .capsule-dock {
+      position: sticky;
+      z-index: 20;
+      top: 0.6rem;
+      display: grid;
+      grid-template-columns: minmax(14rem, 0.72fr) minmax(0, 1.4fr) auto;
+      gap: 1rem;
+      align-items: center;
+      margin-block: 1rem 1.5rem;
+      padding: 1rem;
+      color: var(--ink);
+      background: rgba(255, 253, 248, 0.97);
+      border: var(--frame);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-small);
+    }
+    .capsule-dock h2 { margin: 0.1rem 0 0.3rem; font-size: 1.15rem; letter-spacing: -0.02em; }
+    .capsule-dock p { margin: 0; }
+    .capsule-dock__receipt { display: grid; gap: 0.25rem; padding-left: 1rem; border-left: 4px solid var(--tiffany); font-size: 0.88rem; }
+    .capsule-status { display: inline-flex; width: fit-content; gap: 0.4rem; align-items: center; padding: 0.28rem 0.5rem; background: var(--acid); border: 1.5px solid var(--ink); font: 800 0.68rem/1.2 var(--font-mono); letter-spacing: 0.05em; text-transform: uppercase; }
+    .capsule-dock a { display: inline-block; padding: 0.6rem 0.75rem; color: var(--paper); background: var(--cobalt-deep); border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); font-weight: 850; text-decoration: none; }
+    .control-receipt { margin: 0; padding: 0.7rem 0.8rem; color: var(--ink); background: var(--sea); border-left: 5px solid var(--tiffany); font-size: 0.88rem; }
+    .control-receipt strong { color: var(--cobalt-deep); }
+
+    .note, .boundary, .look-here, .local-note, .social-proxy {
+      margin: 0;
+      padding: 0.85rem 0.95rem;
+      color: var(--ink);
+      border-left: 5px solid var(--line);
+    }
+    .note { background: var(--info); }
+    .boundary { background: #ffe1de; border-color: var(--coral); }
+    .look-here { background: var(--sea); border-color: var(--tiffany); }
+    .local-note { background: var(--paper-warm); border-color: var(--acid); }
+    .social-proxy { background: var(--cobalt-pale); border-color: var(--cobalt); }
+    .chip { display: inline-block; padding: 0.28rem 0.5rem; color: var(--ink); background: var(--acid); border: 1.5px solid var(--ink); font-size: 0.66rem; }
+    .chip.context { background: var(--sea); }
+    .chip.quant { background: var(--info); }
+
+    .standard-card, .source-card, .route-card, .result-card, .diagram-card, .prompt-example, .inspector-card {
+      padding: 1rem;
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      border-radius: var(--radius-small);
+      box-shadow: var(--shadow-small);
+    }
+    .standard-card { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.75rem; align-items: start; }
+    .standard-card strong, .standard-card small, .source-card strong { display: block; }
+    .standard-card small { margin-top: 0.2rem; color: var(--muted); }
+    .standard-card p, .source-card p, .route-card p { margin-bottom: 0; }
+    .source-card { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.75rem; }
+    .source-card .source-type { display: block; margin-bottom: 0.25rem; color: var(--cobalt-deep); font-size: 0.65rem; }
+    .source-card .source-boundary { display: block; margin-top: 0.5rem; color: var(--muted); font-size: 0.88rem; }
+
+    .coordination-field {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      padding: clamp(1rem, 2.4vw, 1.6rem);
+      background-color: var(--paper-warm);
+      background-image:
+        linear-gradient(rgba(40, 85, 243, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(40, 85, 243, 0.07) 1px, transparent 1px);
+      background-size: 22px 22px;
+      border: 2px solid var(--ink);
+      border-radius: var(--radius-small);
+      box-shadow: var(--shadow-small);
+    }
+    .coordination-field::after {
+      position: absolute;
+      z-index: -1;
+      right: -2.5rem;
+      top: -2.5rem;
+      width: 7.5rem;
+      aspect-ratio: 1;
+      content: "";
+      background: var(--tiffany);
+      border: 2px solid var(--ink);
+      transform: rotate(18deg);
+    }
+    .coordination-field > header { max-width: 78ch; }
+    .coordination-field > header p { margin-bottom: 0; }
+    .grouping-field { background: rgba(255, 253, 248, 0.94); border: 2px solid var(--ink); }
+    .grouping-palette { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
+    .grouping-choice {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 0.65rem;
+      align-items: start;
+      min-height: 8.4rem;
+      padding: 0.8rem;
+      color: var(--body);
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      box-shadow: 3px 3px 0 var(--ink);
+      font-weight: 500;
+    }
+    .grouping-choice:has(input:checked) { background: var(--tiffany); outline: 3px solid var(--cobalt); outline-offset: -6px; }
+    .grouping-choice strong, .grouping-choice small { display: block; }
+    .grouping-choice small { margin-top: 0.28rem; color: var(--muted); }
+    .coordination-ledger {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.65rem;
+      margin: 0;
+    }
+    .coordination-ledger div { padding: 0.75rem; background: rgba(255, 253, 248, 0.95); border: 1.5px solid var(--line); }
+    .coordination-ledger dt { color: var(--cobalt-deep); font: 800 0.69rem/1.25 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; }
+    .coordination-ledger dd { margin: 0.28rem 0 0; color: var(--ink); font-size: 0.9rem; }
+    .coordination-return { margin: 0; padding: 0.75rem 0.85rem; color: var(--ink); background: var(--sea); border-left: 5px solid var(--tiffany); }
+
+    .candidate-field { background: var(--cobalt-pale); }
+    .candidate-field h3 { max-width: 32ch; }
+    .candidate-route-field { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.7rem; margin: 0; padding: 0; list-style: none; }
+    .candidate-route-field li { padding: 0.8rem; color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); }
+    .candidate-route-field strong { display: block; margin-bottom: 0.25rem; }
+    .method-frame { padding: 1rem; background: var(--paper); border: 2px solid var(--ink); box-shadow: var(--shadow-small); }
+    .method-frame--primary { background: var(--sea); border-width: 3px; }
+    .method-frame > header p { margin-bottom: 0; }
+    .sampling-prompt { margin: 0; padding: 1rem; color: var(--paper); background: var(--ink); border: 3px solid var(--tiffany); white-space: pre-wrap; font: 0.82rem/1.55 var(--font-mono); }
+    .sampling-prompt--secondary { border-color: var(--cobalt); }
+    .open-probability-field { margin: 0; padding: 0.75rem 0.85rem; color: var(--ink); background: var(--acid); border: 1.5px solid var(--ink); font-weight: 750; }
+
+    .table-wrap { overflow-x: auto; border: 1.5px solid var(--line); }
+    .table-wrap:focus-visible { outline: var(--focus); outline-offset: 3px; }
+    table { width: 100%; min-width: 46rem; border-collapse: collapse; background: var(--paper); font-size: 0.92rem; }
+    caption { padding: 0.7rem; color: var(--ink); background: var(--sea); font-weight: 800; text-align: left; }
+    th, td { padding: 0.65rem 0.7rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    thead th { color: var(--paper); background: var(--ink); }
+    tbody th { color: var(--ink); background: var(--cobalt-pale); }
+
+    .button-row, .selector-row { display: flex; flex-wrap: wrap; gap: 0.65rem; align-items: center; }
+    button {
+      min-height: 2.8rem;
+      padding: 0.65rem 0.85rem;
+      color: var(--ink);
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      border-radius: 6px;
+      box-shadow: 3px 3px 0 var(--ink);
+      font-weight: 850;
+    }
+    button:hover { transform: translateY(-1px); }
+    button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+    button.primary, button[aria-pressed="true"] { background: var(--tiffany); }
+    button[aria-pressed="true"]::before { content: "✓ "; }
+    .status { min-height: 1.5em; margin: 0.75rem 0 0; color: var(--ink); font-weight: 720; }
+    .status-label { color: var(--cobalt-deep); font-size: 0.7rem; }
+
+    .prompt-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .prompt-example { display: flex; flex-direction: column; gap: 0.65rem; }
+    .prompt-example p { margin-bottom: 0; }
+    .prompt-example code { display: block; padding: 0.75rem; color: var(--ink); background: var(--cobalt-pale); border: 1px solid var(--line); white-space: normal; }
+    .register-control { padding: 1rem; background: var(--paper-warm); border: 1.5px solid var(--line); }
+    .register-reading { margin: 0.75rem 0 0; padding: 0.75rem; background: var(--paper); border-left: 5px solid var(--tiffany); }
+
+    .diagram-card { min-width: 0; }
+    .diagram-card figure { margin: 0; }
+    .diagram-card svg { display: block; width: 100%; height: auto; color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); }
+    .diagram-card figcaption { margin-top: 0.6rem; color: var(--muted); font-size: 0.9rem; }
+    .plot-point { fill: var(--tiffany); stroke: var(--ink); stroke-width: 2.5; }
+    .plot-point:focus { outline: none; fill: var(--acid); stroke-width: 5; }
+    .plot-grid { fill: none; stroke: var(--line); stroke-width: 1; stroke-dasharray: 4 5; }
+    .plot-axis { fill: none; stroke: var(--ink); stroke-width: 2.5; }
+    .plot-label { fill: var(--ink); font: 700 14px var(--font-sans); }
+    .map-road { fill: none; stroke: var(--ink); stroke-width: 7; stroke-linecap: round; stroke-dasharray: 14 8; }
+    .map-stream { fill: none; stroke: var(--cobalt); stroke-width: 10; stroke-linecap: round; }
+    .map-label { fill: var(--ink); font: 800 14px var(--font-sans); paint-order: stroke; stroke: var(--paper); stroke-width: 4px; }
+    .map-group.is-off { display: none; }
+    .metric-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.7rem; margin-top: 0.8rem; }
+    .metric { padding: 0.75rem; color: var(--ink); background: var(--cobalt-pale); border: 1.5px solid var(--line); }
+    .metric strong { display: block; font-size: 1.22rem; }
+    .lag-control { margin-bottom: 1rem; padding: 1rem; background: var(--sea); border: 1.5px solid var(--line); }
+    .lag-control output { color: var(--ink); font-weight: 850; }
+    .alignment-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
+    .alignment-choice {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 0.65rem;
+      align-items: start;
+      min-height: 8.5rem;
+      padding: 0.85rem;
+      color: var(--body);
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      box-shadow: 3px 3px 0 var(--ink);
+      font-weight: 500;
+    }
+    .alignment-choice:has(input:checked) { background: var(--tiffany); outline: 3px solid var(--cobalt); outline-offset: -6px; }
+    .alignment-choice strong, .alignment-choice small { display: block; }
+    .alignment-choice small { margin-top: 0.25rem; color: var(--muted); }
+
+    .timing-ledger, .standard-effects, .proxy-questions, .route-folio, .revision-diff { margin: 0; padding: 0; list-style: none; }
+    .timing-ledger { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.55rem; }
+    .timing-ledger li { padding: 0.65rem; color: var(--ink); background: var(--cobalt-pale); border: 1.5px solid var(--line); }
+    .timing-ledger strong, .timing-ledger span { display: block; }
+    .timing-ledger strong { font-size: 1.1rem; }
+    .standard-effects, .proxy-questions, .revision-diff { display: grid; gap: 0.5rem; }
+    .standard-effects li, .proxy-questions li, .revision-diff li { padding: 0.65rem 0.75rem; background: var(--paper-warm); border-left: 4px solid var(--cobalt); }
+    .route-folio { display: grid; gap: 0.45rem; font-size: 0.88rem; }
+    .route-folio li { padding-top: 0.45rem; border-top: 1px solid var(--line); }
+    .route-folio strong { color: var(--ink); }
+    .relation-reading { margin: 0; padding: 0.75rem; background: var(--paper-warm); border-left: 5px solid var(--cobalt); }
+    .assembly-card { display: grid; gap: 0.65rem; }
+    .assembly-card p { margin: 0; }
+    .assembly-meta { color: var(--ink); font-family: var(--font-mono); font-size: 0.82rem; }
+    button:disabled { cursor: default; opacity: 0.55; box-shadow: none; transform: none; }
+    .assembled-capsule { display: none; }
+    .assembled-capsule[data-ready="true"] { display: block; }
+
+    .route-card { display: flex; flex-direction: column; gap: 0.65rem; }
+    .route-card[data-selected="true"] { background: var(--sea); outline: 3px solid var(--cobalt); outline-offset: -6px; transform: translateY(-2px); }
+    .route-card .route-state { display: block; color: var(--cobalt-deep); font-size: 0.66rem; }
+    .route-card[data-selected="true"] .route-state::before { content: "✓ "; }
+    .route-card button { margin-top: auto; align-self: start; }
+
+    .packet {
+      min-height: 24rem;
+      max-height: 42rem;
+      overflow: auto;
+      margin: 0;
+      padding: 1rem;
+      color: var(--paper);
+      background: var(--ink);
+      border: 3px solid var(--cobalt);
+      white-space: pre-wrap;
+      font: 0.88rem/1.55 var(--font-mono);
+      tab-size: 2;
+    }
+    .handoff-checks { margin: 0; padding-left: 1.2rem; }
+    .handoff-checks li + li { margin-top: 0.45rem; }
+
+    .inspection { margin-top: 1.5rem; padding: clamp(1.1rem, 2.8vw, 2rem); background: var(--paper); border-radius: var(--radius); }
+    .inspection details { border: 1.5px solid var(--line); }
+    .inspection summary { padding: 0.9rem; color: var(--ink); background: var(--cobalt-pale); cursor: pointer; font-weight: 850; }
+    .inspection-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; padding: 1rem; }
+    .inspection pre { max-height: 28rem; overflow: auto; margin: 0; padding: 0.8rem; color: var(--paper); background: var(--ink); white-space: pre-wrap; font: 0.78rem/1.45 var(--font-mono); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+    @media (max-width: 980px) {
+      .hero-grid, .stage-head, .grid-2, .visual-grid, .handoff-grid, .inspection-grid, .capsule-dock { grid-template-columns: 1fr; }
+      .grid-3, .source-grid, .route-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .coordination-ledger, .candidate-route-field { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stage-effect { grid-column: 1 / -1; }
+      .capsule-dock { position: static; }
+      .capsule-dock__receipt { padding: 0.75rem 0 0; border-top: 4px solid var(--tiffany); border-left: 0; }
+    }
+
+    @media (max-width: 680px) {
+      .shell { width: min(calc(100% - 1rem), 1880px); padding-top: 0.5rem; }
+      .hero, .stage, .route-field, .inspection { box-shadow: 4px 4px 0 var(--ink); }
+      .hero { border-radius: 18px; }
+      .hero-contract { display: none; }
+      .stage-head { grid-template-columns: auto minmax(0, 1fr); }
+      .stage-effect { grid-column: 1 / -1; }
+      .grid-3, .source-grid, .route-grid, .prompt-pair, .form-row, .metric-strip, .alignment-grid, .timing-ledger, .grouping-palette, .coordination-ledger, .candidate-route-field { grid-template-columns: 1fr; }
+      .stage-number { width: 2.75rem; }
+      .button-row button, .selector-row button { flex: 1 1 10rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
+    }
+
+    @media (forced-colors: active) {
+      body { background: Canvas; }
+      .hero, .stage, .route-field, .inspection, .standard-card, .source-card, .route-card, .diagram-card, .coordination-field, .grouping-choice, .candidate-field, .method-frame, button, input, select, textarea { border-color: CanvasText; box-shadow: none; }
+      .hero { color: CanvasText; background: Canvas; }
+      .hero :is(h1, h2, h3, p, dt, dd, .eyebrow) { color: CanvasText; }
+      .hero::after { display: none; }
+      button[aria-pressed="true"], .route-scroll a[aria-current="step"], .route-card[data-selected="true"], .alignment-choice:has(input:checked), .grouping-choice:has(input:checked) { color: HighlightText; background: Highlight; outline: 3px double CanvasText; }
+      .plot-point { fill: ButtonFace; stroke: ButtonText; }
+      .map-stream, .map-road, .plot-axis, .plot-grid { stroke: CanvasText; }
+      .packet, .sampling-prompt, .inspection pre { color: CanvasText; background: Canvas; }
+      .coordination-field::after { display: none; }
+    }
+
+    @media print {
+      @page { margin: 0.55in; }
+      body { color: #000; background: #fff; font-size: 10pt; }
+      .shell { width: 100%; padding: 0; }
+      .hero, .stage, .route-field, .inspection, .standard-card, .source-card, .route-card, .diagram-card, .coordination-field, .candidate-field, .method-frame { color: #000; background: #fff; border-color: #000; box-shadow: none; break-inside: avoid; }
+      .hero { padding: 1rem; }
+      .hero::after, .route-field, .capsule-dock, .js-only, .button-row, .selector-row, .inspection, .working-capsule-panel { display: none !important; }
+      .hero :is(h1, h2, h3, p, dt, dd, .eyebrow), h1, h2, h3, h4 { color: #000; }
+      .hero-grid, .stage-head, .grid-2, .grid-3, .source-grid, .route-grid, .visual-grid, .handoff-grid { grid-template-columns: 1fr; }
+      .stage { overflow: visible; page-break-inside: avoid; }
+      .stage-head, thead th, tbody th { color: #000; background: #fff; }
+      .stage-number { color: #000; background: #fff; border-color: #000; }
+      .table-wrap { overflow: visible; border-color: #000; }
+      table { min-width: 0; font-size: 8pt; }
+      th, td { border-color: #000; }
+      .packet, .sampling-prompt { min-height: 0; max-height: none; overflow: visible; color: #000; background: #fff; border-color: #000; white-space: pre-wrap; }
+      .assembled-capsule[data-ready="true"] { display: block !important; }
+      html.has-reviewed-revision main > .stage:not(#handoff) { display: none; }
+      html.has-reviewed-revision #handoff .handoff-grid > .stack:first-child { display: none; }
+      html.has-reviewed-revision #handoff .handoff-grid { display: block; }
+      .diagram-card svg { border-color: #000; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the lesson field</a>
+  <div class="shell">
+    <header class="hero">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">Open Lesson Field · local collaboration instrument</p>
+          <h1>Shape a lesson request the next collaborator can inspect.</h1>
+          <p class="hero-deck">A lesson plan carries standards, learner conditions, source interpretation, access, and review across several hands. As you enter details and choose among seven equal-weight conditions, this instrument builds a local working prompt capsule: a compact, inspectable request shaped by an invented teaching fixture. Assembly freezes a reviewed handoff revision. Computation and revision history stay in this file, and a named educator retains the classroom decision.</p>
+        </div>
+        <dl class="hero-contract">
+          <div><dt>Working fixture</dt><dd><abbr title="Common Core State Standards for Mathematics">CCSS-M</abbr> HSS-ID.B.6 and HSS-ID.C.7–9</dd></div>
+          <div><dt>Quantitative field</dt><dd>Invented precipitation and streamflow fixture values</dd></div>
+          <div><dt>Human receiver</dt><dd>A named educator reviews the lesson and its evidence boundaries</dd></div>
+        </dl>
+      </div>
+    </header>
+
+    <aside class="capsule-dock" aria-labelledby="capsule-dock-title">
+      <div>
+        <span class="capsule-status" id="capsule-status">Working draft · 0 changes</span>
+        <h2 id="capsule-dock-title">Working prompt capsule</h2>
+        <p>Builds locally as controls change. Assembly creates a reviewed handoff revision.</p>
+      </div>
+      <div class="capsule-dock__receipt">
+        <p><strong>Last change:</strong> <span id="last-change">Initial fixture loaded</span></p>
+        <p><strong>Changed:</strong> <span id="changed-reading">working capsule, lesson views, and inspectable state initialized</span></p>
+        <p><strong>Preserved:</strong> <span id="preserved-reading">invented-fixture standing · local operation · human classroom authority</span></p>
+      </div>
+      <a href="#working-capsule">Review working capsule <span aria-hidden="true">↓</span></a>
+    </aside>
+
+    <nav class="route-field" aria-label="Seven lesson-planning stages">
+      <p><strong>Seven equal-weight stages.</strong> Their order supports orientation, and each planning control contributes an inspectable field to the working prompt capsule.</p>
+      <div class="route-scroll" tabindex="0" aria-label="Lesson stage route; scroll horizontally to inspect all seven stages">
+        <ol>
+          <li><a href="#situation" aria-current="step"><span class="route-number">01</span><span class="route-name">Teaching situation</span></a></li>
+          <li><a href="#standard"><span class="route-number">02</span><span class="route-name">Standard &amp; goal</span></a></li>
+          <li><a href="#sources"><span class="route-number">03</span><span class="route-name">Source field</span></a></li>
+          <li><a href="#reference"><span class="route-number">04</span><span class="route-name">Reference &amp; register</span></a></li>
+          <li><a href="#investigate"><span class="route-number">05</span><span class="route-name">Investigate</span></a></li>
+          <li><a href="#routes"><span class="route-number">06</span><span class="route-name">Compare routes</span></a></li>
+          <li><a href="#handoff"><span class="route-number">07</span><span class="route-name">Assemble handoff</span></a></li>
+        </ol>
+      </div>
+    </nav>
+
+    <noscript>
+      <p class="boundary"><strong>Static posture:</strong> the complete default fixture, source ledger, diagrams, route comparison, and initial prompt capsule remain readable. JavaScript adds local controls and reviewed revisions when available.</p>
+    </noscript>
+
+    <main id="main">
+      <section class="stage" id="situation" aria-labelledby="situation-title">
+        <header class="stage-head">
+          <span class="stage-number" aria-hidden="true">01</span>
+          <div><span class="stage-label">Teaching situation</span><h2 id="situation-title">Name the teaching situation at classroom scale.</h2><p>Use grade band, learner count, available minutes, and shareable access conditions to shape the work. The prompt capsule carries class-level planning conditions; protected learner records remain in the educator’s approved channel.</p></div>
+          <p class="stage-effect"><strong>Capsule effect:</strong> changes the audience, lesson length, grouping tableau, materials, participation, reporting, movement, evidence return, and classroom conditions in the working prompt capsule.</p>
+        </header>
+        <div class="stage-body stack">
+          <div class="form-row js-only">
+            <label for="grade"><span>Grade band</span><select id="grade" aria-describedby="grade-effect"><option value="Grade 9" selected>Grade 9</option><option value="Grades 9–10">Grades 9–10</option><option value="Grades 11–12">Grades 11–12</option></select><small class="effect-line" id="grade-effect">Changes: vocabulary · scaffolding · independence expectation</small></label>
+            <label for="learners"><span>Class size</span><input id="learners" type="number" min="1" max="60" value="28" inputmode="numeric" aria-describedby="learners-effect"><small class="effect-line" id="learners-effect">Changes: group count · material quantities · discussion structure</small></label>
+            <label for="minutes"><span>Available minutes</span><input id="minutes" type="number" min="20" max="180" step="5" value="55" inputmode="numeric" aria-describedby="minutes-effect"><small class="effect-line" id="minutes-effect">Changes: timed lesson ledger · activity depth · requested handoff</small></label>
+          </div>
+          <div class="grid-2">
+            <article class="result-card"><span class="chip">Working situation</span><h3 id="situation-readout">Grade 9 statistics · 28 learners · 14 pairs · 55 minutes</h3><p id="situation-guidance">Use one annotated example and sentence frames before paired investigation. Prepare 14 copies of each paired-work material set. The lesson ends with an individual evidence-boundary note.</p></article>
+            <p class="boundary"><strong>Privacy boundary:</strong> share class-level conditions that serve planning. Keep learner names, individual grades, disability records, family details, and behavioral profiles in the educator’s approved protected channel.</p>
+          </div>
+          <section class="coordination-field stack" aria-labelledby="coordination-title">
+            <header>
+              <span class="chip">Class-size depth</span>
+              <h3 id="coordination-title">Class size becomes useful when it changes the work.</h3>
+              <p id="coordination-intro">For 28 learners, “14 pairs” can become 14 material sets, 14 participation rehearsals, a seven-minute reporting plan, four teacher sweep zones, and 28 individual evidence-boundary notes. The palette exposes this usually quiet coordination work so an AI collaborator can help prepare it for educator review.</p>
+            </header>
+            <fieldset class="grouping-field js-only">
+              <legend>Compare peer grouping structures</legend>
+              <p>Each option is an unordered peer. Choose one to reveal a different coordination tableau; the educator assigns actual groups and adaptations.</p>
+              <div class="grouping-palette">
+                <label class="grouping-choice"><input type="radio" name="grouping-mode" value="Pair teams" checked disabled data-enhanced-control><span><strong>Pair teams</strong><small id="grouping-preview-pairs">14 pairs · 14 shared material sets</small><span class="effect-line">Changes: composition · stations · roles · movement route</span></span></label>
+                <label class="grouping-choice"><input type="radio" name="grouping-mode" value="Trio teams" disabled data-enhanced-control><span><strong>Trio teams</strong><small id="grouping-preview-trios">8 trios and 2 pairs · 10 shared material sets</small><span class="effect-line">Changes: composition · participation cycle · reporting time</span></span></label>
+                <label class="grouping-choice"><input type="radio" name="grouping-mode" value="Table teams of four" disabled data-enhanced-control><span><strong>Table teams of four</strong><small id="grouping-preview-quartets">7 quartets · 7 shared material sets</small><span class="effect-line">Changes: composition · rotating roles · evidence collection</span></span></label>
+              </div>
+            </fieldset>
+            <dl class="coordination-ledger" aria-label="Current class-size coordination tableau">
+              <div><dt>Grouping composition</dt><dd id="coordination-grouping">14 pairs across 14 peer stations.</dd></div>
+              <div><dt>Materials</dt><dd id="coordination-materials">Prepare 14 shared alignment folios, each with three pairing views.</dd></div>
+              <div><dt>Participation opportunities</dt><dd id="coordination-participation">Plan 28 supported first turns in pairs, followed by 28 individual notes.</dd></div>
+              <div><dt>Reporting time</dt><dd id="coordination-reporting">Use 14 evidence headlines at 30 seconds each: about 7 minutes of the 10-minute synthesis.</dd></div>
+              <div><dt>Rotating roles</dt><dd id="coordination-roles">Rotate plotter and evidence steward halfway through the investigation.</dd></div>
+              <div><dt>Technology &amp; access</dt><dd id="coordination-technology">Plan for up to 14 shared access points when digital; carry the same values in table, plot, and verbal form.</dd></div>
+              <div><dt>Teacher movement</dt><dd id="coordination-movement">Plan 4 sweep zones covering up to 4 groups each, with the pairing key as the focal check.</dd></div>
+              <div><dt>Evidence collection</dt><dd id="coordination-evidence">Collect 14 alignment folios and 28 individual evidence-boundary notes.</dd></div>
+              <div><dt>Room configuration</dt><dd id="coordination-room">Place 14 pair stations along a clear teacher path with one shared review surface.</dd></div>
+              <div><dt>Accessibility &amp; adaptation</dt><dd id="coordination-accessibility">Prepare 14 equivalent material sets; a human reviewer aligns actual supports and adaptations.</dd></div>
+            </dl>
+            <p class="coordination-return" id="coordination-return"><strong>Review and return:</strong> return 14 group folios and 28 individual notes to the classroom educator and curriculum lead with assumptions marked for review.</p>
+            <p class="boundary"><strong>Support-condition boundary:</strong> this field carries class-level quantities, group structures, and named access conditions. Learner composition, protected records, and actual adaptations remain with the educator’s approved process.</p>
+          </section>
+          <section class="result-card" aria-labelledby="timing-title"><h3 id="timing-title">Timed lesson ledger · <span id="timing-total">55 minutes</span></h3><ul class="timing-ledger" id="timing-ledger"><li><strong>7 min</strong><span>Launch</span></li><li><strong>8 min</strong><span>Source standing</span></li><li><strong>22 min</strong><span>Investigation</span></li><li><strong>10 min</strong><span>Synthesis</span></li><li><strong>8 min</strong><span>Claim check</span></li></ul></section>
+          <p class="control-receipt" id="situation-receipt"><strong>Current effect:</strong> the working capsule carries Grade 9 scaffolding, Pair teams with 14 pairs, 14 material sets, a visible coordination tableau, and a 55-minute ledger. <strong>Preserved:</strong> class-level privacy, fixture values, source standing, and educator authority.</p>
+        </div>
+      </section>
+
+      <section class="stage" id="standard" aria-labelledby="standard-title">
+        <header class="stage-head">
+          <span class="stage-number" aria-hidden="true">02</span>
+          <div><span class="stage-label">Standard &amp; goal</span><h2 id="standard-title">Choose the mathematical work that should become visible.</h2><p>Standards supply an alignment reference. The teaching team retains curriculum, pedagogy, local sequencing, and approval.</p></div>
+          <p class="stage-effect"><strong>Capsule effect:</strong> changes objectives, learner evidence, review checks, and the route recommendation. The visitor retains route selection.</p>
+        </header>
+        <div class="stage-body stack">
+          <fieldset>
+            <legend><abbr title="Common Core State Standards for Mathematics">CCSS-M</abbr> fixture · selected standards</legend>
+            <div class="grid-2">
+              <label class="standard-card"><input type="checkbox" name="standard" value="HSS-ID.B.6" checked disabled data-enhanced-control><span><strong>HSS-ID.B.6</strong><small>Represent data on two quantitative variables with a scatter plot, describe fit, and attend to association.</small><span class="effect-line">Changes: paired-variable representation · annotation evidence</span></span></label>
+              <label class="standard-card"><input type="checkbox" name="standard" value="HSS-ID.C.7" checked disabled data-enhanced-control><span><strong>HSS-ID.C.7</strong><small>Interpret the slope and intercept of a linear model in the context of the data.</small><span class="effect-line">Changes: model-parameter interpretation · unit check</span></span></label>
+              <label class="standard-card"><input type="checkbox" name="standard" value="HSS-ID.C.8" checked disabled data-enhanced-control><span><strong>HSS-ID.C.8</strong><small>Compute and interpret the correlation coefficient of a linear fit.</small><span class="effect-line">Changes: correlation calculation · context interpretation</span></span></label>
+              <label class="standard-card"><input type="checkbox" name="standard" value="HSS-ID.C.9" checked disabled data-enhanced-control><span><strong>HSS-ID.C.9</strong><small>Distinguish association from causation.</small><span class="effect-line">Changes: claim boundary · evidence-needed check</span></span></label>
+            </div>
+          </fieldset>
+          <fieldset class="js-only">
+            <legend>Primary inquiry goal</legend>
+            <div class="choice-list">
+              <label class="choice"><input type="radio" name="goal" value="Describe association"><span><strong>Describe association</strong><small>Build and annotate one paired-data view.</small><span class="effect-line">Suggests: Plot and annotate · selection remains with the visitor</span></span></label>
+              <label class="choice"><input type="radio" name="goal" value="Compare time alignment" checked><span><strong>Compare time alignment</strong><small>Rotate through same-day, one-day-later, and two-days-later alignments and explain what changes.</small><span class="effect-line">Suggests: Lag and compare · selection remains with the visitor</span></span></label>
+              <label class="choice"><input type="radio" name="goal" value="Audit a causal claim"><span><strong>Audit a causal claim</strong><small>Separate what the fixture shows from what a causal conclusion would require.</small><span class="effect-line">Suggests: Claim and challenge · selection remains with the visitor</span></span></label>
+            </div>
+          </fieldset>
+          <p class="relation-reading" id="goal-route-reading"><strong>Goal-to-route relation:</strong> Compare time alignment suggests Lag and compare; the current route matches that suggestion. Choosing a goal updates the recommendation while preserving the visitor’s route choice.</p>
+          <section class="result-card" aria-labelledby="standard-effects-title"><h3 id="standard-effects-title">Selected alignment becomes visible as</h3><ul class="standard-effects" id="standard-effects"><li><strong>HSS-ID.B.6:</strong> learners construct and annotate a paired-variable view.</li><li><strong>HSS-ID.C.7:</strong> learners interpret slope and intercept with units.</li><li><strong>HSS-ID.C.8:</strong> learners calculate and contextualize correlation.</li><li><strong>HSS-ID.C.9:</strong> learners distinguish a descriptive association from a causal conclusion.</li></ul></section>
+          <p class="control-receipt" id="standard-receipt"><strong>Current effect:</strong> four selected standards contribute four observable learner-evidence checks; the goal recommends Lag and compare. <strong>Preserved:</strong> curriculum sequencing, pedagogy, and route choice remain human decisions.</p>
+          <p class="look-here"><strong>Look here:</strong> the fixture supports reasoning about paired quantitative variables and time alignment. Watershed behavior, streamflow forecasts, mechanisms, and alternative explanations remain questions for observed sources and appropriate study designs.</p>
+        </div>
+      </section>
+
+      <section class="stage" id="sources" aria-labelledby="sources-title">
+        <header class="stage-head">
+          <span class="stage-number" aria-hidden="true">03</span>
+          <div><span class="stage-label">Source field</span><h2 id="sources-title">Separate measures from context layers.</h2><p>Two quantitative columns carry the calculation. Map and land-cover layers orient discussion and contribute question-forming context.</p></div>
+          <p class="stage-effect"><strong>Capsule effect:</strong> changes quantitative readiness, visible context, calculation standing, and source-use instructions.</p>
+        </header>
+        <div class="stage-body stack">
+          <div class="source-grid">
+            <label class="source-card"><input type="checkbox" name="source" value="NOAA-shaped precipitation" data-kind="quantitative" checked disabled data-enhanced-control><span><span class="source-type">Quantitative · axis eligible</span><strong><abbr title="National Oceanic and Atmospheric Administration">NOAA</abbr>-shaped precipitation</strong><span class="source-boundary">Invented fixture daily millimeters; separately sourced records carry live or historical station standing.</span><span class="effect-line">Changes: horizontal-axis readiness · paired rows · descriptive calculation</span></span></label>
+            <label class="source-card"><input type="checkbox" name="source" value="USGS-shaped streamflow" data-kind="quantitative" checked disabled data-enhanced-control><span><span class="source-type">Quantitative · axis eligible</span><strong><abbr title="United States Geological Survey">USGS</abbr>-shaped streamflow</strong><span class="source-boundary">Invented fixture daily-mean cubic feet per second; separately sourced records carry live or historical gage standing.</span><span class="effect-line">Changes: vertical-axis readiness · paired rows · descriptive calculation</span></span></label>
+            <label class="source-card"><input id="osm-toggle" type="checkbox" name="source" value="OpenStreetMap-shaped context" data-kind="context" checked disabled data-enhanced-control><span><span class="source-type">Context · annotation only</span><strong><abbr title="OpenStreetMap">OSM</abbr>-shaped map context</strong><span class="source-boundary">A fictional orientation sketch for discussing place, access, and scale.</span><span class="effect-line">Changes: map visibility · place-and-scale questions · context ledger</span></span></label>
+            <label class="source-card"><input id="cdl-toggle" type="checkbox" name="source" value="USDA Cropland Data Layer-shaped context" data-kind="context" checked disabled data-enhanced-control><span><span class="source-type">Context · question-forming only</span><strong><abbr title="United States Department of Agriculture">USDA</abbr> <abbr title="Cropland Data Layer">CDL</abbr>-shaped land cover</strong><span class="source-boundary">Patterned fields provide discussion context while the paired quantitative columns carry the correlation.</span><span class="effect-line">Changes: land-cover visibility · scale questions · context ledger</span></span></label>
+          </div>
+
+          <p class="local-note"><strong>Static teaching fixture:</strong> the source names identify the kinds of open public data an educator could review. Every number and place mark on this page is invented for this teaching fixture and stored in this file. The precipitation anchor cohort spans Apr 7–16; streamflow buffer values for Apr 17–18 preserve ten precipitation anchors across all three alignments.</p>
+
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Invented teaching-fixture daily observations; scroll horizontally to inspect all columns">
+            <table>
+              <caption>Paired teaching-fixture observations · invented values · familiar units · fictional site</caption>
+              <thead><tr><th scope="col">Date</th><th scope="col">Daily precipitation (mm)</th><th scope="col">Daily-mean streamflow (ft³/s)</th><th scope="col">Source standing</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Apr 7</th><td>4</td><td>56</td><td>Quantitative fixture</td></tr>
+                <tr><th scope="row">Apr 8</th><td>18</td><td>63</td><td>Quantitative fixture</td></tr>
+                <tr><th scope="row">Apr 9</th><td>7</td><td>72</td><td>Quantitative fixture</td></tr>
+                <tr><th scope="row">Apr 10</th><td>34</td><td>74</td><td>Quantitative fixture</td></tr>
+                <tr><th scope="row">Apr 11</th><td>11</td><td>100</td><td>Quantitative fixture</td></tr>
+                <tr><th scope="row">Apr 12</th><td>26</td><td>68</td><td>Quantitative fixture</td></tr>
+                <tr><th scope="row">Apr 13</th><td>2</td><td>91</td><td>Quantitative fixture</td></tr>
+                <tr><th scope="row">Apr 14</th><td>15</td><td>64</td><td>Quantitative fixture</td></tr>
+                <tr><th scope="row">Apr 15</th><td>30</td><td>78</td><td>Quantitative fixture</td></tr>
+                <tr><th scope="row">Apr 16</th><td>8</td><td>93</td><td>Quantitative anchor fixture</td></tr>
+                <tr><th scope="row">Apr 17</th><td><span aria-hidden="true">—</span><span class="sr-only">Precipitation anchor cohort ends Apr 16</span></td><td>66</td><td>Streamflow buffer for later alignment</td></tr>
+                <tr><th scope="row">Apr 18</th><td><span aria-hidden="true">—</span><span class="sr-only">Precipitation anchor cohort ends Apr 16</span></td><td>84</td><td>Streamflow buffer for later alignment</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="control-receipt" id="sources-receipt"><strong>Current effect:</strong> two quantitative fields form ten paired observations; two context layers add place-and-scale questions. <strong>Preserved:</strong> context remains question-forming, the anchor cohort remains fixed, and live-data standing requires separately sourced records.</p>
+        </div>
+      </section>
+
+      <section class="stage" id="reference" aria-labelledby="reference-title">
+        <header class="stage-head">
+          <span class="stage-number" aria-hidden="true">04</span>
+          <div><span class="stage-label">Reference &amp; register</span><h2 id="reference-title">Anchor consequential reference; rotate the working register.</h2><p>Pronouns remain natural collaboration language. When a reference could change role, authority, audience, ownership, evidence, or personalization, give the working prompt capsule a recoverable task position.</p></div>
+          <p class="stage-effect"><strong>Capsule effect:</strong> changes recoverable task positions, substantive handoff modules, and disclosed question-forming review lenses.</p>
+        </header>
+        <div class="stage-body stack">
+          <div class="prompt-pair">
+            <article class="prompt-example">
+              <span class="chip">Look here · task position open</span>
+              <h3>A speaker-relative cue enters the task</h3>
+              <code>Make me a lesson plan for high-school Math students.</code>
+              <p><em>Me</em> points to the speaker, while the speaker’s task role remains unstated. The collaboration still needs that position: the AI collaborator can ask, and the requester can name whether the speaker is the educator, learner, author, approver, or intended user—and which speaker-specific context belongs in the lesson.</p>
+              <span class="effect-line">Changes: request text · referent reading · task-position questions</span>
+              <button type="button" class="js-only" data-example="personal">Try this request</button>
+            </article>
+            <article class="prompt-example">
+              <span class="chip context">More explicit · named role</span>
+              <h3>The audience and reviewer become inspectable</h3>
+              <code>Create a Grade 9 statistics lesson plan for a classroom educator. A curriculum lead will review the handoff.</code>
+              <p>Naming the classroom educator and curriculum lead makes those two task positions inspectable. Standards, sources, evidence standing, and boundaries come from the surrounding prompt capsule. The presence of <em>me</em> is one signal to inspect speaker task position; the useful practice is recoverable reference.</p>
+              <span class="effect-line">Changes: request text · named-role reading · review route</span>
+              <button type="button" class="js-only" data-example="named">Use the named-role request</button>
+            </article>
+          </div>
+
+          <div class="grid-2">
+            <fieldset>
+              <legend>Referent checker</legend>
+              <label for="request-input"><span>Artifact request</span><textarea id="request-input" aria-describedby="request-effect" disabled data-enhanced-control>Create a Grade 9 statistics lesson plan for a classroom educator. A curriculum lead will review the handoff.</textarea><small class="effect-line" id="request-effect">Changes: task text · recoverable roles · working capsule · assembly readiness</small></label>
+              <div class="button-row js-only"><button type="button" id="check-referent" class="primary">Review task positions</button></div>
+              <p id="referent-result" class="look-here">Named-role cues found: classroom educator and curriculum lead are named. Human review still assigns use, review, authority, and standing.</p>
+              <p class="note"><strong>Context-sensitive rule:</strong> this checker uses whole-token matching, which keeps source names such as <abbr title="United States Geological Survey">USGS</abbr> intact. Clear pronouns can stay; the useful check is whether task position remains recoverable.</p>
+            </fieldset>
+
+            <div class="stack">
+              <section class="register-control" aria-labelledby="register-title">
+                <h3 id="register-title">Rotate the working register</h3>
+                <div class="selector-row js-only" role="group" aria-label="Working register" aria-describedby="register-effect">
+                  <button type="button" data-register="Instructional planning" aria-pressed="true">Instructional planning</button>
+                  <button type="button" data-register="Evidence steward" aria-pressed="false">Evidence steward</button>
+                  <button type="button" data-register="Accessibility review" aria-pressed="false">Accessibility review</button>
+                </div>
+                <span class="effect-line" id="register-effect">Changes: required handoff modules · review prompts · requested evidence</span>
+                <p id="register-reading" class="register-reading"><strong>Instructional planning:</strong> foreground the lesson arc, student moves, and formative check. Register changes emphasis; evidence and decision authority stay in their own fields.</p>
+                <ul class="standard-effects" id="register-modules"><li>Timed lesson arc and grouping moves</li><li>Teacher and learner instructions</li><li>Formative check and closing claim note</li></ul>
+                <p class="note">This control rotates task-facing emphasis. Demographic identity, professional standing, and human decisions retain their original standing.</p>
+              </section>
+              <fieldset>
+                <legend>Disclosed social proxy</legend>
+                <label for="proxy"><span>Question-forming perspective</span><select id="proxy" aria-describedby="proxy-effect" disabled data-enhanced-control><option value="Direct human review" selected>Direct human review</option><option value="Grade 9 learner questioner">Grade 9 learner questioner</option><option value="Family-facing reviewer">Family-facing reviewer</option><option value="Accessibility questioner">Accessibility questioner</option></select><small class="effect-line" id="proxy-effect">Changes: disclosed review questions · representation route · prompt capsule</small></label>
+                <p class="social-proxy"><strong>Boundary:</strong> use a disclosed simulation to surface questions. When a social proxy is selected, route representation to people from the named population for review; they retain authority over lived experience, consent, identity, and representation.</p>
+                <h4>Questions this perspective contributes</h4>
+                <ul class="proxy-questions" id="proxy-questions"><li>Which local classroom conditions shape instructional fit?</li><li>Which standards, source standing, and claim boundaries require human review?</li></ul>
+              </fieldset>
+            </div>
+          </div>
+          <p class="control-receipt" id="reference-receipt"><strong>Current effect:</strong> named roles remain recoverable; Instructional planning requires a timed arc, participant moves, and formative evidence; Direct human review contributes two review questions. <strong>Preserved:</strong> pronouns remain available collaboration language, and people retain authority over representation and decisions.</p>
+        </div>
+      </section>
+
+      <section class="stage" id="investigate" aria-labelledby="investigate-title">
+        <header class="stage-head">
+          <span class="stage-number" aria-hidden="true">05</span>
+          <div><span class="stage-label">Investigate</span><h2 id="investigate-title">Choose the alignment; inspect what moved.</h2><p>Choose same-day, one-day-later, or two-days-later streamflow. Ten fixed precipitation anchors support a direct comparison while the pairing rule changes.</p></div>
+          <p class="stage-effect"><strong>Capsule effect:</strong> changes streamflow dates, plotted points, descriptive correlation, investigation instructions, and alignment questions.</p>
+        </header>
+        <div class="stage-body stack">
+          <div class="lag-control js-only">
+            <fieldset>
+              <legend>Daily-mean streamflow alignment after each precipitation anchor</legend>
+              <div class="alignment-grid">
+                <label class="alignment-choice"><input type="radio" name="alignment" value="0"><span><strong>Same day</strong><small>Apr 7 precipitation pairs with Apr 7 streamflow.</small><span class="effect-line">Changes: streamflow dates · points · correlation</span></span></label>
+                <label class="alignment-choice"><input type="radio" name="alignment" value="1" checked><span><strong>One day later</strong><small>Apr 7 precipitation pairs with Apr 8 streamflow.</small><span class="effect-line">Changes: streamflow dates · points · correlation</span></span></label>
+                <label class="alignment-choice"><input type="radio" name="alignment" value="2"><span><strong>Two days later</strong><small>Apr 7 precipitation pairs with Apr 9 streamflow.</small><span class="effect-line">Changes: streamflow dates · points · correlation</span></span></label>
+              </div>
+            </fieldset>
+            <p><strong>Current alignment:</strong> <output id="lag-output">1 day later</output></p>
+            <p id="lag-explanation">Pair each precipitation anchor with daily-mean streamflow from the following day. Ten precipitation anchors remain in view.</p>
+          </div>
+
+          <div class="visual-grid">
+            <article class="diagram-card">
+              <h3>Paired-variable view</h3>
+              <figure>
+                <svg id="scatterplot" viewBox="0 0 680 420" role="img" aria-labelledby="plot-title plot-desc">
+                  <title id="plot-title">Teaching-fixture daily precipitation and next-day daily-mean streamflow scatter plot</title>
+                  <desc id="plot-desc">Ten points compare daily precipitation with daily-mean streamflow from one day later. A table below provides the same values.</desc>
+                  <g aria-hidden="true">
+                    <path class="plot-grid" d="M70 60H640M70 130H640M70 200H640M70 270H640M70 340H640M70 60V340M212.5 60V340M355 60V340M497.5 60V340M640 60V340"/>
+                    <path class="plot-axis" d="M70 48V340H650"/>
+                    <g class="plot-label"><text x="60" y="365">0</text><text x="202" y="365">9</text><text x="340" y="365">18</text><text x="482" y="365">27</text><text x="622" y="365">36</text><text x="32" y="345">45</text><text x="32" y="275">63</text><text x="32" y="205">80</text><text x="26" y="135">98</text><text x="20" y="65">115</text><text x="275" y="400">Precipitation (mm)</text><text transform="translate(16 280) rotate(-90)">Streamflow (ft³/s)</text></g>
+                  </g>
+                  <g id="plot-points">
+                    <circle class="plot-point" cx="133" cy="268" r="8" tabindex="0"><title>Apr 7 daily precipitation 4 millimeters paired with Apr 8 daily-mean streamflow 63 cubic feet per second</title></circle>
+                    <circle class="plot-point" cx="355" cy="232" r="8" tabindex="0"><title>Apr 8 daily precipitation 18 millimeters paired with Apr 9 daily-mean streamflow 72 cubic feet per second</title></circle>
+                    <circle class="plot-point" cx="181" cy="224" r="8" tabindex="0"><title>Apr 9 daily precipitation 7 millimeters paired with Apr 10 daily-mean streamflow 74 cubic feet per second</title></circle>
+                    <circle class="plot-point" cx="608" cy="120" r="8" tabindex="0"><title>Apr 10 daily precipitation 34 millimeters paired with Apr 11 daily-mean streamflow 100 cubic feet per second</title></circle>
+                    <circle class="plot-point" cx="244" cy="248" r="8" tabindex="0"><title>Apr 11 daily precipitation 11 millimeters paired with Apr 12 daily-mean streamflow 68 cubic feet per second</title></circle>
+                    <circle class="plot-point" cx="482" cy="156" r="8" tabindex="0"><title>Apr 12 daily precipitation 26 millimeters paired with Apr 13 daily-mean streamflow 91 cubic feet per second</title></circle>
+                    <circle class="plot-point" cx="102" cy="264" r="8" tabindex="0"><title>Apr 13 daily precipitation 2 millimeters paired with Apr 14 daily-mean streamflow 64 cubic feet per second</title></circle>
+                    <circle class="plot-point" cx="307" cy="208" r="8" tabindex="0"><title>Apr 14 daily precipitation 15 millimeters paired with Apr 15 daily-mean streamflow 78 cubic feet per second</title></circle>
+                    <circle class="plot-point" cx="545" cy="148" r="8" tabindex="0"><title>Apr 15 daily precipitation 30 millimeters paired with Apr 16 daily-mean streamflow 93 cubic feet per second</title></circle>
+                    <circle class="plot-point" cx="197" cy="256" r="8" tabindex="0"><title>Apr 16 daily precipitation 8 millimeters paired with Apr 17 daily-mean streamflow 66 cubic feet per second</title></circle>
+                  </g>
+                </svg>
+                <figcaption>Points are keyboard-focusable and announce paired values. The plot supports descriptive practice with an invented fixture; actual-watershed claims require observed records.</figcaption>
+              </figure>
+              <div class="metric-strip">
+                <div class="metric"><span class="status-label">Alignment</span><strong id="metric-lag">+1 day</strong></div>
+                <div class="metric"><span class="status-label">Fixed anchors</span><strong id="metric-pairs">10 pairs</strong></div>
+                <div class="metric"><span class="status-label">Correlation</span><strong id="metric-correlation">r = +0.95</strong></div>
+              </div>
+            </article>
+
+            <article class="diagram-card">
+              <h3>Context sketch · question-forming layer</h3>
+              <figure>
+                <svg viewBox="0 0 680 420" role="img" aria-labelledby="map-title map-desc">
+                  <title id="map-title">Fictional watershed context sketch</title>
+                  <desc id="map-desc">A patterned crop context layer and map orientation layer surround a school and stream. Neither context layer enters the correlation.</desc>
+                  <defs>
+                    <pattern id="field-hatch" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="16" height="16" fill="#fff6df"/><path d="M0 0V16" stroke="#17345f" stroke-width="4"/></pattern>
+                  </defs>
+                  <rect x="0" y="0" width="680" height="420" fill="#fffdf8"/>
+                  <g id="cdl-context" class="map-group">
+                    <path d="M38 42H250V170H38Z" fill="url(#field-hatch)" stroke="#17345f" stroke-width="2"/>
+                    <path d="M430 230H646V384H430Z" fill="url(#field-hatch)" stroke="#17345f" stroke-width="2"/>
+                    <text class="map-label" x="54" y="72">Patterned land-cover context</text>
+                  </g>
+                  <path class="map-stream" d="M-20 330C105 348 122 206 242 224S380 350 478 246 578 70 710 92"/>
+                  <g id="osm-context" class="map-group">
+                    <path class="map-road" d="M70 20C132 96 194 122 306 132S506 158 640 222"/>
+                    <path d="M294 120h42v42h-42z" fill="#f2ff67" stroke="#17345f" stroke-width="3"/>
+                    <path d="m288 120 27-22 27 22" fill="#56d8c9" stroke="#17345f" stroke-width="3"/>
+                    <text class="map-label" x="344" y="144">School · fictional</text>
+                    <circle cx="480" cy="246" r="10" fill="#fa7065" stroke="#17345f" stroke-width="3"/>
+                    <text class="map-label" x="496" y="238">Observation point</text>
+                  </g>
+                  <g class="map-label"><text x="28" y="398">Fictional orientation · scale unassigned</text></g>
+                </svg>
+                <figcaption><span class="chip context">Context only</span> Map and land-cover marks help learners ask place-based questions; the paired precipitation and streamflow fields carry the quantitative comparison.</figcaption>
+              </figure>
+              <p id="context-reading" class="look-here">OSM-shaped map context and USDA CDL-shaped land-cover context are visible for question-forming context. The paired quantitative fields carry the calculation.</p>
+            </article>
+          </div>
+
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Current paired values; scroll horizontally to inspect all columns">
+            <table>
+              <caption id="pair-caption">Current pairing · daily precipitation to daily-mean streamflow one day later</caption>
+              <thead><tr><th scope="col">Precipitation date</th><th scope="col">Daily precipitation (mm)</th><th scope="col">Streamflow date</th><th scope="col">Daily-mean streamflow (ft³/s)</th></tr></thead>
+              <tbody id="pair-rows">
+                <tr><th scope="row">Apr 7</th><td>4</td><td>Apr 8</td><td>63</td></tr><tr><th scope="row">Apr 8</th><td>18</td><td>Apr 9</td><td>72</td></tr><tr><th scope="row">Apr 9</th><td>7</td><td>Apr 10</td><td>74</td></tr><tr><th scope="row">Apr 10</th><td>34</td><td>Apr 11</td><td>100</td></tr><tr><th scope="row">Apr 11</th><td>11</td><td>Apr 12</td><td>68</td></tr><tr><th scope="row">Apr 12</th><td>26</td><td>Apr 13</td><td>91</td></tr><tr><th scope="row">Apr 13</th><td>2</td><td>Apr 14</td><td>64</td></tr><tr><th scope="row">Apr 14</th><td>15</td><td>Apr 15</td><td>78</td></tr><tr><th scope="row">Apr 15</th><td>30</td><td>Apr 16</td><td>93</td></tr><tr><th scope="row">Apr 16</th><td>8</td><td>Apr 17</td><td>66</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="boundary"><strong>Causal boundary:</strong> this fixture supports a descriptive claim about the selected pairings. A causal claim would require observed records, a plausible mechanism, a design that establishes time order, and review of alternative explanations.</p>
+          <p class="control-receipt" id="investigate-receipt"><strong>Current effect:</strong> one-day-later alignment selects ten streamflow dates, ten plotted points, r = +0.95, and matching investigation instructions. <strong>Preserved:</strong> ten precipitation anchors, fixture values, axes, source standing, and the causal boundary.</p>
+        </div>
+      </section>
+
+      <section class="stage" id="routes" aria-labelledby="routes-title">
+        <header class="stage-head">
+          <span class="stage-number" aria-hidden="true">06</span>
+          <div><span class="stage-label">Compare routes</span><h2 id="routes-title">Compare three deterministic lesson routes.</h2><p>Each peer route uses the same selected standards, fixture, grouping structure, and named event while foregrounding a different form of mathematical work.</p></div>
+          <p class="stage-effect"><strong>Capsule effect:</strong> changes the timed arc, teacher move, learner move, formative evidence, coordination artifacts, access treatment, and route-changing observation.</p>
+        </header>
+        <div class="stage-body stack">
+          <div class="route-grid" role="group" aria-label="Lesson route selection">
+            <article class="route-card" data-route-card="Plot and annotate" data-selected="false">
+              <span class="route-state">Available route</span><span class="chip quant">Represent</span><h3>Plot and annotate</h3>
+              <p>Groups build one scatter plot, annotate direction and strength, then explain what the fitted line can support and which claims require more evidence.</p>
+              <ul class="route-folio"><li><strong>Teacher move:</strong> model one coordinate and one unit-aware annotation.</li><li><strong>Learner move:</strong> construct, annotate, and interpret the selected pairing.</li><li><strong>Formative evidence:</strong> one annotation links pattern, units, and fixture standing.</li><li><strong>Access treatment:</strong> table, plotted view, and sentence frame carry equivalent values.</li><li><strong>Class-size consequence:</strong> <span data-route-coordination="Plot and annotate">14 pair stations prepare 14 annotated plots and 28 individual evidence-boundary notes.</span></li><li><strong>Assumption:</strong> one deeply read representation serves the inquiry goal.</li><li><strong>Route-changing observation:</strong> learners need comparison across pair rules to explain sensitivity.</li></ul>
+              <span class="effect-line">Changes: full lesson folio · plot-first prompts · representation evidence</span>
+              <button type="button" class="js-only" data-route="Plot and annotate" aria-pressed="false">Choose plot route</button>
+            </article>
+            <article class="route-card" data-route-card="Lag and compare" data-selected="true">
+              <span class="route-state">Selected route</span><span class="chip">Compare</span><h3>Lag and compare</h3>
+              <p>Groups rotate through zero-, one-, and two-day alignments, select one fit to interpret, then account for the changed pairing rule and its causal boundary.</p>
+              <ul class="route-folio"><li><strong>Teacher move:</strong> demonstrate how the pairing key changes while the anchor cohort stays fixed.</li><li><strong>Learner move:</strong> compare all three alignments and defend one descriptive reading.</li><li><strong>Formative evidence:</strong> one comparison names changed streamflow dates and preserved precipitation anchors.</li><li><strong>Access treatment:</strong> choice labels, plots, metrics, and semantic tables carry the same pairings.</li><li><strong>Class-size consequence:</strong> <span data-route-coordination="Lag and compare">14 pair stations prepare 14 three-alignment folios and 28 individual evidence-boundary notes.</span></li><li><strong>Assumption:</strong> the class benefits from a sensitivity comparison before model interpretation.</li><li><strong>Route-changing observation:</strong> learners need deeper work on one plot before comparing three.</li></ul>
+              <span class="effect-line">Changes: full lesson folio · alignment comparison · sensitivity evidence</span>
+              <button type="button" class="js-only" data-route="Lag and compare" aria-pressed="true">Selected · lag route</button>
+            </article>
+            <article class="route-card" data-route-card="Claim and challenge" data-selected="false">
+              <span class="route-state">Available route</span><span class="chip context">Bound evidence</span><h3>Claim and challenge</h3>
+              <p>Small groups inspect a causal-sounding claim, identify what the fixture supports, and list evidence needed for a stronger conclusion.</p>
+              <ul class="route-folio"><li><strong>Teacher move:</strong> present a causal-sounding claim beside the fixture standing.</li><li><strong>Learner move:</strong> revise the claim and name evidence a causal study would require.</li><li><strong>Formative evidence:</strong> one claim separates observed pattern, mechanism question, and study need.</li><li><strong>Access treatment:</strong> claim sort, spoken explanation, and written scaffold support equivalent reasoning.</li><li><strong>Class-size consequence:</strong> <span data-route-coordination="Claim and challenge">14 pair stations prepare 14 claim-audit boards and 28 individual evidence-boundary notes.</span></li><li><strong>Assumption:</strong> claim language is the most useful entry point for this class.</li><li><strong>Route-changing observation:</strong> learners require a constructed plot before they can evaluate the claim.</li></ul>
+              <span class="effect-line">Changes: full lesson folio · claim audit · evidence-needed check</span>
+              <button type="button" class="js-only" data-route="Claim and challenge" aria-pressed="false">Choose claim route</button>
+            </article>
+          </div>
+          <p class="note"><strong>Deterministic here means inspectable:</strong> the three peer routes and their changes are written in this file. A visitor compares them, chooses one, and can trace the selection into the working prompt capsule.</p>
+          <p class="relation-reading" id="route-goal-reading"><strong>Current relation:</strong> Lag and compare supports the Compare time alignment goal. The goal supplies a recommendation; the selected route supplies the lesson method.</p>
+          <section class="result-card candidate-field stack" aria-labelledby="candidate-field-title">
+            <header>
+              <span class="chip context">Two probability frames</span>
+              <h3 id="candidate-field-title">Generate a bounded candidate set; keep route assessment separate.</h3>
+              <p>Verbalized Sampling generates its own candidate set and places each candidate relative to the full response distribution, with residual mass disclosed. A second, optional frame evaluates the three authored lesson routes against one named event. Their probability semantics stay visibly distinct.</p>
+            </header>
+            <article class="method-frame method-frame--primary stack" aria-labelledby="sampling-frame-title">
+              <header><span class="chip">Primary method frame</span><h4 id="sampling-frame-title">Verbalized Sampling · bounded five-candidate fan-out</h4><p>One response generates five candidate coordination plans, assigns each a probability relative to the full response distribution, and discloses mass held by unlisted responses.</p></header>
+              <pre class="sampling-prompt" id="sampling-prompt" tabindex="0">VERBALIZED SAMPLING · BOUNDED FIVE-CANDIDATE FAN-OUT
+
+Planning question: Given the current Grade 9 lesson capsule, what distinct coordination plan could help 28 learners produce one interpretable evidence-boundary note within 55 minutes?
+Fixed conditions: invented watershed fixture; 14 pairs and 14 material sets; equivalent table, plot, and verbal pathways; class-level privacy boundary; educator review of source standing, accessibility, and classroom fit.
+
+Within one response:
+1. Generate exactly 5 distinct candidate answers to the planning question. Each candidate specifies grouping composition, materials, participation and reporting, rotating roles, device-and-paper access, teacher movement, evidence collection, room configuration, accessibility review, and review-and-return.
+2. Give every generated candidate a stable label and concise plan. Preserve the fixed conditions; mark candidate-specific assumptions.
+3. Assign one probability, expressed as a percentage from 0% to 100%, to every generated candidate relative to the full distribution of plausible responses under the fixed conditions.
+4. Sum the five listed probabilities. Report the residual or unlisted response mass required to complete 100%. The five listed probabilities can therefore total less than 100%.
+
+Return the candidates in generation order as: label · coordination plan · probability relative to the full response distribution · assumptions · evidence that would change the probability. Then report: listed probability mass · residual/unlisted mass · 100% accounting check. Treat the five candidates as a bounded working set; wider alternatives remain visible through the residual. Classroom fit remains a human decision.</pre>
+              <p class="open-probability-field" id="sampling-standing"><strong>Open full-distribution accounting:</strong> the method contract is five generated candidates with one probability each relative to the full response distribution, plus disclosed residual mass. This local instrument supplies the prompt and keeps candidate and probability values open. The local page makes no model call; a separately authorized AI-enabled workflow can generate the response, and the educator reviews its standing and classroom relevance.</p>
+            </article>
+            <article class="method-frame stack" aria-labelledby="route-assessment-title">
+              <header><span class="chip context">Optional · separate frame</span><h4 id="route-assessment-title">Route / event-success assessment</h4><p>This frame keeps the authored routes as an unordered peer field and estimates the same binary classroom event under each route. Each conditional probability stands independently; full-response mass accounting belongs to the generated VS set above.</p></header>
+              <ul class="candidate-route-field" aria-label="Unordered candidate lesson-route field">
+                <li><strong>Plot and annotate</strong><span id="candidate-plot">14 annotated-plot folios · 28 individual evidence-boundary notes · unit-aware annotation checkpoint.</span></li>
+                <li><strong>Lag and compare</strong><span id="candidate-lag">14 three-alignment folios · 28 individual evidence-boundary notes · pairing-key checkpoint.</span></li>
+                <li><strong>Claim and challenge</strong><span id="candidate-claim">14 claim-audit boards · 28 individual evidence-boundary notes · claim-standing checkpoint.</span></li>
+              </ul>
+              <pre class="sampling-prompt sampling-prompt--secondary" id="route-event-prompt" tabindex="0">OPTIONAL ROUTE / EVENT-SUCCESS ASSESSMENT · SEPARATE FRAME
+
+Authored route field (unordered): Plot and annotate; Lag and compare; Claim and challenge.
+Named binary event: In a 55-minute Grade 9 session, the route enables all 28 learners, organized as 14 pairs with 14 material sets, to produce one interpretable evidence-boundary note from the invented watershed fixture under educator review.
+Conditions: equivalent table, plot, and verbal representations; up to one shared access point per group when digital; 14 group artifacts; about 7 minutes for reporting; educator review of source standing, accessibility, and classroom fit.
+
+For each authored route, use a fresh independent assessment pass. Estimate P(named event | route, conditions), then state a concise rationale, carrying assumptions, coordination dependencies, and evidence that would most change the estimate. Report each conditional probability independently. Keep the full-response-distribution and residual-mass accounting with the generated Verbalized Sampling set above.</pre>
+              <p class="open-probability-field" id="route-event-standing"><strong>Open conditional-event fields:</strong> this optional frame supplies route conditions and keeps all three event-success estimates open for a separately authorized assessment and educator review.</p>
+            </article>
+          </section>
+          <p class="control-receipt" id="routes-receipt"><strong>Current effect:</strong> Lag and compare contributes its complete lesson folio; the VS frame carries five generated candidates with full-response probabilities and disclosed residual mass; the optional route/event frame keeps three conditional estimates open. <strong>Preserved:</strong> standards, fixture standing, alignment choice, probability semantics, and human route authority.</p>
+        </div>
+      </section>
+
+      <section class="stage" id="handoff" aria-labelledby="handoff-title">
+        <header class="stage-head">
+          <span class="stage-number" aria-hidden="true">07</span>
+          <div><span class="stage-label">Assemble reviewed handoff</span><h2 id="handoff-title">Review the working prompt capsule; assemble a revision.</h2><p>Controls keep the working prompt capsule synchronized. Assembly freezes a numbered, locally held handoff revision for human review. The receiving educator retains the classroom decision.</p></div>
+          <p class="stage-effect"><strong>Capsule effect:</strong> names the receiver, checks readiness, records changed fields, and creates a recoverable reviewed revision.</p>
+        </header>
+        <div class="stage-body stack">
+          <div class="handoff-grid">
+            <div class="stack">
+              <label for="receiver"><span>Named human receiver</span><textarea id="receiver" rows="2" autocomplete="off" aria-describedby="receiver-effect receiver-reading" disabled data-enhanced-control>classroom educator and curriculum lead</textarea><small class="effect-line" id="receiver-effect">Changes: review route · authority statement · assembly readiness</small></label>
+              <p class="look-here" id="receiver-reading"><strong>Receiver named:</strong> classroom educator and curriculum lead can receive the reviewed handoff.</p>
+              <article class="result-card assembly-card">
+                <span class="chip">Local revision</span><h3>Working draft → reviewed handoff</h3>
+                <p>Each control updates the working prompt capsule and a precise change receipt. “Assemble reviewed prompt capsule” freezes the current values, fixture version, receiver standing, review time, and changes since the previous revision.</p>
+                <p class="assembly-meta" id="assembly-meta">Working draft · first reviewed revision ready to assemble</p>
+                <h4>Changes since reviewed revision</h4>
+                <ul class="revision-diff" id="changes-since-reviewed-revision"><li>The first reviewed revision will establish the comparison point.</li></ul>
+                <h4>Assembly readiness</h4>
+                <ul class="revision-diff" id="assembly-readiness"><li>Ready: invented fixture and source standing are named.</li><li>Ready: ten-anchor alignment is inspectable in a plot and semantic table.</li><li>Ready: named human receiver provides a review route.</li></ul>
+              </article>
+              <div class="button-row js-only">
+                <button type="button" id="assemble" class="primary" aria-describedby="assembly-meta assembly-readiness">Assemble reviewed prompt capsule</button>
+                <button type="button" id="restore-revision" disabled>Restore assembled revision</button>
+                <button type="button" id="select-packet" aria-describedby="assembly-meta" disabled>Select reviewed prompt capsule</button>
+                <button type="button" id="print" disabled>Print reviewed handoff</button>
+              </div>
+              <p id="handoff-status" class="status"></p>
+              <section class="result-card" aria-labelledby="review-title">
+                <h3 id="review-title">Human review route</h3>
+                <ul class="handoff-checks">
+                  <li>The classroom educator checks instructional fit, privacy, and learner conditions.</li>
+                  <li>The curriculum lead checks standard interpretation and local sequencing.</li>
+                  <li>A data-literate reviewer checks units, pair construction, computation, and causal language.</li>
+                  <li>An accessibility reviewer works from actual local requirements; simulated perspectives remain disclosed question-forming proxies.</li>
+                </ul>
+              </section>
+              <p class="control-receipt" id="handoff-receipt"><strong>Current effect:</strong> the named receiver supports assembly readiness; the first reviewed revision is ready to assemble. <strong>Preserved:</strong> working controls, local-only operation, and human approval authority.</p>
+            </div>
+            <div class="stack">
+              <section class="working-capsule-panel" id="working-capsule" aria-labelledby="working-capsule-title">
+              <h3 id="working-capsule-title">Working prompt capsule</h3>
+              <pre id="packet" class="packet" tabindex="0">WORKING PROMPT CAPSULE
+
+TASK
+Create a Grade 9 statistics lesson plan for a classroom educator. A curriculum lead will review the handoff.
+Named human receiver: classroom educator and curriculum lead.
+
+TEACHING SITUATION
+Grade 9 · 28 learners · Pair teams: 14 pairs · 14 material sets · 55 minutes. Use one annotated example and sentence frames before paired investigation. Groups can use graph paper or a spreadsheet. Keep learner identities and records in the educator’s protected channel.
+Timing: Launch 7 min · Source standing 8 min · Investigation 22 min · Synthesis 10 min · Claim check 8 min.
+
+CLASSROOM COORDINATION
+Grouping: 14 pairs across 14 peer stations.
+Materials: prepare 14 shared material sets, each containing an alignment folio with three pairing views.
+Participation and reporting: reserve one supported first turn per learner, one individual evidence-boundary note each, and 14 thirty-second evidence headlines within a seven-minute reporting window.
+Roles and teacher movement: rotate plotter and evidence steward halfway; use four teacher sweep zones with the pairing key as the focal check.
+Technology, room, and access: plan up to 14 shared access points when digital; carry equivalent table, plot, and verbal pathways along a clear teacher route. A human reviewer aligns actual supports and adaptations.
+Evidence, review, and return: return 14 three-alignment folios and 28 individual notes to the classroom educator and curriculum lead with assumptions marked for review.
+
+STANDARDS AND GOAL
+CCSS-M HSS-ID.B.6, HSS-ID.C.7, HSS-ID.C.8, HSS-ID.C.9.
+Primary goal: Compare time alignment.
+Suggested route: Lag and compare. Selected route: Lag and compare. Relation: aligned.
+Learner evidence: construct and annotate a paired-variable view; interpret slope and intercept with units; calculate and contextualize correlation; distinguish descriptive association from causal conclusion.
+
+SOURCE FIELD
+Use the local invented NOAA-shaped precipitation and USGS-shaped streamflow teaching fixture as paired quantitative variables. Treat the OSM-shaped map and USDA CDL-shaped land-cover layers as context only. Present every value and place mark as an invented teaching fixture; live and historical claims require separately sourced records.
+Fixed cohort: ten precipitation anchors from Apr 7–16; streamflow buffer through Apr 18 preserves ten pairs across all three alignments.
+
+REFERENCE AND REGISTER
+Named role: classroom educator. Human receiver: classroom educator and curriculum lead.
+Working register: Instructional planning. Foreground lesson arc, student moves, and formative checks. Evidence and decision authority stay in their own fields.
+Review route: Direct human review.
+Required modules: timed lesson arc and grouping moves; teacher and learner instructions; formative check and closing claim note.
+
+INVESTIGATION
+Start with daily-mean streamflow aligned one day after daily precipitation: 10 fixed-anchor pairs; fixture r = +0.95. Ask learners to compare all three alignments and explain why a changed pairing rule changes the result while the anchor cohort stays fixed.
+
+LESSON ROUTE
+Lag and compare: groups compare all three alignments, select one linear fit to interpret, document changed streamflow dates and preserved precipitation anchors, and separate descriptive association from causal conclusion.
+Teacher move: demonstrate the pairing key. Learner move: compare and defend one descriptive reading. Formative evidence: name changed pairings and preserved anchors. Access: choice labels, plots, metrics, and semantic tables carry equivalent values.
+
+VERBALIZED SAMPLING · BOUNDED FIVE-CANDIDATE FAN-OUT
+Planning question: given the current Grade 9 lesson capsule, what distinct coordination plan could help 28 learners produce one interpretable evidence-boundary note within 55 minutes?
+Within one response, generate exactly 5 distinct candidate answers. Give every generated candidate a stable label and coordination plan. Assign one probability, expressed as a percentage from 0% to 100%, to every generated candidate relative to the full response distribution. Sum the five listed probabilities, then report residual or unlisted response mass so the accounting completes 100%. The listed candidates can total less than 100%. Return candidates in generation order with assumptions and evidence that would change each probability. The five candidates form a bounded working set; residual mass keeps wider alternatives visible.
+
+OPTIONAL ROUTE / EVENT-SUCCESS ASSESSMENT · SEPARATE FRAME
+Authored route field (unordered): Plot and annotate; Lag and compare; Claim and challenge.
+Named binary event: in a 55-minute Grade 9 session, the route enables all 28 learners, organized as 14 pairs with 14 material sets, to produce one interpretable evidence-boundary note from the invented watershed fixture under educator review. Estimate P(named event | route, conditions) independently for each authored route. Keep full-response-distribution and residual-mass accounting with the generated Verbalized Sampling set above.
+
+REQUESTED HANDOFF
+Return the exact 55-minute lesson ledger, grouping and material counts, participation opportunities, reporting window, rotating roles, device-and-paper access conditions, teacher movement, evidence collection, room configuration, accessibility-review questions, learner instructions, compact data table, plot prompts, formative evidence, and a closing claim check. Place the evidence boundary beside each interpretation.
+
+BOUNDARIES
+SOURCE STANDING: present every value and place mark as an invented teaching fixture; live or historical claims require separately sourced records. AXIS RULE: use paired precipitation and streamflow on quantitative axes; use map and land-cover layers to form context questions. CLAIM RULE: describe association from the selected pairings; causal claims require observed records, an adequate study design, and review of alternative explanations. PRIVACY AND AUTHORITY: use class-level conditions in this capsule; keep protected learner records in the educator’s approved channel. The educator approves classroom use. Mark assumptions and questions for the named human receiver.</pre>
+              </section>
+              <section class="assembled-capsule result-card" id="assembled-revision" data-ready="false" aria-labelledby="assembled-title">
+                <span class="chip context">Reviewed revision</span>
+                <h3 id="assembled-title">Assembled prompt capsule</h3>
+                <p class="assembly-meta" id="revision-meta">Assembly metadata appears with the first reviewed revision.</p>
+                <h4>Changes included in this revision</h4>
+                <ul class="revision-diff" id="revision-diff"><li>The first revision records the complete working state.</li></ul>
+                <pre id="assembled-packet" class="packet" tabindex="0"></pre>
+              </section>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <section class="inspection" aria-labelledby="inspection-title">
+      <span class="stage-label">Inspectable contract</span>
+      <h2 id="inspection-title">State and schema travel together.</h2>
+      <p>The interaction state is compact, deterministic, and serializable. Its schema is included in this file so a receiving implementation can validate the same vocabulary. Reviewed revisions live in memory for the current page session.</p>
+      <p class="look-here" id="schema-status"><strong>Contract check:</strong> the default working state matches the included schema vocabulary.</p>
+      <details>
+        <summary>Inspect current state and JSON Schema</summary>
+        <div class="inspection-grid">
+          <section class="inspector-card" aria-labelledby="state-title"><h3 id="state-title">Current state</h3><pre id="state-json" tabindex="0">{
+  "version": "open-lesson-field.v2",
+  "fixtureVersion": "watershed-teaching-fixture.v2",
+  "situation": {
+    "grade": "Grade 9", "learners": 28, "minutes": 55,
+    "grouping": { "mode": "Pair teams", "groups": 14, "individuals": 0, "pairs": 14, "trios": 0, "quartets": 0, "materialSets": 14 },
+    "timing": [
+      { "label": "Launch", "minutes": 7 },
+      { "label": "Source standing", "minutes": 8 },
+      { "label": "Investigation", "minutes": 22 },
+      { "label": "Synthesis", "minutes": 10 },
+      { "label": "Claim check", "minutes": 8 }
+    ]
+  },
+  "standards": ["HSS-ID.B.6", "HSS-ID.C.7", "HSS-ID.C.8", "HSS-ID.C.9"],
+  "goal": "Compare time alignment",
+  "sources": {
+    "quantitative": ["NOAA-shaped precipitation", "USGS-shaped streamflow"],
+    "context": ["OpenStreetMap-shaped context", "USDA Cropland Data Layer-shaped context"]
+  },
+  "reference": {
+    "request": "Create a Grade 9 statistics lesson plan for a classroom educator. A curriculum lead will review the handoff.",
+    "referentStatus": "named-role-cue",
+    "register": "Instructional planning",
+    "socialProxy": "Direct human review"
+  },
+  "investigation": { "alignmentDays": 1, "pairs": 10, "correlation": 0.95, "anchorCohort": "Apr 7–16" },
+  "route": { "selected": "Lag and compare", "suggested": "Lag and compare", "relation": "aligned" },
+  "sampling": { "method": "bounded-verbalized-sampling", "candidateCount": 5, "probabilityReference": "full-response-distribution", "residualMass": "required-disclosure", "probabilityUnit": "percent", "standing": "open-local-field", "routeEventAssessment": "optional-separate" },
+  "receiver": { "label": "classroom educator and curriculum lead", "status": "named" },
+  "assembly": { "status": "working-draft", "revision": 0, "reviewedAt": null, "changedControls": [] }
+}</pre></section>
+          <section class="inspector-card" aria-labelledby="schema-title"><h3 id="schema-title">State schema</h3><pre id="schema-display" tabindex="0">{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:context-canvas:open-lesson-field:v2",
+  "type": "object",
+  "required": ["version", "fixtureVersion", "situation", "standards", "goal", "sources", "reference", "investigation", "route", "sampling", "receiver", "assembly"],
+  "properties": {
+    "version": { "const": "open-lesson-field.v2" },
+    "fixtureVersion": { "const": "watershed-teaching-fixture.v2" },
+    "situation": { "type": "object" },
+    "standards": { "type": "array", "items": { "enum": ["HSS-ID.B.6", "HSS-ID.C.7", "HSS-ID.C.8", "HSS-ID.C.9"] }, "uniqueItems": true },
+    "goal": { "enum": ["Describe association", "Compare time alignment", "Audit a causal claim"] },
+    "sources": { "type": "object" },
+    "reference": { "type": "object" },
+    "investigation": { "type": "object" },
+    "route": { "type": "object" },
+    "sampling": { "type": "object" },
+    "receiver": { "type": "object" },
+    "assembly": { "type": "object" }
+  },
+  "additionalProperties": false
+}</pre></section>
+        </div>
+      </details>
+    </section>
+  </div>
+
+  <p id="live-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+
+  <script type="application/schema+json" id="lesson-field-schema">
+  {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:context-canvas:open-lesson-field:v2",
+    "type": "object",
+    "required": ["version", "fixtureVersion", "situation", "standards", "goal", "sources", "reference", "investigation", "route", "sampling", "receiver", "assembly"],
+    "properties": {
+      "version": { "const": "open-lesson-field.v2" },
+      "fixtureVersion": { "const": "watershed-teaching-fixture.v2" },
+      "situation": {
+        "type": "object",
+        "required": ["grade", "learners", "minutes", "grouping", "timing"],
+        "properties": {
+          "grade": { "enum": ["Grade 9", "Grades 9–10", "Grades 11–12"] },
+          "learners": { "type": "integer", "minimum": 1, "maximum": 60 },
+          "minutes": { "type": "integer", "minimum": 20, "maximum": 180 },
+          "grouping": {
+            "type": "object",
+            "required": ["mode", "groups", "individuals", "pairs", "trios", "quartets", "materialSets"],
+            "properties": {
+              "mode": { "enum": ["Pair teams", "Trio teams", "Table teams of four"] },
+              "groups": { "type": "integer", "minimum": 1, "maximum": 30 },
+              "individuals": { "type": "integer", "minimum": 0, "maximum": 1 },
+              "pairs": { "type": "integer", "minimum": 0, "maximum": 30 },
+              "trios": { "type": "integer", "minimum": 0, "maximum": 20 },
+              "quartets": { "type": "integer", "minimum": 0, "maximum": 15 },
+              "materialSets": { "type": "integer", "minimum": 1, "maximum": 30 }
+            },
+            "additionalProperties": false
+          },
+          "timing": {
+            "type": "array", "minItems": 5, "maxItems": 5,
+            "items": {
+              "type": "object", "required": ["label", "minutes"],
+              "properties": { "label": { "type": "string" }, "minutes": { "type": "integer", "minimum": 1 } },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "standards": { "type": "array", "items": { "enum": ["HSS-ID.B.6", "HSS-ID.C.7", "HSS-ID.C.8", "HSS-ID.C.9"] }, "uniqueItems": true },
+      "goal": { "enum": ["Describe association", "Compare time alignment", "Audit a causal claim"] },
+      "sources": {
+        "type": "object",
+        "required": ["quantitative", "context"],
+        "properties": {
+          "quantitative": { "type": "array", "items": { "enum": ["NOAA-shaped precipitation", "USGS-shaped streamflow"] }, "uniqueItems": true },
+          "context": { "type": "array", "items": { "enum": ["OpenStreetMap-shaped context", "USDA Cropland Data Layer-shaped context"] }, "uniqueItems": true }
+        },
+        "additionalProperties": false
+      },
+      "reference": {
+        "type": "object",
+        "required": ["request", "referentStatus", "register", "socialProxy"],
+        "properties": {
+          "request": { "type": "string" },
+          "referentStatus": { "enum": ["named-role-cue", "personal-reference-cue", "task-position-open"] },
+          "register": { "enum": ["Instructional planning", "Evidence steward", "Accessibility review"] },
+          "socialProxy": { "enum": ["Direct human review", "Grade 9 learner questioner", "Family-facing reviewer", "Accessibility questioner"] }
+        },
+        "additionalProperties": false
+      },
+      "investigation": {
+        "type": "object",
+        "required": ["alignmentDays", "pairs", "correlation", "anchorCohort"],
+        "properties": {
+          "alignmentDays": { "type": "integer", "minimum": 0, "maximum": 2 },
+          "pairs": { "type": "integer", "minimum": 0, "maximum": 10 },
+          "correlation": { "anyOf": [{ "type": "number", "minimum": -1, "maximum": 1 }, { "type": "null" }] },
+          "anchorCohort": { "const": "Apr 7–16" }
+        },
+        "additionalProperties": false
+      },
+      "route": {
+        "type": "object", "required": ["selected", "suggested", "relation"],
+        "properties": {
+          "selected": { "enum": ["Plot and annotate", "Lag and compare", "Claim and challenge"] },
+          "suggested": { "enum": ["Plot and annotate", "Lag and compare", "Claim and challenge"] },
+          "relation": { "enum": ["aligned", "visitor-selected-alternative"] }
+        },
+        "additionalProperties": false
+      },
+      "sampling": {
+        "type": "object", "required": ["method", "candidateCount", "probabilityReference", "residualMass", "probabilityUnit", "standing", "routeEventAssessment"],
+        "properties": {
+          "method": { "const": "bounded-verbalized-sampling" },
+          "candidateCount": { "const": 5 },
+          "probabilityReference": { "const": "full-response-distribution" },
+          "residualMass": { "const": "required-disclosure" },
+          "probabilityUnit": { "const": "percent" },
+          "standing": { "const": "open-local-field" },
+          "routeEventAssessment": { "const": "optional-separate" }
+        },
+        "additionalProperties": false
+      },
+      "receiver": {
+        "type": "object", "required": ["label", "status"],
+        "properties": {
+          "label": { "type": "string" },
+          "status": { "enum": ["named", "requires-resolution"] }
+        },
+        "additionalProperties": false
+      },
+      "assembly": {
+        "type": "object", "required": ["status", "revision", "reviewedAt", "changedControls"],
+        "properties": {
+          "status": { "enum": ["working-draft", "reviewed-revision-current", "changes-awaiting-review"] },
+          "revision": { "type": "integer", "minimum": 0 },
+          "reviewedAt": { "anyOf": [{ "type": "string", "format": "date-time" }, { "type": "null" }] },
+          "changedControls": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+        },
+        "additionalProperties": false
+      }
+    },
+    "additionalProperties": false
+  }
+  </script>
+
+  <script>
+  (function () {
+    'use strict';
+
+    var fixture = {
+      version: 'watershed-teaching-fixture.v2',
+      anchorDates: ['Apr 7', 'Apr 8', 'Apr 9', 'Apr 10', 'Apr 11', 'Apr 12', 'Apr 13', 'Apr 14', 'Apr 15', 'Apr 16'],
+      precipitation: [4, 18, 7, 34, 11, 26, 2, 15, 30, 8],
+      streamflowDates: ['Apr 7', 'Apr 8', 'Apr 9', 'Apr 10', 'Apr 11', 'Apr 12', 'Apr 13', 'Apr 14', 'Apr 15', 'Apr 16', 'Apr 17', 'Apr 18'],
+      streamflow: [56, 63, 72, 74, 100, 68, 91, 64, 78, 93, 66, 84]
+    };
+
+    var gradeProfiles = {
+      'Grade 9': 'Use one annotated example and sentence frames before paired investigation.',
+      'Grades 9–10': 'Use a paired comparison, peer explanation, and one scaffolded method check.',
+      'Grades 11–12': 'Invite independent method justification, sensitivity analysis, and peer critique.'
+    };
+
+    var standardEffects = {
+      'HSS-ID.B.6': 'learners construct and annotate a paired-variable view',
+      'HSS-ID.C.7': 'learners interpret slope and intercept with units',
+      'HSS-ID.C.8': 'learners calculate and contextualize correlation',
+      'HSS-ID.C.9': 'learners distinguish a descriptive association from a causal conclusion'
+    };
+
+    var registerCopy = {
+      'Instructional planning': 'Foreground the lesson arc, student moves, and formative evidence.',
+      'Evidence steward': 'Foreground source standing, units, pair construction, and the boundary between association and causation.',
+      'Accessibility review': 'Foreground equivalent representations, response modes, and questions for a human accessibility reviewer.'
+    };
+
+    var registerModules = {
+      'Instructional planning': ['Timed lesson arc and grouping moves', 'Teacher and learner instructions', 'Formative check and closing claim note'],
+      'Evidence steward': ['Source-role and unit ledger', 'Pair-construction audit', 'Claim-standing and evidence-needed check'],
+      'Accessibility review': ['Equivalent table, plot, and verbal representations', 'Multiple response modes and pacing cues', 'Questions routed to a human accessibility reviewer']
+    };
+
+    var proxyQuestions = {
+      'Direct human review': ['Which local classroom conditions shape instructional fit?', 'Which standards, source standing, and claim boundaries require human review?'],
+      'Grade 9 learner questioner': ['Where does the pairing rule first become visible?', 'Which representation supports a learner who begins with the table?'],
+      'Family-facing reviewer': ['Which fixture boundaries need plain-language explanation?', 'How will the lesson communicate purpose and classroom use?'],
+      'Accessibility questioner': ['Which information has equivalent visual, tabular, and verbal forms?', 'Which actual access requirements should the human reviewer resolve?']
+    };
+
+    var routeData = {
+      'Plot and annotate': {
+        summary: 'Groups build one scatter plot, annotate direction and strength, interpret slope and intercept in context, and name the evidence a stronger claim would require.',
+        teacher: 'Model one coordinate and one unit-aware annotation.', learner: 'Construct, annotate, and interpret the selected pairing.', evidence: 'One annotation links pattern, units, and fixture standing.', access: 'Table, plotted view, and sentence frame carry equivalent values.',
+        material: 'an annotated-plot folio with a data table and plot grid', artifact: 'annotated plots', checkpoint: 'unit-aware annotation', movement: 'units and annotation standing'
+      },
+      'Lag and compare': {
+        summary: 'Groups compare all three alignments, select one linear fit to interpret, document changed streamflow dates and preserved precipitation anchors, and separate descriptive association from causal conclusion.',
+        teacher: 'Demonstrate how the pairing key changes while the anchor cohort stays fixed.', learner: 'Compare all three alignments and defend one descriptive reading.', evidence: 'One comparison names changed streamflow dates and preserved precipitation anchors.', access: 'Choice labels, plots, metrics, and semantic tables carry equivalent values.',
+        material: 'an alignment folio with three pairing views', artifact: 'three-alignment folios', checkpoint: 'pairing-key explanation', movement: 'pairing key and fixed-anchor standing'
+      },
+      'Claim and challenge': {
+        summary: 'Groups inspect a causal-sounding claim, identify what the fixture supports, and list the additional evidence a stronger conclusion would require.',
+        teacher: 'Present a causal-sounding claim beside the fixture standing.', learner: 'Revise the claim and name evidence a causal study would require.', evidence: 'One claim separates observed pattern, mechanism question, and study need.', access: 'Claim sort, spoken explanation, and written scaffold support equivalent reasoning.',
+        material: 'a claim-audit board with source-standing cards', artifact: 'claim-audit boards', checkpoint: 'claim-standing distinction', movement: 'claim standing and evidence-needed questions'
+      }
+    };
+
+    var goalRoutes = {
+      'Describe association': 'Plot and annotate',
+      'Compare time alignment': 'Lag and compare',
+      'Audit a causal claim': 'Claim and challenge'
+    };
+
+    var dependencyMap = {
+      grade: { label: 'Grade band', changes: ['vocabulary', 'scaffolding', 'independence expectation', 'working capsule'], preserves: ['fixture values', 'source standing', 'human review authority'], receipt: 'situation-receipt' },
+      learners: { label: 'Class size', changes: ['group composition', 'material quantities', 'participation plan', 'teacher movement', 'evidence collection', 'VS planning question', 'optional named event', 'working capsule'], preserves: ['selected grouping mode', 'lesson minutes', 'standards', 'privacy boundary'], receipt: 'situation-receipt' },
+      grouping: { label: 'Grouping structure', changes: ['composition', 'material sets', 'reporting window', 'rotating roles', 'room configuration', 'VS fixed conditions', 'optional event conditions', 'working capsule'], preserves: ['class size', 'learner records boundary', 'lesson goal', 'educator assignment authority'], receipt: 'situation-receipt' },
+      minutes: { label: 'Available minutes', changes: ['five-part time ledger', 'reporting window', 'activity depth', 'VS fixed conditions', 'optional event conditions', 'working capsule'], preserves: ['lesson goal', 'fixture values', 'human route choice'], receipt: 'situation-receipt' },
+      standards: { label: 'Selected standards', changes: ['objectives', 'observable learner evidence', 'review checks', 'working capsule'], preserves: ['curriculum sequencing', 'pedagogy', 'human approval'], receipt: 'standard-receipt' },
+      goal: { label: 'Inquiry goal', changes: ['success evidence', 'route recommendation', 'goal-to-route reading', 'VS fixed conditions', 'working capsule'], preserves: ['selected route', 'source standing', 'visitor authority'], receipt: 'standard-receipt' },
+      quantitative: { label: 'Quantitative source field', changes: ['axis readiness', 'paired rows', 'plot', 'descriptive calculation'], preserves: ['invented-fixture standing', 'fixed precipitation anchors', 'causal boundary'], receipt: 'sources-receipt' },
+      context: { label: 'Context source field', changes: ['visible context layers', 'place-and-scale questions', 'source ledger'], preserves: ['quantitative calculation', 'axis roles', 'fixture standing'], receipt: 'sources-receipt' },
+      request: { label: 'Artifact request', changes: ['task text', 'referent reading', 'task-position questions', 'working capsule'], preserves: ['pronouns as collaboration language', 'human role assignment', 'source standing'], receipt: 'reference-receipt' },
+      register: { label: 'Working register', changes: ['required handoff modules', 'review prompts', 'requested evidence', 'working capsule'], preserves: ['demographic identity', 'professional standing', 'human decisions'], receipt: 'reference-receipt' },
+      proxy: { label: 'Question-forming perspective', changes: ['disclosed review questions', 'representation route', 'working capsule'], preserves: ['human authority over representation', 'consent', 'identity'], receipt: 'reference-receipt' },
+      alignment: { label: 'Streamflow alignment', changes: ['streamflow dates', 'plotted points', 'descriptive correlation', 'investigation instructions'], preserves: ['ten precipitation anchors', 'axes', 'fixture values', 'causal boundary'], receipt: 'investigate-receipt' },
+      route: { label: 'Lesson route', changes: ['timed method', 'teacher move', 'learner move', 'formative evidence', 'coordination artifacts', 'VS fixed conditions', 'optional route/event frame'], preserves: ['five-candidate fan-out contract', 'unordered authored route field', 'goal recommendation', 'standards', 'alignment choice', 'human route authority'], receipt: 'routes-receipt' },
+      receiver: { label: 'Human receiver', changes: ['review route', 'authority statement', 'review-and-return reading', 'assembly readiness', 'working capsule'], preserves: ['working controls', 'local operation', 'classroom authority'], receipt: 'handoff-receipt' }
+    };
+
+    var elements = {
+      grade: document.getElementById('grade'),
+      learners: document.getElementById('learners'),
+      minutes: document.getElementById('minutes'),
+      situationReadout: document.getElementById('situation-readout'),
+      situationGuidance: document.getElementById('situation-guidance'),
+      groupingPreviewPairs: document.getElementById('grouping-preview-pairs'),
+      groupingPreviewTrios: document.getElementById('grouping-preview-trios'),
+      groupingPreviewQuartets: document.getElementById('grouping-preview-quartets'),
+      coordinationGrouping: document.getElementById('coordination-grouping'),
+      coordinationIntro: document.getElementById('coordination-intro'),
+      coordinationMaterials: document.getElementById('coordination-materials'),
+      coordinationParticipation: document.getElementById('coordination-participation'),
+      coordinationReporting: document.getElementById('coordination-reporting'),
+      coordinationRoles: document.getElementById('coordination-roles'),
+      coordinationTechnology: document.getElementById('coordination-technology'),
+      coordinationMovement: document.getElementById('coordination-movement'),
+      coordinationEvidence: document.getElementById('coordination-evidence'),
+      coordinationRoom: document.getElementById('coordination-room'),
+      coordinationAccessibility: document.getElementById('coordination-accessibility'),
+      coordinationReturn: document.getElementById('coordination-return'),
+      timingTotal: document.getElementById('timing-total'),
+      timingLedger: document.getElementById('timing-ledger'),
+      standardEffects: document.getElementById('standard-effects'),
+      goalRouteReading: document.getElementById('goal-route-reading'),
+      routeGoalReading: document.getElementById('route-goal-reading'),
+      candidatePlot: document.getElementById('candidate-plot'),
+      candidateLag: document.getElementById('candidate-lag'),
+      candidateClaim: document.getElementById('candidate-claim'),
+      samplingPrompt: document.getElementById('sampling-prompt'),
+      samplingStanding: document.getElementById('sampling-standing'),
+      routeEventPrompt: document.getElementById('route-event-prompt'),
+      routeEventStanding: document.getElementById('route-event-standing'),
+      request: document.getElementById('request-input'),
+      referentResult: document.getElementById('referent-result'),
+      proxy: document.getElementById('proxy'),
+      registerReading: document.getElementById('register-reading'),
+      registerModules: document.getElementById('register-modules'),
+      proxyQuestions: document.getElementById('proxy-questions'),
+      lagOutput: document.getElementById('lag-output'),
+      lagExplanation: document.getElementById('lag-explanation'),
+      points: document.getElementById('plot-points'),
+      plotTitle: document.getElementById('plot-title'),
+      plotDesc: document.getElementById('plot-desc'),
+      metricLag: document.getElementById('metric-lag'),
+      metricPairs: document.getElementById('metric-pairs'),
+      metricCorrelation: document.getElementById('metric-correlation'),
+      pairCaption: document.getElementById('pair-caption'),
+      pairRows: document.getElementById('pair-rows'),
+      osm: document.getElementById('osm-context'),
+      cdl: document.getElementById('cdl-context'),
+      contextReading: document.getElementById('context-reading'),
+      receiver: document.getElementById('receiver'),
+      receiverReading: document.getElementById('receiver-reading'),
+      packet: document.getElementById('packet'),
+      assembledRevision: document.getElementById('assembled-revision'),
+      assembledPacket: document.getElementById('assembled-packet'),
+      revisionMeta: document.getElementById('revision-meta'),
+      revisionDiff: document.getElementById('revision-diff'),
+      assemblyMeta: document.getElementById('assembly-meta'),
+      assemblyReadiness: document.getElementById('assembly-readiness'),
+      changesSinceReview: document.getElementById('changes-since-reviewed-revision'),
+      assembleButton: document.getElementById('assemble'),
+      restoreButton: document.getElementById('restore-revision'),
+      selectButton: document.getElementById('select-packet'),
+      printButton: document.getElementById('print'),
+      capsuleStatus: document.getElementById('capsule-status'),
+      lastChange: document.getElementById('last-change'),
+      changedReading: document.getElementById('changed-reading'),
+      preservedReading: document.getElementById('preserved-reading'),
+      stateJson: document.getElementById('state-json'),
+      schemaDisplay: document.getElementById('schema-display'),
+      schemaStatus: document.getElementById('schema-status'),
+      live: document.getElementById('live-status'),
+      handoffStatus: document.getElementById('handoff-status')
+    };
+
+    var state = {
+      version: 'open-lesson-field.v2',
+      fixtureVersion: fixture.version,
+      situation: { grade: 'Grade 9', learners: 28, minutes: 55, grouping: { mode: 'Pair teams', groups: 14, individuals: 0, pairs: 14, trios: 0, quartets: 0, materialSets: 14 }, timing: [] },
+      standards: ['HSS-ID.B.6', 'HSS-ID.C.7', 'HSS-ID.C.8', 'HSS-ID.C.9'],
+      goal: 'Compare time alignment',
+      sources: {
+        quantitative: ['NOAA-shaped precipitation', 'USGS-shaped streamflow'],
+        context: ['OpenStreetMap-shaped context', 'USDA Cropland Data Layer-shaped context']
+      },
+      reference: {
+        request: elements.request.value,
+        referentStatus: 'named-role-cue',
+        register: 'Instructional planning',
+        socialProxy: 'Direct human review'
+      },
+      investigation: { alignmentDays: 1, pairs: 10, correlation: 0.95, anchorCohort: 'Apr 7–16' },
+      route: { selected: 'Lag and compare', suggested: 'Lag and compare', relation: 'aligned' },
+      sampling: { method: 'bounded-verbalized-sampling', candidateCount: 5, probabilityReference: 'full-response-distribution', residualMass: 'required-disclosure', probabilityUnit: 'percent', standing: 'open-local-field', routeEventAssessment: 'optional-separate' },
+      receiver: { label: elements.receiver.value, status: 'named' },
+      assembly: { status: 'working-draft', revision: 0, reviewedAt: null, changedControls: [] }
+    };
+
+    var reviewedSnapshot = null;
+    var reviewedCapsule = '';
+    var reviewedChanges = [];
+    var pendingChangeDetails = {};
+    var announcementTimer = null;
+
+    function clampNumber(value, min, max, fallback) {
+      var number = Number(value);
+      if (!Number.isFinite(number)) return fallback;
+      return Math.min(max, Math.max(min, Math.round(number)));
+    }
+
+    function selectedValue(name) {
+      var selected = document.querySelector('input[name="' + name + '"]:checked');
+      return selected ? selected.value : '';
+    }
+
+    function selectedValues(selector) {
+      return Array.prototype.map.call(document.querySelectorAll(selector + ':checked'), function (input) { return input.value; });
+    }
+
+    function copy(value) {
+      return JSON.parse(JSON.stringify(value));
+    }
+
+    function groupingFor(learners, mode) {
+      var individuals = 0;
+      var pairs = 0;
+      var trios = 0;
+      var quartets = 0;
+      if (learners === 1) {
+        individuals = 1;
+      } else if (mode === 'Trio teams') {
+        if (learners === 2) pairs = 1;
+        else if (learners === 3) trios = 1;
+        else if (learners % 3 === 0) trios = learners / 3;
+        else if (learners % 3 === 1) {
+          pairs = 2;
+          trios = (learners - 4) / 3;
+        } else {
+          pairs = 1;
+          trios = (learners - 2) / 3;
+        }
+      } else if (mode === 'Table teams of four') {
+        if (learners === 2) pairs = 1;
+        else if (learners === 3) trios = 1;
+        else if (learners % 4 === 0) quartets = learners / 4;
+        else if (learners % 4 === 1) {
+          pairs = 1;
+          trios = 1;
+          quartets = (learners - 5) / 4;
+        } else if (learners % 4 === 2) {
+          pairs = 1;
+          quartets = (learners - 2) / 4;
+        } else {
+          trios = 1;
+          quartets = (learners - 3) / 4;
+        }
+      } else {
+        trios = learners % 2;
+        pairs = trios ? (learners - 3) / 2 : learners / 2;
+      }
+      var groups = individuals + pairs + trios + quartets;
+      return { mode: mode, groups: groups, individuals: individuals, pairs: pairs, trios: trios, quartets: quartets, materialSets: groups };
+    }
+
+    function countPhrase(count, singular, plural) {
+      return count + ' ' + (count === 1 ? singular : plural);
+    }
+
+    function groupingPhrase(grouping) {
+      var parts = [];
+      if (grouping.individuals) parts.push(countPhrase(grouping.individuals, 'individual investigation', 'individual investigations'));
+      if (grouping.pairs) parts.push(countPhrase(grouping.pairs, 'pair', 'pairs'));
+      if (grouping.trios) parts.push(countPhrase(grouping.trios, 'trio', 'trios'));
+      if (grouping.quartets) parts.push(countPhrase(grouping.quartets, 'quartet', 'quartets'));
+      if (parts.length < 2) return parts[0];
+      return parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1];
+    }
+
+    function timingFor(minutes) {
+      var labels = ['Launch', 'Source standing', 'Investigation', 'Synthesis', 'Claim check'];
+      var weights = [0.12, 0.15, 0.4, 0.18];
+      var assigned = weights.map(function (weight) { return Math.max(1, Math.round(minutes * weight)); });
+      var used = assigned.reduce(function (sum, value) { return sum + value; }, 0);
+      assigned.push(Math.max(1, minutes - used));
+      var total = assigned.reduce(function (sum, value) { return sum + value; }, 0);
+      if (total !== minutes) assigned[2] += minutes - total;
+      return labels.map(function (label, index) { return { label: label, minutes: assigned[index] }; });
+    }
+
+    function listInto(element, items, formatter) {
+      element.replaceChildren();
+      items.forEach(function (item) {
+        var li = document.createElement('li');
+        if (formatter) formatter(li, item);
+        else li.textContent = item;
+        element.appendChild(li);
+      });
+    }
+
+    function correlation(xs, ys) {
+      var count = xs.length;
+      if (count < 2) return 0;
+      var meanX = xs.reduce(function (sum, value) { return sum + value; }, 0) / count;
+      var meanY = ys.reduce(function (sum, value) { return sum + value; }, 0) / count;
+      var numerator = 0;
+      var denominatorX = 0;
+      var denominatorY = 0;
+      xs.forEach(function (value, index) {
+        var dx = value - meanX;
+        var dy = ys[index] - meanY;
+        numerator += dx * dy;
+        denominatorX += dx * dx;
+        denominatorY += dy * dy;
+      });
+      return numerator / Math.sqrt(denominatorX * denominatorY);
+    }
+
+    function pairedData(alignment) {
+      var pairs = [];
+      for (var index = 0; index < fixture.precipitation.length; index += 1) {
+        pairs.push({
+          precipitationDate: fixture.anchorDates[index],
+          precipitation: fixture.precipitation[index],
+          streamflowDate: fixture.streamflowDates[index + alignment],
+          streamflow: fixture.streamflow[index + alignment]
+        });
+      }
+      return pairs;
+    }
+
+    function alignmentPhrase(alignment) {
+      if (alignment === 0) return 'the same day';
+      return alignment === 1 ? 'one day later' : alignment + ' days later';
+    }
+
+    function signed(value) {
+      if (value === null) return 'awaiting both quantitative fields';
+      return (value >= 0 ? '+' : '') + value.toFixed(2);
+    }
+
+    function referentStatus(request) {
+      var personalPronoun = /\b(i|me|my|mine|myself|you|your|yours|yourself|yourselves|we|us|our|ours|ourselves|they|them|their|theirs|themselves)\b/i;
+      var namedRole = /\b(educator|teacher|instructor|learner|student|curriculum lead|reviewer|facilitator)\b/i;
+      if (namedRole.test(request)) return 'named-role-cue';
+      if (personalPronoun.test(request)) return 'personal-reference-cue';
+      return 'task-position-open';
+    }
+
+    function updateReferentReading(announce) {
+      state.reference.request = elements.request.value.trim();
+      state.reference.referentStatus = referentStatus(state.reference.request);
+      if (state.reference.referentStatus === 'personal-reference-cue') {
+        elements.referentResult.innerHTML = '<strong>Personal-reference cue found:</strong> keep it when its referent is clear; name the task position when the cue could change role, audience, authority, ownership, receiver, or personalization.';
+      } else if (state.reference.referentStatus === 'named-role-cue') {
+        elements.referentResult.innerHTML = '<strong>Named-role cue found:</strong> a task position is available for inspection. Human review assigns audience, use, review, authority, and standing.';
+      } else {
+        elements.referentResult.innerHTML = '<strong>Task position remains open:</strong> name the audience, receiver, or accountable role whenever that position changes the work.';
+      }
+      if (announce) elements.live.textContent = elements.referentResult.textContent;
+    }
+
+    function updateSourceState() {
+      state.sources.quantitative = selectedValues('input[name="source"][data-kind="quantitative"]');
+      state.sources.context = selectedValues('input[name="source"][data-kind="context"]');
+      var osmOn = document.getElementById('osm-toggle').checked;
+      var cdlOn = document.getElementById('cdl-toggle').checked;
+      elements.osm.classList.toggle('is-off', !osmOn);
+      elements.osm.setAttribute('aria-hidden', String(!osmOn));
+      elements.cdl.classList.toggle('is-off', !cdlOn);
+      elements.cdl.setAttribute('aria-hidden', String(!cdlOn));
+      var visible = [];
+      if (osmOn) visible.push('OSM-shaped map context');
+      if (cdlOn) visible.push('USDA CDL-shaped land-cover context');
+      elements.contextReading.textContent = visible.length ? visible.join(' and ') + (visible.length > 1 ? ' are' : ' is') + ' visible for question-forming context. The paired quantitative fields carry the calculation.' : 'The map focuses on the quantitative field. The paired precipitation and streamflow calculation remains current.';
+    }
+
+    function renderPairs() {
+      var alignment = state.investigation.alignmentDays;
+      var quantitativeReady = state.sources.quantitative.indexOf('NOAA-shaped precipitation') !== -1 && state.sources.quantitative.indexOf('USGS-shaped streamflow') !== -1;
+      if (!quantitativeReady) {
+        state.investigation.pairs = 0;
+        state.investigation.correlation = null;
+        elements.lagOutput.value = alignment === 0 ? 'same day' : alignment + (alignment === 1 ? ' day later' : ' days later');
+        elements.lagOutput.textContent = elements.lagOutput.value;
+        elements.lagExplanation.textContent = 'Pairing readiness requires both quantitative fixture fields. Choose precipitation and streamflow to form the ten-anchor view.';
+        elements.metricLag.textContent = alignment === 0 ? 'same day' : '+' + alignment + (alignment === 1 ? ' day' : ' days');
+        elements.metricPairs.textContent = 'Ready with both fields';
+        elements.metricCorrelation.textContent = 'Awaiting both measures';
+        elements.pairCaption.textContent = 'Current pairing · requires precipitation and streamflow fixture fields';
+        elements.plotTitle.textContent = 'Paired-variable view awaiting both quantitative fields';
+        elements.plotDesc.textContent = 'Choose the precipitation and streamflow quantitative fixtures to form ten paired observations.';
+        elements.points.replaceChildren();
+        elements.pairRows.replaceChildren();
+        var emptyRow = document.createElement('tr');
+        var emptyCell = document.createElement('td');
+        emptyCell.colSpan = 4;
+        emptyCell.textContent = 'Choose both quantitative fixture fields to calculate ten paired rows.';
+        emptyRow.appendChild(emptyCell);
+        elements.pairRows.appendChild(emptyRow);
+        return;
+      }
+      var pairs = pairedData(alignment);
+      var xs = pairs.map(function (pair) { return pair.precipitation; });
+      var ys = pairs.map(function (pair) { return pair.streamflow; });
+      var r = correlation(xs, ys);
+      state.investigation.pairs = pairs.length;
+      state.investigation.correlation = Number(r.toFixed(2));
+
+      elements.lagOutput.value = alignment === 0 ? 'same day' : alignment + (alignment === 1 ? ' day later' : ' days later');
+      elements.lagOutput.textContent = elements.lagOutput.value;
+      elements.lagExplanation.textContent = alignment === 0 ? 'Pair each precipitation anchor with daily-mean streamflow from the same fixture date. Ten precipitation anchors remain in view.' : 'Pair each precipitation anchor with daily-mean streamflow from ' + alignmentPhrase(alignment) + '. Ten precipitation anchors remain in view.';
+      elements.metricLag.textContent = alignment === 0 ? 'same day' : '+' + alignment + (alignment === 1 ? ' day' : ' days');
+      elements.metricPairs.textContent = String(pairs.length) + ' pairs';
+      elements.metricCorrelation.textContent = 'r = ' + signed(r);
+      elements.pairCaption.textContent = 'Current fixed-cohort pairing · daily precipitation to daily-mean streamflow ' + alignmentPhrase(alignment);
+      elements.plotTitle.textContent = 'Teaching-fixture daily precipitation and daily-mean streamflow ' + alignmentPhrase(alignment) + ' scatter plot';
+      elements.plotDesc.textContent = pairs.length + ' points compare the fixed precipitation anchor cohort with daily-mean streamflow ' + alignmentPhrase(alignment) + '. A table below provides the same values.';
+
+      elements.points.replaceChildren();
+      pairs.forEach(function (pair) {
+        var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        var title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+        var x = 70 + (pair.precipitation / 36) * 570;
+        var y = 340 - ((pair.streamflow - 45) / 70) * 280;
+        circle.setAttribute('class', 'plot-point');
+        circle.setAttribute('cx', x.toFixed(1));
+        circle.setAttribute('cy', y.toFixed(1));
+        circle.setAttribute('r', '8');
+        circle.setAttribute('tabindex', '0');
+        title.textContent = pair.precipitationDate + ' daily precipitation ' + pair.precipitation + ' millimeters paired with ' + pair.streamflowDate + ' daily-mean streamflow ' + pair.streamflow + ' cubic feet per second';
+        circle.appendChild(title);
+        elements.points.appendChild(circle);
+      });
+
+      elements.pairRows.replaceChildren();
+      pairs.forEach(function (pair) {
+        var row = document.createElement('tr');
+        var date = document.createElement('th');
+        date.scope = 'row';
+        date.textContent = pair.precipitationDate;
+        row.appendChild(date);
+        [pair.precipitation, pair.streamflowDate, pair.streamflow].forEach(function (value) {
+          var cell = document.createElement('td');
+          cell.textContent = String(value);
+          row.appendChild(cell);
+        });
+        elements.pairRows.appendChild(row);
+      });
+    }
+
+    function updateRouteButtons() {
+      document.querySelectorAll('[data-route-card]').forEach(function (card) {
+        var selected = card.getAttribute('data-route-card') === state.route.selected;
+        card.dataset.selected = String(selected);
+        card.querySelector('.route-state').textContent = selected ? 'Selected route' : 'Available route';
+        var button = card.querySelector('[data-route]');
+        button.setAttribute('aria-pressed', String(selected));
+        button.textContent = selected ? 'Selected · ' + state.route.selected.toLowerCase() : 'Choose ' + button.getAttribute('data-route').toLowerCase() + ' route';
+      });
+    }
+
+    function registerBoundary() {
+      return state.reference.register + ': ' + registerCopy[state.reference.register] + ' Evidence standing and decision authority remain explicit fields.';
+    }
+
+    function sourceSentence() {
+      var quant = state.sources.quantitative.length ? state.sources.quantitative.join(' and ') : 'Quantitative fields require selection before pair construction';
+      var context = state.sources.context.length ? state.sources.context.join(' and ') : 'The quantitative-only view is selected';
+      return 'Quantitative selection: ' + quant + '. Context selection: ' + context + '. Every value and place mark is an invented fixture. Paired quantitative fields carry the calculation; context layers form questions.';
+    }
+
+    function proxySentence() {
+      if (state.reference.socialProxy === 'Direct human review') return 'Review route: direct human review selected.';
+      return 'Disclosed social proxy: ' + state.reference.socialProxy + '. Use it to surface questions; route representation to people from the named population for review. They retain authority over representation, consent, identity, and lived experience.';
+    }
+
+    function investigationSentence(alignment) {
+      if (state.investigation.correlation === null) {
+        return 'Pair construction requires both quantitative fixture fields. Ask the named human receiver to choose precipitation and streamflow before forming the ten-anchor view.';
+      }
+      return 'Start with daily-mean streamflow aligned ' + alignmentPhrase(alignment) + ' after daily precipitation: ' + state.investigation.pairs + ' fixed-anchor pairs; fixture r = ' + signed(state.investigation.correlation) + '. Ask learners to compare all three pairings and explain why changed streamflow dates change the result while ten precipitation anchors remain fixed.';
+    }
+
+    function standardSentence() {
+      if (!state.standards.length) return 'Standard alignment requires a human selection. Keep the inquiry goal open for review.';
+      return state.standards.map(function (standard) { return standard + ': ' + standardEffects[standard]; }).join('; ') + '.';
+    }
+
+    function timingSentence() {
+      return state.situation.timing.map(function (part) { return part.label + ' ' + part.minutes + ' min'; }).join(' · ') + '.';
+    }
+
+    function rolePlanFor(grouping) {
+      if (grouping.individuals) return 'Use a visible sequence of plotter, source keeper, evidence steward, and reporter moves for the individual investigation.';
+      if (grouping.mode === 'Trio teams') return 'Rotate plotter, source keeper, and evidence steward; pairs combine source-keeper and evidence-steward moves.';
+      if (grouping.mode === 'Table teams of four') return 'Rotate plotter, source keeper, evidence steward, and reporter; smaller remainder groups combine adjacent moves.';
+      return grouping.trios
+        ? 'Rotate plotter and evidence steward halfway; the trio also rotates a source-keeper move.'
+        : 'Rotate plotter and evidence steward halfway through the investigation.';
+    }
+
+    function countedArtifacts(route, count) {
+      return count + ' ' + (count === 1 ? route.artifact.replace(/s$/, '') : route.artifact);
+    }
+
+    function coordinationFor() {
+      var grouping = state.situation.grouping;
+      var route = routeData[state.route.selected];
+      var synthesis = state.situation.timing.filter(function (part) { return part.label === 'Synthesis'; })[0];
+      var synthesisMinutes = synthesis ? synthesis.minutes : Math.max(1, Math.round(state.situation.minutes * 0.18));
+      var reportingBudgetSeconds = Math.max(20, Math.floor(synthesisMinutes * 60 * 0.7));
+      var reportingUnits = Math.min(grouping.groups, Math.max(1, Math.floor(reportingBudgetSeconds / 20)));
+      var reportingSeconds = Math.floor(reportingBudgetSeconds / reportingUnits / 5) * 5;
+      reportingSeconds = Math.max(20, Math.min(45, reportingSeconds));
+      var reportingMinutes = Math.ceil(reportingUnits * reportingSeconds / 60);
+      var reportingSubject = reportingUnits === grouping.groups
+        ? reportingUnits + ' evidence headline' + (reportingUnits === 1 ? '' : 's')
+        : reportingUnits + ' cluster evidence headlines representing ' + grouping.groups + ' groups';
+      var sweepZones = Math.max(1, Math.ceil(grouping.groups / 4));
+      var groupsPerZone = Math.ceil(grouping.groups / sweepZones);
+      var groupWord = grouping.groups === 1 ? 'group' : 'groups';
+      var stationWord = grouping.groups === 1 ? 'station' : 'stations';
+      return {
+        grouping: groupingPhrase(grouping) + ' across ' + grouping.groups + ' peer ' + stationWord + '.',
+        materials: 'Prepare ' + grouping.materialSets + ' shared material set' + (grouping.materialSets === 1 ? '' : 's') + ', each containing ' + route.material + '.',
+        participation: 'Reserve one supported first turn per learner across ' + grouping.groups + ' ' + groupWord + ', followed by ' + state.situation.learners + ' individual note' + (state.situation.learners === 1 ? '' : 's') + '.',
+        reporting: 'Use ' + reportingSubject + ' at ' + reportingSeconds + ' seconds each: about ' + reportingMinutes + ' minute' + (reportingMinutes === 1 ? '' : 's') + ' of the ' + synthesisMinutes + '-minute synthesis. Every group artifact remains in the return packet.',
+        roles: rolePlanFor(grouping),
+        technology: 'Plan for up to ' + grouping.materialSets + ' shared access point' + (grouping.materialSets === 1 ? '' : 's') + ' when digital; carry the same values in table, plot, and verbal form.',
+        movement: 'Plan ' + sweepZones + ' teacher sweep zone' + (sweepZones === 1 ? '' : 's') + ' covering up to ' + groupsPerZone + ' ' + groupWord + ' each, with ' + route.movement + ' as the focal check.',
+        evidence: 'Collect ' + countedArtifacts(route, grouping.groups) + ' and ' + state.situation.learners + ' individual evidence-boundary note' + (state.situation.learners === 1 ? '' : 's') + '.',
+        room: 'Arrange ' + grouping.groups + ' ' + stationWord + ' for ' + groupingPhrase(grouping) + '; preserve a clear teacher path and one shared review surface.',
+        accessibility: 'Prepare ' + grouping.materialSets + ' equivalent material set' + (grouping.materialSets === 1 ? '' : 's') + ' with table, plot, and verbal pathways; a human reviewer aligns actual supports and adaptations.',
+        review: 'Return ' + grouping.groups + ' group artifact' + (grouping.groups === 1 ? '' : 's') + ' and ' + state.situation.learners + ' individual note' + (state.situation.learners === 1 ? '' : 's') + ' to ' + (state.receiver.status === 'named' ? state.receiver.label : 'the named human receiver') + ' with assumptions marked for review.',
+        reportingUnits: reportingUnits,
+        reportingSeconds: reportingSeconds,
+        reportingMinutes: reportingMinutes,
+        synthesisMinutes: synthesisMinutes,
+        sweepZones: sweepZones
+      };
+    }
+
+    function candidateLineFor(routeName) {
+      var grouping = state.situation.grouping;
+      var route = routeData[routeName];
+      return countedArtifacts(route, grouping.groups) + ' · ' + state.situation.learners + ' individual evidence-boundary note' + (state.situation.learners === 1 ? '' : 's') + ' · ' + route.checkpoint + ' checkpoint.';
+    }
+
+    function samplingPromptFor() {
+      var grouping = state.situation.grouping;
+      var candidateCount = state.sampling.candidateCount;
+      return [
+        'VERBALIZED SAMPLING · BOUNDED ' + candidateCount + '-CANDIDATE FAN-OUT',
+        '',
+        'Planning question: Given the current ' + state.situation.grade + ' lesson capsule, what distinct coordination plan could help ' + state.situation.learners + ' learner' + (state.situation.learners === 1 ? '' : 's') + ' produce one interpretable evidence-boundary note within ' + state.situation.minutes + ' minutes?',
+        'Fixed conditions: invented watershed fixture; primary goal ' + state.goal + '; selected route ' + state.route.selected + '; ' + groupingPhrase(grouping) + ' and ' + grouping.materialSets + ' material set' + (grouping.materialSets === 1 ? '' : 's') + '; equivalent table, plot, and verbal pathways; class-level privacy boundary; educator review of source standing, accessibility, and classroom fit.',
+        '',
+        'Within one response:',
+        '1. Generate exactly ' + candidateCount + ' distinct candidate answers to the planning question. Each candidate specifies grouping composition, materials, participation and reporting, rotating roles, device-and-paper access, teacher movement, evidence collection, room configuration, accessibility review, and review-and-return.',
+        '2. Give every generated candidate a stable label and concise plan. Preserve the fixed conditions; mark candidate-specific assumptions.',
+        '3. Assign one probability, expressed as a percentage from 0% to 100%, to every generated candidate relative to the full distribution of plausible responses under the fixed conditions.',
+        '4. Sum the ' + candidateCount + ' listed probabilities. Report the residual or unlisted response mass required to complete 100%. The listed probabilities can therefore total less than 100%.',
+        '',
+        'Return the candidates in generation order as: label · coordination plan · probability relative to the full response distribution · assumptions · evidence that would change the probability. Then report: listed probability mass · residual/unlisted mass · 100% accounting check. Treat the ' + candidateCount + ' candidates as a bounded working set; wider alternatives remain visible through the residual. Classroom fit remains a human decision.'
+      ].join('\n');
+    }
+
+    function routeEventPromptFor() {
+      var grouping = state.situation.grouping;
+      var coordination = coordinationFor();
+      var eventPopulation = state.situation.learners === 1 ? 'the learner' : 'all ' + state.situation.learners + ' learners';
+      return [
+        'OPTIONAL ROUTE / EVENT-SUCCESS ASSESSMENT · SEPARATE FRAME',
+        '',
+        'Authored route field (unordered): Plot and annotate; Lag and compare; Claim and challenge.',
+        'Named binary event: In a ' + state.situation.minutes + '-minute ' + state.situation.grade + ' session, the route enables ' + eventPopulation + ', organized as ' + groupingPhrase(grouping) + ' with ' + grouping.materialSets + ' material set' + (grouping.materialSets === 1 ? '' : 's') + ', to produce one interpretable evidence-boundary note from the invented watershed fixture under educator review.',
+        'Conditions: equivalent table, plot, and verbal representations; up to one shared access point per group when digital; ' + grouping.groups + ' group artifact' + (grouping.groups === 1 ? '' : 's') + '; about ' + coordination.reportingMinutes + ' minutes for reporting; educator review of source standing, accessibility, and classroom fit.',
+        '',
+        'For each authored route, use a fresh independent assessment pass. Estimate P(named event | route, conditions), then state a concise rationale, carrying assumptions, coordination dependencies, and evidence that would most change the estimate. Report each conditional probability independently. Keep the full-response-distribution and residual-mass accounting with the generated Verbalized Sampling set above.'
+      ].join('\n');
+    }
+
+    function buildPromptCapsule(reviewed) {
+      var standards = state.standards.length ? state.standards.join(', ') : 'Requires human selection';
+      var request = state.reference.request || 'Define the lesson request with the named classroom educator.';
+      var alignment = state.investigation.alignmentDays;
+      var receiver = state.receiver.status === 'named' ? state.receiver.label : 'Requires a named human receiver';
+      var route = routeData[state.route.selected];
+      var coordination = coordinationFor();
+      var heading = reviewed ? 'REVIEWED PROMPT CAPSULE · REVISION ' + state.assembly.revision : 'WORKING PROMPT CAPSULE';
+      var representationReview = state.reference.socialProxy === 'Direct human review'
+        ? 'The classroom educator and curriculum lead provide the direct review route.'
+        : 'When a social proxy is selected, route representation to people from the named population for review.';
+      return [
+        heading,
+        reviewed ? 'Reviewed locally: ' + state.assembly.reviewedAt + ' · Fixture: ' + state.fixtureVersion + '.' : 'Status: ' + state.assembly.status + ' · Fixture: ' + state.fixtureVersion + '.',
+        '',
+        'TASK',
+        request,
+        'Named human receiver: ' + receiver + '.',
+        '',
+        'TEACHING SITUATION',
+        state.situation.grade + ' · ' + state.situation.learners + ' learners · ' + state.situation.grouping.mode + ': ' + groupingPhrase(state.situation.grouping) + ' · ' + state.situation.grouping.materialSets + ' material sets · ' + state.situation.minutes + ' minutes. ' + gradeProfiles[state.situation.grade] + ' Groups can use graph paper or a spreadsheet. Keep learner identities and records in the educator’s protected channel.',
+        'Timing: ' + timingSentence(),
+        '',
+        'CLASSROOM COORDINATION',
+        'Grouping: ' + coordination.grouping,
+        'Materials: ' + coordination.materials,
+        'Participation and reporting: ' + coordination.participation + ' ' + coordination.reporting,
+        'Roles and teacher movement: ' + coordination.roles + ' ' + coordination.movement,
+        'Technology, room, and access: ' + coordination.technology + ' ' + coordination.room + ' ' + coordination.accessibility,
+        'Evidence, review, and return: ' + coordination.evidence + ' ' + coordination.review,
+        '',
+        'STANDARDS AND GOAL',
+        'CCSS-M ' + standards + '.',
+        'Primary goal: ' + state.goal + '.',
+        'Suggested route: ' + state.route.suggested + '. Selected route: ' + state.route.selected + '. Relation: ' + state.route.relation + '.',
+        'Learner evidence: ' + standardSentence(),
+        '',
+        'SOURCE FIELD',
+        sourceSentence(),
+        'Fixed cohort: ten precipitation anchors from Apr 7–16; streamflow buffer through Apr 18 preserves ten pairs across all three alignments.',
+        '',
+        'REFERENCE AND REGISTER',
+        'Referent check: ' + state.reference.referentStatus + '. Human receiver: ' + receiver + '.',
+        registerBoundary(),
+        'Required modules: ' + registerModules[state.reference.register].join('; ') + '.',
+        proxySentence(),
+        'Review questions: ' + proxyQuestions[state.reference.socialProxy].join(' '),
+        '',
+        'INVESTIGATION',
+        investigationSentence(alignment),
+        '',
+        'LESSON ROUTE',
+        state.route.selected + ': ' + route.summary,
+        'Teacher move: ' + route.teacher + ' Learner move: ' + route.learner + ' Formative evidence: ' + route.evidence + ' Access treatment: ' + route.access,
+        '',
+        samplingPromptFor(),
+        '',
+        routeEventPromptFor(),
+        '',
+        'REQUESTED HANDOFF',
+        'Return the exact ' + state.situation.minutes + '-minute ledger, ' + groupingPhrase(state.situation.grouping) + ', ' + state.situation.grouping.materialSets + ' material sets, participation opportunities, reporting window, rotating roles, device-and-paper access conditions, teacher movement, evidence collection, room configuration, accessibility-review questions, learner instructions, compact data table, plot prompts, and a closing claim check. Place the evidence boundary beside each interpretation.',
+        '',
+        'BOUNDARIES',
+        'SOURCE STANDING: present every value and place mark as an invented teaching fixture; live or historical claims require separately sourced records. AXIS RULE: use paired precipitation and streamflow on quantitative axes; use map and land-cover layers to form context questions. CLAIM RULE: describe association from the selected pairings; causal claims require observed records, an adequate study design, and review of alternative explanations. PRIVACY AND AUTHORITY: use class-level conditions in this capsule; keep protected learner records in the educator’s approved channel. The educator approves classroom use. ' + representationReview + ' Mark assumptions and questions for the named human receiver.'
+      ].join('\n');
+    }
+
+    function renderClassSizeCoordination() {
+      var grouping = state.situation.grouping;
+      var coordination = coordinationFor();
+      var pairOption = groupingFor(state.situation.learners, 'Pair teams');
+      var trioOption = groupingFor(state.situation.learners, 'Trio teams');
+      var quartetOption = groupingFor(state.situation.learners, 'Table teams of four');
+      elements.groupingPreviewPairs.textContent = groupingPhrase(pairOption) + ' · ' + pairOption.materialSets + ' shared material set' + (pairOption.materialSets === 1 ? '' : 's');
+      elements.groupingPreviewTrios.textContent = groupingPhrase(trioOption) + ' · ' + trioOption.materialSets + ' shared material set' + (trioOption.materialSets === 1 ? '' : 's');
+      elements.groupingPreviewQuartets.textContent = groupingPhrase(quartetOption) + ' · ' + quartetOption.materialSets + ' shared material set' + (quartetOption.materialSets === 1 ? '' : 's');
+      elements.coordinationIntro.textContent = 'For ' + state.situation.learners + ' learner' + (state.situation.learners === 1 ? '' : 's') + ', “' + groupingPhrase(grouping) + '” becomes ' + grouping.materialSets + ' material set' + (grouping.materialSets === 1 ? '' : 's') + ', one supported first turn per learner, about ' + coordination.reportingMinutes + ' minute' + (coordination.reportingMinutes === 1 ? '' : 's') + ' of reporting, ' + coordination.sweepZones + ' teacher sweep zone' + (coordination.sweepZones === 1 ? '' : 's') + ', and ' + state.situation.learners + ' individual evidence-boundary note' + (state.situation.learners === 1 ? '' : 's') + '. The palette exposes this usually quiet coordination work so an AI collaborator can help prepare it for educator review.';
+      elements.coordinationGrouping.textContent = coordination.grouping;
+      elements.coordinationMaterials.textContent = coordination.materials;
+      elements.coordinationParticipation.textContent = coordination.participation;
+      elements.coordinationReporting.textContent = coordination.reporting;
+      elements.coordinationRoles.textContent = coordination.roles;
+      elements.coordinationTechnology.textContent = coordination.technology;
+      elements.coordinationMovement.textContent = coordination.movement;
+      elements.coordinationEvidence.textContent = coordination.evidence;
+      elements.coordinationRoom.textContent = coordination.room;
+      elements.coordinationAccessibility.textContent = coordination.accessibility;
+      elements.coordinationReturn.replaceChildren();
+      var reviewStrong = document.createElement('strong');
+      reviewStrong.textContent = 'Review and return: ';
+      elements.coordinationReturn.appendChild(reviewStrong);
+      elements.coordinationReturn.appendChild(document.createTextNode(coordination.review));
+      document.querySelectorAll('[data-route-coordination]').forEach(function (reading) {
+        var routeName = reading.getAttribute('data-route-coordination');
+        reading.textContent = countedArtifacts(routeData[routeName], grouping.groups) + ' from ' + groupingPhrase(grouping) + ' and ' + state.situation.learners + ' individual evidence-boundary note' + (state.situation.learners === 1 ? '' : 's') + '.';
+      });
+      elements.candidatePlot.textContent = candidateLineFor('Plot and annotate');
+      elements.candidateLag.textContent = candidateLineFor('Lag and compare');
+      elements.candidateClaim.textContent = candidateLineFor('Claim and challenge');
+      elements.samplingPrompt.textContent = samplingPromptFor();
+      elements.routeEventPrompt.textContent = routeEventPromptFor();
+      elements.samplingStanding.replaceChildren();
+      var standingStrong = document.createElement('strong');
+      standingStrong.textContent = 'Open full-distribution accounting: ';
+      elements.samplingStanding.appendChild(standingStrong);
+      elements.samplingStanding.appendChild(document.createTextNode('the method contract is ' + state.sampling.candidateCount + ' generated candidates with one probability each relative to the full response distribution, plus disclosed residual mass. This local instrument prepares conditions for ' + state.situation.learners + ' learner' + (state.situation.learners === 1 ? '' : 's') + ' using ' + groupingPhrase(grouping) + ' and keeps candidate and probability values open. The local page makes no model call; a separately authorized AI-enabled workflow can generate the response, and the educator reviews its standing and classroom relevance.'));
+      elements.routeEventStanding.replaceChildren();
+      var routeStandingStrong = document.createElement('strong');
+      routeStandingStrong.textContent = 'Open conditional-event fields: ';
+      elements.routeEventStanding.appendChild(routeStandingStrong);
+      elements.routeEventStanding.appendChild(document.createTextNode('the optional frame carries ' + state.situation.learners + ' learner' + (state.situation.learners === 1 ? '' : 's') + ', ' + groupingPhrase(grouping) + ', and three authored peer routes. All three event-success estimates remain open for a separately authorized assessment and educator review.'));
+    }
+
+    function renderSituation() {
+      var grouping = state.situation.grouping;
+      elements.situationReadout.textContent = state.situation.grade + ' statistics · ' + state.situation.learners + ' learners · ' + groupingPhrase(grouping) + ' · ' + state.situation.minutes + ' minutes';
+      elements.situationGuidance.textContent = gradeProfiles[state.situation.grade] + ' The selected ' + grouping.mode.toLowerCase() + ' structure prepares ' + grouping.materialSets + ' shared material set' + (grouping.materialSets === 1 ? '' : 's') + ', one supported first turn per learner, and one individual evidence-boundary note each.';
+      elements.timingTotal.textContent = state.situation.minutes + ' minutes';
+      listInto(elements.timingLedger, state.situation.timing, function (li, part) {
+        var strong = document.createElement('strong');
+        var span = document.createElement('span');
+        strong.textContent = part.minutes + ' min';
+        span.textContent = part.label;
+        li.appendChild(strong);
+        li.appendChild(span);
+      });
+      renderClassSizeCoordination();
+    }
+
+    function renderStandardAndRouteRelation() {
+      listInto(elements.standardEffects, state.standards, function (li, standard) {
+        var strong = document.createElement('strong');
+        strong.textContent = standard + ': ';
+        li.appendChild(strong);
+        li.appendChild(document.createTextNode(standardEffects[standard] + '.'));
+      });
+      if (!state.standards.length) {
+        listInto(elements.standardEffects, ['Standard alignment requires a human selection before reviewed assembly.']);
+      }
+      var relationText = state.route.relation === 'aligned'
+        ? 'the current route matches that recommendation'
+        : 'the visitor selected ' + state.route.selected + ' as an explicit alternative';
+      elements.goalRouteReading.innerHTML = '<strong>Goal-to-route relation:</strong> ' + state.goal + ' suggests ' + state.route.suggested + '; ' + relationText + '. Choosing a goal updates the recommendation while preserving the visitor’s route choice.';
+      elements.routeGoalReading.innerHTML = '<strong>Current relation:</strong> ' + state.route.selected + (state.route.relation === 'aligned' ? ' supports the current ' + state.goal + ' recommendation.' : ' is a visitor-selected alternative to the ' + state.route.suggested + ' recommendation.') + ' The goal supplies a recommendation; the selected route supplies the lesson method.';
+    }
+
+    function renderRegisterAndProxy() {
+      elements.registerReading.innerHTML = '<strong>' + state.reference.register + ':</strong> ' + registerCopy[state.reference.register] + ' Evidence standing and decision authority remain explicit fields.';
+      listInto(elements.registerModules, registerModules[state.reference.register]);
+      listInto(elements.proxyQuestions, proxyQuestions[state.reference.socialProxy]);
+      document.querySelectorAll('[data-register]').forEach(function (button) {
+        button.setAttribute('aria-pressed', String(button.dataset.register === state.reference.register));
+      });
+    }
+
+    function renderReceiverAndReadiness() {
+      var readyItems = [];
+      if (state.sources.quantitative.length === 2) readyItems.push('Ready: precipitation and streamflow form the ten-anchor quantitative field.');
+      else readyItems.push('Requires resolution: choose precipitation and streamflow to form the paired quantitative field.');
+      if (state.standards.length) readyItems.push('Ready: selected standards contribute observable learner evidence.');
+      else readyItems.push('Requires resolution: choose at least one standard for the reviewed handoff.');
+      if (state.reference.request) readyItems.push('Ready: the artifact request supplies task text.');
+      else readyItems.push('Requires resolution: enter the artifact request for the reviewed handoff.');
+      elements.receiverReading.replaceChildren();
+      var receiverStrong = document.createElement('strong');
+      if (state.receiver.status === 'named') {
+        readyItems.push('Ready: ' + state.receiver.label + ' provides the human review route.');
+        receiverStrong.textContent = 'Receiver named: ';
+        elements.receiverReading.appendChild(receiverStrong);
+        elements.receiverReading.appendChild(document.createTextNode(state.receiver.label + ' can receive the reviewed handoff.'));
+      } else {
+        readyItems.push('Requires resolution: name the educator or reviewer who will receive the handoff.');
+        receiverStrong.textContent = 'Receiver requires resolution: ';
+        elements.receiverReading.appendChild(receiverStrong);
+        elements.receiverReading.appendChild(document.createTextNode('name the educator or reviewer who will receive the handoff.'));
+      }
+      listInto(elements.assemblyReadiness, readyItems);
+      var ready = state.sources.quantitative.length === 2 && state.standards.length > 0 && Boolean(state.reference.request) && state.receiver.status === 'named';
+      var reviewedStateIsCurrent = state.assembly.revision > 0 && state.assembly.changedControls.length === 0;
+      elements.assembleButton.disabled = !ready || reviewedStateIsCurrent;
+      elements.assembleButton.textContent = state.assembly.revision === 0
+        ? 'Assemble reviewed prompt capsule'
+        : (reviewedStateIsCurrent ? 'Reviewed revision ' + state.assembly.revision + ' is current' : 'Assemble reviewed revision ' + (state.assembly.revision + 1));
+      elements.assemblyMeta.textContent = state.assembly.revision
+        ? 'Reviewed revision ' + state.assembly.revision + ' · ' + (state.assembly.status === 'reviewed-revision-current' ? 'current controls match the revision' : state.assembly.changedControls.length + ' changed control' + (state.assembly.changedControls.length === 1 ? '' : 's') + ' awaiting review')
+        : 'Working draft · first reviewed revision ' + (ready ? 'ready to assemble' : 'requires the listed resolutions');
+      var changesSinceReview;
+      if (!state.assembly.revision) {
+        changesSinceReview = state.assembly.changedControls.length
+          ? state.assembly.changedControls.map(function (key) { return dependencyMap[key].label + ': ' + pendingChangeDetails[key]; })
+          : ['The first reviewed revision will establish the comparison point.'];
+      } else if (state.assembly.changedControls.length) {
+        changesSinceReview = state.assembly.changedControls.map(function (key) { return dependencyMap[key].label + ': ' + pendingChangeDetails[key]; });
+      } else {
+        changesSinceReview = ['Current working controls match reviewed revision ' + state.assembly.revision + '.'];
+      }
+      listInto(elements.changesSinceReview, changesSinceReview);
+    }
+
+    function contractMatches() {
+      var timingTotal = state.situation.timing.reduce(function (sum, part) { return sum + part.minutes; }, 0);
+      var receiverMatches = state.receiver.status === (state.receiver.label ? 'named' : 'requires-resolution');
+      var groupingMatches = JSON.stringify(state.situation.grouping) === JSON.stringify(groupingFor(state.situation.learners, state.situation.grouping.mode));
+      var samplingMatches = state.sampling.method === 'bounded-verbalized-sampling' && state.sampling.candidateCount === 5 && state.sampling.probabilityReference === 'full-response-distribution' && state.sampling.residualMass === 'required-disclosure' && state.sampling.probabilityUnit === 'percent' && state.sampling.standing === 'open-local-field' && state.sampling.routeEventAssessment === 'optional-separate';
+      return state.version === 'open-lesson-field.v2' && state.fixtureVersion === fixture.version && timingTotal === state.situation.minutes && groupingMatches && samplingMatches && [0, 1, 2].indexOf(state.investigation.alignmentDays) !== -1 && [0, 10].indexOf(state.investigation.pairs) !== -1 && receiverMatches && Boolean(routeData[state.route.selected]) && Boolean(routeData[state.route.suggested]);
+    }
+
+    function renderContract() {
+      elements.packet.textContent = buildPromptCapsule(false);
+      elements.stateJson.textContent = JSON.stringify(state, null, 2);
+      var matches = contractMatches();
+      elements.schemaStatus.innerHTML = matches ? '<strong>Contract check:</strong> current state matches the included schema vocabulary and derived invariants.' : '<strong>Contract check requires review:</strong> a derived state invariant requires reconciliation before assembly.';
+    }
+
+    function readControls() {
+      state.situation.grade = elements.grade.value;
+      state.situation.learners = clampNumber(elements.learners.value, 1, 60, 28);
+      state.situation.minutes = clampNumber(elements.minutes.value, 20, 180, 55);
+      state.situation.grouping = groupingFor(state.situation.learners, selectedValue('grouping-mode') || state.situation.grouping.mode || 'Pair teams');
+      state.situation.timing = timingFor(state.situation.minutes);
+      elements.learners.value = state.situation.learners;
+      elements.minutes.value = state.situation.minutes;
+      state.standards = selectedValues('input[name="standard"]');
+      state.goal = selectedValue('goal') || state.goal;
+      state.reference.request = elements.request.value.trim();
+      state.reference.socialProxy = elements.proxy.value;
+      state.investigation.alignmentDays = clampNumber(selectedValue('alignment'), 0, 2, 1);
+      state.receiver.label = elements.receiver.value.trim();
+      state.receiver.status = state.receiver.label ? 'named' : 'requires-resolution';
+      state.route.suggested = goalRoutes[state.goal];
+      state.route.relation = state.route.selected === state.route.suggested ? 'aligned' : 'visitor-selected-alternative';
+      updateSourceState();
+      updateReferentReading(false);
+      renderPairs();
+      renderSituation();
+      renderStandardAndRouteRelation();
+      renderRegisterAndProxy();
+      updateRouteButtons();
+      renderReceiverAndReadiness();
+      renderContract();
+    }
+
+    function announce(message) {
+      if (announcementTimer !== null) window.clearTimeout(announcementTimer);
+      elements.live.textContent = '';
+      announcementTimer = window.setTimeout(function () {
+        elements.live.textContent = message;
+        announcementTimer = null;
+      }, 20);
+    }
+
+    function setReceipt(element, detail, config) {
+      element.replaceChildren();
+      var effectStrong = document.createElement('strong');
+      var preservedStrong = document.createElement('strong');
+      effectStrong.textContent = 'Current effect: ';
+      preservedStrong.textContent = ' Preserved: ';
+      element.appendChild(effectStrong);
+      element.appendChild(document.createTextNode(detail + '. Changed: ' + config.changes.join(' · ') + '.'));
+      element.appendChild(preservedStrong);
+      element.appendChild(document.createTextNode(config.preserves.join(' · ') + '.'));
+    }
+
+    function semanticValue(source, key) {
+      if (key === 'grade') return source.situation.grade;
+      if (key === 'learners') return source.situation.learners;
+      if (key === 'grouping') return source.situation.grouping.mode;
+      if (key === 'minutes') return source.situation.minutes;
+      if (key === 'standards') return source.standards.slice().sort();
+      if (key === 'goal') return source.goal;
+      if (key === 'quantitative') return source.sources.quantitative.slice().sort();
+      if (key === 'context') return source.sources.context.slice().sort();
+      if (key === 'request') return source.reference.request;
+      if (key === 'register') return source.reference.register;
+      if (key === 'proxy') return source.reference.socialProxy;
+      if (key === 'alignment') return source.investigation.alignmentDays;
+      if (key === 'route') return source.route.selected;
+      return { label: source.receiver.label, status: source.receiver.status };
+    }
+
+    function familyMatchesReviewed(key) {
+      if (!reviewedSnapshot) return false;
+      return JSON.stringify(semanticValue(state, key)) === JSON.stringify(semanticValue(reviewedSnapshot, key));
+    }
+
+    function recordChange(key, detail) {
+      var config = dependencyMap[key];
+      var returnedToReviewed = state.assembly.revision > 0 && familyMatchesReviewed(key);
+      if (returnedToReviewed) {
+        state.assembly.changedControls = state.assembly.changedControls.filter(function (candidate) { return candidate !== key; });
+        delete pendingChangeDetails[key];
+      } else {
+        if (state.assembly.changedControls.indexOf(key) === -1) state.assembly.changedControls.push(key);
+        pendingChangeDetails[key] = detail;
+      }
+      state.assembly.status = state.assembly.revision
+        ? (state.assembly.changedControls.length ? 'changes-awaiting-review' : 'reviewed-revision-current')
+        : 'working-draft';
+      elements.lastChange.textContent = detail;
+      elements.changedReading.textContent = returnedToReviewed
+        ? config.label + ' now matches reviewed revision ' + state.assembly.revision + ' · pending receipt reconciled'
+        : config.changes.join(' · ');
+      elements.preservedReading.textContent = config.preserves.join(' · ');
+      elements.capsuleStatus.textContent = state.assembly.revision
+        ? (state.assembly.changedControls.length ? 'Revision ' + state.assembly.revision + ' · ' + state.assembly.changedControls.length + ' awaiting review' : 'Revision ' + state.assembly.revision + ' · current')
+        : 'Working draft · ' + state.assembly.changedControls.length + ' changed';
+      setReceipt(document.getElementById(config.receipt), returnedToReviewed ? detail + '; this family now matches reviewed revision ' + state.assembly.revision : detail, returnedToReviewed ? { changes: ['pending change receipt reconciled'], preserves: config.preserves } : config);
+      renderReceiverAndReadiness();
+      renderContract();
+    }
+
+    function detailFor(key, control) {
+      if (key === 'grade') return 'Grade band set to ' + state.situation.grade;
+      if (key === 'learners') return state.situation.learners + ' learners form ' + groupingPhrase(state.situation.grouping) + ' with ' + state.situation.grouping.materialSets + ' material sets';
+      if (key === 'grouping') return state.situation.grouping.mode + ' selected: ' + groupingPhrase(state.situation.grouping) + ', ' + state.situation.grouping.materialSets + ' material sets, and ' + state.situation.grouping.groups + ' reporting groups';
+      if (key === 'minutes') return state.situation.minutes + ' minutes allocated across five timed lesson parts';
+      if (key === 'standards') return state.standards.length + ' standard' + (state.standards.length === 1 ? '' : 's') + ' selected for observable learner evidence';
+      if (key === 'goal') return state.goal + ' now suggests ' + state.route.suggested + ' while ' + state.route.selected + ' remains selected';
+      if (key === 'quantitative') return control.value + (control.checked ? ' contributes its quantitative field' : ' requires selection for paired calculation readiness');
+      if (key === 'context') return control.value + (control.checked ? ' contributes question-forming context' : ' yields a more focused context view');
+      if (key === 'request') return 'Artifact request and recoverable task positions updated';
+      if (key === 'register') return state.reference.register + ' now requires ' + registerModules[state.reference.register].length + ' handoff modules';
+      if (key === 'proxy') return state.reference.socialProxy + ' now contributes ' + proxyQuestions[state.reference.socialProxy].length + ' disclosed review questions';
+      if (key === 'alignment') return 'Streamflow aligned ' + alignmentPhrase(state.investigation.alignmentDays) + ' across ten fixed precipitation anchors; r = ' + signed(state.investigation.correlation);
+      if (key === 'route') return state.route.selected + ' selected; goal relation is ' + state.route.relation;
+      return state.receiver.status === 'named' ? 'Human receiver named for reviewed assembly' : 'Human receiver requires resolution before reviewed assembly';
+    }
+
+    function updateWorkingControl(key, control, announceChange) {
+      readControls();
+      var detail = detailFor(key, control);
+      recordChange(key, detail);
+      if (announceChange) announce(detail + '. Working prompt capsule updated.');
+    }
+
+    function controlKey(control) {
+      if (control.id === 'grade') return 'grade';
+      if (control.id === 'learners') return 'learners';
+      if (control.id === 'minutes') return 'minutes';
+      if (control.name === 'standard') return 'standards';
+      if (control.name === 'goal') return 'goal';
+      if (control.name === 'grouping-mode') return 'grouping';
+      if (control.name === 'alignment') return 'alignment';
+      if (control.name === 'source') return control.dataset.kind === 'quantitative' ? 'quantitative' : 'context';
+      if (control.id === 'proxy') return 'proxy';
+      return '';
+    }
+
+    document.addEventListener('change', function (event) {
+      if (!event.target.matches('input, select')) return;
+      if (['learners', 'minutes'].indexOf(event.target.id) !== -1) return;
+      var key = controlKey(event.target);
+      if (key) updateWorkingControl(key, event.target, true);
+    });
+
+    [elements.learners, elements.minutes].forEach(function (input) {
+      input.addEventListener('input', function () {
+        if (input.value === '') return;
+        updateWorkingControl(input.id, input, false);
+      });
+      input.addEventListener('change', function () {
+        if (input.value === '') {
+          input.value = input.id === 'learners' ? state.situation.learners : state.situation.minutes;
+          announce((input.id === 'learners' ? 'Class size' : 'Available minutes') + ' restored to the last complete value. Enter a number within the displayed range to revise it.');
+          return;
+        }
+        announce(detailFor(input.id, input) + '. Working prompt capsule updated.');
+      });
+    });
+
+    [elements.request, elements.receiver].forEach(function (input) {
+      input.addEventListener('input', function () {
+        updateWorkingControl(input === elements.request ? 'request' : 'receiver', input, false);
+      });
+      input.addEventListener('change', function () {
+        announce(detailFor(input === elements.request ? 'request' : 'receiver', input) + '. Working prompt capsule updated.');
+      });
+    });
+
+    document.querySelectorAll('[data-example]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        elements.request.value = button.dataset.example === 'personal' ? 'Make me a lesson plan for high-school Math students.' : 'Create a Grade 9 statistics lesson plan for a classroom educator. A curriculum lead will review the handoff.';
+        updateWorkingControl('request', elements.request, false);
+        updateReferentReading(true);
+        elements.request.focus();
+      });
+    });
+
+    document.getElementById('check-referent').addEventListener('click', function () {
+      readControls();
+      updateReferentReading(true);
+    });
+
+    document.querySelectorAll('[data-register]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        state.reference.register = button.dataset.register;
+        readControls();
+        recordChange('register', detailFor('register', button));
+        announce(state.reference.register + ' selected. Required handoff modules and working prompt capsule updated.');
+      });
+    });
+
+    document.querySelectorAll('[data-route]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        state.route.selected = button.dataset.route;
+        readControls();
+        recordChange('route', detailFor('route', button));
+        announce(state.route.selected + ' selected. Full lesson folio and working prompt capsule updated.');
+      });
+    });
+
+    elements.assembleButton.addEventListener('click', function () {
+      readControls();
+      if (elements.assembleButton.disabled || !contractMatches()) return;
+      var included = state.assembly.changedControls.slice();
+      state.assembly.revision += 1;
+      state.assembly.reviewedAt = new Date().toISOString();
+      state.assembly.status = 'reviewed-revision-current';
+      state.assembly.changedControls = [];
+      reviewedChanges = included.length ? included.map(function (key) { return dependencyMap[key].label + ': ' + pendingChangeDetails[key]; }) : ['Complete initial working state'];
+      reviewedCapsule = buildPromptCapsule(true);
+      reviewedSnapshot = copy(state);
+      pendingChangeDetails = {};
+      elements.assembledPacket.textContent = reviewedCapsule;
+      elements.assembledRevision.dataset.ready = 'true';
+      document.documentElement.classList.add('has-reviewed-revision');
+      elements.revisionMeta.textContent = 'Revision ' + state.assembly.revision + ' · reviewed ' + state.assembly.reviewedAt + ' · ' + state.fixtureVersion;
+      listInto(elements.revisionDiff, reviewedChanges);
+      elements.restoreButton.disabled = false;
+      elements.selectButton.disabled = false;
+      elements.selectButton.textContent = 'Select reviewed revision ' + state.assembly.revision;
+      elements.printButton.disabled = false;
+      elements.capsuleStatus.textContent = 'Revision ' + state.assembly.revision + ' · current';
+      elements.lastChange.textContent = 'Reviewed revision ' + state.assembly.revision + ' assembled locally';
+      elements.changedReading.textContent = reviewedChanges.join(' · ');
+      elements.preservedReading.textContent = 'local-only operation · fixture standing · human review authority · working controls';
+      setReceipt(document.getElementById('handoff-receipt'), 'Reviewed revision ' + state.assembly.revision + ' records the current working state', { changes: ['revision metadata', 'included-change receipt', 'recoverable snapshot', 'printable handoff'], preserves: ['working controls', 'local-only operation', 'human approval authority'] });
+      renderReceiverAndReadiness();
+      renderContract();
+      elements.handoffStatus.textContent = 'Reviewed prompt capsule revision ' + state.assembly.revision + ' assembled locally. Working controls remain available for the next revision.';
+      announce(elements.handoffStatus.textContent);
+    });
+
+    function applySnapshotToControls() {
+      elements.grade.value = state.situation.grade;
+      elements.learners.value = state.situation.learners;
+      elements.minutes.value = state.situation.minutes;
+      document.querySelectorAll('input[name="grouping-mode"]').forEach(function (input) { input.checked = input.value === state.situation.grouping.mode; });
+      document.querySelectorAll('input[name="standard"]').forEach(function (input) { input.checked = state.standards.indexOf(input.value) !== -1; });
+      document.querySelectorAll('input[name="goal"]').forEach(function (input) { input.checked = input.value === state.goal; });
+      document.querySelectorAll('input[name="source"]').forEach(function (input) { input.checked = state.sources.quantitative.concat(state.sources.context).indexOf(input.value) !== -1; });
+      document.querySelectorAll('input[name="alignment"]').forEach(function (input) { input.checked = Number(input.value) === state.investigation.alignmentDays; });
+      elements.request.value = state.reference.request;
+      elements.proxy.value = state.reference.socialProxy;
+      elements.receiver.value = state.receiver.label;
+    }
+
+    elements.restoreButton.addEventListener('click', function () {
+      if (!reviewedSnapshot) return;
+      state = copy(reviewedSnapshot);
+      pendingChangeDetails = {};
+      applySnapshotToControls();
+      readControls();
+      elements.capsuleStatus.textContent = 'Revision ' + state.assembly.revision + ' · current';
+      elements.lastChange.textContent = 'Working controls restored to reviewed revision ' + state.assembly.revision;
+      elements.changedReading.textContent = 'working controls · lesson views · working prompt capsule';
+      elements.preservedReading.textContent = 'reviewed revision · fixture standing · human review authority';
+      elements.handoffStatus.textContent = 'Working controls restored to reviewed revision ' + state.assembly.revision + '. The reviewed snapshot remains available.';
+      announce(elements.handoffStatus.textContent);
+    });
+
+    document.getElementById('select-packet').addEventListener('click', function () {
+      if (!reviewedSnapshot) return;
+      var selection = window.getSelection();
+      var range = document.createRange();
+      range.selectNodeContents(elements.assembledPacket);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      elements.handoffStatus.textContent = 'Reviewed prompt capsule revision ' + state.assembly.revision + ' selected. Use the browser or operating-system copy command to carry it to an approved surface.';
+      announce(elements.handoffStatus.textContent);
+    });
+
+    elements.printButton.addEventListener('click', function () { if (reviewedSnapshot) window.print(); });
+
+    var routeLinks = Array.prototype.slice.call(document.querySelectorAll('.route-scroll a'));
+
+    function setCurrentStage(id) {
+      var currentLink = routeLinks.find(function (link) { return link.getAttribute('href') === '#' + id; }) || routeLinks[0];
+      routeLinks.forEach(function (link) {
+        if (link === currentLink) link.setAttribute('aria-current', 'step');
+        else link.removeAttribute('aria-current');
+      });
+    }
+
+    routeLinks.forEach(function (link) {
+      link.addEventListener('click', function () { setCurrentStage(link.getAttribute('href').slice(1)); });
+    });
+    setCurrentStage(window.location.hash.slice(1));
+    window.addEventListener('hashchange', function () { setCurrentStage(window.location.hash.slice(1)); });
+
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        var visible = entries.filter(function (entry) { return entry.isIntersecting; }).sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; })[0];
+        if (!visible) return;
+        setCurrentStage(visible.target.id);
+      }, { rootMargin: '-20% 0px -62% 0px', threshold: [0.05, 0.35, 0.7] });
+      document.querySelectorAll('main > .stage').forEach(function (section) { observer.observe(section); });
+    }
+
+    try {
+      elements.schemaDisplay.textContent = JSON.stringify(JSON.parse(document.getElementById('lesson-field-schema').textContent), null, 2);
+    } catch (error) {
+      elements.schemaDisplay.textContent = 'Schema parsing requires implementation review.';
+    }
+
+    updateRouteButtons();
+    readControls();
+    document.querySelectorAll('[data-enhanced-control]').forEach(function (control) {
+      control.disabled = false;
+    });
+    document.documentElement.classList.add('is-enhanced');
+  }());
+  </script>
+</body>
+</html>

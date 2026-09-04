@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">AI Systems Service Blueprint preview</title>
+  <desc id="desc">One visible interaction is traced through human, agent, runtime, knowledge, evaluation, observability, governance, and handoff lanes.</desc>
+  <style>.bg{fill:#fffdf7}.ink{fill:#16345e}.cobalt{fill:#2855f3}.sea{fill:#bfe7e4}.powder{fill:#dbe9ff}.rose{fill:#ffd3d0}.lime{fill:#efff66}.rule{stroke:#16345e;stroke-width:3}.cap{font:700 17px ui-monospace,monospace;letter-spacing:.7px}.head{font:700 26px Arial,sans-serif}.small{font:16px Arial,sans-serif}</style>
+  <rect width="960" height="600" class="bg"/>
+  <rect x="40" y="34" width="880" height="74" rx="14" class="cobalt rule"/><text x="68" y="67" class="cap" fill="#fff">VISIBLE EXPERIENCE</text><text x="68" y="93" class="small" fill="#fff">Reviewer asks for a bounded evidence summary</text>
+  <g class="rule">
+    <rect x="40" y="130" width="188" height="76" rx="12" class="sea"/><rect x="250" y="130" width="188" height="76" rx="12" class="lime"/><rect x="460" y="130" width="188" height="76" rx="12" class="powder"/><rect x="670" y="130" width="250" height="76" rx="12" class="rose"/>
+  </g>
+  <text x="62" y="160" class="cap ink">HUMAN ACTION</text><text x="62" y="186" class="small ink">sets intent</text>
+  <text x="272" y="160" class="cap ink">AGENT</text><text x="272" y="186" class="small ink">plans + calls tools</text>
+  <text x="482" y="160" class="cap ink">RUNTIME</text><text x="482" y="186" class="small ink">bounds execution</text>
+  <text x="692" y="160" class="cap ink">KNOWLEDGE</text><text x="692" y="186" class="small ink">source + retrieval standing</text>
+  <path d="M134 206V252H795V226" fill="none" class="rule"/><path d="M795 226l-13 22h26z" class="ink"/>
+  <rect x="40" y="252" width="880" height="92" rx="14" class="bg rule"/><text x="66" y="287" class="cap ink">SYSTEM ACTION</text><text x="66" y="320" class="head ink">Retrieve → transform → cite → ask for review</text>
+  <g class="rule"><rect x="40" y="368" width="268" height="110" rx="14" class="powder"/><rect x="346" y="368" width="268" height="110" rx="14" class="sea"/><rect x="652" y="368" width="268" height="110" rx="14" class="rose"/></g>
+  <text x="62" y="402" class="cap ink">EVALUATION</text><text x="62" y="433" class="small ink">protected behavior</text><text x="62" y="456" class="small ink">+ counter-signal</text>
+  <text x="368" y="402" class="cap ink">OBSERVABILITY</text><text x="368" y="433" class="small ink">trace + source receipt</text><text x="368" y="456" class="small ink">+ recovery cue</text>
+  <text x="674" y="402" class="cap ink">GOVERNANCE</text><text x="674" y="433" class="small ink">review + escalation</text><text x="674" y="456" class="small ink">+ authority boundary</text>
+  <rect x="206" y="512" width="548" height="54" rx="16" class="lime rule"/><text x="480" y="547" text-anchor="middle" class="head ink">Named handoff and accountable reader</text>
+</svg>

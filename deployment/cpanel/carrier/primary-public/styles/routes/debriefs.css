@@ -1,0 +1,700 @@
+@charset "UTF-8";
+
+/* Context Canvas route bundle: Debriefs catalog --------------------------
+   Consumer: debriefs.html (.debrief-catalog)
+   Owns: the cobalt-and-cream catalog field, filters, Debrief-card badges and
+   metadata, browse/preview layout, alternate modes, and print reading.
+   Load order: expanded.css, styles/components/debrief-reading.css, this route
+   bundle, then canvas-shell.css.
+   Contract: ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md.
+   The complete list remains in HTML; debriefs-catalog.js adds bounded filters
+   and focus previews. Catalog rhythm, density, and visual experiments remain
+   route-owned while the shared reading components keep their own source. */
+
+.debrief-system-summary,
+.debrief-catalog {
+    --debrief-field: #fffaf2;
+    --debrief-panel: #fffdf8;
+    --debrief-cobalt: #2855f3;
+    --debrief-cobalt-deep: #153fbe;
+    --debrief-ink: #17345f;
+    --debrief-body: #304a71;
+    --debrief-muted: #5d6f8b;
+    --debrief-acid: #f2ff67;
+    --debrief-coral: #fa7065;
+    --debrief-sea: #d9efea;
+    --debrief-powder: #cfe7f7;
+    --debrief-preview-bottom-gap: 1rem;
+    --debrief-preview-top: 5.75rem;
+    color: var(--debrief-body);
+}
+
+.debrief-system-summary {
+    --canvas-link-color: var(--canvas-link-on-dark);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
+    background:
+        linear-gradient(90deg, rgba(242, 255, 103, .18) 0 1px, transparent 1px 100%) 0 0 / 6rem 100%,
+        var(--debrief-cobalt-deep);
+    border-block: 1px solid #0d329f;
+    color: var(--debrief-field);
+}
+
+.content.debrief-system-summary__inner,
+.content.debrief-catalog__content {
+    inline-size: min(100%, 92rem);
+    max-width: 92rem;
+}
+
+.debrief-system-summary__inner {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 5rem);
+    grid-template-columns: minmax(15rem, .8fr) minmax(0, 1.45fr);
+}
+
+.debrief-system-summary .txt-h2 {
+    color: #fff;
+    margin-block: .3rem 0;
+    max-width: 18ch;
+}
+
+.debrief-system-summary__copy {
+    max-inline-size: var(--canvas-reading-measure);
+}
+
+.debrief-system-summary__copy p {
+    margin-block: 0 1rem;
+}
+
+.debrief-system-summary__copy p:last-child {
+    margin-bottom: 0;
+}
+
+.debrief-eyebrow {
+    color: var(--debrief-cobalt-deep);
+    font-family: Futura, "Arial Nova", sans-serif;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .13em;
+    margin: 0 0 .45rem;
+    text-transform: uppercase;
+}
+
+.debrief-system-summary .debrief-eyebrow {
+    color: var(--debrief-acid);
+}
+
+.debrief-catalog {
+    background:
+        linear-gradient(rgba(40, 85, 243, .045) 1px, transparent 1px) 0 0 / 100% 2.5rem,
+        var(--debrief-field);
+}
+
+.debrief-catalog__header {
+    background: var(--debrief-panel);
+    border: 1px solid rgba(40, 85, 243, .3);
+    border-top: .45rem solid var(--debrief-cobalt);
+    box-shadow: .7rem .7rem 0 rgba(40, 85, 243, .09);
+    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+    padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.debrief-catalog__header > p:not(.debrief-eyebrow),
+.debrief-catalog__header noscript p {
+    max-inline-size: var(--canvas-reading-measure);
+}
+
+.debrief-catalog__header .txt-h2 {
+    color: var(--debrief-ink);
+    margin-block: .2rem .65rem;
+}
+
+.debrief-filter-panel[hidden],
+.debrief-preview-entry[hidden],
+.debrief-preview-default[hidden],
+.debrief-catalog__card[hidden] {
+    display: none !important;
+}
+
+.debrief-filter-panel {
+    border-top: 1px solid rgba(40, 85, 243, .25);
+    display: block;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+}
+
+.debrief-filter-panel fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.debrief-filter-panel legend {
+    color: var(--debrief-ink);
+    font: 700 1rem/1.2 Futura, "Arial Nova", sans-serif;
+    padding: 0;
+}
+
+.debrief-filter-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .55rem;
+    margin-top: .85rem;
+}
+
+.debrief-filter {
+    align-items: center;
+    background: var(--debrief-panel);
+    border: 2px solid var(--debrief-cobalt);
+    border-radius: 999px;
+    color: var(--debrief-cobalt-deep);
+    cursor: pointer;
+    display: inline-flex;
+    font: 700 .72rem/1.2 Futura, "Arial Nova", sans-serif;
+    gap: .4rem;
+    letter-spacing: .035em;
+    min-height: 2.75rem;
+    padding: .55rem .85rem;
+}
+
+.debrief-filter input {
+    accent-color: var(--debrief-cobalt-deep);
+    block-size: 1.05rem;
+    flex: 0 0 auto;
+    inline-size: 1.05rem;
+    margin: 0;
+}
+
+.debrief-filter:hover,
+.debrief-filter-apply:hover,
+.debrief-filter-clear:hover:not(:disabled),
+.debrief-zero-results button:hover {
+    background: var(--debrief-powder);
+}
+
+.debrief-filter:has(input:checked) {
+    background: var(--debrief-cobalt-deep);
+    box-shadow: inset 0 0 0 2px var(--debrief-acid);
+    color: #fff;
+}
+
+.debrief-filter-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .55rem;
+    margin-top: .85rem;
+}
+
+.debrief-filter-apply,
+.debrief-filter-clear,
+.debrief-zero-results button {
+    align-items: center;
+    background: var(--debrief-panel);
+    border: 2px solid var(--debrief-cobalt);
+    color: var(--debrief-cobalt-deep);
+    cursor: pointer;
+    display: inline-flex;
+    font: 700 .72rem/1.2 Futura, "Arial Nova", sans-serif;
+    gap: .4rem;
+    min-height: 2.75rem;
+    padding: .55rem .85rem;
+}
+
+.debrief-filter-clear {
+    border-color: var(--debrief-muted);
+    color: var(--debrief-body);
+}
+
+.debrief-filter-clear:disabled {
+    cursor: default;
+    opacity: .48;
+}
+
+.debrief-filter:has(input:focus-visible),
+.debrief-filter-apply:focus-visible,
+.debrief-filter-clear:focus-visible,
+.debrief-zero-results button:focus-visible,
+.debrief-preview-link:focus-visible,
+.debrief-catalog__card:focus-visible {
+    outline: 4px solid var(--debrief-coral);
+    outline-offset: 3px;
+}
+
+.debrief-filter-status {
+    color: var(--debrief-muted);
+    display: block;
+    font-size: .82rem;
+    font-weight: 700;
+    margin: .8rem 0 0;
+}
+
+.debrief-noscript {
+    background: var(--debrief-sea);
+    border-left: .35rem solid var(--debrief-cobalt);
+    color: var(--debrief-ink);
+    margin-top: 1.25rem;
+    padding: .9rem 1rem;
+}
+
+.debrief-catalog__layout {
+    align-items: start;
+    display: grid;
+    gap: clamp(1.25rem, 3vw, 2.75rem);
+    grid-template-columns: minmax(0, 65fr) minmax(18rem, 35fr);
+}
+
+.debrief-catalog__browse,
+.debrief-catalog__preview {
+    min-width: 0;
+}
+
+.debrief-catalog__preview {
+    background: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+.debrief-catalog__list {
+    display: grid;
+    gap: 1rem;
+}
+
+.debrief-zero-results {
+    align-items: flex-start;
+    background: var(--debrief-panel);
+    border: 2px dashed var(--debrief-cobalt);
+    color: var(--debrief-body);
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding: 1.25rem;
+}
+
+.debrief-zero-results[hidden] {
+    display: none !important;
+}
+
+.debrief-zero-results svg {
+    color: var(--debrief-cobalt-deep);
+    flex: 0 0 auto;
+}
+
+.debrief-zero-results .txt-h3 {
+    color: var(--debrief-ink);
+    margin: 0 0 .35rem;
+}
+
+.debrief-zero-results p {
+    margin-block: 0 .75rem;
+}
+
+.debrief-catalog__card.project__media {
+    background: var(--debrief-panel);
+    border: 1px solid rgba(40, 85, 243, .34);
+    border-left: .42rem solid var(--debrief-cobalt);
+    box-shadow: .45rem .45rem 0 rgba(21, 63, 190, .08);
+    display: flow-root;
+    margin: 0;
+    overflow-wrap: anywhere;
+    padding: clamp(1rem, 2vw, 1.5rem);
+}
+
+.debrief-catalog__card.project__media:last-of-type {
+    border: 1px solid rgba(40, 85, 243, .34);
+    border-left: .42rem solid var(--debrief-cobalt);
+}
+
+.debrief-catalog__card:hover,
+.debrief-catalog__card:focus-within,
+.debrief-catalog__card[data-preview-active="true"] {
+    border-color: var(--debrief-cobalt-deep);
+    box-shadow: .55rem .55rem 0 rgba(40, 85, 243, .15);
+}
+
+.debrief-catalog__card > .txt-h2 {
+    color: var(--debrief-ink);
+    font-size: clamp(1.25rem, 2vw, 1.7rem);
+    margin-top: 0;
+}
+
+.debrief-card__types {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+    margin: -.2rem 0 1rem;
+}
+
+.debrief-card__types li {
+    background: var(--debrief-sea);
+    border: 1px solid rgba(21, 63, 190, .32);
+    border-radius: .2rem;
+    color: var(--debrief-ink);
+    font-family: Futura, "Arial Nova", sans-serif;
+    font-size: .62rem;
+    font-weight: 700;
+    letter-spacing: .035em;
+    padding: .28rem .42rem;
+    text-transform: uppercase;
+}
+
+.debrief-card__types > li {
+    margin-block-end: 0;
+}
+
+.debrief-card__catalog-meta {
+    background: rgba(207, 231, 247, .42);
+    border-block: 1px solid rgba(40, 85, 243, .22);
+    clear: both;
+    display: grid;
+    gap: .65rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0 0 1rem;
+    padding: .7rem;
+}
+
+.debrief-card__catalog-meta > div {
+    min-width: 0;
+}
+
+.debrief-card__catalog-meta dt {
+    color: var(--debrief-cobalt-deep);
+    font-family: Futura, "Arial Nova", sans-serif;
+    font-size: .58rem;
+    font-weight: 700;
+    letter-spacing: .065em;
+    text-transform: uppercase;
+}
+
+.debrief-card__catalog-meta dd {
+    color: var(--debrief-body);
+    font-size: .7rem;
+    margin: .15rem 0 0;
+    overflow-wrap: anywhere;
+}
+
+.debrief-catalog__card .project__media--container {
+    max-width: min(45%, 19rem);
+}
+
+.debrief-catalog__card .project__upfront {
+    background: #fff;
+    border: 1px solid rgba(40, 85, 243, .22);
+    display: block;
+    height: auto;
+    width: 100%;
+}
+
+.debrief-catalog__card .project--slug {
+    color: var(--debrief-cobalt-deep);
+}
+
+.debrief-catalog__card .article__summary {
+    overflow-wrap: anywhere;
+}
+
+.debrief-catalog__preview-inner {
+    background: var(--debrief-cobalt-deep);
+    border: 1px solid #0d329f;
+    box-shadow: .65rem .65rem 0 rgba(21, 63, 190, .14);
+    color: var(--debrief-field);
+    padding: clamp(1.1rem, 2.5vw, 1.7rem);
+    position: static;
+}
+
+.debrief-catalog__preview .debrief-eyebrow {
+    color: var(--debrief-acid);
+}
+
+.debrief-catalog__preview .txt-h3 {
+    color: #fff;
+    font-size: .72rem;
+    letter-spacing: .08em;
+    margin-block: .3rem .7rem;
+    text-transform: uppercase;
+}
+
+.debrief-preview-heading {
+    color: #fff;
+    font-size: clamp(1.25rem, 2.3vw, 1.8rem);
+    margin-block: 0 .8rem;
+}
+
+.debrief-tag-cloud {
+    display: grid;
+    gap: .45rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-block: 1.1rem;
+}
+
+.debrief-tag-cloud li {
+    align-items: center;
+    background: rgba(255, 255, 255, .1);
+    border: 1px solid rgba(255, 255, 255, .48);
+    display: flex;
+    font-size: .68rem;
+    gap: .55rem;
+    justify-content: space-between;
+    min-width: 0;
+    padding: .5rem .6rem;
+}
+
+.debrief-tag-cloud span {
+    overflow-wrap: anywhere;
+}
+
+.debrief-tag-cloud strong {
+    align-items: center;
+    background: var(--debrief-acid);
+    border-radius: 50%;
+    color: var(--debrief-ink);
+    display: inline-flex;
+    flex: 0 0 1.65rem;
+    height: 1.65rem;
+    justify-content: center;
+}
+
+.debrief-preview-note {
+    color: var(--debrief-powder);
+    font-size: .75rem;
+}
+
+.debrief-preview-figure {
+    background: #fff;
+    border: 2px solid var(--debrief-acid);
+    margin: 1rem 0;
+    padding: .55rem;
+}
+
+.debrief-preview-figure img {
+    display: block;
+    height: auto;
+    max-height: 19rem;
+    object-fit: contain;
+    width: 100%;
+}
+
+.debrief-preview-figure figcaption {
+    border-top: 1px solid var(--debrief-powder);
+    color: var(--debrief-body);
+    font-size: .68rem;
+    margin-top: .55rem;
+    padding: .55rem .2rem .1rem;
+}
+
+.debrief-preview-slug {
+    color: #fff;
+    font-weight: 700;
+}
+
+.debrief-preview-facts {
+    display: grid;
+    gap: .65rem;
+    margin-block: 1rem;
+}
+
+.debrief-preview-facts > div {
+    border-left: .25rem solid var(--debrief-coral);
+    padding-left: .75rem;
+}
+
+.debrief-preview-facts dt {
+    color: var(--debrief-acid);
+    font-family: Futura, "Arial Nova", sans-serif;
+    font-size: .62rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.debrief-preview-facts dd {
+    margin: .15rem 0 0;
+    overflow-wrap: anywhere;
+}
+
+.debrief-preview-link {
+    align-items: center;
+    background: var(--debrief-acid);
+    border: 2px solid var(--debrief-acid);
+    color: var(--debrief-ink);
+    display: inline-flex;
+    font-weight: 700;
+    gap: .45rem;
+    padding: .7rem .85rem;
+    text-decoration: none;
+}
+
+.debrief-preview-link:hover {
+    background: #fff;
+    color: var(--debrief-cobalt-deep);
+}
+
+@media screen and (min-width: 64.0625rem) {
+    .content.debrief-catalog__content {
+        padding-inline-end: 5rem;
+    }
+
+    .debrief-catalog__preview {
+        align-self: start;
+        min-block-size: 0;
+        position: sticky;
+        inset-block-start: var(--debrief-preview-top);
+    }
+
+    .debrief-catalog__preview-inner {
+        max-block-size: calc(100vh - var(--debrief-preview-top) - var(--debrief-preview-bottom-gap));
+        max-block-size: calc(100dvh - var(--debrief-preview-top) - var(--debrief-preview-bottom-gap));
+        min-block-size: 0;
+        overflow-y: auto;
+        overscroll-behavior-block: contain;
+        scroll-padding-block: 1rem;
+        scrollbar-gutter: stable;
+    }
+
+    .debrief-catalog__preview-inner:focus-visible {
+        outline: .2rem solid var(--debrief-acid);
+        outline-offset: -.35rem;
+    }
+}
+
+@media screen and (max-width: 64rem) {
+    .debrief-catalog__layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .debrief-catalog__preview {
+        grid-row: 1;
+        position: static;
+    }
+
+    .debrief-catalog__preview-inner {
+        max-block-size: none;
+        overflow: visible;
+        position: static;
+    }
+
+    .debrief-tag-cloud {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media screen and (max-width: 46rem) {
+    .debrief-system-summary__inner {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .debrief-tag-cloud {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .debrief-catalog__card .project__media--container {
+        float: none;
+        margin: 0 0 1rem;
+        max-width: 100%;
+    }
+
+    .debrief-card__catalog-meta {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media screen and (max-width: 26rem) {
+    .debrief-filter,
+    .debrief-filter-apply,
+    .debrief-filter-clear {
+        border-radius: .25rem;
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    .debrief-filter-actions {
+        flex-direction: column;
+    }
+
+    .debrief-tag-cloud {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .debrief-catalog *,
+    .debrief-system-summary * {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+    }
+}
+
+@media (forced-colors: active) {
+    .debrief-system-summary,
+    .debrief-catalog,
+    .debrief-catalog__header,
+    .debrief-catalog__card.project__media,
+    .debrief-catalog__preview-inner,
+    .debrief-tag-cloud li,
+    .debrief-filter,
+    .debrief-filter-apply,
+    .debrief-filter-clear,
+    .debrief-zero-results,
+    .debrief-zero-results button,
+    .debrief-preview-link {
+        background: Canvas;
+        border-color: CanvasText;
+        box-shadow: none;
+        color: CanvasText;
+    }
+
+    .debrief-filter:has(input:checked) {
+        background: Highlight;
+        color: HighlightText;
+        outline: 2px solid CanvasText;
+    }
+
+    .debrief-filter input {
+        accent-color: Highlight;
+        forced-color-adjust: none;
+    }
+
+    .debrief-card__types li,
+    .debrief-tag-cloud strong {
+        background: Canvas;
+        border: 1px solid CanvasText;
+        color: CanvasText;
+    }
+}
+
+@media print {
+    .debrief-system-summary,
+    .debrief-catalog,
+    .debrief-catalog__header,
+    .debrief-catalog__card.project__media {
+        --canvas-link-color: var(--canvas-link-on-light);
+        --canvas-link-visited-color: var(--canvas-link-visited-on-light);
+        background: #fff;
+        box-shadow: none;
+        color: #000;
+    }
+
+    .debrief-filter-panel,
+    .debrief-catalog__preview,
+    .debrief-noscript {
+        display: none !important;
+    }
+
+    .debrief-catalog__layout {
+        display: block;
+    }
+
+    .debrief-catalog__card[hidden] {
+        display: flow-root !important;
+    }
+
+    .debrief-catalog__card.project__media {
+        break-inside: avoid;
+        margin-bottom: 1rem;
+    }
+
+    .debrief-system-summary .txt-h2,
+    .debrief-catalog__preview .txt-h3,
+    .debrief-catalog__card > .txt-h2,
+    .debrief-eyebrow {
+        color: #000;
+    }
+}

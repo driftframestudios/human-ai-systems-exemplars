@@ -1,0 +1,1001 @@
+{
+  "id": "context-canvas.iframe-route-package-receipt.v1",
+  "version": "1",
+  "host": "iframes.vik.guru",
+  "base_path": "/v1/canvas/",
+  "route_contract": {
+    "file": "iframe-route-families/canvas/public-iframe-route-manifest-v1.json",
+    "sha256": "be467209fc9fc3ad8e2110434b70110c86dd20aeecb41c5f45bbcfb365b50557"
+  },
+  "package_contract": {
+    "primary_routes": 15,
+    "decorated_routes": 14,
+    "byte_identical_routes": 1,
+    "generated_files": 40,
+    "live_cloudflare_mutation": false,
+    "closure_observation": "static_resource_graph",
+    "browser_request_observation_required": true,
+    "neighboring_path_posture": "unmatched"
+  },
+  "routes": [
+    {
+      "id": "registry-goal-fidelity",
+      "public_alias": "/v1/canvas/registry-goal-fidelity/",
+      "source_file": "collaboration/registry-goal-fidelity-routing/index.html",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "projection_kind": "decorated_copy",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts"
+      ],
+      "projection_file": "registry-goal-fidelity/index.html",
+      "source_bytes": 68289,
+      "source_sha256": "a92df214229c8b49e672a92e107ec314191bfd7e0e47a8759f302ea3c7fd7e0b",
+      "projection_bytes": 71003,
+      "projection_sha256": "85fca88f15a98f172120fc1850205a665aa6ced14f23d01c1a785e77322f1271",
+      "projection_rewrites": [],
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": [],
+        "navigation_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 1,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "cross-platform-collaboration-cycle",
+      "public_alias": "/v1/canvas/cross-platform-collaboration-cycle/",
+      "source_file": "collaboration/shared-machinery/cross-platform-collaboration-cycle/index.html",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "projection_kind": "decorated_copy",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts"
+      ],
+      "projection_file": "cross-platform-collaboration-cycle/index.html",
+      "source_bytes": 13183,
+      "source_sha256": "f193977f75bc7d0062968b1c0b54aa79dc7df06030b6dc2b1862c0e054f4cfc0",
+      "projection_bytes": 15897,
+      "projection_sha256": "a488dc02629630736717d2d820ea5b1eaded3153f9b7429f2c544d1bda4485e0",
+      "projection_rewrites": [],
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": [],
+        "navigation_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "lims-eln-program-constellation",
+      "public_alias": "/v1/canvas/lims-eln-program-constellation/",
+      "source_file": "collaboration/lims-eln-program-constellation/index.html",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "projection_kind": "decorated_copy",
+      "carrier_policy": {
+        "sandbox_tokens": [],
+        "permissions_policy": []
+      },
+      "observed_runtime_capabilities": [],
+      "projection_file": "lims-eln-program-constellation/index.html",
+      "source_bytes": 53097,
+      "source_sha256": "452e5aa2259b07f25177ac9401bda272403ab96c021b2a38eaf34a1bb6c278dd",
+      "projection_bytes": 55811,
+      "projection_sha256": "16692b5817d10e8a7910a1ea9a234e3f5dd4aa21438d5e5ca90ac07c5bc87203",
+      "projection_rewrites": [],
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": [],
+        "navigation_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 5,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "genomic-viewer-context-tree",
+      "public_alias": "/v1/canvas/genomic-viewer-context-tree/",
+      "source_file": "collaboration/context-tree-visual-variants/genomic-viewer-presentation.html",
+      "source_view": "board",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "projection_kind": "decorated_copy",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts"
+      ],
+      "projection_file": "genomic-viewer-context-tree/index.html",
+      "source_bytes": 40846,
+      "source_sha256": "6f1be43bc9f7ba35487acc030c6858b3fdcc6d3adc3961f8c6f5804f864f53af",
+      "projection_bytes": 43560,
+      "projection_sha256": "41cf0becd748128fde5b7fc0dc5e3cb6013e2f23cda4a0d20faf68a8d23c0f65",
+      "projection_rewrites": [],
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": [],
+        "navigation_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 1,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "talent-agent-intake",
+      "public_alias": "/v1/canvas/talent-agent-intake/",
+      "source_file": "collaboration/hiring-surfaces-talent-agent-intake/index.html",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "projection_kind": "decorated_copy",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts"
+      ],
+      "projection_file": "talent-agent-intake/index.html",
+      "source_bytes": 58085,
+      "source_sha256": "dc643eee8cdc5f4f60cdd8f0412be801977ff309927e4cbdd2d8b448f45ab716",
+      "projection_bytes": 60799,
+      "projection_sha256": "8f4711ae0a3487671349286afa3f365afdba304f9805829bb040af980354574c",
+      "projection_rewrites": [],
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": [],
+        "navigation_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 1,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "cross-functional-investment-studio",
+      "public_alias": "/v1/canvas/cross-functional-investment-studio/",
+      "source_file": "collaboration/initiative-costing-calculator/index.html",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "projection_kind": "decorated_rewrite",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts"
+      ],
+      "projection_file": "cross-functional-investment-studio/index.html",
+      "source_bytes": 143090,
+      "source_sha256": "ebc3ee44470712eb61563e57dc68fccc0f97212c093d8209a4dbbc0d32264483",
+      "projection_bytes": 145559,
+      "projection_sha256": "3d41932ee4698b5dbc08578c618db36a58c58530afe78374cd663e754f82f1a0",
+      "projection_rewrites": [
+        {
+          "kind": "primary_site_navigation",
+          "source_reference": "../../context-canvas-project-surface/context-canvas/hiring-surfaces-talent-agent-intake.html",
+          "projected_reference": "https://vik.guru/hiring-surfaces-talent-agent-intake.html",
+          "replacements": 3
+        },
+        {
+          "kind": "primary_site_navigation",
+          "source_reference": "../../context-canvas-project-surface/context-canvas/initiative-costing.html",
+          "projected_reference": "https://vik.guru/initiative-costing.html",
+          "replacements": 2
+        },
+        {
+          "kind": "primary_site_navigation",
+          "source_reference": "../../context-canvas-project-surface/context-canvas/shared-machinery.html",
+          "projected_reference": "https://vik.guru/shared-machinery.html",
+          "replacements": 2
+        }
+      ],
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": [],
+        "navigation_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 18,
+        "external_links": 8,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "prompt-conditions-explorer",
+      "public_alias": "/v1/canvas/prompt-conditions-explorer/",
+      "source_file": "collaboration/about-prompt-conditions-explorer/index.html",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "projection_kind": "decorated_rewrite",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts"
+      ],
+      "projection_file": "prompt-conditions-explorer/index.html",
+      "source_bytes": 40200,
+      "source_sha256": "543f5ff7dfdef6b86d3b78be96f6f3033c215cf357f640d591153300ea590123",
+      "projection_bytes": 42389,
+      "projection_sha256": "e652c0ada477c91e20ade0a4304d1cd20447fd2d3d416c2973eaab232ceaf951",
+      "projection_rewrites": [
+        {
+          "kind": "primary_site_navigation",
+          "source_reference": "../../context-canvas-project-surface/context-canvas/ai-systems.html#conditioning-field-entry",
+          "projected_reference": "https://vik.guru/ai-systems.html#conditioning-field-entry",
+          "replacements": 1
+        },
+        {
+          "kind": "primary_site_navigation",
+          "source_reference": "../../context-canvas-project-surface/context-canvas/conditioning-field.html",
+          "projected_reference": "https://vik.guru/conditioning-field.html",
+          "replacements": 1
+        },
+        {
+          "kind": "primary_site_navigation",
+          "source_reference": "../../context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html",
+          "projected_reference": "https://vik.guru/core-architectures-orientation-index.html",
+          "replacements": 2
+        },
+        {
+          "kind": "primary_site_navigation",
+          "source_reference": "../../context-canvas-project-surface/context-canvas/cross-platform-collaboration-cycle.html",
+          "projected_reference": "https://vik.guru/cross-platform-collaboration-cycle.html",
+          "replacements": 3
+        },
+        {
+          "kind": "primary_site_navigation",
+          "source_reference": "../../context-canvas-project-surface/context-canvas/grammar-family.html",
+          "projected_reference": "https://vik.guru/grammar-family.html",
+          "replacements": 2
+        },
+        {
+          "kind": "primary_site_navigation",
+          "source_reference": "../../context-canvas-project-surface/context-canvas/hiring-surfaces-talent-agent-intake.html",
+          "projected_reference": "https://vik.guru/hiring-surfaces-talent-agent-intake.html",
+          "replacements": 2
+        },
+        {
+          "kind": "primary_site_navigation",
+          "source_reference": "../../context-canvas-project-surface/context-canvas/metadata-blocks.html",
+          "projected_reference": "https://vik.guru/metadata-blocks.html",
+          "replacements": 2
+        },
+        {
+          "kind": "primary_site_navigation",
+          "source_reference": "../../context-canvas-project-surface/context-canvas/prompt-side-conditions-practice.html#quick-use-title",
+          "projected_reference": "https://vik.guru/prompt-side-conditions-practice.html#quick-use-title",
+          "replacements": 1
+        },
+        {
+          "kind": "primary_site_navigation",
+          "source_reference": "../../context-canvas-project-surface/context-canvas/prompt-side-conditions-practice.html#sources-title",
+          "projected_reference": "https://vik.guru/prompt-side-conditions-practice.html#sources-title",
+          "replacements": 1
+        }
+      ],
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": [],
+        "navigation_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 1,
+        "external_links": 10,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "heatmap-comparison",
+      "public_alias": "/v1/canvas/heatmap-comparison/",
+      "source_file": "collaboration/about-heatmap-comparison/index.html",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "projection_kind": "decorated_rewrite",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts"
+      ],
+      "projection_file": "heatmap-comparison/index.html",
+      "source_bytes": 6488,
+      "source_sha256": "12eed5938a37ef64304454bbe65aab0c8a5d17c1f2c7f5c0b51d4753335d81bc",
+      "projection_bytes": 9130,
+      "projection_sha256": "eccb02fccf58bb9eadbd1beb89d96d59b49f26755fc80be24c4eb7bd0d362cb9",
+      "projection_rewrites": [
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/img/bgr/bgr_3b_before_safeway_purple.svg",
+          "projected_reference": "./assets/bgr_3b_before_safeway_purple.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/img/bgr/bgr_3b_after_safeway_cool_tri.svg",
+          "projected_reference": "./assets/bgr_3b_after_safeway_cool_tri.svg",
+          "replacements": 1
+        }
+      ],
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": [
+          {
+            "source_file": "context-canvas-project-surface/img/bgr/bgr_3b_before_safeway_purple.svg",
+            "target_file": "assets/bgr_3b_before_safeway_purple.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/img/bgr/bgr_3b_before_safeway_purple.svg",
+            "rewritten_references": 1,
+            "bytes": 32842,
+            "sha256": "122d242cb8499a513a0b6e4c243b2f73913560ed38694c487c9da83d77a35802"
+          },
+          {
+            "source_file": "context-canvas-project-surface/img/bgr/bgr_3b_after_safeway_cool_tri.svg",
+            "target_file": "assets/bgr_3b_after_safeway_cool_tri.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/img/bgr/bgr_3b_after_safeway_cool_tri.svg",
+            "rewritten_references": 1,
+            "bytes": 32847,
+            "sha256": "5923c3497de22d0ab726dddbf10d5ca3ef3cf1b3ddffd689dc067574079a2b48"
+          }
+        ],
+        "navigation_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "ai-method-gallery",
+      "public_alias": "/v1/canvas/ai-method-gallery/",
+      "source_file": "collaboration/about-ai-method-gallery/index.html",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "projection_kind": "decorated_rewrite",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts"
+      ],
+      "projection_file": "ai-method-gallery/index.html",
+      "source_bytes": 42002,
+      "source_sha256": "50b84b31f4bf6f680bf56948b3b3f0b12c1cb44441520c1fd2a067503595873d",
+      "projection_bytes": 42312,
+      "projection_sha256": "88a88ae30693ab5849caa599fbc43a8886d4b17eb1fa32e0623029ba6717261a",
+      "projection_rewrites": [
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/img/plot/random_cut_forest.svg",
+          "projected_reference": "./assets/random_cut_forest.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_anomaly-alert.svg",
+          "projected_reference": "./assets/viewlet_anomaly-alert.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_attention-route.svg",
+          "projected_reference": "./assets/viewlet_attention-route.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_steward-queue.svg",
+          "projected_reference": "./assets/viewlet_steward-queue.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/img/plot/random_cut_isolation_forest.svg",
+          "projected_reference": "./assets/random_cut_isolation_forest.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_component-heatmap.svg",
+          "projected_reference": "./assets/viewlet_component-heatmap.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_pattern-resonance-probe.svg",
+          "projected_reference": "./assets/viewlet_pattern-resonance-probe.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_known-issue-memory.svg",
+          "projected_reference": "./assets/viewlet_known-issue-memory.svg",
+          "replacements": 2
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_one-hot-matrix.svg",
+          "projected_reference": "./assets/viewlet_one-hot-matrix.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_directed-graph.svg",
+          "projected_reference": "./assets/viewlet_directed-graph.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_audit-trail.svg",
+          "projected_reference": "./assets/viewlet_audit-trail.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_context-mosaic.svg",
+          "projected_reference": "./assets/viewlet_context-mosaic.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_data-rights.svg",
+          "projected_reference": "./assets/viewlet_data-rights.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_human-ai.svg",
+          "projected_reference": "./assets/viewlet_human-ai.svg",
+          "replacements": 2
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/img/plot/v3b2_gold_note_viewlets.svg",
+          "projected_reference": "./assets/v3b2_gold_note_viewlets.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_event-log.svg",
+          "projected_reference": "./assets/viewlet_event-log.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_comment.svg",
+          "projected_reference": "./assets/viewlet_comment.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/img/plot/ai_legible_viewlet_svg_companion.svg",
+          "projected_reference": "./assets/ai_legible_viewlet_svg_companion.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_quiet-routing-seed.svg",
+          "projected_reference": "./assets/viewlet_quiet-routing-seed.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "package_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_done.svg",
+          "projected_reference": "./assets/viewlet_done.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "navigation_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_atlas.svg",
+          "projected_reference": "./sources/ai_legible_viewlet_atlas.svg",
+          "replacements": 1
+        },
+        {
+          "kind": "navigation_file",
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_manifest.json",
+          "projected_reference": "./sources/viewlet_manifest.json",
+          "replacements": 1
+        }
+      ],
+      "static_resource_closure": {
+        "inline_references": 3,
+        "package_files": [
+          {
+            "source_file": "context-canvas-project-surface/img/plot/random_cut_forest.svg",
+            "target_file": "assets/random_cut_forest.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/img/plot/random_cut_forest.svg",
+            "rewritten_references": 1,
+            "bytes": 15362,
+            "sha256": "4e6f2c9f4f01409adac44f5737363a6587bb5939fdf512212cb958152895f77b"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_anomaly-alert.svg",
+            "target_file": "assets/viewlet_anomaly-alert.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_anomaly-alert.svg",
+            "rewritten_references": 1,
+            "bytes": 3336,
+            "sha256": "d7b70973e3df955f15625c7152c10571a6f234b2ffbddcd78592c34cd3ff22a7"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_attention-route.svg",
+            "target_file": "assets/viewlet_attention-route.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_attention-route.svg",
+            "rewritten_references": 1,
+            "bytes": 3328,
+            "sha256": "e6504df3c3afa3c6c48e3dfd570124f4d4ce8532921da8a65e0b7968614d254d"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_steward-queue.svg",
+            "target_file": "assets/viewlet_steward-queue.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_steward-queue.svg",
+            "rewritten_references": 1,
+            "bytes": 4563,
+            "sha256": "6e993d78e65e52d41d90d3416d391e872801f5bd2012f5cb5eeadcd2a032bb11"
+          },
+          {
+            "source_file": "context-canvas-project-surface/img/plot/random_cut_isolation_forest.svg",
+            "target_file": "assets/random_cut_isolation_forest.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/img/plot/random_cut_isolation_forest.svg",
+            "rewritten_references": 1,
+            "bytes": 16561,
+            "sha256": "81921a00afab5eb4181591add1517bce81a72d408e3ac782cd4185ff94da6926"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_component-heatmap.svg",
+            "target_file": "assets/viewlet_component-heatmap.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_component-heatmap.svg",
+            "rewritten_references": 1,
+            "bytes": 6588,
+            "sha256": "7f7dd75ac1fa1599625172a04f51e465eede04e0cc28620546448fe5b2454203"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_pattern-resonance-probe.svg",
+            "target_file": "assets/viewlet_pattern-resonance-probe.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_pattern-resonance-probe.svg",
+            "rewritten_references": 1,
+            "bytes": 6660,
+            "sha256": "7fed16c047d9d55299837cd5cdcab1d0b6e726839ad4a667295ae38db2469ece"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_known-issue-memory.svg",
+            "target_file": "assets/viewlet_known-issue-memory.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_known-issue-memory.svg",
+            "rewritten_references": 2,
+            "bytes": 3781,
+            "sha256": "f14a0c42bcf73eb28a12c184fc75ad93a09c986e13beb72fe0876e3021d86427"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_one-hot-matrix.svg",
+            "target_file": "assets/viewlet_one-hot-matrix.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_one-hot-matrix.svg",
+            "rewritten_references": 1,
+            "bytes": 5769,
+            "sha256": "fab86a7bf33a2ce6b891cbea836ced9f8ab51ddbc11b40598525701fce244871"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_directed-graph.svg",
+            "target_file": "assets/viewlet_directed-graph.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_directed-graph.svg",
+            "rewritten_references": 1,
+            "bytes": 4140,
+            "sha256": "6d14e6a765e84c73a90b1fd679819dbacf45e25d1edd4088be586b339ff75cf9"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_audit-trail.svg",
+            "target_file": "assets/viewlet_audit-trail.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_audit-trail.svg",
+            "rewritten_references": 1,
+            "bytes": 4658,
+            "sha256": "f74cbc0fda8e67c65204295787327e6ad9e678911ae3b9c614dc9cc0b0e2c22b"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_context-mosaic.svg",
+            "target_file": "assets/viewlet_context-mosaic.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_context-mosaic.svg",
+            "rewritten_references": 1,
+            "bytes": 6615,
+            "sha256": "539d73cc2bc7d2e261d57e3116b86fd45cba7df8b513c84922b8f8ca4345aa76"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_data-rights.svg",
+            "target_file": "assets/viewlet_data-rights.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_data-rights.svg",
+            "rewritten_references": 1,
+            "bytes": 3669,
+            "sha256": "9a89c889503677d0075be59602cb55268604d80b332c4ce6104349134f8542ae"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_human-ai.svg",
+            "target_file": "assets/viewlet_human-ai.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_human-ai.svg",
+            "rewritten_references": 2,
+            "bytes": 3623,
+            "sha256": "f5f9e0f94623854615befb83acd4a0faa495da79f24a37f9e944e1b1e9ac7e76"
+          },
+          {
+            "source_file": "context-canvas-project-surface/img/plot/v3b2_gold_note_viewlets.svg",
+            "target_file": "assets/v3b2_gold_note_viewlets.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/img/plot/v3b2_gold_note_viewlets.svg",
+            "rewritten_references": 1,
+            "bytes": 11640,
+            "sha256": "6f8d921177162c42c4e3a684be9bae72ddbb7f3d6f9397c145cd25bc1f8ed8ae"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_event-log.svg",
+            "target_file": "assets/viewlet_event-log.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_event-log.svg",
+            "rewritten_references": 1,
+            "bytes": 4639,
+            "sha256": "6a22aa425a931ffcd8431096e98c5d39d033a06c698e72b39104e8cb4c5d1e64"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_comment.svg",
+            "target_file": "assets/viewlet_comment.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_comment.svg",
+            "rewritten_references": 1,
+            "bytes": 3564,
+            "sha256": "04add019528f0e414ff00d51ff355a96738ff0f3097081f45b8134da82985434"
+          },
+          {
+            "source_file": "context-canvas-project-surface/img/plot/ai_legible_viewlet_svg_companion.svg",
+            "target_file": "assets/ai_legible_viewlet_svg_companion.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/img/plot/ai_legible_viewlet_svg_companion.svg",
+            "rewritten_references": 1,
+            "bytes": 22740,
+            "sha256": "c4094ff502311414e7216b9303b39b4a7e0d2735ee0b47a69a2cabee75da2134"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_quiet-routing-seed.svg",
+            "target_file": "assets/viewlet_quiet-routing-seed.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_quiet-routing-seed.svg",
+            "rewritten_references": 1,
+            "bytes": 3837,
+            "sha256": "bbcfae9b2a3800f437c8cd9057d96893daf9c5180b08f8a7ddbe2ac5a2933048"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_done.svg",
+            "target_file": "assets/viewlet_done.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_done.svg",
+            "rewritten_references": 1,
+            "bytes": 3184,
+            "sha256": "b085d366baddb6d50c187f4f58d99807cec547329f72481a811983831441451e"
+          }
+        ],
+        "navigation_files": [
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_atlas.svg",
+            "target_file": "sources/ai_legible_viewlet_atlas.svg",
+            "content_type": "image/svg+xml",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_atlas.svg",
+            "rewritten_references": 1,
+            "bytes": 204898,
+            "sha256": "2a6d2057ce0ffba25f2773a016dceabb635d7aeaac62a502277053dc757d6844"
+          },
+          {
+            "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_manifest.json",
+            "target_file": "sources/viewlet_manifest.json",
+            "content_type": "application/json",
+            "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_manifest.json",
+            "rewritten_references": 1,
+            "bytes": 96939,
+            "sha256": "776689bc6c825263a1335d7e8c3f5c583a5b1ab0eda1fffc46d3f3391f47b366"
+          }
+        ]
+      },
+      "navigation": {
+        "packaged_links": 2,
+        "fragment_links": 0,
+        "external_links": 2,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "cross-functional-investment-model-studio",
+      "public_alias": "/v1/canvas/cross-functional-investment-model-studio/",
+      "source_file": "collaboration/cross-functional-investment-model-studio/index.html",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "projection_kind": "decorated_copy",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts"
+      ],
+      "projection_file": "cross-functional-investment-model-studio/index.html",
+      "source_bytes": 79237,
+      "source_sha256": "6c675d9513840208b9aa346a9e5d90c086c3d636a3e617a635948361d65d91e2",
+      "projection_bytes": 81951,
+      "projection_sha256": "5865f853d58a65cce0af3d7ce14017de6083389de969809b7b02233263a56882",
+      "projection_rewrites": [],
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": [],
+        "navigation_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 1,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "threadkeeping-ledger",
+      "public_alias": "/v1/canvas/threadkeeping-ledger/",
+      "source_file": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html",
+      "receiver_standing": "byte_identical",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "projection_kind": "byte_identical",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-modals",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ]
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write",
+        "native-modals"
+      ],
+      "projection_file": "threadkeeping-ledger/index.html",
+      "source_bytes": 84779,
+      "source_sha256": "48a087d0360c97bcb2d46da7bca07ed4c51aa835da496701a5c0bc748a56ae2f",
+      "projection_bytes": 84779,
+      "projection_sha256": "48a087d0360c97bcb2d46da7bca07ed4c51aa835da496701a5c0bc748a56ae2f",
+      "projection_rewrites": [],
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": [],
+        "navigation_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "open-lesson-field",
+      "public_alias": "/v1/canvas/open-lesson-field/",
+      "source_file": "collaboration/open-lesson-field/index.html",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "projection_kind": "decorated_copy",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-modals",
+          "allow-scripts"
+        ],
+        "permissions_policy": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts"
+      ],
+      "projection_file": "open-lesson-field/index.html",
+      "source_bytes": 181474,
+      "source_sha256": "d41af04e4ff011b4869c89a4dc494e3ff4789aa9dc64a6de54f4732df71e6d5b",
+      "projection_bytes": 184188,
+      "projection_sha256": "db6a0b38da269940c96d14d9e7fb85a936b3bc8e1be121c411a398985ff29260",
+      "projection_rewrites": [],
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": [],
+        "navigation_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 9,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "visualization-fidelity-atlas",
+      "public_alias": "/v1/canvas/visualization-fidelity-atlas/",
+      "source_file": "visualization-fidelity-atlas-bundle-v0.1/visualization-fidelity-atlas-chimeric-prototype-v0.1.html",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "projection_kind": "decorated_copy",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ]
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write"
+      ],
+      "projection_file": "visualization-fidelity-atlas/index.html",
+      "source_bytes": 141849,
+      "source_sha256": "073f465da36db8f965745819ecf2de70e5ec8bf17bd1561b2d039a052b1b9e55",
+      "projection_bytes": 144563,
+      "projection_sha256": "bcc512d967cafe060084938ce03f6ee8cf138c09811e071223cbf4fe3229dbd0",
+      "projection_rewrites": [],
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": [],
+        "navigation_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "visualization-fidelity-selector",
+      "public_alias": "/v1/canvas/visualization-fidelity-selector/",
+      "source_file": "collaboration/shared-machinery/visualization-fidelity-selector/index.html",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "projection_kind": "decorated_copy",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts"
+      ],
+      "projection_file": "visualization-fidelity-selector/index.html",
+      "source_bytes": 14300,
+      "source_sha256": "afb7e6b852ee75c70869c3c98eb4f6be416eac865dcf4ae676fea7e3c5f4334a",
+      "projection_bytes": 17014,
+      "projection_sha256": "c142392d36fc9ff2758b32572d4614a0ffe4e8a64b1adb3c24f3bb2477d13557",
+      "projection_rewrites": [],
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": [],
+        "navigation_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "who-to-believe-context-tree",
+      "public_alias": "/v1/canvas/who-to-believe-context-tree/",
+      "source_file": "collaboration/context-tree-visual-variants/who-to-believe-presentation.html",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "projection_kind": "decorated_copy",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
+        "permissions_policy": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts"
+      ],
+      "projection_file": "who-to-believe-context-tree/index.html",
+      "source_bytes": 26092,
+      "source_sha256": "0868411523cb639f893dcf8145b45427449cbb2a443b1be1670249f564279948",
+      "projection_bytes": 28806,
+      "projection_sha256": "78979615d323ab54dadeac8ff7e93c7b6b47887000d0c21df10168bfd8b728f7",
+      "projection_rewrites": [],
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": [],
+        "navigation_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 1,
+        "external_links": 0,
+        "unresolved_local_links": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,286 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="rgf-title rgf-desc">
+  <title id="rgf-title">Registry Goal Fidelity operating field</title>
+  <desc id="rgf-desc">A paired operating field asks what a collaboration structure will change and what evidence could show that it works. The Registry route moves from outcome through cognitive move, fitting instrument, receiving artifact, and changed ability. The Goal Fidelity route moves from declared horizon through configured system, material check, named reader and decision, and continuation. Six population contracts name the investment each function carries. Productivity theater, scaffold capture, validation displacement, and constraint literalization are practitioner synthesis terms for observable interaction patterns. Platform-cost causality remains an open hypothesis.</desc>
+
+  <defs>
+    <pattern id="field-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#cfe7f7" stroke-width="1" opacity="0.52"/>
+    </pattern>
+    <style>
+      .sans { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+      .eyebrow { font-size: 13px; font-weight: 800; letter-spacing: 1.7px; }
+      .title { font-size: 35px; font-weight: 800; letter-spacing: -0.8px; }
+      .lead { font-size: 15px; font-weight: 650; }
+      .lane-title { font-size: 15px; font-weight: 850; letter-spacing: 1.2px; }
+      .card-kicker { font-size: 12px; font-weight: 850; letter-spacing: 1.1px; }
+      .card-copy { font-size: 14px; font-weight: 620; }
+      .role-title { font-size: 12px; font-weight: 850; letter-spacing: 0.8px; }
+      .role-copy { font-size: 12.5px; font-weight: 620; }
+      .foot { font-size: 13px; font-weight: 650; }
+      .micro { font-size: 10.5px; font-weight: 800; letter-spacing: 0.75px; }
+      .ink { fill: #17345f; }
+      .body { fill: #304a71; }
+      .muted { fill: #5d6f8b; }
+      .white { fill: #fffdf8; }
+      .cobalt { fill: #2855f3; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1120" fill="#fffaf2"/>
+  <rect x="28" y="28" width="1552" height="1072" rx="28" fill="#17345f"/>
+  <rect x="20" y="20" width="1552" height="1072" rx="28" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+  <rect x="21" y="21" width="1550" height="1070" rx="27" fill="url(#field-grid)" opacity="0.55"/>
+
+  <g id="question-and-scope" role="group" aria-labelledby="question-title">
+    <title id="question-title">Question and scope</title>
+    <path d="M20 48Q20 20 48 20H1544Q1572 20 1572 48V184H20Z" fill="#2855f3"/>
+    <text x="56" y="55" class="sans eyebrow white">REGISTRY DESCRIPTION PROGRAM · GOAL FIDELITY</text>
+    <text x="56" y="96" class="sans title white">What will this structure change—and what is the smallest</text>
+    <text x="56" y="135" class="sans title white">credible evidence that it works?</text>
+
+    <rect x="1080" y="47" width="449" height="112" rx="14" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <rect x="1092" y="58" width="8" height="89" rx="4" fill="#f2ff67"/>
+    <text x="1118" y="80" class="sans lead ink">Choose the instrument by the decision</text>
+    <text x="1118" y="102" class="sans lead ink">it must improve.</text>
+    <text x="1118" y="127" class="sans card-copy body">The Registry routes the cognitive move.</text>
+    <text x="1118" y="147" class="sans card-copy body">Goal Fidelity carries the named outcome.</text>
+  </g>
+
+  <g id="registry-families" role="group" aria-labelledby="families-title">
+    <title id="families-title">Seven Registry architecture families</title>
+    <g class="sans card-kicker ink">
+      <rect x="54" y="205" width="200" height="42" rx="10" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+      <text x="154" y="231" text-anchor="middle">ORIENT + TRACE</text>
+      <rect x="266" y="205" width="200" height="42" rx="10" fill="#cfe7f7" stroke="#17345f" stroke-width="2"/>
+      <text x="366" y="231" text-anchor="middle">COMPARE + THRESHOLD</text>
+      <rect x="478" y="205" width="200" height="42" rx="10" fill="#e7efff" stroke="#17345f" stroke-width="2"/>
+      <text x="578" y="223" text-anchor="middle">TOPOLOGY +</text>
+      <text x="578" y="238" text-anchor="middle">SHARED SURFACE</text>
+      <rect x="690" y="205" width="200" height="42" rx="10" fill="#fff5de" stroke="#17345f" stroke-width="2"/>
+      <text x="790" y="231" text-anchor="middle">ELICIT + SPECIFY</text>
+      <rect x="902" y="205" width="200" height="42" rx="10" fill="#ffd3d0" stroke="#17345f" stroke-width="2"/>
+      <text x="1002" y="231" text-anchor="middle">MEASURE + JUDGE</text>
+      <rect x="1114" y="205" width="200" height="42" rx="10" fill="#f2ff67" stroke="#17345f" stroke-width="2"/>
+      <text x="1214" y="231" text-anchor="middle">FIT + PROTECT</text>
+      <rect x="1326" y="205" width="200" height="42" rx="10" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+      <text x="1426" y="231" text-anchor="middle">RECOVER + REVISE</text>
+    </g>
+  </g>
+
+  <g id="registry-route" role="group" aria-labelledby="registry-route-title">
+    <title id="registry-route-title">Registry route from outcome to changed ability</title>
+    <rect x="62" y="286" width="1492" height="232" rx="17" fill="#17345f"/>
+    <rect x="54" y="278" width="1492" height="232" rx="17" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <path d="M54 295Q54 278 71 278H162V510H54Z" fill="#17345f"/>
+    <text x="78" y="317" class="sans eyebrow" fill="#f2ff67">ROUTE 01</text>
+    <text x="78" y="347" class="sans lane-title white">REGISTRY</text>
+    <text x="78" y="372" class="sans card-copy" fill="#cfe7f7">Choose the</text>
+    <text x="78" y="392" class="sans card-copy" fill="#cfe7f7">fitting</text>
+    <text x="78" y="412" class="sans card-copy" fill="#cfe7f7">instrument.</text>
+    <path d="M97 449H119V438L143 462L119 486V475H97Z" fill="#f2ff67"/>
+
+    <g id="registry-outcome" role="group" aria-labelledby="registry-outcome-title">
+      <title id="registry-outcome-title">Outcome</title>
+      <rect x="184" y="307" width="232" height="166" rx="12" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+      <circle cx="207" cy="331" r="13" fill="#17345f"/>
+      <text x="207" y="336" text-anchor="middle" class="mono card-kicker white">1</text>
+      <text x="228" y="336" class="sans card-kicker ink">OUTCOME</text>
+      <text x="204" y="370" class="sans card-copy body">
+        <tspan x="204" dy="0">State the decision and the</tspan>
+        <tspan x="204" dy="20">population carrying its</tspan>
+        <tspan x="204" dy="20">consequence.</tspan>
+      </text>
+    </g>
+    <path d="M422 374H436V362L458 390L436 418V406H422Z" fill="#2855f3"/>
+
+    <g id="registry-move" role="group" aria-labelledby="registry-move-title">
+      <title id="registry-move-title">Cognitive move</title>
+      <rect x="458" y="307" width="232" height="166" rx="12" fill="#cfe7f7" stroke="#17345f" stroke-width="2"/>
+      <circle cx="481" cy="331" r="13" fill="#17345f"/>
+      <text x="481" y="336" text-anchor="middle" class="mono card-kicker white">2</text>
+      <text x="502" y="336" class="sans card-kicker ink">COGNITIVE MOVE</text>
+      <text x="478" y="370" class="sans card-copy body">
+        <tspan x="478" dy="0">Name what the group must</tspan>
+        <tspan x="478" dy="20">do together: align, compare,</tspan>
+        <tspan x="478" dy="20">expose topology, specify,</tspan>
+        <tspan x="478" dy="20">measure, protect, or recover.</tspan>
+      </text>
+    </g>
+    <path d="M696 374H710V362L732 390L710 418V406H696Z" fill="#2855f3"/>
+
+    <g id="registry-instrument" role="group" aria-labelledby="registry-instrument-title">
+      <title id="registry-instrument-title">Fitting instrument</title>
+      <rect x="732" y="307" width="232" height="166" rx="12" fill="#e7efff" stroke="#17345f" stroke-width="2"/>
+      <circle cx="755" cy="331" r="13" fill="#17345f"/>
+      <text x="755" y="336" text-anchor="middle" class="mono card-kicker white">3</text>
+      <text x="776" y="336" class="sans card-kicker ink">FITTING INSTRUMENT</text>
+      <text x="752" y="370" class="sans card-copy body">
+        <tspan x="752" dy="0">Choose the smallest</tspan>
+        <tspan x="752" dy="20">architecture that makes</tspan>
+        <tspan x="752" dy="20">the move inspectable.</tspan>
+      </text>
+    </g>
+    <path d="M970 374H984V362L1006 390L984 418V406H970Z" fill="#2855f3"/>
+
+    <g id="registry-artifact" role="group" aria-labelledby="registry-artifact-title">
+      <title id="registry-artifact-title">Receiving artifact</title>
+      <rect x="1006" y="307" width="232" height="166" rx="12" fill="#fff5de" stroke="#17345f" stroke-width="2"/>
+      <circle cx="1029" cy="331" r="13" fill="#17345f"/>
+      <text x="1029" y="336" text-anchor="middle" class="mono card-kicker white">4</text>
+      <text x="1050" y="336" class="sans card-kicker ink">RECEIVING ARTIFACT</text>
+      <text x="1026" y="370" class="sans card-copy body">
+        <tspan x="1026" dy="0">Produce a surface another</tspan>
+        <tspan x="1026" dy="20">function receives with shared,</tspan>
+        <tspan x="1026" dy="20">inspectable reasoning.</tspan>
+      </text>
+    </g>
+    <path d="M1244 374H1258V362L1280 390L1258 418V406H1244Z" fill="#2855f3"/>
+
+    <g id="registry-ability" role="group" aria-labelledby="registry-ability-title">
+      <title id="registry-ability-title">Changed ability</title>
+      <rect x="1280" y="307" width="232" height="166" rx="12" fill="#f2ff67" stroke="#17345f" stroke-width="2"/>
+      <circle cx="1303" cy="331" r="13" fill="#17345f"/>
+      <text x="1303" y="336" text-anchor="middle" class="mono card-kicker white">5</text>
+      <text x="1324" y="336" class="sans card-kicker ink">CHANGED ABILITY</text>
+      <text x="1300" y="370" class="sans card-copy body">
+        <tspan x="1300" dy="0">The next decision starts</tspan>
+        <tspan x="1300" dy="20">from shared, versioned state.</tspan>
+      </text>
+      <rect x="1300" y="426" width="181" height="25" rx="12.5" fill="#17345f"/>
+      <text x="1390" y="443" text-anchor="middle" class="mono card-kicker white">MATERIAL CHANGE</text>
+    </g>
+  </g>
+
+  <g id="goal-fidelity-route" role="group" aria-labelledby="goal-route-title">
+    <title id="goal-route-title">Goal Fidelity route from declared horizon to continuation</title>
+    <rect x="62" y="543" width="1492" height="246" rx="17" fill="#17345f"/>
+    <rect x="54" y="535" width="1492" height="246" rx="17" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <path d="M54 552Q54 535 71 535H162V781H54Z" fill="#2855f3"/>
+    <text x="78" y="575" class="sans eyebrow" fill="#f2ff67">ROUTE 02</text>
+    <text x="78" y="605" class="sans lane-title white">GOAL</text>
+    <text x="78" y="625" class="sans lane-title white">FIDELITY</text>
+    <text x="78" y="653" class="sans card-copy" fill="#e7efff">Carry work</text>
+    <text x="78" y="673" class="sans card-copy" fill="#e7efff">toward the</text>
+    <text x="78" y="693" class="sans card-copy" fill="#e7efff">outcome.</text>
+    <path d="M97 720H119V709L143 733L119 757V746H97Z" fill="#f2ff67"/>
+
+    <g id="goal-horizon" role="group" aria-labelledby="goal-horizon-title">
+      <title id="goal-horizon-title">Declared horizon</title>
+      <rect x="184" y="566" width="232" height="174" rx="12" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+      <circle cx="207" cy="590" r="13" fill="#2855f3"/>
+      <text x="207" y="595" text-anchor="middle" class="mono card-kicker white">1</text>
+      <text x="228" y="595" class="sans card-kicker ink">DECLARED HORIZON</text>
+      <text x="204" y="629" class="sans card-copy body">
+        <tspan x="204" dy="0">Carry the goal, current</tspan>
+        <tspan x="204" dy="20">artifact, settled constraints,</tspan>
+        <tspan x="204" dy="20">accessible evidence, and</tspan>
+        <tspan x="204" dy="20">granted capabilities.</tspan>
+      </text>
+    </g>
+    <path d="M422 636H436V624L458 652L436 680V668H422Z" fill="#fa7065"/>
+
+    <g id="goal-system" role="group" aria-labelledby="goal-system-title">
+      <title id="goal-system-title">Configured system</title>
+      <rect x="458" y="566" width="232" height="174" rx="12" fill="#cfe7f7" stroke="#17345f" stroke-width="2"/>
+      <circle cx="481" cy="590" r="13" fill="#2855f3"/>
+      <text x="481" y="595" text-anchor="middle" class="mono card-kicker white">2</text>
+      <text x="502" y="595" class="sans card-kicker ink">CONFIGURED SYSTEM</text>
+      <text x="478" y="629" class="sans card-copy body">
+        <tspan x="478" dy="0">Record model, instructions,</tspan>
+        <tspan x="478" dy="20">context selection, tools,</tspan>
+        <tspan x="478" dy="20">permissions, interaction,</tspan>
+        <tspan x="478" dy="20">and evaluation path.</tspan>
+      </text>
+    </g>
+    <path d="M696 636H710V624L732 652L710 680V668H696Z" fill="#fa7065"/>
+
+    <g id="goal-check" role="group" aria-labelledby="goal-check-title">
+      <title id="goal-check-title">Material check</title>
+      <rect x="732" y="566" width="232" height="174" rx="12" fill="#e7efff" stroke="#17345f" stroke-width="2"/>
+      <circle cx="755" cy="590" r="13" fill="#2855f3"/>
+      <text x="755" y="595" text-anchor="middle" class="mono card-kicker white">3</text>
+      <text x="776" y="595" class="sans card-kicker ink">MATERIAL CHECK</text>
+      <text x="752" y="629" class="sans card-copy body">
+        <tspan x="752" dy="0">Tie one plausible failure</tspan>
+        <tspan x="752" dy="20">to evidence capable of</tspan>
+        <tspan x="752" dy="20">exposing it.</tspan>
+      </text>
+      <rect x="752" y="696" width="174" height="23" rx="11.5" fill="#ffd3d0" stroke="#17345f" stroke-width="1.5"/>
+      <text x="839" y="712" text-anchor="middle" class="mono card-kicker ink">FAILURE ↔ SIGNAL</text>
+    </g>
+    <path d="M970 636H984V624L1006 652L984 680V668H970Z" fill="#fa7065"/>
+
+    <g id="goal-reader" role="group" aria-labelledby="goal-reader-title">
+      <title id="goal-reader-title">Reader and decision</title>
+      <rect x="1006" y="566" width="232" height="174" rx="12" fill="#fff5de" stroke="#17345f" stroke-width="2"/>
+      <circle cx="1029" cy="590" r="13" fill="#2855f3"/>
+      <text x="1029" y="595" text-anchor="middle" class="mono card-kicker white">4</text>
+      <text x="1050" y="595" class="sans card-kicker ink">READER + DECISION</text>
+      <text x="1026" y="629" class="sans card-copy body">
+        <tspan x="1026" dy="0">Name who acts, what</tspan>
+        <tspan x="1026" dy="20">changes, and which boundary</tspan>
+        <tspan x="1026" dy="20">remains.</tspan>
+      </text>
+    </g>
+    <path d="M1244 636H1258V624L1280 652L1258 680V668H1244Z" fill="#fa7065"/>
+
+    <g id="goal-continuation" role="group" aria-labelledby="goal-continuation-title">
+      <title id="goal-continuation-title">Continuation</title>
+      <rect x="1280" y="566" width="232" height="174" rx="12" fill="#f2ff67" stroke="#17345f" stroke-width="2"/>
+      <circle cx="1303" cy="590" r="13" fill="#2855f3"/>
+      <text x="1303" y="595" text-anchor="middle" class="mono card-kicker white">5</text>
+      <text x="1324" y="595" class="sans card-kicker ink">CONTINUATION</text>
+      <text x="1300" y="629" class="sans card-copy body">
+        <tspan x="1300" dy="0">Continue with a fresh signal;</tspan>
+        <tspan x="1300" dy="20">otherwise ask, wait, repair</tspan>
+        <tspan x="1300" dy="20">the named object, or return</tspan>
+        <tspan x="1300" dy="20">control.</tspan>
+      </text>
+    </g>
+  </g>
+
+  <g id="population-investment" role="group" aria-labelledby="investment-title">
+    <title id="investment-title">Population investment contracts</title>
+    <rect x="62" y="814" width="1492" height="154" rx="17" fill="#17345f"/>
+    <rect x="54" y="806" width="1492" height="154" rx="17" fill="#e7efff" stroke="#17345f" stroke-width="2"/>
+    <text x="76" y="837" class="sans eyebrow ink">INVESTMENT · WHO CARRIES WHICH PART OF THE OPERATING CONTRACT</text>
+
+    <g class="sans">
+      <rect x="76" y="852" width="231" height="87" rx="10" fill="#fffdf8" stroke="#17345f" stroke-width="1.5"/>
+      <text x="91" y="875" class="role-title cobalt">DOMAIN OWNER</text>
+      <text x="91" y="897" class="role-copy body"><tspan x="91">Outcome, consequence,</tspan><tspan x="91" dy="17">and authority.</tspan></text>
+
+      <rect x="319" y="852" width="231" height="87" rx="10" fill="#fffdf8" stroke="#17345f" stroke-width="1.5"/>
+      <text x="334" y="875" class="role-title cobalt">PRODUCT + SERVICE DESIGN</text>
+      <text x="334" y="897" class="role-copy body"><tspan x="334">Receiving surface and</tspan><tspan x="334" dy="17">lightest fitting artifact.</tspan></text>
+
+      <rect x="562" y="852" width="231" height="87" rx="10" fill="#fffdf8" stroke="#17345f" stroke-width="1.5"/>
+      <text x="577" y="875" class="role-title cobalt">ENGINEERING</text>
+      <text x="577" y="897" class="role-copy body"><tspan x="577">Configured system, behavior,</tspan><tspan x="577" dy="17">fault, and oracle.</tspan></text>
+
+      <rect x="805" y="852" width="231" height="87" rx="10" fill="#fffdf8" stroke="#17345f" stroke-width="1.5"/>
+      <text x="820" y="875" class="role-title cobalt">REVIEWER</text>
+      <text x="820" y="897" class="role-copy body"><tspan x="820">Signal-to-decision</tspan><tspan x="820" dy="17">contract.</tspan></text>
+
+      <rect x="1048" y="852" width="231" height="87" rx="10" fill="#fffdf8" stroke="#17345f" stroke-width="1.5"/>
+      <text x="1063" y="875" class="role-title cobalt">OPERATIONS</text>
+      <text x="1063" y="897" class="role-copy body"><tspan x="1063">Versions, re-entry state,</tspan><tspan x="1063" dy="17">and recovery positions.</tspan></text>
+
+      <rect x="1291" y="852" width="231" height="87" rx="10" fill="#fffdf8" stroke="#17345f" stroke-width="1.5"/>
+      <text x="1306" y="875" class="role-title cobalt">EVALUATION + GOVERNANCE</text>
+      <text x="1306" y="897" class="role-copy body"><tspan x="1306">Transfer limits and</tspan><tspan x="1306" dy="17">unresolved evidence.</tspan></text>
+    </g>
+  </g>
+
+  <g id="epistemic-boundary" role="group" aria-labelledby="boundary-title">
+    <title id="boundary-title">Epistemic boundary</title>
+    <rect x="62" y="990" width="1492" height="74" rx="14" fill="#17345f"/>
+    <rect x="54" y="982" width="1492" height="74" rx="14" fill="#fff5de" stroke="#17345f" stroke-width="2"/>
+    <rect x="54" y="982" width="14" height="74" rx="7" fill="#fa7065"/>
+    <text x="88" y="1009" class="sans card-kicker ink">EPISTEMIC BOUNDARY</text>
+    <text x="88" y="1034" class="sans foot body">Recognition terms name observable interaction patterns for diagnosis and recovery.</text>
+    <rect x="1086" y="999" width="429" height="39" rx="19.5" fill="#17345f"/>
+    <text x="1300" y="1023" text-anchor="middle" class="mono micro white">TRANSFER + OUTCOME EFFECT REMAIN DEPLOYMENT-SPECIFIC</text>
+  </g>
+</svg>

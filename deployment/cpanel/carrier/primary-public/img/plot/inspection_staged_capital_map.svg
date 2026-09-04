@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" role="img" aria-labelledby="capital-map-title capital-map-desc">
+  <title id="capital-map-title">Staged capital map for the field inspection harness</title>
+  <desc id="capital-map-desc">A prospective planning map separates four capital stages: operating baseline and architecture, a dealer bridge with Clappia retained, a native offline field application, and production hardening. It shows a full planning envelope of 95 to 167 thousand US dollars, a Year 1 envelope of 125 to 230 thousand, a separate reserve near 15 percent, and a near-20-thousand opening that buys a bounded baseline or bridge slice while later platform envelopes remain visible.</desc>
+  <defs>
+    <pattern id="capital-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#2855f3" stroke-width="1" opacity="0.08"/>
+      <circle cx="1" cy="1" r="1" fill="#2855f3" opacity="0.1"/>
+    </pattern>
+    <pattern id="capital-speckle" width="38" height="38" patternUnits="userSpaceOnUse">
+      <circle cx="7" cy="8" r="1.2" fill="#b78946" opacity="0.18"/>
+      <circle cx="29" cy="21" r="1" fill="#b78946" opacity="0.12"/>
+      <circle cx="17" cy="34" r="0.8" fill="#b78946" opacity="0.12"/>
+    </pattern>
+    <pattern id="capital-topography" width="150" height="92" patternUnits="userSpaceOnUse">
+      <path d="M-16 59C20 34 54 34 88 52s62 20 86-7M-18 78C18 52 52 53 84 70s60 18 94-7" fill="none" stroke="#2f6668" stroke-width="1.4" opacity="0.12"/>
+    </pattern>
+    <clipPath id="capital-envelope-clip"><rect x="72" y="162" width="1456" height="112" rx="22"/></clipPath>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}
+      .ink{fill:#17345f}.muted{fill:#5d6f8b}.cobalt{fill:#2855f3}.sea{fill:#2f6668}.paper{fill:#fffdf8}.sand{fill:#9a4c3f}
+      .title{font-size:38px;font-weight:820;letter-spacing:-.7px}.subtitle{font-size:18px;font-weight:560}
+      .eyebrow{font-size:13px;font-weight:820;letter-spacing:1.5px}.section-title{font-size:23px;font-weight:820}
+      .stage-title{font-size:20px;font-weight:800}.band{font-size:25px;font-weight:850}.body{font-size:15.5px;font-weight:560}.small{font-size:13.5px;font-weight:620}.tiny{font-size:11.5px;font-weight:760;letter-spacing:.35px}
+      .card{fill:#fffdf8;stroke:#17345f;stroke-width:2}.card-sea{fill:#d9efea;stroke:#2f6668;stroke-width:2}.card-blue{fill:#e7efff;stroke:#2855f3;stroke-width:2}.card-sand{fill:#fff5de;stroke:#9a4c3f;stroke-width:2}
+      .rule{stroke:#88a6d6;stroke-width:1.5}.rule-sand{stroke:#d4ab72;stroke-width:1.5}.arrow{fill:#2855f3}.arrow-sea{fill:#2f6668}.arrow-sand{fill:#fa7065}
+    </style>
+  </defs>
+
+  <rect width="1600" height="1200" fill="#17345f"/>
+  <rect x="30" y="30" width="1540" height="1140" rx="34" fill="#fffaf2" stroke="#cfe7f7" stroke-width="2"/>
+
+  <g class="sans">
+    <text x="72" y="88" class="title ink">Staged capital: buy the baseline, continuity, field reliability, then scale</text>
+    <text x="72" y="124" class="subtitle muted">Prospective planning bands separate the first useful tranche from the full field-operating platform and its Year 1 ownership.</text>
+    <g transform="translate(1306 64)" aria-label="Prospective planning status">
+      <rect x="7" y="7" width="222" height="62" rx="16" fill="#17345f" aria-hidden="true"/>
+      <rect width="222" height="62" rx="16" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+      <text x="111" y="26" text-anchor="middle" class="eyebrow sea">PROSPECTIVE BANDS</text>
+      <text x="111" y="48" text-anchor="middle" class="tiny muted">PROSPECTIVE PLANNING BANDS</text>
+    </g>
+
+    <g role="group" aria-labelledby="capital-envelopes-title">
+      <title id="capital-envelopes-title">Full delivery, Year 1 ownership, and bounded opening envelopes</title>
+      <rect x="80" y="170" width="1456" height="112" rx="22" fill="#17345f" aria-hidden="true"/>
+      <rect x="72" y="162" width="1456" height="112" rx="22" fill="#e7efff" stroke="#2855f3" stroke-width="2"/>
+      <g clip-path="url(#capital-envelope-clip)"><rect x="72" y="162" width="1456" height="112" fill="url(#capital-grid)"/></g>
+
+      <g transform="translate(96 184)">
+        <text x="0" y="20" class="eyebrow cobalt">FULL DELIVERY ENVELOPE</text>
+        <text x="0" y="57" class="band ink">USD 95k–167k</text>
+        <text x="0" y="82" class="small muted">staged build + separate reserve near 15%</text>
+      </g>
+      <line x1="500" y1="182" x2="500" y2="254" class="rule"/>
+      <g transform="translate(530 184)">
+        <text x="0" y="20" class="eyebrow cobalt">YEAR 1 OWNERSHIP ENVELOPE</text>
+        <text x="0" y="57" class="band ink">USD 125k–230k</text>
+        <text x="0" y="82" class="small muted">delivery + support + operation + readiness</text>
+      </g>
+      <line x1="992" y1="182" x2="992" y2="254" class="rule"/>
+      <g transform="translate(1022 184)">
+        <text x="0" y="20" class="eyebrow sand">NEAR USD 20k OPENS</text>
+        <text x="0" y="55" class="stage-title ink">Baseline or bounded bridge</text>
+        <text x="0" y="79" class="small muted">a useful first tranche · later envelopes stay visible</text>
+      </g>
+    </g>
+
+    <g role="group" aria-labelledby="capital-stages-title">
+      <title id="capital-stages-title">Four capital stages with duration, band, purchased work, and operating result</title>
+      <text x="72" y="318" class="eyebrow cobalt">CAPITAL SEQUENCE</text>
+      <text x="72" y="350" class="section-title ink">Each stage retires a different operating uncertainty</text>
+
+      <g transform="translate(72 382)" aria-label="Stage zero operating baseline and architecture">
+        <rect width="332" height="286" rx="22" class="card-sand"/>
+        <text x="22" y="32" class="eyebrow sand">STAGE 0 · 3–4 WEEKS</text>
+        <text x="22" y="66" class="stage-title ink">Baseline + architecture</text>
+        <text x="22" y="105" class="band sand">USD 8k–15k</text>
+        <line x1="22" y1="124" x2="310" y2="124" class="rule-sand"/>
+        <text x="22" y="151" class="small ink">Field workflow + failure inventory</text>
+        <text x="22" y="175" class="small ink">Canonical record + sync contracts</text>
+        <text x="22" y="199" class="small ink">Media lifecycle + privacy boundaries</text>
+        <text x="22" y="223" class="small ink">Parity and restoration readiness</text>
+        <text x="22" y="260" class="tiny muted">BUYS: a buildable scope and a safe opening slice</text>
+      </g>
+      <path class="arrow-sand" d="M404 508H426V498L454 525L426 552V542H404Z"/>
+
+      <g transform="translate(454 382)" aria-label="Stage one dealer bridge">
+        <rect width="332" height="286" rx="22" class="card-blue"/>
+        <text x="22" y="32" class="eyebrow cobalt">STAGE 1 · 6–10 WEEKS</text>
+        <text x="22" y="66" class="stage-title ink">Dealer bridge</text>
+        <text x="22" y="105" class="band cobalt">USD 20k–35k</text>
+        <line x1="22" y1="124" x2="310" y2="124" class="rule"/>
+        <text x="22" y="151" class="small ink">Install-free dealer + staff workflows</text>
+        <text x="22" y="175" class="small ink">Managed Postgres operational core</text>
+        <text x="22" y="199" class="small ink">Private media path + messaging</text>
+        <text x="22" y="223" class="small ink">Clappia retained and reconciled</text>
+        <text x="22" y="260" class="tiny muted">BUYS: a working dealer-operations bridge</text>
+      </g>
+      <path class="arrow" d="M786 508H808V498L836 525L808 552V542H786Z"/>
+
+      <g transform="translate(836 382)" aria-label="Stage two native offline field application">
+        <rect width="332" height="286" rx="22" class="card-sea"/>
+        <text x="22" y="32" class="eyebrow sea">STAGE 2 · 10–16 WEEKS</text>
+        <text x="22" y="66" class="stage-title ink">Native offline field app</text>
+        <text x="22" y="105" class="band sea">USD 30k–50k</text>
+        <line x1="22" y1="124" x2="310" y2="124" stroke="#79a6a5" stroke-width="1.5"/>
+        <text x="22" y="151" class="small ink">Expo / React Native inspector</text>
+        <text x="22" y="175" class="small ink">Durable local writes + ordered queue</text>
+        <text x="22" y="199" class="small ink">Resumable media + explicit state</text>
+        <text x="22" y="223" class="small ink">Per-entity conflict + pilot support</text>
+        <text x="22" y="260" class="tiny muted">BUYS: reliable capture through interruption</text>
+      </g>
+      <path class="arrow-sea" d="M1168 508H1190V498L1218 525L1190 552V542H1168Z"/>
+
+      <g transform="translate(1218 382)" aria-label="Stage three integration and production hardening">
+        <rect width="310" height="286" rx="22" fill="#17345f" stroke="#17345f" stroke-width="2"/>
+        <text x="22" y="32" class="eyebrow" fill="#dbe9ff">STAGE 3 · 8–12 WEEKS</text>
+        <text x="22" y="66" class="stage-title paper">Integration + hardening</text>
+        <text x="22" y="105" class="band paper">USD 25k–45k</text>
+        <line x1="22" y1="124" x2="288" y2="124" stroke="#8aaee9" stroke-width="1.5"/>
+        <text x="22" y="151" class="small paper">Observability + security review</text>
+        <text x="22" y="175" class="small paper">Restore + reconciliation rehearsal</text>
+        <text x="22" y="199" class="small paper">Downstream integration + runbooks</text>
+        <text x="22" y="223" class="small paper">Readiness + controlled handoff</text>
+        <text x="22" y="260" class="tiny" fill="#b9cee9">BUYS: a supportable production platform</text>
+      </g>
+    </g>
+
+    <g role="group" aria-labelledby="capital-continuity-title">
+      <title id="capital-continuity-title">Clappia continuity and target-system handoff rail</title>
+      <rect x="80" y="712" width="1456" height="110" rx="22" fill="#17345f" aria-hidden="true"/>
+      <rect x="72" y="704" width="1456" height="110" rx="22" fill="#fff5de" stroke="#9a4c3f" stroke-width="2"/>
+      <rect x="72" y="704" width="1456" height="110" rx="22" fill="url(#capital-speckle)"/>
+      <text x="96" y="734" class="eyebrow sand">CONTINUITY BEFORE CUTOVER</text>
+      <text x="96" y="762" class="small ink">Clappia remains available through bridge, native pilot, record reconciliation, restore testing, support rehearsal, and controlled handoff.</text>
+
+      <rect x="96" y="780" width="620" height="10" rx="5" fill="#a26b26"/>
+      <path class="arrow-sand" d="M716 775H742V767L768 785L742 803V795H716Z"/>
+      <text x="96" y="807" class="tiny sand">INCUMBENT SYSTEM OF RECORD · STAGES 0–2</text>
+      <rect x="798" y="780" width="676" height="10" rx="5" fill="#2f6668"/>
+      <text x="798" y="807" class="tiny sea">TARGET SYSTEM OF RECORD · AFTER PARITY, RECONCILIATION, RESTORE, AND READINESS</text>
+    </g>
+
+    <g role="group" aria-labelledby="capital-cost-shape-title">
+      <title id="capital-cost-shape-title">Year 1 cost composition led by operational work</title>
+      <rect x="80" y="854" width="930" height="236" rx="22" fill="#17345f" aria-hidden="true"/>
+      <rect x="72" y="846" width="930" height="236" rx="22" fill="#d9efea" stroke="#2f6668" stroke-width="2"/>
+      <rect x="72" y="846" width="930" height="236" rx="22" fill="url(#capital-topography)"/>
+      <text x="98" y="880" class="eyebrow sea">YEAR 1 COST SHAPE</text>
+      <text x="98" y="912" class="section-title ink">Operational work leads the Year 1 cost shape</text>
+
+      <g transform="translate(98 940)">
+        <rect width="278" height="108" rx="16" class="card"/>
+        <text x="18" y="29" class="eyebrow sea">PLATFORM SERVICES</text>
+        <text x="18" y="61" class="stage-title ink">~USD 125–650 / month</text>
+        <text x="18" y="87" class="small muted">before support and unknown</text>
+        <text x="18" y="103" class="small muted">SmartAuction fees</text>
+      </g>
+      <path class="arrow-sea" d="M376 985H400V977L426 994L400 1011V1003H376Z"/>
+      <g transform="translate(426 940)">
+        <rect width="550" height="108" rx="16" fill="#2f6668" stroke="#17345f" stroke-width="2"/>
+        <text x="18" y="29" class="eyebrow" fill="#d8ece9">DOMINANT OWNERSHIP WORK</text>
+        <text x="18" y="59" class="body paper">support · QA · migration · reconciliation · incident response</text>
+        <text x="18" y="83" class="body paper">restore rehearsal · field training · release and readiness</text>
+        <text x="18" y="101" class="tiny" fill="#d8ece9">The durable operating model carries the larger cost surface.</text>
+      </g>
+    </g>
+
+    <g role="group" aria-labelledby="capital-reserve-title">
+      <title id="capital-reserve-title">Separate program reserve and its observed-use boundary</title>
+      <rect x="1034" y="854" width="502" height="236" rx="22" fill="#17345f" aria-hidden="true"/>
+      <rect x="1026" y="846" width="502" height="236" rx="22" fill="#fff5de" stroke="#9a4c3f" stroke-width="2"/>
+      <text x="1050" y="880" class="eyebrow sand">SEPARATE RESERVE</text>
+      <text x="1050" y="918" class="band sand">near 15%</text>
+      <text x="1050" y="951" class="body ink">Held outside the stage bands for:</text>
+      <text x="1050" y="980" class="small ink">integration variance · migration correction</text>
+      <text x="1050" y="1004" class="small ink">field-device behavior · vendor boundaries</text>
+      <text x="1050" y="1028" class="small ink">operational readiness discovered in use</text>
+      <line x1="1050" y1="1046" x2="1504" y2="1046" class="rule-sand"/>
+      <text x="1050" y="1067" class="tiny muted">Release against observed conditions; fund the reserve as its own line.</text>
+    </g>
+
+    <g transform="translate(72 1110)" role="group" aria-labelledby="capital-decision-title">
+      <title id="capital-decision-title">Capital decision rule</title>
+      <rect x="6" y="6" width="1456" height="42" rx="14" fill="#fa7065" aria-hidden="true"/>
+      <rect width="1456" height="42" rx="14" fill="#17345f"/>
+      <text x="728" y="27" text-anchor="middle" class="small paper">Capital follows capability: baseline → bridge → offline reliability → supportable production. Each tranche preserves a recoverable operating path.</text>
+    </g>
+  </g>
+</svg>
