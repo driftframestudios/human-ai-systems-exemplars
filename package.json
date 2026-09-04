@@ -16,6 +16,7 @@
     "stage:prod-carrier": "node tools/build-prod-projection.mjs --stage-carrier",
     "check:prod-carrier": "node tools/build-prod-projection.mjs --check-carrier",
     "build:schema-pages": "node tools/build-schema-pages.mjs",
+    "check:schema-pages-receiver": "node tools/verify-schema-pages-receiver.mjs",
     "build:schema-delivery": "node cloudflare/schema-delivery/build.mjs",
     "check:schema-delivery": "node cloudflare/schema-delivery/build.mjs --check",
     "dry-run:schema-delivery": "npm run build:schema-delivery && wrangler deploy --dry-run --env=\"\" --config cloudflare/schema-delivery/wrangler.jsonc",

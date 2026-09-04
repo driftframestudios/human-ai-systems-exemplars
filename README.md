@@ -673,7 +673,7 @@ routes](.github/ENVIRONMENTS.md) are the settings-adjacent authority.
 
 | Workflow | Current receiving use |
 | --- | --- |
-| `schema-pages.yml` | Connected schema check, static build, artifact upload, and Pages deployment from `docs` |
+| `schema-pages.yml` | Manual exact-source rebuild and byte comparison with a reviewed `docs` coordinate; deployment is a separate dispatch selection |
 | `res-public-boundary-intake.yml` | Advisory aggregate public-boundary receipt for eligible pull requests into `main` while its repository budget is active |
 | `schema-receiver-routes.yml` | Advisory schema identity, receiver-route, and mapped-build receipt for matching `main` changes |
 | `schema-delivery.yml` | Automatic schema, Static Assets, Wrangler, and secret-material contract for `release` and `prod`, followed by separately activated environment deployment |
