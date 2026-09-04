@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "strategy-canvas-evidence/0.1",
+  "methodOrigin": {
+    "name": "Strategy Canvas",
+    "developers": [
+      "W. Chan Kim",
+      "Renée Mauborgne"
+    ],
+    "primarySource": {
+      "title": "Strategy Canvas | Blue Ocean Strategy Tools and Frameworks",
+      "url": "https://www.blueoceanstrategy.com/tools/strategy-canvas/",
+      "publisher": "Blue Ocean Strategy"
+    },
+    "institutionalRecord": {
+      "title": "Blue Ocean Strategy, Expanded Edition",
+      "url": "https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested",
+      "publisher": "INSEAD"
+    },
+    "sourceClaim": "The Strategy Canvas is a diagnostic and action framework developed by W. Chan Kim and Renée Mauborgne for comparing the factors, offering levels, and strategic profiles that shape a market.",
+    "localAdaptation": "This repository adapts the comparison form for internal collaboration. Its good-enough threshold, consequence weight, lifecycle, evidence, participant input, and AI collaboration fields are repository-specific extensions."
+  },
+  "implementationEvidence": [
+    {
+      "id": "direct-manipulation",
+      "citation": "Shneiderman, B. (1983). Direct Manipulation: A Step Beyond Programming Languages. Computer, 16(8), 57–69.",
+      "url": "https://doi.org/10.1109/MC.1983.1654471",
+      "evidenceClass": "interaction-design account",
+      "implementationDecision": "Marker movement and labelled score controls update the same visible state, and undo and redo preserve reversibility.",
+      "transferLimit": "This account motivates the interaction pattern; it does not establish usability or decision quality for this implementation."
+    },
+    {
+      "id": "diagram-and-table",
+      "citation": "Larkin, J. H., & Simon, H. A. (1987). Why a Diagram is (Sometimes) Worth Ten Thousand Words. Cognitive Science, 11(1), 65–100.",
+      "url": "https://doi.org/10.1111/j.1551-6708.1987.tb00863.x",
+      "evidenceClass": "comparative representation models",
+      "implementationDecision": "The plotted profile and a complete structured table remain adjacent semantic twins.",
+      "transferLimit": "The paper analyzes when informationally equivalent diagrams can make lookup and inference more efficient; it does not show that a diagram is always easier to understand."
+    },
+    {
+      "id": "complex-image-equivalent",
+      "citation": "W3C Web Accessibility Initiative. Complex Images tutorial.",
+      "url": "https://www.w3.org/WAI/tutorials/images/complex/",
+      "evidenceClass": "accessibility implementation guidance",
+      "implementationDecision": "Each complex chart has a short description and a visible, structured long-form table equivalent.",
+      "transferLimit": "The guidance shapes the text-equivalent route; conformance and practical access still require testing with relevant users and technologies."
+    },
+    {
+      "id": "graphical-position",
+      "citation": "Cleveland, W. S., & McGill, R. (1984). Graphical Perception: Theory, Experimentation, and Application to the Development of Graphical Methods. Journal of the American Statistical Association, 79(387), 531–554.",
+      "url": "https://doi.org/10.1080/01621459.1984.10478080",
+      "evidenceClass": "controlled graphical-perception experiments",
+      "implementationDecision": "Scores use position on a common aligned scale, with exact values repeated in marker labels and tables.",
+      "transferLimit": "The experiments compare elementary graphical judgments. They do not validate this curve, its local scale, or its decision meaning."
+    },
+    {
+      "id": "interactive-analysis",
+      "citation": "Heer, J., & Shneiderman, B. (2012). Interactive Dynamics for Visual Analysis. Communications of the ACM, 55(4), 45–54.",
+      "url": "https://doi.org/10.1145/2133806.2133821",
+      "evidenceClass": "visual-analysis interaction synthesis",
+      "implementationDecision": "Selection, filtering by attention, direct value change, and state inspection remain explicit and reversible across chart and native controls.",
+      "transferLimit": "The taxonomy supports interaction design choices; it is not an evaluation of this artifact or its audience."
+    },
+    {
+      "id": "independent-before-reveal",
+      "citation": "Lorenz, J., Rauhut, H., Schweitzer, F., & Helbing, D. (2011). How social influence can undermine the wisdom of crowd effect. Proceedings of the National Academy of Sciences, 108(22), 9020–9025.",
+      "url": "https://doi.org/10.1073/pnas.1008636108",
+      "evidenceClass": "controlled estimation experiment",
+      "implementationDecision": "The Context Canvas adaptation can collect independent participant readings before an explicit reveal.",
+      "transferLimit": "The experiment used factual estimation tasks with 144 participants. Its result does not establish a universal benefit for concealed entry or apply directly to every collaboration task.",
+      "counterevidence": {
+        "citation": "Farrell, S. (2011). Social influence benefits the wisdom of individuals in the crowd. Proceedings of the National Academy of Sciences, 108(36), E625.",
+        "url": "https://doi.org/10.1073/pnas.1109947108",
+        "relevance": "This response argues that social information can improve individual estimates, reinforcing a context-dependent rather than universal interpretation."
+      }
+    },
+    {
+      "id": "organizational-readiness-boundary",
+      "citation": "Weiner, B. J. (2009). A theory of organizational readiness for change. Implementation Science, 4, 67.",
+      "url": "https://doi.org/10.1186/1748-5908-4-67",
+      "evidenceClass": "organization-level theory",
+      "implementationDecision": "Local dimensions may separately name shared commitment, capability, resources, and situational conditions when they matter to a change decision.",
+      "transferLimit": "The paper presents a theory and calls for further measurement development. This Strategy Canvas does not measure organizational readiness unless a separate validated method is supplied."
+    },
+    {
+      "id": "redundant-selection-cue",
+      "citation": "Treisman, A. M., & Gelade, G. (1980). A feature-integration theory of attention. Cognitive Psychology, 12(1), 97–136.",
+      "url": "https://doi.org/10.1016/0010-0285(80)90005-5",
+      "evidenceClass": "visual-search, identification, and localization experiments",
+      "implementationDecision": "The current dimension is identified by visible text and a persistent border treatment as well as color.",
+      "transferLimit": "The experiments concern attention to separable visual features. They motivate redundancy but do not establish accessibility or comprehension for this control."
+    },
+    {
+      "id": "anchoring-boundary",
+      "citation": "Tversky, A., & Kahneman, D. (1974). Judgment under Uncertainty: Heuristics and Biases. Science, 185(4157), 1124–1131.",
+      "url": "https://doi.org/10.1126/science.185.4157.1124",
+      "evidenceClass": "experimental and theoretical judgment research",
+      "implementationDecision": "Every number remains attached to local observable anchors and an evidence field, with participant spread retained where available.",
+      "transferLimit": "Visible anchors and evidence make interpretation inspectable; they do not remove anchoring effects or other judgment biases."
+    }
+  ],
+  "claimBoundaries": [
+    "The repository-specific 0–10 scales are locally defined rather than psychometrically validated.",
+    "The Strategy Canvas shows authored and derived readings; it does not determine whether a strategy or change will succeed.",
+    "Cognitive and interaction research informs specific design choices without proving universal comprehension, accessibility, or decision improvement."
+  ]
+}

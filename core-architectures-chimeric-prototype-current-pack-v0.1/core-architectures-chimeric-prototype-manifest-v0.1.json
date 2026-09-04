@@ -110,10 +110,11 @@
       "compatibility_route": "strategy-canvas-chimeric-prototype-v0.1.1.html",
       "semantic_contract": "strategy-canvas/2.0",
       "schema": "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      "evidence": "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
       "expression": "canonical",
       "exists": true,
-      "size_bytes": 133005,
-      "sha256": "7d1a5a1f381e1fafe880dc76a691b40ad24e73226632ff73293e69ae35e59dbe"
+      "size_bytes": 139370,
+      "sha256": "cf52854a37eef224ef240047aa7f68cbc6f64f6952e96be0368055eafeef8f63"
     },
     {
       "id": "first-responsible-version-matrix",

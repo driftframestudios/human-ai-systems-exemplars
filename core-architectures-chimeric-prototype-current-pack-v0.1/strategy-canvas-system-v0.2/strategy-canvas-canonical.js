@@ -253,15 +253,21 @@
           svg.append(group);
         });
 
-        const label = svgElement('text', {
-          class: 'sc-dimension-label sc-dimension-hit',
-          x: x(index),
-          y: margin.top + plotHeight + 42,
-          'text-anchor': 'middle',
+        const labelGroup = svgElement('g', {
+          class: 'sc-dimension-hit',
           tabindex: '0',
           role: 'button',
-          'aria-label': `Inspect ${dimension.label}`,
+          'aria-current': selected ? 'true' : undefined,
+          'aria-label': `${dimension.label}${selected ? ', current dimension' : ''}. Inspect anchors and evidence.`,
           'data-select-dimension': dimension.id,
+          'data-selection-route': 'chart',
+          'data-selected': selected
+        });
+        const label = svgElement('text', {
+          class: 'sc-dimension-label',
+          x: x(index),
+          y: margin.top + plotHeight + (selected ? 56 : 44),
+          'text-anchor': 'middle',
           'data-factor-label': dimension.id
         });
         const words = dimension.label.split(/\s+/);
@@ -277,9 +283,45 @@
           x: x(index),
           dy: lineIndex ? '1.15em' : 0
         }, line)));
-        svg.append(label);
+        labelGroup.append(svgElement('rect', {
+          class: 'sc-dimension-label-surface',
+          x: columnStart(index) + 5,
+          y: margin.top + plotHeight + 14,
+          width: columnWidth - 10,
+          height: 122,
+          rx: 2
+        }));
+        if (selected) labelGroup.append(svgElement('text', {
+          class: 'sc-dimension-current-marker',
+          x: x(index),
+          y: margin.top + plotHeight + 34,
+          'text-anchor': 'middle'
+        }, 'Current'));
+        labelGroup.append(label);
+        svg.append(labelGroup);
       });
       container.replaceChildren(svg);
+    }
+
+    function renderDimensionChooser(state) {
+      const container = find('dimension-chooser');
+      if (!container) return;
+      const selectedId = state.view.selectedDimensionId;
+      const controls = core.selectors.orderedDimensions(state).map((dimension) => {
+        const selected = dimension.id === selectedId;
+        const button = element('button', {
+          type: 'button',
+          className: 'sc-dimension-choice',
+          'aria-current': selected ? 'true' : undefined,
+          'aria-label': `${dimension.label}${selected ? ', current dimension' : ''}. Inspect anchors and evidence.`,
+          'data-select-dimension': dimension.id,
+          'data-selection-route': 'chooser'
+        });
+        button.append(element('span', { text: dimension.label }));
+        if (selected) button.append(element('span', { className: 'sc-dimension-choice-status', text: 'Current' }));
+        return button;
+      });
+      container.replaceChildren(...controls);
     }
 
     function scoreControl(state, dimension, series) {
@@ -342,6 +384,8 @@
             className: 'sc-button-small sc-quiet',
             'data-action': 'select',
             'data-dimension-id': dimension.id,
+            'data-selection-route': 'matrix',
+            'aria-current': state.view.selectedDimensionId === dimension.id ? 'true' : undefined,
             text: dimension.label
           }),
           element('div', { className: 'sc-help', text: dimension.definition })
@@ -513,6 +557,7 @@
       const state = store.getState();
       renderMeta(state);
       renderChart(state);
+      renderDimensionChooser(state);
       renderScoreMatrix(state);
       renderInspector(state);
       renderTextEquivalent(state);
@@ -537,6 +582,18 @@
       } catch (error) {
         announce(`${description} remains visible for manual copy.`);
       }
+    }
+
+    function selectDimension(dimensionId, sourceControl) {
+      const dimension = store.getState().dimensions.find((candidate) => candidate.id === dimensionId);
+      if (!dimension) return;
+      const route = sourceControl?.dataset.selectionRoute;
+      const restoreFocus = sourceControl === document.activeElement && route;
+      store.dispatch(core.actions.viewSelect(dimensionId));
+      if (restoreFocus) {
+        root.querySelector(`[data-selection-route="${route}"][data-${route === 'matrix' ? 'dimension-id' : 'select-dimension'}="${CSS.escape(dimensionId)}"]`)?.focus();
+      }
+      announce(`${dimension.label} selected. Its anchors and evidence are available below the chart.`);
     }
 
     function commitDrag(event) {
@@ -620,15 +677,18 @@
         return;
       }
       const selectable = event.target.closest?.('[data-select-dimension]');
-      if (selectable && (event.key === 'Enter' || event.key === ' ')) {
+      if (selectable && selectable.tagName !== 'BUTTON' && (event.key === 'Enter' || event.key === ' ')) {
         event.preventDefault();
-        store.dispatch(core.actions.viewSelect(selectable.dataset.selectDimension));
+        selectDimension(selectable.dataset.selectDimension, selectable);
       }
     }, { signal });
 
     root.addEventListener('click', (event) => {
       const selectable = event.target.closest?.('[data-select-dimension]');
-      if (selectable) store.dispatch(core.actions.viewSelect(selectable.dataset.selectDimension));
+      if (selectable) {
+        selectDimension(selectable.dataset.selectDimension, selectable);
+        return;
+      }
       const trigger = event.target.closest?.('[data-action]');
       if (!trigger) return;
       const action = trigger.dataset.action;
@@ -636,7 +696,7 @@
       if (action === 'undo') store.undo();
       else if (action === 'redo') store.redo();
       else if (action === 'toggle-mode') store.dispatch(core.actions.viewModeSet(state.view.mode === 'presentation' ? 'working' : 'presentation'));
-      else if (action === 'select') store.dispatch(core.actions.viewSelect(trigger.dataset.dimensionId));
+      else if (action === 'select') selectDimension(trigger.dataset.dimensionId, trigger);
       else if (action === 'add' && !locked()) store.dispatch(core.actions.dimensionAdd());
       else if (action === 'move' && !locked()) store.dispatch(core.actions.dimensionMove(trigger.dataset.dimensionId, Number(trigger.dataset.delta)));
       else if (action === 'remove' && !locked()) store.dispatch(core.actions.dimensionRemove(trigger.dataset.dimensionId));
