@@ -41,7 +41,7 @@ Each contract keeps the `$id` declared inside its exact-version file. Most curre
 
 As observed on 2026-09-01, the Radiant Null mirror serves the registry over HTTPS. The Vik Guru hostname resolves and currently returns a service response rather than the registry homepage and contract routes. The mirror is therefore the dependable public retrieval route for this delivery phase.
 
-The active GitHub Pages path publishes the generated `docs` branch. The checked-in Pages workflow records a possible Actions-based path; it becomes operative when the checked-out publication branch contains its required package, workflow, and build tools. Until that topology changes through review, an accepted source revision is built deterministically, projected to `docs`, and observed on the public origin.
+The active GitHub Pages path publishes the generated `docs` branch. The checked-in Pages workflow can independently name an accepted source commit and a reviewed `docs` commit, rebuild with the source toolchain, and require complete path-and-byte agreement. Its default dispatch stops after verification; a separate dispatch selection uploads and deploys the verified artifact. Legacy branch delivery remains active until the repository's Pages setting explicitly selects the workflow route.
 
 ## Version and compatibility
 
@@ -68,6 +68,23 @@ PAGES_BASE_URL=https://schemas.radiantnull.com npm run build:schema-pages
 ```
 
 The builder creates `.schema-pages/`, preserves every declared schema byte, adds the public orientation and attribution carriers, and resolves canonical and social metadata for the receiving origin.
+
+Compare that build with a separately checked-out, reviewed `docs` coordinate:
+
+```bash
+npm run check:schema-pages-receiver -- \
+  --source-revision <accepted-full-source-sha> \
+  --source-branch main \
+  --projection-root ../reviewed-docs \
+  --projection-revision <reviewed-full-docs-sha> \
+  --projection-branch docs
+```
+
+The receiver check accepts regular files only and requires exact source and
+projection coordinates that belong to their named receiving branches, an
+unchanged projection worktree including its ignored paths, identical sorted
+membership, and byte-for-byte agreement. It reports one deterministic closure
+digest for the pair.
 
 ## Extension shape
 
