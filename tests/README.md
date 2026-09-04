@@ -49,6 +49,36 @@ telemetry, and 320-pixel containment observations. `test:iframe-browser` runs
 both rendered delivery contracts. Live response headers, cache behavior, and
 deployed-parent behavior remain delivery activation checks.
 
+Production assembly and the cPanel carrier have their own repository-level
+contract:
+
+```sh
+npm run test:prod-deployment
+npm run check:prod-projection
+npm run build:prod-projection
+npm run stage:prod-carrier
+npm run check:prod-carrier
+```
+
+The test suite covers explicit primary membership, Core and Canvas package
+composition, URL materialization, exact digests, separate document roots,
+transactional replacement, deployment-bundle ancestry, and the fail-closed
+installer.
+The projection check composes and verifies a temporary result; the build
+replaces only ignored `.prod-projection-build/`. Staging replaces only the
+tracked cPanel deployment bundle, and the bundle check requires its committed
+files to match the accepted first-parent source. Host selection, live
+installation, and public-response observation begin in their named deployment
+steps.
+
+The attribution suite applies one visitor-boundary rule to every governed
+HTML carrier. Top-level Context Canvas pages use the shared contract and shell;
+self-contained prototypes and canonical generator templates carry the same
+ordered marker content with local narrow, print, and forced-color treatment.
+When an owning source or template changes, its maintained projections and
+iframe package digests are rebuilt together. The exact marker strings remain
+centralized in `visitor-boundary-contract.js` and its focused tests.
+
 Secret-material inspection has its own focused behavior contract:
 
 ```sh
