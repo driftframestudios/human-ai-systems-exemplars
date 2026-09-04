@@ -42,15 +42,15 @@ description: <Third-person capability statement>. Applies when <specific trigger
 
 ### Scenario: <ordinary path>
 
-Given <initial context><br>
-When <event or action><br>
-Then <observable result>
+- Given <initial context>
+- When <event or action>
+- Then <observable result>
 
 ### Scenario: <consequential boundary, when needed>
 
-Given <boundary context><br>
-When <event or action><br>
-Then <observable result and recovery route>
+- Given <boundary context>
+- When <event or action>
+- Then <observable result and recovery route>
 
 ## Conditional context
 

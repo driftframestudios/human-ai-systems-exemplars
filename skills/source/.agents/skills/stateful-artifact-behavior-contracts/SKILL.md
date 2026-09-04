@@ -79,20 +79,20 @@ Existing local commands remain the primary evidence route. A hosted run uses the
 
 ### Scenario: An artifact re-enters through its own export
 
-Given an authored state has a stable identity, usable focus, and machine-readable twin<br>
-When a material edit is exported and imported into a fresh working state<br>
-Then the edit, identity, usable focus, and shared semantic fields survive<br>
-And later mutation of the exported document leaves the working model unchanged
+- Given an authored state has a stable identity, usable focus, and machine-readable twin
+- When a material edit is exported and imported into a fresh working state
+- Then the edit, identity, usable focus, and shared semantic fields survive
+- And later mutation of the exported document leaves the working model unchanged
 
 ### Scenario: Independent prototypes exchange serialized state
 
-Given a producer and receiver own different units<br>
-And an adapter owns the translation at their serialized boundary<br>
-When one compatible and one structurally incompatible exchange are exercised<br>
-Then producer, adapter, and receiver assertions stay with their respective owners<br>
-And source identity remains recoverable as lineage while receiver identity stays receiver-owned<br>
-And the compatible state reaches a usable rendered result<br>
-And the incompatible candidate leaves the accepted receiver state available with a direct revision route
+- Given a producer and receiver own different units
+- And an adapter owns the translation at their serialized boundary
+- When one compatible and one structurally incompatible exchange are exercised
+- Then producer, adapter, and receiver assertions stay with their respective owners
+- And source identity remains recoverable as lineage while receiver identity stays receiver-owned
+- And the compatible state reaches a usable rendered result
+- And the incompatible candidate leaves the accepted receiver state available with a direct revision route
 
 ## Completion
 

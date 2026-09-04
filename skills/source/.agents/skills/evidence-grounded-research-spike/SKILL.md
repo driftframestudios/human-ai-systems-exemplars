@@ -57,20 +57,20 @@ An unknown or disagreement receives enough research to establish its utility and
 
 ### Scenario: Contemporary practice extends an official convention
 
-Given official documentation establishes metadata routing and progressive disclosure<br>
-And named practitioner work demonstrates a useful scenario-based authoring pattern<br>
-When repository guidance is formed<br>
-Then official behavior remains a verified fact<br>
-And the practitioner pattern remains a scoped observation<br>
-And local use determines transfer into a standing instruction
+- Given official documentation establishes metadata routing and progressive disclosure
+- And named practitioner work demonstrates a useful scenario-based authoring pattern
+- When repository guidance is formed
+- Then official behavior remains a verified fact
+- And the practitioner pattern remains a scoped observation
+- And local use determines transfer into a standing instruction
 
 ### Scenario: External workspace context is unavailable later
 
-Given a Notion payload supplies useful research and vocabulary<br>
-When the repository decision settles<br>
-Then direct source routes remain in the evidence map<br>
-And the durable instruction is carried in repository source<br>
-And runtime collaboration remains independent of Notion availability
+- Given a Notion payload supplies useful research and vocabulary
+- When the repository decision settles
+- Then direct source routes remain in the evidence map
+- And the durable instruction is carried in repository source
+- And runtime collaboration remains independent of Notion availability
 
 ## Completion
 

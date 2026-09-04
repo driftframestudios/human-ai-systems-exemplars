@@ -82,12 +82,12 @@ The chain exits when the next receiver accepts the transition or the relationshi
 
 ### Scenario: A public-route issue prepares a human-cued history decision
 
-Given one issue owns public receiving routes and a locator-free current tree<br>
-And a later issue owns a public-history choice that requires direct human direction<br>
-When the current-tree issue supplies its accepted route and locator receipt<br>
-Then the chain passes that evidence to the history issue<br>
-And the later issue retains the human-cued destructive-action boundary<br>
-And the chain exits when the receiver accepts the handoff or names a remaining condition
+- Given one issue owns public receiving routes and a locator-free current tree
+- And a later issue owns a public-history choice that requires direct human direction
+- When the current-tree issue supplies its accepted route and locator receipt
+- Then the chain passes that evidence to the history issue
+- And the later issue retains the human-cued destructive-action boundary
+- And the chain exits when the receiver accepts the handoff or names a remaining condition
 
 ## Completion
 

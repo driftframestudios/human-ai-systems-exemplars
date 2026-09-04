@@ -46,18 +46,18 @@ Unrelated worktree changes retain their ownership. Overlap becomes visible befor
 
 ### Scenario: Accepted feature branch leads the default branch
 
-Given an accepted planning branch contains newer direction than the default branch<br>
-When repository state is reconstructed<br>
-Then the feature branch and pull request are named as the current collaboration surface<br>
-And the default-branch difference remains visible without rewriting accepted history
+- Given an accepted planning branch contains newer direction than the default branch
+- When repository state is reconstructed
+- Then the feature branch and pull request are named as the current collaboration surface
+- And the default-branch difference remains visible without rewriting accepted history
 
 ### Scenario: Historical ledger conflicts with runtime behavior
 
-Given a threadkeeping record describes an earlier behavior<br>
-And current runnable source implements a later behavior<br>
-When the two records are reconciled<br>
-Then current source defines behavior<br>
-And threadkeeping retains rationale until an authorized update clarifies re-entry
+- Given a threadkeeping record describes an earlier behavior
+- And current runnable source implements a later behavior
+- When the two records are reconciled
+- Then current source defines behavior
+- And threadkeeping retains rationale until an authorized update clarifies re-entry
 
 ## Completion
 

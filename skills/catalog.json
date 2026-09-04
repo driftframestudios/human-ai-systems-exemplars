@@ -11,7 +11,7 @@
       "publicationStanding": "public_ready",
       "projectionPath": "bounded-support-routing/projection.json",
       "sourceRoute": "source/.agents/skills/bounded-support-routing/SKILL.md",
-      "sourceSha256": "f6acdfcfd795ba617bc4b3da78256ae3a357a0d662c50986e9fd1841bd133742",
+      "sourceSha256": "80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402",
       "dependencies": [
         {
           "path": "source/.agents/skills/bounded-support-routing/references/github-issue-label-routing.md",
@@ -33,15 +33,15 @@
       "publicationStanding": "public_ready",
       "projectionPath": "collaboration-accounting/projection.json",
       "sourceRoute": "source/.agents/skills/collaboration-accounting/SKILL.md",
-      "sourceSha256": "0eb00a5e18c057cb95892cb92514f87cdd59eb14a70d752575bdee97b55b35da",
+      "sourceSha256": "f081f046652c1b526f1f8f4ad70c42de6a25662bcabd359690e2b71448061089",
       "dependencies": [
         {
           "path": "source/.agents/skills/collaboration-accounting/references/candidacy-and-routing.md",
-          "sha256": "bc1ed65ac5127c10a2296aff6c090fbc4b81484df906047fd6b8fc853d51fc77"
+          "sha256": "d4aad9c20dcf1fd93db6f2aff4be1a780d793f9c60ca6f9f3dd903b24c0dfeb7"
         },
         {
           "path": "source/.agents/skills/collaboration-accounting/references/task-bound-skill-projections.md",
-          "sha256": "dc63c733d27e8cedab4b58d53551b3a4cbde591f302e4938c9e78674afaf258f"
+          "sha256": "3f67711bf98fad38f9e746ffcacfe4fd6d467803d3aebb4fd7f0dd4d640d0d80"
         }
       ]
     },
@@ -51,7 +51,7 @@
       "publicationStanding": "public_ready",
       "projectionPath": "collaboration-runbook-authoring/projection.json",
       "sourceRoute": "source/.agents/skills/collaboration-runbook-authoring/SKILL.md",
-      "sourceSha256": "a8b654296e706b8e8574e74e556d0a0702239376db539e3f6f2760d3bb792f2c",
+      "sourceSha256": "9e5c5de2277768d2efd1fa639006a7e7179e814fba84f9d1c0ab96f3155bfaf9",
       "dependencies": []
     },
     {
@@ -60,11 +60,11 @@
       "publicationStanding": "public_ready",
       "projectionPath": "context-canvas-css-ownership/projection.json",
       "sourceRoute": "source/.agents/skills/context-canvas-css-ownership/SKILL.md",
-      "sourceSha256": "b24c3691818904f4a71eb0487e6827de72d70c61142b8611f036838a24f76544",
+      "sourceSha256": "03e8bbc4695aeec710a218b65a0212985662a34e0e3b4b24172c7945e37bf0b3",
       "dependencies": [
         {
           "path": "source/.agents/skills/context-canvas-css-ownership/references/scenarios.md",
-          "sha256": "adc6c19ddcf4369cf718276f0ad47119100f33fbc8d3c6497954baa8fc8da9a6"
+          "sha256": "d0a0027bf1febe7e0562ffefe10a0d5ddec4bd334be4d16d82ed248d7d46e93c"
         },
         {
           "path": "source/.agents/skills/context-canvas-css-ownership/references/surface-color-and-state-roles.md",
@@ -78,7 +78,7 @@
       "publicationStanding": "public_ready",
       "projectionPath": "context-canvas-surface-reading/projection.json",
       "sourceRoute": "source/.agents/skills/context-canvas-surface-reading/SKILL.md",
-      "sourceSha256": "f593953b9d79ed90859fc25f0cc1efe5eb3cc934994e9eed0884ee6fd9b5a24f",
+      "sourceSha256": "b0861479adc855a26c4c2d7a62d49a436f44a803e3c28a406da28c26b83d7188",
       "dependencies": []
     },
     {
@@ -87,7 +87,7 @@
       "publicationStanding": "public_ready",
       "projectionPath": "context-canvas-visual-verification/projection.json",
       "sourceRoute": "source/.agents/skills/context-canvas-visual-verification/SKILL.md",
-      "sourceSha256": "c480caeb5605c0329f717c58ec9bff3c9cfcfc7c01d9e6fde67370754748414e",
+      "sourceSha256": "3ae5ab182f0b0a0136a016b9c2959d8e0ef8e6cc38b97fd607bd5505125293b0",
       "dependencies": []
     },
     {
@@ -96,7 +96,7 @@
       "publicationStanding": "public_ready",
       "projectionPath": "contextual-jargon-scan/projection.json",
       "sourceRoute": "source/.agents/skills/contextual-jargon-scan/SKILL.md",
-      "sourceSha256": "1e763d1607c05874be58879e24f6c91c74ffbce4a8798ab58dae67778f189fe9",
+      "sourceSha256": "af2d00add7e4916e11b8dfe00e97ce180e901b874c99627069d695baa1d4df11",
       "dependencies": []
     },
     {
@@ -105,11 +105,11 @@
       "publicationStanding": "public_ready",
       "projectionPath": "declarative-skill-authoring/projection.json",
       "sourceRoute": "source/.agents/skills/declarative-skill-authoring/SKILL.md",
-      "sourceSha256": "135ef5993a90fb7a180aa4fe52aeabf5c7f29bc13b7eb34968456768ce6ccfb7",
+      "sourceSha256": "153ea23114bd69f57403c548f884b5fede7f1c350d85ffadb0d4337b45ccccca",
       "dependencies": [
         {
           "path": "source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
-          "sha256": "ba6d1ce3d15cb689346605414775d313b9c0c9ac8d263c635782b9248a381295"
+          "sha256": "04f598a568310f5a6381a3cbc93e3e51333857e9becb066ec8ecb2d9ff5d6843"
         }
       ]
     },
@@ -119,7 +119,7 @@
       "publicationStanding": "public_ready",
       "projectionPath": "evidence-grounded-research-spike/projection.json",
       "sourceRoute": "source/.agents/skills/evidence-grounded-research-spike/SKILL.md",
-      "sourceSha256": "8c4be2c64c596e3e8a4641c64ee8f597581f8ccc2901c636c7fec7fd28d1a16e",
+      "sourceSha256": "844fc0c6b0b956b81984a2c2d47d9252abadeb0a6554c5ef4734d0f1e5f4b531",
       "dependencies": []
     },
     {
@@ -128,7 +128,7 @@
       "publicationStanding": "public_ready",
       "projectionPath": "issue-chain-stewardship/projection.json",
       "sourceRoute": "source/.agents/skills/issue-chain-stewardship/SKILL.md",
-      "sourceSha256": "744db2ad8de7f3cf5405bf1e3a61398a70430e4f1d0a22765d0e69b26d99f5cf",
+      "sourceSha256": "86815b7996c29de1aefce7b58e1276b727d50da75dd2b19985decb6884390c57",
       "dependencies": []
     },
     {
@@ -137,7 +137,7 @@
       "publicationStanding": "public_ready",
       "projectionPath": "locator-boundary-stewardship/projection.json",
       "sourceRoute": "source/.agents/skills/locator-boundary-stewardship/SKILL.md",
-      "sourceSha256": "7266565529432220313a78b00261ae2990fc5f51819133a513faff9b2e53ddeb",
+      "sourceSha256": "9a71f2512756ddb1163ef1694effa5ec5b159783b8b8cf46e7aa166884f10723",
       "dependencies": [
         {
           "path": "source/.agents/skills/locator-boundary-stewardship/references/issue-and-pull-request-practice.md",
@@ -155,7 +155,7 @@
       "publicationStanding": "public_ready",
       "projectionPath": "practitioner-probe/projection.json",
       "sourceRoute": "source/.agents/skills/practitioner-probe/SKILL.md",
-      "sourceSha256": "7fc5e342386f11d89ad13b3fcf1ae70509500770b7f5ee84c8652a6db8bb1dce",
+      "sourceSha256": "348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c",
       "dependencies": []
     },
     {
@@ -164,7 +164,7 @@
       "publicationStanding": "public_ready",
       "projectionPath": "repository-attribution-stewardship/projection.json",
       "sourceRoute": "source/.agents/skills/repository-attribution-stewardship/SKILL.md",
-      "sourceSha256": "f8fee69700578f574923ff00dcc60ffc00c96479b8300e385b64ead11173a180",
+      "sourceSha256": "6c13f9a54543e973824bc5ce407ae9fe17f8a07d2ef22dccb532f60685c12dfd",
       "dependencies": []
     },
     {
@@ -173,7 +173,7 @@
       "publicationStanding": "public_ready",
       "projectionPath": "repository-reentry/projection.json",
       "sourceRoute": "source/.agents/skills/repository-reentry/SKILL.md",
-      "sourceSha256": "c60bb1bac3a993c78d94b1d05aaa7a97761b99275fc9acdc8285acba6f688f02",
+      "sourceSha256": "211cdbd293c260e95e62d3bc7ed5cb4d6d9ca3debd560a28a74b52364a1bfa90",
       "dependencies": []
     },
     {
@@ -191,7 +191,7 @@
       "publicationStanding": "public_ready",
       "projectionPath": "secret-boundary-inspection/projection.json",
       "sourceRoute": "source/.agents/skills/secret-boundary-inspection/SKILL.md",
-      "sourceSha256": "a3cb69d922d15c979a88664b2330287c72e317f2dcbf5a00e4d9e681b6c2cd9c",
+      "sourceSha256": "0fc2cc964ed65457fdea77ea1494756b0c1c618d30c0622094ae7c089374405d",
       "dependencies": [
         {
           "path": "source/threadkeeping/repository-secret-material-boundary.md",
@@ -213,7 +213,7 @@
       "publicationStanding": "public_ready",
       "projectionPath": "source-authority-mapping/projection.json",
       "sourceRoute": "source/.agents/skills/source-authority-mapping/SKILL.md",
-      "sourceSha256": "1420eaee7f6d58805c29eaff23644d4982fdf1f12d2f6ce3cc39c65791939aff",
+      "sourceSha256": "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5",
       "dependencies": []
     },
     {
@@ -222,7 +222,7 @@
       "publicationStanding": "public_ready",
       "projectionPath": "stateful-artifact-behavior-contracts/projection.json",
       "sourceRoute": "source/.agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
-      "sourceSha256": "1790958738fb770b25a992bc047167055402194801988ab31d26c0e251a59786",
+      "sourceSha256": "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a",
       "dependencies": []
     }
   ],
