@@ -108,6 +108,7 @@
     const { signal } = controller;
     let drag = null;
     let chartGeometry = null;
+    let focusInput = 'keyboard';
 
     const find = (role) => root.querySelector(`[data-sc-role="${role}"]`);
     const announce = (message) => {
@@ -117,6 +118,41 @@
       global.requestAnimationFrame(() => { live.textContent = message; });
     };
     const locked = () => store.getState().lifecycle.status === 'reviewed';
+
+    function revealKeyboardFocus(target) {
+      if (focusInput !== 'keyboard' || !(target instanceof Element)) return;
+      const frame = target.closest('.sc-chart-frame');
+      if (!frame) return;
+      const frameRect = frame.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const padding = Math.min(24, frame.clientWidth / 4);
+      let delta = 0;
+      if (targetRect.left < frameRect.left + padding) {
+        delta = targetRect.left - frameRect.left - padding;
+      } else if (targetRect.right > frameRect.right - padding) {
+        delta = targetRect.right - frameRect.right + padding;
+      }
+      if (Math.abs(delta) < 1) return;
+      const nextLeft = core.clamp(
+        frame.scrollLeft + delta,
+        0,
+        Math.max(0, frame.scrollWidth - frame.clientWidth)
+      );
+      frame.scrollTo({
+        left: nextLeft,
+        behavior: global.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+      });
+    }
+
+    root.addEventListener('pointerdown', () => {
+      focusInput = 'pointer';
+    }, { capture: true, signal });
+    root.addEventListener('keydown', () => {
+      focusInput = 'keyboard';
+    }, { capture: true, signal });
+    root.addEventListener('focusin', (event) => {
+      global.requestAnimationFrame(() => revealKeyboardFocus(event.target));
+    }, { signal });
 
     function seriesPath(dimensions, series, geometry, preview) {
       return dimensions.map((dimension, index) => {

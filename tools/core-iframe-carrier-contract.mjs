@@ -198,7 +198,7 @@ async function assertCarrierContainment(page, carrier, frame, label) {
   }
 }
 
-async function exerciseStrategyCarrier(page, carrier, frame, label) {
+async function exerciseStrategyCarrier(carrier, frame, label) {
   assert.equal(
     await frame.locator("[data-direct-source-route]").count(),
     0,
@@ -211,25 +211,10 @@ async function exerciseStrategyCarrier(page, carrier, frame, label) {
   );
   const figure = carrier.locator("xpath=ancestor::figure[1]");
   const sourceLink = figure.locator("[data-strategy-canvas-host-source]").first();
-  assert.equal(await sourceLink.getAttribute("target"), "_blank", `${label} source target`);
-  assert.equal(
-    await sourceLink.getAttribute("rel"),
-    "noopener noreferrer",
-    `${label} isolates its source destination`,
-  );
+  assert.equal(await sourceLink.getAttribute("target"), null, `${label} leaves new-context choice with the visitor`);
+  assert.equal(await sourceLink.getAttribute("rel"), null, `${label} uses ordinary parent-page link semantics`);
   const href = await sourceLink.getAttribute("href");
   assert.equal(strategySourceUrls.has(href), true, `${label} uses an allowlisted method source`);
-  const [popup] = await Promise.all([
-    page.waitForEvent("popup"),
-    sourceLink.click(),
-  ]);
-  try {
-    await popup.waitForLoadState("domcontentloaded");
-    assert.equal(popup.url(), href, `${label} opens the source outside the iframe`);
-    assert.match(await popup.locator("body").textContent(), /Navigation observed/);
-  } finally {
-    await popup.close();
-  }
 }
 
 async function exerciseHeartCarrier(page, carrier, frame, heartFrame) {
@@ -739,15 +724,6 @@ async function run() {
         });
         return;
       }
-      if (strategySourceUrls.has(request.url()) && request.resourceType() === "document") {
-        await route.fulfill({
-          status: 200,
-          contentType: "text/html; charset=utf-8",
-          headers: { "cache-control": "no-store" },
-          body: "<!doctype html><title>Controlled source navigation</title><p>Navigation observed.</p>",
-        });
-        return;
-      }
       await route.abort("blockedbyclient");
     });
 
@@ -862,7 +838,7 @@ async function run() {
             conditioningInteractions += 1;
           }
           if (routeProfile.id === "strategy-canvas") {
-            await exerciseStrategyCarrier(page, carrier, frame, label);
+            await exerciseStrategyCarrier(carrier, frame, label);
             strategyInteractions += 1;
           }
         }

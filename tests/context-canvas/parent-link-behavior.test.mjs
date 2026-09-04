@@ -9,14 +9,10 @@ const canvasRoot = resolve(
   "context-canvas-project-surface/context-canvas",
 );
 
-const iframeAdjacentLinks = [
+const iframeCompanionLinks = [
   "ai-systems.html:conditioning-field.html",
   "fmi-lims-eln-replatforming.html:prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
-  "fmi-lims-eln-replatforming.html:https://www.blueoceanstrategy.com/tools/strategy-canvas/",
-  "fmi-lims-eln-replatforming.html:https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested",
   "grammar-family.html:prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
-  "grammar-family.html:https://www.blueoceanstrategy.com/tools/strategy-canvas/",
-  "grammar-family.html:https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested",
   "prompt-side-conditions-practice.html:../../collaboration/open-lesson-field/index.html",
 ];
 
@@ -24,7 +20,7 @@ function withoutComments(source) {
   return source.replace(/<!--[\s\S]*?-->/gu, "");
 }
 
-test("ordinary parent links preserve visitor choice while iframe-adjacent handoffs use isolated tabs", async () => {
+test("ordinary parent links preserve the visitor's browsing-context choice", async () => {
   const routes = (await readdir(canvasRoot, { withFileTypes: true }))
     .filter(entry => entry.isFile() && entry.name.endsWith(".html"))
     .map(entry => entry.name)
@@ -41,7 +37,7 @@ test("ordinary parent links preserve visitor choice while iframe-adjacent handof
     }
   }
 
-  assert.deepEqual(forcedNewTabs, iframeAdjacentLinks);
+  assert.deepEqual(forcedNewTabs, iframeCompanionLinks);
 });
 
 test("the shared parent footer emits standard links", async () => {

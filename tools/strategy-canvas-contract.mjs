@@ -537,6 +537,50 @@ async function canonicalViewportContract(browser, url) {
 }
 
 async function canonicalSelectionStateVisualContract(browser, url) {
+  async function focusedChartReceipt(page) {
+    return page.evaluate(() => {
+      const target = document.activeElement;
+      const frame = target?.closest?.('.sc-chart-frame');
+      if (!frame) return null;
+      const frameRect = frame.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const visibleWidth = Math.max(0, Math.min(frameRect.right, targetRect.right) - Math.max(frameRect.left, targetRect.left));
+      return {
+        dimensionId: target.dataset.dimensionId || target.dataset.selectDimension || '',
+        isChartLabel: target.dataset.selectionRoute === 'chart',
+        isHandle: target.dataset.handle === 'true',
+        scrollLeft: frame.scrollLeft,
+        targetWidth: targetRect.width,
+        visibleWidth,
+        visibleRatio: targetRect.width ? visibleWidth / targetRect.width : 0,
+      };
+    });
+  }
+
+  async function assertFocusedChartControlVisible(page, label) {
+    await page.waitForFunction(() => {
+      const target = document.activeElement;
+      const frame = target?.closest?.('.sc-chart-frame');
+      if (!frame) return false;
+      const frameRect = frame.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const visibleWidth = Math.max(0, Math.min(frameRect.right, targetRect.right) - Math.max(frameRect.left, targetRect.left));
+      return visibleWidth >= Math.min(44, targetRect.width * 0.75) && visibleWidth / targetRect.width >= 0.75;
+    });
+    const receipt = await focusedChartReceipt(page);
+    assert(receipt && receipt.visibleWidth >= Math.min(44, receipt.targetWidth * 0.75) && receipt.visibleRatio >= 0.75, `${label} should remain meaningfully visible in the chart scroller. ${JSON.stringify(receipt)}`);
+    return receipt;
+  }
+
+  async function tabTo(page, predicate, label) {
+    for (let index = 0; index < 30; index += 1) {
+      await page.keyboard.press('Tab');
+      const receipt = await focusedChartReceipt(page);
+      if (receipt && predicate(receipt)) return assertFocusedChartControlVisible(page, label);
+    }
+    throw new Error(`${label} should be reachable through the chart's actual Tab order.`);
+  }
+
   for (const viewport of [VIEWPORTS[1], VIEWPORTS[0]]) {
     await verify(`canonical ${viewport.name} · initial, keyboard-focus, and selected states stay visibly distinct`, async () => {
       const { context, page, telemetry } = await openPage(browser, url, viewport);
@@ -544,14 +588,23 @@ async function canonicalSelectionStateVisualContract(browser, url) {
         const section = page.locator(".sc-chart-section");
         await section.waitFor({ state: "visible" });
         await section.screenshot({ path: resolve(runDir, `canonical-${viewport.name}-selection-initial.png`) });
-        const target = page.locator('[data-selection-route="chart"]').nth(1);
-        await target.focus();
-        assert(await target.evaluate((element) => document.activeElement === element), `${viewport.name} chart label should receive keyboard focus.`);
+        let target = page.locator('[data-selection-route="chart"]').nth(1);
+        if (viewport.name === "mobile") {
+          const targetId = await target.getAttribute('data-select-dimension');
+          await page.locator('.sc-chart-frame').focus();
+          await tabTo(page, (receipt) => receipt.isChartLabel && receipt.dimensionId === targetId, "Mobile second chart label");
+        } else {
+          await target.focus();
+          await assertFocusedChartControlVisible(page, "Desktop second chart label");
+        }
         await section.screenshot({ path: resolve(runDir, `canonical-${viewport.name}-selection-focus.png`) });
-        await target.press("Enter");
+        await page.keyboard.press("Enter");
         await assertCanonicalSelectionCoherence(page, `Canonical ${viewport.name} selected state`);
+        await assertFocusedChartControlVisible(page, `${viewport.name} selected chart label after Enter`);
         await section.screenshot({ path: resolve(runDir, `canonical-${viewport.name}-selection-selected.png`) });
         if (viewport.name === "mobile") {
+          await tabTo(page, (receipt) => receipt.isHandle, "Mobile plotted handle");
+          await section.screenshot({ path: resolve(runDir, "canonical-mobile-selection-handle-focus.png") });
           await page.emulateMedia({ forcedColors: "active" });
           const selected = page.locator('[data-selection-route="chart"][aria-current="true"]');
           await selected.focus();

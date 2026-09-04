@@ -95,9 +95,9 @@ Review-ready means every release-blocking gate has evidence, every current regis
 
 ## Current v0.2.2 verification route
 
-- `npm run test:strategy-canvas` — **41/41 checks passed** on 2026-09-04. The focused contract covers registry-to-representation copy, desktop and narrow initial/focus/selected states, forced-colors focus and selection, direct method-source navigation, state round trips, both maintained expressions, and compatibility routes.
-- Canonical generated distribution — **140,592 bytes**, SHA-256 `e4c975536215c83eeb9548ed6cc96ee703fc325447e6c6813b802f79c8a532c0`; source/build parity passed.
-- `npm run test:iframe-carriers` exercises both real Strategy Canvas host pages. Their opaque iframe retains `allow-scripts`; embedded source text hands navigation to adjacent host-owned links that open the official sources outside the frame.
+- `npm run test:strategy-canvas` — **41/41 checks passed** on 2026-09-04. The focused contract covers registry-to-representation copy, desktop and narrow initial/focus/selected states, meaningful chart-control visibility after actual Tab and Enter input at 390px, forced-colors focus and selection, direct method-source navigation, state round trips, both maintained expressions, and compatibility routes.
+- Canonical generated distribution — **141,995 bytes**, SHA-256 `abebae82508b80c5af80f47a5404fa5d2013a8317dd3eff626c76a9c0e66b284`; source/build parity passed.
+- `npm run test:iframe-carriers` exercises both real Strategy Canvas host pages. Their opaque iframe retains `allow-scripts`; embedded source text hands navigation to adjacent host-owned links that continue to the official sources in the parent browsing context.
 - `npm run test:canvas-iframe-routes` exercises the Cross-Functional Investment Studio’s Four Actions source through its existing route-specific popup profile.
 
 ## Historical verification receipt · v0.2.0 and v0.2.1 foundation
