@@ -586,7 +586,8 @@ async function exerciseTalent({ page }) {
   assert.equal(await page.locator("#view-evidence a[target='_blank']").count(), 4);
 }
 
-async function exerciseInvestmentStudio({ carrierPage, page }) {
+async function exerciseInvestmentStudio(session) {
+  const { carrierPage, page } = session;
   const before = (await page.locator("#band").textContent())?.trim();
   await page.locator("#horizon").fill("7");
   await page.locator("#horizon").dispatchEvent("change");
@@ -608,6 +609,10 @@ async function exerciseInvestmentStudio({ carrierPage, page }) {
   } finally {
     await popup.close();
   }
+  await observeExternalPopup(
+    session,
+    page.locator('a[href="https://www.blueoceanstrategy.com/tools/four-actions-framework/"]'),
+  );
 }
 
 async function observeExternalPopup(session, locator) {

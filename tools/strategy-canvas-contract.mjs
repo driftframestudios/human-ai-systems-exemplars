@@ -21,6 +21,10 @@ const NARRATIVE_COMPOSERS = [
 ];
 const SCHEMA_NEGATIVE_FIXTURE = "planning/context-canvas/strategy-canvas/fixtures/schema-validator-negative-cases.v2.json";
 const SHARED_STRATEGY_CORE = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-core.js";
+const STRATEGY_EVIDENCE = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json";
+const GENOMIC_REPRESENTATION = "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html";
+const GENOMIC_SVG = "context-canvas-project-surface/img/plot/genomic_viewer_strategy_canvas.svg";
+const INITIATIVE_COSTING = "collaboration/initiative-costing-calculator/index.html";
 const VIEWPORTS = [
   { name: "mobile", width: 390, height: 844 },
   { name: "desktop", width: 1440, height: 1000 },
@@ -296,6 +300,41 @@ async function contextState(page) {
   return page.evaluate(() => window.StrategyCanvasWorkbench.getState());
 }
 
+async function canonicalSelectionReceipt(page) {
+  return page.evaluate(() => {
+    const ids = (selector, attribute) => [...document.querySelectorAll(selector)].map((element) => element.getAttribute(attribute));
+    return {
+      stateId: window.strategyCanvasCanonical.getState().view.selectedDimensionId,
+      chooserCount: document.querySelectorAll('[data-sc-role="dimension-chooser"] [data-select-dimension]').length,
+      chooserCurrent: ids('[data-sc-role="dimension-chooser"] [aria-current="true"]', 'data-select-dimension'),
+      chooserStatus: document.querySelector('[data-sc-role="dimension-chooser"] [aria-current="true"] .sc-dimension-choice-status')?.textContent.trim() || '',
+      chartCurrent: ids('[data-selection-route="chart"][aria-current="true"]', 'data-select-dimension'),
+      matrixCurrent: ids('[data-selection-route="matrix"][aria-current="true"]', 'data-dimension-id'),
+      selectedRows: ids('[data-sc-role="score-matrix"] tr[data-selected="true"] [data-selection-route="matrix"]', 'data-dimension-id'),
+      selectedHandleIds: [...new Set(ids('[data-handle="true"][data-selected="true"]', 'data-dimension-id'))],
+      selectedHandleCount: document.querySelectorAll('[data-handle="true"][data-selected="true"]').length,
+      inspectorHeading: document.querySelector('[data-sc-role="inspector"] h3')?.textContent.trim() || ''
+    };
+  });
+}
+
+async function assertCanonicalSelectionCoherence(page, label) {
+  const receipt = await canonicalSelectionReceipt(page);
+  assert(receipt.chooserCount === (await canonicalState(page)).dimensions.length, `${label} should expose one chooser control per dimension.`);
+  for (const [surface, ids] of [
+    ['chooser', receipt.chooserCurrent],
+    ['chart label', receipt.chartCurrent],
+    ['score matrix', receipt.matrixCurrent],
+    ['selected row', receipt.selectedRows],
+    ['selected handles', receipt.selectedHandleIds]
+  ]) {
+    assert(same(ids, [receipt.stateId]), `${label} ${surface} should identify only ${receipt.stateId}. ${JSON.stringify(ids)}`);
+  }
+  assert(receipt.chooserStatus === 'Current', `${label} chooser should name the current dimension in visible text.`);
+  assert(receipt.selectedHandleCount === 3, `${label} should mark all three handles for the current dimension.`);
+  assert(receipt.inspectorHeading.includes((await canonicalState(page)).dimensions.find((dimension) => dimension.id === receipt.stateId).label), `${label} inspector should describe the current dimension.`);
+}
+
 async function assertContextIdIntegrity(page, standing) {
   const receipt = await page.evaluate(() => {
     const ids = [...document.querySelectorAll("[id]")].map((element) => element.id);
@@ -486,6 +525,7 @@ async function canonicalViewportContract(browser, url) {
         assert(await page.locator('[data-score-input="true"]').count() === 18, "Canonical table should expose labelled native score controls.");
         assert(await page.locator('[data-dimension-field="consequenceWeight"]').count() === 6, "Canonical table should keep consequence weight separate.");
         assert(await page.locator('[data-sc-role="live"][aria-live="polite"]').count() === 1, "Canonical surface should use one settled live route.");
+        await assertCanonicalSelectionCoherence(page, `Canonical ${viewport.name}`);
         await assertSkipLinkLifecycle(page, `Canonical ${viewport.name}`);
         await page.screenshot({ path: resolve(runDir, `canonical-${viewport.name}.png`), fullPage: true });
         assertTelemetry(telemetry);
@@ -496,10 +536,172 @@ async function canonicalViewportContract(browser, url) {
   }
 }
 
+async function canonicalSelectionStateVisualContract(browser, url) {
+  async function focusedChartReceipt(page) {
+    return page.evaluate(() => {
+      const target = document.activeElement;
+      const frame = target?.closest?.('.sc-chart-frame');
+      if (!frame) return null;
+      const frameRect = frame.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const visibleWidth = Math.max(0, Math.min(frameRect.right, targetRect.right) - Math.max(frameRect.left, targetRect.left));
+      return {
+        dimensionId: target.dataset.dimensionId || target.dataset.selectDimension || '',
+        isChartLabel: target.dataset.selectionRoute === 'chart',
+        isHandle: target.dataset.handle === 'true',
+        scrollLeft: frame.scrollLeft,
+        targetWidth: targetRect.width,
+        visibleWidth,
+        visibleRatio: targetRect.width ? visibleWidth / targetRect.width : 0,
+      };
+    });
+  }
+
+  async function assertFocusedChartControlVisible(page, label) {
+    await page.waitForFunction(() => {
+      const target = document.activeElement;
+      const frame = target?.closest?.('.sc-chart-frame');
+      if (!frame) return false;
+      const frameRect = frame.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const visibleWidth = Math.max(0, Math.min(frameRect.right, targetRect.right) - Math.max(frameRect.left, targetRect.left));
+      return visibleWidth >= Math.min(44, targetRect.width * 0.75) && visibleWidth / targetRect.width >= 0.75;
+    });
+    const receipt = await focusedChartReceipt(page);
+    assert(receipt && receipt.visibleWidth >= Math.min(44, receipt.targetWidth * 0.75) && receipt.visibleRatio >= 0.75, `${label} should remain meaningfully visible in the chart scroller. ${JSON.stringify(receipt)}`);
+    return receipt;
+  }
+
+  async function tabTo(page, predicate, label) {
+    for (let index = 0; index < 30; index += 1) {
+      await page.keyboard.press('Tab');
+      const receipt = await focusedChartReceipt(page);
+      if (receipt && predicate(receipt)) return assertFocusedChartControlVisible(page, label);
+    }
+    throw new Error(`${label} should be reachable through the chart's actual Tab order.`);
+  }
+
+  for (const viewport of [VIEWPORTS[1], VIEWPORTS[0]]) {
+    await verify(`canonical ${viewport.name} · initial, keyboard-focus, and selected states stay visibly distinct`, async () => {
+      const { context, page, telemetry } = await openPage(browser, url, viewport);
+      try {
+        const section = page.locator(".sc-chart-section");
+        await section.waitFor({ state: "visible" });
+        await section.screenshot({ path: resolve(runDir, `canonical-${viewport.name}-selection-initial.png`) });
+        let target = page.locator('[data-selection-route="chart"]').nth(1);
+        if (viewport.name === "mobile") {
+          const targetId = await target.getAttribute('data-select-dimension');
+          await page.locator('.sc-chart-frame').focus();
+          await tabTo(page, (receipt) => receipt.isChartLabel && receipt.dimensionId === targetId, "Mobile second chart label");
+        } else {
+          await target.focus();
+          await assertFocusedChartControlVisible(page, "Desktop second chart label");
+        }
+        await section.screenshot({ path: resolve(runDir, `canonical-${viewport.name}-selection-focus.png`) });
+        await page.keyboard.press("Enter");
+        await assertCanonicalSelectionCoherence(page, `Canonical ${viewport.name} selected state`);
+        await assertFocusedChartControlVisible(page, `${viewport.name} selected chart label after Enter`);
+        await section.screenshot({ path: resolve(runDir, `canonical-${viewport.name}-selection-selected.png`) });
+        if (viewport.name === "mobile") {
+          await tabTo(page, (receipt) => receipt.isHandle, "Mobile plotted handle");
+          await section.screenshot({ path: resolve(runDir, "canonical-mobile-selection-handle-focus.png") });
+          await page.emulateMedia({ forcedColors: "active" });
+          const selected = page.locator('[data-selection-route="chart"][aria-current="true"]');
+          await selected.focus();
+          const forcedColorState = await selected.evaluate((element) => {
+            const surface = element.querySelector(".sc-dimension-label-surface");
+            const choice = document.querySelector('[data-selection-route="chooser"][aria-current="true"]');
+            return {
+              focusIsVisible: element.matches(":focus-visible"),
+              surfaceStrokeWidth: Number.parseFloat(getComputedStyle(surface).strokeWidth),
+              choiceBorderStyle: getComputedStyle(choice).borderStyle,
+            };
+          });
+          assert(forcedColorState.focusIsVisible, "Forced-colors observation should retain keyboard focus.");
+          assert(forcedColorState.surfaceStrokeWidth >= 4, "Forced colors should retain the selected, focused chart-label outline.");
+          assert(forcedColorState.choiceBorderStyle !== "none", "Forced colors should retain the matching chooser border.");
+          await section.screenshot({ path: resolve(runDir, "canonical-mobile-selection-forced-colors-focus.png") });
+        }
+        assertTelemetry(telemetry);
+      } finally {
+        await context.close();
+      }
+    });
+  }
+}
+
+async function canonicalSourceNavigationContract(browser, url) {
+  await verify("canonical · direct view opens its official method source in a separate top-level page", async () => {
+    const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    const methodUrl = "https://www.blueoceanstrategy.com/tools/strategy-canvas/";
+    await context.route(methodUrl, (route) => route.fulfill({
+      status: 200,
+      contentType: "text/html; charset=utf-8",
+      body: "<!doctype html><title>Controlled source navigation</title><p>Navigation observed.</p>",
+    }));
+    try {
+      const page = await context.newPage();
+      await page.goto(url, { waitUntil: "domcontentloaded" });
+      assert(await page.locator('[data-framed-source-handoff]').isHidden(), "Direct view should keep the embedded handoff hidden.");
+      const sourceLink = page.locator(`[data-direct-source-route][href="${methodUrl}"]`);
+      assert(await sourceLink.count() === 1, "Direct view should expose its official method source once.");
+      const [popup] = await Promise.all([page.waitForEvent("popup"), sourceLink.click()]);
+      try {
+        await popup.waitForLoadState("domcontentloaded");
+        assert(popup.url() === methodUrl, "Direct source navigation should retain the official destination.");
+        assert((await popup.locator("body").textContent()).includes("Navigation observed"), "Direct source destination should open outside the artifact page.");
+      } finally {
+        await popup.close();
+      }
+    } finally {
+      await context.close();
+    }
+  });
+}
+
 async function canonicalInteractionContract(browser, url) {
   const { context, page, telemetry } = await openPage(browser, url, VIEWPORTS[1]);
   try {
     await page.locator('[data-sc-role="chart"] svg').waitFor({ state: "visible" });
+    await verify("canonical · pointer and keyboard selection keep every current-dimension route coherent", async () => {
+      const initial = await canonicalState(page);
+      const chartRoutes = page.locator('[data-selection-route="chart"]');
+      const enterTarget = initial.dimensions[1].id;
+      await chartRoutes.nth(1).focus();
+      await chartRoutes.nth(1).press("Enter");
+      assert((await canonicalState(page)).view.selectedDimensionId === enterTarget, "Enter should select the focused chart dimension.");
+      assert(await page.evaluate((id) => document.activeElement?.getAttribute('data-select-dimension') === id && document.activeElement?.getAttribute('data-selection-route') === 'chart', enterTarget), "Enter selection should restore focus to the replacement chart label.");
+      await assertCanonicalSelectionCoherence(page, "Canonical Enter selection");
+
+      const spaceTarget = initial.dimensions[2].id;
+      const chooser = page.locator('[data-sc-role="dimension-chooser"] [data-selection-route="chooser"]');
+      await chooser.nth(2).focus();
+      await chooser.nth(2).press("Space");
+      assert((await canonicalState(page)).view.selectedDimensionId === spaceTarget, "Space should select the focused native chooser button.");
+      assert(await page.evaluate((id) => document.activeElement?.getAttribute('data-select-dimension') === id && document.activeElement?.getAttribute('data-selection-route') === 'chooser', spaceTarget), "Chooser selection should restore focus after render.");
+      await assertCanonicalSelectionCoherence(page, "Canonical Space selection");
+
+      const pointerTarget = initial.dimensions[3].id;
+      await page.locator(`[data-selection-route="chart"][data-select-dimension="${pointerTarget}"]`).click();
+      assert((await canonicalState(page)).view.selectedDimensionId === pointerTarget, "Pointer activation should select the chart dimension.");
+      await page.waitForFunction((label) => document.querySelector('[data-sc-role="live"]')?.textContent.includes(label), initial.dimensions[3].label);
+      await assertCanonicalSelectionCoherence(page, "Canonical pointer selection");
+
+      await page.locator('[data-action="undo"]').click();
+      assert((await canonicalState(page)).view.selectedDimensionId === spaceTarget, "Undo should restore the prior selected dimension.");
+      await assertCanonicalSelectionCoherence(page, "Canonical selection undo");
+      await page.locator('[data-action="redo"]').click();
+      assert((await canonicalState(page)).view.selectedDimensionId === pointerTarget, "Redo should restore the later selected dimension.");
+      await assertCanonicalSelectionCoherence(page, "Canonical selection redo");
+
+      const selectedExport = await page.evaluate(() => window.strategyCanvasCanonical.serialize());
+      await chooser.first().click();
+      await page.locator('[data-sc-role="import"]').evaluate((input) => { input.closest('details').open = true; });
+      await page.locator('[data-sc-role="import"]').fill(selectedExport);
+      await page.locator('[data-action="import"]').click();
+      assert((await canonicalState(page)).view.selectedDimensionId === pointerTarget, "Import should restore the serialized selected dimension.");
+      await assertCanonicalSelectionCoherence(page, "Canonical selection import");
+    });
     await verify("canonical · score, weight, keyboard, undo, and clone boundaries", async () => {
       const dimensionId = (await canonicalState(page)).dimensions[0].id;
       const score = page.locator(`[data-score-input][data-dimension-id="${dimensionId}"][data-series="current"]`);
@@ -517,6 +719,7 @@ async function canonicalInteractionContract(browser, url) {
       assert(state.dimensions[0].consequenceWeight === 1, "Consequence weight should update its own field.");
       assert(state.dimensions[0].scores.current === 6, "Consequence weight should preserve the plotted score.");
       assert(await handle.getAttribute("transform") === transformBeforeWeight, "Consequence weight should preserve marker position.");
+      await assertCanonicalSelectionCoherence(page, "Canonical score and weight changes");
       await handle.focus();
       await handle.press("ArrowUp");
       state = await canonicalState(page);
@@ -546,10 +749,12 @@ async function canonicalInteractionContract(browser, url) {
       assert(reviewed.lifecycle.status === "reviewed", "Review should create a stable reviewed state.");
       assert(reviewed.lifecycle.reviewedSnapshot?.dimensions?.length === reviewed.dimensions.length, "Reviewed state should carry a complete snapshot.");
       assert(await page.locator('[data-score-input="true"]').first().isDisabled(), "Reviewed state should lock editing controls.");
+      await assertCanonicalSelectionCoherence(page, "Canonical reviewed lifecycle");
       await page.locator('[data-action="reopen"]').click();
       const reopened = await canonicalState(page);
       assert(reopened.lifecycle.status === "working" && reopened.meta.revision === reviewed.meta.revision + 1, "Reopen should begin the next working revision.");
       assert(reopened.lifecycle.reviewedSnapshot, "Reopen should preserve the reviewed snapshot.");
+      await assertCanonicalSelectionCoherence(page, "Canonical reopened lifecycle");
     });
     await verify("canonical · presentation, reduced-motion, forced-colors, and print", async () => {
       await page.locator('[data-action="toggle-mode"]').click();
@@ -558,8 +763,10 @@ async function canonicalInteractionContract(browser, url) {
       await page.emulateMedia({ reducedMotion: "reduce", forcedColors: "active" });
       assert(await page.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches), "Reduced motion should be available to the surface.");
       assert(await page.evaluate(() => matchMedia("(forced-colors: active)").matches), "Forced colors should be available to the surface.");
+      assert(await page.locator('[data-selection-route="chart"][aria-current="true"] .sc-dimension-current-marker').isVisible(), "Forced colors should retain the visible current-dimension marker.");
       await page.emulateMedia({ media: "print" });
       assert(await page.locator('[data-sc-role="text-equivalent"] table').isVisible(), "Print should preserve the semantic table.");
+      assert(await page.locator('[data-selection-route="chart"][aria-current="true"] .sc-dimension-current-marker').isVisible(), "Print should retain the current dimension in visible chart text.");
       assertTelemetry(telemetry);
     });
   } finally {
@@ -742,9 +949,11 @@ async function noJavaScriptContract(browser, url, kind) {
       if (kind === "canonical") {
         assert(await page.locator(".sc-static-twin").isVisible(), "Canonical static twin should remain visible.");
         assert(await page.locator(".sc-static-twin tbody tr").count() === 6, "Canonical static twin should retain all six dimensions.");
+        assert(await page.locator('[data-strategy-canvas-source="method-origin"]').isVisible(), "Canonical static reading should retain its method and adaptation source note.");
       } else {
         assert(await page.locator(".static-field").isVisible(), "Context static field should remain visible.");
         assert(await page.locator(".static-field tbody tr").count() === 6, "Context static field should retain all six starting dimensions.");
+        assert(await page.locator('[data-strategy-canvas-source="method-origin"]').isVisible(), "Context static reading should retain its method and adaptation source note.");
       }
       const receipt = await layoutReceipt(page);
       assert(receipt.scrollWidth <= receipt.clientWidth + 2, `${kind} no-JavaScript surface should contain document width.`);
@@ -771,6 +980,8 @@ async function contextViewportContract(browser, url) {
         assert(await page.locator("[data-phase-link]").count() === 8, "Workbench should expose eight collaboration phases.");
         assert(await page.locator('[role="status"][aria-live]').count() === 1, "Workbench should use one settled live status route.");
         assert(await page.locator('#strategy-chart[role="group"]').count() === 1, "Interactive SVG should be a named group rather than an image role.");
+        assert(await page.locator('#dimension-strip [aria-current="true"]').count() === 1, "Context parity should retain one explicit current dimension in its existing chooser.");
+        assert(await page.locator('[data-strategy-canvas-source="method-origin"]').isVisible(), "Context workbench should keep its method and local adaptation visible.");
         await assertContextIdIntegrity(page, `Mounted ${viewport.name}`);
         await page.screenshot({ path: resolve(runDir, `context-${viewport.name}.png`), fullPage: true });
         assertTelemetry(telemetry);
@@ -1150,8 +1361,72 @@ async function narrativeInlineParityContract() {
   }
 }
 
+async function strategyCanvasEvidenceContract() {
+  await verify("Strategy Canvas evidence · origin, implementation decisions, counterevidence, and limits remain source-owned", async () => {
+    const registry = JSON.parse(await readFile(resolve(STRATEGY_EVIDENCE), "utf8"));
+    assert(registry.schemaVersion === "strategy-canvas-evidence/0.1", "Evidence registry should publish its contract version.");
+    assert(registry.methodOrigin.primarySource.url === "https://www.blueoceanstrategy.com/tools/strategy-canvas/", "Evidence registry should name the method owners' primary description.");
+    assert(registry.methodOrigin.institutionalRecord.url.startsWith("https://www.insead.edu/"), "Evidence registry should retain the institutional record.");
+    assert(registry.methodOrigin.developers.includes("W. Chan Kim") && registry.methodOrigin.developers.includes("Renée Mauborgne"), "Evidence registry should retain both method developers.");
+    const ids = registry.implementationEvidence.map((entry) => entry.id);
+    assert(new Set(ids).size === ids.length && ids.length >= 8, "Evidence registry should carry a distinct, substantive implementation ledger.");
+    for (const entry of registry.implementationEvidence) {
+      assert(entry.url.startsWith("https://"), `${entry.id} should use a stable HTTPS source.`);
+      assert(entry.evidenceClass.length > 8, `${entry.id} should name its evidence class.`);
+      assert(entry.implementationDecision.length > 24, `${entry.id} should name the implementation decision it informs.`);
+      assert(entry.transferLimit.length > 32, `${entry.id} should carry a decision-proximate transfer limit.`);
+      assert(Array.isArray(entry.receivingSurfaces) && entry.receivingSurfaces.length > 0, `${entry.id} should name at least one receiving surface.`);
+      for (const receiver of entry.receivingSurfaces) {
+        assert(Object.hasOwn(registry.representations, receiver), `${entry.id} should map only to a registered representation (${receiver}).`);
+      }
+    }
+    const usedReceivers = new Set(registry.implementationEvidence.flatMap((entry) => entry.receivingSurfaces));
+    assert(same([...usedReceivers].sort(), Object.keys(registry.representations).sort()), "Every registered representation should receive at least one evidence item.");
+    const socialInfluence = registry.implementationEvidence.find((entry) => entry.id === "independent-before-reveal");
+    assert(socialInfluence?.counterevidence?.url === "https://doi.org/10.1073/pnas.1109947108", "Independent-before-reveal evidence should travel with its published counterpoint.");
+    assert(registry.claimBoundaries.some((claim) => claim.includes("psychometrically validated")), "Evidence registry should keep the local scale's measurement boundary explicit.");
+  });
+
+  await verify("Strategy Canvas evidence · registry copy and sources reach every named representation", async () => {
+    const registry = JSON.parse(await readFile(resolve(STRATEGY_EVIDENCE), "utf8"));
+    const methodUrl = "https://www.blueoceanstrategy.com/tools/strategy-canvas/";
+    for (const [id, representation] of Object.entries(registry.representations)) {
+      assert(Array.isArray(representation.receivers) && representation.receivers.length > 0, `${id} should name its receiving artifacts.`);
+      for (const file of representation.receivers) {
+        const source = await readFile(resolve(file), "utf8");
+        const normalized = source.replace(/\s+/g, " ");
+        for (const field of ["sourceClaim", "adaptationClaim", "boundaryClaim"]) {
+          assert(normalized.includes(representation[field]), `${file} should carry the exact ${id} ${field} from the evidence registry.`);
+        }
+      }
+    }
+    const strategyFiles = [CANONICAL, CONTEXT, ...NARRATIVE_COMPOSERS.map((composer) => composer.route), GENOMIC_REPRESENTATION];
+    for (const file of strategyFiles) {
+      const source = await readFile(resolve(file), "utf8");
+      assert(source.includes('data-strategy-canvas-source="method-origin"'), `${file} should expose a visible method-origin marker.`);
+      assert(source.includes(methodUrl), `${file} should link the method owners' primary description.`);
+    }
+    const initiativeSource = await readFile(resolve(INITIATIVE_COSTING), "utf8");
+    const fourActionsUrl = registry.relatedMethods.fourActionsFramework.primarySource.url;
+    assert(initiativeSource.includes('data-strategy-canvas-source="four-actions-origin"'), "Initiative costing should expose its Four Actions method marker.");
+    assert(initiativeSource.includes(`href="${fourActionsUrl}" target="_blank" rel="noopener noreferrer"`), "Initiative costing should route its official Four Actions source through its existing iframe-safe popup profile.");
+    assert(registry.representations.initiativeCosting.classification === "strategy-canvas-adjacent-four-actions", "Initiative costing should retain its precise adjacent-method classification.");
+    const genomicSource = await readFile(resolve(GENOMIC_REPRESENTATION), "utf8");
+    assert(genomicSource.includes('<figcaption class="table-note" data-strategy-canvas-source="method-origin">\n                This static representation adapts the Strategy Canvas'), "The Genomic page should attach the method marker to the Strategy Canvas caption itself.");
+    assert(!genomicSource.includes(`href="${methodUrl}" target="_blank"`), "The parent Genomic visitor page should keep ordinary in-place citation navigation.");
+    const svg = await readFile(resolve(GENOMIC_SVG), "utf8");
+    assert(svg.includes('<metadata id="strategy-method-source">'), "Static Strategy Canvas SVG should carry machine-readable method metadata.");
+    assert(svg.includes(`<dc:source rdf:resource="${methodUrl}"/>`), "Static Strategy Canvas SVG metadata should link the primary method source.");
+    assert(svg.includes("Strategy Canvas method developed by W. Chan Kim and Renée Mauborgne"), "Static Strategy Canvas SVG metadata should attribute the method without assigning the local artifact to its developers.");
+    assert(svg.includes("local qualitative adaptation"), "Static Strategy Canvas SVG metadata should state its local adaptation standing.");
+    const buildSource = await readFile(resolve("core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/build.mjs"), "utf8");
+    assert(buildSource.includes("strategy-canvas-evidence.v0.1.json") && buildSource.includes("representations?.canonical"), "The canonical builder should consume its evidence registry representation.");
+  });
+}
+
 async function main() {
   await mkdir(runDir, { recursive: true });
+  await strategyCanvasEvidenceContract();
   await narrativeInlineParityContract();
   const staticServer = await startStaticServer(resolve("."));
   let browser;
@@ -1160,6 +1435,8 @@ async function main() {
     const canonicalUrl = `${staticServer.origin}/${CANONICAL}`;
     const contextUrl = `${staticServer.origin}/${CONTEXT}`;
     await canonicalViewportContract(browser, canonicalUrl);
+    await canonicalSelectionStateVisualContract(browser, canonicalUrl);
+    await canonicalSourceNavigationContract(browser, canonicalUrl);
     await canonicalColumnGeometryContract(browser, canonicalUrl);
     await canonicalInteractionContract(browser, canonicalUrl);
     await canonicalExchangeRecoveryContract(browser, canonicalUrl);

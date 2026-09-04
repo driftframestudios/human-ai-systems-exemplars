@@ -7,17 +7,19 @@ const sourceDirectory = dirname(fileURLToPath(import.meta.url));
 const outputPath = resolve(sourceDirectory, '..', 'strategy-canvas-chimeric-prototype-v0.2.2.html');
 const compatibilityPath = resolve(sourceDirectory, '..', 'strategy-canvas-chimeric-prototype-v0.1.1.html');
 const validatorPath = resolve(sourceDirectory, 'strategy-canvas-validator.js');
-const [template, compatibility, css, schemaText, validatorTemplate, core, canonical] = await Promise.all([
+const [template, compatibility, css, schemaText, evidenceText, validatorTemplate, core, canonical] = await Promise.all([
   readFile(resolve(sourceDirectory, 'canonical.template.html'), 'utf8'),
   readFile(resolve(sourceDirectory, 'compatibility-v0.1.1.html'), 'utf8'),
   readFile(resolve(sourceDirectory, 'strategy-canvas.css'), 'utf8'),
   readFile(resolve(sourceDirectory, 'strategy-canvas.schema.json'), 'utf8'),
+  readFile(resolve(sourceDirectory, 'strategy-canvas-evidence.v0.1.json'), 'utf8'),
   readFile(resolve(sourceDirectory, 'strategy-canvas-validator.template.js'), 'utf8'),
   readFile(resolve(sourceDirectory, 'strategy-canvas-core.js'), 'utf8'),
   readFile(resolve(sourceDirectory, 'strategy-canvas-canonical.js'), 'utf8')
 ]);
 
 const schema = JSON.parse(schemaText);
+const evidence = JSON.parse(evidenceText);
 const validator = validatorTemplate.replace('/*__STRATEGY_CANVAS_SCHEMA__*/ null', () => JSON.stringify(schema));
 const compatibilityOutput = compatibility.replaceAll(
   '../strategy-canvas-chimeric-prototype-v0.2.2.html',
@@ -27,8 +29,29 @@ if (validator.includes('/*__STRATEGY_CANVAS_SCHEMA__*/')) {
   throw new Error('The Strategy Canvas validator contains an unresolved schema marker.');
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+const method = evidence.methodOrigin;
+const representation = evidence.representations?.canonical;
+if (!representation || representation.method !== 'strategyCanvas') {
+  throw new Error('The evidence registry must define the canonical Strategy Canvas representation.');
+}
+const methodSourceNote = `
+        <p>${escapeHtml(representation.sourceClaim)} Read the <span data-direct-source-route data-href="${escapeHtml(method.primarySource.url)}">authors’ method description</span> and the <span data-direct-source-route data-href="${escapeHtml(method.institutionalRecord.url)}">INSEAD book record</span>.</p>
+        <p data-framed-source-handoff hidden>In this embedded view, the hosting page provides both source routes immediately after the frame.</p>
+        <noscript><p>Source URLs: https://www.blueoceanstrategy.com/tools/strategy-canvas/ and https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested. In a sandboxed embedded view, use the source routes provided by the hosting page after the frame.</p></noscript>
+        <p>${escapeHtml(representation.adaptationClaim)} ${escapeHtml(representation.boundaryClaim)}</p>`;
+
 const output = template
   .replace('/*__STRATEGY_CANVAS_CSS__*/', () => css.trim())
+  .replace('<!--__STRATEGY_CANVAS_EVIDENCE_NOTE__-->', () => methodSourceNote.trim())
   .replace('/*__STRATEGY_CANVAS_VALIDATOR__*/', () => validator.trim())
   .replace('/*__STRATEGY_CANVAS_CORE__*/', () => core.trim())
   .replace('/*__STRATEGY_CANVAS_CANONICAL__*/', () => canonical.trim());

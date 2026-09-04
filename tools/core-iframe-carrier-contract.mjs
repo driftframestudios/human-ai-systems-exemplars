@@ -37,6 +37,10 @@ const expectedCarrierRouteCounts = [
   ["strategy-canvas", 2],
 ];
 const viewports = [1280, 800, 480, 390, 320];
+const strategySourceUrls = new Set([
+  "https://www.blueoceanstrategy.com/tools/strategy-canvas/",
+  "https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested",
+]);
 
 function configuredDestination(key) {
   if (key.startsWith(PUBLIC_IFRAME_NAMESPACE)) {
@@ -192,6 +196,25 @@ async function assertCarrierContainment(page, carrier, frame, label) {
         `(${frameContainment.scrollWidth}/${frameContainment.clientWidth})`,
     );
   }
+}
+
+async function exerciseStrategyCarrier(carrier, frame, label) {
+  assert.equal(
+    await frame.locator("[data-direct-source-route]").count(),
+    0,
+    `${label} replaces direct-only source links with an embedded handoff`,
+  );
+  assert.equal(
+    await frame.locator("[data-framed-source-handoff]").isVisible(),
+    true,
+    `${label} explains where its embedded source routes continue`,
+  );
+  const figure = carrier.locator("xpath=ancestor::figure[1]");
+  const sourceLink = figure.locator("[data-strategy-canvas-host-source]").first();
+  assert.equal(await sourceLink.getAttribute("target"), null, `${label} leaves new-context choice with the visitor`);
+  assert.equal(await sourceLink.getAttribute("rel"), null, `${label} uses ordinary parent-page link semantics`);
+  const href = await sourceLink.getAttribute("href");
+  assert.equal(strategySourceUrls.has(href), true, `${label} uses an allowlisted method source`);
 }
 
 async function exerciseHeartCarrier(page, carrier, frame, heartFrame) {
@@ -712,6 +735,7 @@ async function run() {
     }
     let heartInteractions = 0;
     let conditioningInteractions = 0;
+    let strategyInteractions = 0;
 
     for (const [pagePath, pageCarriers] of carriersByPage) {
       const page = await context.newPage();
@@ -813,6 +837,10 @@ async function run() {
             await exerciseConditioningCarrier(page, frame);
             conditioningInteractions += 1;
           }
+          if (routeProfile.id === "strategy-canvas") {
+            await exerciseStrategyCarrier(carrier, frame, label);
+            strategyInteractions += 1;
+          }
         }
 
         await page.waitForLoadState("networkidle", { timeout: 4000 }).catch(() => {});
@@ -857,6 +885,11 @@ async function run() {
       1,
       "the Conditioning Field carrier interaction runs once",
     );
+    assert.equal(
+      strategyInteractions,
+      2,
+      "both Strategy Canvas carriers expose working host-owned source navigation",
+    );
     await exerciseConditioningFooter(context, server.origin);
     const conditioningRoute = routeManifest.routes.find(
       ({ id }) => id === "conditioning-field",
@@ -867,7 +900,7 @@ async function run() {
       conditioningRouteUrl,
       canonicalBytesByPublicUrl.get(conditioningRouteUrl),
     );
-    return routeManifest.routes.length * 2 + carriers.length + 3;
+    return routeManifest.routes.length * 2 + carriers.length + 5;
   } finally {
     await context?.close();
     await browser?.close();
