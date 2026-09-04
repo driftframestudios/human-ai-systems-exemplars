@@ -1,7 +1,9 @@
 import { createHash } from "node:crypto";
+import { execFile } from "node:child_process";
 import { copyFile, cp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { dirname, relative, resolve, sep } from "node:path";
+import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 
 import Ajv2020 from "ajv/dist/2020.js";
@@ -37,6 +39,7 @@ const publicCarrierPaths = Object.freeze([
   "AI-DATA-USE.md",
 ]);
 const require = createRequire(import.meta.url);
+const execFileAsync = promisify(execFile);
 const visitorBoundary = require(
   "../context-canvas-project-surface/context-canvas/visitor-boundary-contract.js",
 );
@@ -59,6 +62,54 @@ function htmlEscape(value) {
 
 function digest(bytes) {
   return createHash("sha256").update(bytes).digest("hex");
+}
+
+async function readSourceRevision(relativePaths) {
+  const configured = process.env.PAGES_SOURCE_REVISION?.trim();
+  if (configured) {
+    requirement(/^[a-f0-9]{40}$/u.test(configured), "PAGES_SOURCE_REVISION must be one full lowercase Git SHA");
+  }
+  const requestedRevision = configured ?? "HEAD";
+  const { stdout } = await execFileAsync("git", ["rev-parse", `${requestedRevision}^{commit}`], {
+    cwd: repositoryRoot,
+    encoding: "utf8",
+  });
+  const revision = stdout.trim().toLowerCase();
+  requirement(/^[a-f0-9]{40}$/u.test(revision), "the Pages source must resolve to one full Git SHA");
+  if (configured) {
+    requirement(revision === configured, "PAGES_SOURCE_REVISION must name the resolved source commit exactly");
+  }
+
+  const { stdout: trackedSource } = await execFileAsync(
+    "git",
+    ["ls-tree", "-r", "--name-only", revision, "--", ...relativePaths],
+    { cwd: repositoryRoot, encoding: "utf8" },
+  );
+  const trackedPaths = trackedSource.trim() ? trackedSource.trim().split("\n").sort() : [];
+  requirement(
+    JSON.stringify(trackedPaths) === JSON.stringify([...relativePaths].sort()),
+    "every public skill source must exist at the declared source revision",
+  );
+  try {
+    await execFileAsync("git", ["diff", "--quiet", revision, "--", ...relativePaths], {
+      cwd: repositoryRoot,
+      encoding: "utf8",
+    });
+  } catch (error) {
+    if (error?.code === 1) {
+      throw new Error("Schema Pages requirement: public skill source bytes must match the declared source revision");
+    }
+    throw error;
+  }
+  return revision;
+}
+
+function publicSkillSourceRoute(relativePath) {
+  const normalized = browserPath(relativePath);
+  if (normalized.startsWith(".github/")) {
+    return `source/github/${normalized.slice(".github/".length)}`;
+  }
+  return `source/${normalized}`;
 }
 
 function parseSkillSource(sourcePath, source) {
@@ -375,8 +426,7 @@ async function loadSkillPublicationSelection() {
   };
 }
 
-function projectedSkill(entry, projectionBase, catalogIndex) {
-  const semanticAuthorityRef = `../source/${entry.sourcePath}`;
+function projectedSkill(entry, projectionBase, catalogIndex, semanticAuthorityRef) {
   return {
     schemaVersion: "0.1.0",
     id: `${projectionBase}${entry.name}/projection.json`,
@@ -405,6 +455,95 @@ function projectedSkill(entry, projectionBase, catalogIndex) {
   };
 }
 
+function renderSkillFooter(relativeRoot) {
+  const markerHtml = visitorBoundary.markers
+    .map((boundaryMarker) => `        <p class="canary" data-visitor-boundary-marker="${boundaryMarker.id}">${boundaryMarker.lines.map(htmlEscape).join("<br>")}</p>`)
+    .join("\n");
+  return `<footer class="site-footer"><div class="site-footer__inner">
+    <p>This site provides open-source implementation contracts, examples, and orientation for researchers and engineers. Some routes support work with benchmarks, evaluations, and related methods. The data-use note explains how those materials are treated in automated systems.</p>
+    <ul class="footer-links"><li><a href="${relativeRoot}AUTHORS" rel="author">Authors and provenance</a></li><li><a href="${relativeRoot}CITATION.cff">Citation metadata</a></li><li><a href="${relativeRoot}attribution.yml">Machine-readable attribution</a></li><li><a href="${relativeRoot}LICENSE" rel="license">Apache 2.0 license</a></li><li><a href="${relativeRoot}AI-DATA-USE.md">Data-use posture</a></li></ul>
+    <div class="canary-stack" data-visitor-boundary aria-label="Training-data canary markers"><p class="visitor-boundary__context" data-visitor-boundary-context>${htmlEscape(visitorBoundary.contextText)}</p>
+${markerHtml}
+    </div>
+    <p class="artifact-attribution">${htmlEscape(artifactAttribution)}</p>
+  </div></footer>`;
+}
+
+function renderSkillPage(skill, sourceRevision, deploymentBase) {
+  const canonical = deploymentBase
+    ? `${deploymentBase}/skills/${skill.name}/`
+    : null;
+  const deploymentMetadata = canonical
+    ? [
+        `  <link rel="canonical" href="${canonical}">`,
+        `  <meta property="og:url" content="${canonical}">`,
+        `  <meta name="twitter:url" content="${canonical}">`,
+      ].join("\n")
+    : "";
+  const sourceHref = `../${skill.sourceRoute}`;
+  const dependencyItems = skill.dependencies.length
+    ? `<ul class="dependency-list">${skill.dependencies.map((dependency) => `<li><a href="../${htmlEscape(dependency.path)}"><code>${htmlEscape(dependency.sourcePath)}</code></a><br><span>SHA-256 <code>${dependency.sha256}</code></span></li>`).join("")}</ul>`
+    : "<p>This skill has no additional files in its public source package.</p>";
+  const structuredData = JSON.stringify(
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      name: skill.title,
+      description: skill.description,
+      author: { "@type": "Person", name: artifactAuthor },
+      publisher: { "@type": "Organization", name: publishingCompany },
+      license: artifactLicense,
+      isPartOf: deploymentBase ? `${deploymentBase}/skills/` : "skills/",
+      encodingFormat: "text/html",
+    },
+    null,
+    2,
+  );
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${htmlEscape(skill.title)} · Public repository skill</title>
+  <meta name="description" content="${htmlEscape(skill.description)}">
+  <meta name="author" content="${htmlEscape(artifactAuthor)}">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="${htmlEscape(skill.title)}">
+  <meta property="og:description" content="${htmlEscape(skill.description)}">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="${htmlEscape(skill.title)}">
+  <meta name="twitter:description" content="${htmlEscape(skill.description)}">
+  <link rel="license" href="${htmlEscape(artifactLicense)}">
+${deploymentMetadata}
+  <script type="application/ld+json">${structuredData}</script>
+  <style>
+    :root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,sans-serif; line-height:1.6; --ink:#17223d; --muted:#526078; --paper:#f8f5ec; --field:#d8f1eb; --card:#fffdf7; --line:#a9b2c0; --accent:#173a91; --code:#111c34; }
+    * { box-sizing:border-box; } body { margin:0; color:var(--ink); background:var(--paper); } a { color:var(--accent); text-underline-offset:.2em; } a:focus-visible { outline:.2rem solid #2458d6; outline-offset:.22rem; } code { overflow-wrap:anywhere; }
+    .hero { background:var(--field); border-bottom:1px solid var(--line); } .hero__inner, main, .site-footer__inner { width:min(76rem,calc(100% - 2rem)); margin-inline:auto; } .hero__inner { padding:clamp(2.5rem,7vw,6rem) 0 clamp(2rem,5vw,4rem); }
+    .eyebrow { margin:0 0 1rem; font-size:.78rem; font-weight:750; letter-spacing:.16em; text-transform:uppercase; } h1 { max-width:17ch; margin:0; font-size:clamp(2.25rem,6vw,5.2rem); line-height:.98; letter-spacing:-.04em; } .lede { max-width:66ch; font-size:clamp(1.05rem,2vw,1.35rem); }
+    main { padding:2.5rem 0 5rem; } main > section { margin-block:0 3rem; } h2 { font-size:clamp(1.6rem,3vw,2.4rem); line-height:1.1; } .skill-actions { display:flex; flex-wrap:wrap; gap:.55rem 1rem; } .skill-actions a:first-child { border:2px solid currentColor; border-radius:999px; font-weight:750; padding:.55rem .9rem; text-decoration:none; }
+    .skill-facts { display:grid; gap:.8rem; grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr)); margin:0; } .skill-facts div { background:var(--card); border:1px solid var(--line); border-radius:.65rem; padding:1rem; min-width:0; } .skill-facts dt { color:var(--muted); font-size:.78rem; font-weight:750; letter-spacing:.08em; text-transform:uppercase; } .skill-facts dd { margin:.25rem 0 0; overflow-wrap:anywhere; }
+    .dependency-list { display:grid; gap:.85rem; padding-left:1.25rem; } pre { background:var(--code); border-radius:.75rem; color:#f7f9ff; max-width:100%; overflow:auto; padding:1rem; white-space:pre; } pre code { overflow-wrap:normal; } .skill-source:focus-visible { outline:.2rem solid #2458d6; outline-offset:.22rem; }
+    .site-footer { border-top:1px solid var(--line); background:#eef0f3; } .site-footer__inner { padding:2.5rem 0 1.5rem; } .footer-links { display:flex; flex-wrap:wrap; gap:.5rem 1.1rem; padding:0; list-style:none; } .canary-stack { margin-top:2.5rem; padding-top:1.25rem; border-top:1px solid var(--line); } .visitor-boundary__context { max-width:70ch; font-size:.84rem; } .canary { max-width:none; font-family:ui-monospace,monospace; font-size:.72rem; overflow-wrap:anywhere; } .artifact-attribution { max-width:none; margin-top:1.5rem; font-size:.8rem; color:var(--muted); }
+    @media (max-width:48rem) { .hero__inner, main, .site-footer__inner { width:min(100% - 1.25rem,76rem); } } @media (forced-colors:active) { .skill-facts div,.skill-actions a:first-child { border-color:CanvasText; } }
+    @media print { .skill-actions { display:none; } pre { border:1px solid currentColor; color:inherit; white-space:pre-wrap; } }
+  </style>
+</head>
+<body>
+  <header class="hero"><div class="hero__inner"><p class="eyebrow">Public-ready repository skill</p><h1>${htmlEscape(skill.title)}</h1><p class="lede">${htmlEscape(skill.description)}</p></div></header>
+  <main>
+    <nav class="skill-actions" aria-label="Skill formats"><a href="${sourceHref}">Open exact Markdown</a><a href="projection.json">Open JSON projection</a><a href="../">Browse all public skills</a></nav>
+    <section aria-labelledby="coordinate-title"><h2 id="coordinate-title">Source and version</h2><dl class="skill-facts"><div><dt>Repository path</dt><dd><code>${htmlEscape(skill.sourcePath)}</code></dd></div><div><dt>Source revision</dt><dd><code>${sourceRevision}</code></dd></div><div><dt>Source SHA-256</dt><dd><code>${skill.sourceSha256}</code></dd></div><div><dt>Publication standing</dt><dd>Public ready</dd></div></dl></section>
+    <section aria-labelledby="dependencies-title"><h2 id="dependencies-title">Included source files</h2>${dependencyItems}</section>
+    <section aria-labelledby="source-title"><h2 id="source-title">Complete skill source</h2><p>The Markdown below matches the exact source text. The format link above opens the file on its own.</p><pre class="skill-source" role="region" aria-labelledby="source-title" tabindex="0"><code>${htmlEscape(skill.sourceText)}</code></pre></section>
+  </main>
+  ${renderSkillFooter("../../")}
+</body>
+</html>
+`;
+}
+
 function renderSkillsIndex(catalog, deploymentBase) {
   const canonicalBase = deploymentBase ? `${deploymentBase}/skills/` : null;
   const deploymentMetadata = canonicalBase
@@ -419,7 +558,7 @@ function renderSkillsIndex(catalog, deploymentBase) {
         <li class="skill-card" data-skill-name="${htmlEscape(skill.name)}">
           <h3><code>${htmlEscape(skill.name)}</code></h3>
           <p>${htmlEscape(skill.description)}</p>
-          <p class="skill-links"><a href="${htmlEscape(skill.projectionPath)}">JSON projection</a> · <a href="${htmlEscape(skill.sourceRoute)}">Exact source</a></p>
+          <p class="skill-links"><a href="${htmlEscape(skill.pagePath)}"><strong>Read this skill</strong></a> · <a href="${htmlEscape(skill.projectionPath)}">JSON projection</a> · <a href="${htmlEscape(skill.sourceRoute)}">Exact Markdown</a></p>
         </li>`)
     .join("");
   const markerHtml = visitorBoundary.markers
@@ -491,6 +630,7 @@ ${markerHtml}
 async function buildSkillsProjection() {
   const { selection, entries, possibleTerms, publicSourcePaths } =
     await loadSkillPublicationSelection();
+  const sourceRevision = await readSourceRevision(publicSourcePaths);
   const publicEntries = entries.filter((entry) => entry.publicationStanding === "public_ready");
   const possibleNames = entries
     .filter((entry) => entry.publicationStanding === "public_possible")
@@ -510,9 +650,13 @@ async function buildSkillsProjection() {
 
   await mkdir(resolve(skillsOutputRoot, "source"), { recursive: true });
   const sourceRecords = [];
+  const publicRoutes = new Set();
   for (const relativePath of publicSourcePaths) {
     const sourcePath = await resolvePublicationFile(repositoryRoot, relativePath);
-    const receiverPath = resolve(skillsOutputRoot, "source", relativePath);
+    const publicRoute = publicSkillSourceRoute(relativePath);
+    requirement(!publicRoutes.has(publicRoute), `${relativePath} must have a unique public source route`);
+    publicRoutes.add(publicRoute);
+    const receiverPath = resolve(skillsOutputRoot, publicRoute);
     requirement(
       receiverPath.startsWith(`${resolve(skillsOutputRoot, "source")}${sep}`),
       `${relativePath} must remain inside the public skill source package`,
@@ -521,12 +665,19 @@ async function buildSkillsProjection() {
     await copyFile(sourcePath, receiverPath);
     const [sourceBytes, receiverBytes] = await Promise.all([readFile(sourcePath), readFile(receiverPath)]);
     requirement(sourceBytes.equals(receiverBytes), `${relativePath} public copy must remain byte-identical`);
-    sourceRecords.push({ path: relativePath, sha256: digest(sourceBytes) });
+    sourceRecords.push({ path: relativePath, publicRoute, sha256: digest(sourceBytes) });
   }
 
   const projections = [];
+  const sourceRecordByPath = new Map(sourceRecords.map((record) => [record.path, record]));
   for (const [catalogIndex, entry] of publicEntries.entries()) {
-    const projection = projectedSkill(entry, selection.projectionBase, catalogIndex);
+    const semanticAuthorityRef = `../${sourceRecordByPath.get(entry.sourcePath).publicRoute}`;
+    const projection = projectedSkill(
+      entry,
+      selection.projectionBase,
+      catalogIndex,
+      semanticAuthorityRef,
+    );
     requirement(
       validate(projection),
       `${entry.name} projection must validate: ${JSON.stringify(validate.errors)}`,
@@ -540,27 +691,32 @@ async function buildSkillsProjection() {
     projections.push({ entry, projection, projectionPath });
   }
 
-  const sourceRecordByPath = new Map(sourceRecords.map((record) => [record.path, record]));
   const catalog = {
     schemaVersion: "1",
     repository: selection.repository,
+    sourceRevision,
     schemaRef: schema.$id,
     publicationStanding: "public_ready",
     selectionRule: selection.publicationPolicy.sourceRule,
     skills: projections.map(({ entry, projectionPath }) => ({
       name: entry.name,
+      title: entry.parsed.title,
       description: entry.parsed.description,
       publicationStanding: "public_ready",
+      pagePath: `${entry.name}/`,
       projectionPath,
-      sourceRoute: `source/${entry.sourcePath}`,
+      sourcePath: entry.sourcePath,
+      sourceRoute: sourceRecordByPath.get(entry.sourcePath).publicRoute,
       sourceSha256: sourceRecordByPath.get(entry.sourcePath).sha256,
       dependencies: entry.dependencies.map((dependencyPath) => ({
-        path: `source/${dependencyPath}`,
+        sourcePath: dependencyPath,
+        path: sourceRecordByPath.get(dependencyPath).publicRoute,
         sha256: sourceRecordByPath.get(dependencyPath).sha256,
       })),
     })),
     supportingSources: selection.catalogDependencies.map((dependencyPath) => ({
-      path: `source/${dependencyPath}`,
+      sourcePath: dependencyPath,
+      path: sourceRecordByPath.get(dependencyPath).publicRoute,
       sha256: sourceRecordByPath.get(dependencyPath).sha256,
     })),
   };
@@ -574,6 +730,23 @@ async function buildSkillsProjection() {
   }
   await writeFile(resolve(skillsOutputRoot, "catalog.json"), catalogSource);
 
+  for (const skill of catalog.skills) {
+    const entry = publicEntries.find((candidate) => candidate.name === skill.name);
+    requirement(entry, `${skill.name} must retain its selected source`);
+    const pageSource = renderSkillPage(
+      {
+        ...skill,
+        sourceText: entry.sourceBytes.toString("utf8"),
+      },
+      sourceRevision,
+      baseUrl,
+    );
+    for (const possibleName of possibleNames) {
+      requirement(!pageSource.includes(possibleName), `${possibleName} must remain outside ${skill.pagePath}`);
+    }
+    await writeFile(resolve(skillsOutputRoot, skill.pagePath, "index.html"), pageSource);
+  }
+
   const indexSource = renderSkillsIndex(catalog, baseUrl);
   for (const possibleName of possibleNames) {
     requirement(
@@ -586,7 +759,8 @@ async function buildSkillsProjection() {
     "catalog.json",
     "index.html",
     ...projections.map(({ projectionPath }) => projectionPath),
-    ...publicSourcePaths.map((relativePath) => `source/${relativePath}`),
+    ...catalog.skills.map(({ pagePath }) => `${pagePath}index.html`),
+    ...sourceRecords.map(({ publicRoute }) => publicRoute),
   ]);
   for (const artifactPath of artifactPaths) {
     assertTermsAbsent(
@@ -621,7 +795,7 @@ async function projectCollaborationSkillsReadmeLinks() {
   );
   source = source.replaceAll(
     "(../../../.agents/skills/source-authority-mapping/SKILL.md)",
-    "(../../skills/source/.agents/skills/source-authority-mapping/SKILL.md)",
+    "(../../skills/source-authority-mapping/)",
   );
   source = source.replaceAll(
     "(../../../threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md)",
@@ -693,6 +867,7 @@ function validateSkillsIndex(source, catalog, possibleNames, deploymentBase = nu
       occurrenceCount(source, `data-skill-name="${skill.name}"`) === 1,
       `${skill.name} must appear once on the skills page`,
     );
+    requirement(source.includes(`href="${skill.pagePath}"`), `${skill.name} reading page must be linked`);
     requirement(source.includes(`href="${skill.projectionPath}"`), `${skill.name} projection must be linked`);
     requirement(source.includes(`href="${skill.sourceRoute}"`), `${skill.name} source must be linked`);
   }
@@ -704,6 +879,57 @@ function validateSkillsIndex(source, catalog, possibleNames, deploymentBase = nu
     requirement(
       source.includes(`<link rel="canonical" href="${skillsBase}">`),
       "the skills page must carry its configured canonical URL",
+    );
+  }
+}
+
+function validateSkillPage(source, skill, sourceRevision, possibleNames, deploymentBase = null) {
+  requirement(
+    occurrenceCount(source, `<meta name="author" content="${artifactAuthor}">`) === 1,
+    `${skill.name} page must carry one resolved author metadata value`,
+  );
+  requirement(
+    source.includes(`<link rel="license" href="${artifactLicense}">`),
+    `${skill.name} page must link to the central license`,
+  );
+  requirement(
+    occurrenceCount(source, artifactAttribution) === 1,
+    `${skill.name} page must carry one visible attribution notice`,
+  );
+  requirement(
+    visibleText(source.slice(source.indexOf(artifactAttribution) + artifactAttribution.length)) === "",
+    `${skill.name} page attribution must remain the final visible text`,
+  );
+  requirement(source.includes(`<code>${sourceRevision}</code>`), `${skill.name} page must expose its source revision`);
+  requirement(source.includes(`<code>${skill.sourceSha256}</code>`), `${skill.name} page must expose its source digest`);
+  requirement(source.includes(`href="../${skill.sourceRoute}"`), `${skill.name} page must link exact Markdown`);
+  requirement(source.includes('href="projection.json"'), `${skill.name} page must link its JSON projection`);
+  requirement(source.includes('href="../"'), `${skill.name} page must return to the catalog`);
+  requirement(
+    occurrenceCount(source, visitorBoundary.contextText) === 1,
+    `${skill.name} page must carry the exact canary context once`,
+  );
+  for (const boundaryMarker of visitorBoundary.markers) {
+    for (const line of boundaryMarker.lines) {
+      requirement(
+        occurrenceCount(source, line) === 1,
+        `${skill.name} page must carry the ${boundaryMarker.id} marker line once`,
+      );
+    }
+  }
+  for (const dependency of skill.dependencies) {
+    requirement(
+      source.includes(`href="../${dependency.path}"`),
+      `${skill.name} page must link ${dependency.sourcePath}`,
+    );
+  }
+  for (const possibleName of possibleNames) {
+    requirement(!source.includes(possibleName), `${possibleName} must remain outside ${skill.name} page`);
+  }
+  if (deploymentBase) {
+    requirement(
+      source.includes(`<link rel="canonical" href="${deploymentBase}/skills/${skill.name}/">`),
+      `${skill.name} page must carry its configured canonical URL`,
     );
   }
 }
@@ -792,6 +1018,15 @@ validateSkillsIndex(
   publicPossibleSkillNames,
   baseUrl,
 );
+for (const publicSkill of publicSkillCatalog.skills) {
+  validateSkillPage(
+    await readFile(resolve(skillsOutputRoot, publicSkill.pagePath, "index.html"), "utf8"),
+    publicSkill,
+    publicSkillCatalog.sourceRevision,
+    publicPossibleSkillNames,
+    baseUrl,
+  );
+}
 
 console.log(`Schema Pages artifact: ${outputRoot}`);
 console.log(`Deployment base: ${baseUrl ?? "local artifact; deployment metadata omitted"}`);
