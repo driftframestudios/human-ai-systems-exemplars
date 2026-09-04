@@ -104,7 +104,7 @@
     {
       "name": "technology-fit-sampling-tableau-chimeric-prototype-v0.2.html",
       "bytes": 238463,
-      "sha256": "ce3564a322d3c562cdc499382374e3539bd9a9a1fdc01831b55fa1d49ead8334",
+      "sha256": "34a5fc96d92d78a449d63779be16b1a2f9518cc5816acc9ada1c579a79ccc979",
       "role": "interactive_prototype"
     },
     {
@@ -134,7 +134,7 @@
     {
       "name": "technology-decision-routing-registry.v0.1.json",
       "bytes": 30517,
-      "sha256": "25e57b4e88bd2d0645864cc5bad5aa488e3ac5d745f2df9d1e31d5df7bead1bd",
+      "sha256": "c2b13d3f4c2c560f13a93072c1a43affe308f4fe09d193a7465e4480e69b9402",
       "role": "core_architecture_routing_registry"
     },
     {

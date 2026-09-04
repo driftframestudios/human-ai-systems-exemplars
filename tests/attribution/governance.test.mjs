@@ -115,7 +115,7 @@ test("the standalone Participatory Design Kit declares its relationship without 
   const [routed, ...standaloneVersions] = await Promise.all([
     readFile(resolve(
       repositoryRoot,
-      "core-architectures-chimeric-prototype-current-pack-v0.1/participatory-design-kit-chimeric-prototype-v0.1.2.html",
+      "core-architectures-chimeric-prototype-current-pack-v0.1/participatory-design-kit-chimeric-prototype-v0.1.3.html",
     ), "utf8"),
     readFile(resolve(
       repositoryRoot,

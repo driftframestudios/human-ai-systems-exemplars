@@ -10,13 +10,21 @@ the artifact itself supplies runtime behavior.
 
 - `core-architectures-chimeric-prototype-manifest-v0.1.json` names the current
   pack entries, versions, paths, and material byte or digest receipts.
-- `core-architectures-chimeric-prototype-pack-index-v0.1.2.html` provides the
+- `core-architectures-chimeric-prototype-pack-index-v0.1.3.html` provides the
   human-facing pack route.
 - `strategy-canvas-system-v0.2/` owns the shared Strategy Canvas schema,
   validator, state engine, canonical source, and build contract.
 - `context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/`
   is the Context Canvas projection. Its local manifest names the copied and
   adapted paths, including the Context-specific Strategy Canvas workbench.
+
+Current Core JSON-LD terms use
+`https://vik.guru/vocabulary/core-architectures#`. Upstream Revision Loop
+instances use
+`https://vik.guru/id/core-architectures/upstream-revision-loop/`. These stable
+identifiers travel inside each self-contained artifact and create no runtime
+request. The source manifest declares the current semantic coordinates, while
+prior versioned files preserve their earlier identifiers as history.
 
 Artifact variation is part of the family: route-specific layout, color,
 density, interaction, and evidence posture remain available while stable IDs,

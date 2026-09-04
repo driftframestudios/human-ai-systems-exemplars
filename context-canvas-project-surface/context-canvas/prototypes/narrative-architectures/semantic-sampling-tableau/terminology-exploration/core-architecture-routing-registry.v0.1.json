@@ -372,7 +372,7 @@
         "dependency",
         "affordance"
       ],
-      "prototype": "participatory-design-kit-chimeric-prototype-v0.1.2.html"
+      "prototype": "participatory-design-kit-chimeric-prototype-v0.1.3.html"
     },
     {
       "id": "ca:specification-by-example",
@@ -436,7 +436,7 @@
         "tolerance",
         "calibration"
       ],
-      "prototype": "heart-chart-chimeric-prototype-v0.1.4.html"
+      "prototype": "heart-chart-chimeric-prototype-v0.1.5.html"
     },
     {
       "id": "ca:plus-delta",

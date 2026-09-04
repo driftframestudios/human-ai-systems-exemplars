@@ -1204,7 +1204,7 @@
       "artifactShape": "Goal–signal–metric matrix",
       "useWhen": "Metrics need interpretation against goals, tolerances, and counter-signals.",
       "readerRef": "/field-guide/core-architectures/heart-chart/",
-      "prototypeRef": "heart-chart-chimeric-prototype-v0.1.4.html",
+      "prototypeRef": "heart-chart-chimeric-prototype-v0.1.5.html",
       "prototypeStatus": "generated · patch candidate",
       "routes": [
         "Plus / Delta",
