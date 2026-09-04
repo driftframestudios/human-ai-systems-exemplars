@@ -653,7 +653,7 @@ function normalizedSafePath(safePath) {
   return safePath.split(sep).join("/");
 }
 
-function inspectProfessionalProfileScript(
+export function inspectProfessionalProfileScript(
   source,
   safePath = PUBLIC_AUTHOR_PROFILE_SCRIPT_PATH,
 ) {
@@ -1008,17 +1008,32 @@ function validateIframeDestination(key, value) {
   return normalized;
 }
 
-async function resolveConfiguration(keys, configPath, environment) {
-  let fileSource = "";
-  try {
-    fileSource = await readFile(configPath, "utf8");
-  } catch (error) {
-    if (error?.code !== "ENOENT") {
-      throw new PublicReferenceOperationalError(
-        "PUBLIC_REFERENCE_CONFIG_READ",
-        "the public-reference configuration could not be read",
-        { cause: error },
-      );
+export async function resolvePublicReferenceDestinations(
+  keys,
+  {
+    configPath = PUBLIC_REFERENCE_CONFIG,
+    environment = process.env,
+    configurationSource,
+  } = {},
+) {
+  if (configurationSource !== undefined && typeof configurationSource !== "string") {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_CONFIG_SOURCE",
+      "the supplied public-reference configuration source must be text",
+    );
+  }
+  let fileSource = configurationSource ?? "";
+  if (configurationSource === undefined) {
+    try {
+      fileSource = await readFile(configPath, "utf8");
+    } catch (error) {
+      if (error?.code !== "ENOENT") {
+        throw new PublicReferenceOperationalError(
+          "PUBLIC_REFERENCE_CONFIG_READ",
+          "the public-reference configuration could not be read",
+          { cause: error },
+        );
+      }
     }
   }
 
@@ -1218,7 +1233,7 @@ export function materializePublicReferenceHtml(
   return materialized;
 }
 
-function materializeProfessionalProfileScript(
+export function materializeProfessionalProfileScript(
   source,
   destinations,
   safePath = PUBLIC_AUTHOR_PROFILE_SCRIPT_PATH,
@@ -1474,10 +1489,9 @@ export async function materializePublicReferences({
 
     const stagedHtmlRoot = join(stagedOutput, relative(source, html));
     inventory = await inventoryTree(stagedOutput, stagedHtmlRoot);
-    const destinations = await resolveConfiguration(
+    const destinations = await resolvePublicReferenceDestinations(
       inventory.keys,
-      config,
-      environment,
+      { configPath: config, environment },
     );
     const routeProfiles = await loadIframeRouteProfiles(
       carrierManifest,

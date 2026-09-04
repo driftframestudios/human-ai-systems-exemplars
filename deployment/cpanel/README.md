@@ -23,21 +23,34 @@ its own identifier.
 
 ## Current entry condition
 
-The assembler and its fixture-driven contract are active. The initial primary
-route selection remains with Issue #116, so this directory currently carries
-no production route manifest and no production configuration. That boundary
-keeps provisional membership outside the delivery artifact.
+The tracked production configuration selects the accepted 37-page Context
+Canvas collection, its non-indexed `404.html`, and the complete local file
+closure those documents need. The four resting no-index exemplars stay outside
+this initial visitor collection. `primary-route-manifest.json` records every
+selected source and its document-root destination explicitly.
 
-Once the selected collection is accepted, add a repository-owned
-`production-projection.config.json` with this shape:
+`production-projection.config.json` has this shape:
 
 ```json
 {
   "id": "prod-projection.configuration.v1",
   "version": "1",
-  "primary_manifest": "deployment/cpanel/primary-route-manifest.json"
+  "primary_manifest": "deployment/cpanel/primary-route-manifest.json",
+  "iframe_origin_robots": "deployment/cpanel/iframe-origin-robots.txt",
+  "publication": {
+    "base_url": "https://vik.guru/",
+    "source_root": "context-canvas-project-surface/context-canvas",
+    "public_reference_config": ".env.public"
+  }
 }
 ```
+
+`iframe_origin_robots` gives the iframe host its own reviewed root
+`robots.txt`. The file carries the same search, person-directed retrieval, and
+training-use posture as the primary source while remaining independent of the
+versioned `/v1/` iframe package. The primary `robots.txt` keeps the primary
+sitemap; the iframe-origin file omits a sitemap because this projection does
+not publish one for that host.
 
 The referenced manifest uses one explicit entry for every primary output:
 
@@ -55,18 +68,29 @@ The referenced manifest uses one explicit entry for every primary output:
 }
 ```
 
-That example describes the manifest grammar. The accepted manifest will add
-the complete primary dependency closure before a production build is treated
-as a deployment candidate.
+The assembler reads selected files from regular Git blobs at the accepted
+source coordinate. It resolves Registry and professional-profile tokens from
+the ignored `.env.public` receiver in memory, records that receiver's digest
+and semantic key set, and rechecks the digest before returning the plan. It
+uses an empty process environment for this step, so the file is the complete
+receiver for a production projection.
 
-The authored Context Canvas root currently contains Registry publication
-tokens, and its shared footer script contains the professional-profile token.
-The complete assembler will call `materializePublicReferences()` with approved
-values inside the same build transaction, then select primary files from that
-exact result. It will use configured values as the complete receiver and will
-leave an ambient `.public-reference-build/` directory outside its inputs. The
-current baseline keeps that future seam visible by stopping when a selected
-source still contains an unresolved token.
+Publication transforms then map the nested Context Canvas root to
+`https://vik.guru/`. Canonical, social, JSON-LD, sitemap, and local relative
+references follow their projected locations. Markdown links resolve through
+their complete selected-file closure, including fragments and directory
+README targets; repository-only continuations use their accepted public owner
+or remain ordinary prose. Schema identities and literal
+`https://iframes.vik.guru/v1/` routes retain their authored values. Generated
+rows record their source digest and projected digest; unchanged files retain
+byte-preserved standing. The ignored `.public-reference-build/` directory is
+not an input.
+
+The assembler also keeps the Core vocabulary decision at its current owner.
+If a selected primary file or the accepted iframe package still carries the
+placeholder Core authority, assembly stops at Issue #110. Continue after that
+Issue supplies an accepted namespace and the source-owned projections and
+complete iframe package have been regenerated together.
 
 ## Commands
 
@@ -81,10 +105,9 @@ npm run check:prod-carrier
 `check:prod-projection` writes and verifies the newly composed plan in
 temporary storage; it does not attest an existing carried artifact.
 `build:prod-projection` is the explicit mutation boundary and transactionally
-replaces only `.prod-projection-build/`. Both commands stop with a clear
-missing-configuration result while the primary route selection is open. A
-custom repository-owned fixture or future accepted configuration can be named
-with `-- --config path/to/config.json`.
+replaces only `.prod-projection-build/`. Both commands require the ignored
+`.env.public` receiver. A custom repository-owned fixture can be named with
+`-- --config path/to/config.json`.
 
 `stage:prod-carrier` transactionally replaces only the tracked carrier root.
 It may be repeated while that root is the worktree's only open change.
@@ -133,12 +156,14 @@ the deployment manifest calls this an `independent_plan_bound_input` instead
 of implying that the primary repository `source_sha` establishes its lineage.
 The assembler also checks the aggregate receipt's family routes, counts, byte
 totals, and receipt files against the supplied plan. Schema identities and
-literal `https://iframes.vik.guru/v1/...` carrier URLs travel unchanged in this
-baseline because selected primary and iframe files retain their exact bytes.
+literal `https://iframes.vik.guru/v1/...` carrier URLs retain their authored
+semantic values. Primary files transformed for the production route carry
+their source and projected digests; exact copies retain byte-preserved
+standing.
 
-When publication-owned URL transformations join the assembler, their manifest
-rows will carry both source and projection digests with generated standing.
-The byte-preserved standing in this baseline remains reserved for exact copies.
+Publication-owned URL transformations carry both source and projection digests
+with generated standing. Byte-preserved standing remains reserved for exact
+copies.
 After an explicit build installs the new closure, transaction cleanup reports
 either `complete` or `incomplete`. An incomplete cleanup result still reports
 the installed closure as successful and leaves transaction cleanup as a

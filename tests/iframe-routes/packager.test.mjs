@@ -73,7 +73,7 @@ test("the route plan preserves the Core population and adds one supplemental ins
   assert.equal(firstPlan.contract.routes.length, 23);
   assert.equal(prototypeRoutes.length, 21);
   assert.equal(supplementalRoutes.length, 1);
-  assert.equal(firstPlan.outputFiles.size, 26);
+  assert.equal(firstPlan.outputFiles.size, 27);
   assert.equal(firstPlan.receipt.package_contract.primary_routes, 23);
   assert.equal(firstPlan.receipt.package_contract.prototype_routes, 21);
   assert.equal(firstPlan.receipt.package_contract.supplemental_instrument_routes, 1);
@@ -247,13 +247,26 @@ test("the route receipt exposes unresolved local navigation without rewriting it
     defaultPaths.sourceRoot,
     "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
   ));
-  assert.deepEqual(byId.get("strategy-canvas").static_resource_closure.package_files, [{
-    source_file: "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
-    target_file: "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
-    content_type: "application/schema+json",
-    bytes: strategySchema.byteLength,
-    sha256: sha256(strategySchema),
-  }]);
+  const strategyEvidence = await readFile(path.join(
+    defaultPaths.sourceRoot,
+    "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+  ));
+  assert.deepEqual(byId.get("strategy-canvas").static_resource_closure.package_files, [
+    {
+      source_file: "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      target_file: "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      content_type: "application/schema+json",
+      bytes: strategySchema.byteLength,
+      sha256: sha256(strategySchema),
+    },
+    {
+      source_file: "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+      target_file: "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+      content_type: "application/json",
+      bytes: strategyEvidence.byteLength,
+      sha256: sha256(strategyEvidence),
+    },
+  ]);
   assert.deepEqual(byId.get("core-architecture-family-index").navigation.unresolved_local_links, [
     {
       href: "../context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html",
@@ -360,7 +373,7 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   await writePackagePlan(plan, temporaryRoot);
   const verification = await verifyPackagePlan(plan, temporaryRoot);
 
-  assert.deepEqual(verification, { files: 26, bytes: 1761565 });
+  assert.deepEqual(verification, { files: 27, bytes: 1775661 });
   await writeFile(path.join(temporaryRoot, "unexpected.txt"), "outside the plan\n");
   await assert.rejects(
     verifyPackagePlan(plan, temporaryRoot),
@@ -812,7 +825,7 @@ test("declared package media travels through planning, output, and receipt", asy
     routeManifestPath,
     sourceManifestPath,
   });
-  assert.equal(plan.outputFiles.size, 27);
+  assert.equal(plan.outputFiles.size, 28);
   assert.ok(plan.outputFiles.get(`poda/${mediaRelativePath}`).equals(mediaBytes));
   const podaReceipt = plan.receipt.routes.find(({ id }) => id === "poda");
   assert.deepEqual(podaReceipt.static_resource_closure.package_files, [{
@@ -824,7 +837,7 @@ test("declared package media travels through planning, output, and receipt", asy
   }]);
 
   await writePackagePlan(plan, outputRoot);
-  assert.equal((await verifyPackagePlan(plan, outputRoot)).files, 27);
+  assert.equal((await verifyPackagePlan(plan, outputRoot)).files, 28);
   assert.ok((await readFile(path.join(outputRoot, `poda/${mediaRelativePath}`))).equals(mediaBytes));
 });
 

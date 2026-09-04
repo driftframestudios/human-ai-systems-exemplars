@@ -40,12 +40,13 @@ function escapeHtml(value) {
 
 const method = evidence.methodOrigin;
 const representation = evidence.representations?.canonical;
+const evidenceRoute = 'strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json';
 if (!representation || representation.method !== 'strategyCanvas') {
   throw new Error('The evidence registry must define the canonical Strategy Canvas representation.');
 }
 const methodSourceNote = `
-        <p>${escapeHtml(representation.sourceClaim)} Read the <span data-direct-source-route data-href="${escapeHtml(method.primarySource.url)}">authors’ method description</span> and the <span data-direct-source-route data-href="${escapeHtml(method.institutionalRecord.url)}">INSEAD book record</span>.</p>
-        <p data-framed-source-handoff hidden>In this embedded view, the hosting page provides both source routes immediately after the frame.</p>
+        <p>${escapeHtml(representation.sourceClaim)} Read the <span data-direct-source-route data-href="${escapeHtml(method.primarySource.url)}">authors’ method description</span> and the <span data-direct-source-route data-href="${escapeHtml(method.institutionalRecord.url)}">INSEAD book record</span>, then inspect the <a data-direct-source-route href="${evidenceRoute}" data-href="${evidenceRoute}">machine-readable evidence record</a>.</p>
+        <p data-framed-source-handoff hidden>In this embedded view, the hosting page provides the source and evidence routes immediately after the frame.</p>
         <noscript><p>Source URLs: https://www.blueoceanstrategy.com/tools/strategy-canvas/ and https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested. In a sandboxed embedded view, use the source routes provided by the hosting page after the frame.</p></noscript>
         <p>${escapeHtml(representation.adaptationClaim)} ${escapeHtml(representation.boundaryClaim)}</p>`;
 
