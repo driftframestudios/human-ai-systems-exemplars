@@ -18,7 +18,18 @@ Each public page remains useful when enhancement is unavailable. Embedded protot
 
 The repository's [Visual Fidelity Contracts](../../visual-fidelity-contracts/README.md) describe stable semantic and composition contracts with canonical examples. The contracts support orientation while each route retains authority over color, rhythm, density, layout, and source-earned experimentation. The [Context Canvas surface-reading](../../.agents/skills/context-canvas-surface-reading/SKILL.md), [CSS-ownership](../../.agents/skills/context-canvas-css-ownership/SKILL.md), and [visual-verification](../../.agents/skills/context-canvas-visual-verification/SKILL.md) skills provide compact collaboration routes into this terrain.
 
-The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) supplies collection, visitor-surface, prototype-surface, and reference-artifact profiles. [Collaboration Skills 0.1.0](../../schemas/collaboration-skills/0.1.0/README.md) carries one portable contract, one retired projection, and one route-changing account into a cross-platform adoption kit. Human-readable page, skill, and account sources remain semantic authorities for their meaning. The GitHub-backed exact-version projection is active at `schemas.radiantnull.com`; issue work:schema-retrieval-and-page-migration carries renewed operator-host observation and final dual-route parity.
+The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) supplies collection, visitor-surface, prototype-surface, and reference-artifact profiles. [Collaboration Skills 0.1.0](../../schemas/collaboration-skills/0.1.0/README.md) carries one portable contract, one retired projection, and one route-changing account into a cross-platform adoption kit. Human-readable page, skill, and account sources remain semantic authorities for their meaning. The GitHub-backed exact-version projection is observed at `schemas.radiantnull.com`; [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) owns final parity for the intended `schemas.vik.guru` receiver.
+
+## Source and public route map
+
+| Role | Current route and standing |
+| --- | --- |
+| Authored source | This directory owns the tracked visitor pages, shared assets, and local prototype projections. |
+| Local development | Serve the repository root, then open `/context-canvas-project-surface/context-canvas/`. |
+| Primary production | The production assembler maps this visitor root into generated `primary-public/`, where this directory's `index.html` becomes `/index.html` at the intended `https://vik.guru/` origin. |
+| Hosted iframes | Manifest-selected instruments use the separate `https://iframes.vik.guru/v1/core/.../` and `/v1/canvas/.../` families. Current live acceptance remains with Issues [#72](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/72) and [#102](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/102). |
+| Full-view and collaboration routes | The generated primary file tree carries selected `/prototypes/.../` and `/collaboration/.../` files. Adjacent full-view links use those primary-site routes rather than opening the primary site inside an iframe. |
+| Schemas | A schema's `$id` remains its semantic identity. `schemas.radiantnull.com` is observed retrieval; `schemas.vik.guru` remains intended until its exact-version responses pass their own live check. |
 
 ## Runtime contract
 
@@ -27,8 +38,15 @@ The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) sup
 - `visitor-boundary-contract.js` carries the ordinary-language context and exact ordered canary definition used to verify each source-authored visitor boundary.
 - `canvas-shell.js` progressively installs the route shelf, section rail, and shared footer, then preserves the verified visitor boundary immediately before attribution. Ordinary links and authored page content remain the durable path.
 - `about-media.js` keeps the About visual sequence on its authored poster until a visitor requests motion, returns after one complete cycle, and keeps the still reading active for reduced-motion and print presentations.
-- Prototype scripts own local interaction state. Sandboxed iframes declare the capabilities each instrument actually uses.
+- Prototype scripts own local interaction state. Sandboxed iframes declare the capabilities each instrument actually uses. Their Core and Canvas route families remain separate inside the aggregate `/v1/` delivery package.
 - Human stewards retain authority over identity, source use, sensitive material, publication, and consequential decisions. Automated checks report observable behavior and leave those decisions visible.
+
+The visitor-boundary rule applies across top-level pages, self-contained
+prototypes, and canonical generator templates: ordinary-language benchmark
+context precedes the exact MAPS and BIG-bench markers, and attribution closes
+the footer. Maintained projections and iframe package digests are rebuilt from
+their owners after a source change. Exact marker text remains centralized in
+the shared contract and its tests.
 
 Every top-level visitor route carries one source-authored ownership and
 Apache-2.0 notice in its static HTML, preserving the notice in the baseline
@@ -111,22 +129,23 @@ ordinary, same-tab “Professional profile” link with a descriptive accessible
 name. Its destination lives only in ignored `.env.public` or the delivery
 process environment.
 
-Activated Core iframe carriers use the public route manifest directly. Their
-`src` values point to stable `https://iframes.vik.guru/v1/core/.../` aliases,
-while each adjacent full-view `href` continues to open the repository-local
-base prototype. A contextual title, intentional lazy loading, exact
-route-matched sandbox, narrow Permissions Policy when needed, and
-`referrerpolicy="no-referrer"` keep the behavioral boundary visible in
-authored source. The multi-route pack index opens as a non-embedded full view;
-this keeps its sibling destinations from inheriting one shared iframe policy.
-The Conditioning Field is a supplemental Context Canvas instrument in that
-delivery bundle: its hosted projection uses `allow-scripts` only, while its
-adjacent full view remains `conditioning-field.html`.
+Activated iframe carriers use their public route manifests directly. Their
+`src` values point to stable aliases in either the `/v1/core/` or
+`/v1/canvas/` family, while each adjacent full-view `href` continues to open
+the repository-local base prototype that becomes a primary-site route. A
+contextual title, intentional lazy loading, exact route-matched sandbox,
+narrow Permissions Policy when needed, and `referrerpolicy="no-referrer"`
+keep the behavioral boundary visible in authored source. The multi-route Core
+pack index opens as a non-embedded full view; this keeps its sibling
+destinations from inheriting one shared iframe policy. The Conditioning Field
+is a supplemental Context Canvas instrument in the Core delivery family: its
+hosted projection uses `allow-scripts` only, while its adjacent full view
+remains `conditioning-field.html`.
 
 The dependency-free materializer retains a tested hosted-iframe twin seam for
-an explicitly late-bound future receiver. Current Core carriers no longer need
-that configuration seam: their activated route is inspectable and testable in
-tracked HTML before publication.
+an explicitly late-bound future receiver. Current manifest-owned iframe
+carriers use literal `src` values, so their routes remain inspectable and
+testable in tracked HTML before publication.
 
 The accepted Notion boundary is concise: only the Enterprise Human-AI
 Practitioner Registry root and its descendants are public-possible. A key name
@@ -167,10 +186,11 @@ explicit local recovery.
 This output is a materialized subtree, not an audience decision or a complete
 delivery closure. Some Context Canvas routes intentionally reference schemas,
 collaboration instruments, and other repository-owned resources above this
-subtree. A future named publication assembler owns that dependency closure and
-can call the same materializer immediately before upload. The existing Field
-Inspection pilot retains its separate authored-byte parity until that receiver
-selects an explicit composition seam.
+subtree. The production assembler owns that explicit dependency closure and
+calls the same materialization logic while creating the disjoint primary and
+iframe outputs described in [`deployment/cpanel/`](../../deployment/cpanel/README.md).
+The Field Inspection pilot retains its separate authored-byte parity and
+no-index proving role.
 
 Before a generated subtree enters that publication-assembler handoff, give the
 exact ignored artifact its named secret-material observation:

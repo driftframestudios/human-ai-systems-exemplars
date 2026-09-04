@@ -53,7 +53,7 @@ This program asks how the repository can become:
 - The settled CSS direction is readable `core/`, `components/`, `contracts/`, `routes/`, and `legacy/` source with direct core-plus-route outputs. About is the first extraction after the visual cutoff.
 - The Context Canvas now has a section `README.md`, an authored `404.html`, repaired manifest and browser metadata, explicit stewardship text, and an updated root metadata surface. The historical `404.shtml` and server error log have left the public source path.
 - `cloudflare/context-canvas-field-pilot/` builds and checks an exact 14-file public closure, supplies source-owned response headers and a pilot 404, and supports a deterministic Wrangler dry-run.
-- The pilot is a direct-view, no-index surface with `frame-ancestors 'none'`. Cross-origin iframe delivery remains a later explicit route with an exact receiving origin and capability contract.
+- The pilot is a direct-view, no-index surface with `frame-ancestors 'none'`. Cross-origin iframe delivery now has separate manifest-owned Core and Canvas families beneath `https://iframes.vik.guru/v1/`; accepted current bytes, response policy, and deployed-parent behavior remain with Issues #72 and #102.
 
 ## Planning influences
 
@@ -72,7 +72,7 @@ The settled foundation hands forward small, separately reviewable continuations:
 - Root collaboration and contribution contract
 - Full-page Context Canvas visual-reference utility and browseable family index
 - Existing focused visual and interaction checks for changed behavior
-- Broader publication registry and allowlisted assembler, when more than the current 14-file closure earns publication
+- Implemented allowlisted production assembler and cPanel carrier for the selected primary collection and aggregate iframe package
 - Context Canvas core, component, contract, route, and legacy source modules
 - Direct route bundles followed by conservative, content-hashed CSS distribution
 - Prototype capability manifest and cross-origin protocol

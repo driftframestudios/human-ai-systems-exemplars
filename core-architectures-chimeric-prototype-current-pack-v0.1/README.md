@@ -48,6 +48,14 @@ the same attribution contract. Its Context Canvas workbench retains its
 adapted document and style owners. The repository-root `LICENSE` remains the
 complete license text.
 
+These standalone carriers also follow the repository-wide visitor-boundary
+rule: ordinary-language benchmark context, the exact MAPS marker, the exact
+BIG-bench marker, then attribution. Canonical HTML sources and the Strategy
+Canvas generator template own the copied carrier content; maintained Context
+projections and iframe package digests are rebuilt after a source change. The
+exact marker strings remain centralized in the Context Canvas visitor-boundary
+contract and its attribution tests.
+
 ## Public iframe route projection
 
 `public-iframe-route-manifest-v1.json` binds the pack hub, 21 current Core

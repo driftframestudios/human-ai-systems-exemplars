@@ -23,6 +23,13 @@ redirect target advances to the current distribution. The adapted Context
 Canvas workbench keeps the current declarations
 in its local document and stylesheet.
 
+The canonical template also carries the repository-wide visitor-boundary
+order: ordinary-language benchmark context, the exact MAPS marker, the exact
+BIG-bench marker, then attribution. Rebuilding synchronizes the generated
+canonical distribution; the Context workbench retains its local owner, and
+iframe packaging records the resulting bytes. The shared Context Canvas
+contract and attribution tests remain the source for exact marker text.
+
 Generate the distribution:
 
 ```sh
