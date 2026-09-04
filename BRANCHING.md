@@ -13,8 +13,8 @@ adapt research, integration, staging, release, and delivery to particular jobs.
 | `research` | Future-state projection and AI research-integration environment | Preview artifacts or a later purpose-bound research route |
 | `dev` | Sustained feature integration | Radiant Null collaboration family |
 | `stg` | Deployment candidates and Cloudflare Worker pilots | Vik Guru schema family |
-| `release` | Accepted release integration and source for generated documentation | Vik Guru schema family |
-| `docs` | Generated GitHub Pages projection | Radiant Null collaboration family |
+| `release` | Accepted release integration and promotion source for production | Vik Guru schema family |
+| `docs` | Reviewed GitHub Pages projection rebuilt from an exact accepted `main` source | Radiant Null collaboration family |
 | `prod` | Accepted schema and later Worker-backed production surface | Vik Guru schema family |
 
 The service families are:
@@ -68,10 +68,12 @@ human review and explicit cue precede every merge from an epic branch into
 `res` is the environment label used in receipts, workflow names, and future
 deployment metadata. `research` remains the single canonical branch name.
 
-## Promotion flow
+## Promotion and publication flow
 
 Research supplies candidate implementations and evidence. Authored source and
-promotion branches select the durable result:
+promotion branches select the durable result through two distinct routes.
+
+The production route is:
 
 1. `main` receives accepted contracts and concise research receipts so
    main-only collaborators can understand and continue the work.
@@ -79,8 +81,15 @@ promotion branches select the durable result:
 3. `stg` receives a selected deployment candidate or Worker pilot, directly
    from `main` when a sustained `dev` lane adds no useful integration step.
 4. `release` binds the accepted source, evidence, and integration result.
-5. An accepted `release` update produces the `docs` projection.
-6. A separately reviewed move advances accepted release material to `prod`.
+5. A separately reviewed move advances accepted release material to `prod`.
+
+The schema Pages route is:
+
+1. An exact accepted `main` revision supplies the source.
+2. A generated `docs` projection receives its own review.
+3. The Pages workflow receives both revisions, rebuilds from the accepted
+   source, and requires complete byte equality before a deliberately selected
+   deployment.
 
 Publication, DNS, schema identity, credentials, and production authority remain
 with their named branch, setting, or human-reviewed operation. Generated
@@ -155,9 +164,9 @@ the boundary reader retains its aggregate receipt for one day. `release` and
 `prod` are the two additional budget-active receivers for the bounded schema
 delivery contract described below.
 
-The complete source-owned Actions family also travels with the trunk: `docs`
-can publish the schema surface, Core and Narrative units remain manually
-selectable with their pull-request receiver resting behind
+The complete source-owned Actions family also travels with the trunk: the
+Pages workflow can publish a reviewed `docs` projection, Core and Narrative
+units remain manually selectable with their pull-request receiver resting behind
 `PROTOTYPE_UNIT_TESTS_AUTOMATIC`, and two LIMS/ELN proof paths retain explicit
 dispatch and confirmation. Every external action is pinned to a full reviewed
 commit SHA. These routes have distinct activation controls and leave the main
