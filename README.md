@@ -17,7 +17,7 @@ The [static discovery page](index.html) presents the same first-contact route wh
 | Strategy Canvas 0.2 | Factors, plotted offerings, weighting, comparison state, and exchange behavior | [Strategy Canvas schema](core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json) |
 | Local prototype manifest | Files and relationships needed to open a self-contained prototype locally | [Manifest schema](context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json) |
 
-The public build copies these contracts to their declared receiver paths. It also includes the authorship, citation, license, attribution, and data-use files needed to understand the public artifact on its own. Its repository-local Skills route is derived from the reviewed publication selection: each public-ready contract carries one schema-valid JSON projection plus byte-identical source and dependency copies. A later public-possible entry stays with the repository until its complete source package is ready for the same audience.
+The public build copies these contracts to their declared receiver paths. It also includes the authorship, citation, license, attribution, and data-use files needed to understand the public artifact on its own. Its repository-local Skills route is derived from the reviewed publication selection: each public-ready contract has a readable page, one schema-valid JSON projection, and byte-identical source and dependency copies. A later public-possible entry stays with the repository until its complete source package is ready for the same audience.
 
 ## Authority
 
