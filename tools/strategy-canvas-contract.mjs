@@ -24,6 +24,7 @@ const SHARED_STRATEGY_CORE = "core-architectures-chimeric-prototype-current-pack
 const STRATEGY_EVIDENCE = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json";
 const GENOMIC_REPRESENTATION = "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html";
 const GENOMIC_SVG = "context-canvas-project-surface/img/plot/genomic_viewer_strategy_canvas.svg";
+const INITIATIVE_COSTING = "collaboration/initiative-costing-calculator/index.html";
 const VIEWPORTS = [
   { name: "mobile", width: 390, height: 844 },
   { name: "desktop", width: 1440, height: 1000 },
@@ -533,6 +534,76 @@ async function canonicalViewportContract(browser, url) {
       }
     });
   }
+}
+
+async function canonicalSelectionStateVisualContract(browser, url) {
+  for (const viewport of [VIEWPORTS[1], VIEWPORTS[0]]) {
+    await verify(`canonical ${viewport.name} · initial, keyboard-focus, and selected states stay visibly distinct`, async () => {
+      const { context, page, telemetry } = await openPage(browser, url, viewport);
+      try {
+        const section = page.locator(".sc-chart-section");
+        await section.waitFor({ state: "visible" });
+        await section.screenshot({ path: resolve(runDir, `canonical-${viewport.name}-selection-initial.png`) });
+        const target = page.locator('[data-selection-route="chart"]').nth(1);
+        await target.focus();
+        assert(await target.evaluate((element) => document.activeElement === element), `${viewport.name} chart label should receive keyboard focus.`);
+        await section.screenshot({ path: resolve(runDir, `canonical-${viewport.name}-selection-focus.png`) });
+        await target.press("Enter");
+        await assertCanonicalSelectionCoherence(page, `Canonical ${viewport.name} selected state`);
+        await section.screenshot({ path: resolve(runDir, `canonical-${viewport.name}-selection-selected.png`) });
+        if (viewport.name === "mobile") {
+          await page.emulateMedia({ forcedColors: "active" });
+          const selected = page.locator('[data-selection-route="chart"][aria-current="true"]');
+          await selected.focus();
+          const forcedColorState = await selected.evaluate((element) => {
+            const surface = element.querySelector(".sc-dimension-label-surface");
+            const choice = document.querySelector('[data-selection-route="chooser"][aria-current="true"]');
+            return {
+              focusIsVisible: element.matches(":focus-visible"),
+              surfaceStrokeWidth: Number.parseFloat(getComputedStyle(surface).strokeWidth),
+              choiceBorderStyle: getComputedStyle(choice).borderStyle,
+            };
+          });
+          assert(forcedColorState.focusIsVisible, "Forced-colors observation should retain keyboard focus.");
+          assert(forcedColorState.surfaceStrokeWidth >= 4, "Forced colors should retain the selected, focused chart-label outline.");
+          assert(forcedColorState.choiceBorderStyle !== "none", "Forced colors should retain the matching chooser border.");
+          await section.screenshot({ path: resolve(runDir, "canonical-mobile-selection-forced-colors-focus.png") });
+        }
+        assertTelemetry(telemetry);
+      } finally {
+        await context.close();
+      }
+    });
+  }
+}
+
+async function canonicalSourceNavigationContract(browser, url) {
+  await verify("canonical · direct view opens its official method source in a separate top-level page", async () => {
+    const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    const methodUrl = "https://www.blueoceanstrategy.com/tools/strategy-canvas/";
+    await context.route(methodUrl, (route) => route.fulfill({
+      status: 200,
+      contentType: "text/html; charset=utf-8",
+      body: "<!doctype html><title>Controlled source navigation</title><p>Navigation observed.</p>",
+    }));
+    try {
+      const page = await context.newPage();
+      await page.goto(url, { waitUntil: "domcontentloaded" });
+      assert(await page.locator('[data-framed-source-handoff]').isHidden(), "Direct view should keep the embedded handoff hidden.");
+      const sourceLink = page.locator(`[data-direct-source-route][href="${methodUrl}"]`);
+      assert(await sourceLink.count() === 1, "Direct view should expose its official method source once.");
+      const [popup] = await Promise.all([page.waitForEvent("popup"), sourceLink.click()]);
+      try {
+        await popup.waitForLoadState("domcontentloaded");
+        assert(popup.url() === methodUrl, "Direct source navigation should retain the official destination.");
+        assert((await popup.locator("body").textContent()).includes("Navigation observed"), "Direct source destination should open outside the artifact page.");
+      } finally {
+        await popup.close();
+      }
+    } finally {
+      await context.close();
+    }
+  });
 }
 
 async function canonicalInteractionContract(browser, url) {
@@ -1251,29 +1322,42 @@ async function strategyCanvasEvidenceContract() {
       assert(entry.evidenceClass.length > 8, `${entry.id} should name its evidence class.`);
       assert(entry.implementationDecision.length > 24, `${entry.id} should name the implementation decision it informs.`);
       assert(entry.transferLimit.length > 32, `${entry.id} should carry a decision-proximate transfer limit.`);
+      assert(Array.isArray(entry.receivingSurfaces) && entry.receivingSurfaces.length > 0, `${entry.id} should name at least one receiving surface.`);
+      for (const receiver of entry.receivingSurfaces) {
+        assert(Object.hasOwn(registry.representations, receiver), `${entry.id} should map only to a registered representation (${receiver}).`);
+      }
     }
+    const usedReceivers = new Set(registry.implementationEvidence.flatMap((entry) => entry.receivingSurfaces));
+    assert(same([...usedReceivers].sort(), Object.keys(registry.representations).sort()), "Every registered representation should receive at least one evidence item.");
     const socialInfluence = registry.implementationEvidence.find((entry) => entry.id === "independent-before-reveal");
     assert(socialInfluence?.counterevidence?.url === "https://doi.org/10.1073/pnas.1109947108", "Independent-before-reveal evidence should travel with its published counterpoint.");
     assert(registry.claimBoundaries.some((claim) => claim.includes("psychometrically validated")), "Evidence registry should keep the local scale's measurement boundary explicit.");
   });
 
-  await verify("Strategy Canvas evidence · every current independent representation carries method origin and adaptation standing", async () => {
+  await verify("Strategy Canvas evidence · registry copy and sources reach every named representation", async () => {
+    const registry = JSON.parse(await readFile(resolve(STRATEGY_EVIDENCE), "utf8"));
     const methodUrl = "https://www.blueoceanstrategy.com/tools/strategy-canvas/";
-    const representationFiles = [
-      CANONICAL,
-      CONTEXT,
-      ...NARRATIVE_COMPOSERS.map((composer) => composer.route),
-      GENOMIC_REPRESENTATION
-    ];
-    for (const file of representationFiles) {
+    for (const [id, representation] of Object.entries(registry.representations)) {
+      assert(Array.isArray(representation.receivers) && representation.receivers.length > 0, `${id} should name its receiving artifacts.`);
+      for (const file of representation.receivers) {
+        const source = await readFile(resolve(file), "utf8");
+        const normalized = source.replace(/\s+/g, " ");
+        for (const field of ["sourceClaim", "adaptationClaim", "boundaryClaim"]) {
+          assert(normalized.includes(representation[field]), `${file} should carry the exact ${id} ${field} from the evidence registry.`);
+        }
+      }
+    }
+    const strategyFiles = [CANONICAL, CONTEXT, ...NARRATIVE_COMPOSERS.map((composer) => composer.route), GENOMIC_REPRESENTATION];
+    for (const file of strategyFiles) {
       const source = await readFile(resolve(file), "utf8");
       assert(source.includes('data-strategy-canvas-source="method-origin"'), `${file} should expose a visible method-origin marker.`);
       assert(source.includes(methodUrl), `${file} should link the method owners' primary description.`);
-      assert(source.includes("W. Chan Kim") && source.includes("Renée Mauborgne"), `${file} should name both method developers.`);
-      if (file !== GENOMIC_REPRESENTATION) {
-        assert(source.includes(`href="${methodUrl}" target="_blank" rel="noopener noreferrer"`), `${file} should route its framed external citation to a new, isolated tab.`);
-      }
     }
+    const initiativeSource = await readFile(resolve(INITIATIVE_COSTING), "utf8");
+    const fourActionsUrl = registry.relatedMethods.fourActionsFramework.primarySource.url;
+    assert(initiativeSource.includes('data-strategy-canvas-source="four-actions-origin"'), "Initiative costing should expose its Four Actions method marker.");
+    assert(initiativeSource.includes(`href="${fourActionsUrl}" target="_blank" rel="noopener noreferrer"`), "Initiative costing should route its official Four Actions source through its existing iframe-safe popup profile.");
+    assert(registry.representations.initiativeCosting.classification === "strategy-canvas-adjacent-four-actions", "Initiative costing should retain its precise adjacent-method classification.");
     const genomicSource = await readFile(resolve(GENOMIC_REPRESENTATION), "utf8");
     assert(genomicSource.includes('<figcaption class="table-note" data-strategy-canvas-source="method-origin">\n                This static representation adapts the Strategy Canvas'), "The Genomic page should attach the method marker to the Strategy Canvas caption itself.");
     assert(!genomicSource.includes(`href="${methodUrl}" target="_blank"`), "The parent Genomic visitor page should keep ordinary in-place citation navigation.");
@@ -1282,6 +1366,8 @@ async function strategyCanvasEvidenceContract() {
     assert(svg.includes(`<dc:source rdf:resource="${methodUrl}"/>`), "Static Strategy Canvas SVG metadata should link the primary method source.");
     assert(svg.includes("Strategy Canvas method developed by W. Chan Kim and Renée Mauborgne"), "Static Strategy Canvas SVG metadata should attribute the method without assigning the local artifact to its developers.");
     assert(svg.includes("local qualitative adaptation"), "Static Strategy Canvas SVG metadata should state its local adaptation standing.");
+    const buildSource = await readFile(resolve("core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/build.mjs"), "utf8");
+    assert(buildSource.includes("strategy-canvas-evidence.v0.1.json") && buildSource.includes("representations?.canonical"), "The canonical builder should consume its evidence registry representation.");
   });
 }
 
@@ -1296,6 +1382,8 @@ async function main() {
     const canonicalUrl = `${staticServer.origin}/${CANONICAL}`;
     const contextUrl = `${staticServer.origin}/${CONTEXT}`;
     await canonicalViewportContract(browser, canonicalUrl);
+    await canonicalSelectionStateVisualContract(browser, canonicalUrl);
+    await canonicalSourceNavigationContract(browser, canonicalUrl);
     await canonicalColumnGeometryContract(browser, canonicalUrl);
     await canonicalInteractionContract(browser, canonicalUrl);
     await canonicalExchangeRecoveryContract(browser, canonicalUrl);

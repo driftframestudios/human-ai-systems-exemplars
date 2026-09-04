@@ -19,6 +19,69 @@
     "sourceClaim": "The Strategy Canvas is a diagnostic and action framework developed by W. Chan Kim and Renée Mauborgne for comparing the factors, offering levels, and strategic profiles that shape a market.",
     "localAdaptation": "This repository adapts the comparison form for internal collaboration. Its good-enough threshold, consequence weight, lifecycle, evidence, participant input, and AI collaboration fields are repository-specific extensions."
   },
+  "relatedMethods": {
+    "fourActionsFramework": {
+      "name": "Four Actions Framework",
+      "developers": [
+        "W. Chan Kim",
+        "Renée Mauborgne"
+      ],
+      "primarySource": {
+        "title": "Four Actions Framework | Blue Ocean Strategy Tools and Frameworks",
+        "url": "https://www.blueoceanstrategy.com/tools/four-actions-framework/",
+        "publisher": "Blue Ocean Strategy"
+      },
+      "sourceClaim": "The Four Actions Framework was developed by W. Chan Kim and Renée Mauborgne to ask what to eliminate, reduce, raise, and create when shaping a new value curve."
+    }
+  },
+  "representations": {
+    "canonical": {
+      "receivers": [
+        "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html"
+      ],
+      "method": "strategyCanvas",
+      "sourceClaim": "The Strategy Canvas was developed by INSEAD strategy scholars W. Chan Kim and Renée Mauborgne as a diagnostic and action framework for Blue Ocean Strategy.",
+      "adaptationClaim": "This implementation adapts the comparison form for internal collaboration. Its good-enough threshold, consequence weight, lifecycle, evidence, participant input, and AI collaboration fields are repository-specific extensions.",
+      "boundaryClaim": "The 0–10 scores are locally defined comparison coordinates. Research informs the interaction and representation choices; claims about comprehension, accessibility, readiness, and decision improvement require evidence designed for those questions."
+    },
+    "contextCanvas": {
+      "receivers": [
+        "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html"
+      ],
+      "method": "strategyCanvas",
+      "sourceClaim": "The Strategy Canvas was developed by INSEAD strategy scholars W. Chan Kim and Renée Mauborgne as a diagnostic and action framework for Blue Ocean Strategy.",
+      "adaptationClaim": "This Context Canvas workbench adapts the comparison form for internal collaboration. Its current, good-enough, desired, consequence, evidence, participant input, scenario, and AI collaboration fields are repository-specific extensions.",
+      "boundaryClaim": "The local 0–10 scores support comparison. Evidence designed for decision and change outcomes establishes those claims."
+    },
+    "narrativeCapsuleComposer": {
+      "receivers": [
+        "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/narrative-capsules-chimeric-prototype-v0.1.html"
+      ],
+      "method": "strategyCanvas",
+      "sourceClaim": "The Strategy Canvas was developed by INSEAD strategy scholars W. Chan Kim and Renée Mauborgne as a diagnostic and action framework for Blue Ocean Strategy.",
+      "adaptationClaim": "This composer adapts the comparison form through a NOW / NEXT / LATER projection.",
+      "boundaryClaim": "Its local dimensions, thresholds, evidence fields, and capsule bindings remain provisional until reviewed in their receiving context."
+    },
+    "genomicViewer": {
+      "receivers": [
+        "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html"
+      ],
+      "method": "strategyCanvas",
+      "sourceClaim": "This static representation adapts the Strategy Canvas developed by W. Chan Kim and Renée Mauborgne.",
+      "adaptationClaim": "It maps the ten dimensions named in the research-to-architecture trace.",
+      "boundaryClaim": "The action groupings are an inspectable 2026 local synthesis. Scores recorded at the time, observed outcomes, and the costing model remain separate evidence routes."
+    },
+    "initiativeCosting": {
+      "receivers": [
+        "collaboration/initiative-costing-calculator/index.html"
+      ],
+      "method": "fourActionsFramework",
+      "classification": "strategy-canvas-adjacent-four-actions",
+      "sourceClaim": "The Four Actions Framework was developed by W. Chan Kim and Renée Mauborgne to ask what to eliminate, reduce, raise, and create when shaping a new value curve.",
+      "adaptationClaim": "This action area uses the four categories to organize editable planning suggestions.",
+      "boundaryClaim": "Market-strategy conclusions retain their own evidence and review."
+    }
+  },
   "implementationEvidence": [
     {
       "id": "direct-manipulation",
@@ -26,7 +89,8 @@
       "url": "https://doi.org/10.1109/MC.1983.1654471",
       "evidenceClass": "interaction-design account",
       "implementationDecision": "Marker movement and labelled score controls update the same visible state, and undo and redo preserve reversibility.",
-      "transferLimit": "This account motivates the interaction pattern; it does not establish usability or decision quality for this implementation."
+      "transferLimit": "This account motivates the interaction pattern; it does not establish usability or decision quality for this implementation.",
+      "receivingSurfaces": ["canonical", "contextCanvas"]
     },
     {
       "id": "diagram-and-table",
@@ -34,7 +98,8 @@
       "url": "https://doi.org/10.1111/j.1551-6708.1987.tb00863.x",
       "evidenceClass": "comparative representation models",
       "implementationDecision": "The plotted profile and a complete structured table remain adjacent semantic twins.",
-      "transferLimit": "The paper analyzes when informationally equivalent diagrams can make lookup and inference more efficient; it does not show that a diagram is always easier to understand."
+      "transferLimit": "The paper analyzes when informationally equivalent diagrams can make lookup and inference more efficient; it does not show that a diagram is always easier to understand.",
+      "receivingSurfaces": ["canonical", "contextCanvas", "genomicViewer"]
     },
     {
       "id": "complex-image-equivalent",
@@ -42,7 +107,8 @@
       "url": "https://www.w3.org/WAI/tutorials/images/complex/",
       "evidenceClass": "accessibility implementation guidance",
       "implementationDecision": "Each complex chart has a short description and a visible, structured long-form table equivalent.",
-      "transferLimit": "The guidance shapes the text-equivalent route; conformance and practical access still require testing with relevant users and technologies."
+      "transferLimit": "The guidance shapes the text-equivalent route; conformance and practical access still require testing with relevant users and technologies.",
+      "receivingSurfaces": ["canonical", "contextCanvas", "genomicViewer"]
     },
     {
       "id": "graphical-position",
@@ -50,7 +116,8 @@
       "url": "https://doi.org/10.1080/01621459.1984.10478080",
       "evidenceClass": "controlled graphical-perception experiments",
       "implementationDecision": "Scores use position on a common aligned scale, with exact values repeated in marker labels and tables.",
-      "transferLimit": "The experiments compare elementary graphical judgments. They do not validate this curve, its local scale, or its decision meaning."
+      "transferLimit": "The experiments compare elementary graphical judgments. They do not validate this curve, its local scale, or its decision meaning.",
+      "receivingSurfaces": ["canonical", "contextCanvas", "genomicViewer"]
     },
     {
       "id": "interactive-analysis",
@@ -58,7 +125,8 @@
       "url": "https://doi.org/10.1145/2133806.2133821",
       "evidenceClass": "visual-analysis interaction synthesis",
       "implementationDecision": "Selection, filtering by attention, direct value change, and state inspection remain explicit and reversible across chart and native controls.",
-      "transferLimit": "The taxonomy supports interaction design choices; it is not an evaluation of this artifact or its audience."
+      "transferLimit": "The taxonomy supports interaction design choices; it is not an evaluation of this artifact or its audience.",
+      "receivingSurfaces": ["canonical", "contextCanvas"]
     },
     {
       "id": "independent-before-reveal",
@@ -71,7 +139,8 @@
         "citation": "Farrell, S. (2011). Social influence benefits the wisdom of individuals in the crowd. Proceedings of the National Academy of Sciences, 108(36), E625.",
         "url": "https://doi.org/10.1073/pnas.1109947108",
         "relevance": "This response argues that social information can improve individual estimates, reinforcing a context-dependent rather than universal interpretation."
-      }
+      },
+      "receivingSurfaces": ["contextCanvas"]
     },
     {
       "id": "organizational-readiness-boundary",
@@ -79,7 +148,8 @@
       "url": "https://doi.org/10.1186/1748-5908-4-67",
       "evidenceClass": "organization-level theory",
       "implementationDecision": "Local dimensions may separately name shared commitment, capability, resources, and situational conditions when they matter to a change decision.",
-      "transferLimit": "The paper presents a theory and calls for further measurement development. This Strategy Canvas does not measure organizational readiness unless a separate validated method is supplied."
+      "transferLimit": "The paper presents a theory and calls for further measurement development. This Strategy Canvas does not measure organizational readiness unless a separate validated method is supplied.",
+      "receivingSurfaces": ["canonical", "contextCanvas", "narrativeCapsuleComposer"]
     },
     {
       "id": "redundant-selection-cue",
@@ -87,7 +157,8 @@
       "url": "https://doi.org/10.1016/0010-0285(80)90005-5",
       "evidenceClass": "visual-search, identification, and localization experiments",
       "implementationDecision": "The current dimension is identified by visible text and a persistent border treatment as well as color.",
-      "transferLimit": "The experiments concern attention to separable visual features. They motivate redundancy but do not establish accessibility or comprehension for this control."
+      "transferLimit": "The experiments concern attention to separable visual features. They motivate redundancy but do not establish accessibility or comprehension for this control.",
+      "receivingSurfaces": ["canonical", "contextCanvas"]
     },
     {
       "id": "anchoring-boundary",
@@ -95,7 +166,17 @@
       "url": "https://doi.org/10.1126/science.185.4157.1124",
       "evidenceClass": "experimental and theoretical judgment research",
       "implementationDecision": "Every number remains attached to local observable anchors and an evidence field, with participant spread retained where available.",
-      "transferLimit": "Visible anchors and evidence make interpretation inspectable; they do not remove anchoring effects or other judgment biases."
+      "transferLimit": "Visible anchors and evidence make interpretation inspectable; they do not remove anchoring effects or other judgment biases.",
+      "receivingSurfaces": ["canonical", "contextCanvas", "narrativeCapsuleComposer"]
+    },
+    {
+      "id": "four-actions-origin",
+      "citation": "Kim, W. C., & Mauborgne, R. Four Actions Framework. Blue Ocean Strategy Tools and Frameworks.",
+      "url": "https://www.blueoceanstrategy.com/tools/four-actions-framework/",
+      "evidenceClass": "official method description",
+      "implementationDecision": "The initiative-costing action area names the framework's four categories and states how the local planning adaptation uses them.",
+      "transferLimit": "The official description establishes the method origin. Local planning suggestions and market-strategy conclusions retain their own evidence routes.",
+      "receivingSurfaces": ["initiativeCosting"]
     }
   ],
   "claimBoundaries": [

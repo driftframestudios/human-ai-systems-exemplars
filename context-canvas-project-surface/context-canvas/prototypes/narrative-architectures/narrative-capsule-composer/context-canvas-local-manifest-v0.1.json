@@ -17,7 +17,7 @@
   },
   "publicationPosture": "visitor-linked-through-receiving-pages",
   "archive": {"status": "rebuilt-local-snapshot", "path": "narrative-capsules-chimeric-prototype-bundle-v0.1.zip"},
-  "integrity": {"algorithm": "sha256", "entryFile": "72f18e7b0cc44b42be6098440b5965de1d1c04ec89e9fe8939f3194de163a061"},
+  "integrity": {"algorithm": "sha256", "entryFile": "3ffcb433a96309701661c1c064a834e9e62fa20751b0f98d802ff9ab8076e436"},
   "canonicalStatus": "context_canvas_owned_projection",
   "sourcePath": ".",
   "localPath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/",

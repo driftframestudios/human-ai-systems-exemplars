@@ -549,8 +549,10 @@
       <p>Eliminate, Reduce, Raise, and Create form an action lens applied after the baseline shape becomes inspectable. Hold and Open are local extensions for continuity and inquiry.</p>
       <section class="sc-method-source" data-strategy-canvas-source="method-origin" aria-labelledby="strategy-canvas-source-heading">
         <h2 id="strategy-canvas-source-heading">Method source and local adaptation</h2>
-        <p>The Strategy Canvas was developed by INSEAD strategy scholars W. Chan Kim and Renée Mauborgne as a diagnostic and action framework for <cite>Blue Ocean Strategy</cite>. Read the <a href="https://www.blueoceanstrategy.com/tools/strategy-canvas/" target="_blank" rel="noopener noreferrer">authors’ method description (opens in a new tab)</a> and the <a href="https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested" target="_blank" rel="noopener noreferrer">INSEAD book record (opens in a new tab)</a>.</p>
-        <p>This implementation adapts the comparison form for internal collaboration. Its good-enough threshold, consequence weight, lifecycle, evidence, participant input, and AI collaboration fields are repository-specific extensions. The 0–10 scores are locally defined comparison coordinates rather than a validated measurement scale. Research informs the interaction and representation choices; claims about comprehension, accessibility, readiness, or decision improvement require evidence designed for those questions.</p>
+        <p>The Strategy Canvas was developed by INSEAD strategy scholars W. Chan Kim and Renée Mauborgne as a diagnostic and action framework for Blue Ocean Strategy. Read the <span data-direct-source-route data-href="https://www.blueoceanstrategy.com/tools/strategy-canvas/">authors’ method description</span> and the <span data-direct-source-route data-href="https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested">INSEAD book record</span>.</p>
+        <p data-framed-source-handoff hidden>In this embedded view, the hosting page provides both source routes immediately after the frame.</p>
+        <noscript><p>Source URLs: https://www.blueoceanstrategy.com/tools/strategy-canvas/ and https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested. In a sandboxed embedded view, use the source routes provided by the hosting page after the frame.</p></noscript>
+        <p>This implementation adapts the comparison form for internal collaboration. Its good-enough threshold, consequence weight, lifecycle, evidence, participant input, and AI collaboration fields are repository-specific extensions. The 0–10 scores are locally defined comparison coordinates. Research informs the interaction and representation choices; claims about comprehension, accessibility, readiness, and decision improvement require evidence designed for those questions.</p>
       </section>
       <div class="visitor-boundary" data-visitor-boundary aria-label="Training-data canary markers">
         <p class="visitor-boundary__context" data-visitor-boundary-context>The exact markers below help people preparing training data identify evaluation material and help evaluators investigate whether a model may have encountered it before.</p>
@@ -1514,6 +1516,26 @@
     open: 'Open'
   });
   const IMPORT_LIMITS = Object.freeze({ bytes: 512 * 1024, depth: 32, nodes: 20000 });
+
+  if (global.top !== global.self) {
+    document.querySelector('[data-framed-source-handoff]')?.removeAttribute('hidden');
+    for (const source of document.querySelectorAll('[data-direct-source-route]')) {
+      const label = document.createElement('span');
+      label.className = 'sc-framed-source-label';
+      label.textContent = `${source.textContent} (source route follows this frame)`;
+      source.replaceWith(label);
+    }
+  } else {
+    for (const source of document.querySelectorAll('[data-direct-source-route]')) {
+      const anchor = document.createElement('a');
+      anchor.dataset.directSourceRoute = '';
+      anchor.href = source.dataset.href;
+      anchor.target = '_blank';
+      anchor.rel = 'noopener noreferrer';
+      anchor.textContent = `${source.textContent} (opens in a new tab)`;
+      source.replaceWith(anchor);
+    }
+  }
 
   function parseBoundedImport(rawText) {
     const text = String(rawText || '');

@@ -18,6 +18,26 @@
   });
   const IMPORT_LIMITS = Object.freeze({ bytes: 512 * 1024, depth: 32, nodes: 20000 });
 
+  if (global.top !== global.self) {
+    document.querySelector('[data-framed-source-handoff]')?.removeAttribute('hidden');
+    for (const source of document.querySelectorAll('[data-direct-source-route]')) {
+      const label = document.createElement('span');
+      label.className = 'sc-framed-source-label';
+      label.textContent = `${source.textContent} (source route follows this frame)`;
+      source.replaceWith(label);
+    }
+  } else {
+    for (const source of document.querySelectorAll('[data-direct-source-route]')) {
+      const anchor = document.createElement('a');
+      anchor.dataset.directSourceRoute = '';
+      anchor.href = source.dataset.href;
+      anchor.target = '_blank';
+      anchor.rel = 'noopener noreferrer';
+      anchor.textContent = `${source.textContent} (opens in a new tab)`;
+      source.replaceWith(anchor);
+    }
+  }
+
   function parseBoundedImport(rawText) {
     const text = String(rawText || '');
     const byteLength = new TextEncoder().encode(text).byteLength;

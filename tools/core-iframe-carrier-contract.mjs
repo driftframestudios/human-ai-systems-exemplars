@@ -37,6 +37,10 @@ const expectedCarrierRouteCounts = [
   ["strategy-canvas", 2],
 ];
 const viewports = [1280, 800, 480, 390, 320];
+const strategySourceUrls = new Set([
+  "https://www.blueoceanstrategy.com/tools/strategy-canvas/",
+  "https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested",
+]);
 
 function configuredDestination(key) {
   if (key.startsWith(PUBLIC_IFRAME_NAMESPACE)) {
@@ -191,6 +195,40 @@ async function assertCarrierContainment(page, carrier, frame, label) {
       `${label} contains framed-document root overflow at ${width}px ` +
         `(${frameContainment.scrollWidth}/${frameContainment.clientWidth})`,
     );
+  }
+}
+
+async function exerciseStrategyCarrier(page, carrier, frame, label) {
+  assert.equal(
+    await frame.locator("[data-direct-source-route]").count(),
+    0,
+    `${label} replaces direct-only source links with an embedded handoff`,
+  );
+  assert.equal(
+    await frame.locator("[data-framed-source-handoff]").isVisible(),
+    true,
+    `${label} explains where its embedded source routes continue`,
+  );
+  const figure = carrier.locator("xpath=ancestor::figure[1]");
+  const sourceLink = figure.locator("[data-strategy-canvas-host-source]").first();
+  assert.equal(await sourceLink.getAttribute("target"), "_blank", `${label} source target`);
+  assert.equal(
+    await sourceLink.getAttribute("rel"),
+    "noopener noreferrer",
+    `${label} isolates its source destination`,
+  );
+  const href = await sourceLink.getAttribute("href");
+  assert.equal(strategySourceUrls.has(href), true, `${label} uses an allowlisted method source`);
+  const [popup] = await Promise.all([
+    page.waitForEvent("popup"),
+    sourceLink.click(),
+  ]);
+  try {
+    await popup.waitForLoadState("domcontentloaded");
+    assert.equal(popup.url(), href, `${label} opens the source outside the iframe`);
+    assert.match(await popup.locator("body").textContent(), /Navigation observed/);
+  } finally {
+    await popup.close();
   }
 }
 
@@ -701,6 +739,15 @@ async function run() {
         });
         return;
       }
+      if (strategySourceUrls.has(request.url()) && request.resourceType() === "document") {
+        await route.fulfill({
+          status: 200,
+          contentType: "text/html; charset=utf-8",
+          headers: { "cache-control": "no-store" },
+          body: "<!doctype html><title>Controlled source navigation</title><p>Navigation observed.</p>",
+        });
+        return;
+      }
       await route.abort("blockedbyclient");
     });
 
@@ -712,6 +759,7 @@ async function run() {
     }
     let heartInteractions = 0;
     let conditioningInteractions = 0;
+    let strategyInteractions = 0;
 
     for (const [pagePath, pageCarriers] of carriersByPage) {
       const page = await context.newPage();
@@ -813,6 +861,10 @@ async function run() {
             await exerciseConditioningCarrier(page, frame);
             conditioningInteractions += 1;
           }
+          if (routeProfile.id === "strategy-canvas") {
+            await exerciseStrategyCarrier(page, carrier, frame, label);
+            strategyInteractions += 1;
+          }
         }
 
         await page.waitForLoadState("networkidle", { timeout: 4000 }).catch(() => {});
@@ -857,6 +909,11 @@ async function run() {
       1,
       "the Conditioning Field carrier interaction runs once",
     );
+    assert.equal(
+      strategyInteractions,
+      2,
+      "both Strategy Canvas carriers expose working host-owned source navigation",
+    );
     await exerciseConditioningFooter(context, server.origin);
     const conditioningRoute = routeManifest.routes.find(
       ({ id }) => id === "conditioning-field",
@@ -867,7 +924,7 @@ async function run() {
       conditioningRouteUrl,
       canonicalBytesByPublicUrl.get(conditioningRouteUrl),
     );
-    return routeManifest.routes.length * 2 + carriers.length + 3;
+    return routeManifest.routes.length * 2 + carriers.length + 5;
   } finally {
     await context?.close();
     await browser?.close();

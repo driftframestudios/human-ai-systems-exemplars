@@ -97,8 +97,11 @@ lifecycle, evidence, participant input, and AI collaboration fields are local
 extensions.
 
 The machine-readable [evidence ledger](strategy-canvas-evidence.v0.1.json)
-connects each included source to one implementation decision and its transfer
-limit. The principal routes are:
+connects each included source to an implementation decision, its transfer
+limit, and the representations that receive it. The canonical build reads its
+copy directly from this ledger; focused contract checks keep the Context,
+Narrative, Genomic, and initiative-costing notes aligned with their named
+registry entries. The principal routes are:
 
 | Decision in this system | Evidence basis | Limit carried with the decision |
 | --- | --- | --- |

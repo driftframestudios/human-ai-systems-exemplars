@@ -113,8 +113,8 @@
       "canonical_evidence": "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
       "expression": "context-canvas",
       "exists": true,
-      "size_bytes": 10641,
-      "sha256": "a5519376154621afc61d79230459219788ab6f4c914f7bc962552d7c33f10a0f"
+      "size_bytes": 10568,
+      "sha256": "14e6dd3264ae1bbd103d905c82022e31eca4551fdcd0f189fbdcefa991012beb"
     },
     {
       "id": "first-responsible-version-matrix",
