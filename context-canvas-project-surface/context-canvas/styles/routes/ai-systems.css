@@ -1,5 +1,5 @@
 /* Context Canvas route bundle: AI Systems family -------------------------
-   Consumers: all fourteen top-level pages carrying .ai-systems-page.
+   Consumers: all sixteen top-level pages carrying .ai-systems-page.
    Owns: shared AI Systems tokens, scan/field/card/reading-path grammar,
    ten-instrument safeguards, multi-route tables and static equivalents, and
    the small Shared Machinery hub seam.
@@ -91,6 +91,22 @@
     --blueprint-acid-yellow: #f2ff67;
 }
 
+.ai-systems-page .debrief-quote--operating-principle {
+    background: var(--blueprint-cream);
+    border: .125rem solid var(--blueprint-ink);
+    border-radius: .75rem;
+    box-shadow: .5rem .5rem 0 var(--blueprint-coral);
+    color: var(--blueprint-ink);
+    margin: clamp(2rem, 4vw, 3.5rem) auto .5rem;
+    max-inline-size: var(--canvas-reading-measure);
+    padding: clamp(1rem, 2.5vw, 1.75rem);
+    text-align: start;
+}
+
+.ai-systems-page .debrief-quote--operating-principle :is(p, footer) {
+    color: var(--blueprint-ink);
+}
+
 .ai-systems-page .anchor_ai_systems,
 .ai-systems-page .anchor_ai_systems:visited {
     background: rgba(0, 0, 0, .6);
@@ -111,6 +127,7 @@
 }
 
 :where(.ai-systems-solution-field) {
+    --canvas-ink-muted: var(--blueprint-ink);
     background: var(--blueprint-sea);
 }
 
@@ -228,6 +245,7 @@
 }
 
 @media screen and (max-width: 30rem) {
+    .ai-systems-page .debrief-quote--operating-principle,
     .blueprint-pop-cards article,
     .goal-fidelity-table-figure {
         box-shadow: .3rem .3rem 0 var(--blueprint-ink);
@@ -235,6 +253,7 @@
 }
 
 @media (forced-colors: active) {
+    .ai-systems-page .debrief-quote--operating-principle,
     .blueprint-pop-cards article,
     .goal-fidelity-table-figure {
         border: .125rem solid CanvasText;
@@ -243,6 +262,7 @@
 }
 
 @media print {
+    .ai-systems-page .debrief-quote--operating-principle,
     .goal-fidelity-table-figure,
     .blueprint-pop-cards article {
         box-shadow: none;
@@ -330,7 +350,6 @@
 .ai-systems-page .ai-systems-reading-path a:hover,
 .ai-systems-page .ai-systems-reading-path a:focus-visible {
     background: var(--blueprint-sky);
-    filter: none;
     text-decoration: underline;
     text-decoration-thickness: .12em;
     text-underline-offset: .18em;

@@ -68,7 +68,6 @@
 
 .instrument-prototype-grid a:hover,
 .instrument-prototype-grid a:focus-visible {
-    filter: none;
     color: var(--blueprint-cobalt-deep);
     background: var(--blueprint-acid-yellow);
     box-shadow: .4rem .4rem 0 var(--blueprint-cobalt);

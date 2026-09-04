@@ -14,13 +14,17 @@ npm run check:context-canvas-field-pilot
 npm run dry-run:context-canvas-field-pilot
 ```
 
-The reading remains at its canonical path inside the generated surface:
+The reading keeps this pilot-local path inside the generated surface:
 
 ```text
 /context-canvas-project-surface/context-canvas/field-inspection-harness-replatform.html
 ```
 
 `wrangler deploy --dry-run` validates the asset-only package without publishing it. A named steward authorizes deployment and the resulting audience separately.
+
+This no-index pilot is an independent proving surface. Its evidence applies to
+the pilot-local route; the authored repository path and the cPanel assembler's
+flattened `https://vik.guru/` route retain their own checks.
 
 ## Delivery contract
 

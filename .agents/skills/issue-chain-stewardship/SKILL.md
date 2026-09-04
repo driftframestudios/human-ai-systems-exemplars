@@ -17,7 +17,7 @@ description: Makes related repository issues legible as a revisable work route w
 - **Useful when:** One issue prepares or blocks another, a tranche contains a smaller issue family, or completed work returns to an umbrella issue.
 - **Poor fit when:** One issue and its acceptance criteria already describe the whole job, or a simple unordered related-issues list preserves enough context.
 - **Smallest useful dose:** One current front, one or more evidenced relations, one pass condition, and one next receiver.
-- **Interactions:** `repository-reentry` resolves each issue's current truth; `source-authority-mapping` traces cross-surface artifacts; `supportive-change-writing` shapes the handoff; `collaboration-accounting` receives promotion, revision, or retirement evidence.
+- **Interactions:** `repository-reentry` resolves each issue's current truth; `source-authority-mapping` traces cross-surface artifacts; desired-state writing shapes the handoff; `collaboration-accounting` receives promotion, revision, or retirement evidence.
 - **Rest or release when:** The next issue accepts the handoff, the relationship dissolves, or new evidence changes the route.
 
 ## Rules
@@ -42,9 +42,9 @@ Represent parallel work, contained tranches, optional enrichments, and return pa
 
 Name the decision, the evidence available to support it, and the event that invites it. The chain preserves the boundary; the named human owner resolves the decision.
 
-### Rule: Transitions carry a receipt
+### Rule: Transitions reuse a sufficient public return
 
-A passing issue states the material result, changed paths or surfaces, remaining boundary, and receiving issue. The receiver records acceptance or the exact condition that keeps the handoff open.
+A passing issue states the material result, public-safe changed surfaces, remaining boundary, and receiving issue. A linked pull-request body, workflow summary, task response, or Issue comment can satisfy the transition when it already carries the pass condition. The receiver records acceptance or the bounded condition that keeps the handoff open. Sensitive diagnostics and protected coordinates remain with their existing local or access-controlled owner rather than being reproduced in the chain.
 
 ### Rule: Chains finish
 
@@ -56,7 +56,7 @@ The chain exits when the next receiver accepts the transition or the relationshi
 2. **Name the route:** State the desired end state, current front, and why that front is current.
 3. **Type the relationships:** Name what each issue owns, receives, and passes, using ordinary relation language.
 4. **Separate terrain:** Make blockers, held conditions, parallel work, optional enrichments, and human-held decisions visible.
-5. **Write the receipt:** Record the evidence that satisfies the current pass condition and the next receiver.
+5. **Reuse or write the return:** Link an existing sufficient public-safe result, or record only the decision-changing evidence that satisfies the current pass condition and names the next receiver.
 6. **Release or return:** Close the chain when the receiver accepts it; preserve one concrete re-entry event when the route remains open.
 
 ## Working capsule
@@ -68,7 +68,7 @@ The chain exits when the next receiver accepts the transition or the relationshi
 **Current front:**
 **Why this issue is current:**
 
-| Issue | Relation | Owns | Receives | Passes when | Receipt |
+| Issue | Relation | Owns | Receives | Passes when | Return |
 | --- | --- | --- | --- | --- | --- |
 
 **Held condition or blocker:**
@@ -82,13 +82,13 @@ The chain exits when the next receiver accepts the transition or the relationshi
 
 ### Scenario: A public-route issue prepares a human-cued history decision
 
-Given one issue owns public receiving routes and a locator-free current tree<br>
-And a later issue owns a public-history choice that requires direct human direction<br>
-When the current-tree issue supplies its accepted route and locator receipt<br>
-Then the chain passes that evidence to the history issue<br>
-And the later issue retains the human-cued destructive-action boundary<br>
-And the chain exits when the receiver accepts the handoff or names a remaining condition
+- Given one issue owns public receiving routes and a locator-free current tree
+- And a later issue owns a public-history choice that requires direct human direction
+- When the current-tree issue supplies its accepted route and locator receipt
+- Then the chain passes that evidence to the history issue
+- And the later issue retains the human-cued destructive-action boundary
+- And the chain exits when the receiver accepts the handoff or names a remaining condition
 
 ## Completion
 
-Issue chain stewardship completes when the current front, evidenced relations, issue-owned contracts, held decisions, transition receipt, next receiver, and release event are legible, dependencies remain evidence-backed, and authority remains with its existing owners. A materially different receiving use, a missed branch, or a stale transition can reopen the contract through collaboration accounting.
+Issue chain stewardship completes when the current front, evidenced relations, issue-owned contracts, held decisions, one sufficient transition return, next receiver, and release event are legible, dependencies remain evidence-backed, and authority remains with its existing owners. A materially different receiving use, a missed branch, or a stale transition can reopen the contract through collaboration accounting.

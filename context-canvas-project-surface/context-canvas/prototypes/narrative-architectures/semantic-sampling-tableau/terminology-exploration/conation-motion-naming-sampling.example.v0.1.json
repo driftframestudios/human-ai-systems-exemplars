@@ -247,7 +247,7 @@
           "measurementStatus": "planning_estimate",
           "calibrationState": "uncalibrated",
           "estimatorRef": "vs:estimator/human-ai-planning-pass",
-          "basis": "Illustrative planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
+          "basis": "Uncalibrated planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
           "confidence": "moderate",
           "dimensionScores": {
             "vs:dimension/semantic-stability": 8.9,
@@ -292,7 +292,7 @@
           "measurementStatus": "planning_estimate",
           "calibrationState": "uncalibrated",
           "estimatorRef": "vs:estimator/human-ai-planning-pass",
-          "basis": "Illustrative planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
+          "basis": "Uncalibrated planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
           "confidence": "moderate",
           "dimensionScores": {
             "vs:dimension/semantic-stability": 8.5,
@@ -338,7 +338,7 @@
           "measurementStatus": "planning_estimate",
           "calibrationState": "uncalibrated",
           "estimatorRef": "vs:estimator/human-ai-planning-pass",
-          "basis": "Illustrative planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
+          "basis": "Uncalibrated planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
           "confidence": "moderate",
           "dimensionScores": {
             "vs:dimension/semantic-stability": 7.6,
@@ -383,7 +383,7 @@
           "measurementStatus": "planning_estimate",
           "calibrationState": "uncalibrated",
           "estimatorRef": "vs:estimator/human-ai-planning-pass",
-          "basis": "Illustrative planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
+          "basis": "Uncalibrated planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
           "confidence": "moderate",
           "dimensionScores": {
             "vs:dimension/semantic-stability": 8.0,
@@ -429,7 +429,7 @@
           "measurementStatus": "planning_estimate",
           "calibrationState": "uncalibrated",
           "estimatorRef": "vs:estimator/human-ai-planning-pass",
-          "basis": "Illustrative planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
+          "basis": "Uncalibrated planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
           "confidence": "moderate",
           "dimensionScores": {
             "vs:dimension/semantic-stability": 7.2,
@@ -501,7 +501,7 @@
           "measurementStatus": "planning_estimate",
           "calibrationState": "uncalibrated",
           "estimatorRef": "vs:estimator/human-ai-planning-pass",
-          "basis": "Illustrative planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
+          "basis": "Uncalibrated planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
           "confidence": "moderate",
           "dimensionScores": {
             "vs:dimension/semantic-stability": 8.9,
@@ -546,7 +546,7 @@
           "measurementStatus": "planning_estimate",
           "calibrationState": "uncalibrated",
           "estimatorRef": "vs:estimator/human-ai-planning-pass",
-          "basis": "Illustrative planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
+          "basis": "Uncalibrated planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
           "confidence": "moderate",
           "dimensionScores": {
             "vs:dimension/semantic-stability": 8.5,
@@ -592,7 +592,7 @@
           "measurementStatus": "planning_estimate",
           "calibrationState": "uncalibrated",
           "estimatorRef": "vs:estimator/human-ai-planning-pass",
-          "basis": "Illustrative planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
+          "basis": "Uncalibrated planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
           "confidence": "moderate",
           "dimensionScores": {
             "vs:dimension/semantic-stability": 7.6,
@@ -637,7 +637,7 @@
           "measurementStatus": "planning_estimate",
           "calibrationState": "uncalibrated",
           "estimatorRef": "vs:estimator/human-ai-planning-pass",
-          "basis": "Illustrative planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
+          "basis": "Uncalibrated planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
           "confidence": "moderate",
           "dimensionScores": {
             "vs:dimension/semantic-stability": 8.0,
@@ -683,7 +683,7 @@
           "measurementStatus": "planning_estimate",
           "calibrationState": "uncalibrated",
           "estimatorRef": "vs:estimator/human-ai-planning-pass",
-          "basis": "Illustrative planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
+          "basis": "Uncalibrated planning estimate derived from the attached naming exploration; it is not an empirical frequency.",
           "confidence": "moderate",
           "dimensionScores": {
             "vs:dimension/semantic-stability": 7.2,

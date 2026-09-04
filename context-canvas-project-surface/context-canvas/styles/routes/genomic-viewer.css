@@ -193,6 +193,11 @@
     border-inline-start: .3rem solid var(--genomic-coral);
 }
 
+.genomic-implementation-field {
+    --canvas-link-color: var(--canvas-link-on-dark);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
+}
+
 .genomic-implementation-field--iron {
     background: var(--genomic-iron);
 }
@@ -222,15 +227,6 @@
     color: var(--genomic-ink);
 }
 
-.genomic-implementation-field a,
-.genomic-implementation-field a:visited {
-    color: var(--genomic-acid);
-}
-
-.genomic-implementation-field code {
-    color: var(--genomic-acid);
-}
-
 .genomic-implementation-field .debrief-quote {
     border-inline-start-color: var(--genomic-coral);
 }
@@ -249,10 +245,6 @@
 
 .genomic-implementation-field :is(.cobalt-operating-field__table, .cobalt-operating-field__aside) :is(h4, p, caption, th, td) {
     color: var(--genomic-ink);
-}
-
-.genomic-implementation-field .cobalt-operating-field__aside a {
-    color: var(--genomic-cobalt-deep);
 }
 
 .genomic-stacked-cube-visual img {
@@ -295,6 +287,8 @@
         .genomic-solution-field,
         .genomic-implementation-field
         ) {
+        --canvas-link-color: var(--canvas-link-on-light);
+        --canvas-link-visited-color: var(--canvas-link-visited-on-light);
         background: #fff !important;
         color: #000 !important;
     }
@@ -391,12 +385,4 @@
 
 .genomic-viewer-page .genomic-implementation-field .cobalt-operating-field__table :is(thead th:first-child, tbody th[scope="row"]) {
     color: var(--canvas-ink-strong);
-}
-
-.genomic-viewer-page .genomic-implementation-field.cobalt-operating-field :is(
-    .content > section > p,
-    .cobalt-operating-field__table,
-    .story-visual
-    ) a {
-    color: inherit;
 }

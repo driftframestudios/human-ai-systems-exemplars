@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100" role="img" aria-labelledby="nrm-title nrm-desc">
+  <title id="nrm-title">Five parts of a shared, resumable collaboration</title>
+  <desc id="nrm-desc">A relationship map shows five distinct roles working together. Narrative Architecture governs a repeatable collaboration span. Narrative Affordance defines a possible move. Affordance Activation records one use or disposition of that move. A Narrative Architecture Instance records one concrete occurrence and carries activations. A Narrative Coordination Surface makes the instance inspectable, revisable, and resumable.</desc>
+
+  <defs>
+    <pattern id="nrm-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#cfe7f7" stroke-width="1" opacity="0.5"/>
+    </pattern>
+    <marker id="nrm-arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#7893bc"/>
+    </marker>
+    <filter id="nrm-shadow" x="-10%" y="-10%" width="130%" height="140%">
+      <feDropShadow dx="6" dy="6" stdDeviation="0" flood-color="#17345f" flood-opacity="1"/>
+    </filter>
+    <style>
+      .sans { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .mono { font-family: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+      .white { fill: #fffdf8; }
+      .ink { fill: #17345f; }
+      .body { fill: #304a71; }
+      .muted { fill: #5d6f8b; }
+      .eyebrow { font-size: 15px; font-weight: 700; letter-spacing: 1.7px; }
+      .headline { font-size: 42px; font-weight: 700; letter-spacing: -1px; }
+      .deck { font-size: 19px; font-weight: 500; }
+      .field-label { font-size: 18px; font-weight: 700; letter-spacing: 0.8px; }
+      .node-title { font-size: 27px; font-weight: 700; letter-spacing: -0.35px; }
+      .node-copy { font-size: 18px; font-weight: 500; }
+      .relation { font-size: 14px; font-weight: 700; letter-spacing: 0.5px; }
+      .surface-title { font-size: 30px; font-weight: 700; letter-spacing: -0.4px; }
+      .surface-copy { font-size: 18px; font-weight: 500; }
+      .foot { font-size: 15px; font-weight: 500; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1100" fill="#fffaf2"/>
+  <rect x="28" y="28" width="1544" height="1044" rx="28" fill="#17345f"/>
+  <rect x="20" y="20" width="1544" height="1044" rx="28" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+  <rect x="21" y="21" width="1542" height="1042" rx="27" fill="url(#nrm-grid)" opacity="0.62"/>
+
+  <g id="nrm-heading" role="group" aria-labelledby="nrm-heading-title">
+    <title id="nrm-heading-title">Relationship map heading</title>
+    <path d="M20 48Q20 20 48 20H1536Q1564 20 1564 48V190H20Z" fill="#2855f3"/>
+    <text x="58" y="61" class="mono eyebrow white">FIVE DISTINCT ROLES</text>
+    <text x="58" y="110" class="sans headline white">Five parts of a shared, resumable collaboration</text>
+    <text x="58" y="150" class="sans deck white">Each role contributes a distinct layer of shared, resumable work.</text>
+    <rect x="1252" y="51" width="250" height="102" rx="16" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <rect x="1266" y="64" width="8" height="76" rx="4" fill="#f2ff67"/>
+    <text x="1294" y="88" class="sans node-copy ink">Each role clarifies</text>
+    <text x="1294" y="113" class="sans node-copy ink">a different part of</text>
+    <text x="1294" y="137" class="sans node-copy body">shared, resumable work.</text>
+  </g>
+
+  <g id="nrm-architecture" role="group" aria-labelledby="nrm-architecture-title">
+    <title id="nrm-architecture-title">Architecture governs the span</title>
+    <rect x="66" y="226" width="1468" height="756" rx="26" fill="#fffdf8" stroke="#17345f" stroke-width="3"/>
+    <path d="M92 226H1508Q1534 226 1534 252V302H66V252Q66 226 92 226Z" fill="#f2ff67"/>
+    <circle cx="109" cy="264" r="20" fill="#17345f"/>
+    <path d="M99 264H119M109 254V274" stroke="#fffdf8" stroke-width="3" stroke-linecap="round"/>
+    <text x="145" y="259" class="sans node-title ink">Architecture</text>
+    <text x="145" y="284" class="sans node-copy body">governs the span in which the other roles can work together</text>
+    <text x="1487" y="270" text-anchor="end" class="mono field-label ink">THE ENVELOPE</text>
+  </g>
+
+  <g aria-hidden="true" fill="none" stroke="#7893bc" stroke-width="3" stroke-linecap="round">
+    <path d="M632 468H848"/>
+    <path d="M1110 586V632H655V682" marker-end="url(#nrm-arrow)"/>
+    <path d="M920 797H990" marker-end="url(#nrm-arrow)"/>
+    <path d="M732 458L742 468L732 478L722 468Z" fill="#7893bc" stroke="none"/>
+  </g>
+  <g aria-hidden="true">
+    <rect x="641" y="418" width="182" height="30" rx="15" fill="#fffdf8"/>
+    <text x="732" y="439" text-anchor="middle" class="mono relation muted">DEFINITION / USE</text>
+    <rect x="742" y="617" width="258" height="30" rx="15" fill="#fffdf8"/>
+    <text x="871" y="638" text-anchor="middle" class="mono relation muted">INSTANCE CARRIES ACTIVATIONS</text>
+  </g>
+
+  <g id="nrm-affordance" role="group" aria-labelledby="nrm-affordance-title" filter="url(#nrm-shadow)">
+    <title id="nrm-affordance-title">Narrative Affordance is the reusable definition of a possible move</title>
+    <rect x="112" y="350" width="520" height="236" rx="22" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
+    <path d="M154 411C154 379 180 353 212 353H242V469H212C180 469 154 443 154 411Z" fill="#17345f"/>
+    <path d="M174 411C174 393 188 379 206 379H216V443H206C188 443 174 429 174 411Z" fill="#d9efea"/>
+    <path d="M228 411H270" stroke="#17345f" stroke-width="4" stroke-linecap="round" marker-end="url(#nrm-arrow)"/>
+    <text x="300" y="390" class="sans node-title ink">Narrative Affordance</text>
+    <text x="300" y="428" class="sans node-copy body">A reusable definition of</text>
+    <text x="300" y="453" class="sans node-copy body">a possible move.</text>
+    <text x="154" y="524" class="sans node-copy body">Makes the move perceivable and selectable.</text>
+    <text x="154" y="557" class="mono relation ink">WHAT MOVE IS AVAILABLE?</text>
+  </g>
+
+  <g id="nrm-activation" role="group" aria-labelledby="nrm-activation-title" filter="url(#nrm-shadow)">
+    <title id="nrm-activation-title">Affordance Activation records one proposed, accepted, declined, completed, or superseded use</title>
+    <rect x="848" y="350" width="520" height="236" rx="22" fill="#cfe7f7" stroke="#17345f" stroke-width="2"/>
+    <circle cx="920" cy="411" r="46" fill="#17345f"/>
+    <path d="M920 377L928 399L951 411L928 423L920 445L912 423L889 411L912 399Z" fill="#f2ff67"/>
+    <text x="990" y="390" class="sans node-title ink">Affordance Activation</text>
+    <text x="990" y="428" class="sans node-copy body">One recorded use or</text>
+    <text x="990" y="453" class="sans node-copy body">disposition of that move.</text>
+    <text x="890" y="510" class="sans node-copy body">Proposed · accepted · declined</text>
+    <text x="890" y="534" class="sans node-copy body">Completed · superseded</text>
+    <text x="890" y="563" class="mono relation ink">WHAT HAPPENED TO THE MOVE?</text>
+  </g>
+
+  <g id="nrm-instance" role="group" aria-labelledby="nrm-instance-title" filter="url(#nrm-shadow)">
+    <title id="nrm-instance-title">Narrative Architecture Instance is one concrete occurrence with current state and active activations</title>
+    <rect x="390" y="682" width="530" height="230" rx="22" fill="#e7efff" stroke="#17345f" stroke-width="2"/>
+    <rect x="432" y="718" width="110" height="96" rx="10" fill="#17345f"/>
+    <path d="M455 741H519M455 765H506M455 789H493" stroke="#fffdf8" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="519" cy="789" r="8" fill="#f2ff67"/>
+    <text x="576" y="728" class="sans node-title ink">Narrative Architecture</text>
+    <text x="576" y="761" class="sans node-title ink">Instance</text>
+    <text x="432" y="852" class="sans node-copy body">One concrete occurrence, including its current state.</text>
+    <text x="432" y="883" class="mono relation ink">CARRIES ACTIVE AFFORDANCE ACTIVATIONS</text>
+  </g>
+
+  <g id="nrm-surface" role="group" aria-labelledby="nrm-surface-title" filter="url(#nrm-shadow)">
+    <title id="nrm-surface-title">Narrative Coordination Surface is the view through which an instance becomes inspectable, revisable, and resumable</title>
+    <rect x="990" y="655" width="430" height="284" rx="24" fill="#ffd3d0" stroke="#17345f" stroke-width="2"/>
+    <rect x="1026" y="694" width="110" height="118" rx="14" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
+    <path d="M1048 726H1114M1048 752H1100M1048 778H1108" stroke="#7893bc" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="1114" cy="778" r="8" fill="#fa7065"/>
+    <text x="1164" y="707" class="sans node-title ink">Narrative</text>
+    <text x="1164" y="739" class="sans node-title ink">Coordination</text>
+    <text x="1164" y="771" class="sans node-title ink">Surface</text>
+    <text x="1028" y="849" class="sans node-copy body">The view through which an instance</text>
+    <text x="1028" y="874" class="sans node-copy body">becomes inspectable and resumable.</text>
+    <text x="1028" y="909" class="mono relation ink">REVISIT · QUESTION · CONTINUE</text>
+  </g>
+
+  <g id="nrm-footer" role="group" aria-labelledby="nrm-footer-title">
+    <title id="nrm-footer-title">How to read the map</title>
+    <text x="72" y="1025" class="sans foot ink">The companion definitions preserve the complete distinctions and states.</text>
+    <text x="1528" y="1025" text-anchor="end" class="sans foot body">Read each role, then follow the relationships among them.</text>
+  </g>
+</svg>

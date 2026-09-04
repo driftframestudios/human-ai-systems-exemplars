@@ -64,7 +64,7 @@ Columns, branches, or lenses remain source-local. They are not maturity levels. 
 
 Every figure carries a useful title, description, caption, and adjacent semantic equivalent where the relationship is consequential. State is expressed in words, border, and geometry as well as color. Dense diagrams have a full-size route and a locally scrollable narrow presentation.
 
-Close propositions with a written Evidence Boundary. Distinguish observed source material, reconstructed dialogue, illustrative examples, and proposed transfer. Name the next evaluation that can settle the boundary rather than converting uncertainty into a score.
+Close propositions with a written Evidence Boundary. Distinguish observed source material, reconstructed dialogue, teaching examples, and proposed transfer. Name the next evaluation that can settle the boundary rather than converting uncertainty into a score.
 
 ## Release checks
 

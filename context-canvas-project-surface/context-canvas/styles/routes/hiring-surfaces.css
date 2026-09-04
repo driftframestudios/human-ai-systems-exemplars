@@ -30,7 +30,7 @@
     color: #f4f7ff;
 }
 
-.hiring-surfaces-page .ai-systems-hero .debrief-quote {
+.hiring-surfaces-page .debrief-quote--operating-principle {
     background: var(--hiring-lime);
     box-shadow: .5rem .5rem 0 var(--hiring-coral);
 }
@@ -173,12 +173,6 @@
     text-align: end;
 }
 
-.hiring-surfaces-page .function-word-table code {
-    color: var(--hiring-cobalt-deep);
-    font-size: 1em;
-    font-weight: 750;
-}
-
 @media screen and (max-width: 64rem) {
     .hiring-surfaces-page .prototype-embed--blueprint iframe {
         min-block-size: 40rem;
@@ -186,7 +180,7 @@
 }
 
 @media screen and (max-width: 30rem) {
-    .hiring-surfaces-page .ai-systems-hero .debrief-quote,
+    .hiring-surfaces-page .debrief-quote--operating-principle,
     .hiring-surfaces-page .blueprint-pop-cards article,
     .hiring-surfaces-page .blueprint-pop-visual img,
     .hiring-surfaces-page .prototype-embed--blueprint,
@@ -197,6 +191,7 @@
 }
 
 @media (forced-colors: active) {
+    .hiring-surfaces-page .debrief-quote--operating-principle,
     .hiring-surfaces-page .blueprint-pop-cards article,
     .hiring-surfaces-page .prototype-embed--blueprint,
     .hiring-surfaces-page .cobalt-operating-field__table,
@@ -216,6 +211,11 @@
         .hiring-population-table
         ) {
         min-inline-size: 0;
+    }
+
+    .hiring-surfaces-page .debrief-quote--operating-principle {
+        box-shadow: none;
+        break-inside: avoid;
     }
 
     .hiring-surfaces-page :is(

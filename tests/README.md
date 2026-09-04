@@ -20,6 +20,65 @@ Context Canvas source without retaining or reporting configured destinations.
 The repository case discovers its keys and occurrences from source; migration
 counts remain a historical observation rather than a release threshold.
 
+Public iframe route packaging has a separate dependency-free boundary:
+
+```sh
+npm run test:iframe-routes
+npm run check:iframe-routes
+npm run test:iframe-carriers
+npm run test:canvas-iframe-routes
+npm run test:iframe-browser
+```
+
+The focused suite verifies exact agreement across the 23-route Core family,
+the 15-route Canvas family, and their aggregate `/v1/` receipt. It covers
+normalized and collision-free aliases, bounded regular-file inputs, explicit
+package-local media, static runtime-resource observation, byte-identical and
+generated projections, deterministic receipts, unresolved local navigation,
+observed carrier-capability agreement, and exclusion of undeclared routes. The
+check forms the complete package in a temporary directory and leaves live
+delivery unchanged. The static carrier inventory accounts for all 28 iframe
+occurrences and 23 distinct hosted aliases while preserving adjacent local
+full-view links.
+
+The Core carrier contract exercises its cross-origin route inside the declared
+sandbox. The Canvas route contract exercises all 15 generated documents inside
+their exact sandbox and Permissions Policy profiles, including package media,
+popup, clipboard, download, modal, print, scriptless, keyboard, request-closure,
+telemetry, and 320-pixel containment observations. `test:iframe-browser` runs
+both rendered delivery contracts. Live response headers, cache behavior, and
+deployed-parent behavior remain delivery activation checks.
+
+Production assembly and the cPanel carrier have their own repository-level
+contract:
+
+```sh
+npm run test:prod-deployment
+npm run check:prod-projection
+npm run build:prod-projection
+npm run stage:prod-carrier
+npm run check:prod-carrier
+```
+
+The test suite covers explicit primary membership, Core and Canvas package
+composition, URL materialization, exact digests, separate document roots,
+transactional replacement, deployment-bundle ancestry, and the fail-closed
+installer.
+The projection check composes and verifies a temporary result; the build
+replaces only ignored `.prod-projection-build/`. Staging replaces only the
+tracked cPanel deployment bundle, and the bundle check requires its committed
+files to match the accepted first-parent source. Host selection, live
+installation, and public-response observation begin in their named deployment
+steps.
+
+The attribution suite applies one visitor-boundary rule to every governed
+HTML carrier. Top-level Context Canvas pages use the shared contract and shell;
+self-contained prototypes and canonical generator templates carry the same
+ordered marker content with local narrow, print, and forced-color treatment.
+When an owning source or template changes, its maintained projections and
+iframe package digests are rebuilt together. The exact marker strings remain
+centralized in `visitor-boundary-contract.js` and its focused tests.
+
 Secret-material inspection has its own focused behavior contract:
 
 ```sh
@@ -56,11 +115,13 @@ adapter and compiles the governed Narrative schemas with the repository's
 installed Ajv 2020-12 implementation. Material valid and invalid cases stay
 close to the contracts they exercise.
 
-Standard `node:test` output is the complete local receipt. Focused browser
+Standard `node:test` output is the complete local observation. Focused browser
 contracts remain available for behavior that requires a rendered page:
 
 ```sh
 npm run test:core-browser
+npm run test:canvas-iframe-routes
+npm run test:iframe-browser
 npm run test:core-decision-canvases
 npm run test:core-planning-instruments
 npm run test:core-reference-instruments
@@ -68,6 +129,10 @@ npm run test:strategy-canvas
 npm run test:narrative-browser
 npm run test:prototype-exchanges
 ```
+
+A durable public handback names the selected repository script, public revision
+when needed, normalized result, and scope boundary without copying runner output
+or local diagnostic coordinates.
 
 The Core aggregate opens both declared projections of twenty tranche-owned
 artifacts in fresh browser contexts. Strategy Canvas keeps its dedicated
@@ -78,6 +143,12 @@ Each page demonstrates its owned relationship, one material edit, a derived
 and serialized twin, compatible exchange, retained-state recovery, and clear
 browser telemetry. The Strategy Canvas route protects its broader
 collaboration state and accessibility contract.
+
+The focused Core namespace contract checks the semantic identifiers declared
+by each manifest-current canonical artifact and its Context projection. It
+also confirms that prior versioned artifacts retain their historical identity
+and that semantic-only successors preserve the established static request and
+runtime-capability closure.
 
 The Narrative route carries ten fresh-context journeys. Four keep one material
 exchange path available for every projection. Six additional decision and

@@ -18,7 +18,7 @@ description: Produces locator-safe public collaboration records while exact gate
 - **Poor fit when:** Every referenced source is already public in the same durable repository and ordinary relative links provide the complete reader job.
 - **Smallest useful dose:** One reference classification, one semantic replacement, and one scoped receipt.
 - **Foregrounds:** Reader job, publication standing, semantic identity, re-entry, and the difference between public comprehension and exact private resolution.
-- **Interactions:** `source-authority-mapping` selects source standing and receiver topology; `issue-chain-stewardship` owns transitions; `supportive-change-writing` shapes register; `repository-reentry` establishes current truth.
+- **Interactions:** `source-authority-mapping` selects source standing and receiver topology; `issue-chain-stewardship` owns transitions; evidence-calibrated writing shapes the register; `repository-reentry` establishes current truth.
 - **Rest or release when:** The receiving artifact contains only fitting public routes, local explanations, repository-local sources, or stable keys whose private mappings are complete.
 
 ## Rules
@@ -81,27 +81,27 @@ Repository settings, publication state, remote refs, history operations, credent
 
 ### Scenario: A private source remains materially useful
 
-Given a public Threadkeeping record cites a gated working source<br>
-And the source materially changes the rationale or re-entry path<br>
-When the record crosses the publication boundary<br>
-Then the public record keeps a stable source key, title, role, contribution, standing, and re-entry condition<br>
-And the authorized resolver keeps the exact coordinate
+- Given a public Threadkeeping record cites a gated working source
+- And the source materially changes the rationale or re-entry path
+- When the record crosses the publication boundary
+- Then the public record keeps a stable source key, title, role, contribution, standing, and re-entry condition
+- And the authorized resolver keeps the exact coordinate
 
 ### Scenario: A private coordinate reaches a public draft
 
-Given a draft Issue, review, or handoff contains an exact gated coordinate<br>
-When the public packet is prepared<br>
-Then the intended relation receives a semantic title, local source, accepted public route, or stable key<br>
-And the exact coordinate returns to the authorized resolver before collaboration continues
+- Given a draft Issue, review, or handoff contains an exact gated coordinate
+- When the public packet is prepared
+- Then the intended relation receives a semantic title, local source, accepted public route, or stable key
+- And the exact coordinate returns to the authorized resolver before collaboration continues
 
 ### Scenario: Complementary receivers settle at different times
 
-Given one source projection needs a locator-safe public artifact and an exact authorized resolver mapping<br>
-And both records share one operator-blind key while carrying different reader information<br>
-When the public artifact is accepted before the resolver mapping, or the resolver mapping is accepted before the public artifact<br>
-Then the completed receiver stays legible<br>
-And the aggregate receipt remains partial with the awaiting receiver and re-entry move named<br>
-And settlement follows when both receiver-specific acceptance records are present
+- Given one source projection needs a locator-safe public artifact and an exact authorized resolver mapping
+- And both records share one operator-blind key while carrying different reader information
+- When the public artifact is accepted before the resolver mapping, or the resolver mapping is accepted before the public artifact
+- Then the completed receiver stays legible
+- And the aggregate receipt remains partial with the awaiting receiver and re-entry move named
+- And settlement follows when both receiver-specific acceptance records are present
 
 ## Conditional context
 

@@ -24,7 +24,7 @@
         "statement": "P(generic-LLM-first-recommendation | the named prompt condition): the model-verbalized probability that a candidate appears as the first recommendation under that request.",
         "candidateSetSemantics": "open_exclusive",
         "normalizationRule": "Listed candidates plus other/tail mass sum to one.",
-        "measurementStatus": "illustrative_verbalized_sample"
+        "measurementStatus": "uncalibrated_verbalized_sample"
       },
       {
         "id": "probability-six-month-fit",
@@ -32,7 +32,7 @@
         "statement": "P(six-month-fit-without-structural-rewrite | declared outcome, team conditions, and current evidence): the contextual planning probability that a candidate supports the selected low-fidelity interaction surfaces for six months while preserving accessibility, semantic readability, maintainability, testability, and a practical replacement path.",
         "candidateSetSemantics": "independent_events",
         "normalizationRule": "Candidate estimates are independent and need not sum to one.",
-        "measurementStatus": "illustrative_planning_estimate"
+        "measurementStatus": "uncalibrated_planning_estimate"
       }
     ],
     "population": "Hybrid human–AI team building accessible, SVG-rich, static collaboration surfaces",
@@ -131,7 +131,7 @@
       "id": "run-sparse-default-brief",
       "name": "Run A · sparse default brief",
       "asOf": "2026-06-21",
-      "status": "illustrative",
+      "status": "sample_state",
       "promptCondition": "Build a maintainable interactive front end quickly. Recommend a stack.",
       "samplingCondition": "Underspecified request with no explicit accessibility, SVG, swapability, or six-month horizon.",
       "candidateSetSemantics": "open_exclusive",
@@ -180,21 +180,21 @@
             "intervalLow": 0.34,
             "intervalHigh": 0.55,
             "estimateKind": "model_verbalized_distribution",
-            "measurementStatus": "illustrative_verbalized_sample",
+            "measurementStatus": "uncalibrated_verbalized_sample",
             "calibrationState": "uncalibrated",
-            "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+            "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
           },
           "sixMonthFit": {
             "estimate": 0.59,
             "intervalLow": 0.42,
             "intervalHigh": 0.74,
             "estimateKind": "planning_probability",
-            "measurementStatus": "illustrative_planning_estimate",
+            "measurementStatus": "uncalibrated_planning_estimate",
             "calibrationState": "uncalibrated",
             "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
           },
           "decisionState": "unreviewed",
-          "evidenceStatus": "illustrative_seed",
+          "evidenceStatus": "sample_state",
           "assumptions": [
             "A static or mostly client-side interactive reference surface is acceptable.",
             "The team can run equal behavior fixtures across candidates.",
@@ -248,21 +248,21 @@
             "intervalLow": 0.12,
             "intervalHigh": 0.27,
             "estimateKind": "model_verbalized_distribution",
-            "measurementStatus": "illustrative_verbalized_sample",
+            "measurementStatus": "uncalibrated_verbalized_sample",
             "calibrationState": "uncalibrated",
-            "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+            "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
           },
           "sixMonthFit": {
             "estimate": 0.67,
             "intervalLow": 0.5,
             "intervalHigh": 0.82,
             "estimateKind": "planning_probability",
-            "measurementStatus": "illustrative_planning_estimate",
+            "measurementStatus": "uncalibrated_planning_estimate",
             "calibrationState": "uncalibrated",
             "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
           },
           "decisionState": "unreviewed",
-          "evidenceStatus": "illustrative_seed",
+          "evidenceStatus": "sample_state",
           "assumptions": [
             "A static or mostly client-side interactive reference surface is acceptable.",
             "The team can run equal behavior fixtures across candidates.",
@@ -316,21 +316,21 @@
             "intervalLow": 0.05,
             "intervalHigh": 0.17,
             "estimateKind": "model_verbalized_distribution",
-            "measurementStatus": "illustrative_verbalized_sample",
+            "measurementStatus": "uncalibrated_verbalized_sample",
             "calibrationState": "uncalibrated",
-            "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+            "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
           },
           "sixMonthFit": {
             "estimate": 0.62,
             "intervalLow": 0.45,
             "intervalHigh": 0.78,
             "estimateKind": "planning_probability",
-            "measurementStatus": "illustrative_planning_estimate",
+            "measurementStatus": "uncalibrated_planning_estimate",
             "calibrationState": "uncalibrated",
             "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
           },
           "decisionState": "unreviewed",
-          "evidenceStatus": "illustrative_seed",
+          "evidenceStatus": "sample_state",
           "assumptions": [
             "A static or mostly client-side interactive reference surface is acceptable.",
             "The team can run equal behavior fixtures across candidates.",
@@ -384,21 +384,21 @@
             "intervalLow": 0.04,
             "intervalHigh": 0.15,
             "estimateKind": "model_verbalized_distribution",
-            "measurementStatus": "illustrative_verbalized_sample",
+            "measurementStatus": "uncalibrated_verbalized_sample",
             "calibrationState": "uncalibrated",
-            "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+            "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
           },
           "sixMonthFit": {
             "estimate": 0.59,
             "intervalLow": 0.42,
             "intervalHigh": 0.75,
             "estimateKind": "planning_probability",
-            "measurementStatus": "illustrative_planning_estimate",
+            "measurementStatus": "uncalibrated_planning_estimate",
             "calibrationState": "uncalibrated",
             "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
           },
           "decisionState": "unreviewed",
-          "evidenceStatus": "illustrative_seed",
+          "evidenceStatus": "sample_state",
           "assumptions": [
             "A static or mostly client-side interactive reference surface is acceptable.",
             "The team can run equal behavior fixtures across candidates.",
@@ -452,21 +452,21 @@
             "intervalLow": 0.035,
             "intervalHigh": 0.14,
             "estimateKind": "model_verbalized_distribution",
-            "measurementStatus": "illustrative_verbalized_sample",
+            "measurementStatus": "uncalibrated_verbalized_sample",
             "calibrationState": "uncalibrated",
-            "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+            "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
           },
           "sixMonthFit": {
             "estimate": 0.63,
             "intervalLow": 0.46,
             "intervalHigh": 0.79,
             "estimateKind": "planning_probability",
-            "measurementStatus": "illustrative_planning_estimate",
+            "measurementStatus": "uncalibrated_planning_estimate",
             "calibrationState": "uncalibrated",
             "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
           },
           "decisionState": "unreviewed",
-          "evidenceStatus": "illustrative_seed",
+          "evidenceStatus": "sample_state",
           "assumptions": [
             "A static or mostly client-side interactive reference surface is acceptable.",
             "The team can run equal behavior fixtures across candidates.",
@@ -520,21 +520,21 @@
             "intervalLow": 0.015,
             "intervalHigh": 0.085,
             "estimateKind": "model_verbalized_distribution",
-            "measurementStatus": "illustrative_verbalized_sample",
+            "measurementStatus": "uncalibrated_verbalized_sample",
             "calibrationState": "uncalibrated",
-            "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+            "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
           },
           "sixMonthFit": {
             "estimate": 0.5,
             "intervalLow": 0.32,
             "intervalHigh": 0.69,
             "estimateKind": "planning_probability",
-            "measurementStatus": "illustrative_planning_estimate",
+            "measurementStatus": "uncalibrated_planning_estimate",
             "calibrationState": "uncalibrated",
             "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
           },
           "decisionState": "unreviewed",
-          "evidenceStatus": "illustrative_seed",
+          "evidenceStatus": "sample_state",
           "assumptions": [
             "A static or mostly client-side interactive reference surface is acceptable.",
             "The team can run equal behavior fixtures across candidates.",
@@ -588,21 +588,21 @@
             "intervalLow": 0.01,
             "intervalHigh": 0.07,
             "estimateKind": "model_verbalized_distribution",
-            "measurementStatus": "illustrative_verbalized_sample",
+            "measurementStatus": "uncalibrated_verbalized_sample",
             "calibrationState": "uncalibrated",
-            "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+            "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
           },
           "sixMonthFit": {
             "estimate": 0.48,
             "intervalLow": 0.3,
             "intervalHigh": 0.67,
             "estimateKind": "planning_probability",
-            "measurementStatus": "illustrative_planning_estimate",
+            "measurementStatus": "uncalibrated_planning_estimate",
             "calibrationState": "uncalibrated",
             "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
           },
           "decisionState": "unreviewed",
-          "evidenceStatus": "illustrative_seed",
+          "evidenceStatus": "sample_state",
           "assumptions": [
             "A static or mostly client-side interactive reference surface is acceptable.",
             "The team can run equal behavior fixtures across candidates.",
@@ -627,7 +627,7 @@
       "id": "run-evidence-enriched-brief",
       "name": "Run B · evidence-enriched brief",
       "asOf": "2026-06-21",
-      "status": "illustrative",
+      "status": "sample_state",
       "promptCondition": "Compare materially distinct front-end stacks for a static, accessible, SVG-rich collaboration surface with JSON/JSON-LD round trip and a practical six-month replacement path.",
       "samplingCondition": "Outcome, dimensions, gap review, low-fidelity spikes, and technology-layer composition are explicit.",
       "candidateSetSemantics": "open_exclusive",
@@ -676,21 +676,21 @@
             "intervalLow": 0.22,
             "intervalHigh": 0.4,
             "estimateKind": "model_verbalized_distribution",
-            "measurementStatus": "illustrative_verbalized_sample",
+            "measurementStatus": "uncalibrated_verbalized_sample",
             "calibrationState": "uncalibrated",
-            "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+            "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
           },
           "sixMonthFit": {
             "estimate": 0.52,
             "intervalLow": 0.36,
             "intervalHigh": 0.68,
             "estimateKind": "planning_probability",
-            "measurementStatus": "illustrative_planning_estimate",
+            "measurementStatus": "uncalibrated_planning_estimate",
             "calibrationState": "uncalibrated",
             "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
           },
           "decisionState": "held",
-          "evidenceStatus": "illustrative_seed",
+          "evidenceStatus": "sample_state",
           "assumptions": [
             "A static or mostly client-side interactive reference surface is acceptable.",
             "The team can run equal behavior fixtures across candidates.",
@@ -744,21 +744,21 @@
             "intervalLow": 0.18,
             "intervalHigh": 0.36,
             "estimateKind": "model_verbalized_distribution",
-            "measurementStatus": "illustrative_verbalized_sample",
+            "measurementStatus": "uncalibrated_verbalized_sample",
             "calibrationState": "uncalibrated",
-            "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+            "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
           },
           "sixMonthFit": {
             "estimate": 0.78,
             "intervalLow": 0.64,
             "intervalHigh": 0.89,
             "estimateKind": "planning_probability",
-            "measurementStatus": "illustrative_planning_estimate",
+            "measurementStatus": "uncalibrated_planning_estimate",
             "calibrationState": "uncalibrated",
             "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
           },
           "decisionState": "selected_for_spike",
-          "evidenceStatus": "illustrative_seed",
+          "evidenceStatus": "sample_state",
           "assumptions": [
             "A static or mostly client-side interactive reference surface is acceptable.",
             "The team can run equal behavior fixtures across candidates.",
@@ -812,21 +812,21 @@
             "intervalLow": 0.05,
             "intervalHigh": 0.17,
             "estimateKind": "model_verbalized_distribution",
-            "measurementStatus": "illustrative_verbalized_sample",
+            "measurementStatus": "uncalibrated_verbalized_sample",
             "calibrationState": "uncalibrated",
-            "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+            "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
           },
           "sixMonthFit": {
             "estimate": 0.64,
             "intervalLow": 0.48,
             "intervalHigh": 0.79,
             "estimateKind": "planning_probability",
-            "measurementStatus": "illustrative_planning_estimate",
+            "measurementStatus": "uncalibrated_planning_estimate",
             "calibrationState": "uncalibrated",
             "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
           },
           "decisionState": "held",
-          "evidenceStatus": "illustrative_seed",
+          "evidenceStatus": "sample_state",
           "assumptions": [
             "A static or mostly client-side interactive reference surface is acceptable.",
             "The team can run equal behavior fixtures across candidates.",
@@ -880,21 +880,21 @@
             "intervalLow": 0.055,
             "intervalHigh": 0.18,
             "estimateKind": "model_verbalized_distribution",
-            "measurementStatus": "illustrative_verbalized_sample",
+            "measurementStatus": "uncalibrated_verbalized_sample",
             "calibrationState": "uncalibrated",
-            "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+            "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
           },
           "sixMonthFit": {
             "estimate": 0.66,
             "intervalLow": 0.5,
             "intervalHigh": 0.81,
             "estimateKind": "planning_probability",
-            "measurementStatus": "illustrative_planning_estimate",
+            "measurementStatus": "uncalibrated_planning_estimate",
             "calibrationState": "uncalibrated",
             "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
           },
           "decisionState": "held",
-          "evidenceStatus": "illustrative_seed",
+          "evidenceStatus": "sample_state",
           "assumptions": [
             "A static or mostly client-side interactive reference surface is acceptable.",
             "The team can run equal behavior fixtures across candidates.",
@@ -948,21 +948,21 @@
             "intervalLow": 0.055,
             "intervalHigh": 0.18,
             "estimateKind": "model_verbalized_distribution",
-            "measurementStatus": "illustrative_verbalized_sample",
+            "measurementStatus": "uncalibrated_verbalized_sample",
             "calibrationState": "uncalibrated",
-            "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+            "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
           },
           "sixMonthFit": {
             "estimate": 0.71,
             "intervalLow": 0.56,
             "intervalHigh": 0.85,
             "estimateKind": "planning_probability",
-            "measurementStatus": "illustrative_planning_estimate",
+            "measurementStatus": "uncalibrated_planning_estimate",
             "calibrationState": "uncalibrated",
             "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
           },
           "decisionState": "selected_for_spike",
-          "evidenceStatus": "illustrative_seed",
+          "evidenceStatus": "sample_state",
           "assumptions": [
             "A static or mostly client-side interactive reference surface is acceptable.",
             "The team can run equal behavior fixtures across candidates.",
@@ -1016,21 +1016,21 @@
             "intervalLow": 0.025,
             "intervalHigh": 0.11,
             "estimateKind": "model_verbalized_distribution",
-            "measurementStatus": "illustrative_verbalized_sample",
+            "measurementStatus": "uncalibrated_verbalized_sample",
             "calibrationState": "uncalibrated",
-            "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+            "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
           },
           "sixMonthFit": {
             "estimate": 0.59,
             "intervalLow": 0.42,
             "intervalHigh": 0.75,
             "estimateKind": "planning_probability",
-            "measurementStatus": "illustrative_planning_estimate",
+            "measurementStatus": "uncalibrated_planning_estimate",
             "calibrationState": "uncalibrated",
             "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
           },
           "decisionState": "held",
-          "evidenceStatus": "illustrative_seed",
+          "evidenceStatus": "sample_state",
           "assumptions": [
             "A static or mostly client-side interactive reference surface is acceptable.",
             "The team can run equal behavior fixtures across candidates.",
@@ -1084,21 +1084,21 @@
             "intervalLow": 0.015,
             "intervalHigh": 0.085,
             "estimateKind": "model_verbalized_distribution",
-            "measurementStatus": "illustrative_verbalized_sample",
+            "measurementStatus": "uncalibrated_verbalized_sample",
             "calibrationState": "uncalibrated",
-            "basis": "Illustrative response under the named prompt condition; this is not an observed model-frequency benchmark."
+            "basis": "Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark."
           },
           "sixMonthFit": {
             "estimate": 0.58,
             "intervalLow": 0.4,
             "intervalHigh": 0.74,
             "estimateKind": "planning_probability",
-            "measurementStatus": "illustrative_planning_estimate",
+            "measurementStatus": "uncalibrated_planning_estimate",
             "calibrationState": "uncalibrated",
             "basis": "Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one."
           },
           "decisionState": "held",
-          "evidenceStatus": "illustrative_seed",
+          "evidenceStatus": "sample_state",
           "assumptions": [
             "A static or mostly client-side interactive reference surface is acceptable.",
             "The team can run equal behavior fixtures across candidates.",
@@ -1355,11 +1355,11 @@
       ],
       "candidateStates": {
         "react-css-modules-headless": {
-          "status": "illustrative_walkthrough",
+          "status": "working_example",
           "evidence": "Direct SVG and grouping path appears viable; dense-scene benchmark remains open."
         },
         "svelte-component-css": {
-          "status": "illustrative_walkthrough",
+          "status": "working_example",
           "evidence": "Compact SVG authoring path appears viable; assistive naming and export checks remain open."
         }
       }
@@ -1660,7 +1660,7 @@
     "sourceBand": [
       "author_original",
       "collaboration_stabilized",
-      "illustrative_seed"
+      "sample_state"
     ],
     "sourceOfTruthBand": [
       "human_steward_review",
@@ -1670,7 +1670,7 @@
     ],
     "privateLocatorsIncluded": false,
     "unreviewedInferenceIncludedAsFact": false,
-    "note": "Candidate values are illustrative planning and verbalized-sampling records. They invite replacement with team evidence."
+    "note": "Candidate values are uncalibrated planning and verbalized-sampling records. They invite replacement with team evidence."
   },
   "validation": {
     "schemaRef": "technology-fit-sampling-tableau-state.schema.v0.1.json",

@@ -18,6 +18,12 @@ description: Accounts for decision-changing collaboration observations and route
 
 An account records an observation when it changes a routing decision, a skill instruction, or a future return condition. Smooth use can remain simply useful. The durable residue is the decision, evidence, consequence, and re-entry trigger rather than a turn transcript.
 
+### Rule: Persistence names its receiver and material effect
+
+A skill, account, manifest, ledger, gate, validator, inventory, or recurring review earns persistence when it changes a decision, protects observable behavior, serves a named consumer, reduces a named risk, or preserves a real re-entry need. Existing Git, GitHub, repository, and platform surfaces remain the default carriers when they already preserve the required state. When proposed structure primarily reports the collaboration or justifies its own continuation, preserve the decision-bearing residue on the nearest existing surface and return attention to material work. Security, privacy, destructive-operation, and production boundaries retain consequence-fitting depth.
+
+Visibility and persistence remain separate decisions. A public record carries a sanitized decision-changing summary while exact sensitive material stays with its existing private owner; neither the wish to display evidence nor the existence of a receipt creates a new durable artifact by itself.
+
 ### Rule: Skills remain provisional affordance surfaces
 
 The collaboration affordance can outlive its current transport format. A portable skill contract makes one working method routable in the present repository; it does not establish truth, competence, permission, priority, or organizational policy. Current intent, repository ground, independent evidence, and granted tools retain those roles.
@@ -80,7 +86,7 @@ Each pass selects one primary route and one smallest useful action. A second ski
 4. **Select one route:** Choose `create_now`, `iterate_now`, `queue_with_trigger`, `observe`, `settle_or_fold`, or `merge_or_retire`.
 5. **Choose the receiving form:** Use a portable skill contract for a durable independently routable job, a task-bound skill projection for a named temporary receiving task, a non-routable context capsule for explicitly loaded local detail, a skill billet for durable pre-skill stock, or no new artifact when current ground is sufficient.
 6. **Choose any receiving relation:** Keep one primary owner. Add peer composition for a distinct adjacent result or an interpretive lens binding for a bounded attention effect.
-7. **Take the smallest action:** Use declarative skill authoring for creation or structural revision; update a planning or issue surface for a billet; preserve a compact collaboration account only when the observation changes a future decision.
+7. **Take the smallest action:** Use declarative skill authoring for creation or structural revision; update a planning or issue surface for a billet; preserve a compact public-safe collaboration account only when the observation changes a future decision.
 8. **Name the return condition:** State the natural use, new evidence, overlap signal, or projection exit event that would reopen stewardship.
 9. **Release the pass:** Resume the original repository, product, research, or writing work.
 
@@ -88,21 +94,21 @@ Each pass selects one primary route and one smallest useful action. A second ski
 
 ### Scenario: A trusted first attempt has a live receiving use
 
-Given materially meaningful work reveals a transferable collaboration affordance<br>
-And no active skill owns the receiving job<br>
-And the instruction-only artifact is inexpensive to revise<br>
-When the collaboration explicitly encourages experimentation and the next use is active<br>
-Then the route is `create_now`<br>
-And the first natural use becomes field evidence for revision
+- Given materially meaningful work reveals a transferable collaboration affordance
+- And no active skill owns the receiving job
+- And the instruction-only artifact is inexpensive to revise
+- When the collaboration explicitly encourages experimentation and the next use is active
+- Then the route is `create_now`
+- And the first natural use becomes field evidence for revision
 
 ### Scenario: A recursive pass has no new signal
 
-Given the current skill route already reflects the available evidence<br>
-And another meta-level pass introduces no changed behavior, intent, dependency, authority, or independent source<br>
-When continued analysis would leave the next decision unchanged<br>
-Then the route is `settle_or_fold`<br>
-And a concrete re-entry trigger preserves the open possibility<br>
-And attention returns to material work
+- Given the current skill route already reflects the available evidence
+- And another meta-level pass introduces no changed behavior, intent, dependency, authority, or independent source
+- When continued analysis would leave the next decision unchanged
+- Then the route is `settle_or_fold`
+- And a concrete re-entry trigger preserves the open possibility
+- And attention returns to material work
 
 ## Conditional context
 

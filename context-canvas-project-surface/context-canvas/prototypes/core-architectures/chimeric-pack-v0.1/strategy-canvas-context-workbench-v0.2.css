@@ -583,3 +583,41 @@
   .muted { color: var(--sc-ink-soft); }
   .small { font-size: .75rem; }
 }
+
+.artifact-attribution {
+    position: static;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .strategy-method-source {
+    box-sizing: border-box;
+    width: min(82rem, calc(100% - 2rem));
+    margin: clamp(1.5rem, 4vw, 3rem) auto 0;
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+    border: 2px solid var(--sc-ink);
+    background: var(--sc-paper-raised);
+    color: var(--sc-ink-soft);
+    font-size: .88rem;
+  }
+  .strategy-method-source h2 { margin-block-end: .5rem; color: var(--sc-ink); font: 800 1rem var(--sc-sans); }
+  .strategy-method-source p:last-child { margin-block-end: 0; }
+  .artifact-attribution__notice {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 82rem;
+    margin: clamp(1.5rem, 4vw, 3rem) auto 0;
+    padding: 1rem clamp(1rem, 3vw, 1.75rem) 1.5rem;
+    color: var(--muted, currentColor);
+    font-size: .78rem;
+    line-height: 1.55;
+    text-align: center;
+  }
+  @media print {
+    .strategy-method-source { width: 100%; border-color: #000; color: #000; }
+    .artifact-attribution__notice { color: #000; }
+  }
+  @media (forced-colors: active) {
+    .strategy-method-source { border-color: CanvasText; background: Canvas; color: CanvasText; }
+    .artifact-attribution__notice { color: CanvasText; }
+  }

@@ -12,7 +12,7 @@ collaboration_account:
 
 ## Working moment
 
-Issue work:source-ownership-and-promotion needed a small repository ownership map after two earlier collaboration waves had already exercised the same underlying judgment. The schema wave separated canonical identity, authored source, publication authority, delivery operator, and retrieval availability. The Context Canvas link wave traced private Notion working sources into reviewed Registry counterparts while preserving internal lineage and adaptation needs. The current repository wave distinguished standalone source and release owners, integrated snapshots, public-experimental projections, and delivery hosts.
+Issue work:source-ownership-and-promotion needed a small repository ownership map after two earlier collaboration waves had already exercised the same underlying judgment. The schema wave separated canonical identity, authored source, publication authority, delivery operator, and retrieval availability. The Context Canvas link wave traced gated working sources into reviewed public counterparts while preserving internal lineage and adaptation needs. The current repository wave distinguished standalone source and release owners, integrated snapshots, public-experimental projections, and delivery hosts.
 
 Across all three corpora, the material contribution was stable: trace one claim or artifact from the source that defines meaning through typed projections and delivery routes to the receiver that can accept a decision. Neither a repository inventory nor a general research workflow owned this whole result.
 
@@ -30,7 +30,7 @@ That result exercises the portable distinctions while the immutable v1 example r
 
 ## Current-tree natural use — 2026-08-25
 
-The complete Context Canvas citation tree exposed a publication-boundary distinction that classification alone could not settle. Thirty private working identities already had their useful construct, evidence boundary, or canonical onward route on ten visitor surfaces. Treating those sources as “resting” while leaving their gated URLs active would have made lineage state look like visitor availability.
+The complete Context Canvas citation tree exposed a publication-boundary distinction that classification alone could not settle. Private working identities already had their useful construct, evidence boundary, or canonical onward route across several visitor surfaces. Treating those sources as “resting” while leaving their gated URLs active would have made lineage state look like visitor availability.
 
 `collaboration-accounting` selects `iterate_now` for the smallest useful revision. `source-authority-mapping` now states that rest and deferral belong to the authorized resolver: the visitor route can retire while exact source identity, prior relation, and a material re-entry condition remain recoverable. One rule and one scenario carry the change. The Collaboration Skills schema and typed formation example remain sufficient because the portable contract structure stays stable.
 

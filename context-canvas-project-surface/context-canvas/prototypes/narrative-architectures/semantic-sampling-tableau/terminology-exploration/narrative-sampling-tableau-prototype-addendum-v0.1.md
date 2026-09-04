@@ -32,7 +32,7 @@ The baseline asks one term to serve every naming layer.
 
 The comparison variant allows canonical, technical, public display, and authored labels to remain separate.
 
-The values are **illustrative planning estimates** derived from the prior exploration. They are intentionally marked uncalibrated and non-empirical.
+The values are **uncalibrated planning estimates** derived from the prior exploration. They are intentionally marked uncalibrated and non-empirical.
 
 This seed is useful because it demonstrates:
 

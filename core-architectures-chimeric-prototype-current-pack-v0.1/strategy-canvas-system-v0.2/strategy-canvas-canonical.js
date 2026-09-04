@@ -1,4 +1,4 @@
-/* Canonical Strategy Canvas controller v0.2.0 — safe DOM rendering over StrategyCanvasCore. */
+/* Canonical Strategy Canvas controller v0.2.2 — safe DOM rendering over StrategyCanvasCore. */
 (function exposeStrategyCanvasCanonical(global) {
   'use strict';
 
@@ -17,6 +17,26 @@
     open: 'Open'
   });
   const IMPORT_LIMITS = Object.freeze({ bytes: 512 * 1024, depth: 32, nodes: 20000 });
+
+  if (global.top !== global.self) {
+    document.querySelector('[data-framed-source-handoff]')?.removeAttribute('hidden');
+    for (const source of document.querySelectorAll('[data-direct-source-route]')) {
+      const label = document.createElement('span');
+      label.className = 'sc-framed-source-label';
+      label.textContent = `${source.textContent} (source route follows this frame)`;
+      source.replaceWith(label);
+    }
+  } else {
+    for (const source of document.querySelectorAll('[data-direct-source-route]')) {
+      const anchor = document.createElement('a');
+      anchor.dataset.directSourceRoute = '';
+      anchor.href = source.dataset.href;
+      anchor.target = '_blank';
+      anchor.rel = 'noopener noreferrer';
+      anchor.textContent = `${source.textContent} (opens in a new tab)`;
+      source.replaceWith(anchor);
+    }
+  }
 
   function parseBoundedImport(rawText) {
     const text = String(rawText || '');
@@ -88,6 +108,7 @@
     const { signal } = controller;
     let drag = null;
     let chartGeometry = null;
+    let focusInput = 'keyboard';
 
     const find = (role) => root.querySelector(`[data-sc-role="${role}"]`);
     const announce = (message) => {
@@ -97,6 +118,41 @@
       global.requestAnimationFrame(() => { live.textContent = message; });
     };
     const locked = () => store.getState().lifecycle.status === 'reviewed';
+
+    function revealKeyboardFocus(target) {
+      if (focusInput !== 'keyboard' || !(target instanceof Element)) return;
+      const frame = target.closest('.sc-chart-frame');
+      if (!frame) return;
+      const frameRect = frame.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const padding = Math.min(24, frame.clientWidth / 4);
+      let delta = 0;
+      if (targetRect.left < frameRect.left + padding) {
+        delta = targetRect.left - frameRect.left - padding;
+      } else if (targetRect.right > frameRect.right - padding) {
+        delta = targetRect.right - frameRect.right + padding;
+      }
+      if (Math.abs(delta) < 1) return;
+      const nextLeft = core.clamp(
+        frame.scrollLeft + delta,
+        0,
+        Math.max(0, frame.scrollWidth - frame.clientWidth)
+      );
+      frame.scrollTo({
+        left: nextLeft,
+        behavior: global.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+      });
+    }
+
+    root.addEventListener('pointerdown', () => {
+      focusInput = 'pointer';
+    }, { capture: true, signal });
+    root.addEventListener('keydown', () => {
+      focusInput = 'keyboard';
+    }, { capture: true, signal });
+    root.addEventListener('focusin', (event) => {
+      global.requestAnimationFrame(() => revealKeyboardFocus(event.target));
+    }, { signal });
 
     function seriesPath(dimensions, series, geometry, preview) {
       return dimensions.map((dimension, index) => {
@@ -253,15 +309,21 @@
           svg.append(group);
         });
 
-        const label = svgElement('text', {
-          class: 'sc-dimension-label sc-dimension-hit',
-          x: x(index),
-          y: margin.top + plotHeight + 42,
-          'text-anchor': 'middle',
+        const labelGroup = svgElement('g', {
+          class: 'sc-dimension-hit',
           tabindex: '0',
           role: 'button',
-          'aria-label': `Inspect ${dimension.label}`,
+          'aria-current': selected ? 'true' : undefined,
+          'aria-label': `${dimension.label}${selected ? ', current dimension' : ''}. Inspect anchors and evidence.`,
           'data-select-dimension': dimension.id,
+          'data-selection-route': 'chart',
+          'data-selected': selected
+        });
+        const label = svgElement('text', {
+          class: 'sc-dimension-label',
+          x: x(index),
+          y: margin.top + plotHeight + (selected ? 56 : 44),
+          'text-anchor': 'middle',
           'data-factor-label': dimension.id
         });
         const words = dimension.label.split(/\s+/);
@@ -277,9 +339,45 @@
           x: x(index),
           dy: lineIndex ? '1.15em' : 0
         }, line)));
-        svg.append(label);
+        labelGroup.append(svgElement('rect', {
+          class: 'sc-dimension-label-surface',
+          x: columnStart(index) + 5,
+          y: margin.top + plotHeight + 14,
+          width: columnWidth - 10,
+          height: 122,
+          rx: 2
+        }));
+        if (selected) labelGroup.append(svgElement('text', {
+          class: 'sc-dimension-current-marker',
+          x: x(index),
+          y: margin.top + plotHeight + 34,
+          'text-anchor': 'middle'
+        }, 'Current'));
+        labelGroup.append(label);
+        svg.append(labelGroup);
       });
       container.replaceChildren(svg);
+    }
+
+    function renderDimensionChooser(state) {
+      const container = find('dimension-chooser');
+      if (!container) return;
+      const selectedId = state.view.selectedDimensionId;
+      const controls = core.selectors.orderedDimensions(state).map((dimension) => {
+        const selected = dimension.id === selectedId;
+        const button = element('button', {
+          type: 'button',
+          className: 'sc-dimension-choice',
+          'aria-current': selected ? 'true' : undefined,
+          'aria-label': `${dimension.label}${selected ? ', current dimension' : ''}. Inspect anchors and evidence.`,
+          'data-select-dimension': dimension.id,
+          'data-selection-route': 'chooser'
+        });
+        button.append(element('span', { text: dimension.label }));
+        if (selected) button.append(element('span', { className: 'sc-dimension-choice-status', text: 'Current' }));
+        return button;
+      });
+      container.replaceChildren(...controls);
     }
 
     function scoreControl(state, dimension, series) {
@@ -342,6 +440,8 @@
             className: 'sc-button-small sc-quiet',
             'data-action': 'select',
             'data-dimension-id': dimension.id,
+            'data-selection-route': 'matrix',
+            'aria-current': state.view.selectedDimensionId === dimension.id ? 'true' : undefined,
             text: dimension.label
           }),
           element('div', { className: 'sc-help', text: dimension.definition })
@@ -513,6 +613,7 @@
       const state = store.getState();
       renderMeta(state);
       renderChart(state);
+      renderDimensionChooser(state);
       renderScoreMatrix(state);
       renderInspector(state);
       renderTextEquivalent(state);
@@ -537,6 +638,18 @@
       } catch (error) {
         announce(`${description} remains visible for manual copy.`);
       }
+    }
+
+    function selectDimension(dimensionId, sourceControl) {
+      const dimension = store.getState().dimensions.find((candidate) => candidate.id === dimensionId);
+      if (!dimension) return;
+      const route = sourceControl?.dataset.selectionRoute;
+      const restoreFocus = sourceControl === document.activeElement && route;
+      store.dispatch(core.actions.viewSelect(dimensionId));
+      if (restoreFocus) {
+        root.querySelector(`[data-selection-route="${route}"][data-${route === 'matrix' ? 'dimension-id' : 'select-dimension'}="${CSS.escape(dimensionId)}"]`)?.focus();
+      }
+      announce(`${dimension.label} selected. Its anchors and evidence are available below the chart.`);
     }
 
     function commitDrag(event) {
@@ -620,15 +733,18 @@
         return;
       }
       const selectable = event.target.closest?.('[data-select-dimension]');
-      if (selectable && (event.key === 'Enter' || event.key === ' ')) {
+      if (selectable && selectable.tagName !== 'BUTTON' && (event.key === 'Enter' || event.key === ' ')) {
         event.preventDefault();
-        store.dispatch(core.actions.viewSelect(selectable.dataset.selectDimension));
+        selectDimension(selectable.dataset.selectDimension, selectable);
       }
     }, { signal });
 
     root.addEventListener('click', (event) => {
       const selectable = event.target.closest?.('[data-select-dimension]');
-      if (selectable) store.dispatch(core.actions.viewSelect(selectable.dataset.selectDimension));
+      if (selectable) {
+        selectDimension(selectable.dataset.selectDimension, selectable);
+        return;
+      }
       const trigger = event.target.closest?.('[data-action]');
       if (!trigger) return;
       const action = trigger.dataset.action;
@@ -636,7 +752,7 @@
       if (action === 'undo') store.undo();
       else if (action === 'redo') store.redo();
       else if (action === 'toggle-mode') store.dispatch(core.actions.viewModeSet(state.view.mode === 'presentation' ? 'working' : 'presentation'));
-      else if (action === 'select') store.dispatch(core.actions.viewSelect(trigger.dataset.dimensionId));
+      else if (action === 'select') selectDimension(trigger.dataset.dimensionId, trigger);
       else if (action === 'add' && !locked()) store.dispatch(core.actions.dimensionAdd());
       else if (action === 'move' && !locked()) store.dispatch(core.actions.dimensionMove(trigger.dataset.dimensionId, Number(trigger.dataset.delta)));
       else if (action === 'remove' && !locked()) store.dispatch(core.actions.dimensionRemove(trigger.dataset.dimensionId));
@@ -706,7 +822,7 @@
     root.dataset.scEnhancementState = 'mounted';
 
     return Object.freeze({
-      version: '0.2.0',
+      version: '0.2.2',
       schemaVersion: core.schemaVersion,
       getState: () => core.clone(store.getState()),
       getValidation: () => core.validateState(store.getState()),
@@ -716,5 +832,5 @@
     });
   }
 
-  global.StrategyCanvasCanonical = Object.freeze({ version: '0.2.0', mount });
+  global.StrategyCanvasCanonical = Object.freeze({ version: '0.2.2', mount });
 })(typeof window !== 'undefined' ? window : globalThis);

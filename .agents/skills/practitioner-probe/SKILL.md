@@ -44,19 +44,19 @@ The contract and five-field anatomy carry the current capability. Domain-specifi
 
 ### Scenario: Plausible CSS hides a cascade mechanism
 
-Given a component appears correct in source<br>
-And one repeated visual item renders differently<br>
-When a probe traces global rules, layout-axis behavior, and item position<br>
-Then the mechanism identifies the smallest component-owned repair<br>
-And the instruction yield names the affected-family observation<br>
-And the route returns to the CSS source that owns the state
+- Given a component appears correct in source
+- And one repeated visual item renders differently
+- When a probe traces global rules, layout-axis behavior, and item position
+- Then the mechanism identifies the smallest component-owned repair
+- And the instruction yield names the affected-family observation
+- And the route returns to the CSS source that owns the state
 
 ### Scenario: A repair already has clear ownership and evidence
 
-Given the defect, mechanism, consumer, and receiving source are already known<br>
-When the next move is selected<br>
-Then the owning implementation workflow proceeds directly<br>
-And an additional probe layer remains unnecessary
+- Given the defect, mechanism, consumer, and receiving source are already known
+- When the next move is selected
+- Then the owning implementation workflow proceeds directly
+- And an additional probe layer remains unnecessary
 
 ## Completion
 

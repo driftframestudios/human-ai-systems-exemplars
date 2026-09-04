@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1040" role="img" aria-labelledby="benchmark-title benchmark-desc" focusable="false">
+  <title id="benchmark-title">Benchmark result coordinate</title>
+  <desc id="benchmark-desc">Six numbered stages connect a decision question to tasks, run conditions, scoring, aggregation, and a bounded claim. A lower profile separates benchmark accuracy from generalized accuracy and keeps contamination, uncertainty, and interpretation visible.</desc>
+  <defs>
+    <pattern id="benchmark-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#2855f3" stroke-opacity=".08"/>
+    </pattern>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",ui-monospace,monospace}
+      .ink{fill:#17345f}.body{fill:#304a71}.paper{fill:#fffaf2}.white{fill:#fff}.cobalt{fill:#2855f3}.sky{fill:#cfe7f7}.mint{fill:#d9efea}.cream{fill:#fff5de}.rose{fill:#ffe0e6}.lime{fill:#f2ff67}
+      .eyebrow{font-size:14px;font-weight:850;letter-spacing:1.8px}.display{font-size:42px;font-weight:850}.lead{font-size:18px;font-weight:620}
+      .step-number{font-size:14px;font-weight:900;letter-spacing:1px}.step-title{font-size:20px;font-weight:850}.step-copy{font-size:14px;font-weight:620}
+      .profile-label{font-size:13px;font-weight:900;letter-spacing:1.2px}.profile-title{font-size:22px;font-weight:850}.profile-copy{font-size:15px;font-weight:620}.footer{font-size:13px;font-weight:680}
+      @media (forced-colors:active){.paper,.step,.profile{fill:Canvas;stroke:CanvasText}.header,.route{fill:Highlight;stroke:CanvasText}.white{fill:HighlightText}.ink,.body{fill:CanvasText}.lime{fill:HighlightText}}
+    </style>
+  </defs>
+
+  <rect class="paper" width="1600" height="1040"/>
+  <rect width="1600" height="1040" fill="url(#benchmark-grid)" aria-hidden="true"/>
+
+  <g role="group" aria-labelledby="header-title">
+    <title id="header-title">A score becomes useful when its full coordinate is visible</title>
+    <path d="M50 34H1514L1550 70V190H50Z" fill="#17345f" transform="translate(9 9)" aria-hidden="true"/>
+    <path class="header" d="M50 34H1514L1550 70V190H50Z" fill="#2855f3" stroke="#17345f" stroke-width="3"/>
+    <path d="M1514 34V70H1550Z" fill="#f2ff67" stroke="#17345f" stroke-width="3" aria-hidden="true"/>
+    <text x="82" y="77" class="mono eyebrow" fill="#65d8d0">BENCHMARK ORIENTATION · RESULT COORDINATE</text>
+    <text x="82" y="126" class="sans display white">Carry the conditions that make the score interpretable.</text>
+    <text x="82" y="164" class="sans lead" fill="#e7efff">Question, items, run, scorer, aggregation, and claim remain connected.</text>
+  </g>
+
+  <g role="group" aria-labelledby="flow-title">
+    <title id="flow-title">Six-stage benchmark flow</title>
+    <path class="route" d="M152 356H1448" fill="none" stroke="#2855f3" stroke-width="12" stroke-linecap="round" aria-hidden="true"/>
+    <path d="M1448 336L1490 356L1448 376Z" fill="#2855f3" aria-hidden="true"/>
+
+    <g role="group" aria-labelledby="step-1-title">
+      <title id="step-1-title">Step 1: decision question</title>
+      <rect class="step" x="56" y="246" width="226" height="224" rx="20" fill="#fff5de" stroke="#17345f" stroke-width="2.5"/>
+      <circle cx="96" cy="286" r="24" fill="#17345f"/><text x="96" y="291" text-anchor="middle" class="mono step-number" fill="#f2ff67">01</text>
+      <text x="82" y="338" class="sans step-title ink"><tspan x="82">Decision</tspan><tspan x="82" dy="25">question</tspan></text>
+      <text x="82" y="403" class="sans step-copy body"><tspan x="82">Name the use the</tspan><tspan x="82" dy="20">result must support.</tspan></text>
+    </g>
+    <g role="group" aria-labelledby="step-2-title">
+      <title id="step-2-title">Step 2: tasks and items</title>
+      <rect class="step" x="310" y="246" width="226" height="224" rx="20" fill="#cfe7f7" stroke="#17345f" stroke-width="2.5"/>
+      <circle cx="350" cy="286" r="24" fill="#17345f"/><text x="350" y="291" text-anchor="middle" class="mono step-number" fill="#f2ff67">02</text>
+      <text x="336" y="338" class="sans step-title ink"><tspan x="336">Tasks</tspan><tspan x="336" dy="25">and items</tspan></text>
+      <text x="336" y="403" class="sans step-copy body"><tspan x="336">Fix the revision and</tspan><tspan x="336" dy="20">sampling frame.</tspan></text>
+    </g>
+    <g role="group" aria-labelledby="step-3-title">
+      <title id="step-3-title">Step 3: run coordinate</title>
+      <rect class="step" x="564" y="246" width="226" height="224" rx="20" fill="#d9efea" stroke="#17345f" stroke-width="2.5"/>
+      <circle cx="604" cy="286" r="24" fill="#17345f"/><text x="604" y="291" text-anchor="middle" class="mono step-number" fill="#f2ff67">03</text>
+      <text x="590" y="338" class="sans step-title ink"><tspan x="590">Run</tspan><tspan x="590" dy="25">coordinate</tspan></text>
+      <text x="590" y="403" class="sans step-copy body"><tspan x="590">Model, harness, prompt,</tspan><tspan x="590" dy="20">tools, trials, date.</tspan></text>
+    </g>
+    <g role="group" aria-labelledby="step-4-title">
+      <title id="step-4-title">Step 4: scorer</title>
+      <rect class="step" x="818" y="246" width="226" height="224" rx="20" fill="#ffe0e6" stroke="#17345f" stroke-width="2.5"/>
+      <circle cx="858" cy="286" r="24" fill="#17345f"/><text x="858" y="291" text-anchor="middle" class="mono step-number" fill="#f2ff67">04</text>
+      <text x="844" y="338" class="sans step-title ink"><tspan x="844">Scorer</tspan><tspan x="844" dy="25">contract</tspan></text>
+      <text x="844" y="403" class="sans step-copy body"><tspan x="844">Parser, grader, rubric,</tspan><tspan x="844" dy="20">threshold, metric.</tspan></text>
+    </g>
+    <g role="group" aria-labelledby="step-5-title">
+      <title id="step-5-title">Step 5: aggregation</title>
+      <rect class="step" x="1072" y="246" width="226" height="224" rx="20" fill="#fff5de" stroke="#17345f" stroke-width="2.5"/>
+      <circle cx="1112" cy="286" r="24" fill="#17345f"/><text x="1112" y="291" text-anchor="middle" class="mono step-number" fill="#f2ff67">05</text>
+      <text x="1098" y="338" class="sans step-title ink"><tspan x="1098">Aggregation</tspan><tspan x="1098" dy="25">and uncertainty</tspan></text>
+      <text x="1098" y="403" class="sans step-copy body"><tspan x="1098">Show trial structure,</tspan><tspan x="1098" dy="20">variation, exclusions.</tspan></text>
+    </g>
+    <g role="group" aria-labelledby="step-6-title">
+      <title id="step-6-title">Step 6: bounded claim</title>
+      <rect class="step" x="1326" y="246" width="218" height="224" rx="20" fill="#f2ff67" stroke="#17345f" stroke-width="2.5"/>
+      <circle cx="1366" cy="286" r="24" fill="#17345f"/><text x="1366" y="291" text-anchor="middle" class="mono step-number" fill="#f2ff67">06</text>
+      <text x="1352" y="338" class="sans step-title ink"><tspan x="1352">Bounded</tspan><tspan x="1352" dy="25">claim</tspan></text>
+      <text x="1352" y="403" class="sans step-copy body"><tspan x="1352">State what the result</tspan><tspan x="1352" dy="20">supports and leaves open.</tspan></text>
+    </g>
+  </g>
+
+  <g role="group" aria-labelledby="profile-title">
+    <title id="profile-title">Reusable result profile</title>
+    <path d="M50 542H1518L1550 574V946H50Z" fill="#17345f" transform="translate(9 9)" aria-hidden="true"/>
+    <path d="M50 542H1518L1550 574V946H50Z" fill="#17345f" stroke="#17345f" stroke-width="3"/>
+    <path d="M1518 542V574H1550Z" fill="#f2ff67" stroke="#17345f" stroke-width="3" aria-hidden="true"/>
+    <text x="82" y="585" class="mono eyebrow" fill="#65d8d0">REUSABLE RESULT PROFILE · KEEP THESE DISTINCTIONS TOGETHER</text>
+
+    <rect class="profile" x="82" y="620" width="436" height="258" rx="18" fill="#cfe7f7" stroke="#fff" stroke-width="2"/>
+    <text x="110" y="658" class="mono profile-label ink">OBSERVED ON THE FIXED BENCHMARK</text>
+    <text x="110" y="699" class="sans profile-title ink">Benchmark accuracy</text>
+    <text x="110" y="738" class="sans profile-copy body"><tspan x="110">A score on the particular sampled items</tspan><tspan x="110" dy="23">under the recorded run and scoring rules.</tspan></text>
+    <text x="110" y="809" class="sans profile-copy body"><tspan x="110">Useful as an observation. It remains tied</tspan><tspan x="110" dy="23">to this benchmark coordinate.</tspan></text>
+
+    <rect class="profile" x="582" y="620" width="436" height="258" rx="18" fill="#fff5de" stroke="#fff" stroke-width="2"/>
+    <text x="610" y="658" class="mono profile-label ink">INFERRED BEYOND THE SAMPLED ITEMS</text>
+    <text x="610" y="699" class="sans profile-title ink">Generalized accuracy</text>
+    <text x="610" y="738" class="sans profile-copy body"><tspan x="610">An estimate for a defined item population,</tspan><tspan x="610" dy="23">supported by a stated statistical model.</tspan></text>
+    <text x="610" y="809" class="sans profile-copy body"><tspan x="610">Population, assumptions, and uncertainty</tspan><tspan x="610" dy="23">travel with the estimate.</tspan></text>
+
+    <rect class="profile" x="1082" y="620" width="436" height="258" rx="18" fill="#ffe0e6" stroke="#fff" stroke-width="2"/>
+    <text x="1110" y="658" class="mono profile-label ink">INTERPRETATION CONDITIONS</text>
+    <text x="1110" y="699" class="sans profile-title ink">Validity checks</text>
+    <text x="1110" y="738" class="sans profile-copy body"><tspan x="1110">Contamination signal, evaluation awareness,</tspan><tspan x="1110" dy="23">grader gaming, harness fit, and exclusions.</tspan></text>
+    <text x="1110" y="809" class="sans profile-copy body"><tspan x="1110">Each check can narrow or redirect the claim</tspan><tspan x="1110" dy="23">without erasing the underlying observation.</tspan></text>
+  </g>
+
+  <text x="50" y="1000" class="mono footer body">The structured reading beside this figure carries definitions, source links, grader choices, and the complete reporting profile.</text>
+</svg>

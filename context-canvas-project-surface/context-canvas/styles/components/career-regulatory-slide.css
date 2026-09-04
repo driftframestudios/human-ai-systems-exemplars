@@ -11,6 +11,8 @@
 
 /* Main slide container */
 .career-slide {
+    --career-card-ink: #17345f;
+    --career-copper-ink: #986532;
     max-width: 900px;
     width: 100%;
     display: grid;
@@ -105,7 +107,7 @@
     background: rgba(255, 255, 255, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(4px);
-    color: white;
+    color: var(--career-card-ink);
 }
 
 /* Badge in primary card */
@@ -125,13 +127,13 @@
 .accent-card__number {
     font-size: 2rem;
     font-weight: 900;
-    color: #d4a574;
+    color: var(--career-copper-ink);
     line-height: 1;
 }
 
 .accent-card__number--small {
     font-size: 1.5rem;
-    color: white;
+    color: inherit;
     margin-bottom: 0.25rem;
 }
 

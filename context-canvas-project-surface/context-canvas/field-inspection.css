@@ -162,6 +162,8 @@
 }
 
 .field-inspection-implementation-field {
+    --canvas-link-color: var(--canvas-link-on-dark);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
     background: var(--inspection-iron);
     color: var(--inspection-warm-white);
 }
@@ -175,11 +177,6 @@
     border-block-end-color: var(--inspection-coral);
 }
 
-.field-inspection-implementation-field :is(a, a:visited, code),
-.field-inspection-assurance-field :is(a, a:visited, code) {
-    color: var(--inspection-acid);
-}
-
 .field-inspection-implementation-field .architecture-pair article,
 .field-inspection-implementation-field .implementation-companion {
     color: var(--inspection-ink);
@@ -191,6 +188,8 @@
 }
 
 .field-inspection-implementation-field .implementation-companion {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
     background: var(--inspection-cream);
     border: .125rem solid var(--inspection-ink);
     border-inline-start: .55rem solid var(--inspection-coral);
@@ -200,6 +199,8 @@
 
 .field-inspection-implementation-field .table-scroll,
 .field-inspection-assurance-field .table-scroll {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
     background: var(--inspection-warm-white);
     border: .125rem solid var(--inspection-ink);
     border-radius: .55rem;
@@ -251,6 +252,8 @@
 }
 
 .field-inspection-assurance-field {
+    --canvas-link-color: var(--canvas-link-on-dark);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
     background: var(--inspection-ink);
     color: var(--inspection-warm-white);
 }
@@ -322,6 +325,8 @@
 
 .field-inspection-evidence-boundary,
 .field-inspection-final-boundary {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
     background: var(--inspection-warm-white);
     border: .125rem solid var(--inspection-ink);
     border-inline-start: .65rem solid var(--inspection-coral);
@@ -411,6 +416,8 @@
     }
 
     .field-inspection-page :is(.field-inspection-implementation-field, .field-inspection-assurance-field) {
+        --canvas-link-color: var(--canvas-link-on-light);
+        --canvas-link-visited-color: var(--canvas-link-visited-on-light);
         background: #fff !important;
         color: #000 !important;
     }
