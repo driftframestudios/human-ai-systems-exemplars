@@ -166,7 +166,7 @@ Metadata informs vocabulary and route separation. The repository skill remains s
 
 ### Corpus cautions
 
-The 2026-08-23 sweep sampled 385 `::fragments` rows, 465 `~loamthread` rows, 6 Generated Research rows, 41 Research Registry rows, 59 Narrative Affordance rows, and 12 Narrative Architecture rows. The larger exploratory corpora rarely propagate every observation into a touched page. The smaller generated-research corpus cannot support empirical skill-effectiveness inference. Blank drift-risk, instruction-implication, research-link, or lifecycle fields remain unclassified state rather than negative evidence.
+A varied workspace sampling pass showed that exploratory collections contribute vocabulary and situated observations while only a small portion changes the artifact in front of the team. Sparse research collections support qualitative route decisions rather than empirical skill-effectiveness inference. Blank drift-risk, instruction-implication, research-link, or lifecycle fields remain unclassified state rather than negative evidence.
 
 These findings support a compact initial skill and natural-use observation. They do not support a performance dashboard or a statistical promotion gate.
 
@@ -207,39 +207,39 @@ skill_billet:
 
 ### Scenario: An active skill has decision-changing friction
 
-Given an active skill owns the receiving job<br>
-And material use reveals one instruction gap that would change the next result<br>
-When another similar use is prepared<br>
-Then the route is `iterate_now`<br>
-And the narrowest behavior-changing instruction receives revision
+- Given an active skill owns the receiving job
+- And material use reveals one instruction gap that would change the next result
+- When another similar use is prepared
+- Then the route is `iterate_now`
+- And the narrowest behavior-changing instruction receives revision
 
 ### Scenario: A portable contract has no receiving job yet
 
-Given a collaboration surface contains a durable cognitive contract<br>
-And several future skills could be forged from it<br>
-And no immediate task selects among those forms<br>
-When stewardship reviews the candidate<br>
-Then the route is `queue_with_trigger`<br>
-And the contract remains available with a forge condition
+- Given a collaboration surface contains a durable cognitive contract
+- And several future skills could be forged from it
+- And no immediate task selects among those forms
+- When stewardship reviews the candidate
+- Then the route is `queue_with_trigger`
+- And the contract remains available with a forge condition
 
 ### Scenario: Two skills converge on one job
 
-Given two skills route from materially identical triggers to the same receiving result<br>
-And one owner can preserve the useful rules and source links<br>
-When duplicate routing increases attention cost<br>
-Then the route is `merge_or_retire`<br>
-And Git history or threadkeeping preserves the lineage and future re-formation trigger
+- Given two skills route from materially identical triggers to the same receiving result
+- And one owner can preserve the useful rules and source links
+- When duplicate routing increases attention cost
+- Then the route is `merge_or_retire`
+- And Git history or threadkeeping preserves the lineage and future re-formation trigger
 
 ### Scenario: A second research pass confirms the current route
 
-Given direct sources and a varied second sample support the same route<br>
-And a database-metadata sweep adds vocabulary without changing the decision<br>
-When further retrieval would repeat the evidence shape<br>
-Then research settles<br>
-And the selected skill action proceeds with the source boundary visible
+- Given direct sources and a varied second sample support the same route
+- And a database-metadata sweep adds vocabulary without changing the decision
+- When further retrieval would repeat the evidence shape
+- Then research settles
+- And the selected skill action proceeds with the source boundary visible
 
 ## Research grounding
 
-The [collaboration-accounting source capsule](../../../../planning/repository-skill-architecture.md#collaboration-accounting-source-capsule) carries `ca-ref-001..005`: the Enterprise Human-AI Practitioner Registry, Narrative Architecture Orientation Index candidacy role, Practitioner Probes, Affordance Stewardship and Research Ledger, and Verbalized Sampling. Together they supplied the distinctions used here: affordance and activation, proposal and authority, contextual use and promotion, probability and fit, and working preparation and receiving outcome.
+The repository-local source capsule carries five operator-blind relations for the collaboration-accounting research. Together they supplied the distinctions used here: affordance and activation, proposal and authority, contextual use and promotion, probability and fit, and working preparation and receiving outcome. Exact workspace lineage remains with its authorized resolver.
 
 Additional workspace material informed the synthesis without becoming direct repository citation or runtime dependency. The repository-local contract remains the operative routing surface; natural material use remains the outside evidence path.

@@ -84,39 +84,39 @@ Promotion is a new route decision rather than an automatic consequence of surviv
 
 ### Scenario: A bounded task benefits from its own routing entry
 
-Given a portable skill contract owns the durable behavior<br>
-And a named task will receive several materially meaningful collaboration turns<br>
-And local source, scope, tool, and lifetime bindings would save repeated reconstruction<br>
-When the temporary artifact receives an exit event and default disposition<br>
-Then a task-bound skill projection forms at routable depth one<br>
-And the source contract retains durable authority
+- Given a portable skill contract owns the durable behavior
+- And a named task will receive several materially meaningful collaboration turns
+- And local source, scope, tool, and lifetime bindings would save repeated reconstruction
+- When the temporary artifact receives an exit event and default disposition
+- Then a task-bound skill projection forms at routable depth one
+- And the source contract retains durable authority
 
 ### Scenario: One projection suggests another projection
 
-Given an active task-bound projection already sits at routable depth one<br>
-And the task reveals another local distinction<br>
-When that distinction remains part of the same receiving job<br>
-Then a non-routable context capsule carries the additional detail<br>
-And the projection tree remains one routable edge deep
+- Given an active task-bound projection already sits at routable depth one
+- And the task reveals another local distinction
+- When that distinction remains part of the same receiving job
+- Then a non-routable context capsule carries the additional detail
+- And the projection tree remains one routable edge deep
 
 ### Scenario: A local projection reveals a distinct durable job
 
-Given natural use reveals a transferable job with distinct trigger territory<br>
-And that job extends beyond the current receiving task<br>
-When collaboration accounting selects `create_now` from independent evidence<br>
-Then a new portable skill contract forms at depth zero<br>
-And the temporary projection retains its planned exit
+- Given natural use reveals a transferable job with distinct trigger territory
+- And that job extends beyond the current receiving task
+- When collaboration accounting selects `create_now` from independent evidence
+- Then a new portable skill contract forms at depth zero
+- And the temporary projection retains its planned exit
 
 ### Scenario: The task settles without durable learning
 
-Given the projection served its receiving task<br>
-And no observation would change the portable contract or another future decision<br>
-When the exit event occurs<br>
-Then the projection retires through normal review<br>
-And successful local use remains sufficient evidence
+- Given the projection served its receiving task
+- And no observation would change the portable contract or another future decision
+- When the exit event occurs
+- Then the projection retires through normal review
+- And successful local use remains sufficient evidence
 
 ## Research grounding
 
-The [collaboration-accounting source capsule](../../../../planning/repository-skill-architecture.md#collaboration-accounting-source-capsule) carries `ca-ref-001` and `ca-ref-006..008`: the Enterprise Human-AI Practitioner Registry, Narrative Architecture Orientation Index task-projection role, Core Architecture Projections, and Narrative Capsules. Together they supplied the distinctions used here: architecture and affordance, source and projection, profile and instance, selected state and portable capsule, receipt and agreement, and return proposal and source decision.
+The repository-local source capsule carries four operator-blind relations for this projection research. Together they supplied the distinctions used here: architecture and affordance, source and projection, profile and instance, selected state and portable capsule, receipt and agreement, and return proposal and source decision. Exact workspace lineage remains with its authorized resolver.
 
 Additional workspace material informed the release posture without becoming direct repository citation or runtime dependency. The repository-local depth allowance remains a working design choice to be revised through natural use.

@@ -10,7 +10,7 @@ the artifact itself supplies runtime behavior.
 
 - `core-architectures-chimeric-prototype-manifest-v0.1.json` names the current
   pack entries, versions, paths, and material byte or digest receipts.
-- `core-architectures-chimeric-prototype-pack-index-v0.1.html` provides the
+- `core-architectures-chimeric-prototype-pack-index-v0.1.3.html` provides the
   human-facing pack route.
 - `strategy-canvas-system-v0.2/` owns the shared Strategy Canvas schema,
   validator, state engine, canonical source, and build contract.
@@ -18,9 +18,114 @@ the artifact itself supplies runtime behavior.
   is the Context Canvas projection. Its local manifest names the copied and
   adapted paths, including the Context-specific Strategy Canvas workbench.
 
+Current Core JSON-LD terms use
+`https://vik.guru/vocabulary/core-architectures#`. Upstream Revision Loop
+instances use
+`https://vik.guru/id/core-architectures/upstream-revision-loop/`. These stable
+identifiers travel inside each self-contained artifact and create no runtime
+request. The source manifest declares the current semantic coordinates, while
+prior versioned files preserve their earlier identifiers as history.
+
 Artifact variation is part of the family: route-specific layout, color,
 density, interaction, and evidence posture remain available while stable IDs,
 current versions, and declared source relationships keep the pack legible.
+
+## Visitor-visible authorship and license
+
+The pack hub and each of the 21 current prototype documents carry their own
+authorship and licensing context: one `author` metadata value, one Apache-2.0
+license relation, and one semantic `footer.artifact-attribution` with the full
+visitor-visible notice. The same contract is present in each Context Canvas
+projection, including its four intentional adaptations. The notice therefore
+travels directly with each self-contained HTML carrier across projections and
+publication.
+
+Strategy Canvas is maintained through its canonical template and stylesheet;
+the generated current distribution inherits the contract. The current visitor
+set covers Strategy Canvas v0.2.2. The resting v0.1.1 compatibility route is
+generated from its system-local source, including a location-correct link and
+the same attribution contract. Its Context Canvas workbench retains its
+adapted document and style owners. The repository-root `LICENSE` remains the
+complete license text.
+
+These standalone carriers also follow the repository-wide visitor-boundary
+rule: ordinary-language benchmark context, the exact MAPS marker, the exact
+BIG-bench marker, then attribution. Canonical HTML sources and the Strategy
+Canvas generator template own the copied carrier content; maintained Context
+projections and iframe package digests are rebuilt after a source change. The
+exact marker strings remain centralized in the Context Canvas visitor-boundary
+contract and its attribution tests.
+
+## Public iframe route projection
+
+`public-iframe-route-manifest-v1.json` binds the pack hub, 21 current Core
+prototypes, and one supplemental Context Canvas instrument to 23 exact aliases
+beneath `https://iframes.vik.guru/v1/core/`.
+It keeps four relations separate: authored source identity, transferable route
+projection, per-route activation standing, and live delivery. Forming the
+package does not activate a route. Supplemental delivery membership identifies
+the source owner explicitly; it does not add the Conditioning Field to the
+21-member Core Architecture source manifest.
+
+The same manifest carries each route's minimal carrier policy. The scriptless
+pack hub uses an empty sandbox. A prototype with executable behavior grants
+`allow-scripts`, and a route that writes clipboard text delegates only the
+`clipboard-write` Permissions Policy feature. Every current route now uses an
+ordinary inline notice, input, or two-step confirmation instead of native
+browser dialogs, so no route retains a held capability. An `eligible` route is
+invalid when any hold remains. The policy vocabulary stays intentionally
+narrow: a newly observed capability returns to source review and an explicit
+contract revision before activation.
+
+Build the ignored, dependency-free projection:
+
+```sh
+npm run build:iframe-routes
+```
+
+The root build stages and replaces the complete
+`.iframe-route-build/iframes.vik.guru/v1/` closure. This Core family is written
+to its `core/` child beside the separately declared
+[`canvas/`](../iframe-route-families/canvas/README.md) family and one aggregate
+receipt. Each Core prototype becomes its route-local `index.html` without
+changing its bytes. The
+hub alone receives projection-local links to its 21 sibling routes and
+`manifest.json`. The Conditioning Field receives a deterministic embedded
+single-file projection that leaves its standalone Context Canvas page
+authoritative while omitting shared navigation, popup exits, and runtime
+subresources. A deterministic `route-manifest.json` records source and
+projection digests, static-resource evidence, activation standing, and
+unresolved user-activated local navigation. It also records the observed
+runtime capabilities beside the exact carrier policy, making policy drift
+visible in the upload-ready receipt. The Strategy Canvas route also carries its
+explicitly linked JSON Schema as one route-local, content-typed companion.
+
+Verify the complete package in a temporary directory without retaining output:
+
+```sh
+npm run check:iframe-routes
+npm run test:iframe-routes
+```
+
+Runtime resources remain inline unless a route declares an exact
+`package_files` source-to-target allowlist with an explicit content type. The
+packager copies those regular files byte-for-byte beneath that route and
+rejects statically observable ambient or network references, path escape,
+symbolic links, missing files, and unused declarations. Ordinary citations and
+user-activated links are observed separately from runtime resources; an exact
+route-local companion named in `package_files` is also retained when an anchor
+reaches it. This lets
+parity and navigation decisions stay visible without silently rewriting an
+adapted receiver.
+
+The source scan covers resource-bearing markup, CSS and SVG dependency graphs,
+and selected JavaScript network primitives. It does not claim to prove every
+dynamic browser request. A browser request graph and the intended delivery
+policy remain required activation evidence for every selected route.
+
+The optional Strategy Canvas v0.1.1 compatibility alias remains resting and is
+not generated. Upload, Cloudflare configuration, neighboring-path behavior,
+receiver repointing, and public activation remain later review steps.
 
 ## Direct checks
 

@@ -82,7 +82,9 @@ Every selected candidate receives the same fixtures:
 4. editable state with JSON / JSON-LD round trip;
 5. styling or component-layer replacement.
 
-The surface records `planned`, `illustrative_walkthrough`, `in_progress`, `observed`, `verified`, `blocked`, or `deferred`. The seed data uses planning and illustrative states rather than claiming completed verification.
+The surface records `planned`, `working_example`, `in_progress`, `observed`, `verified`, `blocked`, or `deferred`. The sample state uses planning and working-example states rather than claiming completed verification.
+
+Current exports use `uncalibrated_verbalized_sample`, `uncalibrated_planning_estimate`, `sample_state`, and `working_example`. Browser imports normalize the earlier `illustrative_verbalized_sample`, `illustrative_planning_estimate`, `illustrative_seed`, and `illustrative_walkthrough` values before validation and rendering, so a prior local save remains usable without carrying the older vocabulary into a new export.
 
 ## Practitioner Probe routes
 
@@ -172,4 +174,4 @@ The prototype provides:
 
 The paired Field Guide page supplies the fit-over-popularity, optionality, maintainability, accessibility, swapability, and Specification-by-Example posture.
 
-Candidate values are illustrative seed records. They are designed to be replaced or enriched by local team evidence, current primary documentation, Practitioner Probe findings, spike observations, and stewardship review.
+Candidate values are uncalibrated sample-state records. They are designed to be replaced or enriched by local team evidence, current primary documentation, Practitioner Probe findings, spike observations, and stewardship review.

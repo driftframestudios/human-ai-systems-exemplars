@@ -1,0 +1,34 @@
+# Canvas iframe route family
+
+`public-iframe-route-manifest-v1.json` declares the 15 non-Core documents that
+Context Canvas visitor surfaces embed beneath
+`https://iframes.vik.guru/v1/canvas/`. The `canvas` token describes the
+receiving delivery family. Each listed HTML file remains semantic authority
+for its own prototype or instrument.
+
+The manifest keeps these concerns explicit:
+
+- one exact public alias and reader job per source document;
+- generated attribution and visitor-boundary decoration where the source does
+  not already carry the governed stack;
+- declared rewrites for onward primary-site navigation;
+- exact route-local files for SVG, JSON, or other non-inline dependencies;
+- the smallest observed sandbox and Permissions Policy capability set; and
+- one activation standing that remains distinct from upload and live delivery.
+
+Build Core and Canvas together from the repository root:
+
+```sh
+npm run build:iframe-routes
+```
+
+The Canvas upload root is
+`.iframe-route-build/iframes.vik.guru/v1/canvas/`. The sibling Core package and
+the deterministic aggregate receipt are generated in the same staged `v1`
+replacement. Use `npm run check:iframe-routes` to verify a temporary clean
+generation without retaining output, and `npm run test:iframe-routes` for the
+focused package contracts.
+
+The generated `index.html` files are projections. Preserve the repository
+sources, retain adjacent full-view links on the primary visitor surface, and
+regenerate the family when a source or route contract changes.

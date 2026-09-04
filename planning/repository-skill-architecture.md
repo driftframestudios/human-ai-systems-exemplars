@@ -3,8 +3,8 @@
 ```yaml
 planning_surface:
   id: "prototype-exemplars.repository-skills.v0.1"
-  as_of: "2026-08-25"
-  status: "thirteen portable contracts; two settled projections; first typed exchange family active"
+  as_of: "2026-08-31"
+  status: "nineteen portable contracts; two settled projections; first typed exchange family active"
   standing_ground: "AGENTS.md"
   skill_root: ".agents/skills"
   later_tranche_issue: work:repository-skill-tranche
@@ -189,7 +189,7 @@ The first experiment was `context-canvas-ai-systems-css-projection`. It bound `c
 
 ### Source authority mapping, Issue Chain, locator boundary, and planning inventory
 
-Three material corpora activated the resting `source-authority-mapping` candidate. Schema publication distinguished canonical identity, authored source, publication authority, delivery, and retrieval. The Context Canvas link wave traced internal workspace sources into Registry-facing receivers while preserving lineage and adaptation needs. The [root source-ownership map](../README.md#source-ownership-and-receiving-routes) then separated standalone release owners, integrated snapshots, reviewed projections, and delivery hosts. Together they establish a distinct source-to-receiver job with immediate material use.
+Three material corpora activated the resting `source-authority-mapping` candidate. Schema publication distinguished canonical identity, authored source, publication authority, delivery, and retrieval. The Context Canvas link wave traced internal workspace sources into Registry-facing receivers while preserving lineage and adaptation needs. The [root source-ownership map](../README.md#source-projection-and-delivery-retain-separate-ownership) then separated standalone release owners, integrated snapshots, reviewed projections, and delivery hosts. Together they establish a distinct source-to-receiver job with immediate material use.
 
 `source-authority-mapping` therefore enters through `create_now`. It traces one claim, artifact, or contract through semantic ownership, exact source, typed projections, delivery, receiving use, and promotion. The Collaboration Skills 0.1.0 family makes that contract loadable by another platform while its `SKILL.md` remains semantic authority.
 
@@ -328,28 +328,43 @@ The lean repository probe keeps five fields: question, why it matters, mechanism
 | Skill | Coherent job | Typical trigger | Useful result |
 | --- | --- | --- | --- |
 | `repository-reentry` | Reconstruct current truth across repository and GitHub surfaces | Resume, handoff, status reconciliation, stale plan | Settled/current/open/next model with one re-entry route |
+| `repository-collaboration-cycle` | Carry one authorized task from re-entry through route selection, conditional setup, source-owned execution, evidence, delivery, and exact continuation | A cold or resumed collaborator is expected to complete a full repository cycle | One receiver-ready change, finding, or held route with proportionate evidence and exact re-entry |
 | `context-canvas-surface-reading` | Read one page or family as visitor surface and design input | Assessment, planning, material Canvas change | Standing, visitor ability, evidence, owners, fingerprint, family effects |
 | `context-canvas-css-ownership` | Make CSS ownership, extraction, and selector migration legible | `expanded.css`, first paint, cascade, rename, contract map | Consumer map, receiving module, affected-family comparison |
+| `context-canvas-visual-verification` | Select proportionate source-bound visual and browser evidence | Layout, responsive behavior, interaction state, print, forced colors, visible regression | Fitting reference or focused check, interpreted result, limits, risk, and next receiver |
 | `practitioner-probe` | Turn ambiguous terrain into a decision-changing technical question | Plausible-but-shallow code, unclear gap, issue assessment | Mechanism, observation, instruction yield, bounded route |
 | `supportive-change-writing` | Produce negation-aware, evidence-calibrated repository prose | README, planning, issue, instructions, explanation | Desired state, authority, evidence limit, revisable next move |
+| `contextual-jargon-scan` | Distinguish exact language and useful compact metaphors from replaceable inside shorthand | Public, visitor-facing, cross-team, or durable prose with a bounded reader job | Scoped occurrence map, targeted revisions, intentional retentions, verification, and any material deferral |
 | `evidence-grounded-research-spike` | Convert current evidence into a bounded repository decision | Contemporary technical or collaboration question | Synthesis, evidence map, instruction delta, transfer limits |
 | `declarative-skill-authoring` | Author a transferable skill through contract, rules, workflow, and sparse scenarios | New skill, routing friction, scenario layering, conditional context | Conventional skill with explicit behavior, transfer boundary, and completion |
 | `collaboration-accounting` | Route decision-changing observations through an accretive skill lifecycle | Reusable affordance, active-skill friction, queued candidate, skill recursion | One skill route, smallest action, evidence boundary, and re-entry trigger |
 | `schema-contract-authoring` | Shape bounded schema families with explicit identity, authority, dependency, retrieval, and examples | Schema root, revision, semantic context, publication route, linked projection | Versioned contract whose ownership, closure, examples, and extension points remain legible |
 | `source-authority-mapping` | Trace a claim, artifact, or contract from semantic owner through projections and delivery to a receiver | Cross-repository promotion, workspace citation, mirror, snapshot, ownership ambiguity | Authoritative source, typed relations, receiving decision, and re-entry coordinate |
 | `issue-chain-stewardship` | Make related issues legible as a revisable route while each retains its own contract | One issue prepares, blocks, contains, runs alongside, receives, or returns to another | Current front, evidenced relations, transition receipt, next receiver, and release event |
+| `bounded-support-routing` | Compose one finite support contribution with an explicit return and stop | A bounded observation, patch, research, validation, or recovery request needs a handback | Action mode, known-good point, observable return, handback, and stopping event |
 | `locator-boundary-stewardship` | Project locator-safe public records while authorized lineage stays recoverable | Public-history preparation, durable collaboration prose, gated source coordinates | Public semantic receiver, paired resolver mapping, bounded receipt, and re-entry route |
 | `stateful-artifact-behavior-contracts` | Select the smallest source-grounded behavior contract for a stateful artifact exchange | Import, edit, export, semantic twin, minimum usable state, retained-state recovery | Focused executable journey whose accepted and rejected paths leave state intelligible |
 | `secret-boundary-inspection` | Produce a canary-proven, scope-explicit secret-material observation | Repository snapshot, exact proposed index, local-ref history, generated artifact, successor reception | Safe clean receipt tied to engine, configuration, canary, and scope, or a private finding route |
+| `repository-attribution-stewardship` | Align copyright-holder, citation, contribution, notice, and bounded machine-projection carriers | Repository attribution, citation metadata, contributor credit, or adaptation guidance changes | Distinct carrier roles, proportionate attribution, and an evidence-calibrated governance return |
+| `collaboration-runbook-authoring` | Convert a settled multi-phase route into a re-entrant versioned procedure | Known work spans several source owners, Issues, checks, recovery paths, and handbacks | AI-legible entry, authority, action modes, checks, recovery, stop, and handback |
 
-Fourteen portable skill contracts now form the standing catalog. The first
-eight began as instruction-only experiments. Six later contracts joined after
+Twenty portable skill contracts now form the standing catalog. The first
+eight began as instruction-only experiments. Twelve later contracts joined after
 material work established distinct receiving jobs:
-`schema-contract-authoring`, `source-authority-mapping`,
-`issue-chain-stewardship`, `locator-boundary-stewardship`,
-`stateful-artifact-behavior-contracts`, and
-`secret-boundary-inspection`. Each remains a revisable transport surface whose
-contribution is read through the receiving work.
+`contextual-jargon-scan`, `schema-contract-authoring`, `source-authority-mapping`,
+`issue-chain-stewardship`, `bounded-support-routing`,
+`locator-boundary-stewardship`, `stateful-artifact-behavior-contracts`,
+`secret-boundary-inspection`, `repository-attribution-stewardship`,
+`collaboration-runbook-authoring`, `context-canvas-visual-verification`, and
+`repository-collaboration-cycle`. Each remains a revisable transport
+surface whose contribution is read through the receiving work.
+
+The [repository collaboration cycle option analysis](repository-collaboration-cycle-options.md)
+records the distinct full-cycle receiving job, selected one-runbook
+architecture, conditional domain overlays, and capacity-aware bounded-support
+branch. `repository-reentry` retains truth reconstruction;
+`bounded-support-routing` retains each finite packet; material skills retain
+their source behavior.
 
 ### Settled task-bound projections
 
@@ -365,14 +380,14 @@ No task-bound projection is currently active. The two completed projections rema
 | Candidate skill | High-value affordance | Re-entry condition |
 | --- | --- | --- |
 | Interactive instrument state mapping | Extend `stateful-artifact-behavior-contracts` when control-to-state causality, reset or undo, persistence, provenance, and input semantics form a distinct receiving result | A control-heavy Open Lesson, Strategy Canvas, or Initiative Costing change exposes work that the formed exchange contract cannot carry |
-| Semantic information-surface authoring | Shape content-led explanatory pages with early orientation, semantic structure, comfortable measure, native navigation, and source boundaries | The [Collaboration Skills visitor page](../context-canvas-project-surface/context-canvas/collaboration-skills.html) demonstrates a distinct authoring job that surface reading, supportive writing, and CSS ownership do not already carry well |
+| Semantic information-surface authoring | Shape content-led explanatory pages through hierarchy, measure, grouping, heading information scent, link wording, reading rhythm, and source boundaries; an `attention-ergonomics` lens can foreground fatigue and scanning without prescribing an F-shaped layout | Two materially different authoring or refactor tasks demonstrate a distinct intervention beyond surface reading, supportive writing, and CSS ownership, and at least one supplies human reading or task-completion evidence; milestone-22 issue #150 is the next probe |
 | Collaboration handoff capsule | Carry explicit referents, settled decisions, evidence, authority, open state, artifact pointers, and next moves across collaborators or platforms | A current-handoff or prompt-capsule artifact receives real cross-platform human or AI use |
 | Decision-instrument modeling | Keep units, assumptions, calculations, uncertainty, scenarios, sensitivity, explanation, and leave-behind behavior legible | The Initiative Costing refactor begins and exposes a repeated modeling job |
 | Facilitated session state | Separate participant turns, votes, aggregation, overrides, notes, settlement, provenance, and reports | Multi-participant Strategy Canvas implementation begins |
 | Embedded-origin boundary | Make host and guest authority, framing, message exchange, sizing, loading, and fallback behavior explicit | The [prototype-delivery collaboration](context-canvas/open-issue-collaboration-waves.md) or an iframe packaging wave produces repeated origin-boundary decisions |
 | Reference-affordance extraction | Separate visible form from ergonomic, interaction, accessibility, spatial, and facilitation implications | Another authored visual reference supplies a material implementation use |
-| Visual-reference cycle | Discover routes, capture initial states, compare composition, and summarize local artifacts | The [all-page reference runner](context-canvas/css-modularization-and-visual-reference-plan.md) exists and two real CSS waves reveal the stable human/AI review sequence |
-| Visual-fingerprint stewardship | Distinguish contract fidelity from welcome page-family variation | Two refactors surface the same ambiguity about preservation versus intentional change |
+| Agent observation channel agreement | Map one browser task across semantic/accessibility, DOM geometry, and rendered screenshot channels, then route a decision-changing divergence | Milestone-22 issue #149 runs a real repository task through an AX/DOM-style observation and a screenshot/VLM-style observation, and the result changes a decision beyond surface reading plus a practitioner probe |
+| Surface color-state stewardship | Carry a painted-owner foreground and state contract into a visitor system outside Context Canvas | A second non-Canvas system needs the same role/state/mode matrix and exposes a distinct decision not already carried by its CSS owner or visual-verification route |
 | Cloudflare contextual delivery | Connect a Canvas source closure to direct view, Worker envelope, storage, and framing choices | Another authorized proof requires a repeated delivery decision beyond the existing pilot |
 | LIMS/ELN constellation re-entry | Navigate five source repositories, the integrated nucleus, issue long tail, and pull-request reassessment | Context Canvas workflows settle and constellation reassessment resumes |
 | Debrief composition stewardship | Map source-native movements, catalog relationships, route rail, and shared composition CSS | The Debriefs CSS tranche establishes stable module boundaries |
@@ -383,8 +398,15 @@ No task-bound projection is currently active. The two completed projections rema
 
 These candidates are vocabulary and possibility, rather than a commitment to populate the catalog. A future tranche should remain smaller than the set of recurring jobs it replaces. Single selectors, one-off bug mechanisms, exact visual choices, and current vendor facts continue through ordinary reasoning, owning skills, or current official documentation.
 
+The former Visual-reference cycle billet has precipitated into
+`context-canvas-visual-verification`. Visual-fingerprint stewardship folds into
+that contract's distinction between intended route variation and regression.
+The [visual-consistency cultivation plan](context-canvas/visual-consistency-skill-cultivation.md)
+records the source evidence, private/public Registry boundary, and next natural
+uses.
+
 This candidate ledger preserves later skill terrain as a collaboration
-surface. Fourteen portable contracts form the standing experiment; the two
+surface. Twenty portable contracts form the standing experiment; the two
 retired projections remain available as use evidence through Git history and
 threadkeeping.
 
@@ -401,7 +423,7 @@ Fresh-context comparison remains occasional and human-visible. It enters when a 
 - **Skill version manifests and changelogs:** Git history owns repository-local evolution. Version metadata returns when compatibility or external distribution requires it.
 - **Further machine-readable skill architecture:** Collaboration Skills 0.1.0 now carries one portable contract, one retired projection, and one collaboration account into a named visitor-facing adoption kit. JSON-LD, composition objects, registries, routing services, and hosted workflows return only when another material receiver needs them.
 - **Projection registry:** each projection declares its own binding profile and exit event. A separate inventory returns only if concurrent projections make re-entry materially difficult.
-- **Router skill:** twelve distinct descriptions remain easy for a human and model to scan. Catalog growth and observed misrouting can earn a router.
+- **Router skill:** nineteen distinct descriptions remain easy for a human and model to scan. Observed misrouting or further material catalog growth can earn a router.
 - **Plugin packaging:** local practice should stabilize the useful vocabulary first.
 - **Cross-model conformance matrix:** the portable `SKILL.md` form is sufficient for now; another target environment can earn its own reading.
 - **CI and hosted evaluations:** the prototype unit-test workflow is manually dispatchable, and its pull-request receiver rests by default. Setting `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` activates the bounded automatic path within the approved standard-runner Actions budget; local checks remain the ordinary development path.

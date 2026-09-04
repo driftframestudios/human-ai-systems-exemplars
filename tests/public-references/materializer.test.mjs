@@ -14,6 +14,8 @@ import { dirname, join, win32 } from "node:path";
 import test from "node:test";
 
 import {
+  PUBLIC_AUTHOR_PROFILE_KEY,
+  PUBLIC_IFRAME_NAMESPACE,
   PUBLIC_REFERENCE_NAMESPACE,
   PUBLIC_REFERENCE_SOURCE,
   inspectPublicReferenceSource,
@@ -23,6 +25,12 @@ import {
 
 const PRIMARY_KEY = "PUBLIC_URL_REGISTRY_EXAMPLE_READING";
 const SECONDARY_KEY = "PUBLIC_URL_REGISTRY_SECOND_READING";
+const IFRAME_KEY = "PUBLIC_URL_IFRAME_CORE_HEART_CHART";
+const IFRAME_ROUTE = "https://iframes.vik.guru/v1/core/heart-chart/";
+const CONDITIONING_IFRAME_KEY = "PUBLIC_URL_IFRAME_CORE_CONDITIONING_FIELD";
+const CONDITIONING_IFRAME_ROUTE =
+  "https://iframes.vik.guru/v1/core/conditioning-field/";
+const PROFILE_ROUTE = "https://profiles.example/practitioner";
 const APP_NOTION_HOST = ["app", "notion", "com"].join(".");
 const WORKSPACE_NOTION_HOST = ["workspace", "notion", "so"].join(".");
 const SITE_NOTION_HOST = ["registry-example", "notion", "site"].join(".");
@@ -54,6 +62,77 @@ function pageWithTwin(key = PRIMARY_KEY) {
 </html>\n`;
 }
 
+function pageWithIframeTwins(key = IFRAME_KEY) {
+  const local = "prototypes/core-architectures/chimeric-pack-v0.1/heart-chart.html";
+  return `<!doctype html>
+<html>
+  <body>
+    <iframe src="${local}" data-public-src="{{${key}}}" title="HEART Chart" loading="lazy" sandbox="allow-scripts" allow="clipboard-write" referrerpolicy="no-referrer"></iframe>
+    <a href="${local}" data-public-href="{{${key}}}">Open HEART Chart</a>
+  </body>
+</html>\n`;
+}
+
+function professionalProfileScript(key = PUBLIC_AUTHOR_PROFILE_KEY) {
+  return `(function () {
+  "use strict";
+  var professionalProfileRoute = "{{${key}}}";
+  if (professionalProfileRoute.indexOf("{{PUBLIC_URL_") === -1) {
+    var professionalProfileLink = element("a", "", "Professional profile");
+    professionalProfileLink.href = professionalProfileRoute;
+    professionalProfileLink.setAttribute("aria-label", "View the author's professional profile");
+    network.appendChild(professionalProfileLink);
+  } else {
+    network.appendChild(
+      element(
+        "span",
+        "super-footer__reserved",
+        "Professional profile available in the public build",
+      ),
+    );
+  }
+}());\n`;
+}
+
+async function addProfessionalProfileScript(paths, source = professionalProfileScript()) {
+  const path = join(paths.htmlRoot, "canvas-shell.js");
+  await writeFile(path, source, "utf8");
+  return { path, source };
+}
+
+async function iframeRouteManifest(paths, {
+  publicAlias = "/v1/core/heart-chart/",
+  sourceFile = "heart-chart.html",
+  kind = "prototype",
+  sourceRoot,
+  sandboxTokens = ["allow-scripts"],
+  permissionsPolicy = ["clipboard-write"],
+} = {}) {
+  const manifestPath = join(paths.root, "public-iframe-route-manifest-v1.json");
+  await writeFile(
+    manifestPath,
+    `${JSON.stringify({
+      host: "iframes.vik.guru",
+      carrier_contract: {
+        sandbox_posture: "exact_per_route_allowlist",
+        permissions_policy_posture: "exact_per_route_allowlist",
+      },
+      routes: [{
+        kind,
+        ...(sourceRoot === undefined ? {} : { source_root: sourceRoot }),
+        source_file: sourceFile,
+        public_alias: publicAlias,
+        carrier_policy: {
+          sandbox_tokens: sandboxTokens,
+          permissions_policy: permissionsPolicy,
+        },
+      }],
+    })}\n`,
+    "utf8",
+  );
+  return manifestPath;
+}
+
 function jsonLdBodies(html) {
   const bodies = [];
   for (const match of html.matchAll(/<script\b[^>]*>[\s\S]*?<\/script>/gi)) {
@@ -66,6 +145,13 @@ function jsonLdBodies(html) {
     bodies.push(script.slice(openEnd + 1, closeStart));
   }
   return bodies;
+}
+
+function htmlAttribute(tag, name) {
+  const match = tag.match(
+    new RegExp(`(?:^|\\s)${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)')`, "i"),
+  );
+  return match?.[1] ?? match?.[2] ?? null;
 }
 
 async function assertContractFailure(promise, code, hiddenValue) {
@@ -126,6 +212,350 @@ test("materializes one resolved value into HTML and JSON-LD without changing sou
   const [jsonLd] = jsonLdBodies(generated).map((body) => JSON.parse(body));
   assert.equal(jsonLd.citation, approved);
   assert.deepEqual(await readFile(join(paths.outputRoot, "asset.bin")), asset);
+});
+
+test("materializes the exact shared professional-profile carrier without changing authored JavaScript", async (t) => {
+  const paths = await fixture(t, "<!doctype html><html><body></body></html>\n");
+  const authored = await addProfessionalProfileScript(paths);
+
+  const result = await materializePublicReferences({
+    ...paths,
+    environment: { [PUBLIC_AUTHOR_PROFILE_KEY]: PROFILE_ROUTE },
+  });
+
+  assert.equal(result.keyCount, 1);
+  assert.equal(result.occurrenceCount, 1);
+  assert.equal(result.anchorCount, 1);
+  assert.equal(result.affectedHtmlFileCount, 0);
+  assert.equal(result.affectedScriptFileCount, 1);
+  assert.equal(result.affectedSourceFileCount, 1);
+  assert.deepEqual(result.keys, [PUBLIC_AUTHOR_PROFILE_KEY]);
+  assert.equal(await readFile(authored.path, "utf8"), authored.source);
+
+  const generated = await readFile(
+    join(paths.outputRoot, "context-canvas", "canvas-shell.js"),
+    "utf8",
+  );
+  assert.match(
+    generated,
+    /var professionalProfileRoute = "https:\/\/profiles\.example\/practitioner";/,
+  );
+  assert.match(
+    generated,
+    /professionalProfileLink\.href\s*=\s*professionalProfileRoute/,
+  );
+  assert.equal(generated.includes("{{PUBLIC_URL_AUTHOR"), false);
+});
+
+test("preserves replacement-significant characters in a professional-profile destination", async (t) => {
+  const paths = await fixture(t, "<!doctype html><html><body></body></html>\n");
+  await addProfessionalProfileScript(paths);
+  const configured = "https://profiles.example/practitioner/$&?context=$'";
+  const expected = new URL(configured).href;
+
+  await materializePublicReferences({
+    ...paths,
+    environment: { [PUBLIC_AUTHOR_PROFILE_KEY]: configured },
+  });
+
+  const generated = await readFile(
+    join(paths.outputRoot, "context-canvas", "canvas-shell.js"),
+    "utf8",
+  );
+  const assignment = generated.match(
+    /var professionalProfileRoute = ("(?:[^"\\]|\\.)*");/u,
+  );
+  assert.ok(assignment);
+  assert.equal(JSON.parse(assignment[1]), expected);
+});
+
+test("keeps the professional-profile key within one exact script carrier", async (t) => {
+  await t.test("carrier outside the shared shell", async (t) => {
+    const paths = await fixture(t, "<!doctype html><html><body></body></html>\n");
+    await writeFile(
+      join(paths.htmlRoot, "route.js"),
+      `export const route = "{{${PUBLIC_AUTHOR_PROFILE_KEY}}}";\n`,
+      "utf8",
+    );
+    await assertContractFailure(
+      materializePublicReferences({
+        ...paths,
+        environment: { [PUBLIC_AUTHOR_PROFILE_KEY]: PROFILE_ROUTE },
+      }),
+      "PUBLIC_REFERENCE_TOKEN_SCOPE",
+    );
+  });
+
+  await t.test("second carrier in the shared shell", async (t) => {
+    const paths = await fixture(t, "<!doctype html><html><body></body></html>\n");
+    await addProfessionalProfileScript(
+      paths,
+      professionalProfileScript().replace(
+        'if (professionalProfileRoute.indexOf("{{PUBLIC_URL_") === -1) {',
+        `var secondProfileRoute = "{{${PUBLIC_AUTHOR_PROFILE_KEY}}}";\n  if (professionalProfileRoute.indexOf("{{PUBLIC_URL_") === -1) {`,
+      ),
+    );
+    await assertContractFailure(
+      materializePublicReferences({
+        ...paths,
+        environment: { [PUBLIC_AUTHOR_PROFILE_KEY]: PROFILE_ROUTE },
+      }),
+      "PUBLIC_REFERENCE_PROFILE_CARRIER",
+    );
+  });
+
+  for (const [label, mutate] of [
+    [
+      "inverted authored-token guard",
+      (source) => source.replace("=== -1", "!== -1"),
+    ],
+    [
+      "missing source-mode fallback",
+      (source) => source.replace(/\s*else\s*\{[\s\S]*?\n  \}\n\}\(\)\);/u, "\n  }\n}());"),
+    ],
+    [
+      "additional destination sink",
+      (source) => source.replace(
+        "professionalProfileLink.href = professionalProfileRoute;",
+        "professionalProfileLink.href = professionalProfileRoute;\n    navigator.sendBeacon(professionalProfileRoute);",
+      ),
+    ],
+    [
+      "additional indirect link sink",
+      (source) => source.replace(
+        "network.appendChild(professionalProfileLink);",
+        "navigator.sendBeacon(professionalProfileLink.href);\n    network.appendChild(professionalProfileLink);",
+      ),
+    ],
+  ]) {
+    await t.test(label, async (t) => {
+      const paths = await fixture(t, "<!doctype html><html><body></body></html>\n");
+      await addProfessionalProfileScript(paths, mutate(professionalProfileScript()));
+      await assertContractFailure(
+        materializePublicReferences({
+          ...paths,
+          environment: { [PUBLIC_AUTHOR_PROFILE_KEY]: PROFILE_ROUTE },
+        }),
+        "PUBLIC_REFERENCE_PROFILE_CARRIER",
+      );
+    });
+  }
+
+  await t.test("unsupported sibling key", async (t) => {
+    const paths = await fixture(t, "<!doctype html><html><body></body></html>\n");
+    await addProfessionalProfileScript(
+      paths,
+      professionalProfileScript("PUBLIC_URL_AUTHOR_OTHER_PROFILE"),
+    );
+    await assertContractFailure(
+      materializePublicReferences({ ...paths, environment: {} }),
+      "PUBLIC_REFERENCE_TOKEN_NAMESPACE",
+    );
+  });
+
+  await t.test("missing destination", async (t) => {
+    const paths = await fixture(t, "<!doctype html><html><body></body></html>\n");
+    await addProfessionalProfileScript(paths);
+    await assertContractFailure(
+      materializePublicReferences({ ...paths, environment: {} }),
+      "PUBLIC_REFERENCE_VALUE_MISSING",
+    );
+  });
+
+  for (const [label, value, code] of [
+    ["requires an absolute HTTPS destination", "profiles.example/practitioner", "PUBLIC_REFERENCE_VALUE_URL"],
+    ["requires a credential-free destination", "https://person:secret@profiles.example/practitioner", "PUBLIC_REFERENCE_VALUE_CREDENTIAL"],
+  ]) {
+    await t.test(label, async (t) => {
+      const paths = await fixture(t, "<!doctype html><html><body></body></html>\n");
+      await addProfessionalProfileScript(paths);
+      await assertContractFailure(
+        materializePublicReferences({
+          ...paths,
+          environment: { [PUBLIC_AUTHOR_PROFILE_KEY]: value },
+        }),
+        code,
+        value,
+      );
+    });
+  }
+});
+
+test("materializes a hosted iframe while its full-view route stays on the local base artifact", async (t) => {
+  const source = pageWithIframeTwins();
+  const paths = await fixture(t, source);
+
+  const result = await materializePublicReferences({
+    ...paths,
+    environment: { [IFRAME_KEY]: IFRAME_ROUTE },
+  });
+
+  assert.equal(result.keyCount, 1);
+  assert.equal(result.occurrenceCount, 2);
+  assert.equal(result.anchorCount, 1);
+  assert.equal(result.iframeCount, 1);
+  assert.deepEqual(result.keys, [IFRAME_KEY]);
+  assert.equal(await readFile(join(paths.htmlRoot, "index.html"), "utf8"), source);
+
+  const generated = await readFile(
+    join(paths.outputRoot, "context-canvas", "index.html"),
+    "utf8",
+  );
+  assert.match(generated, /src="https:\/\/iframes\.vik\.guru\/v1\/core\/heart-chart\/"/);
+  assert.match(generated, /data-public-src="https:\/\/iframes\.vik\.guru\/v1\/core\/heart-chart\/"/);
+  assert.match(
+    generated,
+    /href="prototypes\/core-architectures\/chimeric-pack-v0\.1\/heart-chart\.html"/,
+  );
+  assert.equal(
+    htmlAttribute(generated.match(/<a\b[^>]*>/i)?.[0] ?? "", "href"),
+    "prototypes/core-architectures/chimeric-pack-v0.1/heart-chart.html",
+  );
+  assert.match(generated, /data-public-href="https:\/\/iframes\.vik\.guru\/v1\/core\/heart-chart\/"/);
+  assert.match(generated, /title="HEART Chart"/);
+  assert.match(generated, /loading="lazy"/);
+  assert.match(generated, /sandbox="allow-scripts"/);
+  assert.match(generated, /allow="clipboard-write"/);
+  assert.match(generated, /referrerpolicy="no-referrer"/);
+  assert.equal(generated.includes("{{PUBLIC_URL"), false);
+});
+
+test("materializes a hosted iframe only when its configured route profile matches exactly", async (t) => {
+  const source = pageWithIframeTwins();
+  const paths = await fixture(t, source);
+  const iframeRouteManifestPath = await iframeRouteManifest(paths);
+
+  const result = await materializePublicReferences({
+    ...paths,
+    iframeRouteManifestPath,
+    environment: { [IFRAME_KEY]: IFRAME_ROUTE },
+  });
+
+  assert.equal(result.iframeCount, 1);
+  assert.match(
+    await readFile(join(paths.outputRoot, "context-canvas", "index.html"), "utf8"),
+    /sandbox="allow-scripts" allow="clipboard-write"/,
+  );
+});
+
+test("materializes a supplemental Context Canvas iframe with its local full view", async (t) => {
+  const local = "conditioning-field.html";
+  const source = `<!doctype html>
+<html>
+  <body>
+    <iframe src="${local}" data-public-src="{{${CONDITIONING_IFRAME_KEY}}}" title="Conditioning Field" loading="lazy" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe>
+    <a href="${local}" data-public-href="{{${CONDITIONING_IFRAME_KEY}}}">Open Conditioning Field</a>
+  </body>
+</html>\n`;
+  const paths = await fixture(t, source);
+  const iframeRouteManifestPath = await iframeRouteManifest(paths, {
+    publicAlias: "/v1/core/conditioning-field/",
+    sourceFile: "conditioning-field.html",
+    kind: "supplemental_instrument",
+    sourceRoot: "context-canvas-project-surface/context-canvas",
+    permissionsPolicy: [],
+  });
+
+  const result = await materializePublicReferences({
+    ...paths,
+    iframeRouteManifestPath,
+    environment: { [CONDITIONING_IFRAME_KEY]: CONDITIONING_IFRAME_ROUTE },
+  });
+
+  assert.equal(result.iframeCount, 1);
+  const generated = await readFile(
+    join(paths.outputRoot, "context-canvas", "index.html"),
+    "utf8",
+  );
+  assert.match(generated, /src="https:\/\/iframes\.vik\.guru\/v1\/core\/conditioning-field\/"/);
+  assert.match(generated, /href="conditioning-field\.html"/);
+  assert.match(generated, /sandbox="allow-scripts"/);
+  assert.doesNotMatch(generated, /\sallow=/);
+});
+
+test("rejects globally narrow iframe policies that drift from their exact route profile", async (t) => {
+  const cases = [
+    {
+      name: "missing script grant",
+      source: pageWithIframeTwins().replace('sandbox="allow-scripts"', 'sandbox=""'),
+      manifest: {},
+    },
+    {
+      name: "missing clipboard delegation",
+      source: pageWithIframeTwins().replace(' allow="clipboard-write"', ""),
+      manifest: {},
+    },
+    {
+      name: "unexpected clipboard delegation",
+      source: pageWithIframeTwins().replace('sandbox="allow-scripts"', 'sandbox=""'),
+      manifest: { sandboxTokens: [], permissionsPolicy: [] },
+    },
+    {
+      name: "unmatched configured route",
+      source: pageWithIframeTwins(),
+      manifest: { publicAlias: "/v1/core/strategy-canvas/", sourceFile: "strategy-canvas.html" },
+    },
+    {
+      name: "wrong local path with the expected basename",
+      source: pageWithIframeTwins().replaceAll(
+        "prototypes/core-architectures/chimeric-pack-v0.1/heart-chart.html",
+        "prototypes/alternate-pack/heart-chart.html",
+      ),
+      manifest: {},
+    },
+  ];
+
+  for (const entry of cases) {
+    await t.test(entry.name, async (t) => {
+      const paths = await fixture(t, entry.source);
+      const iframeRouteManifestPath = await iframeRouteManifest(paths, entry.manifest);
+      await assertContractFailure(
+        materializePublicReferences({
+          ...paths,
+          iframeRouteManifestPath,
+          environment: { [IFRAME_KEY]: IFRAME_ROUTE },
+        }),
+        "PUBLIC_REFERENCE_IFRAME_POLICY",
+      );
+      await assert.rejects(
+        readFile(join(paths.outputRoot, ".public-reference-materialization.json")),
+        { code: "ENOENT" },
+      );
+    });
+  }
+});
+
+test("keeps hosted-route metadata aligned while the full-view route stays local", async (t) => {
+  const source = pageWithIframeTwins().replace(
+    "  </body>",
+    `    <script type="application/ld+json">{"contentUrl":"{{${IFRAME_KEY}}}"}</script>\n  </body>`,
+  );
+  const paths = await fixture(t, source);
+
+  const result = await materializePublicReferences({
+    ...paths,
+    environment: { [IFRAME_KEY]: IFRAME_ROUTE },
+  });
+  assert.equal(result.occurrenceCount, 3);
+  assert.equal(result.anchorCount, 1);
+  assert.equal(result.iframeCount, 1);
+  assert.equal(result.jsonLdCount, 1);
+
+  const generated = await readFile(
+    join(paths.outputRoot, "context-canvas", "index.html"),
+    "utf8",
+  );
+  assert.deepEqual(jsonLdBodies(generated).map((body) => JSON.parse(body)), [
+    { contentUrl: IFRAME_ROUTE },
+  ]);
+  assert.match(
+    generated,
+    /<a href="prototypes\/core-architectures\/chimeric-pack-v0\.1\/heart-chart\.html" data-public-href="https:\/\/iframes\.vik\.guru\/v1\/core\/heart-chart\/">/,
+  );
+  assert.equal(
+    htmlAttribute(generated.match(/<a\b[^>]*>/i)?.[0] ?? "", "href"),
+    "prototypes/core-architectures/chimeric-pack-v0.1/heart-chart.html",
+  );
 });
 
 test("treats a different Windows drive as a separate tree", () => {
@@ -230,7 +660,154 @@ test("rejects unsuitable destinations without echoing their values", async (t) =
   }
 });
 
-test("accepts only Registry tokens in complete anchor or JSON-LD carriers", async (t) => {
+test("rejects hosted iframe destinations outside their exact route contract", async (t) => {
+  const credentialedDestination = new URL(
+    "https://iframes.vik.guru/v1/core/heart-chart/",
+  );
+  credentialedDestination.username = "route-contract-test";
+
+  const cases = [
+    ["http://iframes.vik.guru/v1/core/heart-chart/", "PUBLIC_REFERENCE_VALUE_PROTOCOL"],
+    [
+      credentialedDestination.href,
+      "PUBLIC_REFERENCE_VALUE_CREDENTIAL",
+    ],
+    [
+      "https://iframes.vik.guru:8443/v1/core/heart-chart/",
+      "PUBLIC_REFERENCE_IFRAME_PORT",
+    ],
+    [
+      "https://iframes.vik.guru:443/v1/core/heart-chart/",
+      "PUBLIC_REFERENCE_IFRAME_PORT",
+    ],
+    ["https://cdn.vik.guru/v1/core/heart-chart/", "PUBLIC_REFERENCE_IFRAME_HOST"],
+    ["https://iframes.vik.guru/cdn-raster/heart-chart/", "PUBLIC_REFERENCE_IFRAME_ROUTE"],
+    ["https://iframes.vik.guru/v1/core/heart-chart", "PUBLIC_REFERENCE_IFRAME_ROUTE"],
+    [
+      "https://iframes.vik.guru/v1/core/../core/heart-chart/",
+      "PUBLIC_REFERENCE_IFRAME_ROUTE",
+    ],
+    ["https://iframes.vik.guru/v1/core/heart/chart/", "PUBLIC_REFERENCE_IFRAME_ROUTE"],
+    [
+      "https://iframes.vik.guru/v1/core/heart-chart/?width=960",
+      "PUBLIC_REFERENCE_IFRAME_ROUTE",
+    ],
+    [
+      "https://iframes.vik.guru/v1/core/heart-chart/#detail",
+      "PUBLIC_REFERENCE_IFRAME_ROUTE",
+    ],
+    [
+      "https://iframes.vik.guru/v1/core/strategy-canvas/",
+      "PUBLIC_REFERENCE_IFRAME_KEY_MISMATCH",
+    ],
+  ];
+
+  for (const [value, code] of cases) {
+    await t.test(code, async (t) => {
+      const paths = await fixture(t, pageWithIframeTwins());
+      await assertContractFailure(
+        materializePublicReferences({
+          ...paths,
+          environment: { [IFRAME_KEY]: value },
+        }),
+        code,
+        value,
+      );
+    });
+  }
+});
+
+test("requires explicit hosted iframe carriers and complete local fallbacks", async (t) => {
+  const cases = [
+    [
+      `<iframe data-public-src="{{${IFRAME_KEY}}}" title="HEART Chart"></iframe>`,
+      "PUBLIC_REFERENCE_IFRAME_FALLBACK",
+    ],
+    [
+      `<a href="prototypes/core/heart-chart.html" data-public-src="{{${IFRAME_KEY}}}">Open</a>`,
+      "PUBLIC_REFERENCE_IFRAME_CARRIER",
+    ],
+    [
+      `<iframe src="https://example.test/heart-chart.html" data-public-src="{{${IFRAME_KEY}}}"></iframe>`,
+      "PUBLIC_REFERENCE_IFRAME_FALLBACK",
+    ],
+    [
+      `<iframe src="javascript&#58;alert(1)" data-public-src="{{${IFRAME_KEY}}}"></iframe>`,
+      "PUBLIC_REFERENCE_IFRAME_FALLBACK",
+    ],
+    [
+      `<iframe src="prototypes/core/heart-chart.html" data-public-src="${IFRAME_KEY}"></iframe>`,
+      "PUBLIC_REFERENCE_IFRAME_CARRIER",
+    ],
+    [
+      `<iframe src="prototypes/core/heart-chart.html" data-public-src="{{${PRIMARY_KEY}}}"></iframe>`,
+      "PUBLIC_REFERENCE_IFRAME_CARRIER",
+    ],
+    [
+      `<iframe src="prototypes/core/heart-chart.html" data-public-src="{{${IFRAME_KEY}}}"></iframe>`,
+      "PUBLIC_REFERENCE_IFRAME_KEY_MISMATCH",
+    ],
+    [
+      `<a href="prototypes/core/heart-chart.html" data-public-href="{{${IFRAME_KEY}}}">Open</a>`,
+      "PUBLIC_REFERENCE_IFRAME_KEY_MISMATCH",
+    ],
+    [
+      `<iframe src="prototypes/core/heart-chart.html" data-public-src="{{${IFRAME_KEY}}}"></iframe>
+       <a href="prototypes/core/strategy-canvas.html" data-public-href="{{PUBLIC_URL_IFRAME_CORE_STRATEGY_CANVAS}}">Open</a>`,
+      "PUBLIC_REFERENCE_IFRAME_KEY_MISMATCH",
+    ],
+    [
+      `<iframe src="prototypes/core/heart-chart.html" data-public-src="{{${IFRAME_KEY}}}"></iframe>
+       <a href="prototypes/core/other-chart.html" data-public-href="{{${IFRAME_KEY}}}">Open</a>`,
+      "PUBLIC_REFERENCE_IFRAME_FALLBACK",
+    ],
+    [
+      `<script type="application/ld+json">{"contentUrl":"{{${IFRAME_KEY}}}"}</script>`,
+      "PUBLIC_REFERENCE_IFRAME_KEY_MISMATCH",
+    ],
+  ];
+
+  for (const [html, code] of cases) {
+    await t.test(code, async (t) => {
+      const paths = await fixture(t, html);
+      await assertContractFailure(
+        materializePublicReferences({
+          ...paths,
+          environment: { [IFRAME_KEY]: IFRAME_ROUTE },
+        }),
+        code,
+      );
+    });
+  }
+});
+
+test("requires a minimal explicit policy on hosted iframe carriers", async (t) => {
+  const source = pageWithIframeTwins();
+  const cases = [
+    source.replace(' title="HEART Chart"', ""),
+    source.replace(' loading="lazy"', ""),
+    source.replace(' sandbox="allow-scripts"', ""),
+    source.replace(' referrerpolicy="no-referrer"', ""),
+    source.replace(' loading="lazy"', ' loading="auto"'),
+    source.replace(' sandbox="allow-scripts"', ' sandbox="allow-scripts allow-same-origin"'),
+    source.replace(' allow="clipboard-write"', ' allow="camera"'),
+  ];
+
+  for (const [index, html] of cases.entries()) {
+    await t.test(`policy case ${index + 1}`, async (t) => {
+      const paths = await fixture(t, html);
+      await assertContractFailure(
+        materializePublicReferences({
+          ...paths,
+          environment: { [IFRAME_KEY]: IFRAME_ROUTE },
+        }),
+        "PUBLIC_REFERENCE_IFRAME_POLICY",
+      );
+    });
+  }
+});
+
+test("accepts only scoped public tokens in their complete carriers", async (t) => {
   const cases = [
     [
       '<a href="{{PUBLIC_URL_OTHER_READING}}">Reading</a>',
@@ -243,6 +820,10 @@ test("accepts only Registry tokens in complete anchor or JSON-LD carriers", asyn
     [
       `<a href="${PRIMARY_KEY}">Reading</a>`,
       "PUBLIC_REFERENCE_TOKEN_LOOKALIKE",
+    ],
+    [
+      "<p>{{PUBLIC_URL_</p>",
+      "PUBLIC_REFERENCE_UNRESOLVED",
     ],
     [
       `<a href="https://${APP_NOTION_HOST}/p/private-coordinate">Reading</a>`,
@@ -357,7 +938,7 @@ test("rejects ambiguous file configuration while ignoring unrelated process valu
     );
   });
 
-  await t.test("public key outside the Registry namespace", async (t) => {
+  await t.test("public key outside the supported namespaces", async (t) => {
     const paths = await fixture(t, pageWithTwin());
     await writeFile(
       paths.configPath,
@@ -541,8 +1122,46 @@ test("the repository source materializes from discovered keys without frozen rou
   assert.ok(inventory.keys.size > 0);
   assert.ok(inventory.occurrenceCount > 0);
   for (const key of inventory.keys) {
-    assert.equal(key.startsWith(PUBLIC_REFERENCE_NAMESPACE), true);
+    assert.equal(
+      key.startsWith(PUBLIC_REFERENCE_NAMESPACE) ||
+        key.startsWith(PUBLIC_IFRAME_NAMESPACE) ||
+        key === PUBLIC_AUTHOR_PROFILE_KEY,
+      true,
+    );
   }
+  assert.equal(inventory.keys.has(IFRAME_KEY), false);
+  assert.equal(inventory.iframeCount, 0);
+
+  const expectedLocalFallback =
+    "prototypes/core-architectures/chimeric-pack-v0.1/heart-chart-chimeric-prototype-v0.1.5.html";
+  const escapedLocalFallback = expectedLocalFallback.replace(
+    /[.*+?^${}()|[\]\\]/g,
+    "\\$&",
+  );
+  const carrierSource = await readFile(
+    join(
+      PUBLIC_REFERENCE_SOURCE,
+      "context-canvas/core-architectures-orientation-index.html",
+    ),
+    "utf8",
+  );
+  assert.match(
+    carrierSource,
+    new RegExp(`src=["']${IFRAME_ROUTE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`),
+  );
+  assert.match(
+    carrierSource,
+    new RegExp(`href=["']${escapedLocalFallback}["']`),
+  );
+  assert.doesNotMatch(carrierSource, /data-public-(?:src|href)=/i);
+  await readFile(
+    join(
+      PUBLIC_REFERENCE_SOURCE,
+      "context-canvas",
+      expectedLocalFallback,
+    ),
+    "utf8",
+  );
 
   const example = await readFile(
     join(dirname(PUBLIC_REFERENCE_SOURCE), ".env.public.example"),
@@ -556,7 +1175,11 @@ test("the repository source materializes from discovered keys without frozen rou
   }
 
   const before = new Map();
-  for (const record of inventory.htmlFiles) {
+  const materializedRecords = [
+    ...inventory.htmlFiles,
+    ...inventory.scriptFiles,
+  ];
+  for (const record of materializedRecords) {
     if (record.inspection.occurrenceCount === 0) continue;
     before.set(record.path, await readFile(record.path, "utf8"));
   }
@@ -566,7 +1189,9 @@ test("the repository source materializes from discovered keys without frozen rou
   const environment = Object.fromEntries(
     [...inventory.keys].map((key) => [
       key,
-      `https://registry.example/readings/${key.slice(PUBLIC_REFERENCE_NAMESPACE.length).toLowerCase()}`,
+      key === PUBLIC_AUTHOR_PROFILE_KEY
+        ? PROFILE_ROUTE
+        : `https://registry.example/readings/${key.slice(PUBLIC_REFERENCE_NAMESPACE.length).toLowerCase()}`,
     ]),
   );
   const outputRoot = join(root, "context-canvas-project-surface");
@@ -577,13 +1202,38 @@ test("the repository source materializes from discovered keys without frozen rou
     environment,
   });
 
-  for (const record of inventory.htmlFiles) {
+  for (const record of materializedRecords) {
     if (record.inspection.occurrenceCount === 0) continue;
     assert.equal(await readFile(record.path, "utf8"), before.get(record.path));
     const generated = await readFile(join(outputRoot, record.safePath), "utf8");
-    assert.equal(generated.includes("{{PUBLIC_URL"), false);
+    assert.doesNotMatch(generated, /\{\{PUBLIC_URL_[A-Z0-9_]+\}\}/);
     for (const body of jsonLdBodies(generated)) {
       if (body.includes("https://registry.example/")) JSON.parse(body);
     }
   }
+
+  const generatedShell = await readFile(
+    join(outputRoot, "context-canvas/canvas-shell.js"),
+    "utf8",
+  );
+  assert.match(generatedShell, /var professionalProfileRoute = "https:\/\/profiles\.example\/practitioner";/);
+  assert.match(generatedShell, /professionalProfileLink\.href\s*=\s*professionalProfileRoute/);
+
+  const generatedCarrierSource = await readFile(
+    join(
+      outputRoot,
+      "context-canvas/core-architectures-orientation-index.html",
+    ),
+    "utf8",
+  );
+  assert.match(
+    generatedCarrierSource,
+    new RegExp(`src=["']${IFRAME_ROUTE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`),
+    "Registry-link materialization preserves the active iframe route",
+  );
+  assert.match(
+    generatedCarrierSource,
+    new RegExp(`href=["']${escapedLocalFallback}["']`),
+    "Registry-link materialization preserves the repository-local full view",
+  );
 });

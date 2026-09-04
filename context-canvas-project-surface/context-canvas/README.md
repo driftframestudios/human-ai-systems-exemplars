@@ -4,8 +4,10 @@ Context Canvas is a static, progressively enhanced enterprise reading system. HT
 
 ## Start with the reading surface
 
-- [`index.html`](index.html) introduces the illustrative portfolio and the Context Canvas method.
+- [`index.html`](index.html) introduces the technology leadership portfolio and the Context Canvas method.
 - [`ai-systems.html`](ai-systems.html) gathers the AI-legible architecture and related instrument routes.
+- [`benchmark-orientation.html`](benchmark-orientation.html) connects benchmark revision, model and harness conditions, scoring, aggregation, uncertainty, and receiving use in one result coordinate.
+- [`maps-evaluations.html`](maps-evaluations.html) begins with Alignment Research Center's canonical MAPS canary record and keeps adjacent public ARA evaluation work source-bounded.
 - [`debriefs.html`](debriefs.html) provides the catalog of completed and prospective readings.
 - [`grammar-family.html`](grammar-family.html) compares composable site readings and debriefs across portable assets, embedded instruments, and contextual delivery.
 - [`collaboration-skills.html`](collaboration-skills.html) explains portable skill contracts, bounded projections, candidacy, release, and cross-platform adoption.
@@ -14,21 +16,46 @@ Context Canvas is a static, progressively enhanced enterprise reading system. HT
 
 Each public page remains useful when enhancement is unavailable. Embedded prototypes pair their interactive surface with a semantic orientation or static equivalent in the parent page.
 
-The repository's [Visual Fidelity Contracts](../../visual-fidelity-contracts/README.md) describe stable semantic and composition contracts with canonical examples. The contracts support orientation while each route retains authority over color, rhythm, density, layout, and source-earned experimentation. The [Context Canvas surface-reading](../../.agents/skills/context-canvas-surface-reading/SKILL.md) and [CSS-ownership](../../.agents/skills/context-canvas-css-ownership/SKILL.md) skills provide compact collaboration routes into this terrain.
+The repository's [Visual Fidelity Contracts](../../visual-fidelity-contracts/README.md) describe stable semantic and composition contracts with canonical examples. The contracts support orientation while each route retains authority over color, rhythm, density, layout, and source-earned experimentation. The [Context Canvas surface-reading](../../.agents/skills/context-canvas-surface-reading/SKILL.md), [CSS-ownership](../../.agents/skills/context-canvas-css-ownership/SKILL.md), and [visual-verification](../../.agents/skills/context-canvas-visual-verification/SKILL.md) skills provide compact collaboration routes into this terrain.
 
-The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) supplies collection, visitor-surface, prototype-surface, and reference-artifact profiles. [Collaboration Skills 0.1.0](../../schemas/collaboration-skills/0.1.0/README.md) carries one portable contract, one retired projection, and one route-changing account into a cross-platform adoption kit. Human-readable page, skill, and account sources remain semantic authorities for their meaning. The GitHub-backed exact-version projection is active at `schemas.radiantnull.com`; issue work:schema-retrieval-and-page-migration carries renewed operator-host observation and final dual-route parity.
+The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) supplies collection, visitor-surface, prototype-surface, and reference-artifact profiles. [Collaboration Skills 0.1.0](../../schemas/collaboration-skills/0.1.0/README.md) carries one portable contract, one retired projection, and one route-changing account into a cross-platform adoption kit. Human-readable page, skill, and account sources remain semantic authorities for their meaning. The GitHub-backed exact-version projection is observed at `schemas.radiantnull.com`; [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) owns final parity for the intended `schemas.vik.guru` receiver.
+
+## Source and public route map
+
+| Role | Current route and standing |
+| --- | --- |
+| Authored source | This directory owns the tracked visitor pages, shared assets, and local prototype projections. |
+| Local development | Serve the repository root, then open `/context-canvas-project-surface/context-canvas/`. |
+| Primary production | The production assembler maps this visitor root into generated `primary-public/`, where this directory's `index.html` becomes `/index.html` at the intended `https://vik.guru/` origin. |
+| Hosted iframes | Manifest-selected instruments use the separate `https://iframes.vik.guru/v1/core/.../` and `/v1/canvas/.../` families. Current live acceptance remains with Issues [#72](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/72) and [#102](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/102). |
+| Full-view and collaboration routes | The generated primary file tree carries selected `/prototypes/.../` and `/collaboration/.../` files. Adjacent full-view links use those primary-site routes rather than opening the primary site inside an iframe. |
+| Schemas | A schema's `$id` remains its semantic identity. `schemas.radiantnull.com` is observed retrieval; `schemas.vik.guru` remains intended until its exact-version responses pass their own live check. |
 
 ## Runtime contract
 
 - Plain HTML owns document meaning, reading order, links, fallback content, and structured metadata.
 - CSS owns the visual contract, reflow, print behavior, forced-color behavior, and reduced-motion response.
-- `canvas-shell.js` progressively installs the route shelf, section rail, and shared footer. Ordinary links and authored page content remain the durable path.
-- Prototype scripts own local interaction state. Sandboxed iframes declare the capabilities each instrument actually uses.
+- `visitor-boundary-contract.js` carries the ordinary-language context and exact ordered canary definition used to verify each source-authored visitor boundary.
+- `canvas-shell.js` progressively installs the route shelf, section rail, and shared footer, then preserves the verified visitor boundary immediately before attribution. Ordinary links and authored page content remain the durable path.
+- `about-media.js` keeps the About visual sequence on its authored poster until a visitor requests motion, returns after one complete cycle, and keeps the still reading active for reduced-motion and print presentations.
+- Prototype scripts own local interaction state. Sandboxed iframes declare the capabilities each instrument actually uses. Their Core and Canvas route families remain separate inside the aggregate `/v1/` delivery package.
 - Human stewards retain authority over identity, source use, sensitive material, publication, and consequential decisions. Automated checks report observable behavior and leave those decisions visible.
+
+The visitor-boundary rule applies across top-level pages, self-contained
+prototypes, and canonical generator templates: ordinary-language benchmark
+context precedes the exact MAPS and BIG-bench markers, and attribution closes
+the footer. Maintained projections and iframe package digests are rebuilt from
+their owners after a source change. Exact marker text remains centralized in
+the shared contract and its tests.
+
+Every top-level visitor route carries one source-authored ownership and
+Apache-2.0 notice in its static HTML, preserving the notice in the baseline
+reading. `AUTHORS` is the copyright-holder authority, and the repository-root
+`LICENSE` remains the complete license text.
 
 ## Document head order
 
-Top-level routes usually present charset and viewport, compact page metadata, first-paint stylesheets in their established cascade order, deferred `canvas-shell.js`, and then inline JSON-LD. This sequence gives visitor resources an early discovery path while structured data remains a descriptive projection of the visible document. Route-local material can occupy an earlier position when embedding, cascade, or execution behavior depends on it; the affected page carries that reason beside the dependency.
+Top-level routes usually present charset and viewport, compact page metadata, first-paint stylesheets in their established cascade order, deferred `visitor-boundary-contract.js`, deferred `canvas-shell.js`, and then inline JSON-LD. The boundary contract loads before shell enhancement so the authored context and marker stack can be verified in place. This sequence gives visitor resources an early discovery path while structured data remains a descriptive projection of the visible document. Route-local material can occupy an earlier position when embedding, cascade, or execution behavior depends on it; the affected page carries that reason beside the dependency.
 
 ## Stylesheet ownership
 
@@ -39,15 +66,16 @@ Current high-signal ownership:
 | Source | Direct consumer | Visual authority and seam |
 | --- | --- | --- |
 | [`expanded.css`](expanded.css) | Broad Context Canvas foundation | Shared reading, table, editorial, and route-card rules; named route extractions progressively reduce this surface. |
-| [`canvas-shell.css`](canvas-shell.css) | 39 direct consumers across 40 top-level routes; [`debriefs.html`](debriefs.html) currently demonstrates source-derived rail mode | Shared generated footer and page rail, loaded after foundation, component, and route CSS. `data-canvas-page-rail-source` exposes direct identified children as destinations while major-section discovery remains the fallback; route bundles retain palette, rhythm, density, and composition. |
+| [`canvas-shell.css`](canvas-shell.css) | 41 direct consumers across 42 top-level routes; [`debriefs.html`](debriefs.html) currently demonstrates source-derived rail mode | Shared generated footer and page rail, loaded after foundation, component, and route CSS. `data-canvas-page-rail-source` exposes direct identified children as destinations while major-section discovery remains the fallback; route bundles retain palette, rhythm, density, and composition. |
 | [`styles/routes/about.css`](styles/routes/about.css) | [`index.html`](index.html) | About tokens and composition under the [paired-evidence ledger contract](../../visual-fidelity-contracts/tiffany-ledger-field.md) and [prompt-condition routing contract](../../visual-fidelity-contracts/tiffany-conditions-routing-field.md); shared route-card and table rules remain in `expanded.css`. |
 | [`styles/routes/about-noscript.css`](styles/routes/about-noscript.css) | [`index.html`](index.html) without scripting | Complete static folio and Prompt Conditions reading after the About route bundle. |
-| [`styles/routes/ai-systems.css`](styles/routes/ai-systems.css) | Fourteen pages carrying `.ai-systems-page` | Shared scan, content-region, card, reading-path, instrument, and orchestration styles. The [operating-map visual contract](../../visual-fidelity-contracts/cobalt-operating-field.md) keeps actors, decision context, service movement, recovery, and authority legible. |
+| [`styles/routes/ai-systems.css`](styles/routes/ai-systems.css) | Sixteen pages carrying `.ai-systems-page` | Shared scan, content-region, card, reading-path, instrument, and orchestration styles. The [operating-map visual contract](../../visual-fidelity-contracts/cobalt-operating-field.md) keeps actors, decision context, service movement, recovery, and authority legible. |
 | [`styles/components/instrument-atlas.css`](styles/components/instrument-atlas.css) | [`ai-systems.html`](ai-systems.html), [`shared-machinery.html`](shared-machinery.html) | Reusable atlas table and prototype-card structure, loaded before the AI Systems route bundle. |
 | [`styles/routes/ai-systems-entry.css`](styles/routes/ai-systems-entry.css) | [`ai-systems.html`](ai-systems.html) | Entry bridges, live-lab summaries, Goal Fidelity tables, and late route anchors after the shared AI Systems route bundle. |
 | [`styles/routes/hiring-surfaces.css`](styles/routes/hiring-surfaces.css) | [`hiring-surfaces-talent-agent-intake.html`](hiring-surfaces-talent-agent-intake.html) | Two-reader palette, Hiring content regions and tables, responsive treatment, and late route anchors after the shared AI Systems route bundle. |
 | [`styles/components/career-regulatory-slide.css`](styles/components/career-regulatory-slide.css) | [`exemplar-ideal-debrief.html`](exemplar-ideal-debrief.html), [`exemplar-index-landing.html`](exemplar-index-landing.html), [`exemplar-maximal-debrief.html`](exemplar-maximal-debrief.html) | Reusable split-to-stack career and regulatory slides, accent cards, content sections, responsive and container behavior, entrance motion, and reduced-motion response; loaded after `expanded.css` and before the shell. |
-| [`styles/components/debrief-reading.css`](styles/components/debrief-reading.css) | Fifteen Debrief and enterprise-reading routes | Shared reading-route navigation, source-basis lists, and orientation-reading placement, loaded directly after `expanded.css`. |
+| [`styles/components/debrief-reading.css`](styles/components/debrief-reading.css) | Seventeen Debrief and enterprise-reading routes | Shared reading-route navigation, source-basis lists, and orientation-reading placement, loaded directly after `expanded.css`. |
+| [`styles/routes/benchmark-readings.css`](styles/routes/benchmark-readings.css) | [`benchmark-orientation.html`](benchmark-orientation.html), [`maps-evaluations.html`](maps-evaluations.html) | Result-coordinate flow, reusable result profile, source-lane distinction, and canary orientation after the shared AI Systems family bundle. |
 | [`styles/routes/debriefs.css`](styles/routes/debriefs.css) | [`debriefs.html`](debriefs.html) | Catalog layout, filters, Debrief-card badges and metadata, browse/preview composition, and alternate modes after the shared Debrief-reading component. |
 | [`styles/routes/three-movement-debrief.css`](styles/routes/three-movement-debrief.css) | [`choose-your-player-humatics.html`](choose-your-player-humatics.html) | Three-movement hero, working-posture, and contract-transition composition under the [Dual-Track Debrief Composition](../../visual-fidelity-contracts/dual-track-debrief-composition.md) contract. |
 | [`styles/routes/genomic-viewer.css`](styles/routes/genomic-viewer.css) | [`genomic-viewer-replatforming.html`](genomic-viewer-replatforming.html) | Paired solution and implementation tracks, route visuals, alternate modes, and named shared-component seams under the [paired-debrief composition contract](../../visual-fidelity-contracts/dual-track-debrief-composition.md); loaded after the Debrief-reading component and before the shell. |
@@ -55,6 +83,8 @@ Current high-signal ownership:
 | [`field-inspection.css`](field-inspection.css) | [`field-inspection-harness-replatform.html`](field-inspection-harness-replatform.html) | Field Inspection route treatment, loaded after the shared foundation. |
 
 Existing companions such as `fmi-lims-eln-replatforming.css` remain focused on their named surfaces.
+
+Shared visitor links use four immutable light/dark unvisited/visited palette roles and two inherited active roles in `expanded.css`. A painted surface declares its background plus the complete active pair; a nested surface that changes the paint resets both active roles. Route owners can assign local active values when their art direction calls for a different audited foreground. The CSS-ownership skill's [surface color and state reference](../../.agents/skills/context-canvas-css-ownership/references/surface-color-and-state-roles.md) carries the state, print, forced-color, visited-privacy, and modern-CSS decision boundary.
 
 Use an existing semantic component when its visual role fits. Add a selector when the page demonstrates a material gap. Sustained prose uses the shared reading measures; tables, diagrams, ledgers, and direct-manipulation instruments retain local two-dimensional space when that space carries meaning.
 
@@ -65,7 +95,7 @@ The settled [CSS modularization plan](../../planning/context-canvas/css-modulari
 From the repository root, use Node 22 or newer:
 
 ```bash
-npm install
+npm ci --ignore-scripts
 npm run playwright:install
 python3 -m http.server 8000
 ```
@@ -86,11 +116,36 @@ Serving the repository root preserves the relative paths used by shared images, 
 
 ## Materialize approved public references
 
-Authored Context Canvas HTML carries stable `PUBLIC_URL_REGISTRY_*` semantic
-keys as complete anchor `href` values and JSON-LD strings. The visible label,
-neighboring explanation, and semantic key keep the source legible before a
-public build; materialization supplies the ordinary external link. Direct
-Notion page routes stay outside this authored visitor tree.
+Authored Context Canvas sources carry stable public-reference keys. Registry
+keys appear as complete anchor `href` values and JSON-LD strings. One exact
+`PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE` key appears in the shared footer
+script. The visible label, neighboring explanation, and key keep local source
+useful before a public build; materialization supplies each approved external
+destination. Direct Notion page routes stay with the authorized resolver.
+
+The authored footer describes the professional profile as available in the
+public build. A materialized build changes that same shared carrier into an
+ordinary, same-tab “Professional profile” link with a descriptive accessible
+name. Its destination lives only in ignored `.env.public` or the delivery
+process environment.
+
+Activated iframe carriers use their public route manifests directly. Their
+`src` values point to stable aliases in either the `/v1/core/` or
+`/v1/canvas/` family, while each adjacent full-view `href` continues to open
+the repository-local base prototype that becomes a primary-site route. A
+contextual title, intentional lazy loading, exact route-matched sandbox,
+narrow Permissions Policy when needed, and `referrerpolicy="no-referrer"`
+keep the behavioral boundary visible in authored source. The multi-route Core
+pack index opens as a non-embedded full view; this keeps its sibling
+destinations from inheriting one shared iframe policy. The Conditioning Field
+is a supplemental Context Canvas instrument in the Core delivery family: its
+hosted projection uses `allow-scripts` only, while its adjacent full view
+remains `conditioning-field.html`.
+
+The dependency-free materializer retains a tested hosted-iframe twin seam for
+an explicitly late-bound future receiver. Current manifest-owned iframe
+carriers use literal `src` values, so their routes remain inspectable and
+testable in tracked HTML before publication.
 
 The accepted Notion boundary is concise: only the Enterprise Human-AI
 Practitioner Registry root and its descendants are public-possible. A key name
@@ -111,29 +166,31 @@ An explicit process-environment value overrides the matching `.env.public`
 entry, which keeps the same build seam available to a later delivery receiver.
 The materializer never prints configured values. It rejects incomplete,
 malformed, non-HTTPS, userinfo-bearing, recognized credential-parameter,
-duplicate, or out-of-namespace public settings before replacing an accepted
-generation. Unused Registry-scoped settings remain additive; authored HTML
-continues to define the required set. Human review keeps path-shaped access
-coordinates and unfamiliar signing conventions outside approved destinations.
+duplicate, or unsupported public-reference settings before replacing an accepted
+generation. Unused scoped settings remain additive; authored source continues
+to define the required set. Human review keeps path-shaped access coordinates
+and unfamiliar signing conventions with their approved receiver.
 
 The ignored output is
 `.public-reference-build/context-canvas-project-surface/`. The builder copies
-the complete `context-canvas-project-surface/` subtree, transforms only
-Context Canvas HTML, preserves other regular files byte-for-byte, validates
-the token-bearing JSON-LD, scans every copied regular file for direct Notion
-routes, and replaces the prior generation only after the complete result
-succeeds. Configuration stays outside the copied tree. Symbolic links and
-special filesystem entries stay outside this build boundary. Tracked input
-remains byte-unchanged. An operational restore failure preserves the ignored
-recovery directory for an explicit local recovery.
+the complete `context-canvas-project-surface/` subtree, transforms approved
+Context Canvas HTML carriers and the one shared footer-script carrier, and
+preserves every other regular file byte-for-byte. It validates token-bearing
+JSON-LD, scans every copied regular file for direct Notion routes, and replaces
+the prior generation only after the complete result succeeds. Configuration
+stays outside the copied tree. Symbolic links and special filesystem entries
+stay outside this build boundary. Tracked input remains byte-unchanged. An
+operational restore failure preserves the ignored recovery directory for an
+explicit local recovery.
 
 This output is a materialized subtree, not an audience decision or a complete
 delivery closure. Some Context Canvas routes intentionally reference schemas,
 collaboration instruments, and other repository-owned resources above this
-subtree. A future named publication assembler owns that dependency closure and
-can call the same materializer immediately before upload. The existing Field
-Inspection pilot retains its separate authored-byte parity until that receiver
-selects an explicit composition seam.
+subtree. The production assembler owns that explicit dependency closure and
+calls the same materialization logic while creating the disjoint primary and
+iframe outputs described in [`deployment/cpanel/`](../../deployment/cpanel/README.md).
+The Field Inspection pilot retains its separate authored-byte parity and
+no-index proving role.
 
 Before a generated subtree enters that publication-assembler handoff, give the
 exact ignored artifact its named secret-material observation:
@@ -155,13 +212,23 @@ carries that observation into a receiving repository.
 Choose the existing check that answers the page question under review:
 
 ```bash
+npm run test:context-canvas
+npm run test:context-canvas-narrow-rails
 npm run visual:check -- path/to/page.html --selector "main"
 npm run visual:rail-labels
 npm run test:open-lesson-field
 npm run test:strategy-canvas
 ```
 
-The generic visual check records the requested surface at desktop and mobile widths, document containment, and browser errors. The two interaction contracts cover their named collaboration systems in depth; they do not stand in for unrelated page evidence.
+The Context Canvas source suite protects source-authored visitor metadata,
+shared rail ownership, and the About-page identity seam. The narrow-rail
+contract is the lightweight all-route check for generated rail disclosure,
+clipping, scroll reachability, the 56rem seam, forced colors, and print. The
+generic visual check records the requested surface at desktop and mobile
+widths, document containment, and browser errors; `visual:rail-labels` adds
+screenshot-bearing ordinary-rail interaction evidence. The other interaction
+contracts cover their named collaboration systems in depth. Choose the fitting
+check for each page behavior.
 
 A useful verification note names the command, viewport-relevant result, and ignored `.visual-runs/` artifact directory. A new check joins the shared harness when a reproduced visitor-facing defect gives it a stable purpose.
 
@@ -182,6 +249,6 @@ The pilot measures delivery behavior. The broader Cloudflare delivery architectu
 
 ## Public evidence boundary
 
-Public routes name illustrative identity, prospective estimates, source authority, and unresolved implementation questions directly. Internal planning, historical logs, credentials, and sensitive source material remain outside the published asset closure. A named human steward approves any change that expands audience, identity, data handling, embedding authority, or deployment scope.
+Public routes name identity, prospective estimates, source authority, and unresolved implementation questions directly. Internal planning, historical logs, credentials, and sensitive source material remain outside the published asset closure. A named human steward approves any change that expands audience, identity, data handling, embedding authority, or deployment scope.
 
 The next move stays bounded and revisable: improve one visible reading or runtime boundary, observe it with the narrowest useful evidence, and carry the result into the next design decision.

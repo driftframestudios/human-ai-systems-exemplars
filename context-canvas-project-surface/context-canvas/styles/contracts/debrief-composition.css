@@ -202,6 +202,8 @@
 }
 
 .debrief-composition-page .debrief-track--implementation {
+  --canvas-link-color: var(--canvas-link-on-dark);
+  --canvas-link-visited-color: var(--canvas-link-visited-on-dark);
   background-color: var(--debrief-cobalt-deep);
   background-image:
     linear-gradient(rgba(255, 255, 255, .045) 1px, transparent 1px),
@@ -231,14 +233,6 @@
   color: var(--debrief-paper);
 }
 
-.debrief-composition-page .debrief-track--implementation :is(a, a:visited) {
-  color: var(--debrief-acid);
-}
-
-.debrief-composition-page .debrief-track--implementation code {
-  color: var(--debrief-cobalt-ink);
-}
-
 .debrief-composition-page .debrief-track--implementation :is(
   .architecture-pair article,
   .implementation-moves article,
@@ -247,6 +241,8 @@
   .cobalt-operating-field__aside,
   .cobalt-operating-field__table
 ) {
+  --canvas-link-color: var(--canvas-link-on-light);
+  --canvas-link-visited-color: var(--canvas-link-visited-on-light);
   background: var(--debrief-paper);
   border-color: var(--debrief-cobalt-ink);
   color: var(--debrief-cobalt-ink);
@@ -264,6 +260,8 @@
 }
 
 .debrief-composition-page .debrief-track--implementation .table-scroll {
+  --canvas-link-color: var(--canvas-link-on-light);
+  --canvas-link-visited-color: var(--canvas-link-visited-on-light);
   background: var(--debrief-paper);
   border: .125rem solid var(--debrief-cobalt-ink);
   color: var(--debrief-cobalt-ink);
@@ -465,6 +463,8 @@
   .debrief-composition-page .debrief-track--implementation,
   .debrief-composition-page .debrief-track--narrative,
   .debrief-composition-page .debrief-track--solution-neutral {
+    --canvas-link-color: var(--canvas-link-on-light);
+    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
     background: #fff !important;
     color: #000 !important;
   }

@@ -1,0 +1,11 @@
+{
+  "id": "prod-projection.configuration.v1",
+  "version": "1",
+  "primary_manifest": "deployment/cpanel/primary-route-manifest.json",
+  "iframe_origin_robots": "deployment/cpanel/iframe-origin-robots.txt",
+  "publication": {
+    "base_url": "https://vik.guru/",
+    "source_root": "context-canvas-project-surface/context-canvas",
+    "public_reference_config": ".env.public"
+  }
+}

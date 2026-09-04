@@ -79,7 +79,7 @@ Routes out of the About page state their destination and whether they open a new
 
 ## Evidence boundary
 
-The About page may be illustrative while still being technically honest. It names representative or source-era material, preserves currentness and applicability, and keeps external validation, production shipment, or authorization open when those receipts are absent. Positive description leads; consequential boundaries remain direct and paired with the state a visitor can rely on.
+An About page can carry source-era or representative material with explicit technical standing. It names the material's currentness and applicability. Named receipts establish external validation, production shipment, or authorization. Positive description leads; consequential boundaries remain direct and paired with the state a visitor can rely on.
 
 ## Release checks
 

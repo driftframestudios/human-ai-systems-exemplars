@@ -73,28 +73,28 @@ Human correction, receiving-artifact behavior, an independently grounded source,
 
 ### Scenario: A new affordance has no prior skill history
 
-Given repeated collaboration reveals a useful named job<br>
-And no repository skill currently carries that job<br>
-When an initial skill is authored<br>
-Then the first version remains instruction-only<br>
-And scenarios appear only where intended behavior would otherwise remain ambiguous<br>
-And every attempt supplies evidence for the next revision
+- Given repeated collaboration reveals a useful named job
+- And no repository skill currently carries that job
+- When an initial skill is authored
+- Then the first version remains instruction-only
+- And scenarios appear only where intended behavior would otherwise remain ambiguous
+- And every attempt supplies evidence for the next revision
 
 ### Scenario: A practitioner preference appears source-specific
 
-Given one practitioner corpus demonstrates a productive collaboration pattern<br>
-When the pattern enters a repository skill<br>
-Then the skill names the transferable affordance<br>
-And provenance and transfer limits remain visible<br>
-And the skill avoids constructing a personality or personalization model
+- Given one practitioner corpus demonstrates a productive collaboration pattern
+- When the pattern enters a repository skill
+- Then the skill names the transferable affordance
+- And provenance and transfer limits remain visible
+- And the skill avoids constructing a personality or personalization model
 
 ### Scenario: Standing guidance already carries the job
 
-Given the requested result follows directly from repository ground or ordinary reasoning<br>
-And a new routing entry would add no distinct receiving contribution<br>
-When the authoring route is considered<br>
-Then the no-skill path remains available<br>
-And the observation can rest without entering the active catalog
+- Given the requested result follows directly from repository ground or ordinary reasoning
+- And a new routing entry would add no distinct receiving contribution
+- When the authoring route is considered
+- Then the no-skill path remains available
+- And the observation can rest without entering the active catalog
 
 ## Conditional template
 

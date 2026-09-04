@@ -18,6 +18,8 @@
 
 ## Evidence
 
+<!-- Summarize outcomes and coverage, and link an existing public-safe result when it is sufficient. Keep raw output, logs, traces, environment/header/cookie values, signed or query-bearing URLs, private routes, browser state, and user-specific paths in their existing local or access-controlled owner. -->
+
 | Observation | Result | What it establishes | Coverage boundary |
 | --- | --- | --- | --- |
 |  |  |  |  |

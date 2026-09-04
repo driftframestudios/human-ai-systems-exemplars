@@ -29,6 +29,10 @@ const technologyContext = join(
   repositoryRoot,
   "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau",
 );
+const threadkeepingContext = join(
+  repositoryRoot,
+  "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger",
+);
 
 function source(path) {
   return { kind: "source", path };
@@ -41,20 +45,20 @@ function legacy(archive, entry) {
 function portableNarrativeText(value) {
   return value
     .replaceAll(
-      "../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.0.html",
-      "companions/strategy-canvas-chimeric-prototype-v0.2.0.html",
+      "../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
+      "companions/strategy-canvas-chimeric-prototype-v0.2.2.html",
     )
     .replaceAll(
       "../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",
       "companions/strategy-canvas-chimeric-prototype-v0.1.1.html",
     )
     .replaceAll(
-      "../../../../core-architectures-chimeric-prototype-current-pack-v0.1/core-architecture-family-index-chimeric-prototype-v0.1.html",
-      "companions/core-architecture-family-index-chimeric-prototype-v0.1.html",
+      "../../../../core-architectures-chimeric-prototype-current-pack-v0.1/core-architecture-family-index-chimeric-prototype-v0.1.4.html",
+      "companions/core-architecture-family-index-chimeric-prototype-v0.1.4.html",
     )
     .replaceAll(
-      "../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.0.html",
-      "companions/strategy-canvas-chimeric-prototype-v0.2.0.html",
+      "../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
+      "companions/strategy-canvas-chimeric-prototype-v0.2.2.html",
     )
     .replaceAll(
       "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
@@ -88,9 +92,9 @@ function narrativeBundle(base, archivePath, familyIndex, compatibility) {
     archivePath,
     root: "narrative-capsules-chimeric-prototype-v0.1",
     entries: [
-      ["companions/core-architecture-family-index-chimeric-prototype-v0.1.html", source(familyIndex)],
+      ["companions/core-architecture-family-index-chimeric-prototype-v0.1.4.html", source(familyIndex)],
       ["companions/strategy-canvas-chimeric-prototype-v0.1.1.html", source(compatibility)],
-      ["companions/strategy-canvas-chimeric-prototype-v0.2.0.html", source(join(rootCanonicalPack, "strategy-canvas-chimeric-prototype-v0.2.0.html"))],
+      ["companions/strategy-canvas-chimeric-prototype-v0.2.2.html", source(join(rootCanonicalPack, "strategy-canvas-chimeric-prototype-v0.2.2.html"))],
       ["companions/strategy-canvas-system-v0.2/strategy-canvas.schema.json", source(join(rootCanonicalPack, "strategy-canvas-system-v0.2/strategy-canvas.schema.json"))],
       ["companions/strategy-canvas-system-v0.2/strategy-canvas-validator.js", source(join(rootCanonicalPack, "strategy-canvas-system-v0.2/strategy-canvas-validator.js"))],
       ["core-architecture-target-pair-registry.v0.1.json", source(join(base, "core-architecture-target-pair-registry.v0.1.json"))],
@@ -105,7 +109,7 @@ function narrativeBundle(base, archivePath, familyIndex, compatibility) {
     ],
     transform(path, buffer) {
       const textFiles = new Set([
-        "companions/core-architecture-family-index-chimeric-prototype-v0.1.html",
+        "companions/core-architecture-family-index-chimeric-prototype-v0.1.4.html",
         "companions/strategy-canvas-chimeric-prototype-v0.1.1.html",
         "core-architecture-target-pair-registry.v0.1.json",
         "narrative-capsules-chimeric-prototype-manifest-v0.1.json",
@@ -115,8 +119,8 @@ function narrativeBundle(base, archivePath, familyIndex, compatibility) {
       let value = portableNarrativeText(buffer.toString("utf8"));
       if (path.startsWith("companions/")) {
         value = value.replaceAll(
-          "../../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.0.html",
-          "strategy-canvas-chimeric-prototype-v0.2.0.html",
+          "../../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
+          "strategy-canvas-chimeric-prototype-v0.2.2.html",
         );
       }
       return Buffer.from(value);
@@ -171,15 +175,33 @@ function technologyBundle(base, archivePath) {
   };
 }
 
+function threadkeepingBundle(base, archivePath) {
+  return {
+    name: relative(repositoryRoot, archivePath),
+    archivePath,
+    root: "",
+    entries: [
+      ["threadkeeping-ledger-chimeric-prototype-v0.1.html", source(join(base, "threadkeeping-ledger-chimeric-prototype-v0.1.html"))],
+      ["threadkeeping-ledger-manifest-v0.1.json", source(join(base, "threadkeeping-ledger-manifest-v0.1.json"))],
+      ["threadkeeping-ledger.context.v0.1.jsonld", source(join(base, "threadkeeping-ledger.context.v0.1.jsonld"))],
+      ["threadkeeping-ledger.schema.v0.1.json", source(join(base, "threadkeeping-ledger.schema.v0.1.json"))],
+    ],
+  };
+}
+
 const bundles = [
   narrativeBundle(
     narrativeContext,
     join(narrativeContext, "narrative-capsules-chimeric-prototype-bundle-v0.1.zip"),
-    join(narrativeContext, "companions/core-architecture-family-index-chimeric-prototype-v0.1.html"),
+    join(narrativeContext, "companions/core-architecture-family-index-chimeric-prototype-v0.1.4.html"),
     join(narrativeContext, "companions/strategy-canvas-chimeric-prototype-v0.1.1.html"),
   ),
   semanticBundle(semanticContext, join(semanticContext, "narrative-sampling-tableau-chimeric-prototype-bundle-v0.1.zip")),
   technologyBundle(technologyContext, join(technologyContext, "technology-fit-sampling-tableau-chimeric-prototype-bundle-v0.1.zip")),
+  threadkeepingBundle(
+    join(threadkeepingContext, "threadkeeping-ledger-chimeric-prototype-bundle-v0.1"),
+    join(threadkeepingContext, "threadkeeping-ledger-chimeric-prototype-bundle-v0.1.zip"),
+  ),
 ];
 
 function readLegacy(archive, entry) {
@@ -210,7 +232,7 @@ async function verifyManifestReceipts(bundle) {
 }
 
 async function buildBundle(bundle, temporaryRoot) {
-  const stage = join(temporaryRoot, bundle.root);
+  const stage = bundle.root ? join(temporaryRoot, bundle.root) : temporaryRoot;
   await mkdir(stage, { recursive: true });
   const archiveEntries = [];
 
@@ -222,7 +244,7 @@ async function buildBundle(bundle, temporaryRoot) {
     await writeFile(destination, bytes);
     await chmod(destination, 0o644);
     await utimes(destination, fixedTime, fixedTime);
-    archiveEntries.push(`${bundle.root}/${entryPath}`);
+    archiveEntries.push(bundle.root ? `${bundle.root}/${entryPath}` : entryPath);
   }
 
   const output = join(temporaryRoot, "bundle.zip");

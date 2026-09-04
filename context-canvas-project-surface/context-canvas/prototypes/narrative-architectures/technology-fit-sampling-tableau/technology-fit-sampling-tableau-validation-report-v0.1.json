@@ -170,7 +170,7 @@
     }
   },
   "notes": [
-    "Candidate probabilities, intervals, and scores are illustrative planning records rather than calibrated forecasts.",
+    "Candidate probabilities, intervals, and scores are uncalibrated planning records rather than calibrated forecasts.",
     "Browser tests used Playwright with system Chromium and page.set_content because local URL navigation is restricted in the execution environment.",
     "The preview image is a convenience artifact and is not a semantic source of truth."
   ]
