@@ -20,6 +20,13 @@ import {
   writePackagePlan,
 } from "./iframe-route-package-engine.mjs";
 import { createAggregatePackagePlan } from "./package-v1-iframe-routes.mjs";
+import {
+  inspectProfessionalProfileScript,
+  inspectPublicReferenceHtml,
+  materializeProfessionalProfileScript,
+  materializePublicReferenceHtml,
+  resolvePublicReferenceDestinations,
+} from "./materialize-public-references.mjs";
 
 const execFileAsync = promisify(execFile);
 const toolPath = fileURLToPath(import.meta.url);
@@ -34,6 +41,9 @@ const carrierManifestRelativePath = `${carrierRelativeRoot}/deployment-manifest.
 const carrierIndexRelativePath = `${carrierRelativeRoot}/deployment-files.tsv`;
 const deploymentFileIndexHeader =
   "deployment_manifest_sha256\tsource_sha\tsurface\tprojected_path\tbytes\tsha256\tmedia_type\n";
+const productionPublicReferenceConfig = ".env.public";
+const legacyContextCanvasPublicationBase =
+  "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/";
 
 const excludedPrimaryRoots = new Set([
   ".agents",
@@ -73,6 +83,7 @@ const mediaTypesByExtension = new Map([
   [".jsonld", new Set(["application/ld+json"])],
   [".js", new Set(["text/javascript"])],
   [".mjs", new Set(["text/javascript"])],
+  [".md", new Set(["text/markdown"])],
   [".png", new Set(["image/png"])],
   [".svg", new Set(["image/svg+xml"])],
   [".txt", new Set(["text/plain"])],
@@ -179,10 +190,49 @@ function assertMediaType(relativePath, mediaType, label) {
   return mediaType;
 }
 
+function validatePublicationConfiguration(publication) {
+  assertExactKeys(
+    publication,
+    ["base_url", "source_root", "public_reference_config"],
+    "Production publication configuration",
+  );
+  let baseUrl;
+  try {
+    baseUrl = new URL(publication.base_url);
+  } catch {
+    fail("Production publication base_url must be one absolute HTTPS origin URL.");
+  }
+  if (
+    baseUrl.protocol !== "https:" ||
+    baseUrl.username !== "" ||
+    baseUrl.password !== "" ||
+    baseUrl.pathname !== "/" ||
+    baseUrl.search !== "" ||
+    baseUrl.hash !== "" ||
+    baseUrl.href !== publication.base_url
+  ) {
+    fail("Production publication base_url must be one normalized HTTPS origin ending in /.");
+  }
+  const sourceRoot = assertRepositoryInputPath(
+    publication.source_root,
+    "Production publication source root",
+  );
+  if (publication.public_reference_config !== productionPublicReferenceConfig) {
+    fail(`Production publication public_reference_config must be ${productionPublicReferenceConfig}.`);
+  }
+  return {
+    base_url: baseUrl.href,
+    source_root: sourceRoot,
+    public_reference_config: productionPublicReferenceConfig,
+  };
+}
+
 function validateConfiguration(configuration) {
+  const keys = ["id", "version", "primary_manifest"];
+  if (Object.hasOwn(configuration ?? {}, "publication")) keys.push("publication");
   assertExactKeys(
     configuration,
-    ["id", "version", "primary_manifest"],
+    keys,
     "Production projection configuration",
   );
   if (configuration.id !== configurationId || configuration.version !== "1") {
@@ -192,6 +242,11 @@ function validateConfiguration(configuration) {
     configuration.primary_manifest,
     "Primary manifest",
   );
+  if (configuration.publication !== undefined) {
+    configuration.publication = validatePublicationConfiguration(
+      configuration.publication,
+    );
+  }
   return configuration;
 }
 
@@ -726,6 +781,313 @@ function assertResolvedPrimaryBytes(bytes, sourcePath) {
   }
 }
 
+function splitReferenceSuffix(reference) {
+  const suffixIndex = reference.search(/[?#]/);
+  return suffixIndex < 0
+    ? { pathname: reference, suffix: "" }
+    : {
+        pathname: reference.slice(0, suffixIndex),
+        suffix: reference.slice(suffixIndex),
+      };
+}
+
+function isLocalReference(reference) {
+  return (
+    reference !== "" &&
+    !reference.startsWith("#") &&
+    !reference.startsWith("{{") &&
+    !/^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(reference)
+  );
+}
+
+function sourceReferenceTarget(
+  reference,
+  sourcePath,
+  sourceRoot,
+  trackedBlobs,
+) {
+  if (!isLocalReference(reference)) return null;
+  const { pathname } = splitReferenceSuffix(reference);
+  if (pathname === "") return null;
+  const candidate = pathname.startsWith("/")
+    ? path.posix.normalize(path.posix.join(sourceRoot, pathname.replace(/^\/+/, "")))
+    : path.posix.normalize(path.posix.join(path.posix.dirname(sourcePath), pathname));
+  if (candidate === ".." || candidate.startsWith("../")) return null;
+  const candidates = pathname.endsWith("/")
+    ? [path.posix.join(candidate, "index.html")]
+    : [candidate, path.posix.join(candidate, "index.html")];
+  for (const target of candidates) {
+    const entry = trackedBlobs.get(target);
+    if (entry?.type === "blob" && ["100644", "100755"].includes(entry.mode)) {
+      return target;
+    }
+  }
+  return null;
+}
+
+function projectedReference(
+  reference,
+  sourcePath,
+  sourceRoot,
+  trackedBlobs,
+  projectedPaths,
+) {
+  const target = sourceReferenceTarget(
+    reference,
+    sourcePath,
+    sourceRoot,
+    trackedBlobs,
+  );
+  if (target === null) return reference;
+  const projectedTarget = projectedPaths.get(target);
+  if (projectedTarget === undefined) {
+    fail(`Primary projection dependency is absent from its explicit closure: ${sourcePath} -> ${target}.`);
+  }
+  const { pathname, suffix } = splitReferenceSuffix(reference);
+  const directoryRoute = pathname.endsWith("/") && projectedTarget.endsWith("/index.html");
+  const targetPath = directoryRoute
+    ? projectedTarget.slice(0, -"index.html".length)
+    : projectedTarget;
+  if (pathname.startsWith("/")) return `/${targetPath}${suffix}`;
+  const projectedSource = projectedPaths.get(sourcePath);
+  const relativeTarget = path.posix.relative(
+    path.posix.dirname(projectedSource),
+    targetPath,
+  );
+  const normalizedTarget = relativeTarget === "" ? "./" : relativeTarget;
+  return `${normalizedTarget}${suffix}`;
+}
+
+function rewriteSrcset(
+  value,
+  sourcePath,
+  sourceRoot,
+  trackedBlobs,
+  projectedPaths,
+) {
+  return value.replace(/(^|,\s*)([^\s,]+)(?=\s|,|$)/g, (
+    carrier,
+    prefix,
+    reference,
+  ) => `${prefix}${projectedReference(
+    reference,
+    sourcePath,
+    sourceRoot,
+    trackedBlobs,
+    projectedPaths,
+  )}`);
+}
+
+function rewritePrimaryLocalReferences(
+  text,
+  sourcePath,
+  sourceRoot,
+  trackedBlobs,
+  projectedPaths,
+) {
+  const rewrite = (reference) => projectedReference(
+    reference,
+    sourcePath,
+    sourceRoot,
+    trackedBlobs,
+    projectedPaths,
+  );
+  let rewritten = text.replace(
+    /(\b(?:href|src|poster|data|action|formaction|xlink:href)\s*=\s*)(["'])([\s\S]*?)\2/gi,
+    (carrier, prefix, quote, reference) =>
+      `${prefix}${quote}${rewrite(reference)}${quote}`,
+  );
+  rewritten = rewritten.replace(
+    /(\b(?:srcset|imagesrcset)\s*=\s*)(["'])([\s\S]*?)\2/gi,
+    (carrier, prefix, quote, value) =>
+      `${prefix}${quote}${rewriteSrcset(
+        value,
+        sourcePath,
+        sourceRoot,
+        trackedBlobs,
+        projectedPaths,
+      )}${quote}`,
+  );
+  rewritten = rewritten.replace(
+    /(url\(\s*)(["']?)([^"')]+)\2(\s*\))/gi,
+    (carrier, prefix, quote, reference, suffix) =>
+      `${prefix}${quote}${rewrite(reference.trim())}${quote}${suffix}`,
+  );
+  rewritten = rewritten.replace(
+    /(@import\s+)(["'])([^"']+)\2/gi,
+    (carrier, prefix, quote, reference) =>
+      `${prefix}${quote}${rewrite(reference)}${quote}`,
+  );
+  rewritten = rewritten.replace(
+    /(\b(?:href|src|poster|url)\s*:\s*)(["'])([^"']+)\2/gi,
+    (carrier, prefix, quote, reference) =>
+      `${prefix}${quote}${rewrite(reference)}${quote}`,
+  );
+  return rewritten;
+}
+
+function rewriteJsonStringReferences(
+  text,
+  sourcePath,
+  sourceRoot,
+  trackedBlobs,
+  projectedPaths,
+) {
+  return text.replace(/"(?:\\.|[^"\\])*"/g, (token) => {
+    let value;
+    try {
+      value = JSON.parse(token);
+    } catch {
+      return token;
+    }
+    const rewritten = projectedReference(
+      value,
+      sourcePath,
+      sourceRoot,
+      trackedBlobs,
+      projectedPaths,
+    );
+    return rewritten === value ? token : JSON.stringify(rewritten);
+  });
+}
+
+function transformPrimaryBytes(
+  bytes,
+  file,
+  publication,
+  trackedBlobs,
+  projectedPaths,
+  destinations,
+) {
+  const extension = path.posix.extname(file.source_path).toLowerCase();
+  const textExtensions = new Set([".css", ".html", ".js", ".json", ".md", ".svg", ".txt", ".xml"]);
+  if (!textExtensions.has(extension)) return bytes;
+  let text = bytes.toString("utf8");
+  if (file.source_path.startsWith(`${publication.source_root}/`)) {
+    const materializerPath = path.posix.relative(
+      path.posix.dirname(publication.source_root),
+      file.source_path,
+    );
+    if (extension === ".html") {
+      const inspection = inspectPublicReferenceHtml(text, materializerPath);
+      if (inspection.occurrenceCount > 0) {
+        text = materializePublicReferenceHtml(
+          text,
+          destinations,
+          materializerPath,
+        );
+      }
+    } else if (extension === ".js" && text.includes("{{PUBLIC_URL")) {
+      const inspection = inspectProfessionalProfileScript(text, materializerPath);
+      if (inspection.occurrenceCount > 0) {
+        text = materializeProfessionalProfileScript(
+          text,
+          destinations,
+          materializerPath,
+        );
+      }
+    }
+    if (extension === ".json") {
+      text = rewriteJsonStringReferences(
+        text,
+        file.source_path,
+        publication.source_root,
+        trackedBlobs,
+        projectedPaths,
+      );
+    }
+    text = text.replaceAll(
+      legacyContextCanvasPublicationBase,
+      publication.base_url,
+    );
+  }
+  text = rewritePrimaryLocalReferences(
+    text,
+    file.source_path,
+    publication.source_root,
+    trackedBlobs,
+    projectedPaths,
+  );
+  const transformed = Buffer.from(text, "utf8");
+  assertResolvedPrimaryBytes(transformed, file.source_path);
+  return transformed;
+}
+
+function publicReferenceMaterializerPath(sourcePath, sourceRoot) {
+  return path.posix.relative(path.posix.dirname(sourceRoot), sourcePath);
+}
+
+async function loadPublicationInput(
+  root,
+  publication,
+  primaryInputs,
+  trackedBlobs,
+) {
+  const configPath = path.resolve(root, productionPublicReferenceConfig);
+  if (trackedBlobs.has(productionPublicReferenceConfig)) {
+    fail("Production public-reference configuration must remain an ignored external input.");
+  }
+  try {
+    await assertRegularFileWithin(
+      root,
+      configPath,
+      "Production public-reference configuration",
+    );
+  } catch (error) {
+    if (error?.code === "ENOENT") {
+      fail(`Production publication requires the ignored ${productionPublicReferenceConfig} receiver.`);
+    }
+    throw error;
+  }
+  const configurationBytes = await readFile(configPath);
+  const keys = new Set();
+  for (const [sourcePath, input] of primaryInputs) {
+    if (!sourcePath.startsWith(`${publication.source_root}/`)) continue;
+    const extension = path.posix.extname(sourcePath).toLowerCase();
+    const source = input.bytes.toString("utf8");
+    const safePath = publicReferenceMaterializerPath(
+      sourcePath,
+      publication.source_root,
+    );
+    let inspection = null;
+    if (extension === ".html") {
+      inspection = inspectPublicReferenceHtml(source, safePath);
+    } else if (extension === ".js" && source.includes("{{PUBLIC_URL")) {
+      inspection = inspectProfessionalProfileScript(source, safePath);
+    }
+    for (const key of inspection?.keys ?? []) keys.add(key);
+  }
+  const destinations = await resolvePublicReferenceDestinations(keys, {
+    configurationSource: configurationBytes.toString("utf8"),
+    environment: {},
+  });
+  return {
+    destinations,
+    input: {
+      source_relationship: "external_digest_bound_input",
+      configuration_path: productionPublicReferenceConfig,
+      configuration_sha256: sha256(configurationBytes),
+      keys: [...keys].sort(),
+    },
+    state: {
+      path: configPath,
+      sha256: sha256(configurationBytes),
+    },
+  };
+}
+
+async function verifyPublicationInputState(state) {
+  if (state === null) return;
+  await assertRegularFileWithin(
+    path.dirname(state.path),
+    state.path,
+    "Production public-reference configuration revalidation",
+  );
+  if (sha256(await readFile(state.path)) !== state.sha256) {
+    fail("Production public-reference configuration changed during composition.");
+  }
+}
+
 function serializeManifest(manifest) {
   return Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 }
@@ -834,17 +1196,11 @@ export async function createProductionProjectionPlan(options = {}) {
     allowCarrierOnlyDirty,
   });
   const primaryManifest = selection.primaryManifest;
-  const aggregatePlan = assertAggregatePlan(
-    options.aggregatePlan ?? await createAggregatePackagePlan(),
-  );
-  const aggregateClosure = aggregateClosureSha256(aggregatePlan.outputFiles);
-  const outputFiles = new Map();
-  const portablePaths = new Set();
-  const outputs = [];
   const trackedInputs = new Map(selection.trackedInputs);
-  let primaryBytes = 0;
-  let iframeBytes = 0;
-
+  const primaryInputs = new Map();
+  const projectedPaths = new Map(
+    primaryManifest.files.map((file) => [file.source_path, file.projected_path]),
+  );
   for (const file of primaryManifest.files) {
     const trackedInput = await readTrackedRepositoryInput(
       root,
@@ -852,22 +1208,63 @@ export async function createProductionProjectionPlan(options = {}) {
       file.source_path,
       "Primary projection source",
     );
-    const bytes = trackedInput.bytes;
+    primaryInputs.set(file.source_path, trackedInput);
     trackedInputs.set(file.source_path, trackedInput);
+  }
+  const publicationInput = selection.configuration.publication === undefined
+    ? null
+    : await loadPublicationInput(
+        root,
+        selection.configuration.publication,
+        primaryInputs,
+        trackedBlobs,
+      );
+  const aggregatePlan = assertAggregatePlan(
+    options.aggregatePlan ?? await createAggregatePackagePlan(),
+  );
+  for (const [key, destination] of publicationInput?.destinations ?? []) {
+    if (!key.startsWith("PUBLIC_URL_IFRAME_")) continue;
+    const url = new URL(destination);
+    const aggregatePath = url.pathname.replace(/^\/v1\//, "");
+    if (!aggregatePlan.outputFiles.has(`${aggregatePath}index.html`)) {
+      fail(`${key} does not identify a route in the accepted aggregate iframe plan.`);
+    }
+  }
+  const aggregateClosure = aggregateClosureSha256(aggregatePlan.outputFiles);
+  const outputFiles = new Map();
+  const portablePaths = new Set();
+  const outputs = [];
+  let primaryBytes = 0;
+  let iframeBytes = 0;
+
+  for (const file of primaryManifest.files) {
+    const sourceBytes = primaryInputs.get(file.source_path).bytes;
+    const bytes = publicationInput === null
+      ? sourceBytes
+      : transformPrimaryBytes(
+          sourceBytes,
+          file,
+          selection.configuration.publication,
+          trackedBlobs,
+          projectedPaths,
+          publicationInput.destinations,
+        );
     assertResolvedPrimaryBytes(bytes, file.source_path);
     const projectedPath = `primary-public/${file.projected_path}`;
     assertPortableOutputCollision(projectedPath, outputFiles, portablePaths);
     outputFiles.set(projectedPath, bytes);
     primaryBytes += bytes.byteLength;
-    outputs.push({
+    const output = {
       surface: "primary",
       source_path: file.source_path,
       projected_path: projectedPath,
       media_type: file.media_type,
       bytes: bytes.byteLength,
       sha256: sha256(bytes),
-      standing: "byte_preserved",
-    });
+      standing: bytes.equals(sourceBytes) ? "byte_preserved" : "generated",
+    };
+    if (!bytes.equals(sourceBytes)) output.source_sha256 = sha256(sourceBytes);
+    outputs.push(output);
   }
 
   const iframeMediaTypes = aggregateMediaTypes(aggregatePlan);
@@ -906,6 +1303,7 @@ export async function createProductionProjectionPlan(options = {}) {
     allowHistoricalSource: carrierRelationship !== null,
     allowCarrierOnlyDirty,
   });
+  await verifyPublicationInputState(publicationInput?.state ?? null);
   const aggregateReceiptBytes = aggregatePlan.outputFiles.get("route-manifest.json");
   const manifest = {
     id: deploymentManifestId,
@@ -918,6 +1316,9 @@ export async function createProductionProjectionPlan(options = {}) {
         version: primaryManifest.version,
         ...selection.binding.primary_manifest,
       },
+      ...(publicationInput === null
+        ? {}
+        : { public_references: publicationInput.input }),
       iframe_package: {
         id: aggregatePlan.receipt.id,
         host: aggregatePlan.receipt.host,

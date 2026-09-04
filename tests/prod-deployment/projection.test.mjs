@@ -221,6 +221,130 @@ async function createFixtureRoot() {
   };
 }
 
+async function enablePublicationFixture(fixture) {
+  const canvasRoot = "context-canvas-project-surface/context-canvas";
+  const projectRoot = "context-canvas-project-surface";
+  const profileKey = "PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE";
+  const registryKey = "PUBLIC_URL_REGISTRY_PRACTITIONER_PROBES";
+  const legacyBase =
+    "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/";
+  const files = {
+    [`${canvasRoot}/index.html`]: [
+      "<!doctype html>",
+      `<link rel="canonical" href="${legacyBase}">`,
+      `<meta property="og:url" content="${legacyBase}">`,
+      `<meta property="og:image" content="${legacyBase}portrait.jpg">`,
+      `<meta name="twitter:image" content="${legacyBase}portrait.jpg">`,
+      '<a href="../img/photo.jpg">Portrait</a>',
+      '<a href="../../collaboration/demo.html#start">Example</a>',
+      "<script>const route = { href: '../../collaboration/demo.html#script' };</script>",
+      `<a href="{{${registryKey}}}">Registry</a>`,
+      '<iframe src="https://iframes.vik.guru/v1/canvas/demo/"></iframe>',
+      '<script type="application/ld+json">' + JSON.stringify({
+        "@id": `${legacyBase}#page`,
+        url: legacyBase,
+        schema: "https://schemas.vik.guru/example/v1/schema.json",
+        iframe: "https://iframes.vik.guru/v1/canvas/demo/",
+        relatedLink: `{{${registryKey}}}`,
+      }) + "</script>",
+    ].join("\n"),
+    [`${canvasRoot}/canvas-shell.js`]: [
+      `var professionalProfileRoute = "{{${profileKey}}}";`,
+      'if (professionalProfileRoute.indexOf("{{PUBLIC_URL_") === -1) {',
+      '  var professionalProfileLink = element("a", "", "Professional profile");',
+      "  professionalProfileLink.href = professionalProfileRoute;",
+      '  professionalProfileLink.setAttribute("aria-label", "View the author profile");',
+      "  network.appendChild(professionalProfileLink);",
+      "} else {",
+      '  network.appendChild(element("span", "super-footer__reserved", "Professional profile available in the public build"));',
+      "}",
+    ].join("\n"),
+    [`${canvasRoot}/portrait.jpg`]: "portrait",
+    [`${canvasRoot}/sitemap.xml`]: [
+      '<?xml version="1.0"?>',
+      "<urlset>",
+      `  <url><loc>${legacyBase}</loc></url>`,
+      "</urlset>",
+    ].join("\n"),
+    [`${projectRoot}/img/photo.jpg`]: "photo",
+    "collaboration/demo.html": "<!doctype html><title>Demo</title>",
+  };
+  for (const [relativePath, source] of Object.entries(files)) {
+    const filePath = path.join(fixture.root, ...relativePath.split("/"));
+    await mkdir(path.dirname(filePath), { recursive: true });
+    await writeFile(filePath, source, "utf8");
+  }
+  await writeFile(
+    path.join(fixture.root, ".gitignore"),
+    ".env.public\n",
+    "utf8",
+  );
+  await writeFile(
+    fixture.primaryManifestPath,
+    `${JSON.stringify(primaryManifest([
+      {
+        source_path: `${canvasRoot}/index.html`,
+        projected_path: "index.html",
+        media_type: "text/html",
+      },
+      {
+        source_path: `${canvasRoot}/canvas-shell.js`,
+        projected_path: "canvas-shell.js",
+        media_type: "text/javascript",
+      },
+      {
+        source_path: `${canvasRoot}/portrait.jpg`,
+        projected_path: "portrait.jpg",
+        media_type: "image/jpeg",
+      },
+      {
+        source_path: `${canvasRoot}/sitemap.xml`,
+        projected_path: "sitemap.xml",
+        media_type: "application/xml",
+      },
+      {
+        source_path: `${projectRoot}/img/photo.jpg`,
+        projected_path: "img/photo.jpg",
+        media_type: "image/jpeg",
+      },
+      {
+        source_path: "collaboration/demo.html",
+        projected_path: "collaboration/demo.html",
+        media_type: "text/html",
+      },
+    ]))}\n`,
+    "utf8",
+  );
+  await writeFile(
+    fixture.configurationPath,
+    `${JSON.stringify({
+      id: "prod-projection.configuration.v1",
+      version: "1",
+      primary_manifest: primaryManifestRelativePath,
+      publication: {
+        base_url: "https://vik.guru/",
+        source_root: canvasRoot,
+        public_reference_config: ".env.public",
+      },
+    })}\n`,
+    "utf8",
+  );
+  const destinations = {
+    [profileKey]: "https://profiles.example.test/author",
+    [registryKey]: "https://registry.example.test/probes",
+  };
+  const publicConfiguration = Object.entries(destinations)
+    .map(([key, value]) => `${key}=${value}`)
+    .join("\n") + "\n";
+  await writeFile(
+    path.join(fixture.root, ".env.public"),
+    publicConfiguration,
+    "utf8",
+  );
+  fixture.sourceSha = await commitFixture(fixture.root, "Accept publication fixture");
+  return { canvasRoot, destinations, publicConfiguration };
+}
+
 async function commitPrimaryManifest(fixture, files, message) {
   await writeFile(
     fixture.primaryManifestPath,
@@ -327,6 +451,107 @@ test("the production plan deterministically combines an explicit primary closure
       [...first.outputFiles.keys()].every((file) =>
         !file.includes(".iframe-route-build") && !file.includes("context-canvas-project-surface/context-canvas"),
       ),
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("publication projection materializes one digest-bound receiver and rewrites flattened route geometry", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const publication = await enablePublicationFixture(fixture);
+    const aggregatePlan = aggregateFixture();
+    const first = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan,
+    });
+    const second = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan,
+    });
+    const html = first.outputFiles.get("primary-public/index.html").toString("utf8");
+    assert.match(html, /<link rel="canonical" href="https:\/\/vik\.guru\/">/);
+    assert.match(html, /<meta property="og:url" content="https:\/\/vik\.guru\/">/);
+    assert.match(html, /<meta property="og:image" content="https:\/\/vik\.guru\/portrait\.jpg">/);
+    assert.match(html, /<meta name="twitter:image" content="https:\/\/vik\.guru\/portrait\.jpg">/);
+    assert.match(html, /href="img\/photo\.jpg"/);
+    assert.match(html, /href="collaboration\/demo\.html#start"/);
+    assert.match(html, /href: 'collaboration\/demo\.html#script'/);
+    assert.match(html, new RegExp(publication.destinations.PUBLIC_URL_REGISTRY_PRACTITIONER_PROBES));
+    assert.match(html, /https:\/\/iframes\.vik\.guru\/v1\/canvas\/demo\//);
+    assert.match(html, /https:\/\/schemas\.vik\.guru\/example\/v1\/schema\.json/);
+    assert.doesNotMatch(html, /schemas\.radiantnull\.com\/context-canvas-project-surface\/context-canvas/);
+    const script = first.outputFiles
+      .get("primary-public/canvas-shell.js")
+      .toString("utf8");
+    assert.match(script, new RegExp(publication.destinations.PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE));
+    assert.doesNotMatch(script, /\{\{PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE\}\}/);
+    assert.match(
+      first.outputFiles.get("primary-public/sitemap.xml").toString("utf8"),
+      /<loc>https:\/\/vik\.guru\/<\/loc>/,
+    );
+    assert.deepEqual([...first.outputFiles.keys()], [...second.outputFiles.keys()]);
+    for (const [file, bytes] of first.outputFiles) {
+      assert.ok(bytes.equals(second.outputFiles.get(file)), `${file} remains deterministic`);
+    }
+    const publicReferenceInput = first.manifest.inputs.public_references;
+    assert.deepEqual(publicReferenceInput.keys, [
+      "PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE",
+      "PUBLIC_URL_REGISTRY_PRACTITIONER_PROBES",
+    ]);
+    assert.equal(
+      publicReferenceInput.configuration_sha256,
+      sha256(Buffer.from(publication.publicConfiguration)),
+    );
+    assert.equal(publicReferenceInput.source_relationship, "external_digest_bound_input");
+    assert.doesNotMatch(
+      JSON.stringify(first.manifest),
+      /profiles\.example\.test|registry\.example\.test/,
+    );
+    const generated = first.manifest.outputs.filter(
+      ({ surface, standing }) => surface === "primary" && standing === "generated",
+    );
+    assert.ok(generated.length >= 3);
+    assert.ok(generated.every(({ source_sha256 }) => /^[a-f0-9]{64}$/.test(source_sha256)));
+
+    await rm(path.join(fixture.root, ".env.public"));
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan,
+      }),
+      /requires the ignored \.env\.public receiver/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("publication projection fails closed when an authored dependency is absent from the explicit manifest", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    await enablePublicationFixture(fixture);
+    const manifest = JSON.parse(await readFile(fixture.primaryManifestPath, "utf8"));
+    manifest.files = manifest.files.filter(
+      ({ source_path }) => source_path !== "collaboration/demo.html",
+    );
+    await writeFile(fixture.primaryManifestPath, `${JSON.stringify(manifest)}\n`, "utf8");
+    fixture.sourceSha = await commitFixture(fixture.root, "Remove required publication dependency");
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /dependency is absent.*index\.html -> collaboration\/demo\.html/,
     );
   } finally {
     await rm(fixture.root, { recursive: true, force: true });
