@@ -757,6 +757,34 @@ async function exerciseOpenLesson({ page }) {
   assert.equal(await page.evaluate(() => globalThis.__canvasPrintCalls), 1);
 }
 
+function replaceExactStrings(value, replacements) {
+  if (typeof value === "string") return replacements.get(value) ?? value;
+  if (Array.isArray(value)) {
+    return value.map((item) => replaceExactStrings(item, replacements));
+  }
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [
+        key,
+        replaceExactStrings(item, replacements),
+      ]),
+    );
+  }
+  return value;
+}
+
+async function importAtlasFixture(page, name, value) {
+  await page.locator("#importStatus").evaluate((element) => {
+    element.textContent = "";
+  });
+  await page.locator("#jsonFileInput").setInputFiles({
+    name,
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(value)),
+  });
+  await page.locator("#importStatus").filter({ hasText: "accepted" }).waitFor();
+}
+
 async function exerciseAtlas({ page }) {
   assert.match(
     await page.locator("noscript").textContent(),
@@ -855,6 +883,169 @@ async function exerciseAtlas({ page }) {
     `viz:${exported.view_state.selectedExemplarId}`,
   );
   assert.equal(jsonLdView["viz:audienceContext"], "mixed");
+
+  const hostileMoveId = 'move-compare" data-atlas-injected="true';
+  const hostileMoveLabel =
+    '<img src="x" onerror="globalThis.__atlasHostileExecutions += 1">';
+  const hostileColumn =
+    '</text><image href="x" onerror="globalThis.__atlasHostileExecutions += 1"></image><text>';
+  const hostileAtlas = replaceExactStrings(
+    structuredClone(exported),
+    new Map([["move-compare", hostileMoveId]]),
+  );
+  hostileAtlas.cognitive_moves.find((item) => item.id === hostileMoveId).label =
+    hostileMoveLabel;
+  hostileAtlas.exemplars.find(
+    (item) => item.id === "ex-outcome-composition",
+  ).dataset.columns[1] = hostileColumn;
+  hostileAtlas.view_state = {
+    ...hostileAtlas.view_state,
+    selectedMoveId: "move-composition-groups",
+    selectedShapeId: "shape-composition-groups",
+    selectedVisualFormId: "form-stacked100",
+    selectedExemplarId: "ex-outcome-composition",
+  };
+  await page.evaluate(() => {
+    globalThis.__atlasHostileExecutions = 0;
+  });
+  await importAtlasFixture(page, "atlas-hostile.json", hostileAtlas);
+  await page.waitForTimeout(100);
+  const hostileOption = await page.locator("#moveSelect option").evaluateAll(
+    (options, label) => {
+      const option = options.find((candidate) => candidate.textContent === label);
+      return option
+        ? {
+            injectedAttribute: option.hasAttribute("data-atlas-injected"),
+            value: option.value,
+          }
+        : null;
+    },
+    hostileMoveLabel,
+  );
+  assert.deepEqual(hostileOption, {
+    injectedAttribute: false,
+    value: hostileMoveId,
+  });
+  assert.equal(
+    await page.evaluate(() => globalThis.__atlasHostileExecutions),
+    0,
+  );
+  assert.equal(await page.locator("#exemplarDetail [onerror]").count(), 0);
+  assert.match(await page.locator("#exemplarDetail svg").textContent(), /<\/text><image/);
+
+  await importAtlasFixture(page, "atlas-baseline.json", exported);
+
+  const scorelessAtlas = structuredClone(exported);
+  for (const recommendation of scorelessAtlas.recommendations) {
+    delete recommendation.fidelity_score;
+    delete recommendation.accessibility_score;
+    delete recommendation.ai_readiness_score;
+  }
+  await importAtlasFixture(page, "atlas-scoreless.json", scorelessAtlas);
+  assert.deepEqual(
+    await page.locator("#scoreGrid strong").allTextContents(),
+    ["Not scored", "Not scored", "Not scored"],
+    "schema-optional recommendation scores retain a legible runtime state",
+  );
+
+  await importAtlasFixture(page, "atlas-baseline.json", exported);
+  const reservedToggle = page.locator("#reservedToggle");
+  assert.equal(await reservedToggle.isChecked(), true);
+  await reservedToggle.uncheck();
+  assert.equal(await page.locator(".rec-card.reserved").count(), 0);
+  await page.locator("#exportJsonBtn").click();
+  assert.equal(
+    JSON.parse(await page.locator("#copyOutput").inputValue()).view_state.showReserved,
+    false,
+  );
+  const reservedJsonLd = JSON.parse(
+    await page.locator("#jsonld-data").textContent(),
+  );
+  assert.equal(
+    reservedJsonLd["@graph"].find((node) => node["@type"] === "viz:ViewState")[
+      "viz:showReserved"
+    ],
+    false,
+  );
+  await reservedToggle.check();
+  assert.equal(await page.locator(".rec-card.reserved").count(), 1);
+
+  const renamedIds = new Map([
+    ["move-compare", "move-imported"],
+    ["shape-category-quantity", "shape-imported"],
+    ["form-sorted-bar", "form-imported"],
+    ["ex-metadata-corrections-bar", "ex-imported"],
+  ]);
+  const renamedAtlas = replaceExactStrings(structuredClone(exported), renamedIds);
+  renamedAtlas.artifact_identity.display_name = "Imported Atlas fixture";
+  renamedAtlas.cognitive_moves[0].label = "Imported comparison move";
+  renamedAtlas.data_shapes[0].label = "Imported category and quantity";
+  renamedAtlas.visual_forms[0].label = "Imported aligned bar";
+  renamedAtlas.exemplars[0].title = "Imported comparison exemplar";
+  renamedAtlas.view_state = {
+    ...renamedAtlas.view_state,
+    audience: "executive",
+    showReserved: false,
+  };
+  await importAtlasFixture(page, "atlas-renamed.json", renamedAtlas);
+  assert.equal(await page.locator("#moveSelect").inputValue(), "move-imported");
+  assert.equal(await page.locator("#shapeSelect").inputValue(), "shape-imported");
+  assert.equal(
+    await page.locator('[data-form-id="form-imported"]').getAttribute("aria-pressed"),
+    "true",
+  );
+  assert.equal(
+    await page.locator("#exemplarDetail").getAttribute("data-selected-exemplar-id"),
+    "ex-imported",
+  );
+  assert.equal(await page.locator(".rec-card.reserved").count(), 0);
+  let importedJsonLd = JSON.parse(
+    await page.locator("#jsonld-data").textContent(),
+  );
+  assert.equal(
+    importedJsonLd["@graph"].find((node) => node["@id"] === "viz:viz-atlas-001")[
+      "schema:name"
+    ],
+    "Imported Atlas fixture",
+  );
+  assert.equal(
+    importedJsonLd["@graph"].find((node) => node["@id"] === "viz:form-imported")[
+      "schema:name"
+    ],
+    "Imported aligned bar",
+  );
+  assert.equal(
+    importedJsonLd["@graph"].some((node) => node["@id"] === "viz:form-sorted-bar"),
+    false,
+  );
+
+  await page.locator("#moveSelect").selectOption({ index: 1 });
+  await page.locator("#audienceSelect").selectOption("research");
+  await page.locator("#reservedToggle").check();
+  await page.locator("#resetViewBtn").click();
+  assert.equal(await page.locator("#moveSelect").inputValue(), "move-imported");
+  assert.equal(await page.locator("#shapeSelect").inputValue(), "shape-imported");
+  assert.equal(await page.locator("#audienceSelect").inputValue(), "mixed");
+  assert.equal(await page.locator("#reservedToggle").isChecked(), true);
+  assert.equal(
+    await page.locator('[data-form-id="form-imported"]').getAttribute("aria-pressed"),
+    "true",
+  );
+  assert.equal(
+    await page.locator("#exemplarDetail").getAttribute("data-selected-exemplar-id"),
+    "ex-imported",
+  );
+  importedJsonLd = JSON.parse(
+    await page.locator("#jsonld-data").textContent(),
+  );
+  assert.equal(
+    importedJsonLd["@graph"].find((node) => node["@type"] === "viz:ViewState")[
+      "viz:selectedVisualForm"
+    ]["@id"],
+    "viz:form-imported",
+  );
+
+  await importAtlasFixture(page, "atlas-baseline.json", exported);
 
   await page.locator("#audienceSelect").selectOption("research");
   await page.locator('[data-form-id="form-lollipop"]').click();

@@ -14,10 +14,12 @@
     "Core Architectures and Site Readings"
   ],
   "interaction_contract": {
-    "selection": "Visual-form selection and exemplar selection remain distinct, visible states.",
-    "exchange": "Paste and local-file routes share one size-limited validation and commit path.",
+    "selection": "Visual-form selection, exemplar selection, and Reserved-group visibility remain distinct, visible states.",
+    "exchange": "Paste and local-file routes share one size-limited interactive-render validation and commit path. Renderable collections, closed references, and finite chart values are checked; schema-optional recommendation scores appear as Not scored.",
+    "rendering": "Accepted Atlas strings remain inert text in controls, HTML, and SVG output.",
     "recovery": "A rejected import leaves the last accepted Atlas and view state active.",
-    "copy": "Prompt, Atlas JSON, and JSON-LD actions expose selectable content together with clipboard status."
+    "copy": "Prompt, Atlas JSON, and JSON-LD actions expose selectable content together with clipboard status.",
+    "semantic_twin": "The JSON-LD graph is rebuilt from the accepted Atlas and current view state."
   },
   "recommended_repository_paths": {
     "field_guide": "packages/field-guide/src/stabilizers/visual-data-communication/",

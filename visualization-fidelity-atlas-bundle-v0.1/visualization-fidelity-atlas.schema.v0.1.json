@@ -99,7 +99,8 @@
           "type": "string"
         },
         "showReserved": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether the Reserved recommendation group is visible in the interactive Atlas."
         },
         "audience": {
           "type": "string",
