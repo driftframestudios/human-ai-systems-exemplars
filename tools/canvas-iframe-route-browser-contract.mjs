@@ -951,7 +951,14 @@ async function exerciseAtlas({ page }) {
   await importAtlasFixture(page, "atlas-baseline.json", exported);
   const reservedToggle = page.locator("#reservedToggle");
   assert.equal(await reservedToggle.isChecked(), true);
+  const promptWithReserved = await page.locator("#aiPrompt").inputValue();
   await reservedToggle.uncheck();
+  const promptWithReservedOutOfView = await page.locator("#aiPrompt").inputValue();
+  assert.notEqual(promptWithReservedOutOfView, promptWithReserved);
+  assert.match(
+    promptWithReservedOutOfView,
+    /Reserved recommendations: available through the selector; current view focuses on Recommended and Conditional forms/,
+  );
   assert.equal(await page.locator(".rec-card.reserved").count(), 0);
   await page.locator("#exportJsonBtn").click();
   assert.equal(
