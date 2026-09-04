@@ -226,24 +226,33 @@ async function enablePublicationFixture(fixture) {
   const projectRoot = "context-canvas-project-surface";
   const profileKey = "PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE";
   const registryKey = "PUBLIC_URL_REGISTRY_PRACTITIONER_PROBES";
+  const legacyOrigin = "https://schemas.radiantnull.com/";
   const legacyBase =
-    "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/";
+    `${legacyOrigin}context-canvas-project-surface/context-canvas/`;
   const files = {
     [`${canvasRoot}/index.html`]: [
       "<!doctype html>",
       `<link rel="canonical" href="${legacyBase}">`,
       `<meta property="og:url" content="${legacyBase}">`,
-      `<meta property="og:image" content="${legacyBase}portrait.jpg">`,
-      `<meta name="twitter:image" content="${legacyBase}portrait.jpg">`,
+      `<meta property="og:image" content="${legacyOrigin}${projectRoot}/img/photo.jpg">`,
+      `<meta name="twitter:image" content="${legacyOrigin}${projectRoot}/img/photo.jpg">`,
       '<a href="../img/photo.jpg">Portrait</a>',
       '<a href="../../collaboration/demo.html#start">Example</a>',
+      '<button data-action="open-panel" data-src="lazy-panel" data-href="panel-route">Open panel</button>',
+      "<script>const preview = URL.createObjectURL(blob);</script>",
+      '<script>const card = `<a href="${escapeHtml(source.url)}" data-action="${source.action}">${source.label}</a>`;</script>',
+      "<style>/* .archived { background-image: url(missing-comment.png); } */</style>",
       "<script>const route = { href: '../../collaboration/demo.html#script' };</script>",
       `<a href="{{${registryKey}}}">Registry</a>`,
       '<iframe src="https://iframes.vik.guru/v1/canvas/demo/"></iframe>',
       '<script type="application/ld+json">' + JSON.stringify({
         "@id": `${legacyBase}#page`,
         url: legacyBase,
+        image: `${legacyOrigin}${projectRoot}/img/photo.jpg`,
+        contentUrl: `${legacyOrigin}${projectRoot}/img/photo.jpg`,
+        application: `${legacyOrigin}collaboration/app/`,
         schema: "https://schemas.vik.guru/example/v1/schema.json",
+        skill: "https://schemas.radiantnull.com/skills/source-authority-mapping/",
         iframe: "https://iframes.vik.guru/v1/canvas/demo/",
         relatedLink: `{{${registryKey}}}`,
       }) + "</script>",
@@ -260,14 +269,24 @@ async function enablePublicationFixture(fixture) {
       "}",
     ].join("\n"),
     [`${canvasRoot}/portrait.jpg`]: "portrait",
+    [`${canvasRoot}/manifest.json`]: `${JSON.stringify({
+      id: "./",
+      start_url: "./index.html",
+      scope: "./",
+      icons: [{ src: "portrait.jpg" }],
+    }, null, 2)}\n`,
     [`${canvasRoot}/sitemap.xml`]: [
       '<?xml version="1.0"?>',
       "<urlset>",
       `  <url><loc>${legacyBase}</loc></url>`,
+      "  <url><loc>https://schemas.radiantnull.com/context-canvas/1.0.0/context-canvas.schema.json</loc></url>",
+      "  <url><loc>https://example.test/external</loc></url>",
       "</urlset>",
     ].join("\n"),
     [`${projectRoot}/img/photo.jpg`]: "photo",
     "collaboration/demo.html": "<!doctype html><title>Demo</title>",
+    "collaboration/app/index.html": "<!doctype html><title>App</title>",
+    "deployment/cpanel/iframe-origin-robots.txt": "User-agent: *\nAllow: /\n",
   };
   for (const [relativePath, source] of Object.entries(files)) {
     const filePath = path.join(fixture.root, ...relativePath.split("/"));
@@ -298,6 +317,11 @@ async function enablePublicationFixture(fixture) {
         media_type: "image/jpeg",
       },
       {
+        source_path: `${canvasRoot}/manifest.json`,
+        projected_path: "manifest.json",
+        media_type: "application/manifest+json",
+      },
+      {
         source_path: `${canvasRoot}/sitemap.xml`,
         projected_path: "sitemap.xml",
         media_type: "application/xml",
@@ -312,6 +336,11 @@ async function enablePublicationFixture(fixture) {
         projected_path: "collaboration/demo.html",
         media_type: "text/html",
       },
+      {
+        source_path: "collaboration/app/index.html",
+        projected_path: "collaboration/app/index.html",
+        media_type: "text/html",
+      },
     ]))}\n`,
     "utf8",
   );
@@ -321,6 +350,7 @@ async function enablePublicationFixture(fixture) {
       id: "prod-projection.configuration.v1",
       version: "1",
       primary_manifest: primaryManifestRelativePath,
+      iframe_origin_robots: "deployment/cpanel/iframe-origin-robots.txt",
       publication: {
         base_url: "https://vik.guru/",
         source_root: canvasRoot,
@@ -343,6 +373,82 @@ async function enablePublicationFixture(fixture) {
   );
   fixture.sourceSha = await commitFixture(fixture.root, "Accept publication fixture");
   return { canvasRoot, destinations, publicConfiguration };
+}
+
+async function enableMarkdownFixture(fixture) {
+  const { canvasRoot } = await enablePublicationFixture(fixture);
+  const guideSource = [
+    "# Projection guide",
+    "",
+    "[Read the detail](notes/detail.md#decision)",
+    "![Inspect the flow](images/flow.svg)",
+    "[Open the handbook](handbook/)",
+    "[Stay with this section](#projection-guide)",
+    "[Read the contract][contract]",
+    "[External source](https://example.test/reference)",
+    "",
+    "`[Code sample](missing-inline.md)`",
+    "",
+    "```markdown",
+    "[Fenced example](missing-fenced.md)",
+    "```",
+    "",
+    '[contract]: <contracts/agreement.md#scope> "Agreement scope"',
+    "",
+  ].join("\n");
+  const files = {
+    [`${canvasRoot}/guide.md`]: guideSource,
+    [`${canvasRoot}/notes/detail.md`]: "# Detail\n",
+    [`${canvasRoot}/images/flow.svg`]: '<svg xmlns="http://www.w3.org/2000/svg"></svg>\n',
+    [`${canvasRoot}/handbook/README.md`]: "# Handbook\n",
+    [`${canvasRoot}/contracts/agreement.md`]: "# Agreement\n",
+  };
+  for (const [relativePath, source] of Object.entries(files)) {
+    const filePath = path.join(fixture.root, ...relativePath.split("/"));
+    await mkdir(path.dirname(filePath), { recursive: true });
+    await writeFile(filePath, source, "utf8");
+  }
+  const indexPath = path.join(fixture.root, ...`${canvasRoot}/index.html`.split("/"));
+  await writeFile(
+    indexPath,
+    `${await readFile(indexPath, "utf8")}\n<a href="guide.md">Projection guide</a>\n`,
+    "utf8",
+  );
+  const manifest = JSON.parse(await readFile(fixture.primaryManifestPath, "utf8"));
+  manifest.files.push(
+    {
+      source_path: `${canvasRoot}/guide.md`,
+      projected_path: "guides/guide.md",
+      media_type: "text/markdown",
+    },
+    {
+      source_path: `${canvasRoot}/notes/detail.md`,
+      projected_path: "guides/detail.md",
+      media_type: "text/markdown",
+    },
+    {
+      source_path: `${canvasRoot}/images/flow.svg`,
+      projected_path: "guides/flow.svg",
+      media_type: "image/svg+xml",
+    },
+    {
+      source_path: `${canvasRoot}/handbook/README.md`,
+      projected_path: "guides/handbook/README.md",
+      media_type: "text/markdown",
+    },
+    {
+      source_path: `${canvasRoot}/contracts/agreement.md`,
+      projected_path: "guides/contracts/agreement.md",
+      media_type: "text/markdown",
+    },
+  );
+  await writeFile(
+    fixture.primaryManifestPath,
+    `${JSON.stringify(manifest)}\n`,
+    "utf8",
+  );
+  fixture.sourceSha = await commitFixture(fixture.root, "Accept Markdown closure fixture");
+  return { canvasRoot, guideSource };
 }
 
 async function commitPrimaryManifest(fixture, files, message) {
@@ -477,15 +583,36 @@ test("publication projection materializes one digest-bound receiver and rewrites
     const html = first.outputFiles.get("primary-public/index.html").toString("utf8");
     assert.match(html, /<link rel="canonical" href="https:\/\/vik\.guru\/">/);
     assert.match(html, /<meta property="og:url" content="https:\/\/vik\.guru\/">/);
-    assert.match(html, /<meta property="og:image" content="https:\/\/vik\.guru\/portrait\.jpg">/);
-    assert.match(html, /<meta name="twitter:image" content="https:\/\/vik\.guru\/portrait\.jpg">/);
+    assert.match(html, /<meta property="og:image" content="https:\/\/vik\.guru\/img\/photo\.jpg">/);
+    assert.match(html, /<meta name="twitter:image" content="https:\/\/vik\.guru\/img\/photo\.jpg">/);
     assert.match(html, /href="img\/photo\.jpg"/);
     assert.match(html, /href="collaboration\/demo\.html#start"/);
+    assert.match(html, /data-action="open-panel" data-src="lazy-panel" data-href="panel-route"/);
+    assert.match(html, /URL\.createObjectURL\(blob\)/);
+    assert.match(
+      html,
+      /`<a href="\$\{escapeHtml\(source\.url\)\}" data-action="\$\{source\.action\}">\$\{source\.label\}<\/a>`/,
+    );
+    assert.match(html, /url\(missing-comment\.png\)/);
     assert.match(html, /href: 'collaboration\/demo\.html#script'/);
     assert.match(html, new RegExp(publication.destinations.PUBLIC_URL_REGISTRY_PRACTITIONER_PROBES));
     assert.match(html, /https:\/\/iframes\.vik\.guru\/v1\/canvas\/demo\//);
     assert.match(html, /https:\/\/schemas\.vik\.guru\/example\/v1\/schema\.json/);
+    const jsonLd = JSON.parse(
+      html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1],
+    );
+    assert.equal(jsonLd["@id"], "https://vik.guru/#page");
+    assert.equal(jsonLd.url, "https://vik.guru/");
+    assert.equal(jsonLd.image, "https://vik.guru/img/photo.jpg");
+    assert.equal(jsonLd.contentUrl, "https://vik.guru/img/photo.jpg");
+    assert.equal(jsonLd.application, "https://vik.guru/collaboration/app/");
+    assert.equal(
+      jsonLd.skill,
+      "https://schemas.radiantnull.com/skills/source-authority-mapping/",
+    );
     assert.doesNotMatch(html, /schemas\.radiantnull\.com\/context-canvas-project-surface\/context-canvas/);
+    assert.doesNotMatch(html, /schemas\.radiantnull\.com\/context-canvas-project-surface\/img/);
+    assert.doesNotMatch(html, /schemas\.radiantnull\.com\/collaboration\/app/);
     const script = first.outputFiles
       .get("primary-public/canvas-shell.js")
       .toString("utf8");
@@ -494,6 +621,27 @@ test("publication projection materializes one digest-bound receiver and rewrites
     assert.match(
       first.outputFiles.get("primary-public/sitemap.xml").toString("utf8"),
       /<loc>https:\/\/vik\.guru\/<\/loc>/,
+    );
+    assert.match(
+      first.outputFiles.get("primary-public/sitemap.xml").toString("utf8"),
+      /<loc>https:\/\/schemas\.radiantnull\.com\/context-canvas\/1\.0\.0\/context-canvas\.schema\.json<\/loc>/,
+    );
+    assert.match(
+      first.outputFiles.get("primary-public/sitemap.xml").toString("utf8"),
+      /<loc>https:\/\/example\.test\/external<\/loc>/,
+    );
+    assert.deepEqual(
+      JSON.parse(first.outputFiles.get("primary-public/manifest.json")),
+      {
+        id: "./",
+        start_url: "./index.html",
+        scope: "./",
+        icons: [{ src: "portrait.jpg" }],
+      },
+    );
+    assert.equal(
+      first.outputFiles.get("iframe-public/robots.txt").toString("utf8"),
+      "User-agent: *\nAllow: /\n",
     );
     assert.deepEqual([...first.outputFiles.keys()], [...second.outputFiles.keys()]);
     for (const [file, bytes] of first.outputFiles) {
@@ -509,6 +657,14 @@ test("publication projection materializes one digest-bound receiver and rewrites
       sha256(Buffer.from(publication.publicConfiguration)),
     );
     assert.equal(publicReferenceInput.source_relationship, "external_digest_bound_input");
+    assert.deepEqual(first.manifest.inputs.iframe_origin_robots, {
+      source_path: "deployment/cpanel/iframe-origin-robots.txt",
+      git_blob_id: await git(
+        fixture.root,
+        ["rev-parse", "HEAD:deployment/cpanel/iframe-origin-robots.txt"],
+      ),
+      sha256: sha256(Buffer.from("User-agent: *\nAllow: /\n")),
+    });
     assert.doesNotMatch(
       JSON.stringify(first.manifest),
       /profiles\.example\.test|registry\.example\.test/,
@@ -528,6 +684,224 @@ test("publication projection materializes one digest-bound receiver and rewrites
         aggregatePlan,
       }),
       /requires the ignored \.env\.public receiver/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("publication projection rewrites visitor-reachable Markdown links across fragments and directory READMEs", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    await enableMarkdownFixture(fixture);
+    const plan = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan: aggregateFixture(),
+    });
+    const html = plan.outputFiles.get("primary-public/index.html").toString("utf8");
+    const markdown = plan.outputFiles
+      .get("primary-public/guides/guide.md")
+      .toString("utf8");
+
+    assert.match(html, /href="guides\/guide\.md"/);
+    assert.match(markdown, /\[Read the detail\]\(detail\.md#decision\)/);
+    assert.match(markdown, /!\[Inspect the flow\]\(flow\.svg\)/);
+    assert.match(markdown, /\[Open the handbook\]\(handbook\/README\.md\)/);
+    assert.match(markdown, /\[Stay with this section\]\(#projection-guide\)/);
+    assert.match(markdown, /\[External source\]\(https:\/\/example\.test\/reference\)/);
+    assert.match(markdown, /\[contract\]: <contracts\/agreement\.md#scope>/);
+    assert.match(markdown, /`\[Code sample\]\(missing-inline\.md\)`/);
+    assert.match(markdown, /\[Fenced example\]\(missing-fenced\.md\)/);
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("publication projection fails closed for missing and escaping Markdown destinations", async () => {
+  for (const [label, destination, expected] of [
+    ["missing", "missing.md", /Markdown reference points to an unavailable tracked file/],
+    ["escaping", "../../../../outside.md", /Markdown reference escapes the repository/],
+  ]) {
+    const fixture = await createFixtureRoot();
+    try {
+      const { canvasRoot } = await enableMarkdownFixture(fixture);
+      const guidePath = path.join(fixture.root, ...`${canvasRoot}/guide.md`.split("/"));
+      await writeFile(
+        guidePath,
+        `${await readFile(guidePath, "utf8")}\n[Unresolved destination](${destination})\n`,
+        "utf8",
+      );
+      fixture.sourceSha = await commitFixture(fixture.root, `Add ${label} Markdown destination`);
+      await assert.rejects(
+        createProductionProjectionPlan({
+          repositoryRoot: fixture.root,
+          sourceSha: fixture.sourceSha,
+          configurationPath: fixture.configurationPath,
+          aggregatePlan: aggregateFixture(),
+        }),
+        expected,
+      );
+    } finally {
+      await rm(fixture.root, { recursive: true, force: true });
+    }
+  }
+});
+
+test("publication projection fails closed for missing and escaping runtime references", async () => {
+  const cases = [
+    {
+      label: "missing HTML image",
+      kind: "html",
+      source: '<img src="missing.png" alt="">',
+      expected: /runtime reference points to an unavailable tracked file.*index\.html -> missing\.png/,
+    },
+    {
+      label: "escaping HTML image",
+      kind: "html",
+      source: '<img src="../../../outside.png" alt="">',
+      expected: /runtime reference escapes the repository.*index\.html -> \.\.\/\.\.\/\.\.\/outside\.png/,
+    },
+    {
+      label: "missing HTML form action",
+      kind: "html",
+      source: '<form action="missing-handler.html"></form>',
+      expected: /runtime reference points to an unavailable tracked file.*index\.html -> missing-handler\.html/,
+    },
+    {
+      label: "missing HTML style attribute image",
+      kind: "html",
+      source: '<div style="background-image: url(\'missing.png\')"></div>',
+      expected: /runtime reference points to an unavailable tracked file.*index\.html -> missing\.png/,
+    },
+    {
+      label: "missing HTML style block image",
+      kind: "html",
+      source: '<style>.card { background-image: url("missing.png"); }</style>',
+      expected: /runtime reference points to an unavailable tracked file.*index\.html -> missing\.png/,
+    },
+    {
+      label: "missing CSS image",
+      kind: "css",
+      source: '.card { background-image: url("missing.png"); }\n',
+      expected: /runtime reference points to an unavailable tracked file.*surface\.css -> missing\.png/,
+    },
+    {
+      label: "escaping CSS import",
+      kind: "css",
+      source: '@import "../../../outside.css";\n',
+      expected: /runtime reference escapes the repository.*surface\.css -> \.\.\/\.\.\/\.\.\/outside\.css/,
+    },
+    {
+      label: "missing JavaScript locator",
+      kind: "js",
+      source: 'const asset = { url: "missing.json" };\n',
+      expected: /runtime reference points to an unavailable tracked file.*canvas-shell\.js -> missing\.json/,
+    },
+    {
+      label: "escaping JavaScript locator",
+      kind: "js",
+      source: 'const asset = { url: "../../../outside.json" };\n',
+      expected: /runtime reference escapes the repository.*canvas-shell\.js -> \.\.\/\.\.\/\.\.\/outside\.json/,
+    },
+  ];
+
+  for (const runtimeCase of cases) {
+    const fixture = await createFixtureRoot();
+    try {
+      const { canvasRoot } = await enablePublicationFixture(fixture);
+      const manifest = JSON.parse(await readFile(fixture.primaryManifestPath, "utf8"));
+      let relativePath;
+      if (runtimeCase.kind === "html") {
+        relativePath = `${canvasRoot}/index.html`;
+        const filePath = path.join(fixture.root, ...relativePath.split("/"));
+        await writeFile(
+          filePath,
+          `${await readFile(filePath, "utf8")}\n${runtimeCase.source}\n`,
+          "utf8",
+        );
+      } else if (runtimeCase.kind === "css") {
+        relativePath = `${canvasRoot}/surface.css`;
+        await writeFile(
+          path.join(fixture.root, ...relativePath.split("/")),
+          runtimeCase.source,
+          "utf8",
+        );
+        manifest.files.push({
+          source_path: relativePath,
+          projected_path: "surface.css",
+          media_type: "text/css",
+        });
+        await writeFile(
+          fixture.primaryManifestPath,
+          `${JSON.stringify(manifest)}\n`,
+          "utf8",
+        );
+      } else {
+        relativePath = `${canvasRoot}/canvas-shell.js`;
+        const filePath = path.join(fixture.root, ...relativePath.split("/"));
+        await writeFile(
+          filePath,
+          `${await readFile(filePath, "utf8")}\n${runtimeCase.source}`,
+          "utf8",
+        );
+      }
+      fixture.sourceSha = await commitFixture(
+        fixture.root,
+        `Add ${runtimeCase.label} fixture`,
+      );
+
+      await assert.rejects(
+        createProductionProjectionPlan({
+          repositoryRoot: fixture.root,
+          sourceSha: fixture.sourceSha,
+          configurationPath: fixture.configurationPath,
+          aggregatePlan: aggregateFixture(),
+        }),
+        runtimeCase.expected,
+      );
+    } finally {
+      await rm(fixture.root, { recursive: true, force: true });
+    }
+  }
+});
+
+test("selected JSON examples cannot carry machine references into repository-only roots", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const { canvasRoot } = await enablePublicationFixture(fixture);
+    const privateSource = ".agents/skills/private/SKILL.md";
+    const exampleSource = `${canvasRoot}/machine-example.json`;
+    for (const [relativePath, source] of [
+      [privateSource, "# Private source\n"],
+      [exampleSource, `${JSON.stringify({ sourceRef: "../../.agents/skills/private/SKILL.md" })}\n`],
+    ]) {
+      const filePath = path.join(fixture.root, ...relativePath.split("/"));
+      await mkdir(path.dirname(filePath), { recursive: true });
+      await writeFile(filePath, source, "utf8");
+    }
+    const manifest = JSON.parse(await readFile(fixture.primaryManifestPath, "utf8"));
+    manifest.files.push({
+      source_path: exampleSource,
+      projected_path: "examples/machine-example.json",
+      media_type: "application/json",
+    });
+    await writeFile(
+      fixture.primaryManifestPath,
+      `${JSON.stringify(manifest)}\n`,
+      "utf8",
+    );
+    fixture.sourceSha = await commitFixture(fixture.root, "Select machine-reference fixture");
+
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /dependency is absent.*machine-example\.json -> \.agents\/skills\/private\/SKILL\.md/,
     );
   } finally {
     await rm(fixture.root, { recursive: true, force: true });
@@ -555,6 +929,50 @@ test("publication projection fails closed when an authored dependency is absent 
     );
   } finally {
     await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("unsettled Core authority pauses both primary and iframe production selection at Issue #110", async () => {
+  const primaryFixture = await createFixtureRoot();
+  try {
+    await writeFile(
+      path.join(primaryFixture.root, "visitor/index.html"),
+      '<!doctype html><script>const context = "https://example.org/core-architectures#";</script>\n',
+      "utf8",
+    );
+    primaryFixture.sourceSha = await commitFixture(
+      primaryFixture.root,
+      "Add unsettled primary authority",
+    );
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: primaryFixture.root,
+        sourceSha: primaryFixture.sourceSha,
+        configurationPath: primaryFixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /pauses at Issue #110:.*1 primary file\(s\) and 0 iframe package file\(s\)/,
+    );
+  } finally {
+    await rm(primaryFixture.root, { recursive: true, force: true });
+  }
+
+  const iframeFixture = await createFixtureRoot();
+  try {
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: iframeFixture.root,
+        sourceSha: iframeFixture.sourceSha,
+        configurationPath: iframeFixture.configurationPath,
+        aggregatePlan: aggregateFixture({
+          canvasHtml:
+            '<!doctype html><script>const context = "https://example.org/core-architectures#";</script>',
+        }),
+      }),
+      /pauses at Issue #110:.*0 primary file\(s\) and 1 iframe package file\(s\)/,
+    );
+  } finally {
+    await rm(iframeFixture.root, { recursive: true, force: true });
   }
 });
 

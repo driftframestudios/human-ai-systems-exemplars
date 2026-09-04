@@ -255,7 +255,7 @@
     {
       "source_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
       "projected_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
-      "media_type": "application/json"
+      "media_type": "application/schema+json"
     },
     {
       "source_path": "context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html",
@@ -913,11 +913,6 @@
       "media_type": "text/markdown"
     },
     {
-      "source_path": "lims-eln-functional-nucleus/lims-eln-program-specification/README.md",
-      "projected_path": "lims-eln-functional-nucleus/lims-eln-program-specification/README.md",
-      "media_type": "text/markdown"
-    },
-    {
       "source_path": "context-canvas-project-surface/context-canvas/manifest.json",
       "projected_path": "manifest.json",
       "media_type": "application/manifest+json"
@@ -1263,26 +1258,6 @@
       "media_type": "image/svg+xml"
     },
     {
-      "source_path": "schemas/collaboration-skills/0.1.0/examples/collaboration-account.example.json",
-      "projected_path": "schemas/collaboration-skills/0.1.0/examples/collaboration-account.example.json",
-      "media_type": "application/json"
-    },
-    {
-      "source_path": "schemas/collaboration-skills/0.1.0/examples/portable-skill.example.json",
-      "projected_path": "schemas/collaboration-skills/0.1.0/examples/portable-skill.example.json",
-      "media_type": "application/json"
-    },
-    {
-      "source_path": "schemas/collaboration-skills/0.1.0/examples/retired-projection.example.json",
-      "projected_path": "schemas/collaboration-skills/0.1.0/examples/retired-projection.example.json",
-      "media_type": "application/json"
-    },
-    {
-      "source_path": "schemas/collaboration-skills/0.1.0/README.md",
-      "projected_path": "schemas/collaboration-skills/0.1.0/README.md",
-      "media_type": "text/markdown"
-    },
-    {
       "source_path": "context-canvas-project-surface/context-canvas/shared-machinery.html",
       "projected_path": "shared-machinery.html",
       "media_type": "text/html"
@@ -1361,11 +1336,6 @@
       "source_path": "context-canvas-project-surface/context-canvas/visitor-boundary-contract.js",
       "projected_path": "visitor-boundary-contract.js",
       "media_type": "text/javascript"
-    },
-    {
-      "source_path": "visual-fidelity-contracts/cobalt-temporal-field.md",
-      "projected_path": "visual-fidelity-contracts/cobalt-temporal-field.md",
-      "media_type": "text/markdown"
     },
     {
       "source_path": "visualization-fidelity-atlas-bundle-v0.1/visualization-fidelity-atlas-chimeric-prototype-v0.1.html",

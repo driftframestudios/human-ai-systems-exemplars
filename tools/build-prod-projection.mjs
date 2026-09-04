@@ -42,8 +42,11 @@ const carrierIndexRelativePath = `${carrierRelativeRoot}/deployment-files.tsv`;
 const deploymentFileIndexHeader =
   "deployment_manifest_sha256\tsource_sha\tsurface\tprojected_path\tbytes\tsha256\tmedia_type\n";
 const productionPublicReferenceConfig = ".env.public";
-const legacyContextCanvasPublicationBase =
-  "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/";
+const legacyPublicationOrigin = "https://schemas.radiantnull.com/";
+const unsettledCoreAuthorityMarkers = [
+  "https://example.org/core-architectures#",
+  "https://example.org/core-architectures/",
+];
 
 const excludedPrimaryRoots = new Set([
   ".agents",
@@ -230,6 +233,9 @@ function validatePublicationConfiguration(publication) {
 function validateConfiguration(configuration) {
   const keys = ["id", "version", "primary_manifest"];
   if (Object.hasOwn(configuration ?? {}, "publication")) keys.push("publication");
+  if (Object.hasOwn(configuration ?? {}, "iframe_origin_robots")) {
+    keys.push("iframe_origin_robots");
+  }
   assertExactKeys(
     configuration,
     keys,
@@ -242,6 +248,15 @@ function validateConfiguration(configuration) {
     configuration.primary_manifest,
     "Primary manifest",
   );
+  if (configuration.iframe_origin_robots !== undefined) {
+    configuration.iframe_origin_robots = assertRepositoryInputPath(
+      configuration.iframe_origin_robots,
+      "Iframe-origin robots source",
+    );
+    if (path.posix.extname(configuration.iframe_origin_robots).toLowerCase() !== ".txt") {
+      fail("Iframe-origin robots source must be a text file.");
+    }
+  }
   if (configuration.publication !== undefined) {
     configuration.publication = validatePublicationConfiguration(
       configuration.publication,
@@ -781,6 +796,24 @@ function assertResolvedPrimaryBytes(bytes, sourcePath) {
   }
 }
 
+function hasUnsettledProductionAuthority(bytes) {
+  return unsettledCoreAuthorityMarkers.some((marker) => bytes.includes(marker));
+}
+
+function assertSettledProductionAuthority(primaryInputs, aggregateOutputFiles) {
+  const primaryCount = [...primaryInputs.values()].filter(({ bytes }) =>
+    hasUnsettledProductionAuthority(bytes),
+  ).length;
+  const iframeCount = [...aggregateOutputFiles.values()].filter((bytes) =>
+    hasUnsettledProductionAuthority(bytes),
+  ).length;
+  if (primaryCount > 0 || iframeCount > 0) {
+    fail(
+      `Production projection pauses at Issue #110: unsettled Core vocabulary authority remains in ${primaryCount} primary file(s) and ${iframeCount} iframe package file(s).`,
+    );
+  }
+}
+
 function splitReferenceSuffix(reference) {
   const suffixIndex = reference.search(/[?#]/);
   return suffixIndex < 0
@@ -800,29 +833,62 @@ function isLocalReference(reference) {
   );
 }
 
-function sourceReferenceTarget(
+function publicationAbsoluteReferenceMap(primaryManifest, publication) {
+  const mappings = new Map();
+  const declare = (sourceUrl, projectedUrl) => {
+    const existing = mappings.get(sourceUrl);
+    if (existing !== undefined && existing !== projectedUrl) {
+      fail(`Production publication URL mapping collides at ${sourceUrl}.`);
+    }
+    mappings.set(sourceUrl, projectedUrl);
+  };
+  for (const file of primaryManifest.files) {
+    const sourceUrl = new URL(file.source_path, legacyPublicationOrigin).href;
+    const projectedUrl = new URL(file.projected_path, publication.base_url).href;
+    declare(sourceUrl, projectedUrl);
+    if (
+      path.posix.basename(file.source_path) === "index.html" &&
+      path.posix.basename(file.projected_path) === "index.html"
+    ) {
+      declare(
+        new URL(`${path.posix.dirname(file.source_path)}/`, legacyPublicationOrigin).href,
+        new URL(`${path.posix.dirname(file.projected_path)}/`, publication.base_url).href,
+      );
+    }
+  }
+  return mappings;
+}
+
+function sourceReferenceResolution(
   reference,
   sourcePath,
   sourceRoot,
   trackedBlobs,
+  { allowDirectoryReadme = false } = {},
 ) {
-  if (!isLocalReference(reference)) return null;
+  if (!isLocalReference(reference)) return { standing: "outside_local_scope" };
   const { pathname } = splitReferenceSuffix(reference);
-  if (pathname === "") return null;
+  if (pathname === "") return { standing: "outside_local_scope" };
   const candidate = pathname.startsWith("/")
     ? path.posix.normalize(path.posix.join(sourceRoot, pathname.replace(/^\/+/, "")))
     : path.posix.normalize(path.posix.join(path.posix.dirname(sourcePath), pathname));
-  if (candidate === ".." || candidate.startsWith("../")) return null;
+  if (candidate === ".." || candidate.startsWith("../")) {
+    return { standing: "escape", candidate };
+  }
+  const directoryCandidates = [path.posix.join(candidate, "index.html")];
+  if (allowDirectoryReadme) {
+    directoryCandidates.push(path.posix.join(candidate, "README.md"));
+  }
   const candidates = pathname.endsWith("/")
-    ? [path.posix.join(candidate, "index.html")]
-    : [candidate, path.posix.join(candidate, "index.html")];
+    ? directoryCandidates
+    : [candidate, ...directoryCandidates];
   for (const target of candidates) {
     const entry = trackedBlobs.get(target);
     if (entry?.type === "blob" && ["100644", "100755"].includes(entry.mode)) {
-      return target;
+      return { standing: "resolved", target };
     }
   }
-  return null;
+  return { standing: "missing", candidate };
 }
 
 function projectedReference(
@@ -831,31 +897,57 @@ function projectedReference(
   sourceRoot,
   trackedBlobs,
   projectedPaths,
+  options = {},
 ) {
-  const target = sourceReferenceTarget(
+  const { pathname, suffix } = splitReferenceSuffix(reference);
+  const absoluteProjection = options.absoluteProjectionUrls?.get(pathname);
+  if (absoluteProjection !== undefined) {
+    return `${absoluteProjection}${suffix}`;
+  }
+  const resolution = sourceReferenceResolution(
     reference,
     sourcePath,
     sourceRoot,
     trackedBlobs,
+    { allowDirectoryReadme: options.allowDirectoryReadme === true },
   );
-  if (target === null) return reference;
+  if (resolution.standing !== "resolved") {
+    if (options.requireLocalResolution === true) {
+      const referenceKind = options.referenceKind ?? "local";
+      if (resolution.standing === "escape") {
+        fail(`Primary projection ${referenceKind} reference escapes the repository: ${sourcePath} -> ${reference}.`);
+      }
+      if (resolution.standing === "missing") {
+        fail(`Primary projection ${referenceKind} reference points to an unavailable tracked file: ${sourcePath} -> ${reference}.`);
+      }
+    }
+    return reference;
+  }
+  const target = resolution.target;
   const projectedTarget = projectedPaths.get(target);
   if (projectedTarget === undefined) {
     fail(`Primary projection dependency is absent from its explicit closure: ${sourcePath} -> ${target}.`);
   }
-  const { pathname, suffix } = splitReferenceSuffix(reference);
-  const directoryRoute = pathname.endsWith("/") && projectedTarget.endsWith("/index.html");
+  const directoryRoute =
+    pathname.endsWith("/") && path.posix.basename(projectedTarget) === "index.html";
   const targetPath = directoryRoute
     ? projectedTarget.slice(0, -"index.html".length)
     : projectedTarget;
   if (pathname.startsWith("/")) return `/${targetPath}${suffix}`;
   const projectedSource = projectedPaths.get(sourcePath);
-  const relativeTarget = path.posix.relative(
+  let relativeTarget = path.posix.relative(
     path.posix.dirname(projectedSource),
     targetPath,
   );
-  const normalizedTarget = relativeTarget === "" ? "./" : relativeTarget;
-  return `${normalizedTarget}${suffix}`;
+  if (relativeTarget === "") {
+    relativeTarget = "./";
+  } else {
+    if (directoryRoute && !relativeTarget.endsWith("/")) relativeTarget += "/";
+    if (pathname.startsWith("./") && !relativeTarget.startsWith(".")) {
+      relativeTarget = `./${relativeTarget}`;
+    }
+  }
+  return `${relativeTarget}${suffix}`;
 }
 
 function rewriteSrcset(
@@ -864,6 +956,7 @@ function rewriteSrcset(
   sourceRoot,
   trackedBlobs,
   projectedPaths,
+  options,
 ) {
   return value.replace(/(^|,\s*)([^\s,]+)(?=\s|,|$)/g, (
     carrier,
@@ -875,40 +968,103 @@ function rewriteSrcset(
     sourceRoot,
     trackedBlobs,
     projectedPaths,
+    options,
   )}`);
 }
 
-function rewritePrimaryLocalReferences(
-  text,
-  sourcePath,
-  sourceRoot,
-  trackedBlobs,
-  projectedPaths,
-) {
-  const rewrite = (reference) => projectedReference(
-    reference,
-    sourcePath,
-    sourceRoot,
-    trackedBlobs,
-    projectedPaths,
+function htmlAttributeValue(element, attribute) {
+  const match = element.match(
+    new RegExp(`(?:^|\\s)${attribute}\\s*=\\s*(["'])([\\s\\S]*?)\\1`, "i"),
   );
+  return match?.[2] ?? null;
+}
+
+function rewriteHtmlAttribute(element, attribute, rewrite) {
+  return element.replace(
+    new RegExp(`(^|\\s)(${attribute}\\s*=\\s*)(["'])([\\s\\S]*?)\\3`, "i"),
+    (carrier, boundary, prefix, quote, value) =>
+      `${boundary}${prefix}${quote}${rewrite(value)}${quote}`,
+  );
+}
+
+function rewriteOpeningTags(text, rewrite, { skipBodies = new Set() } = {}) {
+  let cursor = 0;
+  let rewritten = "";
+  const lowercaseText = text.toLowerCase();
+  while (cursor < text.length) {
+    const opening = text.indexOf("<", cursor);
+    if (opening < 0) return `${rewritten}${text.slice(cursor)}`;
+    rewritten += text.slice(cursor, opening);
+    const candidate = text.slice(opening).match(/^<[A-Za-z][A-Za-z0-9:-]*(?=[\s/>])/);
+    if (candidate === null) {
+      rewritten += "<";
+      cursor = opening + 1;
+      continue;
+    }
+    let quote = null;
+    let closing = opening + candidate[0].length;
+    for (; closing < text.length; closing += 1) {
+      const character = text[closing];
+      if (quote === null && (character === '"' || character === "'")) {
+        quote = character;
+      } else if (quote === character) {
+        quote = null;
+      } else if (quote === null && character === ">") {
+        closing += 1;
+        break;
+      }
+    }
+    if (closing > text.length || text[closing - 1] !== ">") {
+      rewritten += text.slice(opening);
+      return rewritten;
+    }
+    const tagName = candidate[0].slice(1).match(/^[A-Za-z][A-Za-z0-9:-]*/)[0].toLowerCase();
+    rewritten += rewrite(text.slice(opening, closing));
+    cursor = closing;
+    if (skipBodies.has(tagName)) {
+      const closingTag = lowercaseText.indexOf(`</${tagName}`, cursor);
+      if (closingTag < 0) {
+        rewritten += text.slice(cursor);
+        return rewritten;
+      }
+      rewritten += text.slice(cursor, closingTag);
+      cursor = closingTag;
+    }
+  }
+  return rewritten;
+}
+
+function rewritePublicationMetadataReferences(text, rewrite) {
+  const socialUrlRoles = new Set([
+    "og:image",
+    "og:image:secure_url",
+    "og:image:url",
+    "og:url",
+    "twitter:image",
+    "twitter:image:src",
+    "twitter:url",
+  ]);
+  return text.replace(/<(?:link|meta)\b[^>]*>/gi, (element) => {
+    if (/^<link\b/i.test(element)) {
+      const rel = htmlAttributeValue(element, "rel");
+      if (rel?.toLowerCase().split(/\s+/).includes("canonical")) {
+        return rewriteHtmlAttribute(element, "href", rewrite);
+      }
+      return element;
+    }
+    const role = (
+      htmlAttributeValue(element, "property") ??
+      htmlAttributeValue(element, "name") ??
+      ""
+    ).toLowerCase();
+    return socialUrlRoles.has(role)
+      ? rewriteHtmlAttribute(element, "content", rewrite)
+      : element;
+  });
+}
+
+function rewriteCssReferenceChunk(text, rewrite) {
   let rewritten = text.replace(
-    /(\b(?:href|src|poster|data|action|formaction|xlink:href)\s*=\s*)(["'])([\s\S]*?)\2/gi,
-    (carrier, prefix, quote, reference) =>
-      `${prefix}${quote}${rewrite(reference)}${quote}`,
-  );
-  rewritten = rewritten.replace(
-    /(\b(?:srcset|imagesrcset)\s*=\s*)(["'])([\s\S]*?)\2/gi,
-    (carrier, prefix, quote, value) =>
-      `${prefix}${quote}${rewriteSrcset(
-        value,
-        sourcePath,
-        sourceRoot,
-        trackedBlobs,
-        projectedPaths,
-      )}${quote}`,
-  );
-  rewritten = rewritten.replace(
     /(url\(\s*)(["']?)([^"')]+)\2(\s*\))/gi,
     (carrier, prefix, quote, reference, suffix) =>
       `${prefix}${quote}${rewrite(reference.trim())}${quote}${suffix}`,
@@ -918,11 +1074,110 @@ function rewritePrimaryLocalReferences(
     (carrier, prefix, quote, reference) =>
       `${prefix}${quote}${rewrite(reference)}${quote}`,
   );
-  rewritten = rewritten.replace(
+  return rewritten;
+}
+
+function rewriteCssReferences(text, rewrite) {
+  let cursor = 0;
+  let rewritten = "";
+  for (const comment of text.matchAll(/\/\*[\s\S]*?(?:\*\/|$)/g)) {
+    rewritten += rewriteCssReferenceChunk(text.slice(cursor, comment.index), rewrite);
+    rewritten += comment[0];
+    cursor = comment.index + comment[0].length;
+  }
+  return `${rewritten}${rewriteCssReferenceChunk(text.slice(cursor), rewrite)}`;
+}
+
+function rewriteStyleBlocks(text, rewrite) {
+  return text.replace(
+    /(<style\b[^>]*>)([\s\S]*?)(<\/style\s*>)/gi,
+    (carrier, opening, css, closing) =>
+      `${opening}${rewriteCssReferences(css, rewrite)}${closing}`,
+  );
+}
+
+function rewriteJavascriptReferences(text, rewrite) {
+  return text.replace(
     /(\b(?:href|src|poster|url)\s*:\s*)(["'])([^"']+)\2/gi,
     (carrier, prefix, quote, reference) =>
       `${prefix}${quote}${rewrite(reference)}${quote}`,
   );
+}
+
+function rewriteOrdinaryScriptBodies(text, rewrite) {
+  return text.replace(
+    /(<script\b([^>]*)>)([\s\S]*?)(<\/script\s*>)/gi,
+    (carrier, opening, attributes, javascript, closing) => {
+      const type = htmlAttributeValue(`<script ${attributes}>`, "type")?.toLowerCase();
+      return type === "application/ld+json"
+        ? carrier
+        : `${opening}${rewriteJavascriptReferences(javascript, rewrite)}${closing}`;
+    },
+  );
+}
+
+function rewriteSitemapReferences(text, rewrite) {
+  return text.replace(
+    /(<loc>)([\s\S]*?)(<\/loc>)/gi,
+    (carrier, opening, reference, closing) =>
+      `${opening}${rewrite(reference.trim())}${closing}`,
+  );
+}
+
+function rewritePrimaryLocalReferences(
+  text,
+  sourcePath,
+  sourceRoot,
+  trackedBlobs,
+  projectedPaths,
+  options = {},
+) {
+  const rewrite = (reference) => projectedReference(
+    reference,
+    sourcePath,
+    sourceRoot,
+    trackedBlobs,
+    projectedPaths,
+    options,
+  );
+  const extension = options.extension;
+  const markup = [".html", ".svg", ".xml"].includes(extension);
+  let rewritten = markup
+    ? rewriteOpeningTags(text, (element) => {
+        let tag = rewritePublicationMetadataReferences(element, rewrite);
+        tag = tag.replace(
+          /(^|\s)((?:href|src|poster|data|action|formaction|xlink:href)\s*=\s*)(["'])([\s\S]*?)\3/gi,
+          (carrier, boundary, prefix, quote, reference) =>
+            `${boundary}${prefix}${quote}${rewrite(reference)}${quote}`,
+        );
+        tag = tag.replace(
+          /(^|\s)((?:srcset|imagesrcset)\s*=\s*)(["'])([\s\S]*?)\3/gi,
+          (carrier, boundary, prefix, quote, value) =>
+            `${boundary}${prefix}${quote}${rewriteSrcset(
+              value,
+              sourcePath,
+              sourceRoot,
+              trackedBlobs,
+              projectedPaths,
+              options,
+            )}${quote}`,
+        );
+        tag = rewriteHtmlAttribute(
+          tag,
+          "style",
+          (value) => rewriteCssReferences(value, rewrite),
+        );
+        return tag;
+      }, { skipBodies: new Set(["script"]) })
+    : text;
+  if (extension === ".css") rewritten = rewriteCssReferences(rewritten, rewrite);
+  if ([".html", ".svg"].includes(extension)) {
+    rewritten = rewriteStyleBlocks(rewritten, rewrite);
+  }
+  if (extension === ".html") rewritten = rewriteOrdinaryScriptBodies(rewritten, rewrite);
+  if ([".js", ".mjs"].includes(extension)) {
+    rewritten = rewriteJavascriptReferences(rewritten, rewrite);
+  }
   return rewritten;
 }
 
@@ -932,6 +1187,7 @@ function rewriteJsonStringReferences(
   sourceRoot,
   trackedBlobs,
   projectedPaths,
+  options = {},
 ) {
   return text.replace(/"(?:\\.|[^"\\])*"/g, (token) => {
     let value;
@@ -946,9 +1202,257 @@ function rewriteJsonStringReferences(
       sourceRoot,
       trackedBlobs,
       projectedPaths,
+      options,
     );
     return rewritten === value ? token : JSON.stringify(rewritten);
   });
+}
+
+function assertJsonMachineReferenceClosure(
+  text,
+  sourcePath,
+  sourceRoot,
+  trackedBlobs,
+  projectedPaths,
+  options,
+) {
+  let document;
+  try {
+    document = JSON.parse(text);
+  } catch (error) {
+    fail(`Primary projection JSON source must parse: ${sourcePath}: ${error instanceof Error ? error.message : error}.`);
+  }
+  const visit = (value) => {
+    if (Array.isArray(value)) {
+      for (const item of value) visit(item);
+      return;
+    }
+    if (!isPlainObject(value)) return;
+    for (const [key, item] of Object.entries(value)) {
+      const referenceField =
+        key === "$ref" || /(?:Ref|Refs|_ref|_refs)$/.test(key);
+      if (referenceField) {
+        const references = Array.isArray(item) ? item : [item];
+        for (const reference of references) {
+          if (typeof reference !== "string") continue;
+          projectedReference(
+            reference,
+            sourcePath,
+            sourceRoot,
+            trackedBlobs,
+            projectedPaths,
+            {
+              ...options,
+              allowDirectoryReadme: true,
+              requireLocalResolution: true,
+            },
+          );
+        }
+      }
+      visit(item);
+    }
+  };
+  visit(document);
+}
+
+function rewriteJsonLdReferences(
+  text,
+  sourcePath,
+  sourceRoot,
+  trackedBlobs,
+  projectedPaths,
+  options,
+) {
+  return text.replace(
+    /(<script\b(?=[^>]*\btype\s*=\s*["']application\/ld\+json["'])[^>]*>)([\s\S]*?)(<\/script\s*>)/gi,
+    (carrier, opening, json, closing) =>
+      `${opening}${rewriteJsonStringReferences(
+        json,
+        sourcePath,
+        sourceRoot,
+        trackedBlobs,
+        projectedPaths,
+        options,
+      )}${closing}`,
+  );
+}
+
+function maskMarkdownCodeAndComments(text) {
+  const masked = Array(text.length).fill(false);
+  const mark = (start, end) => {
+    for (let index = start; index < end; index += 1) masked[index] = true;
+  };
+
+  let fence = null;
+  let lineStart = 0;
+  while (lineStart < text.length) {
+    const newline = text.indexOf("\n", lineStart);
+    const lineEnd = newline < 0 ? text.length : newline;
+    const nextLine = newline < 0 ? text.length : newline + 1;
+    const line = text.slice(lineStart, lineEnd);
+    if (fence === null) {
+      const opening = line.match(/^[ \t]{0,3}(`{3,}|~{3,})/);
+      if (opening) {
+        fence = { character: opening[1][0], length: opening[1].length };
+        mark(lineStart, nextLine);
+      }
+    } else {
+      mark(lineStart, nextLine);
+      const closing = line.match(/^[ \t]{0,3}(`+|~+)[ \t]*$/);
+      if (
+        closing &&
+        closing[1][0] === fence.character &&
+        closing[1].length >= fence.length
+      ) {
+        fence = null;
+      }
+    }
+    lineStart = nextLine;
+  }
+
+  for (const comment of text.matchAll(/<!--[\s\S]*?(?:-->|$)/g)) {
+    mark(comment.index, comment.index + comment[0].length);
+  }
+
+  let index = 0;
+  while (index < text.length) {
+    if (masked[index] || text[index] !== "`") {
+      index += 1;
+      continue;
+    }
+    let runEnd = index + 1;
+    while (text[runEnd] === "`") runEnd += 1;
+    const marker = text.slice(index, runEnd);
+    let closing = text.indexOf(marker, runEnd);
+    while (
+      closing >= 0 &&
+      (masked[closing] || text[closing - 1] === "`" || text[closing + marker.length] === "`")
+    ) {
+      closing = text.indexOf(marker, closing + marker.length);
+    }
+    if (closing < 0) {
+      index = runEnd;
+      continue;
+    }
+    mark(index, closing + marker.length);
+    index = closing + marker.length;
+  }
+
+  return text
+    .split("")
+    .map((character, characterIndex) =>
+      masked[characterIndex] && character !== "\n" ? " " : character,
+    )
+    .join("");
+}
+
+function markdownDestinationSpan(source, start, { parenthesized }) {
+  let cursor = start;
+  while (cursor < source.length && /[ \t\n]/.test(source[cursor])) cursor += 1;
+  if (source[cursor] === "<") {
+    const destinationStart = cursor + 1;
+    cursor = destinationStart;
+    while (cursor < source.length) {
+      if (source[cursor] === "\\") {
+        cursor += 2;
+        continue;
+      }
+      if (source[cursor] === ">") {
+        return { start: destinationStart, end: cursor };
+      }
+      if (source[cursor] === "\n") return null;
+      cursor += 1;
+    }
+    return null;
+  }
+
+  const destinationStart = cursor;
+  let nested = 0;
+  while (cursor < source.length) {
+    const character = source[cursor];
+    if (character === "\\") {
+      cursor += 2;
+      continue;
+    }
+    if (/\s/.test(character) && nested === 0) break;
+    if (parenthesized && character === "(") {
+      nested += 1;
+    } else if (parenthesized && character === ")") {
+      if (nested === 0) break;
+      nested -= 1;
+    }
+    cursor += 1;
+  }
+  return cursor === destinationStart
+    ? null
+    : { start: destinationStart, end: cursor };
+}
+
+function normalizedMarkdownLabel(label) {
+  return label.trim().replace(/\s+/g, " ").toLowerCase();
+}
+
+function markdownReferenceSpans(text) {
+  const source = maskMarkdownCodeAndComments(text);
+  const references = [];
+  for (const match of source.matchAll(/!?\[(?:\\.|[^\]\\])*\]\(/g)) {
+    const span = markdownDestinationSpan(
+      source,
+      match.index + match[0].length,
+      { parenthesized: true },
+    );
+    if (span !== null) references.push(span);
+  }
+
+  const definitions = new Map();
+  for (const match of source.matchAll(/^[ \t]{0,3}\[((?:\\.|[^\]\\])+)\]:[ \t]*/gm)) {
+    const span = markdownDestinationSpan(
+      source,
+      match.index + match[0].length,
+      { parenthesized: false },
+    );
+    if (span === null) continue;
+    const label = normalizedMarkdownLabel(match[1]);
+    if (!definitions.has(label)) definitions.set(label, span);
+  }
+  const usedDefinitions = new Set();
+  for (const match of source.matchAll(/!?\[((?:\\.|[^\]\\])+)\]\[((?:\\.|[^\]\\])*)\]/g)) {
+    usedDefinitions.add(normalizedMarkdownLabel(match[2] || match[1]));
+  }
+  for (const label of usedDefinitions) {
+    const span = definitions.get(label);
+    if (span !== undefined) references.push(span);
+  }
+  return references.sort((left, right) => right.start - left.start);
+}
+
+function rewriteMarkdownLocalReferences(
+  text,
+  sourcePath,
+  sourceRoot,
+  trackedBlobs,
+  projectedPaths,
+  options,
+) {
+  let rewritten = text;
+  for (const span of markdownReferenceSpans(text)) {
+    const reference = text.slice(span.start, span.end);
+    const projected = projectedReference(
+      reference,
+      sourcePath,
+      sourceRoot,
+      trackedBlobs,
+      projectedPaths,
+      {
+        ...options,
+        allowDirectoryReadme: true,
+        requireLocalResolution: true,
+        referenceKind: "Markdown",
+      },
+    );
+    rewritten = `${rewritten.slice(0, span.start)}${projected}${rewritten.slice(span.end)}`;
+  }
+  return rewritten;
 }
 
 function transformPrimaryBytes(
@@ -958,11 +1462,29 @@ function transformPrimaryBytes(
   trackedBlobs,
   projectedPaths,
   destinations,
+  absoluteProjectionUrls,
 ) {
   const extension = path.posix.extname(file.source_path).toLowerCase();
-  const textExtensions = new Set([".css", ".html", ".js", ".json", ".md", ".svg", ".txt", ".xml"]);
+  const textExtensions = new Set([".css", ".html", ".js", ".json", ".jsonld", ".md", ".svg", ".txt", ".webmanifest", ".xml"]);
   if (!textExtensions.has(extension)) return bytes;
   let text = bytes.toString("utf8");
+  const referenceOptions = { absoluteProjectionUrls };
+  const runtimeReferenceOptions = {
+    ...referenceOptions,
+    extension,
+    requireLocalResolution: [".css", ".html", ".js", ".mjs", ".svg", ".xml"].includes(extension),
+    referenceKind: "runtime",
+  };
+  if ([".json", ".jsonld"].includes(extension)) {
+    assertJsonMachineReferenceClosure(
+      text,
+      file.source_path,
+      publication.source_root,
+      trackedBlobs,
+      projectedPaths,
+      referenceOptions,
+    );
+  }
   if (file.source_path.startsWith(`${publication.source_root}/`)) {
     const materializerPath = path.posix.relative(
       path.posix.dirname(publication.source_root),
@@ -987,27 +1509,58 @@ function transformPrimaryBytes(
         );
       }
     }
-    if (extension === ".json") {
+    if ([".json", ".jsonld"].includes(extension)) {
       text = rewriteJsonStringReferences(
         text,
         file.source_path,
         publication.source_root,
         trackedBlobs,
         projectedPaths,
+        referenceOptions,
       );
     }
-    text = text.replaceAll(
-      legacyContextCanvasPublicationBase,
-      publication.base_url,
+  }
+  if (extension === ".html") {
+    text = rewriteJsonLdReferences(
+      text,
+      file.source_path,
+      publication.source_root,
+      trackedBlobs,
+      projectedPaths,
+      referenceOptions,
     );
   }
-  text = rewritePrimaryLocalReferences(
-    text,
-    file.source_path,
-    publication.source_root,
-    trackedBlobs,
-    projectedPaths,
-  );
+  if (
+    extension === ".xml" &&
+    path.posix.basename(file.source_path).toLowerCase() === "sitemap.xml"
+  ) {
+    const rewrite = (reference) => projectedReference(
+      reference,
+      file.source_path,
+      publication.source_root,
+      trackedBlobs,
+      projectedPaths,
+      referenceOptions,
+    );
+    text = rewriteSitemapReferences(text, rewrite);
+  }
+  text = extension === ".md"
+    ? rewriteMarkdownLocalReferences(
+        text,
+        file.source_path,
+        publication.source_root,
+        trackedBlobs,
+        projectedPaths,
+        referenceOptions,
+      )
+    : rewritePrimaryLocalReferences(
+        text,
+        file.source_path,
+        publication.source_root,
+        trackedBlobs,
+        projectedPaths,
+        runtimeReferenceOptions,
+      );
   const transformed = Buffer.from(text, "utf8");
   assertResolvedPrimaryBytes(transformed, file.source_path);
   return transformed;
@@ -1201,6 +1754,12 @@ export async function createProductionProjectionPlan(options = {}) {
   const projectedPaths = new Map(
     primaryManifest.files.map((file) => [file.source_path, file.projected_path]),
   );
+  const absoluteProjectionUrls = selection.configuration.publication === undefined
+    ? new Map()
+    : publicationAbsoluteReferenceMap(
+        primaryManifest,
+        selection.configuration.publication,
+      );
   for (const file of primaryManifest.files) {
     const trackedInput = await readTrackedRepositoryInput(
       root,
@@ -1210,6 +1769,19 @@ export async function createProductionProjectionPlan(options = {}) {
     );
     primaryInputs.set(file.source_path, trackedInput);
     trackedInputs.set(file.source_path, trackedInput);
+  }
+  let iframeOriginRobotsInput = null;
+  if (selection.configuration.iframe_origin_robots !== undefined) {
+    iframeOriginRobotsInput = await readTrackedRepositoryInput(
+      root,
+      trackedBlobs,
+      selection.configuration.iframe_origin_robots,
+      "Iframe-origin robots source",
+    );
+    trackedInputs.set(
+      selection.configuration.iframe_origin_robots,
+      iframeOriginRobotsInput,
+    );
   }
   const publicationInput = selection.configuration.publication === undefined
     ? null
@@ -1248,6 +1820,7 @@ export async function createProductionProjectionPlan(options = {}) {
           trackedBlobs,
           projectedPaths,
           publicationInput.destinations,
+          absoluteProjectionUrls,
         );
     assertResolvedPrimaryBytes(bytes, file.source_path);
     const projectedPath = `primary-public/${file.projected_path}`;
@@ -1265,6 +1838,25 @@ export async function createProductionProjectionPlan(options = {}) {
     };
     if (!bytes.equals(sourceBytes)) output.source_sha256 = sha256(sourceBytes);
     outputs.push(output);
+  }
+
+  assertSettledProductionAuthority(primaryInputs, aggregatePlan.outputFiles);
+
+  if (iframeOriginRobotsInput !== null) {
+    const projectedPath = "iframe-public/robots.txt";
+    const bytes = iframeOriginRobotsInput.bytes;
+    assertPortableOutputCollision(projectedPath, outputFiles, portablePaths);
+    outputFiles.set(projectedPath, bytes);
+    iframeBytes += bytes.byteLength;
+    outputs.push({
+      surface: "iframe",
+      source_path: selection.configuration.iframe_origin_robots,
+      projected_path: projectedPath,
+      media_type: "text/plain",
+      bytes: bytes.byteLength,
+      sha256: sha256(bytes),
+      standing: "byte_preserved",
+    });
   }
 
   const iframeMediaTypes = aggregateMediaTypes(aggregatePlan);
@@ -1319,6 +1911,15 @@ export async function createProductionProjectionPlan(options = {}) {
       ...(publicationInput === null
         ? {}
         : { public_references: publicationInput.input }),
+      ...(iframeOriginRobotsInput === null
+        ? {}
+        : {
+            iframe_origin_robots: {
+              source_path: selection.configuration.iframe_origin_robots,
+              git_blob_id: iframeOriginRobotsInput.object,
+              sha256: sha256(iframeOriginRobotsInput.bytes),
+            },
+          }),
       iframe_package: {
         id: aggregatePlan.receipt.id,
         host: aggregatePlan.receipt.host,
@@ -1336,7 +1937,7 @@ export async function createProductionProjectionPlan(options = {}) {
       },
       iframe: {
         root: "iframe-public/",
-        files: aggregatePlan.outputFiles.size,
+        files: aggregatePlan.outputFiles.size + (iframeOriginRobotsInput === null ? 0 : 1),
         bytes: iframeBytes,
       },
     },

@@ -5,6 +5,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 import { validatePrimaryManifest } from "../../tools/build-prod-projection.mjs";
+import { createAggregatePackagePlan } from "../../tools/package-v1-iframe-routes.mjs";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -56,6 +57,34 @@ const restingExemplars = [
   "exemplar-maximal-debrief.html",
   "exemplar-maximal-information-radiator.html",
 ];
+const robotsCommon = `# Search discovery and person-directed retrieval are welcome.
+User-agent: OAI-SearchBot
+User-agent: Claude-SearchBot
+User-agent: PerplexityBot
+User-agent: ChatGPT-User
+User-agent: Claude-User
+User-agent: Perplexity-User
+User-agent: Googlebot
+User-agent: Applebot
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+# Model-training collection is outside this site's intended use.
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: CCBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Amazonbot
+User-agent: Bytespider
+User-agent: meta-externalagent
+Disallow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+User-agent: *
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+`;
 
 async function loadPrimaryManifest() {
   const source = await readFile(
@@ -77,6 +106,16 @@ test("the production manifest carries the accepted 37-route primary collection a
   );
   assert.ok(projectedPaths.has("404.html"));
   for (const route of restingExemplars) assert.equal(projectedPaths.has(route), false);
+  for (const repositoryOwnedContinuation of [
+    "lims-eln-functional-nucleus/lims-eln-program-specification/README.md",
+    "schemas/collaboration-skills/0.1.0/README.md",
+    "schemas/collaboration-skills/0.1.0/examples/collaboration-account.example.json",
+    "schemas/collaboration-skills/0.1.0/examples/portable-skill.example.json",
+    "schemas/collaboration-skills/0.1.0/examples/retired-projection.example.json",
+    "visual-fidelity-contracts/cobalt-temporal-field.md",
+  ]) {
+    assert.equal(projectedPaths.has(repositoryOwnedContinuation), false);
+  }
   for (const required of [
     "sitemap.xml",
     "robots.txt",
@@ -114,4 +153,56 @@ test("the sitemap identifies exactly the 37 indexable production routes", async 
   assert.deepEqual(routes.sort(), acceptedRoutes);
   assert.equal(routes.includes("404.html"), false);
   for (const route of restingExemplars) assert.equal(routes.includes(route), false);
+});
+
+test("the duplicated Strategy Canvas schema agrees across primary and iframe delivery", async () => {
+  const manifest = await loadPrimaryManifest();
+  const primarySource =
+    "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json";
+  const iframePath =
+    "core/strategy-canvas/strategy-canvas-system-v0.2/strategy-canvas.schema.json";
+  const primary = manifest.files.find(({ source_path }) => source_path === primarySource);
+  assert.ok(primary, "the primary closure carries the shared Strategy Canvas schema");
+  assert.equal(primary.media_type, "application/schema+json");
+
+  const aggregate = await createAggregatePackagePlan();
+  const iframeBytes = aggregate.outputFiles.get(iframePath);
+  assert.ok(iframeBytes, "the iframe closure carries the shared Strategy Canvas schema");
+  assert.ok(
+    iframeBytes.equals(await readFile(path.join(repositoryRoot, primarySource))),
+    "both surfaces carry the same schema bytes",
+  );
+  const iframeDeclaration = aggregate.familyPlans
+    .get("core")
+    .receipt.routes
+    .flatMap((route) => (route.static_resource_closure?.package_files ?? []).map(
+      (file) => ({ route, file }),
+    ))
+    .find(({ route, file }) =>
+      `core/${path.posix.join(path.posix.dirname(route.projection_file), file.target_file)}` === iframePath,
+    );
+  assert.ok(iframeDeclaration, "the iframe route contract declares the shared schema");
+  assert.equal(iframeDeclaration.file.content_type, primary.media_type);
+});
+
+test("both production origins carry the settled crawler posture through explicit source owners", async () => {
+  const primaryRobots = await readFile(
+    path.join(repositoryRoot, canvasRoot, "robots.txt"),
+    "utf8",
+  );
+  const iframeRobots = await readFile(
+    path.join(repositoryRoot, "deployment/cpanel/iframe-origin-robots.txt"),
+    "utf8",
+  );
+  assert.equal(primaryRobots, `${robotsCommon}\nSitemap: https://vik.guru/sitemap.xml\n`);
+  assert.equal(iframeRobots, robotsCommon);
+
+  const configuration = JSON.parse(await readFile(
+    path.join(repositoryRoot, "deployment/cpanel/production-projection.config.json"),
+    "utf8",
+  ));
+  assert.equal(
+    configuration.iframe_origin_robots,
+    "deployment/cpanel/iframe-origin-robots.txt",
+  );
 });

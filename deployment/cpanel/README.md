@@ -36,6 +36,7 @@ selected source and its document-root destination explicitly.
   "id": "prod-projection.configuration.v1",
   "version": "1",
   "primary_manifest": "deployment/cpanel/primary-route-manifest.json",
+  "iframe_origin_robots": "deployment/cpanel/iframe-origin-robots.txt",
   "publication": {
     "base_url": "https://vik.guru/",
     "source_root": "context-canvas-project-surface/context-canvas",
@@ -43,6 +44,13 @@ selected source and its document-root destination explicitly.
   }
 }
 ```
+
+`iframe_origin_robots` gives the iframe host its own reviewed root
+`robots.txt`. The file carries the same search, person-directed retrieval, and
+training-use posture as the primary source while remaining independent of the
+versioned `/v1/` iframe package. The primary `robots.txt` keeps the primary
+sitemap; the iframe-origin file omits a sitemap because this projection does
+not publish one for that host.
 
 The referenced manifest uses one explicit entry for every primary output:
 
@@ -69,11 +77,20 @@ receiver for a production projection.
 
 Publication transforms then map the nested Context Canvas root to
 `https://vik.guru/`. Canonical, social, JSON-LD, sitemap, and local relative
-references follow their projected locations. Schema identities and literal
+references follow their projected locations. Markdown links resolve through
+their complete selected-file closure, including fragments and directory
+README targets; repository-only continuations use their accepted public owner
+or remain ordinary prose. Schema identities and literal
 `https://iframes.vik.guru/v1/` routes retain their authored values. Generated
 rows record their source digest and projected digest; unchanged files retain
 byte-preserved standing. The ignored `.public-reference-build/` directory is
 not an input.
+
+The assembler also keeps the Core vocabulary decision at its current owner.
+If a selected primary file or the accepted iframe package still carries the
+placeholder Core authority, assembly stops at Issue #110. Continue after that
+Issue supplies an accepted namespace and the source-owned projections and
+complete iframe package have been regenerated together.
 
 ## Commands
 
