@@ -52,7 +52,7 @@ uv run --isolated --no-project \
 
 Describe this result as an observation of the dependency versions resolved for that run, and record materially relevant package versions. It establishes behavior for that observed resolution rather than dependency-byte reproducibility.
 
-A local editable or non-editable package build can create ignored backend material such as `*.egg-info` or `build/` inside the checkout. Tracked-tree cleanliness remains the ordinary source observation. When the full tree must remain unchanged, including ignored build material, run from a disposable worktree or source copy and compare `git status --short --ignored` before and after; identify any permitted build material in the return.
+A local editable or non-editable package build can create ignored backend material such as `*.egg-info` or `build/` inside the checkout. Tracked-tree cleanliness remains the ordinary source observation. `git status --short --ignored` inventories ignored paths, but an existing ignored directory can retain the same status line while files inside it change. When the full tree must remain untouched, run from a disposable worktree or source copy. When byte equality of ignored output matters, prefer the repository's snapshot tool; otherwise compare records of relative path, byte length, and SHA-256 sorted by relative path before and after. State the included paths and digest algorithm in the return.
 
 ### Rule: Writable runtime state receives an explicit home
 
@@ -60,7 +60,7 @@ If the default cache is unavailable, select an ignored repository cache, an auth
 
 ### Rule: Execution evidence stays proportionate
 
-Capture the exact `uv` command, `uv --version`, the executing Python version, materially relevant dependency versions, the named check's result, and `git status --short` before and after. Add `--ignored` when the requested result includes an unchanged full tree, including ignored build material. Report what that run establishes and which operating systems, Python versions, optional groups, or external services it leaves unobserved.
+Capture the exact `uv` command, `uv --version`, the executing Python version, materially relevant dependency versions, the named check's result, and `git status --short` before and after. Add `--ignored` when the requested result needs an inventory of ignored paths. Add a scoped digest inventory when unchanged ignored bytes are part of the claim. Report what that run establishes and which operating systems, Python versions, optional groups, or external services it leaves unobserved.
 
 ### Rule: Another attempt follows a changed signal
 
