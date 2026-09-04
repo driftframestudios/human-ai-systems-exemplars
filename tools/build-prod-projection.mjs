@@ -802,8 +802,8 @@ function hasUnsettledProductionAuthority(bytes) {
   return unsettledCoreAuthorityMarkers.some((marker) => bytes.includes(marker));
 }
 
-function assertSettledProductionAuthority(primaryInputs, aggregateOutputFiles) {
-  const primaryCount = [...primaryInputs.values()].filter(({ bytes }) =>
+function assertSettledProductionAuthority(primaryOutputFiles, aggregateOutputFiles) {
+  const primaryCount = [...primaryOutputFiles.values()].filter((bytes) =>
     hasUnsettledProductionAuthority(bytes),
   ).length;
   const iframeCount = [...aggregateOutputFiles.values()].filter((bytes) =>
@@ -1948,7 +1948,7 @@ export async function createProductionProjectionPlan(options = {}) {
     outputs.push(output);
   }
 
-  assertSettledProductionAuthority(primaryInputs, aggregatePlan.outputFiles);
+  assertSettledProductionAuthority(outputFiles, aggregatePlan.outputFiles);
 
   if (iframeOriginRobotsInput !== null) {
     const projectedPath = "iframe-public/robots.txt";

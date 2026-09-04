@@ -156,8 +156,10 @@ the deployment manifest calls this an `independent_plan_bound_input` instead
 of implying that the primary repository `source_sha` establishes its lineage.
 The assembler also checks the aggregate receipt's family routes, counts, byte
 totals, and receipt files against the supplied plan. Schema identities and
-literal `https://iframes.vik.guru/v1/...` carrier URLs travel unchanged in this
-baseline because selected primary and iframe files retain their exact bytes.
+literal `https://iframes.vik.guru/v1/...` carrier URLs retain their authored
+semantic values. Primary files transformed for the production route carry
+their source and projected digests; exact copies retain byte-preserved
+standing.
 
 Publication-owned URL transformations carry both source and projection digests
 with generated standing. Byte-preserved standing remains reserved for exact

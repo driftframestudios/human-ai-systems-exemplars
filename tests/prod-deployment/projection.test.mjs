@@ -1099,6 +1099,30 @@ test("unsettled Core authority pauses both primary and iframe production selecti
     await rm(primaryFixture.root, { recursive: true, force: true });
   }
 
+  const materializedFixture = await createFixtureRoot();
+  try {
+    const publication = await enablePublicationFixture(materializedFixture);
+    await writeFile(
+      path.join(materializedFixture.root, ".env.public"),
+      publication.publicConfiguration.replace(
+        publication.destinations.PUBLIC_URL_REGISTRY_PRACTITIONER_PROBES,
+        "https://example.org/core-architectures/",
+      ),
+      "utf8",
+    );
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: materializedFixture.root,
+        sourceSha: materializedFixture.sourceSha,
+        configurationPath: materializedFixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /pauses at Issue #110:.*1 primary file\(s\) and 0 iframe package file\(s\)/,
+    );
+  } finally {
+    await rm(materializedFixture.root, { recursive: true, force: true });
+  }
+
   const iframeFixture = await createFixtureRoot();
   try {
     await assert.rejects(
