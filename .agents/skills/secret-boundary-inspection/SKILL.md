@@ -69,20 +69,20 @@ A successor or delivery repository reruns its accepted implementation after popu
 
 ### Scenario: A successor receives an accepted source snapshot
 
-Given the source repository has a canary-proven clean receipt<br>
-And the successor has assembled its own tree and refs<br>
-When the successor prepares to accept the snapshot<br>
-Then it verifies its local implementation and runs a fresh canary<br>
-And it observes its own tree, exact index, locally available history, and named delivery artifacts<br>
-And its receipt names any coverage that remains outside those scopes
+- Given the source repository has a canary-proven clean receipt
+- And the successor has assembled its own tree and refs
+- When the successor prepares to accept the snapshot
+- Then it verifies its local implementation and runs a fresh canary
+- And it observes its own tree, exact index, locally available history, and named delivery artifacts
+- And its receipt names any coverage that remains outside those scopes
 
 ### Scenario: The detector reports a candidate
 
-Given the generated canary has proved the detector and safe-output path<br>
-When a named material scope returns a finding<br>
-Then the affected handoff pauses<br>
-And the candidate remains outside Issues, pull requests, retained reports, and ordinary transcripts<br>
-And the credential owner receives the private response route before cleanup or coordinated history work proceeds
+- Given the generated canary has proved the detector and safe-output path
+- When a named material scope returns a finding
+- Then the affected handoff pauses
+- And the candidate remains outside Issues, pull requests, retained reports, and ordinary transcripts
+- And the credential owner receives the private response route before cleanup or coordinated history work proceeds
 
 ## Conditional context
 

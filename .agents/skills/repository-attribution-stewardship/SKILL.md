@@ -124,20 +124,20 @@ new rights decision.
 
 ### Scenario: Citation and contribution credit arrive together
 
-Given a tool asks how to cite the repository and who made a recent change<br>
-When the collaborator maps the two needs<br>
-Then `CITATION.cff` supplies citation metadata<br>
-And truthful Git metadata plus the reviewed pull request supplies contribution
-credit
+- Given a tool asks how to cite the repository and who made a recent change
+- When the collaborator maps the two needs
+- Then `CITATION.cff` supplies citation metadata
+- And truthful Git metadata plus the reviewed pull request supplies contribution
+  credit
 
 ### Scenario: A rights or license question needs a human decision
 
-Given a proposed edit could change ownership, license interpretation, or
-downstream notice obligations<br>
-When the collaborator reaches that boundary<br>
-Then the existing sources and exact open question form the decision context<br>
-And the named human receiver or qualified counsel settles the interpretation
-before repository implementation continues
+- Given a proposed edit could change ownership, license interpretation, or
+  downstream notice obligations
+- When the collaborator reaches that boundary
+- Then the existing sources and exact open question form the decision context
+- And the named human receiver or qualified counsel settles the interpretation
+  before repository implementation continues
 
 ## Completion
 

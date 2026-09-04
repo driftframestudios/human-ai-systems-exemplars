@@ -207,36 +207,36 @@ skill_billet:
 
 ### Scenario: An active skill has decision-changing friction
 
-Given an active skill owns the receiving job<br>
-And material use reveals one instruction gap that would change the next result<br>
-When another similar use is prepared<br>
-Then the route is `iterate_now`<br>
-And the narrowest behavior-changing instruction receives revision
+- Given an active skill owns the receiving job
+- And material use reveals one instruction gap that would change the next result
+- When another similar use is prepared
+- Then the route is `iterate_now`
+- And the narrowest behavior-changing instruction receives revision
 
 ### Scenario: A portable contract has no receiving job yet
 
-Given a collaboration surface contains a durable cognitive contract<br>
-And several future skills could be forged from it<br>
-And no immediate task selects among those forms<br>
-When stewardship reviews the candidate<br>
-Then the route is `queue_with_trigger`<br>
-And the contract remains available with a forge condition
+- Given a collaboration surface contains a durable cognitive contract
+- And several future skills could be forged from it
+- And no immediate task selects among those forms
+- When stewardship reviews the candidate
+- Then the route is `queue_with_trigger`
+- And the contract remains available with a forge condition
 
 ### Scenario: Two skills converge on one job
 
-Given two skills route from materially identical triggers to the same receiving result<br>
-And one owner can preserve the useful rules and source links<br>
-When duplicate routing increases attention cost<br>
-Then the route is `merge_or_retire`<br>
-And Git history or threadkeeping preserves the lineage and future re-formation trigger
+- Given two skills route from materially identical triggers to the same receiving result
+- And one owner can preserve the useful rules and source links
+- When duplicate routing increases attention cost
+- Then the route is `merge_or_retire`
+- And Git history or threadkeeping preserves the lineage and future re-formation trigger
 
 ### Scenario: A second research pass confirms the current route
 
-Given direct sources and a varied second sample support the same route<br>
-And a database-metadata sweep adds vocabulary without changing the decision<br>
-When further retrieval would repeat the evidence shape<br>
-Then research settles<br>
-And the selected skill action proceeds with the source boundary visible
+- Given direct sources and a varied second sample support the same route
+- And a database-metadata sweep adds vocabulary without changing the decision
+- When further retrieval would repeat the evidence shape
+- Then research settles
+- And the selected skill action proceeds with the source boundary visible
 
 ## Research grounding
 
