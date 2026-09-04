@@ -79,6 +79,14 @@ function sha256(bytes) {
   return createHash("sha256").update(bytes).digest("hex");
 }
 
+function htmlEscape(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
 function parseSkillSource(source) {
   const frontmatter = source.match(/^---\n([\s\S]*?)\n---/u)?.[1];
   assert.ok(frontmatter);
@@ -340,6 +348,17 @@ test("the public catalog contains exactly the public-ready allowlist", async () 
   assert.equal(catalog.publicationStanding, "public_ready");
   assert.deepEqual(catalog.skills.map((entry) => entry.name), readyNames);
   assert.equal(catalog.skills.length, readyNames.length);
+  for (const skill of catalog.skills) {
+    const card = index.match(
+      new RegExp(`data-skill-name="${skill.name}"[\\s\\S]*?<\\/li>`, "u"),
+    )?.[0];
+    assert.ok(card, `${skill.name} has one catalog card`);
+    assert.ok(card.includes(`<strong>Read this skill</strong>`));
+    assert.ok(
+      card.indexOf(`href="${skill.pagePath}"`) < card.indexOf(`href="${skill.projectionPath}"`),
+      `${skill.name} makes the readable route its primary action`,
+    );
+  }
   for (const possibleName of possibleNames) {
     assert.ok(!JSON.stringify(catalog).includes(possibleName));
     assert.ok(!index.includes(possibleName));
@@ -396,7 +415,7 @@ test("every public skill projection is schema-valid and points to its exact cata
     assert.deepEqual(projection.contract, parsed.contract);
     assert.equal(
       projection.semanticAuthorityRef,
-      `../source/${selectionEntry.sourcePath}`,
+      `../${catalogEntry.sourceRoute}`,
     );
     assert.equal(projection.sourceRef, `../catalog.json#/skills/${catalogIndex}`);
     assert.equal(catalog.skills[catalogIndex].name, projection.name);
@@ -418,12 +437,9 @@ test("public skill sources and dependencies remain byte-identical and hash-bound
     const projectedBytes = await readFile(resolve(skillsOutputRoot, catalogEntry.sourceRoute));
     assert.deepEqual(projectedBytes, sourceBytes, selectionEntry.sourcePath);
     assert.equal(catalogEntry.sourceSha256, sha256(sourceBytes));
-    assert.deepEqual(
-      catalogEntry.dependencies.map((dependency) => dependency.path),
-      selectionEntry.dependencies.map((dependencyPath) => `source/${dependencyPath}`),
-    );
+    assert.deepEqual(catalogEntry.dependencies.map(({ sourcePath }) => sourcePath), selectionEntry.dependencies);
     for (const dependency of catalogEntry.dependencies) {
-      const repositoryPath = dependency.path.slice("source/".length);
+      const repositoryPath = dependency.sourcePath;
       const dependencyBytes = await readFile(resolve(repositoryRoot, repositoryPath));
       const publicBytes = await readFile(resolve(skillsOutputRoot, dependency.path));
       assert.deepEqual(publicBytes, dependencyBytes, repositoryPath);
@@ -432,7 +448,7 @@ test("public skill sources and dependencies remain byte-identical and hash-bound
   }
 
   for (const supportingSource of catalog.supportingSources) {
-    const repositoryPath = supportingSource.path.slice("source/".length);
+    const repositoryPath = supportingSource.sourcePath;
     const sourceBytes = await readFile(resolve(repositoryRoot, repositoryPath));
     const publicBytes = await readFile(resolve(skillsOutputRoot, supportingSource.path));
     assert.deepEqual(publicBytes, sourceBytes, repositoryPath);
@@ -469,16 +485,24 @@ test("public skill Markdown source packages use native line structure", async ()
 });
 
 test("every public skill and nested schema-documentation link resolves", async () => {
-  const skillsIndex = await readFile(resolve(skillsOutputRoot, "index.html"), "utf8");
-  const indexHrefs = [...skillsIndex.matchAll(/<a\b[^>]*\bhref="([^"]+)"/gu)].map(
-    (match) => match[1],
-  );
-  for (const href of indexHrefs) {
-    const url = new URL(href, `${deploymentBase}/skills/`);
-    if (url.origin !== deploymentOrigin) continue;
-    const receiverPath = artifactPath(url, href);
-    const entry = await stat(receiverPath);
-    assert.ok(entry.isFile() || entry.isDirectory(), `${href} resolves`);
+  const skillPages = (await filesUnder(skillsOutputRoot))
+    .filter((filePath) => filePath.endsWith(".html"));
+  for (const pagePath of skillPages) {
+    const source = await readFile(pagePath, "utf8");
+    const pageUrl = new URL(
+      relative(skillsOutputRoot, pagePath).split(sep).join("/"),
+      `${deploymentBase}/skills/`,
+    );
+    const hrefs = [...source.matchAll(/<a\b[^>]*\bhref="([^"]+)"/gu)].map(
+      (match) => match[1],
+    );
+    for (const href of hrefs) {
+      const url = new URL(href, pageUrl);
+      if (url.origin !== deploymentOrigin) continue;
+      const receiverPath = artifactPath(url, href);
+      const entry = await stat(receiverPath);
+      assert.ok(entry.isFile() || entry.isDirectory(), `${href} resolves from ${relative(skillsOutputRoot, pagePath)}`);
+    }
   }
 
   const markdownFiles = (await filesUnder(resolve(skillsOutputRoot, "source")))
@@ -518,17 +542,60 @@ test("the Context Canvas skill catalog matches the same public-ready allowlist",
     /<section\s+aria-labelledby="catalog-title">([\s\S]*?)<\/section>/u,
   )?.[1];
   assert.ok(table);
-  const catalogNames = [...table.matchAll(/\.agents\/skills\/([^/]+)\/SKILL\.md/gu)]
+  const catalogNames = [...table.matchAll(/schemas\.radiantnull\.com\/skills\/([^/]+)\//gu)]
     .map((match) => match[1])
     .sort();
   assert.deepEqual(catalogNames, readyNames);
   assert.equal(new Set(catalogNames).size, catalogNames.length);
   for (const readyName of readyNames) {
     assert.ok(table.includes(
-      `href="https://schemas.radiantnull.com/skills/source/.agents/skills/${readyName}/SKILL.md"`,
+      `href="https://schemas.radiantnull.com/skills/${readyName}/"`,
     ));
   }
   for (const possibleName of possibleNames) assert.ok(!table.includes(possibleName));
+});
+
+test("each public skill has a readable, revision-bound route with its complete source", async () => {
+  const catalog = JSON.parse(await readFile(resolve(skillsOutputRoot, "catalog.json"), "utf8"));
+  assert.match(catalog.sourceRevision, /^[a-f0-9]{40}$/u);
+
+  for (const skill of catalog.skills) {
+    assert.equal(skill.pagePath, `${skill.name}/`);
+    const source = await readFile(resolve(repositoryRoot, skill.sourcePath), "utf8");
+    const page = await readFile(resolve(skillsOutputRoot, skill.pagePath, "index.html"), "utf8");
+    assert.ok(page.includes("Open exact Markdown"), `${skill.name} leads with its exact Markdown source`);
+    assert.ok(page.includes(`<h1>${htmlEscape(skill.title)}</h1>`));
+    assert.ok(page.includes(htmlEscape(source)), `${skill.name} renders its complete source`);
+    assert.ok(
+      page.includes('<pre class="skill-source" role="region" aria-labelledby="source-title" tabindex="0">'),
+      `${skill.name} gives keyboard users a named scrolling source region`,
+    );
+    assert.ok(page.includes(`<code>${catalog.sourceRevision}</code>`));
+    assert.ok(page.includes(`<code>${skill.sourceSha256}</code>`));
+    assert.ok(page.includes(`href="../${skill.sourceRoute}"`));
+    assert.ok(page.includes('href="projection.json"'));
+    assert.ok(page.includes('href="../"'));
+    assert.ok(page.includes(".skill-source:focus-visible"), `${skill.name} exposes a visible focus treatment for its source scroller`);
+    assert.ok(page.includes("@media (forced-colors:active)"), `${skill.name} carries forced-colors treatment`);
+    assert.equal(occurrenceCount(page, "<script"), 1, `${skill.name} needs no executable JavaScript`);
+    const structuredData = JSON.parse(
+      page.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)?.[1],
+    );
+    assert.equal(structuredData.name, skill.title);
+    assert.equal(structuredData.description, skill.description);
+    assert.equal(structuredData.isPartOf, `${deploymentBase}/skills/`);
+    assert.equal(structuredData.encodingFormat, "text/html");
+    assert.ok(page.includes(`<link rel="canonical" href="${deploymentBase}/skills/${skill.name}/">`));
+    for (const dependency of skill.dependencies) {
+      assert.ok(page.includes(`href="../${dependency.path}"`), `${skill.name} links ${dependency.sourcePath}`);
+    }
+  }
+
+  const workflow = catalog.skills
+    .flatMap(({ dependencies }) => dependencies)
+    .find(({ sourcePath }) => sourcePath === ".github/workflows/prototype-unit-tests.yml");
+  assert.equal(workflow?.path, "source/github/workflows/prototype-unit-tests.yml");
+  await assert.rejects(stat(resolve(skillsOutputRoot, "source/.github")));
 });
 
 test("publication paths remain physically inside their source repository", async () => {
