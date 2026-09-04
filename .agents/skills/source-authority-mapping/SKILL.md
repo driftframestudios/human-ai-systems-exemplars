@@ -90,43 +90,43 @@ The map supports a concrete choice: keep the current source, change a link, adap
 
 ### Scenario: A private working page has a public counterpart
 
-Given a visitor-facing page cites a private working source<br>
-And a reviewed public registry page already carries the same cognitive move<br>
-When the citation route is reconciled<br>
-Then the visitor page points to the public receiver<br>
-And the working source remains in the internal lineage record with any uncovered claims marked for adaptation
+- Given a visitor-facing page cites a private working source
+- And a reviewed public registry page already carries the same cognitive move
+- When the citation route is reconciled
+- Then the visitor page points to the public receiver
+- And the working source remains in the internal lineage record with any uncovered claims marked for adaptation
 
 ### Scenario: A repository consumes an accepted snapshot
 
-Given a standalone repository retains source and release authority<br>
-And an integrated package accepts one revision for coordinated use<br>
-When the snapshot is promoted<br>
-Then its nearest orientation records repository, source path, revision, relationship, and retained history or license<br>
-And later drift reopens reconciliation without changing the source owner
+- Given a standalone repository retains source and release authority
+- And an integrated package accepts one revision for coordinated use
+- When the snapshot is promoted
+- Then its nearest orientation records repository, source path, revision, relationship, and retained history or license
+- And later drift reopens reconciliation without changing the source owner
 
 ### Scenario: Working sources resolve into complementary public surfaces
 
-Given several working sources contribute to one public family<br>
-And an existing public page already carries the conceptual orientation<br>
-When the remaining material serves one distinct operational reader job<br>
-Then preserve the existing orientation and form one sibling operational receiver with stable sections<br>
-And keep working-source aliases as discovery and lineage aids rather than additional visitor surfaces
+- Given several working sources contribute to one public family
+- And an existing public page already carries the conceptual orientation
+- When the remaining material serves one distinct operational reader job
+- Then preserve the existing orientation and form one sibling operational receiver with stable sections
+- And keep working-source aliases as discovery and lineage aids rather than additional visitor surfaces
 
 ### Scenario: A Registry-situated page still carries internal signals
 
-Given a candidate receiver sits inside a public-oriented Registry<br>
-And its body still declares an internal band, house annotation, draft apparatus, private nursery lineage, or a colliding definition<br>
-When publication standing is resolved<br>
-Then treat ancestry as evidence of intended placement rather than the complete publication receipt<br>
-And either translate the internal apparatus into a clean reader-facing page or form a fitting projection while the private resolver retains exact lineage
+- Given a candidate receiver sits inside a public-oriented Registry
+- And its body still declares an internal band, house annotation, draft apparatus, private nursery lineage, or a colliding definition
+- When publication standing is resolved
+- Then treat ancestry as evidence of intended placement rather than the complete publication receipt
+- And either translate the internal apparatus into a clean reader-facing page or form a fitting projection while the private resolver retains exact lineage
 
 ### Scenario: A local explanation carries the visitor job while projection rests
 
-Given a visitor surface already carries the useful construct, evidence boundary, and onward route<br>
-And the cited working source remains private while the next public receiver is still forming or would repeat the same reader job<br>
-When the route is reconciled<br>
-Then remove the gated locator from visitor retrieval and keep the explanation local<br>
-And preserve exact lineage plus a material re-entry condition in the authorized resolver
+- Given a visitor surface already carries the useful construct, evidence boundary, and onward route
+- And the cited working source remains private while the next public receiver is still forming or would repeat the same reader job
+- When the route is reconciled
+- Then remove the gated locator from visitor retrieval and keep the explanation local
+- And preserve exact lineage plus a material re-entry condition in the authorized resolver
 
 ## Completion
 

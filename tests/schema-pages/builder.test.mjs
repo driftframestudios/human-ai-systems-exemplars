@@ -454,6 +454,21 @@ test("public skill sources and dependencies remain byte-identical and hash-bound
   );
 });
 
+test("public skill Markdown source packages use native line structure", async () => {
+  const markdownFiles = (await filesUnder(resolve(skillsOutputRoot, "source")))
+    .filter((filePath) => filePath.endsWith(".md"));
+  assert.ok(markdownFiles.length > 0);
+
+  for (const filePath of markdownFiles) {
+    const source = await readFile(filePath, "utf8");
+    assert.doesNotMatch(
+      source,
+      /<br\s*\/?>/iu,
+      `${relative(skillsOutputRoot, filePath)} uses Markdown instead of an HTML break tag`,
+    );
+  }
+});
+
 test("every public skill and nested schema-documentation link resolves", async () => {
   const skillsIndex = await readFile(resolve(skillsOutputRoot, "index.html"), "utf8");
   const indexHrefs = [...skillsIndex.matchAll(/<a\b[^>]*\bhref="([^"]+)"/gu)].map(

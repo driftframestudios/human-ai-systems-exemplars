@@ -92,12 +92,12 @@ The return contains:
 
 ### Scenario: One word carries exact and vague meanings
 
-Given `seam` names a verified integration boundary in one passage<br>
-And the same word loosely stands for an unspecified transition elsewhere<br>
-When the occurrences are classified<br>
-Then the exact boundary term remains, with a local definition when useful<br>
-And the vague occurrence names the systems, handoff, or responsibility boundary it actually means<br>
-And completion depends on reader legibility rather than eliminating the word family
+- Given `seam` names a verified integration boundary in one passage
+- And the same word loosely stands for an unspecified transition elsewhere
+- When the occurrences are classified
+- Then the exact boundary term remains, with a local definition when useful
+- And the vague occurrence names the systems, handoff, or responsibility boundary it actually means
+- And completion depends on reader legibility rather than eliminating the word family
 
 ## Completion
 

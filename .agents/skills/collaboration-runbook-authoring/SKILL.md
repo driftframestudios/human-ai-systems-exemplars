@@ -78,13 +78,13 @@ The document stops when it and its linked current owners give another collaborat
 
 ### Scenario: A generated delivery package follows several accepted source changes
 
-Given the current task grant authorizes changes within an active Issue's canonical visitor and prototype source scope<br>
-And a later Issue owns generated delivery and live observation<br>
-When the source phase reaches its named checks<br>
-Then the runbook passes the accepted source coordinate to the builder-owned phase<br>
-And the package is regenerated through its named command rather than hand-edited<br>
-And external upload or activation begins only through its explicitly granted receiver<br>
-And one public-safe handback states the accepted package result and next receiver
+- Given the current task grant authorizes changes within an active Issue's canonical visitor and prototype source scope
+- And a later Issue owns generated delivery and live observation
+- When the source phase reaches its named checks
+- Then the runbook passes the accepted source coordinate to the builder-owned phase
+- And the package is regenerated through its named command rather than hand-edited
+- And external upload or activation begins only through its explicitly granted receiver
+- And one public-safe handback states the accepted package result and next receiver
 
 ## Completion
 

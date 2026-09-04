@@ -94,21 +94,21 @@ Each pass selects one primary route and one smallest useful action. A second ski
 
 ### Scenario: A trusted first attempt has a live receiving use
 
-Given materially meaningful work reveals a transferable collaboration affordance<br>
-And no active skill owns the receiving job<br>
-And the instruction-only artifact is inexpensive to revise<br>
-When the collaboration explicitly encourages experimentation and the next use is active<br>
-Then the route is `create_now`<br>
-And the first natural use becomes field evidence for revision
+- Given materially meaningful work reveals a transferable collaboration affordance
+- And no active skill owns the receiving job
+- And the instruction-only artifact is inexpensive to revise
+- When the collaboration explicitly encourages experimentation and the next use is active
+- Then the route is `create_now`
+- And the first natural use becomes field evidence for revision
 
 ### Scenario: A recursive pass has no new signal
 
-Given the current skill route already reflects the available evidence<br>
-And another meta-level pass introduces no changed behavior, intent, dependency, authority, or independent source<br>
-When continued analysis would leave the next decision unchanged<br>
-Then the route is `settle_or_fold`<br>
-And a concrete re-entry trigger preserves the open possibility<br>
-And attention returns to material work
+- Given the current skill route already reflects the available evidence
+- And another meta-level pass introduces no changed behavior, intent, dependency, authority, or independent source
+- When continued analysis would leave the next decision unchanged
+- Then the route is `settle_or_fold`
+- And a concrete re-entry trigger preserves the open possibility
+- And attention returns to material work
 
 ## Conditional context
 

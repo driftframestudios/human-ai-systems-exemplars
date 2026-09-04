@@ -47,17 +47,17 @@ Document meaning, accessibility-tree or DOM representation, rendered visibility,
 
 ### Scenario: A composed Debrief receives a visual change
 
-Given a Debrief carries shared composition grammar and a route-specific fingerprint<br>
-When a visual change is assessed<br>
-Then shared contract relationships and route-local expression are mapped separately<br>
-And the comparison preserves meaningful variation while surfacing material regression
+- Given a Debrief carries shared composition grammar and a route-specific fingerprint
+- When a visual change is assessed
+- Then shared contract relationships and route-local expression are mapped separately
+- And the comparison preserves meaningful variation while surfacing material regression
 
 ### Scenario: A Cloudflare reference appears inside a page
 
-Given a page includes a Cloudflare mechanism or contextual-delivery concept<br>
-When the page's implementation implications are assessed<br>
-Then `grammar-family.html` supplies repository context<br>
-And current official Cloudflare documentation supplies contemporary platform facts
+- Given a page includes a Cloudflare mechanism or contextual-delivery concept
+- When the page's implementation implications are assessed
+- Then `grammar-family.html` supplies repository context
+- And current official Cloudflare documentation supplies contemporary platform facts
 
 ## Completion
 
