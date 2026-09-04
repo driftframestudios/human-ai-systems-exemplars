@@ -114,6 +114,12 @@ and serialized twin, compatible exchange, retained-state recovery, and clear
 browser telemetry. The Strategy Canvas route protects its broader
 collaboration state and accessibility contract.
 
+The focused Core namespace contract checks the semantic identifiers declared
+by each manifest-current canonical artifact and its Context projection. It
+also confirms that prior versioned artifacts retain their historical identity
+and that semantic-only successors preserve the established static request and
+runtime-capability closure.
+
 The Narrative route carries ten fresh-context journeys. Four keep one material
 exchange path available for every projection. Six additional decision and
 lifecycle journeys protect active-run prompt semantics, exact exclusive

@@ -360,7 +360,7 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   await writePackagePlan(plan, temporaryRoot);
   const verification = await verifyPackagePlan(plan, temporaryRoot);
 
-  assert.deepEqual(verification, { files: 26, bytes: 1758501 });
+  assert.deepEqual(verification, { files: 26, bytes: 1752491 });
   await writeFile(path.join(temporaryRoot, "unexpected.txt"), "outside the plan\n");
   await assert.rejects(
     verifyPackagePlan(plan, temporaryRoot),
@@ -512,7 +512,7 @@ test("route validation rejects alias and source-identity drift", async () => {
       content_type: "image/svg+xml",
     },
     {
-      source_file: "poda-chimeric-prototype-v0.1.2.html",
+      source_file: "poda-chimeric-prototype-v0.1.3.html",
       target_file: "media/plot.svg",
       content_type: "image/svg+xml",
     },
@@ -568,7 +568,7 @@ test("package planning rejects source bytes that drift from the authored receipt
   t.after(() => rm(temporaryRoot, { recursive: true, force: true }));
   const fixtureRoot = path.join(temporaryRoot, "core");
   await cp(defaultPaths.sourceRoot, fixtureRoot, { recursive: true });
-  const fixtureSource = path.join(fixtureRoot, "poda-chimeric-prototype-v0.1.2.html");
+  const fixtureSource = path.join(fixtureRoot, "poda-chimeric-prototype-v0.1.3.html");
   const source = await readFile(fixtureSource);
   await writeFile(fixtureSource, Buffer.concat([source, Buffer.from("\n<!-- drift -->\n")]));
 
@@ -782,7 +782,7 @@ test("declared package media travels through planning, output, and receipt", asy
   await mkdir(path.join(fixtureRoot, "media"));
   await writeFile(path.join(fixtureRoot, mediaRelativePath), mediaBytes);
 
-  const sourcePath = path.join(fixtureRoot, "poda-chimeric-prototype-v0.1.2.html");
+  const sourcePath = path.join(fixtureRoot, "poda-chimeric-prototype-v0.1.3.html");
   const revisedSource = (await readFile(sourcePath, "utf8")).replace(
     "</body>",
     `<img src="${mediaRelativePath}" alt="">\n</body>`,

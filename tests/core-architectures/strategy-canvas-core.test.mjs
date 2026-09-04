@@ -221,11 +221,11 @@ test("Core manifests resolve current files, byte counts, and published digests",
       const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
       const byId = new Map(manifest.prototypes.map((entry) => [entry.id, entry]));
       const currentIdentities = {
-        "core-architecture-family-index": ["core-architecture-family-index-chimeric-prototype-v0.1.3.html", "0.1.3"],
-        "impact-map": ["impact-map-chimeric-prototype-v0.1.3.html", "0.1.3"],
-        "service-design-blueprint": ["service-design-blueprint-chimeric-prototype-v0.2.3.html", "0.2.3"],
-        "heart-chart": ["heart-chart-chimeric-prototype-v0.1.4.html", "0.1.4"],
-        "specification-by-example": ["specification-by-example-chimeric-prototype-v0.1.4.html", "0.1.4"]
+        "core-architecture-family-index": ["core-architecture-family-index-chimeric-prototype-v0.1.4.html", "0.1.4"],
+        "impact-map": ["impact-map-chimeric-prototype-v0.1.4.html", "0.1.4"],
+        "service-design-blueprint": ["service-design-blueprint-chimeric-prototype-v0.2.4.html", "0.2.4"],
+        "heart-chart": ["heart-chart-chimeric-prototype-v0.1.5.html", "0.1.5"],
+        "specification-by-example": ["specification-by-example-chimeric-prototype-v0.1.5.html", "0.1.5"]
       };
       for (const [id, identity] of Object.entries(currentIdentities)) {
         const entry = byId.get(id);

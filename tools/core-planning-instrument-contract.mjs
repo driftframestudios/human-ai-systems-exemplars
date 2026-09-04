@@ -15,15 +15,15 @@ import {
 } from "./core-architecture-browser-helper.mjs";
 
 const artifactNames = {
-  poda: "poda-chimeric-prototype-v0.1.2.html",
-  alignment: "alignment-worksheet-chimeric-prototype-v0.1.2.html",
-  frv: "first-responsible-version-matrix-chimeric-prototype-v0.1.2.html",
-  sharedSurface: "shared-surface-priority-map-chimeric-prototype-v0.1.2.html",
-  aiSystems: "ai-systems-service-blueprint-chimeric-prototype-v0.1.2.html",
-  softwareViews: "software-architecture-views-chimeric-prototype-v0.1.2.html",
-  participatory: "participatory-design-kit-chimeric-prototype-v0.1.2.html",
-  plusDelta: "plus-delta-chimeric-prototype-v0.1.2.html",
-  upstream: "upstream-revision-loop-chimeric-prototype-v0.1.2.html"
+  poda: "poda-chimeric-prototype-v0.1.3.html",
+  alignment: "alignment-worksheet-chimeric-prototype-v0.1.3.html",
+  frv: "first-responsible-version-matrix-chimeric-prototype-v0.1.3.html",
+  sharedSurface: "shared-surface-priority-map-chimeric-prototype-v0.1.3.html",
+  aiSystems: "ai-systems-service-blueprint-chimeric-prototype-v0.1.3.html",
+  softwareViews: "software-architecture-views-chimeric-prototype-v0.1.3.html",
+  participatory: "participatory-design-kit-chimeric-prototype-v0.1.3.html",
+  plusDelta: "plus-delta-chimeric-prototype-v0.1.3.html",
+  upstream: "upstream-revision-loop-chimeric-prototype-v0.1.3.html"
 };
 
 const checks = [];
