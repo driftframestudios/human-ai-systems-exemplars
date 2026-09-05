@@ -604,6 +604,121 @@
       white-space: pre-wrap;
     }
 
+    .prompt-panel .panel-heading {
+      margin-bottom: 0.85rem;
+    }
+
+    .prompt-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+    }
+
+    .prompt-action {
+      min-height: 2.75rem;
+      padding: 0.62rem 0.9rem;
+      color: var(--cof-ink);
+      background: var(--cof-panel);
+      border: 2px solid var(--cof-ink);
+      border-radius: var(--radius-card);
+      box-shadow: 3px 3px 0 var(--cof-ink);
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .prompt-action--primary {
+      color: var(--cof-panel);
+      background: var(--cof-cobalt-deep);
+    }
+
+    .prompt-action:hover {
+      background: var(--cof-acid);
+      color: var(--cof-ink);
+    }
+
+    .prompt-contract-note {
+      max-width: 75ch;
+      margin-bottom: 1rem;
+      color: var(--cof-muted);
+    }
+
+    .prompt-related-loops {
+      margin-bottom: 1rem;
+    }
+
+    .prompt-related-loops > p,
+    .prompt-related-loops > ul {
+      margin-inline: 1rem;
+    }
+
+    .prompt-related-loops li + li {
+      margin-top: 0.75rem;
+    }
+
+    .prompt-related-loops a {
+      display: inline-flex;
+      min-height: 2.75rem;
+      align-items: center;
+      color: var(--cof-cobalt-deep);
+      font-weight: 800;
+    }
+
+    .prompt-related-loops li p {
+      max-width: 75ch;
+      margin: 0.2rem 0 0;
+    }
+
+    .prompt-view-control {
+      margin: 0;
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--cof-ink);
+      border-radius: var(--radius-card);
+    }
+
+    .prompt-view-control legend {
+      padding-inline: 0.35rem;
+      color: var(--cof-ink);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .prompt-view-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.2rem;
+    }
+
+    .prompt-view-options label {
+      display: inline-flex;
+      min-height: 2.75rem;
+      align-items: center;
+      gap: 0.45rem;
+      color: var(--cof-ink);
+      cursor: pointer;
+      font-weight: 760;
+    }
+
+    .prompt-view-options input {
+      width: 1.15rem;
+      height: 1.15rem;
+      margin: 0;
+      accent-color: var(--cof-cobalt-deep);
+    }
+
+    .prompt-status {
+      min-height: 1.55rem;
+      margin: 0.55rem 0 0;
+      color: var(--cof-cobalt-deep);
+      font-weight: 760;
+    }
+
+    .prompt-panel .prompt-capsule {
+      max-height: 38rem;
+    }
+
     .table-region {
       overflow-x: auto;
       border: 2px solid var(--cof-ink);
@@ -895,6 +1010,14 @@
         display: block;
       }
 
+      .prompt-actions {
+        width: 100%;
+      }
+
+      .prompt-action {
+        flex: 1 1 10rem;
+      }
+
       .result-status {
         margin-top: 0.8rem;
       }
@@ -948,7 +1071,10 @@
       .tab-scroll,
       .model-view,
       .state-json,
-      .contract-panel {
+      .contract-panel,
+      .prompt-actions,
+      .prompt-view-control,
+      .prompt-status {
         display: none !important;
       }
 
@@ -995,7 +1121,7 @@
         <div>
           <p class="eyebrow">Decision routing · model comparison · inspectable state</p>
           <h1>Cross-Functional Investment Model Studio</h1>
-          <p class="hero-deck">Choose the question leadership needs to answer, then inspect the method, inputs, work split, tooling, and material boundary that make the resulting investment reading usable.</p>
+          <p class="hero-deck">Choose the question leadership needs to answer, then inspect the method, inputs, work split, tooling, and evidence boundary that make the resulting investment reading usable.</p>
         </div>
         <dl class="hero-contract" aria-label="Studio contract">
           <div>
@@ -1034,12 +1160,166 @@
           <p id="selectionAnnouncement" class="selection-announcement" role="status" aria-live="polite" aria-atomic="true"></p>
         </section>
 
+        <section id="prompt-capsule" class="panel prompt-panel" aria-labelledby="prompt-capsule-title">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">02 · Carry the selected reading forward</p>
+              <h2 id="prompt-capsule-title">One complete investment request, ready for collaboration.</h2>
+              <p>The selected model and shared scenario produce one Markdown handoff. The Studio remains the state authority; the capsule carries its current question, inputs, work split, evidence boundary, and requested return.</p>
+            </div>
+            <div class="prompt-actions" data-prompt-actions hidden>
+              <button id="copyPromptCapsule" class="prompt-action prompt-action--primary" type="button">Copy Markdown</button>
+              <button id="downloadPromptCapsule" class="prompt-action" type="button">Download Markdown</button>
+            </div>
+          </div>
+
+          <p class="prompt-contract-note">The plain view stands on its own. The skill-assisted view adds three public collaboration methods while the selected model and scenario remain unchanged. Both views carry the same represented-state fingerprint and related loops.</p>
+
+          <details class="prompt-related-loops" data-prompt-related-loops>
+            <summary>Related loops</summary>
+            <p>Choose a loop when the selected investment reading enters the condition described with it.</p>
+            <ul>
+              <li data-related-loop-id="repository-reentry">
+                <a data-related-loop-link href="https://schemas.radiantnull.com/collaboration/#repository-reentry" target="_blank" rel="noopener noreferrer">Re-enter, make one bounded change, and return it clearly</a>
+                <p data-related-loop-fit>Fit when a costing question or requested change resumes in repository work and the current source, accepted state, verification, stopping point, and handback need reconstruction.</p>
+              </li>
+              <li data-related-loop-id="skill-from-receiving-use">
+                <a data-related-loop-link href="https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use" target="_blank" rel="noopener noreferrer">Let real use shape a skill</a>
+                <p data-related-loop-fit>Fit when repeated use of the selected investment method reveals a reusable collaboration move and its human owner is ready to retain, revise, rest, or promote it.</p>
+              </li>
+            </ul>
+          </details>
+
+          <fieldset id="promptViewControl" class="prompt-view-control" data-prompt-view-control hidden>
+            <legend>Markdown view</legend>
+            <div class="prompt-view-options">
+              <label><input type="radio" name="investment-model-prompt-view" value="plain" data-prompt-view checked> Plain</label>
+              <label><input type="radio" name="investment-model-prompt-view" value="skill-assisted" data-prompt-view> Skill-assisted</label>
+            </div>
+          </fieldset>
+          <p id="promptViewStatus" class="prompt-status" data-prompt-status></p>
+          <noscript><p class="prompt-contract-note">The complete Activity-Based plain Markdown remains available below for manual copy.</p></noscript>
+          <pre id="promptCapsuleMarkdown" class="prompt-capsule" data-prompt-view-active="plain" aria-label="Cross-Functional Investment Model Studio Prompt Capsule Markdown" aria-describedby="promptViewStatus" tabindex="0"># Prompt Capsule: Cross-Functional Investment Model Studio — Activity-Based Cost-Driver
+
+- Contract: `prompt-capsule/0.1.0`
+- Capsule: `cross-functional-investment-model-studio/selected-model`
+- Source: `cross-functional-investment-model-studio@0.1.0`
+- State: `investment-model-studio-state.v0.1` · revision `0.1.0`
+- Fingerprint: `fnv1a32-utf8:8627363c`
+- View: `plain`
+
+## Purpose and target
+
+Use the selected investment method to prepare a reviewable decision input from named sources, owned assumptions, and deterministic calculations.
+
+- Selected model: Activity-Based Cost-Driver (`model/activity-based.v0.1`)
+- Decision question: What does the work cost per sample, assay, site, review, or other driver — and how does that change with scale?
+- Human receiver: Open — name the sponsor and accountable finance or operating owner who can authorize inputs and consequences.
+
+## Relevant context and inputs
+
+- Model fit: Use when leadership thinks in throughput and unit economics, or when a project total hides the activity that actually consumes resources.
+- Source record: Costing Plan · Activity-Based Cost-Driver (Unit Economics) (`cbaee20c-7507-4425-b5cd-a37adb206749`)
+- Shared scenario: Discovery &amp;amp; Alignment (`scenario/discovery-alignment.v0.1`); horizon 3 quarters; complexity connected.
+- Scenario scale: `4` staffed people; `30` activity tasks; `3` recovery events; `3` named unknowns.
+- Evidence posture: Sample current Initiative Costing state; no claimed FMI economics.
+
+### Method
+
+1. Name the driver events that consume resources.
+2. Separate fixed platform, build, and validation cost from variable labor, storage, and support.
+3. Trace each approved cost line to a driver and denominator.
+4. Compute current and target-volume unit cost, then inspect scale effects.
+5. Express value through a changed unit cost and its operating mechanism.
+
+### Inputs
+
+- Driver-event counts
+- Approved fixed and variable cost lines
+- Current and target volumes
+- Review effort and loaded rates
+- Assumption register
+
+### Expected outputs
+
+- Cost-driver register
+- Current unit cost
+- Target-volume unit cost
+- Scale sensitivity
+- Reserved-input list
+
+## Working state
+
+- Current focus: Throughput, denominator quality, and fixed-versus-variable behavior
+- Decision route: 1. Throughput question → 2. Cost-driver register → 3. Deterministic unit cost → 4. Scale reading
+- Deterministic operation: Cost allocated to a driver divided by approved driver-event volume
+- Inputs still needed: Local driver counts, allocation rules, approved cost lines, and target-volume assumptions
+- Next handoff: Benefit Realization when unit-cost change needs a value mechanism; Whole-Life TCO when scale changes recurring run cost
+
+### Work held by people
+
+- Choose meaningful drivers
+- Authorize fixed/variable allocation
+- Interpret operating consequences
+
+### Work suited to generative AI
+
+- Draft a driver taxonomy from supplied work
+- Reconcile terminology
+- Surface missing denominators and review questions
+
+### Work suited to deterministic computation
+
+- Allocate approved costs
+- Divide by event counts
+- Recompute scale scenarios
+
+Tooling fit: A spreadsheet or small data model holds drivers and denominators; a repeatable script recomputes scenarios; an AI collaborator helps structure and challenge the register while a named owner approves every input.
+
+## Boundaries and human-held decisions
+
+- Evidence and authority boundary: Approved denominators and local cost lines establish the unit reading. Reserved economics stay visibly reserved; a high unit cost is a decision-bearing result.
+- Scenario standing: Sample current Initiative Costing state; no claimed FMI economics.
+- The inline model catalog, shared scenario, and accepted active-model state remain the runnable projection authority. This Markdown is their derived collaboration view.
+- The selected source record identifies the underlying method. Named owners supply and authorize rates, volumes, ranges, value mechanisms, risk ownership, horizons, decision thresholds, and consequences.
+- Generative AI structures supplied material and review questions. Deterministic tools calculate from approved inputs.
+- Receiving authority: Open — name the sponsor and accountable finance or operating owner who can authorize inputs and consequences.
+
+## Requested return
+
+Using the Discovery &amp;amp; Alignment scenario, draft a cost-driver register for this initiative.
+
+Separate fixed and variable work. For each proposed driver, name the numerator, denominator, source, owner, and missing input. Ask for every missing denominator. Keep unavailable economics, rates, volumes, and savings as &amp;lt;reserved&amp;gt; until a named owner supplies and approves them. Return a table plus three scale-sensitivity questions for human review.
+
+Return with this handback:
+
+1. Name the inputs received and the inputs that remain reserved.
+2. Keep each source and accountable owner visible beside the value or assumption they supply.
+3. Return the requested model output and the smallest questions that move open material toward human review.
+
+## Related loops
+
+- [Re-enter, make one bounded change, and return it clearly](https://schemas.radiantnull.com/collaboration/#repository-reentry) (`repository-reentry`) — Fit when a costing question or requested change resumes in repository work and the current source, accepted state, verification, stopping point, and handback need reconstruction.
+- [Let real use shape a skill](https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use) (`skill-from-receiving-use`) — Fit when repeated use of the selected investment method reveals a reusable collaboration move and its human owner is ready to retain, revise, rest, or promote it.
+
+## Evidence and recovery
+
+- Source record: Costing Plan · Activity-Based Cost-Driver (Unit Economics) (`cbaee20c-7507-4425-b5cd-a37adb206749`).
+- Deterministic operation: Cost allocated to a driver divided by approved driver-event volume
+- Tooling fit: A spreadsheet or small data model holds drivers and denominators; a repeatable script recomputes scenarios; an AI collaborator helps structure and challenge the register while a named owner approves every input.
+- Next handoff: Benefit Realization when unit-cost change needs a value mechanism; Whole-Life TCO when scale changes recurring run cost
+- The embedded schema establishes the selection shape, schema version, known model IDs, scenario ID, and selection reasons. Financial validity, assumption quality, authorization, and outcomes remain with their named evidence and decision owners.
+- Keep an unavailable input as `&lt;reserved&gt;` with its owner or clarifying question. An unrecognized model selection leaves the accepted model and Prompt Capsule available.
+- Use the FNV-1a fingerprint as a represented-state comparison key. Integrity-sensitive exchange uses the source artifact’s stronger digest or exact serialized snapshot when its owner provides one.
+</pre>
+        </section>
+
         <section class="panel" aria-labelledby="scenario-title">
           <div class="panel-heading">
             <div>
-              <p class="eyebrow">02 · Hold the scenario steady</p>
+              <p class="eyebrow">03 · Hold the scenario steady</p>
               <h2 id="scenario-title">Discovery &amp; Alignment supplies the shared test case.</h2>
-              <p>The scenario carries current Initiative Costing inputs into each method so the visitor can compare model behavior. It demonstrates method transfer and carries no claimed FMI economics.</p>
+              <p>The scenario carries current Initiative Costing inputs into each method so the visitor can compare model behavior. It shows how one scenario behaves under each method and carries no claimed FMI economics.</p>
             </div>
             <p class="result-status">Sample shared state</p>
           </div>
@@ -1071,27 +1351,27 @@
         <section class="panel" aria-labelledby="equivalent-title">
           <div class="panel-heading">
             <div>
-              <p class="eyebrow">03 · Semantic equivalents</p>
+              <p class="eyebrow">04 · Complete text equivalents</p>
               <h2 id="equivalent-title">Every interactive model has a captioned table.</h2>
-              <p>Open any row to read the same use, method, inputs, outputs, work split, tooling, prompt capsule, and boundary carried by its tab.</p>
+              <p>Open any row to read the same use, method, inputs, outputs, work split, tooling, model-specific instruction, and evidence boundary carried by its tab. WBS means work breakdown structure; TCO means total cost of ownership; P50 and P80 are the 50th and 80th percentiles of a modeled cost distribution; NPV and IRR mean net present value and internal rate of return; CapEx and OpEx mean capital and operating expenditure.</p>
             </div>
           </div>
           <div id="semanticEquivalents">
-            <div class="table-region" tabindex="0" role="region" aria-label="Eight investment model semantic equivalents; horizontally scrollable on narrow screens">
+            <div class="table-region" tabindex="0" role="region" aria-label="Eight investment model complete text equivalents; horizontally scrollable on narrow screens">
               <table class="semantic-matrix">
-                <caption>Table 02 · Eight investment model views — static semantic equivalent</caption>
+                <caption>Table 02 · Eight investment model views — complete static text equivalent</caption>
                 <thead>
                   <tr>
                     <th scope="col">Model</th>
                     <th scope="col">When to use</th>
                     <th scope="col">Method</th>
                     <th scope="col">Inputs → outputs</th>
-                    <th scope="col">Material boundary</th>
+                    <th scope="col">Evidence and authority boundary</th>
                     <th scope="col">Human judgment</th>
                     <th scope="col">Generative AI</th>
                     <th scope="col">Deterministic computation</th>
                     <th scope="col">Tooling fit</th>
-                    <th scope="col">Prompt capsule</th>
+                    <th scope="col">Model-specific instruction</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1105,7 +1385,7 @@
                     <td>Draft taxonomy, reconcile terms, surface missing denominators.</td>
                     <td>Allocate costs, divide by events, recompute scenarios.</td>
                     <td>Driver spreadsheet or data model plus repeatable calculation script.</td>
-                    <td>Draft a driver register; name numerator, denominator, source, owner, and missing input; assign no economics.</td>
+                    <td>Draft a driver register; name numerator, denominator, source, owner, and missing input; keep economics reserved for named owners.</td>
                   </tr>
                   <tr>
                     <th scope="row">Benefit Realization / ROI</th>
@@ -1141,7 +1421,7 @@
                     <td>Compress supplied models, check consistency, draft scan-friendly alternatives.</td>
                     <td>Pull approved values, verify source IDs, reconcile and render.</td>
                     <td>Traceable publishing template fed by approved model fields.</td>
-                    <td>Draft ask, burden, recommendation, one sourced commitment, value, risks, and timeline; originate no numbers.</td>
+                    <td>Draft ask, burden, recommendation, one sourced commitment, value, risks, and timeline using only supplied, approved figures.</td>
                   </tr>
                   <tr>
                     <th scope="row">Probabilistic P50/P80</th>
@@ -1153,7 +1433,7 @@
                     <td>Draft elicitation questions, surface coupling and missing cases, explain structure.</td>
                     <td>Sample, aggregate trials, calculate percentiles, rank tail contribution.</td>
                     <td>Versioned simulation script or established cost-risk tool with reproducible settings.</td>
-                    <td>Request three-point ranges, source, owner, rationale, and dependencies; assign no ranges.</td>
+                    <td>Request three-point ranges, source, owner, rationale, and dependencies; keep ranges reserved for named owners.</td>
                   </tr>
                   <tr>
                     <th scope="row">Risk-Register Contingency</th>
@@ -1177,7 +1457,7 @@
                     <td>Normalize rows, find asymmetric assumptions, draft evidence-based trade-offs.</td>
                     <td>Sum identical rows; separate cost types; calculate deltas.</td>
                     <td>Branch-comparison table enforcing identical categories and horizon.</td>
-                    <td>Frame buy, build, and blend with common rows, sources, owners, and missing inputs; assign no prices.</td>
+                    <td>Frame buy, build, and blend with common rows, sources, owners, and missing inputs; keep prices reserved for named owners.</td>
                   </tr>
                   <tr>
                     <th scope="row">Whole-Life TCO</th>
@@ -1200,7 +1480,7 @@
         <section class="panel contract-panel" aria-labelledby="contract-title">
           <div class="panel-heading">
             <div>
-              <p class="eyebrow">04 · Inspectable contract</p>
+              <p class="eyebrow">05 · Inspectable contract</p>
               <h2 id="contract-title">Stable state and closed schema share one boundary.</h2>
               <p>The selected model and fixed scenario resolve to explicit JSON. The adjacent Draft 2020-12 schema names every allowed property and value.</p>
             </div>
@@ -1253,7 +1533,7 @@
           <li><strong>Three-Branch TCO:</strong> compare buy, build, and blend on one baseline, horizon, row set, and set of non-cost factors.</li>
           <li><strong>Whole-Life TCO:</strong> extend the horizon through implementation, operation, scaling, parallel run, revalidation, and retirement.</li>
         </ol>
-        <p><strong>Shared scenario:</strong> Discovery &amp; Alignment · three quarters · four staffed people across product, research, and domain roles · thirty activity tasks · three scheduling-and-access disruptions · three named unknowns. The scenario demonstrates method transfer and carries no claimed FMI economics.</p>
+        <p><strong>Shared scenario:</strong> Discovery &amp; Alignment · three quarters · four staffed people across product, research, and domain roles · thirty activity tasks · three scheduling-and-access disruptions · three named unknowns. The scenario shows how one scenario behaves under each method and carries no claimed FMI economics.</p>
         <p><strong>Work split:</strong> humans authorize assumptions, consequences, and decisions; generative AI structures source material and proposes review questions; deterministic computation produces arithmetic, simulations, sorting, and traceable rollups.</p>
       </section>
     </noscript>
@@ -1337,7 +1617,7 @@
         tooling: "A spreadsheet or small data model holds drivers and denominators; a repeatable script recomputes scenarios; an AI collaborator helps structure and challenge the register while a named owner approves every input.",
         prompt: `Using the Discovery & Alignment scenario, draft a cost-driver register for this initiative.
 
-Separate fixed and variable work. For each proposed driver, name the numerator, denominator, source, owner, and missing input. Ask for every missing denominator. Preserve unavailable economics as <reserved>. Do not assign rates, volumes, or savings. Return a table plus three scale-sensitivity questions for human review.`,
+Separate fixed and variable work. For each proposed driver, name the numerator, denominator, source, owner, and missing input. Ask for every missing denominator. Keep unavailable economics, rates, volumes, and savings as <reserved> until a named owner supplies and approves them. Return a table plus three scale-sensitivity questions for human review.`,
         foreground: "Throughput, denominator quality, and fixed-versus-variable behavior",
         calculation: "Cost allocated to a driver divided by approved driver-event volume",
         missing: "Local driver counts, allocation rules, approved cost lines, and target-volume assumptions",
@@ -1430,7 +1710,7 @@ Give every package a stable ID, deliverable, owner role, predecessor, acceptance
         tooling: "A traceable publishing template reads approved fields from the underlying models. Automated checks catch mismatched values and missing sources; AI supports compression after the source ledger is complete.",
         prompt: `Draft a one-page decision brief from supplied, approved model outputs for the Discovery & Alignment scenario.
 
-Use exactly these sections: ask, present burden, recommendation, one headline commitment, value, top three named risks with owners, and timeline. Add a source-model ID beside every figure. Originate no numbers. Mark missing material as <reserved>. If the evidence supports pause or decline, state that recommendation directly.`,
+Use exactly these sections: ask, present burden, recommendation, one headline commitment, value, top three named risks with owners, and timeline. Add a source-model ID beside every figure. Use only supplied, approved figures and mark missing material as <reserved>. When the evidence supports pause or decline, state that recommendation directly.`,
         foreground: "Decision, sourced commitment, value, risks, and timing",
         calculation: "Source pull and reconciliation only; the one-pager originates no economics",
         missing: "Approved outputs from WBS, percentile, value, risk, branch, and whole-life models",
@@ -1461,7 +1741,7 @@ Use exactly these sections: ask, present burden, recommendation, one headline co
         tooling: "A versioned simulation script or established cost-risk tool consumes stable WBS IDs, documented distributions, dependencies, and a reproducible seed. AI supports range elicitation and review rather than sampling arithmetic.",
         prompt: `Prepare the Discovery & Alignment WBS for a deterministic P50/P80 simulation.
 
-For every package, request best, most-likely, and worst hours and rates; source; range owner; distribution rationale; and dependency links. Identify missing tail cases and possible coupling. Assign no ranges yourself. Return a machine-readable input checklist plus human-review questions.`,
+For every package, request best, most-likely, and worst hours and rates; source; range owner; distribution rationale; and dependency links. Identify missing tail cases and possible coupling. Keep ranges as <reserved> until a named owner supplies and approves them. Return a machine-readable input checklist plus human-review questions.`,
         foreground: "Range shape, percentile posture, explicit reserve, and tail drivers",
         calculation: "Deterministic repeated sampling over approved distributions and dependencies",
         missing: "Three-point ranges, distribution rationales, dependency treatment, and commitment posture",
@@ -1492,7 +1772,7 @@ For every package, request best, most-likely, and worst hours and rates; source;
         tooling: "A risk database holds stable IDs, sources, triggers, owners, impact ranges, mitigations, and status. Deterministic formulas and sensitivity scripts create the rollup; AI assists retrieval and completeness review.",
         prompt: `Build a draft risk-register shell for the Discovery & Alignment scenario from the supplied failure, dependency, and recovery material.
 
-For each candidate risk, provide a stable ID, observable trigger, affected object, consequence, owner placeholder, mitigation, recovery route, probability-input placeholder, impact-range placeholder, source, and current status. Distinguish realized failures from prospective risks. Assign no percentages or dollars. Return missing-owner and missing-evidence questions.`,
+For each candidate risk, provide a stable ID, observable trigger, affected object, consequence, owner placeholder, mitigation, recovery route, probability-input placeholder, impact-range placeholder, source, and current status. Distinguish realized failures from prospective risks. Keep percentages and currency values as <reserved> until named owners supply and approve them. Return missing-owner and missing-evidence questions.`,
         foreground: "Named risk, ownership, mitigation, reserve basis, and sensitivity",
         calculation: "Approved probability × impact, aggregate reconciliation, and deterministic sensitivity ranking",
         missing: "Local failure evidence, owners, probability inputs, impact ranges, and mitigation costs",
@@ -1523,7 +1803,7 @@ For each candidate risk, provide a stable ID, observable trigger, affected objec
         tooling: "A branch-comparison table enforces identical categories and horizon. Deterministic formulas calculate totals and deltas; AI assists taxonomy normalization and assumption challenge.",
         prompt: `Create a three-branch comparison frame for the Discovery & Alignment scenario: buy, build, and blend.
 
-Start with one common baseline and horizon. Propose identical row labels for one-time work, recurring work, internal effort, quality, change, recovery, scaling, and retirement where the supplied scope supports them. Add non-cost factors, source, owner, and missing-input columns. Assign no prices and recommend no branch until the human supplies decision weights and constraints.`,
+Start with one common baseline and horizon. Propose identical row labels for one-time work, recurring work, internal effort, quality, change, recovery, scaling, and retirement where the supplied scope supports them. Add non-cost factors, source, owner, and missing-input columns. Keep prices and the branch recommendation as <reserved> until the human supplies decision weights and constraints.`,
         foreground: "Comparable branch grammar, full-option cost, and non-cost consequences",
         calculation: "Deterministic totals and deltas across identical rows and one approved horizon",
         missing: "Stable branch inclusions, branch-specific costs, common horizon, constraints, and decision factors",
@@ -1554,7 +1834,7 @@ Start with one common baseline and horizon. Propose identical row labels for one
         tooling: "A year-indexed lifecycle ledger separates CapEx, OpEx, scaling, parallel run, revalidation, and retirement. Deterministic finance formulas handle escalation and discounting; AI supports completeness review.",
         prompt: `Extend the Discovery & Alignment scenario into a whole-life cost-input ledger.
 
-Create year-indexed rows for implementation, recurring operation, maintenance, hosting, support, revalidation, training, scaling, parallel run, recovery, and retirement where the supplied scope supports them. Add source, owner, start condition, end condition, escalation input, discount input, FX input, and <reserved> placeholders. Assign no rates or economic assumptions. Return lifecycle gaps and decision questions.`,
+Create year-indexed rows for implementation, recurring operation, maintenance, hosting, support, revalidation, training, scaling, parallel run, recovery, and retirement where the supplied scope supports them. Add source, owner, start condition, end condition, escalation input, discount input, FX input, and <reserved> placeholders. Keep rates and economic assumptions as <reserved> until named owners supply and approve them. Return lifecycle gaps and decision questions.`,
         foreground: "Lifecycle horizon, recurring operation, scaling, double-running, and retirement",
         calculation: "Deterministic annual rollup, approved escalation, discounting, and lifecycle NPV",
         missing: "Run-cost lines, scaling path, revalidation cadence, retirement scope, discount rate, and FX assumptions",
@@ -1562,6 +1842,45 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
         route: ["Lifecycle question", "Year-indexed ledger", "Deterministic discounting", "Whole-life reading"]
       }
     ];
+
+    const PROMPT_CAPSULE_CONTRACT = "prompt-capsule/0.1.0";
+    const PROMPT_CAPSULE_SOURCE_ID = "cross-functional-investment-model-studio";
+    const PROMPT_CAPSULE_SOURCE_VERSION = "0.1.0";
+    const PROMPT_CAPSULE_STATE_CONTRACT = "investment-model-studio-state.v0.1";
+    const PROMPT_CAPSULE_ID = "cross-functional-investment-model-studio/selected-model";
+    const PROMPT_CAPSULE_VIEWS = Object.freeze(["plain", "skill-assisted"]);
+    const PROMPT_CAPSULE_SKILL_REVISION = "0b8c0463cc5e5fe107b894e2f6f204e3b746a99b";
+    const PROMPT_CAPSULE_SKILLS = Object.freeze([
+      Object.freeze({
+        name: "Source Authority Mapping",
+        publicUrl: "https://schemas.radiantnull.com/skills/source-authority-mapping/",
+        path: ".agents/skills/source-authority-mapping/SKILL.md",
+        sha256: "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5",
+        purpose: "Trace every assumption, input, method record, calculation, output, and receiving decision through its named owner."
+      }),
+      Object.freeze({
+        name: "Practitioner Probe",
+        publicUrl: "https://schemas.radiantnull.com/skills/practitioner-probe/",
+        path: ".agents/skills/practitioner-probe/SKILL.md",
+        sha256: "348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c",
+        purpose: "Turn one consequential missing denominator, range, mechanism, dependency, or lifecycle assumption into a decision-changing question and observation."
+      }),
+      Object.freeze({
+        name: "Bounded Support Routing",
+        publicUrl: "https://schemas.radiantnull.com/skills/bounded-support-routing/",
+        path: ".agents/skills/bounded-support-routing/SKILL.md",
+        sha256: "80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402",
+        purpose: "Shape the selected model request as finite work with an observable return, stopping event, and handback to the accountable owner."
+      })
+    ]);
+    const PROMPT_CAPSULE_RELATED_LOOPS = Object.freeze(
+      [...document.querySelectorAll("[data-prompt-related-loops] [data-related-loop-id]")].map((item) => Object.freeze({
+        id: item.dataset.relatedLoopId,
+        name: item.querySelector("[data-related-loop-link]").textContent.trim(),
+        publicUrl: item.querySelector("[data-related-loop-link]").getAttribute("href"),
+        fitCondition: item.querySelector("[data-related-loop-fit]").textContent.trim()
+      }))
+    );
 
     const state = {
       schemaVersion: "1.0.0",
@@ -1583,8 +1902,16 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
       selectedJson: document.getElementById("selectedJson"),
       stateContract: document.getElementById("stateContract"),
       schemaContract: document.getElementById("schemaContract"),
-      schemaSource: document.getElementById("investmentModelSchema")
+      schemaSource: document.getElementById("investmentModelSchema"),
+      prompt: document.getElementById("promptCapsuleMarkdown"),
+      promptStatus: document.getElementById("promptViewStatus"),
+      promptActions: document.querySelector("[data-prompt-actions]"),
+      promptViewControl: document.querySelector("[data-prompt-view-control]"),
+      copyPrompt: document.getElementById("copyPromptCapsule"),
+      downloadPrompt: document.getElementById("downloadPromptCapsule")
     };
+
+    let promptCapsuleView = "plain";
 
     function escapeHtml(value) {
       return String(value)
@@ -1602,6 +1929,279 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
 
     function activeModel() {
       return models.find((model) => model.id === state.activeModelId) || models[0];
+    }
+
+    function markdownLiteral(value, fallback = "") {
+      return (typeof value === "string" ? value : fallback)
+        .replace(/\r\n?/g, "\n")
+        .replace(/\s*\n\s*/g, " ");
+    }
+
+    function markdownInline(value, fallback = "") {
+      return markdownLiteral(value, fallback)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\\/g, "\\\\")
+        .replace(/([!#@`*_[\]|~])/g, "\\$1")
+        .replace(/\b((?:https?|ftp):)(?=\/\/)/gi, (protocol) => `${protocol.slice(0, -1)}\\:`)
+        .replace(/\bwww\./gi, (prefix) => `${prefix.slice(0, -1)}\\.`);
+    }
+
+    function markdownParagraphs(value) {
+      return String(value ?? "")
+        .replace(/\r\n?/g, "\n")
+        .split(/\n\s*\n/g)
+        .map((paragraph) => markdownInline(paragraph.trim()))
+        .filter(Boolean);
+    }
+
+    function markdownCode(value, fallback = "Open for review.") {
+      const literal = markdownLiteral(String(value ?? fallback), fallback);
+      const longest = (literal.match(/`+/g) || []).reduce((length, run) => Math.max(length, run.length), 0);
+      const delimiter = "`".repeat(longest + 1);
+      const padding = /^(?: |`)|(?: |`)$/.test(literal) ? " " : "";
+      return `${delimiter}${padding}${literal}${padding}${delimiter}`;
+    }
+
+    function canonicalValue(value) {
+      if (Array.isArray(value)) return value.map(canonicalValue);
+      if (value && typeof value === "object") {
+        return Object.fromEntries(Object.keys(value).sort().map((key) => [key, canonicalValue(value[key])]));
+      }
+      return value;
+    }
+
+    function fnv1a32Utf8(value) {
+      let hash = 0x811c9dc5;
+      const update = (byte) => {
+        hash ^= byte;
+        hash = Math.imul(hash, 0x01000193) >>> 0;
+      };
+      for (const symbol of String(value)) {
+        const codePoint = symbol.codePointAt(0);
+        if (codePoint <= 0x7f) update(codePoint);
+        else if (codePoint <= 0x7ff) {
+          update(0xc0 | (codePoint >>> 6));
+          update(0x80 | (codePoint & 0x3f));
+        } else if (codePoint <= 0xffff) {
+          update(0xe0 | (codePoint >>> 12));
+          update(0x80 | ((codePoint >>> 6) & 0x3f));
+          update(0x80 | (codePoint & 0x3f));
+        } else {
+          update(0xf0 | (codePoint >>> 18));
+          update(0x80 | ((codePoint >>> 12) & 0x3f));
+          update(0x80 | ((codePoint >>> 6) & 0x3f));
+          update(0x80 | (codePoint & 0x3f));
+        }
+      }
+      return `fnv1a32-utf8:${hash.toString(16).padStart(8, "0")}`;
+    }
+
+    function promptCapsuleStateProjection(sourceState = state) {
+      const model = models.find((candidate) => candidate.id === sourceState.activeModelId) || models[0];
+      const encodeList = (values) => values.map((value) => markdownInline(value));
+      return {
+        contract: PROMPT_CAPSULE_CONTRACT,
+        capsule: PROMPT_CAPSULE_ID,
+        source: {
+          id: PROMPT_CAPSULE_SOURCE_ID,
+          version: PROMPT_CAPSULE_SOURCE_VERSION
+        },
+        state: {
+          contract: PROMPT_CAPSULE_STATE_CONTRACT,
+          schemaVersion: sourceState.schemaVersion,
+          revision: PROMPT_CAPSULE_SOURCE_VERSION,
+          activeModelId: model.id,
+          scenarioId: sharedScenario.id
+        },
+        purpose: {
+          title: markdownInline(`Cross-Functional Investment Model Studio — ${model.title}`),
+          decisionQuestion: markdownInline(model.question),
+          selectedModelId: model.id,
+          humanReceiver: markdownInline("Open — name the sponsor and accountable finance or operating owner who can authorize inputs and consequences.")
+        },
+        context: {
+          scenario: {
+            id: sharedScenario.id,
+            label: markdownInline(sharedScenario.label),
+            horizon: markdownInline(sharedScenario.horizon),
+            complexity: markdownInline(sharedScenario.complexity),
+            namedUnknowns: sharedScenario.namedUnknowns,
+            people: sharedScenario.people,
+            tasks: sharedScenario.tasks,
+            recoveryEvents: sharedScenario.recoveryEvents,
+            posture: markdownInline(sharedScenario.posture)
+          },
+          sourceRecord: {
+            id: model.sourceId,
+            title: markdownInline(model.sourceTitle)
+          },
+          whenToUse: markdownInline(model.when)
+        },
+        workingState: {
+          method: encodeList(model.method),
+          inputs: encodeList(model.inputs),
+          outputs: encodeList(model.outputs),
+          foreground: markdownInline(model.foreground),
+          decisionRoute: encodeList(model.route),
+          humanJudgment: encodeList(model.human),
+          generativeAi: encodeList(model.ai),
+          deterministicComputation: encodeList(model.deterministic),
+          toolingFit: markdownInline(model.tooling),
+          deterministicOperation: markdownInline(model.calculation),
+          missingInputs: markdownInline(model.missing),
+          nextHandoff: markdownInline(model.handoff)
+        },
+        boundaries: {
+          modelBoundary: markdownInline(model.boundary),
+          evidencePosture: markdownInline(sharedScenario.posture)
+        },
+        requestedReturn: {
+          instructionParagraphs: markdownParagraphs(model.prompt),
+          handback: [
+            "Name the inputs received and the inputs that remain reserved.",
+            "Keep each source and accountable owner visible beside the value or assumption they supply.",
+            "Return the requested model output and the smallest questions that move open material toward human review."
+          ].map((value) => markdownInline(value))
+        },
+        evidence: {
+          sourceRecordId: model.sourceId,
+          sourceRecordTitle: markdownInline(model.sourceTitle),
+          deterministicOperation: markdownInline(model.calculation),
+          toolingFit: markdownInline(model.tooling),
+          nextHandoff: markdownInline(model.handoff)
+        }
+      };
+    }
+
+    function promptCapsuleFingerprint(sourceState = state) {
+      return fnv1a32Utf8(JSON.stringify(canonicalValue(promptCapsuleStateProjection(sourceState))));
+    }
+
+    function promptCapsuleMarkdown(sourceState = state, options = {}) {
+      const requestedView = typeof options === "string" ? options : options?.view;
+      const view = PROMPT_CAPSULE_VIEWS.includes(requestedView) ? requestedView : "plain";
+      const capsule = promptCapsuleStateProjection(sourceState);
+      const bulletList = (values, fallback = "Open for the next review.") => values.length
+        ? values.map((value) => `- ${value}`).join("\n")
+        : `- ${fallback}`;
+      const numberedList = (values) => values.map((value, index) => `${index + 1}. ${value}`).join("\n");
+      const route = capsule.workingState.decisionRoute.map((value, index) => `${index + 1}. ${value}`).join(" → ");
+      const relatedLoops = PROMPT_CAPSULE_RELATED_LOOPS.map((loop) =>
+        `- [${loop.name}](${loop.publicUrl}) (${markdownCode(loop.id)}) — ${markdownInline(loop.fitCondition)}`
+      ).join("\n");
+      const sections = [
+        `# Prompt Capsule: ${capsule.purpose.title}`,
+        "",
+        `- Contract: ${markdownCode(capsule.contract)}`,
+        `- Capsule: ${markdownCode(capsule.capsule)}`,
+        `- Source: ${markdownCode(`${capsule.source.id}@${capsule.source.version}`)}`,
+        `- State: ${markdownCode(capsule.state.contract)} · revision ${markdownCode(capsule.state.revision)}`,
+        `- Fingerprint: ${markdownCode(promptCapsuleFingerprint(sourceState))}`,
+        `- View: ${markdownCode(view)}`,
+        "",
+        "## Purpose and target",
+        "",
+        "Use the selected investment method to prepare a reviewable decision input from named sources, owned assumptions, and deterministic calculations.",
+        "",
+        `- Selected model: ${markdownInline(models.find((model) => model.id === capsule.state.activeModelId)?.title)} (${markdownCode(capsule.purpose.selectedModelId)})`,
+        `- Decision question: ${capsule.purpose.decisionQuestion}`,
+        `- Human receiver: ${capsule.purpose.humanReceiver}`,
+        "",
+        "## Relevant context and inputs",
+        "",
+        `- Model fit: ${capsule.context.whenToUse}`,
+        `- Source record: ${capsule.context.sourceRecord.title} (${markdownCode(capsule.context.sourceRecord.id)})`,
+        `- Shared scenario: ${capsule.context.scenario.label} (${markdownCode(capsule.context.scenario.id)}); horizon ${capsule.context.scenario.horizon}; complexity ${capsule.context.scenario.complexity}.`,
+        `- Scenario scale: ${markdownCode(capsule.context.scenario.people)} staffed people; ${markdownCode(capsule.context.scenario.tasks)} activity tasks; ${markdownCode(capsule.context.scenario.recoveryEvents)} recovery events; ${markdownCode(capsule.context.scenario.namedUnknowns)} named unknowns.`,
+        `- Evidence posture: ${capsule.context.scenario.posture}.`,
+        "",
+        "### Method",
+        "",
+        numberedList(capsule.workingState.method),
+        "",
+        "### Inputs",
+        "",
+        bulletList(capsule.workingState.inputs),
+        "",
+        "### Expected outputs",
+        "",
+        bulletList(capsule.workingState.outputs),
+        "",
+        "## Working state",
+        "",
+        `- Current focus: ${capsule.workingState.foreground}`,
+        `- Decision route: ${route}`,
+        `- Deterministic operation: ${capsule.workingState.deterministicOperation}`,
+        `- Inputs still needed: ${capsule.workingState.missingInputs}`,
+        `- Next handoff: ${capsule.workingState.nextHandoff}`,
+        "",
+        "### Work held by people",
+        "",
+        bulletList(capsule.workingState.humanJudgment),
+        "",
+        "### Work suited to generative AI",
+        "",
+        bulletList(capsule.workingState.generativeAi),
+        "",
+        "### Work suited to deterministic computation",
+        "",
+        bulletList(capsule.workingState.deterministicComputation),
+        "",
+        `Tooling fit: ${capsule.workingState.toolingFit}`,
+        "",
+        "## Boundaries and human-held decisions",
+        "",
+        `- Evidence and authority boundary: ${capsule.boundaries.modelBoundary}`,
+        `- Scenario standing: ${capsule.boundaries.evidencePosture}.`,
+        "- The inline model catalog, shared scenario, and accepted active-model state remain the runnable projection authority. This Markdown is their derived collaboration view.",
+        "- The selected source record identifies the underlying method. Named owners supply and authorize rates, volumes, ranges, value mechanisms, risk ownership, horizons, decision thresholds, and consequences.",
+        "- Generative AI structures supplied material and review questions. Deterministic tools calculate from approved inputs.",
+        `- Receiving authority: ${capsule.purpose.humanReceiver}`,
+        "",
+        "## Requested return",
+        "",
+        capsule.requestedReturn.instructionParagraphs.join("\n\n"),
+        "",
+        "Return with this handback:",
+        "",
+        numberedList(capsule.requestedReturn.handback),
+        "",
+        "## Related loops",
+        "",
+        relatedLoops,
+        "",
+        "## Evidence and recovery",
+        "",
+        `- Source record: ${capsule.evidence.sourceRecordTitle} (${markdownCode(capsule.evidence.sourceRecordId)}).`,
+        `- Deterministic operation: ${capsule.evidence.deterministicOperation}`,
+        `- Tooling fit: ${capsule.evidence.toolingFit}`,
+        `- Next handoff: ${capsule.evidence.nextHandoff}`,
+        `- The embedded schema establishes the selection shape, schema version, known model IDs, scenario ID, and selection reasons. Financial validity, assumption quality, authorization, and outcomes remain with their named evidence and decision owners.`,
+        `- Keep an unavailable input as ${markdownCode("<reserved>")} with its owner or clarifying question. An unrecognized model selection leaves the accepted model and Prompt Capsule available.`,
+        "- Use the FNV-1a fingerprint as a represented-state comparison key. Integrity-sensitive exchange uses the source artifact’s stronger digest or exact serialized snapshot when its owner provides one."
+      ];
+      if (view === "skill-assisted") {
+        sections.push(
+          "",
+          "## Skill assistance",
+          "",
+          "These public repository skills can shape the return while the selected model and scenario remain the state authority:",
+          "",
+          ...PROMPT_CAPSULE_SKILLS.map((skill) => [
+            `- [${skill.name}](${skill.publicUrl}) — ${skill.purpose}`,
+            `  - Repository path: ${markdownCode(skill.path)}`,
+            `  - Source revision: ${markdownCode(PROMPT_CAPSULE_SKILL_REVISION)}`,
+            `  - Source SHA-256: ${markdownCode(skill.sha256)}`
+          ].join("\n"))
+        );
+      }
+      return `${sections.join("\n")}\n`;
+    }
+
+    function activePromptCapsule() {
+      return promptCapsuleMarkdown(state, { view: promptCapsuleView });
     }
 
     function renderTabs() {
@@ -1634,7 +2234,7 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
           <div class="route-track">
             ${model.route.map((item, routeIndex) => `<div class="route-node"><strong>${["Question", "Source model", "Computation", "Reading"][routeIndex]}</strong><span>${escapeHtml(item)}</span></div>`).join("")}
           </div>
-          <figcaption>The shared scenario stays fixed while the selected model changes the question, required source structure, deterministic operation, and receiving investment reading.</figcaption>
+          <figcaption>The shared scenario stays fixed while the selected model changes the question, required inputs and records, deterministic operation, and result used in the next decision.</figcaption>
         </figure>
 
         <div class="method-grid">
@@ -1654,7 +2254,7 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
             </div>
           </section>
           <section class="method-card method-card--wide boundary-card">
-            <h3>Material boundary</h3>
+            <h3>Evidence and authority boundary</h3>
             <p>${escapeHtml(model.boundary)}</p>
           </section>
           <section class="method-card method-card--wide">
@@ -1670,10 +2270,94 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
             <p>${escapeHtml(model.tooling)}</p>
           </section>
           <section class="method-card">
-            <h3>Prompt capsule</h3>
+            <h3>Model-specific instruction</h3>
             <pre class="prompt-capsule" tabindex="0">${escapeHtml(model.prompt)}</pre>
           </section>
         </div>`;
+    }
+
+    function promptViewLabel() {
+      return promptCapsuleView === "plain" ? "Plain" : "Skill-assisted";
+    }
+
+    function renderPromptCapsule() {
+      const model = activeModel();
+      elements.prompt.textContent = activePromptCapsule();
+      elements.prompt.dataset.promptViewActive = promptCapsuleView;
+      elements.prompt.setAttribute("aria-label", `${promptViewLabel()} ${model.title} Prompt Capsule Markdown`);
+      document.querySelectorAll("[data-prompt-view]").forEach((control) => {
+        control.checked = control.value === promptCapsuleView;
+      });
+    }
+
+    function announcePrompt(message) {
+      elements.promptStatus.textContent = message;
+      elements.announcement.textContent = message;
+    }
+
+    function setPromptCapsuleView(view, announce = true) {
+      if (!PROMPT_CAPSULE_VIEWS.includes(view)) return false;
+      promptCapsuleView = view;
+      renderPromptCapsule();
+      if (announce) announcePrompt(`${promptViewLabel()} Markdown view selected. The investment model state is unchanged.`);
+      return true;
+    }
+
+    function fallbackWriteText(text) {
+      const priorFocus = document.activeElement;
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.setAttribute("aria-hidden", "true");
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      let copied = false;
+      try {
+        textarea.select();
+        copied = document.execCommand("copy");
+      } finally {
+        textarea.remove();
+        priorFocus?.focus?.();
+      }
+      return copied;
+    }
+
+    async function copyPromptCapsule() {
+      const markdown = activePromptCapsule();
+      try {
+        let copied = false;
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(markdown);
+          copied = true;
+        } else {
+          copied = fallbackWriteText(markdown);
+        }
+        if (!copied) throw new Error("Clipboard write was unavailable.");
+        announcePrompt(`${promptViewLabel()} Markdown copied.`);
+      } catch (error) {
+        announcePrompt(`${promptViewLabel()} Markdown remains visible for manual copy.`);
+      }
+    }
+
+    function modelSlug() {
+      return activeModel().short
+        .toLowerCase()
+        .normalize("NFKD")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+    }
+
+    function downloadPromptCapsule() {
+      const blob = new Blob([activePromptCapsule()], { type: "text/markdown;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `${PROMPT_CAPSULE_SOURCE_ID}.${modelSlug()}.prompt-capsule.r${PROMPT_CAPSULE_SOURCE_VERSION}.${promptCapsuleView}.md`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1200);
+      announcePrompt(`${promptViewLabel()} Markdown download prepared.`);
     }
 
     function renderInspector() {
@@ -1717,8 +2401,8 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
         ["Outputs", model.outputs.join("; ")],
         ["Work split", split.join(" | ")],
         ["Tooling fit", model.tooling],
-        ["Material boundary", model.boundary],
-        ["Prompt capsule", model.prompt],
+        ["Evidence and authority boundary", model.boundary],
+        ["Model-specific instruction", model.prompt],
         ["Source record", `${model.sourceTitle} · ${model.sourceId}`]
       ];
     }
@@ -1728,9 +2412,9 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
         <details${index === 0 ? " open" : ""}>
           <summary>${String(index + 1).padStart(2, "0")} · ${escapeHtml(model.title)}</summary>
           <table class="equivalent-table">
-            <caption>Table ${String(index + 2).padStart(2, "0")} · ${escapeHtml(model.title)} semantic equivalent</caption>
+            <caption>Table ${String(index + 2).padStart(2, "0")} · ${escapeHtml(model.title)} complete text equivalent</caption>
             <tbody>
-              ${semanticRows(model).map(([label, value]) => `<tr><th scope="row">${escapeHtml(label)}</th><td>${label === "Prompt capsule" ? `<pre>${escapeHtml(value)}</pre>` : escapeHtml(value)}</td></tr>`).join("")}
+              ${semanticRows(model).map(([label, value]) => `<tr><th scope="row">${escapeHtml(label)}</th><td>${label === "Model-specific instruction" ? `<pre>${escapeHtml(value)}</pre>` : escapeHtml(value)}</td></tr>`).join("")}
             </tbody>
           </table>
         </details>`).join("");
@@ -1747,18 +2431,21 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
     }
 
     function setActive(modelId, reason) {
-      if (!models.some((model) => model.id === modelId)) return;
+      if (!models.some((model) => model.id === modelId)) return false;
       state.activeModelId = modelId;
       state.selectionReason = reason;
       renderTabs();
       renderPanel();
       renderInspector();
       renderContracts();
+      renderPromptCapsule();
 
       const model = activeModel();
       const position = models.indexOf(model) + 1;
       elements.status.textContent = `${model.short} selected · model ${position} of ${models.length}`;
-      elements.announcement.textContent = `${model.title} selected. The shared Discovery & Alignment scenario remains fixed.`;
+      elements.promptStatus.textContent = `${promptViewLabel()} Markdown now represents ${model.title}.`;
+      elements.announcement.textContent = `${model.title} selected. The shared Discovery & Alignment scenario remains fixed, and the Prompt Capsule now represents this model.`;
+      return true;
     }
 
     elements.tabs.addEventListener("click", (event) => {
@@ -1787,11 +2474,36 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
       document.querySelector(`[data-model-id="${modelId}"]`)?.focus();
     });
 
+    document.querySelectorAll("[data-prompt-view]").forEach((control) => {
+      control.addEventListener("change", () => {
+        if (control.checked) setPromptCapsuleView(control.value);
+      });
+    });
+
+    elements.copyPrompt.addEventListener("click", copyPromptCapsule);
+    elements.downloadPrompt.addEventListener("click", downloadPromptCapsule);
+    elements.promptActions.hidden = false;
+    elements.promptViewControl.hidden = false;
+
+    window.crossFunctionalInvestmentModelStudio = Object.freeze({
+      version: PROMPT_CAPSULE_SOURCE_VERSION,
+      stateSchemaVersion: state.schemaVersion,
+      promptCapsuleContract: PROMPT_CAPSULE_CONTRACT,
+      promptCapsuleViews: PROMPT_CAPSULE_VIEWS,
+      getState: () => structuredClone(state),
+      promptCapsule: () => promptCapsuleMarkdown(state, { view: "plain" }),
+      promptCapsuleMarkdown: (view = promptCapsuleView) => promptCapsuleMarkdown(state, { view }),
+      promptCapsuleStateProjection: () => structuredClone(promptCapsuleStateProjection(state)),
+      promptCapsuleFingerprint: () => promptCapsuleFingerprint(state),
+      getPromptCapsuleView: () => promptCapsuleView
+    });
+
     renderTabs();
     renderPanel();
     renderInspector();
     renderSemanticEquivalents();
     renderContracts();
+    renderPromptCapsule();
   </script>
 </body>
 </html>
