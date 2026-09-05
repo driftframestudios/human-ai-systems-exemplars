@@ -27,7 +27,7 @@
     "The manifest-current Core Architecture Family Index is adapted into companions/ so the capsule link remains child-directory relative.",
     "Strategy Canvas registry, manifest, and prototype references resolve through Context-local routes.",
     "The published Strategy Canvas schema validator establishes the source contract before adapter mapping.",
-    "The deterministic local bundle rewrites repository-relative Strategy Canvas routes to its included portable companions."
+    "The deterministic local bundle rewrites repository-relative Strategy Canvas routes to its included portable companions and verifies the local links in the included Strategy Canvas."
   ],
   "divergence": {
     "status": "context_canvas_owned_projection",

@@ -183,15 +183,29 @@ test("adding the supplemental route does not change the existing Core hub projec
 });
 
 test("every current Core carrier owns one visible authorship and license declaration", async () => {
-  const { contract } = await loadManifests();
-  const projections = [defaultPaths.sourceRoot, contextProjectionRoot];
+  const { contract, sourceManifest } = await loadManifests();
+  const contextManifest = JSON.parse(await readFile(
+    path.join(contextProjectionRoot, "core-architectures-chimeric-prototype-manifest-v0.1.json"),
+    "utf8",
+  ));
+  const projections = [
+    {
+      root: defaultPaths.sourceRoot,
+      files: new Map(sourceManifest.prototypes.map((entry) => [entry.id, entry.file])),
+    },
+    {
+      root: contextProjectionRoot,
+      files: new Map(contextManifest.prototypes.map((entry) => [entry.id, entry.file])),
+    },
+  ];
 
   for (const route of contract.routes.filter(
     ({ kind }) => kind !== "supplemental_instrument",
   )) {
-    for (const projectionRoot of projections) {
-      const label = `${path.relative(defaultPaths.repositoryRoot, projectionRoot)}/${route.source_file}`;
-      const source = await readFile(path.join(projectionRoot, route.source_file), "utf8");
+    for (const projection of projections) {
+      const projectionFile = projection.files.get(route.id) ?? route.source_file;
+      const label = `${path.relative(defaultPaths.repositoryRoot, projection.root)}/${projectionFile}`;
+      const source = await readFile(path.join(projection.root, projectionFile), "utf8");
 
       assert.equal(occurrenceCount(source, /<meta\b[^>]*\bname=["']author["'][^>]*>/gi), 1, `${label} author count`);
       assert.match(
@@ -297,6 +311,16 @@ test("every route receipt carries its observed minimal carrier policy", async ()
     held_capabilities: [],
   });
   assert.deepEqual(byId.get("strategy-canvas").carrier_policy.held_capabilities, []);
+  assert.deepEqual(byId.get("strategy-canvas").observed_runtime_capabilities, [
+    "executable-scripts",
+    "clipboard-write",
+    "file-download",
+  ]);
+  assert.deepEqual(byId.get("strategy-canvas").carrier_policy, {
+    sandbox_tokens: ["allow-downloads", "allow-scripts"],
+    permissions_policy: ["clipboard-write"],
+    held_capabilities: [],
+  });
   assert.deepEqual(byId.get("ai-systems-service-blueprint").carrier_policy.permissions_policy, []);
   assert.equal(
     plan.receipt.routes.filter(({ carrier_policy }) =>
@@ -359,6 +383,16 @@ test("runtime observation distinguishes executable behavior from embedded data",
     ),
     ["executable-scripts"],
   );
+  assert.deepEqual(
+    observeIframeRuntimeCapabilities(
+      '<script>const link = document.createElement("a"); link.download = "state.md";</script>',
+    ),
+    ["executable-scripts", "file-download"],
+  );
+  assert.deepEqual(
+    observeIframeRuntimeCapabilities('<a href="state.md" download>Download</a>'),
+    ["file-download"],
+  );
   assert.throws(
     () => observeIframeRuntimeCapabilities('<script type="application/x-custom-data">value</script>'),
     /unsupported script type/,
@@ -373,7 +407,7 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   await writePackagePlan(plan, temporaryRoot);
   const verification = await verifyPackagePlan(plan, temporaryRoot);
 
-  assert.deepEqual(verification, { files: 27, bytes: 1775661 });
+  assert.deepEqual(verification, { files: 27, bytes: 1795248 });
   await writeFile(path.join(temporaryRoot, "unexpected.txt"), "outside the plan\n");
   await assert.rejects(
     verifyPackagePlan(plan, temporaryRoot),
@@ -635,6 +669,15 @@ test("route navigation cannot escape the versioned base", () => {
 });
 
 test("closure scanning accepts declared package media and rejects ambient dependencies", () => {
+  assert.deepEqual(
+    scanHtmlClosure(
+      `<script>const href = URL.createObjectURL(new Blob(["value"]));</script>`,
+      new Set(),
+      "download fixture",
+    ),
+    { inline_references: 0, package_targets: [] },
+    "a download object URL is not a CSS resource reference",
+  );
   assert.deepEqual(
     scanHtmlClosure(
       `<!doctype html><style>.mark{mask:url(#mark)}</style><img src="data:image/svg+xml,%3Csvg/%3E"><img src="media/plot.svg"><svg><use href="#mark"></use></svg>`,

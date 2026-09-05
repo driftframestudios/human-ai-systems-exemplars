@@ -102,14 +102,15 @@
       "subtitle": "Comparative Collaboration Field",
       "family": "Comparison and Threshold",
       "shape": "anchored dimension matrix + editable profile field",
-      "file": "strategy-canvas-chimeric-prototype-v0.2.2.html",
-      "version": "0.2.2",
+      "file": "strategy-canvas-chimeric-prototype-v0.2.3.html",
+      "version": "0.2.3",
       "status": "current",
       "previous": [
         "strategy-canvas-chimeric-prototype-v0.1.html",
         "strategy-canvas-chimeric-prototype-v0.1.1.html",
         "strategy-canvas-chimeric-prototype-v0.2.0.html",
-        "strategy-canvas-chimeric-prototype-v0.2.1.html"
+        "strategy-canvas-chimeric-prototype-v0.2.1.html",
+        "strategy-canvas-chimeric-prototype-v0.2.2.html"
       ],
       "compatibility_route": "strategy-canvas-chimeric-prototype-v0.1.1.html",
       "semantic_contract": "strategy-canvas/2.0",
@@ -117,8 +118,8 @@
       "evidence": "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
       "expression": "canonical",
       "exists": true,
-      "size_bytes": 142235,
-      "sha256": "93f5e2b138461f85b4980b849550f7c86cc51d7eaf16bf8429d1ea632034372a"
+      "size_bytes": 161641,
+      "sha256": "3bd973a204d148a593569610308f92e92f0541d34ab4aa569f21ae904ed39938"
     },
     {
       "id": "first-responsible-version-matrix",

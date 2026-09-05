@@ -68,11 +68,24 @@ test("manifest-current Core JSON-LD uses the approved semantic identifiers", asy
 
   for (const entry of sourceManifest.prototypes) {
     const contextEntry = currentById(contextManifest).get(entry.id);
-    assert.deepEqual(
-      [contextEntry.file, contextEntry.version],
-      [entry.file, entry.version],
-      `${entry.id} source and Context identities`,
-    );
+    if (entry.id === "strategy-canvas") {
+      assert.deepEqual(
+        [entry.file, entry.version],
+        ["strategy-canvas-chimeric-prototype-v0.2.3.html", "0.2.3"],
+        "Strategy Canvas canonical current identity",
+      );
+      assert.deepEqual(
+        [contextEntry.file, contextEntry.version],
+        ["strategy-canvas-chimeric-prototype-v0.2.2.html", "0.2.2"],
+        "Strategy Canvas maintained Context identity",
+      );
+    } else {
+      assert.deepEqual(
+        [contextEntry.file, contextEntry.version],
+        [entry.file, entry.version],
+        `${entry.id} source and Context identities`,
+      );
+    }
     const [source, contextSource] = await Promise.all([
       readFile(path.join(coreRoot, entry.file), "utf8"),
       readFile(path.join(contextCoreRoot, contextEntry.file), "utf8"),
@@ -132,7 +145,12 @@ test("current canonical and Context projections retain their declared relationsh
       readFile(path.join(coreRoot, entry.file)),
       readFile(path.join(contextCoreRoot, contextEntry.file)),
     ]);
-    if (!declaredAdaptations.has(entry.file)) {
+    if (entry.id === "strategy-canvas") {
+      assert.ok(
+        declaredAdaptations.has(contextEntry.file),
+        "Strategy Canvas keeps its independently versioned Context adaptation",
+      );
+    } else if (!declaredAdaptations.has(entry.file)) {
       assert.ok(projection.equals(source), `${entry.id} remains byte-identical`);
     }
   }

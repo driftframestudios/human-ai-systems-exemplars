@@ -4,7 +4,7 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { chmod, mkdtemp, mkdir, readFile, writeFile, copyFile, rm, utimes } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { dirname, join, relative, resolve } from "node:path";
+import { dirname, join, posix, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -77,6 +77,14 @@ function portableNarrativeText(value) {
       "companions/strategy-canvas-system-v0.2/strategy-canvas-validator.js",
     )
     .replaceAll(
+      "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+      "companions/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+    )
+    .replaceAll(
+      "../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+      "companions/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+    )
+    .replaceAll(
       '<a href="../context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html">Core Architectures Orientation Index</a>',
       '<a href="https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html" target="_blank" rel="noopener noreferrer">Core Architectures Orientation Index (opens in a new tab)</a>',
     )
@@ -91,12 +99,14 @@ function narrativeBundle(base, archivePath, familyIndex, compatibility) {
     name: relative(repositoryRoot, archivePath),
     archivePath,
     root: "narrative-capsules-chimeric-prototype-v0.1",
+    closureEntries: ["companions/strategy-canvas-chimeric-prototype-v0.2.2.html"],
     entries: [
       ["companions/core-architecture-family-index-chimeric-prototype-v0.1.4.html", source(familyIndex)],
       ["companions/strategy-canvas-chimeric-prototype-v0.1.1.html", source(compatibility)],
       ["companions/strategy-canvas-chimeric-prototype-v0.2.2.html", source(join(rootCanonicalPack, "strategy-canvas-chimeric-prototype-v0.2.2.html"))],
       ["companions/strategy-canvas-system-v0.2/strategy-canvas.schema.json", source(join(rootCanonicalPack, "strategy-canvas-system-v0.2/strategy-canvas.schema.json"))],
       ["companions/strategy-canvas-system-v0.2/strategy-canvas-validator.js", source(join(rootCanonicalPack, "strategy-canvas-system-v0.2/strategy-canvas-validator.js"))],
+      ["companions/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json", source(join(rootCanonicalPack, "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json"))],
       ["core-architecture-target-pair-registry.v0.1.json", source(join(base, "core-architecture-target-pair-registry.v0.1.json"))],
       ["expectation-opportunity-to-strategy-canvas.example.v0.1.json", source(join(base, "expectation-opportunity-to-strategy-canvas.example.v0.1.json"))],
       ["narrative-capsule-composition.context.v0.1.jsonld", source(join(base, "narrative-capsule-composition.context.v0.1.jsonld"))],
@@ -231,6 +241,34 @@ async function verifyManifestReceipts(bundle) {
   }
 }
 
+function localDocumentReferences(value) {
+  const references = [];
+  for (const match of value.matchAll(/\b(?:href|src|data-href)=["']([^"']+)["']/giu)) {
+    const reference = match[1].trim();
+    if (
+      !reference ||
+      reference.startsWith("#") ||
+      /^(?:data|https?|mailto|tel|javascript):/iu.test(reference)
+    ) continue;
+    references.push(reference.split(/[?#]/u, 1)[0]);
+  }
+  return references;
+}
+
+async function verifyStagedClosure(bundle, stage) {
+  if (!bundle.closureEntries?.length) return;
+  const included = new Set(bundle.entries.map(([entryPath]) => entryPath));
+  for (const entryPath of bundle.closureEntries) {
+    const value = await readFile(join(stage, entryPath), "utf8");
+    for (const reference of localDocumentReferences(value)) {
+      const target = posix.normalize(posix.join(posix.dirname(entryPath), reference));
+      if (target.startsWith("../") || !included.has(target)) {
+        throw new Error(`${bundle.name} leaves ${entryPath} reference ${reference} outside its archive closure`);
+      }
+    }
+  }
+}
+
 async function buildBundle(bundle, temporaryRoot) {
   const stage = bundle.root ? join(temporaryRoot, bundle.root) : temporaryRoot;
   await mkdir(stage, { recursive: true });
@@ -246,6 +284,7 @@ async function buildBundle(bundle, temporaryRoot) {
     await utimes(destination, fixedTime, fixedTime);
     archiveEntries.push(bundle.root ? `${bundle.root}/${entryPath}` : entryPath);
   }
+  await verifyStagedClosure(bundle, stage);
 
   const output = join(temporaryRoot, "bundle.zip");
   execFileSync("zip", ["-X", "-q", output, ...archiveEntries], {

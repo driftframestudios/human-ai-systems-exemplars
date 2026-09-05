@@ -72,7 +72,7 @@ const expectedActivationStandings = new Set([
   "reader_job_required",
   "visitor_copy_review",
 ]);
-const supportedSandboxTokens = new Set(["allow-scripts"]);
+const supportedSandboxTokens = new Set(["allow-downloads", "allow-scripts"]);
 const supportedPermissionsPolicyFeatures = new Set(["clipboard-write"]);
 const supportedHeldCapabilities = new Set(["native-modals"]);
 const expectedRouteAliases = new Map([
@@ -785,7 +785,9 @@ export function validateRouteContract(contract, sourceManifest) {
 
 function validateCarrierPolicyAgainstCapabilities(route, capabilities) {
   const observed = new Set(capabilities);
-  const expectedSandbox = observed.has("executable-scripts") ? ["allow-scripts"] : [];
+  const expectedSandbox = [];
+  if (observed.has("file-download")) expectedSandbox.push("allow-downloads");
+  if (observed.has("executable-scripts")) expectedSandbox.push("allow-scripts");
   const expectedPermissions = observed.has("clipboard-write") ? ["clipboard-write"] : [];
   const expectedHeld = observed.has("native-modals") ? ["native-modals"] : [];
 

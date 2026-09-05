@@ -119,6 +119,11 @@
             </tbody>
           </table>
         </div>
+        <section class="sc-static-capsule" aria-labelledby="static-prompt-heading">
+          <h3 id="static-prompt-heading">Default AI collaboration capsule · plain Markdown</h3>
+          <p class="sc-help">This complete default remains readable and copyable when JavaScript is unavailable. Interactive editing, view selection, copying, and downloading become available when the workbench mounts.</p>
+          <pre class="sc-code" data-sc-role="static-prompt" tabindex="0">/*__STRATEGY_CANVAS_DEFAULT_PROMPT_CAPSULE__*/</pre>
+        </section>
       </section>
 
     <article class="sc-workbench" id="strategy-canvas-chart" aria-label="Interactive Strategy Canvas">
@@ -192,10 +197,21 @@
           </div>
           <div>
             <div class="sc-workbench-head">
-              <h3>AI collaboration capsule</h3>
-              <button type="button" data-action="copy-prompt">Copy capsule</button>
+              <h3 id="prompt-capsule-heading">AI collaboration capsule · Markdown</h3>
+              <div class="sc-toolbar" aria-label="Markdown actions">
+                <button type="button" data-action="copy-markdown">Copy Markdown</button>
+                <button type="button" data-action="download-markdown">Download Markdown</button>
+              </div>
             </div>
-            <pre class="sc-code" data-sc-role="prompt" tabindex="0"></pre>
+            <fieldset class="sc-capsule-view-control" data-sc-role="prompt-view-control">
+              <legend class="sc-label">Markdown view</legend>
+              <div class="sc-capsule-view-options">
+                <label><input type="radio" name="prompt-capsule-view" value="plain" data-prompt-view checked /> Plain</label>
+                <label><input type="radio" name="prompt-capsule-view" value="skill-assisted" data-prompt-view /> Skill-assisted</label>
+              </div>
+            </fieldset>
+            <p class="sc-help" id="prompt-view-description" data-sc-role="prompt-view-description">Plain Markdown carries the complete working context without asking the receiver to load a repository skill.</p>
+            <pre class="sc-code" data-sc-role="prompt" data-prompt-view="plain" aria-labelledby="prompt-capsule-heading" aria-describedby="prompt-view-description" tabindex="0"></pre>
           </div>
         </div>
         <details class="sc-implications">

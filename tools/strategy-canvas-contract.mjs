@@ -11,8 +11,9 @@ import {
   artifactLicense,
 } from "./attribution-contract.mjs";
 
-const CANONICAL = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html";
+const CANONICAL = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html";
 const CONTEXT = "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html";
+const PROMPT_CAPSULE_EXAMPLE = "prompt-capsules/0.1.0/examples/strategy-canvas.md";
 const NARRATIVE_COMPOSERS = [
   {
     name: "Context",
@@ -799,6 +800,9 @@ async function canonicalExchangeRecoveryContract(browser, url) {
       const exported = JSON.parse(await jsonOutput.textContent());
       assert(exported.dimensions[0].scores.current === target, "The visible JSON export should carry the facilitator's score edit.");
       assert(same(exported, edited), "The visible JSON export should describe the edited working state.");
+      const markdownOutput = page.locator('[data-sc-role="prompt"]');
+      const acceptedMarkdown = await markdownOutput.textContent();
+      const acceptedFingerprint = await page.evaluate(() => window.strategyCanvasCanonical.promptCapsuleFingerprint());
 
       const importInput = page.locator('[data-sc-role="import"]');
       await importInput.evaluate((input) => { input.closest("details").open = true; });
@@ -811,6 +815,88 @@ async function canonicalExchangeRecoveryContract(browser, url) {
       assert(await score.isEnabled(), "Recovery should keep the labelled score control available.");
       assert(await score.inputValue() === String(target), "Recovery should keep the edited score visible and usable.");
       assert(same(JSON.parse(await jsonOutput.textContent()), exported), "Recovery should retain the edited JSON export.");
+      assert(await markdownOutput.textContent() === acceptedMarkdown, "Recovery should retain the accepted Markdown projection.");
+      assert(await page.evaluate(() => window.strategyCanvasCanonical.promptCapsuleFingerprint()) === acceptedFingerprint, "Recovery should retain the accepted state fingerprint.");
+      assertTelemetry(telemetry);
+    } finally {
+      await context.close();
+    }
+  });
+}
+
+async function canonicalPromptCapsuleContract(browser, url) {
+  await verify("canonical · native Prompt Capsule views keep state fixed and active Markdown bytes aligned", async () => {
+    const context = await browser.newContext({
+      viewport: { width: VIEWPORTS[1].width, height: VIEWPORTS[1].height },
+      acceptDownloads: true
+    });
+    const page = await context.newPage();
+    const telemetry = monitor(page);
+    try {
+      await page.goto(url, { waitUntil: "domcontentloaded" });
+      await page.locator('[data-sc-role="prompt"]').waitFor({ state: "visible" });
+      const checkedExample = await readFile(resolve(PROMPT_CAPSULE_EXAMPLE), "utf8");
+      const prompt = page.locator('[data-sc-role="prompt"]');
+      const radios = page.locator('[data-sc-role="prompt-view-control"] input[type="radio"]');
+      assert(await page.locator('[data-sc-role="prompt-view-control"] fieldset').count() === 0, "The Prompt Capsule view control should itself be the native fieldset.");
+      assert(await page.locator('fieldset[data-sc-role="prompt-view-control"] > legend').count() === 1, "The native view group should have one visible legend.");
+      assert(await radios.count() === 2, "The view group should expose plain and skill-assisted radios.");
+      assert(await radios.nth(0).getAttribute("value") === "plain" && await radios.nth(0).isChecked(), "Plain Markdown should be the native default.");
+      assert(await prompt.textContent() === checkedExample, "The mounted plain view should equal the checked default example.");
+      assert(await page.evaluate(() => window.strategyCanvasCanonical.promptCapsule()) === checkedExample, "The promptCapsule compatibility seam should return plain Markdown.");
+
+      const stateBeforeView = await page.evaluate(() => window.strategyCanvasCanonical.serialize());
+      const fingerprintBeforeView = await page.evaluate(() => window.strategyCanvasCanonical.promptCapsuleFingerprint());
+      const assisted = radios.nth(1);
+      await assisted.focus();
+      await assisted.check();
+      await page.waitForFunction(() => document.querySelector('[data-sc-role="live"]')?.textContent.includes("Skill-assisted Markdown view selected."));
+      assert(await page.evaluate(() => document.activeElement?.getAttribute("data-prompt-view") === "" && document.activeElement?.value === "skill-assisted"), "View switching should retain focus on the chosen radio.");
+      assert(await page.evaluate(() => window.strategyCanvasCanonical.serialize()) === stateBeforeView, "View switching should leave Strategy Canvas state unchanged.");
+      assert(await page.evaluate(() => window.strategyCanvasCanonical.promptCapsuleFingerprint()) === fingerprintBeforeView, "Both Markdown views should share one state fingerprint.");
+      const assistedMarkdown = await prompt.textContent();
+      assert(assistedMarkdown.includes("## Skill assistance"), "The assisted view should add its bounded skill section.");
+      assert(assistedMarkdown.includes(`- Fingerprint: \`${fingerprintBeforeView}\``), "The assisted view should expose the shared fingerprint.");
+
+      await page.evaluate(() => {
+        Object.defineProperty(navigator, "clipboard", {
+          configurable: true,
+          value: { writeText: async (value) => { window.__strategyCanvasCopiedMarkdown = value; } }
+        });
+        const createObjectURL = URL.createObjectURL.bind(URL);
+        URL.createObjectURL = (blob) => {
+          window.__strategyCanvasDownloadType = blob.type;
+          return createObjectURL(blob);
+        };
+      });
+      await page.locator('[data-action="copy-markdown"]').click();
+      await page.waitForFunction(() => typeof window.__strategyCanvasCopiedMarkdown === "string");
+      assert(await page.evaluate(() => window.__strategyCanvasCopiedMarkdown) === assistedMarkdown, "Copy should use the exact active Markdown bytes.");
+
+      const downloadEvent = page.waitForEvent("download");
+      await page.locator('[data-action="download-markdown"]').click();
+      const download = await downloadEvent;
+      const downloadPath = await download.path();
+      assert(download.suggestedFilename() === "strategy-canvas-collaboration-field.prompt-capsule.r1.skill-assisted.md", "Download should use a deterministic Markdown filename.");
+      assert(await page.evaluate(() => window.__strategyCanvasDownloadType) === "text/markdown;charset=utf-8", "Download should declare UTF-8 Markdown.");
+      assert(downloadPath && await readFile(downloadPath, "utf8") === assistedMarkdown, "Download should use the exact active Markdown bytes.");
+
+      await radios.nth(0).check();
+      assert(await prompt.textContent() === checkedExample, "Returning to plain should restore the checked example bytes.");
+      await page.locator('[data-action="copy-markdown"]').click();
+      await page.waitForFunction((expected) => window.__strategyCanvasCopiedMarkdown === expected, checkedExample);
+      const plainDownloadEvent = page.waitForEvent("download");
+      await page.locator('[data-action="download-markdown"]').click();
+      const plainDownload = await plainDownloadEvent;
+      const plainDownloadPath = await plainDownload.path();
+      assert(plainDownload.suggestedFilename() === "strategy-canvas-collaboration-field.prompt-capsule.r1.plain.md", "Plain download should name its active view.");
+      assert(plainDownloadPath && await readFile(plainDownloadPath, "utf8") === checkedExample, "Plain copy, download, and visible Markdown should agree byte for byte.");
+      const dimensionId = (await canonicalState(page)).dimensions[0].id;
+      const score = page.locator(`[data-score-input="true"][data-dimension-id="${dimensionId}"][data-series="current"]`);
+      await score.fill("6");
+      await score.press("Tab");
+      assert(await page.evaluate(() => window.strategyCanvasCanonical.promptCapsuleFingerprint()) !== fingerprintBeforeView, "A material state edit should change the fingerprint.");
+      assert((await prompt.textContent()).includes('current `6`; good enough `7`; desired `9`'), "The visible Markdown should agree with the edited state.");
       assertTelemetry(telemetry);
     } finally {
       await context.close();
@@ -892,6 +978,7 @@ async function canonicalMountFailureContract(browser, url) {
       assert(await baseline.isVisible(), "A failed mount should leave the semantic baseline visible.");
       assert(await baseline.locator("svg").isVisible(), "The retained baseline should include the complete static chart.");
       assert(await baseline.locator("tbody tr").count() === 6, "The retained baseline should include all six exact-value rows.");
+      assert(await baseline.locator('[data-sc-role="static-prompt"]').textContent() === await readFile(resolve(PROMPT_CAPSULE_EXAMPLE), "utf8"), "The retained baseline should include the checked plain Markdown default.");
       assert(await page.locator(".sc-workbench").isHidden(), "Unmounted interactive controls should stay unavailable.");
       assert(await page.locator("#strategy-canvas-root").getAttribute("data-sc-enhancement-state") === "static", "A failed mount should publish static enhancement standing.");
       assert(await page.locator('[data-sc-role="skip-link"]').getAttribute("href") === "#strategy-canvas-static", "The failure-safe skip link should continue to target the static reading.");
@@ -950,6 +1037,7 @@ async function noJavaScriptContract(browser, url, kind) {
         assert(await page.locator(".sc-static-twin").isVisible(), "Canonical static twin should remain visible.");
         assert(await page.locator(".sc-static-twin tbody tr").count() === 6, "Canonical static twin should retain all six dimensions.");
         assert(await page.locator('[data-strategy-canvas-source="method-origin"]').isVisible(), "Canonical static reading should retain its method and adaptation source note.");
+        assert(await page.locator('[data-sc-role="static-prompt"]').textContent() === await readFile(resolve(PROMPT_CAPSULE_EXAMPLE), "utf8"), "Canonical static reading should retain the checked plain Markdown default.");
       } else {
         assert(await page.locator(".static-field").isVisible(), "Context static field should remain visible.");
         assert(await page.locator(".static-field tbody tr").count() === 6, "Context static field should retain all six starting dimensions.");
@@ -1273,16 +1361,25 @@ async function contextMediaContract(browser, url) {
 
 async function compatibilityContract(browser, origin) {
   const routes = [
-    "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",
-    "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",
-    "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/companions/strategy-canvas-chimeric-prototype-v0.1.1.html"
+    {
+      route: "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",
+      current: "strategy-canvas-chimeric-prototype-v0.2.3.html"
+    },
+    {
+      route: "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",
+      current: "strategy-canvas-chimeric-prototype-v0.2.2.html"
+    },
+    {
+      route: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/companions/strategy-canvas-chimeric-prototype-v0.1.1.html",
+      current: "strategy-canvas-chimeric-prototype-v0.2.2.html"
+    }
   ];
-  for (const route of routes) {
+  for (const { route, current } of routes) {
     await verify(`compatibility route · ${route}`, async () => {
       const { context, page, telemetry } = await openPage(browser, `${origin}/${route}`, VIEWPORTS[0]);
       try {
-        const redirected = page.url().endsWith("strategy-canvas-chimeric-prototype-v0.2.2.html");
-        const link = page.locator('a[href*="strategy-canvas-chimeric-prototype-v0.2.2.html"]').first();
+        const redirected = page.url().endsWith(current);
+        const link = page.locator(`a[href*="${current}"]`).first();
         const linkVisible = await link.isVisible().catch(() => false);
         assert(redirected || linkVisible, "Compatibility route should redirect or expose a direct current-version link.");
         if (linkVisible) assert((await link.textContent()).trim().length > 8, "Compatibility link should carry a readable name.");
@@ -1439,6 +1536,7 @@ async function main() {
     await canonicalSourceNavigationContract(browser, canonicalUrl);
     await canonicalColumnGeometryContract(browser, canonicalUrl);
     await canonicalInteractionContract(browser, canonicalUrl);
+    await canonicalPromptCapsuleContract(browser, canonicalUrl);
     await canonicalExchangeRecoveryContract(browser, canonicalUrl);
     await canonicalImportBoundaryContract(browser, canonicalUrl);
     await canonicalZoomContract(browser, canonicalUrl);

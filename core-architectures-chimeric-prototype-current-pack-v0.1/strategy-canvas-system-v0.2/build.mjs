@@ -2,12 +2,14 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { runInNewContext } from 'node:vm';
 
 const sourceDirectory = dirname(fileURLToPath(import.meta.url));
-const outputPath = resolve(sourceDirectory, '..', 'strategy-canvas-chimeric-prototype-v0.2.2.html');
+const outputPath = resolve(sourceDirectory, '..', 'strategy-canvas-chimeric-prototype-v0.2.3.html');
 const compatibilityPath = resolve(sourceDirectory, '..', 'strategy-canvas-chimeric-prototype-v0.1.1.html');
 const validatorPath = resolve(sourceDirectory, 'strategy-canvas-validator.js');
-const [template, compatibility, css, schemaText, evidenceText, validatorTemplate, core, canonical] = await Promise.all([
+const defaultExamplePath = resolve(sourceDirectory, '..', '..', 'prompt-capsules', '0.1.0', 'examples', 'strategy-canvas.md');
+const [template, compatibility, css, schemaText, evidenceText, validatorTemplate, core, canonical, defaultExample] = await Promise.all([
   readFile(resolve(sourceDirectory, 'canonical.template.html'), 'utf8'),
   readFile(resolve(sourceDirectory, 'compatibility-v0.1.1.html'), 'utf8'),
   readFile(resolve(sourceDirectory, 'strategy-canvas.css'), 'utf8'),
@@ -15,15 +17,16 @@ const [template, compatibility, css, schemaText, evidenceText, validatorTemplate
   readFile(resolve(sourceDirectory, 'strategy-canvas-evidence.v0.1.json'), 'utf8'),
   readFile(resolve(sourceDirectory, 'strategy-canvas-validator.template.js'), 'utf8'),
   readFile(resolve(sourceDirectory, 'strategy-canvas-core.js'), 'utf8'),
-  readFile(resolve(sourceDirectory, 'strategy-canvas-canonical.js'), 'utf8')
+  readFile(resolve(sourceDirectory, 'strategy-canvas-canonical.js'), 'utf8'),
+  readFile(defaultExamplePath, 'utf8')
 ]);
 
 const schema = JSON.parse(schemaText);
 const evidence = JSON.parse(evidenceText);
 const validator = validatorTemplate.replace('/*__STRATEGY_CANVAS_SCHEMA__*/ null', () => JSON.stringify(schema));
 const compatibilityOutput = compatibility.replaceAll(
-  '../strategy-canvas-chimeric-prototype-v0.2.2.html',
-  'strategy-canvas-chimeric-prototype-v0.2.2.html'
+  '../strategy-canvas-chimeric-prototype-v0.2.3.html',
+  'strategy-canvas-chimeric-prototype-v0.2.3.html'
 );
 if (validator.includes('/*__STRATEGY_CANVAS_SCHEMA__*/')) {
   throw new Error('The Strategy Canvas validator contains an unresolved schema marker.');
@@ -36,6 +39,15 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
+}
+
+const coreContext = { structuredClone };
+runInNewContext(core, coreContext, { filename: 'strategy-canvas-core.js' });
+const expectedDefaultExample = coreContext.StrategyCanvasCore.promptCapsule(
+  coreContext.StrategyCanvasCore.defaultState
+);
+if (defaultExample !== expectedDefaultExample) {
+  throw new Error('The checked Strategy Canvas default Prompt Capsule example differs from the plain renderer.');
 }
 
 const method = evidence.methodOrigin;
@@ -52,6 +64,7 @@ const methodSourceNote = `
 
 const output = template
   .replace('/*__STRATEGY_CANVAS_CSS__*/', () => css.trim())
+  .replace('/*__STRATEGY_CANVAS_DEFAULT_PROMPT_CAPSULE__*/', () => escapeHtml(defaultExample))
   .replace('<!--__STRATEGY_CANVAS_EVIDENCE_NOTE__-->', () => methodSourceNote.trim())
   .replace('/*__STRATEGY_CANVAS_VALIDATOR__*/', () => validator.trim())
   .replace('/*__STRATEGY_CANVAS_CORE__*/', () => core.trim())
@@ -63,6 +76,7 @@ if (output.includes('/*__STRATEGY_CANVAS_')) {
 
 const progressiveEnhancementMarkers = [
   'data-sc-role="static-baseline"',
+  'data-sc-role="static-prompt"',
   "scEnhancementState = 'mounted'",
   "scEnhancementState = 'static'"
 ];
