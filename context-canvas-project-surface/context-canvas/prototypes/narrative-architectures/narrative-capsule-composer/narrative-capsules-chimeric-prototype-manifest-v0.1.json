@@ -31,6 +31,40 @@
       "companions/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json"
     ]
   },
+  "prompt_capsule": {
+    "contract": "prompt-capsule/0.1.0",
+    "state_contract": "narrative-capsule-composition/0.1",
+    "views": [
+      "plain",
+      "skill-assisted"
+    ],
+    "default_view": "plain",
+    "source_revision": "b8b305c78b82a288ae2aca9574bb86d7d3d574d9",
+    "assisted_skills": [
+      {
+        "id": "source-authority-mapping",
+        "path": ".agents/skills/source-authority-mapping/SKILL.md",
+        "sha256": "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5"
+      },
+      {
+        "id": "stateful-artifact-behavior-contracts",
+        "path": ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
+        "sha256": "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a"
+      },
+      {
+        "id": "bounded-support-routing",
+        "path": ".agents/skills/bounded-support-routing/SKILL.md",
+        "sha256": "80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402"
+      }
+    ],
+    "related_loops": [
+      "#repository-reentry",
+      "#visitor-surface-change"
+    ],
+    "parity": "The authored plain Markdown, active visible text, copy, download, and read-only public API use one canonical byte sequence. Both views share one represented-state fingerprint.",
+    "role_behavior": "Generate, adapt, critique, decompose, continue, and orient each derive a fitting purpose and requested return from the represented collaboration role.",
+    "strategy_dimension_projection": "Strategy Canvas dimensions carry definition, anchors, NOW/NEXT/LATER values, consequence weight, action, evidence basis, and value origin."
+  },
   "seed_composition": {
     "source_capsules": [
       "Expectation Capsule",
@@ -45,6 +79,9 @@
     "Named module capsules are Narrative Capsule profile aliases, not new top-level classes.",
     "Several capsule versions compose through CapsuleCompositionRecord.",
     "AI Prompt Capsule is an enriched multi-source AIContextProjection.",
+    "Plain and skill-assisted GitHub Flavored Markdown derive from one represented composition state and share its fingerprint.",
+    "Collaboration role determines the projection purpose and requested return.",
+    "Strategy Canvas scores remain attached to dimension meaning, anchors, consequence weight, evidence basis, and value origin.",
     "Structured capsule versions remain source truth.",
     "Target-specific requirements resolve from ProjectionTargetProfile.",
     "Target-local values carry provisional origin.",

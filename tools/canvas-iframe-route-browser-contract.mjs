@@ -721,6 +721,47 @@ async function exerciseInvestmentModelStudio({ page }) {
 }
 
 async function exerciseThreadkeeping({ carrierPage, page }) {
+  const plainMarkdown = await page.locator("#hydrationPacket").inputValue();
+  const initialFingerprint = await page.evaluate(() => globalThis.threadkeepingLedger.promptCapsuleFingerprint());
+  assert.equal(
+    plainMarkdown,
+    await page.evaluate(() => globalThis.threadkeepingLedger.promptCapsule()),
+    "Threadkeeping exposes the visible plain Prompt Capsule byte stream",
+  );
+  await page.locator("#copyHydrationBtn").click();
+  await page.waitForFunction(() => globalThis.__canvasClipboardWrites.length > 0);
+  assert.equal(
+    await page.evaluate(() => globalThis.__canvasClipboardWrites.at(-1)),
+    plainMarkdown,
+    "Threadkeeping copies its exact active Prompt Capsule",
+  );
+  const [promptDownload] = await Promise.all([
+    carrierPage.waitForEvent("download"),
+    page.locator("#downloadHydrationBtn").click(),
+  ]);
+  assert.equal(promptDownload.suggestedFilename(), "threadkeeping-ledger.prompt-capsule.r0.1.plain.md");
+  assert.equal(await promptDownload.failure(), null);
+  const promptDownloadPath = await promptDownload.path();
+  assert.ok(promptDownloadPath, "Threadkeeping Prompt Capsule download has a browser-owned temporary path");
+  assert.equal(
+    await readFile(promptDownloadPath, "utf8"),
+    plainMarkdown,
+    "Threadkeeping Prompt Capsule download contains the exact active Markdown",
+  );
+
+  await page.locator('[data-prompt-view][value="skill-assisted"]').check();
+  const assistedMarkdown = await page.locator("#hydrationPacket").inputValue();
+  assert.match(assistedMarkdown, /^## Skill assistance$/mu);
+  assert.equal(
+    assistedMarkdown,
+    await page.evaluate(() => globalThis.threadkeepingLedger.promptCapsuleMarkdown("skill-assisted")),
+  );
+  assert.equal(
+    await page.evaluate(() => globalThis.threadkeepingLedger.promptCapsuleFingerprint()),
+    initialFingerprint,
+    "Threadkeeping keeps one represented-state fingerprint across Markdown views",
+  );
+
   await page.locator("#copyJsonBtn").click();
   await page.waitForFunction(() => globalThis.__canvasClipboardWrites.length > 0);
   const copied = await page.evaluate(() => globalThis.__canvasClipboardWrites.at(-1));

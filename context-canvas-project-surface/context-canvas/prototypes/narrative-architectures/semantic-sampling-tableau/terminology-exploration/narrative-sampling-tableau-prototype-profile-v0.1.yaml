@@ -38,6 +38,8 @@ invariantRegions:
   - "Probability of What"
   - "Scope and Candidate-Set Semantics"
   - "AI Prompt Capsule"
+  - "Prompt Capsule Markdown views and Related loops"
+  - "Prompt Capsule success criteria, boundary sets, dimension scores, baseline comparison, and formal statistical-fit state"
   - "Run and Variant Strip"
   - "Possibility Fan-Out"
   - "Common-Scale Probability / Interval Plot"
@@ -57,7 +59,9 @@ controls:
   - "edit decision and probability outcome"
   - "select candidate-set semantics"
   - "edit scope, conditions, exclusions, and success criteria"
-  - "construct and copy an AI Prompt Capsule"
+  - "construct, view, copy, and download a complete Prompt Capsule in plain or skill-assisted Markdown"
+  - "inspect condition-bound collaboration loops without changing represented sampling state"
+  - "refresh Prompt Capsule bytes when comparison, probability-role, or formal statistical-fit controls change"
   - "switch, duplicate, and compare sampling runs"
   - "add, remove, select, hold, and decline candidates"
   - "blend checked candidates into a new composed candidate"
@@ -71,6 +75,7 @@ controls:
   - "record a decision, dissent, and update triggers"
   - "route to Core Architectures and adjacent research or stewardship flows"
   - "import or export JSON"
+  - "require every imported candidate to provide a finite zero-to-ten score for every declared dimension"
   - "export JSON-LD and copy the AI context projection"
 
 visualContract:

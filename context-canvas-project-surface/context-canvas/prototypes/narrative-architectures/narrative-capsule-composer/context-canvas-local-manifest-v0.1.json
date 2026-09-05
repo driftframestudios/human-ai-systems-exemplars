@@ -17,7 +17,7 @@
   },
   "publicationPosture": "visitor-linked-through-receiving-pages",
   "archive": {"status": "rebuilt-local-snapshot", "path": "narrative-capsules-chimeric-prototype-bundle-v0.1.zip"},
-  "integrity": {"algorithm": "sha256", "entryFile": "48953c40b1c56d345143d057829472595410c166adf001938e9112b0f7a8ab40"},
+  "integrity": {"algorithm": "sha256", "entryFile": "105f88afc7f4d04fce2ceb7efaf28835c98c4bd789d97176c5f7fea34c3ae841"},
   "canonicalStatus": "context_canvas_owned_projection",
   "sourcePath": ".",
   "localPath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/",
@@ -27,6 +27,7 @@
     "The manifest-current Core Architecture Family Index is adapted into companions/ so the capsule link remains child-directory relative.",
     "Strategy Canvas registry, manifest, and prototype references resolve through Context-local routes.",
     "The published Strategy Canvas schema validator establishes the source contract before adapter mapping.",
+    "Prompt Capsule 0.1.0 projects role-aware plain and skill-assisted GitHub Flavored Markdown, complete Strategy Canvas dimension meaning, a shared state-only fingerprint, two related loops, and exact visible, copy, download, and API bytes.",
     "The deterministic local bundle rewrites repository-relative Strategy Canvas routes to its included portable companions and verifies the local links in the included Strategy Canvas."
   ],
   "divergence": {
@@ -38,6 +39,8 @@
       "narrative-capsule-composition.example.valid.v0.1.json",
       "narrative-capsules-chimeric-prototype-manifest-v0.1.json",
       "narrative-capsules-chimeric-prototype-v0.1.html",
+      "narrative-capsules-composition-addendum-v0.1.md",
+      "narrative-capsules-prototype-profile-v0.1.yaml",
       "narrative-capsules-chimeric-prototype-bundle-v0.1.zip"
     ]
   },

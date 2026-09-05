@@ -154,6 +154,38 @@ test("Narrative Capsule AI projections carry the prompt sections needed for exch
   );
 });
 
+test("Narrative Capsule Composer publishes the shared Prompt Capsule exchange contract", async () => {
+  const html = await readFile(
+    resolve(composerRoot, "narrative-capsules-chimeric-prototype-v0.1.html"),
+    "utf8"
+  );
+  assert.match(html, /const PROMPT_CAPSULE_CONTRACT="prompt-capsule\/0\.1\.0";/u);
+  assert.match(html, /const PROMPT_CAPSULE_STATE_CONTRACT="narrative-capsule-composition\/0\.1";/u);
+  assert.match(html, /<fieldset[^>]+id="promptViewControl"[\s\S]*?<legend>Markdown view<\/legend>/u);
+  assert.match(html, /type="radio"[^>]+value="plain"[^>]+checked/u);
+  assert.match(html, /type="radio"[^>]+value="skill-assisted"/u);
+  assert.match(html, /<noscript>[\s\S]*?complete plain Markdown remains available/u);
+  assert.match(html, /<details[^>]+data-prompt-related-loops[\s\S]*?<summary>Related loops<\/summary>/u);
+  assert.doesNotMatch(html, /__COMPOSER_PROMPT_CAPSULE_PLAIN_BASELINE__/u);
+  assert.match(html, /https:\/\/schemas\.radiantnull\.com\/collaboration\/#repository-reentry/u);
+  assert.match(html, /https:\/\/schemas\.radiantnull\.com\/collaboration\/#visitor-surface-change/u);
+  assert.match(html, /window\.narrativeCapsuleComposer=Object\.freeze\(/u);
+
+  const revision = "b8b305c78b82a288ae2aca9574bb86d7d3d574d9";
+  assert.match(html, new RegExp(`const PROMPT_CAPSULE_SKILL_REVISION="${revision}";`, "u"));
+  const skills = [
+    [".agents/skills/source-authority-mapping/SKILL.md", "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5"],
+    [".agents/skills/stateful-artifact-behavior-contracts/SKILL.md", "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a"],
+    [".agents/skills/bounded-support-routing/SKILL.md", "80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402"],
+  ];
+  for (const [path, expectedDigest] of skills) {
+    const source = await readFile(resolve(repositoryRoot, path));
+    assert.equal(createHash("sha256").update(source).digest("hex"), expectedDigest);
+    assert.ok(html.includes(`path:"${path}"`));
+    assert.ok(html.includes(`sha256:"${expectedDigest}"`));
+  }
+});
+
 test("Narrative Capsule links and bundles the Context-received Core family index", async () => {
   const [coreManifest, contextCoreManifest, composerManifest, composer, targetRegistry] = await Promise.all([
     json(resolve(coreRoot, "core-architectures-chimeric-prototype-manifest-v0.1.json")),
@@ -250,6 +282,47 @@ test("Semantic Sampling material state has meaningful identity and run-mode boun
   ));
 });
 
+test("Semantic Sampling publishes its canonical state and Prompt Capsule coordinates together", async () => {
+  const canonical = await json(
+    resolve(semanticRoot, "conation-motion-naming-sampling.example.v0.1.json")
+  );
+  const html = await readFile(
+    resolve(semanticRoot, "narrative-sampling-tableau-chimeric-prototype-v0.1.html"),
+    "utf8"
+  );
+  const match = html.match(/^const SEED=(.+);$/mu);
+  assert.ok(match, "Semantic Sampling publishes one adjacent SEED projection");
+  assert.deepEqual(JSON.parse(match[1]), canonical);
+
+  assert.match(html, /const PROMPT_CAPSULE_CONTRACT="prompt-capsule\/0\.1\.0";/u);
+  assert.match(html, /const PROMPT_CAPSULE_STATE_CONTRACT="narrative-sampling-tableau-state\/0\.1";/u);
+  assert.match(html, /<fieldset[^>]+id="promptViewControl"[\s\S]*?<legend>Markdown view<\/legend>/u);
+  assert.match(html, /type="radio"[^>]+value="plain"[^>]+checked/u);
+  assert.match(html, /type="radio"[^>]+value="skill-assisted"/u);
+  assert.match(html, /<noscript>[\s\S]*?complete plain Markdown remains available/u);
+  assert.match(html, /<details[^>]+data-prompt-related-loops[\s\S]*?<summary>Related loops<\/summary>/u);
+  assert.equal((html.match(/data-related-loop-id=/gu) || []).length, 2);
+  assert.doesNotMatch(html, /__SEMANTIC_PROMPT_CAPSULE_PLAIN_BASELINE__/u);
+  assert.match(html, /https:\/\/schemas\.radiantnull\.com\/collaboration\/#skill-from-receiving-use/u);
+  assert.match(html, /https:\/\/schemas\.radiantnull\.com\/collaboration\/#visitor-surface-change/u);
+  assert.match(html, /Candidate-set semantics: `open_exclusive`/u);
+  assert.doesNotMatch(html, /Candidate-set semantics: `open\\_exclusive`/u);
+
+  const revision = "b8b305c78b82a288ae2aca9574bb86d7d3d574d9";
+  assert.match(html, new RegExp(`const PROMPT_CAPSULE_SKILL_REVISION="${revision}";`, "u"));
+  const skills = [
+    [".agents/skills/practitioner-probe/SKILL.md", "348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c"],
+    [".agents/skills/evidence-grounded-research-spike/SKILL.md", "844fc0c6b0b956b81984a2c2d47d9252abadeb0a6554c5ef4734d0f1e5f4b531"],
+    [".agents/skills/source-authority-mapping/SKILL.md", "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5"],
+  ];
+  for (const [path, expectedDigest] of skills) {
+    const source = await readFile(resolve(repositoryRoot, path));
+    assert.equal(createHash("sha256").update(source).digest("hex"), expectedDigest);
+    assert.ok(html.includes(`path:"${path}"`));
+    assert.ok(html.includes(`sha256:"${expectedDigest}"`));
+  }
+});
+
 test("Technology Fit material state has a meaningful required-field boundary", async () => {
   const validate = await compile(schemaPaths.technology);
   const valid = await json(
@@ -339,6 +412,38 @@ test("Threadkeeping Ledger material state has a meaningful identity boundary", a
   literal.threadkeeper.entries[0].title = "A quoted \"title\" with <literal> markup";
   literal.threadkeeper.entries[0].summary = "Literal collaborator text stays intact: 'single', \"double\", <angle>, and & ampersand.";
   assert.equal(validate(literal), true, JSON.stringify(validate.errors, null, 2));
+});
+
+test("Threadkeeping Ledger publishes its complete state through the shared Prompt Capsule contract", async () => {
+  const html = await readFile(
+    resolve(threadkeepingRoot, "threadkeeping-ledger-chimeric-prototype-v0.1.html"),
+    "utf8"
+  );
+  assert.match(html, /const PROMPT_CAPSULE_CONTRACT="prompt-capsule\/0\.1\.0";/u);
+  assert.match(html, /const PROMPT_CAPSULE_STATE_CONTRACT="threadkeeping-ledger-state\/0\.1";/u);
+  assert.match(html, /<fieldset[^>]+id="promptViewControl"[\s\S]*?<legend>Markdown view<\/legend>/u);
+  assert.match(html, /type="radio"[^>]+value="plain"[^>]+checked/u);
+  assert.match(html, /type="radio"[^>]+value="skill-assisted"/u);
+  assert.match(html, /<noscript>[\s\S]*?complete plain Markdown remains available/u);
+  assert.match(html, /<details[^>]+data-prompt-related-loops[\s\S]*?<summary>Related loops<\/summary>/u);
+  assert.doesNotMatch(html, /__THREADKEEPING_PROMPT_CAPSULE_PLAIN_BASELINE__/u);
+  assert.match(html, /https:\/\/schemas\.radiantnull\.com\/collaboration\/#repository-reentry/u);
+  assert.match(html, /window\.threadkeepingLedger=Object\.freeze\(/u);
+  assert.match(html, /Every ledger entry, next candidate, continuity assessment, relationship field, recovery field, and source note contributes/u);
+
+  const revision = "b8b305c78b82a288ae2aca9574bb86d7d3d574d9";
+  assert.match(html, new RegExp(`const PROMPT_CAPSULE_SKILL_REVISION="${revision}";`, "u"));
+  const skills = [
+    [".agents/skills/repository-reentry/SKILL.md", "211cdbd293c260e95e62d3bc7ed5cb4d6d9ca3debd560a28a74b52364a1bfa90"],
+    [".agents/skills/issue-chain-stewardship/SKILL.md", "86815b7996c29de1aefce7b58e1276b727d50da75dd2b19985decb6884390c57"],
+    [".agents/skills/source-authority-mapping/SKILL.md", "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5"],
+  ];
+  for (const [path, expectedDigest] of skills) {
+    const source = await readFile(resolve(repositoryRoot, path));
+    assert.equal(createHash("sha256").update(source).digest("hex"), expectedDigest);
+    assert.ok(html.includes(`path:"${path}"`));
+    assert.ok(html.includes(`sha256:"${expectedDigest}"`));
+  }
 });
 
 test("every Context-local prototype manifest satisfies the shared source relationship", async (t) => {

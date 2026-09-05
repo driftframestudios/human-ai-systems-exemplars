@@ -35,10 +35,26 @@ workingDeterminations:
   aiPromptCapsule:
     fitProbability: 0.95
     canonicalType: "AIContextProjection"
+    promptContract: "prompt-capsule/0.1.0"
+    stateContract: "narrative-capsule-composition/0.1"
+    markdownViews:
+      - "plain"
+      - "skill-assisted"
+    relatedLoops:
+      - "#repository-reentry"
+      - "#visitor-surface-change"
+    assistedSkills:
+      - "source-authority-mapping"
+      - "stateful-artifact-behavior-contracts"
+      - "bounded-support-routing"
     determination: >
       The AI Prompt Capsule is an enriched, multi-source projection with target bindings,
       gaps, boundaries, requested outputs, verification, and receipt requirements. Its
-      source capsule versions remain source truth.
+      source capsule versions remain source truth. Plain and skill-assisted GitHub Flavored
+      Markdown derive from one represented composition state and share its fingerprint.
+      Each collaboration role produces a fitting purpose and requested return, and Strategy
+      Canvas dimensions carry their meaning, anchors, scores, consequence weight, action,
+      evidence basis, and value origin.
 
   targetSpecificRequirements:
     fitProbability: 0.94
@@ -74,6 +90,11 @@ prototypeContract:
     - "Module-only capsule profiles remain Narrative Capsule instances."
     - "Several capsule versions can feed one AI Context Projection."
     - "Projection remains separate from source truth."
+    - "Plain and skill-assisted Markdown derive from one represented composition state."
+    - "The represented-state fingerprint stays stable when only the Markdown view changes."
+    - "The authored plain Markdown remains complete before progressive enhancement runs."
+    - "Collaboration role changes the stated purpose and requested return."
+    - "Strategy Canvas dimension scores travel with their meaning, anchors, consequence weight, evidence basis, and value origin."
     - "Target-specific slots and requirements come from the Core Architecture profile."
     - "Target-local entries carry provisional origin."
     - "Gaps remain visible and routeable."

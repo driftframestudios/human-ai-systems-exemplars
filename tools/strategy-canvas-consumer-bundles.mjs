@@ -146,7 +146,7 @@ function semanticBundle(base, archivePath) {
     root: archiveRoot,
     receiptManifest: "narrative-sampling-tableau-manifest-v0.1.json",
     entries: [
-      ["README.md", legacy(archivePath, `${archiveRoot}/README.md`)],
+      ["README.md", source(join(base, "README.md"))],
       ["conation-motion-naming-sampling.example.v0.1.json", source(join(base, "conation-motion-naming-sampling.example.v0.1.json"))],
       ["conation-motion-naming-sampling.example.v0.1.jsonld", source(join(base, "conation-motion-naming-sampling.example.v0.1.jsonld"))],
       ["core-architecture-routing-registry.v0.1.json", source(join(base, "core-architecture-routing-registry.v0.1.json"))],
@@ -241,6 +241,20 @@ async function verifyManifestReceipts(bundle) {
   }
 }
 
+async function verifyReadmeInventory(bundle) {
+  const descriptors = new Map(bundle.entries);
+  const readmeDescriptor = descriptors.get("README.md");
+  if (!readmeDescriptor) return;
+  const readme = (await readDescriptor(readmeDescriptor)).toString("utf8");
+  const filesSection = readme.match(/^## Files[^\S\r\n]*\r?\n([\s\S]*?)(?=^## |(?![\s\S]))/mu);
+  if (!filesSection) throw new Error(`${bundle.name} README does not declare its Files inventory`);
+  const listed = [...filesSection[1].matchAll(/^- `([^`]+)`\s*$/gmu)].map(([, path]) => path);
+  const expected = bundle.entries.map(([path]) => path);
+  if (JSON.stringify(listed.sort()) !== JSON.stringify([...expected].sort())) {
+    throw new Error(`${bundle.name} README Files inventory differs from its declared archive members`);
+  }
+}
+
 function localDocumentReferences(value) {
   const references = [];
   for (const match of value.matchAll(/\b(?:href|src|data-href)=["']([^"']+)["']/giu)) {
@@ -296,6 +310,7 @@ async function buildBundle(bundle, temporaryRoot) {
 
 async function main() {
   for (const bundle of bundles) {
+    await verifyReadmeInventory(bundle);
     await verifyManifestReceipts(bundle);
     const temporaryRoot = await mkdtemp(join(tmpdir(), "strategy-canvas-bundle-"));
     try {
