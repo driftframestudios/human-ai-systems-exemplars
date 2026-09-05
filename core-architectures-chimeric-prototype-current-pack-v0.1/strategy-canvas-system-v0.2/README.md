@@ -9,15 +9,15 @@ This directory provides the authoritative source boundary for the neutral canoni
 - `strategy-canvas-core.js` provides portable shared state, validation, migration, aggregation, history, JSON-LD, and the plain and skill-assisted Markdown Prompt Capsule projection.
 - `strategy-canvas.css` is the neutral, low-specificity canonical visual contract.
 - `strategy-canvas-canonical.js` renders and progressively enhances the canonical HTML surface.
-- `canonical.template.html` contains the authored document structure, semantic static baseline, and build-injected plain Markdown default.
+- `canonical.template.html` contains the authored document structure, semantic static baseline, and build slots for the related-loop disclosure and plain Markdown default.
 - `strategy-canvas-evidence.v0.1.json` records the method origin, research-to-implementation decisions, counterevidence, and transfer limits shared by each current representation.
-- `build.mjs` checks the versioned Prompt Capsule example, assembles the self-contained v0.2.3 distribution one directory above, and keeps the v0.1.1 compatibility route available.
+- `build.mjs` checks the versioned Prompt Capsule example, assembles the self-contained v0.2.4 distribution one directory above, and keeps the v0.1.1 compatibility route available.
 
 The canonical template owns Strategy Canvas authorship metadata, its license
 relation, and the semantic attribution footer. `strategy-canvas.css` owns the
 footer's in-flow visual treatment. The generated current distribution inherits
 those source-owned declarations. Edit the template or stylesheet, rebuild the
-distribution, and run the parity check. The current canonical visitor set covers v0.2.3;
+distribution, and run the parity check. The current canonical visitor set covers v0.2.4;
 the v0.1.1 compatibility route keeps its stable route identity while its
 redirect target advances to the current distribution. The adapted Context
 Canvas workbench keeps the current declarations
@@ -72,7 +72,7 @@ The canonical renderer is exposed separately as `window.StrategyCanvasCanonical`
 
 After mounting, the canonical page publishes frozen `window.strategyCanvasCanonical` inspection methods: `getState`, `getValidation`, `serialize`, `toJSONLD`, `promptCapsule`, `promptCapsuleMarkdown`, `promptCapsuleFingerprint`, and `getPromptCapsuleView`. Each structured result is a clone, so inspection remains stable while the controller retains sole access to the mutable store. `promptCapsule()` remains the plain-view compatibility seam.
 
-The semantic static baseline is the dependable initial reading surface. It includes the complete checked plain Markdown example for reading and manual copying when JavaScript is unavailable. A successful controller mount renders the interactive field, moves the skip link to that field, marks the root `data-sc-enhancement-state="mounted"`, and then replaces the baseline with the enhanced experience. Native radio controls select plain or skill-assisted Markdown without changing Strategy Canvas state. Copy and download use the exact active Markdown bytes. The `data-sc-enhancement-state="mounted"` marker makes the transition observable. The build confirms these boundary markers, requires the checked example to equal the plain default renderer, and reports the generated distribution’s byte count and SHA-256 digest as a parity receipt.
+The semantic static baseline is the dependable initial reading surface. It includes the complete checked plain Markdown example for reading and manual copying when JavaScript is unavailable. A successful controller mount renders the interactive field, moves the skip link to that field, marks the root `data-sc-enhancement-state="mounted"`, and then replaces the baseline with the enhanced experience. Native radio controls select plain or skill-assisted Markdown without changing Strategy Canvas state. A native Related loops disclosure remains available with or without JavaScript; the builder generates its two public links and fit conditions from the same `promptCapsuleRelatedLoops` metadata used by both Markdown views. Loop metadata and the active view remain outside the state fingerprint. Copy and download use the exact active Markdown bytes. The `data-sc-enhancement-state="mounted"` marker makes the transition observable. The build confirms these boundary markers, requires the checked example to equal the plain default renderer, and reports the generated distribution’s byte count and SHA-256 digest as a parity receipt.
 
 The repository-level [`prompt-capsule/0.1.0` contract](../../prompt-capsules/0.1.0/prompt-capsule-contract.md) owns the general Markdown shape. Its [checked Strategy Canvas example](../../prompt-capsules/0.1.0/examples/strategy-canvas.md) is a projection of this system’s default state. Both views carry the same named state fingerprint; the skill-assisted view pairs accessible public skill routes with exact repository paths, revisions, and SHA-256 identities while the artifact remains state authority.
 

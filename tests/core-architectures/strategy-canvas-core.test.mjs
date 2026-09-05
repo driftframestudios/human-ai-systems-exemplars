@@ -20,6 +20,10 @@ const promptCapsuleExamplePath = resolve(
   repositoryRoot,
   "prompt-capsules/0.1.0/examples/strategy-canvas.md"
 );
+const collaborationGuidePath = resolve(
+  repositoryRoot,
+  "schemas/collaboration/index.html"
+);
 
 async function loadStrategyCanvasCore() {
   const context = vm.createContext({ console, structuredClone });
@@ -58,9 +62,10 @@ test("Prompt Capsule views share one deterministic state coordinate and checked 
     view: "skill-assisted"
   });
   const checkedExample = await readFile(promptCapsuleExamplePath, "utf8");
+  const collaborationGuide = await readFile(collaborationGuidePath, "utf8");
   const fingerprint = Core.promptCapsuleFingerprint(Core.defaultState);
 
-  assert.equal(Core.version, "0.2.3");
+  assert.equal(Core.version, "0.2.4");
   assert.equal(Core.promptCapsuleContract, "prompt-capsule/0.1.0");
   assert.equal(Core.promptCapsule(Core.defaultState), plainMarkdown);
   assert.equal(checkedExample, plainMarkdown);
@@ -68,10 +73,50 @@ test("Prompt Capsule views share one deterministic state coordinate and checked 
   assert.match(plainMarkdown, /- View: `plain`/u);
   assert.match(plainMarkdown, /People retain decisions about handoff scope, interpretation, acceptance, and publication\./u);
   assert.match(plainMarkdown, /Return a Markdown review note grouped by stable dimension ID\./u);
+  assert.match(plainMarkdown, /## Related loops/u);
   assert.doesNotMatch(plainMarkdown, /## Skill assistance/u);
   assert.match(assistedMarkdown, /- View: `skill-assisted`/u);
+  assert.match(assistedMarkdown, /## Related loops/u);
   assert.ok(plainMarkdown.includes("- Fingerprint: `" + fingerprint + "`"));
   assert.ok(assistedMarkdown.includes("- Fingerprint: `" + fingerprint + "`"));
+
+  const relatedLoops = [
+    [
+      "repository-reentry",
+      "https://schemas.radiantnull.com/collaboration/#repository-reentry",
+      "Use when this versioned canvas carries a named question or requested change into resumed repository work"
+    ],
+    [
+      "public-release",
+      "https://schemas.radiantnull.com/collaboration/#public-release",
+      "Use after people accept this canvas revision as source for a public artifact"
+    ]
+  ];
+  assert.deepEqual(
+    plain(Core.promptCapsuleRelatedLoops.map(({ id, publicUrl }) => [id, publicUrl])),
+    relatedLoops.map(([id, publicUrl]) => [id, publicUrl])
+  );
+  for (const [loopId, publicUrl, fitCondition] of relatedLoops) {
+    assert.match(collaborationGuide, new RegExp(`id=["']${loopId}["']`, "u"));
+    for (const markdown of [plainMarkdown, assistedMarkdown]) {
+      assert.ok(markdown.includes(`- \`${loopId}\` — [`));
+      assert.ok(markdown.includes(`](${publicUrl})`));
+      assert.ok(markdown.includes(`- Fit condition: ${fitCondition}`));
+    }
+  }
+  for (const unrelatedLoopId of ["skill-from-receiving-use", "visitor-surface-change"]) {
+    assert.doesNotMatch(plainMarkdown, new RegExp(`#${unrelatedLoopId}`, "u"));
+    assert.doesNotMatch(assistedMarkdown, new RegExp(`#${unrelatedLoopId}`, "u"));
+  }
+  assert.ok(
+    plainMarkdown.indexOf("## Requested return") < plainMarkdown.indexOf("## Related loops")
+      && plainMarkdown.indexOf("## Related loops") < plainMarkdown.indexOf("## Evidence and recovery"),
+    "Related loops should keep the contract-defined section order"
+  );
+  assert.ok(
+    assistedMarkdown.indexOf("## Evidence and recovery") < assistedMarkdown.indexOf("## Skill assistance"),
+    "Skill assistance should remain an addition after the shared capsule sections"
+  );
 
   const skillRevision = "058469145696009485aa68c089f424b00adc10ae";
   const skillCoordinates = [
@@ -179,6 +224,8 @@ test("Prompt Capsule fingerprint carries represented state and leaves transient 
   assert.equal(Core.promptCapsuleFingerprint(privateExtensionA), baselineFingerprint);
   assert.equal(Core.promptCapsuleFingerprint(privateExtensionB), baselineFingerprint);
   assert.equal(Object.hasOwn(Core.promptCapsuleStateProjection(privateExtensionA), "extensions"), false);
+  assert.equal(Object.hasOwn(Core.promptCapsuleStateProjection(privateExtensionA), "relatedLoops"), false);
+  assert.equal(Object.hasOwn(Core.promptCapsuleStateProjection(privateExtensionA), "view"), false);
 
   const sharedScope = plain(baseline);
   sharedScope.extensions.contextCanvas = {
@@ -372,7 +419,7 @@ test("Core manifests resolve current files, byte counts, and published digests",
         "core-architecture-family-index": ["core-architecture-family-index-chimeric-prototype-v0.1.4.html", "0.1.4"],
         "impact-map": ["impact-map-chimeric-prototype-v0.1.4.html", "0.1.4"],
         "strategy-canvas": dirname(manifestPath) === coreRoot
-          ? ["strategy-canvas-chimeric-prototype-v0.2.3.html", "0.2.3"]
+          ? ["strategy-canvas-chimeric-prototype-v0.2.4.html", "0.2.4"]
           : ["strategy-canvas-chimeric-prototype-v0.2.2.html", "0.2.2"],
         "service-design-blueprint": ["service-design-blueprint-chimeric-prototype-v0.2.4.html", "0.2.4"],
         "heart-chart": ["heart-chart-chimeric-prototype-v0.1.5.html", "0.1.5"],

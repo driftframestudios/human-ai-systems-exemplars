@@ -154,9 +154,10 @@ test("Narrative Capsule AI projections carry the prompt sections needed for exch
   );
 });
 
-test("Narrative Capsule links and bundles the manifest-current Core family index", async () => {
-  const [coreManifest, composerManifest, composer, targetRegistry] = await Promise.all([
+test("Narrative Capsule links and bundles the Context-received Core family index", async () => {
+  const [coreManifest, contextCoreManifest, composerManifest, composer, targetRegistry] = await Promise.all([
     json(resolve(coreRoot, "core-architectures-chimeric-prototype-manifest-v0.1.json")),
+    json(resolve(contextCoreRoot, "core-architectures-chimeric-prototype-manifest-v0.1.json")),
     json(resolve(composerRoot, "narrative-capsules-chimeric-prototype-manifest-v0.1.json")),
     readFile(resolve(composerRoot, "narrative-capsules-chimeric-prototype-v0.1.html"), "utf8"),
     json(resolve(composerRoot, "core-architecture-target-pair-registry.v0.1.json"))
@@ -189,10 +190,18 @@ test("Narrative Capsule links and bundles the manifest-current Core family index
       .filter(({ id }) => id !== "core-architecture-family-index")
       .map(({ id, file }) => [id, file])
   );
+  const contextStrategyCanvas = contextCoreManifest.prototypes.find(({ id }) => id === "strategy-canvas");
+  assert.equal(contextStrategyCanvas.expression, "context-canvas");
+  assert.notEqual(
+    contextStrategyCanvas.file,
+    currentFiles.get("strategy-canvas"),
+    "the independently maintained Context Strategy Canvas keeps its own version coordinate"
+  );
+  currentFiles.set("strategy-canvas", contextStrategyCanvas.file);
   assert.deepEqual(
     new Map(companionSeed.cards.map(({ id, file }) => [id, file])),
     currentFiles,
-    "the companion index keeps every current Core artifact coordinate"
+    "the companion index keeps current Core coordinates and the declared Context Strategy adaptation"
   );
 
   const heart = coreManifest.prototypes.find(({ id }) => id === "heart-chart");
@@ -275,6 +284,42 @@ test("Technology Fit inline seed is an exact projection of its canonical example
   assert.ok(match, "Technology Fit publishes one adjacent SEED projection");
   assert.deepEqual(JSON.parse(match[1]), canonical);
   assert.deepEqual(canonical.runs.map(({ status }) => status), ["sample_state", "sample_state"]);
+});
+
+test("Technology Fit publishes the Narrative Prompt Capsule pilot and exact skill coordinates", async () => {
+  const html = await readFile(
+    resolve(technologyRoot, "technology-fit-sampling-tableau-chimeric-prototype-v0.2.html"),
+    "utf8"
+  );
+  assert.doesNotMatch(html, /function buildPrompt\s*\(/u);
+  assert.match(html, /const PROMPT_CAPSULE_CONTRACT="prompt-capsule\/0\.1\.0";/u);
+  assert.match(html, /const PROMPT_CAPSULE_STATE_CONTRACT="technology-fit-sampling-tableau-state\/0\.1";/u);
+  assert.match(html, /<fieldset[^>]+id="promptViewControl"[\s\S]*?<legend>Markdown view<\/legend>/u);
+  assert.match(html, /type="radio"[^>]+value="plain"[^>]+checked/u);
+  assert.match(html, /type="radio"[^>]+value="skill-assisted"/u);
+  assert.match(html, /<noscript>[\s\S]*?complete plain Markdown remains available/u);
+  assert.match(html, /<details[^>]+data-prompt-related-loops[\s\S]*?<summary>Related loops<\/summary>/u);
+  assert.equal((html.match(/data-related-loop-id=/gu) || []).length, 2);
+  assert.doesNotMatch(html, /__PROMPT_CAPSULE_PLAIN_BASELINE__/u);
+  assert.match(html, /https:\/\/schemas\.radiantnull\.com\/collaboration\/#visitor-surface-change/u);
+  assert.match(html, /https:\/\/schemas\.radiantnull\.com\/collaboration\/#repository-reentry/u);
+  assert.match(html, /Candidate-set semantics: `open_exclusive`/u);
+  assert.doesNotMatch(html, /Candidate-set semantics: `open\\_exclusive`/u);
+
+  const revision = "64992546a4fe7f6fd7b2e27022f0625033a81cf1";
+  assert.match(html, new RegExp(`const PROMPT_CAPSULE_SKILL_REVISION="${revision}";`, "u"));
+  const skills = [
+    [".agents/skills/practitioner-probe/SKILL.md", "348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c"],
+    [".agents/skills/evidence-grounded-research-spike/SKILL.md", "844fc0c6b0b956b81984a2c2d47d9252abadeb0a6554c5ef4734d0f1e5f4b531"],
+    [".agents/skills/stateful-artifact-behavior-contracts/SKILL.md", "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a"]
+  ];
+  for (const [path, expectedDigest] of skills) {
+    const source = await readFile(resolve(repositoryRoot, path));
+    const actualDigest = createHash("sha256").update(source).digest("hex");
+    assert.equal(actualDigest, expectedDigest, `${path} should retain the capsule's exact source digest`);
+    assert.ok(html.includes(`path:"${path}"`));
+    assert.ok(html.includes(`sha256:"${expectedDigest}"`));
+  }
 });
 
 test("Threadkeeping Ledger material state has a meaningful identity boundary", async () => {
