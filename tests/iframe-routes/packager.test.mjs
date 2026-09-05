@@ -321,6 +321,16 @@ test("every route receipt carries its observed minimal carrier policy", async ()
     permissions_policy: ["clipboard-write"],
     held_capabilities: [],
   });
+  assert.deepEqual(byId.get("first-responsible-version-matrix").observed_runtime_capabilities, [
+    "executable-scripts",
+    "clipboard-write",
+    "file-download",
+  ]);
+  assert.deepEqual(byId.get("first-responsible-version-matrix").carrier_policy, {
+    sandbox_tokens: ["allow-downloads", "allow-scripts"],
+    permissions_policy: ["clipboard-write"],
+    held_capabilities: [],
+  });
   assert.deepEqual(byId.get("ai-systems-service-blueprint").carrier_policy.permissions_policy, []);
   assert.equal(
     plan.receipt.routes.filter(({ carrier_policy }) =>
@@ -407,7 +417,7 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   await writePackagePlan(plan, temporaryRoot);
   const verification = await verifyPackagePlan(plan, temporaryRoot);
 
-  assert.deepEqual(verification, { files: 27, bytes: 1799286 });
+  assert.deepEqual(verification, { files: 27, bytes: 1829585 });
   await writeFile(path.join(temporaryRoot, "unexpected.txt"), "outside the plan\n");
   await assert.rejects(
     verifyPackagePlan(plan, temporaryRoot),

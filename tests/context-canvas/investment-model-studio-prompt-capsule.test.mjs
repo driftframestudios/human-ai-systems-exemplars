@@ -51,6 +51,6 @@ test("the Investment Model Studio points to current public loop owners", async (
     assert.match(html, new RegExp(`data-related-loop-id="${loopId}"`, "u"));
     assert.match(loopRegistry, new RegExp(`id="${loopId}"`, "u"));
   }
-  assert.match(inventory, /Investment Model Studio are the seven current adoptions/u);
-  assert.match(inventory, /The remaining 21\s+sources keep their accepted capsule/u);
+  assert.match(inventory, /\| Cross-Functional Investment Model Studio \| 1 \|/u);
+  assert.match(inventory, /selected method, fixed scenario, and model-selection recovery behavior/u);
 });

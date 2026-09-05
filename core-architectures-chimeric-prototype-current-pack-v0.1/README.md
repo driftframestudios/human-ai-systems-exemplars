@@ -30,6 +30,15 @@ Artifact variation is part of the family: route-specific layout, color,
 density, interaction, and evidence posture remain available while stable IDs,
 current versions, and declared source relationships keep the pack legible.
 
+Strategy Canvas v0.2.4 and First Responsible Version Matrix v0.1.4 complete
+the current Comparison and Threshold family’s Prompt Capsule adoption. Each
+derives complete plain and skill-assisted Markdown from its own accepted state,
+keeps one view-independent state fingerprint, points to fitting public
+collaboration loops, and leaves a complete plain reading available without
+JavaScript. The matrix retains its threshold cards, focus view, routes, and
+recovery semantics as authority; the Markdown is a portable handoff from that
+state.
+
 ## Visitor-visible authorship and license
 
 The pack hub and each of the 21 current prototype documents carry their own

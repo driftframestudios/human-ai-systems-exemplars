@@ -128,15 +128,16 @@
       "subtitle": "Threshold Alignment Surface",
       "family": "Comparison and Threshold",
       "shape": "threshold card zones",
-      "file": "first-responsible-version-matrix-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "first-responsible-version-matrix-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 63309,
+      "size_bytes": 93366,
       "previous": [
         "first-responsible-version-matrix-chimeric-prototype-v0.1.html",
         "first-responsible-version-matrix-chimeric-prototype-v0.1.1.html",
-        "first-responsible-version-matrix-chimeric-prototype-v0.1.2.html"
+        "first-responsible-version-matrix-chimeric-prototype-v0.1.2.html",
+        "first-responsible-version-matrix-chimeric-prototype-v0.1.3.html"
       ]
     },
     {

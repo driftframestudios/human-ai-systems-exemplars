@@ -17,7 +17,7 @@
   },
   "integrity": {
     "algorithm": "sha256",
-    "entryFile": "6cc896252b4f11884e87a774e9f3ec02460b3b18ba1c5c826ca50d21f3b405e4"
+    "entryFile": "0cc49a201274a0c19ff675812ca018c007dc6ae542d0d76910bca285344c3b4d"
   },
   "canonicalStatus": "adapted_copy",
   "sourcePath": "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/",

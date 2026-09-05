@@ -174,13 +174,14 @@
       "id": "first-responsible-version-matrix",
       "display_name": "First Responsible Version Matrix",
       "kind": "prototype",
-      "source_file": "first-responsible-version-matrix-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
+      "source_file": "first-responsible-version-matrix-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
       "public_alias": "/v1/core/first-responsible-version-matrix/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
           "allow-scripts"
         ],
         "permissions_policy": [
