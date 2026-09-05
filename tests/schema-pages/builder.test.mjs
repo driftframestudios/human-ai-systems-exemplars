@@ -172,7 +172,7 @@ test("the built registry resolves current authorship, license, and deployment me
   assert.ok(html.includes(`<meta property="og:url" content="${deploymentBase}/">`));
   assert.ok(html.includes(`<meta name="twitter:url" content="${deploymentBase}/">`));
   assert.ok(!html.includes("schema-pages:deployment-metadata"));
-  assert.ok(html.includes("<h1>Structures people and software can read together.</h1>"));
+  assert.ok(html.includes("<h1>Specifications people and software can read together.</h1>"));
 
   const structuredDataSource = html.match(
     /<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/u,
