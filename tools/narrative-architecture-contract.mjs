@@ -158,6 +158,16 @@ async function downloadedText(page, selector) {
   };
 }
 
+function renderedCodeSpanText(line) {
+  const match = String(line).match(/(`+)([\s\S]*?)\1/u);
+  assert.ok(match, `expected a Markdown code span in: ${line}`);
+  let value = match[2].replace(/[\t\n ]+/gu, " ");
+  if (value.startsWith(" ") && value.endsWith(" ") && !/^ +$/u.test(value)) {
+    value = value.slice(1, -1);
+  }
+  return value;
+}
+
 async function composerPath(browser, origin) {
   const { context, page, telemetry } = await openFresh(browser, origin, routes.composer);
   try {
@@ -585,6 +595,11 @@ async function technologyPromptCapsulePath(browser, origin) {
     assert.equal(await page.locator('[data-prompt-view][value="plain"]').isChecked(), true);
     assert.match(initialPlain, /- Contract: `prompt-capsule\/0\.1\.0`/u);
     assert.match(initialPlain, /- View: `plain`/u);
+    assert.equal(
+      renderedCodeSpanText(initialPlain.split("\n").find(line => line.startsWith("- Candidate-set semantics:"))),
+      "open_exclusive",
+      "a rendered GFM code span should preserve an underscore-bearing stable value"
+    );
     assert.doesNotMatch(initialPlain, /^## Skill assistance$/mu);
     for (const fragment of [
       "https://schemas.radiantnull.com/collaboration/#visitor-surface-change",
@@ -592,6 +607,42 @@ async function technologyPromptCapsulePath(browser, origin) {
       "https://schemas.radiantnull.com/collaboration/#repository-reentry",
       "Fit when a successor run resumes as repository work"
     ]) assert.ok(initialPlain.includes(fragment), `plain Markdown should carry ${fragment}`);
+
+    const relatedLoops = page.locator("[data-prompt-related-loops]");
+    const relatedSummary = relatedLoops.locator("summary");
+    assert.equal(await relatedLoops.count(), 1, "the visitor surface should expose one native Related loops disclosure");
+    assert.equal(await relatedLoops.evaluate(element => element.open), false, "the disclosure should begin collapsed");
+    const loopMetadata = await page.evaluate(() => PROMPT_CAPSULE_RELATED_LOOPS.map(loop => ({ ...loop })));
+    const visibleLoops = await relatedLoops.locator("[data-related-loop-id]").evaluateAll(items => items.map(item => ({
+      id: item.dataset.relatedLoopId,
+      name: item.querySelector("[data-related-loop-link]")?.textContent.trim() || "",
+      publicUrl: item.querySelector("[data-related-loop-link]")?.getAttribute("href") || "",
+      fitCondition: item.querySelector("[data-related-loop-fit]")?.textContent.trim() || ""
+    })));
+    assert.deepEqual(visibleLoops, loopMetadata, "visible loop links and generated Markdown should share one source");
+    await relatedSummary.focus();
+    const summaryTarget = await relatedSummary.boundingBox();
+    assert.ok(summaryTarget && summaryTarget.width >= 44 && summaryTarget.height >= 44, "the Related loops summary should retain a touch-sized target");
+    assert.ok(await relatedSummary.evaluate(element => Number.parseFloat(getComputedStyle(element).outlineWidth) >= 3), "the Related loops summary should show keyboard focus");
+    await page.keyboard.press("Enter");
+    assert.equal(await relatedLoops.evaluate(element => element.open), true, "Enter should open the native disclosure");
+    const loopLinks = relatedLoops.locator("[data-related-loop-link]");
+    assert.equal(await loopLinks.count(), 2, "the disclosure should expose exactly the two accepted loop links");
+    for (let index = 0; index < await loopLinks.count(); index += 1) {
+      const linkTarget = await loopLinks.nth(index).boundingBox();
+      assert.ok(linkTarget && linkTarget.width >= 44 && linkTarget.height >= 44, `related loop ${index + 1} should retain a touch-sized target`);
+    }
+    await page.evaluate(() => {
+      window.__technologyLoopActivation = "";
+      const link = document.querySelector("[data-related-loop-link]");
+      link.addEventListener("click", event => {
+        event.preventDefault();
+        window.__technologyLoopActivation = link.href;
+      }, { once: true });
+    });
+    await loopLinks.first().focus();
+    await page.keyboard.press("Enter");
+    assert.equal(await page.evaluate(() => window.__technologyLoopActivation), loopMetadata[0].publicUrl, "Enter should activate the first public loop anchor");
 
     const noScriptContext = await browser.newContext({
       javaScriptEnabled: false,
@@ -606,6 +657,21 @@ async function technologyPromptCapsulePath(browser, origin) {
         "the source-authored no-JavaScript baseline should equal the runtime plain projection"
       );
       assert.match(await noScriptPage.locator("noscript").textContent(), /complete plain Markdown remains available/u);
+      const noScriptLoops = noScriptPage.locator("[data-prompt-related-loops]");
+      assert.equal(await noScriptLoops.count(), 1, "the Related loops disclosure should remain available without JavaScript");
+      assert.equal(await noScriptLoops.evaluate(element => element.open), false);
+      await noScriptLoops.locator("summary").click();
+      assert.equal(await noScriptLoops.evaluate(element => element.open), true, "the native disclosure should open without JavaScript");
+      assert.deepEqual(
+        await noScriptLoops.locator("[data-related-loop-id]").evaluateAll(items => items.map(item => ({
+          id: item.dataset.relatedLoopId,
+          name: item.querySelector("[data-related-loop-link]")?.textContent.trim() || "",
+          publicUrl: item.querySelector("[data-related-loop-link]")?.getAttribute("href") || "",
+          fitCondition: item.querySelector("[data-related-loop-fit]")?.textContent.trim() || ""
+        }))),
+        loopMetadata,
+        "the no-JavaScript reading should retain the exact loop set and fit conditions"
+      );
     } finally {
       await noScriptContext.close();
     }
@@ -680,7 +746,7 @@ async function technologyPromptCapsulePath(browser, origin) {
 
     await page.locator("details:has(#stateImportInput) > summary").click();
     const literal = structuredClone(transientState);
-    literal.id = "na:literal`source";
+    literal.id = "na:literal`source_&";
     literal.promptCapsule.currentDecision = "Inspect <img src=x> [linked](https://example.invalid) @mention ~~change~~ www.example.invalid #42";
     await page.locator("#stateImportInput").fill(JSON.stringify(literal));
     await page.locator("#importStateBtn").click();
@@ -692,7 +758,13 @@ async function technologyPromptCapsulePath(browser, origin) {
     assert.ok(literalPrompt.includes("\\~\\~change\\~\\~"));
     assert.ok(literalPrompt.includes("www\\.example.invalid"));
     assert.ok(literalPrompt.includes("\\#42"));
-    assert.ok(literalPrompt.includes("- Source: ``na:literal\\`source@0.1``"), "backtick-bearing IDs should remain inside a literal code span");
+    const sourceLine = literalPrompt.split("\n").find(line => line.startsWith("- Source:"));
+    assert.equal(
+      renderedCodeSpanText(sourceLine),
+      "na:literal`source_&@0.1",
+      "a rendered GFM code span should preserve backtick-, underscore-, and ampersand-bearing identity text"
+    );
+    assert.ok(literalPrompt.includes("- Source: ``na:literal`source_&@0.1``"), "the source identity should use a delimiter longer than its literal backtick");
     assert.notEqual(await page.evaluate(() => window.technologyFitSamplingTableau.promptCapsuleFingerprint()), seam.fingerprint);
 
     const finePrecisionA = structuredClone(literal);

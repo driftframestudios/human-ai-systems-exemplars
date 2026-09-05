@@ -125,8 +125,9 @@ validation:
 - JSON-LD parse
 - route registry count and identity checks
 - probe registry count and shape checks
-- Prompt Capsule no-JavaScript baseline, view, fingerprint, escaping, exact exchange,
-  and failed-import recovery contracts
+- Prompt Capsule no-JavaScript baseline, native Related loops disclosure, view,
+  fingerprint, prose escaping, literal code-span identity, exact exchange, and
+  failed-import recovery contracts
 - browser interaction smoke tests
 - responsive body-overflow checks
 - console and page-error checks

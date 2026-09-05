@@ -298,9 +298,13 @@ test("Technology Fit publishes the Narrative Prompt Capsule pilot and exact skil
   assert.match(html, /type="radio"[^>]+value="plain"[^>]+checked/u);
   assert.match(html, /type="radio"[^>]+value="skill-assisted"/u);
   assert.match(html, /<noscript>[\s\S]*?complete plain Markdown remains available/u);
+  assert.match(html, /<details[^>]+data-prompt-related-loops[\s\S]*?<summary>Related loops<\/summary>/u);
+  assert.equal((html.match(/data-related-loop-id=/gu) || []).length, 2);
   assert.doesNotMatch(html, /__PROMPT_CAPSULE_PLAIN_BASELINE__/u);
   assert.match(html, /https:\/\/schemas\.radiantnull\.com\/collaboration\/#visitor-surface-change/u);
   assert.match(html, /https:\/\/schemas\.radiantnull\.com\/collaboration\/#repository-reentry/u);
+  assert.match(html, /Candidate-set semantics: `open_exclusive`/u);
+  assert.doesNotMatch(html, /Candidate-set semantics: `open\\_exclusive`/u);
 
   const revision = "64992546a4fe7f6fd7b2e27022f0625033a81cf1";
   assert.match(html, new RegExp(`const PROMPT_CAPSULE_SKILL_REVISION="${revision}";`, "u"));

@@ -944,6 +944,7 @@ async function canonicalRelatedLoopsContract(browser, url) {
       const summary = details.locator("summary");
       assert(await details.count() === 1 && await details.isVisible(), "The canonical visitor surface should expose one visible native Related loops disclosure.");
       assert(await summary.evaluate((element) => element.tagName === "SUMMARY"), "Related loops should use the native details/summary control.");
+      assert(await summary.textContent() === "Related loops", "The prototype control should use the compact Related loops label.");
       assert(await details.evaluate((element) => element.open) === false, "The Related loops disclosure should begin collapsed.");
 
       const sourceLoops = await page.evaluate(() => window.StrategyCanvasCore.promptCapsuleRelatedLoops.map((loop) => ({

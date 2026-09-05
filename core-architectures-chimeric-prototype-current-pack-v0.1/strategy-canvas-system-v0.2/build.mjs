@@ -56,7 +56,7 @@ if (!Array.isArray(relatedLoops) || relatedLoops.length === 0) {
 }
 const relatedLoopsControl = `
     <details class="sc-related-loops" data-sc-role="related-loops">
-      <summary>Related collaboration loops</summary>
+      <summary>Related loops</summary>
       <p class="sc-help">These public collaboration loops fit only when the receiving work meets the stated condition.</p>
       <ul>
 ${relatedLoops.map((loop) => `        <li data-related-loop-id="${escapeHtml(loop.id)}">

@@ -104,20 +104,20 @@
   "files": [
     {
       "name": "technology-fit-sampling-tableau-chimeric-prototype-v0.2.html",
-      "bytes": 293315,
-      "sha256": "5f7b8382c734933c876bba5b0ba4c9a3172eae63784f4e3153c95779afb8d3b1",
+      "bytes": 294496,
+      "sha256": "d22f012c1db8c1004e6c8fad962c65798200fd8542cc6c56ba4a9d062c57bf06",
       "role": "interactive_prototype"
     },
     {
       "name": "technology-fit-sampling-tableau-prototype-addendum-v0.1.md",
-      "bytes": 8550,
-      "sha256": "b94faa6620e65db243f57bd3b45f9456aaf486a2d0662445b0668f6c7a684698",
+      "bytes": 8817,
+      "sha256": "36e9d0b04a27ed1f6cbadcd941014dd4f02947deab90990e11ebf038733ffc57",
       "role": "prototype_addendum"
     },
     {
       "name": "technology-fit-sampling-tableau-prototype-profile-v0.1.yaml",
-      "bytes": 5435,
-      "sha256": "affab8e78c879ce399b023205766e2ccc7a90d4fa99f19e0000589e1375ff868",
+      "bytes": 5504,
+      "sha256": "08f5b7c7ffd1b1b42f740c762a1295d4527966a8d1565c65e6ec89d7fb8e6627",
       "role": "prototype_profile"
     },
     {

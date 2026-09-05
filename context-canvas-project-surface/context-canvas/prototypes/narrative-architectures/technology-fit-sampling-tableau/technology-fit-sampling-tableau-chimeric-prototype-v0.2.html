@@ -72,6 +72,7 @@ details{border:1px solid var(--line);border-radius:12px;background:#fff;padding:
 hr{border:0;border-top:1px solid var(--line);margin:15px 0}.split-note{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.prob-card{border:1px solid var(--line);border-radius:15px;padding:12px;background:#fff}
 .status-line{min-height:1.4em;color:var(--accent);font-size:.82rem}.hidden{display:none!important}.muted-box{background:var(--soft);border-radius:12px;padding:11px}
 .prompt-view-control{border:0;margin:0;padding:0;min-width:0}.prompt-view-control legend{color:var(--accent);font-size:.72rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase}.prompt-view-options{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}.prompt-view-options label{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);cursor:pointer}.prompt-view-options label:has(input:checked){border-color:var(--blue);box-shadow:0 0 0 3px rgba(49,94,145,.12)}.prompt-contract-note{max-width:66ch;margin:0;color:var(--muted)}
+.prompt-related-loops{margin-top:12px;max-width:66ch}.prompt-related-loops summary{box-sizing:border-box;min-height:44px;padding:10px 0}.prompt-related-loops ul{margin:8px 0 0;padding-left:22px}.prompt-related-loops li+li{margin-top:8px}.prompt-related-loops a{display:inline-flex;align-items:center;min-height:44px;font-weight:760}.prompt-related-loops p{margin:0;color:var(--muted)}
 .route-card.selected,.probe-card.selected{border-color:var(--blue);box-shadow:0 0 0 3px rgba(49,94,145,.12)}
 .route-score{font-size:1.25rem;font-weight:850;color:var(--accent)}
 .comp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.comp-grid .field{margin:0}
@@ -213,6 +214,20 @@ hr{border:0;border-top:1px solid var(--line);margin:15px 0}.split-note{display:g
       </div>
     </div>
     <p class="prompt-contract-note">The plain view is complete on its own. The skill-assisted view adds three public collaboration skills while this tableau remains the state authority. Both views carry the same represented-state fingerprint and related loops.</p>
+    <details class="prompt-related-loops" data-prompt-related-loops>
+      <summary>Related loops</summary>
+      <p class="small">Choose a loop when this tableau enters the condition described with it.</p>
+      <ul>
+        <li data-related-loop-id="#visitor-surface-change">
+          <a data-related-loop-link href="https://schemas.radiantnull.com/collaboration/#visitor-surface-change">Change a visitor surface with fitting evidence</a>
+          <p data-related-loop-fit>Fit when an equivalent candidate spike changes a visible or interactive surface and needs source-owned browser evidence.</p>
+        </li>
+        <li data-related-loop-id="#repository-reentry">
+          <a data-related-loop-link href="https://schemas.radiantnull.com/collaboration/#repository-reentry">Re-enter, make one bounded change, and return it clearly</a>
+          <p data-related-loop-fit>Fit when a successor run resumes as repository work and its current source, work state, verification, and handback need reconstruction.</p>
+        </li>
+      </ul>
+    </details>
     <fieldset class="prompt-view-control" id="promptViewControl" style="margin-top:12px">
       <legend>Markdown view</legend>
       <div class="prompt-view-options">
@@ -250,7 +265,7 @@ hr{border:0;border-top:1px solid var(--line);margin:15px 0}.split-note{display:g
 - Capsule: `na:technology-fit-ai-prompt-capsule/v0.1`
 - Source: `na:technology-fit-sampling-tableau/instance/front-end-stack-selection-v0.1@0.1`
 - State: `technology-fit-sampling-tableau-state/0.1` · revision `0.1`
-- Fingerprint: `fnv1a32-utf8:3b861c2e`
+- Fingerprint: `fnv1a32-utf8:04ff1f66`
 - View: `plain`
 
 ## Purpose and target
@@ -260,31 +275,31 @@ Use this working Technology Fit Sampling Tableau to compare front-end candidates
 - Decision: Choose two front-end stack candidates for equivalent low-fidelity spikes, then preserve evidence and an exit path before a durable stack commitment.
 - Population: Hybrid human–AI team building accessible, SVG-rich, static collaboration surfaces
 - Horizon: Six months after the first implementation
-- Lifecycle: `chimeric\_prototype`
+- Lifecycle: `chimeric_prototype`
 
 ## Relevant context and inputs
 
 - Central contract: Compare popular defaults and fit-for-purpose front-end compositions through separate probability objects, dimensional fit, equal low-fidelity spikes, explicit gaps, and reversible decision records.
-- Active run: Run B · evidence-enriched brief (`run-evidence-enriched-brief`; status `sample\_state`).
+- Active run: Run B · evidence-enriched brief (`run-evidence-enriched-brief`; status `sample_state`).
 - Prompt condition: Compare materially distinct front-end stacks for a static, accessible, SVG-rich collaboration surface with JSON/JSON-LD round trip and a practical six-month replacement path.
 - Sampling condition: Outcome, dimensions, gap review, low-fidelity spikes, and technology-layer composition are explicit.
-- Candidate-set semantics: `open\_exclusive`; other/tail mass `0.02`.
+- Candidate-set semantics: `open_exclusive`; other/tail mass `0.02`.
 - Compare against: Run A · sparse default brief (`run-sparse-default-brief`)
 - Comparison question: How does a richer collaboration contract change default likelihood, six-month fit, candidate breadth, gap visibility, and the decision to spike?
 
 ### Generic LLM first-recommendation likelihood (`probability-default-likelihood`)
 
 - Probability of what: P(generic-LLM-first-recommendation \| the named prompt condition): the model-verbalized probability that a candidate appears as the first recommendation under that request.
-- Candidate-set semantics: `open\_exclusive`.
+- Candidate-set semantics: `open_exclusive`.
 - Normalization: Listed candidates plus other/tail mass sum to one.
-- Evidence standing: `uncalibrated\_verbalized\_sample`.
+- Evidence standing: `uncalibrated_verbalized_sample`.
 
 ### Six-month collaboration fit (`probability-six-month-fit`)
 
 - Probability of what: P(six-month-fit-without-structural-rewrite \| declared outcome, team conditions, and current evidence): the contextual planning probability that a candidate supports the selected low-fidelity interaction surfaces for six months while preserving accessibility, semantic readability, maintainability, testability, and a practical replacement path.
-- Candidate-set semantics: `independent\_events`.
+- Candidate-set semantics: `independent_events`.
 - Normalization: Candidate estimates are independent and need not sum to one.
-- Evidence standing: `uncalibrated\_planning\_estimate`.
+- Evidence standing: `uncalibrated_planning_estimate`.
 
 ### Conditions
 
@@ -314,8 +329,8 @@ Use this working Technology Fit Sampling Tableau to compare front-end candidates
 
 - Summary: A high-frequency LLM default optimized for immediate scaffolding and familiar examples.
 - Layers: runtime — Browser DOM; framework — React; styling — Tailwind-style utility classes; components — Copied component primitives; state/data — React state + query/store as needed; build/deploy — Vite-style static build; testing — DOM/component tests + end-to-end.
-- Default-likelihood: `0.30` (interval `0.22–0.40`; status `uncalibrated\_verbalized\_sample`). Basis: Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark.
-- Six-month fit: `0.52` (interval `0.36–0.68`; status `uncalibrated\_planning\_estimate`). Basis: Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one.
+- Default-likelihood: `0.30` (interval `0.22–0.40`; status `uncalibrated_verbalized_sample`). Basis: Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark.
+- Six-month fit: `0.52` (interval `0.36–0.68`; status `uncalibrated_planning_estimate`). Basis: Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one.
 - Weighted dimensional fit: `7.00/10`. Decision state: `held`.
 - Replacement seam: Keep behavior, data, and accessibility contracts independent from utility classes and copied primitives.
 - Strengths: Rapid scaffolding; Large example surface in model training and public code; Easy access to many component recipes
@@ -327,9 +342,9 @@ Use this working Technology Fit Sampling Tableau to compare front-end candidates
 
 - Summary: A middle-ground React option with local semantic styles and explicit primitive ownership.
 - Layers: runtime — Browser DOM; framework — React; styling — CSS Modules + cascade layers; components — Headless accessible primitives; state/data — React state + external stores through declared adapters; build/deploy — Vite-style static build; testing — Specification examples + DOM/component + end-to-end.
-- Default-likelihood: `0.26` (interval `0.18–0.36`; status `uncalibrated\_verbalized\_sample`). Basis: Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark.
-- Six-month fit: `0.78` (interval `0.64–0.89`; status `uncalibrated\_planning\_estimate`). Basis: Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one.
-- Weighted dimensional fit: `8.03/10`. Decision state: `selected\_for\_spike`.
+- Default-likelihood: `0.26` (interval `0.18–0.36`; status `uncalibrated_verbalized_sample`). Basis: Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark.
+- Six-month fit: `0.78` (interval `0.64–0.89`; status `uncalibrated_planning_estimate`). Basis: Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one.
+- Weighted dimensional fit: `8.03/10`. Decision state: `selected_for_spike`.
 - Replacement seam: Place framework adapters around state, routing, and primitives; keep CSS tokens and behavior fixtures portable.
 - Strengths: Readable local style ownership; Strong React ecosystem access with explicit component seams; Straightforward semantic HTML and SVG control
 - Tradeoffs: More deliberate style and primitive composition; React version assumptions still need active stewardship; Headless primitives require local visual-system work
@@ -340,8 +355,8 @@ Use this working Technology Fit Sampling Tableau to compare front-end candidates
 
 - Summary: A rapid, accessibility-aware path with theming and component behavior supplied by an integrated system.
 - Layers: runtime — Browser DOM; framework — React; styling — Component-system theming; components — Integrated accessible component system; state/data — React state + query/store as needed; build/deploy — Framework-compatible static or server build; testing — Component contracts + end-to-end.
-- Default-likelihood: `0.10` (interval `0.05–0.17`; status `uncalibrated\_verbalized\_sample`). Basis: Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark.
-- Six-month fit: `0.64` (interval `0.48–0.79`; status `uncalibrated\_planning\_estimate`). Basis: Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one.
+- Default-likelihood: `0.10` (interval `0.05–0.17`; status `uncalibrated_verbalized_sample`). Basis: Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark.
+- Six-month fit: `0.64` (interval `0.48–0.79`; status `uncalibrated_planning_estimate`). Basis: Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one.
 - Weighted dimensional fit: `7.34/10`. Decision state: `held`.
 - Replacement seam: Wrap integrated components behind local contracts and keep domain behavior outside component-library APIs.
 - Strengths: Fast scaffolding with coherent theming; Many interaction patterns arrive with accessibility posture; Lower local primitive construction cost
@@ -353,8 +368,8 @@ Use this working Technology Fit Sampling Tableau to compare front-end candidates
 
 - Summary: A component-oriented option with a readable template model and explicit styling and primitive layers.
 - Layers: runtime — Browser DOM; framework — Vue; styling — CSS Modules or component-scoped CSS; components — Headless accessible primitives; state/data — Vue reactivity + query/store adapters; build/deploy — Vite-style static build; testing — Specification examples + component + end-to-end.
-- Default-likelihood: `0.11` (interval `0.06–0.18`; status `uncalibrated\_verbalized\_sample`). Basis: Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark.
-- Six-month fit: `0.66` (interval `0.50–0.81`; status `uncalibrated\_planning\_estimate`). Basis: Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one.
+- Default-likelihood: `0.11` (interval `0.06–0.18`; status `uncalibrated_verbalized_sample`). Basis: Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark.
+- Six-month fit: `0.66` (interval `0.50–0.81`; status `uncalibrated_planning_estimate`). Basis: Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one.
 - Weighted dimensional fit: `7.66/10`. Decision state: `held`.
 - Replacement seam: Use framework-neutral domain models, behavior examples, and CSS tokens with narrow component adapters.
 - Strengths: Readable template and component boundaries; Strong static build path; Good direct DOM and SVG control
@@ -366,9 +381,9 @@ Use this working Technology Fit Sampling Tableau to compare front-end candidates
 
 - Summary: A compact compiler-oriented option with low ceremony and direct component-local markup and styling.
 - Layers: runtime — Browser DOM; framework — Svelte; styling — Component-scoped CSS + shared tokens; components — Native-first local components; state/data — Svelte state + explicit service adapters; build/deploy — Static adapter or Vite-style build; testing — Specification examples + DOM + end-to-end.
-- Default-likelihood: `0.11` (interval `0.06–0.18`; status `uncalibrated\_verbalized\_sample`). Basis: Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark.
-- Six-month fit: `0.71` (interval `0.56–0.85`; status `uncalibrated\_planning\_estimate`). Basis: Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one.
-- Weighted dimensional fit: `7.81/10`. Decision state: `selected\_for\_spike`.
+- Default-likelihood: `0.11` (interval `0.06–0.18`; status `uncalibrated_verbalized_sample`). Basis: Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark.
+- Six-month fit: `0.71` (interval `0.56–0.85`; status `uncalibrated_planning_estimate`). Basis: Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one.
+- Weighted dimensional fit: `7.81/10`. Decision state: `selected_for_spike`.
 - Replacement seam: Preserve domain state and fixtures outside component syntax; use custom events and adapters at boundaries.
 - Strengths: Compact readable component files; Direct HTML, CSS, and SVG authoring; Low runtime and scaffolding ceremony for static surfaces
 - Tradeoffs: Smaller practitioner and AI example surface; Framework-specific reactive syntax still requires stewardship; Some enterprise component ecosystems are less extensive
@@ -379,8 +394,8 @@ Use this working Technology Fit Sampling Tableau to compare front-end candidates
 
 - Summary: A standards-oriented component path with explicit custom-element and shadow-boundary contracts.
 - Layers: runtime — Browser DOM + Custom Elements; framework — Lit; styling — CSS layers + shadow or light DOM policy; components — Web Components; state/data — Framework-neutral services and signals/adapters; build/deploy — Static module build; testing — Custom-element contracts + DOM + end-to-end.
-- Default-likelihood: `0.06` (interval `0.03–0.11`; status `uncalibrated\_verbalized\_sample`). Basis: Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark.
-- Six-month fit: `0.59` (interval `0.42–0.75`; status `uncalibrated\_planning\_estimate`). Basis: Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one.
+- Default-likelihood: `0.06` (interval `0.03–0.11`; status `uncalibrated_verbalized_sample`). Basis: Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark.
+- Six-month fit: `0.59` (interval `0.42–0.75`; status `uncalibrated_planning_estimate`). Basis: Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one.
 - Weighted dimensional fit: `7.41/10`. Decision state: `held`.
 - Replacement seam: Custom-element APIs can remain stable while internal implementation changes.
 - Strengths: Strong platform-level component interoperability; Clear module and custom-element seams; Direct control of HTML, CSS, and SVG
@@ -392,8 +407,8 @@ Use this working Technology Fit Sampling Tableau to compare front-end candidates
 
 - Summary: A platform-first option with minimal framework commitment and maximum explicit ownership.
 - Layers: runtime — Browser DOM + Custom Elements; framework — Platform APIs; styling — Modern CSS + cascade layers; components — Native elements + local Web Components; state/data — Typed services, events, and immutable records; build/deploy — Minimal static module build; testing — Platform-neutral unit + DOM + end-to-end.
-- Default-likelihood: `0.04` (interval `0.01–0.09`; status `uncalibrated\_verbalized\_sample`). Basis: Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark.
-- Six-month fit: `0.58` (interval `0.40–0.74`; status `uncalibrated\_planning\_estimate`). Basis: Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one.
+- Default-likelihood: `0.04` (interval `0.01–0.09`; status `uncalibrated_verbalized_sample`). Basis: Uncalibrated verbalized sample under the named prompt condition; this is not an observed model-frequency benchmark.
+- Six-month fit: `0.58` (interval `0.40–0.74`; status `uncalibrated_planning_estimate`). Basis: Contextual planning estimate under the declared collaboration outcome; candidates are independent and need not sum to one.
 - Weighted dimensional fit: `7.59/10`. Decision state: `held`.
 - Replacement seam: Platform contracts are the seam; local components and services can be replaced independently.
 - Strengths: Minimal dependency and framework commitment; High semantic and styling clarity; Strong replacement and longevity posture
@@ -443,8 +458,8 @@ Use this working Technology Fit Sampling Tableau to compare front-end candidates
 #### SVG coordinate and label-placement surface (`spike-svg-label-placement`)
 
 - Decision question: Can the candidate render, edit, and export a dense SVG scene while preserving groups, transforms, collision rules, stable IDs, keyboard access, and a table equivalent?
-- react-css-modules-headless: `working\_example` — Direct SVG and grouping path appears viable; dense-scene benchmark remains open.
-- svelte-component-css: `working\_example` — Compact SVG authoring path appears viable; assistive naming and export checks remain open.
+- react-css-modules-headless: `working_example` — Direct SVG and grouping path appears viable; dense-scene benchmark remains open.
+- svelte-component-css: `working_example` — Compact SVG authoring path appears viable; assistive naming and export checks remain open.
 
 #### Responsive comparison and inspector (`spike-responsive-comparison-surface`)
 
@@ -468,7 +483,7 @@ Use this working Technology Fit Sampling Tableau to compare front-end candidates
 
 - The tableau’s JSON state remains semantic authority; this Markdown is a derived collaboration view.
 - Default-likelihood and six-month-fit estimates retain their named, uncalibrated evidence standing. Weighted dimensional fit remains a separate decision aid.
-- Formal statistical fit is `not\_yet\_applicable`: The surface contains verbalized probability distributions, contextual planning estimates, and weighted dimensional fit. It does not yet contain observed outcome data or a fitted statistical model.
+- Formal statistical fit is `not_yet_applicable`: The surface contains verbalized probability distributions, contextual planning estimates, and weighted dimensional fit. It does not yet contain observed outcome data or a fitted statistical model.
 - Formal-fit route: When observed spike or pilot data exists, attach a StatisticalFitAssessment while preserving the current verbalized and dimensional records as separate evidence layers.
 - Publication boundary: Candidate values are uncalibrated planning and verbalized-sampling records. They invite replacement with team evidence.
 - Private locators included: `false`. Unreviewed inference included as fact: `false`.
@@ -499,7 +514,7 @@ Keep framework popularity, default likelihood, contextual fit, dimensional fit, 
 
 ## Evidence and recovery
 
-- Decision record: `technology-decision-record/v0.1`; state `prepare\_equal\_spikes`; review standing `working`.
+- Decision record: `technology-decision-record/v0.1`; state `prepare_equal_spikes`; review standing `working`.
 - Selected for equal spikes: react-css-modules-headless; svelte-component-css
 - Held in the range: react-tailwind-copied-primitives; react-integrated-component-system; vue-css-modules-headless; lit-web-components-css-layers; vanilla-ts-web-components-css-layers
 - Declined: None recorded.
@@ -511,15 +526,15 @@ Keep framework popularity, default likelihood, contextual fit, dimensional fit, 
 
 ### Open gaps
 
-- Default-likelihood frequency remains unmeasured (`gap-popularity-frequency-unmeasured`; class `methodological`; type `calibration\_absent`; severity `moderate`) — The verbalized default distribution illustrates model priors under two prompts; it is not an empirical benchmark across models or repeated samples. Current route: Preserve as an explicitly uncalibrated distribution and open a benchmark only when the decision needs measured frequency.
-- Six-month fit combines several forms of evidence (`gap-fit-commensurability`; class `methodological`; type `runs\_not\_commensurate`; severity `moderate`) — Current fit estimates blend practitioner judgment, design dimensions, and hypothetical spike outcomes without a formal statistical model. Current route: Keep dimensional fit visible and reserve formal statistical fit for observed outcomes with a named model.
-- SVG density and label-placement envelope (`gap-svg-density-envelope`; class `technical`; type `technical\_veracity\_gap`; severity `high`) — The intended scene size, label count, motion pattern, and collision budget remain partially specified. Current route: Run the shared dense SVG fixture and compare at least two placement strategies.
-- Local assistive-technology verification (`gap-at-verification`; class `technical`; type `accessibility\_gap`; severity `high`) — Library or framework claims remain source anchors; high-risk primitives still need local keyboard and assistive-technology verification. Current route: Attach local verification to the semantic form and feedback spike.
-- React version and integration assumptions (`gap-react-version`; class `technical`; type `model\_or\_version\_unknown`; severity `moderate`) — React candidates need exact version, rendering, external-store, component-library, and build assumptions before technical claims can settle. Current route: Use the React version-coherence probe and record local rendering tests.
-- Effect and resource-lifetime behavior (`gap-resource-lifetimes`; class `technical`; type `technical\_veracity\_gap`; severity `high`) — Listeners, observers, timers, fetches, and external subscriptions need equal acquire/release review across selected candidates. Current route: Run navigation and repeated-render stress cases with an acquire/release ledger.
-- Maintainer and collaborator context (`gap-maintainer-context`; class `organizational`; type `population\_undefined`; severity `moderate`) — Current estimates assume a team comfortable with TypeScript, semantic HTML, modern CSS, and local verification; actual experience distribution remains unstated. Current route: Create a Context Tree for maintainers, designers, accessibility reviewers, and future AI collaborators.
-- Static-hosting boundary versus server needs (`gap-static-deployment-boundary`; class `boundary`; type `target\_model\_mismatch`; severity `low`) — The exemplar assumes a static or mostly client-side collaboration surface; authentication, server rendering, or dynamic API needs could change the candidate set. Current route: Keep server-capable frameworks in the open tail and revisit when a concrete server requirement appears.
-- Dependency and six-month aging evidence (`gap-dependency-aging`; class `evidence`; type `evidence\_stale`; severity `moderate`) — The prototype does not yet contain repeated upgrade, security, or dependency-review observations for the candidate stacks. Current route: Add a dependency review and one controlled upgrade exercise to the spike record.
+- Default-likelihood frequency remains unmeasured (`gap-popularity-frequency-unmeasured`; class `methodological`; type `calibration_absent`; severity `moderate`) — The verbalized default distribution illustrates model priors under two prompts; it is not an empirical benchmark across models or repeated samples. Current route: Preserve as an explicitly uncalibrated distribution and open a benchmark only when the decision needs measured frequency.
+- Six-month fit combines several forms of evidence (`gap-fit-commensurability`; class `methodological`; type `runs_not_commensurate`; severity `moderate`) — Current fit estimates blend practitioner judgment, design dimensions, and hypothetical spike outcomes without a formal statistical model. Current route: Keep dimensional fit visible and reserve formal statistical fit for observed outcomes with a named model.
+- SVG density and label-placement envelope (`gap-svg-density-envelope`; class `technical`; type `technical_veracity_gap`; severity `high`) — The intended scene size, label count, motion pattern, and collision budget remain partially specified. Current route: Run the shared dense SVG fixture and compare at least two placement strategies.
+- Local assistive-technology verification (`gap-at-verification`; class `technical`; type `accessibility_gap`; severity `high`) — Library or framework claims remain source anchors; high-risk primitives still need local keyboard and assistive-technology verification. Current route: Attach local verification to the semantic form and feedback spike.
+- React version and integration assumptions (`gap-react-version`; class `technical`; type `model_or_version_unknown`; severity `moderate`) — React candidates need exact version, rendering, external-store, component-library, and build assumptions before technical claims can settle. Current route: Use the React version-coherence probe and record local rendering tests.
+- Effect and resource-lifetime behavior (`gap-resource-lifetimes`; class `technical`; type `technical_veracity_gap`; severity `high`) — Listeners, observers, timers, fetches, and external subscriptions need equal acquire/release review across selected candidates. Current route: Run navigation and repeated-render stress cases with an acquire/release ledger.
+- Maintainer and collaborator context (`gap-maintainer-context`; class `organizational`; type `population_undefined`; severity `moderate`) — Current estimates assume a team comfortable with TypeScript, semantic HTML, modern CSS, and local verification; actual experience distribution remains unstated. Current route: Create a Context Tree for maintainers, designers, accessibility reviewers, and future AI collaborators.
+- Static-hosting boundary versus server needs (`gap-static-deployment-boundary`; class `boundary`; type `target_model_mismatch`; severity `low`) — The exemplar assumes a static or mostly client-side collaboration surface; authentication, server rendering, or dynamic API needs could change the candidate set. Current route: Keep server-capable frameworks in the open tail and revisit when a concrete server requirement appears.
+- Dependency and six-month aging evidence (`gap-dependency-aging`; class `evidence`; type `evidence_stale`; severity `moderate`) — The prototype does not yet contain repeated upgrade, security, or dependency-review observations for the candidate stacks. Current route: Add a dependency review and one controlled upgrade exercise to the spike record.
 
 A rejected state or AI-response import leaves the accepted tableau and this capsule available. When the decision object, evidence standing, candidate set, scope, or authority remains unclear, return the smallest clarifying question with its named receiver.
 </pre>
@@ -747,20 +762,14 @@ const PROMPT_CAPSULE_SKILLS=Object.freeze([
     purpose:"Keep accepted state, the Prompt Capsule, semantic twins, self-roundtrip behavior, and recovery in agreement."
   })
 ]);
-const PROMPT_CAPSULE_RELATED_LOOPS=Object.freeze([
-  Object.freeze({
-    id:"#visitor-surface-change",
-    name:"Change a visitor surface with fitting evidence",
-    publicUrl:"https://schemas.radiantnull.com/collaboration/#visitor-surface-change",
-    fitCondition:"Fit when an equivalent candidate spike changes a visible or interactive surface and needs source-owned browser evidence."
-  }),
-  Object.freeze({
-    id:"#repository-reentry",
-    name:"Re-enter, make one bounded change, and return it clearly",
-    publicUrl:"https://schemas.radiantnull.com/collaboration/#repository-reentry",
-    fitCondition:"Fit when a successor run resumes as repository work and its current source, work state, verification, and handback need reconstruction."
-  })
-]);
+const PROMPT_CAPSULE_RELATED_LOOPS=Object.freeze(
+  [...document.querySelectorAll("[data-prompt-related-loops] [data-related-loop-id]")].map(item=>Object.freeze({
+    id:item.dataset.relatedLoopId,
+    name:item.querySelector("[data-related-loop-link]").textContent.trim(),
+    publicUrl:item.querySelector("[data-related-loop-link]").getAttribute("href"),
+    fitCondition:item.querySelector("[data-related-loop-fit]").textContent.trim()
+  }))
+);
 let state=structuredClone(SEED);
 let promptCapsuleView="plain";
 
@@ -956,10 +965,13 @@ function ensureState(){
   state.viewState.showIntervals = state.viewState.showIntervals!==false;
   state.stackPalette.currentComposition ||= {};
 }
-function markdownInline(value,fallback=""){
+function markdownLiteral(value,fallback=""){
   return (typeof value==="string"?value:fallback)
     .replace(/\r\n?/g,"\n")
-    .replace(/\s*\n\s*/g," ")
+    .replace(/\s*\n\s*/g," ");
+}
+function markdownInline(value,fallback=""){
+  return markdownLiteral(value,fallback)
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
@@ -969,7 +981,7 @@ function markdownInline(value,fallback=""){
     .replace(/\bwww\./gi,prefix=>`${prefix.slice(0,-1)}\\.`);
 }
 function markdownCode(value,fallback="Open for review."){
-  const literal=String(value??fallback).replace(/\r\n?/g,"\n").replace(/\s*\n\s*/g," ");
+  const literal=markdownLiteral(String(value??fallback),fallback);
   const longest=(literal.match(/`+/g)||[]).reduce((length,run)=>Math.max(length,run.length),0);
   const delimiter="`".repeat(longest+1);
   const padding=/^(?: |`)|(?: |`)$/.test(literal)?" ":"";
@@ -1004,29 +1016,29 @@ function promptCapsuleStateProjection(source=state){
   const encodeList=values=>(Array.isArray(values)?values:[]).map(value=>markdownInline(value));
   return {
     contract:PROMPT_CAPSULE_CONTRACT,
-    capsule:markdownInline(prompt.id),
-    source:{id:markdownInline(source.id),version:markdownInline(source.version)},
-    state:{contract:PROMPT_CAPSULE_STATE_CONTRACT,revision:markdownInline(source.version)},
+    capsule:markdownLiteral(prompt.id),
+    source:{id:markdownLiteral(source.id),version:markdownLiteral(source.version)},
+    state:{contract:PROMPT_CAPSULE_STATE_CONTRACT,revision:markdownLiteral(source.version)},
     purpose:{
       title:markdownInline(source.displayName),
       decision:markdownInline(prompt.currentDecision),
       population:markdownInline(prompt.population),
       horizon:markdownInline(prompt.horizon),
-      lifecycle:markdownInline(source.status)
+      lifecycle:markdownLiteral(source.status)
     },
     context:{
       centralContract:markdownInline(source.centralContract),
       activeRun:{
-        id:markdownInline(run.id),name:markdownInline(run.name),status:markdownInline(run.status),
+        id:markdownLiteral(run.id),name:markdownInline(run.name),status:markdownLiteral(run.status),
         promptCondition:markdownInline(run.promptCondition),samplingCondition:markdownInline(run.samplingCondition),
-        candidateSetSemantics:markdownInline(run.candidateSetSemantics),otherOrTailMass:num(run.otherOrTailMass,2)
+        candidateSetSemantics:markdownLiteral(run.candidateSetSemantics),otherOrTailMass:num(run.otherOrTailMass,2)
       },
-      compareAgainst:compare?{id:markdownInline(compare.id),name:markdownInline(compare.name)}:null,
+      compareAgainst:compare?{id:markdownLiteral(compare.id),name:markdownInline(compare.name)}:null,
       comparisonQuestion:markdownInline(source.comparison.comparisonQuestion,"Open for the next review."),
       probabilityObjects:prompt.probabilityObjects.map(item=>({
-        id:markdownInline(item.id),label:markdownInline(item.label),statement:markdownInline(item.statement),
-        candidateSetSemantics:markdownInline(item.candidateSetSemantics),normalizationRule:markdownInline(item.normalizationRule),
-        measurementStatus:markdownInline(item.measurementStatus)
+        id:markdownLiteral(item.id),label:markdownInline(item.label),statement:markdownInline(item.statement),
+        candidateSetSemantics:markdownLiteral(item.candidateSetSemantics),normalizationRule:markdownInline(item.normalizationRule),
+        measurementStatus:markdownLiteral(item.measurementStatus)
       })),
       conditions:encodeList(prompt.conditions),
       exclusions:encodeList(prompt.exclusions),
@@ -1040,7 +1052,7 @@ function promptCapsuleStateProjection(source=state){
     },
     workingState:{
       candidates:run.candidates.map(candidate=>({
-        id:markdownInline(candidate.id),name:markdownInline(candidate.name),summary:markdownInline(candidate.summary,"Open for review."),
+        id:markdownLiteral(candidate.id),name:markdownInline(candidate.name),summary:markdownInline(candidate.summary,"Open for review."),
         layers:{
           runtime:markdownInline(candidate.layers?.runtime,"Open."),framework:markdownInline(candidate.layers?.framework,"Open."),
           styling:markdownInline(candidate.layers?.styling,"Open."),components:markdownInline(candidate.layers?.components,"Open."),
@@ -1049,34 +1061,34 @@ function promptCapsuleStateProjection(source=state){
         },
         defaultLikelihood:{
           estimate:num(candidate.defaultLikelihood.estimate,2),intervalLow:num(candidate.defaultLikelihood.intervalLow,2),
-          intervalHigh:num(candidate.defaultLikelihood.intervalHigh,2),status:markdownInline(candidate.defaultLikelihood.measurementStatus),
+          intervalHigh:num(candidate.defaultLikelihood.intervalHigh,2),status:markdownLiteral(candidate.defaultLikelihood.measurementStatus),
           basis:markdownInline(candidate.defaultLikelihood.basis)
         },
         sixMonthFit:{
           estimate:num(candidate.sixMonthFit.estimate,2),intervalLow:num(candidate.sixMonthFit.intervalLow,2),
-          intervalHigh:num(candidate.sixMonthFit.intervalHigh,2),status:markdownInline(candidate.sixMonthFit.measurementStatus),
+          intervalHigh:num(candidate.sixMonthFit.intervalHigh,2),status:markdownLiteral(candidate.sixMonthFit.measurementStatus),
           basis:markdownInline(candidate.sixMonthFit.basis)
         },
         weightedFit:num(weightedFitFor(source,candidate),2),
-        decisionState:markdownInline(candidate.decisionState),replacementSeam:markdownInline(candidate.replacementSeam,"Open for review."),
+        decisionState:markdownLiteral(candidate.decisionState),replacementSeam:markdownInline(candidate.replacementSeam,"Open for review."),
         strengths:encodeList(candidate.strengths),tradeoffs:encodeList(candidate.tradeoffs),
         assumptions:encodeList(candidate.assumptions),evidenceWouldMove:encodeList(candidate.evidenceWouldMove)
       })),
       dimensions:source.dimensions.map(dimension=>({
-        id:markdownInline(dimension.id),name:markdownInline(dimension.name),weight:num(dimension.weight,2),
+        id:markdownLiteral(dimension.id),name:markdownInline(dimension.name),weight:num(dimension.weight,2),
         definition:markdownInline(dimension.definition),evidenceClass:markdownInline(dimension.evidenceClass,"Open for the next review.")
       })),
-      selectedProbes:(source.selectedProbeIds||[]).map(id=>({id:markdownInline(id),name:markdownInline(probeById(id)?.label||id)})),
-      selectedRoutes:(source.selectedRouteIds||[]).map(id=>({id:markdownInline(id),name:markdownInline(routeById(id)?.displayName||id)})),
+      selectedProbes:(source.selectedProbeIds||[]).map(id=>({id:markdownLiteral(id),name:markdownInline(probeById(id)?.label||id)})),
+      selectedRoutes:(source.selectedRouteIds||[]).map(id=>({id:markdownLiteral(id),name:markdownInline(routeById(id)?.displayName||id)})),
       equalSpikes:(source.lowFidelitySpikes||[]).map(spike=>({
-        id:markdownInline(spike.id),name:markdownInline(spike.name),decisionQuestion:markdownInline(spike.decisionQuestion),
+        id:markdownLiteral(spike.id),name:markdownInline(spike.name),decisionQuestion:markdownInline(spike.decisionQuestion),
         candidateStates:Object.entries(spike.candidateStates||{}).filter(([id])=>selectedCandidateIds.has(id)).map(([id,value])=>({
-          candidateId:markdownInline(id),status:markdownInline(value.status),evidence:markdownInline(value.evidence,"Open for the next review.")
+          candidateId:markdownLiteral(id),status:markdownLiteral(value.status),evidence:markdownInline(value.evidence,"Open for the next review.")
         }))
       }))
     },
     boundaries:{
-      formalFitStatus:markdownInline(source.formalStatisticalFitBoundary?.status,"not_yet_applicable"),
+      formalFitStatus:markdownLiteral(source.formalStatisticalFitBoundary?.status,"not_yet_applicable"),
       formalFitCurrent:markdownInline(source.formalStatisticalFitBoundary?.currentState,"Observed statistical fit remains open."),
       formalFitReplacement:markdownInline(source.formalStatisticalFitBoundary?.replacementState,"Attach observed evidence through the named state contract."),
       publicationNote:markdownInline(source.publication?.note,"Publication standing remains with human review."),
@@ -1086,16 +1098,16 @@ function promptCapsuleStateProjection(source=state){
     requestedReturn:encodeList(prompt.returnShape),
     evidence:{
       decision:{
-        id:markdownInline(source.decision.id),state:markdownInline(source.decision.decisionState),
+        id:markdownLiteral(source.decision.id),state:markdownLiteral(source.decision.decisionState),
         selectedCandidateIds:encodeList(source.decision.selectedCandidateIds),heldCandidateIds:encodeList(source.decision.heldCandidateIds),
         declinedCandidateIds:encodeList(source.decision.declinedCandidateIds),rule:markdownInline(source.decision.decisionRule),
         rationale:markdownInline(source.decision.rationale),dissent:markdownInline(source.decision.dissentOrMinorityRead,"No dissent is recorded."),
         evidenceRequired:encodeList(source.decision.evidenceRequiredBeforeCommitment),reviewAfter:markdownInline(source.decision.reviewAfter),
-        reviewState:markdownInline(source.decision.reviewState)
+        reviewState:markdownLiteral(source.decision.reviewState)
       },
       openGaps:(source.gaps||[]).filter(gap=>!["resolved","retired"].includes(gap.resolutionState)).map(gap=>({
-        id:markdownInline(gap.id),title:markdownInline(gap.title),gapClass:markdownInline(gap.gapClass),gapType:markdownInline(gap.gapType),
-        severity:markdownInline(gap.severity),description:markdownInline(gap.description),currentHandling:markdownInline(gap.currentHandling)
+        id:markdownLiteral(gap.id),title:markdownInline(gap.title),gapClass:markdownLiteral(gap.gapClass),gapType:markdownLiteral(gap.gapType),
+        severity:markdownLiteral(gap.severity),description:markdownInline(gap.description),currentHandling:markdownInline(gap.currentHandling)
       }))
     }
   };
@@ -1135,7 +1147,7 @@ function promptCapsuleMarkdown(source=state,options={}){
   const spikeSections=capsule.workingState.equalSpikes.map(spike=>[
     `#### ${spike.name} (${markdownCode(spike.id)})`,"",
     `- Decision question: ${spike.decisionQuestion}`,
-    ...(spike.candidateStates.length?spike.candidateStates.map(item=>`- ${item.candidateId}: ${markdownCode(item.status)} — ${item.evidence}`):["- Candidate evidence remains open for the selected comparison."])
+    ...(spike.candidateStates.length?spike.candidateStates.map(item=>`- ${markdownCode(item.candidateId)}: ${markdownCode(item.status)} — ${item.evidence}`):["- Candidate evidence remains open for the selected comparison."])
   ].join("\n")).join("\n\n");
   const relatedLoops=PROMPT_CAPSULE_RELATED_LOOPS.map(loop=>`- [${loop.name}](${loop.publicUrl}) (${markdownCode(loop.id)}) — ${loop.fitCondition}`).join("\n");
   const gapList=capsule.evidence.openGaps.map(gap=>`- ${gap.title} (${markdownCode(gap.id)}; class ${markdownCode(gap.gapClass)}; type ${markdownCode(gap.gapType)}; severity ${markdownCode(gap.severity)}) — ${gap.description} Current route: ${gap.currentHandling}`).join("\n")||"- The current represented state carries no open gap record.";
