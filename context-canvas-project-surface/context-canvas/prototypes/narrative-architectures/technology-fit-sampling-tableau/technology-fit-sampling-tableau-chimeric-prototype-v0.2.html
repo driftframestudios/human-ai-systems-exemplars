@@ -452,32 +452,32 @@ Use this working Technology Fit Sampling Tableau to compare front-end candidates
 #### Semantic form and status feedback (`spike-semantic-form-feedback`)
 
 - Decision question: Can the candidate preserve native form semantics, committed filtering, status feedback, focus recovery, and zero-results messaging with a clear local verification path?
-- react-css-modules-headless: `planned` — Shared fixture prepared; local AT verification pending.
-- svelte-component-css: `planned` — Shared fixture prepared; native-first component path pending.
+- `react-css-modules-headless`: `planned` — Shared fixture prepared; local AT verification pending.
+- `svelte-component-css`: `planned` — Shared fixture prepared; native-first component path pending.
 
 #### SVG coordinate and label-placement surface (`spike-svg-label-placement`)
 
 - Decision question: Can the candidate render, edit, and export a dense SVG scene while preserving groups, transforms, collision rules, stable IDs, keyboard access, and a table equivalent?
-- react-css-modules-headless: `working_example` — Direct SVG and grouping path appears viable; dense-scene benchmark remains open.
-- svelte-component-css: `working_example` — Compact SVG authoring path appears viable; assistive naming and export checks remain open.
+- `react-css-modules-headless`: `working_example` — Direct SVG and grouping path appears viable; dense-scene benchmark remains open.
+- `svelte-component-css`: `working_example` — Compact SVG authoring path appears viable; assistive naming and export checks remain open.
 
 #### Responsive comparison and inspector (`spike-responsive-comparison-surface`)
 
 - Decision question: Can the candidate preserve semantic order, keyboard reachability, readable tables, and stable inspector identity across narrow and wide viewports?
-- react-css-modules-headless: `planned` — Responsive chassis and table equivalent pending.
-- svelte-component-css: `planned` — Responsive chassis and table equivalent pending.
+- `react-css-modules-headless`: `planned` — Responsive chassis and table equivalent pending.
+- `svelte-component-css`: `planned` — Responsive chassis and table equivalent pending.
 
 #### Editable state and JSON / JSON-LD round trip (`spike-round-trip-state`)
 
 - Decision question: Can collaborators edit the surface, export stable state, re-import it, and preserve IDs, value origins, omissions, and source boundaries?
-- react-css-modules-headless: `planned` — Shared state contract available; implementation comparison pending.
-- svelte-component-css: `planned` — Shared state contract available; implementation comparison pending.
+- `react-css-modules-headless`: `planned` — Shared state contract available; implementation comparison pending.
+- `svelte-component-css`: `planned` — Shared state contract available; implementation comparison pending.
 
 #### Styling and component-layer replacement (`spike-layer-replacement`)
 
 - Decision question: Can one visual and interaction slice replace its styling or primitive layer while behavior fixtures and domain state remain unchanged?
-- react-css-modules-headless: `planned` — Replace headless primitive or CSS module in one slice.
-- svelte-component-css: `planned` — Replace component implementation while preserving state and fixtures.
+- `react-css-modules-headless`: `planned` — Replace headless primitive or CSS module in one slice.
+- `svelte-component-css`: `planned` — Replace component implementation while preserving state and fixtures.
 
 ## Boundaries and human-held decisions
 
@@ -852,6 +852,7 @@ function downloadPromptCapsule(){
 }
 const technologyStateObjectFields=["promptCapsule","comparison","stackPalette","gapPolicy","decision","viewState","publication","validation","formalStatisticalFitBoundary"];
 const technologyStateArrayFields=["dimensions","runs","lowFidelitySpikes","gaps"];
+const technologyStateScalarFields=["id","profileOf","displayName","version","status","centralContract","activeRunId","probeRegistryRef","routingRegistryRef"];
 const legacyTechnologyVocabulary=Object.freeze({
   illustrative_verbalized_sample:"uncalibrated_verbalized_sample",
   illustrative_planning_estimate:"uncalibrated_planning_estimate",
@@ -892,9 +893,10 @@ function requireProbabilityValue(value,label){
 function prepareTechnologyState(value){
   const candidate=structuredClone(requireTechnologyRecord(value,"Technology-fit state"));
   normalizeLegacyTechnologyVocabulary(candidate);
-  requireTechnologyFields(candidate,["id","type","activeRunId",...technologyStateObjectFields,...technologyStateArrayFields],"Technology-fit state");
+  requireTechnologyFields(candidate,["type",...technologyStateScalarFields,...technologyStateObjectFields,...technologyStateArrayFields],"Technology-fit state");
   if(candidate.type!=="TechnologyFitSamplingSurface")throw new Error("Expected a TechnologyFitSamplingSurface document.");
-  if(typeof candidate.id!=="string"||!candidate.id.trim())throw new Error("Technology-fit state needs a stable id.");
+  if(candidate.profileOf!=="na:narrative-sampling-tableau")throw new Error("Technology-fit state must retain the Narrative Sampling Tableau profile.");
+  technologyStateScalarFields.forEach(field=>{if(typeof candidate[field]!=="string"||!candidate[field].trim())throw new Error(`Technology-fit state needs a non-empty ${field}.`)});
   technologyStateObjectFields.forEach(field=>requireTechnologyRecord(candidate[field],field));
   technologyStateArrayFields.forEach(field=>{if(!Array.isArray(candidate[field]))throw new Error(`${field} must be an array.`)});
   if(!candidate.dimensions.length)throw new Error("dimensions must contain at least one fit dimension.");

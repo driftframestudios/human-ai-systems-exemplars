@@ -14,6 +14,7 @@ const routes = {
   semantic: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/semantic-sampling-tableau/terminology-exploration/narrative-sampling-tableau-chimeric-prototype-v0.1.html",
   semanticJsonLd: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/semantic-sampling-tableau/terminology-exploration/conation-motion-naming-sampling.example.v0.1.jsonld",
   technology: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/technology-fit-sampling-tableau-chimeric-prototype-v0.2.html",
+  technologySchema: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/technology-fit-sampling-tableau-state.schema.v0.1.json",
   technologyJsonLd: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/front-end-stack-selection.example.v0.1.jsonld",
   threadkeeping: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html"
 };
@@ -793,13 +794,26 @@ async function technologyPromptCapsulePath(browser, origin) {
 
     const acceptedMarkdown = await promptPreview.textContent();
     const acceptedFingerprint = await page.evaluate(() => window.technologyFitSamplingTableau.promptCapsuleFingerprint());
-    const invalid = structuredClone(finePrecisionB);
-    delete invalid.id;
-    await page.locator("#stateImportInput").fill(JSON.stringify(invalid));
-    await page.locator("#importStateBtn").click();
-    assert.match(await page.locator("#importStatus").textContent(), /Current technology-fit state is still available/u);
-    assert.equal(await promptPreview.textContent(), acceptedMarkdown);
-    assert.equal(await page.evaluate(() => window.technologyFitSamplingTableau.promptCapsuleFingerprint()), acceptedFingerprint);
+    const acceptedState = await page.evaluate(() => window.technologyFitSamplingTableau.getState());
+    const technologySchema = JSON.parse(await readFile(resolve(repositoryRoot, routes.technologySchema), "utf8"));
+    for (const requiredField of technologySchema.required) {
+      const invalid = structuredClone(finePrecisionB);
+      delete invalid[requiredField];
+      await page.locator("#stateImportInput").fill(JSON.stringify(invalid));
+      await page.locator("#importStateBtn").click();
+      assert.match(
+        await page.locator("#importStatus").textContent(),
+        /Current technology-fit state is still available/u,
+        `an import missing schema-required ${requiredField} should retain the accepted state`
+      );
+      assert.deepEqual(
+        await page.evaluate(() => window.technologyFitSamplingTableau.getState()),
+        acceptedState,
+        `a rejected ${requiredField} omission should preserve the complete accepted state`
+      );
+      assert.equal(await promptPreview.textContent(), acceptedMarkdown);
+      assert.equal(await page.evaluate(() => window.technologyFitSamplingTableau.promptCapsuleFingerprint()), acceptedFingerprint);
+    }
     assertTelemetry(telemetry);
   } finally {
     await context.close();
