@@ -322,12 +322,13 @@
       "projection_kind": "decorated_copy",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
           "allow-modals",
           "allow-scripts"
         ],
-        "permissions_policy": []
+        "permissions_policy": ["clipboard-write"]
       },
-      "reader_job": "Work through an open lesson and print the reviewed snapshot when the reader chooses."
+      "reader_job": "Work through an open lesson, carry the active Prompt Capsule Markdown by copy or download, and print the reviewed snapshot when the reader chooses."
     },
     {
       "id": "visualization-fidelity-atlas",

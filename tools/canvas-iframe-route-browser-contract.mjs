@@ -750,7 +750,33 @@ async function exerciseThreadkeeping({ carrierPage, page }) {
   assert.equal(modalObserved, true, "Threadkeeping exposes its deliberate-delete modal");
 }
 
-async function exerciseOpenLesson({ page }) {
+async function exerciseOpenLesson({ carrierPage, page }) {
+  const plainMarkdown = await page.locator("#packet").textContent();
+  assert.equal(
+    plainMarkdown,
+    await page.evaluate(() => globalThis.openLessonField.promptCapsule()),
+    "Open Lesson Field exposes the visible plain Prompt Capsule byte stream",
+  );
+  await page.locator("#copy-prompt").click();
+  await page.waitForFunction(() => globalThis.__canvasClipboardWrites.length > 0);
+  assert.equal(
+    await page.evaluate(() => globalThis.__canvasClipboardWrites.at(-1)),
+    plainMarkdown,
+    "Open Lesson Field copies its exact active Prompt Capsule",
+  );
+  const [download] = await Promise.all([
+    carrierPage.waitForEvent("download"),
+    page.locator("#download-prompt").click(),
+  ]);
+  assert.equal(download.suggestedFilename(), "open-lesson-field.prompt-capsule.r0.plain.md");
+  assert.equal(await download.failure(), null);
+  const downloadPath = await download.path();
+  assert.ok(downloadPath, "Open Lesson Field download has a browser-owned temporary path");
+  assert.equal(
+    await readFile(downloadPath, "utf8"),
+    plainMarkdown,
+    "Open Lesson Field download contains the exact active Prompt Capsule",
+  );
   await page.locator('[data-route="Plot and annotate"]').click();
   assert.equal(
     await page.locator('[data-route="Plot and annotate"]').getAttribute("aria-pressed"),
@@ -1224,7 +1250,7 @@ const behaviorProfiles = new Map([
     exercise: exerciseThreadkeeping,
   }],
   ["open-lesson-field", {
-    policy: { sandbox_tokens: ["allow-modals", "allow-scripts"], permissions_policy: [] },
+    policy: { sandbox_tokens: ["allow-downloads", "allow-modals", "allow-scripts"], permissions_policy: ["clipboard-write"] },
     exercise: exerciseOpenLesson,
   }],
   ["visualization-fidelity-atlas", {
