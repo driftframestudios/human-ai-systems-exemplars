@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
@@ -102,21 +103,22 @@ test("manifest-current Core JSON-LD uses the approved semantic identifiers", asy
     assert.equal(count(source, vocabularyNamespace), 1, `${entry.id} canonical namespace`);
     assert.equal(count(contextSource, vocabularyNamespace), 1, `${entry.id} Context namespace`);
 
-    const priorFile = entry.previous.at(-1);
-    assert.ok(priorFile, `${entry.id} retains a prior version coordinate`);
-    const [priorSource, priorContextSource] = await Promise.all([
+    assert.ok(entry.previous.length, `${entry.id} retains prior version coordinates`);
+    const availablePriorFiles = entry.previous.filter((priorFile) =>
+      existsSync(path.join(coreRoot, priorFile)) && existsSync(path.join(contextCoreRoot, priorFile))
+    );
+    assert.ok(availablePriorFiles.length, `${entry.id} retains an available prior version pair`);
+    const priorPairs = await Promise.all(availablePriorFiles.map(async (priorFile) => Promise.all([
       readFile(path.join(coreRoot, priorFile), "utf8"),
       readFile(path.join(contextCoreRoot, priorFile), "utf8"),
-    ]);
-    assert.equal(
-      count(priorSource, placeholderNamespace),
-      1,
-      `${entry.id} canonical predecessor remains recoverable`,
+    ])));
+    assert.ok(
+      priorPairs.some(([priorSource]) => count(priorSource, placeholderNamespace) === 1),
+      `${entry.id} canonical placeholder-era predecessor remains recoverable`,
     );
-    assert.equal(
-      count(priorContextSource, placeholderNamespace),
-      1,
-      `${entry.id} Context predecessor remains recoverable`,
+    assert.ok(
+      priorPairs.some(([, priorContextSource]) => count(priorContextSource, placeholderNamespace) === 1),
+      `${entry.id} Context placeholder-era predecessor remains recoverable`,
     );
   }
 
@@ -171,6 +173,9 @@ test("semantic-identifier successors retain the established iframe request closu
     readJson(routeManifestPath),
   ]);
   const sourceEntries = currentById(sourceManifest);
+  const acceptedCapabilityAdditions = new Map([
+    ["first-responsible-version-matrix", ["file-download"]],
+  ]);
 
   for (const entry of sourceManifest.prototypes) {
     const route = routeManifest.routes.find(({ id }) => id === entry.id);
@@ -187,10 +192,12 @@ test("semantic-identifier successors retain the established iframe request closu
       readFile(path.join(coreRoot, entry.file), "utf8"),
       readFile(path.join(coreRoot, priorFile), "utf8"),
     ]);
+    const priorCapabilities = observeIframeRuntimeCapabilities(prior);
+    const addedCapabilities = acceptedCapabilityAdditions.get(entry.id) ?? [];
     assert.deepEqual(
       observeIframeRuntimeCapabilities(current),
-      observeIframeRuntimeCapabilities(prior),
-      `${entry.id} runtime capabilities`,
+      [...priorCapabilities, ...addedCapabilities],
+      `${entry.id} runtime capabilities retain the predecessor plus accepted additions`,
     );
     assert.deepEqual(
       scanHtmlClosure(current, new Set(), `${entry.id} current source`),

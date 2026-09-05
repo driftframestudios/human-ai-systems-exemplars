@@ -17,7 +17,7 @@ import {
 const artifactNames = {
   poda: "poda-chimeric-prototype-v0.1.3.html",
   alignment: "alignment-worksheet-chimeric-prototype-v0.1.3.html",
-  frv: "first-responsible-version-matrix-chimeric-prototype-v0.1.3.html",
+  frv: "first-responsible-version-matrix-chimeric-prototype-v0.1.4.html",
   sharedSurface: "shared-surface-priority-map-chimeric-prototype-v0.1.3.html",
   aiSystems: "ai-systems-service-blueprint-chimeric-prototype-v0.1.3.html",
   softwareViews: "software-architecture-views-chimeric-prototype-v0.1.3.html",
@@ -201,9 +201,118 @@ async function alignmentPath(browser, origin, route) {
 }
 
 async function frvPath(browser, origin, route) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPlain = "";
   try {
     const cardId = "card-ai-generated-summary-panel";
+    const initial = await page.evaluate(() => {
+      const api = window.firstResponsibleVersionMatrix;
+      return {
+        frozen: Object.isFrozen(api),
+        version: api.version,
+        contract: api.contract,
+        stateContract: api.stateContract,
+        view: api.getPromptCapsuleView(),
+        state: api.getState(),
+        stateProjection: api.promptCapsuleStateProjection(),
+        fingerprint: api.promptCapsuleFingerprint(),
+        plain: api.promptCapsule(),
+        explicitPlain: api.promptCapsuleMarkdown("plain"),
+        visible: document.querySelector("#aiPrompt").textContent,
+      };
+    });
+    initialPlain = initial.plain;
+    assert.equal(initial.frozen, true);
+    assert.deepEqual(
+      [initial.version, initial.contract, initial.stateContract, initial.view],
+      ["0.1.4", "prompt-capsule/0.1.0", "first-responsible-version-matrix-state.v0.1", "plain"],
+    );
+    assert.equal(initial.plain, initial.explicitPlain);
+    assert.equal(initial.visible, initial.plain);
+    assert.equal(initial.stateProjection.cards.length, initial.state.cards.length);
+    assert.ok(initial.plain.includes(`- Fingerprint: \`${initial.fingerprint}\``));
+    assert.match(initial.plain, /^# Prompt Capsule: First Responsible Version Matrix\n/u);
+    assert.match(initial.plain, /## Related loops/u);
+    assert.doesNotMatch(initial.plain, /## Skill assistance/u);
+
+    await page.locator('[data-action="select"][data-id="card-ai-generated-summary-panel"]').click();
+    const selectedOnly = await page.evaluate(() => ({
+      selectedCardId: window.firstResponsibleVersionMatrix.getState().view_state.views[0].selected_card_id,
+      fingerprint: window.firstResponsibleVersionMatrix.promptCapsuleFingerprint(),
+      markdown: window.firstResponsibleVersionMatrix.promptCapsule(),
+    }));
+    assert.equal(selectedOnly.selectedCardId, "card-ai-generated-summary-panel");
+    assert.equal(selectedOnly.fingerprint, initial.fingerprint);
+    assert.equal(selectedOnly.markdown, initial.plain);
+
+    const loopReceipt = await page.locator("[data-prompt-related-loops]").evaluate((details) => ({
+      tag: details.tagName,
+      open: details.open,
+      summary: details.querySelector("summary")?.textContent.trim(),
+      loops: [...details.querySelectorAll("[data-related-loop-id]")].map((item) => ({
+        id: item.dataset.relatedLoopId,
+        href: item.querySelector("a")?.href,
+      })),
+    }));
+    assert.deepEqual(loopReceipt, {
+      tag: "DETAILS",
+      open: false,
+      summary: "Related loops",
+      loops: [
+        { id: "repository-reentry", href: "https://schemas.radiantnull.com/collaboration/#repository-reentry" },
+        { id: "skill-from-receiving-use", href: "https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use" },
+      ],
+    });
+    const relatedSummary = page.locator("[data-prompt-related-loops] summary");
+    await relatedSummary.focus();
+    const summaryBox = await relatedSummary.boundingBox();
+    assert.ok(summaryBox && summaryBox.height >= 44 && summaryBox.width >= 44);
+    await relatedSummary.press("Enter");
+    assert.equal(await page.locator("[data-prompt-related-loops]").evaluate(element => element.open), true);
+    const firstLoopBox = await page.locator("[data-related-loop-id] a").first().boundingBox();
+    assert.ok(firstLoopBox && firstLoopBox.height >= 44 && firstLoopBox.width >= 44);
+
+    const assistedControl = page.locator('[data-prompt-view][value="skill-assisted"]');
+    await assistedControl.check();
+    assert.equal(await assistedControl.evaluate(element => document.activeElement === element), true);
+    const assisted = await page.evaluate(() => ({
+      view: window.firstResponsibleVersionMatrix.getPromptCapsuleView(),
+      stateProjection: window.firstResponsibleVersionMatrix.promptCapsuleStateProjection(),
+      fingerprint: window.firstResponsibleVersionMatrix.promptCapsuleFingerprint(),
+      markdown: window.firstResponsibleVersionMatrix.promptCapsuleMarkdown(),
+      visible: document.querySelector("#aiPrompt").textContent,
+    }));
+    assert.equal(assisted.view, "skill-assisted");
+    assert.equal(assisted.markdown, assisted.visible);
+    assert.equal(assisted.fingerprint, initial.fingerprint);
+    assert.deepEqual(assisted.stateProjection, initial.stateProjection);
+    assert.match(assisted.markdown, /## Skill assistance/u);
+    assert.match(assisted.markdown, /\.agents\/skills\/source-authority-mapping\/SKILL\.md/u);
+    assert.match(assisted.markdown, /## Related loops/u);
+
+    await page.evaluate(() => { globalThis.__coreClipboard = ""; });
+    await page.locator("#copyPromptBtn").click();
+    await page.waitForFunction(() => Boolean(globalThis.__coreClipboard));
+    assert.equal(await page.evaluate(() => globalThis.__coreClipboard), assisted.markdown);
+    await page.evaluate(() => {
+      const original = URL.createObjectURL.bind(URL);
+      URL.createObjectURL = (blob) => {
+        globalThis.__promptDownloadType = blob.type;
+        return original(blob);
+      };
+    });
+    const downloadPromise = page.waitForEvent("download");
+    await page.locator("#downloadPromptBtn").click();
+    const download = await downloadPromise;
+    assert.equal(download.suggestedFilename(), "first-responsible-version-matrix.prompt-capsule.r0.1.4.skill-assisted.md");
+    assert.equal(await page.evaluate(() => globalThis.__promptDownloadType), "text/markdown;charset=utf-8");
+    const stream = await download.createReadStream();
+    const chunks = [];
+    for await (const chunk of stream) chunks.push(chunk);
+    assert.equal(Buffer.concat(chunks).toString("utf8"), assisted.markdown);
+
+    await page.locator('[data-prompt-view][value="plain"]').check();
+    assert.equal(await page.locator("#aiPrompt").textContent(), initial.plain);
     const placement = page.locator(`select[data-field="placement"][data-id="${cardId}"]`);
     await placement.selectOption("above_line");
 
@@ -215,6 +324,13 @@ async function frvPath(browser, origin, route) {
     assert.match(await page.locator("#tableEquivalent").textContent(), /Above line/);
     assert.equal(await page.locator(`#thresholdSvg [data-card-id="${cardId}"]`).count(), 1);
     assert.ok(Number(await page.locator(`#thresholdSvg [data-card-id="${cardId}"] rect`).getAttribute("y")) < 200);
+    const movedCapsule = await page.evaluate(() => ({
+      fingerprint: window.firstResponsibleVersionMatrix.promptCapsuleFingerprint(),
+      markdown: window.firstResponsibleVersionMatrix.promptCapsule(),
+    }));
+    assert.notEqual(movedCapsule.fingerprint, initial.fingerprint);
+    assert.notEqual(movedCapsule.markdown, initial.plain);
+    assert.match(movedCapsule.markdown, /AI-generated summary panel[\s\S]*?- Focus view: `visible`; display order `6`\.[\s\S]*?- Type: `Support condition`\./u);
 
     await page.locator(`#cardList button[data-action="hide"][data-id="${cardId}"]`).click();
     exported = await textJson(page, "#jsonOut");
@@ -241,10 +357,18 @@ async function frvPath(browser, origin, route) {
     await page.locator(`textarea[data-field="reason"][data-id="${cardId}"]`).fill(sentinel);
     const invalid = structuredClone(await textJson(page, "#jsonOut"));
     invalid.cards = { unexpected: true };
+    const retainedCapsule = await page.evaluate(() => ({
+      fingerprint: window.firstResponsibleVersionMatrix.promptCapsuleFingerprint(),
+      markdown: window.firstResponsibleVersionMatrix.promptCapsule(),
+    }));
     await page.locator("#importText").fill(JSON.stringify(invalid));
     await page.locator("#importJsonBtn").click();
     await assertVisibleNotice(page, "#importNotice", /remains available|working state retained/i);
     assert.equal((await textJson(page, "#jsonOut")).cards.find(item => item.id === cardId).reason, sentinel);
+    assert.deepEqual(await page.evaluate(() => ({
+      fingerprint: window.firstResponsibleVersionMatrix.promptCapsuleFingerprint(),
+      markdown: window.firstResponsibleVersionMatrix.promptCapsule(),
+    })), retainedCapsule);
 
     const lateInvalid = structuredClone(await textJson(page, "#jsonOut"));
     lateInvalid.semantic_locality.replacement_state_guidance = [null];
@@ -260,9 +384,85 @@ async function frvPath(browser, origin, route) {
     await page.locator("#importJsonBtn").click();
     await assertVisibleNotice(page, "#importNotice", /unique semantic namespace/i);
     assert.equal((await textJson(page, "#jsonOut")).cards.find(item => item.id === cardId).reason, sentinel);
+
+    await page.evaluate(() => {
+      Object.defineProperty(Navigator.prototype, "clipboard", {
+        configurable: true,
+        get: () => ({ writeText: async () => { throw new Error("clipboard unavailable"); } }),
+      });
+    });
+    await page.locator("#copyPromptBtn").click();
+    await page.waitForFunction(() => /manual copy/i.test(document.querySelector("#promptCapsuleStatus")?.textContent || ""));
+    assert.equal(await page.locator("#aiPrompt").isVisible(), true);
     assertTelemetry(telemetry);
   } finally {
     await context.close();
+  }
+
+  const stateBoundaryContext = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  try {
+    const stateBoundaryPage = await stateBoundaryContext.newPage();
+    await stateBoundaryPage.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+    const baseline = await stateBoundaryPage.evaluate(() => ({
+      state: window.firstResponsibleVersionMatrix.getState(),
+      fingerprint: window.firstResponsibleVersionMatrix.promptCapsuleFingerprint(),
+      markdown: window.firstResponsibleVersionMatrix.promptCapsule(),
+    }));
+    const privateOnly = structuredClone(baseline.state);
+    privateOnly.artifact_identity.private_annotation = "local review note";
+    privateOnly.cards[0].private_annotation = "local card note";
+    await openContainingDetails(stateBoundaryPage, "#importText");
+    await stateBoundaryPage.locator("#importText").fill(JSON.stringify(privateOnly));
+    await stateBoundaryPage.locator("#importJsonBtn").click();
+    await assertVisibleNotice(stateBoundaryPage, "#importNotice", /JSON imported/i);
+    const privateOnlyReceipt = await stateBoundaryPage.evaluate(() => ({
+      state: window.firstResponsibleVersionMatrix.getState(),
+      fingerprint: window.firstResponsibleVersionMatrix.promptCapsuleFingerprint(),
+      markdown: window.firstResponsibleVersionMatrix.promptCapsule(),
+    }));
+    assert.equal(privateOnlyReceipt.state.artifact_identity.private_annotation, "local review note");
+    assert.equal(privateOnlyReceipt.state.cards[0].private_annotation, "local card note");
+    assert.equal(privateOnlyReceipt.fingerprint, baseline.fingerprint);
+    assert.equal(privateOnlyReceipt.markdown, baseline.markdown);
+
+    const semanticChange = structuredClone(privateOnlyReceipt.state);
+    semanticChange.semantic_locality.preferred_phrasing[0] = "Which evidence makes this threshold responsible?";
+    await stateBoundaryPage.locator("#importText").fill(JSON.stringify(semanticChange));
+    await stateBoundaryPage.locator("#importJsonBtn").click();
+    await assertVisibleNotice(stateBoundaryPage, "#importNotice", /JSON imported/i);
+    const semanticReceipt = await stateBoundaryPage.evaluate(() => ({
+      fingerprint: window.firstResponsibleVersionMatrix.promptCapsuleFingerprint(),
+      markdown: window.firstResponsibleVersionMatrix.promptCapsule(),
+    }));
+    assert.notEqual(semanticReceipt.fingerprint, baseline.fingerprint);
+    assert.notEqual(semanticReceipt.markdown, baseline.markdown);
+    assert.match(semanticReceipt.markdown, /Which evidence makes this threshold responsible\?/u);
+  } finally {
+    await stateBoundaryContext.close();
+  }
+
+  const noScriptContext = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 320, height: 900 },
+  });
+  try {
+    const noScriptPage = await noScriptContext.newPage();
+    await noScriptPage.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+    assert.equal(await noScriptPage.locator("#aiPrompt").textContent(), initialPlain);
+    assert.equal(await noScriptPage.locator("#aiPrompt").isVisible(), true);
+    assert.equal(await noScriptPage.locator("[data-prompt-view-control]").isVisible(), false);
+    assert.equal(await noScriptPage.locator("[data-prompt-actions]").isVisible(), false);
+    const details = noScriptPage.locator("[data-prompt-related-loops]");
+    assert.equal(await details.isVisible(), true);
+    await details.locator("summary").click();
+    assert.equal(await details.evaluate(element => element.open), true);
+    const containment = await noScriptPage.locator("html").evaluate(root => ({
+      clientWidth: root.clientWidth,
+      scrollWidth: root.scrollWidth,
+    }));
+    assert.ok(containment.scrollWidth <= containment.clientWidth + 1, JSON.stringify(containment));
+  } finally {
+    await noScriptContext.close();
   }
 }
 
