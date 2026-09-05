@@ -6,13 +6,14 @@
 
 This inventory routes work to the source that can accept it. The observed
 current population contains 28 source artifacts: 21 listed as current by the
-Core manifest, four listed as current by the Narrative manifest, and three directly
-maintained standalone artifacts. Strategy Canvas v0.2.4 and Technology Fit
-Sampling Tableau v0.1 are the two current pilot adoptions. The other 26 sources
-keep their accepted capsule behavior until their owner has a receiving use and
-fitting migration evidence. Later adoptions retain this 28-source denominator;
-their manifest rows name the accepted sources without counting companion
-projections or generated archives as new sources.
+Core manifest, four listed as current by the Narrative manifest, and three
+directly maintained standalone artifacts. Strategy Canvas v0.2.4, Technology
+Fit Sampling Tableau v0.1, and Open Lesson Field are the three current pilot
+adoptions. The remaining 25 sources keep their accepted capsule behavior until
+their owner has a receiving use and fitting migration evidence. Later adoptions
+retain this 28-source denominator; their manifest rows name the accepted
+sources without counting companion projections or generated archives as new
+sources.
 
 ## Current source artifacts · 28
 
@@ -20,7 +21,7 @@ projections or generated archives as new sources.
 | --- | ---: | --- | --- |
 | Core Architecture sources | 21 | [Core Architecture pack manifest](../core-architectures-chimeric-prototype-current-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json) | The manifest is the current population owner. Strategy Canvas v0.2.4 implements `prompt-capsule/0.1.0`; the other 20 retain their existing formats. |
 | Narrative Architecture sources | 4 | [Narrative collection manifest](../context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/manifest.json): `narrative-capsule-composer`, `technology-fit-sampling-tableau`, `semantic-sampling-tableau`, and `threadkeeping-ledger` | Technology Fit Sampling Tableau v0.1 implements `prompt-capsule/0.1.0`; the other three keep their richer independent context, uncertainty, comparison, and continuation contracts. |
-| Open Lesson Field | 1 | [`collaboration/open-lesson-field/index.html`](../collaboration/open-lesson-field/index.html) | This directly maintained instrument owns working and reviewed teaching handoffs. |
+| Open Lesson Field | 1 | [`collaboration/open-lesson-field/index.html`](../collaboration/open-lesson-field/index.html) | This directly maintained instrument implements `prompt-capsule/0.1.0` from its accepted v2 lesson state. It owns complete plain and skill-assisted GitHub Flavored Markdown, native Related loops, and a reviewed lesson snapshot for recovery. |
 | Cross-Functional Investment Model Studio | 1 | [`collaboration/cross-functional-investment-model-studio/index.html`](../collaboration/cross-functional-investment-model-studio/index.html) | This directly maintained instrument owns the prompt for each method. |
 | Visualization Fidelity Atlas | 1 | [Atlas artifact](../visualization-fidelity-atlas-bundle-v0.1/visualization-fidelity-atlas-chimeric-prototype-v0.1.html) and [manifest](../visualization-fidelity-atlas-bundle-v0.1/visualization-fidelity-atlas-manifest-v0.1.json) | This directly maintained atlas owns its AI prompt capsule and machine-readable relationships. |
 
@@ -35,7 +36,7 @@ The four Narrative coordinates resolve through their collection manifest:
 
 | Class | Current owner or registry | Relationship to the 28 sources |
 | --- | --- | --- |
-| Canonical pilot sources | [Strategy Canvas system](../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/README.md) and [Technology Fit Sampling Tableau](../context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/technology-fit-sampling-tableau-chimeric-prototype-v0.2.html) | Strategy Canvas's core module owns its state-to-Markdown projection and builder path. Technology Fit's self-contained HTML owns its Narrative projection, complete no-JavaScript plain baseline, and read-only programmatic seam while its v0.1 state and schema remain authoritative. |
+| Canonical pilot sources | [Strategy Canvas system](../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/README.md), [Technology Fit Sampling Tableau](../context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/technology-fit-sampling-tableau-chimeric-prototype-v0.2.html), and [Open Lesson Field](../collaboration/open-lesson-field/index.html) | Strategy Canvas's core module owns its state-to-Markdown projection and builder path. Technology Fit's self-contained HTML owns its Narrative projection, complete no-JavaScript plain baseline, and read-only programmatic seam while its v0.1 state and schema remain authoritative. Open Lesson Field's self-contained HTML owns its state-derived Markdown views, native Related loops, exact copy and download behavior, and reviewed snapshot while its v2 state and embedded schema remain authoritative. |
 | Tracked Context Core projections | [Context Core manifest](../context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json) | Eighteen current projections remain byte-identical to their Core source. PODA, Core Architecture Family Index, and Strategy Canvas are declared adaptations. The Context Strategy Canvas v0.2.2 workbench keeps its independent capsule behavior. |
 | Maintained Narrative companion | [Current Core Architecture Family Index companion](../context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/companions/core-architecture-family-index-chimeric-prototype-v0.1.4.html) | The Narrative owner maintains this receiving projection beside its source registry. It does not become another source artifact. |
 | Generated consumer archives | [`tools/strategy-canvas-consumer-bundles.mjs`](../tools/strategy-canvas-consumer-bundles.mjs) | Four deterministic ZIP snapshots carry their declared Narrative members; the Narrative Capsule Composer archive also carries the Strategy v0.2.2 companion. The builder owns propagation, and archive members do not become sources. |
@@ -47,6 +48,6 @@ The four Narrative coordinates resolve through their collection manifest:
 
 Another artifact joins this contract when its owner can produce both views from
 one accepted state, keep the fingerprint independent of view, preserve its
-import/export and recovery behavior, supply a readable no-JavaScript default,
-and protect active-view byte agreement with focused tests. Until then, its
-existing capsule remains the truthful current behavior.
+source-owned state and recovery behavior, supply a readable no-JavaScript
+default, and protect active-view byte agreement with focused tests. Until then,
+its existing capsule remains the truthful current behavior.
