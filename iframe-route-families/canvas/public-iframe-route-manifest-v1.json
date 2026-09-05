@@ -287,10 +287,15 @@
       "activation_standing": "eligible",
       "projection_kind": "decorated_copy",
       "carrier_policy": {
-        "sandbox_tokens": ["allow-scripts"],
-        "permissions_policy": []
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": ["clipboard-write"]
       },
-      "reader_job": "Inspect a cross-functional investment model as an interactive planning surface."
+      "reader_job": "Inspect a cross-functional investment model and carry the selected Prompt Capsule by copy or download."
     },
     {
       "id": "threadkeeping-ledger",

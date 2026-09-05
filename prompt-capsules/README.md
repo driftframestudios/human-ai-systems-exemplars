@@ -17,8 +17,9 @@ receivers, and independently governed capsule families. It is an ownership map,
 not a count of matching words.
 
 The current adoptions span three source families: Strategy Canvas v0.2.4 in
-Core, all four current Narrative Architecture sources, and the standalone Open
-Lesson Field. Each source owner keeps its own state and schema version while
+Core, all four current Narrative Architecture sources, and two standalone
+instruments—Open Lesson Field and Cross-Functional Investment Model Studio.
+Each source owner keeps its own state and schema version while
 projecting complete plain and skill-assisted Markdown views with one
 represented-state fingerprint. Each source points to a small set of related
 collaboration loops whose fit conditions remain visible.
@@ -26,8 +27,10 @@ collaboration loops whose fit conditions remain visible.
 Open Lesson Field derives both GitHub Flavored Markdown views from its accepted
 v2 lesson state. Copy and download return the selected view exactly, Related
 loops remain native page content, and lesson assembly keeps a reviewed snapshot
-available for recovery. Narrative Capsule Composer, Semantic Sampling,
-Technology Fit, and Threadkeeping Ledger derive the same exchange shape from
-their distinct accepted states. Other capsule-bearing artifacts keep their
-existing contracts until their source owner accepts a migration with a material
-use and fitting tests.
+available for recovery. Cross-Functional Investment Model Studio derives one
+complete handoff from the fixed scenario and selected method while people retain
+economic inputs and decision authority. Narrative Capsule Composer, Semantic
+Sampling, Technology Fit, and Threadkeeping Ledger derive the same exchange
+shape from their distinct accepted states. Other capsule-bearing artifacts
+keep their existing contracts until their source owner accepts a migration
+with a material use and fitting tests.

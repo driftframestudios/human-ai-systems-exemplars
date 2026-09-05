@@ -335,6 +335,7 @@ async function openRoute(browser, origin, route) {
   await carrierPage.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {});
 
   return {
+    browser,
     carrier,
     carrierPage,
     context,
@@ -342,6 +343,7 @@ async function openRoute(browser, origin, route) {
     localRequests,
     localResponses,
     observedExternalUrls,
+    origin,
     page,
     permittedExternalUrls,
     route,
@@ -617,7 +619,11 @@ async function exerciseInvestmentStudio(session) {
 
 async function observeExternalPopup(session, locator) {
   const href = await locator.evaluate((anchor) => anchor.href);
+  const requestUrl = new URL(href);
+  requestUrl.hash = "";
+  const requestHref = requestUrl.href;
   session.permittedExternalUrls.add(href);
+  session.permittedExternalUrls.add(requestHref);
   try {
     const [popup] = await Promise.all([
       session.carrierPage.waitForEvent("popup"),
@@ -631,12 +637,13 @@ async function observeExternalPopup(session, locator) {
       await popup.close();
     }
     assert.equal(
-      session.observedExternalUrls.has(href),
+      session.observedExternalUrls.has(href) || session.observedExternalUrls.has(requestHref),
       true,
       `controlled popup navigation observed for ${href}`,
     );
   } finally {
     session.permittedExternalUrls.delete(href);
+    session.permittedExternalUrls.delete(requestHref);
   }
 }
 
@@ -709,15 +716,305 @@ async function exerciseAiGallery(session) {
   );
 }
 
-async function exerciseInvestmentModelStudio({ page }) {
+function promptCapsuleFingerprintFrom(markdown) {
+  const match = String(markdown).match(/^- Fingerprint: `([^`]+)`$/mu);
+  assert.ok(match, "Prompt Capsule Markdown carries one readable fingerprint");
+  return match[1];
+}
+
+function assertInvestmentPromptCapsuleSections(markdown, label) {
+  const headings = [
+    "# Prompt Capsule: Cross-Functional Investment Model Studio",
+    "## Purpose and target",
+    "## Relevant context and inputs",
+    "## Working state",
+    "## Boundaries and human-held decisions",
+    "## Requested return",
+    "## Related loops",
+    "## Evidence and recovery",
+  ];
+  let previous = -1;
+  for (const heading of headings) {
+    const position = markdown.indexOf(heading);
+    assert.ok(position > previous, `${label} carries ${heading} in contract order`);
+    previous = position;
+  }
+}
+
+async function exerciseInvestmentModelStudio(session) {
+  const { browser, carrierPage, expectedPaths, origin, page, route } = session;
   const tabs = page.locator('#modelTabs [role="tab"]');
   assert.equal(await tabs.count(), 8);
+
+  const initial = await page.evaluate(() => ({
+    apiFrozen: Object.isFrozen(globalThis.crossFunctionalInvestmentModelStudio),
+    viewsFrozen: Object.isFrozen(globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleViews),
+    version: globalThis.crossFunctionalInvestmentModelStudio.version,
+    stateSchemaVersion: globalThis.crossFunctionalInvestmentModelStudio.stateSchemaVersion,
+    contract: globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleContract,
+    views: globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleViews.slice(),
+    view: globalThis.crossFunctionalInvestmentModelStudio.getPromptCapsuleView(),
+    state: globalThis.crossFunctionalInvestmentModelStudio.getState(),
+    projection: globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleStateProjection(),
+    fingerprint: globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleFingerprint(),
+    plain: globalThis.crossFunctionalInvestmentModelStudio.promptCapsule(),
+    explicitPlain: globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleMarkdown("plain"),
+  }));
+  const visiblePlain = await page.locator("#promptCapsuleMarkdown").textContent();
+  assert.equal(initial.apiFrozen, true);
+  assert.equal(initial.viewsFrozen, true);
+  assert.equal(initial.version, "0.1.0");
+  assert.equal(initial.stateSchemaVersion, "1.0.0");
+  assert.equal(initial.contract, "prompt-capsule/0.1.0");
+  assert.deepEqual(initial.views, ["plain", "skill-assisted"]);
+  assert.equal(initial.view, "plain");
+  assert.equal(initial.state.activeModelId, "model/activity-based.v0.1");
+  assert.equal(initial.projection.state.activeModelId, initial.state.activeModelId);
+  assert.equal(initial.plain, initial.explicitPlain);
+  assert.equal(initial.plain, visiblePlain);
+  assert.ok(initial.plain.endsWith("\n"));
+  assertInvestmentPromptCapsuleSections(initial.plain, "Initial plain Prompt Capsule");
+  assert.equal(promptCapsuleFingerprintFrom(initial.plain), initial.fingerprint);
+  assert.match(initial.plain, /Keep unavailable economics, rates, volumes, and savings as &lt;reserved&gt;/u);
+  assert.doesNotMatch(
+    initial.plain.split("## Requested return")[1].split("## Related loops")[0],
+    /<reserved>/u,
+    "Source-authored instruction text keeps markup-shaped values escaped",
+  );
+  assert.match(initial.plain, /Keep an unavailable input as `<reserved>`/u);
+
+  const source = await readFile(path.join(repositoryRoot, route.source_file), "utf8");
+  const staticMatch = source.match(/<pre\s+id="promptCapsuleMarkdown"[^>]*>([\s\S]*?)<\/pre>/u);
+  assert.ok(staticMatch, "Investment Model Studio source carries an authored plain Prompt Capsule baseline");
+  const staticPlain = await page.evaluate((encoded) => {
+    const textarea = document.createElement("textarea");
+    textarea.innerHTML = encoded;
+    return textarea.value;
+  }, staticMatch[1]);
+  assert.equal(staticPlain, initial.plain, "Authored no-JavaScript baseline equals the runtime plain Markdown exactly");
+
+  const noScriptContext = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 320, height: 900 },
+  });
+  try {
+    const noScriptLocalRequests = [];
+    const noScriptUnexpectedRequests = [];
+    noScriptContext.on("request", (request) => {
+      const requestUrl = new URL(request.url());
+      if (["about:", "blob:", "data:"].includes(requestUrl.protocol)) return;
+      if (requestUrl.origin === origin) {
+        noScriptLocalRequests.push({
+          method: request.method(),
+          pathname: requestUrl.pathname,
+          resourceType: request.resourceType(),
+        });
+        if (request.method() !== "GET" || !expectedPaths.has(requestUrl.pathname)) {
+          noScriptUnexpectedRequests.push(`${request.method()} ${requestUrl.href}`);
+        }
+        return;
+      }
+      noScriptUnexpectedRequests.push(`${request.method()} ${requestUrl.href}`);
+    });
+    await noScriptContext.route("**/*", async (routeHandle) => {
+      const requestUrl = new URL(routeHandle.request().url());
+      if (
+        ["http:", "https:"].includes(requestUrl.protocol) &&
+        requestUrl.origin !== origin
+      ) {
+        await routeHandle.fulfill({
+          status: 200,
+          contentType: "text/html; charset=utf-8",
+          body: "<!doctype html><title>Contained external request</title>",
+        });
+        return;
+      }
+      await routeHandle.continue();
+    });
+    const noScriptPage = await noScriptContext.newPage();
+    const noScriptTelemetry = monitor(noScriptPage);
+    await noScriptPage.goto(routeUrl(origin, route), { waitUntil: "domcontentloaded" });
+    await noScriptPage.waitForLoadState("networkidle", { timeout: 5000 });
+    assert.equal(
+      await noScriptPage.locator("#promptCapsuleMarkdown").textContent(),
+      initial.plain,
+      "JavaScript-disabled reading exposes the exact initial plain Markdown",
+    );
+    assert.equal(await noScriptPage.locator("#promptCapsuleMarkdown").isVisible(), true);
+    assert.equal(await noScriptPage.locator("[data-prompt-actions]").isVisible(), false);
+    assert.equal(await noScriptPage.locator("[data-prompt-view-control]").isVisible(), false);
+    assert.equal(await noScriptPage.locator("[data-prompt-related-loops]").isVisible(), true);
+    const noScriptEntryPath = new URL(routeUrl(origin, route)).pathname;
+    assert.equal(
+      noScriptLocalRequests.filter(
+        ({ pathname, resourceType }) =>
+          pathname === noScriptEntryPath && resourceType === "document",
+      ).length,
+      1,
+      "JavaScript-disabled reading loads its entry document once",
+    );
+    assert.deepEqual(
+      noScriptUnexpectedRequests,
+      [],
+      "JavaScript-disabled reading stays inside its declared request closure",
+    );
+    assertTelemetry(noScriptTelemetry);
+  } finally {
+    await noScriptContext.close();
+  }
+
+  const detached = await page.evaluate(() => {
+    const returnedState = globalThis.crossFunctionalInvestmentModelStudio.getState();
+    const returnedProjection = globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleStateProjection();
+    returnedState.activeModelId = "changed-outside-api";
+    returnedProjection.state.activeModelId = "changed-outside-api";
+    return {
+      state: globalThis.crossFunctionalInvestmentModelStudio.getState().activeModelId,
+      projection: globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleStateProjection().state.activeModelId,
+      fingerprint: globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleFingerprint(),
+    };
+  });
+  assert.equal(detached.state, initial.state.activeModelId);
+  assert.equal(detached.projection, initial.projection.state.activeModelId);
+  assert.equal(detached.fingerprint, initial.fingerprint);
+
+  const loops = page.locator("[data-prompt-related-loops]");
+  await loops.locator("summary").focus();
+  await carrierPage.keyboard.press("Enter");
+  assert.equal(await loops.evaluate((element) => element.open), true);
+  const loopRecords = await loops.locator("[data-related-loop-id]").evaluateAll((items) => items.map((item) => {
+    const link = item.querySelector("[data-related-loop-link]");
+    return {
+      id: item.dataset.relatedLoopId,
+      href: link?.getAttribute("href"),
+      target: link?.getAttribute("target"),
+      rel: link?.getAttribute("rel"),
+      targetHeight: link?.getBoundingClientRect().height,
+      fit: item.querySelector("[data-related-loop-fit]")?.textContent.trim(),
+    };
+  }));
+  assert.deepEqual(loopRecords.map(({ id }) => id), ["repository-reentry", "skill-from-receiving-use"]);
+  assert.equal(loopRecords[0].href, "https://schemas.radiantnull.com/collaboration/#repository-reentry");
+  assert.equal(loopRecords[1].href, "https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use");
+  assert.equal(loopRecords.every(({ target, rel, targetHeight, fit }) =>
+    target === "_blank" && rel === "noopener noreferrer" && targetHeight >= 43.5 && Boolean(fit)), true);
+  await observeExternalPopup(session, loops.locator("[data-related-loop-link]").first());
+
+  const first = tabs.first();
+  await first.click();
+  const sameModel = await page.evaluate(() => ({
+    reason: globalThis.crossFunctionalInvestmentModelStudio.getState().selectionReason,
+    fingerprint: globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleFingerprint(),
+  }));
+  assert.equal(sameModel.reason, "visitor-selected");
+  assert.equal(sameModel.fingerprint, initial.fingerprint, "Selection modality stays outside the represented-state fingerprint");
+
+  await page.locator('input[name="investment-model-prompt-view"][value="plain"]').focus();
+  await carrierPage.keyboard.press("ArrowRight");
+  const assistedControl = page.locator('input[name="investment-model-prompt-view"][value="skill-assisted"]');
+  assert.equal(await assistedControl.isChecked(), true);
+  assert.equal(await assistedControl.evaluate((element) => document.activeElement === element), true);
+  const assisted = await page.locator("#promptCapsuleMarkdown").textContent();
+  const explicitAssisted = await page.evaluate(() =>
+    globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleMarkdown("skill-assisted"));
+  assert.equal(assisted, explicitAssisted);
+  assert.equal(promptCapsuleFingerprintFrom(assisted), initial.fingerprint);
+  assert.match(assisted, /^## Skill assistance$/mu);
+  assert.match(assisted, /https:\/\/schemas\.radiantnull\.com\/skills\/source-authority-mapping\//u);
+  assert.match(assisted, /https:\/\/schemas\.radiantnull\.com\/skills\/practitioner-probe\//u);
+  assert.match(assisted, /https:\/\/schemas\.radiantnull\.com\/skills\/bounded-support-routing\//u);
+  assert.match(assisted, /0b8c0463cc5e5fe107b894e2f6f204e3b746a99b/u);
+  assert.match(assisted, /706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5/u);
+  assert.match(assisted, /348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c/u);
+  assert.match(assisted, /80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402/u);
+  assert.equal(
+    assisted.split("\n## Skill assistance")[0].replace("- View: `skill-assisted`", "- View: `plain`"),
+    initial.plain,
+    "Skill assistance extends the complete plain view without changing shared content",
+  );
+  assert.match(await page.locator("#promptViewStatus").textContent(), /Skill-assisted Markdown view selected/u);
+
+  await page.locator("#copyPromptCapsule").click();
+  await page.waitForFunction(() => globalThis.__canvasClipboardWrites.length > 0);
+  assert.equal(
+    await page.evaluate(() => globalThis.__canvasClipboardWrites.at(-1)),
+    assisted,
+    "Investment Model Studio copies the exact active Prompt Capsule",
+  );
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: async () => { throw new Error("Clipboard unavailable"); } },
+    });
+    document.execCommand = () => false;
+  });
+  await page.locator("#copyPromptCapsule").click();
+  assert.match(
+    await page.locator("#promptViewStatus").textContent(),
+    /Markdown remains visible for manual copy/u,
+    "A declined clipboard write returns an accurate manual-copy route",
+  );
+
   const last = tabs.last();
   const selectedId = await last.getAttribute("data-model-id");
   await last.click();
-  const state = await jsonText(page, "#stateContract");
-  assert.equal(state.activeModelId, selectedId);
+  const changed = await page.evaluate(() => ({
+    state: globalThis.crossFunctionalInvestmentModelStudio.getState(),
+    projection: globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleStateProjection(),
+    fingerprint: globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleFingerprint(),
+    assisted: globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleMarkdown("skill-assisted"),
+  }));
+  assert.equal(changed.state.activeModelId, selectedId);
+  assert.equal(changed.projection.state.activeModelId, selectedId);
+  assert.notEqual(changed.fingerprint, initial.fingerprint);
+  assert.equal(promptCapsuleFingerprintFrom(changed.assisted), changed.fingerprint);
+  assert.match(changed.assisted, /Whole-Life TCO with OpEx &amp; Scaling/u);
+  assert.match(changed.assisted, /Keep rates and economic assumptions as &lt;reserved&gt;/u);
+  assert.equal(await page.locator("#promptCapsuleMarkdown").textContent(), changed.assisted);
   assert.equal(await last.getAttribute("aria-selected"), "true");
+
+  const stateBeforeInvalid = changed.state;
+  await page.evaluate(() => {
+    const invalid = document.createElement("button");
+    invalid.type = "button";
+    invalid.setAttribute("role", "tab");
+    invalid.dataset.modelId = "model/unrecognized";
+    invalid.textContent = "Unrecognized model";
+    document.getElementById("modelTabs").appendChild(invalid);
+    invalid.click();
+    invalid.remove();
+  });
+  assert.deepEqual(
+    await page.evaluate(() => globalThis.crossFunctionalInvestmentModelStudio.getState()),
+    stateBeforeInvalid,
+    "An unrecognized selection leaves the accepted model state available",
+  );
+  assert.equal(
+    await page.evaluate(() => globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleFingerprint()),
+    changed.fingerprint,
+  );
+
+  const downloadExpected = await page.locator("#promptCapsuleMarkdown").textContent();
+  await page.evaluate(() => {
+    const createObjectURL = URL.createObjectURL.bind(URL);
+    URL.createObjectURL = (blob) => {
+      globalThis.__investmentPromptDownloadType = blob.type;
+      return createObjectURL(blob);
+    };
+  });
+  const [download] = await Promise.all([
+    carrierPage.waitForEvent("download"),
+    page.locator("#downloadPromptCapsule").click(),
+  ]);
+  assert.equal(
+    download.suggestedFilename(),
+    "cross-functional-investment-model-studio.whole-life-tco.prompt-capsule.r0.1.0.skill-assisted.md",
+  );
+  assert.equal(await download.failure(), null);
+  assert.equal(await page.evaluate(() => globalThis.__investmentPromptDownloadType), "text/markdown;charset=utf-8");
+  const downloadPath = await download.path();
+  assert.ok(downloadPath, "Investment Model Studio Prompt Capsule download has a browser-owned path");
+  assert.equal(await readFile(downloadPath, "utf8"), downloadExpected);
 }
 
 async function exerciseThreadkeeping({ carrierPage, page }) {
@@ -1280,7 +1577,10 @@ const behaviorProfiles = new Map([
     exercise: exerciseAiGallery,
   }],
   ["cross-functional-investment-model-studio", {
-    policy: { sandbox_tokens: ["allow-scripts"], permissions_policy: [] },
+    policy: {
+      sandbox_tokens: ["allow-downloads", "allow-popups", "allow-popups-to-escape-sandbox", "allow-scripts"],
+      permissions_policy: ["clipboard-write"],
+    },
     exercise: exerciseInvestmentModelStudio,
   }],
   ["threadkeeping-ledger", {
