@@ -30,6 +30,7 @@
     "Practitioner Probe records preserve question, what-it-reveals, technical-core, edge-case, and AI-directive fields.",
     "All twenty Core Architecture cards remain available as routes.",
     "Target-local edits and AI imports create reviewable successor state.",
+    "The prompt-capsule/0.1.0 projection keeps plain and skill-assisted Markdown on one canonical represented-state fingerprint while view and transient state remain outside it.",
     "Aligned common-scale charts and structured tables carry consequential comparisons."
   ],
   "seedDecision": {
@@ -103,20 +104,20 @@
   "files": [
     {
       "name": "technology-fit-sampling-tableau-chimeric-prototype-v0.2.html",
-      "bytes": 238463,
-      "sha256": "34a5fc96d92d78a449d63779be16b1a2f9518cc5816acc9ada1c579a79ccc979",
+      "bytes": 293315,
+      "sha256": "5f7b8382c734933c876bba5b0ba4c9a3172eae63784f4e3153c95779afb8d3b1",
       "role": "interactive_prototype"
     },
     {
       "name": "technology-fit-sampling-tableau-prototype-addendum-v0.1.md",
-      "bytes": 7385,
-      "sha256": "c83c35d72816c732130d13911bc3c56fd934d9fcbd96d67113d043f49849059b",
+      "bytes": 8550,
+      "sha256": "b94faa6620e65db243f57bd3b45f9456aaf486a2d0662445b0668f6c7a684698",
       "role": "prototype_addendum"
     },
     {
       "name": "technology-fit-sampling-tableau-prototype-profile-v0.1.yaml",
-      "bytes": 4989,
-      "sha256": "714de2cd7f2a174a752244e7b1e53fcd74291ba2db4651b0eb4667c42639dab2",
+      "bytes": 5435,
+      "sha256": "affab8e78c879ce399b023205766e2ccc7a90d4fa99f19e0000589e1375ff868",
       "role": "prototype_profile"
     },
     {

@@ -140,7 +140,14 @@ Until then, `formalStatisticalFitBoundary.status` remains `not_yet_applicable`.
 
 ## AI Prompt Capsule
 
-The capsule asks for:
+The self-contained prototype implements `prompt-capsule/0.1.0` without changing
+the Technology Fit state or schema version. Its plain view is complete on its
+own. The skill-assisted view adds exact public source coordinates for
+Practitioner Probe, Evidence-Grounded Research Spike, and Stateful Artifact
+Behavior Contracts. Both views include the visitor-surface-change and
+repository-reentry loops with a condition that explains when each loop fits.
+
+The capsule carries:
 
 - materially distinct candidates;
 - composable stack layers;
@@ -153,7 +160,18 @@ The capsule asks for:
 - Practitioner Probe and Core Architecture routes;
 - decision, abstention, and review conditions.
 
-A structured AI response can enter the prototype as a successor run. Human edits, AI-proposed values, and observed evidence remain distinguishable through state and provenance fields.
+One canonical fingerprint represents the material sampling state in both
+views; selector choice and transient visitor state do not change it. The
+source-authored plain Markdown remains readable without JavaScript. Native
+radio controls select a view, an accessible status reports selection and
+exchange results, and copy and download return the active Markdown exactly.
+The frozen programmatic seam exposes detached state and read-only projection
+methods without a state mutator.
+
+A structured AI response can enter the prototype as a successor run. Human
+edits, AI-proposed values, and observed evidence remain distinguishable through
+state and provenance fields. Literal collaborator text is escaped for a GitHub
+Flavored Markdown context before it enters either projection.
 
 ## Visualization and accessibility
 
@@ -168,6 +186,8 @@ The prototype provides:
 - a table equivalent for each visual comparison;
 - a full candidate inspector;
 - JSON and JSON-LD twins;
+- native Prompt Capsule view radios with live status feedback;
+- a complete no-JavaScript plain Prompt Capsule baseline;
 - stable identity independent of sorting or visual placement.
 
 ## Source and publication note

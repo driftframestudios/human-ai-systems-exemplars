@@ -146,6 +146,18 @@ async function downloadedJson(page, selector) {
   return JSON.parse(await readFile(path, "utf8"));
 }
 
+async function downloadedText(page, selector) {
+  const downloadPromise = page.waitForEvent("download");
+  await page.locator(selector).click();
+  const download = await downloadPromise;
+  const path = await download.path();
+  assert.ok(path, `${selector} should create a local download`);
+  return {
+    fileName: download.suggestedFilename(),
+    text: await readFile(path, "utf8")
+  };
+}
+
 async function composerPath(browser, origin) {
   const { context, page, telemetry } = await openFresh(browser, origin, routes.composer);
   try {
@@ -515,6 +527,207 @@ async function technologyPath(browser, origin) {
     assert.equal(recovered.id, migrated.id);
     assert.equal(recovered.activeRunId, migrated.activeRunId);
     assert.equal(recovered.runs.length, migrated.runs.length);
+    assertTelemetry(telemetry);
+  } finally {
+    await context.close();
+  }
+}
+
+async function technologyPromptCapsulePath(browser, origin) {
+  const { context, page, telemetry } = await openFresh(browser, origin, routes.technology);
+  try {
+    const seam = await page.evaluate(() => {
+      const api = window.technologyFitSamplingTableau;
+      const detached = api.getState();
+      const workingDecision = api.getState().promptCapsule.currentDecision;
+      detached.promptCapsule.currentDecision = "Detached mutation";
+      return {
+        frozen: Object.isFrozen(api),
+        viewsFrozen: Object.isFrozen(api.promptCapsuleViews),
+        keys: Object.keys(api).sort(),
+        contract: api.promptCapsuleContract,
+        version: api.version,
+        stateSchemaVersion: api.stateSchemaVersion,
+        view: api.getPromptCapsuleView(),
+        plain: api.promptCapsule(),
+        plainByView: api.promptCapsuleMarkdown("plain"),
+        fingerprint: api.promptCapsuleFingerprint(),
+        detached: api.getState().promptCapsule.currentDecision === workingDecision
+      };
+    });
+    assert.equal(seam.frozen, true);
+    assert.equal(seam.viewsFrozen, true);
+    assert.deepEqual(seam.keys, [
+      "getPromptCapsuleView",
+      "getState",
+      "promptCapsule",
+      "promptCapsuleContract",
+      "promptCapsuleFingerprint",
+      "promptCapsuleMarkdown",
+      "promptCapsuleStateProjection",
+      "promptCapsuleViews",
+      "stateSchemaVersion",
+      "version"
+    ]);
+    assert.equal(seam.contract, "prompt-capsule/0.1.0");
+    assert.equal(seam.version, "0.1");
+    assert.equal(seam.stateSchemaVersion, "0.1");
+    assert.equal(seam.view, "plain");
+    assert.equal(seam.detached, true);
+    assert.equal(seam.plain, seam.plainByView);
+
+    const promptPreview = page.locator("#promptPreview");
+    const initialPlain = await promptPreview.textContent();
+    assert.equal(initialPlain, seam.plain, "the visible default should equal the canonical plain capsule bytes");
+    assert.equal(await promptPreview.getAttribute("data-prompt-view-active"), "plain");
+    assert.equal(await page.locator("#promptViewControl legend").textContent(), "Markdown view");
+    assert.equal(await page.locator('#promptViewControl input[type="radio"]').count(), 2);
+    assert.equal(await page.locator('[data-prompt-view][value="plain"]').isChecked(), true);
+    assert.match(initialPlain, /- Contract: `prompt-capsule\/0\.1\.0`/u);
+    assert.match(initialPlain, /- View: `plain`/u);
+    assert.doesNotMatch(initialPlain, /^## Skill assistance$/mu);
+    for (const fragment of [
+      "https://schemas.radiantnull.com/collaboration/#visitor-surface-change",
+      "Fit when an equivalent candidate spike changes a visible or interactive surface",
+      "https://schemas.radiantnull.com/collaboration/#repository-reentry",
+      "Fit when a successor run resumes as repository work"
+    ]) assert.ok(initialPlain.includes(fragment), `plain Markdown should carry ${fragment}`);
+
+    const noScriptContext = await browser.newContext({
+      javaScriptEnabled: false,
+      viewport: { width: 1440, height: 1000 }
+    });
+    try {
+      const noScriptPage = await noScriptContext.newPage();
+      await noScriptPage.goto(`${origin}/${routes.technology}`, { waitUntil: "domcontentloaded" });
+      assert.equal(
+        await noScriptPage.locator("#promptPreview").textContent(),
+        initialPlain,
+        "the source-authored no-JavaScript baseline should equal the runtime plain projection"
+      );
+      assert.match(await noScriptPage.locator("noscript").textContent(), /complete plain Markdown remains available/u);
+    } finally {
+      await noScriptContext.close();
+    }
+
+    const initialState = await previewJson(page, "#jsonPreview");
+    await page.locator("#intervalToggle").uncheck();
+    const transientState = await previewJson(page, "#jsonPreview");
+    assert.equal(transientState.viewState.showIntervals, false);
+    assert.notDeepEqual(transientState.viewState, initialState.viewState);
+    const afterTransient = await page.evaluate(() => ({
+      markdown: window.technologyFitSamplingTableau.promptCapsule(),
+      fingerprint: window.technologyFitSamplingTableau.promptCapsuleFingerprint()
+    }));
+    assert.equal(afterTransient.markdown, initialPlain);
+    assert.equal(afterTransient.fingerprint, seam.fingerprint, "transient view state should not change the represented-state fingerprint");
+
+    const assistedControl = page.locator('[data-prompt-view][value="skill-assisted"]');
+    await assistedControl.focus();
+    await assistedControl.press("Space");
+    assert.equal(await assistedControl.isChecked(), true);
+    assert.equal(await page.evaluate(() => document.activeElement?.value), "skill-assisted", "keyboard selection should retain focus");
+    assert.match(await page.locator("#promptViewStatus").textContent(), /Skill-assisted Markdown view selected/u);
+    assert.equal(await promptPreview.getAttribute("data-prompt-view-active"), "skill-assisted");
+    assert.deepEqual(await previewJson(page, "#jsonPreview"), transientState, "view selection should not enter exported state");
+
+    const assisted = await promptPreview.textContent();
+    const assistedSeam = await page.evaluate(() => ({
+      markdown: window.technologyFitSamplingTableau.promptCapsuleMarkdown("skill-assisted"),
+      fingerprint: window.technologyFitSamplingTableau.promptCapsuleFingerprint()
+    }));
+    assert.equal(assisted, assistedSeam.markdown);
+    assert.equal(assistedSeam.fingerprint, seam.fingerprint);
+    assert.match(assisted, /- View: `skill-assisted`/u);
+    assert.match(assisted, /^## Skill assistance$/mu);
+    assert.match(assisted, /Source revision: `64992546a4fe7f6fd7b2e27022f0625033a81cf1`/u);
+    for (const [name, path, digest] of [
+      ["Practitioner Probe", ".agents/skills/practitioner-probe/SKILL.md", "348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c"],
+      ["Evidence-Grounded Research Spike", ".agents/skills/evidence-grounded-research-spike/SKILL.md", "844fc0c6b0b956b81984a2c2d47d9252abadeb0a6554c5ef4734d0f1e5f4b531"],
+      ["Stateful Artifact Behavior Contracts", ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md", "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a"]
+    ]) {
+      assert.ok(assisted.includes(name));
+      assert.ok(assisted.includes(path));
+      assert.ok(assisted.includes(digest));
+    }
+
+    await page.evaluate(() => {
+      window.__copiedPrompt = "";
+      Object.defineProperty(navigator, "clipboard", {
+        configurable: true,
+        value: { writeText: async value => { window.__copiedPrompt = value; } }
+      });
+      const createObjectURL = URL.createObjectURL.bind(URL);
+      window.__promptDownloadTypes = [];
+      URL.createObjectURL = blob => {
+        window.__promptDownloadTypes.push(blob.type);
+        return createObjectURL(blob);
+      };
+    });
+    await page.locator("#copyPromptBtn").click();
+    assert.equal(await page.evaluate(() => window.__copiedPrompt), assisted);
+    assert.match(await page.locator("#promptViewStatus").textContent(), /Skill-assisted Markdown copied/u);
+    const assistedDownload = await downloadedText(page, "#downloadPromptBtn");
+    assert.equal(assistedDownload.fileName, "technology-fit-sampling-tableau.prompt-capsule.r0.1.skill-assisted.md");
+    assert.equal(assistedDownload.text, assisted);
+    assert.deepEqual(await page.evaluate(() => window.__promptDownloadTypes), ["text/markdown;charset=utf-8"]);
+
+    const plainControl = page.locator('[data-prompt-view][value="plain"]');
+    await plainControl.check();
+    assert.equal(await promptPreview.textContent(), afterTransient.markdown);
+    await page.locator("#copyPromptBtn").click();
+    assert.equal(await page.evaluate(() => window.__copiedPrompt), afterTransient.markdown);
+
+    await page.locator("details:has(#stateImportInput) > summary").click();
+    const literal = structuredClone(transientState);
+    literal.id = "na:literal`source";
+    literal.promptCapsule.currentDecision = "Inspect <img src=x> [linked](https://example.invalid) @mention ~~change~~ www.example.invalid #42";
+    await page.locator("#stateImportInput").fill(JSON.stringify(literal));
+    await page.locator("#importStateBtn").click();
+    assert.match(await page.locator("#importStatus").textContent(), /Technology-fit state imported/u);
+    const literalPrompt = await promptPreview.textContent();
+    assert.ok(literalPrompt.includes("&lt;img src=x&gt;"));
+    assert.ok(literalPrompt.includes("\\[linked\\](https\\://example.invalid)"));
+    assert.ok(literalPrompt.includes("\\@mention"));
+    assert.ok(literalPrompt.includes("\\~\\~change\\~\\~"));
+    assert.ok(literalPrompt.includes("www\\.example.invalid"));
+    assert.ok(literalPrompt.includes("\\#42"));
+    assert.ok(literalPrompt.includes("- Source: ``na:literal\\`source@0.1``"), "backtick-bearing IDs should remain inside a literal code span");
+    assert.notEqual(await page.evaluate(() => window.technologyFitSamplingTableau.promptCapsuleFingerprint()), seam.fingerprint);
+
+    const finePrecisionA = structuredClone(literal);
+    const activeA = finePrecisionA.runs.find(run => run.id === finePrecisionA.activeRunId);
+    activeA.candidates[0].defaultLikelihood.estimate = 0.3001;
+    activeA.otherOrTailMass = 0.0199;
+    await page.locator("#stateImportInput").fill(JSON.stringify(finePrecisionA));
+    await page.locator("#importStateBtn").click();
+    assert.match(await page.locator("#importStatus").textContent(), /Technology-fit state imported/u);
+    const precisionMarkdown = await promptPreview.textContent();
+    const precisionFingerprint = await page.evaluate(() => window.technologyFitSamplingTableau.promptCapsuleFingerprint());
+
+    const finePrecisionB = structuredClone(finePrecisionA);
+    const activeB = finePrecisionB.runs.find(run => run.id === finePrecisionB.activeRunId);
+    activeB.candidates[0].defaultLikelihood.estimate = 0.3002;
+    activeB.otherOrTailMass = 0.0198;
+    await page.locator("#stateImportInput").fill(JSON.stringify(finePrecisionB));
+    await page.locator("#importStateBtn").click();
+    assert.match(await page.locator("#importStatus").textContent(), /Technology-fit state imported/u);
+    assert.equal(await promptPreview.textContent(), precisionMarkdown, "sub-display numeric precision should not change represented Markdown");
+    assert.equal(
+      await page.evaluate(() => window.technologyFitSamplingTableau.promptCapsuleFingerprint()),
+      precisionFingerprint,
+      "sub-display numeric precision should not change the represented-state fingerprint"
+    );
+
+    const acceptedMarkdown = await promptPreview.textContent();
+    const acceptedFingerprint = await page.evaluate(() => window.technologyFitSamplingTableau.promptCapsuleFingerprint());
+    const invalid = structuredClone(finePrecisionB);
+    delete invalid.id;
+    await page.locator("#stateImportInput").fill(JSON.stringify(invalid));
+    await page.locator("#importStateBtn").click();
+    assert.match(await page.locator("#importStatus").textContent(), /Current technology-fit state is still available/u);
+    assert.equal(await promptPreview.textContent(), acceptedMarkdown);
+    assert.equal(await page.evaluate(() => window.technologyFitSamplingTableau.promptCapsuleFingerprint()), acceptedFingerprint);
     assertTelemetry(telemetry);
   } finally {
     await context.close();
@@ -914,6 +1127,7 @@ try {
   await verify("Semantic Sampling · active-run prompt contract and variant lineage", () => semanticPromptAndLineagePath(browser, server.origin));
   await verify("Semantic Sampling · exact exclusive normalization and minimum usable set", () => semanticNormalizationPath(browser, server.origin));
   await verify("Technology Fit · AI successor, browser round trip, export, and recovery", () => technologyPath(browser, server.origin));
+  await verify("Technology Fit · Prompt Capsule views, exact exchange, fingerprint, escaping, and recovery", () => technologyPromptCapsulePath(browser, server.origin));
   await verify("Technology Fit · rapid composition identity and collision-safe recovery", () => technologyCompositionIdentityPath(browser, server.origin));
   await verify("Technology Fit · decision synchronization and successor lineage", () => technologyDecisionAndLineagePath(browser, server.origin));
   await verify("Technology Fit · aligned successor exchange and minimum candidate boundary", () => technologySuccessorExchangePath(browser, server.origin));
