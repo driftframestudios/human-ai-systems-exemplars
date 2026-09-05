@@ -157,6 +157,13 @@
   .sc-implications summary { cursor: pointer; font-weight: 750; }
   .sc-implications ul { padding-inline-start: 1.2rem; }
   .sc-implications li + li { margin-block-start: 0.55rem; }
+  .sc-related-loops { margin-block-start: 1rem; padding: 0.4rem 1rem 0.9rem; border: 1px solid var(--sc-line); background: var(--sc-sheet); }
+  .sc-related-loops summary { min-height: 2.75rem; padding-block: 0.55rem; cursor: pointer; font-weight: 750; }
+  .sc-related-loops a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+  .sc-related-loops :is(summary, a):focus-visible { outline: 3px solid var(--sc-focus); outline: 3px solid color-mix(in srgb, var(--sc-focus) 66%, transparent); outline-offset: 3px; }
+  .sc-related-loops ul { margin-block-end: 0; padding-inline-start: 1.2rem; }
+  .sc-related-loops li + li { margin-block-start: 0.9rem; }
+  .sc-related-loops li p { margin: 0.25rem 0 0; max-width: var(--sc-readable); }
   .sc-label { display: block; margin-block-end: 0.25rem; font-size: 0.78rem; font-weight: 750; }
   .sc-field { display: grid; gap: 0.25rem; }
   .sc-help { color: var(--sc-muted); font-size: 0.8rem; }

@@ -14,6 +14,20 @@ import {
 const CANONICAL = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.4.html";
 const CONTEXT = "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html";
 const PROMPT_CAPSULE_EXAMPLE = "prompt-capsules/0.1.0/examples/strategy-canvas.md";
+const RELATED_LOOPS = [
+  {
+    id: "repository-reentry",
+    name: "Re-enter, make one bounded change, and return it clearly",
+    publicUrl: "https://schemas.radiantnull.com/collaboration/#repository-reentry",
+    fit: "Use when this versioned canvas carries a named question or requested change into resumed repository work and the return needs an exact stopping and re-entry point."
+  },
+  {
+    id: "public-release",
+    name: "Publish a repeatable, byte-comparable artifact through a named destination",
+    publicUrl: "https://schemas.radiantnull.com/collaboration/#public-release",
+    fit: "Use after people accept this canvas revision as source for a public artifact whose declared files and bytes need a named delivery receiver."
+  }
+];
 const NARRATIVE_COMPOSERS = [
   {
     name: "Context",
@@ -922,6 +936,77 @@ async function canonicalPromptCapsuleContract(browser, url) {
   });
 }
 
+async function canonicalRelatedLoopsContract(browser, url) {
+  await verify("canonical · native Related loops disclosure shares the Prompt Capsule metadata", async () => {
+    const { context, page, telemetry } = await openPage(browser, url, VIEWPORTS[0]);
+    try {
+      const details = page.locator('details[data-sc-role="related-loops"]');
+      const summary = details.locator("summary");
+      assert(await details.count() === 1 && await details.isVisible(), "The canonical visitor surface should expose one visible native Related loops disclosure.");
+      assert(await summary.evaluate((element) => element.tagName === "SUMMARY"), "Related loops should use the native details/summary control.");
+      assert(await details.evaluate((element) => element.open) === false, "The Related loops disclosure should begin collapsed.");
+
+      const sourceLoops = await page.evaluate(() => window.StrategyCanvasCore.promptCapsuleRelatedLoops.map((loop) => ({
+        id: loop.id,
+        name: loop.name,
+        publicUrl: loop.publicUrl,
+        fit: loop.fit
+      })));
+      const visibleLoops = await details.locator("[data-related-loop-id]").evaluateAll((items) => items.map((item) => {
+        const link = item.querySelector("a[data-related-loop-link]");
+        return {
+          id: item.dataset.relatedLoopId,
+          name: link?.textContent.trim() || "",
+          publicUrl: link?.href || "",
+          fit: item.querySelector("p")?.textContent.replace(/^Fit condition:\s*/u, "").trim() || ""
+        };
+      }));
+      assert(same(sourceLoops, RELATED_LOOPS), "The exported core metadata should retain the exact accepted two-loop set.");
+      assert(same(visibleLoops, sourceLoops), "The native visitor control should be generated from the same loop metadata as Markdown.");
+
+      await page.evaluate(() => document.activeElement?.blur());
+      let reachedSummary = false;
+      for (let index = 0; index < 8; index += 1) {
+        await page.keyboard.press("Tab");
+        reachedSummary = await summary.evaluate((element) => document.activeElement === element);
+        if (reachedSummary) break;
+      }
+      assert(reachedSummary, "The Related loops summary should be reachable in native keyboard order.");
+      const summaryFocus = await summary.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        const style = getComputedStyle(element);
+        return { width: rect.width, height: rect.height, outlineWidth: Number.parseFloat(style.outlineWidth) || 0 };
+      });
+      assert(summaryFocus.width >= 44 && summaryFocus.height >= 44, `The Related loops summary should retain a touch-sized target. ${JSON.stringify(summaryFocus)}`);
+      assert(summaryFocus.outlineWidth >= 3, "Keyboard focus should remain visibly outlined on the Related loops summary.");
+      await page.keyboard.press("Enter");
+      assert(await details.evaluate((element) => element.open), "Enter on the native summary should reveal the related loops.");
+
+      const links = details.locator("a[data-related-loop-link]");
+      assert(await links.count() === 2, "The open disclosure should expose exactly two native anchors.");
+      for (let index = 0; index < await links.count(); index += 1) {
+        const target = await links.nth(index).boundingBox();
+        assert(target && target.width >= 44 && target.height >= 44, `Related loop ${index + 1} should retain a touch-sized anchor target.`);
+      }
+      await page.evaluate(() => {
+        window.__strategyCanvasRelatedLoopActivation = "";
+        const link = document.querySelector('a[data-related-loop-link]');
+        link.addEventListener("click", (event) => {
+          event.preventDefault();
+          window.__strategyCanvasRelatedLoopActivation = link.href;
+        }, { once: true });
+      });
+      await links.first().focus();
+      assert(await links.first().evaluate((element) => (Number.parseFloat(getComputedStyle(element).outlineWidth) || 0) >= 3), "A related-loop anchor should retain a visible keyboard focus indicator.");
+      await page.keyboard.press("Enter");
+      assert(await page.evaluate(() => window.__strategyCanvasRelatedLoopActivation) === RELATED_LOOPS[0].publicUrl, "Enter should activate the first native public loop anchor.");
+      assertTelemetry(telemetry);
+    } finally {
+      await context.close();
+    }
+  });
+}
+
 async function canonicalImportBoundaryContract(browser, url) {
   await verify("canonical · malformed, oversized, deep, and high-node imports fail locally with state intact", async () => {
     const { context, page, telemetry } = await openPage(browser, url, VIEWPORTS[1]);
@@ -1056,6 +1141,21 @@ async function noJavaScriptContract(browser, url, kind) {
         assert(await page.locator(".sc-static-twin tbody tr").count() === 6, "Canonical static twin should retain all six dimensions.");
         assert(await page.locator('[data-strategy-canvas-source="method-origin"]').isVisible(), "Canonical static reading should retain its method and adaptation source note.");
         assert(await page.locator('[data-sc-role="static-prompt"]').textContent() === await readFile(resolve(PROMPT_CAPSULE_EXAMPLE), "utf8"), "Canonical static reading should retain the checked plain Markdown default.");
+        const details = page.locator('details[data-sc-role="related-loops"]');
+        const summary = details.locator("summary");
+        assert(await details.count() === 1 && await details.isVisible(), "Canonical static reading should retain one native Related loops disclosure.");
+        assert(await details.evaluate((element) => element.open) === false, "The no-JavaScript Related loops disclosure should begin collapsed.");
+        await summary.click();
+        assert(await details.evaluate((element) => element.open), "The native Related loops disclosure should open without JavaScript.");
+        const staticLoops = await details.locator("[data-related-loop-id]").evaluateAll((items) => items.map((item) => ({
+          id: item.dataset.relatedLoopId,
+          name: item.querySelector("a")?.textContent.trim() || "",
+          publicUrl: item.querySelector("a")?.href || "",
+          fit: item.querySelector("p")?.textContent.replace(/^Fit condition:\s*/u, "").trim() || ""
+        })));
+        assert(same(staticLoops, RELATED_LOOPS), "The no-JavaScript disclosure should retain the exact accepted two-loop set and fit conditions.");
+        const summaryTarget = await summary.boundingBox();
+        assert(summaryTarget && summaryTarget.width >= 44 && summaryTarget.height >= 44, "The no-JavaScript disclosure summary should retain a touch-sized target.");
       } else {
         assert(await page.locator(".static-field").isVisible(), "Context static field should remain visible.");
         assert(await page.locator(".static-field tbody tr").count() === 6, "Context static field should retain all six starting dimensions.");
@@ -1555,6 +1655,7 @@ async function main() {
     await canonicalColumnGeometryContract(browser, canonicalUrl);
     await canonicalInteractionContract(browser, canonicalUrl);
     await canonicalPromptCapsuleContract(browser, canonicalUrl);
+    await canonicalRelatedLoopsContract(browser, canonicalUrl);
     await canonicalExchangeRecoveryContract(browser, canonicalUrl);
     await canonicalImportBoundaryContract(browser, canonicalUrl);
     await canonicalZoomContract(browser, canonicalUrl);

@@ -119,8 +119,8 @@
       "evidence": "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
       "expression": "canonical",
       "exists": true,
-      "size_bytes": 163651,
-      "sha256": "77b790928844a8dc736c656f296dd567a8689a7c3b81e88841dd5f397093c66f"
+      "size_bytes": 165571,
+      "sha256": "c1996b735dd71c030f98a57e5e20dadf44e75fdccfda0c2378b34f285e946c23"
     },
     {
       "id": "first-responsible-version-matrix",

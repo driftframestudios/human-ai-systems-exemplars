@@ -50,6 +50,22 @@ if (defaultExample !== expectedDefaultExample) {
   throw new Error('The checked Strategy Canvas default Prompt Capsule example differs from the plain renderer.');
 }
 
+const relatedLoops = coreContext.StrategyCanvasCore.promptCapsuleRelatedLoops;
+if (!Array.isArray(relatedLoops) || relatedLoops.length === 0) {
+  throw new Error('The Strategy Canvas core must declare related collaboration loops.');
+}
+const relatedLoopsControl = `
+    <details class="sc-related-loops" data-sc-role="related-loops">
+      <summary>Related collaboration loops</summary>
+      <p class="sc-help">These public collaboration loops fit only when the receiving work meets the stated condition.</p>
+      <ul>
+${relatedLoops.map((loop) => `        <li data-related-loop-id="${escapeHtml(loop.id)}">
+          <a data-related-loop-link href="${escapeHtml(loop.publicUrl)}">${escapeHtml(loop.name)}</a>
+          <p><strong>Fit condition:</strong> ${escapeHtml(loop.fit)}</p>
+        </li>`).join('\n')}
+      </ul>
+    </details>`;
+
 const method = evidence.methodOrigin;
 const representation = evidence.representations?.canonical;
 const evidenceRoute = 'strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json';
@@ -64,19 +80,21 @@ const methodSourceNote = `
 
 const output = template
   .replace('/*__STRATEGY_CANVAS_CSS__*/', () => css.trim())
+  .replace('<!--__STRATEGY_CANVAS_RELATED_LOOPS__-->', () => relatedLoopsControl.trim())
   .replace('/*__STRATEGY_CANVAS_DEFAULT_PROMPT_CAPSULE__*/', () => escapeHtml(defaultExample))
   .replace('<!--__STRATEGY_CANVAS_EVIDENCE_NOTE__-->', () => methodSourceNote.trim())
   .replace('/*__STRATEGY_CANVAS_VALIDATOR__*/', () => validator.trim())
   .replace('/*__STRATEGY_CANVAS_CORE__*/', () => core.trim())
   .replace('/*__STRATEGY_CANVAS_CANONICAL__*/', () => canonical.trim());
 
-if (output.includes('/*__STRATEGY_CANVAS_')) {
+if (output.includes('__STRATEGY_CANVAS_')) {
   throw new Error('The canonical template contains an unresolved build marker.');
 }
 
 const progressiveEnhancementMarkers = [
   'data-sc-role="static-baseline"',
   'data-sc-role="static-prompt"',
+  'data-sc-role="related-loops"',
   "scEnhancementState = 'mounted'",
   "scEnhancementState = 'static'"
 ];
