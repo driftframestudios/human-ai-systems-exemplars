@@ -41,8 +41,8 @@ travels directly with each self-contained HTML carrier across projections and
 publication.
 
 Strategy Canvas is maintained through its canonical template and stylesheet;
-the generated current distribution inherits the contract. The current visitor
-set covers Strategy Canvas v0.2.2. The resting v0.1.1 compatibility route is
+the generated current distribution inherits the contract. The current canonical
+visitor set covers Strategy Canvas v0.2.3. The resting v0.1.1 compatibility route is
 generated from its system-local source, including a location-correct link and
 the same attribution contract. Its Context Canvas workbench retains its
 adapted document and style owners. The repository-root `LICENSE` remains the
@@ -69,7 +69,8 @@ the source owner explicitly; it does not add the Conditioning Field to the
 
 The same manifest carries each route's minimal carrier policy. The scriptless
 pack hub uses an empty sandbox. A prototype with executable behavior grants
-`allow-scripts`, and a route that writes clipboard text delegates only the
+`allow-scripts`; a route with an implemented file download grants
+`allow-downloads`; and a route that writes clipboard text delegates only the
 `clipboard-write` Permissions Policy feature. Every current route now uses an
 ordinary inline notice, input, or two-step confirmation instead of native
 browser dialogs, so no route retains a held capability. An `eligible` route is

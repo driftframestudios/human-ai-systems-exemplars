@@ -472,11 +472,11 @@ function assertHostedIframePolicy(carrier, safePath, iframeCarrierPolicies = nul
   const sandboxTokens = sandbox.split(/\s+/).filter(Boolean);
   if (
     new Set(sandboxTokens).size !== sandboxTokens.length ||
-    sandboxTokens.some((token) => token !== "allow-scripts")
+    sandboxTokens.some((token) => !["allow-downloads", "allow-scripts"].includes(token))
   ) {
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_IFRAME_POLICY",
-      `${key} may grant only its observed allow-scripts sandbox capability in ${safePath}`,
+      `${key} may grant only its observed download and script sandbox capabilities in ${safePath}`,
     );
   }
 

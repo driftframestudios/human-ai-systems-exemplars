@@ -16,6 +16,10 @@ const routeManifestPath = join(
   repositoryRoot,
   "core-architectures-chimeric-prototype-current-pack-v0.1/public-iframe-route-manifest-v1.json",
 );
+const contextCoreManifestPath = join(
+  contextRoot,
+  "prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json",
+);
 const canvasRouteManifestPath = join(
   repositoryRoot,
   "iframe-route-families/canvas/public-iframe-route-manifest-v1.json",
@@ -251,13 +255,13 @@ function localReferenceIdentity(ownerPath, href) {
   return `${repositoryPath(resolve(dirname(ownerPath), match[1]))}${match[2] ?? ""}`;
 }
 
-function routeSourceIdentity(family, route) {
+function routeSourceIdentity(family, route, contextCoreFiles = new Map()) {
   if (family === "canvas") {
     return `${route.source_file}${route.source_view ? `?view=${route.source_view}` : ""}`;
   }
   const sourceRoot = route.source_root ??
     "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1";
-  return `${sourceRoot}/${route.source_file}`;
+  return `${sourceRoot}/${contextCoreFiles.get(route.id) ?? route.source_file}`;
 }
 
 function enclosingSemanticBlocks(html, targetIndex) {
@@ -327,13 +331,19 @@ async function discoverVisitorCarriers() {
 }
 
 test("all Context Canvas iframe carriers remain explicitly inventoried", async () => {
-  const manifests = await Promise.all([
+  const [manifests, contextCoreManifest] = await Promise.all([
+    Promise.all([
     ["core", routeManifestPath],
     ["canvas", canvasRouteManifestPath],
   ].map(async ([family, path]) => [
     family,
     JSON.parse(await readFile(path, "utf8")),
-  ]));
+    ])),
+    readFile(contextCoreManifestPath, "utf8").then(JSON.parse),
+  ]);
+  const contextCoreFiles = new Map(
+    contextCoreManifest.prototypes.map((entry) => [entry.id, entry.file]),
+  );
   const routeByPublicUrl = new Map();
   for (const [family, manifest] of manifests) {
     for (const route of manifest.routes) {
@@ -393,7 +403,7 @@ test("all Context Canvas iframe carriers remain explicitly inventoried", async (
       `${label} omits an empty Permissions Policy attribute`,
     );
 
-    const sourceIdentity = routeSourceIdentity(profile.family, profile.route);
+    const sourceIdentity = routeSourceIdentity(profile.family, profile.route, contextCoreFiles);
     const sourcePath = resolve(repositoryRoot, sourceIdentity.split(/[?#]/u, 1)[0]);
     assert.equal((await stat(sourcePath)).isFile(), true, `${label} local source is a regular file`);
     const singleCarrierBlocks = carrier.blocks.filter(
@@ -455,7 +465,13 @@ test("the retained cobalt exemplar keeps exact carrier parity with the primary i
 });
 
 test("manifest-owned prototype carriers keep a minimal explicit iframe boundary", async () => {
-  const manifest = JSON.parse(await readFile(routeManifestPath, "utf8"));
+  const [manifest, contextCoreManifest] = await Promise.all([
+    readFile(routeManifestPath, "utf8").then(JSON.parse),
+    readFile(contextCoreManifestPath, "utf8").then(JSON.parse),
+  ]);
+  const contextCoreFiles = new Map(
+    contextCoreManifest.prototypes.map((entry) => [entry.id, entry.file]),
+  );
   const routeByPublicUrl = new Map(
     manifest.routes.map((route) => [
       `https://${manifest.host}${route.public_alias}`,
@@ -523,7 +539,7 @@ test("manifest-owned prototype carriers keep a minimal explicit iframe boundary"
     );
     const localFullView = route.id === "conditioning-field"
       ? "conditioning-field.html"
-      : `prototypes/core-architectures/chimeric-pack-v0.1/${route.source_file}`;
+      : `prototypes/core-architectures/chimeric-pack-v0.1/${contextCoreFiles.get(route.id) ?? route.source_file}`;
     assert.match(
       carrier.figure,
       new RegExp(`href=["']${escapeExpression(localFullView)}["']`, "i"),
@@ -588,5 +604,10 @@ test("manifest-owned prototype carriers keep a minimal explicit iframe boundary"
   const downloadCarriers = carriers.filter(({ tag }) =>
     (attributeValue(tag, "sandbox") ?? "").split(/\s+/).includes("allow-downloads"),
   );
-  assert.equal(downloadCarriers.length, 0, "hosted iframe carriers do not retain local-only download permission");
+  assert.equal(downloadCarriers.length, 2, "the two Strategy Canvas carriers grant their implemented Markdown download");
+  assert.equal(
+    downloadCarriers.every(({ src }) => src === "https://iframes.vik.guru/v1/core/strategy-canvas/"),
+    true,
+    "download capability stays scoped to the Strategy Canvas route",
+  );
 });

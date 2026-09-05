@@ -146,10 +146,17 @@ export function observeIframeRuntimeCapabilities(html) {
 
   const { executableBodies, executableScripts } = iframeExecutableSources(html);
   const executableSource = executableBodies.join("\n");
+  const inertMarkup = html.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "");
   const capabilities = [];
   if (executableScripts) capabilities.push("executable-scripts");
   if (/\bnavigator\.clipboard\b[\s\S]{0,120}?\bwriteText\s*\(/.test(executableSource)) {
     capabilities.push("clipboard-write");
+  }
+  if (
+    /\.download\s*=/.test(executableSource) ||
+    /<a\b[^>]*\bdownload(?:\s|=|>)/i.test(inertMarkup)
+  ) {
+    capabilities.push("file-download");
   }
   if (/(?:^|[^\w.])(?:(?:window|globalThis)\.)?(?:alert|confirm|prompt)\s*\(/m.test(executableSource)) {
     capabilities.push("native-modals");
@@ -219,7 +226,7 @@ function classifyResourceReference(reference, baseDirectory = "") {
 
 function styleReferences(text) {
   const references = [];
-  for (const match of text.matchAll(/url\(\s*(?:"([^"]*)"|'([^']*)'|([^)'"\s][^)]*))\s*\)/gi)) {
+  for (const match of text.matchAll(/(?<![\w$])url\(\s*(?:"([^"]*)"|'([^']*)'|([^)'"\s][^)]*))\s*\)/gi)) {
     references.push({ tag: "style", attribute: "url", reference: match[1] ?? match[2] ?? match[3] });
   }
   for (const match of text.matchAll(/@import\s+(?:url\(\s*)?(?:"([^"]*)"|'([^']*)')/gi)) {

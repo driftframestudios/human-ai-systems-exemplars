@@ -1,0 +1,23 @@
+# Prompt Capsules
+
+Prompt Capsules carry the smallest useful collaboration context from a source
+artifact into a readable, copyable, versioned Markdown handoff. The source
+artifact keeps authority for its state. A capsule is a projection—a derived
+view rather than the source of truth—that names its source, state identity,
+evidence boundary, requested return, and recovery route.
+
+Start with the [Prompt Capsule 0.1.0 contract](0.1.0/prompt-capsule-contract.md).
+Its [Strategy Canvas example](0.1.0/examples/strategy-canvas.md) is generated
+from the canonical default state and checked by that artifact’s builder and
+focused unit contract.
+
+The [classified inventory](prompt-capsule-inventory.v0.1.0.md) distinguishes
+canonical sources, maintained projections, historical versions, generated
+receivers, and independently governed capsule families. It is an ownership map,
+not a count of matching words.
+
+The Strategy Canvas v0.2.3 pilot is the first current artifact to implement
+this general contract. Other capsule-bearing artifacts keep their existing
+contracts until their source owner accepts a migration with a material use and
+fitting tests. Related-loop discovery begins after the public guide supplies
+its stable receiving anchors.

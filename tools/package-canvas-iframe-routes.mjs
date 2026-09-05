@@ -585,11 +585,7 @@ export function deriveCanvasProjection(html, route) {
 function observedCarrierPolicy(html) {
   const runtimeCapabilities = observeIframeRuntimeCapabilities(html);
   const sandboxTokens = [];
-  const markup = html.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "");
-  if (
-    /\.download\s*=/.test(html) ||
-    /<a\b[^>]*\bdownload(?:\s|=|>)/i.test(markup)
-  ) {
+  if (runtimeCapabilities.includes("file-download")) {
     sandboxTokens.push("allow-downloads");
   }
   if (
