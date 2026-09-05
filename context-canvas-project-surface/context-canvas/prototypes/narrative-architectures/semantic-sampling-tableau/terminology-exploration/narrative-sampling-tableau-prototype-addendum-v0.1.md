@@ -85,6 +85,24 @@ The AI Prompt Capsule lowers the cost of a complete verbalized-sampling request 
 
 The generated request leads with desired output state and preserves hard epistemic boundaries.
 
+The prototype now projects that request through `prompt-capsule/0.1.0`. Its
+plain GitHub Flavored Markdown view is complete on its own; the optional
+skill-assisted view adds public collaboration methods while preserving the
+same represented sampling state and fingerprint. Visible, copied, downloaded,
+and programmatic Markdown share one byte stream. Related loops remain
+condition-bound routes, and the JSON sampling state retains semantic
+authority.
+
+The portable request includes the outcome success criteria, outcome and
+condition-profile boundary sets, each candidate's declared dimension scores,
+and a compact comparison with the named baseline run. When a formal
+statistical-fit method is enabled, its complete declared state enters the
+projection and fingerprint and appears in a dedicated Markdown subsection.
+Imported candidates provide one finite zero-to-ten score for every declared
+dimension, keeping absence distinct from a measured zero. Changes to the
+baseline or comparison run, commensurability, probability role, and formal-fit
+controls refresh the visible Prompt Capsule alongside its programmatic view.
+
 ## Visual doctrine
 
 Probability uses a common zero-to-one scale.
