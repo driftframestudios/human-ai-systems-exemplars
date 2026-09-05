@@ -154,9 +154,10 @@ test("Narrative Capsule AI projections carry the prompt sections needed for exch
   );
 });
 
-test("Narrative Capsule links and bundles the manifest-current Core family index", async () => {
-  const [coreManifest, composerManifest, composer, targetRegistry] = await Promise.all([
+test("Narrative Capsule links and bundles the Context-received Core family index", async () => {
+  const [coreManifest, contextCoreManifest, composerManifest, composer, targetRegistry] = await Promise.all([
     json(resolve(coreRoot, "core-architectures-chimeric-prototype-manifest-v0.1.json")),
+    json(resolve(contextCoreRoot, "core-architectures-chimeric-prototype-manifest-v0.1.json")),
     json(resolve(composerRoot, "narrative-capsules-chimeric-prototype-manifest-v0.1.json")),
     readFile(resolve(composerRoot, "narrative-capsules-chimeric-prototype-v0.1.html"), "utf8"),
     json(resolve(composerRoot, "core-architecture-target-pair-registry.v0.1.json"))
@@ -189,10 +190,18 @@ test("Narrative Capsule links and bundles the manifest-current Core family index
       .filter(({ id }) => id !== "core-architecture-family-index")
       .map(({ id, file }) => [id, file])
   );
+  const contextStrategyCanvas = contextCoreManifest.prototypes.find(({ id }) => id === "strategy-canvas");
+  assert.equal(contextStrategyCanvas.expression, "context-canvas");
+  assert.notEqual(
+    contextStrategyCanvas.file,
+    currentFiles.get("strategy-canvas"),
+    "the independently maintained Context Strategy Canvas keeps its own version coordinate"
+  );
+  currentFiles.set("strategy-canvas", contextStrategyCanvas.file);
   assert.deepEqual(
     new Map(companionSeed.cards.map(({ id, file }) => [id, file])),
     currentFiles,
-    "the companion index keeps every current Core artifact coordinate"
+    "the companion index keeps current Core coordinates and the declared Context Strategy adaptation"
   );
 
   const heart = coreManifest.prototypes.find(({ id }) => id === "heart-chart");

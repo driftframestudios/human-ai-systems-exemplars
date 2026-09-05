@@ -2,9 +2,9 @@
 
 - Contract: `prompt-capsule/0.1.0`
 - Capsule: `strategy-canvas-collaboration-field`
-- Source: `strategy-canvas-canonical@0.2.3`
+- Source: `strategy-canvas-canonical@0.2.4`
 - State: `strategy-canvas/2.0` · revision `1`
-- Fingerprint: `fnv1a32-utf8:8f520660`
+- Fingerprint: `fnv1a32-utf8:13bcf93f`
 - View: `plain`
 
 ## Purpose and target
@@ -101,6 +101,15 @@ Collaborate with this Strategy Canvas as an inspectable working revision.
 ## Requested return
 
 Return a Markdown review note grouped by stable dimension ID. For each dimension, include the proposed interpretation, evidence basis, open condition, and receiving review surface.
+
+## Related loops
+
+These public collaboration loops fit only when the receiving work meets the stated condition:
+
+- `repository-reentry` — [Re-enter, make one bounded change, and return it clearly](https://schemas.radiantnull.com/collaboration/#repository-reentry)
+  - Fit condition: Use when this versioned canvas carries a named question or requested change into resumed repository work and the return needs an exact stopping and re-entry point.
+- `public-release` — [Publish a repeatable, byte-comparable artifact through a named destination](https://schemas.radiantnull.com/collaboration/#public-release)
+  - Fit condition: Use after people accept this canvas revision as source for a public artifact whose declared files and bytes need a named delivery receiver.
 
 ## Evidence and recovery
 

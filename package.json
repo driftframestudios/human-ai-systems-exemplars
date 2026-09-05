@@ -68,7 +68,7 @@
     "visual:initiative-costing": "node tools/visual-check.mjs collaboration/initiative-costing-calculator/index.html --name initiative-costing-ledger --selector .workspace --readable-control-selector \".ledger-row input[data-field='name']\"",
     "visual:rail-labels": "node tools/visual-check.mjs context-canvas-project-surface/context-canvas/conditioning-field.html --name context-canvas-rail-labels --selector .page-section-rail --rail-label-check",
     "visual:debriefs-rail": "node tools/visual-check.mjs context-canvas-project-surface/context-canvas/debriefs.html --name debriefs-source-rail --selector .page-section-rail --rail-label-check --http",
-    "visual:strategy-canvas-canonical": "node tools/visual-check.mjs core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html --name strategy-canvas-canonical --selector \"#strategy-canvas-chart\" --http --wide",
+    "visual:strategy-canvas-canonical": "node tools/visual-check.mjs core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.4.html --name strategy-canvas-canonical --selector \"#strategy-canvas-chart\" --http --wide",
     "visual:strategy-canvas-context": "node tools/visual-check.mjs context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html --name strategy-canvas-context --selector \"#strategy-field\" --http --wide",
     "build:context-canvas-field-pilot": "node cloudflare/context-canvas-field-pilot/build.mjs",
     "check:context-canvas-field-pilot": "node cloudflare/context-canvas-field-pilot/build.mjs --check",

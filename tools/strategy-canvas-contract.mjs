@@ -11,7 +11,7 @@ import {
   artifactLicense,
 } from "./attribution-contract.mjs";
 
-const CANONICAL = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html";
+const CANONICAL = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.4.html";
 const CONTEXT = "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html";
 const PROMPT_CAPSULE_EXAMPLE = "prompt-capsules/0.1.0/examples/strategy-canvas.md";
 const NARRATIVE_COMPOSERS = [
@@ -844,6 +844,11 @@ async function canonicalPromptCapsuleContract(browser, url) {
       assert(await radios.nth(0).getAttribute("value") === "plain" && await radios.nth(0).isChecked(), "Plain Markdown should be the native default.");
       assert(await prompt.textContent() === checkedExample, "The mounted plain view should equal the checked default example.");
       assert(await page.evaluate(() => window.strategyCanvasCanonical.promptCapsule()) === checkedExample, "The promptCapsule compatibility seam should return plain Markdown.");
+      assert(checkedExample.includes("## Related loops"), "The plain view should carry its related-loop section.");
+      assert(checkedExample.includes("https://schemas.radiantnull.com/collaboration/#repository-reentry"), "The plain view should link the fitting repository re-entry loop.");
+      assert(checkedExample.includes("https://schemas.radiantnull.com/collaboration/#public-release"), "The plain view should link the fitting public-release loop.");
+      assert(!checkedExample.includes("#visitor-surface-change"), "The Strategy Canvas should omit subject-dependent visitor-surface routing.");
+      assert(!checkedExample.includes("#skill-from-receiving-use"), "The Strategy Canvas should omit subject-dependent skill-growth routing.");
 
       const stateBeforeView = await page.evaluate(() => window.strategyCanvasCanonical.serialize());
       const fingerprintBeforeView = await page.evaluate(() => window.strategyCanvasCanonical.promptCapsuleFingerprint());
@@ -856,6 +861,18 @@ async function canonicalPromptCapsuleContract(browser, url) {
       assert(await page.evaluate(() => window.strategyCanvasCanonical.promptCapsuleFingerprint()) === fingerprintBeforeView, "Both Markdown views should share one state fingerprint.");
       const assistedMarkdown = await prompt.textContent();
       assert(assistedMarkdown.includes("## Skill assistance"), "The assisted view should add its bounded skill section.");
+      assert(assistedMarkdown.includes("## Related loops"), "The assisted view should retain the same related-loop section.");
+      assert(await page.evaluate(() => window.strategyCanvasCanonical.promptCapsuleMarkdown()) === assistedMarkdown, "The programmatic Markdown reading should equal the visible active view.");
+      assert(
+        assistedMarkdown.slice(
+          assistedMarkdown.indexOf("## Related loops"),
+          assistedMarkdown.indexOf("## Evidence and recovery")
+        ) === checkedExample.slice(
+          checkedExample.indexOf("## Related loops"),
+          checkedExample.indexOf("## Evidence and recovery")
+        ),
+        "Both views should carry byte-identical related-loop metadata outside the state fingerprint."
+      );
       assert(assistedMarkdown.includes(`- Fingerprint: \`${fingerprintBeforeView}\``), "The assisted view should expose the shared fingerprint.");
 
       await page.evaluate(() => {
@@ -883,6 +900,7 @@ async function canonicalPromptCapsuleContract(browser, url) {
 
       await radios.nth(0).check();
       assert(await prompt.textContent() === checkedExample, "Returning to plain should restore the checked example bytes.");
+      assert(await page.evaluate(() => window.strategyCanvasCanonical.promptCapsuleMarkdown()) === checkedExample, "The programmatic Markdown reading should return the checked plain bytes.");
       await page.locator('[data-action="copy-markdown"]').click();
       await page.waitForFunction((expected) => window.__strategyCanvasCopiedMarkdown === expected, checkedExample);
       const plainDownloadEvent = page.waitForEvent("download");
@@ -1363,7 +1381,7 @@ async function compatibilityContract(browser, origin) {
   const routes = [
     {
       route: "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",
-      current: "strategy-canvas-chimeric-prototype-v0.2.3.html"
+      current: "strategy-canvas-chimeric-prototype-v0.2.4.html"
     },
     {
       route: "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",

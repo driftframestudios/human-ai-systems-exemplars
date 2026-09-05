@@ -5,7 +5,7 @@
 - Format: GitHub Flavored Markdown
 - Semantic authority: the named source artifact and its state contract
 - Projection role: readable collaboration handoff
-- Reference implementation: [Strategy Canvas v0.2.3](../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/README.md)
+- Reference implementation: [Strategy Canvas v0.2.4](../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/README.md)
 
 ## Desired receiving state
 

@@ -71,7 +71,7 @@ test("manifest-current Core JSON-LD uses the approved semantic identifiers", asy
     if (entry.id === "strategy-canvas") {
       assert.deepEqual(
         [entry.file, entry.version],
-        ["strategy-canvas-chimeric-prototype-v0.2.3.html", "0.2.3"],
+        ["strategy-canvas-chimeric-prototype-v0.2.4.html", "0.2.4"],
         "Strategy Canvas canonical current identity",
       );
       assert.deepEqual(

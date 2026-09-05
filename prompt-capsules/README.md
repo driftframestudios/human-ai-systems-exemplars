@@ -16,8 +16,8 @@ canonical sources, maintained projections, historical versions, generated
 receivers, and independently governed capsule families. It is an ownership map,
 not a count of matching words.
 
-The Strategy Canvas v0.2.3 pilot is the first current artifact to implement
-this general contract. Other capsule-bearing artifacts keep their existing
+The Strategy Canvas v0.2.4 pilot is the first current artifact to implement
+this general contract and point to a small, condition-bound set of related
+collaboration loops. Other capsule-bearing artifacts keep their existing
 contracts until their source owner accepts a migration with a material use and
-fitting tests. Related-loop discovery begins after the public guide supplies
-its stable receiving anchors.
+fitting tests.

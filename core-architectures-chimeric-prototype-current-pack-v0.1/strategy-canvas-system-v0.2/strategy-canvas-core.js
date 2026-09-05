@@ -1,4 +1,4 @@
-/* Strategy Canvas shared state engine v0.2.3 — dependency-free and DOM-independent. */
+/* Strategy Canvas shared state engine v0.2.4 — dependency-free and DOM-independent. */
 (function exposeStrategyCanvasCore(global) {
   'use strict';
 
@@ -27,6 +27,20 @@
       path: '.agents/skills/bounded-support-routing/SKILL.md',
       sha256: '80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402',
       purpose: 'Shape a finite support request with an observable return and stopping event.'
+    })
+  ]);
+  const PROMPT_CAPSULE_RELATED_LOOPS = Object.freeze([
+    Object.freeze({
+      id: 'repository-reentry',
+      name: 'Re-enter, make one bounded change, and return it clearly',
+      publicUrl: 'https://schemas.radiantnull.com/collaboration/#repository-reentry',
+      fit: 'Use when this versioned canvas carries a named question or requested change into resumed repository work and the return needs an exact stopping and re-entry point.'
+    }),
+    Object.freeze({
+      id: 'public-release',
+      name: 'Publish a repeatable, byte-comparable artifact through a named destination',
+      publicUrl: 'https://schemas.radiantnull.com/collaboration/#public-release',
+      fit: 'Use after people accept this canvas revision as source for a public artifact whose declared files and bytes need a named delivery receiver.'
     })
   ]);
   const SERIES = Object.freeze(['current', 'goodEnough', 'desired']);
@@ -853,7 +867,7 @@
     return {
       contract: PROMPT_CAPSULE_CONTRACT,
       capsule: markdownInline(normalized.meta.id),
-      source: 'strategy-canvas-canonical@0.2.3',
+      source: 'strategy-canvas-canonical@0.2.4',
       state: {
         schemaVersion: markdownInline(normalized.schemaVersion),
         revision: normalized.meta.revision
@@ -926,7 +940,7 @@
       '',
       `- Contract: \`${PROMPT_CAPSULE_CONTRACT}\``,
       `- Capsule: \`${markdownInline(normalized.meta.id)}\``,
-      '- Source: `strategy-canvas-canonical@0.2.3`',
+      '- Source: `strategy-canvas-canonical@0.2.4`',
       `- State: \`${normalized.schemaVersion}\` · revision \`${normalized.meta.revision}\``,
       `- Fingerprint: \`${fingerprint}\``,
       `- View: \`${view}\``,
@@ -962,6 +976,15 @@
       '',
       'Return a Markdown review note grouped by stable dimension ID. For each dimension, include the proposed interpretation, evidence basis, open condition, and receiving review surface.',
       '',
+      '## Related loops',
+      '',
+      'These public collaboration loops fit only when the receiving work meets the stated condition:',
+      '',
+      ...PROMPT_CAPSULE_RELATED_LOOPS.map((loop) => [
+        `- \`${loop.id}\` — [${loop.name}](${loop.publicUrl})`,
+        `  - Fit condition: ${loop.fit}`
+      ].join('\n')),
+      '',
       '## Evidence and recovery',
       '',
       '- Carry each dimension’s evidence basis with its interpretation. Treat an open basis as a question for the next review.',
@@ -990,11 +1013,12 @@
   }
 
   global.StrategyCanvasCore = Object.freeze({
-    version: '0.2.3',
+    version: '0.2.4',
     schemaVersion: SCHEMA_VERSION,
     promptCapsuleContract: PROMPT_CAPSULE_CONTRACT,
     promptCapsuleViews: PROMPT_CAPSULE_VIEWS,
     promptCapsuleSkillRevision: SKILL_REVISION,
+    promptCapsuleRelatedLoops: PROMPT_CAPSULE_RELATED_LOOPS,
     series: SERIES,
     errcActions: ACTIONS,
     defaultState: clone(DEFAULT_STATE),
