@@ -1677,6 +1677,32 @@ async function exerciseAtlas(session) {
   const initialExemplarId = await page
     .locator("#exemplarDetail")
     .getAttribute("data-selected-exemplar-id");
+  const galleryExemplarControls = page.locator("#gallery [data-select-exemplar]");
+  const galleryExemplarNames = await galleryExemplarControls.evaluateAll((controls) =>
+    controls.map((control) => control.getAttribute("aria-label")),
+  );
+  assert.equal(
+    galleryExemplarNames.every((name) => /^(?:Open exemplar \d+ of \d+|Exemplar \d+ of \d+ open): .+/u.test(name || "")),
+    true,
+    "every Atlas gallery action names the exemplar and its stable position",
+  );
+  assert.equal(
+    new Set(galleryExemplarNames).size,
+    galleryExemplarNames.length,
+    "Atlas gallery actions remain distinguishable outside their visual cards",
+  );
+  const duplicateTitleAtlas = structuredClone(initialPrompt.exported);
+  duplicateTitleAtlas.exemplars[2].title = duplicateTitleAtlas.exemplars[1].title;
+  await importAtlasFixture(page, "atlas-duplicate-titles.json", duplicateTitleAtlas);
+  const duplicateTitleNames = await galleryExemplarControls.evaluateAll((controls) =>
+    controls.map((control) => control.getAttribute("aria-label")),
+  );
+  assert.equal(
+    new Set(duplicateTitleNames).size,
+    duplicateTitleNames.length,
+    "accepted exemplars with repeated titles retain distinct position-bearing actions",
+  );
+  await importAtlasFixture(page, "atlas-baseline.json", initialPrompt.exported);
   const formChoices = page.locator("[data-select-form]");
   assert.ok(await formChoices.count() >= 5, "Atlas exposes recommendation forms as controls");
   for (const control of await formChoices.all()) {
@@ -1703,12 +1729,15 @@ async function exerciseAtlas(session) {
     "keyboard selection retains visible focus",
   );
 
-  const secondExemplar = page
-    .locator("[data-select-exemplar]")
-    .filter({ hasText: "Open exemplar" })
-    .first();
+  const secondExemplar = page.getByRole("button", {
+    name: /^Open exemplar \d+ of \d+: Which review delay drivers should be triaged first\?$/u,
+  });
+  const secondExemplarPosition = await secondExemplar.evaluate((element) => {
+    const controls = [...document.querySelectorAll("#gallery [data-select-exemplar]")];
+    return `${controls.indexOf(element) + 1} of ${controls.length}`;
+  });
   const secondExemplarId = await secondExemplar.getAttribute("data-select-exemplar");
-  await secondExemplar.click();
+  await secondExemplar.press("Enter");
   assert.equal(
     await page.locator("#exemplarDetail").getAttribute("data-selected-exemplar-id"),
     secondExemplarId,
@@ -1725,6 +1754,60 @@ async function exerciseAtlas(session) {
       .getAttribute("aria-pressed"),
     "true",
   );
+  assert.equal(
+    await page
+      .locator(`[data-select-exemplar="${secondExemplarId}"]`)
+      .last()
+      .getAttribute("aria-label"),
+    `Exemplar ${secondExemplarPosition} open: Which review delay drivers should be triaged first?`,
+  );
+  const selectedExemplarTitle = page.locator("#selected-exemplar-title");
+  assert.equal(await selectedExemplarTitle.evaluate((element) => element.tagName), "H4");
+  assert.equal(
+    (await selectedExemplarTitle.textContent())?.trim(),
+    "Which review delay drivers should be triaged first?",
+  );
+  assert.equal(
+    await selectedExemplarTitle.evaluate((element) => document.activeElement === element),
+    true,
+    "exemplar activation moves focus to its concise semantic title",
+  );
+  assert.notEqual(
+    await selectedExemplarTitle.evaluate((element) => getComputedStyle(element).outlineStyle),
+    "none",
+    "the selected exemplar title preserves a visible keyboard arrival",
+  );
+
+  await carrierPage.setViewportSize({ width: 320, height: 900 });
+  const textSpacingStyle = await page.addStyleTag({
+    content: `
+      * { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; }
+      p { margin-block-end: 2em !important; }
+    `,
+  });
+  await page.evaluate(() => new Promise((resolve) => {
+    requestAnimationFrame(() => requestAnimationFrame(resolve));
+  }));
+  const spacedAtlas = await page.evaluate(() => {
+    const root = document.documentElement;
+    const evidenceGrid = document.querySelector(".exemplar-evidence-grid");
+    return {
+      clientWidth: root.clientWidth,
+      scrollWidth: root.scrollWidth,
+      evidenceColumns: evidenceGrid ? getComputedStyle(evidenceGrid).gridTemplateColumns : "",
+    };
+  });
+  assert.ok(
+    spacedAtlas.scrollWidth <= spacedAtlas.clientWidth + 2,
+    `Atlas text spacing remains contained at the 400% reflow model (${spacedAtlas.scrollWidth}/${spacedAtlas.clientWidth})`,
+  );
+  assert.equal(
+    spacedAtlas.evidenceColumns.trim().split(/\s+/u).length,
+    1,
+    "Atlas evidence follows one readable column at the 400% reflow model",
+  );
+  await textSpacingStyle.evaluate((element) => element.remove());
+  await carrierPage.setViewportSize({ width: viewports[0].width, height: viewports[0].height });
 
   const before = await page.locator("#aiPrompt").inputValue();
   await page.locator("#moveSelect").selectOption({ index: 1 });

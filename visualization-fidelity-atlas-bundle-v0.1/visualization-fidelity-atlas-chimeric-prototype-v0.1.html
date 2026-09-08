@@ -1708,6 +1708,7 @@ select:focus-visible,
 textarea:focus-visible,
 input:focus-visible,
 summary:focus-visible,
+.chart-title:focus-visible,
 a:focus-visible {
   outline: 3px solid var(--accent-3);
   outline-offset: 3px;
@@ -1931,11 +1932,18 @@ details {
 summary { cursor:pointer; font-weight:700; }
 .chart-title {
   font-weight: 800;
-  margin-bottom: 4px;
+  margin: 0 0 4px;
 }
 .chart-subtitle {
   color: var(--muted);
   margin-bottom: 12px;
+}
+.exemplar-evidence-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 12px;
+}
+@media (max-width: 1100px) {
+  .exemplar-evidence-grid { grid-template-columns: 1fr; }
 }
 .notice {
   background:#fff8e9;
@@ -3982,7 +3990,7 @@ function renderSelectedForm() {
       <div><strong>Fitting tasks:</strong> ${esc(tasks.join(", ") || "Context-specific review")}</div>
     </div>
     ${matchingExemplar
-      ? `<p>The gallery includes a separate example for this form.</p><div class="button-row"><button type="button" data-select-exemplar="${esc(matchingExemplar.id)}" aria-controls="exemplarDetail">Open matching exemplar</button></div>`
+      ? `<p>The gallery includes a separate example for this form.</p><div class="button-row"><button type="button" data-select-exemplar="${esc(matchingExemplar.id)}" aria-controls="exemplarDetail" aria-label="Open matching exemplar: ${esc(matchingExemplar.title)}">Open matching exemplar</button></div>`
       : `<p>This form stands on its own; the current gallery offers examples for other forms.</p>`}
   `;
 }
@@ -4017,16 +4025,17 @@ function renderLadder() {
 function shorten(s,n) { s=String(s||""); return s.length>n ? s.slice(0,n-1)+"…" : s; }
 function renderGallery() {
   const gallery = document.getElementById("gallery");
-  gallery.innerHTML = atlas.exemplars.map(ex => {
+  gallery.innerHTML = atlas.exemplars.map((ex, index) => {
     const form = byId(atlas.visual_forms, ex.visual_form_id);
     const move = byId(atlas.cognitive_moves, ex.cognitive_move_id);
     const selected = ex.id === view.selectedExemplarId;
+    const position = `${index + 1} of ${atlas.exemplars.length}`;
     return `<div class="ex-card ${selected ? "selected" : ""}">
       ${selected ? '<span class="ex-card__state">Current exemplar</span>' : ""}
       <h3>${esc(ex.title)}</h3>
       <p class="meta">${esc(form?.label)} · ${esc(move?.label)} · ${esc(ex.unit)}</p>
       <p>${esc(ex.why_fit)}</p>
-      <div class="button-row"><button type="button" data-select-exemplar="${esc(ex.id)}" aria-pressed="${selected}" aria-controls="exemplarDetail">${selected ? "Exemplar open" : "Open exemplar"}</button></div>
+      <div class="button-row"><button type="button" data-select-exemplar="${esc(ex.id)}" aria-pressed="${selected}" aria-controls="exemplarDetail" aria-label="${selected ? `Exemplar ${position} open` : `Open exemplar ${position}`}: ${esc(ex.title)}">${selected ? "Exemplar open" : "Open exemplar"}</button></div>
     </div>`;
   }).join("");
 }
@@ -4037,10 +4046,9 @@ function selectExemplar(id, moveFocus = false) {
   renderAll();
   announce("selectionStatus", `${exemplar.title} is now the current exemplar. The selected visual form remains ${byId(atlas.visual_forms, view.selectedVisualFormId)?.label || "open for selection"}.`);
   if (moveFocus) {
-    const detail = document.getElementById("exemplarDetail");
-    detail.setAttribute("tabindex", "-1");
-    detail.focus({preventScroll:true});
-    detail.scrollIntoView({
+    const title = document.getElementById("selected-exemplar-title");
+    title.focus({preventScroll:true});
+    title.scrollIntoView({
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
       block: "nearest",
     });
@@ -4056,10 +4064,10 @@ function renderExemplarDetail() {
   el.dataset.selectedExemplarId = ex.id;
   el.innerHTML = `
     <span class="ex-card__state">Current exemplar</span>
-    <div class="chart-title">${esc(ex.title)}</div>
+    <h4 class="chart-title" id="selected-exemplar-title" tabindex="-1">${esc(ex.title)}</h4>
     <div class="chart-subtitle">${esc(form.label)} · ${esc(shape.label)} · ${esc(move.label)} · Unit: ${esc(ex.unit)}</div>
     <div class="visual-surface">${renderChart(ex)}</div>
-    <div class="grid" style="grid-template-columns:1fr 1fr; margin-top:12px;">
+    <div class="grid exemplar-evidence-grid">
       <div>
         <h3>Text equivalent</h3>
         <p>${esc(ex.text_equivalent)}</p>

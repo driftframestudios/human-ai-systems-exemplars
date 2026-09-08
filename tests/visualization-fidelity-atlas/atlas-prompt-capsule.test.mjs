@@ -78,6 +78,10 @@ test("Visualization Fidelity Atlas publishes one source-bound Prompt Capsule con
   const plain = authoredPlainPrompt(source);
 
   assert.equal(manifest.files.prototype, atlasFile);
+  assert.match(
+    manifest.interaction_contract.selection,
+    /Every exemplar action names its exact example and position, and pressed state identifies the current example\./u,
+  );
   for (const identity of [
     "visualization-fidelity-atlas@0.1",
     "visualization-fidelity-atlas-state.v0.1",

@@ -63,6 +63,14 @@ const ZOOM_PROFILES = [
   { name: "200%", width: 640, height: 900 },
   { name: "400%", width: 320, height: 800 }
 ];
+const RESPONSIVE_SEAMS = [
+  { name: "two-column edge", width: 901, height: 1000 },
+  { name: "stacked edge", width: 900, height: 1000 }
+];
+const PRESENTATION_VIEWPORTS = [
+  VIEWPORTS[2],
+  { ...ZOOM_PROFILES[1], name: "400% model" }
+];
 
 const runId = new Date().toISOString().replace(/[:.]/g, "-");
 const runDir = resolve(".visual-runs", `${runId}-strategy-canvas-contract`);
@@ -1232,6 +1240,35 @@ async function contextViewportContract(browser, url) {
   }
 }
 
+async function contextResponsiveSeamContract(browser, url) {
+  for (const viewport of RESPONSIVE_SEAMS) {
+    await verify(`Context workbench ${viewport.name} · document containment`, async () => {
+      const { context, page, telemetry } = await openPage(browser, url, viewport);
+      try {
+        await page.locator("#strategy-field").waitFor({ state: "visible" });
+        await assertLayout(page, `Context ${viewport.name}`);
+        const geometry = await page.evaluate(() => {
+          const root = document.documentElement;
+          const field = document.querySelector("#strategy-field").getBoundingClientRect();
+          const grid = document.querySelector(".workbench-grid").getBoundingClientRect();
+          return {
+            clientWidth: root.clientWidth,
+            scrollWidth: root.scrollWidth,
+            fieldRight: field.right,
+            gridRight: grid.right
+          };
+        });
+        assert(geometry.fieldRight <= geometry.clientWidth + 2, `Context ${viewport.name} field should stay within the viewport.`);
+        assert(geometry.gridRight <= geometry.clientWidth + 2, `Context ${viewport.name} working grid should stay within the viewport.`);
+        await page.screenshot({ path: resolve(runDir, `context-seam-${viewport.width}.png`), fullPage: true });
+        assertTelemetry(telemetry);
+      } finally {
+        await context.close();
+      }
+    });
+  }
+}
+
 async function contextZoomContract(browser, url) {
   for (const profile of ZOOM_PROFILES) {
     await verify(`Context workbench · ${profile.name} zoom and reflow`, async () => {
@@ -1250,6 +1287,27 @@ async function contextZoomContract(browser, url) {
         assert(await table.isVisible(), `Context ${profile.name} should expose the complete semantic table on request.`);
         assert(await table.locator("tbody tr").count() === 6, `Context ${profile.name} table should retain all six dimensions.`);
         assert((await table.locator("caption").innerText()).trim().length > 16, `Context ${profile.name} table should retain a readable caption.`);
+        if (profile.name === "400%") {
+          const spacingStyle = await page.addStyleTag({
+            content: `
+              * { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; }
+              p { margin-block-end: 2em !important; }
+            `
+          });
+          await page.evaluate(() => new Promise((resolveFrame) => {
+            requestAnimationFrame(() => requestAnimationFrame(resolveFrame));
+          }));
+          const spacingReceipt = await page.evaluate(() => ({
+            clientWidth: document.documentElement.clientWidth,
+            scrollWidth: document.documentElement.scrollWidth,
+            selectedDimension: document.querySelector('#dimension-strip [aria-current="true"]')?.textContent.trim() || "",
+            tableRows: document.querySelectorAll("#semantic-table tbody tr").length
+          }));
+          assert(spacingReceipt.scrollWidth <= spacingReceipt.clientWidth + 2, `Context ${profile.name} standard text spacing should retain document containment (${spacingReceipt.scrollWidth}/${spacingReceipt.clientWidth}).`);
+          assert(spacingReceipt.selectedDimension.length > 0, `Context ${profile.name} standard text spacing should preserve the current dimension identity.`);
+          assert(spacingReceipt.tableRows === 6, `Context ${profile.name} standard text spacing should preserve the complete table.`);
+          await spacingStyle.evaluate((element) => element.remove());
+        }
         await page.screenshot({ path: resolve(runDir, `context-zoom-${profile.name.replace("%", "")}.png`), fullPage: true });
         assertTelemetry(telemetry);
       } finally {
@@ -1508,6 +1566,73 @@ async function contextMediaContract(browser, url) {
     });
   } finally {
     await context.close();
+  }
+}
+
+async function contextPresentationLayoutContract(browser, url) {
+  for (const viewport of PRESENTATION_VIEWPORTS) {
+    await verify(`Context presentation ${viewport.name} · retained state and readable flow`, async () => {
+      const { context, page, telemetry } = await openPage(browser, url, viewport);
+      try {
+        await page.locator("#strategy-field").waitFor({ state: "visible" });
+        const dimension = page.getByRole("button", { name: "Select Cross-surface continuity", exact: true });
+        await dimension.press("Enter");
+        await page.locator(".data-table-disclosure > summary").click();
+        assert(await page.locator(".data-table-disclosure").evaluate((details) => details.open), "Complete table should open before presentation.");
+        await page.locator('[data-action="presentation"]').click();
+        await page.evaluate(() => new Promise((resolveFrame) => {
+          requestAnimationFrame(() => requestAnimationFrame(resolveFrame));
+        }));
+
+        const state = await contextState(page);
+        assert(state.view.mode === "presentation", `Context presentation ${viewport.name} should update state.`);
+        assert(state.view.selectedDimensionId === "cross-surface-continuity", `Context presentation ${viewport.name} should retain the selected dimension.`);
+        assert(await page.locator('[data-action="presentation"]').getAttribute("aria-pressed") === "true", `Context presentation ${viewport.name} control should expose its active state.`);
+        assert(await page.locator(".data-table-disclosure").evaluate((details) => details.open), `Context presentation ${viewport.name} should retain the open complete table.`);
+        const table = page.locator("#semantic-table table");
+        assert(await table.isVisible(), `Context presentation ${viewport.name} should keep the requested complete table visible.`);
+        assert(await table.locator("tbody tr").count() === 6, `Context presentation ${viewport.name} should retain all six table rows.`);
+        await assertLocalScroller(page, "#semantic-table", "table", `Context presentation ${viewport.name} complete table`);
+        await assertLocalScroller(page, "#chart-scroll", "#strategy-chart", `Context presentation ${viewport.name} chart frame`);
+
+        const geometry = await page.evaluate(() => {
+          const rect = (selector) => {
+            const bounds = document.querySelector(selector)?.getBoundingClientRect();
+            return bounds ? { top: bounds.top, right: bounds.right, bottom: bounds.bottom, left: bounds.left, width: bounds.width, height: bounds.height } : null;
+          };
+          const chartScroll = document.querySelector("#chart-scroll");
+          const dimensionStrip = document.querySelector("#dimension-strip");
+          const skipLink = document.querySelector(".skip-link");
+          return {
+            clientWidth: document.documentElement.clientWidth,
+            scrollWidth: document.documentElement.scrollWidth,
+            chartHeight: chartScroll?.clientHeight || 0,
+            chartRect: rect("#chart-scroll"),
+            stripClientHeight: dimensionStrip?.clientHeight || 0,
+            stripScrollHeight: dimensionStrip?.scrollHeight || 0,
+            skipLink: skipLink ? {
+              active: document.activeElement === skipLink,
+              bottom: skipLink.getBoundingClientRect().bottom,
+              transform: getComputedStyle(skipLink).transform
+            } : null,
+            root: rect("#context-workbench-root"),
+            method: rect(".strategy-method-source"),
+            footer: rect("footer.artifact-attribution")
+          };
+        });
+        assert(geometry.scrollWidth <= geometry.clientWidth + 2, `Context presentation ${viewport.name} should contain document width (${geometry.scrollWidth}/${geometry.clientWidth}).`);
+        assert(geometry.chartHeight >= 300, `Context presentation ${viewport.name} should preserve a substantial comparison surface (${geometry.chartHeight}px).`);
+        assert(geometry.chartRect?.width > 0, `Context presentation ${viewport.name} should retain a visible chart frame.`);
+        assert(geometry.stripScrollHeight <= geometry.stripClientHeight + 2, `Context presentation ${viewport.name} should keep dimension names vertically available (${geometry.stripScrollHeight}/${geometry.stripClientHeight}).`);
+        assert(geometry.skipLink && geometry.skipLink.active === false && geometry.skipLink.bottom <= 0, `Context presentation ${viewport.name} skip link should stay offscreen until focused. ${JSON.stringify(geometry.skipLink)}`);
+        assert(geometry.root && geometry.method && geometry.root.bottom <= geometry.method.top + 1, `Context presentation ${viewport.name} method source should follow the workbench without overlap.`);
+        assert(geometry.method && geometry.footer && geometry.method.bottom <= geometry.footer.top + 1, `Context presentation ${viewport.name} attribution should follow the method source without overlap.`);
+        await page.screenshot({ path: resolve(runDir, `context-presentation-${viewport.name.replace(/[^a-z0-9]+/giu, "-").toLowerCase()}.png`), fullPage: true });
+        assertTelemetry(telemetry);
+      } finally {
+        await context.close();
+      }
+    });
   }
 }
 
@@ -1782,8 +1907,10 @@ async function main() {
     await schemaNegativeContract(browser, canonicalUrl);
     await noJavaScriptContract(browser, canonicalUrl, "canonical");
     await contextViewportContract(browser, contextUrl);
+    await contextResponsiveSeamContract(browser, contextUrl);
     await contextZoomContract(browser, contextUrl);
     await contextCollaborationContract(browser, contextUrl);
+    await contextPresentationLayoutContract(browser, contextUrl);
     await contextMediaContract(browser, contextUrl);
     await noJavaScriptContract(browser, contextUrl, "Context");
     await compatibilityContract(browser, staticServer.origin);
