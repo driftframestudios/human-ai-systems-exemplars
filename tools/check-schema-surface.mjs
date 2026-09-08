@@ -19,6 +19,13 @@ const paths = {
     "schemas/context-canvas/1.0.0/examples/visitor-surface.example.json",
     "schemas/context-canvas/1.0.0/examples/prototype.example.json"
   ],
+  strategyCanvasPrototypeExample: "schemas/context-canvas/1.0.0/examples/prototype.example.json",
+  canonicalCoreManifest:
+    "core-architectures-chimeric-prototype-current-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json",
+  contextCoreManifest:
+    "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json",
+  strategyCanvasEvidence:
+    "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
   collaborationSkillSchema: "schemas/collaboration-skills/0.1.0/collaboration-skill.schema.json",
   collaborationAccountSchema: "schemas/collaboration-skills/0.1.0/collaboration-account.schema.json",
   collaborationSkillExamples: [
@@ -37,6 +44,111 @@ async function readJson(relativePath) {
     return JSON.parse(contents);
   } catch (error) {
     throw new Error(`${relativePath} is not valid JSON: ${error.message}`);
+  }
+}
+
+function assertExact(label, actual, expected) {
+  if (actual !== expected) {
+    throw new Error(`${label} carries ${JSON.stringify(actual)}; expected ${JSON.stringify(expected)}.`);
+  }
+}
+
+function repositoryRouteFromManifest(manifestPath, referencedPath) {
+  const route = path.posix.normalize(
+    path.posix.join(path.posix.dirname(manifestPath), referencedPath)
+  );
+  if (route.startsWith("../") || path.posix.isAbsolute(route)) {
+    throw new Error(`${manifestPath} carries a reference outside the repository: ${referencedPath}`);
+  }
+  return route;
+}
+
+function strategyCanvasEntry(manifest, manifestPath) {
+  const entries = manifest.prototypes?.filter(({ id }) => id === "strategy-canvas") ?? [];
+  if (entries.length !== 1) {
+    throw new Error(`${manifestPath} should carry one Strategy Canvas entry; received ${entries.length}.`);
+  }
+  return entries[0];
+}
+
+function representationByKind(example, kind) {
+  const representations =
+    example.representations?.filter((representation) => representation.kind === kind) ?? [];
+  if (representations.length !== 1) {
+    throw new Error(
+      `The Strategy Canvas prototype example should carry one ${kind} representation; received ${representations.length}.`
+    );
+  }
+  return representations[0];
+}
+
+async function assertStrategyCanvasExampleCoordinates(
+  example,
+  canonicalManifest,
+  contextManifest,
+  evidenceRegistry
+) {
+  const canonical = strategyCanvasEntry(canonicalManifest, paths.canonicalCoreManifest);
+  const context = strategyCanvasEntry(contextManifest, paths.contextCoreManifest);
+
+  assertExact(
+    "Strategy Canvas evidence registry contract",
+    evidenceRegistry.schemaVersion,
+    "strategy-canvas-evidence/0.1"
+  );
+  assertExact("Canonical Strategy Canvas expression", canonical.expression, "canonical");
+  assertExact("Context Strategy Canvas expression", context.expression, "context-canvas");
+  assertExact("Canonical Strategy Canvas standing", canonical.status, "current");
+  assertExact("Context Strategy Canvas standing", context.status, "current");
+
+  const canonicalRoute = repositoryRouteFromManifest(paths.canonicalCoreManifest, canonical.file);
+  const contextRoute = repositoryRouteFromManifest(paths.contextCoreManifest, context.file);
+  const schemaRoute = repositoryRouteFromManifest(paths.canonicalCoreManifest, canonical.schema);
+  const contextSchemaRoute = repositoryRouteFromManifest(paths.contextCoreManifest, context.canonical_schema);
+  const evidenceRoute = repositoryRouteFromManifest(paths.canonicalCoreManifest, canonical.evidence);
+  const contextEvidenceRoute = repositoryRouteFromManifest(paths.contextCoreManifest, context.canonical_evidence);
+
+  assertExact("Context Strategy Canvas canonical schema route", contextSchemaRoute, schemaRoute);
+  assertExact("Context Strategy Canvas canonical evidence route", contextEvidenceRoute, evidenceRoute);
+  assertExact("Strategy Canvas evidence registry route", evidenceRoute, paths.strategyCanvasEvidence);
+
+  if (canonicalRoute === contextRoute) {
+    throw new Error("Canonical worksheet and Context workbench should retain distinct current source routes.");
+  }
+
+  await Promise.all(
+    [canonicalRoute, contextRoute, schemaRoute, evidenceRoute].map(async (route) => {
+      try {
+        await access(path.join(repositoryRoot, route));
+      } catch {
+        throw new Error(`The Strategy Canvas authority coordinate should resolve in repository source: ${route}`);
+      }
+    })
+  );
+
+  assertExact("Strategy Canvas workbench content authority", example.authority.contentAuthorityRef, contextRoute);
+
+  const canonicalRepresentation = representationByKind(example, "canonical_html");
+  assertExact("Canonical worksheet source", canonicalRepresentation.sourceRef, canonicalRoute);
+  assertExact("Canonical worksheet revision", canonicalRepresentation.revision, canonical.version);
+
+  const schemaRepresentation = representationByKind(example, "machine_representation");
+  assertExact("Strategy Canvas schema source", schemaRepresentation.sourceRef, schemaRoute);
+  assertExact("Strategy Canvas semantic revision", schemaRepresentation.revision, canonical.semantic_contract);
+
+  const contextRepresentation = representationByKind(example, "served_projection");
+  assertExact("Context workbench source", contextRepresentation.sourceRef, contextRoute);
+  assertExact("Context workbench revision", contextRepresentation.revision, context.version);
+
+  const staticRepresentation = representationByKind(example, "static_fallback");
+  assertExact("Context static reading source", staticRepresentation.sourceRef, contextRoute);
+  assertExact("Context static reading revision", staticRepresentation.revision, context.version);
+
+  if (!example.standing.sourceRefs.includes(evidenceRoute)) {
+    throw new Error(`Strategy Canvas standing should reference its source-owned evidence registry: ${evidenceRoute}`);
+  }
+  if (!example.contractRefs.some(({ ref }) => ref === evidenceRoute)) {
+    throw new Error(`Strategy Canvas contract routes should include its source-owned evidence registry: ${evidenceRoute}`);
   }
 }
 
@@ -170,6 +282,11 @@ const repositoryExample = await readJson(paths.repositoryExample);
 const contextExamples = await Promise.all(paths.contextExamples.map(readJson));
 const collaborationSkillExamples = await Promise.all(paths.collaborationSkillExamples.map(readJson));
 const collaborationAccountExample = await readJson(paths.collaborationAccountExample);
+const [canonicalCoreManifest, contextCoreManifest, strategyCanvasEvidence] = await Promise.all([
+  readJson(paths.canonicalCoreManifest),
+  readJson(paths.contextCoreManifest),
+  readJson(paths.strategyCanvasEvidence)
+]);
 const collaborationAccountExternalReferences = new Map([
   [
     "$.relatedRefs[1]",
@@ -182,6 +299,12 @@ assertValid(paths.repositoryExample, validateRepository, repositoryExample);
 paths.contextExamples.forEach((examplePath, index) => {
   assertValid(examplePath, validateContext, contextExamples[index]);
 });
+await assertStrategyCanvasExampleCoordinates(
+  contextExamples[paths.contextExamples.indexOf(paths.strategyCanvasPrototypeExample)],
+  canonicalCoreManifest,
+  contextCoreManifest,
+  strategyCanvasEvidence
+);
 paths.collaborationSkillExamples.forEach((examplePath, index) => {
   assertValid(examplePath, validateCollaborationSkill, collaborationSkillExamples[index]);
 });
@@ -289,5 +412,5 @@ if (limsResult.status !== 0) {
 }
 
 console.log(
-  `Schema surface check passed: 4 strict schemas, 7 representative schema instances, 1 Supportive instance, 1 LIMS/ELN instance, 9 boundary probes, and ${schemaReceiverRoutes.length} receiver identities.`
+  `Schema surface check passed: 4 strict schemas, 7 representative schema instances, 1 Supportive instance, 1 LIMS/ELN instance, 1 Strategy Canvas cross-owner coordinate, 9 boundary probes, and ${schemaReceiverRoutes.length} receiver identities.`
 );

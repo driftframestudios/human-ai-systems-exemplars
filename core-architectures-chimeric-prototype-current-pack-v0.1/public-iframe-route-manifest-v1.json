@@ -162,6 +162,7 @@
       "kind": "prototype",
       "source_file": "strategy-canvas-chimeric-prototype-v0.2.4.html",
       "source_version": "0.2.4",
+      "expression": "canonical",
       "public_alias": "/v1/core/strategy-canvas/",
       "receiver_standing": "context_adapted",
       "activation_standing": "parity_review",
@@ -189,7 +190,7 @@
           "content_type": "application/json"
         }
       ],
-      "reader_job": "Compare several options across anchored dimensions in the canonical collaboration field."
+      "reader_job": "Compare several options across anchored dimensions in the canonical worksheet."
     },
     {
       "id": "first-responsible-version-matrix",

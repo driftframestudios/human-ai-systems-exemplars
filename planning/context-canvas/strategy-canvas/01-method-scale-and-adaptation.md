@@ -108,6 +108,8 @@ Every instruction explains its state consequence:
 | Practitioner Judgment Probes | claim-specific judgment, independent elicitation, confidence, review | informs facilitation rather than conferring measurement validity |
 | supplied reference image | hierarchy, legend, action bands, qualitative axes, generous markers | visual and interaction grammar, not a data source |
 
+The [machine-readable evidence registry](../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json) binds the source ledger to implementation entries `graphical-position`, `anchoring-boundary`, and `four-actions-origin`. Each entry states what the source changes here and which adjacent claim it leaves open.
+
 ## Falsifiers
 
 - Participants interpret consequence weight as a plotted offering score.

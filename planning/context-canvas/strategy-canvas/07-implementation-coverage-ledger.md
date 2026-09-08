@@ -27,7 +27,7 @@ Status language:
 | Local execution boundary | dependency-free generated artifact | local CSS/JS workbench | local adapter | local static-server telemetry and declared `local-only` policy | verified for this prototype boundary; service adapter remains outside scope |
 | Compatibility | v0.1.1 route leads to canonical v0.2.4 | v0.1.1 route leads to Context v0.2.2 | registries name each current owner and compatibility route | route and anchor checks | verified |
 | Versioned Prompt Capsule | plain and skill-assisted GitHub Flavored Markdown share one state fingerprint; both views and the native Related loops disclosure share one loop-metadata owner | Context v0.2.2 keeps its independently maintained capsule | portable Markdown names source, contract, scope, evidence, recovery, and conditional public loops | checked example + pure and browser semantic-twin contracts | verified |
-| Downloadable consumer snapshots | canonical v2 and schema travel as the portable companion | Context-resolved source variants retain their route standing | root + Context Narrative, Semantic, and Technology archives | deterministic rebuild, embedded receipt, and archive-link checks | verified |
+| Downloadable consumer snapshots | canonical v2, schema, validator, and evidence travel as the portable companion | the source Composer retains its Context workbench route | Narrative Composer, Semantic Sampling, Technology Fit, and Threadkeeping Ledger archives | deterministic rebuild, role-specific identity, embedded receipt, and archive-link checks | verified |
 
 ## Three-channel invariant
 
@@ -39,16 +39,24 @@ The interaction model keeps three authorities visible:
 
 An AIShadowRound is the optional post-reveal interaction that prepares a portable prompt and receives proposals. In the v0.2 state shape, this interaction serializes as the single `extensions.contextCanvas.aiCollaboration` record and its `proposals` map. The aggregate input set remains the submitted human ballots.
 
-## Consumer and route inventory
+## Representation and route inventory
 
-| Consumer | Current route or contract | Compatibility posture |
+The [machine-readable evidence registry](../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json) owns the same finite inventory in structured form. This table records each material expression or carrier; pages that only mention or route toward Strategy Canvas remain outside the set.
+
+| Representation or carrier | Current route or contract | Relationship and compatibility posture |
 | --- | --- | --- |
-| Canonical pack index and manifest | `strategy-canvas-chimeric-prototype-v0.2.4.html` | v0.1.1 remains an accessible compatibility route; v0.2.0 through v0.2.3 remain recorded predecessors |
-| Context pack index and manifest | `strategy-canvas-chimeric-prototype-v0.2.2.html` | this independently maintained workbench and its v0.1.1 compatibility route keep their accepted current standing |
-| Shared artifact-model registry | `strategy-canvas/2.0`; `extensions.contextCanvas` | recommended entities include migration and review concepts |
-| Narrative Capsule Composer | `strategy-canvas-v2-adapter.js` | NOW/NEXT/LATER mapping is named and receipted |
-| Grammar Family | public Core v0.2.4 embed | the opaque iframe supports the implemented Markdown download; its adjacent local full view remains the Context v0.2.2 workbench |
-| FMI / LIMS / ELN receiving page | public Core v0.2.4 embed | working-example values keep an explicit replace-with-participant-data standing; the adjacent local full view remains the Context v0.2.2 workbench |
+| Canonical source and current distribution | `canonical.template.html` → `strategy-canvas-chimeric-prototype-v0.2.4.html` | the authored template and shared core generate the quiet canonical worksheet |
+| Canonical compatibility route | `strategy-canvas-system-v0.2/compatibility-v0.1.1.html` → pack-root v0.1.1 route | the compatibility source and projected route lead to canonical v0.2.4; v0.2.0 through v0.2.3 remain recorded predecessors |
+| Canonical iframe projection | `/v1/core/strategy-canvas/` through `public-iframe-route-manifest-v1.json` | package projection preserves canonical expression identity and carries schema plus evidence |
+| Context workbench and expression-owned assets | `strategy-canvas-chimeric-prototype-v0.2.2.html`, Context CSS, and Context JavaScript | this independently maintained facilitation workbench consumes the shared contract and retains its own current standing |
+| Context compatibility route | Context pack v0.1.1 route | routes to Context v0.2.2 through the Context owner |
+| Shared schema and artifact-model registry | `strategy-canvas/2.0`; `extensions.contextCanvas` | the canonical schema owns the shared semantic contract; canonical and Context representations retain separate versions and roles |
+| Narrative Capsule Composer | Composer HTML + `strategy-canvas-v2-adapter.js` | NOW/NEXT/LATER mapping is named and receipted; the source preview routes to Context workbench v0.2.2 |
+| Narrative portable companion | Narrative Composer archive member `strategy-canvas-chimeric-prototype-v0.2.4.html` | the portable archive carries current canonical bytes under an explicitly canonical role |
+| Genomic Viewer static companion | `genomic_viewer_strategy_canvas.svg` + adjacent page table and caption | the SVG owns source metadata; its receiving page owns the visible method and adaptation note |
+| Grammar Family and FMI hosts | public Core v0.2.4 embed | each host names the embedded canonical worksheet and offers Context v0.2.2 as a distinct full workbench handoff |
+| Public Context schema example | `schemas/context-canvas/1.0.0/examples/prototype.example.json` | Context workbench v0.2.2 owns the example's content; canonical worksheet v0.2.4 remains a distinct shared-contract representation |
+| Planning and evidence spine | this directory + `strategy-canvas-evidence.v0.1.json` | human-readable decisions and machine-readable evidence link to each other |
 | Cross-Functional Investment Studio | Four Actions planning-lens adaptation | the existing route-specific popup profile carries its official method source; local suggestions retain their planning standing |
 
 ## Completion gates
@@ -102,7 +110,7 @@ Review-ready means every release-blocking gate has evidence, canonical registrie
 
 - `npm run test:strategy-canvas` — **43/43 checks passed** on 2026-09-08. The focused contract covers both maintained expressions and their compatibility routes, the native Prompt Capsule view control, exact active-view byte agreement, a source-generated Related loops disclosure, and the system-color defaults that keep unselected dimension labels distinct from the selected and focused `Highlight` state.
 - Canonical generated distribution — **165,694 bytes**, SHA-256 `60fc6669b54adff4f609f4c48322548d44abc4875f5a2412030eb2c619f4c8b4`; the builder checked the default Markdown example and generated the native disclosure from the same core metadata before source/build parity passed.
-- Acceptance-time cross-family package — `npm run test:iframe-routes` passed **29/29 checks**, and `npm run check:iframe-routes` verified 38 routes, 68 files, and 3,379,525 bytes through a read-only package observation. This result records the package accepted with v0.2.4; [Issue #137](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/137) carries the current cross-family package coordinate as route families advance.
+- Acceptance-time cross-family package — `npm run test:iframe-routes` and `npm run check:iframe-routes` passed through a read-only package observation when v0.2.4 was accepted. [Issue #137](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/137) owns the current cross-family package coordinate as route families advance.
 - `npm run test:core-architectures` — **74/74 checks passed** with current manifest, historical artifact, public-anchor, and fingerprint boundaries intact.
 
 ## Historical verification receipt · v0.2.3
