@@ -375,13 +375,14 @@
       "id": "pattern-problem-surface-matrix",
       "display_name": "Pattern–Problem Surface Matrix",
       "kind": "prototype",
-      "source_file": "pattern-problem-surface-matrix-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
+      "source_file": "pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
       "public_alias": "/v1/core/pattern-problem-surface-matrix/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -395,13 +396,14 @@
       "id": "jobs-to-be-done-treemap",
       "display_name": "Jobs-to-be-Done Treemap",
       "kind": "prototype",
-      "source_file": "jobs-to-be-done-treemap-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
+      "source_file": "jobs-to-be-done-treemap-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
       "public_alias": "/v1/core/jobs-to-be-done-treemap/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -415,13 +417,14 @@
       "id": "unit-test-first-design",
       "display_name": "Unit-test-first Design",
       "kind": "prototype",
-      "source_file": "unit-test-first-design-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
+      "source_file": "unit-test-first-design-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
       "public_alias": "/v1/core/unit-test-first-design/",
       "receiver_standing": "reserve",
       "activation_standing": "navigation_observation",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
           "allow-scripts"
         ],
         "permissions_policy": [
