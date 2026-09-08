@@ -50,6 +50,17 @@ JavaScript. The matrix retains its threshold cards, focus view, routes, and
 recovery semantics as authority; the Markdown is a portable handoff from that
 state.
 
+Shared Surface Priority Map v0.1.4, Service-design Blueprint v0.2.5, AI
+Systems Service Blueprint v0.1.4, and Software Architecture Views v0.1.4
+complete the current Shared Surfaces and Topology family’s Prompt Capsule
+adoption. The map carries every stage, surface, priority cell with its channel
+intensities, and shared asset. The service blueprint carries every stage, lane, cell, and
+shared asset. The AI systems blueprint carries the complete runtime,
+knowledge, infrastructure, evidence, and governance topology. The architecture
+views carry every view and attachment for the modeled element. Their Markdown
+views retain the complete represented state while transient focus and
+selection stay with the interactive artifact.
+
 Upstream Revision Loop v0.1.4 and Recovery Routing Atlas v0.1.4 complete the
 current Recovery Routing and Revision family’s Prompt Capsule adoption. The
 loop carries downstream observations back to a named prior artifact and

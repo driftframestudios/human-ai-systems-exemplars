@@ -299,6 +299,6 @@ test("Orientation and Tracing advances the current inventory as one complete fam
   for (const phrase of ["PODA v0.1.4", "Alignment Worksheet v0.1.4", "Impact Map v0.1.5", "Context Tree v0.1.7"]) {
     assert.match(inventory, new RegExp(phrase.replaceAll(".", "\\."), "u"));
   }
-  assert.match(inventory, /22 current[\s\S]*?adoptions\. The remaining six/u);
+  assert.match(inventory, /26 current[\s\S]*?adoptions\. The remaining two/u);
   assert.match(inventory, /accepted sources complete the current Orientation and Tracing[\s\S]*?famil(?:y|ies)/u);
 });

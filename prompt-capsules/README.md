@@ -16,19 +16,21 @@ canonical sources, maintained projections, historical versions, generated
 receivers, and independently governed capsule families. It is an ownership map,
 not a count of matching words.
 
-The current adoptions span six Core source families: PODA v0.1.4, Alignment
+The current adoptions span seven Core source families: PODA v0.1.4, Alignment
 Worksheet v0.1.4, Impact Map v0.1.5, Context Tree v0.1.7, Strategy Canvas
-v0.2.4, First Responsible Version Matrix v0.1.4, Upstream Revision Loop v0.1.4,
-Recovery Routing Atlas v0.1.4, Participatory Design Kit v0.1.4,
+v0.2.4, First Responsible Version Matrix v0.1.4, Shared Surface Priority Map
+v0.1.4, Service-design Blueprint v0.2.5, AI Systems Service Blueprint v0.1.4,
+Software Architecture Views v0.1.4, Upstream Revision Loop v0.1.4, Recovery
+Routing Atlas v0.1.4, Participatory Design Kit v0.1.4,
 Specification-by-Example v0.1.6, Pattern–Problem Surface Matrix v0.1.4,
 Jobs-to-be-Done Treemap v0.1.4, Unit-test-first Design v0.1.4, HEART Chart
 v0.1.6, Plus / Delta v0.1.4, and Practitioner Judgment Probes v0.1.4; all four
 current Narrative Architecture sources; and two standalone instruments—Open
-Lesson Field and Cross-Functional Investment Model Studio. The sixteen Core
+Lesson Field and Cross-Functional Investment Model Studio. The twenty Core
 adoptions complete the current Orientation and Tracing, Comparison and
-Threshold, Recovery Routing and Revision, Participatory Elicitation and
-Specification, Pattern Fit and Behavior Protection, and Measurement,
-Reflection, and Judgment families.
+Threshold, Shared Surfaces and Topology, Recovery Routing and Revision,
+Participatory Elicitation and Specification, Pattern Fit and Behavior
+Protection, and Measurement, Reflection, and Judgment families.
 Each source owner keeps its own state and schema version while
 projecting complete plain and skill-assisted Markdown views with one
 represented-state fingerprint. Each source points to a small set of related
@@ -46,7 +48,13 @@ objectives, discoverables, activities, and accepted handoffs. Alignment
 Worksheet keeps forward and backward premises together with its option spread
 and evidence. Impact Map carries every actor-to-impact-to-discoverable trace.
 Context Tree carries every role, context question, cell, status, and handoff
-route while focus remains presentation state. First Responsible Version Matrix
+route while focus remains presentation state. Shared Surface Priority Map
+carries every stage, surface, priority cell with its channel intensities, and shared asset.
+Service-design Blueprint carries every stage, service lane, cell, and shared
+asset. AI Systems Service Blueprint carries its complete runtime, knowledge,
+infrastructure, evidence, and governance topology. Software Architecture Views
+carries the modeled element through every view and attachment. First
+Responsible Version Matrix
 derives the exchange from its complete card set, active focus view, threshold
 placements, evidence statuses, handoffs, review triggers, semantic guidance,
 and recovery route. Upstream Revision Loop carries each downstream observation,

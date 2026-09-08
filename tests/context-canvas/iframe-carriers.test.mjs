@@ -605,7 +605,7 @@ test("manifest-owned prototype carriers keep a minimal explicit iframe boundary"
     (attributeValue(tag, "sandbox") ?? "").split(/\s+/).includes("allow-downloads"),
   );
   const downloadRoutes = downloadCarriers.map(({ src }) => src);
-  assert.equal(downloadCarriers.length, 5, "the five capsule carriers grant their implemented Markdown downloads");
+  assert.equal(downloadCarriers.length, 7, "the seven capsule carriers grant their implemented Markdown downloads");
   assert.equal(
     downloadRoutes.filter((src) => src === "https://iframes.vik.guru/v1/core/strategy-canvas/").length,
     2,
@@ -625,5 +625,15 @@ test("manifest-owned prototype carriers keep a minimal explicit iframe boundary"
     downloadRoutes.filter((src) => src === "https://iframes.vik.guru/v1/core/poda/").length,
     1,
     "the PODA carrier grants its source-owned Markdown download",
+  );
+  assert.equal(
+    downloadRoutes.filter((src) => src === "https://iframes.vik.guru/v1/core/cross-channel-blueprint/").length,
+    1,
+    "the Shared Surface Priority Map carrier grants its source-owned Markdown download",
+  );
+  assert.equal(
+    downloadRoutes.filter((src) => src === "https://iframes.vik.guru/v1/core/service-design-blueprint/").length,
+    1,
+    "the Service-design Blueprint carrier grants its source-owned Markdown download",
   );
 });

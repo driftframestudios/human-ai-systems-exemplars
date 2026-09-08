@@ -18,9 +18,9 @@ const artifactNames = {
   poda: "poda-chimeric-prototype-v0.1.4.html",
   alignment: "alignment-worksheet-chimeric-prototype-v0.1.4.html",
   frv: "first-responsible-version-matrix-chimeric-prototype-v0.1.4.html",
-  sharedSurface: "shared-surface-priority-map-chimeric-prototype-v0.1.3.html",
-  aiSystems: "ai-systems-service-blueprint-chimeric-prototype-v0.1.3.html",
-  softwareViews: "software-architecture-views-chimeric-prototype-v0.1.3.html",
+  sharedSurface: "shared-surface-priority-map-chimeric-prototype-v0.1.4.html",
+  aiSystems: "ai-systems-service-blueprint-chimeric-prototype-v0.1.4.html",
+  softwareViews: "software-architecture-views-chimeric-prototype-v0.1.4.html",
   participatory: "participatory-design-kit-chimeric-prototype-v0.1.4.html",
   plusDelta: "plus-delta-chimeric-prototype-v0.1.4.html",
   upstream: "upstream-revision-loop-chimeric-prototype-v0.1.4.html"
@@ -158,6 +158,23 @@ async function assertNoScriptPromptCapsule(browser, origin, route, promptSelecto
   } finally {
     await context.close();
   }
+}
+
+async function assertPromptCapsuleKeyOrderStability(page, apiName) {
+  const receipt = await page.evaluate(name => {
+    const reverseKeys = value => {
+      if (Array.isArray(value)) return value.map(reverseKeys);
+      if (value && typeof value === "object") {
+        return Object.fromEntries(Object.keys(value).reverse().map(key => [key, reverseKeys(value[key])]));
+      }
+      return value;
+    };
+    const api = globalThis[name];
+    const before = { fingerprint: api.promptCapsuleFingerprint(), markdown: api.promptCapsule() };
+    api.importState(reverseKeys(api.getState()));
+    return { before, after: { fingerprint: api.promptCapsuleFingerprint(), markdown: api.promptCapsule() } };
+  }, apiName);
+  assert.deepEqual(receipt.after, receipt.before, "object key order does not change represented-state identity or Markdown");
 }
 
 function activeView(exported) {
@@ -757,10 +774,42 @@ async function frvPath(browser, origin, route) {
 
 async function sharedSurfacePath(browser, origin, route) {
   const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPrompt;
   try {
+    initialPrompt = await exercisePromptCapsule(page, {
+      apiName: "sharedSurfacePriorityMap",
+      copySelector: "#copyPromptBtn",
+      downloadSelector: "#downloadPromptBtn",
+      filename: "shared-surface-priority-map.prompt-capsule.r0.1.4.skill-assisted.md",
+      loopIds: ["visitor-surface-change", "repository-reentry"],
+      promptSelector: "#aiPrompt",
+      stateContract: "shared-surface-priority-map-state.v0.1",
+      title: "Shared Surface Priority Map",
+      version: "0.1.4",
+    });
+    assert.equal(
+      initialPrompt.projection.shared_surface_priority_map.heatmap_cells.length,
+      initialPrompt.state.shared_surface_priority_map.heatmap_cells.length,
+      "the capsule represents every priority cell",
+    );
+    assert.equal(
+      initialPrompt.projection.shared_surface_priority_map.shared_assets.length,
+      initialPrompt.state.shared_surface_priority_map.shared_assets.length,
+      "the capsule represents every shared asset",
+    );
+    assert.equal(
+      initialPrompt.projection.view_state.views.length,
+      initialPrompt.state.view_state.views.length,
+      "the capsule represents every accepted focus view",
+    );
+    await assertPromptCapsuleKeyOrderStability(page, "sharedSurfacePriorityMap");
     const cellId = "cell-analysis-environment__stage-review";
     const assetId = "asset-claim-source-map";
     await page.locator(`button[data-select-cell="${cellId}"]`).click();
+    assert.deepEqual(await page.evaluate(() => ({
+      fingerprint: window.sharedSurfacePriorityMap.promptCapsuleFingerprint(),
+      markdown: window.sharedSurfacePriorityMap.promptCapsule(),
+    })), { fingerprint: initialPrompt.fingerprint, markdown: initialPrompt.plain });
     await page.locator('select[data-cell-basis="workflow_consequence"]').selectOption("disputed");
     const asset = page.locator(`input[data-cell-asset="${assetId}"]`);
     if (!(await asset.isChecked())) await asset.check();
@@ -777,6 +826,12 @@ async function sharedSurfacePath(browser, origin, route) {
     const jsonLd = JSON.parse(await page.locator("#jsonLdScript").textContent());
     const cellNode = jsonLd["@graph"].find(node => node.id === `#${cellId}`);
     assert.ok(cellNode.linkedSharedAsset.includes(`#${assetId}`));
+    const changedPrompt = await page.evaluate(() => ({
+      fingerprint: window.sharedSurfacePriorityMap.promptCapsuleFingerprint(),
+      markdown: window.sharedSurfacePriorityMap.promptCapsule(),
+    }));
+    assert.notEqual(changedPrompt.fingerprint, initialPrompt.fingerprint);
+    assert.match(changedPrompt.markdown, /asset-claim-source-map/u);
 
     await page.locator('[data-hide-surface="surface-analysis-environment"]').click();
     exported = await copiedJson(page, "#copyJsonBtn");
@@ -787,7 +842,7 @@ async function sharedSurfacePath(browser, origin, route) {
     await page.locator('[data-show-surface="surface-analysis-environment"]').click();
 
     const compatible = await copiedJson(page, "#copyJsonBtn");
-    const importedCell = "Imported shared-surface decision";
+    const importedCell = "Imported <strong>shared-surface</strong> decision";
     compatible.shared_surface_priority_map.heatmap_cells.find(item => item.id === cellId).note = importedCell;
     activeView(compatible).selected_cell_id = cellId;
     await openContainingDetails(page, "#importText");
@@ -797,7 +852,11 @@ async function sharedSurfacePath(browser, origin, route) {
     const imported = await copiedJson(page, "#copyJsonBtn");
     assert.equal(imported.shared_surface_priority_map.heatmap_cells.find(item => item.id === cellId).note, importedCell);
     assert.equal(activeView(imported).selected_cell_id, cellId);
-    assert.match(await page.locator("#inspector").textContent(), /Imported shared-surface decision/);
+    assert.match(await page.locator("#inspector").textContent(), /Imported <strong>shared-surface<\/strong> decision/);
+    assert.match(
+      await page.evaluate(() => window.sharedSurfacePriorityMap.promptCapsule()),
+      /Imported &lt;strong&gt;shared-surface&lt;\/strong&gt; decision/u,
+    );
 
     await page.locator(`button[data-select-cell="${cellId}"]`).click();
     const sentinel = "Shared Surface recovery sentinel";
@@ -824,17 +883,162 @@ async function sharedSurfacePath(browser, origin, route) {
     await page.locator("#importJsonBtn").click();
     await assertVisibleNotice(page, "#importNotice", /unique semantic namespace/i);
     assert.equal((await copiedJson(page, "#copyJsonBtn")).shared_surface_priority_map.heatmap_cells.find(item => item.id === cellId).note, sentinel);
+
+    const privateExtensionReceipt = await page.evaluate(() => {
+      const api = window.sharedSurfacePriorityMap;
+      const before = { fingerprint: api.promptCapsuleFingerprint(), markdown: api.promptCapsule() };
+      const candidate = api.getState();
+      candidate.private_review_note = "local priority-map note";
+      candidate.shared_surface_priority_map.private_review_note = "local body note";
+      candidate.view_state.private_review_note = "local view note";
+      api.importState(candidate);
+      const roundtrip = api.getState();
+      return {
+        before,
+        after: { fingerprint: api.promptCapsuleFingerprint(), markdown: api.promptCapsule() },
+        retained: [
+          roundtrip.private_review_note,
+          roundtrip.shared_surface_priority_map.private_review_note,
+          roundtrip.view_state.private_review_note,
+        ],
+      };
+    });
+    assert.deepEqual(privateExtensionReceipt.after, privateExtensionReceipt.before);
+    assert.deepEqual(privateExtensionReceipt.retained, ["local priority-map note", "local body note", "local view note"]);
+
+    const multiViewReceipt = await page.evaluate(cell => {
+      const api = window.sharedSurfacePriorityMap;
+      const candidate = api.getState();
+      const second = structuredClone(candidate.view_state.views[0]);
+      second.id = "view-contract-second";
+      second.name = "Contract second view";
+      second.selected_cell_id = "";
+      second.selected_shared_asset_id = "";
+      candidate.view_state.views.push(second);
+      api.importState(candidate);
+      const withSecond = { fingerprint: api.promptCapsuleFingerprint(), projection: api.promptCapsuleStateProjection() };
+      const selectionOnly = api.getState();
+      selectionOnly.view_state.views.find(view => view.id === "view-contract-second").selected_cell_id = cell;
+      api.importState(selectionOnly);
+      return {
+        withSecond,
+        afterSelection: { fingerprint: api.promptCapsuleFingerprint(), projection: api.promptCapsuleStateProjection() },
+      };
+    }, cellId);
+    assert.equal(multiViewReceipt.withSecond.projection.view_state.views.length, 2);
+    assert.deepEqual(multiViewReceipt.afterSelection, multiViewReceipt.withSecond);
+
+    await page.locator("#addSurfaceBtn").click();
+    const withAddedSurface = await copiedJson(page, "#copyJsonBtn");
+    const addedSurface = withAddedSurface.shared_surface_priority_map.surfaces.at(-1);
+    const addedSurfaceCell = withAddedSurface.shared_surface_priority_map.heatmap_cells.find(
+      candidate => candidate.surface_id === addedSurface.id,
+    );
+    assert.ok(addedSurfaceCell, "A new surface should own stage-intersection cells");
+    for (const focusView of withAddedSurface.view_state.views) {
+      assert.equal(focusView.surface_order.filter(id => id === addedSurface.id).length, 1);
+    }
+    await page.evaluate(({ surfaceId, cellId: selectedCellId }) => {
+      const api = window.sharedSurfacePriorityMap;
+      const candidate = api.getState();
+      const second = candidate.view_state.views.find(view => view.id === "view-contract-second");
+      second.hidden_surface_ids.push(surfaceId);
+      second.selected_cell_id = selectedCellId;
+      api.importState(candidate);
+    }, { surfaceId: addedSurface.id, cellId: addedSurfaceCell.id });
+    const removeSurfaceButton = page.locator(`[data-remove-surface="${addedSurface.id}"]`);
+    await removeSurfaceButton.click();
+    assert.equal(await removeSurfaceButton.textContent(), "Confirm removal");
+    await removeSurfaceButton.click();
+    const withoutAddedSurface = await copiedJson(page, "#copyJsonBtn");
+    assert.equal(
+      withoutAddedSurface.shared_surface_priority_map.surfaces.some(({ id }) => id === addedSurface.id),
+      false,
+    );
+    for (const focusView of withoutAddedSurface.view_state.views) {
+      assert.equal(focusView.surface_order.includes(addedSurface.id), false);
+      assert.equal(focusView.hidden_surface_ids.includes(addedSurface.id), false);
+      assert.ok(
+        !focusView.selected_cell_id
+          || withoutAddedSurface.shared_surface_priority_map.heatmap_cells.some(({ id }) => id === focusView.selected_cell_id),
+      );
+    }
+
+    await page.locator("#addAssetBtn").click();
+    const withAddedAsset = await copiedJson(page, "#copyJsonBtn");
+    const addedAsset = withAddedAsset.shared_surface_priority_map.shared_assets.at(-1);
+    for (const focusView of withAddedAsset.view_state.views) {
+      assert.equal(focusView.shared_asset_order.filter(id => id === addedAsset.id).length, 1);
+    }
+    await page.evaluate(assetId => {
+      const api = window.sharedSurfacePriorityMap;
+      const candidate = api.getState();
+      const second = candidate.view_state.views.find(view => view.id === "view-contract-second");
+      second.hidden_shared_asset_ids.push(assetId);
+      second.selected_shared_asset_id = assetId;
+      api.importState(candidate);
+    }, addedAsset.id);
+    const removeAssetButton = page.locator(`[data-remove-asset="${addedAsset.id}"]`);
+    await removeAssetButton.click();
+    assert.equal(await removeAssetButton.textContent(), "Confirm removal");
+    await removeAssetButton.click();
+    const withoutAddedAsset = await copiedJson(page, "#copyJsonBtn");
+    assert.equal(
+      withoutAddedAsset.shared_surface_priority_map.shared_assets.some(({ id }) => id === addedAsset.id),
+      false,
+    );
+    for (const focusView of withoutAddedAsset.view_state.views) {
+      assert.equal(focusView.shared_asset_order.includes(addedAsset.id), false);
+      assert.equal(focusView.hidden_shared_asset_ids.includes(addedAsset.id), false);
+      assert.notEqual(focusView.selected_shared_asset_id, addedAsset.id);
+    }
+    const sharedSurfaceSelfImport = await page.evaluate(() => {
+      const api = window.sharedSurfacePriorityMap;
+      const before = api.getState();
+      api.importState(before);
+      return { before, after: api.getState() };
+    });
+    assert.deepEqual(sharedSurfaceSelfImport.after, sharedSurfaceSelfImport.before);
     assertTelemetry(telemetry);
   } finally {
     await context.close();
   }
+  await assertNoScriptPromptCapsule(browser, origin, route, "#aiPrompt", initialPrompt.plain);
 }
 
 async function aiSystemsPath(browser, origin, route) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPrompt;
   try {
+    initialPrompt = await exercisePromptCapsule(page, {
+      apiName: "aiSystemsServiceBlueprint",
+      copySelector: "#copyPromptBtn",
+      downloadSelector: "#downloadPromptBtn",
+      filename: "ai-systems-service-blueprint.prompt-capsule.r0.1.4.skill-assisted.md",
+      loopIds: ["repository-reentry", "visitor-surface-change"],
+      promptSelector: "#promptOut",
+      stateContract: "ai-systems-service-blueprint-state.v0.1",
+      title: "AI Systems Service Blueprint",
+      version: "0.1.4",
+    });
+    assert.equal(
+      initialPrompt.projection.ai_systems_service_blueprint.cells.length,
+      initialPrompt.state.ai_systems_service_blueprint.cells.length,
+      "the capsule represents every topology cell",
+    );
+    assert.equal(
+      initialPrompt.projection.view_state.views.length,
+      initialPrompt.state.view_state.views.length,
+      "the capsule represents every accepted focus view",
+    );
+    await assertPromptCapsuleKeyOrderStability(page, "aiSystemsServiceBlueprint");
     const cellId = "cell-runtime__plan";
     const literal = "Orchestrator keeps <strong>plan limits</strong> visible.";
+    await page.locator(`textarea[data-bind="cell-text"][data-id="${cellId}"]`).click();
+    assert.deepEqual(await page.evaluate(() => ({
+      fingerprint: window.aiSystemsServiceBlueprint.promptCapsuleFingerprint(),
+      markdown: window.aiSystemsServiceBlueprint.promptCapsule(),
+    })), { fingerprint: initialPrompt.fingerprint, markdown: initialPrompt.plain });
     await page.locator(`textarea[data-bind="cell-text"][data-id="${cellId}"]`).fill(literal);
     await page.locator(`select[data-bind="cell-status"][data-id="${cellId}"]`).selectOption("ready_to_route");
     await page.locator(`select[data-bind="cell-veracity"][data-id="${cellId}"]`).selectOption("source_specific");
@@ -849,6 +1053,12 @@ async function aiSystemsPath(browser, origin, route) {
     assert.match(await page.locator(`#topologySvg [data-cell-id="${cellId}"] title`).textContent(), /Orchestrator keeps <strong>plan limits/);
     assert.equal(await page.locator(`textarea[data-bind="cell-text"][data-id="${cellId}"]`).inputValue(), literal);
     assert.match(await page.locator(`select[data-bind="cell-route"][data-id="cell-runtime__intake"] option:checked`).textContent(), /No route yet/i);
+    const changedPrompt = await page.evaluate(() => ({
+      fingerprint: window.aiSystemsServiceBlueprint.promptCapsuleFingerprint(),
+      markdown: window.aiSystemsServiceBlueprint.promptCapsule(),
+    }));
+    assert.notEqual(changedPrompt.fingerprint, initialPrompt.fingerprint);
+    assert.match(changedPrompt.markdown, /Orchestrator keeps \\<strong\\>plan limits\\<\/strong\\> visible\./u);
 
     const stageIds = new Set(exported.ai_systems_service_blueprint.stages.map(stage => stage.id));
     const layerIds = new Set(exported.ai_systems_service_blueprint.layers.map(layer => layer.id));
@@ -883,6 +1093,73 @@ async function aiSystemsPath(browser, origin, route) {
     await assertVisibleNotice(page, "#importNotice", /remains available|working state retained/i);
     assert.equal((await valueJson(page, "#jsonOut")).ai_systems_service_blueprint.cells.find(item => item.id === cellId).text, sentinel);
 
+    const privateExtensionReceipt = await page.evaluate(() => {
+      const api = window.aiSystemsServiceBlueprint;
+      const before = { fingerprint: api.promptCapsuleFingerprint(), markdown: api.promptCapsule() };
+      const candidate = api.getState();
+      candidate.private_review_note = "local topology note";
+      candidate.ai_systems_service_blueprint.private_review_note = "local body note";
+      candidate.view_state.private_review_note = "local view note";
+      candidate.artifact_identity.private_review_note = "local identity note";
+      candidate.quick_use.private_review_note = "local quick-use note";
+      candidate.ai_systems_service_blueprint.stages[0].private_review_note = "local stage note";
+      candidate.ai_systems_service_blueprint.layers[0].private_review_note = "local layer note";
+      candidate.ai_systems_service_blueprint.cells[0].private_review_note = "local cell note";
+      candidate.ai_systems_service_blueprint.components[0].private_review_note = "local component note";
+      candidate.view_state.views[0].private_review_note = "local focus-view note";
+      candidate.semantic_locality.private_review_note = "local language note";
+      candidate.semantic_locality.replacement_state_guidance[0].private_review_note = "local guidance note";
+      candidate.recovery_calibration.private_review_note = "local recovery note";
+      api.importState(candidate);
+      const roundtrip = api.getState();
+      return {
+        before,
+        after: { fingerprint: api.promptCapsuleFingerprint(), markdown: api.promptCapsule() },
+        retained: [
+          roundtrip.private_review_note,
+          roundtrip.ai_systems_service_blueprint.private_review_note,
+          roundtrip.view_state.private_review_note,
+          roundtrip.artifact_identity.private_review_note,
+          roundtrip.quick_use.private_review_note,
+          roundtrip.ai_systems_service_blueprint.stages[0].private_review_note,
+          roundtrip.ai_systems_service_blueprint.layers[0].private_review_note,
+          roundtrip.ai_systems_service_blueprint.cells[0].private_review_note,
+          roundtrip.ai_systems_service_blueprint.components[0].private_review_note,
+          roundtrip.view_state.views[0].private_review_note,
+          roundtrip.semantic_locality.private_review_note,
+          roundtrip.semantic_locality.replacement_state_guidance[0].private_review_note,
+          roundtrip.recovery_calibration.private_review_note,
+        ],
+      };
+    });
+    assert.deepEqual(privateExtensionReceipt.after, privateExtensionReceipt.before);
+    assert.deepEqual(privateExtensionReceipt.retained, [
+      "local topology note", "local body note", "local view note", "local identity note", "local quick-use note",
+      "local stage note", "local layer note", "local cell note", "local component note", "local focus-view note",
+      "local language note", "local guidance note", "local recovery note",
+    ]);
+
+    const multiViewReceipt = await page.evaluate(cell => {
+      const api = window.aiSystemsServiceBlueprint;
+      const candidate = api.getState();
+      const second = structuredClone(candidate.view_state.views[0]);
+      second.id = "view-contract-second";
+      second.name = "Contract second view";
+      second.selected_cell_id = "";
+      candidate.view_state.views.push(second);
+      api.importState(candidate);
+      const withSecond = { fingerprint: api.promptCapsuleFingerprint(), projection: api.promptCapsuleStateProjection() };
+      const selectionOnly = api.getState();
+      selectionOnly.view_state.views.find(view => view.id === "view-contract-second").selected_cell_id = cell;
+      api.importState(selectionOnly);
+      return {
+        withSecond,
+        afterSelection: { fingerprint: api.promptCapsuleFingerprint(), projection: api.promptCapsuleStateProjection() },
+      };
+    }, cellId);
+    assert.equal(multiViewReceipt.withSecond.projection.view_state.views.length, 2);
+    assert.deepEqual(multiViewReceipt.afterSelection, multiViewReceipt.withSecond);
+
     const collision = withActiveViewArtifactCollision(await valueJson(page, "#jsonOut"));
     await clearNotice(page, "#importNotice");
     await page.locator("#jsonImport").fill(JSON.stringify(collision));
@@ -893,14 +1170,42 @@ async function aiSystemsPath(browser, origin, route) {
   } finally {
     await context.close();
   }
+  await assertNoScriptPromptCapsule(browser, origin, route, "#promptOut", initialPrompt.plain);
 }
 
 async function softwareViewsPath(browser, origin, route) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPrompt;
   try {
+    initialPrompt = await exercisePromptCapsule(page, {
+      apiName: "softwareArchitectureViews",
+      copySelector: "#copyPromptBtn",
+      downloadSelector: "#downloadPromptBtn",
+      filename: "software-architecture-views.prompt-capsule.r0.1.4.skill-assisted.md",
+      loopIds: ["repository-reentry", "visitor-surface-change"],
+      promptSelector: "#aiPrompt",
+      stateContract: "software-architecture-views-state.v0.1",
+      title: "Software Architecture Views",
+      version: "0.1.4",
+    });
+    assert.equal(
+      initialPrompt.projection.software_architecture_views.attachments.length,
+      initialPrompt.state.software_architecture_views.attachments.length,
+      "the capsule represents every architecture attachment",
+    );
+    assert.equal(
+      initialPrompt.projection.view_state.views.length,
+      initialPrompt.state.view_state.views.length,
+      "the capsule represents every accepted focus view",
+    );
+    await assertPromptCapsuleKeyOrderStability(page, "softwareArchitectureViews");
     const attachmentId = "att-review-state-service";
     const literal = "Review state crosses <strong>service and audit</strong> attachments.";
     await page.locator(`button[data-action="select-attachment"][data-id="${attachmentId}"]`).click();
+    assert.deepEqual(await page.evaluate(() => ({
+      fingerprint: window.softwareArchitectureViews.promptCapsuleFingerprint(),
+      markdown: window.softwareArchitectureViews.promptCapsule(),
+    })), { fingerprint: initialPrompt.fingerprint, markdown: initialPrompt.plain });
     await page.locator("#attRelationship").fill(literal);
 
     let exported = await textJson(page, "#jsonOut");
@@ -911,6 +1216,12 @@ async function softwareViewsPath(browser, origin, route) {
     const jsonLd = await textJson(page, "#jsonLdOut");
     const attachmentNode = jsonLd["@graph"].find(node => node.id === `#${attachmentId}`);
     assert.equal(attachmentNode["ca:belongsToView"].id, "#view-module");
+    const changedPrompt = await page.evaluate(() => ({
+      fingerprint: window.softwareArchitectureViews.promptCapsuleFingerprint(),
+      markdown: window.softwareArchitectureViews.promptCapsule(),
+    }));
+    assert.notEqual(changedPrompt.fingerprint, initialPrompt.fingerprint);
+    assert.match(changedPrompt.markdown, /Review state crosses \\<strong\\>service and audit\\<\/strong\\> attachments\./u);
 
     await page.locator(`#attachmentTable button[data-action="toggle-attachment"][data-id="${attachmentId}"]`).click();
     exported = await textJson(page, "#jsonOut");
@@ -943,9 +1254,74 @@ async function softwareViewsPath(browser, origin, route) {
     await assertVisibleNotice(page, "#importNotice", /remains available|working state retained/i);
     assert.equal((await textJson(page, "#jsonOut")).software_architecture_views.attachments.find(item => item.id === attachmentId).relationship, sentinel);
 
+    const privateExtensionReceipt = await page.evaluate(() => {
+      const api = window.softwareArchitectureViews;
+      const before = { fingerprint: api.promptCapsuleFingerprint(), markdown: api.promptCapsule() };
+      const candidate = api.getState();
+      candidate.private_review_note = "local architecture note";
+      candidate.software_architecture_views.private_review_note = "local body note";
+      candidate.view_state.private_review_note = "local view note";
+      candidate.artifact_identity.private_review_note = "local identity note";
+      candidate.quick_use.private_review_note = "local quick-use note";
+      candidate.modeled_element.private_review_note = "local modeled-element note";
+      candidate.software_architecture_views.views[0].private_review_note = "local architecture-view note";
+      candidate.software_architecture_views.attachments[0].private_review_note = "local attachment note";
+      candidate.view_state.views[0].private_review_note = "local focus-view note";
+      candidate.semantic_locality.private_review_note = "local language note";
+      candidate.semantic_locality.replacement_state_guidance[0].private_review_note = "local guidance note";
+      candidate.recovery_calibration.private_review_note = "local recovery note";
+      api.importState(candidate);
+      const roundtrip = api.getState();
+      return {
+        before,
+        after: { fingerprint: api.promptCapsuleFingerprint(), markdown: api.promptCapsule() },
+        retained: [
+          roundtrip.private_review_note,
+          roundtrip.software_architecture_views.private_review_note,
+          roundtrip.view_state.private_review_note,
+          roundtrip.artifact_identity.private_review_note,
+          roundtrip.quick_use.private_review_note,
+          roundtrip.modeled_element.private_review_note,
+          roundtrip.software_architecture_views.views[0].private_review_note,
+          roundtrip.software_architecture_views.attachments[0].private_review_note,
+          roundtrip.view_state.views[0].private_review_note,
+          roundtrip.semantic_locality.private_review_note,
+          roundtrip.semantic_locality.replacement_state_guidance[0].private_review_note,
+          roundtrip.recovery_calibration.private_review_note,
+        ],
+      };
+    });
+    assert.deepEqual(privateExtensionReceipt.after, privateExtensionReceipt.before);
+    assert.deepEqual(privateExtensionReceipt.retained, [
+      "local architecture note", "local body note", "local view note", "local identity note", "local quick-use note",
+      "local modeled-element note", "local architecture-view note", "local attachment note", "local focus-view note",
+      "local language note", "local guidance note", "local recovery note",
+    ]);
+
+    const multiViewReceipt = await page.evaluate(attachment => {
+      const api = window.softwareArchitectureViews;
+      const candidate = api.getState();
+      const second = structuredClone(candidate.view_state.views[0]);
+      second.id = "view-contract-second";
+      second.name = "Contract second view";
+      second.selected_attachment_id = "";
+      candidate.view_state.views.push(second);
+      api.importState(candidate);
+      const withSecond = { fingerprint: api.promptCapsuleFingerprint(), projection: api.promptCapsuleStateProjection() };
+      const selectionOnly = api.getState();
+      selectionOnly.view_state.views.find(view => view.id === "view-contract-second").selected_attachment_id = attachment;
+      api.importState(selectionOnly);
+      return {
+        withSecond,
+        afterSelection: { fingerprint: api.promptCapsuleFingerprint(), projection: api.promptCapsuleStateProjection() },
+      };
+    }, attachmentId);
+    assert.equal(multiViewReceipt.withSecond.projection.view_state.views.length, 2);
+    assert.deepEqual(multiViewReceipt.afterSelection, multiViewReceipt.withSecond);
+
     const collision = structuredClone(await textJson(page, "#jsonOut"));
     collision.software_architecture_views.attachments.find(item => item.id === attachmentId).id = "view-module";
-    activeView(collision).selected_attachment_id = "";
+    collision.view_state.views.forEach(view => { view.selected_attachment_id = ""; });
     activeView(collision).hidden_attachment_ids = [];
     await clearNotice(page, "#importNotice");
     await page.locator("#jsonImport").fill(JSON.stringify(collision));
@@ -956,6 +1332,7 @@ async function softwareViewsPath(browser, origin, route) {
   } finally {
     await context.close();
   }
+  await assertNoScriptPromptCapsule(browser, origin, route, "#aiPrompt", initialPrompt.plain);
 }
 
 async function participatoryPath(browser, origin, route) {
