@@ -356,15 +356,16 @@
       "subtitle": "Revisiting Solution Artifacts",
       "family": "Recovery Routing and Revision",
       "shape": "evidence-to-revision log",
-      "file": "upstream-revision-loop-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "upstream-revision-loop-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 59607,
+      "size_bytes": 94311,
       "previous": [
         "upstream-revision-loop-chimeric-prototype-v0.1.html",
         "upstream-revision-loop-chimeric-prototype-v0.1.1.html",
-        "upstream-revision-loop-chimeric-prototype-v0.1.2.html"
+        "upstream-revision-loop-chimeric-prototype-v0.1.2.html",
+        "upstream-revision-loop-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -373,15 +374,16 @@
       "subtitle": "Failure Geometries and Strain Cues",
       "family": "Recovery Routing and Revision",
       "shape": "strain cue routing atlas",
-      "file": "recovery-routing-atlas-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 74083,
+      "size_bytes": 120756,
       "previous": [
         "recovery-routing-atlas-chimeric-prototype-v0.1.html",
         "recovery-routing-atlas-chimeric-prototype-v0.1.1.html",
-        "recovery-routing-atlas-chimeric-prototype-v0.1.2.html"
+        "recovery-routing-atlas-chimeric-prototype-v0.1.2.html",
+        "recovery-routing-atlas-chimeric-prototype-v0.1.3.html"
       ]
     },
     {

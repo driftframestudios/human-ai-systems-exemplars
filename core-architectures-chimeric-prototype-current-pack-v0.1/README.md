@@ -39,6 +39,15 @@ JavaScript. The matrix retains its threshold cards, focus view, routes, and
 recovery semantics as authority; the Markdown is a portable handoff from that
 state.
 
+Upstream Revision Loop v0.1.4 and Recovery Routing Atlas v0.1.4 complete the
+current Recovery Routing and Revision family’s Prompt Capsule adoption. The
+loop carries downstream observations back to a named prior artifact and
+revision target. The atlas carries every recovery geometry—including entries
+hidden in the active focus view—so a receiving collaborator can distinguish a
+strain cue, restored condition, fitting route, and evidence worth preserving.
+Both Markdown views retain that complete represented state while selection and
+other interface-only details stay local to the artifact.
+
 ## Visitor-visible authorship and license
 
 The pack hub and each of the 21 current prototype documents carry their own

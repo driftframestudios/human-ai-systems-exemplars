@@ -175,6 +175,8 @@ test("semantic-identifier successors retain the established iframe request closu
   const sourceEntries = currentById(sourceManifest);
   const acceptedCapabilityAdditions = new Map([
     ["first-responsible-version-matrix", ["file-download"]],
+    ["upstream-revision-loop", ["file-download"]],
+    ["recovery-routing-atlas", ["file-download"]],
   ]);
 
   for (const entry of sourceManifest.prototypes) {
