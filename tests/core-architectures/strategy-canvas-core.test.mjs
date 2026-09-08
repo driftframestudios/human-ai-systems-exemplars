@@ -24,6 +24,10 @@ const collaborationGuidePath = resolve(
   repositoryRoot,
   "schemas/collaboration/index.html"
 );
+const artifactModelRegistryPath = resolve(
+  repositoryRoot,
+  "core-architecture-shared-schema-extraction-v0.1/core-architecture-artifact-model-registry-v0.1.json"
+);
 
 async function loadStrategyCanvasCore() {
   const context = vm.createContext({ console, structuredClone });
@@ -460,5 +464,103 @@ test("Core manifests resolve current files, byte counts, and published digests",
         }
       }
     });
+  }
+});
+
+test("Strategy Canvas artifact registry preserves both current expression owners", async () => {
+  const canonicalManifestPath = resolve(
+    coreRoot,
+    "core-architectures-chimeric-prototype-manifest-v0.1.json"
+  );
+  const contextManifestPath = resolve(
+    contextCoreRoot,
+    "core-architectures-chimeric-prototype-manifest-v0.1.json"
+  );
+  const [registry, canonicalManifest, contextManifest] = await Promise.all([
+    readFile(artifactModelRegistryPath, "utf8").then((source) => JSON.parse(source)),
+    readFile(canonicalManifestPath, "utf8").then((source) => JSON.parse(source)),
+    readFile(contextManifestPath, "utf8").then((source) => JSON.parse(source))
+  ]);
+  const model = registry.models.find(({ id }) => id === "strategy-canvas");
+  const canonical = canonicalManifest.prototypes.find(({ id }) => id === "strategy-canvas");
+  const context = contextManifest.prototypes.find(({ id }) => id === "strategy-canvas");
+  const registryRoot = dirname(artifactModelRegistryPath);
+
+  assert.ok(model, "The artifact-model registry should carry the Strategy Canvas model.");
+  assert.ok(canonical, "The canonical manifest should carry the Strategy Canvas entry.");
+  assert.ok(context, "The Context manifest should carry the Strategy Canvas entry.");
+  assert.ok(
+    model.expression_coordinates,
+    "The shared registry should carry the maintained expression coordinates."
+  );
+  assert.equal(canonical.expression, "canonical");
+  assert.equal(context.expression, "context-canvas");
+  assert.deepEqual(
+    [model.current_file, model.current_version, model.current_expression],
+    [canonical.file, canonical.version, canonical.expression],
+    "The shared registry should follow the canonical manifest's current identity."
+  );
+  assert.deepEqual(
+    Object.keys(model.expression_coordinates).sort(),
+    ["canonical", "context_canvas"],
+    "The shared registry should name both maintained expression owners."
+  );
+
+  const assertExpressionCoordinate = (name, coordinate, manifestEntry, manifestPath, ownerRoot) => {
+    assert.equal(
+      resolve(registryRoot, coordinate.manifest_file),
+      manifestPath,
+      `${name} should route to its owning manifest.`
+    );
+    assert.equal(
+      resolve(registryRoot, coordinate.current_file),
+      resolve(ownerRoot, manifestEntry.file),
+      `${name} should route to its manifest-selected current artifact.`
+    );
+    assert.equal(
+      coordinate.current_version,
+      manifestEntry.version,
+      `${name} should carry its manifest-selected current version.`
+    );
+    assert.equal(
+      resolve(registryRoot, coordinate.compatibility_route),
+      resolve(ownerRoot, manifestEntry.compatibility_route),
+      `${name} should route through its owner's compatibility artifact.`
+    );
+  };
+
+  assertExpressionCoordinate(
+    "Canonical Strategy Canvas",
+    model.expression_coordinates.canonical,
+    canonical,
+    canonicalManifestPath,
+    coreRoot
+  );
+  assertExpressionCoordinate(
+    "Context Strategy Canvas",
+    model.expression_coordinates.context_canvas,
+    context,
+    contextManifestPath,
+    contextCoreRoot
+  );
+  assert.notEqual(
+    resolve(registryRoot, model.expression_coordinates.canonical.current_file),
+    resolve(registryRoot, model.expression_coordinates.context_canvas.current_file),
+    "Canonical and Context coordinates should retain distinct current artifacts."
+  );
+
+  const canonicalSchemaPath = resolve(coreRoot, canonical.schema);
+  const canonicalEvidencePath = resolve(coreRoot, canonical.evidence);
+  assert.equal(resolve(registryRoot, model.schema_file), canonicalSchemaPath);
+  assert.equal(resolve(registryRoot, model.evidence_file), canonicalEvidencePath);
+  assert.equal(resolve(contextCoreRoot, context.canonical_schema), canonicalSchemaPath);
+  assert.equal(resolve(contextCoreRoot, context.canonical_evidence), canonicalEvidencePath);
+  for (const [label, file] of [
+    ["canonical compatibility route", resolve(coreRoot, canonical.compatibility_route)],
+    ["Context compatibility route", resolve(contextCoreRoot, context.compatibility_route)],
+    ["canonical schema", canonicalSchemaPath],
+    ["canonical evidence registry", canonicalEvidencePath]
+  ]) {
+    assert.equal(existsSync(file), true, `The ${label} should resolve in repository source.`);
   }
 });

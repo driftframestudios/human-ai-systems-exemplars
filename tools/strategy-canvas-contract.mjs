@@ -40,6 +40,15 @@ const STRATEGY_EVIDENCE = "core-architectures-chimeric-prototype-current-pack-v0
 const GENOMIC_REPRESENTATION = "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html";
 const GENOMIC_SVG = "context-canvas-project-surface/img/plot/genomic_viewer_strategy_canvas.svg";
 const INITIATIVE_COSTING = "collaboration/initiative-costing-calculator/index.html";
+const STRATEGY_PLANNING_SOURCE_RESOLVER = new Map([
+  ["urn:source-key:strategy-canvas-research/001", "planning/context-canvas/strategy-canvas/01-method-scale-and-adaptation.md"],
+  ["urn:source-key:strategy-canvas-research/002", "planning/context-canvas/strategy-canvas/02-independent-elicitation-and-aggregation.md"],
+  ["urn:source-key:strategy-canvas-research/003", "planning/context-canvas/strategy-canvas/03-direct-manipulation-and-room-ergonomics.md"],
+  ["urn:source-key:strategy-canvas-research/004", "planning/context-canvas/strategy-canvas/04-domain-dimension-and-anchor-atlas.md"],
+  ["urn:source-key:strategy-canvas-research/005", "planning/context-canvas/strategy-canvas/06-architecture-security-and-verification.md"],
+  ["urn:source-key:strategy-canvas-research/006", "planning/context-canvas/strategy-canvas/README.md"],
+  ["urn:source-key:strategy-canvas-research/007", "planning/context-canvas/strategy-canvas/07-implementation-coverage-ledger.md"],
+]);
 const VIEWPORTS = [
   { name: "mobile", width: 390, height: 844 },
   { name: "desktop", width: 1440, height: 1000 },
@@ -1608,6 +1617,74 @@ async function strategyCanvasEvidenceContract() {
     assert(registry.methodOrigin.primarySource.url === "https://www.blueoceanstrategy.com/tools/strategy-canvas/", "Evidence registry should name the method owners' primary description.");
     assert(registry.methodOrigin.institutionalRecord.url.startsWith("https://www.insead.edu/"), "Evidence registry should retain the institutional record.");
     assert(registry.methodOrigin.developers.includes("W. Chan Kim") && registry.methodOrigin.developers.includes("Renée Mauborgne"), "Evidence registry should retain both method developers.");
+    const inventory = registry.representationInventory;
+    const expectedInventoryIds = [
+      "canonical-worksheet",
+      "canonical-compatibility",
+      "canonical-iframe-projection",
+      "context-workbench",
+      "context-compatibility",
+      "narrative-projection",
+      "narrative-portable-companion",
+      "genomic-static-companion",
+      "context-host-embeds",
+      "public-schema-example",
+      "planning-and-evidence-spine",
+    ];
+    assert(/incidental/iu.test(inventory.scope), "Representation inventory should state why incidental mentions remain outside its finite scope.");
+    assert(!JSON.stringify(registry).includes("planning/context-canvas"), "The public evidence registry should carry operator-blind planning source keys rather than private planning locators.");
+    assert(same(Object.keys(inventory.authorities).sort(), ["canonicalManifest", "contextManifest", "evidenceRegistry", "semanticContract"]), "Representation inventory should name its four source authorities.");
+    assert(same(inventory.artifacts.map((artifact) => artifact.id), expectedInventoryIds), "Representation inventory should retain the complete ordered set of material Strategy Canvas carriers.");
+    const [canonicalManifest, contextManifest, publicRouteManifest] = await Promise.all([
+      readFile(resolve(inventory.authorities.canonicalManifest), "utf8").then(JSON.parse),
+      readFile(resolve(inventory.authorities.contextManifest), "utf8").then(JSON.parse),
+      readFile(resolve("core-architectures-chimeric-prototype-current-pack-v0.1/public-iframe-route-manifest-v1.json"), "utf8").then(JSON.parse),
+    ]);
+    const canonicalCurrent = canonicalManifest.prototypes.find((prototype) =>
+      prototype.id === "strategy-canvas" && prototype.status === "current" && prototype.expression === "canonical"
+    );
+    const contextCurrent = contextManifest.prototypes.find((prototype) =>
+      prototype.id === "strategy-canvas" && prototype.status === "current" && prototype.expression === "context-canvas"
+    );
+    assert(canonicalCurrent && contextCurrent, "Each owning manifest should declare one current Strategy Canvas expression.");
+    const canonicalRoot = inventory.authorities.canonicalManifest.slice(0, inventory.authorities.canonicalManifest.lastIndexOf("/") + 1);
+    const contextRoot = inventory.authorities.contextManifest.slice(0, inventory.authorities.contextManifest.lastIndexOf("/") + 1);
+    const inventoryById = new Map(inventory.artifacts.map((artifact) => [artifact.id, artifact]));
+    const canonicalInventory = inventoryById.get("canonical-worksheet");
+    assert(canonicalInventory.version === canonicalCurrent.version, "Canonical inventory version should derive from its owning manifest.");
+    assert(canonicalInventory.paths.includes(`${canonicalRoot}${canonicalCurrent.file}`), "Canonical inventory should name the manifest-current worksheet.");
+    const canonicalCompatibility = inventoryById.get("canonical-compatibility");
+    assert(canonicalCompatibility.paths.includes(`${canonicalRoot}${canonicalCurrent.compatibility_route}`), "Canonical inventory should name the manifest-owned compatibility route.");
+    const contextInventory = inventoryById.get("context-workbench");
+    assert(contextInventory.version === contextCurrent.version, "Context inventory version should derive from its owning manifest.");
+    assert(contextInventory.paths.includes(`${contextRoot}${contextCurrent.file}`), "Context inventory should name the manifest-current workbench.");
+    const contextCompatibility = inventoryById.get("context-compatibility");
+    assert(contextCompatibility.paths.includes(`${contextRoot}${contextCurrent.compatibility_route}`), "Context inventory should name the manifest-owned compatibility route.");
+    const iframeRoute = publicRouteManifest.routes.find((route) => route.id === "strategy-canvas");
+    assert(iframeRoute?.source_file === canonicalCurrent.file, "The public iframe route should project the manifest-current canonical worksheet.");
+    assert(iframeRoute?.source_version === canonicalCurrent.version && iframeRoute?.expression === canonicalCurrent.expression, "The public iframe route should retain canonical version and expression identity.");
+    assert(iframeRoute?.package_files?.some((file) => file.source_file === canonicalCurrent.evidence), "The public iframe route should carry the evidence file declared by the canonical manifest.");
+    const iframeInventory = inventoryById.get("canonical-iframe-projection");
+    assert(iframeInventory.version === iframeRoute.source_version, "Iframe inventory version should derive from the route manifest.");
+    for (const artifact of inventory.artifacts) {
+      assert(artifact.expression.length > 4, `${artifact.id} should name its expression.`);
+      assert(artifact.role.length > 8, `${artifact.id} should name its carrier role.`);
+      assert(artifact.version.length > 2, `${artifact.id} should name its version or current standing.`);
+      assert(artifact.relation.length > 24, `${artifact.id} should state its relation to source or receiver.`);
+      assert(Array.isArray(artifact.paths) && artifact.paths.length > 0, `${artifact.id} should name its repository paths.`);
+      for (const file of artifact.paths) {
+        assert((await readFile(resolve(file))).length > 0, `${artifact.id} should resolve ${file}.`);
+      }
+      for (const sourceKey of artifact.sourceKeys || []) {
+        const planningPath = STRATEGY_PLANNING_SOURCE_RESOLVER.get(sourceKey);
+        assert(planningPath, `${artifact.id} should use a source key present in the authorized local resolver.`);
+        const planningSource = await readFile(resolve(planningPath), "utf8");
+        assert(planningSource.includes("strategy-canvas-evidence.v0.1.json"), `${planningPath} should route back to the evidence registry.`);
+      }
+    }
+    const portableCompanion = inventory.artifacts.find((artifact) => artifact.id === "narrative-portable-companion");
+    assert(portableCompanion.version === canonicalCurrent.version, "Narrative portable-companion inventory should derive its version from the canonical manifest.");
+    assert(portableCompanion.archiveMember.endsWith(canonicalCurrent.file), "Narrative portable-companion inventory should name the manifest-current canonical worksheet without collapsing it into the Context workbench.");
     const ids = registry.implementationEvidence.map((entry) => entry.id);
     assert(new Set(ids).size === ids.length && ids.length >= 8, "Evidence registry should carry a distinct, substantive implementation ledger.");
     for (const entry of registry.implementationEvidence) {
@@ -1618,6 +1695,14 @@ async function strategyCanvasEvidenceContract() {
       assert(Array.isArray(entry.receivingSurfaces) && entry.receivingSurfaces.length > 0, `${entry.id} should name at least one receiving surface.`);
       for (const receiver of entry.receivingSurfaces) {
         assert(Object.hasOwn(registry.representations, receiver), `${entry.id} should map only to a registered representation (${receiver}).`);
+      }
+      assert(Array.isArray(entry.planningSourceKeys) && entry.planningSourceKeys.length > 0, `${entry.id} should name the planning source that explains its implementation use.`);
+      for (const sourceKey of entry.planningSourceKeys) {
+        const planningPath = STRATEGY_PLANNING_SOURCE_RESOLVER.get(sourceKey);
+        assert(planningPath, `${entry.id} should use a planning source key present in the authorized local resolver.`);
+        const planningSource = await readFile(resolve(planningPath), "utf8");
+        assert(planningSource.includes("strategy-canvas-evidence.v0.1.json"), `${planningPath} should route back to the evidence registry.`);
+        assert(planningSource.includes(`\`${entry.id}\``), `${planningPath} should name evidence entry ${entry.id}.`);
       }
     }
     const usedReceivers = new Set(registry.implementationEvidence.flatMap((entry) => entry.receivingSurfaces));
@@ -1650,7 +1735,7 @@ async function strategyCanvasEvidenceContract() {
     const fourActionsUrl = registry.relatedMethods.fourActionsFramework.primarySource.url;
     assert(initiativeSource.includes('data-strategy-canvas-source="four-actions-origin"'), "Initiative costing should expose its Four Actions method marker.");
     assert(initiativeSource.includes(`<a href="${fourActionsUrl}">`), "Initiative costing should link its official Four Actions source with ordinary in-place navigation.");
-    assert(!initiativeSource.includes(`href="${fourActionsUrl}" target="_blank"`), "The Initiative Costing source should keep ordinary in-place citation navigation.");
+    assert(!initiativeSource.includes(`href="${fourActionsUrl}" target="_blank"`), "The Initiative Costing source should preserve the visitor's browsing-context choice; iframe projection owns separate-tab behavior.");
     assert(registry.representations.initiativeCosting.classification === "strategy-canvas-adjacent-four-actions", "Initiative costing should retain its precise adjacent-method classification.");
     const genomicSource = await readFile(resolve(GENOMIC_REPRESENTATION), "utf8");
     assert(genomicSource.includes('<figcaption class="table-note" data-strategy-canvas-source="method-origin">\n                This static representation adapts the Strategy Canvas'), "The Genomic page should attach the method marker to the Strategy Canvas caption itself.");
@@ -1662,6 +1747,14 @@ async function strategyCanvasEvidenceContract() {
     assert(svg.includes("local qualitative adaptation"), "Static Strategy Canvas SVG metadata should state its local adaptation standing.");
     const buildSource = await readFile(resolve("core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/build.mjs"), "utf8");
     assert(buildSource.includes("strategy-canvas-evidence.v0.1.json") && buildSource.includes("representations?.canonical"), "The canonical builder should consume its evidence registry representation.");
+    const publicRouteManifest = JSON.parse(await readFile(resolve("core-architectures-chimeric-prototype-current-pack-v0.1/public-iframe-route-manifest-v1.json"), "utf8"));
+    const publicRoute = publicRouteManifest.routes.find((route) => route.id === "strategy-canvas");
+    assert(publicRoute.expression === "canonical", "The public Strategy Canvas route should identify its canonical expression.");
+    assert(publicRoute.reader_job.includes("canonical worksheet"), "The public Strategy Canvas route should name its canonical worksheet reader job.");
+    const fmiHost = await readFile(resolve("context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html"), "utf8");
+    assert(fmiHost.includes("embedded canonical worksheet"), "The FMI host should identify the embedded surface as the canonical worksheet.");
+    assert(fmiHost.includes("JSON state remains visible"), "The FMI host should use the canonical worksheet's JSON-state term.");
+    assert(fmiHost.includes("Open the Strategy Canvas workbench"), "The FMI host should keep the fuller Context workbench as a distinct handoff.");
   });
 }
 

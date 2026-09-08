@@ -1079,6 +1079,9 @@ export async function createPackagePlan(options = {}) {
         ? { source_root: reading.route.source_root }
         : {}),
       source_version: reading.route.source_version,
+      ...(typeof reading.route.expression === "string"
+        ? { expression: reading.route.expression }
+        : {}),
       receiver_standing: reading.route.receiver_standing,
       activation_standing: reading.route.activation_standing,
       activation_eligible: reading.route.activation_standing === "eligible",

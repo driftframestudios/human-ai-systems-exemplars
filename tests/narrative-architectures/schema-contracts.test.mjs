@@ -186,7 +186,7 @@ test("Narrative Capsule Composer publishes the shared Prompt Capsule exchange co
   }
 });
 
-test("Narrative Capsule links and bundles the Context-received Core family index", async () => {
+test("Narrative Capsule keeps its Context workbench preview distinct from its canonical portable companion", async () => {
   const [coreManifest, contextCoreManifest, composerManifest, composer, targetRegistry] = await Promise.all([
     json(resolve(coreRoot, "core-architectures-chimeric-prototype-manifest-v0.1.json")),
     json(resolve(contextCoreRoot, "core-architectures-chimeric-prototype-manifest-v0.1.json")),
@@ -197,10 +197,41 @@ test("Narrative Capsule links and bundles the Context-received Core family index
   const familyIndex = coreManifest.prototypes.find(({ id }) => id === "core-architecture-family-index");
   const currentCompanion = `companions/${familyIndex.file}`;
   const priorCompanion = "companions/core-architecture-family-index-chimeric-prototype-v0.1.html";
+  const canonicalStrategyCanvas = coreManifest.prototypes.find(({ id }) => id === "strategy-canvas");
+  const contextStrategyCanvas = contextCoreManifest.prototypes.find(({ id }) => id === "strategy-canvas");
+  const sourcePreview = composerManifest.files.strategy_canvas.source_preview;
+  const portableCompanion = composerManifest.files.strategy_canvas.portable_companion;
+  const canonicalArchiveRef = `companions/${canonicalStrategyCanvas.file}`;
 
   assert.ok(composerManifest.files.companions.includes(currentCompanion));
+  assert.ok(composerManifest.files.companions.includes(canonicalArchiveRef));
+  assert.ok(!composerManifest.files.companions.includes(`companions/${contextStrategyCanvas.file}`));
   assert.ok(!composerManifest.files.companions.includes(priorCompanion));
   assert.match(composer, new RegExp(`href=["']${currentCompanion.replaceAll(".", "\\.")}["']`, "u"));
+
+  assert.deepEqual(sourcePreview, {
+    role: "context_facilitation_workbench",
+    expression: contextStrategyCanvas.expression,
+    version: contextStrategyCanvas.version,
+    source_ref: `../../core-architectures/chimeric-pack-v0.1/${contextStrategyCanvas.file}`,
+    sha256: contextStrategyCanvas.sha256,
+  });
+  assert.deepEqual(portableCompanion, {
+    role: "portable_canonical_worksheet",
+    expression: canonicalStrategyCanvas.expression,
+    version: canonicalStrategyCanvas.version,
+    source_ref: `../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/${canonicalStrategyCanvas.file}`,
+    archive_ref: canonicalArchiveRef,
+    sha256: canonicalStrategyCanvas.sha256,
+  });
+  assert.notEqual(sourcePreview.role, portableCompanion.role);
+  assert.match(
+    composer,
+    new RegExp(
+      `<a href=["']${sourcePreview.source_ref.replaceAll(".", "\\.")}["'][^>]*>Open Context Canvas facilitation workbench v${sourcePreview.version.replaceAll(".", "\\.")} in a new tab</a>`,
+      "u",
+    ),
+  );
 
   const [companion, acceptedFamilyIndex] = await Promise.all([
     readFile(resolve(composerRoot, currentCompanion), "utf8"),
@@ -222,8 +253,8 @@ test("Narrative Capsule links and bundles the Context-received Core family index
       .filter(({ id }) => id !== "core-architecture-family-index")
       .map(({ id, file }) => [id, file])
   );
-  const contextStrategyCanvas = contextCoreManifest.prototypes.find(({ id }) => id === "strategy-canvas");
   assert.equal(contextStrategyCanvas.expression, "context-canvas");
+  assert.equal(canonicalStrategyCanvas.expression, "canonical");
   assert.notEqual(
     contextStrategyCanvas.file,
     currentFiles.get("strategy-canvas"),
@@ -235,6 +266,10 @@ test("Narrative Capsule links and bundles the Context-received Core family index
     currentFiles,
     "the companion index keeps current Core coordinates and the declared Context Strategy adaptation"
   );
+
+  const strategyTarget = targetRegistry.cards.find(({ id }) => id === "strategy-canvas");
+  assert.equal(strategyTarget.prototypeRef, contextStrategyCanvas.file);
+  assert.equal(strategyTarget.companionRef, sourcePreview.source_ref);
 
   for (const id of ["heart-chart", "plus-delta", "practitioner-judgment-probes"]) {
     const current = coreManifest.prototypes.find((prototype) => prototype.id === id);
@@ -249,6 +284,8 @@ test("Narrative Capsule links and bundles the Context-received Core family index
   const archiveRoot = "narrative-capsules-chimeric-prototype-v0.1";
   const archiveEntries = execFileSync("unzip", ["-Z1", archive], { encoding: "utf8" }).split("\n");
   assert.ok(archiveEntries.includes(`${archiveRoot}/${currentCompanion}`));
+  assert.ok(archiveEntries.includes(`${archiveRoot}/${portableCompanion.archive_ref}`));
+  assert.ok(!archiveEntries.includes(`${archiveRoot}/companions/${contextStrategyCanvas.file}`));
   assert.ok(!archiveEntries.includes(`${archiveRoot}/${priorCompanion}`));
   const bundledCompanion = execFileSync(
     "unzip",
@@ -256,13 +293,70 @@ test("Narrative Capsule links and bundles the Context-received Core family index
     { encoding: "utf8", maxBuffer: 8 * 1024 * 1024 }
   );
   assert.doesNotMatch(bundledCompanion, /https:\/\/example\.org\/core-architectures(?:#|\/)/u);
-  assert.deepEqual(familyIndexSeed(bundledCompanion), companionSeed);
+  const bundledCompanionSeed = familyIndexSeed(bundledCompanion);
+  assert.equal(
+    bundledCompanionSeed.cards.find(({ id }) => id === "strategy-canvas").file,
+    canonicalStrategyCanvas.file,
+    "the portable family index resolves Strategy Canvas through the canonical archive companion",
+  );
+
+  const canonicalBytes = await readFile(resolve(coreRoot, canonicalStrategyCanvas.file));
+  assert.equal(
+    createHash("sha256").update(canonicalBytes).digest("hex"),
+    canonicalStrategyCanvas.sha256,
+    "the Core manifest receipt identifies the current canonical worksheet bytes",
+  );
+  const bundledCanonicalBytes = execFileSync(
+    "unzip",
+    ["-p", archive, `${archiveRoot}/${portableCompanion.archive_ref}`],
+    { encoding: "buffer", maxBuffer: 8 * 1024 * 1024 },
+  );
+  assert.ok(
+    bundledCanonicalBytes.equals(canonicalBytes),
+    "the portable companion is byte-identical to the manifest-current canonical worksheet",
+  );
+
+  const bundledComposer = execFileSync(
+    "unzip",
+    ["-p", archive, `${archiveRoot}/narrative-capsules-chimeric-prototype-v0.1.html`],
+    { encoding: "utf8", maxBuffer: 8 * 1024 * 1024 },
+  );
+  assert.doesNotMatch(
+    bundledComposer,
+    new RegExp(`href=["']${sourcePreview.source_ref.replaceAll(".", "\\.")}["']`, "u"),
+    "the portable HTML leaves the repository-local Context workbench route with its source projection",
+  );
+  assert.match(
+    bundledComposer,
+    new RegExp(
+      `<a href=["']${portableCompanion.archive_ref.replaceAll(".", "\\.")}["'][^>]*>Open canonical Strategy Canvas worksheet v${portableCompanion.version.replaceAll(".", "\\.")} in a new tab</a>`,
+      "u",
+    ),
+    "the portable HTML routes to the canonical worksheet carried inside the archive",
+  );
+
+  const bundledManifest = JSON.parse(execFileSync(
+    "unzip",
+    ["-p", archive, `${archiveRoot}/narrative-capsules-chimeric-prototype-manifest-v0.1.json`],
+    { encoding: "utf8", maxBuffer: 8 * 1024 * 1024 },
+  ));
+  assert.deepEqual(bundledManifest.files.strategy_canvas, composerManifest.files.strategy_canvas);
   const bundledRegistry = execFileSync(
     "unzip",
     ["-p", archive, `${archiveRoot}/core-architecture-target-pair-registry.v0.1.json`],
     { encoding: "utf8", maxBuffer: 8 * 1024 * 1024 }
   );
   const bundledTargetRegistry = JSON.parse(bundledRegistry);
+  assert.equal(
+    bundledTargetRegistry.cards.find(({ id }) => id === "strategy-canvas").companionRef,
+    portableCompanion.archive_ref,
+    "the archived Narrative projection routes runtime inspection to its local canonical worksheet",
+  );
+  assert.match(
+    bundledComposer,
+    new RegExp(`companionRef["']\\s*:\\s*["']${portableCompanion.archive_ref.replaceAll(".", "\\.")}["']`, "u"),
+    "the archived inline target registry routes runtime inspection inside the portable closure",
+  );
   for (const id of ["heart-chart", "plus-delta", "practitioner-judgment-probes"]) {
     assert.equal(
       bundledTargetRegistry.cards.find((card) => card.id === id).prototypeRef,

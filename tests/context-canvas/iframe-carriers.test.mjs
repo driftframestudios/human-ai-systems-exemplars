@@ -80,7 +80,7 @@ const expectedCarrierInventory = [
   [
     "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
     "https://iframes.vik.guru/v1/core/strategy-canvas/",
-    "Strategy Canvas carrier for comparing current state, good-enough thresholds, and desired state",
+    "Canonical Strategy Canvas worksheet for comparing current state, good-enough thresholds, and desired state",
     "lazy",
   ],
   [

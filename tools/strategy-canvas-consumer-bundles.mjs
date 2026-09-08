@@ -34,6 +34,76 @@ const threadkeepingContext = join(
   "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger",
 );
 
+const [canonicalCoreManifest, contextCoreManifest] = await Promise.all([
+  readFile(join(rootCanonicalPack, "core-architectures-chimeric-prototype-manifest-v0.1.json"), "utf8").then(JSON.parse),
+  readFile(join(contextCanonicalPack, "core-architectures-chimeric-prototype-manifest-v0.1.json"), "utf8").then(JSON.parse),
+]);
+
+function currentPrototype(manifest, id, expression) {
+  const prototype = manifest.prototypes.find((candidate) => candidate.id === id);
+  if (!prototype || prototype.status !== "current" || prototype.expression !== expression) {
+    throw new Error(`the ${expression} manifest does not declare one current ${id}`);
+  }
+  return prototype;
+}
+
+const canonicalStrategyCanvas = currentPrototype(canonicalCoreManifest, "strategy-canvas", "canonical");
+const contextStrategyCanvas = currentPrototype(contextCoreManifest, "strategy-canvas", "context-canvas");
+const canonicalFamilyIndex = canonicalCoreManifest.prototypes.find(
+  (prototype) => prototype.id === "core-architecture-family-index" && prototype.status === "current",
+);
+
+if (!canonicalFamilyIndex) {
+  throw new Error("the canonical manifest does not declare one current Core Architecture Family Index");
+}
+
+for (const [pack, prototype] of [
+  [rootCanonicalPack, canonicalStrategyCanvas],
+  [contextCanonicalPack, contextStrategyCanvas],
+]) {
+  const bytes = await readFile(join(pack, prototype.file));
+  const digest = createHash("sha256").update(bytes).digest("hex");
+  if (prototype.size_bytes !== bytes.length || prototype.sha256 !== digest) {
+    throw new Error(`${prototype.expression} Strategy Canvas bytes differ from their manifest receipt`);
+  }
+}
+
+const narrativeManifest = JSON.parse(await readFile(
+  join(narrativeContext, "narrative-capsules-chimeric-prototype-manifest-v0.1.json"),
+  "utf8",
+));
+const strategyCanvasMetadata = narrativeManifest.files.strategy_canvas;
+const canonicalStrategyCanvasArchiveRef = `companions/${canonicalStrategyCanvas.file}`;
+
+function verifyStrategyIdentity(actual, expected, label) {
+  if (!actual) throw new Error(`the Narrative manifest does not declare ${label}`);
+  for (const [field, value] of Object.entries(expected)) {
+    if (actual[field] !== value) {
+      throw new Error(`the Narrative manifest ${label} ${field} differs from its owning manifest`);
+    }
+  }
+}
+
+verifyStrategyIdentity(strategyCanvasMetadata?.source_preview, {
+  role: "context_facilitation_workbench",
+  expression: contextStrategyCanvas.expression,
+  version: contextStrategyCanvas.version,
+  source_ref: `../../core-architectures/chimeric-pack-v0.1/${contextStrategyCanvas.file}`,
+  sha256: contextStrategyCanvas.sha256,
+}, "Strategy Canvas source preview");
+verifyStrategyIdentity(strategyCanvasMetadata?.portable_companion, {
+  role: "portable_canonical_worksheet",
+  expression: canonicalStrategyCanvas.expression,
+  version: canonicalStrategyCanvas.version,
+  source_ref: `../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/${canonicalStrategyCanvas.file}`,
+  archive_ref: canonicalStrategyCanvasArchiveRef,
+  sha256: canonicalStrategyCanvas.sha256,
+}, "Strategy Canvas portable companion");
+
+if (!narrativeManifest.files.companions.includes(canonicalStrategyCanvasArchiveRef)) {
+  throw new Error("the Narrative manifest companions do not include the canonical Strategy Canvas archive member");
+}
+
 function source(path) {
   return { kind: "source", path };
 }
@@ -45,20 +115,8 @@ function legacy(archive, entry) {
 function portableNarrativeText(value) {
   return value
     .replaceAll(
-      "../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
-      "companions/strategy-canvas-chimeric-prototype-v0.2.2.html",
-    )
-    .replaceAll(
-      "../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",
-      "companions/strategy-canvas-chimeric-prototype-v0.1.1.html",
-    )
-    .replaceAll(
-      "../../../../core-architectures-chimeric-prototype-current-pack-v0.1/core-architecture-family-index-chimeric-prototype-v0.1.5.html",
-      "companions/core-architecture-family-index-chimeric-prototype-v0.1.5.html",
-    )
-    .replaceAll(
-      "../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
-      "companions/strategy-canvas-chimeric-prototype-v0.2.2.html",
+      `../../../../core-architectures-chimeric-prototype-current-pack-v0.1/${canonicalFamilyIndex.file}`,
+      `companions/${canonicalFamilyIndex.file}`,
     )
     .replaceAll(
       "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
@@ -94,16 +152,31 @@ function portableNarrativeText(value) {
     );
 }
 
-function narrativeBundle(base, archivePath, familyIndex, compatibility) {
+function portableStrategyTargetText(value, { rewriteLabel = false } = {}) {
+  const withPortableLabel = rewriteLabel
+    ? value.replaceAll(
+      `Open Context Canvas facilitation workbench v${strategyCanvasMetadata.source_preview.version} in a new tab`,
+      `Open canonical Strategy Canvas worksheet v${canonicalStrategyCanvas.version} in a new tab`,
+    )
+    : value;
+  return withPortableLabel.replaceAll(
+    strategyCanvasMetadata.source_preview.source_ref,
+    canonicalStrategyCanvasArchiveRef,
+  );
+}
+
+function narrativeBundle(base, archivePath) {
   return {
     name: relative(repositoryRoot, archivePath),
     archivePath,
     root: "narrative-capsules-chimeric-prototype-v0.1",
-    closureEntries: ["companions/strategy-canvas-chimeric-prototype-v0.2.2.html"],
+    closureEntries: [
+      "narrative-capsules-chimeric-prototype-v0.1.html",
+      canonicalStrategyCanvasArchiveRef,
+    ],
     entries: [
-      ["companions/core-architecture-family-index-chimeric-prototype-v0.1.5.html", source(familyIndex)],
-      ["companions/strategy-canvas-chimeric-prototype-v0.1.1.html", source(compatibility)],
-      ["companions/strategy-canvas-chimeric-prototype-v0.2.2.html", source(join(rootCanonicalPack, "strategy-canvas-chimeric-prototype-v0.2.2.html"))],
+      [`companions/${canonicalFamilyIndex.file}`, source(join(rootCanonicalPack, canonicalFamilyIndex.file))],
+      [canonicalStrategyCanvasArchiveRef, source(join(rootCanonicalPack, canonicalStrategyCanvas.file))],
       ["companions/strategy-canvas-system-v0.2/strategy-canvas.schema.json", source(join(rootCanonicalPack, "strategy-canvas-system-v0.2/strategy-canvas.schema.json"))],
       ["companions/strategy-canvas-system-v0.2/strategy-canvas-validator.js", source(join(rootCanonicalPack, "strategy-canvas-system-v0.2/strategy-canvas-validator.js"))],
       ["companions/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json", source(join(rootCanonicalPack, "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json"))],
@@ -119,19 +192,18 @@ function narrativeBundle(base, archivePath, familyIndex, compatibility) {
     ],
     transform(path, buffer) {
       const textFiles = new Set([
-        "companions/core-architecture-family-index-chimeric-prototype-v0.1.5.html",
-        "companions/strategy-canvas-chimeric-prototype-v0.1.1.html",
+        `companions/${canonicalFamilyIndex.file}`,
         "core-architecture-target-pair-registry.v0.1.json",
         "narrative-capsules-chimeric-prototype-manifest-v0.1.json",
         "narrative-capsules-chimeric-prototype-v0.1.html",
       ]);
       if (!textFiles.has(path)) return buffer;
       let value = portableNarrativeText(buffer.toString("utf8"));
-      if (path.startsWith("companions/")) {
-        value = value.replaceAll(
-          "../../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
-          "strategy-canvas-chimeric-prototype-v0.2.2.html",
-        );
+      if (path === "core-architecture-target-pair-registry.v0.1.json") {
+        value = portableStrategyTargetText(value);
+      }
+      if (path === "narrative-capsules-chimeric-prototype-v0.1.html") {
+        value = portableStrategyTargetText(value, { rewriteLabel: true });
       }
       return Buffer.from(value);
     },
@@ -203,8 +275,6 @@ const bundles = [
   narrativeBundle(
     narrativeContext,
     join(narrativeContext, "narrative-capsules-chimeric-prototype-bundle-v0.1.zip"),
-    join(narrativeContext, "companions/core-architecture-family-index-chimeric-prototype-v0.1.5.html"),
-    join(narrativeContext, "companions/strategy-canvas-chimeric-prototype-v0.1.1.html"),
   ),
   semanticBundle(semanticContext, join(semanticContext, "narrative-sampling-tableau-chimeric-prototype-bundle-v0.1.zip")),
   technologyBundle(technologyContext, join(technologyContext, "technology-fit-sampling-tableau-chimeric-prototype-bundle-v0.1.zip")),
@@ -262,6 +332,7 @@ function localDocumentReferences(value) {
     if (
       !reference ||
       reference.startsWith("#") ||
+      reference.includes("${") ||
       /^(?:data|https?|mailto|tel|javascript):/iu.test(reference)
     ) continue;
     references.push(reference.split(/[?#]/u, 1)[0]);

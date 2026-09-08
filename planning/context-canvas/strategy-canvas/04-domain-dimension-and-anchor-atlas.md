@@ -11,6 +11,8 @@ research_payload:
 
 A preset is a starting hypothesis. It creates editable dimensions and records its source/version. A participant reviews each definition and anchor before the first round.
 
+The [machine-readable evidence registry](../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json) connects change-oriented starter dimensions to `organizational-readiness-boundary`. That entry keeps shared commitment and collective capability distinct from local offering levels and from any claim that this worksheet measures readiness.
+
 Each dimension includes:
 
 - stable ID and concise label;

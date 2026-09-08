@@ -25,6 +25,8 @@ Each participant receives the same definitions and anchors. Existing ballots and
 
 The human round completes first. AI proposals and prior generated material remain outside the ballot surface while participants form their readings. After reveal, the facilitator may open an attributed AI shadow round; it reads only the reviewed fields selected by the consent/scope record and never contributes observations to the group aggregate.
 
+The [machine-readable evidence registry](../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json) connects this route to `independent-before-reveal` and `anchoring-boundary`. The first travels with its published counterpoint, and both retain the task and inference limits that keep elicitation choices revisable.
+
 ## Round lifecycle
 
 | State | Participant experience | Facilitator action | Durable state |

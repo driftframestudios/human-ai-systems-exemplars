@@ -282,6 +282,7 @@ test("the route receipt resolves declared local exits to the primary visitor sur
     },
   );
   assert.deepEqual(byId.get("strategy-canvas").navigation.unresolved_local_links, []);
+  assert.equal(byId.get("strategy-canvas").expression, "canonical");
   const strategySchema = await readFile(path.join(
     defaultPaths.sourceRoot,
     "strategy-canvas-system-v0.2/strategy-canvas.schema.json",
@@ -465,7 +466,7 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   await writePackagePlan(plan, temporaryRoot);
   const verification = await verifyPackagePlan(plan, temporaryRoot);
 
-  assert.deepEqual(verification, { files: 27, bytes: 2729179 });
+  assert.deepEqual(verification, { files: 27, bytes: 2737380 });
   await writeFile(path.join(temporaryRoot, "unexpected.txt"), "outside the plan\n");
   await assert.rejects(
     verifyPackagePlan(plan, temporaryRoot),

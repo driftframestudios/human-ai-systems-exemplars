@@ -82,6 +82,139 @@
       "boundaryClaim": "Market-strategy conclusions retain their own evidence and review."
     }
   },
+  "representationInventory": {
+    "scope": "This inventory names material Strategy Canvas expressions, projections, hosts, and explanation owners. Incidental mentions and links to the method remain outside this finite set.",
+    "authorities": {
+      "semanticContract": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      "evidenceRegistry": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
+      "canonicalManifest": "core-architectures-chimeric-prototype-current-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json",
+      "contextManifest": "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json"
+    },
+    "artifacts": [
+      {
+        "id": "canonical-worksheet",
+        "expression": "canonical",
+        "role": "authored source and generated current distribution",
+        "version": "0.2.4",
+        "relation": "The template and shared core generate the current canonical worksheet.",
+        "paths": [
+          "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/canonical.template.html",
+          "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.4.html"
+        ]
+      },
+      {
+        "id": "canonical-compatibility",
+        "expression": "canonical",
+        "role": "compatibility source and projected route",
+        "version": "0.1.1",
+        "relation": "The compatibility source routes the historical public name to canonical worksheet v0.2.4.",
+        "paths": [
+          "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/compatibility-v0.1.1.html",
+          "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html"
+        ]
+      },
+      {
+        "id": "canonical-iframe-projection",
+        "expression": "canonical",
+        "role": "public iframe route declaration",
+        "version": "0.2.4",
+        "relation": "The route manifest projects the canonical worksheet and the package-declared copy of its source-owned evidence into /v1/core/strategy-canvas/.",
+        "paths": [
+          "core-architectures-chimeric-prototype-current-pack-v0.1/public-iframe-route-manifest-v1.json"
+        ]
+      },
+      {
+        "id": "context-workbench",
+        "expression": "context-canvas",
+        "role": "current facilitation workbench and expression-owned assets",
+        "version": "0.2.2",
+        "relation": "The Context expression consumes the shared semantic contract and adds participant, reveal, scenario, evidence, and handoff behavior.",
+        "paths": [
+          "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
+          "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-context-workbench-v0.2.css",
+          "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-context-workbench-v0.2.js"
+        ]
+      },
+      {
+        "id": "context-compatibility",
+        "expression": "context-canvas",
+        "role": "compatibility route",
+        "version": "0.1.1",
+        "relation": "The Context compatibility route points to the independently maintained workbench v0.2.2.",
+        "paths": [
+          "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html"
+        ]
+      },
+      {
+        "id": "narrative-projection",
+        "expression": "narrative-projection",
+        "role": "NOW / NEXT / LATER receiving projection",
+        "version": "0.1",
+        "relation": "The Narrative Composer adapts reviewed Strategy Canvas state through an explicit v2 adapter while its source preview routes to the Context workbench.",
+        "paths": [
+          "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/narrative-capsules-chimeric-prototype-v0.1.html",
+          "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/strategy-canvas-v2-adapter.js"
+        ]
+      },
+      {
+        "id": "narrative-portable-companion",
+        "expression": "canonical",
+        "role": "portable archive companion",
+        "version": "0.2.4",
+        "relation": "The Narrative archive carries the current canonical worksheet as a self-contained companion while the source Composer keeps its Context workbench route.",
+        "paths": [
+          "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/narrative-capsules-chimeric-prototype-bundle-v0.1.zip"
+        ],
+        "archiveMember": "narrative-capsules-chimeric-prototype-v0.1/companions/strategy-canvas-chimeric-prototype-v0.2.4.html"
+      },
+      {
+        "id": "genomic-static-companion",
+        "expression": "domain-static-adaptation",
+        "role": "static figure and complete text companion",
+        "version": "2026-reading",
+        "relation": "The SVG carries machine-readable method metadata while the adjacent visitor page carries the visible source and adaptation note.",
+        "paths": [
+          "context-canvas-project-surface/img/plot/genomic_viewer_strategy_canvas.svg",
+          "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html"
+        ]
+      },
+      {
+        "id": "context-host-embeds",
+        "expression": "canonical-with-context-handoff",
+        "role": "embedded hosts",
+        "version": "current",
+        "relation": "Each host names the embedded canonical worksheet and offers the fuller Context workbench as a distinct route.",
+        "paths": [
+          "context-canvas-project-surface/context-canvas/grammar-family.html",
+          "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html"
+        ]
+      },
+      {
+        "id": "public-schema-example",
+        "expression": "context-canvas-with-canonical-relative",
+        "role": "machine-readable public example",
+        "version": "1.0.0",
+        "relation": "The example identifies the Context workbench as content authority and the canonical worksheet as a distinct shared-contract representation.",
+        "paths": [
+          "schemas/context-canvas/1.0.0/examples/prototype.example.json"
+        ]
+      },
+      {
+        "id": "planning-and-evidence-spine",
+        "expression": "cross-expression",
+        "role": "human-readable rationale and machine-readable evidence",
+        "version": "current",
+        "relation": "The planning route explains decisions and limits; this evidence registry maps them back to material representations.",
+        "sourceKeys": [
+          "urn:source-key:strategy-canvas-research/006",
+          "urn:source-key:strategy-canvas-research/007"
+        ],
+        "paths": [
+          "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json"
+        ]
+      }
+    ]
+  },
   "implementationEvidence": [
     {
       "id": "direct-manipulation",
@@ -90,7 +223,8 @@
       "evidenceClass": "interaction-design account",
       "implementationDecision": "Marker movement and labelled score controls update the same visible state, and undo and redo preserve reversibility.",
       "transferLimit": "This account motivates the interaction pattern; it does not establish usability or decision quality for this implementation.",
-      "receivingSurfaces": ["canonical", "contextCanvas"]
+      "receivingSurfaces": ["canonical", "contextCanvas"],
+      "planningSourceKeys": ["urn:source-key:strategy-canvas-research/003"]
     },
     {
       "id": "diagram-and-table",
@@ -99,7 +233,8 @@
       "evidenceClass": "comparative representation models",
       "implementationDecision": "The plotted profile and a complete structured table remain adjacent semantic twins.",
       "transferLimit": "The paper analyzes when informationally equivalent diagrams can make lookup and inference more efficient; it does not show that a diagram is always easier to understand.",
-      "receivingSurfaces": ["canonical", "contextCanvas", "genomicViewer"]
+      "receivingSurfaces": ["canonical", "contextCanvas", "genomicViewer"],
+      "planningSourceKeys": ["urn:source-key:strategy-canvas-research/003"]
     },
     {
       "id": "complex-image-equivalent",
@@ -108,7 +243,8 @@
       "evidenceClass": "accessibility implementation guidance",
       "implementationDecision": "Each complex chart has a short description and a visible, structured long-form table equivalent.",
       "transferLimit": "The guidance shapes the text-equivalent route; conformance and practical access still require testing with relevant users and technologies.",
-      "receivingSurfaces": ["canonical", "contextCanvas", "genomicViewer"]
+      "receivingSurfaces": ["canonical", "contextCanvas", "genomicViewer"],
+      "planningSourceKeys": ["urn:source-key:strategy-canvas-research/005"]
     },
     {
       "id": "graphical-position",
@@ -117,7 +253,8 @@
       "evidenceClass": "controlled graphical-perception experiments",
       "implementationDecision": "Scores use position on a common aligned scale, with exact values repeated in marker labels and tables.",
       "transferLimit": "The experiments compare elementary graphical judgments. They do not validate this curve, its local scale, or its decision meaning.",
-      "receivingSurfaces": ["canonical", "contextCanvas", "genomicViewer"]
+      "receivingSurfaces": ["canonical", "contextCanvas", "genomicViewer"],
+      "planningSourceKeys": ["urn:source-key:strategy-canvas-research/001"]
     },
     {
       "id": "interactive-analysis",
@@ -126,7 +263,8 @@
       "evidenceClass": "visual-analysis interaction synthesis",
       "implementationDecision": "Selection, filtering by attention, direct value change, and state inspection remain explicit and reversible across chart and native controls.",
       "transferLimit": "The taxonomy supports interaction design choices; it is not an evaluation of this artifact or its audience.",
-      "receivingSurfaces": ["canonical", "contextCanvas"]
+      "receivingSurfaces": ["canonical", "contextCanvas"],
+      "planningSourceKeys": ["urn:source-key:strategy-canvas-research/003"]
     },
     {
       "id": "independent-before-reveal",
@@ -140,7 +278,8 @@
         "url": "https://doi.org/10.1073/pnas.1109947108",
         "relevance": "This response argues that social information can improve individual estimates, reinforcing a context-dependent rather than universal interpretation."
       },
-      "receivingSurfaces": ["contextCanvas"]
+      "receivingSurfaces": ["contextCanvas"],
+      "planningSourceKeys": ["urn:source-key:strategy-canvas-research/002"]
     },
     {
       "id": "organizational-readiness-boundary",
@@ -149,7 +288,8 @@
       "evidenceClass": "organization-level theory",
       "implementationDecision": "Local dimensions may separately name shared commitment, capability, resources, and situational conditions when they matter to a change decision.",
       "transferLimit": "The paper presents a theory and calls for further measurement development. This Strategy Canvas does not measure organizational readiness unless a separate validated method is supplied.",
-      "receivingSurfaces": ["canonical", "contextCanvas", "narrativeCapsuleComposer"]
+      "receivingSurfaces": ["canonical", "contextCanvas", "narrativeCapsuleComposer"],
+      "planningSourceKeys": ["urn:source-key:strategy-canvas-research/004"]
     },
     {
       "id": "redundant-selection-cue",
@@ -158,7 +298,8 @@
       "evidenceClass": "visual-search, identification, and localization experiments",
       "implementationDecision": "The current dimension is identified by visible text and a persistent border treatment as well as color.",
       "transferLimit": "The experiments concern attention to separable visual features. They motivate redundancy but do not establish accessibility or comprehension for this control.",
-      "receivingSurfaces": ["canonical", "contextCanvas"]
+      "receivingSurfaces": ["canonical", "contextCanvas"],
+      "planningSourceKeys": ["urn:source-key:strategy-canvas-research/003"]
     },
     {
       "id": "anchoring-boundary",
@@ -167,7 +308,8 @@
       "evidenceClass": "experimental and theoretical judgment research",
       "implementationDecision": "Every number remains attached to local observable anchors and an evidence field, with participant spread retained where available.",
       "transferLimit": "Visible anchors and evidence make interpretation inspectable; they do not remove anchoring effects or other judgment biases.",
-      "receivingSurfaces": ["canonical", "contextCanvas", "narrativeCapsuleComposer"]
+      "receivingSurfaces": ["canonical", "contextCanvas", "narrativeCapsuleComposer"],
+      "planningSourceKeys": ["urn:source-key:strategy-canvas-research/001", "urn:source-key:strategy-canvas-research/002"]
     },
     {
       "id": "four-actions-origin",
@@ -176,7 +318,8 @@
       "evidenceClass": "official method description",
       "implementationDecision": "The initiative-costing action area names the framework's four categories and states how the local planning adaptation uses them.",
       "transferLimit": "The official description establishes the method origin. Local planning suggestions and market-strategy conclusions retain their own evidence routes.",
-      "receivingSurfaces": ["initiativeCosting"]
+      "receivingSurfaces": ["initiativeCosting"],
+      "planningSourceKeys": ["urn:source-key:strategy-canvas-research/001"]
     }
   ],
   "claimBoundaries": [

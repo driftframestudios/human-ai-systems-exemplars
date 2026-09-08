@@ -52,7 +52,7 @@ Each payload records falsifiers, coverage, and completion gates.
 
 ## Embed boundary
 
-Receiving iframes begin with `allow-scripts`. A real in-frame report download earns `allow-downloads`. A real copy action earns `allow="clipboard-write"` through Permissions Policy. A visible in-frame new-tab action earns `allow-popups allow-popups-to-escape-sandbox`; fullscreen presentation earns `allow="fullscreen"`. The current Grammar Family and FMI embeds grant scripts, downloads, and clipboard writing. They retain their separate origin, omit same-origin, top-navigation, popups, and fullscreen, and display the download/new-tab consequences beside the relevant actions.
+Receiving iframes begin with `allow-scripts`. A real in-frame report download earns `allow-downloads`. A real copy action earns `allow="clipboard-write"` through Permissions Policy. A visible in-frame separate-tab action earns `allow-popups allow-popups-to-escape-sandbox`; fullscreen presentation earns `allow="fullscreen"`. The current Grammar Family and FMI carriers grant scripts, downloads, popup exits, and clipboard writing. They retain their separate origin, omit same-origin, top-navigation, and fullscreen, and keep ordinary navigation on their surrounding visitor pages. The package projection gives only iframe-contained exits separate-tab behavior.
 
 ## Verification gate
 
@@ -66,7 +66,7 @@ Receiving iframes begin with `allow-scripts`. A real in-frame report download ea
 - 390, 1440, 1920, and 2560 treatments preserve a usable surface; reciprocal viewport profiles exercise the layout pressure modeled for 200% and 400% zoom.
 - Canonical and Context action bands, guides, factor labels, and handles share one half-column geometry, with the outer hit halos clear of both plot edges.
 - The canonical import boundary rejects malformed JSON, payloads beyond 512 KiB, nesting beyond 32 levels, and graphs beyond 20,000 values while retaining the current reading.
-- The generated browser validator enforces the exact published schema before domain invariants; adversarial Narrative imports normalize duplicate or markup-like IDs and bound numeric/string values.
+- The generated browser validator enforces the exact published schema before domain invariants; boundary-focused Narrative imports normalize duplicate or markup-like IDs and bound numeric/string values.
 - Authorized and unauthorized AI packets carry explicit scope receipts and recursively hold participant identity, per-person ballots, local events, and raw aggregate arrays outside the portable packet.
 - The canonical skip link is fully offscreen when unfocused, enters at the viewport top on keyboard focus, and returns offscreen after blur. A mid-page copy in very long Chromium `fullPage` captures is fixed-layer stitching from the capture path rather than runtime visibility.
 - Grammar Family and FMI embeds retain the smallest capability set that supports the implemented actions.
@@ -75,9 +75,9 @@ Receiving iframes begin with `allow-scripts`. A real in-frame report download ea
 
 ### Current v0.2.4 source receipt
 
-`npm run test:strategy-canvas` passes 43 of 43 browser contracts at `.visual-runs/2026-09-08T10-01-27-162Z-strategy-canvas-contract`. The current route adds a rendered forced-colors observation: an unselected SVG dimension label resolves to the system `Canvas` and `CanvasText` pair while the selected and focused label retains `Highlight`. The builder reproduces a 165,694-byte canonical distribution with SHA-256 `60fc6669b54adff4f609f4c48322548d44abc4875f5a2412030eb2c619f4c8b4`. `npm run test:core-architectures` passes 74 of 74 checks, the four maintained consumer archives remain current, and `npm run test:iframe-routes` passes 29 of 29 checks.
+`npm run test:strategy-canvas` passes 43 of 43 browser contracts at `.visual-runs/2026-09-08T11-31-45-032Z-strategy-canvas-contract`. The current route includes a rendered forced-colors observation: an unselected SVG dimension label resolves to the system `Canvas` and `CanvasText` pair while the selected and focused label retains `Highlight`. The builder reproduces a 165,694-byte canonical distribution with SHA-256 `60fc6669b54adff4f609f4c48322548d44abc4875f5a2412030eb2c619f4c8b4`. `npm run test:core-architectures` passes 75 of 75 checks, the four maintained consumer archives remain current, `npm run test:narrative-architectures` passes 28 of 28 checks, and `npm run test:iframe-routes` passes 32 of 32 checks.
 
-The local aggregate iframe build contains 38 routes and 68 files at 4,465,287 bytes. [Issue #137](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/137) carries the moving cross-family package coordinate. This record establishes the source-owned build; the existing deployment owners retain live delivery.
+[Issue #137](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/137) carries the moving cross-family package coordinate. This record establishes the source-owned Strategy Canvas identities and build; the existing deployment owners retain live delivery.
 
 ### Historical acceptance receipt · v0.2.0 foundation
 
@@ -85,9 +85,9 @@ The 2026-08-22 acceptance run passed 36 of 36 browser contracts at `.visual-runs
 
 ## Collaboration edge
 
-Current: the canonical v0.2.4 source, generated distribution, source manifest, Context v0.2.2 workbench, schema/core, Narrative consumer, research spine, deterministic consumer archives, and local iframe package agree at their named coordinates. The v0.1.1 routes remain accessible compatibility entries.
+Current: the canonical v0.2.4 source, generated distribution, source manifest, Context v0.2.2 workbench, schema/core, Narrative source projection, canonical portable companion, research spine, deterministic consumer archives, and local iframe package agree at their named coordinates. The evidence registry names each material representation and derives current canonical, Context, and iframe coordinates from their owning manifests. The v0.1.1 routes remain accessible compatibility entries.
 
-Next: review and merge the source-owned forced-colors correction, then let Issue #137 receive the current cross-family package coordinate and Issue #190 receive the exact live Strategy Canvas route observation. Physical touch-hardware and assistive-technology receipts remain nominated field-validation work alongside that delivery review.
+Next: review and merge the source-identity reconciliation, then let Issue #137 receive the accepted cross-family package coordinate and Issue #190 receive the exact live Strategy Canvas route observation. Physical touch-hardware and assistive-technology receipts remain nominated field-validation work alongside that delivery review.
 
 ```yaml
 machine_node:
@@ -96,7 +96,7 @@ machine_node:
   branch: source-key:strategy-canvas-collaboration-system
   semantic_contract: strategy-canvas/2.0
   context_extension_namespace: extensions.contextCanvas
-  state: source_correction_ready_for_review
+  state: source_identity_reconciliation_ready_for_review
   expressions:
     canonical: plain_extensible_instructional_worksheet
     context_canvas: present_tense_collaboration_workbench
@@ -118,10 +118,11 @@ machine_node:
     canonical_distribution:
       bytes: 165694
       sha256: 60fc6669b54adff4f609f4c48322548d44abc4875f5a2412030eb2c619f4c8b4
-    core_architectures: 74_of_74_pass
+    core_architectures: 75_of_75_pass
     consumer_archives: 4_of_4_deterministic_and_receipted
     context_manifests: 5_of_5_pass
-    iframe_routes: 29_of_29_pass
+    narrative_architectures: 28_of_28_pass
+    iframe_routes: 32_of_32_pass
     cross_family_package_authority: issue_137
   open_condition:
     - collect touch_hardware and actual_browser_assistive_technology_zoom receipts as field_validation
