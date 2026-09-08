@@ -423,7 +423,7 @@ test("Core manifests resolve current files, byte counts, and published digests",
           : ["strategy-canvas-chimeric-prototype-v0.2.2.html", "0.2.2"],
         "service-design-blueprint": ["service-design-blueprint-chimeric-prototype-v0.2.4.html", "0.2.4"],
         "heart-chart": ["heart-chart-chimeric-prototype-v0.1.5.html", "0.1.5"],
-        "specification-by-example": ["specification-by-example-chimeric-prototype-v0.1.5.html", "0.1.5"]
+        "specification-by-example": ["specification-by-example-chimeric-prototype-v0.1.6.html", "0.1.6"]
       };
       for (const [id, identity] of Object.entries(currentIdentities)) {
         const entry = byId.get(id);

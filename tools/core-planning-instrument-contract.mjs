@@ -21,7 +21,7 @@ const artifactNames = {
   sharedSurface: "shared-surface-priority-map-chimeric-prototype-v0.1.3.html",
   aiSystems: "ai-systems-service-blueprint-chimeric-prototype-v0.1.3.html",
   softwareViews: "software-architecture-views-chimeric-prototype-v0.1.3.html",
-  participatory: "participatory-design-kit-chimeric-prototype-v0.1.3.html",
+  participatory: "participatory-design-kit-chimeric-prototype-v0.1.4.html",
   plusDelta: "plus-delta-chimeric-prototype-v0.1.3.html",
   upstream: "upstream-revision-loop-chimeric-prototype-v0.1.4.html"
 };
@@ -670,12 +670,116 @@ async function softwareViewsPath(browser, origin, route) {
 }
 
 async function participatoryPath(browser, origin, route) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPlain = "";
   try {
     const itemId = "bar-consent-exception";
     const fragmentId = "frag-consent-route";
     const literal = "the review route stays visible as <strong>collaborator text</strong>";
+    const initial = await page.evaluate(() => {
+      const api = window.participatoryDesignKit;
+      return {
+        frozen: Object.isFrozen(api),
+        version: api.version,
+        contract: api.contract,
+        stateContract: api.stateContract,
+        view: api.getPromptCapsuleView(),
+        state: api.getState(),
+        projection: api.promptCapsuleStateProjection(),
+        fingerprint: api.promptCapsuleFingerprint(),
+        plain: api.promptCapsule(),
+        explicitPlain: api.promptCapsuleMarkdown("plain"),
+        visible: document.querySelector("#ai-prompt").textContent,
+      };
+    });
+    initialPlain = initial.plain;
+    assert.equal(initial.frozen, true);
+    assert.deepEqual(
+      [initial.version, initial.contract, initial.stateContract, initial.view],
+      ["0.1.4", "prompt-capsule/0.1.0", "participatory-design-kit-state.v0.1", "plain"],
+    );
+    assert.equal(initial.plain, initial.explicitPlain);
+    assert.equal(initial.visible, initial.plain);
+    assert.equal(initial.projection.kit.gantt_items.length, initial.state.participatory_design_kit.gantt_items.length);
+    assert.equal(initial.projection.kit.example_fragments.length, initial.state.participatory_design_kit.example_fragments.length);
+    assert.ok(initial.plain.includes(`- Fingerprint: \`${initial.fingerprint}\``));
+    assert.match(initial.plain, /^# Prompt Capsule: Participatory Design Kit\n/u);
+    assert.match(initial.plain, /## Related loops/u);
+    assert.doesNotMatch(initial.plain, /## Skill assistance/u);
+
     await page.locator(`button[data-action="select"][data-type="item"][data-id="${itemId}"]`).click();
+    const selectedOnly = await page.evaluate(() => ({
+      selectedId: window.participatoryDesignKit.getState().view_state.views[0].selected_id,
+      fingerprint: window.participatoryDesignKit.promptCapsuleFingerprint(),
+      markdown: window.participatoryDesignKit.promptCapsule(),
+    }));
+    assert.equal(selectedOnly.selectedId, itemId);
+    assert.equal(selectedOnly.fingerprint, initial.fingerprint);
+    assert.equal(selectedOnly.markdown, initial.plain);
+
+    const loopReceipt = await page.locator("[data-prompt-related-loops]").evaluate((details) => ({
+      tag: details.tagName,
+      open: details.open,
+      loops: [...details.querySelectorAll("[data-related-loop-id]")].map((item) => ({
+        id: item.dataset.relatedLoopId,
+        href: item.querySelector("a")?.href,
+      })),
+    }));
+    assert.deepEqual(loopReceipt, {
+      tag: "DETAILS",
+      open: false,
+      loops: [
+        { id: "skill-from-receiving-use", href: "https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use" },
+        { id: "repository-reentry", href: "https://schemas.radiantnull.com/collaboration/#repository-reentry" },
+      ],
+    });
+    const relatedSummary = page.locator("[data-prompt-related-loops] summary");
+    const summaryBox = await relatedSummary.boundingBox();
+    assert.ok(summaryBox && summaryBox.height >= 44 && summaryBox.width >= 44);
+    await relatedSummary.press("Enter");
+    assert.equal(await page.locator("[data-prompt-related-loops]").evaluate(element => element.open), true);
+    const firstLoopBox = await page.locator("[data-related-loop-id] a").first().boundingBox();
+    assert.ok(firstLoopBox && firstLoopBox.height >= 44 && firstLoopBox.width >= 44);
+
+    const assistedControl = page.locator('[data-prompt-view][value="skill-assisted"]');
+    await assistedControl.check();
+    const assisted = await page.evaluate(() => ({
+      view: window.participatoryDesignKit.getPromptCapsuleView(),
+      projection: window.participatoryDesignKit.promptCapsuleStateProjection(),
+      fingerprint: window.participatoryDesignKit.promptCapsuleFingerprint(),
+      markdown: window.participatoryDesignKit.promptCapsuleMarkdown(),
+      visible: document.querySelector("#ai-prompt").textContent,
+    }));
+    assert.equal(assisted.view, "skill-assisted");
+    assert.equal(assisted.markdown, assisted.visible);
+    assert.equal(assisted.fingerprint, initial.fingerprint);
+    assert.deepEqual(assisted.projection, initial.projection);
+    assert.match(assisted.markdown, /## Skill assistance/u);
+    assert.match(assisted.markdown, /\.agents\/skills\/source-authority-mapping\/SKILL\.md/u);
+
+    await page.evaluate(() => { globalThis.__coreClipboard = ""; });
+    await page.locator("#copy-prompt").click();
+    await page.waitForFunction(() => Boolean(globalThis.__coreClipboard));
+    assert.equal(await page.evaluate(() => globalThis.__coreClipboard), assisted.markdown);
+    await page.evaluate(() => {
+      const original = URL.createObjectURL.bind(URL);
+      URL.createObjectURL = (blob) => {
+        globalThis.__promptDownloadType = blob.type;
+        return original(blob);
+      };
+    });
+    const downloadPromise = page.waitForEvent("download");
+    await page.locator("#download-prompt").click();
+    const download = await downloadPromise;
+    assert.equal(download.suggestedFilename(), "participatory-design-kit.prompt-capsule.r0.1.4.skill-assisted.md");
+    assert.equal(await page.evaluate(() => globalThis.__promptDownloadType), "text/markdown;charset=utf-8");
+    const stream = await download.createReadStream();
+    const chunks = [];
+    for await (const chunk of stream) chunks.push(chunk);
+    assert.equal(Buffer.concat(chunks).toString("utf8"), assisted.markdown);
+    await page.locator('[data-prompt-view][value="plain"]').check();
+    assert.equal(await page.locator("#ai-prompt").textContent(), initial.plain);
+
     await page.locator(`select[data-kind="item"][data-id="${itemId}"][data-field="lane_id"]`).selectOption("lane-reviewer");
     await page.locator(`select[data-kind="item"][data-id="${itemId}"][data-field="start_phase_id"]`).selectOption("phase-review");
     await page.locator(`select[data-kind="item"][data-id="${itemId}"][data-field="end_phase_id"]`).selectOption("phase-exception-routing");
@@ -691,6 +795,17 @@ async function participatoryPath(browser, origin, route) {
     assert.equal(item.start_phase_id, "phase-review");
     assert.equal(item.end_phase_id, "phase-exception-routing");
     assert.equal(fragment.then, literal);
+    const changedCapsule = await page.evaluate(() => ({
+      fingerprint: window.participatoryDesignKit.promptCapsuleFingerprint(),
+      markdown: window.participatoryDesignKit.promptCapsule(),
+    }));
+    assert.notEqual(changedCapsule.fingerprint, initial.fingerprint);
+    assert.notEqual(changedCapsule.markdown, initial.plain);
+    assert.ok(
+      changedCapsule.markdown.includes(
+        "the review route stays visible as &lt;strong&gt;collaborator text&lt;/strong&gt;",
+      ),
+    );
     assert.match(await page.locator("#inspector").textContent(), /Reviewer workflow/);
     assert.match(await page.locator("#svg-wrap").textContent(), /Route consent-state exception/);
     assert.ok(Number(await page.locator(`#svg-wrap .svg-select[data-type="item"][data-id="${itemId}"] rect`).getAttribute("width")) > 300);
@@ -737,6 +852,69 @@ async function participatoryPath(browser, origin, route) {
     assertTelemetry(telemetry);
   } finally {
     await context.close();
+  }
+
+  const stateBoundaryContext = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  try {
+    const stateBoundaryPage = await stateBoundaryContext.newPage();
+    await stateBoundaryPage.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+    const baseline = await stateBoundaryPage.evaluate(() => ({
+      state: window.participatoryDesignKit.getState(),
+      fingerprint: window.participatoryDesignKit.promptCapsuleFingerprint(),
+      markdown: window.participatoryDesignKit.promptCapsule(),
+    }));
+    const privateOnly = structuredClone(baseline.state);
+    privateOnly.private_annotation = "local participatory note";
+    privateOnly.participatory_design_kit.private_annotation = "local kit note";
+    await stateBoundaryPage.locator("#json-import").fill(JSON.stringify(privateOnly));
+    await stateBoundaryPage.locator("#import-json").click();
+    await assertVisibleNotice(stateBoundaryPage, "#import-note", /updated|imported/i);
+    const privateReceipt = await stateBoundaryPage.evaluate(() => ({
+      state: window.participatoryDesignKit.getState(),
+      fingerprint: window.participatoryDesignKit.promptCapsuleFingerprint(),
+      markdown: window.participatoryDesignKit.promptCapsule(),
+    }));
+    assert.equal(privateReceipt.state.private_annotation, "local participatory note");
+    assert.equal(privateReceipt.state.participatory_design_kit.private_annotation, "local kit note");
+    assert.equal(privateReceipt.fingerprint, baseline.fingerprint);
+    assert.equal(privateReceipt.markdown, baseline.markdown);
+
+    const semanticChange = structuredClone(privateReceipt.state);
+    semanticChange.participatory_design_kit.example_fragments[0].then = "A revised receiving route becomes visible.";
+    await stateBoundaryPage.locator("#json-import").fill(JSON.stringify(semanticChange));
+    await stateBoundaryPage.locator("#import-json").click();
+    await assertVisibleNotice(stateBoundaryPage, "#import-note", /updated|imported/i);
+    const semanticReceipt = await stateBoundaryPage.evaluate(() => ({
+      fingerprint: window.participatoryDesignKit.promptCapsuleFingerprint(),
+      markdown: window.participatoryDesignKit.promptCapsule(),
+    }));
+    assert.notEqual(semanticReceipt.fingerprint, baseline.fingerprint);
+    assert.notEqual(semanticReceipt.markdown, baseline.markdown);
+    assert.match(semanticReceipt.markdown, /A revised receiving route becomes visible\./u);
+  } finally {
+    await stateBoundaryContext.close();
+  }
+
+  const noScriptContext = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 320, height: 900 },
+  });
+  try {
+    const noScriptPage = await noScriptContext.newPage();
+    await noScriptPage.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+    assert.equal(await noScriptPage.locator("#ai-prompt").textContent(), initialPlain);
+    assert.equal(await noScriptPage.locator("#ai-prompt").isVisible(), true);
+    assert.equal(await noScriptPage.locator("[data-prompt-view-control]").isVisible(), false);
+    assert.equal(await noScriptPage.locator("[data-prompt-actions]").isVisible(), false);
+    const details = noScriptPage.locator("[data-prompt-related-loops]");
+    assert.equal(await details.isVisible(), true);
+    const containment = await noScriptPage.locator("html").evaluate(root => ({
+      clientWidth: root.clientWidth,
+      scrollWidth: root.scrollWidth,
+    }));
+    assert.ok(containment.scrollWidth <= containment.clientWidth + 1, JSON.stringify(containment));
+  } finally {
+    await noScriptContext.close();
   }
 }
 

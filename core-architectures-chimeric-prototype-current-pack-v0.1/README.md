@@ -48,6 +48,14 @@ strain cue, restored condition, fitting route, and evidence worth preserving.
 Both Markdown views retain that complete represented state while selection and
 other interface-only details stay local to the artifact.
 
+Participatory Design Kit v0.1.4 and Specification-by-Example v0.1.6 complete
+the current Participatory Elicitation and Specification family’s Prompt
+Capsule adoption. The kit carries the complete workflow arrangement, activity
+materials, and example fragments that make participant knowledge actionable.
+The specification carries every rule and Given / When / Then scenario that
+turns shared understanding into observable behavior. Both handoffs retain the
+full represented state while interface focus stays with the working artifact.
+
 ## Visitor-visible authorship and license
 
 The pack hub and each of the 21 current prototype documents carry their own

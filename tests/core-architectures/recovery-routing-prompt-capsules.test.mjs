@@ -169,5 +169,5 @@ test("Recovery Routing and Revision advances the current inventory as one family
   const inventory = await readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8");
   assert.match(inventory, /Upstream Revision Loop v0\.1\.4/u);
   assert.match(inventory, /Recovery Routing Atlas v0\.1\.4/u);
-  assert.match(inventory, /ten current[\s\S]*?adoptions\. The remaining 18/u);
+  assert.match(inventory, /twelve current[\s\S]*?adoptions\. The remaining 16/u);
 });

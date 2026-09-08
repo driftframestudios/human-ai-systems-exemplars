@@ -216,15 +216,16 @@
       "subtitle": "Tacit Workflow Elicitation Kit",
       "family": "Participatory Elicitation and Specification",
       "shape": "participatory Gantt + masonry + example fragments",
-      "file": "participatory-design-kit-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "participatory-design-kit-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 70946,
+      "size_bytes": 119255,
       "previous": [
         "participatory-design-kit-chimeric-prototype-v0.1.html",
         "participatory-design-kit-chimeric-prototype-v0.1.1.html",
-        "participatory-design-kit-chimeric-prototype-v0.1.2.html"
+        "participatory-design-kit-chimeric-prototype-v0.1.2.html",
+        "participatory-design-kit-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -233,18 +234,19 @@
       "subtitle": "Behavior Example Bridge",
       "family": "Participatory Elicitation and Specification",
       "shape": "rule/scenario graph",
-      "file": "specification-by-example-chimeric-prototype-v0.1.5.html",
-      "version": "0.1.5",
+      "file": "specification-by-example-chimeric-prototype-v0.1.6.html",
+      "version": "0.1.6",
       "status": "current",
       "previous": [
         "specification-by-example-chimeric-prototype-v0.1.html",
         "specification-by-example-chimeric-prototype-v0.1.1.html",
         "specification-by-example-chimeric-prototype-v0.1.2.html",
         "specification-by-example-chimeric-prototype-v0.1.3.html",
-        "specification-by-example-chimeric-prototype-v0.1.4.html"
+        "specification-by-example-chimeric-prototype-v0.1.4.html",
+        "specification-by-example-chimeric-prototype-v0.1.5.html"
       ],
       "exists": true,
-      "size_bytes": 69546
+      "size_bytes": 106630
     },
     {
       "id": "heart-chart",
