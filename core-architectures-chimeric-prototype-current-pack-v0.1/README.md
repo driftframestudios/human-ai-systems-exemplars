@@ -65,6 +65,16 @@ each protected behavior from its source and preconditions through its expected
 results and platform-independent test target. Their Markdown views retain the
 complete represented state while selection remains with the working artifact.
 
+HEART Chart v0.1.6, Plus / Delta v0.1.4, and Practitioner Judgment Probes
+v0.1.4 complete the current Measurement, Reflection, and Judgment family’s
+Prompt Capsule adoption. The HEART handoff connects every goal to its signal,
+metric, interpretation, tolerance, counter-signal, and qualitative evidence.
+Plus / Delta carries each working condition or change need with the people,
+evidence, route, and review trigger it affects. The probes carry the question,
+probability target, evidence basis, technical standing, and next instruction
+that make experienced judgment actionable. Their Markdown views preserve the
+complete accepted state while interface focus stays with the working artifact.
+
 ## Visitor-visible authorship and license
 
 The pack hub and each of the 21 current prototype documents carry their own

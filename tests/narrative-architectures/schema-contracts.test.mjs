@@ -236,12 +236,14 @@ test("Narrative Capsule links and bundles the Context-received Core family index
     "the companion index keeps current Core coordinates and the declared Context Strategy adaptation"
   );
 
-  const heart = coreManifest.prototypes.find(({ id }) => id === "heart-chart");
-  assert.equal(
-    targetRegistry.cards.find(({ id }) => id === heart.id).prototypeRef,
-    heart.file,
-    "the target registry and current family index agree on HEART"
-  );
+  for (const id of ["heart-chart", "plus-delta", "practitioner-judgment-probes"]) {
+    const current = coreManifest.prototypes.find((prototype) => prototype.id === id);
+    assert.equal(
+      targetRegistry.cards.find((card) => card.id === id).prototypeRef,
+      current.file,
+      `the target registry and current family index agree on ${current.name}`
+    );
+  }
 
   const archive = resolve(composerRoot, "narrative-capsules-chimeric-prototype-bundle-v0.1.zip");
   const archiveRoot = "narrative-capsules-chimeric-prototype-v0.1";
@@ -255,6 +257,19 @@ test("Narrative Capsule links and bundles the Context-received Core family index
   );
   assert.doesNotMatch(bundledCompanion, /https:\/\/example\.org\/core-architectures(?:#|\/)/u);
   assert.deepEqual(familyIndexSeed(bundledCompanion), companionSeed);
+  const bundledRegistry = execFileSync(
+    "unzip",
+    ["-p", archive, `${archiveRoot}/core-architecture-target-pair-registry.v0.1.json`],
+    { encoding: "utf8", maxBuffer: 8 * 1024 * 1024 }
+  );
+  const bundledTargetRegistry = JSON.parse(bundledRegistry);
+  for (const id of ["heart-chart", "plus-delta", "practitioner-judgment-probes"]) {
+    assert.equal(
+      bundledTargetRegistry.cards.find((card) => card.id === id).prototypeRef,
+      targetRegistry.cards.find((card) => card.id === id).prototypeRef,
+      `the bundled target registry retains the current ${id} coordinate`
+    );
+  }
 
   const historicalCompanion = await readFile(resolve(composerRoot, priorCompanion), "utf8");
   assert.match(historicalCompanion, /https:\/\/example\.org\/core-architectures#/u);

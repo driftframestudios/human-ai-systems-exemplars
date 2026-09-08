@@ -17,7 +17,7 @@ import {
 const artifactNames = {
   contextTree: "context-tree-chimeric-prototype-v0.1.6.html",
   treemap: "jobs-to-be-done-treemap-chimeric-prototype-v0.1.4.html",
-  probes: "practitioner-judgment-probes-chimeric-prototype-v0.1.3.html",
+  probes: "practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
   matrix: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
   unitTestFirst: "unit-test-first-design-chimeric-prototype-v0.1.4.html",
   recoveryAtlas: "recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
@@ -447,10 +447,51 @@ async function treemapPath(browser, origin, route) {
   await assertNoScriptPromptCapsule(browser, origin, route, "#ai-prompt", initialPrompt.plain);
 }
 async function probesPath(browser, origin, route) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPrompt;
   try {
     const probeId = "probe-protect-business-rules";
     const literal = "Could the rule remain visible as <strong>collaborator text</strong>?";
+    initialPrompt = await exercisePromptCapsule(page, {
+      apiName: "practitionerJudgmentProbes",
+      copySelector: "#copy-prompt-btn",
+      downloadSelector: "#download-prompt-btn",
+      filename: "practitioner-judgment-probes.prompt-capsule.r0.1.4.skill-assisted.md",
+      promptSelector: "#ai-prompt",
+      stateContract: "practitioner-judgment-probes-state.v0.1",
+      title: "Practitioner Judgment Probes",
+      version: "0.1.4",
+    });
+    assert.equal(initialPrompt.projection.probes.length, 5);
+    assert.equal(initialPrompt.projection.veracityVocabulary.length, 7);
+
+    const editorLabels = await page.locator("#probe-list").evaluate(root => (
+      [...root.querySelectorAll("label")].map(label => {
+        const control = label.htmlFor ? document.getElementById(label.htmlFor) : null;
+        return {
+          text: label.textContent.trim(),
+          htmlFor: label.htmlFor,
+          targetExists: Boolean(control),
+          targetIsUnique: Boolean(control) && [...document.querySelectorAll("[id]")].filter(element => element.id === label.htmlFor).length === 1,
+          sameProbeCard: Boolean(control) && control.closest(".probe-card") === label.closest(".probe-card"),
+        };
+      })
+    ));
+    assert.ok(editorLabels.length > 0);
+    assert.equal(editorLabels.every(label => label.htmlFor && label.targetExists && label.targetIsUnique && label.sameProbeCard), true, JSON.stringify(editorLabels));
+    const representedLabels = new Set(editorLabels.map(label => label.text));
+    for (const label of ["Probe question", "Probability estimate", "Technical veracity", "Handoff route", "Probability of what", "Concern family", "Causal path", "AI instruction yield", "Route reason"]) {
+      assert.equal(representedLabels.has(label), true, `Missing generated editor label: ${label}`);
+    }
+
+    await page.locator(`button[data-action="select-probe"][data-probe-id="${probeId}"]`).first().click();
+    const selectedOnly = await page.evaluate(() => ({
+      fingerprint: window.practitionerJudgmentProbes.promptCapsuleFingerprint(),
+      markdown: window.practitionerJudgmentProbes.promptCapsule(),
+    }));
+    assert.equal(selectedOnly.fingerprint, initialPrompt.fingerprint);
+    assert.equal(selectedOnly.markdown, initialPrompt.plain);
+
     let card = page.locator(`.probe-card[data-probe-id="${probeId}"]`);
     await card.locator('[data-field="question"]').fill(literal);
     await card.locator('[data-field="question"]').press("Tab");
@@ -472,6 +513,13 @@ async function probesPath(browser, origin, route) {
     const linkedGraph = await textJson(page, "#jsonld-output");
     const probeNode = linkedGraph["@graph"].find(node => node["@id"] === `#${probeId}`);
     assert.equal(probeNode["ca:probabilityEstimate"], 0.73);
+    const changedPrompt = await page.evaluate(() => ({
+      fingerprint: window.practitionerJudgmentProbes.promptCapsuleFingerprint(),
+      markdown: window.practitionerJudgmentProbes.promptCapsule(),
+    }));
+    assert.notEqual(changedPrompt.fingerprint, initialPrompt.fingerprint);
+    assert.notEqual(changedPrompt.markdown, initialPrompt.plain);
+    assert.match(changedPrompt.markdown, /Could the rule remain visible as &lt;strong&gt;collaborator text&lt;\/strong&gt;\?/u);
 
     const beforeOrder = [...activeView(exported).probe_order];
     await page.locator(`button[data-action="move-probe"][data-direction="1"][data-probe-id="${probeId}"]`).click();
@@ -501,6 +549,140 @@ async function probesPath(browser, origin, route) {
     assert.equal(imported.probes.find(item => item.id === probeId).question, importedQuestion);
     assert.equal(activeView(imported).selected_probe_id, probeId);
     assert.match(await page.locator("#selected-probe-inspector").textContent(), /Imported probability-bounded practitioner probe/);
+
+    const knownBaseline = await page.evaluate(() => ({
+      fingerprint: window.practitionerJudgmentProbes.promptCapsuleFingerprint(),
+      markdown: window.practitionerJudgmentProbes.promptCapsule(),
+      state: window.practitionerJudgmentProbes.getState(),
+    }));
+    const knownFields = structuredClone(knownBaseline.state);
+    knownFields.artifact_identity.id = "ca-artifact-practitioner-judgment-probes-imported";
+    knownFields.artifact_identity.display_name = "Imported <Probe> collection";
+    knownFields.artifact_identity.subtitle = "Imported evidence & recovery";
+    knownFields.artifact_identity.version = "0.1.4-imported";
+    knownFields.artifact_identity.family = "Imported measurement family";
+    knownFields.artifact_identity.placement = ["Imported bridge", "Imported implementation"];
+    knownFields.artifact_identity.primary_cognitive_move = "import-aware judgment";
+    knownFields.artifact_identity.source_band = ["imported_source_band", "reviewed_state"];
+    knownFields.artifact_identity.private_import_note = "identity extension retained";
+    knownFields.semantic_locality.preferred_phrasing = ["Ask what changed & why.", "Name the receiving decision."];
+    knownFields.semantic_locality.replacement_state_guidance = [{
+      common_phrase: "Make the <draft> final.",
+      stronger_phrase: "Name the accepted evidence and next receiver.",
+      private_import_note: "guidance extension retained",
+    }];
+    knownFields.semantic_locality.private_import_note = "semantic extension retained";
+    knownFields.recovery_calibration.strain_cues = ["The represented evidence and current route diverge."];
+    knownFields.recovery_calibration.stabilizing_read = "Reconcile the represented metadata with the accepted source.";
+    knownFields.recovery_calibration.restored_state = "The accepted source and exchange agree.";
+    knownFields.recovery_calibration.named_failure_geometries = ["Represented Metadata Drift"];
+    knownFields.recovery_calibration.private_import_note = "recovery extension retained";
+    await page.locator("#import-json").fill(JSON.stringify(knownFields));
+    await page.locator('button[data-action="import-json"]').click();
+    await assertVisibleNotice(page, "#import-message", /updated|imported/i);
+    const knownReceipt = await page.evaluate(() => ({
+      fingerprint: window.practitionerJudgmentProbes.promptCapsuleFingerprint(),
+      markdown: window.practitionerJudgmentProbes.promptCapsule(),
+      projection: window.practitionerJudgmentProbes.promptCapsuleStateProjection(),
+      state: window.practitionerJudgmentProbes.getState(),
+    }));
+    assert.notEqual(knownReceipt.fingerprint, knownBaseline.fingerprint);
+    assert.notEqual(knownReceipt.markdown, knownBaseline.markdown);
+    assert.deepEqual(knownReceipt.projection.artifact, {
+      id: "ca-artifact-practitioner-judgment-probes-imported",
+      displayName: "Imported <Probe> collection",
+      subtitle: "Imported evidence & recovery",
+      revision: "0.1.4-imported",
+      family: "Imported measurement family",
+      placement: ["Imported bridge", "Imported implementation"],
+      primaryMove: "import-aware judgment",
+      sourceBands: ["imported_source_band", "reviewed_state"],
+    });
+    assert.deepEqual(knownReceipt.projection.semanticLocality, {
+      preferredPhrasing: ["Ask what changed & why.", "Name the receiving decision."],
+      replacementStateGuidance: [{ contextCue: "Make the <draft> final.", use: "Name the accepted evidence and next receiver." }],
+    });
+    assert.deepEqual(knownReceipt.projection.recovery, {
+      strainCues: ["The represented evidence and current route diverge."],
+      stabilizingRead: "Reconcile the represented metadata with the accepted source.",
+      restoredState: "The accepted source and exchange agree.",
+      namedFailureGeometries: ["Represented Metadata Drift"],
+    });
+    assert.match(knownReceipt.markdown, /^# Prompt Capsule: Imported &lt;Probe&gt; collection$/mu);
+    assert.match(knownReceipt.markdown, /Make the &lt;draft&gt; final\./u);
+    assert.doesNotMatch(knownReceipt.markdown, /<Probe>|<draft>/u);
+    assert.equal(knownReceipt.state.artifact_identity.private_import_note, "identity extension retained");
+    assert.equal(knownReceipt.state.semantic_locality.private_import_note, "semantic extension retained");
+    assert.equal(knownReceipt.state.semantic_locality.replacement_state_guidance[0].private_import_note, "guidance extension retained");
+    assert.equal(knownReceipt.state.recovery_calibration.private_import_note, "recovery extension retained");
+
+    await page.locator("#import-json").fill(JSON.stringify(knownReceipt.state));
+    await page.locator('button[data-action="import-json"]').click();
+    await assertVisibleNotice(page, "#import-message", /updated|imported/i);
+    const knownRoundTrip = await page.evaluate(() => ({
+      fingerprint: window.practitionerJudgmentProbes.promptCapsuleFingerprint(),
+      markdown: window.practitionerJudgmentProbes.promptCapsule(),
+      state: window.practitionerJudgmentProbes.getState(),
+    }));
+    assert.deepEqual(knownRoundTrip.state, knownReceipt.state);
+    assert.equal(knownRoundTrip.fingerprint, knownReceipt.fingerprint);
+    assert.equal(knownRoundTrip.markdown, knownReceipt.markdown);
+
+    const malformedKnownFields = [];
+    const malformedIdentity = structuredClone(knownReceipt.state);
+    malformedIdentity.artifact_identity.placement = "Imported bridge";
+    malformedKnownFields.push([malformedIdentity, /working state retained|artifact_identity\.placement.*array/i]);
+    const malformedSemantic = structuredClone(knownReceipt.state);
+    malformedSemantic.semantic_locality.preferred_phrasing = "Ask what changed.";
+    malformedKnownFields.push([malformedSemantic, /working state retained|semantic_locality\.preferred_phrasing.*array/i]);
+    const malformedRecovery = structuredClone(knownReceipt.state);
+    malformedRecovery.recovery_calibration.named_failure_geometries = { name: "Represented Metadata Drift" };
+    malformedKnownFields.push([malformedRecovery, /working state retained|recovery_calibration\.named_failure_geometries.*array/i]);
+    for (const [candidate, pattern] of malformedKnownFields) {
+      await clearNotice(page, "#import-message");
+      await page.locator("#import-json").fill(JSON.stringify(candidate));
+      await page.locator('button[data-action="import-json"]').click();
+      await assertVisibleNotice(page, "#import-message", pattern);
+      const retained = await page.evaluate(() => ({
+        fingerprint: window.practitionerJudgmentProbes.promptCapsuleFingerprint(),
+        markdown: window.practitionerJudgmentProbes.promptCapsule(),
+        state: window.practitionerJudgmentProbes.getState(),
+      }));
+      assert.deepEqual(retained.state, knownReceipt.state);
+      assert.equal(retained.fingerprint, knownReceipt.fingerprint);
+      assert.equal(retained.markdown, knownReceipt.markdown);
+    }
+
+    const privateBaseline = await page.evaluate(() => ({
+      fingerprint: window.practitionerJudgmentProbes.promptCapsuleFingerprint(),
+      markdown: window.practitionerJudgmentProbes.promptCapsule(),
+      state: window.practitionerJudgmentProbes.getState(),
+    }));
+    const privateOnly = structuredClone(privateBaseline.state);
+    privateOnly.private_annotation = "local probe-collection note";
+    privateOnly.artifact_identity.private_annotation = "local identity note";
+    privateOnly.probes[0].private_annotation = "local probe note";
+    privateOnly.view_state.private_annotation = "local view-state note";
+    activeView(privateOnly).private_annotation = "local focus-view note";
+    privateOnly.semantic_locality.private_annotation = "local language note";
+    privateOnly.recovery_calibration.private_annotation = "local recovery note";
+    await page.locator("#import-json").fill(JSON.stringify(privateOnly));
+    await page.locator('button[data-action="import-json"]').click();
+    await assertVisibleNotice(page, "#import-message", /updated|imported/i);
+    const privateReceipt = await page.evaluate(() => ({
+      fingerprint: window.practitionerJudgmentProbes.promptCapsuleFingerprint(),
+      markdown: window.practitionerJudgmentProbes.promptCapsule(),
+      state: window.practitionerJudgmentProbes.getState(),
+    }));
+    assert.equal(privateReceipt.state.private_annotation, "local probe-collection note");
+    assert.equal(privateReceipt.state.artifact_identity.private_annotation, "local identity note");
+    assert.equal(privateReceipt.state.probes[0].private_annotation, "local probe note");
+    assert.equal(privateReceipt.state.view_state.private_annotation, "local view-state note");
+    assert.equal(activeView(privateReceipt.state).private_annotation, "local focus-view note");
+    assert.equal(privateReceipt.state.semantic_locality.private_annotation, "local language note");
+    assert.equal(privateReceipt.state.recovery_calibration.private_annotation, "local recovery note");
+    assert.equal(privateReceipt.fingerprint, privateBaseline.fingerprint);
+    assert.equal(privateReceipt.markdown, privateBaseline.markdown);
 
     const sentinel = "Practitioner probe recovery sentinel";
     card = page.locator(`.probe-card[data-probe-id="${probeId}"]`);
@@ -549,6 +731,7 @@ async function probesPath(browser, origin, route) {
   } finally {
     await context.close();
   }
+  await assertNoScriptPromptCapsule(browser, origin, route, "#ai-prompt", initialPrompt.plain);
 }
 async function matrixPath(browser, origin, route) {
   const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });

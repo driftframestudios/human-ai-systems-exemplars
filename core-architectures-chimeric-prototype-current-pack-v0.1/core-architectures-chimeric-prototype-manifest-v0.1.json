@@ -254,18 +254,19 @@
       "subtitle": "Signal-to-Metric Calibration",
       "family": "Measurement, Reflection, and Judgment",
       "shape": "goal-signal-metric matrix",
-      "file": "heart-chart-chimeric-prototype-v0.1.5.html",
-      "version": "0.1.5",
+      "file": "heart-chart-chimeric-prototype-v0.1.6.html",
+      "version": "0.1.6",
       "status": "current",
       "previous": [
         "heart-chart-chimeric-prototype-v0.1.html",
         "heart-chart-chimeric-prototype-v0.1.1.html",
         "heart-chart-chimeric-prototype-v0.1.2.html",
         "heart-chart-chimeric-prototype-v0.1.3.html",
-        "heart-chart-chimeric-prototype-v0.1.4.html"
+        "heart-chart-chimeric-prototype-v0.1.4.html",
+        "heart-chart-chimeric-prototype-v0.1.5.html"
       ],
       "exists": true,
-      "size_bytes": 64271
+      "size_bytes": 100151
     },
     {
       "id": "plus-delta",
@@ -273,15 +274,16 @@
       "subtitle": "Working / Needs-to-Change Review",
       "family": "Measurement, Reflection, and Judgment",
       "shape": "preserve/change reflection matrix",
-      "file": "plus-delta-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "plus-delta-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 49137,
+      "size_bytes": 84718,
       "previous": [
         "plus-delta-chimeric-prototype-v0.1.html",
         "plus-delta-chimeric-prototype-v0.1.1.html",
-        "plus-delta-chimeric-prototype-v0.1.2.html"
+        "plus-delta-chimeric-prototype-v0.1.2.html",
+        "plus-delta-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -290,15 +292,16 @@
       "subtitle": "Interview Questions as Propensities",
       "family": "Measurement, Reflection, and Judgment",
       "shape": "probe matrix",
-      "file": "practitioner-judgment-probes-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 68964,
+      "size_bytes": 114032,
       "previous": [
         "practitioner-judgment-probes-chimeric-prototype-v0.1.html",
         "practitioner-judgment-probes-chimeric-prototype-v0.1.1.html",
-        "practitioner-judgment-probes-chimeric-prototype-v0.1.2.html"
+        "practitioner-judgment-probes-chimeric-prototype-v0.1.2.html",
+        "practitioner-judgment-probes-chimeric-prototype-v0.1.3.html"
       ]
     },
     {

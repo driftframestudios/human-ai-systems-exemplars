@@ -22,7 +22,7 @@ const artifactNames = {
   aiSystems: "ai-systems-service-blueprint-chimeric-prototype-v0.1.3.html",
   softwareViews: "software-architecture-views-chimeric-prototype-v0.1.3.html",
   participatory: "participatory-design-kit-chimeric-prototype-v0.1.4.html",
-  plusDelta: "plus-delta-chimeric-prototype-v0.1.3.html",
+  plusDelta: "plus-delta-chimeric-prototype-v0.1.4.html",
   upstream: "upstream-revision-loop-chimeric-prototype-v0.1.4.html"
 };
 
@@ -37,6 +37,126 @@ async function verify(label, callback) {
     const message = error?.stack || error?.message || String(error);
     checks.push({ label, status: "failed", message });
     failures.push(`${label}: ${message}`);
+  }
+}
+
+async function exercisePromptCapsule(page, {
+  apiName,
+  copySelector,
+  downloadSelector,
+  filename,
+  loopIds,
+  promptSelector,
+  stateContract,
+  title,
+  version,
+}) {
+  const initial = await page.evaluate(name => {
+    const api = globalThis[name];
+    return {
+      contract: api.contract,
+      fingerprint: api.promptCapsuleFingerprint(),
+      frozen: Object.isFrozen(api),
+      plain: api.promptCapsule(),
+      explicitPlain: api.promptCapsuleMarkdown("plain"),
+      projection: api.promptCapsuleStateProjection(),
+      state: api.getState(),
+      stateContract: api.stateContract,
+      version: api.version,
+      view: api.getPromptCapsuleView(),
+    };
+  }, apiName);
+  assert.equal(initial.frozen, true);
+  assert.deepEqual(
+    [initial.version, initial.contract, initial.stateContract, initial.view],
+    [version, "prompt-capsule/0.1.0", stateContract, "plain"],
+  );
+  assert.equal(initial.plain, initial.explicitPlain);
+  assert.equal(await page.locator(promptSelector).textContent(), initial.plain);
+  assert.match(initial.plain, new RegExp(`^# Prompt Capsule: ${title}\\n`, "u"));
+  assert.ok(initial.plain.includes(`- Fingerprint: \`${initial.fingerprint}\``));
+  assert.match(initial.plain, /## Related loops/u);
+  assert.doesNotMatch(initial.plain, /## Skill assistance/u);
+  assert.ok(initial.plain.endsWith("\n"));
+
+  const loops = await page.locator("[data-prompt-related-loops]").evaluate(details => ({
+    open: details.open,
+    tag: details.tagName,
+    ids: [...details.querySelectorAll("[data-related-loop-id]")].map(item => item.dataset.relatedLoopId),
+  }));
+  assert.deepEqual(loops, { open: false, tag: "DETAILS", ids: loopIds });
+  const summary = page.locator("[data-prompt-related-loops] summary");
+  await summary.focus();
+  const summaryBox = await summary.boundingBox();
+  assert.ok(summaryBox && summaryBox.height >= 44 && summaryBox.width >= 44);
+  await summary.press("Enter");
+  assert.equal(await page.locator("[data-prompt-related-loops]").evaluate(element => element.open), true);
+  const firstLoopBox = await page.locator("[data-related-loop-id] a").first().boundingBox();
+  assert.ok(firstLoopBox && firstLoopBox.height >= 44 && firstLoopBox.width >= 44);
+
+  await page.locator('[data-prompt-view][value="skill-assisted"]').check();
+  const assisted = await page.evaluate(name => {
+    const api = globalThis[name];
+    return {
+      fingerprint: api.promptCapsuleFingerprint(),
+      markdown: api.promptCapsuleMarkdown(),
+      projection: api.promptCapsuleStateProjection(),
+      view: api.getPromptCapsuleView(),
+    };
+  }, apiName);
+  assert.equal(assisted.view, "skill-assisted");
+  assert.equal(assisted.fingerprint, initial.fingerprint);
+  assert.deepEqual(assisted.projection, initial.projection);
+  assert.equal(await page.locator(promptSelector).textContent(), assisted.markdown);
+  assert.match(assisted.markdown, /## Skill assistance/u);
+  assert.match(assisted.markdown, /\.agents\/skills\/[a-z0-9-]+\/SKILL\.md/u);
+
+  await page.evaluate(() => { globalThis.__coreClipboard = ""; });
+  await page.locator(copySelector).click();
+  await page.waitForFunction(() => Boolean(globalThis.__coreClipboard));
+  assert.equal(await page.evaluate(() => globalThis.__coreClipboard), assisted.markdown);
+  await page.evaluate(() => {
+    const original = URL.createObjectURL.bind(URL);
+    URL.createObjectURL = blob => {
+      globalThis.__promptDownloadType = blob.type;
+      return original(blob);
+    };
+  });
+  const downloadPromise = page.waitForEvent("download");
+  await page.locator(downloadSelector).click();
+  const download = await downloadPromise;
+  assert.equal(download.suggestedFilename(), filename);
+  assert.equal(await page.evaluate(() => globalThis.__promptDownloadType), "text/markdown;charset=utf-8");
+  const stream = await download.createReadStream();
+  const chunks = [];
+  for await (const chunk of stream) chunks.push(chunk);
+  assert.equal(Buffer.concat(chunks).toString("utf8"), assisted.markdown);
+
+  await page.locator('[data-prompt-view][value="plain"]').check();
+  assert.equal(await page.locator(promptSelector).textContent(), initial.plain);
+  return initial;
+}
+
+async function assertNoScriptPromptCapsule(browser, origin, route, promptSelector, expectedPlain) {
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 320, height: 900 },
+  });
+  try {
+    const page = await context.newPage();
+    await page.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+    assert.equal(await page.locator(promptSelector).textContent(), expectedPlain);
+    assert.equal(await page.locator(promptSelector).isVisible(), true);
+    assert.equal(await page.locator("[data-prompt-view-control]").isVisible(), false);
+    assert.equal(await page.locator("[data-prompt-actions]").isVisible(), false);
+    assert.equal(await page.locator("[data-prompt-related-loops]").isVisible(), true);
+    const containment = await page.locator("html").evaluate(root => ({
+      clientWidth: root.clientWidth,
+      scrollWidth: root.scrollWidth,
+    }));
+    assert.ok(containment.scrollWidth <= containment.clientWidth + 1, JSON.stringify(containment));
+  } finally {
+    await context.close();
   }
 }
 
@@ -920,9 +1040,62 @@ async function participatoryPath(browser, origin, route) {
 
 async function plusDeltaPath(browser, origin, route) {
   const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPrompt;
   try {
     const observationId = "obs-source-provenance-plus";
     const literal = "Source provenance now needs <strong>one clearer recovery route</strong>.";
+    initialPrompt = await exercisePromptCapsule(page, {
+      apiName: "plusDelta",
+      copySelector: "#copyPromptBtn",
+      downloadSelector: "#downloadPromptBtn",
+      filename: "plus-delta.prompt-capsule.r0.1.4.skill-assisted.md",
+      loopIds: ["repository-reentry", "skill-from-receiving-use"],
+      promptSelector: "#aiPrompt",
+      stateContract: "plus-delta-state.v0.1",
+      title: "Plus / Delta",
+      version: "0.1.4",
+    });
+    assert.equal(initialPrompt.projection.observations.length, 5);
+    assert.ok(initialPrompt.projection.observations.every(observation => [
+      "type", "goal", "actor", "evidence", "status", "route",
+      "routeReason", "instruction", "reviewTrigger",
+    ].every(field => Object.hasOwn(observation, field))));
+
+    const fieldAssociations = await page.locator("#observationsEditor [data-field]").evaluateAll(controls => controls.map(control => ({
+      id: control.id,
+      labelCount: control.labels?.length || 0,
+      labelTargetsControl: control.labels?.[0]?.control === control,
+    })));
+    assert.ok(fieldAssociations.length > 0);
+    assert.equal(new Set(fieldAssociations.map(({ id }) => id)).size, fieldAssociations.length);
+    assert.ok(fieldAssociations.every(({ id, labelCount, labelTargetsControl }) => id && labelCount === 1 && labelTargetsControl));
+    await page.locator(`select[data-field="route"][data-id="${observationId}"]`).selectOption("__custom__");
+    const customRouteControlId = `observation-${encodeURIComponent(observationId)}-custom-route`;
+    await page.waitForFunction(controlId => document.activeElement?.id === controlId, customRouteControlId);
+    const customRouteAssociation = await page.locator(`input[data-field="custom-route"][data-id="${observationId}"]`).evaluate(control => ({
+      id: control.id,
+      labelCount: control.labels?.length || 0,
+      labelTargetsControl: control.labels?.[0]?.control === control,
+      receivesFocus: document.activeElement === control,
+    }));
+    assert.deepEqual(customRouteAssociation, {
+      id: customRouteControlId,
+      labelCount: 1,
+      labelTargetsControl: true,
+      receivesFocus: true,
+    });
+    await page.locator(`select[data-field="route"][data-id="${observationId}"]`).selectOption("HEART Chart");
+    assert.equal(await page.locator(`select[data-field="route"][data-id="${observationId}"]`).inputValue(), "HEART Chart");
+    assert.equal(await page.locator(`input[data-field="custom-route"][data-id="${observationId}"]`).count(), 0);
+
+    await page.locator(`button[data-action="select"][data-id="${observationId}"]`).first().click();
+    const selectedOnly = await page.evaluate(() => ({
+      fingerprint: window.plusDelta.promptCapsuleFingerprint(),
+      markdown: window.plusDelta.promptCapsule(),
+    }));
+    assert.equal(selectedOnly.fingerprint, initialPrompt.fingerprint);
+    assert.equal(selectedOnly.markdown, initialPrompt.plain);
+
     await page.locator(`select[data-field="type"][data-id="${observationId}"]`).selectOption("delta");
     await page.locator(`textarea[data-field="observation"][data-id="${observationId}"]`).fill(literal);
 
@@ -932,6 +1105,13 @@ async function plusDeltaPath(browser, origin, route) {
     assert.equal(observation.observation, literal);
     assert.match(await page.locator(`#textTable tr[data-id="${observationId}"]`).textContent(), /needs to change/i);
     assert.match(await page.locator(`#diagramWrap .svg-cell[data-id="${observationId}"] title`).textContent(), /Source provenance now needs <strong>one clearer recovery route/);
+    const changedPrompt = await page.evaluate(() => ({
+      fingerprint: window.plusDelta.promptCapsuleFingerprint(),
+      markdown: window.plusDelta.promptCapsule(),
+    }));
+    assert.notEqual(changedPrompt.fingerprint, initialPrompt.fingerprint);
+    assert.notEqual(changedPrompt.markdown, initialPrompt.plain);
+    assert.match(changedPrompt.markdown, /Source provenance now needs &lt;strong&gt;one clearer recovery route&lt;\/strong&gt;\./u);
 
     await page.locator(`button[data-action="hide"][data-id="${observationId}"]`).click();
     exported = await copiedJson(page, "#copyJsonBtn");
@@ -963,6 +1143,33 @@ async function plusDeltaPath(browser, origin, route) {
     assert.equal(artifactNode.activeView, `#${importedViewId}`);
     assert.equal(viewNode.name, "Imported focus view");
 
+    const privateBaseline = await page.evaluate(() => ({
+      fingerprint: window.plusDelta.promptCapsuleFingerprint(),
+      markdown: window.plusDelta.promptCapsule(),
+      state: window.plusDelta.getState(),
+    }));
+    const privateOnly = structuredClone(privateBaseline.state);
+    privateOnly.private_annotation = "local reflection note";
+    privateOnly.artifact_identity.private_annotation = "local identity note";
+    privateOnly.observations[0].private_annotation = "local observation note";
+    privateOnly.view_state.private_annotation = "local view-state note";
+    activeView(privateOnly).private_annotation = "local focus-view note";
+    await page.locator("#importArea").fill(JSON.stringify(privateOnly));
+    await page.locator("#importBtn").click();
+    await assertVisibleNotice(page, "#importNotice", /updated|imported/i);
+    const privateReceipt = await page.evaluate(() => ({
+      fingerprint: window.plusDelta.promptCapsuleFingerprint(),
+      markdown: window.plusDelta.promptCapsule(),
+      state: window.plusDelta.getState(),
+    }));
+    assert.equal(privateReceipt.state.private_annotation, "local reflection note");
+    assert.equal(privateReceipt.state.artifact_identity.private_annotation, "local identity note");
+    assert.equal(privateReceipt.state.observations[0].private_annotation, "local observation note");
+    assert.equal(privateReceipt.state.view_state.private_annotation, "local view-state note");
+    assert.equal(activeView(privateReceipt.state).private_annotation, "local focus-view note");
+    assert.equal(privateReceipt.fingerprint, privateBaseline.fingerprint);
+    assert.equal(privateReceipt.markdown, privateBaseline.markdown);
+
     const sentinel = "Plus Delta recovery sentinel";
     await page.locator(`textarea[data-field="observation"][data-id="${observationId}"]`).fill(sentinel);
     const invalid = structuredClone(await copiedJson(page, "#copyJsonBtn"));
@@ -978,10 +1185,103 @@ async function plusDeltaPath(browser, origin, route) {
     await page.locator("#importBtn").click();
     await assertVisibleNotice(page, "#importNotice", /unique semantic namespace/i);
     assert.equal((await copiedJson(page, "#copyJsonBtn")).observations.find(item => item.id === observationId).observation, sentinel);
+
+    const multiView = structuredClone(await copiedJson(page, "#copyJsonBtn"));
+    const secondaryView = structuredClone(activeView(multiView));
+    secondaryView.id = `obs-new-observation-${multiView.observations.length + 1}`;
+    secondaryView.name = "Secondary membership view";
+    secondaryView.selected_observation_id = "";
+    secondaryView.private_annotation = "secondary view extension";
+    multiView.view_state.views.push(secondaryView);
+    await page.locator("#importArea").fill(JSON.stringify(multiView));
+    await page.locator("#importBtn").click();
+    await assertVisibleNotice(page, "#importNotice", /updated|imported/i);
+    const beforeAddIds = new Set(multiView.observations.map(({ id }) => id));
+    await page.locator("#addObservationBtn").click();
+    const afterAdd = await page.evaluate(() => ({
+      state: window.plusDelta.getState(),
+      fingerprint: window.plusDelta.promptCapsuleFingerprint(),
+      markdown: window.plusDelta.promptCapsule(),
+    }));
+    const addedObservation = afterAdd.state.observations.find(({ id }) => !beforeAddIds.has(id));
+    assert.ok(addedObservation);
+    assert.notEqual(addedObservation.id, secondaryView.id);
+    assert.ok(afterAdd.state.view_state.views.every(view => view.observation_order.includes(addedObservation.id)));
+    await page.locator("#importArea").fill(JSON.stringify(afterAdd.state));
+    await page.locator("#importBtn").click();
+    await assertVisibleNotice(page, "#importNotice", /updated|imported/i);
+    const addRoundTrip = await page.evaluate(() => ({
+      state: window.plusDelta.getState(),
+      fingerprint: window.plusDelta.promptCapsuleFingerprint(),
+      markdown: window.plusDelta.promptCapsule(),
+    }));
+    assert.deepEqual(addRoundTrip, afterAdd);
+
+    await page.locator(`button[data-action="request-remove"][data-id="${addedObservation.id}"]`).click();
+    await page.locator(`button[data-action="confirm-remove"][data-id="${addedObservation.id}"]`).click();
+    const afterRemove = await page.evaluate(() => ({
+      state: window.plusDelta.getState(),
+      fingerprint: window.plusDelta.promptCapsuleFingerprint(),
+      markdown: window.plusDelta.promptCapsule(),
+    }));
+    assert.equal(afterRemove.state.observations.some(({ id }) => id === addedObservation.id), false);
+    assert.ok(afterRemove.state.view_state.views.every(view => (
+      !view.observation_order.includes(addedObservation.id)
+      && !view.hidden_observation_ids.includes(addedObservation.id)
+      && view.selected_observation_id !== addedObservation.id
+    )));
+    assert.equal(afterRemove.state.view_state.views.find(({ id }) => id === secondaryView.id).private_annotation, "secondary view extension");
+    await page.locator("#importArea").fill(JSON.stringify(afterRemove.state));
+    await page.locator("#importBtn").click();
+    await assertVisibleNotice(page, "#importNotice", /updated|imported/i);
+    const removeRoundTrip = await page.evaluate(() => ({
+      state: window.plusDelta.getState(),
+      fingerprint: window.plusDelta.promptCapsuleFingerprint(),
+      markdown: window.plusDelta.promptCapsule(),
+    }));
+    assert.deepEqual(removeRoundTrip, afterRemove);
+
+    const singleObservation = structuredClone(await copiedJson(page, "#copyJsonBtn"));
+    singleObservation.observations = [singleObservation.observations.find(item => item.id === observationId)];
+    for (const view of singleObservation.view_state.views) {
+      view.observation_order = [observationId];
+      view.hidden_observation_ids = [];
+      view.selected_observation_id = observationId;
+    }
+    await page.locator("#importArea").fill(JSON.stringify(singleObservation));
+    await page.locator("#importBtn").click();
+    await assertVisibleNotice(page, "#importNotice", /updated|imported/i);
+    const finalRemove = page.locator(`button[data-action="request-remove"][data-id="${observationId}"]`);
+    assert.equal(await finalRemove.isDisabled(), true);
+    const minimumBaseline = await page.evaluate(() => ({
+      state: window.plusDelta.getState(),
+      fingerprint: window.plusDelta.promptCapsuleFingerprint(),
+      markdown: window.plusDelta.promptCapsule(),
+    }));
+    await finalRemove.evaluate(button => {
+      button.disabled = false;
+      button.dataset.action = "confirm-remove";
+      button.click();
+    });
+    const guardedMinimum = await page.evaluate(() => ({
+      state: window.plusDelta.getState(),
+      fingerprint: window.plusDelta.promptCapsuleFingerprint(),
+      markdown: window.plusDelta.promptCapsule(),
+    }));
+    assert.equal(guardedMinimum.state.observations.length, 1);
+    assert.equal(guardedMinimum.fingerprint, minimumBaseline.fingerprint);
+    assert.equal(guardedMinimum.markdown, minimumBaseline.markdown);
+    assert.match(await page.locator("#interactionNotice").textContent(), /at least one observation remains available/i);
+    await page.locator("#importArea").fill(JSON.stringify(guardedMinimum.state));
+    await page.locator("#importBtn").click();
+    await assertVisibleNotice(page, "#importNotice", /updated|imported/i);
+    assert.equal((await copiedJson(page, "#copyJsonBtn")).observations.length, 1);
+    assert.equal(await page.evaluate(() => window.plusDelta.promptCapsuleFingerprint()), minimumBaseline.fingerprint);
     assertTelemetry(telemetry);
   } finally {
     await context.close();
   }
+  await assertNoScriptPromptCapsule(browser, origin, route, "#aiPrompt", initialPrompt.plain);
 }
 
 async function upstreamPath(browser, origin, route) {

@@ -1204,7 +1204,7 @@
       "artifactShape": "Goal–signal–metric matrix",
       "useWhen": "Metrics need interpretation against goals, tolerances, and counter-signals.",
       "readerRef": "/field-guide/core-architectures/heart-chart/",
-      "prototypeRef": "heart-chart-chimeric-prototype-v0.1.5.html",
+      "prototypeRef": "heart-chart-chimeric-prototype-v0.1.6.html",
       "prototypeStatus": "generated · patch candidate",
       "routes": [
         "Plus / Delta",
@@ -1288,7 +1288,7 @@
       "artifactShape": "Preserve/change reflection board",
       "useWhen": "The team needs to preserve what works and route what needs to change.",
       "readerRef": "/field-guide/core-architectures/plus-delta/",
-      "prototypeRef": "plus-delta-chimeric-prototype-v0.1.html",
+      "prototypeRef": "plus-delta-chimeric-prototype-v0.1.4.html",
       "prototypeStatus": "generated",
       "routes": [
         "HEART Chart",
@@ -1372,7 +1372,7 @@
       "artifactShape": "Probe matrix",
       "useWhen": "Plausible artifacts need strong practitioner questions and AI instruction yield.",
       "readerRef": "/field-guide/core-architectures/practitioner-judgment-probes/",
-      "prototypeRef": "practitioner-judgment-probes-chimeric-prototype-v0.1.html",
+      "prototypeRef": "practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
       "prototypeStatus": "generated",
       "routes": [
         "Software Architecture Views",

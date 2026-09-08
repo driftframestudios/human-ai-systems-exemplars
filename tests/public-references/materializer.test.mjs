@@ -1156,7 +1156,7 @@ test("the repository source materializes from discovered keys without frozen rou
   assert.equal(inventory.iframeCount, 0);
 
   const expectedLocalFallback =
-    "prototypes/core-architectures/chimeric-pack-v0.1/heart-chart-chimeric-prototype-v0.1.5.html";
+    "prototypes/core-architectures/chimeric-pack-v0.1/heart-chart-chimeric-prototype-v0.1.6.html";
   const escapedLocalFallback = expectedLocalFallback.replace(
     /[.*+?^${}()|[\]\\]/g,
     "\\$&",

@@ -182,6 +182,9 @@ test("semantic-identifier successors retain the established iframe request closu
     ["pattern-problem-surface-matrix", ["file-download"]],
     ["jobs-to-be-done-treemap", ["file-download"]],
     ["unit-test-first-design", ["file-download"]],
+    ["heart-chart", ["file-download"]],
+    ["plus-delta", ["file-download"]],
+    ["practitioner-judgment-probes", ["file-download"]],
   ]);
 
   for (const entry of sourceManifest.prototypes) {
