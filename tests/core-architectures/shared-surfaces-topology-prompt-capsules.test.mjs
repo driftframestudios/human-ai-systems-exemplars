@@ -41,7 +41,7 @@ const artifacts = [
     loops: ["visitor-surface-change", "repository-reentry"],
     skills: ["source-authority-mapping", "context-canvas-surface-reading", "stateful-artifact-behavior-contracts"],
     directCarriers: ["context-canvas-project-surface/context-canvas/concept-nursery.html"],
-    receiverStanding: "byte_identical",
+    receiverStanding: "context_adapted",
     activationStanding: "provenance_review",
     materialPhrases: ["Every accepted stage, surface, priority cell, shared asset, and focus view", "asset-claim-source-map"],
   },
@@ -63,7 +63,7 @@ const artifacts = [
       "context-canvas-project-surface/context-canvas/planning-surface.html",
       "context-canvas-project-surface/context-canvas/ai-systems.html",
     ],
-    receiverStanding: "byte_identical",
+    receiverStanding: "context_adapted",
     activationStanding: "visitor_copy_review",
     materialPhrases: ["Every accepted stage, lane, cell, shared asset, and focus view", "asset-claim-source-map"],
   },
@@ -212,7 +212,12 @@ for (const artifact of artifacts) {
 
     assert.deepEqual([route.source_file, route.source_version], [artifact.currentFile, artifact.version]);
     assert.deepEqual(route.carrier_policy, {
-      sandbox_tokens: ["allow-downloads", "allow-scripts"],
+      sandbox_tokens: [
+        "allow-downloads",
+        "allow-popups",
+        "allow-popups-to-escape-sandbox",
+        "allow-scripts",
+      ],
       permissions_policy: ["clipboard-write"],
       held_capabilities: [],
     });

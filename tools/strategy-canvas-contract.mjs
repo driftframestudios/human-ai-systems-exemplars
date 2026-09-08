@@ -1649,7 +1649,8 @@ async function strategyCanvasEvidenceContract() {
     const initiativeSource = await readFile(resolve(INITIATIVE_COSTING), "utf8");
     const fourActionsUrl = registry.relatedMethods.fourActionsFramework.primarySource.url;
     assert(initiativeSource.includes('data-strategy-canvas-source="four-actions-origin"'), "Initiative costing should expose its Four Actions method marker.");
-    assert(initiativeSource.includes(`href="${fourActionsUrl}" target="_blank" rel="noopener noreferrer"`), "Initiative costing should route its official Four Actions source through its existing iframe-safe popup profile.");
+    assert(initiativeSource.includes(`<a href="${fourActionsUrl}">`), "Initiative costing should link its official Four Actions source with ordinary in-place navigation.");
+    assert(!initiativeSource.includes(`href="${fourActionsUrl}" target="_blank"`), "The Initiative Costing source should keep ordinary in-place citation navigation.");
     assert(registry.representations.initiativeCosting.classification === "strategy-canvas-adjacent-four-actions", "Initiative costing should retain its precise adjacent-method classification.");
     const genomicSource = await readFile(resolve(GENOMIC_REPRESENTATION), "utf8");
     assert(genomicSource.includes('<figcaption class="table-note" data-strategy-canvas-source="method-origin">\n                This static representation adapts the Strategy Canvas'), "The Genomic page should attach the method marker to the Strategy Canvas caption itself.");

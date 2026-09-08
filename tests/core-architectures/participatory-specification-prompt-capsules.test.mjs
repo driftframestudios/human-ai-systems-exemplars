@@ -147,7 +147,12 @@ for (const artifact of artifacts) {
 
     assert.deepEqual([route.source_file, route.source_version], [artifact.currentFile, artifact.version]);
     assert.deepEqual(route.carrier_policy, {
-      sandbox_tokens: ["allow-downloads", "allow-scripts"],
+      sandbox_tokens: [
+        "allow-downloads",
+        "allow-popups",
+        "allow-popups-to-escape-sandbox",
+        "allow-scripts",
+      ],
       permissions_policy: ["clipboard-write"],
       held_capabilities: [],
     });
