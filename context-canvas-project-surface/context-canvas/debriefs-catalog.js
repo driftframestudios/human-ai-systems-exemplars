@@ -78,7 +78,7 @@
     defaultPanel.hidden = false;
 
     if (activeTypes.length === 0) {
-      summary.textContent = "All " + cards.length + " catalog entries are in view. Focus an entry to bring its primary visual and reading route into this panel.";
+      summary.textContent = "All " + cards.length + " catalog entries are in view. Focus an entry to bring its primary visual and full-page link into this panel.";
       syncPreviewScroller();
       return;
     }
