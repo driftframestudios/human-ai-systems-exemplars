@@ -97,7 +97,12 @@ test("First Responsible Version Matrix carries the complete Prompt Capsule sourc
     [currentFile, "0.1.4"],
   );
   assert.deepEqual(route.carrier_policy, {
-    sandbox_tokens: ["allow-downloads", "allow-scripts"],
+    sandbox_tokens: [
+      "allow-downloads",
+      "allow-popups",
+      "allow-popups-to-escape-sandbox",
+      "allow-scripts",
+    ],
     permissions_policy: ["clipboard-write"],
     held_capabilities: [],
   });

@@ -264,7 +264,12 @@ test("Family Index current route provides exact Markdown download capability", a
 
   assert.deepEqual([route.source_file, route.source_version], [currentFile, "0.1.5"]);
   assert.deepEqual(route.carrier_policy, {
-    sandbox_tokens: ["allow-downloads", "allow-scripts"],
+    sandbox_tokens: [
+      "allow-downloads",
+      "allow-popups",
+      "allow-popups-to-escape-sandbox",
+      "allow-scripts",
+    ],
     permissions_policy: ["clipboard-write"],
     held_capabilities: [],
   });
