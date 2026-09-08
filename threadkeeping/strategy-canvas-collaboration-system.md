@@ -71,7 +71,7 @@ Receiving iframes begin with `allow-scripts`. A real in-frame report download ea
 - The canonical skip link is fully offscreen when unfocused, enters at the viewport top on keyboard focus, and returns offscreen after blur. A mid-page copy in very long Chromium `fullPage` captures is fixed-layer stitching from the capture path rather than runtime visibility.
 - Grammar Family and FMI embeds retain the smallest capability set that supports the implemented actions.
 - Root and Context Narrative Composer, Semantic Sampling, and Technology Fit archives rebuild deterministically; their embedded manifests and portable routes resolve against the packaged members.
-- The Context prototype-manifest validator passes all six mirrored collections.
+- The Context prototype-manifest validator passes all five mirrored collections.
 
 ### Current v0.2.4 source receipt
 
@@ -120,7 +120,7 @@ machine_node:
       sha256: 60fc6669b54adff4f609f4c48322548d44abc4875f5a2412030eb2c619f4c8b4
     core_architectures: 74_of_74_pass
     consumer_archives: 4_of_4_deterministic_and_receipted
-    context_manifests: 6_of_6_pass
+    context_manifests: 5_of_5_pass
     iframe_routes: 29_of_29_pass
     cross_family_package_authority: issue_137
   open_condition:
