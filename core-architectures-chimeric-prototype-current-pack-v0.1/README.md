@@ -138,7 +138,9 @@ The same manifest carries each route's minimal carrier policy. The scriptless
 pack hub uses an empty sandbox. A prototype with executable behavior grants
 `allow-scripts`; a route with an implemented file download grants
 `allow-downloads`; and a route that writes clipboard text delegates only the
-`clipboard-write` Permissions Policy feature. Every current route now uses an
+`clipboard-write` Permissions Policy feature. A projected user-activated exit
+grants `allow-popups` with `allow-popups-to-escape-sandbox`, opening the
+destination as a separate top-level page. Every current route now uses an
 ordinary inline notice, input, or two-step confirmation instead of native
 browser dialogs, so no route retains a held capability. An `eligible` route is
 invalid when any hold remains. The policy vocabulary stays intentionally
@@ -155,15 +157,16 @@ The root build stages and replaces the complete
 `.iframe-route-build/iframes.vik.guru/v1/` closure. This Core family is written
 to its `core/` child beside the separately declared
 [`canvas/`](../iframe-route-families/canvas/README.md) family and one aggregate
-receipt. Each Core prototype becomes its route-local `index.html` without
-changing its bytes. The
-hub alone receives projection-local links to its 21 sibling routes and
-`manifest.json`. The Conditioning Field receives a deterministic embedded
-single-file projection that leaves its standalone Context Canvas page
-authoritative while omitting shared navigation, popup exits, and runtime
-subresources. A deterministic `route-manifest.json` records source and
+receipt. Each Core prototype becomes a route-local `index.html`; the generated
+projection gives eligible onward links secure separate-tab behavior while the
+canonical source keeps ordinary navigation. Fragment links, downloads, and
+page controls retain their local behavior. The hub receives projection-local
+links to its 21 sibling routes and `manifest.json`. The Conditioning Field
+receives a deterministic embedded single-file projection that leaves its
+standalone Context Canvas page authoritative while omitting shared navigation
+and runtime subresources. A deterministic `route-manifest.json` records source and
 projection digests, static-resource evidence, activation standing, and
-unresolved user-activated local navigation. It also records the observed
+resolved or remaining user-activated navigation. It also records the observed
 runtime capabilities beside the exact carrier policy, making policy drift
 visible in the upload-ready receipt. The Strategy Canvas route also carries its
 explicitly linked JSON Schema as one route-local, content-typed companion.

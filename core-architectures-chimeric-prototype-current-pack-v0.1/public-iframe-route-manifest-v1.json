@@ -12,7 +12,8 @@
     "html_closure": "single_file",
     "package_coupled_media": "inline_or_package_local",
     "package_file_allowlist": "Optional route.package_files entries bind a regular source file to a route-local target and explicit content type.",
-    "static_scan_boundary": "Markup, CSS and selected JavaScript network primitives are checked during packaging; browser request-graph and delivery-policy evidence remain activation gates.",
+    "static_scan_boundary": "Markup, CSS and selected JavaScript network primitives are checked during packaging; browser request-graph, projected exit behavior, and delivery-policy evidence remain activation gates.",
+    "navigation_posture": "Declared repository-local exits first resolve to the primary visitor surface. Every generated iframe prototype then opens user-activated exits in a separate top-level tab with a severed opener; fragment links, downloads, the standalone pack hub, and canonical source behavior remain unchanged.",
     "activation_owner": "Issue #72 and human review",
     "neighboring_path_posture": "unmatched"
   },
@@ -69,6 +70,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -76,6 +79,12 @@
         ],
         "held_capabilities": []
       },
+      "navigation_rewrites": [
+        {
+          "source_reference": "../context-canvas-project-surface/context-canvas/poda.html",
+          "public_reference": "https://vik.guru/poda.html"
+        }
+      ],
       "reader_job": "Trace purpose, objectives, discoverables, and activities in one editable orientation."
     },
     {
@@ -90,6 +99,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -111,6 +122,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -132,6 +145,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -153,6 +168,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -186,6 +203,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -202,11 +221,13 @@
       "source_file": "shared-surface-priority-map-chimeric-prototype-v0.1.4.html",
       "source_version": "0.1.4",
       "public_alias": "/v1/core/cross-channel-blueprint/",
-      "receiver_standing": "byte_identical",
+      "receiver_standing": "context_adapted",
       "activation_standing": "provenance_review",
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -223,11 +244,13 @@
       "source_file": "service-design-blueprint-chimeric-prototype-v0.2.5.html",
       "source_version": "0.2.5",
       "public_alias": "/v1/core/service-design-blueprint/",
-      "receiver_standing": "byte_identical",
+      "receiver_standing": "context_adapted",
       "activation_standing": "visitor_copy_review",
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -249,6 +272,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -270,6 +295,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -291,6 +318,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -307,11 +336,13 @@
       "source_file": "specification-by-example-chimeric-prototype-v0.1.6.html",
       "source_version": "0.1.6",
       "public_alias": "/v1/core/specification-by-example/",
-      "receiver_standing": "byte_identical",
+      "receiver_standing": "context_adapted",
       "activation_standing": "navigation_observation",
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -328,11 +359,13 @@
       "source_file": "heart-chart-chimeric-prototype-v0.1.6.html",
       "source_version": "0.1.6",
       "public_alias": "/v1/core/heart-chart/",
-      "receiver_standing": "byte_identical",
+      "receiver_standing": "context_adapted",
       "activation_standing": "eligible",
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -354,6 +387,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -375,6 +410,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -396,6 +433,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -417,6 +456,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -438,6 +479,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -459,6 +502,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -480,6 +525,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -501,6 +548,8 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -508,6 +557,12 @@
         ],
         "held_capabilities": []
       },
+      "navigation_rewrites": [
+        {
+          "source_reference": "../context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html",
+          "public_reference": "https://vik.guru/core-architectures-orientation-index.html"
+        }
+      ],
       "reader_job": "Browse the full family and select a fitting cognitive move."
     },
     {
@@ -523,11 +578,23 @@
       "activation_standing": "eligible",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [],
         "held_capabilities": []
       },
+      "navigation_rewrites": [
+        {
+          "source_reference": "conditioning-field.html",
+          "public_reference": "https://vik.guru/conditioning-field.html"
+        },
+        {
+          "source_reference": "prompt-side-conditions-practice.html#sources-title",
+          "public_reference": "https://vik.guru/prompt-side-conditions-practice.html#sources-title"
+        }
+      ],
       "reader_job": "Shape task, desired state, human referents, evidence horizon, uncertainty, and authority before an AI collaboration converges."
     }
   ],

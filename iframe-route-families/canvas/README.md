@@ -12,6 +12,8 @@ The manifest keeps these concerns explicit:
 - generated attribution and visitor-boundary decoration where the source does
   not already carry the governed stack;
 - declared rewrites for onward primary-site navigation;
+- generated separate-tab behavior for eligible iframe exits, including links
+  created at runtime, while source links remain ordinary;
 - exact route-local files for SVG, JSON, or other non-inline dependencies;
 - the smallest observed sandbox and Permissions Policy capability set; and
 - one activation standing that remains distinct from upload and live delivery.
@@ -30,5 +32,8 @@ generation without retaining output, and `npm run test:iframe-routes` for the
 focused package contracts.
 
 The generated `index.html` files are projections. Preserve the repository
-sources, retain adjacent full-view links on the primary visitor surface, and
-regenerate the family when a source or route contract changes.
+sources, retain ordinary adjacent full-view links on the primary visitor
+surface, and regenerate the family when a source or route contract changes.
+Generated iframe exits carry `_blank` with `noopener noreferrer`; fragments,
+downloads, and page controls keep their local behavior. Only routes with an
+observed exit receive the matching popup sandbox capabilities.

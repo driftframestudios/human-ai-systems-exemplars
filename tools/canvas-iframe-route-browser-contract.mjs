@@ -581,11 +581,19 @@ async function exerciseGenomic({ carrierPage, page }) {
   );
 }
 
-async function exerciseTalent({ page }) {
+async function exerciseTalent(session) {
+  const { page } = session;
   await page.locator("#view-button-evidence").click();
   const state = await jsonText(page, "#state-output");
   assert.equal(state.activeView, "evidence");
-  assert.equal(await page.locator("#view-evidence a[target='_blank']").count(), 4);
+  const links = page.locator("#view-evidence a[href]");
+  assert.equal(await links.count(), 4);
+  for (const link of await links.all()) {
+    assert.equal(await link.getAttribute("target"), "_blank", "Talent evidence exits use a top-level tab");
+    const rel = new Set((await link.getAttribute("rel") ?? "").split(/\s+/u).filter(Boolean));
+    assert.equal(rel.has("noopener") && rel.has("noreferrer"), true, "Talent evidence exits sever opener access");
+  }
+  await observeExternalPopup(session, links.first());
 }
 
 async function exerciseInvestmentStudio(session) {
@@ -622,6 +630,7 @@ async function observeExternalPopup(session, locator) {
   const requestUrl = new URL(href);
   requestUrl.hash = "";
   const requestHref = requestUrl.href;
+  const parentUrl = session.carrierPage.url();
   session.permittedExternalUrls.add(href);
   session.permittedExternalUrls.add(requestHref);
   try {
@@ -637,6 +646,11 @@ async function observeExternalPopup(session, locator) {
       await popup.close();
     }
     assert.equal(
+      session.carrierPage.url(),
+      parentUrl,
+      "opening an iframe exit preserves the parent page state",
+    );
+    assert.equal(
       session.observedExternalUrls.has(href) || session.observedExternalUrls.has(requestHref),
       true,
       `controlled popup navigation observed for ${href}`,
@@ -645,6 +659,37 @@ async function observeExternalPopup(session, locator) {
     session.permittedExternalUrls.delete(href);
     session.permittedExternalUrls.delete(requestHref);
   }
+}
+
+async function assertProjectedExitLinks(session, label) {
+  const links = await session.page.locator("a[href]").evaluateAll((anchors) =>
+    anchors.map((anchor) => ({
+      download: anchor.hasAttribute("download"),
+      href: anchor.getAttribute("href")?.trim() ?? "",
+      rel: anchor.getAttribute("rel"),
+      target: anchor.getAttribute("target"),
+    })),
+  );
+  const exits = links.filter(({ download, href }) => {
+    const raw = href.trim();
+    return raw.length > 0 &&
+      !raw.startsWith("#") &&
+      !download &&
+      !/^javascript:/iu.test(raw);
+  });
+  assert.equal(
+    exits.every(({ rel, target }) => {
+      const relTokens = new Set((rel ?? "").toLowerCase().split(/\s+/u).filter(Boolean));
+      return target === "_blank" && relTokens.has("noopener") && relTokens.has("noreferrer");
+    }),
+    true,
+    `${label} projected exits open in secure top-level tabs`,
+  );
+  assert.equal(
+    links.filter(({ href }) => href.startsWith("#")).every(({ target }) => target !== "_blank"),
+    true,
+    `${label} fragment navigation remains within the framed document`,
+  );
 }
 
 async function exercisePromptConditions(session) {
@@ -2082,13 +2127,13 @@ const behaviorProfiles = new Map([
   }],
   ["threadkeeping-ledger", {
     policy: {
-      sandbox_tokens: ["allow-downloads", "allow-modals", "allow-scripts"],
+      sandbox_tokens: ["allow-downloads", "allow-modals", "allow-popups", "allow-popups-to-escape-sandbox", "allow-scripts"],
       permissions_policy: ["clipboard-write"],
     },
     exercise: exerciseThreadkeeping,
   }],
   ["open-lesson-field", {
-    policy: { sandbox_tokens: ["allow-downloads", "allow-modals", "allow-scripts"], permissions_policy: ["clipboard-write"] },
+    policy: { sandbox_tokens: ["allow-downloads", "allow-modals", "allow-popups", "allow-popups-to-escape-sandbox", "allow-scripts"], permissions_policy: ["clipboard-write"] },
     exercise: exerciseOpenLesson,
   }],
   ["visualization-fidelity-atlas", {
@@ -2167,6 +2212,7 @@ async function exerciseRoute(browser, origin, route) {
     await assertAttribution(session.page, route);
     await assertContained(session, "initial state");
     await profile.exercise(session);
+    await assertProjectedExitLinks(session, `${route.id} exercised state`);
     await assertContained(session, "exercised state");
     assertRuntimeFilesObserved(session);
     assert.deepEqual(

@@ -199,6 +199,53 @@ async function assertCarrierContainment(page, carrier, frame, label) {
   }
 }
 
+async function assertParentLinksRemainOrdinary(carrier, label) {
+  const links = carrier.locator("xpath=ancestor::figure[1]").locator("a[href]");
+  for (const link of await links.all()) {
+    assert.equal(
+      await link.getAttribute("target"),
+      null,
+      `${label} keeps its parent-page link in the visitor's current context`,
+    );
+    assert.equal(
+      await link.getAttribute("rel"),
+      null,
+      `${label} keeps ordinary parent-page link security semantics`,
+    );
+  }
+}
+
+async function assertProjectedExitLinks(frame, label) {
+  const links = await frame.locator("a[href]").evaluateAll((anchors) =>
+    anchors.map((anchor) => ({
+      download: anchor.hasAttribute("download"),
+      href: anchor.getAttribute("href")?.trim() ?? "",
+      rel: anchor.getAttribute("rel"),
+      target: anchor.getAttribute("target"),
+    })),
+  );
+  const exits = links.filter(({ download, href }) =>
+    href.length > 0 &&
+    !href.startsWith("#") &&
+    !download &&
+    !/^javascript:/iu.test(href),
+  );
+  assert.equal(
+    exits.every(({ rel, target }) => {
+      const relTokens = new Set((rel ?? "").toLowerCase().split(/\s+/u).filter(Boolean));
+      return target === "_blank" && relTokens.has("noopener") && relTokens.has("noreferrer");
+    }),
+    true,
+    `${label} projected exits open in secure top-level tabs`,
+  );
+  assert.equal(
+    links.filter(({ href }) => href.startsWith("#")).every(({ target }) => target !== "_blank"),
+    true,
+    `${label} fragment navigation remains within the framed document`,
+  );
+  return exits.length;
+}
+
 async function exerciseStrategyCarrier(page, carrier, frame, label) {
   assert.equal(
     await frame.locator("[data-direct-source-route]").count(),
@@ -785,6 +832,7 @@ async function run() {
       page.setDefaultTimeout(7000);
       const telemetry = monitor(page);
       const outsideRequests = [];
+      const parentUrl = `${server.origin}${pagePath}`;
       page.on("request", (request) => {
         if (
           request.url().startsWith("http") &&
@@ -821,6 +869,7 @@ async function run() {
           await carrier.scrollIntoViewIfNeeded();
           const frame = page.frameLocator(carrierSelector);
           await frame.locator("body").waitFor();
+          await assertParentLinksRemainOrdinary(carrier, label);
 
           const expectedTitle = attributeValue(tag, "title");
           assert.ok(expectedTitle?.trim(), `${label} carries a context-specific title`);
@@ -884,6 +933,12 @@ async function run() {
             await exerciseStrategyCarrier(page, carrier, frame, label);
             strategyInteractions += 1;
           }
+          await assertProjectedExitLinks(frame, label);
+          assert.equal(
+            page.url(),
+            parentUrl,
+            `${label} preserves the parent visitor-surface state while the frame changes`,
+          );
         }
 
         await page.waitForLoadState("networkidle", { timeout: 4000 }).catch(() => {});

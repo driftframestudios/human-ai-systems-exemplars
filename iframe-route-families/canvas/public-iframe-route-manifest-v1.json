@@ -9,7 +9,7 @@
     "route_receipt_file": "route-manifest.json",
     "html_closure": "declared_package_local",
     "public_decoration": "A generated public projection carries centralized author metadata, the Apache-2.0 license relation, ordinary-language visitor-boundary context followed by the exact stacked markers, and the copy-local attribution notice. The semantic source stays unchanged.",
-    "navigation_posture": "Repository-local onward links are rewritten only when declared below and point to the primary visitor surface. Fragment-only navigation remains route-local.",
+    "navigation_posture": "Declared repository-local onward links first resolve to the primary visitor surface. The generated iframe projection then opens every user-activated exit in a separate top-level tab with a severed opener; fragment links, downloads, and canonical source behavior remain unchanged.",
     "package_file_allowlist": "Every non-inline resource is copied from an explicitly declared regular repository file to an explicitly declared route-local target with a content type.",
     "static_scan_boundary": "Markup, CSS, and selected JavaScript network primitives are checked during packaging. Browser request-graph, interaction, containment, and delivery-policy checks remain release gates.",
     "activation_owner": "Issue #137 and human review",
@@ -303,13 +303,15 @@
       "kind": "visitor_companion",
       "source_file": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html",
       "public_alias": "/v1/canvas/threadkeeping-ledger/",
-      "receiver_standing": "byte_identical",
+      "receiver_standing": "context_adapted",
       "activation_standing": "eligible",
-      "projection_kind": "byte_identical",
+      "projection_kind": "navigation_adapted",
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
           "allow-modals",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": ["clipboard-write"]
@@ -329,6 +331,8 @@
         "sandbox_tokens": [
           "allow-downloads",
           "allow-modals",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": ["clipboard-write"]
