@@ -1060,6 +1060,7 @@ export async function createPackagePlan(options = {}) {
       reading.routeOutputDirectory,
       expectedOutputPaths,
       contract.base_path,
+      { scanMarkupContextsOnly: true },
     );
     if (
       reading.route.activation_standing === "eligible" &&

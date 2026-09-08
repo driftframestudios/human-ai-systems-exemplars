@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  navigationObservation,
   observeIframeExitLinks,
   projectIframeExitLinks,
 } from "../../tools/iframe-route-package-engine.mjs";
@@ -67,4 +68,27 @@ test("runtime-created iframe exits receive their projected navigation when added
   assert.match(projection.html, /document\.querySelectorAll\("a\[href\]"\)\.forEach\(projectExit\);/u);
   assert.match(projection.html, /anchor\.target = "_blank";/u);
   assert.match(projection.html, /anchor\.relList\.add\("noopener", "noreferrer"\);/u);
+});
+
+test("navigation receipts keep downloads out of route-exit resolution", () => {
+  const observation = navigationObservation(
+    `<!doctype html><body>
+      <a href="artifact.json" download>Download</a>
+      <script>const example = '<a href="unpackaged.html">Example</a>';</script>
+    </body>`,
+    "instrument",
+    new Set(),
+    "/v1/core/",
+    { scanMarkupContextsOnly: true },
+  );
+
+  assert.deepEqual(observation, {
+    packaged_links: 0,
+    fragment_links: 0,
+    external_links: 0,
+    exit_links: 0,
+    new_tab_exit_links: 0,
+    secure_new_tab_exit_links: 0,
+    unresolved_local_links: [],
+  });
 });

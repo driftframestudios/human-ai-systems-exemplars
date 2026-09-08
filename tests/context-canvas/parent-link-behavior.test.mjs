@@ -17,7 +17,6 @@ test("ordinary parent links preserve the visitor's browsing-context choice", asy
   const routes = (await readdir(canvasRoot, { withFileTypes: true }))
     .filter(entry => entry.isFile() && entry.name.endsWith(".html"))
     .map(entry => entry.name)
-    .filter(route => route !== "conditioning-field.html")
     .sort();
   const forcedNewTabs = [];
 

@@ -414,6 +414,18 @@ function extractAnchorHrefs(html, options = {}) {
   return hrefs;
 }
 
+function extractNavigationAnchorHrefs(html, options = {}) {
+  const hrefs = [];
+  const markup = markupResourceContext(html, options);
+  for (const match of markup.matchAll(/<a\b[^>]*>/gi)) {
+    const tag = match[0];
+    if (hasBooleanAttribute(tag, "download")) continue;
+    const href = attributeValue(tag, "href");
+    if (href !== null) hrefs.push(href.trim());
+  }
+  return hrefs;
+}
+
 function hasBooleanAttribute(tag, attributeName) {
   const escapedName = attributeName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   return new RegExp(`(?:^|\\s)${escapedName}(?:\\s|=|/?>)`, "i").test(tag);
@@ -664,7 +676,7 @@ export function navigationObservation(
   let externalLinks = 0;
   const unresolved = new Map();
 
-  for (const href of extractAnchorHrefs(html, options)) {
+  for (const href of extractNavigationAnchorHrefs(html, options)) {
     if (!href || href.startsWith("#")) {
       fragmentLinks += 1;
       continue;
