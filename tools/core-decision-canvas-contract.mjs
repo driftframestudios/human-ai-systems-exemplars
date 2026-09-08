@@ -17,7 +17,7 @@ const artifactNames = {
   impact: "impact-map-chimeric-prototype-v0.1.4.html",
   service: "service-design-blueprint-chimeric-prototype-v0.2.4.html",
   heart: "heart-chart-chimeric-prototype-v0.1.5.html",
-  specification: "specification-by-example-chimeric-prototype-v0.1.5.html"
+  specification: "specification-by-example-chimeric-prototype-v0.1.6.html"
 };
 const checks = [];
 const failures = [];
@@ -309,8 +309,40 @@ async function heartPath(browser, origin, route) {
 }
 
 async function specificationPath(browser, origin, route) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPlain = "";
   try {
+    const apiInitial = await page.evaluate(() => {
+      const api = window.specificationByExample;
+      return {
+        frozen: Object.isFrozen(api),
+        version: api.version,
+        contract: api.contract,
+        stateContract: api.stateContract,
+        view: api.getPromptCapsuleView(),
+        state: api.getState(),
+        projection: api.promptCapsuleStateProjection(),
+        fingerprint: api.promptCapsuleFingerprint(),
+        plain: api.promptCapsule(),
+        explicitPlain: api.promptCapsuleMarkdown("plain"),
+        visible: document.querySelector("#aiPrompt").textContent,
+      };
+    });
+    initialPlain = apiInitial.plain;
+    assert.equal(apiInitial.frozen, true);
+    assert.deepEqual(
+      [apiInitial.version, apiInitial.contract, apiInitial.stateContract, apiInitial.view],
+      ["0.1.6", "prompt-capsule/0.1.0", "specification-by-example-state.v0.1", "plain"],
+    );
+    assert.equal(apiInitial.plain, apiInitial.explicitPlain);
+    assert.equal(apiInitial.visible, apiInitial.plain);
+    assert.equal(apiInitial.projection.rules.length, apiInitial.state.specification_by_example.rules.length);
+    assert.equal(apiInitial.projection.scenarios.length, apiInitial.state.specification_by_example.scenarios.length);
+    assert.ok(apiInitial.plain.includes(`- Fingerprint: \`${apiInitial.fingerprint}\``));
+    assert.match(apiInitial.plain, /^# Prompt Capsule: Specification-by-Example\n/u);
+    assert.match(apiInitial.plain, /## Related loops/u);
+    assert.doesNotMatch(apiInitial.plain, /## Skill assistance/u);
+
     const initial = await valueJson(page, "#jsonOut");
     const ruleIds = new Set(initial.specification_by_example.rules.map(rule => rule.id));
     assert.ok(initial.specification_by_example.scenarios.every(scenario => ruleIds.has(scenario.rule_id)), "Every scenario should belong to a current rule");
@@ -319,6 +351,79 @@ async function specificationPath(browser, origin, route) {
     const view = initial.view_state.views[0];
     const firstId = view.scenario_order[0];
     const secondId = view.scenario_order[1];
+    await page.locator(`[data-action="select-scenario"][data-id="${firstId}"]`).first().click();
+    const selectedOnly = await page.evaluate(() => ({
+      selectedId: window.specificationByExample.getState().view_state.views[0].selected_scenario_id,
+      fingerprint: window.specificationByExample.promptCapsuleFingerprint(),
+      markdown: window.specificationByExample.promptCapsule(),
+    }));
+    assert.equal(selectedOnly.selectedId, firstId);
+    assert.equal(selectedOnly.fingerprint, apiInitial.fingerprint);
+    assert.equal(selectedOnly.markdown, apiInitial.plain);
+
+    const loopReceipt = await page.locator("[data-prompt-related-loops]").evaluate((details) => ({
+      tag: details.tagName,
+      open: details.open,
+      loops: [...details.querySelectorAll("[data-related-loop-id]")].map((item) => ({
+        id: item.dataset.relatedLoopId,
+        href: item.querySelector("a")?.href,
+      })),
+    }));
+    assert.deepEqual(loopReceipt, {
+      tag: "DETAILS",
+      open: false,
+      loops: [
+        { id: "repository-reentry", href: "https://schemas.radiantnull.com/collaboration/#repository-reentry" },
+        { id: "skill-from-receiving-use", href: "https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use" },
+      ],
+    });
+    const relatedSummary = page.locator("[data-prompt-related-loops] summary");
+    const summaryBox = await relatedSummary.boundingBox();
+    assert.ok(summaryBox && summaryBox.height >= 44 && summaryBox.width >= 44);
+    await relatedSummary.press("Enter");
+    assert.equal(await page.locator("[data-prompt-related-loops]").evaluate(element => element.open), true);
+    const firstLoopBox = await page.locator("[data-related-loop-id] a").first().boundingBox();
+    assert.ok(firstLoopBox && firstLoopBox.height >= 44 && firstLoopBox.width >= 44);
+
+    const assistedControl = page.locator('[data-prompt-view][value="skill-assisted"]');
+    await assistedControl.check();
+    const assisted = await page.evaluate(() => ({
+      view: window.specificationByExample.getPromptCapsuleView(),
+      projection: window.specificationByExample.promptCapsuleStateProjection(),
+      fingerprint: window.specificationByExample.promptCapsuleFingerprint(),
+      markdown: window.specificationByExample.promptCapsuleMarkdown(),
+      visible: document.querySelector("#aiPrompt").textContent,
+    }));
+    assert.equal(assisted.view, "skill-assisted");
+    assert.equal(assisted.markdown, assisted.visible);
+    assert.equal(assisted.fingerprint, apiInitial.fingerprint);
+    assert.deepEqual(assisted.projection, apiInitial.projection);
+    assert.match(assisted.markdown, /## Skill assistance/u);
+    assert.match(assisted.markdown, /\.agents\/skills\/stateful-artifact-behavior-contracts\/SKILL\.md/u);
+
+    await page.evaluate(() => { globalThis.__coreClipboard = ""; });
+    await page.locator("#copyPromptBtn").click();
+    await page.waitForFunction(() => Boolean(globalThis.__coreClipboard));
+    assert.equal(await page.evaluate(() => globalThis.__coreClipboard), assisted.markdown);
+    await page.evaluate(() => {
+      const original = URL.createObjectURL.bind(URL);
+      URL.createObjectURL = (blob) => {
+        globalThis.__promptDownloadType = blob.type;
+        return original(blob);
+      };
+    });
+    const downloadPromise = page.waitForEvent("download");
+    await page.locator("#downloadPromptBtn").click();
+    const download = await downloadPromise;
+    assert.equal(download.suggestedFilename(), "specification-by-example.prompt-capsule.r0.1.6.skill-assisted.md");
+    assert.equal(await page.evaluate(() => globalThis.__promptDownloadType), "text/markdown;charset=utf-8");
+    const stream = await download.createReadStream();
+    const chunks = [];
+    for await (const chunk of stream) chunks.push(chunk);
+    assert.equal(Buffer.concat(chunks).toString("utf8"), assisted.markdown);
+    await page.locator('[data-prompt-view][value="plain"]').check();
+    assert.equal(await page.locator("#aiPrompt").textContent(), apiInitial.plain);
+
     const literal = "Then <img src=x onerror=globalThis.__coreProbe=1> appears as collaborator text";
     await page.locator(`[data-scenario-id="${firstId}"][data-field="then"]`).fill(literal);
     await page.locator(`[data-scenario-id="${firstId}"][data-field="then"]`).blur();
@@ -326,6 +431,17 @@ async function specificationPath(browser, origin, route) {
     assert.equal(edited.specification_by_example.scenarios.find(scenario => scenario.id === firstId).then, literal);
     assert.match(await page.locator("#scenarioText").textContent(), /Then <img src=x/);
     assert.equal(await page.evaluate(() => globalThis.__coreProbe), undefined);
+    const changedCapsule = await page.evaluate(() => ({
+      fingerprint: window.specificationByExample.promptCapsuleFingerprint(),
+      markdown: window.specificationByExample.promptCapsule(),
+    }));
+    assert.notEqual(changedCapsule.fingerprint, apiInitial.fingerprint);
+    assert.notEqual(changedCapsule.markdown, apiInitial.plain);
+    assert.ok(
+      changedCapsule.markdown.includes(
+        "Then &lt;img src=x onerror=globalThis.\\_\\_coreProbe=1&gt; appears as collaborator text",
+      ),
+    );
 
     await page.locator(`[data-action="move-scenario"][data-id="${firstId}"][data-dir="1"]`).click();
     const reordered = await valueJson(page, "#jsonOut");
@@ -358,6 +474,68 @@ async function specificationPath(browser, origin, route) {
     assertTelemetry(telemetry);
   } finally {
     await context.close();
+  }
+
+  const stateBoundaryContext = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  try {
+    const stateBoundaryPage = await stateBoundaryContext.newPage();
+    await stateBoundaryPage.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+    const baseline = await stateBoundaryPage.evaluate(() => ({
+      state: window.specificationByExample.getState(),
+      fingerprint: window.specificationByExample.promptCapsuleFingerprint(),
+      markdown: window.specificationByExample.promptCapsule(),
+    }));
+    const privateOnly = structuredClone(baseline.state);
+    privateOnly.private_annotation = "local behavior note";
+    privateOnly.specification_by_example.private_annotation = "local specification note";
+    await stateBoundaryPage.locator("#jsonImport").fill(JSON.stringify(privateOnly));
+    await stateBoundaryPage.locator("#importJsonBtn").click();
+    assert.match(await stateBoundaryPage.locator("#importNotice").textContent(), /Specification-by-Example imported/i);
+    const privateReceipt = await stateBoundaryPage.evaluate(() => ({
+      state: window.specificationByExample.getState(),
+      fingerprint: window.specificationByExample.promptCapsuleFingerprint(),
+      markdown: window.specificationByExample.promptCapsule(),
+    }));
+    assert.equal(privateReceipt.state.private_annotation, "local behavior note");
+    assert.equal(privateReceipt.state.specification_by_example.private_annotation, "local specification note");
+    assert.equal(privateReceipt.fingerprint, baseline.fingerprint);
+    assert.equal(privateReceipt.markdown, baseline.markdown);
+
+    const semanticChange = structuredClone(privateReceipt.state);
+    semanticChange.specification_by_example.scenarios[0].then = "A revised example produces an observable result.";
+    await stateBoundaryPage.locator("#jsonImport").fill(JSON.stringify(semanticChange));
+    await stateBoundaryPage.locator("#importJsonBtn").click();
+    assert.match(await stateBoundaryPage.locator("#importNotice").textContent(), /Specification-by-Example imported/i);
+    const semanticReceipt = await stateBoundaryPage.evaluate(() => ({
+      fingerprint: window.specificationByExample.promptCapsuleFingerprint(),
+      markdown: window.specificationByExample.promptCapsule(),
+    }));
+    assert.notEqual(semanticReceipt.fingerprint, baseline.fingerprint);
+    assert.notEqual(semanticReceipt.markdown, baseline.markdown);
+    assert.match(semanticReceipt.markdown, /A revised example produces an observable result\./u);
+  } finally {
+    await stateBoundaryContext.close();
+  }
+
+  const noScriptContext = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 320, height: 900 },
+  });
+  try {
+    const noScriptPage = await noScriptContext.newPage();
+    await noScriptPage.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+    assert.equal(await noScriptPage.locator("#aiPrompt").textContent(), initialPlain);
+    assert.equal(await noScriptPage.locator("#aiPrompt").isVisible(), true);
+    assert.equal(await noScriptPage.locator("[data-prompt-view-control]").isVisible(), false);
+    assert.equal(await noScriptPage.locator("[data-prompt-actions]").isVisible(), false);
+    assert.equal(await noScriptPage.locator("[data-prompt-related-loops]").isVisible(), true);
+    const containment = await noScriptPage.locator("html").evaluate(root => ({
+      clientWidth: root.clientWidth,
+      scrollWidth: root.scrollWidth,
+    }));
+    assert.ok(containment.scrollWidth <= containment.clientWidth + 1, JSON.stringify(containment));
+  } finally {
+    await noScriptContext.close();
   }
 }
 

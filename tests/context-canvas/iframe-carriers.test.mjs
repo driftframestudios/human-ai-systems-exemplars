@@ -604,10 +604,16 @@ test("manifest-owned prototype carriers keep a minimal explicit iframe boundary"
   const downloadCarriers = carriers.filter(({ tag }) =>
     (attributeValue(tag, "sandbox") ?? "").split(/\s+/).includes("allow-downloads"),
   );
-  assert.equal(downloadCarriers.length, 2, "the two Strategy Canvas carriers grant their implemented Markdown download");
+  const downloadRoutes = downloadCarriers.map(({ src }) => src);
+  assert.equal(downloadCarriers.length, 3, "the three capsule carriers grant their implemented Markdown downloads");
   assert.equal(
-    downloadCarriers.every(({ src }) => src === "https://iframes.vik.guru/v1/core/strategy-canvas/"),
-    true,
-    "download capability stays scoped to the Strategy Canvas route",
+    downloadRoutes.filter((src) => src === "https://iframes.vik.guru/v1/core/strategy-canvas/").length,
+    2,
+    "both Strategy Canvas carriers grant their source-owned Markdown download",
+  );
+  assert.equal(
+    downloadRoutes.filter((src) => src === "https://iframes.vik.guru/v1/core/specification-by-example/").length,
+    1,
+    "the Specification-by-Example carrier grants its source-owned Markdown download",
   );
 });

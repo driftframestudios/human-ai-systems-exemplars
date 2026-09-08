@@ -273,13 +273,14 @@
       "id": "participatory-design-kit",
       "display_name": "Participatory Design Kit",
       "kind": "prototype",
-      "source_file": "participatory-design-kit-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
+      "source_file": "participatory-design-kit-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
       "public_alias": "/v1/core/participatory-design-kit/",
       "receiver_standing": "reserve",
       "activation_standing": "visitor_copy_review",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -293,13 +294,14 @@
       "id": "specification-by-example",
       "display_name": "Specification-by-Example",
       "kind": "prototype",
-      "source_file": "specification-by-example-chimeric-prototype-v0.1.5.html",
-      "source_version": "0.1.5",
+      "source_file": "specification-by-example-chimeric-prototype-v0.1.6.html",
+      "source_version": "0.1.6",
       "public_alias": "/v1/core/specification-by-example/",
       "receiver_standing": "byte_identical",
       "activation_standing": "navigation_observation",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
           "allow-scripts"
         ],
         "permissions_policy": [
