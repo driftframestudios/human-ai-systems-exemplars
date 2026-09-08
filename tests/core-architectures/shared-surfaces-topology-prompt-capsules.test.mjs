@@ -224,9 +224,9 @@ for (const artifact of artifacts) {
     const [targetRegistry, narrativeComposer, coreFamilyIndex, contextFamilyIndex, familyCompanion, ...directCarriers] = await Promise.all([
       json(resolve(narrativeRoot, "core-architecture-target-pair-registry.v0.1.json")),
       readFile(resolve(narrativeRoot, "narrative-capsules-chimeric-prototype-v0.1.html"), "utf8"),
-      readFile(resolve(coreRoot, "core-architecture-family-index-chimeric-prototype-v0.1.4.html"), "utf8"),
-      readFile(resolve(contextRoot, "core-architecture-family-index-chimeric-prototype-v0.1.4.html"), "utf8"),
-      readFile(resolve(narrativeRoot, "companions/core-architecture-family-index-chimeric-prototype-v0.1.4.html"), "utf8"),
+      readFile(resolve(coreRoot, "core-architecture-family-index-chimeric-prototype-v0.1.5.html"), "utf8"),
+      readFile(resolve(contextRoot, "core-architecture-family-index-chimeric-prototype-v0.1.5.html"), "utf8"),
+      readFile(resolve(narrativeRoot, "companions/core-architecture-family-index-chimeric-prototype-v0.1.5.html"), "utf8"),
       ...artifact.directCarriers.map(path => readFile(resolve(repositoryRoot, path), "utf8")),
     ]);
     const card = targetRegistry.cards.find(({ id }) => id === artifact.id);
@@ -247,6 +247,6 @@ test("Shared Surfaces and Topology advances the current inventory as one complet
     "AI Systems Service Blueprint v0.1.4",
     "Software Architecture Views v0.1.4",
   ]) assert.ok(inventory.includes(phrase));
-  assert.match(inventory, /26 current[\s\S]*?adoptions\. The remaining two/u);
-  assert.match(inventory, /accepted sources complete the current[\s\S]*?Shared Surfaces and Topology[\s\S]*?famil(?:y|ies)/u);
+  assert.match(inventory, /27 current[\s\S]*?adoptions\. The remaining source/u);
+  assert.match(inventory, /family members, which complete the current[\s\S]*?Shared Surfaces and Topology[\s\S]*?famil(?:y|ies)/u);
 });

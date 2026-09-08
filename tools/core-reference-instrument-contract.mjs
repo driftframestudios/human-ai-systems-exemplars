@@ -21,7 +21,7 @@ const artifactNames = {
   matrix: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
   unitTestFirst: "unit-test-first-design-chimeric-prototype-v0.1.4.html",
   recoveryAtlas: "recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
-  familyIndex: "core-architecture-family-index-chimeric-prototype-v0.1.4.html"
+  familyIndex: "core-architecture-family-index-chimeric-prototype-v0.1.5.html"
 };
 
 const packIndexName = "core-architectures-chimeric-prototype-pack-index-v0.1.3.html";
@@ -1638,11 +1638,52 @@ async function recoveryAtlasPath(browser, origin, route) {
 }
 
 async function familyIndexPath(browser, origin, route, projection) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPlain = "";
   try {
     const cardId = "unit-test-first-design";
     const literal = "protect <strong>vital behavior</strong> through executable examples";
     let exported = await textJson(page, "#jsonPreview");
+    const initialPrompt = await exercisePromptCapsule(page, {
+      apiName: "coreArchitectureFamilyIndex",
+      copySelector: "#copyPromptBtn",
+      downloadSelector: "#downloadPromptBtn",
+      filename: "core-architecture-family-index.prompt-capsule.r0.1.5.skill-assisted.md",
+      promptSelector: "#aiPrompt",
+      stateContract: "core-architecture-family-index-state.v0.1",
+      title: "Core Architecture Family Index",
+      version: "0.1.5",
+    });
+    await page.locator('[data-prompt-view][value="skill-assisted"]').check();
+    const legacyCopyMarkdown = await page.evaluate(() => window.coreArchitectureFamilyIndex.promptCapsuleMarkdown());
+    await page.evaluate(() => { globalThis.__coreClipboard = ""; });
+    await page.locator('[data-action="copy-prompt"]').click();
+    await page.waitForFunction(() => Boolean(globalThis.__coreClipboard));
+    assert.equal(await page.evaluate(() => globalThis.__coreClipboard), legacyCopyMarkdown);
+    await page.locator('[data-prompt-view][value="plain"]').check();
+    initialPlain = initialPrompt.plain;
+    assert.deepEqual(
+      [
+        initialPrompt.projection.families.length,
+        initialPrompt.projection.cards.length,
+        initialPrompt.projection.entryRoutes.length,
+        initialPrompt.projection.recoveryRoutes.length,
+        initialPrompt.projection.focusViews.length,
+      ],
+      [7, 20, 20, 19, 1],
+    );
+    const skillCoordinates = await page.evaluate(() => ({
+      frozen: Object.isFrozen(window.coreArchitectureFamilyIndex.skills),
+      revision: window.coreArchitectureFamilyIndex.skillRevision,
+      skills: window.coreArchitectureFamilyIndex.skills.map(skill => ({ path: skill.path, sha256: skill.sha256 })),
+    }));
+    assert.equal(skillCoordinates.frozen, true);
+    assert.equal(skillCoordinates.revision, "17560183cc066196233173aa8cc030ee25fbd517");
+    assert.deepEqual(skillCoordinates.skills, [
+      { path: ".agents/skills/repository-reentry/SKILL.md", sha256: "211cdbd293c260e95e62d3bc7ed5cb4d6d9ca3debd560a28a74b52364a1bfa90" },
+      { path: ".agents/skills/source-authority-mapping/SKILL.md", sha256: "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5" },
+      { path: ".agents/skills/practitioner-probe/SKILL.md", sha256: "348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c" },
+    ]);
     const manifest = await page.evaluate(async fileName => {
       const response = await fetch(fileName);
       if (!response.ok) throw new Error(`Manifest request returned ${response.status}.`);
@@ -1663,6 +1704,12 @@ async function familyIndexPath(browser, origin, route, projection) {
     assert.equal(await page.locator("#cardRegistry article[data-card-id]").count(), 20);
 
     await page.locator(`#cardRegistry article[data-card-id="${cardId}"] button[data-action="select-card"]`).click();
+    const selectionOnly = await page.evaluate(() => ({
+      fingerprint: window.coreArchitectureFamilyIndex.promptCapsuleFingerprint(),
+      markdown: window.coreArchitectureFamilyIndex.promptCapsule(),
+    }));
+    assert.equal(selectionOnly.fingerprint, initialPrompt.fingerprint);
+    assert.equal(selectionOnly.markdown, initialPrompt.plain);
     await page.locator('[data-bind-card="move"]').fill(literal);
     await page.locator('[data-bind-card="move"]').press("Tab");
     exported = await textJson(page, "#jsonPreview");
@@ -1674,6 +1721,13 @@ async function familyIndexPath(browser, origin, route, projection) {
     assert.equal(await page.locator('#registryTable strong:has-text("vital behavior")').count(), 0);
     let linkedGraph = await textJson(page, "#jsonLdPreview");
     assert.equal(linkedGraph["@graph"].find(node => node["@id"] === `#${cardId}`)["ca:primaryCognitiveMove"], literal);
+    const editedPrompt = await page.evaluate(() => ({
+      fingerprint: window.coreArchitectureFamilyIndex.promptCapsuleFingerprint(),
+      markdown: window.coreArchitectureFamilyIndex.promptCapsule(),
+    }));
+    assert.notEqual(editedPrompt.fingerprint, initialPrompt.fingerprint);
+    assert.notEqual(editedPrompt.markdown, initialPrompt.plain);
+    assert.match(editedPrompt.markdown, /protect &lt;strong&gt;vital behavior&lt;\/strong&gt; through executable examples/u);
 
     const beforeOrder = [...activeView(exported).card_order];
     const cardIndex = beforeOrder.indexOf(cardId);
@@ -1683,6 +1737,7 @@ async function familyIndexPath(browser, origin, route, projection) {
     assert.equal(activeView(exported).card_order.indexOf(cardId), cardIndex + delta);
     assert.equal(await page.locator(`#atlasSvg [data-card-id="${cardId}"]`).count(), 1);
 
+    const beforeFocusChange = await page.evaluate(() => window.coreArchitectureFamilyIndex.promptCapsuleFingerprint());
     await page.locator(`#cardRegistry button[data-action="hide-card"][data-id="${cardId}"]`).click();
     exported = await textJson(page, "#jsonPreview");
     card = exported.cards.find(item => item.id === cardId);
@@ -1690,6 +1745,7 @@ async function familyIndexPath(browser, origin, route, projection) {
     assert.notEqual(activeView(exported).selected_card_id, cardId);
     assert.equal(await page.locator(`#cardRegistry article[data-card-id="${cardId}"]`).count(), 0);
     assert.ok(card, "hidden card should remain in the exported source registry");
+    assert.notEqual(await page.evaluate(() => window.coreArchitectureFamilyIndex.promptCapsuleFingerprint()), beforeFocusChange);
     await page.locator('button[data-action="show-all"]').click();
     assert.equal(await page.locator(`#cardRegistry article[data-card-id="${cardId}"]`).count(), 1);
 
@@ -1704,6 +1760,52 @@ async function familyIndexPath(browser, origin, route, projection) {
     assert.equal(imported.cards.find(item => item.id === cardId).move, importedMove);
     assert.equal(activeView(imported).selected_card_id, cardId);
     assert.match(await page.locator("#inspector").textContent(), /Imported behavior-protection route/);
+
+    const twoViewState = structuredClone(imported);
+    activeView(twoViewState).hidden_family_ids = ["orientation"];
+    twoViewState.view_state.views.push({
+      ...structuredClone(activeView(twoViewState)),
+      id: "view-comparison-held",
+      name: "Comparison held from current focus",
+      hidden_family_ids: ["comparison"],
+      selected_card_id: cardId,
+    });
+    await page.locator("#importText").fill(JSON.stringify(twoViewState));
+    await page.locator('button[data-action="import-json"]').click();
+    await assertVisibleNotice(page, "#importNotice", /updated|imported/i);
+    await page.locator('button[data-action="add-card"]').click();
+    let multiViewExport = await textJson(page, "#jsonPreview");
+    const addedCard = multiViewExport.cards.find(item => item.name === "New Core Architecture");
+    assert.ok(addedCard, "the added card should enter the accepted registry");
+    assert.equal(activeView(multiViewExport).selected_card_id, addedCard.id);
+    assert.equal(activeView(multiViewExport).hidden_family_ids.includes(addedCard.family), false);
+    multiViewExport.view_state.views.forEach(focusView => assert.ok(
+      focusView.card_order.includes(addedCard.id),
+      `${focusView.id} should include the added card in its complete order`,
+    ));
+    const heldView = multiViewExport.view_state.views.find(focusView => focusView.id === "view-comparison-held");
+    heldView.hidden_family_ids = multiViewExport.families
+      .map(family => family.id)
+      .filter(familyId => familyId !== addedCard.family);
+    heldView.hidden_card_ids = multiViewExport.cards
+      .filter(candidate => candidate.family === addedCard.family && candidate.id !== addedCard.id)
+      .map(candidate => candidate.id);
+    heldView.selected_card_id = addedCard.id;
+    await page.locator("#importText").fill(JSON.stringify(multiViewExport));
+    await page.locator('button[data-action="import-json"]').click();
+    await assertVisibleNotice(page, "#importNotice", /updated|imported/i);
+    await page.locator('[data-bind-card="family"]').selectOption("comparison");
+    multiViewExport = await textJson(page, "#jsonPreview");
+    const reconciledView = multiViewExport.view_state.views.find(focusView => focusView.id === "view-comparison-held");
+    const reconciledSelection = multiViewExport.cards.find(item => item.id === reconciledView.selected_card_id);
+    assert.equal(reconciledView.selected_card_id, addedCard.id);
+    assert.ok(reconciledSelection, "the secondary focus view should retain a current selected card");
+    assert.equal(reconciledView.hidden_card_ids.includes(reconciledSelection.id), false);
+    assert.equal(reconciledView.hidden_family_ids.includes(reconciledSelection.family), false);
+    await page.locator("#importText").fill(JSON.stringify(multiViewExport));
+    await page.locator('button[data-action="import-json"]').click();
+    await assertVisibleNotice(page, "#importNotice", /updated|imported/i);
+    assert.deepEqual(await textJson(page, "#jsonPreview"), multiViewExport);
 
     const singleVisibleCard = structuredClone(imported);
     const selectedFamilyId = singleVisibleCard.cards.find(item => item.id === cardId).family;
@@ -1727,6 +1829,10 @@ async function familyIndexPath(browser, origin, route, projection) {
     const malformed = structuredClone(await textJson(page, "#jsonPreview"));
     malformed.artifact_identity.display_name = "Partially committed family title";
     malformed.recovery_routes = [null];
+    const retainedCapsule = await page.evaluate(() => ({
+      fingerprint: window.coreArchitectureFamilyIndex.promptCapsuleFingerprint(),
+      markdown: window.coreArchitectureFamilyIndex.promptCapsule(),
+    }));
     await clearNotice(page, "#importNotice");
     await page.locator("#importText").fill(JSON.stringify(malformed));
     await page.locator('button[data-action="import-json"]').click();
@@ -1734,6 +1840,10 @@ async function familyIndexPath(browser, origin, route, projection) {
     let recovered = await textJson(page, "#jsonPreview");
     assert.notEqual(recovered.artifact_identity.display_name, "Partially committed family title");
     assert.equal(recovered.cards.find(item => item.id === cardId).move, sentinel);
+    assert.deepEqual(await page.evaluate(() => ({
+      fingerprint: window.coreArchitectureFamilyIndex.promptCapsuleFingerprint(),
+      markdown: window.coreArchitectureFamilyIndex.promptCapsule(),
+    })), retainedCapsule);
 
     const collision = withActiveViewArtifactCollision(recovered);
     await clearNotice(page, "#importNotice");
@@ -1757,14 +1867,89 @@ async function familyIndexPath(browser, origin, route, projection) {
     const linkedFiles = (await currentLinks.evaluateAll(links => links.map(link => new URL(link.href).pathname.split("/").pop()))).sort();
     const manifestFiles = manifest.prototypes.filter(item => item.status === "current" && item.exists).map(item => item.file).sort();
     assert.deepEqual(linkedFiles, manifestFiles);
-    const familyLink = page.locator(`a[href="${artifactNames.familyIndex}"]`);
+    const familyIndexFile = manifest.prototypes.find(item => item.id === "core-architecture-family-index").file;
+    const familyLink = page.locator(`a[href="${familyIndexFile}"]`);
     await familyLink.click();
-    await page.waitForURL(new RegExp(`${artifactNames.familyIndex.replaceAll(".", "\\.")}$`));
+    await page.waitForURL(new RegExp(`${familyIndexFile.replaceAll(".", "\\.")}$`));
     assert.match(await page.title(), /Core Architecture Family Index/);
     assertTelemetry(telemetry);
   } finally {
     await context.close();
   }
+
+  const stateBoundaryContext = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  try {
+    const stateBoundaryPage = await stateBoundaryContext.newPage();
+    await stateBoundaryPage.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+    const baseline = await stateBoundaryPage.evaluate(() => ({
+      state: window.coreArchitectureFamilyIndex.getState(),
+      fingerprint: window.coreArchitectureFamilyIndex.promptCapsuleFingerprint(),
+      markdown: window.coreArchitectureFamilyIndex.promptCapsule(),
+    }));
+    const detachedReceipt = await stateBoundaryPage.evaluate(() => {
+      const exported = window.coreArchitectureFamilyIndex.exportState();
+      const originalName = exported.cards[0].name;
+      exported.cards[0].name = "Detached caller mutation";
+      return {
+        originalName,
+        retainedName: window.coreArchitectureFamilyIndex.getState().cards[0].name,
+      };
+    });
+    assert.equal(detachedReceipt.retainedName, detachedReceipt.originalName);
+    const privateOnly = structuredClone(baseline.state);
+    privateOnly.private_annotation = { audience: "local review" };
+    privateOnly.artifact_identity.private_annotation = "local artifact note";
+    privateOnly.families[0].private_annotation = "local family note";
+    privateOnly.cards[0].private_annotation = "local card note";
+    privateOnly.entry_routes[0].private_annotation = "local entry note";
+    privateOnly.recovery_routes[0].private_annotation = "local recovery note";
+    privateOnly.view_state.private_annotation = "local view-state note";
+    privateOnly.view_state.views[0].private_annotation = "local focus-view note";
+    await stateBoundaryPage.evaluate(candidate => window.coreArchitectureFamilyIndex.importState(candidate), privateOnly);
+    const privateReceipt = await stateBoundaryPage.evaluate(() => ({
+      state: window.coreArchitectureFamilyIndex.getState(),
+      fingerprint: window.coreArchitectureFamilyIndex.promptCapsuleFingerprint(),
+      markdown: window.coreArchitectureFamilyIndex.promptCapsule(),
+    }));
+    assert.deepEqual(privateReceipt.state.private_annotation, { audience: "local review" });
+    assert.equal(privateReceipt.state.artifact_identity.private_annotation, "local artifact note");
+    assert.equal(privateReceipt.state.families[0].private_annotation, "local family note");
+    assert.equal(privateReceipt.state.cards[0].private_annotation, "local card note");
+    assert.equal(privateReceipt.state.entry_routes[0].private_annotation, "local entry note");
+    assert.equal(privateReceipt.state.recovery_routes[0].private_annotation, "local recovery note");
+    assert.equal(privateReceipt.state.view_state.private_annotation, "local view-state note");
+    assert.equal(privateReceipt.state.view_state.views[0].private_annotation, "local focus-view note");
+    assert.equal(privateReceipt.fingerprint, baseline.fingerprint);
+    assert.equal(privateReceipt.markdown, baseline.markdown);
+
+    const malformed = structuredClone(privateReceipt.state);
+    malformed.cards[0].family = "missing-family";
+    const rejectedApiReceipt = await stateBoundaryPage.evaluate(candidate => {
+      const before = {
+        state: window.coreArchitectureFamilyIndex.getState(),
+        fingerprint: window.coreArchitectureFamilyIndex.promptCapsuleFingerprint(),
+        markdown: window.coreArchitectureFamilyIndex.promptCapsule(),
+      };
+      let message = "";
+      try { window.coreArchitectureFamilyIndex.importState(candidate); }
+      catch (error) { message = error.message; }
+      return {
+        before,
+        after: {
+          state: window.coreArchitectureFamilyIndex.getState(),
+          fingerprint: window.coreArchitectureFamilyIndex.promptCapsuleFingerprint(),
+          markdown: window.coreArchitectureFamilyIndex.promptCapsule(),
+        },
+        message,
+      };
+    }, malformed);
+    assert.match(rejectedApiReceipt.message, /unknown family/u);
+    assert.deepEqual(rejectedApiReceipt.after, rejectedApiReceipt.before);
+  } finally {
+    await stateBoundaryContext.close();
+  }
+
+  await assertNoScriptPromptCapsule(browser, origin, route, "#aiPrompt", initialPlain);
 }
 
 const paths = [
