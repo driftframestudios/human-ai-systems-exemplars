@@ -493,13 +493,14 @@
       "id": "core-architecture-family-index",
       "display_name": "Core Architecture Family Index",
       "kind": "prototype",
-      "source_file": "core-architecture-family-index-chimeric-prototype-v0.1.4.html",
-      "source_version": "0.1.4",
+      "source_file": "core-architecture-family-index-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
       "public_alias": "/v1/core/core-architecture-family-index/",
       "receiver_standing": "context_adapted",
       "activation_standing": "parity_review",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
           "allow-scripts"
         ],
         "permissions_policy": [

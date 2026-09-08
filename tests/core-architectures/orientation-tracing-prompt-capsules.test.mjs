@@ -281,7 +281,7 @@ for (const artifact of artifacts) {
     const [targetRegistry, narrativeComposer, familyCompanion, ...directCarriers] = await Promise.all([
       json(resolve(narrativeRoot, "core-architecture-target-pair-registry.v0.1.json")),
       readFile(resolve(narrativeRoot, "narrative-capsules-chimeric-prototype-v0.1.html"), "utf8"),
-      readFile(resolve(narrativeRoot, "companions/core-architecture-family-index-chimeric-prototype-v0.1.4.html"), "utf8"),
+      readFile(resolve(narrativeRoot, "companions/core-architecture-family-index-chimeric-prototype-v0.1.5.html"), "utf8"),
       ...artifact.directCarriers.map(path => readFile(resolve(repositoryRoot, path), "utf8")),
     ]);
     const card = targetRegistry.cards.find(({ id }) => id === artifact.id);
@@ -299,6 +299,6 @@ test("Orientation and Tracing advances the current inventory as one complete fam
   for (const phrase of ["PODA v0.1.4", "Alignment Worksheet v0.1.4", "Impact Map v0.1.5", "Context Tree v0.1.7"]) {
     assert.match(inventory, new RegExp(phrase.replaceAll(".", "\\."), "u"));
   }
-  assert.match(inventory, /26 current[\s\S]*?adoptions\. The remaining two/u);
-  assert.match(inventory, /accepted sources complete the current Orientation and Tracing[\s\S]*?famil(?:y|ies)/u);
+  assert.match(inventory, /27 current[\s\S]*?adoptions\. The remaining source/u);
+  assert.match(inventory, /family members, which complete the current Orientation and Tracing[\s\S]*?famil(?:y|ies)/u);
 });

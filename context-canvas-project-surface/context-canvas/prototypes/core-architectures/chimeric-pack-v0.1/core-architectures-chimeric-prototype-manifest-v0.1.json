@@ -406,16 +406,17 @@
       "subtitle": "Root Atlas and Entry Map",
       "family": "System Root",
       "shape": "family registry and route map",
-      "file": "core-architecture-family-index-chimeric-prototype-v0.1.4.html",
-      "version": "0.1.4",
+      "file": "core-architecture-family-index-chimeric-prototype-v0.1.5.html",
+      "version": "0.1.5",
       "status": "current",
       "exists": true,
-      "size_bytes": 74907,
+      "size_bytes": 122431,
       "previous": [
         "core-architecture-family-index-chimeric-prototype-v0.1.html",
         "core-architecture-family-index-chimeric-prototype-v0.1.1.html",
         "core-architecture-family-index-chimeric-prototype-v0.1.2.html",
-        "core-architecture-family-index-chimeric-prototype-v0.1.3.html"
+        "core-architecture-family-index-chimeric-prototype-v0.1.3.html",
+        "core-architecture-family-index-chimeric-prototype-v0.1.4.html"
       ]
     }
   ],

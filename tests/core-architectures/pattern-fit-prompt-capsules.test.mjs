@@ -180,5 +180,5 @@ test("Pattern Fit and Behavior Protection advances the current inventory as one 
   assert.match(inventory, /Pattern–Problem Surface Matrix v0\.1\.4/u);
   assert.match(inventory, /Jobs-to-be-Done Treemap v0\.1\.4/u);
   assert.match(inventory, /Unit-test-first Design v0\.1\.4/u);
-  assert.match(inventory, /26 current[\s\S]*?adoptions\. The remaining two/u);
+  assert.match(inventory, /27 current[\s\S]*?adoptions\. The remaining source/u);
 });

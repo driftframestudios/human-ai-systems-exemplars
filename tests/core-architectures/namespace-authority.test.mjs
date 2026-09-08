@@ -162,7 +162,7 @@ test("current canonical and Context projections retain their declared relationsh
     "PODA retains its Context navigation adaptation",
   );
   assert.ok(
-    declaredAdaptations.has("core-architecture-family-index-chimeric-prototype-v0.1.4.html"),
+    declaredAdaptations.has("core-architecture-family-index-chimeric-prototype-v0.1.5.html"),
     "the family index retains its Context navigation adaptation",
   );
 });
@@ -193,6 +193,7 @@ test("semantic-identifier successors retain the established iframe request closu
     ["heart-chart", ["file-download"]],
     ["plus-delta", ["file-download"]],
     ["practitioner-judgment-probes", ["file-download"]],
+    ["core-architecture-family-index", ["file-download"]],
   ]);
 
   for (const entry of sourceManifest.prototypes) {

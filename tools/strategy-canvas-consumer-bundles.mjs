@@ -53,8 +53,8 @@ function portableNarrativeText(value) {
       "companions/strategy-canvas-chimeric-prototype-v0.1.1.html",
     )
     .replaceAll(
-      "../../../../core-architectures-chimeric-prototype-current-pack-v0.1/core-architecture-family-index-chimeric-prototype-v0.1.4.html",
-      "companions/core-architecture-family-index-chimeric-prototype-v0.1.4.html",
+      "../../../../core-architectures-chimeric-prototype-current-pack-v0.1/core-architecture-family-index-chimeric-prototype-v0.1.5.html",
+      "companions/core-architecture-family-index-chimeric-prototype-v0.1.5.html",
     )
     .replaceAll(
       "../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
@@ -101,7 +101,7 @@ function narrativeBundle(base, archivePath, familyIndex, compatibility) {
     root: "narrative-capsules-chimeric-prototype-v0.1",
     closureEntries: ["companions/strategy-canvas-chimeric-prototype-v0.2.2.html"],
     entries: [
-      ["companions/core-architecture-family-index-chimeric-prototype-v0.1.4.html", source(familyIndex)],
+      ["companions/core-architecture-family-index-chimeric-prototype-v0.1.5.html", source(familyIndex)],
       ["companions/strategy-canvas-chimeric-prototype-v0.1.1.html", source(compatibility)],
       ["companions/strategy-canvas-chimeric-prototype-v0.2.2.html", source(join(rootCanonicalPack, "strategy-canvas-chimeric-prototype-v0.2.2.html"))],
       ["companions/strategy-canvas-system-v0.2/strategy-canvas.schema.json", source(join(rootCanonicalPack, "strategy-canvas-system-v0.2/strategy-canvas.schema.json"))],
@@ -119,7 +119,7 @@ function narrativeBundle(base, archivePath, familyIndex, compatibility) {
     ],
     transform(path, buffer) {
       const textFiles = new Set([
-        "companions/core-architecture-family-index-chimeric-prototype-v0.1.4.html",
+        "companions/core-architecture-family-index-chimeric-prototype-v0.1.5.html",
         "companions/strategy-canvas-chimeric-prototype-v0.1.1.html",
         "core-architecture-target-pair-registry.v0.1.json",
         "narrative-capsules-chimeric-prototype-manifest-v0.1.json",
@@ -203,7 +203,7 @@ const bundles = [
   narrativeBundle(
     narrativeContext,
     join(narrativeContext, "narrative-capsules-chimeric-prototype-bundle-v0.1.zip"),
-    join(narrativeContext, "companions/core-architecture-family-index-chimeric-prototype-v0.1.4.html"),
+    join(narrativeContext, "companions/core-architecture-family-index-chimeric-prototype-v0.1.5.html"),
     join(narrativeContext, "companions/strategy-canvas-chimeric-prototype-v0.1.1.html"),
   ),
   semanticBundle(semanticContext, join(semanticContext, "narrative-sampling-tableau-chimeric-prototype-bundle-v0.1.zip")),
