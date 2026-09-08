@@ -741,6 +741,25 @@ function assertInvestmentPromptCapsuleSections(markdown, label) {
   }
 }
 
+function assertAtlasPromptCapsuleSections(markdown, label) {
+  const headings = [
+    "# Prompt Capsule: Visualization Fidelity Atlas",
+    "## Purpose and target",
+    "## Relevant context and inputs",
+    "## Working state",
+    "## Boundaries and human-held decisions",
+    "## Requested return",
+    "## Related loops",
+    "## Evidence and recovery",
+  ];
+  let previous = -1;
+  for (const heading of headings) {
+    const position = markdown.indexOf(heading);
+    assert.ok(position > previous, `${label} carries ${heading} in contract order`);
+    previous = position;
+  }
+}
+
 async function exerciseInvestmentModelStudio(session) {
   const { browser, carrierPage, expectedPaths, origin, page, route } = session;
   const tabs = page.locator('#modelTabs [role="tab"]');
@@ -1154,12 +1173,462 @@ async function importAtlasFixture(page, name, value) {
   await page.locator("#importStatus").filter({ hasText: "accepted" }).waitFor();
 }
 
-async function exerciseAtlas({ page }) {
+async function exerciseAtlas(session) {
+  const { browser, carrierPage, expectedPaths, origin, page, route } = session;
   assert.match(
-    await page.locator("noscript").textContent(),
+    await page.locator("noscript").first().textContent(),
     /complete static selector/i,
     "Atlas retains a no-script route to the static reading",
   );
+
+  const initialPrompt = await page.evaluate(() => {
+    const api = globalThis.visualizationFidelityAtlas;
+    return {
+      apiFrozen: Object.isFrozen(api),
+      viewsFrozen: Object.isFrozen(api.views),
+      version: api.version,
+      stateContract: api.stateContract,
+      contract: api.contract,
+      views: api.views.slice(),
+      skillRevision: api.skillRevision,
+      skillPaths: api.skills.map((skill) => skill.path),
+      relatedLoopIds: api.relatedLoops.map((loop) => loop.id),
+      view: api.getPromptCapsuleView(),
+      state: api.getState(),
+      exported: api.exportState(),
+      projection: api.promptCapsuleStateProjection(),
+      fingerprint: api.promptCapsuleFingerprint(),
+      plain: api.promptCapsule(),
+      explicitPlain: api.promptCapsuleMarkdown("plain"),
+    };
+  });
+  assert.equal(initialPrompt.apiFrozen, true);
+  assert.equal(initialPrompt.viewsFrozen, true);
+  assert.equal(initialPrompt.version, "0.1");
+  assert.equal(
+    initialPrompt.stateContract,
+    "visualization-fidelity-atlas-state.v0.1",
+  );
+  assert.equal(initialPrompt.contract, "prompt-capsule/0.1.0");
+  assert.deepEqual(initialPrompt.views, ["plain", "skill-assisted"]);
+  assert.match(initialPrompt.skillRevision, /^[0-9a-f]{40}$/u);
+  assert.deepEqual(initialPrompt.skillPaths, [
+    ".agents/skills/evidence-grounded-research-spike/SKILL.md",
+    ".agents/skills/source-authority-mapping/SKILL.md",
+    ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
+  ]);
+  assert.deepEqual(initialPrompt.relatedLoopIds, [
+    "visitor-surface-change",
+    "repository-reentry",
+  ]);
+  assert.equal(initialPrompt.view, "plain");
+  assert.deepEqual(initialPrompt.state, initialPrompt.exported);
+  assert.deepEqual(
+    Object.keys(initialPrompt.state.view_state).sort(),
+    [
+      "aiIngestion",
+      "audience",
+      "selectedExemplarId",
+      "selectedMoveId",
+      "selectedShapeId",
+      "selectedVisualFormId",
+      "showReserved",
+      "uncertaintyRequired",
+    ],
+  );
+  assert.deepEqual(
+    Object.keys(initialPrompt.projection).sort(),
+    ["atlas", "capsule", "contract", "source", "stateContract", "viewState"],
+  );
+  assert.deepEqual(
+    Object.keys(initialPrompt.projection.viewState).sort(),
+    Object.keys(initialPrompt.state.view_state).sort(),
+  );
+  assert.equal(
+    initialPrompt.projection.capsule,
+    "visualization-fidelity-atlas/current-selection",
+  );
+  assert.equal(initialPrompt.projection.source, "visualization-fidelity-atlas@0.1");
+  assert.equal(initialPrompt.projection.contract, "prompt-capsule/0.1.0");
+  assert.equal(
+    initialPrompt.projection.stateContract,
+    "visualization-fidelity-atlas-state.v0.1",
+  );
+  assert.equal(
+    initialPrompt.projection.atlas.artifact_identity.id,
+    initialPrompt.state.artifact_identity.id,
+  );
+  assert.equal(Object.hasOwn(initialPrompt.projection.atlas, "view_state"), false);
+  assert.equal(Object.hasOwn(initialPrompt.projection.atlas, "extensions"), false);
+  assert.equal(initialPrompt.plain, initialPrompt.explicitPlain);
+  assert.equal(initialPrompt.plain, await page.locator("#aiPrompt").inputValue());
+  assert.ok(initialPrompt.plain.endsWith("\n"));
+  assertAtlasPromptCapsuleSections(initialPrompt.plain, "Initial Atlas plain Prompt Capsule");
+  assert.equal(promptCapsuleFingerprintFrom(initialPrompt.plain), initialPrompt.fingerprint);
+  assert.match(initialPrompt.plain, /- Contract: `prompt-capsule\/0\.1\.0`/u);
+  assert.match(
+    initialPrompt.plain,
+    /- Capsule: `visualization-fidelity-atlas\/current-selection`/u,
+  );
+  assert.match(initialPrompt.plain, /- Source: `visualization-fidelity-atlas@0\.1`/u);
+  assert.match(
+    initialPrompt.plain,
+    /- State: `visualization-fidelity-atlas-state\.v0\.1`/u,
+  );
+
+  const source = await readFile(path.join(repositoryRoot, route.source_file), "utf8");
+  const staticMatch = source.match(
+    /<textarea(?=[^>]*\bid="aiPrompt")[^>]*>([\s\S]*?)<\/textarea>/u,
+  );
+  assert.ok(staticMatch, "Atlas source carries an authored plain Prompt Capsule baseline");
+  const staticPlain = await page.evaluate((encoded) => {
+    const textarea = document.createElement("textarea");
+    textarea.innerHTML = encoded;
+    return textarea.value;
+  }, staticMatch[1]);
+  assert.equal(
+    staticPlain,
+    initialPrompt.plain,
+    "Authored Atlas baseline equals the runtime plain Markdown exactly",
+  );
+
+  const noScriptContext = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 320, height: 900 },
+  });
+  try {
+    const noScriptLocalRequests = [];
+    const noScriptUnexpectedRequests = [];
+    noScriptContext.on("request", (request) => {
+      const requestUrl = new URL(request.url());
+      if (["about:", "blob:", "data:"].includes(requestUrl.protocol)) return;
+      if (requestUrl.origin === origin) {
+        noScriptLocalRequests.push({
+          method: request.method(),
+          pathname: requestUrl.pathname,
+          resourceType: request.resourceType(),
+        });
+        if (request.method() !== "GET" || !expectedPaths.has(requestUrl.pathname)) {
+          noScriptUnexpectedRequests.push(`${request.method()} ${requestUrl.href}`);
+        }
+        return;
+      }
+      noScriptUnexpectedRequests.push(`${request.method()} ${requestUrl.href}`);
+    });
+    await noScriptContext.route("**/*", async (routeHandle) => {
+      const requestUrl = new URL(routeHandle.request().url());
+      if (
+        ["http:", "https:"].includes(requestUrl.protocol) &&
+        requestUrl.origin !== origin
+      ) {
+        await routeHandle.fulfill({
+          status: 200,
+          contentType: "text/html; charset=utf-8",
+          body: "<!doctype html><title>Contained external request</title>",
+        });
+        return;
+      }
+      await routeHandle.continue();
+    });
+    const noScriptPage = await noScriptContext.newPage();
+    const noScriptTelemetry = monitor(noScriptPage);
+    await noScriptPage.goto(routeUrl(origin, route), { waitUntil: "domcontentloaded" });
+    await noScriptPage.waitForLoadState("networkidle", { timeout: 5000 });
+    assert.equal(
+      await noScriptPage.locator("#aiPrompt").inputValue(),
+      initialPrompt.plain,
+      "JavaScript-disabled Atlas exposes the exact initial plain Markdown",
+    );
+    assert.equal(await noScriptPage.locator("#aiPrompt").isVisible(), true);
+    assert.equal(await noScriptPage.locator("[data-prompt-actions]").isVisible(), false);
+    assert.equal(
+      await noScriptPage.locator("[data-prompt-view-control]").isVisible(),
+      false,
+    );
+    assert.equal(
+      await noScriptPage.locator("[data-prompt-related-loops]").isVisible(),
+      true,
+    );
+    const promptBounds = await noScriptPage.locator("#aiPrompt").evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return { left: rect.left, right: rect.right, viewport: innerWidth };
+    });
+    assert.ok(promptBounds.left >= -0.5, "no-script Prompt Capsule stays inside the narrow left edge");
+    assert.ok(
+      promptBounds.right <= promptBounds.viewport + 0.5,
+      "no-script Prompt Capsule stays inside the 320px viewport",
+    );
+    const noScriptEntryPath = new URL(routeUrl(origin, route)).pathname;
+    assert.equal(
+      noScriptLocalRequests.filter(
+        ({ pathname, resourceType }) =>
+          pathname === noScriptEntryPath && resourceType === "document",
+      ).length,
+      1,
+      "JavaScript-disabled Atlas loads its entry document once",
+    );
+    assert.deepEqual(noScriptUnexpectedRequests, []);
+    assertTelemetry(noScriptTelemetry);
+  } finally {
+    await noScriptContext.close();
+  }
+
+  const detachedPromptState = await page.evaluate(() => {
+    const api = globalThis.visualizationFidelityAtlas;
+    const state = api.getState();
+    const exported = api.exportState();
+    const projection = api.promptCapsuleStateProjection();
+    state.artifact_identity.display_name = "Changed outside API";
+    exported.view_state.audience = "research";
+    projection.atlas.artifact_identity.display_name = "Changed outside API";
+    projection.viewState.audience = "research";
+    return {
+      state: api.getState(),
+      exported: api.exportState(),
+      projection: api.promptCapsuleStateProjection(),
+      fingerprint: api.promptCapsuleFingerprint(),
+      plain: api.promptCapsule(),
+    };
+  });
+  assert.deepEqual(detachedPromptState.state, initialPrompt.state);
+  assert.deepEqual(detachedPromptState.exported, initialPrompt.exported);
+  assert.deepEqual(detachedPromptState.projection, initialPrompt.projection);
+  assert.equal(detachedPromptState.fingerprint, initialPrompt.fingerprint);
+  assert.equal(detachedPromptState.plain, initialPrompt.plain);
+
+  const privateExtension = await page.evaluate((baseline) => {
+    const api = globalThis.visualizationFidelityAtlas;
+    const candidate = structuredClone(baseline);
+    candidate.extensions = {
+      private_workspace_note: "available to its private receiver",
+      nested: { marker: "retained" },
+    };
+    candidate.quick_use.private_workspace_note = {
+      marker: "retained beside an authored field",
+    };
+    api.importState(candidate);
+    const exported = api.exportState();
+    const projection = api.promptCapsuleStateProjection();
+    return {
+      exported,
+      projection,
+      fingerprint: api.promptCapsuleFingerprint(),
+      plain: api.promptCapsule(),
+    };
+  }, initialPrompt.state);
+  assert.equal(
+    privateExtension.exported.extensions.private_workspace_note,
+    "available to its private receiver",
+  );
+  assert.equal(privateExtension.exported.extensions.nested.marker, "retained");
+  assert.equal(
+    privateExtension.exported.quick_use.private_workspace_note.marker,
+    "retained beside an authored field",
+  );
+  assert.equal(Object.hasOwn(privateExtension.projection.atlas, "extensions"), false);
+  assert.equal(
+    Object.hasOwn(privateExtension.projection.atlas.quick_use, "private_workspace_note"),
+    false,
+  );
+  assert.equal(privateExtension.fingerprint, initialPrompt.fingerprint);
+  assert.equal(privateExtension.plain, initialPrompt.plain);
+  assert.doesNotMatch(privateExtension.plain, /private_workspace_note/u);
+
+  const representedChange = await page.evaluate((baseline) => {
+    const api = globalThis.visualizationFidelityAtlas;
+    const candidate = structuredClone(baseline);
+    candidate.quick_use.good_next_question =
+      `${candidate.quick_use.good_next_question} Name the decision this visual supports.`;
+    candidate.view_state.audience = "research";
+    api.importState(candidate);
+    return {
+      state: api.getState(),
+      projection: api.promptCapsuleStateProjection(),
+      fingerprint: api.promptCapsuleFingerprint(),
+      plain: api.promptCapsule(),
+    };
+  }, initialPrompt.state);
+  assert.notEqual(representedChange.fingerprint, initialPrompt.fingerprint);
+  assert.equal(representedChange.projection.viewState.audience, "research");
+  assert.match(representedChange.plain, /Name the decision this visual supports\./u);
+  assert.match(
+    representedChange.plain,
+    /^- Audience or review context: `research`\.$/mu,
+  );
+  assert.equal(promptCapsuleFingerprintFrom(representedChange.plain), representedChange.fingerprint);
+
+  const rejectedApiImport = await page.evaluate((baseline) => {
+    const api = globalThis.visualizationFidelityAtlas;
+    api.importState(structuredClone(baseline));
+    const before = {
+      state: api.getState(),
+      fingerprint: api.promptCapsuleFingerprint(),
+      plain: api.promptCapsule(),
+    };
+    const invalid = api.exportState();
+    invalid.data_shapes = [];
+    let rejected = false;
+    try {
+      api.importState(invalid);
+    } catch {
+      rejected = true;
+    }
+    return {
+      before,
+      rejected,
+      state: api.getState(),
+      fingerprint: api.promptCapsuleFingerprint(),
+      plain: api.promptCapsule(),
+    };
+  }, initialPrompt.state);
+  assert.equal(rejectedApiImport.rejected, true);
+  assert.deepEqual(rejectedApiImport.state, rejectedApiImport.before.state);
+  assert.equal(rejectedApiImport.fingerprint, rejectedApiImport.before.fingerprint);
+  assert.equal(rejectedApiImport.plain, rejectedApiImport.before.plain);
+
+  for (const field of ["display_name", "version"]) {
+    const rejectedIdentityImport = await page.evaluate(({ baseline, field }) => {
+      const api = globalThis.visualizationFidelityAtlas;
+      api.importState(structuredClone(baseline));
+      const before = {
+        state: api.getState(),
+        fingerprint: api.promptCapsuleFingerprint(),
+        plain: api.promptCapsule(),
+      };
+      const invalid = api.exportState();
+      delete invalid.artifact_identity[field];
+      let rejected = false;
+      try {
+        api.importState(invalid);
+      } catch {
+        rejected = true;
+      }
+      return {
+        before,
+        rejected,
+        state: api.getState(),
+        fingerprint: api.promptCapsuleFingerprint(),
+        plain: api.promptCapsule(),
+      };
+    }, { baseline: initialPrompt.state, field });
+    assert.equal(rejectedIdentityImport.rejected, true);
+    assert.deepEqual(rejectedIdentityImport.state, rejectedIdentityImport.before.state);
+    assert.equal(
+      rejectedIdentityImport.fingerprint,
+      rejectedIdentityImport.before.fingerprint,
+    );
+    assert.equal(rejectedIdentityImport.plain, rejectedIdentityImport.before.plain);
+  }
+
+  const assistedControl = page.locator('[data-prompt-view][value="skill-assisted"]');
+  assert.equal(await assistedControl.evaluate((element) => element.tagName), "INPUT");
+  assert.equal(await assistedControl.getAttribute("type"), "radio");
+  await assistedControl.check();
+  assert.equal(await assistedControl.isChecked(), true);
+  assert.equal(
+    await assistedControl.evaluate((element) => document.activeElement === element),
+    true,
+  );
+  const assistedPrompt = await page.locator("#aiPrompt").inputValue();
+  assert.equal(
+    assistedPrompt,
+    await page.evaluate(() =>
+      globalThis.visualizationFidelityAtlas.promptCapsuleMarkdown("skill-assisted")),
+  );
+  assert.equal(
+    await page.evaluate(() => globalThis.visualizationFidelityAtlas.getPromptCapsuleView()),
+    "skill-assisted",
+  );
+  assert.equal(promptCapsuleFingerprintFrom(assistedPrompt), initialPrompt.fingerprint);
+  assert.match(assistedPrompt, /^## Skill assistance$/mu);
+  assert.match(
+    assistedPrompt,
+    /https:\/\/schemas\.radiantnull\.com\/skills\/evidence-grounded-research-spike\//u,
+  );
+  assert.match(
+    assistedPrompt,
+    /https:\/\/schemas\.radiantnull\.com\/skills\/source-authority-mapping\//u,
+  );
+  assert.match(
+    assistedPrompt,
+    /https:\/\/schemas\.radiantnull\.com\/skills\/stateful-artifact-behavior-contracts\//u,
+  );
+  assert.equal(
+    assistedPrompt
+      .split("\n## Skill assistance")[0]
+      .replace("- View: `skill-assisted`", "- View: `plain`"),
+    initialPrompt.plain,
+    "Atlas skill assistance extends the complete plain view without changing shared content",
+  );
+  assert.match(
+    await page.locator("#actionStatus").textContent(),
+    /Skill-assisted Markdown view selected/u,
+  );
+
+  const loopRecords = await page.locator("[data-prompt-related-loops] [data-related-loop-id]").evaluateAll(
+    (items) => items.map((item) => {
+      const link = item.querySelector("a");
+      return {
+        id: item.dataset.relatedLoopId,
+        href: link?.getAttribute("href"),
+        target: link?.getAttribute("target"),
+        rel: link?.getAttribute("rel"),
+        fit: item.textContent.trim(),
+      };
+    }),
+  );
+  assert.deepEqual(loopRecords.map(({ id }) => id), [
+    "visitor-surface-change",
+    "repository-reentry",
+  ]);
+  assert.equal(
+    loopRecords.every(({ href, target, rel, fit }) =>
+      href?.startsWith("https://schemas.radiantnull.com/collaboration/#") &&
+      target === "_blank" && rel === "noopener noreferrer" && Boolean(fit)),
+    true,
+  );
+  await page.locator("[data-prompt-related-loops] summary").click();
+  await observeExternalPopup(
+    session,
+    page.locator("[data-prompt-related-loops] a").first(),
+  );
+
+  await page.locator("#copyPromptBtn").click();
+  await page.waitForFunction(() => globalThis.__canvasClipboardWrites.length > 0);
+  assert.equal(
+    await page.evaluate(() => globalThis.__canvasClipboardWrites.at(-1)),
+    assistedPrompt,
+    "Atlas copies the exact active Prompt Capsule",
+  );
+  assert.equal(await page.locator("#copyOutput").inputValue(), assistedPrompt);
+
+  await page.evaluate(() => {
+    const createObjectURL = URL.createObjectURL.bind(URL);
+    URL.createObjectURL = (blob) => {
+      globalThis.__atlasPromptDownloadType = blob.type;
+      return createObjectURL(blob);
+    };
+  });
+  const [promptDownload] = await Promise.all([
+    carrierPage.waitForEvent("download"),
+    page.locator("#downloadPromptBtn").click(),
+  ]);
+  assert.equal(
+    promptDownload.suggestedFilename(),
+    "visualization-fidelity-atlas.prompt-capsule.r0.1.skill-assisted.md",
+  );
+  assert.equal(await promptDownload.failure(), null);
+  assert.equal(
+    await page.evaluate(() => globalThis.__atlasPromptDownloadType),
+    "text/markdown;charset=utf-8",
+  );
+  const promptDownloadPath = await promptDownload.path();
+  assert.ok(promptDownloadPath, "Atlas Prompt Capsule download has a browser-owned path");
+  assert.equal(await readFile(promptDownloadPath, "utf8"), assistedPrompt);
+
+  await page.locator('[data-prompt-view][value="plain"]').check();
+  assert.equal(await page.locator("#aiPrompt").inputValue(), initialPrompt.plain);
+
   const initialExemplarId = await page
     .locator("#exemplarDetail")
     .getAttribute("data-selected-exemplar-id");
@@ -1230,6 +1699,11 @@ async function exerciseAtlas({ page }) {
   await page.locator('[data-form-id="form-lollipop"]').press("Enter");
   await page.locator("#resetViewBtn").click();
   assert.equal(await page.locator("#audienceSelect").inputValue(), "mixed");
+  assert.match(
+    await page.locator("#aiPrompt").inputValue(),
+    /^- Audience or review context: `mixed`\.$/mu,
+    "reset keeps the visible Prompt Capsule audience aligned with the selector",
+  );
   assert.equal(
     await page.locator('[data-form-id="form-sorted-bar"]').getAttribute("aria-pressed"),
     "true",
@@ -1326,7 +1800,7 @@ async function exerciseAtlas({ page }) {
   assert.notEqual(promptWithReservedOutOfView, promptWithReserved);
   assert.match(
     promptWithReservedOutOfView,
-    /Reserved recommendations: available through the selector; current view focuses on Recommended and Conditional forms/,
+    /Reserved recommendations: represented in the state while Recommended and Conditional forms hold the current visual focus/,
   );
   assert.equal(await page.locator(".rec-card.reserved").count(), 0);
   await page.locator("#exportJsonBtn").click();
@@ -1447,12 +1921,26 @@ async function exerciseAtlas({ page }) {
     "true",
   );
 
+  const beforeRejectedUiImport = await page.evaluate(() => ({
+    state: globalThis.visualizationFidelityAtlas.getState(),
+    fingerprint: globalThis.visualizationFidelityAtlas.promptCapsuleFingerprint(),
+    markdown: globalThis.visualizationFidelityAtlas.promptCapsule(),
+  }));
   await page.locator("#jsonImport").fill("{");
   await page.locator("#importJsonBtn").click();
   assert.match(await page.locator("#importStatus").textContent(), /needs revision/i);
   assert.equal(
     await page.locator('[data-form-id="form-lollipop"]').getAttribute("aria-pressed"),
     "true",
+  );
+  assert.deepEqual(
+    await page.evaluate(() => ({
+      state: globalThis.visualizationFidelityAtlas.getState(),
+      fingerprint: globalThis.visualizationFidelityAtlas.promptCapsuleFingerprint(),
+      markdown: globalThis.visualizationFidelityAtlas.promptCapsule(),
+    })),
+    beforeRejectedUiImport,
+    "Malformed pasted JSON leaves the accepted Atlas and Prompt Capsule available",
   );
 
   const structurallyInvalid = JSON.stringify({ ...exported, data_shapes: [] });
@@ -1465,6 +1953,15 @@ async function exerciseAtlas({ page }) {
   assert.equal(
     await page.locator('[data-form-id="form-lollipop"]').getAttribute("aria-pressed"),
     "true",
+  );
+  assert.deepEqual(
+    await page.evaluate(() => ({
+      state: globalThis.visualizationFidelityAtlas.getState(),
+      fingerprint: globalThis.visualizationFidelityAtlas.promptCapsuleFingerprint(),
+      markdown: globalThis.visualizationFidelityAtlas.promptCapsule(),
+    })),
+    beforeRejectedUiImport,
+    "Structurally invalid file input leaves the accepted Atlas and Prompt Capsule available",
   );
 
   await page.locator("#jsonFileInput").setInputFiles({
@@ -1595,7 +2092,15 @@ const behaviorProfiles = new Map([
     exercise: exerciseOpenLesson,
   }],
   ["visualization-fidelity-atlas", {
-    policy: { sandbox_tokens: ["allow-scripts"], permissions_policy: ["clipboard-write"] },
+    policy: {
+      sandbox_tokens: [
+        "allow-downloads",
+        "allow-popups",
+        "allow-popups-to-escape-sandbox",
+        "allow-scripts",
+      ],
+      permissions_policy: ["clipboard-write"],
+    },
     exercise: exerciseAtlas,
   }],
   ["visualization-fidelity-selector", {

@@ -26,15 +26,16 @@ Routing Atlas v0.1.4, Participatory Design Kit v0.1.4,
 Specification-by-Example v0.1.6, Pattern–Problem Surface Matrix v0.1.4,
 Jobs-to-be-Done Treemap v0.1.4, Unit-test-first Design v0.1.4, HEART Chart
 v0.1.6, Plus / Delta v0.1.4, and Practitioner Judgment Probes v0.1.4; all four
-current Narrative Architecture sources; and two standalone instruments—Open
-Lesson Field and Cross-Functional Investment Model Studio. Twenty Core family
+current Narrative Architecture sources; and three standalone instruments—Open
+Lesson Field, Cross-Functional Investment Model Studio, and Visualization
+Fidelity Atlas. Twenty Core family
 members complete the current Orientation and Tracing, Comparison and
 Threshold, Shared Surfaces and Topology, Recovery Routing and Revision,
 Participatory Elicitation and Specification, Pattern Fit and Behavior
 Protection, and Measurement, Reflection, and Judgment families. The Family
 Index carries their current coordinates and routes the collection as the
-twenty-first Core adoption. Together, these sources bring the current adoption
-standing to 27 of 28.
+twenty-first Core adoption. Together, these sources complete the current
+adoption set: all 28 source artifacts implement `prompt-capsule/0.1.0`.
 Each source owner keeps its own state and schema version while
 projecting complete plain and skill-assisted Markdown views with one
 represented-state fingerprint. Each source points to a small set of related
@@ -81,5 +82,11 @@ route. Plus / Delta carries every observation with its reflection kind, goal,
 actor, evidence, status, instruction, review trigger, and route. Practitioner
 Judgment Probes carries every question with its probability target and
 estimate, concern family, causal path, evidence standing, instruction yield,
-and route. Other capsule-bearing artifacts keep their existing contracts until
-their source owner accepts a migration with a material use and fitting tests.
+and route. Visualization Fidelity Atlas carries the current task, selector
+state, selected visual form and exemplar, recommendation guidance, Reserved
+visibility, and its JSON and JSON-LD companions. Its separate qualitative
+selector remains a focused comparison aid whose no-script note points to the
+parent reading’s complete static mapping. It sits beside the interactive Atlas
+as an adjacent instrument, and the capsule population remains 28. Other
+capsule-bearing artifacts keep their existing contracts and can join a later
+population when their source owner accepts a material use and fitting tests.

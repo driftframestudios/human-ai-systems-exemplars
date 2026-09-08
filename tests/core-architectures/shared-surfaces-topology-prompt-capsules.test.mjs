@@ -247,6 +247,6 @@ test("Shared Surfaces and Topology advances the current inventory as one complet
     "AI Systems Service Blueprint v0.1.4",
     "Software Architecture Views v0.1.4",
   ]) assert.ok(inventory.includes(phrase));
-  assert.match(inventory, /27 current[\s\S]*?adoptions\. The remaining source/u);
+  assert.match(inventory, /28 current\s+adoptions\. This completes the observed population/u);
   assert.match(inventory, /family members, which complete the current[\s\S]*?Shared Surfaces and Topology[\s\S]*?famil(?:y|ies)/u);
 });
