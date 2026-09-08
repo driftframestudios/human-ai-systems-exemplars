@@ -56,6 +56,15 @@ The specification carries every rule and Given / When / Then scenario that
 turns shared understanding into observable behavior. Both handoffs retain the
 full represented state while interface focus stays with the working artifact.
 
+Pattern–Problem Surface Matrix v0.1.4, Jobs-to-be-Done Treemap v0.1.4, and
+Unit-test-first Design v0.1.4 complete the current Pattern Fit and Behavior
+Protection family’s Prompt Capsule adoption. The matrix carries all 48
+pattern-to-population relationships. The treemap carries each job’s purpose,
+weight, evidence, route, and review trigger. Unit-test-first Design carries
+each protected behavior from its source and preconditions through its expected
+results and platform-independent test target. Their Markdown views retain the
+complete represented state while selection remains with the working artifact.
+
 ## Visitor-visible authorship and license
 
 The pack hub and each of the 21 current prototype documents carry their own

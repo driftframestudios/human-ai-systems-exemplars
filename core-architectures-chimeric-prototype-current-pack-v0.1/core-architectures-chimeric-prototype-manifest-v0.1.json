@@ -307,15 +307,16 @@
       "subtitle": "Experience Design Patterns as Problem Surfaces",
       "family": "Pattern Fit and Behavior Protection",
       "shape": "population-cartography problem matrix",
-      "file": "pattern-problem-surface-matrix-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 96474,
+      "size_bytes": 154627,
       "previous": [
         "pattern-problem-surface-matrix-chimeric-prototype-v0.1.html",
         "pattern-problem-surface-matrix-chimeric-prototype-v0.1.1.html",
-        "pattern-problem-surface-matrix-chimeric-prototype-v0.1.2.html"
+        "pattern-problem-surface-matrix-chimeric-prototype-v0.1.2.html",
+        "pattern-problem-surface-matrix-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -324,15 +325,16 @@
       "subtitle": "Purpose-Weighted Job Map",
       "family": "Pattern Fit and Behavior Protection",
       "shape": "weighted treemap",
-      "file": "jobs-to-be-done-treemap-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "jobs-to-be-done-treemap-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 68520,
+      "size_bytes": 103876,
       "previous": [
         "jobs-to-be-done-treemap-chimeric-prototype-v0.1.html",
         "jobs-to-be-done-treemap-chimeric-prototype-v0.1.1.html",
-        "jobs-to-be-done-treemap-chimeric-prototype-v0.1.2.html"
+        "jobs-to-be-done-treemap-chimeric-prototype-v0.1.2.html",
+        "jobs-to-be-done-treemap-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -341,15 +343,16 @@
       "subtitle": "Business Rule Protection",
       "family": "Pattern Fit and Behavior Protection",
       "shape": "business-rule test matrix",
-      "file": "unit-test-first-design-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "unit-test-first-design-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 66268,
+      "size_bytes": 101510,
       "previous": [
         "unit-test-first-design-chimeric-prototype-v0.1.html",
         "unit-test-first-design-chimeric-prototype-v0.1.1.html",
-        "unit-test-first-design-chimeric-prototype-v0.1.2.html"
+        "unit-test-first-design-chimeric-prototype-v0.1.2.html",
+        "unit-test-first-design-chimeric-prototype-v0.1.3.html"
       ]
     },
     {

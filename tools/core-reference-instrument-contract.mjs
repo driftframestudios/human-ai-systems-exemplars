@@ -16,10 +16,10 @@ import {
 
 const artifactNames = {
   contextTree: "context-tree-chimeric-prototype-v0.1.6.html",
-  treemap: "jobs-to-be-done-treemap-chimeric-prototype-v0.1.3.html",
+  treemap: "jobs-to-be-done-treemap-chimeric-prototype-v0.1.4.html",
   probes: "practitioner-judgment-probes-chimeric-prototype-v0.1.3.html",
-  matrix: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.3.html",
-  unitTestFirst: "unit-test-first-design-chimeric-prototype-v0.1.3.html",
+  matrix: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
+  unitTestFirst: "unit-test-first-design-chimeric-prototype-v0.1.4.html",
   recoveryAtlas: "recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
   familyIndex: "core-architecture-family-index-chimeric-prototype-v0.1.4.html"
 };
@@ -90,6 +90,132 @@ async function revealControl(page, selector) {
       ancestor = ancestor.parentElement;
     }
   });
+}
+
+async function exercisePromptCapsule(page, {
+  apiName,
+  copySelector,
+  downloadSelector,
+  filename,
+  promptSelector,
+  stateContract,
+  title,
+  version,
+}) {
+  const initial = await page.evaluate(name => {
+    const api = globalThis[name];
+    return {
+      contract: api.contract,
+      fingerprint: api.promptCapsuleFingerprint(),
+      frozen: Object.isFrozen(api),
+      plain: api.promptCapsule(),
+      explicitPlain: api.promptCapsuleMarkdown("plain"),
+      projection: api.promptCapsuleStateProjection(),
+      state: api.getState(),
+      stateContract: api.stateContract,
+      version: api.version,
+      view: api.getPromptCapsuleView(),
+    };
+  }, apiName);
+  assert.equal(initial.frozen, true);
+  assert.deepEqual(
+    [initial.version, initial.contract, initial.stateContract, initial.view],
+    [version, "prompt-capsule/0.1.0", stateContract, "plain"],
+  );
+  assert.equal(initial.plain, initial.explicitPlain);
+  assert.equal(await page.locator(promptSelector).textContent(), initial.plain);
+  assert.match(initial.plain, new RegExp(`^# Prompt Capsule: ${title}\\n`, "u"));
+  assert.ok(initial.plain.includes(`- Fingerprint: \`${initial.fingerprint}\``));
+  assert.match(initial.plain, /## Related loops/u);
+  assert.doesNotMatch(initial.plain, /## Skill assistance/u);
+  assert.ok(initial.plain.endsWith("\n"));
+
+  const loopReceipt = await page.locator("[data-prompt-related-loops]").evaluate(details => ({
+    open: details.open,
+    tag: details.tagName,
+    loops: [...details.querySelectorAll("[data-related-loop-id]")].map(item => item.dataset.relatedLoopId),
+  }));
+  assert.deepEqual(loopReceipt, {
+    open: false,
+    tag: "DETAILS",
+    loops: ["repository-reentry", "skill-from-receiving-use"],
+  });
+  const summary = page.locator("[data-prompt-related-loops] summary");
+  await summary.focus();
+  const summaryBox = await summary.boundingBox();
+  assert.ok(summaryBox && summaryBox.height >= 44 && summaryBox.width >= 44);
+  await summary.press("Enter");
+  assert.equal(await page.locator("[data-prompt-related-loops]").evaluate(element => element.open), true);
+  const firstLoopBox = await page.locator("[data-related-loop-id] a").first().boundingBox();
+  assert.ok(firstLoopBox && firstLoopBox.height >= 44 && firstLoopBox.width >= 44);
+
+  await page.locator('[data-prompt-view][value="skill-assisted"]').check();
+  const assisted = await page.evaluate(name => {
+    const api = globalThis[name];
+    return {
+      fingerprint: api.promptCapsuleFingerprint(),
+      markdown: api.promptCapsuleMarkdown(),
+      projection: api.promptCapsuleStateProjection(),
+      view: api.getPromptCapsuleView(),
+    };
+  }, apiName);
+  assert.equal(assisted.view, "skill-assisted");
+  assert.equal(assisted.fingerprint, initial.fingerprint);
+  assert.deepEqual(assisted.projection, initial.projection);
+  assert.equal(await page.locator(promptSelector).textContent(), assisted.markdown);
+  assert.match(assisted.markdown, /## Skill assistance/u);
+  assert.match(assisted.markdown, /\.agents\/skills\/[a-z0-9-]+\/SKILL\.md/u);
+
+  await page.evaluate(() => { globalThis.__coreClipboard = ""; });
+  await page.locator(copySelector).click();
+  await page.waitForFunction(() => Boolean(globalThis.__coreClipboard));
+  assert.equal(await page.evaluate(() => globalThis.__coreClipboard), assisted.markdown);
+  await page.evaluate(() => {
+    const original = URL.createObjectURL.bind(URL);
+    URL.createObjectURL = blob => {
+      globalThis.__promptDownloadType = blob.type;
+      return original(blob);
+    };
+  });
+  const downloadPromise = page.waitForEvent("download");
+  await page.locator(downloadSelector).click();
+  const download = await downloadPromise;
+  assert.equal(download.suggestedFilename(), filename);
+  assert.equal(await page.evaluate(() => globalThis.__promptDownloadType), "text/markdown;charset=utf-8");
+  const stream = await download.createReadStream();
+  const chunks = [];
+  for await (const chunk of stream) chunks.push(chunk);
+  assert.equal(Buffer.concat(chunks).toString("utf8"), assisted.markdown);
+
+  await page.locator('[data-prompt-view][value="plain"]').check();
+  assert.equal(await page.locator(promptSelector).textContent(), initial.plain);
+  return initial;
+}
+
+async function assertNoScriptPromptCapsule(browser, origin, route, promptSelector, expectedPlain) {
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 320, height: 900 },
+  });
+  try {
+    const page = await context.newPage();
+    await page.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+    assert.equal(await page.locator(promptSelector).textContent(), expectedPlain);
+    assert.equal(await page.locator(promptSelector).isVisible(), true);
+    assert.equal(await page.locator("[data-prompt-view-control]").isVisible(), false);
+    assert.equal(await page.locator("[data-prompt-actions]").isVisible(), false);
+    const loops = page.locator("[data-prompt-related-loops]");
+    assert.equal(await loops.isVisible(), true);
+    await loops.locator("summary").click();
+    assert.equal(await loops.evaluate(element => element.open), true);
+    const containment = await page.locator("html").evaluate(root => ({
+      clientWidth: root.clientWidth,
+      scrollWidth: root.scrollWidth,
+    }));
+    assert.ok(containment.scrollWidth <= containment.clientWidth + 1, JSON.stringify(containment));
+  } finally {
+    await context.close();
+  }
 }
 
 async function contextTreePath(browser, origin, route) {
@@ -179,10 +305,29 @@ async function contextTreePath(browser, origin, route) {
   }
 }
 async function treemapPath(browser, origin, route) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPrompt;
   try {
     const jobId = "job-confirm-evidence-provenance";
     const literal = "Provenance remains <strong>literal collaborator text</strong>.";
+    initialPrompt = await exercisePromptCapsule(page, {
+      apiName: "jobsToBeDoneTreemap",
+      copySelector: "#copy-prompt-btn",
+      downloadSelector: "#download-prompt-btn",
+      filename: "jobs-to-be-done-treemap.prompt-capsule.r0.1.4.skill-assisted.md",
+      promptSelector: "#ai-prompt",
+      stateContract: "jobs-to-be-done-treemap-state.v0.1",
+      title: "Jobs-to-be-Done Treemap",
+      version: "0.1.4",
+    });
+    assert.equal(initialPrompt.projection.jobs.length, 8);
+    await page.locator(`#table-equivalent [data-select-job="${jobId}"]`).click();
+    const selectedOnly = await page.evaluate(() => ({
+      fingerprint: window.jobsToBeDoneTreemap.promptCapsuleFingerprint(),
+      markdown: window.jobsToBeDoneTreemap.promptCapsule(),
+    }));
+    assert.equal(selectedOnly.fingerprint, initialPrompt.fingerprint);
+    assert.equal(selectedOnly.markdown, initialPrompt.plain);
     const rect = page.locator(`#treemap-svg-wrap [data-job-id="${jobId}"] rect`);
     const initialArea = Number(await rect.getAttribute("width")) * Number(await rect.getAttribute("height"));
     const jobCard = page.locator(`[data-job-card="${jobId}"]`);
@@ -206,6 +351,13 @@ async function treemapPath(browser, origin, route) {
     assert.match(await page.locator(`#treemap-svg-wrap [data-job-id="${jobId}"] title`).textContent(), /<strong>literal collaborator text<\/strong>/);
     assert.match(await page.locator(`#table-equivalent tr[data-row-job="${jobId}"]`).textContent(), /5 \/ 10/);
     assert.match(await page.locator("#selected-job-panel").textContent(), /Unit-test-first Design/);
+    const changedPrompt = await page.evaluate(() => ({
+      fingerprint: window.jobsToBeDoneTreemap.promptCapsuleFingerprint(),
+      markdown: window.jobsToBeDoneTreemap.promptCapsule(),
+    }));
+    assert.notEqual(changedPrompt.fingerprint, initialPrompt.fingerprint);
+    assert.notEqual(changedPrompt.markdown, initialPrompt.plain);
+    assert.match(changedPrompt.markdown, /Provenance remains &lt;strong&gt;literal collaborator text&lt;\/strong&gt;\./u);
     const linkedGraph = await textJson(page, "#jsonld-data");
     const jobNode = linkedGraph["@graph"].find(node => node.id === `#${jobId}`);
     assert.equal(jobNode["ca:relativeWeight"], 5);
@@ -239,6 +391,31 @@ async function treemapPath(browser, origin, route) {
     assert.equal(activeView(imported).selected_job_id, jobId);
     assert.match(await page.locator("#selected-job-panel").textContent(), /Imported provenance-weighted job/);
 
+    const privateBaseline = await page.evaluate(() => ({
+      fingerprint: window.jobsToBeDoneTreemap.promptCapsuleFingerprint(),
+      markdown: window.jobsToBeDoneTreemap.promptCapsule(),
+      state: window.jobsToBeDoneTreemap.getState(),
+    }));
+    const privateOnly = structuredClone(privateBaseline.state);
+    privateOnly.private_annotation = "local job-map note";
+    privateOnly.jobs[0].private_annotation = "local job note";
+    privateOnly.view_state.private_annotation = "local view-state note";
+    activeView(privateOnly).private_annotation = "local view note";
+    await page.locator("#json-import").fill(JSON.stringify(privateOnly));
+    await page.locator("#import-json-btn").click();
+    await assertVisibleNotice(page, "#import-status", /updated|imported/i);
+    const privateReceipt = await page.evaluate(() => ({
+      fingerprint: window.jobsToBeDoneTreemap.promptCapsuleFingerprint(),
+      markdown: window.jobsToBeDoneTreemap.promptCapsule(),
+      state: window.jobsToBeDoneTreemap.getState(),
+    }));
+    assert.equal(privateReceipt.state.private_annotation, "local job-map note");
+    assert.equal(privateReceipt.state.jobs[0].private_annotation, "local job note");
+    assert.equal(privateReceipt.state.view_state.private_annotation, "local view-state note");
+    assert.equal(activeView(privateReceipt.state).private_annotation, "local view note");
+    assert.equal(privateReceipt.fingerprint, privateBaseline.fingerprint);
+    assert.equal(privateReceipt.markdown, privateBaseline.markdown);
+
     const sentinel = "Treemap recovery sentinel";
     const importedCard = page.locator(`[data-job-card="${jobId}"]`);
     await importedCard.locator('[data-field="note"]').fill(sentinel);
@@ -267,6 +444,7 @@ async function treemapPath(browser, origin, route) {
   } finally {
     await context.close();
   }
+  await assertNoScriptPromptCapsule(browser, origin, route, "#ai-prompt", initialPrompt.plain);
 }
 async function probesPath(browser, origin, route) {
   const { context, page, telemetry } = await openFresh(browser, origin, route);
@@ -374,6 +552,7 @@ async function probesPath(browser, origin, route) {
 }
 async function matrixPath(browser, origin, route) {
   const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPrompt;
   try {
     const patternId = "pattern-form-validation";
     const populationId = "pop-designers";
@@ -381,7 +560,27 @@ async function matrixPath(browser, origin, route) {
     const literal = "Validation remains visible as <strong>literal collaborator text</strong>.";
     const cellTextarea = () => page.locator(`#text-${cellId}`);
 
+    initialPrompt = await exercisePromptCapsule(page, {
+      apiName: "patternProblemSurfaceMatrix",
+      copySelector: "#copyPromptBtn",
+      downloadSelector: "#downloadPromptBtn",
+      filename: "pattern-problem-surface-matrix.prompt-capsule.r0.1.4.skill-assisted.md",
+      promptSelector: "#aiPrompt",
+      stateContract: "pattern-problem-surface-matrix-state.v0.1",
+      title: "Pattern–Problem Surface Matrix",
+      version: "0.1.4",
+    });
+    assert.equal(initialPrompt.projection.patterns.length, 8);
+    assert.equal(initialPrompt.projection.populationColumns.length, 6);
+    assert.equal(initialPrompt.projection.patterns.flatMap(pattern => pattern.cells).length, 48);
+
     await page.locator(`.svg-click-cell[data-cell-id="${cellId}"]`).click();
+    const selectedOnly = await page.evaluate(() => ({
+      fingerprint: window.patternProblemSurfaceMatrix.promptCapsuleFingerprint(),
+      markdown: window.patternProblemSurfaceMatrix.promptCapsule(),
+    }));
+    assert.equal(selectedOnly.fingerprint, initialPrompt.fingerprint);
+    assert.equal(selectedOnly.markdown, initialPrompt.plain);
     await cellTextarea().fill(literal);
     await cellTextarea().press("Tab");
     await page.locator(`.cell-status[data-pattern="${patternId}"][data-pop="${populationId}"]`).selectOption("ready_to_route");
@@ -397,6 +596,13 @@ async function matrixPath(browser, origin, route) {
     assert.match(await page.locator(`.svg-click-cell[data-cell-id="${cellId}"] title`).textContent(), /<strong>literal collaborator text<\/strong>/);
     assert.equal(await page.locator(`[data-inspector-cell-text="${cellId}"]`).inputValue(), literal);
     assert.match(await page.locator("#inspector").textContent(), /Ready to route/);
+    const changedPrompt = await page.evaluate(() => ({
+      fingerprint: window.patternProblemSurfaceMatrix.promptCapsuleFingerprint(),
+      markdown: window.patternProblemSurfaceMatrix.promptCapsule(),
+    }));
+    assert.notEqual(changedPrompt.fingerprint, initialPrompt.fingerprint);
+    assert.notEqual(changedPrompt.markdown, initialPrompt.plain);
+    assert.match(changedPrompt.markdown, /Validation remains visible as &lt;strong&gt;literal collaborator text&lt;\/strong&gt;\./u);
     const linkedGraph = await copiedJson(page, "#copyJsonLdBtn");
     const cellNode = linkedGraph["@graph"].find(node => (node.id || node["@id"]) === `#${cellId}`);
     assert.equal(cellNode.text || cellNode["schema:text"], literal);
@@ -458,6 +664,31 @@ async function matrixPath(browser, origin, route) {
     assert.equal(activeView(imported).selected_cell_id, cellId);
     assert.equal(await page.locator(`[data-inspector-cell-text="${cellId}"]`).inputValue(), importedText);
 
+    const privateBaseline = await page.evaluate(() => ({
+      fingerprint: window.patternProblemSurfaceMatrix.promptCapsuleFingerprint(),
+      markdown: window.patternProblemSurfaceMatrix.promptCapsule(),
+      state: window.patternProblemSurfaceMatrix.getState(),
+    }));
+    const privateOnly = structuredClone(privateBaseline.state);
+    privateOnly.private_annotation = "local pattern-map note";
+    privateOnly.patterns[0].private_annotation = "local pattern note";
+    privateOnly.view_state.private_annotation = "local view-state note";
+    activeView(privateOnly).private_annotation = "local view note";
+    await page.locator("#jsonIO").fill(JSON.stringify(privateOnly));
+    await page.locator("#importJsonBtn").click();
+    await assertVisibleNotice(page, "#ioStatus", /updated|imported/i);
+    const privateReceipt = await page.evaluate(() => ({
+      fingerprint: window.patternProblemSurfaceMatrix.promptCapsuleFingerprint(),
+      markdown: window.patternProblemSurfaceMatrix.promptCapsule(),
+      state: window.patternProblemSurfaceMatrix.getState(),
+    }));
+    assert.equal(privateReceipt.state.private_annotation, "local pattern-map note");
+    assert.equal(privateReceipt.state.patterns[0].private_annotation, "local pattern note");
+    assert.equal(privateReceipt.state.view_state.private_annotation, "local view-state note");
+    assert.equal(activeView(privateReceipt.state).private_annotation, "local view note");
+    assert.equal(privateReceipt.fingerprint, privateBaseline.fingerprint);
+    assert.equal(privateReceipt.markdown, privateBaseline.markdown);
+
     const sentinel = "Pattern matrix recovery sentinel";
     await cellTextarea().fill(sentinel);
     await cellTextarea().press("Tab");
@@ -488,10 +719,12 @@ async function matrixPath(browser, origin, route) {
   } finally {
     await context.close();
   }
+  await assertNoScriptPromptCapsule(browser, origin, route, "#aiPrompt", initialPrompt.plain);
 }
 
 async function unitTestFirstPath(browser, origin, route) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPrompt;
   try {
     const targetId = "target-consent-review-route";
     const boundaryId = "target-advanced-visual-comparison";
@@ -499,6 +732,25 @@ async function unitTestFirstPath(browser, origin, route) {
     const targetEditor = () => page.locator(`#edit-${targetId}`);
     const platformField = () => targetEditor().locator('textarea[oninput*="platform_agnostic_test"]');
     const literal = "Given consent is <strong>changed</strong>, when an export is requested, then review routing remains observable.";
+
+    initialPrompt = await exercisePromptCapsule(page, {
+      apiName: "unitTestFirstDesign",
+      copySelector: "#copyPromptBtn",
+      downloadSelector: "#downloadPromptBtn",
+      filename: "unit-test-first-design.prompt-capsule.r0.1.4.skill-assisted.md",
+      promptSelector: "#promptOut",
+      stateContract: "unit-test-first-design-state.v0.1",
+      title: "Unit-test-first Design",
+      version: "0.1.4",
+    });
+    assert.equal(initialPrompt.projection.targets.length, 5);
+    await targetEditor().getByRole("button", { name: "Inspect" }).click();
+    const selectedOnly = await page.evaluate(() => ({
+      fingerprint: window.unitTestFirstDesign.promptCapsuleFingerprint(),
+      markdown: window.unitTestFirstDesign.promptCapsule(),
+    }));
+    assert.equal(selectedOnly.fingerprint, initialPrompt.fingerprint);
+    assert.equal(selectedOnly.markdown, initialPrompt.plain);
 
     let exported = await textJson(page, "#jsonOut");
     assert.equal(targetItems(exported).length, 5);
@@ -515,6 +767,13 @@ async function unitTestFirstPath(browser, origin, route) {
     assert.match(await page.locator("#selectedInspector").textContent(), /<strong>changed<\/strong>/);
     assert.match(await page.locator("#tableEquivalent").textContent(), /<strong>changed<\/strong>/);
     assert.match(await page.locator("#diagram").textContent(), /<strong>changed<\/strong>/);
+    const changedPrompt = await page.evaluate(() => ({
+      fingerprint: window.unitTestFirstDesign.promptCapsuleFingerprint(),
+      markdown: window.unitTestFirstDesign.promptCapsule(),
+    }));
+    assert.notEqual(changedPrompt.fingerprint, initialPrompt.fingerprint);
+    assert.notEqual(changedPrompt.markdown, initialPrompt.plain);
+    assert.match(changedPrompt.markdown, /Given consent is &lt;strong&gt;changed&lt;\/strong&gt;/u);
     let linkedGraph = await textJson(page, "#jsonLdOut");
     assert.equal(linkedGraph["@graph"].find(node => node["@id"] === `#${targetId}`)["ca:platformAgnosticTest"], literal);
     assert.deepEqual(JSON.parse(await page.locator("#embedded-json-ld").textContent()), linkedGraph);
@@ -548,6 +807,29 @@ async function unitTestFirstPath(browser, origin, route) {
     assert.equal(targetItems(imported).find(item => item.id === targetId).title, importedTitle);
     assert.equal(activeView(imported).selected_target_id, targetId);
     assert.match(await page.locator("#selectedInspector").textContent(), /Imported consent-sensitive behavior/);
+
+    const privateBaseline = await page.evaluate(() => ({
+      fingerprint: window.unitTestFirstDesign.promptCapsuleFingerprint(),
+      markdown: window.unitTestFirstDesign.promptCapsule(),
+      state: window.unitTestFirstDesign.getState(),
+    }));
+    const privateOnly = structuredClone(privateBaseline.state);
+    privateOnly.private_annotation = "local protected-behavior note";
+    privateOnly.unit_test_first_design.private_annotation = "local design note";
+    privateOnly.unit_test_first_design.test_targets[0].private_annotation = "local target note";
+    await page.locator("#importText").fill(JSON.stringify(privateOnly));
+    await page.locator("#importPasteBtn").click();
+    await assertVisibleNotice(page, "#importNotice", /updated|imported/i);
+    const privateReceipt = await page.evaluate(() => ({
+      fingerprint: window.unitTestFirstDesign.promptCapsuleFingerprint(),
+      markdown: window.unitTestFirstDesign.promptCapsule(),
+      state: window.unitTestFirstDesign.getState(),
+    }));
+    assert.equal(privateReceipt.state.private_annotation, "local protected-behavior note");
+    assert.equal(privateReceipt.state.unit_test_first_design.private_annotation, "local design note");
+    assert.equal(privateReceipt.state.unit_test_first_design.test_targets[0].private_annotation, "local target note");
+    assert.equal(privateReceipt.fingerprint, privateBaseline.fingerprint);
+    assert.equal(privateReceipt.markdown, privateBaseline.markdown);
 
     const singleVisibleTarget = structuredClone(imported);
     activeView(singleVisibleTarget).hidden_target_ids = targetItems(singleVisibleTarget).map(item => item.id).filter(id => id !== targetId);
@@ -609,6 +891,7 @@ async function unitTestFirstPath(browser, origin, route) {
   } finally {
     await context.close();
   }
+  await assertNoScriptPromptCapsule(browser, origin, route, "#promptOut", initialPrompt.plain);
 }
 
 async function recoveryAtlasPath(browser, origin, route) {

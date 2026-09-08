@@ -16,14 +16,16 @@ canonical sources, maintained projections, historical versions, generated
 receivers, and independently governed capsule families. It is an ownership map,
 not a count of matching words.
 
-The current adoptions span three source families: Strategy Canvas v0.2.4,
+The current adoptions span four Core source families: Strategy Canvas v0.2.4,
 First Responsible Version Matrix v0.1.4, Upstream Revision Loop v0.1.4,
-Recovery Routing Atlas v0.1.4, Participatory Design Kit v0.1.4, and
-Specification-by-Example v0.1.6 in Core; all four current Narrative
-Architecture sources; and two standalone instruments—Open Lesson Field and
-Cross-Functional Investment Model Studio. The six Core adoptions complete the
-current Comparison and Threshold, Recovery Routing and Revision, and
-Participatory Elicitation and Specification families.
+Recovery Routing Atlas v0.1.4, Participatory Design Kit v0.1.4,
+Specification-by-Example v0.1.6, Pattern–Problem Surface Matrix v0.1.4,
+Jobs-to-be-Done Treemap v0.1.4, and Unit-test-first Design v0.1.4; all four
+current Narrative Architecture sources; and two standalone instruments—Open
+Lesson Field and Cross-Functional Investment Model Studio. The nine Core
+adoptions complete the current Comparison and Threshold, Recovery Routing and
+Revision, Participatory Elicitation and Specification, and Pattern Fit and
+Behavior Protection families.
 Each source owner keeps its own state and schema version while
 projecting complete plain and skill-assisted Markdown views with one
 represented-state fingerprint. Each source points to a small set of related
@@ -46,6 +48,11 @@ their strain and restoration readings, primary and secondary routes, recovery
 moves, evidence, status, and focus-view standing. Participatory Design Kit
 carries the workflow’s lanes, phases, activities, materials, and example
 fragments. Specification-by-Example carries the complete rule and scenario
-catalog with each Given / When / Then outcome. Other capsule-bearing artifacts
-keep their existing contracts until their source owner accepts a migration
-with a material use and fitting tests.
+catalog with each Given / When / Then outcome. Pattern–Problem Surface Matrix
+carries eight patterns, six population groups, and all 48 described
+relationships. Jobs-to-be-Done Treemap carries each job’s purpose, weight,
+drivers, evidence, status, route, and review trigger. Unit-test-first Design
+carries each protected behavior’s source, preconditions, action, expected
+results, platform-independent test target, and evidence route. Other
+capsule-bearing artifacts keep their existing contracts until their source
+owner accepts a migration with a material use and fitting tests.
