@@ -15,7 +15,7 @@ import {
 } from "./core-architecture-browser-helper.mjs";
 
 const artifactNames = {
-  contextTree: "context-tree-chimeric-prototype-v0.1.6.html",
+  contextTree: "context-tree-chimeric-prototype-v0.1.7.html",
   treemap: "jobs-to-be-done-treemap-chimeric-prototype-v0.1.4.html",
   probes: "practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
   matrix: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
@@ -219,7 +219,8 @@ async function assertNoScriptPromptCapsule(browser, origin, route, promptSelecto
 }
 
 async function contextTreePath(browser, origin, route) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPrompt;
   try {
     const rowId = "row-context-to-surface";
     const groupId = "group-molecular-pathologist";
@@ -228,6 +229,39 @@ async function contextTreePath(browser, origin, route) {
     const hiddenCellId = "cell-context-to-surface-ai-assistance-surface";
     const literal = "Context stays visible as <strong>collaborator text</strong>.";
     const cellText = page.locator(`#cell-text-${cellId}`);
+
+    initialPrompt = await exercisePromptCapsule(page, {
+      apiName: "contextTree",
+      copySelector: "#copyPromptBtn",
+      downloadSelector: "#downloadPromptBtn",
+      filename: "context-tree.prompt-capsule.r0.1.7.skill-assisted.md",
+      promptSelector: "#promptOut",
+      stateContract: "context-tree-state.v0.1",
+      title: "Context Tree",
+      version: "0.1.7",
+    });
+    assert.equal(initialPrompt.projection.groups.length, 5);
+    assert.equal(initialPrompt.projection.contextRows.length, 5);
+    assert.equal(initialPrompt.projection.cells.length, 25);
+    const skillCoordinates = await page.evaluate(() => ({
+      frozen: Object.isFrozen(window.contextTree.skills),
+      revision: window.contextTree.skillRevision,
+      skills: window.contextTree.skills.map(skill => ({ path: skill.path, sha256: skill.sha256 })),
+    }));
+    assert.equal(skillCoordinates.frozen, true);
+    assert.match(skillCoordinates.revision, /^[0-9a-f]{40}$/u);
+    assert.deepEqual(skillCoordinates.skills, [
+      { path: ".agents/skills/source-authority-mapping/SKILL.md", sha256: "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5" },
+      { path: ".agents/skills/repository-reentry/SKILL.md", sha256: "211cdbd293c260e95e62d3bc7ed5cb4d6d9ca3debd560a28a74b52364a1bfa90" },
+      { path: ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md", sha256: "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a" },
+    ]);
+    await page.locator(`#contextTable tr[data-cell-id="cell-who-molecular-pathologist"]`).click();
+    const selectedOnly = await page.evaluate(() => ({
+      fingerprint: window.contextTree.promptCapsuleFingerprint(),
+      markdown: window.contextTree.promptCapsule(),
+    }));
+    assert.equal(selectedOnly.fingerprint, initialPrompt.fingerprint);
+    assert.equal(selectedOnly.markdown, initialPrompt.plain);
 
     await cellText.fill(literal);
     await cellText.press("Tab");
@@ -250,6 +284,13 @@ async function contextTreePath(browser, origin, route) {
     assert.match(await page.locator("#selectedCellPanel").textContent(), /Imported Context Route/);
     const linkedGraph = await textJson(page, "#jsonLdOut");
     assert.equal(linkedGraph["@graph"].find(node => node.id === `#${cellId}`)["schema:text"], literal);
+    const changedPrompt = await page.evaluate(() => ({
+      fingerprint: window.contextTree.promptCapsuleFingerprint(),
+      markdown: window.contextTree.promptCapsule(),
+    }));
+    assert.notEqual(changedPrompt.fingerprint, initialPrompt.fingerprint);
+    assert.notEqual(changedPrompt.markdown, initialPrompt.plain);
+    assert.match(changedPrompt.markdown, /Context stays visible as &lt;strong&gt;collaborator text&lt;\/strong&gt;\./u);
 
     const beforeOrder = [...activeView(exported).column_order];
     await page.locator(`#groupsEditor button[data-action="move-left"][data-group-id="${hiddenGroupId}"]`).click();
@@ -279,6 +320,104 @@ async function contextTreePath(browser, origin, route) {
     assert.equal(activeView(imported).selected_cell_id, cellId);
     assert.match(await page.locator("#selectedCellPanel").textContent(), /Imported Context Tree relationship/);
 
+    const quickUseBaseline = await page.evaluate(() => ({
+      fingerprint: window.contextTree.promptCapsuleFingerprint(),
+      markdown: window.contextTree.promptCapsule(),
+      state: window.contextTree.getState(),
+    }));
+    const changedQuickUse = structuredClone(quickUseBaseline.state);
+    changedQuickUse.quick_use.good_next_question = "Which relationship should become visible for the next responsible decision?";
+    await page.locator("#importJsonInput").fill(JSON.stringify(changedQuickUse));
+    await page.locator("#importJsonBtn").click();
+    await assertVisibleNotice(page, "#importNotice", /updated|imported/i);
+    const quickUseReceipt = await page.evaluate(() => ({
+      fingerprint: window.contextTree.promptCapsuleFingerprint(),
+      markdown: window.contextTree.promptCapsule(),
+      state: window.contextTree.getState(),
+    }));
+    assert.equal(quickUseReceipt.state.quick_use.good_next_question, changedQuickUse.quick_use.good_next_question);
+    assert.notEqual(quickUseReceipt.fingerprint, quickUseBaseline.fingerprint);
+    assert.notEqual(quickUseReceipt.markdown, quickUseBaseline.markdown);
+    assert.match(quickUseReceipt.markdown, /Which relationship should become visible for the next responsible decision\?/u);
+
+    const privateBaseline = await page.evaluate(() => ({
+      fingerprint: window.contextTree.promptCapsuleFingerprint(),
+      markdown: window.contextTree.promptCapsule(),
+      state: window.contextTree.getState(),
+    }));
+    const privateOnly = structuredClone(privateBaseline.state);
+    privateOnly.private_annotation = "local context-tree note";
+    privateOnly.artifact_identity.private_annotation = "local identity note";
+    privateOnly.context_tree.private_annotation = "local tree note";
+    privateOnly.context_tree.groups[0].private_annotation = "local group note";
+    privateOnly.context_tree.context_rows[0].private_annotation = "local row note";
+    privateOnly.context_tree.cells[0].private_annotation = "local cell note";
+    privateOnly.quick_use.private_annotation = { source: "local quick-use note" };
+    privateOnly.view_state.private_annotation = "local view-state note";
+    activeView(privateOnly).private_annotation = "local focus-view note";
+    privateOnly.semantic_locality.private_annotation = "local language note";
+    privateOnly.recovery_calibration.private_annotation = "local recovery note";
+    await page.locator("#importJsonInput").fill(JSON.stringify(privateOnly));
+    await page.locator("#importJsonBtn").click();
+    await assertVisibleNotice(page, "#importNotice", /updated|imported/i);
+    const privateReceipt = await page.evaluate(() => ({
+      fingerprint: window.contextTree.promptCapsuleFingerprint(),
+      markdown: window.contextTree.promptCapsule(),
+      state: window.contextTree.getState(),
+    }));
+    assert.equal(privateReceipt.state.private_annotation, "local context-tree note");
+    assert.equal(privateReceipt.state.artifact_identity.private_annotation, "local identity note");
+    assert.equal(privateReceipt.state.context_tree.private_annotation, "local tree note");
+    assert.equal(privateReceipt.state.context_tree.groups[0].private_annotation, "local group note");
+    assert.equal(privateReceipt.state.context_tree.context_rows[0].private_annotation, "local row note");
+    assert.equal(privateReceipt.state.context_tree.cells[0].private_annotation, "local cell note");
+    assert.deepEqual(privateReceipt.state.quick_use.private_annotation, { source: "local quick-use note" });
+    assert.equal(privateReceipt.state.view_state.private_annotation, "local view-state note");
+    assert.equal(activeView(privateReceipt.state).private_annotation, "local focus-view note");
+    assert.equal(privateReceipt.state.semantic_locality.private_annotation, "local language note");
+    assert.equal(privateReceipt.state.recovery_calibration.private_annotation, "local recovery note");
+    assert.equal(privateReceipt.fingerprint, privateBaseline.fingerprint);
+    assert.equal(privateReceipt.markdown, privateBaseline.markdown);
+
+    const malformedKnownFields = [];
+    const malformedSourceBands = structuredClone(privateReceipt.state);
+    malformedSourceBands.artifact_identity.source_band = "author_created_method";
+    malformedKnownFields.push([malformedSourceBands, /working .* retained|source_band.*array/i]);
+    const malformedSemantic = structuredClone(privateReceipt.state);
+    malformedSemantic.semantic_locality.preferred_phrasing = "Name the context.";
+    malformedKnownFields.push([malformedSemantic, /working .* retained|preferred_phrasing.*array/i]);
+    const malformedRecovery = structuredClone(privateReceipt.state);
+    malformedRecovery.recovery_calibration.named_failure_geometries = { name: "Context Flattening" };
+    malformedKnownFields.push([malformedRecovery, /working .* retained|named_failure_geometries.*array/i]);
+    const malformedQuickUse = structuredClone(privateReceipt.state);
+    malformedQuickUse.quick_use.use_when = "A relationship needs orientation.";
+    malformedKnownFields.push([malformedQuickUse, /working .* retained|quick_use\.use_when.*array/i]);
+    const emptyGroups = structuredClone(privateReceipt.state);
+    emptyGroups.context_tree.groups = [];
+    emptyGroups.context_tree.cells = [];
+    malformedKnownFields.push([emptyGroups, /working .* retained|at least one group/i]);
+    const emptyRows = structuredClone(privateReceipt.state);
+    emptyRows.context_tree.context_rows = [];
+    emptyRows.context_tree.cells = [];
+    malformedKnownFields.push([emptyRows, /working .* retained|at least one context row/i]);
+    const delimiterId = structuredClone(privateReceipt.state);
+    delimiterId.context_tree.groups[0].id = "group::alias";
+    malformedKnownFields.push([delimiterId, /working .* retained|lowercase letters, numbers, and hyphens/i]);
+    for (const [candidate, pattern] of malformedKnownFields) {
+      await clearNotice(page, "#importNotice");
+      await page.locator("#importJsonInput").fill(JSON.stringify(candidate));
+      await page.locator("#importJsonBtn").click();
+      await assertVisibleNotice(page, "#importNotice", pattern);
+      const retained = await page.evaluate(() => ({
+        fingerprint: window.contextTree.promptCapsuleFingerprint(),
+        markdown: window.contextTree.promptCapsule(),
+        state: window.contextTree.getState(),
+      }));
+      assert.deepEqual(retained.state, privateReceipt.state);
+      assert.equal(retained.fingerprint, privateReceipt.fingerprint);
+      assert.equal(retained.markdown, privateReceipt.markdown);
+    }
+
     const sentinel = "Context Tree recovery sentinel";
     await page.locator(`#cell-text-${cellId}`).fill(sentinel);
     await page.locator(`#cell-text-${cellId}`).press("Tab");
@@ -299,10 +438,89 @@ async function contextTreePath(browser, origin, route) {
     await page.locator("#importJsonBtn").click();
     await assertVisibleNotice(page, "#importNotice", /semantic namespace.*unique|unique.*semantic namespace/i);
     assert.match((await textJson(page, "#jsonOut")).context_tree.cells.find(item => item.id === cellId).text, /remains operable/);
+
+    const multiView = structuredClone(await textJson(page, "#jsonOut"));
+    const secondView = structuredClone(activeView(multiView));
+    secondView.id = "view-secondary";
+    secondView.name = "Secondary focus view";
+    secondView.selected_cell_id = "";
+    multiView.view_state.views.push(secondView);
+    await page.locator("#importJsonInput").fill(JSON.stringify(multiView));
+    await page.locator("#importJsonBtn").click();
+    await assertVisibleNotice(page, "#importNotice", /updated|imported/i);
+    const beforeAddition = await textJson(page, "#jsonOut");
+    const beforeInactiveViewChange = await page.evaluate(() => ({
+      fingerprint: window.contextTree.promptCapsuleFingerprint(),
+      markdown: window.contextTree.promptCapsule(),
+    }));
+    const inactiveViewChange = structuredClone(beforeAddition);
+    const inactiveView = inactiveViewChange.view_state.views.find(view => view.id === "view-secondary");
+    inactiveView.name = "Secondary handoff focus";
+    inactiveView.column_order = [...inactiveView.column_order].reverse();
+    inactiveView.hidden_group_ids = [inactiveView.column_order[0]];
+    await page.locator("#importJsonInput").fill(JSON.stringify(inactiveViewChange));
+    await page.locator("#importJsonBtn").click();
+    await assertVisibleNotice(page, "#importNotice", /updated|imported/i);
+    const inactiveViewReceipt = await page.evaluate(() => ({
+      fingerprint: window.contextTree.promptCapsuleFingerprint(),
+      markdown: window.contextTree.promptCapsule(),
+    }));
+    assert.notEqual(inactiveViewReceipt.fingerprint, beforeInactiveViewChange.fingerprint);
+    assert.notEqual(inactiveViewReceipt.markdown, beforeInactiveViewChange.markdown);
+    assert.match(inactiveViewReceipt.markdown, /Secondary handoff focus/u);
+    const beforeAdditionAfterViewChange = await textJson(page, "#jsonOut");
+    await page.locator("#addGroupBtn").click();
+    await page.locator("#addRowBtn").click();
+    const afterAddition = await textJson(page, "#jsonOut");
+    const addedGroup = afterAddition.context_tree.groups.find(group => !beforeAdditionAfterViewChange.context_tree.groups.some(previous => previous.id === group.id));
+    const addedRow = afterAddition.context_tree.context_rows.find(row => !beforeAdditionAfterViewChange.context_tree.context_rows.some(previous => previous.id === row.id));
+    assert.ok(addedGroup && addedRow);
+    assert.equal(afterAddition.view_state.views.every(view => view.column_order.includes(addedGroup.id)), true);
+    assert.equal(afterAddition.view_state.views.every(view => view.row_order.includes(addedRow.id)), true);
+    assert.equal(afterAddition.context_tree.cells.length, afterAddition.context_tree.groups.length * afterAddition.context_tree.context_rows.length);
+    await page.locator("#importJsonInput").fill(JSON.stringify(afterAddition));
+    await page.locator("#importJsonBtn").click();
+    assert.deepEqual(await textJson(page, "#jsonOut"), afterAddition);
+
+    const removeGroup = page.locator(`#groupsEditor button[data-action="remove-group"][data-group-id="${addedGroup.id}"]`);
+    await removeGroup.click();
+    await removeGroup.click();
+    const removeRow = page.locator(`#rowsEditor button[data-action="remove-row"][data-row-id="${addedRow.id}"]`);
+    await removeRow.click();
+    await removeRow.click();
+    const afterRemoval = await textJson(page, "#jsonOut");
+    assert.equal(afterRemoval.view_state.views.every(view => !view.column_order.includes(addedGroup.id)), true);
+    assert.equal(afterRemoval.view_state.views.every(view => !view.row_order.includes(addedRow.id)), true);
+    assert.equal(afterRemoval.context_tree.cells.length, afterRemoval.context_tree.groups.length * afterRemoval.context_tree.context_rows.length);
+    await page.locator("#importJsonInput").fill(JSON.stringify(afterRemoval));
+    await page.locator("#importJsonBtn").click();
+    assert.deepEqual(await textJson(page, "#jsonOut"), afterRemoval);
+
+    const minimum = structuredClone(afterRemoval);
+    const minimumGroup = minimum.context_tree.groups[0];
+    const minimumRow = { ...minimum.context_tree.context_rows[0], required: false };
+    minimum.context_tree.groups = [minimumGroup];
+    minimum.context_tree.context_rows = [minimumRow];
+    minimum.context_tree.cells = minimum.context_tree.cells.filter(cell => cell.group_id === minimumGroup.id && cell.row_id === minimumRow.id);
+    minimum.view_state.views = minimum.view_state.views.map(view => ({
+      ...view,
+      column_order: [minimumGroup.id],
+      hidden_group_ids: [],
+      row_order: [minimumRow.id],
+      hidden_row_ids: [],
+      selected_cell_id: "",
+    }));
+    await page.locator("#importJsonInput").fill(JSON.stringify(minimum));
+    await page.locator("#importJsonBtn").click();
+    await assertVisibleNotice(page, "#importNotice", /updated|imported/i);
+    assert.equal(await page.locator("#groupsEditor button[data-action='remove-group']").isDisabled(), true);
+    assert.equal(await page.locator("#rowsEditor button[data-action='remove-row']").isDisabled(), true);
+    assert.equal((await textJson(page, "#jsonOut")).context_tree.cells.length, 1);
     assertTelemetry(telemetry);
   } finally {
     await context.close();
   }
+  await assertNoScriptPromptCapsule(browser, origin, route, "#promptOut", initialPrompt.plain);
 }
 async function treemapPath(browser, origin, route) {
   const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });

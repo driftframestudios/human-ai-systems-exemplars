@@ -17,7 +17,7 @@
   },
   "integrity": {
     "algorithm": "sha256",
-    "entryFile": "1a6dd8b1b097594c6fd346833302ec12981ce9235207ecd65c352e8f00d56cae"
+    "entryFile": "b028bbb88622380d3794f1f5c7392268bc9bb752b1be5d322353af2f2e1227b6"
   },
   "canonicalStatus": "adapted_copy",
   "sourcePath": "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/",
@@ -34,7 +34,7 @@
     "status": "adapted_copy",
     "changedPaths": [
       "core-architectures-chimeric-prototype-pack-index-v0.1.3.html",
-      "poda-chimeric-prototype-v0.1.3.html",
+      "poda-chimeric-prototype-v0.1.4.html",
       "core-architecture-family-index-chimeric-prototype-v0.1.4.html",
       "strategy-canvas-chimeric-prototype-v0.1.1.html",
       "strategy-canvas-chimeric-prototype-v0.2.2.html",

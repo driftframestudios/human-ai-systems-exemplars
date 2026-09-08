@@ -158,7 +158,7 @@ test("current canonical and Context projections retain their declared relationsh
   }
 
   assert.ok(
-    declaredAdaptations.has("poda-chimeric-prototype-v0.1.3.html"),
+    declaredAdaptations.has("poda-chimeric-prototype-v0.1.4.html"),
     "PODA retains its Context navigation adaptation",
   );
   assert.ok(
@@ -174,6 +174,10 @@ test("semantic-identifier successors retain the established iframe request closu
   ]);
   const sourceEntries = currentById(sourceManifest);
   const acceptedCapabilityAdditions = new Map([
+    ["poda", ["file-download"]],
+    ["alignment-worksheet", ["file-download"]],
+    ["impact-map", ["file-download"]],
+    ["context-tree", ["file-download"]],
     ["first-responsible-version-matrix", ["file-download"]],
     ["upstream-revision-loop", ["file-download"]],
     ["recovery-routing-atlas", ["file-download"]],

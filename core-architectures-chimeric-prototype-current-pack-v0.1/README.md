@@ -30,6 +30,17 @@ Artifact variation is part of the family: route-specific layout, color,
 density, interaction, and evidence posture remain available while stable IDs,
 current versions, and declared source relationships keep the pack legible.
 
+PODA v0.1.4, Alignment Worksheet v0.1.4, Impact Map v0.1.5, and Context Tree
+v0.1.7 complete the current Orientation and Tracing family’s Prompt Capsule
+adoption. PODA carries the purpose-to-activity orientation and its accepted
+handoffs. Alignment Worksheet carries forward and backward premises together
+with the option spread and its evidence. Impact Map keeps every actor, impact,
+discoverable, and trace relationship connected. Context Tree keeps every role,
+question, context cell, status, and handoff available while focus arrangements
+remain presentation state. Each artifact supplies plain and skill-assisted
+Markdown, one view-independent represented-state fingerprint, fitting public
+collaboration loops, and a complete plain reading when JavaScript is absent.
+
 Strategy Canvas v0.2.4 and First Responsible Version Matrix v0.1.4 complete
 the current Comparison and Threshold family’s Prompt Capsule adoption. Each
 derives complete plain and skill-assisted Markdown from its own accepted state,

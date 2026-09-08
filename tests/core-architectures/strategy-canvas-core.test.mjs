@@ -417,7 +417,7 @@ test("Core manifests resolve current files, byte counts, and published digests",
       const byId = new Map(manifest.prototypes.map((entry) => [entry.id, entry]));
       const currentIdentities = {
         "core-architecture-family-index": ["core-architecture-family-index-chimeric-prototype-v0.1.4.html", "0.1.4"],
-        "impact-map": ["impact-map-chimeric-prototype-v0.1.4.html", "0.1.4"],
+        "impact-map": ["impact-map-chimeric-prototype-v0.1.5.html", "0.1.5"],
         "strategy-canvas": dirname(manifestPath) === coreRoot
           ? ["strategy-canvas-chimeric-prototype-v0.2.4.html", "0.2.4"]
           : ["strategy-canvas-chimeric-prototype-v0.2.2.html", "0.2.2"],

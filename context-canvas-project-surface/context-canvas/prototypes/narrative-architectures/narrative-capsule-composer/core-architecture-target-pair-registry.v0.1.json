@@ -65,7 +65,7 @@
       "artifactShape": "Document / four-zone map",
       "useWhen": "The team needs a compact shared frame before deeper artifacts.",
       "readerRef": "/field-guide/core-architectures/poda/",
-      "prototypeRef": "poda-chimeric-prototype-v0.1.html",
+      "prototypeRef": "poda-chimeric-prototype-v0.1.4.html",
       "prototypeStatus": "generated",
       "routes": [
         "Impact Map",
@@ -157,7 +157,7 @@
       "artifactShape": "Six-blank worksheet / option spread",
       "useWhen": "The team needs to align present world, restored state, and broad approach.",
       "readerRef": "/field-guide/core-architectures/alignment-worksheet/",
-      "prototypeRef": "alignment-worksheet-chimeric-prototype-v0.1.html",
+      "prototypeRef": "alignment-worksheet-chimeric-prototype-v0.1.4.html",
       "prototypeStatus": "generated",
       "routes": [
         "Impact Map",
@@ -252,7 +252,7 @@
       "artifactShape": "Directed graph",
       "useWhen": "The team needs goal → actor → impact → discoverable traceability.",
       "readerRef": "/field-guide/core-architectures/impact-map/",
-      "prototypeRef": "impact-map-chimeric-prototype-v0.1.1.html",
+      "prototypeRef": "impact-map-chimeric-prototype-v0.1.5.html",
       "prototypeStatus": "generated",
       "routes": [
         "Context Tree",
@@ -336,7 +336,7 @@
       "artifactShape": "Matrix",
       "useWhen": "Role differences are being flattened and local context needs to surface.",
       "readerRef": "/field-guide/core-architectures/context-tree/",
-      "prototypeRef": "context-tree-chimeric-prototype-v0.1.3.html",
+      "prototypeRef": "context-tree-chimeric-prototype-v0.1.7.html",
       "prototypeStatus": "generated",
       "routes": [
         "Participatory Design Kit",

@@ -61,13 +61,14 @@
       "id": "poda",
       "display_name": "PODA",
       "kind": "prototype",
-      "source_file": "poda-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
+      "source_file": "poda-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
       "public_alias": "/v1/core/poda/",
       "receiver_standing": "context_adapted",
       "activation_standing": "parity_review",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -81,13 +82,14 @@
       "id": "alignment-worksheet",
       "display_name": "Alignment Worksheet",
       "kind": "prototype",
-      "source_file": "alignment-worksheet-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
+      "source_file": "alignment-worksheet-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
       "public_alias": "/v1/core/alignment-worksheet/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -101,13 +103,14 @@
       "id": "impact-map",
       "display_name": "Impact Map",
       "kind": "prototype",
-      "source_file": "impact-map-chimeric-prototype-v0.1.4.html",
-      "source_version": "0.1.4",
+      "source_file": "impact-map-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
       "public_alias": "/v1/core/impact-map/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -121,13 +124,14 @@
       "id": "context-tree",
       "display_name": "Context Tree",
       "kind": "prototype",
-      "source_file": "context-tree-chimeric-prototype-v0.1.6.html",
-      "source_version": "0.1.6",
+      "source_file": "context-tree-chimeric-prototype-v0.1.7.html",
+      "source_version": "0.1.7",
       "public_alias": "/v1/core/context-tree/",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
           "allow-scripts"
         ],
         "permissions_policy": [
