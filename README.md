@@ -92,6 +92,16 @@ npm ci --ignore-scripts
 npm run playwright:install
 ```
 
+The first command keeps dependency resolution separate from lifecycle-script
+execution. In the current [lockfile](package-lock.json), `esbuild` and
+`workerd` declare steps that select and verify platform binaries, while two
+optional macOS `fsevents` packages declare native rebuild steps. The locked
+prebuilt packages support repository checks with those steps at rest.
+[Issue #50](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/50)
+provides the bounded inspection route when a package version or declared-script
+set changes. Playwright browser binaries remain a separate, explicit install
+for work that needs rendered browser evidence.
+
 Static reading begins directly from the source surfaces. Generated
 publication, visual, and tool artifacts have named commands and remain in
 ignored directories.
