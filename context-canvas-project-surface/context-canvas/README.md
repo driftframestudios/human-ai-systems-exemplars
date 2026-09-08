@@ -31,6 +31,24 @@ The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) sup
 | Full-view and collaboration routes | The generated primary file tree carries selected `/prototypes/.../` and `/collaboration/.../` files. Adjacent full-view links use those primary-site routes rather than opening the primary site inside an iframe. |
 | Schemas | A schema's `$id` remains its semantic identity. `schemas.radiantnull.com` is observed retrieval; `schemas.vik.guru` remains intended until its exact-version responses pass their own live check. |
 
+The project-level [`asset-inventory.json`](../asset-inventory.json) supplies the
+semantic family, visitor job, accessibility owner, provenance, and recovery
+facts used when the production assembler resolves selected images. The primary
+and iframe manifests continue to select membership; the generated deployment
+manifest joins each selected public projection back to one canonical source
+asset and exact source digest.
+
+The accepted Registry visual masters remain the source-level reference for
+dependency-free visitor SVGs: the
+[`question route map`](../img/plot/registry_question_route_map.svg),
+[`narrative relationship map`](../img/plot/registry_narrative_relationship_map.svg),
+and
+[`narrative-to-execution sequence`](../img/plot/registry_narrative_to_execution_method_sequence.svg).
+Each one carries a useful title and description, semantic groups, direct text,
+and visual relationships that remain legible without color alone. The later
+[`goal-fidelity operating field`](../img/plot/registry_goal_fidelity_operating_field.svg)
+extends the same selected `img/plot/` family.
+
 ## Runtime contract
 
 - Plain HTML owns document meaning, reading order, links, fallback content, and structured metadata.
