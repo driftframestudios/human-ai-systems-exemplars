@@ -15,6 +15,7 @@ import {
   listRegularFiles,
   navigationObservation,
   observeIframeRuntimeCapabilities,
+  projectIframeExitLinks,
   scanHtmlClosure,
   scanPackageClosure,
   sha256,
@@ -72,7 +73,12 @@ const expectedActivationStandings = new Set([
   "reader_job_required",
   "visitor_copy_review",
 ]);
-const supportedSandboxTokens = new Set(["allow-downloads", "allow-scripts"]);
+const supportedSandboxTokens = new Set([
+  "allow-downloads",
+  "allow-popups",
+  "allow-popups-to-escape-sandbox",
+  "allow-scripts",
+]);
 const supportedPermissionsPolicyFeatures = new Set(["clipboard-write"]);
 const supportedHeldCapabilities = new Set(["native-modals"]);
 const expectedRouteAliases = new Map([
@@ -289,18 +295,6 @@ export function deriveConditioningFieldProjection(html) {
     "",
     "Unresolved Conditioning Field JSON-LD public reference",
   );
-  projected = replacePatternOnce(
-    projected,
-    /^\s*<a href="conditioning-field\.html" target="_blank" rel="noopener noreferrer">Open the full field · new tab<\/a>\r?\n/gmu,
-    "",
-    "Embedded full-view popup exit",
-  );
-  projected = replacePatternOnce(
-    projected,
-    /<a href="prompt-side-conditions-practice\.html#sources-title" target="_blank" rel="noopener noreferrer">Read the public research and field-source register <span class="new-tab-note">\(opens in a new tab\)<\/span><\/a>/gu,
-    "Read the public research and field-source register",
-    "Embedded research popup exit",
-  );
   projected = replaceExactOnce(
     projected,
     "  <noscript><style>\n",
@@ -310,10 +304,9 @@ export function deriveConditioningFieldProjection(html) {
 
   if (
     /\b(?:canvas-shell\.css|canvas-shell\.js|visitor-boundary-contract\.js)\b/u.test(projected) ||
-    /\{\{PUBLIC_URL_[A-Z0-9_]+\}\}/u.test(projected) ||
-    /\btarget=["']_blank["']/iu.test(projected)
+    /\{\{PUBLIC_URL_[A-Z0-9_]+\}\}/u.test(projected)
   ) {
-    fail("Conditioning Field embedded projection retained shared shell, unresolved public-reference, or popup navigation state.");
+    fail("Conditioning Field embedded projection retained a shared shell or unresolved public reference.");
   }
   if (
     /\bpostMessage\s*\(/u.test(projected) ||
@@ -539,6 +532,12 @@ export function validateRouteContract(contract, sourceManifest) {
       `Route ${route.id} held capabilities`,
     );
     if (
+      route.carrier_policy.sandbox_tokens.includes("allow-popups-to-escape-sandbox") &&
+      !route.carrier_policy.sandbox_tokens.includes("allow-popups")
+    ) {
+      fail(`Route ${route.id} cannot let popups escape without allowing popups.`);
+    }
+    if (
       route.activation_standing === "eligible" &&
       route.carrier_policy.held_capabilities.length > 0
     ) {
@@ -635,7 +634,7 @@ export function validateRouteContract(contract, sourceManifest) {
       }
     } else if (route.kind === "prototype") {
       if (route.source_root !== undefined || route.projection !== undefined) {
-        fail(`Core prototype route ${route.id} must retain its current-pack source owner and byte-identical projection.`);
+        fail(`Core prototype route ${route.id} must retain its current-pack source owner.`);
       }
       const source = sourceById.get(route.id);
       if (!source) {
@@ -730,6 +729,46 @@ export function validateRouteContract(contract, sourceManifest) {
       portablePackageSources.add(portableSource);
       portableOutputPaths.add(portablePackageOutputPath);
     }
+
+    const seenNavigationReferences = new Set();
+    const navigationRewrites = route.navigation_rewrites ?? [];
+    if (!Array.isArray(navigationRewrites)) {
+      fail(`Route ${route.id} navigation_rewrites must be an array.`);
+    }
+    if (route.kind === "hub" && navigationRewrites.length > 0) {
+      fail("The Core hub derives its sibling routes and must not declare navigation rewrites.");
+    }
+    for (const rewrite of navigationRewrites) {
+      if (
+        !isObject(rewrite) ||
+        typeof rewrite.source_reference !== "string" ||
+        rewrite.source_reference.length === 0 ||
+        rewrite.source_reference.startsWith("/") ||
+        rewrite.source_reference.startsWith("//") ||
+        /^[a-z][a-z0-9+.-]*:/iu.test(rewrite.source_reference) ||
+        rewrite.source_reference.includes("\\") ||
+        /[\u0000-\u001f\u007f]/u.test(rewrite.source_reference)
+      ) {
+        fail(`Route ${route.id} navigation rewrite needs a repository-local source reference.`);
+      }
+      if (seenNavigationReferences.has(rewrite.source_reference)) {
+        fail(`Route ${route.id} repeats navigation source ${rewrite.source_reference}.`);
+      }
+      seenNavigationReferences.add(rewrite.source_reference);
+      let publicReference;
+      try {
+        publicReference = new URL(rewrite.public_reference);
+      } catch {
+        fail(`Route ${route.id} has an invalid public navigation reference.`);
+      }
+      if (
+        publicReference.origin !== "https://vik.guru" ||
+        publicReference.username !== "" ||
+        publicReference.password !== ""
+      ) {
+        fail(`Route ${route.id} navigation rewrites must use https://vik.guru/.`);
+      }
+    }
   }
 
   if (hubCount !== 1) {
@@ -783,10 +822,13 @@ export function validateRouteContract(contract, sourceManifest) {
   return true;
 }
 
-function validateCarrierPolicyAgainstCapabilities(route, capabilities) {
+function validateCarrierPolicyAgainstCapabilities(route, capabilities, exitProjection) {
   const observed = new Set(capabilities);
   const expectedSandbox = [];
   if (observed.has("file-download")) expectedSandbox.push("allow-downloads");
+  if (exitProjection.exit_links > 0) {
+    expectedSandbox.push("allow-popups", "allow-popups-to-escape-sandbox");
+  }
   if (observed.has("executable-scripts")) expectedSandbox.push("allow-scripts");
   const expectedPermissions = observed.has("clipboard-write") ? ["clipboard-write"] : [];
   const expectedHeld = observed.has("native-modals") ? ["native-modals"] : [];
@@ -806,6 +848,26 @@ function validateCarrierPolicyAgainstCapabilities(route, capabilities) {
     expectedHeld,
     `Route ${route.id} held capabilities for observed runtime`,
   );
+}
+
+function rewriteDeclaredNavigation(html, route) {
+  let projected = html;
+  const receipts = [];
+  for (const rewrite of route.navigation_rewrites ?? []) {
+    projected = replaceSingleHref(
+      projected,
+      rewrite.source_reference,
+      rewrite.public_reference,
+      `Route ${route.id} navigation projection`,
+    );
+    receipts.push({
+      kind: "primary_site_navigation",
+      source_reference: rewrite.source_reference,
+      projected_reference: rewrite.public_reference,
+      replacements: 1,
+    });
+  }
+  return { html: projected, receipts };
 }
 
 function replaceSingleHref(html, sourceHref, projectedHref, label) {
@@ -892,16 +954,27 @@ export async function createPackagePlan(options = {}) {
     );
     const sourceBytes = await readFile(sourcePath);
     const sourceText = sourceBytes.toString("utf8");
-    const projectionText = route.kind === "hub"
+    const baseProjectionText = route.kind === "hub"
       ? rewriteHub(sourceText, contract)
       : route.kind === "supplemental_instrument"
         ? deriveConditioningFieldProjection(sourceText)
         : sourceText;
-    const projectionBytes = route.kind === "prototype"
+    const navigationProjection = rewriteDeclaredNavigation(baseProjectionText, route);
+    const exitProjection = route.kind === "hub"
+      ? {
+          html: navigationProjection.html,
+          exit_links: 0,
+          rewritten_links: 0,
+          dynamic_exit_templates: 0,
+          runtime_adapter: false,
+        }
+      : projectIframeExitLinks(navigationProjection.html);
+    const projectionText = exitProjection.html;
+    const projectionBytes = projectionText === sourceText
       ? sourceBytes
       : Buffer.from(projectionText, "utf8");
     const runtimeCapabilities = observeIframeRuntimeCapabilities(projectionText);
-    validateCarrierPolicyAgainstCapabilities(route, runtimeCapabilities);
+    validateCarrierPolicyAgainstCapabilities(route, runtimeCapabilities, exitProjection);
     if (route.kind === "prototype" && sourceBytes.byteLength !== sourceById.get(route.id).size_bytes) {
       fail(
         `HTML source for route ${route.id} has ${sourceBytes.byteLength} bytes; ` +
@@ -965,6 +1038,17 @@ export async function createPackagePlan(options = {}) {
       closure,
       runtimeCapabilities,
       packageReceipts,
+      projectionRewrites: [
+        ...navigationProjection.receipts,
+        {
+          kind: "iframe_exit_behavior",
+          exit_links: exitProjection.exit_links,
+          rewritten_links: exitProjection.rewritten_links,
+          dynamic_exit_templates: exitProjection.dynamic_exit_templates,
+          runtime_adapter: exitProjection.runtime_adapter,
+        },
+      ],
+      exitProjection,
     });
   }
 
@@ -976,6 +1060,7 @@ export async function createPackagePlan(options = {}) {
       reading.routeOutputDirectory,
       expectedOutputPaths,
       contract.base_path,
+      { scanMarkupContextsOnly: true },
     );
     if (
       reading.route.activation_standing === "eligible" &&
@@ -1004,7 +1089,11 @@ export async function createPackagePlan(options = {}) {
         ? "navigation_adapted"
         : reading.route.kind === "supplemental_instrument"
           ? "embedded_single_file"
-          : "source_identical",
+          : reading.exitProjection.rewritten_links > 0 ||
+              reading.projectionRewrites.some(({ kind }) => kind === "primary_site_navigation")
+            ? "navigation_adapted"
+            : "source_identical",
+      projection_rewrites: reading.projectionRewrites,
       source_bytes: reading.sourceBytes.byteLength,
       source_sha256: sha256(reading.sourceBytes),
       projection_bytes: reading.projectionBytes.byteLength,
@@ -1034,9 +1123,12 @@ export async function createPackagePlan(options = {}) {
     },
     package_contract: {
       primary_routes: routeReceipts.length,
-      prototype_routes: routeReceipts.filter(({ projection_kind }) => projection_kind === "source_identical").length,
+      prototype_routes: routeReadings.filter(({ route }) => route.kind === "prototype").length,
       supplemental_instrument_routes: routeReceipts.filter(
         ({ projection_kind }) => projection_kind === "embedded_single_file",
+      ).length,
+      navigation_adapted_routes: routeReceipts.filter(
+        ({ projection_kind }) => projection_kind === "navigation_adapted",
       ).length,
       generated_files: generatedFileCount,
       compatibility_aliases_generated: false,

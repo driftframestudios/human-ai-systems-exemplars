@@ -40,3 +40,12 @@ Current delivery families are:
   Conditioning Field, declared by the current Core pack;
 - `canvas` — non-Core companions embedded by Context Canvas receivers,
   declared by [`canvas/public-iframe-route-manifest-v1.json`](canvas/public-iframe-route-manifest-v1.json).
+
+Authored source keeps ordinary links ordinary. During packaging, each generated
+iframe document gives user-activated exits a secure separate-tab destination;
+fragment navigation, downloads, buttons, and other in-document actions retain
+their source behavior. A projected activation adapter applies the same rule to
+eligible links created at runtime. The route receipt records the observed exits,
+and the matching parent carrier grants `allow-popups` with
+`allow-popups-to-escape-sandbox` so the requested destination opens as a
+top-level page rather than inside the embedded document.

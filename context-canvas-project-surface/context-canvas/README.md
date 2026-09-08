@@ -131,16 +131,23 @@ process environment.
 
 Activated iframe carriers use their public route manifests directly. Their
 `src` values point to stable aliases in either the `/v1/core/` or
-`/v1/canvas/` family, while each adjacent full-view `href` continues to open
-the repository-local base prototype that becomes a primary-site route. A
+`/v1/canvas/` family, while each adjacent full-view `href` remains an ordinary
+link to the repository-local base prototype that becomes a primary-site route.
+Inside generated iframe documents, eligible onward links open a secure separate
+top-level tab so the destination cannot replace or nest inside the carrier.
+Fragments, downloads, and page controls keep their in-document behavior. A
 contextual title, intentional lazy loading, exact route-matched sandbox,
 narrow Permissions Policy when needed, and `referrerpolicy="no-referrer"`
 keep the behavioral boundary visible in authored source. The multi-route Core
 pack index opens as a non-embedded full view; this keeps its sibling
 destinations from inheriting one shared iframe policy. The Conditioning Field
 is a supplemental Context Canvas instrument in the Core delivery family: its
-hosted projection uses `allow-scripts` only, while its adjacent full view
-remains `conditioning-field.html`.
+hosted projection uses scripts and projected popup exits, while its adjacent
+full view remains the ordinary `conditioning-field.html` link. The About
+cartography remains a recorded embedded-document exception with five labelled
+separate-tab links. An Accessible Forms reading has no dedicated route yet, so
+its six retained catalog cards present a clear preparation state instead of a
+placeholder destination.
 
 The dependency-free materializer retains a tested hosted-iframe twin seam for
 an explicitly late-bound future receiver. Current manifest-owned iframe

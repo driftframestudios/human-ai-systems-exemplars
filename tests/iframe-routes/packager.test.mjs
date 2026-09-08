@@ -91,9 +91,19 @@ test("the route plan preserves the Core population and adds one supplemental ins
   );
 
   for (const route of prototypeRoutes) {
-    const source = await readFile(path.join(defaultPaths.sourceRoot, route.source_file));
+    const source = await readFile(path.join(defaultPaths.sourceRoot, route.source_file), "utf8");
     const projection = firstPlan.outputFiles.get(routeIndexPath(firstPlan.contract, route));
-    assert.ok(projection.equals(source), `${route.id} remains byte-identical`);
+    const receipt = firstPlan.receipt.routes.find(({ id }) => id === route.id);
+    assert.notEqual(projection.toString("utf8"), source, `${route.id} receives iframe-context navigation`);
+    assert.equal(receipt.projection_kind, "navigation_adapted");
+    assert.ok(receipt.navigation.exit_links > 0, `${route.id} has at least one projected exit`);
+    assert.equal(receipt.navigation.exit_links, receipt.navigation.new_tab_exit_links);
+    assert.equal(receipt.navigation.exit_links, receipt.navigation.secure_new_tab_exit_links);
+    assert.doesNotMatch(
+      source,
+      /<a\b[^>]*\btarget=["']_blank["'][^>]*>/iu,
+      `${route.id} leaves standalone link context with the visitor`,
+    );
   }
 
   const sourceManifest = await readFile(defaultPaths.sourceManifestPath);
@@ -121,9 +131,10 @@ test("the Conditioning Field projection is deterministic, self-contained, and em
   const secondProjection = secondPlan.outputFiles.get("conditioning-field/index.html");
   const projection = firstProjection.toString("utf8");
   const receipt = firstPlan.receipt.routes.find(({ id }) => id === "conditioning-field");
+  const derived = deriveConditioningFieldProjection(source);
 
   assert.ok(firstProjection.equals(secondProjection));
-  assert.equal(deriveConditioningFieldProjection(source), projection);
+  assert.notEqual(derived, projection);
   assert.notEqual(projection, source);
   assert.match(projection, /<style data-iframe-route-projection>/u);
   assert.match(projection, /id=["']mainContent["']/u);
@@ -141,13 +152,20 @@ test("the Conditioning Field projection is deterministic, self-contained, and em
     /canvas-shell\.css|canvas-shell\.js|visitor-boundary-contract\.js/u,
   );
   assert.doesNotMatch(projection, /\{\{PUBLIC_URL_[A-Z0-9_]+\}\}/u);
-  assert.doesNotMatch(projection, /\btarget=["']_blank["']/iu);
+  assert.match(
+    projection,
+    /href="https:\/\/vik\.guru\/conditioning-field\.html" target="_blank" rel="noopener noreferrer"/u,
+  );
+  assert.match(
+    projection,
+    /href="https:\/\/vik\.guru\/prompt-side-conditions-practice\.html#sources-title" target="_blank" rel="noopener noreferrer"/u,
+  );
   assert.deepEqual(scanHtmlClosure(projection, new Set(), "Conditioning Field projection"), {
     inline_references: 0,
     package_targets: [],
   });
   assert.deepEqual(receipt.carrier_policy, {
-    sandbox_tokens: ["allow-scripts"],
+    sandbox_tokens: ["allow-popups", "allow-popups-to-escape-sandbox", "allow-scripts"],
     permissions_policy: [],
     held_capabilities: [],
   });
@@ -156,6 +174,9 @@ test("the Conditioning Field projection is deterministic, self-contained, and em
   assert.equal(receipt.activation_eligible, true);
   assert.deepEqual(receipt.static_resource_closure.package_files, []);
   assert.deepEqual(receipt.navigation.unresolved_local_links, []);
+  assert.equal(receipt.navigation.exit_links, 2);
+  assert.equal(receipt.navigation.new_tab_exit_links, 2);
+  assert.equal(receipt.navigation.secure_new_tab_exit_links, 2);
 
   const messagingSource = source.replace(
     "</body>",
@@ -246,16 +267,20 @@ test("the hub adapts only its route and manifest href values", async () => {
   );
 });
 
-test("the route receipt exposes unresolved local navigation without rewriting it", async () => {
+test("the route receipt resolves declared local exits to the primary visitor surface", async () => {
   const plan = await createPackagePlan();
   const byId = new Map(plan.receipt.routes.map((route) => [route.id, route]));
 
-  assert.deepEqual(byId.get("poda").navigation.unresolved_local_links, [
+  assert.deepEqual(byId.get("poda").navigation.unresolved_local_links, []);
+  assert.deepEqual(
+    byId.get("poda").projection_rewrites.find(({ kind }) => kind === "primary_site_navigation"),
     {
-      href: "../context-canvas-project-surface/context-canvas/poda.html",
-      projected_target: "context-canvas-project-surface/context-canvas/poda.html",
+      kind: "primary_site_navigation",
+      source_reference: "../context-canvas-project-surface/context-canvas/poda.html",
+      projected_reference: "https://vik.guru/poda.html",
+      replacements: 1,
     },
-  ]);
+  );
   assert.deepEqual(byId.get("strategy-canvas").navigation.unresolved_local_links, []);
   const strategySchema = await readFile(path.join(
     defaultPaths.sourceRoot,
@@ -281,12 +306,15 @@ test("the route receipt exposes unresolved local navigation without rewriting it
       sha256: sha256(strategyEvidence),
     },
   ]);
-  assert.deepEqual(byId.get("core-architecture-family-index").navigation.unresolved_local_links, [
-    {
-      href: "../context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html",
-      projected_target: "context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html",
-    },
-  ]);
+  assert.deepEqual(byId.get("core-architecture-family-index").navigation.unresolved_local_links, []);
+  assert.equal(
+    byId.get("core-architecture-family-index").projection_rewrites.some(
+      ({ kind, projected_reference }) =>
+        kind === "primary_site_navigation" &&
+        projected_reference === "https://vik.guru/core-architectures-orientation-index.html",
+    ),
+    true,
+  );
   assert.equal(byId.get("heart-chart").activation_eligible, true);
   assert.deepEqual(byId.get("heart-chart").navigation.unresolved_local_links, []);
 });
@@ -307,7 +335,7 @@ test("every route receipt carries its observed minimal carrier policy", async ()
     "file-download",
   ]);
   assert.deepEqual(byId.get("heart-chart").carrier_policy, {
-    sandbox_tokens: ["allow-downloads", "allow-scripts"],
+    sandbox_tokens: ["allow-downloads", "allow-popups", "allow-popups-to-escape-sandbox", "allow-scripts"],
     permissions_policy: ["clipboard-write"],
     held_capabilities: [],
   });
@@ -318,7 +346,7 @@ test("every route receipt carries its observed minimal carrier policy", async ()
     "file-download",
   ]);
   assert.deepEqual(byId.get("strategy-canvas").carrier_policy, {
-    sandbox_tokens: ["allow-downloads", "allow-scripts"],
+    sandbox_tokens: ["allow-downloads", "allow-popups", "allow-popups-to-escape-sandbox", "allow-scripts"],
     permissions_policy: ["clipboard-write"],
     held_capabilities: [],
   });
@@ -328,7 +356,7 @@ test("every route receipt carries its observed minimal carrier policy", async ()
     "file-download",
   ]);
   assert.deepEqual(byId.get("first-responsible-version-matrix").carrier_policy, {
-    sandbox_tokens: ["allow-downloads", "allow-scripts"],
+    sandbox_tokens: ["allow-downloads", "allow-popups", "allow-popups-to-escape-sandbox", "allow-scripts"],
     permissions_policy: ["clipboard-write"],
     held_capabilities: [],
   });
@@ -339,7 +367,7 @@ test("every route receipt carries its observed minimal carrier policy", async ()
       "file-download",
     ]);
     assert.deepEqual(byId.get(id).carrier_policy, {
-      sandbox_tokens: ["allow-downloads", "allow-scripts"],
+      sandbox_tokens: ["allow-downloads", "allow-popups", "allow-popups-to-escape-sandbox", "allow-scripts"],
       permissions_policy: ["clipboard-write"],
       held_capabilities: [],
     });
@@ -355,10 +383,17 @@ test("every route receipt carries its observed minimal carrier policy", async ()
       carrier_policy.permissions_policy.includes("clipboard-write")).length,
     21,
   );
+  for (const route of plan.receipt.routes.filter(({ id }) => id !== "core-architectures-pack")) {
+    assert.equal(route.carrier_policy.sandbox_tokens.includes("allow-popups"), true);
+    assert.equal(
+      route.carrier_policy.sandbox_tokens.includes("allow-popups-to-escape-sandbox"),
+      true,
+    );
+  }
   assert.equal(
     plan.receipt.routes.some(({ carrier_policy }) =>
       carrier_policy.sandbox_tokens.some((token) =>
-        ["allow-same-origin", "allow-forms", "allow-popups", "allow-top-navigation"].includes(token))),
+        ["allow-same-origin", "allow-forms", "allow-top-navigation", "allow-storage-access-by-user-activation"].includes(token))),
     false,
   );
 });
@@ -430,7 +465,7 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   await writePackagePlan(plan, temporaryRoot);
   const verification = await verifyPackagePlan(plan, temporaryRoot);
 
-  assert.deepEqual(verification, { files: 27, bytes: 2716932 });
+  assert.deepEqual(verification, { files: 27, bytes: 2729179 });
   await writeFile(path.join(temporaryRoot, "unexpected.txt"), "outside the plan\n");
   await assert.rejects(
     verifyPackagePlan(plan, temporaryRoot),

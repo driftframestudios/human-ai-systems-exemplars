@@ -92,7 +92,7 @@ const expectedCarrierInventory = [
   [
     "context-canvas-project-surface/context-canvas/grammar-family.html",
     "https://iframes.vik.guru/v1/core/strategy-canvas/",
-    "Interactive Strategy Canvas collaboration workbench",
+    "Interactive canonical Strategy Canvas worksheet",
     "lazy",
   ],
   [
@@ -524,7 +524,7 @@ test("manifest-owned prototype carriers keep a minimal explicit iframe boundary"
     assert.equal(attributeValue(carrier.tag, "data-public-src"), null, `${label} uses its active stable route directly`);
     assert.doesNotMatch(
       sandbox,
-      /allow-(?:same-origin|forms|popups|top-navigation|storage-access)/,
+      /allow-(?:same-origin|forms|top-navigation|storage-access)/,
       `${label} avoids unrelated sandbox capabilities`,
     );
     assert.deepEqual(
@@ -556,7 +556,10 @@ test("manifest-owned prototype carriers keep a minimal explicit iframe boundary"
   const conditioningCarrier = carriers.find(({ src }) => src === conditioningRoute);
   assert.ok(conditioningCarrier, "AI Systems embeds the hosted Conditioning Field route");
   assert.equal(conditioningCarrier.page, "ai-systems.html");
-  assert.equal(attributeValue(conditioningCarrier.tag, "sandbox"), "allow-scripts");
+  assert.equal(
+    attributeValue(conditioningCarrier.tag, "sandbox"),
+    "allow-popups allow-popups-to-escape-sandbox allow-scripts",
+  );
   assert.equal(attributeValue(conditioningCarrier.tag, "allow"), null);
   assert.equal(attributeValue(conditioningCarrier.tag, "referrerpolicy"), "no-referrer");
   assert.match(
