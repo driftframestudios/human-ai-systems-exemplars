@@ -626,15 +626,39 @@ async function canonicalSelectionStateVisualContract(browser, url) {
           const forcedColorState = await selected.evaluate((element) => {
             const surface = element.querySelector(".sc-dimension-label-surface");
             const choice = document.querySelector('[data-selection-route="chooser"][aria-current="true"]');
-            return {
+            const unselected = document.querySelector('[data-selection-route="chart"]:not([aria-current="true"])');
+            const unselectedSurface = unselected.querySelector(".sc-dimension-label-surface");
+            const unselectedText = unselected.querySelector(".sc-dimension-label");
+            const referenceSurface = document.createElementNS(element.ownerSVGElement.namespaceURI, "rect");
+            const referenceText = document.createElementNS(element.ownerSVGElement.namespaceURI, "text");
+            referenceSurface.style.fill = "Canvas";
+            referenceSurface.style.stroke = "CanvasText";
+            referenceText.style.fill = "CanvasText";
+            element.ownerSVGElement.append(referenceSurface, referenceText);
+            const receipt = {
               focusIsVisible: element.matches(":focus-visible"),
               surfaceStrokeWidth: Number.parseFloat(getComputedStyle(surface).strokeWidth),
               choiceBorderStyle: getComputedStyle(choice).borderStyle,
+              unselectedSurfaceFill: getComputedStyle(unselectedSurface).fill,
+              unselectedSurfaceStroke: getComputedStyle(unselectedSurface).stroke,
+              unselectedTextFill: getComputedStyle(unselectedText).fill,
+              canvasFill: getComputedStyle(referenceSurface).fill,
+              canvasTextStroke: getComputedStyle(referenceSurface).stroke,
+              canvasTextFill: getComputedStyle(referenceText).fill,
             };
+            referenceSurface.remove();
+            referenceText.remove();
+            return receipt;
           });
           assert(forcedColorState.focusIsVisible, "Forced-colors observation should retain keyboard focus.");
           assert(forcedColorState.surfaceStrokeWidth >= 4, "Forced colors should retain the selected, focused chart-label outline.");
           assert(forcedColorState.choiceBorderStyle !== "none", "Forced colors should retain the matching chooser border.");
+          assert(
+            forcedColorState.unselectedSurfaceFill === forcedColorState.canvasFill &&
+              forcedColorState.unselectedSurfaceStroke === forcedColorState.canvasTextStroke &&
+              forcedColorState.unselectedTextFill === forcedColorState.canvasTextFill,
+            `Forced colors should give an unselected chart label the system Canvas and CanvasText pair. ${JSON.stringify(forcedColorState)}`
+          );
           await section.screenshot({ path: resolve(runDir, "canonical-mobile-selection-forced-colors-focus.png") });
         }
         assertTelemetry(telemetry);

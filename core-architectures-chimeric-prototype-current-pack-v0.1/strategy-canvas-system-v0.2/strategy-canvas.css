@@ -292,12 +292,14 @@
   }
 
   @media (forced-colors: active) {
-    .sc-series-line, .sc-grid-line, .sc-axis, .sc-marker, .sc-selection-ring, .sc-dimension-label-surface { forced-color-adjust: auto; }
+    .sc-series-line, .sc-grid-line, .sc-axis, .sc-marker, .sc-selection-ring, .sc-dimension-label-surface, .sc-dimension-label { forced-color-adjust: auto; }
     .sc-handle[data-series="current"] .sc-marker { fill: CanvasText; stroke: CanvasText; }
     .sc-handle[data-series="desired"] .sc-marker { fill: Canvas; stroke: LinkText; }
     .sc-handle[data-series="goodEnough"] .sc-marker { fill: Canvas; stroke: Highlight; }
     .sc-action-cell rect { fill: Canvas; stroke: CanvasText; forced-color-adjust: auto; }
     .sc-action-label { fill: CanvasText; }
+    .sc-dimension-label-surface { fill: Canvas; stroke: CanvasText; }
+    .sc-dimension-label { fill: CanvasText; }
     .sc-dimension-hit[data-selected="true"] .sc-dimension-label-surface,
     .sc-dimension-hit:focus-visible .sc-dimension-label-surface { fill: Canvas; stroke: Highlight; }
     .sc-dimension-current-marker { fill: CanvasText; }
