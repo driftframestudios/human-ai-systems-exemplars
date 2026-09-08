@@ -15,7 +15,7 @@ import {
 
 const artifactNames = {
   impact: "impact-map-chimeric-prototype-v0.1.5.html",
-  service: "service-design-blueprint-chimeric-prototype-v0.2.4.html",
+  service: "service-design-blueprint-chimeric-prototype-v0.2.5.html",
   heart: "heart-chart-chimeric-prototype-v0.1.6.html",
   specification: "specification-by-example-chimeric-prototype-v0.1.6.html"
 };
@@ -151,6 +151,23 @@ async function assertNoScriptPromptCapsule(browser, origin, route, promptSelecto
   } finally {
     await context.close();
   }
+}
+
+async function assertPromptCapsuleKeyOrderStability(page, apiName) {
+  const receipt = await page.evaluate(name => {
+    const reverseKeys = value => {
+      if (Array.isArray(value)) return value.map(reverseKeys);
+      if (value && typeof value === "object") {
+        return Object.fromEntries(Object.keys(value).reverse().map(key => [key, reverseKeys(value[key])]));
+      }
+      return value;
+    };
+    const api = globalThis[name];
+    const before = { fingerprint: api.promptCapsuleFingerprint(), markdown: api.promptCapsule() };
+    api.importState(reverseKeys(api.getState()));
+    return { before, after: { fingerprint: api.promptCapsuleFingerprint(), markdown: api.promptCapsule() } };
+  }, apiName);
+  assert.deepEqual(receipt.after, receipt.before, "object key order does not change represented-state identity or Markdown");
 }
 
 async function impactPath(browser, origin, route) {
@@ -303,7 +320,8 @@ async function impactPath(browser, origin, route) {
 }
 
 async function servicePath(browser, origin, route) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPrompt;
   try {
     const initial = await textJson(page, "#jsonOut");
     const blueprint = initial.service_blueprint;
@@ -314,15 +332,41 @@ async function servicePath(browser, origin, route) {
       assert.equal(await page.locator(`[data-action="remove-layer"][data-id="${layer.id}"]`).isDisabled(), true, `${layer.id} should remain required`);
     }
 
+    initialPrompt = await exercisePromptCapsule(page, {
+      apiName: "serviceDesignBlueprint",
+      copySelector: "#copyPrompt",
+      downloadSelector: "#downloadPrompt",
+      filename: "service-design-blueprint.prompt-capsule.r0.2.5.skill-assisted.md",
+      loopIds: ["visitor-surface-change", "repository-reentry"],
+      promptSelector: "#promptOut",
+      stateContract: "service-design-blueprint-state.v0.2",
+      title: "Service-design Blueprint",
+      version: "0.2.5",
+    });
+    assert.equal(initialPrompt.projection.stages.length, blueprint.stages.length, "the capsule represents every stage");
+    assert.equal(initialPrompt.projection.layers.length, blueprint.layers.length, "the capsule represents every service lane");
+    assert.equal(initialPrompt.projection.cells.length, blueprint.cells.length, "the capsule represents every service cell");
+    assert.equal(initialPrompt.projection.sharedAssets.length, blueprint.shared_assets.length, "the capsule represents every shared asset");
+    assert.equal(initialPrompt.projection.views.length, initial.view_state.views.length, "the capsule represents every accepted focus view");
+    await assertPromptCapsuleKeyOrderStability(page, "serviceDesignBlueprint");
+
+    const cellId = initial.view_state.views[0].selected_cell_id;
+    assert.ok(blueprint.cells.some(cell => cell.id === cellId), "The initial focus view should select a current stage × layer cell");
+    const selectionProbeId = blueprint.cells.find(cell => cell.id !== cellId).id;
+    await page.locator(`[data-action="select-cell"][data-id="${selectionProbeId}"]`).click();
+    assert.deepEqual(await page.evaluate(() => ({
+      fingerprint: window.serviceDesignBlueprint.promptCapsuleFingerprint(),
+      markdown: window.serviceDesignBlueprint.promptCapsule(),
+    })), { fingerprint: initialPrompt.fingerprint, markdown: initialPrompt.plain });
+
     await page.locator("#addStage").click();
     await page.locator("#addLayer").click();
     const expanded = await textJson(page, "#jsonOut");
     assert.equal(expanded.service_blueprint.cells.length, expanded.service_blueprint.stages.length * expanded.service_blueprint.layers.length, "Adding a stage and layer should complete their cell intersections");
 
-    const cellId = initial.view_state.views[0].selected_cell_id;
-    assert.ok(blueprint.cells.some(cell => cell.id === cellId), "The initial focus view should select a current stage × layer cell");
     const literal = "Visible <img src=x onerror=globalThis.__coreProbe=1> service consequence";
     await page.locator(`[data-action="select-cell"][data-id="${cellId}"]`).click();
+    const beforeLiteralFingerprint = await page.evaluate(() => window.serviceDesignBlueprint.promptCapsuleFingerprint());
     await page.locator("#cellText").fill(literal);
     await page.locator("#cellText").blur();
     const edited = await textJson(page, "#jsonOut");
@@ -335,6 +379,12 @@ async function servicePath(browser, origin, route) {
     }
     assert.match(await page.locator(`[data-action="select-cell"][data-id="${cellId}"] .cell-preview`).textContent(), /Visible <img/);
     assert.equal(await page.evaluate(() => globalThis.__coreProbe), undefined);
+    const afterLiteralPrompt = await page.evaluate(() => ({
+      fingerprint: window.serviceDesignBlueprint.promptCapsuleFingerprint(),
+      markdown: window.serviceDesignBlueprint.promptCapsule(),
+    }));
+    assert.notEqual(afterLiteralPrompt.fingerprint, beforeLiteralFingerprint);
+    assert.match(afterLiteralPrompt.markdown, /Visible &lt;img src=x onerror=globalThis\.\\_\\_coreProbe=1&gt; service consequence/u);
 
     await page.locator('[data-action="hide-stage"][data-id="stage-intake"]').click();
     const focused = await textJson(page, "#jsonOut");
@@ -361,10 +411,147 @@ async function servicePath(browser, origin, route) {
     const recovered = await textJson(page, "#jsonOut");
     assert.equal(recovered.artifact_identity.display_name, compatible.artifact_identity.display_name);
     assert.equal(recovered.service_blueprint.cells.find(cell => cell.id === cellId).text, sentinel);
+
+    const privateExtensionReceipt = await page.evaluate(() => {
+      const api = window.serviceDesignBlueprint;
+      const before = { fingerprint: api.promptCapsuleFingerprint(), markdown: api.promptCapsule() };
+      const candidate = api.getState();
+      candidate.private_review_note = "local service note";
+      candidate.service_blueprint.private_review_note = "local body note";
+      candidate.view_state.private_review_note = "local view note";
+      api.importState(candidate);
+      const roundtrip = api.getState();
+      return {
+        before,
+        after: { fingerprint: api.promptCapsuleFingerprint(), markdown: api.promptCapsule() },
+        retained: [
+          roundtrip.private_review_note,
+          roundtrip.service_blueprint.private_review_note,
+          roundtrip.view_state.private_review_note,
+        ],
+      };
+    });
+    assert.deepEqual(privateExtensionReceipt.after, privateExtensionReceipt.before);
+    assert.deepEqual(privateExtensionReceipt.retained, ["local service note", "local body note", "local view note"]);
+
+    const multiViewReceipt = await page.evaluate(cell => {
+      const api = window.serviceDesignBlueprint;
+      const candidate = api.getState();
+      const second = structuredClone(candidate.view_state.views[0]);
+      second.id = "view-contract-second";
+      second.name = "Contract second view";
+      second.selected_cell_id = "";
+      second.selected_asset_id = "";
+      candidate.view_state.views.push(second);
+      api.importState(candidate);
+      const withSecond = { fingerprint: api.promptCapsuleFingerprint(), projection: api.promptCapsuleStateProjection() };
+      const selectionOnly = api.getState();
+      selectionOnly.view_state.views.find(view => view.id === "view-contract-second").selected_cell_id = cell;
+      api.importState(selectionOnly);
+      return {
+        withSecond,
+        afterSelection: { fingerprint: api.promptCapsuleFingerprint(), projection: api.promptCapsuleStateProjection() },
+      };
+    }, cellId);
+    assert.equal(multiViewReceipt.withSecond.projection.views.length, 2);
+    assert.deepEqual(multiViewReceipt.afterSelection, multiViewReceipt.withSecond);
+
+    await page.locator("#addStage").click();
+    await page.locator("#addLayer").click();
+    const withAddedTopology = await textJson(page, "#jsonOut");
+    const addedStage = withAddedTopology.service_blueprint.stages.at(-1);
+    const addedLayer = withAddedTopology.service_blueprint.layers.at(-1);
+    const addedStageCell = withAddedTopology.service_blueprint.cells.find(
+      candidate => candidate.stage_id === addedStage.id,
+    );
+    assert.ok(addedStageCell, "A new stage should own service-layer intersection cells");
+    for (const focusView of withAddedTopology.view_state.views) {
+      assert.equal(focusView.stage_order.filter(id => id === addedStage.id).length, 1);
+      assert.equal(focusView.layer_order.filter(id => id === addedLayer.id).length, 1);
+    }
+    await page.evaluate(({ stageId, selectedCellId }) => {
+      const api = window.serviceDesignBlueprint;
+      const candidate = api.getState();
+      const second = candidate.view_state.views.find(view => view.id === "view-contract-second");
+      second.hidden_stage_ids.push(stageId);
+      second.selected_cell_id = selectedCellId;
+      api.importState(candidate);
+    }, { stageId: addedStage.id, selectedCellId: addedStageCell.id });
+    const removeStageButton = page.locator(`[data-action="remove-stage"][data-id="${addedStage.id}"]`);
+    await removeStageButton.click();
+    assert.equal(await removeStageButton.textContent(), "Confirm removal");
+    await removeStageButton.click();
+    const withoutAddedStage = await textJson(page, "#jsonOut");
+    assert.equal(withoutAddedStage.service_blueprint.stages.some(({ id }) => id === addedStage.id), false);
+    for (const focusView of withoutAddedStage.view_state.views) {
+      assert.equal(focusView.stage_order.includes(addedStage.id), false);
+      assert.equal(focusView.hidden_stage_ids.includes(addedStage.id), false);
+      assert.ok(
+        !focusView.selected_cell_id
+          || withoutAddedStage.service_blueprint.cells.some(({ id }) => id === focusView.selected_cell_id),
+      );
+    }
+
+    const addedLayerCell = withoutAddedStage.service_blueprint.cells.find(
+      candidate => candidate.layer_id === addedLayer.id,
+    );
+    assert.ok(addedLayerCell, "The added layer should remain after removing the added stage");
+    await page.evaluate(({ layerId, selectedCellId }) => {
+      const api = window.serviceDesignBlueprint;
+      const candidate = api.getState();
+      const second = candidate.view_state.views.find(view => view.id === "view-contract-second");
+      second.hidden_layer_ids.push(layerId);
+      second.selected_cell_id = selectedCellId;
+      api.importState(candidate);
+    }, { layerId: addedLayer.id, selectedCellId: addedLayerCell.id });
+    const removeLayerButton = page.locator(`[data-action="remove-layer"][data-id="${addedLayer.id}"]`);
+    await removeLayerButton.click();
+    assert.equal(await removeLayerButton.textContent(), "Confirm removal");
+    await removeLayerButton.click();
+    const withoutAddedLayer = await textJson(page, "#jsonOut");
+    assert.equal(withoutAddedLayer.service_blueprint.layers.some(({ id }) => id === addedLayer.id), false);
+    for (const focusView of withoutAddedLayer.view_state.views) {
+      assert.equal(focusView.layer_order.includes(addedLayer.id), false);
+      assert.equal(focusView.hidden_layer_ids.includes(addedLayer.id), false);
+      assert.ok(
+        !focusView.selected_cell_id
+          || withoutAddedLayer.service_blueprint.cells.some(({ id }) => id === focusView.selected_cell_id),
+      );
+    }
+
+    await page.locator("#addAsset").click();
+    const withAddedAsset = await textJson(page, "#jsonOut");
+    const addedAsset = withAddedAsset.service_blueprint.shared_assets.at(-1);
+    await page.evaluate(assetId => {
+      const api = window.serviceDesignBlueprint;
+      const candidate = api.getState();
+      const second = candidate.view_state.views.find(view => view.id === "view-contract-second");
+      second.hidden_asset_ids.push(assetId);
+      second.selected_asset_id = assetId;
+      api.importState(candidate);
+    }, addedAsset.id);
+    const removeAssetButton = page.locator(`[data-action="remove-asset"][data-id="${addedAsset.id}"]`);
+    await removeAssetButton.click();
+    assert.equal(await removeAssetButton.textContent(), "Confirm removal");
+    await removeAssetButton.click();
+    const withoutAddedAsset = await textJson(page, "#jsonOut");
+    assert.equal(withoutAddedAsset.service_blueprint.shared_assets.some(({ id }) => id === addedAsset.id), false);
+    for (const focusView of withoutAddedAsset.view_state.views) {
+      assert.equal(focusView.hidden_asset_ids.includes(addedAsset.id), false);
+      assert.notEqual(focusView.selected_asset_id, addedAsset.id);
+    }
+    const serviceSelfImport = await page.evaluate(() => {
+      const api = window.serviceDesignBlueprint;
+      const before = api.getState();
+      api.importState(before);
+      return { before, after: api.getState() };
+    });
+    assert.deepEqual(serviceSelfImport.after, serviceSelfImport.before);
     assertTelemetry(telemetry);
   } finally {
     await context.close();
   }
+  await assertNoScriptPromptCapsule(browser, origin, route, "#promptOut", initialPrompt.plain);
 }
 
 async function heartPath(browser, origin, route) {

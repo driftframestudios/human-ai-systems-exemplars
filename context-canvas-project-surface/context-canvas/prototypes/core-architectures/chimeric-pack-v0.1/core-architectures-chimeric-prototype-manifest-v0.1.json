@@ -148,15 +148,16 @@
       "subtitle": "Shared Surface Priority Map",
       "family": "Shared Surfaces and Topology",
       "shape": "heatmap + shared assets below hard line",
-      "file": "shared-surface-priority-map-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "shared-surface-priority-map-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 106139,
+      "size_bytes": 174032,
       "previous": [
         "shared-surface-priority-map-chimeric-prototype-v0.1.html",
         "shared-surface-priority-map-chimeric-prototype-v0.1.1.html",
-        "shared-surface-priority-map-chimeric-prototype-v0.1.2.html"
+        "shared-surface-priority-map-chimeric-prototype-v0.1.2.html",
+        "shared-surface-priority-map-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -165,18 +166,19 @@
       "subtitle": "Service Topology Map",
       "family": "Shared Surfaces and Topology",
       "shape": "layered service blueprint matrix",
-      "file": "service-design-blueprint-chimeric-prototype-v0.2.4.html",
-      "version": "0.2.4",
+      "file": "service-design-blueprint-chimeric-prototype-v0.2.5.html",
+      "version": "0.2.5",
       "status": "current",
       "previous": [
         "service-design-blueprint-chimeric-prototype-v0.1.html",
         "service-design-blueprint-chimeric-prototype-v0.2.html",
         "service-design-blueprint-chimeric-prototype-v0.2.1.html",
         "service-design-blueprint-chimeric-prototype-v0.2.2.html",
-        "service-design-blueprint-chimeric-prototype-v0.2.3.html"
+        "service-design-blueprint-chimeric-prototype-v0.2.3.html",
+        "service-design-blueprint-chimeric-prototype-v0.2.4.html"
       ],
       "exists": true,
-      "size_bytes": 93083
+      "size_bytes": 182647
     },
     {
       "id": "ai-systems-service-blueprint",
@@ -184,15 +186,16 @@
       "subtitle": "Runtime–Knowledge–Infrastructure Topology Map",
       "family": "Shared Surfaces and Topology / AI Engineering Systems",
       "shape": "runtime/knowledge/infrastructure topology matrix",
-      "file": "ai-systems-service-blueprint-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "ai-systems-service-blueprint-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 66749,
+      "size_bytes": 127800,
       "previous": [
         "ai-systems-service-blueprint-chimeric-prototype-v0.1.html",
         "ai-systems-service-blueprint-chimeric-prototype-v0.1.1.html",
-        "ai-systems-service-blueprint-chimeric-prototype-v0.1.2.html"
+        "ai-systems-service-blueprint-chimeric-prototype-v0.1.2.html",
+        "ai-systems-service-blueprint-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -201,15 +204,16 @@
       "subtitle": "Feature Instantiation / Dependency Shape Map",
       "family": "Shared Surfaces and Topology",
       "shape": "view-based attachment map",
-      "file": "software-architecture-views-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "software-architecture-views-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 80200,
+      "size_bytes": 120977,
       "previous": [
         "software-architecture-views-chimeric-prototype-v0.1.html",
         "software-architecture-views-chimeric-prototype-v0.1.1.html",
-        "software-architecture-views-chimeric-prototype-v0.1.2.html"
+        "software-architecture-views-chimeric-prototype-v0.1.2.html",
+        "software-architecture-views-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
