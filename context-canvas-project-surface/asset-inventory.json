@@ -1,0 +1,566 @@
+{
+  "id": "prod-projection.asset-inventory.v1",
+  "version": "1",
+  "scope": "primary_and_iframe_selected_images",
+  "families": [
+    {
+      "id": "a3-stacked-cube.visual-derivative",
+      "selector": {
+        "prefix": "a3-stacked-cube-visual-system-bundle-v0.1/assets/"
+      },
+      "semantic_owner": "A3 Stacked Cube visual-system bundle",
+      "roles": [
+        {
+          "id": "prototype_visual_derivative",
+          "visitor_job": "Offer a portable view of the stacked-cube state model.",
+          "accessibility_text_owner": "The referring carrier and the SVG title and description."
+        }
+      ],
+      "build_consumers": [
+        "production_projection"
+      ],
+      "public_path_standing": {
+        "standing": "repository_source_path_preserved"
+      },
+      "source_relationship": {
+        "standing": "manifest_declared_derivative",
+        "canonical_source_path": "a3-stacked-cube-visual-system-bundle-v0.1/data/a3-stacked-cube-canonical-v0.1.json",
+        "relationship_owner_path": "a3-stacked-cube-visual-system-bundle-v0.1/a3-stacked-cube-visual-system-manifest-v0.1.json",
+        "profile_standing": "The bundle names these SVGs as static visual derivatives of its canonical model; a reproducible generator profile is not recorded."
+      },
+      "recovery_condition": "Restore the accepted bundle source and manifest, then rebuild the production projection.",
+      "semantic_authority_path": "a3-stacked-cube-visual-system-bundle-v0.1/a3-stacked-cube-visual-system-manifest-v0.1.json"
+    },
+    {
+      "id": "context-canvas.about-portrait",
+      "selector": {
+        "paths": [
+          "context-canvas-project-surface/context-canvas/portrait-of-vvk-technology-leader.jpg"
+        ]
+      },
+      "semantic_owner": "Context Canvas About surface",
+      "roles": [
+        {
+          "id": "visible_author_identity",
+          "visitor_job": "Humanize and contextualize the About surface while the work remains the visual focus.",
+          "accessibility_text_owner": "The About HTML image alternative."
+        },
+        {
+          "id": "social_preview",
+          "visitor_job": "Identify the About surface when a platform presents its link preview.",
+          "accessibility_text_owner": "The About HTML social and structured metadata."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface/context-canvas"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted portrait blob and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/index.html"
+    },
+    {
+      "id": "context-canvas.about-visual-sequence",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/media/"
+      },
+      "semantic_owner": "Context Canvas About visual sequence",
+      "roles": [
+        {
+          "id": "visitor_controlled_visual_sequence",
+          "visitor_job": "Show one planning map through several calm visual treatments after a visitor requests motion.",
+          "accessibility_text_owner": "The About HTML image alternative, caption, and motion control."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Regenerate the accepted derivatives from their verified source film and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/index.html"
+    },
+    {
+      "id": "context-canvas.legacy-preview",
+      "selector": {
+        "paths": [
+          "context-canvas-project-surface/context-canvas/forms_upfront.png",
+          "context-canvas-project-surface/context-canvas/langwhich_upfront.png",
+          "context-canvas-project-surface/context-canvas/occipital.png"
+        ]
+      },
+      "semantic_owner": "Context Canvas project readings",
+      "roles": [
+        {
+          "id": "interface_preview",
+          "visitor_job": "Show an authored interface example beside its related project reading.",
+          "accessibility_text_owner": "The referring HTML image alternative and surrounding caption."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface/context-canvas"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted preview blob and rebuild the production projection.",
+      "semantic_authority_path": null
+    },
+    {
+      "id": "context-canvas.document-head-icon",
+      "selector": {
+        "paths": [
+          "context-canvas-project-surface/context-canvas/favicon-32x32.png",
+          "context-canvas-project-surface/context-canvas/favicon.ico",
+          "context-canvas-project-surface/context-canvas/safari-pinned-tab.svg"
+        ]
+      },
+      "semantic_owner": "Context Canvas document-head metadata",
+      "roles": [
+        {
+          "id": "document_head_icon",
+          "visitor_job": "Identify the visitor surface in browser tabs, bookmarks, and pinned-tab chrome.",
+          "accessibility_text_owner": "The document-head metadata and browser chrome."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface/context-canvas"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted document-head icon blobs and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/index.html"
+    },
+    {
+      "id": "context-canvas.installed-site-icon",
+      "selector": {
+        "paths": [
+          "context-canvas-project-surface/context-canvas/android-chrome-144x144.png",
+          "context-canvas-project-surface/context-canvas/android-chrome-192x192.png",
+          "context-canvas-project-surface/context-canvas/apple-touch-icon.png"
+        ]
+      },
+      "semantic_owner": "Context Canvas installed-site manifest",
+      "roles": [
+        {
+          "id": "installed_site_icon",
+          "visitor_job": "Identify the visitor surface when a browser presents or installs the site as an application.",
+          "accessibility_text_owner": "The installed-site manifest and platform chrome."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface/context-canvas"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted installed-site icon blobs and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/manifest.json"
+    },
+    {
+      "id": "context-canvas.windows-tile-icon",
+      "selector": {
+        "paths": [
+          "context-canvas-project-surface/context-canvas/mstile-150x150.png",
+          "context-canvas-project-surface/context-canvas/mstile-310x150.png",
+          "context-canvas-project-surface/context-canvas/mstile-310x310.png"
+        ]
+      },
+      "semantic_owner": "Context Canvas Windows tile metadata",
+      "roles": [
+        {
+          "id": "windows_tile_icon",
+          "visitor_job": "Identify the visitor surface when Windows presents a pinned site tile.",
+          "accessibility_text_owner": "The browser configuration and platform chrome."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface/context-canvas"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted Windows tile icon blobs and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/browserconfig.xml"
+    },
+    {
+      "id": "context-canvas.shared-background",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/bgr/"
+      },
+      "semantic_owner": "Context Canvas shared visual fields",
+      "roles": [
+        {
+          "id": "shared_visual_field",
+          "visitor_job": "Set a route's visual field or carry an informative comparison chosen by the referring surface.",
+          "accessibility_text_owner": "The referring HTML or CSS carrier; an informative SVG also owns its title and description."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted shared visual-field blob and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/expanded.css"
+    },
+    {
+      "id": "context-canvas.shared-plot",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/plot/"
+      },
+      "semantic_owner": "Context Canvas visual explanations",
+      "roles": [
+        {
+          "id": "shared_visual_explanation",
+          "visitor_job": "Explain one relationship, decision route, or operating pattern beside the surrounding reading.",
+          "accessibility_text_owner": "The referring carrier and the SVG title and description."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted visual-explanation blob and rebuild the production projection.",
+      "semantic_authority_path": null
+    },
+    {
+      "id": "context-canvas.social-sprite",
+      "selector": {
+        "paths": [
+          "context-canvas-project-surface/img/social_icons.png"
+        ]
+      },
+      "semantic_owner": "Context Canvas shared footer and network links",
+      "roles": [
+        {
+          "id": "network_link_sprite",
+          "visitor_job": "Provide recognizable visual marks for the shared network-link controls.",
+          "accessibility_text_owner": "The referring link labels in the visitor carrier."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted sprite blob and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/expanded.css"
+    },
+    {
+      "id": "site-reading.viewlet-atlas",
+      "selector": {
+        "paths": [
+          "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_atlas.svg"
+        ]
+      },
+      "semantic_owner": "AI-legible viewlet atlas reading",
+      "roles": [
+        {
+          "id": "source_atlas",
+          "visitor_job": "Present the complete viewlet atlas as a readable source artifact.",
+          "accessibility_text_owner": "The referring link label and surrounding gallery explanation."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "repository_source_path_preserved"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_library_notes.md",
+        "lineage_standing": "The source records a generated atlas shaped by the accepted visual language; a reproducible generator profile is not recorded."
+      },
+      "recovery_condition": "Restore the accepted atlas and its source manifest, then rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_library_notes.md"
+    },
+    {
+      "id": "site-reading.viewlet-library",
+      "selector": {
+        "prefix": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/"
+      },
+      "semantic_owner": "AI-legible viewlet SVG library",
+      "roles": [
+        {
+          "id": "reusable_viewlet",
+          "visitor_job": "Provide one reusable visual unit for inspecting a system relationship or state.",
+          "accessibility_text_owner": "The referring carrier and the viewlet SVG title and description."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "repository_source_path_preserved"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_manifest.json",
+        "lineage_standing": "The manifest records in-session generation from the accepted visual language; a reproducible generator profile is not recorded."
+      },
+      "recovery_condition": "Restore the accepted viewlet and its library manifest, then rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_manifest.json"
+    }
+  ],
+  "variant_groups": [
+    {
+      "id": "assessment-plan-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_assessment_plan.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_assessment_plan415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_assessment_plan770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; a generation profile and canonical member are not established.",
+      "recovery_condition": "Restore all three accepted assessment-plan members from the same source coordinate."
+    },
+    {
+      "id": "about-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_about.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_about415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_about770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; filename suffixes do not establish intrinsic size or generation lineage.",
+      "recovery_condition": "Restore all three accepted About-background members from the same source coordinate."
+    },
+    {
+      "id": "case-study-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_casestudy.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_casestudy415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_casestudy770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; a generation profile and canonical member are not established.",
+      "recovery_condition": "Restore all three accepted case-study members from the same source coordinate."
+    },
+    {
+      "id": "forms-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_forms.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_forms415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_forms770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; a generation profile and canonical member are not established.",
+      "recovery_condition": "Restore all three accepted forms members from the same source coordinate."
+    },
+    {
+      "id": "language-reading-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_cs_langwhich.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_cs_langwhich415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_cs_langwhich770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; a generation profile and canonical member are not established.",
+      "recovery_condition": "Restore all three accepted language-reading members from the same source coordinate."
+    },
+    {
+      "id": "occipital-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_occipital.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_occipital415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_occipital770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; a generation profile and canonical member are not established.",
+      "recovery_condition": "Restore all three accepted Occipital members from the same source coordinate."
+    },
+    {
+      "id": "occipital-storyboard-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_occipital_storyboard.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_occipital_storyboard415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_occipital_storyboard770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; a generation profile and canonical member are not established.",
+      "recovery_condition": "Restore all three accepted storyboard members from the same source coordinate."
+    },
+    {
+      "id": "occipital-whiteboarding-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_occipital_whiteboarding.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_occipital_whiteboarding415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_occipital_whiteboarding770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; a generation profile and canonical member are not established.",
+      "recovery_condition": "Restore all three accepted whiteboarding members from the same source coordinate."
+    },
+    {
+      "id": "sprint-plan-backgrounds",
+      "members": [
+        "context-canvas-project-surface/img/bgr/bgr_sprint_plan.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_sprint_plan415.jpg",
+        "context-canvas-project-surface/img/bgr/bgr_sprint_plan770.jpg"
+      ],
+      "profile_standing": "The accepted source records three authored presentations; a generation profile and canonical member are not established.",
+      "recovery_condition": "Restore all three accepted sprint-plan members from the same source coordinate."
+    }
+  ],
+  "overrides": [
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/portrait-of-vvk-technology-leader.jpg",
+      "semantic_key": "context-canvas.about.author-portrait",
+      "roles": [
+        {
+          "id": "visible_author_identity",
+          "visitor_job": "Humanize and contextualize the About surface while the work remains the visual focus.",
+          "accessibility_text_owner": "The About HTML image alternative."
+        },
+        {
+          "id": "social_preview",
+          "visitor_job": "Identify the About surface when a platform presents its link preview.",
+          "accessibility_text_owner": "The About HTML social and structured metadata."
+        }
+      ],
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted portrait blob and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_casestudy770.jpg",
+      "semantic_key": "context-canvas.shared-background.case-study-social-preview",
+      "roles": [
+        {
+          "id": "shared_visual_field",
+          "visitor_job": "Set the case-study reading's visual field.",
+          "accessibility_text_owner": "The referring HTML or CSS carrier."
+        },
+        {
+          "id": "social_preview",
+          "visitor_job": "Represent the case-study reading when a platform presents its link preview.",
+          "accessibility_text_owner": "The referring HTML social and structured metadata."
+        }
+      ],
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted case-study variant set and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital770.jpg",
+      "semantic_key": "context-canvas.shared-background.occipital-social-preview",
+      "roles": [
+        {
+          "id": "shared_visual_field",
+          "visitor_job": "Set the Occipital reading's visual field.",
+          "accessibility_text_owner": "The referring HTML or CSS carrier."
+        },
+        {
+          "id": "social_preview",
+          "visitor_job": "Represent the Occipital reading when a platform presents its link preview.",
+          "accessibility_text_owner": "The referring HTML social and structured metadata."
+        }
+      ],
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted Occipital variant set and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/v3b2_columns_pale_coral_viewlets.svg",
+      "semantic_key": "context-canvas.shared-plot.v3b2-columns-pale-coral-viewlets.svg",
+      "roles": [
+        {
+          "id": "decorative_background_pattern",
+          "visitor_job": "Provide a quiet visual field while the referring page carries the complete meaning.",
+          "accessibility_text_owner": "The referring HTML carries the content relationship; the CSS background is decorative."
+        }
+      ],
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the accepted background-pattern blob and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/media/impact-map-style-cycle-calm.gif",
+      "semantic_key": "context-canvas.about.visual-sequence.motion",
+      "roles": [
+        {
+          "id": "visitor_controlled_motion",
+          "visitor_job": "Move calmly among four visual treatments after a visitor requests the sequence.",
+          "accessibility_text_owner": "The About HTML image alternative, caption, and motion control."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "collaboration/impact-map-visual-variants/movie/impact-map-style-cycle-movie.mp4",
+        "generator_path": "collaboration/impact-map-visual-variants/movie/render_about_style_cycle_gif.py",
+        "profile": "640x360-four-keyframe-ten-second-calm-loop"
+      },
+      "recovery_condition": "Run the named generator against its digest-verified source film, then rebuild and review the About sequence."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/media/impact-map-style-cycle-poster.jpg",
+      "semantic_key": "context-canvas.about.visual-sequence.still",
+      "roles": [
+        {
+          "id": "still_first_view",
+          "visitor_job": "Provide the calm first view and durable fallback for the About visual sequence.",
+          "accessibility_text_owner": "The About HTML image alternative and caption."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "collaboration/impact-map-visual-variants/movie/impact-map-style-cycle-movie.mp4",
+        "generator_path": "collaboration/impact-map-visual-variants/movie/render_about_style_cycle_gif.py",
+        "profile": "640x360-first-keyframe-progressive-jpeg"
+      },
+      "recovery_condition": "Run the named generator against its digest-verified source film, then rebuild and review the About still."
+    }
+  ]
+}

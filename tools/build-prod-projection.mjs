@@ -34,6 +34,7 @@ const repositoryRoot = path.resolve(path.dirname(toolPath), "..");
 
 const configurationId = "prod-projection.configuration.v1";
 const primaryManifestId = "prod-projection.primary-route-manifest.v1";
+const assetInventoryId = "prod-projection.asset-inventory.v1";
 const deploymentManifestId = "prod-projection.deployment-manifest.v1";
 const aggregateReceiptId = "iframe-routes.aggregate-package-receipt.v1";
 const carrierRelativeRoot = "deployment/cpanel/carrier";
@@ -67,6 +68,14 @@ const excludedPrimaryRoots = new Set([
 ]);
 
 const excludedRepositoryPrefixes = [carrierRelativeRoot];
+const excludedReferenceRoots = new Set([
+  ".git",
+  ".iframe-route-build",
+  ".prod-projection-build",
+  ".public-reference-build",
+  ".visual-runs",
+  "node_modules",
+]);
 
 const mediaTypesByExtension = new Map([
   [".avif", new Set(["image/avif"])],
@@ -129,6 +138,26 @@ function assertExactKeys(value, expectedKeys, label) {
   }
 }
 
+function assertNonemptyString(value, label) {
+  if (typeof value !== "string" || value.trim() !== value || value.length === 0) {
+    fail(`${label} must be one nonempty, trimmed string.`);
+  }
+  return value;
+}
+
+function validateStringSet(values, label) {
+  if (!Array.isArray(values) || values.length === 0) {
+    fail(`${label} must contain at least one value.`);
+  }
+  const unique = new Set();
+  for (const [index, value] of values.entries()) {
+    const normalized = assertNonemptyString(value, `${label} value ${index + 1}`);
+    if (unique.has(normalized)) fail(`${label} repeats ${normalized}.`);
+    unique.add(normalized);
+  }
+  return [...unique].sort(compareUtf8Paths);
+}
+
 function portablePathKey(relativePath) {
   return relativePath.normalize("NFC").toLowerCase();
 }
@@ -184,6 +213,29 @@ function assertPrimarySourcePath(sourcePath) {
   return assertRepositoryInputPath(sourcePath, "Primary projection source");
 }
 
+function assertRepositoryReferencePath(sourcePath, label) {
+  const safePath = assertPortableProjectionPath(sourcePath, `${label} path`);
+  const components = safePath.split(path.posix.sep);
+  const rootKey = components[0].normalize("NFC").toLowerCase();
+  if (excludedReferenceRoots.has(rootKey)) {
+    fail(`${label} stays outside generated or dependency root ${components[0]}.`);
+  }
+  if (components.some((component) => {
+    const key = component.normalize("NFC").toLowerCase();
+    return key === ".env" || key.startsWith(".env.");
+  })) {
+    fail(`${label} stays outside environment files: ${sourcePath}.`);
+  }
+  const portableKey = portablePathKey(safePath);
+  for (const excludedPrefix of excludedRepositoryPrefixes) {
+    const prefixKey = portablePathKey(excludedPrefix);
+    if (portableKey === prefixKey || portableKey.startsWith(`${prefixKey}/`)) {
+      fail(`${label} stays outside generated carrier root ${excludedPrefix}.`);
+    }
+  }
+  return safePath;
+}
+
 function assertMediaType(relativePath, mediaType, label) {
   if (typeof mediaType !== "string" || mediaType.length === 0) {
     fail(`${label} requires a media_type.`);
@@ -234,6 +286,9 @@ function validatePublicationConfiguration(publication) {
 
 function validateConfiguration(configuration) {
   const keys = ["id", "version", "primary_manifest"];
+  if (Object.hasOwn(configuration ?? {}, "asset_inventory")) {
+    keys.push("asset_inventory");
+  }
   if (Object.hasOwn(configuration ?? {}, "publication")) keys.push("publication");
   if (Object.hasOwn(configuration ?? {}, "iframe_origin_robots")) {
     keys.push("iframe_origin_robots");
@@ -250,6 +305,15 @@ function validateConfiguration(configuration) {
     configuration.primary_manifest,
     "Primary manifest",
   );
+  if (configuration.asset_inventory !== undefined) {
+    configuration.asset_inventory = assertRepositoryInputPath(
+      configuration.asset_inventory,
+      "Production asset inventory",
+    );
+    if (path.posix.extname(configuration.asset_inventory).toLowerCase() !== ".json") {
+      fail("Production asset inventory must be a JSON file.");
+    }
+  }
   if (configuration.iframe_origin_robots !== undefined) {
     configuration.iframe_origin_robots = assertRepositoryInputPath(
       configuration.iframe_origin_robots,
@@ -264,7 +328,337 @@ function validateConfiguration(configuration) {
       configuration.publication,
     );
   }
+  if (
+    configuration.asset_inventory !== undefined &&
+    configuration.publication === undefined
+  ) {
+    fail("Production asset inventory requires publication geometry for authored-consumer resolution.");
+  }
   return configuration;
+}
+
+function validateAssetSelector(selector, label) {
+  if (!isPlainObject(selector)) fail(`${label} must be an object.`);
+  if (Object.hasOwn(selector, "prefix")) {
+    assertExactKeys(selector, ["prefix"], label);
+    const prefix = assertNonemptyString(selector.prefix, `${label} prefix`);
+    if (!prefix.endsWith("/")) fail(`${label} prefix must end in /.`);
+    assertRepositoryInputPath(prefix.slice(0, -1), `${label} prefix`);
+    return { prefix };
+  }
+  assertExactKeys(selector, ["paths"], label);
+  const paths = validateStringSet(selector.paths, `${label} paths`).map(
+    (sourcePath) => assertRepositoryInputPath(sourcePath, `${label} source`),
+  );
+  return { paths: paths.sort(compareUtf8Paths) };
+}
+
+function validateAssetRoles(roles, label) {
+  if (!Array.isArray(roles) || roles.length === 0) {
+    fail(`${label} must contain at least one role.`);
+  }
+  const roleIds = new Set();
+  return roles.map((role, index) => {
+    const roleLabel = `${label} role ${index + 1}`;
+    assertExactKeys(
+      role,
+      ["id", "visitor_job", "accessibility_text_owner"],
+      roleLabel,
+    );
+    const id = assertNonemptyString(role.id, `${roleLabel} id`);
+    if (!/^[a-z0-9]+(?:[._-][a-z0-9]+)*$/.test(id)) {
+      fail(`${roleLabel} id must be a stable lowercase key.`);
+    }
+    if (roleIds.has(id)) fail(`${label} repeats role ${id}.`);
+    roleIds.add(id);
+    return {
+      id,
+      visitor_job: assertNonemptyString(
+        role.visitor_job,
+        `${roleLabel} visitor_job`,
+      ),
+      accessibility_text_owner: assertNonemptyString(
+        role.accessibility_text_owner,
+        `${roleLabel} accessibility_text_owner`,
+      ),
+    };
+  }).sort((left, right) => compareUtf8Paths(left.id, right.id));
+}
+
+function validateAssetPublicPathStanding(standing, label) {
+  if (!isPlainObject(standing)) fail(`${label} must be an object.`);
+  if (standing.standing === "repository_source_path_preserved") {
+    assertExactKeys(standing, ["standing"], label);
+    return { standing: standing.standing };
+  }
+  if (standing.standing === "source_root_relative_path_preserved") {
+    assertExactKeys(standing, ["standing", "source_root"], label);
+    return {
+      standing: standing.standing,
+      source_root: assertRepositoryInputPath(
+        standing.source_root,
+        `${label} source root`,
+      ),
+    };
+  }
+  fail(
+    `${label} standing must be repository_source_path_preserved or ` +
+    "source_root_relative_path_preserved.",
+  );
+}
+
+function validateAssetSourceRelationship(relationship, label) {
+  if (!isPlainObject(relationship)) fail(`${label} must be an object.`);
+  if (relationship.standing === "canonical_authored_asset") {
+    assertExactKeys(relationship, ["standing"], label);
+    return { standing: relationship.standing };
+  }
+  if (relationship.standing === "generated_derivative") {
+    assertExactKeys(
+      relationship,
+      ["standing", "canonical_source_path", "generator_path", "profile"],
+      label,
+    );
+    return {
+      standing: relationship.standing,
+      canonical_source_path: assertRepositoryReferencePath(
+        relationship.canonical_source_path,
+        `${label} canonical source`,
+      ),
+      generator_path: assertRepositoryReferencePath(
+        relationship.generator_path,
+        `${label} generator`,
+      ),
+      profile: assertNonemptyString(relationship.profile, `${label} profile`),
+    };
+  }
+  if (relationship.standing === "manifest_declared_derivative") {
+    assertExactKeys(
+      relationship,
+      [
+        "standing",
+        "canonical_source_path",
+        "relationship_owner_path",
+        "profile_standing",
+      ],
+      label,
+    );
+    return {
+      standing: relationship.standing,
+      canonical_source_path: assertRepositoryReferencePath(
+        relationship.canonical_source_path,
+        `${label} canonical source`,
+      ),
+      relationship_owner_path: assertRepositoryReferencePath(
+        relationship.relationship_owner_path,
+        `${label} relationship owner`,
+      ),
+      profile_standing: assertNonemptyString(
+        relationship.profile_standing,
+        `${label} profile_standing`,
+      ),
+    };
+  }
+  if (relationship.standing === "accepted_generated_asset") {
+    assertExactKeys(
+      relationship,
+      ["standing", "provenance_owner_path", "lineage_standing"],
+      label,
+    );
+    return {
+      standing: relationship.standing,
+      provenance_owner_path: assertRepositoryReferencePath(
+        relationship.provenance_owner_path,
+        `${label} provenance owner`,
+      ),
+      lineage_standing: assertNonemptyString(
+        relationship.lineage_standing,
+        `${label} lineage_standing`,
+      ),
+    };
+  }
+  fail(
+    `${label} standing must be canonical_authored_asset, generated_derivative, ` +
+    "manifest_declared_derivative, or accepted_generated_asset.",
+  );
+}
+
+export function validateAssetInventory(inventory) {
+  assertExactKeys(
+    inventory,
+    ["id", "version", "scope", "families", "variant_groups", "overrides"],
+    "Production asset inventory",
+  );
+  if (inventory.id !== assetInventoryId || inventory.version !== "1") {
+    fail(`Production asset inventory must use ${assetInventoryId} version 1.`);
+  }
+  if (inventory.scope !== "primary_and_iframe_selected_images") {
+    fail("Production asset inventory must describe primary_and_iframe_selected_images.");
+  }
+  if (!Array.isArray(inventory.families) || inventory.families.length === 0) {
+    fail("Production asset inventory must declare at least one family.");
+  }
+
+  const familyIds = new Set();
+  const families = inventory.families.map((family, index) => {
+    const label = `Production asset family ${index + 1}`;
+    assertExactKeys(
+      family,
+      [
+        "id",
+        "selector",
+        "semantic_owner",
+        "roles",
+        "build_consumers",
+        "public_path_standing",
+        "source_relationship",
+        "recovery_condition",
+        "semantic_authority_path",
+      ],
+      label,
+    );
+    const id = assertNonemptyString(family.id, `${label} id`);
+    if (!/^[a-z0-9]+(?:[._-][a-z0-9]+)*$/.test(id)) {
+      fail(`${label} id must be a stable lowercase key.`);
+    }
+    if (familyIds.has(id)) fail(`Production asset inventory repeats family ${id}.`);
+    familyIds.add(id);
+    let semanticAuthorityPath = null;
+    if (family.semantic_authority_path !== null) {
+      semanticAuthorityPath = assertRepositoryReferencePath(
+        family.semantic_authority_path,
+        `${label} semantic authority`,
+      );
+    }
+    return {
+      id,
+      selector: validateAssetSelector(family.selector, `${label} selector`),
+      semantic_owner: assertNonemptyString(
+        family.semantic_owner,
+        `${label} semantic_owner`,
+      ),
+      roles: validateAssetRoles(family.roles, `${label} roles`),
+      build_consumers: validateStringSet(
+        family.build_consumers,
+        `${label} build_consumers`,
+      ),
+      public_path_standing: validateAssetPublicPathStanding(
+        family.public_path_standing,
+        `${label} public_path_standing`,
+      ),
+      source_relationship: validateAssetSourceRelationship(
+        family.source_relationship,
+        `${label} source_relationship`,
+      ),
+      recovery_condition: assertNonemptyString(
+        family.recovery_condition,
+        `${label} recovery_condition`,
+      ),
+      semantic_authority_path: semanticAuthorityPath,
+    };
+  }).sort((left, right) => compareUtf8Paths(left.id, right.id));
+
+  if (!Array.isArray(inventory.variant_groups)) {
+    fail("Production asset inventory variant_groups must be an array.");
+  }
+  const variantIds = new Set();
+  const variantMembers = new Set();
+  const variantGroups = inventory.variant_groups.map((group, index) => {
+    const label = `Production asset variant group ${index + 1}`;
+    assertExactKeys(
+      group,
+      ["id", "members", "profile_standing", "recovery_condition"],
+      label,
+    );
+    const id = assertNonemptyString(group.id, `${label} id`);
+    if (!/^[a-z0-9]+(?:[._-][a-z0-9]+)*$/.test(id)) {
+      fail(`${label} id must be a stable lowercase key.`);
+    }
+    if (variantIds.has(id)) fail(`Production asset inventory repeats variant group ${id}.`);
+    variantIds.add(id);
+    const members = validateStringSet(group.members, `${label} members`).map(
+      (sourcePath) => assertRepositoryInputPath(sourcePath, `${label} member`),
+    );
+    for (const member of members) {
+      if (variantMembers.has(member)) {
+        fail(`Production asset inventory assigns ${member} to several variant groups.`);
+      }
+      variantMembers.add(member);
+    }
+    return {
+      id,
+      members: members.sort(compareUtf8Paths),
+      profile_standing: assertNonemptyString(
+        group.profile_standing,
+        `${label} profile_standing`,
+      ),
+      recovery_condition: assertNonemptyString(
+        group.recovery_condition,
+        `${label} recovery_condition`,
+      ),
+    };
+  }).sort((left, right) => compareUtf8Paths(left.id, right.id));
+
+  if (!Array.isArray(inventory.overrides)) {
+    fail("Production asset inventory overrides must be an array.");
+  }
+  const overridePaths = new Set();
+  const semanticKeys = new Set();
+  const overrides = inventory.overrides.map((override, index) => {
+    const label = `Production asset override ${index + 1}`;
+    assertExactKeys(
+      override,
+      [
+        "source_path",
+        "semantic_key",
+        "roles",
+        "source_relationship",
+        "recovery_condition",
+      ],
+      label,
+    );
+    const sourcePath = assertRepositoryInputPath(
+      override.source_path,
+      `${label} source`,
+    );
+    if (overridePaths.has(sourcePath)) {
+      fail(`Production asset inventory repeats override ${sourcePath}.`);
+    }
+    overridePaths.add(sourcePath);
+    const semanticKey = assertNonemptyString(
+      override.semantic_key,
+      `${label} semantic_key`,
+    );
+    if (!/^[a-z0-9]+(?:[._-][a-z0-9]+)*$/.test(semanticKey)) {
+      fail(`${label} semantic_key must be a stable lowercase key.`);
+    }
+    if (semanticKeys.has(semanticKey)) {
+      fail(`Production asset inventory repeats semantic key ${semanticKey}.`);
+    }
+    semanticKeys.add(semanticKey);
+    return {
+      source_path: sourcePath,
+      semantic_key: semanticKey,
+      roles: validateAssetRoles(override.roles, `${label} roles`),
+      source_relationship: validateAssetSourceRelationship(
+        override.source_relationship,
+        `${label} source_relationship`,
+      ),
+      recovery_condition: assertNonemptyString(
+        override.recovery_condition,
+        `${label} recovery_condition`,
+      ),
+    };
+  }).sort((left, right) => compareUtf8Paths(left.source_path, right.source_path));
+
+  return {
+    id: inventory.id,
+    version: inventory.version,
+    scope: inventory.scope,
+    families,
+    variant_groups: variantGroups,
+    overrides,
+  };
 }
 
 export function validatePrimaryManifest(primaryManifest) {
@@ -400,10 +794,24 @@ export async function loadProductionProjectionInputs(
   const primaryManifest = validatePrimaryManifest(
     parseJsonBytes(primaryManifestInput.bytes, "Primary route manifest"),
   );
+  let assetInventory = null;
+  let assetInventoryInput = null;
+  if (configuration.asset_inventory !== undefined) {
+    assetInventoryInput = await readTrackedRepositoryInput(
+      root,
+      trackedBlobs,
+      configuration.asset_inventory,
+      "Production asset inventory",
+    );
+    assetInventory = validateAssetInventory(
+      parseJsonBytes(assetInventoryInput.bytes, "Production asset inventory"),
+    );
+  }
   return {
     sourceSha,
     configuration,
     primaryManifest,
+    assetInventory,
     binding: {
       configuration: {
         source_path: portableConfiguration,
@@ -415,10 +823,22 @@ export async function loadProductionProjectionInputs(
         git_blob_id: primaryManifestInput.object,
         sha256: sha256(primaryManifestInput.bytes),
       },
+      ...(assetInventoryInput === null
+        ? {}
+        : {
+            asset_inventory: {
+              source_path: configuration.asset_inventory,
+              git_blob_id: assetInventoryInput.object,
+              sha256: sha256(assetInventoryInput.bytes),
+            },
+          }),
     },
     trackedInputs: new Map([
       [portableConfiguration, configurationInput],
       [configuration.primary_manifest, primaryManifestInput],
+      ...(assetInventoryInput === null
+        ? []
+        : [[configuration.asset_inventory, assetInventoryInput]]),
     ]),
   };
 }
@@ -772,6 +1192,544 @@ function aggregateMediaTypes(aggregatePlan) {
   return mediaTypes;
 }
 
+function aggregateAssetSources(aggregatePlan) {
+  const sources = new Map();
+  const declare = (relativePath, sourcePath, mediaType, consumerPath, file) => {
+    if (typeof mediaType !== "string" || !mediaType.startsWith("image/")) return;
+    const safeSourcePath = assertPrimarySourcePath(sourcePath);
+    const existing = sources.get(relativePath);
+    if (
+      existing !== undefined &&
+      (existing.source_path !== safeSourcePath || existing.media_type !== mediaType)
+    ) {
+      fail(`Iframe package asset source declarations conflict at ${relativePath}.`);
+    }
+    const bytes = aggregatePlan.outputFiles.get(relativePath);
+    if (
+      !Buffer.isBuffer(bytes) ||
+      bytes.byteLength !== file.bytes ||
+      sha256(bytes) !== file.sha256
+    ) {
+      fail(`Iframe package asset metadata differs from ${relativePath}.`);
+    }
+    const record = existing ?? {
+      source_path: safeSourcePath,
+      media_type: mediaType,
+      consumers: new Set(),
+    };
+    record.consumers.add(assertRepositoryInputPath(
+      consumerPath,
+      "Iframe package asset consumer",
+    ));
+    sources.set(relativePath, record);
+  };
+  for (const [family, familyPlan] of aggregatePlan.familyPlans ?? []) {
+    for (const route of familyPlan.receipt?.routes ?? []) {
+      for (const group of ["package_files", "navigation_files"]) {
+        for (const file of route.static_resource_closure?.[group] ?? []) {
+          if (
+            typeof file.content_type === "string" &&
+            file.content_type.startsWith("image/") &&
+            typeof file.source_file !== "string"
+          ) {
+            fail(
+              `Iframe package image requires one canonical source file: ${family}/${file.target_file}.`,
+            );
+          }
+          if (typeof file.source_file !== "string") continue;
+          const relativePath = `${family}/${path.posix.join(
+            path.posix.dirname(route.projection_file),
+            file.target_file,
+          )}`;
+          declare(
+            relativePath,
+            file.source_file,
+            file.content_type,
+            route.source_file,
+            file,
+          );
+        }
+      }
+    }
+  }
+  return sources;
+}
+
+function assetSelectorMatches(selector, sourcePath) {
+  if (selector.prefix !== undefined) return sourcePath.startsWith(selector.prefix);
+  return selector.paths.includes(sourcePath);
+}
+
+function assetRelationshipReferences(relationship) {
+  if (relationship.standing === "generated_derivative") {
+    return [
+      [relationship.canonical_source_path, "canonical source"],
+      [relationship.generator_path, "generator"],
+    ];
+  }
+  if (relationship.standing === "manifest_declared_derivative") {
+    return [
+      [relationship.canonical_source_path, "canonical source"],
+      [relationship.relationship_owner_path, "relationship owner"],
+    ];
+  }
+  if (relationship.standing === "accepted_generated_asset") {
+    return [[relationship.provenance_owner_path, "provenance owner"]];
+  }
+  return [];
+}
+
+function semanticKeyPart(family, sourcePath) {
+  const relativePath = family.selector.prefix === undefined
+    ? path.posix.basename(sourcePath)
+    : sourcePath.slice(family.selector.prefix.length);
+  const key = relativePath
+    .normalize("NFC")
+    .toLowerCase()
+    .replaceAll("_", "-")
+    .replaceAll("/", ".")
+    .replace(/[^a-z0-9.-]+/g, "-")
+    .replace(/-{2,}/g, "-")
+    .replace(/^[.-]+|[.-]+$/g, "");
+  if (key.length === 0) {
+    fail(`Production asset source does not yield a stable semantic key: ${sourcePath}.`);
+  }
+  return key;
+}
+
+function resolveAssetPublicPathStanding(standing, sourcePath, selection) {
+  let expectedPrimaryPath;
+  if (standing.standing === "repository_source_path_preserved") {
+    expectedPrimaryPath = sourcePath;
+  } else {
+    const rootPrefix = `${standing.source_root}/`;
+    if (!sourcePath.startsWith(rootPrefix)) {
+      fail(
+        `Production asset ${sourcePath} is outside its declared public-path source root ` +
+        `${standing.source_root}.`,
+      );
+    }
+    expectedPrimaryPath = sourcePath.slice(rootPrefix.length);
+  }
+  if (
+    selection.primary !== null &&
+    selection.primary.projected_path !== expectedPrimaryPath
+  ) {
+    fail(
+      `Production asset ${sourcePath} projects to ${selection.primary.projected_path}, ` +
+      `which differs from its declared public-path standing ${expectedPrimaryPath}.`,
+    );
+  }
+  return {
+    primary: selection.primary === null
+      ? { standing: "outside_primary_closure" }
+      : {
+          ...standing,
+          projected_path: selection.primary.projected_path,
+        },
+    iframe: selection.iframe_paths.size === 0
+      ? { standing: "outside_iframe_closure" }
+      : {
+          standing: "aggregate_route_relative_projection",
+          projected_paths: [...selection.iframe_paths].sort(compareUtf8Paths),
+        },
+  };
+}
+
+function jpegDimensions(bytes, label) {
+  if (bytes.byteLength < 4 || bytes[0] !== 0xff || bytes[1] !== 0xd8) {
+    fail(`${label} must contain a JPEG byte stream.`);
+  }
+  const startOfFrameMarkers = new Set([
+    0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7,
+    0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf,
+  ]);
+  let offset = 2;
+  while (offset + 3 < bytes.byteLength) {
+    if (bytes[offset] !== 0xff) {
+      offset += 1;
+      continue;
+    }
+    while (bytes[offset] === 0xff) offset += 1;
+    const marker = bytes[offset];
+    offset += 1;
+    if (marker === 0xd9 || marker === 0xda) break;
+    if (marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) continue;
+    if (offset + 2 > bytes.byteLength) break;
+    const segmentLength = bytes.readUInt16BE(offset);
+    if (segmentLength < 2 || offset + segmentLength > bytes.byteLength) break;
+    if (startOfFrameMarkers.has(marker)) {
+      if (segmentLength < 7) break;
+      const width = bytes.readUInt16BE(offset + 5);
+      const height = bytes.readUInt16BE(offset + 3);
+      if (width < 1 || height < 1) {
+        fail(`${label} must declare positive JPEG dimensions.`);
+      }
+      return {
+        standing: "available",
+        width,
+        height,
+        unit: "pixel",
+        source: "jpeg_frame_header",
+      };
+    }
+    offset += segmentLength;
+  }
+  fail(`${label} does not expose intrinsic JPEG dimensions.`);
+}
+
+function svgDimensions(bytes) {
+  const opening = bytes.toString("utf8").match(/<svg\b[^>]*>/i)?.[0];
+  if (opening === undefined) {
+    return { standing: "not_declared", source: "svg_root" };
+  }
+  const attribute = (name) => opening.match(
+    new RegExp(`(?:^|\\s)${name}\\s*=\\s*(["'])([^"']+)\\1`, "i"),
+  )?.[2];
+  const viewBox = attribute("viewBox");
+  if (viewBox !== undefined) {
+    const values = viewBox.trim().split(/[\s,]+/).map(Number);
+    if (
+      values.length === 4 &&
+      values.every(Number.isFinite) &&
+      values[2] > 0 &&
+      values[3] > 0
+    ) {
+      return {
+        standing: "available",
+        width: values[2],
+        height: values[3],
+        unit: "svg_user_unit",
+        source: "svg_view_box",
+      };
+    }
+  }
+  const numericLength = (value) => {
+    const match = value?.trim().match(/^([0-9]+(?:\.[0-9]+)?)(?:px)?$/i);
+    return match === undefined || match === null ? null : Number(match[1]);
+  };
+  const width = numericLength(attribute("width"));
+  const height = numericLength(attribute("height"));
+  return width !== null && height !== null && width > 0 && height > 0
+    ? {
+        standing: "available",
+        width,
+        height,
+        unit: "css_pixel",
+        source: "svg_dimensions",
+      }
+    : { standing: "not_declared", source: "svg_root" };
+}
+
+export function inspectImageDimensions(bytes, mediaType, label = "Image asset") {
+  if (!Buffer.isBuffer(bytes)) fail(`${label} dimensions require exact bytes.`);
+  if (mediaType === "image/png") {
+    const signature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+    if (
+      bytes.byteLength < 24 ||
+      !bytes.subarray(0, signature.byteLength).equals(signature) ||
+      bytes.subarray(12, 16).toString("ascii") !== "IHDR"
+    ) {
+      fail(`${label} must contain a PNG IHDR.`);
+    }
+    const width = bytes.readUInt32BE(16);
+    const height = bytes.readUInt32BE(20);
+    if (width < 1 || height < 1) {
+      fail(`${label} must declare positive PNG dimensions.`);
+    }
+    return {
+      standing: "available",
+      width,
+      height,
+      unit: "pixel",
+      source: "png_ihdr",
+    };
+  }
+  if (mediaType === "image/gif") {
+    if (
+      bytes.byteLength < 10 ||
+      !["GIF87a", "GIF89a"].includes(bytes.subarray(0, 6).toString("ascii"))
+    ) {
+      fail(`${label} must contain a GIF logical screen descriptor.`);
+    }
+    const width = bytes.readUInt16LE(6);
+    const height = bytes.readUInt16LE(8);
+    if (width < 1 || height < 1) {
+      fail(`${label} must declare positive GIF dimensions.`);
+    }
+    return {
+      standing: "available",
+      width,
+      height,
+      unit: "pixel",
+      source: "gif_logical_screen",
+    };
+  }
+  if (mediaType === "image/jpeg") return jpegDimensions(bytes, label);
+  if (mediaType === "image/svg+xml") return svgDimensions(bytes);
+  if (mediaType === "image/x-icon") {
+    if (
+      bytes.byteLength < 6 ||
+      bytes.readUInt16LE(0) !== 0 ||
+      bytes.readUInt16LE(2) !== 1
+    ) {
+      fail(`${label} must contain an ICO directory.`);
+    }
+    const count = bytes.readUInt16LE(4);
+    if (count < 1 || bytes.byteLength < 6 + count * 16) {
+      fail(`${label} must contain complete ICO entries.`);
+    }
+    const variants = [];
+    for (let index = 0; index < count; index += 1) {
+      const offset = 6 + index * 16;
+      variants.push({
+        width: bytes[offset] || 256,
+        height: bytes[offset + 1] || 256,
+      });
+    }
+    variants.sort((left, right) =>
+      left.width - right.width || left.height - right.height,
+    );
+    return {
+      standing: "variant_set",
+      variants,
+      unit: "pixel",
+      source: "ico_directory",
+    };
+  }
+  return { standing: "not_inspected", source: "decoder_unavailable" };
+}
+
+async function resolveProductionAssetInventory({
+  root,
+  trackedBlobs,
+  trackedInputs,
+  primaryManifest,
+  primaryInputs,
+  aggregatePlan,
+  inventory,
+}) {
+  if (inventory === null) return null;
+  const selected = new Map();
+  for (const file of primaryManifest.files) {
+    if (!file.media_type.startsWith("image/")) continue;
+    selected.set(file.source_path, {
+      media_type: file.media_type,
+      primary: file,
+      iframe_paths: new Set(),
+      iframe_consumers: new Set(),
+    });
+  }
+  const iframeSources = aggregateAssetSources(aggregatePlan);
+  for (const [relativePath, iframeAsset] of iframeSources) {
+    const asset = selected.get(iframeAsset.source_path) ?? {
+      media_type: iframeAsset.media_type,
+      primary: null,
+      iframe_paths: new Set(),
+      iframe_consumers: new Set(),
+    };
+    if (asset.media_type !== iframeAsset.media_type) {
+      fail(`Production asset media type conflicts for ${iframeAsset.source_path}.`);
+    }
+    asset.iframe_paths.add(relativePath);
+    for (const consumer of iframeAsset.consumers) asset.iframe_consumers.add(consumer);
+    selected.set(iframeAsset.source_path, asset);
+  }
+
+  const overrides = new Map(inventory.overrides.map((entry) => [entry.source_path, entry]));
+  const selectedPaths = new Set(selected.keys());
+  for (const sourcePath of overrides.keys()) {
+    if (!selectedPaths.has(sourcePath)) {
+      fail(`Production asset override is outside the selected closure: ${sourcePath}.`);
+    }
+  }
+  const variantsByMember = new Map();
+  for (const group of inventory.variant_groups) {
+    for (const member of group.members) {
+      if (!selectedPaths.has(member)) {
+        fail(`Production asset variant member is outside the selected closure: ${member}.`);
+      }
+      variantsByMember.set(member, group);
+    }
+  }
+
+  for (const family of inventory.families) {
+    if (family.semantic_authority_path === null) continue;
+    const input = await readTrackedRepositoryInput(
+      root,
+      trackedBlobs,
+      family.semantic_authority_path,
+      "Production asset semantic authority",
+    );
+    trackedInputs.set(family.semantic_authority_path, input);
+  }
+  const relationshipInputs = new Map();
+  const relationships = [
+    ...inventory.families.map(({ source_relationship: relationship }) => relationship),
+    ...inventory.overrides.map(({ source_relationship: relationship }) => relationship),
+  ];
+  for (const relationship of relationships) {
+    for (const [sourcePath, label] of assetRelationshipReferences(relationship)) {
+      if (relationshipInputs.has(sourcePath)) continue;
+      const input = await readTrackedRepositoryInput(
+        root,
+        trackedBlobs,
+        sourcePath,
+        `Production asset relationship ${label}`,
+      );
+      trackedInputs.set(sourcePath, input);
+      relationshipInputs.set(sourcePath, input);
+    }
+  }
+
+  const semanticKeys = new Set();
+  const records = [];
+  const bySource = new Map();
+  const byIframePath = new Map();
+  for (const [sourcePath, selection] of [...selected.entries()].sort(
+    ([left], [right]) => compareUtf8Paths(left, right),
+  )) {
+    const matches = inventory.families.filter((family) =>
+      assetSelectorMatches(family.selector, sourcePath),
+    );
+    if (matches.length !== 1) {
+      fail(
+        `Production asset source must match exactly one semantic family: ${sourcePath} matched ${matches.length}.`,
+      );
+    }
+    const family = matches[0];
+    const override = overrides.get(sourcePath);
+    const semanticKey = override?.semantic_key ??
+      `${family.id}.${semanticKeyPart(family, sourcePath)}`;
+    if (semanticKeys.has(semanticKey)) {
+      fail(`Production asset semantic key collides at ${semanticKey}.`);
+    }
+    const relationship = override?.source_relationship ?? family.source_relationship;
+    if (
+      ["generated_derivative", "manifest_declared_derivative"].includes(
+        relationship.standing,
+      ) &&
+      relationship.canonical_source_path === sourcePath
+    ) {
+      fail(`Production asset relationship points ${sourcePath} to itself.`);
+    }
+    semanticKeys.add(semanticKey);
+    let sourceInput = primaryInputs.get(sourcePath);
+    if (sourceInput === undefined) {
+      sourceInput = await readTrackedRepositoryInput(
+        root,
+        trackedBlobs,
+        sourcePath,
+        "Production-selected iframe asset source",
+      );
+      trackedInputs.set(sourcePath, sourceInput);
+    }
+    for (const iframePath of selection.iframe_paths) {
+      const iframeBytes = aggregatePlan.outputFiles.get(iframePath);
+      if (!Buffer.isBuffer(iframeBytes) || !iframeBytes.equals(sourceInput.bytes)) {
+        fail(
+          `Iframe production asset bytes differ from canonical source ${sourcePath} at ` +
+          `${iframePath}.`,
+        );
+      }
+    }
+    const variantGroup = variantsByMember.get(sourcePath);
+    const record = {
+      semantic_key: semanticKey,
+      family: family.id,
+      semantic_owner: family.semantic_owner,
+      roles: override?.roles ?? family.roles,
+      canonical_source_path: sourcePath,
+      file_kind: selection.media_type === "image/svg+xml"
+        ? "vector_image"
+        : selection.media_type === "image/x-icon"
+          ? "icon_container"
+          : "raster_image",
+      media_type: selection.media_type,
+      intrinsic_dimensions: inspectImageDimensions(
+        sourceInput.bytes,
+        selection.media_type,
+        `Production asset ${sourcePath}`,
+      ),
+      bytes: sourceInput.bytes.byteLength,
+      sha256: sha256(sourceInput.bytes),
+      direct_authored_consumers: [...selection.iframe_consumers].sort(compareUtf8Paths),
+      build_consumers: [
+        ...new Set([
+          ...family.build_consumers,
+          ...(selection.iframe_paths.size === 0 ? [] : ["aggregate_iframe_package"]),
+        ]),
+      ].sort(compareUtf8Paths),
+      public_path_standing: resolveAssetPublicPathStanding(
+        family.public_path_standing,
+        sourcePath,
+        selection,
+      ),
+      selected_production_closures: [
+        ...(selection.primary === null ? [] : ["primary"]),
+        ...(selection.iframe_paths.size === 0 ? [] : ["iframe"]),
+      ],
+      source_relationship: (() => {
+        if (relationship.standing === "generated_derivative") {
+          const canonicalSource = relationshipInputs.get(
+            relationship.canonical_source_path,
+          );
+          const generator = relationshipInputs.get(relationship.generator_path);
+          return {
+            ...relationship,
+            canonical_source_bytes: canonicalSource.bytes.byteLength,
+            canonical_source_sha256: sha256(canonicalSource.bytes),
+            generator_sha256: sha256(generator.bytes),
+          };
+        }
+        if (relationship.standing === "manifest_declared_derivative") {
+          const canonicalSource = relationshipInputs.get(
+            relationship.canonical_source_path,
+          );
+          const relationshipOwner = relationshipInputs.get(
+            relationship.relationship_owner_path,
+          );
+          return {
+            ...relationship,
+            canonical_source_bytes: canonicalSource.bytes.byteLength,
+            canonical_source_sha256: sha256(canonicalSource.bytes),
+            relationship_owner_sha256: sha256(relationshipOwner.bytes),
+          };
+        }
+        if (relationship.standing === "accepted_generated_asset") {
+          return {
+            ...relationship,
+            provenance_owner_sha256: sha256(
+              relationshipInputs.get(relationship.provenance_owner_path).bytes,
+            ),
+          };
+        }
+        return relationship;
+      })(),
+      ...(variantGroup === undefined
+        ? {}
+        : {
+            variant_family: {
+              id: variantGroup.id,
+              standing: "authored_variant_set",
+              profile_standing: variantGroup.profile_standing,
+            },
+          }),
+      semantic_authority_path: family.semantic_authority_path,
+      recovery_condition: override?.recovery_condition ??
+        variantGroup?.recovery_condition ??
+        family.recovery_condition,
+      projections: [],
+    };
+    records.push(record);
+    bySource.set(sourcePath, record);
+    for (const iframePath of selection.iframe_paths) {
+      byIframePath.set(iframePath, record);
+    }
+  }
+  return { records, bySource, byIframePath };
+}
+
 function inferredMediaType(relativePath) {
   const allowed = mediaTypesByExtension.get(path.posix.extname(relativePath).toLowerCase());
   if (!allowed || allowed.size !== 1) {
@@ -837,17 +1795,23 @@ function isLocalReference(reference) {
 
 function publicationAbsoluteReferenceMap(primaryManifest, publication) {
   const mappings = new Map();
-  const declare = (sourceUrl, projectedUrl) => {
+  const declare = (sourceUrl, projectedUrl, sourcePath) => {
     const existing = mappings.get(sourceUrl);
-    if (existing !== undefined && existing !== projectedUrl) {
+    if (
+      existing !== undefined &&
+      (existing.projected_url !== projectedUrl || existing.source_path !== sourcePath)
+    ) {
       fail(`Production publication URL mapping collides at ${sourceUrl}.`);
     }
-    mappings.set(sourceUrl, projectedUrl);
+    mappings.set(sourceUrl, {
+      projected_url: projectedUrl,
+      source_path: sourcePath,
+    });
   };
   for (const file of primaryManifest.files) {
     const sourceUrl = new URL(file.source_path, legacyPublicationOrigin).href;
     const projectedUrl = new URL(file.projected_path, publication.base_url).href;
-    declare(sourceUrl, projectedUrl);
+    declare(sourceUrl, projectedUrl, file.source_path);
     if (
       path.posix.basename(file.source_path) === "index.html" &&
       path.posix.basename(file.projected_path) === "index.html"
@@ -855,6 +1819,7 @@ function publicationAbsoluteReferenceMap(primaryManifest, publication) {
       declare(
         new URL(`${path.posix.dirname(file.source_path)}/`, legacyPublicationOrigin).href,
         new URL(`${path.posix.dirname(file.projected_path)}/`, publication.base_url).href,
+        file.source_path,
       );
     }
   }
@@ -904,7 +1869,11 @@ function projectedReference(
   const { pathname, suffix } = splitReferenceSuffix(reference);
   const absoluteProjection = options.absoluteProjectionUrls?.get(pathname);
   if (absoluteProjection !== undefined) {
-    return `${absoluteProjection}${suffix}`;
+    options.onResolvedReference?.({
+      consumer_path: sourcePath,
+      target_path: absoluteProjection.source_path,
+    });
+    return `${absoluteProjection.projected_url}${suffix}`;
   }
   const resolution = sourceReferenceResolution(
     reference,
@@ -930,6 +1899,10 @@ function projectedReference(
   if (projectedTarget === undefined) {
     fail(`Primary projection dependency is absent from its explicit closure: ${sourcePath} -> ${target}.`);
   }
+  options.onResolvedReference?.({
+    consumer_path: sourcePath,
+    target_path: target,
+  });
   const directoryRoute =
     pathname.endsWith("/") && path.posix.basename(projectedTarget) === "index.html";
   const targetPath = directoryRoute
@@ -1148,7 +2121,7 @@ function rewritePrimaryLocalReferences(
     ? rewriteOpeningTags(text, (element) => {
         let tag = rewritePublicationMetadataReferences(element, rewrite);
         tag = tag.replace(
-          /(^|\s)((?:href|src|poster|data|action|formaction|xlink:href)\s*=\s*)(["'])([\s\S]*?)\3/gi,
+          /(^|\s)((?:href|src|poster|data|data-motion-src|data-still-src|action|formaction|xlink:href)\s*=\s*)(["'])([\s\S]*?)\3/gi,
           (carrier, boundary, prefix, quote, reference) =>
             `${boundary}${prefix}${quote}${rewrite(reference)}${quote}`,
         );
@@ -1563,12 +2536,13 @@ function transformPrimaryBytes(
   projectedPaths,
   destinations,
   absoluteProjectionUrls,
+  onResolvedReference,
 ) {
   const extension = path.posix.extname(file.source_path).toLowerCase();
   const textExtensions = new Set([".css", ".html", ".js", ".json", ".jsonld", ".md", ".svg", ".txt", ".webmanifest", ".xml"]);
   if (!textExtensions.has(extension)) return bytes;
   let text = bytes.toString("utf8");
-  const referenceOptions = { absoluteProjectionUrls };
+  const referenceOptions = { absoluteProjectionUrls, onResolvedReference };
   const runtimeReferenceOptions = {
     ...referenceOptions,
     extension,
@@ -1902,6 +2876,24 @@ export async function createProductionProjectionPlan(options = {}) {
   const aggregatePlan = assertAggregatePlan(
     options.aggregatePlan ?? await createAggregatePackagePlan(),
   );
+  const assetInventoryResolution = await resolveProductionAssetInventory({
+    root,
+    trackedBlobs,
+    trackedInputs,
+    primaryManifest,
+    primaryInputs,
+    aggregatePlan,
+    inventory: selection.assetInventory,
+  });
+  const directAssetConsumers = new Map(
+    (assetInventoryResolution?.records ?? []).map((record) => [
+      record.canonical_source_path,
+      new Set(record.direct_authored_consumers),
+    ]),
+  );
+  const noteResolvedReference = ({ consumer_path: consumerPath, target_path: targetPath }) => {
+    directAssetConsumers.get(targetPath)?.add(consumerPath);
+  };
   for (const [key, destination] of publicationInput?.destinations ?? []) {
     if (!key.startsWith("PUBLIC_URL_IFRAME_")) continue;
     const url = new URL(destination);
@@ -1929,6 +2921,7 @@ export async function createProductionProjectionPlan(options = {}) {
           projectedPaths,
           publicationInput.destinations,
           absoluteProjectionUrls,
+          noteResolvedReference,
         );
     assertResolvedPrimaryBytes(bytes, file.source_path);
     const projectedPath = `primary-public/${file.projected_path}`;
@@ -1945,6 +2938,18 @@ export async function createProductionProjectionPlan(options = {}) {
       standing: bytes.equals(sourceBytes) ? "byte_preserved" : "generated",
     };
     if (!bytes.equals(sourceBytes)) output.source_sha256 = sha256(sourceBytes);
+    const assetRecord = assetInventoryResolution?.bySource.get(file.source_path);
+    if (assetRecord !== undefined) {
+      output.semantic_asset_key = assetRecord.semantic_key;
+      assetRecord.projections.push({
+        surface: "primary",
+        projected_path: projectedPath,
+        media_type: output.media_type,
+        bytes: output.bytes,
+        sha256: output.sha256,
+        standing: output.standing,
+      });
+    }
     outputs.push(output);
   }
 
@@ -1980,7 +2985,7 @@ export async function createProductionProjectionPlan(options = {}) {
     iframeBytes += bytes.byteLength;
     const mediaType = iframeMediaTypes.get(relativePath) ?? inferredMediaType(relativePath);
     assertMediaType(relativePath, mediaType, "Iframe package output");
-    outputs.push({
+    const output = {
       surface: "iframe",
       source_path: `iframe-package:v1/${relativePath}`,
       projected_path: projectedPath,
@@ -1988,7 +2993,39 @@ export async function createProductionProjectionPlan(options = {}) {
       bytes: bytes.byteLength,
       sha256: sha256(bytes),
       standing: "byte_preserved",
-    });
+    };
+    const assetRecord = assetInventoryResolution?.byIframePath.get(relativePath);
+    if (
+      assetInventoryResolution !== null &&
+      mediaType.startsWith("image/") &&
+      assetRecord === undefined
+    ) {
+      fail(`Iframe production image has no semantic asset record: ${relativePath}.`);
+    }
+    if (assetRecord !== undefined) {
+      output.semantic_asset_key = assetRecord.semantic_key;
+      assetRecord.projections.push({
+        surface: "iframe",
+        projected_path: projectedPath,
+        media_type: output.media_type,
+        bytes: output.bytes,
+        sha256: output.sha256,
+        standing: output.standing,
+      });
+    }
+    outputs.push(output);
+  }
+
+  for (const record of assetInventoryResolution?.records ?? []) {
+    record.direct_authored_consumers = [
+      ...(directAssetConsumers.get(record.canonical_source_path) ?? []),
+    ].sort(compareUtf8Paths);
+    record.projections.sort((left, right) =>
+      compareUtf8Paths(left.projected_path, right.projected_path),
+    );
+    if (record.projections.length === 0) {
+      fail(`Production asset has no derived public projection: ${record.semantic_key}.`);
+    }
   }
 
   outputs.sort((left, right) =>
@@ -2016,6 +3053,15 @@ export async function createProductionProjectionPlan(options = {}) {
         version: primaryManifest.version,
         ...selection.binding.primary_manifest,
       },
+      ...(selection.binding.asset_inventory === undefined
+        ? {}
+        : {
+            asset_inventory: {
+              id: selection.assetInventory.id,
+              version: selection.assetInventory.version,
+              ...selection.binding.asset_inventory,
+            },
+          }),
       ...(publicationInput === null
         ? {}
         : { public_references: publicationInput.input }),
@@ -2049,6 +3095,16 @@ export async function createProductionProjectionPlan(options = {}) {
         bytes: iframeBytes,
       },
     },
+    ...(assetInventoryResolution === null
+      ? {}
+      : {
+          asset_inventory: {
+            id: selection.assetInventory.id,
+            version: selection.assetInventory.version,
+            scope: selection.assetInventory.scope,
+            assets: assetInventoryResolution.records,
+          },
+        }),
     outputs,
   };
   outputFiles.set("deployment-manifest.json", serializeManifest(manifest));

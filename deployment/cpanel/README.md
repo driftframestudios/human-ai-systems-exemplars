@@ -36,6 +36,7 @@ selected source and its document-root destination explicitly.
   "id": "prod-projection.configuration.v1",
   "version": "1",
   "primary_manifest": "deployment/cpanel/primary-route-manifest.json",
+  "asset_inventory": "context-canvas-project-surface/asset-inventory.json",
   "iframe_origin_robots": "deployment/cpanel/iframe-origin-robots.txt",
   "publication": {
     "base_url": "https://vik.guru/",
@@ -44,6 +45,35 @@ selected source and its document-root destination explicitly.
   }
 }
 ```
+
+The primary manifest alone selects primary files and public paths.
+`asset-inventory.json` describes the images already selected by the primary and
+iframe builders: family rules name the owner, visitor job, accessibility-text
+owner, build consumers, source relationship, and recovery condition. The
+inventory stops a build when a selected image has no single semantic family;
+it cannot add an output.
+
+The generated deployment manifest resolves those rules into one record per
+selected image. Each resolved record carries a stable semantic key, canonical
+source, media kind, dimensions read from exact source bytes, byte count,
+SHA-256, authored consumers observed through the existing reference resolver,
+build consumers, public-path standing, selected closure, derivative or variant
+relationship, and every primary or iframe projection. The output rows carry
+the same semantic key, so an iframe alias and a primary path remain traceable
+to one source asset.
+
+Each family declares whether its primary path preserves the complete repository
+source path or its path beneath a named source root. The assembler verifies the
+primary manifest against that declaration and records iframe route projections
+separately, so `public_path_standing` describes observed geometry rather than a
+general policy claim.
+
+Semantic provenance and transport standing answer different questions. A GIF
+or poster generated from a named film and profile retains that relationship in
+the inventory while the production projection can still carry its committed
+bytes unchanged. Authored raster variant sets record their relationship and
+the current absence of a generation profile without treating filename suffixes
+as dimensions.
 
 `iframe_origin_robots` gives the iframe host its own reviewed root
 `robots.txt`. The file carries the same search, person-directed retrieval, and
@@ -143,12 +173,13 @@ verified Git blobs, and records only bounded current/pending release state
 outside the clone.
 
 Each generated deployment manifest binds the Git source SHA; the tracked
-configuration and primary manifest paths, Git blob IDs, and SHA-256 digests;
-and every projected file's surface, source path, output path, media type, byte
-count, digest, and byte-preserved standing. Selection and primary payload bytes
-come from regular Git blobs at that accepted SHA. A clean checkout may apply a
-line-ending or content filter, so checkout bytes are required to remain regular
-files while the projection uses the immutable Git-blob bytes.
+configuration, primary manifest, and semantic asset inventory paths, Git blob
+IDs, and SHA-256 digests; and every projected file's surface, source path,
+output path, media type, byte count, digest, and byte-preserved standing.
+Selection and primary payload bytes come from regular Git blobs at that
+accepted SHA. A clean checkout may apply a line-ending or content filter, so
+checkout bytes are required to remain regular files while the projection uses
+the immutable Git-blob bytes.
 
 The aggregate iframe plan is a separately composed input. Its root receipt
 digest and deterministic closure digest bind its sorted output paths and bytes;
