@@ -1357,7 +1357,7 @@ These public collaboration loops fit when the receiving work meets the stated co
       '- Qualitative companion: '+markdownInline(row.qualitativeCompanion),
       '- Evidence status: '+markdownCode(row.status),
       '- Route: '+markdownInline(row.route.name)+' ('+markdownInline(row.route.family)+').',
-      '- Custom route label: '+markdownInline(row.route.customLabel,'None.'),
+      '- Custom route label:'+(row.route.customLabel?' '+markdownInline(row.route.customLabel):''),
       '- Route reason: '+markdownInline(row.route.reason),
       '- Order: display '+markdownCode(row.displayOrder)+'; canonical '+markdownCode(row.canonicalOrder)+'; visible '+markdownCode(row.visibleOrder===null?'none':row.visibleOrder)+'.',
       '- Focus view: '+markdownCode(row.visibility)+'.'

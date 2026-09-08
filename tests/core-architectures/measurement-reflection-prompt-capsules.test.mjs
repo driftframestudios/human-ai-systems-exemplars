@@ -28,7 +28,7 @@ const artifacts = [
     version: "0.1.6",
     currentFile: "heart-chart-chimeric-prototype-v0.1.6.html",
     historicalFile: "heart-chart-chimeric-prototype-v0.1.5.html",
-    currentDigest: "e5ca2da4c11303c2b91533f3f728d4ff12c274513de8d1d4c9c43ac17a893577",
+    currentDigest: "426f8389626c80ea8cad890133f0ff551452c52d7fa1b79942bf0d4d7a959b22",
     historicalDigest: "a4fecf35cb271d4b36ffd5a6eb22f9c3a6569b4e8551954cad0ffb47a7b87aba",
     stateContract: "heart-chart-state.v0.1",
     apiName: "heartChart",
