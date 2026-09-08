@@ -101,8 +101,8 @@ Review-ready means every release-blocking gate has evidence, canonical registrie
 ## Current v0.2.4 verification route
 
 - `npm run test:strategy-canvas` — **43/43 checks passed** on 2026-09-04. The focused contract covers both maintained expressions and their compatibility routes, the native Prompt Capsule view control, exact active-view byte agreement, and a source-generated Related loops disclosure with keyboard, focus, target-size, activation, and no-JavaScript observations.
-- Canonical generated distribution — **165,571 bytes**, SHA-256 `c1996b735dd71c030f98a57e5e20dadf44e75fdccfda0c2378b34f285e946c23`; the builder checked the default Markdown example and generated the native disclosure from the same core metadata before source/build parity passed.
-- `npm run test:iframe-routes` — **29/29 checks passed**. `npm run check:iframe-routes` verified the two-family package at 38 routes, 68 files, and 3,379,525 bytes without live delivery mutation.
+- Canonical generated distribution — **165,557 bytes**, SHA-256 `cfa7bf0af550940483005633f19f041029d26257ede97b3a1416786cddfb7d98`; the builder checked the default Markdown example and generated the native disclosure from the same core metadata before source/build parity passed.
+- Acceptance-time cross-family package — `npm run test:iframe-routes` passed **29/29 checks**, and `npm run check:iframe-routes` verified 38 routes, 68 files, and 3,379,525 bytes through a read-only package observation. This result records the package accepted with v0.2.4; [Issue #137](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/137) carries the current cross-family package coordinate as route families advance.
 - `npm run test:core-architectures` — **15/15 checks passed** with current manifest, historical artifact, public-anchor, and fingerprint boundaries intact.
 
 ## Historical verification receipt · v0.2.3
