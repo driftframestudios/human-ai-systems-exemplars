@@ -272,7 +272,7 @@ test("Family Index current route provides exact Markdown download capability", a
   assert.equal(route.activation_standing, "parity_review");
 });
 
-test("Prompt Capsule inventory recognizes Family Index as adoption 27 of 28", async () => {
+test("Prompt Capsule inventory recognizes the complete 28-source adoption set", async () => {
   const [readme, inventory] = await Promise.all([
     readFile(resolve(repositoryRoot, "prompt-capsules/README.md"), "utf8"),
     readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8"),
@@ -280,8 +280,9 @@ test("Prompt Capsule inventory recognizes Family Index as adoption 27 of 28", as
 
   for (const document of [readme, inventory]) {
     assert.match(document, /Core Architecture Family Index\s+v0\.1\.5/u);
-    assert.match(document, /27 (?:of 28|current)/u);
+    assert.match(document, /28 (?:source artifacts|current)/u);
   }
-  assert.match(inventory, /Visualization Fidelity Atlas[\s\S]*?accepted capsule behavior/u);
+  assert.match(inventory, /Visualization Fidelity Atlas[\s\S]*?implements `prompt-capsule\/0\.1\.0`/u);
+  assert.match(inventory, /28 current\s+adoptions\. This completes the observed population/u);
   assert.match(inventory, /Core Architecture Family Index v0\.1\.4[\s\S]*?remain comparison/u);
 });

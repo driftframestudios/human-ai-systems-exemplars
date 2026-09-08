@@ -189,5 +189,5 @@ test("Measurement, Reflection, and Judgment advances the current inventory as on
   assert.match(inventory, /HEART Chart v0\.1\.6/u);
   assert.match(inventory, /Plus \/ Delta v0\.1\.4/u);
   assert.match(inventory, /Practitioner Judgment Probes v0\.1\.4/u);
-  assert.match(inventory, /27 current[\s\S]*?adoptions\. The remaining source/u);
+  assert.match(inventory, /28 current\s+adoptions\. This completes the observed population/u);
 });

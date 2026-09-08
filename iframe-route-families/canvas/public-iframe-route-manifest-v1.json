@@ -345,10 +345,15 @@
       "activation_standing": "eligible",
       "projection_kind": "decorated_copy",
       "carrier_policy": {
-        "sandbox_tokens": ["allow-scripts"],
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
         "permissions_policy": ["clipboard-write"]
       },
-      "reader_job": "Compare visualization fidelity patterns and copy selected prompt or structured state."
+      "reader_job": "Compare visualization fidelity patterns and carry selected Prompt Capsule or structured state by copy or download."
     },
     {
       "id": "visualization-fidelity-selector",
