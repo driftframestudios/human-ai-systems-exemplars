@@ -158,5 +158,5 @@ test("Participatory Elicitation and Specification advances the current inventory
   const inventory = await readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8");
   assert.match(inventory, /Participatory Design Kit v0\.1\.4/u);
   assert.match(inventory, /Specification-by-Example v0\.1\.6/u);
-  assert.match(inventory, /fifteen current[\s\S]*?adoptions\. The remaining 13/u);
+  assert.match(inventory, /eighteen current[\s\S]*?adoptions\. The remaining 10/u);
 });

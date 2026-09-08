@@ -16,7 +16,7 @@ import {
 const artifactNames = {
   impact: "impact-map-chimeric-prototype-v0.1.4.html",
   service: "service-design-blueprint-chimeric-prototype-v0.2.4.html",
-  heart: "heart-chart-chimeric-prototype-v0.1.5.html",
+  heart: "heart-chart-chimeric-prototype-v0.1.6.html",
   specification: "specification-by-example-chimeric-prototype-v0.1.6.html"
 };
 const checks = [];
@@ -30,6 +30,126 @@ async function verify(label, callback) {
     const message = error?.stack || error?.message || String(error);
     checks.push({ label, status: "failed", message });
     failures.push(`${label}: ${message}`);
+  }
+}
+
+async function exercisePromptCapsule(page, {
+  apiName,
+  copySelector,
+  downloadSelector,
+  filename,
+  loopIds,
+  promptSelector,
+  stateContract,
+  title,
+  version,
+}) {
+  const initial = await page.evaluate(name => {
+    const api = globalThis[name];
+    return {
+      contract: api.contract,
+      fingerprint: api.promptCapsuleFingerprint(),
+      frozen: Object.isFrozen(api),
+      plain: api.promptCapsule(),
+      explicitPlain: api.promptCapsuleMarkdown("plain"),
+      projection: api.promptCapsuleStateProjection(),
+      state: api.getState(),
+      stateContract: api.stateContract,
+      version: api.version,
+      view: api.getPromptCapsuleView(),
+    };
+  }, apiName);
+  assert.equal(initial.frozen, true);
+  assert.deepEqual(
+    [initial.version, initial.contract, initial.stateContract, initial.view],
+    [version, "prompt-capsule/0.1.0", stateContract, "plain"],
+  );
+  assert.equal(initial.plain, initial.explicitPlain);
+  assert.equal(await page.locator(promptSelector).textContent(), initial.plain);
+  assert.match(initial.plain, new RegExp(`^# Prompt Capsule: ${title}\\n`, "u"));
+  assert.ok(initial.plain.includes(`- Fingerprint: \`${initial.fingerprint}\``));
+  assert.match(initial.plain, /## Related loops/u);
+  assert.doesNotMatch(initial.plain, /## Skill assistance/u);
+  assert.ok(initial.plain.endsWith("\n"));
+
+  const loops = await page.locator("[data-prompt-related-loops]").evaluate(details => ({
+    open: details.open,
+    tag: details.tagName,
+    ids: [...details.querySelectorAll("[data-related-loop-id]")].map(item => item.dataset.relatedLoopId),
+  }));
+  assert.deepEqual(loops, { open: false, tag: "DETAILS", ids: loopIds });
+  const summary = page.locator("[data-prompt-related-loops] summary");
+  await summary.focus();
+  const summaryBox = await summary.boundingBox();
+  assert.ok(summaryBox && summaryBox.height >= 44 && summaryBox.width >= 44);
+  await summary.press("Enter");
+  assert.equal(await page.locator("[data-prompt-related-loops]").evaluate(element => element.open), true);
+  const firstLoopBox = await page.locator("[data-related-loop-id] a").first().boundingBox();
+  assert.ok(firstLoopBox && firstLoopBox.height >= 44 && firstLoopBox.width >= 44);
+
+  await page.locator('[data-prompt-view][value="skill-assisted"]').check();
+  const assisted = await page.evaluate(name => {
+    const api = globalThis[name];
+    return {
+      fingerprint: api.promptCapsuleFingerprint(),
+      markdown: api.promptCapsuleMarkdown(),
+      projection: api.promptCapsuleStateProjection(),
+      view: api.getPromptCapsuleView(),
+    };
+  }, apiName);
+  assert.equal(assisted.view, "skill-assisted");
+  assert.equal(assisted.fingerprint, initial.fingerprint);
+  assert.deepEqual(assisted.projection, initial.projection);
+  assert.equal(await page.locator(promptSelector).textContent(), assisted.markdown);
+  assert.match(assisted.markdown, /## Skill assistance/u);
+  assert.match(assisted.markdown, /\.agents\/skills\/[a-z0-9-]+\/SKILL\.md/u);
+
+  await page.evaluate(() => { globalThis.__coreClipboard = ""; });
+  await page.locator(copySelector).click();
+  await page.waitForFunction(() => Boolean(globalThis.__coreClipboard));
+  assert.equal(await page.evaluate(() => globalThis.__coreClipboard), assisted.markdown);
+  await page.evaluate(() => {
+    const original = URL.createObjectURL.bind(URL);
+    URL.createObjectURL = blob => {
+      globalThis.__promptDownloadType = blob.type;
+      return original(blob);
+    };
+  });
+  const downloadPromise = page.waitForEvent("download");
+  await page.locator(downloadSelector).click();
+  const download = await downloadPromise;
+  assert.equal(download.suggestedFilename(), filename);
+  assert.equal(await page.evaluate(() => globalThis.__promptDownloadType), "text/markdown;charset=utf-8");
+  const stream = await download.createReadStream();
+  const chunks = [];
+  for await (const chunk of stream) chunks.push(chunk);
+  assert.equal(Buffer.concat(chunks).toString("utf8"), assisted.markdown);
+
+  await page.locator('[data-prompt-view][value="plain"]').check();
+  assert.equal(await page.locator(promptSelector).textContent(), initial.plain);
+  return initial;
+}
+
+async function assertNoScriptPromptCapsule(browser, origin, route, promptSelector, expectedPlain) {
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 320, height: 900 },
+  });
+  try {
+    const page = await context.newPage();
+    await page.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+    assert.equal(await page.locator(promptSelector).textContent(), expectedPlain);
+    assert.equal(await page.locator(promptSelector).isVisible(), true);
+    assert.equal(await page.locator("[data-prompt-view-control]").isVisible(), false);
+    assert.equal(await page.locator("[data-prompt-actions]").isVisible(), false);
+    assert.equal(await page.locator("[data-prompt-related-loops]").isVisible(), true);
+    const containment = await page.locator("html").evaluate(root => ({
+      clientWidth: root.clientWidth,
+      scrollWidth: root.scrollWidth,
+    }));
+    assert.ok(containment.scrollWidth <= containment.clientWidth + 1, JSON.stringify(containment));
+  } finally {
+    await context.close();
   }
 }
 
@@ -155,7 +275,25 @@ async function heartPath(browser, origin, route) {
     route,
     { captureClipboard: true },
   );
+  let initialPrompt;
   try {
+    initialPrompt = await exercisePromptCapsule(page, {
+      apiName: "heartChart",
+      copySelector: '[data-action="copy-prompt"]',
+      downloadSelector: '[data-action="download-prompt"]',
+      filename: "heart-chart.prompt-capsule.r0.1.6.skill-assisted.md",
+      loopIds: ["visitor-surface-change", "skill-from-receiving-use"],
+      promptSelector: "#aiPrompt",
+      stateContract: "heart-chart-state.v0.1",
+      title: "HEART Chart",
+      version: "0.1.6",
+    });
+    assert.equal(initialPrompt.projection.rows.length, 5);
+    assert.ok(initialPrompt.projection.rows.every(row => [
+      "goal", "signal", "metric", "interpretation", "tolerance",
+      "counterSignal", "qualitativeCompanion", "status", "route",
+    ].every(field => Object.hasOwn(row, field))));
+
     for (const width of [1280, 800]) {
       await page.setViewportSize({ width, height: 1000 });
       const containment = await page.evaluate(() => {
@@ -183,6 +321,26 @@ async function heartPath(browser, origin, route) {
     const view = initial.view_state.views[0];
     const firstId = view.row_order[0];
     const secondId = view.row_order[1];
+    const twoViewState = structuredClone(initial);
+    twoViewState.view_state.views.push({
+      id: "view-secondary-review",
+      name: "Secondary review focus",
+      row_order: [...view.row_order].reverse(),
+      hidden_row_ids: [secondId],
+      text_mode: "preview_with_reveal",
+      selected_row_id: firstId,
+    });
+    await page.locator("#jsonImport").fill(JSON.stringify(twoViewState));
+    await page.locator('[data-action="import-json"]').click();
+    assert.match(await page.locator("#importMessage").textContent(), /HEART Chart imported/);
+    assert.deepEqual(await valueJson(page, "#jsonExport"), twoViewState);
+    await page.locator(`[data-action="select-row"][data-row-id="${firstId}"]`).click();
+    const selectedOnly = await page.evaluate(() => ({
+      fingerprint: window.heartChart.promptCapsuleFingerprint(),
+      markdown: window.heartChart.promptCapsule(),
+    }));
+    assert.equal(selectedOnly.fingerprint, initialPrompt.fingerprint);
+    assert.equal(selectedOnly.markdown, initialPrompt.plain);
     await page.locator('[data-action="copy-json"]').click();
     assert.equal(
       await page.evaluate(() => globalThis.__coreClipboard),
@@ -193,6 +351,15 @@ async function heartPath(browser, origin, route) {
     await page.locator('[data-action="add-row"]').click();
     const withAddedRow = await valueJson(page, "#jsonExport");
     const addedId = withAddedRow.heart_chart.rows.at(-1).id;
+    assert.equal(withAddedRow.view_state.views.length, 2);
+    for (const focusView of withAddedRow.view_state.views) {
+      assert.equal(focusView.row_order.length, withAddedRow.heart_chart.rows.length);
+      assert.equal(focusView.row_order.filter(id => id === addedId).length, 1);
+    }
+    await page.locator("#jsonImport").fill(JSON.stringify(withAddedRow));
+    await page.locator('[data-action="import-json"]').click();
+    assert.match(await page.locator("#importMessage").textContent(), /HEART Chart imported/);
+    assert.deepEqual(await valueJson(page, "#jsonExport"), withAddedRow);
     const expectedFocusId = withAddedRow.view_state.views[0].row_order.at(-2);
     const removeButton = page.locator(`[data-action="remove-row"][data-row-id="${addedId}"]`);
     await removeButton.click();
@@ -222,6 +389,18 @@ async function heartPath(browser, origin, route) {
       })),
       { action: "remove-row", rowId: expectedFocusId },
     );
+    const withoutAddedRow = await valueJson(page, "#jsonExport");
+    assert.equal(withoutAddedRow.view_state.views.length, 2);
+    for (const focusView of withoutAddedRow.view_state.views) {
+      assert.equal(focusView.row_order.length, withoutAddedRow.heart_chart.rows.length);
+      assert.equal(focusView.row_order.includes(addedId), false);
+      assert.equal(focusView.hidden_row_ids.includes(addedId), false);
+      assert.notEqual(focusView.selected_row_id, addedId);
+    }
+    await page.locator("#jsonImport").fill(JSON.stringify(withoutAddedRow));
+    await page.locator('[data-action="import-json"]').click();
+    assert.match(await page.locator("#importMessage").textContent(), /HEART Chart imported/);
+    assert.deepEqual(await valueJson(page, "#jsonExport"), withoutAddedRow);
 
     await page.evaluate(() => {
       Object.defineProperty(Navigator.prototype, "clipboard", {
@@ -255,11 +434,36 @@ async function heartPath(browser, origin, route) {
     for (const field of ["category", "goal", "signal", "metric", "status", "handoff", "reason"]) {
       assert.equal(await page.locator(`[data-field="${field}"][data-row-id="${firstId}"]`).inputValue(), editedRow[field]);
     }
+    for (const [field, label] of [
+      ["goal", "Goal"],
+      ["signal", "Signal"],
+      ["metric", "Metric"],
+      ["interpretation", "Interpretation"],
+      ["tolerance", "Tolerance"],
+      ["counter_signal", "Counter-signal"],
+      ["qualitative_companion", "Qualitative companion"],
+      ["status", "Evidence status"],
+      ["handoff", "Route"],
+    ]) {
+      assert.equal(
+        await page.locator(`[data-field="${field}"][data-row-id="${firstId}"]`).getAttribute("aria-label"),
+        `${label} for ${editedRow.category}`,
+      );
+    }
     const readableRow = page.locator("#readableTable tr").filter({ hasText: firstId });
     assert.match(await readableRow.textContent(), /Metric <img src=x/);
     assert.match(await readableRow.textContent(), /Recovery Routing Atlas/);
     assert.match(await page.locator("#inspector").textContent(), /Route <strong>signal strain<\/strong> through a visible recovery path/);
     assert.equal(await page.evaluate(() => globalThis.__coreProbe), undefined);
+    const changedPrompt = await page.evaluate(() => ({
+      fingerprint: window.heartChart.promptCapsuleFingerprint(),
+      markdown: window.heartChart.promptCapsule(),
+    }));
+    assert.notEqual(changedPrompt.fingerprint, initialPrompt.fingerprint);
+    assert.notEqual(changedPrompt.markdown, initialPrompt.plain);
+    assert.ok(changedPrompt.markdown.includes(
+      "Metric &lt;img src=x onerror=globalThis.\\_\\_coreProbe=1&gt; remains contextual",
+    ));
 
     await page.locator(`[data-action="move-down"][data-row-id="${firstId}"]`).click();
     const reordered = await valueJson(page, "#jsonExport");
@@ -282,6 +486,27 @@ async function heartPath(browser, origin, route) {
     assert.equal(importedRow.handoff, route);
     assert.equal(importedRow.reason, routeReason);
     assert.equal(new Set(imported.view_state.views[0].row_order).size, imported.heart_chart.rows.length);
+
+    const privateBaseline = await page.evaluate(() => ({
+      fingerprint: window.heartChart.promptCapsuleFingerprint(),
+      markdown: window.heartChart.promptCapsule(),
+      state: window.heartChart.getState(),
+    }));
+    const privateOnly = structuredClone(privateBaseline.state);
+    privateOnly.private_annotation = "local HEART note";
+    privateOnly.heart_chart.rows[0].private_annotation = "local row note";
+    await page.locator("#jsonImport").fill(JSON.stringify(privateOnly));
+    await page.locator('[data-action="import-json"]').click();
+    assert.match(await page.locator("#importMessage").textContent(), /HEART Chart imported/);
+    const privateReceipt = await page.evaluate(() => ({
+      fingerprint: window.heartChart.promptCapsuleFingerprint(),
+      markdown: window.heartChart.promptCapsule(),
+      state: window.heartChart.getState(),
+    }));
+    assert.equal(privateReceipt.state.private_annotation, "local HEART note");
+    assert.equal(privateReceipt.state.heart_chart.rows[0].private_annotation, "local row note");
+    assert.equal(privateReceipt.fingerprint, privateBaseline.fingerprint);
+    assert.equal(privateReceipt.markdown, privateBaseline.markdown);
 
     const sentinel = "HEART recovery sentinel";
     await page.locator(`[data-field="goal"][data-row-id="${firstId}"]`).fill(sentinel);
@@ -306,6 +531,7 @@ async function heartPath(browser, origin, route) {
   } finally {
     await context.close();
   }
+  await assertNoScriptPromptCapsule(browser, origin, route, "#aiPrompt", initialPrompt.plain);
 }
 
 async function specificationPath(browser, origin, route) {

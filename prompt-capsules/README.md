@@ -16,16 +16,17 @@ canonical sources, maintained projections, historical versions, generated
 receivers, and independently governed capsule families. It is an ownership map,
 not a count of matching words.
 
-The current adoptions span four Core source families: Strategy Canvas v0.2.4,
+The current adoptions span five Core source families: Strategy Canvas v0.2.4,
 First Responsible Version Matrix v0.1.4, Upstream Revision Loop v0.1.4,
 Recovery Routing Atlas v0.1.4, Participatory Design Kit v0.1.4,
 Specification-by-Example v0.1.6, Pattern–Problem Surface Matrix v0.1.4,
-Jobs-to-be-Done Treemap v0.1.4, and Unit-test-first Design v0.1.4; all four
+Jobs-to-be-Done Treemap v0.1.4, Unit-test-first Design v0.1.4, HEART Chart
+v0.1.6, Plus / Delta v0.1.4, and Practitioner Judgment Probes v0.1.4; all four
 current Narrative Architecture sources; and two standalone instruments—Open
-Lesson Field and Cross-Functional Investment Model Studio. The nine Core
+Lesson Field and Cross-Functional Investment Model Studio. The twelve Core
 adoptions complete the current Comparison and Threshold, Recovery Routing and
-Revision, Participatory Elicitation and Specification, and Pattern Fit and
-Behavior Protection families.
+Revision, Participatory Elicitation and Specification, Pattern Fit and
+Behavior Protection, and Measurement, Reflection, and Judgment families.
 Each source owner keeps its own state and schema version while
 projecting complete plain and skill-assisted Markdown views with one
 represented-state fingerprint. Each source points to a small set of related
@@ -53,6 +54,11 @@ carries eight patterns, six population groups, and all 48 described
 relationships. Jobs-to-be-Done Treemap carries each job’s purpose, weight,
 drivers, evidence, status, route, and review trigger. Unit-test-first Design
 carries each protected behavior’s source, preconditions, action, expected
-results, platform-independent test target, and evidence route. Other
-capsule-bearing artifacts keep their existing contracts until their source
-owner accepts a migration with a material use and fitting tests.
+results, platform-independent test target, and evidence route. HEART Chart
+carries every goal, signal, counter-signal, metric, threshold, and action
+route. Plus / Delta carries every observation with its reflection kind, goal,
+actor, evidence, status, instruction, review trigger, and route. Practitioner
+Judgment Probes carries every question with its probability target and
+estimate, concern family, causal path, evidence standing, instruction yield,
+and route. Other capsule-bearing artifacts keep their existing contracts until
+their source owner accepts a migration with a material use and fitting tests.
