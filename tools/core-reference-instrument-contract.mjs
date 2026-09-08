@@ -20,7 +20,7 @@ const artifactNames = {
   probes: "practitioner-judgment-probes-chimeric-prototype-v0.1.3.html",
   matrix: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.3.html",
   unitTestFirst: "unit-test-first-design-chimeric-prototype-v0.1.3.html",
-  recoveryAtlas: "recovery-routing-atlas-chimeric-prototype-v0.1.3.html",
+  recoveryAtlas: "recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
   familyIndex: "core-architecture-family-index-chimeric-prototype-v0.1.4.html"
 };
 
@@ -42,6 +42,21 @@ async function verify(label, callback) {
 
 function activeView(exported) {
   return exported.view_state.views.find(view => view.id === exported.view_state.active_view_id);
+}
+
+function relativeLuminance(cssColor) {
+  const channels = cssColor.match(/[\d.]+/gu)?.slice(0, 3).map(Number);
+  assert.equal(channels?.length, 3, `Expected an RGB color, received ${cssColor}`);
+  const linear = channels.map(channel => {
+    const value = channel / 255;
+    return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+  });
+  return (0.2126 * linear[0]) + (0.7152 * linear[1]) + (0.0722 * linear[2]);
+}
+
+function contrastRatio(foreground, background) {
+  const values = [relativeLuminance(foreground), relativeLuminance(background)];
+  return (Math.max(...values) + 0.05) / (Math.min(...values) + 0.05);
 }
 
 function withActiveViewArtifactCollision(exported) {
@@ -597,7 +612,8 @@ async function unitTestFirstPath(browser, origin, route) {
 }
 
 async function recoveryAtlasPath(browser, origin, route) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPlain = "";
   try {
     const geometryId = "geom-testless-unease";
     const strainCue = "A relied-upon behavior changes without an executable example.";
@@ -606,7 +622,122 @@ async function recoveryAtlasPath(browser, origin, route) {
     const primaryRoute = "Unit-test-first Design";
     const recoveryMoves = ["name the relied-upon behavior", "write one observable example"];
 
+    const initial = await page.evaluate(() => {
+      const api = window.recoveryRoutingAtlas;
+      return {
+        frozen: Object.isFrozen(api),
+        version: api.version,
+        contract: api.contract,
+        stateContract: api.stateContract,
+        view: api.getPromptCapsuleView(),
+        state: api.getState(),
+        stateProjection: api.promptCapsuleStateProjection(),
+        fingerprint: api.promptCapsuleFingerprint(),
+        plain: api.promptCapsule(),
+        explicitPlain: api.promptCapsuleMarkdown("plain"),
+        visible: document.querySelector("#promptBox").textContent,
+        promptStyle: (() => {
+          const style = getComputedStyle(document.querySelector("#promptBox"));
+          return { color: style.color, backgroundColor: style.backgroundColor };
+        })(),
+      };
+    });
+    initialPlain = initial.plain;
+    assert.equal(initial.frozen, true);
+    assert.deepEqual(
+      [initial.version, initial.contract, initial.stateContract, initial.view],
+      ["0.1.4", "prompt-capsule/0.1.0", "recovery-routing-atlas-state.v0.1", "plain"],
+    );
+    assert.equal(initial.plain, initial.explicitPlain);
+    assert.equal(initial.visible, initial.plain);
+    assert.equal(initial.stateProjection.geometries.length, initial.state.geometries.length);
+    assert.equal(initial.stateProjection.geometries.length, 19);
+    assert.ok(initial.plain.includes(`- Fingerprint: \`${initial.fingerprint}\``));
+    assert.match(initial.plain, /^# Prompt Capsule: Recovery Routing Atlas\n/u);
+    assert.match(initial.plain, /## Related loops/u);
+    assert.doesNotMatch(initial.plain, /## Skill assistance/u);
+    const promptContrast = contrastRatio(initial.promptStyle.color, initial.promptStyle.backgroundColor);
+    assert.ok(
+      promptContrast >= 4.5,
+      `Prompt Capsule contrast should meet 4.5:1, received ${promptContrast.toFixed(2)}:1 (${initial.promptStyle.color} on ${initial.promptStyle.backgroundColor})`,
+    );
+
     await page.locator(`#geometryList button[data-action="select"][data-id="${geometryId}"]`).click();
+    const selectedOnly = await page.evaluate(() => ({
+      selectedGeometryId: window.recoveryRoutingAtlas.getState().view_state.views[0].selected_geometry_id,
+      fingerprint: window.recoveryRoutingAtlas.promptCapsuleFingerprint(),
+      markdown: window.recoveryRoutingAtlas.promptCapsule(),
+    }));
+    assert.equal(selectedOnly.selectedGeometryId, geometryId);
+    assert.equal(selectedOnly.fingerprint, initial.fingerprint);
+    assert.equal(selectedOnly.markdown, initial.plain);
+
+    const loopReceipt = await page.locator("[data-prompt-related-loops]").evaluate((details) => ({
+      tag: details.tagName,
+      open: details.open,
+      summary: details.querySelector("summary")?.textContent.trim(),
+      loops: [...details.querySelectorAll("[data-related-loop-id]")].map((item) => ({
+        id: item.dataset.relatedLoopId,
+        href: item.querySelector("a")?.href,
+      })),
+    }));
+    assert.deepEqual(loopReceipt, {
+      tag: "DETAILS",
+      open: false,
+      summary: "Related loops",
+      loops: [
+        { id: "repository-reentry", href: "https://schemas.radiantnull.com/collaboration/#repository-reentry" },
+        { id: "skill-from-receiving-use", href: "https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use" },
+      ],
+    });
+    const relatedSummary = page.locator("[data-prompt-related-loops] summary");
+    await relatedSummary.focus();
+    const summaryBox = await relatedSummary.boundingBox();
+    assert.ok(summaryBox && summaryBox.height >= 44 && summaryBox.width >= 44);
+    await relatedSummary.press("Enter");
+    assert.equal(await page.locator("[data-prompt-related-loops]").evaluate(element => element.open), true);
+    const firstLoopBox = await page.locator("[data-related-loop-id] a").first().boundingBox();
+    assert.ok(firstLoopBox && firstLoopBox.height >= 44 && firstLoopBox.width >= 44);
+
+    const assistedControl = page.locator('[data-prompt-view][value="skill-assisted"]');
+    await assistedControl.check();
+    const assisted = await page.evaluate(() => ({
+      view: window.recoveryRoutingAtlas.getPromptCapsuleView(),
+      stateProjection: window.recoveryRoutingAtlas.promptCapsuleStateProjection(),
+      fingerprint: window.recoveryRoutingAtlas.promptCapsuleFingerprint(),
+      markdown: window.recoveryRoutingAtlas.promptCapsuleMarkdown(),
+      visible: document.querySelector("#promptBox").textContent,
+    }));
+    assert.equal(assisted.view, "skill-assisted");
+    assert.equal(assisted.markdown, assisted.visible);
+    assert.equal(assisted.fingerprint, initial.fingerprint);
+    assert.deepEqual(assisted.stateProjection, initial.stateProjection);
+    assert.match(assisted.markdown, /## Skill assistance/u);
+    assert.match(assisted.markdown, /\.agents\/skills\/practitioner-probe\/SKILL\.md/u);
+
+    await page.evaluate(() => { globalThis.__coreClipboard = ""; });
+    await page.locator("#copyPromptBtn").click();
+    await page.waitForFunction(() => Boolean(globalThis.__coreClipboard));
+    assert.equal(await page.evaluate(() => globalThis.__coreClipboard), assisted.markdown);
+    await page.evaluate(() => {
+      const original = URL.createObjectURL.bind(URL);
+      URL.createObjectURL = (blob) => {
+        globalThis.__promptDownloadType = blob.type;
+        return original(blob);
+      };
+    });
+    const downloadPromise = page.waitForEvent("download");
+    await page.locator("#downloadPromptBtn").click();
+    const download = await downloadPromise;
+    assert.equal(download.suggestedFilename(), "recovery-routing-atlas.prompt-capsule.r0.1.4.skill-assisted.md");
+    assert.equal(await page.evaluate(() => globalThis.__promptDownloadType), "text/markdown;charset=utf-8");
+    const stream = await download.createReadStream();
+    const chunks = [];
+    for await (const chunk of stream) chunks.push(chunk);
+    assert.equal(Buffer.concat(chunks).toString("utf8"), assisted.markdown);
+    await page.locator('[data-prompt-view][value="plain"]').check();
+    assert.equal(await page.locator("#promptBox").textContent(), initial.plain);
+
     await page.locator("#cueField").fill(strainCue);
     await page.locator("#cueField").press("Tab");
     await page.locator("#readField").fill(stabilizingRead);
@@ -636,6 +767,13 @@ async function recoveryAtlasPath(browser, origin, route) {
     assert.deepEqual(geometryNode.recoveryMove || geometryNode["ca:recoveryMove"], recoveryMoves);
     let viewNode = linkedGraph["@graph"].find(node => (node.type || node["@type"]) === "ca:ViewConfiguration");
     assert.equal(viewNode["ca:selectedGeometry"], `#${geometryId}`);
+    const changedCapsule = await page.evaluate(() => ({
+      fingerprint: window.recoveryRoutingAtlas.promptCapsuleFingerprint(),
+      markdown: window.recoveryRoutingAtlas.promptCapsule(),
+    }));
+    assert.notEqual(changedCapsule.fingerprint, initial.fingerprint);
+    assert.notEqual(changedCapsule.markdown, initial.plain);
+    assert.match(changedCapsule.markdown, /The vital behavior becomes an executable example\./u);
 
     const beforeOrder = [...activeView(exported).geometry_order];
     const index = beforeOrder.indexOf(geometryId);
@@ -687,6 +825,10 @@ async function recoveryAtlasPath(browser, origin, route) {
     const malformed = structuredClone(await textJson(page, "#jsonOut"));
     malformed.artifact_identity.display_name = "Partially committed recovery title";
     malformed.geometries = [null];
+    const retainedCapsule = await page.evaluate(() => ({
+      fingerprint: window.recoveryRoutingAtlas.promptCapsuleFingerprint(),
+      markdown: window.recoveryRoutingAtlas.promptCapsule(),
+    }));
     await clearNotice(page, "#importNotice");
     await page.locator("#importText").fill(JSON.stringify(malformed));
     await page.locator("#importBtn").click();
@@ -694,6 +836,10 @@ async function recoveryAtlasPath(browser, origin, route) {
     let recovered = await textJson(page, "#jsonOut");
     assert.notEqual(recovered.artifact_identity.display_name, "Partially committed recovery title");
     assert.equal(recovered.geometries.find(item => item.id === geometryId).stabilizing_read, sentinel);
+    assert.deepEqual(await page.evaluate(() => ({
+      fingerprint: window.recoveryRoutingAtlas.promptCapsuleFingerprint(),
+      markdown: window.recoveryRoutingAtlas.promptCapsule(),
+    })), retainedCapsule);
 
     const collision = withActiveViewArtifactCollision(recovered);
     await clearNotice(page, "#importNotice");
@@ -704,9 +850,106 @@ async function recoveryAtlasPath(browser, origin, route) {
     await page.locator("#readField").press("Tab");
     recovered = await textJson(page, "#jsonOut");
     assert.match(recovered.geometries.find(item => item.id === geometryId).stabilizing_read, /remains operable/);
+
+    const requiredFieldsBefore = structuredClone(recovered.geometries.find(item => item.id === geometryId));
+    await page.locator("#routeField").fill(" ");
+    await page.locator("#routeField").press("Tab");
+    await page.waitForFunction(() => /working geometry retained/i.test(document.querySelector("#promptCapsuleStatus")?.textContent || ""));
+    let afterRequiredRecovery = (await textJson(page, "#jsonOut")).geometries.find(item => item.id === geometryId);
+    assert.deepEqual(afterRequiredRecovery.primary_routes, requiredFieldsBefore.primary_routes);
+    assert.equal(await page.locator("#routeField").inputValue(), requiredFieldsBefore.primary_routes.join("\n"));
+
+    await page.locator("#nameField").fill(" ");
+    await page.locator("#nameField").press("Tab");
+    afterRequiredRecovery = (await textJson(page, "#jsonOut")).geometries.find(item => item.id === geometryId);
+    assert.equal(afterRequiredRecovery.name, requiredFieldsBefore.name);
+    assert.equal(await page.locator("#nameField").inputValue(), requiredFieldsBefore.name);
+
+    const exactSelfRoundtrip = await textJson(page, "#jsonOut");
+    await page.locator("#importText").fill(JSON.stringify(exactSelfRoundtrip));
+    await page.locator("#importBtn").click();
+    await assertVisibleNotice(page, "#importNotice", /updated|imported/i);
+    assert.deepEqual(await textJson(page, "#jsonOut"), exactSelfRoundtrip);
+
+    await page.evaluate(() => {
+      Object.defineProperty(Navigator.prototype, "clipboard", {
+        configurable: true,
+        get: () => undefined,
+      });
+      document.execCommand = () => false;
+    });
+    await page.locator("#copyPromptBtn").click();
+    await page.waitForFunction(() => /manual copy/i.test(document.querySelector("#promptCapsuleStatus")?.textContent || ""));
+    assert.equal(await page.locator("#promptBox").isVisible(), true);
     assertTelemetry(telemetry);
   } finally {
     await context.close();
+  }
+
+  const stateBoundaryContext = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  try {
+    const stateBoundaryPage = await stateBoundaryContext.newPage();
+    await stateBoundaryPage.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+    const baseline = await stateBoundaryPage.evaluate(() => ({
+      state: window.recoveryRoutingAtlas.getState(),
+      fingerprint: window.recoveryRoutingAtlas.promptCapsuleFingerprint(),
+      markdown: window.recoveryRoutingAtlas.promptCapsule(),
+    }));
+    const privateOnly = structuredClone(baseline.state);
+    privateOnly.artifact_identity.private_annotation = "local review note";
+    privateOnly.geometries[0].private_annotation = "local geometry note";
+    await revealControl(stateBoundaryPage, "#importText");
+    await stateBoundaryPage.locator("#importText").fill(JSON.stringify(privateOnly));
+    await stateBoundaryPage.locator("#importBtn").click();
+    await assertVisibleNotice(stateBoundaryPage, "#importNotice", /updated|imported/i);
+    const privateOnlyReceipt = await stateBoundaryPage.evaluate(() => ({
+      state: window.recoveryRoutingAtlas.getState(),
+      fingerprint: window.recoveryRoutingAtlas.promptCapsuleFingerprint(),
+      markdown: window.recoveryRoutingAtlas.promptCapsule(),
+    }));
+    assert.equal(privateOnlyReceipt.state.artifact_identity.private_annotation, "local review note");
+    assert.equal(privateOnlyReceipt.state.geometries[0].private_annotation, "local geometry note");
+    assert.equal(privateOnlyReceipt.fingerprint, baseline.fingerprint);
+    assert.equal(privateOnlyReceipt.markdown, baseline.markdown);
+
+    const semanticChange = structuredClone(privateOnlyReceipt.state);
+    semanticChange.semantic_locality.preferred_phrasing[0] = "Which restored condition would re-open movement?";
+    await stateBoundaryPage.locator("#importText").fill(JSON.stringify(semanticChange));
+    await stateBoundaryPage.locator("#importBtn").click();
+    await assertVisibleNotice(stateBoundaryPage, "#importNotice", /updated|imported/i);
+    const semanticReceipt = await stateBoundaryPage.evaluate(() => ({
+      fingerprint: window.recoveryRoutingAtlas.promptCapsuleFingerprint(),
+      markdown: window.recoveryRoutingAtlas.promptCapsule(),
+    }));
+    assert.notEqual(semanticReceipt.fingerprint, baseline.fingerprint);
+    assert.notEqual(semanticReceipt.markdown, baseline.markdown);
+    assert.match(semanticReceipt.markdown, /Which restored condition would re-open movement\?/u);
+  } finally {
+    await stateBoundaryContext.close();
+  }
+
+  const noScriptContext = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 320, height: 900 },
+  });
+  try {
+    const noScriptPage = await noScriptContext.newPage();
+    await noScriptPage.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+    assert.equal(await noScriptPage.locator("#promptBox").textContent(), initialPlain);
+    assert.equal(await noScriptPage.locator("#promptBox").isVisible(), true);
+    assert.equal(await noScriptPage.locator("[data-prompt-view-control]").isVisible(), false);
+    assert.equal(await noScriptPage.locator("[data-prompt-actions]").isVisible(), false);
+    const details = noScriptPage.locator("[data-prompt-related-loops]");
+    assert.equal(await details.isVisible(), true);
+    await details.locator("summary").click();
+    assert.equal(await details.evaluate(element => element.open), true);
+    const containment = await noScriptPage.locator("html").evaluate(root => ({
+      clientWidth: root.clientWidth,
+      scrollWidth: root.scrollWidth,
+    }));
+    assert.ok(containment.scrollWidth <= containment.clientWidth + 1, JSON.stringify(containment));
+  } finally {
+    await noScriptContext.close();
   }
 }
 

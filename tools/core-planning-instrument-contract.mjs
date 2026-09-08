@@ -23,7 +23,7 @@ const artifactNames = {
   softwareViews: "software-architecture-views-chimeric-prototype-v0.1.3.html",
   participatory: "participatory-design-kit-chimeric-prototype-v0.1.3.html",
   plusDelta: "plus-delta-chimeric-prototype-v0.1.3.html",
-  upstream: "upstream-revision-loop-chimeric-prototype-v0.1.3.html"
+  upstream: "upstream-revision-loop-chimeric-prototype-v0.1.4.html"
 };
 
 const checks = [];
@@ -807,11 +807,119 @@ async function plusDeltaPath(browser, origin, route) {
 }
 
 async function upstreamPath(browser, origin, route) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPlain = "";
   try {
     const revisionId = "revision-ai-summary-review-route";
     const observation = "Human review evidence now identifies a visible source-boundary transition.";
     const revisedRead = "The prior artifact can expose source support and confirmation as separate review states.";
+    const initial = await page.evaluate(() => {
+      const api = window.upstreamRevisionLoop;
+      return {
+        frozen: Object.isFrozen(api),
+        version: api.version,
+        contract: api.contract,
+        stateContract: api.stateContract,
+        view: api.getPromptCapsuleView(),
+        state: api.getState(),
+        stateProjection: api.promptCapsuleStateProjection(),
+        fingerprint: api.promptCapsuleFingerprint(),
+        plain: api.promptCapsule(),
+        explicitPlain: api.promptCapsuleMarkdown("plain"),
+        visible: document.querySelector("#aiPromptOut").textContent,
+      };
+    });
+    initialPlain = initial.plain;
+    assert.equal(initial.frozen, true);
+    assert.deepEqual(
+      [initial.version, initial.contract, initial.stateContract, initial.view],
+      ["0.1.4", "prompt-capsule/0.1.0", "upstream-revision-loop-state.v0.1", "plain"],
+    );
+    assert.equal(initial.plain, initial.explicitPlain);
+    assert.equal(initial.visible, initial.plain);
+    assert.equal(initial.stateProjection.revisions.length, initial.state.revisions.length);
+    assert.ok(initial.plain.includes(`- Fingerprint: \`${initial.fingerprint}\``));
+    assert.match(initial.plain, /^# Prompt Capsule: Upstream Revision Loop\n/u);
+    assert.match(initial.plain, /## Related loops/u);
+    assert.doesNotMatch(initial.plain, /## Skill assistance/u);
+
+    await page.locator('[data-action="select"][data-id="revision-summary-feature-service-layers"]').first().click();
+    const selectedOnly = await page.evaluate(() => ({
+      selectedRevisionId: window.upstreamRevisionLoop.getState().view_state.views[0].selected_revision_id,
+      fingerprint: window.upstreamRevisionLoop.promptCapsuleFingerprint(),
+      markdown: window.upstreamRevisionLoop.promptCapsule(),
+    }));
+    assert.equal(selectedOnly.selectedRevisionId, "revision-summary-feature-service-layers");
+    assert.equal(selectedOnly.fingerprint, initial.fingerprint);
+    assert.equal(selectedOnly.markdown, initial.plain);
+
+    const loopReceipt = await page.locator("[data-prompt-related-loops]").evaluate((details) => ({
+      tag: details.tagName,
+      open: details.open,
+      summary: details.querySelector("summary")?.textContent.trim(),
+      loops: [...details.querySelectorAll("[data-related-loop-id]")].map((item) => ({
+        id: item.dataset.relatedLoopId,
+        href: item.querySelector("a")?.href,
+      })),
+    }));
+    assert.deepEqual(loopReceipt, {
+      tag: "DETAILS",
+      open: false,
+      summary: "Related loops",
+      loops: [
+        { id: "repository-reentry", href: "https://schemas.radiantnull.com/collaboration/#repository-reentry" },
+        { id: "public-release", href: "https://schemas.radiantnull.com/collaboration/#public-release" },
+      ],
+    });
+    const relatedSummary = page.locator("[data-prompt-related-loops] summary");
+    await relatedSummary.focus();
+    const summaryBox = await relatedSummary.boundingBox();
+    assert.ok(summaryBox && summaryBox.height >= 44 && summaryBox.width >= 44);
+    await relatedSummary.press("Enter");
+    assert.equal(await page.locator("[data-prompt-related-loops]").evaluate(element => element.open), true);
+    const firstLoopBox = await page.locator("[data-related-loop-id] a").first().boundingBox();
+    assert.ok(firstLoopBox && firstLoopBox.height >= 44 && firstLoopBox.width >= 44);
+
+    const assistedControl = page.locator('[data-prompt-view][value="skill-assisted"]');
+    await assistedControl.check();
+    const assisted = await page.evaluate(() => ({
+      view: window.upstreamRevisionLoop.getPromptCapsuleView(),
+      stateProjection: window.upstreamRevisionLoop.promptCapsuleStateProjection(),
+      fingerprint: window.upstreamRevisionLoop.promptCapsuleFingerprint(),
+      markdown: window.upstreamRevisionLoop.promptCapsuleMarkdown(),
+      visible: document.querySelector("#aiPromptOut").textContent,
+    }));
+    assert.equal(assisted.view, "skill-assisted");
+    assert.equal(assisted.markdown, assisted.visible);
+    assert.equal(assisted.fingerprint, initial.fingerprint);
+    assert.deepEqual(assisted.stateProjection, initial.stateProjection);
+    assert.match(assisted.markdown, /## Skill assistance/u);
+    assert.match(assisted.markdown, /\.agents\/skills\/source-authority-mapping\/SKILL\.md/u);
+
+    await page.evaluate(() => { globalThis.__coreClipboard = ""; });
+    await page.locator("#copyPromptBtn").click();
+    await page.waitForFunction(() => Boolean(globalThis.__coreClipboard));
+    assert.equal(await page.evaluate(() => globalThis.__coreClipboard), assisted.markdown);
+    await page.evaluate(() => {
+      const original = URL.createObjectURL.bind(URL);
+      URL.createObjectURL = (blob) => {
+        globalThis.__promptDownloadType = blob.type;
+        return original(blob);
+      };
+    });
+    const downloadPromise = page.waitForEvent("download");
+    await page.locator("#downloadPromptBtn").click();
+    const download = await downloadPromise;
+    assert.equal(download.suggestedFilename(), "upstream-revision-loop.prompt-capsule.r0.1.4.skill-assisted.md");
+    assert.equal(await page.evaluate(() => globalThis.__promptDownloadType), "text/markdown;charset=utf-8");
+    const stream = await download.createReadStream();
+    const chunks = [];
+    for await (const chunk of stream) chunks.push(chunk);
+    assert.equal(Buffer.concat(chunks).toString("utf8"), assisted.markdown);
+
+    await page.locator('[data-prompt-view][value="plain"]').check();
+    assert.equal(await page.locator("#aiPromptOut").textContent(), initial.plain);
+    await page.locator(`[data-action="select"][data-id="${revisionId}"]`).first().click();
     const evidenceField = page.locator(`textarea[data-field="evidence_observation"][data-id="${revisionId}"]`);
     await evidenceField.fill(observation);
     await evidenceField.press("Tab");
@@ -827,6 +935,13 @@ async function upstreamPath(browser, origin, route) {
     assert.match(await page.locator("#tableWrap").textContent(), /The prior artifact can expose source support/);
     assert.match(await page.locator("#inspector").textContent(), /Human review evidence now identifies/);
     assert.ok((await textJson(page, "#jsonLdOut"))["@graph"].some(node => node.id.endsWith(revisionId) && node["ca:revisedRead"] === revisedRead));
+    const changedCapsule = await page.evaluate(() => ({
+      fingerprint: window.upstreamRevisionLoop.promptCapsuleFingerprint(),
+      markdown: window.upstreamRevisionLoop.promptCapsule(),
+    }));
+    assert.notEqual(changedCapsule.fingerprint, initial.fingerprint);
+    assert.notEqual(changedCapsule.markdown, initial.plain);
+    assert.match(changedCapsule.markdown, /Human review evidence now identifies a visible source-boundary transition\./u);
 
     const beforeOrder = [...activeView(exported).revision_order];
     const beforeIndex = beforeOrder.indexOf(revisionId);
@@ -867,10 +982,18 @@ async function upstreamPath(browser, origin, route) {
     await sentinelField.press("Tab");
     const invalid = structuredClone(await textJson(page, "#jsonOut"));
     invalid.view_state.views = [];
+    const retainedCapsule = await page.evaluate(() => ({
+      fingerprint: window.upstreamRevisionLoop.promptCapsuleFingerprint(),
+      markdown: window.upstreamRevisionLoop.promptCapsule(),
+    }));
     await page.locator("#importArea").fill(JSON.stringify(invalid));
     await page.locator("#importBtn").click();
     await assertVisibleNotice(page, "#importNotice", /remains available|working state retained/i);
     assert.equal((await textJson(page, "#jsonOut")).revisions.find(item => item.id === revisionId).evidence_observation, sentinel);
+    assert.deepEqual(await page.evaluate(() => ({
+      fingerprint: window.upstreamRevisionLoop.promptCapsuleFingerprint(),
+      markdown: window.upstreamRevisionLoop.promptCapsule(),
+    })), retainedCapsule);
 
     const collision = withActiveViewArtifactCollision(await textJson(page, "#jsonOut"));
     await clearNotice(page, "#importNotice");
@@ -881,6 +1004,71 @@ async function upstreamPath(browser, origin, route) {
     assertTelemetry(telemetry);
   } finally {
     await context.close();
+  }
+
+  const stateBoundaryContext = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  try {
+    const stateBoundaryPage = await stateBoundaryContext.newPage();
+    await stateBoundaryPage.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+    const baseline = await stateBoundaryPage.evaluate(() => ({
+      state: window.upstreamRevisionLoop.getState(),
+      fingerprint: window.upstreamRevisionLoop.promptCapsuleFingerprint(),
+      markdown: window.upstreamRevisionLoop.promptCapsule(),
+    }));
+    const privateOnly = structuredClone(baseline.state);
+    privateOnly.artifact_identity.private_annotation = "local review note";
+    privateOnly.revisions[0].private_annotation = "local revision note";
+    await stateBoundaryPage.locator("#importArea").fill(JSON.stringify(privateOnly));
+    await stateBoundaryPage.locator("#importBtn").click();
+    await assertVisibleNotice(stateBoundaryPage, "#importNotice", /updated|imported/i);
+    const privateOnlyReceipt = await stateBoundaryPage.evaluate(() => ({
+      state: window.upstreamRevisionLoop.getState(),
+      fingerprint: window.upstreamRevisionLoop.promptCapsuleFingerprint(),
+      markdown: window.upstreamRevisionLoop.promptCapsule(),
+    }));
+    assert.equal(privateOnlyReceipt.state.artifact_identity.private_annotation, "local review note");
+    assert.equal(privateOnlyReceipt.state.revisions[0].private_annotation, "local revision note");
+    assert.equal(privateOnlyReceipt.fingerprint, baseline.fingerprint);
+    assert.equal(privateOnlyReceipt.markdown, baseline.markdown);
+
+    const semanticChange = structuredClone(privateOnlyReceipt.state);
+    semanticChange.semantic_locality.preferred_phrasing[0] = "Which accepted evidence improves this prior artifact?";
+    await stateBoundaryPage.locator("#importArea").fill(JSON.stringify(semanticChange));
+    await stateBoundaryPage.locator("#importBtn").click();
+    await assertVisibleNotice(stateBoundaryPage, "#importNotice", /updated|imported/i);
+    const semanticReceipt = await stateBoundaryPage.evaluate(() => ({
+      fingerprint: window.upstreamRevisionLoop.promptCapsuleFingerprint(),
+      markdown: window.upstreamRevisionLoop.promptCapsule(),
+    }));
+    assert.notEqual(semanticReceipt.fingerprint, baseline.fingerprint);
+    assert.notEqual(semanticReceipt.markdown, baseline.markdown);
+    assert.match(semanticReceipt.markdown, /Which accepted evidence improves this prior artifact\?/u);
+  } finally {
+    await stateBoundaryContext.close();
+  }
+
+  const noScriptContext = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 320, height: 900 },
+  });
+  try {
+    const noScriptPage = await noScriptContext.newPage();
+    await noScriptPage.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+    assert.equal(await noScriptPage.locator("#aiPromptOut").textContent(), initialPlain);
+    assert.equal(await noScriptPage.locator("#aiPromptOut").isVisible(), true);
+    assert.equal(await noScriptPage.locator("[data-prompt-view-control]").isVisible(), false);
+    assert.equal(await noScriptPage.locator("[data-prompt-actions]").isVisible(), false);
+    const details = noScriptPage.locator("[data-prompt-related-loops]");
+    assert.equal(await details.isVisible(), true);
+    await details.locator("summary").click();
+    assert.equal(await details.evaluate(element => element.open), true);
+    const containment = await noScriptPage.locator("html").evaluate(root => ({
+      clientWidth: root.clientWidth,
+      scrollWidth: root.scrollWidth,
+    }));
+    assert.ok(containment.scrollWidth <= containment.clientWidth + 1, JSON.stringify(containment));
+  } finally {
+    await noScriptContext.close();
   }
 }
 
