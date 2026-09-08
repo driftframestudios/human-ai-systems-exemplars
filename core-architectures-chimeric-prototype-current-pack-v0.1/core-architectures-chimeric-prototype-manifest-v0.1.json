@@ -30,15 +30,16 @@
       "subtitle": "Purpose, Objectives, Discoverables, Activities",
       "family": "Orientation and Tracing",
       "shape": "left-to-right orientation map",
-      "file": "poda-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "poda-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 72559,
+      "size_bytes": 111057,
       "previous": [
         "poda-chimeric-prototype-v0.1.html",
         "poda-chimeric-prototype-v0.1.1.html",
-        "poda-chimeric-prototype-v0.1.2.html"
+        "poda-chimeric-prototype-v0.1.2.html",
+        "poda-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -47,15 +48,16 @@
       "subtitle": "Forward / Backward Premise Surface",
       "family": "Orientation and Tracing",
       "shape": "six-blank premise flow + option spread",
-      "file": "alignment-worksheet-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "alignment-worksheet-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 67321,
+      "size_bytes": 106530,
       "previous": [
         "alignment-worksheet-chimeric-prototype-v0.1.html",
         "alignment-worksheet-chimeric-prototype-v0.1.1.html",
-        "alignment-worksheet-chimeric-prototype-v0.1.2.html"
+        "alignment-worksheet-chimeric-prototype-v0.1.2.html",
+        "alignment-worksheet-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -64,17 +66,18 @@
       "subtitle": "Actor–Impact–Discoverable Trace",
       "family": "Orientation and Tracing",
       "shape": "directed graph",
-      "file": "impact-map-chimeric-prototype-v0.1.4.html",
-      "version": "0.1.4",
+      "file": "impact-map-chimeric-prototype-v0.1.5.html",
+      "version": "0.1.5",
       "status": "current",
       "previous": [
         "impact-map-chimeric-prototype-v0.1.html",
         "impact-map-chimeric-prototype-v0.1.1.html",
         "impact-map-chimeric-prototype-v0.1.2.html",
-        "impact-map-chimeric-prototype-v0.1.3.html"
+        "impact-map-chimeric-prototype-v0.1.3.html",
+        "impact-map-chimeric-prototype-v0.1.4.html"
       ],
       "exists": true,
-      "size_bytes": 46004
+      "size_bytes": 83801
     },
     {
       "id": "context-tree",
@@ -82,8 +85,8 @@
       "subtitle": "Role–Knowledge Context Map",
       "family": "Orientation and Tracing",
       "shape": "role-context matrix",
-      "file": "context-tree-chimeric-prototype-v0.1.6.html",
-      "version": "0.1.6",
+      "file": "context-tree-chimeric-prototype-v0.1.7.html",
+      "version": "0.1.7",
       "status": "current",
       "previous": [
         "context-tree-chimeric-prototype-v0.1.html",
@@ -91,10 +94,11 @@
         "context-tree-chimeric-prototype-v0.1.2.html",
         "context-tree-chimeric-prototype-v0.1.3.html",
         "context-tree-chimeric-prototype-v0.1.4.html",
-        "context-tree-chimeric-prototype-v0.1.5.html"
+        "context-tree-chimeric-prototype-v0.1.5.html",
+        "context-tree-chimeric-prototype-v0.1.6.html"
       ],
       "exists": true,
-      "size_bytes": 85427
+      "size_bytes": 134657
     },
     {
       "id": "strategy-canvas",

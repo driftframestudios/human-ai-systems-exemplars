@@ -102,7 +102,7 @@ test("First Responsible Version Matrix carries the complete Prompt Capsule sourc
     held_capabilities: [],
   });
   assert.match(inventory, /First Responsible Version Matrix v0\.1\.4/u);
-  assert.match(inventory, /eighteen current[\s\S]*?adoptions\. The remaining 10/u);
+  assert.match(inventory, /22 current[\s\S]*?adoptions\. The remaining six/u);
 });
 
 test("First Responsible Version Matrix pins the exact public skills it offers", async () => {

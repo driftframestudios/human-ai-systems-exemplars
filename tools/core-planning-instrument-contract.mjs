@@ -15,8 +15,8 @@ import {
 } from "./core-architecture-browser-helper.mjs";
 
 const artifactNames = {
-  poda: "poda-chimeric-prototype-v0.1.3.html",
-  alignment: "alignment-worksheet-chimeric-prototype-v0.1.3.html",
+  poda: "poda-chimeric-prototype-v0.1.4.html",
+  alignment: "alignment-worksheet-chimeric-prototype-v0.1.4.html",
   frv: "first-responsible-version-matrix-chimeric-prototype-v0.1.4.html",
   sharedSurface: "shared-surface-priority-map-chimeric-prototype-v0.1.3.html",
   aiSystems: "ai-systems-service-blueprint-chimeric-prototype-v0.1.3.html",
@@ -196,11 +196,29 @@ async function clearNotice(page, selector) {
 }
 
 async function podaPath(browser, origin, route) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPlain = "";
   try {
+    const initial = await exercisePromptCapsule(page, {
+      apiName: "poda",
+      copySelector: "#copyPromptBtn",
+      downloadSelector: "#downloadPromptBtn",
+      filename: "poda.prompt-capsule.r0.1.4.skill-assisted.md",
+      loopIds: ["repository-reentry", "skill-from-receiving-use"],
+      promptSelector: "#aiPrompt",
+      stateContract: "poda-state.v0.1",
+      title: "PODA",
+      version: "0.1.4",
+    });
+    initialPlain = initial.plain;
+    assert.equal(initial.projection.objectives.length, initial.state.poda.objectives.length);
+    assert.equal(initial.projection.discoverables.length, initial.state.poda.discoverables.length);
+    assert.equal(initial.projection.activities.length, initial.state.poda.activities.length);
+    const initialCapsule = { fingerprint: initial.fingerprint, markdown: initial.plain };
     const activityId = "activity-impact-map";
     const discoverableId = "discoverable-role-context";
     await page.locator(`button[data-action="select"][data-type="activity"][data-id="${activityId}"]`).click();
+    assert.deepEqual(await page.evaluate(() => ({ fingerprint: window.poda.promptCapsuleFingerprint(), markdown: window.poda.promptCapsule() })), initialCapsule);
     const relationship = page.locator(`input[data-link="discoverable_ids"][data-type="activity"][data-id="${activityId}"][value="${discoverableId}"]`);
     assert.equal(await relationship.isChecked(), false);
     await relationship.check();
@@ -212,6 +230,8 @@ async function podaPath(browser, origin, route) {
     const linkedGraph = JSON.parse(await page.locator("#jsonld-script").textContent());
     const activityNode = linkedGraph["@graph"].find(node => node["@id"] === `#${activityId}`);
     assert.ok(activityNode["ca:surfacesDiscoverable"].some(node => node["@id"] === `#${discoverableId}`));
+    assert.notEqual(await page.evaluate(() => window.poda.promptCapsuleFingerprint()), initial.fingerprint);
+    assert.match(await page.locator("#aiPrompt").textContent(), /Role-specific context/u);
 
     await page.locator(`#activitiesEditor button[data-action="toggleVisibility"][data-type="activity"][data-id="${activityId}"]`).click();
     exported = await textJson(page, "#jsonPreview");
@@ -234,6 +254,53 @@ async function podaPath(browser, origin, route) {
     assert.equal(imported.poda.activities.find(item => item.id === activityId).text, importedActivity);
     assert.equal(activeView(imported).selected_item_id, activityId);
     assert.match(await page.locator("#textTable").textContent(), /Imported PODA activity relationship/);
+
+    const privateCapsule = await page.evaluate(() => ({ fingerprint: window.poda.promptCapsuleFingerprint(), markdown: window.poda.promptCapsule() }));
+    const privateCandidate = structuredClone(await textJson(page, "#jsonPreview"));
+    privateCandidate._private_annotation = "local orientation note";
+    privateCandidate.poda._private_annotation = "local PODA note";
+    privateCandidate.poda.purpose._private_annotation = "local purpose note";
+    await page.locator("#jsonImport").fill(JSON.stringify(privateCandidate));
+    await page.locator("#importJsonBtn").click();
+    const privateReceipt = await textJson(page, "#jsonPreview");
+    assert.equal(privateReceipt._private_annotation, "local orientation note");
+    assert.equal(privateReceipt.poda._private_annotation, "local PODA note");
+    assert.equal(privateReceipt.poda.purpose._private_annotation, "local purpose note");
+    assert.deepEqual(await page.evaluate(() => ({ fingerprint: window.poda.promptCapsuleFingerprint(), markdown: window.poda.promptCapsule() })), privateCapsule);
+
+    const multiView = structuredClone(privateReceipt);
+    const baseView = activeView(multiView);
+    multiView.view_state.views.push({
+      ...structuredClone(baseView),
+      id: "view-review-route",
+      name: "Review route focus",
+      objective_order: [...baseView.objective_order].reverse(),
+      discoverable_order: [...baseView.discoverable_order].reverse(),
+      activity_order: [...baseView.activity_order].reverse(),
+      hidden_objective_ids: [baseView.objective_order[0]],
+      selected_item_type: "",
+      selected_item_id: "",
+      _private_annotation: "local view note",
+    });
+    await page.locator("#jsonImport").fill(JSON.stringify(multiView));
+    await page.locator("#importJsonBtn").click();
+    assert.deepEqual(await textJson(page, "#jsonPreview"), multiView);
+    const beforeObjectiveIds = new Set(multiView.poda.objectives.map(item => item.id));
+    await page.locator("#addObjectiveBtn").click();
+    const afterAdd = await textJson(page, "#jsonPreview");
+    const addedObjective = afterAdd.poda.objectives.find(item => !beforeObjectiveIds.has(item.id));
+    assert.ok(addedObjective);
+    assert.ok(afterAdd.view_state.views.every(view => view.objective_order.includes(addedObjective.id)));
+    const removeAdded = page.locator(`#objectivesEditor button[data-action="remove"][data-id="${addedObjective.id}"]`);
+    await page.waitForTimeout(50);
+    await removeAdded.click();
+    await page.waitForTimeout(50);
+    await removeAdded.click();
+    const afterRemove = await textJson(page, "#jsonPreview");
+    assert.ok(afterRemove.view_state.views.every(view => !view.objective_order.includes(addedObjective.id) && !view.hidden_objective_ids.includes(addedObjective.id)));
+    await page.locator("#jsonImport").fill(JSON.stringify(afterRemove));
+    await page.locator("#importJsonBtn").click();
+    assert.deepEqual(await textJson(page, "#jsonPreview"), afterRemove);
 
     const sentinel = "PODA recovery sentinel";
     await page.locator("#purposeText").fill(sentinel);
@@ -258,18 +325,60 @@ async function podaPath(browser, origin, route) {
     await page.locator("#importJsonBtn").click();
     await assertVisibleNotice(page, "#importNotice", /unique semantic namespace/i);
     assert.equal((await textJson(page, "#jsonPreview")).poda.purpose.text, sentinel);
+    const minimum = structuredClone(await textJson(page, "#jsonPreview"));
+    minimum.poda.objectives = minimum.poda.objectives.slice(0, 1);
+    minimum.poda.discoverables = minimum.poda.discoverables.slice(0, 1);
+    minimum.poda.discoverables[0].objective_ids = [minimum.poda.objectives[0].id];
+    minimum.poda.activities = minimum.poda.activities.slice(0, 1);
+    minimum.poda.activities[0].discoverable_ids = [minimum.poda.discoverables[0].id];
+    minimum.view_state.views.forEach(view => {
+      view.objective_order = [minimum.poda.objectives[0].id];
+      view.hidden_objective_ids = [];
+      view.discoverable_order = [minimum.poda.discoverables[0].id];
+      view.hidden_discoverable_ids = [];
+      view.activity_order = [minimum.poda.activities[0].id];
+      view.hidden_activity_ids = [];
+      view.selected_item_type = "";
+      view.selected_item_id = "";
+    });
+    await page.locator("#jsonImport").fill(JSON.stringify(minimum));
+    await page.locator("#importJsonBtn").click();
+    assert.equal(await page.locator('#objectivesEditor button[data-action="remove"], #discoverablesEditor button[data-action="remove"], #activitiesEditor button[data-action="remove"]').evaluateAll(buttons => buttons.length === 3 && buttons.every(button => button.disabled)), true);
+    const minimumFingerprint = await page.evaluate(() => window.poda.promptCapsuleFingerprint());
+    await page.locator('#objectivesEditor button[data-action="remove"]').evaluate(button => button.click());
+    assert.equal(await page.evaluate(() => window.poda.promptCapsuleFingerprint()), minimumFingerprint);
+    assert.equal(await page.locator("#objectivesEditor label, #discoverablesEditor label, #activitiesEditor label, #inspector label").evaluateAll(labels => labels.every(label => Boolean(label.htmlFor && document.getElementById(label.htmlFor)))), true);
     assertTelemetry(telemetry);
   } finally {
     await context.close();
   }
+  await assertNoScriptPromptCapsule(browser, origin, route, "#aiPrompt", initialPlain);
 }
 
 async function alignmentPath(browser, origin, route) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialPlain = "";
   try {
+    const initial = await exercisePromptCapsule(page, {
+      apiName: "alignmentWorksheet",
+      copySelector: "#copyPromptBtn",
+      downloadSelector: "#downloadPromptBtn",
+      filename: "alignment-worksheet.prompt-capsule.r0.1.4.skill-assisted.md",
+      loopIds: ["repository-reentry", "skill-from-receiving-use"],
+      promptSelector: "#promptBox",
+      stateContract: "alignment-worksheet-state.v0.1",
+      title: "Alignment Worksheet",
+      version: "0.1.4",
+    });
+    initialPlain = initial.plain;
+    assert.equal(initial.projection.baseline.length, initial.state.baseline_chain.length);
+    assert.equal(initial.projection.options.length, initial.state.options.length);
+    const initialCapsule = { fingerprint: initial.fingerprint, markdown: initial.plain };
+    await page.locator('button.select-option[data-id="option-ai-boundary"]').click();
+    assert.deepEqual(await page.evaluate(() => ({ fingerprint: window.alignmentWorksheet.promptCapsuleFingerprint(), markdown: window.alignmentWorksheet.promptCapsule() })), initialCapsule);
     const restored = "Review boundaries remain visible <strong>as collaborator text</strong>.";
     const strain = "Reviewers can locate the source boundary and still need a clearer confirmation route.";
-    await page.locator("#text-restored_state").fill(restored);
+    await page.locator('.blank-text[data-key="restored_state"]').fill(restored);
     await page.locator('.inverse-field[data-key="observed_strain_state"]').fill(strain);
     await page.locator('button.move-option[data-id="option-ai-boundary"][data-dir="-1"]').click();
 
@@ -277,6 +386,8 @@ async function alignmentPath(browser, origin, route) {
     assert.equal(exported.baseline_chain.find(blank => blank.key === "restored_state").text, restored);
     assert.equal(exported.inverse_state.observed_strain_state, strain);
     assert.ok(activeView(exported).option_order.indexOf("option-ai-boundary") < activeView(exported).option_order.indexOf("option-data-stewardship"));
+    assert.notEqual(await page.evaluate(() => window.alignmentWorksheet.promptCapsuleFingerprint()), initial.fingerprint);
+    assert.ok((await page.locator("#promptBox").textContent()).includes("Review boundaries remain visible \\<strong\\>as collaborator text\\</strong\\>\\."));
     assert.match(await page.locator("#svgMount").textContent(), /Review boundaries remain\s*visible/);
     const optionTable = await page.locator("#tableMount").textContent();
     assert.ok(optionTable.indexOf("AI boundary clarity") < optionTable.indexOf("Data stewardship"));
@@ -299,8 +410,50 @@ async function alignmentPath(browser, origin, route) {
     assert.equal(activeView(imported).selected_option_id, "option-ai-boundary");
     assert.match(await page.locator("#tableMount").textContent(), /Imported AI boundary option/);
 
+    const privateCapsule = await page.evaluate(() => ({ fingerprint: window.alignmentWorksheet.promptCapsuleFingerprint(), markdown: window.alignmentWorksheet.promptCapsule() }));
+    const privateCandidate = structuredClone(await textJson(page, "#jsonOut"));
+    privateCandidate._private_annotation = "local premise note";
+    privateCandidate.options[0]._private_annotation = "local option note";
+    privateCandidate.inverse_state._private_annotation = { receiver: "local recovery review" };
+    await page.locator("#importText").fill(JSON.stringify(privateCandidate));
+    await page.locator("#importJsonBtn").click();
+    const privateReceipt = await textJson(page, "#jsonOut");
+    assert.equal(privateReceipt._private_annotation, "local premise note");
+    assert.equal(privateReceipt.options[0]._private_annotation, "local option note");
+    assert.deepEqual(privateReceipt.inverse_state._private_annotation, { receiver: "local recovery review" });
+    assert.deepEqual(await page.evaluate(() => ({ fingerprint: window.alignmentWorksheet.promptCapsuleFingerprint(), markdown: window.alignmentWorksheet.promptCapsule() })), privateCapsule);
+
+    const multiView = structuredClone(privateReceipt);
+    const baseView = activeView(multiView);
+    multiView.view_state.views.push({
+      ...structuredClone(baseView),
+      id: "view-recovery-route",
+      name: "Recovery route focus",
+      option_order: [...baseView.option_order].reverse(),
+      hidden_option_ids: [baseView.option_order[0]],
+      selected_option_id: baseView.option_order.at(-1),
+      _private_annotation: "local view note",
+    });
+    await page.locator("#importText").fill(JSON.stringify(multiView));
+    await page.locator("#importJsonBtn").click();
+    assert.deepEqual(await textJson(page, "#jsonOut"), multiView);
+    const beforeOptionIds = new Set(multiView.options.map(item => item.id));
+    await page.locator("#addOptionBtn").click();
+    const afterAdd = await textJson(page, "#jsonOut");
+    const addedOption = afterAdd.options.find(item => !beforeOptionIds.has(item.id));
+    assert.ok(addedOption);
+    assert.ok(afterAdd.view_state.views.every(view => view.option_order.includes(addedOption.id)));
+    const removeAdded = page.locator(`button.remove-option[data-id="${addedOption.id}"]`);
+    await removeAdded.click();
+    await removeAdded.click();
+    const afterRemove = await textJson(page, "#jsonOut");
+    assert.ok(afterRemove.view_state.views.every(view => !view.option_order.includes(addedOption.id) && !view.hidden_option_ids.includes(addedOption.id)));
+    await page.locator("#importText").fill(JSON.stringify(afterRemove));
+    await page.locator("#importJsonBtn").click();
+    assert.deepEqual(await textJson(page, "#jsonOut"), afterRemove);
+
     const sentinel = "Alignment recovery sentinel";
-    await page.locator("#text-restored_state").fill(sentinel);
+    await page.locator('.blank-text[data-key="restored_state"]').fill(sentinel);
     const invalid = structuredClone(await textJson(page, "#jsonOut"));
     invalid.options = { unexpected: true };
     await page.locator("#importText").fill(JSON.stringify(invalid));
@@ -314,10 +467,26 @@ async function alignmentPath(browser, origin, route) {
     await page.locator("#importJsonBtn").click();
     await assertVisibleNotice(page, "#importNotice", /unique semantic namespace/i);
     assert.equal((await textJson(page, "#jsonOut")).baseline_chain.find(blank => blank.key === "restored_state").text, sentinel);
+    const minimum = structuredClone(await textJson(page, "#jsonOut"));
+    minimum.options = minimum.options.slice(0, 1);
+    minimum.view_state.views.forEach(view => {
+      view.option_order = [minimum.options[0].id];
+      view.hidden_option_ids = [];
+      view.selected_option_id = minimum.options[0].id;
+    });
+    await page.locator("#importText").fill(JSON.stringify(minimum));
+    await page.locator("#importJsonBtn").click();
+    const onlyRemove = page.locator("button.remove-option");
+    assert.equal(await onlyRemove.isDisabled(), true);
+    const minimumFingerprint = await page.evaluate(() => window.alignmentWorksheet.promptCapsuleFingerprint());
+    await onlyRemove.evaluate(button => button.click());
+    assert.equal(await page.evaluate(() => window.alignmentWorksheet.promptCapsuleFingerprint()), minimumFingerprint);
+    assert.equal(await page.locator("#blankEditor label, #optionInspector label, #inverseEditor label").evaluateAll(labels => labels.every(label => Boolean(label.htmlFor && document.getElementById(label.htmlFor)))), true);
     assertTelemetry(telemetry);
   } finally {
     await context.close();
   }
+  await assertNoScriptPromptCapsule(browser, origin, route, "#promptBox", initialPlain);
 }
 
 async function frvPath(browser, origin, route) {

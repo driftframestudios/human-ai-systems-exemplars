@@ -14,7 +14,7 @@ import {
 } from "./core-architecture-browser-helper.mjs";
 
 const artifactNames = {
-  impact: "impact-map-chimeric-prototype-v0.1.4.html",
+  impact: "impact-map-chimeric-prototype-v0.1.5.html",
   service: "service-design-blueprint-chimeric-prototype-v0.2.4.html",
   heart: "heart-chart-chimeric-prototype-v0.1.6.html",
   specification: "specification-by-example-chimeric-prototype-v0.1.6.html"
@@ -154,7 +154,8 @@ async function assertNoScriptPromptCapsule(browser, origin, route, promptSelecto
 }
 
 async function impactPath(browser, origin, route) {
-  const { context, page, telemetry } = await openFresh(browser, origin, route);
+  const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
+  let initialCapsule;
   try {
     const initial = await textJson(page, "#jsonOut");
     const actor = initial.impact_map.actors[0];
@@ -164,6 +165,53 @@ async function impactPath(browser, origin, route) {
     assert.equal(await page.locator(`[data-node-id="${actor.id}"]`).count(), 1);
     assert.equal(await page.locator(`[data-node-id="${impact.id}"]`).count(), 1);
     assert.equal(await page.locator(`[data-node-id="${discoverable.id}"]`).count(), 1);
+
+    initialCapsule = await exercisePromptCapsule(page, {
+      apiName: "impactMap",
+      copySelector: "#copyPromptBtn",
+      downloadSelector: "#downloadPromptBtn",
+      filename: "impact-map.prompt-capsule.r0.1.5.skill-assisted.md",
+      loopIds: ["visitor-surface-change", "repository-reentry"],
+      promptSelector: "#promptOut",
+      stateContract: "impact-map-state.v0.1",
+      title: "Impact Map",
+      version: "0.1.5",
+    });
+    const hierarchyCounts = {
+      actors: initialCapsule.projection.actors.length,
+      impacts: initialCapsule.projection.actors.reduce((count, item) => count + item.impacts.length, 0),
+      discoverables: initialCapsule.projection.actors.reduce(
+        (count, item) => count + item.impacts.reduce((subtotal, child) => subtotal + child.discoverables.length, 0),
+        0,
+      ),
+    };
+    assert.deepEqual(hierarchyCounts, { actors: 4, impacts: 4, discoverables: 7 });
+    assert.equal(initialCapsule.projection.goal.id, initial.impact_map.goal.id);
+    assert.deepEqual(
+      initialCapsule.projection.actors.map(item => item.id),
+      initial.impact_map.actors.map(item => item.id),
+    );
+    const editorLabels = await page.locator("#actorsEditor label[for]").evaluateAll(labels => ({
+      allAssociated: labels.every(label => document.querySelectorAll(`#${CSS.escape(label.htmlFor)}`).length === 1),
+      controlIds: labels.map(label => label.htmlFor),
+    }));
+    assert.equal(editorLabels.allAssociated, true);
+    assert.equal(new Set(editorLabels.controlIds).size, editorLabels.controlIds.length);
+
+    const beforeMembership = await page.evaluate(() => ({
+      state: window.impactMap.getState(),
+      fingerprint: window.impactMap.promptCapsuleFingerprint(),
+    }));
+    await page.locator("#addActorBtn").click();
+    const expandedMembership = await page.evaluate(() => ({
+      count: window.impactMap.promptCapsuleStateProjection().actors.length,
+      fingerprint: window.impactMap.promptCapsuleFingerprint(),
+    }));
+    assert.equal(expandedMembership.count, beforeMembership.state.impact_map.actors.length + 1);
+    assert.notEqual(expandedMembership.fingerprint, beforeMembership.fingerprint);
+    await page.locator('[data-action="remove-actor"]').last().click();
+    assert.deepEqual(await page.evaluate(() => window.impactMap.getState()), beforeMembership.state);
+    assert.equal(await page.evaluate(() => window.impactMap.promptCapsuleFingerprint()), beforeMembership.fingerprint);
 
     const literal = "Reviewer <img src=x onerror=globalThis.__coreProbe=1> & collaborator";
     await page.locator(`input[data-kind="actor"][data-actor-index="0"]`).fill(literal);
@@ -175,16 +223,66 @@ async function impactPath(browser, origin, route) {
     assert.equal(await page.locator("#traceTable tbody tr").first().locator("td").nth(1).textContent(), literal);
     assert.match(await page.locator(`[data-node-id="${actor.id}"]`).textContent(), /Reviewer <img/);
     assert.equal(await page.evaluate(() => globalThis.__coreProbe), undefined);
+    const literalCapsule = await page.evaluate(() => ({
+      fingerprint: window.impactMap.promptCapsuleFingerprint(),
+      markdown: window.impactMap.promptCapsule(),
+    }));
+    assert.notEqual(literalCapsule.fingerprint, initialCapsule.fingerprint);
+    assert.match(literalCapsule.markdown, /Reviewer &lt;img src=x onerror=globalThis\.\\_\\_coreProbe=1&gt; &amp; collaborator/u);
 
     const compatible = structuredClone(edited);
     const importedText = "Imported discoverable <strong>stays literal</strong>";
     compatible.impact_map.actors[0].impacts[0].discoverables[0].text = importedText;
+    compatible.private_annotation = "local map note";
+    compatible.artifact_identity.private_annotation = "local identity note";
+    compatible.quick_use.private_annotation = "local quick-use note";
+    compatible.impact_map.private_annotation = "local hierarchy note";
+    compatible.impact_map.goal.private_annotation = "local goal note";
+    compatible.impact_map.actors[0].private_annotation = "local actor note";
+    compatible.impact_map.actors[0].impacts[0].private_annotation = "local impact note";
+    compatible.impact_map.actors[0].impacts[0].discoverables[0].private_annotation = "local discoverable note";
+    compatible.semantic_locality.replacement_state_guidance[0].private_annotation = "local wording note";
+    compatible.recovery_calibration.private_annotation = "local recovery note";
     await page.locator("#jsonImport").fill(JSON.stringify(compatible));
     await page.locator("#importJsonBtn").click();
     assert.match(await page.locator("#importNotice").textContent(), /Impact Map imported/);
     const imported = await textJson(page, "#jsonOut");
     assert.equal(imported.impact_map.actors[0].text, literal);
     assert.equal(imported.impact_map.actors[0].impacts[0].discoverables[0].text, importedText);
+    assert.deepEqual(imported, compatible);
+    const privateReceipt = await page.evaluate(() => ({
+      fingerprint: window.impactMap.promptCapsuleFingerprint(),
+      markdown: window.impactMap.promptCapsule(),
+    }));
+    const representedOnly = structuredClone(compatible);
+    delete representedOnly.private_annotation;
+    delete representedOnly.artifact_identity.private_annotation;
+    delete representedOnly.quick_use.private_annotation;
+    delete representedOnly.impact_map.private_annotation;
+    delete representedOnly.impact_map.goal.private_annotation;
+    delete representedOnly.impact_map.actors[0].private_annotation;
+    delete representedOnly.impact_map.actors[0].impacts[0].private_annotation;
+    delete representedOnly.impact_map.actors[0].impacts[0].discoverables[0].private_annotation;
+    delete representedOnly.semantic_locality.replacement_state_guidance[0].private_annotation;
+    delete representedOnly.recovery_calibration.private_annotation;
+    await page.locator("#jsonImport").fill(JSON.stringify(representedOnly));
+    await page.locator("#importJsonBtn").click();
+    const representedReceipt = await page.evaluate(() => ({
+      fingerprint: window.impactMap.promptCapsuleFingerprint(),
+      markdown: window.impactMap.promptCapsule(),
+    }));
+    assert.deepEqual(representedReceipt, privateReceipt);
+
+    const minimum = structuredClone(await textJson(page, "#jsonOut"));
+    minimum.impact_map.actors = minimum.impact_map.actors.slice(0, 1);
+    minimum.impact_map.actors[0].impacts = minimum.impact_map.actors[0].impacts.slice(0, 1);
+    minimum.impact_map.actors[0].impacts[0].discoverables = minimum.impact_map.actors[0].impacts[0].discoverables.slice(0, 1);
+    await page.locator("#jsonImport").fill(JSON.stringify(minimum));
+    await page.locator("#importJsonBtn").click();
+    assert.match(await page.locator("#importNotice").textContent(), /Impact Map imported/);
+    assert.equal(await page.locator('[data-action="remove-actor"]').isDisabled(), true);
+    assert.equal(await page.locator('[data-action="remove-impact"]').isDisabled(), true);
+    assert.equal(await page.locator('[data-action="remove-discoverable"]').isDisabled(), true);
 
     const sentinel = "Impact recovery sentinel";
     await page.locator(`input[data-kind="actor"][data-actor-index="0"]`).fill(sentinel);
@@ -201,6 +299,7 @@ async function impactPath(browser, origin, route) {
   } finally {
     await context.close();
   }
+  await assertNoScriptPromptCapsule(browser, origin, route, "#promptOut", initialCapsule.plain);
 }
 
 async function servicePath(browser, origin, route) {
@@ -769,7 +868,7 @@ const server = await startStaticServer();
 const browser = await chromium.launch({ headless: true });
 try {
   for (const projection of projections) {
-    await verify(`${projection.label} · Impact Map hierarchy, exchange, literal text, and recovery`, () => impactPath(browser, server.origin, `${projection.root}/${artifactNames.impact}`));
+    await verify(`${projection.label} · Impact Map hierarchy, capsule, exchange, literal text, and recovery`, () => impactPath(browser, server.origin, `${projection.root}/${artifactNames.impact}`));
     await verify(`${projection.label} · Service Blueprint cells, assets, focus, exchange, and recovery`, () => servicePath(browser, server.origin, `${projection.root}/${artifactNames.service}`));
     await verify(`${projection.label} · HEART rows, order, focus, exchange, and recovery`, () => heartPath(browser, server.origin, `${projection.root}/${artifactNames.heart}`));
     await verify(`${projection.label} · Specification rules, scenarios, order, exchange, and recovery`, () => specificationPath(browser, server.origin, `${projection.root}/${artifactNames.specification}`));
