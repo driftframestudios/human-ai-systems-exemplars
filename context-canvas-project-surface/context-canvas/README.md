@@ -31,6 +31,24 @@ The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) sup
 | Full-view and collaboration routes | The generated primary file tree carries selected `/prototypes/.../` and `/collaboration/.../` files. Adjacent full-view links use those primary-site routes rather than opening the primary site inside an iframe. |
 | Schemas | A schema's `$id` remains its semantic identity. `schemas.radiantnull.com` is observed retrieval; `schemas.vik.guru` remains intended until its exact-version responses pass their own live check. |
 
+The project-level [`asset-inventory.json`](../asset-inventory.json) supplies the
+semantic family, visitor job, accessibility owner, provenance, and recovery
+facts used when the production assembler resolves selected images. The primary
+and iframe manifests continue to select membership; the generated deployment
+manifest joins each selected public projection back to one canonical source
+asset and exact source digest.
+
+The accepted Registry visual masters remain the source-level reference for
+dependency-free visitor SVGs: the
+[`question route map`](../img/plot/registry_question_route_map.svg),
+[`narrative relationship map`](../img/plot/registry_narrative_relationship_map.svg),
+and
+[`narrative-to-execution sequence`](../img/plot/registry_narrative_to_execution_method_sequence.svg).
+Each one carries a useful title and description, semantic groups, direct text,
+and visual relationships that remain legible without color alone. The later
+[`goal-fidelity operating field`](../img/plot/registry_goal_fidelity_operating_field.svg)
+extends the same selected `img/plot/` family.
+
 ## Runtime contract
 
 - Plain HTML owns document meaning, reading order, links, fallback content, and structured metadata.
@@ -131,16 +149,23 @@ process environment.
 
 Activated iframe carriers use their public route manifests directly. Their
 `src` values point to stable aliases in either the `/v1/core/` or
-`/v1/canvas/` family, while each adjacent full-view `href` continues to open
-the repository-local base prototype that becomes a primary-site route. A
+`/v1/canvas/` family, while each adjacent full-view `href` remains an ordinary
+link to the repository-local base prototype that becomes a primary-site route.
+Inside generated iframe documents, eligible onward links open a secure separate
+top-level tab so the destination cannot replace or nest inside the carrier.
+Fragments, downloads, and page controls keep their in-document behavior. A
 contextual title, intentional lazy loading, exact route-matched sandbox,
 narrow Permissions Policy when needed, and `referrerpolicy="no-referrer"`
 keep the behavioral boundary visible in authored source. The multi-route Core
 pack index opens as a non-embedded full view; this keeps its sibling
 destinations from inheriting one shared iframe policy. The Conditioning Field
 is a supplemental Context Canvas instrument in the Core delivery family: its
-hosted projection uses `allow-scripts` only, while its adjacent full view
-remains `conditioning-field.html`.
+hosted projection uses scripts and projected popup exits, while its adjacent
+full view remains the ordinary `conditioning-field.html` link. The About
+cartography remains a recorded embedded-document exception with five labelled
+separate-tab links. An Accessible Forms reading has no dedicated route yet, so
+its six retained catalog cards present a clear preparation state instead of a
+placeholder destination.
 
 The dependency-free materializer retains a tested hosted-iframe twin seam for
 an explicitly late-bound future receiver. Current manifest-owned iframe

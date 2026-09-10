@@ -1,4 +1,4 @@
-/* Canonical Strategy Canvas controller v0.2.2 — safe DOM rendering over StrategyCanvasCore. */
+/* Canonical Strategy Canvas controller v0.2.4 — safe DOM rendering over StrategyCanvasCore. */
 (function exposeStrategyCanvasCanonical(global) {
   'use strict';
 
@@ -109,6 +109,7 @@
     let drag = null;
     let chartGeometry = null;
     let focusInput = 'keyboard';
+    let promptCapsuleView = 'plain';
 
     const find = (role) => root.querySelector(`[data-sc-role="${role}"]`);
     const announce = (message) => {
@@ -577,9 +578,21 @@
     function renderOutputs(state) {
       const json = find('json');
       const prompt = find('prompt');
+      const promptDescription = find('prompt-view-description');
       const validation = find('validation');
       if (json) json.textContent = core.serialize(state);
-      if (prompt) prompt.textContent = core.promptCapsule(state);
+      if (prompt) {
+        prompt.textContent = core.promptCapsuleMarkdown(state, { view: promptCapsuleView });
+        prompt.dataset.promptView = promptCapsuleView;
+      }
+      for (const control of root.querySelectorAll('[data-prompt-view]')) {
+        control.checked = control.value === promptCapsuleView;
+      }
+      if (promptDescription) {
+        promptDescription.textContent = promptCapsuleView === 'skill-assisted'
+          ? 'Skill-assisted Markdown adds exact public repository skill paths and their immutable revision. The Strategy Canvas state and fingerprint remain the same.'
+          : 'Plain Markdown carries the complete working context without asking the receiver to load a repository skill.';
+      }
       if (validation) {
         const result = core.validateState(state);
         validation.dataset.valid = String(result.valid);
@@ -638,6 +651,24 @@
       } catch (error) {
         announce(`${description} remains visible for manual copy.`);
       }
+    }
+
+    function activePromptCapsule(state = store.getState()) {
+      return core.promptCapsuleMarkdown(state, { view: promptCapsuleView });
+    }
+
+    function downloadPromptCapsule(state) {
+      const markdown = activePromptCapsule(state);
+      const filename = `${state.meta.id}.prompt-capsule.r${state.meta.revision}.${promptCapsuleView}.md`;
+      const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = element('a', { href: url, hidden: true });
+      link.download = filename;
+      root.append(link);
+      link.click();
+      link.remove();
+      global.setTimeout(() => URL.revokeObjectURL(url), 0);
+      announce(`${promptCapsuleView === 'plain' ? 'Plain' : 'Skill-assisted'} Markdown download prepared.`);
     }
 
     function selectDimension(dimensionId, sourceControl) {
@@ -768,7 +799,8 @@
         store.dispatch(core.actions.lifecycleReopen());
         announce(`Working revision ${store.getState().meta.revision} created from the reviewed state.`);
       } else if (action === 'copy-json') copyText(core.serialize(state), 'Strategy Canvas JSON');
-      else if (action === 'copy-prompt') copyText(core.promptCapsule(state), 'AI collaboration capsule');
+      else if (action === 'copy-prompt' || action === 'copy-markdown') copyText(activePromptCapsule(state), 'AI collaboration Markdown');
+      else if (action === 'download-markdown') downloadPromptCapsule(state);
       else if (action === 'import') {
         const input = find('import');
         try {
@@ -789,6 +821,13 @@
     }, { signal });
 
     root.addEventListener('change', (event) => {
+      const promptViewControl = event.target.closest?.('[data-prompt-view]');
+      if (promptViewControl && core.promptCapsuleViews.includes(promptViewControl.value)) {
+        promptCapsuleView = promptViewControl.value;
+        renderOutputs(store.getState());
+        announce(`${promptCapsuleView === 'plain' ? 'Plain' : 'Skill-assisted'} Markdown view selected.`);
+        return;
+      }
       const scoreInput = event.target.closest?.('[data-score-input="true"]');
       if (scoreInput && !locked()) {
         store.dispatch(core.actions.scoreSet(scoreInput.dataset.dimensionId, scoreInput.dataset.series, Number(scoreInput.value)));
@@ -822,15 +861,18 @@
     root.dataset.scEnhancementState = 'mounted';
 
     return Object.freeze({
-      version: '0.2.2',
+      version: '0.2.4',
       schemaVersion: core.schemaVersion,
       getState: () => core.clone(store.getState()),
       getValidation: () => core.validateState(store.getState()),
       serialize: () => core.serialize(store.getState()),
       toJSONLD: () => core.clone(core.toJSONLD(store.getState())),
-      promptCapsule: () => core.promptCapsule(store.getState())
+      promptCapsule: () => core.promptCapsule(store.getState()),
+      promptCapsuleMarkdown: (view = promptCapsuleView) => core.promptCapsuleMarkdown(store.getState(), { view }),
+      promptCapsuleFingerprint: () => core.promptCapsuleFingerprint(store.getState()),
+      getPromptCapsuleView: () => promptCapsuleView
     });
   }
 
-  global.StrategyCanvasCanonical = Object.freeze({ version: '0.2.2', mount });
+  global.StrategyCanvasCanonical = Object.freeze({ version: '0.2.4', mount });
 })(typeof window !== 'undefined' ? window : globalThis);

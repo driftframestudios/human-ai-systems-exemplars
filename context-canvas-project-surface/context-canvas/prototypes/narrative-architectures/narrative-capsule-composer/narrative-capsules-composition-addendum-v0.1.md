@@ -42,3 +42,18 @@ The generated projection contains:
 - verification and receipt requirements.
 
 This shape supports combinations such as Expectation + Opportunity → Strategy Canvas while preserving the distinct identity and version lineage of each source capsule.
+
+## Portable Markdown views
+
+The Composer implements `prompt-capsule/0.1.0` as GitHub Flavored Markdown generated from the current represented composition. The plain view carries the complete request. The skill-assisted view adds three public collaboration skills with an immutable source revision and SHA-256 identity for each skill. Both views preserve one state-only fingerprint, so changing the presentation leaves the represented composition identity stable. Collaboration role is part of that represented state: generate, adapt, critique, decompose, continue, and orient each produce a purpose and requested return fitted to that role.
+
+For the Strategy Canvas target, each dimension carries its definition, low/middle/high anchors, NOW/NEXT/LATER values, consequence weight, change direction, evidence basis, and value origin. This keeps the scores attached to the meaning and evidence a receiver needs to interpret them.
+
+The projection includes two related loops whose fit follows the receiving work:
+
+- `#repository-reentry` supports a resumed composition that needs current source, working state, verification, and handback reconstructed;
+- `#visitor-surface-change` supports a target landing that becomes a visible or interactive artifact and needs source-owned browser evidence.
+
+The authored HTML contains the complete initial plain Markdown. Progressive enhancement keeps the visible text, clipboard copy, Markdown download, and read-only public API byte-aligned as collaborators revise the composition. The existing structured `promptSections`, JSON export, JSON-LD graph, target adapter, and import recovery remain distinct semantic surfaces derived from the same accepted state.
+
+The assisted view pins Source Authority Mapping, Stateful Artifact Behavior Contracts, and Bounded Support Routing to repository revision `b8b305c78b82a288ae2aca9574bb86d7d3d574d9`. These skills help a receiving collaboration trace ownership, keep semantic twins in agreement, and form a finite handoff while the structured composition retains authority.

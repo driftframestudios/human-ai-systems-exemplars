@@ -450,6 +450,22 @@
       font: 0.88rem/1.55 var(--font-mono);
       tab-size: 2;
     }
+    .working-capsule-panel { display: grid; gap: 0.85rem; scroll-margin-top: 10rem; }
+    .prompt-capsule-head { display: flex; flex-wrap: wrap; gap: 0.85rem; align-items: start; justify-content: space-between; }
+    .prompt-capsule-head h3 { margin: 0.35rem 0 0.25rem; }
+    .prompt-capsule-head p { max-width: 62ch; margin: 0; }
+    .prompt-capsule-actions { align-self: center; }
+    .prompt-view-control { min-width: 0; margin: 0; padding: 0; border: 0; }
+    .prompt-view-control legend { color: var(--cobalt-deep); font: 800 0.72rem/1.25 var(--font-mono); letter-spacing: 0.07em; text-transform: uppercase; }
+    .prompt-view-options { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.45rem; }
+    .prompt-view-options label { display: inline-flex; gap: 0.55rem; align-items: center; min-height: 44px; padding: 0.45rem 0.7rem; color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 8px; cursor: pointer; font-weight: 760; }
+    .prompt-view-options label:has(input:checked) { background: var(--sea); outline: 2px solid var(--cobalt); outline-offset: -4px; }
+    .prompt-related-loops { max-width: 66ch; padding: 0.15rem 0.8rem 0.75rem; color: var(--ink); background: var(--paper-warm); border: 1.5px solid var(--line); border-radius: 8px; }
+    .prompt-related-loops summary { min-height: 44px; padding-top: 0.75rem; cursor: pointer; font-weight: 850; }
+    .prompt-related-loops p { margin: 0.2rem 0 0; }
+    .prompt-related-loops ul { margin: 0.35rem 0 0; padding-left: 1.2rem; }
+    .prompt-related-loops li + li { margin-top: 0.55rem; }
+    .prompt-related-loops a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 800; }
     .handoff-checks { margin: 0; padding-left: 1.2rem; }
     .handoff-checks li + li { margin-top: 0.45rem; }
 
@@ -466,6 +482,7 @@
       .coordination-ledger, .candidate-route-field { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .stage-effect { grid-column: 1 / -1; }
       .capsule-dock { position: static; }
+      .working-capsule-panel { scroll-margin-top: 1rem; }
       .capsule-dock__receipt { padding: 0.75rem 0 0; border-top: 4px solid var(--tiffany); border-left: 0; }
     }
 
@@ -973,61 +990,146 @@ For each authored route, use a fresh independent assessment pass. Estimate P(nam
             </div>
             <div class="stack">
               <section class="working-capsule-panel" id="working-capsule" aria-labelledby="working-capsule-title">
-              <h3 id="working-capsule-title">Working prompt capsule</h3>
-              <pre id="packet" class="packet" tabindex="0">WORKING PROMPT CAPSULE
+              <div class="prompt-capsule-head">
+                <div>
+                  <span class="chip context">Portable Markdown</span>
+                  <h3 id="working-capsule-title">Working prompt capsule</h3>
+                  <p id="prompt-capsule-note">The plain view is complete on its own. The skill-assisted view adds two public collaboration skills while this lesson field remains the source for the working state. Both views carry the same fingerprint and related loops.</p>
+                </div>
+                <div class="button-row prompt-capsule-actions js-only">
+                  <button type="button" id="copy-prompt" class="primary">Copy Markdown</button>
+                  <button type="button" id="download-prompt">Download Markdown</button>
+                </div>
+              </div>
+              <details class="prompt-related-loops" data-prompt-related-loops>
+                <summary>Related loops</summary>
+                <p>Choose a loop when this lesson field enters the condition described with it.</p>
+                <ul>
+                  <li data-related-loop-id="visitor-surface-change">
+                    <a data-related-loop-link href="https://schemas.radiantnull.com/collaboration/#visitor-surface-change">Change a visitor surface with fitting evidence</a>
+                    <p data-related-loop-fit>Fit when the lesson field changes as a visible or interactive visitor surface and needs source-owned browser evidence.</p>
+                  </li>
+                  <li data-related-loop-id="public-release">
+                    <a data-related-loop-link href="https://schemas.radiantnull.com/collaboration/#public-release">Publish a repeatable, byte-comparable artifact through a named destination</a>
+                    <p data-related-loop-fit>Fit after people accept this lesson-field revision for a public route whose declared files and bytes need one receiving release.</p>
+                  </li>
+                </ul>
+              </details>
+              <fieldset class="prompt-view-control js-only">
+                <legend>Markdown view</legend>
+                <div class="prompt-view-options">
+                  <label><input type="radio" name="open-lesson-prompt-view" value="plain" data-prompt-view checked> Plain</label>
+                  <label><input type="radio" name="open-lesson-prompt-view" value="skill-assisted" data-prompt-view> Skill-assisted</label>
+                </div>
+              </fieldset>
+              <p id="prompt-view-status" class="status"></p>
+              <noscript><p class="local-note">The complete plain Markdown remains available below for reading and manual copy.</p></noscript>
+              <pre id="packet" class="packet" data-prompt-view-active="plain" aria-label="Open Lesson Field Prompt Capsule Markdown" aria-describedby="prompt-capsule-note prompt-view-status" tabindex="0"># Prompt Capsule: Open Lesson Field
 
-TASK
-Create a Grade 9 statistics lesson plan for a classroom educator. A curriculum lead will review the handoff.
-Named human receiver: classroom educator and curriculum lead.
+- Contract: `prompt-capsule/0.1.0`
+- Capsule: `open-lesson-field/lesson-request`
+- Source: `open-lesson-field@2.0`
+- State: `open-lesson-field.v2` · revision `0`
+- Fingerprint: `fnv1a32-utf8:845a2862`
+- View: `plain`
 
-TEACHING SITUATION
-Grade 9 · 28 learners · Pair teams: 14 pairs · 14 material sets · 55 minutes. Use one annotated example and sentence frames before paired investigation. Groups can use graph paper or a spreadsheet. Keep learner identities and records in the educator’s protected channel.
-Timing: Launch 7 min · Source standing 8 min · Investigation 22 min · Synthesis 10 min · Claim check 8 min.
+## Purpose and target
 
-CLASSROOM COORDINATION
-Grouping: 14 pairs across 14 peer stations.
-Materials: prepare 14 shared material sets, each containing an alignment folio with three pairing views.
-Participation and reporting: reserve one supported first turn per learner, one individual evidence-boundary note each, and 14 thirty-second evidence headlines within a seven-minute reporting window.
-Roles and teacher movement: rotate plotter and evidence steward halfway; use four teacher sweep zones with the pairing key as the focal check.
-Technology, room, and access: plan up to 14 shared access points when digital; carry equivalent table, plot, and verbal pathways along a clear teacher route. A human reviewer aligns actual supports and adaptations.
-Evidence, review, and return: return 14 three-alignment folios and 28 individual notes to the classroom educator and curriculum lead with assumptions marked for review.
+Shape an inspectable lesson request that carries classroom conditions, source standing, evidence, access, and review to the next collaborator.
 
-STANDARDS AND GOAL
-CCSS-M HSS-ID.B.6, HSS-ID.C.7, HSS-ID.C.8, HSS-ID.C.9.
-Primary goal: Compare time alignment.
-Suggested route: Lag and compare. Selected route: Lag and compare. Relation: aligned.
-Learner evidence: construct and annotate a paired-variable view; interpret slope and intercept with units; calculate and contextualize correlation; distinguish descriptive association from causal conclusion.
+- Request: Create a Grade 9 statistics lesson plan for a classroom educator. A curriculum lead will review the handoff.
+- Human receiver: classroom educator and curriculum lead
+- Handoff standing: `working-draft`.
+- Fixture: `watershed-teaching-fixture.v2`.
 
-SOURCE FIELD
-Use the local invented NOAA-shaped precipitation and USGS-shaped streamflow teaching fixture as paired quantitative variables. Treat the OSM-shaped map and USDA CDL-shaped land-cover layers as context only. Present every value and place mark as an invented teaching fixture; live and historical claims require separately sourced records.
-Fixed cohort: ten precipitation anchors from Apr 7–16; streamflow buffer through Apr 18 preserves ten pairs across all three alignments.
+## Relevant context and inputs
 
-REFERENCE AND REGISTER
-Named role: classroom educator. Human receiver: classroom educator and curriculum lead.
-Working register: Instructional planning. Foreground lesson arc, student moves, and formative checks. Evidence and decision authority stay in their own fields.
-Review route: Direct human review.
-Required modules: timed lesson arc and grouping moves; teacher and learner instructions; formative check and closing claim note.
+### Teaching situation
 
-INVESTIGATION
-Start with daily-mean streamflow aligned one day after daily precipitation: 10 fixed-anchor pairs; fixture r = +0.95. Ask learners to compare all three alignments and explain why a changed pairing rule changes the result while the anchor cohort stays fixed.
+- Audience: Grade 9; `28` learners; `55` minutes.
+- Grouping: Pair teams — 14 pairs; `14` material sets.
+- Timing: Launch 7 min · Source standing 8 min · Investigation 22 min · Synthesis 10 min · Claim check 8 min.
+- Learning support: Use one annotated example and sentence frames before paired investigation. Groups can use graph paper or a spreadsheet.
 
-LESSON ROUTE
-Lag and compare: groups compare all three alignments, select one linear fit to interpret, document changed streamflow dates and preserved precipitation anchors, and separate descriptive association from causal conclusion.
-Teacher move: demonstrate the pairing key. Learner move: compare and defend one descriptive reading. Formative evidence: name changed pairings and preserved anchors. Access: choice labels, plots, metrics, and semantic tables carry equivalent values.
+### Standards, sources, and working register
 
-VERBALIZED SAMPLING · BOUNDED FIVE-CANDIDATE FAN-OUT
-Planning question: given the current Grade 9 lesson capsule, what distinct coordination plan could help 28 learners produce one interpretable evidence-boundary note within 55 minutes?
-Within one response, generate exactly 5 distinct candidate answers. Give every generated candidate a stable label and coordination plan. Assign one probability, expressed as a percentage from 0% to 100%, to every generated candidate relative to the full response distribution. Sum the five listed probabilities, then report residual or unlisted response mass so the accounting completes 100%. The listed candidates can total less than 100%. Return candidates in generation order with assumptions and evidence that would change each probability. The five candidates form a bounded working set; residual mass keeps wider alternatives visible.
+- Standards: `HSS-ID.B.6`, `HSS-ID.C.7`, `HSS-ID.C.8`, `HSS-ID.C.9`
+- Inquiry goal: Compare time alignment.
+- Learner evidence: HSS-ID.B.6: learners construct and annotate a paired-variable view; HSS-ID.C.7: learners interpret slope and intercept with units; HSS-ID.C.8: learners calculate and contextualize correlation; HSS-ID.C.9: learners distinguish a descriptive association from a causal conclusion.
+- Quantitative fields: NOAA-shaped precipitation; USGS-shaped streamflow
+- Context fields: OpenStreetMap-shaped context; USDA Cropland Data Layer-shaped context
+- Reference standing: `named-role-cue`.
+- Working register: Instructional planning: Foreground the lesson arc, student moves, and formative evidence. Evidence standing and decision authority remain explicit fields.
+- Required modules: Timed lesson arc and grouping moves; Teacher and learner instructions; Formative check and closing claim note.
+- Review route: direct human review selected.
+- Review questions: Which local classroom conditions shape instructional fit? Which standards, source standing, and claim boundaries require human review?
 
-OPTIONAL ROUTE / EVENT-SUCCESS ASSESSMENT · SEPARATE FRAME
-Authored route field (unordered): Plot and annotate; Lag and compare; Claim and challenge.
-Named binary event: in a 55-minute Grade 9 session, the route enables all 28 learners, organized as 14 pairs with 14 material sets, to produce one interpretable evidence-boundary note from the invented watershed fixture under educator review. Estimate P(named event | route, conditions) independently for each authored route. Keep full-response-distribution and residual-mass accounting with the generated Verbalized Sampling set above.
+## Working state
 
-REQUESTED HANDOFF
-Return the exact 55-minute lesson ledger, grouping and material counts, participation opportunities, reporting window, rotating roles, device-and-paper access conditions, teacher movement, evidence collection, room configuration, accessibility-review questions, learner instructions, compact data table, plot prompts, formative evidence, and a closing claim check. Place the evidence boundary beside each interpretation.
+### Classroom coordination
 
-BOUNDARIES
-SOURCE STANDING: present every value and place mark as an invented teaching fixture; live or historical claims require separately sourced records. AXIS RULE: use paired precipitation and streamflow on quantitative axes; use map and land-cover layers to form context questions. CLAIM RULE: describe association from the selected pairings; causal claims require observed records, an adequate study design, and review of alternative explanations. PRIVACY AND AUTHORITY: use class-level conditions in this capsule; keep protected learner records in the educator’s approved channel. The educator approves classroom use. Mark assumptions and questions for the named human receiver.</pre>
+- Grouping: 14 pairs across 14 peer stations.
+- Materials: Prepare 14 shared material sets, each containing an alignment folio with three pairing views.
+- Participation and reporting: Reserve one supported first turn per learner across 14 groups, followed by 28 individual notes. Use 14 evidence headlines at 30 seconds each: about 7 minutes of the 10-minute synthesis. Every group artifact remains in the return packet.
+- Roles and teacher movement: Rotate plotter and evidence steward halfway through the investigation. Plan 4 teacher sweep zones covering up to 4 groups each, with pairing key and fixed-anchor standing as the focal check.
+- Technology, room, and access: Plan for up to 14 shared access points when digital; carry the same values in table, plot, and verbal form. Arrange 14 stations for 14 pairs; preserve a clear teacher path and one shared review surface. Prepare 14 equivalent material sets with table, plot, and verbal pathways; a human reviewer aligns actual supports and adaptations.
+- Evidence, review, and return: Collect 14 three-alignment folios and 28 individual evidence-boundary notes. Return 14 group artifacts and 28 individual notes to classroom educator and curriculum lead with assumptions marked for review.
+
+### Investigation and lesson route
+
+- Pairing: Start with daily precipitation paired to daily-mean streamflow from one day later: 10 fixed-anchor pairs; fixture r = +0.95. Ask learners to compare all three pairings and explain why changed streamflow dates change the result while ten precipitation anchors remain fixed.
+- Suggested route: Lag and compare. Selected route: Lag and compare. Relation: `aligned`.
+- Route summary: Groups compare all three alignments, select one linear fit to interpret, document changed streamflow dates and preserved precipitation anchors, and separate descriptive association from causal conclusion.
+- Teacher move: Demonstrate how the pairing key changes while the anchor cohort stays fixed.
+- Learner move: Compare all three alignments and defend one descriptive reading.
+- Formative evidence: One comparison names changed streamflow dates and preserved precipitation anchors.
+- Access treatment: Choice labels, plots, metrics, and semantic tables carry equivalent values.
+
+### Sampling request
+
+- Working instruction: VERBALIZED SAMPLING · BOUNDED 5-CANDIDATE FAN-OUT.
+- Method: `bounded-verbalized-sampling`; `5` distinct candidates in generation order.
+- Probability: one percentage for every candidate relative to the full response distribution, followed by the listed mass, residual or unlisted mass, and a 100% accounting check.
+- Candidate content: stable label, coordination plan, assumptions, and evidence that would change the probability.
+- Separate optional frame: estimate the named classroom event independently for each authored route; keep those conditional estimates distinct from the generated-candidate distribution.
+- Authored routes: Plot and annotate; Lag and compare; Claim and challenge.
+
+### Assembly
+
+- Status: `working-draft`; revision `0`.
+- Changes awaiting review: No changes await review.
+- Reviewed locally: Open until the receiving educator assembles a reviewed revision.
+
+## Boundaries and human-held decisions
+
+- The current JSON state in this file remains the source for this Markdown view.
+- Every value and place mark is an invented teaching fixture. Live or historical claims require separately sourced records.
+- Paired precipitation and streamflow fields carry quantitative calculations. Map and land-cover layers form context questions.
+- The fixture supports descriptive association. A causal conclusion requires observed records, an adequate study design, and review of alternative explanations.
+- Class-level conditions travel in this capsule. Learner identities and protected records remain in the educator’s approved channel.
+- The educator retains the classroom-use decision. The classroom educator and curriculum lead provide the direct review route.
+
+## Requested return
+
+Return the exact `55-minute` lesson ledger, 14 pairs, `14` material sets, participation opportunities, reporting window, rotating roles, device-and-paper access conditions, teacher movement, evidence collection, room configuration, accessibility-review questions, learner instructions, a compact data table, plot prompts, formative evidence, and a closing claim check.
+
+Place the evidence boundary beside each interpretation. Mark assumptions and questions for the named human receiver.
+
+## Related loops
+
+These public collaboration loops fit only when the receiving work meets the stated condition:
+
+- [Change a visitor surface with fitting evidence](https://schemas.radiantnull.com/collaboration/#visitor-surface-change) (`visitor-surface-change`) — Fit when the lesson field changes as a visible or interactive visitor surface and needs source-owned browser evidence.
+- [Publish a repeatable, byte-comparable artifact through a named destination](https://schemas.radiantnull.com/collaboration/#public-release) (`public-release`) — Fit after people accept this lesson-field revision for a public route whose declared files and bytes need one receiving release.
+
+## Evidence and recovery
+
+- The embedded JSON Schema checks the current `open-lesson-field.v2` state vocabulary.
+- Ten precipitation anchors from Apr 7–16 and a streamflow buffer through Apr 18 keep the comparison cohort visible across all three alignments.
+- The fingerprint identifies the complete represented state; the plain and skill-assisted views share it.
+- Assembly keeps an immutable reviewed snapshot while the working controls remain available for another revision.
+- When a required source field, classroom condition, receiver, or decision remains open, return the smallest clarifying question and keep the current working state available.
+</pre>
               </section>
               <section class="assembled-capsule result-card" id="assembled-revision" data-ready="false" aria-labelledby="assembled-title">
                 <span class="chip context">Reviewed revision</span>
@@ -1298,6 +1400,37 @@ SOURCE STANDING: present every value and place mark as an invented teaching fixt
       'Audit a causal claim': 'Claim and challenge'
     };
 
+    var PROMPT_CAPSULE_CONTRACT = 'prompt-capsule/0.1.0';
+    var PROMPT_CAPSULE_VIEWS = Object.freeze(['plain', 'skill-assisted']);
+    var PROMPT_CAPSULE_SKILL_REVISION = 'cf00aceb07896bc01a50e0622b133f8837fa3eec';
+    var PROMPT_CAPSULE_SKILLS = Object.freeze([
+      Object.freeze({
+        name: 'Source Authority Mapping',
+        publicUrl: 'https://schemas.radiantnull.com/skills/source-authority-mapping/',
+        path: '.agents/skills/source-authority-mapping/SKILL.md',
+        sha256: '706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5',
+        purpose: 'Trace the lesson request, fixture, state, Markdown view, and receiving handoff through their named owners before moving or publishing them.'
+      }),
+      Object.freeze({
+        name: 'Bounded Support Routing',
+        publicUrl: 'https://schemas.radiantnull.com/skills/bounded-support-routing/',
+        path: '.agents/skills/bounded-support-routing/SKILL.md',
+        sha256: '80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402',
+        purpose: 'Form one finite support request for evidence extraction, classroom adaptation, or implementation checking with an observable return and stopping event.'
+      })
+    ]);
+    var PROMPT_CAPSULE_RELATED_LOOPS = Object.freeze(Array.prototype.map.call(
+      document.querySelectorAll('[data-prompt-related-loops] [data-related-loop-id]'),
+      function (item) {
+        return Object.freeze({
+          id: item.dataset.relatedLoopId,
+          name: item.querySelector('[data-related-loop-link]').textContent.trim(),
+          publicUrl: item.querySelector('[data-related-loop-link]').getAttribute('href'),
+          fitCondition: item.querySelector('[data-related-loop-fit]').textContent.trim()
+        });
+      }
+    ));
+
     var dependencyMap = {
       grade: { label: 'Grade band', changes: ['vocabulary', 'scaffolding', 'independence expectation', 'working capsule'], preserves: ['fixture values', 'source standing', 'human review authority'], receipt: 'situation-receipt' },
       learners: { label: 'Class size', changes: ['group composition', 'material quantities', 'participation plan', 'teacher movement', 'evidence collection', 'VS planning question', 'optional named event', 'working capsule'], preserves: ['selected grouping mode', 'lesson minutes', 'standards', 'privacy boundary'], receipt: 'situation-receipt' },
@@ -1370,6 +1503,9 @@ SOURCE STANDING: present every value and place mark as an invented teaching fixt
       receiver: document.getElementById('receiver'),
       receiverReading: document.getElementById('receiver-reading'),
       packet: document.getElementById('packet'),
+      copyPromptButton: document.getElementById('copy-prompt'),
+      downloadPromptButton: document.getElementById('download-prompt'),
+      promptViewStatus: document.getElementById('prompt-view-status'),
       assembledRevision: document.getElementById('assembled-revision'),
       assembledPacket: document.getElementById('assembled-packet'),
       revisionMeta: document.getElementById('revision-meta'),
@@ -1420,6 +1556,7 @@ SOURCE STANDING: present every value and place mark as an invented teaching fixt
     var reviewedChanges = [];
     var pendingChangeDetails = {};
     var announcementTimer = null;
+    var promptCapsuleView = 'plain';
 
     function clampNumber(value, min, max, fallback) {
       var number = Number(value);
@@ -1438,6 +1575,129 @@ SOURCE STANDING: present every value and place mark as an invented teaching fixt
 
     function copy(value) {
       return JSON.parse(JSON.stringify(value));
+    }
+
+    function markdownLiteral(value, fallback) {
+      var resolved = typeof value === 'string' ? value : (fallback || '');
+      return resolved.replace(/\r\n?/g, '\n').replace(/\s*\n\s*/g, ' ');
+    }
+
+    function markdownInline(value, fallback) {
+      return markdownLiteral(value, fallback)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\\/g, '\\\\')
+        .replace(/([!#@`*_[\]|~])/g, '\\$1')
+        .replace(/\b((?:https?|ftp):)(?=\/\/)/gi, function (protocol) { return protocol.slice(0, -1) + '\\:'; })
+        .replace(/\bwww\./gi, function (prefix) { return prefix.slice(0, -1) + '\\.'; });
+    }
+
+    function markdownCode(value, fallback) {
+      var literal = markdownLiteral(String(value == null ? (fallback || 'Open for review.') : value), fallback);
+      var runs = literal.match(/`+/g) || [];
+      var longest = runs.reduce(function (length, run) { return Math.max(length, run.length); }, 0);
+      var delimiter = '`'.repeat(longest + 1);
+      var padding = /^(?: |`)|(?: |`)$/.test(literal) ? ' ' : '';
+      return delimiter + padding + literal + padding + delimiter;
+    }
+
+    function canonicalValue(value) {
+      if (Array.isArray(value)) return value.map(canonicalValue);
+      if (value && typeof value === 'object') {
+        return Object.keys(value).sort().reduce(function (result, key) {
+          result[key] = canonicalValue(value[key]);
+          return result;
+        }, {});
+      }
+      return value;
+    }
+
+    function fnv1a32Utf8(value) {
+      var hash = 0x811c9dc5;
+      function update(byte) { hash ^= byte; hash = Math.imul(hash, 0x01000193) >>> 0; }
+      Array.from(String(value)).forEach(function (symbol) {
+        var codePoint = symbol.codePointAt(0);
+        if (codePoint <= 0x7f) update(codePoint);
+        else if (codePoint <= 0x7ff) {
+          update(0xc0 | (codePoint >>> 6)); update(0x80 | (codePoint & 0x3f));
+        } else if (codePoint <= 0xffff) {
+          update(0xe0 | (codePoint >>> 12)); update(0x80 | ((codePoint >>> 6) & 0x3f)); update(0x80 | (codePoint & 0x3f));
+        } else {
+          update(0xf0 | (codePoint >>> 18)); update(0x80 | ((codePoint >>> 12) & 0x3f)); update(0x80 | ((codePoint >>> 6) & 0x3f)); update(0x80 | (codePoint & 0x3f));
+        }
+      });
+      return 'fnv1a32-utf8:' + hash.toString(16).padStart(8, '0');
+    }
+
+    function promptCapsuleStateProjection(source) {
+      return {
+        version: markdownLiteral(source.version),
+        fixtureVersion: markdownLiteral(source.fixtureVersion),
+        situation: {
+          grade: markdownInline(source.situation.grade),
+          learners: source.situation.learners,
+          minutes: source.situation.minutes,
+          grouping: {
+            mode: markdownInline(source.situation.grouping.mode),
+            groups: source.situation.grouping.groups,
+            individuals: source.situation.grouping.individuals,
+            pairs: source.situation.grouping.pairs,
+            trios: source.situation.grouping.trios,
+            quartets: source.situation.grouping.quartets,
+            materialSets: source.situation.grouping.materialSets
+          },
+          timing: source.situation.timing.map(function (part) {
+            return { label: markdownInline(part.label), minutes: part.minutes };
+          })
+        },
+        standards: source.standards.map(markdownLiteral),
+        goal: markdownInline(source.goal),
+        sources: {
+          quantitative: source.sources.quantitative.map(markdownInline),
+          context: source.sources.context.map(markdownInline)
+        },
+        reference: {
+          request: markdownInline(source.reference.request),
+          referentStatus: markdownLiteral(source.reference.referentStatus),
+          register: markdownInline(source.reference.register),
+          socialProxy: markdownInline(source.reference.socialProxy)
+        },
+        investigation: {
+          alignmentDays: source.investigation.alignmentDays,
+          pairs: source.investigation.pairs,
+          correlation: source.investigation.correlation,
+          anchorCohort: markdownInline(source.investigation.anchorCohort)
+        },
+        route: {
+          selected: markdownInline(source.route.selected),
+          suggested: markdownInline(source.route.suggested),
+          relation: markdownLiteral(source.route.relation)
+        },
+        sampling: {
+          method: markdownLiteral(source.sampling.method),
+          candidateCount: source.sampling.candidateCount,
+          probabilityReference: markdownLiteral(source.sampling.probabilityReference),
+          residualMass: markdownLiteral(source.sampling.residualMass),
+          probabilityUnit: markdownLiteral(source.sampling.probabilityUnit),
+          standing: markdownLiteral(source.sampling.standing),
+          routeEventAssessment: markdownLiteral(source.sampling.routeEventAssessment)
+        },
+        receiver: {
+          label: markdownInline(source.receiver.label),
+          status: markdownLiteral(source.receiver.status)
+        },
+        assembly: {
+          status: markdownLiteral(source.assembly.status),
+          revision: source.assembly.revision,
+          reviewedAt: source.assembly.reviewedAt === null ? null : markdownLiteral(source.assembly.reviewedAt),
+          changedControls: source.assembly.changedControls.map(markdownLiteral)
+        }
+      };
+    }
+
+    function promptCapsuleFingerprint(source) {
+      return fnv1a32Utf8(JSON.stringify(canonicalValue(promptCapsuleStateProjection(source))));
     }
 
     function groupingFor(learners, mode) {
@@ -1697,7 +1957,7 @@ SOURCE STANDING: present every value and place mark as an invented teaching fixt
       if (state.investigation.correlation === null) {
         return 'Pair construction requires both quantitative fixture fields. Ask the named human receiver to choose precipitation and streamflow before forming the ten-anchor view.';
       }
-      return 'Start with daily-mean streamflow aligned ' + alignmentPhrase(alignment) + ' after daily precipitation: ' + state.investigation.pairs + ' fixed-anchor pairs; fixture r = ' + signed(state.investigation.correlation) + '. Ask learners to compare all three pairings and explain why changed streamflow dates change the result while ten precipitation anchors remain fixed.';
+      return 'Start with daily precipitation paired to daily-mean streamflow from ' + alignmentPhrase(alignment) + ': ' + state.investigation.pairs + ' fixed-anchor pairs; fixture r = ' + signed(state.investigation.correlation) + '. Ask learners to compare all three pairings and explain why changed streamflow dates change the result while ten precipitation anchors remain fixed.';
     }
 
     function standardSentence() {
@@ -1799,71 +2059,151 @@ SOURCE STANDING: present every value and place mark as an invented teaching fixt
       ].join('\n');
     }
 
-    function buildPromptCapsule(reviewed) {
-      var standards = state.standards.length ? state.standards.join(', ') : 'Requires human selection';
-      var request = state.reference.request || 'Define the lesson request with the named classroom educator.';
-      var alignment = state.investigation.alignmentDays;
-      var receiver = state.receiver.status === 'named' ? state.receiver.label : 'Requires a named human receiver';
+    function promptCapsuleMarkdown(options) {
+      var settings = options || {};
+      var view = PROMPT_CAPSULE_VIEWS.indexOf(settings.view) === -1 ? 'plain' : settings.view;
+      var standards = state.standards.length ? state.standards.map(markdownCode).join(', ') : 'Open for human selection.';
+      var request = markdownInline(state.reference.request, 'Define the lesson request with the named classroom educator.');
+      var receiver = state.receiver.status === 'named' ? markdownInline(state.receiver.label) : 'Open: name the human receiver.';
       var route = routeData[state.route.selected];
       var coordination = coordinationFor();
-      var heading = reviewed ? 'REVIEWED PROMPT CAPSULE · REVISION ' + state.assembly.revision : 'WORKING PROMPT CAPSULE';
+      var changedControls = state.assembly.changedControls.length
+        ? state.assembly.changedControls.map(markdownCode).join(', ')
+        : 'No changes await review.';
+      var relatedLoops = PROMPT_CAPSULE_RELATED_LOOPS.map(function (loop) {
+        return '- [' + loop.name + '](' + loop.publicUrl + ') (' + markdownCode(loop.id) + ') — ' + markdownInline(loop.fitCondition);
+      });
       var representationReview = state.reference.socialProxy === 'Direct human review'
         ? 'The classroom educator and curriculum lead provide the direct review route.'
-        : 'When a social proxy is selected, route representation to people from the named population for review.';
-      return [
-        heading,
-        reviewed ? 'Reviewed locally: ' + state.assembly.reviewedAt + ' · Fixture: ' + state.fixtureVersion + '.' : 'Status: ' + state.assembly.status + ' · Fixture: ' + state.fixtureVersion + '.',
+        : 'The selected question-forming perspective surfaces review questions. People from the named population retain decisions about representation, consent, identity, and lived experience.';
+      var sections = [
+        '# Prompt Capsule: Open Lesson Field',
         '',
-        'TASK',
-        request,
-        'Named human receiver: ' + receiver + '.',
+        '- Contract: ' + markdownCode(PROMPT_CAPSULE_CONTRACT),
+        '- Capsule: ' + markdownCode('open-lesson-field/lesson-request'),
+        '- Source: ' + markdownCode('open-lesson-field@2.0'),
+        '- State: ' + markdownCode(state.version) + ' · revision ' + markdownCode(state.assembly.revision),
+        '- Fingerprint: ' + markdownCode(promptCapsuleFingerprint(state)),
+        '- View: ' + markdownCode(view),
         '',
-        'TEACHING SITUATION',
-        state.situation.grade + ' · ' + state.situation.learners + ' learners · ' + state.situation.grouping.mode + ': ' + groupingPhrase(state.situation.grouping) + ' · ' + state.situation.grouping.materialSets + ' material sets · ' + state.situation.minutes + ' minutes. ' + gradeProfiles[state.situation.grade] + ' Groups can use graph paper or a spreadsheet. Keep learner identities and records in the educator’s protected channel.',
-        'Timing: ' + timingSentence(),
+        '## Purpose and target',
         '',
-        'CLASSROOM COORDINATION',
-        'Grouping: ' + coordination.grouping,
-        'Materials: ' + coordination.materials,
-        'Participation and reporting: ' + coordination.participation + ' ' + coordination.reporting,
-        'Roles and teacher movement: ' + coordination.roles + ' ' + coordination.movement,
-        'Technology, room, and access: ' + coordination.technology + ' ' + coordination.room + ' ' + coordination.accessibility,
-        'Evidence, review, and return: ' + coordination.evidence + ' ' + coordination.review,
+        'Shape an inspectable lesson request that carries classroom conditions, source standing, evidence, access, and review to the next collaborator.',
         '',
-        'STANDARDS AND GOAL',
-        'CCSS-M ' + standards + '.',
-        'Primary goal: ' + state.goal + '.',
-        'Suggested route: ' + state.route.suggested + '. Selected route: ' + state.route.selected + '. Relation: ' + state.route.relation + '.',
-        'Learner evidence: ' + standardSentence(),
+        '- Request: ' + request,
+        '- Human receiver: ' + receiver,
+        '- Handoff standing: ' + markdownCode(state.assembly.status) + '.',
+        '- Fixture: ' + markdownCode(state.fixtureVersion) + '.',
         '',
-        'SOURCE FIELD',
-        sourceSentence(),
-        'Fixed cohort: ten precipitation anchors from Apr 7–16; streamflow buffer through Apr 18 preserves ten pairs across all three alignments.',
+        '## Relevant context and inputs',
         '',
-        'REFERENCE AND REGISTER',
-        'Referent check: ' + state.reference.referentStatus + '. Human receiver: ' + receiver + '.',
-        registerBoundary(),
-        'Required modules: ' + registerModules[state.reference.register].join('; ') + '.',
-        proxySentence(),
-        'Review questions: ' + proxyQuestions[state.reference.socialProxy].join(' '),
+        '### Teaching situation',
         '',
-        'INVESTIGATION',
-        investigationSentence(alignment),
+        '- Audience: ' + markdownInline(state.situation.grade) + '; ' + markdownCode(state.situation.learners) + ' learner' + (state.situation.learners === 1 ? '' : 's') + '; ' + markdownCode(state.situation.minutes) + ' minutes.',
+        '- Grouping: ' + markdownInline(state.situation.grouping.mode) + ' — ' + markdownInline(groupingPhrase(state.situation.grouping)) + '; ' + markdownCode(state.situation.grouping.materialSets) + ' material set' + (state.situation.grouping.materialSets === 1 ? '' : 's') + '.',
+        '- Timing: ' + markdownInline(timingSentence()),
+        '- Learning support: ' + markdownInline(gradeProfiles[state.situation.grade]) + ' Groups can use graph paper or a spreadsheet.',
         '',
-        'LESSON ROUTE',
-        state.route.selected + ': ' + route.summary,
-        'Teacher move: ' + route.teacher + ' Learner move: ' + route.learner + ' Formative evidence: ' + route.evidence + ' Access treatment: ' + route.access,
+        '### Standards, sources, and working register',
         '',
-        samplingPromptFor(),
+        '- Standards: ' + standards,
+        '- Inquiry goal: ' + markdownInline(state.goal) + '.',
+        '- Learner evidence: ' + markdownInline(standardSentence()),
+        '- Quantitative fields: ' + (state.sources.quantitative.length ? state.sources.quantitative.map(markdownInline).join('; ') : 'Open for selection.') ,
+        '- Context fields: ' + (state.sources.context.length ? state.sources.context.map(markdownInline).join('; ') : 'The quantitative-only view is selected.'),
+        '- Reference standing: ' + markdownCode(state.reference.referentStatus) + '.',
+        '- Working register: ' + markdownInline(registerBoundary()),
+        '- Required modules: ' + registerModules[state.reference.register].map(markdownInline).join('; ') + '.',
+        '- ' + markdownInline(proxySentence()),
+        '- Review questions: ' + proxyQuestions[state.reference.socialProxy].map(markdownInline).join(' '),
         '',
-        routeEventPromptFor(),
+        '## Working state',
         '',
-        'REQUESTED HANDOFF',
-        'Return the exact ' + state.situation.minutes + '-minute ledger, ' + groupingPhrase(state.situation.grouping) + ', ' + state.situation.grouping.materialSets + ' material sets, participation opportunities, reporting window, rotating roles, device-and-paper access conditions, teacher movement, evidence collection, room configuration, accessibility-review questions, learner instructions, compact data table, plot prompts, and a closing claim check. Place the evidence boundary beside each interpretation.',
+        '### Classroom coordination',
         '',
-        'BOUNDARIES',
-        'SOURCE STANDING: present every value and place mark as an invented teaching fixture; live or historical claims require separately sourced records. AXIS RULE: use paired precipitation and streamflow on quantitative axes; use map and land-cover layers to form context questions. CLAIM RULE: describe association from the selected pairings; causal claims require observed records, an adequate study design, and review of alternative explanations. PRIVACY AND AUTHORITY: use class-level conditions in this capsule; keep protected learner records in the educator’s approved channel. The educator approves classroom use. ' + representationReview + ' Mark assumptions and questions for the named human receiver.'
-      ].join('\n');
+        '- Grouping: ' + markdownInline(coordination.grouping),
+        '- Materials: ' + markdownInline(coordination.materials),
+        '- Participation and reporting: ' + markdownInline(coordination.participation + ' ' + coordination.reporting),
+        '- Roles and teacher movement: ' + markdownInline(coordination.roles + ' ' + coordination.movement),
+        '- Technology, room, and access: ' + markdownInline(coordination.technology + ' ' + coordination.room + ' ' + coordination.accessibility),
+        '- Evidence, review, and return: ' + markdownInline(coordination.evidence + ' ' + coordination.review),
+        '',
+        '### Investigation and lesson route',
+        '',
+        '- Pairing: ' + markdownInline(investigationSentence(state.investigation.alignmentDays)),
+        '- Suggested route: ' + markdownInline(state.route.suggested) + '. Selected route: ' + markdownInline(state.route.selected) + '. Relation: ' + markdownCode(state.route.relation) + '.',
+        '- Route summary: ' + markdownInline(route.summary),
+        '- Teacher move: ' + markdownInline(route.teacher),
+        '- Learner move: ' + markdownInline(route.learner),
+        '- Formative evidence: ' + markdownInline(route.evidence),
+        '- Access treatment: ' + markdownInline(route.access),
+        '',
+        '### Sampling request',
+        '',
+        '- Working instruction: VERBALIZED SAMPLING · BOUNDED ' + state.sampling.candidateCount + '-CANDIDATE FAN-OUT.',
+        '- Method: ' + markdownCode(state.sampling.method) + '; ' + markdownCode(state.sampling.candidateCount) + ' distinct candidates in generation order.',
+        '- Probability: one percentage for every candidate relative to the full response distribution, followed by the listed mass, residual or unlisted mass, and a 100% accounting check.',
+        '- Candidate content: stable label, coordination plan, assumptions, and evidence that would change the probability.',
+        '- Separate optional frame: estimate the named classroom event independently for each authored route; keep those conditional estimates distinct from the generated-candidate distribution.',
+        '- Authored routes: Plot and annotate; Lag and compare; Claim and challenge.',
+        '',
+        '### Assembly',
+        '',
+        '- Status: ' + markdownCode(state.assembly.status) + '; revision ' + markdownCode(state.assembly.revision) + '.',
+        '- Changes awaiting review: ' + changedControls,
+        '- Reviewed locally: ' + (state.assembly.reviewedAt ? markdownCode(state.assembly.reviewedAt) : 'Open until the receiving educator assembles a reviewed revision.') ,
+        '',
+        '## Boundaries and human-held decisions',
+        '',
+        '- The current JSON state in this file remains the source for this Markdown view.',
+        '- Every value and place mark is an invented teaching fixture. Live or historical claims require separately sourced records.',
+        '- Paired precipitation and streamflow fields carry quantitative calculations. Map and land-cover layers form context questions.',
+        '- The fixture supports descriptive association. A causal conclusion requires observed records, an adequate study design, and review of alternative explanations.',
+        '- Class-level conditions travel in this capsule. Learner identities and protected records remain in the educator’s approved channel.',
+        '- The educator retains the classroom-use decision. ' + representationReview,
+        '',
+        '## Requested return',
+        '',
+        'Return the exact ' + markdownCode(state.situation.minutes + '-minute') + ' lesson ledger, ' + markdownInline(groupingPhrase(state.situation.grouping)) + ', ' + markdownCode(state.situation.grouping.materialSets) + ' material sets, participation opportunities, reporting window, rotating roles, device-and-paper access conditions, teacher movement, evidence collection, room configuration, accessibility-review questions, learner instructions, a compact data table, plot prompts, formative evidence, and a closing claim check.',
+        '',
+        'Place the evidence boundary beside each interpretation. Mark assumptions and questions for the named human receiver.',
+        '',
+        '## Related loops',
+        '',
+        'These public collaboration loops fit only when the receiving work meets the stated condition:',
+        '',
+        relatedLoops.join('\n'),
+        '',
+        '## Evidence and recovery',
+        '',
+        '- The embedded JSON Schema checks the current ' + markdownCode(state.version) + ' state vocabulary.',
+        '- Ten precipitation anchors from Apr 7–16 and a streamflow buffer through Apr 18 keep the comparison cohort visible across all three alignments.',
+        '- The fingerprint identifies the complete represented state; the plain and skill-assisted views share it.',
+        '- Assembly keeps an immutable reviewed snapshot while the working controls remain available for another revision.',
+        '- When a required source field, classroom condition, receiver, or decision remains open, return the smallest clarifying question and keep the current working state available.'
+      ];
+      if (view === 'skill-assisted') {
+        sections.push(
+          '',
+          '## Skill assistance',
+          '',
+          'These public repository skills can shape the return while the Open Lesson Field remains the source for the working state:',
+          '',
+          PROMPT_CAPSULE_SKILLS.map(function (skill) {
+            return [
+              '- [' + skill.name + '](' + skill.publicUrl + ') — ' + markdownInline(skill.purpose),
+              '  - Repository path: ' + markdownCode(skill.path),
+              '  - Source revision: ' + markdownCode(PROMPT_CAPSULE_SKILL_REVISION),
+              '  - Source SHA-256: ' + markdownCode(skill.sha256)
+            ].join('\n');
+          }).join('\n')
+        );
+      }
+      return sections.join('\n') + '\n';
+    }
+
+    function buildPromptCapsule(reviewed) {
+      return promptCapsuleMarkdown({ view: reviewed ? 'plain' : promptCapsuleView });
     }
 
     function renderClassSizeCoordination() {
@@ -2008,6 +2348,10 @@ SOURCE STANDING: present every value and place mark as an invented teaching fixt
 
     function renderContract() {
       elements.packet.textContent = buildPromptCapsule(false);
+      elements.packet.dataset.promptViewActive = promptCapsuleView;
+      document.querySelectorAll('[data-prompt-view]').forEach(function (control) {
+        control.checked = control.value === promptCapsuleView;
+      });
       elements.stateJson.textContent = JSON.stringify(state, null, 2);
       var matches = contractMatches();
       elements.schemaStatus.innerHTML = matches ? '<strong>Contract check:</strong> current state matches the included schema vocabulary and derived invariants.' : '<strong>Contract check requires review:</strong> a derived state invariant requires reconciliation before assembly.';
@@ -2048,6 +2392,76 @@ SOURCE STANDING: present every value and place mark as an invented teaching fixt
         elements.live.textContent = message;
         announcementTimer = null;
       }, 20);
+    }
+
+    function promptViewLabel() {
+      return promptCapsuleView === 'plain' ? 'Plain' : 'Skill-assisted';
+    }
+
+    function announcePrompt(message) {
+      elements.promptViewStatus.textContent = message;
+      announce(message);
+    }
+
+    function fallbackWriteText(text) {
+      var previousFocus = document.activeElement;
+      var textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.setAttribute('aria-hidden', 'true');
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.select();
+      var copied = false;
+      try {
+        copied = document.execCommand('copy');
+      } catch (error) {
+        copied = false;
+      }
+      textArea.remove();
+      if (previousFocus && typeof previousFocus.focus === 'function' && document.contains(previousFocus)) {
+        try {
+          previousFocus.focus({ preventScroll: true });
+        } catch (error) {
+          previousFocus.focus();
+        }
+      }
+      return copied;
+    }
+
+    async function copyPromptCapsule() {
+      var markdown = elements.packet.textContent;
+      var copied = false;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          try {
+            await navigator.clipboard.writeText(markdown);
+            copied = true;
+          } catch (error) {
+            copied = fallbackWriteText(markdown);
+          }
+        } else {
+          copied = fallbackWriteText(markdown);
+        }
+      } catch (error) {
+        copied = false;
+      }
+      if (copied) {
+        announcePrompt(promptViewLabel() + ' Markdown copied.');
+      } else {
+        announcePrompt(promptViewLabel() + ' Markdown remains visible for manual copy.');
+      }
+    }
+
+    function downloadPromptCapsule() {
+      var markdown = elements.packet.textContent;
+      var url = URL.createObjectURL(new Blob([markdown], { type: 'text/markdown;charset=utf-8' }));
+      var link = document.createElement('a');
+      link.href = url;
+      link.download = 'open-lesson-field.prompt-capsule.r' + state.assembly.revision + '.' + promptCapsuleView + '.md';
+      link.click();
+      window.setTimeout(function () { URL.revokeObjectURL(url); }, 1200);
+      announcePrompt(promptViewLabel() + ' Markdown download prepared.');
     }
 
     function setReceipt(element, detail, config) {
@@ -2283,6 +2697,17 @@ SOURCE STANDING: present every value and place mark as an invented teaching fixt
 
     elements.printButton.addEventListener('click', function () { if (reviewedSnapshot) window.print(); });
 
+    elements.copyPromptButton.addEventListener('click', copyPromptCapsule);
+    elements.downloadPromptButton.addEventListener('click', downloadPromptCapsule);
+    document.querySelectorAll('[data-prompt-view]').forEach(function (control) {
+      control.addEventListener('change', function () {
+        if (!control.checked || PROMPT_CAPSULE_VIEWS.indexOf(control.value) === -1) return;
+        promptCapsuleView = control.value;
+        renderContract();
+        announcePrompt(promptViewLabel() + ' Markdown view selected.');
+      });
+    });
+
     var routeLinks = Array.prototype.slice.call(document.querySelectorAll('.route-scroll a'));
 
     function setCurrentStage(id) {
@@ -2313,6 +2738,19 @@ SOURCE STANDING: present every value and place mark as an invented teaching fixt
     } catch (error) {
       elements.schemaDisplay.textContent = 'Schema parsing requires implementation review.';
     }
+
+    window.openLessonField = Object.freeze({
+      version: '2.0',
+      stateSchemaVersion: 'open-lesson-field.v2',
+      promptCapsuleContract: PROMPT_CAPSULE_CONTRACT,
+      promptCapsuleViews: PROMPT_CAPSULE_VIEWS,
+      getState: function () { return copy(state); },
+      promptCapsule: function () { return promptCapsuleMarkdown({ view: 'plain' }); },
+      promptCapsuleMarkdown: function (view) { return promptCapsuleMarkdown({ view: view || promptCapsuleView }); },
+      promptCapsuleStateProjection: function () { return copy(promptCapsuleStateProjection(state)); },
+      promptCapsuleFingerprint: function () { return promptCapsuleFingerprint(state); },
+      getPromptCapsuleView: function () { return promptCapsuleView; }
+    });
 
     updateRouteButtons();
     readControls();

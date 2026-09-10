@@ -53,7 +53,7 @@
         "headline": "The Sample Nobody Could Find",
         "alternativeHeadline": "Naming the shared objects before choosing the system",
         "description": "A solution and implementation architecture debrief on naming shared laboratory objects before selecting a LIMS or ELN platform.",
-        "dateModified": "2026-09-01",
+        "dateModified": "2026-09-08",
         "inLanguage": "en-US",
         "author": {
           "@type": "Organization",
@@ -103,7 +103,7 @@
         <p class="tag-line">Naming the shared objects before choosing the system</p>
         <p class="debrief-lead">
           On its face this was a build-or-buy vendor decision. Underneath, the number-one concept to emerge from
-          research was quality, and the loudest, most repeated pain was locational and provenantial: where is this
+          research was quality, and the loudest, most repeated concern was location and provenance: where is this
           sample, what is its status, what work is connected, and who signed off, and when?
         </p>
         <ol class="fmi-track-key" aria-label="Two-track reading structure">
@@ -113,7 +113,7 @@
           </li>
           <li>
             <strong>02 · Implementation</strong>
-            <span>The historical estate beside a 2025–2026 reference posture, with failures and recovery kept visible.</span>
+            <span>The 2021–2022 systems beside a 2025–2026 reference implementation, with failures and recovery kept visible.</span>
           </li>
         </ol>
       </header>
@@ -144,7 +144,7 @@
               </div>
               <div>
                 <dt>Team scale</dt>
-                <dd>A three-person experience and research leadership spine; participatory work scaling from individual sessions to approximately 70–100+ participants; six-plus working groups; hundreds of lab personnel affected.</dd>
+                <dd>A three-person experience and research leadership team; participatory work scaling from individual sessions to approximately 70–100+ participants; six-plus working groups; hundreds of lab personnel affected.</dd>
               </div>
               <div>
                 <dt>My role</dt>
@@ -294,7 +294,7 @@
                     <tr>
                       <th scope="row">Automation Development</th>
                       <td><strong>Pair</strong> sample-flow files with instrument records.</td>
-                      <td><span class="table-value--not-measured">Relationship to surface</span></td>
+                      <td><span class="table-value--not-measured">Known relationship; operating step to be detailed</span></td>
                       <td><strong>Automate</strong> assay and instrument inventory requirements.</td>
                       <td><strong>Integrate</strong> instruments, pseudo-samples, and qualification work.</td>
                       <td><strong>Translate</strong> scenarios into executable tests.</td>
@@ -310,7 +310,7 @@
                     <tr>
                       <th scope="row">Quality and lab leadership</th>
                       <td><strong>Understand</strong> material flow and procurement.</td>
-                      <td><span class="table-value--not-measured">Relationship to surface</span></td>
+                      <td><span class="table-value--not-measured">Known relationship; operating step to be detailed</span></td>
                       <td><strong>Resource</strong> supply-dependent process design.</td>
                       <td><strong>Reduce</strong> downtime and cross-value-stream dependency.</td>
                       <td><strong>Shorten</strong> approval paths while retaining quality assurance.</td>
@@ -319,8 +319,8 @@
                 </table>
               </div>
               <figcaption class="table-note">
-                Each cell names the working relationship a group had with the shared object. “Relationship to surface”
-                keeps a relationship visible while its exact operating move remains open for later elaboration.
+                Each cell names the working relationship a group had with the shared object. “Known relationship;
+                operating step to be detailed” preserves the established relationship and marks the remaining detail for later work.
               </figcaption>
             </figure>
 
@@ -333,7 +333,7 @@
                     <tr><th scope="col">Failure</th><th scope="col">What it named</th></tr>
                   </thead>
                   <tbody>
-                    <tr><th scope="row">The reverted big-bang refresh</th><td>The lived zero-line the whole build-or-buy decision was measured against.</td></tr>
+                    <tr><th scope="row">The reverted big-bang refresh</th><td>The experienced failure baseline against which the whole build-or-buy decision was measured.</td></tr>
                     <tr><th scope="row">Plates disappearing on folder move; folder-duplication crashes</th><td>Data loss on move — a likely top crash cause, recurring in ServiceNow and Slack.</td></tr>
                     <tr><th scope="row">Silently skipped samples with no visual indicator</th><td>Verification becomes a system property, with technologist attention focused on meaningful exceptions.</td></tr>
                     <tr><th scope="row">EBR takes forever to load</th><td>Responsiveness under the rescan-and-recover loop; it derailed a feedback presentation.</td></tr>
@@ -373,8 +373,8 @@
               <li>Fan the specifications into proposed sprints, estimate velocity from recent quarters, and cost development, integration, training, downtime, validation, and SOP rewrites against time saved and reduced error rates.</li>
             </ol>
             <p>
-              After several rounds with different archetypes, the participatory sessions became asynchronous,
-              self-accreting collaborative surfaces: people returned between sessions to add detail as they remembered it.
+              After several rounds with different participant groups, the prototypes and session materials became shared
+              artifacts that people could enrich asynchronously. Participants returned between sessions to add detail as they remembered it.
               Because every interface control implied data primitives and acceptable ranges across states, the LIMS Systems
               teams extended them with data objects, API calls, and storage considerations. These cross-sections, the Context
               Tree, and the personas folded into a Service Design Blueprint.
@@ -480,7 +480,7 @@
             <figure class="table-figure table-figure--wide table-span-all">
               <div class="table-scroll" role="region" tabindex="0" aria-label="HEART signal candidates">
                 <table class="table--comparison table--comfortable">
-                  <caption>HEART receiving surface for the re-platforming work</caption>
+                  <caption>HEART measurement candidates for the re-platforming work</caption>
                   <thead>
                     <tr>
                       <th scope="col">Dimension</th>
@@ -500,7 +500,7 @@
                       <th scope="row">Task success</th>
                       <td>Verify sample location, processing state, connected work, and sign-off from a coherent state history.</td>
                       <td>Time to verified state; systems visited per investigation; corrections per review.</td>
-                      <td><span class="table-status" data-state="needs-to-surface">Needs to surface</span> These are prospective measures; observed values belong to future collection.</td>
+                      <td><span class="table-status" data-state="needs-to-surface">Prospective measures</span> Observed values belong to future collection.</td>
                     </tr>
                     <tr>
                       <th scope="row">Adoption</th>
@@ -513,7 +513,7 @@
               </div>
               <figcaption class="table-note">
                 <span class="table-caveat">Quality condition: a trustworthy lookup preserves state consistency, so speed and decision quality advance together.</span>
-                <span class="prototype-embed__action"><a href="prototypes/core-architectures/chimeric-pack-v0.1/heart-chart-chimeric-prototype-v0.1.5.html">Open the HEART Chart prototype</a></span>
+                <span class="prototype-embed__action"><a href="prototypes/core-architectures/chimeric-pack-v0.1/heart-chart-chimeric-prototype-v0.1.6.html">Open the HEART Chart prototype</a></span>
               </figcaption>
             </figure>
           </section>
@@ -526,22 +526,22 @@
             <h3 id="solution-repeatability-title" class="txt-h3 beat-title">§e Repeatability — The Portable Practice</h3>
             <h4 class="txt-h4">Portable</h4>
             <ul>
-              <li>Name the shared objects before choosing the system; install the grammar before the forks harden.</li>
-              <li>Use prototypes as surfaces: make things to learn, and let sessions accrete asynchronously between meetings.</li>
+              <li>Name the shared objects before choosing the system; define the shared vocabulary before local variants harden.</li>
+              <li>Use prototypes to learn together, and let participants add detail between sessions.</li>
               <li>Time-box breadth-over-depth research around dangerous assumptions and deal-breakers.</li>
               <li>Translate scenarios into unit tests, so one artifact serves the pilot, vendor demonstrations, and automation.</li>
               <li>Use specification stubs as semantic attractors and sprint markers, expanding them where implementation needs depth.</li>
               <li>Cost migration and validation as first-class lines; keep failures first-class so selection and migration carry the remaining work.</li>
             </ul>
-            <h4 class="txt-h4">What repeats only here — anti-repeatables</h4>
-            <p>These are high-leverage negations: the boundary is the content, so they stay stated as limits.</p>
+            <h4 class="txt-h4">Specific to this engagement</h4>
+            <p>These limits keep the transferable method distinct from FMI-specific details.</p>
             <ul>
               <li>The vendor shortlist belongs to its market moment; a future team repeats the fit criteria against its contemporary field.</li>
               <li>The historical preliminary initiative estimate — approximately $500K–$750K, plus separately stated integration — belongs to FMI’s scale and regulatory surface; its reusable value is the set of cost lines.</li>
               <li>The personalities and territorial dynamics belong to this organization; the reconciliation move transfers through shared objects and operating consequences.</li>
               <li>Folder-move data loss is the specific defect; atomic movement, lineage continuity, and recoverable state are the transferable design obligations.</li>
             </ul>
-            <p>Each is named as non-transferable so a future reader keeps the method and leaves FMI’s particulars behind.</p>
+            <p>A future reader can carry the method forward while leaving FMI’s particulars with this engagement.</p>
           </article>
         </div>
       </div>
@@ -549,13 +549,13 @@
       <div class="content__container bg__adjust--dark-iron-ore implementation-track-start fmi-implementation-field fmi-implementation-field--iron">
         <div class="content content--editorial">
           <section aria-labelledby="implementation-architecture-title">
-            <p class="fmi-track-marker fmi-track-marker--implementation"><span>Track 02</span> Implementation substrate · state, authority, and recovery</p>
+            <p class="fmi-track-marker fmi-track-marker--implementation"><span>Track 02</span> Implementation reference · state, authority, and recovery</p>
             <h2 id="implementation-architecture-title" class="txt-h2 architecture-track-title">Implementation Architecture</h2>
-            <p class="fmi-track-promise fmi-track-promise--implementation">Read this movement for system boundaries, state, recovery, decision authority, and investment. The 2025–2026 posture is a reference implementation and qualification agenda, not a retroactive account of the 2021–2022 production estate.</p>
+            <p class="fmi-track-promise fmi-track-promise--implementation">Read this movement for system boundaries, state, recovery, decision authority, and investment. The 2025–2026 design is a reference implementation and qualification agenda presented separately from the 2021–2022 production systems.</p>
             <h3 id="implementation-debrief-title" class="txt-h3 beat-title">§a Debrief — Stack of the Moment ↔ Stack of Today</h3>
             <p id="implementation-debrief-lead" class="debrief-lead">
-              The implementation track sets the estate as it ran beside the reference posture the same doctrine would
-              choose now. The stack changes; the shared-object grammar remains the design constraint.
+              The implementation track compares the historical system landscape with the reference architecture this same
+              design approach would produce today. The technology changes; the shared-object grammar remains the design constraint.
             </p>
             <div class="architecture-pair">
               <article>
@@ -570,8 +570,8 @@
                 </p>
               </article>
               <article>
-                <p class="architecture-pair__label">Now · 2025–2026 reference posture</p>
-                <h4 class="txt-h4">A configurable, lifecycle-centered estate</h4>
+                <p class="architecture-pair__label">Now · 2025–2026 reference implementation</p>
+                <h4 class="txt-h4">A configurable, lifecycle-centered architecture</h4>
                 <p>
                   A commercial LIMS provides a configurable workflow engine, multi-site role administration, attributable
                   review, automated instrument capture, and event-driven integration selected by boundary: ASTM or vendor
@@ -660,8 +660,8 @@
                 </table>
               </div>
               <figcaption class="table-note">
-                “Then” preserves the 2021–2022 operating account. “Now” names a 2025–2026 reference posture and
-                target invariant; it does not claim the historical production estate already behaved this way.
+                “Then” preserves the 2021–2022 operating account. “Now” names a 2025–2026 reference implementation and
+                target invariant; the historical production systems remain a separate account.
               </figcaption>
             </figure>
           </section>
@@ -671,9 +671,9 @@
       <div class="content__container bg__adjust--rose-pink fmi-implementation-field fmi-implementation-field--ink">
         <div class="content content--wide">
           <section aria-labelledby="implementation-intervention-title">
-            <h3 id="implementation-intervention-title" class="txt-h3 beat-title">§c The Intervention — Locally Maximized Technical Moves (Then. ↔ Now.)</h3>
+            <h3 id="implementation-intervention-title" class="txt-h3 beat-title">§c The Intervention — Targeted Technical Moves (Then ↔ Now)</h3>
             <p class="debrief-lead">
-              Each move follows a failure that mattered in the working estate into a current implementation posture. My
+              Each move responds to a consequential failure in the historical systems with a current implementation approach. My
               lived account supplies the 2021–2022 organizational and historical context. The linked Gist Registry examples
               are independently authored, company-neutral implementation models; their versioned source and tests own the
               behaviors they demonstrate. The private production schema stays with its original operational setting.
@@ -772,7 +772,7 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
                 Paginated rows can extend this reading with FMI groups, their local knowledge, collaboration paths, and
                 unresolved context whenever a role-local view extends the shared-object matrix.
               </p>
-              <p><a href="prototypes/core-architectures/chimeric-pack-v0.1/context-tree-chimeric-prototype-v0.1.6.html">Inspect the standalone Context Tree grammar</a></p>
+              <p><a href="prototypes/core-architectures/chimeric-pack-v0.1/context-tree-chimeric-prototype-v0.1.7.html">Inspect the standalone Context Tree grammar</a></p>
             </aside>
           </section>
         </div>
@@ -781,7 +781,7 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
       <div class="content__container bg__adjust--blueprint-cream fmi-implementation-field fmi-implementation-field--cobalt">
         <div class="content content--editorial">
           <section aria-labelledby="implementation-outcome-title">
-            <h3 id="implementation-outcome-title" class="txt-h3 beat-title">§d The Outcome — What Shipped Then ↔ What Ships Now (doctrine &gt; stack)</h3>
+            <h3 id="implementation-outcome-title" class="txt-h3 beat-title">§d The Outcome — What Shipped Then ↔ What Ships Now: Design Principles Across Technology Stacks</h3>
             <div class="architecture-pair">
               <article>
                 <p class="architecture-pair__label">Then · what the engagement produced</p>
@@ -794,7 +794,7 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
                 </ul>
               </article>
               <article>
-                <p class="architecture-pair__label">Now · what the same doctrine ships</p>
+                <p class="architecture-pair__label">Now · what the same design principles produce</p>
                 <p>
                   A configured commercial LIMS encodes the shared-object grammar in its workflow engine; instrument capture
                   is event-driven; custody moves are transactional; lifecycle states make absence visible; review context is
@@ -817,7 +817,7 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
                 role-bounded decisions.
               </p>
               <p>
-                One contract feeds two independent realization lanes: an operating implementation contributes observed
+                One contract supports two independent implementation paths: an operating implementation contributes observed
                 behavior, while an executable simulation contributes a coherent, falsifiable future. Reading them together
                 can reveal convergence, beneficial divergence, an implementation gap, a simulation correction, a context
                 change, or a question that remains open.
@@ -825,11 +825,11 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
             </aside>
 
             <section class="fmi-evidence-planes" aria-labelledby="program-evidence-boundary-title">
-              <p class="implementation-companion__eyebrow">Evidence boundary · three distinct planes</p>
-              <h4 id="program-evidence-boundary-title" class="txt-h4">Related does not mean interchangeable</h4>
+              <p class="implementation-companion__eyebrow">Evidence boundary · three kinds of evidence</p>
+              <h4 id="program-evidence-boundary-title" class="txt-h4">Related records answer different questions</h4>
               <p>
-                The constellation joins a historical reading to a later program contract without collapsing their
-                evidence. Each plane answers a different question and closes through a different receipt.
+                The constellation connects a historical reading with a later program contract while preserving their
+                distinct evidence. Each kind answers a different question and requires its own confirming evidence.
               </p>
               <dl>
                 <div>
@@ -843,8 +843,8 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
                 <div>
                   <dt>Later program specification · 2026</dt>
                   <dd>
-                    Versioned capability contracts, synthetic fixtures, schemas, and a checked local run make a
-                    coherent future falsifiable. The receipt establishes <strong>101 passing local synthetic tests</strong>;
+                    Versioned capability contracts, synthetic fixtures, schemas, and a verified local test run make the
+                    proposed future architecture falsifiable. The test run reports <strong>101 passing local synthetic tests</strong>;
                     it does not establish configured-tenant or production behavior.
                   </dd>
                 </div>
@@ -944,40 +944,41 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
 
             <section class="fmi-architecture-carriers table-span-all" aria-labelledby="architecture-carriers-title">
               <p class="implementation-companion__eyebrow">Core Architecture carriers</p>
-              <h4 id="architecture-carriers-title" class="txt-h4">Two ways to keep comparison and migration authority inspectable</h4>
+              <h4 id="architecture-carriers-title" class="txt-h4">Two ways to keep comparison evidence and migration authority visible</h4>
               <p>
-                These carriers extend the reading as collaboration structures. Their opening values carry working-example
-                prototype standing; FMI-specific readings gain decision standing when relevant populations supply and
-                review them. Strategy Canvas holds comparative dimensions and a good-enough threshold. The A3 Stacked
-                Cube holds current authority, a named seam, shadow evidence, selective transfer, and rollback while
+                These embedded tools extend the reading with two ways to compare and guide the work. Their opening values
+                are examples. FMI-specific scores become ready to inform a decision when the people whose work they
+                represent provide and review them. Strategy Canvas holds comparative dimensions and a good-enough
+                threshold. The A3 Stacked Cube keeps the current source of authority, the boundary being crossed, evidence
+                from parallel operation, the information selected for transfer, and the rollback route visible while
                 preserving migration as a sequence of reviewable transitions.
               </p>
 
               <div class="fmi-carrier-grid">
                 <article class="fmi-carrier-card">
                   <p class="fmi-carrier-card__label">Comparison carrier</p>
-                  <h5>Strategy Canvas</h5>
+                  <h5>Canonical Strategy Canvas worksheet</h5>
                   <p>
-                    Use it to compare current, good-enough, and desired states across source-earned dimensions such as
+                    Use the canonical worksheet to compare current, good-enough, and desired states across dimensions drawn from the work described here, such as
                     sample findability, recovery visibility, review-state attribution, instrument capture, migration
-                    reversibility, and multi-site role administration. A score becomes decision-grade only after the
-                    relevant populations supply its basis.
+                    reversibility, and multi-site role administration. A score is ready to inform a decision after the
+                    people whose work it represents provide and review the evidence behind it.
                   </p>
                   <details>
                     <summary>Open the embedded Strategy Canvas carrier</summary>
                     <figure class="prototype-embed fmi-carrier-embed">
                       <iframe
                         src="https://iframes.vik.guru/v1/core/strategy-canvas/"
-                        title="Strategy Canvas carrier for comparing current state, good-enough thresholds, and desired state"
+                        title="Canonical Strategy Canvas worksheet for comparing current state, good-enough thresholds, and desired state"
                         loading="lazy"
-                        sandbox="allow-scripts"
+                        sandbox="allow-downloads allow-popups allow-popups-to-escape-sandbox allow-scripts"
                         allow="clipboard-write"
                         referrerpolicy="no-referrer"></iframe>
                       <figcaption class="table-note">
-                        The carrier opens with working-example collaboration data. FMI-specific scores remain open until
-                        relevant populations supply their basis and review standing. Session JSON remains visible and
-                        copyable inside the browser.
-                        <span class="prototype-embed__action"><a href="prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html" target="_blank" rel="noopener noreferrer">Open Strategy Canvas in a new tab</a></span>
+                        The embedded canonical worksheet opens with example collaboration data. FMI-specific scores become ready to inform a
+                        decision when the people whose work they represent provide the evidence behind them and review the
+                        result. JSON state remains visible and copyable inside the browser.
+                        <span class="prototype-embed__action"><a href="prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html">Open the Strategy Canvas workbench</a></span>
                         Method sources and evidence: <a data-strategy-canvas-host-source href="https://www.blueoceanstrategy.com/tools/strategy-canvas/">official Strategy Canvas description</a>, <a data-strategy-canvas-host-source href="https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested">INSEAD book record</a>, and <a data-strategy-canvas-host-source href="../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json">machine-readable evidence record</a>.
                       </figcaption>
                     </figure>
@@ -1040,7 +1041,7 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
       <div class="content__container bg__adjust--pale-lavender fmi-implementation-field fmi-implementation-field--iron">
         <div class="content content--editorial">
           <section aria-labelledby="implementation-repeatability-title">
-            <h3 id="implementation-repeatability-title" class="txt-h3 beat-title">§e Repeatability — Portable Patterns and Anti-Repeatables</h3>
+            <h3 id="implementation-repeatability-title" class="txt-h3 beat-title">§e Repeatability — Portable Patterns and Engagement-Specific Conditions</h3>
             <div class="architecture-pair">
               <article>
                 <h4 class="txt-h4">Portable</h4>
@@ -1060,7 +1061,7 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
                   <li>The vendor set and its 2021 API maturity belong to that market moment.</li>
                   <li>The reverted-refresh history and territorial dynamics belong to this organization.</li>
                   <li>COVID-era shift isolation shaped the tablet and handoff priorities.</li>
-                  <li>The particular on-premises and AWS blend belongs to the inherited estate.</li>
+                  <li>The particular on-premises and AWS blend belongs to the inherited system landscape.</li>
                   <li>The historical cost ranges belong to this scale and regulatory surface.</li>
                 </ul>
               </article>

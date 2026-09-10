@@ -52,7 +52,7 @@ Each payload records falsifiers, coverage, and completion gates.
 
 ## Embed boundary
 
-Receiving iframes begin with `allow-scripts`. A real in-frame report download earns `allow-downloads`. A real copy action earns `allow="clipboard-write"` through Permissions Policy. A visible in-frame new-tab action earns `allow-popups allow-popups-to-escape-sandbox`; fullscreen presentation earns `allow="fullscreen"`. The current Grammar Family and FMI embeds grant scripts, downloads, and clipboard writing. They retain their separate origin, omit same-origin, top-navigation, popups, and fullscreen, and display the download/new-tab consequences beside the relevant actions.
+Receiving iframes begin with `allow-scripts`. A real in-frame report download earns `allow-downloads`. A real copy action earns `allow="clipboard-write"` through Permissions Policy. A visible in-frame separate-tab action earns `allow-popups allow-popups-to-escape-sandbox`; fullscreen presentation earns `allow="fullscreen"`. The current Grammar Family and FMI carriers grant scripts, downloads, popup exits, and clipboard writing. They retain their separate origin, omit same-origin, top-navigation, and fullscreen, and keep ordinary navigation on their surrounding visitor pages. The package projection gives only iframe-contained exits separate-tab behavior.
 
 ## Verification gate
 
@@ -66,20 +66,28 @@ Receiving iframes begin with `allow-scripts`. A real in-frame report download ea
 - 390, 1440, 1920, and 2560 treatments preserve a usable surface; reciprocal viewport profiles exercise the layout pressure modeled for 200% and 400% zoom.
 - Canonical and Context action bands, guides, factor labels, and handles share one half-column geometry, with the outer hit halos clear of both plot edges.
 - The canonical import boundary rejects malformed JSON, payloads beyond 512 KiB, nesting beyond 32 levels, and graphs beyond 20,000 values while retaining the current reading.
-- The generated browser validator enforces the exact published schema before domain invariants; adversarial Narrative imports normalize duplicate or markup-like IDs and bound numeric/string values.
+- The generated browser validator enforces the exact published schema before domain invariants; boundary-focused Narrative imports normalize duplicate or markup-like IDs and bound numeric/string values.
 - Authorized and unauthorized AI packets carry explicit scope receipts and recursively hold participant identity, per-person ballots, local events, and raw aggregate arrays outside the portable packet.
 - The canonical skip link is fully offscreen when unfocused, enters at the viewport top on keyboard focus, and returns offscreen after blur. A mid-page copy in very long Chromium `fullPage` captures is fixed-layer stitching from the capture path rather than runtime visibility.
 - Grammar Family and FMI embeds retain the smallest capability set that supports the implemented actions.
 - Root and Context Narrative Composer, Semantic Sampling, and Technology Fit archives rebuild deterministically; their embedded manifests and portable routes resolve against the packaged members.
-- The Context prototype-manifest validator passes all six mirrored collections.
+- The Context prototype-manifest validator passes all five mirrored collections.
 
-Latest receipt: `npm run test:strategy-canvas` passed 36 of 36 browser contracts at `.visual-runs/2026-08-22T05-05-16-708Z-strategy-canvas-contract`. Final selector visuals are preserved at `.visual-runs/2026-08-22T05-10-38-512Z-strategy-canvas-canonical` and `.visual-runs/2026-08-22T05-10-41-452Z-strategy-canvas-context`. Coverage includes both expressions, four viewport bands, reciprocal zoom reflow, column mapping, channel boundaries, packet redaction and consent scope, reviewed-report parity, bounded import failure, historical review preservation across a new starter field, no-script and forced-mount-failure readings, print and media preferences, three compatibility routes, and both Narrative consumers. The reviewed three-channel fixture, published negative-schema suite, and normalized Narrative adapter output validate at the shared schema/core boundary. The canonical distribution is 129,962 bytes with SHA-256 `f3492e97812bb0e4baaeef17adc7ce2015da9b5de53b40105b713f2662b5296d`; source/build parity passes.
+### Current v0.2.4 source receipt
+
+`npm run test:strategy-canvas` passes 43 of 43 browser contracts at `.visual-runs/2026-09-08T11-31-45-032Z-strategy-canvas-contract`. The current route includes a rendered forced-colors observation: an unselected SVG dimension label resolves to the system `Canvas` and `CanvasText` pair while the selected and focused label retains `Highlight`. The builder reproduces a 165,694-byte canonical distribution with SHA-256 `60fc6669b54adff4f609f4c48322548d44abc4875f5a2412030eb2c619f4c8b4`. `npm run test:core-architectures` passes 75 of 75 checks, the four maintained consumer archives remain current, `npm run test:narrative-architectures` passes 28 of 28 checks, and `npm run test:iframe-routes` passes 32 of 32 checks.
+
+[Issue #137](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/137) carries the moving cross-family package coordinate. This record establishes the source-owned Strategy Canvas identities and build; the existing deployment owners retain live delivery.
+
+### Historical acceptance receipt · v0.2.0 foundation
+
+The 2026-08-22 acceptance run passed 36 of 36 browser contracts at `.visual-runs/2026-08-22T05-05-16-708Z-strategy-canvas-contract`. Final selector visuals remain preserved at `.visual-runs/2026-08-22T05-10-38-512Z-strategy-canvas-canonical` and `.visual-runs/2026-08-22T05-10-41-452Z-strategy-canvas-context`. That 82-path acceptance inventory covered both expressions, four viewport bands, reciprocal zoom reflow, column mapping, channel boundaries, packet redaction and consent scope, reviewed-report parity, bounded import failure, historical review preservation across a new starter field, no-script and forced-mount-failure readings, print and media preferences, three compatibility routes, and both Narrative consumers. Its canonical distribution was 129,962 bytes with SHA-256 `f3492e97812bb0e4baaeef17adc7ce2015da9b5de53b40105b713f2662b5296d`.
 
 ## Collaboration edge
 
-Current: the canonical and Context UI expressions, schema/core, Narrative consumer, research spine, registries, manifests, deterministic consumer archives, receiving copy, and verification receipts are reconciled as a release candidate. The v0.2 routes are current; v0.1.1 routes remain accessible compatibility entries.
+Current: the canonical v0.2.4 source, generated distribution, source manifest, Context v0.2.2 workbench, schema/core, Narrative source projection, canonical portable companion, research spine, deterministic consumer archives, and local iframe package agree at their named coordinates. The evidence registry names each material representation and derives current canonical, Context, and iframe coordinates from their owning manifests. The v0.1.1 routes remain accessible compatibility entries.
 
-Next: stage the exact reviewed scope, commit it, publish the branch, and open the Strategy Canvas pull request for human review. Physical touch-hardware and assistive-technology receipts remain nominated field-validation work alongside that review.
+Next: review and merge the source-identity reconciliation, then let Issue #137 receive the accepted cross-family package coordinate and Issue #190 receive the exact live Strategy Canvas route observation. Physical touch-hardware and assistive-technology receipts remain nominated field-validation work alongside that delivery review.
 
 ```yaml
 machine_node:
@@ -88,8 +96,7 @@ machine_node:
   branch: source-key:strategy-canvas-collaboration-system
   semantic_contract: strategy-canvas/2.0
   context_extension_namespace: extensions.contextCanvas
-  state: release_candidate_authorized_for_publication
-  reviewed_change_inventory: 82_paths
+  state: source_identity_reconciliation_ready_for_review
   expressions:
     canonical: plain_extensible_instructional_worksheet
     context_canvas: present_tense_collaboration_workbench
@@ -105,11 +112,18 @@ machine_node:
     network_policy: local_only
     aggregate_membership: excluded
     packet_scope: reviewed_and_explicitly_selected
-  next_route: stage_commit_push_open_pull_request
+  next_route: review_merge_package_receive_live_verify
   verification:
-    browser_contract: 36_of_36_pass
-    consumer_archives: 6_of_6_deterministic_and_receipted
-    context_manifests: 6_of_6_pass
+    browser_contract: 43_of_43_pass
+    canonical_distribution:
+      bytes: 165694
+      sha256: 60fc6669b54adff4f609f4c48322548d44abc4875f5a2412030eb2c619f4c8b4
+    core_architectures: 75_of_75_pass
+    consumer_archives: 4_of_4_deterministic_and_receipted
+    context_manifests: 5_of_5_pass
+    narrative_architectures: 28_of_28_pass
+    iframe_routes: 32_of_32_pass
+    cross_family_package_authority: issue_137
   open_condition:
     - collect touch_hardware and actual_browser_assistive_technology_zoom receipts as field_validation
 ```

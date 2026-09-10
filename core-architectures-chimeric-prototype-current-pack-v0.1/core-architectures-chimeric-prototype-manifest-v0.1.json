@@ -30,15 +30,16 @@
       "subtitle": "Purpose, Objectives, Discoverables, Activities",
       "family": "Orientation and Tracing",
       "shape": "left-to-right orientation map",
-      "file": "poda-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "poda-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 72559,
+      "size_bytes": 111057,
       "previous": [
         "poda-chimeric-prototype-v0.1.html",
         "poda-chimeric-prototype-v0.1.1.html",
-        "poda-chimeric-prototype-v0.1.2.html"
+        "poda-chimeric-prototype-v0.1.2.html",
+        "poda-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -47,15 +48,16 @@
       "subtitle": "Forward / Backward Premise Surface",
       "family": "Orientation and Tracing",
       "shape": "six-blank premise flow + option spread",
-      "file": "alignment-worksheet-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "alignment-worksheet-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 67321,
+      "size_bytes": 106530,
       "previous": [
         "alignment-worksheet-chimeric-prototype-v0.1.html",
         "alignment-worksheet-chimeric-prototype-v0.1.1.html",
-        "alignment-worksheet-chimeric-prototype-v0.1.2.html"
+        "alignment-worksheet-chimeric-prototype-v0.1.2.html",
+        "alignment-worksheet-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -64,17 +66,18 @@
       "subtitle": "Actor–Impact–Discoverable Trace",
       "family": "Orientation and Tracing",
       "shape": "directed graph",
-      "file": "impact-map-chimeric-prototype-v0.1.4.html",
-      "version": "0.1.4",
+      "file": "impact-map-chimeric-prototype-v0.1.5.html",
+      "version": "0.1.5",
       "status": "current",
       "previous": [
         "impact-map-chimeric-prototype-v0.1.html",
         "impact-map-chimeric-prototype-v0.1.1.html",
         "impact-map-chimeric-prototype-v0.1.2.html",
-        "impact-map-chimeric-prototype-v0.1.3.html"
+        "impact-map-chimeric-prototype-v0.1.3.html",
+        "impact-map-chimeric-prototype-v0.1.4.html"
       ],
       "exists": true,
-      "size_bytes": 46004
+      "size_bytes": 83801
     },
     {
       "id": "context-tree",
@@ -82,8 +85,8 @@
       "subtitle": "Role–Knowledge Context Map",
       "family": "Orientation and Tracing",
       "shape": "role-context matrix",
-      "file": "context-tree-chimeric-prototype-v0.1.6.html",
-      "version": "0.1.6",
+      "file": "context-tree-chimeric-prototype-v0.1.7.html",
+      "version": "0.1.7",
       "status": "current",
       "previous": [
         "context-tree-chimeric-prototype-v0.1.html",
@@ -91,10 +94,11 @@
         "context-tree-chimeric-prototype-v0.1.2.html",
         "context-tree-chimeric-prototype-v0.1.3.html",
         "context-tree-chimeric-prototype-v0.1.4.html",
-        "context-tree-chimeric-prototype-v0.1.5.html"
+        "context-tree-chimeric-prototype-v0.1.5.html",
+        "context-tree-chimeric-prototype-v0.1.6.html"
       ],
       "exists": true,
-      "size_bytes": 85427
+      "size_bytes": 134657
     },
     {
       "id": "strategy-canvas",
@@ -102,14 +106,16 @@
       "subtitle": "Comparative Collaboration Field",
       "family": "Comparison and Threshold",
       "shape": "anchored dimension matrix + editable profile field",
-      "file": "strategy-canvas-chimeric-prototype-v0.2.2.html",
-      "version": "0.2.2",
+      "file": "strategy-canvas-chimeric-prototype-v0.2.4.html",
+      "version": "0.2.4",
       "status": "current",
       "previous": [
         "strategy-canvas-chimeric-prototype-v0.1.html",
         "strategy-canvas-chimeric-prototype-v0.1.1.html",
         "strategy-canvas-chimeric-prototype-v0.2.0.html",
-        "strategy-canvas-chimeric-prototype-v0.2.1.html"
+        "strategy-canvas-chimeric-prototype-v0.2.1.html",
+        "strategy-canvas-chimeric-prototype-v0.2.2.html",
+        "strategy-canvas-chimeric-prototype-v0.2.3.html"
       ],
       "compatibility_route": "strategy-canvas-chimeric-prototype-v0.1.1.html",
       "semantic_contract": "strategy-canvas/2.0",
@@ -117,8 +123,8 @@
       "evidence": "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
       "expression": "canonical",
       "exists": true,
-      "size_bytes": 142235,
-      "sha256": "93f5e2b138461f85b4980b849550f7c86cc51d7eaf16bf8429d1ea632034372a"
+      "size_bytes": 165694,
+      "sha256": "60fc6669b54adff4f609f4c48322548d44abc4875f5a2412030eb2c619f4c8b4"
     },
     {
       "id": "first-responsible-version-matrix",
@@ -126,15 +132,16 @@
       "subtitle": "Threshold Alignment Surface",
       "family": "Comparison and Threshold",
       "shape": "threshold card zones",
-      "file": "first-responsible-version-matrix-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "first-responsible-version-matrix-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 63309,
+      "size_bytes": 93366,
       "previous": [
         "first-responsible-version-matrix-chimeric-prototype-v0.1.html",
         "first-responsible-version-matrix-chimeric-prototype-v0.1.1.html",
-        "first-responsible-version-matrix-chimeric-prototype-v0.1.2.html"
+        "first-responsible-version-matrix-chimeric-prototype-v0.1.2.html",
+        "first-responsible-version-matrix-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -143,15 +150,16 @@
       "subtitle": "Shared Surface Priority Map",
       "family": "Shared Surfaces and Topology",
       "shape": "heatmap + shared assets below hard line",
-      "file": "shared-surface-priority-map-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "shared-surface-priority-map-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 106139,
+      "size_bytes": 174032,
       "previous": [
         "shared-surface-priority-map-chimeric-prototype-v0.1.html",
         "shared-surface-priority-map-chimeric-prototype-v0.1.1.html",
-        "shared-surface-priority-map-chimeric-prototype-v0.1.2.html"
+        "shared-surface-priority-map-chimeric-prototype-v0.1.2.html",
+        "shared-surface-priority-map-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -160,18 +168,19 @@
       "subtitle": "Service Topology Map",
       "family": "Shared Surfaces and Topology",
       "shape": "layered service blueprint matrix",
-      "file": "service-design-blueprint-chimeric-prototype-v0.2.4.html",
-      "version": "0.2.4",
+      "file": "service-design-blueprint-chimeric-prototype-v0.2.5.html",
+      "version": "0.2.5",
       "status": "current",
       "previous": [
         "service-design-blueprint-chimeric-prototype-v0.1.html",
         "service-design-blueprint-chimeric-prototype-v0.2.html",
         "service-design-blueprint-chimeric-prototype-v0.2.1.html",
         "service-design-blueprint-chimeric-prototype-v0.2.2.html",
-        "service-design-blueprint-chimeric-prototype-v0.2.3.html"
+        "service-design-blueprint-chimeric-prototype-v0.2.3.html",
+        "service-design-blueprint-chimeric-prototype-v0.2.4.html"
       ],
       "exists": true,
-      "size_bytes": 93083
+      "size_bytes": 182647
     },
     {
       "id": "ai-systems-service-blueprint",
@@ -179,15 +188,16 @@
       "subtitle": "Runtime–Knowledge–Infrastructure Topology Map",
       "family": "Shared Surfaces and Topology / AI Engineering Systems",
       "shape": "runtime/knowledge/infrastructure topology matrix",
-      "file": "ai-systems-service-blueprint-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "ai-systems-service-blueprint-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 66749,
+      "size_bytes": 127800,
       "previous": [
         "ai-systems-service-blueprint-chimeric-prototype-v0.1.html",
         "ai-systems-service-blueprint-chimeric-prototype-v0.1.1.html",
-        "ai-systems-service-blueprint-chimeric-prototype-v0.1.2.html"
+        "ai-systems-service-blueprint-chimeric-prototype-v0.1.2.html",
+        "ai-systems-service-blueprint-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -196,15 +206,16 @@
       "subtitle": "Feature Instantiation / Dependency Shape Map",
       "family": "Shared Surfaces and Topology",
       "shape": "view-based attachment map",
-      "file": "software-architecture-views-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "software-architecture-views-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 80200,
+      "size_bytes": 120977,
       "previous": [
         "software-architecture-views-chimeric-prototype-v0.1.html",
         "software-architecture-views-chimeric-prototype-v0.1.1.html",
-        "software-architecture-views-chimeric-prototype-v0.1.2.html"
+        "software-architecture-views-chimeric-prototype-v0.1.2.html",
+        "software-architecture-views-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -213,15 +224,16 @@
       "subtitle": "Tacit Workflow Elicitation Kit",
       "family": "Participatory Elicitation and Specification",
       "shape": "participatory Gantt + masonry + example fragments",
-      "file": "participatory-design-kit-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "participatory-design-kit-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 70946,
+      "size_bytes": 119255,
       "previous": [
         "participatory-design-kit-chimeric-prototype-v0.1.html",
         "participatory-design-kit-chimeric-prototype-v0.1.1.html",
-        "participatory-design-kit-chimeric-prototype-v0.1.2.html"
+        "participatory-design-kit-chimeric-prototype-v0.1.2.html",
+        "participatory-design-kit-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -230,18 +242,19 @@
       "subtitle": "Behavior Example Bridge",
       "family": "Participatory Elicitation and Specification",
       "shape": "rule/scenario graph",
-      "file": "specification-by-example-chimeric-prototype-v0.1.5.html",
-      "version": "0.1.5",
+      "file": "specification-by-example-chimeric-prototype-v0.1.6.html",
+      "version": "0.1.6",
       "status": "current",
       "previous": [
         "specification-by-example-chimeric-prototype-v0.1.html",
         "specification-by-example-chimeric-prototype-v0.1.1.html",
         "specification-by-example-chimeric-prototype-v0.1.2.html",
         "specification-by-example-chimeric-prototype-v0.1.3.html",
-        "specification-by-example-chimeric-prototype-v0.1.4.html"
+        "specification-by-example-chimeric-prototype-v0.1.4.html",
+        "specification-by-example-chimeric-prototype-v0.1.5.html"
       ],
       "exists": true,
-      "size_bytes": 69546
+      "size_bytes": 106630
     },
     {
       "id": "heart-chart",
@@ -249,18 +262,19 @@
       "subtitle": "Signal-to-Metric Calibration",
       "family": "Measurement, Reflection, and Judgment",
       "shape": "goal-signal-metric matrix",
-      "file": "heart-chart-chimeric-prototype-v0.1.5.html",
-      "version": "0.1.5",
+      "file": "heart-chart-chimeric-prototype-v0.1.6.html",
+      "version": "0.1.6",
       "status": "current",
       "previous": [
         "heart-chart-chimeric-prototype-v0.1.html",
         "heart-chart-chimeric-prototype-v0.1.1.html",
         "heart-chart-chimeric-prototype-v0.1.2.html",
         "heart-chart-chimeric-prototype-v0.1.3.html",
-        "heart-chart-chimeric-prototype-v0.1.4.html"
+        "heart-chart-chimeric-prototype-v0.1.4.html",
+        "heart-chart-chimeric-prototype-v0.1.5.html"
       ],
       "exists": true,
-      "size_bytes": 64271
+      "size_bytes": 100151
     },
     {
       "id": "plus-delta",
@@ -268,15 +282,16 @@
       "subtitle": "Working / Needs-to-Change Review",
       "family": "Measurement, Reflection, and Judgment",
       "shape": "preserve/change reflection matrix",
-      "file": "plus-delta-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "plus-delta-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 49137,
+      "size_bytes": 84718,
       "previous": [
         "plus-delta-chimeric-prototype-v0.1.html",
         "plus-delta-chimeric-prototype-v0.1.1.html",
-        "plus-delta-chimeric-prototype-v0.1.2.html"
+        "plus-delta-chimeric-prototype-v0.1.2.html",
+        "plus-delta-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -285,15 +300,16 @@
       "subtitle": "Interview Questions as Propensities",
       "family": "Measurement, Reflection, and Judgment",
       "shape": "probe matrix",
-      "file": "practitioner-judgment-probes-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 68964,
+      "size_bytes": 114032,
       "previous": [
         "practitioner-judgment-probes-chimeric-prototype-v0.1.html",
         "practitioner-judgment-probes-chimeric-prototype-v0.1.1.html",
-        "practitioner-judgment-probes-chimeric-prototype-v0.1.2.html"
+        "practitioner-judgment-probes-chimeric-prototype-v0.1.2.html",
+        "practitioner-judgment-probes-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -302,15 +318,16 @@
       "subtitle": "Experience Design Patterns as Problem Surfaces",
       "family": "Pattern Fit and Behavior Protection",
       "shape": "population-cartography problem matrix",
-      "file": "pattern-problem-surface-matrix-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 96474,
+      "size_bytes": 154627,
       "previous": [
         "pattern-problem-surface-matrix-chimeric-prototype-v0.1.html",
         "pattern-problem-surface-matrix-chimeric-prototype-v0.1.1.html",
-        "pattern-problem-surface-matrix-chimeric-prototype-v0.1.2.html"
+        "pattern-problem-surface-matrix-chimeric-prototype-v0.1.2.html",
+        "pattern-problem-surface-matrix-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -319,15 +336,16 @@
       "subtitle": "Purpose-Weighted Job Map",
       "family": "Pattern Fit and Behavior Protection",
       "shape": "weighted treemap",
-      "file": "jobs-to-be-done-treemap-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "jobs-to-be-done-treemap-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 68520,
+      "size_bytes": 103876,
       "previous": [
         "jobs-to-be-done-treemap-chimeric-prototype-v0.1.html",
         "jobs-to-be-done-treemap-chimeric-prototype-v0.1.1.html",
-        "jobs-to-be-done-treemap-chimeric-prototype-v0.1.2.html"
+        "jobs-to-be-done-treemap-chimeric-prototype-v0.1.2.html",
+        "jobs-to-be-done-treemap-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -336,15 +354,16 @@
       "subtitle": "Business Rule Protection",
       "family": "Pattern Fit and Behavior Protection",
       "shape": "business-rule test matrix",
-      "file": "unit-test-first-design-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "unit-test-first-design-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 66268,
+      "size_bytes": 101510,
       "previous": [
         "unit-test-first-design-chimeric-prototype-v0.1.html",
         "unit-test-first-design-chimeric-prototype-v0.1.1.html",
-        "unit-test-first-design-chimeric-prototype-v0.1.2.html"
+        "unit-test-first-design-chimeric-prototype-v0.1.2.html",
+        "unit-test-first-design-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -353,15 +372,16 @@
       "subtitle": "Revisiting Solution Artifacts",
       "family": "Recovery Routing and Revision",
       "shape": "evidence-to-revision log",
-      "file": "upstream-revision-loop-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "upstream-revision-loop-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 59607,
+      "size_bytes": 94311,
       "previous": [
         "upstream-revision-loop-chimeric-prototype-v0.1.html",
         "upstream-revision-loop-chimeric-prototype-v0.1.1.html",
-        "upstream-revision-loop-chimeric-prototype-v0.1.2.html"
+        "upstream-revision-loop-chimeric-prototype-v0.1.2.html",
+        "upstream-revision-loop-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -370,15 +390,16 @@
       "subtitle": "Failure Geometries and Strain Cues",
       "family": "Recovery Routing and Revision",
       "shape": "strain cue routing atlas",
-      "file": "recovery-routing-atlas-chimeric-prototype-v0.1.3.html",
-      "version": "0.1.3",
+      "file": "recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
+      "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 74083,
+      "size_bytes": 120756,
       "previous": [
         "recovery-routing-atlas-chimeric-prototype-v0.1.html",
         "recovery-routing-atlas-chimeric-prototype-v0.1.1.html",
-        "recovery-routing-atlas-chimeric-prototype-v0.1.2.html"
+        "recovery-routing-atlas-chimeric-prototype-v0.1.2.html",
+        "recovery-routing-atlas-chimeric-prototype-v0.1.3.html"
       ]
     },
     {
@@ -387,16 +408,17 @@
       "subtitle": "Root Atlas and Entry Map",
       "family": "System Root",
       "shape": "family registry and route map",
-      "file": "core-architecture-family-index-chimeric-prototype-v0.1.4.html",
-      "version": "0.1.4",
+      "file": "core-architecture-family-index-chimeric-prototype-v0.1.5.html",
+      "version": "0.1.5",
       "status": "current",
       "exists": true,
-      "size_bytes": 74944,
+      "size_bytes": 122465,
       "previous": [
         "core-architecture-family-index-chimeric-prototype-v0.1.html",
         "core-architecture-family-index-chimeric-prototype-v0.1.1.html",
         "core-architecture-family-index-chimeric-prototype-v0.1.2.html",
-        "core-architecture-family-index-chimeric-prototype-v0.1.3.html"
+        "core-architecture-family-index-chimeric-prototype-v0.1.3.html",
+        "core-architecture-family-index-chimeric-prototype-v0.1.4.html"
       ]
     }
   ],

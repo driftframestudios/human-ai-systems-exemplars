@@ -6,7 +6,7 @@
     <meta name="color-scheme" content="light">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>The Queue That Was Secretly a Status Machine | Context Canvas</title>
-    <meta name="description" content="A solution and implementation architecture debrief on re-platforming a genomic viewer around profile-scoped work, visible operational state, and recoverable migration.">
+    <meta name="description" content="A solution and implementation architecture debrief on how profile-scoped permissions, visible operational state, and incremental migration changed a genomic viewer.">
     <meta name="author" content="Vikrant Varun Kudesia">
   <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
     <meta name="application-name" content="Context Canvas Project Surface">
@@ -16,7 +16,7 @@
     <meta property="og:locale" content="en_US">
     <meta property="og:type" content="article">
     <meta property="og:title" content="The Queue That Was Secretly a Status Machine | Context Canvas">
-    <meta property="og:description" content="Move operational understanding first; dependable automation can then inherit it.">
+    <meta property="og:description" content="Make operating rules visible first, then use them for dependable routing and automation.">
     <meta property="og:url" content="https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html">
     <meta property="og:image" content="https://schemas.radiantnull.com/context-canvas-project-surface/img/plot/genomic_viewer_boundary_contract_map.svg">
     <meta property="og:image:type" content="image/svg+xml">
@@ -25,7 +25,7 @@
     <meta property="og:image:alt" content="A profile and permission contract connects assay sign-off, authorized actions, visible work, routing, and human judgment.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="The Queue That Was Secretly a Status Machine | Context Canvas">
-    <meta name="twitter:description" content="Re-platforming a genomic viewer around visible work, permission profiles, and operational state.">
+    <meta name="twitter:description" content="How profile-scoped permissions, visible operational state, and incremental migration changed a genomic viewer.">
     <meta name="twitter:image" content="https://schemas.radiantnull.com/context-canvas-project-surface/img/plot/genomic_viewer_boundary_contract_map.svg">
     <meta name="twitter:image:alt" content="A profile and permission contract connects assay sign-off, authorized actions, visible work, routing, and human judgment.">
     <meta property="article:section" content="Implementation Debriefs">
@@ -52,9 +52,9 @@
         "@id": "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html#article",
         "url": "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html",
         "headline": "The Queue That Was Secretly a Status Machine",
-        "alternativeHeadline": "Re-platforming a genomic viewer around profile-scoped work and visible operational state",
-        "description": "A solution and implementation architecture debrief on re-platforming a genomic viewer around profile-scoped work, visible operational state, and recoverable migration.",
-        "dateModified": "2026-09-01",
+        "alternativeHeadline": "How profile-scoped permissions and visible operational state guided an incremental genomic-viewer migration",
+        "description": "A solution and implementation architecture debrief on how profile-scoped permissions, visible operational state, and incremental migration changed a genomic viewer.",
+        "dateModified": "2026-09-08",
         "inLanguage": "en-US",
         "author": {
           "@type": "Organization",
@@ -102,12 +102,12 @@
       <header class="non-index-hero__container debrief-hero genomic-viewer-hero">
         <p class="debrief-kicker">Solution Architecture · Implementation Architecture · Q1 2019–Q1 2025</p>
         <h1 class="txt-h1 h1-spaced h1-hero">The Queue That Was Secretly a Status Machine</h1>
-        <p class="tag-line">Re-platforming a genomic viewer around profile-scoped work, visible evidence, and recoverable migration</p>
+        <p class="tag-line">How profile-scoped work, visible evidence, and recoverable migration changed a genomic viewer</p>
         <p class="debrief-lead">
-          A researcher-built GWT viewer had become a consequential operating surface across clinical genomics. The
-          re-platforming moved operational understanding first: who was qualified to act, which cases belonged in view,
+          A researcher-built GWT viewer had become a consequential operating surface across clinical genomics. The team
+          first documented and modeled its operating rules: who was qualified to act, which cases belonged in view,
           which states carried the work, and where evidence should appear. Dependable routing and automation could then
-          inherit those explicit conditions.
+          use those explicit rules.
         </p>
       </header>
 
@@ -130,7 +130,7 @@
               </div>
               <div>
                 <dt>Material pivots</dt>
-                <dd>Technology replacement → operational-state modeling; authentication → profile-scoped action; global redesign → strangler migration; loved Masonry concept → bounded, typed components.</dd>
+                <dd>Technology replacement → operational-state modeling; authentication alone → profile-scoped permissions and actions; whole-system redesign → strangler migration; loved Masonry concept → bounded, typed components.</dd>
               </div>
               <div>
                 <dt>Outcome synopsis</dt>
@@ -145,12 +145,12 @@
 
           <section class="prose-flow table-span-all genomic-context-tree-feature" aria-labelledby="actor-context-board-title">
             <p class="genomic-field-label">Population context · Context Tree · Solution orientation</p>
-            <h2 id="actor-context-board-title" class="txt-h2">Canonical Context Tree presentation — the same case changes shape by population</h2>
+            <h2 id="actor-context-board-title" class="txt-h2">Canonical Context Tree presentation — each group needs different context for the same case</h2>
             <p>
               Curation, Pathology, computational biology, automation, Quality, engineering, and partner-facing groups
-              each receive a different decision from the same operating surface. Use the group filters to compare the
-              context each population needs, the scenario that exposes hidden state, and the architecture that receives
-              the resulting contract.
+              each make a different decision about the same case from one operating surface. Use the group filters to compare the
+              context each group needs, the scenario that reveals operational state held outside the viewer, and the architecture
+              component that carries the resulting contract.
             </p>
             <figure class="prototype-embed prototype-embed--rose table-span-all">
               <iframe
@@ -161,8 +161,8 @@
                 referrerpolicy="no-referrer"
               ></iframe>
               <figcaption class="table-note">
-                This Context Tree lets collaborators compare how each population receives the same case, which context changes
-                its decision, and where the resulting contract enters the architecture. Case records remain in their fitting
+                This Context Tree lets collaborators compare how each group works with the same case, which context changes
+                its decision, and which architecture component carries the resulting contract. Case records remain in their fitting
                 clinical and laboratory systems. Scenario weights inside
                 the extended views are planning weights, not observed frequencies or clinical forecasts.<sup><a href="#source-context-tree">17</a></sup>
                 <span class="prototype-embed__action"><a href="../../collaboration/context-tree-visual-variants/genomic-viewer-presentation.html?view=board">Compare all Context Tree views</a></span>
@@ -175,7 +175,7 @@
             <ol class="track-index">
               <li><a href="#solution-architecture-title">I. Solution Architecture<br>Which operating model the viewer had to carry</a></li>
               <li><a href="#implementation-architecture-title">II. Implementation Architecture<br>Which technical moves made that model durable</a></li>
-              <li><a href="#changed-work-title">Changed work and investment<br>Which ability each move purchased</a></li>
+              <li><a href="#changed-work-title">Changed work and investment<br>Which ability each move enabled</a></li>
               <li><a href="#population-cartography-title">Population cartography<br>Who received the changed capability</a></li>
             </ol>
           </nav>
@@ -183,10 +183,10 @@
           <figure class="table-figure table-figure--wide table-span-all">
             <div class="table-scroll" role="region" tabindex="0" aria-label="Paired solution and implementation architecture beats">
               <table class="table--comparison table--comfortable">
-                <caption>How each Solution beat changes register in the Implementation track</caption>
+                <caption>How each Solution Architecture finding becomes an Implementation Architecture move</caption>
                 <thead>
                   <tr>
-                    <th scope="col">Bridge object</th>
+                    <th scope="col">Shared concern</th>
                     <th scope="col">Solution Architecture</th>
                     <th scope="col">Implementation Architecture</th>
                     <th scope="col">Enterprise consequence</th>
@@ -197,19 +197,19 @@
                     <th scope="row">Diagnostic surface</th>
                     <td>A research tool becomes operational infrastructure.</td>
                     <td>The stack defines who can contribute and how behavior is shared.</td>
-                    <td>Re-platforming becomes operating-model change rather than screen replacement.</td>
+                    <td>Re-platforming changes the operating model as well as the screens.</td>
                   </tr>
                   <tr>
                     <th scope="row">State contract</th>
-                    <td>Queues, spreadsheets, and SQL rituals carry states the product does not model.</td>
+                    <td>Queues, spreadsheets, and SQL rituals hold operational states outside the product.</td>
                     <td>Explicit permission and state models, service-layer current reads, and structured fields carry the state across boundaries.</td>
-                    <td>Coordination becomes shared system state instead of fragile local reconstruction.</td>
+                    <td>Coordination relies on shared system state, reducing fragile local reconstruction.</td>
                   </tr>
                   <tr>
                     <th scope="row">Permission profile</th>
                     <td>Visible work and assignable work follow qualification.</td>
                     <td>A permission ledger, bounded table interactions, and contextual tools carry the rule.</td>
-                    <td>Routing and automation gain a dependable action substrate.</td>
+                    <td>Routing and automation can apply the same profile and permission rules.</td>
                   </tr>
                   <tr>
                     <th scope="row">Changed work</th>
@@ -250,7 +250,7 @@
             <aside class="interpretive-aside" aria-labelledby="investment-frame-title">
               <h4 id="investment-frame-title" class="txt-h4">The investment was broader than a framework migration</h4>
               <p>
-                The target state had to buy a React substrate, integration continuity, permission semantics, parallel operation,
+                The target state required a React component foundation, integration continuity, permission semantics, parallel operation,
                 training, quality work, support, and recoverable retirement. The opportunity cost included science and product
                 work deferred while the migration proceeded.
               </p>
@@ -270,7 +270,7 @@
               still needed a granular model for profile, assay, jurisdiction, and action.<sup><a href="#source-solution-bottleneck">2</a></sup>
             </p>
             <p>
-              The same geometry appeared elsewhere. Advanced Search hid valid results behind an unpaginated service limit.
+              The same hidden-state pattern appeared elsewhere. Advanced Search hid valid results behind an unpaginated service limit.
               A correct sequencing address depended on a manually maintained German-team process. Morning SQL and a macro-based
               Failure Tracker recovered states the viewer could have carried directly.
             </p>
@@ -297,12 +297,12 @@
             <p>
               Profiles and permissions became the First Responsible Version: the smallest surface able to align current
               sign-off, visible studies, assignable cases, and permitted actions. This converted an abstract re-platforming into
-              an operating contract that could support deterministic routing later.<sup><a href="#source-solution-intervention">3</a></sup>
+              an operating contract with explicit requirements that could support deterministic routing later.<sup><a href="#source-solution-intervention">3</a></sup>
             </p>
             <p>
               A strangler approach moved the operational and assignment layers first while reusing Java services. Values already
               present in the system moved to the point of use. High-impact improvements supported current work while the target
-              architecture developed, and expensive global concepts were retired when they weakened the migration.
+              architecture developed, and expensive system-wide interface concepts were retired when they weakened the migration.
             </p>
             <blockquote class="debrief-quote">
               <p>What if we just showed it to you in the interface, so it’s unnecessary to even have to go find that file and open it up?</p>
@@ -315,7 +315,7 @@
                 <p>Make qualified work visible, make actions explicit, and give later automation a reliable boundary.</p>
               </article>
               <article>
-                <p class="architecture-pair__label">Migration posture</p>
+                <p class="architecture-pair__label">Migration approach</p>
                 <h4 class="txt-h4">Operational layers first</h4>
                 <p>Reuse stable services, move one capability family cleanly, and keep the remaining viewer available.</p>
               </article>
@@ -329,19 +329,19 @@
                 This static representation adapts the Strategy Canvas developed by W. Chan Kim and Renée Mauborgne. It maps the
                 ten dimensions named in the research-to-architecture trace. The action groupings are an inspectable 2026 local
                 synthesis. Scores recorded at the time, observed outcomes, and the costing model remain separate evidence routes. A
-                full collaborative Strategy Canvas prototype can follow a future collaboration cue.<sup><a href="#source-research-trace">19</a>, <a href="#source-strategy-canvas-method">20</a></sup>
+                full collaborative Strategy Canvas prototype can follow in a future iteration.<sup><a href="#source-research-trace">19</a>, <a href="#source-strategy-canvas-method">20</a></sup>
               </figcaption>
             </figure>
             <figure class="table-figure table-figure--wide table-span-all rose-strategy-equivalent">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Text equivalent for the genomic viewer Strategy Canvas">
                 <table class="table--comparison table--comfortable">
-                  <caption>Strategy dimensions and qualitative 2026 posture</caption>
+                  <caption>Strategy dimensions and qualitative 2026 assessment</caption>
                   <thead>
                     <tr><th scope="col">Action</th><th scope="col">Source-named dimensions</th><th scope="col">Decision meaning</th></tr>
                   </thead>
                   <tbody>
                     <tr><th scope="row">Reduce</th><td>Legacy coupling</td><td>Move bounded capability families while retained legacy ownership stays visible.</td></tr>
-                    <tr><th scope="row">Preserve / make explicit</th><td>Clinical task continuity; validation evidence burden</td><td>Keep consequential work usable and name the gate, evidence, rollback, and owner for each move.</td></tr>
+                    <tr><th scope="row">Preserve / make explicit</th><td>Clinical task continuity; validation evidence burden</td><td>Keep consequential work usable and name the acceptance condition, evidence, rollback, and owner for each move.</td></tr>
                     <tr><th scope="row">Raise</th><td>Identity fidelity; accessibility and cognitive load; staffing reach</td><td>Increase reference fidelity, inspection support, and a typed contribution path.</td></tr>
                     <tr><th scope="row">Create</th><td>Authorization explicitness; release independence; observability and recovery</td><td>Establish dependable operating abilities the legacy surface left implicit or coupled.</td></tr>
                     <tr><th scope="row">Open question</th><td>Operating cost</td><td>Estimate migration, parallel operation, validation, support, and retirement separately.</td></tr>
@@ -359,14 +359,14 @@
             <h3 id="solution-outcome-title" class="txt-h3 beat-title">§d The Outcome — The Silence That Meant It Was Working</h3>
             <p>
               I report that profile administration removed recurring assignment-error modes and enabled deeper
-              routing and automation. Advanced Search spread across business units with little promotional noise. Direct users'
+              routing and automation. Advanced Search spread across business units with little internal promotion. Direct users'
               emotional response to working versions and quiet adoption are qualitative signals of fit; usage breadth and causal
               magnitude remain attributed to the source account.<sup><a href="#source-solution-outcome">4</a></sup>
             </p>
             <p>
               The practical change was visible in ordinary work: morning reconstruction moved into configurable surfaces,
               search reached across organizational boundaries, and profile-scoped panels carried current operational issues.
-              The larger “app store” vision remained a north star rather than a completed estate.
+              The delivered work established a bounded capability family, while the larger “app store” vision remained future work.
             </p>
           </section>
         </div>
@@ -379,7 +379,7 @@
             <p>
               The transferable result was a method, rather than a copy of the FMI system. Role-local context, an Impact Map,
               profile-first decomposition, scenario-shaped specifications, and visible operational state made the work
-              discussable across participating units. The same Core Architectures had already supported the FMI LIMS/ELN
+              easier for participating units to examine together. The same Core Architectures had already supported the FMI LIMS/ELN
               re-platforming, giving the portability claim a second, materially different receiving surface. People began writing
               specifications for the behavior they carried.<sup><a href="#source-solution-repeatability">5</a></sup>
             </p>
@@ -387,7 +387,7 @@
               <li><strong>Name the operational state.</strong> Treat queues, sheets, and recurring messages as clues to missing system concepts.</li>
               <li><strong>Move the permission boundary first.</strong> Visible work, assignable work, and allowed actions share one profile model.</li>
               <li><strong>Place existing evidence at the decision.</strong> Interface work can remove a hunt before a larger replacement ships.</li>
-              <li><strong>Use one capability family to prove the migration.</strong> Let the remainder stay honestly visible as legacy-owned.</li>
+              <li><strong>Use one capability family to prove the migration.</strong> Keep the remaining capabilities visibly owned by the legacy system.</li>
               <li><strong>Turn participant language into executable behavior.</strong> Scenarios support estimation, tests, stories, and handoff.</li>
             </ol>
           </section>
@@ -404,7 +404,7 @@
               The legacy client compiled Java into browser code through GWT. React, TypeScript, MUI's data grid, and Storybook
               offered a more familiar contribution path for engineers whose primary experience was in backend systems. The
               hybrid Product Designer and Software Engineer role built the visual system, core tables, forms, modes,
-              super-header, and component library; the wider engineering group extended the same substrate.<sup><a href="#source-implementation-debrief">6</a></sup>
+              super-header, and component library; the wider engineering group extended the same component foundation.<sup><a href="#source-implementation-debrief">6</a></sup>
             </p>
             <p>
               That staffing consequence made the stack a collaboration architecture. Runnable component states connected design,
@@ -432,7 +432,7 @@
             <h3 id="implementation-bottleneck-title" class="txt-h3 beat-title">§b The Bottleneck — JSNI, and the Masonry Everyone Loved</h3>
             <p>
               JSNI placed raw JavaScript inside Java, and <code>gwt-react</code> provided a historically useful but fragile bridge.
-              Lifecycle, validation, DTO handling, payload size, and paint cost gathered at the interop seam. The Masonry concept
+              Lifecycle, validation, DTO handling, payload size, and paint cost accumulated at the interoperability boundary. The Masonry concept
               was widely loved, yet its global mounting and validation demands weakened the migration.<sup><a href="#source-implementation-bottleneck">7</a></sup>
             </p>
             <figure class="story-visual table-span-all cobalt-operating-field__visual genomic-stacked-cube-visual">
@@ -456,7 +456,7 @@
               <article>
                 <p class="architecture-pair__label">Delivery consequence</p>
                 <h4 class="txt-h4">Bounded typed surfaces</h4>
-                <p>Retiring the favored concept preserved migration credibility and reduced the number of coupled failure surfaces.</p>
+                <p>Retiring the favored concept preserved migration credibility and reduced the number of coupled points of failure.</p>
               </article>
             </div>
             <p>
@@ -477,7 +477,7 @@
             <p>
               The exploding-table modal kept the dense row scan intact while moving assembly-aware variant detail into a focused
               interaction. A permission ledger bound profile, assay, product, geography, jurisdiction, lifecycle, and action.
-              The Floating Drawer made references and actions available across tab locations without cloning each capability.<sup><a href="#source-implementation-intervention">8</a></sup>
+              The Floating Drawer made references and actions available across tabs without duplicating each capability.<sup><a href="#source-implementation-intervention">8</a></sup>
             </p>
             <p>
               Sample collaboration moved beside the sample record, reducing per-sample Slack channels and ServiceNow tickets.
@@ -505,13 +505,13 @@
             <h3 id="implementation-outcome-title" class="txt-h3 beat-title">§d The Outcome — The Dashboard That Replaced the Morning SQL Ritual</h3>
             <p>
               A profile-scoped dashboard surfaced plate-gender discordance, stuck samples, and control issues. Three
-              implementation forces displaced the Failure Tracker and overloaded queues: service-layer updates for current
+              implementation changes reduced reliance on the Failure Tracker and overloaded queues: service-layer updates for current
               reads, structured fields on downstream transmission assets, and first-class note types in the viewer.<sup><a href="#source-implementation-outcome">9</a></sup>
             </p>
             <p>
               A thirty-plus-minute daily SQL-and-email ritual was retired according to the portfolio account. That figure describes
-              morning operating intelligence; it remains distinct from the fifteen-to-twenty-minute assignment figure. The tracker
-              stopped being necessary only when each reason to edit a cell gained a first-class home.
+              morning operating intelligence; it remains distinct from the fifteen-to-twenty-minute assignment figure. Each reason
+              to edit a cell gained an explicit system field or note type, making the tracker unnecessary.
             </p>
 
             <figure class="story-visual table-span-all cobalt-operating-field__visual">
@@ -533,7 +533,7 @@
             <h3 id="implementation-repeatability-title" class="txt-h3 beat-title">§e Repeatability — Unit-Test-First and the Living Component Library</h3>
             <p>
               Unit-Test-First Design, the Upstream Revision Loop, Storybook, and Testing Library joined scenario, component,
-              implementation, and repair. A surfaced defect could revise the specification, component state, and test together.
+              implementation, and repair. An observed defect could revise the specification, component state, and test together.
               Managers, QA, engineers, and domain experts could inherit described behavior instead of reconstructing it from
               colleague memory.<sup><a href="#source-implementation-repeatability">10</a></sup>
             </p>
@@ -612,15 +612,15 @@
             </figure>
 
             <aside class="interpretive-aside table-span-all cobalt-operating-field__aside" aria-labelledby="competitive-frontier-title">
-              <h4 id="competitive-frontier-title" class="txt-h4">The documented product spine leaves an operating frontier</h4>
+              <h4 id="competitive-frontier-title" class="txt-h4">Public product workflows leave specific operating questions open</h4>
               <p>
                 Public materials for Illumina Connected Insights, QIAGEN QCI Interpret, SOPHiA DDM, Velsera Clinical
                 Genomics Workspace, and Franklin describe a recurring sequence: ingest, annotation and filtering,
                 knowledge aggregation, professional review, reporting, and later reuse or refresh.<sup><a href="#source-product-scan">13</a></sup>
-                These are documented product surfaces rather than independent comparative outcomes. The useful frontier
-                for this re-platforming is the work around that sequence: profile-scoped eligibility before review,
+                These public materials describe product capabilities; they do not establish independent comparative outcomes. The
+                remaining design opportunity for this re-platforming is the work around that sequence: profile-scoped eligibility before review,
                 caller and filter lineage, modality provenance at the value, an explicit issued-to-current difference,
-                and recovery states that join a surfaced defect to its scenario, test, story, and component revision.
+                and recovery states that join an observed defect to its scenario, test, story, and component revision.
               </p>
               <p class="prototype-embed__action">
                 <a href="../../collaboration/context-tree-visual-variants/genomic-viewer-presentation.html?view=shared&amp;groups=quality,engineers,automation">Inspect the shared repeatability contract across Quality, engineering, and automation</a>
@@ -653,17 +653,17 @@
           <section aria-labelledby="changed-work-title">
             <h2 id="changed-work-title" class="txt-h2 architecture-track-title">Changed work and investment</h2>
             <p class="debrief-lead">
-              Each architectural move purchased an ability and reduced or retired a named reconstruction task. The investment lines
+              Each architectural move enabled an ability and reduced or retired a named reconstruction task. The investment lines
               show the organizational work required to make that ability durable.
             </p>
             <figure class="table-figure table-figure--wide table-span-all">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Genomic viewer changed work and investment table">
                 <table class="table--comparison table--comfortable">
-                  <caption>What the re-platforming investment bought</caption>
+                  <caption>What the re-platforming investment enabled</caption>
                   <thead>
                     <tr>
                       <th scope="col">Investment and capability</th>
-                      <th scope="col">Work displaced</th>
+                      <th scope="col">Prior work reduced or retired</th>
                       <th scope="col">Receiving populations</th>
                       <th scope="col">Changed ability</th>
                       <th scope="col">Material investment lines</th>
@@ -674,7 +674,7 @@
                       <th scope="row">Profile and permission ledger</th>
                       <td>Assay-blind self-assignment, random reassignment, and action rules inferred from authentication.</td>
                       <td>CBO / Genomic Curators; Pathology; managers.</td>
-                      <td class="table-ability">Cases, reports, and actions follow current sign-off; routing gains an authorization substrate.</td>
+                      <td class="table-ability">Cases, reports, and actions follow current sign-off; routing applies shared authorization rules.</td>
                       <td>Development; security and privacy; quality work; training.</td>
                     </tr>
                     <tr>
@@ -722,20 +722,20 @@
           <section aria-labelledby="population-cartography-title">
             <h2 id="population-cartography-title" class="txt-h2 architecture-track-title">Population cartography — who receives the changed capability</h2>
             <p class="debrief-lead">
-              The same platform move changes different work for each population. This surface keeps the decision, receiving
-              interface, and residual burden together.
+              The same platform move changes different work for each population. This surface keeps each group's decision, receiving
+              interface, and remaining responsibility together.
             </p>
             <figure class="table-figure table-figure--wide table-span-all">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Genomic viewer population cartography">
                 <table class="table--reading table--comfortable">
-                  <caption>Prior work, changed work, and residual responsibility by population</caption>
+                  <caption>Prior work, changed work, and remaining responsibility by population</caption>
                   <thead>
                     <tr>
                       <th scope="col">Population</th>
                       <th scope="col">Prior work</th>
                       <th scope="col">Changed work</th>
                       <th scope="col">Receiving surface</th>
-                      <th scope="col">Residual responsibility</th>
+                      <th scope="col">Remaining responsibility</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -779,7 +779,7 @@
                       <td>Learn proprietary UI conventions before contributing.</td>
                       <td>Enter through typed components, runnable stories, and shared test contracts.</td>
                       <td>Component library and verification portfolio.</td>
-                      <td>Preserve integration continuity and bound each retired seam.</td>
+                      <td>Preserve integration continuity and keep each retired integration boundary explicit.</td>
                     </tr>
                     <tr>
                       <th scope="row">Sponsors and operations</th>
@@ -801,11 +801,11 @@
                   <li>Profile-scoped assignment and dashboard views.</li>
                   <li>Advanced Search and modeled operational state.</li>
                   <li>Case &amp; Automated Advice, the Floating Drawer, and in-case collaboration.</li>
-                  <li>Shared component, scenario, and test substrates.</li>
+                  <li>Shared component, scenario, and test foundations.</li>
                 </ul>
               </article>
               <article>
-                <p class="architecture-pair__label">What still carried</p>
+                <p class="architecture-pair__label">What remained</p>
                 <ul>
                   <li>Specimen overview, variant details, quality control, and plugins largely remained legacy-owned.</li>
                   <li>The Non-human capability remained uncertain.</li>

@@ -30,6 +30,73 @@ Artifact variation is part of the family: route-specific layout, color,
 density, interaction, and evidence posture remain available while stable IDs,
 current versions, and declared source relationships keep the pack legible.
 
+PODA v0.1.4, Alignment Worksheet v0.1.4, Impact Map v0.1.5, and Context Tree
+v0.1.7 complete the current Orientation and Tracing family’s Prompt Capsule
+adoption. PODA carries the purpose-to-activity orientation and its accepted
+handoffs. Alignment Worksheet carries forward and backward premises together
+with the option spread and its evidence. Impact Map keeps every actor, impact,
+discoverable, and trace relationship connected. Context Tree keeps every role,
+question, context cell, status, and handoff available while focus arrangements
+remain presentation state. Each artifact supplies plain and skill-assisted
+Markdown, one view-independent represented-state fingerprint, fitting public
+collaboration loops, and a complete plain reading when JavaScript is absent.
+
+Strategy Canvas v0.2.4 and First Responsible Version Matrix v0.1.4 complete
+the current Comparison and Threshold family’s Prompt Capsule adoption. Each
+derives complete plain and skill-assisted Markdown from its own accepted state,
+keeps one view-independent state fingerprint, points to fitting public
+collaboration loops, and leaves a complete plain reading available without
+JavaScript. The matrix retains its threshold cards, focus view, routes, and
+recovery semantics as authority; the Markdown is a portable handoff from that
+state.
+
+Shared Surface Priority Map v0.1.4, Service-design Blueprint v0.2.5, AI
+Systems Service Blueprint v0.1.4, and Software Architecture Views v0.1.4
+complete the current Shared Surfaces and Topology family’s Prompt Capsule
+adoption. The map carries every stage, surface, priority cell with its channel
+intensities, and shared asset. The service blueprint carries every stage, lane, cell, and
+shared asset. The AI systems blueprint carries the complete runtime,
+knowledge, infrastructure, evidence, and governance topology. The architecture
+views carry every view and attachment for the modeled element. Their Markdown
+views retain the complete represented state while transient focus and
+selection stay with the interactive artifact.
+
+Upstream Revision Loop v0.1.4 and Recovery Routing Atlas v0.1.4 complete the
+current Recovery Routing and Revision family’s Prompt Capsule adoption. The
+loop carries downstream observations back to a named prior artifact and
+revision target. The atlas carries every recovery geometry—including entries
+hidden in the active focus view—so a receiving collaborator can distinguish a
+strain cue, restored condition, fitting route, and evidence worth preserving.
+Both Markdown views retain that complete represented state while selection and
+other interface-only details stay local to the artifact.
+
+Participatory Design Kit v0.1.4 and Specification-by-Example v0.1.6 complete
+the current Participatory Elicitation and Specification family’s Prompt
+Capsule adoption. The kit carries the complete workflow arrangement, activity
+materials, and example fragments that make participant knowledge actionable.
+The specification carries every rule and Given / When / Then scenario that
+turns shared understanding into observable behavior. Both handoffs retain the
+full represented state while interface focus stays with the working artifact.
+
+Pattern–Problem Surface Matrix v0.1.4, Jobs-to-be-Done Treemap v0.1.4, and
+Unit-test-first Design v0.1.4 complete the current Pattern Fit and Behavior
+Protection family’s Prompt Capsule adoption. The matrix carries all 48
+pattern-to-population relationships. The treemap carries each job’s purpose,
+weight, evidence, route, and review trigger. Unit-test-first Design carries
+each protected behavior from its source and preconditions through its expected
+results and platform-independent test target. Their Markdown views retain the
+complete represented state while selection remains with the working artifact.
+
+HEART Chart v0.1.6, Plus / Delta v0.1.4, and Practitioner Judgment Probes
+v0.1.4 complete the current Measurement, Reflection, and Judgment family’s
+Prompt Capsule adoption. The HEART handoff connects every goal to its signal,
+metric, interpretation, tolerance, counter-signal, and qualitative evidence.
+Plus / Delta carries each working condition or change need with the people,
+evidence, route, and review trigger it affects. The probes carry the question,
+probability target, evidence basis, technical standing, and next instruction
+that make experienced judgment actionable. Their Markdown views preserve the
+complete accepted state while interface focus stays with the working artifact.
+
 ## Visitor-visible authorship and license
 
 The pack hub and each of the 21 current prototype documents carry their own
@@ -41,8 +108,8 @@ travels directly with each self-contained HTML carrier across projections and
 publication.
 
 Strategy Canvas is maintained through its canonical template and stylesheet;
-the generated current distribution inherits the contract. The current visitor
-set covers Strategy Canvas v0.2.2. The resting v0.1.1 compatibility route is
+the generated current distribution inherits the contract. The current canonical
+visitor set covers Strategy Canvas v0.2.4. The resting v0.1.1 compatibility route is
 generated from its system-local source, including a location-correct link and
 the same attribution contract. Its Context Canvas workbench retains its
 adapted document and style owners. The repository-root `LICENSE` remains the
@@ -69,8 +136,11 @@ the source owner explicitly; it does not add the Conditioning Field to the
 
 The same manifest carries each route's minimal carrier policy. The scriptless
 pack hub uses an empty sandbox. A prototype with executable behavior grants
-`allow-scripts`, and a route that writes clipboard text delegates only the
-`clipboard-write` Permissions Policy feature. Every current route now uses an
+`allow-scripts`; a route with an implemented file download grants
+`allow-downloads`; and a route that writes clipboard text delegates only the
+`clipboard-write` Permissions Policy feature. A projected user-activated exit
+grants `allow-popups` with `allow-popups-to-escape-sandbox`, opening the
+destination as a separate top-level page. Every current route now uses an
 ordinary inline notice, input, or two-step confirmation instead of native
 browser dialogs, so no route retains a held capability. An `eligible` route is
 invalid when any hold remains. The policy vocabulary stays intentionally
@@ -87,15 +157,16 @@ The root build stages and replaces the complete
 `.iframe-route-build/iframes.vik.guru/v1/` closure. This Core family is written
 to its `core/` child beside the separately declared
 [`canvas/`](../iframe-route-families/canvas/README.md) family and one aggregate
-receipt. Each Core prototype becomes its route-local `index.html` without
-changing its bytes. The
-hub alone receives projection-local links to its 21 sibling routes and
-`manifest.json`. The Conditioning Field receives a deterministic embedded
-single-file projection that leaves its standalone Context Canvas page
-authoritative while omitting shared navigation, popup exits, and runtime
-subresources. A deterministic `route-manifest.json` records source and
+receipt. Each Core prototype becomes a route-local `index.html`; the generated
+projection gives eligible onward links secure separate-tab behavior while the
+canonical source keeps ordinary navigation. Fragment links, downloads, and
+page controls retain their local behavior. The hub receives projection-local
+links to its 21 sibling routes and `manifest.json`. The Conditioning Field
+receives a deterministic embedded single-file projection that leaves its
+standalone Context Canvas page authoritative while omitting shared navigation
+and runtime subresources. A deterministic `route-manifest.json` records source and
 projection digests, static-resource evidence, activation standing, and
-unresolved user-activated local navigation. It also records the observed
+resolved or remaining user-activated navigation. It also records the observed
 runtime capabilities beside the exact carrier policy, making policy drift
 visible in the upload-ready receipt. The Strategy Canvas route also carries its
 explicitly linked JSON Schema as one route-local, content-typed companion.

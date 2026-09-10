@@ -51,6 +51,16 @@ structural contract.
   against the adjacent
   [`threadkeeping-ledger.schema.v0.1.json`](threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger.schema.v0.1.json).
 
+Each current Narrative source also implements the shared
+[`prompt-capsule/0.1.0`](../../../../prompt-capsules/0.1.0/prompt-capsule-contract.md)
+exchange contract. Its plain and skill-assisted GitHub Flavored Markdown views
+come from the source's accepted state and share one represented-state
+fingerprint. Native controls expose the selected view for exact copy and
+download, a complete plain view remains available without JavaScript, and
+related loops describe when an adjacent collaboration route fits. The
+composition, sampling, or continuity state beside each page remains the
+semantic authority.
+
 The direct checks keep structural and visitor evidence distinct:
 
 ```bash
@@ -67,7 +77,10 @@ exclusive normalization, minimum comparison sets, successor lineage,
 collision-safe composition, synchronized decisions, and atomic accepted or
 retained exchange. Composer and Threadkeeping add held-open readiness, closed
 internal references, truthful fingerprints, literal-text controls, declared
-chronology, detached exports, and synchronized authored/runtime JSON-LD.
+chronology, detached exports, and synchronized authored/runtime JSON-LD. The
+browser contract also checks each source's complete no-JavaScript Markdown,
+state-only fingerprint, additive skill view, exact copy/download bytes, and
+recovery after a rejected import.
 
 ## Relationship contract
 

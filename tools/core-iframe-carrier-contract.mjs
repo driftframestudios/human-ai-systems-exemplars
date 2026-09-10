@@ -199,7 +199,54 @@ async function assertCarrierContainment(page, carrier, frame, label) {
   }
 }
 
-async function exerciseStrategyCarrier(carrier, frame, label) {
+async function assertParentLinksRemainOrdinary(carrier, label) {
+  const links = carrier.locator("xpath=ancestor::figure[1]").locator("a[href]");
+  for (const link of await links.all()) {
+    assert.equal(
+      await link.getAttribute("target"),
+      null,
+      `${label} keeps its parent-page link in the visitor's current context`,
+    );
+    assert.equal(
+      await link.getAttribute("rel"),
+      null,
+      `${label} keeps ordinary parent-page link security semantics`,
+    );
+  }
+}
+
+async function assertProjectedExitLinks(frame, label) {
+  const links = await frame.locator("a[href]").evaluateAll((anchors) =>
+    anchors.map((anchor) => ({
+      download: anchor.hasAttribute("download"),
+      href: anchor.getAttribute("href")?.trim() ?? "",
+      rel: anchor.getAttribute("rel"),
+      target: anchor.getAttribute("target"),
+    })),
+  );
+  const exits = links.filter(({ download, href }) =>
+    href.length > 0 &&
+    !href.startsWith("#") &&
+    !download &&
+    !/^javascript:/iu.test(href),
+  );
+  assert.equal(
+    exits.every(({ rel, target }) => {
+      const relTokens = new Set((rel ?? "").toLowerCase().split(/\s+/u).filter(Boolean));
+      return target === "_blank" && relTokens.has("noopener") && relTokens.has("noreferrer");
+    }),
+    true,
+    `${label} projected exits open in secure top-level tabs`,
+  );
+  assert.equal(
+    links.filter(({ href }) => href.startsWith("#")).every(({ target }) => target !== "_blank"),
+    true,
+    `${label} fragment navigation remains within the framed document`,
+  );
+  return exits.length;
+}
+
+async function exerciseStrategyCarrier(page, carrier, frame, label) {
   assert.equal(
     await frame.locator("[data-direct-source-route]").count(),
     0,
@@ -220,6 +267,33 @@ async function exerciseStrategyCarrier(carrier, frame, label) {
     hrefs.add(await sourceLink.getAttribute("href"));
   }
   assert.deepEqual(hrefs, strategySourceUrls, `${label} uses the exact source and evidence routes`);
+
+  const prompt = frame.locator('[data-sc-role="prompt"]');
+  const assistedView = frame.locator('[data-prompt-view][value="skill-assisted"]');
+  await assistedView.check();
+  const markdown = await prompt.textContent();
+  assert.match(
+    markdown,
+    /^# Prompt Capsule: Strategy Canvas\n\n- Contract: `prompt-capsule\/0\.1\.0`$/m,
+    `${label} exposes the versioned Markdown contract`,
+  );
+  assert.match(markdown, /^## Skill assistance$/m, `${label} exposes the assisted view inside the framed document`);
+
+  const downloadEvent = page.waitForEvent("download");
+  await frame.locator('[data-action="download-markdown"]').click();
+  const download = await downloadEvent;
+  assert.equal(
+    download.suggestedFilename(),
+    "strategy-canvas-collaboration-field.prompt-capsule.r1.skill-assisted.md",
+    `${label} names the downloaded Markdown deterministically`,
+  );
+  const downloadPath = await download.path();
+  assert.ok(downloadPath, `${label} makes the downloaded Markdown readable to the receiving browser`);
+  assert.equal(
+    await readFile(downloadPath, "utf8"),
+    markdown,
+    `${label} downloads the exact Markdown bytes visible in the active view`,
+  );
 }
 
 async function exerciseHeartCarrier(page, carrier, frame, heartFrame) {
@@ -571,6 +645,13 @@ async function run() {
       repositoryRoot,
       "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1",
     );
+    const contextManifest = JSON.parse(await readFile(
+      join(projectionRoot, "core-architectures-chimeric-prototype-manifest-v0.1.json"),
+      "utf8",
+    ));
+    const contextFileById = new Map(
+      contextManifest.prototypes.map((entry) => [entry.id, entry.file]),
+    );
     const inventory = await inspectPublicReferenceSource();
     const environment = Object.fromEntries(
       [...inventory.keys].map((key) => [key, configuredDestination(key)]),
@@ -640,17 +721,21 @@ async function run() {
         );
         const sourceRoot = routeSourceRoot(routeProfile, coreRoot);
         const sourceProjections = routeProfile.source_root
-          ? [["Context Canvas source", sourceRoot]]
+          ? [["Context Canvas source", sourceRoot, routeProfile.source_file]]
           : [
-              ["Core source", coreRoot],
-              ["Context projection", projectionRoot],
+              ["Core source", coreRoot, routeProfile.source_file],
+              [
+                "Context projection",
+                projectionRoot,
+                contextFileById.get(routeProfile.id) ?? routeProfile.source_file,
+              ],
             ];
-        for (const [projectionLabel, projectionDirectory] of sourceProjections) {
+        for (const [projectionLabel, projectionDirectory, projectionFile] of sourceProjections) {
           const page = await populationContext.newPage();
           page.setDefaultTimeout(7000);
           const telemetry = monitor(page);
           const sourceUrl = new URL(
-            `${relative(repositoryRoot, projectionDirectory)}/${routeProfile.source_file}`,
+            `${relative(repositoryRoot, projectionDirectory)}/${projectionFile}`,
             `${sourceServer.origin}/`,
           ).href;
           const sandbox = routeProfile.carrier_policy.sandbox_tokens.join(" ");
@@ -747,6 +832,7 @@ async function run() {
       page.setDefaultTimeout(7000);
       const telemetry = monitor(page);
       const outsideRequests = [];
+      const parentUrl = `${server.origin}${pagePath}`;
       page.on("request", (request) => {
         if (
           request.url().startsWith("http") &&
@@ -783,6 +869,7 @@ async function run() {
           await carrier.scrollIntoViewIfNeeded();
           const frame = page.frameLocator(carrierSelector);
           await frame.locator("body").waitFor();
+          await assertParentLinksRemainOrdinary(carrier, label);
 
           const expectedTitle = attributeValue(tag, "title");
           assert.ok(expectedTitle?.trim(), `${label} carries a context-specific title`);
@@ -843,9 +930,15 @@ async function run() {
             conditioningInteractions += 1;
           }
           if (routeProfile.id === "strategy-canvas") {
-            await exerciseStrategyCarrier(carrier, frame, label);
+            await exerciseStrategyCarrier(page, carrier, frame, label);
             strategyInteractions += 1;
           }
+          await assertProjectedExitLinks(frame, label);
+          assert.equal(
+            page.url(),
+            parentUrl,
+            `${label} preserves the parent visitor-surface state while the frame changes`,
+          );
         }
 
         await page.waitForLoadState("networkidle", { timeout: 4000 }).catch(() => {});

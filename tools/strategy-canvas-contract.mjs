@@ -11,8 +11,23 @@ import {
   artifactLicense,
 } from "./attribution-contract.mjs";
 
-const CANONICAL = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html";
+const CANONICAL = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.4.html";
 const CONTEXT = "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html";
+const PROMPT_CAPSULE_EXAMPLE = "prompt-capsules/0.1.0/examples/strategy-canvas.md";
+const RELATED_LOOPS = [
+  {
+    id: "repository-reentry",
+    name: "Re-enter, make one bounded change, and return it clearly",
+    publicUrl: "https://schemas.radiantnull.com/collaboration/#repository-reentry",
+    fit: "Use when this versioned canvas carries a named question or requested change into resumed repository work and the return needs an exact stopping and re-entry point."
+  },
+  {
+    id: "public-release",
+    name: "Publish a repeatable, byte-comparable artifact through a named destination",
+    publicUrl: "https://schemas.radiantnull.com/collaboration/#public-release",
+    fit: "Use after people accept this canvas revision as source for a public artifact whose declared files and bytes need a named delivery receiver."
+  }
+];
 const NARRATIVE_COMPOSERS = [
   {
     name: "Context",
@@ -25,6 +40,15 @@ const STRATEGY_EVIDENCE = "core-architectures-chimeric-prototype-current-pack-v0
 const GENOMIC_REPRESENTATION = "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html";
 const GENOMIC_SVG = "context-canvas-project-surface/img/plot/genomic_viewer_strategy_canvas.svg";
 const INITIATIVE_COSTING = "collaboration/initiative-costing-calculator/index.html";
+const STRATEGY_PLANNING_SOURCE_RESOLVER = new Map([
+  ["urn:source-key:strategy-canvas-research/001", "planning/context-canvas/strategy-canvas/01-method-scale-and-adaptation.md"],
+  ["urn:source-key:strategy-canvas-research/002", "planning/context-canvas/strategy-canvas/02-independent-elicitation-and-aggregation.md"],
+  ["urn:source-key:strategy-canvas-research/003", "planning/context-canvas/strategy-canvas/03-direct-manipulation-and-room-ergonomics.md"],
+  ["urn:source-key:strategy-canvas-research/004", "planning/context-canvas/strategy-canvas/04-domain-dimension-and-anchor-atlas.md"],
+  ["urn:source-key:strategy-canvas-research/005", "planning/context-canvas/strategy-canvas/06-architecture-security-and-verification.md"],
+  ["urn:source-key:strategy-canvas-research/006", "planning/context-canvas/strategy-canvas/README.md"],
+  ["urn:source-key:strategy-canvas-research/007", "planning/context-canvas/strategy-canvas/07-implementation-coverage-ledger.md"],
+]);
 const VIEWPORTS = [
   { name: "mobile", width: 390, height: 844 },
   { name: "desktop", width: 1440, height: 1000 },
@@ -38,6 +62,14 @@ const VIEWPORTS = [
 const ZOOM_PROFILES = [
   { name: "200%", width: 640, height: 900 },
   { name: "400%", width: 320, height: 800 }
+];
+const RESPONSIVE_SEAMS = [
+  { name: "two-column edge", width: 901, height: 1000 },
+  { name: "stacked edge", width: 900, height: 1000 }
+];
+const PRESENTATION_VIEWPORTS = [
+  VIEWPORTS[2],
+  { ...ZOOM_PROFILES[1], name: "400% model" }
 ];
 
 const runId = new Date().toISOString().replace(/[:.]/g, "-");
@@ -611,15 +643,39 @@ async function canonicalSelectionStateVisualContract(browser, url) {
           const forcedColorState = await selected.evaluate((element) => {
             const surface = element.querySelector(".sc-dimension-label-surface");
             const choice = document.querySelector('[data-selection-route="chooser"][aria-current="true"]');
-            return {
+            const unselected = document.querySelector('[data-selection-route="chart"]:not([aria-current="true"])');
+            const unselectedSurface = unselected.querySelector(".sc-dimension-label-surface");
+            const unselectedText = unselected.querySelector(".sc-dimension-label");
+            const referenceSurface = document.createElementNS(element.ownerSVGElement.namespaceURI, "rect");
+            const referenceText = document.createElementNS(element.ownerSVGElement.namespaceURI, "text");
+            referenceSurface.style.fill = "Canvas";
+            referenceSurface.style.stroke = "CanvasText";
+            referenceText.style.fill = "CanvasText";
+            element.ownerSVGElement.append(referenceSurface, referenceText);
+            const receipt = {
               focusIsVisible: element.matches(":focus-visible"),
               surfaceStrokeWidth: Number.parseFloat(getComputedStyle(surface).strokeWidth),
               choiceBorderStyle: getComputedStyle(choice).borderStyle,
+              unselectedSurfaceFill: getComputedStyle(unselectedSurface).fill,
+              unselectedSurfaceStroke: getComputedStyle(unselectedSurface).stroke,
+              unselectedTextFill: getComputedStyle(unselectedText).fill,
+              canvasFill: getComputedStyle(referenceSurface).fill,
+              canvasTextStroke: getComputedStyle(referenceSurface).stroke,
+              canvasTextFill: getComputedStyle(referenceText).fill,
             };
+            referenceSurface.remove();
+            referenceText.remove();
+            return receipt;
           });
           assert(forcedColorState.focusIsVisible, "Forced-colors observation should retain keyboard focus.");
           assert(forcedColorState.surfaceStrokeWidth >= 4, "Forced colors should retain the selected, focused chart-label outline.");
           assert(forcedColorState.choiceBorderStyle !== "none", "Forced colors should retain the matching chooser border.");
+          assert(
+            forcedColorState.unselectedSurfaceFill === forcedColorState.canvasFill &&
+              forcedColorState.unselectedSurfaceStroke === forcedColorState.canvasTextStroke &&
+              forcedColorState.unselectedTextFill === forcedColorState.canvasTextFill,
+            `Forced colors should give an unselected chart label the system Canvas and CanvasText pair. ${JSON.stringify(forcedColorState)}`
+          );
           await section.screenshot({ path: resolve(runDir, "canonical-mobile-selection-forced-colors-focus.png") });
         }
         assertTelemetry(telemetry);
@@ -799,6 +855,9 @@ async function canonicalExchangeRecoveryContract(browser, url) {
       const exported = JSON.parse(await jsonOutput.textContent());
       assert(exported.dimensions[0].scores.current === target, "The visible JSON export should carry the facilitator's score edit.");
       assert(same(exported, edited), "The visible JSON export should describe the edited working state.");
+      const markdownOutput = page.locator('[data-sc-role="prompt"]');
+      const acceptedMarkdown = await markdownOutput.textContent();
+      const acceptedFingerprint = await page.evaluate(() => window.strategyCanvasCanonical.promptCapsuleFingerprint());
 
       const importInput = page.locator('[data-sc-role="import"]');
       await importInput.evaluate((input) => { input.closest("details").open = true; });
@@ -811,6 +870,178 @@ async function canonicalExchangeRecoveryContract(browser, url) {
       assert(await score.isEnabled(), "Recovery should keep the labelled score control available.");
       assert(await score.inputValue() === String(target), "Recovery should keep the edited score visible and usable.");
       assert(same(JSON.parse(await jsonOutput.textContent()), exported), "Recovery should retain the edited JSON export.");
+      assert(await markdownOutput.textContent() === acceptedMarkdown, "Recovery should retain the accepted Markdown projection.");
+      assert(await page.evaluate(() => window.strategyCanvasCanonical.promptCapsuleFingerprint()) === acceptedFingerprint, "Recovery should retain the accepted state fingerprint.");
+      assertTelemetry(telemetry);
+    } finally {
+      await context.close();
+    }
+  });
+}
+
+async function canonicalPromptCapsuleContract(browser, url) {
+  await verify("canonical · native Prompt Capsule views keep state fixed and active Markdown bytes aligned", async () => {
+    const context = await browser.newContext({
+      viewport: { width: VIEWPORTS[1].width, height: VIEWPORTS[1].height },
+      acceptDownloads: true
+    });
+    const page = await context.newPage();
+    const telemetry = monitor(page);
+    try {
+      await page.goto(url, { waitUntil: "domcontentloaded" });
+      await page.locator('[data-sc-role="prompt"]').waitFor({ state: "visible" });
+      const checkedExample = await readFile(resolve(PROMPT_CAPSULE_EXAMPLE), "utf8");
+      const prompt = page.locator('[data-sc-role="prompt"]');
+      const radios = page.locator('[data-sc-role="prompt-view-control"] input[type="radio"]');
+      assert(await page.locator('[data-sc-role="prompt-view-control"] fieldset').count() === 0, "The Prompt Capsule view control should itself be the native fieldset.");
+      assert(await page.locator('fieldset[data-sc-role="prompt-view-control"] > legend').count() === 1, "The native view group should have one visible legend.");
+      assert(await radios.count() === 2, "The view group should expose plain and skill-assisted radios.");
+      assert(await radios.nth(0).getAttribute("value") === "plain" && await radios.nth(0).isChecked(), "Plain Markdown should be the native default.");
+      assert(await prompt.textContent() === checkedExample, "The mounted plain view should equal the checked default example.");
+      assert(await page.evaluate(() => window.strategyCanvasCanonical.promptCapsule()) === checkedExample, "The promptCapsule compatibility seam should return plain Markdown.");
+      assert(checkedExample.includes("## Related loops"), "The plain view should carry its related-loop section.");
+      assert(checkedExample.includes("https://schemas.radiantnull.com/collaboration/#repository-reentry"), "The plain view should link the fitting repository re-entry loop.");
+      assert(checkedExample.includes("https://schemas.radiantnull.com/collaboration/#public-release"), "The plain view should link the fitting public-release loop.");
+      assert(!checkedExample.includes("#visitor-surface-change"), "The Strategy Canvas should omit subject-dependent visitor-surface routing.");
+      assert(!checkedExample.includes("#skill-from-receiving-use"), "The Strategy Canvas should omit subject-dependent skill-growth routing.");
+
+      const stateBeforeView = await page.evaluate(() => window.strategyCanvasCanonical.serialize());
+      const fingerprintBeforeView = await page.evaluate(() => window.strategyCanvasCanonical.promptCapsuleFingerprint());
+      const assisted = radios.nth(1);
+      await assisted.focus();
+      await assisted.check();
+      await page.waitForFunction(() => document.querySelector('[data-sc-role="live"]')?.textContent.includes("Skill-assisted Markdown view selected."));
+      assert(await page.evaluate(() => document.activeElement?.getAttribute("data-prompt-view") === "" && document.activeElement?.value === "skill-assisted"), "View switching should retain focus on the chosen radio.");
+      assert(await page.evaluate(() => window.strategyCanvasCanonical.serialize()) === stateBeforeView, "View switching should leave Strategy Canvas state unchanged.");
+      assert(await page.evaluate(() => window.strategyCanvasCanonical.promptCapsuleFingerprint()) === fingerprintBeforeView, "Both Markdown views should share one state fingerprint.");
+      const assistedMarkdown = await prompt.textContent();
+      assert(assistedMarkdown.includes("## Skill assistance"), "The assisted view should add its bounded skill section.");
+      assert(assistedMarkdown.includes("## Related loops"), "The assisted view should retain the same related-loop section.");
+      assert(await page.evaluate(() => window.strategyCanvasCanonical.promptCapsuleMarkdown()) === assistedMarkdown, "The programmatic Markdown reading should equal the visible active view.");
+      assert(
+        assistedMarkdown.slice(
+          assistedMarkdown.indexOf("## Related loops"),
+          assistedMarkdown.indexOf("## Evidence and recovery")
+        ) === checkedExample.slice(
+          checkedExample.indexOf("## Related loops"),
+          checkedExample.indexOf("## Evidence and recovery")
+        ),
+        "Both views should carry byte-identical related-loop metadata outside the state fingerprint."
+      );
+      assert(assistedMarkdown.includes(`- Fingerprint: \`${fingerprintBeforeView}\``), "The assisted view should expose the shared fingerprint.");
+
+      await page.evaluate(() => {
+        Object.defineProperty(navigator, "clipboard", {
+          configurable: true,
+          value: { writeText: async (value) => { window.__strategyCanvasCopiedMarkdown = value; } }
+        });
+        const createObjectURL = URL.createObjectURL.bind(URL);
+        URL.createObjectURL = (blob) => {
+          window.__strategyCanvasDownloadType = blob.type;
+          return createObjectURL(blob);
+        };
+      });
+      await page.locator('[data-action="copy-markdown"]').click();
+      await page.waitForFunction(() => typeof window.__strategyCanvasCopiedMarkdown === "string");
+      assert(await page.evaluate(() => window.__strategyCanvasCopiedMarkdown) === assistedMarkdown, "Copy should use the exact active Markdown bytes.");
+
+      const downloadEvent = page.waitForEvent("download");
+      await page.locator('[data-action="download-markdown"]').click();
+      const download = await downloadEvent;
+      const downloadPath = await download.path();
+      assert(download.suggestedFilename() === "strategy-canvas-collaboration-field.prompt-capsule.r1.skill-assisted.md", "Download should use a deterministic Markdown filename.");
+      assert(await page.evaluate(() => window.__strategyCanvasDownloadType) === "text/markdown;charset=utf-8", "Download should declare UTF-8 Markdown.");
+      assert(downloadPath && await readFile(downloadPath, "utf8") === assistedMarkdown, "Download should use the exact active Markdown bytes.");
+
+      await radios.nth(0).check();
+      assert(await prompt.textContent() === checkedExample, "Returning to plain should restore the checked example bytes.");
+      assert(await page.evaluate(() => window.strategyCanvasCanonical.promptCapsuleMarkdown()) === checkedExample, "The programmatic Markdown reading should return the checked plain bytes.");
+      await page.locator('[data-action="copy-markdown"]').click();
+      await page.waitForFunction((expected) => window.__strategyCanvasCopiedMarkdown === expected, checkedExample);
+      const plainDownloadEvent = page.waitForEvent("download");
+      await page.locator('[data-action="download-markdown"]').click();
+      const plainDownload = await plainDownloadEvent;
+      const plainDownloadPath = await plainDownload.path();
+      assert(plainDownload.suggestedFilename() === "strategy-canvas-collaboration-field.prompt-capsule.r1.plain.md", "Plain download should name its active view.");
+      assert(plainDownloadPath && await readFile(plainDownloadPath, "utf8") === checkedExample, "Plain copy, download, and visible Markdown should agree byte for byte.");
+      const dimensionId = (await canonicalState(page)).dimensions[0].id;
+      const score = page.locator(`[data-score-input="true"][data-dimension-id="${dimensionId}"][data-series="current"]`);
+      await score.fill("6");
+      await score.press("Tab");
+      assert(await page.evaluate(() => window.strategyCanvasCanonical.promptCapsuleFingerprint()) !== fingerprintBeforeView, "A material state edit should change the fingerprint.");
+      assert((await prompt.textContent()).includes('current `6`; good enough `7`; desired `9`'), "The visible Markdown should agree with the edited state.");
+      assertTelemetry(telemetry);
+    } finally {
+      await context.close();
+    }
+  });
+}
+
+async function canonicalRelatedLoopsContract(browser, url) {
+  await verify("canonical · native Related loops disclosure shares the Prompt Capsule metadata", async () => {
+    const { context, page, telemetry } = await openPage(browser, url, VIEWPORTS[0]);
+    try {
+      const details = page.locator('details[data-sc-role="related-loops"]');
+      const summary = details.locator("summary");
+      assert(await details.count() === 1 && await details.isVisible(), "The canonical visitor surface should expose one visible native Related loops disclosure.");
+      assert(await summary.evaluate((element) => element.tagName === "SUMMARY"), "Related loops should use the native details/summary control.");
+      assert(await summary.textContent() === "Related loops", "The prototype control should use the compact Related loops label.");
+      assert(await details.evaluate((element) => element.open) === false, "The Related loops disclosure should begin collapsed.");
+
+      const sourceLoops = await page.evaluate(() => window.StrategyCanvasCore.promptCapsuleRelatedLoops.map((loop) => ({
+        id: loop.id,
+        name: loop.name,
+        publicUrl: loop.publicUrl,
+        fit: loop.fit
+      })));
+      const visibleLoops = await details.locator("[data-related-loop-id]").evaluateAll((items) => items.map((item) => {
+        const link = item.querySelector("a[data-related-loop-link]");
+        return {
+          id: item.dataset.relatedLoopId,
+          name: link?.textContent.trim() || "",
+          publicUrl: link?.href || "",
+          fit: item.querySelector("p")?.textContent.replace(/^Fit condition:\s*/u, "").trim() || ""
+        };
+      }));
+      assert(same(sourceLoops, RELATED_LOOPS), "The exported core metadata should retain the exact accepted two-loop set.");
+      assert(same(visibleLoops, sourceLoops), "The native visitor control should be generated from the same loop metadata as Markdown.");
+
+      await page.evaluate(() => document.activeElement?.blur());
+      let reachedSummary = false;
+      for (let index = 0; index < 8; index += 1) {
+        await page.keyboard.press("Tab");
+        reachedSummary = await summary.evaluate((element) => document.activeElement === element);
+        if (reachedSummary) break;
+      }
+      assert(reachedSummary, "The Related loops summary should be reachable in native keyboard order.");
+      const summaryFocus = await summary.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        const style = getComputedStyle(element);
+        return { width: rect.width, height: rect.height, outlineWidth: Number.parseFloat(style.outlineWidth) || 0 };
+      });
+      assert(summaryFocus.width >= 44 && summaryFocus.height >= 44, `The Related loops summary should retain a touch-sized target. ${JSON.stringify(summaryFocus)}`);
+      assert(summaryFocus.outlineWidth >= 3, "Keyboard focus should remain visibly outlined on the Related loops summary.");
+      await page.keyboard.press("Enter");
+      assert(await details.evaluate((element) => element.open), "Enter on the native summary should reveal the related loops.");
+
+      const links = details.locator("a[data-related-loop-link]");
+      assert(await links.count() === 2, "The open disclosure should expose exactly two native anchors.");
+      for (let index = 0; index < await links.count(); index += 1) {
+        const target = await links.nth(index).boundingBox();
+        assert(target && target.width >= 44 && target.height >= 44, `Related loop ${index + 1} should retain a touch-sized anchor target.`);
+      }
+      await page.evaluate(() => {
+        window.__strategyCanvasRelatedLoopActivation = "";
+        const link = document.querySelector('a[data-related-loop-link]');
+        link.addEventListener("click", (event) => {
+          event.preventDefault();
+          window.__strategyCanvasRelatedLoopActivation = link.href;
+        }, { once: true });
+      });
+      await links.first().focus();
+      assert(await links.first().evaluate((element) => (Number.parseFloat(getComputedStyle(element).outlineWidth) || 0) >= 3), "A related-loop anchor should retain a visible keyboard focus indicator.");
+      await page.keyboard.press("Enter");
+      assert(await page.evaluate(() => window.__strategyCanvasRelatedLoopActivation) === RELATED_LOOPS[0].publicUrl, "Enter should activate the first native public loop anchor.");
       assertTelemetry(telemetry);
     } finally {
       await context.close();
@@ -892,6 +1123,7 @@ async function canonicalMountFailureContract(browser, url) {
       assert(await baseline.isVisible(), "A failed mount should leave the semantic baseline visible.");
       assert(await baseline.locator("svg").isVisible(), "The retained baseline should include the complete static chart.");
       assert(await baseline.locator("tbody tr").count() === 6, "The retained baseline should include all six exact-value rows.");
+      assert(await baseline.locator('[data-sc-role="static-prompt"]').textContent() === await readFile(resolve(PROMPT_CAPSULE_EXAMPLE), "utf8"), "The retained baseline should include the checked plain Markdown default.");
       assert(await page.locator(".sc-workbench").isHidden(), "Unmounted interactive controls should stay unavailable.");
       assert(await page.locator("#strategy-canvas-root").getAttribute("data-sc-enhancement-state") === "static", "A failed mount should publish static enhancement standing.");
       assert(await page.locator('[data-sc-role="skip-link"]').getAttribute("href") === "#strategy-canvas-static", "The failure-safe skip link should continue to target the static reading.");
@@ -950,6 +1182,22 @@ async function noJavaScriptContract(browser, url, kind) {
         assert(await page.locator(".sc-static-twin").isVisible(), "Canonical static twin should remain visible.");
         assert(await page.locator(".sc-static-twin tbody tr").count() === 6, "Canonical static twin should retain all six dimensions.");
         assert(await page.locator('[data-strategy-canvas-source="method-origin"]').isVisible(), "Canonical static reading should retain its method and adaptation source note.");
+        assert(await page.locator('[data-sc-role="static-prompt"]').textContent() === await readFile(resolve(PROMPT_CAPSULE_EXAMPLE), "utf8"), "Canonical static reading should retain the checked plain Markdown default.");
+        const details = page.locator('details[data-sc-role="related-loops"]');
+        const summary = details.locator("summary");
+        assert(await details.count() === 1 && await details.isVisible(), "Canonical static reading should retain one native Related loops disclosure.");
+        assert(await details.evaluate((element) => element.open) === false, "The no-JavaScript Related loops disclosure should begin collapsed.");
+        await summary.click();
+        assert(await details.evaluate((element) => element.open), "The native Related loops disclosure should open without JavaScript.");
+        const staticLoops = await details.locator("[data-related-loop-id]").evaluateAll((items) => items.map((item) => ({
+          id: item.dataset.relatedLoopId,
+          name: item.querySelector("a")?.textContent.trim() || "",
+          publicUrl: item.querySelector("a")?.href || "",
+          fit: item.querySelector("p")?.textContent.replace(/^Fit condition:\s*/u, "").trim() || ""
+        })));
+        assert(same(staticLoops, RELATED_LOOPS), "The no-JavaScript disclosure should retain the exact accepted two-loop set and fit conditions.");
+        const summaryTarget = await summary.boundingBox();
+        assert(summaryTarget && summaryTarget.width >= 44 && summaryTarget.height >= 44, "The no-JavaScript disclosure summary should retain a touch-sized target.");
       } else {
         assert(await page.locator(".static-field").isVisible(), "Context static field should remain visible.");
         assert(await page.locator(".static-field tbody tr").count() === 6, "Context static field should retain all six starting dimensions.");
@@ -992,6 +1240,35 @@ async function contextViewportContract(browser, url) {
   }
 }
 
+async function contextResponsiveSeamContract(browser, url) {
+  for (const viewport of RESPONSIVE_SEAMS) {
+    await verify(`Context workbench ${viewport.name} · document containment`, async () => {
+      const { context, page, telemetry } = await openPage(browser, url, viewport);
+      try {
+        await page.locator("#strategy-field").waitFor({ state: "visible" });
+        await assertLayout(page, `Context ${viewport.name}`);
+        const geometry = await page.evaluate(() => {
+          const root = document.documentElement;
+          const field = document.querySelector("#strategy-field").getBoundingClientRect();
+          const grid = document.querySelector(".workbench-grid").getBoundingClientRect();
+          return {
+            clientWidth: root.clientWidth,
+            scrollWidth: root.scrollWidth,
+            fieldRight: field.right,
+            gridRight: grid.right
+          };
+        });
+        assert(geometry.fieldRight <= geometry.clientWidth + 2, `Context ${viewport.name} field should stay within the viewport.`);
+        assert(geometry.gridRight <= geometry.clientWidth + 2, `Context ${viewport.name} working grid should stay within the viewport.`);
+        await page.screenshot({ path: resolve(runDir, `context-seam-${viewport.width}.png`), fullPage: true });
+        assertTelemetry(telemetry);
+      } finally {
+        await context.close();
+      }
+    });
+  }
+}
+
 async function contextZoomContract(browser, url) {
   for (const profile of ZOOM_PROFILES) {
     await verify(`Context workbench · ${profile.name} zoom and reflow`, async () => {
@@ -1010,6 +1287,27 @@ async function contextZoomContract(browser, url) {
         assert(await table.isVisible(), `Context ${profile.name} should expose the complete semantic table on request.`);
         assert(await table.locator("tbody tr").count() === 6, `Context ${profile.name} table should retain all six dimensions.`);
         assert((await table.locator("caption").innerText()).trim().length > 16, `Context ${profile.name} table should retain a readable caption.`);
+        if (profile.name === "400%") {
+          const spacingStyle = await page.addStyleTag({
+            content: `
+              * { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; }
+              p { margin-block-end: 2em !important; }
+            `
+          });
+          await page.evaluate(() => new Promise((resolveFrame) => {
+            requestAnimationFrame(() => requestAnimationFrame(resolveFrame));
+          }));
+          const spacingReceipt = await page.evaluate(() => ({
+            clientWidth: document.documentElement.clientWidth,
+            scrollWidth: document.documentElement.scrollWidth,
+            selectedDimension: document.querySelector('#dimension-strip [aria-current="true"]')?.textContent.trim() || "",
+            tableRows: document.querySelectorAll("#semantic-table tbody tr").length
+          }));
+          assert(spacingReceipt.scrollWidth <= spacingReceipt.clientWidth + 2, `Context ${profile.name} standard text spacing should retain document containment (${spacingReceipt.scrollWidth}/${spacingReceipt.clientWidth}).`);
+          assert(spacingReceipt.selectedDimension.length > 0, `Context ${profile.name} standard text spacing should preserve the current dimension identity.`);
+          assert(spacingReceipt.tableRows === 6, `Context ${profile.name} standard text spacing should preserve the complete table.`);
+          await spacingStyle.evaluate((element) => element.remove());
+        }
         await page.screenshot({ path: resolve(runDir, `context-zoom-${profile.name.replace("%", "")}.png`), fullPage: true });
         assertTelemetry(telemetry);
       } finally {
@@ -1271,18 +1569,94 @@ async function contextMediaContract(browser, url) {
   }
 }
 
+async function contextPresentationLayoutContract(browser, url) {
+  for (const viewport of PRESENTATION_VIEWPORTS) {
+    await verify(`Context presentation ${viewport.name} · retained state and readable flow`, async () => {
+      const { context, page, telemetry } = await openPage(browser, url, viewport);
+      try {
+        await page.locator("#strategy-field").waitFor({ state: "visible" });
+        const dimension = page.getByRole("button", { name: "Select Cross-surface continuity", exact: true });
+        await dimension.press("Enter");
+        await page.locator(".data-table-disclosure > summary").click();
+        assert(await page.locator(".data-table-disclosure").evaluate((details) => details.open), "Complete table should open before presentation.");
+        await page.locator('[data-action="presentation"]').click();
+        await page.evaluate(() => new Promise((resolveFrame) => {
+          requestAnimationFrame(() => requestAnimationFrame(resolveFrame));
+        }));
+
+        const state = await contextState(page);
+        assert(state.view.mode === "presentation", `Context presentation ${viewport.name} should update state.`);
+        assert(state.view.selectedDimensionId === "cross-surface-continuity", `Context presentation ${viewport.name} should retain the selected dimension.`);
+        assert(await page.locator('[data-action="presentation"]').getAttribute("aria-pressed") === "true", `Context presentation ${viewport.name} control should expose its active state.`);
+        assert(await page.locator(".data-table-disclosure").evaluate((details) => details.open), `Context presentation ${viewport.name} should retain the open complete table.`);
+        const table = page.locator("#semantic-table table");
+        assert(await table.isVisible(), `Context presentation ${viewport.name} should keep the requested complete table visible.`);
+        assert(await table.locator("tbody tr").count() === 6, `Context presentation ${viewport.name} should retain all six table rows.`);
+        await assertLocalScroller(page, "#semantic-table", "table", `Context presentation ${viewport.name} complete table`);
+        await assertLocalScroller(page, "#chart-scroll", "#strategy-chart", `Context presentation ${viewport.name} chart frame`);
+
+        const geometry = await page.evaluate(() => {
+          const rect = (selector) => {
+            const bounds = document.querySelector(selector)?.getBoundingClientRect();
+            return bounds ? { top: bounds.top, right: bounds.right, bottom: bounds.bottom, left: bounds.left, width: bounds.width, height: bounds.height } : null;
+          };
+          const chartScroll = document.querySelector("#chart-scroll");
+          const dimensionStrip = document.querySelector("#dimension-strip");
+          const skipLink = document.querySelector(".skip-link");
+          return {
+            clientWidth: document.documentElement.clientWidth,
+            scrollWidth: document.documentElement.scrollWidth,
+            chartHeight: chartScroll?.clientHeight || 0,
+            chartRect: rect("#chart-scroll"),
+            stripClientHeight: dimensionStrip?.clientHeight || 0,
+            stripScrollHeight: dimensionStrip?.scrollHeight || 0,
+            skipLink: skipLink ? {
+              active: document.activeElement === skipLink,
+              bottom: skipLink.getBoundingClientRect().bottom,
+              transform: getComputedStyle(skipLink).transform
+            } : null,
+            root: rect("#context-workbench-root"),
+            method: rect(".strategy-method-source"),
+            footer: rect("footer.artifact-attribution")
+          };
+        });
+        assert(geometry.scrollWidth <= geometry.clientWidth + 2, `Context presentation ${viewport.name} should contain document width (${geometry.scrollWidth}/${geometry.clientWidth}).`);
+        assert(geometry.chartHeight >= 300, `Context presentation ${viewport.name} should preserve a substantial comparison surface (${geometry.chartHeight}px).`);
+        assert(geometry.chartRect?.width > 0, `Context presentation ${viewport.name} should retain a visible chart frame.`);
+        assert(geometry.stripScrollHeight <= geometry.stripClientHeight + 2, `Context presentation ${viewport.name} should keep dimension names vertically available (${geometry.stripScrollHeight}/${geometry.stripClientHeight}).`);
+        assert(geometry.skipLink && geometry.skipLink.active === false && geometry.skipLink.bottom <= 0, `Context presentation ${viewport.name} skip link should stay offscreen until focused. ${JSON.stringify(geometry.skipLink)}`);
+        assert(geometry.root && geometry.method && geometry.root.bottom <= geometry.method.top + 1, `Context presentation ${viewport.name} method source should follow the workbench without overlap.`);
+        assert(geometry.method && geometry.footer && geometry.method.bottom <= geometry.footer.top + 1, `Context presentation ${viewport.name} attribution should follow the method source without overlap.`);
+        await page.screenshot({ path: resolve(runDir, `context-presentation-${viewport.name.replace(/[^a-z0-9]+/giu, "-").toLowerCase()}.png`), fullPage: true });
+        assertTelemetry(telemetry);
+      } finally {
+        await context.close();
+      }
+    });
+  }
+}
+
 async function compatibilityContract(browser, origin) {
   const routes = [
-    "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",
-    "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",
-    "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/companions/strategy-canvas-chimeric-prototype-v0.1.1.html"
+    {
+      route: "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",
+      current: "strategy-canvas-chimeric-prototype-v0.2.4.html"
+    },
+    {
+      route: "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html",
+      current: "strategy-canvas-chimeric-prototype-v0.2.2.html"
+    },
+    {
+      route: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/companions/strategy-canvas-chimeric-prototype-v0.1.1.html",
+      current: "strategy-canvas-chimeric-prototype-v0.2.2.html"
+    }
   ];
-  for (const route of routes) {
+  for (const { route, current } of routes) {
     await verify(`compatibility route · ${route}`, async () => {
       const { context, page, telemetry } = await openPage(browser, `${origin}/${route}`, VIEWPORTS[0]);
       try {
-        const redirected = page.url().endsWith("strategy-canvas-chimeric-prototype-v0.2.2.html");
-        const link = page.locator('a[href*="strategy-canvas-chimeric-prototype-v0.2.2.html"]').first();
+        const redirected = page.url().endsWith(current);
+        const link = page.locator(`a[href*="${current}"]`).first();
         const linkVisible = await link.isVisible().catch(() => false);
         assert(redirected || linkVisible, "Compatibility route should redirect or expose a direct current-version link.");
         if (linkVisible) assert((await link.textContent()).trim().length > 8, "Compatibility link should carry a readable name.");
@@ -1368,6 +1742,74 @@ async function strategyCanvasEvidenceContract() {
     assert(registry.methodOrigin.primarySource.url === "https://www.blueoceanstrategy.com/tools/strategy-canvas/", "Evidence registry should name the method owners' primary description.");
     assert(registry.methodOrigin.institutionalRecord.url.startsWith("https://www.insead.edu/"), "Evidence registry should retain the institutional record.");
     assert(registry.methodOrigin.developers.includes("W. Chan Kim") && registry.methodOrigin.developers.includes("Renée Mauborgne"), "Evidence registry should retain both method developers.");
+    const inventory = registry.representationInventory;
+    const expectedInventoryIds = [
+      "canonical-worksheet",
+      "canonical-compatibility",
+      "canonical-iframe-projection",
+      "context-workbench",
+      "context-compatibility",
+      "narrative-projection",
+      "narrative-portable-companion",
+      "genomic-static-companion",
+      "context-host-embeds",
+      "public-schema-example",
+      "planning-and-evidence-spine",
+    ];
+    assert(/incidental/iu.test(inventory.scope), "Representation inventory should state why incidental mentions remain outside its finite scope.");
+    assert(!JSON.stringify(registry).includes("planning/context-canvas"), "The public evidence registry should carry operator-blind planning source keys rather than private planning locators.");
+    assert(same(Object.keys(inventory.authorities).sort(), ["canonicalManifest", "contextManifest", "evidenceRegistry", "semanticContract"]), "Representation inventory should name its four source authorities.");
+    assert(same(inventory.artifacts.map((artifact) => artifact.id), expectedInventoryIds), "Representation inventory should retain the complete ordered set of material Strategy Canvas carriers.");
+    const [canonicalManifest, contextManifest, publicRouteManifest] = await Promise.all([
+      readFile(resolve(inventory.authorities.canonicalManifest), "utf8").then(JSON.parse),
+      readFile(resolve(inventory.authorities.contextManifest), "utf8").then(JSON.parse),
+      readFile(resolve("core-architectures-chimeric-prototype-current-pack-v0.1/public-iframe-route-manifest-v1.json"), "utf8").then(JSON.parse),
+    ]);
+    const canonicalCurrent = canonicalManifest.prototypes.find((prototype) =>
+      prototype.id === "strategy-canvas" && prototype.status === "current" && prototype.expression === "canonical"
+    );
+    const contextCurrent = contextManifest.prototypes.find((prototype) =>
+      prototype.id === "strategy-canvas" && prototype.status === "current" && prototype.expression === "context-canvas"
+    );
+    assert(canonicalCurrent && contextCurrent, "Each owning manifest should declare one current Strategy Canvas expression.");
+    const canonicalRoot = inventory.authorities.canonicalManifest.slice(0, inventory.authorities.canonicalManifest.lastIndexOf("/") + 1);
+    const contextRoot = inventory.authorities.contextManifest.slice(0, inventory.authorities.contextManifest.lastIndexOf("/") + 1);
+    const inventoryById = new Map(inventory.artifacts.map((artifact) => [artifact.id, artifact]));
+    const canonicalInventory = inventoryById.get("canonical-worksheet");
+    assert(canonicalInventory.version === canonicalCurrent.version, "Canonical inventory version should derive from its owning manifest.");
+    assert(canonicalInventory.paths.includes(`${canonicalRoot}${canonicalCurrent.file}`), "Canonical inventory should name the manifest-current worksheet.");
+    const canonicalCompatibility = inventoryById.get("canonical-compatibility");
+    assert(canonicalCompatibility.paths.includes(`${canonicalRoot}${canonicalCurrent.compatibility_route}`), "Canonical inventory should name the manifest-owned compatibility route.");
+    const contextInventory = inventoryById.get("context-workbench");
+    assert(contextInventory.version === contextCurrent.version, "Context inventory version should derive from its owning manifest.");
+    assert(contextInventory.paths.includes(`${contextRoot}${contextCurrent.file}`), "Context inventory should name the manifest-current workbench.");
+    const contextCompatibility = inventoryById.get("context-compatibility");
+    assert(contextCompatibility.paths.includes(`${contextRoot}${contextCurrent.compatibility_route}`), "Context inventory should name the manifest-owned compatibility route.");
+    const iframeRoute = publicRouteManifest.routes.find((route) => route.id === "strategy-canvas");
+    assert(iframeRoute?.source_file === canonicalCurrent.file, "The public iframe route should project the manifest-current canonical worksheet.");
+    assert(iframeRoute?.source_version === canonicalCurrent.version && iframeRoute?.expression === canonicalCurrent.expression, "The public iframe route should retain canonical version and expression identity.");
+    assert(iframeRoute?.package_files?.some((file) => file.source_file === canonicalCurrent.evidence), "The public iframe route should carry the evidence file declared by the canonical manifest.");
+    const iframeInventory = inventoryById.get("canonical-iframe-projection");
+    assert(iframeInventory.version === iframeRoute.source_version, "Iframe inventory version should derive from the route manifest.");
+    for (const artifact of inventory.artifacts) {
+      assert(artifact.expression.length > 4, `${artifact.id} should name its expression.`);
+      assert(artifact.role.length > 8, `${artifact.id} should name its carrier role.`);
+      assert(artifact.version.length > 2, `${artifact.id} should name its version or current standing.`);
+      assert(artifact.relation.length > 24, `${artifact.id} should state its relation to source or receiver.`);
+      assert(Array.isArray(artifact.paths) && artifact.paths.length > 0, `${artifact.id} should name its repository paths.`);
+      for (const file of artifact.paths) {
+        assert((await readFile(resolve(file))).length > 0, `${artifact.id} should resolve ${file}.`);
+      }
+      for (const sourceKey of artifact.sourceKeys || []) {
+        const planningPath = STRATEGY_PLANNING_SOURCE_RESOLVER.get(sourceKey);
+        assert(planningPath, `${artifact.id} should use a source key present in the authorized local resolver.`);
+        const planningSource = await readFile(resolve(planningPath), "utf8");
+        assert(planningSource.includes("strategy-canvas-evidence.v0.1.json"), `${planningPath} should route back to the evidence registry.`);
+      }
+    }
+    const portableCompanion = inventory.artifacts.find((artifact) => artifact.id === "narrative-portable-companion");
+    assert(portableCompanion.version === canonicalCurrent.version, "Narrative portable-companion inventory should derive its version from the canonical manifest.");
+    assert(portableCompanion.archiveMember.endsWith(canonicalCurrent.file), "Narrative portable-companion inventory should name the manifest-current canonical worksheet without collapsing it into the Context workbench.");
     const ids = registry.implementationEvidence.map((entry) => entry.id);
     assert(new Set(ids).size === ids.length && ids.length >= 8, "Evidence registry should carry a distinct, substantive implementation ledger.");
     for (const entry of registry.implementationEvidence) {
@@ -1378,6 +1820,14 @@ async function strategyCanvasEvidenceContract() {
       assert(Array.isArray(entry.receivingSurfaces) && entry.receivingSurfaces.length > 0, `${entry.id} should name at least one receiving surface.`);
       for (const receiver of entry.receivingSurfaces) {
         assert(Object.hasOwn(registry.representations, receiver), `${entry.id} should map only to a registered representation (${receiver}).`);
+      }
+      assert(Array.isArray(entry.planningSourceKeys) && entry.planningSourceKeys.length > 0, `${entry.id} should name the planning source that explains its implementation use.`);
+      for (const sourceKey of entry.planningSourceKeys) {
+        const planningPath = STRATEGY_PLANNING_SOURCE_RESOLVER.get(sourceKey);
+        assert(planningPath, `${entry.id} should use a planning source key present in the authorized local resolver.`);
+        const planningSource = await readFile(resolve(planningPath), "utf8");
+        assert(planningSource.includes("strategy-canvas-evidence.v0.1.json"), `${planningPath} should route back to the evidence registry.`);
+        assert(planningSource.includes(`\`${entry.id}\``), `${planningPath} should name evidence entry ${entry.id}.`);
       }
     }
     const usedReceivers = new Set(registry.implementationEvidence.flatMap((entry) => entry.receivingSurfaces));
@@ -1409,7 +1859,8 @@ async function strategyCanvasEvidenceContract() {
     const initiativeSource = await readFile(resolve(INITIATIVE_COSTING), "utf8");
     const fourActionsUrl = registry.relatedMethods.fourActionsFramework.primarySource.url;
     assert(initiativeSource.includes('data-strategy-canvas-source="four-actions-origin"'), "Initiative costing should expose its Four Actions method marker.");
-    assert(initiativeSource.includes(`href="${fourActionsUrl}" target="_blank" rel="noopener noreferrer"`), "Initiative costing should route its official Four Actions source through its existing iframe-safe popup profile.");
+    assert(initiativeSource.includes(`<a href="${fourActionsUrl}">`), "Initiative costing should link its official Four Actions source with ordinary in-place navigation.");
+    assert(!initiativeSource.includes(`href="${fourActionsUrl}" target="_blank"`), "The Initiative Costing source should preserve the visitor's browsing-context choice; iframe projection owns separate-tab behavior.");
     assert(registry.representations.initiativeCosting.classification === "strategy-canvas-adjacent-four-actions", "Initiative costing should retain its precise adjacent-method classification.");
     const genomicSource = await readFile(resolve(GENOMIC_REPRESENTATION), "utf8");
     assert(genomicSource.includes('<figcaption class="table-note" data-strategy-canvas-source="method-origin">\n                This static representation adapts the Strategy Canvas'), "The Genomic page should attach the method marker to the Strategy Canvas caption itself.");
@@ -1421,6 +1872,14 @@ async function strategyCanvasEvidenceContract() {
     assert(svg.includes("local qualitative adaptation"), "Static Strategy Canvas SVG metadata should state its local adaptation standing.");
     const buildSource = await readFile(resolve("core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/build.mjs"), "utf8");
     assert(buildSource.includes("strategy-canvas-evidence.v0.1.json") && buildSource.includes("representations?.canonical"), "The canonical builder should consume its evidence registry representation.");
+    const publicRouteManifest = JSON.parse(await readFile(resolve("core-architectures-chimeric-prototype-current-pack-v0.1/public-iframe-route-manifest-v1.json"), "utf8"));
+    const publicRoute = publicRouteManifest.routes.find((route) => route.id === "strategy-canvas");
+    assert(publicRoute.expression === "canonical", "The public Strategy Canvas route should identify its canonical expression.");
+    assert(publicRoute.reader_job.includes("canonical worksheet"), "The public Strategy Canvas route should name its canonical worksheet reader job.");
+    const fmiHost = await readFile(resolve("context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html"), "utf8");
+    assert(fmiHost.includes("embedded canonical worksheet"), "The FMI host should identify the embedded surface as the canonical worksheet.");
+    assert(fmiHost.includes("JSON state remains visible"), "The FMI host should use the canonical worksheet's JSON-state term.");
+    assert(fmiHost.includes("Open the Strategy Canvas workbench"), "The FMI host should keep the fuller Context workbench as a distinct handoff.");
   });
 }
 
@@ -1439,6 +1898,8 @@ async function main() {
     await canonicalSourceNavigationContract(browser, canonicalUrl);
     await canonicalColumnGeometryContract(browser, canonicalUrl);
     await canonicalInteractionContract(browser, canonicalUrl);
+    await canonicalPromptCapsuleContract(browser, canonicalUrl);
+    await canonicalRelatedLoopsContract(browser, canonicalUrl);
     await canonicalExchangeRecoveryContract(browser, canonicalUrl);
     await canonicalImportBoundaryContract(browser, canonicalUrl);
     await canonicalZoomContract(browser, canonicalUrl);
@@ -1446,8 +1907,10 @@ async function main() {
     await schemaNegativeContract(browser, canonicalUrl);
     await noJavaScriptContract(browser, canonicalUrl, "canonical");
     await contextViewportContract(browser, contextUrl);
+    await contextResponsiveSeamContract(browser, contextUrl);
     await contextZoomContract(browser, contextUrl);
     await contextCollaborationContract(browser, contextUrl);
+    await contextPresentationLayoutContract(browser, contextUrl);
     await contextMediaContract(browser, contextUrl);
     await noJavaScriptContract(browser, contextUrl, "Context");
     await compatibilityContract(browser, staticServer.origin);

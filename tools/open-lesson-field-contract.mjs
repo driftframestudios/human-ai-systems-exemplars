@@ -7,6 +7,7 @@ import { extname, relative, resolve } from "node:path";
 
 const DIRECT_TARGET = "collaboration/open-lesson-field/index.html";
 const HOST_TARGET = "context-canvas-project-surface/context-canvas/prompt-side-conditions-practice.html";
+const PUBLIC_IFRAME_URL = "https://iframes.vik.guru/v1/canvas/open-lesson-field/";
 const IFRAME_SELECTOR = 'iframe[title="Open Lesson Field educator collaboration instrument"]';
 const VIEWPORTS = [
   { name: "mobile", width: 390, height: 844 },
@@ -117,13 +118,23 @@ function assertTelemetry(telemetry) {
   assert(entries.length === 0, `Browser telemetry should stay clear. ${entries.join(" | ")}`);
 }
 
-async function openPage(browser, url, viewport, contextOptions = {}) {
+async function openPage(browser, url, viewport, contextOptions = {}, prepareContext) {
   const context = await browser.newContext({ viewport: { width: viewport.width, height: viewport.height }, ...contextOptions });
+  if (prepareContext) await prepareContext(context);
   const page = await context.newPage();
   const telemetry = monitor(page);
   await page.goto(url, { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("networkidle", { timeout: 3000 }).catch(() => {});
   return { context, page, telemetry };
+}
+
+async function openHostedLessonPage(browser, hostUrl, viewport, contextOptions = {}, prepareContext) {
+  return openPage(browser, hostUrl, viewport, contextOptions, async (context) => {
+    await context.route(PUBLIC_IFRAME_URL, async (route) => {
+      await route.fulfill({ path: resolve(DIRECT_TARGET), contentType: "text/html; charset=utf-8" });
+    });
+    if (prepareContext) await prepareContext(context);
+  });
 }
 
 async function waitForEnhanced(surface) {
@@ -295,6 +306,179 @@ async function iframeSurface(page) {
   return { iframe, frame };
 }
 
+function promptFingerprintFrom(markdown) {
+  const match = String(markdown).match(/^- Fingerprint: `([^`]+)`$/m);
+  assert(match, "Prompt Capsule Markdown should carry one readable fingerprint field.");
+  return match[1];
+}
+
+function assertPromptCapsuleSections(markdown, label) {
+  const headings = [
+    "# Prompt Capsule: Open Lesson Field",
+    "## Purpose and target",
+    "## Relevant context and inputs",
+    "## Working state",
+    "## Boundaries and human-held decisions",
+    "## Requested return",
+    "## Related loops",
+    "## Evidence and recovery"
+  ];
+  let previous = -1;
+  for (const heading of headings) {
+    const position = markdown.indexOf(heading);
+    assert(position > previous, `${label} should carry ${heading} in contract order.`);
+    previous = position;
+  }
+}
+
+async function promptCapsuleContract(browser, directUrl) {
+  const directOrigin = new URL(directUrl).origin;
+  const { context, page, telemetry } = await openPage(browser, directUrl, VIEWPORTS[1], {}, async (browserContext) => {
+    await browserContext.grantPermissions(["clipboard-read", "clipboard-write"], { origin: directOrigin });
+  });
+  try {
+    await waitForEnhanced(page);
+    let initialFingerprint = "";
+    await verify("Prompt Capsule · public API and plain Markdown share one complete initial state", async () => {
+      const api = await page.evaluate(() => ({
+        frozen: Object.isFrozen(window.openLessonField),
+        viewsFrozen: Object.isFrozen(window.openLessonField.promptCapsuleViews),
+        version: window.openLessonField.version,
+        schema: window.openLessonField.stateSchemaVersion,
+        contract: window.openLessonField.promptCapsuleContract,
+        views: window.openLessonField.promptCapsuleViews.slice(),
+        plain: window.openLessonField.promptCapsule(),
+        explicitPlain: window.openLessonField.promptCapsuleMarkdown("plain"),
+        state: window.openLessonField.getState(),
+        fingerprint: window.openLessonField.promptCapsuleFingerprint(),
+        activeView: window.openLessonField.getPromptCapsuleView()
+      }));
+      const visible = await page.locator("#packet").textContent();
+      assert(api.frozen && api.viewsFrozen, "Open Lesson Field should expose a frozen public API and view vocabulary.");
+      assert(api.version === "2.0" && api.schema === "open-lesson-field.v2", "Public API should retain the Open Lesson Field source and state versions.");
+      assert(api.contract === "prompt-capsule/0.1.0", "Public API should name the accepted Prompt Capsule contract.");
+      assert(sameValue(api.views, ["plain", "skill-assisted"]), `Public API should expose the two accepted views; received ${JSON.stringify(api.views)}.`);
+      assert(api.activeView === "plain", "Plain should remain the initial Prompt Capsule view.");
+      assert(api.plain === api.explicitPlain && api.plain === visible, "Initial visible, conventional, and explicit plain Markdown should be byte-identical.");
+      assert(sameValue(api.state, await stateFrom(page)), "Public state API and visible JSON inspector should expose the same source-owned state.");
+      assert(api.plain.endsWith("\n"), "Prompt Capsule Markdown should retain one terminal line feed for portable file output.");
+      assertPromptCapsuleSections(api.plain, "Plain Prompt Capsule");
+      initialFingerprint = promptFingerprintFrom(api.plain);
+      assert(initialFingerprint === api.fingerprint, "Visible fingerprint should identify the complete represented state.");
+      textIncludes(api.plain, "visitor-surface-change", "Plain related-loop identity");
+      textIncludes(api.plain, "public-release", "Plain release-loop identity");
+      const detached = await page.evaluate(() => {
+        const returned = window.openLessonField.getState();
+        const projection = window.openLessonField.promptCapsuleStateProjection();
+        returned.situation.learners = 999;
+        projection.situation.learners = 998;
+        return {
+          stateLearners: window.openLessonField.getState().situation.learners,
+          projectionLearners: window.openLessonField.promptCapsuleStateProjection().situation.learners,
+          fingerprint: window.openLessonField.promptCapsuleFingerprint(),
+          plain: window.openLessonField.promptCapsule()
+        };
+      });
+      assert(detached.stateLearners === 28 && detached.projectionLearners === 28, "Public state and represented-state reads should return detached values.");
+      assert(detached.fingerprint === initialFingerprint && detached.plain === api.plain, "Mutating detached API values should preserve the live Prompt Capsule and fingerprint.");
+    });
+    await verify("Prompt Capsule · native Related loops remain keyboard-operable public destinations", async () => {
+      const details = page.locator("[data-prompt-related-loops]");
+      const summary = details.locator("summary");
+      await summary.focus();
+      await page.keyboard.press("Enter");
+      assert(await details.evaluate((element) => element.open), "Enter on the native summary should open Related loops.");
+      const loops = await details.locator("[data-related-loop-id]").evaluateAll((items) => items.map((item) => ({
+        id: item.getAttribute("data-related-loop-id"),
+        href: item.querySelector("a")?.href,
+        fit: item.querySelector("[data-related-loop-fit]")?.textContent?.trim(),
+        targetHeight: item.querySelector("a")?.getBoundingClientRect().height
+      })));
+      assert(sameValue(loops.map(({ id }) => id), ["visitor-surface-change", "public-release"]), `Related loops should retain the accepted order and identities; received ${JSON.stringify(loops)}.`);
+      assert(loops[0].href === "https://schemas.radiantnull.com/collaboration/#visitor-surface-change", "Visitor-surface loop should resolve to its public schema coordinate.");
+      assert(loops[1].href === "https://schemas.radiantnull.com/collaboration/#public-release", "Public-release loop should resolve to its public schema coordinate.");
+      assert(loops.every(({ fit, targetHeight }) => fit && targetHeight >= 43.5), "Every related loop should carry a fit condition and a 44px link target.");
+    });
+    await verify("Prompt Capsule · native keyboard selection switches to the state-equivalent skill-assisted view", async () => {
+      const plainControl = page.locator('input[name="open-lesson-prompt-view"][value="plain"]');
+      await plainControl.focus();
+      await page.keyboard.press("ArrowRight");
+      const assistedControl = page.locator('input[name="open-lesson-prompt-view"][value="skill-assisted"]');
+      assert(await assistedControl.isChecked(), "ArrowRight should select the skill-assisted native radio.");
+      assert(await assistedControl.evaluate((element) => document.activeElement === element), "Keyboard view selection should retain focus on the selected native radio.");
+      const assisted = await page.locator("#packet").textContent();
+      const apiAssisted = await page.evaluate(() => window.openLessonField.promptCapsuleMarkdown("skill-assisted"));
+      assert(assisted === apiAssisted, "Visible and public-API skill-assisted Markdown should be byte-identical.");
+      assert(await page.locator("#packet").getAttribute("data-prompt-view-active") === "skill-assisted", "Visible packet should expose the active view.");
+      assert(promptFingerprintFrom(assisted) === initialFingerprint, "Plain and skill-assisted views should identify the same represented state.");
+      textIncludes(assisted, "## Skill assistance", "Skill-assisted extension");
+      textIncludes(assisted, "https://schemas.radiantnull.com/skills/source-authority-mapping/", "Source Authority Mapping public coordinate");
+      textIncludes(assisted, "https://schemas.radiantnull.com/skills/bounded-support-routing/", "Bounded Support Routing public coordinate");
+      textIncludes(assisted, "cf00aceb07896bc01a50e0622b133f8837fa3eec", "Skill source revision");
+      textIncludes(assisted, "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5", "Source Authority Mapping digest");
+      textIncludes(assisted, "80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402", "Bounded Support Routing digest");
+      const plain = await page.evaluate(() => window.openLessonField.promptCapsuleMarkdown("plain"));
+      const normalizedSharedAssisted = assisted
+        .split("\n## Skill assistance")[0]
+        .replace("- View: `skill-assisted`", "- View: `plain`");
+      assert(normalizedSharedAssisted === plain, "Skill assistance should extend the complete plain view without changing its shared state-derived content.");
+      textIncludes(await page.locator("#prompt-view-status").textContent(), "Skill-assisted Markdown view selected", "Local view status");
+      await page.waitForFunction(() => document.getElementById("live-status")?.textContent.includes("Skill-assisted Markdown view selected"));
+      assert(await page.locator("#prompt-view-status").getAttribute("aria-live") === null, "Local view status should share the existing live route rather than create a second announcement channel.");
+      assert(await page.locator("[role=status][aria-live]").count() === 1, "Prompt view changes should retain exactly one live status route.");
+    });
+    await verify("Prompt Capsule · state changes update both views and one shared fingerprint", async () => {
+      await page.locator("#learners").fill("31");
+      const values = await page.evaluate(() => ({
+        stateLearners: window.openLessonField.getState().situation.learners,
+        projectionLearners: window.openLessonField.promptCapsuleStateProjection().situation.learners,
+        fingerprint: window.openLessonField.promptCapsuleFingerprint(),
+        plain: window.openLessonField.promptCapsuleMarkdown("plain"),
+        assisted: window.openLessonField.promptCapsuleMarkdown("skill-assisted")
+      }));
+      assert(values.stateLearners === 31 && values.projectionLearners === 31, "State and represented-state projection should carry the changed learner count.");
+      assert(values.fingerprint !== initialFingerprint, "A represented state change should produce a new fingerprint.");
+      assert(promptFingerprintFrom(values.plain) === values.fingerprint && promptFingerprintFrom(values.assisted) === values.fingerprint, "Both views should carry the changed state fingerprint.");
+      textIncludes(values.plain, "`31` learners", "Changed plain learner count");
+      textIncludes(values.assisted, "`31` learners", "Changed skill-assisted learner count");
+      assertPromptCapsuleSections(values.plain, "Changed plain Prompt Capsule");
+      assertPromptCapsuleSections(values.assisted, "Changed skill-assisted Prompt Capsule");
+    });
+    await verify("Prompt Capsule · Copy Markdown carries the exact active byte stream", async () => {
+      const expected = await page.locator("#packet").textContent();
+      await page.locator("#copy-prompt").click();
+      const copied = await page.evaluate(() => navigator.clipboard.readText());
+      assert(copied === expected, "Clipboard text should equal the active Prompt Capsule Markdown byte for byte.");
+      textIncludes(await page.locator("#prompt-view-status").textContent(), "Skill-assisted Markdown copied", "Copy status");
+    });
+    await verify("Prompt Capsule · Download Markdown carries the exact active byte stream", async () => {
+      const expected = await page.locator("#packet").textContent();
+      await page.evaluate(() => {
+        const createObjectURL = URL.createObjectURL.bind(URL);
+        URL.createObjectURL = (blob) => {
+          globalThis.__promptCapsuleDownloadType = blob.type;
+          return createObjectURL(blob);
+        };
+      });
+      const [download] = await Promise.all([
+        page.waitForEvent("download"),
+        page.locator("#download-prompt").click()
+      ]);
+      assert(download.suggestedFilename() === "open-lesson-field.prompt-capsule.r0.skill-assisted.md", `Download should carry the active view and revision; received ${download.suggestedFilename()}.`);
+      assert(await download.failure() === null, "Prompt Capsule download should complete without a browser failure.");
+      assert(await page.evaluate(() => globalThis.__promptCapsuleDownloadType) === "text/markdown;charset=utf-8", "Prompt Capsule download should declare UTF-8 Markdown.");
+      const downloadPath = await download.path();
+      assert(downloadPath, "Prompt Capsule download should produce a readable local artifact.");
+      const downloaded = await readFile(downloadPath, "utf8");
+      assert(downloaded === expected, "Downloaded Markdown should equal the active Prompt Capsule byte stream exactly.");
+      textIncludes(await page.locator("#prompt-view-status").textContent(), "Skill-assisted Markdown download prepared", "Download status");
+    });
+    await verify("Prompt Capsule · focused browser telemetry", async () => assertTelemetry(telemetry));
+  } finally {
+    await context.close();
+  }
+}
+
 async function directViewportChecks(browser, directUrl) {
   for (const viewport of VIEWPORTS) {
     await verify(`direct ${viewport.name} · layout, controls, state, and browser telemetry`, async () => {
@@ -319,7 +503,37 @@ async function directViewportChecks(browser, directUrl) {
         textIncludes(await page.locator("#sampling-prompt").textContent(), "relative to the full distribution", "Verbalized Sampling probability reference");
         textIncludes(await page.locator("#sampling-prompt").textContent(), "residual or unlisted response mass", "Verbalized Sampling residual-mass disclosure");
         textIncludes(await page.locator("#route-event-prompt").textContent(), "Named binary event", "Separate optional route/event assessment");
+        const relatedLoops = page.locator("[data-prompt-related-loops]");
+        await relatedLoops.locator("summary").click();
+        assert(await relatedLoops.evaluate((element) => element.open), "Related loops should remain visible for the Prompt Capsule visual comparison.");
         await page.screenshot({ path: resolve(runDir, `open-lesson-field-${viewport.name}.png`), fullPage: true });
+        await page.locator('.capsule-dock a[href="#working-capsule"]').click();
+        await page.waitForFunction(() => {
+          const dock = document.querySelector(".capsule-dock");
+          const target = document.getElementById("working-capsule");
+          const dockRect = dock.getBoundingClientRect();
+          const targetTop = target.getBoundingClientRect().top;
+          return getComputedStyle(dock).position === "sticky"
+            ? targetTop >= dockRect.bottom - 2 && targetTop <= dockRect.bottom + 32
+            : targetTop >= -2 && targetTop <= 32;
+        });
+        const anchoredGeometry = await page.evaluate(() => {
+          const dock = document.querySelector(".capsule-dock");
+          const target = document.getElementById("working-capsule");
+          const dockRect = dock.getBoundingClientRect();
+          const targetRect = target.getBoundingClientRect();
+          return {
+            dockBottom: dockRect.bottom,
+            dockPosition: getComputedStyle(dock).position,
+            targetTop: targetRect.top
+          };
+        });
+        if (anchoredGeometry.dockPosition === "sticky") {
+          assert(anchoredGeometry.targetTop >= anchoredGeometry.dockBottom - 2 && anchoredGeometry.targetTop <= anchoredGeometry.dockBottom + 32, `Prompt Capsule anchor should clear the sticky dock and begin directly beneath it; received target top ${anchoredGeometry.targetTop}px and dock bottom ${anchoredGeometry.dockBottom}px.`);
+        } else {
+          assert(anchoredGeometry.targetTop >= -2 && anchoredGeometry.targetTop <= 32, `Prompt Capsule anchor should begin at the top of the mobile viewport; received ${anchoredGeometry.targetTop}px.`);
+        }
+        await page.screenshot({ path: resolve(runDir, `open-lesson-field-prompt-capsule-${viewport.name}.png`) });
         assertTelemetry(telemetry);
       } finally {
         await context.close();
@@ -331,12 +545,13 @@ async function directViewportChecks(browser, directUrl) {
 async function embeddedViewportChecks(browser, hostUrl) {
   for (const viewport of VIEWPORTS) {
     await verify(`embedded ${viewport.name} · sandbox, interaction, containment, and browser telemetry`, async () => {
-      const { context, page, telemetry } = await openPage(browser, hostUrl, viewport);
+      const { context, page, telemetry } = await openHostedLessonPage(browser, hostUrl, viewport);
       try {
         await assertLayout(page, `Prompt-side host ${viewport.name}`);
         const { iframe, frame } = await iframeSurface(page);
-        assert(await iframe.getAttribute("src") === "../../collaboration/open-lesson-field/index.html", "Iframe should resolve the standalone Open Lesson Field document.");
-        assert(await iframe.getAttribute("sandbox") === "allow-scripts allow-modals", "Iframe sandbox should carry only the script and print-dialog capabilities.");
+        assert(await iframe.getAttribute("src") === PUBLIC_IFRAME_URL, "Iframe should resolve the manifest-owned public Open Lesson Field route.");
+        assert(await iframe.getAttribute("sandbox") === "allow-downloads allow-modals allow-scripts", "Iframe sandbox should carry the implemented download, script, and print-dialog capabilities.");
+        assert(await iframe.getAttribute("allow") === "clipboard-write", "Iframe Permissions Policy should carry the implemented Markdown copy capability.");
         assert(await iframe.getAttribute("referrerpolicy") === "no-referrer", "Iframe should preserve the no-referrer boundary.");
         assert(await page.locator(IFRAME_SELECTOR).count() === 1, "Parent DOM should contain one Open Lesson Field iframe.");
         assert(await frame.locator("iframe").count() === 0, "Embedded instrument should remain a leaf surface without recursive frames.");
@@ -355,6 +570,37 @@ async function embeddedViewportChecks(browser, hostUrl) {
         await context.close();
       }
     });
+  }
+}
+
+async function embeddedPromptCapsuleExchangeContract(browser, hostUrl) {
+  const hostOrigin = new URL(hostUrl).origin;
+  const { context, page, telemetry } = await openHostedLessonPage(
+    browser,
+    hostUrl,
+    VIEWPORTS[1],
+    { acceptDownloads: true },
+    async (browserContext) => {
+      await browserContext.grantPermissions(["clipboard-read", "clipboard-write"], { origin: hostOrigin });
+    }
+  );
+  try {
+    const { frame } = await iframeSurface(page);
+    await waitForEnhanced(frame);
+    await verify("embedded Prompt Capsule · copy returns exact bytes and retains control focus", async () => {
+      const copyControl = frame.locator("#copy-prompt");
+      const expected = await frame.locator("#packet").textContent();
+      await copyControl.focus();
+      await copyControl.click();
+      const copied = await page.evaluate(() => navigator.clipboard.readText());
+      assert(copied === expected, "Embedded clipboard text should equal the active Prompt Capsule Markdown byte for byte.");
+      assert(copied.endsWith("\n"), "Embedded clipboard text should retain the canonical terminal line feed.");
+      assert(await copyControl.evaluate((element) => document.activeElement === element), "Fallback copy should restore focus to the activating control.");
+      textIncludes(await frame.locator("#prompt-view-status").textContent(), "Plain Markdown copied", "Embedded copy status");
+      assertTelemetry(telemetry);
+    });
+  } finally {
+    await context.close();
   }
 }
 
@@ -421,7 +667,7 @@ async function controlConsequenceContract(browser, directUrl) {
       const state = await assertStateContract(page);
       assert(sameValue(state.situation.grouping, { mode: "Pair teams", groups: 15, individuals: 0, pairs: 14, trios: 1, quartets: 0, materialSets: 15 }), `31 learners should form 14 pairs and one trio in Pair teams mode; received ${JSON.stringify(state.situation.grouping)}.`);
       textIncludes(await page.locator("#situation-readout").textContent(), "1 trio", "Visible grouping result");
-      textIncludes(await page.locator("#packet").textContent(), "15 material sets", "Grouping capsule field");
+      textIncludes(await page.locator("#packet").textContent(), "`15` material sets", "Grouping capsule field");
       textIncludes(await page.locator("#coordination-materials").textContent(), "15 shared material sets", "Dynamic material preparation");
       textIncludes(await page.locator("#coordination-evidence").textContent(), "31 individual evidence-boundary notes", "Dynamic evidence collection");
       await assertReceipt(page, "#situation-receipt");
@@ -434,7 +680,7 @@ async function controlConsequenceContract(browser, directUrl) {
       textIncludes(await page.locator("#coordination-roles").textContent(), "source keeper", "Dynamic rotating-role plan");
       textIncludes(await page.locator("#coordination-movement").textContent(), "teacher sweep", "Dynamic teacher movement plan");
       textIncludes(await page.locator("#coordination-room").textContent(), "8 stations", "Dynamic room configuration");
-      textIncludes(await page.locator("#packet").textContent(), "CLASSROOM COORDINATION", "Coordination capsule section");
+      textIncludes(await page.locator("#packet").textContent(), "### Classroom coordination", "Coordination capsule section");
       await assertReceipt(page, "#situation-receipt");
     });
     await verify("control consequence · single-learner edge remains complete and recoverable", async () => {
@@ -561,8 +807,9 @@ async function controlConsequenceContract(browser, directUrl) {
       textIncludes(routePrompt, "P(named event | route, conditions)", "Optional conditional probability semantics");
       textIncludes(routePrompt, "full-response-distribution and residual-mass accounting", "Probability-frame separation");
       textIncludes(await page.locator("#route-event-standing").textContent(), "event-success estimates remain open", "Open optional event fields");
-      textIncludes(await page.locator("#packet").textContent(), "VERBALIZED SAMPLING · BOUNDED 5-CANDIDATE FAN-OUT", "VS prompt in working capsule");
-      textIncludes(await page.locator("#packet").textContent(), "OPTIONAL ROUTE / EVENT-SUCCESS ASSESSMENT · SEPARATE FRAME", "Separate optional assessment in working capsule");
+      textIncludes(await page.locator("#packet").textContent(), "### Sampling request", "Sampling section in working capsule");
+      textIncludes(await page.locator("#packet").textContent(), "- Method: `bounded-verbalized-sampling`; `5` distinct candidates", "Bounded sampling method in working capsule");
+      textIncludes(await page.locator("#packet").textContent(), "Separate optional frame", "Separate optional assessment in working capsule");
     });
     await verify("control consequence · all edited state paths remain unique and schema-valid", async () => {
       const state = await assertStateContract(page);
@@ -597,7 +844,9 @@ async function lifecycleContract(browser, directUrl) {
       textIncludes(await page.locator("#receiver-reading").textContent(), markupLikeReceiver, "Literal receiver reading");
       assert(await page.locator("#receiver-injection-probe").count() === 0, "Receiver rendering should create no executable markup node.");
       assert(await page.evaluate(() => window.__receiverProbe) === 0, "Receiver rendering should execute no injected event handler.");
-      textIncludes(await page.locator("#packet").textContent(), markupLikeReceiver, "Literal receiver in working capsule");
+      const workingCapsule = await page.locator("#packet").textContent();
+      textIncludes(workingCapsule, '&lt;img id="receiver-injection-probe" src="x" onerror="window.\\_\\_receiverProbe=1"&gt; reviewer', "Escaped receiver in working capsule");
+      assert(!workingCapsule.includes("<img"), "Working Prompt Capsule should carry markup-shaped receiver text as escaped Markdown rather than an HTML element.");
       await assertReceipt(page, "#handoff-receipt");
     });
     await verify("lifecycle · unresolved receiver remains visible and pauses assembly", async () => {
@@ -607,7 +856,7 @@ async function lifecycleContract(browser, directUrl) {
       assert(await page.locator("#assemble").isDisabled(), "Assembly should wait for a named receiver.");
       textIncludes(await page.locator("#receiver-reading").textContent(), "requires resolution", "Receiver recovery reading");
       textIncludes(await page.locator("#assembly-readiness").textContent(), "name the educator or reviewer", "Assembly recovery route");
-      textIncludes(await page.locator("#packet").textContent(), "Requires a named human receiver", "Open receiver capsule field");
+      textIncludes(await page.locator("#packet").textContent(), "Open: name the human receiver", "Open receiver capsule field");
       await assertReceipt(page, "#handoff-receipt");
     });
     await verify("lifecycle · valid working state assembles immutable revision 1", async () => {
@@ -619,7 +868,9 @@ async function lifecycleContract(browser, directUrl) {
       assert(state.assembly.changedControls.length === 0, "Assembly should clear controls awaiting review.");
       assert(!Number.isNaN(Date.parse(state.assembly.reviewedAt)), "Assembly should record an ISO review time.");
       assert(await page.locator("#assembled-revision").getAttribute("data-ready") === "true", "Reviewed revision should become visible.");
-      textIncludes(await page.locator("#assembled-packet").textContent(), "REVIEWED PROMPT CAPSULE · REVISION 1", "Reviewed revision heading");
+      textIncludes(await page.locator("#assembled-packet").textContent(), "# Prompt Capsule: Open Lesson Field", "Reviewed revision heading");
+      textIncludes(await page.locator("#assembled-packet").textContent(), "- State: `open-lesson-field.v2` · revision `1`", "Reviewed revision identity");
+      textIncludes(await page.locator("#assembled-packet").textContent(), "- Handoff standing: `reviewed-revision-current`", "Reviewed revision standing");
       textIncludes(await page.locator("#assembled-packet").textContent(), "Grade 9", "Reviewed revision frozen grade");
       assert(!(await page.locator("#restore-revision").isDisabled()), "Restore should become available after assembly.");
       assert(!(await page.locator("#print").isDisabled()), "Reviewed print should become available after assembly.");
@@ -630,9 +881,11 @@ async function lifecycleContract(browser, directUrl) {
     });
     let reviewedRevisionOne = "";
     let reviewedRevisionOneDiff = "";
+    let reviewedRevisionOneFingerprint = "";
     await verify("lifecycle · later edits mark changes while preserving reviewed revision", async () => {
       reviewedRevisionOne = await page.locator("#assembled-packet").textContent();
       reviewedRevisionOneDiff = await page.locator("#revision-diff").textContent();
+      reviewedRevisionOneFingerprint = promptFingerprintFrom(reviewedRevisionOne);
       await page.locator("#grade").selectOption("Grades 11–12");
       await page.locator("#minutes").fill("35");
       const state = await assertStateContract(page);
@@ -643,6 +896,8 @@ async function lifecycleContract(browser, directUrl) {
       textIncludes(await page.locator("#packet").textContent(), "Grades 11–12", "Changed working capsule");
       textIncludes(await page.locator("#packet").textContent(), "35-minute", "Changed working-capsule timing");
       assert(await page.locator("#assembled-packet").textContent() === reviewedRevisionOne, "Reviewed revision 1 should remain immutable while controls change.");
+      assert(promptFingerprintFrom(await page.locator("#assembled-packet").textContent()) === reviewedRevisionOneFingerprint, "Reviewed revision 1 should retain its assembled state fingerprint while working controls change.");
+      assert(await page.evaluate(() => window.openLessonField.promptCapsuleFingerprint()) !== reviewedRevisionOneFingerprint, "Working Prompt Capsule fingerprint should identify the later working state.");
       assert(await page.locator("#revision-diff").textContent() === reviewedRevisionOneDiff, "Frozen revision diff should retain the changes included in revision 1 while later edits remain pending.");
       const pendingChanges = await page.locator("#changes-since-reviewed-revision li").allTextContents();
       assert(pendingChanges.length === 2, `Visible pending-change ledger should retain both edits since revision 1; received ${JSON.stringify(pendingChanges)}.`);
@@ -703,6 +958,7 @@ async function lifecycleContract(browser, directUrl) {
       assert(await page.locator("#minutes").inputValue() === "55", "Restore should rehydrate the assembled timing control.");
       textIncludes(await page.locator("#packet").textContent(), "Grade 9", "Restored working capsule");
       assert(await page.locator("#assembled-packet").textContent() === reviewedRevisionOne, "Restore should preserve the reviewed snapshot.");
+      assert(await page.evaluate(() => window.openLessonField.promptCapsuleFingerprint()) === reviewedRevisionOneFingerprint, "Restore should reconcile the working Prompt Capsule fingerprint to the reviewed snapshot.");
       textIncludes(await page.locator("#changes-since-reviewed-revision").textContent(), "Current working controls match reviewed revision 1", "Restored pending-change ledger");
       assert(await page.locator("#assemble").isDisabled(), "Restore should disable assembly when controls match revision 1.");
     });
@@ -714,7 +970,7 @@ async function lifecycleContract(browser, directUrl) {
       const state = await assertStateContract(page);
       assert(state.assembly.revision === 2 && state.assembly.status === "reviewed-revision-current", "Second assembly should create current reviewed revision 2.");
       textIncludes(await page.locator("#revision-diff").textContent(), "Grade band", "Revision 2 included-change receipt");
-      textIncludes(await page.locator("#assembled-packet").textContent(), "REVIEWED PROMPT CAPSULE · REVISION 2", "Revision 2 heading");
+      textIncludes(await page.locator("#assembled-packet").textContent(), "- State: `open-lesson-field.v2` · revision `2`", "Revision 2 identity");
       assert(await page.locator("#assemble").isDisabled(), "Current revision 2 should disable another assembly.");
       assert((await page.locator("#assemble").textContent()).trim() === "Reviewed revision 2 is current", "Assembly control should name revision 2 as current.");
       await page.locator("#assemble").evaluate((button) => button.click());
@@ -725,7 +981,8 @@ async function lifecycleContract(browser, directUrl) {
       await page.locator("#select-packet").click();
       const selected = await page.evaluate(() => window.getSelection()?.toString() || "");
       const assembled = await page.locator("#assembled-packet").textContent();
-      assert(selected === assembled, "Post-assembly Select action should select the reviewed snapshot.");
+      assert(assembled.endsWith("\n"), "Reviewed Prompt Capsule should retain its portable terminal line feed.");
+      assert(selected === assembled.slice(0, -1), "Post-assembly Select action should select every visible character; the DOM selection API omits the terminal file line feed.");
     });
     await verify("lifecycle · Print action calls the reviewed-handoff print route", async () => {
       await page.evaluate(() => {
@@ -743,6 +1000,14 @@ async function lifecycleContract(browser, directUrl) {
 
 async function noJavaScriptContract(browser, directUrl, hostUrl) {
   await verify("no-JavaScript · standalone static route remains complete and contained", async () => {
+    const enhanced = await openPage(browser, directUrl, VIEWPORTS[0]);
+    let expectedPlain = "";
+    try {
+      await waitForEnhanced(enhanced.page);
+      expectedPlain = await enhanced.page.evaluate(() => window.openLessonField.promptCapsule());
+    } finally {
+      await enhanced.context.close();
+    }
     const { context, page, telemetry } = await openPage(browser, directUrl, VIEWPORTS[0], { javaScriptEnabled: false });
     try {
       assert(!(await page.locator("html").evaluate((html) => html.classList.contains("is-enhanced"))), "Static route should remain in its authored state.");
@@ -756,7 +1021,9 @@ async function noJavaScriptContract(browser, directUrl, hostUrl) {
       textIncludes(await page.locator("#sampling-prompt").textContent(), "Generate exactly 5 distinct candidate answers", "Static bounded Verbalized Sampling fan-out");
       textIncludes(await page.locator("#sampling-prompt").textContent(), "residual or unlisted response mass", "Static VS residual-mass disclosure");
       textIncludes(await page.locator("#route-event-prompt").textContent(), "Named binary event", "Static separate route/event assessment");
-      textIncludes(await page.locator("#packet").textContent(), "WORKING PROMPT CAPSULE", "Static capsule");
+      const staticPlain = await page.locator("#packet").textContent();
+      textIncludes(staticPlain, "# Prompt Capsule: Open Lesson Field", "Static capsule");
+      assert(staticPlain === expectedPlain, `Authored no-JavaScript and enhanced initial plain Markdown should be byte-identical; received ${Buffer.byteLength(staticPlain, "utf8")} and ${Buffer.byteLength(expectedPlain, "utf8")} bytes.`);
       await assertLayout(page, "Static standalone mobile");
       assertTelemetry(telemetry);
     } finally {
@@ -764,13 +1031,13 @@ async function noJavaScriptContract(browser, directUrl, hostUrl) {
     }
   });
   await verify("no-JavaScript · embedded instrument and parent static equivalent remain readable", async () => {
-    const { context, page, telemetry } = await openPage(browser, hostUrl, VIEWPORTS[0], { javaScriptEnabled: false });
+    const { context, page, telemetry } = await openHostedLessonPage(browser, hostUrl, VIEWPORTS[0], { javaScriptEnabled: false });
     try {
       assert(await page.locator(".lesson-field-static-equivalent").isVisible(), "Parent page should retain the static semantic equivalent.");
       const { frame } = await iframeSurface(page);
       assert(await frame.locator("noscript .boundary").isVisible(), "Embedded instrument should expose its static posture.");
       assert(await frame.locator("#coordination-title").isVisible(), "Embedded static instrument should retain the class-size depth explanation.");
-      textIncludes(await frame.locator("#packet").textContent(), "WORKING PROMPT CAPSULE", "Embedded static capsule");
+      textIncludes(await frame.locator("#packet").textContent(), "# Prompt Capsule: Open Lesson Field", "Embedded static capsule");
       await assertLayout(page, "Static parent mobile");
       await assertLayout(frame, "Static embedded mobile");
       assertTelemetry(telemetry);
@@ -802,7 +1069,7 @@ async function printContract(browser, directUrl, hostUrl) {
     }
   });
   await verify("print · parent page substitutes its static semantic equivalent for the iframe", async () => {
-    const { context, page, telemetry } = await openPage(browser, hostUrl, VIEWPORTS[1]);
+    const { context, page, telemetry } = await openHostedLessonPage(browser, hostUrl, VIEWPORTS[1]);
     try {
       await page.emulateMedia({ media: "print" });
       assert(!(await page.locator(IFRAME_SELECTOR).isVisible()), "Parent print should leave the interactive iframe outside the page artifact.");
@@ -870,6 +1137,8 @@ async function main() {
     browser = await chromium.launch();
     await directViewportChecks(browser, directUrl);
     await embeddedViewportChecks(browser, hostUrl);
+    await embeddedPromptCapsuleExchangeContract(browser, hostUrl);
+    await promptCapsuleContract(browser, directUrl);
     await alignmentContract(browser, directUrl);
     await controlConsequenceContract(browser, directUrl);
     await lifecycleContract(browser, directUrl);

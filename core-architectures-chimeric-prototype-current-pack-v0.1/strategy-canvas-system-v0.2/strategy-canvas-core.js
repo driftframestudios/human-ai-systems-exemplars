@@ -1,8 +1,48 @@
-/* Strategy Canvas shared state engine v0.2.2 — dependency-free and DOM-independent. */
+/* Strategy Canvas shared state engine v0.2.4 — dependency-free and DOM-independent. */
 (function exposeStrategyCanvasCore(global) {
   'use strict';
 
   const SCHEMA_VERSION = 'strategy-canvas/2.0';
+  const PROMPT_CAPSULE_CONTRACT = 'prompt-capsule/0.1.0';
+  const PROMPT_CAPSULE_VIEWS = Object.freeze(['plain', 'skill-assisted']);
+  const SKILL_REVISION = '058469145696009485aa68c089f424b00adc10ae';
+  const PROMPT_CAPSULE_SKILLS = Object.freeze([
+    Object.freeze({
+      name: 'Stateful artifact behavior contracts',
+      publicUrl: 'https://schemas.radiantnull.com/skills/stateful-artifact-behavior-contracts/',
+      path: '.agents/skills/stateful-artifact-behavior-contracts/SKILL.md',
+      sha256: '596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a',
+      purpose: 'Keep the accepted state, prompt projection, self-roundtrip, and recovery route in agreement.'
+    }),
+    Object.freeze({
+      name: 'Source authority mapping',
+      publicUrl: 'https://schemas.radiantnull.com/skills/source-authority-mapping/',
+      path: '.agents/skills/source-authority-mapping/SKILL.md',
+      sha256: '706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5',
+      purpose: 'Keep semantic ownership, source location, projections, and receiving use distinct.'
+    }),
+    Object.freeze({
+      name: 'Bounded support routing',
+      publicUrl: 'https://schemas.radiantnull.com/skills/bounded-support-routing/',
+      path: '.agents/skills/bounded-support-routing/SKILL.md',
+      sha256: '80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402',
+      purpose: 'Shape a finite support request with an observable return and stopping event.'
+    })
+  ]);
+  const PROMPT_CAPSULE_RELATED_LOOPS = Object.freeze([
+    Object.freeze({
+      id: 'repository-reentry',
+      name: 'Re-enter, make one bounded change, and return it clearly',
+      publicUrl: 'https://schemas.radiantnull.com/collaboration/#repository-reentry',
+      fit: 'Use when this versioned canvas carries a named question or requested change into resumed repository work and the return needs an exact stopping and re-entry point.'
+    }),
+    Object.freeze({
+      id: 'public-release',
+      name: 'Publish a repeatable, byte-comparable artifact through a named destination',
+      publicUrl: 'https://schemas.radiantnull.com/collaboration/#public-release',
+      fit: 'Use after people accept this canvas revision as source for a public artifact whose declared files and bytes need a named delivery receiver.'
+    })
+  ]);
   const SERIES = Object.freeze(['current', 'goodEnough', 'desired']);
   const ACTIONS = Object.freeze(['eliminate', 'reduce', 'raise', 'create', 'hold', 'open']);
 
@@ -763,23 +803,222 @@
     };
   }
 
-  function promptCapsule(state) {
-    const normalized = normalizeState(state);
+  function markdownInline(value, fallback = '') {
+    return text(value, fallback)
+      .replace(/\r\n?/g, '\n')
+      .replace(/\s*\n\s*/g, ' ')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\\/g, '\\\\')
+      .replace(/([!#@`*_[\]|~])/g, '\\$1')
+      .replace(/\b((?:https?|ftp):)(?=\/\/)/gi, (protocol) => `${protocol.slice(0, -1)}\\:`)
+      .replace(/\bwww\./gi, (prefix) => `${prefix.slice(0, -1)}\\.`);
+  }
+
+  function fnv1a32Utf8(value) {
+    let hash = 0x811c9dc5;
+    const update = (byte) => {
+      hash ^= byte;
+      hash = Math.imul(hash, 0x01000193) >>> 0;
+    };
+    for (const symbol of String(value)) {
+      const codePoint = symbol.codePointAt(0);
+      if (codePoint <= 0x7f) {
+        update(codePoint);
+      } else if (codePoint <= 0x7ff) {
+        update(0xc0 | (codePoint >>> 6));
+        update(0x80 | (codePoint & 0x3f));
+      } else if (codePoint <= 0xffff) {
+        update(0xe0 | (codePoint >>> 12));
+        update(0x80 | ((codePoint >>> 6) & 0x3f));
+        update(0x80 | (codePoint & 0x3f));
+      } else {
+        update(0xf0 | (codePoint >>> 18));
+        update(0x80 | ((codePoint >>> 12) & 0x3f));
+        update(0x80 | ((codePoint >>> 6) & 0x3f));
+        update(0x80 | (codePoint & 0x3f));
+      }
+    }
+    return `fnv1a32-utf8:${hash.toString(16).padStart(8, '0')}`;
+  }
+
+  function promptCapsuleScope(normalized) {
     const context = normalized.extensions?.contextCanvas;
     const aiChannel = context?.aiCollaboration;
     const includeReviewed = context?.collaboration?.session?.includeReviewedStateInAI === true;
-    const aiScope = includeReviewed && Array.isArray(aiChannel?.consentScope) && aiChannel.consentScope.length
-      ? `AI handoff scope: ${aiChannel.consentScope.join(', ')}; reviewed revision ${aiChannel.reviewedRevision ?? 'open'}. Network policy: ${aiChannel.networkPolicy || 'local-only'}.`
-      : 'AI handoff scope: the receiving collaborator should ask which reviewed fields are in scope before assembling an external packet.';
-    const rows = selectors.orderedDimensions(normalized).map((dimension) =>
-      `- ${dimension.label}: current ${dimension.scores.current}; good enough ${dimension.scores.goodEnough}; desired ${dimension.scores.desired}; consequence ${dimension.consequenceWeight}/5; action ${dimension.action}. Evidence basis: ${dimension.evidenceBasis || 'open for the next review'}`
-    ).join('\n');
-    return `Collaborate with this Strategy Canvas as an inspectable working revision.\n\nDecision object: ${normalized.meta.decisionObject}\nHorizon: ${normalized.meta.horizon}\nMethod posture: ${normalized.method.posture}\nScore meaning: ${normalized.method.scoreMeaning}\nConsequence-weight meaning: ${normalized.method.weightMeaning}\n${aiScope}\n\nCarry these distinctions forward:\n- Current describes the present working reading.\n- Good enough describes the threshold for the named horizon.\n- Desired describes the stronger future condition.\n- Consequence weight directs discussion attention and leaves the score geometry unchanged.\n- Human ballots, system-derived aggregates, and AI-attributed proposals retain distinct standing.\n- AI suggestions enter as visibly attributed proposals outside human aggregates.\n\nDimensions:\n${rows}\n\nReturn proposed interpretations with their evidence basis, open conditions, and receiving review surface. Preserve each stable dimension ID.`;
+    return includeReviewed && Array.isArray(aiChannel?.consentScope) && aiChannel.consentScope.length
+      ? `Reviewed fields in scope: ${aiChannel.consentScope.map((value) => markdownInline(value)).join(', ')}. Reviewed revision: ${markdownInline(String(aiChannel.reviewedRevision ?? 'open'))}. Network policy: ${markdownInline(aiChannel.networkPolicy || 'local-only')}.`
+      : 'The receiving collaborator should ask which reviewed fields are in scope before assembling an external packet.';
+  }
+
+  function canonicalValue(value) {
+    if (Array.isArray(value)) return value.map(canonicalValue);
+    if (value && typeof value === 'object') {
+      return Object.fromEntries(
+        Object.keys(value).sort().map((key) => [key, canonicalValue(value[key])])
+      );
+    }
+    return value;
+  }
+
+  function promptCapsuleStateProjection(state) {
+    const normalized = normalizeState(state);
+    return {
+      contract: PROMPT_CAPSULE_CONTRACT,
+      capsule: markdownInline(normalized.meta.id),
+      source: 'strategy-canvas-canonical@0.2.4',
+      state: {
+        schemaVersion: markdownInline(normalized.schemaVersion),
+        revision: normalized.meta.revision
+      },
+      purpose: {
+        title: markdownInline(normalized.meta.title),
+        decisionObject: markdownInline(normalized.meta.decisionObject),
+        horizon: markdownInline(normalized.meta.horizon),
+        lifecycle: markdownInline(normalized.lifecycle.status)
+      },
+      method: {
+        posture: markdownInline(normalized.method.posture),
+        scoreMeaning: markdownInline(normalized.method.scoreMeaning),
+        weightMeaning: markdownInline(normalized.method.weightMeaning)
+      },
+      scale: {
+        min: normalized.scale.min,
+        max: normalized.scale.max,
+        step: normalized.scale.step,
+        lowLabel: markdownInline(normalized.scale.lowLabel),
+        middleLabel: markdownInline(normalized.scale.middleLabel),
+        highLabel: markdownInline(normalized.scale.highLabel)
+      },
+      dimensions: selectors.orderedDimensions(normalized).map((dimension) => ({
+        id: markdownInline(dimension.id),
+        label: markdownInline(dimension.label),
+        definition: markdownInline(dimension.definition, 'Open for local definition.'),
+        anchors: {
+          low: markdownInline(dimension.anchors.low, 'Open.'),
+          middle: markdownInline(dimension.anchors.middle, 'Open.'),
+          high: markdownInline(dimension.anchors.high, 'Open.')
+        },
+        scores: {
+          current: dimension.scores.current,
+          goodEnough: dimension.scores.goodEnough,
+          desired: dimension.scores.desired
+        },
+        consequenceWeight: dimension.consequenceWeight,
+        action: markdownInline(dimension.action),
+        evidenceBasis: markdownInline(dimension.evidenceBasis, 'Open for the next review.')
+      })),
+      aiScope: promptCapsuleScope(normalized)
+    };
+  }
+
+  function promptCapsuleFingerprint(state) {
+    return fnv1a32Utf8(JSON.stringify(canonicalValue(promptCapsuleStateProjection(state))));
+  }
+
+  function promptCapsuleMarkdown(state, options = {}) {
+    const normalized = normalizeState(state);
+    const requestedView = typeof options === 'string' ? options : options?.view;
+    const view = PROMPT_CAPSULE_VIEWS.includes(requestedView) ? requestedView : 'plain';
+    const fingerprint = promptCapsuleFingerprint(normalized);
+    const aiScope = promptCapsuleScope(normalized);
+    const dimensionSections = selectors.orderedDimensions(normalized).map((dimension) => [
+      `### ${markdownInline(dimension.label)} (\`${markdownInline(dimension.id)}\`)`,
+      '',
+      `- Meaning: ${markdownInline(dimension.definition, 'Open for local definition.')}`,
+      `- Low anchor: ${markdownInline(dimension.anchors.low, 'Open.')}`,
+      `- Middle anchor: ${markdownInline(dimension.anchors.middle, 'Open.')}`,
+      `- High anchor: ${markdownInline(dimension.anchors.high, 'Open.')}`,
+      `- Readings: current \`${dimension.scores.current}\`; good enough \`${dimension.scores.goodEnough}\`; desired \`${dimension.scores.desired}\`.`,
+      `- Consequence weight: \`${dimension.consequenceWeight}/5\`.`,
+      `- Action lens: \`${markdownInline(dimension.action)}\`.`,
+      `- Evidence basis: ${markdownInline(dimension.evidenceBasis, 'Open for the next review.')}`
+    ].join('\n')).join('\n\n');
+    const sections = [
+      `# Prompt Capsule: ${markdownInline(normalized.meta.title)}`,
+      '',
+      `- Contract: \`${PROMPT_CAPSULE_CONTRACT}\``,
+      `- Capsule: \`${markdownInline(normalized.meta.id)}\``,
+      '- Source: `strategy-canvas-canonical@0.2.4`',
+      `- State: \`${normalized.schemaVersion}\` · revision \`${normalized.meta.revision}\``,
+      `- Fingerprint: \`${fingerprint}\``,
+      `- View: \`${view}\``,
+      '',
+      '## Purpose and target',
+      '',
+      'Collaborate with this Strategy Canvas as an inspectable working revision.',
+      '',
+      `- Decision object: ${markdownInline(normalized.meta.decisionObject)}`,
+      `- Horizon: ${markdownInline(normalized.meta.horizon)}`,
+      `- Lifecycle: \`${normalized.lifecycle.status}\``,
+      '',
+      '## Relevant context and inputs',
+      '',
+      `- Method posture: \`${markdownInline(normalized.method.posture)}\``,
+      `- Score meaning: ${markdownInline(normalized.method.scoreMeaning)}`,
+      `- Consequence-weight meaning: ${markdownInline(normalized.method.weightMeaning)}`,
+      `- Scale: minimum \`${normalized.scale.min}\`; maximum \`${normalized.scale.max}\`; step \`${normalized.scale.step}\`. Labels — low: ${markdownInline(normalized.scale.lowLabel)}; middle: ${markdownInline(normalized.scale.middleLabel)}; high: ${markdownInline(normalized.scale.highLabel)}.`,
+      '',
+      '## Working state',
+      '',
+      dimensionSections,
+      '',
+      '## Boundaries and human-held decisions',
+      '',
+      '- Current describes the present working reading. Good enough describes the threshold for the named horizon. Desired describes the stronger future condition.',
+      '- Consequence weight directs discussion attention and leaves the score geometry unchanged.',
+      '- Human ballots, system-derived aggregates, and AI-attributed proposals retain distinct standing. AI suggestions enter as visibly attributed proposals outside human aggregates.',
+      '- People retain decisions about handoff scope, interpretation, acceptance, and publication.',
+      `- AI handoff scope: ${aiScope}`,
+      '',
+      '## Requested return',
+      '',
+      'Return a Markdown review note grouped by stable dimension ID. For each dimension, include the proposed interpretation, evidence basis, open condition, and receiving review surface.',
+      '',
+      '## Related loops',
+      '',
+      'These public collaboration loops fit only when the receiving work meets the stated condition:',
+      '',
+      ...PROMPT_CAPSULE_RELATED_LOOPS.map((loop) => [
+        `- \`${loop.id}\` — [${loop.name}](${loop.publicUrl})`,
+        `  - Fit condition: ${loop.fit}`
+      ].join('\n')),
+      '',
+      '## Evidence and recovery',
+      '',
+      '- Carry each dimension’s evidence basis with its interpretation. Treat an open basis as a question for the next review.',
+      '- If the decision object, horizon, reviewed scope, or authority remains unclear, return the smallest clarifying question while keeping this working revision available.'
+    ];
+    if (view === 'skill-assisted') {
+      sections.push(
+        '',
+        '## Skill assistance',
+        '',
+        'These public repository skills can shape the return while the Strategy Canvas remains the state authority:',
+        '',
+        ...PROMPT_CAPSULE_SKILLS.map((skill) => [
+          `- [${skill.name}](${skill.publicUrl}) — ${skill.purpose}`,
+          `  - Repository path: \`${skill.path}\``,
+          `  - Source revision: \`${SKILL_REVISION}\``,
+          `  - Source SHA-256: \`${skill.sha256}\``
+        ].join('\n'))
+      );
+    }
+    return `${sections.join('\n')}\n`;
+  }
+
+  function promptCapsule(state) {
+    return promptCapsuleMarkdown(state, { view: 'plain' });
   }
 
   global.StrategyCanvasCore = Object.freeze({
-    version: '0.2.2',
+    version: '0.2.4',
     schemaVersion: SCHEMA_VERSION,
+    promptCapsuleContract: PROMPT_CAPSULE_CONTRACT,
+    promptCapsuleViews: PROMPT_CAPSULE_VIEWS,
+    promptCapsuleSkillRevision: SKILL_REVISION,
+    promptCapsuleRelatedLoops: PROMPT_CAPSULE_RELATED_LOOPS,
     series: SERIES,
     errcActions: ACTIONS,
     defaultState: clone(DEFAULT_STATE),
@@ -796,6 +1035,9 @@
     createStore,
     serialize,
     toJSONLD,
+    promptCapsuleStateProjection,
+    promptCapsuleFingerprint,
+    promptCapsuleMarkdown,
     promptCapsule
   });
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -2,6 +2,7 @@
   "id": "prod-projection.configuration.v1",
   "version": "1",
   "primary_manifest": "deployment/cpanel/primary-route-manifest.json",
+  "asset_inventory": "context-canvas-project-surface/asset-inventory.json",
   "iframe_origin_robots": "deployment/cpanel/iframe-origin-robots.txt",
   "publication": {
     "base_url": "https://vik.guru/",

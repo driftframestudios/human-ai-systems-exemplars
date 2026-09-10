@@ -157,6 +157,13 @@
   .sc-implications summary { cursor: pointer; font-weight: 750; }
   .sc-implications ul { padding-inline-start: 1.2rem; }
   .sc-implications li + li { margin-block-start: 0.55rem; }
+  .sc-related-loops { margin-block-start: 1rem; padding: 0.4rem 1rem 0.9rem; border: 1px solid var(--sc-line); background: var(--sc-sheet); }
+  .sc-related-loops summary { min-height: 2.75rem; padding-block: 0.55rem; cursor: pointer; font-weight: 750; }
+  .sc-related-loops a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+  .sc-related-loops :is(summary, a):focus-visible { outline: 3px solid var(--sc-focus); outline: 3px solid color-mix(in srgb, var(--sc-focus) 66%, transparent); outline-offset: 3px; }
+  .sc-related-loops ul { margin-block-end: 0; padding-inline-start: 1.2rem; }
+  .sc-related-loops li + li { margin-block-start: 0.9rem; }
+  .sc-related-loops li p { margin: 0.25rem 0 0; max-width: var(--sc-readable); }
   .sc-label { display: block; margin-block-end: 0.25rem; font-size: 0.78rem; font-weight: 750; }
   .sc-field { display: grid; gap: 0.25rem; }
   .sc-help { color: var(--sc-muted); font-size: 0.8rem; }
@@ -251,6 +258,12 @@
   .sc-code { max-height: 26rem; overflow: auto; padding: 1rem; border: 1px solid var(--sc-line); background: #292a29; color: #f8f5e9; font: 0.78rem/1.55 var(--sc-mono); white-space: pre-wrap; overflow-wrap: anywhere; }
   .sc-static-twin { margin-block: 1.5rem; padding: 1rem; border: 2px solid var(--sc-ink); background: var(--sc-sheet); }
   .sc-static-twin svg { min-width: 760px; width: 100%; height: auto; }
+  .sc-static-capsule { margin-block-start: 1rem; padding-block-start: 1rem; border-block-start: 1px solid var(--sc-line); }
+  .sc-capsule-view-control { margin: 0.8rem 0; padding: 0.75rem; border: 1px solid var(--sc-line); }
+  .sc-capsule-view-options { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .sc-capsule-view-options label { display: inline-flex; align-items: center; gap: 0.45rem; min-height: 2.75rem; padding: 0.45rem 0.7rem; border: 1px solid var(--sc-line); background: var(--sc-sheet); cursor: pointer; }
+  .sc-capsule-view-options input[type="radio"] { width: 1.1rem; min-height: 1.1rem; margin: 0; padding: 0; accent-color: var(--sc-focus); }
+  .sc-capsule-view-options label:has(input:checked) { border-color: var(--sc-focus); box-shadow: inset 0 -3px 0 var(--sc-focus); font-weight: 750; }
   .sc-method-source { margin-block-start: 1.25rem; padding-block-start: 1rem; border-block-start: 1px solid var(--sc-line); }
   .sc-method-source h2 { margin-block-end: 0.55rem; color: var(--sc-ink); font-family: var(--sc-sans); font-size: 1rem; font-weight: 800; }
   .sc-method-source p:last-child { margin-block-end: 0; }
@@ -279,12 +292,14 @@
   }
 
   @media (forced-colors: active) {
-    .sc-series-line, .sc-grid-line, .sc-axis, .sc-marker, .sc-selection-ring, .sc-dimension-label-surface { forced-color-adjust: auto; }
+    .sc-series-line, .sc-grid-line, .sc-axis, .sc-marker, .sc-selection-ring, .sc-dimension-label-surface, .sc-dimension-label { forced-color-adjust: auto; }
     .sc-handle[data-series="current"] .sc-marker { fill: CanvasText; stroke: CanvasText; }
     .sc-handle[data-series="desired"] .sc-marker { fill: Canvas; stroke: LinkText; }
     .sc-handle[data-series="goodEnough"] .sc-marker { fill: Canvas; stroke: Highlight; }
     .sc-action-cell rect { fill: Canvas; stroke: CanvasText; forced-color-adjust: auto; }
     .sc-action-label { fill: CanvasText; }
+    .sc-dimension-label-surface { fill: Canvas; stroke: CanvasText; }
+    .sc-dimension-label { fill: CanvasText; }
     .sc-dimension-hit[data-selected="true"] .sc-dimension-label-surface,
     .sc-dimension-hit:focus-visible .sc-dimension-label-surface { fill: Canvas; stroke: Highlight; }
     .sc-dimension-current-marker { fill: CanvasText; }

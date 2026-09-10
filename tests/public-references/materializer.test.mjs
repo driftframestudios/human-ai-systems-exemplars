@@ -438,6 +438,29 @@ test("materializes a hosted iframe only when its configured route profile matche
   );
 });
 
+test("materializes a hosted iframe whose route earns Markdown downloads", async (t) => {
+  const source = pageWithIframeTwins().replace(
+    'sandbox="allow-scripts"',
+    'sandbox="allow-downloads allow-scripts"',
+  );
+  const paths = await fixture(t, source);
+  const iframeRouteManifestPath = await iframeRouteManifest(paths, {
+    sandboxTokens: ["allow-downloads", "allow-scripts"],
+  });
+
+  const result = await materializePublicReferences({
+    ...paths,
+    iframeRouteManifestPath,
+    environment: { [IFRAME_KEY]: IFRAME_ROUTE },
+  });
+
+  assert.equal(result.iframeCount, 1);
+  assert.match(
+    await readFile(join(paths.outputRoot, "context-canvas", "index.html"), "utf8"),
+    /sandbox="allow-downloads allow-scripts" allow="clipboard-write"/,
+  );
+});
+
 test("materializes a supplemental Context Canvas iframe with its local full view", async (t) => {
   const local = "conditioning-field.html";
   const source = `<!doctype html>
@@ -1133,7 +1156,7 @@ test("the repository source materializes from discovered keys without frozen rou
   assert.equal(inventory.iframeCount, 0);
 
   const expectedLocalFallback =
-    "prototypes/core-architectures/chimeric-pack-v0.1/heart-chart-chimeric-prototype-v0.1.5.html";
+    "prototypes/core-architectures/chimeric-pack-v0.1/heart-chart-chimeric-prototype-v0.1.6.html";
   const escapedLocalFallback = expectedLocalFallback.replace(
     /[.*+?^${}()|[\]\\]/g,
     "\\$&",
