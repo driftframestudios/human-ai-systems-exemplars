@@ -14,12 +14,16 @@
     "Core Architectures and Site Readings"
   ],
   "interaction_contract": {
-    "selection": "Visual-form selection, exemplar selection, and Reserved-group visibility remain distinct, visible states.",
+    "selection": "Visual-form selection, exemplar selection, and Reserved-group visibility remain distinct, visible states. Every exemplar action names its exact example and position, and pressed state identifies the current example.",
     "exchange": "Paste and local-file routes share one size-limited interactive-render validation and commit path. Renderable collections, closed references, and finite chart values are checked; schema-optional recommendation scores appear as Not scored.",
     "rendering": "Accepted Atlas strings remain inert text in controls, HTML, and SVG output.",
     "recovery": "A rejected import leaves the last accepted Atlas and view state active.",
-    "copy": "Prompt, Atlas JSON, and JSON-LD actions expose selectable content together with clipboard status.",
-    "semantic_twin": "The JSON-LD graph is rebuilt from the accepted Atlas and current view state."
+    "prompt_capsule": "The authored no-script plain Markdown and the interactive plain and skill-assisted views follow prompt-capsule/0.1.0. Each view carries the complete public Atlas record, exactly eight selection values that can change the result, human-held decisions, a requested return, evidence and recovery, and two conditionally useful collaboration loops.",
+    "copy": "Visible Prompt Capsule Markdown, clipboard output, downloaded Markdown, and the public API expose the same bytes for the selected view. Atlas JSON and JSON-LD remain separately selectable structured twins.",
+    "fingerprint": "A deterministic FNV-1a UTF-8 fingerprint covers the key-canonicalized public Atlas and its eight selection values together with stable capsule identity. Markdown-view choice, interface status, clipboard state, and compatible private extensions retain their own roles outside that fingerprint.",
+    "extensions": "Compatible root and nested Atlas extensions survive accepted JSON import and export while the public Prompt Capsule projects the fields authored by this Atlas version.",
+    "api": "The frozen visualizationFidelityAtlas API returns detached state and routes API imports through the same validated atomic commit and retained-state recovery path as visitor imports.",
+    "semantic_twin": "The selected form, exemplar, visible controls, JSON export, JSON-LD graph, and Prompt Capsule are rebuilt from the accepted Atlas and current selection."
   },
   "recommended_repository_paths": {
     "field_guide": "packages/field-guide/src/stabilizers/visual-data-communication/",

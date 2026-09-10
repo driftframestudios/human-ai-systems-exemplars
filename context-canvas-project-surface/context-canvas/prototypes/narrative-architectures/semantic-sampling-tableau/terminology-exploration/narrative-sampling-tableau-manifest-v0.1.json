@@ -8,23 +8,23 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 1806,
-      "sha256": "fad4336ae127460e630369957c3e869e458b9f8977c8e773eb7e842d4a3fbb16"
+      "bytes": 2033,
+      "sha256": "0a1ebe925ef374e783d420bcec23d9fe8c626d71747c16cbbe23058191712906"
     },
     {
       "path": "narrative-sampling-tableau-chimeric-prototype-v0.1.html",
-      "bytes": 163644,
-      "sha256": "f4dfa72d989ce0004c93d22db630c5619c76748ff66499f03bea56990c4bf321"
+      "bytes": 212221,
+      "sha256": "66d98b8dbdb8bb929587e22e13b848229cbedd1a60bb32ce0c4f71ec45ef7436"
     },
     {
       "path": "narrative-sampling-tableau-prototype-addendum-v0.1.md",
-      "bytes": 4884,
-      "sha256": "873797939d15f77346f841c76be8f6af2c82ac78888136c2ef8f302ead56ddb6"
+      "bytes": 6009,
+      "sha256": "6309b7c58339b23657b5dc9e4987b5630defbc3cdc77096cbfafb5b05491e5c0"
     },
     {
       "path": "narrative-sampling-tableau-prototype-profile-v0.1.yaml",
-      "bytes": 6646,
-      "sha256": "016440013226cb45a8e6ab84325222547e1dabf00350f75b32fe9002e938ebf2"
+      "bytes": 7196,
+      "sha256": "7d389d1da82ab81b70772910cc04c0139ece7cbbf3fefff13d7ad2ce820379d3"
     },
     {
       "path": "narrative-sampling-tableau-state.schema.v0.1.json",
@@ -72,7 +72,11 @@
     "Recovery is a full family that also acts as a cross-system routing layer.",
     "Visual comparison uses common scales and accessible table equivalents.",
     "Stable identities survive sorting, filtering, blending, and version comparison.",
-    "Public-safe projection excludes private locators, source-local annotation, and unreviewed inference before rendering."
+    "Public-safe projection excludes private locators, source-local annotation, and unreviewed inference before rendering.",
+    "Prompt Capsule 0.1.0 provides complete plain and skill-assisted Markdown views from the accepted sampling state with one state-only fingerprint.",
+    "Prompt Capsule state includes success criteria, outcome and condition-profile boundary sets, candidate dimension scores, baseline comparison, and the complete formal statistical-fit record when enabled.",
+    "Imported candidates provide a finite zero-to-ten score for every declared dimension, preserving the distinction between absence and a measured zero.",
+    "Material comparison, probability-role, and formal-fit controls refresh the visible and programmatic Prompt Capsule together."
   ],
   "researchAnchor": {
     "id": "arxiv:2510.01171",
@@ -86,6 +90,29 @@
       "na:terminological-registry-planning-proposal/v0.1",
       "na:conation-motion-naming-exemplar/v0.1"
     ]
+  },
+  "promptCapsule": {
+    "contract": "prompt-capsule/0.1.0",
+    "views": [
+      "plain",
+      "skill-assisted"
+    ],
+    "stateAuthority": "narrative-sampling-tableau-state/0.1",
+    "defaultView": "plain",
+    "relatedLoops": [
+      "#skill-from-receiving-use",
+      "#visitor-surface-change"
+    ],
+    "plainProjectionIncludes": [
+      "outcome success criteria",
+      "outcome exclusions",
+      "condition-profile exclusions",
+      "per-candidate dimension scores",
+      "baseline comparison",
+      "formal statistical-fit state when enabled"
+    ],
+    "candidateScoreImportBoundary": "Every imported candidate provides one finite score from zero through ten for every declared dimension.",
+    "materialControlSynchronization": "Comparison, probability-role, and formal statistical-fit controls refresh active visible, copy, download, and API Markdown from the accepted state."
   },
   "validationReport": "narrative-sampling-tableau-validation-report-v0.1.json",
   "nextUse": [

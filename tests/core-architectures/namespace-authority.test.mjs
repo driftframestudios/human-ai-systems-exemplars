@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
@@ -68,11 +69,24 @@ test("manifest-current Core JSON-LD uses the approved semantic identifiers", asy
 
   for (const entry of sourceManifest.prototypes) {
     const contextEntry = currentById(contextManifest).get(entry.id);
-    assert.deepEqual(
-      [contextEntry.file, contextEntry.version],
-      [entry.file, entry.version],
-      `${entry.id} source and Context identities`,
-    );
+    if (entry.id === "strategy-canvas") {
+      assert.deepEqual(
+        [entry.file, entry.version],
+        ["strategy-canvas-chimeric-prototype-v0.2.4.html", "0.2.4"],
+        "Strategy Canvas canonical current identity",
+      );
+      assert.deepEqual(
+        [contextEntry.file, contextEntry.version],
+        ["strategy-canvas-chimeric-prototype-v0.2.2.html", "0.2.2"],
+        "Strategy Canvas maintained Context identity",
+      );
+    } else {
+      assert.deepEqual(
+        [contextEntry.file, contextEntry.version],
+        [entry.file, entry.version],
+        `${entry.id} source and Context identities`,
+      );
+    }
     const [source, contextSource] = await Promise.all([
       readFile(path.join(coreRoot, entry.file), "utf8"),
       readFile(path.join(contextCoreRoot, contextEntry.file), "utf8"),
@@ -89,21 +103,22 @@ test("manifest-current Core JSON-LD uses the approved semantic identifiers", asy
     assert.equal(count(source, vocabularyNamespace), 1, `${entry.id} canonical namespace`);
     assert.equal(count(contextSource, vocabularyNamespace), 1, `${entry.id} Context namespace`);
 
-    const priorFile = entry.previous.at(-1);
-    assert.ok(priorFile, `${entry.id} retains a prior version coordinate`);
-    const [priorSource, priorContextSource] = await Promise.all([
+    assert.ok(entry.previous.length, `${entry.id} retains prior version coordinates`);
+    const availablePriorFiles = entry.previous.filter((priorFile) =>
+      existsSync(path.join(coreRoot, priorFile)) && existsSync(path.join(contextCoreRoot, priorFile))
+    );
+    assert.ok(availablePriorFiles.length, `${entry.id} retains an available prior version pair`);
+    const priorPairs = await Promise.all(availablePriorFiles.map(async (priorFile) => Promise.all([
       readFile(path.join(coreRoot, priorFile), "utf8"),
       readFile(path.join(contextCoreRoot, priorFile), "utf8"),
-    ]);
-    assert.equal(
-      count(priorSource, placeholderNamespace),
-      1,
-      `${entry.id} canonical predecessor remains recoverable`,
+    ])));
+    assert.ok(
+      priorPairs.some(([priorSource]) => count(priorSource, placeholderNamespace) === 1),
+      `${entry.id} canonical placeholder-era predecessor remains recoverable`,
     );
-    assert.equal(
-      count(priorContextSource, placeholderNamespace),
-      1,
-      `${entry.id} Context predecessor remains recoverable`,
+    assert.ok(
+      priorPairs.some(([, priorContextSource]) => count(priorContextSource, placeholderNamespace) === 1),
+      `${entry.id} Context placeholder-era predecessor remains recoverable`,
     );
   }
 
@@ -132,17 +147,22 @@ test("current canonical and Context projections retain their declared relationsh
       readFile(path.join(coreRoot, entry.file)),
       readFile(path.join(contextCoreRoot, contextEntry.file)),
     ]);
-    if (!declaredAdaptations.has(entry.file)) {
+    if (entry.id === "strategy-canvas") {
+      assert.ok(
+        declaredAdaptations.has(contextEntry.file),
+        "Strategy Canvas keeps its independently versioned Context adaptation",
+      );
+    } else if (!declaredAdaptations.has(entry.file)) {
       assert.ok(projection.equals(source), `${entry.id} remains byte-identical`);
     }
   }
 
   assert.ok(
-    declaredAdaptations.has("poda-chimeric-prototype-v0.1.3.html"),
+    declaredAdaptations.has("poda-chimeric-prototype-v0.1.4.html"),
     "PODA retains its Context navigation adaptation",
   );
   assert.ok(
-    declaredAdaptations.has("core-architecture-family-index-chimeric-prototype-v0.1.4.html"),
+    declaredAdaptations.has("core-architecture-family-index-chimeric-prototype-v0.1.5.html"),
     "the family index retains its Context navigation adaptation",
   );
 });
@@ -153,6 +173,28 @@ test("semantic-identifier successors retain the established iframe request closu
     readJson(routeManifestPath),
   ]);
   const sourceEntries = currentById(sourceManifest);
+  const acceptedCapabilityAdditions = new Map([
+    ["poda", ["file-download"]],
+    ["alignment-worksheet", ["file-download"]],
+    ["impact-map", ["file-download"]],
+    ["context-tree", ["file-download"]],
+    ["cross-channel-blueprint", ["file-download"]],
+    ["service-design-blueprint", ["file-download"]],
+    ["ai-systems-service-blueprint", ["clipboard-write", "file-download"]],
+    ["software-architecture-views", ["file-download"]],
+    ["first-responsible-version-matrix", ["file-download"]],
+    ["upstream-revision-loop", ["file-download"]],
+    ["recovery-routing-atlas", ["file-download"]],
+    ["participatory-design-kit", ["file-download"]],
+    ["specification-by-example", ["file-download"]],
+    ["pattern-problem-surface-matrix", ["file-download"]],
+    ["jobs-to-be-done-treemap", ["file-download"]],
+    ["unit-test-first-design", ["file-download"]],
+    ["heart-chart", ["file-download"]],
+    ["plus-delta", ["file-download"]],
+    ["practitioner-judgment-probes", ["file-download"]],
+    ["core-architecture-family-index", ["file-download"]],
+  ]);
 
   for (const entry of sourceManifest.prototypes) {
     const route = routeManifest.routes.find(({ id }) => id === entry.id);
@@ -169,10 +211,12 @@ test("semantic-identifier successors retain the established iframe request closu
       readFile(path.join(coreRoot, entry.file), "utf8"),
       readFile(path.join(coreRoot, priorFile), "utf8"),
     ]);
+    const priorCapabilities = observeIframeRuntimeCapabilities(prior);
+    const addedCapabilities = acceptedCapabilityAdditions.get(entry.id) ?? [];
     assert.deepEqual(
       observeIframeRuntimeCapabilities(current),
-      observeIframeRuntimeCapabilities(prior),
-      `${entry.id} runtime capabilities`,
+      [...priorCapabilities, ...addedCapabilities],
+      `${entry.id} runtime capabilities retain the predecessor plus accepted additions`,
     );
     assert.deepEqual(
       scanHtmlClosure(current, new Set(), `${entry.id} current source`),

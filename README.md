@@ -92,6 +92,16 @@ npm ci --ignore-scripts
 npm run playwright:install
 ```
 
+The first command keeps dependency resolution separate from lifecycle-script
+execution. In the current [lockfile](package-lock.json), `esbuild` and
+`workerd` declare steps that select and verify platform binaries, while two
+optional macOS `fsevents` packages declare native rebuild steps. The locked
+prebuilt packages support repository checks with those steps at rest.
+[Issue #50](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/50)
+provides the bounded inspection route when a package version or declared-script
+set changes. Playwright browser binaries remain a separate, explicit install
+for work that needs rendered browser evidence.
+
 Static reading begins directly from the source surfaces. Generated
 publication, visual, and tool artifacts have named commands and remain in
 ignored directories.
@@ -229,6 +239,7 @@ setup, source-owned work, evidence, delivery, and an exact continuation.
 
 | Repository area | What it owns | Open it when… |
 | --- | --- | --- |
+| [Prompt Capsules](prompt-capsules/README.md) | The compact versioned Markdown handoff contract, classified source/projection inventory, and checked Strategy Canvas pilot | Artifact state needs a readable plain or skill-assisted collaboration projection with explicit authority and recovery |
 | [Schemas](schemas/README.md) | Versioned Prototype Exemplars, Context Canvas, and Collaboration Skills identities, examples, JSON-LD context, discovery, and delivery projections; provisional Supportive Change Writing and LIMS/ELN projections remain linked to their owners | Machine-readable identity, retrieval, compatibility, or dependency closure matters |
 | [Core shared-schema extraction](core-architecture-shared-schema-extraction-v0.1/README.md) | An earlier illustrative envelope, context, and artifact-model registry for Core Architecture | Historical extraction work can inform a question while current Context Canvas contracts retain their named authority |
 | [Visual Fidelity Contracts](visual-fidelity-contracts/README.md) | Seven stable visual contracts, shared tokens, and canonical examples | A visitor-facing surface needs recognizable continuity with room for route-specific art direction |

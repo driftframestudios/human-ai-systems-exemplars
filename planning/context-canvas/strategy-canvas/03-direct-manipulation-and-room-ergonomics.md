@@ -7,6 +7,8 @@ research_payload:
   completion_condition: "Every point operation works by drag, tap, buttons, and labelled input at desk, touch, zoom, and presentation sizes."
 ```
 
+The [machine-readable evidence registry](../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json) connects this interaction route to `direct-manipulation`, `diagram-and-table`, `interactive-analysis`, and `redundant-selection-cue`. Those entries explain the implemented choices and preserve the separate usability, comprehension, and accessibility observations still needed for this artifact.
+
 ## Handle anatomy
 
 An interactive point contains four related geometries:

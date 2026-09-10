@@ -11,6 +11,7 @@ import {
   assertRegularFileWithin,
   navigationObservation,
   observeIframeRuntimeCapabilities,
+  projectIframeExitLinks,
   scanPackageClosure,
   sha256,
 } from "./iframe-route-package-engine.mjs";
@@ -24,6 +25,7 @@ const supportedProjectionKinds = new Set([
   "byte_identical",
   "decorated_copy",
   "decorated_rewrite",
+  "navigation_adapted",
 ]);
 const supportedSandboxTokens = new Set([
   "allow-downloads",
@@ -400,6 +402,15 @@ export function validateCanvasRouteContract(contract) {
     ) {
       fail(`Canvas decorated-rewrite route ${route.id} must declare a bounded rewrite.`);
     }
+    if (
+      route.projection_kind === "navigation_adapted" &&
+      (seenReferences.size > 0 || route.receiver_standing !== "context_adapted")
+    ) {
+      fail(
+        `Canvas navigation-adapted route ${route.id} must retain source-owned ` +
+        "attribution and use only the shared exit-link projection.",
+      );
+    }
   }
   return true;
 }
@@ -573,11 +584,28 @@ export function deriveCanvasProjection(html, route) {
       replacements: result.replacements,
     });
   }
-  if (route.projection_kind !== "byte_identical") {
+  if (["decorated_copy", "decorated_rewrite"].includes(route.projection_kind)) {
     projected = decorateProjection(projected, route);
   } else {
     assertAttributionProjection(projected, route, 0);
-    if (projected !== html) fail(`Canvas route ${route.id} must remain byte-identical.`);
+  }
+  const exitProjection = projectIframeExitLinks(projected);
+  projected = exitProjection.html;
+  rewriteReceipts.push({
+    kind: "iframe_exit_behavior",
+    exit_links: exitProjection.exit_links,
+    rewritten_links: exitProjection.rewritten_links,
+    dynamic_exit_templates: exitProjection.dynamic_exit_templates,
+    runtime_adapter: exitProjection.runtime_adapter,
+  });
+  if (route.projection_kind === "byte_identical" && projected !== html) {
+    fail(`Canvas route ${route.id} must remain byte-identical.`);
+  }
+  if (
+    route.projection_kind === "navigation_adapted" &&
+    exitProjection.rewritten_links === 0
+  ) {
+    fail(`Canvas navigation-adapted route ${route.id} must adapt at least one exit link.`);
   }
   return { html: projected, rewrites: rewriteReceipts };
 }
@@ -585,11 +613,7 @@ export function deriveCanvasProjection(html, route) {
 function observedCarrierPolicy(html) {
   const runtimeCapabilities = observeIframeRuntimeCapabilities(html);
   const sandboxTokens = [];
-  const markup = html.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "");
-  if (
-    /\.download\s*=/.test(html) ||
-    /<a\b[^>]*\bdownload(?:\s|=|>)/i.test(markup)
-  ) {
+  if (runtimeCapabilities.includes("file-download")) {
     sandboxTokens.push("allow-downloads");
   }
   if (
@@ -806,6 +830,9 @@ export async function createCanvasPackagePlan(options = {}) {
       ).length,
       byte_identical_routes: routeReceipts.filter(
         ({ projection_kind }) => projection_kind === "byte_identical",
+      ).length,
+      navigation_adapted_routes: routeReceipts.filter(
+        ({ projection_kind }) => projection_kind === "navigation_adapted",
       ).length,
       generated_files: outputFiles.size + 1,
       live_cloudflare_mutation: false,

@@ -17,19 +17,21 @@
   },
   "publicationPosture": "visitor-linked-through-receiving-pages",
   "archive": {"status": "rebuilt-local-snapshot", "path": "threadkeeping-ledger-chimeric-prototype-bundle-v0.1.zip"},
-  "integrity": {"algorithm": "sha256", "entryFile": "48a087d0360c97bcb2d46da7bca07ed4c51aa835da496701a5c0bc748a56ae2f"},
+  "integrity": {"algorithm": "sha256", "entryFile": "8b535e9c8da22dcb7654e157073a0c59f426ac61e28d7380373ae18338a54952"},
   "canonicalStatus": "context_canvas_owned_projection",
   "sourcePath": ".",
   "localPath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/",
   "entryFile": "threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html",
   "sourceManifest": "threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-manifest-v0.1.json",
   "localAdaptations": [
-    "Public example records use portable collaborator roles while exact private lineage remains in the authorized resolver."
+    "Public example records use portable collaborator roles while exact private lineage remains in the authorized resolver.",
+    "Prompt Capsule 0.1.0 projects the complete accepted ledger into plain and skill-assisted GitHub Flavored Markdown with one state-only fingerprint, a related re-entry loop, and exact visible, copy, download, and API bytes."
   ],
   "divergence": {
     "status": "context_canvas_owned_projection",
     "changedPaths": [
       "threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html",
+      "threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-manifest-v0.1.json",
       "threadkeeping-ledger-chimeric-prototype-bundle-v0.1.zip"
     ]
   },

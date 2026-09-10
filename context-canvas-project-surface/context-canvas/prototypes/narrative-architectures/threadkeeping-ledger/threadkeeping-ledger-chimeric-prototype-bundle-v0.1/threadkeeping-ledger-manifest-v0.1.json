@@ -21,7 +21,11 @@
     "continuity assessment",
     "supersession fields",
     "plain-text equivalent",
-    "visible hydration packet and AI prompt capsule",
+    "Prompt Capsule 0.1.0 with complete plain and skill-assisted Markdown views",
+    "state-only fingerprint shared across Prompt Capsule views",
+    "native related-loop and Markdown-view controls",
+    "exact visible, copied, downloaded, and programmatic Prompt Capsule bytes",
+    "clipboard recovery with truthful status and restored focus",
     "JSON import/export",
     "JSON-LD graph"
   ],

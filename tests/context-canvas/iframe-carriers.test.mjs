@@ -16,6 +16,10 @@ const routeManifestPath = join(
   repositoryRoot,
   "core-architectures-chimeric-prototype-current-pack-v0.1/public-iframe-route-manifest-v1.json",
 );
+const contextCoreManifestPath = join(
+  contextRoot,
+  "prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json",
+);
 const canvasRouteManifestPath = join(
   repositoryRoot,
   "iframe-route-families/canvas/public-iframe-route-manifest-v1.json",
@@ -76,7 +80,7 @@ const expectedCarrierInventory = [
   [
     "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
     "https://iframes.vik.guru/v1/core/strategy-canvas/",
-    "Strategy Canvas carrier for comparing current state, good-enough thresholds, and desired state",
+    "Canonical Strategy Canvas worksheet for comparing current state, good-enough thresholds, and desired state",
     "lazy",
   ],
   [
@@ -88,7 +92,7 @@ const expectedCarrierInventory = [
   [
     "context-canvas-project-surface/context-canvas/grammar-family.html",
     "https://iframes.vik.guru/v1/core/strategy-canvas/",
-    "Interactive Strategy Canvas collaboration workbench",
+    "Interactive canonical Strategy Canvas worksheet",
     "lazy",
   ],
   [
@@ -251,13 +255,13 @@ function localReferenceIdentity(ownerPath, href) {
   return `${repositoryPath(resolve(dirname(ownerPath), match[1]))}${match[2] ?? ""}`;
 }
 
-function routeSourceIdentity(family, route) {
+function routeSourceIdentity(family, route, contextCoreFiles = new Map()) {
   if (family === "canvas") {
     return `${route.source_file}${route.source_view ? `?view=${route.source_view}` : ""}`;
   }
   const sourceRoot = route.source_root ??
     "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1";
-  return `${sourceRoot}/${route.source_file}`;
+  return `${sourceRoot}/${contextCoreFiles.get(route.id) ?? route.source_file}`;
 }
 
 function enclosingSemanticBlocks(html, targetIndex) {
@@ -327,13 +331,19 @@ async function discoverVisitorCarriers() {
 }
 
 test("all Context Canvas iframe carriers remain explicitly inventoried", async () => {
-  const manifests = await Promise.all([
+  const [manifests, contextCoreManifest] = await Promise.all([
+    Promise.all([
     ["core", routeManifestPath],
     ["canvas", canvasRouteManifestPath],
   ].map(async ([family, path]) => [
     family,
     JSON.parse(await readFile(path, "utf8")),
-  ]));
+    ])),
+    readFile(contextCoreManifestPath, "utf8").then(JSON.parse),
+  ]);
+  const contextCoreFiles = new Map(
+    contextCoreManifest.prototypes.map((entry) => [entry.id, entry.file]),
+  );
   const routeByPublicUrl = new Map();
   for (const [family, manifest] of manifests) {
     for (const route of manifest.routes) {
@@ -393,7 +403,7 @@ test("all Context Canvas iframe carriers remain explicitly inventoried", async (
       `${label} omits an empty Permissions Policy attribute`,
     );
 
-    const sourceIdentity = routeSourceIdentity(profile.family, profile.route);
+    const sourceIdentity = routeSourceIdentity(profile.family, profile.route, contextCoreFiles);
     const sourcePath = resolve(repositoryRoot, sourceIdentity.split(/[?#]/u, 1)[0]);
     assert.equal((await stat(sourcePath)).isFile(), true, `${label} local source is a regular file`);
     const singleCarrierBlocks = carrier.blocks.filter(
@@ -455,7 +465,13 @@ test("the retained cobalt exemplar keeps exact carrier parity with the primary i
 });
 
 test("manifest-owned prototype carriers keep a minimal explicit iframe boundary", async () => {
-  const manifest = JSON.parse(await readFile(routeManifestPath, "utf8"));
+  const [manifest, contextCoreManifest] = await Promise.all([
+    readFile(routeManifestPath, "utf8").then(JSON.parse),
+    readFile(contextCoreManifestPath, "utf8").then(JSON.parse),
+  ]);
+  const contextCoreFiles = new Map(
+    contextCoreManifest.prototypes.map((entry) => [entry.id, entry.file]),
+  );
   const routeByPublicUrl = new Map(
     manifest.routes.map((route) => [
       `https://${manifest.host}${route.public_alias}`,
@@ -508,7 +524,7 @@ test("manifest-owned prototype carriers keep a minimal explicit iframe boundary"
     assert.equal(attributeValue(carrier.tag, "data-public-src"), null, `${label} uses its active stable route directly`);
     assert.doesNotMatch(
       sandbox,
-      /allow-(?:same-origin|forms|popups|top-navigation|storage-access)/,
+      /allow-(?:same-origin|forms|top-navigation|storage-access)/,
       `${label} avoids unrelated sandbox capabilities`,
     );
     assert.deepEqual(
@@ -523,7 +539,7 @@ test("manifest-owned prototype carriers keep a minimal explicit iframe boundary"
     );
     const localFullView = route.id === "conditioning-field"
       ? "conditioning-field.html"
-      : `prototypes/core-architectures/chimeric-pack-v0.1/${route.source_file}`;
+      : `prototypes/core-architectures/chimeric-pack-v0.1/${contextCoreFiles.get(route.id) ?? route.source_file}`;
     assert.match(
       carrier.figure,
       new RegExp(`href=["']${escapeExpression(localFullView)}["']`, "i"),
@@ -540,7 +556,10 @@ test("manifest-owned prototype carriers keep a minimal explicit iframe boundary"
   const conditioningCarrier = carriers.find(({ src }) => src === conditioningRoute);
   assert.ok(conditioningCarrier, "AI Systems embeds the hosted Conditioning Field route");
   assert.equal(conditioningCarrier.page, "ai-systems.html");
-  assert.equal(attributeValue(conditioningCarrier.tag, "sandbox"), "allow-scripts");
+  assert.equal(
+    attributeValue(conditioningCarrier.tag, "sandbox"),
+    "allow-popups allow-popups-to-escape-sandbox allow-scripts",
+  );
   assert.equal(attributeValue(conditioningCarrier.tag, "allow"), null);
   assert.equal(attributeValue(conditioningCarrier.tag, "referrerpolicy"), "no-referrer");
   assert.match(
@@ -588,5 +607,41 @@ test("manifest-owned prototype carriers keep a minimal explicit iframe boundary"
   const downloadCarriers = carriers.filter(({ tag }) =>
     (attributeValue(tag, "sandbox") ?? "").split(/\s+/).includes("allow-downloads"),
   );
-  assert.equal(downloadCarriers.length, 0, "hosted iframe carriers do not retain local-only download permission");
+  const downloadRoutes = downloadCarriers.map(({ src }) => src);
+  assert.equal(downloadCarriers.length, 8, "the eight capsule carriers grant their implemented Markdown downloads");
+  assert.equal(
+    downloadRoutes.filter((src) => src === "https://iframes.vik.guru/v1/core/strategy-canvas/").length,
+    2,
+    "both Strategy Canvas carriers grant their source-owned Markdown download",
+  );
+  assert.equal(
+    downloadRoutes.filter((src) => src === "https://iframes.vik.guru/v1/core/specification-by-example/").length,
+    1,
+    "the Specification-by-Example carrier grants its source-owned Markdown download",
+  );
+  assert.equal(
+    downloadRoutes.filter((src) => src === "https://iframes.vik.guru/v1/core/core-architecture-family-index/").length,
+    1,
+    "the Family Index carrier grants its source-owned Markdown download",
+  );
+  assert.equal(
+    downloadRoutes.filter((src) => src === "https://iframes.vik.guru/v1/core/heart-chart/").length,
+    1,
+    "the HEART Chart carrier grants its source-owned Markdown download",
+  );
+  assert.equal(
+    downloadRoutes.filter((src) => src === "https://iframes.vik.guru/v1/core/poda/").length,
+    1,
+    "the PODA carrier grants its source-owned Markdown download",
+  );
+  assert.equal(
+    downloadRoutes.filter((src) => src === "https://iframes.vik.guru/v1/core/cross-channel-blueprint/").length,
+    1,
+    "the Shared Surface Priority Map carrier grants its source-owned Markdown download",
+  );
+  assert.equal(
+    downloadRoutes.filter((src) => src === "https://iframes.vik.guru/v1/core/service-design-blueprint/").length,
+    1,
+    "the Service-design Blueprint carrier grants its source-owned Markdown download",
+  );
 });

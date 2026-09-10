@@ -71,11 +71,11 @@ The GitHub-backed retrieval mirror is:
 https://schemas.radiantnull.com/context-canvas/1.0.0/context-canvas.schema.json
 ```
 
-The Radiant Null mirror is active, HTTPS-enforced, and observed against the repository bytes. Authoritative DNS observation currently finds no `schemas.vik.guru` record; issue work:schema-retrieval-and-page-migration therefore retains restoration and direct observation of the operator route as an external delivery handoff. The canonical Vik Guru identifier remains stable while that retrieval route is restored.
+The Radiant Null mirror is active, HTTPS-enforced, and observed against the repository bytes. `schemas.vik.guru` reaches its configured edge; [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) owns the signed-out byte comparison that will confirm its registry and exact-version schema routes return the accepted bytes. The canonical Vik Guru identifier remains stable through that verification.
 
-Both exact-version routes are intended to return identical bytes with the canonical `$id` unchanged. `main` discovery prefers Radiant Null and `prod` discovery can prefer Vik Guru after operator parity is observed. Branch and environment describe publication and discovery projections; instance data and schema meaning remain invariant.
+Both exact-version routes are intended to return identical bytes with the canonical `$id` unchanged. `main` discovery prefers Radiant Null. Signed-out byte parity will establish when `prod` discovery can prefer Vik Guru. Branch and environment describe publication and discovery projections; instance data and schema meaning remain invariant.
 
-The schema and examples are active repository source and published GitHub-backed contracts. The seven selected pages use the released relationship; operator parity and the final dual-route observation continue through issue work:schema-retrieval-and-page-migration.
+The schema and examples are active repository source and published GitHub-backed contracts. The seven selected pages use the released relationship; [Issue #18](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/18) retains the signed-out comparison for the Vik Guru routes.
 
 ## Alternate projections
 

@@ -14,6 +14,7 @@ const routes = {
   semantic: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/semantic-sampling-tableau/terminology-exploration/narrative-sampling-tableau-chimeric-prototype-v0.1.html",
   semanticJsonLd: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/semantic-sampling-tableau/terminology-exploration/conation-motion-naming-sampling.example.v0.1.jsonld",
   technology: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/technology-fit-sampling-tableau-chimeric-prototype-v0.2.html",
+  technologySchema: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/technology-fit-sampling-tableau-state.schema.v0.1.json",
   technologyJsonLd: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/front-end-stack-selection.example.v0.1.jsonld",
   threadkeeping: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html"
 };
@@ -146,6 +147,28 @@ async function downloadedJson(page, selector) {
   return JSON.parse(await readFile(path, "utf8"));
 }
 
+async function downloadedText(page, selector) {
+  const downloadPromise = page.waitForEvent("download");
+  await page.locator(selector).click();
+  const download = await downloadPromise;
+  const path = await download.path();
+  assert.ok(path, `${selector} should create a local download`);
+  return {
+    fileName: download.suggestedFilename(),
+    text: await readFile(path, "utf8")
+  };
+}
+
+function renderedCodeSpanText(line) {
+  const match = String(line).match(/(`+)([\s\S]*?)\1/u);
+  assert.ok(match, `expected a Markdown code span in: ${line}`);
+  let value = match[2].replace(/[\t\n ]+/gu, " ");
+  if (value.startsWith(" ") && value.endsWith(" ") && !/^ +$/u.test(value)) {
+    value = value.slice(1, -1);
+  }
+  return value;
+}
+
 async function composerPath(browser, origin) {
   const { context, page, telemetry } = await openFresh(browser, origin, routes.composer);
   try {
@@ -251,6 +274,169 @@ async function composerLifecyclePath(browser, origin) {
   }
 }
 
+async function composerPromptCapsulePath(browser, origin) {
+  const { context, page, telemetry } = await openFresh(browser, origin, routes.composer);
+  try {
+    const seam = await page.evaluate(() => {
+      const api = window.narrativeCapsuleComposer;
+      const detached = api.getState();
+      detached.capsuleEnvelope.displayName = "detached change";
+      return {
+        frozen: Object.isFrozen(api),
+        viewsFrozen: Object.isFrozen(api.promptCapsuleViews),
+        keys: Object.keys(api).sort(),
+        contract: api.promptCapsuleContract,
+        version: api.version,
+        stateSchemaVersion: api.stateSchemaVersion,
+        view: api.getPromptCapsuleView(),
+        plain: api.promptCapsule(),
+        plainByView: api.promptCapsuleMarkdown("plain"),
+        fingerprint: api.promptCapsuleFingerprint(),
+        detached: api.getState().capsuleEnvelope.displayName !== "detached change",
+      };
+    });
+    assert.equal(seam.frozen, true);
+    assert.equal(seam.viewsFrozen, true);
+    assert.deepEqual(seam.keys, [
+      "getPromptCapsuleView", "getState", "promptCapsule", "promptCapsuleContract",
+      "promptCapsuleFingerprint", "promptCapsuleMarkdown", "promptCapsuleStateProjection",
+      "promptCapsuleViews", "stateSchemaVersion", "version",
+    ]);
+    assert.equal(seam.contract, "prompt-capsule/0.1.0");
+    assert.equal(seam.version, "0.1");
+    assert.equal(seam.stateSchemaVersion, "0.1");
+    assert.equal(seam.view, "plain");
+    assert.equal(seam.detached, true);
+    assert.equal(seam.plain, seam.plainByView);
+
+    const preview = page.locator("#aiPrompt");
+    const initialPlain = await preview.textContent();
+    assert.equal(initialPlain, seam.plain);
+    assert.equal(await preview.getAttribute("data-prompt-view-active"), "plain");
+    assert.match(initialPlain, /- Contract: `prompt-capsule\/0\.1\.0`/u);
+    assert.match(initialPlain, /^## Purpose and target$/mu);
+    assert.match(initialPlain, /^## Evidence and recovery$/mu);
+    assert.doesNotMatch(initialPlain, /^## Skill assistance$/mu);
+    assert.match(initialPlain, /Meaning: Participants can perceive, operate, understand, and recover/u);
+    assert.match(initialPlain, /Anchors: low — Access depends on exceptional help/u);
+    assert.match(initialPlain, /Evidence basis: Attach participant, keyboard, touch, assistive-technology/u);
+    const loops = page.locator("[data-prompt-related-loops]");
+    assert.equal(await loops.count(), 1);
+    assert.equal(await loops.evaluate(element => element.open), false);
+    assert.equal(await loops.locator("[data-related-loop-id]").count(), 2);
+    await loops.locator("summary").focus();
+    await page.keyboard.press("Enter");
+    assert.equal(await loops.evaluate(element => element.open), true);
+
+    const noScriptContext = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1440, height: 1000 } });
+    try {
+      const noScriptPage = await noScriptContext.newPage();
+      await noScriptPage.goto(`${origin}/${routes.composer}`, { waitUntil: "domcontentloaded" });
+      assert.equal(await noScriptPage.locator("#aiPrompt").textContent(), initialPlain);
+      assert.match(await noScriptPage.locator("noscript").textContent(), /complete plain Markdown remains available/u);
+    } finally {
+      await noScriptContext.close();
+    }
+
+    const initialState = await page.evaluate(() => window.narrativeCapsuleComposer.getState());
+    await page.locator("#targetSearch").fill("strategy");
+    const transientState = await page.evaluate(() => window.narrativeCapsuleComposer.getState());
+    assert.notDeepEqual(transientState.viewState, initialState.viewState);
+    assert.equal(await page.evaluate(() => window.narrativeCapsuleComposer.promptCapsule()), initialPlain);
+    assert.equal(await page.evaluate(() => window.narrativeCapsuleComposer.promptCapsuleFingerprint()), seam.fingerprint);
+
+    await page.locator("#promptRole").selectOption("orient");
+    const orient = await preview.textContent();
+    assert.match(orient, /Return a concise orientation to this Strategy Canvas composition/u);
+    assert.match(orient, /Explain the included and held-open sources/u);
+    assert.doesNotMatch(orient, /Create or update a Strategy Canvas artifact instance/u);
+    assert.notEqual(await page.evaluate(() => window.narrativeCapsuleComposer.promptCapsuleFingerprint()), seam.fingerprint);
+
+    await page.locator("#promptRole").selectOption("critique");
+    const critique = await preview.textContent();
+    assert.match(critique, /Assess how well a received Strategy Canvas artifact fits/u);
+    assert.match(critique, /Return the strongest fits, consequential gaps, counter-signals, and viable alternate readings/u);
+    assert.doesNotMatch(critique, /Create or update a Strategy Canvas artifact instance/u);
+
+    await page.locator("#promptRole").selectOption("generate");
+    assert.equal(await preview.textContent(), initialPlain);
+    assert.equal(await page.evaluate(() => window.narrativeCapsuleComposer.promptCapsuleFingerprint()), seam.fingerprint);
+
+    const assistedControl = page.locator('[data-prompt-view][value="skill-assisted"]');
+    await assistedControl.focus();
+    await assistedControl.press("Space");
+    assert.equal(await assistedControl.isChecked(), true);
+    assert.equal(await page.evaluate(() => document.activeElement?.value), "skill-assisted");
+    assert.match(await page.locator("#promptViewStatus").textContent(), /Skill-assisted Markdown view selected/u);
+    const assisted = await preview.textContent();
+    assert.equal(assisted, await page.evaluate(() => window.narrativeCapsuleComposer.promptCapsuleMarkdown("skill-assisted")));
+    assert.equal(await page.evaluate(() => window.narrativeCapsuleComposer.promptCapsuleFingerprint()), seam.fingerprint);
+    assert.match(assisted, /^## Skill assistance$/mu);
+    assert.match(assisted, /Source revision: `b8b305c78b82a288ae2aca9574bb86d7d3d574d9`/u);
+    for (const [name, path, digest] of [
+      ["Source Authority Mapping", ".agents/skills/source-authority-mapping/SKILL.md", "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5"],
+      ["Stateful Artifact Behavior Contracts", ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md", "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a"],
+      ["Bounded Support Routing", ".agents/skills/bounded-support-routing/SKILL.md", "80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402"],
+    ]) {
+      assert.ok(assisted.includes(name));
+      assert.ok(assisted.includes(path));
+      assert.ok(assisted.includes(digest));
+    }
+
+    await page.evaluate(() => {
+      window.__fallbackCopied = "";
+      Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: async () => { throw new Error("opaque-origin style rejection"); } } });
+      document.execCommand = command => {
+        if (command === "copy") window.__fallbackCopied = document.activeElement?.value || "";
+        return command === "copy";
+      };
+    });
+    const copyButton = page.locator('[data-action="copy-prompt"]').last();
+    await copyButton.click();
+    assert.equal(await page.evaluate(() => window.__fallbackCopied), assisted);
+    assert.equal(await page.evaluate(() => document.activeElement?.dataset.action), "copy-prompt");
+    assert.match(await page.locator("#promptViewStatus").textContent(), /Skill-assisted Markdown copied/u);
+    const downloaded = await downloadedText(page, '[data-action="download-prompt"]');
+    assert.equal(downloaded.fileName, "narrative-capsule-composer.prompt-capsule.r0.1.skill-assisted.md");
+    assert.equal(downloaded.text, assisted);
+
+    await page.locator('[data-prompt-view][value="plain"]').check();
+    const literal = structuredClone(transientState);
+    literal.artifactIdentity.id = "na:literal`source_&";
+    literal.capsuleEnvelope.displayName = "Literal [composer] #42";
+    literal.modules[0].summary = "Inspect <img src=x> [linked](https://example.invalid) @mention ~~change~~ www.example.invalid #42";
+    literal.strategyDimensions[0].definition = "A material definition changed for the receiving Strategy Canvas.";
+    literal.strategyDimensions[0].evidenceBasis = "A material evidence route changed for the receiving Strategy Canvas.";
+    await page.locator("#importText").fill(JSON.stringify(literal));
+    await page.locator('[data-action="import-json"]').click();
+    assert.match(await page.locator("#importNotice").textContent(), /Composition imported/u);
+    const literalPrompt = await preview.textContent();
+    assert.ok(literalPrompt.includes("&lt;img src=x&gt;"));
+    assert.ok(literalPrompt.includes("\\[linked\\](https\\://example.invalid)"));
+    assert.ok(literalPrompt.includes("\\@mention"));
+    assert.ok(literalPrompt.includes("\\~\\~change\\~\\~"));
+    assert.ok(literalPrompt.includes("www\\.example.invalid"));
+    assert.ok(literalPrompt.includes("\\#42"));
+    assert.match(literalPrompt, /Meaning: A material definition changed for the receiving Strategy Canvas/u);
+    assert.match(literalPrompt, /Evidence basis: A material evidence route changed for the receiving Strategy Canvas/u);
+    assert.equal(renderedCodeSpanText(literalPrompt.split("\n").find(line => line.startsWith("- Source:"))), "na:literal`source_&@0.1");
+    assert.notEqual(await page.evaluate(() => window.narrativeCapsuleComposer.promptCapsuleFingerprint()), seam.fingerprint);
+
+    const acceptedState = await page.evaluate(() => window.narrativeCapsuleComposer.getState());
+    const acceptedMarkdown = await preview.textContent();
+    const acceptedFingerprint = await page.evaluate(() => window.narrativeCapsuleComposer.promptCapsuleFingerprint());
+    await page.locator("#importText").fill(JSON.stringify({ unexpected: true }));
+    await page.locator('[data-action="import-json"]').click();
+    assert.match(await page.locator("#importNotice").textContent(), /Current composition is still available/u);
+    assert.deepEqual(await page.evaluate(() => window.narrativeCapsuleComposer.getState()), acceptedState);
+    assert.equal(await preview.textContent(), acceptedMarkdown);
+    assert.equal(await page.evaluate(() => window.narrativeCapsuleComposer.promptCapsuleFingerprint()), acceptedFingerprint);
+    assertTelemetry(telemetry);
+  } finally {
+    await context.close();
+  }
+}
+
 async function semanticPath(browser, origin) {
   const { context, page, telemetry } = await openFresh(browser, origin, routes.semantic);
   try {
@@ -310,8 +496,11 @@ async function semanticPromptAndLineagePath(browser, origin) {
     const prompt = await page.locator("#promptPreview").textContent();
     assert.equal(selected.activeRunId, comparisonId);
     assert.equal(selected.conditionProfile.candidateSetSemantics, selectedRun.candidateSetSemantics);
-    assert.match(prompt, new RegExp(`Active sampling run:\\n${selectedRun.displayName.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&")}`));
-    assert.match(prompt, new RegExp(`Candidate-set semantics:\\n${selectedRun.candidateSetSemantics}`));
+    assert.match(prompt, new RegExp(`- Active run: ${selectedRun.displayName.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&")} \\(`));
+    assert.equal(
+      renderedCodeSpanText(prompt.split("\n").find(line => line.startsWith("- Candidate-set semantics:"))),
+      selectedRun.candidateSetSemantics,
+    );
 
     await page.locator('[data-action="duplicate-run"]').click();
     const duplicated = await previewJson(page, "#jsonPreview");
@@ -368,6 +557,274 @@ async function semanticPromptAndLineagePath(browser, origin) {
     await page.locator('[data-action="import-json"]').click();
     assert.match(await page.locator("#importStatus").textContent(), /Current sampling state is still available/);
     assert.deepEqual(await previewJson(page, "#jsonPreview"), recovered);
+    assertTelemetry(telemetry);
+  } finally {
+    await context.close();
+  }
+}
+
+async function semanticPromptCapsulePath(browser, origin) {
+  const { context, page, telemetry } = await openFresh(browser, origin, routes.semantic);
+  try {
+    const seam = await page.evaluate(() => {
+      const api = window.narrativeSamplingTableau;
+      const detached = api.getState();
+      detached.promptCapsule.currentDecision = "detached change";
+      return {
+        frozen: Object.isFrozen(api),
+        viewsFrozen: Object.isFrozen(api.promptCapsuleViews),
+        keys: Object.keys(api).sort(),
+        contract: api.promptCapsuleContract,
+        version: api.version,
+        stateSchemaVersion: api.stateSchemaVersion,
+        view: api.getPromptCapsuleView(),
+        plain: api.promptCapsule(),
+        plainByView: api.promptCapsuleMarkdown("plain"),
+        fingerprint: api.promptCapsuleFingerprint(),
+        detached: api.getState().promptCapsule.currentDecision !== "detached change",
+      };
+    });
+    assert.equal(seam.frozen, true);
+    assert.equal(seam.viewsFrozen, true);
+    assert.deepEqual(seam.keys, [
+      "getPromptCapsuleView", "getState", "promptCapsule", "promptCapsuleContract",
+      "promptCapsuleFingerprint", "promptCapsuleMarkdown", "promptCapsuleStateProjection",
+      "promptCapsuleViews", "stateSchemaVersion", "version",
+    ]);
+    assert.equal(seam.contract, "prompt-capsule/0.1.0");
+    assert.equal(seam.version, "0.1");
+    assert.equal(seam.stateSchemaVersion, "0.1");
+    assert.equal(seam.view, "plain");
+    assert.equal(seam.detached, true);
+    assert.equal(seam.plain, seam.plainByView);
+
+    const preview = page.locator("#promptPreview");
+    const initialPlain = await preview.textContent();
+    assert.equal(initialPlain, seam.plain);
+    assert.equal(await preview.getAttribute("data-prompt-view-active"), "plain");
+    assert.match(initialPlain, /- Contract: `prompt-capsule\/0\.1\.0`/u);
+    assert.match(initialPlain, /^## Purpose and target$/mu);
+    assert.match(initialPlain, /^## Evidence and recovery$/mu);
+    assert.doesNotMatch(initialPlain, /^## Skill assistance$/mu);
+    assert.match(initialPlain, /^### Success criteria$/mu);
+    assert.match(initialPlain, /The term remains recoverable across at least three model contexts/u);
+    assert.match(initialPlain, /^### Outcome boundaries$/mu);
+    assert.match(initialPlain, /Empirical calibration against future outcomes/u);
+    assert.match(initialPlain, /^### Condition-profile boundaries$/mu);
+    assert.match(initialPlain, /Brand positioning/u);
+    assert.match(initialPlain, /Dimension scores: Semantic stability \(`vs:dimension\/semantic-stability`\) `8\.9\/10`/u);
+    assert.match(initialPlain, /^### Baseline comparison$/mu);
+    assert.match(initialPlain, /baseline estimate `0\.28`, active estimate `0\.42`/u);
+    assert.equal(
+      renderedCodeSpanText(initialPlain.split("\n").find(line => line.startsWith("- Candidate-set semantics:"))),
+      "open_exclusive",
+    );
+
+    const loops = page.locator("[data-prompt-related-loops]");
+    assert.equal(await loops.count(), 1);
+    assert.equal(await loops.evaluate(element => element.open), false);
+    const loopMetadata = await page.evaluate(() => PROMPT_CAPSULE_RELATED_LOOPS.map(loop => ({ ...loop })));
+    const visibleLoops = await loops.locator("[data-related-loop-id]").evaluateAll(items => items.map(item => ({
+      id: item.dataset.relatedLoopId,
+      name: item.querySelector("[data-related-loop-link]")?.textContent.trim() || "",
+      publicUrl: item.querySelector("[data-related-loop-link]")?.getAttribute("href") || "",
+      fitCondition: item.querySelector("[data-related-loop-fit]")?.textContent.trim() || "",
+    })));
+    assert.deepEqual(visibleLoops, loopMetadata);
+    await loops.locator("summary").focus();
+    await page.keyboard.press("Enter");
+    assert.equal(await loops.evaluate(element => element.open), true);
+
+    const noScriptContext = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1440, height: 1000 } });
+    try {
+      const noScriptPage = await noScriptContext.newPage();
+      await noScriptPage.goto(`${origin}/${routes.semantic}`, { waitUntil: "domcontentloaded" });
+      assert.equal(await noScriptPage.locator("#promptPreview").textContent(), initialPlain);
+      assert.match(await noScriptPage.locator("noscript").textContent(), /complete plain Markdown remains available/u);
+    } finally {
+      await noScriptContext.close();
+    }
+
+    const initialState = await page.evaluate(() => window.narrativeSamplingTableau.getState());
+    await page.locator("#candidateSort").selectOption("name");
+    const transientState = await page.evaluate(() => window.narrativeSamplingTableau.getState());
+    assert.notDeepEqual(transientState.viewState, initialState.viewState);
+    assert.equal(await page.evaluate(() => window.narrativeSamplingTableau.promptCapsule()), initialPlain);
+    assert.equal(await page.evaluate(() => window.narrativeSamplingTableau.promptCapsuleFingerprint()), seam.fingerprint);
+
+    await page.locator("#commensurability").selectOption("partially_commensurate");
+    const comparisonPrompt = await preview.textContent();
+    const comparisonFingerprint = await page.evaluate(() => window.narrativeSamplingTableau.promptCapsuleFingerprint());
+    assert.equal(comparisonPrompt, await page.evaluate(() => window.narrativeSamplingTableau.promptCapsule()));
+    assert.match(comparisonPrompt, /`partially_commensurate`/u);
+    assert.notEqual(comparisonFingerprint, seam.fingerprint);
+
+    await page.locator("#probabilityRole").selectOption("scenario_weight");
+    const probabilityPrompt = await preview.textContent();
+    const probabilityFingerprint = await page.evaluate(() => window.narrativeSamplingTableau.promptCapsuleFingerprint());
+    assert.equal(probabilityPrompt, await page.evaluate(() => window.narrativeSamplingTableau.promptCapsule()));
+    assert.match(probabilityPrompt, /probability role `scenario_weight`/u);
+    assert.notEqual(probabilityFingerprint, comparisonFingerprint);
+
+    await page.locator("#statFitEnabled").check();
+    await page.locator('[data-stat-field="statisticName"]').fill("Brier score");
+    await page.locator('[data-stat-field="statisticValue"]').fill("0.18");
+    await page.locator('[data-stat-field="modelClass"]').fill("proper scoring rule");
+    await page.locator('[data-stat-field="sampleSize"]').fill("42");
+    await page.locator('[data-stat-field="observedDataRef"]').fill("evidence:cross-model-run");
+    await page.locator('[data-stat-field="observedDataRef"]').blur();
+    const partialStatPrompt = await preview.textContent();
+    const partialStatFingerprint = await page.evaluate(() => window.narrativeSamplingTableau.promptCapsuleFingerprint());
+    assert.equal(partialStatPrompt, await page.evaluate(() => window.narrativeSamplingTableau.promptCapsule()));
+    assert.match(partialStatPrompt, /Statistic: Brier score Value: `0\.18`/u);
+    assert.match(partialStatPrompt, /Observed data reference:/u);
+    assert.deepEqual(
+      await page.evaluate(() => {
+        const value = window.narrativeSamplingTableau.promptCapsuleStateProjection().workingState.statisticalFit;
+        return { enabled: value.enabled, observedDataRef: value.observedDataRef, sampleSize: value.sampleSize };
+      }),
+      { enabled: true, observedDataRef: "evidence:cross-model-run", sampleSize: 42 },
+    );
+    assert.notEqual(partialStatFingerprint, probabilityFingerprint);
+
+    const assistedControl = page.locator('[data-prompt-view][value="skill-assisted"]');
+    await assistedControl.focus();
+    await assistedControl.press("Space");
+    assert.equal(await assistedControl.isChecked(), true);
+    assert.equal(await page.evaluate(() => document.activeElement?.value), "skill-assisted");
+    assert.match(await page.locator("#promptViewStatus").textContent(), /Skill-assisted Markdown view selected/u);
+    const assisted = await preview.textContent();
+    assert.equal(assisted, await page.evaluate(() => window.narrativeSamplingTableau.promptCapsuleMarkdown("skill-assisted")));
+    assert.equal(await page.evaluate(() => window.narrativeSamplingTableau.promptCapsuleFingerprint()), partialStatFingerprint);
+    assert.match(assisted, /^## Skill assistance$/mu);
+    assert.match(assisted, /Source revision: `b8b305c78b82a288ae2aca9574bb86d7d3d574d9`/u);
+    for (const [name, path, digest] of [
+      ["Practitioner Probe", ".agents/skills/practitioner-probe/SKILL.md", "348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c"],
+      ["Evidence-Grounded Research Spike", ".agents/skills/evidence-grounded-research-spike/SKILL.md", "844fc0c6b0b956b81984a2c2d47d9252abadeb0a6554c5ef4734d0f1e5f4b531"],
+      ["Source Authority Mapping", ".agents/skills/source-authority-mapping/SKILL.md", "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5"],
+    ]) {
+      assert.ok(assisted.includes(name));
+      assert.ok(assisted.includes(path));
+      assert.ok(assisted.includes(digest));
+    }
+
+    await page.evaluate(() => {
+      window.__fallbackCopied = "";
+      Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: async () => { throw new Error("opaque-origin style rejection"); } } });
+      document.execCommand = command => {
+        if (command === "copy") window.__fallbackCopied = document.activeElement?.value || "";
+        return command === "copy";
+      };
+    });
+    const copyButton = page.locator('#prompt [data-action="copy-prompt"]');
+    await copyButton.click();
+    assert.equal(await page.evaluate(() => window.__fallbackCopied), assisted);
+    assert.equal(await page.evaluate(() => document.activeElement?.dataset.action), "copy-prompt");
+    assert.match(await page.locator("#promptViewStatus").textContent(), /Skill-assisted Markdown copied/u);
+    const downloaded = await downloadedText(page, '#prompt [data-action="download-prompt"]');
+    assert.equal(downloaded.fileName, "narrative-sampling-tableau.prompt-capsule.r0.1.skill-assisted.md");
+    assert.equal(downloaded.text, assisted);
+
+    await page.locator('[data-prompt-view][value="plain"]').check();
+    await page.locator("details:has(#importText) > summary").click();
+    const literal = structuredClone(transientState);
+    literal.surface.id = "na:literal`source_&";
+    literal.promptCapsule.currentDecision = "Inspect <img src=x> [linked](https://example.invalid) @mention ~~change~~ www.example.invalid #42";
+    literal.runs.find(run => run.id === literal.activeRunId).candidates[0].dimensionScores["vs:dimension/semantic-stability"] = 9.1;
+    literal.runs.find(run => run.id === literal.comparison.baselineRunId).candidates[0].estimate = 0.31;
+    literal.statisticalFit = {
+      enabled: true,
+      statisticName: "Brier score",
+      statisticValue: 0.18,
+      modelClass: "proper scoring rule",
+      observedDataRef: "evidence:cross-model-run",
+      sampleSize: 42,
+      population: "Cross-model naming runs",
+      referenceModel: "Uniform candidate baseline",
+      assumptions: ["Candidate identities remain stable across observations."],
+      diagnostics: ["Calibration curve reviewed."],
+      sourceOfTruthBand: ["observed_test_run"],
+      asOf: "2026-09-05",
+      reviewState: "working_review",
+    };
+    await page.locator("#importText").fill(JSON.stringify(literal));
+    await page.locator('[data-action="import-json"]').click();
+    assert.match(await page.locator("#importStatus").textContent(), /Sampling state imported/u);
+    const literalPrompt = await preview.textContent();
+    assert.ok(literalPrompt.includes("&lt;img src=x&gt;"));
+    assert.ok(literalPrompt.includes("\\[linked\\](https\\://example.invalid)"));
+    assert.ok(literalPrompt.includes("\\@mention"));
+    assert.ok(literalPrompt.includes("\\~\\~change\\~\\~"));
+    assert.ok(literalPrompt.includes("www\\.example.invalid"));
+    assert.ok(literalPrompt.includes("\\#42"));
+    assert.match(literalPrompt, /Semantic stability \(`vs:dimension\/semantic-stability`\) `9\.1\/10`/u);
+    assert.match(literalPrompt, /baseline estimate `0\.31`, active estimate `0\.42`/u);
+    assert.match(literalPrompt, /^### Formal statistical fit$/mu);
+    assert.match(literalPrompt, /Review state: `working_review`\. As of: `2026-09-05`/u);
+    assert.match(literalPrompt, /Model class: proper scoring rule Reference model: Uniform candidate baseline/u);
+    assert.match(literalPrompt, /Assumptions: Candidate identities remain stable across observations\./u);
+    assert.match(literalPrompt, /Diagnostics: Calibration curve reviewed\./u);
+    assert.match(literalPrompt, /Source-of-truth bands: observed\\_test\\_run/u);
+    assert.deepEqual(
+      await page.evaluate(() => window.narrativeSamplingTableau.promptCapsuleStateProjection().workingState.statisticalFit),
+      {
+        enabled: true,
+        statisticName: "Brier score",
+        statisticValue: 0.18,
+        modelClass: "proper scoring rule",
+        observedDataRef: "evidence:cross-model-run",
+        sampleSize: 42,
+        population: "Cross-model naming runs",
+        referenceModel: "Uniform candidate baseline",
+        assumptions: ["Candidate identities remain stable across observations."],
+        diagnostics: ["Calibration curve reviewed."],
+        sourceOfTruthBand: ["observed\\_test\\_run"],
+        asOf: "2026-09-05",
+        reviewState: "working_review",
+      },
+    );
+    assert.equal(renderedCodeSpanText(literalPrompt.split("\n").find(line => line.startsWith("- Source:"))), "na:literal`source_&@0.1");
+    assert.notEqual(await page.evaluate(() => window.narrativeSamplingTableau.promptCapsuleFingerprint()), seam.fingerprint);
+
+    const acceptedState = await page.evaluate(() => window.narrativeSamplingTableau.getState());
+    const acceptedMarkdown = await preview.textContent();
+    const acceptedFingerprint = await page.evaluate(() => window.narrativeSamplingTableau.promptCapsuleFingerprint());
+    await page.locator("#importText").fill(JSON.stringify(acceptedState));
+    await page.locator('[data-action="import-json"]').click();
+    assert.equal(await preview.textContent(), acceptedMarkdown);
+    assert.equal(await page.evaluate(() => window.narrativeSamplingTableau.promptCapsuleFingerprint()), acceptedFingerprint);
+
+    const invalid = structuredClone(acceptedState);
+    delete invalid.id;
+    await page.locator("#importText").fill(JSON.stringify(invalid));
+    await page.locator('[data-action="import-json"]').click();
+    assert.match(await page.locator("#importStatus").textContent(), /Current sampling state is still available/u);
+    assert.deepEqual(await page.evaluate(() => window.narrativeSamplingTableau.getState()), acceptedState);
+    assert.equal(await preview.textContent(), acceptedMarkdown);
+    assert.equal(await page.evaluate(() => window.narrativeSamplingTableau.promptCapsuleFingerprint()), acceptedFingerprint);
+
+    const missingDimensionScore = structuredClone(acceptedState);
+    const activeCandidate = missingDimensionScore.runs
+      .find(run => run.id === missingDimensionScore.activeRunId)
+      .candidates[0];
+    delete activeCandidate.dimensionScores[missingDimensionScore.dimensions[0].id];
+    await page.locator("#importText").fill(JSON.stringify(missingDimensionScore));
+    await page.locator('[data-action="import-json"]').click();
+    assert.match(await page.locator("#importStatus").textContent(), /Current sampling state is still available/u);
+    assert.deepEqual(await page.evaluate(() => window.narrativeSamplingTableau.getState()), acceptedState);
+    assert.equal(await preview.textContent(), acceptedMarkdown);
+
+    const outOfRangeDimensionScore = structuredClone(acceptedState);
+    outOfRangeDimensionScore.runs
+      .find(run => run.id === outOfRangeDimensionScore.activeRunId)
+      .candidates[0]
+      .dimensionScores[outOfRangeDimensionScore.dimensions[0].id] = 10.1;
+    await page.locator("#importText").fill(JSON.stringify(outOfRangeDimensionScore));
+    await page.locator('[data-action="import-json"]').click();
+    assert.match(await page.locator("#importStatus").textContent(), /Current sampling state is still available/u);
+    assert.deepEqual(await page.evaluate(() => window.narrativeSamplingTableau.getState()), acceptedState);
+    assert.equal(await preview.textContent(), acceptedMarkdown);
+    assert.equal(await page.evaluate(() => window.narrativeSamplingTableau.promptCapsuleFingerprint()), acceptedFingerprint);
     assertTelemetry(telemetry);
   } finally {
     await context.close();
@@ -515,6 +972,282 @@ async function technologyPath(browser, origin) {
     assert.equal(recovered.id, migrated.id);
     assert.equal(recovered.activeRunId, migrated.activeRunId);
     assert.equal(recovered.runs.length, migrated.runs.length);
+    assertTelemetry(telemetry);
+  } finally {
+    await context.close();
+  }
+}
+
+async function technologyPromptCapsulePath(browser, origin) {
+  const { context, page, telemetry } = await openFresh(browser, origin, routes.technology);
+  try {
+    const seam = await page.evaluate(() => {
+      const api = window.technologyFitSamplingTableau;
+      const detached = api.getState();
+      const workingDecision = api.getState().promptCapsule.currentDecision;
+      detached.promptCapsule.currentDecision = "Detached mutation";
+      return {
+        frozen: Object.isFrozen(api),
+        viewsFrozen: Object.isFrozen(api.promptCapsuleViews),
+        keys: Object.keys(api).sort(),
+        contract: api.promptCapsuleContract,
+        version: api.version,
+        stateSchemaVersion: api.stateSchemaVersion,
+        view: api.getPromptCapsuleView(),
+        plain: api.promptCapsule(),
+        plainByView: api.promptCapsuleMarkdown("plain"),
+        fingerprint: api.promptCapsuleFingerprint(),
+        detached: api.getState().promptCapsule.currentDecision === workingDecision
+      };
+    });
+    assert.equal(seam.frozen, true);
+    assert.equal(seam.viewsFrozen, true);
+    assert.deepEqual(seam.keys, [
+      "getPromptCapsuleView",
+      "getState",
+      "promptCapsule",
+      "promptCapsuleContract",
+      "promptCapsuleFingerprint",
+      "promptCapsuleMarkdown",
+      "promptCapsuleStateProjection",
+      "promptCapsuleViews",
+      "stateSchemaVersion",
+      "version"
+    ]);
+    assert.equal(seam.contract, "prompt-capsule/0.1.0");
+    assert.equal(seam.version, "0.1");
+    assert.equal(seam.stateSchemaVersion, "0.1");
+    assert.equal(seam.view, "plain");
+    assert.equal(seam.detached, true);
+    assert.equal(seam.plain, seam.plainByView);
+
+    const promptPreview = page.locator("#promptPreview");
+    const initialPlain = await promptPreview.textContent();
+    assert.equal(initialPlain, seam.plain, "the visible default should equal the canonical plain capsule bytes");
+    assert.equal(await promptPreview.getAttribute("data-prompt-view-active"), "plain");
+    assert.equal(await page.locator("#promptViewControl legend").textContent(), "Markdown view");
+    assert.equal(await page.locator('#promptViewControl input[type="radio"]').count(), 2);
+    assert.equal(await page.locator('[data-prompt-view][value="plain"]').isChecked(), true);
+    assert.match(initialPlain, /- Contract: `prompt-capsule\/0\.1\.0`/u);
+    assert.match(initialPlain, /- View: `plain`/u);
+    assert.equal(
+      renderedCodeSpanText(initialPlain.split("\n").find(line => line.startsWith("- Candidate-set semantics:"))),
+      "open_exclusive",
+      "a rendered GFM code span should preserve an underscore-bearing stable value"
+    );
+    assert.doesNotMatch(initialPlain, /^## Skill assistance$/mu);
+    for (const fragment of [
+      "https://schemas.radiantnull.com/collaboration/#visitor-surface-change",
+      "Fit when an equivalent candidate spike changes a visible or interactive surface",
+      "https://schemas.radiantnull.com/collaboration/#repository-reentry",
+      "Fit when a successor run resumes as repository work"
+    ]) assert.ok(initialPlain.includes(fragment), `plain Markdown should carry ${fragment}`);
+
+    const relatedLoops = page.locator("[data-prompt-related-loops]");
+    const relatedSummary = relatedLoops.locator("summary");
+    assert.equal(await relatedLoops.count(), 1, "the visitor surface should expose one native Related loops disclosure");
+    assert.equal(await relatedLoops.evaluate(element => element.open), false, "the disclosure should begin collapsed");
+    const loopMetadata = await page.evaluate(() => PROMPT_CAPSULE_RELATED_LOOPS.map(loop => ({ ...loop })));
+    const visibleLoops = await relatedLoops.locator("[data-related-loop-id]").evaluateAll(items => items.map(item => ({
+      id: item.dataset.relatedLoopId,
+      name: item.querySelector("[data-related-loop-link]")?.textContent.trim() || "",
+      publicUrl: item.querySelector("[data-related-loop-link]")?.getAttribute("href") || "",
+      fitCondition: item.querySelector("[data-related-loop-fit]")?.textContent.trim() || ""
+    })));
+    assert.deepEqual(visibleLoops, loopMetadata, "visible loop links and generated Markdown should share one source");
+    await relatedSummary.focus();
+    const summaryTarget = await relatedSummary.boundingBox();
+    assert.ok(summaryTarget && summaryTarget.width >= 44 && summaryTarget.height >= 44, "the Related loops summary should retain a touch-sized target");
+    assert.ok(await relatedSummary.evaluate(element => Number.parseFloat(getComputedStyle(element).outlineWidth) >= 3), "the Related loops summary should show keyboard focus");
+    await page.keyboard.press("Enter");
+    assert.equal(await relatedLoops.evaluate(element => element.open), true, "Enter should open the native disclosure");
+    const loopLinks = relatedLoops.locator("[data-related-loop-link]");
+    assert.equal(await loopLinks.count(), 2, "the disclosure should expose exactly the two accepted loop links");
+    for (let index = 0; index < await loopLinks.count(); index += 1) {
+      const linkTarget = await loopLinks.nth(index).boundingBox();
+      assert.ok(linkTarget && linkTarget.width >= 44 && linkTarget.height >= 44, `related loop ${index + 1} should retain a touch-sized target`);
+    }
+    await page.evaluate(() => {
+      window.__technologyLoopActivation = "";
+      const link = document.querySelector("[data-related-loop-link]");
+      link.addEventListener("click", event => {
+        event.preventDefault();
+        window.__technologyLoopActivation = link.href;
+      }, { once: true });
+    });
+    await loopLinks.first().focus();
+    await page.keyboard.press("Enter");
+    assert.equal(await page.evaluate(() => window.__technologyLoopActivation), loopMetadata[0].publicUrl, "Enter should activate the first public loop anchor");
+
+    const noScriptContext = await browser.newContext({
+      javaScriptEnabled: false,
+      viewport: { width: 1440, height: 1000 }
+    });
+    try {
+      const noScriptPage = await noScriptContext.newPage();
+      await noScriptPage.goto(`${origin}/${routes.technology}`, { waitUntil: "domcontentloaded" });
+      assert.equal(
+        await noScriptPage.locator("#promptPreview").textContent(),
+        initialPlain,
+        "the source-authored no-JavaScript baseline should equal the runtime plain projection"
+      );
+      assert.match(await noScriptPage.locator("noscript").textContent(), /complete plain Markdown remains available/u);
+      const noScriptLoops = noScriptPage.locator("[data-prompt-related-loops]");
+      assert.equal(await noScriptLoops.count(), 1, "the Related loops disclosure should remain available without JavaScript");
+      assert.equal(await noScriptLoops.evaluate(element => element.open), false);
+      await noScriptLoops.locator("summary").click();
+      assert.equal(await noScriptLoops.evaluate(element => element.open), true, "the native disclosure should open without JavaScript");
+      assert.deepEqual(
+        await noScriptLoops.locator("[data-related-loop-id]").evaluateAll(items => items.map(item => ({
+          id: item.dataset.relatedLoopId,
+          name: item.querySelector("[data-related-loop-link]")?.textContent.trim() || "",
+          publicUrl: item.querySelector("[data-related-loop-link]")?.getAttribute("href") || "",
+          fitCondition: item.querySelector("[data-related-loop-fit]")?.textContent.trim() || ""
+        }))),
+        loopMetadata,
+        "the no-JavaScript reading should retain the exact loop set and fit conditions"
+      );
+    } finally {
+      await noScriptContext.close();
+    }
+
+    const initialState = await previewJson(page, "#jsonPreview");
+    await page.locator("#intervalToggle").uncheck();
+    const transientState = await previewJson(page, "#jsonPreview");
+    assert.equal(transientState.viewState.showIntervals, false);
+    assert.notDeepEqual(transientState.viewState, initialState.viewState);
+    const afterTransient = await page.evaluate(() => ({
+      markdown: window.technologyFitSamplingTableau.promptCapsule(),
+      fingerprint: window.technologyFitSamplingTableau.promptCapsuleFingerprint()
+    }));
+    assert.equal(afterTransient.markdown, initialPlain);
+    assert.equal(afterTransient.fingerprint, seam.fingerprint, "transient view state should not change the represented-state fingerprint");
+
+    const assistedControl = page.locator('[data-prompt-view][value="skill-assisted"]');
+    await assistedControl.focus();
+    await assistedControl.press("Space");
+    assert.equal(await assistedControl.isChecked(), true);
+    assert.equal(await page.evaluate(() => document.activeElement?.value), "skill-assisted", "keyboard selection should retain focus");
+    assert.match(await page.locator("#promptViewStatus").textContent(), /Skill-assisted Markdown view selected/u);
+    assert.equal(await promptPreview.getAttribute("data-prompt-view-active"), "skill-assisted");
+    assert.deepEqual(await previewJson(page, "#jsonPreview"), transientState, "view selection should not enter exported state");
+
+    const assisted = await promptPreview.textContent();
+    const assistedSeam = await page.evaluate(() => ({
+      markdown: window.technologyFitSamplingTableau.promptCapsuleMarkdown("skill-assisted"),
+      fingerprint: window.technologyFitSamplingTableau.promptCapsuleFingerprint()
+    }));
+    assert.equal(assisted, assistedSeam.markdown);
+    assert.equal(assistedSeam.fingerprint, seam.fingerprint);
+    assert.match(assisted, /- View: `skill-assisted`/u);
+    assert.match(assisted, /^## Skill assistance$/mu);
+    assert.match(assisted, /Source revision: `64992546a4fe7f6fd7b2e27022f0625033a81cf1`/u);
+    for (const [name, path, digest] of [
+      ["Practitioner Probe", ".agents/skills/practitioner-probe/SKILL.md", "348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c"],
+      ["Evidence-Grounded Research Spike", ".agents/skills/evidence-grounded-research-spike/SKILL.md", "844fc0c6b0b956b81984a2c2d47d9252abadeb0a6554c5ef4734d0f1e5f4b531"],
+      ["Stateful Artifact Behavior Contracts", ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md", "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a"]
+    ]) {
+      assert.ok(assisted.includes(name));
+      assert.ok(assisted.includes(path));
+      assert.ok(assisted.includes(digest));
+    }
+
+    await page.evaluate(() => {
+      window.__copiedPrompt = "";
+      Object.defineProperty(navigator, "clipboard", {
+        configurable: true,
+        value: { writeText: async value => { window.__copiedPrompt = value; } }
+      });
+      const createObjectURL = URL.createObjectURL.bind(URL);
+      window.__promptDownloadTypes = [];
+      URL.createObjectURL = blob => {
+        window.__promptDownloadTypes.push(blob.type);
+        return createObjectURL(blob);
+      };
+    });
+    await page.locator("#copyPromptBtn").click();
+    assert.equal(await page.evaluate(() => window.__copiedPrompt), assisted);
+    assert.match(await page.locator("#promptViewStatus").textContent(), /Skill-assisted Markdown copied/u);
+    const assistedDownload = await downloadedText(page, "#downloadPromptBtn");
+    assert.equal(assistedDownload.fileName, "technology-fit-sampling-tableau.prompt-capsule.r0.1.skill-assisted.md");
+    assert.equal(assistedDownload.text, assisted);
+    assert.deepEqual(await page.evaluate(() => window.__promptDownloadTypes), ["text/markdown;charset=utf-8"]);
+
+    const plainControl = page.locator('[data-prompt-view][value="plain"]');
+    await plainControl.check();
+    assert.equal(await promptPreview.textContent(), afterTransient.markdown);
+    await page.locator("#copyPromptBtn").click();
+    assert.equal(await page.evaluate(() => window.__copiedPrompt), afterTransient.markdown);
+
+    await page.locator("details:has(#stateImportInput) > summary").click();
+    const literal = structuredClone(transientState);
+    literal.id = "na:literal`source_&";
+    literal.promptCapsule.currentDecision = "Inspect <img src=x> [linked](https://example.invalid) @mention ~~change~~ www.example.invalid #42";
+    await page.locator("#stateImportInput").fill(JSON.stringify(literal));
+    await page.locator("#importStateBtn").click();
+    assert.match(await page.locator("#importStatus").textContent(), /Technology-fit state imported/u);
+    const literalPrompt = await promptPreview.textContent();
+    assert.ok(literalPrompt.includes("&lt;img src=x&gt;"));
+    assert.ok(literalPrompt.includes("\\[linked\\](https\\://example.invalid)"));
+    assert.ok(literalPrompt.includes("\\@mention"));
+    assert.ok(literalPrompt.includes("\\~\\~change\\~\\~"));
+    assert.ok(literalPrompt.includes("www\\.example.invalid"));
+    assert.ok(literalPrompt.includes("\\#42"));
+    const sourceLine = literalPrompt.split("\n").find(line => line.startsWith("- Source:"));
+    assert.equal(
+      renderedCodeSpanText(sourceLine),
+      "na:literal`source_&@0.1",
+      "a rendered GFM code span should preserve backtick-, underscore-, and ampersand-bearing identity text"
+    );
+    assert.ok(literalPrompt.includes("- Source: ``na:literal`source_&@0.1``"), "the source identity should use a delimiter longer than its literal backtick");
+    assert.notEqual(await page.evaluate(() => window.technologyFitSamplingTableau.promptCapsuleFingerprint()), seam.fingerprint);
+
+    const finePrecisionA = structuredClone(literal);
+    const activeA = finePrecisionA.runs.find(run => run.id === finePrecisionA.activeRunId);
+    activeA.candidates[0].defaultLikelihood.estimate = 0.3001;
+    activeA.otherOrTailMass = 0.0199;
+    await page.locator("#stateImportInput").fill(JSON.stringify(finePrecisionA));
+    await page.locator("#importStateBtn").click();
+    assert.match(await page.locator("#importStatus").textContent(), /Technology-fit state imported/u);
+    const precisionMarkdown = await promptPreview.textContent();
+    const precisionFingerprint = await page.evaluate(() => window.technologyFitSamplingTableau.promptCapsuleFingerprint());
+
+    const finePrecisionB = structuredClone(finePrecisionA);
+    const activeB = finePrecisionB.runs.find(run => run.id === finePrecisionB.activeRunId);
+    activeB.candidates[0].defaultLikelihood.estimate = 0.3002;
+    activeB.otherOrTailMass = 0.0198;
+    await page.locator("#stateImportInput").fill(JSON.stringify(finePrecisionB));
+    await page.locator("#importStateBtn").click();
+    assert.match(await page.locator("#importStatus").textContent(), /Technology-fit state imported/u);
+    assert.equal(await promptPreview.textContent(), precisionMarkdown, "sub-display numeric precision should not change represented Markdown");
+    assert.equal(
+      await page.evaluate(() => window.technologyFitSamplingTableau.promptCapsuleFingerprint()),
+      precisionFingerprint,
+      "sub-display numeric precision should not change the represented-state fingerprint"
+    );
+
+    const acceptedMarkdown = await promptPreview.textContent();
+    const acceptedFingerprint = await page.evaluate(() => window.technologyFitSamplingTableau.promptCapsuleFingerprint());
+    const acceptedState = await page.evaluate(() => window.technologyFitSamplingTableau.getState());
+    const technologySchema = JSON.parse(await readFile(resolve(repositoryRoot, routes.technologySchema), "utf8"));
+    for (const requiredField of technologySchema.required) {
+      const invalid = structuredClone(finePrecisionB);
+      delete invalid[requiredField];
+      await page.locator("#stateImportInput").fill(JSON.stringify(invalid));
+      await page.locator("#importStateBtn").click();
+      assert.match(
+        await page.locator("#importStatus").textContent(),
+        /Current technology-fit state is still available/u,
+        `an import missing schema-required ${requiredField} should retain the accepted state`
+      );
+      assert.deepEqual(
+        await page.evaluate(() => window.technologyFitSamplingTableau.getState()),
+        acceptedState,
+        `a rejected ${requiredField} omission should preserve the complete accepted state`
+      );
+      assert.equal(await promptPreview.textContent(), acceptedMarkdown);
+      assert.equal(await page.evaluate(() => window.technologyFitSamplingTableau.promptCapsuleFingerprint()), acceptedFingerprint);
+    }
     assertTelemetry(telemetry);
   } finally {
     await context.close();
@@ -905,19 +1638,168 @@ async function threadkeepingPath(browser, origin) {
   }
 }
 
+async function threadkeepingPromptCapsulePath(browser, origin) {
+  const { context, page, telemetry } = await openFresh(browser, origin, routes.threadkeeping);
+  try {
+    const seam = await page.evaluate(() => {
+      const api = window.threadkeepingLedger;
+      const detached = api.getState();
+      detached.threadkeeper.entries[0].summary = "detached change";
+      return {
+        frozen: Object.isFrozen(api),
+        viewsFrozen: Object.isFrozen(api.promptCapsuleViews),
+        keys: Object.keys(api).sort(),
+        contract: api.promptCapsuleContract,
+        version: api.version,
+        stateSchemaVersion: api.stateSchemaVersion,
+        view: api.getPromptCapsuleView(),
+        plain: api.promptCapsule(),
+        plainByView: api.promptCapsuleMarkdown("plain"),
+        fingerprint: api.promptCapsuleFingerprint(),
+        detached: api.getState().threadkeeper.entries[0].summary !== "detached change",
+      };
+    });
+    assert.equal(seam.frozen, true);
+    assert.equal(seam.viewsFrozen, true);
+    assert.deepEqual(seam.keys, [
+      "getPromptCapsuleView", "getState", "promptCapsule", "promptCapsuleContract",
+      "promptCapsuleFingerprint", "promptCapsuleMarkdown", "promptCapsuleStateProjection",
+      "promptCapsuleViews", "stateSchemaVersion", "version",
+    ]);
+    assert.equal(seam.contract, "prompt-capsule/0.1.0");
+    assert.equal(seam.version, "0.1");
+    assert.equal(seam.stateSchemaVersion, "0.1");
+    assert.equal(seam.view, "plain");
+    assert.equal(seam.detached, true);
+    assert.equal(seam.plain, seam.plainByView);
+
+    const preview = page.locator("#hydrationPacket");
+    const initialPlain = await preview.inputValue();
+    assert.equal(initialPlain, seam.plain);
+    assert.equal(await preview.getAttribute("data-prompt-view-active"), "plain");
+    assert.match(initialPlain, /- Contract: `prompt-capsule\/0\.1\.0`/u);
+    assert.match(initialPlain, /^## Purpose and target$/mu);
+    assert.match(initialPlain, /^## Evidence and recovery$/mu);
+    assert.doesNotMatch(initialPlain, /^## Skill assistance$/mu);
+    for (const materialIdentity of [
+      "tk-entry-001", "tk-entry-007", "next-001", "next-003", "continuity-001",
+      "Relationship ownership", "Failure geometries", "Source note",
+    ]) {
+      assert.ok(initialPlain.includes(materialIdentity), `${materialIdentity} should travel in the complete plain projection`);
+    }
+
+    const loops = page.locator("[data-prompt-related-loops]");
+    assert.equal(await loops.count(), 1);
+    assert.equal(await loops.evaluate(element => element.open), false);
+    assert.equal(await loops.locator("[data-related-loop-id]").count(), 1);
+    await loops.locator("summary").focus();
+    await page.keyboard.press("Enter");
+    assert.equal(await loops.evaluate(element => element.open), true);
+
+    const noScriptContext = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1440, height: 1000 } });
+    try {
+      const noScriptPage = await noScriptContext.newPage();
+      await noScriptPage.goto(`${origin}/${routes.threadkeeping}`, { waitUntil: "domcontentloaded" });
+      assert.equal(await noScriptPage.locator("#hydrationPacket").inputValue(), initialPlain);
+      assert.match(await noScriptPage.locator("noscript").textContent(), /complete plain Markdown remains available/u);
+    } finally {
+      await noScriptContext.close();
+    }
+
+    const initialState = await page.evaluate(() => window.threadkeepingLedger.getState());
+    await page.locator("#searchInput").fill("identity");
+    const transientState = await page.evaluate(() => window.threadkeepingLedger.getState());
+    assert.notDeepEqual(transientState.viewState, initialState.viewState);
+    assert.equal(await page.evaluate(() => window.threadkeepingLedger.promptCapsule()), initialPlain);
+    assert.equal(await page.evaluate(() => window.threadkeepingLedger.promptCapsuleFingerprint()), seam.fingerprint);
+
+    const assistedControl = page.locator('[data-prompt-view][value="skill-assisted"]');
+    await assistedControl.focus();
+    await assistedControl.press("Space");
+    assert.equal(await assistedControl.isChecked(), true);
+    assert.equal(await page.evaluate(() => document.activeElement?.value), "skill-assisted");
+    assert.match(await page.locator("#promptViewStatus").textContent(), /Skill-assisted Markdown view selected/u);
+    const assisted = await preview.inputValue();
+    assert.equal(assisted, await page.evaluate(() => window.threadkeepingLedger.promptCapsuleMarkdown("skill-assisted")));
+    assert.equal(await page.evaluate(() => window.threadkeepingLedger.promptCapsuleFingerprint()), seam.fingerprint);
+    assert.match(assisted, /^## Skill assistance$/mu);
+    assert.match(assisted, /Source revision: `b8b305c78b82a288ae2aca9574bb86d7d3d574d9`/u);
+    for (const [name, path, digest] of [
+      ["Repository Re-entry", ".agents/skills/repository-reentry/SKILL.md", "211cdbd293c260e95e62d3bc7ed5cb4d6d9ca3debd560a28a74b52364a1bfa90"],
+      ["Issue Chain Stewardship", ".agents/skills/issue-chain-stewardship/SKILL.md", "86815b7996c29de1aefce7b58e1276b727d50da75dd2b19985decb6884390c57"],
+      ["Source Authority Mapping", ".agents/skills/source-authority-mapping/SKILL.md", "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5"],
+    ]) {
+      assert.ok(assisted.includes(name));
+      assert.ok(assisted.includes(path));
+      assert.ok(assisted.includes(digest));
+    }
+
+    await page.evaluate(() => {
+      window.__fallbackCopied = "";
+      Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: async () => { throw new Error("opaque-origin style rejection"); } } });
+      document.execCommand = command => {
+        if (command === "copy") window.__fallbackCopied = document.activeElement?.value || "";
+        return command === "copy";
+      };
+    });
+    const copyButton = page.locator("#copyHydrationBtn");
+    await copyButton.click();
+    assert.equal(await page.evaluate(() => window.__fallbackCopied), assisted);
+    assert.equal(await page.evaluate(() => document.activeElement?.id), "copyHydrationBtn");
+    assert.match(await page.locator("#promptViewStatus").textContent(), /Skill-assisted Markdown copied/u);
+    const downloaded = await downloadedText(page, "#downloadHydrationBtn");
+    assert.equal(downloaded.fileName, "threadkeeping-ledger.prompt-capsule.r0.1.skill-assisted.md");
+    assert.equal(downloaded.text, assisted);
+
+    await page.locator('[data-prompt-view][value="plain"]').check();
+    const literal = structuredClone(transientState);
+    literal.threadkeeper.entries[0].summary = "Inspect <img src=x> [linked](https://example.invalid) @mention ~~change~~ www.example.invalid #42";
+    await page.locator("#jsonImport").fill(JSON.stringify(literal));
+    await page.locator("#importJsonBtn").click();
+    assert.match(await page.locator("#importStatus").textContent(), /Ledger imported/u);
+    const literalPrompt = await preview.inputValue();
+    assert.ok(literalPrompt.includes("&lt;img src=x&gt;"));
+    assert.ok(literalPrompt.includes("\\[linked\\](https\\://example.invalid)"));
+    assert.ok(literalPrompt.includes("\\@mention"));
+    assert.ok(literalPrompt.includes("\\~\\~change\\~\\~"));
+    assert.ok(literalPrompt.includes("www\\.example.invalid"));
+    assert.ok(literalPrompt.includes("\\#42"));
+    assert.notEqual(await page.evaluate(() => window.threadkeepingLedger.promptCapsuleFingerprint()), seam.fingerprint);
+
+    const acceptedState = await page.evaluate(() => window.threadkeepingLedger.getState());
+    const acceptedMarkdown = await preview.inputValue();
+    const acceptedFingerprint = await page.evaluate(() => window.threadkeepingLedger.promptCapsuleFingerprint());
+    const invalid = structuredClone(acceptedState);
+    delete invalid.threadkeeper.nextCandidates[0].reason;
+    await page.locator("#jsonImport").fill(JSON.stringify(invalid));
+    await page.locator("#importJsonBtn").click();
+    assert.match(await page.locator("#importStatus").textContent(), /Current ledger remains available/u);
+    assert.deepEqual(await page.evaluate(() => window.threadkeepingLedger.getState()), acceptedState);
+    assert.equal(await preview.inputValue(), acceptedMarkdown);
+    assert.equal(await page.evaluate(() => window.threadkeepingLedger.promptCapsuleFingerprint()), acceptedFingerprint);
+    assertTelemetry(telemetry);
+  } finally {
+    await context.close();
+  }
+}
+
 const server = await startStaticServer();
 const browser = await chromium.launch({ headless: true });
 try {
   await verify("Narrative Capsule Composer · Strategy v2 import, edit, governed export, and recovery", () => composerPath(browser, server.origin));
   await verify("Narrative Capsule Composer · held-open readiness, reference closure, fingerprint, and JSON-LD", () => composerLifecyclePath(browser, server.origin));
+  await verify("Narrative Capsule Composer · Prompt Capsule views, exact exchange, fingerprint, escaping, and recovery", () => composerPromptCapsulePath(browser, server.origin));
   await verify("Semantic Sampling · candidate and run edit, browser round trip, export, and recovery", () => semanticPath(browser, server.origin));
   await verify("Semantic Sampling · active-run prompt contract and variant lineage", () => semanticPromptAndLineagePath(browser, server.origin));
+  await verify("Semantic Sampling · Prompt Capsule views, exact exchange, fingerprint, and recovery", () => semanticPromptCapsulePath(browser, server.origin));
   await verify("Semantic Sampling · exact exclusive normalization and minimum usable set", () => semanticNormalizationPath(browser, server.origin));
   await verify("Technology Fit · AI successor, browser round trip, export, and recovery", () => technologyPath(browser, server.origin));
+  await verify("Technology Fit · Prompt Capsule views, exact exchange, fingerprint, escaping, and recovery", () => technologyPromptCapsulePath(browser, server.origin));
   await verify("Technology Fit · rapid composition identity and collision-safe recovery", () => technologyCompositionIdentityPath(browser, server.origin));
   await verify("Technology Fit · decision synchronization and successor lineage", () => technologyDecisionAndLineagePath(browser, server.origin));
   await verify("Technology Fit · aligned successor exchange and minimum candidate boundary", () => technologySuccessorExchangePath(browser, server.origin));
   await verify("Threadkeeping Ledger · literal controls, chronology, detached exchange, JSON-LD, and recovery", () => threadkeepingPath(browser, server.origin));
+  await verify("Threadkeeping Ledger · Prompt Capsule views, complete state, exact exchange, fingerprint, and recovery", () => threadkeepingPromptCapsulePath(browser, server.origin));
 } finally {
   await browser.close();
   await server.close();

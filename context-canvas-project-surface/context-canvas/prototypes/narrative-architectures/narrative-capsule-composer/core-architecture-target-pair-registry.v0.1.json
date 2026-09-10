@@ -65,7 +65,7 @@
       "artifactShape": "Document / four-zone map",
       "useWhen": "The team needs a compact shared frame before deeper artifacts.",
       "readerRef": "/field-guide/core-architectures/poda/",
-      "prototypeRef": "poda-chimeric-prototype-v0.1.html",
+      "prototypeRef": "poda-chimeric-prototype-v0.1.4.html",
       "prototypeStatus": "generated",
       "routes": [
         "Impact Map",
@@ -157,7 +157,7 @@
       "artifactShape": "Six-blank worksheet / option spread",
       "useWhen": "The team needs to align present world, restored state, and broad approach.",
       "readerRef": "/field-guide/core-architectures/alignment-worksheet/",
-      "prototypeRef": "alignment-worksheet-chimeric-prototype-v0.1.html",
+      "prototypeRef": "alignment-worksheet-chimeric-prototype-v0.1.4.html",
       "prototypeStatus": "generated",
       "routes": [
         "Impact Map",
@@ -252,7 +252,7 @@
       "artifactShape": "Directed graph",
       "useWhen": "The team needs goal → actor → impact → discoverable traceability.",
       "readerRef": "/field-guide/core-architectures/impact-map/",
-      "prototypeRef": "impact-map-chimeric-prototype-v0.1.1.html",
+      "prototypeRef": "impact-map-chimeric-prototype-v0.1.5.html",
       "prototypeStatus": "generated",
       "routes": [
         "Context Tree",
@@ -336,7 +336,7 @@
       "artifactShape": "Matrix",
       "useWhen": "Role differences are being flattened and local context needs to surface.",
       "readerRef": "/field-guide/core-architectures/context-tree/",
-      "prototypeRef": "context-tree-chimeric-prototype-v0.1.3.html",
+      "prototypeRef": "context-tree-chimeric-prototype-v0.1.7.html",
       "prototypeStatus": "generated",
       "routes": [
         "Participatory Design Kit",
@@ -642,7 +642,7 @@
       "artifactShape": "Heatmap matrix with shared assets",
       "useWhen": "Visible surfaces depend on shared assets and priority intensity needs to be mapped.",
       "readerRef": "/field-guide/core-architectures/cross-channel-blueprint/",
-      "prototypeRef": "shared-surface-priority-map-chimeric-prototype-v0.1.html",
+      "prototypeRef": "shared-surface-priority-map-chimeric-prototype-v0.1.4.html",
       "prototypeStatus": "generated",
       "routes": [
         "Service-design Blueprint",
@@ -727,7 +727,7 @@
       "artifactShape": "Layered service matrix",
       "useWhen": "Visible experience depends on backstage work, AI, systems, data, governance, and handoffs.",
       "readerRef": "/field-guide/core-architectures/service-design-blueprint/",
-      "prototypeRef": "service-design-blueprint-chimeric-prototype-v0.2.html",
+      "prototypeRef": "service-design-blueprint-chimeric-prototype-v0.2.5.html",
       "prototypeStatus": "generated",
       "routes": [
         "Specification-by-Example",
@@ -827,7 +827,7 @@
       "artifactShape": "Layered AI topology matrix",
       "useWhen": "Visible AI behavior needs runtime, knowledge, infrastructure, evaluation, and containment context.",
       "readerRef": "/field-guide/core-architectures/ai-systems-service-blueprint/",
-      "prototypeRef": "ai-systems-service-blueprint-chimeric-prototype-v0.1.html",
+      "prototypeRef": "ai-systems-service-blueprint-chimeric-prototype-v0.1.4.html",
       "prototypeStatus": "generated",
       "routes": [
         "Specification-by-Example",
@@ -929,7 +929,7 @@
       "artifactShape": "View-based attachment map",
       "useWhen": "A modeled feature looks small but its system attachments need visibility.",
       "readerRef": "/field-guide/core-architectures/software-architecture-views/",
-      "prototypeRef": "software-architecture-views-chimeric-prototype-v0.1.html",
+      "prototypeRef": "software-architecture-views-chimeric-prototype-v0.1.4.html",
       "prototypeStatus": "generated",
       "routes": [
         "Unit-test-first Design",
@@ -1204,7 +1204,7 @@
       "artifactShape": "Goal–signal–metric matrix",
       "useWhen": "Metrics need interpretation against goals, tolerances, and counter-signals.",
       "readerRef": "/field-guide/core-architectures/heart-chart/",
-      "prototypeRef": "heart-chart-chimeric-prototype-v0.1.5.html",
+      "prototypeRef": "heart-chart-chimeric-prototype-v0.1.6.html",
       "prototypeStatus": "generated · patch candidate",
       "routes": [
         "Plus / Delta",
@@ -1288,7 +1288,7 @@
       "artifactShape": "Preserve/change reflection board",
       "useWhen": "The team needs to preserve what works and route what needs to change.",
       "readerRef": "/field-guide/core-architectures/plus-delta/",
-      "prototypeRef": "plus-delta-chimeric-prototype-v0.1.html",
+      "prototypeRef": "plus-delta-chimeric-prototype-v0.1.4.html",
       "prototypeStatus": "generated",
       "routes": [
         "HEART Chart",
@@ -1372,7 +1372,7 @@
       "artifactShape": "Probe matrix",
       "useWhen": "Plausible artifacts need strong practitioner questions and AI instruction yield.",
       "readerRef": "/field-guide/core-architectures/practitioner-judgment-probes/",
-      "prototypeRef": "practitioner-judgment-probes-chimeric-prototype-v0.1.html",
+      "prototypeRef": "practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
       "prototypeStatus": "generated",
       "routes": [
         "Software Architecture Views",

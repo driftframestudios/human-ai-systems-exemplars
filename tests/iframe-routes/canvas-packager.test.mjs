@@ -63,8 +63,9 @@ test("the Canvas family plan follows the authored 15-route manifest", async () =
   );
   assert.deepEqual(first.receipt.package_contract, {
     primary_routes: 15,
-    decorated_routes: 14,
-    byte_identical_routes: 1,
+    decorated_routes: 15,
+    byte_identical_routes: 0,
+    navigation_adapted_routes: 1,
     generated_files: 40,
     live_cloudflare_mutation: false,
     closure_observation: "static_resource_graph",
@@ -82,9 +83,24 @@ test("the Canvas family plan follows the authored 15-route manifest", async () =
     const html = projection.toString("utf8");
     const receipt = first.receipt.routes.find(({ id }) => id === route.id);
     assert.deepEqual(receipt.navigation.unresolved_local_links, []);
+    assert.equal(
+      receipt.navigation.exit_links,
+      receipt.navigation.new_tab_exit_links,
+      `${route.id} opens every static exit in a separate tab`,
+    );
+    assert.equal(
+      receipt.navigation.exit_links,
+      receipt.navigation.secure_new_tab_exit_links,
+      `${route.id} severs the opener for every static exit`,
+    );
+    const source = await readFile(path.join(repositoryRoot, route.source_file), "utf8");
+    assert.doesNotMatch(
+      source,
+      /<a\b[^>]*\btarget=["']_blank["'][^>]*>/iu,
+      `${route.id} leaves standalone link context with the visitor`,
+    );
     if (route.projection_kind === "byte_identical") {
-      const source = await readFile(path.join(repositoryRoot, route.source_file));
-      assert.ok(projection.equals(source), `${route.id} remains byte-identical`);
+      assert.ok(projection.equals(Buffer.from(source)), `${route.id} remains byte-identical`);
       continue;
     }
     assert.equal(occurrenceCount(html, artifactAuthor), 2, `${route.id} author metadata and notice`);
@@ -97,8 +113,24 @@ test("the Canvas family plan follows the authored 15-route manifest", async () =
         html.indexOf("data-visitor-boundary-marker"),
       `${route.id} context before exact markers`,
     );
-    assert.equal(occurrenceCount(html, "<style data-iframe-route-projection>"), 1);
+    assert.equal(
+      occurrenceCount(html, "<style data-iframe-route-projection>"),
+      ["decorated_copy", "decorated_rewrite"].includes(route.projection_kind) ? 1 : 0,
+      `${route.id} carries only its declared public decoration`,
+    );
   }
+
+  const talentReceipt = first.receipt.routes.find(({ id }) => id === "talent-agent-intake");
+  assert.deepEqual(
+    talentReceipt.projection_rewrites.find(({ kind }) => kind === "iframe_exit_behavior"),
+    {
+      kind: "iframe_exit_behavior",
+      exit_links: 0,
+      rewritten_links: 0,
+      dynamic_exit_templates: 1,
+      runtime_adapter: true,
+    },
+  );
 
   const ai = first.receipt.routes.find(({ id }) => id === "ai-method-gallery");
   assert.equal(ai.static_resource_closure.package_files.length, 20);
@@ -110,6 +142,7 @@ test("the Canvas family plan follows the authored 15-route manifest", async () =
   const talentProjection = first.outputFiles
     .get("talent-agent-intake/index.html")
     .toString("utf8");
+  assert.match(talentProjection, /data-iframe-exit-projection/u);
   for (const placeholder of [
     "Candidate 1",
     "Candidate 2",

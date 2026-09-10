@@ -146,10 +146,17 @@ export function observeIframeRuntimeCapabilities(html) {
 
   const { executableBodies, executableScripts } = iframeExecutableSources(html);
   const executableSource = executableBodies.join("\n");
+  const inertMarkup = html.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "");
   const capabilities = [];
   if (executableScripts) capabilities.push("executable-scripts");
   if (/\bnavigator\.clipboard\b[\s\S]{0,120}?\bwriteText\s*\(/.test(executableSource)) {
     capabilities.push("clipboard-write");
+  }
+  if (
+    /\.download\s*=/.test(executableSource) ||
+    /<a\b[^>]*\bdownload(?:\s|=|>)/i.test(inertMarkup)
+  ) {
+    capabilities.push("file-download");
   }
   if (/(?:^|[^\w.])(?:(?:window|globalThis)\.)?(?:alert|confirm|prompt)\s*\(/m.test(executableSource)) {
     capabilities.push("native-modals");
@@ -219,7 +226,7 @@ function classifyResourceReference(reference, baseDirectory = "") {
 
 function styleReferences(text) {
   const references = [];
-  for (const match of text.matchAll(/url\(\s*(?:"([^"]*)"|'([^']*)'|([^)'"\s][^)]*))\s*\)/gi)) {
+  for (const match of text.matchAll(/(?<![\w$])url\(\s*(?:"([^"]*)"|'([^']*)'|([^)'"\s][^)]*))\s*\)/gi)) {
     references.push({ tag: "style", attribute: "url", reference: match[1] ?? match[2] ?? match[3] });
   }
   for (const match of text.matchAll(/@import\s+(?:url\(\s*)?(?:"([^"]*)"|'([^']*)')/gi)) {
@@ -407,6 +414,188 @@ function extractAnchorHrefs(html, options = {}) {
   return hrefs;
 }
 
+function extractNavigationAnchorHrefs(html, options = {}) {
+  const hrefs = [];
+  const markup = markupResourceContext(html, options);
+  for (const match of markup.matchAll(/<a\b[^>]*>/gi)) {
+    const tag = match[0];
+    if (hasBooleanAttribute(tag, "download")) continue;
+    const href = attributeValue(tag, "href");
+    if (href !== null) hrefs.push(href.trim());
+  }
+  return hrefs;
+}
+
+function hasBooleanAttribute(tag, attributeName) {
+  const escapedName = attributeName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(?:^|\\s)${escapedName}(?:\\s|=|/?>)`, "i").test(tag);
+}
+
+function setTagAttribute(tag, attributeName, value) {
+  const escapedName = attributeName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const expression = new RegExp(
+    `(\\s)${escapedName}\\s*=\\s*(?:"[^"]*"|'[^']*'|[^\\s>]+)`,
+    "i",
+  );
+  if (expression.test(tag)) {
+    return tag.replace(expression, `$1${attributeName}="${value}"`);
+  }
+  return tag.replace(/\s*\/?>$/u, (ending) =>
+    ` ${attributeName}="${value}"${ending}`,
+  );
+}
+
+function iframeExitAnchor(tag) {
+  const href = attributeValue(tag, "href")?.trim() ?? "";
+  const decodedHref = decodeExecutableAttribute(href, { rejectRemaining: false })
+    .replace(/[\u0000-\u0020]+/gu, "");
+  if (
+    href.length === 0 ||
+    decodedHref.startsWith("#") ||
+    hasBooleanAttribute(tag, "download") ||
+    /^javascript:/iu.test(decodedHref)
+  ) {
+    return null;
+  }
+  return href;
+}
+
+function secureNewTabAnchor(tag) {
+  let projected = setTagAttribute(tag, "target", "_blank");
+  const currentRel = (attributeValue(projected, "rel") ?? "")
+    .split(/\s+/u)
+    .filter(Boolean);
+  const relTokens = [...currentRel];
+  const normalized = new Set(currentRel.map((token) => token.toLowerCase()));
+  for (const token of ["noopener", "noreferrer"]) {
+    if (!normalized.has(token)) relTokens.push(token);
+  }
+  projected = setTagAttribute(projected, "rel", relTokens.join(" "));
+  return projected;
+}
+
+function iframeNavigationPattern() {
+  return /<!--[\s\S]*?-->|<script\b[^>]*>[\s\S]*?<\/script\s*>|<style\b[^>]*>[\s\S]*?<\/style\s*>|<a\b[^>]*>/giu;
+}
+
+function iframeNavigationCandidates(html) {
+  return html.matchAll(iframeNavigationPattern());
+}
+
+function dynamicIframeExitTemplates(html) {
+  const { executableBodies } = iframeExecutableSources(html);
+  let exitLinks = 0;
+  for (const body of executableBodies) {
+    for (const match of body.matchAll(/<a\b[^>]*>/giu)) {
+      if (iframeExitAnchor(match[0]) !== null) exitLinks += 1;
+    }
+  }
+  return exitLinks;
+}
+
+const runtimeIframeExitProjection = `<script data-iframe-exit-projection>
+(() => {
+  const projectExit = (anchor) => {
+    if (anchor.hasAttribute("download")) return;
+    const href = (anchor.getAttribute("href") || "").trim();
+    const compactHref = href.replace(/[\\u0000-\\u0020]+/g, "").toLowerCase();
+    if (!href || compactHref.startsWith("#") || compactHref.startsWith("javascript:")) return;
+    anchor.target = "_blank";
+    anchor.relList.add("noopener", "noreferrer");
+  };
+  const projectWithin = (node) => {
+    if (!(node instanceof Element)) return;
+    if (node.matches("a[href]")) projectExit(node);
+    node.querySelectorAll("a[href]").forEach(projectExit);
+  };
+  document.querySelectorAll("a[href]").forEach(projectExit);
+  new MutationObserver((records) => {
+    records.forEach((record) => record.addedNodes.forEach(projectWithin));
+  }).observe(document.documentElement, { childList: true, subtree: true });
+})();
+</script>`;
+
+function projectDynamicIframeExits(html, dynamicExitTemplates) {
+  if (dynamicExitTemplates === 0) return { html, runtime_adapter: false };
+  const closingBody = html.toLowerCase().lastIndexOf("</body>");
+  if (closingBody === -1) {
+    fail("Dynamic iframe exit projection requires a closing body element.");
+  }
+  return {
+    html: `${html.slice(0, closingBody)}${runtimeIframeExitProjection}\n${html.slice(closingBody)}`,
+    runtime_adapter: true,
+  };
+}
+
+/**
+ * Adapt only user-activated exits in generated iframe markup. Canonical HTML,
+ * fragment links, downloads, and script logic retain their source behavior.
+ * A small projected mutation adapter gives runtime-created anchors the same
+ * exit semantics without changing the canonical script that creates them.
+ */
+export function projectIframeExitLinks(html) {
+  if (typeof html !== "string") {
+    fail("Iframe exit projection requires HTML text.");
+  }
+  let exitLinks = 0;
+  let rewrittenLinks = 0;
+  const staticProjection = html.replace(
+    iframeNavigationPattern(),
+    (candidate) => {
+      if (!/^<a\b/iu.test(candidate) || iframeExitAnchor(candidate) === null) {
+        return candidate;
+      }
+      exitLinks += 1;
+      const rewritten = secureNewTabAnchor(candidate);
+      if (rewritten !== candidate) rewrittenLinks += 1;
+      return rewritten;
+    },
+  );
+  const dynamicExitTemplates = dynamicIframeExitTemplates(html);
+  const dynamicProjection = projectDynamicIframeExits(
+    staticProjection,
+    dynamicExitTemplates,
+  );
+  return {
+    html: dynamicProjection.html,
+    exit_links: exitLinks,
+    rewritten_links: rewrittenLinks,
+    dynamic_exit_templates: dynamicExitTemplates,
+    runtime_adapter: dynamicProjection.runtime_adapter,
+  };
+}
+
+export function observeIframeExitLinks(html) {
+  if (typeof html !== "string") {
+    fail("Iframe exit observation requires HTML text.");
+  }
+  let exitLinks = 0;
+  let newTabExitLinks = 0;
+  let secureNewTabExitLinks = 0;
+  for (const match of iframeNavigationCandidates(html)) {
+    const tag = match[0];
+    if (!/^<a\b/iu.test(tag)) continue;
+    if (iframeExitAnchor(tag) === null) continue;
+    exitLinks += 1;
+    if ((attributeValue(tag, "target") ?? "").toLowerCase() !== "_blank") continue;
+    newTabExitLinks += 1;
+    const rel = new Set(
+      (attributeValue(tag, "rel") ?? "")
+        .toLowerCase()
+        .split(/\s+/u)
+        .filter(Boolean),
+    );
+    if (rel.has("noopener") && rel.has("noreferrer")) {
+      secureNewTabExitLinks += 1;
+    }
+  }
+  return {
+    exit_links: exitLinks,
+    new_tab_exit_links: newTabExitLinks,
+    secure_new_tab_exit_links: secureNewTabExitLinks,
+  };
+}
+
 export function scanPackageClosure(
   html,
   packageReadings,
@@ -487,7 +676,7 @@ export function navigationObservation(
   let externalLinks = 0;
   const unresolved = new Map();
 
-  for (const href of extractAnchorHrefs(html, options)) {
+  for (const href of extractNavigationAnchorHrefs(html, options)) {
     if (!href || href.startsWith("#")) {
       fragmentLinks += 1;
       continue;
@@ -533,10 +722,13 @@ export function navigationObservation(
     }
   }
 
+  const exitObservation = observeIframeExitLinks(html);
+
   return {
     packaged_links: packagedLinks,
     fragment_links: fragmentLinks,
     external_links: externalLinks,
+    ...exitObservation,
     unresolved_local_links: [...unresolved.entries()]
       .map(([href, projected_target]) => ({ href, projected_target }))
       .sort((left, right) => compareCodeUnits(left.href, right.href)),
