@@ -172,6 +172,7 @@ test("the built registry resolves current authorship, license, and deployment me
   assert.ok(html.includes(`<meta property="og:url" content="${deploymentBase}/">`));
   assert.ok(html.includes(`<meta name="twitter:url" content="${deploymentBase}/">`));
   assert.ok(!html.includes("schema-pages:deployment-metadata"));
+  assert.ok(html.includes("<h1>Specifications people and software can read together.</h1>"));
 
   const structuredDataSource = html.match(
     /<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/u,
@@ -213,6 +214,91 @@ test("every relative homepage link resolves inside the built artifact", async ()
     const receiverPath = artifactPath(url, href);
     const entry = await stat(receiverPath);
     assert.ok(entry.isFile() || entry.isDirectory(), `${href} resolves`);
+  }
+});
+
+test("the collaboration guide carries finite loops, public sources, and matching FAQs", async () => {
+  const guidePath = resolve(outputRoot, "collaboration/index.html");
+  const html = await readFile(guidePath, "utf8");
+
+  assert.ok(html.includes(`<link rel="canonical" href="${deploymentBase}/collaboration/">`));
+  assert.ok(html.includes('href="../index.html"'));
+
+  for (const loopId of [
+    "skill-from-receiving-use",
+    "visitor-surface-change",
+    "repository-reentry",
+    "public-release",
+  ]) {
+    const loop = html.match(
+      new RegExp(`<article\\b[^>]*\\bid="${loopId}"[\\s\\S]*?<\\/article>`, "u"),
+    )?.[0];
+    assert.ok(loop, loopId);
+    for (const dimension of [
+      "Entry",
+      "Source owners",
+      "Human decision",
+      "Evidence",
+      "Exit",
+      "Recovery",
+      "Re-entry",
+    ]) {
+      assert.ok(loop.includes(`<dt>${dimension}</dt>`), `${loopId} names ${dimension}`);
+    }
+  }
+
+  for (const skillName of [
+    "practitioner-probe",
+    "collaboration-accounting",
+    "declarative-skill-authoring",
+    "context-canvas-surface-reading",
+    "context-canvas-css-ownership",
+    "context-canvas-visual-verification",
+    "repository-reentry",
+    "issue-chain-stewardship",
+    "source-authority-mapping",
+    "secret-boundary-inspection",
+    "stateful-artifact-behavior-contracts",
+  ]) {
+    assert.ok(html.includes(`href="../skills/${skillName}/"`), skillName);
+    await stat(resolve(outputRoot, `skills/${skillName}/index.html`));
+  }
+
+  const structuredData = JSON.parse(
+    html.match(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/u)?.[1],
+  );
+  const visibleFaqs = [...html.matchAll(
+    /<details\s+class="faq">\s*<summary>([^<]+)<\/summary>\s*<p\s+data-faq-answer>([^<]+)<\/p>/gu,
+  )].map((match) => ({ question: match[1].trim(), answer: match[2].trim() }));
+  assert.equal(structuredData["@type"], "FAQPage");
+  assert.deepEqual(
+    structuredData.mainEntity.map((entry) => ({
+      question: entry.name,
+      answer: entry.acceptedAnswer.text,
+    })),
+    visibleFaqs,
+  );
+  assert.equal(visibleFaqs.length, 8);
+  assert.ok(visibleFaqs.some(({ question, answer }) =>
+    question === "Do I need a framework or orchestration script to use these loops?" &&
+    answer.includes("The platform and environment determine")));
+
+  const executableScripts = [...html.matchAll(/<script\b([^>]*)>/gu)]
+    .filter((match) => !/type="application\/ld\+json"/u.test(match[1]));
+  assert.equal(executableScripts.length, 0);
+
+  const hrefs = [...html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/gu)]
+    .map((match) => match[1]);
+  for (const href of hrefs) {
+    if (href.startsWith("#")) {
+      assert.ok(html.includes(`id="${href.slice(1)}"`), href);
+      continue;
+    }
+    const url = new URL(href, `${deploymentBase}/collaboration/`);
+    if (url.origin !== deploymentOrigin) continue;
+    const receiverPath = artifactPath(url, href);
+    const entry = await stat(receiverPath);
+    assert.ok(entry.isFile() || entry.isDirectory(), `${href} resolves from collaboration guide`);
   }
 });
 

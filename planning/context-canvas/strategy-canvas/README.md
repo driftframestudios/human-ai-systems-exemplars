@@ -18,6 +18,7 @@ Machine examples:
 - [Reviewed three-channel Strategy Canvas](fixtures/three-channel-reviewed.example.v2.json) — human ballots, system-derived aggregate readings, a reversible scenario, and the single consent-scoped `aiCollaboration` record used to serialize the v0.2 AIShadowRound interaction and its attributed proposal.
 - [Narrative adapter receipt](fixtures/narrative-adapter-receipt.example.v2.json) — explicit NOW/NEXT/LATER mapping and receiving extension namespaces.
 - [Published-schema negative suite](fixtures/schema-validator-negative-cases.v2.json) — the accepted v2 contract stays closed and bounded; companion rejection cases exercise closed-shape, required-field, constant, reference, lifecycle, and string-bound boundaries against the generated browser validator and shared core.
+- [Machine-readable evidence registry](../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json) — method provenance, the finite representation inventory, implementation decisions, counterevidence, transfer limits, and reciprocal routes into the planning documents below.
 
 ## Two expressions, one semantic spine
 

@@ -4,7 +4,11 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
-import { validatePrimaryManifest } from "../../tools/build-prod-projection.mjs";
+import {
+  inspectImageDimensions,
+  validateAssetInventory,
+  validatePrimaryManifest,
+} from "../../tools/build-prod-projection.mjs";
 import { createAggregatePackagePlan } from "../../tools/package-v1-iframe-routes.mjs";
 
 const repositoryRoot = path.resolve(
@@ -135,6 +139,83 @@ test("the production manifest carries the accepted 37-route primary collection a
       path.join(repositoryRoot, ...file.source_path.split("/")),
     );
     assert.ok(status.isFile() && !status.isSymbolicLink(), file.source_path);
+  }
+});
+
+test("the semantic inventory resolves every selected image without becoming a membership source", async () => {
+  const configuration = JSON.parse(await readFile(
+    path.join(repositoryRoot, "deployment/cpanel/production-projection.config.json"),
+    "utf8",
+  ));
+  assert.equal(
+    configuration.asset_inventory,
+    "context-canvas-project-surface/asset-inventory.json",
+  );
+  const inventory = validateAssetInventory(JSON.parse(await readFile(
+    path.join(repositoryRoot, configuration.asset_inventory),
+    "utf8",
+  )));
+  const primary = await loadPrimaryManifest();
+  const aggregate = await createAggregatePackagePlan();
+  const selected = new Map(
+    primary.files
+      .filter(({ media_type }) => media_type.startsWith("image/"))
+      .map(({ source_path, media_type }) => [source_path, media_type]),
+  );
+  for (const familyPlan of aggregate.familyPlans.values()) {
+    for (const route of familyPlan.receipt.routes) {
+      for (const group of ["package_files", "navigation_files"]) {
+        for (const file of route.static_resource_closure?.[group] ?? []) {
+          if (!file.content_type.startsWith("image/")) continue;
+          const existing = selected.get(file.source_file);
+          assert.ok(existing === undefined || existing === file.content_type, file.source_file);
+          selected.set(file.source_file, file.content_type);
+        }
+      }
+    }
+  }
+
+  const usedFamilies = new Set();
+  const overrides = new Map(
+    inventory.overrides.map((override) => [override.source_path, override]),
+  );
+  for (const [sourcePath, mediaType] of selected) {
+    const families = inventory.families.filter(({ selector }) =>
+      selector.prefix === undefined
+        ? selector.paths.includes(sourcePath)
+        : sourcePath.startsWith(selector.prefix),
+    );
+    assert.equal(families.length, 1, sourcePath);
+    usedFamilies.add(families[0].id);
+    const bytes = await readFile(path.join(repositoryRoot, sourcePath));
+    assert.match(mediaType, /^image\//);
+    assert.ok(
+      ["available", "variant_set"].includes(
+        inspectImageDimensions(bytes, mediaType, sourcePath).standing,
+      ),
+      sourcePath,
+    );
+    const roles = overrides.get(sourcePath)?.roles ?? families[0].roles;
+    if (
+      mediaType === "image/svg+xml" &&
+      roles.some(({ accessibility_text_owner: owner }) =>
+        /svg title and description/i.test(owner),
+      )
+    ) {
+      const svg = bytes.toString("utf8");
+      assert.match(svg, /<title(?:\s|>)/i, `${sourcePath} title owner`);
+      assert.match(svg, /<desc(?:\s|>)/i, `${sourcePath} description owner`);
+    }
+  }
+  assert.deepEqual(
+    [...usedFamilies].sort(),
+    inventory.families.map(({ id }) => id).sort(),
+  );
+  for (const override of inventory.overrides) {
+    assert.ok(selected.has(override.source_path), override.source_path);
+  }
+  for (const group of inventory.variant_groups) {
+    for (const member of group.members) assert.ok(selected.has(member), member);
   }
 });
 

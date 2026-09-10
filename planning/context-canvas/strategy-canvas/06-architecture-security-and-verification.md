@@ -7,6 +7,8 @@ research_payload:
   completion_condition: "One deterministic state model drives HTML, SVG, table, export, report, and test fixtures across canonical and Context expressions."
 ```
 
+The [machine-readable evidence registry](../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json) connects the diagram, structured table, and text-alternative route to `complex-image-equivalent`. The guidance shapes the implemented relationship; relevant people and technologies establish practical access.
+
 ## Architecture decision
 
 Use semantic HTML, layered CSS, accessible inline SVG, and dependency-free JavaScript. The working set of 5–12 dimensions and a small number of visible series fits the browser platform directly. A framework or visualization library may be reconsidered when measured complexity exceeds the current reducer, renderer, and test contracts.
@@ -21,7 +23,7 @@ Use semantic HTML, layered CSS, accessible inline SVG, and dependency-free JavaS
 - One source build that can emit self-contained portable HTML distributions.
 - Explicit adapters for v0.1 and Narrative `now/next/later` dialects.
 - Manifest and registry entries identify semantic and presentation versions separately.
-- A deterministic consumer-bundle builder produces the root and Context Narrative Composer, Semantic Sampling, and Technology Fit archives. It fixes file modes and timestamps, checks embedded byte/SHA receipts, and preserves a self-contained canonical v2 + schema as the portable Strategy Canvas companion.
+- A deterministic consumer-bundle builder produces the Narrative Composer, Semantic Sampling, Technology Fit, and Threadkeeping Ledger archives. It fixes file modes and timestamps, checks embedded byte/SHA receipts, and preserves the current canonical worksheet, schema, validator, and evidence registry as the portable Strategy Canvas companion.
 
 The canonical core stays compact and closed around shared Strategy Canvas objects. Consumer state enters through namespaced extensions:
 

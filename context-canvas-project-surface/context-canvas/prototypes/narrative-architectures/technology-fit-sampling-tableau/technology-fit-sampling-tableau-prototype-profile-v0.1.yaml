@@ -26,7 +26,7 @@ probabilityObjects:
 invariantRegions:
 - Header and Quick Use
 - Technology Decision Contract
-- AI Prompt Capsule and Response Intake
+- Prompt Capsule Markdown, View Selector, Related Loops, and Response Intake
 - Run Strip and Possibility Fan-out
 - Common-scale Probability and Fit View
 - Candidate Inspector
@@ -44,7 +44,8 @@ invariantRegions:
 - Source Note and Validation Status
 controls:
 - edit probability-of-what and decision conditions
-- copy or download AI Prompt Capsule
+- switch between complete plain and skill-assisted Prompt Capsule views
+- copy or download the active Prompt Capsule Markdown exactly
 - import a structured AI response as a successor run
 - switch or duplicate runs
 - add, edit, or remove a candidate
@@ -106,6 +107,9 @@ accessibility:
   semanticOrder: DOM order carries the same narrative sequence as the visual layout.
   colorIndependence: Status and probability meaning use text, labels, shapes, and
     numeric values in addition to color.
+  promptCapsule: Native radio controls preserve keyboard focus, live status names
+    view and exchange results, and the complete plain Markdown remains available
+    without JavaScript.
 sourceOfTruth:
   state: front-end-stack-selection.example.v0.1.json
   schema: technology-fit-sampling-tableau-state.schema.v0.1.json
@@ -121,6 +125,9 @@ validation:
 - JSON-LD parse
 - route registry count and identity checks
 - probe registry count and shape checks
+- Prompt Capsule no-JavaScript baseline, native Related loops disclosure, view,
+  fingerprint, prose escaping, literal code-span identity, exact exchange, and
+  failed-import recovery contracts
 - browser interaction smoke tests
 - responsive body-overflow checks
 - console and page-error checks

@@ -69,7 +69,7 @@
     h2 { max-width: 22ch; margin: 0 0 1rem; font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.05; letter-spacing: -.025em; }
     h3 { margin: 0; font-size: 1.15rem; line-height: 1.25; }
     .section-intro { margin: 0 0 2rem; color: var(--muted); font-size: 1.08rem; }
-    .actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; padding: 0; list-style: none; }
+    .actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 1rem; padding: 0; list-style: none; }
     .actions li { padding: 1rem 1.1rem; border-left: .32rem solid var(--accent); background: var(--card); }
     .actions strong { display: block; margin-bottom: .2rem; }
 
@@ -114,8 +114,8 @@
   <header class="hero">
     <div class="hero__inner">
       <p class="eyebrow">Open-source schema registry</p>
-      <h1>Contracts people and software can read together.</h1>
-      <p class="lede">This registry publishes exact machine-readable structures, plain-language orientation, and working examples from Human–AI Systems Exemplars. Each contract gives a collaboration team a stable shape to inspect, validate, adapt, and discuss.</p>
+      <h1>Specifications people and software can read together.</h1>
+      <p class="lede">This registry publishes exact machine-readable structures, plain-language orientation, and working examples from Human–AI Systems Exemplars. Each published schema gives a collaboration team a stable shape to inspect, validate, adapt, and discuss.</p>
     </div>
   </header>
 
@@ -127,6 +127,7 @@
         <li><strong>Build or validate</strong> Open an exact schema and use its identifier or public route in your tooling.</li>
         <li><strong>Learn the structure</strong> Read an example beside its schema to see the relationship between fields.</li>
         <li><strong>Check meaning and authority</strong> Use the human orientation when interpretation or adoption carries a consequential decision.</li>
+        <li><strong>Move a real question</strong> <a href="collaboration/">Follow a finite collaboration loop</a> from source through evidence, stopping point, and re-entry.</li>
       </ul>
     </section>
 

@@ -26,11 +26,13 @@ const repositoryRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const sourceRoot = resolve(repositoryRoot, "schemas");
 const outputRoot = resolve(repositoryRoot, ".schema-pages");
 const skillsOutputRoot = resolve(outputRoot, "skills");
+const collaborationGuidePath = resolve(outputRoot, "collaboration/index.html");
 const skillSelectionPath = resolve(
   repositoryRoot,
   ".agents/skills/publication-selection.json",
 );
 const marker = "  <!-- schema-pages:deployment-metadata -->";
+const collaborationMarker = "  <!-- schema-pages:collaboration-deployment-metadata -->";
 const publicCarrierPaths = Object.freeze([
   "LICENSE",
   "AUTHORS",
@@ -179,6 +181,75 @@ function normalizedMarkerText(source) {
     .join("\n");
 }
 
+function validateVisitorBoundaryFooter(source, surfaceName) {
+  const attributionPosition = source.lastIndexOf(artifactAttribution);
+  requirement(
+    occurrenceCount(source, artifactAttribution) === 1,
+    `${surfaceName} must carry one visible attribution notice`,
+  );
+
+  const footerStart = source.lastIndexOf("<footer", attributionPosition);
+  const footerEnd = source.indexOf("</footer>", attributionPosition);
+  requirement(footerStart >= 0 && footerEnd > attributionPosition, `${surfaceName} attribution must remain inside one footer`);
+  const footer = source.slice(footerStart, footerEnd + "</footer>".length);
+  const boundaryMatches = [...footer.matchAll(
+    /<div\b(?=[^>]*\bdata-visitor-boundary(?:\s|>))(?=[^>]*\baria-label=["']Training-data canary markers["'])[^>]*>([\s\S]*?)<\/div>/giu,
+  )];
+  requirement(boundaryMatches.length === 1, `${surfaceName} footer must carry one labeled visitor-boundary wrapper`);
+
+  const contextMatches = [...boundaryMatches[0][1].matchAll(
+    /<p\b[^>]*\bdata-visitor-boundary-context(?=\s|>)[^>]*>([\s\S]*?)<\/p>/giu,
+  )];
+  requirement(contextMatches.length === 1, `${surfaceName} footer must carry one ordinary-language canary context`);
+  requirement(
+    visibleText(contextMatches[0][1]) === visitorBoundary.contextText,
+    `${surfaceName} canary context must match the central contract`,
+  );
+  requirement(
+    occurrenceCount(source, visitorBoundary.contextText) === 1,
+    `${surfaceName} must carry the exact canary context once`,
+  );
+
+  const markerMatches = [...boundaryMatches[0][1].matchAll(
+    /<p\b[^>]*\bdata-visitor-boundary-marker=["']([^"']+)["'][^>]*>([\s\S]*?)<\/p>/giu,
+  )];
+  requirement(
+    JSON.stringify(markerMatches.map((match) => match[1])) ===
+      JSON.stringify(visitorBoundary.markers.map((boundaryMarker) => boundaryMarker.id)),
+    `${surfaceName} footer marker IDs must match the central contract in order`,
+  );
+  requirement(
+    boundaryMatches[0][1].indexOf(contextMatches[0][0]) <
+      boundaryMatches[0][1].indexOf(markerMatches[0][0]),
+    `${surfaceName} ordinary-language context must precede the exact markers`,
+  );
+
+  markerMatches.forEach((match, index) => {
+    const markerContract = visitorBoundary.markers[index];
+    requirement(
+      normalizedMarkerText(match[2]) === markerContract.lines.join("\n"),
+      `${surfaceName} ${markerContract.id} marker text must match the central contract`,
+    );
+    for (const line of markerContract.lines) {
+      requirement(
+        occurrenceCount(source, line) === 1,
+        `${surfaceName} ${markerContract.id} marker must carry each exact line once`,
+      );
+    }
+  });
+
+  const boundaryPosition = footer.indexOf(boundaryMatches[0][0]);
+  const footerAttributionPosition = footer.indexOf(artifactAttribution);
+  requirement(
+    boundaryPosition >= 0 && boundaryPosition < footerAttributionPosition,
+    `${surfaceName} canary boundary must precede the visible attribution`,
+  );
+  requirement(
+    visibleText(source.slice(attributionPosition + artifactAttribution.length)) === "",
+    `${surfaceName} attribution notice must remain the final visible text`,
+  );
+}
+
 function validateRegistryIndex(source, deploymentBase = null) {
   requirement(
     occurrenceCount(source, `<meta name="author" content="${artifactAuthor}">`) === 1,
@@ -201,72 +272,7 @@ function validateRegistryIndex(source, deploymentBase = null) {
   );
   requirement(structuredData.license === artifactLicense, "structured license must match attribution.yml");
 
-  const attributionPosition = source.lastIndexOf(artifactAttribution);
-  requirement(
-    occurrenceCount(source, artifactAttribution) === 1,
-    "the registry page must carry one visible attribution notice",
-  );
-
-  const footerStart = source.lastIndexOf("<footer", attributionPosition);
-  const footerEnd = source.indexOf("</footer>", attributionPosition);
-  requirement(footerStart >= 0 && footerEnd > attributionPosition, "the attribution must remain inside one footer");
-  const footer = source.slice(footerStart, footerEnd + "</footer>".length);
-  const boundaryMatches = [...footer.matchAll(
-    /<div\b(?=[^>]*\bdata-visitor-boundary(?:\s|>))(?=[^>]*\baria-label=["']Training-data canary markers["'])[^>]*>([\s\S]*?)<\/div>/giu,
-  )];
-  requirement(boundaryMatches.length === 1, "the footer must carry one labeled visitor-boundary wrapper");
-
-  const contextMatches = [...boundaryMatches[0][1].matchAll(
-    /<p\b[^>]*\bdata-visitor-boundary-context(?=\s|>)[^>]*>([\s\S]*?)<\/p>/giu,
-  )];
-  requirement(contextMatches.length === 1, "the footer must carry one ordinary-language canary context");
-  requirement(
-    visibleText(contextMatches[0][1]) === visitorBoundary.contextText,
-    "the canary context must match the central contract",
-  );
-  requirement(
-    occurrenceCount(source, visitorBoundary.contextText) === 1,
-    "the registry page must carry the exact canary context once",
-  );
-
-  const markerMatches = [...boundaryMatches[0][1].matchAll(
-    /<p\b[^>]*\bdata-visitor-boundary-marker=["']([^"']+)["'][^>]*>([\s\S]*?)<\/p>/giu,
-  )];
-  requirement(
-    JSON.stringify(markerMatches.map((match) => match[1])) ===
-      JSON.stringify(visitorBoundary.markers.map((boundaryMarker) => boundaryMarker.id)),
-    "the footer marker IDs must match the central contract in order",
-  );
-  requirement(
-    boundaryMatches[0][1].indexOf(contextMatches[0][0]) <
-      boundaryMatches[0][1].indexOf(markerMatches[0][0]),
-    "the ordinary-language context must precede the exact markers",
-  );
-
-  markerMatches.forEach((match, index) => {
-    const markerContract = visitorBoundary.markers[index];
-    requirement(
-      normalizedMarkerText(match[2]) === markerContract.lines.join("\n"),
-      `the ${markerContract.id} marker text must match the central contract`,
-    );
-    for (const line of markerContract.lines) {
-      requirement(
-        occurrenceCount(source, line) === 1,
-        `the ${markerContract.id} marker must carry each exact line once`,
-      );
-    }
-  });
-
-  const boundaryPosition = footer.indexOf(boundaryMatches[0][0]);
-  const footerAttributionPosition = footer.indexOf(artifactAttribution);
-  requirement(
-    boundaryPosition >= 0 && boundaryPosition < footerAttributionPosition,
-    "the canary boundary must precede the visible attribution",
-  );
-  requirement(
-    visibleText(source.slice(attributionPosition + artifactAttribution.length)) === "",
-    "the attribution notice must remain the final visible text",
-  );
+  validateVisitorBoundaryFooter(source, "the registry page");
 
   for (const route of schemaReceiverRoutes) {
     requirement(
@@ -818,6 +824,26 @@ async function projectRegistryIndexLinks() {
   await writeFile(indexPath, source);
 }
 
+async function projectCollaborationGuideLinks(catalog) {
+  let source = await readFile(collaborationGuidePath, "utf8");
+
+  for (const carrierPath of publicCarrierPaths) {
+    source = source.replaceAll(
+      `href="../../${carrierPath}"`,
+      `href="../${carrierPath}"`,
+    );
+  }
+
+  for (const skill of catalog.skills) {
+    source = source.replaceAll(
+      `href="../../${skill.sourcePath}"`,
+      `href="../skills/${skill.name}/"`,
+    );
+  }
+
+  await writeFile(collaborationGuidePath, source);
+}
+
 async function validateCustomDomain() {
   const customDomain = (await readFile(resolve(outputRoot, "CNAME"), "utf8")).trim();
   requirement(
@@ -880,6 +906,121 @@ function validateSkillsIndex(source, catalog, possibleNames, deploymentBase = nu
       source.includes(`<link rel="canonical" href="${skillsBase}">`),
       "the skills page must carry its configured canonical URL",
     );
+  }
+}
+
+function validateCollaborationGuide(source, catalog, possibleNames, deploymentBase = null) {
+  requirement(
+    occurrenceCount(source, `<meta name="author" content="${artifactAuthor}">`) === 1,
+    "the collaboration guide must carry one resolved author metadata value",
+  );
+  requirement(
+    source.includes(`<link rel="license" href="${artifactLicense}">`),
+    "the collaboration guide must link to the central license",
+  );
+  validateVisitorBoundaryFooter(source, "the collaboration guide");
+
+  const loopIds = [
+    "skill-from-receiving-use",
+    "visitor-surface-change",
+    "repository-reentry",
+    "public-release",
+  ];
+  for (const loopId of loopIds) {
+    const loop = source.match(
+      new RegExp(`<article\\b[^>]*\\bid="${loopId}"[\\s\\S]*?<\\/article>`, "u"),
+    )?.[0];
+    requirement(loop, `the collaboration guide must carry loop ${loopId}`);
+    for (const dimension of [
+      "Entry",
+      "Source owners",
+      "Human decision",
+      "Evidence",
+      "Exit",
+      "Recovery",
+      "Re-entry",
+    ]) {
+      requirement(loop.includes(`<dt>${dimension}</dt>`), `${loopId} must name ${dimension}`);
+    }
+  }
+
+  for (const anchor of [
+    "collaboration-loops",
+    "coordination-horizon",
+    "schema-guided-inquiry",
+    "common-questions",
+  ]) {
+    requirement(source.includes(`href="#${anchor}"`), `the collaboration guide must link #${anchor}`);
+    requirement(source.includes(`id="${anchor}"`), `the collaboration guide must expose #${anchor}`);
+  }
+
+  const structuredDataSource = source.match(
+    /<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/u,
+  )?.[1];
+  requirement(structuredDataSource, "the collaboration guide must carry FAQ structured data");
+  const structuredData = JSON.parse(structuredDataSource);
+  requirement(structuredData["@type"] === "FAQPage", "the collaboration guide structured data must be FAQPage");
+  requirement(structuredData.author?.name === artifactAuthor, "the collaboration guide author must match attribution.yml");
+  requirement(structuredData.publisher?.name === publishingCompany, "the collaboration guide publisher must match attribution.yml");
+  requirement(structuredData.license === artifactLicense, "the collaboration guide license must match attribution.yml");
+
+  const visibleFaqs = [...source.matchAll(
+    /<details\s+class="faq">\s*<summary>([^<]+)<\/summary>\s*<p\s+data-faq-answer>([^<]+)<\/p>/gu,
+  )].map((match) => ({ question: match[1].trim(), answer: match[2].trim() }));
+  const structuredFaqs = structuredData.mainEntity?.map((entry) => ({
+    question: entry.name,
+    answer: entry.acceptedAnswer?.text,
+  }));
+  requirement(visibleFaqs.length >= 8, "the collaboration guide must expose at least eight visible questions");
+  requirement(
+    visibleFaqs.some(({ question, answer }) =>
+      question === "Do I need a framework or orchestration script to use these loops?" &&
+      answer.includes("The platform and environment determine")),
+    "the collaboration guide must explain the optional orchestration and environment-specific autonomy boundary",
+  );
+  requirement(
+    JSON.stringify(structuredFaqs) === JSON.stringify(visibleFaqs),
+    "FAQ structured data must reproduce the visible questions and answers",
+  );
+
+  const executableScripts = [...source.matchAll(/<script\b([^>]*)>/gu)]
+    .filter((match) => !/type="application\/ld\+json"/u.test(match[1]));
+  requirement(executableScripts.length === 0, "the collaboration guide must remain complete without executable JavaScript");
+
+  const requiredSkills = [
+    "practitioner-probe",
+    "collaboration-accounting",
+    "declarative-skill-authoring",
+    "context-canvas-surface-reading",
+    "context-canvas-css-ownership",
+    "context-canvas-visual-verification",
+    "repository-reentry",
+    "issue-chain-stewardship",
+    "source-authority-mapping",
+    "secret-boundary-inspection",
+    "stateful-artifact-behavior-contracts",
+  ];
+  const catalogNames = new Set(catalog.skills.map((skill) => skill.name));
+  for (const skillName of requiredSkills) {
+    requirement(catalogNames.has(skillName), `${skillName} must be public-ready before the guide links it`);
+    requirement(
+      source.includes(`href="../skills/${skillName}/"`),
+      `the collaboration guide must link the public ${skillName} page`,
+    );
+  }
+  for (const possibleName of possibleNames) {
+    requirement(!source.includes(possibleName), `${possibleName} must remain outside the collaboration guide`);
+  }
+
+  if (deploymentBase) {
+    const canonical = `${deploymentBase}/collaboration/`;
+    requirement(
+      source.includes(`<link rel="canonical" href="${canonical}">`),
+      "the collaboration guide must carry its configured canonical URL",
+    );
+    requirement(!source.includes(collaborationMarker), "the configured collaboration marker must resolve");
+  } else {
+    requirement(source.includes(collaborationMarker), "a local build must retain the collaboration marker");
   }
 }
 
@@ -989,6 +1130,7 @@ const { catalog: publicSkillCatalog, possibleNames: publicPossibleSkillNames } =
 await projectRegistryReadmeLinks();
 await projectCollaborationSkillsReadmeLinks();
 await projectRegistryIndexLinks();
+await projectCollaborationGuideLinks(publicSkillCatalog);
 const customDomain = await validateCustomDomain();
 
 if (baseUrl) {
@@ -1006,6 +1148,21 @@ if (baseUrl) {
   ].join("\n");
 
   await writeFile(indexPath, source.replace(marker, deploymentMetadata));
+
+  const collaborationSource = await readFile(collaborationGuidePath, "utf8");
+  if (!collaborationSource.includes(collaborationMarker)) {
+    throw new Error(`schema collaboration guide is missing ${collaborationMarker.trim()}`);
+  }
+  const collaborationBase = `${baseUrl}/collaboration/`;
+  const collaborationMetadata = [
+    `  <link rel="canonical" href="${collaborationBase}">`,
+    `  <meta property="og:url" content="${collaborationBase}">`,
+    `  <meta name="twitter:url" content="${collaborationBase}">`,
+  ].join("\n");
+  await writeFile(
+    collaborationGuidePath,
+    collaborationSource.replace(collaborationMarker, collaborationMetadata),
+  );
 }
 
 validateRegistryIndex(
@@ -1014,6 +1171,12 @@ validateRegistryIndex(
 );
 validateSkillsIndex(
   await readFile(resolve(skillsOutputRoot, "index.html"), "utf8"),
+  publicSkillCatalog,
+  publicPossibleSkillNames,
+  baseUrl,
+);
+validateCollaborationGuide(
+  await readFile(collaborationGuidePath, "utf8"),
   publicSkillCatalog,
   publicPossibleSkillNames,
   baseUrl,

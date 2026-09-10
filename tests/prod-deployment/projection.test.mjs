@@ -17,9 +17,11 @@ import { promisify } from "node:util";
 import {
   checkProductionProjection,
   createProductionProjectionPlan,
+  inspectImageDimensions,
   loadProductionProjectionInputs,
   persistProductionProjection,
   readRepositorySourceSha,
+  validateAssetInventory,
   validatePrimaryManifest,
 } from "../../tools/build-prod-projection.mjs";
 import { sha256 } from "../../tools/iframe-route-package-engine.mjs";
@@ -29,6 +31,8 @@ const configurationRelativePath =
   "deployment/cpanel/production-projection.config.json";
 const primaryManifestRelativePath =
   "deployment/cpanel/primary-route-manifest.json";
+const assetInventoryRelativePath =
+  "deployment/cpanel/asset-inventory.json";
 
 async function git(root, args) {
   const { stdout = "" } = await execFileAsync("git", args, {
@@ -50,6 +54,55 @@ function primaryManifest(files) {
     version: "1",
     files,
   };
+}
+
+function fixtureAssetInventory(selector, options = {}) {
+  return {
+    id: "prod-projection.asset-inventory.v1",
+    version: "1",
+    scope: "primary_and_iframe_selected_images",
+    families: [
+      {
+        id: "fixture.image",
+        selector,
+        semantic_owner: "Fixture visitor surface",
+        roles: [
+          {
+            id: "fixture_image",
+            visitor_job: "Make the image relationship observable in the fixture.",
+            accessibility_text_owner: "The fixture HTML image alternative.",
+          },
+        ],
+        build_consumers: ["production_projection"],
+        public_path_standing: {
+          standing: "source_root_relative_path_preserved",
+          source_root: "visitor",
+        },
+        source_relationship: { standing: "canonical_authored_asset" },
+        recovery_condition: "Restore the fixture source and rebuild the projection.",
+        semantic_authority_path: null,
+      },
+    ],
+    variant_groups: options.variantGroups ?? [],
+    overrides: options.overrides ?? [],
+  };
+}
+
+function fixturePng(width = 3, height = 2) {
+  const bytes = Buffer.alloc(24);
+  Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]).copy(bytes);
+  bytes.write("IHDR", 12, "ascii");
+  bytes.writeUInt32BE(width, 16);
+  bytes.writeUInt32BE(height, 20);
+  return bytes;
+}
+
+function fixtureGif(width = 7, height = 5) {
+  const bytes = Buffer.alloc(10);
+  bytes.write("GIF89a", 0, "ascii");
+  bytes.writeUInt16LE(width, 6);
+  bytes.writeUInt16LE(height, 8);
+  return bytes;
 }
 
 function aggregateFixture(options = {}) {
@@ -74,6 +127,12 @@ function aggregateFixture(options = {}) {
     ["canvas/route-manifest.json", canvasReceipt],
     ["core/route-manifest.json", coreReceipt],
   ]);
+  if (options.image !== undefined) {
+    outputFiles.set(options.image.projectedPath, options.image.bytes);
+  }
+  for (const [relativePath, bytes] of options.extraOutputs ?? []) {
+    outputFiles.set(relativePath, bytes);
+  }
   const familySummary = (family, routeReceipt) => {
     const files = [...outputFiles.entries()].filter(
       ([relativePath]) => relativePath.startsWith(`${family}/`),
@@ -151,7 +210,22 @@ function aggregateFixture(options = {}) {
             routes: [
               {
                 projection_file: "demo/index.html",
-                static_resource_closure: {},
+                source_file: options.image?.consumerPath ?? "visitor/index.html",
+                static_resource_closure: options.image === undefined
+                  ? {}
+                  : {
+                      package_files: [
+                        {
+                          ...(options.image.omitSourceFile
+                            ? {}
+                            : { source_file: options.image.sourcePath }),
+                          target_file: options.image.targetFile,
+                          content_type: options.image.mediaType,
+                          bytes: options.image.bytes.byteLength,
+                          sha256: sha256(options.image.bytes),
+                        },
+                      ],
+                    },
               },
             ],
           },
@@ -219,6 +293,54 @@ async function createFixtureRoot() {
     configurationPath: path.join(root, configurationRelativePath),
     primaryManifestPath: path.join(root, primaryManifestRelativePath),
   };
+}
+
+async function enableAssetInventoryFixture(fixture) {
+  const sourcePath = "visitor/photo.png";
+  const projectedPath = "photo.png";
+  const bytes = fixturePng();
+  await writeFile(path.join(fixture.root, sourcePath), bytes);
+  const indexPath = path.join(fixture.root, "visitor/index.html");
+  await writeFile(
+    indexPath,
+    `${await readFile(indexPath, "utf8")}\n<img src="photo.png" alt="Fixture relationship">\n`,
+    "utf8",
+  );
+  const manifest = JSON.parse(await readFile(fixture.primaryManifestPath, "utf8"));
+  manifest.files.push({
+    source_path: sourcePath,
+    projected_path: projectedPath,
+    media_type: "image/png",
+  });
+  await writeFile(
+    fixture.primaryManifestPath,
+    `${JSON.stringify(manifest)}\n`,
+    "utf8",
+  );
+  await writeFile(
+    path.join(fixture.root, assetInventoryRelativePath),
+    `${JSON.stringify(fixtureAssetInventory({ paths: [sourcePath] }))}\n`,
+    "utf8",
+  );
+  await writeFile(
+    fixture.configurationPath,
+    `${JSON.stringify({
+      id: "prod-projection.configuration.v1",
+      version: "1",
+      primary_manifest: primaryManifestRelativePath,
+      asset_inventory: assetInventoryRelativePath,
+      publication: {
+        base_url: "https://vik.guru/",
+        source_root: "visitor",
+        public_reference_config: ".env.public",
+      },
+    })}\n`,
+    "utf8",
+  );
+  await writeFile(path.join(fixture.root, ".gitignore"), ".env.public\n", "utf8");
+  await writeFile(path.join(fixture.root, ".env.public"), "", "utf8");
+  fixture.sourceSha = await commitFixture(fixture.root, "Accept asset inventory fixture");
+  return { sourcePath, projectedPath, bytes };
 }
 
 async function enablePublicationFixture(fixture) {
@@ -561,6 +683,614 @@ test("the production plan deterministically combines an explicit primary closure
   } finally {
     await rm(fixture.root, { recursive: true, force: true });
   }
+});
+
+test("one semantic asset record follows its canonical source into both production closures", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const image = await enableAssetInventoryFixture(fixture);
+    const aggregatePlan = aggregateFixture({
+      image: {
+        sourcePath: image.sourcePath,
+        projectedPath: "canvas/demo/assets/photo.png",
+        targetFile: "assets/photo.png",
+        mediaType: "image/png",
+        bytes: image.bytes,
+        consumerPath: "visitor/index.html",
+      },
+    });
+    const plan = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan,
+    });
+
+    assert.equal(plan.manifest.inputs.asset_inventory.source_path, assetInventoryRelativePath);
+    assert.match(plan.manifest.inputs.asset_inventory.sha256, /^[a-f0-9]{64}$/);
+    const assets = plan.manifest.asset_inventory.assets;
+    assert.equal(assets.length, 1);
+    const sourceDigest = sha256(image.bytes);
+    assert.deepEqual(assets[0], {
+      semantic_key: "fixture.image.photo.png",
+      family: "fixture.image",
+      semantic_owner: "Fixture visitor surface",
+      roles: [
+        {
+          id: "fixture_image",
+          visitor_job: "Make the image relationship observable in the fixture.",
+          accessibility_text_owner: "The fixture HTML image alternative.",
+        },
+      ],
+      canonical_source_path: image.sourcePath,
+      file_kind: "raster_image",
+      media_type: "image/png",
+      intrinsic_dimensions: {
+        standing: "available",
+        width: 3,
+        height: 2,
+        unit: "pixel",
+        source: "png_ihdr",
+      },
+      bytes: image.bytes.byteLength,
+      sha256: sourceDigest,
+      direct_authored_consumers: ["visitor/index.html"],
+      build_consumers: ["aggregate_iframe_package", "production_projection"],
+      public_path_standing: {
+        primary: {
+          standing: "source_root_relative_path_preserved",
+          source_root: "visitor",
+          projected_path: "photo.png",
+        },
+        iframe: {
+          standing: "aggregate_route_relative_projection",
+          projected_paths: ["canvas/demo/assets/photo.png"],
+        },
+      },
+      selected_production_closures: ["primary", "iframe"],
+      source_relationship: { standing: "canonical_authored_asset" },
+      semantic_authority_path: null,
+      recovery_condition: "Restore the fixture source and rebuild the projection.",
+      projections: [
+        {
+          surface: "iframe",
+          projected_path: "iframe-public/v1/canvas/demo/assets/photo.png",
+          media_type: "image/png",
+          bytes: image.bytes.byteLength,
+          sha256: sourceDigest,
+          standing: "byte_preserved",
+        },
+        {
+          surface: "primary",
+          projected_path: "primary-public/photo.png",
+          media_type: "image/png",
+          bytes: image.bytes.byteLength,
+          sha256: sourceDigest,
+          standing: "byte_preserved",
+        },
+      ],
+    });
+    assert.deepEqual(
+      JSON.parse(plan.outputFiles.get("deployment-manifest.json"))
+        .asset_inventory.assets[0],
+      assets[0],
+    );
+    for (const projectedPath of [
+      "primary-public/photo.png",
+      "iframe-public/v1/canvas/demo/assets/photo.png",
+    ]) {
+      assert.equal(
+        plan.manifest.outputs.find((output) => output.projected_path === projectedPath)
+          .semantic_asset_key,
+        assets[0].semantic_key,
+      );
+    }
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("visitor-controlled motion references participate in closure and consumer accounting", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    await enableAssetInventoryFixture(fixture);
+    const motionPath = "visitor/motion.gif";
+    await writeFile(path.join(fixture.root, motionPath), fixtureGif());
+    const indexPath = path.join(fixture.root, "visitor/index.html");
+    await writeFile(
+      indexPath,
+      `${await readFile(indexPath, "utf8")}\n<div data-still-src="photo.png" data-motion-src="motion.gif"></div>\n`,
+      "utf8",
+    );
+    const manifest = JSON.parse(await readFile(fixture.primaryManifestPath, "utf8"));
+    manifest.files.push({
+      source_path: motionPath,
+      projected_path: "motion.gif",
+      media_type: "image/gif",
+    });
+    await writeFile(
+      fixture.primaryManifestPath,
+      `${JSON.stringify(manifest)}\n`,
+      "utf8",
+    );
+    const inventoryPath = path.join(fixture.root, assetInventoryRelativePath);
+    const inventory = JSON.parse(await readFile(inventoryPath, "utf8"));
+    inventory.families[0].selector.paths.push(motionPath);
+    await writeFile(inventoryPath, `${JSON.stringify(inventory)}\n`, "utf8");
+    fixture.sourceSha = await commitFixture(fixture.root, "Bind controlled motion asset");
+
+    const plan = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan: aggregateFixture(),
+    });
+    const motion = plan.manifest.asset_inventory.assets.find(
+      ({ canonical_source_path: sourcePath }) => sourcePath === motionPath,
+    );
+    assert.deepEqual(motion.direct_authored_consumers, ["visitor/index.html"]);
+    assert.equal(
+      plan.outputFiles.get("primary-public/index.html").toString("utf8")
+        .includes('data-motion-src="motion.gif"'),
+      true,
+    );
+
+    manifest.files = manifest.files.filter(({ source_path: sourcePath }) =>
+      sourcePath !== motionPath,
+    );
+    await writeFile(
+      fixture.primaryManifestPath,
+      `${JSON.stringify(manifest)}\n`,
+      "utf8",
+    );
+    fixture.sourceSha = await commitFixture(fixture.root, "Remove motion from projection");
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /Primary projection dependency is absent.*visitor\/motion\.gif/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("CSS and metadata carriers join selected assets to their direct consumers", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const image = await enableAssetInventoryFixture(fixture);
+    const cssPath = "visitor/styles.css";
+    const manifestPath = "visitor/manifest.json";
+    await writeFile(
+      path.join(fixture.root, cssPath),
+      'body { background-image: url("photo.png"); }\n',
+      "utf8",
+    );
+    await writeFile(
+      path.join(fixture.root, manifestPath),
+      `${JSON.stringify({ icons: [{ src: "photo.png" }] })}\n`,
+      "utf8",
+    );
+    const manifest = JSON.parse(await readFile(fixture.primaryManifestPath, "utf8"));
+    manifest.files.push(
+      {
+        source_path: cssPath,
+        projected_path: "styles.css",
+        media_type: "text/css",
+      },
+      {
+        source_path: manifestPath,
+        projected_path: "manifest.json",
+        media_type: "application/json",
+      },
+    );
+    await writeFile(
+      fixture.primaryManifestPath,
+      `${JSON.stringify(manifest)}\n`,
+      "utf8",
+    );
+    fixture.sourceSha = await commitFixture(fixture.root, "Add image consumer carriers");
+
+    const plan = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan: aggregateFixture(),
+    });
+    const asset = plan.manifest.asset_inventory.assets.find(
+      ({ canonical_source_path: sourcePath }) => sourcePath === image.sourcePath,
+    );
+    assert.deepEqual(asset.direct_authored_consumers, [
+      "visitor/index.html",
+      "visitor/manifest.json",
+      "visitor/styles.css",
+    ]);
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("iframe image projections require a canonical source before semantic inventory resolution", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const image = await enableAssetInventoryFixture(fixture);
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: aggregateFixture({
+          image: {
+            sourcePath: image.sourcePath,
+            projectedPath: "canvas/demo/assets/photo.png",
+            targetFile: "assets/photo.png",
+            mediaType: "image/png",
+            bytes: image.bytes,
+            consumerPath: "visitor/index.html",
+            omitSourceFile: true,
+          },
+        }),
+      }),
+      /Iframe package image requires one canonical source file/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("every iframe image resolves through the inventory and exact canonical source bytes", async () => {
+  const orphanFixture = await createFixtureRoot();
+  const driftFixture = await createFixtureRoot();
+  try {
+    await enableAssetInventoryFixture(orphanFixture);
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: orphanFixture.root,
+        sourceSha: orphanFixture.sourceSha,
+        configurationPath: orphanFixture.configurationPath,
+        aggregatePlan: aggregateFixture({
+          extraOutputs: [["canvas/demo/orphan.png", fixturePng(1, 1)]],
+        }),
+      }),
+      /Iframe production image has no semantic asset record: canvas\/demo\/orphan\.png/,
+    );
+
+    const image = await enableAssetInventoryFixture(driftFixture);
+    const driftedBytes = fixturePng(5, 4);
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: driftFixture.root,
+        sourceSha: driftFixture.sourceSha,
+        configurationPath: driftFixture.configurationPath,
+        aggregatePlan: aggregateFixture({
+          image: {
+            sourcePath: image.sourcePath,
+            projectedPath: "canvas/demo/assets/photo.png",
+            targetFile: "assets/photo.png",
+            mediaType: "image/png",
+            bytes: driftedBytes,
+            consumerPath: "visitor/index.html",
+          },
+        }),
+      }),
+      /Iframe production asset bytes differ from canonical source visitor\/photo\.png/,
+    );
+  } finally {
+    await rm(orphanFixture.root, { recursive: true, force: true });
+    await rm(driftFixture.root, { recursive: true, force: true });
+  }
+});
+
+test("generated derivative lineage stays distinct and digest-bound in serialized output", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const image = await enableAssetInventoryFixture(fixture);
+    const sourceFilmPath = "source/style-cycle.mp4";
+    const generatorPath = "tools/generate-style-cycle.mjs";
+    const sourceFilm = Buffer.from("accepted source film", "utf8");
+    const generator = Buffer.from("export const profile = 'fixture';\n", "utf8");
+    await mkdir(path.join(fixture.root, "source"), { recursive: true });
+    await mkdir(path.join(fixture.root, "tools"), { recursive: true });
+    await writeFile(path.join(fixture.root, sourceFilmPath), sourceFilm);
+    await writeFile(path.join(fixture.root, generatorPath), generator);
+    const inventoryPath = path.join(fixture.root, assetInventoryRelativePath);
+    const inventory = JSON.parse(await readFile(inventoryPath, "utf8"));
+    inventory.overrides.push({
+      source_path: image.sourcePath,
+      semantic_key: "fixture.generated-photo",
+      roles: inventory.families[0].roles,
+      source_relationship: {
+        standing: "generated_derivative",
+        canonical_source_path: sourceFilmPath,
+        generator_path: generatorPath,
+        profile: "fixture-profile-v1",
+      },
+      recovery_condition: "Run the fixture generator against its accepted source film.",
+    });
+    await writeFile(inventoryPath, `${JSON.stringify(inventory)}\n`, "utf8");
+    fixture.sourceSha = await commitFixture(fixture.root, "Bind derivative lineage");
+
+    const plan = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan: aggregateFixture(),
+    });
+    const inventoryBytes = await readFile(inventoryPath);
+    assert.equal(
+      plan.manifest.inputs.asset_inventory.git_blob_id,
+      await git(fixture.root, [
+        "rev-parse",
+        `${fixture.sourceSha}:${assetInventoryRelativePath}`,
+      ]),
+    );
+    assert.equal(plan.manifest.inputs.asset_inventory.sha256, sha256(inventoryBytes));
+    const asset = plan.manifest.asset_inventory.assets[0];
+    assert.equal(asset.canonical_source_path, image.sourcePath);
+    assert.deepEqual(asset.source_relationship, {
+      standing: "generated_derivative",
+      canonical_source_path: sourceFilmPath,
+      generator_path: generatorPath,
+      profile: "fixture-profile-v1",
+      canonical_source_bytes: sourceFilm.byteLength,
+      canonical_source_sha256: sha256(sourceFilm),
+      generator_sha256: sha256(generator),
+    });
+    assert.deepEqual(
+      JSON.parse(plan.outputFiles.get("deployment-manifest.json"))
+        .asset_inventory.assets[0].source_relationship,
+      asset.source_relationship,
+    );
+
+    inventory.overrides[0].source_relationship.canonical_source_path = image.sourcePath;
+    await writeFile(inventoryPath, `${JSON.stringify(inventory)}\n`, "utf8");
+    fixture.sourceSha = await commitFixture(fixture.root, "Introduce self lineage");
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /relationship points .* to itself/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("declared and accepted generation relationships bind their exact provenance owners", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const image = await enableAssetInventoryFixture(fixture);
+    const sourceRoot = path.join(fixture.root, "source");
+    await mkdir(sourceRoot, { recursive: true });
+    const canonicalPath = "source/model.json";
+    const relationshipOwnerPath = "source/model-manifest.json";
+    const provenanceOwnerPath = "source/generation-notes.md";
+    const canonical = Buffer.from('{"state":"accepted"}\n', "utf8");
+    const relationshipOwner = Buffer.from('{"derivatives":["../visitor/photo.png"]}\n', "utf8");
+    const provenanceOwner = Buffer.from("# Accepted generation account\n", "utf8");
+    await writeFile(path.join(fixture.root, canonicalPath), canonical);
+    await writeFile(path.join(fixture.root, relationshipOwnerPath), relationshipOwner);
+    await writeFile(path.join(fixture.root, provenanceOwnerPath), provenanceOwner);
+    const inventoryPath = path.join(fixture.root, assetInventoryRelativePath);
+    const inventory = JSON.parse(await readFile(inventoryPath, "utf8"));
+    inventory.overrides = [
+      {
+        source_path: image.sourcePath,
+        semantic_key: "fixture.manifest-declared-photo",
+        roles: inventory.families[0].roles,
+        source_relationship: {
+          standing: "manifest_declared_derivative",
+          canonical_source_path: canonicalPath,
+          relationship_owner_path: relationshipOwnerPath,
+          profile_standing: "The fixture manifest owns the declared relationship.",
+        },
+        recovery_condition: "Restore the fixture model and relationship owner.",
+      },
+    ];
+    await writeFile(inventoryPath, `${JSON.stringify(inventory)}\n`, "utf8");
+    fixture.sourceSha = await commitFixture(fixture.root, "Bind declared derivative");
+
+    let plan = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan: aggregateFixture(),
+    });
+    assert.deepEqual(plan.manifest.asset_inventory.assets[0].source_relationship, {
+      ...inventory.overrides[0].source_relationship,
+      canonical_source_bytes: canonical.byteLength,
+      canonical_source_sha256: sha256(canonical),
+      relationship_owner_sha256: sha256(relationshipOwner),
+    });
+
+    inventory.overrides[0] = {
+      ...inventory.overrides[0],
+      semantic_key: "fixture.accepted-generated-photo",
+      source_relationship: {
+        standing: "accepted_generated_asset",
+        provenance_owner_path: provenanceOwnerPath,
+        lineage_standing: "The fixture records accepted generated bytes and their account.",
+      },
+      recovery_condition: "Restore the accepted fixture and its generation account.",
+    };
+    await writeFile(inventoryPath, `${JSON.stringify(inventory)}\n`, "utf8");
+    fixture.sourceSha = await commitFixture(fixture.root, "Bind accepted generation account");
+    plan = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan: aggregateFixture(),
+    });
+    assert.deepEqual(plan.manifest.asset_inventory.assets[0].source_relationship, {
+      ...inventory.overrides[0].source_relationship,
+      provenance_owner_sha256: sha256(provenanceOwner),
+    });
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("selected assets require one semantic family and inventory rules remain non-selecting", async () => {
+  const unmatched = await createFixtureRoot();
+  const ambiguous = await createFixtureRoot();
+  const misrouted = await createFixtureRoot();
+  try {
+    await enableAssetInventoryFixture(unmatched);
+    const unmatchedInventoryPath = path.join(unmatched.root, assetInventoryRelativePath);
+    const unmatchedInventory = JSON.parse(await readFile(unmatchedInventoryPath, "utf8"));
+    unmatchedInventory.families[0].selector.paths = ["visitor/elsewhere.png"];
+    await writeFile(unmatchedInventoryPath, `${JSON.stringify(unmatchedInventory)}\n`, "utf8");
+    unmatched.sourceSha = await commitFixture(unmatched.root, "Move the fixture annotation");
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: unmatched.root,
+        sourceSha: unmatched.sourceSha,
+        configurationPath: unmatched.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /must match exactly one semantic family.*matched 0/,
+    );
+
+    await enableAssetInventoryFixture(ambiguous);
+    const ambiguousInventoryPath = path.join(ambiguous.root, assetInventoryRelativePath);
+    const ambiguousInventory = JSON.parse(await readFile(ambiguousInventoryPath, "utf8"));
+    ambiguousInventory.families.push({
+      ...structuredClone(ambiguousInventory.families[0]),
+      id: "fixture.duplicate",
+    });
+    await writeFile(ambiguousInventoryPath, `${JSON.stringify(ambiguousInventory)}\n`, "utf8");
+    ambiguous.sourceSha = await commitFixture(ambiguous.root, "Overlap fixture annotations");
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: ambiguous.root,
+        sourceSha: ambiguous.sourceSha,
+        configurationPath: ambiguous.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /must match exactly one semantic family.*matched 2/,
+    );
+
+    const image = await enableAssetInventoryFixture(misrouted);
+    const misroutedManifest = JSON.parse(
+      await readFile(misrouted.primaryManifestPath, "utf8"),
+    );
+    misroutedManifest.files.find(({ source_path: sourcePath }) =>
+      sourcePath === image.sourcePath
+    ).projected_path = "media/photo.png";
+    await writeFile(
+      misrouted.primaryManifestPath,
+      `${JSON.stringify(misroutedManifest)}\n`,
+      "utf8",
+    );
+    misrouted.sourceSha = await commitFixture(
+      misrouted.root,
+      "Diverge from declared asset path standing",
+    );
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: misrouted.root,
+        sourceSha: misrouted.sourceSha,
+        configurationPath: misrouted.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /differs from its declared public-path standing photo\.png/,
+    );
+  } finally {
+    await rm(unmatched.root, { recursive: true, force: true });
+    await rm(ambiguous.root, { recursive: true, force: true });
+    await rm(misrouted.root, { recursive: true, force: true });
+  }
+});
+
+test("asset inventory grammar and image headers keep semantic and physical facts bounded", () => {
+  const accepted = fixtureAssetInventory({ paths: ["visitor/photo.png"] });
+  assert.equal(validateAssetInventory(accepted).families[0].id, "fixture.image");
+  assert.throws(
+    () => validateAssetInventory({ ...accepted, selected_files: ["visitor/photo.png"] }),
+    /must contain exactly/,
+  );
+  assert.throws(
+    () => validateAssetInventory({
+      ...accepted,
+      overrides: [
+        {
+          source_path: "visitor/photo.png",
+          semantic_key: "fixture.photo",
+          roles: accepted.families[0].roles,
+          source_relationship: {
+            standing: "generated_derivative",
+            canonical_source_path: "../outside.mp4",
+            generator_path: "collaboration/generate.py",
+            profile: "fixture",
+          },
+          recovery_condition: "Regenerate the fixture.",
+        },
+      ],
+    }),
+    /must stay relative and normalized/,
+  );
+
+  const gif = Buffer.alloc(10);
+  gif.write("GIF89a", 0, "ascii");
+  gif.writeUInt16LE(7, 6);
+  gif.writeUInt16LE(5, 8);
+  assert.equal(inspectImageDimensions(gif, "image/gif").width, 7);
+  const zeroGif = Buffer.from(gif);
+  zeroGif.writeUInt16LE(0, 6);
+  assert.throws(
+    () => inspectImageDimensions(zeroGif, "image/gif"),
+    /positive GIF dimensions/,
+  );
+  assert.throws(
+    () => inspectImageDimensions(fixturePng(0, 2), "image/png"),
+    /positive PNG dimensions/,
+  );
+  const zeroWidthJpeg = Buffer.alloc(21);
+  Buffer.from([0xff, 0xd8, 0xff, 0xc0]).copy(zeroWidthJpeg);
+  zeroWidthJpeg.writeUInt16BE(17, 4);
+  zeroWidthJpeg[6] = 8;
+  zeroWidthJpeg.writeUInt16BE(2, 7);
+  zeroWidthJpeg.writeUInt16BE(0, 9);
+  assert.throws(
+    () => inspectImageDimensions(zeroWidthJpeg, "image/jpeg"),
+    /positive JPEG dimensions/,
+  );
+  assert.deepEqual(
+    inspectImageDimensions(
+      Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1050"></svg>'),
+      "image/svg+xml",
+    ),
+    {
+      standing: "available",
+      width: 1600,
+      height: 1050,
+      unit: "svg_user_unit",
+      source: "svg_view_box",
+    },
+  );
+  assert.deepEqual(
+    inspectImageDimensions(
+      Buffer.from(
+        '<svg xmlns="http://www.w3.org/2000/svg" data-viewBox="0 0 11 13" stroke-width="7" data-height="9"></svg>',
+      ),
+      "image/svg+xml",
+    ),
+    { standing: "not_declared", source: "svg_root" },
+  );
+  const ico = Buffer.alloc(22);
+  ico.writeUInt16LE(1, 2);
+  ico.writeUInt16LE(1, 4);
+  ico[6] = 0;
+  ico[7] = 0;
+  assert.deepEqual(inspectImageDimensions(ico, "image/x-icon").variants, [
+    { width: 256, height: 256 },
+  ]);
 });
 
 test("publication projection materializes one digest-bound receiver and rewrites flattened route geometry", async () => {
