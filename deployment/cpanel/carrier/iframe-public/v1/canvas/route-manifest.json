@@ -5,12 +5,13 @@
   "base_path": "/v1/canvas/",
   "route_contract": {
     "file": "iframe-route-families/canvas/public-iframe-route-manifest-v1.json",
-    "sha256": "be467209fc9fc3ad8e2110434b70110c86dd20aeecb41c5f45bbcfb365b50557"
+    "sha256": "8c3e3b8d6e424465c763741d1fbd4368e61cdfa4d2922393bcbdb729152a60ab"
   },
   "package_contract": {
     "primary_routes": 15,
-    "decorated_routes": 14,
-    "byte_identical_routes": 1,
+    "decorated_routes": 15,
+    "byte_identical_routes": 0,
+    "navigation_adapted_routes": 1,
     "generated_files": 40,
     "live_cloudflare_mutation": false,
     "closure_observation": "static_resource_graph",
@@ -40,7 +41,15 @@
       "source_sha256": "a92df214229c8b49e672a92e107ec314191bfd7e0e47a8759f302ea3c7fd7e0b",
       "projection_bytes": 71003,
       "projection_sha256": "85fca88f15a98f172120fc1850205a665aa6ced14f23d01c1a785e77322f1271",
-      "projection_rewrites": [],
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 0,
+          "rewritten_links": 0,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": [],
@@ -50,6 +59,9 @@
         "packaged_links": 0,
         "fragment_links": 1,
         "external_links": 0,
+        "exit_links": 0,
+        "new_tab_exit_links": 0,
+        "secure_new_tab_exit_links": 0,
         "unresolved_local_links": []
       }
     },
@@ -75,7 +87,15 @@
       "source_sha256": "f193977f75bc7d0062968b1c0b54aa79dc7df06030b6dc2b1862c0e054f4cfc0",
       "projection_bytes": 15897,
       "projection_sha256": "a488dc02629630736717d2d820ea5b1eaded3153f9b7429f2c544d1bda4485e0",
-      "projection_rewrites": [],
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 0,
+          "rewritten_links": 0,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": [],
@@ -85,6 +105,9 @@
         "packaged_links": 0,
         "fragment_links": 0,
         "external_links": 0,
+        "exit_links": 0,
+        "new_tab_exit_links": 0,
+        "secure_new_tab_exit_links": 0,
         "unresolved_local_links": []
       }
     },
@@ -106,7 +129,15 @@
       "source_sha256": "452e5aa2259b07f25177ac9401bda272403ab96c021b2a38eaf34a1bb6c278dd",
       "projection_bytes": 55811,
       "projection_sha256": "16692b5817d10e8a7910a1ea9a234e3f5dd4aa21438d5e5ca90ac07c5bc87203",
-      "projection_rewrites": [],
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 0,
+          "rewritten_links": 0,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": [],
@@ -116,6 +147,9 @@
         "packaged_links": 0,
         "fragment_links": 5,
         "external_links": 0,
+        "exit_links": 0,
+        "new_tab_exit_links": 0,
+        "secure_new_tab_exit_links": 0,
         "unresolved_local_links": []
       }
     },
@@ -142,7 +176,15 @@
       "source_sha256": "6f1be43bc9f7ba35487acc030c6858b3fdcc6d3adc3961f8c6f5804f864f53af",
       "projection_bytes": 43560,
       "projection_sha256": "41cf0becd748128fde5b7fc0dc5e3cb6013e2f23cda4a0d20faf68a8d23c0f65",
-      "projection_rewrites": [],
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 0,
+          "rewritten_links": 0,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": [],
@@ -152,6 +194,9 @@
         "packaged_links": 0,
         "fragment_links": 1,
         "external_links": 0,
+        "exit_links": 0,
+        "new_tab_exit_links": 0,
+        "secure_new_tab_exit_links": 0,
         "unresolved_local_links": []
       }
     },
@@ -175,11 +220,19 @@
         "executable-scripts"
       ],
       "projection_file": "talent-agent-intake/index.html",
-      "source_bytes": 58085,
-      "source_sha256": "dc643eee8cdc5f4f60cdd8f0412be801977ff309927e4cbdd2d8b448f45ab716",
-      "projection_bytes": 60799,
-      "projection_sha256": "8f4711ae0a3487671349286afa3f365afdba304f9805829bb040af980354574c",
-      "projection_rewrites": [],
+      "source_bytes": 58052,
+      "source_sha256": "5dbec72a7a922fa357b7ae409c285a46d89c2aa5348e6689ddddf4a9fd438de5",
+      "projection_bytes": 61677,
+      "projection_sha256": "13f5321dd4082c24006007df3c0f0f5c036a68fe7ee4f02e228d7302a8b921c6",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 0,
+          "rewritten_links": 0,
+          "dynamic_exit_templates": 1,
+          "runtime_adapter": true
+        }
+      ],
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": [],
@@ -189,6 +242,9 @@
         "packaged_links": 0,
         "fragment_links": 1,
         "external_links": 0,
+        "exit_links": 0,
+        "new_tab_exit_links": 0,
+        "secure_new_tab_exit_links": 0,
         "unresolved_local_links": []
       }
     },
@@ -212,10 +268,10 @@
         "executable-scripts"
       ],
       "projection_file": "cross-functional-investment-studio/index.html",
-      "source_bytes": 143090,
-      "source_sha256": "ebc3ee44470712eb61563e57dc68fccc0f97212c093d8209a4dbbc0d32264483",
-      "projection_bytes": 145559,
-      "projection_sha256": "3d41932ee4698b5dbc08578c618db36a58c58530afe78374cd663e754f82f1a0",
+      "source_bytes": 142752,
+      "source_sha256": "28d09cd55b392c9059afa015e44e44cc9fd1506fd9836ee7f55017507000a6bd",
+      "projection_bytes": 145557,
+      "projection_sha256": "d8d39fae141ef9b705ff20d8a95722574952270ec11d33e327a7016e9979451f",
       "projection_rewrites": [
         {
           "kind": "primary_site_navigation",
@@ -234,6 +290,13 @@
           "source_reference": "../../context-canvas-project-surface/context-canvas/shared-machinery.html",
           "projected_reference": "https://vik.guru/shared-machinery.html",
           "replacements": 2
+        },
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 8,
+          "rewritten_links": 8,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
         }
       ],
       "static_resource_closure": {
@@ -245,6 +308,9 @@
         "packaged_links": 0,
         "fragment_links": 18,
         "external_links": 8,
+        "exit_links": 8,
+        "new_tab_exit_links": 8,
+        "secure_new_tab_exit_links": 8,
         "unresolved_local_links": []
       }
     },
@@ -268,10 +334,10 @@
         "executable-scripts"
       ],
       "projection_file": "prompt-conditions-explorer/index.html",
-      "source_bytes": 40200,
-      "source_sha256": "543f5ff7dfdef6b86d3b78be96f6f3033c215cf357f640d591153300ea590123",
-      "projection_bytes": 42389,
-      "projection_sha256": "e652c0ada477c91e20ade0a4304d1cd20447fd2d3d416c2973eaab232ceaf951",
+      "source_bytes": 39753,
+      "source_sha256": "b836573aa300a25153ecc60f17622b33f38d65c40f1a466d31c1f480acba671b",
+      "projection_bytes": 42362,
+      "projection_sha256": "677c0156fad99d94b951b21f11234bb5ff4f905ac47d13122da6f6d72c1be324",
       "projection_rewrites": [
         {
           "kind": "primary_site_navigation",
@@ -326,6 +392,13 @@
           "source_reference": "../../context-canvas-project-surface/context-canvas/prompt-side-conditions-practice.html#sources-title",
           "projected_reference": "https://vik.guru/prompt-side-conditions-practice.html#sources-title",
           "replacements": 1
+        },
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 10,
+          "rewritten_links": 10,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
         }
       ],
       "static_resource_closure": {
@@ -337,6 +410,9 @@
         "packaged_links": 0,
         "fragment_links": 1,
         "external_links": 10,
+        "exit_links": 10,
+        "new_tab_exit_links": 10,
+        "secure_new_tab_exit_links": 10,
         "unresolved_local_links": []
       }
     },
@@ -374,6 +450,13 @@
           "source_reference": "../../context-canvas-project-surface/img/bgr/bgr_3b_after_safeway_cool_tri.svg",
           "projected_reference": "./assets/bgr_3b_after_safeway_cool_tri.svg",
           "replacements": 1
+        },
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 0,
+          "rewritten_links": 0,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
         }
       ],
       "static_resource_closure": {
@@ -404,6 +487,9 @@
         "packaged_links": 0,
         "fragment_links": 0,
         "external_links": 0,
+        "exit_links": 0,
+        "new_tab_exit_links": 0,
+        "secure_new_tab_exit_links": 0,
         "unresolved_local_links": []
       }
     },
@@ -427,10 +513,10 @@
         "executable-scripts"
       ],
       "projection_file": "ai-method-gallery/index.html",
-      "source_bytes": 42002,
-      "source_sha256": "50b84b31f4bf6f680bf56948b3b3f0b12c1cb44441520c1fd2a067503595873d",
-      "projection_bytes": 42312,
-      "projection_sha256": "88a88ae30693ab5849caa599fbc43a8886d4b17eb1fa32e0623029ba6717261a",
+      "source_bytes": 41802,
+      "source_sha256": "9a3162772ac6e8fcbb55036d744530f88889debd13158e69e2acdc1d05697123",
+      "projection_bytes": 42280,
+      "projection_sha256": "0da973c76d651e7e09e345a3008cfc45c7809cdfdad7292ff1aa3663d34c2202",
       "projection_rewrites": [
         {
           "kind": "package_file",
@@ -563,6 +649,13 @@
           "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_manifest.json",
           "projected_reference": "./sources/viewlet_manifest.json",
           "replacements": 1
+        },
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 4,
+          "rewritten_links": 4,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
         }
       ],
       "static_resource_closure": {
@@ -774,6 +867,9 @@
         "packaged_links": 2,
         "fragment_links": 0,
         "external_links": 2,
+        "exit_links": 4,
+        "new_tab_exit_links": 4,
+        "secure_new_tab_exit_links": 4,
         "unresolved_local_links": []
       }
     },
@@ -787,43 +883,9 @@
       "projection_kind": "decorated_copy",
       "carrier_policy": {
         "sandbox_tokens": [
-          "allow-scripts"
-        ],
-        "permissions_policy": []
-      },
-      "observed_runtime_capabilities": [
-        "executable-scripts"
-      ],
-      "projection_file": "cross-functional-investment-model-studio/index.html",
-      "source_bytes": 79237,
-      "source_sha256": "6c675d9513840208b9aa346a9e5d90c086c3d636a3e617a635948361d65d91e2",
-      "projection_bytes": 81951,
-      "projection_sha256": "5865f853d58a65cce0af3d7ce14017de6083389de969809b7b02233263a56882",
-      "projection_rewrites": [],
-      "static_resource_closure": {
-        "inline_references": 0,
-        "package_files": [],
-        "navigation_files": []
-      },
-      "navigation": {
-        "packaged_links": 0,
-        "fragment_links": 1,
-        "external_links": 0,
-        "unresolved_local_links": []
-      }
-    },
-    {
-      "id": "threadkeeping-ledger",
-      "public_alias": "/v1/canvas/threadkeeping-ledger/",
-      "source_file": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html",
-      "receiver_standing": "byte_identical",
-      "activation_standing": "eligible",
-      "activation_eligible": true,
-      "projection_kind": "byte_identical",
-      "carrier_policy": {
-        "sandbox_tokens": [
           "allow-downloads",
-          "allow-modals",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -833,14 +895,77 @@
       "observed_runtime_capabilities": [
         "executable-scripts",
         "clipboard-write",
+        "file-download"
+      ],
+      "projection_file": "cross-functional-investment-model-studio/index.html",
+      "source_bytes": 113372,
+      "source_sha256": "821acc2f965468fb519c9ff2853212984f2d6934ec73f9e70d5d3730e9781d8c",
+      "projection_bytes": 116170,
+      "projection_sha256": "6bd9eacb475b115b4be5aeb2a12487b7e29df0145ec985e974a78ec0a272a919",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": [],
+        "navigation_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 1,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "threadkeeping-ledger",
+      "public_alias": "/v1/canvas/threadkeeping-ledger/",
+      "source_file": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "projection_kind": "navigation_adapted",
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-modals",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ]
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write",
+        "file-download",
         "native-modals"
       ],
       "projection_file": "threadkeeping-ledger/index.html",
-      "source_bytes": 84779,
-      "source_sha256": "48a087d0360c97bcb2d46da7bca07ed4c51aa835da496701a5c0bc748a56ae2f",
-      "projection_bytes": 84779,
-      "projection_sha256": "48a087d0360c97bcb2d46da7bca07ed4c51aa835da496701a5c0bc748a56ae2f",
-      "projection_rewrites": [],
+      "source_bytes": 125221,
+      "source_sha256": "8b535e9c8da22dcb7654e157073a0c59f426ac61e28d7380373ae18338a54952",
+      "projection_bytes": 125263,
+      "projection_sha256": "a8a5278cd290051d9b17fbebab8b6b62c997ac1289bdaf84c511acb7bee91c09",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 1,
+          "rewritten_links": 1,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": [],
@@ -849,7 +974,10 @@
       "navigation": {
         "packaged_links": 0,
         "fragment_links": 0,
-        "external_links": 0,
+        "external_links": 1,
+        "exit_links": 1,
+        "new_tab_exit_links": 1,
+        "secure_new_tab_exit_links": 1,
         "unresolved_local_links": []
       }
     },
@@ -863,20 +991,35 @@
       "projection_kind": "decorated_copy",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
           "allow-modals",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
-        "permissions_policy": []
+        "permissions_policy": [
+          "clipboard-write"
+        ]
       },
       "observed_runtime_capabilities": [
-        "executable-scripts"
+        "executable-scripts",
+        "clipboard-write",
+        "file-download"
       ],
       "projection_file": "open-lesson-field/index.html",
-      "source_bytes": 181474,
-      "source_sha256": "d41af04e4ff011b4869c89a4dc494e3ff4789aa9dc64a6de54f4732df71e6d5b",
-      "projection_bytes": 184188,
-      "projection_sha256": "db6a0b38da269940c96d14d9e7fb85a936b3bc8e1be121c411a398985ff29260",
-      "projection_rewrites": [],
+      "source_bytes": 204746,
+      "source_sha256": "fa5dc5c1b6556a1409eeb45c6748ea3a1be50b8a837c762ce0f07667d121c984",
+      "projection_bytes": 207544,
+      "projection_sha256": "56962fba16afcab30841bc82286f3839f4351220f492188536e54087b4d7d6cb",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": [],
@@ -885,7 +1028,10 @@
       "navigation": {
         "packaged_links": 0,
         "fragment_links": 9,
-        "external_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
         "unresolved_local_links": []
       }
     },
@@ -899,6 +1045,9 @@
       "projection_kind": "decorated_copy",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -907,14 +1056,23 @@
       },
       "observed_runtime_capabilities": [
         "executable-scripts",
-        "clipboard-write"
+        "clipboard-write",
+        "file-download"
       ],
       "projection_file": "visualization-fidelity-atlas/index.html",
-      "source_bytes": 141849,
-      "source_sha256": "073f465da36db8f965745819ecf2de70e5ec8bf17bd1561b2d039a052b1b9e55",
-      "projection_bytes": 144563,
-      "projection_sha256": "bcc512d967cafe060084938ce03f6ee8cf138c09811e071223cbf4fe3229dbd0",
-      "projection_rewrites": [],
+      "source_bytes": 211917,
+      "source_sha256": "c7ffce34ea84f3f27037f4dc0a0ea5f5457bd5a0bdd16698a10106f74e7a8768",
+      "projection_bytes": 214715,
+      "projection_sha256": "30f5ef793db6b9ba7ca311498da4023d30dc3dd39f6765f8778e88997f201c51",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": [],
@@ -923,7 +1081,10 @@
       "navigation": {
         "packaged_links": 0,
         "fragment_links": 0,
-        "external_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
         "unresolved_local_links": []
       }
     },
@@ -949,7 +1110,15 @@
       "source_sha256": "afb7e6b852ee75c70869c3c98eb4f6be416eac865dcf4ae676fea7e3c5f4334a",
       "projection_bytes": 17014,
       "projection_sha256": "c142392d36fc9ff2758b32572d4614a0ffe4e8a64b1adb3c24f3bb2477d13557",
-      "projection_rewrites": [],
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 0,
+          "rewritten_links": 0,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": [],
@@ -959,6 +1128,9 @@
         "packaged_links": 0,
         "fragment_links": 0,
         "external_links": 0,
+        "exit_links": 0,
+        "new_tab_exit_links": 0,
+        "secure_new_tab_exit_links": 0,
         "unresolved_local_links": []
       }
     },
@@ -984,7 +1156,15 @@
       "source_sha256": "0868411523cb639f893dcf8145b45427449cbb2a443b1be1670249f564279948",
       "projection_bytes": 28806,
       "projection_sha256": "78979615d323ab54dadeac8ff7e93c7b6b47887000d0c21df10168bfd8b728f7",
-      "projection_rewrites": [],
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 0,
+          "rewritten_links": 0,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": [],
@@ -994,6 +1174,9 @@
         "packaged_links": 0,
         "fragment_links": 1,
         "external_links": 0,
+        "exit_links": 0,
+        "new_tab_exit_links": 0,
+        "secure_new_tab_exit_links": 0,
         "unresolved_local_links": []
       }
     }

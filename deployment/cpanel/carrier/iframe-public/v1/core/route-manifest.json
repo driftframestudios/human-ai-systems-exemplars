@@ -5,17 +5,18 @@
   "base_path": "/v1/core/",
   "route_contract": {
     "file": "public-iframe-route-manifest-v1.json",
-    "sha256": "c207eee18ef3c7fde2fc63406fe4fb7140a389103f5b6ee40352da932567075f"
+    "sha256": "c789fb0f4f69fc9007a6fdbf90005077ef2be3638485c15384f7d86dc9ad193e"
   },
   "source_manifest": {
     "file": "manifest.json",
     "source_file": "core-architectures-chimeric-prototype-manifest-v0.1.json",
-    "sha256": "4dd5a7c3afb3ec2f9f4049a98871b90ed56baf9087b495a65ea7208454a37224"
+    "sha256": "60056a80c149c466de83eeb631027accc1e1bade662f56196ec93d941b79434d"
   },
   "package_contract": {
     "primary_routes": 23,
     "prototype_routes": 21,
     "supplemental_instrument_routes": 1,
+    "navigation_adapted_routes": 22,
     "generated_files": 27,
     "compatibility_aliases_generated": false,
     "live_cloudflare_mutation": false,
@@ -40,10 +41,19 @@
       "observed_runtime_capabilities": [],
       "projection_file": "index.html",
       "projection_kind": "navigation_adapted",
-      "source_bytes": 24095,
-      "source_sha256": "f709c8d9b49f250dd8ebb66275f86ea667d5bb80592fe05f4c851aa132724193",
-      "projection_bytes": 23462,
-      "projection_sha256": "5baa8e2c2d30788a71ac1299fd637efc211683af0cd695182fa9890c7da649d3",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 0,
+          "rewritten_links": 0,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 25612,
+      "source_sha256": "abe6fc88c9800699bb44ec01d311f021b17766b3b6003c5bc7c017e8f8eda14b",
+      "projection_bytes": 24979,
+      "projection_sha256": "00e6f7fb0d0c1cf1ae61208c79335ffb281d3b9aab03cc87d24d1b5fc7f56d41",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -52,19 +62,25 @@
         "packaged_links": 22,
         "fragment_links": 0,
         "external_links": 0,
+        "exit_links": 22,
+        "new_tab_exit_links": 0,
+        "secure_new_tab_exit_links": 0,
         "unresolved_local_links": []
       }
     },
     {
       "id": "poda",
       "public_alias": "/v1/core/poda/",
-      "source_file": "poda-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
+      "source_file": "poda-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
       "receiver_standing": "context_adapted",
       "activation_standing": "parity_review",
       "activation_eligible": false,
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -74,14 +90,30 @@
       },
       "observed_runtime_capabilities": [
         "executable-scripts",
-        "clipboard-write"
+        "clipboard-write",
+        "file-download"
       ],
       "projection_file": "poda/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 72559,
-      "source_sha256": "75127797592b85c7f22608d92ae6482b6073c523879d621a3e33c133cecbac5b",
-      "projection_bytes": 72559,
-      "projection_sha256": "75127797592b85c7f22608d92ae6482b6073c523879d621a3e33c133cecbac5b",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "primary_site_navigation",
+          "source_reference": "../context-canvas-project-surface/context-canvas/poda.html",
+          "projected_reference": "https://vik.guru/poda.html",
+          "replacements": 1
+        },
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 3,
+          "rewritten_links": 3,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 111057,
+      "source_sha256": "adf425f5e7b0f22fe03c9df58c874b2f995457de933e9dc777fb8ef5bfd46704",
+      "projection_bytes": 111151,
+      "projection_sha256": "03011fe02e79a721e771bc4b6f2925c308ef27f3cbde4cb8bb47f81fdf4e9f26",
       "static_resource_closure": {
         "inline_references": 3,
         "package_files": []
@@ -89,63 +121,26 @@
       "navigation": {
         "packaged_links": 0,
         "fragment_links": 0,
-        "external_links": 0,
-        "unresolved_local_links": [
-          {
-            "href": "../context-canvas-project-surface/context-canvas/poda.html",
-            "projected_target": "context-canvas-project-surface/context-canvas/poda.html"
-          }
-        ]
+        "external_links": 3,
+        "exit_links": 3,
+        "new_tab_exit_links": 3,
+        "secure_new_tab_exit_links": 3,
+        "unresolved_local_links": []
       }
     },
     {
       "id": "alignment-worksheet",
       "public_alias": "/v1/core/alignment-worksheet/",
-      "source_file": "alignment-worksheet-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
-      "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
-      "carrier_policy": {
-        "sandbox_tokens": [
-          "allow-scripts"
-        ],
-        "permissions_policy": [
-          "clipboard-write"
-        ],
-        "held_capabilities": []
-      },
-      "observed_runtime_capabilities": [
-        "executable-scripts",
-        "clipboard-write"
-      ],
-      "projection_file": "alignment-worksheet/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 67321,
-      "source_sha256": "d95b9dea95e92ab24baf3c286e8ac15d3166056d06b9ee4293b34a99f0400c23",
-      "projection_bytes": 67321,
-      "projection_sha256": "d95b9dea95e92ab24baf3c286e8ac15d3166056d06b9ee4293b34a99f0400c23",
-      "static_resource_closure": {
-        "inline_references": 1,
-        "package_files": []
-      },
-      "navigation": {
-        "packaged_links": 0,
-        "fragment_links": 0,
-        "external_links": 0,
-        "unresolved_local_links": []
-      }
-    },
-    {
-      "id": "impact-map",
-      "public_alias": "/v1/core/impact-map/",
-      "source_file": "impact-map-chimeric-prototype-v0.1.4.html",
+      "source_file": "alignment-worksheet-chimeric-prototype-v0.1.4.html",
       "source_version": "0.1.4",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
       "activation_eligible": false,
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -155,14 +150,24 @@
       },
       "observed_runtime_capabilities": [
         "executable-scripts",
-        "clipboard-write"
+        "clipboard-write",
+        "file-download"
       ],
-      "projection_file": "impact-map/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 46004,
-      "source_sha256": "f4d87c54b4113c15076c0dd2e7516859beccf225d354a1723f16c1c4abd31797",
-      "projection_bytes": 46004,
-      "projection_sha256": "f4d87c54b4113c15076c0dd2e7516859beccf225d354a1723f16c1c4abd31797",
+      "projection_file": "alignment-worksheet/index.html",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 106530,
+      "source_sha256": "86995621536d1d69f74fe6b828e6c5108fe84d4fabbd486f18504e6051465a45",
+      "projection_bytes": 106614,
+      "projection_sha256": "27f34af8cc25b8d4e239c774a00e01870c4455682efbf4ba1003effe986e4040",
       "static_resource_closure": {
         "inline_references": 1,
         "package_files": []
@@ -170,20 +175,26 @@
       "navigation": {
         "packaged_links": 0,
         "fragment_links": 0,
-        "external_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
         "unresolved_local_links": []
       }
     },
     {
-      "id": "context-tree",
-      "public_alias": "/v1/core/context-tree/",
-      "source_file": "context-tree-chimeric-prototype-v0.1.6.html",
-      "source_version": "0.1.6",
+      "id": "impact-map",
+      "public_alias": "/v1/core/impact-map/",
+      "source_file": "impact-map-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
       "activation_eligible": false,
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -193,14 +204,78 @@
       },
       "observed_runtime_capabilities": [
         "executable-scripts",
-        "clipboard-write"
+        "clipboard-write",
+        "file-download"
+      ],
+      "projection_file": "impact-map/index.html",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 83801,
+      "source_sha256": "f6bbc1177942fac7d9dcf1220ed26bc30f7e2bc6e3ea2416f89b2e52be8b102a",
+      "projection_bytes": 83885,
+      "projection_sha256": "81e00355912249ba8fb6f1c812987b4074535ae355247c7cd31af318a4d02952",
+      "static_resource_closure": {
+        "inline_references": 1,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "context-tree",
+      "public_alias": "/v1/core/context-tree/",
+      "source_file": "context-tree-chimeric-prototype-v0.1.7.html",
+      "source_version": "0.1.7",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write",
+        "file-download"
       ],
       "projection_file": "context-tree/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 85427,
-      "source_sha256": "c9b4474b0f8b514fd73363e5b5133cf4222e39973b1e7cf32ff640ed9603d7f7",
-      "projection_bytes": 85427,
-      "projection_sha256": "c9b4474b0f8b514fd73363e5b5133cf4222e39973b1e7cf32ff640ed9603d7f7",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 134657,
+      "source_sha256": "193ad86f568669909802f9e304119f2ecf4a04e20b60798bf0a78ab178d5e805",
+      "projection_bytes": 134741,
+      "projection_sha256": "7eef0ab84cc52e5f7604750bd83859fab79a26ec5d87f774a851c8fba7df2bdf",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -208,20 +283,27 @@
       "navigation": {
         "packaged_links": 0,
         "fragment_links": 0,
-        "external_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
         "unresolved_local_links": []
       }
     },
     {
       "id": "strategy-canvas",
       "public_alias": "/v1/core/strategy-canvas/",
-      "source_file": "strategy-canvas-chimeric-prototype-v0.2.2.html",
-      "source_version": "0.2.2",
+      "source_file": "strategy-canvas-chimeric-prototype-v0.2.4.html",
+      "source_version": "0.2.4",
+      "expression": "canonical",
       "receiver_standing": "context_adapted",
       "activation_standing": "parity_review",
       "activation_eligible": false,
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -231,14 +313,24 @@
       },
       "observed_runtime_capabilities": [
         "executable-scripts",
-        "clipboard-write"
+        "clipboard-write",
+        "file-download"
       ],
       "projection_file": "strategy-canvas/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 142235,
-      "source_sha256": "93f5e2b138461f85b4980b849550f7c86cc51d7eaf16bf8429d1ea632034372a",
-      "projection_bytes": 142235,
-      "projection_sha256": "93f5e2b138461f85b4980b849550f7c86cc51d7eaf16bf8429d1ea632034372a",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 4,
+          "rewritten_links": 4,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 165694,
+      "source_sha256": "60fc6669b54adff4f609f4c48322548d44abc4875f5a2412030eb2c619f4c8b4",
+      "projection_bytes": 165862,
+      "projection_sha256": "c2935e18c0febb5d53c2684573c75e7ab13ace76b3e6db4a4320d58ede63ba10",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": [
@@ -253,28 +345,34 @@
             "source_file": "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
             "target_file": "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
             "content_type": "application/json",
-            "bytes": 13480,
-            "sha256": "a0e50582f924d79e39456349cd0e7dd160e46ad5df77bb2a357f20fedf509c7c"
+            "bytes": 21648,
+            "sha256": "a4a7187f8501b27709a632a608e702a0a2e5312a8fd956a82df3726690eb49f7"
           }
         ]
       },
       "navigation": {
         "packaged_links": 2,
         "fragment_links": 1,
-        "external_links": 0,
+        "external_links": 2,
+        "exit_links": 4,
+        "new_tab_exit_links": 4,
+        "secure_new_tab_exit_links": 4,
         "unresolved_local_links": []
       }
     },
     {
       "id": "first-responsible-version-matrix",
       "public_alias": "/v1/core/first-responsible-version-matrix/",
-      "source_file": "first-responsible-version-matrix-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
+      "source_file": "first-responsible-version-matrix-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
       "activation_eligible": false,
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -284,14 +382,24 @@
       },
       "observed_runtime_capabilities": [
         "executable-scripts",
-        "clipboard-write"
+        "clipboard-write",
+        "file-download"
       ],
       "projection_file": "first-responsible-version-matrix/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 63309,
-      "source_sha256": "92471bc975e471371023e4ebba6be4a9a0974753e471865f8237c884ff219266",
-      "projection_bytes": 63309,
-      "projection_sha256": "92471bc975e471371023e4ebba6be4a9a0974753e471865f8237c884ff219266",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 93366,
+      "source_sha256": "8c2987d41ddb17ebf39e66f3dd74b4a3e4bc9407eb4d1dea374affba5a62329a",
+      "projection_bytes": 93450,
+      "projection_sha256": "9e911b88f90f2603999e9600cb49ed06b915098f8dd269e61a55cd217b293d29",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -299,20 +407,26 @@
       "navigation": {
         "packaged_links": 0,
         "fragment_links": 0,
-        "external_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
         "unresolved_local_links": []
       }
     },
     {
       "id": "cross-channel-blueprint",
       "public_alias": "/v1/core/cross-channel-blueprint/",
-      "source_file": "shared-surface-priority-map-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
-      "receiver_standing": "byte_identical",
+      "source_file": "shared-surface-priority-map-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
+      "receiver_standing": "context_adapted",
       "activation_standing": "provenance_review",
       "activation_eligible": false,
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -322,14 +436,24 @@
       },
       "observed_runtime_capabilities": [
         "executable-scripts",
-        "clipboard-write"
+        "clipboard-write",
+        "file-download"
       ],
       "projection_file": "cross-channel-blueprint/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 106139,
-      "source_sha256": "06817b6fc7312c32f6c303b1ea562c43c2bf8436a6214b73e03e9b6cb14ec08a",
-      "projection_bytes": 106139,
-      "projection_sha256": "06817b6fc7312c32f6c303b1ea562c43c2bf8436a6214b73e03e9b6cb14ec08a",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 174032,
+      "source_sha256": "a631352d54d8cd736932e8045001718c1872ca2be99ceef4fcf820781231ad3e",
+      "projection_bytes": 174116,
+      "projection_sha256": "6dd65c9f53e6b19321027eb627944478d1844a9156d8ea509610cc5e3a612d6e",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -337,20 +461,26 @@
       "navigation": {
         "packaged_links": 0,
         "fragment_links": 0,
-        "external_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
         "unresolved_local_links": []
       }
     },
     {
       "id": "service-design-blueprint",
       "public_alias": "/v1/core/service-design-blueprint/",
-      "source_file": "service-design-blueprint-chimeric-prototype-v0.2.4.html",
-      "source_version": "0.2.4",
-      "receiver_standing": "byte_identical",
+      "source_file": "service-design-blueprint-chimeric-prototype-v0.2.5.html",
+      "source_version": "0.2.5",
+      "receiver_standing": "context_adapted",
       "activation_standing": "visitor_copy_review",
       "activation_eligible": false,
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -360,14 +490,24 @@
       },
       "observed_runtime_capabilities": [
         "executable-scripts",
-        "clipboard-write"
+        "clipboard-write",
+        "file-download"
       ],
       "projection_file": "service-design-blueprint/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 93083,
-      "source_sha256": "2641264f0e3471fe24d4e26482229646e80ed26c1ede1a5f804dd1e53bb5bdfd",
-      "projection_bytes": 93083,
-      "projection_sha256": "2641264f0e3471fe24d4e26482229646e80ed26c1ede1a5f804dd1e53bb5bdfd",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 182647,
+      "source_sha256": "55ca3885f661c5a69258d8b82fc72f07b7274cfd94a970f11c5ce387daff1268",
+      "projection_bytes": 182731,
+      "projection_sha256": "07516bbb5180fa3b6ab717304ee48a95c85a57be807a019e9a07dd61a9e064c5",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -375,34 +515,53 @@
       "navigation": {
         "packaged_links": 0,
         "fragment_links": 0,
-        "external_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
         "unresolved_local_links": []
       }
     },
     {
       "id": "ai-systems-service-blueprint",
       "public_alias": "/v1/core/ai-systems-service-blueprint/",
-      "source_file": "ai-systems-service-blueprint-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
+      "source_file": "ai-systems-service-blueprint-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
       "receiver_standing": "reserve",
       "activation_standing": "navigation_observation",
       "activation_eligible": false,
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
-        "permissions_policy": [],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
         "held_capabilities": []
       },
       "observed_runtime_capabilities": [
-        "executable-scripts"
+        "executable-scripts",
+        "clipboard-write",
+        "file-download"
       ],
       "projection_file": "ai-systems-service-blueprint/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 66749,
-      "source_sha256": "4acdc3d83532449f30decc5685c98061a982905b61e4e550d5731ba2d1b43706",
-      "projection_bytes": 66749,
-      "projection_sha256": "4acdc3d83532449f30decc5685c98061a982905b61e4e550d5731ba2d1b43706",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 5,
+          "rewritten_links": 5,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 127800,
+      "source_sha256": "f7918b9f31de120dbfc1031cd80df874e71a0d2a3b767e2972cc2c6c722e072a",
+      "projection_bytes": 128010,
+      "projection_sha256": "a27e60ad997bb360f74ebe5b41ed79c4bacf0153e85b3fff4e7ecbdd245723ab",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -410,20 +569,26 @@
       "navigation": {
         "packaged_links": 0,
         "fragment_links": 0,
-        "external_links": 3,
+        "external_links": 5,
+        "exit_links": 5,
+        "new_tab_exit_links": 5,
+        "secure_new_tab_exit_links": 5,
         "unresolved_local_links": []
       }
     },
     {
       "id": "software-architecture-views",
       "public_alias": "/v1/core/software-architecture-views/",
-      "source_file": "software-architecture-views-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
+      "source_file": "software-architecture-views-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
       "activation_eligible": false,
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -433,14 +598,24 @@
       },
       "observed_runtime_capabilities": [
         "executable-scripts",
-        "clipboard-write"
+        "clipboard-write",
+        "file-download"
       ],
       "projection_file": "software-architecture-views/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 80200,
-      "source_sha256": "c1fdce7212aa0995cd5e862b9cee00baad5ddfd1b199ca4f3f063488c81ebe0c",
-      "projection_bytes": 80200,
-      "projection_sha256": "c1fdce7212aa0995cd5e862b9cee00baad5ddfd1b199ca4f3f063488c81ebe0c",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 120977,
+      "source_sha256": "13ee65ff0602260847bd8375d9ea264067e6ca117c64f37acaba333653aa6da1",
+      "projection_bytes": 121061,
+      "projection_sha256": "0e93365d9771f01a3fc7f24e55979496a165ed29bdc9e1568c1f2762cce92bbe",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -448,20 +623,26 @@
       "navigation": {
         "packaged_links": 0,
         "fragment_links": 0,
-        "external_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
         "unresolved_local_links": []
       }
     },
     {
       "id": "participatory-design-kit",
       "public_alias": "/v1/core/participatory-design-kit/",
-      "source_file": "participatory-design-kit-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
+      "source_file": "participatory-design-kit-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
       "receiver_standing": "reserve",
       "activation_standing": "visitor_copy_review",
       "activation_eligible": false,
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -471,52 +652,24 @@
       },
       "observed_runtime_capabilities": [
         "executable-scripts",
-        "clipboard-write"
+        "clipboard-write",
+        "file-download"
       ],
       "projection_file": "participatory-design-kit/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 70946,
-      "source_sha256": "d8e9cc9d3e8c354000a48bd62e0b0a023f654596ea223f8acf860b0cd5e75e64",
-      "projection_bytes": 70946,
-      "projection_sha256": "d8e9cc9d3e8c354000a48bd62e0b0a023f654596ea223f8acf860b0cd5e75e64",
-      "static_resource_closure": {
-        "inline_references": 1,
-        "package_files": []
-      },
-      "navigation": {
-        "packaged_links": 0,
-        "fragment_links": 0,
-        "external_links": 0,
-        "unresolved_local_links": []
-      }
-    },
-    {
-      "id": "specification-by-example",
-      "public_alias": "/v1/core/specification-by-example/",
-      "source_file": "specification-by-example-chimeric-prototype-v0.1.5.html",
-      "source_version": "0.1.5",
-      "receiver_standing": "byte_identical",
-      "activation_standing": "navigation_observation",
-      "activation_eligible": false,
-      "carrier_policy": {
-        "sandbox_tokens": [
-          "allow-scripts"
-        ],
-        "permissions_policy": [
-          "clipboard-write"
-        ],
-        "held_capabilities": []
-      },
-      "observed_runtime_capabilities": [
-        "executable-scripts",
-        "clipboard-write"
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
       ],
-      "projection_file": "specification-by-example/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 69546,
-      "source_sha256": "0bea8fabc2d06a05117b8289e01d3931e928262c8db6af01fd9c5563d0a9359f",
-      "projection_bytes": 69546,
-      "projection_sha256": "0bea8fabc2d06a05117b8289e01d3931e928262c8db6af01fd9c5563d0a9359f",
+      "source_bytes": 119255,
+      "source_sha256": "e86619691afe4a687bb22c6c474b3da38c55afec6a18de8a6ef1254fec3a7867",
+      "projection_bytes": 119339,
+      "projection_sha256": "1100a54b2fcf6a25bf643decc7cb315d4991e60d2b3a3e150927384f67be707e",
       "static_resource_closure": {
         "inline_references": 1,
         "package_files": []
@@ -525,209 +678,25 @@
         "packaged_links": 0,
         "fragment_links": 0,
         "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
         "unresolved_local_links": []
       }
     },
     {
-      "id": "heart-chart",
-      "public_alias": "/v1/core/heart-chart/",
-      "source_file": "heart-chart-chimeric-prototype-v0.1.5.html",
-      "source_version": "0.1.5",
-      "receiver_standing": "byte_identical",
-      "activation_standing": "eligible",
-      "activation_eligible": true,
-      "carrier_policy": {
-        "sandbox_tokens": [
-          "allow-scripts"
-        ],
-        "permissions_policy": [
-          "clipboard-write"
-        ],
-        "held_capabilities": []
-      },
-      "observed_runtime_capabilities": [
-        "executable-scripts",
-        "clipboard-write"
-      ],
-      "projection_file": "heart-chart/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 64271,
-      "source_sha256": "a4fecf35cb271d4b36ffd5a6eb22f9c3a6569b4e8551954cad0ffb47a7b87aba",
-      "projection_bytes": 64271,
-      "projection_sha256": "a4fecf35cb271d4b36ffd5a6eb22f9c3a6569b4e8551954cad0ffb47a7b87aba",
-      "static_resource_closure": {
-        "inline_references": 0,
-        "package_files": []
-      },
-      "navigation": {
-        "packaged_links": 0,
-        "fragment_links": 0,
-        "external_links": 0,
-        "unresolved_local_links": []
-      }
-    },
-    {
-      "id": "plus-delta",
-      "public_alias": "/v1/core/plus-delta/",
-      "source_file": "plus-delta-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
-      "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
-      "carrier_policy": {
-        "sandbox_tokens": [
-          "allow-scripts"
-        ],
-        "permissions_policy": [
-          "clipboard-write"
-        ],
-        "held_capabilities": []
-      },
-      "observed_runtime_capabilities": [
-        "executable-scripts",
-        "clipboard-write"
-      ],
-      "projection_file": "plus-delta/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 49137,
-      "source_sha256": "6e0574e69d339be3ae1e4d03fb3c2ae535230505e232c09ab8aa704353dad14a",
-      "projection_bytes": 49137,
-      "projection_sha256": "6e0574e69d339be3ae1e4d03fb3c2ae535230505e232c09ab8aa704353dad14a",
-      "static_resource_closure": {
-        "inline_references": 0,
-        "package_files": []
-      },
-      "navigation": {
-        "packaged_links": 0,
-        "fragment_links": 0,
-        "external_links": 0,
-        "unresolved_local_links": []
-      }
-    },
-    {
-      "id": "practitioner-judgment-probes",
-      "public_alias": "/v1/core/practitioner-judgment-probes/",
-      "source_file": "practitioner-judgment-probes-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
-      "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
-      "carrier_policy": {
-        "sandbox_tokens": [
-          "allow-scripts"
-        ],
-        "permissions_policy": [
-          "clipboard-write"
-        ],
-        "held_capabilities": []
-      },
-      "observed_runtime_capabilities": [
-        "executable-scripts",
-        "clipboard-write"
-      ],
-      "projection_file": "practitioner-judgment-probes/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 68964,
-      "source_sha256": "d50cfcde73b418a4e2f932a9c1e3a02344afb9ddaccf2cb42ca1e1b1bac51136",
-      "projection_bytes": 68964,
-      "projection_sha256": "d50cfcde73b418a4e2f932a9c1e3a02344afb9ddaccf2cb42ca1e1b1bac51136",
-      "static_resource_closure": {
-        "inline_references": 0,
-        "package_files": []
-      },
-      "navigation": {
-        "packaged_links": 0,
-        "fragment_links": 0,
-        "external_links": 0,
-        "unresolved_local_links": []
-      }
-    },
-    {
-      "id": "pattern-problem-surface-matrix",
-      "public_alias": "/v1/core/pattern-problem-surface-matrix/",
-      "source_file": "pattern-problem-surface-matrix-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
-      "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
-      "carrier_policy": {
-        "sandbox_tokens": [
-          "allow-scripts"
-        ],
-        "permissions_policy": [
-          "clipboard-write"
-        ],
-        "held_capabilities": []
-      },
-      "observed_runtime_capabilities": [
-        "executable-scripts",
-        "clipboard-write"
-      ],
-      "projection_file": "pattern-problem-surface-matrix/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 96474,
-      "source_sha256": "25efaa307a2eead01e5779569e79d6c59eae0fd0a094cc256a4ae7dff386ed94",
-      "projection_bytes": 96474,
-      "projection_sha256": "25efaa307a2eead01e5779569e79d6c59eae0fd0a094cc256a4ae7dff386ed94",
-      "static_resource_closure": {
-        "inline_references": 0,
-        "package_files": []
-      },
-      "navigation": {
-        "packaged_links": 0,
-        "fragment_links": 0,
-        "external_links": 0,
-        "unresolved_local_links": []
-      }
-    },
-    {
-      "id": "jobs-to-be-done-treemap",
-      "public_alias": "/v1/core/jobs-to-be-done-treemap/",
-      "source_file": "jobs-to-be-done-treemap-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
-      "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
-      "carrier_policy": {
-        "sandbox_tokens": [
-          "allow-scripts"
-        ],
-        "permissions_policy": [
-          "clipboard-write"
-        ],
-        "held_capabilities": []
-      },
-      "observed_runtime_capabilities": [
-        "executable-scripts",
-        "clipboard-write"
-      ],
-      "projection_file": "jobs-to-be-done-treemap/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 68520,
-      "source_sha256": "74f75b9040a7f1bfadd5a52b401f4b364d2c689829b93a147ee6e18c8277b5ab",
-      "projection_bytes": 68520,
-      "projection_sha256": "74f75b9040a7f1bfadd5a52b401f4b364d2c689829b93a147ee6e18c8277b5ab",
-      "static_resource_closure": {
-        "inline_references": 0,
-        "package_files": []
-      },
-      "navigation": {
-        "packaged_links": 0,
-        "fragment_links": 0,
-        "external_links": 0,
-        "unresolved_local_links": []
-      }
-    },
-    {
-      "id": "unit-test-first-design",
-      "public_alias": "/v1/core/unit-test-first-design/",
-      "source_file": "unit-test-first-design-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
-      "receiver_standing": "reserve",
+      "id": "specification-by-example",
+      "public_alias": "/v1/core/specification-by-example/",
+      "source_file": "specification-by-example-chimeric-prototype-v0.1.6.html",
+      "source_version": "0.1.6",
+      "receiver_standing": "context_adapted",
       "activation_standing": "navigation_observation",
       "activation_eligible": false,
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -737,52 +706,24 @@
       },
       "observed_runtime_capabilities": [
         "executable-scripts",
-        "clipboard-write"
+        "clipboard-write",
+        "file-download"
       ],
-      "projection_file": "unit-test-first-design/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 66268,
-      "source_sha256": "4ef1a9f21f3890468869f306abcd2f13c40572da57ce61edd68c89448abb695d",
-      "projection_bytes": 66268,
-      "projection_sha256": "4ef1a9f21f3890468869f306abcd2f13c40572da57ce61edd68c89448abb695d",
-      "static_resource_closure": {
-        "inline_references": 0,
-        "package_files": []
-      },
-      "navigation": {
-        "packaged_links": 0,
-        "fragment_links": 0,
-        "external_links": 1,
-        "unresolved_local_links": []
-      }
-    },
-    {
-      "id": "upstream-revision-loop",
-      "public_alias": "/v1/core/upstream-revision-loop/",
-      "source_file": "upstream-revision-loop-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
-      "receiver_standing": "reserve",
-      "activation_standing": "reader_job_required",
-      "activation_eligible": false,
-      "carrier_policy": {
-        "sandbox_tokens": [
-          "allow-scripts"
-        ],
-        "permissions_policy": [
-          "clipboard-write"
-        ],
-        "held_capabilities": []
-      },
-      "observed_runtime_capabilities": [
-        "executable-scripts",
-        "clipboard-write"
+      "projection_file": "specification-by-example/index.html",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 4,
+          "rewritten_links": 4,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
       ],
-      "projection_file": "upstream-revision-loop/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 59607,
-      "source_sha256": "b1250002cfd30faa1d9d3cfe6cd43567aef0f60444f7e21d6280ec396af16fa7",
-      "projection_bytes": 59607,
-      "projection_sha256": "b1250002cfd30faa1d9d3cfe6cd43567aef0f60444f7e21d6280ec396af16fa7",
+      "source_bytes": 106630,
+      "source_sha256": "a548c7336ff93bd6b5d8030e99271798297c45078610fb4cb78363c0606d59ce",
+      "projection_bytes": 106798,
+      "projection_sha256": "7611ee94784e33510de3b9a1531a04803c825e8585f416301f3890ede7052f8b",
       "static_resource_closure": {
         "inline_references": 1,
         "package_files": []
@@ -790,20 +731,404 @@
       "navigation": {
         "packaged_links": 0,
         "fragment_links": 0,
-        "external_links": 0,
+        "external_links": 4,
+        "exit_links": 4,
+        "new_tab_exit_links": 4,
+        "secure_new_tab_exit_links": 4,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "heart-chart",
+      "public_alias": "/v1/core/heart-chart/",
+      "source_file": "heart-chart-chimeric-prototype-v0.1.6.html",
+      "source_version": "0.1.6",
+      "receiver_standing": "context_adapted",
+      "activation_standing": "eligible",
+      "activation_eligible": true,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write",
+        "file-download"
+      ],
+      "projection_file": "heart-chart/index.html",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 100151,
+      "source_sha256": "426f8389626c80ea8cad890133f0ff551452c52d7fa1b79942bf0d4d7a959b22",
+      "projection_bytes": 100235,
+      "projection_sha256": "30b90edd93f17a64a985d1840c0b06b0407bffde9a80d9c967ee8b1b3ec4f5c4",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "plus-delta",
+      "public_alias": "/v1/core/plus-delta/",
+      "source_file": "plus-delta-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write",
+        "file-download"
+      ],
+      "projection_file": "plus-delta/index.html",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 84718,
+      "source_sha256": "b1f828166d5fe62b122f5f3bb5eeca36759c5b4b4887875fab9d935520d2d5b6",
+      "projection_bytes": 84802,
+      "projection_sha256": "7663934d5ea5a2f66e3386647b60b057c833e1f9cfad3962e0b2d745540f768a",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "practitioner-judgment-probes",
+      "public_alias": "/v1/core/practitioner-judgment-probes/",
+      "source_file": "practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write",
+        "file-download"
+      ],
+      "projection_file": "practitioner-judgment-probes/index.html",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 114032,
+      "source_sha256": "a15c72f198dacb942d3ca4553204afac69df326df9c70bb6c00f32cd3242fd0c",
+      "projection_bytes": 114116,
+      "projection_sha256": "462e36ce277749284df0b2163e829eaecbf9b5ce277660052d421b719f736f5f",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "pattern-problem-surface-matrix",
+      "public_alias": "/v1/core/pattern-problem-surface-matrix/",
+      "source_file": "pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write",
+        "file-download"
+      ],
+      "projection_file": "pattern-problem-surface-matrix/index.html",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 154627,
+      "source_sha256": "cafc74ff0d7d921fa91865c42ea03417970287483fe96842cf266e8860d7f64b",
+      "projection_bytes": 154711,
+      "projection_sha256": "bc631cc7e3702a3d6b98bc908b0f41a7e3414da49b7ad4152dc3d391aa7889a0",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "jobs-to-be-done-treemap",
+      "public_alias": "/v1/core/jobs-to-be-done-treemap/",
+      "source_file": "jobs-to-be-done-treemap-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write",
+        "file-download"
+      ],
+      "projection_file": "jobs-to-be-done-treemap/index.html",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 103876,
+      "source_sha256": "f72a7449433f550145aa2c58f1a7a97ae9634f6bdabac7ddfd487623d525bdd3",
+      "projection_bytes": 103960,
+      "projection_sha256": "e0e36458da65af47c804143c5690d508a203d38683a511e82d30b0d91d54d39d",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "unit-test-first-design",
+      "public_alias": "/v1/core/unit-test-first-design/",
+      "source_file": "unit-test-first-design-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
+      "receiver_standing": "reserve",
+      "activation_standing": "navigation_observation",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write",
+        "file-download"
+      ],
+      "projection_file": "unit-test-first-design/index.html",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 3,
+          "rewritten_links": 3,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 101510,
+      "source_sha256": "814a84723bfa87dd19f0800c86523d269e913abad5ca3b34fe2837996c658e60",
+      "projection_bytes": 101636,
+      "projection_sha256": "ed857186a31f88b0de0d83dd898d7e3a0cf3768793f95bb331b550099bb8ec35",
+      "static_resource_closure": {
+        "inline_references": 0,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 3,
+        "exit_links": 3,
+        "new_tab_exit_links": 3,
+        "secure_new_tab_exit_links": 3,
+        "unresolved_local_links": []
+      }
+    },
+    {
+      "id": "upstream-revision-loop",
+      "public_alias": "/v1/core/upstream-revision-loop/",
+      "source_file": "upstream-revision-loop-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
+      "receiver_standing": "reserve",
+      "activation_standing": "reader_job_required",
+      "activation_eligible": false,
+      "carrier_policy": {
+        "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
+          "allow-scripts"
+        ],
+        "permissions_policy": [
+          "clipboard-write"
+        ],
+        "held_capabilities": []
+      },
+      "observed_runtime_capabilities": [
+        "executable-scripts",
+        "clipboard-write",
+        "file-download"
+      ],
+      "projection_file": "upstream-revision-loop/index.html",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 94311,
+      "source_sha256": "1392f82acdcc98b5fbdbbede46e50365b0750d1a5fb60eefd8b09e2b4335bb7a",
+      "projection_bytes": 94395,
+      "projection_sha256": "b4a94e321b2887d1a689869b128efa1f09b8dd3487fda128aba2b72b46531761",
+      "static_resource_closure": {
+        "inline_references": 1,
+        "package_files": []
+      },
+      "navigation": {
+        "packaged_links": 0,
+        "fragment_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
         "unresolved_local_links": []
       }
     },
     {
       "id": "recovery-routing-atlas",
       "public_alias": "/v1/core/recovery-routing-atlas/",
-      "source_file": "recovery-routing-atlas-chimeric-prototype-v0.1.3.html",
-      "source_version": "0.1.3",
+      "source_file": "recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
+      "source_version": "0.1.4",
       "receiver_standing": "reserve",
       "activation_standing": "reader_job_required",
       "activation_eligible": false,
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -813,14 +1138,24 @@
       },
       "observed_runtime_capabilities": [
         "executable-scripts",
-        "clipboard-write"
+        "clipboard-write",
+        "file-download"
       ],
       "projection_file": "recovery-routing-atlas/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 74083,
-      "source_sha256": "9f1d469773ff03f048d2a9c67f3dd19845ed90a4148bd447ad072dbeecbaf453",
-      "projection_bytes": 74083,
-      "projection_sha256": "9f1d469773ff03f048d2a9c67f3dd19845ed90a4148bd447ad072dbeecbaf453",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 120756,
+      "source_sha256": "48633e6a5884800e66645d40c15b15b5991385188b9e39993f0f9bf11fe1b1d8",
+      "projection_bytes": 120840,
+      "projection_sha256": "a9764f79ffb4fff70dfc505da29ea7122763d3ff8f68d21262cf2bf1a50ed759",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -828,20 +1163,26 @@
       "navigation": {
         "packaged_links": 0,
         "fragment_links": 0,
-        "external_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
         "unresolved_local_links": []
       }
     },
     {
       "id": "core-architecture-family-index",
       "public_alias": "/v1/core/core-architecture-family-index/",
-      "source_file": "core-architecture-family-index-chimeric-prototype-v0.1.4.html",
-      "source_version": "0.1.4",
+      "source_file": "core-architecture-family-index-chimeric-prototype-v0.1.5.html",
+      "source_version": "0.1.5",
       "receiver_standing": "context_adapted",
       "activation_standing": "parity_review",
       "activation_eligible": false,
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [
@@ -851,14 +1192,30 @@
       },
       "observed_runtime_capabilities": [
         "executable-scripts",
-        "clipboard-write"
+        "clipboard-write",
+        "file-download"
       ],
       "projection_file": "core-architecture-family-index/index.html",
-      "projection_kind": "source_identical",
-      "source_bytes": 74944,
-      "source_sha256": "f474cb712ebc632ee3ec1764c15aa8a2829c0cdccbbcbfd6edd0b562eb5fd336",
-      "projection_bytes": 74944,
-      "projection_sha256": "f474cb712ebc632ee3ec1764c15aa8a2829c0cdccbbcbfd6edd0b562eb5fd336",
+      "projection_kind": "navigation_adapted",
+      "projection_rewrites": [
+        {
+          "kind": "primary_site_navigation",
+          "source_reference": "../context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html",
+          "projected_reference": "https://vik.guru/core-architectures-orientation-index.html",
+          "replacements": 1
+        },
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 3,
+          "rewritten_links": 3,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 122465,
+      "source_sha256": "8796c2818aff5a5b2f18d4d4682a09b114419b259f0e83564d8773655ab07950",
+      "projection_bytes": 122559,
+      "projection_sha256": "e9c36c9b65c14d00d392589a3dbcd0453ce9b4ae9c17ab0f1f13e27dec1b8f35",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -866,13 +1223,11 @@
       "navigation": {
         "packaged_links": 0,
         "fragment_links": 0,
-        "external_links": 0,
-        "unresolved_local_links": [
-          {
-            "href": "../context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html",
-            "projected_target": "context-canvas-project-surface/context-canvas/core-architectures-orientation-index.html"
-          }
-        ]
+        "external_links": 3,
+        "exit_links": 3,
+        "new_tab_exit_links": 3,
+        "secure_new_tab_exit_links": 3,
+        "unresolved_local_links": []
       }
     },
     {
@@ -886,6 +1241,8 @@
       "activation_eligible": true,
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-popups",
+          "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
         "permissions_policy": [],
@@ -896,10 +1253,31 @@
       ],
       "projection_file": "conditioning-field/index.html",
       "projection_kind": "embedded_single_file",
-      "source_bytes": 89730,
-      "source_sha256": "df270685f1195b8e3cd0ef400bda2ce36837c8aaf341bfb90e312f4c9ab2c532",
-      "projection_bytes": 90120,
-      "projection_sha256": "c3169edcca2f4561c8198761d1d55ee215a7c771ca23adc484b4e804a4d8a9c7",
+      "projection_rewrites": [
+        {
+          "kind": "primary_site_navigation",
+          "source_reference": "conditioning-field.html",
+          "projected_reference": "https://vik.guru/conditioning-field.html",
+          "replacements": 1
+        },
+        {
+          "kind": "primary_site_navigation",
+          "source_reference": "prompt-side-conditions-practice.html#sources-title",
+          "projected_reference": "https://vik.guru/prompt-side-conditions-practice.html#sources-title",
+          "replacements": 1
+        },
+        {
+          "kind": "iframe_exit_behavior",
+          "exit_links": 2,
+          "rewritten_links": 2,
+          "dynamic_exit_templates": 0,
+          "runtime_adapter": false
+        }
+      ],
+      "source_bytes": 89577,
+      "source_sha256": "5bd6698f4fdce05a1abdaf2a122610e138f740ed49a82bfe57f07e215e08167b",
+      "projection_bytes": 90366,
+      "projection_sha256": "c67793baa4409274747c672eff01db19c85f34e719697fc4be2d8ae00e5d17ef",
       "static_resource_closure": {
         "inline_references": 0,
         "package_files": []
@@ -907,7 +1285,10 @@
       "navigation": {
         "packaged_links": 0,
         "fragment_links": 1,
-        "external_links": 0,
+        "external_links": 2,
+        "exit_links": 2,
+        "new_tab_exit_links": 2,
+        "secure_new_tab_exit_links": 2,
         "unresolved_local_links": []
       }
     }
