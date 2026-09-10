@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1",
   "repository": "human-ai-systems-exemplars",
-  "sourceRevision": "fa97e0718b5787bd12a08ab0664705187aaaba3d",
+  "sourceRevision": "341bceb719a28be760775b6322021d78abaa919b",
   "schemaRef": "https://schemas.vik.guru/collaboration-skills/0.1.0/collaboration-skill.schema.json",
   "publicationStanding": "public_ready",
   "selectionRule": "A public-ready entry carries an exact semantic source and every supporting file declared for this projection.",
