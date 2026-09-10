@@ -454,16 +454,20 @@
 }
 
 @layer modes {
-  .context-strategy-canvas.is-presenting { --sc-handle: 76px; overflow: hidden; }
+  .context-strategy-canvas.is-presenting {
+    --sc-handle: 76px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
   .is-presenting .field-header,
   .is-presenting .phase-rail,
   .is-presenting .stage-column,
   .is-presenting .ledger-column { display: none; }
-  .is-presenting .workbench { display: block; max-inline-size: none; block-size: 100svh; padding: 0; }
-  .is-presenting .operating-field { block-size: 100svh; border: 0; box-shadow: none; }
-  .is-presenting .workbench-grid { display: block; min-block-size: 0; block-size: calc(100svh - 4.2rem); }
-  .is-presenting .canvas-column { block-size: 100%; }
-  .is-presenting .strategy-chart { block-size: calc(100svh - 13rem); min-block-size: 560px; }
+  .is-presenting .workbench { display: block; max-inline-size: none; min-block-size: 100svh; padding: 0; }
+  .is-presenting .operating-field { min-block-size: 100svh; border: 0; box-shadow: none; }
+  .is-presenting .workbench-grid { display: block; min-block-size: calc(100svh - 4.2rem); }
+  .is-presenting .canvas-column { min-block-size: calc(100svh - 4.2rem); }
+  .is-presenting .strategy-chart { block-size: max(560px, calc(100svh - 13rem)); min-block-size: 560px; }
   .is-presenting .canvas-header h2 { font-size: clamp(2rem, 3vw, 4rem); }
   .is-presenting .legend { font-size: 1rem; }
   .is-presenting .dimension-strip button { min-block-size: 3.5rem; font-size: .95rem; }
@@ -471,7 +475,7 @@
   .is-presenting .strategy-chart .factor-label--detail { font-size: 14px; }
 
   @media (max-width: 1280px) {
-    .workbench-grid { grid-template-columns: minmax(16.5rem, .72fr) minmax(32rem, 1.6fr); }
+    .workbench-grid { grid-template-columns: minmax(16.5rem, .72fr) minmax(0, 1.6fr); }
     .ledger-column { grid-column: 1 / -1; display: grid; grid-template-columns: 12rem minmax(0, 1fr); max-block-size: 17rem; border-block-start: 2px solid var(--sc-ink); border-inline-start: 0; }
     .ledger-tabs { grid-template-columns: 1fr; border-block-end: 0; border-inline-end: 2px solid var(--sc-ink); }
     .ledger-tabs button { border-inline-end: 0; border-block-end: 1px solid var(--sc-ink); }

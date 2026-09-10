@@ -5,7 +5,7 @@
   <meta name="author" content="Vikrant Varun Kudesia">
   <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PODA Chimeric Prototype v0.1.3</title>
+  <title>PODA Chimeric Prototype v0.1.4</title>
   <style>
     :root{
       --bg:#f7f3ec; --panel:#fffaf2; --ink:#2f2a24; --muted:#6f665a; --line:#d8cdbd; --line2:#eadfce;
@@ -51,6 +51,22 @@
     .definition-list{display:grid;grid-template-columns:160px 1fr;gap:8px 12px;font-size:.9rem}.definition-list dt{color:var(--muted);font-weight:750}.definition-list dd{margin:0}@media(max-width:680px){.definition-list{grid-template-columns:1fr}.definition-list dt{margin-top:10px}}
     .source-note{font-size:.88rem;color:#51473c}.source-note ul{margin:8px 0 0;padding-left:18px}.kbd-note{font-size:.78rem;color:var(--muted);font-family:var(--mono)}
     @media(max-width:560px){.card-head{flex-direction:column}.controls{justify-content:flex-start;width:100%}.route-pill{white-space:normal;max-width:100%}}
+    .prompt-capsule-panel{min-width:0}
+    .prompt-capsule-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .prompt-capsule-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .prompt-capsule-actions button,.prompt-view-option,.related-loops summary,.related-loops a{min-height:44px}
+    .prompt-view-control{border:0;padding:0;margin:14px 0 0}
+    .prompt-view-control legend{font-weight:750;margin-bottom:7px}
+    .prompt-view-options{display:flex;gap:8px;flex-wrap:wrap}
+    .prompt-view-option{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;background:#fffdf8;color:var(--ink);padding:8px 12px;margin:0;cursor:pointer}
+    .prompt-view-option input{width:auto;margin:0}
+    .related-loops{border:1px solid var(--line);border-radius:14px;background:#fffdf8;margin-top:14px;padding:0 12px}
+    .related-loops summary{display:flex;align-items:center;font-weight:750;cursor:pointer}
+    .related-loops ul{margin:0 0 12px;padding-left:20px}.related-loops li+li{margin-top:8px}.related-loops a{display:inline-flex;align-items:center}
+    .prompt-status{min-height:1.4em;margin:8px 0;color:var(--muted);font-size:.86rem}
+    [hidden]{display:none !important}
+    .prompt-capsule-actions button:focus-visible,.prompt-view-option:focus-within,.related-loops summary:focus-visible,.related-loops a:focus-visible{outline:3px solid rgba(168,131,67,.4);outline-offset:3px}
+    @media(max-width:480px){.prompt-capsule-actions,.prompt-capsule-actions button,.prompt-view-options,.prompt-view-option{width:100%}.prompt-view-option{justify-content:flex-start}}
     @media(prefers-reduced-motion:reduce){
       *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}
     }
@@ -98,7 +114,7 @@
 </head>
 <body>
 <header>
-  <div class="eyebrow">Core Architecture Chimeric Prototype · v0.1.3</div>
+  <div class="eyebrow">Core Architecture Chimeric Prototype · v0.1.4</div>
   <h1>PODA</h1>
   <p class="subtitle">Purpose, Objectives, Discoverables, Activities. A compact orientation artifact that names why the work matters, what goals matter, what should become discoverable, and which activities will help make those surfaces inspectable.</p>
 </header>
@@ -106,7 +122,7 @@
   <noscript>
     <section class="panel" aria-labelledby="no-script-title">
       <h2 id="no-script-title">JavaScript is unavailable</h2>
-      <p>This operational companion needs JavaScript for editing, routing, and inspection. The <a href="../context-canvas-project-surface/context-canvas/poda.html">Site Reading and Debrief PODA Companion</a> preserves the four-zone flow, operating contract, changed-work account, and population cartography as a static reading.</p>
+      <p>This operational companion needs JavaScript for editing, routing, and inspection. The <a href="https://vik.guru/poda.html" target="_blank" rel="noopener noreferrer">Site Reading and Debrief PODA Companion</a> preserves the four-zone flow, operating contract, changed-work account, and population cartography as a static reading.</p>
     </section>
   </noscript>
   <section class="panel">
@@ -187,11 +203,293 @@
     </section>
   </div>
 
-  <section class="panel">
-    <h2>AI Collaboration Prompt Capsule</h2>
-    <p class="note">Visible for trust and manual copy. The copy button is optional.</p>
-    <pre id="aiPrompt"></pre>
-    <div class="button-row"><button id="copyPromptBtn">Copy AI prompt</button></div>
+  <section class="panel prompt-capsule-panel" aria-labelledby="promptCapsuleHeading">
+    <div class="prompt-capsule-heading">
+      <div>
+        <h2 id="promptCapsuleHeading">Prompt Capsule · Markdown</h2>
+        <p class="note" id="promptViewDescription">Plain Markdown carries the complete PODA orientation and tracing context as a self-contained handoff.</p>
+      </div>
+      <div class="prompt-capsule-actions" data-prompt-actions hidden aria-label="Prompt Capsule actions">
+        <button id="copyPromptBtn" type="button">Copy Markdown</button>
+        <button id="downloadPromptBtn" type="button">Download .md</button>
+      </div>
+    </div>
+    <details class="related-loops" data-prompt-related-loops>
+      <summary>Related loops</summary>
+      <ul>
+        <li data-related-loop-id="repository-reentry">
+          <a href="https://schemas.radiantnull.com/collaboration/#repository-reentry" target="_blank" rel="noopener noreferrer">Re-enter, make one bounded change, and return it clearly</a>
+          <p class="small">Fits when one discoverable routes into a repository change with a clear evidence signal and re-entry point.</p>
+        </li>
+        <li data-related-loop-id="skill-from-receiving-use">
+          <a href="https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use" target="_blank" rel="noopener noreferrer">Let receiving use refine a reusable collaboration skill</a>
+          <p class="small">Fits when repeated purpose-to-activity traces reveal a practice whose usefulness can be judged in another receiving task.</p>
+        </li>
+      </ul>
+    </details>
+    <fieldset class="prompt-view-control" data-prompt-view-control hidden>
+      <legend>Markdown view</legend>
+      <div class="prompt-view-options">
+        <label class="prompt-view-option"><input type="radio" name="prompt-capsule-view" value="plain" data-prompt-view checked /> Plain</label>
+        <label class="prompt-view-option"><input type="radio" name="prompt-capsule-view" value="skill-assisted" data-prompt-view /> Skill-assisted</label>
+      </div>
+    </fieldset>
+    <p class="prompt-status" id="promptCapsuleStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+    <pre id="aiPrompt" data-prompt-view-active="plain" aria-labelledby="promptCapsuleHeading" aria-describedby="promptViewDescription" tabindex="0"># Prompt Capsule: PODA
+
+- Contract: `prompt-capsule/0.1.0`
+- Capsule: `poda/current-orientation-trace`
+- Source: `poda@0.1.4`
+- State: `poda-state.v0.1` · revision `0.1.4`
+- Fingerprint: `fnv1a32-utf8:bcbea0d6`
+- View: `plain`
+
+## Purpose and target
+
+Use this PODA artifact to keep purpose, objectives, discoverables, and activities connected while the collaboration chooses its next receiving architecture.
+
+- Artifact ID: ca-artifact-poda-genomics-001
+- Subtitle: Purpose, Objectives, Discoverables, Activities
+- Family: Orientation and Tracing
+- Placement: Solution Architecture
+- Primary move: narrative orientation and discoverable scoping
+- Source bands: author\_adapted\_method; project\_orientation\_lineage; ai\_collaboration\_anchor
+
+## Relevant context and inputs
+
+- Use when: A team needs a compact shared frame before actor mapping, context mapping, thresholding, service topology, examples, or AI-assisted artifact generation.
+- Restored condition: Shared orientation around purpose, objectives, discoverables, and activities.
+- Good next question: What should become discoverable before we commit to artifact, workflow, diagram, prototype, or implementation form?
+- Focus arrangement: Default focus view (view-default); text mode preview\_with\_reveal.
+- Accepted items: 4 objectives (4 visible); 6 discoverables (6 visible); 6 activities (6 visible).
+
+### Status language
+
+- stable for now (stable\_for\_now): clear enough to guide the next pass
+- assumed (assumed): reasonable and ready for review
+- needs to surface (needs\_to\_surface): should become more visible or inspectable
+- disputed (disputed): participants have different reads
+- ready to route (ready\_to\_route): can hand to another Core Architecture
+- revised (revised): updated because new evidence improved the read
+
+### Available routes
+
+- Orientation and Tracing: PODA; Alignment Worksheet; Impact Map; Context Tree
+- Comparison and Threshold: Strategy Canvas; First Responsible Version Matrix
+- Shared Surfaces and Topology: Cross-channel Blueprint; Service-design Blueprint; AI Systems Service Blueprint; Software Architecture Views
+- Participatory Elicitation and Specification: Participatory Design Kit; Specification-by-Example
+- Measurement, Reflection, and Judgment: HEART Chart; Plus / Delta; Practitioner Judgment Probes
+- Pattern Fit and Behavior Protection: Pattern–Problem Surface Matrix; Jobs-to-be-Done Treemap; Unit-test-first Design
+- Recovery Routing and Revision: Upstream Revision Loop; Recovery Routing Atlas
+- Custom route: Custom route…
+
+## Working state
+
+### Purpose — purpose-001
+
+- Statement: Support responsible, provenance-aware variant review by helping reviewers, analysts, coordinators, and data stewards see the context, evidence, and review boundaries needed for confident interpretation.
+- Status: stable for now (stable\_for\_now).
+- Route: Impact Map (Orientation and Tracing).
+- Route reason: Purpose should trace to actors, impacts, and discoverables.
+
+### Objective: Make evidence provenance inspectable — objective-provenance
+
+- Description: Make evidence provenance easier to inspect during review.
+- Status: stable for now (stable\_for\_now).
+- Route: HEART Chart (Measurement, Reflection, and Judgment).
+- Route reason: Provenance visibility should become a signal and counter-signal surface.
+- Order: display 1; canonical 1; visibility visible; visible order 1.
+
+### Objective: Clarify AI-generated boundaries — objective-ai-boundaries
+
+- Description: Clarify how AI-generated summaries should show source boundaries and human confirmation status.
+- Status: stable for now (stable\_for\_now).
+- Route: AI Systems Service Blueprint (Shared Surfaces and Topology).
+- Route reason: AI behavior needs runtime, knowledge, evaluation, and review-boundary topology.
+- Order: display 2; canonical 2; visibility visible; visible order 2.
+
+### Objective: Surface consent and metadata context — objective-consent-metadata
+
+- Description: Surface consent-state and metadata-readiness context early enough to support responsible review.
+- Status: assumed (assumed).
+- Route: Service-design Blueprint (Shared Surfaces and Topology).
+- Route reason: Consent and metadata appear across visible, backstage, data, and governance layers.
+- Order: display 3; canonical 3; visibility visible; visible order 3.
+
+### Objective: Preserve review auditability — objective-auditability
+
+- Description: Preserve auditability around review-state transitions.
+- Status: stable for now (stable\_for\_now).
+- Route: Unit-test-first Design (Pattern Fit and Behavior Protection).
+- Route reason: Review-state behavior should become a protected business-rule surface.
+- Order: display 4; canonical 4; visibility visible; visible order 4.
+
+### Discoverable: Actor-impact surfaces — discoverable-actor-impact
+
+- Description: Who is affected by variant-review support, and what changes for each group?
+- Status: ready to route (ready\_to\_route).
+- Route: Impact Map (Orientation and Tracing).
+- Route reason: This discoverable needs goal-to-actor-to-impact traceability.
+- Order: display 1; canonical 1; visibility visible; visible order 1.
+- Supports objective IDs: objective-provenance; objective-ai-boundaries
+- Supports objectives: Make evidence provenance inspectable; Clarify AI-generated boundaries
+
+### Discoverable: Role-specific context — discoverable-role-context
+
+- Description: What do molecular pathologists, bioinformatics analysts, research coordinators, data stewards, and AI assistance surfaces need to know?
+- Status: ready to route (ready\_to\_route).
+- Route: Context Tree (Orientation and Tracing).
+- Route reason: This discoverable needs role-specific context locality.
+- Order: display 2; canonical 2; visibility visible; visible order 2.
+- Supports objective IDs: objective-provenance; objective-consent-metadata
+- Supports objectives: Make evidence provenance inspectable; Surface consent and metadata context
+
+### Discoverable: Current / future-state dimensions — discoverable-dimensions
+
+- Description: Which dimensions define better: provenance visibility, consent-state clarity, review-decision clarity, metadata readiness, AI boundary clarity, and maintainability?
+- Status: assumed (assumed).
+- Route: Strategy Canvas (Comparison and Threshold).
+- Route reason: Dimensions and good-enough thresholds need comparison.
+- Order: display 3; canonical 3; visibility visible; visible order 3.
+- Supports objective IDs: objective-provenance; objective-ai-boundaries; objective-consent-metadata
+- Supports objectives: Make evidence provenance inspectable; Clarify AI-generated boundaries; Surface consent and metadata context
+
+### Discoverable: First responsible boundary — discoverable-boundary
+
+- Description: Which supports belong above the line for a responsible first version?
+- Status: needs to surface (needs\_to\_surface).
+- Route: First Responsible Version Matrix (Comparison and Threshold).
+- Route reason: Above-line support conditions need threshold alignment.
+- Order: display 4; canonical 4; visibility visible; visible order 4.
+- Supports objective IDs: objective-ai-boundaries; objective-auditability
+- Supports objectives: Clarify AI-generated boundaries; Preserve review auditability
+
+### Discoverable: Behavior examples — discoverable-behaviors
+
+- Description: Which consent, audit, AI-boundary, and review-state behaviors should be expressed as observable examples?
+- Status: ready to route (ready\_to\_route).
+- Route: Specification-by-Example (Participatory Elicitation and Specification).
+- Route reason: Rules should become Given / When / Then examples before implementation hardens.
+- Order: display 5; canonical 5; visibility visible; visible order 5.
+- Supports objective IDs: objective-auditability; objective-consent-metadata
+- Supports objectives: Preserve review auditability; Surface consent and metadata context
+
+### Discoverable: Service and AI-system topology — discoverable-topology
+
+- Description: How do visible review surfaces depend on backstage work, AI, tools, data, provenance, governance, and review gates?
+- Status: assumed (assumed).
+- Route: Service-design Blueprint (Shared Surfaces and Topology).
+- Route reason: Layered service topology should place the support surfaces.
+- Order: display 6; canonical 6; visibility visible; visible order 6.
+- Supports objective IDs: objective-ai-boundaries; objective-consent-metadata
+- Supports objectives: Clarify AI-generated boundaries; Surface consent and metadata context
+
+### Activity: Actor-impact mapping session — activity-impact-map
+
+- Description: Map goal, actors, impacts, and discoverables.
+- Status: stable for now (stable\_for\_now).
+- Route: Impact Map (Orientation and Tracing).
+- Route reason: Creates actor-impact-discoverable traceability.
+- Order: display 1; canonical 1; visibility visible; visible order 1.
+- Surfaces discoverable IDs: discoverable-actor-impact
+- Surfaces discoverables: Actor-impact surfaces
+
+### Activity: Role-context mapping — activity-context-tree
+
+- Description: Create a Context Tree for reviewers, analysts, coordinators, data stewards, and AI assistance surfaces.
+- Status: stable for now (stable\_for\_now).
+- Route: Context Tree (Orientation and Tracing).
+- Route reason: Surfaces role-specific context and knowledge needs.
+- Order: display 2; canonical 2; visibility visible; visible order 2.
+- Surfaces discoverable IDs: discoverable-role-context
+- Surfaces discoverables: Role-specific context
+
+### Activity: Current/future-state comparison — activity-strategy-canvas
+
+- Description: Compare current, desired, and good-enough states across dimensions.
+- Status: assumed (assumed).
+- Route: Strategy Canvas (Comparison and Threshold).
+- Route reason: Helps clarify improvement dimensions and thresholds.
+- Order: display 3; canonical 3; visibility visible; visible order 3.
+- Surfaces discoverable IDs: discoverable-dimensions
+- Surfaces discoverables: Current / future-state dimensions
+
+### Activity: Threshold alignment workshop — activity-threshold
+
+- Description: Sort responsibilities, support conditions, opportunities, and premise questions above/on/below the line.
+- Status: needs to surface (needs\_to\_surface).
+- Route: First Responsible Version Matrix (Comparison and Threshold).
+- Route reason: Makes the first responsible boundary visible.
+- Order: display 4; canonical 4; visibility visible; visible order 4.
+- Surfaces discoverable IDs: discoverable-boundary
+- Surfaces discoverables: First responsible boundary
+
+### Activity: Behavior example drafting — activity-examples
+
+- Description: Draft scenarios for consent-state changes, AI claim-source boundaries, review-state transitions, and audit events.
+- Status: stable for now (stable\_for\_now).
+- Route: Specification-by-Example (Participatory Elicitation and Specification).
+- Route reason: Turns rules into observable examples.
+- Order: display 5; canonical 5; visibility visible; visible order 5.
+- Surfaces discoverable IDs: discoverable-behaviors
+- Surfaces discoverables: Behavior examples
+
+### Activity: Service topology session — activity-service-topology
+
+- Description: Map visible, backstage, AI, system, data, governance, and handoff layers.
+- Status: assumed (assumed).
+- Route: Service-design Blueprint (Shared Surfaces and Topology).
+- Route reason: Places support layers before implementation hardens.
+- Order: display 6; canonical 6; visibility visible; visible order 6.
+- Surfaces discoverable IDs: discoverable-topology
+- Surfaces discoverables: Service and AI-system topology
+
+## Boundaries and human-held decisions
+
+- People decide which purpose gives the work meaning, which objectives deserve support, what should become discoverable, and which activities and routes fit the situation.
+- Display order and visibility shape the current focus arrangement and are represented in the fingerprint. Every hidden item remains available in this capsule and the complete JSON export.
+- The selected item, pending removal choice, clipboard state, and Markdown-view choice are local interface state and stay outside the fingerprint.
+- Compatible unknown or private JSON extensions remain available through import and export while this public projection and fingerprint describe the represented PODA state.
+- A discoverable keeps exploration open before the team commits to a particular artifact or implementation form.
+
+## Requested return
+
+Return a Markdown orientation handoff grouped by stable purpose, objective, discoverable, and activity IDs. Keep each relationship, status, route, route reason, represented order, and visibility together.
+
+Name what the current evidence establishes, identify the discoverable that can clarify the next decision, and close with one bounded receiving action.
+
+## Related loops
+
+These public collaboration loops fit when the receiving work meets the stated condition:
+
+- `repository-reentry` — [Re-enter, make one bounded change, and return it clearly](https://schemas.radiantnull.com/collaboration/#repository-reentry)
+  - Fit condition: Use when one discoverable routes into a repository change with a clear evidence signal and re-entry point.
+- `skill-from-receiving-use` — [Let receiving use refine a reusable collaboration skill](https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use)
+  - Fit condition: Use when repeated purpose-to-activity traces reveal a practice whose usefulness can be judged in another receiving task.
+
+## Evidence and recovery
+
+### Preferred questions
+
+- What should become discoverable?
+- Which activity helps surface this discoverable?
+- Which objective does this discoverable support?
+- What purpose gives this work meaning?
+- Which architecture should receive this discoverable next?
+
+### Replacement-state guidance
+
+- Use: What should become discoverable before we commit to artifact form? · Context cue: What are the deliverables?
+- Use: What purpose, objectives, and discoverable surfaces should guide the next activities? · Context cue: What are we building?
+- Use: The AI collaborator needs a stronger orientation layer and clearer discoverable routes. · Context cue: The AI went off track.
+- Use: Which discoverable does this activity help make visible? · Context cue: This is just a task.
+
+- Recovery strain cues: participants restate the project differently; AI outputs are polished but misaligned; activities multiply without a shared reason; deliverable-shaped language appears before discoverable surfaces are clear
+- Stabilizing read: The collaboration needs a shared orientation layer.
+- Restored state: Shared semantic orientation is visible.
+- Named failure geometries: Semantic Field Drift; Actor-Impact Opacity; Context Flattening; Upstream Revision Hesitancy
+- A compatible import becomes the accepted working state and regenerates this capsule. A structurally incompatible candidate leaves the current state and capsule available, names the mismatch, and can return after revision.
+</pre>
   </section>
 
   <section class="panel">
@@ -233,6 +531,23 @@
 
 <script>
 (function(){
+  const PROMPT_CAPSULE_CONTRACT='prompt-capsule/0.1.0';
+  const PROMPT_CAPSULE_STATE_CONTRACT='poda-state.v0.1';
+  const PROMPT_CAPSULE_ID='poda/current-orientation-trace';
+  const PROMPT_CAPSULE_SOURCE_ID='poda';
+  const PROMPT_CAPSULE_SOURCE_VERSION='0.1.4';
+  const PROMPT_CAPSULE_VIEWS=Object.freeze(['plain','skill-assisted']);
+  const PROMPT_CAPSULE_SKILL_REVISION='2efdf98ccc2f2478cf1a833eb1e29d898566e725';
+  const PROMPT_CAPSULE_SKILLS=Object.freeze([
+    Object.freeze({name:'Supportive change writing',publicUrl:'https://schemas.radiantnull.com/skills/supportive-change-writing/',path:'.agents/skills/supportive-change-writing/SKILL.md',sha256:'fca40001b28ba6e07c0b122da39a054eae723b4f0df514c805684c94001d2e2c',purpose:'Keep the desired shared orientation prominent and pair each boundary with the next workable state.'}),
+    Object.freeze({name:'Source authority mapping',publicUrl:'https://schemas.radiantnull.com/skills/source-authority-mapping/',path:'.agents/skills/source-authority-mapping/SKILL.md',sha256:'706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5',purpose:'Trace purpose, objectives, discoverables, activities, source ownership, and receiving routes without flattening their distinct roles.'}),
+    Object.freeze({name:'Stateful artifact behavior contracts',publicUrl:'https://schemas.radiantnull.com/skills/stateful-artifact-behavior-contracts/',path:'.agents/skills/stateful-artifact-behavior-contracts/SKILL.md',sha256:'596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a',purpose:'Keep represented PODA state, Markdown views, exchange, and recovery behavior in agreement.'})
+  ]);
+  const PROMPT_CAPSULE_RELATED_LOOPS=Object.freeze([
+    Object.freeze({id:'repository-reentry',name:'Re-enter, make one bounded change, and return it clearly',publicUrl:'https://schemas.radiantnull.com/collaboration/#repository-reentry',fit:'Use when one discoverable routes into a repository change with a clear evidence signal and re-entry point.'}),
+    Object.freeze({id:'skill-from-receiving-use',name:'Let receiving use refine a reusable collaboration skill',publicUrl:'https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use',fit:'Use when repeated purpose-to-activity traces reveal a practice whose usefulness can be judged in another receiving task.'})
+  ]);
+  let promptCapsuleView='plain';
   const routeRegistry = [
     {label:'PODA', family:'Orientation and Tracing'},
     {label:'Alignment Worksheet', family:'Orientation and Tracing'},
@@ -265,7 +580,8 @@
     {value:'revised', label:'revised', desc:'updated because new evidence improved the read'}
   ];
   const state = {
-    artifact_identity:{id:'ca-artifact-poda-genomics-001',display_name:'PODA',subtitle:'Purpose, Objectives, Discoverables, Activities',version:'0.1.3',family:'Orientation and Tracing',placement:'Solution Architecture',primary_cognitive_move:'narrative orientation and discoverable scoping',source_band:['author_adapted_method','project_orientation_lineage','ai_collaboration_anchor']},
+    artifact_identity:{id:'ca-artifact-poda-genomics-001',display_name:'PODA',subtitle:'Purpose, Objectives, Discoverables, Activities',version:'0.1.4',family:'Orientation and Tracing',placement:'Solution Architecture',primary_cognitive_move:'narrative orientation and discoverable scoping',source_band:['author_adapted_method','project_orientation_lineage','ai_collaboration_anchor']},
+    quick_use:{use_when:'A team needs a compact shared frame before actor mapping, context mapping, thresholding, service topology, examples, or AI-assisted artifact generation.',restores:'Shared orientation around purpose, objectives, discoverables, and activities.',good_next_question:'What should become discoverable before we commit to artifact, workflow, diagram, prototype, or implementation form?'},
     purpose:{id:'purpose-001',text:'Support responsible, provenance-aware variant review by helping reviewers, analysts, coordinators, and data stewards see the context, evidence, and review boundaries needed for confident interpretation.',status:'stable_for_now',route:'Impact Map',reason:'Purpose should trace to actors, impacts, and discoverables.'},
     objectives:[
       {id:'objective-provenance',label:'Make evidence provenance inspectable',text:'Make evidence provenance easier to inspect during review.',status:'stable_for_now',route:'HEART Chart',reason:'Provenance visibility should become a signal and counter-signal surface.',canonical_order:1},
@@ -295,16 +611,20 @@
   };
   const $ = id => document.getElementById(id);
   let pendingRemoval = null;
+  let preservedRootExtensions = {};
+  let preservedPodaExtensions = {};
   const safe = v => String(v ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
   const attr = safe;
-  const uid = prefix => `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,7)}`;
+  function semanticIdInUse(id){return state.artifact_identity.id===id||state.purpose.id===id||state.objectives.some(item=>item.id===id)||state.discoverables.some(item=>item.id===id)||state.activities.some(item=>item.id===id)||state.view_state.views.some(view=>view.id===id)}
+  function uid(prefix){const base=`${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,7)}`;let id=base,index=2;while(semanticIdInUse(id)){id=base+'-'+index;index+=1}return id}
   const domKey = value => Array.from(String(value ?? '')).map(char=>char.codePointAt(0).toString(36)).join('-') || 'empty';
   const controlId = (area,type,itemId,field,relatedId='') => ['poda',area,type,domKey(itemId),field,relatedId?domKey(relatedId):''].filter(Boolean).join('-');
   const statusLabel = v => (statuses.find(s=>s.value===v)||{}).label || v;
   function routeFamily(label){return (routeRegistry.find(r=>r.label===label)||{family: label ? 'Custom route' : '—'}).family;}
   function activeView(){return state.view_state.views.find(v=>v.id===state.view_state.active_view_id) || state.view_state.views[0];}
-  function normalizeView(){const v=activeView(); const objIds=state.objectives.map(o=>o.id); const discIds=state.discoverables.map(d=>d.id); const actIds=state.activities.map(a=>a.id); v.objective_order=[...(v.objective_order||[]).filter(id=>objIds.includes(id)),...objIds.filter(id=>!(v.objective_order||[]).includes(id))]; v.discoverable_order=[...(v.discoverable_order||[]).filter(id=>discIds.includes(id)),...discIds.filter(id=>!(v.discoverable_order||[]).includes(id))]; v.activity_order=[...(v.activity_order||[]).filter(id=>actIds.includes(id)),...actIds.filter(id=>!(v.activity_order||[]).includes(id))]; v.hidden_objective_ids=(v.hidden_objective_ids||[]).filter(id=>objIds.includes(id)); v.hidden_discoverable_ids=(v.hidden_discoverable_ids||[]).filter(id=>discIds.includes(id)); v.hidden_activity_ids=(v.hidden_activity_ids||[]).filter(id=>actIds.includes(id));}
-  function ordered(type){normalizeView(); const v=activeView(); const map={objective:['objectives','objective_order'],discoverable:['discoverables','discoverable_order'],activity:['activities','activity_order']}[type]; return v[map[1]].map(id=>state[map[0]].find(x=>x.id===id)).filter(Boolean);}
+  function normalizeView(v){const objIds=state.objectives.map(o=>o.id); const discIds=state.discoverables.map(d=>d.id); const actIds=state.activities.map(a=>a.id); v.objective_order=[...(v.objective_order||[]).filter(id=>objIds.includes(id)),...objIds.filter(id=>!(v.objective_order||[]).includes(id))]; v.discoverable_order=[...(v.discoverable_order||[]).filter(id=>discIds.includes(id)),...discIds.filter(id=>!(v.discoverable_order||[]).includes(id))]; v.activity_order=[...(v.activity_order||[]).filter(id=>actIds.includes(id)),...actIds.filter(id=>!(v.activity_order||[]).includes(id))]; v.hidden_objective_ids=(v.hidden_objective_ids||[]).filter(id=>objIds.includes(id)); v.hidden_discoverable_ids=(v.hidden_discoverable_ids||[]).filter(id=>discIds.includes(id)); v.hidden_activity_ids=(v.hidden_activity_ids||[]).filter(id=>actIds.includes(id));}
+  function normalizeViews(){state.view_state.views.forEach(normalizeView)}
+  function ordered(type){normalizeView(activeView()); const v=activeView(); const map={objective:['objectives','objective_order'],discoverable:['discoverables','discoverable_order'],activity:['activities','activity_order']}[type]; return v[map[1]].map(id=>state[map[0]].find(x=>x.id===id)).filter(Boolean);}
   function hiddenIds(type){const v=activeView(); return v[`hidden_${type}_ids`] || [];}
   function visible(type){return ordered(type).filter(x=>!hiddenIds(type).includes(x.id));}
   function isVisible(type,id){return !hiddenIds(type).includes(id);}
@@ -318,7 +638,7 @@
     if(type==='activity') linkControls = `<div><div class="small"><strong>Surfaces discoverables</strong></div><div class="small">${(item.discoverable_ids||[]).map(id=>(state.discoverables.find(d=>d.id===id)||{}).label).filter(Boolean).map(safe).join(', ')||'—'}</div></div>`;
     return `<article class="item-card ${typeClass} ${isHidden?'hidden-item':''}" data-type="${type}" data-id="${attr(item.id)}">
       <div class="card-head"><div><div class="card-title">${safe(item.label)}</div><div class="small"><code>${safe(item.id)}</code>${isHidden?' · hidden in focus view':''}</div></div>
-        <div class="controls"><button class="mini" data-action="select" data-type="${type}" data-id="${attr(item.id)}">Inspect</button><button class="mini" data-action="move" data-type="${type}" data-id="${attr(item.id)}" data-dir="-1">Earlier</button><button class="mini" data-action="move" data-type="${type}" data-id="${attr(item.id)}" data-dir="1">Later</button><button class="mini" data-action="toggleVisibility" data-type="${type}" data-id="${attr(item.id)}">${isHidden?'Show':'Hide'}</button><button class="mini danger" data-action="remove" data-type="${type}" data-id="${attr(item.id)}">Remove</button></div>
+        <div class="controls"><button class="mini" data-action="select" data-type="${type}" data-id="${attr(item.id)}">Inspect</button><button class="mini" data-action="move" data-type="${type}" data-id="${attr(item.id)}" data-dir="-1">Earlier</button><button class="mini" data-action="move" data-type="${type}" data-id="${attr(item.id)}" data-dir="1">Later</button><button class="mini" data-action="toggleVisibility" data-type="${type}" data-id="${attr(item.id)}">${isHidden?'Show':'Hide'}</button><button class="mini danger" data-action="remove" data-type="${type}" data-id="${attr(item.id)}" ${state[{objective:'objectives',discoverable:'discoverables',activity:'activities'}[type]].length<=1?'disabled':''}>Remove</button></div>
       </div>
       <div class="row"><div><label for="${fieldIds.label}">Label</label><input id="${fieldIds.label}" data-field="label" data-type="${type}" data-id="${attr(item.id)}" value="${attr(item.label)}" /></div><div><label for="${fieldIds.status}">Status</label><select id="${fieldIds.status}" data-field="status" data-type="${type}" data-id="${attr(item.id)}">${statusOptions(item.status)}</select></div></div>
       <div style="margin-top:10px"><label for="${fieldIds.text}">Description</label><textarea id="${fieldIds.text}" data-field="text" data-type="${type}" data-id="${attr(item.id)}">${safe(item.text)}</textarea></div>
@@ -341,10 +661,34 @@
     $('inspector').innerHTML=`<dl class="definition-list"><dt>Type</dt><dd>${safe(type)}</dd><dt>ID</dt><dd><code>${safe(id)}</code></dd><dt>Visibility</dt><dd>${vis?'visible in focus view':'hidden in focus view'}</dd><dt>Order</dt><dd>${safe(orderInfo)}</dd><dt>Route family</dt><dd>${safe(routeFamily(item.route))}</dd></dl><div style="margin-top:12px"><label for="${textId}">Full text</label><textarea id="${textId}" data-field="text" data-type="${type}" data-id="${attr(id)}">${safe(item.text||'')}</textarea></div>${linkChecks}`;}
   function renderTable(){const purposeRow=`<tr><td><strong>Purpose</strong></td><td colspan="6">${clampBlock(state.purpose.text,'purpose-table')}</td><td>${safe(statusLabel(state.purpose.status))}</td><td><span class="route-pill">${safe(state.purpose.route||'—')}</span></td></tr>`; const rows=[]; for(const o of visible('objective')) rows.push(`<tr><td>Objective</td><td>${safe(o.label)}</td><td>${clampBlock(o.text,o.id+'-table')}</td><td>—</td><td>—</td><td>—</td><td>—</td><td>${safe(statusLabel(o.status))}</td><td><span class="route-pill">${safe(o.route||'—')}</span></td></tr>`); for(const d of visible('discoverable')) rows.push(`<tr><td>Discoverable</td><td>${safe(d.label)}</td><td>${clampBlock(d.text,d.id+'-table')}</td><td>${(d.objective_ids||[]).map(id=>safe((state.objectives.find(o=>o.id===id)||{}).label||id)).join(', ')||'—'}</td><td>—</td><td>—</td><td>—</td><td>${safe(statusLabel(d.status))}</td><td><span class="route-pill">${safe(d.route||'—')}</span></td></tr>`); for(const a of visible('activity')) rows.push(`<tr><td>Activity</td><td>${safe(a.label)}</td><td>${clampBlock(a.text,a.id+'-table')}</td><td>—</td><td>${(a.discoverable_ids||[]).map(id=>safe((state.discoverables.find(d=>d.id===id)||{}).label||id)).join(', ')||'—'}</td><td>—</td><td>—</td><td>${safe(statusLabel(a.status))}</td><td><span class="route-pill">${safe(a.route||'—')}</span></td></tr>`); $('textTable').innerHTML=`<caption>Visible PODA zones, relationships, status, and handoff routes.</caption><thead><tr><th scope="col">Type</th><th scope="col">Label</th><th scope="col">Text</th><th scope="col">Objectives</th><th scope="col">Discoverables</th><th scope="col">Activities</th><th scope="col">Notes</th><th scope="col">Status</th><th scope="col">Route</th></tr></thead><tbody>${purposeRow}${rows.join('')}</tbody>`;}
   function renderRegistry(){const rows=[]; for(const type of ['objective','discoverable','activity']){for(const it of ordered(type)){const vis=isVisible(type,it.id); rows.push(`<tr><td>${safe(type)}</td><td><code>${safe(it.id)}</code></td><td>${safe(it.canonical_order||'—')}</td><td>${ordered(type).findIndex(x=>x.id===it.id)+1}</td><td>${vis?'visible':'hidden'}</td><td>${vis?visible(type).findIndex(x=>x.id===it.id)+1:'—'}</td></tr>`);}} $('identityRegistry').innerHTML=`<caption>Stable identities and their canonical, display, and visible order.</caption><thead><tr><th scope="col">Type</th><th scope="col">Stable ID</th><th scope="col">Canonical</th><th scope="col">Display</th><th scope="col">Visibility</th><th scope="col">Visible order</th></tr></thead><tbody>${rows.join('')}</tbody>`;}
-  function buildExport(){normalizeView(); const v=activeView(); return {artifact_identity:state.artifact_identity, quick_use:{use_when:'the team needs a compact shared frame before moving into other Core Architectures', restores:'shared orientation around purpose, objectives, discoverables, and activities', good_next_question:'What should become discoverable before we commit to artifact form?'}, poda:{purpose:state.purpose, objectives:state.objectives.map(o=>({...o,visible_in_active_view:isVisible('objective',o.id),display_order:ordered('objective').findIndex(x=>x.id===o.id)+1,visible_order:visible('objective').findIndex(x=>x.id===o.id)+1||null})), discoverables:state.discoverables.map(d=>({...d,visible_in_active_view:isVisible('discoverable',d.id),display_order:ordered('discoverable').findIndex(x=>x.id===d.id)+1,visible_order:visible('discoverable').findIndex(x=>x.id===d.id)+1||null})), activities:state.activities.map(a=>({...a,visible_in_active_view:isVisible('activity',a.id),display_order:ordered('activity').findIndex(x=>x.id===a.id)+1,visible_order:visible('activity').findIndex(x=>x.id===a.id)+1||null}))}, view_state:state.view_state, route_registry:routeRegistry, semantic_locality:state.semantic_locality, recovery_calibration:state.recovery_calibration};}
+  function clone(value){if(typeof structuredClone==='function')return structuredClone(value);return JSON.parse(JSON.stringify(value))}
+  function buildExport(){normalizeViews(); const v=activeView(); return {...clone(preservedRootExtensions),artifact_identity:clone(state.artifact_identity),quick_use:clone(state.quick_use),poda:{...clone(preservedPodaExtensions),purpose:clone(state.purpose), objectives:state.objectives.map(o=>({...clone(o),visible_in_active_view:isVisible('objective',o.id),display_order:ordered('objective').findIndex(x=>x.id===o.id)+1,visible_order:visible('objective').findIndex(x=>x.id===o.id)+1||null})), discoverables:state.discoverables.map(d=>({...clone(d),visible_in_active_view:isVisible('discoverable',d.id),display_order:ordered('discoverable').findIndex(x=>x.id===d.id)+1,visible_order:visible('discoverable').findIndex(x=>x.id===d.id)+1||null})), activities:state.activities.map(a=>({...clone(a),visible_in_active_view:isVisible('activity',a.id),display_order:ordered('activity').findIndex(x=>x.id===a.id)+1,visible_order:visible('activity').findIndex(x=>x.id===a.id)+1||null}))}, view_state:clone(state.view_state), route_registry:clone(routeRegistry), semantic_locality:clone(state.semantic_locality), recovery_calibration:clone(state.recovery_calibration)};}
   function buildJsonLd(){const graph=[]; const base='#'; graph.push({'@id':base+state.artifact_identity.id,'@type':['ca:CoreArchitectureArtifact','ca:PODA','schema:CreativeWork'],name:state.artifact_identity.display_name,'schema:description':state.artifact_identity.subtitle,'ca:version':state.artifact_identity.version,'ca:family':state.artifact_identity.family,'ca:placement':state.artifact_identity.placement,'ca:primaryCognitiveMove':state.artifact_identity.primary_cognitive_move,'ca:hasPurpose':{'@id':'#'+state.purpose.id},'ca:hasObjective':state.objectives.map(o=>({'@id':'#'+o.id})),'ca:hasDiscoverable':state.discoverables.map(d=>({'@id':'#'+d.id})),'ca:hasActivity':state.activities.map(a=>({'@id':'#'+a.id})),'ca:activeView':{'@id':'#'+activeView().id}}); graph.push({'@id':'#'+state.purpose.id,'@type':'ca:Purpose','schema:text':state.purpose.text,'ca:status':state.purpose.status,'ca:handsTo':{'@type':'ca:HandoffRoute',name:state.purpose.route,'ca:reason':state.purpose.reason}}); graph.push({'@id':'#'+activeView().id,'@type':'ca:ViewConfiguration',name:activeView().name,'ca:objectiveOrder':activeView().objective_order,'ca:hiddenObjective':activeView().hidden_objective_ids,'ca:discoverableOrder':activeView().discoverable_order,'ca:hiddenDiscoverable':activeView().hidden_discoverable_ids,'ca:activityOrder':activeView().activity_order,'ca:hiddenActivity':activeView().hidden_activity_ids,'ca:textMode':activeView().text_mode}); for(const o of state.objectives)graph.push({'@id':'#'+o.id,'@type':'ca:Objective',name:o.label,'schema:text':o.text,'ca:status':o.status,'ca:canonicalOrder':o.canonical_order,'ca:visibleInActiveView':isVisible('objective',o.id),'ca:handsTo':{'@type':'ca:HandoffRoute',name:o.route,'ca:reason':o.reason}}); for(const d of state.discoverables)graph.push({'@id':'#'+d.id,'@type':'ca:Discoverable',name:d.label,'schema:text':d.text,'ca:status':d.status,'ca:canonicalOrder':d.canonical_order,'ca:supportsObjective':(d.objective_ids||[]).map(id=>({'@id':'#'+id})),'ca:visibleInActiveView':isVisible('discoverable',d.id),'ca:handsTo':{'@type':'ca:HandoffRoute',name:d.route,'ca:reason':d.reason}}); for(const a of state.activities)graph.push({'@id':'#'+a.id,'@type':'ca:Activity',name:a.label,'schema:text':a.text,'ca:status':a.status,'ca:canonicalOrder':a.canonical_order,'ca:surfacesDiscoverable':(a.discoverable_ids||[]).map(id=>({'@id':'#'+id})),'ca:visibleInActiveView':isVisible('activity',a.id),'ca:handsTo':{'@type':'ca:HandoffRoute',name:a.route,'ca:reason':a.reason}}); return {'@context':{'ca':'https://vik.guru/vocabulary/core-architectures#','schema':'https://schema.org/','name':'schema:name'},'@graph':graph};}
-  function buildPrompt(){const visibleObjectives=visible('objective').map(o=>o.label).join(', ')||'none'; const hiddenObjectives=state.objectives.filter(o=>!isVisible('objective',o.id)).map(o=>o.label).join(', ')||'none'; const visibleDiscoverables=visible('discoverable').map(d=>`- ${d.label}: ${d.text} [route: ${d.route||'—'}]`).join('\n')||'- none'; const hiddenDiscoverables=state.discoverables.filter(d=>!isVisible('discoverable',d.id)).map(d=>d.label).join(', ')||'none'; const visibleActivities=visible('activity').map(a=>`- ${a.label}: ${a.text} [surfaces: ${(a.discoverable_ids||[]).map(id=>(state.discoverables.find(d=>d.id===id)||{}).label||id).join(', ')||'—'}]`).join('\n')||'- none'; return `Use this PODA as the current Core Architecture orientation context.\n\nPurpose:\n${state.purpose.text}\n\nVisible objectives: ${visibleObjectives}\nHidden objectives: ${hiddenObjectives}\n\nVisible discoverables:\n${visibleDiscoverables}\n\nHidden discoverables: ${hiddenDiscoverables}\n\nVisible activities:\n${visibleActivities}\n\nPreserve:\n- the distinction between objectives, discoverables, and activities\n- the local term “Discoverable” rather than deliverable\n- activity-to-discoverable alignment\n- status markers and handoff routes\n- stable semantic IDs even when focus view changes\n\nHelp make the next decision inspectable: Which discoverables should route into Impact Map, Context Tree, Strategy Canvas, First Responsible Version Matrix, Participatory Design Kit, Service-design Blueprint, Specification-by-Example, HEART Chart, or Upstream Revision Loop?\n\nHidden items remain in the source artifact and JSON export; they are not deleted or redacted. If hidden context may matter, ask to inspect the full artifact data before assuming this focus view is complete.\n\nWhen proposing options, name the evidence, the claim boundary, and the conditions that would change the recommendation.`;}
-  function renderExports(){const json=buildExport(); $('jsonPreview').textContent=JSON.stringify(json,null,2); $('aiPrompt').textContent=buildPrompt(); let ld=buildJsonLd(); const old=document.getElementById('jsonld-script'); if(old)old.remove(); const script=document.createElement('script'); script.type='application/ld+json'; script.id='jsonld-script'; script.textContent=JSON.stringify(ld,null,2); document.body.appendChild(script);}
+  function markdownInline(value,fallback=''){const source=typeof value==='string'?value:fallback;return source.replace(/\r\n?/g,'\n').replace(/\s*\n\s*/g,' ').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\\/g,'\\\\').replace(/([!#@*_\[\]|~])/g,'\\$1').replace(/\x60/g,()=> '\\'+String.fromCharCode(96)).replace(/\b((?:https?|ftp):)(?=\/\/)/gi,protocol=>protocol.slice(0,-1)+'\\:').replace(/\bwww\./gi,prefix=>prefix.slice(0,-1)+'\\.')}
+  function markdownCode(value){const source=String(value??'').replace(/\r\n?/g,'\n').replace(/\s*\n\s*/g,' ');const runs=source.match(/\x60+/g)||[];const fence=String.fromCharCode(96).repeat(Math.max(0,...runs.map(run=>run.length))+1);const padded=/^\s|\s$|^\x60|\x60$/.test(source)?' '+source+' ':source;return fence+padded+fence}
+  function canonicalValue(value){if(Array.isArray(value))return value.map(canonicalValue);if(value&&typeof value==='object')return Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonicalValue(value[key])]));return value}
+  function fnv1a32Utf8(value){let hash=0x811c9dc5;const update=byte=>{hash^=byte;hash=Math.imul(hash,0x01000193)>>>0};for(const symbol of String(value)){const point=symbol.codePointAt(0);if(point<=0x7f)update(point);else if(point<=0x7ff){update(0xc0|(point>>>6));update(0x80|(point&0x3f))}else if(point<=0xffff){update(0xe0|(point>>>12));update(0x80|((point>>>6)&0x3f));update(0x80|(point&0x3f))}else{update(0xf0|(point>>>18));update(0x80|((point>>>12)&0x3f));update(0x80|((point>>>6)&0x3f));update(0x80|(point&0x3f))}}return 'fnv1a32-utf8:'+hash.toString(16).padStart(8,'0')}
+  function textList(values){return Array.isArray(values)?values.filter(value=>typeof value==='string'&&value.trim()).map(value=>markdownInline(value)):[]}
+  function joinedList(values,fallback='Open for the next review.'){return Array.isArray(values)&&values.length?values.join('; '):fallback}
+  function promptCapsuleStateProjection(){
+    const v=activeView();const objectiveOrder=ordered('objective');const discoverableOrder=ordered('discoverable');const activityOrder=ordered('activity');const identity=state.artifact_identity||{};const quick=state.quick_use||{};const semantic=state.semantic_locality||{};const recovery=state.recovery_calibration||{};
+    const orderFields=(item,index,type)=>({id:markdownInline(item.id,type+'-'+(index+1)),label:markdownInline(item.label),text:markdownInline(item.text),status:markdownInline(item.status),statusLabel:markdownInline(statusLabel(item.status)),route:markdownInline(item.route,'No route selected'),routeFamily:markdownInline(routeFamily(item.route)),routeReason:markdownInline(item.reason,'Open route reason.'),canonicalOrder:Number.isFinite(Number(item.canonical_order))?Number(item.canonical_order):index+1,displayOrder:index+1,visibleOrder:v[`hidden_${type}_ids`].includes(item.id)?null:visible(type).findIndex(candidate=>candidate.id===item.id)+1,visibility:v[`hidden_${type}_ids`].includes(item.id)?'hidden':'visible'});
+    return {contract:PROMPT_CAPSULE_CONTRACT,capsule:PROMPT_CAPSULE_ID,source:PROMPT_CAPSULE_SOURCE_ID+'@'+PROMPT_CAPSULE_SOURCE_VERSION,stateContract:PROMPT_CAPSULE_STATE_CONTRACT,artifact:{id:markdownInline(identity.id,PROMPT_CAPSULE_SOURCE_ID),displayName:markdownInline(identity.display_name,'PODA'),subtitle:markdownInline(identity.subtitle,'Purpose, Objectives, Discoverables, Activities'),revision:markdownInline(String(identity.version??PROMPT_CAPSULE_SOURCE_VERSION)),family:markdownInline(identity.family,'Orientation and Tracing'),placement:markdownInline(identity.placement),primaryMove:markdownInline(identity.primary_cognitive_move),sourceBand:textList(identity.source_band)},quickUse:{useWhen:markdownInline(quick.use_when),restores:markdownInline(quick.restores),goodNextQuestion:markdownInline(quick.good_next_question)},focusView:{id:markdownInline(v.id,'view-default'),name:markdownInline(v.name,'Default focus view'),textMode:markdownInline(v.text_mode,'preview_with_reveal'),objectiveOrder:objectiveOrder.map(item=>markdownInline(item.id)),hiddenObjectiveIds:v.hidden_objective_ids.map(id=>markdownInline(id)),discoverableOrder:discoverableOrder.map(item=>markdownInline(item.id)),hiddenDiscoverableIds:v.hidden_discoverable_ids.map(id=>markdownInline(id)),activityOrder:activityOrder.map(item=>markdownInline(item.id)),hiddenActivityIds:v.hidden_activity_ids.map(id=>markdownInline(id))},purpose:{id:markdownInline(state.purpose.id,'purpose'),text:markdownInline(state.purpose.text),status:markdownInline(state.purpose.status),statusLabel:markdownInline(statusLabel(state.purpose.status)),route:markdownInline(state.purpose.route,'No route selected'),routeFamily:markdownInline(routeFamily(state.purpose.route)),routeReason:markdownInline(state.purpose.reason,'Open route reason.')},statuses:statuses.map(item=>({id:markdownInline(item.value),label:markdownInline(item.label),meaning:markdownInline(item.desc)})),routes:routeRegistry.map(route=>({name:markdownInline(route.label),family:markdownInline(route.family)})),objectives:objectiveOrder.map((item,index)=>orderFields(item,index,'objective')),discoverables:discoverableOrder.map((item,index)=>({...orderFields(item,index,'discoverable'),objectiveIds:(item.objective_ids||[]).map(id=>markdownInline(id)),objectiveLabels:(item.objective_ids||[]).map(id=>markdownInline((state.objectives.find(objective=>objective.id===id)||{}).label||id))})),activities:activityOrder.map((item,index)=>({...orderFields(item,index,'activity'),discoverableIds:(item.discoverable_ids||[]).map(id=>markdownInline(id)),discoverableLabels:(item.discoverable_ids||[]).map(id=>markdownInline((state.discoverables.find(discoverable=>discoverable.id===id)||{}).label||id))})),semanticLocality:{preferredPhrasing:textList(semantic.preferred_phrasing),replacementStateGuidance:Array.isArray(semantic.replacement_state_guidance)?semantic.replacement_state_guidance.filter(item=>item&&typeof item==='object').map(item=>({commonPhrase:markdownInline(item.common_phrase,'Open context cue.'),strongerPhrase:markdownInline(item.stronger_phrase,'State the improved read directly.')})):[]},recovery:{strainCues:textList(recovery.strain_cues),stabilizingRead:markdownInline(recovery.stabilizing_read),restoredState:markdownInline(recovery.restored_state),namedFailureGeometries:textList(recovery.named_failure_geometries)}}
+  }
+  function promptCapsuleFingerprint(){return fnv1a32Utf8(JSON.stringify(canonicalValue(promptCapsuleStateProjection())))}
+  function promptCapsuleMarkdown(view='plain'){
+    const selectedView=PROMPT_CAPSULE_VIEWS.includes(view)?view:'plain';const projection=promptCapsuleStateProjection();const visibleCount=type=>projection[type].filter(item=>item.visibility==='visible').length;
+    const entitySection=(heading,item,links=[])=>['### '+heading+': '+item.label+' — '+item.id,'','- Description: '+item.text,'- Status: '+item.statusLabel+' ('+item.status+').','- Route: '+item.route+' ('+item.routeFamily+').','- Route reason: '+item.routeReason,'- Order: display '+item.displayOrder+'; canonical '+item.canonicalOrder+'; visibility '+item.visibility+'; visible order '+(item.visibleOrder===null?'not shown':item.visibleOrder)+'.',...links].join('\n');
+    const objectiveSections=projection.objectives.map(item=>entitySection('Objective',item)).join('\n\n');
+    const discoverableSections=projection.discoverables.map(item=>entitySection('Discoverable',item,['- Supports objective IDs: '+joinedList(item.objectiveIds,'No objective link is set.'),'- Supports objectives: '+joinedList(item.objectiveLabels,'No objective link is set.')])).join('\n\n');
+    const activitySections=projection.activities.map(item=>entitySection('Activity',item,['- Surfaces discoverable IDs: '+joinedList(item.discoverableIds,'No discoverable link is set.'),'- Surfaces discoverables: '+joinedList(item.discoverableLabels,'No discoverable link is set.')])).join('\n\n');
+    const statusLines=projection.statuses.map(item=>'- '+item.label+' ('+item.id+'): '+item.meaning);const routeLines=[];projection.routes.forEach(route=>{const prefix='- '+route.family+': ';const previous=routeLines[routeLines.length-1];if(previous&&previous.startsWith(prefix))routeLines[routeLines.length-1]=previous+'; '+route.name;else routeLines.push(prefix+route.name)});const preferred=projection.semanticLocality.preferredPhrasing.length?projection.semanticLocality.preferredPhrasing.map(value=>'- '+value):['- What should become discoverable next?'];const replacement=projection.semanticLocality.replacementStateGuidance.length?projection.semanticLocality.replacementStateGuidance.map(item=>'- Use: '+item.strongerPhrase+' · Context cue: '+item.commonPhrase):['- Use: State the shared orientation directly. · Context cue: The next activity remains open.'];
+    const sections=['# Prompt Capsule: '+projection.artifact.displayName,'','- Contract: '+markdownCode(projection.contract),'- Capsule: '+markdownCode(projection.capsule),'- Source: '+markdownCode(projection.source),'- State: '+markdownCode(projection.stateContract)+' · revision '+markdownCode(projection.artifact.revision),'- Fingerprint: '+markdownCode(promptCapsuleFingerprint()),'- View: '+markdownCode(selectedView),'','## Purpose and target','','Use this PODA artifact to keep purpose, objectives, discoverables, and activities connected while the collaboration chooses its next receiving architecture.','','- Artifact ID: '+projection.artifact.id,'- Subtitle: '+projection.artifact.subtitle,'- Family: '+projection.artifact.family,'- Placement: '+projection.artifact.placement,'- Primary move: '+projection.artifact.primaryMove,'- Source bands: '+joinedList(projection.artifact.sourceBand),'','## Relevant context and inputs','','- Use when: '+projection.quickUse.useWhen,'- Restored condition: '+projection.quickUse.restores,'- Good next question: '+projection.quickUse.goodNextQuestion,'- Focus arrangement: '+projection.focusView.name+' ('+projection.focusView.id+'); text mode '+projection.focusView.textMode+'.','- Accepted items: '+projection.objectives.length+' objectives ('+visibleCount('objectives')+' visible); '+projection.discoverables.length+' discoverables ('+visibleCount('discoverables')+' visible); '+projection.activities.length+' activities ('+visibleCount('activities')+' visible).','','### Status language','',...statusLines,'','### Available routes','',...routeLines,'','## Working state','','### Purpose — '+projection.purpose.id,'','- Statement: '+projection.purpose.text,'- Status: '+projection.purpose.statusLabel+' ('+projection.purpose.status+').','- Route: '+projection.purpose.route+' ('+projection.purpose.routeFamily+').','- Route reason: '+projection.purpose.routeReason,'',objectiveSections,'',discoverableSections,'',activitySections,'','## Boundaries and human-held decisions','','- People decide which purpose gives the work meaning, which objectives deserve support, what should become discoverable, and which activities and routes fit the situation.','- Display order and visibility shape the current focus arrangement and are represented in the fingerprint. Every hidden item remains available in this capsule and the complete JSON export.','- The selected item, pending removal choice, clipboard state, and Markdown-view choice are local interface state and stay outside the fingerprint.','- Compatible unknown or private JSON extensions remain available through import and export while this public projection and fingerprint describe the represented PODA state.','- A discoverable keeps exploration open before the team commits to a particular artifact or implementation form.','','## Requested return','','Return a Markdown orientation handoff grouped by stable purpose, objective, discoverable, and activity IDs. Keep each relationship, status, route, route reason, represented order, and visibility together.','','Name what the current evidence establishes, identify the discoverable that can clarify the next decision, and close with one bounded receiving action.','','## Related loops','','These public collaboration loops fit when the receiving work meets the stated condition:','',...PROMPT_CAPSULE_RELATED_LOOPS.map(loop=>['- '+markdownCode(loop.id)+' — ['+loop.name+']('+loop.publicUrl+')','  - Fit condition: '+loop.fit].join('\n')),'','## Evidence and recovery','','### Preferred questions','',...preferred,'','### Replacement-state guidance','',...replacement,'','- Recovery strain cues: '+joinedList(projection.recovery.strainCues),'- Stabilizing read: '+projection.recovery.stabilizingRead,'- Restored state: '+projection.recovery.restoredState,'- Named failure geometries: '+joinedList(projection.recovery.namedFailureGeometries),'- A compatible import becomes the accepted working state and regenerates this capsule. A structurally incompatible candidate leaves the current state and capsule available, names the mismatch, and can return after revision.'];
+    if(selectedView==='skill-assisted')sections.push('','## Skill assistance','','These public repository skills may shape the return while the PODA artifact remains the source of truth:','',...PROMPT_CAPSULE_SKILLS.map(skill=>['- ['+skill.name+']('+skill.publicUrl+') — '+skill.purpose,'  - Repository path: '+markdownCode(skill.path),'  - Source revision: '+markdownCode(PROMPT_CAPSULE_SKILL_REVISION),'  - Source SHA-256: '+markdownCode(skill.sha256)].join('\n')));
+    return sections.join('\n')+'\n'
+  }
+  function renderPrompt(){const prompt=$('aiPrompt');prompt.textContent=promptCapsuleMarkdown(promptCapsuleView);prompt.dataset.promptViewActive=promptCapsuleView;document.querySelectorAll('[data-prompt-view]').forEach(control=>{control.checked=control.value===promptCapsuleView});$('promptViewDescription').textContent=promptCapsuleView==='skill-assisted'?'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented PODA state and fingerprint remain the same.':'Plain Markdown carries the complete PODA orientation and tracing context as a self-contained handoff.'}
+  function renderExports(){const json=buildExport(); $('jsonPreview').textContent=JSON.stringify(json,null,2); renderPrompt(); let ld=buildJsonLd(); const old=document.getElementById('jsonld-script'); if(old)old.remove(); const script=document.createElement('script'); script.type='application/ld+json'; script.id='jsonld-script'; script.textContent=JSON.stringify(ld,null,2); document.body.appendChild(script);}
   function renderSemantic(){ $('preferredPhrasing').innerHTML=state.semantic_locality.preferred_phrasing.map(x=>`<li>${safe(x)}</li>`).join(''); $('replacementGuidance').innerHTML=state.semantic_locality.replacement_state_guidance.map(x=>`<li><strong>${safe(x.common_phrase)}</strong> → ${safe(x.stronger_phrase)}</li>`).join(''); $('recoveryPanel').innerHTML=`<div class="row"><div><h3>Strain cues</h3><ul>${state.recovery_calibration.strain_cues.map(x=>`<li>${safe(x)}</li>`).join('')}</ul></div><div><h3>Stabilizing read</h3><p>${safe(state.recovery_calibration.stabilizing_read)}</p><h3>Restored state</h3><p>${safe(state.recovery_calibration.restored_state)}</p><h3>Named Failure Geometries</h3><div class="legend">${state.recovery_calibration.named_failure_geometries.map(x=>`<span class="pill">${safe(x)}</span>`).join('')}</div></div></div>`;}
   function captureFocus(){const element=document.activeElement; if(!element||element===document.body||!element.id)return null; const snapshot={id:element.id,scrollTop:element.scrollTop,scrollLeft:element.scrollLeft}; try{if(typeof element.selectionStart==='number'){snapshot.selectionStart=element.selectionStart;snapshot.selectionEnd=element.selectionEnd;snapshot.selectionDirection=element.selectionDirection;}}catch(_error){} return snapshot;}
   function restoreFocus(snapshot){if(!snapshot)return; const element=$(snapshot.id); if(!element)return; try{element.focus({preventScroll:true});}catch(_error){element.focus();} if(typeof snapshot.selectionStart==='number'&&typeof element.setSelectionRange==='function'){try{element.setSelectionRange(snapshot.selectionStart,snapshot.selectionEnd,snapshot.selectionDirection||'none');}catch(_error){}} element.scrollTop=snapshot.scrollTop; element.scrollLeft=snapshot.scrollLeft;}
@@ -358,10 +702,11 @@
   function toggleVisibility(type,id){const key=`hidden_${type}_ids`; const arr=activeView()[key]; const i=arr.indexOf(id); if(i>=0)arr.splice(i,1); else arr.push(id); if(activeView().selected_item_id===id){activeView().selected_item_id='';activeView().selected_item_type='';}}
   function clearPendingRemoval(announce=true){if(!pendingRemoval)return; const {button,label,describedBy}=pendingRemoval; pendingRemoval=null; if(button.isConnected){button.textContent=label; button.removeAttribute('aria-pressed'); if(describedBy===null)button.removeAttribute('aria-describedby'); else button.setAttribute('aria-describedby',describedBy);} if(announce)$('removalNotice').textContent='Removal confirmation cleared. The current PODA items remain available.';}
   function requestRemoval(button,key,message){if(pendingRemoval&&pendingRemoval.key===key){pendingRemoval=null;return true;} clearPendingRemoval(false); pendingRemoval={key,button,label:button.textContent,describedBy:button.getAttribute('aria-describedby')}; button.textContent='Confirm removal'; button.setAttribute('aria-pressed','true'); button.setAttribute('aria-describedby','removalNotice'); $('removalNotice').textContent=`${message} Select Confirm removal to continue; choose another action to keep it.`; button.focus(); return false;}
-  function removeItem(type,id,button){const listName={objective:'objectives',discoverable:'discoverables',activity:'activities'}[type]; const item=state[listName].find(x=>x.id===id); if(!item||!requestRemoval(button,`${type}:${id}`,`Remove ${item.label} from the source data? Hide keeps it preserved; removal is semantic deletion.`))return false; state[listName]=state[listName].filter(x=>x.id!==id); const v=activeView(); v[`${type}_order`]=(v[`${type}_order`]||[]).filter(x=>x!==id); v[`hidden_${type}_ids`]=(v[`hidden_${type}_ids`]||[]).filter(x=>x!==id); if(type==='objective') state.discoverables.forEach(d=>d.objective_ids=(d.objective_ids||[]).filter(x=>x!==id)); if(type==='discoverable') state.activities.forEach(a=>a.discoverable_ids=(a.discoverable_ids||[]).filter(x=>x!==id)); if(v.selected_item_id===id){v.selected_item_id='';v.selected_item_type='';} $('removalNotice').textContent=`${item.label} removed. The PODA exports now reflect the current source data.`; return true;}
-  function addItem(type){const n=state[{objective:'objectives',discoverable:'discoverables',activity:'activities'}[type]].length+1; if(type==='objective'){const id=uid('objective'); state.objectives.push({id,label:`New objective ${n}`,text:'Describe the goal or capacity this work should support.',status:'assumed',route:'Impact Map',reason:'Route this objective when it is ready for more structure.',canonical_order:n}); activeView().objective_order.push(id);}
-    if(type==='discoverable'){const id=uid('discoverable'); state.discoverables.push({id,label:`New discoverable ${n}`,text:'Describe the surface that should become inspectable.',status:'needs_to_surface',route:'Context Tree',reason:'Route this discoverable to make its context more visible.',objective_ids:[],canonical_order:n}); activeView().discoverable_order.push(id);}
-    if(type==='activity'){const id=uid('activity'); state.activities.push({id,label:`New activity ${n}`,text:'Describe the activity that will help surface a discoverable.',status:'assumed',route:'Participatory Design Kit',reason:'Route this activity when live workflow evidence is needed.',discoverable_ids:[],canonical_order:n}); activeView().activity_order.push(id);}
+  function removeItem(type,id,button){const listName={objective:'objectives',discoverable:'discoverables',activity:'activities'}[type]; const item=state[listName].find(x=>x.id===id); if(state[listName].length<=1){$('removalNotice').textContent=`At least one ${type} remains available so the PODA trace stays usable.`;return false} if(!item||!requestRemoval(button,`${type}:${id}`,`Remove ${item.label} from the source data? Hide keeps it preserved; removal changes the semantic trace.`))return false; state[listName]=state[listName].filter(x=>x.id!==id); state.view_state.views.forEach(v=>{v[`${type}_order`]=(v[`${type}_order`]||[]).filter(x=>x!==id);v[`hidden_${type}_ids`]=(v[`hidden_${type}_ids`]||[]).filter(x=>x!==id);if(v.selected_item_id===id){v.selected_item_id='';v.selected_item_type=''}}); if(type==='objective') state.discoverables.forEach(d=>d.objective_ids=(d.objective_ids||[]).filter(x=>x!==id)); if(type==='discoverable') state.activities.forEach(a=>a.discoverable_ids=(a.discoverable_ids||[]).filter(x=>x!==id)); $('removalNotice').textContent=`${item.label} removed. The PODA exports now reflect the current source data.`; return true;}
+  function addItem(type){const n=state[{objective:'objectives',discoverable:'discoverables',activity:'activities'}[type]].length+1; let id=''; if(type==='objective'){id=uid('objective'); state.objectives.push({id,label:`New objective ${n}`,text:'Describe the goal or capacity this work should support.',status:'assumed',route:'Impact Map',reason:'Route this objective when it is ready for more structure.',canonical_order:n});}
+    if(type==='discoverable'){id=uid('discoverable'); state.discoverables.push({id,label:`New discoverable ${n}`,text:'Describe the surface that should become inspectable.',status:'needs_to_surface',route:'Context Tree',reason:'Route this discoverable to make its context more visible.',objective_ids:[],canonical_order:n});}
+    if(type==='activity'){id=uid('activity'); state.activities.push({id,label:`New activity ${n}`,text:'Describe the activity that will help surface a discoverable.',status:'assumed',route:'Participatory Design Kit',reason:'Route this activity when live workflow evidence is needed.',discoverable_ids:[],canonical_order:n});}
+    if(id){state.view_state.views.forEach(view=>{const key=`${type}_order`;if(!view[key].includes(id))view[key].push(id)});activeView().selected_item_type=type;activeView().selected_item_id=id;}
   }
   let actionLock=false; function locked(fn){if(actionLock)return; actionLock=true; try{fn();}finally{setTimeout(()=>{actionLock=false;},30);}}
   document.addEventListener('click',e=>{if(pendingRemoval&&e.target.closest('button')!==pendingRemoval.button)clearPendingRemoval();},true);
@@ -371,11 +716,15 @@
   document.addEventListener('click', e=>{const node=e.target.closest('[data-action="select"]'); if(node && !node.closest('button')){activeView().selected_item_type=node.dataset.type; activeView().selected_item_id=node.dataset.id; renderAll();}});
   document.addEventListener('click', e=>{const b=e.target.closest('button'); if(!b)return; const action=b.dataset.action; if(action==='toggleText'){const el=$(b.dataset.target); const expanded=el.classList.toggle('expanded'); b.textContent=expanded?'Collapse':'Show full text'; b.setAttribute('aria-expanded',expanded?'true':'false'); return;} if(action==='select'){activeView().selected_item_type=b.dataset.type; activeView().selected_item_id=b.dataset.id; renderAll(); return;} if(action==='move'){locked(()=>{moveItem(b.dataset.type,b.dataset.id,Number(b.dataset.dir)); renderAll();}); return;} if(action==='toggleVisibility'){locked(()=>{toggleVisibility(b.dataset.type,b.dataset.id); renderAll();}); return;} if(action==='remove'){locked(()=>{if(removeItem(b.dataset.type,b.dataset.id,b))renderAll();}); return;}});
   document.addEventListener('input', e=>{const t=e.target; if(t.matches('select,input[type="checkbox"],input[type="file"]'))return; let changed=false; if(t.id==='artifactTitle'){state.artifact_identity.display_name=t.value; changed=true;} else if(t.id==='artifactVersion'){state.artifact_identity.version=t.value; changed=true;} else if(t.id==='purposeText'){state.purpose.text=t.value; changed=true;} else if(t.dataset.field){updateField(t.dataset.type,t.dataset.id,t.dataset.field,t.value); changed=true;} if(changed)renderDerivedPreservingFocus();});
-  document.addEventListener('change', e=>{const t=e.target; if(t.id==='purposeStatus'){state.purpose.status=t.value; renderAllPreservingFocus(); return;} if(t.id==='purposeRoute'){state.purpose.route=t.value; renderAllPreservingFocus(); return;} if(t.dataset.field){updateField(t.dataset.type,t.dataset.id,t.dataset.field,t.value); renderAllPreservingFocus(); return;} if(t.dataset.link){const item=state[{discoverable:'discoverables',activity:'activities'}[t.dataset.type]].find(x=>x.id===t.dataset.id); if(item){const arr=item[t.dataset.link] || []; if(t.checked && !arr.includes(t.value))arr.push(t.value); if(!t.checked){const i=arr.indexOf(t.value); if(i>=0)arr.splice(i,1);} item[t.dataset.link]=arr; renderAllPreservingFocus();} return;} if(t.id==='jsonFile'&&t.files&&t.files[0]){const reader=new FileReader(); reader.onload=()=>{importJson(reader.result)}; reader.readAsText(t.files[0]);}});
+  document.addEventListener('change', e=>{const t=e.target; if(t.matches('[data-prompt-view]')){if(!PROMPT_CAPSULE_VIEWS.includes(t.value))return;promptCapsuleView=t.value;renderPrompt();announcePrompt((promptCapsuleView==='plain'?'Plain':'Skill-assisted')+' Markdown view selected.');return;} if(t.id==='purposeStatus'){state.purpose.status=t.value; renderAllPreservingFocus(); return;} if(t.id==='purposeRoute'){state.purpose.route=t.value; renderAllPreservingFocus(); return;} if(t.dataset.field){updateField(t.dataset.type,t.dataset.id,t.dataset.field,t.value); renderAllPreservingFocus(); return;} if(t.dataset.link){const item=state[{discoverable:'discoverables',activity:'activities'}[t.dataset.type]].find(x=>x.id===t.dataset.id); if(item){const arr=item[t.dataset.link] || []; if(t.checked && !arr.includes(t.value))arr.push(t.value); if(!t.checked){const i=arr.indexOf(t.value); if(i>=0)arr.splice(i,1);} item[t.dataset.link]=arr; renderAllPreservingFocus();} return;} if(t.id==='jsonFile'&&t.files&&t.files[0]){const reader=new FileReader(); reader.onload=()=>{importJson(reader.result)}; reader.readAsText(t.files[0]);}});
   $('addObjectiveBtn').addEventListener('click',()=>locked(()=>{addItem('objective');renderAll();})); $('addDiscoverableBtn').addEventListener('click',()=>locked(()=>{addItem('discoverable');renderAll();})); $('addActivityBtn').addEventListener('click',()=>locked(()=>{addItem('activity');renderAll();}));
   $('showAllBtn').addEventListener('click',()=>{const v=activeView(); v.hidden_objective_ids=[]; v.hidden_discoverable_ids=[]; v.hidden_activity_ids=[]; renderAll();});
   $('resetOrderBtn').addEventListener('click',()=>{const v=activeView(); v.objective_order=state.objectives.slice().sort((a,b)=>a.canonical_order-b.canonical_order).map(x=>x.id); v.discoverable_order=state.discoverables.slice().sort((a,b)=>a.canonical_order-b.canonical_order).map(x=>x.id); v.activity_order=state.activities.slice().sort((a,b)=>a.canonical_order-b.canonical_order).map(x=>x.id); renderAll();});
-  $('copyJsonBtn').addEventListener('click',()=>navigator.clipboard&&navigator.clipboard.writeText(JSON.stringify(buildExport(),null,2))); $('copyJsonLdBtn').addEventListener('click',()=>navigator.clipboard&&navigator.clipboard.writeText(JSON.stringify(buildJsonLd(),null,2))); $('copyPromptBtn').addEventListener('click',()=>navigator.clipboard&&navigator.clipboard.writeText(buildPrompt()));
+  $('copyJsonBtn').addEventListener('click',()=>navigator.clipboard&&navigator.clipboard.writeText(JSON.stringify(buildExport(),null,2))); $('copyJsonLdBtn').addEventListener('click',()=>navigator.clipboard&&navigator.clipboard.writeText(JSON.stringify(buildJsonLd(),null,2)));
+  function announcePrompt(message){const status=$('promptCapsuleStatus');status.textContent='';requestAnimationFrame(()=>{status.textContent=message})}
+  async function copyPromptCapsule(){const markdown=promptCapsuleMarkdown(promptCapsuleView);try{if(navigator.clipboard?.writeText)await navigator.clipboard.writeText(markdown);else{const fallback=document.createElement('textarea');fallback.setAttribute('aria-hidden','true');fallback.value=markdown;fallback.style.position='fixed';fallback.style.opacity='0';document.body.append(fallback);fallback.select();if(!document.execCommand('copy'))throw new Error('Copy command was unavailable.');fallback.remove()}announcePrompt((promptCapsuleView==='plain'?'Plain':'Skill-assisted')+' Markdown copied.')}catch(error){announcePrompt('Markdown remains visible for manual copy.')}}
+  function downloadPromptCapsule(){const markdown=promptCapsuleMarkdown(promptCapsuleView);const filename=PROMPT_CAPSULE_SOURCE_ID+'.prompt-capsule.r'+PROMPT_CAPSULE_SOURCE_VERSION+'.'+promptCapsuleView+'.md';const blob=new Blob([markdown],{type:'text/markdown;charset=utf-8'});const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download=filename;link.hidden=true;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),0);announcePrompt((promptCapsuleView==='plain'?'Plain':'Skill-assisted')+' Markdown download prepared.')}
+  $('copyPromptBtn').addEventListener('click',copyPromptCapsule);$('downloadPromptBtn').addEventListener('click',downloadPromptCapsule);
   $('importJsonBtn').addEventListener('click',()=>importJson($('jsonImport').value));
   function isRecord(value){return Boolean(value)&&typeof value==='object'&&!Array.isArray(value);}
   function requireRecord(value,label){if(!isRecord(value))throw new Error(`${label} must be an object.`); return value;}
@@ -392,9 +741,15 @@
   function preparePodaImport(parsed){
     requireRecord(parsed,'PODA export');
     const poda=requireRecord(parsed.poda,'PODA export poda section');
+    const knownRootKeys=new Set(['artifact_identity','quick_use','poda','view_state','route_registry','semantic_locality','recovery_calibration']);
+    const knownPodaKeys=new Set(['purpose','objectives','discoverables','activities']);
+    const rootExtensions=Object.fromEntries(Object.entries(parsed).filter(([key])=>!knownRootKeys.has(key)).map(([key,value])=>[key,clone(value)]));
+    const podaExtensions=Object.fromEntries(Object.entries(poda).filter(([key])=>!knownPodaKeys.has(key)).map(([key,value])=>[key,clone(value)]));
     const allowedStatuses=new Set(statuses.map(item=>item.value));
     const artifactIdentity={...state.artifact_identity,...(isRecord(parsed.artifact_identity)?parsed.artifact_identity:{})};
     artifactIdentity.id=requireId(artifactIdentity.id,'PODA artifact identity');
+    const quickSource=parsed.quick_use===undefined?state.quick_use:requireRecord(parsed.quick_use,'PODA quick_use');
+    const quickUse={...quickSource,use_when:requireText(quickSource.use_when,'PODA quick_use.use_when'),restores:requireText(quickSource.restores,'PODA quick_use.restores'),good_next_question:requireText(quickSource.good_next_question,'PODA quick_use.good_next_question')};
     const normalizeItem=(item,index,type)=>{requireRecord(item,`${type} ${index+1}`); return {...item,id:requireId(item.id,`${type} ${index+1}`),label:requireText(item.label,`${type} ${index+1} label`),text:requireText(item.text,`${type} ${index+1} text`),status:requireEnum(item.status,allowedStatuses,`${type} ${index+1} status`),route:typeof item.route==='string'?item.route:'',reason:typeof item.reason==='string'?item.reason:'',canonical_order:Number(item.canonical_order)||index+1};};
     const purposeSource=requireRecord(poda.purpose,'PODA purpose');
     const purpose={...purposeSource,id:requireId(purposeSource.id,'PODA purpose'),text:requireText(purposeSource.text,'PODA purpose text'),status:requireEnum(purposeSource.status,allowedStatuses,'PODA purpose status'),route:typeof purposeSource.route==='string'?purposeSource.route:'',reason:typeof purposeSource.reason==='string'?purposeSource.reason:''};
@@ -423,10 +778,14 @@
     const semantic={...semanticSource,preferred_phrasing:requireTextArray(semanticSource.preferred_phrasing,'PODA semantic_locality.preferred_phrasing'),replacement_state_guidance:normalizeReplacementGuidance(semanticSource.replacement_state_guidance,'PODA semantic_locality.replacement_state_guidance')};
     const recoverySource=parsed.recovery_calibration===undefined?state.recovery_calibration:requireRecord(parsed.recovery_calibration,'PODA recovery_calibration');
     const recovery={...recoverySource,strain_cues:requireTextArray(recoverySource.strain_cues,'PODA recovery_calibration.strain_cues'),stabilizing_read:requireText(recoverySource.stabilizing_read,'PODA recovery_calibration.stabilizing_read'),restored_state:requireText(recoverySource.restored_state,'PODA recovery_calibration.restored_state'),named_failure_geometries:requireTextArray(recoverySource.named_failure_geometries,'PODA recovery_calibration.named_failure_geometries')};
-    return {artifact_identity:artifactIdentity,purpose,objectives,discoverables,activities,view_state:{active_view_id:activeViewId,views},semantic_locality:semantic,recovery_calibration:recovery};
+    return {artifact_identity:artifactIdentity,quick_use:quickUse,purpose,objectives,discoverables,activities,view_state:{active_view_id:activeViewId,views},semantic_locality:semantic,recovery_calibration:recovery,rootExtensions,podaExtensions};
   }
-  function importJson(raw){try{const candidate=preparePodaImport(JSON.parse(raw)); state.artifact_identity=candidate.artifact_identity; state.purpose=candidate.purpose; state.objectives=candidate.objectives; state.discoverables=candidate.discoverables; state.activities=candidate.activities; state.view_state=candidate.view_state; state.semantic_locality=candidate.semantic_locality; state.recovery_calibration=candidate.recovery_calibration; $('importNotice').textContent='JSON imported. The accepted PODA data and complete focus-view state are active.'; renderAllPreservingFocus();}catch(err){$('importNotice').textContent='Working state retained. The current complete JSON export remains available; import needs a usable PODA candidate: '+err.message;}}
+  function applyPodaCandidate(candidate){state.artifact_identity=candidate.artifact_identity;state.quick_use=candidate.quick_use;state.purpose=candidate.purpose;state.objectives=candidate.objectives;state.discoverables=candidate.discoverables;state.activities=candidate.activities;state.view_state=candidate.view_state;state.semantic_locality=candidate.semantic_locality;state.recovery_calibration=candidate.recovery_calibration;preservedRootExtensions=candidate.rootExtensions;preservedPodaExtensions=candidate.podaExtensions;}
+  function importJson(raw){const retained={candidate:{artifact_identity:clone(state.artifact_identity),quick_use:clone(state.quick_use),purpose:clone(state.purpose),objectives:clone(state.objectives),discoverables:clone(state.discoverables),activities:clone(state.activities),view_state:clone(state.view_state),semantic_locality:clone(state.semantic_locality),recovery_calibration:clone(state.recovery_calibration),rootExtensions:clone(preservedRootExtensions),podaExtensions:clone(preservedPodaExtensions)}};try{const candidate=preparePodaImport(JSON.parse(raw));applyPodaCandidate(candidate);renderAllPreservingFocus();$('importNotice').textContent='JSON imported. The accepted PODA data and complete focus-view state are active.';}catch(err){applyPodaCandidate(retained.candidate);renderAllPreservingFocus();$('importNotice').textContent='Working state retained. The current complete JSON export remains available; import needs a usable PODA candidate: '+err.message;}}
   renderAll();
+  document.querySelector('[data-prompt-view-control]').hidden=false;
+  document.querySelector('[data-prompt-actions]').hidden=false;
+  window.poda=Object.freeze({version:'0.1.4',stateContract:PROMPT_CAPSULE_STATE_CONTRACT,contract:PROMPT_CAPSULE_CONTRACT,views:PROMPT_CAPSULE_VIEWS,skillRevision:PROMPT_CAPSULE_SKILL_REVISION,skills:PROMPT_CAPSULE_SKILLS,relatedLoops:PROMPT_CAPSULE_RELATED_LOOPS,getState:()=>clone(buildExport()),promptCapsuleStateProjection:()=>clone(promptCapsuleStateProjection()),promptCapsuleFingerprint,promptCapsule:()=>promptCapsuleMarkdown('plain'),promptCapsuleMarkdown:(view=promptCapsuleView)=>promptCapsuleMarkdown(view),getPromptCapsuleView:()=>promptCapsuleView});
 })();
 </script>
   <footer class="artifact-attribution">

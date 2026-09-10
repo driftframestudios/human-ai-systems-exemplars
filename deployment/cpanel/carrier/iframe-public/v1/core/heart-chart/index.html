@@ -5,7 +5,7 @@
   <meta name="author" content="Vikrant Varun Kudesia">
   <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>HEART Chart — Signal-to-Metric Calibration · Chimeric Prototype v0.1.5</title>
+  <title>HEART Chart — Signal-to-Metric Calibration · Chimeric Prototype v0.1.6</title>
   <style>
     :root {
       --bg: #f7f4ee;
@@ -137,6 +137,7 @@
       align-items: center;
       margin: 12px 0;
     }
+    .controls[hidden] { display: none; }
     button, .button-like {
       appearance: none;
       border: 1px solid var(--line-strong);
@@ -149,6 +150,7 @@
       font-weight: 700;
       cursor: pointer;
       transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      min-height: 44px;
     }
     button:hover { background: #f4eadb; border-color: #9e907b; }
     button:active { transform: translateY(1px); }
@@ -245,7 +247,7 @@
     .status-disputed { background: #f2dfdc; }
     .status-ready_to_route { background: var(--accent-soft); }
     .mini-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
-    .mini-controls button { font-size: 12px; padding: 6px; }
+    .mini-controls button { font-size: 12px; padding: 6px; min-height: 44px; }
     .hidden-list, .legend, .pill-list { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     .hidden-item {
       display: inline-flex;
@@ -286,7 +288,47 @@
       border: 1px solid rgba(255,255,255,.08);
     }
     .export-area { min-height: 240px; width: 100%; }
-    .prompt-area { min-height: 300px; background: #fffefb; color: var(--ink); border: 1px solid var(--line); font-family: var(--mono); }
+    .prompt-area {
+      min-height: 300px;
+      margin: 0;
+      background: #211f1b;
+      color: #f7f0e3;
+      border: 1px solid rgba(255,255,255,.08);
+      font-family: var(--mono);
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+    .prompt-capsule-head { display: flex; flex-wrap: wrap; align-items: start; justify-content: space-between; gap: 12px; }
+    .prompt-capsule-head > div { min-width: min(100%, 34rem); }
+    .prompt-view-control {
+      min-width: min(100%, 24rem);
+      margin: 0;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+    }
+    .prompt-view-control legend { padding: 0 6px; font-size: 12px; font-weight: 800; color: var(--accent); }
+    .prompt-view-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .prompt-view-option {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      margin: 0;
+      padding: 8px 10px;
+      border: 1px solid var(--line-strong);
+      border-radius: 10px;
+      background: #fffaf0;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .prompt-view-option input { width: auto; min-height: auto; margin: 0; }
+    .related-loops { margin: 14px 0; border: 1px solid var(--line); border-radius: var(--radius-md); padding: 10px 12px; background: var(--panel-2); }
+    .related-loops summary { min-height: 44px; display: flex; align-items: center; font-weight: 800; color: var(--accent); cursor: pointer; }
+    .related-loops a { display: inline-flex; align-items: center; min-height: 44px; }
+    .related-loops li + li { margin-top: 10px; }
+    .related-loops p { margin: 4px 0 0; }
+    .prompt-status { min-height: 1.5em; }
     .note { color: var(--muted); font-size: 13px; }
     .small { font-size: 12px; color: var(--muted); }
     .sr-only { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
@@ -329,7 +371,7 @@
 </head>
 <body>
   <header class="hero">
-    <p class="eyebrow">Core Architecture · Chimeric Prototype v0.1.5</p>
+    <p class="eyebrow">Core Architecture · Chimeric Prototype v0.1.6</p>
     <h1>HEART Chart</h1>
     <p class="subtitle">Signal-to-Metric Calibration — a goal/signal/metric matrix for interpreting experience evidence without collapsing meaning into a single metric.</p>
     <div class="hero-grid">
@@ -424,11 +466,199 @@
     </section>
 
     <section class="panel" aria-labelledby="ai-title">
-      <h2 id="ai-title">AI Collaboration Prompt Capsule</h2>
-      <p class="note">This full prompt remains visible for manual copy. It includes visible/hidden row scope and the probability-of-what instruction.</p>
-      <div class="controls"><button type="button" data-action="copy-prompt">Copy AI prompt</button></div>
-      <p id="promptCopyMessage" class="note" role="status" aria-live="polite" aria-atomic="true"></p>
-      <textarea id="aiPrompt" class="prompt-area" aria-label="AI collaboration prompt"></textarea>
+      <div class="prompt-capsule-head">
+        <div>
+          <h2 id="ai-title">Prompt Capsule · Markdown</h2>
+          <p class="note">This portable handoff carries every HEART row, including rows hidden in the current focus view. Plain and skill-assisted views share one represented-state fingerprint.</p>
+        </div>
+        <fieldset id="promptViewControl" class="prompt-view-control" data-prompt-view-control hidden>
+          <legend>Markdown view</legend>
+          <div class="prompt-view-options">
+            <label class="prompt-view-option"><input type="radio" name="prompt-view" value="plain" data-prompt-view checked /> Plain</label>
+            <label class="prompt-view-option"><input type="radio" name="prompt-view" value="skill-assisted" data-prompt-view /> Skill-assisted</label>
+          </div>
+        </fieldset>
+      </div>
+      <p id="promptViewDescription" class="note">Plain Markdown carries the complete signal-to-metric context as a self-contained handoff.</p>
+      <details class="related-loops" data-prompt-related-loops>
+        <summary>Related loops</summary>
+        <p class="note">These public collaboration loops fit when the receiving work meets the stated condition.</p>
+        <ul>
+          <li data-related-loop-id="visitor-surface-change">
+            <a href="https://schemas.radiantnull.com/collaboration/#visitor-surface-change" target="_blank" rel="noopener noreferrer">Observe a visitor-surface change across meaning, interaction, and evidence</a>
+            <p><strong>Fit condition:</strong> Use when a visitor-facing change needs a named goal, observable signal, counter-signal, and bounded evidence return.</p>
+          </li>
+          <li data-related-loop-id="skill-from-receiving-use">
+            <a href="https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use" target="_blank" rel="noopener noreferrer">Let receiving use refine a reusable collaboration skill</a>
+            <p><strong>Fit condition:</strong> Use when repeated measurement work reveals a collaboration practice worth refining through observed use.</p>
+          </li>
+        </ul>
+      </details>
+      <div class="controls" data-prompt-actions hidden>
+        <button type="button" data-action="copy-prompt">Copy Markdown</button>
+        <button type="button" data-action="download-prompt">Download Markdown</button>
+      </div>
+      <p id="promptCopyMessage" class="note prompt-status" role="status" aria-live="polite" aria-atomic="true"></p>
+      <noscript><p class="note">The complete Plain Markdown remains available below. Interactive view selection, copy, and download become available when JavaScript runs.</p></noscript>
+      <pre id="aiPrompt" class="prompt-area" data-prompt-view-active="plain" aria-labelledby="ai-title" aria-describedby="promptViewDescription" tabindex="0"># Prompt Capsule: HEART Chart
+
+- Contract: `prompt-capsule/0.1.0`
+- Capsule: `heart-chart/current-signal-to-metric-calibration`
+- Source: `heart-chart@0.1.6`
+- State: `heart-chart-state.v0.1` · revision `0.1.6`
+- Fingerprint: `fnv1a32-utf8:dfb4f4fe`
+- View: `plain`
+
+## Purpose and target
+
+Use this HEART Chart to connect experience goals to observable signals and interpretable metrics, then carry tolerances, counter-signals, qualitative evidence, and receiving routes into the next decision.
+
+- Artifact ID: `ca-artifact-heart-chart-genomics-001`
+- Subtitle: Signal-to-Metric Calibration
+- Family: Measurement, Reflection, and Judgment
+- Placement: Implementation Architecture / Recovery Routing Atlas participant
+- Primary move: signal-to-metric calibration
+- Source basis: `inherited_method`; `author_adapted_method`; `implementation_recovery_bridge`
+
+## Relevant context and inputs
+
+- Use when: Metrics, observations, user feedback, workflow data, test results, prototype evidence, or AI-evaluation notes need interpretation.
+- Restored condition: Measurement as coordinated evidence rather than premature judgment.
+- Good next question: What signal is this metric approximating, and what would make the metric misleading?
+- Scale: 0–10 semantic interpretation scale; numeric scores are optional in this prototype
+- Active focus view: Default focus view (`view-default`); text mode `preview_with_reveal`.
+- Focus summary: 5 of 5 HEART rows are visible.
+
+## Working state
+
+Every accepted HEART row appears below. A hidden label narrows the visual focus while the represented row remains part of this handoff.
+
+### Task Success (`heart-task-success-review-quality`)
+
+- Goal: Reviewers can complete variant review with clearer provenance and fewer downstream corrections.
+- Signal: Review decisions contain fewer metadata-related corrections and fewer unsupported evidence claims.
+- Metric: Metadata correction count per review cycle; unsupported-claim routing rate; review completion with required provenance fields present.
+- Interpretation: A lower correction count suggests improved review readiness when provenance fields remain complete.
+- Tolerance: Review time may increase during early adoption if metadata corrections and unsupported claims decrease.
+- Counter-signal: Corrections decrease because reviewers defer ambiguous cases rather than resolving them; provenance is visible but hard to interpret.
+- Qualitative companion: Plus / Delta review with molecular pathologists; reviewer confidence notes.
+- Evidence status: `known`
+- Route: Specification-by-Example (Participatory Elicitation and Specification).
+- Custom route label:
+- Route reason: Task-success signals can become observable behavior examples and acceptance conditions.
+- Order: display `1`; canonical `5`; visible `1`.
+- Focus view: `visible`.
+
+### Happiness (`heart-happiness-source-confidence`)
+
+- Goal: Reviewers feel confident distinguishing AI-generated suggestions from accepted evidence.
+- Signal: Reviewers can explain which summary claims are source-supported, generated, or human-confirmed.
+- Metric: Confidence rating after review session; source-boundary comprehension check; clarification requests about AI-generated summaries.
+- Interpretation: Higher confidence is useful when paired with source-boundary comprehension.
+- Tolerance: Confidence should be interpreted alongside comprehension so the experience supports informed trust.
+- Counter-signal: Confidence increases while source-boundary comprehension remains soft; reviewers accept summaries quickly but ask fewer source questions.
+- Qualitative companion: Reviewer interview; Plus / Delta reflection; source-boundary walkthrough.
+- Evidence status: `known`
+- Route: AI Systems Service Blueprint (Shared Surfaces and Topology).
+- Custom route label:
+- Route reason: This signal may require runtime, knowledge, evaluation, and source-boundary support.
+- Order: display `2`; canonical `1`; visible `2`.
+- Focus view: `visible`.
+
+### Adoption (`heart-adoption-provenance-panel`)
+
+- Goal: Intended reviewer groups begin using the provenance panel and source-boundary expansion.
+- Signal: Reviewers open source details during review when AI-generated summaries are present.
+- Metric: Source-detail expansion rate; percentage of AI-assisted reviews with source-detail interaction.
+- Interpretation: Expansion rate may indicate that reviewers are using the provenance support surface.
+- Tolerance: Lower expansion may be acceptable when source boundaries are already visible enough for routine cases.
+- Counter-signal: Low expansion because reviewers overlook the control; high expansion because summaries are unclear.
+- Qualitative companion: Session observation; Plus / Delta; pattern-fit review.
+- Evidence status: `assumed`
+- Route: Pattern–Problem Surface Matrix (Pattern Fit and Behavior Protection).
+- Custom route label:
+- Route reason: Source-detail interaction may point to pattern fit or pattern strain.
+- Order: display `3`; canonical `3`; visible `3`.
+- Focus view: `visible`.
+
+### Retention (`heart-retention-repeat-review-use`)
+
+- Goal: Review teams continue using the workflow after initial novelty.
+- Signal: Teams return to the workflow for subsequent review cycles.
+- Metric: Repeat use across review cycles; continued use by role group.
+- Interpretation: Retention is meaningful when paired with task-success and confidence signals.
+- Tolerance: Lower early retention may be acceptable if the workflow is still being piloted with a small reviewer group.
+- Counter-signal: Continued use because the workflow is mandated rather than useful; drop-off because critical data is missing rather than because the workflow is weak.
+- Qualitative companion: Role-specific Context Tree update; Plus / Delta with different groups.
+- Evidence status: `needs_to_surface`
+- Route: Upstream Revision Loop (Recovery Routing and Revision).
+- Custom route label:
+- Route reason: Retention differences may reveal role-context or framing updates.
+- Order: display `4`; canonical `4`; visible `4`.
+- Focus view: `visible`.
+
+### Engagement (`heart-engagement-evidence-support`)
+
+- Goal: Reviewers meaningfully interact with evidence support surfaces without excessive navigation.
+- Signal: Reviewers use source details, provenance panels, and exception routing where those supports fit the work.
+- Metric: Evidence-support interactions per review; interaction sequence around AI summaries; exception routing follow-through.
+- Interpretation: More engagement is useful when it reflects meaningful review support; high interaction can also signal confusion.
+- Tolerance: Higher interaction is acceptable during learning and complex cases when errors or rework decrease.
+- Counter-signal: High interaction paired with low confidence; high interaction paired with repeated backtracking.
+- Qualitative companion: Workflow observation; Participatory Design Kit session; Plus / Delta.
+- Evidence status: `assumed`
+- Route: Participatory Design Kit (Participatory Elicitation and Specification).
+- Custom route label:
+- Route reason: Interaction patterns may need lived workflow interpretation.
+- Order: display `5`; canonical `2`; visible `5`.
+- Focus view: `visible`.
+
+## Boundaries and human-held decisions
+
+- Human reviewers decide which goals matter, which observations count as signals, how proxy metrics should be interpreted, which tolerances fit the work, and when a route is ready.
+- Metrics provide evidence about a signal. Interpretation, tolerance, counter-signals, and qualitative companions keep that evidence connected to its context.
+- Stable row IDs keep each measurement relationship recognizable across focus arrangements. Row order, visibility, and text mode carry the active presentation state.
+- Hiding narrows the focus view. Hidden rows remain represented in this capsule and the complete JSON and JSON-LD exports.
+- Current selection, status announcements, clipboard state, pending removal, private extensions, and Markdown-view choice stay with the working interface and leave the represented-state fingerprint unchanged.
+- AI suggestions enter as attributed proposals. Human reviewers retain metric interpretation, route acceptance, external sharing, and publication decisions.
+
+## Requested return
+
+Return a GitHub Flavored Markdown handoff grouped by stable HEART row ID. Keep rows in current focus order and keep each goal, signal, metric, interpretation, tolerance, counter-signal, qualitative companion, evidence status, route, route reason, and visibility state with the row it describes.
+
+Name the outcome or condition each probability describes before assigning a value.
+
+State what the evidence establishes, name any open condition and its receiver, then end with the smallest bounded next action and its stopping event.
+
+## Related loops
+
+These public collaboration loops fit when the receiving work meets the stated condition:
+
+- `visitor-surface-change` — [Observe a visitor-surface change across meaning, interaction, and evidence](https://schemas.radiantnull.com/collaboration/#visitor-surface-change)
+  - Fit condition: Use when a visitor-facing change needs a named goal, observable signal, counter-signal, and bounded evidence return.
+- `skill-from-receiving-use` — [Let receiving use refine a reusable collaboration skill](https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use)
+  - Fit condition: Use when repeated measurement work reveals a collaboration practice worth refining through observed use.
+
+## Evidence and recovery
+
+### Preferred wording
+
+- What signal is this metric approximating?
+- What goal gives this signal meaning?
+- What would make this metric misleading?
+- What tolerance or tradeoff is acceptable here?
+
+### Replacement-state guidance
+
+- Use: The metric is evidence for a signal, interpreted against a goal, tolerance, and counter-signal. · Context cue: The metric proves this.
+- Use: Which AI behavior, human goal, evaluation check, and counter-signal does the score represent? · Context cue: The AI eval is good.
+
+- Recovery strain cues: one metric is treated as the whole meaning; time-on-task increases and the team assumes weakening; qualitative feedback and quantitative data point in different directions
+- Stabilizing read: Metrics become useful when connected to goals, interpreted against context, paired with counter-signals, and placed inside tolerances.
+- Restored state: Metrics are interpreted as proxies connected to goals and signals.
+- Named failure geometries: Signal / Metric Collapse; Experience Goal-Fit Drift; Upstream Revision Hesitancy
+- A compatible import becomes the accepted working state and regenerates this capsule. A structurally incompatible candidate leaves the current chart and capsule available, names the mismatch, and can return after revision.
+</pre>
     </section>
 
     <section class="panel source-note" aria-labelledby="source-title">
@@ -519,6 +749,50 @@
   ];
   const statusOptions = ['known','assumed','needs_to_surface','disputed','ready_to_route'];
   const heartCategories = ['Happiness','Engagement','Adoption','Retention','Task Success'];
+  const PROMPT_CAPSULE_CONTRACT = 'prompt-capsule/0.1.0';
+  const PROMPT_CAPSULE_STATE_CONTRACT = 'heart-chart-state.v0.1';
+  const PROMPT_CAPSULE_ID = 'heart-chart/current-signal-to-metric-calibration';
+  const PROMPT_CAPSULE_SOURCE_ID = 'heart-chart';
+  const PROMPT_CAPSULE_SOURCE_VERSION = '0.1.6';
+  const PROMPT_CAPSULE_VIEWS = Object.freeze(['plain', 'skill-assisted']);
+  const PROMPT_CAPSULE_SKILL_REVISION = 'b43d51853c8625935d091dd781be7bba917d3040';
+  const PROMPT_CAPSULE_SKILLS = Object.freeze([
+    Object.freeze({
+      name: 'Evidence-grounded research spike',
+      publicUrl: 'https://schemas.radiantnull.com/skills/evidence-grounded-research-spike/',
+      path: '.agents/skills/evidence-grounded-research-spike/SKILL.md',
+      sha256: '844fc0c6b0b956b81984a2c2d47d9252abadeb0a6554c5ef4734d0f1e5f4b531',
+      purpose: 'Turn a metric, counter-signal, or evidence question into a bounded decision supported by current sources and practiced experience.'
+    }),
+    Object.freeze({
+      name: 'Source authority mapping',
+      publicUrl: 'https://schemas.radiantnull.com/skills/source-authority-mapping/',
+      path: '.agents/skills/source-authority-mapping/SKILL.md',
+      sha256: '706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5',
+      purpose: 'Keep goals, signals, proxy metrics, evidence standing, route proposals, and review authority distinct.'
+    }),
+    Object.freeze({
+      name: 'Stateful artifact behavior contracts',
+      publicUrl: 'https://schemas.radiantnull.com/skills/stateful-artifact-behavior-contracts/',
+      path: '.agents/skills/stateful-artifact-behavior-contracts/SKILL.md',
+      sha256: '596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a',
+      purpose: 'Keep HEART state, Markdown views, serialized exchange, and retained-state recovery in agreement.'
+    })
+  ]);
+  const PROMPT_CAPSULE_RELATED_LOOPS = Object.freeze([
+    Object.freeze({
+      id: 'visitor-surface-change',
+      name: 'Observe a visitor-surface change across meaning, interaction, and evidence',
+      publicUrl: 'https://schemas.radiantnull.com/collaboration/#visitor-surface-change',
+      fit: 'Use when a visitor-facing change needs a named goal, observable signal, counter-signal, and bounded evidence return.'
+    }),
+    Object.freeze({
+      id: 'skill-from-receiving-use',
+      name: 'Let receiving use refine a reusable collaboration skill',
+      publicUrl: 'https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use',
+      fit: 'Use when repeated measurement work reveals a collaboration practice worth refining through observed use.'
+    })
+  ]);
   const clamp = (n,min,max) => Math.max(min, Math.min(max, Number(n) || 0));
   const slug = (s) => String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,48) || 'item';
   const uid = (prefix) => prefix + '-' + Math.random().toString(36).slice(2,8) + '-' + Date.now().toString(36).slice(-4);
@@ -527,6 +801,8 @@
   let addLock = false;
   let pendingRemovalId = '';
   let data = seedData();
+  let promptCapsuleView = 'plain';
+  let importExtensions = {root:{}};
   normalizeData(data);
 
   function seedData(){
@@ -535,7 +811,7 @@
         id: 'ca-artifact-heart-chart-genomics-001',
         display_name: 'HEART Chart',
         subtitle: 'Signal-to-Metric Calibration',
-        version: '0.1.5',
+        version: '0.1.6',
         family: 'Measurement, Reflection, and Judgment',
         placement: 'Implementation Architecture / Recovery Routing Atlas participant',
         primary_cognitive_move: 'signal-to-metric calibration',
@@ -730,16 +1006,16 @@
         <p class="small">ID: <code>${esc(r.id)}</code></p>
       </td>
       <td><label>Category<select data-field="category" data-row-id="${esc(r.id)}">${heartCategories.map(c=>`<option value="${esc(c)}" ${r.category===c?'selected':''}>${esc(c)}</option>`).join('')}</select></label></td>
-      <td><textarea data-field="goal" data-row-id="${esc(r.id)}">${esc(r.goal)}</textarea></td>
-      <td><textarea data-field="signal" data-row-id="${esc(r.id)}">${esc(r.signal)}</textarea></td>
-      <td><textarea data-field="metric" data-row-id="${esc(r.id)}">${esc(r.metric)}</textarea></td>
-      <td><textarea data-field="interpretation" data-row-id="${esc(r.id)}">${esc(r.interpretation)}</textarea></td>
-      <td><textarea data-field="tolerance" data-row-id="${esc(r.id)}">${esc(r.tolerance)}</textarea></td>
-      <td><textarea data-field="counter_signal" data-row-id="${esc(r.id)}">${esc(r.counter_signal)}</textarea></td>
-      <td><textarea data-field="qualitative_companion" data-row-id="${esc(r.id)}">${esc(r.qualitative_companion)}</textarea></td>
-      <td><select data-field="status" data-row-id="${esc(r.id)}">${statusOptions.map(s=>`<option value="${s}" ${r.status===s?'selected':''}>${s.replaceAll('_',' ')}</option>`).join('')}</select></td>
+      <td><textarea aria-label="Goal for ${esc(r.category)}" data-field="goal" data-row-id="${esc(r.id)}">${esc(r.goal)}</textarea></td>
+      <td><textarea aria-label="Signal for ${esc(r.category)}" data-field="signal" data-row-id="${esc(r.id)}">${esc(r.signal)}</textarea></td>
+      <td><textarea aria-label="Metric for ${esc(r.category)}" data-field="metric" data-row-id="${esc(r.id)}">${esc(r.metric)}</textarea></td>
+      <td><textarea aria-label="Interpretation for ${esc(r.category)}" data-field="interpretation" data-row-id="${esc(r.id)}">${esc(r.interpretation)}</textarea></td>
+      <td><textarea aria-label="Tolerance for ${esc(r.category)}" data-field="tolerance" data-row-id="${esc(r.id)}">${esc(r.tolerance)}</textarea></td>
+      <td><textarea aria-label="Counter-signal for ${esc(r.category)}" data-field="counter_signal" data-row-id="${esc(r.id)}">${esc(r.counter_signal)}</textarea></td>
+      <td><textarea aria-label="Qualitative companion for ${esc(r.category)}" data-field="qualitative_companion" data-row-id="${esc(r.id)}">${esc(r.qualitative_companion)}</textarea></td>
+      <td><select aria-label="Evidence status for ${esc(r.category)}" data-field="status" data-row-id="${esc(r.id)}">${statusOptions.map(s=>`<option value="${s}" ${r.status===s?'selected':''}>${s.replaceAll('_',' ')}</option>`).join('')}</select></td>
       <td>
-        <select data-field="handoff" data-row-id="${esc(r.id)}">${selectOptions(r.handoff)}</select>
+        <select aria-label="Route for ${esc(r.category)}" data-field="handoff" data-row-id="${esc(r.id)}">${selectOptions(r.handoff)}</select>
         <label style="margin-top:8px;">Custom route<input data-field="custom_route" data-row-id="${esc(r.id)}" value="${esc(r.custom_route || (!routeRegistry.some(rr=>rr.label===r.handoff)?r.handoff:''))}" placeholder="Custom route if needed" /></label>
         <label style="margin-top:8px;">Route reason<textarea data-field="reason" data-row-id="${esc(r.id)}">${esc(r.reason)}</textarea></label>
       </td>
@@ -876,6 +1152,13 @@
     return `<td><div class="clamp">${esc(txt)}</div>${needs?`<button type="button" data-action="toggle-full" data-target="${id}" aria-controls="${id}" aria-expanded="false">Show full text</button><div id="${id}" class="full-text" hidden>${esc(txt)}</div>`:''}</td>`;
   }
 
+  function deepClone(value){ return structuredClone(value); }
+  function extensionFields(record, ownedKeys){
+    if(!record || typeof record !== 'object' || Array.isArray(record)) return {};
+    return Object.fromEntries(Object.entries(record).filter(([key])=>!ownedKeys.has(key)).map(([key,value])=>[key,deepClone(value)]));
+  }
+  const ROOT_EXPORT_KEYS = new Set(['artifact_identity','quick_use','heart_chart','rows','view_state','route_registry','text_handling','semantic_locality','recovery_calibration']);
+
   function toExport(){
     normalizeData(data);
     const v = activeView();
@@ -883,6 +1166,7 @@
     const visible = visibleRows();
     const visibleIds = new Set(visible.map(r=>r.id));
     return {
+      ...deepClone(importExtensions.root),
       artifact_identity: data.artifact_identity,
       quick_use: data.quick_use,
       heart_chart: {
@@ -934,41 +1218,268 @@
     const jsonLd = JSON.stringify(toJsonLd(), null, 2);
     document.getElementById('jsonLdExport').value = jsonLd;
     document.getElementById('embedded-jsonld').textContent = jsonLd;
-    document.getElementById('aiPrompt').value = aiPrompt();
+    const prompt = document.getElementById('aiPrompt');
+    prompt.textContent = promptCapsuleMarkdown(promptCapsuleView);
+    prompt.dataset.promptViewActive = promptCapsuleView;
+    document.querySelectorAll('[data-prompt-view]').forEach(control=>{ control.checked = control.value === promptCapsuleView; });
+    document.getElementById('promptViewDescription').textContent = promptCapsuleView === 'skill-assisted'
+      ? 'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented HEART state and fingerprint remain the same.'
+      : 'Plain Markdown carries the complete signal-to-metric context as a self-contained handoff.';
   }
 
-  function aiPrompt(){
-    const v = activeView();
-    const visible = visibleRows();
-    const hidden = orderedRows().filter(r=>v.hidden_row_ids.includes(r.id));
-    const lines = [];
-    lines.push('Use this HEART Chart as the current Core Architecture context.');
-    lines.push('');
-    lines.push('Preserve:');
-    lines.push('- the distinction between goal, signal, metric, interpretation, tolerance, counter-signal, and qualitative companion');
-    lines.push('- metric-as-proxy language rather than metric-as-verdict language');
-    lines.push('- visible/hidden row scope; hidden rows remain in the source artifact unless an export says otherwise');
-    lines.push('- handoff routes and route reasons');
-    lines.push('- stable semantic IDs even when focus view changes');
-    lines.push('');
-    lines.push('Visible HEART rows in this focus view:');
-    visible.forEach(r=>{
-      lines.push(`- ${r.category} (${r.id})`);
-      lines.push(`  Goal: ${r.goal}`);
-      lines.push(`  Signal: ${r.signal}`);
-      lines.push(`  Metric: ${r.metric}`);
-      lines.push(`  Counter-signal: ${r.counter_signal}`);
-      if (effectiveRoute(r)) lines.push(`  Route: ${effectiveRoute(r)} — ${r.reason}`);
-    });
-    if (hidden.length) {
-      lines.push('');
-      lines.push('Hidden rows in this focus view, preserved in source data:');
-      hidden.forEach(r=>lines.push(`- ${r.category} (${r.id})`));
+  function plainText(value, fallback=''){
+    const source = typeof value === 'string' ? value : fallback;
+    return source.replace(/\r\n?/g,'\n').replace(/\s*\n\s*/g,' ').trim();
+  }
+  function markdownInline(value, fallback=''){
+    return plainText(value,fallback)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/\\/g,'\\\\')
+      .replace(/([!#@*_\[\]|~])/g,'\\$1')
+      .replace(/\x60/g,()=> '\\'+String.fromCharCode(96))
+      .replace(/\b((?:https?|ftp):)(?=\/\/)/gi,protocol=>protocol.slice(0,-1)+'\\:')
+      .replace(/\bwww\./gi,prefix=>prefix.slice(0,-1)+'\\.');
+  }
+  function markdownCode(value){
+    const source = plainText(String(value??''));
+    const runs = source.match(/\x60+/g)||[];
+    const fence = String.fromCharCode(96).repeat(Math.max(0,...runs.map(run=>run.length))+1);
+    const padded = /^\s|\s$|^\x60|\x60$/.test(source)?' '+source+' ':source;
+    return fence+padded+fence;
+  }
+  function canonicalValue(value){
+    if(Array.isArray(value)) return value.map(canonicalValue);
+    if(value&&typeof value==='object') return Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonicalValue(value[key])]));
+    return value;
+  }
+  function fnv1a32Utf8(value){
+    let hash=0x811c9dc5;
+    const update=byte=>{hash^=byte;hash=Math.imul(hash,0x01000193)>>>0;};
+    for(const symbol of String(value)){
+      const point=symbol.codePointAt(0);
+      if(point<=0x7f) update(point);
+      else if(point<=0x7ff){update(0xc0|(point>>>6));update(0x80|(point&0x3f));}
+      else if(point<=0xffff){update(0xe0|(point>>>12));update(0x80|((point>>>6)&0x3f));update(0x80|(point&0x3f));}
+      else{update(0xf0|(point>>>18));update(0x80|((point>>>12)&0x3f));update(0x80|((point>>>6)&0x3f));update(0x80|(point&0x3f));}
     }
-    lines.push('');
-    lines.push('Help make the next decision inspectable: which signals need Plus / Delta reflection, Specification-by-Example, Pattern–Problem Surface Matrix, Unit-test-first Design, AI Systems Service Blueprint, or Upstream Revision Loop?');
-    lines.push('When proposing options, state probability of what before assigning probabilities.');
-    return lines.join('\n');
+    return 'fnv1a32-utf8:'+hash.toString(16).padStart(8,'0');
+  }
+  function textList(values){ return Array.isArray(values)?values.filter(value=>typeof value==='string'&&value.trim()).map(value=>plainText(value)):[]; }
+  function promptCapsuleStateProjection(){
+    normalizeData(data);
+    const view=activeView();
+    const identity=data.artifact_identity||{};
+    const quick=data.quick_use||{};
+    const rowById=new Map(data.rows.map(row=>[row.id,row]));
+    const visibleIds=new Set(visibleRows().map(row=>row.id));
+    const visibleOrder=new Map(visibleRows().map((row,index)=>[row.id,index+1]));
+    const rows=view.row_order.map(id=>rowById.get(id)).filter(Boolean).map((row,index)=>({
+      id:plainText(row.id),
+      category:plainText(row.category,'Happiness'),
+      goal:plainText(row.goal),
+      signal:plainText(row.signal),
+      metric:plainText(row.metric),
+      interpretation:plainText(row.interpretation),
+      tolerance:plainText(row.tolerance),
+      counterSignal:plainText(row.counter_signal),
+      qualitativeCompanion:plainText(row.qualitative_companion),
+      status:plainText(row.status,'assumed'),
+      route:{
+        name:plainText(effectiveRoute(row),'Open for review.'),
+        family:plainText(rowFamily(row),'No route selected'),
+        customLabel:plainText(row.custom_route),
+        reason:plainText(row.reason,'Open for review.')
+      },
+      canonicalOrder:Number.isFinite(Number(row.canonical_order))?Number(row.canonical_order):index+1,
+      displayOrder:index+1,
+      visibleOrder:visibleOrder.get(row.id)||null,
+      visibility:visibleIds.has(row.id)?'visible':'hidden'
+    }));
+    return {
+      contract:PROMPT_CAPSULE_CONTRACT,
+      capsule:PROMPT_CAPSULE_ID,
+      source:PROMPT_CAPSULE_SOURCE_ID+'@'+PROMPT_CAPSULE_SOURCE_VERSION,
+      stateContract:PROMPT_CAPSULE_STATE_CONTRACT,
+      artifact:{
+        id:plainText(identity.id,PROMPT_CAPSULE_SOURCE_ID),
+        displayName:plainText(identity.display_name,'HEART Chart'),
+        subtitle:plainText(identity.subtitle,'Signal-to-Metric Calibration'),
+        revision:plainText(String(identity.version??PROMPT_CAPSULE_SOURCE_VERSION)),
+        family:plainText(identity.family,'Measurement, Reflection, and Judgment'),
+        placement:plainText(identity.placement,'Implementation Architecture / Recovery Routing Atlas participant'),
+        primaryMove:plainText(identity.primary_cognitive_move,'signal-to-metric calibration'),
+        sourceBands:textList(identity.source_band)
+      },
+      quickUse:{
+        useWhen:plainText(quick.use_when),
+        restores:plainText(quick.restores),
+        goodNextQuestion:plainText(quick.good_next_question)
+      },
+      scale:'0–10 semantic interpretation scale; numeric scores are optional in this prototype',
+      focusView:{
+        id:plainText(view.id,'view-default'),
+        name:plainText(view.name,'Default focus view'),
+        textMode:plainText(view.text_mode,'preview_with_reveal'),
+        rowOrder:[...view.row_order],
+        hiddenRowIds:[...view.hidden_row_ids]
+      },
+      rows,
+      semanticLocality:{
+        preferredPhrasing:textList(data.semantic_locality?.preferred_phrasing),
+        replacementStateGuidance:Array.isArray(data.semantic_locality?.replacement_state_guidance)
+          ?data.semantic_locality.replacement_state_guidance.filter(item=>item&&typeof item==='object').map(item=>({contextCue:plainText(item.common_phrase),use:plainText(item.stronger_phrase)}))
+          :[]
+      },
+      recoveryCalibration:{
+        strainCues:textList(data.recovery_calibration?.strain_cues),
+        stabilizingRead:plainText(data.recovery_calibration?.stabilizing_read),
+        restoredState:plainText(data.recovery_calibration?.restored_state),
+        namedFailureGeometries:textList(data.recovery_calibration?.named_failure_geometries)
+      }
+    };
+  }
+  function promptCapsuleFingerprint(){ return fnv1a32Utf8(JSON.stringify(canonicalValue(promptCapsuleStateProjection()))); }
+  function promptCapsuleMarkdown(view='plain'){
+    const selectedView=PROMPT_CAPSULE_VIEWS.includes(view)?view:'plain';
+    const capsule=promptCapsuleStateProjection();
+    const visibleCount=capsule.rows.filter(row=>row.visibility==='visible').length;
+    const rowSections=capsule.rows.map(row=>[
+      '### '+markdownInline(row.category)+' ('+markdownCode(row.id)+')',
+      '',
+      '- Goal: '+markdownInline(row.goal),
+      '- Signal: '+markdownInline(row.signal),
+      '- Metric: '+markdownInline(row.metric),
+      '- Interpretation: '+markdownInline(row.interpretation),
+      '- Tolerance: '+markdownInline(row.tolerance),
+      '- Counter-signal: '+markdownInline(row.counterSignal),
+      '- Qualitative companion: '+markdownInline(row.qualitativeCompanion),
+      '- Evidence status: '+markdownCode(row.status),
+      '- Route: '+markdownInline(row.route.name)+' ('+markdownInline(row.route.family)+').',
+      '- Custom route label:'+(row.route.customLabel?' '+markdownInline(row.route.customLabel):''),
+      '- Route reason: '+markdownInline(row.route.reason),
+      '- Order: display '+markdownCode(row.displayOrder)+'; canonical '+markdownCode(row.canonicalOrder)+'; visible '+markdownCode(row.visibleOrder===null?'none':row.visibleOrder)+'.',
+      '- Focus view: '+markdownCode(row.visibility)+'.'
+    ].join('\n')).join('\n\n');
+    const sections=[
+      '# Prompt Capsule: '+markdownInline(capsule.artifact.displayName),
+      '',
+      '- Contract: '+markdownCode(capsule.contract),
+      '- Capsule: '+markdownCode(capsule.capsule),
+      '- Source: '+markdownCode(capsule.source),
+      '- State: '+markdownCode(capsule.stateContract)+' · revision '+markdownCode(capsule.artifact.revision),
+      '- Fingerprint: '+markdownCode(promptCapsuleFingerprint()),
+      '- View: '+markdownCode(selectedView),
+      '',
+      '## Purpose and target',
+      '',
+      'Use this '+markdownInline(capsule.artifact.displayName)+' to connect experience goals to observable signals and interpretable metrics, then carry tolerances, counter-signals, qualitative evidence, and receiving routes into the next decision.',
+      '',
+      '- Artifact ID: '+markdownCode(capsule.artifact.id),
+      '- Subtitle: '+markdownInline(capsule.artifact.subtitle),
+      '- Family: '+markdownInline(capsule.artifact.family),
+      '- Placement: '+markdownInline(capsule.artifact.placement),
+      '- Primary move: '+markdownInline(capsule.artifact.primaryMove),
+      '- Source basis: '+capsule.artifact.sourceBands.map(value=>markdownCode(value)).join('; '),
+      '',
+      '## Relevant context and inputs',
+      '',
+      '- Use when: '+markdownInline(capsule.quickUse.useWhen),
+      '- Restored condition: '+markdownInline(capsule.quickUse.restores),
+      '- Good next question: '+markdownInline(capsule.quickUse.goodNextQuestion),
+      '- Scale: '+markdownInline(capsule.scale),
+      '- Active focus view: '+markdownInline(capsule.focusView.name)+' ('+markdownCode(capsule.focusView.id)+'); text mode '+markdownCode(capsule.focusView.textMode)+'.',
+      '- Focus summary: '+visibleCount+' of '+capsule.rows.length+' HEART rows are visible.',
+      '',
+      '## Working state',
+      '',
+      'Every accepted HEART row appears below. A hidden label narrows the visual focus while the represented row remains part of this handoff.',
+      '',
+      rowSections||'The next HEART row remains open for a goal, signal, metric, and receiving route.',
+      '',
+      '## Boundaries and human-held decisions',
+      '',
+      '- Human reviewers decide which goals matter, which observations count as signals, how proxy metrics should be interpreted, which tolerances fit the work, and when a route is ready.',
+      '- Metrics provide evidence about a signal. Interpretation, tolerance, counter-signals, and qualitative companions keep that evidence connected to its context.',
+      '- Stable row IDs keep each measurement relationship recognizable across focus arrangements. Row order, visibility, and text mode carry the active presentation state.',
+      '- Hiding narrows the focus view. Hidden rows remain represented in this capsule and the complete JSON and JSON-LD exports.',
+      '- Current selection, status announcements, clipboard state, pending removal, private extensions, and Markdown-view choice stay with the working interface and leave the represented-state fingerprint unchanged.',
+      '- AI suggestions enter as attributed proposals. Human reviewers retain metric interpretation, route acceptance, external sharing, and publication decisions.',
+      '',
+      '## Requested return',
+      '',
+      'Return a GitHub Flavored Markdown handoff grouped by stable HEART row ID. Keep rows in current focus order and keep each goal, signal, metric, interpretation, tolerance, counter-signal, qualitative companion, evidence status, route, route reason, and visibility state with the row it describes.',
+      '',
+      'Name the outcome or condition each probability describes before assigning a value.',
+      '',
+      'State what the evidence establishes, name any open condition and its receiver, then end with the smallest bounded next action and its stopping event.',
+      '',
+      '## Related loops',
+      '',
+      'These public collaboration loops fit when the receiving work meets the stated condition:',
+      '',
+      ...PROMPT_CAPSULE_RELATED_LOOPS.map(loop=>'- '+markdownCode(loop.id)+' — ['+loop.name+']('+loop.publicUrl+')\n  - Fit condition: '+loop.fit),
+      '',
+      '## Evidence and recovery',
+      '',
+      '### Preferred wording',
+      '',
+      ...capsule.semanticLocality.preferredPhrasing.map(value=>'- '+markdownInline(value)),
+      '',
+      '### Replacement-state guidance',
+      '',
+      ...capsule.semanticLocality.replacementStateGuidance.map(item=>'- Use: '+markdownInline(item.use)+' · Context cue: '+markdownInline(item.contextCue)),
+      '',
+      '- Recovery strain cues: '+capsule.recoveryCalibration.strainCues.map(markdownInline).join('; '),
+      '- Stabilizing read: '+markdownInline(capsule.recoveryCalibration.stabilizingRead),
+      '- Restored state: '+markdownInline(capsule.recoveryCalibration.restoredState),
+      '- Named failure geometries: '+capsule.recoveryCalibration.namedFailureGeometries.map(markdownInline).join('; '),
+      '- A compatible import becomes the accepted working state and regenerates this capsule. A structurally incompatible candidate leaves the current chart and capsule available, names the mismatch, and can return after revision.'
+    ];
+    if(selectedView==='skill-assisted'){
+      sections.push(
+        '',
+        '## Skill assistance',
+        '',
+        'These public repository skills may shape the return while the HEART Chart remains the state authority:',
+        '',
+        ...PROMPT_CAPSULE_SKILLS.map(skill=>[
+          '- ['+skill.name+']('+skill.publicUrl+') — '+skill.purpose,
+          '  - Repository path: '+markdownCode(skill.path),
+          '  - Source revision: '+markdownCode(PROMPT_CAPSULE_SKILL_REVISION),
+          '  - Source SHA-256: '+markdownCode(skill.sha256)
+        ].join('\n'))
+      );
+    }
+    return sections.join('\n')+'\n';
+  }
+  function announcePrompt(message){
+    const status=document.getElementById('promptCopyMessage');
+    status.textContent='';
+    requestAnimationFrame(()=>{status.textContent=message;});
+  }
+  async function copyPromptCapsule(){
+    const markdown=promptCapsuleMarkdown(promptCapsuleView);
+    try{
+      if(navigator.clipboard?.writeText) await navigator.clipboard.writeText(markdown);
+      else{
+        const fallback=document.createElement('textarea');
+        fallback.setAttribute('aria-hidden','true');fallback.value=markdown;fallback.style.position='fixed';fallback.style.opacity='0';document.body.append(fallback);fallback.select();
+        let copied=false;try{copied=document.execCommand('copy');}finally{fallback.remove();}
+        if(!copied) throw new Error('Copy command was unavailable.');
+      }
+      announcePrompt((promptCapsuleView==='plain'?'Plain':'Skill-assisted')+' Markdown copied.');
+    }catch(error){announcePrompt('Markdown remains visible for manual copy.');}
+  }
+  function downloadPromptCapsule(){
+    const markdown=promptCapsuleMarkdown(promptCapsuleView);
+    const filename=PROMPT_CAPSULE_SOURCE_ID+'.prompt-capsule.r'+PROMPT_CAPSULE_SOURCE_VERSION+'.'+promptCapsuleView+'.md';
+    const blob=new Blob([markdown],{type:'text/markdown;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement('a');link.href=url;link.download=filename;link.hidden=true;document.body.append(link);link.click();link.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),0);
+    announcePrompt((promptCapsuleView==='plain'?'Plain':'Skill-assisted')+' Markdown download prepared.');
   }
 
   function labelFor(f){ return ({goal:'Goal',signal:'Signal',metric:'Metric',interpretation:'Interpretation',tolerance:'Tolerance',counter_signal:'Counter-signal',qualitative_companion:'Qualitative companion',reason:'Route reason'}[f] || f); }
@@ -1004,7 +1515,10 @@
     if(addLock) return; addLock = true; setTimeout(()=>{ addLock=false; }, 250);
     const id = uid('heart-row');
     const r = {id, canonical_order:data.rows.length+1, category:'Task Success', goal:'New goal to calibrate.', signal:'Signal to detect.', metric:'Metric proxy.', interpretation:'Interpret metric movement in context.', tolerance:'Acceptable range or tradeoff.', counter_signal:'Evidence that could make the metric misleading.', qualitative_companion:'Plus / Delta or field observation companion.', status:'assumed', handoff:'HEART Chart', custom_route:'', reason:'New row needs calibration.'};
-    data.rows.push(r); activeView().row_order.push(id); activeView().selected_row_id = id; render();
+    data.rows.push(r);
+    data.view_state.views.forEach(view=>{ if(!view.row_order.includes(id)) view.row_order.push(id); });
+    activeView().selected_row_id = id;
+    render();
   }
   function clearPendingRemoval(){
     if(!pendingRemovalId) return;
@@ -1027,7 +1541,11 @@
     const focusId = visible[index+1]?.id || visible[index-1]?.id || '';
     pendingRemovalId = '';
     data.rows = data.rows.filter(r=>r.id!==id);
-    const v=activeView(); v.row_order = v.row_order.filter(x=>x!==id); v.hidden_row_ids = v.hidden_row_ids.filter(x=>x!==id); if(v.selected_row_id===id) v.selected_row_id = data.rows[0]?.id || '';
+    data.view_state.views.forEach(view=>{
+      view.row_order = view.row_order.filter(rowId=>rowId!==id);
+      view.hidden_row_ids = view.hidden_row_ids.filter(rowId=>rowId!==id);
+      if(view.selected_row_id===id) view.selected_row_id = view.row_order.find(rowId=>!view.hidden_row_ids.includes(rowId)) || view.row_order[0] || '';
+    });
     render();
     message.textContent = `${row?.category || 'HEART'} row removed. The JSON and JSON-LD exports now reflect the current chart.`;
     const focusTarget = [...document.querySelectorAll('[data-action="remove-row"]')].find(candidate=>candidate.dataset.rowId===focusId) || document.querySelector('[data-action="add-row"]');
@@ -1052,8 +1570,16 @@
     if(a==='toggle-full') toggleFull(btn);
     if(a==='copy-json') copyText(document.getElementById('jsonExport').value, 'JSON copied.', 'jsonCopyMessage');
     if(a==='copy-jsonld') copyText(document.getElementById('jsonLdExport').value, 'JSON-LD copied.', 'jsonLdCopyMessage');
-    if(a==='copy-prompt') copyText(document.getElementById('aiPrompt').value, 'AI prompt copied.', 'promptCopyMessage');
+    if(a==='copy-prompt') copyPromptCapsule();
+    if(a==='download-prompt') downloadPromptCapsule();
     if(a==='import-json') importJson(document.getElementById('jsonImport').value);
+  });
+  document.addEventListener('change', (e)=>{
+    const control = e.target.closest?.('[data-prompt-view]');
+    if(!control || !PROMPT_CAPSULE_VIEWS.includes(control.value)) return;
+    promptCapsuleView = control.value;
+    renderExports();
+    announcePrompt((promptCapsuleView === 'plain' ? 'Plain' : 'Skill-assisted') + ' Markdown view selected.');
   });
   document.addEventListener('input', (e)=>{
     clearPendingRemoval();
@@ -1072,12 +1598,18 @@
   function heartCandidate(text){
     const parsed = JSON.parse(text);
     if(!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('The candidate needs to be a JSON object.');
+    const extensions = {root:extensionFields(parsed,ROOT_EXPORT_KEYS)};
     const rows = parsed.heart_chart?.rows || parsed.rows;
     if(!Array.isArray(rows)) throw new Error('heart_chart.rows needs to be an array.');
     const candidate = structuredClone(data);
     if(parsed.artifact_identity){
       if(typeof parsed.artifact_identity !== 'object' || Array.isArray(parsed.artifact_identity) || typeof parsed.artifact_identity.id !== 'string' || !parsed.artifact_identity.id.trim()) throw new Error('artifact_identity needs a stable id.');
-      candidate.artifact_identity = structuredClone(parsed.artifact_identity);
+      candidate.artifact_identity = {...candidate.artifact_identity,...structuredClone(parsed.artifact_identity)};
+    }
+    if(parsed.quick_use !== undefined){
+      if(!parsed.quick_use || typeof parsed.quick_use !== 'object' || Array.isArray(parsed.quick_use)) throw new Error('quick_use needs to be an object.');
+      for(const field of ['use_when','restores','good_next_question']) if(typeof parsed.quick_use[field] !== 'string') throw new Error(`quick_use needs text for ${field}.`);
+      candidate.quick_use = {...candidate.quick_use,...structuredClone(parsed.quick_use)};
     }
     const ids = new Set();
     candidate.rows = rows.map(({visible_in_active_view,display_order,visible_order,route_family,...row}, index)=>{
@@ -1103,14 +1635,39 @@
       if(new Set(view.hidden_row_ids).size !== view.hidden_row_ids.length || view.hidden_row_ids.some(id => !rowIds.has(id))) throw new Error(`Focus view ${view.id} needs unique current row ids in hidden_row_ids.`);
       if(view.selected_row_id && !rowIds.has(view.selected_row_id)) throw new Error(`Focus view ${view.id} needs a current selected_row_id.`);
     }
+    if(parsed.semantic_locality !== undefined){
+      const semantic = parsed.semantic_locality;
+      if(!semantic || typeof semantic !== 'object' || Array.isArray(semantic)) throw new Error('semantic_locality needs to be an object.');
+      if(!Array.isArray(semantic.preferred_phrasing) || semantic.preferred_phrasing.some(value=>typeof value !== 'string')) throw new Error('semantic_locality.preferred_phrasing needs to be an array of strings.');
+      if(!Array.isArray(semantic.replacement_state_guidance) || semantic.replacement_state_guidance.some(value=>!value || typeof value !== 'object' || Array.isArray(value) || typeof value.common_phrase !== 'string' || typeof value.stronger_phrase !== 'string')) throw new Error('semantic_locality.replacement_state_guidance needs common_phrase and stronger_phrase text.');
+      candidate.semantic_locality = {...candidate.semantic_locality,...structuredClone(semantic)};
+    }
+    if(parsed.recovery_calibration !== undefined){
+      const recovery = parsed.recovery_calibration;
+      if(!recovery || typeof recovery !== 'object' || Array.isArray(recovery)) throw new Error('recovery_calibration needs to be an object.');
+      for(const field of ['strain_cues','named_failure_geometries']) if(!Array.isArray(recovery[field]) || recovery[field].some(value=>typeof value !== 'string')) throw new Error(`recovery_calibration.${field} needs to be an array of strings.`);
+      for(const field of ['stabilizing_read','restored_state']) if(typeof recovery[field] !== 'string') throw new Error(`recovery_calibration needs text for ${field}.`);
+      candidate.recovery_calibration = {...candidate.recovery_calibration,...structuredClone(recovery)};
+    }
     normalizeData(candidate);
-    return candidate;
+    return {candidate,extensions};
   }
   function importJson(text){
     const message = document.getElementById('importMessage');
     try{
-      data = heartCandidate(text);
-      render();
+      const prepared = heartCandidate(text);
+      const previousData = data;
+      const previousExtensions = importExtensions;
+      try{
+        data = prepared.candidate;
+        importExtensions = prepared.extensions;
+        render();
+      }catch(error){
+        data = previousData;
+        importExtensions = previousExtensions;
+        render();
+        throw error;
+      }
       message.textContent = 'HEART Chart imported. Row identity, order, focus state, signals, metrics, and routes are available.';
     } catch(err){ message.textContent = 'The current HEART Chart remains available. Supply a complete HEART Chart export to continue: ' + err.message; }
   }
@@ -1119,7 +1676,24 @@
     try { await navigator.clipboard.writeText(text); message.textContent = msg; }
     catch(e){ message.textContent = 'Copy was not available in this browser. The text remains visible for manual copy.'; }
   }
+  window.heartChart = Object.freeze({
+    version: PROMPT_CAPSULE_SOURCE_VERSION,
+    stateContract: PROMPT_CAPSULE_STATE_CONTRACT,
+    contract: PROMPT_CAPSULE_CONTRACT,
+    views: PROMPT_CAPSULE_VIEWS,
+    skillRevision: PROMPT_CAPSULE_SKILL_REVISION,
+    skills: PROMPT_CAPSULE_SKILLS,
+    relatedLoops: PROMPT_CAPSULE_RELATED_LOOPS,
+    getState: ()=>deepClone(toExport()),
+    promptCapsuleStateProjection: ()=>deepClone(promptCapsuleStateProjection()),
+    promptCapsuleFingerprint,
+    promptCapsule: ()=>promptCapsuleMarkdown('plain'),
+    promptCapsuleMarkdown: (view=promptCapsuleView)=>promptCapsuleMarkdown(view),
+    getPromptCapsuleView: ()=>promptCapsuleView
+  });
   render();
+  document.getElementById('promptViewControl').hidden = false;
+  document.querySelector('[data-prompt-actions]').hidden = false;
 })();
 </script>
   <footer class="artifact-attribution">

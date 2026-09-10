@@ -5,7 +5,7 @@
   <meta name="author" content="Vikrant Varun Kudesia">
   <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Upstream Revision Loop · Chimeric Prototype v0.1.3</title>
+  <title>Upstream Revision Loop · Chimeric Prototype v0.1.4</title>
   <style>
     :root {
       --bg: #f7f4ee;
@@ -169,6 +169,29 @@
     .legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 0; }
     .small-select { width: 100%; }
     .source-note { font-size: 14px; color: #51483d; }
+    .prompt-capsule-panel { min-width: 0; }
+    .prompt-capsule-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .prompt-capsule-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .prompt-capsule-actions button,
+    .prompt-view-option,
+    .related-loops summary,
+    .related-loops a { min-height: 44px; }
+    .prompt-view-control { border: 0; margin: 12px 0; padding: 0; }
+    .prompt-view-control legend { font-weight: 780; margin-bottom: 6px; }
+    .prompt-view-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .prompt-view-option { display: inline-flex; align-items: center; gap: 8px; margin: 0; padding: 6px 10px; border: 1px solid var(--line-strong); border-radius: 12px; background: var(--soft); color: var(--ink); }
+    .prompt-view-option input { inline-size: 1.1rem; block-size: 1.1rem; }
+    .prompt-status { min-height: 1.4em; margin: 8px 0; color: var(--accent); font-weight: 700; }
+    .related-loops { margin: 12px 0; padding: 4px 12px 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--soft); }
+    .related-loops summary { display: flex; align-items: center; cursor: pointer; font-weight: 780; }
+    .related-loops a { display: inline-flex; align-items: center; }
+    .related-loops li + li { margin-top: 10px; }
+    .related-loops p { margin: 3px 0 0; }
+    .prompt-capsule-actions button:focus-visible,
+    .prompt-view-option:focus-within,
+    .related-loops summary:focus-visible,
+    .related-loops a:focus-visible { outline: 3px solid rgba(122, 100, 61, .5); outline-offset: 3px; }
+    [hidden] { display: none !important; }
 
   .artifact-attribution {
     position: static;
@@ -202,7 +225,7 @@
   <div class="page">
     <header class="hero">
       <div>
-        <div class="eyebrow">Core Architecture · Chimeric Prototype v0.1.3</div>
+        <div class="eyebrow">Core Architecture · Chimeric Prototype v0.1.4</div>
         <h1>Upstream Revision Loop</h1>
         <p class="subtitle">Revisiting Solution Artifacts</p>
       </div>
@@ -268,7 +291,6 @@
           <div class="toolbar">
             <button id="copyJsonBtn">Copy JSON</button>
             <button id="copyJsonLdBtn">Copy JSON-LD</button>
-            <button id="copyPromptBtn">Copy AI prompt</button>
           </div>
           <div class="field-grid">
             <div>
@@ -289,10 +311,174 @@
           </div>
         </section>
 
-        <section class="panel" aria-labelledby="prompt-heading">
-          <h2 id="prompt-heading">AI Collaboration Prompt Capsule</h2>
-          <p class="note">Rendered visibly for direct manual copy. The copy button is a convenience, not the only access path.</p>
-          <pre id="aiPromptOut"></pre>
+        <section class="panel prompt-capsule-panel" aria-labelledby="prompt-heading">
+          <div class="prompt-capsule-heading">
+            <div>
+              <h2 id="prompt-heading">Prompt Capsule · Markdown</h2>
+              <p class="note">This derived handoff follows the complete accepted revision state. The revision artifact and its JSON export remain the state authority.</p>
+            </div>
+            <div class="prompt-capsule-actions" data-prompt-actions hidden aria-label="Prompt Capsule actions">
+              <button type="button" id="copyPromptBtn">Copy Markdown</button>
+              <button type="button" id="downloadPromptBtn">Download Markdown</button>
+            </div>
+          </div>
+          <details class="related-loops" data-prompt-related-loops>
+            <summary>Related loops</summary>
+            <p class="tiny">These public collaboration loops fit when the receiving work meets the stated condition.</p>
+            <ul>
+              <li data-related-loop-id="repository-reentry">
+                <a href="https://schemas.radiantnull.com/collaboration/#repository-reentry" target="_blank" rel="noopener noreferrer">Re-enter, make one bounded change, and return it clearly</a>
+                <p><strong>Fit condition:</strong> Use when accepted revision evidence enters resumed repository work and the return needs a clear stopping and re-entry point.</p>
+              </li>
+              <li data-related-loop-id="public-release">
+                <a href="https://schemas.radiantnull.com/collaboration/#public-release" target="_blank" rel="noopener noreferrer">Publish a repeatable, byte-comparable artifact through a named destination</a>
+                <p><strong>Fit condition:</strong> Use after people accept a revised artifact for public delivery and its declared files and bytes need a named receiver.</p>
+              </li>
+            </ul>
+          </details>
+          <fieldset class="prompt-view-control" data-prompt-view-control hidden>
+            <legend>Markdown view</legend>
+            <div class="prompt-view-options">
+              <label class="prompt-view-option"><input type="radio" name="prompt-capsule-view" value="plain" data-prompt-view checked /> Plain</label>
+              <label class="prompt-view-option"><input type="radio" name="prompt-capsule-view" value="skill-assisted" data-prompt-view /> Skill-assisted</label>
+            </div>
+          </fieldset>
+          <p class="note" id="promptViewDescription">Plain Markdown carries the complete revision context without asking the receiver to load a repository skill.</p>
+          <p class="prompt-status" id="promptCapsuleStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+          <noscript><p class="note">The complete default plain Markdown remains available below. Interactive editing, view selection, copying, and downloading become available when JavaScript runs.</p></noscript>
+          <pre id="aiPromptOut" data-prompt-view-active="plain" aria-labelledby="prompt-heading" aria-describedby="promptViewDescription" tabindex="0"># Prompt Capsule: Upstream Revision Loop
+
+- Contract: `prompt-capsule/0.1.0`
+- Capsule: `upstream-revision-loop/current-revision-state`
+- Source: `upstream-revision-loop@0.1.4`
+- State: `upstream-revision-loop-state.v0.1` · revision `0.1.4`
+- Fingerprint: `fnv1a32-utf8:e062632f`
+- View: `plain`
+
+## Purpose and target
+
+Use this Upstream Revision Loop to carry downstream evidence into the smallest useful revision of a prior artifact.
+
+- Artifact ID: ca-artifact-upstream-revision-loop-genomics-001
+- Subtitle: Revisiting Solution Artifacts
+- Family: Recovery Routing and Revision
+- Placement: Recovery Routing Atlas participant → Implementation Architecture bridge
+- Primary move: upstream correction from implementation evidence
+- Source bands: author\_adapted\_method; recovery\_routing\_protocol; implementation\_solution\_bridge
+
+## Relevant context and inputs
+
+- Use when: downstream evidence improves an earlier Solution or Bridge artifact
+- Restored condition: evidence-responsive continuity between implementation learning and solution framing
+- Good next question: Which prior artifact does this evidence improve?
+- Operating principle: Revise the smallest useful field while preserving the previous read as provenance.
+- Revision summary: 4 accepted entries; 4 visible and 0 hidden in the current focus arrangement.
+
+## Working state
+
+Every accepted revision appears below in current display order. A hidden label narrows the visual focus while the entry remains part of this handoff.
+
+### AI-generated summary panel card — revision-ai-summary-review-route
+
+- Order: display 1; canonical 1; visibility visible.
+- Evidence source: Specification-by-Example
+- Evidence observation: Unsupported AI summary claims require a visible review route.
+- Prior artifact: First Responsible Version Matrix
+- Previous read: AI-generated summary panel is a support condition on the line.
+- Revised read: AI-generated summary panel remains on the line until unsupported-claim routing and source-boundary behavior are specified.
+- Revision reason: Behavior examples show source-boundary and review-route responsibilities are needed before the card can move above the line.
+- Status: needs-to-surface (needs\_to\_surface).
+- Route: Specification-by-Example (Participatory Elicitation and Specification).
+- Route reason: The unresolved behavior needs observable examples before threshold placement stabilizes.
+- AI context update: Treat unsupported-claim routing as open behavior context before proposing implementation polish.
+
+### AI / agent participation and data/evidence rows during human variant review — revision-summary-feature-service-layers
+
+- Order: display 2; canonical 2; visibility visible.
+- Evidence source: Software Architecture Views
+- Evidence observation: The summary feature touches retrieval sources, claim-source maps, audit logs, and review history.
+- Prior artifact: Service-design Blueprint
+- Previous read: AI suggests evidence summary during review.
+- Revised read: AI suggests source-linked claims during review, with claim-source map, unsupported-claim routing, audit trace, and human confirmation boundary.
+- Revision reason: Architecture views reveal attachments that should be represented as service layers.
+- Status: supersedes previous (supersedes\_previous).
+- Route: AI Systems Service Blueprint (Shared Surfaces and Topology).
+- Route reason: Runtime, knowledge, evaluation, and review-boundary support layers need specialized mapping.
+- AI context update: When generating service or AI-system artifacts, include claim-source map, audit trace, and human confirmation boundary.
+
+### AI boundary clarity dimension — revision-ai-boundary-clarity-dimension
+
+- Order: display 3; canonical 3; visibility visible.
+- Evidence source: Plus / Delta + HEART Chart
+- Evidence observation: Reviewer confidence increases when source boundaries are claim-specific; summary-wide confidence is insufficient.
+- Prior artifact: Strategy Canvas
+- Previous read: AI boundary clarity means reviewers can distinguish generated summaries from accepted evidence.
+- Revised read: AI boundary clarity means reviewers can distinguish claim-level generated text, source support, unsupported claims, and human-confirmed interpretation.
+- Revision reason: Qualitative review and signal calibration show that claim-level clarity is the meaningful support surface.
+- Status: stable for now (stable\_for\_now).
+- Route: HEART Chart (Measurement, Reflection, and Judgment).
+- Route reason: The revised dimension needs signal-to-metric calibration around claim-level comprehension and confidence.
+- AI context update: Use claim-level AI boundary clarity as current context for future Strategy Canvas, HEART, and pattern work.
+
+### Discoverables — revision-source-authority-discoverables
+
+- Order: display 4; canonical 4; visibility visible.
+- Evidence source: AI Systems Service Blueprint
+- Evidence observation: Memory staleness and retrieval authority affect which sources can be used in generated summaries.
+- Prior artifact: PODA
+- Previous read: Discover AI-generated summary support surfaces.
+- Revised read: Discover source authority, retrieval freshness, memory authority, and claim-source boundary surfaces for AI-generated summaries.
+- Revision reason: AI-system topology reveals knowledge-layer surfaces that should become inspectable earlier.
+- Status: ready to route (ready\_to\_route).
+- Route: Practitioner Judgment Probes (Measurement, Reflection, and Judgment).
+- Route reason: Practitioner probes can surface technical-veracity and AI-instruction questions around memory and retrieval authority.
+- AI context update: Include source authority, retrieval freshness, and memory authority as open discoverables in AI collaboration prompts.
+
+## Boundaries and human-held decisions
+
+- People decide whether evidence supports a revised read, which prior artifact receives it, and when a route is ready to hand off.
+- The previous read remains visible as provenance. The revised read states the current proposal or accepted interpretation supported by named evidence.
+- Display order and visibility shape the current focus arrangement. Hidden entries remain represented in the capsule and complete JSON export.
+- AI context updates guide a collaborator and remain proposals for human review; they carry neither acceptance nor publication authority.
+
+## Requested return
+
+Return a Markdown revision handoff grouped by stable revision ID. For each entry, keep the evidence source and observation, prior artifact and target, previous and revised reads, revision reason, status, route, route reason, and AI context update together.
+
+When options use probabilities, name the outcome or condition each probability describes before assigning a value.
+
+State what the evidence establishes, name any open condition and its receiver, then end with the smallest bounded next action.
+
+## Related loops
+
+These public collaboration loops fit only when the receiving work meets the stated condition:
+
+- `repository-reentry` — [Re-enter, make one bounded change, and return it clearly](https://schemas.radiantnull.com/collaboration/#repository-reentry)
+  - Fit condition: Use when accepted revision evidence enters resumed repository work and the return needs a clear stopping and re-entry point.
+- `public-release` — [Publish a repeatable, byte-comparable artifact through a named destination](https://schemas.radiantnull.com/collaboration/#public-release)
+  - Fit condition: Use after people accept a revised artifact for public delivery and its declared files and bytes need a named receiver.
+
+## Evidence and recovery
+
+### Preferred questions
+
+- Which prior artifact does this evidence improve?
+- What is the smallest useful revision?
+- What should remain preserved from the earlier read?
+- What should the AI collaborator treat as current context now?
+
+### Replacement-state guidance
+
+- Use: We can re-enter the prior artifact with better evidence. · Context cue: We have to go backward.
+- Use: The premise has been improved by downstream evidence. · Context cue: The premise was wrong.
+- Use: We can preserve the prior read and update the field that changed. · Context cue: We need to start over.
+
+- Recovery strain cues: implementation evidence has no clear artifact route; team treats upstream revision as a setback; metrics improve while lived workflow stays strained; AI-system topology reveals a missing review boundary
+- Stabilizing read: The collaboration needs evidence-responsive continuity.
+- Restored state: Revision becomes part of the architecture.
+- Named failure geometries: Upstream Revision Hesitancy; Semantic Field Drift; Service-Layer Invisibility; Attachment Obscurity; Signal / Metric Collapse
+- A compatible import becomes the accepted working state and regenerates this capsule. A malformed or semantically incompatible candidate leaves the current state and capsule available, names the mismatch, and can return after revision.
+</pre>
         </section>
 
         <section class="panel" aria-labelledby="source-heading">
@@ -354,6 +540,52 @@
 
   <script id="jsonld-script" type="application/ld+json"></script>
   <script>
+    const PROMPT_CAPSULE_CONTRACT = 'prompt-capsule/0.1.0';
+    const PROMPT_CAPSULE_STATE_CONTRACT = 'upstream-revision-loop-state.v0.1';
+    const PROMPT_CAPSULE_ID = 'upstream-revision-loop/current-revision-state';
+    const PROMPT_CAPSULE_SOURCE_ID = 'upstream-revision-loop';
+    const PROMPT_CAPSULE_SOURCE_VERSION = '0.1.4';
+    const PROMPT_CAPSULE_VIEWS = Object.freeze(['plain', 'skill-assisted']);
+    const PROMPT_CAPSULE_SKILL_REVISION = 'efb94fcf70a80630d8edd289697341699b966f00';
+    const PROMPT_CAPSULE_SKILLS = Object.freeze([
+      Object.freeze({
+        name: 'Repository re-entry',
+        publicUrl: 'https://schemas.radiantnull.com/skills/repository-reentry/',
+        path: '.agents/skills/repository-reentry/SKILL.md',
+        sha256: '211cdbd293c260e95e62d3bc7ed5cb4d6d9ca3debd560a28a74b52364a1bfa90',
+        purpose: 'Reconstruct current source and work state before carrying one accepted revision into a bounded repository change.'
+      }),
+      Object.freeze({
+        name: 'Source authority mapping',
+        publicUrl: 'https://schemas.radiantnull.com/skills/source-authority-mapping/',
+        path: '.agents/skills/source-authority-mapping/SKILL.md',
+        sha256: '706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5',
+        purpose: 'Keep the evidence source, prior artifact, revised read, projection, and receiving route distinct.'
+      }),
+      Object.freeze({
+        name: 'Stateful artifact behavior contracts',
+        publicUrl: 'https://schemas.radiantnull.com/skills/stateful-artifact-behavior-contracts/',
+        path: '.agents/skills/stateful-artifact-behavior-contracts/SKILL.md',
+        sha256: '596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a',
+        purpose: 'Keep accepted revision state, Markdown views, exchange, and recovery behavior in agreement.'
+      })
+    ]);
+    const PROMPT_CAPSULE_RELATED_LOOPS = Object.freeze([
+      Object.freeze({
+        id: 'repository-reentry',
+        name: 'Re-enter, make one bounded change, and return it clearly',
+        publicUrl: 'https://schemas.radiantnull.com/collaboration/#repository-reentry',
+        fit: 'Use when accepted revision evidence enters resumed repository work and the return needs a clear stopping and re-entry point.'
+      }),
+      Object.freeze({
+        id: 'public-release',
+        name: 'Publish a repeatable, byte-comparable artifact through a named destination',
+        publicUrl: 'https://schemas.radiantnull.com/collaboration/#public-release',
+        fit: 'Use after people accept a revised artifact for public delivery and its declared files and bytes need a named receiver.'
+      })
+    ]);
+    let promptCapsuleView = 'plain';
+
     const ROUTES = [
       { family: 'Orientation and Tracing', labels: ['PODA','Alignment Worksheet','Impact Map','Context Tree'] },
       { family: 'Comparison and Threshold', labels: ['Strategy Canvas','First Responsible Version Matrix'] },
@@ -380,7 +612,7 @@
         id: 'ca-artifact-upstream-revision-loop-genomics-001',
         display_name: 'Upstream Revision Loop',
         subtitle: 'Revisiting Solution Artifacts',
-        version: '0.1.3',
+        version: '0.1.4',
         family: 'Recovery Routing and Revision',
         placement: 'Recovery Routing Atlas participant → Implementation Architecture bridge',
         primary_cognitive_move: 'upstream correction from implementation evidence',
@@ -712,13 +944,300 @@
       return lines.join('\n');
     }
 
+    function clone(value) {
+      if (typeof structuredClone === 'function') return structuredClone(value);
+      return JSON.parse(JSON.stringify(value));
+    }
+
+    function markdownInline(value, fallback = '') {
+      const source = typeof value === 'string' ? value : fallback;
+      return source
+        .replace(/\r\n?/g, '\n')
+        .replace(/\s*\n\s*/g, ' ')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\\/g, '\\\\')
+        .replace(/([!#@*_\[\]|~])/g, '\\$1')
+        .replace(/\x60/g, () => '\\' + String.fromCharCode(96))
+        .replace(/\b((?:https?|ftp):)(?=\/\/)/gi, protocol => protocol.slice(0, -1) + '\\:')
+        .replace(/\bwww\./gi, prefix => prefix.slice(0, -1) + '\\.');
+    }
+
+    function markdownCode(value) {
+      const source = String(value ?? '').replace(/\r\n?/g, '\n').replace(/\s*\n\s*/g, ' ');
+      const runs = source.match(/\x60+/g) || [];
+      const fence = String.fromCharCode(96).repeat(Math.max(0, ...runs.map(run => run.length)) + 1);
+      const padded = /^\s|\s$|^\x60|\x60$/.test(source) ? ' ' + source + ' ' : source;
+      return fence + padded + fence;
+    }
+
+    function canonicalValue(value) {
+      if (Array.isArray(value)) return value.map(canonicalValue);
+      if (value && typeof value === 'object') {
+        return Object.fromEntries(Object.keys(value).sort().map(key => [key, canonicalValue(value[key])]));
+      }
+      return value;
+    }
+
+    function fnv1a32Utf8(value) {
+      let hash = 0x811c9dc5;
+      const update = byte => { hash ^= byte; hash = Math.imul(hash, 0x01000193) >>> 0; };
+      for (const symbol of String(value)) {
+        const point = symbol.codePointAt(0);
+        if (point <= 0x7f) update(point);
+        else if (point <= 0x7ff) {
+          update(0xc0 | (point >>> 6));
+          update(0x80 | (point & 0x3f));
+        } else if (point <= 0xffff) {
+          update(0xe0 | (point >>> 12));
+          update(0x80 | ((point >>> 6) & 0x3f));
+          update(0x80 | (point & 0x3f));
+        } else {
+          update(0xf0 | (point >>> 18));
+          update(0x80 | ((point >>> 12) & 0x3f));
+          update(0x80 | ((point >>> 6) & 0x3f));
+          update(0x80 | (point & 0x3f));
+        }
+      }
+      return 'fnv1a32-utf8:' + hash.toString(16).padStart(8, '0');
+    }
+
+    function textList(values) {
+      return Array.isArray(values)
+        ? values.filter(value => typeof value === 'string' && value.trim()).map(value => markdownInline(value))
+        : [];
+    }
+
+    function quickUseState() {
+      return {
+        use_when: 'downstream evidence improves an earlier Solution or Bridge artifact',
+        restores: 'evidence-responsive continuity between implementation learning and solution framing',
+        good_next_question: 'Which prior artifact does this evidence improve?',
+        operating_principle: 'Revise the smallest useful field while preserving the previous read as provenance.'
+      };
+    }
+
+    function recoveryCalibration() {
+      return {
+        strain_cues: ['implementation evidence has no clear artifact route','team treats upstream revision as a setback','metrics improve while lived workflow stays strained','AI-system topology reveals a missing review boundary'],
+        stabilizing_read: 'The collaboration needs evidence-responsive continuity.',
+        restored_state: 'Revision becomes part of the architecture.',
+        named_failure_geometries: ['Upstream Revision Hesitancy','Semantic Field Drift','Service-Layer Invisibility','Attachment Obscurity','Signal / Metric Collapse']
+      };
+    }
+
+    function promptCapsuleStateProjection() {
+      normalizeView();
+      const view = activeView();
+      const identity = state.artifact_identity || {};
+      const semantic = state.semantic_locality || {};
+      const recovery = recoveryCalibration();
+      const quick = quickUseState();
+      const guidance = Array.isArray(semantic.replacement_state_guidance)
+        ? semantic.replacement_state_guidance
+          .filter(item => item && typeof item === 'object')
+          .map(item => ({
+            commonPhrase: markdownInline(item.common_phrase, 'Open context cue.'),
+            strongerPhrase: markdownInline(item.stronger_phrase, 'State the improved read directly.')
+          }))
+        : [];
+      return {
+        contract: PROMPT_CAPSULE_CONTRACT,
+        capsule: PROMPT_CAPSULE_ID,
+        source: PROMPT_CAPSULE_SOURCE_ID + '@' + PROMPT_CAPSULE_SOURCE_VERSION,
+        stateContract: PROMPT_CAPSULE_STATE_CONTRACT,
+        artifact: {
+          id: markdownInline(identity.id, PROMPT_CAPSULE_SOURCE_ID),
+          displayName: markdownInline(identity.display_name, 'Upstream Revision Loop'),
+          subtitle: markdownInline(identity.subtitle, 'Revisiting Solution Artifacts'),
+          revision: markdownInline(String(identity.version ?? PROMPT_CAPSULE_SOURCE_VERSION)),
+          family: markdownInline(identity.family, 'Recovery Routing and Revision'),
+          placement: markdownInline(identity.placement, 'Recovery routing'),
+          primaryMove: markdownInline(identity.primary_cognitive_move, 'upstream correction from implementation evidence'),
+          sourceBand: textList(identity.source_band)
+        },
+        quickUse: {
+          useWhen: markdownInline(quick.use_when),
+          restores: markdownInline(quick.restores),
+          goodNextQuestion: markdownInline(quick.good_next_question),
+          operatingPrinciple: markdownInline(quick.operating_principle)
+        },
+        revisions: orderedRevisions().map((revision, index) => ({
+          id: markdownInline(revision.id, 'revision-' + (index + 1)),
+          canonicalOrder: Number.isFinite(Number(revision.canonical_order)) ? Number(revision.canonical_order) : index + 1,
+          displayOrder: index + 1,
+          visibility: view.hidden_revision_ids.includes(revision.id) ? 'hidden' : 'visible',
+          evidenceSource: markdownInline(revision.evidence_source, 'Open evidence source.'),
+          evidenceObservation: markdownInline(revision.evidence_observation, 'Open evidence observation.'),
+          priorArtifact: markdownInline(revision.prior_artifact, 'Open prior artifact.'),
+          revisionTarget: markdownInline(revision.revision_target, 'Open revision target.'),
+          previousRead: markdownInline(revision.previous_read, 'Open previous read.'),
+          revisedRead: markdownInline(revision.revised_read, 'Open revised read.'),
+          revisionReason: markdownInline(revision.revision_reason, 'Open revision reason.'),
+          status: markdownInline(revision.status, 'assumed'),
+          statusLabel: markdownInline(STATUS_LABEL[revision.status] || revision.status, 'assumed'),
+          route: markdownInline(revision.route, 'Open for the next review.'),
+          routeFamily: markdownInline(routeFamily(revision.route)),
+          routeReason: markdownInline(revision.route_reason, 'Open for the next review.'),
+          aiContextUpdate: markdownInline(revision.ai_context_update, 'Open for named review.')
+        })),
+        semanticLocality: {
+          preferredPhrasing: textList(semantic.preferred_phrasing),
+          replacementStateGuidance: guidance
+        },
+        recovery: {
+          strainCues: textList(recovery.strain_cues),
+          stabilizingRead: markdownInline(recovery.stabilizing_read),
+          restoredState: markdownInline(recovery.restored_state),
+          namedFailureGeometries: textList(recovery.named_failure_geometries)
+        }
+      };
+    }
+
+    function promptCapsuleFingerprint() {
+      return fnv1a32Utf8(JSON.stringify(canonicalValue(promptCapsuleStateProjection())));
+    }
+
+    function joinedList(values, fallback = 'Open for the next review.') {
+      return Array.isArray(values) && values.length ? values.join('; ') : fallback;
+    }
+
+    function promptCapsuleMarkdown(view = 'plain') {
+      const selectedView = PROMPT_CAPSULE_VIEWS.includes(view) ? view : 'plain';
+      const projection = promptCapsuleStateProjection();
+      const revisions = projection.revisions;
+      const visibleCount = revisions.filter(revision => revision.visibility === 'visible').length;
+      const hiddenCount = revisions.length - visibleCount;
+      const revisionSections = revisions.map(revision => [
+        '### ' + revision.revisionTarget + ' — ' + revision.id,
+        '',
+        '- Order: display ' + revision.displayOrder + '; canonical ' + revision.canonicalOrder + '; visibility ' + revision.visibility + '.',
+        '- Evidence source: ' + revision.evidenceSource,
+        '- Evidence observation: ' + revision.evidenceObservation,
+        '- Prior artifact: ' + revision.priorArtifact,
+        '- Previous read: ' + revision.previousRead,
+        '- Revised read: ' + revision.revisedRead,
+        '- Revision reason: ' + revision.revisionReason,
+        '- Status: ' + revision.statusLabel + ' (' + revision.status + ').',
+        '- Route: ' + revision.route + ' (' + revision.routeFamily + ').',
+        '- Route reason: ' + revision.routeReason,
+        '- AI context update: ' + revision.aiContextUpdate
+      ].join('\n')).join('\n\n');
+      const preferred = projection.semanticLocality.preferredPhrasing.length
+        ? projection.semanticLocality.preferredPhrasing.map(value => '- ' + value)
+        : ['- Which field needs the next evidence-responsive revision?'];
+      const replacementGuidance = projection.semanticLocality.replacementStateGuidance.length
+        ? projection.semanticLocality.replacementStateGuidance.map(item => '- Use: ' + item.strongerPhrase + ' · Context cue: ' + item.commonPhrase)
+        : ['- Use: State the improved read directly. · Context cue: The prior read needs revision.'];
+      const sections = [
+        '# Prompt Capsule: ' + projection.artifact.displayName,
+        '',
+        '- Contract: ' + markdownCode(projection.contract),
+        '- Capsule: ' + markdownCode(projection.capsule),
+        '- Source: ' + markdownCode(projection.source),
+        '- State: ' + markdownCode(projection.stateContract) + ' · revision ' + markdownCode(projection.artifact.revision),
+        '- Fingerprint: ' + markdownCode(promptCapsuleFingerprint()),
+        '- View: ' + markdownCode(selectedView),
+        '',
+        '## Purpose and target',
+        '',
+        'Use this ' + projection.artifact.displayName + ' to carry downstream evidence into the smallest useful revision of a prior artifact.',
+        '',
+        '- Artifact ID: ' + projection.artifact.id,
+        '- Subtitle: ' + projection.artifact.subtitle,
+        '- Family: ' + projection.artifact.family,
+        '- Placement: ' + projection.artifact.placement,
+        '- Primary move: ' + projection.artifact.primaryMove,
+        '- Source bands: ' + joinedList(projection.artifact.sourceBand),
+        '',
+        '## Relevant context and inputs',
+        '',
+        '- Use when: ' + projection.quickUse.useWhen,
+        '- Restored condition: ' + projection.quickUse.restores,
+        '- Good next question: ' + projection.quickUse.goodNextQuestion,
+        '- Operating principle: ' + projection.quickUse.operatingPrinciple,
+        '- Revision summary: ' + revisions.length + ' accepted entries; ' + visibleCount + ' visible and ' + hiddenCount + ' hidden in the current focus arrangement.',
+        '',
+        '## Working state',
+        '',
+        'Every accepted revision appears below in current display order. A hidden label narrows the visual focus while the entry remains part of this handoff.',
+        '',
+        revisionSections || 'The next accepted revision remains open for a named evidence source and human receiver.',
+        '',
+        '## Boundaries and human-held decisions',
+        '',
+        '- People decide whether evidence supports a revised read, which prior artifact receives it, and when a route is ready to hand off.',
+        '- The previous read remains visible as provenance. The revised read states the current proposal or accepted interpretation supported by named evidence.',
+        '- Display order and visibility shape the current focus arrangement. Hidden entries remain represented in the capsule and complete JSON export.',
+        '- AI context updates guide a collaborator and remain proposals for human review; they carry neither acceptance nor publication authority.',
+        '',
+        '## Requested return',
+        '',
+        'Return a Markdown revision handoff grouped by stable revision ID. For each entry, keep the evidence source and observation, prior artifact and target, previous and revised reads, revision reason, status, route, route reason, and AI context update together.',
+        '',
+        'When options use probabilities, name the outcome or condition each probability describes before assigning a value.',
+        '',
+        'State what the evidence establishes, name any open condition and its receiver, then end with the smallest bounded next action.',
+        '',
+        '## Related loops',
+        '',
+        'These public collaboration loops fit only when the receiving work meets the stated condition:',
+        '',
+        ...PROMPT_CAPSULE_RELATED_LOOPS.map(loop => [
+          '- ' + markdownCode(loop.id) + ' — [' + loop.name + '](' + loop.publicUrl + ')',
+          '  - Fit condition: ' + loop.fit
+        ].join('\n')),
+        '',
+        '## Evidence and recovery',
+        '',
+        '### Preferred questions',
+        '',
+        ...preferred,
+        '',
+        '### Replacement-state guidance',
+        '',
+        ...replacementGuidance,
+        '',
+        '- Recovery strain cues: ' + joinedList(projection.recovery.strainCues),
+        '- Stabilizing read: ' + projection.recovery.stabilizingRead,
+        '- Restored state: ' + projection.recovery.restoredState,
+        '- Named failure geometries: ' + joinedList(projection.recovery.namedFailureGeometries),
+        '- A compatible import becomes the accepted working state and regenerates this capsule. A malformed or semantically incompatible candidate leaves the current state and capsule available, names the mismatch, and can return after revision.'
+      ];
+      if (selectedView === 'skill-assisted') {
+        sections.push(
+          '',
+          '## Skill assistance',
+          '',
+          'These public repository skills may shape the return while the Upstream Revision Loop remains the state authority:',
+          '',
+          ...PROMPT_CAPSULE_SKILLS.map(skill => [
+            '- [' + skill.name + '](' + skill.publicUrl + ') — ' + skill.purpose,
+            '  - Repository path: ' + markdownCode(skill.path),
+            '  - Source revision: ' + markdownCode(PROMPT_CAPSULE_SKILL_REVISION),
+            '  - Source SHA-256: ' + markdownCode(skill.sha256)
+          ].join('\n'))
+        );
+      }
+      return sections.join('\n') + '\n';
+    }
+
     function renderExports() {
       const json = JSON.stringify(exportData(), null, 2);
       const jsonld = JSON.stringify(exportJsonLd(), null, 2);
       document.getElementById('jsonOut').textContent = json;
       document.getElementById('jsonLdOut').textContent = jsonld;
       document.getElementById('jsonld-script').textContent = jsonld;
-      document.getElementById('aiPromptOut').textContent = buildPrompt();
+      const prompt = document.getElementById('aiPromptOut');
+      prompt.textContent = promptCapsuleMarkdown(promptCapsuleView);
+      prompt.dataset.promptViewActive = promptCapsuleView;
+      document.querySelectorAll('[data-prompt-view]').forEach(control => {
+        control.checked = control.value === promptCapsuleView;
+      });
+      document.getElementById('promptViewDescription').textContent = promptCapsuleView === 'skill-assisted'
+        ? 'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented revision state and fingerprint remain the same.'
+        : 'Plain Markdown carries the complete revision context without asking the receiver to load a repository skill.';
     }
 
     function renderAll() { normalizeView(); renderEditor(); renderSVG(); renderTable(); renderInspector(); renderIdentityRegistry(); renderExports(); document.getElementById('interactionNotice').textContent=interactionMessage; }
@@ -773,6 +1292,50 @@
       setTimeout(()=>{ adding = false; }, 250);
     }
 
+    function announcePrompt(message) {
+      const status = document.getElementById('promptCapsuleStatus');
+      status.textContent = '';
+      requestAnimationFrame(() => { status.textContent = message; });
+    }
+
+    async function copyPromptCapsule() {
+      const markdown = promptCapsuleMarkdown(promptCapsuleView);
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(markdown);
+        } else {
+          const fallback = document.createElement('textarea');
+          fallback.setAttribute('aria-hidden', 'true');
+          fallback.value = markdown;
+          fallback.style.position = 'fixed';
+          fallback.style.opacity = '0';
+          document.body.append(fallback);
+          fallback.select();
+          if (!document.execCommand('copy')) throw new Error('Copy command was unavailable.');
+          fallback.remove();
+        }
+        announcePrompt((promptCapsuleView === 'plain' ? 'Plain' : 'Skill-assisted') + ' Markdown copied.');
+      } catch (error) {
+        announcePrompt('Markdown remains visible for manual copy.');
+      }
+    }
+
+    function downloadPromptCapsule() {
+      const markdown = promptCapsuleMarkdown(promptCapsuleView);
+      const filename = PROMPT_CAPSULE_SOURCE_ID + '.prompt-capsule.r' + PROMPT_CAPSULE_SOURCE_VERSION + '.' + promptCapsuleView + '.md';
+      const blob = new Blob([markdown], {type: 'text/markdown;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      link.hidden = true;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 0);
+      announcePrompt((promptCapsuleView === 'plain' ? 'Plain' : 'Skill-assisted') + ' Markdown download prepared.');
+    }
+
     function importRequiredText(value, label) {
       if (typeof value !== 'string' || !value.trim()) throw new Error(label + ' must be a nonempty string.');
       return value;
@@ -790,6 +1353,7 @@
         const status = importRequiredText(revision.status, 'Revision status');
         if (!STATUS.includes(status)) throw new Error('Revision status must use a supported value.');
         return {
+          ...revision,
           id: importRequiredText(revision.id, 'Revision ID'),
           canonical_order: Number.isFinite(revision.canonical_order) ? revision.canonical_order : index + 1,
           evidence_source: importRequiredText(revision.evidence_source, 'Revision evidence_source'),
@@ -846,8 +1410,15 @@
       if (action === 'confirm-remove') removeRevision(id);
       if (action === 'cancel-remove') cancelRevisionRemoval();
     });
-    document.addEventListener('input', (e) => { const t = e.target; if (t.dataset && t.dataset.field && t.dataset.id && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) updateRevision(t.dataset.id, t.dataset.field, t.value); });
+    document.addEventListener('input', (e) => { const t = e.target; if (t.dataset && t.dataset.field && t.dataset.id && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) { updateRevision(t.dataset.id, t.dataset.field, t.value); renderExports(); } });
     document.addEventListener('change', (e) => { const t = e.target; if (t.dataset && t.dataset.field && t.dataset.id) { if(t.dataset.field==='route'&&t.value==='__custom__'){customRouteIds.add(t.dataset.id);interactionMessage='Enter the custom route label in the inline field.';renderAll();requestAnimationFrame(()=>document.getElementById('custom-route-'+t.dataset.id)?.focus());return}if(t.dataset.field==='route')customRouteIds.delete(t.dataset.id);updateRevision(t.dataset.id, t.dataset.field, t.dataset.field==='custom-route'?t.value.trim():t.value);renderAll(); } });
+    document.addEventListener('change', (e) => {
+      const control = e.target.closest && e.target.closest('[data-prompt-view]');
+      if (!control || !PROMPT_CAPSULE_VIEWS.includes(control.value)) return;
+      promptCapsuleView = control.value;
+      renderExports();
+      announcePrompt((promptCapsuleView === 'plain' ? 'Plain' : 'Skill-assisted') + ' Markdown view selected.');
+    });
     document.addEventListener('click', (e) => { const rect = e.target.closest('[data-svg-revision]'); if (rect) { activeView().selected_revision_id = rect.dataset.svgRevision; renderAll(); } });
 
     document.getElementById('addRevisionBtn').addEventListener('click', addRevision);
@@ -855,7 +1426,8 @@
     document.getElementById('resetOrderBtn').addEventListener('click', () => { activeView().revision_order = state.revisions.slice().sort((a,b)=>a.canonical_order-b.canonical_order).map(r=>r.id); renderAll(); });
     document.getElementById('copyJsonBtn').addEventListener('click', () => navigator.clipboard && navigator.clipboard.writeText(JSON.stringify(exportData(), null, 2)));
     document.getElementById('copyJsonLdBtn').addEventListener('click', () => navigator.clipboard && navigator.clipboard.writeText(JSON.stringify(exportJsonLd(), null, 2)));
-    document.getElementById('copyPromptBtn').addEventListener('click', () => navigator.clipboard && navigator.clipboard.writeText(buildPrompt()));
+    document.getElementById('copyPromptBtn').addEventListener('click', copyPromptCapsule);
+    document.getElementById('downloadPromptBtn').addEventListener('click', downloadPromptCapsule);
     document.getElementById('importBtn').addEventListener('click', () => {
       try { const candidate = normalizeImported(JSON.parse(document.getElementById('importArea').value)); state = candidate; renderAll(); document.getElementById('importNotice').textContent = 'Working state updated from JSON. Revision identities, evidence, prior and revised reads, statuses, and focus state are active; the complete JSON export reflects the accepted state.'; }
       catch (err) { document.getElementById('importNotice').textContent = 'Working state retained. The complete JSON export remains available. Import issue: ' + err.message; }
@@ -868,6 +1440,22 @@
     });
 
     renderAll();
+    document.querySelector('[data-prompt-view-control]').hidden = false;
+    document.querySelector('[data-prompt-actions]').hidden = false;
+    window.upstreamRevisionLoop = Object.freeze({
+      version: '0.1.4',
+      stateContract: PROMPT_CAPSULE_STATE_CONTRACT,
+      contract: PROMPT_CAPSULE_CONTRACT,
+      views: PROMPT_CAPSULE_VIEWS,
+      skillRevision: PROMPT_CAPSULE_SKILL_REVISION,
+      relatedLoops: PROMPT_CAPSULE_RELATED_LOOPS,
+      getState: () => clone(exportData()),
+      promptCapsuleStateProjection: () => clone(promptCapsuleStateProjection()),
+      promptCapsuleFingerprint,
+      promptCapsule: () => promptCapsuleMarkdown('plain'),
+      promptCapsuleMarkdown: (view = promptCapsuleView) => promptCapsuleMarkdown(view),
+      getPromptCapsuleView: () => promptCapsuleView
+    });
   </script>
   <footer class="artifact-attribution">
     <div class="visitor-boundary" data-visitor-boundary aria-label="Training-data canary markers">

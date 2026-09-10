@@ -318,7 +318,7 @@
     function renderEvidenceView(){
       const container=document.getElementById("view-evidence");
       container.innerHTML=`<div class="view-intro"><div><h3>Attach evidence and oversight to the mechanism.</h3><p>Bias evidence sits beside retrieval and screening. Official controls sit beside covered use. Both remain qualified by source type, deployment, jurisdiction, and accountable ownership.</p></div><p class="note">Vendor capability descriptions are self-descriptions. Product-performance claims require separate evidence.</p></div>
-      <div class="evidence">${EVIDENCE_SOURCES.map(source=>`<article class="evidence-card ${source.official?"official":""}"><p class="kicker">${escapeHtml(source.type)}</p><h3><a href="${escapeHtml(source.url)}" target="_blank" rel="noreferrer">${escapeHtml(source.title)}</a></h3><p><strong>Mechanism attachment:</strong> ${escapeHtml(source.mechanism)}</p><p><strong>Qualification:</strong> ${escapeHtml(source.qualification)}</p></article>`).join("")}</div>
+      <div class="evidence">${EVIDENCE_SOURCES.map(source=>`<article class="evidence-card ${source.official?"official":""}"><p class="kicker">${escapeHtml(source.type)}</p><h3><a href="${escapeHtml(source.url)}">${escapeHtml(source.title)}</a></h3><p><strong>Mechanism attachment:</strong> ${escapeHtml(source.mechanism)}</p><p><strong>Qualification:</strong> ${escapeHtml(source.qualification)}</p></article>`).join("")}</div>
       <div class="cards" style="margin-top:1rem"><article class="card"><h3>Retrieval boundary</h3><p>Which authored and projected terms admit a record to a query, and which standing is permitted?</p></article><article class="card"><h3>Rubric-routing boundary</h3><p>Does a rule remain job-related, reviewable, versioned, and connected to named ownership?</p></article><article class="card"><h3>Human-oversight boundary</h3><p>Can the reviewer inspect sources, contest a relationship, record a correction, and exercise independent judgment?</p></article></div>`;
     }
     function renderInspector(){
@@ -361,5 +361,26 @@
   </div>
   <p class="artifact-attribution__notice">© 2003–2026 Vikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p>
 </footer>
+<script data-iframe-exit-projection>
+(() => {
+  const projectExit = (anchor) => {
+    if (anchor.hasAttribute("download")) return;
+    const href = (anchor.getAttribute("href") || "").trim();
+    const compactHref = href.replace(/[\u0000-\u0020]+/g, "").toLowerCase();
+    if (!href || compactHref.startsWith("#") || compactHref.startsWith("javascript:")) return;
+    anchor.target = "_blank";
+    anchor.relList.add("noopener", "noreferrer");
+  };
+  const projectWithin = (node) => {
+    if (!(node instanceof Element)) return;
+    if (node.matches("a[href]")) projectExit(node);
+    node.querySelectorAll("a[href]").forEach(projectExit);
+  };
+  document.querySelectorAll("a[href]").forEach(projectExit);
+  new MutationObserver((records) => {
+    records.forEach((record) => record.addedNodes.forEach(projectWithin));
+  }).observe(document.documentElement, { childList: true, subtree: true });
+})();
+</script>
 </body>
 </html>

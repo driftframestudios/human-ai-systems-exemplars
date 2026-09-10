@@ -5,7 +5,7 @@
   <meta name="author" content="Vikrant Varun Kudesia">
   <link rel="license" href="https://www.apache.org/licenses/LICENSE-2.0">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jobs-to-be-Done Treemap Chimeric Prototype v0.1.3</title>
+  <title>Jobs-to-be-Done Treemap Chimeric Prototype v0.1.4</title>
   <style>
     :root {
       --bg: #f8f7f3;
@@ -176,6 +176,29 @@
     .warn { border-left-color: var(--focus); background: #f5ead4; color: #4a3418; }
     .inline-action { margin: 10px 0; border-left: 4px solid #a24a3f; padding: 10px 12px; background: #fff4f1; border-radius: 12px; }
     .screen-reader-text { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+    .prompt-capsule-panel { min-width: 0; }
+    .prompt-capsule-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .prompt-capsule-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .prompt-capsule-actions button,
+    .prompt-view-option,
+    .related-loops summary,
+    .related-loops a { min-height: 44px; }
+    .prompt-view-control { border: 0; margin: 12px 0; padding: 0; }
+    .prompt-view-control legend { font-weight: 700; margin-bottom: 6px; }
+    .prompt-view-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .prompt-view-option { display: inline-flex; align-items: center; gap: 8px; margin: 0; padding: 6px 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--soft-2); color: var(--ink); }
+    .prompt-view-option input { inline-size: 1.1rem; block-size: 1.1rem; width: auto; }
+    .prompt-status { min-height: 1.4em; margin: 8px 0; color: var(--accent); font-weight: 700; }
+    .related-loops { margin: 12px 0; padding: 4px 12px 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--accent-soft); }
+    .related-loops summary { display: flex; align-items: center; cursor: pointer; font-weight: 700; }
+    .related-loops a { display: inline-flex; align-items: center; }
+    .related-loops li + li { margin-top: 10px; }
+    .related-loops p { margin: 3px 0 0; }
+    .prompt-capsule-actions button:focus-visible,
+    .prompt-view-option:focus-within,
+    .related-loops summary:focus-visible,
+    .related-loops a:focus-visible { outline: 3px solid rgba(155,106,31,.48); outline-offset: 3px; }
+    [hidden] { display: none !important; }
 
   .artifact-attribution {
     position: static;
@@ -212,7 +235,7 @@
     <h1>Jobs-to-be-Done Treemap</h1>
     <p class="lede">A purpose-weighted job map that sizes jobs by relative consequence for a workflow, restored state, or collaboration purpose while preserving full data, SVG visualization, JSON/JSON-LD, semantic locality, and AI collaboration context.</p>
     <div class="meta-row" aria-label="Artifact metadata">
-      <span class="pill">v0.1.3</span>
+      <span class="pill">v0.1.4</span>
       <span class="pill">Pattern Fit and Behavior Protection</span>
       <span class="pill">Purpose-weighted treemap</span>
       <span class="pill">HTML + SVG + JSON-LD</span>
@@ -297,7 +320,6 @@
         <div class="toolbar" style="margin-bottom: 10px;">
           <button id="copy-json-btn" type="button">Copy JSON</button>
           <button id="copy-jsonld-btn" type="button">Copy JSON-LD</button>
-          <button id="copy-ai-btn" type="button">Copy AI prompt</button>
         </div>
         <label for="json-output">Exported JSON</label>
         <pre id="json-output" tabindex="0"></pre>
@@ -311,20 +333,254 @@
         </div>
         <p id="import-status" class="tiny" role="status"></p>
       </div>
-      <div class="panel">
-        <h2>AI Collaboration Prompt Capsule</h2>
-        <p class="tiny">Visible for direct inspection and manual copy.</p>
-        <pre id="ai-prompt" tabindex="0"></pre>
+      <div class="panel prompt-capsule-panel" aria-labelledby="prompt-heading">
+        <div class="prompt-capsule-heading">
+          <div>
+            <h2 id="prompt-heading">Prompt Capsule · Markdown</h2>
+            <p class="tiny">This derived handoff follows the complete accepted job map. The artifact and its JSON export remain the state authority.</p>
+          </div>
+          <div class="prompt-capsule-actions" data-prompt-actions hidden aria-label="Prompt Capsule actions">
+            <button type="button" id="copy-prompt-btn">Copy Markdown</button>
+            <button type="button" id="download-prompt-btn">Download Markdown</button>
+          </div>
+        </div>
+        <details class="related-loops" data-prompt-related-loops>
+          <summary>Related loops</summary>
+          <p class="tiny">These public collaboration loops fit when the receiving work meets the stated condition.</p>
+          <ul>
+            <li data-related-loop-id="repository-reentry">
+              <a href="https://schemas.radiantnull.com/collaboration/#repository-reentry" target="_blank" rel="noopener noreferrer">Re-enter, make one bounded change, and return it clearly</a>
+              <p><strong>Fit condition:</strong> Use when a weighted job enters repository work and needs one source-owned change, fitting evidence, and a clear return.</p>
+            </li>
+            <li data-related-loop-id="skill-from-receiving-use">
+              <a href="https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use" target="_blank" rel="noopener noreferrer">Let receiving use refine a reusable collaboration skill</a>
+              <p><strong>Fit condition:</strong> Use when repeated work around job evidence, weighting, or routing reveals a practice worth refining with a human reviewer.</p>
+            </li>
+          </ul>
+        </details>
+        <fieldset class="prompt-view-control" data-prompt-view-control hidden>
+          <legend>Markdown view</legend>
+          <div class="prompt-view-options">
+            <label class="prompt-view-option"><input type="radio" name="prompt-capsule-view" value="plain" data-prompt-view checked /> Plain</label>
+            <label class="prompt-view-option"><input type="radio" name="prompt-capsule-view" value="skill-assisted" data-prompt-view /> Skill-assisted</label>
+          </div>
+        </fieldset>
+        <p class="tiny" id="prompt-view-description">Plain Markdown carries the complete weighted-job context as a self-contained handoff.</p>
+        <p class="prompt-status" id="prompt-capsule-status" role="status" aria-live="polite" aria-atomic="true"></p>
+        <noscript><p class="notice">The complete default plain Markdown remains available below. Interactive editing, view selection, copying, and downloading become available when JavaScript runs.</p></noscript>
+        <pre id="ai-prompt" data-prompt-view-active="plain" aria-labelledby="prompt-heading" aria-describedby="prompt-view-description" tabindex="0"># Prompt Capsule: Jobs-to-be-Done Treemap
+
+- Contract: `prompt-capsule/0.1.0`
+- Capsule: `jobs-to-be-done-treemap/current-weighted-job-map`
+- Source: `jobs-to-be-done-treemap@0.1.4`
+- State: `jobs-to-be-done-treemap-state.v0.1` · revision `0.1.4`
+- Fingerprint: `fnv1a32-utf8:6eae3ad5`
+- View: `plain`
+
+## Purpose and target
+
+Use this Jobs-to-be-Done Treemap to keep attention proportional to job consequence for the stated purpose and route the most consequential work into its next useful instrument.
+
+- Artifact ID: `ca-artifact-jtbd-treemap-genomics-001`
+- Subtitle: Purpose-Weighted Job Map
+- Family: Pattern Fit and Behavior Protection
+- Placement: Bridge Architecture
+- Primary move: workflow-purpose weighting
+- Source bands: `inherited_method`; `author_adapted_method`; `bridge_capable_artifact`
+
+## Relevant context and inputs
+
+- Overall purpose: Support responsible, provenance-aware variant review with clear AI boundaries and fewer downstream corrections.
+- Weight basis: relative workflow consequence for responsible variant review
+- Use when: a team can name many jobs, tasks, responsibilities, workflows, or support needs and needs to see which carry the most consequence for the overall purpose.
+- Restored condition: purpose-weighted attention.
+- Good next question: Which jobs carry the most workflow consequence, and what evidence supports their weight?
+- Active focus view: Default focus view (`view-default`); text mode `preview_with_reveal`.
+- Focus summary: 8 of 8 jobs are visible.
+
+## Working state
+
+Every accepted job appears below. A hidden label narrows visual focus while the represented job remains part of this handoff.
+
+### Confirm evidence provenance during review (`job-confirm-evidence-provenance`)
+
+- Actor / role: Molecular pathologist
+- Dimension: `interpretive`
+- Relative weight: `10/10`
+- Weight driver: interpretive confidence; downstream consequence; trust and auditability
+- Evidence basis: Reviewers need claim-level source context to interpret AI-supported summaries responsibly.
+- Evidence status: `known`
+- Route: HEART Chart (Measurement, Reflection, and Judgment).
+- Route reason: Provenance confidence should become a signal with counter-signals.
+- Review trigger: Revisit after source-boundary comprehension is measured.
+- Note: High-consequence because provenance supports confidence, auditability, and interpretation quality.
+- Order: display `1`; canonical `1`; visible `1`.
+- Focus view: `visible`.
+
+### Distinguish AI-generated summary claims from accepted evidence (`job-distinguish-ai-summary-claims`)
+
+- Actor / role: Molecular pathologist
+- Dimension: `ai_boundary`
+- Relative weight: `9/10`
+- Weight driver: AI boundary clarity; review responsibility; source confidence
+- Evidence basis: Plus / Delta and HEART signals show source-specific confidence matters more than summary-level confidence.
+- Evidence status: `known`
+- Route: AI Systems Service Blueprint (Shared Surfaces and Topology).
+- Route reason: This job depends on retrieval, source mapping, evaluation, and human review boundaries.
+- Review trigger: Revisit after unsupported-claim routing is specified.
+- Note: A visible source boundary is a support surface, not decorative polish.
+- Order: display `2`; canonical `2`; visible `2`.
+- Focus view: `visible`.
+
+### Resolve consent-state exceptions before report-sensitive actions (`job-resolve-consent-exceptions`)
+
+- Actor / role: Research coordinator
+- Dimension: `governance`
+- Relative weight: `9/10`
+- Weight driver: governance responsibility; workflow blocking; downstream risk
+- Evidence basis: Consent-state exceptions can block review, reporting, and export-sensitive actions.
+- Evidence status: `known`
+- Route: First Responsible Version Matrix (Comparison and Threshold).
+- Route reason: Consent-state clarity may belong above the first responsible boundary.
+- Review trigger: Revisit after service stage order is corrected.
+- Note: High-consequence even when not the most frequent job.
+- Order: display `3`; canonical `3`; visible `3`.
+- Focus view: `visible`.
+
+### Verify metadata readiness before review (`job-verify-metadata-readiness`)
+
+- Actor / role: Data steward
+- Dimension: `governance`
+- Relative weight: `8/10`
+- Weight driver: downstream correction reduction; review readiness; data quality
+- Evidence basis: Metadata readiness affects review quality and downstream correction count.
+- Evidence status: `assumed`
+- Route: Unit-test-first Design (Pattern Fit and Behavior Protection).
+- Route reason: Metadata readiness checks may contain behavior worth protecting.
+- Review trigger: Revisit after metadata correction signals are calibrated.
+- Note: Candidate for HEART and test-first protection.
+- Order: display `4`; canonical `4`; visible `4`.
+- Focus view: `visible`.
+
+### Understand pipeline assumptions behind surfaced variants (`job-understand-pipeline-assumptions`)
+
+- Actor / role: Bioinformatics analyst
+- Dimension: `interpretive`
+- Relative weight: `6/10`
+- Weight driver: handoff quality; interpretive support; review confidence
+- Evidence basis: Pipeline assumptions may shape downstream review interpretation.
+- Evidence status: `needs_to_surface`
+- Route: Context Tree (Orientation and Tracing).
+- Route reason: Role-specific context and knowledge needs should be clarified.
+- Review trigger: Revisit after participatory elicitation with analysts.
+- Note: Potentially underweighted if analysts carry more downstream responsibility than visible now.
+- Order: display `5`; canonical `5`; visible `5`.
+- Focus view: `visible`.
+
+### Navigate quickly between variant evidence sections (`job-navigate-evidence-sections`)
+
+- Actor / role: Molecular pathologist
+- Dimension: `functional`
+- Relative weight: `4/10`
+- Weight driver: efficiency; review flow
+- Evidence basis: Navigation matters, but it should not outrank provenance and consent-state clarity.
+- Evidence status: `assumed`
+- Route: Pattern–Problem Surface Matrix (Pattern Fit and Behavior Protection).
+- Route reason: Interface patterns should be tied to the problem surface before implementation.
+- Review trigger: Revisit after high-consequence review support stabilizes.
+- Note: Useful but lower consequence than source confidence or governance routing.
+- Order: display `6`; canonical `6`; visible `6`.
+- Focus view: `visible`.
+
+### Add review note (`job-add-review-note`)
+
+- Actor / role: Molecular pathologist
+- Dimension: `functional`
+- Relative weight: `3/10`
+- Weight driver: documentation support
+- Evidence basis: Notes support review history but are not currently the highest consequence job.
+- Evidence status: `known`
+- Route: Specification-by-Example (Participatory Elicitation and Specification).
+- Route reason: Note behavior may need observable examples if it affects review history.
+- Review trigger: Revisit if audit or reporting needs change.
+- Note: Preserved as a lower-weight job.
+- Order: display `7`; canonical `7`; visible `7`.
+- Focus view: `visible`.
+
+### Customize dashboard layout (`job-customize-dashboard-layout`)
+
+- Actor / role: Power reviewer
+- Dimension: `functional`
+- Relative weight: `2/10`
+- Weight driver: personal efficiency; advanced workflow support
+- Evidence basis: Value is disputed until high-consequence review support stabilizes.
+- Evidence status: `disputed`
+- Route: Plus / Delta (Measurement, Reflection, and Judgment).
+- Route reason: Goal-fit reflection should determine whether customization helps or distracts.
+- Review trigger: Revisit after reviewer confidence and task success signals are calibrated.
+- Note: Preserved for later without guiding the next phase.
+- Order: display `8`; canonical `8`; visible `8`.
+- Focus view: `visible`.
+
+## Boundaries and human-held decisions
+
+- Human stewards decide which purpose and weight basis fit, which evidence changes a weight, which route can receive a job, and when the handoff is ready.
+- Weights express current relative consequence for the stated purpose. Their evidence status and basis show the standing of each working judgment.
+- Stable semantic IDs keep each job recognizable across focus arrangements. Job order, visibility, and text mode carry the active presentation state.
+- Hide narrows the focus view. Hidden jobs remain represented in this capsule and the complete JSON and JSON-LD exports.
+- Current selection, notices, clipboard state, pending removal, private extensions, and Markdown-view choice stay outside the represented-state fingerprint and public projection.
+- AI suggestions enter as attributed proposals. Human reviewers retain weight interpretation, route acceptance, external sharing, and publication decisions.
+
+## Requested return
+
+Return a GitHub Flavored Markdown handoff grouped by stable job ID. Keep jobs in current focus order and keep each relative weight, weight driver, evidence basis, evidence status, route, route reason, review trigger, note, and visibility state with the job it describes.
+
+Name the outcome or condition each probability describes before assigning a value.
+
+State what the evidence establishes, name any open condition and its receiver, then end with the smallest bounded next action and its stopping event.
+
+## Related loops
+
+These public collaboration loops fit when the receiving work meets the stated condition:
+
+- `repository-reentry` — [Re-enter, make one bounded change, and return it clearly](https://schemas.radiantnull.com/collaboration/#repository-reentry)
+  - Fit condition: Use when a weighted job enters repository work and needs one source-owned change, fitting evidence, and a clear return.
+- `skill-from-receiving-use` — [Let receiving use refine a reusable collaboration skill](https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use)
+  - Fit condition: Use when repeated work around job evidence, weighting, or routing reveals a practice worth refining with a human reviewer.
+
+## Evidence and recovery
+
+### Preferred phrasing
+
+- Which jobs carry the most workflow consequence?
+- What purpose gives these job weights meaning?
+- What evidence supports this weight?
+- Which weight driver explains this job’s size?
+- Which architecture should receive this job next?
+
+### Replacement-state guidance
+
+- Use: Show the jobs by their relative consequence for the current purpose. · Context cue: List all the jobs.
+- Use: What weight does this job carry, and what evidence supports that weight? · Context cue: This task is important.
+- Use: This job can remain visible as a lower-weight or later-review item. · Context cue: This job is out of scope.
+- Use: The job weight is disputed and should become more inspectable. · Context cue: The team disagrees about priority.
+
+- Recovery strain cues: all jobs appear equally important; a flat task list is guiding design attention; critical workflow jobs are hidden inside a long list; AI-generated plans optimize visible tasks while missing high-consequence jobs
+- Stabilizing read: The collaboration needs purpose-weighted job visibility.
+- Restored state: Jobs are weighted by relative consequence for the current purpose.
+- Named failure geometries: Flat-Job Overload; Experience Goal-Fit Drift; Threshold Haze; Signal / Metric Collapse
+- A compatible import becomes the accepted working state and regenerates this capsule. A malformed or semantically incompatible candidate leaves the current artifact and capsule available, names the mismatch, and can return after revision.
+</pre>
       </div>
     </section>
 
     <section class="grid two">
       <div class="panel soft">
-        <h2>Semantic Locality</h2>
+        <h2>Language cues</h2>
         <div id="semantic-locality"></div>
       </div>
       <div class="panel soft">
-        <h2>Recovery Calibration</h2>
+        <h2>Recovery cues</h2>
         <div id="recovery-calibration"></div>
       </div>
     </section>
@@ -337,13 +593,60 @@
 
     <section class="panel soft">
       <h2>Source Note</h2>
-      <p>This prototype adapts Jobs-to-be-Done as a <strong>Purpose-Weighted Job Map</strong>. The local use is not a complete JTBD research program. It sizes jobs by their relative consequence for the current workflow, purpose, or restored state, then routes high-consequence jobs into thresholds, examples, measurement, tests, patterns, service topology, or architecture views.</p>
-      <p class="tiny">Product-market language is intentionally translated into actor, workflow, service, research, implementation, and collaboration context language.</p>
+      <p>This prototype adapts Jobs-to-be-Done as a <strong>Purpose-Weighted Job Map</strong>. Its bounded role is to size jobs by their relative consequence for the current workflow, purpose, or restored state, then route high-consequence jobs into thresholds, examples, measurement, tests, patterns, service topology, or architecture views.</p>
+      <p class="tiny">Product-market language becomes actor, workflow, service, research, implementation, and collaboration language here.</p>
     </section>
   </main>
 
 <script>
 'use strict';
+
+const PROMPT_CAPSULE_CONTRACT = 'prompt-capsule/0.1.0';
+const PROMPT_CAPSULE_STATE_CONTRACT = 'jobs-to-be-done-treemap-state.v0.1';
+const PROMPT_CAPSULE_ID = 'jobs-to-be-done-treemap/current-weighted-job-map';
+const PROMPT_CAPSULE_SOURCE_ID = 'jobs-to-be-done-treemap';
+const PROMPT_CAPSULE_SOURCE_VERSION = '0.1.4';
+const PROMPT_CAPSULE_VIEWS = Object.freeze(['plain', 'skill-assisted']);
+const PROMPT_CAPSULE_SKILL_REVISION = '22ff10cb2f6a122f89a905da695ebb18a0b0ec77';
+const PROMPT_CAPSULE_SKILLS = Object.freeze([
+  Object.freeze({
+    name: 'Source authority mapping',
+    publicUrl: 'https://schemas.radiantnull.com/skills/source-authority-mapping/',
+    path: '.agents/skills/source-authority-mapping/SKILL.md',
+    sha256: '706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5',
+    purpose: 'Keep job evidence, working interpretations, route proposals, and accepted source authority distinct.'
+  }),
+  Object.freeze({
+    name: 'Practitioner probe',
+    publicUrl: 'https://schemas.radiantnull.com/skills/practitioner-probe/',
+    path: '.agents/skills/practitioner-probe/SKILL.md',
+    sha256: '348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c',
+    purpose: 'Turn an uncertain job weight or evidence basis into a decision-changing question and observation.'
+  }),
+  Object.freeze({
+    name: 'Stateful artifact behavior contracts',
+    publicUrl: 'https://schemas.radiantnull.com/skills/stateful-artifact-behavior-contracts/',
+    path: '.agents/skills/stateful-artifact-behavior-contracts/SKILL.md',
+    sha256: '596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a',
+    purpose: 'Keep weighted-job state, Markdown views, exchange, and recovery behavior in agreement.'
+  })
+]);
+const PROMPT_CAPSULE_RELATED_LOOPS = Object.freeze([
+  Object.freeze({
+    id: 'repository-reentry',
+    name: 'Re-enter, make one bounded change, and return it clearly',
+    publicUrl: 'https://schemas.radiantnull.com/collaboration/#repository-reentry',
+    fit: 'Use when a weighted job enters repository work and needs one source-owned change, fitting evidence, and a clear return.'
+  }),
+  Object.freeze({
+    id: 'skill-from-receiving-use',
+    name: 'Let receiving use refine a reusable collaboration skill',
+    publicUrl: 'https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use',
+    fit: 'Use when repeated work around job evidence, weighting, or routing reveals a practice worth refining with a human reviewer.'
+  })
+]);
+let promptCapsuleView = 'plain';
+let importExtensions = { root: {} };
 
 const routeRegistry = [
   { id: 'poda', label: 'PODA', family: 'Orientation and Tracing' },
@@ -393,7 +696,7 @@ let state = {
     id: 'ca-artifact-jtbd-treemap-genomics-001',
     display_name: 'Jobs-to-be-Done Treemap',
     subtitle: 'Purpose-Weighted Job Map',
-    version: '0.1.3',
+    version: '0.1.4',
     family: 'Pattern Fit and Behavior Protection',
     placement: 'Bridge Architecture',
     primary_cognitive_move: 'workflow-purpose weighting',
@@ -1032,11 +1335,17 @@ function renderTableEquivalent() {
   document.querySelectorAll('#table-equivalent [data-select-job]').forEach(btn => btn.addEventListener('click', () => setSelectedJob(btn.dataset.selectJob)));
 }
 
+function extensionFields(record, ownedKeys) {
+  if (!record || typeof record !== 'object' || Array.isArray(record)) return {};
+  return Object.fromEntries(Object.entries(record).filter(([key]) => !ownedKeys.has(key)).map(([key, value]) => [key, deepClone(value)]));
+}
+const ROOT_EXPORT_KEYS = new Set(['artifact_identity', 'purpose', 'weight_basis', 'jobs', 'view_state', 'route_registry', 'semantic_locality', 'recovery_calibration', 'stable_identity_note', 'text_handling']);
 function exportData() {
   const view = normalizeView();
   const ordered = orderedJobs();
   const visible = visibleJobs();
   return {
+    ...deepClone(importExtensions.root),
     artifact_identity: state.artifact_identity,
     purpose: state.purpose,
     weight_basis: state.weight_basis,
@@ -1050,7 +1359,7 @@ function exportData() {
     route_registry: routeRegistry,
     semantic_locality: state.semantic_locality,
     recovery_calibration: state.recovery_calibration,
-    stable_identity_note: 'Job IDs remain stable. Order and visibility are focus-view state. Hidden jobs are not deleted or redacted.',
+    stable_identity_note: 'Job IDs carry stable semantic identity. Order and visibility carry the active focus view. Hidden jobs remain represented in the complete state.',
     text_handling: {
       full_text_preserved: true,
       svg: 'Treemap labels are previews. Full text is preserved in the table, selected inspector, JSON, and JSON-LD.',
@@ -1119,32 +1428,279 @@ function renderExports() {
   const jsonld = buildJsonLd();
   document.getElementById('json-output').textContent = json;
   document.getElementById('jsonld-data').textContent = JSON.stringify(jsonld, null, 2);
-  renderAiPrompt(data);
+  const prompt = document.getElementById('ai-prompt');
+  prompt.textContent = promptCapsuleMarkdown(promptCapsuleView);
+  prompt.dataset.promptViewActive = promptCapsuleView;
+  document.querySelectorAll('[data-prompt-view]').forEach(control => { control.checked = control.value === promptCapsuleView; });
+  document.getElementById('prompt-view-description').textContent = promptCapsuleView === 'skill-assisted'
+    ? 'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented job-map state and fingerprint remain the same.'
+    : 'Plain Markdown carries the complete weighted-job context as a self-contained handoff.';
 }
-function renderAiPrompt(data) {
-  const visible = data.jobs.filter(job => job.visible_in_active_view);
-  const hidden = data.jobs.filter(job => !job.visible_in_active_view);
-  const lines = [];
-  lines.push('Use this Jobs-to-be-Done Treemap as the current Core Architecture context.');
-  lines.push('');
-  lines.push(`Purpose: ${data.purpose}`);
-  lines.push(`Weight basis: ${data.weight_basis}`);
-  lines.push('');
-  lines.push('Preserve:');
-  lines.push('- purpose-weighted attention');
-  lines.push('- full job text and stable job IDs');
-  lines.push('- hidden jobs as focus state, not deletion or redaction');
-  lines.push('- route labels and route reasons');
-  lines.push('- replacement-state phrasing around relative consequence and review triggers');
-  lines.push('');
-  lines.push('Visible jobs in current focus view:');
-  visible.forEach(job => lines.push(`- ${job.label} (${job.actor}) — weight ${job.relative_weight}/10; route: ${job.route || 'none'}; status: ${job.evidence_status}`));
-  lines.push('');
-  lines.push(hidden.length ? `Hidden jobs preserved in source artifact: ${hidden.map(j => j.label).join(', ')}` : 'Hidden jobs preserved in source artifact: none.');
-  lines.push('');
-  lines.push('Help make the next decision inspectable: which high-weight jobs should route into First Responsible Version Matrix, Specification-by-Example, HEART Chart, Unit-test-first Design, Pattern–Problem Surface Matrix, Service-design Blueprint, or Software Architecture Views?');
-  lines.push('When proposing options, state probability of what before assigning probabilities.');
-  document.getElementById('ai-prompt').textContent = lines.join('\n');
+function plainText(value, fallback = '') {
+  const source = typeof value === 'string' ? value : fallback;
+  return source.replace(/\r\n?/g, '\n').replace(/\s*\n\s*/g, ' ').trim();
+}
+function markdownInline(value, fallback = '') {
+  return plainText(value, fallback)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\\/g, '\\\\')
+    .replace(/([!#@*_\[\]|~])/g, '\\$1')
+    .replace(/\x60/g, () => '\\' + String.fromCharCode(96))
+    .replace(/\b((?:https?|ftp):)(?=\/\/)/gi, protocol => protocol.slice(0, -1) + '\\:')
+    .replace(/\bwww\./gi, prefix => prefix.slice(0, -1) + '\\.');
+}
+function markdownCode(value) {
+  const source = plainText(String(value ?? ''));
+  const runs = source.match(/\x60+/g) || [];
+  const fence = String.fromCharCode(96).repeat(Math.max(0, ...runs.map(run => run.length)) + 1);
+  const padded = /^\s|\s$|^\x60|\x60$/.test(source) ? ' ' + source + ' ' : source;
+  return fence + padded + fence;
+}
+function canonicalValue(value) {
+  if (Array.isArray(value)) return value.map(canonicalValue);
+  if (value && typeof value === 'object') return Object.fromEntries(Object.keys(value).sort().map(key => [key, canonicalValue(value[key])]));
+  return value;
+}
+function fnv1a32Utf8(value) {
+  let hash = 0x811c9dc5;
+  const update = byte => { hash ^= byte; hash = Math.imul(hash, 0x01000193) >>> 0; };
+  for (const symbol of String(value)) {
+    const point = symbol.codePointAt(0);
+    if (point <= 0x7f) update(point);
+    else if (point <= 0x7ff) { update(0xc0 | (point >>> 6)); update(0x80 | (point & 0x3f)); }
+    else if (point <= 0xffff) { update(0xe0 | (point >>> 12)); update(0x80 | ((point >>> 6) & 0x3f)); update(0x80 | (point & 0x3f)); }
+    else { update(0xf0 | (point >>> 18)); update(0x80 | ((point >>> 12) & 0x3f)); update(0x80 | ((point >>> 6) & 0x3f)); update(0x80 | (point & 0x3f)); }
+  }
+  return 'fnv1a32-utf8:' + hash.toString(16).padStart(8, '0');
+}
+function textList(values) {
+  return Array.isArray(values) ? values.filter(value => typeof value === 'string' && value.trim()).map(value => plainText(value)) : [];
+}
+function promptCapsuleStateProjection() {
+  const view = normalizeView();
+  const identity = state.artifact_identity || {};
+  const jobById = new Map(state.jobs.map(job => [job.id, job]));
+  const visibleIds = new Set(visibleJobs().map(job => job.id));
+  const visibleOrder = new Map(visibleJobs().map((job, index) => [job.id, index + 1]));
+  const jobs = view.job_order.map(id => jobById.get(id)).filter(Boolean).map((job, index) => ({
+    id: plainText(job.id),
+    label: plainText(job.label),
+    actor: plainText(job.actor),
+    dimension: plainText(job.dimension),
+    relativeWeight: clampNumber(job.relative_weight, 1, 10, 3),
+    weightDriver: plainText(job.weight_driver, 'Open weight driver.'),
+    evidenceBasis: plainText(job.evidence_basis, 'Open evidence basis.'),
+    evidenceStatus: plainText(job.evidence_status, 'assumed'),
+    route: {
+      name: plainText(job.route, 'Open for review.'),
+      family: plainText(routeInfo(job.route).family, 'Unrouted'),
+      reason: plainText(job.reason, 'Open for review.')
+    },
+    reviewTrigger: plainText(job.review_trigger, 'Open review trigger.'),
+    note: plainText(job.note, 'Open job note.'),
+    canonicalOrder: Number.isFinite(Number(job.canonical_order)) ? Number(job.canonical_order) : index + 1,
+    displayOrder: index + 1,
+    visibleOrder: visibleOrder.get(job.id) || null,
+    visibility: visibleIds.has(job.id) ? 'visible' : 'hidden'
+  }));
+  return {
+    contract: PROMPT_CAPSULE_CONTRACT,
+    capsule: PROMPT_CAPSULE_ID,
+    source: PROMPT_CAPSULE_SOURCE_ID + '@' + PROMPT_CAPSULE_SOURCE_VERSION,
+    stateContract: PROMPT_CAPSULE_STATE_CONTRACT,
+    artifact: {
+      id: plainText(identity.id, PROMPT_CAPSULE_SOURCE_ID),
+      displayName: plainText(identity.display_name, 'Jobs-to-be-Done Treemap'),
+      subtitle: plainText(identity.subtitle, 'Purpose-Weighted Job Map'),
+      revision: plainText(String(identity.version ?? PROMPT_CAPSULE_SOURCE_VERSION)),
+      family: plainText(identity.family, 'Pattern Fit and Behavior Protection'),
+      placement: plainText(identity.placement, 'Bridge Architecture'),
+      primaryMove: plainText(identity.primary_cognitive_move, 'workflow-purpose weighting'),
+      sourceBands: textList(identity.source_band)
+    },
+    purpose: plainText(state.purpose),
+    weightBasis: plainText(state.weight_basis),
+    focusView: {
+      id: plainText(view.id, 'view-default'),
+      name: plainText(view.name, 'Default focus view'),
+      textMode: plainText(view.text_mode, 'preview_with_reveal'),
+      jobOrder: [...view.job_order],
+      hiddenJobIds: [...view.hidden_job_ids]
+    },
+    jobs,
+    semanticLocality: {
+      preferredPhrasing: textList(state.semantic_locality?.preferred_phrasing),
+      replacementStateGuidance: Array.isArray(state.semantic_locality?.replacement_state_guidance)
+        ? state.semantic_locality.replacement_state_guidance.filter(item => item && typeof item === 'object').map(item => ({ contextCue: plainText(item.common), use: plainText(item.stronger) }))
+        : []
+    },
+    recoveryCalibration: {
+      strainCues: textList(state.recovery_calibration?.strain_cues),
+      stabilizingRead: plainText(state.recovery_calibration?.stabilizing_read),
+      restoredState: plainText(state.recovery_calibration?.restored_state),
+      namedFailureGeometries: textList(state.recovery_calibration?.named_failure_geometries)
+    }
+  };
+}
+function promptCapsuleFingerprint() {
+  return fnv1a32Utf8(JSON.stringify(canonicalValue(promptCapsuleStateProjection())));
+}
+function promptCapsuleMarkdown(view = 'plain') {
+  const selectedView = PROMPT_CAPSULE_VIEWS.includes(view) ? view : 'plain';
+  const capsule = promptCapsuleStateProjection();
+  const visibleCount = capsule.jobs.filter(job => job.visibility === 'visible').length;
+  const jobSections = capsule.jobs.map(job => [
+    '### ' + markdownInline(job.label) + ' (' + markdownCode(job.id) + ')',
+    '',
+    '- Actor / role: ' + markdownInline(job.actor),
+    '- Dimension: ' + markdownCode(job.dimension),
+    '- Relative weight: ' + markdownCode(job.relativeWeight + '/10'),
+    '- Weight driver: ' + markdownInline(job.weightDriver),
+    '- Evidence basis: ' + markdownInline(job.evidenceBasis),
+    '- Evidence status: ' + markdownCode(job.evidenceStatus),
+    '- Route: ' + markdownInline(job.route.name) + ' (' + markdownInline(job.route.family) + ').',
+    '- Route reason: ' + markdownInline(job.route.reason),
+    '- Review trigger: ' + markdownInline(job.reviewTrigger),
+    '- Note: ' + markdownInline(job.note),
+    '- Order: display ' + markdownCode(job.displayOrder) + '; canonical ' + markdownCode(job.canonicalOrder) + '; visible ' + markdownCode(job.visibleOrder === null ? 'none' : job.visibleOrder) + '.',
+    '- Focus view: ' + markdownCode(job.visibility) + '.'
+  ].join('\n')).join('\n\n');
+  const sections = [
+    '# Prompt Capsule: ' + markdownInline(capsule.artifact.displayName),
+    '',
+    '- Contract: ' + markdownCode(capsule.contract),
+    '- Capsule: ' + markdownCode(capsule.capsule),
+    '- Source: ' + markdownCode(capsule.source),
+    '- State: ' + markdownCode(capsule.stateContract) + ' · revision ' + markdownCode(capsule.artifact.revision),
+    '- Fingerprint: ' + markdownCode(promptCapsuleFingerprint()),
+    '- View: ' + markdownCode(selectedView),
+    '',
+    '## Purpose and target',
+    '',
+    'Use this ' + markdownInline(capsule.artifact.displayName) + ' to keep attention proportional to job consequence for the stated purpose and route the most consequential work into its next useful instrument.',
+    '',
+    '- Artifact ID: ' + markdownCode(capsule.artifact.id),
+    '- Subtitle: ' + markdownInline(capsule.artifact.subtitle),
+    '- Family: ' + markdownInline(capsule.artifact.family),
+    '- Placement: ' + markdownInline(capsule.artifact.placement),
+    '- Primary move: ' + markdownInline(capsule.artifact.primaryMove),
+    '- Source bands: ' + capsule.artifact.sourceBands.map(value => markdownCode(value)).join('; '),
+    '',
+    '## Relevant context and inputs',
+    '',
+    '- Overall purpose: ' + markdownInline(capsule.purpose),
+    '- Weight basis: ' + markdownInline(capsule.weightBasis),
+    '- Use when: a team can name many jobs, tasks, responsibilities, workflows, or support needs and needs to see which carry the most consequence for the overall purpose.',
+    '- Restored condition: purpose-weighted attention.',
+    '- Good next question: Which jobs carry the most workflow consequence, and what evidence supports their weight?',
+    '- Active focus view: ' + markdownInline(capsule.focusView.name) + ' (' + markdownCode(capsule.focusView.id) + '); text mode ' + markdownCode(capsule.focusView.textMode) + '.',
+    '- Focus summary: ' + visibleCount + ' of ' + capsule.jobs.length + ' jobs are visible.',
+    '',
+    '## Working state',
+    '',
+    'Every accepted job appears below. A hidden label narrows visual focus while the represented job remains part of this handoff.',
+    '',
+    jobSections || 'The next weighted job remains open for a named actor, evidence basis, and receiving route.',
+    '',
+    '## Boundaries and human-held decisions',
+    '',
+    '- Human stewards decide which purpose and weight basis fit, which evidence changes a weight, which route can receive a job, and when the handoff is ready.',
+    '- Weights express current relative consequence for the stated purpose. Their evidence status and basis show the standing of each working judgment.',
+    '- Stable semantic IDs keep each job recognizable across focus arrangements. Job order, visibility, and text mode carry the active presentation state.',
+    '- Hide narrows the focus view. Hidden jobs remain represented in this capsule and the complete JSON and JSON-LD exports.',
+    '- Current selection, notices, clipboard state, pending removal, private extensions, and Markdown-view choice stay outside the represented-state fingerprint and public projection.',
+    '- AI suggestions enter as attributed proposals. Human reviewers retain weight interpretation, route acceptance, external sharing, and publication decisions.',
+    '',
+    '## Requested return',
+    '',
+    'Return a GitHub Flavored Markdown handoff grouped by stable job ID. Keep jobs in current focus order and keep each relative weight, weight driver, evidence basis, evidence status, route, route reason, review trigger, note, and visibility state with the job it describes.',
+    '',
+    'Name the outcome or condition each probability describes before assigning a value.',
+    '',
+    'State what the evidence establishes, name any open condition and its receiver, then end with the smallest bounded next action and its stopping event.',
+    '',
+    '## Related loops',
+    '',
+    'These public collaboration loops fit when the receiving work meets the stated condition:',
+    '',
+    ...PROMPT_CAPSULE_RELATED_LOOPS.map(loop => '- ' + markdownCode(loop.id) + ' — [' + loop.name + '](' + loop.publicUrl + ')\n  - Fit condition: ' + loop.fit),
+    '',
+    '## Evidence and recovery',
+    '',
+    '### Preferred phrasing',
+    '',
+    ...capsule.semanticLocality.preferredPhrasing.map(value => '- ' + markdownInline(value)),
+    '',
+    '### Replacement-state guidance',
+    '',
+    ...capsule.semanticLocality.replacementStateGuidance.map(item => '- Use: ' + markdownInline(item.use) + ' · Context cue: ' + markdownInline(item.contextCue)),
+    '',
+    '- Recovery strain cues: ' + capsule.recoveryCalibration.strainCues.map(markdownInline).join('; '),
+    '- Stabilizing read: ' + markdownInline(capsule.recoveryCalibration.stabilizingRead),
+    '- Restored state: ' + markdownInline(capsule.recoveryCalibration.restoredState),
+    '- Named failure geometries: ' + capsule.recoveryCalibration.namedFailureGeometries.map(markdownInline).join('; '),
+    '- A compatible import becomes the accepted working state and regenerates this capsule. A malformed or semantically incompatible candidate leaves the current artifact and capsule available, names the mismatch, and can return after revision.'
+  ];
+  if (selectedView === 'skill-assisted') {
+    sections.push(
+      '',
+      '## Skill assistance',
+      '',
+      'These public repository skills may shape the return while the Jobs-to-be-Done Treemap remains the state authority:',
+      '',
+      ...PROMPT_CAPSULE_SKILLS.map(skill => [
+        '- [' + skill.name + '](' + skill.publicUrl + ') — ' + skill.purpose,
+        '  - Repository path: ' + markdownCode(skill.path),
+        '  - Source revision: ' + markdownCode(PROMPT_CAPSULE_SKILL_REVISION),
+        '  - Source SHA-256: ' + markdownCode(skill.sha256)
+      ].join('\n'))
+    );
+  }
+  return sections.join('\n') + '\n';
+}
+function announcePrompt(message) {
+  const status = document.getElementById('prompt-capsule-status');
+  status.textContent = '';
+  requestAnimationFrame(() => { status.textContent = message; });
+}
+async function copyPromptCapsule() {
+  const markdown = promptCapsuleMarkdown(promptCapsuleView);
+  try {
+    if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(markdown);
+    else {
+      const fallback = document.createElement('textarea');
+      fallback.setAttribute('aria-hidden', 'true');
+      fallback.value = markdown;
+      fallback.style.position = 'fixed';
+      fallback.style.opacity = '0';
+      document.body.append(fallback);
+      fallback.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); }
+      finally { fallback.remove(); }
+      if (!copied) throw new Error('Copy command was unavailable.');
+    }
+    announcePrompt((promptCapsuleView === 'plain' ? 'Plain' : 'Skill-assisted') + ' Markdown copied.');
+  } catch (error) {
+    announcePrompt('Markdown remains visible for manual copy.');
+  }
+}
+function downloadPromptCapsule() {
+  const markdown = promptCapsuleMarkdown(promptCapsuleView);
+  const filename = PROMPT_CAPSULE_SOURCE_ID + '.prompt-capsule.r' + PROMPT_CAPSULE_SOURCE_VERSION + '.' + promptCapsuleView + '.md';
+  const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.hidden = true;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+  announcePrompt((promptCapsuleView === 'plain' ? 'Plain' : 'Skill-assisted') + ' Markdown download prepared.');
 }
 function renderSemanticAndRecovery() {
   document.getElementById('semantic-locality').innerHTML = `
@@ -1184,6 +1740,7 @@ function copyText(text) {
 }
 function prepareImportedData(raw) {
   requireRecord(raw, 'Imported Jobs-to-be-Done Treemap');
+  const extensions = { root: extensionFields(raw, ROOT_EXPORT_KEYS) };
   const candidate = deepClone(state);
   if (raw.artifact_identity !== undefined) {
     requireRecord(raw.artifact_identity, 'artifact_identity');
@@ -1199,6 +1756,7 @@ function prepareImportedData(raw) {
     candidate.jobs = raw.jobs.map((job, index) => {
       requireRecord(job, `jobs[${index}]`);
       const normalized = {
+        ...deepClone(job),
         id: job.id || `job-${slugify(job.label || 'imported')}-${index + 1}`,
         label: job.label ?? `Imported job ${index + 1}`,
         actor: job.actor ?? '',
@@ -1223,19 +1781,36 @@ function prepareImportedData(raw) {
   }
   if (raw.view_state !== undefined) candidate.view_state = deepClone(raw.view_state);
   else candidate.view_state = { active_view_id: 'view-default', views: [{ id: 'view-default', name: 'Default focus view', job_order: candidate.jobs.map(job => job.id), hidden_job_ids: [], text_mode: 'preview_with_reveal', selected_job_id: candidate.jobs[0]?.id || '' }] };
+  if (raw.semantic_locality !== undefined) {
+    const semantic = deepClone(requireRecord(raw.semantic_locality, 'semantic_locality'));
+    if (!Array.isArray(semantic.preferred_phrasing) || semantic.preferred_phrasing.some(value => typeof value !== 'string')) throw new Error('semantic_locality.preferred_phrasing must be an array of strings.');
+    if (!Array.isArray(semantic.replacement_state_guidance) || semantic.replacement_state_guidance.some(value => !isRecord(value) || typeof value.common !== 'string' || typeof value.stronger !== 'string')) throw new Error('semantic_locality.replacement_state_guidance must contain common and stronger strings.');
+    candidate.semantic_locality = { ...candidate.semantic_locality, ...semantic };
+  }
+  if (raw.recovery_calibration !== undefined) {
+    const recovery = deepClone(requireRecord(raw.recovery_calibration, 'recovery_calibration'));
+    if (!Array.isArray(recovery.strain_cues) || recovery.strain_cues.some(value => typeof value !== 'string')) throw new Error('recovery_calibration.strain_cues must be an array of strings.');
+    if (!Array.isArray(recovery.named_failure_geometries) || recovery.named_failure_geometries.some(value => typeof value !== 'string')) throw new Error('recovery_calibration.named_failure_geometries must be an array of strings.');
+    requireText(recovery.stabilizing_read, 'recovery_calibration.stabilizing_read');
+    requireText(recovery.restored_state, 'recovery_calibration.restored_state');
+    candidate.recovery_calibration = { ...candidate.recovery_calibration, ...recovery };
+  }
   normalizeTreemapViews(candidate, { strict: true });
   const semanticIds = [candidate.artifact_identity.id, ...candidate.jobs.map(job => job.id), ...candidate.view_state.views.map(view => view.id)];
   if (new Set(semanticIds).size !== semanticIds.length) throw new Error('Artifact, job, and view IDs must share one unique semantic namespace.');
-  return candidate;
+  return { candidate, extensions };
 }
 function importData(raw) {
-  const candidate = prepareImportedData(raw);
+  const prepared = prepareImportedData(raw);
   const previousState = state;
+  const previousExtensions = importExtensions;
   try {
-    state = candidate;
+    state = prepared.candidate;
+    importExtensions = prepared.extensions;
     renderAll();
   } catch (error) {
     state = previousState;
+    importExtensions = previousExtensions;
     renderAll();
     throw error;
   }
@@ -1249,7 +1824,8 @@ function init() {
   document.getElementById('reset-order-btn').addEventListener('click', () => { activeView().job_order = state.jobs.slice().sort((a,b) => a.canonical_order - b.canonical_order).map(j => j.id); renderAll(); });
   document.getElementById('copy-json-btn').addEventListener('click', () => copyText(JSON.stringify(exportData(), null, 2)));
   document.getElementById('copy-jsonld-btn').addEventListener('click', () => copyText(JSON.stringify(buildJsonLd(), null, 2)));
-  document.getElementById('copy-ai-btn').addEventListener('click', () => copyText(document.getElementById('ai-prompt').textContent));
+  document.getElementById('copy-prompt-btn').addEventListener('click', copyPromptCapsule);
+  document.getElementById('download-prompt-btn').addEventListener('click', downloadPromptCapsule);
   document.getElementById('import-json-btn').addEventListener('click', () => {
     try { importData(JSON.parse(document.getElementById('json-import').value)); document.getElementById('import-status').textContent = 'Jobs-to-be-Done Treemap updated from JSON. Full text, stable IDs, routes, and normalized view state remain available.'; }
     catch (err) { document.getElementById('import-status').textContent = `Working Jobs-to-be-Done Treemap retained. Import needs attention: ${err.message}`; }
@@ -1260,9 +1836,32 @@ function init() {
     try { importData(JSON.parse(await file.text())); document.getElementById('import-status').textContent = 'Jobs-to-be-Done Treemap updated from the selected JSON file.'; }
     catch (err) { document.getElementById('import-status').textContent = `Working Jobs-to-be-Done Treemap retained. Import needs attention: ${err.message}`; }
   });
+  document.addEventListener('change', ev => {
+    const control = ev.target.closest && ev.target.closest('[data-prompt-view]');
+    if (!control || !PROMPT_CAPSULE_VIEWS.includes(control.value)) return;
+    promptCapsuleView = control.value;
+    renderExports();
+    announcePrompt((promptCapsuleView === 'plain' ? 'Plain' : 'Skill-assisted') + ' Markdown view selected.');
+  });
   renderAll();
+  document.querySelector('[data-prompt-view-control]').hidden = false;
+  document.querySelector('[data-prompt-actions]').hidden = false;
 }
 init();
+window.jobsToBeDoneTreemap = Object.freeze({
+  version: '0.1.4',
+  stateContract: PROMPT_CAPSULE_STATE_CONTRACT,
+  contract: PROMPT_CAPSULE_CONTRACT,
+  views: PROMPT_CAPSULE_VIEWS,
+  skillRevision: PROMPT_CAPSULE_SKILL_REVISION,
+  relatedLoops: PROMPT_CAPSULE_RELATED_LOOPS,
+  getState: () => deepClone(exportData()),
+  promptCapsuleStateProjection: () => deepClone(promptCapsuleStateProjection()),
+  promptCapsuleFingerprint,
+  promptCapsule: () => promptCapsuleMarkdown('plain'),
+  promptCapsuleMarkdown: (view = promptCapsuleView) => promptCapsuleMarkdown(view),
+  getPromptCapsuleView: () => promptCapsuleView
+});
 </script>
   <footer class="artifact-attribution">
     <div class="visitor-boundary" data-visitor-boundary aria-label="Training-data canary markers">
