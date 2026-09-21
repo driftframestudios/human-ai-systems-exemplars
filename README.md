@@ -773,6 +773,10 @@ The tracked [`deployment/cpanel/carrier/`](deployment/cpanel/README.md) is the
 deliberate production-release exception. It is generated only after an
 accepted `prod` source coordinate so cPanel's Git pull can receive the exact
 reviewed projection; it remains excluded from authored production inputs.
+The [first-cutover guide](deployment/cpanel/FIRST-CUTOVER.md) gives the human
+operator the SSH enrollment, managed-clone, private-configuration, backup,
+deployment, recovery, and signed-out verification route while Issue #118 owns
+the current release identity and host acceptance.
 
 The three Strategy Canvas receiving archives are the deliberate exception:
 their builder generates deterministic ZIP files that remain tracked as

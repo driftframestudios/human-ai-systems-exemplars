@@ -267,12 +267,16 @@ release, destination, credential, and recovery decisions.
 Review the exact source SHA, aggregate package coordinate, both closure
 manifests, secret-boundary result, and recovery path. Follow the canonical
 [accepted release sequence](../../deployment/cpanel/README.md#accepted-release-sequence)
-from source promotion through the carrier-only release and cPanel's **Update
-from Remote** and **Deploy HEAD Commit** actions. #108 owns the human-selected
-protected branch path. #118's checked-in deployment route installs the prebuilt
-`primary-public/` and `iframe-public/` closures into verified, separate document
-roots. The cPanel clone stays outside both roots; the accepted source and
-manifest select publication membership before the host receives the release.
+from source promotion through the carrier-only release. The human operator
+then follows the [first pull-model enrollment and cutover
+guide](../../deployment/cpanel/FIRST-CUTOVER.md) for SSH access, managed-clone
+registration, private configuration, backup, canary rehearsal, cPanel's
+**Update from Remote** and **Deploy HEAD Commit** actions, and recovery. #108
+owns the human-selected protected branch path. #118's checked-in deployment
+route installs the prebuilt `primary-public/` and `iframe-public/` closures into
+verified, separate document roots. The cPanel clone stays outside both roots;
+the accepted source and manifest select publication membership before the host
+receives the release.
 
 Private-repository activation begins after the receiver confirms cPanel
 Terminal or shell access with a bounded deploy credential, or another bounded
