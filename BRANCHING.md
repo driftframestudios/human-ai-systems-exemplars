@@ -12,16 +12,18 @@ adapt research, integration, staging, release, and delivery to particular jobs.
 | `snapshot` | Exact selected `main` revision for stable-core comparison and recovery re-entry | Comparison input for a named preflight; feature work returns through a living branch |
 | `research` | Future-state projection and AI research-integration environment | Preview artifacts or a later purpose-bound research route |
 | `dev` | Sustained feature integration | Radiant Null collaboration family |
-| `stg` | Deployment candidates and Cloudflare Worker pilots | Vik Guru schema family |
-| `release` | Accepted release integration and promotion source for production | Vik Guru schema family |
+| `stg` | Deployment candidates and Cloudflare Worker pilots | Vik Guru delivery family |
+| `release` | Accepted release integration and promotion source for production | Vik Guru delivery family |
 | `docs` | Reviewed GitHub Pages projection rebuilt from an exact accepted `main` source | Radiant Null collaboration family |
-| `prod` | Accepted schema and later Worker-backed production surface | Vik Guru schema family |
+| `prod` | Accepted schema and exact production carrier authorized for delivery | Vik Guru delivery family |
 
 The service families are:
 
 - `schemas.radiantnull.com` for the collaboration-facing `main`, `dev`, and
   generated `docs` projections;
-- `schemas.vik.guru` for `stg`, `release`, and `prod`.
+- the Vik Guru delivery family for `stg`, `release`, and `prod`, with
+  `schemas.vik.guru` as the schema receiver, `vik.guru` as the primary visitor
+  receiver, and `iframes.vik.guru` as the embedded-artifact receiver.
 
 A GitHub Pages custom domain is repository-level. These groups describe source,
 promotion, and delivery intent rather than separate Pages sites for every
@@ -111,9 +113,15 @@ receives it.
 
 Carrier bytes remain downstream, generated `prod` release material. They do
 not promote backward into source branches and the assembler excludes them from
-production inputs. cPanel deploys `R`, while the carried manifest identifies
-`S`. If `prod` moves before the carrier merge, regenerate from the new source
-coordinate. The complete sequence and host boundary live in
+production inputs. The selected host receiver deploys `R`, while the carried
+manifest identifies `S`. `prod` names accepted production material rather than
+an attached checkout or transfer event. The immutable tag and carrier digests
+identify the payload; a transfer receipt identifies one delivery attempt; live
+observation identifies visitor standing. A human-approved deployment packet
+authorizes the first pilot; manual workflow dispatch can authorize a later
+artifact transfer without introducing another moving deployment branch. If
+`prod` moves before the carrier merge, regenerate from
+the new source coordinate. The complete sequence and host boundary live in
 [`deployment/cpanel/README.md`](deployment/cpanel/README.md).
 
 ## Synchronization and re-entry

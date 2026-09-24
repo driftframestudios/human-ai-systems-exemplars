@@ -389,7 +389,7 @@ No task-bound projection is currently active. The two completed projections rema
 | Agent observation channel agreement | Map one browser task across semantic/accessibility, DOM geometry, and rendered screenshot channels, then route a decision-changing divergence | Milestone-22 issue #149 runs a real repository task through an AX/DOM-style observation and a screenshot/VLM-style observation, and the result changes a decision beyond surface reading plus a practitioner probe |
 | Surface color-state stewardship | Carry a painted-owner foreground and state contract into a visitor system outside Context Canvas | A second non-Canvas system needs the same role/state/mode matrix and exposes a distinct decision not already carried by its CSS owner or visual-verification route |
 | Cloudflare contextual delivery | Connect a Canvas source closure to direct view, Worker envelope, storage, and framing choices | Another authorized proof requires a repeated delivery decision beyond the existing pilot |
-| Managed-host release reception | Receive one accepted source/carrier coordinate through a platform-managed clone, bounded private configuration, preflight, first cutover, recovery, and signed-out handback while source and host authority remain distinct | The first live cPanel activation exposes decision-changing enrollment or recovery friction, or a second repository needs the same host-reception route beyond the existing publication runbook and deployment owner |
+| Managed-host release reception | Receive one accepted source/carrier coordinate through a bounded managed-host transport, including a platform-managed clone or verified artifact push, with private configuration, preflight, first cutover, recovery, and signed-out handback while source and host authority remain distinct | The first live cPanel activation exposes decision-changing enrollment or recovery friction, or a second repository needs the same host-reception route beyond the existing publication runbook and deployment owner |
 | LIMS/ELN constellation re-entry | Navigate five source repositories, the integrated nucleus, issue long tail, and pull-request reassessment | Context Canvas workflows settle and constellation reassessment resumes |
 | Debrief composition stewardship | Map source-native movements, catalog relationships, route rail, and shared composition CSS | The Debriefs CSS tranche establishes stable module boundaries |
 | Planning inventory | Arrange artifacts, decisions, dependencies, receiving surfaces, resting conditions, and opportunities for selection and handoff | A non-Canvas planning cycle accepts the inventory itself as a decision-bearing deliverable and demonstrates opportunity capture, lower rediscovery cost, or clearer expectation negotiation beyond existing owners |
@@ -398,6 +398,17 @@ No task-bound projection is currently active. The two completed projections rema
 | Failure-geometry recognition and recovery routing | Name recurring collaboration strain, assess gap utility, and route the smallest adequate move to an owning surface | Two cycles repeat the same strain shape and the active cross-cutting guidance no longer supplies enough orientation |
 
 These candidates are vocabulary and possibility, rather than a commitment to populate the catalog. A future tranche should remain smaller than the set of recurring jobs it replaces. Single selectors, one-off bug mechanisms, exact visual choices, and current vendor facts continue through ordinary reasoning, owning skills, or current official documentation.
+
+The provider-confirmed shell-free cPanel route on 2026-09-24 broadens the
+`Managed-host release reception` billet from a platform-managed clone to a
+transport-neutral receiving job. The current route uses existing
+source-authority, secret-boundary, issue-chain, research, runbook, and bounded
+support contracts, plus the publication runbook and Issue #253. Its disposition
+remains `queue_with_trigger`: the first live artifact cutover can expose the
+decision-changing enrollment, interruption, or recovery behavior needed to
+form a portable skill. A second repository needing the same receiver can also
+activate formation. Until then, a new skill would mainly repeat the active
+runbook and Issue rather than remove rediscovery.
 
 The former Visual-reference cycle billet has precipitated into
 `context-canvas-visual-verification`. Visual-fingerprint stewardship folds into
