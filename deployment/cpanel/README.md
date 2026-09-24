@@ -132,6 +132,8 @@ npm run check:prod-projection
 npm run build:prod-projection
 npm run stage:prod-carrier
 npm run check:prod-carrier
+npm run build:prod-carrier-transfer -- --tag production-v0.2.0
+npm run verify:prod-carrier-transfer -- --tag production-v0.2.0 --receipt .cpanel-transfer/production-v0.2.0/hase-production-v0.2.0.receipt.json
 ```
 
 `check:prod-projection` writes and verifies the newly composed plan in
@@ -145,6 +147,11 @@ replaces only `.prod-projection-build/`. Both commands require the ignored
 It may be repeated while that root is the worktree's only open change.
 `check:prod-carrier` runs after the carrier is committed and proves the source,
 release, diff, manifest, index, and file closure without activating a host.
+The transfer builder reads that closure from an annotated production tag and,
+by default, writes a deterministic ZIP plus external receipt beneath ignored
+`.cpanel-transfer/`. The verifier reopens the archive, enforces portable regular
+files and explicit size/count bounds, and compares every carried byte with the
+tag before any host activation.
 
 ## Accepted release sequence
 
@@ -161,8 +168,9 @@ release, diff, manifest, index, and file closure without activating a host.
 5. Check the exact merged `R`, then select the host-supported receiver:
    - a shell-capable cPanel account performs **Update from Remote** followed by
      **Deploy HEAD Commit**; or
-   - a shell-free cPanel account forms the immutable carrier archive, stages it
-     privately, and follows the ordered cutover and recovery contract.
+   - a shell-free cPanel account runs the repository-owned transfer-envelope
+     builder and verifier, stages both outputs privately, and follows the
+     ordered cutover and recovery contract.
 
 If `prod` advances before step 4, begin again from the new accepted source and
 regenerate the carrier. Updating the older carrier branch would weaken the

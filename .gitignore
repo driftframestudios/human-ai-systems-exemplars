@@ -217,6 +217,9 @@ test-results/
 .prod-projection-build/
 .prod-projection-transaction-*/
 
+# Verified shell-free cPanel transfer envelopes
+.cpanel-transfer/
+
 # Local GitHub Pages build artifact
 .schema-pages/
 .schema_pages/

@@ -526,15 +526,19 @@ deployment bundle:
 npm run stage:prod-carrier
 # commit only deployment/cpanel/carrier/**
 npm run check:prod-carrier
+npm run build:prod-carrier-transfer -- --tag production-v0.2.0
+npm run verify:prod-carrier-transfer -- --tag production-v0.2.0 --receipt .cpanel-transfer/production-v0.2.0/hase-production-v0.2.0.receipt.json
 ```
 
 The test and check commands establish selected-file, transformation, package,
 installer, and recovery behavior at the current source. The build writes the
 ignored local preview. Staging writes the tracked deployment bundle only after
 a `prod` source revision is accepted, and the bundle check binds that committed
-release to its first-parent source and exact files. These commands prepare or
-inspect repository artifacts; the named deployment step still selects the
-cPanel destinations and establishes live behavior.
+release to its first-parent source and exact files. The transfer commands read
+the annotated tag, form one deterministic ZIP and machine-readable receipt,
+and recheck every archived byte without reconstructing private inputs. These
+commands prepare or inspect repository artifacts; the named deployment step
+still selects the cPanel destinations and establishes live behavior.
 
 [The Context Canvas orientation](context-canvas-project-surface/context-canvas/README.md#materialize-approved-public-references)
 and [durable materialization account](threadkeeping/context-canvas-public-reference-materialization.md)
