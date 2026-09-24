@@ -1,5 +1,12 @@
 # cPanel pull-model enrollment and first cutover
 
+> **Current GoDaddy account route — 2026-09-24:** the provider-confirmed plan
+> keeps SSH and Terminal outside the account. This pull guide remains the
+> reviewed route for a future shell-capable host. The current first cutover
+> follows [shell-free cPanel artifact delivery](SHELL-FREE-ARTIFACT-DELIVERY.md),
+> with [Issue #253](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/253)
+> owning the adapter and host-capability envelope.
+
 This guide is the human-operated route for connecting the private
 `driftframestudios/human-ai-systems-exemplars` repository to cPanel, selecting
 the reviewed `prod` carrier, and performing the first two-origin cutover.
@@ -31,7 +38,7 @@ The immutable production tag, when accepted, identifies `R`. The cPanel
 checkout remains attached to `prod` because the installer verifies both the
 branch name and its carrier-only first-parent relationship.
 
-## 1. Confirm the account can support the route
+## 1. Confirm the account can support the pull route
 
 Before creating a repository, confirm these account capabilities with the
 hosting provider or cPanel administrator:
@@ -52,7 +59,9 @@ hosting provider or cPanel administrator:
 
 This route pauses before public mutation when any capability is unsettled.
 The provider can then name the supported credential or repository-registration
-path without placing the clone inside a web root.
+path without placing the clone inside a web root. A provider-confirmed
+shell-free account continues through the artifact-delivery guide instead of
+simulating cPanel Git deployment with a public web script.
 
 ## 2. Freeze the release coordinate
 

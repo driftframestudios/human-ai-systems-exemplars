@@ -14,12 +14,14 @@ assembler reads iframe bytes from `createAggregatePackagePlan()` instead of
 walking the ignored `.iframe-route-build/` directory.
 
 cPanel receives the same projection through the tracked, generated
-`deployment/cpanel/carrier/` closure. The deployment manifest binds an accepted
-source commit `S`; a following carrier-only release commit `R` transports those
-bytes. Verification requires `R^1 = S`, an `S..R` diff confined to the carrier
-root, and exact agreement among the manifest, the Bash-readable index, and
-every carried file. This two-coordinate form avoids asking a commit to contain
-its own identifier.
+`deployment/cpanel/carrier/` closure. A shell-capable account can receive it
+through cPanel's managed Git deployment; a shell-free account can receive a
+verified archive through the artifact-delivery route. The deployment manifest
+binds an accepted source commit `S`; a following carrier-only release commit
+`R` transports those bytes. Verification requires `R^1 = S`, an `S..R` diff
+confined to the carrier root, and exact agreement among the manifest, the
+Bash-readable index, and every carried file. This two-coordinate form avoids
+asking a commit to contain its own identifier.
 
 ## Current entry condition
 
@@ -156,18 +158,23 @@ release, diff, manifest, index, and file closure without activating a host.
 4. Merge the carrier pull request only while `prod` still names `S`. The
    repository's ordinary reviewed merge form is valid because the resulting
    `R` keeps `S` as its first parent and changes only the carrier root.
-5. Check the exact merged `R`, then let cPanel perform **Update from Remote**
-   followed by **Deploy HEAD Commit**.
+5. Check the exact merged `R`, then select the host-supported receiver:
+   - a shell-capable cPanel account performs **Update from Remote** followed by
+     **Deploy HEAD Commit**; or
+   - a shell-free cPanel account forms the immutable carrier archive, stages it
+     privately, and follows the ordered cutover and recovery contract.
 
 If `prod` advances before step 4, begin again from the new accepted source and
 regenerate the carrier. Updating the older carrier branch would weaken the
 `R^1 = S` relationship that makes the handoff inspectable.
 
-The human-operated first enrollment, SSH key, managed-clone, private-config,
-backup, canary, cutover, recovery, response-policy, and signed-out observation
-route is in [cPanel pull-model enrollment and first
-cutover](FIRST-CUTOVER.md). An accepted production tag supplies immutable
-identity while the managed checkout remains attached to `prod`.
+The human-operated [pull-model enrollment and first cutover](FIRST-CUTOVER.md)
+owns a shell-capable managed clone. [Shell-free cPanel artifact
+delivery](SHELL-FREE-ARTIFACT-DELIVERY.md) owns File Manager staging, the first
+manual pilot, later manual Actions packaging, conditional FTPS, and the PHP
+finalizer boundary. An accepted production tag supplies immutable payload
+identity in both routes; only the pull route keeps a managed checkout attached
+to `prod`.
 
 An authorized iframe-only upload can use the complete generated
 `.iframe-route-build/iframes.vik.guru/v1/` directory as the interim `/v1/`
@@ -221,6 +228,7 @@ route observations remain with their separately authorized receiver.
 ## cPanel references
 
 - [First pull-model enrollment and cutover](FIRST-CUTOVER.md)
+- [Shell-free artifact delivery and first cutover](SHELL-FREE-ARTIFACT-DELIVERY.md)
 - [Set up access to private repositories](https://docs.cpanel.net/knowledge-base/web-services/guide-to-git-set-up-access-to-private-repositories/)
 - [Set up Git deployment](https://docs.cpanel.net/knowledge-base/web-services/guide-to-git-set-up-deployment/)
 - [Guide to Git Deployment](https://docs.cpanel.net/knowledge-base/web-services/guide-to-git-deployment/)
