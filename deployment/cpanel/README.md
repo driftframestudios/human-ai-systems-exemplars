@@ -163,6 +163,19 @@ If `prod` advances before step 4, begin again from the new accepted source and
 regenerate the carrier. Updating the older carrier branch would weaken the
 `R^1 = S` relationship that makes the handoff inspectable.
 
+The human-operated first enrollment, SSH key, managed-clone, private-config,
+backup, canary, cutover, recovery, response-policy, and signed-out observation
+route is in [cPanel pull-model enrollment and first
+cutover](FIRST-CUTOVER.md). An accepted production tag supplies immutable
+identity while the managed checkout remains attached to `prod`.
+
+An authorized iframe-only upload can use the complete generated
+`.iframe-route-build/iframes.vik.guru/v1/` directory as the interim `/v1/`
+unit. The accepted full iframe-origin closure at `R` is
+`deployment/cpanel/carrier/iframe-public/`; it also carries the root
+`robots.txt`. The first-cutover guide keeps the manual upload, host response
+policy, and later two-root cPanel acceptance distinct.
+
 The top-level `.cpanel.yml` delegates to one repository-relative Bash script.
 Real document roots, state paths, and first-cutover allowances live in a
 data-only private configuration beside the managed clone; the tracked
@@ -207,6 +220,11 @@ route observations remain with their separately authorized receiver.
 
 ## cPanel references
 
+- [First pull-model enrollment and cutover](FIRST-CUTOVER.md)
+- [Set up access to private repositories](https://docs.cpanel.net/knowledge-base/web-services/guide-to-git-set-up-access-to-private-repositories/)
+- [Set up Git deployment](https://docs.cpanel.net/knowledge-base/web-services/guide-to-git-set-up-deployment/)
 - [Guide to Git Deployment](https://docs.cpanel.net/knowledge-base/web-services/guide-to-git-deployment/)
 - [Git Version Control](https://docs.cpanel.net/cpanel/files/git-version-control/)
 - [Git advanced configuration and troubleshooting](https://docs.cpanel.net/knowledge-base/web-services/guide-to-git-advanced-configuration-and-troubleshooting/)
+- [Git UI timeout advisory](https://support.cpanel.net/hc/en-us/articles/4418071248791-Git-Repositories-may-timeout-when-cloned-or-updated-via-cPanel-s-Git-Version-Control-Feature)
+- [GitHub deploy keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys)
