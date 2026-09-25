@@ -13,9 +13,10 @@ This boundary protects against accidental credential-shaped material. The
 [Context Canvas public-reference materializer](context-canvas-public-reference-materialization.md)
 owns public-possible Notion route formation, and the main public-boundary
 receipt owns locator-free source history. A private Notion coordinate is a
-publication-boundary concern rather than automatically a credential. Issue #88
-continues to own reporter-facing security policy, `security.txt`, and hosted
-service controls.
+publication-boundary concern rather than automatically a credential. A
+repository-root reporter-facing security policy, `security.txt`, and hosted
+service controls remain a separate publication concern and need a named
+receiver before repository visibility changes.
 
 ## Selected mechanism
 
@@ -125,6 +126,31 @@ lexical and real paths must remain contained; cross-drive Windows targets,
 parent-symlink escape, final symlinks, and special entries stop the operation.
 The configured public-reference subtree has a named command so it can receive
 this observation before a publication-assembler handoff.
+
+### Adjacent embedded metadata publication boundary
+
+Credential-shaped material and embedded binary metadata now remain explicit
+peer observations. Betterleaks can return a clean text and artifact receipt
+while an image, document, media container, or archive still carries a precise
+location, device or lens serial, author, capture time, workstation path, or
+production-tool field. A human audience, rights, and consent decision remains a
+third distinct claim.
+
+During the 2026-09-25 public-visibility assessment at
+`main@cb479e44f956362b1fde8f2d26cbe7b2d7ae8e81`, a format-aware reading of the
+tracked raster collection found camera and lens serial fields in the XMP of
+three related background variants. Seven raster files retained device model and
+capture-time metadata. No EXIF GPS information field or XMP GPS coordinate key
+was observed in the 76 raster files inspected. The raw serial values remain out
+of this record.
+
+The human confirmed that location capture had been purposefully disabled and
+accepted the metadata finding as useful publication evidence. Device settings
+remain preventive context; inspection of the exact release closure establishes
+the current carrier. The source variants, generated derivatives, and packaged
+copies can therefore receive one format-aware normalization and re-observation
+before public visibility changes. The portable skill routes that branch through
+[embedded metadata at a publication boundary](../.agents/skills/secret-boundary-inspection/references/embedded-metadata-publication-boundary.md).
 
 ## One reviewed exception surface
 
@@ -252,6 +278,14 @@ behavior. Successor adoption supplies its first receiving use. The
 [formation account](collaboration-accounts/2026-08-26-secret-boundary-inspection.md)
 can now receive this successor-local configuration and scope observation.
 
+The 2026-09-25 metadata observation selects `iterate_now` for the existing
+contract rather than forming a second scanner skill. The credential detector
+retains one narrow completion claim; a conditional reference now makes the
+adjacent binary-carrier check discoverable when a publication closure contains
+images, documents, media, or archives. A later natural use can justify a
+standalone embedded-metadata skill if that job develops its own repeated tools,
+receipt schema, or receiving workflow.
+
 ## Re-entry
 
 Return here when one of these events occurs:
@@ -261,6 +295,7 @@ Return here when one of these events occurs:
 - a real finding tests the information diet or response order;
 - a hosted receiver gains a named budget and evidence job;
 - another repository or hosted receiver accepts the implementation and supplies its own observation;
+- a binary carrier, derivative profile, export tool, archive, or publication closure changes and needs an embedded-metadata observation;
   or
 - another repository use exposes a distinct decision, friction, or fold path.
 
