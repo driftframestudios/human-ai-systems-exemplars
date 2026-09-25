@@ -1,0 +1,58 @@
+name: Production projection and carrier contracts
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+    paths:
+      - ".github/workflows/production-carrier-contracts.yml"
+      - "package.json"
+      - "package-lock.json"
+      - "deployment/cpanel/**"
+      - "tests/prod-deployment/**"
+      - "tools/build-prod-projection.mjs"
+      - "tools/package-prod-carrier-transfer.mjs"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-carrier-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contracts:
+    name: Projection, carrier, and transfer contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out the candidate source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Use the reviewed Node runtime
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install the locked root toolchain
+        run: npm ci --ignore-scripts
+
+      - name: Exercise production delivery contracts
+        run: npm run test:prod-deployment
+
+      - name: Form and independently inspect the accepted carrier envelope
+        run: |
+          npm run build:prod-carrier-transfer -- --tag production-v0.2.0
+          npm run verify:prod-carrier-transfer -- --tag production-v0.2.0 --receipt .cpanel-transfer/production-v0.2.0/hase-production-v0.2.0.receipt.json
+          unzip -t .cpanel-transfer/production-v0.2.0/hase-production-v0.2.0.zip

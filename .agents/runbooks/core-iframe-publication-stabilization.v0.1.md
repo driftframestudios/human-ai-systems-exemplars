@@ -77,11 +77,11 @@ the same command, viewport or route coverage, evidence claim, and safe return.
 Before cPanel activation, select one human-authorized, host-supported receiver.
 A shell-capable account can use the managed-clone and Bash-installer route. A
 shell-free account can use a verified carrier archive, private staging, and a
-human-operated cutover while its stronger package verifier remains owned by
-the active adapter Issue. Keep credentials, exact account paths, and host
-limits with the protected receiver. When neither route has a verified staging
-and recovery path, stop at the reviewed cPanel closures and return `friction`;
-the repository remains private and the deployment phase remains at rest.
+human-operated cutover through the repository-owned transfer-envelope builder
+and verifier. Keep credentials, exact account paths, and host limits with the
+protected receiver. When neither route has a verified staging and recovery
+path, stop at the reviewed cPanel closures and return `friction`; the repository
+remains private and the deployment phase remains at rest.
 
 ## Current source owners
 

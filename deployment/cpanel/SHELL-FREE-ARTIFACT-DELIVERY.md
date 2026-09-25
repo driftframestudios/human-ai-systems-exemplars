@@ -5,8 +5,9 @@ carrier to a cPanel account that supplies File Manager while keeping SSH and
 Terminal outside the current plan. FTPS is a candidate successor whose TLS,
 credential scope, staging reach, and rename behavior still need host-specific
 observation. GitHub remains the working source of truth. cPanel receives one
-immutable, prebuilt artifact; signed-out observations establish the bytes and
-response behavior visitors receive.
+immutable, prebuilt transfer envelope—an archive plus its external receipt;
+signed-out observations establish the bytes and response behavior visitors
+receive.
 
 [Issue #253](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/253)
 owns the shell-free adapter and its acceptance. Issue
@@ -46,7 +47,8 @@ public deployment endpoint for the first pilot.
 | Stable comparison | `stable-core-v0.2.0` | Accepted stable-core coordinate `A` |
 | Release integration | `release` | Reviewed source, evidence, and artifact-builder contract accepted for production promotion |
 | Production carrier | `production-v0.2.0` on `prod` | Exact deployable carrier `R`; its manifest identifies source `S` |
-| Transfer attempt | Archive receipt and protected operator record | One upload, staging, activation, or recovery attempt |
+| Transfer envelope | Archive receipt | One archive formation bound to the payload and committed packaging tool |
+| Delivery attempt | Protected operator record | One upload, staging, activation, or recovery attempt |
 | Live state | #251 signed-out observation | Bytes, media types, response policy, redirects, cache behavior, and parent-child behavior visitors receive |
 
 A human-approved deployment packet and Issue receipt authorize the first
@@ -73,8 +75,8 @@ file-index SHA-256
 ```
 
 The carrier contains 322 files / 28,611,470 bytes: 251 primary files,
-69 iframe-origin files, and two manifest/index records. A current `git archive`
-ZIP is about 18.5 MB, within GoDaddy's documented default 32 MB PHP upload
+69 iframe-origin files, and two manifest/index records. The current
+transfer-envelope ZIP is about 18.5 MB, within GoDaddy's documented default 32 MB PHP upload
 envelope; File Manager applies its own account-specific limit, so read that
 limit in the actual interface before relying on the estimate.
 
@@ -160,59 +162,65 @@ uploaded, extracted, and inspected in private staging.
 
 ## Form the current release archive
 
-Run this phase from a dedicated clean worktree and place the accepted private
-`.env.public` receiver inside that worktree. The commands establish repository
-and archive input; they do not establish host upload or live behavior.
+Run this phase from a dedicated clean worktree at the reviewed transfer-tool
+revision. The immutable production tag remains the payload input; the worktree
+supplies the packaging and verification implementation. No private
+`.env.public` input is needed because this phase verifies the already-built
+carrier rather than reconstructing it.
 
 ```sh
 git fetch --prune --tags origin
-git worktree add ../hase-release-production-v0.2.0 production-v0.2.0
-cd ../hase-release-production-v0.2.0
-git rev-parse HEAD HEAD^1
-git diff --name-only production-v0.2.0^1 production-v0.2.0
+git worktree add ../hase-transfer-tool REVIEWED_TOOL_REVISION
+cd ../hase-transfer-tool
+git rev-parse production-v0.2.0^{} production-v0.2.0^{}^1
+git diff --no-renames --name-only production-v0.2.0^{}^1 production-v0.2.0^{}
 npm ci --ignore-scripts
-npm run check:prod-carrier
 npm run test:prod-deployment
 ```
 
 The two Git coordinates should equal exact `R` and `S`. Every diff path should
-remain beneath `deployment/cpanel/carrier/`.
+remain beneath `deployment/cpanel/carrier/`. The builder repeats those release,
+tree, manifest, index, and byte checks before it writes an archive. The receipt
+records the exact committed tool revision and tool-file digest separately from
+the immutable payload coordinate.
 
-Until #253 supplies the repository-owned packaging helper, this bounded Git
-command forms one archive directly from immutable carrier blobs:
+Form the transfer envelope directly from the annotated production tag:
 
 ```sh
-git archive \
-  --format=zip \
-  --output=hase-production-v0.2.0.zip \
-  --prefix=hase-production-v0.2.0/ \
-  production-v0.2.0 \
-  deployment/cpanel/carrier
-shasum -a 256 hase-production-v0.2.0.zip
-unzip -Z1 hase-production-v0.2.0.zip
+npm run build:prod-carrier-transfer -- --tag production-v0.2.0
+npm run verify:prod-carrier-transfer -- \
+  --tag production-v0.2.0 \
+  --receipt .cpanel-transfer/production-v0.2.0/hase-production-v0.2.0.receipt.json
 ```
 
-Keep the commit and pathspec as separate arguments. Passing the carrier tree
-as `production-v0.2.0:deployment/cpanel/carrier` gives Git a tree object rather
-than a commit and can place current creation times into the ZIP. The command
-above uses the tagged commit time and reproduced an identical archive digest
-across two local formations.
+The dependency-free helper reads carrier blobs from the annotated tag rather
+than the worktree. It requires `R^1 = S`, a carrier-only release diff, regenerated
+manifest and index records, ordinary non-executable files, exact manifest/index
+closure, and portable path names. It writes into an empty ignored directory,
+then reopens and verifies the completed ZIP and its external receipt before
+reporting success. Formations in separate empty output directories produce the
+same archive bytes when tag, committed tool bytes, Node version, and zlib
+version agree; the receipt records that runtime. Its creation time changes the
+receipt, not the archive. A stopped formation remains available for diagnosis;
+retry into a fresh empty directory selected with `--output`.
 
 The carrier directory inside the archive should contain exactly:
 
 ```text
 hase-production-v0.2.0/
-  deployment/cpanel/carrier/
-    deployment-files.tsv
-    deployment-manifest.json
-    iframe-public/
-    primary-public/
+  deployment-files.tsv
+  deployment-manifest.json
+  iframe-public/
+  primary-public/
 ```
 
-Record the archive digest, byte count, Git version, and creation time beside the
-accepted manifest and file-index digests. Keep this local command as an interim
-operator step: #253 will add archive-shape verification, bounds, negative tests,
-and a machine-readable receipt.
+The receipt binds the production tag object, exact `R` and `S`, relationship,
+manifest and index digests, carrier counts, archive digest and size, and the
+packaging-tool revision and file digest. It is a transfer record, not a new
+release identity: a tooling-only change preserves `production-v0.2.0`, while a
+change to carrier bytes or their source relationship requires a new accepted
+carrier and tag. Keep the receipt beside the archive through staging and retain
+its public-safe fields with the release handback.
 
 If the Betterleaks helper is already installed and verified, observe the exact
 carrier before transfer:
@@ -229,27 +237,29 @@ archive integrity and live-host evidence.
 
 1. Open **cPanel → Files → File Manager** and navigate to the private staging
    directory recorded earlier.
-2. Select **Upload**, choose `hase-production-v0.2.0.zip`, and wait for the
-   complete upload result.
+2. Select **Upload**, choose both `hase-production-v0.2.0.zip` and
+   `hase-production-v0.2.0.receipt.json`, and wait for both complete upload
+   results.
 3. Compare the displayed archive size with the protected release receipt.
 4. Select the staged ZIP and choose **Download**. On the trusted release
-   workstation, calculate its SHA-256 and require equality with the protected
-   release receipt. This round trip observes the complete uploaded archive
-   before extraction.
+   workstation, rerun `verify:prod-carrier-transfer` with the explicitly
+   selected production tag, the locally retained receipt, and the downloaded
+   ZIP passed through `--archive`. The local receipt remains the trust anchor;
+   the round trip observes the complete uploaded archive before extraction.
 5. Select the archive and choose **Extract** into a fresh, release-specific
    staging directory.
-6. Navigate to the extracted `deployment/cpanel/carrier/` directory and confirm
+6. Navigate to the extracted `hase-production-v0.2.0/` directory and confirm
    the names above. Confirm that `deployment-manifest.json` and
    `deployment-files.tsv` are regular files and that both public directories
    are present.
 7. Keep the archive and extracted generation outside both document roots while
    the current roots remain live.
 
-The upload/download digest round trip establishes the staged archive bytes;
+The upload/download verification round trip establishes the staged archive bytes;
 File Manager name and shape observations provide a bounded extraction check.
 The current interface does not establish every extracted file's SHA-256. The
 trusted pre-upload carrier check and #251's complete signed-out byte comparison
-bracket that gap; #253 owns a stronger shell-free verifier.
+bracket that gap.
 
 ## Activate the two roots
 
@@ -370,9 +380,9 @@ The packaging job runs without hosting credentials:
    bounded timeout;
 4. install Node 22 from a full-SHA-pinned GitHub action and use
    `npm ci --ignore-scripts`;
-5. run `npm run test:prod-deployment` plus #253's self-contained carrier and
-   archive verification;
-6. form the archive and receipt from tracked carrier blobs;
+5. run `npm run test:prod-deployment` and the focused transfer-contract tests;
+6. build the archive and receipt from tagged carrier blobs, then rerun the
+   self-contained receipt and archive verification;
 7. run the canary-proven artifact secret scan in the admitted hosted boundary;
 8. retain the immutable artifact and sanitized receipt for the shortest useful
    interval; and

@@ -15,6 +15,8 @@
     "check:prod-projection": "node tools/build-prod-projection.mjs --check",
     "stage:prod-carrier": "node tools/build-prod-projection.mjs --stage-carrier",
     "check:prod-carrier": "node tools/build-prod-projection.mjs --check-carrier",
+    "build:prod-carrier-transfer": "node tools/package-prod-carrier-transfer.mjs --build",
+    "verify:prod-carrier-transfer": "node tools/package-prod-carrier-transfer.mjs --verify",
     "build:schema-pages": "node tools/build-schema-pages.mjs",
     "check:schema-pages-receiver": "node tools/verify-schema-pages-receiver.mjs",
     "build:schema-delivery": "node cloudflare/schema-delivery/build.mjs",
