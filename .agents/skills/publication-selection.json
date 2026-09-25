@@ -149,6 +149,7 @@
       "publicationStanding": "public_ready",
       "sourceAvailability": "included",
       "dependencies": [
+        ".agents/skills/secret-boundary-inspection/references/embedded-metadata-publication-boundary.md",
         "threadkeeping/repository-secret-material-boundary.md",
         "threadkeeping/context-canvas-public-reference-materialization.md",
         "threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md"
