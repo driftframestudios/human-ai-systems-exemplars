@@ -2,6 +2,12 @@
 
 Threadkeeping carries decisions, rationale, assumptions, source boundaries, review history, and the next re-entry position across sessions and tools. It lives beside the work so visitor and runtime surfaces stay focused on what a reader can use. Each record leads with the desired state and next move; safety, privacy, evidence, and compatibility boundaries travel with the affirmative behavior they protect.
 
+`visibility: "collaboration_thread_only"` places a record in repository
+collaboration while keeping it outside visitor and runtime deployment
+closures. Repository visibility governs who can read that tracked source. A
+future repository-visibility review therefore includes these records even
+though production assemblers leave them outside the visitor surface.
+
 The files in this directory keep their existing paths. Collaboration notes, source pages, and prior pull requests already reference them, so path stability preserves continuity. This README supplies the stable route now. Subdirectories can emerge later when the corpus itself demonstrates a durable grouping.
 
 ## Current ledgers

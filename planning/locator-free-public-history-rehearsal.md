@@ -1,6 +1,6 @@
 ---
 title: Locator-free public baseline rehearsal
-status: two-commit successor snapshot ready for review
+status: public-possible rehearsal retained; repository visibility remains private
 operation: additive public-possible population
 snapshot_receipt: public-possible-exemplar-baseline.v1
 revision_receipt: public-baseline-revision-links.v1
@@ -19,6 +19,29 @@ The retained source keeps its history and resolver role. This repository keeps
 its own curated collaboration history and becomes the public-possible source,
 visitor, schema, and delivery receiver. Technical-collaboration replay remains
 an independent learning surface.
+
+## Current repository-visibility posture · 2026-09-25
+
+The repository stays private while its publication-readiness owners settle.
+`public-possible` describes source prepared for possible public reception;
+repository visibility remains a separate human decision on one exact reviewed
+revision.
+
+A future visibility packet joins the current-tree and GitHub-native locator
+settlement in #60, exact secret-material and embedded-metadata observations,
+asset audience, rights, consent, and attribution standing in #88 and its
+prototype-provenance receiver #257, the short-lived branch disposition in #90,
+and the repository settings, rules, security, and reporting posture selected
+for public operation. Gate completion produces a decision-ready packet. An
+explicit human cue on that packet authorizes the visibility change.
+
+GitHub's
+[repository-visibility documentation](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/setting-repository-visibility#changing-from-private-to-public)
+states that every push ruleset becomes disabled when a private repository
+becomes public. The visibility packet therefore captures the five active
+rulesets before the change and verifies that the intended `main`, `release`,
+and `prod` protections are active again immediately afterward. Actions history
+and logs also become public and receive their own review in the same packet.
 
 ## Refreshed source boundary
 
