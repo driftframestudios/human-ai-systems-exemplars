@@ -53,7 +53,9 @@
       ["Prompt-Side Conditions Practice", "prompt-side-conditions-practice.html"],
       ["Benchmark Orientation", "benchmark-orientation.html"],
       ["MAPS Evaluations", "maps-evaluations.html"],
-      ["Brief Exploration exemplar", "exemplar-brief-exploration.html"],
+      ["The Photographs Were a Proxy", "exemplar-brief-exploration.html"],
+      ["Language Control Belongs with the Learner", "multilingual-clinical-vocabulary-practice.html"],
+      ["The Form Is a Contract", "recoverable-enterprise-forms.html"],
       ["Gallery List exemplar", "exemplar-gallery-list.html"]
     ]
   };

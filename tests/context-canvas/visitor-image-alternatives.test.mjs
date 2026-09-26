@@ -26,13 +26,23 @@ const repeatedImageAlternatives = new Map([
     "forms_upfront.png",
     "Step three of a payment form shows card number, security code, expiration date, and a Create your portfolio button.",
   ],
+  [
+    "langwhich_upfront.png",
+    "Two LangWhich prototype screens showing learner-selected English and Spanish clinical vocabulary views.",
+  ],
+  [
+    "../img/plot/structure_sensor_3_angled.webp",
+    "A current black Structure Sensor 3 shown at an angle.",
+  ],
 ]);
 
 const socialImageAlternatives = new Map([
   ["index.html", "Portrait of Vikrant Kudesia, smiling."],
   ["debriefs.html", "Handwritten troubleshooting notes, system diagrams, a pen, and crumpled paper spread across a desk."],
   ["exemplar-gallery-list.html", "Handwritten troubleshooting notes, system diagrams, a pen, and crumpled paper spread across a desk."],
-  ["exemplar-brief-exploration.html", "A wall-sized handwritten mind map connects architecture, construction, inspections, augmented reality, and measurement ideas."],
+  ["exemplar-brief-exploration.html", "A recurring coordination job moves through capture authority, an immutable source, task-fitted spatial representations, fitness evidence, role review, correction, and reuse."],
+  ["multilingual-clinical-vocabulary-practice.html", "Katarina learner situation model showing established nursing knowledge, English terminology mapping, commute, classroom, home and supervised-preparation contexts, learner-chosen language support, and distinct educator, terminology and licensure authority routes."],
+  ["recoverable-enterprise-forms.html", "A person’s purpose moves through semantic HTML, understandable state, typed validation and recovery, a replay-safe service command, a provider boundary, and a durable receipt and support route."],
   ["exemplar-index-landing.html", "A handwritten customer-support journey map sits beside a sketched person and a cup of tea."],
   ["exemplar-ideal-debrief.html", "An abstract pink contour visualization radiates from a small central point."],
   ["exemplar-maximal-debrief.html", "An abstract pink contour visualization radiates from a small central point."],
@@ -76,7 +86,7 @@ test("parent visitor images carry a legible text relationship", async () => {
     }
   }
 
-  assert.equal(imageCount, 146);
+  assert.equal(imageCount, 153);
   assert.deepEqual(
     emptyAlternatives,
     ["debriefs.html:../img/plot/genomic_viewer_boundary_contract_map.svg"],

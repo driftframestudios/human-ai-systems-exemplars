@@ -10,7 +10,6 @@ const contextRoot = resolve(
 );
 
 const sourceEraRoutes = [
-  "exemplar-brief-exploration.html",
   "exemplar-gallery-list.html",
   "exemplar-ideal-debrief.html",
   "exemplar-maximal-debrief.html",
@@ -38,6 +37,38 @@ test("retained non-profile exemplars state observed source-era standing", async 
       node["cc:standing"]["cc:evidenceClass"],
       "retained_source_era_surface",
       route
+    );
+  }
+});
+
+test("the retained gallery routes each invitation to its current Debrief", async () => {
+  const route = "exemplar-gallery-list.html";
+  const source = await readFile(resolve(contextRoot, route), "utf8");
+  const graph = await jsonLd(route);
+  const itemList = graph["@graph"].find(item => item["@type"] === "ItemList");
+  const page = webpage(graph, route);
+  const expected = [
+    "exemplar-brief-exploration.html",
+    "multilingual-clinical-vocabulary-practice.html",
+    "recoverable-enterprise-forms.html",
+  ];
+
+  assert.deepEqual(
+    itemList.itemListElement.map(item => new URL(item.url).pathname.split("/").at(-1)),
+    expected,
+  );
+  assert.deepEqual(
+    page.hasPart.map(item => {
+      const url = new URL(item["@id"]);
+      return `${url.pathname.split("/").at(-1)}${url.hash}`;
+    }),
+    expected.map(current => `${current}#article`),
+  );
+  for (const current of expected) {
+    assert.equal(
+      [...source.matchAll(new RegExp(`href="${current.replace(".", "\\.")}"`, "gu"))].length,
+      3,
+      `${current} owns the image, title, and final invitation`,
     );
   }
 });

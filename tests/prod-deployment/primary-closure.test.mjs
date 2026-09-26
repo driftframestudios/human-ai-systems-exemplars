@@ -53,6 +53,8 @@ const acceptedRoutes = [
   "field-inspection-harness-replatform.html",
   "distributed-inspection-harness.html",
   "exemplar-brief-exploration.html",
+  "multilingual-clinical-vocabulary-practice.html",
+  "recoverable-enterprise-forms.html",
   "exemplar-gallery-list.html",
 ].sort();
 const restingExemplars = [
@@ -98,7 +100,7 @@ async function loadPrimaryManifest() {
   return validatePrimaryManifest(JSON.parse(source));
 }
 
-test("the production manifest carries the accepted 37-route primary collection and its explicit closure", async () => {
+test("the production manifest carries the accepted 39-route primary collection and its explicit closure", async () => {
   const manifest = await loadPrimaryManifest();
   const projectedPaths = new Set(manifest.files.map(({ projected_path }) => projected_path));
   const rootHtml = manifest.files
@@ -219,7 +221,7 @@ test("the semantic inventory resolves every selected image without becoming a me
   }
 });
 
-test("the sitemap identifies exactly the 37 indexable production routes", async () => {
+test("the sitemap identifies exactly the 39 indexable production routes", async () => {
   const sitemap = await readFile(
     path.join(repositoryRoot, canvasRoot, "sitemap.xml"),
     "utf8",

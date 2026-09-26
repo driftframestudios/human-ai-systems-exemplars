@@ -58,7 +58,7 @@
   </url>
   <url>
     <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/debriefs.html</loc>
-    <lastmod>2026-08-29</lastmod>
+    <lastmod>2026-09-25</lastmod>
   </url>
   <url>
     <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/registry-goal-fidelity-routing.html</loc>
@@ -142,7 +142,15 @@
   </url>
   <url>
     <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/exemplar-brief-exploration.html</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-09-25</lastmod>
+  </url>
+  <url>
+    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/multilingual-clinical-vocabulary-practice.html</loc>
+    <lastmod>2026-09-25</lastmod>
+  </url>
+  <url>
+    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/recoverable-enterprise-forms.html</loc>
+    <lastmod>2026-09-25</lastmod>
   </url>
   <url>
     <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/exemplar-gallery-list.html</loc>

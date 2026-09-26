@@ -84,7 +84,7 @@ Current high-signal ownership:
 | Source | Direct consumer | Visual authority and seam |
 | --- | --- | --- |
 | [`expanded.css`](expanded.css) | Broad Context Canvas foundation | Shared reading, table, editorial, and route-card rules; named route extractions progressively reduce this surface. |
-| [`canvas-shell.css`](canvas-shell.css) | 41 direct consumers across 42 top-level routes; [`debriefs.html`](debriefs.html) currently demonstrates source-derived rail mode | Shared generated footer and page rail, loaded after foundation, component, and route CSS. `data-canvas-page-rail-source` exposes direct identified children as destinations while major-section discovery remains the fallback; route bundles retain palette, rhythm, density, and composition. |
+| [`canvas-shell.css`](canvas-shell.css) | 43 direct consumers across 44 top-level routes; [`debriefs.html`](debriefs.html) currently demonstrates source-derived rail mode | Shared generated footer and page rail, loaded after foundation, component, and route CSS. `data-canvas-page-rail-source` exposes direct identified children as destinations while major-section discovery remains the fallback; route bundles retain palette, rhythm, density, and composition. |
 | [`styles/routes/about.css`](styles/routes/about.css) | [`index.html`](index.html) | About tokens and composition under the [paired-evidence ledger contract](../../visual-fidelity-contracts/tiffany-ledger-field.md) and [prompt-condition routing contract](../../visual-fidelity-contracts/tiffany-conditions-routing-field.md); shared route-card and table rules remain in `expanded.css`. |
 | [`styles/routes/about-noscript.css`](styles/routes/about-noscript.css) | [`index.html`](index.html) without scripting | Complete static folio and Prompt Conditions reading after the About route bundle. |
 | [`styles/routes/ai-systems.css`](styles/routes/ai-systems.css) | Sixteen pages carrying `.ai-systems-page` | Shared scan, content-region, card, reading-path, instrument, and orchestration styles. The [operating-map visual contract](../../visual-fidelity-contracts/cobalt-operating-field.md) keeps actors, decision context, service movement, recovery, and authority legible. |
@@ -92,12 +92,12 @@ Current high-signal ownership:
 | [`styles/routes/ai-systems-entry.css`](styles/routes/ai-systems-entry.css) | [`ai-systems.html`](ai-systems.html) | Entry bridges, live-lab summaries, Goal Fidelity tables, and late route anchors after the shared AI Systems route bundle. |
 | [`styles/routes/hiring-surfaces.css`](styles/routes/hiring-surfaces.css) | [`hiring-surfaces-talent-agent-intake.html`](hiring-surfaces-talent-agent-intake.html) | Two-reader palette, Hiring content regions and tables, responsive treatment, and late route anchors after the shared AI Systems route bundle. |
 | [`styles/components/career-regulatory-slide.css`](styles/components/career-regulatory-slide.css) | [`exemplar-ideal-debrief.html`](exemplar-ideal-debrief.html), [`exemplar-index-landing.html`](exemplar-index-landing.html), [`exemplar-maximal-debrief.html`](exemplar-maximal-debrief.html) | Reusable split-to-stack career and regulatory slides, accent cards, content sections, responsive and container behavior, entrance motion, and reduced-motion response; loaded after `expanded.css` and before the shell. |
-| [`styles/components/debrief-reading.css`](styles/components/debrief-reading.css) | Seventeen Debrief and enterprise-reading routes | Shared reading-route navigation, source-basis lists, and orientation-reading placement, loaded directly after `expanded.css`. |
+| [`styles/components/debrief-reading.css`](styles/components/debrief-reading.css) | Twenty Debrief and enterprise-reading routes | Shared reading-route navigation, source-basis lists, and orientation-reading placement, loaded directly after `expanded.css`. |
 | [`styles/routes/benchmark-readings.css`](styles/routes/benchmark-readings.css) | [`benchmark-orientation.html`](benchmark-orientation.html), [`maps-evaluations.html`](maps-evaluations.html) | Result-coordinate flow, reusable result profile, source-lane distinction, and canary orientation after the shared AI Systems family bundle. |
 | [`styles/routes/debriefs.css`](styles/routes/debriefs.css) | [`debriefs.html`](debriefs.html) | Catalog layout, filters, Debrief-card badges and metadata, browse/preview composition, and alternate modes after the shared Debrief-reading component. |
 | [`styles/routes/three-movement-debrief.css`](styles/routes/three-movement-debrief.css) | [`choose-your-player-humatics.html`](choose-your-player-humatics.html) | Three-movement hero, working-posture, and contract-transition composition under the [Dual-Track Debrief Composition](../../visual-fidelity-contracts/dual-track-debrief-composition.md) contract. |
 | [`styles/routes/genomic-viewer.css`](styles/routes/genomic-viewer.css) | [`genomic-viewer-replatforming.html`](genomic-viewer-replatforming.html) | Paired solution and implementation tracks, route visuals, alternate modes, and named shared-component seams under the [paired-debrief composition contract](../../visual-fidelity-contracts/dual-track-debrief-composition.md); loaded after the Debrief-reading component and before the shell. |
-| [`styles/contracts/debrief-composition.css`](styles/contracts/debrief-composition.css) | Seven composed Debriefs | Contract layer for movement labels, outcome blocks, handoffs, and Evidence Boundaries; loaded after foundation, component, route, and shell styles where a composition opts in. |
+| [`styles/contracts/debrief-composition.css`](styles/contracts/debrief-composition.css) | Ten composed Debriefs, including [`The Photographs Were a Proxy`](exemplar-brief-exploration.html), [`Language Control Belongs with the Learner`](multilingual-clinical-vocabulary-practice.html), and [`The Form Is a Contract`](recoverable-enterprise-forms.html) | Contract layer for movement labels, outcome blocks, handoffs, and Evidence Boundaries; loaded after foundation, component, route, and shell styles where a composition opts in. The three current Debriefs use the shared lean-paired grammar without adding route-specific CSS. |
 | [`field-inspection.css`](field-inspection.css) | [`field-inspection-harness-replatform.html`](field-inspection-harness-replatform.html) | Field Inspection route treatment, loaded after the shared foundation. |
 
 Existing companions such as `fmi-lims-eln-replatforming.css` remain focused on their named surfaces.
@@ -163,9 +163,9 @@ is a supplemental Context Canvas instrument in the Core delivery family: its
 hosted projection uses scripts and projected popup exits, while its adjacent
 full view remains the ordinary `conditioning-field.html` link. The About
 cartography remains a recorded embedded-document exception with five labelled
-separate-tab links. An Accessible Forms reading has no dedicated route yet, so
-its six retained catalog cards present a clear preparation state instead of a
-placeholder destination.
+separate-tab links. The current Debriefs catalog now carries a dedicated
+recoverable-enterprise-forms route. Four source-era example cards preserve
+their recorded preparation state instead of acquiring a retrospective link.
 
 The dependency-free materializer retains a tested hosted-iframe twin seam for
 an explicitly late-bound future receiver. Current manifest-owned iframe

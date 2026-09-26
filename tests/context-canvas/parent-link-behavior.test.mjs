@@ -49,17 +49,25 @@ test("the About cartography retains its recorded embedded-document exception", a
   }
 });
 
-test("Accessible Forms remains truthful catalog content until its reading is ready", async () => {
-  const owners = [
-    "debriefs.html",
-    "exemplar-gallery-list.html",
+test("current catalogs link the Forms Debrief while retained examples preserve their recorded pending state", async () => {
+  const currentHeading = "<h2 class=\"txt-h2\">The Form Is a Contract</h2>";
+  for (const owner of ["debriefs.html", "exemplar-gallery-list.html"]) {
+    const html = await readFile(join(canvasRoot, owner), "utf8");
+    const currentHeadingIndex = html.indexOf(currentHeading);
+    assert.ok(currentHeadingIndex >= 0, `${owner} names the Forms Debrief`);
+    const currentCard = html.slice(currentHeadingIndex, currentHeadingIndex + 5000);
+    assert.match(currentCard, /href="recoverable-enterprise-forms\.html"/u);
+    assert.doesNotMatch(currentCard, /Dedicated reading in preparation\./u);
+  }
+
+  const retainedOwners = [
     "exemplar-ideal-debrief.html",
     "exemplar-maximal-debrief.html",
     "exemplar-maximal-information-radiator.html",
   ];
   let cards = 0;
 
-  for (const owner of owners) {
+  for (const owner of retainedOwners) {
     const html = await readFile(join(canvasRoot, owner), "utf8");
     const heading = "<h2 class=\"txt-h2\">The Architecture of Accessible Forms</h2>";
     let headingIndex = html.indexOf(heading);
@@ -74,7 +82,33 @@ test("Accessible Forms remains truthful catalog content until its reading is rea
     }
   }
 
-  assert.equal(cards, 6, "the primary catalog and retained exemplars agree on six cards");
+  assert.equal(cards, 4, "the retained examples preserve four recorded pending cards");
+});
+
+test("the current Debrief routes expose truthful navigation and progressive enhancement", async () => {
+  const currentRoutes = [
+    "exemplar-brief-exploration.html",
+    "multilingual-clinical-vocabulary-practice.html",
+    "recoverable-enterprise-forms.html",
+  ];
+  for (const route of currentRoutes) {
+    const html = await readFile(join(canvasRoot, route), "utf8");
+    assert.doesNotMatch(
+      html,
+      /href="debriefs\.html"[^>]*aria-current="page"/u,
+      `${route} does not identify the catalog route as the current page`,
+    );
+  }
+
+  const [catalog, enhancement] = await Promise.all([
+    readFile(join(canvasRoot, "debriefs.html"), "utf8"),
+    readFile(join(canvasRoot, "debriefs-catalog.js"), "utf8"),
+  ]);
+  assert.match(catalog, /<a class="skip-link" href="#main-content">/u);
+  assert.match(catalog, /<nav aria-label="Primary">/u);
+  assert.match(catalog, /<main id="main-content"[^>]*tabindex="-1">/u);
+  assert.match(catalog, /data-debrief-preview hidden>/u);
+  assert.match(enhancement, /preview\.hidden = false;\s*setSelections/u);
 });
 
 test("the shared parent footer emits standard links", async () => {
