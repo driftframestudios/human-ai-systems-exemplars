@@ -171,7 +171,7 @@ The general utility discovers every top-level `context-canvas/*.html` page. This
 | Prompt conditions | `conditioning-field.html`, `prompt-side-conditions-practice.html` |
 | Composed Debriefs | `choose-your-player-humatics.html`, `ehr-discrete-genomic-result.html`, `ehr-interface-engine-replatform.html`, `ehr-pgx-alert-failure.html`, `ehr-three-front-doors.html`, `ehr-two-charts-one-result.html`, `fmi-clinical-trial-coordination.html` |
 | Enterprise readings | `distributed-inspection-harness.html`, `field-inspection-harness-replatform.html`, `fmi-lims-eln-replatforming.html`, `genomic-viewer-replatforming.html`, `initiative-costing.html`, `narrative-execution-gap-research-atlas.html`, `three-way-comparative-return.html`, `who-to-believe-reviews-platform.html` |
-| Historical exemplars | `exemplar-brief-exploration.html`, `exemplar-gallery-list.html`, `exemplar-ideal-debrief.html`, `exemplar-index-landing.html`, `exemplar-maximal-debrief.html`, `exemplar-maximal-information-radiator.html` |
+| Historical exemplars | `spatial-capture-collaborative-memory.html`, `exemplar-gallery-list.html`, `exemplar-ideal-debrief.html`, `exemplar-index-landing.html`, `exemplar-maximal-debrief.html`, `exemplar-maximal-information-radiator.html` |
 
 The route catalog also names standing—primary, instrument, Debrief, exemplar, or recovery—so a collaborator can understand why a page exists without teaching the capture runner separate logic.
 

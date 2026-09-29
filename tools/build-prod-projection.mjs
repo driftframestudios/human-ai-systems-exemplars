@@ -1421,6 +1421,77 @@ function svgDimensions(bytes) {
     : { standing: "not_declared", source: "svg_root" };
 }
 
+function webpDimensions(bytes, label) {
+  if (
+    bytes.byteLength < 20 ||
+    bytes.subarray(0, 4).toString("ascii") !== "RIFF" ||
+    bytes.subarray(8, 12).toString("ascii") !== "WEBP"
+  ) {
+    fail(`${label} must contain a WebP RIFF container.`);
+  }
+  const containerEnd = bytes.readUInt32LE(4) + 8;
+  if (containerEnd > bytes.byteLength || containerEnd < 20) {
+    fail(`${label} must contain a complete WebP RIFF container.`);
+  }
+
+  for (let offset = 12; offset + 8 <= containerEnd;) {
+    const chunk = bytes.subarray(offset, offset + 4).toString("ascii");
+    const size = bytes.readUInt32LE(offset + 4);
+    const dataStart = offset + 8;
+    const dataEnd = dataStart + size;
+    if (dataEnd > containerEnd) {
+      fail(`${label} must contain complete WebP chunks.`);
+    }
+
+    let width;
+    let height;
+    let source;
+    if (chunk === "VP8X") {
+      if (size < 10) fail(`${label} must contain a complete WebP VP8X header.`);
+      width = bytes.readUIntLE(dataStart + 4, 3) + 1;
+      height = bytes.readUIntLE(dataStart + 7, 3) + 1;
+      source = "webp_vp8x_canvas";
+    } else if (chunk === "VP8L") {
+      if (size < 5 || bytes[dataStart] !== 0x2f) {
+        fail(`${label} must contain a complete WebP VP8L header.`);
+      }
+      width = 1 + bytes[dataStart + 1] + ((bytes[dataStart + 2] & 0x3f) << 8);
+      height = 1 +
+        (bytes[dataStart + 2] >> 6) +
+        (bytes[dataStart + 3] << 2) +
+        ((bytes[dataStart + 4] & 0x0f) << 10);
+      source = "webp_vp8l_header";
+    } else if (chunk === "VP8 ") {
+      if (
+        size < 10 ||
+        !bytes.subarray(dataStart + 3, dataStart + 6).equals(
+          Buffer.from([0x9d, 0x01, 0x2a]),
+        )
+      ) {
+        fail(`${label} must contain a complete WebP VP8 frame header.`);
+      }
+      width = bytes.readUInt16LE(dataStart + 6) & 0x3fff;
+      height = bytes.readUInt16LE(dataStart + 8) & 0x3fff;
+      source = "webp_vp8_frame";
+    }
+
+    if (source !== undefined) {
+      if (width < 1 || height < 1) {
+        fail(`${label} must declare positive WebP dimensions.`);
+      }
+      return {
+        standing: "available",
+        width,
+        height,
+        unit: "pixel",
+        source,
+      };
+    }
+    offset = dataEnd + (size % 2);
+  }
+  fail(`${label} must contain a supported WebP image header.`);
+}
+
 export function inspectImageDimensions(bytes, mediaType, label = "Image asset") {
   if (!Buffer.isBuffer(bytes)) fail(`${label} dimensions require exact bytes.`);
   if (mediaType === "image/png") {
@@ -1467,6 +1538,7 @@ export function inspectImageDimensions(bytes, mediaType, label = "Image asset") 
   }
   if (mediaType === "image/jpeg") return jpegDimensions(bytes, label);
   if (mediaType === "image/svg+xml") return svgDimensions(bytes);
+  if (mediaType === "image/webp") return webpDimensions(bytes, label);
   if (mediaType === "image/x-icon") {
     if (
       bytes.byteLength < 6 ||

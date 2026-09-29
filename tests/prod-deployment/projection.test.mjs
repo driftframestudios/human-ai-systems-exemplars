@@ -1261,6 +1261,55 @@ test("asset inventory grammar and image headers keep semantic and physical facts
     () => inspectImageDimensions(zeroWidthJpeg, "image/jpeg"),
     /positive JPEG dimensions/,
   );
+  const extendedWebp = Buffer.alloc(30);
+  extendedWebp.write("RIFF", 0, "ascii");
+  extendedWebp.writeUInt32LE(22, 4);
+  extendedWebp.write("WEBPVP8X", 8, "ascii");
+  extendedWebp.writeUInt32LE(10, 16);
+  extendedWebp.writeUIntLE(1599, 24, 3);
+  extendedWebp.writeUIntLE(899, 27, 3);
+  assert.deepEqual(inspectImageDimensions(extendedWebp, "image/webp"), {
+    standing: "available",
+    width: 1600,
+    height: 900,
+    unit: "pixel",
+    source: "webp_vp8x_canvas",
+  });
+  const losslessWebp = Buffer.alloc(26);
+  losslessWebp.write("RIFF", 0, "ascii");
+  losslessWebp.writeUInt32LE(18, 4);
+  losslessWebp.write("WEBPVP8L", 8, "ascii");
+  losslessWebp.writeUInt32LE(5, 16);
+  losslessWebp[20] = 0x2f;
+  losslessWebp[21] = 6;
+  losslessWebp[22] = 0;
+  losslessWebp[23] = 1;
+  assert.deepEqual(inspectImageDimensions(losslessWebp, "image/webp"), {
+    standing: "available",
+    width: 7,
+    height: 5,
+    unit: "pixel",
+    source: "webp_vp8l_header",
+  });
+  const lossyWebp = Buffer.alloc(30);
+  lossyWebp.write("RIFF", 0, "ascii");
+  lossyWebp.writeUInt32LE(22, 4);
+  lossyWebp.write("WEBPVP8 ", 8, "ascii");
+  lossyWebp.writeUInt32LE(10, 16);
+  Buffer.from([0x9d, 0x01, 0x2a]).copy(lossyWebp, 23);
+  lossyWebp.writeUInt16LE(320, 26);
+  lossyWebp.writeUInt16LE(240, 28);
+  assert.deepEqual(inspectImageDimensions(lossyWebp, "image/webp"), {
+    standing: "available",
+    width: 320,
+    height: 240,
+    unit: "pixel",
+    source: "webp_vp8_frame",
+  });
+  assert.throws(
+    () => inspectImageDimensions(Buffer.from("not a webp"), "image/webp"),
+    /WebP RIFF container/,
+  );
   assert.deepEqual(
     inspectImageDimensions(
       Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1050"></svg>'),

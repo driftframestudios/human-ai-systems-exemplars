@@ -62,7 +62,10 @@ const FAMILIES = [
       "ehr-pgx-alert-failure.html",
       "ehr-three-front-doors.html",
       "ehr-two-charts-one-result.html",
-      "fmi-clinical-trial-coordination.html"
+      "spatial-capture-collaborative-memory.html",
+      "fmi-clinical-trial-coordination.html",
+      "multilingual-clinical-vocabulary-practice.html",
+      "recoverable-enterprise-forms.html"
     ]
   },
   {
@@ -85,7 +88,6 @@ const FAMILIES = [
     title: "Historical exemplars",
     standing: "exemplar",
     routes: [
-      "exemplar-brief-exploration.html",
       "exemplar-gallery-list.html",
       "exemplar-ideal-debrief.html",
       "exemplar-index-landing.html",

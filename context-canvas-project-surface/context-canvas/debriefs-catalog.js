@@ -203,6 +203,7 @@
     });
   });
 
+  preview.hidden = false;
   setSelections(selectionsFromLocation());
   applyFilters();
   status.setAttribute("role", "status");

@@ -25,7 +25,7 @@ asking a commit to contain its own identifier.
 
 ## Current entry condition
 
-The tracked production configuration selects the accepted 37-page Context
+The tracked production configuration selects the accepted 39-page Context
 Canvas collection, its non-indexed `404.html`, and the complete local file
 closure those documents need. The four resting no-index exemplars stay outside
 this initial visitor collection. `primary-route-manifest.json` records every

@@ -91,7 +91,7 @@ async function governedHtmlFiles() {
 
 test("all attribution-governed HTML carries one exact MAPS to BIG-bench boundary before final attribution", async () => {
   const paths = await governedHtmlFiles();
-  assert.equal(paths.length, 106, "the current governed visitor population should remain explicit");
+  assert.equal(paths.length, 108, "the current governed visitor population should remain explicit");
 
   for (const path of paths) {
     const html = await readFile(path, "utf8");
@@ -159,7 +159,7 @@ test("enhanced routes load one contract and preserve the authored boundary as th
     .filter(entry => entry.isFile() && entry.name.endsWith(".html") && entry.name !== "404.html")
     .map(entry => entry.name)
     .sort();
-  assert.equal(routes.length, 41);
+  assert.equal(routes.length, 43);
 
   for (const route of routes) {
     const html = await readFile(resolve(visitorRoot, route), "utf8");

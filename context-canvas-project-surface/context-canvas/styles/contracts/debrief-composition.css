@@ -196,6 +196,46 @@
   box-shadow: .5rem .5rem 0 var(--debrief-cobalt-ink);
 }
 
+/*
+ * Source-era photographs and interface references remain readable thumbnails.
+ * The ordinary story visual stays available for diagrams whose relationships
+ * need the complete editorial measure.
+ */
+.debrief-composition-page .debrief-image-grid {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  margin-block: clamp(2rem, 4vw, 3.25rem);
+}
+
+.debrief-composition-page .debrief-image-grid .story-visual {
+  inline-size: 100%;
+  justify-self: center;
+  margin: 0;
+  max-inline-size: 30rem;
+  transform: none;
+}
+
+.debrief-composition-page .debrief-image-grid .story-visual img {
+  inline-size: auto;
+  margin-inline: auto;
+  max-block-size: 32rem;
+  max-inline-size: 100%;
+}
+
+@container canvas-reading (min-width: 48rem) {
+  .debrief-composition-page .debrief-image-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 56.0625rem) {
+  .page-section-rail + main .debrief-image-grid {
+    inline-size: min(calc(100vw - 10rem), var(--canvas-editorial-measure));
+    margin-inline: 50%;
+    transform: translateX(-50%);
+  }
+}
+
 .debrief-composition-page .debrief-track--solution .architecture-pair article {
   background: var(--debrief-rose-quiet);
   border-color: var(--debrief-cobalt-ink);
@@ -504,5 +544,13 @@
     box-shadow: none;
     color: #000 !important;
     transform: none;
+  }
+
+  .debrief-composition-page .debrief-image-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .debrief-composition-page .debrief-image-grid .story-visual {
+    break-inside: avoid;
   }
 }
