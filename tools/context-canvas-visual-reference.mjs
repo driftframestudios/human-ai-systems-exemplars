@@ -62,7 +62,7 @@ const FAMILIES = [
       "ehr-pgx-alert-failure.html",
       "ehr-three-front-doors.html",
       "ehr-two-charts-one-result.html",
-      "exemplar-brief-exploration.html",
+      "spatial-capture-collaborative-memory.html",
       "fmi-clinical-trial-coordination.html",
       "multilingual-clinical-vocabulary-practice.html",
       "recoverable-enterprise-forms.html"

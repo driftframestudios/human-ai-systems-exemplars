@@ -125,6 +125,93 @@
       "semantic_authority_path": null
     },
     {
+      "id": "context-canvas.debrief-media.multilingual-clinical-vocabulary",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/"
+      },
+      "semantic_owner": "Multilingual clinical vocabulary Debrief",
+      "roles": [
+        {
+          "id": "debrief_source_artifact",
+          "visitor_job": "Keep source-era research, prototype, and learner-situation evidence readable beside the contemporary Debrief.",
+          "accessibility_text_owner": "The multilingual clinical vocabulary Debrief image alternative and surrounding caption."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/multilingual-clinical-vocabulary-practice.html",
+        "lineage_standing": "The accepted WebP deliveries were generated in September 2026 from the retained source-era JPG and PNG masters plus the reviewed learner-situation PNG renderings. Full-view and responsive thumbnail names preserve each source relationship; a repository-owned generator is not recorded."
+      },
+      "recovery_condition": "Regenerate the reviewed WebP deliveries from their retained source masters, compare their visible text and photographs, and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/multilingual-clinical-vocabulary-practice.html"
+    },
+    {
+      "id": "context-canvas.debrief-media.recoverable-enterprise-forms",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/debriefs/recoverable-enterprise-forms/"
+      },
+      "semantic_owner": "Recoverable enterprise forms Debrief",
+      "roles": [
+        {
+          "id": "debrief_visual_evidence",
+          "visitor_job": "Keep the source-era form references and contemporary PAN explanation readable beside the form-contract Debrief.",
+          "accessibility_text_owner": "The recoverable enterprise forms Debrief image alternatives, captions, and the PAN SVG title and description."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/recoverable-enterprise-forms.html",
+        "lineage_standing": "The accepted WebP deliveries were generated in September 2026 from the retained form-challenge and payment-step PNG masters. The authored PAN SVG is distinguished by its path-specific override."
+      },
+      "recovery_condition": "Regenerate the reviewed WebP deliveries from their retained PNG masters, restore the authored PAN SVG, and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/recoverable-enterprise-forms.html"
+    },
+    {
+      "id": "context-canvas.debrief-media.spatial-capture",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/debriefs/spatial-capture/"
+      },
+      "semantic_owner": "Spatial capture collaborative memory Debrief",
+      "roles": [
+        {
+          "id": "debrief_source_artifact",
+          "visitor_job": "Keep the source-era discovery field and film-production storyboard readable beside the spatial-capture Debrief.",
+          "accessibility_text_owner": "The spatial-capture Debrief image alternatives and surrounding captions."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/spatial-capture-collaborative-memory.html",
+        "lineage_standing": "The accepted WebP deliveries were generated in September 2026 from the retained full-resolution Occipital discovery-wall and whiteboarding masters. Full-view and responsive thumbnail names preserve each source relationship."
+      },
+      "recovery_condition": "Regenerate the reviewed WebP deliveries from the retained full-resolution source masters, compare the visible result, and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/spatial-capture-collaborative-memory.html"
+    },
+    {
       "id": "context-canvas.document-head-icon",
       "selector": {
         "paths": [
@@ -413,8 +500,8 @@
     {
       "id": "multilingual-learner-situation-model",
       "members": [
-        "context-canvas-project-surface/img/plot/katarina_learner_situation_model_desktop.png",
-        "context-canvas-project-surface/img/plot/katarina_learner_situation_model_mobile.png"
+        "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-desktop.webp",
+        "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-mobile.webp"
       ],
       "profile_standing": "The accepted desktop and mobile renderings present the same reviewed learner situation model for their respective reading widths; a reproducible generator profile is not recorded.",
       "recovery_condition": "Restore both accepted learner-situation renderings from the reviewed source coordinate and rebuild the production projection."
@@ -461,6 +548,21 @@
     }
   ],
   "overrides": [
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/recoverable-enterprise-forms/pan-identifier-validation-flow.svg",
+      "semantic_key": "context-canvas.debrief-media.recoverable-enterprise-forms.pan-identifier-validation-flow",
+      "roles": [
+        {
+          "id": "pan_identifier_explanation",
+          "visitor_job": "Distinguish text capture, account-range suggestion, Luhn screening, provider tokenization, and issuer authorization.",
+          "accessibility_text_owner": "The SVG title and description plus the recoverable enterprise forms Debrief alternative and caption."
+        }
+      ],
+      "source_relationship": {
+        "standing": "canonical_authored_asset"
+      },
+      "recovery_condition": "Restore the authored accessible SVG and rebuild the production projection."
+    },
     {
       "source_path": "context-canvas-project-surface/context-canvas/portrait-of-vvk-technology-leader.jpg",
       "semantic_key": "context-canvas.about.author-portrait",
@@ -522,7 +624,7 @@
       "recovery_condition": "Restore the accepted Occipital variant set and rebuild the production projection."
     },
     {
-      "source_path": "context-canvas-project-surface/img/plot/katarina_learner_situation_model_desktop.png",
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-desktop.webp",
       "semantic_key": "context-canvas.shared-plot.multilingual-learner-situation-model.desktop",
       "roles": [
         {
@@ -539,7 +641,7 @@
       "recovery_condition": "Restore the accepted desktop rendering from its reviewed source coordinate and rebuild the production projection."
     },
     {
-      "source_path": "context-canvas-project-surface/img/plot/katarina_learner_situation_model_mobile.png",
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-mobile.webp",
       "semantic_key": "context-canvas.shared-plot.multilingual-learner-situation-model.mobile",
       "roles": [
         {
@@ -567,7 +669,7 @@
       ],
       "source_relationship": {
         "standing": "accepted_generated_asset",
-        "provenance_owner_path": "context-canvas-project-surface/context-canvas/exemplar-brief-exploration.html",
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/spatial-capture-collaborative-memory.html",
         "lineage_standing": "The accepted 1600x900 WebP was generated from Structure's official ST03Render89.png media master at https://structure.io/content/resellers/resources/images/ST03Render89.png, retrieved 2026-09-25 with source SHA-256 375ef5986a3d4016f5b7e7801a1a18d246bb9599d05ae26a4bb14d16d14e62aa; the Debrief records the third-party media boundary and source link."
       },
       "recovery_condition": "Recreate the reviewed WebP from the official Structure media master, compare the visible result, and rebuild the production projection."

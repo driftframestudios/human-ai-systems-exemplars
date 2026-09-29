@@ -48,7 +48,7 @@ test("the retained gallery routes each invitation to its current Debrief", async
   const itemList = graph["@graph"].find(item => item["@type"] === "ItemList");
   const page = webpage(graph, route);
   const expected = [
-    "exemplar-brief-exploration.html",
+    "spatial-capture-collaborative-memory.html",
     "multilingual-clinical-vocabulary-practice.html",
     "recoverable-enterprise-forms.html",
   ];

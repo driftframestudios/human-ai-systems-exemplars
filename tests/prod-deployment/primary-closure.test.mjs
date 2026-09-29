@@ -52,7 +52,7 @@ const acceptedRoutes = [
   "initiative-costing.html",
   "field-inspection-harness-replatform.html",
   "distributed-inspection-harness.html",
-  "exemplar-brief-exploration.html",
+  "spatial-capture-collaborative-memory.html",
   "multilingual-clinical-vocabulary-practice.html",
   "recoverable-enterprise-forms.html",
   "exemplar-gallery-list.html",

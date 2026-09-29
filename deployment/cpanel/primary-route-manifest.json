@@ -248,14 +248,14 @@
       "media_type": "text/javascript"
     },
     {
-      "source_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-validator.js",
-      "projected_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-validator.js",
-      "media_type": "text/javascript"
-    },
-    {
       "source_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
       "projected_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
       "media_type": "application/json"
+    },
+    {
+      "source_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-validator.js",
+      "projected_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-validator.js",
+      "media_type": "text/javascript"
     },
     {
       "source_path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
@@ -310,11 +310,6 @@
     {
       "source_path": "context-canvas-project-surface/context-canvas/ehr-two-charts-one-result.html",
       "projected_path": "ehr-two-charts-one-result.html",
-      "media_type": "text/html"
-    },
-    {
-      "source_path": "context-canvas-project-surface/context-canvas/exemplar-brief-exploration.html",
-      "projected_path": "exemplar-brief-exploration.html",
       "media_type": "text/html"
     },
     {
@@ -493,6 +488,21 @@
       "media_type": "image/png"
     },
     {
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital.jpg",
+      "projected_path": "img/bgr/bgr_occipital.jpg",
+      "media_type": "image/jpeg"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital415.jpg",
+      "projected_path": "img/bgr/bgr_occipital415.jpg",
+      "media_type": "image/jpeg"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital770.jpg",
+      "projected_path": "img/bgr/bgr_occipital770.jpg",
+      "media_type": "image/jpeg"
+    },
+    {
       "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital_storyboard.jpg",
       "projected_path": "img/bgr/bgr_occipital_storyboard.jpg",
       "media_type": "image/jpeg"
@@ -523,21 +533,6 @@
       "media_type": "image/jpeg"
     },
     {
-      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital.jpg",
-      "projected_path": "img/bgr/bgr_occipital.jpg",
-      "media_type": "image/jpeg"
-    },
-    {
-      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital415.jpg",
-      "projected_path": "img/bgr/bgr_occipital415.jpg",
-      "media_type": "image/jpeg"
-    },
-    {
-      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital770.jpg",
-      "projected_path": "img/bgr/bgr_occipital770.jpg",
-      "media_type": "image/jpeg"
-    },
-    {
       "source_path": "context-canvas-project-surface/img/bgr/bgr_sprint_plan.jpg",
       "projected_path": "img/bgr/bgr_sprint_plan.jpg",
       "media_type": "image/jpeg"
@@ -556,6 +551,126 @@
       "source_path": "context-canvas-project-surface/img/bgr/redesigning_reviews_platform.svg",
       "projected_path": "img/bgr/redesigning_reviews_platform.svg",
       "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/concept-sketches-480.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/concept-sketches-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/concept-sketches-960.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/concept-sketches-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/concept-sketches.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/concept-sketches.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/design-sprint-plan-480.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/design-sprint-plan-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/design-sprint-plan-960.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/design-sprint-plan-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/design-sprint-plan.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/design-sprint-plan.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-experience-map-480.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/learner-experience-map-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-experience-map-960.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/learner-experience-map-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-experience-map.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/learner-experience-map.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-desktop.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-desktop.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-mobile.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/learner-situation-model-mobile.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/onboarding-prototype-480.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/onboarding-prototype-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/onboarding-prototype.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/onboarding-prototype.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/prototype-in-use-480.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/prototype-in-use-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/multilingual-clinical-vocabulary/prototype-in-use.webp",
+      "projected_path": "img/debriefs/multilingual-clinical-vocabulary/prototype-in-use.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/recoverable-enterprise-forms/complete-form-reference-480.webp",
+      "projected_path": "img/debriefs/recoverable-enterprise-forms/complete-form-reference-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/recoverable-enterprise-forms/complete-form-reference.webp",
+      "projected_path": "img/debriefs/recoverable-enterprise-forms/complete-form-reference.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/recoverable-enterprise-forms/pan-identifier-validation-flow.svg",
+      "projected_path": "img/debriefs/recoverable-enterprise-forms/pan-identifier-validation-flow.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/recoverable-enterprise-forms/payment-step-reference-480.webp",
+      "projected_path": "img/debriefs/recoverable-enterprise-forms/payment-step-reference-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/recoverable-enterprise-forms/payment-step-reference.webp",
+      "projected_path": "img/debriefs/recoverable-enterprise-forms/payment-step-reference.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/discovery-wall-480.webp",
+      "projected_path": "img/debriefs/spatial-capture/discovery-wall-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/discovery-wall.webp",
+      "projected_path": "img/debriefs/spatial-capture/discovery-wall.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/production-storyboard-480.webp",
+      "projected_path": "img/debriefs/spatial-capture/production-storyboard-480.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/spatial-capture/production-storyboard.webp",
+      "projected_path": "img/debriefs/spatial-capture/production-storyboard.webp",
+      "media_type": "image/webp"
     },
     {
       "source_path": "context-canvas-project-surface/img/media/impact-map-style-cycle-calm.gif",
@@ -758,16 +873,6 @@
       "media_type": "image/svg+xml"
     },
     {
-      "source_path": "context-canvas-project-surface/img/plot/katarina_learner_situation_model_desktop.png",
-      "projected_path": "img/plot/katarina_learner_situation_model_desktop.png",
-      "media_type": "image/png"
-    },
-    {
-      "source_path": "context-canvas-project-surface/img/plot/katarina_learner_situation_model_mobile.png",
-      "projected_path": "img/plot/katarina_learner_situation_model_mobile.png",
-      "media_type": "image/png"
-    },
-    {
       "source_path": "context-canvas-project-surface/img/plot/maps_source_boundary.svg",
       "projected_path": "img/plot/maps_source_boundary.svg",
       "media_type": "image/svg+xml"
@@ -963,11 +1068,6 @@
       "media_type": "text/html"
     },
     {
-      "source_path": "context-canvas-project-surface/context-canvas/multilingual-clinical-vocabulary-practice.html",
-      "projected_path": "multilingual-clinical-vocabulary-practice.html",
-      "media_type": "text/html"
-    },
-    {
       "source_path": "context-canvas-project-surface/context-canvas/mstile-150x150.png",
       "projected_path": "mstile-150x150.png",
       "media_type": "image/png"
@@ -981,6 +1081,11 @@
       "source_path": "context-canvas-project-surface/context-canvas/mstile-310x310.png",
       "projected_path": "mstile-310x310.png",
       "media_type": "image/png"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/multilingual-clinical-vocabulary-practice.html",
+      "projected_path": "multilingual-clinical-vocabulary-practice.html",
+      "media_type": "text/html"
     },
     {
       "source_path": "context-canvas-project-surface/context-canvas/narrative-execution-gap-research-atlas.html",
@@ -1015,11 +1120,6 @@
     {
       "source_path": "context-canvas-project-surface/context-canvas/prompt-side-conditions-practice.html",
       "projected_path": "prompt-side-conditions-practice.html",
-      "media_type": "text/html"
-    },
-    {
-      "source_path": "context-canvas-project-surface/context-canvas/recoverable-enterprise-forms.html",
-      "projected_path": "recoverable-enterprise-forms.html",
       "media_type": "text/html"
     },
     {
@@ -1183,6 +1283,11 @@
       "media_type": "text/html"
     },
     {
+      "source_path": "context-canvas-project-surface/context-canvas/recoverable-enterprise-forms.html",
+      "projected_path": "recoverable-enterprise-forms.html",
+      "media_type": "text/html"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/registry-goal-fidelity-routing.html",
       "projected_path": "registry-goal-fidelity-routing.html",
       "media_type": "text/html"
@@ -1211,6 +1316,11 @@
       "source_path": "context-canvas-project-surface/context-canvas/sitemap.xml",
       "projected_path": "sitemap.xml",
       "media_type": "application/xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/spatial-capture-collaborative-memory.html",
+      "projected_path": "spatial-capture-collaborative-memory.html",
+      "media_type": "text/html"
     },
     {
       "source_path": "context-canvas-project-surface/context-canvas/styles/components/debrief-reading.css",

@@ -87,7 +87,7 @@ test("current catalogs link the Forms Debrief while retained examples preserve t
 
 test("the current Debrief routes expose truthful navigation and progressive enhancement", async () => {
   const currentRoutes = [
-    "exemplar-brief-exploration.html",
+    "spatial-capture-collaborative-memory.html",
     "multilingual-clinical-vocabulary-practice.html",
     "recoverable-enterprise-forms.html",
   ];

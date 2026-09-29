@@ -109,7 +109,7 @@ machine_node:
     comparison_order_posture: rotate_and_inspect_before_human_decision
     public_legacy_exemplars:
       available:
-        - exemplar-brief-exploration.html
+        - spatial-capture-collaborative-memory.html
         - exemplar-gallery-list.html
       resting_until_restored:
         - exemplar-ideal-debrief.html

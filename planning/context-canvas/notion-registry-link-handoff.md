@@ -112,7 +112,7 @@ The parent and children remain public-possible receiving areas. The semantic rec
 | `cc-site-reading-14` | **Three-Way Comparative & The Return** · `PUBLIC_URL_REGISTRY_THREE_WAY_COMPARATIVE_AND_THE_RETURN` | `three-way-comparative-return.html` |
 | `cc-site-reading-15` | **From Narrative to Execution** · `PUBLIC_URL_REGISTRY_FROM_NARRATIVE_TO_EXECUTION_A_DEEP_RESEARCH_COLLABORATION_ATLAS` | `narrative-execution-gap-research-atlas.html` |
 | `cc-site-reading-16` | Field Watch practice + Generated Research synthesis | `prompt-side-conditions-practice.html` |
-| `cc-site-reading-17` | Shared family parent · resolver-open | `exemplar-brief-exploration.html` |
+| `cc-site-reading-17` | Shared family parent · resolver-open | `spatial-capture-collaborative-memory.html` |
 | `cc-site-reading-18` | Shared family parent · resolver-open | `exemplar-gallery-list.html` |
 
 This return raises the current visitor-facing identity count from 37 to 52 while preserving 93 occurrences. The added identities represent greater semantic precision rather than added source dependency. Stable affinity handles and private source keys continue to support later route changes.
