@@ -24,6 +24,13 @@ const formatLabels = new Map([
   ["Article", "article"],
 ]);
 
+const readingModeLabels = new Map([
+  ["Catalog overview", "catalog"],
+  ["Case Briefs", "case-brief"],
+  ["Full Debrief index", "full-debrief"],
+  ["Articles", "article"],
+]);
+
 const topicLabels = new Map([
   ["Practice", "practice"],
   ["Data Visualization", "data-visualization"],
@@ -67,7 +74,7 @@ function displayedCounts(html, ariaLabel, labels) {
   );
 }
 
-test("Debrief catalog separates format from topic and retains the compact-to-full route", async () => {
+test("Debrief catalog gives Case Briefs a true display mode and retains every direct route", async () => {
   const [html, script] = await Promise.all([
     readCanvasFile("debriefs.html"),
     readCanvasFile("debriefs-catalog.js"),
@@ -87,9 +94,22 @@ test("Debrief catalog separates format from topic and retains the compact-to-ful
     }
   }
 
+  for (const [label, value] of readingModeLabels) {
+    assert.match(
+      html,
+      new RegExp(`<input[^>]*type="radio"[^>]*name="format"[^>]*value="${value}"[^>]*>[\\s\\S]*?<span class="debrief-filter__label">${label}<\\/span>`, "u"),
+      `${label} should be one mutually exclusive reading mode`,
+    );
+  }
+  assert.doesNotMatch(html, /<input[^>]*type="checkbox"[^>]*name="format"/u);
+
   assert.deepEqual(
-    displayedCounts(html, "Format counts", formatLabels),
-    countValues(cards, "data-formats"),
+    displayedCounts(html, "Reading route counts", formatLabels),
+    new Map([
+      ["case-brief", 16],
+      ["full-debrief", 16],
+      ["article", 5],
+    ]),
   );
   assert.deepEqual(
     displayedCounts(html, "Topic and tool counts", topicLabels),
@@ -133,9 +153,14 @@ test("Debrief catalog separates format from topic and retains the compact-to-ful
   assert.match(script, /"executive-summary": \{ kind: "format", value: "case-brief" \}/u);
   assert.match(script, /legacyOrMode/u);
   assert.match(script, /unknownLegacyTypes/u);
-  assert.match(html, /data-preview-link[^>]*>[\s\S]*?Read the Case Brief/u);
-  assert.match(html, /data-preview-full-link[^>]*>[\s\S]*?Read the Full Debrief/u);
-  assert.match(html, /data-preview-case-brief-content/u);
+  assert.match(script, /catalog\.setAttribute\("data-reading-mode", displayMode\)/u);
+  assert.match(script, /function ensureCaseBriefDisplay\(card\)/u);
+  assert.match(script, /function createCaseBriefArticle\(card, route, source, index\)/u);
+  assert.match(script, /existing\.setAttribute\("data-card-full-index", ""\)/u);
+  assert.match(script, /cloneForCatalog\(source\.fields, "debrief-preview-facts", route\)/u);
+  assert.match(script, /caseBriefCache\.delete\(route\)/u, "A rejected source request should remain retryable");
+  assert.match(html, /data-preview-link[^>]*>[\s\S]*?Read the Full Debrief/u);
+  assert.doesNotMatch(html, /data-preview-case-brief-content/u);
 });
 
 test("Every catalogued Full Debrief carries one complete Case Brief contract", async () => {

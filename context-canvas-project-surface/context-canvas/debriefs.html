@@ -569,21 +569,22 @@
   <section class="debrief-catalog" aria-labelledby="debrief-catalog-title">
     <div class="content content--wide debrief-catalog__content">
       <header class="debrief-catalog__header">
-        <p class="debrief-eyebrow">Reading atlas · Format, topic, and tool</p>
+        <p class="debrief-eyebrow">Reading atlas · Mode, topic, and tool</p>
         <h2 id="debrief-catalog-title" class="txt-h2">Choose a useful way into the work</h2>
         <p>
-          Choose a format or topic to show matching entries. Case Briefs provide the concise view; Full Debriefs carry the
-          complete account. Multiple choices within one group widen that group, while choices across both groups narrow the
-          collection to their intersection. Focus an entry to preview its visual and continuation routes.
+          Choose one reading mode, then add any topics or tools that help narrow the collection. Case Brief mode places
+          every concise, source-owned brief directly in the catalog. The Full Debrief index keeps the complete accounts one
+          clear step away, while Catalog overview and Articles preserve their own browsing routes.
         </p>
         <search class="debrief-filter-panel" data-debrief-filters hidden>
           <form method="get" action="debriefs.html" data-debrief-filter-form>
             <fieldset data-filter-group="format">
-              <legend>Format</legend>
+              <legend>Reading mode</legend>
               <div class="debrief-filter-list">
-                <label class="debrief-filter" for="debrief-filter-case-brief"><input id="debrief-filter-case-brief" type="checkbox" name="format" value="case-brief" data-filter data-filter-kind="format"><span class="debrief-filter__label">Case Brief</span></label>
-                <label class="debrief-filter" for="debrief-filter-full-debrief"><input id="debrief-filter-full-debrief" type="checkbox" name="format" value="full-debrief" data-filter data-filter-kind="format"><span class="debrief-filter__label">Full Debrief</span></label>
-                <label class="debrief-filter" for="debrief-filter-article"><input id="debrief-filter-article" type="checkbox" name="format" value="article" data-filter data-filter-kind="format"><span class="debrief-filter__label">Article</span></label>
+                <label class="debrief-filter" for="debrief-filter-catalog"><input id="debrief-filter-catalog" type="radio" name="format" value="catalog" data-filter data-filter-kind="format" checked><span class="debrief-filter__label">Catalog overview</span></label>
+                <label class="debrief-filter" for="debrief-filter-case-brief"><input id="debrief-filter-case-brief" type="radio" name="format" value="case-brief" data-filter data-filter-kind="format"><span class="debrief-filter__label">Case Briefs</span></label>
+                <label class="debrief-filter" for="debrief-filter-full-debrief"><input id="debrief-filter-full-debrief" type="radio" name="format" value="full-debrief" data-filter data-filter-kind="format"><span class="debrief-filter__label">Full Debrief index</span></label>
+                <label class="debrief-filter" for="debrief-filter-article"><input id="debrief-filter-article" type="radio" name="format" value="article" data-filter data-filter-kind="format"><span class="debrief-filter__label">Articles</span></label>
               </div>
             </fieldset>
             <fieldset data-filter-group="topic">
@@ -603,14 +604,14 @@
               </button>
               <button class="debrief-filter-clear" type="button" data-clear-filters disabled>
                 <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4h8v2m-9 0 1 15h8l1-15M10 11v6m4-6v6"/></svg>
-                Clear all
+                Reset view
               </button>
             </div>
-            <output class="debrief-filter-status" data-filter-status>Showing all 17 catalog entries.</output>
+            <output class="debrief-filter-status" data-filter-status>Showing all 17 catalog entries. Catalog overview is active.</output>
           </form>
         </search>
         <noscript>
-          <p class="debrief-noscript">The complete catalog follows. Scripting adds format and topic controls; every entry and continuation remains available here.</p>
+          <p class="debrief-noscript">The complete catalog follows. Every Case Brief and Full Debrief remains available through an ordinary link; scripting adds the in-catalog reading modes and topic controls.</p>
         </noscript>
       </header>
 
@@ -1377,16 +1378,16 @@
         </div><!-- /debrief-catalog__browse -->
 
         <aside class="debrief-catalog__preview" aria-labelledby="debrief-preview-heading" data-debrief-preview hidden>
-          <div class="debrief-catalog__preview-inner" role="region" aria-label="Reading preview; scroll when the complete preview exceeds the viewport" tabindex="0">
-            <p class="debrief-eyebrow">In view · Reading preview</p>
-            <h3 id="debrief-preview-heading" class="txt-h3">Reading preview</h3>
+          <div class="debrief-catalog__preview-inner" role="region" aria-label="Catalog preview; scroll when the complete preview exceeds the viewport" tabindex="0">
+            <p class="debrief-eyebrow">In view · Catalog preview</p>
+            <h3 id="debrief-preview-heading" class="txt-h3">Catalog preview</h3>
             <div class="debrief-preview-default" data-preview-default>
               <h4 class="debrief-preview-heading">The collection at a glance</h4>
-              <p data-preview-summary>All 17 catalog entries are in view. Focus an entry to bring its primary visual and continuation routes into this panel.</p>
+              <p data-preview-summary>All 17 catalog entries are in view. Focus an entry to bring its primary visual and direct reading route into this panel.</p>
               <h5 class="debrief-tag-cloud-heading">Formats</h5>
-              <ul class="debrief-tag-cloud clean-list" aria-label="Format counts">
-                <li><span>Case Brief</span><strong>12</strong></li>
-                <li><span>Full Debrief</span><strong>12</strong></li>
+              <ul class="debrief-tag-cloud clean-list" aria-label="Reading route counts">
+                <li><span>Case Brief</span><strong>16</strong></li>
+                <li><span>Full Debrief</span><strong>16</strong></li>
                 <li><span>Article</span><strong>5</strong></li>
               </ul>
               <h5 class="debrief-tag-cloud-heading">Topics and tools</h5>
@@ -1398,9 +1399,9 @@
                 <li><span>Interactive Instrument</span><strong>5</strong></li>
               </ul>
               <p class="debrief-preview-note">
-                Counts overlap because one entry can carry several formats, topics, or tools. Choices within a group
-                widen that group; choices across groups show their intersection. Selections remain in the page URL and
-                return on direct load and Back or Forward; each reading keeps a stable canonical URL.
+                Reading-route counts include all five EHR cases gathered under one catalog group. Topic and tool counts
+                describe catalog groups. The selected mode and topics remain in the page URL and return on direct load and
+                Back or Forward; every reading keeps its stable canonical URL.
               </p>
             </div>
 
@@ -1411,11 +1412,6 @@
                 <figcaption data-preview-caption>Primary visual from the selected reading.</figcaption>
               </figure>
               <p class="debrief-preview-slug" data-preview-slug></p>
-              <section class="debrief-preview-case-brief" data-preview-case-brief hidden aria-labelledby="debrief-preview-case-brief-title">
-                <h5 id="debrief-preview-case-brief-title" class="debrief-eyebrow">Case Brief · At a glance</h5>
-                <p class="debrief-preview-note invisible-offscreen__left" data-preview-case-brief-status aria-live="polite"></p>
-                <div data-preview-case-brief-content></div>
-              </section>
               <dl class="debrief-preview-facts">
                 <div>
                   <dt>Available formats</dt>
@@ -1435,12 +1431,9 @@
                 </div>
               </dl>
               <div class="debrief-preview-actions">
-                <a class="debrief-preview-link" href="genomic-viewer-replatforming.html#case-brief" data-preview-link>
-                  <span data-preview-link-label>Read the Case Brief</span>
+                <a class="debrief-preview-link" href="genomic-viewer-replatforming.html" data-preview-link>
+                  <span data-preview-link-label>Read the Full Debrief</span>
                   <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-                </a>
-                <a class="debrief-preview-secondary-link" href="genomic-viewer-replatforming.html" data-preview-full-link>
-                  Read the Full Debrief
                 </a>
               </div>
             </div>
