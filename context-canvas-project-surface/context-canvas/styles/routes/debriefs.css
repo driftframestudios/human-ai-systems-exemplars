@@ -7,8 +7,8 @@
    Load order: expanded.css, styles/components/debrief-reading.css, this route
    bundle, then canvas-shell.css.
    Contract: ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md.
-   The complete list remains in HTML; debriefs-catalog.js adds bounded filters
-   and focus previews. Catalog rhythm, density, and visual experiments remain
+   The complete list remains in HTML; debriefs-catalog.js adds bounded reading
+   modes, topic filters, and focus previews. Catalog rhythm, density, and visual experiments remain
    route-owned while the shared reading components keep their own source. */
 
 .debrief-system-summary,
@@ -109,8 +109,11 @@
 }
 
 .debrief-filter-panel[hidden],
+.debrief-catalog__preview[hidden],
 .debrief-preview-entry[hidden],
 .debrief-preview-default[hidden],
+.debrief-card__case-brief-list[hidden],
+.debrief-card__full-index[hidden],
 .debrief-catalog__card[hidden] {
     display: none !important;
 }
@@ -126,6 +129,12 @@
     border: 0;
     margin: 0;
     padding: 0;
+}
+
+.debrief-filter-panel fieldset + fieldset {
+    border-top: 1px solid rgba(40, 85, 243, .18);
+    margin-top: 1rem;
+    padding-top: .85rem;
 }
 
 .debrief-filter-panel legend {
@@ -214,6 +223,7 @@
 .debrief-filter-clear:focus-visible,
 .debrief-zero-results button:focus-visible,
 .debrief-preview-link:focus-visible,
+.debrief-preview-secondary-link:focus-visible,
 .debrief-catalog__card:focus-visible {
     outline: 4px solid var(--debrief-coral);
     outline-offset: 3px;
@@ -240,6 +250,14 @@
     display: grid;
     gap: clamp(1.25rem, 3vw, 2.75rem);
     grid-template-columns: minmax(0, 65fr) minmax(18rem, 35fr);
+}
+
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__layout {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card {
+    max-inline-size: none;
 }
 
 .debrief-catalog__browse,
@@ -316,14 +334,23 @@
     margin-top: 0;
 }
 
-.debrief-card__types {
+.debrief-card__types,
+.debrief-card__topics {
     display: flex;
     flex-wrap: wrap;
     gap: .35rem;
-    margin: -.2rem 0 1rem;
 }
 
-.debrief-card__types li {
+.debrief-card__types {
+    margin: -.2rem 0 .4rem;
+}
+
+.debrief-card__topics {
+    margin: 0 0 1rem;
+}
+
+.debrief-card__types li,
+.debrief-card__topics li {
     background: var(--debrief-sea);
     border: 1px solid rgba(21, 63, 190, .32);
     border-radius: .2rem;
@@ -336,7 +363,12 @@
     text-transform: uppercase;
 }
 
-.debrief-card__types > li {
+.debrief-card__topics li {
+    background: var(--debrief-powder);
+}
+
+.debrief-card__types > li,
+.debrief-card__topics > li {
     margin-block-end: 0;
 }
 
@@ -391,6 +423,91 @@
     overflow-wrap: anywhere;
 }
 
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-routes] > .debrief-card__types,
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-routes] > .debrief-card__catalog-meta,
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-routes] > .project__media--container,
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-routes] > .project__media--text,
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-routes] > .article__summary,
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-routes] > .txt-right,
+.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-routes] > hr,
+.debrief-catalog[data-reading-mode="full-debrief"] .debrief-catalog__card[data-case-brief-routes] > .txt-right,
+.debrief-catalog[data-reading-mode="full-debrief"] .debrief-catalog__card[data-case-brief-routes] > .debrief-card__types li:first-child {
+    display: none;
+}
+
+.debrief-card__case-brief-list {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.debrief-card__case-brief {
+    background: rgba(207, 231, 247, .24);
+    border: 1px solid rgba(40, 85, 243, .28);
+    border-top: .35rem solid var(--debrief-cobalt);
+    padding: clamp(1rem, 2.5vw, 1.6rem);
+}
+
+.debrief-card__case-brief-title {
+    color: var(--debrief-ink);
+    font-size: clamp(1.05rem, 2vw, 1.35rem);
+    margin-block: 0 .75rem;
+}
+
+.debrief-card__case-brief .debrief-preview-slug,
+.debrief-card__case-brief .debrief-preview-note {
+    color: var(--debrief-body);
+    max-inline-size: var(--canvas-reading-measure);
+}
+
+.debrief-card__case-brief .debrief-preview-facts dt {
+    color: var(--debrief-cobalt-deep);
+}
+
+.debrief-card__case-brief .debrief-preview-secondary-link {
+    color: var(--debrief-cobalt-deep);
+}
+
+.debrief-card__case-brief .debrief-preview-secondary-link:hover {
+    color: var(--debrief-ink);
+}
+
+.debrief-card__case-brief .debrief-preview-actions {
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.debrief-card__case-brief-loading {
+    background: var(--debrief-sea);
+    border-left: .35rem solid var(--debrief-cobalt);
+    color: var(--debrief-ink);
+    margin: 0;
+    padding: 1rem;
+}
+
+.debrief-card__full-index {
+    background: var(--debrief-cobalt-deep);
+    border: 1px solid #0d329f;
+    clear: both;
+    color: var(--debrief-field);
+    margin-top: 1rem;
+    padding: 1rem;
+}
+
+.debrief-card__full-index > .txt-h3 {
+    color: #fff;
+    font-size: .76rem;
+    letter-spacing: .08em;
+    margin-block: 0 .75rem;
+    text-transform: uppercase;
+}
+
+.debrief-card__full-index-list {
+    display: grid;
+    gap: .65rem;
+}
+
 .debrief-catalog__preview-inner {
     background: var(--debrief-cobalt-deep);
     border: 1px solid #0d329f;
@@ -423,6 +540,14 @@
     gap: .45rem;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     margin-block: 1.1rem;
+}
+
+.debrief-tag-cloud-heading {
+    color: var(--debrief-acid);
+    font: 700 .68rem/1.3 Futura, "Arial Nova", sans-serif;
+    letter-spacing: .08em;
+    margin-block: 1rem -.55rem;
+    text-transform: uppercase;
 }
 
 .debrief-tag-cloud li {
@@ -527,6 +652,27 @@
     color: var(--debrief-cobalt-deep);
 }
 
+.debrief-preview-actions {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.debrief-preview-secondary-link {
+    color: #fff;
+    font-weight: 700;
+    text-underline-offset: .2em;
+}
+
+.debrief-preview-secondary-link:hover {
+    color: var(--debrief-acid);
+}
+
+.debrief-preview-secondary-link[hidden] {
+    display: none !important;
+}
+
 @media screen and (min-width: 64.0625rem) {
     .content.debrief-catalog__content {
         padding-inline-end: 5rem;
@@ -552,6 +698,12 @@
     .debrief-catalog__preview-inner:focus-visible {
         outline: .2rem solid var(--debrief-acid);
         outline-offset: -.35rem;
+    }
+}
+
+@media screen and (min-width: 46.0625rem) {
+    .debrief-card__case-brief .debrief-preview-facts {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
@@ -634,7 +786,11 @@
     .debrief-filter-clear,
     .debrief-zero-results,
     .debrief-zero-results button,
-    .debrief-preview-link {
+    .debrief-card__case-brief,
+    .debrief-card__case-brief-loading,
+    .debrief-card__full-index,
+    .debrief-preview-link,
+    .debrief-preview-secondary-link {
         background: Canvas;
         border-color: CanvasText;
         box-shadow: none;
@@ -653,6 +809,7 @@
     }
 
     .debrief-card__types li,
+    .debrief-card__topics li,
     .debrief-tag-cloud strong {
         background: Canvas;
         border: 1px solid CanvasText;
@@ -686,9 +843,31 @@
         display: flow-root !important;
     }
 
+    .debrief-catalog[data-enhanced="true"] .debrief-catalog__card[hidden] {
+        display: none !important;
+    }
+
     .debrief-catalog__card.project__media {
         break-inside: avoid;
         margin-bottom: 1rem;
+    }
+
+    .debrief-card__case-brief,
+    .debrief-card__full-index {
+        background: #fff;
+        border-color: #000;
+        break-inside: avoid;
+        box-shadow: none;
+        color: #000;
+    }
+
+    .debrief-card__case-brief .debrief-preview-slug,
+    .debrief-card__case-brief .debrief-preview-note,
+    .debrief-card__case-brief .debrief-preview-facts dt,
+    .debrief-card__case-brief .debrief-preview-secondary-link,
+    .debrief-card__full-index > .txt-h3,
+    .debrief-card__full-index .debrief-preview-secondary-link {
+        color: #000;
     }
 
     .debrief-system-summary .txt-h2,

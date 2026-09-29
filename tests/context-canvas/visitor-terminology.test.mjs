@@ -73,7 +73,7 @@ test("viewlet remains specialist vocabulary outside the About route", async () =
   assert.match(gallery, /class="viewlet-rack"/u);
 });
 
-test("current autobiographical debriefs use a first-person perspective", async () => {
+test("Debrief role fields distinguish autobiographical work from teaching reconstruction", async () => {
   assert.deepEqual(
     await topLevelHtmlFilesContaining(/\b(?:Narrator(?: role| posture)?|[Tt]he author)\b/u),
     [
@@ -93,8 +93,11 @@ test("current autobiographical debriefs use a first-person perspective", async (
   ];
   for (const route of routes) {
     const html = await readCanvasFile(route);
-    assert.match(html, /<dt>My (?:role|posture)<\/dt>/u, route);
-    assert.match(html, /<dd>I\b/u, route);
+    assert.match(
+      html,
+      /<dt>Scope and role<\/dt>\s*<dd>[\s\S]*?\bI (?:worked|served)\b[\s\S]*?<\/dd>/u,
+      route,
+    );
   }
 
   const scenarioRoutes = [
@@ -106,7 +109,11 @@ test("current autobiographical debriefs use a first-person perspective", async (
   ];
   for (const route of scenarioRoutes) {
     const html = await readCanvasFile(route);
-    assert.match(html, /<dt>My interpretation<\/dt><dd>I read this as a principal-level design and engineering problem/u, route);
+    assert.match(
+      html,
+      /<dt>Scope and role<\/dt><dd>This principal-level teaching reconstruction reads/u,
+      route,
+    );
   }
 
   const [aiSystems, hiring, threeWay] = await Promise.all([
@@ -114,17 +121,18 @@ test("current autobiographical debriefs use a first-person perspective", async (
     readCanvasFile("hiring-surfaces-talent-agent-intake.html"),
     readCanvasFile("three-way-comparative-return.html"),
   ]);
-  assert.match(aiSystems, /I build open-source software, multi-agent orchestration environments, and decision-making surfaces/u);
+  assert.match(aiSystems, /I design, build, test, and publish the open-source methods, software, and multi-agent collaboration environments shown here/u);
   assert.match(hiring, /hiring research with inspectable work in open-source software, multi-agent orchestration environments, and decision-making surfaces/u);
-  assert.match(threeWay, /building shared decision-making surfaces and translating among specialized teams/u);
+  assert.match(threeWay, /I worked across design, product strategy, and engineering/u);
 
   for (const html of [aiSystems, hiring, threeWay, ...await Promise.all(scenarioRoutes.map(readCanvasFile))]) {
     assert.doesNotMatch(html, /Registry steward|systems practitioner|substrate builder|principal product designer and engineer/u);
   }
 
   const debriefs = await readCanvasFile("debriefs.html");
-  assert.match(debriefs, /The interpretations throughout this collection are mine\./u);
-  assert.match(debriefs, /AI collaboration supported a bounded public-source\s+search/u);
+  assert.match(debriefs, /These Debriefs turn lived work in regulated, high-consequence, and commercially constrained systems into\s+reusable cases/u);
+  assert.match(debriefs, /Each remains an example to\s+interpret in context/u);
+  assert.doesNotMatch(debriefs, /AI collaboration supported a bounded public-source\s+search/u);
 });
 
 test("curated visitor prose states findings directly while citations carry provenance", async () => {

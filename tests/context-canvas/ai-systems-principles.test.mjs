@@ -24,9 +24,9 @@ const placements = new Map([
   }],
   ["collaboration-skills.html", {
     sectionId: "receipt-title",
-    label: "First receipt boundary",
+    label: "First-use boundary",
     text: "A skill offers a working method. The receiving collaboration decides whether the method fits, what authority it carries, and what material result counts.",
-    footer: "First receipt boundary",
+    footer: "First-use boundary",
   }],
   ["concept-nursery.html", {
     sectionId: "lifecycle-title",
