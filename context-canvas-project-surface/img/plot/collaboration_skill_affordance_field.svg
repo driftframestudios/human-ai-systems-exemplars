@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
   <title id="title">Collaboration skills as working affordances</title>
-  <desc id="desc">Four distinct forms surround a material receiving result: portable skill contract, task-bound projection, context capsule, and skill billet. A first-receipt band names user intent, repository ground, evidence, and granted tool authority. A lower lifecycle moves from observe through hold, form, use, and settle, with fresh signal reopening the work.</desc>
+  <desc id="desc">Four distinct forms surround a material receiving result: portable skill contract, task-bound projection, context capsule, and skill candidate. A first-use band names user intent, working context, evidence, and granted tool authority. A lower lifecycle moves from observe through hold, form, use, and settle, with fresh signal reopening the work.</desc>
   <defs>
     <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
       <path d="M40 0H0V40" fill="none" stroke="#163f74" stroke-opacity=".08" stroke-width="1"/>
@@ -22,7 +22,7 @@
   <path d="M70 72H1530V930H70Z" fill="none" stroke="#163f74" stroke-width="3"/>
   <path d="M70 72H112V114H70M1530 72H1488V114H1530M70 930H112V888H70M1530 930H1488V888H1530" fill="#f4f1e8" stroke="#163f74" stroke-width="4"/>
 
-  <text x="105" y="120" class="label">FIRST RECEIPT</text>
+  <text x="105" y="120" class="label">FIRST USE</text>
   <text x="105" y="157" class="title">Place the method in current work</text>
   <g transform="translate(750 101)">
     <rect class="node" x="0" y="0" width="160" height="68" rx="34" fill="#d7edff"/>
@@ -30,7 +30,7 @@
     <rect class="node" x="356" y="0" width="160" height="68" rx="34" fill="#fff0b8"/>
     <rect class="node" x="534" y="0" width="226" height="68" rx="34" fill="#dcebd8"/>
     <text x="80" y="42" text-anchor="middle" class="small">user intent</text>
-    <text x="258" y="42" text-anchor="middle" class="small">local ground</text>
+    <text x="258" y="42" text-anchor="middle" class="small">work context</text>
     <text x="436" y="42" text-anchor="middle" class="small">evidence</text>
     <text x="647" y="42" text-anchor="middle" class="small">granted authority</text>
   </g>
@@ -63,7 +63,7 @@
     <rect class="node" width="300" height="180" rx="20" fill="#dcebd8"/>
     <circle cx="45" cy="45" r="22" fill="#163f74"/>
     <text x="45" y="52" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="20" font-weight="700" fill="#fff">04</text>
-    <text x="28" y="92" class="label">SKILL BILLET</text>
+    <text x="28" y="92" class="label">SKILL CANDIDATE</text>
     <text x="28" y="128" class="body">Holds a durable candidate</text>
     <text x="28" y="158" class="small">awaits a distinct receiving use</text>
   </g>

@@ -34,7 +34,7 @@
         "@type": ["Article", "TechArticle"],
         "headline": "The Alert Nobody Clicked",
         "alternativeHeadline": "A SMART on FHIR and CDS Hooks pharmacogenomics failure reading",
-        "dateModified": "2026-08-30",
+        "dateModified": "2026-09-29",
         "inLanguage": "en-US",
         "author": {"@type": "Organization", "name": "Driftframe Studios"},
         "isPartOf": {"@type": "CreativeWorkSeries", "name": "EHR Integration Across the Population Cartographies"},
@@ -66,16 +66,19 @@
 
       <div class="content__container">
         <div class="content content--editorial">
-          <section aria-labelledby="scan-title">
-            <h2 id="scan-title" class="txt-h2">Six-field scan</h2>
+          <section id="case-brief" data-content-form="case-brief" aria-labelledby="scan-title">
+            <h2 id="scan-title" class="txt-h2">At a glance</h2>
+            <p>In an aggregated prescribing workflow, I authored this principal-level teaching reconstruction to distinguish successful pharmacogenomic delivery from clinical effect; it establishes a technically working but behaviorally failed intervention.</p>
             <dl class="debrief-at-glance">
-              <div><dt>Era</dt><dd>Then-and-now reading: interruptive best-practice alerts in 2021–2022 alongside CDS Hooks and SMART patterns in 2025–2026.</dd></div>
-              <div><dt>Team scale</dt><dd>Prescribing clinicians, pharmacy, clinical informatics, CMIO leadership, integration engineering, product design, analytics, and EHR vendor counterparts.</dd></div>
-              <div><dt>My interpretation</dt><dd>I read this as a principal-level design and engineering problem spanning system architecture, clinical workflow, and the decision surfaces that shape adoption.</dd></div>
-              <div><dt>Material pivots</dt><dd>Integration success → clinical behavior; interruptive card → non-interruptive routes; launch telemetry → sustained stewardship.</dd></div>
-              <div><dt>Outcome synopsis</dt><dd>Failure: the technical path worked, yet the interruptive guidance did not earn sustained clinical attention.</dd></div>
-              <div><dt>Salient topics</dt><dd>Prescribe-time CDS Hooks (<code>medication-prescribe</code> in the source-period scenario; current <code>order-select</code> / <code>order-sign</code>) · SMART launch · OAuth2 and PKCE · pharmacogenomic specificity · attention budget · order-set and pharmacist workflow.</dd></div>
+              <div><dt>Situation and stakes</dt><dd>A service returned the right pharmacogenomic guidance for the right patient at prescribe time. The card rendered and the application opened, yet clinical behavior barely changed.</dd></div>
+              <div><dt>Scope and role</dt><dd>This principal-level teaching reconstruction reads 2021–2022 interruptive alerts alongside 2025–2026 CDS Hooks and SMART patterns across prescribing, pharmacy, informatics, leadership, engineering, design, analytics, and vendor roles.</dd></div>
+              <div><dt>Core constraint</dt><dd>The delivery team optimized technical conformance while leaving clinician attention, workflow placement, adoption state, and ongoing stewardship under-designed.</dd></div>
+              <div><dt>Key decision</dt><dd>Separate delivery from clinical effect, move suitable guidance into non-interruptive routes, define the behavior that counts as adoption, and give attention stewardship an operating owner.</dd></div>
+              <div><dt>Outcome and evidence</dt><dd>Failed intervention: the technical path worked, yet the interruptive guidance did not earn sustained clinical attention. The delivery result remains useful evidence about a different layer.</dd></div>
+              <div><dt>Relevance now</dt><dd>The scenario helps clinical and AI-assisted product teams distinguish a working integration from a receiving workflow that changes safely and sustainably.</dd></div>
             </dl>
+            <p><strong>Evidence standing:</strong> Public standards, clinical decision-support research, and common operating patterns support this aggregated teaching reconstruction. Exact adoption telemetry remains outside its claim.</p>
+            <p><a href="#solution-title">Read the Full Debrief →</a></p>
             <aside class="debrief-quote debrief-quote--orientation" aria-label="Central architectural reading">
               <p>Technical conformance established delivery. Clinical adoption required a different operating model.</p>
               <footer>Central architectural reading</footer>

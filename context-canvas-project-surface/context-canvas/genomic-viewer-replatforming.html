@@ -54,7 +54,7 @@
         "headline": "The Queue That Was Secretly a Status Machine",
         "alternativeHeadline": "How profile-scoped permissions and visible operational state guided an incremental genomic-viewer migration",
         "description": "A solution and implementation architecture debrief on how profile-scoped permissions, visible operational state, and incremental migration changed a genomic viewer.",
-        "dateModified": "2026-09-08",
+        "dateModified": "2026-09-29",
         "inLanguage": "en-US",
         "author": {
           "@type": "Organization",
@@ -113,34 +113,37 @@
 
       <div class="content__container">
         <div class="content content--editorial">
-          <section aria-labelledby="at-a-glance-title">
+          <section id="case-brief" data-content-form="case-brief" aria-labelledby="at-a-glance-title">
             <h2 id="at-a-glance-title" class="txt-h2">At a glance</h2>
+            <p>In a clinical-genomics platform program, I worked as Principal Product Designer and Software Engineer III to keep case assignment, evidence review, and sign-off moving during replatforming; the work established a partial strangler migration with consequential legacy areas still explicitly owned.</p>
             <dl class="debrief-at-glance">
               <div>
-                <dt>Era</dt>
-                <dd>Q1 2019–Q1 2025 · full re-platforming began in 2022</dd>
+                <dt>Situation and stakes</dt>
+                <dd>A researcher-built GWT viewer had become a consequential clinical-genomics operating surface. Case assignment, evidence review, and sign-off had to keep moving while the replacement took shape.</dd>
               </div>
               <div>
-                <dt>Team scale</dt>
-                <dd>I worked with three Software Engineers III, one Senior Software Engineer, two Software Engineers I, and one Principal Software Engineer; directors, executives, and operating groups shaped the work.</dd>
+                <dt>Scope and role</dt>
+                <dd>From Q1 2019 through Q1 2025, I worked as Principal Product Designer and Software Engineer III with seven engineers; directors, executives, and operating groups shaped the program.</dd>
               </div>
               <div>
-                <dt>My role</dt>
-                <dd>Principal Product Designer + Software Engineer III, R&amp;D / Computational Biology Engineering.</dd>
+                <dt>Core constraint</dt>
+                <dd>The visible queue encoded operational state, qualification, permissions, and tacit workflow inside a monolith. Replacing screens before naming those rules would put consequential work at risk.</dd>
               </div>
               <div>
-                <dt>Material pivots</dt>
-                <dd>Technology replacement → operational-state modeling; authentication alone → profile-scoped permissions and actions; whole-system redesign → strangler migration; loved Masonry concept → bounded, typed components.</dd>
+                <dt>Key decision</dt>
+                <dd>Model profiles, permissions, cases, and status explicitly; place evidence at the decision; translate the Masonry concept into bounded typed components; and move capability through a strangler migration.</dd>
               </div>
               <div>
-                <dt>Outcome synopsis</dt>
-                <dd>Partial: profiles, permissions, operational views, dashboards, search, and shared components moved; specimen overview, variant details, quality control, and plugins largely remained legacy-owned.</dd>
+                <dt>Outcome and evidence</dt>
+                <dd>Partial: profiles, permissions, operational views, dashboards, search, and shared components moved. Specimen overview, variant details, quality control, and plugins largely remained legacy-owned.</dd>
               </div>
               <div>
-                <dt>Salient topics</dt>
-                <dd>GWT → React · profile and permission modeling · human queues as status · visible reference evidence · operational dashboards · Storybook · Unit-Test-First · incremental migration</dd>
+                <dt>Relevance now</dt>
+                <dd>The case shows how explicit authority, operational state, and point-of-use evidence can make an incremental modernization safer to staff, observe, and continue.</dd>
               </div>
             </dl>
+            <p><strong>Evidence standing:</strong> The retrospective account establishes the reported partial migration and retained legacy scope. Costing, current technology choices, and AI-assisted delivery effects follow their own evidence routes.</p>
+            <p><a href="#actor-context-board-title">Read the Full Debrief →</a></p>
           </section>
 
           <section class="prose-flow table-span-all genomic-context-tree-feature" aria-labelledby="actor-context-board-title">
