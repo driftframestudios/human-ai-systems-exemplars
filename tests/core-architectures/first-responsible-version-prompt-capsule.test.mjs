@@ -60,6 +60,8 @@ test("First Responsible Version Matrix carries the complete Prompt Capsule sourc
   ]);
   const plain = staticPrompt(html);
   const route = routeManifest.routes.find(({ id }) => id === "first-responsible-version-matrix");
+  const currentInventory = inventory.split("\n## Projections, receivers, and recovery inputs\n", 1)[0];
+  assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
 
   assert.doesNotMatch(html, /PROMPT_CAPSULE_STATIC_BASELINE/u);
   assert.match(html, /const PROMPT_CAPSULE_CONTRACT = 'prompt-capsule\/0\.1\.0';/u);
@@ -106,8 +108,8 @@ test("First Responsible Version Matrix carries the complete Prompt Capsule sourc
     permissions_policy: ["clipboard-write"],
     held_capabilities: [],
   });
-  assert.match(inventory, /First Responsible Version Matrix v0\.1\.4/u);
-  assert.match(inventory, /28 current\s+adoptions\. This completes the observed population/u);
+  assert.match(currentInventory, /First Responsible Version Matrix v0\.1\.4/u);
+  assert.match(currentInventory, /28 current\s+adoptions\. This completes the observed population/u);
 });
 
 test("First Responsible Version Matrix pins the exact public skills it offers", async () => {

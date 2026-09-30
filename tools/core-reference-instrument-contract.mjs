@@ -17,14 +17,14 @@ import {
 const artifactNames = {
   contextTree: "context-tree-chimeric-prototype-v0.1.7.html",
   treemap: "jobs-to-be-done-treemap-chimeric-prototype-v0.1.4.html",
-  probes: "practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
-  matrix: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
-  unitTestFirst: "unit-test-first-design-chimeric-prototype-v0.1.4.html",
-  recoveryAtlas: "recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
-  familyIndex: "core-architecture-family-index-chimeric-prototype-v0.1.5.html"
+  probes: "practitioner-judgment-probes-chimeric-prototype-v0.1.5.html",
+  matrix: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.5.html",
+  unitTestFirst: "unit-test-first-design-chimeric-prototype-v0.1.5.html",
+  recoveryAtlas: "recovery-routing-atlas-chimeric-prototype-v0.1.5.html",
+  familyIndex: "core-architecture-family-index-chimeric-prototype-v0.1.6.html"
 };
 
-const packIndexName = "core-architectures-chimeric-prototype-pack-index-v0.1.3.html";
+const packIndexName = "core-architectures-chimeric-prototype-pack-index-v0.1.4.html";
 const manifestName = "core-architectures-chimeric-prototype-manifest-v0.1.json";
 const checks = [];
 const failures = [];
@@ -674,11 +674,11 @@ async function probesPath(browser, origin, route) {
       apiName: "practitionerJudgmentProbes",
       copySelector: "#copy-prompt-btn",
       downloadSelector: "#download-prompt-btn",
-      filename: "practitioner-judgment-probes.prompt-capsule.r0.1.4.skill-assisted.md",
+      filename: "practitioner-judgment-probes.prompt-capsule.r0.1.5.skill-assisted.md",
       promptSelector: "#ai-prompt",
       stateContract: "practitioner-judgment-probes-state.v0.1",
       title: "Practitioner Judgment Probes",
-      version: "0.1.4",
+      version: "0.1.5",
     });
     assert.equal(initialPrompt.projection.probes.length, 5);
     assert.equal(initialPrompt.projection.veracityVocabulary.length, 7);
@@ -965,11 +965,11 @@ async function matrixPath(browser, origin, route) {
       apiName: "patternProblemSurfaceMatrix",
       copySelector: "#copyPromptBtn",
       downloadSelector: "#downloadPromptBtn",
-      filename: "pattern-problem-surface-matrix.prompt-capsule.r0.1.4.skill-assisted.md",
+      filename: "pattern-problem-surface-matrix.prompt-capsule.r0.1.5.skill-assisted.md",
       promptSelector: "#aiPrompt",
       stateContract: "pattern-problem-surface-matrix-state.v0.1",
       title: "Pattern–Problem Surface Matrix",
-      version: "0.1.4",
+      version: "0.1.5",
     });
     assert.equal(initialPrompt.projection.patterns.length, 8);
     assert.equal(initialPrompt.projection.populationColumns.length, 6);
@@ -1138,11 +1138,11 @@ async function unitTestFirstPath(browser, origin, route) {
       apiName: "unitTestFirstDesign",
       copySelector: "#copyPromptBtn",
       downloadSelector: "#downloadPromptBtn",
-      filename: "unit-test-first-design.prompt-capsule.r0.1.4.skill-assisted.md",
+      filename: "unit-test-first-design.prompt-capsule.r0.1.5.skill-assisted.md",
       promptSelector: "#promptOut",
       stateContract: "unit-test-first-design-state.v0.1",
       title: "Unit-test-first Design",
-      version: "0.1.4",
+      version: "0.1.5",
     });
     assert.equal(initialPrompt.projection.targets.length, 5);
     await targetEditor().getByRole("button", { name: "Inspect" }).click();
@@ -1330,7 +1330,7 @@ async function recoveryAtlasPath(browser, origin, route) {
     assert.equal(initial.frozen, true);
     assert.deepEqual(
       [initial.version, initial.contract, initial.stateContract, initial.view],
-      ["0.1.4", "prompt-capsule/0.1.0", "recovery-routing-atlas-state.v0.1", "plain"],
+      ["0.1.5", "prompt-capsule/0.1.0", "recovery-routing-atlas-state.v0.1", "plain"],
     );
     assert.equal(initial.plain, initial.explicitPlain);
     assert.equal(initial.visible, initial.plain);
@@ -1413,7 +1413,7 @@ async function recoveryAtlasPath(browser, origin, route) {
     const downloadPromise = page.waitForEvent("download");
     await page.locator("#downloadPromptBtn").click();
     const download = await downloadPromise;
-    assert.equal(download.suggestedFilename(), "recovery-routing-atlas.prompt-capsule.r0.1.4.skill-assisted.md");
+    assert.equal(download.suggestedFilename(), "recovery-routing-atlas.prompt-capsule.r0.1.5.skill-assisted.md");
     assert.equal(await page.evaluate(() => globalThis.__promptDownloadType), "text/markdown;charset=utf-8");
     const stream = await download.createReadStream();
     const chunks = [];
@@ -1648,11 +1648,11 @@ async function familyIndexPath(browser, origin, route, projection) {
       apiName: "coreArchitectureFamilyIndex",
       copySelector: "#copyPromptBtn",
       downloadSelector: "#downloadPromptBtn",
-      filename: "core-architecture-family-index.prompt-capsule.r0.1.5.skill-assisted.md",
+      filename: "core-architecture-family-index.prompt-capsule.r0.1.6.skill-assisted.md",
       promptSelector: "#aiPrompt",
       stateContract: "core-architecture-family-index-state.v0.1",
       title: "Core Architecture Family Index",
-      version: "0.1.5",
+      version: "0.1.6",
     });
     await page.locator('[data-prompt-view][value="skill-assisted"]').check();
     const legacyCopyMarkdown = await page.evaluate(() => window.coreArchitectureFamilyIndex.promptCapsuleMarkdown());

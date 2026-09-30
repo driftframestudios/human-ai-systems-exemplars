@@ -24,11 +24,11 @@ const artifacts = [
   {
     id: "pattern-problem-surface-matrix",
     name: "Pattern–Problem Surface Matrix",
-    version: "0.1.4",
-    currentFile: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
-    historicalFile: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.3.html",
-    currentDigest: "cafc74ff0d7d921fa91865c42ea03417970287483fe96842cf266e8860d7f64b",
-    historicalDigest: "25efaa307a2eead01e5779569e79d6c59eae0fd0a094cc256a4ae7dff386ed94",
+    version: "0.1.5",
+    currentFile: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.5.html",
+    historicalFile: "pattern-problem-surface-matrix-chimeric-prototype-v0.1.4.html",
+    currentDigest: "b6b939828aaf31347c3cb828acfbddb595b43c194adda8115294724342eca491",
+    historicalDigest: "cafc74ff0d7d921fa91865c42ea03417970287483fe96842cf266e8860d7f64b",
     stateContract: "pattern-problem-surface-matrix-state.v0.1",
     apiName: "patternProblemSurfaceMatrix",
     promptId: "aiPrompt",
@@ -59,11 +59,11 @@ const artifacts = [
   {
     id: "unit-test-first-design",
     name: "Unit-test-first Design",
-    version: "0.1.4",
-    currentFile: "unit-test-first-design-chimeric-prototype-v0.1.4.html",
-    historicalFile: "unit-test-first-design-chimeric-prototype-v0.1.3.html",
-    currentDigest: "814a84723bfa87dd19f0800c86523d269e913abad5ca3b34fe2837996c658e60",
-    historicalDigest: "4ef1a9f21f3890468869f306abcd2f13c40572da57ce61edd68c89448abb695d",
+    version: "0.1.5",
+    currentFile: "unit-test-first-design-chimeric-prototype-v0.1.5.html",
+    historicalFile: "unit-test-first-design-chimeric-prototype-v0.1.4.html",
+    currentDigest: "3aebe764a9f8a55fc04dabca28851be0109ceeb23e20fa81d8304c40301f156b",
+    historicalDigest: "814a84723bfa87dd19f0800c86523d269e913abad5ca3b34fe2837996c658e60",
     stateContract: "unit-test-first-design-state.v0.1",
     apiName: "unitTestFirstDesign",
     promptId: "promptOut",
@@ -182,8 +182,10 @@ for (const artifact of artifacts) {
 
 test("Pattern Fit and Behavior Protection advances the current inventory as one family", async () => {
   const inventory = await readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8");
-  assert.match(inventory, /Pattern–Problem Surface Matrix v0\.1\.4/u);
-  assert.match(inventory, /Jobs-to-be-Done Treemap v0\.1\.4/u);
-  assert.match(inventory, /Unit-test-first Design v0\.1\.4/u);
-  assert.match(inventory, /28 current\s+adoptions\. This completes the observed population/u);
+  const currentInventory = inventory.split("\n## Projections, receivers, and recovery inputs\n", 1)[0];
+  assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
+  assert.match(currentInventory, /Pattern–Problem Surface Matrix v0\.1\.5/u);
+  assert.match(currentInventory, /Jobs-to-be-Done Treemap v0\.1\.4/u);
+  assert.match(currentInventory, /Unit-test-first Design v0\.1\.5/u);
+  assert.match(currentInventory, /28 current\s+adoptions\. This completes the observed population/u);
 });

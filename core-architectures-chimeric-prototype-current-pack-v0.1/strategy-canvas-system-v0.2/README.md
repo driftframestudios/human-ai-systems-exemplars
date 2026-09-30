@@ -11,13 +11,13 @@ This directory provides the authoritative source boundary for the neutral canoni
 - `strategy-canvas-canonical.js` renders and progressively enhances the canonical HTML surface.
 - `canonical.template.html` contains the authored document structure, semantic static baseline, and build slots for the related-loop disclosure and plain Markdown default.
 - `strategy-canvas-evidence.v0.1.json` records the method origin, research-to-implementation decisions, counterevidence, and transfer limits shared by each current representation.
-- `build.mjs` checks the versioned Prompt Capsule example, assembles the self-contained v0.2.4 distribution one directory above, and keeps the v0.1.1 compatibility route available.
+- `build.mjs` checks the versioned Prompt Capsule example, assembles the self-contained v0.2.5 distribution one directory above, and keeps the v0.1.1 compatibility route available.
 
 The canonical template owns Strategy Canvas authorship metadata, its license
 relation, and the semantic attribution footer. `strategy-canvas.css` owns the
 footer's in-flow visual treatment. The generated current distribution inherits
 those source-owned declarations. Edit the template or stylesheet, rebuild the
-distribution, and run the parity check. The current canonical visitor set covers v0.2.4;
+distribution, and run the parity check. The current canonical visitor set covers v0.2.5;
 the v0.1.1 compatibility route keeps its stable route identity while its
 redirect target advances to the current distribution. The adapted Context
 Canvas workbench keeps the current declarations

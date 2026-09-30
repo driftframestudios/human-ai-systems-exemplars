@@ -15,9 +15,9 @@ import {
 
 const artifactNames = {
   impact: "impact-map-chimeric-prototype-v0.1.5.html",
-  service: "service-design-blueprint-chimeric-prototype-v0.2.5.html",
+  service: "service-design-blueprint-chimeric-prototype-v0.2.6.html",
   heart: "heart-chart-chimeric-prototype-v0.1.6.html",
-  specification: "specification-by-example-chimeric-prototype-v0.1.6.html"
+  specification: "specification-by-example-chimeric-prototype-v0.1.7.html"
 };
 const checks = [];
 const failures = [];
@@ -336,12 +336,12 @@ async function servicePath(browser, origin, route) {
       apiName: "serviceDesignBlueprint",
       copySelector: "#copyPrompt",
       downloadSelector: "#downloadPrompt",
-      filename: "service-design-blueprint.prompt-capsule.r0.2.5.skill-assisted.md",
+      filename: "service-design-blueprint.prompt-capsule.r0.2.6.skill-assisted.md",
       loopIds: ["visitor-surface-change", "repository-reentry"],
       promptSelector: "#promptOut",
       stateContract: "service-design-blueprint-state.v0.2",
       title: "Service-design Blueprint",
-      version: "0.2.5",
+      version: "0.2.6",
     });
     assert.equal(initialPrompt.projection.stages.length, blueprint.stages.length, "the capsule represents every stage");
     assert.equal(initialPrompt.projection.layers.length, blueprint.layers.length, "the capsule represents every service lane");
@@ -844,7 +844,7 @@ async function specificationPath(browser, origin, route) {
     assert.equal(apiInitial.frozen, true);
     assert.deepEqual(
       [apiInitial.version, apiInitial.contract, apiInitial.stateContract, apiInitial.view],
-      ["0.1.6", "prompt-capsule/0.1.0", "specification-by-example-state.v0.1", "plain"],
+      ["0.1.7", "prompt-capsule/0.1.0", "specification-by-example-state.v0.1", "plain"],
     );
     assert.equal(apiInitial.plain, apiInitial.explicitPlain);
     assert.equal(apiInitial.visible, apiInitial.plain);
@@ -927,7 +927,7 @@ async function specificationPath(browser, origin, route) {
     const downloadPromise = page.waitForEvent("download");
     await page.locator("#downloadPromptBtn").click();
     const download = await downloadPromise;
-    assert.equal(download.suggestedFilename(), "specification-by-example.prompt-capsule.r0.1.6.skill-assisted.md");
+    assert.equal(download.suggestedFilename(), "specification-by-example.prompt-capsule.r0.1.7.skill-assisted.md");
     assert.equal(await page.evaluate(() => globalThis.__promptDownloadType), "text/markdown;charset=utf-8");
     const stream = await download.createReadStream();
     const chunks = [];

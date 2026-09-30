@@ -16,10 +16,10 @@ const artifacts = [
   {
     id: "upstream-revision-loop",
     name: "Upstream Revision Loop",
-    currentFile: "upstream-revision-loop-chimeric-prototype-v0.1.4.html",
-    historicalFile: "upstream-revision-loop-chimeric-prototype-v0.1.3.html",
-    historicalDigest: "b1250002cfd30faa1d9d3cfe6cd43567aef0f60444f7e21d6280ec396af16fa7",
-    currentDigest: "1392f82acdcc98b5fbdbbede46e50365b0750d1a5fb60eefd8b09e2b4335bb7a",
+    currentFile: "upstream-revision-loop-chimeric-prototype-v0.1.5.html",
+    historicalFile: "upstream-revision-loop-chimeric-prototype-v0.1.4.html",
+    historicalDigest: "1392f82acdcc98b5fbdbbede46e50365b0750d1a5fb60eefd8b09e2b4335bb7a",
+    currentDigest: "02b14b3ee4e4723ae086881927f40489e7f9d9b338b1e5a8fa6ea7841def66c2",
     stateContract: "upstream-revision-loop-state.v0.1",
     apiName: "upstreamRevisionLoop",
     promptId: "aiPromptOut",
@@ -33,10 +33,10 @@ const artifacts = [
   {
     id: "recovery-routing-atlas",
     name: "Recovery Routing Atlas",
-    currentFile: "recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
-    historicalFile: "recovery-routing-atlas-chimeric-prototype-v0.1.3.html",
-    historicalDigest: "9f1d469773ff03f048d2a9c67f3dd19845ed90a4148bd447ad072dbeecbaf453",
-    currentDigest: "48633e6a5884800e66645d40c15b15b5991385188b9e39993f0f9bf11fe1b1d8",
+    currentFile: "recovery-routing-atlas-chimeric-prototype-v0.1.5.html",
+    historicalFile: "recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
+    historicalDigest: "48633e6a5884800e66645d40c15b15b5991385188b9e39993f0f9bf11fe1b1d8",
+    currentDigest: "ecf8b904e4e8b5c2a0f530f3f39c2511be9da7d8d4240adad0b0b510e2395b21",
     stateContract: "recovery-routing-atlas-state.v0.1",
     apiName: "recoveryRoutingAtlas",
     promptId: "promptBox",
@@ -67,7 +67,7 @@ function staticPrompt(html, id) {
 }
 
 for (const artifact of artifacts) {
-  test(`${artifact.name} v0.1.4 is one byte-identical current source`, async () => {
+  test(`${artifact.name} v0.1.5 is one byte-identical current source`, async () => {
     const [source, projection, historical, historicalProjection, coreManifest, contextManifest] = await Promise.all([
       readFile(resolve(coreRoot, artifact.currentFile)),
       readFile(resolve(contextRoot, artifact.currentFile)),
@@ -79,14 +79,14 @@ for (const artifact of artifacts) {
     const current = coreManifest.prototypes.find(({ id }) => id === artifact.id);
     const contextCurrent = contextManifest.prototypes.find(({ id }) => id === artifact.id);
 
-    assert.deepEqual([current.file, current.version], [artifact.currentFile, "0.1.4"]);
-    assert.deepEqual([contextCurrent.file, contextCurrent.version], [artifact.currentFile, "0.1.4"]);
+    assert.deepEqual([current.file, current.version], [artifact.currentFile, "0.1.5"]);
+    assert.deepEqual([contextCurrent.file, contextCurrent.version], [artifact.currentFile, "0.1.5"]);
     assert.equal(current.previous.at(-1), artifact.historicalFile);
     assert.equal(contextCurrent.previous.at(-1), artifact.historicalFile);
     assert.equal(current.size_bytes, source.byteLength);
     assert.equal(contextCurrent.size_bytes, projection.byteLength);
     assert.ok(source.equals(projection), "current source and Context projection agree byte for byte");
-    assert.ok(historical.equals(historicalProjection), "v0.1.3 remains the byte-identical historical pair");
+    assert.ok(historical.equals(historicalProjection), "v0.1.4 remains the byte-identical historical pair");
     assert.equal(sha256(source), artifact.currentDigest);
     assert.equal(sha256(historical), artifact.historicalDigest);
   });
@@ -143,7 +143,7 @@ for (const artifact of artifacts) {
       assert.match(loopRegistry, new RegExp(`id="${loopId}"`, "u"));
     }
 
-    assert.deepEqual([route.source_file, route.source_version], [artifact.currentFile, "0.1.4"]);
+    assert.deepEqual([route.source_file, route.source_version], [artifact.currentFile, "0.1.5"]);
     assert.deepEqual(route.carrier_policy, {
       sandbox_tokens: [
         "allow-downloads",
@@ -172,7 +172,9 @@ for (const artifact of artifacts) {
 
 test("Recovery Routing and Revision advances the current inventory as one family", async () => {
   const inventory = await readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8");
-  assert.match(inventory, /Upstream Revision Loop v0\.1\.4/u);
-  assert.match(inventory, /Recovery Routing Atlas v0\.1\.4/u);
-  assert.match(inventory, /28 current\s+adoptions\. This completes the observed population/u);
+  const currentInventory = inventory.split("\n## Projections, receivers, and recovery inputs\n", 1)[0];
+  assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
+  assert.match(currentInventory, /Upstream Revision Loop v0\.1\.5/u);
+  assert.match(currentInventory, /Recovery Routing Atlas v0\.1\.5/u);
+  assert.match(currentInventory, /28 current\s+adoptions\. This completes the observed population/u);
 });

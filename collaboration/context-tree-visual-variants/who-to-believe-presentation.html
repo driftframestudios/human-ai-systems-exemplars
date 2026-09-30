@@ -213,8 +213,8 @@
 
   <main id="context-surface" tabindex="-1">
     <div class="surface-heading">
-      <div><h2 id="view-title">Role context</h2><p id="view-description">Compare the decision, visible evidence, remaining uncertainty, and handoff carried by each population.</p></div>
-      <div class="view-state" id="view-state">7 populations · all in view</div>
+      <div><h2 id="view-title">Role context</h2><p id="view-description">Compare the decision, visible evidence, remaining uncertainty, and handoff carried by each role or system.</p></div>
+      <div class="view-state" id="view-state">7 roles and systems · all in view</div>
     </div>
     <div class="workspace">
       <section class="surface" id="panel" role="tabpanel" aria-labelledby="tab-roles"></section>
@@ -226,7 +226,7 @@
       <div class="table-wrap">
         <table>
           <caption>Complete Who To Believe Context Tree; evidence classes remain visible in each row.</caption>
-          <thead><tr><th scope="col">Population</th><th scope="col">Decision carried</th><th scope="col">Must be visible</th><th scope="col">Context still to surface</th><th scope="col">Handoff</th></tr></thead>
+          <thead><tr><th scope="col">Role or system</th><th scope="col">Decision carried</th><th scope="col">Must be visible</th><th scope="col">Context still to surface</th><th scope="col">Handoff</th></tr></thead>
           <tbody>
             <tr><th scope="row">Participants &amp; influencers</th><td>Whether the campaign exchange and roster decision fit their lived context.</td><td>Purpose, status, reason, review timing, accessible appeal.</td><td>How marriage, roommates, caregiving, access needs, or therapy history change meaning.</td><td>Review operations · participant support</td></tr>
             <tr><th scope="row">Review operations</th><td>Whether an ambiguous transition warrants action.</td><td>Minimized evidence, bounded reasons, policy version, comparable lawful context.</td><td>Reviewer disagreement, capacity, service level, and appeal overturn patterns.</td><td>Trust product · independent appeal reviewer</td></tr>
@@ -234,7 +234,7 @@
             <tr><th scope="row">Platform engineering</th><td>How identity, purpose, decision, and retries retain one authoritative contract.</td><td>Actor, tenant, region, versions, evidence IDs, immutable decision ID.</td><td>Single-writer migration path, event replay, adapter retirement, drift gates.</td><td>Data stewardship · quality engineering</td></tr>
             <tr><th scope="row">Privacy &amp; safety</th><td>Which purpose, regional, disclosure, and safety obligations attach.</td><td>Purpose provenance, retention, regional movement, receiving-team status.</td><td>Applicable jurisdiction, controller roles, erasure completion, safety receipt.</td><td>Accountable regulated party · privacy owner</td></tr>
             <tr><th scope="row">Clients &amp; executives</th><td>Whether the signal is reliable enough to change a campaign or investment.</td><td>Population, denominator, source class, operating cost, unresolved uncertainty.</td><td>Whether a channel metric measures value or recovery from another broken route.</td><td>Product strategy · client operations</td></tr>
-            <tr><th scope="row">AI collaborator</th><td>Which candidate explanation or method should be offered for human inspection.</td><td>Source boundary, named outcome, candidate set, assumptions, falsifiers.</td><td>What evidence and alternatives are outside the current context window.</td><td>Named human receiver · Threadkeeping Ledger</td></tr>
+            <tr><th scope="row">Generative AI proposal system</th><td>Which candidate explanation or method should be proposed for human inspection.</td><td>Source boundary, named outcome, candidate set, assumptions, falsifiers.</td><td>What evidence and alternatives are outside the current context window.</td><td>Named human receiver · Threadkeeping Ledger</td></tr>
           </tbody>
         </table>
       </div>
@@ -258,10 +258,10 @@
         {id:"engineering",label:"Platform engineering",status:"system authority",decision:"How identity, purpose, decision, and retries retain one authoritative contract.",visible:"Actor, tenant, region, versions, evidence IDs, and immutable decision identity.",gap:"Single-writer migration, event replay, adapter retirement, and drift gates.",route:"Data stewardship · quality engineering"},
         {id:"governance",label:"Privacy & safety",status:"accountable boundary",decision:"Which purpose, regional, disclosure, and safety obligations attach.",visible:"Purpose provenance, retention, regional movement, and receiving-team status.",gap:"Applicable jurisdiction, controller roles, erasure completion, and safety receipt.",route:"Regulated party · privacy owner"},
         {id:"executive",label:"Clients & executives",status:"investment decision",decision:"Whether a signal is reliable enough to change a campaign or investment.",visible:"Population, denominator, source class, operating cost, and unresolved uncertainty.",gap:"Whether a channel metric measures value or recovery from another broken route.",route:"Product strategy · client operations"},
-        {id:"ai",label:"AI collaborator",status:"proposal only",decision:"Which candidate explanation or method should be offered for human inspection.",visible:"Source boundary, named outcome, candidate set, assumptions, and falsifiers.",gap:"Which evidence and alternatives sit outside the current context window.",route:"Named human receiver · ledger"}
+        {id:"ai",label:"Generative AI proposal system",status:"proposal channel",decision:"Which candidate explanation or method should be proposed for human inspection.",visible:"Source boundary, named outcome, candidate set, assumptions, and falsifiers.",gap:"Which evidence and alternatives sit outside the current context window.",route:"Named human receiver · ledger"}
       ];
       const views = {
-        roles:{title:"Role context",description:"Compare the decision, visible evidence, remaining uncertainty, and handoff carried by each population."},
+        roles:{title:"Role context",description:"Compare the decision, visible evidence, remaining uncertainty, and handoff carried by each role or system."},
         blueprint:{title:"Service handoffs",description:"Follow one roster decision through people, interface, services, evidence, review, and learning."},
         gaps:{title:"Context still to surface",description:"Treat uncertainty as an inspectable work queue with a named receiver rather than as a defect in a person."}
       };
@@ -287,7 +287,7 @@
           button.setAttribute("aria-selected", String(selected));
           button.tabIndex = selected ? 0 : -1;
         });
-        document.getElementById("actor-controls").innerHTML = [{id:"all",label:"All populations"},...actors].map(actor => `<button class="actor-filter" type="button" data-actor="${actor.id}" aria-pressed="${state.actor === actor.id}">${escapeHtml(actor.label)}</button>`).join("");
+        document.getElementById("actor-controls").innerHTML = [{id:"all",label:"All roles and systems"},...actors].map(actor => `<button class="actor-filter" type="button" data-actor="${actor.id}" aria-pressed="${state.actor === actor.id}">${escapeHtml(actor.label)}</button>`).join("");
       }
       function roleCards() {
         return `<div class="role-grid">${visibleActors().map(actor => `<article class="role-card"><button type="button" data-inspect="${actor.id}" aria-current="${state.actor === actor.id}"><span class="status">${escapeHtml(actor.status)}</span><h3>${escapeHtml(actor.label)}</h3><p><strong>Decision:</strong> ${escapeHtml(actor.decision)}</p><p><strong>Visible:</strong> ${escapeHtml(actor.visible)}</p><span class="route">${escapeHtml(actor.route)}</span></button></article>`).join("")}</div>`;
@@ -301,7 +301,7 @@
       function renderInspector() {
         const actor = actors.find(item => item.id === state.actor);
         if (!actor) {
-          inspector.innerHTML = `<h2 id="inspector-title">Read role differences before convergence</h2><p>The tree keeps seven populations visible. Choose one to inspect its decision, evidence need, context queue, and handoff without losing the complete system view.</p><dl><div><dt>Shared invariant</dt><dd>Scores focus attention; people retain consequential judgment.</dd></div><div><dt>Information scent</dt><dd>Reasons, source class, alternatives, and recovery routes stay visible.</dd></div></dl>`;
+          inspector.innerHTML = `<h2 id="inspector-title">Read role differences before convergence</h2><p>The tree keeps seven roles and systems visible. Choose one to inspect its decision, evidence need, context queue, and handoff without losing the complete system view.</p><dl><div><dt>Shared invariant</dt><dd>Scores focus attention; people retain consequential judgment.</dd></div><div><dt>Information scent</dt><dd>Reasons, source class, alternatives, and recovery routes stay visible.</dd></div></dl>`;
           return;
         }
         inspector.innerHTML = `<h2 id="inspector-title">${escapeHtml(actor.label)}</h2><p>${escapeHtml(actor.decision)}</p><dl><div><dt>Must be visible</dt><dd>${escapeHtml(actor.visible)}</dd></div><div><dt>Context still to surface</dt><dd>${escapeHtml(actor.gap)}</dd></div><div><dt>Receiving route</dt><dd>${escapeHtml(actor.route)}</dd></div></dl>`;
@@ -310,7 +310,7 @@
         renderControls();
         document.getElementById("view-title").textContent = views[state.view].title;
         document.getElementById("view-description").textContent = views[state.view].description;
-        document.getElementById("view-state").textContent = state.actor === "all" ? `${actors.length} populations · all in view` : `Focus · ${actors.find(actor => actor.id === state.actor).label}`;
+        document.getElementById("view-state").textContent = state.actor === "all" ? `${actors.length} roles and systems · all in view` : `Focus · ${actors.find(actor => actor.id === state.actor).label}`;
         panel.setAttribute("aria-labelledby", `tab-${state.view}`);
         panel.innerHTML = state.view === "roles" ? roleCards() : state.view === "blueprint" ? blueprint() : gapCards();
         renderInspector();
@@ -324,7 +324,7 @@
       function chooseActor(id, announce = true) {
         if (id !== "all" && !actors.some(actor => actor.id === id)) return;
         state.actor = id; writeUrl(); render();
-        if (announce) status.textContent = id === "all" ? "All populations are visible." : `${actors.find(actor => actor.id === id).label} is in focus.`;
+        if (announce) status.textContent = id === "all" ? "All roles and systems are visible." : `${actors.find(actor => actor.id === id).label} is in focus.`;
       }
       document.addEventListener("click", event => {
         const view = event.target.closest("[data-view]");

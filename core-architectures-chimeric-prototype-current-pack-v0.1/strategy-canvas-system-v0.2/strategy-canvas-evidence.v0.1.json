@@ -37,7 +37,7 @@
   "representations": {
     "canonical": {
       "receivers": [
-        "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.4.html"
+        "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.5.html"
       ],
       "method": "strategyCanvas",
       "sourceClaim": "The Strategy Canvas was developed by INSEAD strategy scholars W. Chan Kim and Renée Mauborgne as a diagnostic and action framework for Blue Ocean Strategy.",
@@ -46,11 +46,11 @@
     },
     "contextCanvas": {
       "receivers": [
-        "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html"
+        "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html"
       ],
       "method": "strategyCanvas",
       "sourceClaim": "The Strategy Canvas was developed by INSEAD strategy scholars W. Chan Kim and Renée Mauborgne as a diagnostic and action framework for Blue Ocean Strategy.",
-      "adaptationClaim": "This Context Canvas workbench adapts the comparison form for internal collaboration. Its current, good-enough, desired, consequence, evidence, participant input, scenario, and AI collaboration fields are repository-specific extensions.",
+      "adaptationClaim": "This Context Canvas workbench adapts the comparison form for internal collaboration. Its current, good-enough, desired, consequence, evidence, participant input, scenario, and generative AI proposal fields are repository-specific extensions.",
       "boundaryClaim": "The local 0–10 scores support comparison. Evidence designed for decision and change outcomes establishes those claims."
     },
     "narrativeCapsuleComposer": {
@@ -95,11 +95,11 @@
         "id": "canonical-worksheet",
         "expression": "canonical",
         "role": "authored source and generated current distribution",
-        "version": "0.2.4",
+        "version": "0.2.5",
         "relation": "The template and shared core generate the current canonical worksheet.",
         "paths": [
           "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/canonical.template.html",
-          "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.4.html"
+          "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.5.html"
         ]
       },
       {
@@ -107,7 +107,7 @@
         "expression": "canonical",
         "role": "compatibility source and projected route",
         "version": "0.1.1",
-        "relation": "The compatibility source routes the historical public name to canonical worksheet v0.2.4.",
+        "relation": "The compatibility source routes the historical public name to canonical worksheet v0.2.5.",
         "paths": [
           "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/compatibility-v0.1.1.html",
           "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html"
@@ -117,7 +117,7 @@
         "id": "canonical-iframe-projection",
         "expression": "canonical",
         "role": "public iframe route declaration",
-        "version": "0.2.4",
+        "version": "0.2.5",
         "relation": "The route manifest projects the canonical worksheet and the package-declared copy of its source-owned evidence into /v1/core/strategy-canvas/.",
         "paths": [
           "core-architectures-chimeric-prototype-current-pack-v0.1/public-iframe-route-manifest-v1.json"
@@ -127,10 +127,10 @@
         "id": "context-workbench",
         "expression": "context-canvas",
         "role": "current facilitation workbench and expression-owned assets",
-        "version": "0.2.2",
+        "version": "0.2.3",
         "relation": "The Context expression consumes the shared semantic contract and adds participant, reveal, scenario, evidence, and handoff behavior.",
         "paths": [
-          "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
+          "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html",
           "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-context-workbench-v0.2.css",
           "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-context-workbench-v0.2.js"
         ]
@@ -140,7 +140,7 @@
         "expression": "context-canvas",
         "role": "compatibility route",
         "version": "0.1.1",
-        "relation": "The Context compatibility route points to the independently maintained workbench v0.2.2.",
+        "relation": "The Context compatibility route points to the independently maintained workbench v0.2.3.",
         "paths": [
           "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.1.1.html"
         ]
@@ -160,12 +160,12 @@
         "id": "narrative-portable-companion",
         "expression": "canonical",
         "role": "portable archive companion",
-        "version": "0.2.4",
-        "relation": "The Narrative archive carries the current canonical worksheet as a self-contained companion while the source Composer keeps its Context workbench route.",
+        "version": "0.2.5",
+        "relation": "The Narrative archive retains the accepted v0.2.5 canonical worksheet as a self-contained companion while the source Composer keeps its Context workbench route.",
         "paths": [
           "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/narrative-capsules-chimeric-prototype-bundle-v0.1.zip"
         ],
-        "archiveMember": "narrative-capsules-chimeric-prototype-v0.1/companions/strategy-canvas-chimeric-prototype-v0.2.4.html"
+        "archiveMember": "narrative-capsules-chimeric-prototype-v0.1/companions/strategy-canvas-chimeric-prototype-v0.2.5.html"
       },
       {
         "id": "genomic-static-companion",

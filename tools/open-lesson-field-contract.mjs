@@ -550,7 +550,7 @@ async function embeddedViewportChecks(browser, hostUrl) {
         await assertLayout(page, `Prompt-side host ${viewport.name}`);
         const { iframe, frame } = await iframeSurface(page);
         assert(await iframe.getAttribute("src") === PUBLIC_IFRAME_URL, "Iframe should resolve the manifest-owned public Open Lesson Field route.");
-        assert(await iframe.getAttribute("sandbox") === "allow-downloads allow-modals allow-scripts", "Iframe sandbox should carry the implemented download, script, and print-dialog capabilities.");
+        assert(await iframe.getAttribute("sandbox") === "allow-downloads allow-modals allow-popups allow-popups-to-escape-sandbox allow-scripts", "Iframe sandbox should carry the implemented download, print-dialog, projected onward-navigation, and script capabilities.");
         assert(await iframe.getAttribute("allow") === "clipboard-write", "Iframe Permissions Policy should carry the implemented Markdown copy capability.");
         assert(await iframe.getAttribute("referrerpolicy") === "no-referrer", "Iframe should preserve the no-referrer boundary.");
         assert(await page.locator(IFRAME_SELECTOR).count() === 1, "Parent DOM should contain one Open Lesson Field iframe.");

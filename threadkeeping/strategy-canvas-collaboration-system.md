@@ -73,9 +73,9 @@ Receiving iframes begin with `allow-scripts`. A real in-frame report download ea
 - Root and Context Narrative Composer, Semantic Sampling, and Technology Fit archives rebuild deterministically; their embedded manifests and portable routes resolve against the packaged members.
 - The Context prototype-manifest validator passes all five mirrored collections.
 
-### Current v0.2.4 source receipt
+### Current v0.2.5 source receipt
 
-`npm run test:strategy-canvas` passes 43 of 43 browser contracts at `.visual-runs/2026-09-08T11-31-45-032Z-strategy-canvas-contract`. The current route includes a rendered forced-colors observation: an unselected SVG dimension label resolves to the system `Canvas` and `CanvasText` pair while the selected and focused label retains `Highlight`. The builder reproduces a 165,694-byte canonical distribution with SHA-256 `60fc6669b54adff4f609f4c48322548d44abc4875f5a2412030eb2c619f4c8b4`. `npm run test:core-architectures` passes 75 of 75 checks, the four maintained consumer archives remain current, `npm run test:narrative-architectures` passes 28 of 28 checks, and `npm run test:iframe-routes` passes 32 of 32 checks.
+`npm run test:strategy-canvas` passes 47 of 47 browser contracts at `.visual-runs/2026-09-30T01-12-44-056Z-strategy-canvas-contract`. The current route includes a rendered forced-colors observation: an unselected SVG dimension label resolves to the system `Canvas` and `CanvasText` pair while the selected and focused label retains `Highlight`. The builder reproduces a 165,776-byte canonical distribution with SHA-256 `9e376ec39c2f0cf5dd1359b7332fade27257008a48db5ebfc63cf606af28fa56`. `npm run test:core-architectures` passes 76 of 76 checks, the four maintained consumer archives remain current, `npm run test:narrative-architectures` passes 28 of 28 checks, and `npm run test:iframe-routes` passes 32 of 32 checks.
 
 [Issue #137](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/137) carries the moving cross-family package coordinate. This record establishes the source-owned Strategy Canvas identities and build; the existing deployment owners retain live delivery.
 
@@ -85,7 +85,7 @@ The 2026-08-22 acceptance run passed 36 of 36 browser contracts at `.visual-runs
 
 ## Collaboration edge
 
-Current: the canonical v0.2.4 source, generated distribution, source manifest, Context v0.2.2 workbench, schema/core, Narrative source projection, canonical portable companion, research spine, deterministic consumer archives, and local iframe package agree at their named coordinates. The evidence registry names each material representation and derives current canonical, Context, and iframe coordinates from their owning manifests. The v0.1.1 routes remain accessible compatibility entries.
+Current: the canonical v0.2.5 source, generated distribution, source manifest, Context v0.2.3 workbench, schema/core, Narrative source projection, canonical portable companion, research spine, deterministic consumer archives, and local iframe package agree at their named coordinates. The evidence registry names each material representation and derives current canonical, Context, and iframe coordinates from their owning manifests. The v0.1.1 routes remain accessible compatibility entries.
 
 Next: review and merge the source-identity reconciliation, then let Issue #137 receive the accepted cross-family package coordinate and Issue #190 receive the exact live Strategy Canvas route observation. Physical touch-hardware and assistive-technology receipts remain nominated field-validation work alongside that delivery review.
 
@@ -114,11 +114,11 @@ machine_node:
     packet_scope: reviewed_and_explicitly_selected
   next_route: review_merge_package_receive_live_verify
   verification:
-    browser_contract: 43_of_43_pass
+    browser_contract: 47_of_47_pass
     canonical_distribution:
-      bytes: 165694
-      sha256: 60fc6669b54adff4f609f4c48322548d44abc4875f5a2412030eb2c619f4c8b4
-    core_architectures: 75_of_75_pass
+      bytes: 165776
+      sha256: 9e376ec39c2f0cf5dd1359b7332fade27257008a48db5ebfc63cf606af28fa56
+    core_architectures: 76_of_76_pass
     consumer_archives: 4_of_4_deterministic_and_receipted
     context_manifests: 5_of_5_pass
     narrative_architectures: 28_of_28_pass

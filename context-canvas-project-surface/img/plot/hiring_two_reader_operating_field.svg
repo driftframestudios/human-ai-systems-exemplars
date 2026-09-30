@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="htr-title htr-desc">
   <title id="htr-title">One body of work meets two readers</title>
-  <desc id="htr-desc">An operating field shows four candidate-authored surfaces—hero, resume, body of work, and public surface—feeding one specificity spine. The spine carries named role, scale, tradeoff, outcome, and voice into two distinct local readings. A senior human reads for judgment, shaped problems, tradeoffs, influence, stewardship, and the presence of a person. A parser or talent agent reads standard role titles, named skills, explicit scale, working artifact links, and extractable text. Stated and inferred signals remain distinct, and employment judgment remains with named people. An investment band names the sustained work of the candidate or author, content design, talent operations, engineering, human reviewers, and legal or EEO governance. Specificity improves legibility; fairness, fit, and capability require separate evidence and accountable human judgment.</desc>
+  <desc id="htr-desc">An operating field shows four candidate-authored surfaces—hero, resume, body of work, and public surface—feeding one specificity spine. The spine carries named role, scale, tradeoff, outcome, and voice into two distinct local readings. A senior human reads for judgment, shaped problems, tradeoffs, influence, stewardship, and the presence of a person. A parser or talent-agent system extracts standard role titles, named skills, explicit scale, working artifact links, and extractable text. Stated and inferred signals remain distinct, and employment judgment remains with named people. An investment band names the sustained work of the candidate or author, content design, talent operations, engineering, human reviewers, and legal or EEO governance. Specificity improves legibility; fairness, fit, and capability require separate evidence and accountable human judgment.</desc>
 
   <defs>
     <pattern id="htr-grid" width="30" height="30" patternUnits="userSpaceOnUse">
@@ -157,7 +157,7 @@
     </g>
 
     <g id="htr-parser-reading" role="group" aria-labelledby="htr-parser-title">
-      <title id="htr-parser-title">Parser and talent-agent reading</title>
+      <title id="htr-parser-title">Parser and talent-agent system processing</title>
       <rect x="1022" y="523" width="500" height="211" rx="13" fill="#e7efff" stroke="#17345f" stroke-width="2"/>
       <text x="1046" y="551" class="mono eyebrow cobalt">PARSER + TALENT AGENT</text>
       <text x="1046" y="580" class="sans section ink">Can this profile enter and survive retrieval?</text>

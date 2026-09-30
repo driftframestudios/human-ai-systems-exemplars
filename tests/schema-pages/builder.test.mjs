@@ -428,6 +428,7 @@ test("the public catalog contains exactly the public-ready allowlist", async () 
     .map((entry) => entry.name);
 
   assert.deepEqual(possibleNames, [
+    "audit-anthropomorphic-cues",
     "repository-collaboration-cycle",
     "supportive-change-writing",
   ]);

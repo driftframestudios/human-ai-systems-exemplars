@@ -30,13 +30,13 @@ const artifacts = [
   {
     id: "poda",
     name: "PODA",
-    version: "0.1.4",
-    currentFile: "poda-chimeric-prototype-v0.1.4.html",
-    historicalFile: "poda-chimeric-prototype-v0.1.3.html",
-    currentDigest: "adf425f5e7b0f22fe03c9df58c874b2f995457de933e9dc777fb8ef5bfd46704",
-    contextDigest: "cffd9df254680e13de1d6609c518926f6b8fc80dff56c972ea796fa896b4fe26",
-    historicalDigest: "75127797592b85c7f22608d92ae6482b6073c523879d621a3e33c133cecbac5b",
-    historicalContextDigest: "bcc33fdf78718abc54f65477672d164a1962cdf9f588480763b6e69c3ad7d2f9",
+    version: "0.1.5",
+    currentFile: "poda-chimeric-prototype-v0.1.5.html",
+    historicalFile: "poda-chimeric-prototype-v0.1.4.html",
+    currentDigest: "abefbece34d524819d0d50bd4281ba7ae55d9648f8e74c6ef19645aa36076af2",
+    contextDigest: "a706295b3fcac11bbe6f28057cad7649ac1f8ede4e591a68f7c45122c9942f42",
+    historicalDigest: "adf425f5e7b0f22fe03c9df58c874b2f995457de933e9dc777fb8ef5bfd46704",
+    historicalContextDigest: "cffd9df254680e13de1d6609c518926f6b8fc80dff56c972ea796fa896b4fe26",
     stateContract: "poda-state.v0.1",
     apiName: "poda",
     promptId: "aiPrompt",
@@ -286,7 +286,7 @@ for (const artifact of artifacts) {
     const [targetRegistry, narrativeComposer, familyCompanion, ...directCarriers] = await Promise.all([
       json(resolve(narrativeRoot, "core-architecture-target-pair-registry.v0.1.json")),
       readFile(resolve(narrativeRoot, "narrative-capsules-chimeric-prototype-v0.1.html"), "utf8"),
-      readFile(resolve(narrativeRoot, "companions/core-architecture-family-index-chimeric-prototype-v0.1.5.html"), "utf8"),
+      readFile(resolve(narrativeRoot, "companions/core-architecture-family-index-chimeric-prototype-v0.1.6.html"), "utf8"),
       ...artifact.directCarriers.map(path => readFile(resolve(repositoryRoot, path), "utf8")),
     ]);
     const card = targetRegistry.cards.find(({ id }) => id === artifact.id);
@@ -301,9 +301,11 @@ for (const artifact of artifacts) {
 
 test("Orientation and Tracing advances the current inventory as one complete family", async () => {
   const inventory = await readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8");
-  for (const phrase of ["PODA v0.1.4", "Alignment Worksheet v0.1.4", "Impact Map v0.1.5", "Context Tree v0.1.7"]) {
-    assert.match(inventory, new RegExp(phrase.replaceAll(".", "\\."), "u"));
+  const currentInventory = inventory.split("\n## Projections, receivers, and recovery inputs\n", 1)[0];
+  assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
+  for (const phrase of ["PODA v0.1.5", "Alignment Worksheet v0.1.4", "Impact Map v0.1.5", "Context Tree v0.1.7"]) {
+    assert.match(currentInventory, new RegExp(phrase.replaceAll(".", "\\."), "u"));
   }
-  assert.match(inventory, /28 current\s+adoptions\. This completes the observed population/u);
-  assert.match(inventory, /family members, which complete the current Orientation and Tracing[\s\S]*?famil(?:y|ies)/u);
+  assert.match(currentInventory, /28 current\s+adoptions\. This completes the observed population/u);
+  assert.match(currentInventory, /family members, which complete the current Orientation and Tracing[\s\S]*?famil(?:y|ies)/u);
 });

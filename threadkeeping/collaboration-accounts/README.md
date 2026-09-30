@@ -19,6 +19,7 @@ These notes remain provisional field evidence. Repeated use can earn a skill rev
 - [Context Canvas contrast convergence and visual-verification formation](2026-08-31-context-canvas-contrast-convergence.md) — the approved two-level foreground roles, debate and browser evidence, `create_now` visual-verification contract, existing-owner revisions, public skill billets, and milestone-22 receivers.
 - [Repository collaboration cycle formation](2026-08-31-repository-collaboration-cycle.md) — the accepted #146 → #152 merge sequence, wished-for cold-session docket, one-runbook capacity architecture, locked-environment route, `create_now` full-cycle skill, and fresh-context exercise event.
 - [Contextual jargon scan formation](2026-09-01-contextual-jargon-scan.md) — two materially different corpora, a bounded FMI/genomic visitor-surface exercise, and the `create_now` route for function-classified ordinary-language revision.
+- [Anthropomorphic cue audit — first repository use](2026-09-29-anthropomorphic-cue-audit.md) — an exercised Practitioner Registry skill family, one Context Canvas and iframe language migration, and the `create_now` route for cue-bundle diagnosis distinct from prose translation and causal evaluation.
 
 ## Return condition
 

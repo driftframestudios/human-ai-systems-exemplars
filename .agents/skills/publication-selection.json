@@ -16,6 +16,14 @@
   ],
   "skills": [
     {
+      "name": "audit-anthropomorphic-cues",
+      "sourcePath": ".agents/skills/audit-anthropomorphic-cues/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "Promote only through a separate publication decision after natural-use review confirms that the self-contained projection preserves the cue-bundle, source-fidelity, and human-authority boundaries."
+    },
+    {
       "name": "bounded-support-routing",
       "sourcePath": ".agents/skills/bounded-support-routing/SKILL.md",
       "publicationStanding": "public_ready",

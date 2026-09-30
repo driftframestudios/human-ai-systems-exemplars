@@ -1536,7 +1536,7 @@
       "description": "Current estimates assume a team comfortable with TypeScript, semantic HTML, modern CSS, and local verification; actual experience distribution remains unstated.",
       "consequence": "A stack with strong abstract fit may impose uneven onboarding cost.",
       "gapUtility": "coordination_gap",
-      "currentHandling": "Create a Context Tree for maintainers, designers, accessibility reviewers, and future AI collaborators.",
+      "currentHandling": "Create a Context Tree for maintainers, designers, accessibility reviewers, and future practitioners working with generative systems.",
       "routeTargetId": "ca:context-tree",
       "probeRef": "pp:start-here-technology-decision",
       "resolutionState": "open",

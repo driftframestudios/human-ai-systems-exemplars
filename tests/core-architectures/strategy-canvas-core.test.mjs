@@ -69,7 +69,7 @@ test("Prompt Capsule views share one deterministic state coordinate and checked 
   const collaborationGuide = await readFile(collaborationGuidePath, "utf8");
   const fingerprint = Core.promptCapsuleFingerprint(Core.defaultState);
 
-  assert.equal(Core.version, "0.2.4");
+  assert.equal(Core.version, "0.2.5");
   assert.equal(Core.promptCapsuleContract, "prompt-capsule/0.1.0");
   assert.equal(Core.promptCapsule(Core.defaultState), plainMarkdown);
   assert.equal(checkedExample, plainMarkdown);
@@ -420,26 +420,26 @@ test("Core manifests resolve current files, byte counts, and published digests",
       const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
       const byId = new Map(manifest.prototypes.map((entry) => [entry.id, entry]));
       const currentIdentities = {
-        "core-architecture-family-index": ["core-architecture-family-index-chimeric-prototype-v0.1.5.html", "0.1.5"],
+        "core-architecture-family-index": ["core-architecture-family-index-chimeric-prototype-v0.1.6.html", "0.1.6"],
         "impact-map": ["impact-map-chimeric-prototype-v0.1.5.html", "0.1.5"],
         "strategy-canvas": dirname(manifestPath) === coreRoot
-          ? ["strategy-canvas-chimeric-prototype-v0.2.4.html", "0.2.4"]
-          : ["strategy-canvas-chimeric-prototype-v0.2.2.html", "0.2.2"],
+          ? ["strategy-canvas-chimeric-prototype-v0.2.5.html", "0.2.5"]
+          : ["strategy-canvas-chimeric-prototype-v0.2.3.html", "0.2.3"],
         "cross-channel-blueprint": ["shared-surface-priority-map-chimeric-prototype-v0.1.4.html", "0.1.4"],
-        "service-design-blueprint": ["service-design-blueprint-chimeric-prototype-v0.2.5.html", "0.2.5"],
-        "ai-systems-service-blueprint": ["ai-systems-service-blueprint-chimeric-prototype-v0.1.4.html", "0.1.4"],
+        "service-design-blueprint": ["service-design-blueprint-chimeric-prototype-v0.2.6.html", "0.2.6"],
+        "ai-systems-service-blueprint": ["ai-systems-service-blueprint-chimeric-prototype-v0.1.5.html", "0.1.5"],
         "software-architecture-views": ["software-architecture-views-chimeric-prototype-v0.1.4.html", "0.1.4"],
         "heart-chart": ["heart-chart-chimeric-prototype-v0.1.6.html", "0.1.6"],
-        "plus-delta": ["plus-delta-chimeric-prototype-v0.1.4.html", "0.1.4"],
-        "practitioner-judgment-probes": ["practitioner-judgment-probes-chimeric-prototype-v0.1.4.html", "0.1.4"],
-        "specification-by-example": ["specification-by-example-chimeric-prototype-v0.1.6.html", "0.1.6"]
+        "plus-delta": ["plus-delta-chimeric-prototype-v0.1.5.html", "0.1.5"],
+        "practitioner-judgment-probes": ["practitioner-judgment-probes-chimeric-prototype-v0.1.5.html", "0.1.5"],
+        "specification-by-example": ["specification-by-example-chimeric-prototype-v0.1.7.html", "0.1.7"]
       };
       for (const [id, identity] of Object.entries(currentIdentities)) {
         const entry = byId.get(id);
         assert.deepEqual([entry.file, entry.version], identity, `${id} current identity`);
         const source = await readFile(resolve(dirname(manifestPath), entry.file), "utf8");
         if (id === "strategy-canvas" && dirname(manifestPath) === contextCoreRoot) {
-          assert.match(source, /<title>Strategy Canvas Collaboration Field v0\.2\.2<\/title>/u);
+          assert.match(source, /<title>Strategy Canvas Collaboration Field v0\.2\.3<\/title>/u);
         } else {
           const embeddedVersion = new RegExp(
             `['"]?version['"]?\\s*:\\s*['"]${entry.version.replaceAll(".", "\\.")}['"]`
@@ -465,6 +465,105 @@ test("Core manifests resolve current files, byte counts, and published digests",
       }
     });
   }
+});
+
+test("current-facing Strategy and Family coordinates follow their owning manifests", async () => {
+  const [canonicalManifest, contextManifest] = await Promise.all([
+    readFile(resolve(coreRoot, "core-architectures-chimeric-prototype-manifest-v0.1.json"), "utf8").then(JSON.parse),
+    readFile(resolve(contextCoreRoot, "core-architectures-chimeric-prototype-manifest-v0.1.json"), "utf8").then(JSON.parse)
+  ]);
+  const canonical = canonicalManifest.prototypes.find(({ id }) => id === "strategy-canvas");
+  const context = contextManifest.prototypes.find(({ id }) => id === "strategy-canvas");
+  const familyIndex = contextManifest.prototypes.find(({ id }) => id === "core-architecture-family-index");
+
+  assert.ok(canonical && context && familyIndex, "the owning manifests retain the current Strategy and Family entries");
+
+  const [
+    rootReadme,
+    prototypeIndex,
+    evidence,
+    promptContract,
+    promptInventory,
+    coverageLedger,
+    threadkeeping,
+  ] = await Promise.all([
+    readFile(resolve(repositoryRoot, "README.md"), "utf8"),
+    readFile(resolve(repositoryRoot, "context-canvas-project-surface/context-canvas/prototypes/index.html"), "utf8"),
+    readFile(resolve(systemRoot, "strategy-canvas-evidence.v0.1.json"), "utf8").then(JSON.parse),
+    readFile(resolve(repositoryRoot, "prompt-capsules/0.1.0/prompt-capsule-contract.md"), "utf8"),
+    readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8"),
+    readFile(resolve(repositoryRoot, "planning/context-canvas/strategy-canvas/07-implementation-coverage-ledger.md"), "utf8"),
+    readFile(resolve(repositoryRoot, "threadkeeping/strategy-canvas-collaboration-system.md"), "utf8"),
+  ]);
+
+  const rootStrategyLink = rootReadme.match(/\[Strategy Canvas collaboration workbench\]\(([^)]+)\)/u);
+  assert.ok(rootStrategyLink, "the root README retains the Strategy Canvas door");
+  assert.equal(
+    rootStrategyLink[1],
+    `context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/${context.file}`,
+  );
+
+  const prototypeFamilyLink = prototypeIndex.match(/<a href="([^"]+)">Open family index<\/a>/u);
+  assert.ok(prototypeFamilyLink, "the prototype library retains the Family Index route");
+  assert.equal(
+    prototypeFamilyLink[1],
+    `core-architectures/chimeric-pack-v0.1/${familyIndex.file}`,
+  );
+
+  assert.deepEqual(
+    evidence.representations.contextCanvas.receivers,
+    [`context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/${context.file}`],
+  );
+  const contextCompatibility = evidence.representationInventory.artifacts.find(
+    ({ id }) => id === "context-compatibility",
+  );
+  assert.equal(
+    contextCompatibility?.relation,
+    `The Context compatibility route points to the independently maintained workbench v${context.version}.`,
+  );
+
+  const promptReference = promptContract.match(
+    /- Reference implementation: \[Strategy Canvas v([^\]]+)\]\(([^)]+)\)/u,
+  );
+  assert.deepEqual(
+    promptReference?.slice(1),
+    [canonical.version, "../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/README.md"],
+  );
+  const currentInventory = promptInventory.split("\n## Projections, receivers, and recovery inputs\n", 1)[0];
+  assert.notEqual(currentInventory, promptInventory, "the inventory keeps its current/projection boundary");
+  assert.ok(currentInventory.includes(`Strategy Canvas v${canonical.version}`));
+
+  const representationInventory = coverageLedger.match(
+    /## Representation and route inventory\n([\s\S]*?)\n## Completion gates/u,
+  )?.[1];
+  assert.ok(representationInventory, "the coverage ledger retains its current representation inventory");
+  assert.ok(representationInventory.includes(`\`${canonical.file}\``));
+  assert.ok(representationInventory.includes(`\`${context.file}\``));
+  assert.ok(coverageLedger.includes(`canonical registries resolve to v${canonical.version}`));
+  assert.ok(coverageLedger.includes(`Context registry remains on v${context.version}`));
+  assert.ok(coverageLedger.includes(`## Current v${canonical.version} verification route`));
+  assert.ok(
+    coverageLedger.includes(
+      `**${canonical.size_bytes.toLocaleString("en-US")} bytes**, SHA-256 \`${canonical.sha256}\``,
+    ),
+  );
+
+  assert.ok(threadkeeping.includes(`### Current v${canonical.version} source receipt`));
+  assert.ok(
+    threadkeeping.includes(
+      `Current: the canonical v${canonical.version} source, generated distribution, source manifest, Context v${context.version} workbench`,
+    ),
+  );
+  assert.ok(
+    threadkeeping.includes(
+      `a ${canonical.size_bytes.toLocaleString("en-US")}-byte canonical distribution with SHA-256 \`${canonical.sha256}\``,
+    ),
+  );
+  assert.ok(
+    threadkeeping.includes(
+      `bytes: ${canonical.size_bytes}\n      sha256: ${canonical.sha256}`,
+    ),
+  );
 });
 
 test("Strategy Canvas artifact registry preserves both current expression owners", async () => {
