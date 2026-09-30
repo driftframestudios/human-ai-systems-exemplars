@@ -24,6 +24,10 @@ import {
   repositoryRoot,
   startStaticServer,
 } from "./core-architecture-browser-helper.mjs";
+import {
+  assertFormControlLabelRetention,
+  observeFormControlLabels,
+} from "./form-control-label-contract.mjs";
 
 const contextCanvasDirectory = "context-canvas";
 const expectedCarrierRouteCounts = [
@@ -175,6 +179,7 @@ async function discoverPublicIframeCarriers(outputRoot, routeManifest) {
 }
 
 async function assertCarrierContainment(page, carrier, frame, label) {
+  const labelObservations = [];
   for (const width of viewports) {
     await page.setViewportSize({ width, height: 1000 });
     await carrier.scrollIntoViewIfNeeded();
@@ -196,7 +201,11 @@ async function assertCarrierContainment(page, carrier, frame, label) {
       `${label} contains framed-document root overflow at ${width}px ` +
         `(${frameContainment.scrollWidth}/${frameContainment.clientWidth})`,
     );
+    labelObservations.push(
+      await observeFormControlLabels(frame.locator("html"), width),
+    );
   }
+  assertFormControlLabelRetention(labelObservations, label);
 }
 
 async function assertParentLinksRemainOrdinary(carrier, label) {
@@ -758,6 +767,7 @@ async function run() {
             0,
             `${projectionLabel} ${routeProfile.id} does not introduce a nested frame`,
           );
+          const labelObservations = [];
           for (const width of viewports) {
             await page.setViewportSize({ width, height: 1000 });
             const containment = await frame.locator("html").evaluate((root) => ({
@@ -769,7 +779,14 @@ async function run() {
               `${projectionLabel} ${routeProfile.id} contains document overflow at ${width}px ` +
                 `(${containment.scrollWidth}/${containment.clientWidth})`,
             );
+            labelObservations.push(
+              await observeFormControlLabels(frame.locator("html"), width),
+            );
           }
+          assertFormControlLabelRetention(
+            labelObservations,
+            `${projectionLabel} ${routeProfile.id}`,
+          );
           await page.waitForLoadState("networkidle", { timeout: 4000 }).catch(() => {});
           assertTelemetry(telemetry);
           await page.close();
