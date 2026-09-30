@@ -17,7 +17,7 @@ description: Audits bundled person-like cues in generative-system interfaces and
 - **Useful when:** A name, persona, first-person voice, pronoun, avatar, emotional phrase, role metaphor, turn-taking pattern, customization feature, agency claim, or tool surface may affect reliance or responsibility.
 - **Poor fit when:** Ordinary factual editing resolves the wording, exact source language must remain verbatim, or the requested result is a causal comparison rather than an interface and language audit.
 - **Smallest useful dose:** Inspect the consequential cue bundle and its nearby referents; revise only the ambiguity that changes a reader's interpretation or action.
-- **Interactions:** `context-canvas-surface-reading` owns the visitor and runtime map; `source-authority-mapping` owns source and projection lineage; `supportive-change-writing` owns final prose; a separately authorized evaluation owns causal comparison.
+- **Interactions:** `context-canvas-surface-reading` owns the visitor and runtime map; `source-authority-mapping` owns source and projection lineage; the receiving writing practice owns final prose; a separately authorized evaluation owns causal comparison.
 - **Rest or release when:** The cue bundle, intended value, evidence standing, acting system, accountable owner, and smallest useful move are recoverable. A new cue, population, deployment context, or measured effect can reopen the audit.
 
 ## Rules

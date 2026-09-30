@@ -173,6 +173,15 @@ test("the built registry resolves current authorship, license, and deployment me
   assert.ok(html.includes(`<meta name="twitter:url" content="${deploymentBase}/">`));
   assert.ok(!html.includes("schema-pages:deployment-metadata"));
   assert.ok(html.includes("<h1>Specifications people and software can read together.</h1>"));
+  assert.ok(html.includes('<h2 id="methods-title">Portable working methods</h2>'));
+  for (const route of [
+    "skills/audit-anthropomorphic-cues/",
+    "skills/source-authority-mapping/",
+    "skills/evidence-grounded-research-spike/",
+    "skills/",
+  ]) {
+    assert.ok(html.includes(`href="${route}"`), `${route} is prominent on the registry entry surface`);
+  }
 
   const structuredDataSource = html.match(
     /<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/u,
@@ -428,7 +437,6 @@ test("the public catalog contains exactly the public-ready allowlist", async () 
     .map((entry) => entry.name);
 
   assert.deepEqual(possibleNames, [
-    "audit-anthropomorphic-cues",
     "repository-collaboration-cycle",
     "supportive-change-writing",
   ]);
