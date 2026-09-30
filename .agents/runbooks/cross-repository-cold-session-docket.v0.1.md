@@ -1,7 +1,7 @@
 ---
 title: Cross-repository cold-session docket
-version: 0.1.0
-status: working
+version: 0.1.1
+status: exercised
 audience: ai_collaborators
 source_band: public_possible
 task_type: operational_collaboration
@@ -71,16 +71,57 @@ git rev-parse --show-toplevel
 git rev-parse HEAD
 git log -5 --oneline --decorate HEAD
 git remote
-git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}'
+if git symbolic-ref --quiet --short HEAD; then
+  if upstream=$(git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' 2>/dev/null); then
+    printf 'Upstream: %s\n' "$upstream"
+  else
+    printf '%s\n' 'Upstream: unset for the current branch'
+  fi
+else
+  printf '%s\n' 'Branch: detached HEAD; use the inspected commit as the local coordinate'
+fi
 ```
 
-When the current grant permits a networked repository read, refresh the remote
-coordinate before classifying branches or Issues:
+Detached HEAD and an unset upstream are ordinary coordinate states. Record
+them and continue source observation; branch preparation belongs to a later
+authorized implementation route.
+
+### Bootstrap absent or stale local instructions
+
+When this docket, the companion cycle, or the expected instructions are absent
+or older in the chat checkout, preserve that checkout and resolve the intended
+source owner first. The task or live owner may select an integration branch,
+pull-request head, or accepted release rather than `main`.
+
+When a networked read is authorized, observe the selected remote coordinate.
+For GitHub, one read-only observation is:
 
 ```sh
-git fetch origin
-git rev-parse origin/main
+gh api repos/<owner>/<repo>/commits/<working-ref> --jq .sha
 ```
+
+Compare the returned commit with locally available objects. Read the runbook,
+root instructions, nearest README, and selected source at that exact commit
+without moving the worktree:
+
+```sh
+git cat-file -e '<verified-sha>^{commit}'
+git show '<verified-sha>:.agents/runbooks/cross-repository-cold-session-docket.v0.1.md'
+git show '<verified-sha>:AGENTS.md'
+git show '<verified-sha>:README.md'
+```
+
+If the object is unavailable, use an authorized remote source read pinned to
+the same commit. Fetch only when the grant permits updating local remote refs
+and that preparation is useful; read `origin/<working-ref>` after the fetch.
+An unavailable remote leaves its freshness unobserved. Locally cached refs
+still support a source comparison when their cached standing is explicit.
+
+Record both the preserved checkout coordinate and the inspected source
+coordinate. A remote API observation establishes the ref at observation time;
+a cached ref establishes only locally recorded knowledge. Apply retrieved
+instructions within the current task and tool authority. Implementation can
+later receive a clean, authorized worktree from the verified task base.
 
 Read, in order:
 
@@ -103,15 +144,24 @@ Before implementation, form this compact map:
 
 | Question | Required return |
 | --- | --- |
-| Where is the work now? | Repository, branch, revision, worktree state, live Issue/PR, and remote freshness |
+| Where is the working source now? | Preserved checkout branch or detached commit and worktree state; inspected working/integration branch and commit; live Issue/PR; remote freshness and observation method |
+| What release is accepted or pending? | Accepted release coordinate, observed tag, promotion state, and outstanding release or observation receipt, each with its source owner |
+| What was captured for comparison? | Integrated snapshot version, source commit, and capture date from its manifest or copy receipt |
+| What binds the reviewed package? | Package version, reviewed source commit or explicit pending value, content digest when present, and adoption receiver |
 | What owns meaning and behavior? | Authored or runnable source and its nearest contract |
 | What is derived? | Discovery index, snapshot, generated projection, package, or hosted copy |
 | What owns delivery? | Builder, carrier, tag, archive, Pages branch, or receiving host |
 | What remains human-held? | Publication, deployment, credential, qualification, merge, or other consequential decision |
 | What changed since the remembered record? | Each stale-coordinate or stale-status difference |
-| What is the route? | `direct_action`, `primary_with_bounded_support`, or `held_for_named_signal` plus the fitting skill |
+| What is the route? | `direct_action`, `primary_with_bounded_support`, or `held_for_named_signal`; action mode, fitting skill, and smallest evidence lane |
 
 This pass establishes the inspected coordinates and authority relationships.
+Keep merged source, tag existence, accepted release, reviewed package binding,
+receiver adoption, and runtime evidence distinct. Each establishes its named
+state; a pending or omitted field leaves the adjacent acceptance claim open
+for its owner. Include only participating coordinates, with inapplicable or
+unobserved states named rather than reconstructed speculatively.
+
 It leaves unobserved remotes, private workspace ancestry, live deployment,
 vendor qualification, and other adjacent claims open for their named
 receivers.
@@ -255,6 +305,20 @@ authority.
 
 ## Conditional operational overlays
 
+### Evidence-to-adoption expansion
+
+When research, comparative evidence, or external adoption would materially
+change the selected task, use the tiered route owned by
+[Issue #276](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/276)
+and the
+[`evidence-grounded-research-spike`](../skills/evidence-grounded-research-spike/SKILL.md)
+contract. Select the smallest sufficient tier: source observation, bounded
+research spike, comparative packet, adoption dossier, or cross-repository
+program. The active owner supplies that tier's bounded return and stopping
+event. A source-only finding can finish at the first tier; a new tier begins
+when its concrete receiving decision, evidence need, and grant are named.
+This docket links the existing route rather than duplicating its ladder.
+
 ### Public-reference materialization
 
 Use this overlay when authored Context Canvas source carries
@@ -352,19 +416,33 @@ standalone repositories retain source and release authority for:
 - enterprise implementation; and
 - comparative evidence.
 
-Read version differences as lineage facts. Verify the current standalone
-release before proposing reconciliation, and return durable changes to the
-repository that owns the affected role. Local synthetic tests establish their
+Read version differences as lineage facts. Observe the standalone working or
+integration source and its release state separately before proposing
+reconciliation. Record the integrated capture's version, source commit, and
+date alongside any reviewed package binding and its pending fields. A merged
+implementation can coexist with an open broader Issue or pending release
+binding; each owner retains its remaining acceptance. Return durable changes
+to the repository that owns the affected role. Local synthetic tests establish their
 declared fixture and runtime scope. Vendor tenant or sandbox behavior,
 migration and restore rehearsal, production security and observability, and
 Quality/Regulatory applicability receive independent receipts.
 
-## Hand to the full collaboration cycle
+## Complete the selected route
 
 After the authority map is legible, continue through the
 [Repository collaboration cycle](repository-collaboration-cycle.v0.1.md). It
-owns route selection, environment preparation, source-owned execution,
-evidence, recovery, stop conditions, and the standard handback.
+owns route selection, conditional environment preparation, source-owned
+execution, evidence, recovery, stop conditions, and the standard handback.
+
+An `observation_only` task completes with the authority map, a bounded finding
+or correctly held decision, its source observations and coverage, and one
+exact next receiver. Follow the companion's observation route through current
+truth, route selection, proportionate evidence, and re-entry. Direct source
+reading can complete it with the existing toolchain and preserved checkout;
+dependency installation, branch creation, implementation, commit, push, pull
+request, publication, and deployment phases stay outside that route. Prepare
+an environment only when the selected observation needs it and the current
+grant permits it.
 
 Add three cross-repository facts to that handback:
 
@@ -383,9 +461,17 @@ authority surfaces.
 
 ## Exercise and maturity
 
-This runbook begins as `working`. Its first complete cold-session traversal
-should record only decision-changing friction. A successful authority map,
-one completed or correctly held route, and a receiver-ready handback provide
-the evidence for considering `exercised`. Repeated use can support `stable`;
-a shorter current owner can receive the useful rules if this route later
-becomes redundant.
+This runbook is `exercised` through a resumed-session, source-only traversal
+of `human-ai-systems-exemplars` and the LIMS/ELN Program source relationship.
+The exercise produced an authority map and receiver-ready finding while
+preserving repository and external state. It exposed an older detached chat
+checkout without the docket, an unavailable upstream relation, and distinct
+integration, captured-snapshot, and pending package/release coordinates.
+Those observations supply the bootstrap, guarded upstream, coordinate, and
+observation-completion refinements above.
+
+This standing covers that observation route. Independent blank-context use,
+private connector ancestry, Gist publication, runtime proofs, and production
+delivery remain separate exercises. Repeated materially different use can
+support `stable`; a shorter current owner can receive useful rules if this
+route later becomes redundant. Record only decision-changing friction.
