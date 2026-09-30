@@ -33,6 +33,12 @@ and acceptance boundary.
 
 ## Shareable cold-session docket
 
+When one result spans `human-ai-systems-exemplars`, `gist-registry`, the
+LIMS/ELN constellation, or their Notion and publication boundaries, begin with
+the [Cross-repository cold-session docket](cross-repository-cold-session-docket.v0.1.md).
+It adds the constellation authority map and conditional domain overlays while
+this runbook retains the full execution spine.
+
 A human can begin a fresh collaboration by sharing this compact packet and a
 link to this runbook:
 
