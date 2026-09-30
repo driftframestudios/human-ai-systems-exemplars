@@ -73,5 +73,11 @@ test("the public topology keeps the three Comet Spectrum surfaces distinct", asy
   }
 
   const limsDebrief = await canvasFile("fmi-lims-eln-replatforming.html");
-  assert.match(limsDebrief, /href="https:\/\/cometspectrum\.org\/"/u);
+  for (const expected of cometSurfaces) {
+    assert.match(
+      limsDebrief,
+      new RegExp(`href="${expected.url.replaceAll(".", "\\.")}"`, "u"),
+      `the LIMS/ELN Debrief links ${expected.url}`,
+    );
+  }
 });
