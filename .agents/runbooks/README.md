@@ -40,6 +40,7 @@ Git preserves chronology; the active Issue preserves the work decision.
 | Runbook | Use it when | Standing |
 | --- | --- | --- |
 | [Repository collaboration cycle](repository-collaboration-cycle.v0.1.md) | A cold or resumed AI collaborator should carry one authorized repository task from current truth through route selection, conditional setup, source-owned execution, evidence, delivery, and exact re-entry | Working; fresh-context traversal is the first exercise |
+| [Cross-repository cold-session docket](cross-repository-cold-session-docket.v0.1.md) | Work spans `human-ai-systems-exemplars`, `gist-registry`, the LIMS/ELN constellation, or their Notion, materializer, and production boundaries | Working; the first complete cold-session traversal is the exercise |
 | [Iframe and production publication stabilization](core-iframe-publication-stabilization.v0.1.md) | The accepted visitor and prototype changes must pass through one manifest-declared Core-and-Canvas package, cPanel closures, a host-supported pull or artifact receiver, hosted observation, public route documentation, and long-lived branch return | Exercised through a read-only cold-start traversal; the shell-free adapter and live implementation follow their active Issues |
 
 The
