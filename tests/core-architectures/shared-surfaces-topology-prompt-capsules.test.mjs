@@ -49,11 +49,11 @@ const artifacts = [
     id: "service-design-blueprint",
     sourceId: "service-design-blueprint",
     name: "Service-design Blueprint",
-    version: "0.2.5",
-    currentFile: "service-design-blueprint-chimeric-prototype-v0.2.5.html",
-    historicalFile: "service-design-blueprint-chimeric-prototype-v0.2.4.html",
-    currentDigest: "55ca3885f661c5a69258d8b82fc72f07b7274cfd94a970f11c5ce387daff1268",
-    historicalDigest: "2641264f0e3471fe24d4e26482229646e80ed26c1ede1a5f804dd1e53bb5bdfd",
+    version: "0.2.6",
+    currentFile: "service-design-blueprint-chimeric-prototype-v0.2.6.html",
+    historicalFile: "service-design-blueprint-chimeric-prototype-v0.2.5.html",
+    currentDigest: "1a8eb376e5e6808592dfcd7b7ffd48781b90ada36de0326e7a6804b9f573110c",
+    historicalDigest: "55ca3885f661c5a69258d8b82fc72f07b7274cfd94a970f11c5ce387daff1268",
     stateContract: "service-design-blueprint-state.v0.2",
     apiName: "serviceDesignBlueprint",
     promptId: "promptOut",
@@ -71,11 +71,11 @@ const artifacts = [
     id: "ai-systems-service-blueprint",
     sourceId: "ai-systems-service-blueprint",
     name: "AI Systems Service Blueprint",
-    version: "0.1.4",
-    currentFile: "ai-systems-service-blueprint-chimeric-prototype-v0.1.4.html",
-    historicalFile: "ai-systems-service-blueprint-chimeric-prototype-v0.1.3.html",
-    currentDigest: "f7918b9f31de120dbfc1031cd80df874e71a0d2a3b767e2972cc2c6c722e072a",
-    historicalDigest: "4acdc3d83532449f30decc5685c98061a982905b61e4e550d5731ba2d1b43706",
+    version: "0.1.5",
+    currentFile: "ai-systems-service-blueprint-chimeric-prototype-v0.1.5.html",
+    historicalFile: "ai-systems-service-blueprint-chimeric-prototype-v0.1.4.html",
+    currentDigest: "724209974cc7cdcd34c3c7e40ef3ffd1f6dca7405964515f38bc5157836655d2",
+    historicalDigest: "f7918b9f31de120dbfc1031cd80df874e71a0d2a3b767e2972cc2c6c722e072a",
     stateContract: "ai-systems-service-blueprint-state.v0.1",
     apiName: "aiSystemsServiceBlueprint",
     promptId: "promptOut",
@@ -229,9 +229,9 @@ for (const artifact of artifacts) {
     const [targetRegistry, narrativeComposer, coreFamilyIndex, contextFamilyIndex, familyCompanion, ...directCarriers] = await Promise.all([
       json(resolve(narrativeRoot, "core-architecture-target-pair-registry.v0.1.json")),
       readFile(resolve(narrativeRoot, "narrative-capsules-chimeric-prototype-v0.1.html"), "utf8"),
-      readFile(resolve(coreRoot, "core-architecture-family-index-chimeric-prototype-v0.1.5.html"), "utf8"),
-      readFile(resolve(contextRoot, "core-architecture-family-index-chimeric-prototype-v0.1.5.html"), "utf8"),
-      readFile(resolve(narrativeRoot, "companions/core-architecture-family-index-chimeric-prototype-v0.1.5.html"), "utf8"),
+      readFile(resolve(coreRoot, "core-architecture-family-index-chimeric-prototype-v0.1.6.html"), "utf8"),
+      readFile(resolve(contextRoot, "core-architecture-family-index-chimeric-prototype-v0.1.6.html"), "utf8"),
+      readFile(resolve(narrativeRoot, "companions/core-architecture-family-index-chimeric-prototype-v0.1.6.html"), "utf8"),
       ...artifact.directCarriers.map(path => readFile(resolve(repositoryRoot, path), "utf8")),
     ]);
     const card = targetRegistry.cards.find(({ id }) => id === artifact.id);
@@ -246,12 +246,14 @@ for (const artifact of artifacts) {
 
 test("Shared Surfaces and Topology advances the current inventory as one complete family", async () => {
   const inventory = await readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8");
+  const currentInventory = inventory.split("\n## Projections, receivers, and recovery inputs\n", 1)[0];
+  assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
   for (const phrase of [
     "Shared Surface Priority Map v0.1.4",
-    "Service-design Blueprint v0.2.5",
-    "AI Systems Service Blueprint v0.1.4",
+    "Service-design Blueprint v0.2.6",
+    "AI Systems Service Blueprint v0.1.5",
     "Software Architecture Views v0.1.4",
-  ]) assert.ok(inventory.includes(phrase));
-  assert.match(inventory, /28 current\s+adoptions\. This completes the observed population/u);
-  assert.match(inventory, /family members, which complete the current[\s\S]*?Shared Surfaces and Topology[\s\S]*?famil(?:y|ies)/u);
+  ]) assert.ok(currentInventory.includes(phrase));
+  assert.match(currentInventory, /28 current\s+adoptions\. This completes the observed population/u);
+  assert.match(currentInventory, /family members, which complete the current[\s\S]*?Shared Surfaces and Topology[\s\S]*?famil(?:y|ies)/u);
 });

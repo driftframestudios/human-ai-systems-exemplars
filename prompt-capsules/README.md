@@ -17,15 +17,15 @@ receivers, and independently governed capsule families. It is an ownership map,
 not a count of matching words.
 
 The current adoptions span the system-root Core Architecture Family Index
-v0.1.5 and seven Core source families: PODA v0.1.4, Alignment Worksheet v0.1.4,
+v0.1.6 and seven Core source families: PODA v0.1.5, Alignment Worksheet v0.1.4,
 Impact Map v0.1.5, Context Tree v0.1.7, Strategy Canvas
-v0.2.4, First Responsible Version Matrix v0.1.4, Shared Surface Priority Map
-v0.1.4, Service-design Blueprint v0.2.5, AI Systems Service Blueprint v0.1.4,
-Software Architecture Views v0.1.4, Upstream Revision Loop v0.1.4, Recovery
-Routing Atlas v0.1.4, Participatory Design Kit v0.1.4,
-Specification-by-Example v0.1.6, Pattern–Problem Surface Matrix v0.1.4,
-Jobs-to-be-Done Treemap v0.1.4, Unit-test-first Design v0.1.4, HEART Chart
-v0.1.6, Plus / Delta v0.1.4, and Practitioner Judgment Probes v0.1.4; all four
+v0.2.5, First Responsible Version Matrix v0.1.4, Shared Surface Priority Map
+v0.1.4, Service-design Blueprint v0.2.6, AI Systems Service Blueprint v0.1.5,
+Software Architecture Views v0.1.4, Upstream Revision Loop v0.1.5, Recovery
+Routing Atlas v0.1.5, Participatory Design Kit v0.1.4,
+Specification-by-Example v0.1.7, Pattern–Problem Surface Matrix v0.1.5,
+Jobs-to-be-Done Treemap v0.1.4, Unit-test-first Design v0.1.5, HEART Chart
+v0.1.6, Plus / Delta v0.1.5, and Practitioner Judgment Probes v0.1.5; all four
 current Narrative Architecture sources; and three standalone instruments—Open
 Lesson Field, Cross-Functional Investment Model Studio, and Visualization
 Fidelity Atlas. Twenty Core family

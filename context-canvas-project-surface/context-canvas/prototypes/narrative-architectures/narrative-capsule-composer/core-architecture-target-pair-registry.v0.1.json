@@ -65,7 +65,7 @@
       "artifactShape": "Document / four-zone map",
       "useWhen": "The team needs a compact shared frame before deeper artifacts.",
       "readerRef": "/field-guide/core-architectures/poda/",
-      "prototypeRef": "poda-chimeric-prototype-v0.1.4.html",
+      "prototypeRef": "poda-chimeric-prototype-v0.1.5.html",
       "prototypeStatus": "generated",
       "routes": [
         "Impact Map",
@@ -429,8 +429,8 @@
       "artifactShape": "Anchored dimension matrix / editable profile field / collaboration extension",
       "useWhen": "The team needs shared dimensions, anchored readings, participant spread, good-enough thresholds, reversible proposals, and a reviewed handoff.",
       "readerRef": "/field-guide/core-architectures/strategy-canvas/",
-      "prototypeRef": "strategy-canvas-chimeric-prototype-v0.2.2.html",
-      "companionRef": "../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.2.html",
+      "prototypeRef": "strategy-canvas-chimeric-prototype-v0.2.3.html",
+      "companionRef": "../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html",
       "legacyPrototypeRef": "strategy-canvas-chimeric-prototype-v0.1.1.html",
       "artifactModelRef": "ca:strategy-canvas-comparison/2.0",
       "semanticContract": "strategy-canvas/2.0",
@@ -727,7 +727,7 @@
       "artifactShape": "Layered service matrix",
       "useWhen": "Visible experience depends on backstage work, AI, systems, data, governance, and handoffs.",
       "readerRef": "/field-guide/core-architectures/service-design-blueprint/",
-      "prototypeRef": "service-design-blueprint-chimeric-prototype-v0.2.5.html",
+      "prototypeRef": "service-design-blueprint-chimeric-prototype-v0.2.6.html",
       "prototypeStatus": "generated",
       "routes": [
         "Specification-by-Example",
@@ -827,7 +827,7 @@
       "artifactShape": "Layered AI topology matrix",
       "useWhen": "Visible AI behavior needs runtime, knowledge, infrastructure, evaluation, and containment context.",
       "readerRef": "/field-guide/core-architectures/ai-systems-service-blueprint/",
-      "prototypeRef": "ai-systems-service-blueprint-chimeric-prototype-v0.1.4.html",
+      "prototypeRef": "ai-systems-service-blueprint-chimeric-prototype-v0.1.5.html",
       "prototypeStatus": "generated",
       "routes": [
         "Specification-by-Example",
@@ -1288,7 +1288,7 @@
       "artifactShape": "Preserve/change reflection board",
       "useWhen": "The team needs to preserve what works and route what needs to change.",
       "readerRef": "/field-guide/core-architectures/plus-delta/",
-      "prototypeRef": "plus-delta-chimeric-prototype-v0.1.4.html",
+      "prototypeRef": "plus-delta-chimeric-prototype-v0.1.5.html",
       "prototypeStatus": "generated",
       "routes": [
         "HEART Chart",
@@ -1372,7 +1372,7 @@
       "artifactShape": "Probe matrix",
       "useWhen": "Plausible artifacts need strong practitioner questions and AI instruction yield.",
       "readerRef": "/field-guide/core-architectures/practitioner-judgment-probes/",
-      "prototypeRef": "practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
+      "prototypeRef": "practitioner-judgment-probes-chimeric-prototype-v0.1.5.html",
       "prototypeStatus": "generated",
       "routes": [
         "Software Architecture Views",

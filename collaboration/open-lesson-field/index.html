@@ -547,7 +547,7 @@
       <div class="hero-grid">
         <div>
           <p class="eyebrow">Open Lesson Field · local collaboration instrument</p>
-          <h1>Shape a lesson request the next collaborator can inspect.</h1>
+          <h1>Shape an inspectable lesson request before generation.</h1>
           <p class="hero-deck">A lesson plan carries standards, learner conditions, source interpretation, access, and review across several hands. As you enter details and choose among seven equal-weight conditions, this instrument builds a local working prompt capsule: a compact, inspectable request shaped by an invented teaching fixture. Assembly freezes a reviewed handoff revision. Computation and revision history stay in this file, and a named educator retains the classroom decision.</p>
         </div>
         <dl class="hero-contract">
@@ -612,7 +612,7 @@
             <header>
               <span class="chip">Class-size depth</span>
               <h3 id="coordination-title">Class size becomes useful when it changes the work.</h3>
-              <p id="coordination-intro">For 28 learners, “14 pairs” can become 14 material sets, 14 participation rehearsals, a seven-minute reporting plan, four teacher sweep zones, and 28 individual evidence-boundary notes. The palette exposes this usually quiet coordination work so an AI collaborator can help prepare it for educator review.</p>
+              <p id="coordination-intro">For 28 learners, “14 pairs” can become 14 material sets, 14 participation rehearsals, a seven-minute reporting plan, four teacher sweep zones, and 28 individual evidence-boundary notes. The palette exposes this usually quiet coordination work so a generative AI system can draft a coordination plan for educator review.</p>
             </header>
             <fieldset class="grouping-field js-only">
               <legend>Compare peer grouping structures</legend>
@@ -726,7 +726,7 @@
               <span class="chip">Look here · task position open</span>
               <h3>A speaker-relative cue enters the task</h3>
               <code>Make me a lesson plan for high-school Math students.</code>
-              <p><em>Me</em> points to the speaker, while the speaker’s task role remains unstated. The collaboration still needs that position: the AI collaborator can ask, and the requester can name whether the speaker is the educator, learner, author, approver, or intended user—and which speaker-specific context belongs in the lesson.</p>
+              <p><em>Me</em> points to the speaker, while the speaker’s task role remains unstated. The collaboration still needs that position: the generative AI system can return a clarifying question, and the requester can name whether the speaker is the educator, learner, author, approver, or intended user—and which speaker-specific context belongs in the lesson.</p>
               <span class="effect-line">Changes: request text · referent reading · task-position questions</span>
               <button type="button" class="js-only" data-example="personal">Try this request</button>
             </article>
@@ -1035,7 +1035,7 @@ For each authored route, use a fresh independent assessment pass. Estimate P(nam
 
 ## Purpose and target
 
-Shape an inspectable lesson request that carries classroom conditions, source standing, evidence, access, and review to the next collaborator.
+Shape an inspectable lesson request that carries classroom conditions, source standing, evidence, access, and review into generation and educator review.
 
 - Request: Create a Grade 9 statistics lesson plan for a classroom educator. A curriculum lead will review the handoff.
 - Human receiver: classroom educator and curriculum lead
@@ -2088,7 +2088,7 @@ These public collaboration loops fit only when the receiving work meets the stat
         '',
         '## Purpose and target',
         '',
-        'Shape an inspectable lesson request that carries classroom conditions, source standing, evidence, access, and review to the next collaborator.',
+        'Shape an inspectable lesson request that carries classroom conditions, source standing, evidence, access, and review into generation and educator review.',
         '',
         '- Request: ' + request,
         '- Human receiver: ' + receiver,
@@ -2215,7 +2215,7 @@ These public collaboration loops fit only when the receiving work meets the stat
       elements.groupingPreviewPairs.textContent = groupingPhrase(pairOption) + ' · ' + pairOption.materialSets + ' shared material set' + (pairOption.materialSets === 1 ? '' : 's');
       elements.groupingPreviewTrios.textContent = groupingPhrase(trioOption) + ' · ' + trioOption.materialSets + ' shared material set' + (trioOption.materialSets === 1 ? '' : 's');
       elements.groupingPreviewQuartets.textContent = groupingPhrase(quartetOption) + ' · ' + quartetOption.materialSets + ' shared material set' + (quartetOption.materialSets === 1 ? '' : 's');
-      elements.coordinationIntro.textContent = 'For ' + state.situation.learners + ' learner' + (state.situation.learners === 1 ? '' : 's') + ', “' + groupingPhrase(grouping) + '” becomes ' + grouping.materialSets + ' material set' + (grouping.materialSets === 1 ? '' : 's') + ', one supported first turn per learner, about ' + coordination.reportingMinutes + ' minute' + (coordination.reportingMinutes === 1 ? '' : 's') + ' of reporting, ' + coordination.sweepZones + ' teacher sweep zone' + (coordination.sweepZones === 1 ? '' : 's') + ', and ' + state.situation.learners + ' individual evidence-boundary note' + (state.situation.learners === 1 ? '' : 's') + '. The palette exposes this usually quiet coordination work so an AI collaborator can help prepare it for educator review.';
+      elements.coordinationIntro.textContent = 'For ' + state.situation.learners + ' learner' + (state.situation.learners === 1 ? '' : 's') + ', “' + groupingPhrase(grouping) + '” becomes ' + grouping.materialSets + ' material set' + (grouping.materialSets === 1 ? '' : 's') + ', one supported first turn per learner, about ' + coordination.reportingMinutes + ' minute' + (coordination.reportingMinutes === 1 ? '' : 's') + ' of reporting, ' + coordination.sweepZones + ' teacher sweep zone' + (coordination.sweepZones === 1 ? '' : 's') + ', and ' + state.situation.learners + ' individual evidence-boundary note' + (state.situation.learners === 1 ? '' : 's') + '. The palette exposes this usually quiet coordination work so a generative AI system can draft a coordination plan for educator review.';
       elements.coordinationGrouping.textContent = coordination.grouping;
       elements.coordinationMaterials.textContent = coordination.materials;
       elements.coordinationParticipation.textContent = coordination.participation;

@@ -1,4 +1,4 @@
-/* Strategy Canvas shared state engine v0.2.4 — dependency-free and DOM-independent. */
+/* Strategy Canvas shared state engine v0.2.5 — dependency-free and DOM-independent. */
 (function exposeStrategyCanvasCore(global) {
   'use strict';
 
@@ -136,7 +136,7 @@
     {
       id: 'cross-surface-continuity',
       label: 'Cross-surface continuity',
-      definition: 'Meaning remains coherent as the work moves between workshops, documents, code, and AI collaborators.',
+      definition: 'Meaning remains coherent as the work moves between workshops, documents, code, and generative AI systems.',
       anchors: {
         low: 'Each surface requires substantial context reconstruction.',
         middle: 'Selected artifacts carry reusable context.',
@@ -849,7 +849,7 @@
     const includeReviewed = context?.collaboration?.session?.includeReviewedStateInAI === true;
     return includeReviewed && Array.isArray(aiChannel?.consentScope) && aiChannel.consentScope.length
       ? `Reviewed fields in scope: ${aiChannel.consentScope.map((value) => markdownInline(value)).join(', ')}. Reviewed revision: ${markdownInline(String(aiChannel.reviewedRevision ?? 'open'))}. Network policy: ${markdownInline(aiChannel.networkPolicy || 'local-only')}.`
-      : 'The receiving collaborator should ask which reviewed fields are in scope before assembling an external packet.';
+      : 'Before an external packet is assembled, a human operator should confirm which reviewed fields are in scope.';
   }
 
   function canonicalValue(value) {
@@ -867,7 +867,7 @@
     return {
       contract: PROMPT_CAPSULE_CONTRACT,
       capsule: markdownInline(normalized.meta.id),
-      source: 'strategy-canvas-canonical@0.2.4',
+      source: 'strategy-canvas-canonical@0.2.5',
       state: {
         schemaVersion: markdownInline(normalized.schemaVersion),
         revision: normalized.meta.revision
@@ -940,7 +940,7 @@
       '',
       `- Contract: \`${PROMPT_CAPSULE_CONTRACT}\``,
       `- Capsule: \`${markdownInline(normalized.meta.id)}\``,
-      '- Source: `strategy-canvas-canonical@0.2.4`',
+      '- Source: `strategy-canvas-canonical@0.2.5`',
       `- State: \`${normalized.schemaVersion}\` · revision \`${normalized.meta.revision}\``,
       `- Fingerprint: \`${fingerprint}\``,
       `- View: \`${view}\``,
@@ -968,7 +968,7 @@
       '',
       '- Current describes the present working reading. Good enough describes the threshold for the named horizon. Desired describes the stronger future condition.',
       '- Consequence weight directs discussion attention and leaves the score geometry unchanged.',
-      '- Human ballots, system-derived aggregates, and AI-attributed proposals retain distinct standing. AI suggestions enter as visibly attributed proposals outside human aggregates.',
+      '- Human ballots, system-derived aggregates, and AI-attributed proposals retain distinct standing. System-generated suggestions enter as visibly attributed proposals outside human aggregates.',
       '- People retain decisions about handoff scope, interpretation, acceptance, and publication.',
       `- AI handoff scope: ${aiScope}`,
       '',
@@ -1013,7 +1013,7 @@
   }
 
   global.StrategyCanvasCore = Object.freeze({
-    version: '0.2.4',
+    version: '0.2.5',
     schemaVersion: SCHEMA_VERSION,
     promptCapsuleContract: PROMPT_CAPSULE_CONTRACT,
     promptCapsuleViews: PROMPT_CAPSULE_VIEWS,

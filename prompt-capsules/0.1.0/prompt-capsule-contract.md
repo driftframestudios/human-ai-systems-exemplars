@@ -5,11 +5,11 @@
 - Format: GitHub Flavored Markdown
 - Semantic authority: the named source artifact and its state contract
 - Projection role: readable collaboration handoff
-- Reference implementation: [Strategy Canvas v0.2.4](../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/README.md)
+- Reference implementation: [Strategy Canvas v0.2.5](../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/README.md)
 
 ## Desired receiving state
 
-A person or AI collaborator can read one Markdown document and identify what
+A person or a bounded generative-system process can read one Markdown document and identify what
 the work is for, which source and state it represents, what context matters,
 which decisions remain human-held, what return is requested, what evidence
 supports the request, and how to recover when a necessary condition remains

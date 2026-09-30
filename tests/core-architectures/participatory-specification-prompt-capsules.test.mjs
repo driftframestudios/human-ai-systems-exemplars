@@ -36,11 +36,11 @@ const artifacts = [
   {
     id: "specification-by-example",
     name: "Specification-by-Example",
-    version: "0.1.6",
-    currentFile: "specification-by-example-chimeric-prototype-v0.1.6.html",
-    historicalFile: "specification-by-example-chimeric-prototype-v0.1.5.html",
-    currentDigest: "a548c7336ff93bd6b5d8030e99271798297c45078610fb4cb78363c0606d59ce",
-    historicalDigest: "0bea8fabc2d06a05117b8289e01d3931e928262c8db6af01fd9c5563d0a9359f",
+    version: "0.1.7",
+    currentFile: "specification-by-example-chimeric-prototype-v0.1.7.html",
+    historicalFile: "specification-by-example-chimeric-prototype-v0.1.6.html",
+    currentDigest: "339234e772497123c197835df595bf422d846b1ac08382a230146372f68bf109",
+    historicalDigest: "a548c7336ff93bd6b5d8030e99271798297c45078610fb4cb78363c0606d59ce",
     stateContract: "specification-by-example-state.v0.1",
     apiName: "specificationByExample",
     promptId: "aiPrompt",
@@ -161,7 +161,9 @@ for (const artifact of artifacts) {
 
 test("Participatory Elicitation and Specification advances the current inventory as one family", async () => {
   const inventory = await readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8");
-  assert.match(inventory, /Participatory Design Kit v0\.1\.4/u);
-  assert.match(inventory, /Specification-by-Example v0\.1\.6/u);
-  assert.match(inventory, /28 current\s+adoptions\. This completes the observed population/u);
+  const currentInventory = inventory.split("\n## Projections, receivers, and recovery inputs\n", 1)[0];
+  assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
+  assert.match(currentInventory, /Participatory Design Kit v0\.1\.4/u);
+  assert.match(currentInventory, /Specification-by-Example v0\.1\.7/u);
+  assert.match(currentInventory, /28 current\s+adoptions\. This completes the observed population/u);
 });

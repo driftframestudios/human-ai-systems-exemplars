@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="aab-title aab-desc">
   <title id="aab-title">AI systems accountability blueprint</title>
-  <desc id="aab-desc">A service blueprint asks where an automated actor decides and where a person can still intervene. Five lifecycle columns move from need stated through context assembled, decision made, action attempted, and outcome reviewed. Seven lanes show the person, visible interaction, supplied and omitted context, automated decisions, action and reversibility, intervention points, and evidence and trace. A consequential-action contract requires intended effect, permitted tools, reversibility class, approval owner, intervention deadline, evidence source, and recovery route. A permanent action receives a gate before execution, and an override returns control to the person carrying the consequence. The parent service-blueprint method is established; the automated-actor extension is a reasoned proposal. Independent evaluation remains open for that extension, while reversibility taxonomy and intervention effectiveness remain deployment-specific.</desc>
+  <desc id="aab-desc">A service blueprint asks where an automated system produces a decision and where a person can still intervene. Five lifecycle columns move from need stated through context assembled, decision made, action attempted, and outcome reviewed. Seven lanes show the person, visible interaction, supplied and omitted context, automated decisions, action and reversibility, intervention points, and evidence and trace. A consequential-action contract requires intended effect, permitted tools, reversibility class, approval owner, intervention deadline, evidence source, and recovery route. A permanent action receives a gate before execution, and an override returns control to the person carrying the consequence. The parent service-blueprint method is established; the automated-system extension is a reasoned proposal. Independent evaluation remains open for that extension, while reversibility taxonomy and intervention effectiveness remain deployment-specific.</desc>
 
   <defs>
     <pattern id="blueprint-grid" width="28" height="28" patternUnits="userSpaceOnUse">
@@ -39,9 +39,9 @@
   <g id="blueprint-question" role="group" aria-labelledby="blueprint-question-title">
     <title id="blueprint-question-title">Accountability question and system boundary</title>
     <path d="M20 48Q20 20 48 20H1544Q1572 20 1572 48V184H20Z" fill="#2855f3"/>
-    <text x="56" y="55" class="sans eyebrow white">ACCOUNTABILITY BLUEPRINT · AUTOMATED-ACTOR EXTENSION</text>
+    <text x="56" y="55" class="sans eyebrow white">ACCOUNTABILITY BLUEPRINT · AUTOMATED-SYSTEM EXTENSION</text>
     <text x="56" y="96" class="sans title white">W</text>
-    <text x="90" y="96" class="sans title white">here does the automated actor decide—</text>
+    <text x="90" y="96" class="sans title white">here is an automated decision produced—</text>
     <text x="56" y="135" class="sans title white">and where can a person still intervene?</text>
 
     <rect x="1008" y="47" width="521" height="112" rx="14" fill="#fffdf8" stroke="#17345f" stroke-width="2"/>
@@ -276,7 +276,7 @@
     <text x="288" y="1028" text-anchor="middle" class="sans foot ink">ESTABLISHED · parent service-blueprint method</text>
     <path d="M511 1013H523V1007L538 1022L523 1037V1031H511Z" fill="#2855f3"/>
     <rect x="548" y="1008" width="461" height="29" rx="14.5" fill="#cfe7f7" stroke="#17345f" stroke-width="1.2"/>
-    <text x="778" y="1028" text-anchor="middle" class="sans foot ink">PROPOSED · automated-actor lanes + action contract</text>
+    <text x="778" y="1028" text-anchor="middle" class="sans foot ink">PROPOSED · automated-system lanes + action contract</text>
     <path d="M1019 1013H1031V1007L1046 1022L1031 1037V1031H1019Z" fill="#fa7065"/>
     <rect x="1056" y="1008" width="466" height="29" rx="14.5" fill="#ffd3d0" stroke="#17345f" stroke-width="1.2"/>
     <text x="1289" y="1028" text-anchor="middle" class="sans foot ink">OPEN · reversibility taxonomy + intervention effect</text>

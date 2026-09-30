@@ -192,7 +192,7 @@
     <text class="mono state-label" x="60" y="233">STATE: HUMAN REVIEW</text>
     <text class="mono carry-label cobalt" x="22" y="273">CARRIES</text>
     <text class="carry-value" x="22" y="298">Receiver + decision</text>
-    <text class="card-note" x="22" y="324">AI prepares; the named steward</text>
+    <text class="card-note" x="22" y="324">System prepares; named steward</text>
     <text class="card-note" x="22" y="343">inspects, compares, and authorizes.</text>
   </g>
 
@@ -234,7 +234,7 @@
     <title id="packet-title">The portable handoff packet preserves seven named fields and an inspectable data contract</title>
     <rect class="packet" x="50" y="642" width="1500" height="247" rx="26" fill="#fffdf8" stroke="#17345f" stroke-width="2.5"/>
     <text class="mono eyebrow cobalt" x="82" y="678">PORTABLE HANDOFF PACKET · NO CONTEXT LEFT BEHIND</text>
-    <text class="packet-title" x="82" y="711">The decision arrives with what a collaborator needs to inspect it.</text>
+    <text class="packet-title" x="82" y="711">The decision arrives with what the named human reviewer needs to inspect it.</text>
     <text class="packet-copy" x="82" y="737">Color supports the scan; written labels preserve meaning in every mode.</text>
 
     <g role="group" aria-labelledby="handoff-fields-title">

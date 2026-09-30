@@ -45,11 +45,11 @@ const artifacts = [
   {
     id: "plus-delta",
     name: "Plus / Delta",
-    version: "0.1.4",
-    currentFile: "plus-delta-chimeric-prototype-v0.1.4.html",
-    historicalFile: "plus-delta-chimeric-prototype-v0.1.3.html",
-    currentDigest: "b1f828166d5fe62b122f5f3bb5eeca36759c5b4b4887875fab9d935520d2d5b6",
-    historicalDigest: "6e0574e69d339be3ae1e4d03fb3c2ae535230505e232c09ab8aa704353dad14a",
+    version: "0.1.5",
+    currentFile: "plus-delta-chimeric-prototype-v0.1.5.html",
+    historicalFile: "plus-delta-chimeric-prototype-v0.1.4.html",
+    currentDigest: "578953f291aa3dfcf5a7fe84c4e127b887c32c72e060484895e8dbebed60a727",
+    historicalDigest: "b1f828166d5fe62b122f5f3bb5eeca36759c5b4b4887875fab9d935520d2d5b6",
     stateContract: "plus-delta-state.v0.1",
     apiName: "plusDelta",
     promptId: "aiPrompt",
@@ -65,11 +65,11 @@ const artifacts = [
   {
     id: "practitioner-judgment-probes",
     name: "Practitioner Judgment Probes",
-    version: "0.1.4",
-    currentFile: "practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
-    historicalFile: "practitioner-judgment-probes-chimeric-prototype-v0.1.3.html",
-    currentDigest: "a15c72f198dacb942d3ca4553204afac69df326df9c70bb6c00f32cd3242fd0c",
-    historicalDigest: "d50cfcde73b418a4e2f932a9c1e3a02344afb9ddaccf2cb42ca1e1b1bac51136",
+    version: "0.1.5",
+    currentFile: "practitioner-judgment-probes-chimeric-prototype-v0.1.5.html",
+    historicalFile: "practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
+    currentDigest: "ceb745b5b20c6ba707d7e5767401c8e1bc179aa8fc66f4a668c52907e8e69e0b",
+    historicalDigest: "a15c72f198dacb942d3ca4553204afac69df326df9c70bb6c00f32cd3242fd0c",
     stateContract: "practitioner-judgment-probes-state.v0.1",
     apiName: "practitionerJudgmentProbes",
     promptId: "ai-prompt",
@@ -191,8 +191,10 @@ for (const artifact of artifacts) {
 
 test("Measurement, Reflection, and Judgment advances the current inventory as one family", async () => {
   const inventory = await readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8");
-  assert.match(inventory, /HEART Chart v0\.1\.6/u);
-  assert.match(inventory, /Plus \/ Delta v0\.1\.4/u);
-  assert.match(inventory, /Practitioner Judgment Probes v0\.1\.4/u);
-  assert.match(inventory, /28 current\s+adoptions\. This completes the observed population/u);
+  const currentInventory = inventory.split("\n## Projections, receivers, and recovery inputs\n", 1)[0];
+  assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
+  assert.match(currentInventory, /HEART Chart v0\.1\.6/u);
+  assert.match(currentInventory, /Plus \/ Delta v0\.1\.5/u);
+  assert.match(currentInventory, /Practitioner Judgment Probes v0\.1\.5/u);
+  assert.match(currentInventory, /28 current\s+adoptions\. This completes the observed population/u);
 });

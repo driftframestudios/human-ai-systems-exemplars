@@ -1205,7 +1205,7 @@
 - Capsule: `cross-functional-investment-model-studio/selected-model`
 - Source: `cross-functional-investment-model-studio@0.1.0`
 - State: `investment-model-studio-state.v0.1` · revision `0.1.0`
-- Fingerprint: `fnv1a32-utf8:8627363c`
+- Fingerprint: `fnv1a32-utf8:ddff4776`
 - View: `plain`
 
 ## Purpose and target
@@ -1274,7 +1274,7 @@ Use the selected investment method to prepare a reviewable decision input from n
 - Divide by event counts
 - Recompute scale scenarios
 
-Tooling fit: A spreadsheet or small data model holds drivers and denominators; a repeatable script recomputes scenarios; an AI collaborator helps structure and challenge the register while a named owner approves every input.
+Tooling fit: A spreadsheet or small data model holds drivers and denominators; a repeatable script recomputes scenarios; a generative AI system structures the register and proposes review questions while a named owner approves every input.
 
 ## Boundaries and human-held decisions
 
@@ -1306,7 +1306,7 @@ Return with this handback:
 
 - Source record: Costing Plan · Activity-Based Cost-Driver (Unit Economics) (`cbaee20c-7507-4425-b5cd-a37adb206749`).
 - Deterministic operation: Cost allocated to a driver divided by approved driver-event volume
-- Tooling fit: A spreadsheet or small data model holds drivers and denominators; a repeatable script recomputes scenarios; an AI collaborator helps structure and challenge the register while a named owner approves every input.
+- Tooling fit: A spreadsheet or small data model holds drivers and denominators; a repeatable script recomputes scenarios; a generative AI system structures the register and proposes review questions while a named owner approves every input.
 - Next handoff: Benefit Realization when unit-cost change needs a value mechanism; Whole-Life TCO when scale changes recurring run cost
 - The embedded schema establishes the selection shape, schema version, known model IDs, scenario ID, and selection reasons. Financial validity, assumption quality, authorization, and outcomes remain with their named evidence and decision owners.
 - Keep an unavailable input as `&lt;reserved&gt;` with its owner or clarifying question. An unrecognized model selection leaves the accepted model and Prompt Capsule available.
@@ -1614,7 +1614,7 @@ Return with this handback:
         human: ["Choose meaningful drivers", "Authorize fixed/variable allocation", "Interpret operating consequences"],
         ai: ["Draft a driver taxonomy from supplied work", "Reconcile terminology", "Surface missing denominators and review questions"],
         deterministic: ["Allocate approved costs", "Divide by event counts", "Recompute scale scenarios"],
-        tooling: "A spreadsheet or small data model holds drivers and denominators; a repeatable script recomputes scenarios; an AI collaborator helps structure and challenge the register while a named owner approves every input.",
+        tooling: "A spreadsheet or small data model holds drivers and denominators; a repeatable script recomputes scenarios; a generative AI system structures the register and proposes review questions while a named owner approves every input.",
         prompt: `Using the Discovery & Alignment scenario, draft a cost-driver register for this initiative.
 
 Separate fixed and variable work. For each proposed driver, name the numerator, denominator, source, owner, and missing input. Ask for every missing denominator. Keep unavailable economics, rates, volumes, and savings as <reserved> until a named owner supplies and approves them. Return a table plus three scale-sensitivity questions for human review.`,
@@ -1645,7 +1645,7 @@ Separate fixed and variable work. For each proposed driver, name the numerator, 
         human: ["Authorize the counterfactual", "Judge mechanism plausibility", "Choose horizon and decision threshold"],
         ai: ["Map proposed benefits to mechanisms", "Surface double counting", "Draft counterfactual and next-learning questions"],
         deterministic: ["Phase cash flows", "Discount approved values", "Calculate payback, NPV, and IRR"],
-        tooling: "A value ledger joins current-state burden, mechanism, owner, timing, and source. A deterministic financial model handles time-value arithmetic; AI supports mechanism mapping and contradiction review.",
+        tooling: "A value ledger joins current-state burden, mechanism, owner, timing, and source. A deterministic financial model handles time-value arithmetic; a generative AI system maps proposed benefits to mechanisms and flags apparent contradictions for human review.",
         prompt: `Using the Discovery & Alignment scenario, build a benefit-mechanism register before calculating ROI.
 
 For each proposed benefit, state the current burden, changed ability, mechanism, affected population, earliest realization point, owner, evidence source, and missing input. Flag double counting. Keep unquantified value as <reserved>. Return the status-quo questions that must be answered before deterministic payback or NPV can run.`,
@@ -1676,7 +1676,7 @@ For each proposed benefit, state the current burden, changed ability, mechanism,
         human: ["Define package boundaries", "Assign accountable roles", "Authorize hours, rates, and exclusions"],
         ai: ["Draft a package tree from supplied scope", "Challenge missing work and dependencies", "Normalize role and deliverable names"],
         deterministic: ["Multiply hours by rates", "Roll up package totals", "Reconcile subtotals and separate reserves"],
-        tooling: "A WBS table or project-cost database preserves package IDs, owners, hours, rates, exclusions, and source notes. Deterministic formulas create the rollup; AI proposes and challenges decomposition.",
+        tooling: "A WBS table or project-cost database preserves package IDs, owners, hours, rates, exclusions, and source notes. Deterministic formulas create the rollup; a generative AI system proposes a work-package decomposition and flags missing work or dependencies for human review.",
         prompt: `Decompose the Discovery & Alignment scenario into a draft resource-loaded WBS.
 
 Give every package a stable ID, deliverable, owner role, predecessor, acceptance condition, hour-input placeholder, rate-input placeholder, exclusion, and source. Include discovery, participation, synthesis, decision preparation, recovery, quality collaboration, change work, and program coordination where the supplied scope supports them. Keep every unavailable figure as <reserved>. Return missing-work questions before any rollup.`,
@@ -1707,7 +1707,7 @@ Give every package a stable ID, deliverable, owner role, predecessor, acceptance
         human: ["Own the ask and recommendation", "Choose material risks", "Authorize decision language and timing"],
         ai: ["Compress supplied source plans", "Check cross-plan consistency", "Draft scan-friendly alternatives with citations to local records"],
         deterministic: ["Pull approved values", "Verify source IDs and reconciliation", "Render a stable one-page layout"],
-        tooling: "A traceable publishing template reads approved fields from the underlying models. Automated checks catch mismatched values and missing sources; AI supports compression after the source ledger is complete.",
+        tooling: "A traceable publishing template reads approved fields from the underlying models. Automated checks catch mismatched values and missing sources; a generative AI system drafts the compressed narrative after the source ledger is complete.",
         prompt: `Draft a one-page decision brief from supplied, approved model outputs for the Discovery & Alignment scenario.
 
 Use exactly these sections: ask, present burden, recommendation, one headline commitment, value, top three named risks with owners, and timeline. Add a source-model ID beside every figure. Use only supplied, approved figures and mark missing material as <reserved>. When the evidence supports pause or decline, state that recommendation directly.`,
@@ -1738,7 +1738,7 @@ Use exactly these sections: ask, present burden, recommendation, one headline co
         human: ["Authorize ranges and distributions", "Judge dependency structure", "Choose the commitment posture and response to tail drivers"],
         ai: ["Draft elicitation questions", "Surface coupled ranges and missing cases", "Explain model structure in plain language"],
         deterministic: ["Sample distributions", "Aggregate repeated trials", "Calculate percentiles and rank tail contribution"],
-        tooling: "A versioned simulation script or established cost-risk tool consumes stable WBS IDs, documented distributions, dependencies, and a reproducible seed. AI supports range elicitation and review rather than sampling arithmetic.",
+        tooling: "A versioned simulation script or established cost-risk tool consumes stable WBS IDs, documented distributions, dependencies, and a reproducible seed. A generative AI system drafts range-elicitation questions and review notes; the simulation script performs sampling arithmetic.",
         prompt: `Prepare the Discovery & Alignment WBS for a deterministic P50/P80 simulation.
 
 For every package, request best, most-likely, and worst hours and rates; source; range owner; distribution rationale; and dependency links. Identify missing tail cases and possible coupling. Keep ranges as <reserved> until a named owner supplies and approves them. Return a machine-readable input checklist plus human-review questions.`,
@@ -1769,7 +1769,7 @@ For every package, request best, most-likely, and worst hours and rates; source;
         human: ["Name and own risks", "Authorize probability and impact inputs", "Choose mitigations and escalation thresholds"],
         ai: ["Retrieve failure evidence", "Draft risk statements and cross-links", "Challenge missing owners, triggers, and recovery routes"],
         deterministic: ["Compute probability × impact", "Aggregate approved entries", "Sort sensitivity and reconcile reserve"],
-        tooling: "A risk database holds stable IDs, sources, triggers, owners, impact ranges, mitigations, and status. Deterministic formulas and sensitivity scripts create the rollup; AI assists retrieval and completeness review.",
+        tooling: "A risk database holds stable IDs, sources, triggers, owners, impact ranges, mitigations, and status. Deterministic formulas and sensitivity scripts create the rollup; a generative AI system surfaces supplied failure evidence and flags incomplete risk records for human review.",
         prompt: `Build a draft risk-register shell for the Discovery & Alignment scenario from the supplied failure, dependency, and recovery material.
 
 For each candidate risk, provide a stable ID, observable trigger, affected object, consequence, owner placeholder, mitigation, recovery route, probability-input placeholder, impact-range placeholder, source, and current status. Distinguish realized failures from prospective risks. Keep percentages and currency values as <reserved> until named owners supply and approve them. Return missing-owner and missing-evidence questions.`,
@@ -1800,7 +1800,7 @@ For each candidate risk, provide a stable ID, observable trigger, affected objec
         human: ["Define branches and common baseline", "Judge non-cost factors", "Authorize recommendation and exit conditions"],
         ai: ["Normalize branch rows", "Find category gaps and asymmetric assumptions", "Draft trade-off language from supplied evidence"],
         deterministic: ["Sum identical rows by branch", "Separate one-time and recurring totals", "Calculate branch differences"],
-        tooling: "A branch-comparison table enforces identical categories and horizon. Deterministic formulas calculate totals and deltas; AI assists taxonomy normalization and assumption challenge.",
+        tooling: "A branch-comparison table enforces identical categories and horizon. Deterministic formulas calculate totals and deltas; a generative AI system proposes taxonomy mappings and questions about branch assumptions.",
         prompt: `Create a three-branch comparison frame for the Discovery & Alignment scenario: buy, build, and blend.
 
 Start with one common baseline and horizon. Propose identical row labels for one-time work, recurring work, internal effort, quality, change, recovery, scaling, and retirement where the supplied scope supports them. Add non-cost factors, source, owner, and missing-input columns. Keep prices and the branch recommendation as <reserved> until the human supplies decision weights and constraints.`,
@@ -1831,7 +1831,7 @@ Start with one common baseline and horizon. Propose identical row labels for one
         human: ["Choose horizon and scaling path", "Authorize run, FX, and discount assumptions", "Judge operational and retirement obligations"],
         ai: ["Surface forgotten lifecycle lines", "Draft year-by-year assumption questions", "Compare source coverage across branches"],
         deterministic: ["Roll annual costs", "Apply approved escalation and discounting", "Calculate lifecycle totals and NPV"],
-        tooling: "A year-indexed lifecycle ledger separates CapEx, OpEx, scaling, parallel run, revalidation, and retirement. Deterministic finance formulas handle escalation and discounting; AI supports completeness review.",
+        tooling: "A year-indexed lifecycle ledger separates CapEx, OpEx, scaling, parallel run, revalidation, and retirement. Deterministic finance formulas handle escalation and discounting; a generative AI system flags omitted lifecycle categories for human review.",
         prompt: `Extend the Discovery & Alignment scenario into a whole-life cost-input ledger.
 
 Create year-indexed rows for implementation, recurring operation, maintenance, hosting, support, revalidation, training, scaling, parallel run, recovery, and retirement where the supplied scope supports them. Add source, owner, start condition, end condition, escalation input, discount input, FX input, and <reserved> placeholders. Keep rates and economic assumptions as <reserved> until named owners supply and approve them. Return lifecycle gaps and decision questions.`,

@@ -1,4 +1,4 @@
-/* Canonical Strategy Canvas controller v0.2.4 — safe DOM rendering over StrategyCanvasCore. */
+/* Canonical Strategy Canvas controller v0.2.5 — safe DOM rendering over StrategyCanvasCore. */
 (function exposeStrategyCanvasCanonical(global) {
   'use strict';
 
@@ -861,7 +861,7 @@
     root.dataset.scEnhancementState = 'mounted';
 
     return Object.freeze({
-      version: '0.2.4',
+      version: '0.2.5',
       schemaVersion: core.schemaVersion,
       getState: () => core.clone(store.getState()),
       getValidation: () => core.validateState(store.getState()),
@@ -874,5 +874,5 @@
     });
   }
 
-  global.StrategyCanvasCanonical = Object.freeze({ version: '0.2.4', mount });
+  global.StrategyCanvasCanonical = Object.freeze({ version: '0.2.5', mount });
 })(typeof window !== 'undefined' ? window : globalThis);
