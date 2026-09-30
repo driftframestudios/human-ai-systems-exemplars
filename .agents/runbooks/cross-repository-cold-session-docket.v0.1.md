@@ -86,12 +86,13 @@ Detached HEAD and an unset upstream are ordinary coordinate states. Record
 them and continue source observation; branch preparation belongs to a later
 authorized implementation route.
 
-### Bootstrap absent or stale local instructions
+### Bootstrap current instructions from the task-owned coordinate
 
-When this docket, the companion cycle, or the expected instructions are absent
-or older in the chat checkout, preserve that checkout and resolve the intended
-source owner first. The task or live owner may select an integration branch,
-pull-request head, or accepted release rather than `main`.
+A cold session can read current instructions at the task-owned source
+coordinate while retaining its existing checkout. Resolve the intended source
+owner when the checkout carries older instructions or omits the expected
+runbook. The task or live owner selects the fitting integration branch,
+pull-request head, accepted release, or `main` according to its source role.
 
 When a networked read is authorized, observe the selected remote coordinate.
 For GitHub, one read-only observation is:
@@ -101,8 +102,8 @@ gh api repos/<owner>/<repo>/commits/<working-ref> --jq .sha
 ```
 
 Compare the returned commit with locally available objects. Read the runbook,
-root instructions, nearest README, and selected source at that exact commit
-without moving the worktree:
+root instructions, nearest README, and selected source at that exact commit,
+with the existing worktree retained at its inspected coordinate:
 
 ```sh
 git cat-file -e '<verified-sha>^{commit}'
@@ -111,11 +112,13 @@ git show '<verified-sha>:AGENTS.md'
 git show '<verified-sha>:README.md'
 ```
 
-If the object is unavailable, use an authorized remote source read pinned to
-the same commit. Fetch only when the grant permits updating local remote refs
-and that preparation is useful; read `origin/<working-ref>` after the fetch.
-An unavailable remote leaves its freshness unobserved. Locally cached refs
-still support a source comparison when their cached standing is explicit.
+An authorized remote source read pinned to the same commit supplies the
+source when the local object is unavailable. Use fetch when the grant permits
+updating local remote refs and the selected next step needs that preparation;
+read `origin/<working-ref>` after the fetch. Locally cached refs support a
+source comparison with their cached standing explicit. Current remote
+freshness receives its own network observation; while remote access is
+unavailable, that claim remains unobserved.
 
 Record both the preserved checkout coordinate and the inspected source
 coordinate. A remote API observation establishes the ref at observation time;
@@ -159,8 +162,8 @@ This pass establishes the inspected coordinates and authority relationships.
 Keep merged source, tag existence, accepted release, reviewed package binding,
 receiver adoption, and runtime evidence distinct. Each establishes its named
 state; a pending or omitted field leaves the adjacent acceptance claim open
-for its owner. Include only participating coordinates, with inapplicable or
-unobserved states named rather than reconstructed speculatively.
+for its owner. Include the coordinates that participate in the task. Explicit
+inapplicable or unobserved states keep the next evidence need visible.
 
 It leaves unobserved remotes, private workspace ancestry, live deployment,
 vendor qualification, and other adjacent claims open for their named
@@ -317,7 +320,8 @@ research spike, comparative packet, adoption dossier, or cross-repository
 program. The active owner supplies that tier's bounded return and stopping
 event. A source-only finding can finish at the first tier; a new tier begins
 when its concrete receiving decision, evidence need, and grant are named.
-This docket links the existing route rather than duplicating its ladder.
+This docket routes through the existing tier contract, whose owner retains
+the ladder and its acceptance boundaries.
 
 ### Public-reference materialization
 
@@ -438,11 +442,13 @@ An `observation_only` task completes with the authority map, a bounded finding
 or correctly held decision, its source observations and coverage, and one
 exact next receiver. Follow the companion's observation route through current
 truth, route selection, proportionate evidence, and re-entry. Direct source
-reading can complete it with the existing toolchain and preserved checkout;
-dependency installation, branch creation, implementation, commit, push, pull
-request, publication, and deployment phases stay outside that route. Prepare
-an environment only when the selected observation needs it and the current
-grant permits it.
+reading completes with the existing toolchain and preserved checkout. The
+observation grant covers the selected observations and handback, with
+repository and external state retained at their observed coordinates.
+Environment preparation applies when the selected observation needs it and
+the current grant permits it. Branch creation, implementation, commit, push,
+and pull-request delivery each begin through the fitting task route and grant;
+publication and deployment begin through their named authority surfaces.
 
 Add three cross-repository facts to that handback:
 
@@ -464,9 +470,10 @@ authority surfaces.
 This runbook is `exercised` through a resumed-session, source-only traversal
 of `human-ai-systems-exemplars` and the LIMS/ELN Program source relationship.
 The exercise produced an authority map and receiver-ready finding while
-preserving repository and external state. It exposed an older detached chat
-checkout without the docket, an unavailable upstream relation, and distinct
-integration, captured-snapshot, and pending package/release coordinates.
+preserving repository and external state. It identified an older detached
+chat checkout needing current instructions, the detached-HEAD upstream state,
+and distinct integration, captured-snapshot, and pending package/release
+coordinates.
 Those observations supply the bootstrap, guarded upstream, coordinate, and
 observation-completion refinements above.
 

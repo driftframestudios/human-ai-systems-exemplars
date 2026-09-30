@@ -91,7 +91,7 @@ Select the working source coordinate through the task and live owner.
 `main`, an integration branch, a pull-request head, and an accepted release
 can serve different roles. Preserve the checkout when the selected source or
 instructions live at a newer coordinate. The
-[cold-session bootstrap](cross-repository-cold-session-docket.v0.1.md#bootstrap-absent-or-stale-local-instructions)
+[cold-session bootstrap](cross-repository-cold-session-docket.v0.1.md#bootstrap-current-instructions-from-the-task-owned-coordinate)
 supplies guarded upstream inspection, a read-only remote observation, and
 exact-commit source reading for either a single- or cross-repository entry.
 Detached HEAD and an unset upstream remain usable source-observation states.
@@ -133,7 +133,7 @@ through the named grant that owns them.
 
 ### Select the phase path
 
-The action mode selects phases rather than imposing one serial setup path:
+Each action mode has a phase path fitted to its receiving result:
 
 | Current route | Phase path and completion |
 | --- | --- |
@@ -141,11 +141,12 @@ The action mode selects phases rather than imposing one serial setup path:
 | Observation requiring execution | Phases 1 and 2, Phase 3 only for the selected check's authorized environment needs, optional bounded support in Phase 5, then Phases 7 and 9 |
 | Authorized implementation or repair | Phases 1 and 2, conditional Phase 3, task-owned branch context in Phase 4, optional Phase 5, then Phases 6 and 7; Phase 8 stops at the granted delivery boundary before Phase 9 |
 
-Source-only observation preserves repository and external state, including
-the checkout's branch or detached coordinate. It skips dependency probes and
-installation, branch creation, implementation, and commit/push/PR delivery.
-One task response can be its complete receiving surface. A changed question
-or wider grant reopens only the phases that the new decision needs.
+Source-only observation uses readable source and the existing environment,
+preserving repository and external state, including the checkout's branch or
+detached coordinate. One task response can be its complete receiving surface.
+Dependency preparation, branch creation, implementation, and commit/push/PR
+delivery begin when a selected task needs them and its grant covers them. A
+changed question or wider grant reopens the phases that the new decision needs.
 
 ### Phase 1 — Reconstruct current truth
 
@@ -205,9 +206,9 @@ several Issues form a decision-bearing route.
 a named receiver or rest condition.
 
 When an observation-only question is answered, continue directly to Phase 7
-to state its source evidence and Phase 9 to return the finding. An ambiguous
-mutation grant can correctly end as a held decision; it leaves implementation
-with the named receiver rather than creating a substitute change task.
+to state its source evidence and Phase 9 to return the finding. A held decision
+names the responsible receiver, the choice needed, and its observable release
+event. Implementation begins through that receiver's task selection and grant.
 
 **Recovery and stop:** A changed premise returns classification to current
 truth. A wider architectural or product choice returns to its human or Issue
