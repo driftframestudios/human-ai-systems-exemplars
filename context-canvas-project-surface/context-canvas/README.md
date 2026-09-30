@@ -239,6 +239,7 @@ Choose the existing check that answers the page question under review:
 ```bash
 npm run test:context-canvas
 npm run test:context-canvas-narrow-rails
+npm run test:prototype-control-labels
 npm run visual:check -- path/to/page.html --selector "main"
 npm run visual:rail-labels
 npm run test:open-lesson-field
@@ -249,6 +250,10 @@ The Context Canvas source suite protects source-authored visitor metadata,
 shared rail ownership, and the About-page identity seam. The narrow-rail
 contract is the lightweight all-route check for generated rail disclosure,
 clipping, scroll reachability, the 56rem seam, forced colors, and print. The
+prototype-control-label contract checks the Cross-Functional Investment
+Studio at 1280, 701, 700, 390, and 320 CSS pixels, including generated rows and
+rerenders; the Canvas and Core iframe browser contracts apply the corresponding
+label-retention observation across their form-bearing route families. The
 generic visual check records the requested surface at desktop and mobile
 widths, document containment, and browser errors; `visual:rail-labels` adds
 screenshot-bearing ordinary-rail interaction evidence. The other interaction

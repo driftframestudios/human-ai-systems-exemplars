@@ -19,6 +19,12 @@ import {
   monitor,
   startStaticServer,
 } from "./core-architecture-browser-helper.mjs";
+import {
+  assertFormControlLabelRetention,
+  assertInvestmentStudioRowLabels,
+  observeFormControlLabels,
+  observeInvestmentStudioRowLabels,
+} from "./form-control-label-contract.mjs";
 
 const toolPath = fileURLToPath(import.meta.url);
 const repositoryRoot = path.resolve(path.dirname(toolPath), "..");
@@ -34,6 +40,9 @@ const canvasOutputRoot = path.join(iframeHostRoot, "v1/canvas");
 const routeReceiptPath = path.join(canvasOutputRoot, "route-manifest.json");
 const viewports = Object.freeze([
   { id: "desktop", width: 1280, height: 1000 },
+  { id: "compact", width: 800, height: 900 },
+  { id: "small", width: 480, height: 900 },
+  { id: "mobile", width: 390, height: 900 },
   { id: "narrow", width: 320, height: 900 },
 ]);
 
@@ -422,6 +431,7 @@ async function assertAttribution(page, route) {
 
 async function assertContained(session, stateLabel) {
   const { carrier, carrierPage, page, route } = session;
+  const labelObservations = [];
   for (const viewport of viewports) {
     await carrierPage.setViewportSize({ width: viewport.width, height: viewport.height });
     await carrierPage.evaluate(() => new Promise((resolve) => {
@@ -466,7 +476,14 @@ async function assertContained(session, stateLabel) {
       `${route.id} ${stateLabel} attribution contains its ${viewport.id} width ` +
         `(${observed.footerScrollWidth}/${observed.footerClientWidth})`,
     );
+    labelObservations.push(
+      await observeFormControlLabels(page.locator("html"), viewport.width),
+    );
   }
+  assertFormControlLabelRetention(
+    labelObservations,
+    `${route.id} ${stateLabel}`,
+  );
   await carrierPage.setViewportSize({
     width: viewports[0].width,
     height: viewports[0].height,
@@ -598,6 +615,40 @@ async function exerciseTalent(session) {
 
 async function exerciseInvestmentStudio(session) {
   const { carrierPage, page } = session;
+  for (const width of [1280, 701, 700, 390, 320]) {
+    await carrierPage.setViewportSize({ width, height: 900 });
+    await carrierPage.evaluate(() => new Promise((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(resolve));
+    }));
+    assertInvestmentStudioRowLabels(
+      await observeInvestmentStudioRowLabels(page),
+      width,
+      "generated Cross-Functional Investment Studio",
+    );
+  }
+
+  await carrierPage.setViewportSize({ width: 390, height: 900 });
+  await page.locator('[data-add="activity"]').click();
+  assertInvestmentStudioRowLabels(
+    await observeInvestmentStudioRowLabels(page),
+    390,
+    "generated Cross-Functional Investment Studio after adding an activity",
+  );
+  await page.locator('[data-preset="1"]').click();
+  assertInvestmentStudioRowLabels(
+    await observeInvestmentStudioRowLabels(page),
+    390,
+    "generated Cross-Functional Investment Studio after changing the plan",
+  );
+  const activityName = page.locator('.activity-row input[data-field="name"]').first();
+  await activityName.fill("Accessible planning activity");
+  assert.match(
+    await page.locator('.activity-row input[data-field="a"]').first().getAttribute("aria-label"),
+    /Accessible planning activity/u,
+    "generated activity controls retain contextual programmatic labels after renaming",
+  );
+
+  await carrierPage.setViewportSize({ width: viewports[0].width, height: viewports[0].height });
   const before = (await page.locator("#band").textContent())?.trim();
   await page.locator("#horizon").fill("7");
   await page.locator("#horizon").dispatchEvent("change");
