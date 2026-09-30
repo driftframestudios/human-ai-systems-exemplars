@@ -1,4 +1,4 @@
-# A3 Stacked Cube Model — Prototype Source and Provenance Appendix
+# Evidence-Guided Capability Transfer Model — Prototype Source and Provenance Appendix
 
 ## Source resolution
 
@@ -9,7 +9,7 @@
 - [Pack index](https://github.com/driftframestudios/human-ai-systems-exemplars/blob/a9ba528946fead335b49da3ae6dfb91c65588046/core-architectures-chimeric-prototype-current-pack-v0.1/core-architectures-chimeric-prototype-pack-index-v0.1.html)
 - [Pack manifest](https://github.com/driftframestudios/human-ai-systems-exemplars/blob/a9ba528946fead335b49da3ae6dfb91c65588046/core-architectures-chimeric-prototype-current-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json)
 
-The pinned pack contains 21 current prototype HTML artifacts with embedded or dynamically rendered SVG surfaces, plus one HTML pack index without SVG. The following prototypes contribute directly to the A3 strangler-fig storyboard and its operational design layer.
+The pinned pack contains 21 current prototype HTML artifacts with embedded or dynamically rendered SVG surfaces, plus one HTML pack index without SVG. The following prototypes contribute directly to the A3 capability-transfer storyboard and its operational design layer.
 
 ## Primary A3 precedents
 

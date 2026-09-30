@@ -18,14 +18,14 @@
   "protected_semantics": [
     "A cube is a bounded software capability or service dependency, not a team, screen, or human activity.",
     "Position encodes current execution or decision authority only.",
-    "Migration is a reversible routing and authority change through an explicit seam, validation gate, and rollback route.",
+    "Migration is a reversible routing and authority change through an explicit boundary, validation gate, and rollback route.",
     "Visible gaps imply verified separability.",
     "Human work remains a separate ribbon unless a bounded software capability is separately evidenced.",
     "UNKNOWN is visible and durable.",
     "F0–F3 remain the protected historical authority spine."
   ],
   "scope_statement": {
-    "system": "regulated genomic-viewer Strangler-Fig migration",
+    "system": "regulated genomic-viewer capability transfer",
     "intended_use": "unresolved",
     "jurisdiction": "unresolved",
     "device_or_non_device_status": "unresolved",
@@ -176,7 +176,7 @@
   "migration_gates": [
     {
       "id": "G0",
-      "label": "Seam readiness",
+      "label": "Boundary readiness",
       "status": "partially_evidenced_historical",
       "requires": ["stable identity", "routable interception or abstraction", "owner and dependency map", "known system of record"]
     },
@@ -227,7 +227,7 @@
       "fallback authority"
     ],
     "candidate_elements": [
-      "interception router or branch-by-abstraction seam",
+      "interception router or branch-by-abstraction boundary",
       "anti-corruption adapter",
       "migration flag and cohort selector",
       "legacy and target systems of record",

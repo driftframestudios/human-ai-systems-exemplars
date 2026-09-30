@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.vik.guru/a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json",
-  "title": "A3 stacked-cube Atlas expansion delta",
+  "title": "Evidence-Guided Capability Transfer Atlas — Expansion Delta",
   "description": "Research-derived semantic planes that extend, but do not overwrite, the protected v0.1 authority model.",
   "type": "object",
   "required": [

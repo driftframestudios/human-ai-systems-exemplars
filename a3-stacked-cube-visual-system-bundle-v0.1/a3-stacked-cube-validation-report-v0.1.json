@@ -1,7 +1,7 @@
 {
   "report_version": "0.1.0",
   "artifact_family": "A3-CUBE-VISUAL-SYSTEM",
-  "validated_on": "2026-07-27",
+  "validated_on": "2026-09-30",
   "overall_status": "passed",
   "subject": {
     "prototype": "a3-stacked-cube-visual-system-chimeric-prototype-v0.1.html",
@@ -59,9 +59,24 @@
       "detail": "Both static SVG derivatives parse as XML."
     },
     {
+      "id": "SVG-GEOMETRY",
+      "status": "passed",
+      "detail": "Both generated SVG derivatives preserve their public viewBoxes, keep text inside those coordinate spaces, and express every directional route as one closed body-and-head path without a detached marker."
+    },
+    {
       "id": "ACCESSIBLE-NAMES",
       "status": "passed",
       "detail": "Both static SVGs include title and description elements; the interactive SVG uses an aria-labelledby title/description pair."
+    },
+    {
+      "id": "STATIC-SEMANTICS",
+      "status": "passed",
+      "detail": "Both static SVGs expose named phase groups without inactive button or tab-stop semantics; F3 renders one transferred capability and a distinct fallback-route block rather than a duplicate authority cube."
+    },
+    {
+      "id": "HUMAN-WORK-PROGRESSION",
+      "status": "passed",
+      "detail": "Interactive and static views distinguish workflow discovery, design review and sprint-closure presentations, training during validation and procedure drafting, and procedure-supported use after launch."
     },
     {
       "id": "MOTION-PREFERENCE",
@@ -71,7 +86,7 @@
     {
       "id": "BROWSER-SMOKE",
       "status": "passed",
-      "detail": "Headless Chrome exercised F0–F3 at 1440, 736, 390, and 320 CSS pixels with no console errors, page errors, or remote runtime requests."
+      "detail": "Headless Chrome initialized the generator API and exercised F0–F3 at 1440, 736, 390, and 320 CSS pixels with no console errors, page errors, or remote runtime requests."
     },
     {
       "id": "RESPONSIVE-OVERFLOW",

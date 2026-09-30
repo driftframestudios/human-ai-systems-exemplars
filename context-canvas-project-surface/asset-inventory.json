@@ -8,11 +8,11 @@
       "selector": {
         "prefix": "a3-stacked-cube-visual-system-bundle-v0.1/assets/"
       },
-      "semantic_owner": "A3 Stacked Cube visual-system bundle",
+      "semantic_owner": "Evidence-Guided Capability Transfer Model visual-system bundle",
       "roles": [
         {
           "id": "prototype_visual_derivative",
-          "visitor_job": "Offer a portable view of the stacked-cube state model.",
+          "visitor_job": "Offer a portable view of the evidence-guided capability-transfer state model.",
           "accessibility_text_owner": "The referring carrier and the SVG title and description."
         }
       ],
