@@ -1,6 +1,6 @@
 ---
 title: Repository collaboration cycle
-version: 0.1.0
+version: 0.1.1
 status: working
 audience: ai_collaborators
 source_band: public_possible
@@ -87,13 +87,17 @@ current milestones, dependency relations, and available acceptance signals;
 return a classified candidate set. Implementation begins when the current task
 or human owner selects one Issue and its acceptance boundary.
 
-When the task permits a networked repository read, refresh and inspect the
-remote coordinate:
-
-```sh
-git fetch origin
-git rev-parse origin/main
-```
+Select the working source coordinate through the task and live owner.
+`main`, an integration branch, a pull-request head, and an accepted release
+can serve different roles. Preserve the checkout when the selected source or
+instructions live at a newer coordinate. The
+[cold-session bootstrap](cross-repository-cold-session-docket.v0.1.md#bootstrap-current-instructions-from-the-task-owned-coordinate)
+supplies guarded upstream inspection, a read-only remote observation, and
+exact-commit source reading for either a single- or cross-repository entry.
+Detached HEAD and an unset upstream remain usable source-observation states.
+Fetch only when updating local remote refs is authorized and useful; a cached
+ref retains its cached standing until a network observation establishes the
+selected remote coordinate.
 
 Use `gh issue view <number>` and `gh pr view <number>` when live GitHub state
 changes classification, authority, review, or delivery. A local-only pass
@@ -127,6 +131,23 @@ through the named grant that owns them.
 
 ## Ordered phases
 
+### Select the phase path
+
+Each action mode has a phase path fitted to its receiving result:
+
+| Current route | Phase path and completion |
+| --- | --- |
+| Source-only observation | Phases 1 and 2, then source evidence in Phase 7 and handback in Phase 9; the authority map and bounded finding or held decision complete the task |
+| Observation requiring execution | Phases 1 and 2, Phase 3 only for the selected check's authorized environment needs, optional bounded support in Phase 5, then Phases 7 and 9 |
+| Authorized implementation or repair | Phases 1 and 2, conditional Phase 3, task-owned branch context in Phase 4, optional Phase 5, then Phases 6 and 7; Phase 8 stops at the granted delivery boundary before Phase 9 |
+
+Source-only observation uses readable source and the existing environment,
+preserving repository and external state, including the checkout's branch or
+detached coordinate. One task response can be its complete receiving surface.
+Dependency preparation, branch creation, implementation, and commit/push/PR
+delivery begin when a selected task needs them and its grant covers them. A
+changed question or wider grant reopens the phases that the new decision needs.
+
 ### Phase 1 — Reconstruct current truth
 
 **Action mode:** `observation_only` until the current task and active owner
@@ -141,6 +162,13 @@ establish a wider grant.
 5. Name every difference between historical status and current source.
 6. State settled, current, open, and next terrain in one compact map.
 
+Keep the preserved checkout and inspected working source coordinates visible.
+When releases or integrated copies participate, add the accepted/tagged
+release and its pending receipts, snapshot version/source commit/capture date,
+and reviewed package/adoption binding as distinct observations. Merged source
+establishes integration; each release, binding, or runtime claim retains its
+own evidence and receiver.
+
 Phase 1 produces the
 [`repository-reentry`](../skills/repository-reentry/SKILL.md) result. The
 compact steps above are this repository's invocation profile; the portable
@@ -149,8 +177,8 @@ participate.
 
 **Checkpoint:** The map establishes the inspected source coordinate, live work
 surface, current behavior owner, open decision, and first bounded move. A
-cached remote ref establishes local knowledge of that ref; a network refresh
-establishes current remote standing.
+cached remote ref establishes local knowledge of that ref; a network
+observation establishes the selected remote coordinate at observation time.
 
 **Recovery and stop:** Preserve a dirty or overlapping worktree. A separately
 authorized clean worktree can receive implementation. When the active Issue,
@@ -177,6 +205,11 @@ several Issues form a decision-bearing route.
 **Checkpoint:** One route owns the current synthesis. Adjacent candidates have
 a named receiver or rest condition.
 
+When an observation-only question is answered, continue directly to Phase 7
+to state its source evidence and Phase 9 to return the finding. A held decision
+names the responsible receiver, the choice needed, and its observable release
+event. Implementation begins through that receiver's task selection and grant.
+
 **Recovery and stop:** A changed premise returns classification to current
 truth. A wider architectural or product choice returns to its human or Issue
 owner with the smallest decision surface that can release work.
@@ -187,8 +220,13 @@ owner with the smallest decision surface that can release work.
 `implementation_authorized` when the current task permits dependency or tool
 installation.
 
-The repository currently requires Node 22 or newer and carries a root lockfile.
-Inspect the local lane first:
+Enter this phase when the selected evidence requires a runtime, dependency,
+browser, scanner, or other environment capability. Direct source reading can
+proceed to Phase 7 with the existing environment; Node/npm probes and
+installation are conditional on the chosen check.
+
+For a selected Node-based check, the repository currently requires Node 22 or
+newer and carries a root lockfile. Inspect that local lane first:
 
 ```sh
 node --version
@@ -249,13 +287,16 @@ return `friction` with its release event.
 **Action mode:** `implementation_authorized` when the current task grants the
 named repository changes.
 
-Start from the verified receiving base and use the repository branch prefix:
+Start from the verified task-owned receiving base and use the repository
+branch prefix. In an authorized task worktree:
 
 ```sh
-git switch main
-git merge --ff-only origin/main
-git switch -c codex/<issue>-<short-purpose>
+git switch -c codex/<issue-or-task>-<short-purpose> <verified-base-sha>
 ```
+
+The active owner selects that base; an integration branch or reviewed task
+head can be fitting where default `main` has a different role. Keep the
+original checkout intact when a separate worktree receives the task.
 
 When the branch already exists, inspect its remote and local history, pull
 request, and relationship to current `main` before continuing. A separately
@@ -384,7 +425,7 @@ Choose the smallest existing observation that answers the receiving question:
 An evidence statement uses this order:
 
 ```text
-Command and normalized result
+Command or named source observation at its revision, and normalized result
 Establishes: the affirmative state observed at this revision
 Coverage boundary: the adjacent claim that receives its own check
 ```
@@ -393,7 +434,7 @@ A passing static contract can establish declared values and owner relations.
 Rendered interaction, real-system accessibility mode, hosted response, and
 human acceptance each retain their fitting observation or decision holder.
 
-**Checkpoint:** The selected commands answer the acceptance question at the
+**Checkpoint:** The selected observations answer the acceptance question at the
 proposed revision, and every remaining claim has a visible evidence owner.
 
 **Recovery and stop:** A failing check returns to its nearest behavior owner
@@ -435,8 +476,11 @@ their last accepted coordinates until their receiver grants the next action.
 **Action mode:** `observation_only` unless the task grants a final GitHub or
 repository status update.
 
-Confirm the branch or accepted `main` coordinate, worktree state, Issue or
-pull-request standing, and one exact continuation. A merged cycle can verify
+Report the final branch or inspected source coordinate, worktree state, Issue
+or pull-request standing, and one exact continuation. A source-only cycle
+names the preserved checkout, the observed source, and the finding's next
+receiver; optional runtime or external claims retain their unobserved
+standing. A merged cycle can verify
 its head commits are ancestors of current `main`; a review-ready cycle names
 the review event; a held cycle names the signal that releases it.
 
@@ -456,7 +500,7 @@ Disposition: pass | friction | blocker
 Scope: one-sentence receiving result
 Source coordinate: public revision and branch or pull request
 Changed surfaces: concise repository-relative paths or decision
-Validation: exact command -> normalized result
+Validation: exact command or named source observation at its revision -> normalized result
 Establishes: affirmative evidence state
 Coverage boundary: adjacent claim still open and its evidence owner
 Environment note: retained toolchain, or named local change and behavior risk
@@ -475,7 +519,10 @@ responsible continuation.
 | Observed condition | Desired continuation |
 | --- | --- |
 | Shared worktree carries unrelated or ownership-unclear changes | Preserve the exact state; use a separately authorized clean worktree or return `friction` with the overlap named |
+| Local runbook or instructions are absent or stale | Resolve the task's source owner, read at a verified available commit or authorized remote source, and retain the original checkout coordinate |
+| HEAD is detached or the current branch has no upstream | Record the commit and upstream state; continue source observation and prepare branch context only for authorized implementation |
 | Remote refresh belongs to a network-authorized receiver | Use local source evidence, label remote refs as cached, and route live standing to that receiver |
+| Integration source, release, captured snapshot, or package binding differ | Name each coordinate and pending acceptance separately; return reconciliation to the source or adoption owner |
 | Issue scope or acceptance can support materially different implementations | Return a compact decision surface to the Issue or human owner and hold implementation at the last verified coordinate |
 | Required dependency, browser, scanner, or system capability needs preparation | Prepare it when authorized, or route the exact check while leaving its claim open |
 | Bounded-support capacity is resting | Continue the primary route; retain only a decision-useful packet with `awaiting_capacity` standing and a refresh gate |
@@ -494,7 +541,9 @@ capability, authority, or check result changed.
 
 Status remains `working` until a fresh-context collaborator traverses this
 document and returns a current-truth map, one classified route, its environment
-needs, and an exact next action. A complete material cycle can then move the
+needs, and an exact next action. An observation-only cycle can establish this
+with source evidence, a decision-ready finding or correctly held route, and
+an explicit unchanged-environment note. A complete material cycle can then move the
 runbook to `exercised`; repeated materially different cycles can support
 `stable`. A shorter Issue or better owner can receive useful rules later while
 this route retires with its lineage intact.
