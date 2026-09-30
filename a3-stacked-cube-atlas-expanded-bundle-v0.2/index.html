@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
-  <title>A3 Stacked Cube Model — Atlas-expanded authority and evidence research document</title>
+  <title>Evidence-Guided Capability Transfer Atlas — Authority and evidence research document</title>
   <style>
     :root {
       --paper: #fffaf6;
@@ -373,13 +373,13 @@
 </head>
 <body>
   <main class="page">
-    <p class="eyebrow">A3 Appendix · Atlas-expanded research surface · v0.2</p>
+    <p class="eyebrow">Capability transfer · Atlas-expanded research surface · v0.2</p>
     <h1>Authority is one layer of the migration.</h1>
-    <p class="dek">The protected four-frame Strangler-Fig story remains intact. New lenses expose the assurance, runtime, data, provenance, recovery, and human-authorization evidence that a selective authority transfer may require—without claiming that conditional regulatory regimes already apply.</p>
+    <p class="dek">The protected four-frame capability-transfer story remains intact. New lenses expose the assurance, runtime, data, provenance, recovery, and human-authorization evidence that a selective authority transfer may require—without claiming that conditional regulatory regimes already apply.</p>
 
     <section class="meta-strip" aria-label="Research and artifact metadata">
       <div><strong>As-of</strong><span>24 July 2026</span></div>
-      <div><strong>Protected baseline</strong><span>A3 Stacked Cube v0.1 · F0–F3</span></div>
+      <div><strong>Protected baseline</strong><span>Evidence-Guided Capability Transfer Model v0.1 · F0–F3</span></div>
       <div><strong>Research method</strong><span>Deep Research Atlas v1.2</span></div>
       <div><strong>Regulatory scope</strong><span>Unresolved · badges are conditional</span></div>
     </section>
@@ -395,7 +395,7 @@
       <span class="toolbar-sep" aria-hidden="true"></span>
       <div class="toolbar-group" id="frame-controls" aria-label="Historical authority frame">
         <button class="control" type="button" data-frame="F0" aria-pressed="true">1 · Current</button>
-        <button class="control" type="button" data-frame="F1" aria-pressed="false">2 · Seam</button>
+        <button class="control" type="button" data-frame="F1" aria-pressed="false">2 · Boundary</button>
         <button class="control" type="button" data-frame="F2" aria-pressed="false">3 · Shadow</button>
         <button class="control" type="button" data-frame="F3" aria-pressed="false">4 · Validated</button>
       </div>
@@ -419,7 +419,7 @@
         <span class="micro">Redundant state encoding</span>
         <div class="legend">
           <span><i class="swatch legacy" aria-hidden="true"></i>Legacy authority</span>
-          <span><i class="swatch seam" aria-hidden="true"></i>Seam / conditional</span>
+          <span><i class="swatch seam" aria-hidden="true"></i>Boundary / conditional</span>
           <span><i class="swatch shadowed" aria-hidden="true"></i>Shadow / dual-run</span>
           <span><i class="swatch new" aria-hidden="true"></i>New authority</span>
           <span><i class="swatch retained" aria-hidden="true"></i>Retained legacy</span>
@@ -451,7 +451,7 @@
       <summary>Complete capability registry and protected semantics</summary>
       <div class="table-wrap">
         <table>
-          <caption>Original A3 capability and service-dependency registry. New research does not silently turn human work into software cubes.</caption>
+          <caption>Original capability and service-dependency registry. New research does not silently turn human work into software cubes.</caption>
           <thead><tr><th>Capability</th><th>Family</th><th>F0</th><th>F1</th><th>F2</th><th>F3</th><th>Evidence posture</th></tr></thead>
           <tbody id="capability-body"></tbody>
         </table>
@@ -487,7 +487,7 @@
     },
     "frames": [
       {"id":"F0","label":"Current authority","note":"Most capabilities remain under legacy or human authority. Coupling and unknowns are explicit."},
-      {"id":"F1","label":"Seam identified","note":"The operational and assignment seam is bounded. Dependencies, evidence, and rollback are named before routing changes."},
+      {"id":"F1","label":"Boundary identified","note":"The operational and assignment boundary is defined. Dependencies, evidence, and rollback are named before routing changes."},
       {"id":"F2","label":"Shadow / dual-run","note":"The candidate mirrors or receives bounded traffic while legacy remains authoritative and rollback stays available."},
       {"id":"F3","label":"Validated authority","note":"Authority transfers only for the validated capability. Risky, coupled, human, and unknown work remains deliberately visible."}
     ],
@@ -527,7 +527,7 @@
       {"id":"AG-07","label":"Change authorization","status":"NAMED DECISION","summary":"Intended-use change; new risk; pathway rationale; HF and security impact; approvers; release criteria; monitoring; rollback trigger.","boundary":"A bounded non-device operational change may need a smaller evidence set, but must still preserve authority, audit, and rollback semantics.","sources":["SRC-FDA-CHANGE","SRC-FDA-PCCP","SRC-AWS-RETIRE","SRC-AZURE-RETIRE"]}
     ],
     "migrationGates": [
-      {"id":"G0","label":"Seam readiness","status":"PARTIAL HISTORICAL EVIDENCE","summary":"Stable identity; routable interception or abstraction; owner and dependency map; known system of record.","sources":["SRC-FOWLER-STRANGLER","SRC-AWS-STRANGLER","SRC-FOWLER-ABSTRACTION"]},
+      {"id":"G0","label":"Boundary readiness","status":"PARTIAL HISTORICAL EVIDENCE","summary":"Stable identity; routable interception or abstraction; owner and dependency map; known system of record.","sources":["SRC-FOWLER-STRANGLER","SRC-AWS-STRANGLER","SRC-FOWLER-ABSTRACTION"]},
       {"id":"G1","label":"Data readiness","status":"UNKNOWN","summary":"Backfill scope; schema compatibility; lag; conflicts; reconciliation; idempotency.","sources":["SRC-AWS-OUTBOX","SRC-DEBEZIUM","SRC-PG-REPL"]},
       {"id":"G2","label":"Contract readiness","status":"UNKNOWN","summary":"Declared interface; current provider verification; failure behavior; version compatibility.","sources":["SRC-OPENAPI","SRC-PACT"]},
       {"id":"G3","label":"Runtime readiness","status":"UNKNOWN","summary":"Canary/control separation; user-centered indicators; adequate window; parity and error-budget verdict.","sources":["SRC-GOOGLE-CANARY","SRC-GOOGLE-SLO","SRC-ISTIO-MIRROR"]},
@@ -536,7 +536,7 @@
       {"id":"G6","label":"Retirement readiness","status":"NOT CLAIMED","summary":"No unresolved dependencies; controlled stop; archive retrieval; retention and owner approvals; temporary controls retired.","sources":["SRC-AWS-RETIRE","SRC-AZURE-RETIRE"]}
     ],
     "runtimeItems": [
-      {"id":"RT-ROUTER","label":"Interception router / abstraction","status":"Candidate control","summary":"A routable seam or branch-by-abstraction boundary separates candidate behavior without asserting that the domain is already separable.","boundary":"Proxy, ACL, bottleneck, and unclear-domain risks remain.","sources":["SRC-AWS-STRANGLER","SRC-FOWLER-ABSTRACTION"]},
+      {"id":"RT-ROUTER","label":"Interception router / abstraction","status":"Candidate control","summary":"A routable interception or branch-by-abstraction boundary separates candidate behavior without asserting that the domain is already separable.","boundary":"Proxy, ACL, bottleneck, and unclear-domain risks remain.","sources":["SRC-AWS-STRANGLER","SRC-FOWLER-ABSTRACTION"]},
       {"id":"RT-LEGACY","label":"Legacy execution + decision authority","status":"Protected baseline","summary":"Legacy serves the authoritative result until the named gate authorizes a bounded transfer.","boundary":"Physical deployment does not itself define authority.","sources":["SRC-A3"]},
       {"id":"RT-NEW","label":"Target implementation","status":"Candidate / selectively authoritative","summary":"In F2 it may receive non-authoritative mirrored traffic; in F3 only the evidenced operational capability is shown as authoritative.","boundary":"No broader clinical, scientific, data-store, or retirement authority is implied.","sources":["SRC-A3","SRC-ISTIO-MIRROR"]},
       {"id":"RT-COMPARE","label":"Contract + response comparator","status":"Evidence plane","summary":"Declared contract, current provider verification, and old/new result comparison are different evidence objects.","boundary":"Passing contracts does not replace data, security, production, or end-to-end evidence.","sources":["SRC-OPENAPI","SRC-PACT","SRC-GOOGLE-CANARY"]},
@@ -551,7 +551,7 @@
       {"id":"DR-03","question":"Do all seven regulated-assurance gates apply to the operational capability?","values":[25,45,10,20],"confidence":"Low—regulatory scope unresolved.","falsifier":"A documented applicability assessment places one or more gates outside the product or record boundary.","sources":["SRC-FDA-CDS","SRC-PART11","SRC-HIPAA","SRC-CLIA"]}
     ],
     "sources": [
-      {"id":"SRC-A3","title":"A3 · Appendix — Stacked Cube Model","url":"urn:source-key:SRC-A3","role":"Protected historical and semantic baseline.","boundary":"Internal source assertion; operational evidence still required for new claims."},
+      {"id":"SRC-A3","title":"Evidence-Guided Capability Transfer Model","url":"urn:source-key:SRC-A3","role":"Protected historical and semantic baseline.","boundary":"Internal source assertion; operational evidence still required for new claims."},
       {"id":"SRC-ATLAS","title":"Deep Research Atlas v1.2","url":"urn:source-key:SRC-ATLAS","role":"Coverage ledger, confounders, disconfirmation, probability referent, provenance, completion gate.","boundary":"Research protocol; domain evidence remains with the cited sources."},
       {"id":"SRC-QMSR","title":"FDA Quality Management System Regulation","url":"https://www.fda.gov/medical-devices/postmarket-requirements-devices/quality-management-system-regulation-qmsr","role":"Current quality-system context; effective 2 February 2026.","boundary":"Incorporated ISO text was not reproduced in the page."},
       {"id":"SRC-FDA-SW","title":"FDA Premarket Submissions for Device Software Functions","url":"https://www.fda.gov/media/153781/download","role":"Architecture, requirements, traceability, verification, versions, anomaly disposition.","boundary":"Product-specific documentation level unresolved."},
@@ -569,8 +569,8 @@
       {"id":"SRC-NIST-ZTA","title":"NIST SP 800-207 Zero Trust Architecture","url":"https://csrc.nist.gov/pubs/sp/800/207/final","role":"Per-request policy decisions and enforcement; least privilege.","boundary":"General architecture; product policy topology unresolved."},
       {"id":"SRC-RFC9700","title":"RFC 9700 OAuth 2.0 Security BCP","url":"https://www.rfc-editor.org/rfc/rfc9700.html","role":"Audience-restricted and sender-constrained token guidance.","boundary":"Does not establish the product’s identity protocol."},
       {"id":"SRC-FOWLER-STRANGLER","title":"Fowler — Original Strangler Fig Application","url":"https://martinfowler.com/bliki/OriginalStranglerFigApplication.html","role":"Gradual replacement and frequent release framing.","boundary":"Pattern description, not proof of product separability."},
-      {"id":"SRC-AWS-STRANGLER","title":"AWS Strangler Fig Pattern","url":"https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/strangler-fig.html","role":"Proxy and anti-corruption seam with risks and limitations.","boundary":"Implementation choice and domain boundary remain product-specific."},
-      {"id":"SRC-FOWLER-ABSTRACTION","title":"Fowler — Branch by Abstraction","url":"https://martinfowler.com/bliki/BranchByAbstraction.html","role":"Inner seam, coexisting implementations, feature-flagged switching.","boundary":"Requires a viable abstraction; not always available."},
+      {"id":"SRC-AWS-STRANGLER","title":"AWS Strangler Fig Pattern","url":"https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/strangler-fig.html","role":"Proxy and anti-corruption boundary with risks and limitations.","boundary":"Implementation choice and domain boundary remain product-specific."},
+      {"id":"SRC-FOWLER-ABSTRACTION","title":"Fowler — Branch by Abstraction","url":"https://martinfowler.com/bliki/BranchByAbstraction.html","role":"Inner boundary, coexisting implementations, feature-flagged switching.","boundary":"Requires a viable abstraction; not always available."},
       {"id":"SRC-LD-MIGRATION","title":"LaunchDarkly Multi-stage Migrations","url":"https://launchdarkly.com/docs/guides/flags/migrations","role":"Old-only, dual-write, shadow, live, ramp-down, complete; selectable profiles.","boundary":"Not all systems support coexisting implementations."},
       {"id":"SRC-AWS-OUTBOX","title":"AWS Transactional Outbox","url":"https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html","role":"Avoid uncoordinated dual writes; atomic state and event commit.","boundary":"Duplicate delivery still requires idempotent consumers."},
       {"id":"SRC-DEBEZIUM","title":"Debezium Outbox and CDC Features","url":"https://debezium.io/documentation/reference/stable/features.html","role":"Change capture, deletes, transaction metadata, engine limitations.","boundary":"Connector-specific constraints remain."},
@@ -692,7 +692,7 @@
         <rect class="zone" x="400" y="18" width="338" height="520" rx="14"></rect>
         <rect class="zone" x="760" y="18" width="382" height="520" rx="14"></rect>
         <text x="40" y="52" class="label">LEGACY AUTHORITY</text>
-        <text x="424" y="52" class="label">STRANGLER / CONTRACT</text>
+        <text x="424" y="52" class="label">TRANSFER BOUNDARY</text>
         <text x="784" y="52" class="label">NEW AUTHORITY</text>`;
       retained.forEach((item, idx) => {
         const state = item.states[i];
@@ -700,7 +700,7 @@
       });
       if (activeFrame !== "F3") out += cubeNode(candidate, "legacy", 40, 490, 310, 50);
       if (activeFrame === "F0") {
-        out += node("G0", 435, 218, 268, 100, "unknown", "No verified seam", "UNKNOWN remains explicit.", {titleOffset:34, maxChars:27});
+        out += node("G0", 435, 218, 268, 100, "unknown", "No verified boundary", "UNKNOWN remains explicit.", {titleOffset:34, maxChars:27});
         out += wrapText("No authority transfer is claimed.", 806, 250, 34, "small", 18, 2);
       }
       if (activeFrame === "F1") {
@@ -776,7 +776,7 @@
         ${node("RT-CONTROL", 260, 36, 620, 60, "conditional", "Cohort / promotion / rollback controls", "Temporary, scoped, reversible; retire after the migration.", {titleOffset:25, maxChars:70, subtitleBottom:12, subtitleLines:1})}
         <text x="28" y="151" class="label">REQUEST / RESPONSE PLANE</text>`;
       out += node("RT-CLIENT", 30, 190, 140, 90, "zone", "User / caller", "requests", {titleOffset:31, maxChars:15});
-      out += node("RT-ROUTER", 230, 175, 190, 120, f === "F0" ? "unknown" : "seam", "Interception seam", f === "F0" ? "not established" : "router / abstraction", {titleOffset:34, maxChars:20, subtitleBottom:20});
+      out += node("RT-ROUTER", 230, 175, 190, 120, f === "F0" ? "unknown" : "seam", "Interception boundary", f === "F0" ? "not established" : "router / abstraction", {titleOffset:34, maxChars:20, subtitleBottom:20});
       out += node("RT-LEGACY", 500, 145, 220, 110, f === "F3" ? "retained" : "legacy", "Legacy implementation", f === "F3" ? "fallback retained" : "authoritative", {titleOffset:34, maxChars:23, subtitleBottom:20});
       out += node("RT-NEW", 500, 295, 220, 110, f === "F0" ? "unknown" : (f === "F1" ? "seam" : (f === "F2" ? "shadowed" : "new")), "Target implementation", f === "F2" ? "mirrored response discarded" : (f === "F3" ? "bounded authority only" : "candidate"), {titleOffset:34, maxChars:23, subtitleBottom:20, subtitleLines:2});
       out += node("RT-COMPARE", 790, 205, 190, 120, "evidence", "Contract + response evidence", "declared · verified · compared", {titleOffset:34, maxChars:20, subtitleBottom:20});
@@ -908,7 +908,7 @@
 
     function itemFor(id) {
       const c = cap(id);
-      if (c) return {id:c.id,title:c.label,status:c.states[frameIndex()],summary:`${c.family}. ${c.evidence}.`,boundary:"Protected A3 baseline. Position encodes authority only; separability and broader readiness are not implied.",sources:["SRC-A3"]};
+      if (c) return {id:c.id,title:c.label,status:c.states[frameIndex()],summary:`${c.family}. ${c.evidence}.`,boundary:"Protected capability-transfer baseline. Position encodes authority only; separability and broader readiness are not implied.",sources:["SRC-A3"]};
       const gate = M.assuranceGates.find(x => x.id === id);
       if (gate) return {id:gate.id,title:gate.label,status:gate.status,summary:gate.summary,boundary:gate.boundary,sources:gate.sources};
       const mg = M.migrationGates.find(x => x.id === id);
@@ -950,8 +950,8 @@
       const prefix = `${lens().label}. ${lens().note}`;
       if (activeLens === "authority") return `${prefix} ${frame().label}: ${frame().note} The operational and assignment capability is ${cap("CAP-OP-ASSIGN").states[frameIndex()]}. Search, specimen, variant, quality-control, plugin, non-human, and regulatory work remains legacy, retained, or unknown. Human workflows remain a separate authority ribbon.`;
       if (activeLens === "assurance") return `${prefix} Seven gates cover intended-use and regulatory context; clinical evidence; software evidence; human factors; safety and cybersecurity; records and genomic-data custody; and named change authorization. Product-specific scope and gate outcomes remain unresolved.`;
-      if (activeLens === "runtime") return `${prefix} The visual separates the request router, legacy and target implementations, contract and response comparison, per-request authorization, legacy and target record authority, a possible data-transition and reconciliation surface, provenance, promotion, and rollback. In ${frame().label}, only the original A3 authority claim is treated as historical evidence; data movement is not asserted.`;
-      if (activeLens === "recovery") return `${prefix} Gates G0 through G6 cover seam, data, contract, runtime, security, authority transfer, and retirement readiness. G5 is historically asserted for one bounded candidate; detailed gate outcomes remain unknown and retirement is not claimed. Post-transfer states include monitoring, rollback holding, controlled stop, and retired-but-readable preservation.`;
+      if (activeLens === "runtime") return `${prefix} The visual separates the request router, legacy and target implementations, contract and response comparison, per-request authorization, legacy and target record authority, a possible data-transition and reconciliation surface, provenance, promotion, and rollback. In ${frame().label}, only the original authority claim is treated as historical evidence; data movement is not asserted.`;
+      if (activeLens === "recovery") return `${prefix} Gates G0 through G6 cover boundary, data, contract, runtime, security, authority transfer, and retirement readiness. G5 is historically asserted for one bounded candidate; detailed gate outcomes remain unknown and retirement is not claimed. Post-transfer states include monitoring, rollback holding, controlled stop, and retired-but-readable preservation.`;
       return `${prefix} Provenance runs from source entity to classified claim, candidate element, inclusion decision, and derived artifact. Three explanation distributions are low- or medium-confidence research estimates with explicit falsifiers; they are not probabilities of migration success or compliance.`;
     }
 
