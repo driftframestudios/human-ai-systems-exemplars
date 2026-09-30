@@ -36,7 +36,7 @@ Prospective principal-engineering work now lives in [Planning surfaces](../plann
 
 ## Local rendered-surface observations
 
-When a thread resolves a visible layout regression, include one compact public-safe result: repository-defined check or sanitized command shape, viewport-relevant outcome, and a controlled repository-relative `.visual-runs/` reference when useful. The root [Local visual checks](../README.md#local-visual-checks) affordance supports this with Chromium-rendered screenshots and focused checks for table columns, readable form controls, and Context Canvas rail labels.
+When a thread resolves a visible layout regression, include one compact public-safe result: repository-defined check or sanitized command shape, viewport-relevant outcome, and a controlled repository-relative `.visual-runs/` reference when useful. The root [Visual reading](../README.md#visual-reading) affordance supports this with Chromium-rendered screenshots and focused checks for table columns, readable form controls, and Context Canvas rail labels.
 
 The all-page Context Canvas reference serves a different, equally bounded purpose. One shared runner captures the initial visitor state of every top-level route at narrow, desktop, and wide dimensions before and after CSS modularization, then presents the ignored local images through a family index. The images support cycle-scoped way-finding and comparison. A named moved interaction or reproduced regression can invoke the smallest existing focused check; focus-state permutations remain outside the general pass.
 

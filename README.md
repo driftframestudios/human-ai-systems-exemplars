@@ -31,6 +31,16 @@ decision begins. Each exemplar combines a concrete reading or interaction
 surface with the nearest source, schema, evidence route, and collaboration
 record needed to continue it responsibly.
 
+## At a glance
+
+| Question | Current route |
+| --- | --- |
+| What is useful here? | Open one of the five concrete doors below; each connects a readable or runnable surface with its source and evidence path. |
+| What is current? | The checked-out branch and runnable source lead. [GitHub Issues](https://github.com/driftframestudios/human-ai-systems-exemplars/issues) carry active outcomes; [planning](planning/README.md) carries prospective terrain; [threadkeeping](threadkeeping/README.md) carries settled rationale and re-entry. |
+| What can I inspect quickly? | Serve the static source locally, then open a complete Context Canvas or collaboration route. The setup immediately below gives the exact command. |
+| How do I contribute or resume? | Begin with [`AGENTS.md`](AGENTS.md), the [repository collaboration cycle](.agents/runbooks/repository-collaboration-cycle.v0.1.md), and the active Issue or pull request. |
+| Where does authority sit? | Runnable source owns behavior; named manifests and schemas own machine contracts; focused observations own bounded evidence; people retain consequential acceptance and publication decisions. |
+
 This README has two layers. [Layer 1](#layer-1--enter-through-a-concrete-surface)
 is a scan-first orientation for choosing something useful to open. [Layer
 2](#layer-2--repository-operating-map) is the complete re-entry and operating
@@ -316,32 +326,15 @@ their trigger fits; current user intent, repository evidence, and granted tool
 authority continue to govern every use. Direct reasoning remains the smallest
 adequate route when no skill is needed.
 
-| Skill | Use it when… | It returns… |
-| --- | --- | --- |
-| [`repository-reentry`](.agents/skills/repository-reentry/SKILL.md) | Work resumes across source, Git, GitHub, planning, or threadkeeping | A reconciled current-truth map and one bounded next move |
-| [`repository-collaboration-cycle`](.agents/skills/repository-collaboration-cycle/SKILL.md) | A cold or resumed AI collaborator should complete a full authorized repository cycle after re-entry | One receiver-ready change, finding, or held route with proportionate evidence and exact re-entry |
-| [`uv-backed-python-execution`](.agents/skills/uv-backed-python-execution/SKILL.md) | A repository-authorized Python check needs a compatible interpreter, lock-aware dependencies, or an isolated `uv` environment | The named check, its runtime coordinates and evidence boundary, with the host Python installation preserved |
-| [`context-canvas-surface-reading`](.agents/skills/context-canvas-surface-reading/SKILL.md) | A Context Canvas page, iframe, or related route group enters assessment or change | A visitor-surface reading grounded in every material owner |
-| [`context-canvas-css-ownership`](.agents/skills/context-canvas-css-ownership/SKILL.md) | CSS cascade, selector migration, route bundles, or visual-contract mapping enters scope | Legible style ownership and a focused rendered comparison |
-| [`context-canvas-visual-verification`](.agents/skills/context-canvas-visual-verification/SKILL.md) | Layout, responsive behavior, interaction state, print, forced colors, or a visible regression needs review | Proportionate source-bound visual evidence with limits, risk, and a next receiver |
-| [`practitioner-probe`](.agents/skills/practitioner-probe/SKILL.md) | A plausible concern lacks a decision-changing mechanism or observation | A bounded technical question, probe, and interpretation |
-| [`supportive-change-writing`](.agents/skills/supportive-change-writing/SKILL.md) | Human-facing prose, plans, Issues, READMEs, or instructions change materially | Warm, negation-aware, evidence-calibrated language oriented to the desired state |
-| [`audit-anthropomorphic-cues`](.agents/skills/audit-anthropomorphic-cues/SKILL.md) | Person-like cues in an interface or work description may change reliance, delegation, responsibility, or recovery | A cue-bundle ledger and proportionate retain, qualify, separate, disclose, test, or revise decisions |
-| [`contextual-jargon-scan`](.agents/skills/contextual-jargon-scan/SKILL.md) | Public, visitor-facing, or cross-team prose may rely on context its reader does not share | A scoped occurrence map with targeted revisions, intentional retentions, and a receiver-owned verification signal |
-| [`evidence-grounded-research-spike`](.agents/skills/evidence-grounded-research-spike/SKILL.md) | Current expert evidence should change a repository decision | A bounded evidence map, transfer limits, and decision delta |
-| [`declarative-skill-authoring`](.agents/skills/declarative-skill-authoring/SKILL.md) | A reusable collaboration affordance has earned a portable contract | A declarative skill with explicit trigger, boundaries, rules, and sparse examples |
-| [`collaboration-accounting`](.agents/skills/collaboration-accounting/SKILL.md) | Work exposes a potentially reusable collaboration observation | A create, revise, observe, settle, consolidate, or retire disposition |
-| [`schema-contract-authoring`](.agents/skills/schema-contract-authoring/SKILL.md) | A schema family, context, example, retrieval route, or compatibility boundary changes | A bounded contract with identity, authority, dependency closure, and proportional use checks |
-| [`source-authority-mapping`](.agents/skills/source-authority-mapping/SKILL.md) | Mirrors, snapshots, workspaces, or delivery routes obscure ownership and lineage | A trace from semantic owner through source, projection, delivery, receiving use, and promotion |
-| [`issue-chain-stewardship`](.agents/skills/issue-chain-stewardship/SKILL.md) | Several Issues form a decision-bearing work route | A current front, transition receipt, next receiver, and release event without merging Issue contracts |
-| [`bounded-support-routing`](.agents/skills/bounded-support-routing/SKILL.md) | One finite observation, repair, implementation, or recovery contribution needs an explicit action boundary and return | A compact packet, observable handback, known-good point, and stopping event |
-| [`locator-boundary-stewardship`](.agents/skills/locator-boundary-stewardship/SKILL.md) | Public collaboration records cross gated or private locator boundaries | Locator-safe prose with stable semantic keys and resolver-held exact lineage |
-| [`stateful-artifact-behavior-contracts`](.agents/skills/stateful-artifact-behavior-contracts/SKILL.md) | Owned state crosses import, edit, render, export, machine-readable, or recovery boundaries | The smallest source-grounded executable behavior contract |
-| [`secret-boundary-inspection`](.agents/skills/secret-boundary-inspection/SKILL.md) | A repository, exact index, local history, or generated artifact approaches snapshot, publication, or delivery | Canary-proven scope evidence and a safe receipt or private finding route |
-| [`repository-attribution-stewardship`](.agents/skills/repository-attribution-stewardship/SKILL.md) | Copyright-holder records, citation metadata, contribution credit, public notices, or machine-readable attribution change | Distinct carrier roles, proportionate attribution, and an evidence-calibrated governance return |
-| [`collaboration-runbook-authoring`](.agents/skills/collaboration-runbook-authoring/SKILL.md) | A known multi-phase route must stay re-entrant across source owners, Issues, checks, recovery, and handbacks | A versioned public-possible or internal-only procedure that supplies sufficient orientation while existing Issues retain scope and acceptance |
+| Working need | Catalog route |
+| --- | --- |
+| Enter, orient, and complete a repository cycle | Re-entry, collaboration-cycle, orientation-stewardship, and Python execution contracts |
+| Read and verify a visitor surface | Context Canvas reading, CSS ownership, visual verification, anthropomorphic-cue, and jargon contracts |
+| Research, probe, write, or cultivate a method | Practitioner-probe, evidence-research, supportive-writing, skill-authoring, accounting, and runbook contracts |
+| Steward contracts, authority, and delivery boundaries | Schema, source, issue-chain, support, locator, stateful-artifact, secret, and attribution contracts |
 
-[The Context Canvas skill catalog](context-canvas-project-surface/context-canvas/collaboration-skills.html)
+[The repository skill catalog](.agents/skills/README.md) is the selector for
+every active portable contract and its result. [The Context Canvas skill catalog](context-canvas-project-surface/context-canvas/collaboration-skills.html)
 provides the corresponding visitor-facing reading surface. Collaboration
 accounts in [`threadkeeping/`](threadkeeping/collaboration-accounts/README.md)
 record why a skill formed, changed, continued under observation, or settled.
@@ -433,73 +426,31 @@ boundary.
 
 ### Approved public references form through semantic keys
 
-The complete public-possible Notion boundary is the Enterprise Human-AI
-Practitioner Registry root and its descendants. Authored Context Canvas HTML
-uses stable `PUBLIC_URL_REGISTRY_*` keys for those candidates and carries
-direct Notion page URLs to exactly zero pages. The shared footer script carries
-one exact `PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE` key for its approved public
-profile destination. Configuration supplies that destination during a public
-build; authored source presents a useful availability label beforehand. Other
-Notion pages remain with the authorized resolver.
-
-Iframe companions use manifest-owned `https://iframes.vik.guru/v1/core/.../`
-or `https://iframes.vik.guru/v1/canvas/.../` routes directly in `src`
-attributes. Each adjacent full-view `href` continues to open the corresponding
-repository-local base artifact, which the production assembler carries to its
-matching route on the primary site. The
-complete static inventory contains 28 carriers and 23 distinct hosted routes:
-nine Core-family occurrences use eight aliases, while 19 Canvas-family
-occurrences use 15 aliases. The `canvas` token describes a receiving delivery
-family; it does not recast the included Collaboration, Narrative Architecture,
-Visualization, or contextual Core sources as one semantic family. Every
-carrier uses its exact route-minimal sandbox and Permissions Policy profile.
-The pack index stays a non-embedded full-view navigation surface so sibling
-prototypes do not inherit one union capability boundary.
-
-The eighteen Site Reading routes enter the public-possible collection through
-their approved Registry destinations: fifteen use direct counterparts,
-Prompt-Side Conditions offers Field Watch and full-research depths, and two
-resolver-open readings use the shared orientation parent. The
-[Registry link handoff](planning/context-canvas/notion-registry-link-handoff.md)
-records the reader gain and closest matching child for each route.
-
-Every attribution-governed public HTML carrier uses one visitor-boundary rule:
-ordinary-language benchmark context, the exact MAPS marker, the exact
-BIG-bench marker, then the final attribution. Top-level Context Canvas pages
-read that definition from `visitor-boundary-contract.js`; self-contained
-sources and canonical generator templates carry the same ordered content and
-their local display treatment. When a canonical source or template changes,
-its maintained projections and iframe package digests are rebuilt together.
-The exact marker strings stay with the shared contract and focused tests rather
-than being repeated in package guidance.
-
-This gives each approved destination an affirmative configuration route. Copy
-[`.env.public.example`](.env.public.example) to ignored `.env.public`, supply
-only human-approved HTTPS destinations, and materialize a static source
-subtree:
+Authored Context Canvas source uses stable `PUBLIC_URL_REGISTRY_*` semantic
+keys for public-possible Registry destinations and carries no direct Notion
+page coordinate. The shared footer uses the separate
+`PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE` key. Human-reviewed HTTPS values enter
+through ignored `.env.public`; the source keeps a useful availability state
+before configuration.
 
 ```sh
 npm run build:public-references
 npm run test:public-reference-materializer
 ```
 
-The dependency-free
-[materializer](tools/materialize-public-references.mjs) discovers required keys
-from authored HTML and the one shared footer-script carrier, resolves Registry
-anchors, JSON-LD values, and the professional-profile link together, and writes
-the validated result beneath ignored `.public-reference-build/`. The builder
-reports key names without destination values. A
-configuration or build failure preserves the prior tool-owned generation; a
-final rename failure retains and names its recovery directory. The generic
-hosted-iframe twin validator remains covered for an explicitly late-bound
-future receiver; the current manifest-owned iframe routes use literal `src`
-values and remain inspectable in tracked HTML before publication.
+The [materializer](tools/materialize-public-references.mjs) owns substitution,
+carrier agreement, containment, and recoverable generation beneath ignored
+`.public-reference-build/`. Human review owns Registry ancestry, content
+standing, audience, signed-out reachability, and publication approval. The
+[Context Canvas orientation](context-canvas-project-surface/context-canvas/README.md#materialize-approved-public-references),
+[Registry handoff](planning/context-canvas/notion-registry-link-handoff.md), and
+[durable account](threadkeeping/context-canvas-public-reference-materialization.md)
+carry the full boundary and re-entry route.
 
-Materialization establishes source-to-destination substitution, carrier
-agreement, containment, and recoverable generation. Human review establishes
-Registry ancestry, content standing, audience, signed-out reachability, and
-publication approval. A delivery receiver owns complete adjacent-asset
-closure, configuration, upload, and its publication receipt.
+Iframe companions use manifest-owned `/v1/core/` and `/v1/canvas/` delivery
+routes while adjacent full-view links keep their repository-local source
+relationship. [`iframe-route-families/`](iframe-route-families/README.md) owns
+family membership, capabilities, packaging, and hosted comparison.
 
 ### Public routes keep their source and delivery roles distinct
 
@@ -512,46 +463,25 @@ closure, configuration, upload, and its publication receipt.
 | Full-view and embedded instruments | The primary file tree carries selected `/prototypes/.../` and `/collaboration/.../` routes. Each iframe keeps its manifest-owned cross-origin `src`; its adjacent full-view link opens the matching primary-site artifact. |
 | Schema identity and retrieval | Each JSON Schema keeps its declared `$id`. `https://schemas.radiantnull.com/` is the **observed live** GitHub Pages mirror; `https://schemas.vik.guru/` is the **intended** receiver and becomes observed live through its own accepted signed-out parity evidence. |
 
-Build and inspect the complete cPanel-shaped result locally:
+The [cPanel deployment route](deployment/cpanel/README.md) owns assembly,
+tracked carrier staging, transfer archives, installation, rollback, and live
+observation. The compact local proof is:
 
 ```sh
 npm run test:prod-deployment
 npm run check:prod-projection
-npm run build:prod-projection
 ```
 
-After an exact `prod` source revision is accepted, form and verify its tracked
-deployment bundle:
-
-```sh
-npm run stage:prod-carrier
-# commit only deployment/cpanel/carrier/**
-npm run check:prod-carrier
-npm run build:prod-carrier-transfer -- --tag production-v0.2.0
-npm run verify:prod-carrier-transfer -- --tag production-v0.2.0 --receipt .cpanel-transfer/production-v0.2.0/hase-production-v0.2.0.receipt.json
-```
-
-The test and check commands establish selected-file, transformation, package,
-installer, and recovery behavior at the current source. The build writes the
-ignored local preview. Staging writes the tracked deployment bundle only after
-a `prod` source revision is accepted, and the bundle check binds that committed
-release to its first-parent source and exact files. The transfer commands read
-the annotated tag, form one deterministic ZIP and machine-readable receipt,
-and recheck every archived byte without reconstructing private inputs. These
-commands prepare or inspect repository artifacts; the named deployment step
-still selects the cPanel destinations and establishes live behavior.
-
-[The Context Canvas orientation](context-canvas-project-surface/context-canvas/README.md#materialize-approved-public-references)
-and [durable materialization account](threadkeeping/context-canvas-public-reference-materialization.md)
-hold the full boundary and re-entry conditions.
+These commands establish selected-file, transformation, package, installer,
+and recovery behavior at the checked source. An accepted `prod` coordinate and
+the named deployment step still govern carrier formation and live behavior.
 
 ### Secret-material inspection binds a clean result to its scope
 
-The repository's selected detector is Betterleaks 1.8.1. A
-repository-owned installer verifies the supported release archive and
-executable against tracked SHA-256 values. Every scan creates a fresh,
-non-issued provider-shaped canary and requires its expected, redacted finding
-before interpreting the requested scope.
+The repository pins Betterleaks 1.8.1 by checksum and proves each requested
+scan with a fresh, non-issued canary before interpreting the selected scope.
+The aggregate route covers the working tree, exact proposed index, locally
+available ref history, and named artifacts without persisting raw findings.
 
 ```sh
 npm run security:secrets:install
@@ -559,117 +489,31 @@ npm run test:secret-material
 npm run security:secrets
 ```
 
-The complete command observes these distinct scopes:
-
-| Scope | What it reads |
-| --- | --- |
-| Generated canary | Detector, rule, parser, finding exit, masking, and output sanitizer operating together |
-| Working tree | Tracked, untracked, and ignored repository material—including `collaboration/`—apart from Git internals, verified `.tools/`, and installed `node_modules/` |
-| Exact index | Every stage-zero blob in the proposed commit when the index differs from `HEAD` |
-| Local-ref history | Diff-visible full-history content across locally available refs in a complete clone, including merge-resolution diffs |
-| Named artifact | One contained regular file or directory, including the generated public-reference subtree |
-
-Focused routes remain available:
-
-```sh
-npm run security:secrets:canary
-npm run security:secrets:tree
-npm run security:secrets:staged
-npm run security:secrets:history
-npm run security:secrets:artifact -- path/inside/repository
-npm run security:secrets:public-references
-```
-
-Raw scanner JSON and diagnostics remain sensitive in-memory input. The wrapper
-emits only an allowlisted rule identifier, finding ordinal, numeric line, and
-strictly validated abbreviated commit. [`.betterleaks.toml`](.betterleaks.toml)
-is the one reviewed exception surface; each exception names its exact shape,
-rationale, and focused test.
-
-A clean receipt establishes that the printed engine version and configuration
-hash passed the generated canary proof and the named material scope returned
-zero unresolved matches. Its coverage statement accompanies the result:
-locally unavailable refs, GitHub-native discussion, dangling objects, some
-historical binary bytes, credential liveness, audience fit, and publication
-approval each require their own observation.
-
-A finding pauses the affected commit, snapshot, or delivery handoff and stays
-inside private triage. Plausibly live credentials receive provider revocation
-or rotation and access-log review first; source cleanup, reachable-copy mapping,
-coordinated history repair, and changed-scope reruns follow. Candidate values
-stay out of Issues, pull requests, retained reports, and command transcripts.
-
-[The durable secret-material account](threadkeeping/repository-secret-material-boundary.md)
-holds the complete mechanism, option assessment, incident order, and successor
-handoff. The
-[`secret-boundary-inspection` skill](.agents/skills/secret-boundary-inspection/SKILL.md)
-carries the same bounded observation into a receiving repository.
+Use `security:secrets:staged` for a proposed commit and
+`security:secrets:artifact -- path/inside/repository` for a named delivery.
+Embedded metadata, including image XMP fields, remains part of artifact review
+even when it does not resemble a credential. [The durable account](threadkeeping/repository-secret-material-boundary.md),
+the [`secret-boundary-inspection` skill](.agents/skills/secret-boundary-inspection/SKILL.md),
+and [`tests/README.md`](tests/README.md#secret-material-inspection) carry the full
+scope, coverage limits, private-finding route, and recovery order.
 
 ### Evidence follows the behavior being changed
 
 Choose the smallest existing observation that answers the question. Direct
 source reading often settles an identity question; a state change earns a
 focused behavior contract; a visible change usually earns one targeted-route
-browser comparison.
-
-#### Schema, build, and direct behavior
-
-```sh
-npm run check:schemas
-npm run test:prototype-units
-npm run test:public-reference-materializer
-npm run test:secret-material
-npm run check:strategy-canvas-consumer-bundles
-```
-
-Rebuild the three declared Strategy Canvas receiving archives only when their
-source changes:
-
-```sh
-npm run build:strategy-canvas-consumer-bundles
-```
-
-#### Rendered and exchange behavior
-
-```sh
-npm run test:core-browser
-npm run test:canvas-iframe-routes
-npm run test:iframe-browser
-npm run test:strategy-canvas
-npm run test:narrative-browser
-npm run test:prototype-exchanges
-npm run test:open-lesson-field
-```
-
-The Core aggregate can be narrowed to decision canvases, planning instruments,
-or reference instruments:
-
-```sh
-npm run test:core-decision-canvases
-npm run test:core-planning-instruments
-npm run test:core-reference-instruments
-```
+browser comparison. [`tests/README.md`](tests/README.md) is the command and
+coverage catalog; `npm run test:prototype-units` is the fastest broad source
+baseline, while the named browser, exchange, schema, materializer, deployment,
+and research routes stay with their owning surfaces.
 
 #### Visual reading
 
-Use the generic checker for one materially affected surface:
+Use the generic checker for one materially affected surface, then add only the
+viewport or interaction options needed by the question:
 
 ```sh
 npm run visual:check -- path/to/page.html --selector ".main-surface"
-```
-
-Add `--wide`, `--desktop-only`, `--readable-control-selector`, or
-`--rail-label-check` when the question needs that observation. Named checks
-cover recurring surfaces:
-
-```sh
-npm run visual:conditioning-field
-npm run visual:initiative-costing
-npm run visual:rail-labels
-npm run visual:open-lesson-field
-npm run visual:prompt-side-practice
-npm run visual:strategy-canvas-canonical
-npm run visual:strategy-canvas-context
 ```
 
 An all-page Context Canvas reference pass captures initial visitor states at
@@ -679,26 +523,12 @@ narrow, desktop, and wide dimensions:
 npm run visual:context-canvas-reference -- --phase before
 ```
 
-Every visual run writes screenshots, measurements, and browser errors beneath
-ignored `.visual-runs/`. These local artifacts can contain URLs, paths, console
-text, or browser diagnostics. The durable public return names the repository
-check, public source revision when needed, normalized result, controlled
-repository-relative artifact reference when useful, and the page change. It
-does not copy generated images or raw diagnostic payloads into permanent
-repository content.
-
-#### Research and bounded delivery experiments
-
-```sh
-npm run check:research-projection -- --help
-npm run build:context-canvas-field-pilot
-npm run check:context-canvas-field-pilot
-npm run dry-run:context-canvas-field-pilot
-```
-
-The research-projection tool compares locator-safe source baselines. The
-Cloudflare Static Assets pilot builds and dry-runs a bounded delivery receiver;
-these commands stop at the local dry-run boundary.
+Visual runs rest beneath ignored `.visual-runs/`; durable public returns keep
+the normalized result and coverage boundary while raw screenshots, browser
+diagnostics, URLs, and local paths remain cycle-scoped. The
+[`context-canvas-visual-verification` skill](.agents/skills/context-canvas-visual-verification/SKILL.md)
+selects a proportionate initial-state, interaction, alternate-media, viewport,
+or cross-engine observation.
 
 ### Branches adapt collaboration to a receiving job
 
@@ -732,27 +562,14 @@ recorded cue identifies the old revision, new revision, and receiving use.
 
 [Automation posture](.github/AUTOMATION.md), [Actions
 policy](.github/ACTIONS-POLICY.md), and [environment
-routes](.github/ENVIRONMENTS.md) are the settings-adjacent authority.
-
-| Workflow | Current receiving use |
-| --- | --- |
-| `schema-pages.yml` | Manual exact-source rebuild and byte comparison with a reviewed `docs` coordinate; deployment is a separate dispatch selection |
-| `res-public-boundary-intake.yml` | Advisory aggregate public-boundary receipt for eligible pull requests into `main` while its repository budget is active |
-| `schema-receiver-routes.yml` | Advisory schema identity, receiver-route, and mapped-build receipt for matching `main` changes |
-| `schema-delivery.yml` | Automatic schema, Static Assets, Wrangler, and secret-material contract for `release` and `prod`, followed by separately activated environment deployment |
-| `prototype-unit-tests.yml` | Explicit Core/iframe/Narrative dispatch and optional matching pull-request receiver controlled by `PROTOTYPE_UNIT_TESTS_AUTOMATIC` |
-| `lims-eln-enterprise-reference.yml` | Human-confirmed manual enterprise-reference proof |
-| `lims-eln-functional-nucleus.yml` | Human-confirmed manual selected-member or integrated nucleus proof |
-
-GitHub-owned actions are pinned to full commit SHAs. Third-party Marketplace
-actions remain outside the selected-actions policy. The paid-overage boundary
-is $0. `main` retains its bounded evidence readers; `release` and `prod` each
-carry a 300-minute allocation for the connected schema contract. Their upload
-authority remains independently selected through the deployment receiver list
-and branch-restricted environments. Other long-lived receivers and `res/*`
-rest until a named evidence question and approved budget activate them. Local
+routes](.github/ENVIRONMENTS.md) are the settings-adjacent authority. `main`
+receives the bounded public-boundary and schema-route evidence readers;
+`release` and `prod` receive the connected schema delivery contract. Prototype
+and LIMS/ELN proofs retain explicit dispatch or variable gates. GitHub-owned
+actions stay pinned to full commit SHAs, the paid-overage boundary remains $0,
+and deployment authority stays separate from successful validation. Local
 commands remain the immediate route for application, visual, materializer, and
-other secret-boundary work.
+secret-boundary work.
 
 ### Generated material has an explicit resting place
 

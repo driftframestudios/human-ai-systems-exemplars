@@ -1,9 +1,33 @@
-# Prototype unit tests
+# Repository behavior checks
 
 This directory exercises behavior owned by the Core Architecture and Narrative
 Architecture prototype families. The source artifact, its adjacent schema or
 manifest, and its nearest README remain the meaning authority; these tests make
 selected expectations executable.
+
+## Choose the smallest fitting observation
+
+Begin with the source owner's focused command. The sections below separate
+build boundaries, deployment assembly, source contracts, and rendered browser
+behavior so one passing result keeps a clear evidence scope.
+
+The documentation route contract checks the repository's current Markdown
+forms: inline and used reference links in ordinary, quoted, and list prose;
+ATX headings and explicit HTML identifiers; and fenced or inline code kept at
+rest. It rejects repository and symlink escapes, checks local targets and
+fragments, follows directory-to-README routes, and requires exact live-link
+membership for every active skill in the skill catalog:
+
+```sh
+npm run check:readme-routes
+```
+
+It establishes navigability for the checked-in README graph. It leaves prose
+quality, external URLs, release standing, and human interpretation to their
+own sources and reviewers. A materially new Markdown form enters with its own
+focused fixture or a maintained parser boundary before the contract claims it.
+
+## Public-reference materialization
 
 Public-reference materialization has a separate dependency-free contract
 because it protects a build boundary rather than Core or Narrative prototype
@@ -19,6 +43,8 @@ source/output separation, retained-generation recovery, and the current
 Context Canvas source without retaining or reporting configured destinations.
 The repository case discovers its keys and occurrences from source; migration
 counts remain a historical observation rather than a release threshold.
+
+## Public iframe route packaging
 
 Public iframe route packaging has a separate dependency-free boundary:
 
@@ -49,6 +75,8 @@ telemetry, and 320-pixel containment observations. `test:iframe-browser` runs
 both rendered delivery contracts. Live response headers, cache behavior, and
 deployed-parent behavior remain delivery activation checks.
 
+## Production assembly and cPanel carrier
+
 Production assembly and the cPanel carrier have their own repository-level
 contract:
 
@@ -71,6 +99,8 @@ files to match the accepted first-parent source. Host selection, live
 installation, and public-response observation begin in their named deployment
 steps.
 
+## Visitor attribution
+
 The attribution suite applies one visitor-boundary rule to every governed
 HTML carrier. Top-level Context Canvas pages use the shared contract and shell;
 self-contained prototypes and canonical generator templates carry the same
@@ -78,6 +108,8 @@ ordered marker content with local narrow, print, and forced-color treatment.
 When an owning source or template changes, its maintained projections and
 iframe package digests are rebuilt together. The exact marker strings remain
 centralized in `visitor-boundary-contract.js` and its focused tests.
+
+## Secret-material inspection
 
 Secret-material inspection has its own focused behavior contract:
 
@@ -94,6 +126,8 @@ local Betterleaks binary present, integration cases also prove skip-worktree
 coverage, canary-bearing filenames and commit metadata, and merge-resolution
 history. These are mechanism observations rather than a detector score or a
 universal secret-absence claim.
+
+## Prototype unit baseline
 
 Run the complete unit baseline from the repository root:
 
@@ -114,6 +148,8 @@ identity. The Narrative suite checks the dependency-free Strategy Canvas
 adapter and compiles the governed Narrative schemas with the repository's
 installed Ajv 2020-12 implementation. Material valid and invalid cases stay
 close to the contracts they exercise.
+
+## Rendered and exchange behavior
 
 Standard `node:test` output is the complete local observation. Focused browser
 contracts remain available for behavior that requires a rendered page:
@@ -164,3 +200,11 @@ into the Composer. Producer and receiver schemas remain separate assertions;
 the adapter preserves source identity and payload fingerprint as lineage while
 the Composer retains its own identity. One claimed-v2 mismatch confirms that
 the accepted composition and its first editable control remain available.
+
+## Hand back the result
+
+Name the exact repository command, normalized result, behavior it establishes,
+coverage boundary, and next receiver. Raw logs, browser state, credentials,
+private routes, and user-specific paths remain with their existing local or
+access-controlled owner. Return to the [repository root](../README.md) for the
+standing evidence and automation posture.

@@ -6,6 +6,8 @@ artifact keeps authority for its state. A capsule is a projection—a derived
 view rather than the source of truth—that names its source, state identity,
 evidence boundary, requested return, and recovery route.
 
+## Start with the contract
+
 Start with the [Prompt Capsule 0.1.0 contract](0.1.0/prompt-capsule-contract.md).
 Its [Strategy Canvas example](0.1.0/examples/strategy-canvas.md) is generated
 from the canonical default state and checked by that artifact’s builder and
@@ -15,6 +17,8 @@ The [classified inventory](prompt-capsule-inventory.v0.1.0.md) distinguishes
 canonical sources, maintained projections, historical versions, generated
 receivers, and independently governed capsule families. It is an ownership map,
 not a count of matching words.
+
+## Current adoption
 
 The current adoptions span the system-root Core Architecture Family Index
 v0.1.6 and seven Core source families: PODA v0.1.5, Alignment Worksheet v0.1.4,
@@ -40,6 +44,8 @@ Each source owner keeps its own state and schema version while
 projecting complete plain and skill-assisted Markdown views with one
 represented-state fingerprint. Each source points to a small set of related
 collaboration loops whose fit conditions remain visible.
+
+## What each source projects
 
 Open Lesson Field derives both GitHub Flavored Markdown views from its accepted
 v2 lesson state. Copy and download return the selected view exactly, Related
@@ -90,3 +96,11 @@ parent reading’s complete static mapping. It sits beside the interactive Atlas
 as an adjacent instrument, and the capsule population remains 28. Other
 capsule-bearing artifacts keep their existing contracts and can join a later
 population when their source owner accepts a material use and fitting tests.
+
+## Continue
+
+Use the [inventory](prompt-capsule-inventory.v0.1.0.md) to resolve ownership,
+the [0.1.0 contract](0.1.0/prompt-capsule-contract.md) to implement a compatible
+projection, and the [test map](../tests/README.md) to choose a focused behavior
+check. Return to the [repository root](../README.md) for the wider source and
+evidence model.

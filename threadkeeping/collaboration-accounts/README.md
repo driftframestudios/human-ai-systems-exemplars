@@ -20,6 +20,7 @@ These notes remain provisional field evidence. Repeated use can earn a skill rev
 - [Repository collaboration cycle formation](2026-08-31-repository-collaboration-cycle.md) — the accepted #146 → #152 merge sequence, wished-for cold-session docket, one-runbook capacity architecture, locked-environment route, `create_now` full-cycle skill, and fresh-context exercise event.
 - [Contextual jargon scan formation](2026-09-01-contextual-jargon-scan.md) — two materially different corpora, a bounded FMI/genomic visitor-surface exercise, and the `create_now` route for function-classified ordinary-language revision.
 - [Anthropomorphic cue audit — first repository use](2026-09-29-anthropomorphic-cue-audit.md) — an exercised Practitioner Registry skill family, one Context Canvas and iframe language migration, and the `create_now` route for cue-bundle diagnosis distinct from prose translation and causal evaluation.
+- [Repository orientation stewardship formation](2026-09-30-repository-orientation-stewardship.md) — a seven-repository README-graph audit, the distinct first-receipt/repeat-use/re-entry job, the `create_now` route, and the first human-readable skill catalog.
 
 ## Return condition
 
