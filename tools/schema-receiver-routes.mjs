@@ -1,5 +1,10 @@
 export const schemaReceiverRoutes = Object.freeze([
   {
+    source: "collaboration/investment-analysis/state.schema.json",
+    id: "https://schemas.vik.guru/investment-analysis/0.2.0/state.schema.json",
+    receiverPath: "investment-analysis/0.2.0/state.schema.json"
+  },
+  {
     source: "schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
     id: "https://schemas.vik.guru/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
     receiverPath: "prototype-exemplars/1.0.0/prototype-exemplars.schema.json"

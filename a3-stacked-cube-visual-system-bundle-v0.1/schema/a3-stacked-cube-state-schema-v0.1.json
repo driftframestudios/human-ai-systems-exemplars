@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://driftframe.studio/schemas/a3-stacked-cube-state-v0.1.json",
-  "title": "Evidence-Guided Capability Transfer Model — Canonical State",
-  "description": "Validation contract for the v0.1 authority, evidence, recovery, and presentation state that drives the Evidence-Guided Capability Transfer Model.",
+  "title": "A3 Stacked Cube Canonical State Model",
+  "description": "Validation contract for the v0.1 authority, evidence, recovery, and presentation state that drives the A3 visual system.",
   "type": "object",
   "additionalProperties": false,
   "required": [

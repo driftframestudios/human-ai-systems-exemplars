@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.vik.guru/a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json",
-  "title": "Evidence-Guided Capability Transfer Atlas — Visualization View Model",
+  "title": "A3 expanded visualization view model",
   "type": "object",
   "required": [
     "version",
