@@ -5,7 +5,7 @@
   "name": "context-canvas-visual-verification",
   "description": "Selects proportionate visual and browser evidence for Context Canvas visitor-surface changes. Applies when layout, CSS, responsive behavior, interaction state, print, forced colors, or a visible regression needs review.",
   "semanticAuthorityRef": "../source/.agents/skills/context-canvas-visual-verification/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/5",
+  "sourceRef": "../catalog.json#/skills/6",
   "contract": {
     "what": "A source-bound visual and browser observation that answers one Context Canvas visitor-surface question.",
     "when": [

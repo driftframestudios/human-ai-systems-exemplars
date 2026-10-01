@@ -5,7 +5,7 @@
   "name": "context-canvas-surface-reading",
   "description": "Reads a Context Canvas page or route family as a visitor surface and primary design input. Applies before assessment, planning, or material changes to a Canvas page, embedded instrument, or family relationship.",
   "semanticAuthorityRef": "../source/.agents/skills/context-canvas-surface-reading/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/4",
+  "sourceRef": "../catalog.json#/skills/5",
   "contract": {
     "what": "A source-grounded model of one page or route family.",
     "when": [

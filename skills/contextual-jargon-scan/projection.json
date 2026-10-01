@@ -5,7 +5,7 @@
   "name": "contextual-jargon-scan",
   "description": "Classifies potentially specialist or inside wording within a bounded corpus and revises replaceable shorthand into ordinary language. Applies when public, visitor-facing, or cross-team prose may rely on context its reader does not share, including an in-stride review of material already receiving substantive change.",
   "semanticAuthorityRef": "../source/.agents/skills/contextual-jargon-scan/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/6",
+  "sourceRef": "../catalog.json#/skills/7",
   "contract": {
     "what": "A context-aware language review that distinguishes useful precision from shorthand a reader must decode.",
     "when": [

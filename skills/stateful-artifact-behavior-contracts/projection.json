@@ -5,7 +5,7 @@
   "name": "stateful-artifact-behavior-contracts",
   "description": "Designs focused executable behavior contracts for stateful artifacts and prototypes. Applies when owned state crosses import, edit, rendered, export, machine-readable, or recovery boundaries and a consequential regression needs the smallest source-grounded observation.",
   "semanticAuthorityRef": "../source/.agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/17",
+  "sourceRef": "../catalog.json#/skills/19",
   "contract": {
     "what": "A source-grounded method for selecting and exercising the smallest behavior contract that protects a stateful artifact through its consequential exchange route.",
     "when": [

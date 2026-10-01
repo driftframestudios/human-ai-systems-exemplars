@@ -5,7 +5,7 @@
   "name": "locator-boundary-stewardship",
   "description": "Produces locator-safe public collaboration records while exact gated lineage remains recoverable through stable semantic keys and an authorized resolver. Applies when Issues, pull requests, Threadkeeping, handoffs, or public-history preparation cross publication boundaries.",
   "semanticAuthorityRef": "../source/.agents/skills/locator-boundary-stewardship/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/10",
+  "sourceRef": "../catalog.json#/skills/12",
   "contract": {
     "what": "A publication-boundary projection that keeps collaboration meaning complete in a public record while exact gated coordinates remain recoverable through an authorized resolver.",
     "when": [

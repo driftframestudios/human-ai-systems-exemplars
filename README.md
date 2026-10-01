@@ -11,8 +11,8 @@ The [static discovery page](index.html) presents the same first-contact route wh
 | Repository collection 1.0.0 | Repository entry points, related families, source and delivery roles, and lived use | [Schema](prototype-exemplars/1.0.0/prototype-exemplars.schema.json) · [Example](prototype-exemplars/1.0.0/prototype-exemplars.example.json) |
 | Context Canvas 1.0.0 | Collections, visitor surfaces, prototypes, reference artifacts, and intended experience | [Orientation](context-canvas/1.0.0/README.md) · [Schema](context-canvas/1.0.0/context-canvas.schema.json) · [JSON-LD context](context-canvas/1.0.0/context-canvas.context.jsonld) · examples under [`examples/`](context-canvas/1.0.0/examples/) |
 | Collaboration Skills 0.1.0 | Portable collaboration instructions and decision-changing observations about their use | [Orientation](collaboration-skills/0.1.0/README.md) · [Skill schema](collaboration-skills/0.1.0/collaboration-skill.schema.json) · [Collaboration-account schema](collaboration-skills/0.1.0/collaboration-account.schema.json) · examples under [`examples/`](collaboration-skills/0.1.0/examples/) |
-| A3 Expanded 0.2 | Change records, rendered views, source registration, and coverage for the expanded atlas | [Change record](a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json) · [View model](a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json) · [Source registry](a3-stacked-cube-atlas-expanded/0.2/source-registry.schema.json) · [Coverage record](a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json) |
-| A3 state 0.1 | Saved state for an A3 stacked-cube decision instrument | [State schema](schemas/a3-stacked-cube-state-v0.1.json) |
+| Evidence-Guided Capability Transfer Atlas 0.2 | Change records, rendered views, source registration, and coverage for the expanded atlas | [Change record](a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json) · [View model](a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json) · [Source registry](a3-stacked-cube-atlas-expanded/0.2/source-registry.schema.json) · [Coverage record](a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json) |
+| Capability Transfer Model state 0.1 | Saved state for the Evidence-Guided Capability Transfer Model | [State schema](schemas/a3-stacked-cube-state-v0.1.json) |
 | Visualization Fidelity Atlas 0.1 | Visual treatments and the evidence used to compare or select them | [Atlas schema](visualization/visualization-fidelity-atlas.schema.v0.1.json) |
 | Strategy Canvas 0.2 | Factors, plotted offerings, weighting, comparison state, and exchange behavior | [Strategy Canvas schema](core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json) |
 | Local prototype manifest | Files and relationships needed to open a self-contained prototype locally | [Manifest schema](context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json) |
@@ -101,3 +101,54 @@ Extension keys use a scheme-qualified namespace so ownership remains visible:
 ```
 
 The local check establishes the namespace-key shape. A receiving semantic context can define stronger meaning for its own namespace. Repeated use can support a later core version, while family-specific material can remain namespaced when that keeps its owner easy to find.
+
+## Site releases and retrieval
+
+The GitHub Pages site publishes reviewed source as a versioned site release.
+Its download links and page metadata use `schemas.radiantnull.com`; schema
+identifiers retain their established values. The generated `schema-catalog.json`
+names each identity, host-local retrieval URL, source path, revision, dependency
+identities, and digest. `release.json` identifies the site release and source.
+Skill catalog `schemaRef` remains the canonical identity; `schemaRetrievalUrl`
+provides this site's download. The source selection includes Investment
+Analysis 0.2.0: [orientation](investment-analysis/0.2.0/README.md),
+[schema](investment-analysis/0.2.0/state.schema.json), and
+[example](investment-analysis/0.2.0/example.json).
+
+### Release and recovery contract
+
+1. Accept the source PR on main, including source-owned public material checks.
+2. Build with `PAGES_BASE_URL=https://schemas.radiantnull.com`,
+   `PAGES_SOURCE_REVISION=<accepted full SHA>`, and `PAGES_RELEASE_TAG=pages-v0.1.0`
+   (or the next unused site version). Run the schema, Pages, and focused browser checks.
+3. Review the complete generated artifact in a PR targeting docs. Compare exact
+   file membership and bytes with the source build using the receiver verifier.
+4. Create an annotated `pages-vMAJOR.MINOR.PATCH` tag on the accepted docs commit.
+   Its annotation includes exact `Source-Revision: <SHA>` and
+   `Closure-SHA256: <digest>` lines from the receiver comparison. Preserve tags as
+   permanent release coordinates; a changed artifact receives a new tag.
+5. Dispatch the main Pages workflow with the source SHA, projection SHA, and
+   release tag. The default observation leaves activation at rest. Activate the
+   same reviewed pair through the explicit deployment input after acceptance.
+6. Observe public release metadata, selected schemas, skill sources, media types,
+   and missing routes. Publish release notes after deployment succeeds.
+
+Site versions describe catalog, presentation, and delivery changes. Schema
+versions describe individual contracts. New capabilities advance the site minor
+version; compatible corrections advance its patch version; changed site-level
+consumer contracts earn a major version. The first dedicated site tag is
+`pages-v0.1.0`; earlier deployments retain their source/docs receipts.
+
+The published-byte lock lives in `tools/schema-publication-lock.json`. Existing
+entries preserve exact-version bytes, including annotations. New identities and
+paths receive reviewed additions. Updated visitor display names belong in the
+catalog. Recovery keeps every promised schema route; after adding contracts,
+prefer a forward repair over an older artifact that omits those routes.
+
+The author-host adapter uses the same selected contract payload. Its domain
+activation and observed cache/CORS behavior remain a separate release. Selected
+reviewed skill source copies are deliberate public artifacts; the complete
+operational directories retain their repository-only role. Both builders bind
+publication provenance to committed selected inputs. The workflow-owned verifier
+checks release metadata and the annotated tag independently of the selected
+historical source, so an earlier builder retains the current acceptance boundary.

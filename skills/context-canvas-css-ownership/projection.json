@@ -5,7 +5,7 @@
   "name": "context-canvas-css-ownership",
   "description": "Establishes legible Context Canvas CSS ownership. Applies when expanded.css, cascade diagnosis, selector or token migration, route bundles, first-paint work, or Visual Fidelity Contract mapping enters scope.",
   "semanticAuthorityRef": "../source/.agents/skills/context-canvas-css-ownership/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/3",
+  "sourceRef": "../catalog.json#/skills/4",
   "contract": {
     "what": "A consumer-grounded move from broad CSS terrain into legible core, component, contract, route, or legacy ownership.",
     "when": [

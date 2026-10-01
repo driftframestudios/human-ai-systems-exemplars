@@ -5,7 +5,7 @@
   "name": "uv-backed-python-execution",
   "description": "Resolves and runs repository-declared Python checks through uv while preserving the host's base Python installation. Applies when a required Python version, existing uv lock, isolated dependency environment, or unwritable default uv cache must be reconciled before validation.",
   "semanticAuthorityRef": "../source/.agents/skills/uv-backed-python-execution/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/18",
+  "sourceRef": "../catalog.json#/skills/20",
   "contract": {
     "what": "A repository-directed way to select a compatible Python interpreter through `uv`, prepare dependencies according to the repository's lockfile, run one named check, and report the environment coordinates that affect the result.",
     "when": [

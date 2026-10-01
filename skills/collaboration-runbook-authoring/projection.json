@@ -5,7 +5,7 @@
   "name": "collaboration-runbook-authoring",
   "description": "Converts a settled, repeatable multi-phase collaboration route into a versioned AI-legible runbook with explicit entry, authority, checks, recovery, stop, and handback. Applies when a known procedure spans several source owners, Issues, or bounded support returns and the runbook plus its linked current owners should provide sufficient re-entry orientation.",
   "semanticAuthorityRef": "../source/.agents/skills/collaboration-runbook-authoring/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/2",
+  "sourceRef": "../catalog.json#/skills/3",
   "contract": {
     "what": "A compact, versioned procedure for carrying granted work through a known collaboration route.",
     "when": [

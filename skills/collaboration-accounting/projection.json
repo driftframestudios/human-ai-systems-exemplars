@@ -5,7 +5,7 @@
   "name": "collaboration-accounting",
   "description": "Accounts for decision-changing collaboration observations and routes them into immediate skill creation, existing-skill revision, a named candidate, continued observation, settlement, or retirement. Applies when materially meaningful work exposes a reusable collaboration affordance, an upcoming skill receives new evidence, or skill recursion needs a release decision.",
   "semanticAuthorityRef": "../source/.agents/skills/collaboration-accounting/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/1",
+  "sourceRef": "../catalog.json#/skills/2",
   "contract": {
     "what": "A light stewardship pass that turns working observations into one proportionate skill-lifecycle route.",
     "when": [
