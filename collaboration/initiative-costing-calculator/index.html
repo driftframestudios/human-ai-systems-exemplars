@@ -26,6 +26,7 @@
     button:focus-visible,input:focus-visible,select:focus-visible{outline:4px solid var(--cobalt);outline-offset:3px}
     .skip{position:absolute;left:-999rem;top:.5rem}.skip:focus{left:.75rem;z-index:20;background:#fff;padding:.6rem;border:2px solid}
     .page-nav{position:fixed;z-index:18;inset-block-start:50%;inset-inline-start:max(.45rem,env(safe-area-inset-left));transform:translateY(-50%);max-height:calc(100dvh - 2rem);font-family:var(--mono)}
+    .page-nav__scrollport{display:contents}
     .page-nav__title{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
     .page-nav ol{display:flex;flex-direction:column;gap:.12rem;margin:0;padding:.35rem;list-style:none;border:1px solid var(--line);border-radius:999px;background:rgba(248,241,217,.94);box-shadow:3px 3px 0 var(--ink-strong)}
     .page-nav a{position:relative;display:grid;place-items:center;width:44px;min-height:44px;color:var(--ink);text-decoration:none;border-radius:50%}
@@ -35,7 +36,7 @@
     .page-nav a[aria-current="location"]{background:var(--ink-strong);color:var(--paper);box-shadow:inset 0 0 0 2px var(--tiffany)}
     .page-nav a[aria-current="location"] .page-nav__tick{width:28px;height:6px;background:var(--tiffany);box-shadow:0 0 0 1px var(--paper)}
     .page-nav a[aria-current="location"] .page-nav__label{color:var(--paper)}
-    .page-nav__label{position:absolute;inset-inline-start:calc(100% + .45rem);top:50%;transform:translateY(-50%) translateX(-.25rem);padding:.38rem .5rem;border:1px solid var(--line);border-radius:4px;background:var(--ink-strong);color:#fff;font:800 .66rem var(--mono);white-space:nowrap;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .14s ease,transform .14s ease}
+    .page-nav__label{position:absolute;inset-inline-start:calc(100% + .45rem);top:50%;transform:translateY(-50%) translateX(-.25rem);padding:.38rem .5rem;border:1px solid var(--line);border-radius:4px;background:var(--ink-strong);color:#fff;font:800 .66rem var(--mono);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .14s ease,transform .14s ease}
     .page-nav a:is(:hover,:focus-visible) .page-nav__label{opacity:1;visibility:visible;transform:translateY(-50%) translateX(0)}
     header{background:var(--ink-strong);color:#fff;padding:1rem clamp(1rem,3vw,2.4rem);border-bottom:5px solid var(--tiffany)}
     .mast{max-width:1500px;margin:auto;display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap}
@@ -108,7 +109,18 @@
     .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
     .fallback{border:2px dashed var(--line);padding:1rem;background:var(--route)}
     #on-navy{color:#56d8c9}
-    @media(min-width:1151px){main{padding-inline-start:max(clamp(1rem,3vw,2.4rem),4.5rem)}.page-nav{overflow-y:auto;overflow-x:hidden;width:3.2rem;padding:2px 5px 5px 2px}.page-nav ol{border-radius:20px;gap:0;padding:.2rem;align-items:center}.page-nav a{width:32px;min-height:32px}.page-nav a:is(:hover,:focus-visible) .page-nav__label{position:static;transform:none;white-space:normal;overflow-wrap:anywhere;font-size:.5rem;padding:.1rem;background:var(--paper);color:var(--ink);max-width:100%}.page-nav a:is(:hover,:focus-visible){height:auto;grid-template-rows:auto auto}}
+    /* The transparent gutter contains CSS flyouts; pointer input stays with the rail and document. */
+    @media(min-width:1151px){
+      main{padding-inline-start:max(clamp(1rem,3vw,2.4rem),4.5rem)}
+      .page-nav{overflow:visible;width:3.2rem;pointer-events:none}
+      .page-nav__scrollport{display:block;width:calc(100% + 12rem);max-height:calc(100dvh - 2rem);overflow-y:auto;overflow-x:hidden;padding:.4rem 5px .4rem 2px;scrollbar-width:none;pointer-events:none}
+      .page-nav ol{width:calc(3.2rem - 7px);border-radius:20px;gap:0;padding:.2rem;align-items:center;pointer-events:auto}
+      .page-nav a{width:32px;min-height:32px;pointer-events:auto}
+      .page-nav__label{inset-inline-start:calc(100% + 1.25rem)}
+    .page-nav__label::before{content:"";position:absolute;inset-inline-end:100%;inset-block:0;width:calc(1.25rem + 2px)}
+    .page-nav a:is(:hover,:focus-visible) .page-nav__label{pointer-events:auto}
+    .page-nav a[data-label-dismissed] .page-nav__label{opacity:0;pointer-events:none}
+    }
     @media(max-width:1150px){main [id]{scroll-margin-block-start:5rem}.page-nav{position:sticky;inset:auto;inset-block-start:0;transform:none;max-height:none;padding:.55rem max(.7rem,env(safe-area-inset-right)) .65rem max(.7rem,env(safe-area-inset-left));background:var(--ink-strong);overflow-x:auto;white-space:nowrap}.page-nav__title{position:sticky;left:0;z-index:2;display:inline-flex;width:auto;height:44px;margin:0 .45rem 0 0;padding:0 .7rem;align-items:center;overflow:visible;clip:auto;background:var(--ink-strong);color:#fff;font:900 .68rem var(--mono);text-transform:uppercase;white-space:nowrap}.page-nav ol{display:inline-flex;flex-direction:row;gap:.25rem;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;vertical-align:top}.page-nav a{display:flex;width:auto;min-width:44px;padding:.2rem .62rem;gap:.42rem;border:1px solid #8aaee9;border-radius:5px;background:#f8f1d9}.page-nav__tick{width:4px;height:14px}.page-nav a.is-in-view .page-nav__tick,.page-nav a[aria-current="location"] .page-nav__tick{width:5px;height:20px}.page-nav__label{position:static;transform:none;padding:0;border:0;background:transparent;color:var(--ink);font-size:.65rem;opacity:1;visibility:visible}.page-nav a:is(:hover,:focus-visible) .page-nav__label{transform:none}}
     @media(max-width:980px){.workspace{grid-template-columns:1fr}.summary{position:static}.presets{grid-template-columns:repeat(3,minmax(10rem,1fr))}.method-grid{grid-template-columns:1fr 1fr}.sigma-layout,.lens-composer{grid-template-columns:1fr}}
     @media(max-width:700px){.intro{grid-template-columns:1fr}.controls-grid,.goal-grid{grid-template-columns:1fr}.goal-grid label:first-child{grid-column:auto}.row-head{display:none}.ledger-row{grid-template-columns:2rem minmax(0,1fr) minmax(0,1fr);align-items:start;padding:.75rem .25rem}.ledger-row>*{min-width:0}.ledger-row>input[type="checkbox"]{grid-column:1;justify-self:center;margin-top:.45rem}.ledger-row>input[data-field="name"]{grid-column:2/-1}.ledger-row>input[data-field="a"]{grid-column:2}.ledger-row>input[data-field="b"],.ledger-row>input[data-field="c"]{grid-column:3}.activity-row,.disruption-row{grid-template-columns:2rem minmax(10rem,1fr) minmax(6rem,.65fr)}.activity-row .row-control,.disruption-row .row-control{display:grid;gap:.2rem;min-width:0}.activity-row .row-control__label,.disruption-row .row-control__label{display:block;color:var(--muted);font:800 .62rem var(--mono);letter-spacing:.045em;text-transform:uppercase}.activity-row .row-control[data-row-field="enabled"],.disruption-row .row-control[data-row-field="enabled"]{grid-column:1;grid-row:1/3;align-self:start;justify-items:center}.activity-row .row-control[data-row-field="name"],.disruption-row .row-control[data-row-field="name"]{grid-column:2/-1}.activity-row .row-control[data-row-field="a"],.disruption-row .row-control[data-row-field="a"]{grid-column:2}.activity-row .row-control[data-row-field="b"],.disruption-row .row-control[data-row-field="b"]{grid-column:3}.activity-row .row-control[data-row-field="enabled"] input,.disruption-row .row-control[data-row-field="enabled"] input{justify-self:center;margin-top:.2rem}.row-actions{grid-column:2/-1;justify-self:end}.activity-row .row-actions,.disruption-row .row-actions{display:grid;grid-template-columns:auto auto;align-items:center}.activity-row .row-actions .row-control__label,.disruption-row .row-actions .row-control__label{grid-column:1/-1}.presets{display:flex}.preset{flex:0 0 13rem}.method-grid,.collaboration-map,.staffing-map{grid-template-columns:1fr}.gap-card{grid-template-columns:1fr}.framework-button[aria-pressed="true"]{transform:none}.coverage-grid{grid-template-columns:1fr 1fr}}
@@ -974,7 +986,7 @@
 <body>
 <a class="skip" href="#costing-workspace">Skip to costing workspace</a>
 <header><div class="mast"><div class="brand"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 16V9m5 7V5m5 11v-4"/></svg><div><strong>Cross-Functional Investment Studio</strong><small>Change investment and human–AI planning</small></div></div><span class="posture"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 7 10 17l-5-5"/></svg> Planning model · editable</span></div></header>
-<nav class="page-nav" aria-label="On this page"><span class="page-nav__title">On this page</span><ol><li><a href="#preset-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Start</span></a></li><li><a href="#shape-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Shape</span></a></li><li><a href="#horizon-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Horizon</span></a></li><li><a href="#goal-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Goal</span></a></li><li><a href="#components-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Change model</span></a></li><li><a href="#roles-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Roles</span></a></li><li><a href="#sigma-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Sigma posture</span></a></li><li><a href="#activities-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Work</span></a></li><li><a href="#quality-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Quality</span></a></li><li><a href="#allocation-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Attention</span></a></li><li><a href="#investment-changes-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Changes</span></a></li><li><a href="#method-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Range</span></a></li><li><a href="#investment-analysis-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Comparison</span></a></li></ol></nav>
+<nav class="page-nav" aria-label="On this page"><span class="page-nav__title">On this page</span><div class="page-nav__scrollport"><ol><li><a href="#preset-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Start</span></a></li><li><a href="#shape-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Shape</span></a></li><li><a href="#horizon-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Horizon</span></a></li><li><a href="#goal-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Goal</span></a></li><li><a href="#components-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Change model</span></a></li><li><a href="#roles-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Roles</span></a></li><li><a href="#sigma-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Sigma posture</span></a></li><li><a href="#activities-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Work</span></a></li><li><a href="#quality-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Quality</span></a></li><li><a href="#allocation-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Attention</span></a></li><li><a href="#investment-changes-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Changes</span></a></li><li><a href="#method-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Range</span></a></li><li><a href="#investment-analysis-title"><span class="page-nav__tick" aria-hidden="true"></span><span class="page-nav__label">Comparison</span></a></li></ol></div></nav>
 <main id="costing-workspace">
   <p class="prototype-link-note"><span aria-hidden="true">↗</span>Onward readings and source links continue into their complete context.</p>
   <section class="intro" aria-labelledby="page-title"><div><span class="eyebrow">Editable investment and change view</span><h1 id="page-title">Plan what the initiative actually asks for.</h1><p>Plan the people, work, disruption, and learning an initiative actually asks for. Complex, important initiatives are often cross-functional resource requests; this studio keeps their change work and human–AI handoffs in the same editable view.</p></div><aside class="boundary" aria-label="Planning model boundary"><strong>Put the estimate to work</strong>This prospective USD model supports effort and investment planning. Ground each assumption in local evidence. Accountable people review pricing and expected outcomes, authorize budgets and staffing, and establish applicable rates.</aside></section>
@@ -1144,6 +1156,7 @@
   });
   function pageNavigationInit(){
     const rail = document.querySelector('.page-nav');
+    const desktopScrollport = rail.querySelector('.page-nav__scrollport');
     const sections = Array.from(rail.querySelectorAll('a[href^="#"]'), link => ({
       link, target: document.getElementById(link.getAttribute('href').slice(1))
     })).filter(section => section.target);
@@ -1152,7 +1165,10 @@
     let viewportWidth = 0;
     let viewportHeight = 0;
     function revealInRail(link, horizontal){
-      const railBounds = rail.getBoundingClientRect();
+      const scrollport = horizontal ? rail : desktopScrollport;
+      const inactiveScrollport = horizontal ? desktopScrollport : rail;
+      inactiveScrollport.scrollTo({ left: 0, top: 0, behavior: 'instant' });
+      const railBounds = scrollport.getBoundingClientRect();
       const linkBounds = link.getBoundingClientRect();
       const titleBounds = rail.querySelector('.page-nav__title').getBoundingClientRect();
       const start = horizontal ? Math.max(railBounds.left, titleBounds.right) + 8 : railBounds.top + 6;
@@ -1162,7 +1178,7 @@
       let delta = 0;
       if (linkEnd > end) delta = linkEnd - end;
       if (linkStart < start) delta = linkStart - start;
-      rail.scrollTo({ left: horizontal ? rail.scrollLeft + delta : 0, top: horizontal ? 0 : rail.scrollTop + delta, behavior: 'instant' });
+      scrollport.scrollTo({ left: horizontal ? scrollport.scrollLeft + delta : 0, top: horizontal ? 0 : scrollport.scrollTop + delta, behavior: 'instant' });
     }
     function update(){
       framePending = false;
@@ -1196,7 +1212,21 @@
     }
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
-    window.addEventListener('hashchange', schedule);
+  window.addEventListener('hashchange', schedule);
+  window.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || event.defaultPrevented || getComputedStyle(rail).position === 'sticky') return;
+    const visibleLinks = sections.filter(({ link }) => link.matches(':hover, :focus-visible') && !link.hasAttribute('data-label-dismissed'));
+    if (!visibleLinks.length) return;
+    for (const { link } of visibleLinks) link.setAttribute('data-label-dismissed', '');
+    event.preventDefault();
+  });
+  for (const { link } of sections) {
+    const restoreLabel = () => {
+      if (!link.matches(':hover, :focus-visible')) link.removeAttribute('data-label-dismissed');
+    };
+    link.addEventListener('pointerleave', restoreLabel);
+    link.addEventListener('blur', restoreLabel);
+  }
     rail.addEventListener('focusin', event => {
       const link = event.target.closest('a');
       if (link) revealInRail(link, getComputedStyle(rail).position === 'sticky');
