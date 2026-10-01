@@ -1,4 +1,5 @@
 import test from "node:test";
+import { Worker } from "node:worker_threads";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
@@ -261,4 +262,183 @@ test("record-domain maps retain their named domains, order and detached calculat
   assert.equal(C.serialize(state), before);
   result.events[0].kind = "changed result";
   assert.equal(state.events[0].kind, "acquisition");
+});
+
+test("stable vocabulary is frozen while scenario values remain editable", () => {
+  for (const value of [C.FIELD_TYPE, C.JSON_LIMITS, C.DOMAINS, C.TYPES, C.FIELDS, C.OUTCOMES, C.FIELDS.period, C.FIELDS.period.options]) {
+    assert.equal(Object.isFrozen(value), true);
+  }
+  assert.throws(() => { C.FIELDS.currency.initial = "EUR"; }, TypeError);
+  const state = fresh();
+  state.inputs.currency = "EUR";
+  assert.equal(C.calculate(state).metrics.netPrice.status, "known");
+  assert.equal(C.STAFFING_CURRENCY, "USD");
+  assert.equal(C.staffing(staffing()).currency, "USD");
+});
+
+test("whole-state admission retains only JSON values that survive export and import", () => {
+  const invalid = [
+    undefined, NaN, Infinity, -Infinity, 1n, Symbol("value"), () => 1,
+    new Date("2026-09-30"), new Map(), new Set(), /value/,
+    JSON.parse('{"constructor":"retained text"}'),
+    JSON.parse('{"__proto__":{"value":1}}'), { prototype: "reserved" },
+    Object.assign([1, 2], { extra: true }), [1, , 3]
+  ];
+  const cyclic = {}; cyclic.self = cyclic; invalid.push(cyclic);
+  const hidden = {}; Object.defineProperty(hidden, "hidden", { value: 1 }); invalid.push(hidden);
+  const symbolic = { [Symbol("key")]: 1 }; invalid.push(symbolic);
+  let getterCalls = 0;
+  const accessor = {};
+  Object.defineProperty(accessor, "value", { enumerable: true, get() { getterCalls++; return 1; } });
+  invalid.push(accessor);
+  for (const value of invalid) {
+    const state = fresh();
+    state.extensions["urn:example:payload"] = value;
+    assert.equal(C.validate(state).valid, false);
+    assert.throws(() => C.serialize(state));
+    assert.throws(() => C.clone(state));
+  }
+  assert.equal(getterCalls, 0, "admission inspects descriptors before reading values");
+  const state = fresh();
+  state.extensions["urn:example:payload"] = { values: [null, false, 0, "", { text: "\u00e9" }] };
+  assert.deepEqual(C.importState(C.serialize(state)), state);
+});
+
+test("reserved keys and limits use one admission policy before migration or normalization", () => {
+  for (const key of ["constructor", "prototype", "__proto__"]) {
+    const state = fresh();
+    state.extensions["urn:example:payload"] = JSON.parse('{"' + key + '":"retained text"}');
+    assert.throws(() => C.importState(JSON.stringify(state)), /reserved object keys/);
+  }
+  const legacy = { schemaVersion: "1.0.0", view: "model-explorer", activeModelId: fresh().method, payload: Infinity };
+  assert.throws(() => C.migrate(legacy), /finite numbers/);
+  const state = fresh();
+  state.extensions["urn:example:payload"] = "\u00e9".repeat(500000);
+  assert.throws(() => C.serialize(state), /UTF-8/);
+  assert.throws(() => C.importState(JSON.stringify(state)), /UTF-8/);
+  let nested = null;
+  for (let depth = 0; depth < 70; depth++) nested = [nested];
+  state.extensions["urn:example:payload"] = nested;
+  assert.throws(() => C.serialize(state), /depth and node limits/);
+  state.extensions["urn:example:payload"] = Array(100001).fill(0);
+  assert.throws(() => C.serialize(state), /dense JSON array|node limits/);
+});
+
+test("sparse state arrays are rejected while a missing standalone flow remains unavailable", () => {
+  const state = fresh();
+  delete state.alternatives[0].flows[1];
+  assert.equal(C.validate(state).valid, false);
+  assert.equal(C.calculate(state).valid, false);
+  assert.equal(C.npv([-100, , 60], .1).status, "unavailable");
+});
+
+test("NPV, expected NPV and sensitivity share currency, horizon and unit policy", () => {
+  for (const currency of ["", "usd", "US"]) {
+    const state = fresh();
+    state.inputs.currency = currency;
+    const result = C.calculate(state);
+    const monetary = [result.metrics.expectedNpv, ...result.alternatives.map(a => a.npv), ...result.sensitivity.flatMap(a => a.values.map(v => v.result))];
+    for (const value of monetary) {
+      assert.equal(value.status, "unavailable");
+      assert.equal(value.unit, "currency");
+    }
+    assert.equal(result.metrics.nrr.status, "known");
+    assert.equal(result.alternatives[2].irr.status, "known");
+  }
+  const state = fresh();
+  state.inputs.discountRate = "";
+  assert.ok(C.calculate(state).sensitivity.every(a => a.values.every(v => v.result.status === "unavailable" && v.result.unit === "currency")));
+  state.inputs.discountRate = .1;
+  state.alternatives[0].flows.push(0);
+  assert.ok(C.calculate(state).sensitivity.every(a => a.values.every(v => v.result.status === "incompatible")));
+});
+
+test("valid extension variants retain deterministic serialization and exact ordinary JSON values", () => {
+  const variants = [null, false, 0, "", [], {}, { nested: [1, "1", true, null] }];
+  for (const payload of variants) {
+    const state = fresh();
+    state.extensions["urn:example:payload"] = payload;
+    const serialized = C.serialize(state);
+    const next = C.importState(serialized);
+    assert.deepEqual(next, state);
+    assert.equal(C.serialize(next), serialized);
+    assert.deepEqual(C.calculate(next), C.calculate(state));
+  }
+});
+
+
+test("decimal admission shares a bounded grammar with the generated schema", () => {
+  const accepts = new Ajv2020({ strict: true, allErrors: true }).compile(C.schema());
+  for (const value of ["", " ", "0", "-0", ".5", "1.", "+2.5e-3", " 42 "]) {
+    const state = fresh(); state.inputs.newCustomers = value;
+    assert.equal(C.validate(state).valid, true, JSON.stringify(value));
+    assert.equal(accepts(state), true, JSON.stringify(value));
+    assert.equal(C.numeric(value).status, value.trim() ? "known" : "unavailable");
+  }
+  for (const value of ["1x", "0x10", ".", "1e", "9".repeat(C.NUMERIC_TEXT_LIMIT + 1)]) {
+    const state = fresh(); state.inputs.newCustomers = value;
+    assert.equal(C.validate(state).valid, false);
+    assert.equal(accepts(state), false);
+    assert.equal(C.numeric(value).status, "invalid");
+  }
+});
+
+test("closed objects reject inherited-name keys while open extension values retain them", () => {
+  const accepts = new Ajv2020({ strict: true, allErrors: true }).compile(C.schema());
+  for (const key of ["toString", "valueOf", "hasOwnProperty", "__defineGetter__"]) {
+    for (const location of ["root", "inputs", "alternative"]) {
+      const state = fresh();
+      const target = location === "root" ? state : location === "inputs" ? state.inputs : state.alternatives[0];
+      target[key] = "extra";
+      assert.equal(C.validate(state).valid, false, location + "." + key);
+      assert.equal(accepts(state), false, location + "." + key);
+    }
+  }
+  const state = fresh(); state.extensions["urn:test:metadata"] = { toString: "ordinary data" };
+  assert.equal(C.validate(state).valid, true);
+  assert.deepEqual(C.importState(C.serialize(state)), state);
+});
+
+test("prepared revisions are immutable and ordinary calculation results own their nested arrays", () => {
+  const state = fresh(), original = C.clone(state), result = C.calculate(state);
+  result.alternatives[0].flows[0] = 777;
+  result.events[0].predecessors.push("caller-owned-change");
+  assert.deepEqual(state, original);
+  const prepared = C.prepare(state);
+  assert.deepEqual(prepared.result, C.calculate(state));
+  assert.deepEqual(JSON.parse(prepared.serialized), state);
+  assert.equal(prepared.fingerprint, C.fingerprint(state));
+  assert.equal(Object.isFrozen(prepared.state.inputs), true);
+  assert.equal(Object.isFrozen(prepared.result.alternatives[0].flows), true);
+  assert.throws(() => { prepared.state.inputs.label = "changed"; }, TypeError);
+  assert.deepEqual(state, original);
+  const publicSchema = C.schema();
+  publicSchema.properties.inputs.additionalProperties = true;
+  state.inputs.toString = "extra";
+  assert.equal(C.validate(state).valid, false);
+});
+
+test("numeric near misses stay within an isolated acceptance budget", { timeout: 10000 }, async () => {
+  const worker = new Worker(`
+    const { parentPort, workerData } = require("node:worker_threads");
+    const C = require(workerData.core);
+    const Ajv = require(workerData.ajv).default;
+    const accepts = new Ajv({strict:true,allErrors:true}).compile(C.schema());
+    const observations = [];
+    for (const size of [1000, 10000, 100000, 900000]) {
+      const text = "9".repeat(size) + "x", state = C.defaults();
+      state.inputs.newCustomers = text;
+      observations.push({ size, numeric: C.numeric(text).status, runtime: C.validate(state).valid, schema: accepts(state) });
+    }
+    parentPort.postMessage(observations);
+  `, { eval: true, workerData: { core: require.resolve("../../collaboration/investment-analysis/core.js"), ajv: require.resolve("ajv/dist/2020.js") } });
+  let timer;
+  try {
+    const observations = await new Promise((resolve, reject) => {
+      timer = setTimeout(() => reject(new Error("Numeric admission exceeded its isolated 5-second budget.")), 5000);
+      worker.once("message", resolve); worker.once("error", reject);
+      worker.once("exit", code => { if (code !== 0) reject(new Error("Numeric worker exited: " + code)); });
+    });
+    assert.deepEqual(observations, [1000, 10000, 100000, 900000].map(size => ({ size, numeric: "invalid", runtime: false, schema: false })));
+  } finally { clearTimeout(timer); await worker.terminate(); }
 });

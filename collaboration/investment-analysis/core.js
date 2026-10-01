@@ -6,20 +6,30 @@
 })(globalThis, function () {
   "use strict";
   const VERSION = "0.1.0";
-  const DOMAINS = ["internal-investment", "customer-implementation", "commercial-cohort", "clinical-operational", "capital-allocation"];
-  const TYPES = ["input", "assumption", "calculation", "evidence", "decision"];
-  const PERIODS = ["month", "quarter", "year"];
+  const FIELD_TYPE = Object.freeze({ NUMBER: "number", TEXT: "text", CURRENCY: "currency", SELECT: "select", BOOLEAN: "boolean" });
+  const STAFFING_CURRENCY = "USD";
+  const CURRENCY_CODE = /^[A-Z]{3}$/;
+  const JSON_LIMITS = Object.freeze({ bytes: 1000000, depth: 64, nodes: 100000 });
+  const NUMERIC_TEXT_LIMIT = 128;
+  const DECIMAL_BODY = "[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?";
+  const NUMBER_TEXT_PATTERN = "^(?:\\s*" + DECIMAL_BODY + "\\s*|\\s*)$";
+  const RESERVED_KEYS = new Set(["__proto__", "constructor", "prototype"]);
+  const STAFFING_HOURS = Object.freeze({ hours: 1, sprints: 80, quarters: 520 });
+  const COMPLEXITY_RATES = Object.freeze({ bounded: .08, connected: .16, frontier: .28 });
+  const DOMAINS = Object.freeze(["internal-investment", "customer-implementation", "commercial-cohort", "clinical-operational", "capital-allocation"]);
+  const TYPES = Object.freeze(["input", "assumption", "calculation", "evidence", "decision"]);
+  const PERIODS = Object.freeze(["month", "quarter", "year"]);
   const FIELDS = {};
   function field(key, label, group, unit, initial, options = {}) {
-    FIELDS[key] = { label, group, unit, initial, type: "number", min: 0, ...options };
+    FIELDS[key] = { label, group, unit, initial, type: FIELD_TYPE.NUMBER, min: 0, ...options };
   }
-  field("label", "Scenario name", "orientation", "text", "Illustrative pilot versus status quo", {type:"text"});
-  field("currency", "Currency (ISO 4217 code)", "orientation", "text", "USD", {type:"currency"});
-  field("period", "Cash-flow and commercial period", "orientation", "period", "year", {type:"select", options:PERIODS});
-  field("segment", "Customer segment", "commercial", "text", "Synthetic implementation partners", {type:"text"});
-  field("cohort", "Opening cohort and measurement window", "commercial", "text", "100 synthetic customers; one year", {type:"text"});
+  field("label", "Scenario name", "orientation", "text", "Illustrative pilot versus status quo", {type:FIELD_TYPE.TEXT});
+  field("currency", "Currency (ISO 4217 code)", "orientation", "text", STAFFING_CURRENCY, {type:FIELD_TYPE.CURRENCY});
+  field("period", "Cash-flow and commercial period", "orientation", "period", "year", {type:FIELD_TYPE.SELECT, options:PERIODS});
+  field("segment", "Customer segment", "commercial", "text", "Synthetic implementation partners", {type:FIELD_TYPE.TEXT});
+  field("cohort", "Opening cohort and measurement window", "commercial", "text", "100 synthetic customers; one year", {type:FIELD_TYPE.TEXT});
   field("tenure", "Cohort tenure (periods)", "commercial", "period", 1);
-  field("implementationState", "Implementation standing", "commercial", "text", "Illustrative ramp; one-period lag", {type:"text"});
+  field("implementationState", "Implementation standing", "commercial", "text", "Illustrative ramp; one-period lag", {type:FIELD_TYPE.TEXT});
   field("openingCustomers", "Opening customers", "commercial", "customer", 100);
   field("newCustomers", "New customers", "commercial", "customer", 20);
   field("churnCustomers", "Opening-cohort customers lost", "commercial", "customer", 10);
@@ -37,52 +47,121 @@
   field("rebate", "Rebate per unit", "pricing", "currency/unit", 25);
   field("variableCost", "Variable cost per unit", "pricing", "currency/unit", 200);
   field("serviceCost", "Service cost per unit", "pricing", "currency/unit", 100);
-  field("pricingUnit", "Orderable unit and package boundary", "pricing", "text", "One synthetic service unit; implementation separate", {type:"text"});
-  field("buyer", "Buyer / user / payer", "pricing", "text", "Sponsor / operating team / customer organization", {type:"text"});
-  field("priceClass", "Price evidence class", "pricing", "text", "Illustrative scenario", {type:"select",options:["Illustrative scenario","Public cash-pay price","Contracted price","Observed realized revenue"]});
+  field("pricingUnit", "Orderable unit and package boundary", "pricing", "text", "One synthetic service unit; implementation separate", {type:FIELD_TYPE.TEXT});
+  field("buyer", "Buyer / user / payer", "pricing", "text", "Sponsor / operating team / customer organization", {type:FIELD_TYPE.TEXT});
+  field("priceClass", "Price evidence class", "pricing", "text", "Illustrative scenario", {type:FIELD_TYPE.SELECT,options:["Illustrative scenario","Public cash-pay price","Contracted price","Observed realized revenue"]});
   field("implementationCost", "Customer implementation cost", "pricing", "currency", 10000);
   field("implementationLag", "Implementation lag (periods)", "pricing", "period", 1);
   field("internalInvestment", "Internal investment reference", "capital", "currency", 100000);
   field("discountRate", "Effective discount rate per period", "capital", "ratio", .1, {min:-.999999});
-  field("cashConvention", "Cash-flow convention", "capital", "text", "Incremental to status quo; end-period; t=0 upfront", {type:"text"});
-  field("taxWorkingCapital", "Tax and working-capital treatment", "capital", "text", "Synthetic after-tax flows; working-capital changes included once", {type:"text"});
+  field("cashConvention", "Cash-flow convention", "capital", "text", "Incremental to status quo; end-period; t=0 upfront", {type:FIELD_TYPE.TEXT});
+  field("taxWorkingCapital", "Tax and working-capital treatment", "capital", "text", "Synthetic after-tax flows; working-capital changes included once", {type:FIELD_TYPE.TEXT});
   field("capacity", "Implementation capacity (adopted people per period)", "capital", "person/period", 40);
-  field("exhaustive", "Outcome tree is mutually exclusive and exhaustive", "capital", "boolean", false, {type:"boolean"});
+  field("exhaustive", "Outcome tree is mutually exclusive and exhaustive", "capital", "boolean", false, {type:FIELD_TYPE.BOOLEAN});
   field("eligiblePopulation", "Eligible population", "clinical", "person", 100);
   field("adoption", "Adoption fraction (0-1)", "clinical", "ratio", .3, {max:1});
   field("baselineCost", "Baseline resource cost per person per period", "clinical", "currency/person/period", 500);
   field("candidateCost", "Candidate resource cost per person per period", "clinical", "currency/person/period", 650);
-  field("perspective", "Budget perspective", "clinical", "text", "Illustrative provider budget", {type:"text"});
-  field("population", "Population and context", "clinical", "text", "Synthetic population; local eligibility remains to be specified", {type:"text"});
-  field("intervention", "Intervention", "clinical", "text", "Bounded workflow pilot", {type:"text"});
-  field("comparator", "Comparator", "clinical", "text", "Current workflow", {type:"text"});
-  field("reviewer", "Accountable clinical / operating reviewer", "clinical", "text", "", {type:"text"});
-  field("evidenceSource", "Evidence semantic key or public source", "clinical", "text", "", {type:"text"});
-  field("asOf", "Evidence as-of date", "clinical", "date", "", {type:"text"});
-  field("economicReview", "Outcome transformation review", "clinical", "text", "pending", {type:"select",options:["pending","reviewed"]});
+  field("perspective", "Budget perspective", "clinical", "text", "Illustrative provider budget", {type:FIELD_TYPE.TEXT});
+  field("population", "Population and context", "clinical", "text", "Synthetic population; local eligibility remains to be specified", {type:FIELD_TYPE.TEXT});
+  field("intervention", "Intervention", "clinical", "text", "Bounded workflow pilot", {type:FIELD_TYPE.TEXT});
+  field("comparator", "Comparator", "clinical", "text", "Current workflow", {type:FIELD_TYPE.TEXT});
+  field("reviewer", "Accountable clinical / operating reviewer", "clinical", "text", "", {type:FIELD_TYPE.TEXT});
+  field("evidenceSource", "Evidence semantic key or public source", "clinical", "text", "", {type:FIELD_TYPE.TEXT});
+  field("asOf", "Evidence as-of date", "clinical", "date", "", {type:FIELD_TYPE.TEXT});
+  field("economicReview", "Outcome transformation review", "clinical", "text", "pending", {type:FIELD_TYPE.SELECT,options:["pending","reviewed"]});
   field("incrementalOutcome", "Reviewed incremental outcome per adopted person", "clinical", "outcome/person", null, {min:null});
-  field("outcomeUnit", "Outcome unit (explicit measure)", "clinical", "text", "", {type:"text"});
-  field("owner", "Decision owner", "decision", "text", "", {type:"text"});
-  field("trigger", "Gate trigger", "decision", "text", "Review pilot feasibility, evidence, and capacity", {type:"text"});
-  field("nextEvidence", "Next evidence needed", "decision", "text", "Observed workflow and reviewed resource requirements", {type:"text"});
-  field("revisit", "Revisit date", "decision", "date", "", {type:"text"});
-  field("option", "Reversible next choice", "decision", "text", "pilot", {type:"select",options:["status-quo","proceed","defer","pilot","scale","redirect","stop"]});
-  field("gate", "Safety / governance gate", "decision", "text", "open", {type:"select",options:["open","satisfied","stop"]});
-  const OUTCOMES = ["Safety","Quality","Timeliness","Patient experience","Equity","Efficiency","Burden","Governance","Budget capacity"];
-  const clone = value => JSON.parse(JSON.stringify(value));
+  field("outcomeUnit", "Outcome unit (explicit measure)", "clinical", "text", "", {type:FIELD_TYPE.TEXT});
+  field("owner", "Decision owner", "decision", "text", "", {type:FIELD_TYPE.TEXT});
+  field("trigger", "Gate trigger", "decision", "text", "Review pilot feasibility, evidence, and capacity", {type:FIELD_TYPE.TEXT});
+  field("nextEvidence", "Next evidence needed", "decision", "text", "Observed workflow and reviewed resource requirements", {type:FIELD_TYPE.TEXT});
+  field("revisit", "Revisit date", "decision", "date", "", {type:FIELD_TYPE.TEXT});
+  field("option", "Reversible next choice", "decision", "text", "pilot", {type:FIELD_TYPE.SELECT,options:["status-quo","proceed","defer","pilot","scale","redirect","stop"]});
+  field("gate", "Safety / governance gate", "decision", "text", "open", {type:FIELD_TYPE.SELECT,options:["open","satisfied","stop"]});
+  const OUTCOMES = Object.freeze(["Safety","Quality","Timeliness","Patient experience","Equity","Efficiency","Burden","Governance","Budget capacity"]);
+  for (const definition of Object.values(FIELDS)) {
+    if (definition.options) Object.freeze(definition.options);
+    Object.freeze(definition);
+  }
+  Object.freeze(FIELDS);
+
+  // Admission precedes schema traversal and cloning, so serialization preserves every JSON value.
+  function jsonText(value) {
+    const ancestors = new Set();
+    let nodes = 0;
+    let textUnits = 0;
+    function accountText(text) {
+      textUnits += text.length;
+      if (textUnits > JSON_LIMITS.bytes) throw new Error("Use a JSON state of at most 1 MB in UTF-8.");
+    }
+    function visit(item, path, depth) {
+      if (++nodes > JSON_LIMITS.nodes || depth > JSON_LIMITS.depth) {
+        throw new Error(path + ": use a JSON tree within the declared depth and node limits.");
+      }
+      if (typeof item === "string") { accountText(item); return; }
+      if (item === null || typeof item === "boolean") return;
+      if (typeof item === "number" && Number.isFinite(item)) return;
+      if (typeof item !== "object") {
+        throw new Error(path + ": use finite numbers and ordinary JSON values.");
+      }
+      const array = Array.isArray(item);
+      const prototype = Object.getPrototypeOf(item);
+      if (array ? prototype !== Array.prototype : prototype !== Object.prototype && prototype !== null) {
+        throw new Error(path + ": use plain JSON objects and arrays.");
+      }
+      if (ancestors.has(item)) throw new Error(path + ": represent each branch as an acyclic JSON value.");
+      const keys = Reflect.ownKeys(item);
+      if (array && (item.length > JSON_LIMITS.nodes || keys.length !== item.length + 1)) {
+        throw new Error(path + ": use a dense JSON array with one value per position.");
+      }
+      ancestors.add(item);
+      for (const key of keys) {
+        if (array && key === "length") continue;
+        if (typeof key !== "string" || RESERVED_KEYS.has(key)) {
+          throw new Error(path + ": use ordinary JSON property names; reserved object keys belong outside this contract.");
+        }
+        if (array && (!/^(0|[1-9][0-9]*)$/.test(key) || Number(key) >= item.length)) {
+          throw new Error(path + ": keep array values at consecutive numeric positions.");
+        }
+        accountText(key);
+        const descriptor = Object.getOwnPropertyDescriptor(item, key);
+        if (!descriptor.enumerable || !Object.hasOwn(descriptor, "value")) {
+          throw new Error(path + ": use enumerable data properties for portable JSON.");
+        }
+        visit(descriptor.value, path + "." + key, depth + 1);
+      }
+      ancestors.delete(item);
+    }
+    visit(value, "state", 0);
+    const text = stable(value);
+    if (text.length > JSON_LIMITS.bytes || new TextEncoder().encode(text).byteLength > JSON_LIMITS.bytes) {
+      throw new Error("Use a JSON state of at most 1 MB in UTF-8.");
+    }
+    return text;
+  }
+  function clone(value) { return JSON.parse(jsonText(value)); }
+  function parseJson(text) {
+    if (typeof text !== "string" || text.length > JSON_LIMITS.bytes || new TextEncoder().encode(text).byteLength > JSON_LIMITS.bytes) {
+      throw new Error("Use JSON text of at most 1 MB in UTF-8.");
+    }
+    const value = JSON.parse(text);
+    jsonText(value);
+    return value;
+  }
   const cleanText = value => typeof value === "string" && value.trim().length > 0;
   function validDate(value) { if(typeof value!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(value))return false;const date=new Date(value+"T00:00:00Z");return Number.isFinite(date.getTime())&&date.toISOString().slice(0,10)===value; }
-  const decimal = /^[-+]?(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?$/i;
+  const decimal = new RegExp("^" + DECIMAL_BODY + "$");
   function known(value, unit, reason = "") {
     return Number.isFinite(value) ? {status:"known",value,unit,reason} : unavailable("The result exceeds the supported numeric range.",unit,"invalid");
   }
   function unavailable(reason, unit = "", status = "unavailable") { return {status,value:null,unit,reason}; }
   function numeric(value, label = "Input", min = null, max = null) {
+    if (typeof value === "string" && value.length > NUMERIC_TEXT_LIMIT) return unavailable(label + " uses at most " + NUMERIC_TEXT_LIMIT + " characters; use scientific notation for scale.", "", "invalid");
     if (value === "" || value === null || value === undefined || (typeof value === "string" && !value.trim())) return unavailable(label + " is needed.");
-    if ((typeof value !== "number" && typeof value !== "string") || (typeof value === "string" && !decimal.test(value.trim()))) return unavailable(label + " needs a finite decimal number.","","invalid");
+    if ((typeof value !== "number" && typeof value !== "string") || (typeof value === "string" && !decimal.test(value.trim()))) return unavailable(label + " needs a finite decimal number.", "", "invalid");
     const n = Number(value);
-    if (!Number.isFinite(n) || (min !== null && n < min) || (max !== null && n > max)) return unavailable(label + " is outside its declared range.","","invalid");
-    return known(n,"");
+    if (!Number.isFinite(n) || (min !== null && n < min) || (max !== null && n > max)) return unavailable(label + " is outside its declared range.", "", "invalid");
+    return known(n, "");
   }
   function defaults() {
     return {
@@ -114,8 +193,8 @@
       extensions:{}
     };
   }
-  function schema() {
-    const numberInput={anyOf:[{type:"number"},{type:"null"},{type:"string",pattern:"^$|^[-+]?(?:[0-9]+\\.?[0-9]*|\\.[0-9]+)(?:[eE][-+]?[0-9]+)?$"}]};
+  function buildSchema() {
+    const numberInput={anyOf:[{type:FIELD_TYPE.NUMBER},{type:"null"},{type:"string",maxLength:NUMERIC_TEXT_LIMIT,pattern:NUMBER_TEXT_PATTERN}]};
     const text={type:"string",maxLength:2000};
     const object=(properties,required=Object.keys(properties))=>({type:"object",additionalProperties:false,properties,required});
     const flows={type:"array",minItems:2,maxItems:101,items:numberInput};
@@ -127,7 +206,7 @@
       ...object({
         schemaVersion:{const:VERSION},scenarioId:{type:"string",minLength:1,maxLength:200},method:text,
         origin:{enum:["illustrative","user-supplied","observed"]},
-        inputs:object(Object.fromEntries(Object.entries(FIELDS).map(([k,f])=>[k,f.type==="number"?numberInput:f.type==="boolean"?{type:"boolean"}:f.type==="select"?{enum:f.options}:text]))),
+        inputs:object(Object.fromEntries(Object.entries(FIELDS).map(([k,f])=>[k,f.type===FIELD_TYPE.NUMBER?numberInput:f.type===FIELD_TYPE.BOOLEAN?{type:FIELD_TYPE.BOOLEAN}:f.type===FIELD_TYPE.SELECT?{enum:f.options}:text]))),
         alternatives:{type:"array",minItems:1,maxItems:12,items:object({id:text,label:text,flows,standing:{enum:["illustrative","user-supplied","observed"]}})},
         outcomes:{type:"array",minItems:1,maxItems:12,items:object({id:text,probability:numberInput,flows})},
         clinical:{type:"array",minItems:9,maxItems:9,items:object({name:{enum:OUTCOMES},unit:text,baseline:numberInput,candidate:numberInput,standing:{enum:["unavailable","illustrative","source-observation","transfer-hypothesis","locally-verified"]},source:text})},
@@ -136,94 +215,81 @@
       })
     };
   }
-  function validateSchemaValue(value, shape, path, errors) {
+  // The immutable source schema owns this finite pattern set; imported state supplies values only.
+  const STATE_SCHEMA = freezeTree(buildSchema());
+  const SCHEMA_PATTERNS = compileSchemaPatterns(STATE_SCHEMA);
+  function freezeTree(value) {
+    if (value && typeof value === "object" && !Object.isFrozen(value)) {
+      for (const child of Object.values(value)) freezeTree(child);
+      Object.freeze(value);
+    }
+    return value;
+  }
+  function compileSchemaPatterns(shape) {
+    const patterns = new Map();
+    function visit(value) {
+      if (!value || typeof value !== "object") return;
+      if (Object.hasOwn(value, "pattern") && !patterns.has(value.pattern)) patterns.set(value.pattern, new RegExp(value.pattern));
+      for (const child of Object.values(value)) visit(child);
+    }
+    visit(shape);
+    return patterns;
+  }
+  function schema() { return JSON.parse(JSON.stringify(STATE_SCHEMA)); }
+
+  function* validateSchemaValue(value, shape, path) {
     if (shape.anyOf) {
-      const matches = shape.anyOf.some(candidate => {
-        const candidateErrors = [];
-        validateSchemaValue(value, candidate, path, candidateErrors);
-        return candidateErrors.length === 0;
-      });
-      if (!matches) errors.push(path + ": supply a finite number or leave it blank.");
+      if (!shape.anyOf.some(candidate => validateSchemaValue(value, candidate, path).next().done)) yield path + ": supply a finite number or leave it blank.";
       return;
     }
-
-    if ("const" in shape && value !== shape.const) {
-      errors.push(path + ": unsupported contract version.");
-    }
-    if (shape.enum && !shape.enum.includes(value)) {
-      errors.push(path + ": choose a declared value.");
-    }
-
+    if (Object.hasOwn(shape, "const") && value !== shape.const) yield path + ": unsupported contract version.";
+    if (shape.enum && !shape.enum.includes(value)) yield path + ": choose a declared value.";
     switch (shape.type) {
-      case "object":
-        validateObject(value, shape, path, errors);
-        return;
-      case "array":
-        validateArray(value, shape, path, errors);
-        return;
-      case "number":
-        if (typeof value !== "number" || !Number.isFinite(value)) {
-          errors.push(path + ": finite number needed.");
-        }
-        return;
-      case "null":
-        if (value !== null) errors.push(path + ": null needed.");
-        return;
-      case "boolean":
-        if (typeof value !== "boolean") errors.push(path + ": boolean needed.");
-        return;
-      case "string":
-        validateString(value, shape, path, errors);
+      case "object": yield* validateObject(value, shape, path); return;
+      case "array": yield* validateArray(value, shape, path); return;
+      case "number": if (typeof value !== "number" || !Number.isFinite(value)) yield path + ": finite number needed."; return;
+      case "null": if (value !== null) yield path + ": null needed."; return;
+      case "boolean": if (typeof value !== "boolean") yield path + ": boolean needed."; return;
+      case "string": {
+        const error = validateString(value, shape, path);
+        if (error) yield error;
+      }
     }
   }
 
-  function validateObject(value, shape, path, errors) {
-    if (!value || typeof value !== "object" || Array.isArray(value)) {
-      errors.push(path + ": an object is needed.");
-      return;
-    }
+  function* validateObject(value, shape, path) {
+    if (!value || typeof value !== "object" || Array.isArray(value)) { yield path + ": an object is needed."; return; }
     for (const key of shape.required || []) {
-      if (!Object.hasOwn(value, key)) errors.push(path + "." + key + ": required field.");
+      if (!Object.hasOwn(value, key)) yield path + "." + key + ": required field.";
     }
     for (const key of Object.keys(value)) {
-      if (shape.propertyNames && !new RegExp(shape.propertyNames.pattern).test(key)) {
-        errors.push(path + ": use a namespaced extension.");
-      }
-      const childShape = shape.properties?.[key];
-      if (childShape) {
-        validateSchemaValue(value[key], childShape, path + "." + key, errors);
+      if (shape.propertyNames && !SCHEMA_PATTERNS.get(shape.propertyNames.pattern).test(key)) yield path + ": use a namespaced extension.";
+      if (shape.properties && Object.hasOwn(shape.properties, key)) {
+        yield* validateSchemaValue(value[key], shape.properties[key], path + "." + key);
       } else if (shape.additionalProperties === false) {
-        errors.push(path + "." + key + ": field belongs to a different contract.");
+        yield path + "." + key + ": field belongs to a different contract.";
       }
     }
   }
 
-  function validateArray(value, shape, path, errors) {
-    if (!Array.isArray(value)) {
-      errors.push(path + ": a list is needed.");
-      return;
-    }
-    if (value.length < (shape.minItems || 0) || value.length > (shape.maxItems || Infinity)) {
-      errors.push(path + ": list length is outside this contract.");
-    }
-    value.forEach((item, index) => {
-      validateSchemaValue(item, shape.items, path + "[" + index + "]", errors);
-    });
+  function* validateArray(value, shape, path) {
+    if (!Array.isArray(value)) { yield path + ": a list is needed."; return; }
+    if (value.length < (shape.minItems ?? 0) || value.length > (shape.maxItems ?? Infinity)) yield path + ": list length is outside this contract.";
+    for (const [index, item] of value.entries()) yield* validateSchemaValue(item, shape.items, path + "[" + index + "]");
   }
 
-  function validateString(value, shape, path, errors) {
+  function validateString(value, shape, path) {
     const valid = typeof value === "string"
-      && value.length <= (shape.maxLength || Infinity)
-      && value.length >= (shape.minLength || 0)
-      && (!shape.pattern || new RegExp(shape.pattern).test(value));
-    if (!valid) errors.push(path + ": text is outside this contract.");
+      && value.length <= (shape.maxLength ?? Infinity)
+      && value.length >= (shape.minLength ?? 0)
+      && (!shape.pattern || SCHEMA_PATTERNS.get(shape.pattern).test(value));
+    return valid ? null : path + ": text is outside this contract.";
   }
 
-  function validateIdentifiers(name, list, errors) {
+  function validateIdentifiers(name, list) {
     const ids = list.map(item => item.id);
-    if (ids.some(id => !cleanText(id)) || new Set(ids).size !== ids.length) {
-      errors.push(name + ": distinct nonempty identifiers are needed.");
-    }
+    return ids.some(id => !cleanText(id)) || new Set(ids).size !== ids.length
+      ? name + ": distinct nonempty identifiers are needed." : null;
   }
 
   function hasEventCycle(events, byId) {
@@ -246,11 +312,11 @@
     return events.some(event => visit(event.id));
   }
 
-  function validateEvents(events, errors) {
+  function* validateEvents(events) {
     const eventIds = new Set(events.map(event => event.id));
     for (const event of events) {
       if (event.predecessors.some(id => !eventIds.has(id) || id === event.id)) {
-        errors.push("events: each predecessor must name another event.");
+        yield "events: each predecessor must name another event.";
       }
     }
 
@@ -258,56 +324,57 @@
     for (const event of events) {
       const time = numeric(event.period, "Event period", 0);
       if (time.status === "invalid") {
-        errors.push("events: periods use nonnegative finite numbers or an explicit blank.");
+        yield "events: periods use nonnegative finite numbers or an explicit blank.";
       }
       for (const id of event.predecessors) {
         const prior = numeric(byId.get(id)?.period, "Predecessor period", 0);
         if (time.status === "known" && prior.status === "known" && prior.value > time.value) {
-          errors.push("events: predecessor occurrences belong at or before the receiving event.");
+          yield "events: predecessor occurrences belong at or before the receiving event.";
         }
       }
     }
 
     if (hasEventCycle(events, byId)) {
-      errors.push("events: use distinct event occurrences to represent repeated lifecycle stages.");
+      yield "events: use distinct event occurrences to represent repeated lifecycle stages.";
     }
   }
 
-  function validate(state) {
-    const errors = [];
-    validateSchemaValue(state, schema(), "state", errors);
+  function validateContract(state) {
+    const errors = [...validateSchemaValue(state, STATE_SCHEMA, "state")];
     if (errors.length) return { valid: false, errors };
-
-    // Diagnostics accumulate in contract order; choosing the first match would lose evidence.
-    for (const name of ["alternatives", "outcomes", "events"]) {
-      validateIdentifiers(name, state[name], errors);
-    }
-    if (new Set(state.clinical.map(item => item.name)).size !== OUTCOMES.length) {
-      errors.push("clinical: preserve all nine distinct consequence dimensions.");
-    }
-    validateEvents(state.events, errors);
-    return { valid: errors.length === 0, errors };
+    const identityErrors = ["alternatives", "outcomes", "events"].map(name => validateIdentifiers(name, state[name])).filter(Boolean);
+    const clinicalErrors = new Set(state.clinical.map(item => item.name)).size === OUTCOMES.length
+      ? [] : ["clinical: preserve all nine distinct consequence dimensions."];
+    const diagnostics = [...identityErrors, ...clinicalErrors, ...validateEvents(state.events)];
+    return { valid: diagnostics.length === 0, errors: diagnostics };
+  }
+  function validate(state) {
+    try { jsonText(state); }
+    catch (error) { return { valid: false, errors: [error.message] }; }
+    return validateContract(state);
   }
   function stable(value) {
     if(Array.isArray(value))return "["+value.map(stable).join(",")+"]";
     if(value&&typeof value==="object")return "{"+Object.keys(value).sort().map(k=>JSON.stringify(k)+":"+stable(value[k])).join(",")+"}";
     return JSON.stringify(value);
   }
-  function fingerprint(state) {
-    let hash=2166136261;for(const char of stable(state)){hash^=char.codePointAt(0);hash=Math.imul(hash,16777619);}
+  function fingerprintText(text) {
+    let hash=2166136261;for(const char of text){hash^=char.codePointAt(0);hash=Math.imul(hash,16777619);}
     return "fnv1a32:"+ (hash>>>0).toString(16).padStart(8,"0");
   }
+  function fingerprint(state) { return fingerprintText(stable(state)); }
   function parseFlows(flows) {
     if(!Array.isArray(flows)||flows.length<2)return unavailable("Supply t=0 and at least one later cash flow.");
-    const parsed=flows.map((v,i)=>numeric(v,"Cash flow at t="+i));
+    const parsed=Array.from(flows,(v,i)=>numeric(v,"Cash flow at t="+i));
     const bad=parsed.find(x=>x.status!=="known");
     return bad||{status:"known",value:parsed.map(x=>x.value)};
   }
   function npv(flows, rate) {
     const f=parseFlows(flows),r=numeric(rate,"Discount rate",-.999999);
     if(f.status!=="known")return f;if(r.status!=="known")return r;
-    return known(f.value.reduce((sum,x,t)=>sum+x/Math.pow(1+r.value,t),0),"currency");
+    return known(npvValues(f.value,r.value),"currency");
   }
+  function npvValues(flows, rate) { return flows.reduce((sum, value, period) => sum + value / Math.pow(1 + rate, period), 0); }
   function irr(flows) {
     const f=parseFlows(flows);if(f.status!=="known")return f;
     const xs=f.value,signs=xs.filter(x=>x!==0).map(Math.sign);
@@ -315,9 +382,10 @@
     if(changes===0)return unavailable("IRR has no sign-changing cash-flow solution.","ratio","inapplicable");
     if(changes>1)return unavailable("Multiple-solution or non-conventional cash flows: use NPV.","ratio","ambiguous");
     if(xs[0]>=0||xs.slice(1).some(x=>x<0))return unavailable("IRR is restricted to an initial investment followed by nonnegative flows.","ratio","inapplicable");
-    let lo=-.9999,hi=100,a=npv(xs,lo).value,b=npv(xs,hi).value;
-    if(a===null||b===null||a*b>0)return unavailable("IRR lies outside the supported -99.99% to 10,000% bracket.","ratio","unreached");
-    for(let i=0;i<160;i++){const mid=(lo+hi)/2,v=npv(xs,mid).value;if(v>0)lo=mid;else hi=mid;}
+    let lo=-.9999,hi=100;
+    const a=npvValues(xs,lo),b=npvValues(xs,hi);
+    if(!Number.isFinite(a)||!Number.isFinite(b)||a*b>0)return unavailable("IRR lies outside the supported -99.99% to 10,000% bracket.","ratio","unreached");
+    for(let i=0;i<160;i++){const mid=(lo+hi)/2,v=npvValues(xs,mid);if(v>0)lo=mid;else hi=mid;}
     return known((lo+hi)/2,"ratio");
   }
   function payback(flows) {
@@ -338,7 +406,7 @@
   }
   function staffing(s) {
     const problems=[],read=(v,label,min=0,max=null)=>{const r=numeric(v,label,min,max);if(r.status!=="known")problems.push(r.reason);return r.value;};
-    const h=read(s.horizon,"Horizon"),units={hours:1,sprints:80,quarters:520};
+    const h=read(s.horizon,"Horizon"),units=STAFFING_HOURS;
     if(!Object.hasOwn(units,s.unit))problems.push("Choose hours, sprints, or quarters.");
     const horizonHours=h*units[s.unit],roles=s.roles.filter(r=>r.enabled),activities=s.activities.filter(r=>r.enabled),disruptions=s.disruptions.filter(r=>r.enabled);
     let people=0,weighted=0,allocatedHours=0,roleCost=0,taskCount=0,activityHours=0,disruptionHours=0;
@@ -352,12 +420,12 @@
     const qualityRate=s.qualityEnabled?read(s.qualityRate,"Quality loaded rate"):0;
     const overlap={activities:read(s.overlap?.activities,"Additional activity share",0,1),recovery:read(s.overlap?.recovery,"Additional recovery share",0,1),quality:read(s.overlap?.quality,"Additional quality share",0,1)};
     const activityCost=activityHours*blended*overlap.activities,disruptionCost=disruptionHours*blended*overlap.recovery,qualityCost=qualityHours*qualityRate*overlap.quality;
-    const unknownCount=read(s.unknowns,"Named unknowns"),unknownRate=Math.min(.35,unknownCount*.025),complexityRate={bounded:.08,connected:.16,frontier:.28}[s.complexity];
+    const unknownCount=read(s.unknowns,"Named unknowns"),unknownRate=Math.min(.35,unknownCount*.025),complexityRate=Object.hasOwn(COMPLEXITY_RATES,s.complexity)?COMPLEXITY_RATES[s.complexity]:undefined;
     if(complexityRate===undefined)problems.push("Choose a named complexity heuristic.");
     if(problems.length)return {status:"unavailable",problems};
     const base=roleCost+activityCost+disruptionCost+qualityCost,unknownCost=base*unknownRate,complexityCost=base*complexityRate,central=base+unknownCost+complexityCost,spread=.07+Math.min(.16,unknownRate*.45+complexityRate*.2);
     if(!Number.isFinite(central))return {status:"invalid",problems:["The staffing result exceeds the supported numeric range."]};
-    return {status:"known",horizonHours,people,taskCount,activityHours,allocatedHours,qualityHours,qualityMultiplier,disruptionHours,roleCost,activityCost,qualityCost,disruptionCost,unknownCost,complexityCost,central,spread,low:central*(1-spread),high:central*(1+spread),unknownCount,unknownRate,complexityRate,unpricedWork:false,overlap,problems:[]};
+    return {status:"known",currency:STAFFING_CURRENCY,horizonHours,people,taskCount,activityHours,allocatedHours,qualityHours,qualityMultiplier,disruptionHours,roleCost,activityCost,qualityCost,disruptionCost,unknownCost,complexityCost,central,spread,low:central*(1-spread),high:central*(1+spread),unknownCount,unknownRate,complexityRate,unpricedWork:false,overlap,problems:[]};
   }
   const FIELD_DOMAINS = Object.freeze({
     commercial: "commercial-cohort",
@@ -423,29 +491,37 @@
       return unavailable("Use a common horizon before comparing alternatives.", "currency", "incompatible");
     }
     if (!currencyAvailable) return unavailable("Supply currency.", "currency");
-    return npv(alternative.flows, inputs.discountRate);
+    return { ...npv(alternative.flows, inputs.discountRate), unit: "currency" };
   }
 
   function calculateAlternatives(state, currencyAvailable) {
     const commonHorizon = new Set(state.alternatives.map(item => item.flows.length)).size === 1;
     return state.alternatives.map(alternative => ({
       ...alternative,
+      flows: [...alternative.flows],
       npv: calculateAlternativeNpv(alternative, state.inputs, commonHorizon, currencyAvailable),
       irr: irr(alternative.flows),
       payback: payback(alternative.flows)
     }));
   }
 
-  function calculateSensitivity(state) {
+  function calculateSensitivity(state, currencyAvailable) {
     const rate = readInput(state.inputs, "discountRate");
+    const commonHorizon = new Set(state.alternatives.map(item => item.flows.length)).size === 1;
     return state.alternatives.map(alternative => ({
       id: alternative.id,
-      values: [-.02, 0, .02].map(offset => ({
-        rate: rate.value === null ? null : rate.value + offset,
-        result: rate.status === "known"
-          ? npv(alternative.flows, rate.value + offset)
-          : unavailable(rate.reason)
-      }))
+      values: [-.02, 0, .02].map(offset => {
+        const shifted = rate.status === "known" ? rate.value + offset : null;
+        return {
+          rate: shifted,
+          result: calculateAlternativeNpv(
+            alternative,
+            { discountRate: shifted === null ? state.inputs.discountRate : shifted },
+            commonHorizon,
+            currencyAvailable
+          )
+        };
+      })
     }));
   }
 
@@ -480,7 +556,7 @@
   }
 
   function inputStatus(inputs, key, field) {
-    if (field.type === "number") return readInput(inputs, key).status;
+    if (field.type === FIELD_TYPE.NUMBER) return readInput(inputs, key).status;
     return cleanText(inputs[key]) || typeof inputs[key] === "boolean" ? "known" : "unavailable";
   }
 
@@ -571,8 +647,11 @@
       return { valid: false, errors: validation.errors, metrics: {}, alternatives: [], clinical: [], records: [] };
     }
 
+    return calculateAccepted(state);
+  }
+  function calculateAccepted(state) {
     const inputs = state.inputs;
-    const currencyAvailable = /^[A-Z]{3}$/.test(inputs.currency);
+    const currencyAvailable = CURRENCY_CODE.test(inputs.currency);
     const metrics = {};
     function metric(key, keys, unit, formula) {
       metrics[key] = calculateMetric(inputs, currencyAvailable, keys, unit, formula);
@@ -621,11 +700,11 @@
     metric("costPerOutcome", ["candidateCost", "baselineCost", "incrementalOutcome"], "currency/outcome",
       (candidate, baseline, outcome) => calculateCostPerOutcome(inputs, candidate, baseline, outcome));
     metrics.expectedNpv = currencyAvailable
-      ? expectedNpv(state.outcomes, inputs.discountRate, inputs.exhaustive)
+      ? { ...expectedNpv(state.outcomes, inputs.discountRate, inputs.exhaustive), unit: "currency" }
       : unavailable("Supply currency.", "currency");
 
     const alternatives = calculateAlternatives(state, currencyAvailable);
-    const sensitivity = calculateSensitivity(state);
+    const sensitivity = calculateSensitivity(state, currencyAvailable);
     const clinical = state.clinical.map(consequence => ({
       ...consequence,
       delta: calculateClinicalDelta(consequence, inputs)
@@ -634,10 +713,11 @@
     const records = buildRecords(state, metrics, alternatives, clinical, gate);
     return {
       valid: true, errors: [], metrics, alternatives, sensitivity, clinical, records,
-      gate, events: clone(state.events)
+      gate, events: state.events.map(event => ({ ...event, predecessors: [...event.predecessors] }))
     };
   }
   function migrate(raw) {
+    jsonText(raw);
     if(raw?.schemaVersion===VERSION)return clone(raw);
     const next=defaults();
     if(raw?.schemaVersion==="1.0.0"&&raw.view==="model-explorer"&&typeof raw.activeModelId==="string") {
@@ -646,7 +726,7 @@
     if(raw&&Array.isArray(raw.roles)&&raw.horizon&&raw.plan) {
       next.inputs.label=String(raw.plan);next.inputs.internalInvestment=null;next.origin="user-supplied";
       next.extensions["urn:investment:legacy-leave-behind"]={snapshot:clone(raw),standing:"Historical display snapshot retained. Re-enter exact inputs before deriving investment amounts."};
-      for(const [key,f] of Object.entries(FIELDS))if(f.type==="number")next.inputs[key]=null;
+      for(const [key,f] of Object.entries(FIELDS))if(f.type===FIELD_TYPE.NUMBER)next.inputs[key]=null;
       for(const a of next.alternatives)a.flows=a.flows.map(()=>null);
       for(const o of next.outcomes){o.probability=null;o.flows=o.flows.map(()=>null);}
       return next;
@@ -654,12 +734,22 @@
     throw new Error("Choose investment state 0.1.0, a legacy model selection, or a calculator leave-behind. Current state remains available.");
   }
   function importState(text) {
-    if(typeof text!=="string"||text.length>1000000)throw new Error("Use a JSON state of at most 1 MB.");
-    const parsed=JSON.parse(text,(key,value)=>{if(["__proto__","constructor","prototype"].includes(key))throw new Error("Reserved object key; current state remains available.");return value;});
-    const state=migrate(parsed),result=validate(state);
-    if(!result.valid)throw new Error(result.errors.slice(0,4).join(" "));
+    const state = migrate(parseJson(text));
+    const result = validate(state);
+    if (!result.valid) throw new Error(result.errors.slice(0,4).join(" "));
     return state;
   }
-  function serialize(state) { const v=validate(state);if(!v.valid)throw new Error(v.errors.join(" "));return stable(state); }
-  return Object.freeze({VERSION,DOMAINS,TYPES,FIELDS,OUTCOMES,defaults,schema,validate,clone,numeric,known,unavailable,stable,fingerprint,npv,irr,payback,expectedNpv,staffing,calculate,migrate,importState,serialize});
+  function serialize(state) {
+    const text = jsonText(state);
+    const validation = validateContract(state);
+    if (!validation.valid) throw new Error(validation.errors.join(" "));
+    return text;
+  }
+  function prepare(candidate) {
+    const serialized = serialize(candidate);
+    const state = JSON.parse(serialized);
+    const result = calculateAccepted(state);
+    return freezeTree({ state, result, serialized, fingerprint: fingerprintText(serialized) });
+  }
+  return Object.freeze({VERSION,FIELD_TYPE,STAFFING_CURRENCY,JSON_LIMITS,NUMERIC_TEXT_LIMIT,DOMAINS,TYPES,FIELDS,OUTCOMES,defaults,schema,validate,clone,numeric,known,unavailable,stable,fingerprint,npv,irr,payback,expectedNpv,staffing,calculate,migrate,parseJson,importState,serialize,prepare});
 });

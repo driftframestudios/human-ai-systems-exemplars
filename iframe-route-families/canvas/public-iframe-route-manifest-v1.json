@@ -150,26 +150,6 @@
           "public_reference": "https://vik.guru/shared-machinery.html"
         }
       ],
-      "package_files": [
-        {
-          "source_reference": "../investment-analysis/core.js",
-          "source_file": "collaboration/investment-analysis/core.js",
-          "target_file": "assets/investment-core.js",
-          "content_type": "text/javascript"
-        },
-        {
-          "source_reference": "../investment-analysis/studio.js",
-          "source_file": "collaboration/investment-analysis/studio.js",
-          "target_file": "assets/investment-studio.js",
-          "content_type": "text/javascript"
-        },
-        {
-          "source_reference": "../investment-analysis/studio.css",
-          "source_file": "collaboration/investment-analysis/studio.css",
-          "target_file": "assets/investment-studio.css",
-          "content_type": "text/css"
-        }
-      ],
       "reader_job": "Model a provisional cross-functional investment and open its report or primary-site continuation without changing the parent visitor surface."
     },
     {
@@ -423,7 +403,7 @@
       "public_alias": "/v1/canvas/cross-functional-investment-model-studio/",
       "receiver_standing": "context_adapted",
       "activation_standing": "eligible",
-      "projection_kind": "decorated_rewrite",
+      "projection_kind": "decorated_copy",
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -435,26 +415,6 @@
           "clipboard-write"
         ]
       },
-      "package_files": [
-        {
-          "source_reference": "../investment-analysis/core.js",
-          "source_file": "collaboration/investment-analysis/core.js",
-          "target_file": "assets/investment-core.js",
-          "content_type": "text/javascript"
-        },
-        {
-          "source_reference": "../investment-analysis/studio.js",
-          "source_file": "collaboration/investment-analysis/studio.js",
-          "target_file": "assets/investment-studio.js",
-          "content_type": "text/javascript"
-        },
-        {
-          "source_reference": "../investment-analysis/studio.css",
-          "source_file": "collaboration/investment-analysis/studio.css",
-          "target_file": "assets/investment-studio.css",
-          "content_type": "text/css"
-        }
-      ],
       "reader_job": "Inspect a cross-functional investment model and carry the selected Prompt Capsule by copy or download."
     },
     {
