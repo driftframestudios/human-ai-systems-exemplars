@@ -36,6 +36,7 @@
     "security:secrets:history": "node tools/scan-secret-material.mjs history",
     "security:secrets:artifact": "node tools/scan-secret-material.mjs artifact",
     "security:secrets:public-references": "node tools/scan-secret-material.mjs artifact .public-reference-build/context-canvas-project-surface",
+    "test:dependency-security": "node --test tests/security/dependency-security.test.mjs",
     "test:open-lesson-field": "node tools/open-lesson-field-contract.mjs",
     "test:public-reference-materializer": "node --test tests/public-references/materializer.test.mjs",
     "test:context-canvas": "node --test tests/context-canvas/*.test.mjs",
@@ -77,6 +78,9 @@
     "build:context-canvas-field-pilot": "node cloudflare/context-canvas-field-pilot/build.mjs",
     "check:context-canvas-field-pilot": "node cloudflare/context-canvas-field-pilot/build.mjs --check",
     "dry-run:context-canvas-field-pilot": "npm run build:context-canvas-field-pilot && wrangler deploy --dry-run --config cloudflare/context-canvas-field-pilot/wrangler.jsonc"
+  },
+  "overrides": {
+    "fast-uri": "4.1.5"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
