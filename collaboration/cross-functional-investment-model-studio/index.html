@@ -1152,7 +1152,7 @@
 <!-- investment-analysis:core:start -->
 <!-- Generated from collaboration/investment-analysis/core.js; regenerate: node tools/project-investment-analysis.mjs -->
 <script data-investment-analysis-source="collaboration/investment-analysis/core.js">
-/* Shared investment calculation and exchange owner. Browser and Node; no runtime dependencies. */
+/* Shared investment calculation and exchange owner. Uses browser and Node built-ins. */
 (function (root, factory) {
   const api = factory();
   if (typeof module === "object" && module.exports) module.exports = api;
@@ -1533,7 +1533,7 @@
     const f=parseFlows(flows);if(f.status!=="known")return f;
     const xs=f.value,signs=xs.filter(x=>x!==0).map(Math.sign);
     const changes=signs.slice(1).reduce((n,x,i)=>n+(x!==signs[i]?1:0),0);
-    if(changes===0)return unavailable("IRR has no sign-changing cash-flow solution.","ratio","inapplicable");
+    if(changes===0)return unavailable("IRR requires at least one cash-flow sign change.","ratio","inapplicable");
     if(changes>1)return unavailable("Multiple-solution or non-conventional cash flows: use NPV.","ratio","ambiguous");
     if(xs[0]>=0||xs.slice(1).some(x=>x<0))return unavailable("IRR is restricted to an initial investment followed by nonnegative flows.","ratio","inapplicable");
     let lo=-.9999,hi=100;
@@ -1547,7 +1547,7 @@
     if(f.value[0]>=0)return unavailable("Payback requires an initial cash outlay.","period","inapplicable");
     let cumulative=f.value[0];
     for(let t=1;t<f.value.length;t++){const prior=cumulative;cumulative+=f.value[t];if(cumulative>=0)return known(t-1+(-prior/f.value[t]),"period","Undiscounted; linear recovery within the crossing period.");}
-    return unavailable("Not reached within horizon.","period","unreached");
+    return unavailable("Cumulative cash flow remains below zero throughout the supplied horizon.","period","unreached");
   }
   function expectedNpv(outcomes, rate, exhaustive) {
     if(!exhaustive)return unavailable("Confirm a mutually exclusive, collectively exhaustive outcome tree.","currency");
@@ -1735,7 +1735,7 @@
       value: {
         convention: inputs.cashConvention,
         taxWorkingCapital: inputs.taxWorkingCapital,
-        reserves: "Cash flows carry all intended costs once; staffing reference and pricing outputs are separate views, never automatically added."
+        reserves: "Cash-flow inputs carry each intended cost once; staffing references and pricing outputs remain separate views."
       }
     });
     for (const [id, result] of Object.entries(metrics)) {
