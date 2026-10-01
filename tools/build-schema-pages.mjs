@@ -15,6 +15,8 @@ import {
   publishingCompany,
 } from "./attribution-contract.mjs";
 import { schemaReceiverRoutes } from "./schema-receiver-routes.mjs";
+import { assertPublicationRevision, copySchemaPayload, retrievalUrl, schemaCompanionRoutes, schemaPublication } from "./schema-publication.mjs";
+import { pagesReleaseTag } from "./schema-site-release.mjs";
 import {
   assertExactFileInventory,
   assertPublicMaterial,
@@ -310,6 +312,7 @@ function normalizedBaseUrl(rawValue) {
 }
 
 const baseUrl = normalizedBaseUrl(process.env.PAGES_BASE_URL);
+const releaseTag = process.env.PAGES_RELEASE_TAG ? pagesReleaseTag(process.env.PAGES_RELEASE_TAG) : null;
 
 function browserPath(path) {
   return path.split(sep).join("/");
@@ -637,6 +640,14 @@ async function buildSkillsProjection() {
   const { selection, entries, possibleTerms, publicSourcePaths } =
     await loadSkillPublicationSelection();
   const sourceRevision = await readSourceRevision(publicSourcePaths);
+  await assertPublicationRevision(repositoryRoot, sourceRevision, [
+    "schemas", ".agents/skills/publication-selection.json", ...publicSourcePaths,
+    "tools/build-schema-pages.mjs", "tools/schema-publication.mjs", "tools/schema-publication-lock.json",
+    "tools/schema-receiver-routes.mjs", "tools/schema-site-release.mjs", "tools/publication-boundary.mjs",
+    "tools/attribution-contract.mjs", "package.json", "package-lock.json", ...publicCarrierPaths,
+    "context-canvas-project-surface/context-canvas/visitor-boundary-contract.js",
+    ...[...schemaReceiverRoutes, ...schemaCompanionRoutes].map(({ source }) => source),
+  ]);
   const publicEntries = entries.filter((entry) => entry.publicationStanding === "public_ready");
   const possibleNames = entries
     .filter((entry) => entry.publicationStanding === "public_possible")
@@ -702,6 +713,10 @@ async function buildSkillsProjection() {
     repository: selection.repository,
     sourceRevision,
     schemaRef: schema.$id,
+    schemaRefRole: "canonical_schema_identity",
+    schemaRetrievalUrl: baseUrl
+      ? retrievalUrl("collaboration-skills/0.1.0/collaboration-skill.schema.json", baseUrl)
+      : "../collaboration-skills/0.1.0/collaboration-skill.schema.json",
     publicationStanding: "public_ready",
     selectionRule: selection.publicationPolicy.sourceRule,
     skills: projections.map(({ entry, projectionPath }) => ({
@@ -711,6 +726,7 @@ async function buildSkillsProjection() {
       publicationStanding: "public_ready",
       pagePath: `${entry.name}/`,
       projectionPath,
+      projectionRetrievalUrl: baseUrl ? retrievalUrl(`skills/${projectionPath}`, baseUrl) : projectionPath,
       sourcePath: entry.sourcePath,
       sourceRoute: sourceRecordByPath.get(entry.sourcePath).publicRoute,
       sourceSha256: sourceRecordByPath.get(entry.sourcePath).sha256,
@@ -782,7 +798,7 @@ async function projectRegistryReadmeLinks() {
   const readmePath = resolve(outputRoot, "README.md");
   let source = await readFile(readmePath, "utf8");
 
-  for (const route of schemaReceiverRoutes) {
+  for (const route of [...schemaReceiverRoutes, ...schemaCompanionRoutes]) {
     const authoredHref = browserPath(
       relative(sourceRoot, resolve(repositoryRoot, route.source)),
     );
@@ -1127,6 +1143,24 @@ for (const route of schemaReceiverRoutes) {
 
 const { catalog: publicSkillCatalog, possibleNames: publicPossibleSkillNames } =
   await buildSkillsProjection();
+await copySchemaPayload(repositoryRoot, outputRoot);
+const schemaCatalog = await schemaPublication(repositoryRoot, baseUrl, publicSkillCatalog.sourceRevision);
+await writeFile(resolve(outputRoot, "schema-catalog.json"), `${JSON.stringify(schemaCatalog, null, 2)}\n`);
+await writeFile(resolve(outputRoot, "release.json"), `${JSON.stringify({
+  schemaVersion: "1", releaseTag, sourceRevision: publicSkillCatalog.sourceRevision,
+  deliveryBase: baseUrl, schemaCatalog: "schema-catalog.json", skillCatalog: "skills/catalog.json",
+}, null, 2)}\n`);
+const registryPath = resolve(outputRoot, "index.html");
+let registry = await readFile(registryPath, "utf8");
+for (const contract of schemaCatalog.contracts) {
+  const anchor = registry.indexOf(`href="${contract.path}"`);
+  requirement(anchor >= 0, `the registry must link ${contract.path}`);
+  const end = registry.indexOf("</li>", anchor);
+  const details = `<details data-schema-path="${htmlEscape(contract.path)}"><summary>Identity and source: ${htmlEscape(contract.path.split("/").at(-1))}</summary><p>Download from this site: <a href="${htmlEscape(contract.path)}">${htmlEscape(contract.retrievalUrl)}</a></p><p>Stable schema identity: <code>${htmlEscape(contract.canonicalId)}</code></p><p>Repository source: <code>${htmlEscape(contract.sourcePath)}</code></p><p>SHA-256: <code>${contract.sha256}</code></p></details>\n`;
+  registry = registry.slice(0, end) + details + registry.slice(end);
+}
+registry = registry.replace("<!-- schema-pages:release -->", `<p>Site release: <code>${releaseTag ?? "local build"}</code>. Source revision: <code>${publicSkillCatalog.sourceRevision}</code>.</p><p><a href="release.json">Release coordinates</a> · <a href="schema-catalog.json">Schema identities, downloads, and digests</a></p>`);
+await writeFile(registryPath, registry);
 await projectRegistryReadmeLinks();
 await projectCollaborationSkillsReadmeLinks();
 await projectRegistryIndexLinks();

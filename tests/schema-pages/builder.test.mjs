@@ -211,6 +211,32 @@ test("the generated artifact carries the reviewed custom domain", async () => {
   assert.equal(customDomain, new URL(deploymentBase).hostname);
 });
 
+test("schema discovery separates frozen identity, host retrieval, and accepted source", async () => {
+  const catalog = JSON.parse(await readFile(resolve(outputRoot, "schema-catalog.json"), "utf8"));
+  const release = JSON.parse(await readFile(resolve(outputRoot, "release.json"), "utf8"));
+  const skills = JSON.parse(await readFile(resolve(skillsOutputRoot, "catalog.json"), "utf8"));
+  assert.equal(catalog.sourceRevision, release.sourceRevision);
+  assert.equal(release.sourceRevision, skills.sourceRevision);
+  assert.equal(catalog.contracts.length, schemaReceiverRoutes.length);
+  for (const contract of catalog.contracts) {
+    const bytes = await readFile(resolve(outputRoot, contract.path));
+    assert.equal(contract.canonicalId, JSON.parse(bytes).$id);
+    assert.equal(contract.retrievalUrl, `${deploymentBase}/${contract.path}`);
+    assert.equal(contract.sha256, sha256(bytes));
+    assert.equal(contract.sizeBytes, bytes.length);
+    assert.ok(contract.dependencyIdentities.every((id) => catalog.contracts.some((entry) => entry.canonicalId === id)));
+  }
+  const investment = catalog.contracts.find((entry) => entry.path === "investment-analysis/0.2.0/state.schema.json");
+  assert.ok(investment);
+  const schema = JSON.parse(await readFile(resolve(outputRoot, investment.path), "utf8"));
+  const example = JSON.parse(await readFile(resolve(outputRoot, "investment-analysis/0.2.0/example.json"), "utf8"));
+  const validate = new Ajv2020({ strict: true, validateFormats: false }).compile(schema);
+  assert.equal(validate(example), true, JSON.stringify(validate.errors));
+  assert.equal(skills.schemaRefRole, "canonical_schema_identity");
+  assert.equal(skills.schemaRetrievalUrl, `${deploymentBase}/collaboration-skills/0.1.0/collaboration-skill.schema.json`);
+  for (const skill of skills.skills) assert.equal(skill.projectionRetrievalUrl, `${deploymentBase}/skills/${skill.projectionPath}`);
+});
+
 test("every relative homepage link resolves inside the built artifact", async () => {
   const html = await readFile(resolve(outputRoot, "index.html"), "utf8");
   const hrefs = [...html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/gu)].map((match) => match[1]);

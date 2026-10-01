@@ -6,7 +6,8 @@ import { resolve } from "node:path";
 import { promisify } from "node:util";
 import test from "node:test";
 
-import { verifySchemaPagesReceiver } from "../../tools/verify-schema-pages-receiver.mjs";
+import { verifySchemaPagesReceiver, verifySchemaSiteRelease } from "../../tools/verify-schema-pages-receiver.mjs";
+import { assertPublicationRevision } from "../../tools/schema-publication.mjs";
 
 const execFileAsync = promisify(execFile);
 const repositoryRoot = resolve(import.meta.dirname, "../..");
@@ -79,6 +80,37 @@ test("an exact source and docs pair verifies file membership and bytes", async (
   } finally {
     await rm(state.root, { recursive: true, force: true });
   }
+});
+
+test("the current release gate requires metadata even for an exact historical artifact", async () => {
+  const state = await fixture();
+  try {
+    await assert.rejects(verifySchemaSiteRelease({ ...state, releaseTag: "pages-v0.1.0" }), /ENOENT/u);
+    const manifest = { releaseTag: "pages-v0.1.0", sourceRevision: state.sourceRevision };
+    const bytes = `${JSON.stringify(manifest)}\n`;
+    await writeFile(resolve(state.artifactRoot, "release.json"), bytes);
+    await writeFile(resolve(state.projectionRoot, "release.json"), bytes);
+    await git(state.projectionRoot, "add", "release.json");
+    await git(state.projectionRoot, "commit", "--quiet", "-m", "Bind release");
+    state.projectionRevision = await git(state.projectionRoot, "rev-parse", "HEAD");
+    await assert.rejects(verifySchemaSiteRelease({ ...state, releaseTag: "pages-v0.1.0" }));
+    const result = await verifySchemaPagesReceiver(state);
+    await git(state.projectionRoot, "tag", "-a", "pages-v0.1.0", "-m",
+      `Site release\n\nSource-Revision: ${state.sourceRevision}\nClosure-SHA256: ${result.closureDigest}`);
+    await verifySchemaSiteRelease({ ...state, releaseTag: "pages-v0.1.0" });
+  } finally { await rm(state.root, { recursive: true, force: true }); }
+});
+
+test("publication provenance follows committed selected inputs", async () => {
+  const state = await fixture();
+  try {
+    await assertPublicationRevision(state.sourceRoot, state.sourceRevision, ["README.md"]);
+    await writeFile(resolve(state.sourceRoot, "README.md"), "Edited source\n");
+    await assert.rejects(assertPublicationRevision(state.sourceRoot, state.sourceRevision, ["README.md"]), /Commit the selected/u);
+    await writeFile(resolve(state.sourceRoot, "README.md"), "Accepted source\n");
+    await writeFile(resolve(state.sourceRoot, "new.md"), "Uncommitted input\n");
+    await assert.rejects(assertPublicationRevision(state.sourceRoot, state.sourceRevision, ["README.md", "new.md"]), /belong to the named commit/u);
+  } finally { await rm(state.root, { recursive: true, force: true }); }
 });
 
 test("receiver verification rejects matching ignored additions", async () => {

@@ -101,3 +101,54 @@ Extension keys use a scheme-qualified namespace so ownership remains visible:
 ```
 
 The local check establishes the namespace-key shape. A receiving semantic context can define stronger meaning for its own namespace. Repeated use can support a later core version, while family-specific material can remain namespaced when that keeps its owner easy to find.
+
+## Site releases and retrieval
+
+The GitHub Pages site publishes reviewed source as a versioned site release.
+Its download links and page metadata use `schemas.radiantnull.com`; schema
+identifiers retain their established values. The generated `schema-catalog.json`
+names each identity, host-local retrieval URL, source path, revision, dependency
+identities, and digest. `release.json` identifies the site release and source.
+Skill catalog `schemaRef` remains the canonical identity; `schemaRetrievalUrl`
+provides this site's download. The source selection includes Investment
+Analysis 0.2.0: [orientation](investment-analysis/0.2.0/README.md),
+[schema](../collaboration/investment-analysis/state.schema.json), and
+[example](../collaboration/investment-analysis/example.json).
+
+### Release and recovery contract
+
+1. Accept the source PR on main, including source-owned public material checks.
+2. Build with `PAGES_BASE_URL=https://schemas.radiantnull.com`,
+   `PAGES_SOURCE_REVISION=<accepted full SHA>`, and `PAGES_RELEASE_TAG=pages-v0.1.0`
+   (or the next unused site version). Run the schema, Pages, and focused browser checks.
+3. Review the complete generated artifact in a PR targeting docs. Compare exact
+   file membership and bytes with the source build using the receiver verifier.
+4. Create an annotated `pages-vMAJOR.MINOR.PATCH` tag on the accepted docs commit.
+   Its annotation includes exact `Source-Revision: <SHA>` and
+   `Closure-SHA256: <digest>` lines from the receiver comparison. Preserve tags as
+   permanent release coordinates; a changed artifact receives a new tag.
+5. Dispatch the main Pages workflow with the source SHA, projection SHA, and
+   release tag. The default observation leaves activation at rest. Activate the
+   same reviewed pair through the explicit deployment input after acceptance.
+6. Observe public release metadata, selected schemas, skill sources, media types,
+   and missing routes. Publish release notes after deployment succeeds.
+
+Site versions describe catalog, presentation, and delivery changes. Schema
+versions describe individual contracts. New capabilities advance the site minor
+version; compatible corrections advance its patch version; changed site-level
+consumer contracts earn a major version. The first dedicated site tag is
+`pages-v0.1.0`; earlier deployments retain their source/docs receipts.
+
+The published-byte lock lives in `tools/schema-publication-lock.json`. Existing
+entries preserve exact-version bytes, including annotations. New identities and
+paths receive reviewed additions. Updated visitor display names belong in the
+catalog. Recovery keeps every promised schema route; after adding contracts,
+prefer a forward repair over an older artifact that omits those routes.
+
+The author-host adapter uses the same selected contract payload. Its domain
+activation and observed cache/CORS behavior remain a separate release. Selected
+reviewed skill source copies are deliberate public artifacts; the complete
+operational directories retain their repository-only role. Both builders bind
+publication provenance to committed selected inputs. The workflow-owned verifier
+checks release metadata and the annotated tag independently of the selected
+historical source, so an earlier builder retains the current acceptance boundary.

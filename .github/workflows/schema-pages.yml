@@ -4,15 +4,19 @@ on:
   workflow_dispatch:
     inputs:
       source_revision:
-        description: Exact accepted main commit (40 lowercase hexadecimal characters)
+        description: Accepted main source (full lowercase SHA)
         required: true
         type: string
       projection_revision:
-        description: Exact reviewed docs commit (40 lowercase hexadecimal characters)
+        description: Reviewed docs projection (full lowercase SHA)
+        required: true
+        type: string
+      release_tag:
+        description: Annotated site release tag (pages-vMAJOR.MINOR.PATCH)
         required: true
         type: string
       activate_deployment:
-        description: Upload and deploy the verified receiver through GitHub Pages
+        description: Publish the verified site release
         required: true
         default: false
         type: boolean
@@ -22,154 +26,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  verify:
-    name: Rebuild and compare accepted coordinates
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    permissions:
-      contents: read
-      pages: read
-    steps:
-      - name: Validate immutable coordinates
-        shell: bash
-        env:
-          WORKFLOW_REF: ${{ github.ref }}
-          SOURCE_REVISION: ${{ inputs.source_revision }}
-          PROJECTION_REVISION: ${{ inputs.projection_revision }}
-        run: |
-          if [[ "$WORKFLOW_REF" != "refs/heads/main" ]]; then
-            echo "This workflow must be dispatched from main" >&2
-            exit 1
-          fi
-          if [[ ! "$SOURCE_REVISION" =~ ^[0-9a-f]{40}$ ]]; then
-            echo "source_revision must be one full lowercase Git SHA" >&2
-            exit 1
-          fi
-          if [[ ! "$PROJECTION_REVISION" =~ ^[0-9a-f]{40}$ ]]; then
-            echo "projection_revision must be one full lowercase Git SHA" >&2
-            exit 1
-          fi
-
-      - name: Check out the accepted source
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ inputs.source_revision }}
-          path: source
-          persist-credentials: false
-          fetch-depth: 0
-
-      - name: Check out the reviewed docs projection
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ inputs.projection_revision }}
-          path: projection
-          persist-credentials: false
-          fetch-depth: 0
-
-      - name: Confirm receiving branch membership
-        shell: bash
-        env:
-          SOURCE_REVISION: ${{ inputs.source_revision }}
-          PROJECTION_REVISION: ${{ inputs.projection_revision }}
-        run: |
-          if [[ "$(git -C source rev-parse HEAD)" != "$SOURCE_REVISION" ]]; then
-            echo "The source checkout must equal source_revision" >&2
-            exit 1
-          fi
-          if ! git -C source merge-base --is-ancestor "$SOURCE_REVISION" origin/main; then
-            echo "source_revision must belong to main" >&2
-            exit 1
-          fi
-          if [[ "$(git -C projection rev-parse HEAD)" != "$PROJECTION_REVISION" ]]; then
-            echo "The projection checkout must equal projection_revision" >&2
-            exit 1
-          fi
-          if ! git -C projection merge-base --is-ancestor "$PROJECTION_REVISION" origin/docs; then
-            echo "projection_revision must belong to docs" >&2
-            exit 1
-          fi
-
-      - name: Observe active GitHub Pages settings
-        id: pages
-        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: source/package-lock.json
-
-      - name: Install the locked source toolchain
-        working-directory: source
-        run: npm ci --ignore-scripts
-
-      - name: Confirm the accepted custom domain
-        working-directory: source
-        shell: bash
-        env:
-          PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
-          PAGES_HOST: ${{ steps.pages.outputs.host }}
-        run: |
-          FILE_HOST="$(tr -d '\r\n' < schemas/CNAME)"
-          if [[ ! "$FILE_HOST" =~ ^[a-z0-9]([a-z0-9.-]*[a-z0-9])?$ ]]; then
-            echo "schemas/CNAME must contain one host name" >&2
-            exit 1
-          fi
-          if [[ "$FILE_HOST" != "$PAGES_HOST" ]]; then
-            echo "schemas/CNAME must agree with the active GitHub Pages host" >&2
-            exit 1
-          fi
-          if [[ "$PAGES_BASE_URL" != "https://$FILE_HOST" ]]; then
-            echo "GitHub Pages must report the accepted HTTPS custom-domain base URL" >&2
-            exit 1
-          fi
-
-      - name: Check schema and Pages behavior
-        working-directory: source
-        run: npm run check:schemas && npm run test:schema-pages
-
-      - name: Rebuild the accepted source
-        working-directory: source
-        env:
-          PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
-          PAGES_SOURCE_REVISION: ${{ inputs.source_revision }}
-        run: npm run build:schema-pages
-
-      - name: Compare the reviewed docs receiver
-        working-directory: source
-        env:
-          SOURCE_REVISION: ${{ inputs.source_revision }}
-          PROJECTION_REVISION: ${{ inputs.projection_revision }}
-        run: >-
-          node tools/verify-schema-pages-receiver.mjs
-          --source-revision "$SOURCE_REVISION"
-          --source-branch origin/main
-          --projection-root ../projection
-          --projection-revision "$PROJECTION_REVISION"
-          --projection-branch origin/docs
-
-      - name: Install the checksum-verified secret scanner
-        working-directory: source
-        run: npm run security:secrets:install
-
-      - name: Prove the scanner and inspect the exact artifact
-        working-directory: source
-        run: npm run security:secrets:canary && npm run security:secrets:artifact -- .schema-pages
-
-      - name: Upload the verified Pages artifact
-        if: ${{ inputs.activate_deployment }}
-        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
-        with:
-          path: source/.schema-pages
-          include-hidden-files: true
-
   publish:
-    name: Deploy the verified receiver
-    if: ${{ inputs.activate_deployment }}
-    needs: verify
+    name: Verify and publish the reviewed site release
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     permissions:
       contents: read
       pages: write
@@ -178,6 +38,93 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Bind accepted coordinates
+        env:
+          WORKFLOW_REF: ${{ github.ref }}
+          SOURCE_REVISION: ${{ inputs.source_revision }}
+          PROJECTION_REVISION: ${{ inputs.projection_revision }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          test "$WORKFLOW_REF" = refs/heads/main
+          [[ "$SOURCE_REVISION" =~ ^[a-f0-9]{40}$ ]]
+          [[ "$PROJECTION_REVISION" =~ ^[a-f0-9]{40}$ ]]
+          [[ "$RELEASE_TAG" =~ ^pages-v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ inputs.source_revision }}
+          path: source
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ inputs.projection_revision }}
+          path: projection
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Confirm accepted branch ancestry
+        env:
+          SOURCE_REVISION: ${{ inputs.source_revision }}
+          PROJECTION_REVISION: ${{ inputs.projection_revision }}
+        run: |
+          test "$(git -C source rev-parse HEAD)" = "$SOURCE_REVISION"
+          test "$(git -C projection rev-parse HEAD)" = "$PROJECTION_REVISION"
+          git -C source merge-base --is-ancestor "$SOURCE_REVISION" origin/main
+          git -C projection merge-base --is-ancestor "$PROJECTION_REVISION" origin/docs
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d
+        id: pages
+      - name: Load the workflow-owned release verifier
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          path: release-tools
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: source/package-lock.json
+      - name: Prepare locked dependencies
+        working-directory: source
+        run: npm ci --ignore-scripts
+      - name: Confirm the configured public host
+        working-directory: source
+        env:
+          PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
+        run: |
+          node --input-type=module -e 'import fs from "node:fs"; const host=fs.readFileSync("schemas/CNAME","utf8").trim(); const url=new URL(process.env.PAGES_BASE_URL); if(!/^[a-z0-9.-]+$/.test(host)||url.hostname!==host||url.protocol!=="https:") process.exit(1);'
+      - name: Exercise schema and site contracts
+        working-directory: source
+        run: npm run check:schemas && npm run test:schema-pages
+      - name: Build the tagged site
+        working-directory: source
+        env:
+          PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
+          PAGES_SOURCE_REVISION: ${{ inputs.source_revision }}
+          PAGES_RELEASE_TAG: ${{ inputs.release_tag }}
+        run: npm run build:schema-pages
+      - name: Compare the exact reviewed artifact and tag
+        working-directory: release-tools
+        env:
+          SOURCE_REVISION: ${{ inputs.source_revision }}
+          PROJECTION_REVISION: ${{ inputs.projection_revision }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: >-
+          node tools/verify-schema-pages-receiver.mjs --source-root ../source
+          --source-revision "$SOURCE_REVISION" --source-branch origin/main
+          --projection-root ../projection --projection-revision "$PROJECTION_REVISION"
+          --projection-branch origin/docs --release-tag "$RELEASE_TAG"
+      - name: Observe the selected public artifact
+        working-directory: source
+        run: |
+          npm run security:secrets:install
+          npm run security:secrets:canary
+          npm run security:secrets:artifact -- .schema-pages
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9
+        if: inputs.activate_deployment
+        with:
+          path: source/.schema-pages
+          include-hidden-files: true
+      - uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128
+        if: inputs.activate_deployment
         id: deployment
-        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0

@@ -1,174 +1,61 @@
-import { createHash } from "node:crypto";
-import { copyFile, lstat, mkdir, readFile, readdir, rm } from "node:fs/promises";
-import path from "node:path";
+import { execFileSync } from "node:child_process";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { schemaReceiverRoutes } from "../../tools/schema-receiver-routes.mjs";
+import { assertPublicationRevision, schemaCompanionRoutes, schemaPublication } from "../../tools/schema-publication.mjs";
+import { assertExactFileInventory, resolvePublicationFile } from "../../tools/publication-boundary.mjs";
+import { artifactAuthor, artifactAttribution, artifactLicense } from "../../tools/attribution-contract.mjs";
 
-const deliveryDirectory = path.dirname(fileURLToPath(import.meta.url));
-const repositoryRoot = path.resolve(deliveryDirectory, "../..");
-const distributionDirectory = path.join(deliveryDirectory, "dist");
-
-const schemaReceipt = {
-  target: "prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
-  sizeBytes: 12309,
-  sha256: "42910b5238a62c666cf5fcdbdc5a364b64d7c5301d959ac9bdaea11c8743ccf2",
-};
-
-const publicFiles = [
-  {
-    source: "cloudflare/schema-delivery/source/_headers",
-    target: "_headers",
-  },
-  {
-    source: "cloudflare/schema-delivery/source/404.html",
-    target: "404.html",
-  },
-  {
-    source: "cloudflare/schema-delivery/source/index.html",
-    target: "index.html",
-  },
-  {
-    source: "schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
-    target: schemaReceipt.target,
-  },
-];
-
-function sha256(bytes) {
-  return createHash("sha256").update(bytes).digest("hex");
+const directory = dirname(fileURLToPath(import.meta.url));
+const root = resolve(directory, "../..");
+const output = resolve(directory, "dist");
+const base = "https://schemas.vik.guru";
+const escape = (value) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+const args = process.argv.slice(2);
+if (args.length && (args.length !== 1 || args[0] !== "--check")) throw new Error("Use build.mjs [--check]");
+const revision = execFileSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).trim();
+await assertPublicationRevision(root, revision, [
+  "cloudflare/schema-delivery/source", "cloudflare/schema-delivery/build.mjs", "cloudflare/schema-delivery/wrangler.jsonc",
+  "tools/schema-publication.mjs", "tools/schema-publication-lock.json", "tools/schema-receiver-routes.mjs",
+  "tools/publication-boundary.mjs", "tools/attribution-contract.mjs",
+  "LICENSE", "AUTHORS", "CITATION.cff", "attribution.yml", "AI-DATA-USE.md",
+  ...[...schemaReceiverRoutes, ...schemaCompanionRoutes].map(({ source }) => source),
+]);
+const catalog = await schemaPublication(root, base, revision);
+const files = new Map();
+for (const route of [...schemaReceiverRoutes, ...schemaCompanionRoutes]) {
+  files.set(route.receiverPath, await readFile(await resolvePublicationFile(root, route.source)));
 }
-
-function assertBoundedPaths() {
-  const expectedDistribution = path.resolve(deliveryDirectory, "dist");
-  if (path.resolve(distributionDirectory) !== expectedDistribution) {
-    throw new Error(`Refusing an unexpected distribution path: ${distributionDirectory}`);
-  }
-
-  const targets = new Set();
-  for (const entry of publicFiles) {
-    if (
-      path.isAbsolute(entry.source) ||
-      path.isAbsolute(entry.target) ||
-      path.posix.normalize(entry.source) !== entry.source ||
-      path.posix.normalize(entry.target) !== entry.target ||
-      entry.source.startsWith("../") ||
-      entry.target.startsWith("../")
-    ) {
-      throw new Error(`Public allowlist paths must be normalized repository-relative paths: ${entry.target}`);
-    }
-    if (targets.has(entry.target)) {
-      throw new Error(`Duplicate public target: ${entry.target}`);
-    }
-    targets.add(entry.target);
+for (const path of ["LICENSE", "AUTHORS", "CITATION.cff", "attribution.yml", "AI-DATA-USE.md"]) {
+  files.set(path, await readFile(await resolvePublicationFile(root, path)));
+}
+let index = await readFile(await resolvePublicationFile(root, "cloudflare/schema-delivery/source/index.html"), "utf8");
+const cards = catalog.contracts.map((contract) => `<article><h2>${escape(contract.path)}</h2><p><a href="/${escape(contract.path)}">Download from schemas.vik.guru</a></p><p>Stable identity: <code>${escape(contract.canonicalId)}</code></p><p class="receipt">SHA-256 <code>${contract.sha256}</code></p></article>`).join("\n");
+index = index.replace("<!-- schema-delivery:contracts -->", cards)
+  .replace("<!-- schema-delivery:author -->", `<meta name="author" content="${escape(artifactAuthor)}"><link rel="license" href="${artifactLicense}"><link rel="canonical" href="${base}/">`)
+  .replace("<!-- schema-delivery:attribution -->", `<footer><p><a href="/LICENSE">License</a> · <a href="/AUTHORS">Authors</a> · <a href="/CITATION.cff">Citation</a> · <a href="/AI-DATA-USE.md">Data-use posture</a></p><p>${escape(artifactAttribution)}</p></footer>`);
+files.set("index.html", Buffer.from(index));
+files.set("404.html", await readFile(await resolvePublicationFile(root, "cloudflare/schema-delivery/source/404.html")));
+files.set("schema-catalog.json", Buffer.from(`${JSON.stringify(catalog, null, 2)}\n`));
+let headers = await readFile(await resolvePublicationFile(root, "cloudflare/schema-delivery/source/_headers"), "utf8");
+for (const path of ["", ...files.keys()]) {
+  if (path === "404.html") continue;
+  const versionedSchema = schemaReceiverRoutes.some((route) => route.receiverPath === path)
+    && path !== "context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json";
+  const policy = versionedSchema ? "public, max-age=31536000, immutable" : "public, max-age=0, must-revalidate";
+  headers += `\n/${path}\n  ! Cache-Control\n  Cache-Control: ${policy}\n`;
+}
+files.set("_headers", Buffer.from(headers));
+if (!args.length) {
+  await rm(output, { recursive: true, force: true });
+  for (const [path, bytes] of files) {
+    await mkdir(dirname(resolve(output, path)), { recursive: true });
+    await writeFile(resolve(output, path), bytes);
   }
 }
-
-async function assertRegularFile(filePath, label) {
-  const status = await lstat(filePath);
-  if (status.isSymbolicLink() || !status.isFile()) {
-    throw new Error(`${label} must resolve to a regular file: ${filePath}`);
-  }
+await assertExactFileInventory(output, [...files.keys()]);
+for (const [path, bytes] of files) {
+  if (!bytes.equals(await readFile(resolve(output, path)))) throw new Error(`Schema receiver must match accepted source: ${path}`);
 }
-
-async function listFiles(directory, relativeDirectory = "") {
-  const entries = await readdir(path.join(directory, relativeDirectory), { withFileTypes: true });
-  const files = [];
-
-  for (const entry of entries) {
-    const relativePath = path.posix.join(relativeDirectory, entry.name);
-    if (entry.isSymbolicLink()) {
-      throw new Error(`Generated public output contains a symbolic link: ${relativePath}`);
-    }
-    if (entry.isDirectory()) {
-      files.push(...await listFiles(directory, relativePath));
-      continue;
-    }
-    if (!entry.isFile()) {
-      throw new Error(`Generated public output contains a non-file entry: ${relativePath}`);
-    }
-    files.push(relativePath);
-  }
-
-  return files.sort();
-}
-
-function assertSchemaReceipt(bytes, label) {
-  if (bytes.byteLength !== schemaReceipt.sizeBytes) {
-    throw new Error(`${label} has ${bytes.byteLength} bytes; expected ${schemaReceipt.sizeBytes}.`);
-  }
-  const digest = sha256(bytes);
-  if (digest !== schemaReceipt.sha256) {
-    throw new Error(`${label} has SHA-256 ${digest}; expected ${schemaReceipt.sha256}.`);
-  }
-}
-
-async function checkDistribution() {
-  const actualFiles = await listFiles(distributionDirectory);
-  const expectedFiles = publicFiles.map(({ target }) => target).sort();
-
-  const missing = expectedFiles.filter((file) => !actualFiles.includes(file));
-  const extra = actualFiles.filter((file) => !expectedFiles.includes(file));
-  if (missing.length || extra.length) {
-    throw new Error([
-      "Generated schema delivery differs from the explicit allowlist.",
-      missing.length ? `Missing: ${missing.join(", ")}` : "",
-      extra.length ? `Extra: ${extra.join(", ")}` : "",
-    ].filter(Boolean).join("\n"));
-  }
-
-  let totalBytes = 0;
-  for (const entry of publicFiles) {
-    const sourcePath = path.join(repositoryRoot, entry.source);
-    const targetPath = path.join(distributionDirectory, entry.target);
-    await assertRegularFile(sourcePath, "Allowlisted source");
-    await assertRegularFile(targetPath, "Generated output");
-    const [sourceBytes, targetBytes] = await Promise.all([
-      readFile(sourcePath),
-      readFile(targetPath),
-    ]);
-    if (!sourceBytes.equals(targetBytes)) {
-      throw new Error(`Generated output differs byte-for-byte from its source: ${entry.target}`);
-    }
-    if (entry.target === schemaReceipt.target) {
-      assertSchemaReceipt(sourceBytes, "Schema source");
-      assertSchemaReceipt(targetBytes, "Generated schema");
-    }
-    totalBytes += targetBytes.byteLength;
-  }
-
-  console.log([
-    `Schema delivery verified: ${publicFiles.length} allowlisted files, ${totalBytes} bytes.`,
-    `Prototype Exemplars 1.0.0: ${schemaReceipt.sizeBytes} bytes, SHA-256 ${schemaReceipt.sha256}.`,
-  ].join("\n"));
-}
-
-async function buildDistribution() {
-  await rm(distributionDirectory, { recursive: true, force: true });
-
-  for (const entry of publicFiles) {
-    const sourcePath = path.join(repositoryRoot, entry.source);
-    const targetPath = path.join(distributionDirectory, entry.target);
-    await assertRegularFile(sourcePath, "Allowlisted source");
-    await mkdir(path.dirname(targetPath), { recursive: true });
-    await copyFile(sourcePath, targetPath);
-  }
-
-  await checkDistribution();
-}
-
-async function main() {
-  assertBoundedPaths();
-  const arguments_ = process.argv.slice(2);
-  if (arguments_.length === 0) {
-    await buildDistribution();
-    return;
-  }
-  if (arguments_.length === 1 && arguments_[0] === "--check") {
-    await checkDistribution();
-    return;
-  }
-  throw new Error(`Usage: node ${path.relative(repositoryRoot, fileURLToPath(import.meta.url))} [--check]`);
-}
-
-main().catch((error) => {
-  console.error(error instanceof Error ? error.message : error);
-  process.exitCode = 1;
-});
+console.log(`Schema delivery: ${files.size} selected files; ${catalog.contracts.length} frozen contracts; source ${revision}.`);
