@@ -82,6 +82,17 @@
       "dependencies": []
     },
     {
+      "name": "cost-and-ownership-analysis",
+      "sourcePath": ".agents/skills/cost-and-ownership-analysis/SKILL.md",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
+      "dependencies": [
+        ".agents/skills/practitioner-probe/SKILL.md",
+        ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
+        ".agents/skills/collaboration-accounting/SKILL.md"
+      ]
+    },
+    {
       "name": "declarative-skill-authoring",
       "sourcePath": ".agents/skills/declarative-skill-authoring/SKILL.md",
       "publicationStanding": "public_ready",
@@ -135,6 +146,14 @@
       "sourceAvailability": "repository_only",
       "dependencies": [],
       "publicationNote": "Promote after its runbook family has a public-ready source package with public retrieval targets."
+    },
+    {
+      "name": "repository-orientation-stewardship",
+      "sourcePath": ".agents/skills/repository-orientation-stewardship/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "The repository inventory retains this skill while a source-package review establishes its public publication route."
     },
     {
       "name": "repository-reentry",

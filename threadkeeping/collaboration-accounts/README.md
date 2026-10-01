@@ -22,6 +22,8 @@ These notes remain provisional field evidence. Repeated use can earn a skill rev
 - [Anthropomorphic cue audit — first repository use](2026-09-29-anthropomorphic-cue-audit.md) — an exercised Practitioner Registry skill family, one Context Canvas and iframe language migration, and the `create_now` route for cue-bundle diagnosis distinct from prose translation and causal evaluation.
 - [Repository orientation stewardship formation](2026-09-30-repository-orientation-stewardship.md) — a seven-repository README-graph audit, the distinct first-receipt/repeat-use/re-entry job, the `create_now` route, and the first human-readable skill catalog.
 
+- [Cost and ownership analysis formation](2026-10-01-cost-and-ownership-analysis.md): function-cost coverage, ownership repairs, and the public skill review boundary.
+
 ## Return condition
 
 Add or extend an account when active work changes a repository decision, reveals a repeatable skill affordance, exposes friction that would alter the next use, or tests an earlier observation in a new terrain. The owning `SKILL.md` changes when the accumulated evidence identifies a narrow revision that would improve another real collaboration cycle.
