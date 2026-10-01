@@ -27,6 +27,13 @@ of the primary site and iframe upload.
 
 ## Response contract
 
+The root `/` serves the catalog with HTTP 200 and revalidation. Built-in
+`auto-trailing-slash` HTML handling resolves the root to `index.html`; exact JSON
+paths retain direct retrieval, and unknown schema paths use the genuine 404
+response. Include the root, an exact schema URL, and a missing file inside a
+versioned directory in every receiver observation. The platform behavior is
+described in [Cloudflare's HTML handling reference](https://developers.cloudflare.com/workers/static-assets/routing/advanced/html-handling/).
+
 Each selected exact-version schema has an exact-path immutable cache rule.
 Catalogs, orientation, examples, unversioned contracts, and attribution carriers
 revalidate. The default `no-store` rule covers missing paths, including missing
