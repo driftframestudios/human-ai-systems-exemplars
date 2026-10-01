@@ -130,11 +130,14 @@
       "projection_kind": "decorated_rewrite",
       "carrier_policy": {
         "sandbox_tokens": [
+          "allow-downloads",
           "allow-popups",
           "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
-        "permissions_policy": []
+        "permissions_policy": [
+          "clipboard-write"
+        ]
       },
       "navigation_rewrites": [
         {

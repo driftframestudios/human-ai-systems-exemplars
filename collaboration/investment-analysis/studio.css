@@ -75,3 +75,8 @@
   .investment-analysis [data-column-role] { min-width:0; }
   .investment-analysis .investment-report section { break-inside:auto; }
 }
+
+/* Capsule controls extend the existing native analysis grammar. */
+.investment-analysis [data-analysis-capsule-views] { display:flex; flex-wrap:wrap; gap:1rem; }
+.investment-analysis :is([data-analysis-capsule-views],[data-analysis-capsule-actions])[hidden] { display:none; }
+.investment-analysis [data-analysis-capsule-views] input { width:auto; }

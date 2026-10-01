@@ -129,3 +129,28 @@ serializer's context retention. Its local About-carrier observation exercises
 the actual sandbox with locally generated child bytes; live hosting retains its
 separate observation. The [presentation plan](../../planning/layered-investment-presentation.md)
 records composition, the deferred timing visual, and release boundaries.
+
+## Portable investment Prompt Capsules
+
+The pure `capsule.js` owner groups accepted inputs, assumptions, results,
+evidence, and decisions into five domains and one exact fenced JSON block.
+`studio.js` caches Markdown by immutable accepted projection and view.
+The Model Studio composes its selected method and fixed reference scenario
+with that account in one six-section document; its main capsule panel remains
+the complete handoff. The calculator supplies plain and skill-assisted views,
+Copy Prompt Capsule, and Download Markdown alongside the separate JSON exchange.
+
+Captured staffing references retain their snapshot and USD calculation. The
+live staffing instrument retains its own state. Pending drafts remain at their
+controls while capsules and exports describe accepted state.
+
+`tools/project-investment-analysis.mjs` projects four inline owners and both
+source-readable defaults. Its bounded VM evaluates trusted repository owners
+and the Studio's marked pure method blocks in a fresh build realm. Runtime
+source never evaluates imported text. Both defaults share their live formatter.
+
+The current capsule adoption inventory is
+[Prompt Capsule inventory](../../prompt-capsules/prompt-capsule-inventory.v0.1.0.md).
+Focused transfer evidence lives in `tests/investment-analysis/capsule.test.mjs`
+and `capsule.browser.test.mjs`, alongside existing state, presentation, and package
+contracts. Hosted iframe upload remains human-controlled.

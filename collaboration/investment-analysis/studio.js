@@ -46,7 +46,7 @@
       '<div data-capital></div><h3 id="analysis-serviceOutcomes-title" tabindex="-1">Service and operational evidence</h3>'+group('serviceOutcomes')+
       editor('serviceOutcomes','Nine service / operational dimensions','Preserve each dimension. Supply its unit, baseline, candidate value, evidence standing, and source; reviewed observations also require the named reviewer and date.')+'<div data-serviceOutcomes></div></details>'+
       '<details><summary>'+heading('E','analysis-inspection-title','Inspect and carry the accepted account')+'</summary><p>The domain axis and record-type axis remain separate. Accountable people establish financial, service, and release decisions.</p><div data-records></div>'+
-      '<label class="investment-editor" for="analysis-capsule"><strong>Plain-language comparison and Prompt Capsule</strong><textarea id="analysis-capsule" rows="12" readonly></textarea></label>'+
+      '<p><a href="'+(methodHost?'#prompt-capsule-title':'#investment-capsule-title')+'">View the complete Prompt Capsule</a></p>'+
       '<label class="investment-editor" for="analysis-exchange"><strong>Portable state / schema output</strong><textarea id="analysis-exchange" rows="10" spellcheck="false"></textarea></label>'+
       '<div class="investment-actions"><button type="button" data-action="'+ACTION.IMPORT_TEXT+'">Import pasted state</button><button type="button" data-action="'+ACTION.COPY+'">Select portable state for copying</button><button type="button" data-action="'+ACTION.SCHEMA+'">Inspect JSON Schema</button></div></details>'+
       '<div class="investment-actions"><button type="button" data-action="'+ACTION.APPLY+'">Apply lifecycle, alternative, outcome, and service-outcome edits</button></div>';
@@ -136,19 +136,20 @@
       section('analysis-serviceOutcomes-title','Service and operational evidence',inputTable('serviceOutcomes')+tableHtml(t.serviceOutcomes)+tableHtml(t.consequences))+
       section('analysis-inspection-title','Domain records and exact accepted state',tableHtml(t.records)+'<p>The complete accepted state retains evidence sources, reviewer/date declarations, extensions, and exact inputs. The tables above format amounts for reading.</p><pre>'+esc(JSON.stringify(p.state,null,2))+'</pre>')+'</section>';
   }
-  function capsule() {
-    return ["# Investment comparison",state.inputs.label,
-      "Standing: "+state.origin+". Method: "+state.method+". Contract: "+C.VERSION+". State identity: "+identity+".",
-      "Currency / period: "+state.inputs.currency+" / "+state.inputs.period+". "+state.inputs.cashConvention,
-      "Decision owner: "+(state.inputs.owner||"Unspecified")+". Gate: "+result.gate+". Next option: "+state.inputs.option+".",
-      "Next evidence: "+state.inputs.nextEvidence+". Revisit: "+(state.inputs.revisit||"Unspecified")+".",
-      "Five domains: "+C.DOMAINS.map(domainLabel).join(", ")+". Five record types: "+C.TYPES.join(", ")+".",
-      ...Object.entries(result.metrics).map(([k,v])=>k+": "+formatted(v)),
-      ...result.alternatives.map(a=>a.label+": NPV "+formatted(a.npv)+"; IRR "+formatted(a.irr)+"; payback "+formatted(a.payback)),
-      "Evidence and authority: the source identifies product or workflow context; causal benefit and local applicability require their own observations.",
-      "Cash-flow amounts are complete scenario inputs. Pricing, staffing references, reserves, and service budget impacts remain separate views until a named transformation joins them.",
-      "Service cost-consequence: "+result.serviceOutcomes.map(c=>c.name+" "+formatted(c.delta)).join("; "),
-      "Portable state:\n"+serialized].join("\n\n");
+  let capsuleView = "plain";
+  let capsuleCache = { projection: null, markdown: new Map() };
+  function capsule(view) {
+    if (methodHost) return methodHost.promptCapsuleMarkdown(view);
+    const requested = view ?? capsuleView;
+    const active = requested === "skill-assisted" ? requested : "plain";
+    if (capsuleCache.projection !== projection) capsuleCache = { projection, prepared: window.InvestmentCapsule.prepare(C, projection), markdown: new Map() };
+    if (!capsuleCache.markdown.has(active)) capsuleCache.markdown.set(active, window.InvestmentCapsule.document(C, projection, active, capsuleCache.prepared));
+    return capsuleCache.markdown.get(active);
+  }
+  function renderCapsule() {
+    if (methodHost) return;
+    document.getElementById("analysis-capsule").value = capsule();
+    document.getElementById("analysis-capsule-status").textContent = (capsuleView === "plain" ? "Plain" : "Skill-assisted") + " Markdown carries accepted analysis " + identity + ". Pending drafts remain with their controls.";
   }
   function render() {
     const t=tablesFor(projection);
@@ -157,7 +158,7 @@
     host.querySelector('[data-capital]').innerHTML=tableHtml(t.alternatives)+tableHtml(t.sensitivity);
     host.querySelector('[data-serviceOutcomes]').innerHTML=tableHtml(t.serviceOutcomes)+tableHtml(t.consequences);
     host.querySelector('[data-records]').innerHTML=tableHtml(t.records);
-    host.querySelector('#analysis-capsule').value=capsule();
+    renderCapsule();
     host.dataset.stateFingerprint=identity;
     for (const input of host.querySelectorAll('[data-key]')) {
       input.closest('label').querySelector('small').textContent=unitText(C.FIELDS[input.dataset.key].unit,state.inputs);
@@ -363,6 +364,41 @@
     promptCapsule: capsule,
     fingerprint: () => identity
   });
+  const capsulePanel = document.querySelector('[data-analysis-capsule-panel]');
+  if (capsulePanel) {
+    capsulePanel.querySelector('[data-analysis-capsule-views]').hidden = false;
+    capsulePanel.querySelector('[data-analysis-capsule-actions]').hidden = false;
+    capsulePanel.addEventListener('change', event => {
+      if (event.target.name !== 'analysis-capsule-view' || !event.target.checked) return;
+      capsuleView = event.target.value;
+      renderCapsule();
+    });
+    capsulePanel.addEventListener('click', async event => {
+      const action = event.target.closest('[data-capsule-action]')?.dataset.capsuleAction;
+      if (!action) return;
+      const text = capsule();
+      const receipt = document.getElementById('analysis-capsule-status');
+      if (action === 'download') {
+        const url = URL.createObjectURL(new Blob([text], {type:'text/markdown;charset=utf-8'}));
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = 'initiative-investment-' + capsuleView + '.md';
+        anchor.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        receipt.textContent = 'Markdown download carries the selected accepted capsule.';
+        return;
+      }
+      if (action !== 'copy') return;
+      try {
+        await navigator.clipboard.writeText(text);
+        receipt.textContent = 'Prompt Capsule copied. The captured Markdown is ready for its receiving decision.';
+      } catch {
+        const area = document.getElementById('analysis-capsule');
+        area.focus(); area.select();
+        receipt.textContent = 'Select the capsule text and use your browser Copy command.';
+      }
+    });
+  }
   function revealFragment() {
     let id;
     try { id=decodeURIComponent(location.hash.slice(1)); } catch { return; }
