@@ -5,7 +5,8 @@
   else root.InvestmentCore = api;
 })(globalThis, function () {
   "use strict";
-  const VERSION = "0.1.0";
+  const VERSION = "0.2.0";
+  const FORMULA_VERSION = "0.1.0";
   const FIELD_TYPE = Object.freeze({ NUMBER: "number", TEXT: "text", CURRENCY: "currency", SELECT: "select", BOOLEAN: "boolean" });
   const STAFFING_CURRENCY = "USD";
   const CURRENCY_CODE = /^[A-Z]{3}$/;
@@ -16,7 +17,7 @@
   const RESERVED_KEYS = new Set(["__proto__", "constructor", "prototype"]);
   const STAFFING_HOURS = Object.freeze({ hours: 1, sprints: 80, quarters: 520 });
   const COMPLEXITY_RATES = Object.freeze({ bounded: .08, connected: .16, frontier: .28 });
-  const DOMAINS = Object.freeze(["internal-investment", "customer-implementation", "commercial-cohort", "clinical-operational", "capital-allocation"]);
+  const DOMAINS = Object.freeze(["internal-investment", "customer-implementation", "commercial-cohort", "service-operational", "capital-allocation"]);
   const TYPES = Object.freeze(["input", "assumption", "calculation", "evidence", "decision"]);
   const PERIODS = Object.freeze(["month", "quarter", "year"]);
   const FIELDS = {};
@@ -58,20 +59,20 @@
   field("taxWorkingCapital", "Tax and working-capital treatment", "capital", "text", "Synthetic after-tax flows; working-capital changes included once", {type:FIELD_TYPE.TEXT});
   field("capacity", "Implementation capacity (adopted people per period)", "capital", "person/period", 40);
   field("exhaustive", "Outcome tree is mutually exclusive and exhaustive", "capital", "boolean", false, {type:FIELD_TYPE.BOOLEAN});
-  field("eligiblePopulation", "Eligible population", "clinical", "person", 100);
-  field("adoption", "Adoption fraction (0-1)", "clinical", "ratio", .3, {max:1});
-  field("baselineCost", "Baseline resource cost per person per period", "clinical", "currency/person/period", 500);
-  field("candidateCost", "Candidate resource cost per person per period", "clinical", "currency/person/period", 650);
-  field("perspective", "Budget perspective", "clinical", "text", "Illustrative provider budget", {type:FIELD_TYPE.TEXT});
-  field("population", "Population and context", "clinical", "text", "Synthetic population; local eligibility remains to be specified", {type:FIELD_TYPE.TEXT});
-  field("intervention", "Intervention", "clinical", "text", "Bounded workflow pilot", {type:FIELD_TYPE.TEXT});
-  field("comparator", "Comparator", "clinical", "text", "Current workflow", {type:FIELD_TYPE.TEXT});
-  field("reviewer", "Accountable clinical / operating reviewer", "clinical", "text", "", {type:FIELD_TYPE.TEXT});
-  field("evidenceSource", "Evidence semantic key or public source", "clinical", "text", "", {type:FIELD_TYPE.TEXT});
-  field("asOf", "Evidence as-of date", "clinical", "date", "", {type:FIELD_TYPE.TEXT});
-  field("economicReview", "Outcome transformation review", "clinical", "text", "pending", {type:FIELD_TYPE.SELECT,options:["pending","reviewed"]});
-  field("incrementalOutcome", "Reviewed incremental outcome per adopted person", "clinical", "outcome/person", null, {min:null});
-  field("outcomeUnit", "Outcome unit (explicit measure)", "clinical", "text", "", {type:FIELD_TYPE.TEXT});
+  field("eligiblePopulation", "Eligible population", "serviceOutcomes", "person", 100);
+  field("adoption", "Adoption fraction (0-1)", "serviceOutcomes", "ratio", .3, {max:1});
+  field("baselineCost", "Baseline resource cost per person per period", "serviceOutcomes", "currency/person/period", 500);
+  field("candidateCost", "Candidate resource cost per person per period", "serviceOutcomes", "currency/person/period", 650);
+  field("perspective", "Budget perspective", "serviceOutcomes", "text", "Illustrative provider budget", {type:FIELD_TYPE.TEXT});
+  field("population", "Population and context", "serviceOutcomes", "text", "Synthetic population; local eligibility remains to be specified", {type:FIELD_TYPE.TEXT});
+  field("intervention", "Intervention", "serviceOutcomes", "text", "Bounded workflow pilot", {type:FIELD_TYPE.TEXT});
+  field("comparator", "Comparator", "serviceOutcomes", "text", "Current workflow", {type:FIELD_TYPE.TEXT});
+  field("reviewer", "Accountable service / operating reviewer", "serviceOutcomes", "text", "", {type:FIELD_TYPE.TEXT});
+  field("evidenceSource", "Evidence semantic key or public source", "serviceOutcomes", "text", "", {type:FIELD_TYPE.TEXT});
+  field("asOf", "Evidence as-of date", "serviceOutcomes", "date", "", {type:FIELD_TYPE.TEXT});
+  field("economicReview", "Outcome transformation review", "serviceOutcomes", "text", "pending", {type:FIELD_TYPE.SELECT,options:["pending","reviewed"]});
+  field("incrementalOutcome", "Reviewed incremental outcome per adopted person", "serviceOutcomes", "outcome/person", null, {min:null});
+  field("outcomeUnit", "Outcome unit (explicit measure)", "serviceOutcomes", "text", "", {type:FIELD_TYPE.TEXT});
   field("owner", "Decision owner", "decision", "text", "", {type:FIELD_TYPE.TEXT});
   field("trigger", "Gate trigger", "decision", "text", "Review pilot feasibility, evidence, and capacity", {type:FIELD_TYPE.TEXT});
   field("nextEvidence", "Next evidence needed", "decision", "text", "Observed workflow and reviewed resource requirements", {type:FIELD_TYPE.TEXT});
@@ -181,7 +182,7 @@
         {id:"planned",probability:.5,flows:[-100000,60000,60000]},
         {id:"expanded",probability:.2,flows:[-100000,90000,90000]}
       ],
-      clinical:OUTCOMES.map(name=>({name,unit:"",baseline:null,candidate:null,standing:"unavailable",source:""})),
+      serviceOutcomes:OUTCOMES.map(name=>({name,unit:"",baseline:null,candidate:null,standing:"unavailable",source:""})),
       events:[
         {id:"acquire",kind:"acquisition",period:0,predecessors:[],standing:"illustrative"},
         {id:"onboard",kind:"onboarding",period:1,predecessors:["acquire"],standing:"illustrative"},
@@ -200,8 +201,8 @@
     const flows={type:"array",minItems:2,maxItems:101,items:numberInput};
     return {
       $schema:"https://json-schema.org/draft/2020-12/schema",
-      $id:"https://schemas.vik.guru/investment-analysis/0.1.0/state.schema.json",
-      title:"Investment analysis state 0.1.0",
+      $id:"https://schemas.vik.guru/investment-analysis/0.2.0/state.schema.json",
+      title:"Investment analysis state "+VERSION,
       description:"Validation-input projection generated by core.js; local source contract, public retrieval pending publication.",
       ...object({
         schemaVersion:{const:VERSION},scenarioId:{type:"string",minLength:1,maxLength:200},method:text,
@@ -209,7 +210,7 @@
         inputs:object(Object.fromEntries(Object.entries(FIELDS).map(([k,f])=>[k,f.type===FIELD_TYPE.NUMBER?numberInput:f.type===FIELD_TYPE.BOOLEAN?{type:FIELD_TYPE.BOOLEAN}:f.type===FIELD_TYPE.SELECT?{enum:f.options}:text]))),
         alternatives:{type:"array",minItems:1,maxItems:12,items:object({id:text,label:text,flows,standing:{enum:["illustrative","user-supplied","observed"]}})},
         outcomes:{type:"array",minItems:1,maxItems:12,items:object({id:text,probability:numberInput,flows})},
-        clinical:{type:"array",minItems:9,maxItems:9,items:object({name:{enum:OUTCOMES},unit:text,baseline:numberInput,candidate:numberInput,standing:{enum:["unavailable","illustrative","source-observation","transfer-hypothesis","locally-verified"]},source:text})},
+        serviceOutcomes:{type:"array",minItems:9,maxItems:9,items:object({name:{enum:OUTCOMES},unit:text,baseline:numberInput,candidate:numberInput,standing:{enum:["unavailable","illustrative","source-observation","transfer-hypothesis","locally-verified"]},source:text})},
         events:{type:"array",maxItems:100,items:object({id:text,kind:text,period:numberInput,predecessors:{type:"array",maxItems:100,items:text},standing:text})},
         extensions:{type:"object",propertyNames:{pattern:"^urn:[a-zA-Z0-9][a-zA-Z0-9:._/-]*$"},additionalProperties:true}
       })
@@ -343,9 +344,9 @@
     const errors = [...validateSchemaValue(state, STATE_SCHEMA, "state")];
     if (errors.length) return { valid: false, errors };
     const identityErrors = ["alternatives", "outcomes", "events"].map(name => validateIdentifiers(name, state[name])).filter(Boolean);
-    const clinicalErrors = new Set(state.clinical.map(item => item.name)).size === OUTCOMES.length
-      ? [] : ["clinical: preserve all nine distinct consequence dimensions."];
-    const diagnostics = [...identityErrors, ...clinicalErrors, ...validateEvents(state.events)];
+    const serviceOutcomeErrors = new Set(state.serviceOutcomes.map(item => item.name)).size === OUTCOMES.length
+      ? [] : ["serviceOutcomes: preserve all nine distinct consequence dimensions."];
+    const diagnostics = [...identityErrors, ...serviceOutcomeErrors, ...validateEvents(state.events)];
     return { valid: diagnostics.length === 0, errors: diagnostics };
   }
   function validate(state) {
@@ -430,14 +431,14 @@
   const FIELD_DOMAINS = Object.freeze({
     commercial: "commercial-cohort",
     pricing: "customer-implementation",
-    clinical: "clinical-operational",
+    serviceOutcomes: "service-operational",
     capital: "capital-allocation"
   });
   const METRIC_DOMAINS = Object.freeze({
-    budgetImpact: "clinical-operational",
-    adoptedPopulation: "clinical-operational",
-    capacityGap: "clinical-operational",
-    costPerOutcome: "clinical-operational",
+    budgetImpact: "service-operational",
+    adoptedPopulation: "service-operational",
+    capacityGap: "service-operational",
+    costPerOutcome: "service-operational",
     expectedNpv: "capital-allocation",
     discountAmount: "customer-implementation",
     netPrice: "customer-implementation",
@@ -525,7 +526,7 @@
     }));
   }
 
-  function calculateClinicalDelta(consequence, inputs) {
+  function calculateServiceDelta(consequence, inputs) {
     const baseline = numeric(consequence.baseline, consequence.name + " baseline");
     const candidate = numeric(consequence.candidate, consequence.name + " candidate");
     const reviewedEvidence = consequence.standing !== "unavailable"
@@ -560,7 +561,7 @@
     return cleanText(inputs[key]) || typeof inputs[key] === "boolean" ? "known" : "unavailable";
   }
 
-  function buildRecords(state, metrics, alternatives, clinical, gate) {
+  function buildRecords(state, metrics, alternatives, serviceOutcomes, gate) {
     const inputs = state.inputs;
     const records = Object.entries(FIELDS).map(([key, field]) => ({
       id: "input/" + key,
@@ -592,7 +593,7 @@
         ...result,
         currency: result.unit.includes("currency") ? inputs.currency : null,
         timeBasis: inputs.period,
-        formulaVersion: VERSION,
+        formulaVersion: FORMULA_VERSION,
         evidenceStanding: state.origin
       });
     }
@@ -607,25 +608,25 @@
         currency: inputs.currency,
         timeBasis: inputs.period,
         horizon: alternative.flows.length - 1,
-        formulaVersion: VERSION,
+        formulaVersion: FORMULA_VERSION,
         evidenceStanding: alternative.standing
       });
     }
-    for (const consequence of clinical) {
+    for (const consequence of serviceOutcomes) {
       records.push({
         id: "calculation/consequence/" + consequence.name,
-        domain: "clinical-operational",
+        domain: "service-operational",
         type: "calculation",
         ...consequence.delta,
         source: consequence.source,
         evidenceStanding: consequence.standing,
-        formulaVersion: VERSION,
+        formulaVersion: FORMULA_VERSION,
         timeBasis: inputs.period
       });
     }
     records.push({
       id: "evidence/context",
-      domain: "clinical-operational",
+      domain: "service-operational",
       type: "evidence",
       value: { source: inputs.evidenceSource, reviewer: inputs.reviewer, asOf: inputs.asOf, standing: state.origin }
     });
@@ -644,7 +645,7 @@
   function calculate(state) {
     const validation = validate(state);
     if (!validation.valid) {
-      return { valid: false, errors: validation.errors, metrics: {}, alternatives: [], clinical: [], records: [] };
+      return { valid: false, errors: validation.errors, metrics: {}, alternatives: [], serviceOutcomes: [], records: [] };
     }
 
     return calculateAccepted(state);
@@ -705,20 +706,25 @@
 
     const alternatives = calculateAlternatives(state, currencyAvailable);
     const sensitivity = calculateSensitivity(state, currencyAvailable);
-    const clinical = state.clinical.map(consequence => ({
+    const serviceOutcomes = state.serviceOutcomes.map(consequence => ({
       ...consequence,
-      delta: calculateClinicalDelta(consequence, inputs)
+      delta: calculateServiceDelta(consequence, inputs)
     }));
     const gate = resolveDecisionGate(inputs, metrics.capacityGap);
-    const records = buildRecords(state, metrics, alternatives, clinical, gate);
+    const records = buildRecords(state, metrics, alternatives, serviceOutcomes, gate);
     return {
-      valid: true, errors: [], metrics, alternatives, sensitivity, clinical, records,
+      valid: true, errors: [], metrics, alternatives, sensitivity, serviceOutcomes, records,
       gate, events: state.events.map(event => ({ ...event, predecessors: [...event.predecessors] }))
     };
   }
   function migrate(raw) {
     jsonText(raw);
     if(raw?.schemaVersion===VERSION)return clone(raw);
+    if (raw?.schemaVersion === "0.1.0") {
+      if (Object.hasOwn(raw, "serviceOutcomes")) throw new Error("Supply one versioned outcome field before importing this state.");
+      const { clinical: serviceOutcomes, ...retained } = clone(raw);
+      return { ...retained, schemaVersion: VERSION, serviceOutcomes };
+    }
     const next=defaults();
     if(raw?.schemaVersion==="1.0.0"&&raw.view==="model-explorer"&&typeof raw.activeModelId==="string") {
       next.method=raw.activeModelId;next.extensions["urn:investment:legacy-selection"]={snapshot:clone(raw),standing:"Selection preserved; analytical scenario remains explicitly illustrative."};return next;
@@ -731,7 +737,7 @@
       for(const o of next.outcomes){o.probability=null;o.flows=o.flows.map(()=>null);}
       return next;
     }
-    throw new Error("Choose investment state 0.1.0, a legacy model selection, or a calculator leave-behind. Current state remains available.");
+    throw new Error("Choose investment state 0.2.0 or 0.1.0, a legacy model selection, or a calculator leave-behind. Current state remains available.");
   }
   function importState(text) {
     const state = migrate(parseJson(text));
@@ -751,5 +757,5 @@
     const result = calculateAccepted(state);
     return freezeTree({ state, result, serialized, fingerprint: fingerprintText(serialized) });
   }
-  return Object.freeze({VERSION,FIELD_TYPE,STAFFING_CURRENCY,JSON_LIMITS,NUMERIC_TEXT_LIMIT,DOMAINS,TYPES,FIELDS,OUTCOMES,defaults,schema,validate,clone,numeric,known,unavailable,stable,fingerprint,npv,irr,payback,expectedNpv,staffing,calculate,migrate,parseJson,importState,serialize,prepare});
+  return Object.freeze({VERSION,FORMULA_VERSION,FIELD_TYPE,STAFFING_CURRENCY,JSON_LIMITS,NUMERIC_TEXT_LIMIT,DOMAINS,TYPES,FIELDS,OUTCOMES,defaults,schema,validate,clone,numeric,known,unavailable,stable,fingerprint,npv,irr,payback,expectedNpv,staffing,calculate,migrate,parseJson,importState,serialize,prepare});
 });

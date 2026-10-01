@@ -1116,27 +1116,27 @@
 /* Shared investment analysis component. Consumers: both investment instruments.
    Loaded after each host's authored skin. Local tokens preserve the host palette.
    Parent Canvas routes retain expanded.css and their existing route/component owners. */
-.investment-analysis { --ia-ink:var(--ink,#213252); --ia-paper:var(--paper,#fffdf7); --ia-accent:var(--tiffany,#56d8c9); color:var(--ia-ink); background:var(--ia-paper); border:2px solid var(--ia-ink); margin:2rem auto; padding:clamp(1rem,3vw,2.5rem); max-width:100%; min-width:0; box-sizing:border-box; }
+.investment-analysis { --ia-ink:var(--ink,var(--cof-ink,#213252)); --ia-paper:var(--paper,var(--cof-panel,#fffdf7)); --ia-accent:var(--info,var(--cof-powder,#d3e4f2)); --ia-mono:var(--mono,var(--font-mono,monospace)); color:var(--ia-ink); background:var(--ia-paper); border:2px solid var(--ia-ink); margin:2rem auto; padding:clamp(1rem,3vw,2.5rem); max-width:100%; min-width:0; box-sizing:border-box; }
 .investment-analysis * { box-sizing:border-box; }
 .investment-analysis h2,.investment-analysis h3 { color:var(--ia-ink); }
-.investment-analysis .investment-kicker { font:700 .75rem/1.5 "Courier New",monospace; letter-spacing:.07em; text-transform:uppercase; }
+.investment-analysis .investment-kicker { font:700 .75rem/1.5 var(--ia-mono); letter-spacing:.07em; text-transform:uppercase; }
 .investment-analysis details { border:1px solid var(--ia-ink); margin:1rem 0; padding:1rem; background:var(--ia-paper); }
 .investment-analysis summary { cursor:pointer; font-weight:800; font-size:1.05rem; padding:.6rem; color:var(--ia-ink); }
 .investment-analysis fieldset { border:0; border-top:2px solid var(--ia-accent); padding:1rem 0; min-width:0; margin:1rem 0; }
 .investment-analysis legend { font-weight:800; padding:0 .5rem; }
 .investment-analysis .investment-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr)); gap:1rem; }
 .investment-analysis .investment-field { display:flex; flex-direction:column; gap:.4rem; color:var(--ia-ink); font-weight:600; min-width:0; }
-.investment-analysis .investment-field small { font:400 .72rem/1.4 "Courier New",monospace; overflow-wrap:anywhere; }
+.investment-analysis .investment-field small { font:400 .72rem/1.4 var(--ia-mono); overflow-wrap:anywhere; }
 .investment-analysis input,.investment-analysis select,.investment-analysis textarea { color:var(--ia-ink); background:var(--ia-paper); border:1px solid var(--ia-ink); padding:.65rem; font:inherit; width:100%; max-width:100%; min-width:0; border-radius:0; }
 .investment-analysis input[type=checkbox] { width:1.4rem; height:1.4rem; }
 .investment-analysis .investment-editor { display:grid; gap:.5rem; margin:1rem 0; }
-.investment-analysis textarea { font:.8rem/1.5 "Courier New",monospace; resize:vertical; }
+.investment-analysis textarea { font:.8rem/1.5 var(--ia-mono); resize:vertical; }
 .investment-analysis .investment-actions { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem; margin:1rem 0; }
 .investment-analysis button { color:var(--ia-ink); background:var(--ia-accent); border:2px solid var(--ia-ink); padding:.65rem .9rem; font-family:inherit; font-size:.85rem; font-weight:700; line-height:1.4; cursor:pointer; white-space:normal; }
 .investment-analysis :is(button,input,select,textarea,summary,[tabindex]):focus-visible { outline:3px solid var(--ia-ink); outline-offset:3px; }
 .investment-analysis .investment-table-scroll { overflow:auto; max-width:100%; margin:1rem 0; border:1px solid var(--ia-ink); }
-.investment-analysis table { border-collapse:collapse; width:100%; min-width:36rem; table-layout:auto; margin:0; color:var(--ia-ink); background:var(--ia-paper); }
-.investment-analysis :is(th,td) { border:1px solid var(--ia-ink); text-align:left; vertical-align:top; padding:.7rem; overflow-wrap:anywhere; font-size:.84rem; }
+.investment-analysis table { border-collapse:collapse; width:100%; min-width:42rem; table-layout:auto; margin:0; color:var(--ia-ink); background:var(--ia-paper); }
+.investment-analysis :is(th,td) { border:1px solid var(--ia-ink); text-align:left; vertical-align:top; padding:.7rem; overflow-wrap:normal; word-break:normal; hyphens:none; font-size:.9rem; }
 .investment-analysis thead th { color:var(--ia-ink); background:var(--ia-accent); }
 .investment-analysis caption { text-align:left; font-weight:800; padding:.7rem; caption-side:top; color:var(--ia-ink); background:var(--ia-paper); }
 .investment-analysis .investment-decision { padding:1rem; border-left:.5rem solid var(--ia-ink); background:var(--ia-accent); }
@@ -1147,6 +1147,49 @@
 @media print {.investment-analysis {border:0;padding:0;} .investment-analysis .investment-actions,.investment-analysis input[type=file]{display:none;} .investment-analysis details{break-inside:auto;} .investment-analysis .investment-table-scroll{overflow:visible;} .investment-analysis table{min-width:0;font-size:9pt;} .investment-analysis :is(th,td){font-size:9pt;}}
 
 .investment-analysis [aria-invalid="true"] { border-width:2px; border-style:dashed; }
+
+/* Host grammar supplies the frame; nested analysis stays on a quiet paper field. */
+.investment-analysis { width:100%; grid-column:1 / -1; border-radius:var(--radius,var(--radius-frame,14px)); box-shadow:none; }
+.investment-analysis .panel-head { margin:calc(-1 * clamp(1rem,3vw,2.5rem)) calc(-1 * clamp(1rem,3vw,2.5rem)) 1.5rem; padding:1.25rem; border-radius:var(--radius) var(--radius) 0 0; }
+.investment-analysis summary h3 { display:inline; font-size:1.05rem; margin:0; }
+.investment-analysis summary .investment-kicker { display:block; margin:.2rem 0; }
+.investment-analysis details { border-color:var(--line,var(--cof-line,#7893bc)); border-radius:var(--radius-card,7px); box-shadow:none; }
+.investment-analysis .investment-brief { margin:1rem 0 1.5rem; }
+.investment-analysis .investment-basis { font:400 .75rem/1.5 var(--ia-mono); overflow-wrap:anywhere; }
+.investment-analysis .investment-scroll-note { font-size:.8rem; }
+.investment-analysis [data-column-role=identity] { min-width:10rem; }
+.investment-analysis [data-column-role=status] { min-width:8rem; }
+.investment-analysis [data-column-role=value] { min-width:9rem; }
+.investment-analysis [data-column-role=flows] { min-width:14rem; }
+.investment-analysis [data-column-role=prose] { min-width:18rem; }
+.investment-analysis .investment-number { white-space:nowrap; font-variant-numeric:tabular-nums; }
+.investment-analysis .investment-identifier { overflow-wrap:anywhere; }
+.investment-analysis pre { white-space:pre-wrap; overflow-wrap:anywhere; font-size:.75rem; }
+.investment-analysis :is(h2,h3):focus { outline:3px solid var(--ia-ink); outline-offset:4px; }
+.investment-summary { margin:1rem; padding-top:.5rem; border-top:1px solid var(--line); font-size:.78rem; overflow-wrap:anywhere; }
+.investment-summary .investment-basis { font:400 .66rem/1.45 var(--mono); }
+.investment-summary .investment-decision { font-weight:750; }
+.investment-summary a { color:var(--teal); font-weight:800; }
+#analysis-direct-receipts dd { overflow-wrap:anywhere; }
+.investment-chapter-links { display:flex; flex-wrap:wrap; gap:.65rem; margin:1rem 0; }
+.investment-chapter-links a { display:inline-block; padding:.65rem .9rem; border:2px solid currentColor; border-radius:7px; font-weight:750; color:inherit; text-underline-offset:.2em; }
+@media (max-width:40rem) { .investment-analysis .panel-head { margin:-1rem -1rem 1rem; } }
+@media print {
+  .investment-analysis { margin:1rem 0; border-radius:0; }
+  .investment-analysis .investment-kicker { color:inherit; }
+  .investment-analysis .panel-head { margin:0; padding:0; background:transparent; }
+  .investment-analysis .investment-table-scroll { overflow:visible; border:0; }
+  .investment-analysis table { min-width:0; width:100%; }
+  .investment-analysis :is(tbody,tr,th,td) { display:block; min-width:0; width:auto; }
+  .investment-analysis thead { display:none; }
+  .investment-analysis tr { margin:.8rem 0; break-inside:avoid; border:1px solid; }
+  .investment-analysis :is(th,td) { border:0; padding:.3rem .5rem; }
+  .investment-analysis td::before { content:attr(data-label) ": "; font-weight:800; }
+  .investment-analysis caption { display:block; }
+  .investment-analysis .investment-number { white-space:nowrap; }
+  .investment-analysis [data-column-role] { min-width:0; }
+  .investment-analysis .investment-report section { break-inside:auto; }
+}
 </style>
 <!-- investment-analysis:styles:end -->
 <!-- investment-analysis:core:start -->
@@ -1159,7 +1202,8 @@
   else root.InvestmentCore = api;
 })(globalThis, function () {
   "use strict";
-  const VERSION = "0.1.0";
+  const VERSION = "0.2.0";
+  const FORMULA_VERSION = "0.1.0";
   const FIELD_TYPE = Object.freeze({ NUMBER: "number", TEXT: "text", CURRENCY: "currency", SELECT: "select", BOOLEAN: "boolean" });
   const STAFFING_CURRENCY = "USD";
   const CURRENCY_CODE = /^[A-Z]{3}$/;
@@ -1170,7 +1214,7 @@
   const RESERVED_KEYS = new Set(["__proto__", "constructor", "prototype"]);
   const STAFFING_HOURS = Object.freeze({ hours: 1, sprints: 80, quarters: 520 });
   const COMPLEXITY_RATES = Object.freeze({ bounded: .08, connected: .16, frontier: .28 });
-  const DOMAINS = Object.freeze(["internal-investment", "customer-implementation", "commercial-cohort", "clinical-operational", "capital-allocation"]);
+  const DOMAINS = Object.freeze(["internal-investment", "customer-implementation", "commercial-cohort", "service-operational", "capital-allocation"]);
   const TYPES = Object.freeze(["input", "assumption", "calculation", "evidence", "decision"]);
   const PERIODS = Object.freeze(["month", "quarter", "year"]);
   const FIELDS = {};
@@ -1212,20 +1256,20 @@
   field("taxWorkingCapital", "Tax and working-capital treatment", "capital", "text", "Synthetic after-tax flows; working-capital changes included once", {type:FIELD_TYPE.TEXT});
   field("capacity", "Implementation capacity (adopted people per period)", "capital", "person/period", 40);
   field("exhaustive", "Outcome tree is mutually exclusive and exhaustive", "capital", "boolean", false, {type:FIELD_TYPE.BOOLEAN});
-  field("eligiblePopulation", "Eligible population", "clinical", "person", 100);
-  field("adoption", "Adoption fraction (0-1)", "clinical", "ratio", .3, {max:1});
-  field("baselineCost", "Baseline resource cost per person per period", "clinical", "currency/person/period", 500);
-  field("candidateCost", "Candidate resource cost per person per period", "clinical", "currency/person/period", 650);
-  field("perspective", "Budget perspective", "clinical", "text", "Illustrative provider budget", {type:FIELD_TYPE.TEXT});
-  field("population", "Population and context", "clinical", "text", "Synthetic population; local eligibility remains to be specified", {type:FIELD_TYPE.TEXT});
-  field("intervention", "Intervention", "clinical", "text", "Bounded workflow pilot", {type:FIELD_TYPE.TEXT});
-  field("comparator", "Comparator", "clinical", "text", "Current workflow", {type:FIELD_TYPE.TEXT});
-  field("reviewer", "Accountable clinical / operating reviewer", "clinical", "text", "", {type:FIELD_TYPE.TEXT});
-  field("evidenceSource", "Evidence semantic key or public source", "clinical", "text", "", {type:FIELD_TYPE.TEXT});
-  field("asOf", "Evidence as-of date", "clinical", "date", "", {type:FIELD_TYPE.TEXT});
-  field("economicReview", "Outcome transformation review", "clinical", "text", "pending", {type:FIELD_TYPE.SELECT,options:["pending","reviewed"]});
-  field("incrementalOutcome", "Reviewed incremental outcome per adopted person", "clinical", "outcome/person", null, {min:null});
-  field("outcomeUnit", "Outcome unit (explicit measure)", "clinical", "text", "", {type:FIELD_TYPE.TEXT});
+  field("eligiblePopulation", "Eligible population", "serviceOutcomes", "person", 100);
+  field("adoption", "Adoption fraction (0-1)", "serviceOutcomes", "ratio", .3, {max:1});
+  field("baselineCost", "Baseline resource cost per person per period", "serviceOutcomes", "currency/person/period", 500);
+  field("candidateCost", "Candidate resource cost per person per period", "serviceOutcomes", "currency/person/period", 650);
+  field("perspective", "Budget perspective", "serviceOutcomes", "text", "Illustrative provider budget", {type:FIELD_TYPE.TEXT});
+  field("population", "Population and context", "serviceOutcomes", "text", "Synthetic population; local eligibility remains to be specified", {type:FIELD_TYPE.TEXT});
+  field("intervention", "Intervention", "serviceOutcomes", "text", "Bounded workflow pilot", {type:FIELD_TYPE.TEXT});
+  field("comparator", "Comparator", "serviceOutcomes", "text", "Current workflow", {type:FIELD_TYPE.TEXT});
+  field("reviewer", "Accountable service / operating reviewer", "serviceOutcomes", "text", "", {type:FIELD_TYPE.TEXT});
+  field("evidenceSource", "Evidence semantic key or public source", "serviceOutcomes", "text", "", {type:FIELD_TYPE.TEXT});
+  field("asOf", "Evidence as-of date", "serviceOutcomes", "date", "", {type:FIELD_TYPE.TEXT});
+  field("economicReview", "Outcome transformation review", "serviceOutcomes", "text", "pending", {type:FIELD_TYPE.SELECT,options:["pending","reviewed"]});
+  field("incrementalOutcome", "Reviewed incremental outcome per adopted person", "serviceOutcomes", "outcome/person", null, {min:null});
+  field("outcomeUnit", "Outcome unit (explicit measure)", "serviceOutcomes", "text", "", {type:FIELD_TYPE.TEXT});
   field("owner", "Decision owner", "decision", "text", "", {type:FIELD_TYPE.TEXT});
   field("trigger", "Gate trigger", "decision", "text", "Review pilot feasibility, evidence, and capacity", {type:FIELD_TYPE.TEXT});
   field("nextEvidence", "Next evidence needed", "decision", "text", "Observed workflow and reviewed resource requirements", {type:FIELD_TYPE.TEXT});
@@ -1335,7 +1379,7 @@
         {id:"planned",probability:.5,flows:[-100000,60000,60000]},
         {id:"expanded",probability:.2,flows:[-100000,90000,90000]}
       ],
-      clinical:OUTCOMES.map(name=>({name,unit:"",baseline:null,candidate:null,standing:"unavailable",source:""})),
+      serviceOutcomes:OUTCOMES.map(name=>({name,unit:"",baseline:null,candidate:null,standing:"unavailable",source:""})),
       events:[
         {id:"acquire",kind:"acquisition",period:0,predecessors:[],standing:"illustrative"},
         {id:"onboard",kind:"onboarding",period:1,predecessors:["acquire"],standing:"illustrative"},
@@ -1354,8 +1398,8 @@
     const flows={type:"array",minItems:2,maxItems:101,items:numberInput};
     return {
       $schema:"https://json-schema.org/draft/2020-12/schema",
-      $id:"https://schemas.vik.guru/investment-analysis/0.1.0/state.schema.json",
-      title:"Investment analysis state 0.1.0",
+      $id:"https://schemas.vik.guru/investment-analysis/0.2.0/state.schema.json",
+      title:"Investment analysis state "+VERSION,
       description:"Validation-input projection generated by core.js; local source contract, public retrieval pending publication.",
       ...object({
         schemaVersion:{const:VERSION},scenarioId:{type:"string",minLength:1,maxLength:200},method:text,
@@ -1363,7 +1407,7 @@
         inputs:object(Object.fromEntries(Object.entries(FIELDS).map(([k,f])=>[k,f.type===FIELD_TYPE.NUMBER?numberInput:f.type===FIELD_TYPE.BOOLEAN?{type:FIELD_TYPE.BOOLEAN}:f.type===FIELD_TYPE.SELECT?{enum:f.options}:text]))),
         alternatives:{type:"array",minItems:1,maxItems:12,items:object({id:text,label:text,flows,standing:{enum:["illustrative","user-supplied","observed"]}})},
         outcomes:{type:"array",minItems:1,maxItems:12,items:object({id:text,probability:numberInput,flows})},
-        clinical:{type:"array",minItems:9,maxItems:9,items:object({name:{enum:OUTCOMES},unit:text,baseline:numberInput,candidate:numberInput,standing:{enum:["unavailable","illustrative","source-observation","transfer-hypothesis","locally-verified"]},source:text})},
+        serviceOutcomes:{type:"array",minItems:9,maxItems:9,items:object({name:{enum:OUTCOMES},unit:text,baseline:numberInput,candidate:numberInput,standing:{enum:["unavailable","illustrative","source-observation","transfer-hypothesis","locally-verified"]},source:text})},
         events:{type:"array",maxItems:100,items:object({id:text,kind:text,period:numberInput,predecessors:{type:"array",maxItems:100,items:text},standing:text})},
         extensions:{type:"object",propertyNames:{pattern:"^urn:[a-zA-Z0-9][a-zA-Z0-9:._/-]*$"},additionalProperties:true}
       })
@@ -1497,9 +1541,9 @@
     const errors = [...validateSchemaValue(state, STATE_SCHEMA, "state")];
     if (errors.length) return { valid: false, errors };
     const identityErrors = ["alternatives", "outcomes", "events"].map(name => validateIdentifiers(name, state[name])).filter(Boolean);
-    const clinicalErrors = new Set(state.clinical.map(item => item.name)).size === OUTCOMES.length
-      ? [] : ["clinical: preserve all nine distinct consequence dimensions."];
-    const diagnostics = [...identityErrors, ...clinicalErrors, ...validateEvents(state.events)];
+    const serviceOutcomeErrors = new Set(state.serviceOutcomes.map(item => item.name)).size === OUTCOMES.length
+      ? [] : ["serviceOutcomes: preserve all nine distinct consequence dimensions."];
+    const diagnostics = [...identityErrors, ...serviceOutcomeErrors, ...validateEvents(state.events)];
     return { valid: diagnostics.length === 0, errors: diagnostics };
   }
   function validate(state) {
@@ -1584,14 +1628,14 @@
   const FIELD_DOMAINS = Object.freeze({
     commercial: "commercial-cohort",
     pricing: "customer-implementation",
-    clinical: "clinical-operational",
+    serviceOutcomes: "service-operational",
     capital: "capital-allocation"
   });
   const METRIC_DOMAINS = Object.freeze({
-    budgetImpact: "clinical-operational",
-    adoptedPopulation: "clinical-operational",
-    capacityGap: "clinical-operational",
-    costPerOutcome: "clinical-operational",
+    budgetImpact: "service-operational",
+    adoptedPopulation: "service-operational",
+    capacityGap: "service-operational",
+    costPerOutcome: "service-operational",
     expectedNpv: "capital-allocation",
     discountAmount: "customer-implementation",
     netPrice: "customer-implementation",
@@ -1679,7 +1723,7 @@
     }));
   }
 
-  function calculateClinicalDelta(consequence, inputs) {
+  function calculateServiceDelta(consequence, inputs) {
     const baseline = numeric(consequence.baseline, consequence.name + " baseline");
     const candidate = numeric(consequence.candidate, consequence.name + " candidate");
     const reviewedEvidence = consequence.standing !== "unavailable"
@@ -1714,7 +1758,7 @@
     return cleanText(inputs[key]) || typeof inputs[key] === "boolean" ? "known" : "unavailable";
   }
 
-  function buildRecords(state, metrics, alternatives, clinical, gate) {
+  function buildRecords(state, metrics, alternatives, serviceOutcomes, gate) {
     const inputs = state.inputs;
     const records = Object.entries(FIELDS).map(([key, field]) => ({
       id: "input/" + key,
@@ -1746,7 +1790,7 @@
         ...result,
         currency: result.unit.includes("currency") ? inputs.currency : null,
         timeBasis: inputs.period,
-        formulaVersion: VERSION,
+        formulaVersion: FORMULA_VERSION,
         evidenceStanding: state.origin
       });
     }
@@ -1761,25 +1805,25 @@
         currency: inputs.currency,
         timeBasis: inputs.period,
         horizon: alternative.flows.length - 1,
-        formulaVersion: VERSION,
+        formulaVersion: FORMULA_VERSION,
         evidenceStanding: alternative.standing
       });
     }
-    for (const consequence of clinical) {
+    for (const consequence of serviceOutcomes) {
       records.push({
         id: "calculation/consequence/" + consequence.name,
-        domain: "clinical-operational",
+        domain: "service-operational",
         type: "calculation",
         ...consequence.delta,
         source: consequence.source,
         evidenceStanding: consequence.standing,
-        formulaVersion: VERSION,
+        formulaVersion: FORMULA_VERSION,
         timeBasis: inputs.period
       });
     }
     records.push({
       id: "evidence/context",
-      domain: "clinical-operational",
+      domain: "service-operational",
       type: "evidence",
       value: { source: inputs.evidenceSource, reviewer: inputs.reviewer, asOf: inputs.asOf, standing: state.origin }
     });
@@ -1798,7 +1842,7 @@
   function calculate(state) {
     const validation = validate(state);
     if (!validation.valid) {
-      return { valid: false, errors: validation.errors, metrics: {}, alternatives: [], clinical: [], records: [] };
+      return { valid: false, errors: validation.errors, metrics: {}, alternatives: [], serviceOutcomes: [], records: [] };
     }
 
     return calculateAccepted(state);
@@ -1859,20 +1903,25 @@
 
     const alternatives = calculateAlternatives(state, currencyAvailable);
     const sensitivity = calculateSensitivity(state, currencyAvailable);
-    const clinical = state.clinical.map(consequence => ({
+    const serviceOutcomes = state.serviceOutcomes.map(consequence => ({
       ...consequence,
-      delta: calculateClinicalDelta(consequence, inputs)
+      delta: calculateServiceDelta(consequence, inputs)
     }));
     const gate = resolveDecisionGate(inputs, metrics.capacityGap);
-    const records = buildRecords(state, metrics, alternatives, clinical, gate);
+    const records = buildRecords(state, metrics, alternatives, serviceOutcomes, gate);
     return {
-      valid: true, errors: [], metrics, alternatives, sensitivity, clinical, records,
+      valid: true, errors: [], metrics, alternatives, sensitivity, serviceOutcomes, records,
       gate, events: state.events.map(event => ({ ...event, predecessors: [...event.predecessors] }))
     };
   }
   function migrate(raw) {
     jsonText(raw);
     if(raw?.schemaVersion===VERSION)return clone(raw);
+    if (raw?.schemaVersion === "0.1.0") {
+      if (Object.hasOwn(raw, "serviceOutcomes")) throw new Error("Supply one versioned outcome field before importing this state.");
+      const { clinical: serviceOutcomes, ...retained } = clone(raw);
+      return { ...retained, schemaVersion: VERSION, serviceOutcomes };
+    }
     const next=defaults();
     if(raw?.schemaVersion==="1.0.0"&&raw.view==="model-explorer"&&typeof raw.activeModelId==="string") {
       next.method=raw.activeModelId;next.extensions["urn:investment:legacy-selection"]={snapshot:clone(raw),standing:"Selection preserved; analytical scenario remains explicitly illustrative."};return next;
@@ -1885,7 +1934,7 @@
       for(const o of next.outcomes){o.probability=null;o.flows=o.flows.map(()=>null);}
       return next;
     }
-    throw new Error("Choose investment state 0.1.0, a legacy model selection, or a calculator leave-behind. Current state remains available.");
+    throw new Error("Choose investment state 0.2.0 or 0.1.0, a legacy model selection, or a calculator leave-behind. Current state remains available.");
   }
   function importState(text) {
     const state = migrate(parseJson(text));
@@ -1905,7 +1954,7 @@
     const result = calculateAccepted(state);
     return freezeTree({ state, result, serialized, fingerprint: fingerprintText(serialized) });
   }
-  return Object.freeze({VERSION,FIELD_TYPE,STAFFING_CURRENCY,JSON_LIMITS,NUMERIC_TEXT_LIMIT,DOMAINS,TYPES,FIELDS,OUTCOMES,defaults,schema,validate,clone,numeric,known,unavailable,stable,fingerprint,npv,irr,payback,expectedNpv,staffing,calculate,migrate,parseJson,importState,serialize,prepare});
+  return Object.freeze({VERSION,FORMULA_VERSION,FIELD_TYPE,STAFFING_CURRENCY,JSON_LIMITS,NUMERIC_TEXT_LIMIT,DOMAINS,TYPES,FIELDS,OUTCOMES,defaults,schema,validate,clone,numeric,known,unavailable,stable,fingerprint,npv,irr,payback,expectedNpv,staffing,calculate,migrate,parseJson,importState,serialize,prepare});
 });
 </script>
 <!-- investment-analysis:core:end -->
@@ -1921,8 +1970,8 @@
           <p class="eyebrow">Decision routing · model comparison · inspectable state</p>
           <h1>Cross-Functional Investment Model Studio</h1>
           <p class="hero-deck">Choose the question leadership needs to answer, then inspect the method, inputs, work split, tooling, and evidence boundary that make the resulting investment reading usable.</p>
-        </div>
-        <dl class="hero-contract" aria-label="Studio contract">
+        <nav class="investment-chapter-links" aria-label="Studio chapters"><a href="#explorer-title">Explore eight models</a><a href="#investment-analysis-title">Compare layered investment</a></nav>
+        </div><dl class="hero-contract" aria-label="Studio contract">
           <div>
             <dt>Shared scenario</dt>
             <dd>Discovery &amp; Alignment · three-quarter horizon · current Initiative Costing state.</dd>
@@ -1939,7 +1988,8 @@
       </div>
     </header>
 
-    <main id="main" class="main-layout">
+    <main id="main">
+      <div class="main-layout">
       <div class="content-stack">
         <section class="panel" aria-labelledby="explorer-title">
           <div class="panel-heading">
@@ -2316,17 +2366,18 @@ Return with this handback:
         <dl id="inspectorDetails"></dl>
         <pre id="selectedJson" class="state-json" tabindex="0" aria-label="Selected model record as JSON"></pre>
       </aside>
-    <section class="investment-analysis" aria-labelledby="investment-analysis-title">
-<h2 id="investment-analysis-title">Layered investment comparison</h2>
-<p>Compare an explicitly scoped scenario across internal investment, customer implementation, commercial cohorts, clinical and operational consequences, and capital allocation. The editable comparison is illustrative; named people establish the evidence and decision authority.</p>
-<details><summary>Read the static domain and evidence overview</summary><div class="investment-table-scroll" role="region" tabindex="0" aria-label="Investment domains and evidence; scroll horizontally"><table><caption>Five domains, five cross-cutting record types</caption><thead><tr><th scope="col">Domain</th><th scope="col">Comparison</th><th scope="col">Evidence needed</th></tr></thead><tbody>
-<tr><th scope="row">Internal investment</th><td>Allocated effort and incremental work</td><td>Loaded rates, horizon, overlap policy, and explicit heuristics</td></tr>
-<tr><th scope="row">Customer implementation</th><td>Deployment effort, lag, and unit economics</td><td>Orderable unit, payer, price class, and service boundary</td></tr>
-<tr><th scope="row">Commercial cohort</th><td>Retention, acquisition, expansion, and reactivation</td><td>Opening cohort, denominator, window, currency, and recurring time basis</td></tr>
-<tr><th scope="row">Clinical and operational value</th><td>Separate costs, consequences, and capacity</td><td>Population, comparator, measure, source, reviewer, and date</td></tr>
-<tr><th scope="row">Capital allocation</th><td>NPV, guarded IRR, payback, and reversible choices</td><td>Timed cash flows, conventions, complete outcome tree, and named gates</td></tr>
+      </div>
+    <section class="panel investment-analysis" aria-labelledby="investment-analysis-title">
+<div class="panel-heading"><div><p class="eyebrow">06 · Compare layered investment</p><h2 id="investment-analysis-title" tabindex="-1">Layered investment comparison</h2></div></div>
+<p>Compare an explicitly scoped scenario across internal investment, customer implementation, commercial cohorts, service and operational consequences, and capital allocation. The editable comparison is illustrative; named people establish the evidence and decision authority.</p>
+
+<div data-investment-analysis data-section-prefix="06" hidden></div><details class="investment-static-overview"><summary><span class="eyebrow">06F · Read the source overview</span><h3>Five domains and their evidence</h3></summary><div class="investment-table-scroll" role="region" tabindex="0" aria-label="Investment domains and evidence; scroll horizontally"><table><caption>Five domains, five cross-cutting record types</caption><thead><tr><th scope="col" data-label="Domain">Domain</th><th scope="col" data-label="Comparison">Comparison</th><th scope="col" data-label="Evidence needed">Evidence needed</th></tr></thead><tbody>
+<tr data-label="Five domains, five cross-cutting record types: Internal investment"><th scope="row" data-label="Domain">Internal investment</th><td data-label="Comparison">Allocated effort and incremental work</td><td data-label="Evidence needed">Loaded rates, horizon, overlap policy, and explicit heuristics</td></tr>
+<tr data-label="Five domains, five cross-cutting record types: Customer implementation"><th scope="row" data-label="Domain">Customer implementation</th><td data-label="Comparison">Deployment effort, lag, and unit economics</td><td data-label="Evidence needed">Orderable unit, payer, price class, and service boundary</td></tr>
+<tr data-label="Five domains, five cross-cutting record types: Commercial cohort"><th scope="row" data-label="Domain">Commercial cohort</th><td data-label="Comparison">Retention, acquisition, expansion, and reactivation</td><td data-label="Evidence needed">Opening cohort, denominator, window, currency, and recurring time basis</td></tr>
+<tr data-label="Five domains, five cross-cutting record types: Service and operational value"><th scope="row" data-label="Domain">Service and operational value</th><td data-label="Comparison">Separate costs, consequences, and capacity</td><td data-label="Evidence needed">Population, comparator, measure, source, reviewer, and date</td></tr>
+<tr data-label="Five domains, five cross-cutting record types: Capital allocation"><th scope="row" data-label="Domain">Capital allocation</th><td data-label="Comparison">NPV, guarded IRR, payback, and reversible choices</td><td data-label="Evidence needed">Timed cash flows, conventions, complete outcome tree, and named gates</td></tr>
 </tbody></table></div><p>Input, assumption, calculation, evidence, and decision records describe how each domain is carried. Blank values remain unavailable; zero retains its stated meaning. This overview stays readable with JavaScript unavailable.</p></details>
-<div data-investment-analysis hidden></div>
 </section>
 </main>
 
@@ -3354,7 +3405,7 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
     RESET: "reset", APPLY: "apply", EXPORT: "export", SCHEMA: "schema",
     IMPORT_TEXT: "import-text", COPY: "copy", STAFFING: "staffing"
   });
-  const EDITORS = Object.freeze(["events", "alternatives", "outcomes", "clinical"]);
+  const EDITORS = Object.freeze(["events", "alternatives", "outcomes", "serviceOutcomes"]);
   const methodHost = window.crossFunctionalInvestmentModelStudio;
   const numberFormat = new Intl.NumberFormat("en-US", { maximumFractionDigits: 4 });
   const drafts = new Set();
@@ -3366,7 +3417,8 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
   let interactionVersion = 0;
   let fileRequest = 0;
   const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  const titles={orientation:"Orientation",commercial:"Commercial cohort",pricing:"Pricing and implementation",capital:"Cash flow and capacity",clinical:"Clinical and operational context",decision:"Decision and reversible gate"};
+  const titles={orientation:"Orientation",commercial:"Commercial cohort",pricing:"Pricing and implementation",capital:"Cash flow and capacity",serviceOutcomes:"Service and operational context",decision:"Decision and reversible gate"};
+  const domainLabel = domain => domain === 'service-operational' ? 'Service and operational value' : domain;
   function control(key,f) {
     const id="analysis-"+key,value=state.inputs[key];
     let input;
@@ -3377,64 +3429,136 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
   }
   function group(name) {return '<fieldset><legend>'+titles[name]+'</legend><div class="investment-fields">'+Object.entries(C.FIELDS).filter(([,f])=>f.group===name).map(([k,f])=>control(k,f)).join("")+'</div></fieldset>';}
   function editor(key,label,note) {return '<label class="investment-editor" for="analysis-'+key+'"><strong>'+label+'</strong><span>'+note+'</span><textarea id="analysis-'+key+'" data-editor="'+key+'" rows="8" spellcheck="false">'+esc(JSON.stringify(state[key],null,2))+'</textarea></label>';}
+
+  const sectionPrefix = host.dataset.sectionPrefix;
+  const heading = (suffix, id, title) => '<span class="investment-kicker">'+esc(sectionPrefix+suffix)+' · '+esc(title)+'</span><h3 id="'+id+'" tabindex="-1">'+esc(title)+'</h3>';
   function mount() {
-    host.innerHTML='<div class="investment-intro"><p class="investment-kicker">Local calculation / explicit evidence / revisable decisions</p><h3>Compare what changes the decision.</h3><p>Begin with the illustrative fixture, edit the assumptions, then carry the same state into either instrument. Every amount belongs to its stated currency and period. Clinical dimensions keep their own evidence and human review.</p></div>'+
+    host.innerHTML='<section class="investment-brief" aria-labelledby="analysis-brief-title">'+heading('A','analysis-brief-title','Read the accepted comparison')+'<div data-summary></div></section>'+
       '<div class="investment-actions"><button type="button" data-action="'+ACTION.RESET+'">Reset illustrative analysis</button><button type="button" data-action="'+ACTION.STAFFING+'">Use current staffing reference</button><button type="button" data-action="'+ACTION.EXPORT+'">Export analysis JSON</button><label for="analysis-import">Import analysis JSON<input id="analysis-import" type="file" accept=".json,application/json"></label></div>'+
-      '<p id="analysis-status" role="status" aria-live="polite">Illustrative inputs loaded. Blank and explicit zero remain distinct.</p>'+
-      '<details open><summary>1. Orientation and decision</summary>'+group("orientation")+group("decision")+'<div data-summary></div></details>'+
-      '<details><summary>2. Commercial and implementation analysis</summary>'+group("commercial")+group("pricing")+'<div data-commercial></div>'+editor("events","Lifecycle event graph","Each occurrence has an ID, period, evidence standing, and predecessor IDs. Branches and reactivation retain separate events.")+'</details>'+
-      '<details><summary>3. Capital, uncertainty, and clinical consequences</summary>'+group("capital")+
-      editor("alternatives","Alternatives and timed cash flows","Flows are incremental to the stated comparator: t=0 followed by equal end-of-period intervals. Include every intended cost once. Alternatives are choices, not probabilistic outcomes.")+
-      editor("outcomes","Mutually exclusive outcome tree","Each outcome has its own probability and cash flows. Supplied probabilities are retained. P50/P80 and empirical distributions require their separate models.")+
-      '<div data-capital></div>'+group("clinical")+
-      editor("clinical","Nine clinical / operational dimensions","Preserve each dimension. Supply its unit, baseline, candidate value, evidence standing, and source; reviewed observations also require the named reviewer and date.")+
-      '<div data-clinical></div></details>'+
-      '<details><summary>4. Inspection, exchange, and AI collaboration</summary><p>The domain axis and record-type axis remain separate. This is a local planning instrument; accountable people establish financial, clinical, and release decisions.</p><div data-records></div>'+
+      '<p id="analysis-status" role="status" aria-live="polite">Illustrative inputs loaded. Blank and explicit zero remain distinct. Outputs describe accepted state.</p>'+
+      '<details><summary>'+heading('B','analysis-decision-title','Set the scenario and decision')+'</summary>'+group('orientation')+group('decision')+'</details>'+
+      '<details><summary>'+heading('C','analysis-commercial-title','Trace commercial and implementation value')+'</summary>'+group('commercial')+group('pricing')+'<div data-commercial></div>'+editor('events','Lifecycle event graph','Each occurrence has an ID, period, evidence standing, and predecessor IDs. Branches and reactivation retain separate events.')+'</details>'+
+      '<details><summary>'+heading('D','analysis-capital-title','Compare capital and service consequences')+'</summary>'+group('capital')+
+      editor('alternatives','Alternatives and timed cash flows','Flows are incremental to the stated comparator: t=0 followed by equal end-of-period intervals. Include every intended cost once. Alternatives describe choices; the outcome tree carries probabilities.')+
+      editor('outcomes','Mutually exclusive outcome tree','Each outcome has its own probability and cash flows. Supplied probabilities are retained. P50/P80 and empirical distributions require their separate models.')+
+      '<div data-capital></div><h3 id="analysis-serviceOutcomes-title" tabindex="-1">Service and operational evidence</h3>'+group('serviceOutcomes')+
+      editor('serviceOutcomes','Nine service / operational dimensions','Preserve each dimension. Supply its unit, baseline, candidate value, evidence standing, and source; reviewed observations also require the named reviewer and date.')+'<div data-serviceOutcomes></div></details>'+
+      '<details><summary>'+heading('E','analysis-inspection-title','Inspect and carry the accepted account')+'</summary><p>The domain axis and record-type axis remain separate. Accountable people establish financial, service, and release decisions.</p><div data-records></div>'+
       '<label class="investment-editor" for="analysis-capsule"><strong>Plain-language comparison and Prompt Capsule</strong><textarea id="analysis-capsule" rows="12" readonly></textarea></label>'+
       '<label class="investment-editor" for="analysis-exchange"><strong>Portable state / schema output</strong><textarea id="analysis-exchange" rows="10" spellcheck="false"></textarea></label>'+
       '<div class="investment-actions"><button type="button" data-action="'+ACTION.IMPORT_TEXT+'">Import pasted state</button><button type="button" data-action="'+ACTION.COPY+'">Select portable state for copying</button><button type="button" data-action="'+ACTION.SCHEMA+'">Inspect JSON Schema</button></div></details>'+
-      '<div class="investment-actions"><button type="button" data-action="'+ACTION.APPLY+'">Apply lifecycle, alternative, outcome, and clinical edits</button></div>';
+      '<div class="investment-actions"><button type="button" data-action="'+ACTION.APPLY+'">Apply lifecycle, alternative, outcome, and service-outcome edits</button></div>';
     render();
   }
-  function formatted(r) {
-    if(r.status!=="known")return r.status+": "+r.reason;
-    const v=numberFormat.format(r.value);
-    return v+" "+r.unit.replace(/currency/g,state.inputs.currency).replace(/period/g,state.inputs.period);
+  function unitText(unit, inputs) {
+    return unit.replace(/currency/g, inputs.currency || 'currency unspecified').replace(/period/g, inputs.period);
   }
-  function table(caption,headers,rows) {
-    return '<div class="investment-table-scroll" role="region" tabindex="0" aria-label="'+esc(caption)+'; scroll horizontally"><table><caption>'+esc(caption)+'</caption><thead><tr>'+headers.map(x=>'<th scope="col">'+esc(x)+'</th>').join("")+'</tr></thead><tbody>'+rows.map(row=>'<tr>'+row.map((v,i)=>'<'+(i?"td":"th scope=\"row\"")+'>'+esc(v)+'</'+(i?"td":"th")+'>').join("")+'</tr>').join("")+'</tbody></table></div>';
+  function formatted(metric, inputs = state.inputs) {
+    if (metric.status !== 'known') return metric.status + ': ' + metric.reason;
+    return numberFormat.format(metric.value) + ' ' + unitText(metric.unit, inputs);
   }
-  function metricRows(keys){return keys.map(([key,label])=>[label,formatted(result.metrics[key])]);}
+  function metricCell(metric, inputs) {
+    return metric.status === 'known'
+      ? { amount: numberFormat.format(metric.value), qualifier: unitText(metric.unit, inputs) }
+      : metric.status + ': ' + metric.reason + ' [' + unitText(metric.unit, inputs) + ']';
+  }
+  function literal(value) {
+    // Long imported identifiers keep a local wrapping route; ordinary words stay intact.
+    return String(value ?? '').split(/(\S{32,})/g).map((part, i) => i % 2
+      ? '<span class="investment-identifier">' + esc(part) + '</span>' : esc(part)).join('');
+  }
+  function numericInput(value) {
+    return value === null || (typeof value === 'string' && value.trim() === '') ? 'unavailable' : value;
+  }
+  function cellHtml(value) {
+    if (value && typeof value === 'object' && 'amount' in value) {
+      return '<span class="investment-number">'+esc(value.amount)+'</span> '+literal(value.qualifier);
+    }
+    if (Array.isArray(value)) return value.map(v => '<span class="investment-number">'+esc(numericInput(v))+'</span>').join(', ');
+    return literal(value);
+  }
+  function table(caption, columns, rows, basis = '') {
+    const headers = columns.map(column => typeof column === 'string' ? {label:column, role:'prose'} : column);
+    return '<div class="investment-table-scroll" role="region" tabindex="0" aria-label="'+esc(caption)+'; scroll horizontally"><table><caption>'+esc(caption)+'</caption><thead><tr>'+headers.map(h=>'<th scope="col" data-label="'+esc(h.label)+'" data-column-role="'+h.role+'">'+esc(h.label)+'</th>').join('')+'</tr></thead><tbody>'+rows.map(row=>{
+      const label = caption+': '+String(row.cells[0])+ (basis ? '; '+basis : '');
+      return '<tr data-label="'+esc(label)+'"'+(row.key ? ' data-record-key="'+esc(row.key)+'"' : '')+'>'+row.cells.map((value,i)=>{
+        const tag=i?'td':'th';
+        return '<'+tag+(i?'':' scope="row"')+' data-label="'+esc(headers[i].label)+'" data-column-role="'+headers[i].role+'">'+cellHtml(value)+'</'+tag+'>';
+      }).join('')+'</tr>';
+    }).join('')+'</tbody></table></div>';
+  }
+  const col=(label,role='prose')=>({label,role});
+  const row=(cells,key)=>({cells,key});
+  function tablesFor(p) {
+    const {state:s,result:r}=p, i=s.inputs;
+    const measures=keys=>keys.map(([key,label])=>row([label,metricCell(r.metrics[key],i)],key));
+    const basis=(i.currency||'currency unspecified')+' / '+i.period+'; '+s.origin;
+    const definition=(caption,columns,rows)=>({caption,columns,rows,basis});
+    return {
+      summary:definition('Decision-changing measures',[col('Measure','identity'),col('Value and standing')],measures([['grr','Gross revenue retention'],['nrr','Net revenue retention'],['cac','Customer acquisition cost'],['expectedNpv','Expected NPV'],['budgetImpact','Incremental service budget impact']])),
+      commercial:definition('Commercial cohort and price realization',[col('Measure','identity'),col('Result')],measures([['logoRetention','Customer retention, opening cohort'],['closingCustomers','Closing customers'],['closingRevenue','Closing recurring revenue'],['grr','GRR, opening cohort'],['nrr','NRR, opening cohort'],['cac','Acquisition spend / new customers'],['acquisitionRevenueRatio','Acquisition spend / new recurring revenue'],['cacPayback','Contribution-based acquisition payback'],['discountAmount','Per-unit discount'],['netPrice','Net price after discount and rebate'],['unitContribution','Net price less variable and service costs']])),
+      events:definition('Lifecycle event graph',[col('Occurrence','identity'),col('Stage','identity'),col('Period','value'),col('Predecessors','identity'),col('Standing','status')],s.events.map(e=>row([e.id,e.kind,numericInput(e.period),e.predecessors.join(', ')||'Entry',e.standing],e.id))),
+      alternatives:definition('Incremental alternatives',[col('Choice','identity'),col('Standing','status'),col('Cash flows from t=0','flows'),col('NPV','value'),col('IRR per period'),col('Payback')],r.alternatives.map(a=>row([a.label,a.standing,a.flows,metricCell(a.npv,i),metricCell(a.irr,i),metricCell(a.payback,i)],a.id))),
+      sensitivity:definition('Discount sensitivity, same cash flows',[col('Alternative','identity'),col('Rate minus 0.02'),col('Entered rate'),col('Rate plus 0.02')],r.sensitivity.map(a=>row([a.id,...a.values.map(v=>(v.rate===null?'unavailable':v.rate.toFixed(4))+': '+formatted(v.result,i))],a.id))),
+      serviceOutcomes:definition('Service budget and capacity',[col('Measure','identity'),col('Result')],measures([['adoptedPopulation','Adopted population'],['budgetImpact','Incremental budget per period'],['capacityGap','Capacity gap'],['costPerOutcome','Reviewed incremental cost per outcome']])),
+      consequences:definition('Cost-consequence view',[col('Dimension','identity'),col('Unit','status'),col('Baseline','value'),col('Candidate','value'),col('Standing','status'),col('Change and evidence')],r.serviceOutcomes.map(c=>row([c.name,c.unit||'Unspecified',numericInput(c.baseline),numericInput(c.candidate),c.standing,formatted(c.delta,i)+(c.source?' / '+c.source:'')]))),
+      records:definition('Shared domain and record contract',[col('Domain','identity'),col('Record types present')],C.DOMAINS.map(d=>row([domainLabel(d),[...new Set(r.records.filter(record=>record.domain===d).map(record=>record.type))].join(', ')||'Records remain open'],d)))
+    };
+  }
+  const tableHtml = definition => table(definition.caption,definition.columns,definition.rows,definition.basis);
+  function readings(p) {
+    const {state:s,result:r}=p, i=s.inputs;
+    const selected=r.alternatives.find(a=>a.id===i.option);
+    return [
+      {label:'Commercial cohort',value:'NRR '+formatted(r.metrics.nrr,i)+'; acquisition '+formatted(r.metrics.cac,i),target:'analysis-commercial-title',route:'Cohort, pricing, and implementation'},
+      {label:'Capital comparison',value:selected?selected.label+': NPV '+formatted(selected.npv,i):'Selected option: '+i.option+'; compare the entered alternatives.',target:'analysis-capital-title',route:'Alternatives, cash flows, and sensitivity'},
+      {label:'Service / operational evidence',value:'Budget impact '+formatted(r.metrics.budgetImpact,i)+'. '+r.serviceOutcomes.filter(c=>c.standing==='locally-verified').length+' of '+r.serviceOutcomes.length+' dimensions are recorded as locally verified.',target:'analysis-serviceOutcomes-title',route:'Costs, capacity, and consequence evidence'},
+      {label:'Decision',value:r.gate+' / '+i.option+'. Owner: '+(i.owner||'Unspecified')+'. Next evidence: '+i.nextEvidence,target:'analysis-decision-title',route:'Decision owner, gate, and revisit'}
+    ];
+  }
+  function summaryHtml(p) {
+    const i=p.state.inputs;
+    return '<p><strong>'+esc(i.label)+'</strong></p><p class="investment-basis">Accepted '+esc(p.state.origin)+' comparison · '+esc(i.currency||'currency unspecified')+' / '+esc(i.period)+' · contract '+esc(p.contract)+' · fingerprint '+esc(p.fingerprint)+'</p><p class="investment-decision"><strong>'+esc(p.result.gate)+'</strong> / '+esc(i.option)+' / '+esc(i.owner||'Decision owner remains open')+'</p><p>Next evidence: '+literal(i.nextEvidence)+'. Revisit: '+literal(i.revisit||'Unspecified')+'.</p><p class="investment-basis">Staffing remains a USD planning account. Entered cash flows, commercial measures, and service budget impact keep their separate ledger meanings.</p>';
+  }
+  function receiptsHtml(p, report = false) {
+    return readings(p).map(reading=>'<div class="state-receipt"><dt>'+esc(reading.label)+'</dt><dd>'+literal(reading.value)+'</dd><dd class="state-receipt-route"><small><a href="#'+(report?'report-':'')+reading.target+'">'+esc(reading.route)+'</a></small></dd></div>').join('');
+  }
+  function reportHtml(p) {
+    const t=tablesFor(p), i=p.state.inputs;
+    const inputTable=groupName=>table(titles[groupName]+' inputs',[col('Input','identity'),col('Accepted value'),col('Unit / basis','identity')],Object.entries(C.FIELDS).filter(([,f])=>f.group===groupName).map(([key,f])=>row([f.label,f.type===C.FIELD_TYPE.NUMBER?numericInput(i[key]):i[key]===null||i[key]===''?'unavailable':String(i[key]),unitText(f.unit,i)],key)));
+    const section=(id,title,body)=>'<section aria-labelledby="report-'+id+'"><h3 id="report-'+id+'">'+esc(title)+'</h3>'+body+'</section>';
+    return '<section class="investment-analysis investment-report" aria-labelledby="report-investment-title" data-state-fingerprint="'+esc(p.fingerprint)+'"><h2 id="report-investment-title">Layered investment comparison</h2>'+summaryHtml(p)+'<p>Scenario: '+esc(p.state.scenarioId)+'. Method: '+esc(p.state.method)+'. Cash convention: '+esc(i.cashConvention)+'. Formula version: '+esc(C.FORMULA_VERSION)+'. The fingerprint identifies correspondence; authenticity follows its separate source review.</p><dl class="state-receipts">'+receiptsHtml(p,true)+'</dl>'+tableHtml(t.summary)+
+      section('analysis-decision-title','Scenario, decision, and reversible gate',inputTable('orientation')+inputTable('decision'))+
+      section('analysis-commercial-title','Commercial cohort, implementation, and lifecycle',inputTable('commercial')+inputTable('pricing')+tableHtml(t.commercial)+tableHtml(t.events))+
+      section('analysis-capital-title','Capital, assumptions, and sensitivity',inputTable('capital')+tableHtml(t.alternatives)+table('Outcome tree: supplied probabilities and cash flows',[col('Outcome','identity'),col('Probability','value'),col('Cash flows from t=0','flows')],p.state.outcomes.map(o=>row([o.id,numericInput(o.probability),o.flows],o.id)),t.alternatives.basis)+tableHtml(t.sensitivity))+
+      section('analysis-serviceOutcomes-title','Service and operational evidence',inputTable('serviceOutcomes')+tableHtml(t.serviceOutcomes)+tableHtml(t.consequences))+
+      section('analysis-inspection-title','Domain records and exact accepted state',tableHtml(t.records)+'<p>The complete accepted state retains evidence sources, reviewer/date declarations, extensions, and exact inputs. The tables above format amounts for reading.</p><pre>'+esc(JSON.stringify(p.state,null,2))+'</pre>')+'</section>';
+  }
   function capsule() {
     return ["# Investment comparison",state.inputs.label,
       "Standing: "+state.origin+". Method: "+state.method+". Contract: "+C.VERSION+". State identity: "+identity+".",
       "Currency / period: "+state.inputs.currency+" / "+state.inputs.period+". "+state.inputs.cashConvention,
       "Decision owner: "+(state.inputs.owner||"Unspecified")+". Gate: "+result.gate+". Next option: "+state.inputs.option+".",
       "Next evidence: "+state.inputs.nextEvidence+". Revisit: "+(state.inputs.revisit||"Unspecified")+".",
-      "Five domains: "+C.DOMAINS.join(", ")+". Five record types: "+C.TYPES.join(", ")+".",
+      "Five domains: "+C.DOMAINS.map(domainLabel).join(", ")+". Five record types: "+C.TYPES.join(", ")+".",
       ...Object.entries(result.metrics).map(([k,v])=>k+": "+formatted(v)),
       ...result.alternatives.map(a=>a.label+": NPV "+formatted(a.npv)+"; IRR "+formatted(a.irr)+"; payback "+formatted(a.payback)),
       "Evidence and authority: the source identifies product or workflow context; causal benefit and local applicability require their own observations.",
-      "Cash-flow amounts are complete scenario inputs. Pricing, staffing references, reserves, and clinical budget impacts remain separate views until a named transformation joins them.",
-      "Clinical cost-consequence: "+result.clinical.map(c=>c.name+" "+formatted(c.delta)).join("; "),
+      "Cash-flow amounts are complete scenario inputs. Pricing, staffing references, reserves, and service budget impacts remain separate views until a named transformation joins them.",
+      "Service cost-consequence: "+result.serviceOutcomes.map(c=>c.name+" "+formatted(c.delta)).join("; "),
       "Portable state:\n"+serialized].join("\n\n");
   }
   function render() {
-    host.querySelector("[data-summary]").innerHTML='<p class="investment-decision"><strong>'+esc(result.gate)+'</strong> / '+esc(state.inputs.option)+' / '+esc(state.inputs.owner||"Decision owner remains open")+'</p>'+table("Decision-changing measures",["Measure","Value and standing"],metricRows([["grr","Gross revenue retention"],["nrr","Net revenue retention"],["cac","Customer acquisition cost"],["expectedNpv","Expected NPV"],["budgetImpact","Incremental clinical budget impact"]]))+
-      '<p>Source standing: '+esc(state.origin)+'. '+esc(state.inputs.nextEvidence)+'.</p>';
-    host.querySelector("[data-commercial]").innerHTML=table("Commercial cohort and price realization",["Measure","Result"],metricRows([["logoRetention","Customer retention, opening cohort"],["closingCustomers","Closing customers"],["closingRevenue","Closing recurring revenue"],["grr","GRR, opening cohort"],["nrr","NRR, opening cohort"],["cac","Acquisition spend / new customers"],["acquisitionRevenueRatio","Acquisition spend / new recurring revenue"],["cacPayback","Contribution-based acquisition payback"],["discountAmount","Per-unit discount"],["netPrice","Net price after discount and rebate"],["unitContribution","Net price less variable and service costs"]]))+
-      table("Lifecycle event graph",["Occurrence","Stage","Period","Predecessors","Standing"],state.events.map(e=>[e.id,e.kind,e.period===null?"unavailable":e.period,e.predecessors.join(", ")||"Entry",e.standing]));
-    host.querySelector("[data-capital]").innerHTML=table("Incremental alternatives",["Choice","Standing","Cash flows from t=0","NPV","IRR per period","Payback"],result.alternatives.map(a=>[a.label,a.standing,a.flows.map(x=>x===null||x===""?"unavailable":x).join(", "),formatted(a.npv),formatted(a.irr),formatted(a.payback)]))+
-      table("Discount sensitivity, same cash flows",["Alternative","Rate minus 0.02","Entered rate","Rate plus 0.02"],result.sensitivity.map(a=>[a.id,...a.values.map(v=>(v.rate===null?"unavailable":v.rate.toFixed(4))+": "+formatted(v.result))]));
-    host.querySelector("[data-clinical]").innerHTML=table("Clinical budget and capacity",["Measure","Result"],metricRows([["adoptedPopulation","Adopted population"],["budgetImpact","Incremental budget per period"],["capacityGap","Capacity gap"],["costPerOutcome","Reviewed incremental cost per outcome"]]))+
-      table("Cost-consequence view",["Dimension","Unit","Baseline","Candidate","Standing","Change and evidence"],result.clinical.map(c=>[c.name,c.unit||"Unspecified",c.baseline??"unavailable",c.candidate??"unavailable",c.standing,formatted(c.delta)+(c.source?" / "+c.source:"")]));
-    host.querySelector("[data-records]").innerHTML=table("Shared domain and record contract",["Domain","Record types present"],C.DOMAINS.map(d=>[d,[...new Set(result.records.filter(r=>r.domain===d).map(r=>r.type))].join(", ")||"No records supplied"]));
-    host.querySelector("#analysis-capsule").value=capsule();
+    const t=tablesFor(projection);
+    host.querySelector('[data-summary]').innerHTML=summaryHtml(projection)+tableHtml(t.summary);
+    host.querySelector('[data-commercial]').innerHTML=tableHtml(t.commercial)+tableHtml(t.events);
+    host.querySelector('[data-capital]').innerHTML=tableHtml(t.alternatives)+tableHtml(t.sensitivity);
+    host.querySelector('[data-serviceOutcomes]').innerHTML=tableHtml(t.serviceOutcomes)+tableHtml(t.consequences);
+    host.querySelector('[data-records]').innerHTML=tableHtml(t.records);
+    host.querySelector('#analysis-capsule').value=capsule();
     host.dataset.stateFingerprint=identity;
-    for (const input of host.querySelectorAll("[data-key]")) {
-      const field = C.FIELDS[input.dataset.key];
-      input.closest("label").querySelector("small").textContent = field.unit
-        .replace(/currency/g, state.inputs.currency || "currency").replace(/period/g, state.inputs.period);
+    for (const input of host.querySelectorAll('[data-key]')) {
+      input.closest('label').querySelector('small').textContent=unitText(C.FIELDS[input.dataset.key].unit,state.inputs);
     }
   }
   function status(text) {
@@ -3518,7 +3642,7 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
       try { edits[key] = C.parseJson(editor.value); }
       catch (error) { revisionNeeded(error, editor); return; }
     }
-    accept({ ...state, ...edits }, "Lifecycle, alternative, outcome, and clinical edits accepted.", { editorKeys: EDITORS });
+    accept({ ...state, ...edits }, "Lifecycle, alternative, outcome, and service-outcome edits accepted.", { editorKeys: EDITORS });
   }
 
   function useStaffing() {
@@ -3622,6 +3746,13 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
     getResult: () => C.clone(result),
     getProjection: () => C.clone(projection),
     readProjection: () => projection,
+    summaryHtml: () => summaryHtml(projection),
+    receiptsHtml: () => receiptsHtml(projection),
+    captureReport() {
+      return Object.freeze({ contract: projection.contract, fingerprint: projection.fingerprint,
+        html: reportHtml(projection),
+        styles: document.querySelector('style[data-investment-analysis-source="collaboration/investment-analysis/studio.css"]').textContent });
+    },
     setMethod(method, reason = "visitor-selected") {
       return accept({ ...state, method }, "Analysis and selected method agree.", { methodReason: reason });
     },
@@ -3630,11 +3761,33 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
     promptCapsule: capsule,
     fingerprint: () => identity
   });
+  function revealFragment() {
+    let id;
+    try { id=decodeURIComponent(location.hash.slice(1)); } catch { return; }
+    const target=document.getElementById(id);
+    if (!target || !target.closest('.investment-analysis')) return;
+    for (let parent=target.parentElement; parent; parent=parent.parentElement) {
+      if (parent.tagName==='DETAILS') parent.open=true;
+    }
+    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex','-1');
+    target.focus({preventScroll:true});
+    target.scrollIntoView({block:'start',behavior:'instant'});
+  }
+  window.addEventListener('hashchange',revealFragment);
+  document.addEventListener('click',event=>{
+    const link=event.target.closest('a[href^="#"]');
+    if (link && link.hash===location.hash && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) revealFragment();
+  });
   let printClosed=[];
-  window.addEventListener("beforeprint",()=>{printClosed=Array.from(host.querySelectorAll("details")).filter(d=>!d.open);printClosed.forEach(d=>d.open=true);});
-  window.addEventListener("afterprint",()=>{printClosed.forEach(d=>d.open=false);printClosed=[];});
-  host.hidden=false;mount();
-  window.dispatchEvent(new CustomEvent("investment-analysis-change"));
+  const chapter=host.closest('.investment-analysis');
+  window.addEventListener('beforeprint',()=>{
+    if (printClosed.length) return;
+    printClosed=Array.from(chapter.querySelectorAll('details')).filter(d=>!d.open);
+    printClosed.forEach(d=>d.open=true);
+  });
+  window.addEventListener('afterprint',()=>{printClosed.forEach(d=>d.open=false);printClosed=[];});
+  host.hidden=false;mount();revealFragment();
+  window.dispatchEvent(new CustomEvent('investment-analysis-change'));
 })();
 </script>
 <!-- investment-analysis:ui:end -->

@@ -8,14 +8,14 @@ Source owner for the shared analysis in the Initiative Costing Calculator and Cr
 - `studio.js`: local progressive-enhancement controls, semantic tables, recovery, and a plain-text comparison capsule.
 - `studio.css`: scoped shared component, projected after each host's existing skin.
 - `../../tools/project-investment-analysis.mjs`: deterministic readable inline projection into both HTML hosts. The three files above remain editable authority; marker comments identify each generated copy. Styles and core load in the head, and UI initializes after the host script. The Model Studio retains its inline-only CSP.
-- `state.schema.json`: generated, self-contained JSON Schema 2020-12 projection of `core.schema()`, version 0.1.0. Its canonical identifier describes identity; hosted retrieval follows an explicit publication step.
-- `example.json`: synthetic material instance with hand-checkable numbers for calculation and exchange review. Company economics and clinical findings require their own source evidence.
+- `state.schema.json`: generated, self-contained JSON Schema 2020-12 projection of `core.schema()`, version 0.2.0. Its canonical identifier describes identity; hosted retrieval follows an explicit publication step.
+- `example.json`: synthetic material instance with hand-checkable numbers for calculation and exchange review. Company economics and service-outcome findings require their own source evidence.
 
 The source-reading baseline is the accepted main tree at `a2b6f4355b87115e078f9f94760fedcfa3734ad0`. The calculator offered six change frameworks, a distinct eight-part attention lens, six editable presets, inline calculations, and a generated leave-behind. Discovery & Alignment supplied the three-quarter default. The Model Studio supplied eight method descriptions, fixed illustrative context, selected-method state, and a Prompt Capsule. About supplied a prose equivalent. This change adds the shared analysis and an actual About table while preserving the original roles.
 
 ## Two axes
 
-Domains are internal investment, customer implementation, commercial cohort, clinical/operational value, and capital allocation. Record types are input, assumption, calculation, evidence, and decision. `calculate(state).records` derives the applicable combinations. Each metric carries status, unit, currency where applicable, period, formula version, and evidence standing. A domain's missing record leaves its claim open.
+Domains are internal investment, customer implementation, commercial cohort, service/operational value, and capital allocation. Record types are input, assumption, calculation, evidence, and decision. `calculate(state).records` derives the applicable combinations. Each metric carries status, unit, currency where applicable, period, formula version, and evidence standing. A domain's missing record leaves its claim open.
 
 ## Numeric and economic meaning
 
@@ -27,7 +27,7 @@ Cash flows are complete incremental, equally spaced, end-period amounts with an 
 
 Staffing uses source-owned 80-hour sprints and 520-hour quarters, the existing unknown/complexity reserve heuristics, and sigma as an illustrative attention multiplier. Additional-share controls identify the portions of activity, recovery, and quality work outside allocated staffing. These cost components enter the base once; spread expresses the planning range. Shared-analysis cash flows contain the explicitly entered amounts. Staffing references, implementation costs, and budget-impact outputs remain separate views; the collaborator owns their reconciliation into cash-flow inputs.
 
-Clinical budget impact is eligible population times adoption times the difference in per-person resource cost. The nine cost-consequence dimensions retain their own units and evidence. Cost per incremental outcome requires a named measure, reviewer, source, perspective, valid date, and an explicitly reviewed transformation. The planning interface records these declarations; qualified people establish their substantive validity.
+Service budget impact is eligible population times adoption times the difference in per-person resource cost. The nine cost-consequence dimensions retain their own units and evidence. Cost per incremental outcome requires a named measure, reviewer, source, perspective, valid date, and an explicitly reviewed transformation. The planning interface records these declarations; qualified people establish their substantive validity.
 
 ## Exchange and recovery
 
@@ -47,11 +47,11 @@ Method records use `urn:source-key:investment-method:<method-name>`; the eight m
 
 The core uses a decision structure fitted to each receiving job. Schema types dispatch to focused validators; common constraints and independent domain diagnostics accumulate in their established order. Each `anyOf` candidate owns a temporary diagnostic list. A failed candidate leaves the next candidate's evidence independent.
 
-Calculation stages name their inputs and returned results. Metric guards preserve input, currency, and formula precedence. Clinical consequences preserve evidence, baseline, and candidate precedence. The decision gate gives an explicit stop its established priority, then checks human review and capacity. Static domain maps hold literal classifications; the public calculation API and record order remain stable.
+Calculation stages name their inputs and returned results. Metric guards preserve input, currency, and formula precedence. Service consequences preserve evidence, baseline, and candidate precedence. The decision gate gives an explicit stop its established priority, then checks human review and capacity. Static domain maps hold literal classifications; the public calculation API and record order remain stable.
 
 The smallest useful abstraction localizes a real change: a guard for early recovery, a switch for one discriminant, a map for static classification, and ordered accumulation for independent diagnostics. Short loops and direct conditions remain appropriate. New plugin machinery enters when an actual extension boundary needs it.
 
-The focused unit suite checks schema/example agreement, diagnostic accumulation and order, guard precedence, clinical zero/absence meaning, decision gates, domain mappings, and detached results alongside the formula and exchange fixtures. Browser checks own focus, rendered agreement, and recovery. These observations establish named behavior; maintainability and broader applicability remain review questions.
+The focused unit suite checks schema/example agreement, diagnostic accumulation and order, guard precedence, service-outcome zero/absence meaning, decision gates, domain mappings, and detached results alongside the formula and exchange fixtures. Browser checks own focus, rendered agreement, and recovery. These observations establish named behavior; maintainability and broader applicability remain review questions.
 
 ## Local evidence and delivery
 
@@ -93,3 +93,39 @@ Let B be JSON bytes, N nodes, D depth, K each object's key count, Lkey key compa
 Input limits bound workloads; responsiveness, native regex compilation, garbage collection, and layout cost remain runtime observations. The isolated near-miss check establishes completion within its declared budget. General latency and asymptotic claims require measured workloads and fitting runtime evidence. Package writers require a locally owned output tree and inspect each output directory component; concurrent hostile replacement of filesystem paths remains outside that local-ownership contract.
 
 The reusable method is [cost-and-ownership-analysis](../../.agents/skills/cost-and-ownership-analysis/SKILL.md). The PR assessment supplied the formation evidence: allocation was distinct from native recompilation, inherited lookup was distinct from prototype mutation, and pure state transitions were distinct from necessary UI/filesystem effects. The skill has public-ready source standing and enters the public catalog through PR #291. The publication build carries its readable page, machine projection, exact source, and supporting references; hosted availability follows the reviewed main-branch release. This first application supplies bounded evidence, with broader transfer remaining open to subsequent use.
+
+## Cohesive reading and captured reports
+
+Each host now offers two working chapters: its original instrument and a
+full-width layered comparison. A visible accepted-state brief precedes four
+native analytical disclosures. The calculator's single Comparison rail entry
+and top chapter link provide global navigation; analytical Direct Receipts
+pair current measures with focused routes that reveal the receiving section.
+Native fragments retain browser history, and disclosure choices survive edits.
+
+Shared table descriptors carry captions, row/column scope, field roles, and
+supplementary `data-label` values. Accepted occurrence and alternative IDs remain
+available as row keys. Ordinary words wrap at their boundaries; formatted
+amounts remain intact and broad comparisons use named local scroll regions.
+Print presents labeled records vertically so each field retains its row context.
+
+The calculator summary and analytical report consume the same immutable
+accepted projection. Opening a report captures its rendered analytical account,
+contract, fingerprint, exact input state, and source-owned styles once alongside
+the planning snapshot. New-tab and downloadable reports share that capture;
+later edits affect the next report. Staffing stays in USD while the selected
+analysis currency and period remain explicit. Formula and schema versions
+are 0.1.0 and 0.2.0, respectively. Pending drafts retain their editable UI role.
+
+The focused presentation contract is:
+
+```sh
+node --test tests/investment-analysis/presentation.browser.test.mjs
+```
+
+Its Range observations distinguish broken words/numbers from legitimate
+multiline phrases. Its two detached-row fixtures establish the declared DOM
+serializer's context retention. Its local About-carrier observation exercises
+the actual sandbox with locally generated child bytes; live hosting retains its
+separate observation. The [presentation plan](../../planning/layered-investment-presentation.md)
+records composition, the deferred timing visual, and release boundaries.
