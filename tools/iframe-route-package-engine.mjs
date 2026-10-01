@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { Script } from "node:vm";
 import {
   lstat,
   mkdir,
@@ -596,6 +597,15 @@ export function observeIframeExitLinks(html) {
   };
 }
 
+export function classicScriptMarkup(source, label = "Package script") {
+  if (typeof source !== "string" || /<\/script\b/iu.test(source)) {
+    fail(`${label} needs classic JavaScript without an HTML script terminator.`);
+  }
+  try { new Script(source, { filename: label }); }
+  catch { fail(`${label} needs syntactically valid, self-contained classic JavaScript.`); }
+  return "<script>" + source + "</script>";
+}
+
 export function scanPackageClosure(
   html,
   packageReadings,
@@ -642,7 +652,16 @@ export function scanPackageClosure(
       contentType === "application/ecmascript" ||
       contentType === "text/ecmascript"
     ) {
-      fail(`${label} package file ${target} is executable code; this media tranche keeps JavaScript inline.`);
+      if (!options.allowClassicScripts || contentType !== "text/javascript") {
+        fail(`${label} package file ${target} is executable code; this route keeps JavaScript inline.`);
+      }
+      nested = scanHtmlClosure(classicScriptMarkup(text, `${label} package file ${target}`), targets, `${label} package file ${target}`, {
+        ...options,
+        scanMarkupContextsOnly: true,
+        scanStyleContextsOnly: true,
+        baseDirectory,
+        requireAllTargets: false,
+      });
     }
 
     inlineReferences += nested.inline_references;

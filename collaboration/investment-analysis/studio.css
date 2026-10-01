@@ -1,0 +1,32 @@
+/* Shared investment analysis component. Consumers: both investment instruments.
+   Loaded after each host's authored skin. Local tokens preserve the host palette.
+   Parent Canvas routes retain expanded.css and their existing route/component owners. */
+.investment-analysis { --ia-ink:var(--ink,#213252); --ia-paper:var(--paper,#fffdf7); --ia-accent:var(--tiffany,#56d8c9); color:var(--ia-ink); background:var(--ia-paper); border:2px solid var(--ia-ink); margin:2rem auto; padding:clamp(1rem,3vw,2.5rem); max-width:100%; min-width:0; box-sizing:border-box; }
+.investment-analysis * { box-sizing:border-box; }
+.investment-analysis h2,.investment-analysis h3 { color:var(--ia-ink); }
+.investment-analysis .investment-kicker { font:700 .75rem/1.5 "Courier New",monospace; letter-spacing:.07em; text-transform:uppercase; }
+.investment-analysis details { border:1px solid var(--ia-ink); margin:1rem 0; padding:1rem; background:var(--ia-paper); }
+.investment-analysis summary { cursor:pointer; font-weight:800; font-size:1.05rem; padding:.6rem; color:var(--ia-ink); }
+.investment-analysis fieldset { border:0; border-top:2px solid var(--ia-accent); padding:1rem 0; min-width:0; margin:1rem 0; }
+.investment-analysis legend { font-weight:800; padding:0 .5rem; }
+.investment-analysis .investment-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr)); gap:1rem; }
+.investment-analysis .investment-field { display:flex; flex-direction:column; gap:.4rem; color:var(--ia-ink); font-weight:600; min-width:0; }
+.investment-analysis .investment-field small { font:400 .72rem/1.4 "Courier New",monospace; overflow-wrap:anywhere; }
+.investment-analysis input,.investment-analysis select,.investment-analysis textarea { color:var(--ia-ink); background:var(--ia-paper); border:1px solid var(--ia-ink); padding:.65rem; font:inherit; width:100%; max-width:100%; min-width:0; border-radius:0; }
+.investment-analysis input[type=checkbox] { width:1.4rem; height:1.4rem; }
+.investment-analysis .investment-editor { display:grid; gap:.5rem; margin:1rem 0; }
+.investment-analysis textarea { font:.8rem/1.5 "Courier New",monospace; resize:vertical; }
+.investment-analysis .investment-actions { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem; margin:1rem 0; }
+.investment-analysis button { color:var(--ia-ink); background:var(--ia-accent); border:2px solid var(--ia-ink); padding:.65rem .9rem; font-family:inherit; font-size:.85rem; font-weight:700; line-height:1.4; cursor:pointer; white-space:normal; }
+.investment-analysis :is(button,input,select,textarea,summary,[tabindex]):focus-visible { outline:3px solid var(--ia-ink); outline-offset:3px; }
+.investment-analysis .investment-table-scroll { overflow:auto; max-width:100%; margin:1rem 0; border:1px solid var(--ia-ink); }
+.investment-analysis table { border-collapse:collapse; width:100%; min-width:36rem; table-layout:auto; margin:0; color:var(--ia-ink); background:var(--ia-paper); }
+.investment-analysis :is(th,td) { border:1px solid var(--ia-ink); text-align:left; vertical-align:top; padding:.7rem; overflow-wrap:anywhere; font-size:.84rem; }
+.investment-analysis thead th { color:var(--ia-ink); background:var(--ia-accent); }
+.investment-analysis caption { text-align:left; font-weight:800; padding:.7rem; caption-side:top; color:var(--ia-ink); background:var(--ia-paper); }
+.investment-analysis .investment-decision { padding:1rem; border-left:.5rem solid var(--ia-ink); background:var(--ia-accent); }
+.investment-analysis [role=status] { min-height:3em; border-block:1px solid var(--ia-ink); padding:.75rem 0; }
+@media(max-width:40rem){.investment-analysis {padding:1rem;} .investment-analysis details{padding:.5rem;} .investment-analysis .investment-actions{align-items:stretch;flex-direction:column;}}
+@media(prefers-reduced-motion:reduce){.investment-analysis *{scroll-behavior:auto!important;transition:none!important;animation:none!important;}}
+@media(forced-colors:active){.investment-analysis {--ia-ink:CanvasText;--ia-paper:Canvas;--ia-accent:Canvas;} .investment-analysis button{border-color:ButtonText;}}
+@media print {.investment-analysis {border:0;padding:0;} .investment-analysis .investment-actions,.investment-analysis input[type=file]{display:none;} .investment-analysis details{break-inside:auto;} .investment-analysis .investment-table-scroll{overflow:visible;} .investment-analysis table{min-width:0;font-size:9pt;} .investment-analysis :is(th,td){font-size:9pt;}}

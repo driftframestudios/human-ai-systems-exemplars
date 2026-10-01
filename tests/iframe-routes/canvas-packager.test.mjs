@@ -12,6 +12,7 @@ import {
 } from "../../tools/attribution-contract.mjs";
 import {
   sha256,
+  scanPackageClosure,
   verifyPackagePlan,
   writePackagePlan,
 } from "../../tools/iframe-route-package-engine.mjs";
@@ -56,7 +57,7 @@ test("the Canvas family plan follows the authored 15-route manifest", async () =
 
   assert.equal(first.contract.base_path, "/v1/canvas/");
   assert.equal(first.contract.routes.length, 15);
-  assert.equal(first.outputFiles.size, 40);
+  assert.equal(first.outputFiles.size, 46);
   assert.equal(
     first.receipt.route_contract.file,
     "iframe-route-families/canvas/public-iframe-route-manifest-v1.json",
@@ -66,7 +67,7 @@ test("the Canvas family plan follows the authored 15-route manifest", async () =
     decorated_routes: 15,
     byte_identical_routes: 0,
     navigation_adapted_routes: 1,
-    generated_files: 40,
+    generated_files: 46,
     live_cloudflare_mutation: false,
     closure_observation: "static_resource_graph",
     browser_request_observation_required: true,
@@ -237,7 +238,7 @@ test("the aggregate v1 plan preserves exact family bytes and adds one root recei
   }
   assert.deepEqual(aggregate.receipt.package_contract.family_directories, ["core", "canvas"]);
   assert.equal(aggregate.receipt.package_contract.primary_routes, 38);
-  assert.equal(aggregate.receipt.package_contract.generated_files, 68);
+  assert.equal(aggregate.receipt.package_contract.generated_files, 74);
   assert.equal(
     aggregate.receipt.package_contract.generated_bytes,
     [...aggregate.outputFiles.values()].reduce((total, bytes) => total + bytes.byteLength, 0),
@@ -279,6 +280,24 @@ test("the aggregate v1 plan preserves exact family bytes and adds one root recei
   );
 
   const verification = await checkAggregatePackage(aggregate);
-  assert.equal(verification.files, 68);
+  assert.equal(verification.files, 74);
   assert.ok(verification.bytes > 1_740_871);
+});
+
+test("declared classic scripts retain network and syntax boundaries",()=>{
+  const html='<script src="./engine.js"></script>';
+  const readings=source=>new Map([["engine.js",{contentType:"text/javascript",bytes:Buffer.from(source)}]]);
+  assert.throws(()=>scanPackageClosure(html,readings("globalThis.value=1;")),/executable code/);
+  assert.deepEqual(scanPackageClosure(html,readings("globalThis.value=1;"),"fixture",{allowClassicScripts:true}).package_targets,["engine.js"]);
+  for(const source of ['fetch("https://example.test")','import value from "./other.js";','globalThis.x="</script>";']) {
+    assert.throws(()=>scanPackageClosure(html,readings(source),"fixture",{allowClassicScripts:true}),/runtime network primitive|classic JavaScript/);
+  }
+});
+test("both investment routes package the same source-owned calculation and UI bytes",async()=>{
+  const plan=await createCanvasPackagePlan();
+  for(const route of ["cross-functional-investment-studio","cross-functional-investment-model-studio"]){
+    for(const [file,source] of [["investment-core.js","core.js"],["investment-studio.js","studio.js"],["investment-studio.css","studio.css"]]){
+      assert.deepEqual(plan.outputFiles.get(route+"/assets/"+file),await readFile(path.join(repositoryRoot,"collaboration/investment-analysis",source)));
+    }
+  }
 });

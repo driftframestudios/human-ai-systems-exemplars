@@ -43,7 +43,9 @@
       "activation_standing": "eligible",
       "projection_kind": "decorated_copy",
       "carrier_policy": {
-        "sandbox_tokens": ["allow-scripts"],
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
         "permissions_policy": []
       },
       "reader_job": "Inspect how goal fidelity, evidence, and recovery routes remain visible across a registry handoff."
@@ -58,7 +60,9 @@
       "activation_standing": "eligible",
       "projection_kind": "decorated_copy",
       "carrier_policy": {
-        "sandbox_tokens": ["allow-scripts"],
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
         "permissions_policy": []
       },
       "reader_job": "Follow one recoverable collaboration packet across people, platforms, and revision boundaries."
@@ -89,7 +93,9 @@
       "activation_standing": "eligible",
       "projection_kind": "decorated_copy",
       "carrier_policy": {
-        "sandbox_tokens": ["allow-scripts"],
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
         "permissions_policy": []
       },
       "reader_job": "Compare role-specific genomic-viewer knowledge and handoff context in the source-default board view."
@@ -142,6 +148,26 @@
         {
           "source_reference": "../../context-canvas-project-surface/context-canvas/shared-machinery.html",
           "public_reference": "https://vik.guru/shared-machinery.html"
+        }
+      ],
+      "package_files": [
+        {
+          "source_reference": "../investment-analysis/core.js",
+          "source_file": "collaboration/investment-analysis/core.js",
+          "target_file": "assets/investment-core.js",
+          "content_type": "text/javascript"
+        },
+        {
+          "source_reference": "../investment-analysis/studio.js",
+          "source_file": "collaboration/investment-analysis/studio.js",
+          "target_file": "assets/investment-studio.js",
+          "content_type": "text/javascript"
+        },
+        {
+          "source_reference": "../investment-analysis/studio.css",
+          "source_file": "collaboration/investment-analysis/studio.css",
+          "target_file": "assets/investment-studio.css",
+          "content_type": "text/css"
         }
       ],
       "reader_job": "Model a provisional cross-functional investment and open its report or primary-site continuation without changing the parent visitor surface."
@@ -213,7 +239,9 @@
       "activation_standing": "eligible",
       "projection_kind": "decorated_rewrite",
       "carrier_policy": {
-        "sandbox_tokens": ["allow-scripts"],
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
         "permissions_policy": []
       },
       "package_files": [
@@ -250,30 +278,140 @@
         "permissions_policy": []
       },
       "navigation_files": [
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_atlas.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_atlas.svg", "target_file": "sources/ai_legible_viewlet_atlas.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_manifest.json", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_manifest.json", "target_file": "sources/viewlet_manifest.json", "content_type": "application/json"}
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_atlas.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_atlas.svg",
+          "target_file": "sources/ai_legible_viewlet_atlas.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_manifest.json",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/viewlet_manifest.json",
+          "target_file": "sources/viewlet_manifest.json",
+          "content_type": "application/json"
+        }
       ],
       "package_files": [
-        {"source_reference": "../../context-canvas-project-surface/img/plot/random_cut_forest.svg", "source_file": "context-canvas-project-surface/img/plot/random_cut_forest.svg", "target_file": "assets/random_cut_forest.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_anomaly-alert.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_anomaly-alert.svg", "target_file": "assets/viewlet_anomaly-alert.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_attention-route.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_attention-route.svg", "target_file": "assets/viewlet_attention-route.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_steward-queue.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_steward-queue.svg", "target_file": "assets/viewlet_steward-queue.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/img/plot/random_cut_isolation_forest.svg", "source_file": "context-canvas-project-surface/img/plot/random_cut_isolation_forest.svg", "target_file": "assets/random_cut_isolation_forest.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_component-heatmap.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_component-heatmap.svg", "target_file": "assets/viewlet_component-heatmap.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_pattern-resonance-probe.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_pattern-resonance-probe.svg", "target_file": "assets/viewlet_pattern-resonance-probe.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_known-issue-memory.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_known-issue-memory.svg", "target_file": "assets/viewlet_known-issue-memory.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_one-hot-matrix.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_one-hot-matrix.svg", "target_file": "assets/viewlet_one-hot-matrix.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_directed-graph.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_directed-graph.svg", "target_file": "assets/viewlet_directed-graph.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_audit-trail.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_audit-trail.svg", "target_file": "assets/viewlet_audit-trail.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_context-mosaic.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_context-mosaic.svg", "target_file": "assets/viewlet_context-mosaic.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_data-rights.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_data-rights.svg", "target_file": "assets/viewlet_data-rights.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_human-ai.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_human-ai.svg", "target_file": "assets/viewlet_human-ai.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/img/plot/v3b2_gold_note_viewlets.svg", "source_file": "context-canvas-project-surface/img/plot/v3b2_gold_note_viewlets.svg", "target_file": "assets/v3b2_gold_note_viewlets.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_event-log.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_event-log.svg", "target_file": "assets/viewlet_event-log.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_comment.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_comment.svg", "target_file": "assets/viewlet_comment.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/img/plot/ai_legible_viewlet_svg_companion.svg", "source_file": "context-canvas-project-surface/img/plot/ai_legible_viewlet_svg_companion.svg", "target_file": "assets/ai_legible_viewlet_svg_companion.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_quiet-routing-seed.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_quiet-routing-seed.svg", "target_file": "assets/viewlet_quiet-routing-seed.svg", "content_type": "image/svg+xml"},
-        {"source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_done.svg", "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_done.svg", "target_file": "assets/viewlet_done.svg", "content_type": "image/svg+xml"}
+        {
+          "source_reference": "../../context-canvas-project-surface/img/plot/random_cut_forest.svg",
+          "source_file": "context-canvas-project-surface/img/plot/random_cut_forest.svg",
+          "target_file": "assets/random_cut_forest.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_anomaly-alert.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_anomaly-alert.svg",
+          "target_file": "assets/viewlet_anomaly-alert.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_attention-route.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_attention-route.svg",
+          "target_file": "assets/viewlet_attention-route.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_steward-queue.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_steward-queue.svg",
+          "target_file": "assets/viewlet_steward-queue.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/img/plot/random_cut_isolation_forest.svg",
+          "source_file": "context-canvas-project-surface/img/plot/random_cut_isolation_forest.svg",
+          "target_file": "assets/random_cut_isolation_forest.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_component-heatmap.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_component-heatmap.svg",
+          "target_file": "assets/viewlet_component-heatmap.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_pattern-resonance-probe.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_pattern-resonance-probe.svg",
+          "target_file": "assets/viewlet_pattern-resonance-probe.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_known-issue-memory.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_known-issue-memory.svg",
+          "target_file": "assets/viewlet_known-issue-memory.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_one-hot-matrix.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_one-hot-matrix.svg",
+          "target_file": "assets/viewlet_one-hot-matrix.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_directed-graph.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_directed-graph.svg",
+          "target_file": "assets/viewlet_directed-graph.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_audit-trail.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_audit-trail.svg",
+          "target_file": "assets/viewlet_audit-trail.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_context-mosaic.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_context-mosaic.svg",
+          "target_file": "assets/viewlet_context-mosaic.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_data-rights.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_data-rights.svg",
+          "target_file": "assets/viewlet_data-rights.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_human-ai.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_human-ai.svg",
+          "target_file": "assets/viewlet_human-ai.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/img/plot/v3b2_gold_note_viewlets.svg",
+          "source_file": "context-canvas-project-surface/img/plot/v3b2_gold_note_viewlets.svg",
+          "target_file": "assets/v3b2_gold_note_viewlets.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_event-log.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_event-log.svg",
+          "target_file": "assets/viewlet_event-log.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_comment.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_comment.svg",
+          "target_file": "assets/viewlet_comment.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/img/plot/ai_legible_viewlet_svg_companion.svg",
+          "source_file": "context-canvas-project-surface/img/plot/ai_legible_viewlet_svg_companion.svg",
+          "target_file": "assets/ai_legible_viewlet_svg_companion.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_quiet-routing-seed.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_quiet-routing-seed.svg",
+          "target_file": "assets/viewlet_quiet-routing-seed.svg",
+          "content_type": "image/svg+xml"
+        },
+        {
+          "source_reference": "../../context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_done.svg",
+          "source_file": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_svg_library/viewlet_svg_library/viewlet_done.svg",
+          "target_file": "assets/viewlet_done.svg",
+          "content_type": "image/svg+xml"
+        }
       ],
       "reader_job": "Compare six AI and ML methods while keeping every local viewlet and diagram inside the route package and cited research available in separate tabs."
     },
@@ -285,7 +423,7 @@
       "public_alias": "/v1/canvas/cross-functional-investment-model-studio/",
       "receiver_standing": "context_adapted",
       "activation_standing": "eligible",
-      "projection_kind": "decorated_copy",
+      "projection_kind": "decorated_rewrite",
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
@@ -293,8 +431,30 @@
           "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
-        "permissions_policy": ["clipboard-write"]
+        "permissions_policy": [
+          "clipboard-write"
+        ]
       },
+      "package_files": [
+        {
+          "source_reference": "../investment-analysis/core.js",
+          "source_file": "collaboration/investment-analysis/core.js",
+          "target_file": "assets/investment-core.js",
+          "content_type": "text/javascript"
+        },
+        {
+          "source_reference": "../investment-analysis/studio.js",
+          "source_file": "collaboration/investment-analysis/studio.js",
+          "target_file": "assets/investment-studio.js",
+          "content_type": "text/javascript"
+        },
+        {
+          "source_reference": "../investment-analysis/studio.css",
+          "source_file": "collaboration/investment-analysis/studio.css",
+          "target_file": "assets/investment-studio.css",
+          "content_type": "text/css"
+        }
+      ],
       "reader_job": "Inspect a cross-functional investment model and carry the selected Prompt Capsule by copy or download."
     },
     {
@@ -314,7 +474,9 @@
           "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
-        "permissions_policy": ["clipboard-write"]
+        "permissions_policy": [
+          "clipboard-write"
+        ]
       },
       "reader_job": "Edit, copy, download, and deliberately remove entries inside a local working ledger."
     },
@@ -335,7 +497,9 @@
           "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
-        "permissions_policy": ["clipboard-write"]
+        "permissions_policy": [
+          "clipboard-write"
+        ]
       },
       "reader_job": "Work through an open lesson, carry the active Prompt Capsule Markdown by copy or download, and print the reviewed snapshot when the reader chooses."
     },
@@ -355,7 +519,9 @@
           "allow-popups-to-escape-sandbox",
           "allow-scripts"
         ],
-        "permissions_policy": ["clipboard-write"]
+        "permissions_policy": [
+          "clipboard-write"
+        ]
       },
       "reader_job": "Compare visualization fidelity patterns and carry selected Prompt Capsule or structured state by copy or download."
     },
@@ -369,7 +535,9 @@
       "activation_standing": "eligible",
       "projection_kind": "decorated_copy",
       "carrier_policy": {
-        "sandbox_tokens": ["allow-scripts"],
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
         "permissions_policy": []
       },
       "reader_job": "Choose a visualization fidelity posture through a compact interactive selector."
@@ -384,7 +552,9 @@
       "activation_standing": "eligible",
       "projection_kind": "decorated_copy",
       "carrier_policy": {
-        "sandbox_tokens": ["allow-scripts"],
+        "sandbox_tokens": [
+          "allow-scripts"
+        ],
         "permissions_policy": []
       },
       "reader_job": "Inspect the role-specific evidence and decision context around a review-platform judgment."

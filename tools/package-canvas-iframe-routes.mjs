@@ -9,6 +9,7 @@ import {
 } from "./attribution-contract.mjs";
 import {
   assertRegularFileWithin,
+  classicScriptMarkup,
   navigationObservation,
   observeIframeRuntimeCapabilities,
   projectIframeExitLinks,
@@ -44,6 +45,7 @@ const canonicalContentTypes = new Map([
   [".jpeg", "image/jpeg"],
   [".jpg", "image/jpeg"],
   [".json", "application/json"],
+  [".js", "text/javascript"],
   [".png", "image/png"],
   [".svg", "image/svg+xml"],
   [".webp", "image/webp"],
@@ -712,8 +714,6 @@ export async function createCanvasPackagePlan(options = {}) {
     const projectionBytes = route.projection_kind === "byte_identical"
       ? sourceBytes
       : Buffer.from(projection.html, "utf8");
-    const carrierObservation = observedCarrierPolicy(projection.html);
-    validateObservedCarrierPolicy(route, carrierObservation);
     const routeDirectory = route.id;
     const indexOutputPath = path.posix.join(routeDirectory, "index.html");
     const portableIndexPath = indexOutputPath.normalize("NFC").toLowerCase();
@@ -755,8 +755,14 @@ export async function createCanvasPackagePlan(options = {}) {
       projection.html,
       packageReadings,
       `Canvas route ${route.id}`,
-      { scanMarkupContextsOnly: true, scanStyleContextsOnly: true },
+      { scanMarkupContextsOnly: true, scanStyleContextsOnly: true, allowClassicScripts: true },
     );
+    const scriptContext = [...packageReadings.entries()]
+      .filter(([, reading]) => reading.contentType === "text/javascript")
+      .map(([target, reading]) => classicScriptMarkup(reading.bytes.toString("utf8"), `Canvas route ${route.id} package file ${target}`))
+      .join("\n");
+    const carrierObservation = observedCarrierPolicy(projection.html + scriptContext);
+    validateObservedCarrierPolicy(route, carrierObservation);
     routeReadings.push({
       route,
       routeDirectory,

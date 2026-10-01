@@ -1110,6 +1110,9 @@
       }
     }
   </style>
+<link rel="stylesheet" href="../investment-analysis/studio.css">
+<script src="../investment-analysis/core.js"></script>
+<script src="../investment-analysis/studio.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to investment models</a>
@@ -1517,7 +1520,19 @@ Return with this handback:
         <dl id="inspectorDetails"></dl>
         <pre id="selectedJson" class="state-json" tabindex="0" aria-label="Selected model record as JSON"></pre>
       </aside>
-    </main>
+    <section class="investment-analysis" aria-labelledby="investment-analysis-title">
+<h2 id="investment-analysis-title">Layered investment comparison</h2>
+<p>Compare an explicitly scoped scenario across internal investment, customer implementation, commercial cohorts, clinical and operational consequences, and capital allocation. The editable comparison is illustrative; named people establish the evidence and decision authority.</p>
+<details><summary>Read the static domain and evidence overview</summary><div class="investment-table-scroll" role="region" tabindex="0" aria-label="Investment domains and evidence; scroll horizontally"><table><caption>Five domains, five cross-cutting record types</caption><thead><tr><th scope="col">Domain</th><th scope="col">Comparison</th><th scope="col">Evidence needed</th></tr></thead><tbody>
+<tr><th scope="row">Internal investment</th><td>Allocated effort and incremental work</td><td>Loaded rates, horizon, overlap policy, and explicit heuristics</td></tr>
+<tr><th scope="row">Customer implementation</th><td>Deployment effort, lag, and unit economics</td><td>Orderable unit, payer, price class, and service boundary</td></tr>
+<tr><th scope="row">Commercial cohort</th><td>Retention, acquisition, expansion, and reactivation</td><td>Opening cohort, denominator, window, currency, and recurring time basis</td></tr>
+<tr><th scope="row">Clinical and operational value</th><td>Separate costs, consequences, and capacity</td><td>Population, comparator, measure, source, reviewer, and date</td></tr>
+<tr><th scope="row">Capital allocation</th><td>NPV, guarded IRR, payback, and reversible choices</td><td>Timed cash flows, conventions, complete outcome tree, and named gates</td></tr>
+</tbody></table></div><p>Input, assumption, calculation, evidence, and decision records describe how each domain is carried. Blank values remain unavailable; zero retains its stated meaning. This overview stays readable with JavaScript unavailable.</p></details>
+<div data-investment-analysis hidden></div>
+</section>
+</main>
 
     <noscript>
       <section class="panel" aria-labelledby="noscript-title">
@@ -1597,8 +1612,8 @@ Return with this handback:
         id: "model/activity-based.v0.1",
         short: "Activity-Based",
         title: "Activity-Based Cost-Driver",
-        sourceId: "cbaee20c-7507-4425-b5cd-a37adb206749",
-        sourceTitle: "Costing Plan · Activity-Based Cost-Driver (Unit Economics)",
+        sourceId: "urn:source-key:investment-method:activity-based",
+        sourceTitle: "Investment method: Activity-Based Cost-Driver (Unit Economics)",
         question: "What does the work cost per sample, assay, site, review, or other driver — and how does that change with scale?",
         when: "Use when leadership thinks in throughput and unit economics, or when a project total hides the activity that actually consumes resources.",
         method: [
@@ -1628,8 +1643,8 @@ Separate fixed and variable work. For each proposed driver, name the numerator, 
         id: "model/benefit-realization-roi.v0.1",
         short: "Benefit Realization / ROI",
         title: "Benefit Realization, Status-Quo & ROI",
-        sourceId: "6eded365-6227-47d1-8d38-2b82dc49171b",
-        sourceTitle: "Costing Plan · Benefit Realization, Status-Quo & ROI",
+        sourceId: "urn:source-key:investment-method:benefit-realization-roi",
+        sourceTitle: "Investment method: Benefit Realization, Status-Quo & ROI",
         question: "What does standing still cost, which mechanisms create value, and over what horizon does the initiative return more than it consumes?",
         when: "Use when cost-only views make the initiative appear as pure expense and the decision needs an explicit counterfactual, benefit mechanism, and value horizon.",
         method: [
@@ -1659,8 +1674,8 @@ For each proposed benefit, state the current burden, changed ability, mechanism,
         id: "model/bottom-up-wbs.v0.1",
         short: "Bottom-Up WBS",
         title: "Bottom-Up Resource-Loaded WBS",
-        sourceId: "829e2ca6-5f62-46fa-b486-6f1d671fbc6a",
-        sourceTitle: "Costing Plan · Bottom-Up Resource-Loaded WBS",
+        sourceId: "urn:source-key:investment-method:bottom-up-wbs",
+        sourceTitle: "Investment method: Bottom-Up Resource-Loaded WBS",
         question: "Where exactly does the money go, who performs the work, and which assumption changes a reconstructable base estimate?",
         when: "Use when finance, a steering committee, or an auditor needs an auditable estimate that can be defended package by package.",
         method: [
@@ -1690,8 +1705,8 @@ Give every package a stable ID, deliverable, owner role, predecessor, acceptance
         id: "model/executive-one-pager.v0.1",
         short: "Executive One-Pager",
         title: "Executive One-Pager Business Case",
-        sourceId: "2cf5e23a-6747-401b-bb7d-9f09acd39fd3",
-        sourceTitle: "Costing Plan · Executive One-Pager Business Case",
+        sourceId: "urn:source-key:investment-method:executive-one-pager",
+        sourceTitle: "Investment method: Executive One-Pager Business Case",
         question: "What decision is required, what sourced number carries it, why now, and which risks and milestones fit on one page?",
         when: "Use for a sponsor or steering committee leave-behind after the source models establish the ask, number, value, risks, and timeline.",
         method: [
@@ -1721,8 +1736,8 @@ Use exactly these sections: ask, present burden, recommendation, one headline co
         id: "model/probabilistic-p50-p80.v0.1",
         short: "Probabilistic P50/P80",
         title: "Probabilistic P50/P80",
-        sourceId: "e2e7c3da-b847-42dc-8796-6f12440f31ff",
-        sourceTitle: "Costing Plan · Probabilistic P50/P80 (Monte-Carlo)",
+        sourceId: "urn:source-key:investment-method:probabilistic-p50-p80",
+        sourceTitle: "Investment method: Probabilistic P50/P80 (Monte-Carlo)",
         question: "How does the total distribute across source-supported ranges, and what reserve separates a planning percentile from a commitment percentile?",
         when: "Use when a single point obscures material range and when the initiative needs explicit P50 and P80 postures plus named tail drivers.",
         method: [
@@ -1752,8 +1767,8 @@ For every package, request best, most-likely, and worst hours and rates; source;
         id: "model/risk-register-contingency.v0.1",
         short: "Risk-Register Contingency",
         title: "Risk-Register Contingency & Sensitivity",
-        sourceId: "ecb3f22a-5e28-4d11-acf0-c6d8a7ff299c",
-        sourceTitle: "Costing Plan · Risk-Register Contingency & Sensitivity",
+        sourceId: "urn:source-key:investment-method:risk-register-contingency",
+        sourceTitle: "Investment method: Risk-Register Contingency & Sensitivity",
         question: "Which named risks create the reserve, who owns each response, and which assumptions move the total most?",
         when: "Use when a flat contingency percentage cannot answer where reserve comes from or where mitigation effort changes the investment most.",
         method: [
@@ -1783,8 +1798,8 @@ For each candidate risk, provide a stable ID, observable trigger, affected objec
         id: "model/three-branch-tco.v0.1",
         short: "Three-Branch TCO",
         title: "Three-Branch Comparative TCO",
-        sourceId: "fe069cf2-b823-4416-a62f-ddf5b4abd52f",
-        sourceTitle: "Costing Plan · Three-Branch Comparative TCO",
+        sourceId: "urn:source-key:investment-method:three-branch-tco",
+        sourceTitle: "Investment method: Three-Branch Comparative TCO",
         question: "How do buy, build, and blend compare on one baseline, horizon, row set, and set of non-cost decision factors?",
         when: "Use when leadership is choosing among acquisition, bespoke construction, and a hybrid path and needs like-for-like whole-option comparison.",
         method: [
@@ -1814,8 +1829,8 @@ Start with one common baseline and horizon. Propose identical row labels for one
         id: "model/whole-life-tco.v0.1",
         short: "Whole-Life TCO",
         title: "Whole-Life TCO with OpEx & Scaling",
-        sourceId: "206e16e2-ab16-4dd9-879e-9f7be525f11e",
-        sourceTitle: "Costing Plan · Whole-Life TCO with OpEx & Scaling",
+        sourceId: "urn:source-key:investment-method:whole-life-tco",
+        sourceTitle: "Investment method: Whole-Life TCO with OpEx & Scaling",
         question: "What does the initiative cost across implementation, operation, scaling, parallel run, revalidation, and eventual retirement?",
         when: "Use when the build is only the opening cost and the decision includes recurring operation, growth, cross-jurisdiction work, upgrades, and decommissioning.",
         method: [
@@ -1845,7 +1860,7 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
 
     const PROMPT_CAPSULE_CONTRACT = "prompt-capsule/0.1.0";
     const PROMPT_CAPSULE_SOURCE_ID = "cross-functional-investment-model-studio";
-    const PROMPT_CAPSULE_SOURCE_VERSION = "0.1.0";
+    const PROMPT_CAPSULE_SOURCE_VERSION = "0.2.0";
     const PROMPT_CAPSULE_STATE_CONTRACT = "investment-model-studio-state.v0.1";
     const PROMPT_CAPSULE_ID = "cross-functional-investment-model-studio/selected-model";
     const PROMPT_CAPSULE_VIEWS = Object.freeze(["plain", "skill-assisted"]);
@@ -2039,6 +2054,7 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
           },
           whenToUse: markdownInline(model.when)
         },
+        investmentAnalysis: window.investmentAnalysis?.getProjection() || null,
         workingState: {
           method: encodeList(model.method),
           inputs: encodeList(model.inputs),
@@ -2434,6 +2450,7 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
       if (!models.some((model) => model.id === modelId)) return false;
       state.activeModelId = modelId;
       state.selectionReason = reason;
+      window.investmentAnalysis?.setMethod(modelId);
       renderTabs();
       renderPanel();
       renderInspector();
@@ -2485,6 +2502,12 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
     elements.promptActions.hidden = false;
     elements.promptViewControl.hidden = false;
 
+    const methodOnlyCapsuleMarkdown = promptCapsuleMarkdown;
+    promptCapsuleMarkdown = function(sourceState = state, options = {}) {
+      const selectedMethod = methodOnlyCapsuleMarkdown(sourceState, options);
+      return selectedMethod + (window.investmentAnalysis ? "\n\n" + window.investmentAnalysis.promptCapsule() : "");
+    };
+    window.addEventListener("investment-analysis-change", renderPromptCapsule);
     window.crossFunctionalInvestmentModelStudio = Object.freeze({
       version: PROMPT_CAPSULE_SOURCE_VERSION,
       stateSchemaVersion: state.schemaVersion,
