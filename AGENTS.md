@@ -37,6 +37,7 @@ The on-demand workflows live in `.agents/skills/`:
 - `context-canvas-css-ownership` guides CSS ownership, extraction, selector migration, and visual comparison.
 - `context-canvas-visual-verification` selects proportionate initial-state, focused interaction, alternate-media, viewport, and cross-engine evidence for a visitor-surface change.
 - `practitioner-probe` turns an ambiguous technical concern into a decision-changing question and observation.
+- `cost-and-ownership-analysis` maps scoped function cost, input boundaries, and mutation ownership to proportionate repairs and evidence.
 - `supportive-change-writing` shapes repository prose and instruction surfaces.
 - `audit-anthropomorphic-cues` inspects bundled person-like cues, separates human effects from system-output hypotheses, and restores precise technical and authority referents before interface language changes.
 - `contextual-jargon-scan` classifies potentially inside wording within a bounded corpus and revises only shorthand whose meaning becomes clearer in ordinary language.

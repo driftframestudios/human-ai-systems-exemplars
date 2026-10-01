@@ -32,6 +32,7 @@ the smallest adequate route when no contract adds material value.
 | Skill | Use it when | Result |
 | --- | --- | --- |
 | [`practitioner-probe`](practitioner-probe/SKILL.md) | A plausible concern lacks a decision-changing mechanism or observation | A bounded technical question, probe, and interpretation |
+| [`cost-and-ownership-analysis`](cost-and-ownership-analysis/SKILL.md) | Function cost, input safety, or mutation ownership should change an implementation decision | Scoped cost expressions, explicit ownership, and proportionate repair evidence |
 | [`evidence-grounded-research-spike`](evidence-grounded-research-spike/SKILL.md) | Current expert evidence should change a repository decision | An evidence map, transfer limits, and decision delta |
 | [`supportive-change-writing`](supportive-change-writing/SKILL.md) | Human-facing prose or instructions change materially | Desired-state, negation-aware, evidence-calibrated language |
 | [`declarative-skill-authoring`](declarative-skill-authoring/SKILL.md) | A reusable collaboration affordance has earned a portable contract | A skill with explicit trigger, boundaries, rules, and completion |

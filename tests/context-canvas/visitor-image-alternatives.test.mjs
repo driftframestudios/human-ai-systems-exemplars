@@ -86,7 +86,7 @@ test("parent visitor images carry a legible text relationship", async () => {
     }
   }
 
-  assert.equal(imageCount, 160);
+  assert.equal(imageCount, 161);
   assert.deepEqual(
     emptyAlternatives,
     ["debriefs.html:../img/plot/genomic_viewer_boundary_contract_map.svg"],

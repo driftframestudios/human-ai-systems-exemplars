@@ -1,0 +1,293 @@
+{
+  "schemaVersion": "0.1.0",
+  "scenarioId": "scenario/investment-pilot.v0.1",
+  "method": "model/activity-based.v0.1",
+  "origin": "illustrative",
+  "inputs": {
+    "label": "Illustrative pilot versus status quo",
+    "currency": "USD",
+    "period": "year",
+    "segment": "Synthetic implementation partners",
+    "cohort": "100 synthetic customers; one year",
+    "tenure": 1,
+    "implementationState": "Illustrative ramp; one-period lag",
+    "openingCustomers": 100,
+    "newCustomers": 20,
+    "churnCustomers": 10,
+    "reactivatedCustomers": 5,
+    "openingRevenue": 100000,
+    "churnRevenue": 10000,
+    "contraction": 5000,
+    "expansion": 20000,
+    "newRevenue": 20000,
+    "reactivationRevenue": 5000,
+    "acquisitionSpend": 10000,
+    "contributionMargin": 0.7,
+    "listPrice": 1000,
+    "discount": 0.1,
+    "rebate": 25,
+    "variableCost": 200,
+    "serviceCost": 100,
+    "pricingUnit": "One synthetic service unit; implementation separate",
+    "buyer": "Sponsor / operating team / customer organization",
+    "priceClass": "Illustrative scenario",
+    "implementationCost": 10000,
+    "implementationLag": 1,
+    "internalInvestment": 100000,
+    "discountRate": 0.1,
+    "cashConvention": "Incremental to status quo; end-period; t=0 upfront",
+    "taxWorkingCapital": "Synthetic after-tax flows; working-capital changes included once",
+    "capacity": 40,
+    "exhaustive": false,
+    "eligiblePopulation": 100,
+    "adoption": 0.3,
+    "baselineCost": 500,
+    "candidateCost": 650,
+    "perspective": "Illustrative provider budget",
+    "population": "Synthetic population; local eligibility remains to be specified",
+    "intervention": "Bounded workflow pilot",
+    "comparator": "Current workflow",
+    "reviewer": "",
+    "evidenceSource": "",
+    "asOf": "",
+    "economicReview": "pending",
+    "incrementalOutcome": null,
+    "outcomeUnit": "",
+    "owner": "",
+    "trigger": "Review pilot feasibility, evidence, and capacity",
+    "nextEvidence": "Observed workflow and reviewed resource requirements",
+    "revisit": "",
+    "option": "pilot",
+    "gate": "open"
+  },
+  "alternatives": [
+    {
+      "id": "status-quo",
+      "label": "Status quo",
+      "flows": [
+        0,
+        0,
+        0
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "proceed",
+      "label": "Proceed",
+      "flows": [
+        -120000,
+        70000,
+        75000
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "pilot",
+      "label": "Pilot",
+      "flows": [
+        -100000,
+        60000,
+        60000
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "defer",
+      "label": "Defer",
+      "flows": [
+        0,
+        -90000,
+        80000
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "scale",
+      "label": "Scale",
+      "flows": [
+        -180000,
+        100000,
+        120000
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "redirect",
+      "label": "Redirect",
+      "flows": [
+        -40000,
+        20000,
+        30000
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "stop",
+      "label": "Stop",
+      "flows": [
+        -5000,
+        0,
+        0
+      ],
+      "standing": "illustrative"
+    }
+  ],
+  "outcomes": [
+    {
+      "id": "constrained",
+      "probability": 0.3,
+      "flows": [
+        -100000,
+        30000,
+        30000
+      ]
+    },
+    {
+      "id": "planned",
+      "probability": 0.5,
+      "flows": [
+        -100000,
+        60000,
+        60000
+      ]
+    },
+    {
+      "id": "expanded",
+      "probability": 0.2,
+      "flows": [
+        -100000,
+        90000,
+        90000
+      ]
+    }
+  ],
+  "clinical": [
+    {
+      "name": "Safety",
+      "unit": "",
+      "baseline": null,
+      "candidate": null,
+      "standing": "unavailable",
+      "source": ""
+    },
+    {
+      "name": "Quality",
+      "unit": "",
+      "baseline": null,
+      "candidate": null,
+      "standing": "unavailable",
+      "source": ""
+    },
+    {
+      "name": "Timeliness",
+      "unit": "",
+      "baseline": null,
+      "candidate": null,
+      "standing": "unavailable",
+      "source": ""
+    },
+    {
+      "name": "Patient experience",
+      "unit": "",
+      "baseline": null,
+      "candidate": null,
+      "standing": "unavailable",
+      "source": ""
+    },
+    {
+      "name": "Equity",
+      "unit": "",
+      "baseline": null,
+      "candidate": null,
+      "standing": "unavailable",
+      "source": ""
+    },
+    {
+      "name": "Efficiency",
+      "unit": "",
+      "baseline": null,
+      "candidate": null,
+      "standing": "unavailable",
+      "source": ""
+    },
+    {
+      "name": "Burden",
+      "unit": "",
+      "baseline": null,
+      "candidate": null,
+      "standing": "unavailable",
+      "source": ""
+    },
+    {
+      "name": "Governance",
+      "unit": "",
+      "baseline": null,
+      "candidate": null,
+      "standing": "unavailable",
+      "source": ""
+    },
+    {
+      "name": "Budget capacity",
+      "unit": "",
+      "baseline": null,
+      "candidate": null,
+      "standing": "unavailable",
+      "source": ""
+    }
+  ],
+  "events": [
+    {
+      "id": "acquire",
+      "kind": "acquisition",
+      "period": 0,
+      "predecessors": [],
+      "standing": "illustrative"
+    },
+    {
+      "id": "onboard",
+      "kind": "onboarding",
+      "period": 1,
+      "predecessors": [
+        "acquire"
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "activate",
+      "kind": "activation",
+      "period": 1,
+      "predecessors": [
+        "onboard"
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "renew",
+      "kind": "renewal",
+      "period": 2,
+      "predecessors": [
+        "activate"
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "churn",
+      "kind": "churn",
+      "period": 2,
+      "predecessors": [
+        "activate"
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "reactivate",
+      "kind": "reactivation",
+      "period": 3,
+      "predecessors": [
+        "churn"
+      ],
+      "standing": "illustrative"
+    }
+  ],
+  "extensions": {}
+}

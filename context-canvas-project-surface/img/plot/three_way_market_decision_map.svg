@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">Three markets, distinct evidence, a shared investment discipline</title>
+<desc id="desc">Industrial positioning tests deployment and operating reliability. Patient communities test participation and accountable trust. Precision oncology tests reviewed assay-to-trial coordination. Each path supplies its own next observation before an accountable, revisable investment choice.</desc>
+<rect width="1600" height="900" rx="24" fill="#f6f0e2"/>
+<g font-family="sans-serif" fill="#142c4b">
+<text x="72" y="89" font-size="22" letter-spacing="3">THREE-WAY COMPARATIVE / MARKET AND DECISION MAP</text>
+<text x="72" y="152" font-size="45" font-weight="700">Compare the conditions that make value possible.</text>
+<text x="72" y="198" font-size="25">Historical contribution and current market evidence keep separate dates and authority.</text>
+<g fill="#e1e9e6" stroke="#315071" stroke-width="2">
+<rect x="72" y="250" width="464" height="430" rx="10"/>
+<rect x="568" y="250" width="464" height="430" rx="10"/>
+<rect x="1064" y="250" width="464" height="430" rx="10"/>
+</g>
+<g font-size="28" font-weight="700">
+<text x="102" y="300">Industrial positioning</text>
+<text x="598" y="300">Patient communities</text>
+<text x="1094" y="300">Precision oncology</text>
+</g>
+<g font-size="23">
+<text x="102" y="352">Operations / engineering / service</text>
+<text x="598" y="352">Participants / reviewers / sponsors</text>
+<text x="1094" y="352">Patients / clinicians / sites / payers</text>
+</g>
+<g stroke="#315071" stroke-width="2">
+<path d="M102 380H506 M598 380H1002 M1094 380H1498"/>
+<path d="M304 684V728 M800 684V728 M1296 684V728"/>
+</g>
+<g font-size="24">
+<text x="102" y="429">Shared site model</text>
+<text x="102" y="473">Deployment and handoffs</text>
+<text x="102" y="517">Operating reliability</text>
+<text x="598" y="429">Credibility and influence</text>
+<text x="598" y="473">Participation and review</text>
+<text x="598" y="517">Accountable trust</text>
+<text x="1094" y="429">Assay and partner rules</text>
+<text x="1094" y="473">Eligibility and referral</text>
+<text x="1094" y="517">Reviewed coordination</text>
+</g>
+<g font-size="21" font-weight="700">
+<text x="102" y="593">NEXT OBSERVATION</text>
+<text x="598" y="593">NEXT OBSERVATION</text>
+<text x="1094" y="593">NEXT OBSERVATION</text>
+</g>
+<g font-size="23">
+<text x="102" y="635">Representative site performance</text>
+<text x="598" y="635">Useful participation and workload</text>
+<text x="1094" y="635">Completed, reviewed transitions</text>
+</g>
+<rect x="72" y="730" width="1456" height="104" rx="10" fill="#173d70"/>
+<text x="800" y="774" font-size="28" font-weight="700" text-anchor="middle" fill="#ffffff">A revisable investment choice</text>
+<text x="800" y="810" font-size="22" text-anchor="middle" fill="#ffffff">Named owner / explicit comparator / complete costs / distinct consequences / next evidence</text>
+<text x="72" y="871" font-size="18">Interpretive map. The accompanying HTML tables retain the full accessible comparison and public source links.</text>
+</g>
+</svg>

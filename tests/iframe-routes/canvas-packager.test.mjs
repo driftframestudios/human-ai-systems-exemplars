@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, symlink } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -281,4 +281,28 @@ test("the aggregate v1 plan preserves exact family bytes and adds one root recei
   const verification = await checkAggregatePackage(aggregate);
   assert.equal(verification.files, 68);
   assert.ok(verification.bytes > 1_740_871);
+});
+
+test("both investment routes deliver readable inline source under their authored policy", async () => {
+  const plan = await createCanvasPackagePlan();
+  for (const route of ["cross-functional-investment-studio", "cross-functional-investment-model-studio"]) {
+    const html = plan.outputFiles.get(route + "/index.html").toString("utf8");
+    for (const owner of ["core.js", "studio.js", "studio.css"]) {
+      const source = await readFile(path.join(repositoryRoot, "collaboration/investment-analysis", owner), "utf8");
+      assert.ok(html.includes(source.trimEnd()), owner + " remains readable in delivered HTML");
+    }
+    assert.doesNotMatch(html, /(?:src|href)="(?:\.\.\/investment-analysis|\.\/assets\/investment-)/);
+  }
+});
+
+
+test("package writes keep existing directory symlinks outside the output contract", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "iframe-owned-output-"));
+  const outside = await mkdtemp(path.join(os.tmpdir(), "iframe-output-neighbor-"));
+  try {
+    await symlink(outside, path.join(root, "nested"), "dir");
+    await assert.rejects(writePackagePlan({ outputFiles: new Map([["nested/escape.txt", Buffer.from("bounded")]]) }, root), /regular directory/);
+    await assert.rejects(readFile(path.join(outside, "escape.txt")), { code: "ENOENT" });
+    await assert.rejects(writePackagePlan({ outputFiles: new Map([["escape.txt", Buffer.from("bounded")]]) }, path.join(root, "nested")), /regular directory/);
+  } finally { await rm(root, { recursive: true, force: true }); await rm(outside, { recursive: true, force: true }); }
 });

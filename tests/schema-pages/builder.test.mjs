@@ -438,6 +438,7 @@ test("the public catalog contains exactly the public-ready allowlist", async () 
 
   assert.deepEqual(possibleNames, [
     "repository-collaboration-cycle",
+    "repository-orientation-stewardship",
     "supportive-change-writing",
   ]);
   assert.equal(catalog.publicationStanding, "public_ready");

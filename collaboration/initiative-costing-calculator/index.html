@@ -120,6 +120,805 @@
     @media(forced-colors:active){.summary-tab[aria-pressed="true"]{outline:4px double CanvasText}}
     @media print{.summary-tablist{display:none!important}.summary-tabpanel[hidden]{display:block!important}}
   </style>
+<!-- investment-analysis:styles:start -->
+<!-- Generated from collaboration/investment-analysis/studio.css; regenerate: node tools/project-investment-analysis.mjs -->
+<style data-investment-analysis-source="collaboration/investment-analysis/studio.css">
+/* Shared investment analysis component. Consumers: both investment instruments.
+   Loaded after each host's authored skin. Local tokens preserve the host palette.
+   Parent Canvas routes retain expanded.css and their existing route/component owners. */
+.investment-analysis { --ia-ink:var(--ink,#213252); --ia-paper:var(--paper,#fffdf7); --ia-accent:var(--tiffany,#56d8c9); color:var(--ia-ink); background:var(--ia-paper); border:2px solid var(--ia-ink); margin:2rem auto; padding:clamp(1rem,3vw,2.5rem); max-width:100%; min-width:0; box-sizing:border-box; }
+.investment-analysis * { box-sizing:border-box; }
+.investment-analysis h2,.investment-analysis h3 { color:var(--ia-ink); }
+.investment-analysis .investment-kicker { font:700 .75rem/1.5 "Courier New",monospace; letter-spacing:.07em; text-transform:uppercase; }
+.investment-analysis details { border:1px solid var(--ia-ink); margin:1rem 0; padding:1rem; background:var(--ia-paper); }
+.investment-analysis summary { cursor:pointer; font-weight:800; font-size:1.05rem; padding:.6rem; color:var(--ia-ink); }
+.investment-analysis fieldset { border:0; border-top:2px solid var(--ia-accent); padding:1rem 0; min-width:0; margin:1rem 0; }
+.investment-analysis legend { font-weight:800; padding:0 .5rem; }
+.investment-analysis .investment-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr)); gap:1rem; }
+.investment-analysis .investment-field { display:flex; flex-direction:column; gap:.4rem; color:var(--ia-ink); font-weight:600; min-width:0; }
+.investment-analysis .investment-field small { font:400 .72rem/1.4 "Courier New",monospace; overflow-wrap:anywhere; }
+.investment-analysis input,.investment-analysis select,.investment-analysis textarea { color:var(--ia-ink); background:var(--ia-paper); border:1px solid var(--ia-ink); padding:.65rem; font:inherit; width:100%; max-width:100%; min-width:0; border-radius:0; }
+.investment-analysis input[type=checkbox] { width:1.4rem; height:1.4rem; }
+.investment-analysis .investment-editor { display:grid; gap:.5rem; margin:1rem 0; }
+.investment-analysis textarea { font:.8rem/1.5 "Courier New",monospace; resize:vertical; }
+.investment-analysis .investment-actions { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem; margin:1rem 0; }
+.investment-analysis button { color:var(--ia-ink); background:var(--ia-accent); border:2px solid var(--ia-ink); padding:.65rem .9rem; font-family:inherit; font-size:.85rem; font-weight:700; line-height:1.4; cursor:pointer; white-space:normal; }
+.investment-analysis :is(button,input,select,textarea,summary,[tabindex]):focus-visible { outline:3px solid var(--ia-ink); outline-offset:3px; }
+.investment-analysis .investment-table-scroll { overflow:auto; max-width:100%; margin:1rem 0; border:1px solid var(--ia-ink); }
+.investment-analysis table { border-collapse:collapse; width:100%; min-width:36rem; table-layout:auto; margin:0; color:var(--ia-ink); background:var(--ia-paper); }
+.investment-analysis :is(th,td) { border:1px solid var(--ia-ink); text-align:left; vertical-align:top; padding:.7rem; overflow-wrap:anywhere; font-size:.84rem; }
+.investment-analysis thead th { color:var(--ia-ink); background:var(--ia-accent); }
+.investment-analysis caption { text-align:left; font-weight:800; padding:.7rem; caption-side:top; color:var(--ia-ink); background:var(--ia-paper); }
+.investment-analysis .investment-decision { padding:1rem; border-left:.5rem solid var(--ia-ink); background:var(--ia-accent); }
+.investment-analysis [role=status] { min-height:3em; border-block:1px solid var(--ia-ink); padding:.75rem 0; }
+@media(max-width:40rem){.investment-analysis {padding:1rem;} .investment-analysis details{padding:.5rem;} .investment-analysis .investment-actions{align-items:stretch;flex-direction:column;}}
+@media(prefers-reduced-motion:reduce){.investment-analysis *{scroll-behavior:auto!important;transition:none!important;animation:none!important;}}
+@media(forced-colors:active){.investment-analysis {--ia-ink:CanvasText;--ia-paper:Canvas;--ia-accent:Canvas;} .investment-analysis button{border-color:ButtonText;}}
+@media print {.investment-analysis {border:0;padding:0;} .investment-analysis .investment-actions,.investment-analysis input[type=file]{display:none;} .investment-analysis details{break-inside:auto;} .investment-analysis .investment-table-scroll{overflow:visible;} .investment-analysis table{min-width:0;font-size:9pt;} .investment-analysis :is(th,td){font-size:9pt;}}
+
+.investment-analysis [aria-invalid="true"] { border-width:2px; border-style:dashed; }
+</style>
+<!-- investment-analysis:styles:end -->
+<!-- investment-analysis:core:start -->
+<!-- Generated from collaboration/investment-analysis/core.js; regenerate: node tools/project-investment-analysis.mjs -->
+<script data-investment-analysis-source="collaboration/investment-analysis/core.js">
+/* Shared investment calculation and exchange owner. Uses browser and Node built-ins. */
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === "object" && module.exports) module.exports = api;
+  else root.InvestmentCore = api;
+})(globalThis, function () {
+  "use strict";
+  const VERSION = "0.1.0";
+  const FIELD_TYPE = Object.freeze({ NUMBER: "number", TEXT: "text", CURRENCY: "currency", SELECT: "select", BOOLEAN: "boolean" });
+  const STAFFING_CURRENCY = "USD";
+  const CURRENCY_CODE = /^[A-Z]{3}$/;
+  const JSON_LIMITS = Object.freeze({ bytes: 1000000, depth: 64, nodes: 100000 });
+  const NUMERIC_TEXT_LIMIT = 128;
+  const DECIMAL_BODY = "[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?";
+  const NUMBER_TEXT_PATTERN = "^(?:\\s*" + DECIMAL_BODY + "\\s*|\\s*)$";
+  const RESERVED_KEYS = new Set(["__proto__", "constructor", "prototype"]);
+  const STAFFING_HOURS = Object.freeze({ hours: 1, sprints: 80, quarters: 520 });
+  const COMPLEXITY_RATES = Object.freeze({ bounded: .08, connected: .16, frontier: .28 });
+  const DOMAINS = Object.freeze(["internal-investment", "customer-implementation", "commercial-cohort", "clinical-operational", "capital-allocation"]);
+  const TYPES = Object.freeze(["input", "assumption", "calculation", "evidence", "decision"]);
+  const PERIODS = Object.freeze(["month", "quarter", "year"]);
+  const FIELDS = {};
+  function field(key, label, group, unit, initial, options = {}) {
+    FIELDS[key] = { label, group, unit, initial, type: FIELD_TYPE.NUMBER, min: 0, ...options };
+  }
+  field("label", "Scenario name", "orientation", "text", "Illustrative pilot versus status quo", {type:FIELD_TYPE.TEXT});
+  field("currency", "Currency (ISO 4217 code)", "orientation", "text", STAFFING_CURRENCY, {type:FIELD_TYPE.CURRENCY});
+  field("period", "Cash-flow and commercial period", "orientation", "period", "year", {type:FIELD_TYPE.SELECT, options:PERIODS});
+  field("segment", "Customer segment", "commercial", "text", "Synthetic implementation partners", {type:FIELD_TYPE.TEXT});
+  field("cohort", "Opening cohort and measurement window", "commercial", "text", "100 synthetic customers; one year", {type:FIELD_TYPE.TEXT});
+  field("tenure", "Cohort tenure (periods)", "commercial", "period", 1);
+  field("implementationState", "Implementation standing", "commercial", "text", "Illustrative ramp; one-period lag", {type:FIELD_TYPE.TEXT});
+  field("openingCustomers", "Opening customers", "commercial", "customer", 100);
+  field("newCustomers", "New customers", "commercial", "customer", 20);
+  field("churnCustomers", "Opening-cohort customers lost", "commercial", "customer", 10);
+  field("reactivatedCustomers", "Reactivated customers outside opening cohort", "commercial", "customer", 5);
+  field("openingRevenue", "Opening-cohort recurring revenue", "commercial", "currency/period", 100000);
+  field("churnRevenue", "Revenue lost from opening cohort", "commercial", "currency/period", 10000);
+  field("contraction", "Opening-cohort contraction", "commercial", "currency/period", 5000);
+  field("expansion", "Opening-cohort expansion", "commercial", "currency/period", 20000);
+  field("newRevenue", "New-customer recurring revenue", "commercial", "currency/period", 20000);
+  field("reactivationRevenue", "Reactivation revenue outside opening cohort", "commercial", "currency/period", 5000);
+  field("acquisitionSpend", "Acquisition spend for new customers", "commercial", "currency", 10000);
+  field("contributionMargin", "New-customer contribution margin (0-1)", "commercial", "ratio", .7, {max:1});
+  field("listPrice", "List price per orderable unit", "pricing", "currency/unit", 1000);
+  field("discount", "Discount fraction (0-1)", "pricing", "ratio", .1, {max:1});
+  field("rebate", "Rebate per unit", "pricing", "currency/unit", 25);
+  field("variableCost", "Variable cost per unit", "pricing", "currency/unit", 200);
+  field("serviceCost", "Service cost per unit", "pricing", "currency/unit", 100);
+  field("pricingUnit", "Orderable unit and package boundary", "pricing", "text", "One synthetic service unit; implementation separate", {type:FIELD_TYPE.TEXT});
+  field("buyer", "Buyer / user / payer", "pricing", "text", "Sponsor / operating team / customer organization", {type:FIELD_TYPE.TEXT});
+  field("priceClass", "Price evidence class", "pricing", "text", "Illustrative scenario", {type:FIELD_TYPE.SELECT,options:["Illustrative scenario","Public cash-pay price","Contracted price","Observed realized revenue"]});
+  field("implementationCost", "Customer implementation cost", "pricing", "currency", 10000);
+  field("implementationLag", "Implementation lag (periods)", "pricing", "period", 1);
+  field("internalInvestment", "Internal investment reference", "capital", "currency", 100000);
+  field("discountRate", "Effective discount rate per period", "capital", "ratio", .1, {min:-.999999});
+  field("cashConvention", "Cash-flow convention", "capital", "text", "Incremental to status quo; end-period; t=0 upfront", {type:FIELD_TYPE.TEXT});
+  field("taxWorkingCapital", "Tax and working-capital treatment", "capital", "text", "Synthetic after-tax flows; working-capital changes included once", {type:FIELD_TYPE.TEXT});
+  field("capacity", "Implementation capacity (adopted people per period)", "capital", "person/period", 40);
+  field("exhaustive", "Outcome tree is mutually exclusive and exhaustive", "capital", "boolean", false, {type:FIELD_TYPE.BOOLEAN});
+  field("eligiblePopulation", "Eligible population", "clinical", "person", 100);
+  field("adoption", "Adoption fraction (0-1)", "clinical", "ratio", .3, {max:1});
+  field("baselineCost", "Baseline resource cost per person per period", "clinical", "currency/person/period", 500);
+  field("candidateCost", "Candidate resource cost per person per period", "clinical", "currency/person/period", 650);
+  field("perspective", "Budget perspective", "clinical", "text", "Illustrative provider budget", {type:FIELD_TYPE.TEXT});
+  field("population", "Population and context", "clinical", "text", "Synthetic population; local eligibility remains to be specified", {type:FIELD_TYPE.TEXT});
+  field("intervention", "Intervention", "clinical", "text", "Bounded workflow pilot", {type:FIELD_TYPE.TEXT});
+  field("comparator", "Comparator", "clinical", "text", "Current workflow", {type:FIELD_TYPE.TEXT});
+  field("reviewer", "Accountable clinical / operating reviewer", "clinical", "text", "", {type:FIELD_TYPE.TEXT});
+  field("evidenceSource", "Evidence semantic key or public source", "clinical", "text", "", {type:FIELD_TYPE.TEXT});
+  field("asOf", "Evidence as-of date", "clinical", "date", "", {type:FIELD_TYPE.TEXT});
+  field("economicReview", "Outcome transformation review", "clinical", "text", "pending", {type:FIELD_TYPE.SELECT,options:["pending","reviewed"]});
+  field("incrementalOutcome", "Reviewed incremental outcome per adopted person", "clinical", "outcome/person", null, {min:null});
+  field("outcomeUnit", "Outcome unit (explicit measure)", "clinical", "text", "", {type:FIELD_TYPE.TEXT});
+  field("owner", "Decision owner", "decision", "text", "", {type:FIELD_TYPE.TEXT});
+  field("trigger", "Gate trigger", "decision", "text", "Review pilot feasibility, evidence, and capacity", {type:FIELD_TYPE.TEXT});
+  field("nextEvidence", "Next evidence needed", "decision", "text", "Observed workflow and reviewed resource requirements", {type:FIELD_TYPE.TEXT});
+  field("revisit", "Revisit date", "decision", "date", "", {type:FIELD_TYPE.TEXT});
+  field("option", "Reversible next choice", "decision", "text", "pilot", {type:FIELD_TYPE.SELECT,options:["status-quo","proceed","defer","pilot","scale","redirect","stop"]});
+  field("gate", "Safety / governance gate", "decision", "text", "open", {type:FIELD_TYPE.SELECT,options:["open","satisfied","stop"]});
+  const OUTCOMES = Object.freeze(["Safety","Quality","Timeliness","Patient experience","Equity","Efficiency","Burden","Governance","Budget capacity"]);
+  for (const definition of Object.values(FIELDS)) {
+    if (definition.options) Object.freeze(definition.options);
+    Object.freeze(definition);
+  }
+  Object.freeze(FIELDS);
+
+  // Admission precedes schema traversal and cloning, so serialization preserves every JSON value.
+  function jsonText(value) {
+    const ancestors = new Set();
+    let nodes = 0;
+    let textUnits = 0;
+    function accountText(text) {
+      textUnits += text.length;
+      if (textUnits > JSON_LIMITS.bytes) throw new Error("Use a JSON state of at most 1 MB in UTF-8.");
+    }
+    function visit(item, path, depth) {
+      if (++nodes > JSON_LIMITS.nodes || depth > JSON_LIMITS.depth) {
+        throw new Error(path + ": use a JSON tree within the declared depth and node limits.");
+      }
+      if (typeof item === "string") { accountText(item); return; }
+      if (item === null || typeof item === "boolean") return;
+      if (typeof item === "number" && Number.isFinite(item)) return;
+      if (typeof item !== "object") {
+        throw new Error(path + ": use finite numbers and ordinary JSON values.");
+      }
+      const array = Array.isArray(item);
+      const prototype = Object.getPrototypeOf(item);
+      if (array ? prototype !== Array.prototype : prototype !== Object.prototype && prototype !== null) {
+        throw new Error(path + ": use plain JSON objects and arrays.");
+      }
+      if (ancestors.has(item)) throw new Error(path + ": represent each branch as an acyclic JSON value.");
+      const keys = Reflect.ownKeys(item);
+      if (array && (item.length > JSON_LIMITS.nodes || keys.length !== item.length + 1)) {
+        throw new Error(path + ": use a dense JSON array with one value per position.");
+      }
+      ancestors.add(item);
+      for (const key of keys) {
+        if (array && key === "length") continue;
+        if (typeof key !== "string" || RESERVED_KEYS.has(key)) {
+          throw new Error(path + ": use ordinary JSON property names; reserved object keys belong outside this contract.");
+        }
+        if (array && (!/^(0|[1-9][0-9]*)$/.test(key) || Number(key) >= item.length)) {
+          throw new Error(path + ": keep array values at consecutive numeric positions.");
+        }
+        accountText(key);
+        const descriptor = Object.getOwnPropertyDescriptor(item, key);
+        if (!descriptor.enumerable || !Object.hasOwn(descriptor, "value")) {
+          throw new Error(path + ": use enumerable data properties for portable JSON.");
+        }
+        visit(descriptor.value, path + "." + key, depth + 1);
+      }
+      ancestors.delete(item);
+    }
+    visit(value, "state", 0);
+    const text = stable(value);
+    if (text.length > JSON_LIMITS.bytes || new TextEncoder().encode(text).byteLength > JSON_LIMITS.bytes) {
+      throw new Error("Use a JSON state of at most 1 MB in UTF-8.");
+    }
+    return text;
+  }
+  function clone(value) { return JSON.parse(jsonText(value)); }
+  function parseJson(text) {
+    if (typeof text !== "string" || text.length > JSON_LIMITS.bytes || new TextEncoder().encode(text).byteLength > JSON_LIMITS.bytes) {
+      throw new Error("Use JSON text of at most 1 MB in UTF-8.");
+    }
+    const value = JSON.parse(text);
+    jsonText(value);
+    return value;
+  }
+  const cleanText = value => typeof value === "string" && value.trim().length > 0;
+  function validDate(value) { if(typeof value!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(value))return false;const date=new Date(value+"T00:00:00Z");return Number.isFinite(date.getTime())&&date.toISOString().slice(0,10)===value; }
+  const decimal = new RegExp("^" + DECIMAL_BODY + "$");
+  function known(value, unit, reason = "") {
+    return Number.isFinite(value) ? {status:"known",value,unit,reason} : unavailable("The result exceeds the supported numeric range.",unit,"invalid");
+  }
+  function unavailable(reason, unit = "", status = "unavailable") { return {status,value:null,unit,reason}; }
+  function numeric(value, label = "Input", min = null, max = null) {
+    if (typeof value === "string" && value.length > NUMERIC_TEXT_LIMIT) return unavailable(label + " uses at most " + NUMERIC_TEXT_LIMIT + " characters; use scientific notation for scale.", "", "invalid");
+    if (value === "" || value === null || value === undefined || (typeof value === "string" && !value.trim())) return unavailable(label + " is needed.");
+    if ((typeof value !== "number" && typeof value !== "string") || (typeof value === "string" && !decimal.test(value.trim()))) return unavailable(label + " needs a finite decimal number.", "", "invalid");
+    const n = Number(value);
+    if (!Number.isFinite(n) || (min !== null && n < min) || (max !== null && n > max)) return unavailable(label + " is outside its declared range.", "", "invalid");
+    return known(n, "");
+  }
+  function defaults() {
+    return {
+      schemaVersion:VERSION, scenarioId:"scenario/investment-pilot.v0.1", method:"model/activity-based.v0.1",
+      origin:"illustrative", inputs:Object.fromEntries(Object.entries(FIELDS).map(([k,v])=>[k,v.initial])),
+      alternatives:[
+        {id:"status-quo",label:"Status quo",flows:[0,0,0],standing:"illustrative"},
+        {id:"proceed",label:"Proceed",flows:[-120000,70000,75000],standing:"illustrative"},
+        {id:"pilot",label:"Pilot",flows:[-100000,60000,60000],standing:"illustrative"},
+        {id:"defer",label:"Defer",flows:[0,-90000,80000],standing:"illustrative"},
+        {id:"scale",label:"Scale",flows:[-180000,100000,120000],standing:"illustrative"},
+        {id:"redirect",label:"Redirect",flows:[-40000,20000,30000],standing:"illustrative"},
+        {id:"stop",label:"Stop",flows:[-5000,0,0],standing:"illustrative"}
+      ],
+      outcomes:[
+        {id:"constrained",probability:.3,flows:[-100000,30000,30000]},
+        {id:"planned",probability:.5,flows:[-100000,60000,60000]},
+        {id:"expanded",probability:.2,flows:[-100000,90000,90000]}
+      ],
+      clinical:OUTCOMES.map(name=>({name,unit:"",baseline:null,candidate:null,standing:"unavailable",source:""})),
+      events:[
+        {id:"acquire",kind:"acquisition",period:0,predecessors:[],standing:"illustrative"},
+        {id:"onboard",kind:"onboarding",period:1,predecessors:["acquire"],standing:"illustrative"},
+        {id:"activate",kind:"activation",period:1,predecessors:["onboard"],standing:"illustrative"},
+        {id:"renew",kind:"renewal",period:2,predecessors:["activate"],standing:"illustrative"},
+        {id:"churn",kind:"churn",period:2,predecessors:["activate"],standing:"illustrative"},
+        {id:"reactivate",kind:"reactivation",period:3,predecessors:["churn"],standing:"illustrative"}
+      ],
+      extensions:{}
+    };
+  }
+  function buildSchema() {
+    const numberInput={anyOf:[{type:FIELD_TYPE.NUMBER},{type:"null"},{type:"string",maxLength:NUMERIC_TEXT_LIMIT,pattern:NUMBER_TEXT_PATTERN}]};
+    const text={type:"string",maxLength:2000};
+    const object=(properties,required=Object.keys(properties))=>({type:"object",additionalProperties:false,properties,required});
+    const flows={type:"array",minItems:2,maxItems:101,items:numberInput};
+    return {
+      $schema:"https://json-schema.org/draft/2020-12/schema",
+      $id:"https://schemas.vik.guru/investment-analysis/0.1.0/state.schema.json",
+      title:"Investment analysis state 0.1.0",
+      description:"Validation-input projection generated by core.js; local source contract, public retrieval pending publication.",
+      ...object({
+        schemaVersion:{const:VERSION},scenarioId:{type:"string",minLength:1,maxLength:200},method:text,
+        origin:{enum:["illustrative","user-supplied","observed"]},
+        inputs:object(Object.fromEntries(Object.entries(FIELDS).map(([k,f])=>[k,f.type===FIELD_TYPE.NUMBER?numberInput:f.type===FIELD_TYPE.BOOLEAN?{type:FIELD_TYPE.BOOLEAN}:f.type===FIELD_TYPE.SELECT?{enum:f.options}:text]))),
+        alternatives:{type:"array",minItems:1,maxItems:12,items:object({id:text,label:text,flows,standing:{enum:["illustrative","user-supplied","observed"]}})},
+        outcomes:{type:"array",minItems:1,maxItems:12,items:object({id:text,probability:numberInput,flows})},
+        clinical:{type:"array",minItems:9,maxItems:9,items:object({name:{enum:OUTCOMES},unit:text,baseline:numberInput,candidate:numberInput,standing:{enum:["unavailable","illustrative","source-observation","transfer-hypothesis","locally-verified"]},source:text})},
+        events:{type:"array",maxItems:100,items:object({id:text,kind:text,period:numberInput,predecessors:{type:"array",maxItems:100,items:text},standing:text})},
+        extensions:{type:"object",propertyNames:{pattern:"^urn:[a-zA-Z0-9][a-zA-Z0-9:._/-]*$"},additionalProperties:true}
+      })
+    };
+  }
+  // The immutable source schema owns this finite pattern set; imported state supplies values only.
+  const STATE_SCHEMA = freezeTree(buildSchema());
+  const SCHEMA_PATTERNS = compileSchemaPatterns(STATE_SCHEMA);
+  function freezeTree(value) {
+    if (value && typeof value === "object" && !Object.isFrozen(value)) {
+      for (const child of Object.values(value)) freezeTree(child);
+      Object.freeze(value);
+    }
+    return value;
+  }
+  function compileSchemaPatterns(shape) {
+    const patterns = new Map();
+    function visit(value) {
+      if (!value || typeof value !== "object") return;
+      if (Object.hasOwn(value, "pattern") && !patterns.has(value.pattern)) patterns.set(value.pattern, new RegExp(value.pattern));
+      for (const child of Object.values(value)) visit(child);
+    }
+    visit(shape);
+    return patterns;
+  }
+  function schema() { return JSON.parse(JSON.stringify(STATE_SCHEMA)); }
+
+  function* validateSchemaValue(value, shape, path) {
+    if (shape.anyOf) {
+      if (!shape.anyOf.some(candidate => validateSchemaValue(value, candidate, path).next().done)) yield path + ": supply a finite number or leave it blank.";
+      return;
+    }
+    if (Object.hasOwn(shape, "const") && value !== shape.const) yield path + ": unsupported contract version.";
+    if (shape.enum && !shape.enum.includes(value)) yield path + ": choose a declared value.";
+    switch (shape.type) {
+      case "object": yield* validateObject(value, shape, path); return;
+      case "array": yield* validateArray(value, shape, path); return;
+      case "number": if (typeof value !== "number" || !Number.isFinite(value)) yield path + ": finite number needed."; return;
+      case "null": if (value !== null) yield path + ": null needed."; return;
+      case "boolean": if (typeof value !== "boolean") yield path + ": boolean needed."; return;
+      case "string": {
+        const error = validateString(value, shape, path);
+        if (error) yield error;
+      }
+    }
+  }
+
+  function* validateObject(value, shape, path) {
+    if (!value || typeof value !== "object" || Array.isArray(value)) { yield path + ": an object is needed."; return; }
+    for (const key of shape.required || []) {
+      if (!Object.hasOwn(value, key)) yield path + "." + key + ": required field.";
+    }
+    for (const key of Object.keys(value)) {
+      if (shape.propertyNames && !SCHEMA_PATTERNS.get(shape.propertyNames.pattern).test(key)) yield path + ": use a namespaced extension.";
+      if (shape.properties && Object.hasOwn(shape.properties, key)) {
+        yield* validateSchemaValue(value[key], shape.properties[key], path + "." + key);
+      } else if (shape.additionalProperties === false) {
+        yield path + "." + key + ": field belongs to a different contract.";
+      }
+    }
+  }
+
+  function* validateArray(value, shape, path) {
+    if (!Array.isArray(value)) { yield path + ": a list is needed."; return; }
+    if (value.length < (shape.minItems ?? 0) || value.length > (shape.maxItems ?? Infinity)) yield path + ": list length is outside this contract.";
+    for (const [index, item] of value.entries()) yield* validateSchemaValue(item, shape.items, path + "[" + index + "]");
+  }
+
+  function validateString(value, shape, path) {
+    const valid = typeof value === "string"
+      && value.length <= (shape.maxLength ?? Infinity)
+      && value.length >= (shape.minLength ?? 0)
+      && (!shape.pattern || SCHEMA_PATTERNS.get(shape.pattern).test(value));
+    return valid ? null : path + ": text is outside this contract.";
+  }
+
+  function validateIdentifiers(name, list) {
+    const ids = list.map(item => item.id);
+    return ids.some(id => !cleanText(id)) || new Set(ids).size !== ids.length
+      ? name + ": distinct nonempty identifiers are needed." : null;
+  }
+
+  function hasEventCycle(events, byId) {
+    const visited = new Set();
+    const active = new Set();
+
+    function visit(id) {
+      if (active.has(id)) return true;
+      if (visited.has(id)) return false;
+
+      active.add(id);
+      for (const predecessor of byId.get(id)?.predecessors || []) {
+        if (visit(predecessor)) return true;
+      }
+      active.delete(id);
+      visited.add(id);
+      return false;
+    }
+
+    return events.some(event => visit(event.id));
+  }
+
+  function* validateEvents(events) {
+    const eventIds = new Set(events.map(event => event.id));
+    for (const event of events) {
+      if (event.predecessors.some(id => !eventIds.has(id) || id === event.id)) {
+        yield "events: each predecessor must name another event.";
+      }
+    }
+
+    const byId = new Map(events.map(event => [event.id, event]));
+    for (const event of events) {
+      const time = numeric(event.period, "Event period", 0);
+      if (time.status === "invalid") {
+        yield "events: periods use nonnegative finite numbers or an explicit blank.";
+      }
+      for (const id of event.predecessors) {
+        const prior = numeric(byId.get(id)?.period, "Predecessor period", 0);
+        if (time.status === "known" && prior.status === "known" && prior.value > time.value) {
+          yield "events: predecessor occurrences belong at or before the receiving event.";
+        }
+      }
+    }
+
+    if (hasEventCycle(events, byId)) {
+      yield "events: use distinct event occurrences to represent repeated lifecycle stages.";
+    }
+  }
+
+  function validateContract(state) {
+    const errors = [...validateSchemaValue(state, STATE_SCHEMA, "state")];
+    if (errors.length) return { valid: false, errors };
+    const identityErrors = ["alternatives", "outcomes", "events"].map(name => validateIdentifiers(name, state[name])).filter(Boolean);
+    const clinicalErrors = new Set(state.clinical.map(item => item.name)).size === OUTCOMES.length
+      ? [] : ["clinical: preserve all nine distinct consequence dimensions."];
+    const diagnostics = [...identityErrors, ...clinicalErrors, ...validateEvents(state.events)];
+    return { valid: diagnostics.length === 0, errors: diagnostics };
+  }
+  function validate(state) {
+    try { jsonText(state); }
+    catch (error) { return { valid: false, errors: [error.message] }; }
+    return validateContract(state);
+  }
+  function stable(value) {
+    if(Array.isArray(value))return "["+value.map(stable).join(",")+"]";
+    if(value&&typeof value==="object")return "{"+Object.keys(value).sort().map(k=>JSON.stringify(k)+":"+stable(value[k])).join(",")+"}";
+    return JSON.stringify(value);
+  }
+  function fingerprintText(text) {
+    let hash=2166136261;for(const char of text){hash^=char.codePointAt(0);hash=Math.imul(hash,16777619);}
+    return "fnv1a32:"+ (hash>>>0).toString(16).padStart(8,"0");
+  }
+  function fingerprint(state) { return fingerprintText(stable(state)); }
+  function parseFlows(flows) {
+    if(!Array.isArray(flows)||flows.length<2)return unavailable("Supply t=0 and at least one later cash flow.");
+    const parsed=Array.from(flows,(v,i)=>numeric(v,"Cash flow at t="+i));
+    const bad=parsed.find(x=>x.status!=="known");
+    return bad||{status:"known",value:parsed.map(x=>x.value)};
+  }
+  function npv(flows, rate) {
+    const f=parseFlows(flows),r=numeric(rate,"Discount rate",-.999999);
+    if(f.status!=="known")return f;if(r.status!=="known")return r;
+    return known(npvValues(f.value,r.value),"currency");
+  }
+  function npvValues(flows, rate) { return flows.reduce((sum, value, period) => sum + value / Math.pow(1 + rate, period), 0); }
+  function irr(flows) {
+    const f=parseFlows(flows);if(f.status!=="known")return f;
+    const xs=f.value,signs=xs.filter(x=>x!==0).map(Math.sign);
+    const changes=signs.slice(1).reduce((n,x,i)=>n+(x!==signs[i]?1:0),0);
+    if(changes===0)return unavailable("IRR requires at least one cash-flow sign change.","ratio","inapplicable");
+    if(changes>1)return unavailable("Multiple-solution or non-conventional cash flows: use NPV.","ratio","ambiguous");
+    if(xs[0]>=0||xs.slice(1).some(x=>x<0))return unavailable("IRR is restricted to an initial investment followed by nonnegative flows.","ratio","inapplicable");
+    let lo=-.9999,hi=100;
+    const a=npvValues(xs,lo),b=npvValues(xs,hi);
+    if(!Number.isFinite(a)||!Number.isFinite(b)||a*b>0)return unavailable("IRR lies outside the supported -99.99% to 10,000% bracket.","ratio","unreached");
+    for(let i=0;i<160;i++){const mid=(lo+hi)/2,v=npvValues(xs,mid);if(v>0)lo=mid;else hi=mid;}
+    return known((lo+hi)/2,"ratio");
+  }
+  function payback(flows) {
+    const f=parseFlows(flows);if(f.status!=="known")return f;
+    if(f.value[0]>=0)return unavailable("Payback requires an initial cash outlay.","period","inapplicable");
+    let cumulative=f.value[0];
+    for(let t=1;t<f.value.length;t++){const prior=cumulative;cumulative+=f.value[t];if(cumulative>=0)return known(t-1+(-prior/f.value[t]),"period","Undiscounted; linear recovery within the crossing period.");}
+    return unavailable("Cumulative cash flow remains below zero throughout the supplied horizon.","period","unreached");
+  }
+  function expectedNpv(outcomes, rate, exhaustive) {
+    if(!exhaustive)return unavailable("Confirm a mutually exclusive, collectively exhaustive outcome tree.","currency");
+    const ps=outcomes.map(x=>numeric(x.probability,"Outcome probability",0,1));
+    const bad=ps.find(x=>x.status!=="known");if(bad)return bad;
+    if(Math.abs(ps.reduce((s,x)=>s+x.value,0)-1)>1e-9)return unavailable("Probabilities must sum to one; supplied values are retained.","currency","invalid");
+    if(new Set(outcomes.map(x=>x.flows.length)).size!==1)return unavailable("Use the same time basis and horizon for all outcomes.","currency","invalid");
+    const values=outcomes.map(x=>npv(x.flows,rate));const fail=values.find(x=>x.status!=="known");if(fail)return fail;
+    return known(values.reduce((s,x,i)=>s+x.value*ps[i].value,0),"currency","Weighted scenarios; distinct from P50/P80 or empirical distributions.");
+  }
+  function staffing(s) {
+    const problems=[],read=(v,label,min=0,max=null)=>{const r=numeric(v,label,min,max);if(r.status!=="known")problems.push(r.reason);return r.value;};
+    const h=read(s.horizon,"Horizon"),units=STAFFING_HOURS;
+    if(!Object.hasOwn(units,s.unit))problems.push("Choose hours, sprints, or quarters.");
+    const horizonHours=h*units[s.unit],roles=s.roles.filter(r=>r.enabled),activities=s.activities.filter(r=>r.enabled),disruptions=s.disruptions.filter(r=>r.enabled);
+    let people=0,weighted=0,allocatedHours=0,roleCost=0,taskCount=0,activityHours=0,disruptionHours=0;
+    roles.forEach((r,i)=>{const a=read(r.a,"Role "+(i+1)+" people"),b=read(r.b,"Role "+(i+1)+" loaded rate"),c=read(r.c,"Role "+(i+1)+" allocation",0,100);const hours=a*horizonHours*c/100;people+=a;weighted+=a*b;allocatedHours+=hours;roleCost+=hours*b;});
+    const blended=people>0?weighted/people:0;
+    activities.forEach((r,i)=>{const n=read(r.a,"Activity "+(i+1)+" count"),h=read(r.b,"Activity "+(i+1)+" effort");taskCount+=n;activityHours+=n*h;});
+    disruptions.forEach((r,i)=>{disruptionHours+=read(r.a,"Recovery "+(i+1)+" count")*read(r.b,"Recovery "+(i+1)+" hours");});
+    if(people===0&&(activityHours>0||disruptionHours>0))problems.push("Add a staffed loaded rate to price activity and recovery effort.");
+    const sigma=read(s.sigma,"Sigma attention",1,6),qualityMultiplier=.65+sigma*.15;
+    const qualityHours=s.qualityEnabled?horizonHours*read(s.qualityAllocation,"Quality allocation",0,100)/100*qualityMultiplier:0;
+    const qualityRate=s.qualityEnabled?read(s.qualityRate,"Quality loaded rate"):0;
+    const overlap={activities:read(s.overlap?.activities,"Additional activity share",0,1),recovery:read(s.overlap?.recovery,"Additional recovery share",0,1),quality:read(s.overlap?.quality,"Additional quality share",0,1)};
+    const activityCost=activityHours*blended*overlap.activities,disruptionCost=disruptionHours*blended*overlap.recovery,qualityCost=qualityHours*qualityRate*overlap.quality;
+    const unknownCount=read(s.unknowns,"Named unknowns"),unknownRate=Math.min(.35,unknownCount*.025),complexityRate=Object.hasOwn(COMPLEXITY_RATES,s.complexity)?COMPLEXITY_RATES[s.complexity]:undefined;
+    if(complexityRate===undefined)problems.push("Choose a named complexity heuristic.");
+    if(problems.length)return {status:"unavailable",problems};
+    const base=roleCost+activityCost+disruptionCost+qualityCost,unknownCost=base*unknownRate,complexityCost=base*complexityRate,central=base+unknownCost+complexityCost,spread=.07+Math.min(.16,unknownRate*.45+complexityRate*.2);
+    if(!Number.isFinite(central))return {status:"invalid",problems:["The staffing result exceeds the supported numeric range."]};
+    return {status:"known",currency:STAFFING_CURRENCY,horizonHours,people,taskCount,activityHours,allocatedHours,qualityHours,qualityMultiplier,disruptionHours,roleCost,activityCost,qualityCost,disruptionCost,unknownCost,complexityCost,central,spread,low:central*(1-spread),high:central*(1+spread),unknownCount,unknownRate,complexityRate,unpricedWork:false,overlap,problems:[]};
+  }
+  const FIELD_DOMAINS = Object.freeze({
+    commercial: "commercial-cohort",
+    pricing: "customer-implementation",
+    clinical: "clinical-operational",
+    capital: "capital-allocation"
+  });
+  const METRIC_DOMAINS = Object.freeze({
+    budgetImpact: "clinical-operational",
+    adoptedPopulation: "clinical-operational",
+    capacityGap: "clinical-operational",
+    costPerOutcome: "clinical-operational",
+    expectedNpv: "capital-allocation",
+    discountAmount: "customer-implementation",
+    netPrice: "customer-implementation",
+    unitContribution: "customer-implementation"
+  });
+
+  function mappedDomain(mapping, key, fallback) {
+    return Object.hasOwn(mapping, key) ? mapping[key] : fallback;
+  }
+
+  function readInput(inputs, key) {
+    const field = FIELDS[key];
+    return numeric(inputs[key], field.label, field.min ?? null, field.max ?? null);
+  }
+
+  function calculateMetric(inputs, currencyAvailable, keys, unit, calculateValue) {
+    const values = keys.map(key => readInput(inputs, key));
+    const incomplete = values.find(value => value.status !== "known");
+    if (incomplete) return { ...incomplete, unit };
+    if (unit.includes("currency") && !currencyAvailable) {
+      return unavailable("Supply an explicit three-letter currency code.", unit);
+    }
+    const result = calculateValue(...values.map(value => value.value));
+    return typeof result === "number" ? known(result, unit) : result;
+  }
+
+  function divideByPositive(numerator, denominator, unit) {
+    if (denominator > 0) return known(numerator / denominator, unit);
+    return unavailable("Supply a positive denominator; explicit zero is retained.", unit);
+  }
+
+  function calculateCostPerOutcome(inputs, candidate, baseline, outcome) {
+    const reviewed = inputs.economicReview === "reviewed"
+      && [inputs.reviewer, inputs.evidenceSource, inputs.outcomeUnit, inputs.perspective].every(cleanText)
+      && validDate(inputs.asOf);
+    if (!reviewed) {
+      return unavailable("Supply the reviewed measure, reviewer, perspective, source, and date.", "currency/outcome");
+    }
+    if (outcome <= 0) {
+      return unavailable("A positive incremental outcome is needed for this ratio; inspect cost and outcome separately.", "currency/outcome", "inapplicable");
+    }
+    return known(
+      (candidate - baseline) / outcome,
+      "currency/outcome",
+      "Cost per " + inputs.outcomeUnit + "; interpretation retains the stated evidence boundary."
+    );
+  }
+
+  function calculateAlternativeNpv(alternative, inputs, commonHorizon, currencyAvailable) {
+    if (!commonHorizon) {
+      return unavailable("Use a common horizon before comparing alternatives.", "currency", "incompatible");
+    }
+    if (!currencyAvailable) return unavailable("Supply currency.", "currency");
+    return { ...npv(alternative.flows, inputs.discountRate), unit: "currency" };
+  }
+
+  function calculateAlternatives(state, currencyAvailable) {
+    const commonHorizon = new Set(state.alternatives.map(item => item.flows.length)).size === 1;
+    return state.alternatives.map(alternative => ({
+      ...alternative,
+      flows: [...alternative.flows],
+      npv: calculateAlternativeNpv(alternative, state.inputs, commonHorizon, currencyAvailable),
+      irr: irr(alternative.flows),
+      payback: payback(alternative.flows)
+    }));
+  }
+
+  function calculateSensitivity(state, currencyAvailable) {
+    const rate = readInput(state.inputs, "discountRate");
+    const commonHorizon = new Set(state.alternatives.map(item => item.flows.length)).size === 1;
+    return state.alternatives.map(alternative => ({
+      id: alternative.id,
+      values: [-.02, 0, .02].map(offset => {
+        const shifted = rate.status === "known" ? rate.value + offset : null;
+        return {
+          rate: shifted,
+          result: calculateAlternativeNpv(
+            alternative,
+            { discountRate: shifted === null ? state.inputs.discountRate : shifted },
+            commonHorizon,
+            currencyAvailable
+          )
+        };
+      })
+    }));
+  }
+
+  function calculateClinicalDelta(consequence, inputs) {
+    const baseline = numeric(consequence.baseline, consequence.name + " baseline");
+    const candidate = numeric(consequence.candidate, consequence.name + " candidate");
+    const reviewedEvidence = consequence.standing !== "unavailable"
+      && [consequence.source, inputs.reviewer].every(cleanText)
+      && validDate(inputs.asOf);
+    const evidenceAvailable = consequence.standing === "illustrative" || reviewedEvidence;
+
+    if (!evidenceAvailable || !cleanText(consequence.unit)) {
+      return unavailable(
+        "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario.",
+        consequence.unit
+      );
+    }
+    if (baseline.status !== "known") return baseline;
+    if (candidate.status !== "known") return candidate;
+    return known(candidate.value - baseline.value, consequence.unit, consequence.standing);
+  }
+
+  function resolveDecisionGate(inputs, capacityGap) {
+    if (inputs.gate === "stop") return "stop";
+
+    const reviewComplete = inputs.gate === "satisfied"
+      && [inputs.owner, inputs.trigger, inputs.nextEvidence].every(cleanText)
+      && validDate(inputs.revisit);
+    const capacityAvailable = capacityGap.status === "known" && capacityGap.value === 0;
+    if (reviewComplete && capacityAvailable) return "ready-for-human-review";
+    return "held-open";
+  }
+
+  function inputStatus(inputs, key, field) {
+    if (field.type === FIELD_TYPE.NUMBER) return readInput(inputs, key).status;
+    return cleanText(inputs[key]) || typeof inputs[key] === "boolean" ? "known" : "unavailable";
+  }
+
+  function buildRecords(state, metrics, alternatives, clinical, gate) {
+    const inputs = state.inputs;
+    const records = Object.entries(FIELDS).map(([key, field]) => ({
+      id: "input/" + key,
+      domain: mappedDomain(FIELD_DOMAINS, field.group, "internal-investment"),
+      type: "input",
+      label: field.label,
+      status: inputStatus(inputs, key, field),
+      value: inputs[key],
+      unit: field.unit,
+      currency: field.unit.includes("currency") ? inputs.currency : null,
+      timeBasis: inputs.period,
+      evidenceStanding: state.origin
+    }));
+    records.push({
+      id: "assumption/cash-basis",
+      domain: "capital-allocation",
+      type: "assumption",
+      value: {
+        convention: inputs.cashConvention,
+        taxWorkingCapital: inputs.taxWorkingCapital,
+        reserves: "Cash-flow inputs carry each intended cost once; staffing references and pricing outputs remain separate views."
+      }
+    });
+    for (const [id, result] of Object.entries(metrics)) {
+      records.push({
+        id: "calculation/" + id,
+        domain: mappedDomain(METRIC_DOMAINS, id, "commercial-cohort"),
+        type: "calculation",
+        ...result,
+        currency: result.unit.includes("currency") ? inputs.currency : null,
+        timeBasis: inputs.period,
+        formulaVersion: VERSION,
+        evidenceStanding: state.origin
+      });
+    }
+    for (const alternative of alternatives) {
+      records.push({
+        id: "calculation/alternative/" + alternative.id,
+        domain: "capital-allocation",
+        type: "calculation",
+        npv: alternative.npv,
+        irr: alternative.irr,
+        payback: alternative.payback,
+        currency: inputs.currency,
+        timeBasis: inputs.period,
+        horizon: alternative.flows.length - 1,
+        formulaVersion: VERSION,
+        evidenceStanding: alternative.standing
+      });
+    }
+    for (const consequence of clinical) {
+      records.push({
+        id: "calculation/consequence/" + consequence.name,
+        domain: "clinical-operational",
+        type: "calculation",
+        ...consequence.delta,
+        source: consequence.source,
+        evidenceStanding: consequence.standing,
+        formulaVersion: VERSION,
+        timeBasis: inputs.period
+      });
+    }
+    records.push({
+      id: "evidence/context",
+      domain: "clinical-operational",
+      type: "evidence",
+      value: { source: inputs.evidenceSource, reviewer: inputs.reviewer, asOf: inputs.asOf, standing: state.origin }
+    });
+    records.push({
+      id: "decision/next",
+      domain: "capital-allocation",
+      type: "decision",
+      value: {
+        gate, choice: inputs.option, trigger: inputs.trigger, owner: inputs.owner,
+        optionPreserved: inputs.option, nextEvidence: inputs.nextEvidence, revisit: inputs.revisit
+      }
+    });
+    return records;
+  }
+
+  function calculate(state) {
+    const validation = validate(state);
+    if (!validation.valid) {
+      return { valid: false, errors: validation.errors, metrics: {}, alternatives: [], clinical: [], records: [] };
+    }
+
+    return calculateAccepted(state);
+  }
+  function calculateAccepted(state) {
+    const inputs = state.inputs;
+    const currencyAvailable = CURRENCY_CODE.test(inputs.currency);
+    const metrics = {};
+    function metric(key, keys, unit, formula) {
+      metrics[key] = calculateMetric(inputs, currencyAvailable, keys, unit, formula);
+    }
+
+    metric("closingCustomers", ["openingCustomers", "newCustomers", "churnCustomers", "reactivatedCustomers"], "customer", (opening, added, churn, reactivated) => {
+      if (churn > opening) return unavailable("Churn exceeds the opening cohort.", "customer", "invalid");
+      return opening + added - churn + reactivated;
+    });
+    metric("logoRetention", ["openingCustomers", "churnCustomers"], "ratio", (opening, churn) => {
+      if (churn > opening) return unavailable("Churn exceeds the opening cohort.", "ratio", "invalid");
+      return divideByPositive(opening - churn, opening, "ratio");
+    });
+    metric("grr", ["openingRevenue", "churnRevenue", "contraction"], "ratio", (opening, churn, contraction) => {
+      if (churn + contraction > opening) return unavailable("Losses exceed opening-cohort revenue.", "ratio", "invalid");
+      return divideByPositive(opening - churn - contraction, opening, "ratio");
+    });
+    metric("nrr", ["openingRevenue", "churnRevenue", "contraction", "expansion"], "ratio", (opening, churn, contraction, expansion) => {
+      if (churn + contraction > opening) return unavailable("Losses exceed opening-cohort revenue.", "ratio", "invalid");
+      return divideByPositive(opening - churn - contraction + expansion, opening, "ratio");
+    });
+    metric("closingRevenue", ["openingRevenue", "churnRevenue", "contraction", "expansion", "newRevenue", "reactivationRevenue"], "currency/period", (opening, churn, contraction, expansion, added, reactivated) => {
+      if (churn + contraction > opening) return unavailable("Losses exceed opening-cohort revenue.", "currency/period", "invalid");
+      return opening - churn - contraction + expansion + added + reactivated;
+    });
+    metric("cac", ["acquisitionSpend", "newCustomers"], "currency/customer",
+      (spend, customers) => divideByPositive(spend, customers, "currency/customer"));
+    metric("acquisitionRevenueRatio", ["acquisitionSpend", "newRevenue"], "period",
+      (spend, revenue) => divideByPositive(spend, revenue, "period"));
+    metric("cacPayback", ["acquisitionSpend", "newRevenue", "contributionMargin"], "period",
+      (spend, revenue, margin) => divideByPositive(spend, revenue * margin, "period"));
+    metric("discountAmount", ["listPrice", "discount"], "currency/unit", (price, discount) => price * discount);
+    metric("netPrice", ["listPrice", "discount", "rebate"], "currency/unit", (price, discount, rebate) => {
+      if (rebate > price * (1 - discount)) return unavailable("Rebate exceeds discounted unit price.", "currency/unit", "invalid");
+      return price * (1 - discount) - rebate;
+    });
+    metric("unitContribution", ["listPrice", "discount", "rebate", "variableCost", "serviceCost"], "currency/unit", (price, discount, rebate, cost, service) => {
+      if (rebate > price * (1 - discount)) return unavailable("Rebate exceeds discounted unit price.", "currency/unit", "invalid");
+      return price * (1 - discount) - rebate - cost - service;
+    });
+    metric("adoptedPopulation", ["eligiblePopulation", "adoption"], "person", (population, adoption) => population * adoption);
+    metric("budgetImpact", ["eligiblePopulation", "adoption", "baselineCost", "candidateCost"], "currency/period",
+      (population, adoption, baseline, candidate) => population * adoption * (candidate - baseline));
+    metric("capacityGap", ["eligiblePopulation", "adoption", "capacity"], "person/period",
+      (population, adoption, capacity) => Math.max(0, population * adoption - capacity));
+    metric("costPerOutcome", ["candidateCost", "baselineCost", "incrementalOutcome"], "currency/outcome",
+      (candidate, baseline, outcome) => calculateCostPerOutcome(inputs, candidate, baseline, outcome));
+    metrics.expectedNpv = currencyAvailable
+      ? { ...expectedNpv(state.outcomes, inputs.discountRate, inputs.exhaustive), unit: "currency" }
+      : unavailable("Supply currency.", "currency");
+
+    const alternatives = calculateAlternatives(state, currencyAvailable);
+    const sensitivity = calculateSensitivity(state, currencyAvailable);
+    const clinical = state.clinical.map(consequence => ({
+      ...consequence,
+      delta: calculateClinicalDelta(consequence, inputs)
+    }));
+    const gate = resolveDecisionGate(inputs, metrics.capacityGap);
+    const records = buildRecords(state, metrics, alternatives, clinical, gate);
+    return {
+      valid: true, errors: [], metrics, alternatives, sensitivity, clinical, records,
+      gate, events: state.events.map(event => ({ ...event, predecessors: [...event.predecessors] }))
+    };
+  }
+  function migrate(raw) {
+    jsonText(raw);
+    if(raw?.schemaVersion===VERSION)return clone(raw);
+    const next=defaults();
+    if(raw?.schemaVersion==="1.0.0"&&raw.view==="model-explorer"&&typeof raw.activeModelId==="string") {
+      next.method=raw.activeModelId;next.extensions["urn:investment:legacy-selection"]={snapshot:clone(raw),standing:"Selection preserved; analytical scenario remains explicitly illustrative."};return next;
+    }
+    if(raw&&Array.isArray(raw.roles)&&raw.horizon&&raw.plan) {
+      next.inputs.label=String(raw.plan);next.inputs.internalInvestment=null;next.origin="user-supplied";
+      next.extensions["urn:investment:legacy-leave-behind"]={snapshot:clone(raw),standing:"Historical display snapshot retained. Re-enter exact inputs before deriving investment amounts."};
+      for(const [key,f] of Object.entries(FIELDS))if(f.type===FIELD_TYPE.NUMBER)next.inputs[key]=null;
+      for(const a of next.alternatives)a.flows=a.flows.map(()=>null);
+      for(const o of next.outcomes){o.probability=null;o.flows=o.flows.map(()=>null);}
+      return next;
+    }
+    throw new Error("Choose investment state 0.1.0, a legacy model selection, or a calculator leave-behind. Current state remains available.");
+  }
+  function importState(text) {
+    const state = migrate(parseJson(text));
+    const result = validate(state);
+    if (!result.valid) throw new Error(result.errors.slice(0,4).join(" "));
+    return state;
+  }
+  function serialize(state) {
+    const text = jsonText(state);
+    const validation = validateContract(state);
+    if (!validation.valid) throw new Error(validation.errors.join(" "));
+    return text;
+  }
+  function prepare(candidate) {
+    const serialized = serialize(candidate);
+    const state = JSON.parse(serialized);
+    const result = calculateAccepted(state);
+    return freezeTree({ state, result, serialized, fingerprint: fingerprintText(serialized) });
+  }
+  return Object.freeze({VERSION,FIELD_TYPE,STAFFING_CURRENCY,JSON_LIMITS,NUMERIC_TEXT_LIMIT,DOMAINS,TYPES,FIELDS,OUTCOMES,defaults,schema,validate,clone,numeric,known,unavailable,stable,fingerprint,npv,irr,payback,expectedNpv,staffing,calculate,migrate,parseJson,importState,serialize,prepare});
+});
+</script>
+<!-- investment-analysis:core:end -->
 </head>
 <body>
 <a class="skip" href="#costing-workspace">Skip to costing workspace</a>
@@ -151,6 +950,22 @@
   </div>
   <section class="method" aria-labelledby="method-title"><span class="section-label">09C · Explain the range</span><h2 id="method-title">How the range is formed</h2><p class="guidance">These are reflective outputs. Opening a learning prompt or inspecting a method card does not alter the plan or Coordination Horizon.</p><div class="method-grid"><article><h3>1 · Allocated time</h3><p>People × horizon hours × allocation × editable hourly rate.</p><output class="method-output" id="method-role">$0</output></article><article><h3>2 · Changed-work load</h3><p>Task count × editable effort × the active team’s blended rate.</p><output class="method-output" id="method-activity">$0</output></article><article><h3>3 · Quality collaboration</h3><p>Named horizon allocation × independent review rate × the visible sigma-attention multiplier.</p><output class="method-output" id="method-quality">$0</output></article><article><h3>4 · Recovery and reserve</h3><p>Named interruptions, known unknowns, and complexity stay visible as separate line items.</p><output class="method-output" id="method-recovery">$0</output></article><article><h3>5 · Planning band</h3><p>A lower and upper bound carries early uncertainty; it remains a conversation input rather than approval evidence.</p><output class="method-output" id="method-band">$0 – $0</output></article></div></section>
   <noscript><style>.presets,.horizon-field,.lens-field,.workspace{display:none!important}.fallback{display:block!important;margin:1rem 0}</style><p class="fallback"><strong>Static planning method:</strong> total allocated role cost, add task effort at a blended team rate, add disruption recovery, then show known-unknown and complexity reserves separately. Map the active change model, use the separate eight-part change-attention lens, and pair each AI contribution with a named human receiver. JavaScript enables the editable ledger, learning prompts, and live range. Continue with the <a href="../../context-canvas-project-surface/context-canvas/initiative-costing.html">Initiative Costing reading</a>, <a href="../../context-canvas-project-surface/context-canvas/hiring-surfaces-talent-agent-intake.html">Hiring Surfaces</a>, or <a href="../../context-canvas-project-surface/context-canvas/shared-machinery.html">Shared Machinery</a>.</p></noscript>
+<section class="investment-analysis" aria-labelledby="investment-overlap-title"><h2 id="investment-overlap-title">Staffing overlap policy</h2><p>Enter the share of each cost that is additional to allocated staffing. A share of 0 means that effort is already included; 100 means fully incremental. Reserve and spread remain separate planning heuristics.</p><div class="investment-fields">
+<label class="investment-field" for="overlap-activities">Additional activity share (%)<input id="overlap-activities" type="number" min="0" max="100" value="100"></label>
+<label class="investment-field" for="overlap-recovery">Additional recovery share (%)<input id="overlap-recovery" type="number" min="0" max="100" value="100"></label>
+<label class="investment-field" for="overlap-quality">Additional quality share (%)<input id="overlap-quality" type="number" min="0" max="100" value="100"></label>
+</div></section><section class="investment-analysis" aria-labelledby="investment-analysis-title">
+<h2 id="investment-analysis-title">Layered investment comparison</h2>
+<p>Compare an explicitly scoped scenario across internal investment, customer implementation, commercial cohorts, clinical and operational consequences, and capital allocation. The editable comparison is illustrative; named people establish the evidence and decision authority.</p>
+<details><summary>Read the static domain and evidence overview</summary><div class="investment-table-scroll" role="region" tabindex="0" aria-label="Investment domains and evidence; scroll horizontally"><table><caption>Five domains, five cross-cutting record types</caption><thead><tr><th scope="col">Domain</th><th scope="col">Comparison</th><th scope="col">Evidence needed</th></tr></thead><tbody>
+<tr><th scope="row">Internal investment</th><td>Allocated effort and incremental work</td><td>Loaded rates, horizon, overlap policy, and explicit heuristics</td></tr>
+<tr><th scope="row">Customer implementation</th><td>Deployment effort, lag, and unit economics</td><td>Orderable unit, payer, price class, and service boundary</td></tr>
+<tr><th scope="row">Commercial cohort</th><td>Retention, acquisition, expansion, and reactivation</td><td>Opening cohort, denominator, window, currency, and recurring time basis</td></tr>
+<tr><th scope="row">Clinical and operational value</th><td>Separate costs, consequences, and capacity</td><td>Population, comparator, measure, source, reviewer, and date</td></tr>
+<tr><th scope="row">Capital allocation</th><td>NPV, guarded IRR, payback, and reversible choices</td><td>Timed cash flows, conventions, complete outcome tree, and named gates</td></tr>
+</tbody></table></div><p>Input, assumption, calculation, evidence, and decision records describe how each domain is carried. Blank values remain unavailable; zero retains its stated meaning. This overview stays readable with JavaScript unavailable.</p></details>
+<div data-investment-analysis hidden></div>
+</section>
 </main>
 <div id="live" class="sr-only" aria-live="polite"></div>
 <!-- arrow: <path d="M5 12h14M12 5l7 7-7 7"/> -->
@@ -180,7 +995,7 @@
     {name:'Operational modernization / recovery',h:3,u:'quarters',c:'connected',k:5,roles:[['Operations lead',1,175,70],['Software engineer',3,185,75],['Service designer',1,160,40],['Quality partner',1,190,25]],activities:[['Work recovery mapping',22,10],['Incremental replacement',38,14],['Runbook and handoff',20,9]],disruptions:[['Production interruption',6,16],['Parallel-system load',5,12]]}
   ];
   var DEFAULT_PRESET=0,DEFAULT_FRAMEWORK='kotter',DEFAULT_ALLOCATIONS=[12,10,12,14,14,12,13,13];
-  var state={preset:DEFAULT_PRESET,roles:[],activities:[],disruptions:[],allocations:DEFAULT_ALLOCATIONS.slice(),quality:[true,true,true,true,true,true,true,true,true,true],aiReceivers:[],learningOpen:{},lastCalculation:null};
+  var state={preset:DEFAULT_PRESET,roles:[],activities:[],disruptions:[],allocations:DEFAULT_ALLOCATIONS.slice(),quality:[true,true,true,true,true,true,true,true,true,true],aiReceivers:[],lastCalculation:null};
   var changeComponents=[['Urgency','Why movement matters now'],['Coalition','Who can carry the work together'],['Vision','What changed work should feel like'],['Broad participation','How more people can contribute'],['Remove barriers','What blocks action or access'],['Short-term wins','What creates credible early learning'],['Sustain acceleration','How handoffs survive attention shifts'],['Anchor in culture','How practice becomes ordinary']];
   var aiContributions=['Scenario generation','Source retrieval','Dependency mapping','Draft artifacts','Cross-source synthesis','Transparent calculation'];
   var qualityConcepts=['Acceptance criteria / specification by example','Risk-based test design','Independent review','Data and model quality','Accessibility','Security and privacy','Observability','Reconciliation and replay','Release readiness','Post-release learning'];
@@ -223,16 +1038,40 @@
   function refocus(selector){requestAnimationFrame(function(){var root=selector.indexOf('[data-lens=')===0&&state.lensFocusZone?document.getElementById(state.lensFocusZone):document,control=root.querySelector(selector);if(control)control.focus({preventScroll:true});});}
   document.addEventListener('click',function(e){var lens=e.target.closest&&e.target.closest('[data-lens]');if(lens)state.lensFocusZone=lens.closest('#lens-wheel')?'lens-wheel':'horizon-lenses';},true);
   function ensureFrameworkSources(){if(document.getElementById('framework-research-basis'))return;$('gap-list').insertAdjacentHTML('afterend','<p class="source-note" id="framework-research-basis"><strong>Framework basis:</strong> each model keeps its own component names and sequence while the gap view compares staffing, evidence, and receiver coverage. The correspondence is an analytic reading; the named initiative owner judges fit, outcome, and the next useful evidence.</p>');}
-  function staffingRender(){var active=state.roles.filter(function(r){return r.enabled;}),model=frameworks[state.framework],components=model.components.map(function(c){return c[0];});active.forEach(function(r){if(!r.fn)r.fn=inferFunction(r.name);if(!r.seniority)r.seniority='Senior';if(!r.posture)r.posture='Individual contributor';if(!r.enabler)r.enabler='Decision and source access';if(!r.change||components.indexOf(r.change)<0)r.change=components[0];if(!r.quality)r.quality='Contributes evidence';if(!r.ai)r.ai='Receives / reviews';});$('staffing-statement').innerHTML='<strong>Staffing statement:</strong> '+(active.length?active.map(function(r){return r.a+' × '+escapeHtml(r.fn)+' ('+escapeHtml(r.seniority)+')';}).join(' + '):'No functions are currently loaded. Add a role to create a staffed planning route.');$('staffing-map').innerHTML=active.map(function(r){var i=state.roles.indexOf(r),covered=r.change&&r.ai!=='No AI handoff';return '<article class="staff-card" data-covered="'+covered+'"><h3>'+escapeHtml(r.name)+' · '+r.a+' people</h3><div class="staff-fields"><label><span>Function</span><select data-staff="'+i+'" data-staff-field="fn">'+optionList(['Design / Research','Engineering','Data / ML','Product / Program','Quality / Regulatory','Security / Privacy','Ops / Support','Change / Enablement','Leadership / Decision Owner','Domain / Field Expert'],r.fn)+'</select></label><label><span>Seniority / posture</span><select data-staff="'+i+'" data-staff-field="seniority">'+optionList(['Mid-level','Senior','Principal+','Lead / Manager','Director+'],r.seniority)+'</select></label><label><span>Working posture</span><select data-staff="'+i+'" data-staff-field="posture">'+optionList(['Individual contributor','Player-coach','People leader','Decision owner','Domain reviewer'],r.posture)+'</select></label><label><span>Ability enabler</span><select data-staff="'+i+'" data-staff-field="enabler">'+optionList(['Decision and source access','Protected focus time','Data and tool access','Training and coaching','Cross-team authority'],r.enabler)+'</select></label><label><span>Change component</span><select data-staff="'+i+'" data-staff-field="change">'+optionList(components,r.change)+'</select></label><label><span>Quality boundary</span><select data-staff="'+i+'" data-staff-field="quality">'+optionList(['Contributes evidence','Independent review','Specialist review','Intentionally outside scope'],r.quality)+'</select></label><label><span>AI contribution role</span><select data-staff="'+i+'" data-staff-field="ai">'+optionList(['Receives / reviews','Escalation owner','Draft recipient','No AI handoff'],r.ai)+'</select></label><label><span>Decision boundary</span><select data-staff="'+i+'" data-staff-field="decision">'+optionList(['Advises','Recommends','Approves','Operates'],r.decision||'Advises')+'</select></label></div></article>';}).join('');var groups=[['Change components',active.filter(function(r){return r.change;}).map(function(r){return r.fn+' → '+r.change;})],['Quality collaboration',active.filter(function(r){return r.quality!=='Intentionally outside scope';}).map(function(r){return r.fn+' · '+r.quality;})],['Human–AI handoffs',active.filter(function(r){return r.ai!=='No AI handoff';}).map(function(r){return r.fn+' · '+r.ai;})],['Decision rights',active.filter(function(r){return r.decision==='Approves'||r.posture==='Decision owner';}).map(function(r){return r.fn+' · '+(r.decision||r.posture);})]];$('staffing-coverage').innerHTML=groups.map(function(g){return '<div class="'+(g[1].length?'':'gap')+'"><strong>'+(g[1].length?'✓ ':'! Look here · ')+g[0]+'</strong>'+(g[1].length?g[1].join('<br>'):'Name a staffed receiver or mark this boundary intentionally outside scope.')+'</div>';}).join('');}
+  function normalizeStaffingState(current) {
+    const componentNames = frameworks[current.framework].components.map(component => component[0]);
+    const components = new Set(componentNames);
+    const roles = current.roles.map(role => role.enabled ? {
+      ...role, fn: role.fn || inferFunction(role.name), seniority: role.seniority || 'Senior',
+      posture: role.posture || 'Individual contributor', enabler: role.enabler || 'Decision and source access',
+      change: components.has(role.change) ? role.change : componentNames[0],
+      quality: role.quality || 'Contributes evidence', ai: role.ai || 'Receives / reviews'
+    } : { ...role });
+    const names = roles.filter(role => role.enabled).map(role => role.name);
+    const fallback = names[0] || 'Named human reviewer';
+    const receivers = new Set(names);
+    return { ...current, roles, aiReceivers: aiContributions.map((_, index) => receivers.has(current.aiReceivers[index]) ? current.aiReceivers[index] : fallback) };
+  }
+  function staffingRender(){const roleIndexes=new Map(state.roles.map((role,index)=>[role,index]));var active=state.roles.filter(function(r){return r.enabled;}),model=frameworks[state.framework],components=model.components.map(function(c){return c[0];});$('staffing-statement').innerHTML='<strong>Staffing statement:</strong> '+(active.length?active.map(function(r){return r.a+' × '+escapeHtml(r.fn)+' ('+escapeHtml(r.seniority)+')';}).join(' + '):'No functions are currently loaded. Add a role to create a staffed planning route.');$('staffing-map').innerHTML=active.map(function(r){var i=roleIndexes.get(r),covered=r.change&&r.ai!=='No AI handoff';return '<article class="staff-card" data-covered="'+covered+'"><h3>'+escapeHtml(r.name)+' · '+r.a+' people</h3><div class="staff-fields"><label><span>Function</span><select data-staff="'+i+'" data-staff-field="fn">'+optionList(['Design / Research','Engineering','Data / ML','Product / Program','Quality / Regulatory','Security / Privacy','Ops / Support','Change / Enablement','Leadership / Decision Owner','Domain / Field Expert'],r.fn)+'</select></label><label><span>Seniority / posture</span><select data-staff="'+i+'" data-staff-field="seniority">'+optionList(['Mid-level','Senior','Principal+','Lead / Manager','Director+'],r.seniority)+'</select></label><label><span>Working posture</span><select data-staff="'+i+'" data-staff-field="posture">'+optionList(['Individual contributor','Player-coach','People leader','Decision owner','Domain reviewer'],r.posture)+'</select></label><label><span>Ability enabler</span><select data-staff="'+i+'" data-staff-field="enabler">'+optionList(['Decision and source access','Protected focus time','Data and tool access','Training and coaching','Cross-team authority'],r.enabler)+'</select></label><label><span>Change component</span><select data-staff="'+i+'" data-staff-field="change">'+optionList(components,r.change)+'</select></label><label><span>Quality boundary</span><select data-staff="'+i+'" data-staff-field="quality">'+optionList(['Contributes evidence','Independent review','Specialist review','Intentionally outside scope'],r.quality)+'</select></label><label><span>AI contribution role</span><select data-staff="'+i+'" data-staff-field="ai">'+optionList(['Receives / reviews','Escalation owner','Draft recipient','No AI handoff'],r.ai)+'</select></label><label><span>Decision boundary</span><select data-staff="'+i+'" data-staff-field="decision">'+optionList(['Advises','Recommends','Approves','Operates'],r.decision||'Advises')+'</select></label></div></article>';}).join('');var groups=[['Change components',active.filter(function(r){return r.change;}).map(function(r){return r.fn+' → '+r.change;})],['Quality collaboration',active.filter(function(r){return r.quality!=='Intentionally outside scope';}).map(function(r){return r.fn+' · '+r.quality;})],['Human–AI handoffs',active.filter(function(r){return r.ai!=='No AI handoff';}).map(function(r){return r.fn+' · '+r.ai;})],['Decision rights',active.filter(function(r){return r.decision==='Approves'||r.posture==='Decision owner';}).map(function(r){return r.fn+' · '+(r.decision||r.posture);})]];$('staffing-coverage').innerHTML=groups.map(function(g){return '<div class="'+(g[1].length?'':'gap')+'"><strong>'+(g[1].length?'✓ ':'! Look here · ')+g[0]+'</strong>'+(g[1].length?g[1].join('<br>'):'Name a staffed receiver or mark this boundary intentionally outside scope.')+'</div>';}).join('');}
   function allocationRender(){$('allocations').innerHTML=changeComponents.map(function(c,i){return '<label class="allocation-row"><span><strong>'+c[0]+'</strong><small>'+c[1]+'</small></span><input type="range" min="0" max="25" step="1" value="'+state.allocations[i]+'" data-allocation="'+i+'" aria-label="Relative attention for '+c[0]+'"><output>'+state.allocations[i]+' parts</output></label>';}).join('');}
   function qualityRender(){$('quality-concepts').innerHTML=qualityConcepts.map(function(name,i){return '<label class="quality-concept"><input type="checkbox" data-quality="'+i+'" '+(state.quality[i]?'checked':'')+'><span>'+name+'</span></label>';}).join('');}
   function lensRender(){var active=lenses[state.lens],buttons=Object.keys(lenses).map(function(key){return '<button type="button" class="lens-button" data-lens="'+key+'" aria-pressed="'+(key===state.lens)+'">'+lenses[key].name+'</button>';}).join('');$('lens-wheel').innerHTML=buttons;$('horizon-lenses').innerHTML=buttons;$('lens-name').textContent=active.name;$('lens-summary').textContent='From the '+active.name.toLowerCase()+' vantage, the studio foregrounds '+active.surface.toLowerCase()+'. Underlying facts, costs, roles, and boundaries remain available in the other panels.';$('lens-surface').textContent=active.surface;$('lens-load').textContent=active.load;$('lens-aside').textContent=active.aside;$('lens-reentry').textContent=active.reentry;$('lens-trigger').textContent=active.trigger;$('lens-afterimage').textContent=state.priorLens?'Prior lens: '+lenses[state.priorLens].name+'. Its concerns remain recoverable in the unchanged ledger.':'Initial orientation; no prior rotation yet.';horizonRender();}
   function strategyRender(){var model=frameworks[state.framework],states=state.frameworkStates[state.framework],used=[];function pick(order){var found=-1;order.some(function(status){return states.some(function(s,i){if(s.status===status&&used.indexOf(i)<0){found=i;return true;}return false;});});if(found<0)found=model.components.map(function(_,i){return i;}).find(function(i){return used.indexOf(i)<0;});if(found===undefined||found<0)found=used.length%model.components.length;used.push(found);return model.components[found];}var cards=[{verb:'Raise',time:'Now',component:pick(['look','partial','planned','outside']),sentence:function(c){return 'Raise attention to <strong>'+escapeHtml(c[0])+'</strong>: '+escapeHtml(c[1]);}},{verb:'Reduce',time:'Next',component:pick(['partial','look','planned','outside']),sentence:function(c){return 'Reduce ambiguity around <strong>'+escapeHtml(c[0])+'</strong> by making its receiver, available evidence, and review condition visible.';}},{verb:'Eliminate',time:'Now',component:pick(['outside','look','partial','planned']),sentence:function(c){return 'Eliminate silent scope around <strong>'+escapeHtml(c[0])+'</strong>; mark it planned, partial, Look here, or intentionally outside.';}},{verb:'Create',time:'Later',component:pick(['planned','partial','look','outside']),sentence:function(c){return 'Create a staffed evidence route for <strong>'+escapeHtml(c[0])+'</strong> with '+escapeHtml(c[4]||$('goal-owner').value)+' as the named receiver.';}}];$('strategy-model').innerHTML='<span><strong>'+escapeHtml(model.name)+' is active.</strong> Raise, Reduce, Eliminate, and Create reframe planning attention without merging, scoring, or ranking '+escapeHtml(model.name)+'.</span>';$('strategy-grid').innerHTML=cards.map(function(card){return '<article class="strategy-card" data-verb="'+card.verb+'"><h3>'+card.verb+' <span class="strategy-time">'+card.time+'</span></h3><p>'+card.sentence(card.component)+'</p></article>';}).join('');$('strategy-authority').textContent='This is a question-forming planning treatment. '+$('goal-owner').value+' retains authority for purpose, sequencing, scope, staffing, quality, and exceptions; the temporal labels remain editable discussion cues.';}
   function frameworkRender(){var filter=$('activity-filter').value||'all',model=frameworks[state.framework],states=state.frameworkStates[state.framework],mappedCount=states.filter(function(s){return s.mapped;}).length;$('framework-switcher').innerHTML=Object.keys(frameworks).map(function(key){var f=frameworks[key];return '<button type="button" class="framework-button" data-framework="'+key+'" aria-pressed="'+(key===state.framework)+'">'+f.name+'<small>'+f.short+'</small></button>';}).join('');$('framework-note').innerHTML='<strong>'+model.name+' · '+mappedCount+' of '+states.length+' mapped.</strong> '+model.note+' Switching models recalls that model’s retained map; the separate eight-part attention lens stays unchanged. The correspondence remains a working analytic map with external validation open.';var rows=model.components.map(function(c,i){var s=states[i],suggestions=[];if(filter!=='enterprise')suggestions=suggestions.concat(c[2].map(function(n){return '<span class="suggestion-chip">Core · '+n+'</span>';}));if(filter!=='core')suggestions=suggestions.concat(c[3].map(function(n){return '<span class="suggestion-chip">Enterprise · '+n+'</span>';}));return '<tr><th scope="row">'+c[0]+'<small style="display:block;color:var(--muted);font-weight:500">'+c[1]+'</small></th><td><span class="state-mark" data-state="'+s.status+'">'+(s.status==='look'?'Look here':s.status.charAt(0).toUpperCase()+s.status.slice(1))+'</span><select data-framework-status="'+i+'" aria-label="Mapping state for '+c[0]+'"><option value="planned" '+(s.status==='planned'?'selected':'')+'>Planned</option><option value="partial" '+(s.status==='partial'?'selected':'')+'>Partial</option><option value="look" '+(s.status==='look'?'selected':'')+'>Look here</option><option value="outside" '+(s.status==='outside'?'selected':'')+'>Intentionally outside scope</option></select></td><td>'+suggestions.join(' ')+'</td><td><label class="map-toggle"><input type="checkbox" data-framework-map="'+i+'" '+(s.mapped?'checked':'')+'>Mapped</label></td></tr>';}).join('');$('framework-rows').innerHTML=rows;var gaps=model.components.map(function(c,i){var s=states[i];if(s.mapped&&s.status!=='look')return '';var suggestion=filter==='core'?(c[2][0]||c[3][0]):(c[3][0]||c[2][0]),owner=c[4]||$('goal-owner').value;return '<article class="gap-card"><div><span class="state-mark" data-state="look">Look here</span><strong>'+c[0]+'</strong></div><div>'+c[1]+'<br><span class="suggestion-chip">Suggested · '+suggestion+'</span></div><div><strong>Receiver</strong>'+escapeHtml(owner)+'<br>'+escapeHtml($('goal-population').value)+'</div><button type="button" data-gap-add="'+i+'">Add to plan</button></article>';}).join('');$('gap-list').innerHTML=gaps||'<p class="source-note">Every mapped component has a stated planning posture. Review still belongs to the named decision owner.</p>';strategyRender();staffingRender();horizonRender();}
-  function collaborationRender(){var names=state.roles.filter(function(r){return r.enabled;}).map(function(r){return r.name;});if(!names.length)names=['Named human reviewer'];state.aiReceivers=aiContributions.map(function(_,i){return names.indexOf(state.aiReceivers[i])>-1?state.aiReceivers[i]:names[0];});$('ai-routes').innerHTML=aiContributions.map(function(name,i){return '<div class="ai-route"><label for="receiver-'+i+'">'+name+'</label><select id="receiver-'+i+'" data-ai-receiver="'+i+'" aria-label="Human receiver for '+name+'">'+names.map(function(n){return '<option '+(n===state.aiReceivers[i]?'selected':'')+'>'+escapeHtml(n)+'</option>';}).join('')+'</select></div>';}).join('');}
-  function learningRender(){document.querySelectorAll('#learning-list details[open]').forEach(function(d){state.learningOpen[d.dataset.learningKey]=true;});var p=presets[state.preset].name,needs=[];if(/Discovery/.test(p))needs.push('Source framing and facilitation','Evaluation design and decision criteria');if(/Data|integration/.test(p))needs.push('Workflow mapping and data contracts','Recovery, reconciliation, and replay');if(/Regulated/.test(p))needs.push('Validation evidence and change control','Traceable requirements and exception handling');if(/AI-assisted/.test(p))needs.push('Evaluation-set design and model boundaries','Human review, accessibility, and escalation');if(/Operational/.test(p))needs.push('Service recovery and incremental replacement','Runbook stewardship and handoff design');var low=state.allocations.map(function(v,i){return {v:v,n:changeComponents[i][0]};}).sort(function(a,b){return a.v-b.v;}).slice(0,2);low.forEach(function(x){needs.push('Explore '+x.n.toLowerCase()+' before commitments harden');});if(Number($('unknowns').value)>5)needs.push('Name uncertainty owners and learning checkpoints');if($('quality-enabled').checked){var absent=qualityConcepts.filter(function(n,i){return !state.quality[i];});needs.push(absent.length?'Decide who receives the deferred quality work: '+absent.slice(0,2).join(' and '):'Connect quality evidence to release and post-release learning');}needs=Array.from(new Set(needs)).slice(0,7);$('learning-list').innerHTML=needs.map(function(n,i){var key='route-'+i+'-'+n.toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,28),prompt='Help the cross-functional team explore “'+n+'” for a '+p+' initiative. Start by naming the decision this learning should inform, the affected population, the available evidence, the missing or contradictory signals, and three bounded routes to sample next. Separate sourced facts, working inferences, and open questions. Keep decision authority with the named people and treat this prompt as learning material rather than approval evidence.';return '<li><details data-learning-key="'+key+'" '+(state.learningOpen[key]?'open':'')+'><summary>'+escapeHtml(n)+'</summary><p><strong>Example AI sampling prompt</strong><br>'+escapeHtml(prompt)+'</p></details></li>';}).join('');}
-  function applyPreset(i){var p=presets[i];state.preset=i;$('horizon').value=p.h;$('unit').value=p.u;$('complexity').value=p.c;$('unknowns').value=p.k;state.roles=cloneRows(p.roles);state.activities=cloneRows(p.activities);state.disruptions=cloneRows(p.disruptions);presetsRender();rowsRender();allocationRender();qualityRender();collaborationRender();learningRender();frameworkRender();lensRender();calculate();$('live').textContent=p.name+' plan loaded. The active change-model map and separate eight-part attention lens stayed in place; every assumption remains editable.';}
-  function money(n){return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(Math.round(n));}
+  function collaborationRender(){var names=state.roles.filter(function(r){return r.enabled;}).map(function(r){return r.name;});if(!names.length)names=['Named human reviewer'];$('ai-routes').innerHTML=aiContributions.map(function(name,i){return '<div class="ai-route"><label for="receiver-'+i+'">'+name+'</label><select id="receiver-'+i+'" data-ai-receiver="'+i+'" aria-label="Human receiver for '+name+'">'+names.map(function(n){return '<option '+(n===state.aiReceivers[i]?'selected':'')+'>'+escapeHtml(n)+'</option>';}).join('')+'</select></div>';}).join('');}
+  const learningOpen = new Set();
+  function learningDisclosureSnapshot() {
+    const open = new Set(learningOpen);
+    for (const detail of document.querySelectorAll('#learning-list details')) {
+      if (detail.open) open.add(detail.dataset.learningKey);
+      else open.delete(detail.dataset.learningKey);
+    }
+    return open;
+  }
+  function learningRender(){const open=learningDisclosureSnapshot();var p=presets[state.preset].name,needs=[];if(/Discovery/.test(p))needs.push('Source framing and facilitation','Evaluation design and decision criteria');if(/Data|integration/.test(p))needs.push('Workflow mapping and data contracts','Recovery, reconciliation, and replay');if(/Regulated/.test(p))needs.push('Validation evidence and change control','Traceable requirements and exception handling');if(/AI-assisted/.test(p))needs.push('Evaluation-set design and model boundaries','Human review, accessibility, and escalation');if(/Operational/.test(p))needs.push('Service recovery and incremental replacement','Runbook stewardship and handoff design');var low=state.allocations.map(function(v,i){return {v:v,n:changeComponents[i][0]};}).sort(function(a,b){return a.v-b.v;}).slice(0,2);low.forEach(function(x){needs.push('Explore '+x.n.toLowerCase()+' before commitments harden');});if(Number($('unknowns').value)>5)needs.push('Name uncertainty owners and learning checkpoints');if($('quality-enabled').checked){var absent=qualityConcepts.filter(function(n,i){return !state.quality[i];});needs.push(absent.length?'Decide who receives the deferred quality work: '+absent.slice(0,2).join(' and '):'Connect quality evidence to release and post-release learning');}needs=Array.from(new Set(needs)).slice(0,7);$('learning-list').innerHTML=needs.map(function(n,i){var key='route-'+i+'-'+n.toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,28),prompt='Help the cross-functional team explore “'+n+'” for a '+p+' initiative. Start by naming the decision this learning should inform, the affected population, the available evidence, the missing or contradictory signals, and three bounded routes to sample next. Separate sourced facts, working inferences, and open questions. Keep decision authority with the named people and treat this prompt as learning material rather than approval evidence.';return '<li><details data-learning-key="'+key+'" '+(open.has(key)?'open':'')+'><summary>'+escapeHtml(n)+'</summary><p><strong>Example AI sampling prompt</strong><br>'+escapeHtml(prompt)+'</p></details></li>';}).join('');}
+  function applyPreset(i){var p=presets[i];state.preset=i;$('horizon').value=p.h;$('unit').value=p.u;$('complexity').value=p.c;$('unknowns').value=p.k;state.roles=cloneRows(p.roles);state.activities=cloneRows(p.activities);state.disruptions=cloneRows(p.disruptions);state=normalizeStaffingState(state);presetsRender();rowsRender();allocationRender();qualityRender();collaborationRender();learningRender();frameworkRender();lensRender();calculate();$('live').textContent=p.name+' plan loaded. The active change-model map and separate eight-part attention lens stayed in place; every assumption remains editable.';}
+  const staffingNumberFormat = new Intl.NumberFormat('en-US', {style:'currency',currency:InvestmentCore.STAFFING_CURRENCY,maximumFractionDigits:0});
+  function money(v){return staffingNumberFormat.format(Math.round(v));}
   function erf(x){var sign=x<0?-1:1;x=Math.abs(x);var a1=.254829592,a2=-.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=.3275911;var t=1/(1+p*x);var y=1-(((((a5*t+a4)*t+a3)*t+a2)*t+a1)*t)*Math.exp(-x*x);return sign*y;}
   function sigmaTail(sigma){return 2*(1-(.5*(1+erf(sigma/Math.sqrt(2)))));}
   function curvePoint(z){return {x:350+z*(305/6),y:275-245*Math.exp(-.5*z*z)};}
@@ -241,33 +1080,31 @@
   function horizonRender(){var svg=$('horizon-svg'),max=Math.max(1,Number($('horizon').value)||1),unit=$('unit').value,x0=225,x1=1155,w=x1-x0;function x(v){return x0+w*v;}var activeRoles=state.roles.filter(function(r){return r.enabled;}).slice(0,4),activities=state.activities.filter(function(a){return a.enabled;}).slice(0,3),disruptions=state.disruptions.filter(function(d){return d.enabled;}).slice(0,2);var rows=[],y=112;activeRoles.forEach(function(r,i){var start=Math.min(.18,i*.045),end=Math.min(.98,start+.38+(Number(r.c)||0)/180);rows.push({kind:'span',label:r.a+' × '+r.name,start:start,end:end,y:y,tag:(r.seniority||'STAFFED ROLE')+' · '+r.c+'% · '+(r.change||'CHANGE MAP OPEN')});y+=36;});activities.forEach(function(a,i){var start=.08+i*.25,end=Math.min(.94,start+.25);rows.push({kind:'milestone',label:a.name,start:start,end:end,y:y,tag:'ACTIVITY · '+a.a+' tasks'});y+=36;});disruptions.forEach(function(d,i){var start=.44+i*.22,end=Math.min(.93,start+.1+(Number(d.b)||0)/300);rows.push({kind:'look',label:d.name,start:start,end:end,y:y,tag:'LOOK HERE · '+d.a+' × '+d.b+'h recovery'});y+=36;});rows.push({kind:'handoff',label:'AI collaboration handoffs',points:[.22,.48,.76],y:y,tag:'◆ HUMAN RECEIVER NAMED'});y+=36;var top=state.allocations.map(function(v,i){return {v:v,n:changeComponents[i][0]};}).sort(function(a,b){return b.v-a.v;}).slice(0,state.framework==='dual'?8:3);rows.push({kind:state.framework==='dual'?'accelerators':'change',label:state.framework==='dual'?'Concurrent accelerators':'Change work',items:top,y:y,tag:state.framework==='dual'?'DUAL SYSTEM · 8 CONCURRENT':'ANALYTIC ALLOCATION'});y+=36;if($('quality-enabled').checked){rows.push({kind:'quality',label:'Quality collaboration',start:.06,end:.94,y:y,tag:'DEFAULT PHASE · '+$('quality-allocation').value+'%'});y+=36;}svg.setAttribute('viewBox','0 0 1200 '+Math.max(500,y+70));var out='<defs><pattern id="look-pattern" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#fae4b9"/><line x1="0" y1="0" x2="0" y2="10" stroke="#f5bf42" stroke-width="4"/></pattern></defs><rect width="1200" height="100%" fill="#0f2e61"/><text x="38" y="36" fill="#56d8c9" font-family="monospace" font-size="15" font-weight="800">'+escapeHtml(presets[state.preset].name.toUpperCase())+' · '+max+' '+unit.toUpperCase()+'</text><text x="38" y="64" fill="#d3e4f2" font-family="system-ui" font-size="14">Approximate coordination model · update the controls to recompose this planning horizon</text>';[0,.25,.5,.75,1].forEach(function(t){var tx=x(t);out+='<line x1="'+tx+'" y1="82" x2="'+tx+'" y2="'+(y+15)+'" stroke="#4d70aa" stroke-width="1"/><text x="'+tx+'" y="96" text-anchor="middle" fill="#d3e4f2" font-family="monospace" font-size="12">'+horizonLabel(max*t,max,unit)+'</text>';});rows.forEach(function(row){out+='<text x="38" y="'+(row.y+5)+'" fill="#f8f1d9" font-family="system-ui" font-size="14" font-weight="750">'+escapeHtml(row.label)+'</text><text x="1170" y="'+(row.y+5)+'" text-anchor="end" fill="#9eb5da" font-family="monospace" font-size="10">'+escapeHtml(row.tag)+'</text><line x1="'+x0+'" y1="'+row.y+'" x2="'+x1+'" y2="'+row.y+'" stroke="#35588e"/>';if(row.kind==='span'||row.kind==='milestone'){out+='<rect x="'+x(row.start)+'" y="'+(row.y-9)+'" width="'+(x(row.end)-x(row.start))+'" height="18" rx="4" fill="'+(row.kind==='span'?'#56d8c9':'#d3e4f2')+'" stroke="#fff"/>';if(row.kind==='milestone')out+='<path d="M '+x(row.end)+' '+(row.y-9)+' l 9 9 -9 9 -9-9 Z" fill="#f8f1d9" stroke="#213252"/>';}if(row.kind==='look')out+='<rect x="'+x(row.start)+'" y="'+(row.y-11)+'" width="'+(x(row.end)-x(row.start))+'" height="22" fill="url(#look-pattern)" stroke="#f8f1d9" stroke-width="2" stroke-dasharray="6 4"/><text x="'+(x(row.start)+8)+'" y="'+(row.y+4)+'" fill="#213252" font-family="monospace" font-size="10" font-weight="900">LOOK HERE</text>';if(row.kind==='handoff')row.points.forEach(function(point){out+='<path d="M '+x(point)+' '+(row.y-10)+' l 10 10 -10 10 -10-10 Z" fill="#f8f1d9" stroke="#56d8c9" stroke-width="3"/>';});if(row.kind==='change')row.items.forEach(function(item,i){var sx=.06+i*.31,ew=.21+(item.v/200);out+='<rect x="'+x(sx)+'" y="'+(row.y-9)+'" width="'+(w*ew)+'" height="18" rx="9" fill="#d3e4f2" stroke="#56d8c9"/><text x="'+(x(sx)+8)+'" y="'+(row.y+4)+'" fill="#213252" font-family="monospace" font-size="10" font-weight="800">'+escapeHtml(item.n)+' · '+item.v+'</text>';});if(row.kind==='accelerators')row.items.forEach(function(item,i){var px=.07+i*.12;out+='<path d="M '+x(px)+' '+(row.y-9)+' l 9 9 -9 9 -9-9 Z" fill="#d3e4f2" stroke="#56d8c9" stroke-width="2"/><text x="'+x(px)+'" y="'+(row.y-15)+'" text-anchor="middle" fill="#f8f1d9" font-family="monospace" font-size="8">'+(i+1)+'</text>';});if(row.kind==='quality'){out+='<rect x="'+x(row.start)+'" y="'+(row.y-12)+'" width="'+(x(row.end)-x(row.start))+'" height="24" fill="none" stroke="#f8f1d9" stroke-width="3" stroke-dasharray="3 5"/>';var enabled=state.quality.filter(Boolean).length;out+='<text x="'+x(.5)+'" y="'+(row.y+4)+'" text-anchor="middle" fill="#f8f1d9" font-family="monospace" font-size="11" font-weight="800">QUALITY COLLABORATION · '+enabled+' OF 10 CONCEPTS ACTIVE</text>';}});svg.innerHTML=out;$('horizon-caption').textContent='Planning horizon for '+presets[state.preset].name+': '+max+' '+unit+'. Spans are approximate; diamonds mark human-received AI handoffs or activity milestones, while hatched “Look here” windows preserve disruption and recovery attention.';}
   function applyLensToHorizon(){var svg=$('horizon-svg'),active=lenses[state.lens],ns='http://www.w3.org/2000/svg',title=document.createElementNS(ns,'title'),desc=document.createElementNS(ns,'desc');title.id='horizon-svg-title';title.textContent='Coordination horizon with '+active.name+' foregrounded';desc.id='horizon-svg-desc';desc.textContent='The same planning facts remain visible while '+active.name+' receives a low-opacity underlay. Role spans, activities, disruptions, AI handoffs, change work, and quality collaboration retain their labels.';svg.prepend(desc);svg.prepend(title);var targetText={change:['Change work','Concurrent accelerators'],look:state.lens==='people'?state.disruptions.filter(function(d){return d.enabled;}).slice(0,1).map(function(d){return d.name;}):state.disruptions.filter(function(d){return d.enabled;}).map(function(d){return d.name;}),milestone:state.activities.filter(function(a){return a.enabled;}).slice(0,1).map(function(a){return a.name;}),quality:['Quality collaboration'],span:state.roles.filter(function(r){return r.enabled;}).slice(0,1).map(function(r){return r.a+' × '+r.name;})}[active.kind]||[],firstForeground=svg.querySelector('text');Array.from(svg.querySelectorAll('text')).forEach(function(t){if(t.textContent.indexOf('DEFAULT PHASE ·')===0)t.textContent+=' · '+(Number($('sigma-target-input').value)||3).toFixed(1)+'σ ATTENTION';if(t.textContent==='◆ HUMAN RECEIVER NAMED')t.textContent='◆ '+new Set(state.aiReceivers).size+' HUMAN RECEIVER'+(new Set(state.aiReceivers).size===1?'':'S')+' NAMED';if(targetText.indexOf(t.textContent)>-1){t.setAttribute('fill','#56d8c9');t.setAttribute('font-size','17');var y=Number(t.getAttribute('y'))-5,underlay=document.createElementNS(ns,'line');underlay.setAttribute('x1','215');underlay.setAttribute('x2','1160');underlay.setAttribute('y1',y);underlay.setAttribute('y2',y);underlay.setAttribute('stroke','#56d8c9');underlay.setAttribute('stroke-width','24');underlay.setAttribute('stroke-opacity','.12');underlay.setAttribute('aria-hidden','true');svg.insertBefore(underlay,firstForeground);}});}
   function applyQualitySpanToHorizon(){if(!$('quality-enabled').checked)return;var svg=$('horizon-svg'),label=Array.from(svg.querySelectorAll('text')).find(function(t){return t.textContent==='Quality collaboration';});if(!label)return;var y=Number(label.getAttribute('y'))-5,phase=Array.from(svg.querySelectorAll('rect[fill="none"]')).find(function(r){return Number(r.getAttribute('y'))===y-12;});if(!phase)return;var share=Math.max(.12,Math.min(.88,(Number($('quality-allocation').value)||0)/100)),start=(1-share)/2;phase.setAttribute('x',225+930*start);phase.setAttribute('width',930*share);}
-  function leaveBehindSnapshot(){var calc=state.lastCalculation||{},model=frameworks[state.framework],activeRoles=state.roles.filter(function(r){return r.enabled;}),activeActivities=state.activities.filter(function(a){return a.enabled;}),activeDisruptions=state.disruptions.filter(function(d){return d.enabled;});return {generated:new Date().toISOString(),plan:presets[state.preset].name,band:$('band').textContent,lens:lenses[state.lens].name,framework:model.name,horizon:{value:$('horizon').value,unit:$('unit').value,hours:calc.horizonHours||0,complexity:$('complexity').value,unknowns:$('unknowns').value,effects:'Duration and unit rescale the Coordination Horizon. Complexity and named unknowns change the planning reserve.'},goal:{ability:$('goal-ability').value,population:$('goal-population').value,signal:$('goal-signal').value,owner:$('goal-owner').value,review:$('goal-review').value,open:$('goal-open').value},costs:[['Allocated time',$('method-role').textContent],['Changed-work load',$('method-activity').textContent],['Quality collaboration',$('method-quality').textContent],['Recovery and reserve',$('method-recovery').textContent],['Planning band',$('method-band').textContent]],roles:activeRoles.map(function(r){return [r.name,r.a,r.b,r.c,r.fn,r.seniority,r.decision||'Advises',r.change,r.quality,r.ai];}),activities:activeActivities.map(function(a){return [a.name,a.a,a.b];}),disruptions:activeDisruptions.map(function(d){return [d.name,d.a,d.b];}),components:model.components.map(function(c,i){var s=state.frameworkStates[state.framework][i];return [c[0],s.status,s.mapped?'Mapped':'Outside current map'];}),allocations:changeComponents.map(function(c,i){return [c[0],state.allocations[i]+' parts'];}),quality:{enabled:$('quality-enabled').checked?'Included':'Deferred',allocation:$('quality-allocation').value+'%',rate:money(Number($('quality-rate').value)||0)+'/hr',sigma:(Number($('sigma-target-input').value)||3).toFixed(1)+'σ',multiplier:(calc.qualityMultiplier||0).toFixed(2)+'× planning multiplier',hours:Math.round(calc.qualityHours||0)+' quality-attention hours',concepts:qualityConcepts.filter(function(_,i){return state.quality[i];})},ai:aiContributions.map(function(n,i){return [n,state.aiReceivers[i]||'Named human reviewer'];}),learning:Array.from(document.querySelectorAll('#learning-list summary')).map(function(n){return n.textContent;}),boundaries:['Prospective planning model in USD; not a quote, outcome guarantee, budget authorization, staffing commitment, or statement of market rates.','Change-model correspondence and allocation are analytic planning lenses, not rankings, optimums, or adoption predictions.','Sigma is a centered statistical attention model without a 1.5σ shift; it does not predict realized defects, capability, safety, clinical validity, accessibility, security, or user harm.','Named humans retain decision, hiring, quality, and exception authority.']};}
+  function leaveBehindSnapshot(){var calc=state.lastCalculation||{},model=frameworks[state.framework],activeRoles=state.roles.filter(function(r){return r.enabled;}),activeActivities=state.activities.filter(function(a){return a.enabled;}),activeDisruptions=state.disruptions.filter(function(d){return d.enabled;});return {generated:new Date().toISOString(),calculationContract:InvestmentCore.VERSION,staffingSnapshot:staffingSnapshot(),plan:presets[state.preset].name,band:$('band').textContent,lens:lenses[state.lens].name,framework:model.name,horizon:{value:$('horizon').value,unit:$('unit').value,hours:calc.horizonHours||0,complexity:$('complexity').value,unknowns:$('unknowns').value,effects:'Duration and unit rescale the Coordination Horizon. Complexity and named unknowns change the planning reserve.'},goal:{ability:$('goal-ability').value,population:$('goal-population').value,signal:$('goal-signal').value,owner:$('goal-owner').value,review:$('goal-review').value,open:$('goal-open').value},costs:[['Allocated time',$('method-role').textContent],['Changed-work load',$('method-activity').textContent],['Quality collaboration',$('method-quality').textContent],['Recovery and reserve',$('method-recovery').textContent],['Planning band',$('method-band').textContent]],roles:activeRoles.map(function(r){return [r.name,r.a,r.b,r.c,r.fn,r.seniority,r.decision||'Advises',r.change,r.quality,r.ai];}),activities:activeActivities.map(function(a){return [a.name,a.a,a.b];}),disruptions:activeDisruptions.map(function(d){return [d.name,d.a,d.b];}),components:model.components.map(function(c,i){var s=state.frameworkStates[state.framework][i];return [c[0],s.status,s.mapped?'Mapped':'Outside current map'];}),allocations:changeComponents.map(function(c,i){return [c[0],state.allocations[i]+' parts'];}),quality:{enabled:$('quality-enabled').checked?'Included':'Deferred',allocation:$('quality-allocation').value+'%',rate:money(Number($('quality-rate').value)||0)+'/hr',sigma:(Number($('sigma-target-input').value)||3).toFixed(1)+'σ',multiplier:(calc.qualityMultiplier||0).toFixed(2)+'× planning multiplier',hours:Math.round(calc.qualityHours||0)+' quality-attention hours',concepts:qualityConcepts.filter(function(_,i){return state.quality[i];})},ai:aiContributions.map(function(n,i){return [n,state.aiReceivers[i]||'Named human reviewer'];}),learning:Array.from(document.querySelectorAll('#learning-list summary')).map(function(n){return n.textContent;}),boundaries:['Prospective planning model in USD for discussing assumptions and investment ranges. Quotes, outcome guarantees, budget authorization, and staffing commitments require separate approval; market-rate claims require supporting evidence.','Change-model correspondence and allocation are analytic planning lenses. Rankings, optimums, and adoption predictions require separate methods and evidence.','Sigma uses a centered statistical attention model with a 0σ shift; the 1.5σ-shift convention belongs to a separate model. Claims about realized defects, capability, safety, clinical validity, accessibility, security, and user harm require their own empirical evidence and qualified review.','Named humans retain decision, hiring, quality, and exception authority.']};}
   function reportTable(headers,rows){var label=(headers[0]||'Planning')+' table';return '<div class="table-wrap" tabindex="0" role="region" aria-label="'+escapeHtml(label)+'; scroll horizontally"><table><caption>'+escapeHtml(label)+'</caption><thead><tr>'+headers.map(function(h){return '<th scope="col">'+escapeHtml(h)+'</th>';}).join('')+'</tr></thead><tbody>'+rows.map(function(row){return '<tr>'+row.map(function(v,i){return '<'+(i?'td':'th')+(i?'':' scope="row"')+'>'+escapeHtml(v)+'</'+(i?'td':'th')+'>';}).join('')+'</tr>';}).join('')+'</tbody></table></div>';}
-  function leaveBehindHtml(s,downloadUrl){var download=downloadUrl?'<a class="download" download="initiative-investment-leave-behind.html" href="'+downloadUrl+'">Download HTML</a>':'';return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; img-src data:; base-uri \'none\'; form-action \'none\'"><title>Initiative investment leave-behind</title><style>:root{--ink:#213252;--teal:#0b6663;--tiffany:#56d8c9;--paper:#fffdf7;--info:#d3e4f2}*{box-sizing:border-box}body{margin:0;background:#f1e9d2;color:var(--ink);font:15px/1.5 system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:32px}header{border:3px solid var(--ink);border-top:14px solid var(--tiffany);background:var(--paper);padding:24px}h1{margin:4px 0;font-size:clamp(32px,6vw,64px);line-height:1}.meta{font:700 12px monospace;text-transform:uppercase;color:var(--teal)}section{margin:20px 0;padding:20px;border:2px solid var(--ink);background:var(--paper)}h2{margin:0 0 12px;font-size:20px}dl{display:grid;grid-template-columns:minmax(150px,.45fr) 1fr;gap:8px 16px}dt{font-weight:800}dd{margin:0}.table-wrap{overflow:auto}.table-wrap:focus-visible{outline:4px solid var(--teal);outline-offset:2px}table{width:100%;border-collapse:collapse;min-width:640px}th,td{border:1px solid #71809b;padding:8px;text-align:left;vertical-align:top}thead th{background:var(--info)}.band{font-size:32px;font-weight:900}.download{display:inline-block;margin-top:16px;padding:10px 14px;border:2px solid var(--ink);background:var(--tiffany);color:var(--ink);font-weight:900;text-decoration:none}.print{padding:10px;background:var(--info);border-left:5px solid var(--teal)}ul{margin:8px 0}@media print{body{background:#fff}main{max-width:none;padding:0}.download,.print{display:none}section,header{break-inside:avoid}}</style></head><body><main><header><div class="meta">Cross-Functional Investment Studio · static leave-behind</div><h1>'+escapeHtml(s.plan)+'</h1><p class="band">'+escapeHtml(s.band)+'</p><p>Generated '+escapeHtml(s.generated)+' · '+escapeHtml(s.lens)+' lens · '+escapeHtml(s.framework)+'</p>'+download+'<p class="print"><strong>Print / Save PDF:</strong> use the browser print command for a clean PDF. This page contains no scripts or live calculator state.</p></header><section><h2>Planning read</h2><dl><dt>Estimation Horizon</dt><dd>'+escapeHtml(s.horizon.value+' '+s.horizon.unit+' · '+s.horizon.hours+' planning hours')+'</dd><dt>Complexity</dt><dd>'+escapeHtml(s.horizon.complexity)+'</dd><dt>Named unknowns</dt><dd>'+escapeHtml(s.horizon.unknowns)+'</dd><dt>Horizon effect</dt><dd>'+escapeHtml(s.horizon.effects)+'</dd></dl></section><section><h2>Goal and open conditions</h2><dl><dt>Changed ability</dt><dd>'+escapeHtml(s.goal.ability)+'</dd><dt>Affected population</dt><dd>'+escapeHtml(s.goal.population)+'</dd><dt>Observable signal</dt><dd>'+escapeHtml(s.goal.signal)+'</dd><dt>Decision owner</dt><dd>'+escapeHtml(s.goal.owner)+'</dd><dt>Review boundary</dt><dd>'+escapeHtml(s.goal.review)+'</dd><dt>Remains open</dt><dd>'+escapeHtml(s.goal.open)+'</dd></dl></section><section><h2>How the range is formed</h2>'+reportTable(['Method','Current amount / range'],s.costs)+'</section><section><h2>Roles, allocation, and staffed boundaries</h2>'+reportTable(['Role','People','Rate/hr','Allocation %','Function','Seniority','Decision','Change','Quality','AI contribution role'],s.roles)+'</section><section><h2>Activities and recovery</h2><h3>Activities</h3>'+reportTable(['Activity','Tasks','Hours/task'],s.activities)+'<h3>Disruptions and recovery</h3>'+reportTable(['Disruption','Events','Recovery hours'],s.disruptions)+'</section><section><h2>'+escapeHtml(s.framework)+' components</h2>'+reportTable(['Component','Planning state','Map'],s.components)+'<h3>Separate change-attention lens</h3>'+reportTable(['Component','Relative attention'],s.allocations)+'</section><section><h2>Quality collaboration</h2><dl><dt>Phase</dt><dd>'+escapeHtml(s.quality.enabled)+'</dd><dt>Allocation</dt><dd>'+escapeHtml(s.quality.allocation)+'</dd><dt>Independent review rate</dt><dd>'+escapeHtml(s.quality.rate)+'</dd><dt>Sigma posture</dt><dd>'+escapeHtml(s.quality.sigma)+'</dd><dt>Planning multiplier</dt><dd>'+escapeHtml(s.quality.multiplier)+'</dd><dt>Quality-attention hours</dt><dd>'+escapeHtml(s.quality.hours)+'</dd><dt>Named concepts</dt><dd>'+escapeHtml(s.quality.concepts.join('; '))+'</dd></dl></section><section><h2>Human review of AI contributions</h2>'+reportTable(['AI contribution','Named human receiver'],s.ai)+'</section><section><h2>Next-learning routes</h2><ul>'+s.learning.map(function(n){return '<li>'+escapeHtml(n)+'</li>';}).join('')+'</ul></section><section><h2>Boundaries carried with the plan</h2><ul>'+s.boundaries.map(function(n){return '<li>'+escapeHtml(n)+'</li>';}).join('')+'</ul></section></main></body></html>';}
+  function leaveBehindHtml(s,downloadUrl){var download=downloadUrl?'<a class="download" download="initiative-investment-leave-behind.html" href="'+downloadUrl+'">Download HTML</a>':'';return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; img-src data:; base-uri \'none\'; form-action \'none\'"><title>Initiative investment leave-behind</title><style>:root{--ink:#213252;--teal:#0b6663;--tiffany:#56d8c9;--paper:#fffdf7;--info:#d3e4f2}*{box-sizing:border-box}body{margin:0;background:#f1e9d2;color:var(--ink);font:15px/1.5 system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:32px}header{border:3px solid var(--ink);border-top:14px solid var(--tiffany);background:var(--paper);padding:24px}h1{margin:4px 0;font-size:clamp(32px,6vw,64px);line-height:1}.meta{font:700 12px monospace;text-transform:uppercase;color:var(--teal)}section{margin:20px 0;padding:20px;border:2px solid var(--ink);background:var(--paper)}h2{margin:0 0 12px;font-size:20px}dl{display:grid;grid-template-columns:minmax(150px,.45fr) 1fr;gap:8px 16px}dt{font-weight:800}dd{margin:0}.table-wrap{overflow:auto}.table-wrap:focus-visible{outline:4px solid var(--teal);outline-offset:2px}table{width:100%;border-collapse:collapse;min-width:640px}th,td{border:1px solid #71809b;padding:8px;text-align:left;vertical-align:top}thead th{background:var(--info)}.band{font-size:32px;font-weight:900}.download{display:inline-block;margin-top:16px;padding:10px 14px;border:2px solid var(--ink);background:var(--tiffany);color:var(--ink);font-weight:900;text-decoration:none}.print{padding:10px;background:var(--info);border-left:5px solid var(--teal)}ul{margin:8px 0}@media print{body{background:#fff}main{max-width:none;padding:0}.download,.print{display:none}section,header{break-inside:avoid}}</style></head><body><main><header><div class="meta">Cross-Functional Investment Studio · static leave-behind</div><h1>'+escapeHtml(s.plan)+'</h1><p class="band">'+escapeHtml(s.band)+'</p><p>Generated '+escapeHtml(s.generated)+' · '+escapeHtml(s.lens)+' lens · '+escapeHtml(s.framework)+'</p>'+download+'<p class="print"><strong>Print / Save PDF:</strong> use the browser print command for a clean PDF. This static page carries the exported snapshot; ongoing calculations remain in the source instrument.</p></header><section><h2>Planning read</h2><dl><dt>Estimation Horizon</dt><dd>'+escapeHtml(s.horizon.value+' '+s.horizon.unit+' · '+s.horizon.hours+' planning hours')+'</dd><dt>Complexity</dt><dd>'+escapeHtml(s.horizon.complexity)+'</dd><dt>Named unknowns</dt><dd>'+escapeHtml(s.horizon.unknowns)+'</dd><dt>Horizon effect</dt><dd>'+escapeHtml(s.horizon.effects)+'</dd></dl></section><section><h2>Goal and open conditions</h2><dl><dt>Changed ability</dt><dd>'+escapeHtml(s.goal.ability)+'</dd><dt>Affected population</dt><dd>'+escapeHtml(s.goal.population)+'</dd><dt>Observable signal</dt><dd>'+escapeHtml(s.goal.signal)+'</dd><dt>Decision owner</dt><dd>'+escapeHtml(s.goal.owner)+'</dd><dt>Review boundary</dt><dd>'+escapeHtml(s.goal.review)+'</dd><dt>Remains open</dt><dd>'+escapeHtml(s.goal.open)+'</dd></dl></section><section><h2>How the range is formed</h2>'+reportTable(['Method','Current amount / range'],s.costs)+'</section><section><h2>Roles, allocation, and staffed boundaries</h2>'+reportTable(['Role','People','Rate/hr','Allocation %','Function','Seniority','Decision','Change','Quality','AI contribution role'],s.roles)+'</section><section><h2>Activities and recovery</h2><h3>Activities</h3>'+reportTable(['Activity','Tasks','Hours/task'],s.activities)+'<h3>Disruptions and recovery</h3>'+reportTable(['Disruption','Events','Recovery hours'],s.disruptions)+'</section><section><h2>'+escapeHtml(s.framework)+' components</h2>'+reportTable(['Component','Planning state','Map'],s.components)+'<h3>Separate change-attention lens</h3>'+reportTable(['Component','Relative attention'],s.allocations)+'</section><section><h2>Quality collaboration</h2><dl><dt>Phase</dt><dd>'+escapeHtml(s.quality.enabled)+'</dd><dt>Allocation</dt><dd>'+escapeHtml(s.quality.allocation)+'</dd><dt>Independent review rate</dt><dd>'+escapeHtml(s.quality.rate)+'</dd><dt>Sigma posture</dt><dd>'+escapeHtml(s.quality.sigma)+'</dd><dt>Planning multiplier</dt><dd>'+escapeHtml(s.quality.multiplier)+'</dd><dt>Quality-attention hours</dt><dd>'+escapeHtml(s.quality.hours)+'</dd><dt>Named concepts</dt><dd>'+escapeHtml(s.quality.concepts.join('; '))+'</dd></dl></section><section><h2>Human review of AI contributions</h2>'+reportTable(['AI contribution','Named human receiver'],s.ai)+'</section><section><h2>Next-learning routes</h2><ul>'+s.learning.map(function(n){return '<li>'+escapeHtml(n)+'</li>';}).join('')+'</ul></section><section><h2>Boundaries carried with the plan</h2><ul>'+s.boundaries.map(function(n){return '<li>'+escapeHtml(n)+'</li>';}).join('')+'</ul></section></main></body></html>';}
   function openLeaveBehind(){var snapshot=leaveBehindSnapshot(),clean=leaveBehindHtml(snapshot,''),downloadUrl='data:text/html;charset=utf-8,'+encodeURIComponent(clean),view=leaveBehindHtml(snapshot,downloadUrl),url=URL.createObjectURL(new Blob([view],{type:'text/html'})),link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener noreferrer';link.click();$('live').textContent='Leave-behind opened in a new tab. It includes a Download HTML action and print-to-PDF guidance.';setTimeout(function(){URL.revokeObjectURL(url);},60000);}
   function enhanceHorizonJumplinks(){var svg=$('horizon-svg'),ns='http://www.w3.org/2000/svg',labels=Array.from(svg.querySelectorAll('text[x="38"]'));function centerY(node){if(node.tagName.toLowerCase()==='rect')return Number(node.getAttribute('y'))+Number(node.getAttribute('height'))/2;var match=(node.getAttribute('d')||'').match(/M\s+[\d.]+\s+([\d.]+)/);return match?Number(match[1])+10:0;}function lane(node){var y=centerY(node),best=null,distance=Infinity;labels.forEach(function(label){var gap=Math.abs(Number(label.getAttribute('y'))-5-y);if(gap<distance){best=label;distance=gap;}});return best?best.textContent:'';}function target(label){if(state.roles.some(function(r){return r.enabled&&label===r.a+' × '+r.name;}))return 'roles-title';if(state.activities.some(function(a){return a.enabled&&label===a.name;}))return 'activities-title';if(state.disruptions.some(function(d){return d.enabled&&label===d.name;}))return 'disruptions-title';if(label==='AI collaboration handoffs')return 'collaboration-title';if(label==='Change work'||label==='Concurrent accelerators')return 'allocation-title';if(label==='Quality collaboration')return 'quality-title';return '';}var sectionNames={'roles-title':'Roles and allocation','activities-title':'Activities and tasks','disruptions-title':'Disruptions and recovery','collaboration-title':'Human–AI collaboration map','allocation-title':'Change allocation','quality-title':'Quality collaboration'};Array.from(svg.querySelectorAll('rect,path')).forEach(function(mark){if(mark.closest('defs')||mark.closest('a'))return;var laneLabel=lane(mark),targetId=target(laneLabel);if(!targetId)return;var link=document.createElementNS(ns,'a'),title=document.createElementNS(ns,'title');link.setAttribute('href','#'+targetId);link.setAttribute('class','horizon-jump');link.setAttribute('aria-label',laneLabel+': go to '+sectionNames[targetId]);title.textContent=laneLabel+' — go to '+sectionNames[targetId];mark.parentNode.insertBefore(link,mark);link.appendChild(title);link.appendChild(mark);});}
   var baseHorizonRender=horizonRender;horizonRender=function(){baseHorizonRender();enhanceHorizonJumplinks();};
   function pageNavigationInit(){var links=Array.from(document.querySelectorAll('.page-nav a[href^="#"]'));function syncHash(){links.forEach(function(link){if(location.hash&&link.getAttribute('href')===location.hash)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');});}syncHash();window.addEventListener('hashchange',syncHash);if('IntersectionObserver' in window){var observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){var link=links.find(function(candidate){return candidate.getAttribute('href')==='#'+entry.target.id;});if(link)link.classList.toggle('is-in-view',entry.isIntersecting);});},{rootMargin:'-18% 0px -66% 0px',threshold:[0,.2]});links.forEach(function(link){var target=document.getElementById(link.getAttribute('href').slice(1));if(target)observer.observe(target);});}}
+  function projectStaffingRows(rows) {
+    // Optional allocation is projected when present; activity and recovery rows retain their declared JSON fields.
+    return InvestmentCore.clone(rows.map(row => {
+      const { c, ...fields } = row;
+      return c === undefined ? fields : { ...fields, c };
+    }));
+  }
+  function staffingSnapshot(){return {horizon:$('horizon').value,unit:$('unit').value,roles:projectStaffingRows(state.roles),activities:projectStaffingRows(state.activities),disruptions:projectStaffingRows(state.disruptions),qualityEnabled:$('quality-enabled').checked,qualityAllocation:$('quality-allocation').value,qualityRate:$('quality-rate').value,sigma:$('sigma-target-input').value,unknowns:$('unknowns').value,complexity:$('complexity').value,overlap:{activities:$('overlap-activities').value===''?null:Number($('overlap-activities').value)/100,recovery:$('overlap-recovery').value===''?null:Number($('overlap-recovery').value)/100,quality:$('overlap-quality').value===''?null:Number($('overlap-quality').value)/100}};}
+  window.investmentStaffing=Object.freeze({getState:function(){return InvestmentCore.clone(staffingSnapshot());},getResult:function(){return InvestmentCore.clone(state.lastCalculation);}});
   function calculate(){
-    var unitHours={hours:1,sprints:80,quarters:520};
-    var horizon=Math.max(0,Number($('horizon').value)||0)*unitHours[$('unit').value];
-    var activeRoles=state.roles.filter(function(r){return r.enabled;});
-    var people=activeRoles.reduce(function(s,r){return s+(Number(r.a)||0);},0);
-    var weighted=activeRoles.reduce(function(s,r){return s+(Number(r.a)||0)*(Number(r.b)||0);},0);
-    var blended=people?weighted/people:0;
-    var allocatedHours=0;
-    var roleCost=activeRoles.reduce(function(s,r){var h=(Number(r.a)||0)*horizon*((Number(r.c)||0)/100);allocatedHours+=h;return s+h*(Number(r.b)||0);},0);
-    var taskCount=0,activityHours=0;
-    var activityCost=state.activities.filter(function(a){return a.enabled;}).reduce(function(s,a){var tasks=Number(a.a)||0,hours=Number(a.b)||0;taskCount+=tasks;activityHours+=tasks*hours;return s+tasks*hours*blended;},0);
-    var disruptionHours=0,activeDisruptions=state.disruptions.filter(function(d){return d.enabled;});
-    var disruptionCost=activeDisruptions.reduce(function(s,d){disruptionHours+=(Number(d.a)||0)*(Number(d.b)||0);return s+(Number(d.a)||0)*(Number(d.b)||0)*blended;},0);
-    var unpricedWork=blended<=0&&(taskCount>0||disruptionHours>0);
-    var qualityEnabled=$('quality-enabled').checked,qualityBaseHours=qualityEnabled?horizon*((Number($('quality-allocation').value)||0)/100):0;
-    var sigma=Number($('sigma-target-input').value)||3,qualityMultiplier=.65+sigma*.15;
-    var qualityHours=qualityBaseHours*qualityMultiplier,qualityCost=qualityHours*(Number($('quality-rate').value)||0);
-    var base=roleCost+activityCost+disruptionCost+qualityCost;
-    var unknownCount=Number($('unknowns').value)||0,unknownRate=Math.min(.35,unknownCount*.025),complexityRate={bounded:.08,connected:.16,frontier:.28}[$('complexity').value];
-    var unknownCost=base*unknownRate,complexityCost=base*complexityRate,central=base+unknownCost+complexityCost,spread=.07+Math.min(.16,unknownRate*.45+complexityRate*.2),low=central*(1-spread),high=central*(1+spread);state.lastCalculation={horizonHours:horizon,people:people,taskCount:taskCount,activityHours:activityHours,allocatedHours:allocatedHours,qualityHours:qualityHours,qualityMultiplier:qualityMultiplier,disruptionHours:disruptionHours,roleCost:roleCost,activityCost:activityCost,qualityCost:qualityCost,disruptionCost:disruptionCost,unknownCost:unknownCost,complexityCost:complexityCost,central:central,spread:spread,low:low,high:high,unpricedWork:unpricedWork};
+    var calc=InvestmentCore.staffing(staffingSnapshot());state.lastCalculation=calc;
+    if(calc.status!=='known'){
+      ['band','role-cost','activity-cost','quality-cost','disruption-cost','unknown-cost','complexity-cost','method-role','method-activity','method-quality','method-recovery','method-band','role-time-receipt','quality-time-receipt','unknown-reserve-receipt'].forEach(function(id){$(id).textContent='Unavailable';});
+      $('estimate-note').textContent=calc.problems.join(' ');$('consequences').textContent='Revise the named inputs to recover the monetary comparison. Current input values remain available.';
+      $('horizon-svg').style.display='none';$('sigma-curve').closest('svg').style.display='none';return;
+    }
+    $('horizon-svg').style.removeProperty('display');$('sigma-curve').closest('svg').style.removeProperty('display');
+    var horizon=calc.horizonHours,people=calc.people,allocatedHours=calc.allocatedHours,roleCost=calc.roleCost,taskCount=calc.taskCount,activityHours=calc.activityHours,activityCost=calc.activityCost,disruptionHours=calc.disruptionHours,disruptionCost=calc.disruptionCost,qualityEnabled=$('quality-enabled').checked,qualityMultiplier=calc.qualityMultiplier,qualityHours=calc.qualityHours,qualityCost=calc.qualityCost,unknownCount=calc.unknownCount,unknownCost=calc.unknownCost,complexityCost=calc.complexityCost,central=calc.central,spread=calc.spread,low=calc.low,high=calc.high,unpricedWork=false,activeDisruptions=state.disruptions.filter(function(d){return d.enabled;});
     $('band').textContent=money(low)+' – '+money(high);$('role-cost').textContent=money(roleCost);$('activity-cost').textContent=unpricedWork&&taskCount?'Unpriced':money(activityCost);$('quality-cost').textContent=money(qualityCost);$('disruption-cost').textContent=unpricedWork&&disruptionHours?'Unpriced':money(disruptionCost);$('unknown-cost').textContent=money(unknownCost);$('complexity-cost').textContent=money(complexityCost);$('method-role').textContent=Math.round(allocatedHours)+' allocated h · '+money(roleCost);$('method-activity').textContent=taskCount+' tasks · '+Math.round(activityHours)+' effort h · '+(unpricedWork&&taskCount?'Unpriced':money(activityCost));$('method-quality').textContent=Math.round(qualityHours)+' h · '+qualityMultiplier.toFixed(2)+'× · '+money(qualityCost);$('method-recovery').textContent='Recovery '+(unpricedWork&&disruptionHours?'unpriced':money(disruptionCost))+' · unknown '+money(unknownCost)+' · complexity '+money(complexityCost);$('method-band').textContent=money(central)+' central · '+Math.round(spread*100)+'% spread · '+money(low)+' – '+money(high);
     $('estimate-note').textContent=(unpricedWork?'Look here · activity and recovery work remain unpriced until a staffed loaded rate exists. ':'')+'Foreground: '+lenses[state.lens].name+' · '+people+' people · '+taskCount+' tasks · '+Math.round(qualityHours)+' quality hours · '+Math.round(disruptionHours)+' recovery hours · '+horizon+' horizon hours';
     var interfaces=Math.max(0,people-1)+state.activities.filter(function(a){return a.enabled;}).length+activeDisruptions.length+aiContributions.length,activeFrameworkStates=state.frameworkStates[state.framework],mappedComponents=activeFrameworkStates.filter(function(s){return s.mapped;}).length,mappedDenominator=activeFrameworkStates.length;
@@ -275,15 +1112,15 @@
     var consequences=['Through the '+lenses[state.lens].name.toLowerCase()+' lens: '+lenses[state.lens].load+'.',money(roleCost)+' makes allocated cross-functional time visible.',unpricedWork?'Look here: task and recovery work need a staffed loaded rate before they can enter the monetary range.':money(activityCost)+' carries the task-level work that schedules often compress.'];if(qualityCost>0)consequences.push(money(qualityCost)+' holds independent quality collaboration as named work.');if(disruptionCost>0&&!unpricedWork)consequences.push(money(disruptionCost)+' protects recovery from disappearing into individual overtime.');if(unknownCost+complexityCost>0)consequences.push(money(unknownCost+complexityCost)+' keeps named uncertainty available for learning and re-planning.');$('consequences').innerHTML=consequences.map(function(x){return '<li>'+x+'</li>';}).join('');
     sigmaRender(qualityHours);horizonRender();applyLensToHorizon();applyQualitySpanToHorizon();learningRender();
   }
-  document.addEventListener('click',function(e){var lens=e.target.closest('[data-lens]');if(lens){var lensKey=lens.dataset.lens;state.priorLens=state.lens;state.lens=lensKey;lensRender();calculate();refocus('[data-lens="'+lensKey+'"]');$('live').textContent='Lens rotation: '+lenses[state.lens].name+' is now focal because the visitor selected a new attention instrument.';return;}var f=e.target.closest('[data-framework]');if(f){var frameworkKey=f.dataset.framework;state.framework=frameworkKey;frameworkRender();calculate();refocus('[data-framework="'+frameworkKey+'"]');$('live').textContent=frameworks[state.framework].name+' change model selected. Other models remain distinct and available.';return;}var gap=e.target.closest('[data-gap-add]');if(gap){var i=Number(gap.dataset.gapAdd),component=frameworks[state.framework].components[i],filter=$('activity-filter').value,suggestion=filter==='core'?(component[2][0]||component[3][0]):(component[3][0]||component[2][0]);state.activities.push({enabled:true,name:suggestion,a:6,b:8});state.frameworkStates[state.framework][i]={mapped:true,status:'planned'};rowsRender();frameworkRender();calculate();refocus('[data-kind="activity"][data-index="'+(state.activities.length-1)+'"][data-field="name"]');$('live').textContent=suggestion+' added to the active activity plan for '+component[0]+'.';return;}var p=e.target.closest('[data-preset]');if(p){var presetIndex=Number(p.dataset.preset);applyPreset(presetIndex);refocus('[data-preset="'+presetIndex+'"]');return;}var add=e.target.closest('[data-add]');if(add){var t=add.dataset.add;if(t==='role')state.roles.push({enabled:true,name:'New role',a:1,b:150,c:25,fn:'Engineering',seniority:'Senior',posture:'Individual contributor',enabler:'Decision and source access',change:'',quality:'Contributes evidence',ai:'Receives / reviews'});if(t==='activity')state.activities.push({enabled:true,name:'New activity',a:4,b:8});if(t==='disruption')state.disruptions.push({enabled:true,name:'New disruption',a:1,b:8});rowsRender();collaborationRender();staffingRender();calculate();refocus('[data-kind="'+t+'"][data-index="'+(state[collectionKey(t)].length-1)+'"][data-field="name"]');$('live').textContent='Editable '+t+' row added.';return;}var move=e.target.closest('[data-move]');if(move){var key=collectionKey(move.dataset.move);var from=Number(move.dataset.index);var to=move.dataset.direction==='up'?from-1:from+1;if(to>=0&&to<state[key].length){var changed=state[key].splice(from,1)[0];state[key].splice(to,0,changed);rowsRender();collaborationRender();staffingRender();calculate();var focus=document.querySelector('[data-move="'+move.dataset.move+'"][data-index="'+to+'"][data-direction="'+move.dataset.direction+'"]');if(focus)focus.focus();$('live').textContent=changed.name+' moved '+move.dataset.direction+'.';}return;}});
-  document.addEventListener('input',function(e){if(e.target.dataset.allocation!==undefined){var i=Number(e.target.dataset.allocation);state.allocations[i]=Number(e.target.value);e.target.nextElementSibling.value=e.target.value+' parts';calculate();return;}var kind=e.target.dataset.kind;if(kind&&e.target.dataset.field!=='enabled'){var key=collectionKey(kind),rowIndex=Number(e.target.dataset.index);var item=state[key][rowIndex];var field=e.target.dataset.field;item[field]=field==='name'?e.target.value:Number(e.target.value);if(field==='name')updateRowContextLabels(kind,rowIndex,e.target.value);if(kind==='role'){if(field==='name')collaborationRender();staffingRender();}calculate();return;}if(['horizon','unit','complexity','unknowns','quality-allocation','quality-rate','sigma-target-input'].indexOf(e.target.id)>-1)calculate();});
-  document.addEventListener('change',function(e){if(e.target.dataset.staff!==undefined){var staffIndex=Number(e.target.dataset.staff),staffField=e.target.dataset.staffField;state.roles[staffIndex][staffField]=e.target.value;staffingRender();calculate();refocus('[data-staff="'+staffIndex+'"][data-staff-field="'+staffField+'"]');return;}if(e.target.dataset.frameworkStatus!==undefined){var statusIndex=Number(e.target.dataset.frameworkStatus);state.frameworkStates[state.framework][statusIndex].status=e.target.value;frameworkRender();calculate();refocus('[data-framework-status="'+statusIndex+'"]');return;}if(e.target.dataset.frameworkMap!==undefined){var mapIndex=Number(e.target.dataset.frameworkMap);state.frameworkStates[state.framework][mapIndex].mapped=e.target.checked;frameworkRender();calculate();refocus('[data-framework-map="'+mapIndex+'"]');return;}if(e.target.id==='activity-filter'){frameworkRender();calculate();return;}if(['goal-population','goal-owner'].indexOf(e.target.id)>-1){frameworkRender();calculate();return;}if(e.target.dataset.field==='enabled'){var kind=e.target.dataset.kind,rowIndex=Number(e.target.dataset.index);state[collectionKey(kind)][rowIndex].enabled=e.target.checked;rowsRender();collaborationRender();staffingRender();calculate();refocus('[data-kind="'+kind+'"][data-index="'+rowIndex+'"][data-field="enabled"]');return;}if(e.target.dataset.quality!==undefined){state.quality[Number(e.target.dataset.quality)]=e.target.checked;calculate();return;}if(e.target.id==='quality-enabled'||e.target.id==='unit'||e.target.id==='complexity'){calculate();}});
+  document.addEventListener('click',function(e){var lens=e.target.closest('[data-lens]');if(lens){var lensKey=lens.dataset.lens;state.priorLens=state.lens;state.lens=lensKey;lensRender();calculate();refocus('[data-lens="'+lensKey+'"]');$('live').textContent='Lens rotation: '+lenses[state.lens].name+' is now focal because the visitor selected a new attention instrument.';return;}var f=e.target.closest('[data-framework]');if(f){var frameworkKey=f.dataset.framework;state.framework=frameworkKey;state=normalizeStaffingState(state);frameworkRender();calculate();refocus('[data-framework="'+frameworkKey+'"]');$('live').textContent=frameworks[state.framework].name+' change model selected. Other models remain distinct and available.';return;}var gap=e.target.closest('[data-gap-add]');if(gap){var i=Number(gap.dataset.gapAdd),component=frameworks[state.framework].components[i],filter=$('activity-filter').value,suggestion=filter==='core'?(component[2][0]||component[3][0]):(component[3][0]||component[2][0]);state.activities.push({enabled:true,name:suggestion,a:6,b:8});state.frameworkStates[state.framework][i]={mapped:true,status:'planned'};rowsRender();frameworkRender();calculate();refocus('[data-kind="activity"][data-index="'+(state.activities.length-1)+'"][data-field="name"]');$('live').textContent=suggestion+' added to the active activity plan for '+component[0]+'.';return;}var p=e.target.closest('[data-preset]');if(p){var presetIndex=Number(p.dataset.preset);applyPreset(presetIndex);refocus('[data-preset="'+presetIndex+'"]');return;}var add=e.target.closest('[data-add]');if(add){var t=add.dataset.add;if(t==='role')state.roles.push({enabled:true,name:'New role',a:1,b:150,c:25,fn:'Engineering',seniority:'Senior',posture:'Individual contributor',enabler:'Decision and source access',change:'',quality:'Contributes evidence',ai:'Receives / reviews'});if(t==='activity')state.activities.push({enabled:true,name:'New activity',a:4,b:8});if(t==='disruption')state.disruptions.push({enabled:true,name:'New disruption',a:1,b:8});state=normalizeStaffingState(state);rowsRender();collaborationRender();staffingRender();calculate();refocus('[data-kind="'+t+'"][data-index="'+(state[collectionKey(t)].length-1)+'"][data-field="name"]');$('live').textContent='Editable '+t+' row added.';return;}var move=e.target.closest('[data-move]');if(move){var key=collectionKey(move.dataset.move);var from=Number(move.dataset.index);var to=move.dataset.direction==='up'?from-1:from+1;if(to>=0&&to<state[key].length){var changed=state[key].splice(from,1)[0];state[key].splice(to,0,changed);state=normalizeStaffingState(state);rowsRender();collaborationRender();staffingRender();calculate();var focus=document.querySelector('[data-move="'+move.dataset.move+'"][data-index="'+to+'"][data-direction="'+move.dataset.direction+'"]');if(focus)focus.focus();$('live').textContent=changed.name+' moved '+move.dataset.direction+'.';}return;}});
+  document.addEventListener('input',function(e){if(e.target.dataset.allocation!==undefined){var i=Number(e.target.dataset.allocation);state.allocations[i]=Number(e.target.value);e.target.nextElementSibling.value=e.target.value+' parts';calculate();return;}var kind=e.target.dataset.kind;if(kind&&e.target.dataset.field!=='enabled'){var key=collectionKey(kind),rowIndex=Number(e.target.dataset.index);var field=e.target.dataset.field;state=normalizeStaffingState({...state,[key]:state[key].map((item,index)=>index===rowIndex?{...item,[field]:e.target.value}:item)});if(field==='name')updateRowContextLabels(kind,rowIndex,e.target.value);if(kind==='role'){if(field==='name')collaborationRender();staffingRender();}calculate();return;}if(['horizon','unit','complexity','unknowns','quality-allocation','quality-rate','sigma-target-input','overlap-activities','overlap-recovery','overlap-quality'].indexOf(e.target.id)>-1)calculate();});
+  document.addEventListener('change',function(e){if(e.target.dataset.staff!==undefined){var staffIndex=Number(e.target.dataset.staff),staffField=e.target.dataset.staffField;state=normalizeStaffingState({...state,roles:state.roles.map((role,index)=>index===staffIndex?{...role,[staffField]:e.target.value}:role)});staffingRender();calculate();refocus('[data-staff="'+staffIndex+'"][data-staff-field="'+staffField+'"]');return;}if(e.target.dataset.frameworkStatus!==undefined){var statusIndex=Number(e.target.dataset.frameworkStatus);state.frameworkStates[state.framework][statusIndex].status=e.target.value;frameworkRender();calculate();refocus('[data-framework-status="'+statusIndex+'"]');return;}if(e.target.dataset.frameworkMap!==undefined){var mapIndex=Number(e.target.dataset.frameworkMap);state.frameworkStates[state.framework][mapIndex].mapped=e.target.checked;frameworkRender();calculate();refocus('[data-framework-map="'+mapIndex+'"]');return;}if(e.target.id==='activity-filter'){frameworkRender();calculate();return;}if(['goal-population','goal-owner'].indexOf(e.target.id)>-1){frameworkRender();calculate();return;}if(e.target.dataset.field==='enabled'){var kind=e.target.dataset.kind,rowIndex=Number(e.target.dataset.index);state=normalizeStaffingState({...state,[collectionKey(kind)]:state[collectionKey(kind)].map((item,index)=>index===rowIndex?{...item,enabled:e.target.checked}:item)});rowsRender();collaborationRender();staffingRender();calculate();refocus('[data-kind="'+kind+'"][data-index="'+rowIndex+'"][data-field="enabled"]');return;}if(e.target.dataset.quality!==undefined){state.quality[Number(e.target.dataset.quality)]=e.target.checked;calculate();return;}if(e.target.id==='quality-enabled'||e.target.id==='unit'||e.target.id==='complexity'){calculate();}});
   document.addEventListener('click',function(e){var source=e.target.closest('[data-source-filter]');if(source){$('activity-filter').value=source.dataset.sourceFilter;document.querySelectorAll('[data-source-filter]').forEach(function(button){button.setAttribute('aria-pressed',String(button===source));});frameworkRender();calculate();source.focus();$('live').textContent=source.textContent+' activity sources shown.';}});
   document.addEventListener('change',function(e){if(e.target.dataset.aiReceiver!==undefined){state.aiReceivers[Number(e.target.dataset.aiReceiver)]=e.target.value;calculate();$('live').textContent=e.target.value+' now receives '+aiContributions[Number(e.target.dataset.aiReceiver)]+'.';}});
-  document.addEventListener('toggle',function(e){if(e.target.matches&&e.target.matches('#learning-list details'))state.learningOpen[e.target.dataset.learningKey]=e.target.open;},true);
+  document.addEventListener('toggle',function(e){if(e.target.matches&&e.target.matches('#learning-list details')){if(e.target.open)learningOpen.add(e.target.dataset.learningKey);else learningOpen.delete(e.target.dataset.learningKey);}},true);
   function summaryTabsInit(){var tabs=Array.from(document.querySelectorAll('[data-summary-tab]'));function selectTab(nextTab){tabs.forEach(function(tab){var selected=tab===nextTab;tab.setAttribute('aria-pressed',String(selected));tab.tabIndex=0;$(tab.getAttribute('aria-controls')).hidden=!selected;});}tabs.forEach(function(tab){tab.addEventListener('click',function(){selectTab(tab);});});selectTab(tabs[0]);}
   function activeFrameworkMapRead(){var states=state.frameworkStates[state.framework];return {name:frameworks[state.framework].name,mapped:states.filter(function(s){return s.mapped;}).length,total:states.length};}
-  function restoreModelDefaults(){state.framework=DEFAULT_FRAMEWORK;state.frameworkStates=createDefaultFrameworkStates();state.allocations=DEFAULT_ALLOCATIONS.slice();allocationRender();frameworkRender();calculate();var read=activeFrameworkMapRead();$('live').textContent=read.name+' · '+read.mapped+' of '+read.total+' mapped. The separate eight-part attention defaults were restored; the current initiative plan stayed in place.';}
+  function restoreModelDefaults(){state.framework=DEFAULT_FRAMEWORK;state.frameworkStates=createDefaultFrameworkStates();state.allocations=DEFAULT_ALLOCATIONS.slice();state=normalizeStaffingState(state);allocationRender();frameworkRender();calculate();var read=activeFrameworkMapRead();$('live').textContent=read.name+' · '+read.mapped+' of '+read.total+' mapped. The separate eight-part attention defaults were restored; the current initiative plan stayed in place.';}
   document.addEventListener('click',function(e){var frameworkButton=e.target.closest('[data-framework]');if(frameworkButton){var read=activeFrameworkMapRead();$('live').textContent=read.name+' selected · '+read.mapped+' of '+read.total+' mapped. This model’s retained map returned; the separate eight-part attention lens stayed unchanged.';}});
   document.addEventListener('change',function(e){if(e.target.dataset.frameworkMap!==undefined){var read=activeFrameworkMapRead();$('live').textContent=read.name+' map updated · '+read.mapped+' of '+read.total+' mapped. The mapping state and separate attention lens remain distinct.';}});
   $('restore-model-defaults').addEventListener('click',restoreModelDefaults);
@@ -297,5 +1134,301 @@
   labelGeneratedControls();
 })();
 </script>
+<!-- investment-analysis:ui:start -->
+<!-- Generated from collaboration/investment-analysis/studio.js; regenerate: node tools/project-investment-analysis.mjs -->
+<script data-investment-analysis-source="collaboration/investment-analysis/studio.js">
+/* Shared progressive analysis UI. Core owns meaning; each host owns its original instrument. */
+(function () {
+  "use strict";
+  const C=window.InvestmentCore, host=document.querySelector("[data-investment-analysis]");
+  if(!C||!host)return;
+  const ACTION = Object.freeze({
+    RESET: "reset", APPLY: "apply", EXPORT: "export", SCHEMA: "schema",
+    IMPORT_TEXT: "import-text", COPY: "copy", STAFFING: "staffing"
+  });
+  const EDITORS = Object.freeze(["events", "alternatives", "outcomes", "clinical"]);
+  const methodHost = window.crossFunctionalInvestmentModelStudio;
+  const numberFormat = new Intl.NumberFormat("en-US", { maximumFractionDigits: 4 });
+  const drafts = new Set();
+  const initial = C.defaults();
+  if (methodHost) initial.method = methodHost.getState().activeModelId;
+  const first = C.prepare(initial);
+  let state = first.state, result = first.result, serialized = first.serialized, identity = first.fingerprint;
+  let projection = Object.freeze({ contract: C.VERSION, fingerprint: identity, state, result });
+  let interactionVersion = 0;
+  let fileRequest = 0;
+  const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const titles={orientation:"Orientation",commercial:"Commercial cohort",pricing:"Pricing and implementation",capital:"Cash flow and capacity",clinical:"Clinical and operational context",decision:"Decision and reversible gate"};
+  function control(key,f) {
+    const id="analysis-"+key,value=state.inputs[key];
+    let input;
+    if(f.type===C.FIELD_TYPE.BOOLEAN)input='<input id="'+id+'" data-key="'+key+'" type="checkbox" '+(value?"checked":"")+'>';
+    else if(f.type===C.FIELD_TYPE.SELECT)input='<select id="'+id+'" data-key="'+key+'">'+f.options.map(x=>'<option '+(x===value?"selected":"")+'>'+esc(x)+'</option>').join("")+'</select>';
+    else input='<input id="'+id+'" data-key="'+key+'" type="'+(f.type===C.FIELD_TYPE.NUMBER?"number":f.unit==="date"?"date":"text")+'" '+(f.type===C.FIELD_TYPE.NUMBER?'step="any" '+(f.min!==null&&f.min!==undefined?'min="'+f.min+'" ':"")+(f.max!==undefined?'max="'+f.max+'" ':""):"")+'value="'+esc(value)+'">';
+    return '<label class="investment-field" for="'+id+'"><span>'+esc(f.label)+'</span>'+input+'<small>'+esc(f.unit.replace(/currency/g,state.inputs.currency||"currency").replace(/period/g,state.inputs.period))+'</small></label>';
+  }
+  function group(name) {return '<fieldset><legend>'+titles[name]+'</legend><div class="investment-fields">'+Object.entries(C.FIELDS).filter(([,f])=>f.group===name).map(([k,f])=>control(k,f)).join("")+'</div></fieldset>';}
+  function editor(key,label,note) {return '<label class="investment-editor" for="analysis-'+key+'"><strong>'+label+'</strong><span>'+note+'</span><textarea id="analysis-'+key+'" data-editor="'+key+'" rows="8" spellcheck="false">'+esc(JSON.stringify(state[key],null,2))+'</textarea></label>';}
+  function mount() {
+    host.innerHTML='<div class="investment-intro"><p class="investment-kicker">Local calculation / explicit evidence / revisable decisions</p><h3>Compare what changes the decision.</h3><p>Begin with the illustrative fixture, edit the assumptions, then carry the same state into either instrument. Every amount belongs to its stated currency and period. Clinical dimensions keep their own evidence and human review.</p></div>'+
+      '<div class="investment-actions"><button type="button" data-action="'+ACTION.RESET+'">Reset illustrative analysis</button><button type="button" data-action="'+ACTION.STAFFING+'">Use current staffing reference</button><button type="button" data-action="'+ACTION.EXPORT+'">Export analysis JSON</button><label for="analysis-import">Import analysis JSON<input id="analysis-import" type="file" accept=".json,application/json"></label></div>'+
+      '<p id="analysis-status" role="status" aria-live="polite">Illustrative inputs loaded. Blank and explicit zero remain distinct.</p>'+
+      '<details open><summary>1. Orientation and decision</summary>'+group("orientation")+group("decision")+'<div data-summary></div></details>'+
+      '<details><summary>2. Commercial and implementation analysis</summary>'+group("commercial")+group("pricing")+'<div data-commercial></div>'+editor("events","Lifecycle event graph","Each occurrence has an ID, period, evidence standing, and predecessor IDs. Branches and reactivation retain separate events.")+'</details>'+
+      '<details><summary>3. Capital, uncertainty, and clinical consequences</summary>'+group("capital")+
+      editor("alternatives","Alternatives and timed cash flows","Flows are incremental to the stated comparator: t=0 followed by equal end-of-period intervals. Include every intended cost once. Alternatives are choices, not probabilistic outcomes.")+
+      editor("outcomes","Mutually exclusive outcome tree","Each outcome has its own probability and cash flows. Supplied probabilities are retained. P50/P80 and empirical distributions require their separate models.")+
+      '<div data-capital></div>'+group("clinical")+
+      editor("clinical","Nine clinical / operational dimensions","Preserve each dimension. Supply its unit, baseline, candidate value, evidence standing, and source; reviewed observations also require the named reviewer and date.")+
+      '<div data-clinical></div></details>'+
+      '<details><summary>4. Inspection, exchange, and AI collaboration</summary><p>The domain axis and record-type axis remain separate. This is a local planning instrument; accountable people establish financial, clinical, and release decisions.</p><div data-records></div>'+
+      '<label class="investment-editor" for="analysis-capsule"><strong>Plain-language comparison and Prompt Capsule</strong><textarea id="analysis-capsule" rows="12" readonly></textarea></label>'+
+      '<label class="investment-editor" for="analysis-exchange"><strong>Portable state / schema output</strong><textarea id="analysis-exchange" rows="10" spellcheck="false"></textarea></label>'+
+      '<div class="investment-actions"><button type="button" data-action="'+ACTION.IMPORT_TEXT+'">Import pasted state</button><button type="button" data-action="'+ACTION.COPY+'">Select portable state for copying</button><button type="button" data-action="'+ACTION.SCHEMA+'">Inspect JSON Schema</button></div></details>'+
+      '<div class="investment-actions"><button type="button" data-action="'+ACTION.APPLY+'">Apply lifecycle, alternative, outcome, and clinical edits</button></div>';
+    render();
+  }
+  function formatted(r) {
+    if(r.status!=="known")return r.status+": "+r.reason;
+    const v=numberFormat.format(r.value);
+    return v+" "+r.unit.replace(/currency/g,state.inputs.currency).replace(/period/g,state.inputs.period);
+  }
+  function table(caption,headers,rows) {
+    return '<div class="investment-table-scroll" role="region" tabindex="0" aria-label="'+esc(caption)+'; scroll horizontally"><table><caption>'+esc(caption)+'</caption><thead><tr>'+headers.map(x=>'<th scope="col">'+esc(x)+'</th>').join("")+'</tr></thead><tbody>'+rows.map(row=>'<tr>'+row.map((v,i)=>'<'+(i?"td":"th scope=\"row\"")+'>'+esc(v)+'</'+(i?"td":"th")+'>').join("")+'</tr>').join("")+'</tbody></table></div>';
+  }
+  function metricRows(keys){return keys.map(([key,label])=>[label,formatted(result.metrics[key])]);}
+  function capsule() {
+    return ["# Investment comparison",state.inputs.label,
+      "Standing: "+state.origin+". Method: "+state.method+". Contract: "+C.VERSION+". State identity: "+identity+".",
+      "Currency / period: "+state.inputs.currency+" / "+state.inputs.period+". "+state.inputs.cashConvention,
+      "Decision owner: "+(state.inputs.owner||"Unspecified")+". Gate: "+result.gate+". Next option: "+state.inputs.option+".",
+      "Next evidence: "+state.inputs.nextEvidence+". Revisit: "+(state.inputs.revisit||"Unspecified")+".",
+      "Five domains: "+C.DOMAINS.join(", ")+". Five record types: "+C.TYPES.join(", ")+".",
+      ...Object.entries(result.metrics).map(([k,v])=>k+": "+formatted(v)),
+      ...result.alternatives.map(a=>a.label+": NPV "+formatted(a.npv)+"; IRR "+formatted(a.irr)+"; payback "+formatted(a.payback)),
+      "Evidence and authority: the source identifies product or workflow context; causal benefit and local applicability require their own observations.",
+      "Cash-flow amounts are complete scenario inputs. Pricing, staffing references, reserves, and clinical budget impacts remain separate views until a named transformation joins them.",
+      "Clinical cost-consequence: "+result.clinical.map(c=>c.name+" "+formatted(c.delta)).join("; "),
+      "Portable state:\n"+serialized].join("\n\n");
+  }
+  function render() {
+    host.querySelector("[data-summary]").innerHTML='<p class="investment-decision"><strong>'+esc(result.gate)+'</strong> / '+esc(state.inputs.option)+' / '+esc(state.inputs.owner||"Decision owner remains open")+'</p>'+table("Decision-changing measures",["Measure","Value and standing"],metricRows([["grr","Gross revenue retention"],["nrr","Net revenue retention"],["cac","Customer acquisition cost"],["expectedNpv","Expected NPV"],["budgetImpact","Incremental clinical budget impact"]]))+
+      '<p>Source standing: '+esc(state.origin)+'. '+esc(state.inputs.nextEvidence)+'.</p>';
+    host.querySelector("[data-commercial]").innerHTML=table("Commercial cohort and price realization",["Measure","Result"],metricRows([["logoRetention","Customer retention, opening cohort"],["closingCustomers","Closing customers"],["closingRevenue","Closing recurring revenue"],["grr","GRR, opening cohort"],["nrr","NRR, opening cohort"],["cac","Acquisition spend / new customers"],["acquisitionRevenueRatio","Acquisition spend / new recurring revenue"],["cacPayback","Contribution-based acquisition payback"],["discountAmount","Per-unit discount"],["netPrice","Net price after discount and rebate"],["unitContribution","Net price less variable and service costs"]]))+
+      table("Lifecycle event graph",["Occurrence","Stage","Period","Predecessors","Standing"],state.events.map(e=>[e.id,e.kind,e.period===null?"unavailable":e.period,e.predecessors.join(", ")||"Entry",e.standing]));
+    host.querySelector("[data-capital]").innerHTML=table("Incremental alternatives",["Choice","Standing","Cash flows from t=0","NPV","IRR per period","Payback"],result.alternatives.map(a=>[a.label,a.standing,a.flows.map(x=>x===null||x===""?"unavailable":x).join(", "),formatted(a.npv),formatted(a.irr),formatted(a.payback)]))+
+      table("Discount sensitivity, same cash flows",["Alternative","Rate minus 0.02","Entered rate","Rate plus 0.02"],result.sensitivity.map(a=>[a.id,...a.values.map(v=>(v.rate===null?"unavailable":v.rate.toFixed(4))+": "+formatted(v.result))]));
+    host.querySelector("[data-clinical]").innerHTML=table("Clinical budget and capacity",["Measure","Result"],metricRows([["adoptedPopulation","Adopted population"],["budgetImpact","Incremental budget per period"],["capacityGap","Capacity gap"],["costPerOutcome","Reviewed incremental cost per outcome"]]))+
+      table("Cost-consequence view",["Dimension","Unit","Baseline","Candidate","Standing","Change and evidence"],result.clinical.map(c=>[c.name,c.unit||"Unspecified",c.baseline??"unavailable",c.candidate??"unavailable",c.standing,formatted(c.delta)+(c.source?" / "+c.source:"")]));
+    host.querySelector("[data-records]").innerHTML=table("Shared domain and record contract",["Domain","Record types present"],C.DOMAINS.map(d=>[d,[...new Set(result.records.filter(r=>r.domain===d).map(r=>r.type))].join(", ")||"No records supplied"]));
+    host.querySelector("#analysis-capsule").value=capsule();
+    host.dataset.stateFingerprint=identity;
+    for (const input of host.querySelectorAll("[data-key]")) {
+      const field = C.FIELDS[input.dataset.key];
+      input.closest("label").querySelector("small").textContent = field.unit
+        .replace(/currency/g, state.inputs.currency || "currency").replace(/period/g, state.inputs.period);
+    }
+  }
+  function status(text) {
+    const remaining = drafts.size
+      ? " " + drafts.size + " draft control(s) remain available for revision; outputs and export describe accepted state."
+      : "";
+    host.querySelector("#analysis-status").textContent = text + remaining;
+  }
+
+  function syncControls(inputKeys, editorKeys) {
+    for (const key of inputKeys) {
+      const input = host.querySelector('[data-key="' + key + '"]');
+      const value = state.inputs[key];
+      if (input.type === "checkbox") input.checked = value;
+      else if (input.value !== String(value ?? "")) input.value = value ?? "";
+      input.removeAttribute("aria-invalid");
+      drafts.delete(input.id);
+    }
+    for (const key of editorKeys) {
+      const editor = host.querySelector('[data-editor="' + key + '"]');
+      editor.value = JSON.stringify(state[key], null, 2);
+      editor.removeAttribute("aria-invalid");
+      drafts.delete(editor.id);
+    }
+  }
+
+  function accept(candidate, message, { inputKeys = [], editorKeys = [], methodReason = "analysis-state-accepted" } = {}) {
+    const prepared = C.prepare(candidate);
+    if (methodHost && !methodHost.supportsMethod(prepared.state.method)) throw new Error("Choose one of this studio's eight methods before importing this analysis. The source JSON remains available for revision.");
+    state = prepared.state;
+    result = prepared.result;
+    serialized = prepared.serialized;
+    identity = prepared.fingerprint;
+    projection = Object.freeze({ contract: C.VERSION, fingerprint: identity, state, result });
+    interactionVersion++;
+    syncControls(inputKeys, editorKeys);
+    render();
+    status(message);
+    window.dispatchEvent(new CustomEvent("investment-analysis-change", { detail: { reason: methodReason } }));
+    return true;
+  }
+
+  function importText(text) {
+    return accept(C.importState(text), "Imported state accepted. The contract, identities, and explicitly unavailable values are retained.", {
+      inputKeys: Object.keys(C.FIELDS), editorKeys: EDITORS
+    });
+  }
+
+  function exportText() {
+    const area = host.querySelector("#analysis-exchange");
+    area.value = serialized;
+    area.closest("details").open = true;
+    area.focus();
+    area.select();
+    status("Accepted portable JSON is selected. Use your browser's Copy command to carry this exact scenario into the other instrument.");
+  }
+
+  function revisionNeeded(error, input) {
+    if (input) {
+      drafts.add(input.id);
+      input.setAttribute("aria-invalid", "true");
+    }
+    status("Revision needed: " + error.message + " Accepted state remains available.");
+  }
+
+  function editInput(input) {
+    const key = input.dataset.key;
+    try {
+      if (!Object.hasOwn(C.FIELDS, key)) throw new Error("Choose a declared analysis field.");
+      if (input.validity.badInput) throw new Error("Supply a complete value, or clear the field to represent unavailable input.");
+      const value = input.type === "checkbox" ? input.checked : input.value;
+      const candidate = { ...state, inputs: { ...state.inputs, [key]: value } };
+      accept(candidate, "Input accepted.", { inputKeys: [key] });
+    } catch (error) { revisionNeeded(error, input); }
+  }
+
+  function applyEditors() {
+    const edits = {};
+    for (const key of EDITORS) {
+      const editor = host.querySelector('[data-editor="' + key + '"]');
+      try { edits[key] = C.parseJson(editor.value); }
+      catch (error) { revisionNeeded(error, editor); return; }
+    }
+    accept({ ...state, ...edits }, "Lifecycle, alternative, outcome, and clinical edits accepted.", { editorKeys: EDITORS });
+  }
+
+  function useStaffing() {
+    if (!window.investmentStaffing) {
+      status("Open the staffing instrument to supply its reference, or enter a supported internal-investment amount here.");
+      return;
+    }
+    const snapshot = window.investmentStaffing.getState();
+    const calculation = C.staffing(snapshot);
+    if (calculation.status !== "known") throw new Error(calculation.problems.join(" "));
+    if (state.inputs.currency !== calculation.currency) {
+      throw new Error("The staffing reference is denominated in " + C.STAFFING_CURRENCY + ". Select that currency or supply an explicit conversion separately.");
+    }
+    const candidate = {
+      ...state,
+      inputs: { ...state.inputs, internalInvestment: calculation.central },
+      extensions: { ...state.extensions, "urn:investment:staffing-reference": { snapshot, calculation } }
+    };
+    accept(candidate, "Staffing reference retained in " + C.STAFFING_CURRENCY + ". Enter complete cash flows explicitly so the reference is included once.", {
+      inputKeys: ["internalInvestment"]
+    });
+  }
+
+  host.addEventListener("input", event => {
+    interactionVersion++;
+    const input = event.target;
+    if (input.dataset.editor) {
+      drafts.add(input.id);
+      input.removeAttribute("aria-invalid");
+      status("Matrix draft retained. Apply the four editor groups together when ready.");
+      return;
+    }
+    if (input.dataset.key && !input.matches("select,[type=checkbox]")) editInput(input);
+  });
+
+  host.addEventListener("change", async event => {
+    const input = event.target;
+    interactionVersion++;
+    if (input.dataset.key && input.matches("select,[type=checkbox]")) {
+      editInput(input);
+      return;
+    }
+    if (input.id !== "analysis-import" || !input.files?.[0]) return;
+    const request = ++fileRequest;
+    const version = interactionVersion;
+    const file = input.files[0];
+    try {
+      if (file.size > C.JSON_LIMITS.bytes) throw new Error("Choose a state file of at most 1 MB in UTF-8.");
+      const text = await file.text();
+      if (request !== fileRequest || version !== interactionVersion) {
+        if (request === fileRequest) status("A newer interaction took priority. Select the file again when ready to replace accepted state.");
+        return;
+      }
+      importText(text);
+    } catch (error) {
+      if (request === fileRequest && version === interactionVersion) revisionNeeded(error);
+    } finally {
+      if (request === fileRequest) input.value = "";
+    }
+  });
+
+  host.addEventListener("click", event => {
+    const action = event.target.closest("[data-action]")?.dataset.action;
+    if (!action) return;
+    interactionVersion++;
+    try {
+      switch (action) {
+        case ACTION.RESET: {
+          const candidate = C.defaults();
+          candidate.method = state.method;
+          accept(candidate, "Illustrative analysis restored.", { inputKeys: Object.keys(C.FIELDS), editorKeys: EDITORS });
+          return;
+        }
+        case ACTION.APPLY:
+          applyEditors();
+          return;
+        case ACTION.EXPORT:
+        case ACTION.COPY:
+          exportText();
+          return;
+        case ACTION.SCHEMA: {
+          const area = host.querySelector("#analysis-exchange");
+          area.value = JSON.stringify(C.schema(), null, 2);
+          area.closest("details").open = true;
+          status("Showing the schema. Export analysis JSON to select the accepted portable state.");
+          return;
+        }
+        case ACTION.IMPORT_TEXT:
+          importText(host.querySelector("#analysis-exchange").value);
+          return;
+        case ACTION.STAFFING:
+          useStaffing();
+      }
+    } catch (error) {
+      revisionNeeded(error);
+    }
+  });
+
+  window.investmentAnalysis = Object.freeze({
+    getState: () => C.clone(state),
+    getResult: () => C.clone(result),
+    getProjection: () => C.clone(projection),
+    readProjection: () => projection,
+    setMethod(method, reason = "visitor-selected") {
+      return accept({ ...state, method }, "Analysis and selected method agree.", { methodReason: reason });
+    },
+    importState: importText,
+    serialize: () => serialized,
+    promptCapsule: capsule,
+    fingerprint: () => identity
+  });
+  let printClosed=[];
+  window.addEventListener("beforeprint",()=>{printClosed=Array.from(host.querySelectorAll("details")).filter(d=>!d.open);printClosed.forEach(d=>d.open=true);});
+  window.addEventListener("afterprint",()=>{printClosed.forEach(d=>d.open=false);printClosed=[];});
+  host.hidden=false;mount();
+  window.dispatchEvent(new CustomEvent("investment-analysis-change"));
+})();
+</script>
+<!-- investment-analysis:ui:end -->
 </body>
 </html>

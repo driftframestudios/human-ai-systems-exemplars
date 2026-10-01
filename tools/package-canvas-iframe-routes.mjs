@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { INVESTMENT_HOSTS, readInvestmentSources, assertInvestmentProjection } from "./project-investment-analysis.mjs";
 import { fileURLToPath } from "node:url";
 import visitorBoundaryContract from "../context-canvas-project-surface/context-canvas/visitor-boundary-contract.js";
 import {
@@ -458,15 +459,20 @@ function visitorBoundaryMarkup() {
   </div>`;
 }
 
+function escapePatternLiteral(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+const authorPattern = new RegExp(
+  `<meta\\b[^>]*\\bname=["']author["'][^>]*\\bcontent=["']${escapePatternLiteral(artifactAuthor)}["'][^>]*>`,
+  "gi",
+);
+const licensePattern = new RegExp(
+  `<link\\b[^>]*\\brel=["']license["'][^>]*\\bhref=["']${escapePatternLiteral(artifactLicense)}["'][^>]*>`,
+  "gi",
+);
+
 function assertAttributionProjection(html, route, expectedDecoration) {
-  const authorPattern = new RegExp(
-    `<meta\\b[^>]*\\bname=["']author["'][^>]*\\bcontent=["']${artifactAuthor}["'][^>]*>`,
-    "gi",
-  );
-  const licensePattern = new RegExp(
-    `<link\\b[^>]*\\brel=["']license["'][^>]*\\bhref=["']${artifactLicense.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["'][^>]*>`,
-    "gi",
-  );
   const authorCount = [...html.matchAll(authorPattern)].length;
   const licenseCount = [...html.matchAll(licensePattern)].length;
   const boundaryCount = occurrenceCount(html, "data-visitor-boundary aria-label=");
@@ -690,6 +696,7 @@ export async function createCanvasPackagePlan(options = {}) {
   );
   const contract = routeManifestReading.value;
   validateCanvasRouteContract(contract);
+  const investmentSources = await readInvestmentSources(paths.repositoryRoot);
 
   const outputFiles = new Map();
   const portableOutputPaths = new Set(["route-manifest.json"]);
@@ -708,7 +715,9 @@ export async function createCanvasPackagePlan(options = {}) {
         `Canvas navigation source for route ${route.id}`,
       );
     }
-    const projection = deriveCanvasProjection(sourceBytes.toString("utf8"), route);
+    const sourceHtml = sourceBytes.toString("utf8");
+    if (INVESTMENT_HOSTS.includes(route.source_file)) assertInvestmentProjection(sourceHtml, investmentSources);
+    const projection = deriveCanvasProjection(sourceHtml, route);
     const projectionBytes = route.projection_kind === "byte_identical"
       ? sourceBytes
       : Buffer.from(projection.html, "utf8");
