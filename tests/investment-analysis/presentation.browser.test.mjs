@@ -74,11 +74,17 @@ test("investment chapters retain readable, navigable, source-grounded screen and
       const initial = await page.evaluate(() => window.investmentAnalysis.getState());
 
       if (route === routes[0]) {
+        assert.match(await page.getByRole("complementary", { name: "Planning model boundary", exact: true }).textContent(), /Ground each assumption in local evidence/);
+        assert.match(await page.getByRole("complementary", { name: "Planning model boundary", exact: true }).textContent(), /Accountable people review pricing and expected outcomes, authorize budgets and staffing/);
         assert.equal(await page.locator('.page-nav a[href="#investment-analysis-title"]').count(), 1);
         await page.getByRole("button", { name: "Direct receipts", exact: true }).click();
         const receipt = page.locator("#analysis-direct-receipts").getByRole("link", { name: "Cohort, pricing, and implementation", exact: true });
         await receipt.focus();
         await page.keyboard.press("Enter");
+        await page.waitForFunction(() => {
+          const heading = document.querySelector("#analysis-commercial-title");
+          return heading === document.activeElement && heading.closest("details").open;
+        });
         assert.equal(await page.locator("#analysis-commercial-title").evaluate(el => el === document.activeElement && el.closest("details").open), true);
         await page.locator("#analysis-newCustomers").fill("40");
         assert.match(await page.locator("#analysis-direct-receipts").textContent(), /250 USD\/customer/);
@@ -93,6 +99,7 @@ test("investment chapters retain readable, navigable, source-grounded screen and
       }
 
       await page.locator(".investment-analysis details").evaluateAll(nodes => nodes.forEach(node => { node.open = true; }));
+      const navigationHash = new URL(page.url()).hash;
       for (const width of widths) {
         await page.setViewportSize({ width, height: width === 1239 || width === 1151 ? 501 : 1000 });
         const geometry = await page.locator(".investment-analysis").evaluate(el => ({ left: el.getBoundingClientRect().left, right: el.getBoundingClientRect().right, width: innerWidth }));
@@ -114,6 +121,52 @@ test("investment chapters retain readable, navigable, source-grounded screen and
             return inspector.bottom <= chapter.top + 1;
           }), true, `the first-chapter inspector stays clear of the comparison at ${width}`);
         }
+        assert.equal(await page.locator(".investment-static-overview > summary").evaluate(el => {
+          const label = el.querySelector("span").getBoundingClientRect();
+          const heading = el.querySelector("h3").getBoundingClientRect();
+          return heading.top >= label.bottom - 1;
+        }), true, `${route} source-overview heading starts below its section label at ${width}`);
+        if (route === routes[0]) {
+          await page.waitForFunction(() => document.querySelector('.page-nav a[aria-current="location"]')?.getAttribute("href") === "#investment-analysis-title");
+          assert.equal(await page.locator('.page-nav a[aria-current="location"]').count(), 1);
+          assert.equal(new URL(page.url()).hash, navigationHash, "reading a section preserves the visitor's URL fragment");
+          const rail = await page.locator(".page-nav").evaluate(el => {
+            const bounds = el.getBoundingClientRect();
+            const list = el.querySelector("ol").getBoundingClientRect();
+            const active = el.querySelector('[aria-current="location"]');
+            const inactive = el.querySelector('a:not([aria-current="location"])');
+            const main = document.querySelector("main");
+            return {
+              position: getComputedStyle(el).position, top: bounds.top, left: bounds.left,
+              right: bounds.right, bottom: bounds.bottom, listRight: list.right, listBottom: list.bottom,
+              contentLeft: main.getBoundingClientRect().left + parseFloat(getComputedStyle(main).paddingLeft),
+              targetWidth: active.getBoundingClientRect().width,
+              targetHeight: active.getBoundingClientRect().height,
+              activeLeft: active.getBoundingClientRect().left, activeRight: active.getBoundingClientRect().right,
+              activeTop: active.getBoundingClientRect().top, activeBottom: active.getBoundingClientRect().bottom,
+              titleRight: el.querySelector('.page-nav__title').getBoundingClientRect().right,
+              distinctFill: getComputedStyle(active).backgroundColor !== getComputedStyle(inactive).backgroundColor,
+              currentTickHeight: active.querySelector('.page-nav__tick').getBoundingClientRect().height,
+              ordinaryTickHeight: inactive.querySelector('.page-nav__tick').getBoundingClientRect().height
+            };
+          });
+          assert.equal(rail.distinctFill, true);
+          assert.ok(rail.currentTickHeight > rail.ordinaryTickHeight);
+          if (width > 1150) {
+            assert.equal(rail.position, "fixed");
+            assert.equal(rail.targetWidth, 32);
+            assert.ok(rail.targetHeight >= 32);
+            assert.ok(rail.contentLeft - rail.right >= 8, `content clearance at ${width}`);
+            assert.ok(rail.listRight + 3 <= rail.right && rail.listBottom + 3 <= rail.bottom, `rail shadow stays inside its scrollport at ${width}`);
+            assert.ok(rail.activeTop >= rail.top && rail.activeBottom <= rail.bottom, `active desktop target is visible at ${width}`);
+            assert.ok(rail.activeLeft >= rail.left && rail.activeRight <= rail.right, `desktop targets clear the previous horizontal scroll offset at ${width}`);
+          } else {
+            assert.equal(rail.position, "sticky");
+            assert.ok(rail.top >= -1 && rail.top <= 1, `narrow strip stays at the top at ${width}`);
+            assert.ok(rail.targetWidth >= 44 && rail.targetHeight >= 44);
+            assert.ok(rail.activeLeft >= rail.titleRight + 4 && rail.activeRight <= rail.right, `active narrow target clears the sticky title and remains visible at ${width}`);
+          }
+        }
         if (route === routes[0] && width === 1151) {
           const rail = page.locator(".page-nav");
           await page.locator('.page-nav a[href="#investment-analysis-title"]').focus();
@@ -122,6 +175,33 @@ test("investment chapters retain readable, navigable, source-grounded screen and
             return bounds.top >= 0 && bounds.bottom <= innerHeight && link.top >= bounds.top && link.bottom <= bounds.bottom;
           }), true);
         }
+        if (width === 390 || width === 1239) {
+          await page.locator(".investment-static-overview > summary").evaluate(el => el.scrollIntoView({ block: "center", behavior: "instant" }));
+          await page.screenshot({ path: path.join(artifacts, `polish-${route}-${width}.png`) });
+        }
+      }
+
+      if (route === routes[0]) {
+        await page.setViewportSize({ width: 1239, height: 501 });
+        await page.locator("#components-title").evaluate(el => window.scrollTo({ top: el.getBoundingClientRect().top + scrollY + 240, behavior: "instant" }));
+        await page.waitForFunction(() => document.querySelector('.page-nav a[aria-current="location"]')?.getAttribute("href") === "#components-title");
+        assert.equal(await page.locator("#components-title").evaluate(el => el.getBoundingClientRect().bottom < 0), true);
+        assert.equal(new URL(page.url()).hash, navigationHash);
+        const comparisonLink = page.locator('.page-nav a[href="#investment-analysis-title"]');
+        await comparisonLink.focus();
+        await page.keyboard.press("Enter");
+        await page.waitForFunction(() => document.querySelector('.page-nav a[aria-current="location"]')?.getAttribute("href") === "#investment-analysis-title");
+        await page.setViewportSize({ width: 1239, height: 360 });
+        await page.waitForFunction(() => {
+          const rail = document.querySelector('.page-nav').getBoundingClientRect();
+          const active = document.querySelector('.page-nav a[aria-current="location"]').getBoundingClientRect();
+          return active.top >= rail.top && active.bottom <= rail.bottom;
+        });
+        const before = await page.evaluate(() => ({ top: scrollY, hash: location.hash, focus: document.activeElement.id }));
+        await page.locator('.page-nav a[href="#preset-title"]').focus();
+        assert.equal(await page.locator('.page-nav a[href="#preset-title"]').evaluate(el => el.getBoundingClientRect().top >= document.querySelector('.page-nav').getBoundingClientRect().top), true);
+        assert.equal(await page.evaluate(() => scrollY), before.top, "revealing a focused rail item preserves document scroll");
+        assert.equal(new URL(page.url()).hash, before.hash);
       }
 
       const fixture = structuredClone(initial);
@@ -168,6 +248,7 @@ test("investment chapters retain readable, navigable, source-grounded screen and
         assert.match(await report.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute("content"), /default-src 'none'/);
         assert.equal(await report.locator('meta[name="author"]').count(), 1);
         assert.equal(await report.locator('meta[name="author"]').getAttribute("content"), "Vikrant Varun Kudesia");
+        assert.match(await report.locator("main").textContent(), /Accountable people review pricing and expected outcomes, authorize budgets and staffing/);
         assert.match(await report.locator("footer").textContent(), /Vikrant Varun Kudesia/);
         assert.match(await report.locator(".investment-report").textContent(), /Formula version: 0\.1\.0/);
         const download = await report.getByRole("link", { name: "Download HTML", exact: true }).getAttribute("href");
