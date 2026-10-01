@@ -1,11 +1,26 @@
 {
   "schemaVersion": "1",
   "repository": "human-ai-systems-exemplars",
-  "sourceRevision": "341bceb719a28be760775b6322021d78abaa919b",
+  "sourceRevision": "0fa2195072bc90117b4578d7fe7c62d62f865f73",
   "schemaRef": "https://schemas.vik.guru/collaboration-skills/0.1.0/collaboration-skill.schema.json",
+  "schemaRefRole": "canonical_schema_identity",
+  "schemaRetrievalUrl": "https://schemas.radiantnull.com/collaboration-skills/0.1.0/collaboration-skill.schema.json",
   "publicationStanding": "public_ready",
   "selectionRule": "A public-ready entry carries an exact semantic source and every supporting file declared for this projection.",
   "skills": [
+    {
+      "name": "audit-anthropomorphic-cues",
+      "title": "Audit anthropomorphic cues",
+      "description": "Audits bundled person-like cues in generative-system interfaces and work language, separating human-interpretation evidence, model-output hypotheses, local system functions, and accountable authority. Applies when names, pronouns, avatars, voice, emotional language, agency claims, role metaphors, or tool surfaces may change reliance, delegation, capability expectations, responsibility, or recovery.",
+      "publicationStanding": "public_ready",
+      "pagePath": "audit-anthropomorphic-cues/",
+      "projectionPath": "audit-anthropomorphic-cues/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/audit-anthropomorphic-cues/projection.json",
+      "sourcePath": ".agents/skills/audit-anthropomorphic-cues/SKILL.md",
+      "sourceRoute": "source/.agents/skills/audit-anthropomorphic-cues/SKILL.md",
+      "sourceSha256": "26bc66d0cc0ccee013e34f9dfcbcc1883a595c96523cd29c99d7c0fd71d6f0f0",
+      "dependencies": []
+    },
     {
       "name": "bounded-support-routing",
       "title": "Bounded support routing",
@@ -13,6 +28,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "bounded-support-routing/",
       "projectionPath": "bounded-support-routing/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/bounded-support-routing/projection.json",
       "sourcePath": ".agents/skills/bounded-support-routing/SKILL.md",
       "sourceRoute": "source/.agents/skills/bounded-support-routing/SKILL.md",
       "sourceSha256": "80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402",
@@ -30,7 +46,7 @@
         {
           "sourcePath": ".github/workflows/prototype-unit-tests.yml",
           "path": "source/github/workflows/prototype-unit-tests.yml",
-          "sha256": "d6ef3155beb266959d16254aa1e04653ace796f419c69724ba2b5462aebb3eda"
+          "sha256": "a3e6cacfb100b8c09abb692023722c2741f1b9d857c4d78618c0f68c040d296f"
         }
       ]
     },
@@ -41,6 +57,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "collaboration-accounting/",
       "projectionPath": "collaboration-accounting/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/collaboration-accounting/projection.json",
       "sourcePath": ".agents/skills/collaboration-accounting/SKILL.md",
       "sourceRoute": "source/.agents/skills/collaboration-accounting/SKILL.md",
       "sourceSha256": "f081f046652c1b526f1f8f4ad70c42de6a25662bcabd359690e2b71448061089",
@@ -64,6 +81,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "collaboration-runbook-authoring/",
       "projectionPath": "collaboration-runbook-authoring/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/collaboration-runbook-authoring/projection.json",
       "sourcePath": ".agents/skills/collaboration-runbook-authoring/SKILL.md",
       "sourceRoute": "source/.agents/skills/collaboration-runbook-authoring/SKILL.md",
       "sourceSha256": "9e5c5de2277768d2efd1fa639006a7e7179e814fba84f9d1c0ab96f3155bfaf9",
@@ -76,6 +94,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "context-canvas-css-ownership/",
       "projectionPath": "context-canvas-css-ownership/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/context-canvas-css-ownership/projection.json",
       "sourcePath": ".agents/skills/context-canvas-css-ownership/SKILL.md",
       "sourceRoute": "source/.agents/skills/context-canvas-css-ownership/SKILL.md",
       "sourceSha256": "03e8bbc4695aeec710a218b65a0212985662a34e0e3b4b24172c7945e37bf0b3",
@@ -99,6 +118,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "context-canvas-surface-reading/",
       "projectionPath": "context-canvas-surface-reading/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/context-canvas-surface-reading/projection.json",
       "sourcePath": ".agents/skills/context-canvas-surface-reading/SKILL.md",
       "sourceRoute": "source/.agents/skills/context-canvas-surface-reading/SKILL.md",
       "sourceSha256": "b0861479adc855a26c4c2d7a62d49a436f44a803e3c28a406da28c26b83d7188",
@@ -111,6 +131,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "context-canvas-visual-verification/",
       "projectionPath": "context-canvas-visual-verification/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/context-canvas-visual-verification/projection.json",
       "sourcePath": ".agents/skills/context-canvas-visual-verification/SKILL.md",
       "sourceRoute": "source/.agents/skills/context-canvas-visual-verification/SKILL.md",
       "sourceSha256": "3ae5ab182f0b0a0136a016b9c2959d8e0ef8e6cc38b97fd607bd5505125293b0",
@@ -123,10 +144,40 @@
       "publicationStanding": "public_ready",
       "pagePath": "contextual-jargon-scan/",
       "projectionPath": "contextual-jargon-scan/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/contextual-jargon-scan/projection.json",
       "sourcePath": ".agents/skills/contextual-jargon-scan/SKILL.md",
       "sourceRoute": "source/.agents/skills/contextual-jargon-scan/SKILL.md",
       "sourceSha256": "af2d00add7e4916e11b8dfe00e97ce180e901b874c99627069d695baa1d4df11",
       "dependencies": []
+    },
+    {
+      "name": "cost-and-ownership-analysis",
+      "title": "Cost and ownership analysis",
+      "description": "Maps scoped JavaScript functions to algorithmic cost, input boundaries, and mutation ownership. Applies when a review raises complexity, repeated preparation, regex or prototype-chain behavior, path handling, or state-aliasing concerns that should change an implementation decision.",
+      "publicationStanding": "public_ready",
+      "pagePath": "cost-and-ownership-analysis/",
+      "projectionPath": "cost-and-ownership-analysis/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/cost-and-ownership-analysis/projection.json",
+      "sourcePath": ".agents/skills/cost-and-ownership-analysis/SKILL.md",
+      "sourceRoute": "source/.agents/skills/cost-and-ownership-analysis/SKILL.md",
+      "sourceSha256": "618282d0f3bdc917d1ce1ab8d1173507ec3fb0f91601d005b105d4c3223c6c91",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/practitioner-probe/SKILL.md",
+          "path": "source/.agents/skills/practitioner-probe/SKILL.md",
+          "sha256": "348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c"
+        },
+        {
+          "sourcePath": ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
+          "path": "source/.agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
+          "sha256": "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a"
+        },
+        {
+          "sourcePath": ".agents/skills/collaboration-accounting/SKILL.md",
+          "path": "source/.agents/skills/collaboration-accounting/SKILL.md",
+          "sha256": "f081f046652c1b526f1f8f4ad70c42de6a25662bcabd359690e2b71448061089"
+        }
+      ]
     },
     {
       "name": "declarative-skill-authoring",
@@ -135,6 +186,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "declarative-skill-authoring/",
       "projectionPath": "declarative-skill-authoring/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/declarative-skill-authoring/projection.json",
       "sourcePath": ".agents/skills/declarative-skill-authoring/SKILL.md",
       "sourceRoute": "source/.agents/skills/declarative-skill-authoring/SKILL.md",
       "sourceSha256": "153ea23114bd69f57403c548f884b5fede7f1c350d85ffadb0d4337b45ccccca",
@@ -153,6 +205,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "evidence-grounded-research-spike/",
       "projectionPath": "evidence-grounded-research-spike/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/evidence-grounded-research-spike/projection.json",
       "sourcePath": ".agents/skills/evidence-grounded-research-spike/SKILL.md",
       "sourceRoute": "source/.agents/skills/evidence-grounded-research-spike/SKILL.md",
       "sourceSha256": "844fc0c6b0b956b81984a2c2d47d9252abadeb0a6554c5ef4734d0f1e5f4b531",
@@ -165,6 +218,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "issue-chain-stewardship/",
       "projectionPath": "issue-chain-stewardship/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/issue-chain-stewardship/projection.json",
       "sourcePath": ".agents/skills/issue-chain-stewardship/SKILL.md",
       "sourceRoute": "source/.agents/skills/issue-chain-stewardship/SKILL.md",
       "sourceSha256": "86815b7996c29de1aefce7b58e1276b727d50da75dd2b19985decb6884390c57",
@@ -177,6 +231,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "locator-boundary-stewardship/",
       "projectionPath": "locator-boundary-stewardship/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/locator-boundary-stewardship/projection.json",
       "sourcePath": ".agents/skills/locator-boundary-stewardship/SKILL.md",
       "sourceRoute": "source/.agents/skills/locator-boundary-stewardship/SKILL.md",
       "sourceSha256": "9a71f2512756ddb1163ef1694effa5ec5b159783b8b8cf46e7aa166884f10723",
@@ -200,6 +255,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "practitioner-probe/",
       "projectionPath": "practitioner-probe/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/practitioner-probe/projection.json",
       "sourcePath": ".agents/skills/practitioner-probe/SKILL.md",
       "sourceRoute": "source/.agents/skills/practitioner-probe/SKILL.md",
       "sourceSha256": "348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c",
@@ -212,6 +268,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "repository-attribution-stewardship/",
       "projectionPath": "repository-attribution-stewardship/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/repository-attribution-stewardship/projection.json",
       "sourcePath": ".agents/skills/repository-attribution-stewardship/SKILL.md",
       "sourceRoute": "source/.agents/skills/repository-attribution-stewardship/SKILL.md",
       "sourceSha256": "6c13f9a54543e973824bc5ce407ae9fe17f8a07d2ef22dccb532f60685c12dfd",
@@ -224,6 +281,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "repository-reentry/",
       "projectionPath": "repository-reentry/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/repository-reentry/projection.json",
       "sourcePath": ".agents/skills/repository-reentry/SKILL.md",
       "sourceRoute": "source/.agents/skills/repository-reentry/SKILL.md",
       "sourceSha256": "211cdbd293c260e95e62d3bc7ed5cb4d6d9ca3debd560a28a74b52364a1bfa90",
@@ -236,6 +294,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "schema-contract-authoring/",
       "projectionPath": "schema-contract-authoring/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/schema-contract-authoring/projection.json",
       "sourcePath": ".agents/skills/schema-contract-authoring/SKILL.md",
       "sourceRoute": "source/.agents/skills/schema-contract-authoring/SKILL.md",
       "sourceSha256": "46f58b788bd8c04c60fc71ae0dc33e108f9392e98a18e88ef131917500e8dfe9",
@@ -248,14 +307,20 @@
       "publicationStanding": "public_ready",
       "pagePath": "secret-boundary-inspection/",
       "projectionPath": "secret-boundary-inspection/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/secret-boundary-inspection/projection.json",
       "sourcePath": ".agents/skills/secret-boundary-inspection/SKILL.md",
       "sourceRoute": "source/.agents/skills/secret-boundary-inspection/SKILL.md",
-      "sourceSha256": "0fc2cc964ed65457fdea77ea1494756b0c1c618d30c0622094ae7c089374405d",
+      "sourceSha256": "5a17b8e370963c3b1705bd5a2eb2c9ac6d03371c0564151c121218592826556a",
       "dependencies": [
+        {
+          "sourcePath": ".agents/skills/secret-boundary-inspection/references/embedded-metadata-publication-boundary.md",
+          "path": "source/.agents/skills/secret-boundary-inspection/references/embedded-metadata-publication-boundary.md",
+          "sha256": "b62cff0e3502ed6315ef4f34f19c8b41764a437f549398836f0b181e1ed9c39f"
+        },
         {
           "sourcePath": "threadkeeping/repository-secret-material-boundary.md",
           "path": "source/threadkeeping/repository-secret-material-boundary.md",
-          "sha256": "7693b7ca340099364b743bee4ab5b7ddfb91d6f0c37c4bdd9665af6196bdc8bb"
+          "sha256": "c88ba14ec39549c94c47b59f4d0c0dbf212729cc48e6d43b2fa0fe2fd819425c"
         },
         {
           "sourcePath": "threadkeeping/context-canvas-public-reference-materialization.md",
@@ -265,7 +330,7 @@
         {
           "sourcePath": "threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md",
           "path": "source/threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md",
-          "sha256": "095aadd0b3d7908b3ce7459ec518982981c27918226bde2e5d4309b0e0d12e78"
+          "sha256": "a236bdb88e8ceb22ca8f9e102ff5421478095f6a7c98e89c26cf51e5fab4b212"
         }
       ]
     },
@@ -276,6 +341,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "source-authority-mapping/",
       "projectionPath": "source-authority-mapping/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/source-authority-mapping/projection.json",
       "sourcePath": ".agents/skills/source-authority-mapping/SKILL.md",
       "sourceRoute": "source/.agents/skills/source-authority-mapping/SKILL.md",
       "sourceSha256": "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5",
@@ -288,6 +354,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "stateful-artifact-behavior-contracts/",
       "projectionPath": "stateful-artifact-behavior-contracts/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/stateful-artifact-behavior-contracts/projection.json",
       "sourcePath": ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
       "sourceRoute": "source/.agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
       "sourceSha256": "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a",
@@ -300,6 +367,7 @@
       "publicationStanding": "public_ready",
       "pagePath": "uv-backed-python-execution/",
       "projectionPath": "uv-backed-python-execution/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/uv-backed-python-execution/projection.json",
       "sourcePath": ".agents/skills/uv-backed-python-execution/SKILL.md",
       "sourceRoute": "source/.agents/skills/uv-backed-python-execution/SKILL.md",
       "sourceSha256": "e9d788cae6d2ceb1ed328f8c5ce70c0c34c18d1e0849b4804d89ade6ed42f414",

@@ -9,7 +9,7 @@ description: Produces a canary-proven, scope-explicit secret-material observatio
 
 - **What:** A repository-grounded method for proving the selected detector path with a fresh synthetic canary, observing one named material scope, and returning a safe, bounded receipt or finding response.
 - **When:** Source, an exact proposed index, locally available history, or a named generated artifact is preparing to cross a snapshot, publication, delivery, or repository-reception boundary.
-- **Boundaries:** The repository-owned implementation defines the engine, version, configuration, commands, and supported scopes. This skill supplies neither universal secret absence nor authority to validate a credential, publish material, rotate access, rewrite history, change refs, or disclose a finding. Those actions keep their existing owners and authorization boundaries.
+- **Boundaries:** The repository-owned implementation defines the engine, version, configuration, commands, and supported scopes. Credential-shaped material, embedded binary metadata, audience fit, and rights or consent are separate publication claims with fitting observations. This skill supplies neither universal secret absence nor authority to validate a credential, publish material, rotate access, rewrite history, change refs, or disclose a finding. Those actions keep their existing owners and authorization boundaries.
 - **Result:** The detector path proves itself before interpretation; each requested scope returns zero unresolved matches or enters a private response route; and the receipt names what was observed, what it establishes, and where its evidence stops.
 
 ## Fit and attention
@@ -18,7 +18,7 @@ description: Produces a canary-proven, scope-explicit secret-material observatio
 - **Poor fit when:** The task is live credential administration, vulnerability intake, Notion ancestry or publication approval, signed-out route verification, or exhaustive Git-object forensics.
 - **Smallest useful dose:** One verified local implementation, one fresh generated canary, one precisely named scope, and one safe receipt.
 - **Foregrounds:** Detector liveness, scope identity, exact-index behavior, local-ref limits, sensitive report handling, reviewed exceptions, and receiving-repository re-observation.
-- **May under-attend:** Semantic publication standing, service-side exposure, binary-object history, unfetched refs, forks, caches, and provider validity; those claims retain their fitting observations.
+- **May under-attend:** Semantic publication standing, service-side exposure, embedded EXIF, IPTC, XMP, document, media-container, and archive metadata, binary-object history, unfetched refs, forks, caches, and provider validity; those claims retain their fitting observations.
 - **Interactions:** `repository-reentry` establishes current source and Git standing. `locator-boundary-stewardship` owns public locator placement. `source-authority-mapping` distinguishes source, projection, and receiving roles. `collaboration-accounting` receives real findings, receiver friction, and changed tool behavior.
 - **Rest or release when:** No material boundary is active, a smaller existing repository check already supplies the same receipt, or the selected implementation no longer owns the requested scope.
 
@@ -40,6 +40,10 @@ Distinguish the working tree and explicitly included ignored material, the exact
 
 Establish whether the clone is complete and which refs are locally available before a history observation. State unfetched remotes, forks, dangling objects, caches, GitHub-native prose, and binary content omitted from textual patches as evidence limits rather than implied coverage.
 
+### Rule: Embedded metadata receives a distinct publication observation
+
+When a publication closure contains images, documents, audio, video, or archives, keep its metadata observation adjacent to the secret-material receipt while preserving a separate claim. Format-aware inspection can reveal precise location, device and lens serials, creator or author fields, capture times, software and host details, archive entry paths, and metadata copied into generated derivatives even when a credential detector returns clean. A configured camera or phone setting is useful prevention; the publication candidate and each generated carrier still supply the release evidence. Load the conditional metadata guidance for that branch.
+
 ### Rule: Scanner output receives a narrow information diet
 
 Treat raw reports, scanner diagnostics, matched values, filenames, commit messages, fingerprints, and free-text attributes as potentially sensitive. Keep them local and ephemeral. Durable output carries only the repository wrapper's allowlisted orientation and never the candidate value.
@@ -58,7 +62,7 @@ A successor or delivery repository reruns its accepted implementation after popu
 
 ## Operating sequence
 
-1. **Bind the handoff:** Name the source state, receiving event, requested scopes, repository implementation owner, and the person or Issue that can accept the receipt.
+1. **Bind the handoff:** Name the source state, receiving event, requested scopes, repository implementation owner, and the person or Issue that can accept the receipt. When binary carriers enter the publication closure, identify the adjacent embedded-metadata observation and its receiver without folding that result into the secret-material claim.
 2. **Verify the mechanism:** Confirm the pinned executable and reviewed configuration; run focused implementation tests when the wrapper, engine, rules, or scope behavior changed.
 3. **Prove the path:** Run the fresh synthetic canary and stop if detection, redaction, parsing, or safe output differs from the accepted contract.
 4. **Observe each scope:** Run only the named tree, exact-index, local-history, or artifact routes. Complete clone and ref acquisition before making the corresponding history claim.
@@ -87,6 +91,8 @@ A successor or delivery repository reruns its accepted implementation after popu
 ## Conditional context
 
 In Human-AI Systems Exemplars, load the [repository secret-material boundary](../../../threadkeeping/repository-secret-material-boundary.md) before invoking or changing the scanner. It owns the current Betterleaks version, exact commands, scope topology, reviewed exception surface, safe-output contract, evidence limits, and successor handoff.
+
+Load [embedded metadata at a publication boundary](references/embedded-metadata-publication-boundary.md) when a named handoff contains images, documents, audio, video, or archives whose non-content metadata could travel with the release.
 
 ## Completion
 
