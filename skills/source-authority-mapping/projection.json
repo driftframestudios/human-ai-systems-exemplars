@@ -5,7 +5,7 @@
   "name": "source-authority-mapping",
   "description": "Traces a claim, artifact, or contract through semantic ownership, source location, projections, delivery routes, receiving use, and promotion. Applies when repositories, workspaces, mirrors, snapshots, or publication surfaces make authority and lineage difficult to distinguish.",
   "semanticAuthorityRef": "../source/.agents/skills/source-authority-mapping/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/16",
+  "sourceRef": "../catalog.json#/skills/18",
   "contract": {
     "what": "A portable method for making the authority and receiving path of a claim, artifact, or contract legible across several systems.",
     "when": [

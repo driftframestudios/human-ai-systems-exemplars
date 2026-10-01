@@ -5,7 +5,7 @@
   "name": "bounded-support-routing",
   "description": "Composes a finite support packet with an explicit action mode, observable return, and stopping event. Applies when a focused solution, implementation, or recovery route needs clear expectations, bounded attention, and a natural handback.",
   "semanticAuthorityRef": "../source/.agents/skills/bounded-support-routing/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/0",
+  "sourceRef": "../catalog.json#/skills/1",
   "contract": {
     "what": "A compact support packet that carries one opportunity through a named focal surface to an observable result and return.",
     "when": [
