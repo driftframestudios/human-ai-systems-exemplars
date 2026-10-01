@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-/* Inline delivery projection. Edit the three shared source owners, then run this file. */
+/* Inline delivery and source-readable capsule defaults. Edit canonical owners, then regenerate. */
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 
 export const INVESTMENT_HOSTS = Object.freeze([
@@ -11,6 +12,7 @@ export const INVESTMENT_HOSTS = Object.freeze([
 export const INLINE_OWNERS = Object.freeze([
   Object.freeze({ key: "styles", tag: "style", path: "collaboration/investment-analysis/studio.css" }),
   Object.freeze({ key: "core", tag: "script", path: "collaboration/investment-analysis/core.js" }),
+  Object.freeze({ key: "capsule", tag: "script", path: "collaboration/investment-analysis/capsule.js" }),
   Object.freeze({ key: "ui", tag: "script", path: "collaboration/investment-analysis/studio.js" })
 ]);
 const repositoryRoot = fileURLToPath(new URL("../", import.meta.url));
@@ -32,7 +34,7 @@ export function projectInvestmentHtml(html, sources) {
     }
     const from = projected.indexOf(start);
     const to = projected.indexOf(end);
-    if (from < previousEnd || to < from) throw new Error("Keep inline owners in styles, core, UI order.");
+    if (from < previousEnd || to < from) throw new Error("Keep inline owners in styles, core, capsule, UI order.");
     const headEnd = projected.indexOf("</head>");
     const bodyEnd = projected.lastIndexOf("</body>");
     if (headEnd < 0 || bodyEnd < headEnd || (owner.key === "ui" ? from < headEnd || to > bodyEnd : to > headEnd)) {
@@ -56,7 +58,35 @@ export function projectInvestmentHtml(html, sources) {
     projected = projected.slice(0, from) + block + projected.slice(to + end.length);
     previousEnd = from + block.length;
   }
-  return projected;
+  return projectDefaultCapsule(projected, sources);
+}
+
+function markedSource(html, key) {
+  const start = '// investment-capsule:' + key + ':start';
+  const end = '// investment-capsule:' + key + ':end';
+  if (html.split(start).length !== 2 || html.split(end).length !== 2) throw new Error('Supply one pure method capsule block: ' + key);
+  const from = html.indexOf(start) + start.length, to = html.indexOf(end);
+  if (to < from) throw new Error('Order the method capsule markers.');
+  return html.slice(from, to);
+}
+function projectDefaultCapsule(html, sources) {
+  // Trusted repository source only. A fresh build realm owns its default state;
+  // visitor-supplied state is handled solely by the runtime admission boundary.
+  const context = vm.createContext({TextEncoder});
+  for (const name of ['core', 'capsule']) {
+    const owner = INLINE_OWNERS.find(owner => owner.key === name);
+    new vm.Script(sources[owner.path], {filename:owner.path}).runInContext(context, {timeout:1000});
+  }
+  new vm.Script('const initial = InvestmentCore.prepare(InvestmentCore.defaults()); const prepared = Object.freeze({contract:InvestmentCore.VERSION,fingerprint:initial.fingerprint,state:initial.state,result:initial.result}); const window = {InvestmentCore, InvestmentCapsule, investmentAnalysis:{readProjection:()=>prepared}};').runInContext(context, {timeout:1000});
+  const model = html.includes('id="promptCapsuleMarkdown"');
+  const code = model
+    ? '(function(){' + markedSource(html, 'method-data') + markedSource(html, 'method-formatter') + '\nreturn promptCapsuleMarkdown();})()'
+    : 'InvestmentCapsule.document(InvestmentCore, prepared)';
+  const markdown = new vm.Script(code).runInContext(context, {timeout:1000});
+  const escaped = markdown.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const pattern = model ? /(<pre id="promptCapsuleMarkdown"[^>]*>)[\s\S]*?(<\/pre>)/ : /(<textarea id="analysis-capsule"[^>]*>)[\s\S]*?(<\/textarea>)/;
+  if (!pattern.test(html)) throw new Error('Supply the source-readable capsule carrier.');
+  return html.replace(pattern, (_, open, close) => open + escaped + close);
 }
 
 export function assertInvestmentProjection(html, sources) {
@@ -76,7 +106,7 @@ async function main() {
     if (check) assertInvestmentProjection(html, sources);
     else await writeFile(file, projectInvestmentHtml(html, sources));
   }
-  console.log("Investment inline projections " + (check ? "match" : "updated from") + " their three source owners across two hosts.");
+  console.log("Investment inline projections " + (check ? "match" : "updated from") + " their four source owners across two hosts.");
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   main().catch(error => { console.error(error.message); process.exitCode = 1; });

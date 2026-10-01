@@ -214,6 +214,11 @@
   .investment-analysis [data-column-role] { min-width:0; }
   .investment-analysis .investment-report section { break-inside:auto; }
 }
+
+/* Capsule controls extend the existing native analysis grammar. */
+.investment-analysis [data-analysis-capsule-views] { display:flex; flex-wrap:wrap; gap:1rem; }
+.investment-analysis :is([data-analysis-capsule-views],[data-analysis-capsule-actions])[hidden] { display:none; }
+.investment-analysis [data-analysis-capsule-views] input { width:auto; }
 </style>
 <!-- investment-analysis:styles:end -->
 <!-- investment-analysis:core:start -->
@@ -982,6 +987,153 @@
 });
 </script>
 <!-- investment-analysis:core:end -->
+<!-- investment-analysis:capsule:start -->
+<!-- Generated from collaboration/investment-analysis/capsule.js; regenerate: node tools/project-investment-analysis.mjs -->
+<script data-investment-analysis-source="collaboration/investment-analysis/capsule.js">
+/* Pure capsule projection shared by authored defaults and accepted runtime views. */
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === "object" && module.exports) module.exports = api;
+  else root.InvestmentCapsule = api;
+})(globalThis, function () {
+  "use strict";
+  const CONTRACT = "prompt-capsule/0.1.0";
+  const SOURCE_VERSION = "0.3.0";
+  const LOOPS = Object.freeze([
+    Object.freeze({id:"repository-reentry",name:"Re-enter, make one bounded change, and return it clearly",publicUrl:"https://schemas.radiantnull.com/collaboration/#repository-reentry",fitCondition:"Use when the receiving costing decision resumes across sources and accepted revisions."}),
+    Object.freeze({id:"skill-from-receiving-use",name:"Let real use shape a skill",publicUrl:"https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use",fitCondition:"Use when a receiving decision reveals a reusable collaboration move."})
+  ]);
+  const SKILL_REVISION = "0b8c0463cc5e5fe107b894e2f6f204e3b746a99b";
+  const SKILLS = Object.freeze([
+    Object.freeze({name:"Source Authority Mapping",path:".agents/skills/source-authority-mapping/SKILL.md",sha256:"706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5",purpose:"Trace inputs, evidence, and the receiving decision to their owners."}),
+    Object.freeze({name:"Practitioner Probe",path:".agents/skills/practitioner-probe/SKILL.md",sha256:"348ea113a75af3487a420e2075aa199297673aca0ba0a69e5a19d6c5a463776c",purpose:"Turn a consequential evidence gap into a bounded observation."})
+  ]);
+  const DOMAINS = Object.freeze([
+    ["internal-investment", "Internal investment"], ["customer-implementation", "Customer implementation"],
+    ["commercial-cohort", "Commercial cohort"], ["service-operational", "Service and operational value"],
+    ["capital-allocation", "Capital allocation"]
+  ].map(Object.freeze));
+  const GROUP_DOMAIN = Object.freeze({pricing:"customer-implementation",commercial:"commercial-cohort",serviceOutcomes:"service-operational",capital:"capital-allocation"});
+  const number = new Intl.NumberFormat("en-US", {maximumFractionDigits:4});
+  // Linear scans over source text; structural delimiters belong to the formatter.
+  function inline(value) {
+    return String(value ?? "Unspecified").replace(/\r\n?/g,"\n").replace(/\s+/g,space=>space.includes("\n")?" ":space)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      .replace(/\\/g,"\\\\").replace(/([!#@`*_[\]|~])/g,"\\$1")
+      .replace(/\b((?:https?|ftp):)(?=\/\/)/gi,p=>p.slice(0,-1)+"\\:")
+      .replace(/\bwww\./gi,p=>p.slice(0,-1)+"\\.");
+  }
+  function fence(text, language = "json") {
+    const source = String(text);
+    let longest = 2;
+    for (const run of source.matchAll(/`+/g)) longest = Math.max(longest, run[0].length);
+    const delimiter = "`".repeat(longest + 1);
+    return delimiter + language + "\n" + source + "\n" + delimiter;
+  }
+  const unit = (value, inputs) => String(value || "unit unspecified").replace(/currency/g,inputs.currency || "currency unspecified").replace(/period/g,inputs.period);
+  const valueText = value => value === null || (typeof value === "string" && value.trim() === "") ? "unavailable" : typeof value === "object" ? JSON.stringify(value) : String(value);
+  function metric(value, inputs) {
+    const amount = value.status === "known" ? number.format(value.value) : value.status;
+    return inline(amount) + " " + inline(unit(value.unit, inputs)) + (value.reason ? " | Reason: " + inline(value.reason) : "");
+  }
+  function inputDomain(key, field) {
+    if (key === "internalInvestment") return "internal-investment";
+    if (key === "capacity") return "service-operational";
+    return Object.hasOwn(GROUP_DOMAIN, field.group) ? GROUP_DOMAIN[field.group] : null;
+  }
+  function inputLines(C, p, domain) {
+    return Object.entries(C.FIELDS).filter(([key,field])=>inputDomain(key,field)===domain).map(([key,field])=>{
+      const value=p.state.inputs[key];
+      const standing=field.type===C.FIELD_TYPE.NUMBER ? C.numeric(value,field.label,field.min ?? null,field.max ?? null).status : typeof value === "string" && value.trim() === "" ? "unavailable" : "known";
+      return "- " + inline(field.label) + " (" + inline(key) + "): " + inline(valueText(value)) + " [" + inline(unit(field.unit,p.state.inputs)) + "] | " + standing;
+    });
+  }
+  // O(records + output bytes); five domains are a fixed-size vocabulary.
+  function workingState(C, p) {
+    const {state:s,result:r}=p, i=s.inputs;
+    const sections=[];
+    for (const [domain,title] of DOMAINS) {
+      sections.push("### " + title,"","#### Inputs and assumptions","",...inputLines(C,p,domain));
+      if (domain === "internal-investment") {
+        const captured=Object.hasOwn(s.extensions,"urn:investment:staffing-reference");
+        sections.push("",captured
+          ? "The accepted JSON includes a captured USD staffing reference under urn:investment:staffing-reference. Its snapshot and recorded calculation describe that capture; live calculator controls have their own state."
+          : "The internal amount is an entered reference. Live staffing controls remain in the calculator; a staffing snapshot enters this account through Use current staffing reference.");
+      }
+      const calculations=r.records.filter(record=>record.domain===domain && record.type==="calculation" && Object.hasOwn(record,"status"));
+      if (calculations.length) sections.push("","#### Calculated results","",...calculations.map(record=>"- "+inline(record.id)+": "+metric(record,i)+(record.evidenceStanding?" | Evidence: "+inline(record.evidenceStanding):"")));
+      if (domain === "commercial-cohort" && s.events.length) sections.push("","#### Lifecycle occurrences","",...s.events.map(e=>"- "+inline(e.id)+": "+inline(e.kind)+" | Period: "+inline(valueText(e.period))+" | Predecessors: "+inline(e.predecessors.join(", ")||"Entry")+" | Evidence: "+inline(e.standing)));
+      if (domain === "service-operational") {
+        sections.push("","#### Consequence evidence","",...s.serviceOutcomes.map(c=>"- "+inline(c.name)+": baseline "+inline(valueText(c.baseline))+", candidate "+inline(valueText(c.candidate))+" ["+inline(c.unit||"unit unspecified")+"] | "+inline(c.standing)+" | Source: "+inline(c.source||"Unspecified")));
+      }
+      if (domain === "capital-allocation") {
+        sections.push("","#### Alternatives and supplied outcomes","");
+        for (const a of r.alternatives) sections.push("- "+inline(a.label)+" ("+inline(a.id)+") | "+inline(a.standing)+" | Flows from t=0: "+inline(JSON.stringify(a.flows)),"- NPV: "+metric(a.npv,i),"- IRR per "+inline(i.period)+": "+metric(a.irr,i),"- Payback: "+metric(a.payback,i));
+        sections.push(...s.outcomes.map(o=>"- Outcome "+inline(o.id)+" | Probability: "+inline(valueText(o.probability))+" | Flows from t=0: "+inline(JSON.stringify(o.flows))));
+        sections.push("","#### Discount sensitivity","");
+        for (const a of r.sensitivity) for (const v of a.values) sections.push("- "+inline(a.id)+" | Rate: "+inline(valueText(v.rate))+" | NPV: "+metric(v.result,i));
+        sections.push("","#### Receiving decision","",decision(p));
+      }
+      sections.push("");
+    }
+    sections.push("### Accepted analysis JSON","","This is the directly importable accepted state. Derived results above use formula version "+C.FORMULA_VERSION+". JSON retains exact values, IDs, absence states, and declared extensions.","",fence(JSON.stringify(s,null,2)));
+    return sections.join("\n");
+  }
+  function decision(p) {
+    const i=p.state.inputs;
+    return ["Owner: "+inline(i.owner||"Name the accountable decision owner"),"Gate: "+inline(p.result.gate),"Next option: "+inline(i.option),"Trigger: "+inline(i.trigger),"Next evidence: "+inline(i.nextEvidence),"Revisit: "+inline(i.revisit||"Unspecified")].map(line=>"- "+line).join("\n");
+  }
+  const requestedReturn = "Return findings by domain, identify the evidence each material claim needs, compare supported alternatives using the supplied results, and propose the smallest next decision for the named owner. Preserve units, denominators, periods, explicit zeros, and held-open conditions.";
+  // Flat Markdown-encoded receiving fields define capsule identity. View, skills,
+  // and related-loop navigation remain outside this represented-state projection.
+  function project(C,p) {
+    const s=p.state,i=s.inputs;
+    return Object.freeze({
+      contract:CONTRACT,
+      capsule:"initiative-costing-calculator/investment-comparison",
+      source:"initiative-costing-calculator@"+SOURCE_VERSION,
+      state:"investment-analysis/"+C.VERSION,
+      revision:SOURCE_VERSION,
+      analysisIdentity:inline(p.fingerprint),
+      title:"Initiative Costing Calculator investment comparison",
+      purpose:"Prepare the next investment decision from the accepted comparison. Receiving owner: "+inline(i.owner||"Name the accountable decision owner")+".",
+      context:["- Scenario: "+inline(i.label)+" ("+inline(s.scenarioId)+")","- Method: "+inline(s.method),"- Evidence standing: "+inline(s.origin),"- Currency / period: "+inline(i.currency||"currency unspecified")+" / "+inline(i.period),"- Cash-flow convention: "+inline(i.cashConvention)].join("\n"),
+      workingState:workingState(C,p),
+      boundaries:"Cash flows, pricing, service budget impacts, and staffing references keep their separate ledger meanings until an explicit transformation joins them. Named people authorize assumptions and decisions; evidence of a workflow or product establishes that context, while causal benefit and local applicability require their own observations.",
+      requestedReturn,
+      recovery:"This packet carries the accepted analysis revision identified above. Pending editor drafts remain with their controls. Import the JSON through the existing analysis importer to restore this comparison. Retain the source when an import needs revision. The capsule fingerprint compares the shared Markdown-encoded fields; analysis identity compares the accepted JSON. Exact JSON and source review carry integrity-sensitive exchange."
+    });
+  }
+  const encoder = new TextEncoder();
+  function fingerprint(projection) {
+    const canonical=Object.fromEntries(Object.keys(projection).sort().map(key=>[key,projection[key]]));
+    let hash=0x811c9dc5;
+    for (const byte of encoder.encode(JSON.stringify(canonical))) hash=Math.imul(hash^byte,0x01000193)>>>0;
+    return "fnv1a32-utf8:"+hash.toString(16).padStart(8,"0");
+  }
+  function prepare(C,p) {
+    const projection=project(C,p);
+    return Object.freeze({projection,fingerprint:fingerprint(projection)});
+  }
+  function document(C,p,view="plain",prepared=prepare(C,p)) {
+    const active=view==="skill-assisted"?view:"plain",q=prepared.projection;
+    const lines=["# Prompt Capsule: "+q.title,"",
+      "- Contract: "+inline(q.contract),"- Capsule: "+inline(q.capsule),"- Source: "+inline(q.source),
+      "- State: "+inline(q.state)+" | revision "+inline(q.revision),"- Fingerprint: "+prepared.fingerprint,"- Analysis fingerprint: "+q.analysisIdentity,"- View: "+active,"",
+      "## Purpose and target","",q.purpose,"",
+      "## Relevant context and inputs","",q.context,"",
+      "## Working state","",q.workingState,"",
+      "## Boundaries and human-held decisions","",q.boundaries,"",
+      "## Requested return","",q.requestedReturn,"",
+      "## Related loops","",...LOOPS.map(loop=>"- ["+loop.name+"]("+loop.publicUrl+") | "+loop.fitCondition),"",
+      "## Evidence and recovery","",q.recovery];
+    if(active==="skill-assisted") lines.push("","## Skill assistance","","Use these pinned source contracts to shape the requested return:","",...SKILLS.map(skill=>"- ["+skill.name+"](https://github.com/driftframestudios/human-ai-systems-exemplars/blob/"+SKILL_REVISION+"/"+skill.path+") | "+skill.purpose+" | Source SHA-256: `"+skill.sha256+"`"));
+    return lines.join("\n")+"\n";
+  }
+  return Object.freeze({CONTRACT,SOURCE_VERSION,LOOPS,SKILLS,SKILL_REVISION,DOMAINS,inline,fence,workingState,decision,requestedReturn,project,fingerprint,prepare,document});
+});
+</script>
+<!-- investment-analysis:capsule:end -->
 </head>
 <body>
 <a class="skip" href="#costing-workspace">Skip to costing workspace</a>
@@ -1017,7 +1169,552 @@
 <div class="panel-head"><div class="phase-heading"><span class="section-label">10 · Compare the investment</span><h2 id="investment-analysis-title" tabindex="-1">Layered investment comparison</h2></div></div>
 <p>Compare an explicitly scoped scenario across internal investment, customer implementation, commercial cohorts, service and operational consequences, and capital allocation. The editable comparison is illustrative; named people establish the evidence and decision authority.</p>
 
-<div data-investment-analysis data-section-prefix="10" hidden></div><section aria-labelledby="investment-overlap-title"><span class="section-label">10F · Reconcile staffing overlap</span><h3 id="investment-overlap-title">Staffing overlap policy</h3><p>Enter the share of each cost that is additional to allocated staffing. A share of 0 means that effort is already included; 100 means fully incremental. Reserve and spread remain separate planning heuristics.</p><div class="investment-fields">
+<div data-investment-analysis data-section-prefix="10" hidden></div>
+<details data-analysis-capsule-panel><summary><span class="investment-kicker">10G · Carry the investment comparison</span><h3 id="investment-capsule-title" tabindex="-1">Prompt Capsule</h3></summary>
+<p>The capsule carries accepted analysis and any explicitly captured staffing reference. Live staffing controls retain their own state.</p>
+<fieldset data-analysis-capsule-views hidden><legend>Markdown view</legend><label><input type="radio" name="analysis-capsule-view" value="plain" checked> Plain</label><label><input type="radio" name="analysis-capsule-view" value="skill-assisted"> Skill-assisted</label></fieldset>
+<label class="investment-editor" for="analysis-capsule"><strong>Accepted investment Prompt Capsule Markdown</strong><textarea id="analysis-capsule" rows="16" readonly aria-describedby="analysis-capsule-status"># Prompt Capsule: Initiative Costing Calculator investment comparison
+
+- Contract: prompt-capsule/0.1.0
+- Capsule: initiative-costing-calculator/investment-comparison
+- Source: initiative-costing-calculator\@0.3.0
+- State: investment-analysis/0.2.0 | revision 0.3.0
+- Fingerprint: fnv1a32-utf8:4c1652b2
+- Analysis fingerprint: fnv1a32:57705d19
+- View: plain
+
+## Purpose and target
+
+Prepare the next investment decision from the accepted comparison. Receiving owner: Name the accountable decision owner.
+
+## Relevant context and inputs
+
+- Scenario: Illustrative pilot versus status quo (scenario/investment-pilot.v0.1)
+- Method: model/activity-based.v0.1
+- Evidence standing: illustrative
+- Currency / period: USD / year
+- Cash-flow convention: Incremental to status quo; end-period; t=0 upfront
+
+## Working state
+
+### Internal investment
+
+#### Inputs and assumptions
+
+- Internal investment reference (internalInvestment): 100000 [USD] | known
+
+The internal amount is an entered reference. Live staffing controls remain in the calculator; a staffing snapshot enters this account through Use current staffing reference.
+
+### Customer implementation
+
+#### Inputs and assumptions
+
+- List price per orderable unit (listPrice): 1000 [USD/unit] | known
+- Discount fraction (0-1) (discount): 0.1 [ratio] | known
+- Rebate per unit (rebate): 25 [USD/unit] | known
+- Variable cost per unit (variableCost): 200 [USD/unit] | known
+- Service cost per unit (serviceCost): 100 [USD/unit] | known
+- Orderable unit and package boundary (pricingUnit): One synthetic service unit; implementation separate [text] | known
+- Buyer / user / payer (buyer): Sponsor / operating team / customer organization [text] | known
+- Price evidence class (priceClass): Illustrative scenario [text] | known
+- Customer implementation cost (implementationCost): 10000 [USD] | known
+- Implementation lag (periods) (implementationLag): 1 [year] | known
+
+#### Calculated results
+
+- calculation/discountAmount: 100 USD/unit | Evidence: illustrative
+- calculation/netPrice: 875 USD/unit | Evidence: illustrative
+- calculation/unitContribution: 575 USD/unit | Evidence: illustrative
+
+### Commercial cohort
+
+#### Inputs and assumptions
+
+- Customer segment (segment): Synthetic implementation partners [text] | known
+- Opening cohort and measurement window (cohort): 100 synthetic customers; one year [text] | known
+- Cohort tenure (periods) (tenure): 1 [year] | known
+- Implementation standing (implementationState): Illustrative ramp; one-period lag [text] | known
+- Opening customers (openingCustomers): 100 [customer] | known
+- New customers (newCustomers): 20 [customer] | known
+- Opening-cohort customers lost (churnCustomers): 10 [customer] | known
+- Reactivated customers outside opening cohort (reactivatedCustomers): 5 [customer] | known
+- Opening-cohort recurring revenue (openingRevenue): 100000 [USD/year] | known
+- Revenue lost from opening cohort (churnRevenue): 10000 [USD/year] | known
+- Opening-cohort contraction (contraction): 5000 [USD/year] | known
+- Opening-cohort expansion (expansion): 20000 [USD/year] | known
+- New-customer recurring revenue (newRevenue): 20000 [USD/year] | known
+- Reactivation revenue outside opening cohort (reactivationRevenue): 5000 [USD/year] | known
+- Acquisition spend for new customers (acquisitionSpend): 10000 [USD] | known
+- New-customer contribution margin (0-1) (contributionMargin): 0.7 [ratio] | known
+
+#### Calculated results
+
+- calculation/closingCustomers: 115 customer | Evidence: illustrative
+- calculation/logoRetention: 0.9 ratio | Evidence: illustrative
+- calculation/grr: 0.85 ratio | Evidence: illustrative
+- calculation/nrr: 1.05 ratio | Evidence: illustrative
+- calculation/closingRevenue: 130,000 USD/year | Evidence: illustrative
+- calculation/cac: 500 USD/customer | Evidence: illustrative
+- calculation/acquisitionRevenueRatio: 0.5 year | Evidence: illustrative
+- calculation/cacPayback: 0.7143 year | Evidence: illustrative
+
+#### Lifecycle occurrences
+
+- acquire: acquisition | Period: 0 | Predecessors: Entry | Evidence: illustrative
+- onboard: onboarding | Period: 1 | Predecessors: acquire | Evidence: illustrative
+- activate: activation | Period: 1 | Predecessors: onboard | Evidence: illustrative
+- renew: renewal | Period: 2 | Predecessors: activate | Evidence: illustrative
+- churn: churn | Period: 2 | Predecessors: activate | Evidence: illustrative
+- reactivate: reactivation | Period: 3 | Predecessors: churn | Evidence: illustrative
+
+### Service and operational value
+
+#### Inputs and assumptions
+
+- Implementation capacity (adopted people per period) (capacity): 40 [person/year] | known
+- Eligible population (eligiblePopulation): 100 [person] | known
+- Adoption fraction (0-1) (adoption): 0.3 [ratio] | known
+- Baseline resource cost per person per period (baselineCost): 500 [USD/person/year] | known
+- Candidate resource cost per person per period (candidateCost): 650 [USD/person/year] | known
+- Budget perspective (perspective): Illustrative provider budget [text] | known
+- Population and context (population): Synthetic population; local eligibility remains to be specified [text] | known
+- Intervention (intervention): Bounded workflow pilot [text] | known
+- Comparator (comparator): Current workflow [text] | known
+- Accountable service / operating reviewer (reviewer): unavailable [text] | unavailable
+- Evidence semantic key or public source (evidenceSource): unavailable [text] | unavailable
+- Evidence as-of date (asOf): unavailable [date] | unavailable
+- Outcome transformation review (economicReview): pending [text] | known
+- Reviewed incremental outcome per adopted person (incrementalOutcome): unavailable [outcome/person] | unavailable
+- Outcome unit (explicit measure) (outcomeUnit): unavailable [text] | unavailable
+
+#### Calculated results
+
+- calculation/adoptedPopulation: 30 person | Evidence: illustrative
+- calculation/budgetImpact: 4,500 USD/year | Evidence: illustrative
+- calculation/capacityGap: 0 person/year | Evidence: illustrative
+- calculation/costPerOutcome: unavailable USD/outcome | Reason: Reviewed incremental outcome per adopted person is needed. | Evidence: illustrative
+- calculation/consequence/Safety: unavailable unit unspecified | Reason: Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario. | Evidence: unavailable
+- calculation/consequence/Quality: unavailable unit unspecified | Reason: Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario. | Evidence: unavailable
+- calculation/consequence/Timeliness: unavailable unit unspecified | Reason: Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario. | Evidence: unavailable
+- calculation/consequence/Patient experience: unavailable unit unspecified | Reason: Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario. | Evidence: unavailable
+- calculation/consequence/Equity: unavailable unit unspecified | Reason: Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario. | Evidence: unavailable
+- calculation/consequence/Efficiency: unavailable unit unspecified | Reason: Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario. | Evidence: unavailable
+- calculation/consequence/Burden: unavailable unit unspecified | Reason: Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario. | Evidence: unavailable
+- calculation/consequence/Governance: unavailable unit unspecified | Reason: Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario. | Evidence: unavailable
+- calculation/consequence/Budget capacity: unavailable unit unspecified | Reason: Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario. | Evidence: unavailable
+
+#### Consequence evidence
+
+- Safety: baseline unavailable, candidate unavailable [unit unspecified] | unavailable | Source: Unspecified
+- Quality: baseline unavailable, candidate unavailable [unit unspecified] | unavailable | Source: Unspecified
+- Timeliness: baseline unavailable, candidate unavailable [unit unspecified] | unavailable | Source: Unspecified
+- Patient experience: baseline unavailable, candidate unavailable [unit unspecified] | unavailable | Source: Unspecified
+- Equity: baseline unavailable, candidate unavailable [unit unspecified] | unavailable | Source: Unspecified
+- Efficiency: baseline unavailable, candidate unavailable [unit unspecified] | unavailable | Source: Unspecified
+- Burden: baseline unavailable, candidate unavailable [unit unspecified] | unavailable | Source: Unspecified
+- Governance: baseline unavailable, candidate unavailable [unit unspecified] | unavailable | Source: Unspecified
+- Budget capacity: baseline unavailable, candidate unavailable [unit unspecified] | unavailable | Source: Unspecified
+
+### Capital allocation
+
+#### Inputs and assumptions
+
+- Effective discount rate per period (discountRate): 0.1 [ratio] | known
+- Cash-flow convention (cashConvention): Incremental to status quo; end-period; t=0 upfront [text] | known
+- Tax and working-capital treatment (taxWorkingCapital): Synthetic after-tax flows; working-capital changes included once [text] | known
+- Outcome tree is mutually exclusive and exhaustive (exhaustive): false [boolean] | known
+
+#### Calculated results
+
+- calculation/expectedNpv: unavailable USD | Reason: Confirm a mutually exclusive, collectively exhaustive outcome tree. | Evidence: illustrative
+
+#### Alternatives and supplied outcomes
+
+- Status quo (status-quo) | illustrative | Flows from t=0: \[0,0,0\]
+- NPV: 0 USD
+- IRR per year: inapplicable ratio | Reason: IRR requires at least one cash-flow sign change.
+- Payback: inapplicable year | Reason: Payback requires an initial cash outlay.
+- Proceed (proceed) | illustrative | Flows from t=0: \[-120000,70000,75000\]
+- NPV: 5,619.8347 USD
+- IRR per year: 0.1343 ratio
+- Payback: 1.6667 year | Reason: Undiscounted; linear recovery within the crossing period.
+- Pilot (pilot) | illustrative | Flows from t=0: \[-100000,60000,60000\]
+- NPV: 4,132.2314 USD
+- IRR per year: 0.1307 ratio
+- Payback: 1.6667 year | Reason: Undiscounted; linear recovery within the crossing period.
+- Defer (defer) | illustrative | Flows from t=0: \[0,-90000,80000\]
+- NPV: -15,702.4793 USD
+- IRR per year: inapplicable ratio | Reason: IRR is restricted to an initial investment followed by nonnegative flows.
+- Payback: inapplicable year | Reason: Payback requires an initial cash outlay.
+- Scale (scale) | illustrative | Flows from t=0: \[-180000,100000,120000\]
+- NPV: 10,082.6446 USD
+- IRR per year: 0.1402 ratio
+- Payback: 1.6667 year | Reason: Undiscounted; linear recovery within the crossing period.
+- Redirect (redirect) | illustrative | Flows from t=0: \[-40000,20000,30000\]
+- NPV: 2,975.2066 USD
+- IRR per year: 0.1514 ratio
+- Payback: 1.6667 year | Reason: Undiscounted; linear recovery within the crossing period.
+- Stop (stop) | illustrative | Flows from t=0: \[-5000,0,0\]
+- NPV: -5,000 USD
+- IRR per year: inapplicable ratio | Reason: IRR requires at least one cash-flow sign change.
+- Payback: unreached year | Reason: Cumulative cash flow remains below zero throughout the supplied horizon.
+- Outcome constrained | Probability: 0.3 | Flows from t=0: \[-100000,30000,30000\]
+- Outcome planned | Probability: 0.5 | Flows from t=0: \[-100000,60000,60000\]
+- Outcome expanded | Probability: 0.2 | Flows from t=0: \[-100000,90000,90000\]
+
+#### Discount sensitivity
+
+- status-quo | Rate: 0.08 | NPV: 0 USD
+- status-quo | Rate: 0.1 | NPV: 0 USD
+- status-quo | Rate: 0.12000000000000001 | NPV: 0 USD
+- proceed | Rate: 0.08 | NPV: 9,115.2263 USD
+- proceed | Rate: 0.1 | NPV: 5,619.8347 USD
+- proceed | Rate: 0.12000000000000001 | NPV: 2,289.5408 USD
+- pilot | Rate: 0.08 | NPV: 6,995.8848 USD
+- pilot | Rate: 0.1 | NPV: 4,132.2314 USD
+- pilot | Rate: 0.12000000000000001 | NPV: 1,403.0612 USD
+- defer | Rate: 0.08 | NPV: -14,746.2277 USD
+- defer | Rate: 0.1 | NPV: -15,702.4793 USD
+- defer | Rate: 0.12000000000000001 | NPV: -16,581.6327 USD
+- scale | Rate: 0.08 | NPV: 15,473.251 USD
+- scale | Rate: 0.1 | NPV: 10,082.6446 USD
+- scale | Rate: 0.12000000000000001 | NPV: 4,948.9796 USD
+- redirect | Rate: 0.08 | NPV: 4,238.6831 USD
+- redirect | Rate: 0.1 | NPV: 2,975.2066 USD
+- redirect | Rate: 0.12000000000000001 | NPV: 1,772.9592 USD
+- stop | Rate: 0.08 | NPV: -5,000 USD
+- stop | Rate: 0.1 | NPV: -5,000 USD
+- stop | Rate: 0.12000000000000001 | NPV: -5,000 USD
+
+#### Receiving decision
+
+- Owner: Name the accountable decision owner
+- Gate: held-open
+- Next option: pilot
+- Trigger: Review pilot feasibility, evidence, and capacity
+- Next evidence: Observed workflow and reviewed resource requirements
+- Revisit: Unspecified
+
+### Accepted analysis JSON
+
+This is the directly importable accepted state. Derived results above use formula version 0.1.0. JSON retains exact values, IDs, absence states, and declared extensions.
+
+```json
+{
+  "alternatives": [
+    {
+      "flows": [
+        0,
+        0,
+        0
+      ],
+      "id": "status-quo",
+      "label": "Status quo",
+      "standing": "illustrative"
+    },
+    {
+      "flows": [
+        -120000,
+        70000,
+        75000
+      ],
+      "id": "proceed",
+      "label": "Proceed",
+      "standing": "illustrative"
+    },
+    {
+      "flows": [
+        -100000,
+        60000,
+        60000
+      ],
+      "id": "pilot",
+      "label": "Pilot",
+      "standing": "illustrative"
+    },
+    {
+      "flows": [
+        0,
+        -90000,
+        80000
+      ],
+      "id": "defer",
+      "label": "Defer",
+      "standing": "illustrative"
+    },
+    {
+      "flows": [
+        -180000,
+        100000,
+        120000
+      ],
+      "id": "scale",
+      "label": "Scale",
+      "standing": "illustrative"
+    },
+    {
+      "flows": [
+        -40000,
+        20000,
+        30000
+      ],
+      "id": "redirect",
+      "label": "Redirect",
+      "standing": "illustrative"
+    },
+    {
+      "flows": [
+        -5000,
+        0,
+        0
+      ],
+      "id": "stop",
+      "label": "Stop",
+      "standing": "illustrative"
+    }
+  ],
+  "events": [
+    {
+      "id": "acquire",
+      "kind": "acquisition",
+      "period": 0,
+      "predecessors": [],
+      "standing": "illustrative"
+    },
+    {
+      "id": "onboard",
+      "kind": "onboarding",
+      "period": 1,
+      "predecessors": [
+        "acquire"
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "activate",
+      "kind": "activation",
+      "period": 1,
+      "predecessors": [
+        "onboard"
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "renew",
+      "kind": "renewal",
+      "period": 2,
+      "predecessors": [
+        "activate"
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "churn",
+      "kind": "churn",
+      "period": 2,
+      "predecessors": [
+        "activate"
+      ],
+      "standing": "illustrative"
+    },
+    {
+      "id": "reactivate",
+      "kind": "reactivation",
+      "period": 3,
+      "predecessors": [
+        "churn"
+      ],
+      "standing": "illustrative"
+    }
+  ],
+  "extensions": {},
+  "inputs": {
+    "acquisitionSpend": 10000,
+    "adoption": 0.3,
+    "asOf": "",
+    "baselineCost": 500,
+    "buyer": "Sponsor / operating team / customer organization",
+    "candidateCost": 650,
+    "capacity": 40,
+    "cashConvention": "Incremental to status quo; end-period; t=0 upfront",
+    "churnCustomers": 10,
+    "churnRevenue": 10000,
+    "cohort": "100 synthetic customers; one year",
+    "comparator": "Current workflow",
+    "contraction": 5000,
+    "contributionMargin": 0.7,
+    "currency": "USD",
+    "discount": 0.1,
+    "discountRate": 0.1,
+    "economicReview": "pending",
+    "eligiblePopulation": 100,
+    "evidenceSource": "",
+    "exhaustive": false,
+    "expansion": 20000,
+    "gate": "open",
+    "implementationCost": 10000,
+    "implementationLag": 1,
+    "implementationState": "Illustrative ramp; one-period lag",
+    "incrementalOutcome": null,
+    "internalInvestment": 100000,
+    "intervention": "Bounded workflow pilot",
+    "label": "Illustrative pilot versus status quo",
+    "listPrice": 1000,
+    "newCustomers": 20,
+    "newRevenue": 20000,
+    "nextEvidence": "Observed workflow and reviewed resource requirements",
+    "openingCustomers": 100,
+    "openingRevenue": 100000,
+    "option": "pilot",
+    "outcomeUnit": "",
+    "owner": "",
+    "period": "year",
+    "perspective": "Illustrative provider budget",
+    "population": "Synthetic population; local eligibility remains to be specified",
+    "priceClass": "Illustrative scenario",
+    "pricingUnit": "One synthetic service unit; implementation separate",
+    "reactivatedCustomers": 5,
+    "reactivationRevenue": 5000,
+    "rebate": 25,
+    "reviewer": "",
+    "revisit": "",
+    "segment": "Synthetic implementation partners",
+    "serviceCost": 100,
+    "taxWorkingCapital": "Synthetic after-tax flows; working-capital changes included once",
+    "tenure": 1,
+    "trigger": "Review pilot feasibility, evidence, and capacity",
+    "variableCost": 200
+  },
+  "method": "model/activity-based.v0.1",
+  "origin": "illustrative",
+  "outcomes": [
+    {
+      "flows": [
+        -100000,
+        30000,
+        30000
+      ],
+      "id": "constrained",
+      "probability": 0.3
+    },
+    {
+      "flows": [
+        -100000,
+        60000,
+        60000
+      ],
+      "id": "planned",
+      "probability": 0.5
+    },
+    {
+      "flows": [
+        -100000,
+        90000,
+        90000
+      ],
+      "id": "expanded",
+      "probability": 0.2
+    }
+  ],
+  "scenarioId": "scenario/investment-pilot.v0.1",
+  "schemaVersion": "0.2.0",
+  "serviceOutcomes": [
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Safety",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Quality",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Timeliness",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Patient experience",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Equity",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Efficiency",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Burden",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Governance",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Budget capacity",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    }
+  ]
+}
+```
+
+## Boundaries and human-held decisions
+
+Cash flows, pricing, service budget impacts, and staffing references keep their separate ledger meanings until an explicit transformation joins them. Named people authorize assumptions and decisions; evidence of a workflow or product establishes that context, while causal benefit and local applicability require their own observations.
+
+## Requested return
+
+Return findings by domain, identify the evidence each material claim needs, compare supported alternatives using the supplied results, and propose the smallest next decision for the named owner. Preserve units, denominators, periods, explicit zeros, and held-open conditions.
+
+## Related loops
+
+- [Re-enter, make one bounded change, and return it clearly](https://schemas.radiantnull.com/collaboration/#repository-reentry) | Use when the receiving costing decision resumes across sources and accepted revisions.
+- [Let real use shape a skill](https://schemas.radiantnull.com/collaboration/#skill-from-receiving-use) | Use when a receiving decision reveals a reusable collaboration move.
+
+## Evidence and recovery
+
+This packet carries the accepted analysis revision identified above. Pending editor drafts remain with their controls. Import the JSON through the existing analysis importer to restore this comparison. Retain the source when an import needs revision. The capsule fingerprint compares the shared Markdown-encoded fields; analysis identity compares the accepted JSON. Exact JSON and source review carry integrity-sensitive exchange.
+</textarea></label>
+<div class="investment-actions" data-analysis-capsule-actions hidden><button type="button" data-capsule-action="copy">Copy Prompt Capsule</button><button type="button" data-capsule-action="download">Download Markdown</button></div>
+<p id="analysis-capsule-status" role="status">Plain Markdown describes the authored initial analysis. Select its text to copy it manually.</p>
+</details><section aria-labelledby="investment-overlap-title"><span class="section-label">10F · Reconcile staffing overlap</span><h3 id="investment-overlap-title">Staffing overlap policy</h3><p>Enter the share of each cost that is additional to allocated staffing. A share of 0 means that effort is already included; 100 means fully incremental. Reserve and spread remain separate planning heuristics.</p><div class="investment-fields">
 <label class="investment-field" for="overlap-activities">Additional activity share (%)<input id="overlap-activities" type="number" min="0" max="100" value="100"></label>
 <label class="investment-field" for="overlap-recovery">Additional recovery share (%)<input id="overlap-recovery" type="number" min="0" max="100" value="100"></label>
 <label class="investment-field" for="overlap-quality">Additional quality share (%)<input id="overlap-quality" type="number" min="0" max="100" value="100"></label>
@@ -1331,7 +2028,7 @@
       '<div data-capital></div><h3 id="analysis-serviceOutcomes-title" tabindex="-1">Service and operational evidence</h3>'+group('serviceOutcomes')+
       editor('serviceOutcomes','Nine service / operational dimensions','Preserve each dimension. Supply its unit, baseline, candidate value, evidence standing, and source; reviewed observations also require the named reviewer and date.')+'<div data-serviceOutcomes></div></details>'+
       '<details><summary>'+heading('E','analysis-inspection-title','Inspect and carry the accepted account')+'</summary><p>The domain axis and record-type axis remain separate. Accountable people establish financial, service, and release decisions.</p><div data-records></div>'+
-      '<label class="investment-editor" for="analysis-capsule"><strong>Plain-language comparison and Prompt Capsule</strong><textarea id="analysis-capsule" rows="12" readonly></textarea></label>'+
+      '<p><a href="'+(methodHost?'#prompt-capsule-title':'#investment-capsule-title')+'">View the complete Prompt Capsule</a></p>'+
       '<label class="investment-editor" for="analysis-exchange"><strong>Portable state / schema output</strong><textarea id="analysis-exchange" rows="10" spellcheck="false"></textarea></label>'+
       '<div class="investment-actions"><button type="button" data-action="'+ACTION.IMPORT_TEXT+'">Import pasted state</button><button type="button" data-action="'+ACTION.COPY+'">Select portable state for copying</button><button type="button" data-action="'+ACTION.SCHEMA+'">Inspect JSON Schema</button></div></details>'+
       '<div class="investment-actions"><button type="button" data-action="'+ACTION.APPLY+'">Apply lifecycle, alternative, outcome, and service-outcome edits</button></div>';
@@ -1421,19 +2118,20 @@
       section('analysis-serviceOutcomes-title','Service and operational evidence',inputTable('serviceOutcomes')+tableHtml(t.serviceOutcomes)+tableHtml(t.consequences))+
       section('analysis-inspection-title','Domain records and exact accepted state',tableHtml(t.records)+'<p>The complete accepted state retains evidence sources, reviewer/date declarations, extensions, and exact inputs. The tables above format amounts for reading.</p><pre>'+esc(JSON.stringify(p.state,null,2))+'</pre>')+'</section>';
   }
-  function capsule() {
-    return ["# Investment comparison",state.inputs.label,
-      "Standing: "+state.origin+". Method: "+state.method+". Contract: "+C.VERSION+". State identity: "+identity+".",
-      "Currency / period: "+state.inputs.currency+" / "+state.inputs.period+". "+state.inputs.cashConvention,
-      "Decision owner: "+(state.inputs.owner||"Unspecified")+". Gate: "+result.gate+". Next option: "+state.inputs.option+".",
-      "Next evidence: "+state.inputs.nextEvidence+". Revisit: "+(state.inputs.revisit||"Unspecified")+".",
-      "Five domains: "+C.DOMAINS.map(domainLabel).join(", ")+". Five record types: "+C.TYPES.join(", ")+".",
-      ...Object.entries(result.metrics).map(([k,v])=>k+": "+formatted(v)),
-      ...result.alternatives.map(a=>a.label+": NPV "+formatted(a.npv)+"; IRR "+formatted(a.irr)+"; payback "+formatted(a.payback)),
-      "Evidence and authority: the source identifies product or workflow context; causal benefit and local applicability require their own observations.",
-      "Cash-flow amounts are complete scenario inputs. Pricing, staffing references, reserves, and service budget impacts remain separate views until a named transformation joins them.",
-      "Service cost-consequence: "+result.serviceOutcomes.map(c=>c.name+" "+formatted(c.delta)).join("; "),
-      "Portable state:\n"+serialized].join("\n\n");
+  let capsuleView = "plain";
+  let capsuleCache = { projection: null, markdown: new Map() };
+  function capsule(view) {
+    if (methodHost) return methodHost.promptCapsuleMarkdown(view);
+    const requested = view ?? capsuleView;
+    const active = requested === "skill-assisted" ? requested : "plain";
+    if (capsuleCache.projection !== projection) capsuleCache = { projection, prepared: window.InvestmentCapsule.prepare(C, projection), markdown: new Map() };
+    if (!capsuleCache.markdown.has(active)) capsuleCache.markdown.set(active, window.InvestmentCapsule.document(C, projection, active, capsuleCache.prepared));
+    return capsuleCache.markdown.get(active);
+  }
+  function renderCapsule() {
+    if (methodHost) return;
+    document.getElementById("analysis-capsule").value = capsule();
+    document.getElementById("analysis-capsule-status").textContent = (capsuleView === "plain" ? "Plain" : "Skill-assisted") + " Markdown carries accepted analysis " + identity + ". Pending drafts remain with their controls.";
   }
   function render() {
     const t=tablesFor(projection);
@@ -1442,7 +2140,7 @@
     host.querySelector('[data-capital]').innerHTML=tableHtml(t.alternatives)+tableHtml(t.sensitivity);
     host.querySelector('[data-serviceOutcomes]').innerHTML=tableHtml(t.serviceOutcomes)+tableHtml(t.consequences);
     host.querySelector('[data-records]').innerHTML=tableHtml(t.records);
-    host.querySelector('#analysis-capsule').value=capsule();
+    renderCapsule();
     host.dataset.stateFingerprint=identity;
     for (const input of host.querySelectorAll('[data-key]')) {
       input.closest('label').querySelector('small').textContent=unitText(C.FIELDS[input.dataset.key].unit,state.inputs);
@@ -1648,6 +2346,41 @@
     promptCapsule: capsule,
     fingerprint: () => identity
   });
+  const capsulePanel = document.querySelector('[data-analysis-capsule-panel]');
+  if (capsulePanel) {
+    capsulePanel.querySelector('[data-analysis-capsule-views]').hidden = false;
+    capsulePanel.querySelector('[data-analysis-capsule-actions]').hidden = false;
+    capsulePanel.addEventListener('change', event => {
+      if (event.target.name !== 'analysis-capsule-view' || !event.target.checked) return;
+      capsuleView = event.target.value;
+      renderCapsule();
+    });
+    capsulePanel.addEventListener('click', async event => {
+      const action = event.target.closest('[data-capsule-action]')?.dataset.capsuleAction;
+      if (!action) return;
+      const text = capsule();
+      const receipt = document.getElementById('analysis-capsule-status');
+      if (action === 'download') {
+        const url = URL.createObjectURL(new Blob([text], {type:'text/markdown;charset=utf-8'}));
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = 'initiative-investment-' + capsuleView + '.md';
+        anchor.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        receipt.textContent = 'Markdown download carries the selected accepted capsule.';
+        return;
+      }
+      if (action !== 'copy') return;
+      try {
+        await navigator.clipboard.writeText(text);
+        receipt.textContent = 'Prompt Capsule copied. The captured Markdown is ready for its receiving decision.';
+      } catch {
+        const area = document.getElementById('analysis-capsule');
+        area.focus(); area.select();
+        receipt.textContent = 'Select the capsule text and use your browser Copy command.';
+      }
+    });
+  }
   function revealFragment() {
     let id;
     try { id=decodeURIComponent(location.hash.slice(1)); } catch { return; }

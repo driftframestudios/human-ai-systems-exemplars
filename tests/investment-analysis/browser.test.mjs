@@ -47,6 +47,7 @@ test("both instruments retain state, labels, focus, recovery and semantic parity
       page.on("pageerror",error=>errors.push(error.message));
       await page.goto(origin+"/"+route);
       await page.locator("[data-investment-analysis]:not([hidden])").waitFor();
+      const capsuleText = () => index === 0 ? page.locator('#analysis-capsule').inputValue() : page.locator('#promptCapsuleMarkdown').textContent();
       const baseline=await page.evaluate(()=>window.investmentAnalysis.getState());
       assert.equal(baseline.schemaVersion,"0.2.0");
       assert.equal(await page.evaluate(() => {
@@ -68,7 +69,7 @@ test("both instruments retain state, labels, focus, recovery and semantic parity
       assert.equal(await page.locator("#analysis-newCustomers").evaluate(e=>e===document.activeElement),true);
       await page.locator("#analysis-newCustomers").fill("40");
       assert.equal(await page.evaluate(()=>window.investmentAnalysis.getResult().metrics.cac.value),250);
-      assert.match(await page.locator("#analysis-capsule").inputValue(),/250 USD\/customer/);
+      assert.match(await capsuleText(),/250 USD\/customer/);
       const beforeDraft = await page.evaluate(() => window.investmentAnalysis.serialize());
       await page.locator("#analysis-label").fill("x".repeat(2001));
       assert.equal(await page.evaluate(() => window.investmentAnalysis.serialize()), beforeDraft);
@@ -196,7 +197,8 @@ test("both instruments retain state, labels, focus, recovery and semantic parity
       await frame.locator("[data-investment-analysis]:not([hidden])").waitFor();
       await frame.locator("[data-investment-analysis] details").evaluateAll(nodes => nodes.forEach(node => node.open = true));
       await frame.locator("#analysis-label").fill("Packaged scenario");
-      assert.match(await frame.locator("#analysis-capsule").inputValue(), /Packaged scenario/);
+      const packet = id === 'cross-functional-investment-studio' ? await frame.locator('#analysis-capsule').inputValue() : await frame.locator('#promptCapsuleMarkdown').textContent();
+      assert.match(packet, /Packaged scenario/);
       await frame.locator('[data-action="export"]').click();
       assert.equal(JSON.parse(await frame.locator("#analysis-exchange").inputValue()).inputs.label, "Packaged scenario");
       assert.equal(await frame.locator("[data-investment-analysis] details[open]").count(), 4);
