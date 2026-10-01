@@ -4,7 +4,7 @@ import http from "node:http";
 import path from "node:path";
 import { readFile, mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
-import { chromium } from "@playwright/test";
+import { chromium, expect } from "@playwright/test";
 import { createCanvasPackagePlan } from "../../tools/package-canvas-iframe-routes.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
@@ -41,6 +41,90 @@ function detachedRows(table) {
   }));
 }
 
+async function assertRailFlyout(page, name, interaction) {
+  const link = page.locator(".page-nav").getByRole("link", { name, exact: true });
+  if (interaction === "focus") {
+    await page.mouse.move(page.viewportSize().width - 2, 2);
+    await page.keyboard.press("Tab");
+  }
+  const before = await page.evaluate(() => ({ top: scrollY, url: location.href }));
+  const size = await link.boundingBox();
+  if (interaction === "hover") await link.hover();
+  else await link.focus();
+  await expect.poll(() => link.locator(".page-nav__label").evaluate(label => getComputedStyle(label).opacity)).toBe("1");
+  const geometry = await link.evaluate(el => {
+    const label = el.querySelector(".page-nav__label"), span = label.getBoundingClientRect();
+    const rail = el.closest(".page-nav").getBoundingClientRect();
+    const port = el.closest(".page-nav__scrollport").getBoundingClientRect();
+    const button = el.getBoundingClientRect(), range = document.createRange();
+    range.selectNodeContents(label);
+    return {
+      width: button.width, height: button.height, singleLine: new Set(Array.from(range.getClientRects(), rect => Math.round(rect.top))).size === 1,
+      beside: span.left >= rail.right + 4 && span.left > button.right,
+      contained: span.top >= port.top && span.bottom <= port.bottom && span.right <= port.right,
+      contrast: getComputedStyle(label).color !== getComputedStyle(label).backgroundColor
+    };
+  });
+  assert.equal(geometry.width, size.width);
+  assert.equal(geometry.height, size.height);
+  assert.equal(geometry.singleLine, true, `${name}: one readable label line on ${interaction}`);
+  assert.equal(geometry.beside, true, `${name}: label clears the rail and pointer target`);
+  assert.equal(geometry.contained, true, `${name}: flyout stays inside its clipping owner`);
+  assert.equal(geometry.contrast, true);
+  if (interaction === "hover") {
+    const button = await link.boundingBox(), label = await link.locator(".page-nav__label").boundingBox();
+    await page.mouse.move(button.x + button.width + 0.5, label.y + label.height / 2);
+    assert.equal(await link.evaluate(el => {
+      const label = el.querySelector(".page-nav__label");
+      return el.matches(":hover") && getComputedStyle(label).pointerEvents === "auto";
+    }), true, `${name}: the hover bridge begins immediately outside the marker edge`);
+    await page.mouse.move((button.x + button.width + label.x) / 2, label.y + label.height / 2);
+    await page.mouse.move(label.x + label.width / 2, label.y + label.height / 2);
+    assert.equal(await link.evaluate(el => {
+      const label = el.querySelector(".page-nav__label"), bounds = label.getBoundingClientRect();
+      return el.matches(":hover") && getComputedStyle(label).opacity === "1" && document.elementFromPoint(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2) === label;
+    }), true, `${name}: pointer can cross the gap and hover the label`);
+  }
+  assert.deepEqual(await page.evaluate(() => ({ top: scrollY, url: location.href })), before);
+}
+
+async function assertRailDismissal(page) {
+  const link = page.locator(".page-nav").getByRole("link", { name: "Sigma posture", exact: true });
+  const label = link.locator(".page-nav__label");
+  const opacity = () => label.evaluate(el => getComputedStyle(el).opacity);
+  const posture = () => page.evaluate(() => ({
+    top: scrollY, left: scrollX, url: location.href,
+    focusTag: document.activeElement.tagName, focusId: document.activeElement.id,
+    focusHref: document.activeElement.getAttribute("href"),
+    current: document.querySelector('.page-nav [aria-current="location"]')?.getAttribute("href")
+  }));
+  for (const interaction of ["hover", "focus"]) {
+    await assertRailFlyout(page, "Sigma posture", interaction);
+    const before = await posture();
+    await page.keyboard.press("Escape");
+    await expect.poll(opacity).toBe("0");
+    assert.deepEqual(await posture(), before, `${interaction}: dismissal preserves focus, scroll, URL, and current section`);
+    assert.equal(await link.getAttribute("aria-label"), null, "the literal label remains the native link name");
+    await expect(link).toHaveAccessibleName("Sigma posture");
+    if (interaction === "hover") {
+      await page.mouse.move(page.viewportSize().width - 2, 2);
+      await link.hover();
+    } else {
+      await page.keyboard.press("Tab");
+      await page.keyboard.press("Shift+Tab");
+      await expect(link).toBeFocused();
+    }
+    await expect.poll(opacity).toBe("1");
+  }
+  await page.setViewportSize({ width: 980, height: 1000 });
+  await page.keyboard.press("Escape");
+  await expect.poll(opacity).toBe("1");
+  await expect(link).toHaveAccessibleName("Sigma posture");
+  await link.evaluate(el => el.blur());
+  await page.mouse.move(978, 2);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+}
+
 test("investment chapters retain readable, navigable, source-grounded screen and report accounts", { timeout: 240000 }, async () => {
   const plan = await createCanvasPackagePlan();
   const server = http.createServer(async (request, response) => {
@@ -74,6 +158,7 @@ test("investment chapters retain readable, navigable, source-grounded screen and
       const initial = await page.evaluate(() => window.investmentAnalysis.getState());
 
       if (route === routes[0]) {
+        await assertRailDismissal(page);
         assert.match(await page.getByRole("complementary", { name: "Planning model boundary", exact: true }).textContent(), /Ground each assumption in local evidence/);
         assert.match(await page.getByRole("complementary", { name: "Planning model boundary", exact: true }).textContent(), /Accountable people review pricing and expected outcomes, authorize budgets and staffing/);
         assert.equal(await page.locator('.page-nav a[href="#investment-analysis-title"]').count(), 1);
@@ -299,6 +384,42 @@ test("investment chapters retain readable, navigable, source-grounded screen and
       const overview = staticPage.getByRole("table", { name: captions.at(-1), exact: true });
       assert.equal(await overview.isVisible(), true);
       assert.deepEqual(await overview.evaluate(fragmentedTokens), []);
+      if (route === routes[0]) {
+        assert.equal(await staticPage.evaluate(() => typeof window.investmentAnalysis), "undefined");
+        const sourceLabels = await staticPage.locator(".page-nav a").evaluateAll(links => links.map(link => ({
+          text: link.querySelector(".page-nav__label").textContent,
+          href: link.getAttribute("href"), targetExists: Boolean(document.querySelector(link.getAttribute("href")))
+        })));
+        assert.equal(sourceLabels.length, 13);
+        for (const label of sourceLabels) {
+          assert.ok(label.text.trim() && label.targetExists);
+          assert.equal(await staticPage.locator(".page-nav").getByRole("link", { name: label.text, exact: true }).count(), 1);
+        }
+        for (const height of [501, 360]) {
+          await staticPage.setViewportSize({ width: 1239, height });
+          for (const name of ["Start", "Sigma posture", "Comparison"]) {
+            for (const interaction of ["hover", "focus"]) await assertRailFlyout(staticPage, name, interaction);
+          }
+          await assertRailFlyout(staticPage, "Sigma posture", "hover");
+          assert.equal(await staticPage.locator(".page-nav").evaluate(el => {
+            const rail = el.getBoundingClientRect();
+            return document.elementFromPoint(rail.right + 150, rail.top + 20)?.closest(".page-nav") === null;
+          }), true, "transparent label gutter passes pointer input to the document");
+          await staticPage.screenshot({ path: path.join(artifacts, `static-labels-${height}.png`) });
+        }
+        await staticPage.emulateMedia({ forcedColors: "active", reducedMotion: "reduce" });
+        await assertRailFlyout(staticPage, "Sigma posture", "focus");
+        await staticPage.keyboard.press("Enter");
+        await staticPage.waitForURL(url => url.hash === "#sigma-title");
+        assert.equal(await staticPage.locator("#sigma-title").evaluate(el => {
+          const bounds = el.getBoundingClientRect();
+          return bounds.top >= -1 && bounds.top < innerHeight;
+        }), true, "native fragment navigation works with author scripts disabled");
+        await staticPage.evaluate(() => Array.from(document.styleSheets).forEach(sheet => { sheet.disabled = true; }));
+        assert.deepEqual(await staticPage.locator(".page-nav a").evaluateAll(links => links.map(link => ({
+          text: link.innerText.trim(), href: link.getAttribute("href"), targetExists: Boolean(document.querySelector(link.getAttribute("href")))
+        }))), sourceLabels, "unstyled HTML retains the same readable label/destination inventory");
+      }
       await nojs.close();
     }
 
