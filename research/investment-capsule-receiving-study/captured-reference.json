@@ -1,0 +1,2311 @@
+{
+  "id": "captured-reference",
+  "sourceRevision": "b535403e750bbde8f7dda303377c4a3d2aa2ec41",
+  "analysisFingerprint": "fnv1a32:e34b8282",
+  "capsuleFingerprint": "fnv1a32-utf8:20ea91fc",
+  "context": {
+    "revision": "accepted",
+    "pendingDraft": {
+      "editor": "outcomes",
+      "text": "[pending"
+    },
+    "laterLiveStaffing": {
+      "roleRate": 200,
+      "derivedCentral": 648,
+      "currency": "USD"
+    },
+    "relationship": "Later draft and live observations remain outside the accepted comparison."
+  },
+  "acceptedState": {
+    "alternatives": [
+      {
+        "flows": [
+          0,
+          0,
+          0
+        ],
+        "id": "status-quo",
+        "label": "Status quo",
+        "standing": "illustrative"
+      },
+      {
+        "flows": [
+          -120000,
+          70000,
+          75000
+        ],
+        "id": "proceed",
+        "label": "Proceed",
+        "standing": "illustrative"
+      },
+      {
+        "flows": [
+          -100000,
+          60000,
+          60000
+        ],
+        "id": "pilot",
+        "label": "Pilot",
+        "standing": "illustrative"
+      },
+      {
+        "flows": [
+          0,
+          -90000,
+          80000
+        ],
+        "id": "defer",
+        "label": "Defer",
+        "standing": "illustrative"
+      },
+      {
+        "flows": [
+          -180000,
+          100000,
+          120000
+        ],
+        "id": "scale",
+        "label": "Scale",
+        "standing": "illustrative"
+      },
+      {
+        "flows": [
+          -40000,
+          20000,
+          30000
+        ],
+        "id": "redirect",
+        "label": "Redirect",
+        "standing": "illustrative"
+      },
+      {
+        "flows": [
+          -5000,
+          0,
+          0
+        ],
+        "id": "stop",
+        "label": "Stop",
+        "standing": "illustrative"
+      }
+    ],
+    "events": [
+      {
+        "id": "acquire",
+        "kind": "acquisition",
+        "period": 0,
+        "predecessors": [],
+        "standing": "illustrative"
+      },
+      {
+        "id": "onboard",
+        "kind": "onboarding",
+        "period": 1,
+        "predecessors": [
+          "acquire"
+        ],
+        "standing": "illustrative"
+      },
+      {
+        "id": "activate",
+        "kind": "activation",
+        "period": 1,
+        "predecessors": [
+          "onboard"
+        ],
+        "standing": "illustrative"
+      },
+      {
+        "id": "renew",
+        "kind": "renewal",
+        "period": 2,
+        "predecessors": [
+          "activate"
+        ],
+        "standing": "illustrative"
+      },
+      {
+        "id": "churn",
+        "kind": "churn",
+        "period": 2,
+        "predecessors": [
+          "activate"
+        ],
+        "standing": "illustrative"
+      },
+      {
+        "id": "reactivate",
+        "kind": "reactivation",
+        "period": 3,
+        "predecessors": [
+          "churn"
+        ],
+        "standing": "illustrative"
+      }
+    ],
+    "extensions": {
+      "urn:investment:staffing-reference": {
+        "calculation": {
+          "activityCost": 200,
+          "activityHours": 2,
+          "allocatedHours": 1,
+          "central": 324,
+          "complexityCost": 24,
+          "complexityRate": 0.08,
+          "currency": "USD",
+          "disruptionCost": 0,
+          "disruptionHours": 0,
+          "high": 351.86400000000003,
+          "horizonHours": 1,
+          "low": 296.136,
+          "overlap": {
+            "activities": 1,
+            "quality": 1,
+            "recovery": 1
+          },
+          "people": 1,
+          "problems": [],
+          "qualityCost": 0,
+          "qualityHours": 0,
+          "qualityMultiplier": 1.1,
+          "roleCost": 100,
+          "spread": 0.08600000000000001,
+          "status": "known",
+          "taskCount": 2,
+          "unknownCost": 0,
+          "unknownCount": 0,
+          "unknownRate": 0,
+          "unpricedWork": false
+        },
+        "snapshot": {
+          "activities": [
+            {
+              "a": 2,
+              "b": 1,
+              "enabled": true
+            }
+          ],
+          "complexity": "bounded",
+          "disruptions": [
+            {
+              "a": 0,
+              "b": 1,
+              "enabled": true
+            }
+          ],
+          "horizon": 1,
+          "overlap": {
+            "activities": 1,
+            "quality": 1,
+            "recovery": 1
+          },
+          "qualityAllocation": 0,
+          "qualityEnabled": false,
+          "qualityRate": 0,
+          "roles": [
+            {
+              "a": 1,
+              "b": 100,
+              "c": 100,
+              "enabled": true
+            }
+          ],
+          "sigma": 3,
+          "unit": "hours",
+          "unknowns": 0
+        }
+      }
+    },
+    "inputs": {
+      "acquisitionSpend": 10000,
+      "adoption": 0.3,
+      "asOf": "",
+      "baselineCost": 500,
+      "buyer": "Sponsor / operating team / customer organization",
+      "candidateCost": 650,
+      "capacity": 40,
+      "cashConvention": "Incremental to status quo; end-period; t=0 upfront",
+      "churnCustomers": 10,
+      "churnRevenue": 10000,
+      "cohort": "100 synthetic customers; one year",
+      "comparator": "Current workflow",
+      "contraction": 5000,
+      "contributionMargin": 0.7,
+      "currency": "USD",
+      "discount": 0.1,
+      "discountRate": 0.1,
+      "economicReview": "pending",
+      "eligiblePopulation": 100,
+      "evidenceSource": "",
+      "exhaustive": false,
+      "expansion": 20000,
+      "gate": "satisfied",
+      "implementationCost": 10000,
+      "implementationLag": 1,
+      "implementationState": "Illustrative ramp; one-period lag",
+      "incrementalOutcome": null,
+      "internalInvestment": 324,
+      "intervention": "Bounded workflow pilot",
+      "label": "Illustrative pilot versus status quo",
+      "listPrice": 1000,
+      "newCustomers": 20,
+      "newRevenue": 20000,
+      "nextEvidence": "Observed workflow and reviewed resource requirements",
+      "openingCustomers": 100,
+      "openingRevenue": 100000,
+      "option": "pilot",
+      "outcomeUnit": "",
+      "owner": "Example operating owner",
+      "period": "year",
+      "perspective": "Illustrative provider budget",
+      "population": "Synthetic population; local eligibility remains to be specified",
+      "priceClass": "Illustrative scenario",
+      "pricingUnit": "One synthetic service unit; implementation separate",
+      "reactivatedCustomers": 5,
+      "reactivationRevenue": 5000,
+      "rebate": 25,
+      "reviewer": "",
+      "revisit": "2026-10-30",
+      "segment": "Synthetic implementation partners",
+      "serviceCost": 100,
+      "taxWorkingCapital": "Synthetic after-tax flows; working-capital changes included once",
+      "tenure": 1,
+      "trigger": "Review pilot feasibility, evidence, and capacity",
+      "variableCost": 200
+    },
+    "method": "model/activity-based.v0.1",
+    "origin": "illustrative",
+    "outcomes": [
+      {
+        "flows": [
+          -100000,
+          30000,
+          30000
+        ],
+        "id": "constrained",
+        "probability": 0.3
+      },
+      {
+        "flows": [
+          -100000,
+          60000,
+          60000
+        ],
+        "id": "planned",
+        "probability": 0.5
+      },
+      {
+        "flows": [
+          -100000,
+          90000,
+          90000
+        ],
+        "id": "expanded",
+        "probability": 0.2
+      }
+    ],
+    "scenarioId": "scenario/investment-pilot.v0.1",
+    "schemaVersion": "0.2.0",
+    "serviceOutcomes": [
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Safety",
+        "source": "",
+        "standing": "unavailable",
+        "unit": ""
+      },
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Quality",
+        "source": "",
+        "standing": "unavailable",
+        "unit": ""
+      },
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Timeliness",
+        "source": "",
+        "standing": "unavailable",
+        "unit": ""
+      },
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Patient experience",
+        "source": "",
+        "standing": "unavailable",
+        "unit": ""
+      },
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Equity",
+        "source": "",
+        "standing": "unavailable",
+        "unit": ""
+      },
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Efficiency",
+        "source": "",
+        "standing": "unavailable",
+        "unit": ""
+      },
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Burden",
+        "source": "",
+        "standing": "unavailable",
+        "unit": ""
+      },
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Governance",
+        "source": "",
+        "standing": "unavailable",
+        "unit": ""
+      },
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Budget capacity",
+        "source": "",
+        "standing": "unavailable",
+        "unit": ""
+      }
+    ]
+  },
+  "suppliedResults": {
+    "valid": true,
+    "errors": [],
+    "metrics": {
+      "closingCustomers": {
+        "status": "known",
+        "value": 115,
+        "unit": "customer",
+        "reason": ""
+      },
+      "logoRetention": {
+        "status": "known",
+        "value": 0.9,
+        "unit": "ratio",
+        "reason": ""
+      },
+      "grr": {
+        "status": "known",
+        "value": 0.85,
+        "unit": "ratio",
+        "reason": ""
+      },
+      "nrr": {
+        "status": "known",
+        "value": 1.05,
+        "unit": "ratio",
+        "reason": ""
+      },
+      "closingRevenue": {
+        "status": "known",
+        "value": 130000,
+        "unit": "currency/period",
+        "reason": ""
+      },
+      "cac": {
+        "status": "known",
+        "value": 500,
+        "unit": "currency/customer",
+        "reason": ""
+      },
+      "acquisitionRevenueRatio": {
+        "status": "known",
+        "value": 0.5,
+        "unit": "period",
+        "reason": ""
+      },
+      "cacPayback": {
+        "status": "known",
+        "value": 0.7142857142857143,
+        "unit": "period",
+        "reason": ""
+      },
+      "discountAmount": {
+        "status": "known",
+        "value": 100,
+        "unit": "currency/unit",
+        "reason": ""
+      },
+      "netPrice": {
+        "status": "known",
+        "value": 875,
+        "unit": "currency/unit",
+        "reason": ""
+      },
+      "unitContribution": {
+        "status": "known",
+        "value": 575,
+        "unit": "currency/unit",
+        "reason": ""
+      },
+      "adoptedPopulation": {
+        "status": "known",
+        "value": 30,
+        "unit": "person",
+        "reason": ""
+      },
+      "budgetImpact": {
+        "status": "known",
+        "value": 4500,
+        "unit": "currency/period",
+        "reason": ""
+      },
+      "capacityGap": {
+        "status": "known",
+        "value": 0,
+        "unit": "person/period",
+        "reason": ""
+      },
+      "costPerOutcome": {
+        "status": "unavailable",
+        "value": null,
+        "unit": "currency/outcome",
+        "reason": "Reviewed incremental outcome per adopted person is needed."
+      },
+      "expectedNpv": {
+        "status": "unavailable",
+        "value": null,
+        "unit": "currency",
+        "reason": "Confirm a mutually exclusive, collectively exhaustive outcome tree."
+      }
+    },
+    "alternatives": [
+      {
+        "flows": [
+          0,
+          0,
+          0
+        ],
+        "id": "status-quo",
+        "label": "Status quo",
+        "standing": "illustrative",
+        "npv": {
+          "status": "known",
+          "value": 0,
+          "unit": "currency",
+          "reason": ""
+        },
+        "irr": {
+          "status": "inapplicable",
+          "value": null,
+          "unit": "ratio",
+          "reason": "IRR requires at least one cash-flow sign change."
+        },
+        "payback": {
+          "status": "inapplicable",
+          "value": null,
+          "unit": "period",
+          "reason": "Payback requires an initial cash outlay."
+        }
+      },
+      {
+        "flows": [
+          -120000,
+          70000,
+          75000
+        ],
+        "id": "proceed",
+        "label": "Proceed",
+        "standing": "illustrative",
+        "npv": {
+          "status": "known",
+          "value": 5619.834710743788,
+          "unit": "currency",
+          "reason": ""
+        },
+        "irr": {
+          "status": "known",
+          "value": 0.13432285067319516,
+          "unit": "ratio",
+          "reason": ""
+        },
+        "payback": {
+          "status": "known",
+          "value": 1.6666666666666665,
+          "unit": "period",
+          "reason": "Undiscounted; linear recovery within the crossing period."
+        }
+      },
+      {
+        "flows": [
+          -100000,
+          60000,
+          60000
+        ],
+        "id": "pilot",
+        "label": "Pilot",
+        "standing": "illustrative",
+        "npv": {
+          "status": "known",
+          "value": 4132.231404958671,
+          "unit": "currency",
+          "reason": ""
+        },
+        "irr": {
+          "status": "known",
+          "value": 0.13066238629180738,
+          "unit": "ratio",
+          "reason": ""
+        },
+        "payback": {
+          "status": "known",
+          "value": 1.6666666666666665,
+          "unit": "period",
+          "reason": "Undiscounted; linear recovery within the crossing period."
+        }
+      },
+      {
+        "flows": [
+          0,
+          -90000,
+          80000
+        ],
+        "id": "defer",
+        "label": "Defer",
+        "standing": "illustrative",
+        "npv": {
+          "status": "known",
+          "value": -15702.479338842983,
+          "unit": "currency",
+          "reason": ""
+        },
+        "irr": {
+          "status": "inapplicable",
+          "value": null,
+          "unit": "ratio",
+          "reason": "IRR is restricted to an initial investment followed by nonnegative flows."
+        },
+        "payback": {
+          "status": "inapplicable",
+          "value": null,
+          "unit": "period",
+          "reason": "Payback requires an initial cash outlay."
+        }
+      },
+      {
+        "flows": [
+          -180000,
+          100000,
+          120000
+        ],
+        "id": "scale",
+        "label": "Scale",
+        "standing": "illustrative",
+        "npv": {
+          "status": "known",
+          "value": 10082.644628099151,
+          "unit": "currency",
+          "reason": ""
+        },
+        "irr": {
+          "status": "known",
+          "value": 0.14023192757000114,
+          "unit": "ratio",
+          "reason": ""
+        },
+        "payback": {
+          "status": "known",
+          "value": 1.6666666666666665,
+          "unit": "period",
+          "reason": "Undiscounted; linear recovery within the crossing period."
+        }
+      },
+      {
+        "flows": [
+          -40000,
+          20000,
+          30000
+        ],
+        "id": "redirect",
+        "label": "Redirect",
+        "standing": "illustrative",
+        "npv": {
+          "status": "known",
+          "value": 2975.2066115702437,
+          "unit": "currency",
+          "reason": ""
+        },
+        "irr": {
+          "status": "known",
+          "value": 0.15138781886599728,
+          "unit": "ratio",
+          "reason": ""
+        },
+        "payback": {
+          "status": "known",
+          "value": 1.6666666666666665,
+          "unit": "period",
+          "reason": "Undiscounted; linear recovery within the crossing period."
+        }
+      },
+      {
+        "flows": [
+          -5000,
+          0,
+          0
+        ],
+        "id": "stop",
+        "label": "Stop",
+        "standing": "illustrative",
+        "npv": {
+          "status": "known",
+          "value": -5000,
+          "unit": "currency",
+          "reason": ""
+        },
+        "irr": {
+          "status": "inapplicable",
+          "value": null,
+          "unit": "ratio",
+          "reason": "IRR requires at least one cash-flow sign change."
+        },
+        "payback": {
+          "status": "unreached",
+          "value": null,
+          "unit": "period",
+          "reason": "Cumulative cash flow remains below zero throughout the supplied horizon."
+        }
+      }
+    ],
+    "sensitivity": [
+      {
+        "id": "status-quo",
+        "values": [
+          {
+            "rate": 0.08,
+            "result": {
+              "status": "known",
+              "value": 0,
+              "unit": "currency",
+              "reason": ""
+            }
+          },
+          {
+            "rate": 0.1,
+            "result": {
+              "status": "known",
+              "value": 0,
+              "unit": "currency",
+              "reason": ""
+            }
+          },
+          {
+            "rate": 0.12000000000000001,
+            "result": {
+              "status": "known",
+              "value": 0,
+              "unit": "currency",
+              "reason": ""
+            }
+          }
+        ]
+      },
+      {
+        "id": "proceed",
+        "values": [
+          {
+            "rate": 0.08,
+            "result": {
+              "status": "known",
+              "value": 9115.226337448548,
+              "unit": "currency",
+              "reason": ""
+            }
+          },
+          {
+            "rate": 0.1,
+            "result": {
+              "status": "known",
+              "value": 5619.834710743788,
+              "unit": "currency",
+              "reason": ""
+            }
+          },
+          {
+            "rate": 0.12000000000000001,
+            "result": {
+              "status": "known",
+              "value": 2289.5408163265165,
+              "unit": "currency",
+              "reason": ""
+            }
+          }
+        ]
+      },
+      {
+        "id": "pilot",
+        "values": [
+          {
+            "rate": 0.08,
+            "result": {
+              "status": "known",
+              "value": 6995.884773662547,
+              "unit": "currency",
+              "reason": ""
+            }
+          },
+          {
+            "rate": 0.1,
+            "result": {
+              "status": "known",
+              "value": 4132.231404958671,
+              "unit": "currency",
+              "reason": ""
+            }
+          },
+          {
+            "rate": 0.12000000000000001,
+            "result": {
+              "status": "known",
+              "value": 1403.0612244897857,
+              "unit": "currency",
+              "reason": ""
+            }
+          }
+        ]
+      },
+      {
+        "id": "defer",
+        "values": [
+          {
+            "rate": 0.08,
+            "result": {
+              "status": "known",
+              "value": -14746.227709190673,
+              "unit": "currency",
+              "reason": ""
+            }
+          },
+          {
+            "rate": 0.1,
+            "result": {
+              "status": "known",
+              "value": -15702.479338842983,
+              "unit": "currency",
+              "reason": ""
+            }
+          },
+          {
+            "rate": 0.12000000000000001,
+            "result": {
+              "status": "known",
+              "value": -16581.632653061235,
+              "unit": "currency",
+              "reason": ""
+            }
+          }
+        ]
+      },
+      {
+        "id": "scale",
+        "values": [
+          {
+            "rate": 0.08,
+            "result": {
+              "status": "known",
+              "value": 15473.251028806568,
+              "unit": "currency",
+              "reason": ""
+            }
+          },
+          {
+            "rate": 0.1,
+            "result": {
+              "status": "known",
+              "value": 10082.644628099151,
+              "unit": "currency",
+              "reason": ""
+            }
+          },
+          {
+            "rate": 0.12000000000000001,
+            "result": {
+              "status": "known",
+              "value": 4948.979591836716,
+              "unit": "currency",
+              "reason": ""
+            }
+          }
+        ]
+      },
+      {
+        "id": "redirect",
+        "values": [
+          {
+            "rate": 0.08,
+            "result": {
+              "status": "known",
+              "value": 4238.683127572014,
+              "unit": "currency",
+              "reason": ""
+            }
+          },
+          {
+            "rate": 0.1,
+            "result": {
+              "status": "known",
+              "value": 2975.2066115702437,
+              "unit": "currency",
+              "reason": ""
+            }
+          },
+          {
+            "rate": 0.12000000000000001,
+            "result": {
+              "status": "known",
+              "value": 1772.9591836734653,
+              "unit": "currency",
+              "reason": ""
+            }
+          }
+        ]
+      },
+      {
+        "id": "stop",
+        "values": [
+          {
+            "rate": 0.08,
+            "result": {
+              "status": "known",
+              "value": -5000,
+              "unit": "currency",
+              "reason": ""
+            }
+          },
+          {
+            "rate": 0.1,
+            "result": {
+              "status": "known",
+              "value": -5000,
+              "unit": "currency",
+              "reason": ""
+            }
+          },
+          {
+            "rate": 0.12000000000000001,
+            "result": {
+              "status": "known",
+              "value": -5000,
+              "unit": "currency",
+              "reason": ""
+            }
+          }
+        ]
+      }
+    ],
+    "serviceOutcomes": [
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Safety",
+        "source": "",
+        "standing": "unavailable",
+        "unit": "",
+        "delta": {
+          "status": "unavailable",
+          "value": null,
+          "unit": "",
+          "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario."
+        }
+      },
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Quality",
+        "source": "",
+        "standing": "unavailable",
+        "unit": "",
+        "delta": {
+          "status": "unavailable",
+          "value": null,
+          "unit": "",
+          "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario."
+        }
+      },
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Timeliness",
+        "source": "",
+        "standing": "unavailable",
+        "unit": "",
+        "delta": {
+          "status": "unavailable",
+          "value": null,
+          "unit": "",
+          "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario."
+        }
+      },
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Patient experience",
+        "source": "",
+        "standing": "unavailable",
+        "unit": "",
+        "delta": {
+          "status": "unavailable",
+          "value": null,
+          "unit": "",
+          "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario."
+        }
+      },
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Equity",
+        "source": "",
+        "standing": "unavailable",
+        "unit": "",
+        "delta": {
+          "status": "unavailable",
+          "value": null,
+          "unit": "",
+          "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario."
+        }
+      },
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Efficiency",
+        "source": "",
+        "standing": "unavailable",
+        "unit": "",
+        "delta": {
+          "status": "unavailable",
+          "value": null,
+          "unit": "",
+          "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario."
+        }
+      },
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Burden",
+        "source": "",
+        "standing": "unavailable",
+        "unit": "",
+        "delta": {
+          "status": "unavailable",
+          "value": null,
+          "unit": "",
+          "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario."
+        }
+      },
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Governance",
+        "source": "",
+        "standing": "unavailable",
+        "unit": "",
+        "delta": {
+          "status": "unavailable",
+          "value": null,
+          "unit": "",
+          "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario."
+        }
+      },
+      {
+        "baseline": null,
+        "candidate": null,
+        "name": "Budget capacity",
+        "source": "",
+        "standing": "unavailable",
+        "unit": "",
+        "delta": {
+          "status": "unavailable",
+          "value": null,
+          "unit": "",
+          "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario."
+        }
+      }
+    ],
+    "records": [
+      {
+        "id": "input/label",
+        "domain": "internal-investment",
+        "type": "input",
+        "label": "Scenario name",
+        "status": "known",
+        "value": "Illustrative pilot versus status quo",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/currency",
+        "domain": "internal-investment",
+        "type": "input",
+        "label": "Currency (ISO 4217 code)",
+        "status": "known",
+        "value": "USD",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/period",
+        "domain": "internal-investment",
+        "type": "input",
+        "label": "Cash-flow and commercial period",
+        "status": "known",
+        "value": "year",
+        "unit": "period",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/segment",
+        "domain": "commercial-cohort",
+        "type": "input",
+        "label": "Customer segment",
+        "status": "known",
+        "value": "Synthetic implementation partners",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/cohort",
+        "domain": "commercial-cohort",
+        "type": "input",
+        "label": "Opening cohort and measurement window",
+        "status": "known",
+        "value": "100 synthetic customers; one year",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/tenure",
+        "domain": "commercial-cohort",
+        "type": "input",
+        "label": "Cohort tenure (periods)",
+        "status": "known",
+        "value": 1,
+        "unit": "period",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/implementationState",
+        "domain": "commercial-cohort",
+        "type": "input",
+        "label": "Implementation standing",
+        "status": "known",
+        "value": "Illustrative ramp; one-period lag",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/openingCustomers",
+        "domain": "commercial-cohort",
+        "type": "input",
+        "label": "Opening customers",
+        "status": "known",
+        "value": 100,
+        "unit": "customer",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/newCustomers",
+        "domain": "commercial-cohort",
+        "type": "input",
+        "label": "New customers",
+        "status": "known",
+        "value": 20,
+        "unit": "customer",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/churnCustomers",
+        "domain": "commercial-cohort",
+        "type": "input",
+        "label": "Opening-cohort customers lost",
+        "status": "known",
+        "value": 10,
+        "unit": "customer",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/reactivatedCustomers",
+        "domain": "commercial-cohort",
+        "type": "input",
+        "label": "Reactivated customers outside opening cohort",
+        "status": "known",
+        "value": 5,
+        "unit": "customer",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/openingRevenue",
+        "domain": "commercial-cohort",
+        "type": "input",
+        "label": "Opening-cohort recurring revenue",
+        "status": "known",
+        "value": 100000,
+        "unit": "currency/period",
+        "currency": "USD",
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/churnRevenue",
+        "domain": "commercial-cohort",
+        "type": "input",
+        "label": "Revenue lost from opening cohort",
+        "status": "known",
+        "value": 10000,
+        "unit": "currency/period",
+        "currency": "USD",
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/contraction",
+        "domain": "commercial-cohort",
+        "type": "input",
+        "label": "Opening-cohort contraction",
+        "status": "known",
+        "value": 5000,
+        "unit": "currency/period",
+        "currency": "USD",
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/expansion",
+        "domain": "commercial-cohort",
+        "type": "input",
+        "label": "Opening-cohort expansion",
+        "status": "known",
+        "value": 20000,
+        "unit": "currency/period",
+        "currency": "USD",
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/newRevenue",
+        "domain": "commercial-cohort",
+        "type": "input",
+        "label": "New-customer recurring revenue",
+        "status": "known",
+        "value": 20000,
+        "unit": "currency/period",
+        "currency": "USD",
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/reactivationRevenue",
+        "domain": "commercial-cohort",
+        "type": "input",
+        "label": "Reactivation revenue outside opening cohort",
+        "status": "known",
+        "value": 5000,
+        "unit": "currency/period",
+        "currency": "USD",
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/acquisitionSpend",
+        "domain": "commercial-cohort",
+        "type": "input",
+        "label": "Acquisition spend for new customers",
+        "status": "known",
+        "value": 10000,
+        "unit": "currency",
+        "currency": "USD",
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/contributionMargin",
+        "domain": "commercial-cohort",
+        "type": "input",
+        "label": "New-customer contribution margin (0-1)",
+        "status": "known",
+        "value": 0.7,
+        "unit": "ratio",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/listPrice",
+        "domain": "customer-implementation",
+        "type": "input",
+        "label": "List price per orderable unit",
+        "status": "known",
+        "value": 1000,
+        "unit": "currency/unit",
+        "currency": "USD",
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/discount",
+        "domain": "customer-implementation",
+        "type": "input",
+        "label": "Discount fraction (0-1)",
+        "status": "known",
+        "value": 0.1,
+        "unit": "ratio",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/rebate",
+        "domain": "customer-implementation",
+        "type": "input",
+        "label": "Rebate per unit",
+        "status": "known",
+        "value": 25,
+        "unit": "currency/unit",
+        "currency": "USD",
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/variableCost",
+        "domain": "customer-implementation",
+        "type": "input",
+        "label": "Variable cost per unit",
+        "status": "known",
+        "value": 200,
+        "unit": "currency/unit",
+        "currency": "USD",
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/serviceCost",
+        "domain": "customer-implementation",
+        "type": "input",
+        "label": "Service cost per unit",
+        "status": "known",
+        "value": 100,
+        "unit": "currency/unit",
+        "currency": "USD",
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/pricingUnit",
+        "domain": "customer-implementation",
+        "type": "input",
+        "label": "Orderable unit and package boundary",
+        "status": "known",
+        "value": "One synthetic service unit; implementation separate",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/buyer",
+        "domain": "customer-implementation",
+        "type": "input",
+        "label": "Buyer / user / payer",
+        "status": "known",
+        "value": "Sponsor / operating team / customer organization",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/priceClass",
+        "domain": "customer-implementation",
+        "type": "input",
+        "label": "Price evidence class",
+        "status": "known",
+        "value": "Illustrative scenario",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/implementationCost",
+        "domain": "customer-implementation",
+        "type": "input",
+        "label": "Customer implementation cost",
+        "status": "known",
+        "value": 10000,
+        "unit": "currency",
+        "currency": "USD",
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/implementationLag",
+        "domain": "customer-implementation",
+        "type": "input",
+        "label": "Implementation lag (periods)",
+        "status": "known",
+        "value": 1,
+        "unit": "period",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/internalInvestment",
+        "domain": "capital-allocation",
+        "type": "input",
+        "label": "Internal investment reference",
+        "status": "known",
+        "value": 324,
+        "unit": "currency",
+        "currency": "USD",
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/discountRate",
+        "domain": "capital-allocation",
+        "type": "input",
+        "label": "Effective discount rate per period",
+        "status": "known",
+        "value": 0.1,
+        "unit": "ratio",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/cashConvention",
+        "domain": "capital-allocation",
+        "type": "input",
+        "label": "Cash-flow convention",
+        "status": "known",
+        "value": "Incremental to status quo; end-period; t=0 upfront",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/taxWorkingCapital",
+        "domain": "capital-allocation",
+        "type": "input",
+        "label": "Tax and working-capital treatment",
+        "status": "known",
+        "value": "Synthetic after-tax flows; working-capital changes included once",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/capacity",
+        "domain": "capital-allocation",
+        "type": "input",
+        "label": "Implementation capacity (adopted people per period)",
+        "status": "known",
+        "value": 40,
+        "unit": "person/period",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/exhaustive",
+        "domain": "capital-allocation",
+        "type": "input",
+        "label": "Outcome tree is mutually exclusive and exhaustive",
+        "status": "known",
+        "value": false,
+        "unit": "boolean",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/eligiblePopulation",
+        "domain": "service-operational",
+        "type": "input",
+        "label": "Eligible population",
+        "status": "known",
+        "value": 100,
+        "unit": "person",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/adoption",
+        "domain": "service-operational",
+        "type": "input",
+        "label": "Adoption fraction (0-1)",
+        "status": "known",
+        "value": 0.3,
+        "unit": "ratio",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/baselineCost",
+        "domain": "service-operational",
+        "type": "input",
+        "label": "Baseline resource cost per person per period",
+        "status": "known",
+        "value": 500,
+        "unit": "currency/person/period",
+        "currency": "USD",
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/candidateCost",
+        "domain": "service-operational",
+        "type": "input",
+        "label": "Candidate resource cost per person per period",
+        "status": "known",
+        "value": 650,
+        "unit": "currency/person/period",
+        "currency": "USD",
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/perspective",
+        "domain": "service-operational",
+        "type": "input",
+        "label": "Budget perspective",
+        "status": "known",
+        "value": "Illustrative provider budget",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/population",
+        "domain": "service-operational",
+        "type": "input",
+        "label": "Population and context",
+        "status": "known",
+        "value": "Synthetic population; local eligibility remains to be specified",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/intervention",
+        "domain": "service-operational",
+        "type": "input",
+        "label": "Intervention",
+        "status": "known",
+        "value": "Bounded workflow pilot",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/comparator",
+        "domain": "service-operational",
+        "type": "input",
+        "label": "Comparator",
+        "status": "known",
+        "value": "Current workflow",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/reviewer",
+        "domain": "service-operational",
+        "type": "input",
+        "label": "Accountable service / operating reviewer",
+        "status": "unavailable",
+        "value": "",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/evidenceSource",
+        "domain": "service-operational",
+        "type": "input",
+        "label": "Evidence semantic key or public source",
+        "status": "unavailable",
+        "value": "",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/asOf",
+        "domain": "service-operational",
+        "type": "input",
+        "label": "Evidence as-of date",
+        "status": "unavailable",
+        "value": "",
+        "unit": "date",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/economicReview",
+        "domain": "service-operational",
+        "type": "input",
+        "label": "Outcome transformation review",
+        "status": "known",
+        "value": "pending",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/incrementalOutcome",
+        "domain": "service-operational",
+        "type": "input",
+        "label": "Reviewed incremental outcome per adopted person",
+        "status": "unavailable",
+        "value": null,
+        "unit": "outcome/person",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/outcomeUnit",
+        "domain": "service-operational",
+        "type": "input",
+        "label": "Outcome unit (explicit measure)",
+        "status": "unavailable",
+        "value": "",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/owner",
+        "domain": "internal-investment",
+        "type": "input",
+        "label": "Decision owner",
+        "status": "known",
+        "value": "Example operating owner",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/trigger",
+        "domain": "internal-investment",
+        "type": "input",
+        "label": "Gate trigger",
+        "status": "known",
+        "value": "Review pilot feasibility, evidence, and capacity",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/nextEvidence",
+        "domain": "internal-investment",
+        "type": "input",
+        "label": "Next evidence needed",
+        "status": "known",
+        "value": "Observed workflow and reviewed resource requirements",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/revisit",
+        "domain": "internal-investment",
+        "type": "input",
+        "label": "Revisit date",
+        "status": "known",
+        "value": "2026-10-30",
+        "unit": "date",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/option",
+        "domain": "internal-investment",
+        "type": "input",
+        "label": "Reversible next choice",
+        "status": "known",
+        "value": "pilot",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "input/gate",
+        "domain": "internal-investment",
+        "type": "input",
+        "label": "Safety / governance gate",
+        "status": "known",
+        "value": "satisfied",
+        "unit": "text",
+        "currency": null,
+        "timeBasis": "year",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "assumption/cash-basis",
+        "domain": "capital-allocation",
+        "type": "assumption",
+        "value": {
+          "convention": "Incremental to status quo; end-period; t=0 upfront",
+          "taxWorkingCapital": "Synthetic after-tax flows; working-capital changes included once",
+          "reserves": "Cash-flow inputs carry each intended cost once; staffing references and pricing outputs remain separate views."
+        }
+      },
+      {
+        "id": "calculation/closingCustomers",
+        "domain": "commercial-cohort",
+        "type": "calculation",
+        "status": "known",
+        "value": 115,
+        "unit": "customer",
+        "reason": "",
+        "currency": null,
+        "timeBasis": "year",
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/logoRetention",
+        "domain": "commercial-cohort",
+        "type": "calculation",
+        "status": "known",
+        "value": 0.9,
+        "unit": "ratio",
+        "reason": "",
+        "currency": null,
+        "timeBasis": "year",
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/grr",
+        "domain": "commercial-cohort",
+        "type": "calculation",
+        "status": "known",
+        "value": 0.85,
+        "unit": "ratio",
+        "reason": "",
+        "currency": null,
+        "timeBasis": "year",
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/nrr",
+        "domain": "commercial-cohort",
+        "type": "calculation",
+        "status": "known",
+        "value": 1.05,
+        "unit": "ratio",
+        "reason": "",
+        "currency": null,
+        "timeBasis": "year",
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/closingRevenue",
+        "domain": "commercial-cohort",
+        "type": "calculation",
+        "status": "known",
+        "value": 130000,
+        "unit": "currency/period",
+        "reason": "",
+        "currency": "USD",
+        "timeBasis": "year",
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/cac",
+        "domain": "commercial-cohort",
+        "type": "calculation",
+        "status": "known",
+        "value": 500,
+        "unit": "currency/customer",
+        "reason": "",
+        "currency": "USD",
+        "timeBasis": "year",
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/acquisitionRevenueRatio",
+        "domain": "commercial-cohort",
+        "type": "calculation",
+        "status": "known",
+        "value": 0.5,
+        "unit": "period",
+        "reason": "",
+        "currency": null,
+        "timeBasis": "year",
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/cacPayback",
+        "domain": "commercial-cohort",
+        "type": "calculation",
+        "status": "known",
+        "value": 0.7142857142857143,
+        "unit": "period",
+        "reason": "",
+        "currency": null,
+        "timeBasis": "year",
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/discountAmount",
+        "domain": "customer-implementation",
+        "type": "calculation",
+        "status": "known",
+        "value": 100,
+        "unit": "currency/unit",
+        "reason": "",
+        "currency": "USD",
+        "timeBasis": "year",
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/netPrice",
+        "domain": "customer-implementation",
+        "type": "calculation",
+        "status": "known",
+        "value": 875,
+        "unit": "currency/unit",
+        "reason": "",
+        "currency": "USD",
+        "timeBasis": "year",
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/unitContribution",
+        "domain": "customer-implementation",
+        "type": "calculation",
+        "status": "known",
+        "value": 575,
+        "unit": "currency/unit",
+        "reason": "",
+        "currency": "USD",
+        "timeBasis": "year",
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/adoptedPopulation",
+        "domain": "service-operational",
+        "type": "calculation",
+        "status": "known",
+        "value": 30,
+        "unit": "person",
+        "reason": "",
+        "currency": null,
+        "timeBasis": "year",
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/budgetImpact",
+        "domain": "service-operational",
+        "type": "calculation",
+        "status": "known",
+        "value": 4500,
+        "unit": "currency/period",
+        "reason": "",
+        "currency": "USD",
+        "timeBasis": "year",
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/capacityGap",
+        "domain": "service-operational",
+        "type": "calculation",
+        "status": "known",
+        "value": 0,
+        "unit": "person/period",
+        "reason": "",
+        "currency": null,
+        "timeBasis": "year",
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/costPerOutcome",
+        "domain": "service-operational",
+        "type": "calculation",
+        "status": "unavailable",
+        "value": null,
+        "unit": "currency/outcome",
+        "reason": "Reviewed incremental outcome per adopted person is needed.",
+        "currency": "USD",
+        "timeBasis": "year",
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/expectedNpv",
+        "domain": "capital-allocation",
+        "type": "calculation",
+        "status": "unavailable",
+        "value": null,
+        "unit": "currency",
+        "reason": "Confirm a mutually exclusive, collectively exhaustive outcome tree.",
+        "currency": "USD",
+        "timeBasis": "year",
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/alternative/status-quo",
+        "domain": "capital-allocation",
+        "type": "calculation",
+        "npv": {
+          "status": "known",
+          "value": 0,
+          "unit": "currency",
+          "reason": ""
+        },
+        "irr": {
+          "status": "inapplicable",
+          "value": null,
+          "unit": "ratio",
+          "reason": "IRR requires at least one cash-flow sign change."
+        },
+        "payback": {
+          "status": "inapplicable",
+          "value": null,
+          "unit": "period",
+          "reason": "Payback requires an initial cash outlay."
+        },
+        "currency": "USD",
+        "timeBasis": "year",
+        "horizon": 2,
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/alternative/proceed",
+        "domain": "capital-allocation",
+        "type": "calculation",
+        "npv": {
+          "status": "known",
+          "value": 5619.834710743788,
+          "unit": "currency",
+          "reason": ""
+        },
+        "irr": {
+          "status": "known",
+          "value": 0.13432285067319516,
+          "unit": "ratio",
+          "reason": ""
+        },
+        "payback": {
+          "status": "known",
+          "value": 1.6666666666666665,
+          "unit": "period",
+          "reason": "Undiscounted; linear recovery within the crossing period."
+        },
+        "currency": "USD",
+        "timeBasis": "year",
+        "horizon": 2,
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/alternative/pilot",
+        "domain": "capital-allocation",
+        "type": "calculation",
+        "npv": {
+          "status": "known",
+          "value": 4132.231404958671,
+          "unit": "currency",
+          "reason": ""
+        },
+        "irr": {
+          "status": "known",
+          "value": 0.13066238629180738,
+          "unit": "ratio",
+          "reason": ""
+        },
+        "payback": {
+          "status": "known",
+          "value": 1.6666666666666665,
+          "unit": "period",
+          "reason": "Undiscounted; linear recovery within the crossing period."
+        },
+        "currency": "USD",
+        "timeBasis": "year",
+        "horizon": 2,
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/alternative/defer",
+        "domain": "capital-allocation",
+        "type": "calculation",
+        "npv": {
+          "status": "known",
+          "value": -15702.479338842983,
+          "unit": "currency",
+          "reason": ""
+        },
+        "irr": {
+          "status": "inapplicable",
+          "value": null,
+          "unit": "ratio",
+          "reason": "IRR is restricted to an initial investment followed by nonnegative flows."
+        },
+        "payback": {
+          "status": "inapplicable",
+          "value": null,
+          "unit": "period",
+          "reason": "Payback requires an initial cash outlay."
+        },
+        "currency": "USD",
+        "timeBasis": "year",
+        "horizon": 2,
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/alternative/scale",
+        "domain": "capital-allocation",
+        "type": "calculation",
+        "npv": {
+          "status": "known",
+          "value": 10082.644628099151,
+          "unit": "currency",
+          "reason": ""
+        },
+        "irr": {
+          "status": "known",
+          "value": 0.14023192757000114,
+          "unit": "ratio",
+          "reason": ""
+        },
+        "payback": {
+          "status": "known",
+          "value": 1.6666666666666665,
+          "unit": "period",
+          "reason": "Undiscounted; linear recovery within the crossing period."
+        },
+        "currency": "USD",
+        "timeBasis": "year",
+        "horizon": 2,
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/alternative/redirect",
+        "domain": "capital-allocation",
+        "type": "calculation",
+        "npv": {
+          "status": "known",
+          "value": 2975.2066115702437,
+          "unit": "currency",
+          "reason": ""
+        },
+        "irr": {
+          "status": "known",
+          "value": 0.15138781886599728,
+          "unit": "ratio",
+          "reason": ""
+        },
+        "payback": {
+          "status": "known",
+          "value": 1.6666666666666665,
+          "unit": "period",
+          "reason": "Undiscounted; linear recovery within the crossing period."
+        },
+        "currency": "USD",
+        "timeBasis": "year",
+        "horizon": 2,
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/alternative/stop",
+        "domain": "capital-allocation",
+        "type": "calculation",
+        "npv": {
+          "status": "known",
+          "value": -5000,
+          "unit": "currency",
+          "reason": ""
+        },
+        "irr": {
+          "status": "inapplicable",
+          "value": null,
+          "unit": "ratio",
+          "reason": "IRR requires at least one cash-flow sign change."
+        },
+        "payback": {
+          "status": "unreached",
+          "value": null,
+          "unit": "period",
+          "reason": "Cumulative cash flow remains below zero throughout the supplied horizon."
+        },
+        "currency": "USD",
+        "timeBasis": "year",
+        "horizon": 2,
+        "formulaVersion": "0.1.0",
+        "evidenceStanding": "illustrative"
+      },
+      {
+        "id": "calculation/consequence/Safety",
+        "domain": "service-operational",
+        "type": "calculation",
+        "status": "unavailable",
+        "value": null,
+        "unit": "",
+        "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario.",
+        "source": "",
+        "evidenceStanding": "unavailable",
+        "formulaVersion": "0.1.0",
+        "timeBasis": "year"
+      },
+      {
+        "id": "calculation/consequence/Quality",
+        "domain": "service-operational",
+        "type": "calculation",
+        "status": "unavailable",
+        "value": null,
+        "unit": "",
+        "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario.",
+        "source": "",
+        "evidenceStanding": "unavailable",
+        "formulaVersion": "0.1.0",
+        "timeBasis": "year"
+      },
+      {
+        "id": "calculation/consequence/Timeliness",
+        "domain": "service-operational",
+        "type": "calculation",
+        "status": "unavailable",
+        "value": null,
+        "unit": "",
+        "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario.",
+        "source": "",
+        "evidenceStanding": "unavailable",
+        "formulaVersion": "0.1.0",
+        "timeBasis": "year"
+      },
+      {
+        "id": "calculation/consequence/Patient experience",
+        "domain": "service-operational",
+        "type": "calculation",
+        "status": "unavailable",
+        "value": null,
+        "unit": "",
+        "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario.",
+        "source": "",
+        "evidenceStanding": "unavailable",
+        "formulaVersion": "0.1.0",
+        "timeBasis": "year"
+      },
+      {
+        "id": "calculation/consequence/Equity",
+        "domain": "service-operational",
+        "type": "calculation",
+        "status": "unavailable",
+        "value": null,
+        "unit": "",
+        "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario.",
+        "source": "",
+        "evidenceStanding": "unavailable",
+        "formulaVersion": "0.1.0",
+        "timeBasis": "year"
+      },
+      {
+        "id": "calculation/consequence/Efficiency",
+        "domain": "service-operational",
+        "type": "calculation",
+        "status": "unavailable",
+        "value": null,
+        "unit": "",
+        "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario.",
+        "source": "",
+        "evidenceStanding": "unavailable",
+        "formulaVersion": "0.1.0",
+        "timeBasis": "year"
+      },
+      {
+        "id": "calculation/consequence/Burden",
+        "domain": "service-operational",
+        "type": "calculation",
+        "status": "unavailable",
+        "value": null,
+        "unit": "",
+        "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario.",
+        "source": "",
+        "evidenceStanding": "unavailable",
+        "formulaVersion": "0.1.0",
+        "timeBasis": "year"
+      },
+      {
+        "id": "calculation/consequence/Governance",
+        "domain": "service-operational",
+        "type": "calculation",
+        "status": "unavailable",
+        "value": null,
+        "unit": "",
+        "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario.",
+        "source": "",
+        "evidenceStanding": "unavailable",
+        "formulaVersion": "0.1.0",
+        "timeBasis": "year"
+      },
+      {
+        "id": "calculation/consequence/Budget capacity",
+        "domain": "service-operational",
+        "type": "calculation",
+        "status": "unavailable",
+        "value": null,
+        "unit": "",
+        "reason": "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario.",
+        "source": "",
+        "evidenceStanding": "unavailable",
+        "formulaVersion": "0.1.0",
+        "timeBasis": "year"
+      },
+      {
+        "id": "evidence/context",
+        "domain": "service-operational",
+        "type": "evidence",
+        "value": {
+          "source": "",
+          "reviewer": "",
+          "asOf": "",
+          "standing": "illustrative"
+        }
+      },
+      {
+        "id": "decision/next",
+        "domain": "capital-allocation",
+        "type": "decision",
+        "value": {
+          "gate": "ready-for-human-review",
+          "choice": "pilot",
+          "trigger": "Review pilot feasibility, evidence, and capacity",
+          "owner": "Example operating owner",
+          "optionPreserved": "pilot",
+          "nextEvidence": "Observed workflow and reviewed resource requirements",
+          "revisit": "2026-10-30"
+        }
+      }
+    ],
+    "gate": "ready-for-human-review",
+    "events": [
+      {
+        "id": "acquire",
+        "kind": "acquisition",
+        "period": 0,
+        "predecessors": [],
+        "standing": "illustrative"
+      },
+      {
+        "id": "onboard",
+        "kind": "onboarding",
+        "period": 1,
+        "predecessors": [
+          "acquire"
+        ],
+        "standing": "illustrative"
+      },
+      {
+        "id": "activate",
+        "kind": "activation",
+        "period": 1,
+        "predecessors": [
+          "onboard"
+        ],
+        "standing": "illustrative"
+      },
+      {
+        "id": "renew",
+        "kind": "renewal",
+        "period": 2,
+        "predecessors": [
+          "activate"
+        ],
+        "standing": "illustrative"
+      },
+      {
+        "id": "churn",
+        "kind": "churn",
+        "period": 2,
+        "predecessors": [
+          "activate"
+        ],
+        "standing": "illustrative"
+      },
+      {
+        "id": "reactivate",
+        "kind": "reactivation",
+        "period": 3,
+        "predecessors": [
+          "churn"
+        ],
+        "standing": "illustrative"
+      }
+    ]
+  }
+}

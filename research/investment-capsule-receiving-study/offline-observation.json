@@ -1,0 +1,82 @@
+{
+  "sourceRevision": "b535403e750bbde8f7dda303377c4a3d2aa2ec41",
+  "analysisContract": "0.2.0",
+  "formulaVersion": "0.1.0",
+  "capsuleContract": "prompt-capsule/0.1.0",
+  "capsuleSourceVersion": "0.3.0",
+  "externalModelCalls": 0,
+  "modelUnderstanding": "unmeasured",
+  "encodingEquivalence": "protocol defined; condition rendering awaits selected receiving job",
+  "recommendation": "Retain the complete production packet; continue observation before selecting a compact option.",
+  "cases": [
+    {
+      "id": "baseline",
+      "fixtureSha256": "1b6348ac28cd78733d31266986fee6ceca2ce19a7ad7a203cb510a5ca8b3ecb9",
+      "capsuleSha256": "053923c1da1d5099c490c128b09749b2426186dbc0fe25990f9f9f5474bb8c67",
+      "canonicalStateBytes": 4137,
+      "productionCapsuleBytes": 20731,
+      "tokenCount": null,
+      "exactJsonRestoration": "pass",
+      "handCheckedPilotNpv": 4132.231404958671,
+      "answers": {
+        "newCustomers": 20,
+        "cac": 500,
+        "nrr": 1.05,
+        "budgetImpact": 4500,
+        "selectedOption": "pilot",
+        "highestSuppliedNpv": "scale",
+        "owner": "unspecified",
+        "gate": "held-open",
+        "expectedNpvStatus": "unavailable",
+        "staffingReference": "absent"
+      }
+    },
+    {
+      "id": "absence",
+      "fixtureSha256": "8f861223cf9b53cc64ede489b66120691143b11d26b12ac9f27d3d954adecb5e",
+      "capsuleSha256": "7ab67834768c780f75cc7cb4414d1467ae9f90636081a383316b79b8edbd30ec",
+      "canonicalStateBytes": 4145,
+      "productionCapsuleBytes": 20901,
+      "tokenCount": null,
+      "exactJsonRestoration": "pass",
+      "handCheckedPilotNpv": 4132.231404958671,
+      "answers": {
+        "newCustomers": 0,
+        "cacStatus": "unavailable",
+        "grrStatus": "invalid",
+        "firstOutcomeProbability": "unavailable",
+        "firstEventPeriod": "unavailable",
+        "safetyBaseline": "unavailable",
+        "safetyCandidate": 0,
+        "evidenceSource": "unavailable",
+        "selectedOption": "pilot",
+        "gate": "held-open"
+      }
+    },
+    {
+      "id": "captured-reference",
+      "fixtureSha256": "a9506d9e3c2c54d85d206c89074577e9e184d7dcd876802e901fb812017e43bc",
+      "capsuleSha256": "89448a09ae00d71512204507dad12517a13536d3d0c382268a63e3d9e7082d55",
+      "canonicalStateBytes": 5066,
+      "productionCapsuleBytes": 22428,
+      "tokenCount": null,
+      "exactJsonRestoration": "pass",
+      "handCheckedPilotNpv": 4132.231404958671,
+      "answers": {
+        "capturedCentral": 324,
+        "capturedCurrency": "USD",
+        "laterLiveCentral": 648,
+        "acceptedPilotFlows": [
+          -100000,
+          60000,
+          60000
+        ],
+        "owner": "Example operating owner",
+        "gate": "ready-for-human-review",
+        "nextEvidence": "Observed workflow and reviewed resource requirements",
+        "revisit": "2026-10-30",
+        "authorization": "A ready-for-human-review gate routes the next human decision."
+      }
+    }
+  ]
+}
