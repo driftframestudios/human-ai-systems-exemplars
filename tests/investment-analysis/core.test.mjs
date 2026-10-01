@@ -7,9 +7,26 @@ import Ajv2020 from "ajv/dist/2020.js";
 const require=createRequire(import.meta.url);
 const C=require("../../collaboration/investment-analysis/core.js");
 const fresh=()=>C.defaults();
+test("service-outcome state converts prior exports and preserves calculation meaning", () => {
+  const current = fresh();
+  const { serviceOutcomes, ...retained } = current;
+  const legacy = { ...retained, schemaVersion: "0.1.0", clinical: serviceOutcomes };
+  const imported = C.importState(JSON.stringify(legacy));
+  assert.deepEqual(imported, current);
+  assert.deepEqual(C.calculate(imported), C.calculate(current));
+  assert.equal(imported.schemaVersion, "0.2.0");
+  assert.equal(Object.hasOwn(imported, "clinical"), false);
+  assert.equal(Object.hasOwn(C.schema().properties, "clinical"), false);
+  assert.ok(C.DOMAINS.includes("service-operational"));
+  assert.ok(C.calculate(imported).records.filter(record => record.formulaVersion).every(record => record.formulaVersion === C.FORMULA_VERSION));
+  assert.equal(legacy.schemaVersion, "0.1.0");
+  assert.ok(Object.hasOwn(legacy, "clinical"));
+  assert.throws(() => C.importState(JSON.stringify({ ...legacy, serviceOutcomes })), /one versioned outcome field/);
+});
 test("generated closed schema and independent runtime validator accept a material instance",()=>{
   const state=fresh(),ajv=new Ajv2020({strict:true,allErrors:true});
   const validate=ajv.compile(C.schema());
+  assert.equal(C.schema().title, "Investment analysis state " + C.VERSION);
   assert.equal(validate(state),true);
   assert.equal(C.validate(state).valid,true);
   state.extra=true;
@@ -61,15 +78,15 @@ test("waiting can help or harm under explicit changed economics",()=>{
   assert.ok(C.npv([0,-80,120],.1).value>now);
   assert.ok(C.npv([0,-100,80],.1).value<now);
 });
-test("cost-consequence and review gates preserve clinical absence semantics",()=>{
+test("cost-consequence and review gates preserve serviceOutcomes absence semantics",()=>{
   const s=fresh();let r=C.calculate(s);
   assert.equal(r.metrics.budgetImpact.value,4500);assert.equal(r.metrics.adoptedPopulation.value,30);
   assert.equal(r.metrics.costPerOutcome.status,"unavailable");assert.equal(r.gate,"held-open");
-  assert.equal(r.clinical.length,9);assert.ok(r.clinical.every(x=>x.delta.status==="unavailable"));
+  assert.equal(r.serviceOutcomes.length,9);assert.ok(r.serviceOutcomes.every(x=>x.delta.status==="unavailable"));
   Object.assign(s.inputs,{reviewer:"Synthetic reviewer",evidenceSource:"urn:example:study",asOf:"2026-09-30",economicReview:"reviewed",outcomeUnit:"specified outcome",incrementalOutcome:2});
   assert.equal(C.calculate(s).metrics.costPerOutcome.value,75);
-  s.clinical[0]={name:"Safety",unit:"events per 100 people",baseline:5,candidate:3,standing:"source-observation",source:"urn:example:study"};
-  assert.equal(C.calculate(s).clinical[0].delta.value,-2);
+  s.serviceOutcomes[0]={name:"Safety",unit:"events per 100 people",baseline:5,candidate:3,standing:"source-observation",source:"urn:example:study"};
+  assert.equal(C.calculate(s).serviceOutcomes[0].delta.value,-2);
   Object.assign(s.inputs,{gate:"satisfied",owner:"Synthetic decision owner",revisit:"2026-10-15"});
   assert.equal(C.calculate(s).gate,"ready-for-human-review");
   s.inputs.capacity=1;assert.equal(C.calculate(s).gate,"held-open");
@@ -179,13 +196,13 @@ test("independent domain diagnostics accumulate in stable review order", () => {
   const state = fresh();
   state.alternatives[1].id = state.alternatives[0].id;
   state.outcomes[1].id = state.outcomes[0].id;
-  state.clinical[1].name = state.clinical[0].name;
+  state.serviceOutcomes[1].name = state.serviceOutcomes[0].name;
   state.events[0].predecessors = ["missing"];
   state.events[0].period = -1;
   assert.deepEqual(C.validate(state).errors, [
     "alternatives: distinct nonempty identifiers are needed.",
     "outcomes: distinct nonempty identifiers are needed.",
-    "clinical: preserve all nine distinct consequence dimensions.",
+    "serviceOutcomes: preserve all nine distinct consequence dimensions.",
     "events: each predecessor must name another event.",
     "events: periods use nonnegative finite numbers or an explicit blank."
   ]);
@@ -207,20 +224,20 @@ test("metric guards preserve input, currency and denominator precedence", () => 
   assert.equal(result.reason, "Supply a positive denominator; explicit zero is retained.");
 });
 
-test("clinical delta preserves evidence, baseline, candidate and explicit-zero precedence", () => {
+test("serviceOutcomes delta preserves evidence, baseline, candidate and explicit-zero precedence", () => {
   const state = fresh();
-  const consequence = state.clinical[0];
+  const consequence = state.serviceOutcomes[0];
   Object.assign(consequence, { unit: "events", baseline: "", candidate: "", standing: "source-observation" });
-  let delta = C.calculate(state).clinical[0].delta;
+  let delta = C.calculate(state).serviceOutcomes[0].delta;
   assert.match(delta.reason, /appropriately reviewed evidence/);
   consequence.standing = "illustrative";
-  delta = C.calculate(state).clinical[0].delta;
+  delta = C.calculate(state).serviceOutcomes[0].delta;
   assert.equal(delta.reason, "Safety baseline is needed.");
   consequence.baseline = 0;
-  delta = C.calculate(state).clinical[0].delta;
+  delta = C.calculate(state).serviceOutcomes[0].delta;
   assert.equal(delta.reason, "Safety candidate is needed.");
   consequence.candidate = 0;
-  assert.deepEqual(C.calculate(state).clinical[0].delta, {
+  assert.deepEqual(C.calculate(state).serviceOutcomes[0].delta, {
     status: "known", value: 0, unit: "events", reason: "illustrative"
   });
 });
@@ -250,11 +267,11 @@ test("record-domain maps retain their named domains, order and detached calculat
     ["input/label", "internal-investment"],
     ["input/listPrice", "customer-implementation"],
     ["input/openingCustomers", "commercial-cohort"],
-    ["input/eligiblePopulation", "clinical-operational"],
+    ["input/eligiblePopulation", "service-operational"],
     ["input/discountRate", "capital-allocation"],
     ["calculation/grr", "commercial-cohort"],
     ["calculation/netPrice", "customer-implementation"],
-    ["calculation/budgetImpact", "clinical-operational"],
+    ["calculation/budgetImpact", "service-operational"],
     ["calculation/expectedNpv", "capital-allocation"]
   ]) assert.equal(domainOf(id), domain, id);
   assert.deepEqual(result.records.slice(0, Object.keys(C.FIELDS).length).map(record => record.id),

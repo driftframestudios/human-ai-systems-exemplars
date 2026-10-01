@@ -48,7 +48,7 @@ test("both instruments retain state, labels, focus, recovery and semantic parity
       await page.goto(origin+"/"+route);
       await page.locator("[data-investment-analysis]:not([hidden])").waitFor();
       const baseline=await page.evaluate(()=>window.investmentAnalysis.getState());
-      assert.equal(baseline.schemaVersion,"0.1.0");
+      assert.equal(baseline.schemaVersion,"0.2.0");
       assert.equal(await page.evaluate(() => {
         const api = window.investmentAnalysis, first = api.readProjection(), detached = api.getProjection();
         detached.state.inputs.label = "caller-owned edit";

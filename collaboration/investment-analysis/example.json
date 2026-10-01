@@ -1,238 +1,74 @@
 {
-  "schemaVersion": "0.1.0",
-  "scenarioId": "scenario/investment-pilot.v0.1",
-  "method": "model/activity-based.v0.1",
-  "origin": "illustrative",
-  "inputs": {
-    "label": "Illustrative pilot versus status quo",
-    "currency": "USD",
-    "period": "year",
-    "segment": "Synthetic implementation partners",
-    "cohort": "100 synthetic customers; one year",
-    "tenure": 1,
-    "implementationState": "Illustrative ramp; one-period lag",
-    "openingCustomers": 100,
-    "newCustomers": 20,
-    "churnCustomers": 10,
-    "reactivatedCustomers": 5,
-    "openingRevenue": 100000,
-    "churnRevenue": 10000,
-    "contraction": 5000,
-    "expansion": 20000,
-    "newRevenue": 20000,
-    "reactivationRevenue": 5000,
-    "acquisitionSpend": 10000,
-    "contributionMargin": 0.7,
-    "listPrice": 1000,
-    "discount": 0.1,
-    "rebate": 25,
-    "variableCost": 200,
-    "serviceCost": 100,
-    "pricingUnit": "One synthetic service unit; implementation separate",
-    "buyer": "Sponsor / operating team / customer organization",
-    "priceClass": "Illustrative scenario",
-    "implementationCost": 10000,
-    "implementationLag": 1,
-    "internalInvestment": 100000,
-    "discountRate": 0.1,
-    "cashConvention": "Incremental to status quo; end-period; t=0 upfront",
-    "taxWorkingCapital": "Synthetic after-tax flows; working-capital changes included once",
-    "capacity": 40,
-    "exhaustive": false,
-    "eligiblePopulation": 100,
-    "adoption": 0.3,
-    "baselineCost": 500,
-    "candidateCost": 650,
-    "perspective": "Illustrative provider budget",
-    "population": "Synthetic population; local eligibility remains to be specified",
-    "intervention": "Bounded workflow pilot",
-    "comparator": "Current workflow",
-    "reviewer": "",
-    "evidenceSource": "",
-    "asOf": "",
-    "economicReview": "pending",
-    "incrementalOutcome": null,
-    "outcomeUnit": "",
-    "owner": "",
-    "trigger": "Review pilot feasibility, evidence, and capacity",
-    "nextEvidence": "Observed workflow and reviewed resource requirements",
-    "revisit": "",
-    "option": "pilot",
-    "gate": "open"
-  },
   "alternatives": [
     {
-      "id": "status-quo",
-      "label": "Status quo",
       "flows": [
         0,
         0,
         0
       ],
+      "id": "status-quo",
+      "label": "Status quo",
       "standing": "illustrative"
     },
     {
-      "id": "proceed",
-      "label": "Proceed",
       "flows": [
         -120000,
         70000,
         75000
       ],
+      "id": "proceed",
+      "label": "Proceed",
       "standing": "illustrative"
     },
     {
-      "id": "pilot",
-      "label": "Pilot",
       "flows": [
         -100000,
         60000,
         60000
       ],
+      "id": "pilot",
+      "label": "Pilot",
       "standing": "illustrative"
     },
     {
-      "id": "defer",
-      "label": "Defer",
       "flows": [
         0,
         -90000,
         80000
       ],
+      "id": "defer",
+      "label": "Defer",
       "standing": "illustrative"
     },
     {
-      "id": "scale",
-      "label": "Scale",
       "flows": [
         -180000,
         100000,
         120000
       ],
+      "id": "scale",
+      "label": "Scale",
       "standing": "illustrative"
     },
     {
-      "id": "redirect",
-      "label": "Redirect",
       "flows": [
         -40000,
         20000,
         30000
       ],
+      "id": "redirect",
+      "label": "Redirect",
       "standing": "illustrative"
     },
     {
-      "id": "stop",
-      "label": "Stop",
       "flows": [
         -5000,
         0,
         0
       ],
+      "id": "stop",
+      "label": "Stop",
       "standing": "illustrative"
-    }
-  ],
-  "outcomes": [
-    {
-      "id": "constrained",
-      "probability": 0.3,
-      "flows": [
-        -100000,
-        30000,
-        30000
-      ]
-    },
-    {
-      "id": "planned",
-      "probability": 0.5,
-      "flows": [
-        -100000,
-        60000,
-        60000
-      ]
-    },
-    {
-      "id": "expanded",
-      "probability": 0.2,
-      "flows": [
-        -100000,
-        90000,
-        90000
-      ]
-    }
-  ],
-  "clinical": [
-    {
-      "name": "Safety",
-      "unit": "",
-      "baseline": null,
-      "candidate": null,
-      "standing": "unavailable",
-      "source": ""
-    },
-    {
-      "name": "Quality",
-      "unit": "",
-      "baseline": null,
-      "candidate": null,
-      "standing": "unavailable",
-      "source": ""
-    },
-    {
-      "name": "Timeliness",
-      "unit": "",
-      "baseline": null,
-      "candidate": null,
-      "standing": "unavailable",
-      "source": ""
-    },
-    {
-      "name": "Patient experience",
-      "unit": "",
-      "baseline": null,
-      "candidate": null,
-      "standing": "unavailable",
-      "source": ""
-    },
-    {
-      "name": "Equity",
-      "unit": "",
-      "baseline": null,
-      "candidate": null,
-      "standing": "unavailable",
-      "source": ""
-    },
-    {
-      "name": "Efficiency",
-      "unit": "",
-      "baseline": null,
-      "candidate": null,
-      "standing": "unavailable",
-      "source": ""
-    },
-    {
-      "name": "Burden",
-      "unit": "",
-      "baseline": null,
-      "candidate": null,
-      "standing": "unavailable",
-      "source": ""
-    },
-    {
-      "name": "Governance",
-      "unit": "",
-      "baseline": null,
-      "candidate": null,
-      "standing": "unavailable",
-      "source": ""
-    },
-    {
-      "name": "Budget capacity",
-      "unit": "",
-      "baseline": null,
-      "candidate": null,
-      "standing": "unavailable",
-      "source": ""
     }
   ],
   "events": [
@@ -289,5 +125,169 @@
       "standing": "illustrative"
     }
   ],
-  "extensions": {}
+  "extensions": {},
+  "inputs": {
+    "acquisitionSpend": 10000,
+    "adoption": 0.3,
+    "asOf": "",
+    "baselineCost": 500,
+    "buyer": "Sponsor / operating team / customer organization",
+    "candidateCost": 650,
+    "capacity": 40,
+    "cashConvention": "Incremental to status quo; end-period; t=0 upfront",
+    "churnCustomers": 10,
+    "churnRevenue": 10000,
+    "cohort": "100 synthetic customers; one year",
+    "comparator": "Current workflow",
+    "contraction": 5000,
+    "contributionMargin": 0.7,
+    "currency": "USD",
+    "discount": 0.1,
+    "discountRate": 0.1,
+    "economicReview": "pending",
+    "eligiblePopulation": 100,
+    "evidenceSource": "",
+    "exhaustive": false,
+    "expansion": 20000,
+    "gate": "open",
+    "implementationCost": 10000,
+    "implementationLag": 1,
+    "implementationState": "Illustrative ramp; one-period lag",
+    "incrementalOutcome": null,
+    "internalInvestment": 100000,
+    "intervention": "Bounded workflow pilot",
+    "label": "Illustrative pilot versus status quo",
+    "listPrice": 1000,
+    "newCustomers": 20,
+    "newRevenue": 20000,
+    "nextEvidence": "Observed workflow and reviewed resource requirements",
+    "openingCustomers": 100,
+    "openingRevenue": 100000,
+    "option": "pilot",
+    "outcomeUnit": "",
+    "owner": "",
+    "period": "year",
+    "perspective": "Illustrative provider budget",
+    "population": "Synthetic population; local eligibility remains to be specified",
+    "priceClass": "Illustrative scenario",
+    "pricingUnit": "One synthetic service unit; implementation separate",
+    "reactivatedCustomers": 5,
+    "reactivationRevenue": 5000,
+    "rebate": 25,
+    "reviewer": "",
+    "revisit": "",
+    "segment": "Synthetic implementation partners",
+    "serviceCost": 100,
+    "taxWorkingCapital": "Synthetic after-tax flows; working-capital changes included once",
+    "tenure": 1,
+    "trigger": "Review pilot feasibility, evidence, and capacity",
+    "variableCost": 200
+  },
+  "method": "model/activity-based.v0.1",
+  "origin": "illustrative",
+  "outcomes": [
+    {
+      "flows": [
+        -100000,
+        30000,
+        30000
+      ],
+      "id": "constrained",
+      "probability": 0.3
+    },
+    {
+      "flows": [
+        -100000,
+        60000,
+        60000
+      ],
+      "id": "planned",
+      "probability": 0.5
+    },
+    {
+      "flows": [
+        -100000,
+        90000,
+        90000
+      ],
+      "id": "expanded",
+      "probability": 0.2
+    }
+  ],
+  "scenarioId": "scenario/investment-pilot.v0.1",
+  "schemaVersion": "0.2.0",
+  "serviceOutcomes": [
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Safety",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Quality",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Timeliness",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Patient experience",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Equity",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Efficiency",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Burden",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Governance",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    },
+    {
+      "baseline": null,
+      "candidate": null,
+      "name": "Budget capacity",
+      "source": "",
+      "standing": "unavailable",
+      "unit": ""
+    }
+  ]
 }
