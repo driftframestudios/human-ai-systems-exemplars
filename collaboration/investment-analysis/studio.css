@@ -37,7 +37,7 @@
 .investment-analysis { width:100%; grid-column:1 / -1; border-radius:var(--radius,var(--radius-frame,14px)); box-shadow:none; }
 .investment-analysis .panel-head { margin:calc(-1 * clamp(1rem,3vw,2.5rem)) calc(-1 * clamp(1rem,3vw,2.5rem)) 1.5rem; padding:1.25rem; border-radius:var(--radius) var(--radius) 0 0; }
 .investment-analysis summary h3 { display:inline; font-size:1.05rem; margin:0; }
-.investment-analysis summary .investment-kicker { display:block; margin:.2rem 0; }
+.investment-analysis summary :is(.investment-kicker,.section-label,.eyebrow) { display:block; margin:.2rem 0; }
 .investment-analysis details { border-color:var(--line,var(--cof-line,#7893bc)); border-radius:var(--radius-card,7px); box-shadow:none; }
 .investment-analysis .investment-brief { margin:1rem 0 1.5rem; }
 .investment-analysis .investment-basis { font:400 .75rem/1.5 var(--ia-mono); overflow-wrap:anywhere; }
