@@ -321,7 +321,14 @@ test("investment chapters retain readable, navigable, source-grounded screen and
       await page.locator("#analysis-events").fill("[");
       assert.equal(await page.evaluate(() => window.investmentAnalysis.fingerprint()), fingerprint);
       if (route === routes[0]) {
-        assert.match(await page.locator("#investment-summary").textContent(), /EUR \/ quarter/);
+        const sidebarComparison = page.locator("#investment-summary");
+        assert.equal((await sidebarComparison.textContent()).trim(), "View the complete investment comparison");
+        const comparisonJump = sidebarComparison.getByRole("link", { name: "View the complete investment comparison", exact: true });
+        assert.equal(await comparisonJump.getAttribute("href"), "#investment-analysis-title");
+        await comparisonJump.focus();
+        await page.keyboard.press("Enter");
+        await expect(page).toHaveURL(/#investment-analysis-title$/);
+        await expect(page.locator("#investment-analysis-title")).toBeFocused();
         assert.match(await page.locator("#analysis-direct-receipts").textContent(), /1 of 9 dimensions are recorded as locally verified/);
         const popupPromise = context.waitForEvent("page");
         await page.getByRole("button", { name: "Open report in a new tab", exact: true }).click();
@@ -355,6 +362,7 @@ test("investment chapters retain readable, navigable, source-grounded screen and
         assert.equal(await report.locator(".investment-report tbody tr").first().isVisible(), true);
         assert.equal(await report.getByRole("table", { name: "Incremental alternatives", exact: true }).evaluate(el => el.getBoundingClientRect().right <= innerWidth + 1), true);
         await page.locator("#analysis-label").fill("Next accepted scenario");
+        assert.equal((await sidebarComparison.textContent()).trim(), "View the complete investment comparison");
         assert.equal(await report.locator(".investment-report").getAttribute("data-state-fingerprint"), fingerprint);
         const nextPopup = context.waitForEvent("page");
         await page.getByRole("button", { name: "Open report in a new tab", exact: true }).click();
