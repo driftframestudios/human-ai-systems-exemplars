@@ -2020,7 +2020,7 @@
   function inputLines(C, p, domain) {
     return Object.entries(C.FIELDS).filter(([key,field])=>inputDomain(key,field)===domain).map(([key,field])=>{
       const value=p.state.inputs[key];
-      const standing=field.type===C.FIELD_TYPE.NUMBER ? C.numeric(value,field.label,field.min ?? null,field.max ?? null).status : value === "" ? "unavailable" : "known";
+      const standing=field.type===C.FIELD_TYPE.NUMBER ? C.numeric(value,field.label,field.min ?? null,field.max ?? null).status : typeof value === "string" && value.trim() === "" ? "unavailable" : "known";
       return "- " + inline(field.label) + " (" + inline(key) + "): " + inline(valueText(value)) + " [" + inline(unit(field.unit,p.state.inputs)) + "] | " + standing;
     });
   }

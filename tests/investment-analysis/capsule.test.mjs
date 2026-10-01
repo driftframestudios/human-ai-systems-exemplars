@@ -51,7 +51,7 @@ test('explicit currency, reason, capture scope, and decision owner retain their 
 });
 
 test('capsule identity recomputes from its encoded projection and preserves numeric absence',()=>{
-  const state=C.defaults();state.outcomes[0].probability=' ';state.events[0].period='\t';state.serviceOutcomes[0].baseline=' ';state.serviceOutcomes[0].candidate=0;
+  const state=C.defaults();state.outcomes[0].probability=' ';state.events[0].period='\t';state.serviceOutcomes[0].baseline=' ';state.serviceOutcomes[0].candidate=0;state.inputs.evidenceSource=' \t ';
   const accepted=C.prepare(state),projection=P.project(C,accepted),prepared=P.prepare(C,accepted),text=P.document(C,accepted);
   const canonical=Object.fromEntries(Object.keys(projection).sort().map(key=>[key,projection[key]]));
   let expected=0x811c9dc5;
@@ -61,5 +61,7 @@ test('capsule identity recomputes from its encoded projection and preserves nume
   assert.ok(text.includes('- Analysis fingerprint: '+accepted.fingerprint));
   assert.match(text,/Probability: unavailable/);assert.match(text,/Period: unavailable/);assert.match(text,/Safety: baseline unavailable, candidate 0/);
   assert.equal(extractState(text).outcomes[0].probability,' ');
+  assert.match(text,/evidenceSource\): unavailable \[text\] \| unavailable/);
+  assert.equal(extractState(text).inputs.evidenceSource,' \t ');
   assert.notEqual(P.fingerprint({...projection,purpose:projection.purpose+' Changed decision'}),prepared.fingerprint);
 });
