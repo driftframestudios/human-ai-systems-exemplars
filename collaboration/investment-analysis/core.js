@@ -136,54 +136,157 @@
       })
     };
   }
-  function validate(state) {
-    const errors=[];
-    function visit(value, shape, path) {
-      if (shape.anyOf) {
-        if (!shape.anyOf.some(candidate=>{const mark=errors.length;visit(value,candidate,path);const ok=errors.length===mark;errors.length=mark;return ok;})) errors.push(path+": supply a finite number or leave it blank.");
+  function validateSchemaValue(value, shape, path, errors) {
+    if (shape.anyOf) {
+      const matches = shape.anyOf.some(candidate => {
+        const candidateErrors = [];
+        validateSchemaValue(value, candidate, path, candidateErrors);
+        return candidateErrors.length === 0;
+      });
+      if (!matches) errors.push(path + ": supply a finite number or leave it blank.");
+      return;
+    }
+
+    if ("const" in shape && value !== shape.const) {
+      errors.push(path + ": unsupported contract version.");
+    }
+    if (shape.enum && !shape.enum.includes(value)) {
+      errors.push(path + ": choose a declared value.");
+    }
+
+    switch (shape.type) {
+      case "object":
+        validateObject(value, shape, path, errors);
         return;
+      case "array":
+        validateArray(value, shape, path, errors);
+        return;
+      case "number":
+        if (typeof value !== "number" || !Number.isFinite(value)) {
+          errors.push(path + ": finite number needed.");
+        }
+        return;
+      case "null":
+        if (value !== null) errors.push(path + ": null needed.");
+        return;
+      case "boolean":
+        if (typeof value !== "boolean") errors.push(path + ": boolean needed.");
+        return;
+      case "string":
+        validateString(value, shape, path, errors);
+    }
+  }
+
+  function validateObject(value, shape, path, errors) {
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+      errors.push(path + ": an object is needed.");
+      return;
+    }
+    for (const key of shape.required || []) {
+      if (!Object.hasOwn(value, key)) errors.push(path + "." + key + ": required field.");
+    }
+    for (const key of Object.keys(value)) {
+      if (shape.propertyNames && !new RegExp(shape.propertyNames.pattern).test(key)) {
+        errors.push(path + ": use a namespaced extension.");
       }
-      if ("const" in shape && value!==shape.const) errors.push(path+": unsupported contract version.");
-      if (shape.enum && !shape.enum.includes(value)) errors.push(path+": choose a declared value.");
-      if (shape.type==="object") {
-        if (!value || typeof value!=="object" || Array.isArray(value)) {errors.push(path+": an object is needed.");return;}
-        for (const key of shape.required||[]) if (!Object.hasOwn(value,key)) errors.push(path+"."+key+": required field.");
-        for (const key of Object.keys(value)) {
-          if (shape.propertyNames && !new RegExp(shape.propertyNames.pattern).test(key)) errors.push(path+": use a namespaced extension.");
-          if (shape.properties?.[key]) visit(value[key],shape.properties[key],path+"."+key);
-          else if (shape.additionalProperties===false) errors.push(path+"."+key+": field belongs to a different contract.");
+      const childShape = shape.properties?.[key];
+      if (childShape) {
+        validateSchemaValue(value[key], childShape, path + "." + key, errors);
+      } else if (shape.additionalProperties === false) {
+        errors.push(path + "." + key + ": field belongs to a different contract.");
+      }
+    }
+  }
+
+  function validateArray(value, shape, path, errors) {
+    if (!Array.isArray(value)) {
+      errors.push(path + ": a list is needed.");
+      return;
+    }
+    if (value.length < (shape.minItems || 0) || value.length > (shape.maxItems || Infinity)) {
+      errors.push(path + ": list length is outside this contract.");
+    }
+    value.forEach((item, index) => {
+      validateSchemaValue(item, shape.items, path + "[" + index + "]", errors);
+    });
+  }
+
+  function validateString(value, shape, path, errors) {
+    const valid = typeof value === "string"
+      && value.length <= (shape.maxLength || Infinity)
+      && value.length >= (shape.minLength || 0)
+      && (!shape.pattern || new RegExp(shape.pattern).test(value));
+    if (!valid) errors.push(path + ": text is outside this contract.");
+  }
+
+  function validateIdentifiers(name, list, errors) {
+    const ids = list.map(item => item.id);
+    if (ids.some(id => !cleanText(id)) || new Set(ids).size !== ids.length) {
+      errors.push(name + ": distinct nonempty identifiers are needed.");
+    }
+  }
+
+  function hasEventCycle(events, byId) {
+    const visited = new Set();
+    const active = new Set();
+
+    function visit(id) {
+      if (active.has(id)) return true;
+      if (visited.has(id)) return false;
+
+      active.add(id);
+      for (const predecessor of byId.get(id)?.predecessors || []) {
+        if (visit(predecessor)) return true;
+      }
+      active.delete(id);
+      visited.add(id);
+      return false;
+    }
+
+    return events.some(event => visit(event.id));
+  }
+
+  function validateEvents(events, errors) {
+    const eventIds = new Set(events.map(event => event.id));
+    for (const event of events) {
+      if (event.predecessors.some(id => !eventIds.has(id) || id === event.id)) {
+        errors.push("events: each predecessor must name another event.");
+      }
+    }
+
+    const byId = new Map(events.map(event => [event.id, event]));
+    for (const event of events) {
+      const time = numeric(event.period, "Event period", 0);
+      if (time.status === "invalid") {
+        errors.push("events: periods use nonnegative finite numbers or an explicit blank.");
+      }
+      for (const id of event.predecessors) {
+        const prior = numeric(byId.get(id)?.period, "Predecessor period", 0);
+        if (time.status === "known" && prior.status === "known" && prior.value > time.value) {
+          errors.push("events: predecessor occurrences belong at or before the receiving event.");
         }
       }
-      if (shape.type==="array") {
-        if (!Array.isArray(value)) {errors.push(path+": a list is needed.");return;}
-        if (value.length<(shape.minItems||0)||value.length>(shape.maxItems||Infinity)) errors.push(path+": list length is outside this contract.");
-        value.forEach((item,i)=>visit(item,shape.items,path+"["+i+"]"));
-      }
-      if (shape.type==="number" && (typeof value!=="number"||!Number.isFinite(value))) errors.push(path+": finite number needed.");
-      if (shape.type==="null" && value!==null) errors.push(path+": null needed.");
-      if (shape.type==="boolean" && typeof value!=="boolean") errors.push(path+": boolean needed.");
-      if (shape.type==="string") {
-        if (typeof value!=="string" || value.length>(shape.maxLength||Infinity) || value.length<(shape.minLength||0) || (shape.pattern&&!new RegExp(shape.pattern).test(value))) errors.push(path+": text is outside this contract.");
-      }
     }
-    visit(state,schema(),"state");
-    if (errors.length) return {valid:false,errors};
-    for(const [name,list] of [["alternatives",state.alternatives],["outcomes",state.outcomes],["events",state.events]]) {
-      const ids=list.map(x=>x.id);
-      if(ids.some(x=>!cleanText(x))||new Set(ids).size!==ids.length) errors.push(name+": distinct nonempty identifiers are needed.");
+
+    if (hasEventCycle(events, byId)) {
+      errors.push("events: use distinct event occurrences to represent repeated lifecycle stages.");
     }
-    if(new Set(state.clinical.map(x=>x.name)).size!==OUTCOMES.length) errors.push("clinical: preserve all nine distinct consequence dimensions.");
-    const eventIds=new Set(state.events.map(e=>e.id));
-    for(const e of state.events) if(e.predecessors.some(id=>!eventIds.has(id)||id===e.id)) errors.push("events: each predecessor must name another event.");
-    const visited=new Set(),active=new Set(),byId=new Map(state.events.map(e=>[e.id,e]));
-    for(const e of state.events) {
-      const time=numeric(e.period,"Event period",0);
-      if(time.status==="invalid")errors.push("events: periods use nonnegative finite numbers or an explicit blank.");
-      for(const id of e.predecessors){const prior=numeric(byId.get(id)?.period,"Predecessor period",0);if(time.status==="known"&&prior.status==="known"&&prior.value>time.value)errors.push("events: predecessor occurrences belong at or before the receiving event.");}
+  }
+
+  function validate(state) {
+    const errors = [];
+    validateSchemaValue(state, schema(), "state", errors);
+    if (errors.length) return { valid: false, errors };
+
+    // Diagnostics accumulate in contract order; choosing the first match would lose evidence.
+    for (const name of ["alternatives", "outcomes", "events"]) {
+      validateIdentifiers(name, state[name], errors);
     }
-    function cycle(id){if(active.has(id))return true;if(visited.has(id))return false;active.add(id);for(const p of byId.get(id)?.predecessors||[])if(cycle(p))return true;active.delete(id);visited.add(id);return false;}
-    if(state.events.some(e=>cycle(e.id))) errors.push("events: use distinct event occurrences to represent repeated lifecycle stages.");
-    return {valid:errors.length===0,errors};
+    if (new Set(state.clinical.map(item => item.name)).size !== OUTCOMES.length) {
+      errors.push("clinical: preserve all nine distinct consequence dimensions.");
+    }
+    validateEvents(state.events, errors);
+    return { valid: errors.length === 0, errors };
   }
   function stable(value) {
     if(Array.isArray(value))return "["+value.map(stable).join(",")+"]";
@@ -256,54 +359,283 @@
     if(!Number.isFinite(central))return {status:"invalid",problems:["The staffing result exceeds the supported numeric range."]};
     return {status:"known",horizonHours,people,taskCount,activityHours,allocatedHours,qualityHours,qualityMultiplier,disruptionHours,roleCost,activityCost,qualityCost,disruptionCost,unknownCost,complexityCost,central,spread,low:central*(1-spread),high:central*(1+spread),unknownCount,unknownRate,complexityRate,unpricedWork:false,overlap,problems:[]};
   }
-  function calculate(state) {
-    const validation=validate(state);if(!validation.valid)return {valid:false,errors:validation.errors,metrics:{},alternatives:[],clinical:[],records:[]};
-    const i=state.inputs,metrics={},currency=/^[A-Z]{3}$/.test(i.currency);
-    const read=key=>numeric(i[key],FIELDS[key].label,FIELDS[key].min??null,FIELDS[key].max??null);
-    function metric(key,keys,unit,fn) {
-      const values=keys.map(read),bad=values.find(x=>x.status!=="known");
-      metrics[key]=bad?{...bad,unit}:unit.includes("currency")&&!currency?unavailable("Supply an explicit three-letter currency code.",unit):fn(...values.map(x=>x.value));
-      if(typeof metrics[key]==="number")metrics[key]=known(metrics[key],unit);
-      return metrics[key];
+  const FIELD_DOMAINS = Object.freeze({
+    commercial: "commercial-cohort",
+    pricing: "customer-implementation",
+    clinical: "clinical-operational",
+    capital: "capital-allocation"
+  });
+  const METRIC_DOMAINS = Object.freeze({
+    budgetImpact: "clinical-operational",
+    adoptedPopulation: "clinical-operational",
+    capacityGap: "clinical-operational",
+    costPerOutcome: "clinical-operational",
+    expectedNpv: "capital-allocation",
+    discountAmount: "customer-implementation",
+    netPrice: "customer-implementation",
+    unitContribution: "customer-implementation"
+  });
+
+  function mappedDomain(mapping, key, fallback) {
+    return Object.hasOwn(mapping, key) ? mapping[key] : fallback;
+  }
+
+  function readInput(inputs, key) {
+    const field = FIELDS[key];
+    return numeric(inputs[key], field.label, field.min ?? null, field.max ?? null);
+  }
+
+  function calculateMetric(inputs, currencyAvailable, keys, unit, calculateValue) {
+    const values = keys.map(key => readInput(inputs, key));
+    const incomplete = values.find(value => value.status !== "known");
+    if (incomplete) return { ...incomplete, unit };
+    if (unit.includes("currency") && !currencyAvailable) {
+      return unavailable("Supply an explicit three-letter currency code.", unit);
     }
-    const denominator=(n,d,unit)=>d>0?known(n/d,unit):unavailable("Supply a positive denominator; explicit zero is retained.",unit);
-    metric("closingCustomers",["openingCustomers","newCustomers","churnCustomers","reactivatedCustomers"],"customer",(o,n,c,r)=>c>o?unavailable("Churn exceeds the opening cohort.","customer","invalid"):o+n-c+r);
-    metric("logoRetention",["openingCustomers","churnCustomers"],"ratio",(o,c)=>c>o?unavailable("Churn exceeds the opening cohort.","ratio","invalid"):denominator(o-c,o,"ratio"));
-    metric("grr",["openingRevenue","churnRevenue","contraction"],"ratio",(o,c,d)=>c+d>o?unavailable("Losses exceed opening-cohort revenue.","ratio","invalid"):denominator(o-c-d,o,"ratio"));
-    metric("nrr",["openingRevenue","churnRevenue","contraction","expansion"],"ratio",(o,c,d,e)=>c+d>o?unavailable("Losses exceed opening-cohort revenue.","ratio","invalid"):denominator(o-c-d+e,o,"ratio"));
-    metric("closingRevenue",["openingRevenue","churnRevenue","contraction","expansion","newRevenue","reactivationRevenue"],"currency/period",(o,c,d,e,n,r)=>c+d>o?unavailable("Losses exceed opening-cohort revenue.","currency/period","invalid"):o-c-d+e+n+r);
-    metric("cac",["acquisitionSpend","newCustomers"],"currency/customer",(s,n)=>denominator(s,n,"currency/customer"));
-    metric("acquisitionRevenueRatio",["acquisitionSpend","newRevenue"],"period",(s,n)=>denominator(s,n,"period"));
-    metric("cacPayback",["acquisitionSpend","newRevenue","contributionMargin"],"period",(s,n,m)=>denominator(s,n*m,"period"));
-    metric("discountAmount",["listPrice","discount"],"currency/unit",(p,d)=>p*d);
-    metric("netPrice",["listPrice","discount","rebate"],"currency/unit",(p,d,r)=>r>p*(1-d)?unavailable("Rebate exceeds discounted unit price.","currency/unit","invalid"):p*(1-d)-r);
-    metric("unitContribution",["listPrice","discount","rebate","variableCost","serviceCost"],"currency/unit",(p,d,r,c,s)=>r>p*(1-d)?unavailable("Rebate exceeds discounted unit price.","currency/unit","invalid"):p*(1-d)-r-c-s);
-    metric("adoptedPopulation",["eligiblePopulation","adoption"],"person",(p,a)=>p*a);
-    metric("budgetImpact",["eligiblePopulation","adoption","baselineCost","candidateCost"],"currency/period",(p,a,b,c)=>p*a*(c-b));
-    metric("capacityGap",["eligiblePopulation","adoption","capacity"],"person/period",(p,a,c)=>Math.max(0,p*a-c));
-    metric("costPerOutcome",["candidateCost","baselineCost","incrementalOutcome"],"currency/outcome",(c,b,o)=>{
-      if(i.economicReview!=="reviewed"||(![i.reviewer,i.evidenceSource,i.outcomeUnit,i.perspective].every(cleanText)||!validDate(i.asOf)))return unavailable("Supply the reviewed measure, reviewer, perspective, source, and date.","currency/outcome");
-      return o>0?known((c-b)/o,"currency/outcome","Cost per "+i.outcomeUnit+"; interpretation retains the stated evidence boundary."):unavailable("A positive incremental outcome is needed for this ratio; inspect cost and outcome separately.","currency/outcome","inapplicable");
+    const result = calculateValue(...values.map(value => value.value));
+    return typeof result === "number" ? known(result, unit) : result;
+  }
+
+  function divideByPositive(numerator, denominator, unit) {
+    if (denominator > 0) return known(numerator / denominator, unit);
+    return unavailable("Supply a positive denominator; explicit zero is retained.", unit);
+  }
+
+  function calculateCostPerOutcome(inputs, candidate, baseline, outcome) {
+    const reviewed = inputs.economicReview === "reviewed"
+      && [inputs.reviewer, inputs.evidenceSource, inputs.outcomeUnit, inputs.perspective].every(cleanText)
+      && validDate(inputs.asOf);
+    if (!reviewed) {
+      return unavailable("Supply the reviewed measure, reviewer, perspective, source, and date.", "currency/outcome");
+    }
+    if (outcome <= 0) {
+      return unavailable("A positive incremental outcome is needed for this ratio; inspect cost and outcome separately.", "currency/outcome", "inapplicable");
+    }
+    return known(
+      (candidate - baseline) / outcome,
+      "currency/outcome",
+      "Cost per " + inputs.outcomeUnit + "; interpretation retains the stated evidence boundary."
+    );
+  }
+
+  function calculateAlternativeNpv(alternative, inputs, commonHorizon, currencyAvailable) {
+    if (!commonHorizon) {
+      return unavailable("Use a common horizon before comparing alternatives.", "currency", "incompatible");
+    }
+    if (!currencyAvailable) return unavailable("Supply currency.", "currency");
+    return npv(alternative.flows, inputs.discountRate);
+  }
+
+  function calculateAlternatives(state, currencyAvailable) {
+    const commonHorizon = new Set(state.alternatives.map(item => item.flows.length)).size === 1;
+    return state.alternatives.map(alternative => ({
+      ...alternative,
+      npv: calculateAlternativeNpv(alternative, state.inputs, commonHorizon, currencyAvailable),
+      irr: irr(alternative.flows),
+      payback: payback(alternative.flows)
+    }));
+  }
+
+  function calculateSensitivity(state) {
+    const rate = readInput(state.inputs, "discountRate");
+    return state.alternatives.map(alternative => ({
+      id: alternative.id,
+      values: [-.02, 0, .02].map(offset => ({
+        rate: rate.value === null ? null : rate.value + offset,
+        result: rate.status === "known"
+          ? npv(alternative.flows, rate.value + offset)
+          : unavailable(rate.reason)
+      }))
+    }));
+  }
+
+  function calculateClinicalDelta(consequence, inputs) {
+    const baseline = numeric(consequence.baseline, consequence.name + " baseline");
+    const candidate = numeric(consequence.candidate, consequence.name + " candidate");
+    const reviewedEvidence = consequence.standing !== "unavailable"
+      && [consequence.source, inputs.reviewer].every(cleanText)
+      && validDate(inputs.asOf);
+    const evidenceAvailable = consequence.standing === "illustrative" || reviewedEvidence;
+
+    if (!evidenceAvailable || !cleanText(consequence.unit)) {
+      return unavailable(
+        "Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario.",
+        consequence.unit
+      );
+    }
+    if (baseline.status !== "known") return baseline;
+    if (candidate.status !== "known") return candidate;
+    return known(candidate.value - baseline.value, consequence.unit, consequence.standing);
+  }
+
+  function resolveDecisionGate(inputs, capacityGap) {
+    if (inputs.gate === "stop") return "stop";
+
+    const reviewComplete = inputs.gate === "satisfied"
+      && [inputs.owner, inputs.trigger, inputs.nextEvidence].every(cleanText)
+      && validDate(inputs.revisit);
+    const capacityAvailable = capacityGap.status === "known" && capacityGap.value === 0;
+    if (reviewComplete && capacityAvailable) return "ready-for-human-review";
+    return "held-open";
+  }
+
+  function inputStatus(inputs, key, field) {
+    if (field.type === "number") return readInput(inputs, key).status;
+    return cleanText(inputs[key]) || typeof inputs[key] === "boolean" ? "known" : "unavailable";
+  }
+
+  function buildRecords(state, metrics, alternatives, clinical, gate) {
+    const inputs = state.inputs;
+    const records = Object.entries(FIELDS).map(([key, field]) => ({
+      id: "input/" + key,
+      domain: mappedDomain(FIELD_DOMAINS, field.group, "internal-investment"),
+      type: "input",
+      label: field.label,
+      status: inputStatus(inputs, key, field),
+      value: inputs[key],
+      unit: field.unit,
+      currency: field.unit.includes("currency") ? inputs.currency : null,
+      timeBasis: inputs.period,
+      evidenceStanding: state.origin
+    }));
+    records.push({
+      id: "assumption/cash-basis",
+      domain: "capital-allocation",
+      type: "assumption",
+      value: {
+        convention: inputs.cashConvention,
+        taxWorkingCapital: inputs.taxWorkingCapital,
+        reserves: "Cash flows carry all intended costs once; staffing reference and pricing outputs are separate views, never automatically added."
+      }
     });
-    const commonHorizon=new Set(state.alternatives.map(a=>a.flows.length)).size===1;
-    const alternatives=state.alternatives.map(a=>({...a,npv:!commonHorizon?unavailable("Use a common horizon before comparing alternatives.","currency","incompatible"):currency?npv(a.flows,i.discountRate):unavailable("Supply currency.","currency"),irr:irr(a.flows),payback:payback(a.flows)}));
-    metrics.expectedNpv=currency?expectedNpv(state.outcomes,i.discountRate,i.exhaustive):unavailable("Supply currency.","currency");
-    const rate=read("discountRate"),sensitivity=state.alternatives.map(a=>({id:a.id,values:[-.02,0,.02].map(offset=>({rate:rate.value===null?null:rate.value+offset,result:rate.status==="known"?npv(a.flows,rate.value+offset):unavailable(rate.reason)}))}));
-    const clinical=state.clinical.map(c=>{
-      const b=numeric(c.baseline,c.name+" baseline"),p=numeric(c.candidate,c.name+" candidate");
-      const evidence=c.standing==="illustrative"||(c.standing!=="unavailable"&&[c.source,i.reviewer].every(cleanText)&&validDate(i.asOf));
-      return {...c,delta:!evidence||!cleanText(c.unit)?unavailable("Supply a unit and appropriately reviewed evidence, or identify an illustrative scenario.",c.unit):b.status!=="known"?b:p.status!=="known"?p:known(p.value-b.value,c.unit,c.standing)};
+    for (const [id, result] of Object.entries(metrics)) {
+      records.push({
+        id: "calculation/" + id,
+        domain: mappedDomain(METRIC_DOMAINS, id, "commercial-cohort"),
+        type: "calculation",
+        ...result,
+        currency: result.unit.includes("currency") ? inputs.currency : null,
+        timeBasis: inputs.period,
+        formulaVersion: VERSION,
+        evidenceStanding: state.origin
+      });
+    }
+    for (const alternative of alternatives) {
+      records.push({
+        id: "calculation/alternative/" + alternative.id,
+        domain: "capital-allocation",
+        type: "calculation",
+        npv: alternative.npv,
+        irr: alternative.irr,
+        payback: alternative.payback,
+        currency: inputs.currency,
+        timeBasis: inputs.period,
+        horizon: alternative.flows.length - 1,
+        formulaVersion: VERSION,
+        evidenceStanding: alternative.standing
+      });
+    }
+    for (const consequence of clinical) {
+      records.push({
+        id: "calculation/consequence/" + consequence.name,
+        domain: "clinical-operational",
+        type: "calculation",
+        ...consequence.delta,
+        source: consequence.source,
+        evidenceStanding: consequence.standing,
+        formulaVersion: VERSION,
+        timeBasis: inputs.period
+      });
+    }
+    records.push({
+      id: "evidence/context",
+      domain: "clinical-operational",
+      type: "evidence",
+      value: { source: inputs.evidenceSource, reviewer: inputs.reviewer, asOf: inputs.asOf, standing: state.origin }
     });
-    const gate=i.gate==="stop"?"stop":i.gate==="satisfied"&&[i.owner,i.trigger,i.nextEvidence].every(cleanText)&&validDate(i.revisit)&&metrics.capacityGap.status==="known"&&metrics.capacityGap.value===0?"ready-for-human-review":"held-open";
-    const domain=f=>["commercial","pricing"].includes(f.group)?(f.group==="pricing"?"customer-implementation":"commercial-cohort"):f.group==="clinical"?"clinical-operational":f.group==="capital"?"capital-allocation":"internal-investment";
-    const records=Object.entries(FIELDS).map(([key,f])=>({id:"input/"+key,domain:domain(f),type:"input",label:f.label,status:f.type==="number"?read(key).status:cleanText(i[key])||typeof i[key]==="boolean"?"known":"unavailable",value:i[key],unit:f.unit,currency:f.unit.includes("currency")?i.currency:null,timeBasis:i.period,evidenceStanding:state.origin}));
-    records.push({id:"assumption/cash-basis",domain:"capital-allocation",type:"assumption",value:{convention:i.cashConvention,taxWorkingCapital:i.taxWorkingCapital,reserves:"Cash flows carry all intended costs once; staffing reference and pricing outputs are separate views, never automatically added."}});
-    for(const [id,result] of Object.entries(metrics))records.push({id:"calculation/"+id,domain:["budgetImpact","adoptedPopulation","capacityGap","costPerOutcome"].includes(id)?"clinical-operational":id==="expectedNpv"?"capital-allocation":["discountAmount","netPrice","unitContribution"].includes(id)?"customer-implementation":"commercial-cohort",type:"calculation",...result,currency:result.unit.includes("currency")?i.currency:null,timeBasis:i.period,formulaVersion:VERSION,evidenceStanding:state.origin});
-    for(const alternative of alternatives)records.push({id:"calculation/alternative/"+alternative.id,domain:"capital-allocation",type:"calculation",npv:alternative.npv,irr:alternative.irr,payback:alternative.payback,currency:i.currency,timeBasis:i.period,horizon:alternative.flows.length-1,formulaVersion:VERSION,evidenceStanding:alternative.standing});
-    for(const consequence of clinical)records.push({id:"calculation/consequence/"+consequence.name,domain:"clinical-operational",type:"calculation",...consequence.delta,source:consequence.source,evidenceStanding:consequence.standing,formulaVersion:VERSION,timeBasis:i.period});
-    records.push({id:"evidence/context",domain:"clinical-operational",type:"evidence",value:{source:i.evidenceSource,reviewer:i.reviewer,asOf:i.asOf,standing:state.origin}});
-    records.push({id:"decision/next",domain:"capital-allocation",type:"decision",value:{gate,choice:i.option,trigger:i.trigger,owner:i.owner,optionPreserved:i.option,nextEvidence:i.nextEvidence,revisit:i.revisit}});
-    return {valid:true,errors:[],metrics,alternatives,sensitivity,clinical,records,gate,events:clone(state.events)};
+    records.push({
+      id: "decision/next",
+      domain: "capital-allocation",
+      type: "decision",
+      value: {
+        gate, choice: inputs.option, trigger: inputs.trigger, owner: inputs.owner,
+        optionPreserved: inputs.option, nextEvidence: inputs.nextEvidence, revisit: inputs.revisit
+      }
+    });
+    return records;
+  }
+
+  function calculate(state) {
+    const validation = validate(state);
+    if (!validation.valid) {
+      return { valid: false, errors: validation.errors, metrics: {}, alternatives: [], clinical: [], records: [] };
+    }
+
+    const inputs = state.inputs;
+    const currencyAvailable = /^[A-Z]{3}$/.test(inputs.currency);
+    const metrics = {};
+    function metric(key, keys, unit, formula) {
+      metrics[key] = calculateMetric(inputs, currencyAvailable, keys, unit, formula);
+    }
+
+    metric("closingCustomers", ["openingCustomers", "newCustomers", "churnCustomers", "reactivatedCustomers"], "customer", (opening, added, churn, reactivated) => {
+      if (churn > opening) return unavailable("Churn exceeds the opening cohort.", "customer", "invalid");
+      return opening + added - churn + reactivated;
+    });
+    metric("logoRetention", ["openingCustomers", "churnCustomers"], "ratio", (opening, churn) => {
+      if (churn > opening) return unavailable("Churn exceeds the opening cohort.", "ratio", "invalid");
+      return divideByPositive(opening - churn, opening, "ratio");
+    });
+    metric("grr", ["openingRevenue", "churnRevenue", "contraction"], "ratio", (opening, churn, contraction) => {
+      if (churn + contraction > opening) return unavailable("Losses exceed opening-cohort revenue.", "ratio", "invalid");
+      return divideByPositive(opening - churn - contraction, opening, "ratio");
+    });
+    metric("nrr", ["openingRevenue", "churnRevenue", "contraction", "expansion"], "ratio", (opening, churn, contraction, expansion) => {
+      if (churn + contraction > opening) return unavailable("Losses exceed opening-cohort revenue.", "ratio", "invalid");
+      return divideByPositive(opening - churn - contraction + expansion, opening, "ratio");
+    });
+    metric("closingRevenue", ["openingRevenue", "churnRevenue", "contraction", "expansion", "newRevenue", "reactivationRevenue"], "currency/period", (opening, churn, contraction, expansion, added, reactivated) => {
+      if (churn + contraction > opening) return unavailable("Losses exceed opening-cohort revenue.", "currency/period", "invalid");
+      return opening - churn - contraction + expansion + added + reactivated;
+    });
+    metric("cac", ["acquisitionSpend", "newCustomers"], "currency/customer",
+      (spend, customers) => divideByPositive(spend, customers, "currency/customer"));
+    metric("acquisitionRevenueRatio", ["acquisitionSpend", "newRevenue"], "period",
+      (spend, revenue) => divideByPositive(spend, revenue, "period"));
+    metric("cacPayback", ["acquisitionSpend", "newRevenue", "contributionMargin"], "period",
+      (spend, revenue, margin) => divideByPositive(spend, revenue * margin, "period"));
+    metric("discountAmount", ["listPrice", "discount"], "currency/unit", (price, discount) => price * discount);
+    metric("netPrice", ["listPrice", "discount", "rebate"], "currency/unit", (price, discount, rebate) => {
+      if (rebate > price * (1 - discount)) return unavailable("Rebate exceeds discounted unit price.", "currency/unit", "invalid");
+      return price * (1 - discount) - rebate;
+    });
+    metric("unitContribution", ["listPrice", "discount", "rebate", "variableCost", "serviceCost"], "currency/unit", (price, discount, rebate, cost, service) => {
+      if (rebate > price * (1 - discount)) return unavailable("Rebate exceeds discounted unit price.", "currency/unit", "invalid");
+      return price * (1 - discount) - rebate - cost - service;
+    });
+    metric("adoptedPopulation", ["eligiblePopulation", "adoption"], "person", (population, adoption) => population * adoption);
+    metric("budgetImpact", ["eligiblePopulation", "adoption", "baselineCost", "candidateCost"], "currency/period",
+      (population, adoption, baseline, candidate) => population * adoption * (candidate - baseline));
+    metric("capacityGap", ["eligiblePopulation", "adoption", "capacity"], "person/period",
+      (population, adoption, capacity) => Math.max(0, population * adoption - capacity));
+    metric("costPerOutcome", ["candidateCost", "baselineCost", "incrementalOutcome"], "currency/outcome",
+      (candidate, baseline, outcome) => calculateCostPerOutcome(inputs, candidate, baseline, outcome));
+    metrics.expectedNpv = currencyAvailable
+      ? expectedNpv(state.outcomes, inputs.discountRate, inputs.exhaustive)
+      : unavailable("Supply currency.", "currency");
+
+    const alternatives = calculateAlternatives(state, currencyAvailable);
+    const sensitivity = calculateSensitivity(state);
+    const clinical = state.clinical.map(consequence => ({
+      ...consequence,
+      delta: calculateClinicalDelta(consequence, inputs)
+    }));
+    const gate = resolveDecisionGate(inputs, metrics.capacityGap);
+    const records = buildRecords(state, metrics, alternatives, clinical, gate);
+    return {
+      valid: true, errors: [], metrics, alternatives, sensitivity, clinical, records,
+      gate, events: clone(state.events)
+    };
   }
   function migrate(raw) {
     if(raw?.schemaVersion===VERSION)return clone(raw);

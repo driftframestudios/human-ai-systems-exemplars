@@ -127,3 +127,138 @@ test("alternatives share a comparison horizon and lifecycle events preserve orde
   s.events[1].period=-1;assert.equal(C.validate(s).valid,false);
   s.events[1].period=4;assert.equal(C.validate(s).valid,false);
 });
+
+test("the generated schema and material example agree with their source owner", async () => {
+  const root = new URL("../../collaboration/investment-analysis/", import.meta.url);
+  const schema = JSON.parse(await readFile(new URL("state.schema.json", root), "utf8"));
+  const example = JSON.parse(await readFile(new URL("example.json", root), "utf8"));
+  assert.deepEqual(schema, C.schema());
+  assert.equal(new Ajv2020({ strict: true, allErrors: true }).compile(schema)(example), true);
+  assert.equal(C.validate(example).valid, true);
+  assert.deepEqual(C.importState(C.serialize(example)), example);
+});
+
+test("schema alternatives isolate candidate diagnostics and retain declared field order", () => {
+  const state = fresh();
+  for (const value of [null, "", 0, "0", "-2.5e3"]) {
+    state.inputs.openingRevenue = value;
+    assert.equal(C.validate(state).valid, true);
+  }
+  state.inputs.openingRevenue = true;
+  state.inputs.adoption = {};
+  assert.deepEqual(C.validate(state).errors, [
+    "state.inputs.openingRevenue: supply a finite number or leave it blank.",
+    "state.inputs.adoption: supply a finite number or leave it blank."
+  ]);
+});
+
+test("schema-type dispatch keeps invalid shapes outside dependent domain checks", () => {
+  const cases = [
+    ["inputs", null, "state.inputs: an object is needed."],
+    ["alternatives", {}, "state.alternatives: a list is needed."],
+    ["schemaVersion", "future", "state.schemaVersion: unsupported contract version."]
+  ];
+  for (const [key, value, error] of cases) {
+    const state = fresh();
+    state[key] = value;
+    assert.deepEqual(C.validate(state).errors, [error]);
+  }
+  const state = fresh();
+  state.inputs.exhaustive = "true";
+  state.inputs.label = 42;
+  state.inputs.period = "week";
+  assert.deepEqual(C.validate(state).errors, [
+    "state.inputs.label: text is outside this contract.",
+    "state.inputs.period: choose a declared value.",
+    "state.inputs.exhaustive: boolean needed."
+  ]);
+});
+
+test("independent domain diagnostics accumulate in stable review order", () => {
+  const state = fresh();
+  state.alternatives[1].id = state.alternatives[0].id;
+  state.outcomes[1].id = state.outcomes[0].id;
+  state.clinical[1].name = state.clinical[0].name;
+  state.events[0].predecessors = ["missing"];
+  state.events[0].period = -1;
+  assert.deepEqual(C.validate(state).errors, [
+    "alternatives: distinct nonempty identifiers are needed.",
+    "outcomes: distinct nonempty identifiers are needed.",
+    "clinical: preserve all nine distinct consequence dimensions.",
+    "events: each predecessor must name another event.",
+    "events: periods use nonnegative finite numbers or an explicit blank."
+  ]);
+});
+
+test("metric guards preserve input, currency and denominator precedence", () => {
+  const state = fresh();
+  state.inputs.currency = "";
+  state.inputs.acquisitionSpend = "";
+  let result = C.calculate(state).metrics.cac;
+  assert.equal(result.reason, "Acquisition spend for new customers is needed.");
+  assert.equal(result.unit, "currency/customer");
+  state.inputs.acquisitionSpend = 100;
+  state.inputs.newCustomers = 0;
+  result = C.calculate(state).metrics.cac;
+  assert.equal(result.reason, "Supply an explicit three-letter currency code.");
+  state.inputs.currency = "USD";
+  result = C.calculate(state).metrics.cac;
+  assert.equal(result.reason, "Supply a positive denominator; explicit zero is retained.");
+});
+
+test("clinical delta preserves evidence, baseline, candidate and explicit-zero precedence", () => {
+  const state = fresh();
+  const consequence = state.clinical[0];
+  Object.assign(consequence, { unit: "events", baseline: "", candidate: "", standing: "source-observation" });
+  let delta = C.calculate(state).clinical[0].delta;
+  assert.match(delta.reason, /appropriately reviewed evidence/);
+  consequence.standing = "illustrative";
+  delta = C.calculate(state).clinical[0].delta;
+  assert.equal(delta.reason, "Safety baseline is needed.");
+  consequence.baseline = 0;
+  delta = C.calculate(state).clinical[0].delta;
+  assert.equal(delta.reason, "Safety candidate is needed.");
+  consequence.candidate = 0;
+  assert.deepEqual(C.calculate(state).clinical[0].delta, {
+    status: "known", value: 0, unit: "events", reason: "illustrative"
+  });
+});
+
+test("decision gate preserves stop priority and each required review condition", () => {
+  const ready = fresh();
+  Object.assign(ready.inputs, { gate: "satisfied", owner: "Example owner", revisit: "2026-10-15" });
+  assert.equal(C.calculate(ready).gate, "ready-for-human-review");
+  for (const [key, value] of [
+    ["owner", ""], ["trigger", ""], ["nextEvidence", ""],
+    ["revisit", "2026-02-30"], ["capacity", ""], ["capacity", 1], ["gate", "open"]
+  ]) {
+    const state = C.clone(ready);
+    state.inputs[key] = value;
+    assert.equal(C.calculate(state).gate, "held-open", key);
+    state.inputs.gate = "stop";
+    assert.equal(C.calculate(state).gate, "stop", "stop takes precedence over " + key);
+  }
+});
+
+test("record-domain maps retain their named domains, order and detached calculation", () => {
+  const state = fresh();
+  const before = C.serialize(state);
+  const result = C.calculate(state);
+  const domainOf = id => result.records.find(record => record.id === id).domain;
+  for (const [id, domain] of [
+    ["input/label", "internal-investment"],
+    ["input/listPrice", "customer-implementation"],
+    ["input/openingCustomers", "commercial-cohort"],
+    ["input/eligiblePopulation", "clinical-operational"],
+    ["input/discountRate", "capital-allocation"],
+    ["calculation/grr", "commercial-cohort"],
+    ["calculation/netPrice", "customer-implementation"],
+    ["calculation/budgetImpact", "clinical-operational"],
+    ["calculation/expectedNpv", "capital-allocation"]
+  ]) assert.equal(domainOf(id), domain, id);
+  assert.deepEqual(result.records.slice(0, Object.keys(C.FIELDS).length).map(record => record.id),
+    Object.keys(C.FIELDS).map(key => "input/" + key));
+  assert.equal(C.serialize(state), before);
+  result.events[0].kind = "changed result";
+  assert.equal(state.events[0].kind, "acquisition");
+});

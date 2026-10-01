@@ -38,6 +38,16 @@ The existing Model Studio 1.0.0 selection migrates with its method and exact sel
 
 Method records use `urn:source-key:investment-method:<method-name>`; the eight method IDs supply the stable suffix. Public labels describe the method. Renaming or moving a source leaves its semantic key intact. Any future key replacement retains an explicit public alias at the receiving source. Private workspace coordinates remain with the authorized resolver; detached use needs only the public method description, contract, and semantic key. The semantic key identifies the source concept and carries no independent authority claim.
 
+## Decision structure and maintenance
+
+The core uses a decision structure fitted to each receiving job. Schema types dispatch to focused validators; common constraints and independent domain diagnostics accumulate in their established order. Each `anyOf` candidate owns a temporary diagnostic list. A failed candidate leaves the next candidate's evidence independent.
+
+Calculation stages name their inputs and returned results. Metric guards preserve input, currency, and formula precedence. Clinical consequences preserve evidence, baseline, and candidate precedence. The decision gate gives an explicit stop its established priority, then checks human review and capacity. Static domain maps hold literal classifications; the public calculation API and record order remain stable.
+
+The smallest useful abstraction localizes a real change: a guard for early recovery, a switch for one discriminant, a map for static classification, and ordered accumulation for independent diagnostics. Short loops and direct conditions remain appropriate. New plugin machinery enters when an actual extension boundary needs it.
+
+The focused unit suite checks schema/example agreement, diagnostic accumulation and order, guard precedence, clinical zero/absence meaning, decision gates, domain mappings, and detached results alongside the formula and exchange fixtures. Browser checks own focus, rendered agreement, and recovery. These observations establish named behavior; maintainability and broader applicability remain review questions.
+
 ## Local evidence and delivery
 
 ```sh
