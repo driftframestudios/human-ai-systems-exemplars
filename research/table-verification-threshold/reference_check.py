@@ -10,6 +10,8 @@ from pathlib import Path
 import json
 import subprocess
 
+HANDOFF_STATES = ("D", "R", "V", "H")
+
 
 def beta_upper_tail(a, b, x):
     if type(a) is not int or type(b) is not int or min(a, b) < 1 or a + b > 1000:
@@ -66,7 +68,14 @@ def main():
     # Q_T for the explicitly illustrative D->R, R->V, V->R/H scenario.
     q = [[Fraction(-1,10), Fraction(1,10), 0], [0, Fraction(-1,5), Fraction(1,5)], [0, Fraction(1,20), Fraction(-1,4)]]
     expected = solve_exact(q, [-1, -1, -1]) + [Fraction(0)]
-    comparisons.extend(zip(observed["transitionScenario"]["expectedHandoffMinutesByState"], expected, strict=True))
+    handoff = observed["transitionScenario"]["expectedHandoffMinutesByState"]
+    field = "transitionScenario.expectedHandoffMinutesByState"
+    order = "/".join(HANDOFF_STATES)
+    if not isinstance(handoff, list):
+        raise ValueError(f"{field} requires a list in {order} order; received {type(handoff).__name__}.")
+    if len(handoff) != len(HANDOFF_STATES):
+        raise ValueError(f"{field} requires exactly {len(HANDOFF_STATES)} state values in {order} order; received {len(handoff)}.")
+    comparisons.extend(zip(handoff, expected, strict=True))
     for actual, exact in comparisons:
         if not isclose(actual, float(exact), rel_tol=1e-12, abs_tol=1e-12):
             raise AssertionError(f"scenario differs from exact reference: {actual} versus {exact}")

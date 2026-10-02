@@ -36,8 +36,24 @@ class ReferenceOutputContract(unittest.TestCase):
     def test_state_count_requires_exactly_four(self):
         for handoff in [[], [21.25], [21.25, 11.25, 6.25], [21.25, 11.25, 6.25, 0, 0]]:
             with self.subTest(state_count=len(handoff)):
-                with self.assertRaises(ValueError):
+                with self.assertRaises(ValueError) as error:
                     self.run_reference(handoff)
+                self.assertEqual(
+                    str(error.exception),
+                    "transitionScenario.expectedHandoffMinutesByState requires exactly "
+                    f"4 state values in D/R/V/H order; received {len(handoff)}.",
+                )
+
+    def test_state_sequence_requires_a_list(self):
+        for handoff, type_name in [(None, "NoneType"), ({}, "dict"), ("", "str"), (4, "int")]:
+            with self.subTest(input_type=type_name):
+                with self.assertRaises(ValueError) as error:
+                    self.run_reference(handoff)
+                self.assertEqual(
+                    str(error.exception),
+                    "transitionScenario.expectedHandoffMinutesByState requires a list "
+                    f"in D/R/V/H order; received {type_name}.",
+                )
 
     def test_changed_state_requires_mathematical_agreement(self):
         with self.assertRaises(AssertionError):
