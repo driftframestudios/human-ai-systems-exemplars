@@ -2,12 +2,15 @@
   "name": "schemas-worker",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
   "scripts": {
+    "prepare:publication": "node prepare-publication.mjs",
+    "check:publication": "node prepare-publication.mjs --check",
+    "test": "node --test test/*.test.mjs",
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "deploy": "npm run check:publication && wrangler deploy"
   },
   "devDependencies": {
-    "wrangler": "^4.34.0"
+    "wrangler": "4.145.0"
   }
 }
-

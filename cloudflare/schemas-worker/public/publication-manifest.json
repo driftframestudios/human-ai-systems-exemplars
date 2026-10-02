@@ -1,4 +1,58 @@
 {
-  "frozen": []
+  "schemaVersion": "1",
+  "sourceRevision": "c3dbb9860e77d001e6b1c6f09fd76529911b39a3",
+  "frozen": [
+    "/a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json",
+    "/a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json",
+    "/a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json",
+    "/a3-stacked-cube-atlas-expanded/0.2/source-registry.schema.json",
+    "/collaboration-skills/0.1.0/collaboration-account.schema.json",
+    "/collaboration-skills/0.1.0/collaboration-skill.schema.json",
+    "/context-canvas/1.0.0/context-canvas.schema.json",
+    "/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+    "/investment-analysis/0.2.0/state.schema.json",
+    "/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+    "/schemas/a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json",
+    "/schemas/a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json",
+    "/schemas/a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json",
+    "/schemas/a3-stacked-cube-atlas-expanded/0.2/source-registry.schema.json",
+    "/schemas/a3-stacked-cube-state-v0.1.json",
+    "/schemas/collaboration-skills/0.1.0/collaboration-account.schema.json",
+    "/schemas/collaboration-skills/0.1.0/collaboration-skill.schema.json",
+    "/schemas/context-canvas/1.0.0/context-canvas.schema.json",
+    "/schemas/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+    "/schemas/investment-analysis/0.2.0/state.schema.json",
+    "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+    "/schemas/visualization/visualization-fidelity-atlas.schema.v0.1.json",
+    "/visualization/visualization-fidelity-atlas.schema.v0.1.json"
+  ],
+  "routes": {
+    "/investment-analysis/0.2.0/state.schema.json": "/schemas/investment-analysis/0.2.0/state.schema.json",
+    "/prototype-exemplars/1.0.0/prototype-exemplars.schema.json": "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+    "/context-canvas/1.0.0/context-canvas.schema.json": "/schemas/context-canvas/1.0.0/context-canvas.schema.json",
+    "/collaboration-skills/0.1.0/collaboration-skill.schema.json": "/schemas/collaboration-skills/0.1.0/collaboration-skill.schema.json",
+    "/collaboration-skills/0.1.0/collaboration-account.schema.json": "/schemas/collaboration-skills/0.1.0/collaboration-account.schema.json",
+    "/a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json": "/schemas/a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json",
+    "/a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json": "/schemas/a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json",
+    "/a3-stacked-cube-atlas-expanded/0.2/source-registry.schema.json": "/schemas/a3-stacked-cube-atlas-expanded/0.2/source-registry.schema.json",
+    "/a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json": "/schemas/a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json",
+    "/schemas/a3-stacked-cube-state-v0.1.json": "/schemas/a3-stacked-cube-state-v0.1.json",
+    "/visualization/visualization-fidelity-atlas.schema.v0.1.json": "/schemas/visualization/visualization-fidelity-atlas.schema.v0.1.json",
+    "/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json": "/schemas/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+    "/context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json": "/schemas/context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json",
+    "/prototype-exemplars/1.0.0/prototype-exemplars.example.json": "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.example.json",
+    "/context-canvas/1.0.0/context-canvas.context.jsonld": "/schemas/context-canvas/1.0.0/context-canvas.context.jsonld",
+    "/investment-analysis/0.2.0/example.json": "/schemas/investment-analysis/0.2.0/example.json",
+    "/investment-analysis/0.2.0/README.md": "/schemas/investment-analysis/0.2.0/README.md"
+  },
+  "headers": {
+    "Access-Control-Allow-Origin": "*",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'",
+    "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
+    "Access-Control-Allow-Headers": "If-None-Match, If-Modified-Since",
+    "Access-Control-Expose-Headers": "ETag"
+  }
 }
-

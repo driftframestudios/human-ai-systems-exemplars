@@ -1,92 +1,64 @@
-// schemas-worker — asset-only Worker with publication-manifest-driven caching
-//
-// Behavior:
-//   HTTP          → 308 → HTTPS (preserves hostname, path, query string)
-//   /             → serves public/index.html
-//   200 (asset)   → Cache-Control from publication-manifest.json
-//   404 (missing) → JSON 404 naming the missing resource, Cache-Control: no-store
-//   5xx (error)   → passthrough with Cache-Control: no-store
-//
-// Cache-Control policy (eligibility from publication-manifest.json, not file extension):
-//   Frozen exact-version schema/context  → public, max-age=31536000, immutable
-//   Everything else (catalogs, indexes,
-//     mutable/unversioned schemas)        → public, max-age=0, must-revalidate
-//   Missing resources / error responses   → no-store
-//
-// ETag support is retained from the assets binding (preserved via Response copy).
+import publication from "../public/publication-manifest.json" with { type: "json" };
 
-let manifestCache = null;
+// Deployment-owned configuration, prepared from the repository's schema owners.
+// Lookups are average O(1); response bodies remain streams owned by ASSETS.
+const frozenPaths = new Set(publication.frozen);
+const assetRoutes = new Map(Object.entries(publication.routes));
+const publicHeaders = Object.entries(publication.headers);
+const readMethods = new Set(["GET", "HEAD"]);
+const IMMUTABLE = "public, max-age=31536000, immutable";
+const REVALIDATE = "public, max-age=0, must-revalidate";
 
-async function getManifest(env) {
-  if (manifestCache) return manifestCache;
-  try {
-    const res = await env.ASSETS.fetch("https://assets.local/publication-manifest.json");
-    manifestCache = res.ok ? await res.json() : { frozen: [] };
-  } catch {
-    manifestCache = { frozen: [] };
-  }
-  return manifestCache;
+function responseHeaders(original, policy) {
+  const headers = new Headers(original);
+  for (const [name, value] of publicHeaders) headers.set(name, value);
+  headers.set("Cache-Control", policy);
+  return headers;
 }
 
-function getCacheControl(pathname, manifest) {
-  if (manifest.frozen && manifest.frozen.includes(pathname)) {
-    return "public, max-age=31536000, immutable";
-  }
-  return "public, max-age=0, must-revalidate";
+function jsonResponse(request, status, payload) {
+  const headers = responseHeaders({ "Content-Type": "application/json; charset=utf-8" }, "no-store");
+  if (status === 405) headers.set("Allow", "GET, HEAD, OPTIONS");
+  return new Response(request.method === "HEAD" ? null : JSON.stringify(payload), { status, headers });
+}
+
+function requestForAsset(request, pathname) {
+  const url = new URL(request.url);
+  url.pathname = pathname === "/" ? "/index.html" : (assetRoutes.get(pathname) ?? pathname);
+  return new Request(url, request);
 }
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-
-    // 1. HTTP → HTTPS 308 redirect (preserves hostname, path, query string)
     if (url.protocol === "http:") {
       url.protocol = "https:";
       return new Response(null, {
         status: 308,
-        headers: { Location: url.toString() },
+        headers: responseHeaders({ Location: url.href }, "no-store"),
       });
     }
-
-    // 2. Registry root → index.html
-    const requestedPath = url.pathname;
-    if (url.pathname === "/") {
-      url.pathname = "/index.html";
-      request = new Request(url, request);
+    if (request.method === "OPTIONS") {
+      return new Response(null, { status: 204, headers: responseHeaders(undefined, "no-store") });
     }
-
-    // 3. Fetch the asset via the assets binding
-    const assetResponse = await env.ASSETS.fetch(request);
-
-    // 4. Missing resource → 404 with no-store, naming the missing resource
+    if (!readMethods.has(request.method)) {
+      return jsonResponse(request, 405, { error: "Use GET, HEAD, or OPTIONS", resource: url.pathname });
+    }
+    let assetResponse;
+    try {
+      assetResponse = await env.ASSETS.fetch(requestForAsset(request, url.pathname));
+    } catch {
+      return jsonResponse(request, 503, { error: "Schema delivery temporarily unavailable", resource: url.pathname });
+    }
     if (assetResponse.status === 404) {
-      return new Response(
-        JSON.stringify({ error: "Not Found", resource: requestedPath }, null, 2),
-        {
-          status: 404,
-          headers: {
-            "Content-Type": "application/json",
-            "Cache-Control": "no-store",
-          },
-        }
-      );
+      return jsonResponse(request, 404, { error: "Resource unavailable", resource: url.pathname });
     }
-
-    // 5. Error responses → passthrough with no-store
-    if (!assetResponse.ok && assetResponse.status !== 304) {
-      const response = new Response(assetResponse.body, assetResponse);
-      response.headers.set("Cache-Control", "no-store");
-      return response;
-    }
-
-    // 6. Published schema or mutable resource → manifest-based Cache-Control
-    const manifest = await getManifest(env);
-    const cacheControl = getCacheControl(requestedPath, manifest);
-
-    // Preserve ETag and all other headers from the asset response
-    const response = new Response(assetResponse.body, assetResponse);
-    response.headers.set("Cache-Control", cacheControl);
-    return response;
+    const successful = assetResponse.ok || assetResponse.status === 304;
+    const policy = successful ? (frozenPaths.has(url.pathname) ? IMMUTABLE : REVALIDATE) : "no-store";
+    return new Response(request.method === "HEAD" ? null : assetResponse.body, {
+      status: assetResponse.status,
+      statusText: assetResponse.statusText,
+      headers: responseHeaders(assetResponse.headers, policy),
+    });
   },
 };
-

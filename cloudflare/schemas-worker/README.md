@@ -1,61 +1,115 @@
-# schemas-worker
+# Schema Worker receiver
 
-Asset-only Worker that serves static schemas from `schemas.vik.guru`.
+This Worker serves the repository's selected schema contracts through
+`schemas.vik.guru`. The fetch handler runs before its `ASSETS` binding and owns
+HTTPS redirects, exact-route lookup, response caching, CORS, and recovery.
+Production binding remains a separate operator action.
 
-## Behavior
+## Established source and receiving files
+
+`tools/schema-receiver-routes.mjs` owns the same 13-contract selection used by
+GitHub Pages. `tools/schema-publication-lock.json` freezes those contract bytes;
+`tools/schema-publication.mjs` owns canonical identity, digest, and dependency
+metadata. `cloudflare/schema-delivery/source/` supplies the existing registry
+template and public response policy. Repository attribution carriers retain
+their established ownership.
+
+`prepare-publication.mjs` copies the 13 schemas and four companions into
+`public/schemas/`, carries the five attribution files, and prepares the catalog,
+root page, and publication manifest. `public/` is the complete 25-file static
+delivery boundary. The older asset-only adapter and this fetch-handler adapter
+share source owners while retaining their distinct delivery behavior.
+
+The manifest records an accepted schema-source revision. That pin stays stable
+across commits to the receiving Worker. Preparation requires the selected inputs
+to match that revision on `origin/main`. Existing frozen paths and bytes remain
+available when a later accepted source revision is selected.
+
+## Prepare and check
+
+Run these commands from this directory in the repository, with Node.js 22 or newer:
+
+```sh
+npm install
+npm run prepare:publication -- --source-revision <accepted-main-commit>
+npm run check:publication
+npm test
+```
+
+After the first selection, `npm run prepare:publication` retains the recorded
+source pin. The preparation check compares every output file and byte, including
+the catalog, manifest, source-copy boundaries, and attribution. The focused tests
+exercise the handler and selected schema payload; a Wrangler preview separately
+establishes the platform's routing and response behavior.
+
+## Routes and response policy
 
 | Request | Response |
-|---|---|
-| HTTP (any path) | 308 → HTTPS (preserves hostname, path, query string) |
-| `GET /` | 200 — serves `public/index.html` |
-| `GET /schemas/...` (exists) | 200 — served from static assets |
-| `GET /schemas/...` (missing) | 404 — JSON body naming the missing resource, `Cache-Control: no-store` |
-| Any error (5xx) | passthrough with `Cache-Control: no-store` |
+| --- | --- |
+| HTTP | 308 to HTTPS, preserving hostname, path, and query |
+| `GET /` | 200 with the established registry page |
+| Established schema URL | Direct retrieval through a manifest-owned internal asset mapping |
+| `/schemas/` asset URL | Direct retrieval of the same bytes and identity |
+| Missing resource | JSON 404 naming the requested path, with `no-store` |
+| Asset error response or binding failure | Error response with `no-store`; binding failures expose a bounded recovery message |
+| `HEAD` | Matching status and headers with an empty body |
+| `OPTIONS` | Public read-only CORS preflight |
 
-## Cache-Control policy
+The asset binding uses `html_handling: "none"` because the handler explicitly
+maps `/` to `/index.html`. This keeps the catalog response direct. The established
+JSON paths retain their exact spelling. Canonical `$id` values remain unchanged;
+`schema-catalog.json` describes each host-local download and its source.
 
-Eligibility is determined by `public/publication-manifest.json`, not by file extension.
+Cache eligibility comes from `publication-manifest.json`'s explicit `frozen`
+array. The 12 frozen exact-version contracts include both their established route
+and asset route. The unversioned `prototype-local-manifest.schema.json`, catalogs,
+examples, context companion, and attribution files revalidate. A new immutable
+context earns its own frozen-byte contract before entering this array.
 
-| Category | Cache-Control |
-|---|---|
-| Frozen exact-version schema/context (listed in manifest `frozen[]`) | `public, max-age=31536000, immutable` |
-| Catalogs, indexes, discovery manifests, mutable/unversioned schemas | `public, max-age=0, must-revalidate` |
-| Missing resources and error responses | `no-store` |
+| Response class | `Cache-Control` |
+| --- | --- |
+| Successful frozen resource or its conditional 304 | `public, max-age=31536000, immutable` |
+| Other successful resource or its conditional 304 | `public, max-age=0, must-revalidate` |
+| Missing resource, error, redirect, or unsupported method | `no-store` |
 
-ETag support is retained from the assets binding for efficient conditional requests.
+The manifest is bundled with the Worker. Route and frozen-path lookups use maps
+and sets prepared once per isolate; response bodies stream from `ASSETS`. ETags
+and conditional request headers retain their asset-binding behavior. Public CORS
+and security headers derive from the existing schema-delivery policy.
 
-## Publication manifest
+## Local preview and deployment
 
-`public/publication-manifest.json` lists which schema paths are frozen (published exact versions):
-
-```json
-{
-  "frozen": [
-    "/schemas/example/v1.0.0/schema.json"
-  ]
-}
+```sh
+npm run dev -- --local --local-protocol https
 ```
 
-Any path not listed in `frozen[]` gets `must-revalidate`. For example, an unversioned `prototype-local-manifest.schema.json` stays revalidatable until it has an explicit frozen-version publication contract (i.e., until its path is added to `frozen[]`).
+Use the preview's locally trusted certificate for HTTPS checks. Exercise all
+selected schema routes and digests, both retrieval paths, root discovery, cache
+headers, ETags/304, CORS, HEAD, and missing paths inside versioned directories.
+The unit tests cover the HTTP-to-HTTPS redirect separately. The protected remote
+preview supplies production edge, certificate, and recovery evidence.
 
-## Deploy
+After the operator accepts that evidence and the intended Custom Domain binding:
 
-```bash
-npm install
-npx wrangler deploy
+```sh
+npm run deploy
 ```
 
-## Project structure
+The deploy script first checks the selected public artifact. The existing Custom
+Domain configuration targets `schemas.vik.guru`; preserve the operator's current
+DNS preparation. `workers_dev` stays disabled. GitHub Pages remains a separate
+receiver and site-release path. Preserve all promised versioned routes during
+recovery and record the accepted source and Worker deployment coordinates.
 
-```
-schemas-worker/
-├── src/
-│   └── index.js                  # Worker fetch handler (redirects, 404s, cache headers)
-├── public/
-│   ├── index.html                # Registry root page
-│   ├── publication-manifest.json # Lists frozen (immutable) schema paths
-│   └── schemas/                  # Place schema files here
-├── wrangler.jsonc               # Wrangler config (assets binding, custom domain)
-└── package.json
-```
+## Secret boundary
 
+Keep tokens and secret values in Cloudflare's secret store through
+`wrangler secret put`. Local `.dev.vars` and `.env.*` files remain ignored, as does
+Wrangler runtime state. Public files, the publication manifest, and
+`wrangler.jsonc` carry public configuration only. Inspect the selected `public/`
+artifact before publication; repository credentials and operator diagnostics
+remain outside that boundary.
+
+Platform references: [asset-binding behavior](https://developers.cloudflare.com/workers/static-assets/binding/),
+[Worker-first routing](https://developers.cloudflare.com/workers/static-assets/routing/worker-script/),
+and [HTML handling](https://developers.cloudflare.com/workers/static-assets/routing/advanced/html-handling/).

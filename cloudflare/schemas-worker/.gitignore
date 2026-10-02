@@ -252,3 +252,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Worker-local credentials and runtime state
+.wrangler/
+.dev.vars
+.dev.vars.*
+.env.*
