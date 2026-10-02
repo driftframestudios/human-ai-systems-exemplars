@@ -33,7 +33,7 @@ const artifacts = [
     version: "0.1.4",
     currentFile: "shared-surface-priority-map-chimeric-prototype-v0.1.4.html",
     historicalFile: "shared-surface-priority-map-chimeric-prototype-v0.1.3.html",
-    currentDigest: "a631352d54d8cd736932e8045001718c1872ca2be99ceef4fcf820781231ad3e",
+    currentDigest: "16357f7dec38f8368ad8bce9e93774b207044615d3d162d90587a654a5b6a3b7",
     historicalDigest: "06817b6fc7312c32f6c303b1ea562c43c2bf8436a6214b73e03e9b6cb14ec08a",
     stateContract: "shared-surface-priority-map-state.v0.1",
     apiName: "sharedSurfacePriorityMap",
@@ -254,6 +254,14 @@ test("Shared Surfaces and Topology advances the current inventory as one complet
     "AI Systems Service Blueprint v0.1.5",
     "Software Architecture Views v0.1.4",
   ]) assert.ok(currentInventory.includes(phrase));
-  assert.match(currentInventory, /28 current\s+adoptions\. This completes the observed population/u);
+  const declared = currentInventory.match(/current population contains (\d+) source artifacts/u);
+  const adopted = currentInventory.match(/(\d+) current\s+adoptions\. This completes the observed population/u);
+  const heading = currentInventory.match(/## Current source artifacts[^\n\d]*(\d+)/u);
+  assert.ok(declared && adopted && heading, "the current population has a summary, heading and adoption statement");
+  const tableCount = [...currentInventory.matchAll(/^\|[^|]+\|\s*(\d+)\s*\|/gmu)]
+    .reduce((sum, match) => sum + Number(match[1]), 0);
+  assert.ok(tableCount > 0, "the current-artifact table supplies the counted population");
+  assert.deepEqual([Number(declared[1]), Number(adopted[1]), Number(heading[1])],
+    [tableCount, tableCount, tableCount], "current inventory counts agree with its source classes");
   assert.match(currentInventory, /family members, which complete the current[\s\S]*?Shared Surfaces and Topology[\s\S]*?famil(?:y|ies)/u);
 });

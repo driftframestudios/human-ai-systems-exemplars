@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
 import assert from "node:assert/strict";
+import fs from "node:fs/promises";
+import nodePath from "node:path";
+import { digest, openCheckpoints } from "./observation-checkpoint.mjs";
 
 import { chromium } from "@playwright/test";
 
@@ -2114,20 +2117,43 @@ assert.equal(projections.length, 2, "The planning-instrument contract should exe
 assert.equal(paths.length, 9, "The planning-instrument contract should exercise all nine planning instruments.");
 assert.deepEqual([...pathKeys].sort(), expectedArtifactKeys, "Planning-instrument paths should match the maintained artifact inventory.");
 assert.equal(new Set(pathKeys).size, paths.length, "Each planning instrument should have one browser path.");
-const expectedCheckCount = projections.length * paths.length;
-
-const staticServer = await startStaticServer();
-const browser = await chromium.launch({ headless: true });
+const args = process.argv.slice(2);
+const artifactFlag = args.indexOf("--artifact");
+const selectedArtifact = artifactFlag < 0 ? null : args[artifactFlag + 1];
+assert(artifactFlag < 0 || expectedArtifactKeys.includes(selectedArtifact), "--artifact names a maintained planning instrument");
+const selectedPaths = selectedArtifact ? paths.filter(([, key]) => key === selectedArtifact) : paths;
+const expectedCheckCount = projections.length * selectedPaths.length;
+const root = nodePath.resolve(import.meta.dirname, "..");
+const checkpoints = await openCheckpoints(nodePath.join(root, ".visual-runs/core-planning/checkpoints"));
+const definitions = [];
+for (const file of ["tools/core-planning-instrument-contract.mjs", "tools/core-architecture-browser-helper.mjs",
+  "tools/attribution-contract.mjs", "tools/observation-checkpoint.mjs",
+  "context-canvas-project-surface/context-canvas/visitor-boundary-contract.js", "package-lock.json"]) {
+  definitions.push(digest(await fs.readFile(nodePath.join(root, file))));
+}
+const runtime = await fs.stat(chromium.executablePath());
+const definition = digest(JSON.stringify([definitions, process.version, process.platform, process.arch, runtime.size, runtime.mtimeMs]));
+let staticServer;
+let browser;
+let reused = 0;
 try {
   for (const projection of projections) {
-    for (const [label, artifactKey, path] of paths) {
+    for (const [label, artifactKey, path] of selectedPaths) {
       const route = `${projection.root}/${artifactNames[artifactKey]}`;
+      const signature = digest(definition + digest(await fs.readFile(nodePath.join(root, route))));
+      const saved = args.includes("--resume") && await checkpoints.read(route, signature, () => true);
+      if (saved) { checks.push(saved); reused += 1; continue; }
+      if (!staticServer) staticServer = await startStaticServer();
+      if (!browser) browser = await chromium.launch({ headless: true });
       await verify(`${projection.label} · ${label}`, () => path(browser, staticServer.origin, route));
+      const check = checks.at(-1);
+      await checkpoints.write(route, signature, {}, { ...check, standing: check.status === "passed" ? "pass" : "incomplete" });
+      await fs.appendFile(nodePath.join(root, ".visual-runs/core-planning/cases.jsonl"), JSON.stringify(check) + "\n");
     }
   }
 } finally {
-  await browser.close();
-  await staticServer.close();
+  if (browser) await browser.close();
+  if (staticServer) await staticServer.close();
 }
 
 assert.equal(checks.length, expectedCheckCount, `The planning-instrument contract should complete ${expectedCheckCount} projection checks.`);
@@ -2141,5 +2167,5 @@ if (failures.length) {
   console.error(`Core planning-instrument browser contract: ${checks.length - failures.length}/${checks.length} passed.`);
   process.exitCode = 1;
 } else {
-  console.log(`Core planning-instrument browser contract: ${checks.length}/${checks.length} passed.`);
+  console.log(`Core planning-instrument browser contract: ${checks.length}/${checks.length} passed; ${reused} reused.`);
 }
