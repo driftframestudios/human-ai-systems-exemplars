@@ -1,0 +1,276 @@
+{
+  "artifact_identity": {
+    "id": "poda-table-audit",
+    "display_name": "Table audit and protective verification",
+    "subtitle": "Purpose, Objectives, Discoverables, Activities",
+    "version": "0.1.5",
+    "family": "Orientation and Tracing",
+    "placement": "Solution Architecture",
+    "primary_cognitive_move": "narrative orientation and discoverable scoping",
+    "source_band": [
+      "author_adapted_method",
+      "project_orientation_lineage",
+      "ai_collaboration_anchor"
+    ]
+  },
+  "quick_use": {
+    "use_when": "A team needs a compact shared frame before actor mapping, context mapping, thresholding, service topology, examples, or AI-assisted artifact generation.",
+    "restores": "Shared orientation around purpose, objectives, discoverables, and activities.",
+    "good_next_question": "What should become discoverable before we commit to artifact, workflow, diagram, prototype, or implementation form?"
+  },
+  "poda": {
+    "purpose": {
+      "id": "purpose-table-reading",
+      "text": "Keep table comparisons readable and verification evidence attached to its actual scope.",
+      "status": "stable_for_now",
+      "route": "Strategy Canvas",
+      "reason": "Choose explicit coverage and evidence-reopening dimensions."
+    },
+    "objectives": [
+      {
+        "id": "objective-readable",
+        "label": "Readable comparisons",
+        "text": "Preserve native relationships, useful column measures and local scrolling.",
+        "status": "assumed",
+        "route": "Specification-by-Example",
+        "reason": "Route one named uncertainty to its next observation.",
+        "canonical_order": 1,
+        "display_order": 1,
+        "visible_order": 1,
+        "visible_in_active_view": true
+      },
+      {
+        "id": "objective-protection",
+        "label": "Protective verification",
+        "text": "Keep passing checks bounded and reopen affected evidence.",
+        "status": "assumed",
+        "route": "First Responsible Version Matrix",
+        "reason": "Route one named uncertainty to its next observation.",
+        "canonical_order": 2,
+        "display_order": 2,
+        "visible_order": 2,
+        "visible_in_active_view": true
+      }
+    ],
+    "discoverables": [
+      {
+        "id": "discoverable-inner-width",
+        "label": "Actual inner widths",
+        "text": "Measure parent and iframe before choosing a breakpoint.",
+        "status": "assumed",
+        "route": "Specification-by-Example",
+        "reason": "Route one named uncertainty to its next observation.",
+        "canonical_order": 1,
+        "display_order": 1,
+        "visible_order": 1,
+        "visible_in_active_view": true,
+        "objective_ids": [
+          "objective-readable"
+        ]
+      },
+      {
+        "id": "discoverable-reopening",
+        "label": "Reopening boundary",
+        "text": "Identify evidence invalidated by a new finding.",
+        "status": "assumed",
+        "route": "Recovery Routing Atlas",
+        "reason": "Route one named uncertainty to its next observation.",
+        "canonical_order": 2,
+        "display_order": 2,
+        "visible_order": 2,
+        "visible_in_active_view": true,
+        "objective_ids": [
+          "objective-protection"
+        ]
+      }
+    ],
+    "activities": [
+      {
+        "id": "activity-measure",
+        "label": "Measure parent and child",
+        "text": "Observe narrow and desktop carriers and record child widths.",
+        "status": "assumed",
+        "route": "Specification-by-Example",
+        "reason": "Route one named uncertainty to its next observation.",
+        "canonical_order": 1,
+        "display_order": 1,
+        "visible_order": 1,
+        "visible_in_active_view": true,
+        "discoverable_ids": [
+          "discoverable-inner-width"
+        ]
+      },
+      {
+        "id": "activity-receipt",
+        "label": "Record a bounded check receipt",
+        "text": "Attach scope, revision, fixture and remaining gap to the check.",
+        "status": "assumed",
+        "route": "First Responsible Version Matrix",
+        "reason": "Route one named uncertainty to its next observation.",
+        "canonical_order": 2,
+        "display_order": 2,
+        "visible_order": 2,
+        "visible_in_active_view": true,
+        "discoverable_ids": [
+          "discoverable-reopening"
+        ]
+      }
+    ]
+  },
+  "view_state": {
+    "active_view_id": "view-default",
+    "views": [
+      {
+        "id": "view-default",
+        "name": "Default focus view",
+        "objective_order": [
+          "objective-readable",
+          "objective-protection"
+        ],
+        "hidden_objective_ids": [],
+        "discoverable_order": [
+          "discoverable-inner-width",
+          "discoverable-reopening"
+        ],
+        "hidden_discoverable_ids": [],
+        "activity_order": [
+          "activity-measure",
+          "activity-receipt"
+        ],
+        "hidden_activity_ids": [],
+        "text_mode": "preview_with_reveal",
+        "selected_item_type": "",
+        "selected_item_id": ""
+      }
+    ]
+  },
+  "route_registry": [
+    {
+      "label": "PODA",
+      "family": "Orientation and Tracing"
+    },
+    {
+      "label": "Alignment Worksheet",
+      "family": "Orientation and Tracing"
+    },
+    {
+      "label": "Impact Map",
+      "family": "Orientation and Tracing"
+    },
+    {
+      "label": "Context Tree",
+      "family": "Orientation and Tracing"
+    },
+    {
+      "label": "Strategy Canvas",
+      "family": "Comparison and Threshold"
+    },
+    {
+      "label": "First Responsible Version Matrix",
+      "family": "Comparison and Threshold"
+    },
+    {
+      "label": "Cross-channel Blueprint",
+      "family": "Shared Surfaces and Topology"
+    },
+    {
+      "label": "Service-design Blueprint",
+      "family": "Shared Surfaces and Topology"
+    },
+    {
+      "label": "AI Systems Service Blueprint",
+      "family": "Shared Surfaces and Topology"
+    },
+    {
+      "label": "Software Architecture Views",
+      "family": "Shared Surfaces and Topology"
+    },
+    {
+      "label": "Participatory Design Kit",
+      "family": "Participatory Elicitation and Specification"
+    },
+    {
+      "label": "Specification-by-Example",
+      "family": "Participatory Elicitation and Specification"
+    },
+    {
+      "label": "HEART Chart",
+      "family": "Measurement, Reflection, and Judgment"
+    },
+    {
+      "label": "Plus / Delta",
+      "family": "Measurement, Reflection, and Judgment"
+    },
+    {
+      "label": "Practitioner Judgment Probes",
+      "family": "Measurement, Reflection, and Judgment"
+    },
+    {
+      "label": "Pattern–Problem Surface Matrix",
+      "family": "Pattern Fit and Behavior Protection"
+    },
+    {
+      "label": "Jobs-to-be-Done Treemap",
+      "family": "Pattern Fit and Behavior Protection"
+    },
+    {
+      "label": "Unit-test-first Design",
+      "family": "Pattern Fit and Behavior Protection"
+    },
+    {
+      "label": "Upstream Revision Loop",
+      "family": "Recovery Routing and Revision"
+    },
+    {
+      "label": "Recovery Routing Atlas",
+      "family": "Recovery Routing and Revision"
+    },
+    {
+      "label": "Custom route…",
+      "family": "Custom route"
+    }
+  ],
+  "semantic_locality": {
+    "preferred_phrasing": [
+      "What should become discoverable?",
+      "Which activity helps surface this discoverable?",
+      "Which objective does this discoverable support?",
+      "What purpose gives this work meaning?",
+      "Which architecture should receive this discoverable next?"
+    ],
+    "replacement_state_guidance": [
+      {
+        "common_phrase": "What are the deliverables?",
+        "stronger_phrase": "What should become discoverable before we commit to artifact form?"
+      },
+      {
+        "common_phrase": "What are we building?",
+        "stronger_phrase": "What purpose, objectives, and discoverable surfaces should guide the next activities?"
+      },
+      {
+        "common_phrase": "Generated output lost the project frame.",
+        "stronger_phrase": "Provide the generative AI system with explicit purpose, objective, discoverable, and activity context."
+      },
+      {
+        "common_phrase": "This is just a task.",
+        "stronger_phrase": "Which discoverable does this activity help make visible?"
+      }
+    ]
+  },
+  "recovery_calibration": {
+    "strain_cues": [
+      "participants restate the project differently",
+      "AI outputs are polished but misaligned",
+      "activities multiply without a shared reason",
+      "deliverable-shaped language appears before discoverable surfaces are clear"
+    ],
+    "stabilizing_read": "The collaboration needs a shared orientation layer.",
+    "restored_state": "Shared semantic orientation is visible.",
+    "named_failure_geometries": [
+      "Semantic Field Drift",
+      "Actor-Impact Opacity",
+      "Context Flattening",
+      "Upstream Revision Hesitancy"
+    ]
+  }
+}

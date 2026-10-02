@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "strategy-canvas/2.0",
+  "meta": {
+    "id": "table-verification-window",
+    "title": "Protective verification window",
+    "subtitle": "AI-authored working research judgment",
+    "decisionObject": "Select the smallest protective check scope before the next table-family handoff.",
+    "horizon": "First three repair batches or first family handoff",
+    "revision": 1
+  },
+  "method": {
+    "posture": "internal-collaboration",
+    "scoreMeaning": "AI-authored ordinal judgments against local anchors; empirical effectiveness remains open.",
+    "weightMeaning": "Relative consequence, separate from probability and frequency."
+  },
+  "scale": {
+    "min": 0,
+    "max": 2,
+    "step": 1,
+    "lowLabel": "Unspecified",
+    "middleLabel": "Partially mapped",
+    "highLabel": "Decision-ready"
+  },
+  "dimensions": [
+    {
+      "id": "coverage-boundary",
+      "label": "Coverage boundary",
+      "definition": "Name the owners, states, viewports and limits of each check.",
+      "anchors": {
+        "low": "The dimension is unspecified.",
+        "middle": "A bounded source or observation is named.",
+        "high": "The receiving decision, evidence and remaining gap are explicit."
+      },
+      "scores": {
+        "current": 1,
+        "goodEnough": 2,
+        "desired": 2
+      },
+      "consequenceWeight": 5,
+      "action": "raise",
+      "evidenceBasis": "Initial and expanded-disclosure observations exist; other dynamic states remain open."
+    },
+    {
+      "id": "evidence-reopening",
+      "label": "Evidence reopening",
+      "definition": "A later finding names the evidence that it invalidates.",
+      "anchors": {
+        "low": "The dimension is unspecified.",
+        "middle": "A bounded source or observation is named.",
+        "high": "The receiving decision, evidence and remaining gap are explicit."
+      },
+      "scores": {
+        "current": 1,
+        "goodEnough": 2,
+        "desired": 2
+      },
+      "consequenceWeight": 5,
+      "action": "raise",
+      "evidenceBasis": "The completed broad sweep was retained during a nine-case iframe retry."
+    },
+    {
+      "id": "decision-yield",
+      "label": "Decision-changing observation",
+      "definition": "Each check or prototype use resolves a named uncertainty.",
+      "anchors": {
+        "low": "The dimension is unspecified.",
+        "middle": "A bounded source or observation is named.",
+        "high": "The receiving decision, evidence and remaining gap are explicit."
+      },
+      "scores": {
+        "current": 1,
+        "goodEnough": 2,
+        "desired": 2
+      },
+      "consequenceWeight": 4,
+      "action": "raise",
+      "evidenceBasis": "Actual carrier widths changed the minimum-width coverage plan."
+    }
+  ],
+  "view": {
+    "dimensionOrder": [
+      "coverage-boundary",
+      "evidence-reopening",
+      "decision-yield"
+    ],
+    "selectedDimensionId": "coverage-boundary",
+    "mode": "working"
+  },
+  "lifecycle": {
+    "status": "working",
+    "reviewedSnapshot": null,
+    "reviewedBy": "",
+    "reviewNote": "",
+    "reviewedAt": ""
+  },
+  "extensions": {}
+}

@@ -1,0 +1,127 @@
+{
+  "formatVersion": "0.1",
+  "observedOn": "2026-10-01",
+  "standing": "retrospective descriptive baseline",
+  "acceptedMeasurementRevision": "ce820cc7141e6fc51f208c74cf038b4fd3e4cf1e",
+  "sourceInventoryRevision": "7f6fa73e86756687fe07296f210dbaf7e9762d06",
+  "researchBaseRevision": "282205c9b8a4c3f25671a61e7892dbfec3d0fe44",
+  "countBasis": "Session-history reconstruction of browser launches; purposes and incomplete attempts remain separate.",
+  "browserAttempts": [
+    {
+      "id": "audit-broad-1",
+      "purpose": "audit",
+      "result": "harness-failure",
+      "observation": "Protocol-changing route interception rejected",
+      "elapsedSeconds": null
+    },
+    {
+      "id": "audit-broad-2",
+      "purpose": "audit",
+      "result": "completed",
+      "observation": "299 pages attempted; 297 completed at three widths",
+      "elapsedSeconds": 35.601
+    },
+    {
+      "id": "audit-parents-1",
+      "purpose": "audit",
+      "result": "harness-failure",
+      "observation": "Source-based locator changed after local child substitution",
+      "elapsedSeconds": null
+    },
+    {
+      "id": "audit-parents-2",
+      "purpose": "audit",
+      "result": "completed",
+      "observation": "Nine real parent/child geometry cases",
+      "elapsedSeconds": 1.396
+    },
+    {
+      "id": "instrument-inspection-1",
+      "purpose": "instrument-research",
+      "result": "environment-failure",
+      "observation": "Local server unavailable at navigation",
+      "elapsedSeconds": null
+    },
+    {
+      "id": "instrument-inspection-2",
+      "purpose": "instrument-research",
+      "result": "completed",
+      "observation": "Two prototype pages inspected",
+      "elapsedSeconds": null
+    },
+    {
+      "id": "instrument-controls",
+      "purpose": "instrument-research",
+      "result": "completed",
+      "observation": "Two import/export control surfaces inspected",
+      "elapsedSeconds": null
+    },
+    {
+      "id": "instrument-poda-export",
+      "purpose": "instrument-research",
+      "result": "completed",
+      "observation": "Initial PODA export shape inspected",
+      "elapsedSeconds": null
+    },
+    {
+      "id": "instrument-trial-1",
+      "purpose": "instrument-research",
+      "result": "harness-failure",
+      "observation": "Import control inside an intentionally closed disclosure",
+      "elapsedSeconds": null
+    },
+    {
+      "id": "instrument-trial-2",
+      "purpose": "instrument-research",
+      "result": "completed",
+      "observation": "Strategy Canvas and PODA imported and exported",
+      "elapsedSeconds": null
+    }
+  ],
+  "totals": {
+    "browserLaunches": 10,
+    "auditCampaignAttempts": 4,
+    "completedAuditCampaigns": 2,
+    "instrumentResearchAttempts": 6
+  },
+  "coverage": {
+    "htmlPagesAttempted": 299,
+    "htmlPagesCompleted": 297,
+    "viewportWidths": [
+      304,
+      390,
+      1280
+    ],
+    "completedPageWidthObservations": 891,
+    "focusedParentChildCases": 9,
+    "markdownInventoryFiles": 91,
+    "markdownCandidateTableBlocks": 169
+  },
+  "outcomes": {
+    "selectedPolicyChangedByPrototypeTrial": false,
+    "estimatedBrowserRunsAvoided": null,
+    "estimatedReductionPercent": null,
+    "empiricalVerificationThreshold": null
+  },
+  "limits": [
+    "Initial visitor states and opened native details establish a discovery inventory; remaining interaction states and cross-engine behavior retain focused execution work.",
+    "Two retained Strategy Canvas routes interrupted navigation.",
+    "Blocked external requests and local canonical child substitution establish local geometry; hosted delivery remains a separate observation.",
+    "Counts describe actual attempts. A prospective comparison baseline and eligible exposure record are needed to estimate effects.",
+    "Distinct source and browser revisions are retained without asserting tree equality."
+  ],
+  "prospectiveFields": [
+    "repairBatchId",
+    "acceptedRevision",
+    "affectedFamily",
+    "coverageClass",
+    "eligibleExposureMinutes",
+    "materialDiscoveries",
+    "reopeningEvent",
+    "checkScope",
+    "checkElapsedSeconds",
+    "timeToHandoffMinutes",
+    "decisionChanged",
+    "abandonmentReason"
+  ]
+}
