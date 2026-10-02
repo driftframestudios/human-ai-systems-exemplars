@@ -102,6 +102,13 @@
       ]
     },
     {
+      "name": "embedded-prototype-layout",
+      "sourcePath": ".agents/skills/embedded-prototype-layout/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": []
+    },
+    {
       "name": "evidence-grounded-research-spike",
       "sourcePath": ".agents/skills/evidence-grounded-research-spike/SKILL.md",
       "publicationStanding": "public_ready",
@@ -179,6 +186,15 @@
         "threadkeeping/repository-secret-material-boundary.md",
         "threadkeeping/context-canvas-public-reference-materialization.md",
         "threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md"
+      ]
+    },
+    {
+      "name": "semantic-table-design",
+      "sourcePath": ".agents/skills/semantic-table-design/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [
+        ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md"
       ]
     },
     {

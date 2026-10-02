@@ -65,3 +65,18 @@ evolution; GitHub Issues retain current outcomes and acceptance.
 [`runbooks`](../runbooks/README.md) carry known multi-phase procedures. A skill
 owns one reusable result; a runbook sequences existing owners for one known
 route.
+
+## Table and embedded-layout contracts
+
+These complementary owners were formed from the repository table audit. Their
+publication standing is `public_possible` while representative execution and
+independent publication review proceed through Issues #314, #318 and #319.
+
+| Skill | Receiving result |
+| --- | --- |
+| [semantic-table-design](semantic-table-design/SKILL.md) | Readable comparison, native table relationships and locally complete extracted records. |
+| [embedded-prototype-layout](embedded-prototype-layout/SKILL.md) | A measured parent/child layout contract with explicit scroll, control and full-view behavior. |
+
+The experimental verification-window skill remains on the `res/` study branch
+under Issue #320. Existing visual-verification and collaboration-accounting
+owners retain their broader roles.
