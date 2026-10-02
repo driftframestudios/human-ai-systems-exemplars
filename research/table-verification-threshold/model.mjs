@@ -24,7 +24,7 @@ export function betaPosterior(a, b, events, opportunities) {
 export function betaAnyEvent(a, b, k) {
   positive(a, 'a'); positive(b, 'b'); count(k, 'k');
   let logZero = 0;
-  for (let i = 0; i < k; i += 1) logZero += Math.log((b + i) / (a + b + i));
+  for (let i = 0; i < k; i += 1) logZero -= Math.log1p(a / (b + i));
   return -Math.expm1(logZero);
 }
 // O(a), O(1) space. Exact integer-shape beta/binomial identity, evaluated with log-sum-exp.
@@ -70,7 +70,14 @@ export function generator(rates = {}) {
   return q;
 }
 function probabilityVector(pi) {
-  if (!Array.isArray(pi) || pi.length !== STATES || pi.some(x => !Number.isFinite(x) || x < 0 || x > 1) || Math.abs(pi.reduce((a,b) => a+b, 0) - 1) > 1e-9) throw new RangeError('pi must have four probabilities totaling one');
+  if (!Array.isArray(pi) || pi.length !== STATES) throw new RangeError('pi must have four probabilities totaling one');
+  let total = 0;
+  for (let index = 0; index < STATES; index += 1) {
+    const value = pi[index];
+    if (!Object.hasOwn(pi, index) || !Number.isFinite(value) || value < 0 || value > 1) throw new RangeError('pi must have four own finite probabilities');
+    total += value;
+  }
+  if (Math.abs(total - 1) > 1e-9) throw new RangeError('pi must have four probabilities totaling one');
 }
 function multiply(pi, matrix) {
   return Array.from({ length: STATES }, (_, j) => pi.reduce((sum, p, i) => sum + p * matrix[i][j], 0));

@@ -66,7 +66,7 @@ def main():
     # Q_T for the explicitly illustrative D->R, R->V, V->R/H scenario.
     q = [[Fraction(-1,10), Fraction(1,10), 0], [0, Fraction(-1,5), Fraction(1,5)], [0, Fraction(1,20), Fraction(-1,4)]]
     expected = solve_exact(q, [-1, -1, -1]) + [Fraction(0)]
-    comparisons.extend(zip(observed["transitionScenario"]["expectedHandoffMinutesByState"], expected))
+    comparisons.extend(zip(observed["transitionScenario"]["expectedHandoffMinutesByState"], expected, strict=True))
     for actual, exact in comparisons:
         if not isclose(actual, float(exact), rel_tol=1e-12, abs_tol=1e-12):
             raise AssertionError(f"scenario differs from exact reference: {actual} versus {exact}")

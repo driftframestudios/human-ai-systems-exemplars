@@ -48,3 +48,36 @@ for(const {rate,minutes} of rateScenarios){
     expectedHandoffMinutes(rates).forEach((value,index)=>near(value,(3-index)/rate));
   });
 }
+
+
+const smallPriorScenarios = [
+  {a:1e-20,b:1},
+  {a:1e-100,b:1e6},
+  {a:1e-100,b:1e-100}
+];
+for(const {a,b} of smallPriorScenarios){
+  test('positive one-opportunity probability: a='+a+', b='+b,()=>{
+    const actual=betaAnyEvent(a,b,1),expected=a/(a+b);
+    assert.ok(actual>0);
+    assert.ok(Math.abs(actual/expected-1)<1e-12,'relative probability accuracy');
+  });
+}
+
+for(const missingIndex of [0,1,2,3]){
+  for(const inherited of [false,true]){
+    test('probability ownership: missing index='+missingIndex+', inherited='+inherited,()=>{
+      const probabilities=Array(4).fill(0);
+      probabilities[(missingIndex+1)%4]=1;
+      delete probabilities[missingIndex];
+      if(inherited){
+        const prototype=Object.create(Array.prototype);
+        Object.defineProperty(prototype,missingIndex,{value:0});
+        Object.setPrototypeOf(probabilities,prototype);
+      }
+      Object.freeze(probabilities);
+      assert.throws(()=>forwardDerivative(probabilities,{V_H:.2}),RangeError);
+      assert.throws(()=>propagate(probabilities,{V_H:.2},0),RangeError);
+      assert.throws(()=>propagate(probabilities,{V_H:.2},1),RangeError);
+    });
+  }
+}

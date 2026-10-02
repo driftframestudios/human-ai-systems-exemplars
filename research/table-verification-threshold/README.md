@@ -162,3 +162,29 @@ minutes. Neither statement estimates the actual table collaboration's quality.
 The process equations above are explicitly derived scenario models; independent
 review checked their assumptions and the distinction between prior and posterior
 parameters. See `publication-outline.md` for the eventual Context Canvas receiver.
+
+## Python reference and parameterized checks
+
+`reference_check.py` is a standard-library exact-rational reference for integer
+beta tails, Gamma waiting probability/density, and the fixed-rate backward
+scenario. Its comparison requires the complete four-state handoff result.
+`test_reference_check.py` exercises complete, truncated, extended, and changed
+results through named unit tests and parameterized subcases.
+
+Run from the repository root using an isolated managed Python environment:
+
+```sh
+uv run --isolated --no-project --python 3.12 --managed-python -- python research/table-verification-threshold/reference_check.py
+uv run --isolated --no-project --python 3.12 --managed-python -- python -m unittest discover -s research/table-verification-threshold -p test_reference_check.py -v
+```
+
+The JavaScript suite uses named configuration tables for numerical boundaries,
+rate/time scenarios, tiny positive probabilities, and sparse or inherited array
+positions. Each failed configuration identifies its parameters. Exact reference
+agreement, supported numerical behavior, and empirical study outcomes retain
+separate evidence roles.
+
+`observations.v0.1.json` preserves categorized browser attempts and leaves effect
+estimates unset. `prototype-trial/prototype-suite-consideration.csv` records 42
+declared manifest entries representing 41 distinct source paths; the shared
+Threadkeeping Ledger entry appears in both Canvas and Narrative collections.
