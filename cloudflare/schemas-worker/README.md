@@ -135,3 +135,11 @@ npm run test:browser -- https://schemas.vik.guru
 For a local HTTPS preview, pass its origin instead. Trust the preview certificate through `NODE_EXTRA_CA_CERTS` for the Node receiver check. The browser check accepts `--local-tls` exclusively for loopback previews. The local unit test covers HTTP-to-HTTPS redirection; the live command's optional `--http-origin` checks it on an HTTP listener.
 
 The handler redirects HTTP requests with status 308, including local HTTP requests. Use HTTPS to observe successful asset responses. Add a new frozen path through the publication preparation route and load a fresh Worker bundle to activate that cache policy. Frozen routes retain their published bytes; revised contracts receive a new versioned path.
+
+Conditional live checks use HTTP-standard weak ETag comparison: the quoted
+opaque value stays identical while either header may carry the `W/` marker.
+Malformed or missing validators fail the check. Every schema response still
+passes its exact SHA-256 and canonical-identity assertions. The pure comparison
+helper scans each header once; focused tests cover RFC examples, literal
+backslashes, case sensitivity, empty opaque values, and malformed fields.
+See [RFC 9110 sections 8.8.3 and 13.1.2](https://www.rfc-editor.org/rfc/rfc9110.html#section-8.8.3).
