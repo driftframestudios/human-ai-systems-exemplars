@@ -7,6 +7,8 @@
     "prepare:publication": "node prepare-publication.mjs",
     "check:publication": "node prepare-publication.mjs --check",
     "test": "node --test test/*.test.mjs",
+    "test:receiver": "node test/live-receiver.mjs",
+    "test:browser": "node test/catalog-browser.mjs",
     "dev": "wrangler dev",
     "deploy": "npm run check:publication && wrangler deploy"
   },

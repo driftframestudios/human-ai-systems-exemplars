@@ -54,11 +54,12 @@ for (const { source, receiverPath } of routes) {
     frozen.add(`/${destination}`);
   }
 }
+aliases["/schemas/schema-catalog.json"] = "/schema-catalog.json";
 for (const path of carriers) files.set(path, await readFile(await resolvePublicationFile(root, path)));
 
 const escape = (value) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
 let index = await readFile(await resolvePublicationFile(root, "cloudflare/schema-delivery/source/index.html"), "utf8");
-const cards = catalog.contracts.map((contract) => `<article><h2>${escape(contract.path)}</h2><p><a href="/${escape(contract.path)}">Download from schemas.vik.guru</a></p><p>Stable identity: <code>${escape(contract.canonicalId)}</code></p><p class="receipt">SHA-256 <code>${contract.sha256}</code></p></article>`).join("\n");
+const cards = catalog.contracts.map((contract) => `<article><h2><code>${escape(contract.path)}</code></h2><p><a href="/${escape(contract.path)}">Download from schemas.vik.guru</a></p><p>Stable identity: <code>${escape(contract.canonicalId)}</code></p><p class="receipt">SHA-256 <code>${contract.sha256}</code></p></article>`).join("\n");
 index = index.replace("<!-- schema-delivery:contracts -->", cards)
   .replace("<!-- schema-delivery:author -->", `<meta name="author" content="${escape(artifactAuthor)}"><link rel="license" href="${artifactLicense}"><link rel="canonical" href="${base}/">`)
   .replace("<!-- schema-delivery:attribution -->", `<footer><p><a href="/LICENSE">License</a> | <a href="/AUTHORS">Authors</a> | <a href="/CITATION.cff">Citation</a> | <a href="/AI-DATA-USE.md">Data-use posture</a></p><p>${escape(artifactAttribution)}</p></footer>`);

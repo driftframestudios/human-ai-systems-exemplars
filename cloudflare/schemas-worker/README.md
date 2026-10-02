@@ -113,3 +113,25 @@ remain outside that boundary.
 Platform references: [asset-binding behavior](https://developers.cloudflare.com/workers/static-assets/binding/),
 [Worker-first routing](https://developers.cloudflare.com/workers/static-assets/routing/worker-script/),
 and [HTML handling](https://developers.cloudflare.com/workers/static-assets/routing/advanced/html-handling/).
+
+## Repeatable receiver checks
+
+The checked-in tests divide the evidence by the behavior they observe:
+
+- `test/receiver.test.mjs` exercises the production handler with an asset binding fixture: root routing, exact contract bytes and identities, canonical and asset routes, guide-relative catalog links, headers, conditional requests, missing resources, and supported methods.
+- `test/manifest-transition.test.mjs` loads the same handler in two isolated bundles. `/schemas/test.json` starts revalidatable, then becomes immutable when the next bundle lists it in `frozen`. Another JSON resource stays revalidatable. Production files retain their published bytes throughout this test.
+- `test/live-receiver.mjs` checks a running Worker against the prepared publication. It exercises every contract route, cache policy, ETag/304, HEAD, discovery alias, root, missing-route JSON response, and CORS policy.
+- `test/catalog-browser.mjs` uses the repository's Playwright installation to check catalog links and horizontal containment at narrow and desktop widths with JavaScript unavailable. Screenshots stay in the ignored `.visual-runs/schema-worker/` directory.
+
+Run from this directory:
+
+```sh
+npm test
+npm run check:publication
+npm run test:receiver -- https://schemas.vik.guru --http-origin http://schemas.vik.guru
+npm run test:browser -- https://schemas.vik.guru
+```
+
+For a local HTTPS preview, pass its origin instead. Trust the preview certificate through `NODE_EXTRA_CA_CERTS` for the Node receiver check. The browser check accepts `--local-tls` exclusively for loopback previews. The local unit test covers HTTP-to-HTTPS redirection; the live command's optional `--http-origin` checks it on an HTTP listener.
+
+The handler redirects HTTP requests with status 308, including local HTTP requests. Use HTTPS to observe successful asset responses. Add a new frozen path through the publication preparation route and load a fresh Worker bundle to activate that cache policy. Frozen routes retain their published bytes; revised contracts receive a new versioned path.

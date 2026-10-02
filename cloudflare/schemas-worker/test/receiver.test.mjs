@@ -106,6 +106,24 @@ test("missing resources preserve the requested path and remain uncached", async 
   }
 });
 
+test("both guide routes resolve their relative catalog link to the same mutable receipt", async () => {
+  const expected = await readFile(new URL("schema-catalog.json", publicRoot), "utf8");
+  for (const guide of ["/investment-analysis/0.2.0/README.md", "/schemas/investment-analysis/0.2.0/README.md"]) {
+    const guideResponse = await worker.fetch(request(guide), env);
+    assert.equal(guideResponse.status, 200);
+    const markdown = await guideResponse.text();
+    assert.ok(markdown.includes("../../schema-catalog.json"));
+    const target = new URL("../../schema-catalog.json", base + guide).pathname;
+    const response = await worker.fetch(request(target), env);
+    assert.equal(response.status, 200, target);
+    assert.equal(response.headers.get("Cache-Control"), revalidate, target);
+    assert.equal(await response.text(), expected, target);
+    const conditional = await worker.fetch(request(target, { headers: { "If-None-Match": response.headers.get("ETag") } }), env);
+    assert.equal(conditional.status, 304, target);
+    assert.equal(conditional.headers.get("Cache-Control"), revalidate, target);
+  }
+});
+
 test("asset failures keep bounded no-store responses", async () => {
   const upstream = await worker.fetch(request("/schema.json"), { ASSETS: { fetch: async () => new Response("Temporarily unavailable", { status: 503 }) } });
   assert.equal(upstream.status, 503);

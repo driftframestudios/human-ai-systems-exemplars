@@ -43,7 +43,8 @@
     "/prototype-exemplars/1.0.0/prototype-exemplars.example.json": "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.example.json",
     "/context-canvas/1.0.0/context-canvas.context.jsonld": "/schemas/context-canvas/1.0.0/context-canvas.context.jsonld",
     "/investment-analysis/0.2.0/example.json": "/schemas/investment-analysis/0.2.0/example.json",
-    "/investment-analysis/0.2.0/README.md": "/schemas/investment-analysis/0.2.0/README.md"
+    "/investment-analysis/0.2.0/README.md": "/schemas/investment-analysis/0.2.0/README.md",
+    "/schemas/schema-catalog.json": "/schema-catalog.json"
   },
   "headers": {
     "Access-Control-Allow-Origin": "*",
