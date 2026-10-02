@@ -1,0 +1,40 @@
+{
+  "epoch": "table-repair-01",
+  "standing": "prospective-check-policy",
+  "applicationBranch": "codex/table-reading-repairs",
+  "applicationBase": "77589c5",
+  "researchBase": "938f03f",
+  "issues": [315, 316, 317, 318, 319, 320, 321, 322],
+  "scope": "First coherent repair batch: Conditioning Field, Shared Surface Priority Map, and legacy investment comparison tables, with reusable source-label and all-column observation contracts.",
+  "entryEvidence": {
+    "completedDiscoveryPages": 297,
+    "historicalInterruptedPages": 2,
+    "completedParentChildCases": 9,
+    "projectorUnitTests": 4,
+    "applicationBrowserLaunchesThisEpoch": 0
+  },
+  "comparisonPolicy": {
+    "name": "same-family-check-after-each-source-or-harness-repair-opportunity",
+    "standing": "declared-counterfactual",
+    "rule": "Count a potential focused campaign after each distinct repair opportunity. Record bundled opportunities and actual campaigns separately. The counterfactual is a policy comparison, not observed human behavior or causal proof.",
+    "fullSweepRule": "A changed shared owner, omitted current family, or unexplained cross-family regression can reopen discovery. A local application or harness defect reopens its dependent cases.",
+    "mandatoryGates": ["observer positive and negative fixtures", "affected-family layout and behavior evidence", "source/projection packaging", "independent review", "publication boundary"],
+    "checkpoint": "First family handoff or three coherent repair batches, whichever occurs first"
+  },
+  "estimation": {
+    "model": "Beta-Bernoulli late-defect indicator per completed handoff opportunity",
+    "priorAlpha": 1,
+    "priorBeta": 1,
+    "priorMean": 0.5,
+    "priorStanding": "illustrative and uncalibrated",
+    "exposureDefinition": "A completed family handoff followed by an independently observed review window",
+    "observedExposure": 0,
+    "posterior": null,
+    "rateOrDiffusionFit": null,
+    "reason": "Prospective application exposure begins with this epoch. Previous setup repairs are not family handoff failures. Exact finite-state research remains a sensitivity aid; measured transitions are required for empirical rate or diffusion claims."
+  },
+  "completedCampaigns": [],
+  "fullBrowserCampaignsAvoided": null,
+  "netSavings": null,
+  "nextDecision": "Run the fixture-gated affected-family campaign once; retain completed cases and classify each remaining condition before choosing the next focused observation."
+}
