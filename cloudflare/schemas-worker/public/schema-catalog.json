@@ -1,0 +1,125 @@
+{
+  "schemaVersion": "1",
+  "sourceRevision": "c3dbb9860e77d001e6b1c6f09fd76529911b39a3",
+  "deliveryBase": "https://schemas.vik.guru",
+  "identityRole": "canonicalId identifies the contract; retrievalUrl downloads this site's copy.",
+  "contracts": [
+    {
+      "canonicalId": "https://schemas.vik.guru/investment-analysis/0.2.0/state.schema.json",
+      "retrievalUrl": "https://schemas.vik.guru/investment-analysis/0.2.0/state.schema.json",
+      "path": "investment-analysis/0.2.0/state.schema.json",
+      "sourcePath": "collaboration/investment-analysis/state.schema.json",
+      "sha256": "5e755a73ac130b4da393602ad64d9471e7bddf332c8c3429e8a2c1411699f3a3",
+      "sizeBytes": 21856,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+      "retrievalUrl": "https://schemas.vik.guru/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+      "path": "prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+      "sourcePath": "schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+      "sha256": "42910b5238a62c666cf5fcdbdc5a364b64d7c5301d959ac9bdaea11c8743ccf2",
+      "sizeBytes": 12309,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/context-canvas/1.0.0/context-canvas.schema.json",
+      "retrievalUrl": "https://schemas.vik.guru/context-canvas/1.0.0/context-canvas.schema.json",
+      "path": "context-canvas/1.0.0/context-canvas.schema.json",
+      "sourcePath": "schemas/context-canvas/1.0.0/context-canvas.schema.json",
+      "sha256": "008f0180477814f25fc657f9695668aa4286085ae781ab36650d8830da82c08a",
+      "sizeBytes": 13872,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/collaboration-skills/0.1.0/collaboration-skill.schema.json",
+      "retrievalUrl": "https://schemas.vik.guru/collaboration-skills/0.1.0/collaboration-skill.schema.json",
+      "path": "collaboration-skills/0.1.0/collaboration-skill.schema.json",
+      "sourcePath": "schemas/collaboration-skills/0.1.0/collaboration-skill.schema.json",
+      "sha256": "cb44d6db5e0320062fb3fe1b0b63354d0e17dff3f2cb096ccf9616db6259fdc0",
+      "sizeBytes": 6397,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/collaboration-skills/0.1.0/collaboration-account.schema.json",
+      "retrievalUrl": "https://schemas.vik.guru/collaboration-skills/0.1.0/collaboration-account.schema.json",
+      "path": "collaboration-skills/0.1.0/collaboration-account.schema.json",
+      "sourcePath": "schemas/collaboration-skills/0.1.0/collaboration-account.schema.json",
+      "sha256": "99153a7f803c2431f922790df65ff4dc7d9215a7c3c79d2d36b36bebd113b039",
+      "sizeBytes": 2084,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json",
+      "retrievalUrl": "https://schemas.vik.guru/a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json",
+      "path": "a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json",
+      "sourcePath": "a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/expanded-delta.schema.json",
+      "sha256": "76552eb1f00056f9ae574fca5273f92bd1f0e3389f5f0c7d3cdca63729c355d1",
+      "sizeBytes": 7210,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json",
+      "retrievalUrl": "https://schemas.vik.guru/a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json",
+      "path": "a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json",
+      "sourcePath": "a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/expanded-view-model.schema.json",
+      "sha256": "a61e277fb2bf153117622bcb61d471531508ca45dad23a83f8f43c270a3d1ac1",
+      "sizeBytes": 5184,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/a3-stacked-cube-atlas-expanded/0.2/source-registry.schema.json",
+      "retrievalUrl": "https://schemas.vik.guru/a3-stacked-cube-atlas-expanded/0.2/source-registry.schema.json",
+      "path": "a3-stacked-cube-atlas-expanded/0.2/source-registry.schema.json",
+      "sourcePath": "a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/source-registry.schema.json",
+      "sha256": "e5961a3c74fe5d304162e576ef5d3f4182eb8d90dc43dbec13956d3c5221fc9e",
+      "sizeBytes": 1300,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.vik.guru/a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json",
+      "retrievalUrl": "https://schemas.vik.guru/a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json",
+      "path": "a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json",
+      "sourcePath": "a3-stacked-cube-atlas-expanded-bundle-v0.2/schema/coverage-ledger.schema.json",
+      "sha256": "02dba1dd1e225c3f2e25dfd39cf8ccf5153e7000595dd9062ff14b2e8aafd230",
+      "sizeBytes": 1574,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://driftframe.studio/schemas/a3-stacked-cube-state-v0.1.json",
+      "retrievalUrl": "https://schemas.vik.guru/schemas/a3-stacked-cube-state-v0.1.json",
+      "path": "schemas/a3-stacked-cube-state-v0.1.json",
+      "sourcePath": "a3-stacked-cube-visual-system-bundle-v0.1/schema/a3-stacked-cube-state-schema-v0.1.json",
+      "sha256": "29412224ba56ec6f4289821bf34d44acedc56c9ae9eee76ae33cb7e276e24426",
+      "sizeBytes": 13212,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.radiantnull.com/visualization/visualization-fidelity-atlas.schema.v0.1.json",
+      "retrievalUrl": "https://schemas.vik.guru/visualization/visualization-fidelity-atlas.schema.v0.1.json",
+      "path": "visualization/visualization-fidelity-atlas.schema.v0.1.json",
+      "sourcePath": "visualization-fidelity-atlas-bundle-v0.1/visualization-fidelity-atlas.schema.v0.1.json",
+      "sha256": "9cc827bf3357a601335af6ef1dce61e2b62dfa69e0c88215dbdd61e360a64ed3",
+      "sizeBytes": 7537,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.radiantnull.com/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      "retrievalUrl": "https://schemas.vik.guru/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      "path": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      "sourcePath": "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      "sha256": "8fc5d394a0edeb4578d9e5203323ec2572cea2673e525e5c083e2fdf51c5c41c",
+      "sizeBytes": 15432,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json",
+      "retrievalUrl": "https://schemas.vik.guru/context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json",
+      "path": "context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json",
+      "sourcePath": "context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json",
+      "sha256": "819d3d376ed9c9414a36df9565ccb5c89e988cfdadd1b99c7c1fe4ee3c63b53d",
+      "sizeBytes": 3294,
+      "dependencyIdentities": []
+    }
+  ]
+}
