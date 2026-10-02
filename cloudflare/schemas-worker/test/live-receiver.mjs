@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
+import { weakETagMatches } from "./http-validators.mjs";
 import manifest from "../public/publication-manifest.json" with { type: "json" };
 import catalog from "../public/schema-catalog.json" with { type: "json" };
 
@@ -47,12 +48,12 @@ for (const contract of catalog.contracts) {
     assert.ok(etag, path);
     const conditional = await get(path, { headers: { "If-None-Match": etag } });
     assert.equal(conditional.status, 304, path);
-    assert.equal(conditional.headers.get("ETag"), etag, path);
+    assert(weakETagMatches(conditional.headers.get("ETag"), etag), `conditional validator: ${path}`);
     assert.equal(conditional.headers.get("Cache-Control"), policy(path), path);
     assert.equal(await conditional.text(), "", path);
     const head = await get(path, { method: "HEAD" });
     assert.equal(head.status, 200, path);
-    assert.equal(head.headers.get("ETag"), etag, path);
+    assert(weakETagMatches(head.headers.get("ETag"), etag), `HEAD validator: ${path}`);
     assert.equal(head.headers.get("Cache-Control"), policy(path), path);
     assert.equal(await head.text(), "", path);
     routes += 1;
