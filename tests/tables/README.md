@@ -56,3 +56,11 @@ receivers.
 
 Return to the [repository check guide](../README.md) for existing stateful,
 packaging and delivery contracts.
+
+The versioned [source-bound campaign stages](PIPELINE.md) describe exact planning,
+complete-generation publication, dependency invalidation and interrupted-run
+recovery. `--plan` prints the requested cases while browser execution remains idle.
+
+The [Python source-preservation contract](python-source-preservation.md) owns the
+projector's admitted HTML shape, bounded allocation, exact-byte edit and atomic
+publication behavior, together with its focused isolated-Python command.

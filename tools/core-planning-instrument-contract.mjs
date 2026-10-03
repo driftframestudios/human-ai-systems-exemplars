@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import nodePath from "node:path";
 import { digest, openCheckpoints } from "./observation-checkpoint.mjs";
+import { corePlanningInputs } from "./evidence-inputs.mjs";
 
 import { chromium } from "@playwright/test";
 
@@ -2126,9 +2127,7 @@ const expectedCheckCount = projections.length * selectedPaths.length;
 const root = nodePath.resolve(import.meta.dirname, "..");
 const checkpoints = await openCheckpoints(nodePath.join(root, ".visual-runs/core-planning/checkpoints"));
 const definitions = [];
-for (const file of ["tools/core-planning-instrument-contract.mjs", "tools/core-architecture-browser-helper.mjs",
-  "tools/attribution-contract.mjs", "tools/observation-checkpoint.mjs",
-  "context-canvas-project-surface/context-canvas/visitor-boundary-contract.js", "package-lock.json"]) {
+for (const file of corePlanningInputs) {
   definitions.push(digest(await fs.readFile(nodePath.join(root, file))));
 }
 const runtime = await fs.stat(chromium.executablePath());
