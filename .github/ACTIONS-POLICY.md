@@ -70,10 +70,12 @@ requests, including drafts, and manual dispatch. Its read-only ten-minute job
 tests production contracts and exercises the immutable `production-v0.2.0`
 archive using the candidate tool. Its source declares no budget-variable or
 confirmation gate and grants no host credential or deployment action. Preserve
-that trigger posture. The human budget owner receives the remaining question
-of which accepted allocation covers this lane, or what allowance to approve
-if that record remains open. The allocation is unknown in this inventory;
-this reconciliation introduces no activation or budget-setting change.
+that trigger posture. The human budget owner has approved **300 minutes per
+month** for this lane, adjustable through a later explicit budget decision.
+The allowance is a human-held budget; automated monthly metering is outside
+the declared workflow contract. Current usage and remaining allocation stay
+unknown in this source inventory. Workflow triggers, permissions, and activation
+remain unchanged.
 
 `release` and `prod` each retain the recorded approved 300-minute allocation
 per collaboration cycle. One shared schema-delivery workflow gives both branches a
