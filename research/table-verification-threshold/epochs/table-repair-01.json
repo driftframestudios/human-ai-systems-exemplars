@@ -105,7 +105,7 @@
       "review",
       "execution"
     ],
-    "receivingEvidence": "Wave 1/2 events record the parent's supplied observations dated 2026-10-03. occurredOn supplies the reported day; exact occurrence timestamps, source/runtime identities, manifest locators and pre-execution prediction times remain unspecified. Append order records this return without inventing within-day timestamps. One subsequent scope-addition event records the supplied HTML-change resume under the same v3 definition. Its embedded request annotation classifies additional requested work separately from defects; the preceding 35 entries remain unchanged."
+    "receivingEvidence": "Wave 1/2 events record the parent's supplied observations dated 2026-10-03. occurredOn supplies the reported day; exact occurrence timestamps, source/runtime identities, manifest locators and pre-execution prediction times remain unspecified. Append order records this return without inventing within-day timestamps. One subsequent scope-addition event records the supplied HTML-change resume under the same v3 definition. Its embedded request annotation classifies additional requested work separately from defects; the preceding 35 entries remain unchanged. Three dated PR334 intake records append retained focused checks and the two-launch Service closure after the preceding 36 records. The receiving commit fc874df is user-reported; per-check execution revisions and exact occurrence times remain unspecified. The earlier Service diagnostic is not accumulated in this delta."
   },
   "units": {
     "family": "A source-owned group of related tables and maintained projections with a shared visitor/acceptance contract. One family may contain several repair batches.",
@@ -290,10 +290,10 @@
   },
   "currentSummary": {
     "recordedOn": "2026-10-03",
-    "throughEvent": "scope-plain-labels-v3-resume-2026-10-03",
+    "throughEvent": "pr334-service-browser-passed-2026-10-03",
     "historicalExecutionEvents": 13,
     "browserLaunches": {
-      "value": 14,
+      "value": 16,
       "standing": "exact-recorded-count"
     },
     "tableObserverBrowserLaunches": {
@@ -301,7 +301,7 @@
       "standing": "exact-recorded-count"
     },
     "ancillaryBrowserLaunches": {
-      "value": 6,
+      "value": 8,
       "standing": "exact-recorded-count"
     },
     "tablePrototypeCaseAttempts": {
@@ -338,7 +338,7 @@
     "totalPageVisits": {
       "value": null,
       "standing": "unmeasured",
-      "reason": "190 table attempts, four known ancillary visits and four Shared Surface journeys retain different units. Fresh v3 closure reports 47 document navigations and the user-scope resume reports 15; historical and other navigation coverage remains incomplete."
+      "reason": "190 table attempts, four known ancillary visits and four Shared Surface journeys retain different units. Fresh v3 closure reports 47 document navigations and the user-scope resume reports 15; historical and other navigation coverage remains incomplete. The PR334 Service closure adds two launches with unmeasured page/navigation counts; its earlier one-launch/three-visit diagnostic is not accumulated here."
     },
     "completedHandoffs": {
       "value": 0,
@@ -349,8 +349,8 @@
       "standing": "unmeasured",
       "reason": "An accepted batch count awaits explicit receiving-review records."
     },
-    "receivingStanding": "application-wave-passed; awaiting-accepted-receiving-handoff",
-    "boundary": "Cumulative counts combine the original ledger, supplied Wave 1/2 execution events and one new user-requested scope addition. asOfWave12Summary and wave12 preserve the earlier completed application phase. Reviews, annotations, retained observations and the stubbed launch retain separate accounting.",
+    "receivingStanding": "PR334-draft; retained-source-and-Service-evidence; application-acceptance-gaps-open",
+    "boundary": "Cumulative counts combine the original ledger, supplied Wave 1/2 execution events and one new user-requested scope addition. asOfWave12Summary and wave12 preserve the earlier completed application phase. Reviews, annotations, retained observations and the stubbed launch retain separate accounting. The PR334 intake adds two ancillary Service browser launches, including one locator-fault attempt. Table-observer attempt/completion counts retain their earlier scope. Service case attempts, duration and page/navigation counts remain unmeasured; two passing paths are not converted into case counts. Research remains outside the application-completion gate.",
     "wave12": {
       "recordedOn": "2026-10-03",
       "standing": "parent-reported-wave-complete; receiving-handoff-pending",
@@ -413,6 +413,41 @@
       "publishedPassingRecords": 39,
       "browserLaunches": 1,
       "actualDocumentNavigations": 15
+    },
+    "pr334Receipt": {
+      "recordedOn": "2026-10-03",
+      "applicationReceipt": {
+        "pullRequest": 334,
+        "url": "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/334",
+        "commit": "fc874df",
+        "commitStanding": "user-supplied-short-commit",
+        "boundary": "Receiving application coordinate, not a claim that every retained check or browser attempt ran at this exact commit."
+      },
+      "eventIds": [
+        "pr334-retained-focused-checks-2026-10-03",
+        "pr334-service-browser-locator-fault-2026-10-03",
+        "pr334-service-browser-passed-2026-10-03"
+      ],
+      "browserLaunches": {
+        "value": 2,
+        "standing": "parent-reported-exact-count; includes failed harness attempt"
+      },
+      "caseAttempts": {
+        "value": null,
+        "standing": "unmeasured"
+      },
+      "durationSeconds": {
+        "value": null,
+        "standing": "unmeasured"
+      },
+      "prospectiveProbability": null,
+      "declaredPassingPaths": [
+        "canonical",
+        "Canvas"
+      ],
+      "lateDefectOutcome": null,
+      "earlierServiceDiagnostic": "Excluded from this delta; its reported one launch/three visits are not accumulated again.",
+      "researchDoesNotGateApplication": true
     }
   },
   "costAccounting": {
