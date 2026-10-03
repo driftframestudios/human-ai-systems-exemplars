@@ -30,16 +30,16 @@ Routing Atlas v0.1.5, Participatory Design Kit v0.1.4,
 Specification-by-Example v0.1.7, Pattern–Problem Surface Matrix v0.1.5,
 Jobs-to-be-Done Treemap v0.1.4, Unit-test-first Design v0.1.5, HEART Chart
 v0.1.6, Plus / Delta v0.1.5, and Practitioner Judgment Probes v0.1.5; all four
-current Narrative Architecture sources; and three standalone instruments—Open
-Lesson Field, Cross-Functional Investment Model Studio, and Visualization
-Fidelity Atlas. Twenty Core family
+current Narrative Architecture sources; and four standalone instruments: Open
+Lesson Field, Cross-Functional Investment Model Studio, Initiative Costing
+Calculator, and Visualization Fidelity Atlas. Twenty Core family
 members complete the current Orientation and Tracing, Comparison and
 Threshold, Shared Surfaces and Topology, Recovery Routing and Revision,
 Participatory Elicitation and Specification, Pattern Fit and Behavior
 Protection, and Measurement, Reflection, and Judgment families. The Family
 Index carries their current coordinates and routes the collection as the
 twenty-first Core adoption. Together, these sources complete the current
-adoption set: all 28 source artifacts implement `prompt-capsule/0.1.0`.
+adoption set: all 29 source artifacts implement `prompt-capsule/0.1.0`.
 Each source owner keeps its own state and schema version while
 projecting complete plain and skill-assisted Markdown views with one
 represented-state fingerprint. Each source points to a small set of related
@@ -50,9 +50,12 @@ collaboration loops whose fit conditions remain visible.
 Open Lesson Field derives both GitHub Flavored Markdown views from its accepted
 v2 lesson state. Copy and download return the selected view exactly, Related
 loops remain native page content, and lesson assembly keeps a reviewed snapshot
-available for recovery. Cross-Functional Investment Model Studio derives one
-complete handoff from the fixed scenario and selected method while people retain
-economic inputs and decision authority. Narrative Capsule Composer, Semantic
+available for recovery. Cross-Functional Investment Model Studio combines its
+selected method and fixed reference scenario with the accepted five-domain
+investment comparison. Initiative Costing Calculator projects that accepted
+comparison and explicitly captured staffing references; its live staffing state
+retains its own owner. People retain economic inputs and decision authority.
+Narrative Capsule Composer, Semantic
 Sampling, Technology Fit, and Threadkeeping Ledger derive the same exchange
 shape from their distinct accepted states. PODA carries its purpose,
 objectives, discoverables, activities, and accepted handoffs. Alignment
@@ -93,7 +96,7 @@ state, selected visual form and exemplar, recommendation guidance, Reserved
 visibility, and its JSON and JSON-LD companions. Its separate qualitative
 selector remains a focused comparison aid whose no-script note points to the
 parent reading’s complete static mapping. It sits beside the interactive Atlas
-as an adjacent instrument, and the capsule population remains 28. Other
+as an adjacent instrument, and the capsule population remains 29. Other
 capsule-bearing artifacts keep their existing contracts and can join a later
 population when their source owner accepts a material use and fitting tests.
 

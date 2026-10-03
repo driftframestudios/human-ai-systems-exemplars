@@ -306,6 +306,14 @@ test("Orientation and Tracing advances the current inventory as one complete fam
   for (const phrase of ["PODA v0.1.5", "Alignment Worksheet v0.1.4", "Impact Map v0.1.5", "Context Tree v0.1.7"]) {
     assert.match(currentInventory, new RegExp(phrase.replaceAll(".", "\\."), "u"));
   }
-  assert.match(currentInventory, /28 current\s+adoptions\. This completes the observed population/u);
+  const declared = currentInventory.match(/current population contains (\d+) source artifacts/u);
+  const adopted = currentInventory.match(/(\d+) current\s+adoptions\. This completes the observed population/u);
+  const heading = currentInventory.match(/## Current source artifacts[^\n\d]*(\d+)/u);
+  assert.ok(declared && adopted && heading, "the current population has a summary, heading and adoption statement");
+  const tableCount = [...currentInventory.matchAll(/^\|[^|]+\|\s*(\d+)\s*\|/gmu)]
+    .reduce((sum, match) => sum + Number(match[1]), 0);
+  assert.ok(tableCount > 0, "the current-artifact table supplies the counted population");
+  assert.deepEqual([Number(declared[1]), Number(adopted[1]), Number(heading[1])],
+    [tableCount, tableCount, tableCount], "current inventory counts agree with its source classes");
   assert.match(currentInventory, /family members, which complete the current Orientation and Tracing[\s\S]*?famil(?:y|ies)/u);
 });
