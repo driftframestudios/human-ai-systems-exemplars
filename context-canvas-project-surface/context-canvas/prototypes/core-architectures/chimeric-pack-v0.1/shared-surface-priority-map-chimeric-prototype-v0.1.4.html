@@ -1298,12 +1298,31 @@ A compatible import becomes the accepted working state and regenerates this caps
         (inspectorKind === selectedKind ? inspectorKey : null));
     const identity = key && {key, value:control.getAttribute(key), direction:control.getAttribute('data-dir'),
       kind:inspectorKind, selected:inspectorKind ? selectedId : null};
+    const focusBounds = element => {
+      const rect = element.getBoundingClientRect(), style = getComputedStyle(element);
+      const reserve = ['none','hidden'].includes(style.outlineStyle) ? 0 :
+        Math.max(0, (parseFloat(style.outlineWidth) || 0) + (parseFloat(style.outlineOffset) || 0));
+      return {top:rect.top-reserve, bottom:rect.bottom+reserve, left:rect.left-reserve, right:rect.right+reserve};
+    };
+    const viewport = document.documentElement;
+    const before = ['data-move-surface','data-move-asset'].includes(key) ? focusBounds(control) : null;
+    const wasInView = before && before.bottom > 0 && before.top < viewport.clientHeight &&
+      before.right > 0 && before.left < viewport.clientWidth;
     renderAll();
     if(!identity || (identity.kind && (selectedKind !== identity.kind || selectedId !== identity.selected))) return;
     const matches = Array.from(document.querySelectorAll('[' + identity.key + ']')).filter(candidate =>
       candidate.getAttribute(identity.key) === identity.value &&
       candidate.getAttribute('data-dir') === identity.direction);
-    if(matches.length === 1 && !matches[0].disabled) matches[0].focus({preventScroll:true});
+    if(matches.length === 1 && !matches[0].disabled){
+      const target = matches[0];
+      target.focus({preventScroll:true});
+      if(wasInView && document.activeElement === target){
+        const after = focusBounds(target);
+        const delta = after.top < 0 ? after.top : after.bottom > viewport.clientHeight ? after.bottom-viewport.clientHeight : 0;
+        // Correct only this document's vertical viewport; keep the parent and horizontal position.
+        if(delta) window.scrollBy({top:delta, left:0, behavior:'instant'});
+      }
+    }
   }
 
   function inspectorRouteLabel(kind,value){

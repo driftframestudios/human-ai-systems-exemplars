@@ -18,7 +18,17 @@ function definition(name) {
   return source.slice(start, end + 4);
 }
 function fixture() {
-  const calls = [], controls = [], body = {};
+  const calls = [], controls = [], body = {}, scrolls = [];
+  const viewport = { clientWidth: 251, clientHeight: 604 };
+  const window = {
+    scrollX: 17, scrollY: 100,
+    scrollBy(options) {
+      assert.equal(options.left, 0, "A visibility correction never pans horizontally");
+      assert.equal(options.behavior, "instant", "Focus visibility settles without an animation");
+      scrolls.push(plain(options)); this.scrollY += options.top;
+    },
+  };
+  Object.defineProperty(window, "parent", { get() { assert.fail("The focus owner must not scroll or inspect its parent"); } });
   const view = {
     id: "view-main", active_intensity_basis_ids: ["workflow", "reach"],
     surface_order: ["surface-a", "surface-b", "surface-c"],
@@ -34,6 +44,7 @@ function fixture() {
   };
   const document = {
     activeElement: body,
+    documentElement: viewport,
     querySelectorAll(selector) {
       assert.match(selector, /^\[(?:id|data-(?:basis-toggle|move-surface|move-asset|cell-basis|cell-asset|asset-stage))\]$/u);
       const attribute = selector.slice(1, -1);
@@ -44,6 +55,10 @@ function fixture() {
   function control(attributes, disabled = false) {
     const node = {
       disabled, checked: true, listeners: {},
+      rect: { left: 66, top: 100, right: 172, bottom: 144, width: 106, height: 44 },
+      outline: { outlineStyle: "auto", outlineWidth: "1px", outlineOffset: "0px" },
+      getBoundingClientRect() { return this.rect; },
+      scrollIntoView() { assert.fail("Ancestor-panning scrollIntoView is outside this repair"); },
       hasAttribute: name => Object.hasOwn(attributes, name),
       getAttribute: name => attributes[name] ?? null,
       addEventListener(name, listener) { this.listeners[name] = listener; },
@@ -59,14 +74,14 @@ function fixture() {
   const basisHost = { innerHTML: "", querySelectorAll: () => [oldBasis] };
   let renders = 0;
   const context = vm.createContext({
-    document, state, selectedKind: "cell", selectedId: "cell-a", activeView: () => view,
+    document, window, getComputedStyle: node => node.outline, state, selectedKind: "cell", selectedId: "cell-a", activeView: () => view,
     intensityDefs: [{ id: "workflow", label: "Workflow" }, { id: "reach", label: "Reach" }],
     escapeHtml: value => value,
     renderAll() { renders++; document.activeElement = body; },
   });
   vm.runInContext(["renderAllPreservingControlFocus", "renderBasisToggles", "moveItem"].map(definition).join("\n"), context);
   return {
-    state, view, document, body, calls, controls, control, oldBasis,
+    state, view, document, body, calls, controls, control, oldBasis, window, viewport, scrolls,
     renders: () => renders,
     run: expression => vm.runInContext(expression, context),
     set: (name, value) => { context[name] = value; },
@@ -155,18 +170,59 @@ test("inactive controls and unrelated editors never authorize a focus transfer",
   assert.equal(f.calls.length, 0);
 });
 
-test("missing, disabled and ambiguous matches do not redirect focus to another control", () => {
-  for (const mode of ["missing", "disabled", "ambiguous", "wrong-direction"]) {
-    const f = fixture(), attributes = { "data-move-surface": "surface-a", "data-dir": "1" };
-    const old = f.control(attributes); f.document.activeElement = old; f.set("activated", old);
-    if (mode === "disabled") f.controls.push(f.control(attributes, true));
-    if (mode === "ambiguous") f.controls.push(f.control(attributes), f.control(attributes));
-    if (mode === "wrong-direction") f.controls.push(f.control({ ...attributes, "data-dir": "-1" }));
-    f.run("renderAllPreservingControlFocus(activated)");
-    assert.equal(f.calls.length, 0, mode);
-    assert.equal(f.document.activeElement, f.body, mode);
+for (const kind of ["surface", "asset"]) {
+  for (const mode of ["inactive", "missing", "disabled", "ambiguous", "wrong-direction", "focus-rejected"]) {
+    test(kind + " " + mode + " focus boundary never authorizes a visibility scroll", () => {
+      const f = fixture(), before = plain(f.state), attributes = { ["data-move-" + kind]: kind + "-a", "data-dir": "1" };
+      const old = f.control(attributes), next = f.control(attributes, mode === "disabled");
+      next.rect.top = 700; next.rect.bottom = 744;
+      f.document.activeElement = mode === "inactive" ? f.body : old; f.set("activated", old);
+      if (mode === "focus-rejected") next.focus = options => f.calls.push({ control: next, options: plain(options) });
+      if (["inactive", "disabled", "focus-rejected"].includes(mode)) f.controls.push(next);
+      if (mode === "ambiguous") f.controls.push(next, f.control(attributes));
+      if (mode === "wrong-direction") f.controls.push(f.control({ ...attributes, "data-dir": "-1" }));
+      f.run("renderAllPreservingControlFocus(activated)");
+      assert.equal(f.calls.length, mode === "focus-rejected" ? 1 : 0);
+      assert.equal(f.document.activeElement, f.body);
+      assert.deepEqual(f.scrolls, []);
+      assert.deepEqual([f.window.scrollX, f.window.scrollY], [17, 100]);
+      assert.deepEqual(plain(f.state), before);
+    });
   }
-});
+}
+
+const visibilityCases = [
+  { name: "remains visible", beforeTop: 100, afterTop: 140, outline: "1px", offset: "0px", delta: 0 },
+  { name: "upper outline exactly fits", beforeTop: 100, afterTop: 1, outline: "1px", offset: "0px", delta: 0 },
+  { name: "lower outline exactly fits", beforeTop: 100, afterTop: 559, outline: "1px", offset: "0px", delta: 0 },
+  { name: "moves above with outline offset", beforeTop: 100, afterTop: -12, outline: "3px", offset: "2px", delta: -17 },
+  { name: "moves below with outline offset", beforeTop: 100, afterTop: 620, outline: "3px", offset: "2px", delta: 65 },
+  { name: "only upper outline leaves view", beforeTop: 100, afterTop: 0, outline: "1px", offset: "0px", delta: -1 },
+  { name: "only lower outline leaves view", beforeTop: 100, afterTop: 560, outline: "1px", offset: "0px", delta: 1 },
+  { name: "previously above stays outside correction", beforeTop: -60, afterTop: 620, outline: "1px", offset: "0px", delta: 0 },
+  { name: "previously below stays outside correction", beforeTop: 620, afterTop: -12, outline: "1px", offset: "0px", delta: 0 },
+];
+for (const [kind, field] of [["surface", "surface_order"], ["asset", "shared_asset_order"]]) {
+  for (const scenario of visibilityCases) {
+    test(kind + " reorder " + scenario.name + " preserves exact focus and applies only necessary vertical correction", () => {
+      const f = fixture(), before = plain(f.state), id = kind + "-a";
+      const attributes = { ["data-move-" + kind]: id, "data-dir": "1" };
+      const old = f.control(attributes), next = f.control(attributes);
+      Object.assign(old.rect, { top: scenario.beforeTop, bottom: scenario.beforeTop + 44 });
+      Object.assign(next.rect, { top: scenario.afterTop, bottom: scenario.afterTop + 44 });
+      Object.assign(next.outline, { outlineWidth: scenario.outline, outlineOffset: scenario.offset });
+      f.controls.push(next); f.document.activeElement = old; f.set("activated", old);
+      f.run("moveItem('" + kind + "', '" + id + "', 1, activated)");
+      [before.view[field][0], before.view[field][1]] = [before.view[field][1], before.view[field][0]];
+      assert.deepEqual(plain(f.state), before, "Only the intended display order changes");
+      assert.equal(f.document.activeElement, next);
+      assert.deepEqual(f.calls.map(call => call.options), [{ preventScroll: true }]);
+      assert.deepEqual(f.scrolls, scenario.delta ? [{ top: scenario.delta, left: 0, behavior: "instant" }] : []);
+      assert.deepEqual([f.window.scrollX, f.window.scrollY], [17, 100 + scenario.delta]);
+      assert.equal(f.renders(), 1);
+    });
+  }
+}
 
 test("invalid or endpoint reorder remains a no-op without a render or focus action", () => {
   const f = fixture(), before = plain(f.state);

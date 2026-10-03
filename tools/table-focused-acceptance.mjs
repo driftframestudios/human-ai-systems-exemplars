@@ -248,14 +248,39 @@ async function reveal(locator) {
 function focusObservation(element) {
   const style = getComputedStyle(element), rect = element.getBoundingClientRect();
   const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + Math.min(12, rect.height / 2));
+  const viewport = { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight };
+  const left = Math.max(0, rect.left), right = Math.min(viewport.width, rect.right);
+  const top = Math.max(0, rect.top), bottom = Math.min(viewport.height, rect.bottom);
+  const visibleHit = right > left && bottom > top ? document.elementFromPoint((left + right) / 2, (top + bottom) / 2) : null;
+  const outlineReserve = ["none", "hidden"].includes(style.outlineStyle) ? 0 :
+    Math.max(0, (parseFloat(style.outlineWidth) || 0) + (parseFloat(style.outlineOffset) || 0));
   return {
     active: document.activeElement === element,
     focusVisible: element.matches(":focus-visible"),
     outline: style.outlineStyle + " " + style.outlineWidth + " " + style.outlineColor,
     shadow: style.boxShadow, width: rect.width, height: rect.height,
     unobscured: hit === element || element.contains(hit),
+    rect: { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom },
+    viewport, outlineReserve, visiblePointHitsControl: Boolean(visibleHit && (visibleHit === element || element.contains(visibleHit))),
     name: element.labels ? [...element.labels].map(label => label.textContent.trim()).join(" ") : element.textContent.trim(),
   };
+}
+
+export function assertReorderFocusVisible(focus) {
+  assert(focus.active === true && focus.focusVisible === true, "The exact reordered control retains keyboard focus");
+  const { rect, viewport, outlineReserve } = focus;
+  assert(rect && viewport && [rect.left, rect.right, rect.top, rect.bottom, viewport.width, viewport.height, outlineReserve].every(Number.isFinite),
+    "Visible-focus evidence includes actual finite control and viewport geometry");
+  assert(viewport.width > 0 && viewport.height > 0 && outlineReserve >= 0);
+  for (const [start, end, extent] of [[rect.left, rect.right, viewport.width], [rect.top, rect.bottom, viewport.height]]) {
+    assert(end > start && Math.min(end, extent) > Math.max(start, 0), "The focus target intersects the visible viewport");
+    // Oversized controls keep local-scroll semantics; fitting controls include their outline.
+    // One CSS pixel accommodates fractional layout and integer scroll-position rounding.
+    if (end - start + 2 * outlineReserve <= extent) {
+      assert(start - outlineReserve >= -1 && end + outlineReserve <= extent + 1, "The fitting focus outline remains in view");
+    }
+  }
+  assert.equal(focus.visiblePointHitsControl, true, "An interior point in the visible portion reaches the focused control");
 }
 
 function semanticTables(root) {
@@ -351,14 +376,17 @@ async function sharedJourney(frame, check, capture) {
     });
   };
   await inspectNative();
-  const act = async (label, selector, changes, key = "Enter", retainFocus = true) => {
+  const act = async (label, selector, changes, key = "Enter", retainFocus = true, requireVisibleFocus = false) => {
     const before = await state(), target = frame.locator(selector);
     await reveal(target); await target.focus(); await target.press(key);
+    const focus = retainFocus ? await frame.locator(selector).evaluate(focusObservation) : null;
     const after = await state();
     check(label + ": orthogonal state", () => assertSharedTransition(before, after, changes(activeView(before), before)));
     if (retainFocus) {
-      const focus = await frame.locator(selector).evaluate(focusObservation);
-      check(label + ": control focus after render", () => assert(focus.active && focus.focusVisible), focus);
+      check(label + ": control focus after render", () => {
+        if (requireVisibleFocus) assertReorderFocusVisible(focus);
+        else assert(focus.active && focus.focusVisible);
+      }, focus);
     }
     await inspectNative();
   };
@@ -378,7 +406,7 @@ async function sharedJourney(frame, check, capture) {
     const current = activeView(await state()), id = current[field][0];
     await act("Reorder " + kind, '[data-move-' + kind + '="' + id + '"][data-dir="1"]', v => {
       const order = [...v[field]]; [order[0], order[1]] = [order[1], order[0]]; return { [field]: order };
-    });
+    }, "Enter", true, true);
   };
   await move("surface", "surface_order");
   await move("asset", "shared_asset_order");
