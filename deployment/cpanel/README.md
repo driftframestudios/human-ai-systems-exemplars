@@ -23,6 +23,50 @@ confined to the carrier root, and exact agreement among the manifest, the
 Bash-readable index, and every carried file. This two-coordinate form avoids
 asking a commit to contain its own identifier.
 
+## Quick entry: prepare a shell-free cPanel carrier
+
+Start with the receiving job and one approved production coordinate. An AI
+collaborator can prepare the local transfer envelope; the authorized host
+operator owns staging, root placement, and recovery.
+
+| Receiving job | Source of payload bytes | Route |
+| --- | --- | --- |
+| Package an existing release | The selected annotated `production-v*` tag | Use a clean checkout of an explicitly selected, reviewed packaging-tool commit, then form and verify the envelope below. |
+| Publish newer source | A newly accepted source and carrier pair | Follow [the accepted release sequence](#accepted-release-sequence), establish `R^1 = S` and a carrier-only diff, then select a new annotated production tag and package it. |
+
+The operator selects `PRODUCTION_TAG`; example tags elsewhere in this directory
+identify historical releases. Preserve existing tags when source or payload
+changes. The packager reads committed carrier blobs from the selected tag and
+records the packaging-tool revision separately. Packaging an existing carrier
+uses its committed public bytes; private `.env.public` configuration belongs to
+the new-projection build route.
+
+With the repository's declared Node runtime and dependencies available:
+
+```sh
+: "${PRODUCTION_TAG:?Set the approved annotated production-v* tag}"
+git fetch --tags origin
+git rev-parse "${PRODUCTION_TAG}^{commit}"
+npm run build:prod-carrier-transfer -- --tag "$PRODUCTION_TAG"
+npm run verify:prod-carrier-transfer -- \
+  --tag "$PRODUCTION_TAG" \
+  --receipt ".cpanel-transfer/$PRODUCTION_TAG/hase-$PRODUCTION_TAG.receipt.json"
+```
+
+Keep the locally generated receipt as the trust anchor. The
+[shell-free artifact guide](SHELL-FREE-ARTIFACT-DELIVERY.md) owns the complete
+formation, fresh-output retry, upload/download comparison, root-relationship,
+and recovery instructions. It also explains verification of the downloaded ZIP
+against the local receipt and explicit tag before extraction. The host receives
+the verified artifact through authenticated File Manager; repository history
+and packaging tools remain in the trusted release environment.
+
+Return the selected tag, resolved carrier and source commits, reviewed tool
+commit, archive and receipt locations, and normalized verification result.
+Archive verification establishes payload identity. The operator's protected
+record and signed-out receiver checks establish activation and recovery.
+Issue #118 owns that host handoff; #251 owns its release-bound live assessment.
+
 ## Current entry condition
 
 The tracked production configuration selects the accepted 40-page Context
