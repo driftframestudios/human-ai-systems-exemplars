@@ -416,6 +416,11 @@
   @media (forced-colors: active) {
     .artifact-attribution__notice { color: CanvasText; }
   }
+    caption { padding: 12px; text-align: left; font-weight: 700; color: var(--ink); }
+    tbody th[scope="row"] { position: static; z-index: auto; font-size: inherit; font-weight: normal; text-transform: none; letter-spacing: normal; }
+    .table-wrap { max-width: 100%; min-width: 0; }
+    .table-wrap:focus-visible, .matrix-shell:focus-visible { outline: 3px solid var(--focus, #715a3e); outline-offset: 2px; }
+    #routingTable code.mono { display: block; }
 </style>
 <style data-canary-stack-css>
 .visitor-boundary{border-block-start:1px solid currentColor;box-sizing:border-box;display:grid;flex:1 0 100%;gap:.75rem;grid-column:1/-1;inline-size:100%;margin:clamp(1.5rem,4vw,3rem) auto 0;max-inline-size:82rem;overflow-wrap:anywhere;padding:1rem clamp(1rem,3vw,1.75rem) 0;user-select:text}.visitor-boundary__marker{box-sizing:border-box;color:inherit;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-size:.7rem;font-variant-ligatures:none;line-height:1.55;margin:0;max-inline-size:100%;white-space:normal}.visitor-boundary__context{box-sizing:border-box;font-family:inherit;font-size:.8rem;line-height:1.55;margin:0;max-inline-size:70ch}@media print{.visitor-boundary{border-color:#000;color:#000}}@media (forced-colors:active){.visitor-boundary{border-color:CanvasText;color:CanvasText}}
@@ -468,16 +473,16 @@
               <div class="diagram-wrap" aria-label="Recovery routing diagram">
                 <svg id="atlasSvg" role="img" aria-label="Recovery routing atlas visual map"></svg>
               </div>
-              <div class="table-wrap" aria-label="Text and table equivalent">
-                <table id="routingTable">
+              <div class="table-wrap" aria-label="Text and table equivalent" role="region" tabindex="0">
+                <table id="routingTable"><caption>Recovery Routing Atlas: recovery routes in the active view</caption>
                   <thead>
                     <tr>
-                      <th>Geometry</th>
-                      <th>Strain cues</th>
-                      <th>Stabilizing read</th>
-                      <th>Primary routes</th>
-                      <th>Restored state</th>
-                      <th>Status</th>
+                      <th scope="col" data-label="Geometry">Geometry</th>
+                      <th scope="col" data-label="Strain cues">Strain cues</th>
+                      <th scope="col" data-label="Stabilizing read">Stabilizing read</th>
+                      <th scope="col" data-label="Primary routes">Primary routes</th>
+                      <th scope="col" data-label="Restored state">Restored state</th>
+                      <th scope="col" data-label="Status">Status</th>
                     </tr>
                   </thead>
                   <tbody></tbody>
@@ -1658,8 +1663,8 @@ These public collaboration loops fit only when the receiving work meets the stat
 
     function renderTable() {
       els.routingTableBody.innerHTML = visibleGeometries().map(g => `
-        <tr data-id="${escapeHtml(g.id)}">
-          <td><button type="button" class="small" data-id="${escapeHtml(g.id)}">Select</button><br><strong>${escapeHtml(g.name)}</strong><div class="mono">${escapeHtml(g.id)}</div></td>
+        <tr data-id="${escapeHtml(g.id)}" data-record-id="${escapeHtml(g.id)}" data-label="Recovery Routing Atlas geometry: ${escapeHtml(g.name)}">
+          <th scope="row" data-label="Geometry"><button type="button" class="small" data-id="${escapeHtml(g.id)}">Select</button><br><strong>${escapeHtml(g.name)}</strong><code class="mono">${escapeHtml(g.id)}</code></th>
           <td>${withReveal(g.strain_cues.join('\n'))}</td>
           <td>${withReveal(g.stabilizing_read)}</td>
           <td>${g.primary_routes.map(r => `<span class="route-pill">${escapeHtml(r)}</span>`).join('')}</td>

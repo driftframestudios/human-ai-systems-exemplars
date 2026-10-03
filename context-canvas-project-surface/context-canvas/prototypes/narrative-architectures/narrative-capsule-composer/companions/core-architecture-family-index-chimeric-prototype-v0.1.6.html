@@ -236,7 +236,7 @@
 
     <section class="panel">
       <div class="panel-header"><div><h2>Entry routes by situation</h2><p class="small">Select a route to inspect its recommended starting card.</p></div></div>
-      <div class="table-wrap"><table id="entryRoutesTable"><caption>Situations, recommended starting architectures, and route reasons.</caption></table></div>
+      <div class="table-wrap"><table data-label="Entry routes by situation" id="entryRoutesTable"><caption>Situations, recommended starting architectures, and route reasons.</caption></table></div>
     </section>
 
     <section class="grid-2">
@@ -248,13 +248,13 @@
       <section class="panel">
         <h2>Recovery route shortlist</h2>
         <p class="small">Failure Geometry → stabilizing read → starting architecture.</p>
-        <div class="table-wrap"><table id="recoveryTable"><caption>Failure geometries, stabilizing reads, and starting architecture routes.</caption></table></div>
+        <div class="table-wrap"><table data-label="Recovery route shortlist" id="recoveryTable"><caption>Failure geometries, stabilizing reads, and starting architecture routes.</caption></table></div>
       </section>
     </section>
 
     <section class="panel">
       <div class="panel-header"><div><h2>Text / table equivalent</h2><p class="small">Full registry table for manual review and copy.</p></div></div>
-      <div class="table-wrap"><table id="registryTable"><caption>Core Architecture cards by family, placement, primary move, artifact shape, and prototype state.</caption></table></div>
+      <div class="table-wrap"><table data-label="Core Architecture registry" id="registryTable"><caption>Core Architecture cards by family, placement, primary move, artifact shape, and prototype state.</caption></table></div>
     </section>
 
     <section class="panel">
@@ -1665,8 +1665,8 @@ function renderInspector() {
 }
 
 function renderEntryRoutes() {
-  const rows = state.entry_routes.map(r => { const c = cardById(r.start); return `<tr><td>${esc(r.situation)}</td><td><button class="tiny" data-action="select-card" data-id="${esc(r.start)}">${esc(c?.name || r.start)}</button><br><span class="small">${esc(c?.subtitle || '')}</span></td><td>${esc(r.reason)}</td></tr>`; }).join('');
-  document.getElementById('entryRoutesTable').innerHTML = `<caption>Situations, recommended starting architectures, and route reasons.</caption><thead><tr><th scope="col">Situation</th><th scope="col">Start with</th><th scope="col">Why</th></tr></thead><tbody>${rows}</tbody>`;
+  const rows = state.entry_routes.map(r => { const c = cardById(r.start); return `<tr data-label="Entry routes by situation: ${esc(r.situation)}"><td data-label="Situation">${esc(r.situation)}</td><td data-label="Start with"><button class="tiny" data-action="select-card" data-id="${esc(r.start)}">${esc(c?.name || r.start)}</button><br><span class="small">${esc(c?.subtitle || '')}</span></td><td data-label="Why">${esc(r.reason)}</td></tr>`; }).join('');
+  document.getElementById('entryRoutesTable').innerHTML = `<caption>Situations, recommended starting architectures, and route reasons.</caption><thead><tr><th data-label="Situation" scope="col">Situation</th><th data-label="Start with" scope="col">Start with</th><th data-label="Why" scope="col">Why</th></tr></thead><tbody>${rows}</tbody>`;
 }
 
 function renderShapeIndex() {
@@ -1677,13 +1677,13 @@ function renderShapeIndex() {
 }
 
 function renderRecoveryTable() {
-  const rows = state.recovery_routes.map(r => `<tr><td>${esc(r.geometry)}</td><td>${esc(r.read)}</td><td>${r.start.map(id=>`<button class="tiny" data-action="select-card" data-id="${esc(id)}">${esc(routeLabel(id))}</button>`).join(' ')}</td></tr>`).join('');
-  document.getElementById('recoveryTable').innerHTML = `<caption>Failure geometries, stabilizing reads, and starting architecture routes.</caption><thead><tr><th scope="col">Failure Geometry</th><th scope="col">Stabilizing read</th><th scope="col">Start with</th></tr></thead><tbody>${rows}</tbody>`;
+  const rows = state.recovery_routes.map(r => `<tr data-label="Recovery route shortlist: ${esc(r.geometry)}"><td data-label="Failure Geometry">${esc(r.geometry)}</td><td data-label="Stabilizing read">${esc(r.read)}</td><td data-label="Start with">${r.start.map(id=>`<button class="tiny" data-action="select-card" data-id="${esc(id)}">${esc(routeLabel(id))}</button>`).join(' ')}</td></tr>`).join('');
+  document.getElementById('recoveryTable').innerHTML = `<caption>Failure geometries, stabilizing reads, and starting architecture routes.</caption><thead><tr><th data-label="Failure Geometry" scope="col">Failure Geometry</th><th data-label="Stabilizing read" scope="col">Stabilizing read</th><th data-label="Start with" scope="col">Start with</th></tr></thead><tbody>${rows}</tbody>`;
 }
 
 function renderRegistryTable() {
-  const rows = orderedCards().map(c => `<tr><td><button class="tiny" data-action="select-card" data-id="${esc(c.id)}">Inspect</button> ${esc(c.name)}<br><span class="small">${esc(c.subtitle)}</span></td><td>${esc(familyById(c.family)?.name || c.family)}</td><td>${esc(c.placement)}</td><td>${esc(c.move)}</td><td>${esc(c.shape)}</td><td>${esc(c.prototype)}<br><span class="small">${esc(c.file || '')}</span></td></tr>`).join('');
-  document.getElementById('registryTable').innerHTML = `<caption>Core Architecture cards by family, placement, primary move, artifact shape, and prototype state.</caption><thead><tr><th scope="col">Card</th><th scope="col">Family</th><th scope="col">Placement</th><th scope="col">Primary move</th><th scope="col">Shape</th><th scope="col">Prototype</th></tr></thead><tbody>${rows}</tbody>`;
+  const rows = orderedCards().map(c => `<tr data-label="Core Architecture registry: ${esc(c.name)} (${esc(c.id)})"><td data-label="Card"><button class="tiny" data-action="select-card" data-id="${esc(c.id)}">Inspect</button> ${esc(c.name)}<br><span class="small">${esc(c.subtitle)}</span></td><td data-label="Family">${esc(familyById(c.family)?.name || c.family)}</td><td data-label="Placement">${esc(c.placement)}</td><td data-label="Primary move">${esc(c.move)}</td><td data-label="Shape">${esc(c.shape)}</td><td data-label="Prototype">${esc(c.prototype)}<br><span class="small">${esc(c.file || '')}</span></td></tr>`).join('');
+  document.getElementById('registryTable').innerHTML = `<caption>Core Architecture cards by family, placement, primary move, artifact shape, and prototype state.</caption><thead><tr><th data-label="Card" scope="col">Card</th><th data-label="Family" scope="col">Family</th><th data-label="Placement" scope="col">Placement</th><th data-label="Primary move" scope="col">Primary move</th><th data-label="Shape" scope="col">Shape</th><th data-label="Prototype" scope="col">Prototype</th></tr></thead><tbody>${rows}</tbody>`;
 }
 
 function plainText(value, fallback='') {

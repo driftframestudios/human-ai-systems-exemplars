@@ -821,18 +821,18 @@ These public collaboration loops fit only when the receiving work meets the stat
     }
 
     function renderTable() {
-      const rows = visibleRevisions().map(rev => `<tr>
-        <td><button data-action="select" data-id="${escapeHtml(rev.id)}">Inspect</button><br><span class="tiny">${escapeHtml(rev.id)}</span></td>
-        <td>${escapeHtml(rev.evidence_source)}</td>
-        <td>${previewBlock(rev.evidence_observation)}</td>
-        <td><strong>${escapeHtml(rev.prior_artifact)}</strong><br>${escapeHtml(rev.revision_target)}</td>
-        <td>${previewBlock(rev.previous_read)}</td>
-        <td>${previewBlock(rev.revised_read)}</td>
-        <td>${previewBlock(rev.revision_reason)}</td>
-        <td><span class="${statusClass(rev.status)}">${escapeHtml(STATUS_LABEL[rev.status] || rev.status)}</span></td>
-        <td><span class="route-pill">${escapeHtml(rev.route || 'No route')}</span><br><span class="tiny">${escapeHtml(routeFamily(rev.route))}</span></td>
+      const rows = visibleRevisions().map(rev => `<tr data-label="Upstream Revision Loop: ${escapeHtml(rev.prior_artifact)} / ${escapeHtml(rev.revision_target)} (${escapeHtml(rev.id)})">
+        <td data-label="Inspect"><button data-action="select" data-id="${escapeHtml(rev.id)}">Inspect</button><br><span class="tiny">${escapeHtml(rev.id)}</span></td>
+        <td data-label="Evidence source">${escapeHtml(rev.evidence_source)}</td>
+        <td data-label="Observation">${previewBlock(rev.evidence_observation)}</td>
+        <td data-label="Prior artifact / target"><strong>${escapeHtml(rev.prior_artifact)}</strong><br>${escapeHtml(rev.revision_target)}</td>
+        <td data-label="Previous read">${previewBlock(rev.previous_read)}</td>
+        <td data-label="Revised read">${previewBlock(rev.revised_read)}</td>
+        <td data-label="Reason">${previewBlock(rev.revision_reason)}</td>
+        <td data-label="Status"><span class="${statusClass(rev.status)}">${escapeHtml(STATUS_LABEL[rev.status] || rev.status)}</span></td>
+        <td data-label="Route"><span class="route-pill">${escapeHtml(rev.route || 'No route')}</span><br><span class="tiny">${escapeHtml(routeFamily(rev.route))}</span></td>
       </tr>`).join('');
-      document.getElementById('tableWrap').innerHTML = `<table><thead><tr><th>Inspect</th><th>Evidence source</th><th>Observation</th><th>Prior artifact / target</th><th>Previous read</th><th>Revised read</th><th>Reason</th><th>Status</th><th>Route</th></tr></thead><tbody>${rows || '<tr><td colspan="9">No visible revisions. Use Show all to restore focus view.</td></tr>'}</tbody></table>`;
+      document.getElementById('tableWrap').innerHTML = `<table data-label="Upstream Revision Loop"><thead><tr><th data-label="Inspect" scope="col">Inspect</th><th data-label="Evidence source" scope="col">Evidence source</th><th data-label="Observation" scope="col">Observation</th><th data-label="Prior artifact / target" scope="col">Prior artifact / target</th><th data-label="Previous read" scope="col">Previous read</th><th data-label="Revised read" scope="col">Revised read</th><th data-label="Reason" scope="col">Reason</th><th data-label="Status" scope="col">Status</th><th data-label="Route" scope="col">Route</th></tr></thead><tbody>${rows || '<tr data-label="Upstream Revision Loop: empty focus view"><td data-label="No visible revisions" colspan="9">No visible revisions. Use Show all to restore focus view.</td></tr>'}</tbody></table>`;
     }
 
     function renderInspector() {
@@ -864,9 +864,9 @@ These public collaboration loops fit only when the receiving work meets the stat
       const rows = orderedRevisions().map((rev, i) => {
         const hidden = activeView().hidden_revision_ids.includes(rev.id);
         const vIndex = visibleRevisions().findIndex(r => r.id === rev.id);
-        return `<tr><td><code>${escapeHtml(rev.id)}</code></td><td>${rev.canonical_order}</td><td>${i+1}</td><td>${hidden ? 'hidden' : 'visible ' + (vIndex+1)}</td></tr>`;
+        return `<tr data-label="Upstream Revision Loop identity registry: ${escapeHtml(rev.id)}"><td data-label="Revision ID"><code>${escapeHtml(rev.id)}</code></td><td data-label="Canonical">${rev.canonical_order}</td><td data-label="Display">${i+1}</td><td data-label="Visibility">${hidden ? 'hidden' : 'visible ' + (vIndex+1)}</td></tr>`;
       }).join('');
-      document.getElementById('identityRegistry').innerHTML = `<div class="table-scroll"><table style="min-width:360px"><thead><tr><th>Revision ID</th><th>Canonical</th><th>Display</th><th>Visibility</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+      document.getElementById('identityRegistry').innerHTML = `<div class="table-scroll"><table data-label="Upstream Revision Loop identity registry" style="min-width:360px"><thead><tr><th data-label="Revision ID" scope="col">Revision ID</th><th data-label="Canonical" scope="col">Canonical</th><th data-label="Display" scope="col">Display</th><th data-label="Visibility" scope="col">Visibility</th></tr></thead><tbody>${rows}</tbody></table></div>`;
     }
 
     function exportData() {

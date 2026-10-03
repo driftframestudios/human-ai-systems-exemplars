@@ -659,15 +659,15 @@ These public collaboration loops fit only when the receiving work meets the stat
   function renderTable(){
     const rows = visibleScenarios().map(s => {
       const rule = findRule(s.rule_id); const rf = routeFamily(s.handoff);
-      return `<tr data-action="select-scenario" data-id="${esc(s.id)}" tabindex="0">
-        <td><span class="rule-pill">${esc(rule?rule.label:'No rule')}</span><div class="tiny mono">${esc(s.id)}</div></td>
-        <td><strong>${esc(s.title)}</strong><div class="tiny">${esc(s.actor)}</div></td>
-        <td>${detailHTML(s.given)}</td><td>${detailHTML(s.when)}</td><td>${detailHTML(s.then)}</td>
-        <td class="status-cell"><span class="status-pill ${esc(s.status)}"><span class="status-dot"></span>${esc(statusFor(s.status).label)}</span></td>
-        <td>${s.handoff ? `<span class="route-pill">${esc(s.handoff)}</span><div class="tiny">${esc(rf)}</div>` : '<span class="tiny">No route</span>'}</td>
+      return `<tr data-label="Specification-by-Example: ${esc(s.title)} (${esc(s.id)})" data-action="select-scenario" data-id="${esc(s.id)}" tabindex="0">
+        <td data-label="Rule"><span class="rule-pill">${esc(rule?rule.label:'No rule')}</span><div class="tiny mono">${esc(s.id)}</div></td>
+        <td data-label="Scenario"><strong>${esc(s.title)}</strong><div class="tiny">${esc(s.actor)}</div></td>
+        <td data-label="Given">${detailHTML(s.given)}</td><td data-label="When">${detailHTML(s.when)}</td><td data-label="Then">${detailHTML(s.then)}</td>
+        <td data-label="Status" class="status-cell"><span class="status-pill ${esc(s.status)}"><span class="status-dot"></span>${esc(statusFor(s.status).label)}</span></td>
+        <td data-label="Handoff route">${s.handoff ? `<span class="route-pill">${esc(s.handoff)}</span><div class="tiny">${esc(rf)}</div>` : '<span class="tiny">No route</span>'}</td>
       </tr>`;
     }).join('');
-    el('tableEquivalent').innerHTML = `<table><thead><tr><th>Rule</th><th>Scenario</th><th>Given</th><th>When</th><th>Then</th><th>Status</th><th>Handoff route</th></tr></thead><tbody>${rows || `<tr><td colspan="7">No visible scenarios.</td></tr>`}</tbody></table>`;
+    el('tableEquivalent').innerHTML = `<table data-label="Specification-by-Example scenarios"><thead><tr><th data-label="Rule" scope="col">Rule</th><th data-label="Scenario" scope="col">Scenario</th><th data-label="Given" scope="col">Given</th><th data-label="When" scope="col">When</th><th data-label="Then" scope="col">Then</th><th data-label="Status" scope="col">Status</th><th data-label="Handoff route" scope="col">Handoff route</th></tr></thead><tbody>${rows || `<tr data-label="Specification-by-Example scenarios: empty focus view"><td data-label="No visible scenarios" colspan="7">No visible scenarios.</td></tr>`}</tbody></table>`;
   }
 
   function wrapText(str, maxChars, maxLines){
@@ -1126,9 +1126,9 @@ These public collaboration loops fit only when the receiving work meets the stat
 
   function renderIdentityRegistry(){
     const v=activeView();
-    const ruleRows = state.rules.map(r => `<tr><td>Rule</td><td class="mono">${esc(r.id)}</td><td>${esc(r.label)}</td><td>${esc(r.canonical_order)}</td><td>${esc(v.rule_order.indexOf(r.id)+1 || '')}</td><td>${v.hidden_rule_ids.includes(r.id)?'hidden':'visible'}</td></tr>`).join('');
-    const scenarioRows = state.scenarios.map(s => `<tr><td>Scenario</td><td class="mono">${esc(s.id)}</td><td>${esc(s.title)}</td><td>${esc(s.canonical_order)}</td><td>${esc(v.scenario_order.indexOf(s.id)+1 || '')}</td><td>${visibleScenarios().some(vs=>vs.id===s.id)?'visible':'hidden'}</td></tr>`).join('');
-    el('identityRegistry').innerHTML = `<table><thead><tr><th>Type</th><th>ID</th><th>Label</th><th>Canonical order</th><th>Display order</th><th>Visibility</th></tr></thead><tbody>${ruleRows}${scenarioRows}</tbody></table>`;
+    const ruleRows = state.rules.map(r => `<tr data-label="Specification-by-Example identity registry: Rule ${esc(r.label)} (${esc(r.id)})"><td data-label="Type">Rule</td><td data-label="ID" class="mono">${esc(r.id)}</td><td data-label="Label">${esc(r.label)}</td><td data-label="Canonical order">${esc(r.canonical_order)}</td><td data-label="Display order">${esc(v.rule_order.indexOf(r.id)+1 || '')}</td><td data-label="Visibility">${v.hidden_rule_ids.includes(r.id)?'hidden':'visible'}</td></tr>`).join('');
+    const scenarioRows = state.scenarios.map(s => `<tr data-label="Specification-by-Example identity registry: Scenario ${esc(s.title)} (${esc(s.id)})"><td data-label="Type">Scenario</td><td data-label="ID" class="mono">${esc(s.id)}</td><td data-label="Label">${esc(s.title)}</td><td data-label="Canonical order">${esc(s.canonical_order)}</td><td data-label="Display order">${esc(v.scenario_order.indexOf(s.id)+1 || '')}</td><td data-label="Visibility">${visibleScenarios().some(vs=>vs.id===s.id)?'visible':'hidden'}</td></tr>`).join('');
+    el('identityRegistry').innerHTML = `<table data-label="Specification-by-Example identity registry"><thead><tr><th data-label="Type" scope="col">Type</th><th data-label="ID" scope="col">ID</th><th data-label="Label" scope="col">Label</th><th data-label="Canonical order" scope="col">Canonical order</th><th data-label="Display order" scope="col">Display order</th><th data-label="Visibility" scope="col">Visibility</th></tr></thead><tbody>${ruleRows}${scenarioRows}</tbody></table>`;
   }
 
   function updateModelFromField(target){

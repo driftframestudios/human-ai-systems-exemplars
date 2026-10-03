@@ -469,15 +469,15 @@
           </svg>
         </div>
         <div class="sc-table-wrap">
-          <table class="sc-score-table">
-            <thead><tr><th scope="col">Dimension</th><th scope="col">Current</th><th scope="col">Good enough</th><th scope="col">Desired</th><th scope="col">Consequence</th></tr></thead>
+          <table data-label="Starting Strategy Canvas values" class="sc-score-table">
+            <thead><tr><th data-label="Dimension" scope="col">Dimension</th><th data-label="Current" scope="col">Current</th><th data-label="Good enough" scope="col">Good enough</th><th data-label="Desired" scope="col">Desired</th><th data-label="Consequence" scope="col">Consequence</th></tr></thead>
             <tbody>
-              <tr><th scope="row">Goal fidelity</th><td>4</td><td>7</td><td>9</td><td>5</td></tr>
-              <tr><th scope="row">Evidence provenance</th><td>3</td><td>7</td><td>10</td><td>5</td></tr>
-              <tr><th scope="row">Decision legibility</th><td>5</td><td>7</td><td>9</td><td>4</td></tr>
-              <tr><th scope="row">Participant reach</th><td>4</td><td>6</td><td>9</td><td>4</td></tr>
-              <tr><th scope="row">Recovery clarity</th><td>3</td><td>6</td><td>8</td><td>5</td></tr>
-              <tr><th scope="row">Cross-surface continuity</th><td>4</td><td>7</td><td>9</td><td>4</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Goal fidelity"><th data-label="Dimension" scope="row">Goal fidelity</th><td data-label="Current">4</td><td data-label="Good enough">7</td><td data-label="Desired">9</td><td data-label="Consequence">5</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Evidence provenance"><th data-label="Dimension" scope="row">Evidence provenance</th><td data-label="Current">3</td><td data-label="Good enough">7</td><td data-label="Desired">10</td><td data-label="Consequence">5</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Decision legibility"><th data-label="Dimension" scope="row">Decision legibility</th><td data-label="Current">5</td><td data-label="Good enough">7</td><td data-label="Desired">9</td><td data-label="Consequence">4</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Participant reach"><th data-label="Dimension" scope="row">Participant reach</th><td data-label="Current">4</td><td data-label="Good enough">6</td><td data-label="Desired">9</td><td data-label="Consequence">4</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Recovery clarity"><th data-label="Dimension" scope="row">Recovery clarity</th><td data-label="Current">3</td><td data-label="Good enough">6</td><td data-label="Desired">8</td><td data-label="Consequence">5</td></tr>
+              <tr data-label="Starting Strategy Canvas values: Cross-surface continuity"><th data-label="Dimension" scope="row">Cross-surface continuity</th><td data-label="Current">4</td><td data-label="Good enough">7</td><td data-label="Desired">9</td><td data-label="Consequence">4</td></tr>
             </tbody>
           </table>
         </div>
@@ -2328,17 +2328,17 @@ These public collaboration loops fit only when the receiving work meets the stat
     function renderScoreMatrix(state) {
       const container = find('score-matrix');
       if (!container) return;
-      const table = element('table', { className: 'sc-score-table' });
+      const table = element('table', { className: 'sc-score-table', 'aria-label': 'Strategy Canvas score matrix', 'data-label': 'Strategy Canvas score matrix' });
       const head = element('thead');
       const headerRow = element('tr');
       ['Dimension', 'Current', 'Good enough', 'Desired', 'Consequence weight'].forEach((label, index) => {
-        headerRow.append(element('th', { scope: 'col', text: label, id: index ? undefined : 'sc-dimension-column' }));
+        headerRow.append(element('th', { scope: 'col', 'data-label': label, text: label, id: index ? undefined : 'sc-dimension-column' }));
       });
       head.append(headerRow);
       const body = element('tbody');
       core.selectors.orderedDimensions(state).forEach((dimension) => {
-        const row = element('tr', { 'data-selected': state.view.selectedDimensionId === dimension.id });
-        const dimensionHead = element('th', { scope: 'row' });
+        const row = element('tr', { 'data-label': `Strategy Canvas score matrix: ${dimension.label} (${dimension.id})`, 'data-selected': state.view.selectedDimensionId === dimension.id });
+        const dimensionHead = element('th', { scope: 'row', 'data-label': 'Dimension' });
         dimensionHead.append(
           element('button', {
             type: 'button',
@@ -2352,8 +2352,8 @@ These public collaboration loops fit only when the receiving work meets the stat
           element('div', { className: 'sc-help', text: dimension.definition })
         );
         row.append(dimensionHead);
-        core.series.forEach((series) => row.append(element('td', {}, scoreControl(state, dimension, series))));
-        const weightCell = element('td');
+        core.series.forEach((series) => row.append(element('td', { 'data-label': SERIES_LABELS[series] }, scoreControl(state, dimension, series))));
+        const weightCell = element('td', { 'data-label': 'Consequence weight (0 to 5)' });
         const weightInput = element('input', {
           type: 'number', min: 0, max: 5, step: 1, value: dimension.consequenceWeight,
           'data-dimension-field': 'consequenceWeight',
@@ -2425,15 +2425,15 @@ These public collaboration loops fit only when the receiving work meets the stat
     function renderTextEquivalent(state) {
       const container = find('text-equivalent');
       if (!container) return;
-      const table = element('table', { className: 'sc-score-table' });
+      const table = element('table', { className: 'sc-score-table', 'aria-label': 'Strategy Canvas text equivalent', 'data-label': 'Strategy Canvas text equivalent' });
       const head = element('thead');
       const headerRow = element('tr');
-      ['Dimension and anchors', 'Current', 'Good enough', 'Desired', 'Action', 'Evidence basis'].forEach((label) => headerRow.append(element('th', { scope: 'col', text: label })));
+      ['Dimension and anchors', 'Current', 'Good enough', 'Desired', 'Action', 'Evidence basis'].forEach((label) => headerRow.append(element('th', { scope: 'col', 'data-label': label, text: label })));
       head.append(headerRow);
       const body = element('tbody');
       core.selectors.orderedDimensions(state).forEach((dimension) => {
-        const row = element('tr');
-        const dimensionCell = element('th', { scope: 'row' });
+        const row = element('tr', { 'data-label': `Strategy Canvas text equivalent: ${dimension.label} (${dimension.id})` });
+        const dimensionCell = element('th', { scope: 'row', 'data-label': 'Dimension and anchors' });
         dimensionCell.append(
           element('strong', { text: dimension.label }),
           element('p', { text: dimension.definition }),
@@ -2441,11 +2441,11 @@ These public collaboration loops fit only when the receiving work meets the stat
         );
         row.append(
           dimensionCell,
-          element('td', { text: dimension.scores.current }),
-          element('td', { text: dimension.scores.goodEnough }),
-          element('td', { text: dimension.scores.desired }),
-          element('td', { text: ACTION_LABELS[dimension.action] }),
-          element('td', { text: dimension.evidenceBasis || 'Open for the next review.' })
+          element('td', { 'data-label': 'Current', text: dimension.scores.current }),
+          element('td', { 'data-label': 'Good enough', text: dimension.scores.goodEnough }),
+          element('td', { 'data-label': 'Desired', text: dimension.scores.desired }),
+          element('td', { 'data-label': 'Action', text: ACTION_LABELS[dimension.action] }),
+          element('td', { 'data-label': 'Evidence basis', text: dimension.evidenceBasis || 'Open for the next review.' })
         );
         body.append(row);
       });

@@ -1424,16 +1424,16 @@ These public collaboration loops fit when the receiving work meets the stated co
   function renderMatrix(){
     const pops = visiblePopulations();
     const pats = visiblePatterns();
-    let html = '<table aria-label="Pattern problem surface matrix"><thead><tr><th class="pattern-cell">Pattern</th>';
-    pops.forEach(pop => html += `<th><div class="pattern-title">${esc(pop.label)}</div><div class="mini">${esc(pop.description)}</div></th>`);
+    let html = '<table data-label="Pattern problem surface matrix" aria-label="Pattern problem surface matrix"><thead><tr><th data-label="Pattern" scope="col" class="pattern-cell">Pattern</th>';
+    pops.forEach(pop => html += `<th data-label="${esc(pop.label)}" scope="col"><div class="pattern-title">${esc(pop.label)}</div><div class="mini">${esc(pop.description)}</div></th>`);
     html += '</tr></thead><tbody>';
     pats.forEach(pattern => {
-      html += `<tr><td class="pattern-cell"><div class="pattern-title">${esc(pattern.label)}</div><div class="mini">${esc(pattern.category)}</div><div class="cell-meta"><span class="pill">${esc(pattern.pattern_status.replaceAll('_',' '))}</span><span class="route-pill">Route: ${esc(pattern.handoff || '—')}</span></div></td>`;
+      html += `<tr data-label="Pattern problem surface matrix: ${esc(pattern.label)} (${esc(pattern.id)})"><td data-label="Pattern" class="pattern-cell"><div class="pattern-title">${esc(pattern.label)}</div><div class="mini">${esc(pattern.category)}</div><div class="cell-meta"><span class="pill">${esc(pattern.pattern_status.replaceAll('_',' '))}</span><span class="route-pill">Route: ${esc(pattern.handoff || '—')}</span></div></td>`;
       pops.forEach(pop => {
         const id = cellId(pattern.id, pop.id);
         const status = pattern.cell_statuses[pop.id] || 'needs_to_surface';
         const text = pattern.reads[pop.id] || '';
-        html += `<td data-cell-id="${esc(id)}"><button class="tiny ghost select-cell" data-cell="${esc(id)}">Inspect</button><div class="cell-preview" id="preview-${esc(id)}">${esc(text)}</div><button class="tiny ghost toggle-preview" data-target="preview-${esc(id)}">Show full text</button><div class="cell-meta"><span class="status-pill ${cellStatusClass(status)}">${esc(STATUS[status])}</span></div><label for="text-${esc(id)}">Reading</label><textarea class="cell-textarea" id="text-${esc(id)}" data-pattern="${esc(pattern.id)}" data-pop="${esc(pop.id)}">${esc(text)}</textarea><label>Status</label><select class="cell-status" data-pattern="${esc(pattern.id)}" data-pop="${esc(pop.id)}">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${k===status?'selected':''}>${esc(v)}</option>`).join('')}</select></td>`;
+        html += `<td data-label="${esc(pop.label)} (${esc(pop.id)})" data-cell-id="${esc(id)}"><button class="tiny ghost select-cell" data-cell="${esc(id)}">Inspect</button><div class="cell-preview" id="preview-${esc(id)}">${esc(text)}</div><button class="tiny ghost toggle-preview" data-target="preview-${esc(id)}">Show full text</button><div class="cell-meta"><span class="status-pill ${cellStatusClass(status)}">${esc(STATUS[status])}</span></div><label for="text-${esc(id)}">Reading</label><textarea class="cell-textarea" id="text-${esc(id)}" data-pattern="${esc(pattern.id)}" data-pop="${esc(pop.id)}">${esc(text)}</textarea><label>Status</label><select class="cell-status" data-pattern="${esc(pattern.id)}" data-pop="${esc(pop.id)}">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${k===status?'selected':''}>${esc(v)}</option>`).join('')}</select></td>`;
       });
       html += '</tr>';
     });

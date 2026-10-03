@@ -192,3 +192,100 @@ which properties it promises. Fragment splits, newly introduced whitespace,
 protected units and bounded output each receive a fitting fixture. A finite
 composition grammar can exercise these interactions without repeated repair
 passes or an unbounded convergence loop in production.
+
+## Native identity before positional convenience
+
+**When:** a row starts with a date, rank, checkbox, or other field while its
+identifying native header appears in a later column.
+
+**Rule:** derive row identity from `th scope="row"` wherever it occurs. Preserve
+multiple scoped headers in source order when they jointly identify a record.
+Use positional fallback only where the source supplies no native row header;
+retain an explicitly blank header as blank and retain zero as a value. Complex
+spans and grouped headers keep an explicit semantic owner and mapping.
+
+**Exercise:** compare two ledger rows sharing a date but carrying different
+Decision headers. Each supplemental row label should identify its own decision,
+while each date value remains associated with its Date column. An extracted
+record repeats table topic, row identity, field name and original value.
+
+## Rendered boundaries and literal continuity
+
+**Rule:** treat an explicit `br` as a word boundary in derived label text. Keep
+ordinary inline spans transparent to word continuity. A label derived from
+`Name<br>identifier` reads `Name identifier`; `anti<em>body</em>` reads `antibody`.
+Apply the same rule to captions, column headers and row identities. Preserve
+authored markup and values through the source owner's patch or generator.
+
+**Boundaries:** whitespace normalization describes a declared extraction
+channel. Native relationships, browser layout, assistive-technology reading and
+model ingestion retain their own observations. A metadata-only repair earns
+source-preservation, semantic agreement, escaping and idempotence checks;
+changed visible geometry earns the fitting affected-family browser observation.
+
+## Screen comparison and print flow
+
+Useful screen table floors belong to screen-media or an equally explicit
+layout owner. Printing receives its own wrapping and overflow policy so all
+columns remain available. Review screen and print as different receiving
+surfaces; a screen scroll pass establishes the screen contract. Keep intentional
+horizontal comparison and keyboard access on screen while allowing printable
+content to flow within the page.
+
+## Mutable labels and independent acceptance
+
+A derived row label belongs to the same committed record as its visible name,
+category, and exported identity. Trace the prototype's actual commit event
+(`input`, `change`, or `blur`) and update every dependent table view at that
+boundary. Update attributes and display text in place when the active editor
+owns focus, selection, or an open disclosure. A useful exercise renames a record,
+changes its category, restores the original value, and compares visible text,
+row context, exported state, and retained editor identity after each commit.
+
+Give complex tables their own semantic oracle. Enumerating labelled elements
+establishes presence; exact topic, row identity, heading, scope, and `headers`
+relationships establish meaning. Include parameterized counterexamples that
+change one association while preserving element counts. A spanning total row
+keeps its complete table topic and the actual columns occupied by its values.
+
+Source-only observers state their admitted grammar. An observer for explicitly
+closed, unnested tables returns a domain error for nested or incomplete input;
+a successful partial extraction would obscure the unobserved outer cells.
+Validate a list-of-strings boundary before parsing, accumulate fragmented text
+in chunks, and publish results after the complete admitted batch succeeds.
+Keep parser-library cost, initial file reads, output expansion, and observed
+browser behavior as separate claims.
+
+A media-policy source check reads active, structurally bounded rules and rejects
+counterexamples whose declarations are comments, belong to another medium, or
+are superseded later. It establishes the declared source policy. The fitting
+browser comparison establishes rendered widths, wrapping, focus, and printable
+content at the named viewport or print configuration.
+
+## Separate record labels from technical field values
+
+A supplemental label describes the record or field that a reader is receiving.
+Inspect labels derived from mixed prose and code before publishing them: a row
+header can contain both a scenario name and a path such as
+`resume.experience[0]`, while the scenario name supplies the useful record label.
+Keep the exact path in its visible code/value carrier and structured source.
+A nonblank native `th` `abbr` can declare the concise header alternative; the
+source projector honors it when deriving row identity. Empty alternatives retain
+the full authored identity. Multiple row headers keep their separate components.
+
+Retain technical references in supplemental context when a named consumer uses
+them to distinguish actual bindings or records. Record that receiving purpose;
+source syntax alone supplies neither a parser contract nor evidence of ATS value.
+Distinguish JavaScript interpolation syntax in source from the resulting DOM
+attribute. Human-readable labels, native relationships, exact field values and
+stable machine identities have related but separate jobs.
+
+Check regeneration/idempotence, literal value preservation and a meaningful
+human label. A global dotted-string deletion rule would also remove legitimate
+names, units and identifiers, so wording changes remain with their semantic owner.
+The native alternative-header role is described in the
+[MDN table-header reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/th#abbr).
+
+A concise alternative still distinguishes each record. If one scenario gains
+several field rows, include the human-readable field purpose in its alternative
+rather than repeating the same scenario-only label for every record.

@@ -25,7 +25,7 @@
         "expression": "context-canvas",
         "version": "0.2.3",
         "source_ref": "../../core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html",
-        "sha256": "c35c249d390c1e39ba4eee14c5da23dde46cdc494884f2b11df9e0925c5284fb"
+        "sha256": "62a5ff7ab3216ce38aece9abbc5a0b2e12d59804d9b7a7fc48daa2c14833bf2e"
       },
       "portable_companion": {
         "role": "portable_canonical_worksheet",
@@ -33,7 +33,7 @@
         "version": "0.2.5",
         "source_ref": "../../../../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.5.html",
         "archive_ref": "companions/strategy-canvas-chimeric-prototype-v0.2.5.html",
-        "sha256": "9e376ec39c2f0cf5dd1359b7332fade27257008a48db5ebfc63cf606af28fa56"
+        "sha256": "7695c331ff706108c7cd369c259d0b85feb2cf90ac1c94bf2472ebed0348154b"
       }
     },
     "planning_addendum": "narrative-capsules-composition-addendum-v0.1.md",

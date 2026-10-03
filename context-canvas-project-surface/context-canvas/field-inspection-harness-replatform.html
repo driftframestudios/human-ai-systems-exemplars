@@ -231,46 +231,46 @@
 
             <figure class="table-figure table-figure--wide table-span-all">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Five-station inspection pipeline">
-                <table class="table--comparison table--comfortable">
+                <table class="table--comparison table--comfortable" data-label="The five-station field pipeline and its durable handoff">
                   <caption>The five-station field pipeline and its durable handoff</caption>
                   <thead>
-                    <tr>
-                      <th scope="col">Station</th>
-                      <th scope="col">Local or platform responsibility</th>
-                      <th scope="col">Durable result</th>
-                      <th scope="col">Recovery behavior</th>
+                    <tr data-label="The five-station field pipeline and its durable handoff: column headings">
+                      <th scope="col" data-label="Station">Station</th>
+                      <th scope="col" data-label="Local or platform responsibility">Local or platform responsibility</th>
+                      <th scope="col" data-label="Durable result">Durable result</th>
+                      <th scope="col" data-label="Recovery behavior">Recovery behavior</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row">Capture</th>
-                      <td>Write answers, defects, measurements, and media metadata locally before inference or upload.</td>
-                      <td>Inspection record and capture batch with device, actor, time, and schema provenance.</td>
-                      <td>Process death or signal loss returns to the last durable local state.</td>
+                    <tr data-label="The five-station field pipeline and its durable handoff: Capture">
+                      <th scope="row" data-label="Station">Capture</th>
+                      <td data-label="Local or platform responsibility">Write answers, defects, measurements, and media metadata locally before inference or upload.</td>
+                      <td data-label="Durable result">Inspection record and capture batch with device, actor, time, and schema provenance.</td>
+                      <td data-label="Recovery behavior">Process death or signal loss returns to the last durable local state.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Queue</th>
-                      <td>Order mutations and media references into an envelope with idempotency and payload hashes.</td>
-                      <td>Replayable work with explicit dependencies and tombstones.</td>
-                      <td>Retry resumes from acknowledged operations rather than rebuilding the visit.</td>
+                    <tr data-label="The five-station field pipeline and its durable handoff: Queue">
+                      <th scope="row" data-label="Station">Queue</th>
+                      <td data-label="Local or platform responsibility">Order mutations and media references into an envelope with idempotency and payload hashes.</td>
+                      <td data-label="Durable result">Replayable work with explicit dependencies and tombstones.</td>
+                      <td data-label="Recovery behavior">Retry resumes from acknowledged operations rather than rebuilding the visit.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Sync</th>
-                      <td>Push transactionally; pull from a monotonic cursor and consistent server snapshot.</td>
-                      <td>Durable acknowledgement and a visible exception when shared state diverges.</td>
-                      <td>Each operation applies once; stale writes follow the named entity rule.</td>
+                    <tr data-label="The five-station field pipeline and its durable handoff: Sync">
+                      <th scope="row" data-label="Station">Sync</th>
+                      <td data-label="Local or platform responsibility">Push transactionally; pull from a monotonic cursor and consistent server snapshot.</td>
+                      <td data-label="Durable result">Durable acknowledgement and a visible exception when shared state diverges.</td>
+                      <td data-label="Recovery behavior">Each operation applies once; stale writes follow the named entity rule.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Ingest</th>
-                      <td>Validate tenancy, schema, content, checksums, and access before attachment.</td>
-                      <td>Accepted relational records and verified private S3 objects.</td>
-                      <td>Failed or quarantined media remains addressable while accepted records stay valid.</td>
+                    <tr data-label="The five-station field pipeline and its durable handoff: Ingest">
+                      <th scope="row" data-label="Station">Ingest</th>
+                      <td data-label="Local or platform responsibility">Validate tenancy, schema, content, checksums, and access before attachment.</td>
+                      <td data-label="Durable result">Accepted relational records and verified private S3 objects.</td>
+                      <td data-label="Recovery behavior">Failed or quarantined media remains addressable while accepted records stay valid.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Grade</th>
-                      <td>Roll section results into a condition grade with a human-confirmed reason and version.</td>
-                      <td>Condition-grade decision and complete audit trail.</td>
-                      <td>Review supersedes an earlier decision while retaining its lineage.</td>
+                    <tr data-label="The five-station field pipeline and its durable handoff: Grade">
+                      <th scope="row" data-label="Station">Grade</th>
+                      <td data-label="Local or platform responsibility">Roll section results into a condition grade with a human-confirmed reason and version.</td>
+                      <td data-label="Durable result">Condition-grade decision and complete audit trail.</td>
+                      <td data-label="Recovery behavior">Review supersedes an earlier decision while retaining its lineage.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -366,46 +366,46 @@
             <h3 class="txt-h3 beat-title">II.b Component responsibilities</h3>
             <figure class="table-figure table-figure--wide table-span-all">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Target component responsibility table">
-                <table class="table--reading table--comfortable">
+                <table class="table--reading table--comfortable" data-label="Target components, their system responsibility, and the boundary each preserves">
                   <caption>Target components, their system responsibility, and the boundary each preserves</caption>
                   <thead>
-                    <tr>
-                      <th scope="col">Component</th>
-                      <th scope="col">Primary responsibility</th>
-                      <th scope="col">Source-of-truth boundary</th>
-                      <th scope="col">Operational proof</th>
+                    <tr data-label="Target components, their system responsibility, and the boundary each preserves: column headings">
+                      <th scope="col" data-label="Component">Component</th>
+                      <th scope="col" data-label="Primary responsibility">Primary responsibility</th>
+                      <th scope="col" data-label="Source-of-truth boundary">Source-of-truth boundary</th>
+                      <th scope="col" data-label="Operational proof">Operational proof</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row">Dealer and staff web</th>
-                      <td>Request intake, identity, scheduling, dispatch, communication, and reporting.</td>
-                      <td>Tenant membership and role policy; device-local work changes through an explicit sync envelope.</td>
-                      <td>A request can be scheduled and handed to the field while Clappia remains available.</td>
+                    <tr data-label="Target components, their system responsibility, and the boundary each preserves: Dealer and staff web">
+                      <th scope="row" data-label="Component">Dealer and staff web</th>
+                      <td data-label="Primary responsibility">Request intake, identity, scheduling, dispatch, communication, and reporting.</td>
+                      <td data-label="Source-of-truth boundary">Tenant membership and role policy; device-local work changes through an explicit sync envelope.</td>
+                      <td data-label="Operational proof">A request can be scheduled and handed to the field while Clappia remains available.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Native inspector</th>
-                      <td>Guided capture, local durable state, photo batch, queue, sync status, and manual fallback.</td>
-                      <td>Source of observed truth during the visit; server acknowledgement is explicit.</td>
-                      <td>Airplane mode, process death, reboot, low storage, weak signal, and duplicate retry preserve progress.</td>
+                    <tr data-label="Target components, their system responsibility, and the boundary each preserves: Native inspector">
+                      <th scope="row" data-label="Component">Native inspector</th>
+                      <td data-label="Primary responsibility">Guided capture, local durable state, photo batch, queue, sync status, and manual fallback.</td>
+                      <td data-label="Source-of-truth boundary">Source of observed truth during the visit; server acknowledgement is explicit.</td>
+                      <td data-label="Operational proof">Airplane mode, process death, reboot, low storage, weak signal, and duplicate retry preserve progress.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Managed Postgres core</th>
-                      <td>Canonical shared entities, access policy, transaction boundary, cursor, audit, and reconciliation.</td>
-                      <td>Every tenant-owned row carries organization identity and role-aware policy.</td>
-                      <td>Push is idempotent; pull is consistent; stale writes reach an entity-specific rule.</td>
+                    <tr data-label="Target components, their system responsibility, and the boundary each preserves: Managed Postgres core">
+                      <th scope="row" data-label="Component">Managed Postgres core</th>
+                      <td data-label="Primary responsibility">Canonical shared entities, access policy, transaction boundary, cursor, audit, and reconciliation.</td>
+                      <td data-label="Source-of-truth boundary">Every tenant-owned row carries organization identity and role-aware policy.</td>
+                      <td data-label="Operational proof">Push is idempotent; pull is consistent; stale writes reach an entity-specific rule.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Canonical private AWS S3</th>
-                      <td>Immutable source media, multipart upload, checksums, derivative lineage, retention, and signed retrieval.</td>
-                      <td>UUID object keys exclude raw VIN and contact PII; database metadata governs attachment.</td>
-                      <td>Interrupted uploads resume; verification precedes attachment; quarantine remains visible.</td>
+                    <tr data-label="Target components, their system responsibility, and the boundary each preserves: Canonical private AWS S3">
+                      <th scope="row" data-label="Component">Canonical private AWS S3</th>
+                      <td data-label="Primary responsibility">Immutable source media, multipart upload, checksums, derivative lineage, retention, and signed retrieval.</td>
+                      <td data-label="Source-of-truth boundary">UUID object keys exclude raw VIN and contact PII; database metadata governs attachment.</td>
+                      <td data-label="Operational proof">Interrupted uploads resume; verification precedes attachment; quarantine remains visible.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Integration adapters</th>
-                      <td>Messaging, approved auction exchange, validated file import, export, and downstream reconciliation.</td>
-                      <td>Authorized access and versioned mapping precede live exchange; scraping remains outside the route.</td>
-                      <td>External failure remains replayable while the operational source record stays intact.</td>
+                    <tr data-label="Target components, their system responsibility, and the boundary each preserves: Integration adapters">
+                      <th scope="row" data-label="Component">Integration adapters</th>
+                      <td data-label="Primary responsibility">Messaging, approved auction exchange, validated file import, export, and downstream reconciliation.</td>
+                      <td data-label="Source-of-truth boundary">Authorized access and versioned mapping precede live exchange; scraping remains outside the route.</td>
+                      <td data-label="Operational proof">External failure remains replayable while the operational source record stays intact.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -420,40 +420,40 @@
             </p>
             <figure class="table-figure table-span-all">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Per-entity conflict examples">
-                <table class="table--comparison table--comfortable">
+                <table class="table--comparison table--comfortable" data-label="Per-entity resolution keeps the conflict as small as the decision">
                   <caption>Per-entity resolution keeps the conflict as small as the decision</caption>
                   <thead>
-                    <tr>
-                      <th scope="col">Entity</th>
-                      <th scope="col">Concurrent condition</th>
-                      <th scope="col">Resolution</th>
-                      <th scope="col">Continuing work</th>
+                    <tr data-label="Per-entity resolution keeps the conflict as small as the decision: column headings">
+                      <th scope="col" data-label="Entity">Entity</th>
+                      <th scope="col" data-label="Concurrent condition">Concurrent condition</th>
+                      <th scope="col" data-label="Resolution">Resolution</th>
+                      <th scope="col" data-label="Continuing work">Continuing work</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row">Appointment or assignment</th>
-                      <td>Dispatch changes owner while the field device is stale.</td>
-                      <td>Reject or hold the stale assignment mutation; present the current owner.</td>
-                      <td>Captured inspection data remains queued under its visit identity.</td>
+                    <tr data-label="Per-entity resolution keeps the conflict as small as the decision: Appointment or assignment">
+                      <th scope="row" data-label="Entity">Appointment or assignment</th>
+                      <td data-label="Concurrent condition">Dispatch changes owner while the field device is stale.</td>
+                      <td data-label="Resolution">Reject or hold the stale assignment mutation; present the current owner.</td>
+                      <td data-label="Continuing work">Captured inspection data remains queued under its visit identity.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Inspection answer</th>
-                      <td>Two actors change different answer fields.</td>
-                      <td>Merge only where field versions show independent edits; otherwise request review.</td>
-                      <td>Unrelated sections remain editable and syncable.</td>
+                    <tr data-label="Per-entity resolution keeps the conflict as small as the decision: Inspection answer">
+                      <th scope="row" data-label="Entity">Inspection answer</th>
+                      <td data-label="Concurrent condition">Two actors change different answer fields.</td>
+                      <td data-label="Resolution">Merge only where field versions show independent edits; otherwise request review.</td>
+                      <td data-label="Continuing work">Unrelated sections remain editable and syncable.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Condition grade</th>
-                      <td>A reviewer changes the grade after field completion.</td>
-                      <td>Create a superseding decision with actor, reason, and source section versions.</td>
-                      <td>The original grade remains in lineage rather than being overwritten.</td>
+                    <tr data-label="Per-entity resolution keeps the conflict as small as the decision: Condition grade">
+                      <th scope="row" data-label="Entity">Condition grade</th>
+                      <td data-label="Concurrent condition">A reviewer changes the grade after field completion.</td>
+                      <td data-label="Resolution">Create a superseding decision with actor, reason, and source section versions.</td>
+                      <td data-label="Continuing work">The original grade remains in lineage rather than being overwritten.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Media asset</th>
-                      <td>The same bytes retry under multiple upload sessions.</td>
-                      <td>Deduplicate the object by checksum; preserve each capture and attachment provenance.</td>
-                      <td>Other media and records continue through their own queues.</td>
+                    <tr data-label="Per-entity resolution keeps the conflict as small as the decision: Media asset">
+                      <th scope="row" data-label="Entity">Media asset</th>
+                      <td data-label="Concurrent condition">The same bytes retry under multiple upload sessions.</td>
+                      <td data-label="Resolution">Deduplicate the object by checksum; preserve each capture and attachment provenance.</td>
+                      <td data-label="Continuing work">Other media and records continue through their own queues.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -522,59 +522,59 @@
 
             <figure class="table-figure table-figure--wide table-span-all">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Prospective staged capital plan">
-                <table class="table--reading table--comfortable table--numeric">
+                <table class="table--reading table--comfortable table--numeric" data-label="Prospective staged-capital bands and the operating result each tranche buys">
                   <caption>Prospective staged-capital bands and the operating result each tranche buys</caption>
                   <thead>
-                    <tr>
-                      <th scope="col">Stage</th>
-                      <th scope="col">Operating result</th>
-                      <th scope="col">Planning duration</th>
-                      <th scope="col">Prospective planning band</th>
-                      <th scope="col">What becomes knowable</th>
+                    <tr data-label="Prospective staged-capital bands and the operating result each tranche buys: column headings">
+                      <th scope="col" data-label="Stage">Stage</th>
+                      <th scope="col" data-label="Operating result">Operating result</th>
+                      <th scope="col" data-label="Planning duration">Planning duration</th>
+                      <th scope="col" data-label="Prospective planning band">Prospective planning band</th>
+                      <th scope="col" data-label="What becomes knowable">What becomes knowable</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row">Stage 0 · Operating baseline and architecture</th>
-                      <td>Clappia audit and parity spec; target-device offline/media spike; dealer and staff workflow; identity, SMS, volume, and authorized integration boundaries.</td>
-                      <td>3–4 weeks</td>
-                      <td>USD 8k–15k</td>
-                      <td>Whether the target contracts survive the real devices, volumes, roles, media, and access path.</td>
+                    <tr data-label="Prospective staged-capital bands and the operating result each tranche buys: Stage 0: Operating baseline and architecture">
+                      <th scope="row" data-label="Stage">Stage 0 · Operating baseline and architecture</th>
+                      <td data-label="Operating result">Clappia audit and parity spec; target-device offline/media spike; dealer and staff workflow; identity, SMS, volume, and authorized integration boundaries.</td>
+                      <td data-label="Planning duration">3–4 weeks</td>
+                      <td data-label="Prospective planning band">USD 8k–15k</td>
+                      <td data-label="What becomes knowable">Whether the target contracts survive the real devices, volumes, roles, media, and access path.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Stage 1 · Dealer operations bridge</th>
-                      <td>Install-free request intake, verified identity, scheduling, deterministic communications, admin-lite dispatch, and Clappia continuity.</td>
-                      <td>6–10 weeks</td>
-                      <td>USD 20k–35k</td>
-                      <td>Whether demand, coordination, communication, and human dispatch work as one service.</td>
+                    <tr data-label="Prospective staged-capital bands and the operating result each tranche buys: Stage 1: Dealer operations bridge">
+                      <th scope="row" data-label="Stage">Stage 1 · Dealer operations bridge</th>
+                      <td data-label="Operating result">Install-free request intake, verified identity, scheduling, deterministic communications, admin-lite dispatch, and Clappia continuity.</td>
+                      <td data-label="Planning duration">6–10 weeks</td>
+                      <td data-label="Prospective planning band">USD 20k–35k</td>
+                      <td data-label="What becomes knowable">Whether demand, coordination, communication, and human dispatch work as one service.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Stage 2 · Native field application</th>
-                      <td>Offline local store, guided capture, media state machine, sync envelope, per-entity conflict handling, and condition grading.</td>
-                      <td>10–16 weeks</td>
-                      <td>USD 30k–50k</td>
-                      <td>Whether the native path reaches parity and resumes after interruption with field truth intact.</td>
+                    <tr data-label="Prospective staged-capital bands and the operating result each tranche buys: Stage 2: Native field application">
+                      <th scope="row" data-label="Stage">Stage 2 · Native field application</th>
+                      <td data-label="Operating result">Offline local store, guided capture, media state machine, sync envelope, per-entity conflict handling, and condition grading.</td>
+                      <td data-label="Planning duration">10–16 weeks</td>
+                      <td data-label="Prospective planning band">USD 30k–50k</td>
+                      <td data-label="What becomes knowable">Whether the native path reaches parity and resumes after interruption with field truth intact.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Stage 3 · Integration and hardening</th>
-                      <td>Migration and reconciliation, reporting, production controls, authorized adapters, support, restore, and controlled handoff.</td>
-                      <td>8–12 weeks</td>
-                      <td>USD 25k–45k</td>
-                      <td>Whether the operating organization can support, recover, and own the system after the build.</td>
+                    <tr data-label="Prospective staged-capital bands and the operating result each tranche buys: Stage 3: Integration and hardening">
+                      <th scope="row" data-label="Stage">Stage 3 · Integration and hardening</th>
+                      <td data-label="Operating result">Migration and reconciliation, reporting, production controls, authorized adapters, support, restore, and controlled handoff.</td>
+                      <td data-label="Planning duration">8–12 weeks</td>
+                      <td data-label="Prospective planning band">USD 25k–45k</td>
+                      <td data-label="What becomes knowable">Whether the operating organization can support, recover, and own the system after the build.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Separate reserve</th>
-                      <td>Approximately 15% program contingency held outside the approved phased subtotal.</td>
-                      <td>Applied to the full sequence</td>
-                      <td>Included in full envelope</td>
-                      <td>Which lived failure or external dependency actually consumes the reserve.</td>
+                    <tr data-label="Prospective staged-capital bands and the operating result each tranche buys: Separate reserve">
+                      <th scope="row" data-label="Stage">Separate reserve</th>
+                      <td data-label="Operating result">Approximately 15% program contingency held outside the approved phased subtotal.</td>
+                      <td data-label="Planning duration">Applied to the full sequence</td>
+                      <td data-label="Prospective planning band">Included in full envelope</td>
+                      <td data-label="What becomes knowable">Which lived failure or external dependency actually consumes the reserve.</td>
                     </tr>
                   </tbody>
                   <tfoot>
-                    <tr>
-                      <th scope="row" colspan="3">Full build envelope</th>
-                      <td>USD 95k–167k</td>
-                      <td>Shared implementation overlap is reflected; capital remains staged.</td>
+                    <tr data-label="Prospective staged-capital bands and the operating result each tranche buys: Full build envelope">
+                      <th scope="row" colspan="3" data-label="Full build envelope">Full build envelope</th>
+                      <td data-label="Prospective planning band">USD 95k–167k</td>
+                      <td data-label="What becomes knowable">Shared implementation overlap is reflected; capital remains staged.</td>
                     </tr>
                   </tfoot>
                 </table>
@@ -584,34 +584,34 @@
             <h3 class="txt-h3 beat-title">Full build and Year‑1 are different envelopes</h3>
             <figure class="table-figure table-span-all">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Full build and Year 1 planning envelope comparison">
-                <table class="table--comparison table--comfortable">
+                <table class="table--comparison table--comfortable" data-label="The production build and the first operating year answer different investment questions">
                   <caption>The production build and the first operating year answer different investment questions</caption>
                   <thead>
-                    <tr>
-                      <th scope="col">Envelope</th>
-                      <th scope="col">Planning band</th>
-                      <th scope="col">Carries</th>
-                      <th scope="col">Still requires a sourced assumption</th>
+                    <tr data-label="The production build and the first operating year answer different investment questions: column headings">
+                      <th scope="col" data-label="Envelope">Envelope</th>
+                      <th scope="col" data-label="Planning band">Planning band</th>
+                      <th scope="col" data-label="Carries">Carries</th>
+                      <th scope="col" data-label="Still requires a sourced assumption">Still requires a sourced assumption</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row">Full build</th>
-                      <td class="table-number">USD 95k–167k</td>
-                      <td>Stages 0–3 plus separately held program contingency.</td>
-                      <td>Authorized integration access, target-device results, migration shape, staffing capacity, and pilot breadth.</td>
+                    <tr data-label="The production build and the first operating year answer different investment questions: Full build">
+                      <th scope="row" data-label="Envelope">Full build</th>
+                      <td class="table-number" data-label="Planning band">USD 95k–167k</td>
+                      <td data-label="Carries">Stages 0–3 plus separately held program contingency.</td>
+                      <td data-label="Still requires a sourced assumption">Authorized integration access, target-device results, migration shape, staffing capacity, and pilot breadth.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Year 1</th>
-                      <td class="table-number">USD 125k–230k</td>
-                      <td>Build plus QA, support, migration, reconciliation, training, readiness, and low-volume platform services.</td>
-                      <td>Observed support demand, message/media volume, incident load, commercial integration fees, and internal backfill.</td>
+                    <tr data-label="The production build and the first operating year answer different investment questions: Year 1">
+                      <th scope="row" data-label="Envelope">Year 1</th>
+                      <td class="table-number" data-label="Planning band">USD 125k–230k</td>
+                      <td data-label="Carries">Build plus QA, support, migration, reconciliation, training, readiness, and low-volume platform services.</td>
+                      <td data-label="Still requires a sourced assumption">Observed support demand, message/media volume, incident load, commercial integration fees, and internal backfill.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Bounded opening</th>
-                      <td class="table-number">Near USD 20k</td>
-                      <td>Operating baselines and a controlled bridge slice with Clappia retained.</td>
-                      <td>The later native and production envelopes remain separate from this first tranche.</td>
+                    <tr data-label="The production build and the first operating year answer different investment questions: Bounded opening">
+                      <th scope="row" data-label="Envelope">Bounded opening</th>
+                      <td class="table-number" data-label="Planning band">Near USD 20k</td>
+                      <td data-label="Carries">Operating baselines and a controlled bridge slice with Clappia retained.</td>
+                      <td data-label="Still requires a sourced assumption">The later native and production envelopes remain separate from this first tranche.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -635,40 +635,40 @@
             </p>
             <figure class="table-figure table-figure--wide table-span-all">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Capital release conditions by decision">
-                <table class="table--reading table--comfortable">
+                <table class="table--reading table--comfortable" data-label="Executive release conditions preserve optionality when proof is incomplete">
                   <caption>Executive release conditions preserve optionality when proof is incomplete</caption>
                   <thead>
-                    <tr>
-                      <th scope="col">Decision</th>
-                      <th scope="col">Evidence required</th>
-                      <th scope="col">Changed ability purchased</th>
-                      <th scope="col">Responsible posture when evidence is open</th>
+                    <tr data-label="Executive release conditions preserve optionality when proof is incomplete: column headings">
+                      <th scope="col" data-label="Decision">Decision</th>
+                      <th scope="col" data-label="Evidence required">Evidence required</th>
+                      <th scope="col" data-label="Changed ability purchased">Changed ability purchased</th>
+                      <th scope="col" data-label="Responsible posture when evidence is open">Responsible posture when evidence is open</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row">Release the dealer bridge</th>
-                      <td>Verified identity flow, dealer and staff interviews, current operating baseline, workflow audit, and named pilot candidates.</td>
-                      <td>Install-free demand intake, scheduling, deterministic communication, and human dispatch on the shared core.</td>
-                      <td>Keep the bounded Stage 0 result and continue Clappia while the evidence packet is completed.</td>
+                    <tr data-label="Executive release conditions preserve optionality when proof is incomplete: Release the dealer bridge">
+                      <th scope="row" data-label="Decision">Release the dealer bridge</th>
+                      <td data-label="Evidence required">Verified identity flow, dealer and staff interviews, current operating baseline, workflow audit, and named pilot candidates.</td>
+                      <td data-label="Changed ability purchased">Install-free demand intake, scheduling, deterministic communication, and human dispatch on the shared core.</td>
+                      <td data-label="Responsible posture when evidence is open">Keep the bounded Stage 0 result and continue Clappia while the evidence packet is completed.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Release the native field tranche</th>
-                      <td>Low-end device spikes, structured-sync and media recovery tests, parity specification, migration rehearsal, and support owner.</td>
-                      <td>Reliable local capture, visible queue state, resumable media, per-entity conflict handling, and a controlled cohort.</td>
-                      <td>Operate the bridge and incumbent field path; narrow native scope to the tested failure corpus.</td>
+                    <tr data-label="Executive release conditions preserve optionality when proof is incomplete: Release the native field tranche">
+                      <th scope="row" data-label="Decision">Release the native field tranche</th>
+                      <td data-label="Evidence required">Low-end device spikes, structured-sync and media recovery tests, parity specification, migration rehearsal, and support owner.</td>
+                      <td data-label="Changed ability purchased">Reliable local capture, visible queue state, resumable media, per-entity conflict handling, and a controlled cohort.</td>
+                      <td data-label="Responsible posture when evidence is open">Operate the bridge and incumbent field path; narrow native scope to the tested failure corpus.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Release integration and handoff</th>
-                      <td>Authorized connector terms or an approved file-import fallback, reconciliation proof, tenant-isolation tests, restore drill, and runbooks.</td>
-                      <td>A supportable production service with recoverable downstream exchange and controlled ownership transfer.</td>
-                      <td>Retain the replay-safe fallback and defer the live connector while the operational source record remains intact.</td>
+                    <tr data-label="Executive release conditions preserve optionality when proof is incomplete: Release integration and handoff">
+                      <th scope="row" data-label="Decision">Release integration and handoff</th>
+                      <td data-label="Evidence required">Authorized connector terms or an approved file-import fallback, reconciliation proof, tenant-isolation tests, restore drill, and runbooks.</td>
+                      <td data-label="Changed ability purchased">A supportable production service with recoverable downstream exchange and controlled ownership transfer.</td>
+                      <td data-label="Responsible posture when evidence is open">Retain the replay-safe fallback and defer the live connector while the operational source record remains intact.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Release optional assistance</th>
-                      <td>Lawful source corpus, complete-label capture, manual fallback, shadow-mode cohort measures, rollback, and ratified thresholds.</td>
-                      <td>Human-confirmed VIN, odometer, or Canada-market evidence assistance that can be disabled independently.</td>
-                      <td>Continue complete manual capture and review; <code>UNKNOWN</code> remains a valid recorded outcome.</td>
+                    <tr data-label="Executive release conditions preserve optionality when proof is incomplete: Release optional assistance">
+                      <th scope="row" data-label="Decision">Release optional assistance</th>
+                      <td data-label="Evidence required">Lawful source corpus, complete-label capture, manual fallback, shadow-mode cohort measures, rollback, and ratified thresholds.</td>
+                      <td data-label="Changed ability purchased">Human-confirmed VIN, odometer, or Canada-market evidence assistance that can be disabled independently.</td>
+                      <td data-label="Responsible posture when evidence is open">Continue complete manual capture and review; <code>UNKNOWN</code> remains a valid recorded outcome.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -728,59 +728,59 @@
 
             <figure class="table-figure table-figure--wide table-span-all field-inspection-assurance-table">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Field inspection validation, authority, and recovery ledger">
-                <table class="table--reading table--comfortable">
+                <table class="table--reading table--comfortable" data-label="The same state carries a named authority, bounded proof, and recoverable next action">
                   <caption>The same state carries a named authority, bounded proof, and recoverable next action</caption>
                   <thead>
-                    <tr>
-                      <th scope="col">Control surface</th>
-                      <th scope="col">Decision authority</th>
-                      <th scope="col">Bounded validation evidence</th>
-                      <th scope="col">Recovery path</th>
-                      <th scope="col">Release condition</th>
+                    <tr data-label="The same state carries a named authority, bounded proof, and recoverable next action: column headings">
+                      <th scope="col" data-label="Control surface">Control surface</th>
+                      <th scope="col" data-label="Decision authority">Decision authority</th>
+                      <th scope="col" data-label="Bounded validation evidence">Bounded validation evidence</th>
+                      <th scope="col" data-label="Recovery path">Recovery path</th>
+                      <th scope="col" data-label="Release condition">Release condition</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row">Structured field capture</th>
-                      <td>Inspector owns the observation; the server acknowledges accepted shared state.</td>
-                      <td>Zero lost acknowledged captures across the named kill, reboot, offline, retry, migration, and upgrade corpus.</td>
-                      <td>Resume from durable local state; replay only unacknowledged operations.</td>
-                      <td>Target-device soak and recovery results are signed by field and quality owners.</td>
+                    <tr data-label="The same state carries a named authority, bounded proof, and recoverable next action: Structured field capture">
+                      <th scope="row" data-label="Control surface">Structured field capture</th>
+                      <td data-label="Decision authority">Inspector owns the observation; the server acknowledges accepted shared state.</td>
+                      <td data-label="Bounded validation evidence">Zero lost acknowledged captures across the named kill, reboot, offline, retry, migration, and upgrade corpus.</td>
+                      <td data-label="Recovery path">Resume from durable local state; replay only unacknowledged operations.</td>
+                      <td data-label="Release condition">Target-device soak and recovery results are signed by field and quality owners.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Source media and derivatives</th>
-                      <td>Inspector captures the original; platform policy governs verification and attachment; quality owns quarantine review.</td>
-                      <td>Hash, size, type, dimensions, capture role, provenance, checksum, and record/media counts reconcile.</td>
-                      <td>Multipart upload resumes or restarts safely; failed and quarantined remain explicit states.</td>
-                      <td>Verified originals, derivative lineage, restore, retention, and signed retrieval pass the bounded corpus.</td>
+                    <tr data-label="The same state carries a named authority, bounded proof, and recoverable next action: Source media and derivatives">
+                      <th scope="row" data-label="Control surface">Source media and derivatives</th>
+                      <td data-label="Decision authority">Inspector captures the original; platform policy governs verification and attachment; quality owns quarantine review.</td>
+                      <td data-label="Bounded validation evidence">Hash, size, type, dimensions, capture role, provenance, checksum, and record/media counts reconcile.</td>
+                      <td data-label="Recovery path">Multipart upload resumes or restarts safely; failed and quarantined remain explicit states.</td>
+                      <td data-label="Release condition">Verified originals, derivative lineage, restore, retention, and signed retrieval pass the bounded corpus.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Grade and material correction</th>
-                      <td>Qualified reviewer owns grade and superseding decisions.</td>
-                      <td>Every correction retains actor, reason, time, prior value, source evidence, and supersession.</td>
-                      <td>Retain the earlier decision in lineage; route the smallest conflict to review.</td>
-                      <td>The grade can be reconstructed from authoritative detailed evidence.</td>
+                    <tr data-label="The same state carries a named authority, bounded proof, and recoverable next action: Grade and material correction">
+                      <th scope="row" data-label="Control surface">Grade and material correction</th>
+                      <td data-label="Decision authority">Qualified reviewer owns grade and superseding decisions.</td>
+                      <td data-label="Bounded validation evidence">Every correction retains actor, reason, time, prior value, source evidence, and supersession.</td>
+                      <td data-label="Recovery path">Retain the earlier decision in lineage; route the smallest conflict to review.</td>
+                      <td data-label="Release condition">The grade can be reconstructed from authoritative detailed evidence.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Tenancy, backup, and operating recovery</th>
-                      <td>Security, quality, platform operations, and the named incident owner share release authority.</td>
-                      <td>Cross-organization denial tests, backup restore inside agreed <abbr title="Recovery Point Objective">RPO</abbr>/<abbr title="Recovery Time Objective">RTO</abbr>, canary, rollback, and incident rehearsal.</td>
-                      <td>Retain Clappia, open exports, manual procedures, provider-exit routes, and controlled cohort rollback.</td>
-                      <td>Support ownership, second-maintainer coverage, runbooks, and restore evidence exist before pilot expansion.</td>
+                    <tr data-label="The same state carries a named authority, bounded proof, and recoverable next action: Tenancy, backup, and operating recovery">
+                      <th scope="row" data-label="Control surface">Tenancy, backup, and operating recovery</th>
+                      <td data-label="Decision authority">Security, quality, platform operations, and the named incident owner share release authority.</td>
+                      <td data-label="Bounded validation evidence">Cross-organization denial tests, backup restore inside agreed <abbr title="Recovery Point Objective">RPO</abbr>/<abbr title="Recovery Time Objective">RTO</abbr>, canary, rollback, and incident rehearsal.</td>
+                      <td data-label="Recovery path">Retain Clappia, open exports, manual procedures, provider-exit routes, and controlled cohort rollback.</td>
+                      <td data-label="Release condition">Support ownership, second-maintainer coverage, runbooks, and restore evidence exist before pilot expansion.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Canada-market evidence assistance</th>
-                      <td>Machine output is advisory; a human reviewer confirms CANADA, US, DUAL, OTHER, or <code>UNKNOWN</code>.</td>
-                      <td>Complete source label, positive evidence, rule/model version, holdout cohorts, useful abstention, corrections, and shadow-mode results.</td>
-                      <td>Disable the assist while complete-label capture, manual review, sync, and inspection completion remain available.</td>
-                      <td>Stage 0 ratifies proposed thresholds; each confirmed decision references retained positive evidence.</td>
+                    <tr data-label="The same state carries a named authority, bounded proof, and recoverable next action: Canada-market evidence assistance">
+                      <th scope="row" data-label="Control surface">Canada-market evidence assistance</th>
+                      <td data-label="Decision authority">Machine output is advisory; a human reviewer confirms CANADA, US, DUAL, OTHER, or <code>UNKNOWN</code>.</td>
+                      <td data-label="Bounded validation evidence">Complete source label, positive evidence, rule/model version, holdout cohorts, useful abstention, corrections, and shadow-mode results.</td>
+                      <td data-label="Recovery path">Disable the assist while complete-label capture, manual review, sync, and inspection completion remain available.</td>
+                      <td data-label="Release condition">Stage 0 ratifies proposed thresholds; each confirmed decision references retained positive evidence.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">External exchange</th>
-                      <td>Integration and reporting operator owns reconciliation; sponsor accepts authorized commercial terms.</td>
-                      <td>Documented access, permitted use, schema, rate limits, retry, audit, and a replay-safe reconciliation report.</td>
-                      <td>Use a validated file import while the versioned connector remains gated.</td>
-                      <td>SmartAuction access and terms are written; malformed rows reject safely and source counts reconcile.</td>
+                    <tr data-label="The same state carries a named authority, bounded proof, and recoverable next action: External exchange">
+                      <th scope="row" data-label="Control surface">External exchange</th>
+                      <td data-label="Decision authority">Integration and reporting operator owns reconciliation; sponsor accepts authorized commercial terms.</td>
+                      <td data-label="Bounded validation evidence">Documented access, permitted use, schema, rate limits, retry, audit, and a replay-safe reconciliation report.</td>
+                      <td data-label="Recovery path">Use a validated file import while the versioned connector remains gated.</td>
+                      <td data-label="Release condition">SmartAuction access and terms are written; malformed rows reject safely and source counts reconcile.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -811,66 +811,66 @@
             </p>
             <figure class="table-figure table-figure--wide">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Field inspection re-platform population cartography">
-                <table class="table--reading table--comfortable">
+                <table class="table--reading table--comfortable" data-label="Decisions, changed abilities, and absorbed work by population">
                   <caption>Decisions, changed abilities, and absorbed work by population</caption>
                   <thead>
-                    <tr>
-                      <th scope="col">Population</th>
-                      <th scope="col">Material decision</th>
-                      <th scope="col">Ability created</th>
-                      <th scope="col">Work or investment absorbed</th>
-                      <th scope="col">Useful operating signal</th>
+                    <tr data-label="Decisions, changed abilities, and absorbed work by population: column headings">
+                      <th scope="col" data-label="Population">Population</th>
+                      <th scope="col" data-label="Material decision">Material decision</th>
+                      <th scope="col" data-label="Ability created">Ability created</th>
+                      <th scope="col" data-label="Work or investment absorbed">Work or investment absorbed</th>
+                      <th scope="col" data-label="Useful operating signal">Useful operating signal</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row">Field inspector</th>
-                      <td>Can the visit continue through signal loss and app interruption?</td>
-                      <td>Capture once, see truthful sync state, and resume from durable local work.</td>
-                      <td>New guided workflow, device rollout, recovery practice, and exception review.</td>
-                      <td>Completed visits with one capture; acknowledged work retained after interruption.</td>
+                    <tr data-label="Decisions, changed abilities, and absorbed work by population: Field inspector">
+                      <th scope="row" data-label="Population">Field inspector</th>
+                      <td data-label="Material decision">Can the visit continue through signal loss and app interruption?</td>
+                      <td data-label="Ability created">Capture once, see truthful sync state, and resume from durable local work.</td>
+                      <td data-label="Work or investment absorbed">New guided workflow, device rollout, recovery practice, and exception review.</td>
+                      <td data-label="Useful operating signal">Completed visits with one capture; acknowledged work retained after interruption.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Dealer or bank requester</th>
-                      <td>Can a request, appointment, communication, and result remain connected?</td>
-                      <td>Install-free intake and a legible request lifecycle.</td>
-                      <td>Identity and consent flow, communication rules, and request-quality practice.</td>
-                      <td>Requests reach assignment with complete contact, vehicle, and scheduling context.</td>
+                    <tr data-label="Decisions, changed abilities, and absorbed work by population: Dealer or bank requester">
+                      <th scope="row" data-label="Population">Dealer or bank requester</th>
+                      <td data-label="Material decision">Can a request, appointment, communication, and result remain connected?</td>
+                      <td data-label="Ability created">Install-free intake and a legible request lifecycle.</td>
+                      <td data-label="Work or investment absorbed">Identity and consent flow, communication rules, and request-quality practice.</td>
+                      <td data-label="Useful operating signal">Requests reach assignment with complete contact, vehicle, and scheduling context.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Dispatcher and operations staff</th>
-                      <td>Can the operation see current ownership, backlog, exceptions, and recovery?</td>
-                      <td>One queue across scheduling, assignment, field progress, and reconciliation.</td>
-                      <td>Workflow design, transition support, exception ownership, and Clappia coexistence.</td>
-                      <td>Localized exception age and successful same-day recovery.</td>
+                    <tr data-label="Decisions, changed abilities, and absorbed work by population: Dispatcher and operations staff">
+                      <th scope="row" data-label="Population">Dispatcher and operations staff</th>
+                      <td data-label="Material decision">Can the operation see current ownership, backlog, exceptions, and recovery?</td>
+                      <td data-label="Ability created">One queue across scheduling, assignment, field progress, and reconciliation.</td>
+                      <td data-label="Work or investment absorbed">Workflow design, transition support, exception ownership, and Clappia coexistence.</td>
+                      <td data-label="Useful operating signal">Localized exception age and successful same-day recovery.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Reviewer or arbitrator</th>
-                      <td>Can a grade or market-signal decision be reconstructed from source material?</td>
-                      <td>Versioned human decisions with source images, reasons, and supersession.</td>
-                      <td>Review time, correction practice, cohort evaluation, and retained provenance.</td>
-                      <td>Correction time, useful abstention, and resolved decisions with complete source lineage.</td>
+                    <tr data-label="Decisions, changed abilities, and absorbed work by population: Reviewer or arbitrator">
+                      <th scope="row" data-label="Population">Reviewer or arbitrator</th>
+                      <td data-label="Material decision">Can a grade or market-signal decision be reconstructed from source material?</td>
+                      <td data-label="Ability created">Versioned human decisions with source images, reasons, and supersession.</td>
+                      <td data-label="Work or investment absorbed">Review time, correction practice, cohort evaluation, and retained provenance.</td>
+                      <td data-label="Useful operating signal">Correction time, useful abstention, and resolved decisions with complete source lineage.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Quality, security, accessibility, and policy reviewers</th>
-                      <td>Is the bounded release evidence independently reviewable, and does each consequential rule have a qualified owner?</td>
-                      <td>Shared release criteria connect field behavior, denial tests, accessible status, classification policy, restore, and rollback.</td>
-                      <td>Test design, independent review, corpus governance, defect triage, acceptance records, and recurring release participation.</td>
-                      <td>Named owners sign the evidence packet; critical failures retain a recoverable operating path.</td>
+                    <tr data-label="Decisions, changed abilities, and absorbed work by population: Quality, security, accessibility, and policy reviewers">
+                      <th scope="row" data-label="Population">Quality, security, accessibility, and policy reviewers</th>
+                      <td data-label="Material decision">Is the bounded release evidence independently reviewable, and does each consequential rule have a qualified owner?</td>
+                      <td data-label="Ability created">Shared release criteria connect field behavior, denial tests, accessible status, classification policy, restore, and rollback.</td>
+                      <td data-label="Work or investment absorbed">Test design, independent review, corpus governance, defect triage, acceptance records, and recurring release participation.</td>
+                      <td data-label="Useful operating signal">Named owners sign the evidence packet; critical failures retain a recoverable operating path.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Engineering and platform operations</th>
-                      <td>Can each boundary be operated, replayed, and changed independently?</td>
-                      <td>Typed entities, explicit sync and media states, tenant policy, and bounded adapters.</td>
-                      <td>Implementation, instrumentation, migrations, support tooling, restore tests, and maintenance.</td>
-                      <td>Idempotent apply, recoverable media, bounded conflicts, and reconciliation closure.</td>
+                    <tr data-label="Decisions, changed abilities, and absorbed work by population: Engineering and platform operations">
+                      <th scope="row" data-label="Population">Engineering and platform operations</th>
+                      <td data-label="Material decision">Can each boundary be operated, replayed, and changed independently?</td>
+                      <td data-label="Ability created">Typed entities, explicit sync and media states, tenant policy, and bounded adapters.</td>
+                      <td data-label="Work or investment absorbed">Implementation, instrumentation, migrations, support tooling, restore tests, and maintenance.</td>
+                      <td data-label="Useful operating signal">Idempotent apply, recoverable media, bounded conflicts, and reconciliation closure.</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Sponsor and initiative owner</th>
-                      <td>Which tranche buys the next material operating proof?</td>
-                      <td>Capital can follow useful capability while the incumbent protects continuity.</td>
-                      <td>Full build and Year‑1 envelopes, contingency, staffing, migration, and opportunity cost.</td>
-                      <td>Each stage produces a usable result and a clearer next investment.</td>
+                    <tr data-label="Decisions, changed abilities, and absorbed work by population: Sponsor and initiative owner">
+                      <th scope="row" data-label="Population">Sponsor and initiative owner</th>
+                      <td data-label="Material decision">Which tranche buys the next material operating proof?</td>
+                      <td data-label="Ability created">Capital can follow useful capability while the incumbent protects continuity.</td>
+                      <td data-label="Work or investment absorbed">Full build and Year‑1 envelopes, contingency, staffing, migration, and opportunity cost.</td>
+                      <td data-label="Useful operating signal">Each stage produces a usable result and a clearer next investment.</td>
                     </tr>
                   </tbody>
                 </table>

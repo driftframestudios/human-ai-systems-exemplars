@@ -405,6 +405,8 @@ class _TableParser(HTMLParser):
             raise ProjectionError(Failure.MALFORMED, "Embedded raw or template content requires a separate table owner")
         elif self.cell is None and not self.caption:
             raise ProjectionError(Failure.MALFORMED, "Selected table content requires a caption or cell owner")
+        if tag == "br":
+            self.handle_data(" ")
         if tag not in VOID:
             self._push(tag)
 
@@ -611,6 +613,16 @@ def _label_budget(parsed: ParsedAsset) -> _LabelBudget:
     return _LabelBudget(parsed.limits, len(parsed.source), _utf8_size(parsed.source))
 
 
+def _row_identity(cell: Element) -> str:
+    """Use an authored header alternative; keep literal cell content intact."""
+    abbreviation = cell.attribute("abbr") if cell.tag == "th" else None
+    if abbreviation is not None:
+        alternative = text((abbreviation,))
+        if alternative:
+            return alternative
+    return text(cell.text)
+
+
 def derive_labels(validated: ValidatedAsset) -> tuple[Label, ...]:
     proposals: list[tuple[Element, tuple[str, ...]]] = []
     budget = _label_budget(validated.parsed)
@@ -623,7 +635,15 @@ def derive_labels(validated: ValidatedAsset) -> tuple[Label, ...]:
         for header, name in zip(table.headers, table.names, strict=True):
             add(header, (name,))
         for row in table.records:
-            add(row.element, (table.topic, ": ", text(row.cells[0].text)))
+            row_headers = tuple(
+                cell for cell in row.cells
+                if cell.tag == "th" and (cell.attribute("scope") or "").lower() == "row"
+            )
+            identity_cells = row_headers or row.cells[:1]
+            identity_parts = tuple(
+                part for cell in identity_cells for part in (": ", _row_identity(cell))
+            )
+            add(row.element, (table.topic, *identity_parts))
             for cell, name in zip(row.cells, table.names, strict=True):
                 add(cell, (name,))
     budget.finish()
