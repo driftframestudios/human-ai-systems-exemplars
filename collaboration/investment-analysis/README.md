@@ -43,6 +43,52 @@ The existing Model Studio 1.0.0 selection migrates with its method and exact sel
 
 Method records use `urn:source-key:investment-method:<method-name>`; the eight method IDs supply the stable suffix. Public labels describe the method. Renaming or moving a source leaves its semantic key intact. Any future key replacement retains an explicit public alias at the receiving source. Private workspace coordinates remain with the authorized resolver; detached use needs only the public method description, contract, and semantic key. The semantic key identifies the source concept; decision authority stays with the named human and source owner.
 
+### Named public-provenance admission
+
+Candidate admission checks `inputs.evidenceSource`, each `serviceOutcomes[].source`,
+and the declared source fields of recognized legacy selection/leave-behind
+snapshots. These fields carry semantic keys, HTTP(S) reference syntax, readable
+local explanations, or explicit blanks. Known gated workspace hosts, local
+coordinates, opaque standalone workspace IDs, credentialed URLs, and named
+credential query parameters receive field-specific recovery rather than an
+accepted public-provenance claim. Diagnostics name the field, not its value.
+
+Recognized legacy method IDs map to the eight existing semantic keys. For those
+selected-method records, an opaque legacy source ID becomes the established key;
+a gated source URL becomes unavailable while the key carries the relation.
+Conflicting method aliases and unresolved gated sources stay in the original
+local input. Migration changes only the named provenance fields in a detached
+copy. Technical text and unrelated extension values retain their exact content;
+no general recursive sanitizer or new registry is introduced.
+
+A rejected file's exact decoded text stays in the existing local exchange draft;
+a rejected pasted draft stays in place. Accepted state, calculations, and exports
+remain at the prior revision. The original file remains the byte-level recovery
+source. Accepted legacy snapshots carry the resolved public provenance, not a
+copy of rejected gated material. URL admission establishes supported syntax,
+not accessibility or public disclosure suitability. Broader content scanning
+and publication approval retain the existing publication-boundary owner.
+
+### Receipt time and heuristic standing
+
+`receiptTimestamp(clock)` accepts an explicit clock returning a valid Date;
+the calculator's `leaveBehindSnapshot(clock)` forwards it. Ordinary visitor
+activation uses the current clock. Receipt time stays outside accepted domain
+state, canonical serialization, and analytical identity.
+
+`staffingHeuristics()` describes the fixed source coefficients, source keys,
+source bands, formula version, and override standing for time units, named
+unknowns, complexity, sigma attention, planning spread, and touchpoint counting.
+Scenario inputs remain editable; coefficient overrides are unsupported rather
+than silently inferred. The calculator disclosure and captured report display
+these records, and a captured staffing calculation carries them in its existing
+reference extension. Monetary formulas remain unchanged. The records establish
+authored rules, not calibrated uncertainty or measured organizational effects.
+
+The structural state contract remains 0.2.0. Both existing schema files retain
+their published bytes; provenance admission is a named runtime policy, not a
+claim that structural JSON Schema validates public disclosure.
+
 ## Decision structure and maintenance
 
 The core uses a decision structure fitted to each receiving job. Schema types dispatch to focused validators; common constraints and independent domain diagnostics accumulate in their established order. Each `anyOf` candidate owns a temporary diagnostic list. A failed candidate leaves the next candidate's evidence independent.

@@ -17,6 +17,28 @@
   const RESERVED_KEYS = new Set(["__proto__", "constructor", "prototype"]);
   const STAFFING_HOURS = Object.freeze({ hours: 1, sprints: 80, quarters: 520 });
   const COMPLEXITY_RATES = Object.freeze({ bounded: .08, connected: .16, frontier: .28 });
+  // These eight identities mirror the authored method records; titles and paths may change.
+  const METHOD_SOURCE_KEYS = Object.freeze(Object.fromEntries([
+    "activity-based", "benefit-realization-roi", "bottom-up-wbs", "executive-one-pager",
+    "probabilistic-p50-p80", "risk-register-contingency", "three-branch-tco", "whole-life-tco"
+  ].map(name => ["model/" + name + ".v0.1", "urn:source-key:investment-method:" + name])));
+  function methodSourceKey(id) { return Object.hasOwn(METHOD_SOURCE_KEYS, id) ? METHOD_SOURCE_KEYS[id] : null; }
+  const STAFFING_HEURISTICS = freezeTree([
+    { id:"time-basis", label:"Staffing time basis", rule:"One sprint is 80 hours; one quarter is 520 hours.", sourceBand:"authored-unit-convention" },
+    { id:"unknown-reserve", label:"Named-unknown reserve", rule:"Base cost times min(0.35, named unknowns times 0.025).", sourceBand:"authored-planning-heuristic" },
+    { id:"complexity-reserve", label:"Complexity reserve", rule:"Base cost times 0.08 bounded, 0.16 connected, or 0.28 frontier.", sourceBand:"authored-planning-heuristic" },
+    { id:"sigma-attention", label:"Sigma attention", rule:"Quality hours use 0.65 + sigma times 0.15; this is illustrative attention, not observed capability.", sourceBand:"illustrative-attention-heuristic" },
+    { id:"planning-spread", label:"Planning spread", rule:"Central cost plus/minus 0.07 + min(0.16, unknown rate times 0.45 + complexity rate times 0.2); not a percentile.", sourceBand:"authored-planning-heuristic" },
+    { id:"touchpoints", label:"Coordination touchpoints", rule:"max(0, people - 1) + enabled activity rows + enabled recovery rows + declared AI contribution rows; a count, not a cost multiplier.", sourceBand:"authored-presentation-rule" }
+  ].map(item => ({ ...item, sourceKey:"urn:source-key:investment-heuristic:" + item.id,
+    formulaVersion:FORMULA_VERSION, overrideStanding:"Source coefficients fixed; scenario inputs editable; coefficient overrides unsupported." })));
+  function staffingHeuristics() { return STAFFING_HEURISTICS.map(item => ({ ...item })); }
+  function receiptTimestamp(clock = () => new Date()) {
+    if (typeof clock !== "function") throw new TypeError("Supply a receipt clock returning a valid Date.");
+    const date = clock();
+    if (!(date instanceof Date) || !Number.isFinite(date.getTime())) throw new TypeError("Supply a receipt clock returning a valid Date.");
+    return date.toISOString();
+  }
   const DOMAINS = Object.freeze(["internal-investment", "customer-implementation", "commercial-cohort", "service-operational", "capital-allocation"]);
   const TYPES = Object.freeze(["input", "assumption", "calculation", "evidence", "decision"]);
   const PERIODS = Object.freeze(["month", "quarter", "year"]);
@@ -148,6 +170,110 @@
     const value = JSON.parse(text);
     jsonText(value);
     return value;
+  }
+  const LEGACY_SOURCE_FIELDS = Object.freeze([
+    ["sourceId"], ["sourceRecordId"], ["sourceUrl"], ["sourceTitle"], ["sourceRecordTitle"],
+    ["context", "sourceRecord", "id"], ["context", "sourceRecord", "url"], ["context", "sourceRecord", "title"],
+    ["evidence", "sourceRecordId"], ["evidence", "sourceUrl"], ["evidence", "sourceRecordTitle"]
+  ].map(Object.freeze));
+  const OPAQUE_SOURCE_ID = /^(?:[a-f0-9]{32}|[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})$/i;
+  function gatedSourceHost(host) {
+    return /(?:^|\.)(?:notion\.so|notion\.site|app\.notion\.com|localhost|local|internal)$/.test(host)
+      || /^(?:0|10|127)\./.test(host) || /^192\.168\./.test(host) || /^172\.(?:1[6-9]|2[0-9]|3[01])\./.test(host)
+      || /^\[(?:::1|f[cd][a-f0-9:]*|fe[89ab][a-f0-9:]*)\]$/i.test(host);
+  }
+  function provenanceProblem(value) {
+    if (value === null || value === "") return null;
+    if (typeof value !== "string") return "Supply a semantic key, public-reference text, or an explicit blank.";
+    const text = value.trim();
+    if (!text) return null;
+    if (OPAQUE_SOURCE_ID.test(text)
+      || /(?:^|[^\w.-])(?:[\w-]+\.)*(?:notion\.so|notion\.site|app\.notion\.com)(?=[:/\\\s]|$)/i.test(text)
+      || /^(?:\/(?:Users|home|private)(?:\/|$)|[a-z]:[\\/]|\\\\|(?:file|javascript|data|vbscript|smb):)/i.test(text)) {
+      return "Use an established semantic key in this provenance field; keep the exact gated source in the local recovery input.";
+    }
+    if (/^urn:/i.test(text)) {
+      if (!/^urn:[a-z0-9][a-z0-9:._/-]*$/i.test(text)) return "Use a complete semantic source key.";
+      if (text.startsWith("urn:source-key:investment-method:") && !Object.values(METHOD_SOURCE_KEYS).includes(text)) {
+        return "Use one of the established investment-method source keys or retain this source for explicit migration.";
+      }
+      return null;
+    }
+    if (/^https?:/i.test(text) && !/^https?:\/\/[^/\\\s<>"']+/i.test(text)) {
+      return "Supply complete HTTP(S) URL syntax, a semantic key, or a local source explanation.";
+    }
+    // This named-field syntax check performs no network access or disclosure adjudication.
+    for (const match of text.matchAll(/(?:\b[a-z][a-z0-9+.-]*:)?\/\/[^\s<>"']+/gi)) {
+      try {
+        const url = new URL(match[0]);
+        if (!/^https?:$/.test(url.protocol) || /\\/.test(match[0]) || url.username || url.password
+          || gatedSourceHost(url.hostname.toLowerCase().replace(/\.$/, ""))
+          || [...url.searchParams.keys()].some(key => /^(?:access_token|api_key|token|signature|x-amz-signature|x-goog-signature)$/i.test(key))) {
+          return "Use an uncredentialed public-reference URL or a semantic key; keep gated coordinates in the local recovery input.";
+        }
+      } catch { return "Supply complete HTTP(S) URL syntax, a semantic key, or a local source explanation."; }
+    }
+    return null;
+  }
+  function legacySourceEntries(snapshot) {
+    const entries = [];
+    for (const path of LEGACY_SOURCE_FIELDS) {
+      let owner = snapshot;
+      for (const segment of path.slice(0, -1)) owner = owner && typeof owner === "object" && Object.hasOwn(owner, segment) ? owner[segment] : null;
+      const name = path.at(-1);
+      if (owner && typeof owner === "object" && Object.hasOwn(owner, name)) entries.push({ owner, name, path:path.join(".") });
+    }
+    return entries;
+  }
+  function isLegacySelection(value) {
+    return value?.schemaVersion === "1.0.0" && value.view === "model-explorer" && typeof value.activeModelId === "string";
+  }
+  function isLegacyLeaveBehind(value) { return Boolean(value && Array.isArray(value.roles) && value.horizon && value.plan); }
+  function legacyCoordinate(value) {
+    if (typeof value !== "string") return false;
+    if (OPAQUE_SOURCE_ID.test(value.trim())) return true;
+    try { return /(?:^|\.)(?:notion\.so|notion\.site|app\.notion\.com)$/.test(new URL(value).hostname.toLowerCase().replace(/\.$/, "")); }
+    catch { return false; }
+  }
+  function migrateLegacySources(raw) {
+    const snapshot = clone(raw), key = isLegacySelection(snapshot) ? methodSourceKey(snapshot.activeModelId) : null;
+    for (const entry of legacySourceEntries(snapshot)) {
+      const value = entry.owner[entry.name], isTitle = /title$/i.test(entry.name), isUrl = /url$/i.test(entry.name);
+      const alias = typeof value === "string" ? methodSourceKey(value) : null;
+      if (!isTitle && alias) {
+        if (alias !== key) throw new Error("Legacy provenance names a different method. Revise the original local input before accepting it.");
+        entry.owner[entry.name] = key;
+      } else if (!isTitle && key && legacyCoordinate(value)) {
+        entry.owner[entry.name] = isUrl ? "" : key;
+        if (isUrl) snapshot.sourceRecordId = key;
+      }
+      const problem = provenanceProblem(entry.owner[entry.name]);
+      if (problem) throw new Error("legacy." + entry.path + ": " + problem);
+    }
+    return snapshot;
+  }
+  function migrateOwnedLegacyExtensions(state) {
+    for (const name of ["urn:investment:legacy-selection", "urn:investment:legacy-leave-behind"]) {
+      const entry = state.extensions?.[name], snapshot = entry?.snapshot;
+      if (isLegacySelection(snapshot) || isLegacyLeaveBehind(snapshot)) entry.snapshot = migrateLegacySources(snapshot);
+    }
+    return state;
+  }
+  function* validateProvenance(state) {
+    const entries = [
+      ["state.inputs.evidenceSource", state.inputs.evidenceSource],
+      ...state.serviceOutcomes.map((item, index) => ["state.serviceOutcomes[" + index + "].source", item.source])
+    ];
+    for (const name of ["urn:investment:legacy-selection", "urn:investment:legacy-leave-behind"]) {
+      const snapshot = state.extensions[name]?.snapshot;
+      if (isLegacySelection(snapshot) || isLegacyLeaveBehind(snapshot)) {
+        for (const entry of legacySourceEntries(snapshot)) entries.push(["state.extensions[" + name + "].snapshot." + entry.path, entry.owner[entry.name]]);
+      }
+    }
+    for (const [path, value] of entries) {
+      const problem = provenanceProblem(value);
+      if (problem) yield path + ": " + problem;
+    }
   }
   const cleanText = value => typeof value === "string" && value.trim().length > 0;
   function validDate(value) { if(typeof value!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(value))return false;const date=new Date(value+"T00:00:00Z");return Number.isFinite(date.getTime())&&date.toISOString().slice(0,10)===value; }
@@ -346,7 +472,7 @@
     const identityErrors = ["alternatives", "outcomes", "events"].map(name => validateIdentifiers(name, state[name])).filter(Boolean);
     const serviceOutcomeErrors = new Set(state.serviceOutcomes.map(item => item.name)).size === OUTCOMES.length
       ? [] : ["serviceOutcomes: preserve all nine distinct consequence dimensions."];
-    const diagnostics = [...identityErrors, ...serviceOutcomeErrors, ...validateEvents(state.events)];
+    const diagnostics = [...identityErrors, ...serviceOutcomeErrors, ...validateEvents(state.events), ...validateProvenance(state)];
     return { valid: diagnostics.length === 0, errors: diagnostics };
   }
   function validate(state) {
@@ -426,7 +552,7 @@
     if(problems.length)return {status:"unavailable",problems};
     const base=roleCost+activityCost+disruptionCost+qualityCost,unknownCost=base*unknownRate,complexityCost=base*complexityRate,central=base+unknownCost+complexityCost,spread=.07+Math.min(.16,unknownRate*.45+complexityRate*.2);
     if(!Number.isFinite(central))return {status:"invalid",problems:["The staffing result exceeds the supported numeric range."]};
-    return {status:"known",currency:STAFFING_CURRENCY,horizonHours,people,taskCount,activityHours,allocatedHours,qualityHours,qualityMultiplier,disruptionHours,roleCost,activityCost,qualityCost,disruptionCost,unknownCost,complexityCost,central,spread,low:central*(1-spread),high:central*(1+spread),unknownCount,unknownRate,complexityRate,unpricedWork:false,overlap,problems:[]};
+    return {status:"known",currency:STAFFING_CURRENCY,horizonHours,people,taskCount,activityHours,allocatedHours,qualityHours,qualityMultiplier,disruptionHours,roleCost,activityCost,qualityCost,disruptionCost,unknownCost,complexityCost,central,spread,low:central*(1-spread),high:central*(1+spread),unknownCount,unknownRate,complexityRate,unpricedWork:false,overlap,heuristics:staffingHeuristics(),problems:[]};
   }
   const FIELD_DOMAINS = Object.freeze({
     commercial: "commercial-cohort",
@@ -719,19 +845,19 @@
   }
   function migrate(raw) {
     jsonText(raw);
-    if(raw?.schemaVersion===VERSION)return clone(raw);
+    if(raw?.schemaVersion===VERSION)return migrateOwnedLegacyExtensions(clone(raw));
     if (raw?.schemaVersion === "0.1.0") {
       if (Object.hasOwn(raw, "serviceOutcomes")) throw new Error("Supply one versioned outcome field before importing this state.");
       const { clinical: serviceOutcomes, ...retained } = clone(raw);
-      return { ...retained, schemaVersion: VERSION, serviceOutcomes };
+      return migrateOwnedLegacyExtensions({ ...retained, schemaVersion: VERSION, serviceOutcomes });
     }
     const next=defaults();
-    if(raw?.schemaVersion==="1.0.0"&&raw.view==="model-explorer"&&typeof raw.activeModelId==="string") {
-      next.method=raw.activeModelId;next.extensions["urn:investment:legacy-selection"]={snapshot:clone(raw),standing:"Selection preserved; analytical scenario remains explicitly illustrative."};return next;
+    if(isLegacySelection(raw)) {
+      next.method=raw.activeModelId;next.extensions["urn:investment:legacy-selection"]={snapshot:migrateLegacySources(raw),standing:"Selection preserved; analytical scenario remains explicitly illustrative."};return next;
     }
-    if(raw&&Array.isArray(raw.roles)&&raw.horizon&&raw.plan) {
+    if(isLegacyLeaveBehind(raw)) {
       next.inputs.label=String(raw.plan);next.inputs.internalInvestment=null;next.origin="user-supplied";
-      next.extensions["urn:investment:legacy-leave-behind"]={snapshot:clone(raw),standing:"Historical display snapshot retained. Re-enter exact inputs before deriving investment amounts."};
+      next.extensions["urn:investment:legacy-leave-behind"]={snapshot:migrateLegacySources(raw),standing:"Historical display snapshot retained. Re-enter exact inputs before deriving investment amounts."};
       for(const [key,f] of Object.entries(FIELDS))if(f.type===FIELD_TYPE.NUMBER)next.inputs[key]=null;
       for(const a of next.alternatives)a.flows=a.flows.map(()=>null);
       for(const o of next.outcomes){o.probability=null;o.flows=o.flows.map(()=>null);}
@@ -757,5 +883,5 @@
     const result = calculateAccepted(state);
     return freezeTree({ state, result, serialized, fingerprint: fingerprintText(serialized) });
   }
-  return Object.freeze({VERSION,FORMULA_VERSION,FIELD_TYPE,STAFFING_CURRENCY,JSON_LIMITS,NUMERIC_TEXT_LIMIT,DOMAINS,TYPES,FIELDS,OUTCOMES,defaults,schema,validate,clone,numeric,known,unavailable,stable,fingerprint,npv,irr,payback,expectedNpv,staffing,calculate,migrate,parseJson,importState,serialize,prepare});
+  return Object.freeze({VERSION,FORMULA_VERSION,FIELD_TYPE,STAFFING_CURRENCY,JSON_LIMITS,NUMERIC_TEXT_LIMIT,METHOD_SOURCE_KEYS,methodSourceKey,staffingHeuristics,receiptTimestamp,DOMAINS,TYPES,FIELDS,OUTCOMES,defaults,schema,validate,clone,numeric,known,unavailable,stable,fingerprint,npv,irr,payback,expectedNpv,staffing,calculate,migrate,parseJson,importState,serialize,prepare});
 });

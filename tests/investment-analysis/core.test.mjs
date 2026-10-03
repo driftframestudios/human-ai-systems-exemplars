@@ -459,3 +459,123 @@ test("numeric near misses stay within an isolated acceptance budget", { timeout:
     assert.deepEqual(observations, [1000, 10000, 100000, 900000].map(size => ({ size, numeric: "invalid", runtime: false, schema: false })));
   } finally { clearTimeout(timer); await worker.terminate(); }
 });
+
+
+test("named provenance admits public syntax, semantic keys, and literal explanations", () => {
+  for (const source of ["", "urn:example:study", C.methodSourceKey("model/activity-based.v0.1"),
+    "https://example.org/evidence?q=retention#cohort", "http://example.org/reference", 'Local <evidence> & "review"', "doi:10.1000/example"]) {
+    const state = fresh(); state.inputs.evidenceSource = source; state.serviceOutcomes[0].source = source;
+    assert.equal(C.validate(state).valid, true, source);
+    assert.deepEqual(C.importState(C.serialize(state)), state);
+  }
+});
+test("gated named provenance rejects atomically while unrelated technical extensions survive", () => {
+  const gated = ["https://" + "notion.so/" + "a".repeat(32), "b".repeat(32),
+    "file:///local/source", "https://localhost/source", "https://127.0.0.1/source",
+    "https://example.org/source?token=synthetic", "urn:source-key:investment-method:unresolved"];
+  for (const source of gated) for (const location of ["context", "consequence"]) {
+    let accepted = C.prepare(fresh()); const before = accepted;
+    const next = fresh();
+    if (location === "context") next.inputs.evidenceSource = source;
+    else next.serviceOutcomes[0].source = source;
+    const original = JSON.stringify(next);
+    assert.equal(C.validate(next).valid, false);
+    assert.throws(() => { accepted = C.prepare(C.importState(original)); });
+    assert.equal(accepted, before);
+    assert.equal(JSON.stringify(next), original);
+    assert.equal(C.validate(next).errors.some(message => message.includes(source)), false);
+    next.inputs.evidenceSource = ""; next.serviceOutcomes[0].source = "";
+    next.inputs.label = source;
+    next.extensions["urn:example:technical"] = { source, sourceId:source, values:[0, null, "α\r\nβ"] };
+    assert.deepEqual(C.importState(C.serialize(next)), next);
+  }
+});
+test("recognized legacy provenance resolves only named fields and preserves exact recovery input", () => {
+  for (const [method, key] of Object.entries(C.METHOD_SOURCE_KEYS)) {
+    const raw = { schemaVersion:"1.0.0", view:"model-explorer", activeModelId:method,
+      sourceId:"a".repeat(32), sourceUrl:"https://" + "notion.so/" + "b".repeat(32),
+      context:{sourceRecord:{id:method,title:"Readable method description"}},
+      technical:{sourceId:"c".repeat(32), note:"Exact\r\ntechnical α"} };
+    const original = JSON.stringify(raw), result = C.importState(original);
+    const snapshot = result.extensions["urn:investment:legacy-selection"].snapshot;
+    assert.equal(snapshot.sourceId, key); assert.equal(snapshot.sourceRecordId, key);
+    assert.equal(snapshot.sourceUrl, ""); assert.equal(snapshot.context.sourceRecord.id, key);
+    assert.equal(snapshot.context.sourceRecord.title, raw.context.sourceRecord.title);
+    assert.deepEqual(snapshot.technical, raw.technical);
+    assert.equal(JSON.stringify(raw), original);
+    assert.deepEqual(C.importState(C.serialize(result)), result);
+    const prior = fresh();
+    prior.extensions["urn:investment:legacy-selection"] = { snapshot:raw, standing:"Retained legacy selection" };
+    assert.equal(C.validate(prior).valid, false);
+    assert.equal(C.importState(JSON.stringify(prior)).extensions["urn:investment:legacy-selection"].snapshot.sourceId, key);
+  }
+  for (const raw of [
+    {schemaVersion:"1.0.0",view:"model-explorer",activeModelId:"model/unresolved.v0.1",sourceId:"d".repeat(32)},
+    {schemaVersion:"1.0.0",view:"model-explorer",activeModelId:"model/activity-based.v0.1",sourceRecordId:"model/whole-life-tco.v0.1"},
+    {plan:"Legacy report",roles:[],horizon:{value:3,unit:"quarters"},sourceUrl:"https://"+"notion.so/"+"e".repeat(32)}
+  ]) { const original=JSON.stringify(raw); assert.throws(()=>C.importState(original)); assert.equal(JSON.stringify(raw),original); }
+});
+test("receipt clocks are explicit and separate from deterministic domain identity", () => {
+  const before = C.prepare(fresh()); let calls=0;
+  const generated=C.receiptTimestamp(()=>{calls++;return new Date("2026-10-03T12:34:56.789Z");});
+  assert.equal(generated,"2026-10-03T12:34:56.789Z"); assert.equal(calls,1);
+  for (const clock of [null, ()=>"2026-10-03", ()=>new Date(NaN)]) assert.throws(()=>C.receiptTimestamp(clock),/receipt clock/);
+  assert.notEqual(C.receiptTimestamp(()=>new Date("2026-10-04T12:34:56.789Z")),generated);
+  assert.deepEqual(C.prepare(fresh()),before);
+  assert.equal(Object.hasOwn(before.state,"generated"),false);
+});
+test("heuristic standing is detached, explicit, and retains the existing arithmetic", () => {
+  const input=staffing(), result=C.staffing(input), records=C.staffingHeuristics();
+  assert.equal(result.central,5400);
+  assert.deepEqual(records.map(record=>record.id),["time-basis","unknown-reserve","complexity-reserve","sigma-attention","planning-spread","touchpoints"]);
+  assert.deepEqual(result.heuristics,records);
+  for (const record of records) {
+    assert.match(record.sourceKey,/^urn:source-key:investment-heuristic:/);
+    assert.ok(record.sourceBand); assert.equal(record.formulaVersion,C.FORMULA_VERSION);
+    assert.match(record.overrideStanding,/coefficient overrides unsupported/);
+  }
+  records[0].rule="changed detached description";
+  assert.notEqual(C.staffingHeuristics()[0].rule,records[0].rule);
+  input.unknowns=20; input.complexity="frontier"; input.sigma=5;
+  const changed=C.staffing(input);
+  assert.equal(changed.unknownRate,.35);assert.equal(changed.complexityRate,.28);assert.equal(changed.qualityMultiplier,1.4);
+  assert.deepEqual(changed.heuristics,result.heuristics);
+});
+for (const [name, flows] of [["upper bracket",[-1,20000]],["lower bracket",[-1000000,.001]]]) {
+  test("IRR retains the named unsupported " + name + " state",()=>{
+    const input=[...flows], result=C.irr(input);
+    assert.equal(result.status,"unreached"); assert.equal(result.value,null);
+    assert.match(result.reason,/bracket/); assert.deepEqual(input,flows);
+  });
+}
+for (const flows of [[-100,110],[-100,60,60,0]]) {
+  test("expected NPV retains unequal outcome horizon of " + flows.length + " entries",()=>{
+    const state=fresh();state.inputs.exhaustive=true;state.outcomes[0].flows=flows;
+    const before=C.serialize(state), result=C.calculate(state).metrics.expectedNpv;
+    assert.equal(result.status,"invalid"); assert.equal(result.value,null);
+    assert.match(result.reason,/same time basis and horizon/);assert.equal(C.serialize(state),before);
+  });
+}
+
+
+for (const source of ["https://", "http://", "https:relative", "HTTP:relative", "https:/example.org", "https:///example.org", "https:// example.org", "https://?query", "http://#fragment"]) {
+  test("explicit HTTP(S) provenance requires complete reference syntax: " + source, () => {
+    const state=fresh(); state.inputs.evidenceSource=source;
+    const original=JSON.stringify(state);
+    assert.equal(C.validate(state).valid,false);
+    assert.throws(()=>C.importState(original),/HTTP\(S\) URL syntax/);
+    assert.equal(JSON.stringify(state),original);
+    state.inputs.evidenceSource=""; state.serviceOutcomes[0].source=source;
+    assert.equal(C.validate(state).valid,false);
+    state.serviceOutcomes[0].source="";
+    state.inputs.label=source; state.extensions["urn:example:technical"]={source};
+    assert.deepEqual(C.importState(C.serialize(state)),state);
+  });
+}
+for (const source of ["Ordinary source explanation", "Protocol syntax example: https:relative", "https://example.org/reference", "HTTP://example.org/reference", "  https://example.org/reference  "]) {
+  test("provenance explanations and complete references retain exact text: " + source, () => {
+    const state=fresh(); state.inputs.evidenceSource=source; state.serviceOutcomes[0].source=source;
+    assert.equal(C.validate(state).valid,true);
+    assert.deepEqual(C.importState(C.serialize(state)),state);
+  });
+}

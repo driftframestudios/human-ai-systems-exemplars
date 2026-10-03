@@ -205,9 +205,14 @@
   }
 
   function importText(text) {
-    return accept(C.importState(text), "Imported state accepted. The contract, identities, and explicitly unavailable values are retained.", {
+    const accepted = accept(C.importState(text), "Imported state accepted. The contract, identities, and explicitly unavailable values are retained.", {
       inputKeys: Object.keys(C.FIELDS), editorKeys: EDITORS
     });
+    const exchange = host.querySelector("#analysis-exchange");
+    exchange.removeAttribute("aria-invalid");
+    drafts.delete(exchange.id);
+    status("Imported state accepted. The contract, identities, and explicitly unavailable values are retained.");
+    return accepted;
   }
 
   function exportText() {
@@ -292,16 +297,24 @@
     const request = ++fileRequest;
     const version = interactionVersion;
     const file = input.files[0];
+    let text;
     try {
       if (file.size > C.JSON_LIMITS.bytes) throw new Error("Choose a state file of at most 1 MB in UTF-8.");
-      const text = await file.text();
+      text = await file.text();
       if (request !== fileRequest || version !== interactionVersion) {
         if (request === fileRequest) status("A newer interaction took priority. Select the file again when ready to replace accepted state.");
         return;
       }
       importText(text);
     } catch (error) {
-      if (request === fileRequest && version === interactionVersion) revisionNeeded(error);
+      if (request === fileRequest && version === interactionVersion) {
+        const exchange = host.querySelector("#analysis-exchange");
+        if (typeof text === "string") {
+          exchange.value = text;
+          exchange.closest("details").open = true;
+        }
+        revisionNeeded(error, typeof text === "string" ? exchange : undefined);
+      }
     } finally {
       if (request === fileRequest) input.value = "";
     }
@@ -340,7 +353,7 @@
           useStaffing();
       }
     } catch (error) {
-      revisionNeeded(error);
+      revisionNeeded(error, action === ACTION.IMPORT_TEXT ? host.querySelector("#analysis-exchange") : undefined);
     }
   });
 
