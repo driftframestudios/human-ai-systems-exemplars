@@ -100,11 +100,26 @@ test("owner scripts parse without mounting a page", () => {
     if (!script.attrs.src && !/json/i.test(script.attrs.type || "")) new vm.Script(script.text);
   }
 });
-test("label edits preserve both stylesheets and the complete embedded A3 model", () => {
+test("A3 scroll focus extension preserves all other styles and the complete embedded model", () => {
   const styles = key => [...source[key].matchAll(/<style\b[^>]*>[\s\S]*?<\/style>/g)].map(match => match[0]).join("\n");
-  assert.equal(digest(styles("a3")), "c100581b535030706d820fced3728c9897eb6c21653d4c82e4f66f12112e125d");
+  const originalFocus = "button:focus-visible, summary:focus-visible, a:focus-visible";
+  const scrollFocus = originalFocus + ",\n    .table-wrap:focus-visible";
+  const a3Styles = styles("a3");
+  assert.equal(a3Styles.split(scrollFocus).length, 2, "One addition to the existing focus rule");
+  assert.equal(digest(a3Styles.replace(scrollFocus, originalFocus)), "c100581b535030706d820fced3728c9897eb6c21653d4c82e4f66f12112e125d");
   assert.equal(digest(styles("context")), "71de3c3e25df97c2bebec4156ac7c8413e5759b392aecf443142e4d35dd7c7e6");
   assert.equal(digest(a3ModelText), "516621d828e707f0c69ef8043afe2ee9cdef56827fd337fd1737cff68629eb18");
+});
+test("A3 binds three named keyboard regions to the actual table wrappers", () => {
+  // Finite authored shell contract; browser evidence owns visible focus and reach.
+  const wrappers = [...source.a3.matchAll(/(<div class="table-wrap"[^>]*>)\s*(<table\b[\s\S]*?<\/table>)\s*<\/div>/g)];
+  const names = ["Atlas discrepancy register", "Capability and service-dependency registry", "Primary-source coverage ledger"];
+  assert.equal(wrappers.length, bodyIds.length);
+  wrappers.forEach((match, index) => {
+    assert.equal(clean(match[1]), `<div class="table-wrap" role="region" tabindex="0" aria-label="${names[index]}">`);
+    assert.equal(match[2].match(/<tbody id="([^"]+)"/)[1], bodyIds[index]);
+    assert.equal(match[2], a3Shells[index], "Keep each native table inside its named scroll owner");
+  });
 });
 test("A3 preserves all 3 discrepancy, 17 capability and 36 source records", () => {
   const tables = atlasFixture().render();
