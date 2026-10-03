@@ -9,7 +9,7 @@ import { publishCampaign } from "../../tools/evidence-campaign.mjs";
 import {
   acceptancePlan, activeView, assertAcceptanceRecord, assertReportParity,
   assertSharedTransition, driveHorizontal, reportReceiver, resultCaptions,
-  assertAcceptedCustomerEdit, assertRouteReadout, createDocumentAccounting, runAcceptanceCases,
+  assertAcceptedCustomerEdit, assertRouteReadout, assertReorderFocusVisible, createDocumentAccounting, runAcceptanceCases,
 } from "../../tools/table-focused-acceptance.mjs";
 
 const C = createRequire(import.meta.url)("../../collaboration/investment-analysis/core.js");
@@ -371,4 +371,44 @@ test("runtime owner wires case stopping, committed document observations and rea
   assert.doesNotMatch(harness, /documentNavigations:|framenavigated/);
   assert.match(journeys, /await observeDocument\(receiver\.mainFrame\(\)\)/);
   assert.match(journeys, /await report\.locator\("\.investment-report"\)\.waitFor\(\);\s*await observeDocument\(report\.mainFrame\(\)\)/);
+});
+
+function visibleReorderFixture() {
+  return { active: true, focusVisible: true, unobscured: true, visiblePointHitsControl: true,
+    outlineReserve: 1, viewport: { width: 251, height: 604 },
+    rect: { left: 66, right: 172.296875, top: 279.609375, bottom: 323.609375 } };
+}
+test("reorder visible-focus oracle admits independently measured in-view geometry", () => {
+  assertReorderFocusVisible(visibleReorderFixture());
+});
+for (const [name, mutate] of [
+  ["recorded offscreen asset despite positive focus flags", value => { value.rect.top = 785.546875; value.rect.bottom = 829.546875; }],
+  ["above viewport", value => { value.rect.top = -60; value.rect.bottom = -16; }],
+  ["fitting control partly below viewport", value => { value.rect.top = 590; value.rect.bottom = 634; }],
+  ["outline clipped despite a fitting border box", value => { value.rect.top = 560; value.rect.bottom = 604; value.outlineReserve = 3; }],
+  ["entirely outside horizontal viewport", value => { value.rect.left = 300; value.rect.right = 406; }],
+  ["covered visible sample", value => { value.visiblePointHitsControl = false; }],
+  ["missing geometry", value => { delete value.rect; }],
+  ["mistyped viewport", value => { value.viewport.height = "604"; }],
+  ["nonfinite geometry", value => { value.rect.top = NaN; }],
+  ["lost active control", value => { value.active = false; }],
+]) {
+  test("reorder visible-focus oracle rejects " + name, () => {
+    const value = visibleReorderFixture(); mutate(value);
+    assert.throws(() => assertReorderFocusVisible(value));
+  });
+}
+test("overwide control remains valid through a visible interior point without requiring both horizontal edges", () => {
+  const value = visibleReorderFixture();
+  Object.assign(value.rect, { left: -400, right: 300 });
+  value.unobscured = false; // Its full-box center is offscreen; its visible portion is usable.
+  assertReorderFocusVisible(value);
+});
+test("both surface and asset reorders enable immediate geometry assertions before any subsequent view action", async () => {
+  const journeys = await readFile(new URL("../../tools/table-focused-acceptance.mjs", import.meta.url), "utf8");
+  assert.match(journeys, /await target\.press\(key\);\s*const focus = retainFocus \? await frame\.locator\(selector\)\.evaluate\(focusObservation\)/);
+  assert.match(journeys, /if \(requireVisibleFocus\) assertReorderFocusVisible\(focus\)/);
+  assert.match(journeys, /await act\("Reorder "[\s\S]*?\}, "Enter", true, true\);/);
+  assert.match(journeys, /await move\("surface", "surface_order"\);/);
+  assert.match(journeys, /await move\("asset", "shared_asset_order"\);/);
 });
