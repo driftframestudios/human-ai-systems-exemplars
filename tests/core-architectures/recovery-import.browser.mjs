@@ -83,6 +83,7 @@ await withCampaignLock(output, async resources => {
       await contained(page);
       const imported = await page.evaluate(() => window.recoveryRoutingAtlas.getState());
       for (const [name, body] of [["syntax.json", "{"], ["shape.json", '{"unexpected":true}']]) {
+        await page.locator("#importNotice").evaluate(element => { element.textContent = ""; });
         await input.setInputFiles({ name, mimeType: "application/json", buffer: Buffer.from(body) });
         await expect(page.locator("#importNotice")).toContainText("Working Recovery Routing Atlas retained");
         assert.deepEqual(await page.evaluate(() => window.recoveryRoutingAtlas.getState()), imported, "rejected input preserves accepted state");
