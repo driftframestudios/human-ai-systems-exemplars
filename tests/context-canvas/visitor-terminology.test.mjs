@@ -30,10 +30,20 @@ const contextCoreManifestPath = resolve(
 const genericPersonLikeSystemRole = /\b(?:AI|artificial intelligence)[\s-]+(?:assistant|collaborator|companion|coworker|partner|teammate)s?\b/giu;
 
 const tableReadingRoute = "readable-tables-reusable-evidence.html";
-// Reviewed fragments name the space or latitude in view. Each occurrence
-// retains its own context even when an accepted title recurs in metadata.
+// Complete title carriers bind the exception to reviewed HTML and metadata
+// boundaries. Prose fragments independently name the space or latitude in view.
 const tableReadingRoomContexts = [
-  ["comparison space", "Give the Comparison Room"],
+  ...[
+    "<title>Give the Comparison Room</title>",
+    "<title>Give the Comparison Room | Context Canvas</title>",
+    '<meta property="og:title" content="Give the Comparison Room">',
+    '<meta name="twitter:title" content="Give the Comparison Room">',
+    '"headline": "Give the Comparison Room"',
+    '<a class="skip-link" href="#main-content">Skip to Give the Comparison Room</a>',
+    "<h1>Give the Comparison Room</h1>",
+    '<h1 class="txt-h1 h1-spaced h1-hero">Give the Comparison Room</h1>',
+    "<p>Context Canvas / Give the Comparison Room</p>",
+  ].map(fragment => ["comparison space", fragment]),
   ["display space", "That relationship deserves room, whether the table appears on a wide display"],
   ["embedding space", "the child document could receive substantially less room than the surrounding browser window suggested"],
   ["latitude", "review capacity and room to report a partial result"],
@@ -44,7 +54,11 @@ const tableReadingRoomContexts = [
 }));
 
 const catalogRoomContexts = [
-  ["article title", "Give the Comparison Room"],
+  ...[
+    "<h2>Give the Comparison Room</h2>",
+    '<h2 class="txt-h2">Give the Comparison Room</h2>',
+    '"name": "Give the Comparison Room"',
+  ].map(fragment => ["article title", fragment]),
   ["comparison space", "a useful comparison needs room"],
 ].map(([sense, fragment]) => ({
   sense,
@@ -278,6 +292,56 @@ for (const { name, source, expected, contexts } of [
     name: "catalog title and space description retain occurrence-specific boundaries",
     source: "<h2>Give the Comparison Room</h2><p>A useful comparison needs room.</p><p>The room decides the release.</p>",
     expected: ["article title", "comparison space", null],
+    contexts: catalogRoomContexts,
+  },
+  {
+    name: "all reviewed article senses remain distinct from an added title-prefix authority claim",
+    source: [
+      "<h1>Give the Comparison Room</h1>",
+      "<p>That relationship deserves room, whether the table appears on a wide display.</p>",
+      "<p>The child document could receive substantially less room than the surrounding browser window suggested.</p>",
+      "<p>Review capacity and room to report a partial result.</p>",
+      "<p>Give the Comparison Room authority to approve the release.</p>",
+    ].join("\n"),
+    expected: ["comparison space", "display space", "embedding space", "latitude", null],
+  },
+  {
+    name: "all reviewed catalog senses remain distinct from an added title-prefix authority claim",
+    source: "<h2>Give the Comparison Room</h2><p>A useful comparison needs room.</p><p>Give the Comparison Room authority to approve the release.</p>",
+    expected: ["article title", "comparison space", null],
+    contexts: catalogRoomContexts,
+  },
+  {
+    name: "complete article metadata values retain the reviewed title across whitespace",
+    source: [
+      "<title>Give the Comparison Room | Context Canvas</title>",
+      '<meta property="og:title" content="Give the\nComparison Room">',
+      '<meta name="twitter:title" content="Give the Comparison\tRoom">',
+      '<script type="application/ld+json">{"headline":\n"Give the Comparison Room"}</script>',
+    ].join("\n"),
+    expected: ["comparison space", "comparison space", "comparison space", "comparison space"],
+  },
+  {
+    name: "title and metadata extensions receive their own context review",
+    source: [
+      "<title>Give the Comparison Room authority to approve the release.</title>",
+      "<h1>Give the Comparison Room authority to approve the release.</h1>",
+      '<meta property="og:title" content="Give the Comparison Room authority to approve the release.">',
+      '<meta name="twitter:title" content="Give the Comparison Room authority to approve the release.">',
+      '<script type="application/ld+json">{"headline": "Give the Comparison Room authority to approve the release."}</script>',
+    ].join("\n"),
+    expected: [null, null, null, null, null],
+  },
+  {
+    name: "complete catalog metadata retains the reviewed title across whitespace",
+    source: '<script type="application/ld+json">{"name":\n"Give the\tComparison Room"}</script>',
+    expected: ["article title"],
+    contexts: catalogRoomContexts,
+  },
+  {
+    name: "catalog heading and metadata extensions receive their own context review",
+    source: '<h2>Give the Comparison Room authority to approve the release.</h2><script type="application/ld+json">{"name": "Give the Comparison Room authority to approve the release."}</script>',
+    expected: [null, null],
     contexts: catalogRoomContexts,
   },
 ]) {
