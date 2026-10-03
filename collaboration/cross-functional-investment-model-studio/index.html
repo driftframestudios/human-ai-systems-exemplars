@@ -808,11 +808,20 @@
       font-weight: 800;
     }
 
+    :is(.scenario-table, .semantic-matrix, .equivalent-table) :is(th, td) {
+      overflow-wrap: normal;
+      word-break: normal;
+    }
+
+    .scenario-table :is(th, td) { min-inline-size: 10rem; }
+
     .equivalent-table {
+      min-inline-size: 40rem;
       border-top: 2px solid var(--cof-ink);
     }
 
     .equivalent-table th {
+      min-inline-size: 13rem;
       width: 13rem;
     }
 
@@ -2831,20 +2840,20 @@ Return with this handback:
               <caption>Table 01 · Shared Discovery &amp; Alignment scenario</caption>
               <thead>
                 <tr>
-                  <th scope="col">Horizon</th>
-                  <th scope="col">Staffing posture</th>
-                  <th scope="col">Activities</th>
-                  <th scope="col">Recovery</th>
-                  <th scope="col">Open conditions</th>
+                  <th scope="col" data-label="Horizon">Horizon</th>
+                  <th scope="col" data-label="Staffing posture">Staffing posture</th>
+                  <th scope="col" data-label="Activities">Activities</th>
+                  <th scope="col" data-label="Recovery">Recovery</th>
+                  <th scope="col" data-label="Open conditions">Open conditions</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>3 quarters · connected complexity</td>
-                  <td>1 product lead at 55%; 1 research lead at 60%; 2 domain specialists at 25%. Editable loaded rates remain scenario inputs.</td>
-                  <td>14 stakeholder-inquiry tasks; 10 opportunity-framing tasks; 6 decision-brief tasks.</td>
-                  <td>3 scheduling-and-access disruptions with 8 recovery hours each.</td>
-                  <td>3 named unknowns · local rates, denominators, risk ranges, value mechanisms, and authorization remain model-specific inputs.</td>
+                <tr data-label="Table 01: Shared Discovery &amp; Alignment scenario: 3 quarters: connected complexity">
+                  <td data-label="Horizon">3 quarters · connected complexity</td>
+                  <td data-label="Staffing posture">1 product lead at 55%; 1 research lead at 60%; 2 domain specialists at 25%. Editable loaded rates remain scenario inputs.</td>
+                  <td data-label="Activities">14 stakeholder-inquiry tasks; 10 opportunity-framing tasks; 6 decision-brief tasks.</td>
+                  <td data-label="Recovery">3 scheduling-and-access disruptions with 8 recovery hours each.</td>
+                  <td data-label="Open conditions">3 named unknowns · local rates, denominators, risk ranges, value mechanisms, and authorization remain model-specific inputs.</td>
                 </tr>
               </tbody>
             </table>
@@ -2865,114 +2874,114 @@ Return with this handback:
                 <caption>Table 02 · Eight investment model views — complete static text equivalent</caption>
                 <thead>
                   <tr>
-                    <th scope="col">Model</th>
-                    <th scope="col">When to use</th>
-                    <th scope="col">Method</th>
-                    <th scope="col">Inputs → outputs</th>
-                    <th scope="col">Evidence and authority boundary</th>
-                    <th scope="col">Human judgment</th>
-                    <th scope="col">Generative AI</th>
-                    <th scope="col">Deterministic computation</th>
-                    <th scope="col">Tooling fit</th>
-                    <th scope="col">Model-specific instruction</th>
+                    <th scope="col" data-label="Model">Model</th>
+                    <th scope="col" data-label="When to use">When to use</th>
+                    <th scope="col" data-label="Method">Method</th>
+                    <th scope="col" data-label="Inputs to outputs">Inputs → outputs</th>
+                    <th scope="col" data-label="Evidence and authority boundary">Evidence and authority boundary</th>
+                    <th scope="col" data-label="Human judgment">Human judgment</th>
+                    <th scope="col" data-label="Generative AI">Generative AI</th>
+                    <th scope="col" data-label="Deterministic computation">Deterministic computation</th>
+                    <th scope="col" data-label="Tooling fit">Tooling fit</th>
+                    <th scope="col" data-label="Model-specific instruction">Model-specific instruction</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">Activity-Based</th>
-                    <td>Throughput and unit economics; a project total hides the activity consuming resources.</td>
-                    <td>Name driver events; separate fixed and variable costs; trace costs to denominators; recompute at current and target volume.</td>
-                    <td>Driver counts, approved cost lines, volumes, rates → driver register, unit costs, scale sensitivity, reserved-input list.</td>
-                    <td>Approved denominators and local cost lines establish the reading. Reserved economics remain reserved.</td>
-                    <td>Choose drivers, authorize allocation, interpret operating consequences.</td>
-                    <td>Draft taxonomy, reconcile terms, surface missing denominators.</td>
-                    <td>Allocate costs, divide by events, recompute scenarios.</td>
-                    <td>Driver spreadsheet or data model plus repeatable calculation script.</td>
-                    <td>Draft a driver register; name numerator, denominator, source, owner, and missing input; keep economics reserved for named owners.</td>
+                  <tr data-label="Table 02: Eight investment model views - complete static text equivalent: Activity-Based">
+                    <th scope="row" data-label="Model">Activity-Based</th>
+                    <td data-label="When to use">Throughput and unit economics; a project total hides the activity consuming resources.</td>
+                    <td data-label="Method">Name driver events; separate fixed and variable costs; trace costs to denominators; recompute at current and target volume.</td>
+                    <td data-label="Inputs to outputs">Driver counts, approved cost lines, volumes, rates → driver register, unit costs, scale sensitivity, reserved-input list.</td>
+                    <td data-label="Evidence and authority boundary">Approved denominators and local cost lines establish the reading. Reserved economics remain reserved.</td>
+                    <td data-label="Human judgment">Choose drivers, authorize allocation, interpret operating consequences.</td>
+                    <td data-label="Generative AI">Draft taxonomy, reconcile terms, surface missing denominators.</td>
+                    <td data-label="Deterministic computation">Allocate costs, divide by events, recompute scenarios.</td>
+                    <td data-label="Tooling fit">Driver spreadsheet or data model plus repeatable calculation script.</td>
+                    <td data-label="Model-specific instruction">Draft a driver register; name numerator, denominator, source, owner, and missing input; keep economics reserved for named owners.</td>
                   </tr>
-                  <tr>
-                    <th scope="row">Benefit Realization / ROI</th>
-                    <td>The decision needs an explicit counterfactual, benefit mechanism, and value horizon.</td>
-                    <td>Price current burden; attach a mechanism to each benefit; phase realization; apply approved discounting; compare with status quo.</td>
-                    <td>Burden register, benefit inputs, committed cost, ramp, discount rate → baseline, benefit schedule, payback, NPV/IRR, reserved-value register.</td>
-                    <td>Each benefit carries a mechanism and approved input. Unquantified value remains reserved; negative value remains usable.</td>
-                    <td>Authorize counterfactual, mechanism plausibility, horizon, and threshold.</td>
-                    <td>Map mechanisms, surface double counting, draft next-learning questions.</td>
-                    <td>Phase and discount cash flows; calculate payback, NPV, and IRR.</td>
-                    <td>Value ledger joined to a deterministic financial model.</td>
-                    <td>Build a benefit-mechanism register before calculation; preserve unavailable value as reserved.</td>
+                  <tr data-label="Table 02: Eight investment model views - complete static text equivalent: Benefit Realization / ROI">
+                    <th scope="row" data-label="Model">Benefit Realization / ROI</th>
+                    <td data-label="When to use">The decision needs an explicit counterfactual, benefit mechanism, and value horizon.</td>
+                    <td data-label="Method">Price current burden; attach a mechanism to each benefit; phase realization; apply approved discounting; compare with status quo.</td>
+                    <td data-label="Inputs to outputs">Burden register, benefit inputs, committed cost, ramp, discount rate → baseline, benefit schedule, payback, NPV/IRR, reserved-value register.</td>
+                    <td data-label="Evidence and authority boundary">Each benefit carries a mechanism and approved input. Unquantified value remains reserved; negative value remains usable.</td>
+                    <td data-label="Human judgment">Authorize counterfactual, mechanism plausibility, horizon, and threshold.</td>
+                    <td data-label="Generative AI">Map mechanisms, surface double counting, draft next-learning questions.</td>
+                    <td data-label="Deterministic computation">Phase and discount cash flows; calculate payback, NPV, and IRR.</td>
+                    <td data-label="Tooling fit">Value ledger joined to a deterministic financial model.</td>
+                    <td data-label="Model-specific instruction">Build a benefit-mechanism register before calculation; preserve unavailable value as reserved.</td>
                   </tr>
-                  <tr>
-                    <th scope="row">Bottom-Up WBS</th>
-                    <td>An auditable estimate must survive package-by-package review.</td>
-                    <td>Decompose owned packages; attach roles; add approved hours and rates; roll up hours × rate; separate contingency.</td>
-                    <td>Packages, roles, hours, rates, exclusions → resource-loaded WBS, base estimate, role demand, assumption register.</td>
-                    <td>Every dollar resolves to owned work and approved inputs or an explicit reserved field. Reserve stays separate.</td>
-                    <td>Define packages, roles, hours, rates, dependencies, and exclusions.</td>
-                    <td>Draft package tree, challenge missing work, normalize names.</td>
-                    <td>Multiply hours by rates; roll up and reconcile totals.</td>
-                    <td>WBS table or project-cost database with stable package IDs.</td>
-                    <td>Draft packages with IDs, owners, acceptance, dependencies, and reserved hour/rate inputs.</td>
+                  <tr data-label="Table 02: Eight investment model views - complete static text equivalent: Bottom-Up WBS">
+                    <th scope="row" data-label="Model">Bottom-Up WBS</th>
+                    <td data-label="When to use">An auditable estimate must survive package-by-package review.</td>
+                    <td data-label="Method">Decompose owned packages; attach roles; add approved hours and rates; roll up hours × rate; separate contingency.</td>
+                    <td data-label="Inputs to outputs">Packages, roles, hours, rates, exclusions → resource-loaded WBS, base estimate, role demand, assumption register.</td>
+                    <td data-label="Evidence and authority boundary">Every dollar resolves to owned work and approved inputs or an explicit reserved field. Reserve stays separate.</td>
+                    <td data-label="Human judgment">Define packages, roles, hours, rates, dependencies, and exclusions.</td>
+                    <td data-label="Generative AI">Draft package tree, challenge missing work, normalize names.</td>
+                    <td data-label="Deterministic computation">Multiply hours by rates; roll up and reconcile totals.</td>
+                    <td data-label="Tooling fit">WBS table or project-cost database with stable package IDs.</td>
+                    <td data-label="Model-specific instruction">Draft packages with IDs, owners, acceptance, dependencies, and reserved hour/rate inputs.</td>
                   </tr>
-                  <tr>
-                    <th scope="row">Executive One-Pager</th>
-                    <td>A sponsor needs a decision-grade leave-behind after source models establish the case.</td>
-                    <td>State the decision; name current burden; pull recommendation and headline commitment; carry value, risks, milestones, and sources.</td>
-                    <td>Ask, sourced figures, value case, risks, recommendation → one-page brief, headline commitment, recommendation, synopsis.</td>
-                    <td>The one-pager aggregates and originates no figures. Pause or decline remains an executive-grade recommendation.</td>
-                    <td>Own ask, recommendation, material risks, and decision timing.</td>
-                    <td>Compress supplied models, check consistency, draft scan-friendly alternatives.</td>
-                    <td>Pull approved values, verify source IDs, reconcile and render.</td>
-                    <td>Traceable publishing template fed by approved model fields.</td>
-                    <td>Draft ask, burden, recommendation, one sourced commitment, value, risks, and timeline using only supplied, approved figures.</td>
+                  <tr data-label="Table 02: Eight investment model views - complete static text equivalent: Executive One-Pager">
+                    <th scope="row" data-label="Model">Executive One-Pager</th>
+                    <td data-label="When to use">A sponsor needs a decision-grade leave-behind after source models establish the case.</td>
+                    <td data-label="Method">State the decision; name current burden; pull recommendation and headline commitment; carry value, risks, milestones, and sources.</td>
+                    <td data-label="Inputs to outputs">Ask, sourced figures, value case, risks, recommendation → one-page brief, headline commitment, recommendation, synopsis.</td>
+                    <td data-label="Evidence and authority boundary">The one-pager aggregates and originates no figures. Pause or decline remains an executive-grade recommendation.</td>
+                    <td data-label="Human judgment">Own ask, recommendation, material risks, and decision timing.</td>
+                    <td data-label="Generative AI">Compress supplied models, check consistency, draft scan-friendly alternatives.</td>
+                    <td data-label="Deterministic computation">Pull approved values, verify source IDs, reconcile and render.</td>
+                    <td data-label="Tooling fit">Traceable publishing template fed by approved model fields.</td>
+                    <td data-label="Model-specific instruction">Draft ask, burden, recommendation, one sourced commitment, value, risks, and timeline using only supplied, approved figures.</td>
                   </tr>
-                  <tr>
-                    <th scope="row">Probabilistic P50/P80</th>
-                    <td>A point estimate obscures material range and the initiative needs explicit percentile postures.</td>
-                    <td>Use WBS IDs; replace points with approved three-point ranges; assign distributions; simulate; carry P80 − P50 as reserve.</td>
-                    <td>WBS, ranges, distributions, dependencies, run settings → distribution, P50/P80, reserve, S-curve data, tail drivers.</td>
-                    <td>Percentiles describe the modeled distribution rather than delivery certainty, approval, or realized spend.</td>
-                    <td>Authorize ranges, distributions, dependencies, commitment posture, and tail response.</td>
-                    <td>Draft elicitation questions, surface coupling and missing cases, explain structure.</td>
-                    <td>Sample, aggregate trials, calculate percentiles, rank tail contribution.</td>
-                    <td>Versioned simulation script or established cost-risk tool with reproducible settings.</td>
-                    <td>Request three-point ranges, source, owner, rationale, and dependencies; keep ranges reserved for named owners.</td>
+                  <tr data-label="Table 02: Eight investment model views - complete static text equivalent: Probabilistic P50/P80">
+                    <th scope="row" data-label="Model">Probabilistic P50/P80</th>
+                    <td data-label="When to use">A point estimate obscures material range and the initiative needs explicit percentile postures.</td>
+                    <td data-label="Method">Use WBS IDs; replace points with approved three-point ranges; assign distributions; simulate; carry P80 − P50 as reserve.</td>
+                    <td data-label="Inputs to outputs">WBS, ranges, distributions, dependencies, run settings → distribution, P50/P80, reserve, S-curve data, tail drivers.</td>
+                    <td data-label="Evidence and authority boundary">Percentiles describe the modeled distribution rather than delivery certainty, approval, or realized spend.</td>
+                    <td data-label="Human judgment">Authorize ranges, distributions, dependencies, commitment posture, and tail response.</td>
+                    <td data-label="Generative AI">Draft elicitation questions, surface coupling and missing cases, explain structure.</td>
+                    <td data-label="Deterministic computation">Sample, aggregate trials, calculate percentiles, rank tail contribution.</td>
+                    <td data-label="Tooling fit">Versioned simulation script or established cost-risk tool with reproducible settings.</td>
+                    <td data-label="Model-specific instruction">Request three-point ranges, source, owner, rationale, and dependencies; keep ranges reserved for named owners.</td>
                   </tr>
-                  <tr>
-                    <th scope="row">Risk-Register Contingency</th>
-                    <td>A flat contingency percentage cannot explain reserve or mitigation priority.</td>
-                    <td>Use lived failures; assign owner, mitigation, probability input, and impact range; reconcile reserve; rank sensitivity.</td>
-                    <td>Failure register, owners, probability/impact, mitigations → owned register, reserve, rollup, sensitivity, priorities.</td>
-                    <td>Named, locally reviewed risks form the reserve. Realized failures remain visible beside prospective risks.</td>
-                    <td>Name and own risks; authorize inputs, mitigations, and escalation.</td>
-                    <td>Retrieve failure evidence, draft risk statements, challenge missing routes.</td>
-                    <td>Compute probability × impact; aggregate, reconcile, and sort sensitivity.</td>
-                    <td>Risk database with stable IDs plus deterministic rollup and sensitivity script.</td>
-                    <td>Draft risks with trigger, object, consequence, owner, mitigation, recovery, placeholders, source, and status.</td>
+                  <tr data-label="Table 02: Eight investment model views - complete static text equivalent: Risk-Register Contingency">
+                    <th scope="row" data-label="Model">Risk-Register Contingency</th>
+                    <td data-label="When to use">A flat contingency percentage cannot explain reserve or mitigation priority.</td>
+                    <td data-label="Method">Use lived failures; assign owner, mitigation, probability input, and impact range; reconcile reserve; rank sensitivity.</td>
+                    <td data-label="Inputs to outputs">Failure register, owners, probability/impact, mitigations → owned register, reserve, rollup, sensitivity, priorities.</td>
+                    <td data-label="Evidence and authority boundary">Named, locally reviewed risks form the reserve. Realized failures remain visible beside prospective risks.</td>
+                    <td data-label="Human judgment">Name and own risks; authorize inputs, mitigations, and escalation.</td>
+                    <td data-label="Generative AI">Retrieve failure evidence, draft risk statements, challenge missing routes.</td>
+                    <td data-label="Deterministic computation">Compute probability × impact; aggregate, reconcile, and sort sensitivity.</td>
+                    <td data-label="Tooling fit">Risk database with stable IDs plus deterministic rollup and sensitivity script.</td>
+                    <td data-label="Model-specific instruction">Draft risks with trigger, object, consequence, owner, mitigation, recovery, placeholders, source, and status.</td>
                   </tr>
-                  <tr>
-                    <th scope="row">Three-Branch TCO</th>
-                    <td>Leadership is choosing among buy, build, and blend on a like-for-like basis.</td>
-                    <td>Fix common baseline; define branches; use one horizon and row set; separate one-time/recurring; name non-cost factors.</td>
-                    <td>Baseline, definitions, costs, horizon, factors → branch table, TCO, difference drivers, posture, recommendation.</td>
-                    <td>Every branch shares baseline, horizon, and category grammar. A branch can lose cleanly on a material constraint.</td>
-                    <td>Define branches, judge non-cost factors, authorize recommendation and exits.</td>
-                    <td>Normalize rows, find asymmetric assumptions, draft evidence-based trade-offs.</td>
-                    <td>Sum identical rows; separate cost types; calculate deltas.</td>
-                    <td>Branch-comparison table enforcing identical categories and horizon.</td>
-                    <td>Frame buy, build, and blend with common rows, sources, owners, and missing inputs; keep prices reserved for named owners.</td>
+                  <tr data-label="Table 02: Eight investment model views - complete static text equivalent: Three-Branch TCO">
+                    <th scope="row" data-label="Model">Three-Branch TCO</th>
+                    <td data-label="When to use">Leadership is choosing among buy, build, and blend on a like-for-like basis.</td>
+                    <td data-label="Method">Fix common baseline; define branches; use one horizon and row set; separate one-time/recurring; name non-cost factors.</td>
+                    <td data-label="Inputs to outputs">Baseline, definitions, costs, horizon, factors → branch table, TCO, difference drivers, posture, recommendation.</td>
+                    <td data-label="Evidence and authority boundary">Every branch shares baseline, horizon, and category grammar. A branch can lose cleanly on a material constraint.</td>
+                    <td data-label="Human judgment">Define branches, judge non-cost factors, authorize recommendation and exits.</td>
+                    <td data-label="Generative AI">Normalize rows, find asymmetric assumptions, draft evidence-based trade-offs.</td>
+                    <td data-label="Deterministic computation">Sum identical rows; separate cost types; calculate deltas.</td>
+                    <td data-label="Tooling fit">Branch-comparison table enforcing identical categories and horizon.</td>
+                    <td data-label="Model-specific instruction">Frame buy, build, and blend with common rows, sources, owners, and missing inputs; keep prices reserved for named owners.</td>
                   </tr>
-                  <tr>
-                    <th scope="row">Whole-Life TCO</th>
-                    <td>The decision includes recurring operation, scaling, parallel run, revalidation, and retirement.</td>
-                    <td>Select horizon; separate one-time/recurring; add run lines; cost double-running and retirement; model scale; discount.</td>
-                    <td>Implementation, recurring lines, retirement, scale path, discount/FX → annual table, CapEx/OpEx, scale, lifecycle value.</td>
-                    <td>Every approved year, run line, scaling assumption, and retirement obligation remains explicit and owned.</td>
-                    <td>Choose horizon and scaling; authorize run, FX, discount, operational, and retirement assumptions.</td>
-                    <td>Surface forgotten lifecycle lines, draft questions, compare source coverage.</td>
-                    <td>Roll annual costs; apply escalation and discounting; calculate lifecycle totals.</td>
-                    <td>Year-indexed lifecycle ledger plus deterministic finance formulas.</td>
-                    <td>Create year-indexed rows with source, owner, start/end, escalation, discount, FX, and reserved inputs.</td>
+                  <tr data-label="Table 02: Eight investment model views - complete static text equivalent: Whole-Life TCO">
+                    <th scope="row" data-label="Model">Whole-Life TCO</th>
+                    <td data-label="When to use">The decision includes recurring operation, scaling, parallel run, revalidation, and retirement.</td>
+                    <td data-label="Method">Select horizon; separate one-time/recurring; add run lines; cost double-running and retirement; model scale; discount.</td>
+                    <td data-label="Inputs to outputs">Implementation, recurring lines, retirement, scale path, discount/FX → annual table, CapEx/OpEx, scale, lifecycle value.</td>
+                    <td data-label="Evidence and authority boundary">Every approved year, run line, scaling assumption, and retirement obligation remains explicit and owned.</td>
+                    <td data-label="Human judgment">Choose horizon and scaling; authorize run, FX, discount, operational, and retirement assumptions.</td>
+                    <td data-label="Generative AI">Surface forgotten lifecycle lines, draft questions, compare source coverage.</td>
+                    <td data-label="Deterministic computation">Roll annual costs; apply escalation and discounting; calculate lifecycle totals.</td>
+                    <td data-label="Tooling fit">Year-indexed lifecycle ledger plus deterministic finance formulas.</td>
+                    <td data-label="Model-specific instruction">Create year-indexed rows with source, owner, start/end, escalation, discount, FX, and reserved inputs.</td>
                   </tr>
                 </tbody>
               </table>
@@ -3947,12 +3956,14 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
       elements.equivalents.innerHTML = models.map((model, index) => `
         <details${index === 0 ? " open" : ""}>
           <summary>${String(index + 1).padStart(2, "0")} · ${escapeHtml(model.title)}</summary>
+          <div class="table-region" tabindex="0" role="region" aria-label="${escapeHtml(model.title)} complete text equivalent; scroll horizontally">
           <table class="equivalent-table">
             <caption>Table ${String(index + 2).padStart(2, "0")} · ${escapeHtml(model.title)} complete text equivalent</caption>
             <tbody>
-              ${semanticRows(model).map(([label, value]) => `<tr><th scope="row">${escapeHtml(label)}</th><td>${label === "Model-specific instruction" ? `<pre>${escapeHtml(value)}</pre>` : escapeHtml(value)}</td></tr>`).join("")}
+              ${semanticRows(model).map(([label, value]) => `<tr data-label="${escapeHtml(model.title)}: ${escapeHtml(label)}"><th data-label="Field" scope="row">${escapeHtml(label)}</th><td data-label="${escapeHtml(label)}">${label === "Model-specific instruction" ? `<pre>${escapeHtml(value)}</pre>` : escapeHtml(value)}</td></tr>`).join("")}
             </tbody>
           </table>
+          </div>
         </details>`).join("");
     }
 
