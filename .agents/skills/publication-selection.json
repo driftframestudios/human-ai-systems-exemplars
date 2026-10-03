@@ -87,6 +87,8 @@
       "publicationStanding": "public_ready",
       "sourceAvailability": "included",
       "dependencies": [
+        ".agents/skills/cost-and-ownership-analysis/references/python-boundaries-and-traversal-cost.md",
+        ".agents/skills/cost-and-ownership-analysis/references/ownership-preserving-reuse.md",
         ".agents/skills/practitioner-probe/SKILL.md",
         ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
         ".agents/skills/collaboration-accounting/SKILL.md"
@@ -104,8 +106,8 @@
     {
       "name": "embedded-prototype-layout",
       "sourcePath": ".agents/skills/embedded-prototype-layout/SKILL.md",
-      "publicationStanding": "public_possible",
-      "sourceAvailability": "repository_only",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
       "dependencies": []
     },
     {
@@ -191,10 +193,11 @@
     {
       "name": "semantic-table-design",
       "sourcePath": ".agents/skills/semantic-table-design/SKILL.md",
-      "publicationStanding": "public_possible",
-      "sourceAvailability": "repository_only",
+      "publicationStanding": "public_ready",
+      "sourceAvailability": "included",
       "dependencies": [
-        ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md"
+        ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+        ".agents/skills/semantic-table-design/references/supplemental-table-labels.md"
       ]
     },
     {

@@ -69,8 +69,11 @@ route.
 ## Table and embedded-layout contracts
 
 These complementary owners were formed from the repository table audit. Their
-publication standing is `public_possible` while representative execution and
-independent publication review proceed through Issues #314, #318 and #319.
+selected source packages carry `public_ready` publication standing. This names
+package coherence and audience safety; contract revision, evidence maturity,
+lifecycle decisions and execution authority retain their separate owners.
+Issue #58 receives continuing cultivation, while Issues #314, #318 and #319
+retain their application-evidence boundaries.
 
 | Skill | Receiving result |
 | --- | --- |

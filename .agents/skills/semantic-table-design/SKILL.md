@@ -1,37 +1,16 @@
 ---
 name: semantic-table-design
-description: Designs readable native-semantic tables and context-complete extracted records. Applies when header relationships, row completeness, supplemental wording, comparison geometry, or partial-row ingestion changes a visitor or receiving-tool task.
+description: Designs readable native-semantic tables and context-complete extracted records. Applies when a new or revised table's header relationships, row completeness, supplemental wording, comparison geometry, or partial-row ingestion affects a visitor or receiving-tool task.
 ---
 
 # Semantic table design
 
-## What
+## Contract
 
-A source-owned table contract that preserves the reader's operation, native
-header relationships, precise values and locally complete meaning across visual,
-interactive and extracted forms.
-
-## When
-
-A table's content, structure, layout, supplemental labels, generated representation
-or receiving use is being assessed or changed. Direct reasoning remains sufficient
-for a small correction whose meaning and owner are already established.
-
-## Boundaries
-
-Authored semantics and the owning generator establish meaning. Native HTML
-establishes baseline table relationships; custom attributes serve named receivers.
-Plain-word label conventions are design choices, with literal names, language,
-units and technical notation retaining their identity. Geometry, extraction and
-source parity establish separate claims. Accessibility conformance, arbitrary
-model or ATS ingestion, parser adoption and publication retain their own evidence
-and authority.
-
-## Result
-
-A bounded table-family disposition naming the reader job, semantic and source
-owners, header relationships, field roles, supplemental context, scroll boundary,
-affected states, fitting observations and any unresolved interpretation.
+- **What:** A source-owned table contract that preserves the reader's operation, native header relationships, precise values and locally complete meaning across visual, interactive and extracted forms.
+- **When:** A new table or a change to header relationships, record completeness, comparison geometry or supplemental context affects a named reader or receiving-tool task. A small correction with established meaning and ownership can use direct reasoning.
+- **Boundaries:** Authored semantics and the owning generator establish meaning; native HTML carries baseline relationships and custom attributes serve named receivers. Literal names, language, units and technical notation retain their identity. Geometry, extraction and source parity establish separate claims. Accessibility conformance, arbitrary model or ATS ingestion, parser adoption and publication retain their own evidence and authority.
+- **Result:** One bounded table-family disposition naming the reader operation, semantic and source owners, header relationships, field roles, supplemental context, scroll boundary, affected states, fitting observations and any unresolved interpretation.
 
 ## Fit and attention
 
@@ -41,8 +20,15 @@ affected states, fitting observations and any unresolved interpretation.
 - **Foregrounds:** Relationships between headers and values, intact qualifications, complete record context and the actual width available to the reader.
 - **May under-attend:** Correct source associations can coexist with difficult interaction, and good geometry can coexist with incorrect meaning. Each consequential receiving behavior needs its own observation.
 - **Material result:** A usable comparison or record, or an explicit source-owner question that prevents an ambiguous transformation from being published.
-- **Interactions:** Source-authority mapping traces generators and projections; embedded-prototype layout owns parent/child pressure; cost analysis owns traversal and expansion; visual verification selects fitting rendered evidence.
+- **Interactions:** This skill owns the table's semantic and comparison disposition. Source-authority mapping can resolve a disputed generator; embedded-prototype layout owns measured parent/child pressure; cost analysis owns traversal and expansion; visual verification selects fitting rendered evidence. Each peer releases its contribution to the one table disposition rather than producing a competing completion claim.
 - **Rest or release when:** The changed boundary has adequate evidence and an accountable receiver, or a specific uncertainty has a recovery route. A new state or owner can reopen the fitting scope.
+
+## Inputs, defaults and output
+
+- **Minimum inputs:** The affected table or canonical renderer, a reader operation, the relevant state, and the authority granted for inspection or change. A supplemental-label task also names the consumer and the transferred unit: table, row or cell.
+- **Optional context:** Existing relationship fixtures, column definitions, source/projection declarations, viewport or print constraints, and earlier evidence with its actual scope.
+- **Defaults:** Begin with one table or shared family and the existing native structure and styles. When a consumer is unspecified, preserve literal values and record the missing receiving contract before changing metadata. When runtime or private access is unavailable, return the source-supported decision and the exact observation still needed.
+- **Output:** One receiving artifact: a source-owned repair with fitting evidence, an acceptance map, or a bounded question. It carries the changed relationship, literal-value protections, covered states and next receiver when needed. A separate ledger is useful only when it changes a later decision.
 
 ## Rules
 
@@ -54,7 +40,7 @@ values; a chart may accompany it for patterns. Ordering, grouping and selective
 emphasis support the named operation within the existing visual language. A
 conversion to cards preserves a comparison route when comparison remains a task.
 
-### Rule: Semantic ownership precedes editing
+### Rule: Semantic ownership includes creation and change
 
 The collaborator traces authored markup, shared semantic descriptors, generators,
 runtime data, styles, maintained projections and applicable export/print output.
@@ -62,6 +48,15 @@ A generated copy returns to its canonical owner. An authored patch preserves its
 unowned source. Historical copies retain their comparison role. One reviewed
 wording decision can serve several renderers without giving a display normalizer
 authority over every string they receive.
+
+A new table or visitor page enters the existing family's observation contract.
+Before authoring, identify its semantic owner, source inventory, label projector
+or renderer, and acceptance expectations. Register the new carrier where that
+existing contract requires membership, and use its declared table, header, row
+and cell context rules. Plausible hand-authored labels establish neither inventory
+coverage nor agreement with the owning projection. When the receiving system has
+no inventory or projector, define the bounded artifact contract directly; creating
+a new registry or harness needs its own demonstrated use.
 
 ### Rule: Header topology is explicit
 
@@ -134,6 +129,15 @@ the relevant rendered and interaction cases. Existing coverage remains reusable
 only within its actual identity and scope; a browser pass is neither a universal
 requirement for every edit nor a substitute for semantic evidence.
 
+## Operating sequence
+
+1. **Select the receiving operation:** Identify lookup, comparison, entry, reconciliation or detached-record use. Choose direct reasoning when the requested correction already has a clear owner and meaning.
+2. **Trace the source boundary:** Locate authored markup or the canonical renderer, runtime record, styles, maintained copies, and relevant report or print outputs. For a new page or table, discover and satisfy the existing family's source-registration, projection and coverage contract before treating the artifact as admitted. Identify the exact component the task authorizes creating or changing.
+3. **Map meaning before projection:** Trace representative cells to their row, column and group headers. Separate complete records, present blanks, absent fields, summaries and empty states. Preserve literal identifiers, names and units.
+4. **Choose the smallest repair:** Reuse existing table and scroll patterns. Add supplemental context only for its named consumer. Return unsupported topology or ambiguous wording to the semantic owner before transformation.
+5. **Observe the changed claim:** Select source, extraction, state, geometry or interaction evidence from the changed-boundary matrix. A matching pair of empty outputs needs an independent meaningful-record expectation. Preserve previous observations with their source and coverage limits.
+6. **Hand back and release:** State the table disposition, what the evidence establishes, the adjacent unknown and its receiver. Further populations or a wider browser campaign enter through a new consequential uncertainty.
+
 ## Decisive scenarios
 
 ### Scenario: A row leaves its page
@@ -147,6 +151,37 @@ requirement for every edit nor a substitute for semantic evidence.
 - **Given:** Two column groups each contain a field named `Actual`.
 - **When:** A simple projector cannot retain their group distinctions.
 - **Then:** The source owner supplies an explicit association/record contract or simplifies the table; the unresolved projection remains a visible review disposition.
+
+### Scenario: An isolated copy correction is already understood
+
+- **Given:** One caption contains a spelling error, its owner is known, and its wording is outside generated-label and interaction contracts.
+- **When:** The task asks for that correction.
+- **Then:** Direct reasoning repairs the caption within the granted scope; the table-family audit and browser campaign remain released.
+
+## Strain and recovery
+
+Repeated global punctuation rules, guessed header mappings, a growing family list,
+or repeated campaigns without a new acceptance question indicate scope strain.
+Back off to one source-owned record and the relationship that changes the decision.
+Preserve authored bytes, accepted state, completed observations and ambiguous
+material. A smaller admitted grammar or an explicit owner question can complete
+the present return. Re-entry requires the missing association, a changed consumer,
+or a reproduced interaction or layout condition, rather than more processing alone.
+
+## Evidence, publication and authority
+
+These rules carry repository-local material-use observations from table-label,
+comparison, print and embedded-layout repairs, informed by the standards and
+practitioner references below. Their transferable contribution is the distinction
+among semantic, literal, rendered and receiving contracts. Fresh-context exercises
+can probe that distinction; they establish the exercised decisions rather than
+cross-platform effectiveness or arbitrary AI ingestion.
+
+Publication readiness describes a coherent, audience-safe source package. Contract
+revision and evidence maturity stay revisable; current task authority governs every
+edit, test and release. The complete method and both references work without private
+workspace access. Optional repository implementation links support deeper inspection;
+their availability leaves the portable method intact.
 
 ## Conditional context
 
