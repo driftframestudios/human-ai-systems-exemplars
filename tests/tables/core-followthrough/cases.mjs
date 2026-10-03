@@ -37,8 +37,15 @@ export const supplementalFamilies = [
   { id: "a3", source: "a3-stacked-cube-atlas-expanded-bundle-v0.2/index.html", tables: 3, kind: "control" },
 ];
 
-export function planCases({ family = "all", combined = false, caseId = null, fromCaseId = null } = {}) {
-  if (caseId && fromCaseId) throw new Error("--case and --from-case are mutually exclusive");
+export function planCases({ family = "all", combined = false, caseId = null, caseIds = null, fromCaseId = null } = {}) {
+  if (caseId !== null && caseIds !== null) throw new Error("Use caseId or caseIds, not both");
+  const requested = caseIds ?? (caseId === null ? null : [caseId]);
+  if (requested !== null) {
+    if (!Array.isArray(requested) || requested.length < 1 || requested.length > 3)
+      throw new Error("Explicit --case selection requires one to three IDs");
+    if (new Set(requested).size !== requested.length) throw new Error("Duplicate case ID");
+    if (fromCaseId) throw new Error("--case and --from-case are mutually exclusive");
+  }
   const available = [...coreFamilies, ...(combined ? supplementalFamilies : [])];
   const selected = available.filter(item => family === "all" || item.id === family);
   if (!selected.length) throw new Error("Unknown or unavailable family");
@@ -68,11 +75,11 @@ export function planCases({ family = "all", combined = false, caseId = null, fro
       }
     }
   }
-  if (caseId && !cases.some(item => item.id === caseId)) throw new Error("Unknown case");
+  if (requested?.some(id => !cases.some(item => item.id === id))) throw new Error("Unknown case");
   if (fromCaseId) {
     const start = cases.findIndex(item => item.id === fromCaseId);
     if (start < 0) throw new Error("Unknown starting case");
     return cases.slice(start);
   }
-  return cases.filter(item => !caseId || item.id === caseId);
+  return cases.filter(item => requested === null || requested.includes(item.id));
 }

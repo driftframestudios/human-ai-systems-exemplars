@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import vm from "node:vm";
 import { planCases } from "./cases.mjs";
 import { bindScreenshot, bindPrintPDF, printPDFOptions, validateRecordArtifacts } from "./contracts.mjs";
 import { traverseRightmost, tableStateCoverage, comparativeCaption, comparativeColumns, comparativeGroups,
@@ -12,6 +13,93 @@ import { inputSnapshot, publishScreenshot, publishCampaign } from "../../../tool
 
 const helperSource = await fs.readFile(new URL("./closure.mjs", import.meta.url), "utf8");
 const browserSource = await fs.readFile(new URL("./browser.mjs", import.meta.url), "utf8");
+
+const renewalIds = ["hiring-source-960-print", "a3-source-304-screen", "a3-source-390-screen"];
+
+test("bounded renewal selects exactly three trusted cases in canonical order", () => {
+  const full = planCases({ combined: true });
+  assert.deepEqual(planCases({ combined: true, caseIds: [...renewalIds].reverse() }),
+    full.filter(item => renewalIds.includes(item.id)));
+  assert.equal(planCases({ combined: true, caseId: renewalIds[0] }).length, 1);
+  assert.equal(planCases({ combined: true }).length, 93, "legacy full plan stays available");
+});
+for (const [name, options, message] of [
+  ["unknown", { caseIds: [renewalIds[0], "missing"] }, /Unknown case/u],
+  ["duplicate", { caseIds: [renewalIds[0], renewalIds[0]] }, /Duplicate/u],
+  ["from-case conflict", { caseIds: renewalIds, fromCaseId: renewalIds[0] }, /mutually exclusive/u],
+  ["over three", { caseIds: [...renewalIds, "a3-source-1280-screen"] }, /one to three/u],
+  ["empty explicit list", { caseIds: [] }, /one to three/u],
+  ["singular and plural conflict", { caseId: renewalIds[0], caseIds: renewalIds }, /not both/u],
+]) test("bounded renewal rejects " + name, () => {
+  assert.throws(() => planCases({ combined: true, ...options }), message);
+});
+
+function selectedByCLI(args) {
+  const selection = browserSource.slice(browserSource.indexOf("const args ="),
+    browserSource.indexOf("const plannedCases ="));
+  return vm.runInNewContext(selection + "\ncases", {
+    process: { argv: ["node", "browser.mjs", ...args] }, assert, planCases,
+  });
+}
+test("actual CLI consumes repeated --case flags without falling back to a broad plan", () => {
+  const cases = selectedByCLI(["--combined", ...renewalIds.flatMap(id => ["--case", id]), "--plan"]);
+  assert.deepEqual(cases.map(item => item.id), renewalIds);
+  assert.match(browserSource, /if \(args\.includes\("--plan"\)\)/u);
+});
+for (const [name, args, message] of [
+  ["unknown", ["--case", "missing"], /Unknown/u],
+  ["duplicate", ["--case", renewalIds[0], "--case", renewalIds[0]], /Duplicate/u],
+  ["from-case conflict", ["--case", renewalIds[0], "--from-case", renewalIds[1]], /mutually exclusive/u],
+  ["over three", [...renewalIds, "a3-source-1280-screen"].flatMap(id => ["--case", id]), /one to three/u],
+  ["missing value", ["--case"], /needs a value/u],
+]) test("actual CLI rejects " + name + " before browser setup", () => {
+  assert.throws(() => selectedByCLI(["--combined", ...args]), message);
+});
+test("A3 304 and 390 use the same reach helper without widening other narrow cases", () => {
+  const condition = browserSource.match(/const keyboard = ([^\n]+?) \? await observeLocalReach/u)[1];
+  const enabled = (id, width, mode = "screen", nativeOnly = false) =>
+    vm.runInNewContext(condition, { family: { id }, width, mode, nativeOnly });
+  assert.equal(enabled("a3", 304), true);
+  assert.equal(enabled("a3", 390), true);
+  assert.equal(enabled("a3", 1280), false);
+  assert.equal(enabled("hiring", 304), false);
+  assert.equal(enabled("hiring", 390), true);
+  assert.equal(enabled("a3", 304, "print"), false);
+  assert.equal(enabled("a3", 390, "screen", true), false);
+});
+
+function observeIdentifierFixture(literal, rawFragments) {
+  const native = [{ rows: [{ fields: [{ value: literal }] }] }];
+  const measuredTables = [{ fragments: rawFragments }];
+  const before = JSON.stringify({ native, measuredTables });
+  const start = browserSource.indexOf("        const fragments =");
+  const stop = browserSource.indexOf("        const reasons = [];", start);
+  const result = vm.runInNewContext(browserSource.slice(start, stop)
+    + "\n({ fragments, wordFragments, numericFragments, observerLimitations })",
+    { family: { id: "a3" }, native, measuredTables, nativeOnly: false, assert });
+  assert.equal(JSON.stringify({ native, measuredTables }), before, "literal and raw evidence are unchanged");
+  return result;
+}
+test("NIST identifier counterexample retains raw numeric flags and an explicit limitation", () => {
+  const result = observeIdentifierFixture("NIST SP 800-207 Zero Trust Architecture",
+    [{ kind: "numeric", token: "-207", lines: 2 }, { kind: "numeric", token: "42", lines: 2 }]);
+  assert.equal(result.numericFragments, 2, "neither known nor unrelated numeric flags are waived");
+  assert.equal(result.fragments.length, 2);
+  assert.equal(result.observerLimitations[0].literal, "NIST SP 800-207 Zero Trust Architecture");
+  assert.equal(result.observerLimitations[0].rawNumericSuffixFlags, 1);
+  assert.match(result.observerLimitations[0].limitation, /does not excuse other numeric fragments/u);
+  assert.match(browserSource, /if \(wordFragments \|\| numericFragments\) reasons\.push\("fragmentation-review"\)/u);
+  assert.match(browserSource, /interactions, observerLimitations, errors/u);
+});
+test("altering the standards identifier cannot remove its preservation obligation", () => {
+  assert.throws(() => observeIdentifierFixture("NIST SP 800207 Zero Trust Architecture", []),
+    /complete standards identifier/u);
+});
+test("an unfragmented preserved standards identifier does not invent an observer flag", () => {
+  const result = observeIdentifierFixture("NIST SP 800-207 Zero Trust Architecture", []);
+  assert.equal(result.numericFragments, 0);
+  assert.equal(result.observerLimitations.length, 0);
+});
 
 test("closure preserves the original 88 cases plus three reviewed additions and two Strategy states", () => {
   const cases = planCases({ combined: true });
