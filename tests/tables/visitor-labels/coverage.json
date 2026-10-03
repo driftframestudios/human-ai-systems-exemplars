@@ -1216,6 +1216,33 @@
       "standing": "native labels complete",
       "changed": true
     },
+    "readable-tables-reusable-evidence.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Choose the observation that can answer the changed question",
+          "shape": "simple",
+          "rows": 5,
+          "th": 7,
+          "td": 8
+        },
+        {
+          "table": 2,
+          "topic": "Research snapshot: nine recorded terminal dispositions as of 3 October 2026",
+          "shape": "simple",
+          "rows": 4,
+          "th": 6,
+          "td": 6
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
     "recoverable-enterprise-forms.html": {
       "tables": [
         {
@@ -1650,11 +1677,11 @@
     "visitor-boundary-contract.js": "Boundary constants; no table generation found in the inventoried source."
   },
   "counts": {
-    "owned_pages": 42,
-    "native_tables": 139,
-    "simple_tables": 135,
+    "owned_pages": 43,
+    "native_tables": 141,
+    "simple_tables": 137,
     "explicit_tables": 4,
-    "native_labelled_elements": 4664,
+    "native_labelled_elements": 4702,
     "runtime_body_generators": 2
   },
   "rendering_affecting_native_additions": [],

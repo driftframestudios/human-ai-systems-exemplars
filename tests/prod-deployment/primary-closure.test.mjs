@@ -55,6 +55,7 @@ const acceptedRoutes = [
   "spatial-capture-collaborative-memory.html",
   "multilingual-clinical-vocabulary-practice.html",
   "recoverable-enterprise-forms.html",
+  "readable-tables-reusable-evidence.html",
   "exemplar-gallery-list.html",
 ].sort();
 const restingExemplars = [
@@ -100,7 +101,7 @@ async function loadPrimaryManifest() {
   return validatePrimaryManifest(JSON.parse(source));
 }
 
-test("the production manifest carries the accepted 39-route primary collection and its explicit closure", async () => {
+test("the production manifest carries the accepted 40-route primary collection and its explicit closure", async () => {
   const manifest = await loadPrimaryManifest();
   const projectedPaths = new Set(manifest.files.map(({ projected_path }) => projected_path));
   const rootHtml = manifest.files
@@ -132,6 +133,11 @@ test("the production manifest carries the accepted 39-route primary collection a
     "android-chrome-144x144.png",
     "android-chrome-192x192.png",
     "apple-touch-icon.png",
+    "readable-tables-reusable-evidence.html",
+    "styles/routes/table-study.css",
+    "img/plot/table_reading_contract.svg",
+    "img/plot/table_study_observations.svg",
+    "img/plot/table_verification_states.svg",
   ]) {
     assert.ok(projectedPaths.has(required), `${required} belongs to the primary closure`);
   }
@@ -221,7 +227,7 @@ test("the semantic inventory resolves every selected image without becoming a me
   }
 });
 
-test("the sitemap identifies exactly the 39 indexable production routes", async () => {
+test("the sitemap identifies exactly the 40 indexable production routes", async () => {
   const sitemap = await readFile(
     path.join(repositoryRoot, canvasRoot, "sitemap.xml"),
     "utf8",

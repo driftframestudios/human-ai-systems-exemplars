@@ -58,7 +58,7 @@
   </url>
   <url>
     <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/debriefs.html</loc>
-    <lastmod>2026-09-28</lastmod>
+    <lastmod>2026-10-03</lastmod>
   </url>
   <url>
     <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/registry-goal-fidelity-routing.html</loc>
@@ -155,5 +155,9 @@
   <url>
     <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/exemplar-gallery-list.html</loc>
     <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/readable-tables-reusable-evidence.html</loc>
+    <lastmod>2026-10-03</lastmod>
   </url>
 </urlset>
