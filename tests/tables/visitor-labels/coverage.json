@@ -159,9 +159,9 @@
           "table": 2,
           "topic": "Public-ready portable skill contracts and the results they receive",
           "shape": "simple",
-          "rows": 22,
-          "th": 24,
-          "td": 42
+          "rows": 24,
+          "th": 26,
+          "td": 46
         }
       ],
       "external_scripts": [
@@ -1681,7 +1681,7 @@
     "native_tables": 141,
     "simple_tables": 137,
     "explicit_tables": 4,
-    "native_labelled_elements": 4702,
+    "native_labelled_elements": 4710,
     "runtime_body_generators": 2
   },
   "rendering_affecting_native_additions": [],
