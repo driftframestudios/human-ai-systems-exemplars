@@ -102,9 +102,17 @@
   .matrix-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 16px; background: #fffefb; }
   table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 980px; }
   th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 10px; vertical-align: top; }
-  th { background: #faf4e8; text-align: left; font-weight: 860; position: sticky; top: 0; z-index: 2; }
+  th { background: #faf4e8; text-align: left; font-weight: 860; }
+  thead th { position: sticky; top: 0; z-index: 2; }
   th:first-child, td:first-child { position: sticky; left: 0; z-index: 1; background: #fffaf0; min-width: 220px; }
-  th:first-child { z-index: 3; }
+  thead th:first-child { z-index: 3; }
+  caption { padding: 12px; text-align: left; font-weight: 780; }
+  .topology-cell { cursor: pointer; }
+  .topology-cell:focus-visible { outline: none; }
+  .topology-cell:focus-visible > rect { stroke: var(--ink); stroke-width: 4; stroke-dasharray: 6 3; }
+  .cell-button:focus-visible, .matrix-wrap:focus-visible, #cellInspector :is(input, textarea, select):focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 3px; }
+  #cellText { scroll-margin-block: 2rem; }
+  @media (forced-colors: active) { .topology-cell:focus-visible > rect { stroke: Highlight; } }
   .layer-label { display: grid; gap: 6px; }
   .layer-label .kind { color: var(--muted); font-size: .82rem; text-transform: uppercase; letter-spacing: .04em; }
   .cell-button {
@@ -228,8 +236,8 @@
   <section class="wide-area diagram-panel">
     <div class="wrap" style="width:100%; max-width:1680px;">
       <h2>SVG Service Topology View</h2>
-      <p class="small-note">This SVG is generated from visible stages and visible layers. Hidden stages and layers remain in the source data, JSON, and JSON-LD.</p>
-      <div class="svg-wrap"><svg id="blueprintSvg" role="img" aria-label="Service-design Blueprint SVG view"></svg></div>
+      <p class="small-note" id="topologyInstructions">Select a cell, or focus it and press Enter or Space, to move to its editable details. This view shows visible stages and layers; hidden content remains in the source data, JSON, and JSON-LD.</p>
+      <div class="svg-wrap"><svg id="blueprintSvg" role="group" aria-label="Service-design Blueprint cell selection" aria-describedby="topologyInstructions"></svg></div>
     </div>
   </section>
 
@@ -270,7 +278,7 @@
       <h2>Text / Table Equivalent</h2>
       <p class="small-note">Select a cell to reveal and edit the full text, routes, linked shared assets, and stable IDs. Long text remains preserved in the data model even when previewed compactly.</p>
       <div class="legend" style="margin:10px 0;" id="statusLegend"></div>
-      <div class="matrix-wrap"><table id="serviceTable" aria-label="Editable Service-design Blueprint table"></table></div>
+      <div class="matrix-wrap" role="region" aria-label="Editable Service-design Blueprint table" tabindex="0"><table id="serviceTable"></table></div>
     </div>
   </section>
 
@@ -1611,7 +1619,50 @@ function selectCell(cellId) {
   view.selected_cell_id = cellId;
   view.selected_asset_id = '';
   renderAll();
+  focusCellEditor(cellId);
 }
+function cellSelectionLabel(cell) {
+  return `Edit ${layerById(cell.layer_id).label}: ${stageById(cell.stage_id).label}. ${statusLabel(cell.status)}. Cell ${cell.id}.`;
+}
+function focusCellEditor(cellId) {
+  const editor = document.getElementById('cellText');
+  if (!editor || editor.dataset.cellId !== cellId || activeView().selected_cell_id !== cellId) return;
+  editor.focus({preventScroll:true});
+  editor.scrollIntoView({
+    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+    block:'center',
+    inline:'nearest'
+  });
+}
+function captureCellEditorFocus() {
+  const inspector = document.getElementById('cellInspector');
+  const control = document.activeElement;
+  if (!control || !inspector.contains(control)) return null;
+  return {
+    cellId:inspector.dataset.cellId, id:control.id,
+    assetId:control.dataset.field === 'asset-link' ? control.dataset.id : null,
+    start:control.selectionStart, end:control.selectionEnd, direction:control.selectionDirection
+  };
+}
+function restoreCellEditorFocus(focus) {
+  const inspector = document.getElementById('cellInspector');
+  if (!focus || !focus.cellId || focus.cellId !== activeView().selected_cell_id || inspector.dataset.cellId !== focus.cellId) return;
+  const control = focus.id ? document.getElementById(focus.id)
+    : Array.from(inspector.querySelectorAll('[data-field="asset-link"]')).find(input => input.dataset.id === focus.assetId);
+  if (!control || !inspector.contains(control)) return;
+  control.focus({preventScroll:true});
+  if (typeof focus.start === 'number' && typeof control.setSelectionRange === 'function') {
+    control.setSelectionRange(focus.start, focus.end, focus.direction);
+  }
+}
+function activateTopologyKey(event) {
+  if (event.key !== 'Enter' && event.key !== ' ') return;
+  const cell = event.target.closest('#blueprintSvg [data-action="select-cell"]');
+  if (!cell) return;
+  event.preventDefault();
+  if (!event.repeat) selectCell(cell.dataset.id);
+}
+
 function selectAsset(assetId) {
   const view = activeView();
   if (!assetById(assetId) || !isAssetVisible(assetId)) {
@@ -1671,16 +1722,17 @@ function renderTable() {
   const stages = visibleStages();
   const layers = visibleLayers();
   const view = activeView();
-  let html = '<thead><tr><th>Layer / Stage</th>';
-  for (const stage of stages) html += `<th><span class="stage-pill">${escapeHtml(stage.label)}</span><div class="tiny mono">${escapeHtml(stage.id)}</div></th>`;
+  const caption = `Service blueprint: ${state.artifact_identity.display_name}. Visible stages and layers`;
+  let html = `<caption>${escapeHtml(caption)}</caption><thead><tr><th scope="col" data-label="Service layer">Layer / Stage</th>`;
+  for (const stage of stages) html += `<th scope="col" data-label="${escapeHtml('Service stage: '+stage.label+' ('+stage.id+')')}"><span class="stage-pill">${escapeHtml(stage.label)}</span><div class="tiny mono">${escapeHtml(stage.id)}</div></th>`;
   html += '</tr></thead><tbody>';
   for (const layer of layers) {
-    html += `<tr><td class="${layerClass(layer.kind)}"><div class="layer-label"><strong>${escapeHtml(layer.label)}</strong><span class="kind">${escapeHtml(layerKindById[layer.kind]?.label || layer.kind)}</span><span class="tiny mono">${escapeHtml(layer.id)}</span></div></td>`;
+    html += `<tr data-label="${escapeHtml(caption+': '+layer.label+' ('+layer.id+')')}"><th scope="row" data-label="Service layer" class="${layerClass(layer.kind)}"><div class="layer-label"><strong>${escapeHtml(layer.label)}</strong><span class="kind">${escapeHtml(layerKindById[layer.kind]?.label || layer.kind)}</span><span class="tiny mono">${escapeHtml(layer.id)}</span></div></th>`;
     for (const stage of stages) {
       const cell = cellFor(layer.id, stage.id);
       const selected = view.selected_cell_id === cell.id;
       const assets = (cell.asset_ids || []).map(assetById).filter(Boolean).map(a => a.label).slice(0,2);
-      html += `<td class="${layerClass(layer.kind)}"><button class="cell-button" data-action="select-cell" data-id="${cell.id}"><div class="cell-card ${selected ? 'selected' : ''}"><div class="cell-preview">${escapeHtml(cell.text || 'Add service detail…')}</div><div class="cell-meta"><span class="status-pill ${cell.status}"><span class="status-dot"></span>${escapeHtml(statusLabel(cell.status))}</span>${cell.handoff ? `<span class="route-pill">${escapeHtml(routeLabel(cell.handoff, cell.custom_handoff))}</span>` : ''}${assets.length ? `<span class="asset-pill">${escapeHtml(assets.join(', '))}${(cell.asset_ids||[]).length>2?'…':''}</span>` : ''}</div><div class="tiny mono">${escapeHtml(cell.id)}</div></div></button></td>`;
+      html += `<td data-label="${escapeHtml('Service stage: '+stage.label+' ('+stage.id+')')}" class="${layerClass(layer.kind)}"><button type="button" class="cell-button" data-action="select-cell" data-id="${escapeHtml(cell.id)}" aria-label="${escapeHtml(cellSelectionLabel(cell))}" aria-pressed="${selected}" aria-controls="cellInspector"><div class="cell-card ${selected ? 'selected' : ''}"><div class="cell-preview">${escapeHtml(cell.text || 'Add service detail…')}</div><div class="cell-meta"><span class="status-pill ${cell.status}"><span class="status-dot"></span>${escapeHtml(statusLabel(cell.status))}</span>${cell.handoff ? `<span class="route-pill">${escapeHtml(routeLabel(cell.handoff, cell.custom_handoff))}</span>` : ''}${assets.length ? `<span class="asset-pill">${escapeHtml(assets.join(', '))}${(cell.asset_ids||[]).length>2?'…':''}</span>` : ''}</div><div class="tiny mono">${escapeHtml(cell.id)}</div></div></button></td>`;
     }
     html += '</tr>';
   }
@@ -1704,11 +1756,11 @@ function renderSvg() {
   svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
   const ns = 'http://www.w3.org/2000/svg';
   svg.innerHTML = '';
-  function add(tag, attrs={}, text='') {
+  function add(tag, attrs={}, text='', parent=svg) {
     const el = document.createElementNS(ns, tag);
     for (const [k,v] of Object.entries(attrs)) el.setAttribute(k, v);
     if (text) el.textContent = text;
-    svg.appendChild(el);
+    parent.appendChild(el);
     return el;
   }
   add('rect', {x:0,y:0,width,height,fill:'#fffefb'});
@@ -1729,13 +1781,16 @@ function renderSvg() {
       const x = leftW + cIdx*colW;
       const cell = cellFor(layer.id, stage.id);
       const selected = view.selected_cell_id === cell.id;
-      add('rect', {x:x+2,y:y+4,width:colW-12,height:rowH-12,rx:8,fill:selected?'#dfecec':'rgba(255,255,255,.62)',stroke:selected?'#335a61':'#d7d0c1','stroke-width':selected?3:1});
-      const title = document.createElementNS(ns, 'title');
-      title.textContent = `${layer.label} × ${stage.label}: ${cell.text}`;
-      svg.lastChild.appendChild(title);
-      wrapSvgText(cell.text || 'Add service detail…', 29, 3).forEach((line, li) => add('text', {x:x+12,y:y+28+li*16,'font-size':12,'font-weight':li===0?650:500,fill:'#25231f'}, line));
-      add('text', {x:x+12,y:y+84,'font-size':10,'font-weight':700,fill:'#335a61'}, statusLabel(cell.status));
-      if (cell.handoff) add('text', {x:x+12,y:y+99,'font-size':10,fill:'#335a61'}, truncate(routeLabel(cell.handoff, cell.custom_handoff), 26));
+      const group = add('g', {
+        class:'topology-cell', role:'button', tabindex:0,
+        'data-action':'select-cell', 'data-id':cell.id,
+        'aria-label':cellSelectionLabel(cell), 'aria-pressed':String(selected), 'aria-controls':'cellInspector'
+      });
+      add('rect', {x:x+2,y:y+4,width:colW-12,height:rowH-12,rx:8,fill:selected?'#dfecec':'rgba(255,255,255,.62)',stroke:selected?'#335a61':'#d7d0c1','stroke-width':selected?3:1}, '', group);
+      add('title', {}, `${layer.label} × ${stage.label}: ${cell.text}`, group);
+      wrapSvgText(cell.text || 'Add service detail…', 29, 3).forEach((line, li) => add('text', {x:x+12,y:y+28+li*16,'font-size':12,'font-weight':li===0?650:500,fill:'#25231f'}, line, group));
+      add('text', {x:x+12,y:y+84,'font-size':10,'font-weight':700,fill:'#335a61','data-cell-status':''}, statusLabel(cell.status), group);
+      if (cell.handoff) add('text', {x:x+12,y:y+99,'font-size':10,fill:'#335a61'}, truncate(routeLabel(cell.handoff, cell.custom_handoff), 26), group);
     });
   });
   // separating lines inspired by service blueprint convention
@@ -1759,6 +1814,7 @@ function renderCellInspector(message='') {
   const view = activeView();
   const cell = cellById(view.selected_cell_id);
   const el = document.getElementById('cellInspector');
+  el.dataset.cellId = cell?.id || '';
   if (!cell) {
     el.innerHTML = `<p class="small-note">${escapeHtml(message || 'Select a visible service cell from the table or SVG to inspect and edit it.')}</p>`;
     return;
@@ -1769,10 +1825,10 @@ function renderCellInspector(message='') {
   const statusOptionsHtml = statusOptions.map(s => `<option value="${s.id}" ${cell.status===s.id?'selected':''}>${escapeHtml(s.label)}</option>`).join('');
   const assetChecks = state.shared_assets.map(asset => `<label class="checkbox-line"><input type="checkbox" data-field="asset-link" data-id="${asset.id}" ${(cell.asset_ids||[]).includes(asset.id)?'checked':''} /> <span><strong>${escapeHtml(asset.label)}</strong><br><span class="tiny">${escapeHtml(asset.asset_type)}</span></span></label>`).join('');
   el.innerHTML = `
-    <div class="focus-note"><strong>${escapeHtml(layer.label)}</strong> × <strong>${escapeHtml(stage.label)}</strong><br><span class="tiny mono">${escapeHtml(cell.id)}</span></div>
+    <div class="focus-note" id="selectedCellContext"><strong>${escapeHtml(layer.label)}</strong> × <strong>${escapeHtml(stage.label)}</strong><br><span class="tiny mono">${escapeHtml(cell.id)}</span></div>
     <div class="inspector-grid" style="margin-top:12px;">
       <div>
-        <div class="field-row"><label for="cellText">Cell text</label><textarea id="cellText">${escapeHtml(cell.text)}</textarea></div>
+        <div class="field-row"><label for="cellText">Cell text</label><textarea id="cellText" data-cell-id="${escapeHtml(cell.id)}" aria-describedby="selectedCellContext">${escapeHtml(cell.text)}</textarea></div>
         <div class="field-row"><label for="cellStatus">Status</label><select id="cellStatus">${statusOptionsHtml}</select></div>
         <div class="field-row"><label for="cellRoute">Handoff route</label><select id="cellRoute"><option value="">No route yet</option>${routeOptions}</select></div>
         <div class="field-row" id="customRouteWrap" style="display:${cell.handoff==='custom'?'block':'none'}"><label for="cellCustomRoute">Custom route</label><input id="cellCustomRoute" type="text" value="${escapeHtml(cell.custom_handoff || '')}" /></div>
@@ -1787,15 +1843,13 @@ function renderCellInspector(message='') {
         <p class="tiny mono">stage_id: ${escapeHtml(cell.stage_id)}<br>layer_id: ${escapeHtml(cell.layer_id)}</p>
       </div>
     </div>`;
-  document.getElementById('cellText').addEventListener('input', e => { cell.text = e.target.value; updateExportsOnly(); });
-  document.getElementById('cellText').addEventListener('blur', () => renderAll());
+  document.getElementById('cellText').addEventListener('input', e => { cell.text = e.target.value; renderTable(); renderSvg(); updateExportsOnly(); });
   document.getElementById('cellStatus').addEventListener('change', e => { cell.status = e.target.value; renderAll(); });
   document.getElementById('cellRoute').addEventListener('change', e => { cell.handoff = e.target.value; renderAll(); });
   const custom = document.getElementById('cellCustomRoute');
-  if (custom) custom.addEventListener('input', e => { cell.custom_handoff = e.target.value; updateExportsOnly(); });
+  if (custom) custom.addEventListener('input', e => { cell.custom_handoff = e.target.value; renderTable(); renderSvg(); updateExportsOnly(); });
   const reason = document.getElementById('cellReason');
   reason.addEventListener('input', e => { cell.reason = e.target.value; updateExportsOnly(); });
-  reason.addEventListener('blur', () => renderAll());
   el.querySelectorAll('[data-field="asset-link"]').forEach(input => {
     input.addEventListener('change', e => {
       const id = e.target.dataset.id;
@@ -2377,6 +2431,7 @@ function renderPanels() {
 }
 
 function renderAll(message='') {
+  const editorFocus = captureCellEditorFocus();
   normalizeView();
   renderSummary();
   renderLegend();
@@ -2389,6 +2444,7 @@ function renderAll(message='') {
   renderIdentityRegistry();
   renderPanels();
   updateExportsOnly();
+  restoreCellEditorFocus(editorFocus);
 }
 
 function addStage() {
@@ -2630,6 +2686,7 @@ function importData(raw) {
 }
 
 // Event delegation
+document.addEventListener('keydown', activateTopologyKey);
 document.addEventListener('click',e=>{if(pendingRemoval&&e.target.closest('button')!==pendingRemoval.button)clearPendingRemoval();},true);
 document.addEventListener('input',()=>clearPendingRemoval(),true);
 document.addEventListener('change',()=>clearPendingRemoval(),true);
@@ -2652,7 +2709,7 @@ document.addEventListener('click', e => {
   if (action === 'remove-asset') removeAsset(id,btn);
 });
 
-document.getElementById('artifactName').addEventListener('input', e => { state.artifact_identity.display_name = e.target.value; renderSummary(); updateExportsOnly(); });
+document.getElementById('artifactName').addEventListener('input', e => { state.artifact_identity.display_name = e.target.value; renderSummary(); renderTable(); updateExportsOnly(); });
 document.getElementById('artifactSubtitle').addEventListener('input', e => { state.artifact_identity.subtitle = e.target.value; renderSummary(); updateExportsOnly(); });
 document.getElementById('addStage').addEventListener('click', addStage);
 document.getElementById('addLayer').addEventListener('click', addLayer);

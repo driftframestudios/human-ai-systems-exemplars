@@ -214,6 +214,12 @@
   @media (forced-colors: active) {
     .artifact-attribution__notice { color: CanvasText; }
   }
+    caption { padding: 12px; text-align: left; font-weight: 700; color: var(--ink); }
+    tbody th[scope="row"] { position: static; z-index: auto; font-size: inherit; font-weight: normal; text-transform: none; letter-spacing: normal; }
+    .table-wrap { max-width: 100%; min-width: 0; }
+    .table-wrap:focus-visible, .matrix-shell:focus-visible { outline: 3px solid var(--focus, #715a3e); outline-offset: 2px; }
+    #tableMount th:last-child, #tableMount td:last-child { min-width: 16rem; }
+    #tableMount .route-pill { overflow-wrap: normal; word-break: normal; }
 </style>
 <style data-canary-stack-css>
 .visitor-boundary{border-block-start:1px solid currentColor;box-sizing:border-box;display:grid;flex:1 0 100%;gap:.75rem;grid-column:1/-1;inline-size:100%;margin:clamp(1.5rem,4vw,3rem) auto 0;max-inline-size:82rem;overflow-wrap:anywhere;padding:1rem clamp(1rem,3vw,1.75rem) 0;user-select:text}.visitor-boundary__marker{box-sizing:border-box;color:inherit;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-size:.7rem;font-variant-ligatures:none;line-height:1.55;margin:0;max-inline-size:100%;white-space:normal}.visitor-boundary__context{box-sizing:border-box;font-family:inherit;font-size:.8rem;line-height:1.55;margin:0;max-inline-size:70ch}@media print{.visitor-boundary{border-color:#000;color:#000}}@media (forced-colors:active){.visitor-boundary{border-color:CanvasText;color:CanvasText}}
@@ -283,7 +289,7 @@
 
         <section class="panel">
           <h2>Text / Table Equivalent</h2>
-          <div id="tableMount" class="table-wrap" tabindex="0" aria-label="Scrollable Alignment Worksheet table"></div>
+          <div id="tableMount" class="table-wrap" tabindex="0" aria-label="Scrollable Alignment Worksheet table" role="region"></div>
         </section>
       </div>
 
@@ -1025,7 +1031,7 @@ These public collaboration loops fit when the receiving work meets the stated co
       <div class="identity-item">option_id: ${escapeHtml(opt.id)}<br/>visible: ${hidden ? 'hidden in focus view' : 'visible in focus view'}<br/>route_family: ${escapeHtml(getRouteFamily(opt.handoff_route))}</div>
     `;
     const bind = (id, event, fn) => { const el = document.getElementById(id); if (el) el.addEventListener(event, fn); };
-    bind(ids.name,'input', e => { opt.name=e.target.value; renderOptions(); renderSvg(); renderExports(); });
+    bind(ids.name,'input', e => { opt.name=e.target.value; renderOptions(); refreshOptionTableName(opt); renderSvg(); renderExports(); });
     bind(ids.pow,'input', e => { opt.probability_of_what=e.target.value; renderSvg(); renderExports(); });
     bind(ids.prob,'input', e => { opt.probability=Math.max(0, Math.min(100, Number(e.target.value)||0)); renderSvg(); renderExports(); });
     bind(ids.uncertain,'change', e => { opt.most_uncertain_blank=e.target.value; renderSvg(); renderExports(); });
@@ -1055,17 +1061,26 @@ These public collaboration loops fit when the receiving work meets the stated co
     mount.querySelectorAll('.inverse-field').forEach(el => el.addEventListener('input', e => { app.inverse_state[e.target.dataset.key]=e.target.value; renderSvg(); renderExports(); }));
   }
 
+  function refreshOptionTableName(opt) {
+    document.querySelectorAll('#tableMount tbody tr[data-record-id]').forEach(row => {
+      if (row.dataset.recordId !== opt.id) return;
+      row.dataset.label = 'Alignment Worksheet option: ' + opt.name;
+      const name = row.querySelector('th[scope=row] strong');
+      if (name) name.textContent = opt.name;
+    });
+  }
+
   function renderTable() {
     const visible = visibleOptions();
     const rows = visible.map(opt => `
-      <tr>
-        <td><strong>${escapeHtml(opt.name)}</strong><br/><span class="small-note">${escapeHtml(opt.id)}</span></td>
+      <tr data-record-id="${escapeAttr(opt.id)}" data-label="Alignment Worksheet option: ${escapeAttr(opt.name)}">
+        <th scope="row" data-label="Option"><strong>${escapeHtml(opt.name)}</strong><br/><code class="small-note">${escapeHtml(opt.id)}</code></th>
         <td>${escapeHtml(opt.probability_of_what)}<br/><span class="prob-pill">${Number(opt.probability||0)}%</span></td>
         <td>${escapeHtml(BLANK_SHORT[opt.most_uncertain_blank] || opt.most_uncertain_blank)}</td>
         <td><div class="clamp" id="clamp-${escapeAttr(opt.id)}">${escapeHtml(opt.restored_state)}</div><button class="small reveal-btn" data-id="${escapeAttr(opt.id)}" aria-expanded="false">Show full text</button><div class="reveal" id="reveal-${escapeAttr(opt.id)}" hidden>${escapeHtml(opt.restored_state)}</div></td>
         <td>${routePill(opt.handoff_route)}</td>
       </tr>`).join('');
-    document.getElementById('tableMount').innerHTML = `<table><thead><tr><th>Option</th><th>Probability target</th><th>Most uncertain blank</th><th>Restored state</th><th>Route</th></tr></thead><tbody>${rows}</tbody></table>`;
+    document.getElementById('tableMount').innerHTML = `<table><caption>Alignment Worksheet: options in the active view</caption><thead><tr><th scope="col" data-label="Option">Option</th><th scope="col" data-label="Probability target and estimate (%)">Probability target and estimate (%)</th><th scope="col" data-label="Most uncertain blank">Most uncertain blank</th><th scope="col" data-label="Restored state">Restored state</th><th scope="col" data-label="Route">Route</th></tr></thead><tbody>${rows}</tbody></table>`;
     document.querySelectorAll('.reveal-btn').forEach(btn => btn.addEventListener('click', e => { const id=e.currentTarget.dataset.id; const r=document.getElementById('reveal-'+id); const expanded=e.currentTarget.getAttribute('aria-expanded')==='true'; e.currentTarget.setAttribute('aria-expanded', String(!expanded)); e.currentTarget.textContent = expanded ? 'Show full text' : 'Collapse'; r.hidden = expanded; }));
   }
 

@@ -446,7 +446,7 @@
       }
       function renderMatrix() {
         const groups = visibleGroups();
-        return `<div class="table-wrap"><table class="matrix"><caption>Role-local context across the visible populations</caption><thead><tr><th scope="col">Context question</th>${groups.map(group => `<th scope="col">${escapeHtml(group.label)}</th>`).join("")}</tr></thead><tbody>${model.questions.map(question => `<tr><th scope="row">${escapeHtml(question.label)}</th>${groups.map(group => `<td>${escapeHtml(group.items[question.id])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+        return `<div class="table-wrap"><table data-label="Role-local context across the visible populations" class="matrix"><caption>Role-local context across the visible populations</caption><thead><tr><th data-label="Context question" scope="col">Context question</th>${groups.map(group => `<th data-label="${escapeHtml(group.label)}" scope="col">${escapeHtml(group.label)}</th>`).join("")}</tr></thead><tbody>${model.questions.map(question => `<tr data-label="Role-local context: ${escapeHtml(question.label)}"><th data-label="Context question" scope="row">${escapeHtml(question.label)}</th>${groups.map(group => `<td data-label="${escapeHtml(group.label)}">${escapeHtml(group.items[question.id])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
       }
       function renderShared() {
         const visible = new Set(state.groups);
@@ -464,7 +464,7 @@
       }
       function renderBlueprint() {
         const data = model.blueprint;
-        return `<div class="table-wrap"><table><caption>Stage–layer projection of the same operating context</caption><thead><tr><th scope="col">Layer / stage</th>${data.stages.map(stage => `<th scope="col">${escapeHtml(stage)}</th>`).join("")}</tr></thead><tbody>${data.layers.map(layer => `<tr><th scope="row">${escapeHtml(layer.label)}</th>${layer.cells.map(cell => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+        return `<div class="table-wrap"><table data-label="Stage and layer projection of the same operating context"><caption>Stage–layer projection of the same operating context</caption><thead><tr><th data-label="Layer / stage" scope="col">Layer / stage</th>${data.stages.map(stage => `<th data-label="${escapeHtml(stage)}" scope="col">${escapeHtml(stage)}</th>`).join("")}</tr></thead><tbody>${data.layers.map(layer => `<tr data-label="Stage and layer projection: ${escapeHtml(layer.label)}"><th data-label="Layer / stage" scope="row">${escapeHtml(layer.label)}</th>${layer.cells.map((cell, index) => `<td data-label="${escapeHtml(data.stages[index])}">${escapeHtml(cell)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
       }
       function renderSelection() {
         surface.querySelectorAll("[aria-current]").forEach(element => element.setAttribute("aria-current", "false"));
@@ -495,7 +495,7 @@
         inspector.innerHTML = `<h2 id="inspector-title">${escapeHtml(title)}</h2><p>${escapeHtml(copy)}</p>${details}`;
       }
       function renderSemanticTable() {
-        document.getElementById("semantic-table").innerHTML = `<table><caption>Genomic-viewer populations and decision context</caption><thead><tr><th scope="col">Population</th>${model.questions.map(question => `<th scope="col">${escapeHtml(question.label)}</th>`).join("")}</tr></thead><tbody>${model.groups.map(group => `<tr><th scope="row">${escapeHtml(group.label)}</th>${model.questions.map(question => `<td>${escapeHtml(group.items[question.id])}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+        document.getElementById("semantic-table").innerHTML = `<table data-label="Genomic-viewer populations and decision context"><caption>Genomic-viewer populations and decision context</caption><thead><tr><th data-label="Population" scope="col">Population</th>${model.questions.map(question => `<th data-label="${escapeHtml(question.label)}" scope="col">${escapeHtml(question.label)}</th>`).join("")}</tr></thead><tbody>${model.groups.map(group => `<tr data-label="Genomic-viewer decision context: ${escapeHtml(group.label)}"><th data-label="Population" scope="row">${escapeHtml(group.label)}</th>${model.questions.map(question => `<td data-label="${escapeHtml(question.label)}">${escapeHtml(group.items[question.id])}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
       }
       function render() {
         renderControls();

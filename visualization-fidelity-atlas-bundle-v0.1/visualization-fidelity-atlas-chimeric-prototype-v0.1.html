@@ -4079,16 +4079,36 @@ function renderExemplarDetail() {
       </div>
       <div>
         <h3>Source data</h3>
-        ${tableForDataset(ex.dataset)}
+        ${tableForDataset(ex)}
       </div>
     </div>
     <div style="margin-top:12px"><h3>Citation chips</h3>${citations.map(c => `<span class="source-chip" title="${esc(c.text)}">${esc(c.label)} · ${esc(c.supports)}</span>`).join("")}</div>
   `;
 }
-function tableForDataset(ds) {
-  const head = ds.columns.map(c => `<th>${esc(c)}</th>`).join("");
-  const body = ds.rows.map(r => `<tr>${r.map(v=>`<td>${esc(fmt(v))}</td>`).join("")}</tr>`).join("");
-  return `<div class="table-wrap"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+function tableForDataset(ex) {
+  const ds = ex.dataset;
+  const semantics = new Map([
+    ["ex-metadata-corrections-bar", {identity:"stage", measures:["value"]}],
+    ["ex-delay-drivers-dot", {identity:"driver", measures:["value"]}],
+    ["ex-readiness-dumbbell", {identity:"workflow", measures:["before","after"]}],
+    ["ex-weekly-queue-line", {identity:"week", measures:["value"]}],
+    ["ex-outcome-composition", {identity:"team", measures:["Approved","Needs evidence","Escalated"]}],
+    ["ex-support-maturity-heatmap", {identity:"role", measures:["Provenance","Consent","Metadata","AI boundary","Audit"]}],
+    ["ex-exception-interval", {identity:"queue", measures:["estimate","lower","upper"]}],
+    ["ex-turnaround-tornado", {identity:"driver", measures:["low","high"]}],
+    ["ex-readiness-bullet", {identity:"label", measures:["actual","threshold","target"]}]
+  ]).get(ex.id);
+  const identityIndex = semantics ? ds.columns.indexOf(semantics.identity) : -1;
+  const topic = "Source data for " + ex.title + "; unit: " + ex.unit;
+  const labels = ds.columns.map(column => semantics?.measures.includes(column) ? column + " (" + ex.unit + ")" : column);
+  const head = ds.columns.map((c, index) => `<th data-label="${esc(labels[index])}" scope="col" id="atlas-source-column-${index}">${esc(c)}</th>`).join("");
+  const body = ds.rows.map(r => {
+    const identity = identityIndex >= 0
+      ? ds.columns[identityIndex] + ": " + fmt(r[identityIndex])
+      : ds.columns.map((column, index) => column + ": " + fmt(r[index])).join("; ");
+    return `<tr data-label="${esc(topic + "; " + identity)}">${r.map((v, index) => `<td data-label="${esc(labels[index])}" headers="atlas-source-column-${index}">${esc(fmt(v))}</td>`).join("")}</tr>`;
+  }).join("");
+  return `<div class="table-wrap"><table data-label="${esc(topic)}" aria-label="${esc(topic)}"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
 }
 function renderChart(ex) {
   const type = ex.chart_type;

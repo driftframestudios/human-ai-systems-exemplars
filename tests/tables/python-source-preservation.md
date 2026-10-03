@@ -188,3 +188,17 @@ behaviors. The parent task owns known-corpus closure, browser observations,
 JavaScript/checkpoint changes, and the existing table README. PR326 and Issue328
 receive the implementation and focused results. Re-entry starts with the
 focused command above and the remaining boundary that the parent selects.
+
+## Native row identity and explicit word boundaries
+
+Row identity follows every native `th scope="row"` in source order, including
+headers located after ordinary data cells. A first-cell fallback applies only
+when the row has no scoped row header. An explicit blank header remains blank;
+zero remains a value. Multiple scoped row headers contribute a compound identity.
+
+An authored `br` contributes a word boundary to derived caption, header and row
+text. Ordinary inline markup preserves word continuity: `anti<em>body</em>`
+derives `antibody`. These rules affect supplemental labels while authored tags,
+values and newline bytes remain with the source-preserving patch contract.
+Parameterized regressions cover offset/uppercase row scopes, blank and zero,
+compound identities, four line-break spellings, and repeated projection.

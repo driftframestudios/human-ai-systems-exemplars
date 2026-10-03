@@ -482,7 +482,7 @@ footer{padding:26px clamp(16px,3.5vw,52px) 48px;background:#e9e3d8;border-top:1p
           <label>Horizon<select id="horizonFilter"></select></label>
         </div>
         <div class="table-wrap" style="margin-top:10px">
-          <table id="ledgerTable" aria-label="Threadkeeping ledger">
+          <table data-label="Threadkeeping ledger" id="ledgerTable" aria-label="Threadkeeping ledger">
             <thead><tr id="ledgerHead"></tr></thead>
             <tbody id="ledgerBody"></tbody>
           </table>
@@ -1105,10 +1105,10 @@ function renderHorizon() {
 
 function renderLedger() {
   const cols = view.columns.filter(c=>c.visible);
-  $("ledgerHead").innerHTML = cols.map(c=>`<th style="min-width:${c.width}px;max-width:${c.width}px">${esc(c.label)}</th>`).join("");
+  $("ledgerHead").innerHTML = cols.map(c=>`<th data-label="${esc(c.label)}" scope="col" style="min-width:${c.width}px;max-width:${c.width}px">${esc(c.label)}</th>`).join("");
   const entries = filteredEntries();
-  $("ledgerBody").innerHTML = entries.map(e => `<tr class="${e.id===view.selectedEntryId?'selected':''}" data-select-entry="${esc(e.id)}">
-    ${cols.map(c=>`<td style="min-width:${c.width}px;max-width:${c.width}px">${renderCell(e,c)}</td>`).join("")}
+  $("ledgerBody").innerHTML = entries.map(e => `<tr data-label="Threadkeeping ledger: ${esc(e.title)} (${esc(e.id)})" class="${e.id===view.selectedEntryId?'selected':''}" data-select-entry="${esc(e.id)}">
+    ${cols.map(c=>`<td data-label="${esc(c.label)}" style="min-width:${c.width}px;max-width:${c.width}px">${renderCell(e,c)}</td>`).join("")}
   </tr>`).join("");
   $("tableCount").textContent = `${entries.length} of ${model.threadkeeper.entries.length} entries visible`;
 }

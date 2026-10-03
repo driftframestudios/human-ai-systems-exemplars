@@ -263,7 +263,7 @@
   <section class="panel">
     <h2>Editable topology matrix</h2>
     <p class="muted">Full text is preserved. The table remains the primary editing and reading surface; SVG previews may truncate.</p>
-    <div class="matrix-scroll"><table id="matrixTable" aria-label="AI Systems Service Blueprint matrix"></table></div>
+    <div class="matrix-scroll"><table data-label="AI Systems Service Blueprint matrix" id="matrixTable" aria-label="AI Systems Service Blueprint matrix"></table></div>
   </section>
 
   <section class="panel" id="componentInventory">
@@ -1321,10 +1321,10 @@ These public collaboration loops fit when the receiving work meets the stated co
   }
   function renderTable(){
     const table=document.getElementById('matrixTable'); const stages=visibleStages(); const layers=visibleLayers();
-    let html='<thead><tr><th>Layer / Stage</th>'+stages.map(s=>`<th>${escapeHtml(s.label)}<div class="small muted"><code>${escapeHtml(s.id)}</code></div></th>`).join('')+'</tr></thead><tbody>';
+    let html='<thead><tr><th data-label="Layer / Stage" scope="col">Layer / Stage</th>'+stages.map(s=>`<th data-label="${escapeHtml(s.label)} (${escapeHtml(s.id)})" scope="col">${escapeHtml(s.label)}<div class="small muted"><code>${escapeHtml(s.id)}</code></div></th>`).join('')+'</tr></thead><tbody>';
     layers.forEach(layer=>{
-      html+=`<tr><td><span class="layer-label">${escapeHtml(layer.label)}</span><span class="layer-kind">${escapeHtml(layer.kind.replace(/_/g,' / '))}</span><div class="small"><code>${escapeHtml(layer.id)}</code></div></td>`;
-      stages.forEach(stage=>{ const cell=cellFor(layer.id,stage.id); const route=routeInfo(cell.route); html+=`<td class="cell-editor" data-cell-id="${cell.id}">
+      html+=`<tr data-label="AI Systems Service Blueprint matrix: ${escapeHtml(layer.label)} (${escapeHtml(layer.id)})"><td data-label="Layer"><span class="layer-label">${escapeHtml(layer.label)}</span><span class="layer-kind">${escapeHtml(layer.kind.replace(/_/g,' / '))}</span><div class="small"><code>${escapeHtml(layer.id)}</code></div></td>`;
+      stages.forEach(stage=>{ const cell=cellFor(layer.id,stage.id); const route=routeInfo(cell.route); html+=`<td data-label="${escapeHtml(stage.label)} (${escapeHtml(stage.id)})" class="cell-editor" data-cell-id="${cell.id}">
         <button data-action="select-cell" data-id="${cell.id}" class="primary">Inspect</button>
         <label for="cell-text-${cell.id}">Cell text</label><textarea id="cell-text-${cell.id}" data-bind="cell-text" data-id="${cell.id}">${escapeHtml(cell.text)}</textarea>
         <div class="cell-meta">

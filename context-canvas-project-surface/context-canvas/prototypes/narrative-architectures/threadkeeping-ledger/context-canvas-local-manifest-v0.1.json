@@ -16,8 +16,14 @@
     "usedByPages": "manifest-directory"
   },
   "publicationPosture": "visitor-linked-through-receiving-pages",
-  "archive": {"status": "rebuilt-local-snapshot", "path": "threadkeeping-ledger-chimeric-prototype-bundle-v0.1.zip"},
-  "integrity": {"algorithm": "sha256", "entryFile": "8b535e9c8da22dcb7654e157073a0c59f426ac61e28d7380373ae18338a54952"},
+  "archive": {
+    "status": "rebuilt-local-snapshot",
+    "path": "threadkeeping-ledger-chimeric-prototype-bundle-v0.1.zip"
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "entryFile": "fa8d46db15e86472e564c24b74ef6c952104bb97d14d5fa964dfd24c9783d58d"
+  },
   "canonicalStatus": "context_canvas_owned_projection",
   "sourcePath": ".",
   "localPath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/",

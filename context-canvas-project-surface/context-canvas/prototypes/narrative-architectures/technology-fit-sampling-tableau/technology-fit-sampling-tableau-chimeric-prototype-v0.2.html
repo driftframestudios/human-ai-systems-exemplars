@@ -1624,13 +1624,13 @@ function composeCandidate(){
 function renderDimensionTable(){
   const c=selectedCandidate();
   const rows=state.dimensions.map(d=>`
-    <tr>
-      <td><strong>${esc(d.name)}</strong><br/><span class="micro">${esc(d.definition)}</span></td>
-      <td class="num"><input data-weight="${esc(d.id)}" type="number" min="0" max="1" step=".01" value="${d.weight}" aria-label="Weight for ${esc(d.name)}"/></td>
-      <td class="num">${c?`<input data-dimscore="${esc(d.id)}" type="number" min="0" max="10" step=".1" value="${Number(c.dimensionScores?.[d.id]||0)}" aria-label="${esc(c.name)} score for ${esc(d.name)}"/>`:"—"}</td>
-      <td>${esc(d.evidenceClass)}</td>
+    <tr data-label="Technology Fit dimensions: ${esc(d.name)} (${esc(d.id)})">
+      <td data-label="Dimension"><strong>${esc(d.name)}</strong><br/><span class="micro">${esc(d.definition)}</span></td>
+      <td data-label="Weight (0 to 1)" class="num"><input data-weight="${esc(d.id)}" type="number" min="0" max="1" step=".01" value="${d.weight}" aria-label="Weight for ${esc(d.name)}"/></td>
+      <td data-label="${c?esc(c.shortName):"Score"} (0 to 10)" class="num">${c?`<input data-dimscore="${esc(d.id)}" type="number" min="0" max="10" step=".1" value="${Number(c.dimensionScores?.[d.id]||0)}" aria-label="${esc(c.name)} score for ${esc(d.name)}"/>`:"—"}</td>
+      <td data-label="Evidence class">${esc(d.evidenceClass)}</td>
     </tr>`).join("");
-  $("#dimensionTable").innerHTML=`<table><thead><tr><th>Dimension</th><th>Weight</th><th>${c?esc(c.shortName):"Score"}</th><th>Evidence class</th></tr></thead><tbody>${rows}</tbody></table>`;
+  $("#dimensionTable").innerHTML=`<table data-label="Technology Fit dimensions"><thead><tr><th data-label="Dimension" scope="col">Dimension</th><th data-label="Weight (0 to 1)" scope="col">Weight</th><th data-label="${c?esc(c.shortName):"Score"} (0 to 10)" scope="col">${c?esc(c.shortName):"Score"}</th><th data-label="Evidence class" scope="col">Evidence class</th></tr></thead><tbody>${rows}</tbody></table>`;
   $$("[data-weight]").forEach(inp=>inp.addEventListener("change",()=>{dimensionById(inp.dataset.weight).weight=clamp(inp.value,0,1);render()}));
   $$("[data-dimscore]").forEach(inp=>inp.addEventListener("change",()=>{if(c)c.dimensionScores[inp.dataset.dimscore]=clamp(inp.value,0,10);render()}));
 }
@@ -1675,17 +1675,17 @@ function renderSpikes(){
   ensureSpikeColumns();renderSpikeSummary();
   const ids=state.decision.selectedCandidateIds;
   if(!ids.length){$("#spikeTable").innerHTML=`<div class="notice warn">Select at least one candidate for a spike from the possibility cards.</div>`;return}
-  const head=ids.map(id=>`<th>${esc(candidateById(activeRun(),id)?.shortName||id)}</th>`).join("");
-  const rows=state.lowFidelitySpikes.map(s=>`<tr>
-    <td><strong>${esc(s.name)}</strong><br/><span class="micro">${esc(s.decisionQuestion)}</span><br/><span class="micro">${s.architectureRefs.map(id=>esc(routeById(id)?.displayName||id)).join(" · ")}</span></td>
-    ${ids.map(id=>{const cell=s.candidateStates[id]||{status:"planned",evidence:""};return `<td>
+  const head=ids.map(id=>`<th data-label="${esc(candidateById(activeRun(),id)?.shortName||id)}" scope="col">${esc(candidateById(activeRun(),id)?.shortName||id)}</th>`).join("");
+  const rows=state.lowFidelitySpikes.map(s=>`<tr data-label="Shared low-fidelity fixtures: ${esc(s.name)} (${esc(s.id)})">
+    <td data-label="Shared low-fidelity fixture"><strong>${esc(s.name)}</strong><br/><span class="micro">${esc(s.decisionQuestion)}</span><br/><span class="micro">${s.architectureRefs.map(id=>esc(routeById(id)?.displayName||id)).join(" · ")}</span></td>
+    ${ids.map(id=>{const cell=s.candidateStates[id]||{status:"planned",evidence:""};return `<td data-label="${esc(candidateById(activeRun(),id)?.shortName||id)}: status and evidence">
       <select data-spike-status="${esc(s.id)}|${esc(id)}">
         ${["planned","working_example","in_progress","observed","verified","blocked","deferred"].map(v=>`<option value="${v}" ${cell.status===v?"selected":""}>${v.replaceAll("_"," ")}</option>`).join("")}
       </select>
       <textarea data-spike-evidence="${esc(s.id)}|${esc(id)}" aria-label="Evidence for ${esc(s.name)} and ${esc(id)}">${esc(cell.evidence)}</textarea>
     </td>`}).join("")}
   </tr>`).join("");
-  $("#spikeTable").innerHTML=`<table><thead><tr><th>Shared low-fidelity fixture</th>${head}</tr></thead><tbody>${rows}</tbody></table>`;
+  $("#spikeTable").innerHTML=`<table data-label="Shared low-fidelity fixtures"><thead><tr><th data-label="Shared low-fidelity fixture" scope="col">Shared low-fidelity fixture</th>${head}</tr></thead><tbody>${rows}</tbody></table>`;
   $$("[data-spike-status]").forEach(sel=>sel.addEventListener("change",()=>{const [sid,cid]=sel.dataset.spikeStatus.split("|"),s=state.lowFidelitySpikes.find(x=>x.id===sid);s.candidateStates[cid].status=sel.value;render()}));
   $$("[data-spike-evidence]").forEach(ta=>ta.addEventListener("change",()=>{const [sid,cid]=ta.dataset.spikeEvidence.split("|"),s=state.lowFidelitySpikes.find(x=>x.id===sid);s.candidateStates[cid].evidence=ta.value;render()}));
 }
@@ -1772,7 +1772,7 @@ function renderComparison(){
   [-.25,-.1,.1,.25].forEach(t=>svg+=`<line x1="${dx(t)}" x2="${dx(t)}" y1="25" y2="${H-15}" stroke="#e2d7c7"/><text x="${dx(t)}" y="17" text-anchor="middle" font-size="10" fill="#6c645a">${t>0?"+":""}${Math.round(t*100)}pp</text>`);
   valid.forEach((r,i)=>{const y=top+i*rowH,d=r.defaultDelta||0,color=d>=0?"#3f6a51":"#8a4a40";svg+=`<text x="12" y="${y+7}" font-size="12" fill="#29251f">${esc(r.name.slice(0,35))}</text><line x1="${mid}" x2="${dx(d)}" y1="${y+3}" y2="${y+3}" stroke="${color}" stroke-width="9" stroke-linecap="round"/><text x="${W-10}" y="${y+7}" text-anchor="end" font-size="12" font-weight="750" fill="${color}">${d>=0?"+":""}${Math.round(d*100)}pp</text>`});
   svg+=`</svg>`;$("#comparisonChart").innerHTML=svg;
-  $("#comparisonTable").innerHTML=`<table><thead><tr><th>Candidate</th><th>Correspondence</th><th>Default A</th><th>Default B</th><th>Δ</th><th>Fit A</th><th>Fit B</th><th>Δ fit</th><th>Decision A → B</th></tr></thead><tbody>${rows.map(r=>`<tr><td><strong>${esc(r.name)}</strong></td><td>${esc(r.correspondence)}</td><td class="num">${r.baseDefault===null?"—":pct(r.baseDefault)}</td><td class="num">${r.nextDefault===null?"—":pct(r.nextDefault)}</td><td class="num">${r.defaultDelta===null?"—":`${r.defaultDelta>=0?"+":""}${Math.round(r.defaultDelta*100)}pp`}</td><td class="num">${r.baseFit===null?"—":pct(r.baseFit)}</td><td class="num">${r.nextFit===null?"—":pct(r.nextFit)}</td><td class="num">${r.fitDelta===null?"—":`${r.fitDelta>=0?"+":""}${Math.round(r.fitDelta*100)}pp`}</td><td>${r.baseDecision===null||r.nextDecision===null?"—":`${esc(r.baseDecision.replaceAll("_"," "))} → ${esc(r.nextDecision.replaceAll("_"," "))}`}</td></tr>`).join("")}</tbody></table>`;
+  $("#comparisonTable").innerHTML=`<table data-label="Technology Fit run comparison"><thead><tr><th data-label="Candidate" scope="col">Candidate</th><th data-label="Correspondence" scope="col">Correspondence</th><th data-label="Default A (%)" scope="col">Default A</th><th data-label="Default B (%)" scope="col">Default B</th><th data-label="Δ (percentage points)" scope="col">Δ</th><th data-label="Fit A (%)" scope="col">Fit A</th><th data-label="Fit B (%)" scope="col">Fit B</th><th data-label="Δ fit (percentage points)" scope="col">Δ fit</th><th data-label="Decision A to B" scope="col">Decision A → B</th></tr></thead><tbody>${rows.map(r=>`<tr data-label="Technology Fit run comparison, A ${esc(state.comparison.baselineRunId)} to B ${esc(state.comparison.comparisonRunId)}: ${esc(r.name)}"><td data-label="Candidate"><strong>${esc(r.name)}</strong></td><td data-label="Correspondence">${esc(r.correspondence)}</td><td data-label="Default A (%)" class="num">${r.baseDefault===null?"—":pct(r.baseDefault)}</td><td data-label="Default B (%)" class="num">${r.nextDefault===null?"—":pct(r.nextDefault)}</td><td data-label="Δ (percentage points)" class="num">${r.defaultDelta===null?"—":`${r.defaultDelta>=0?"+":""}${Math.round(r.defaultDelta*100)}pp`}</td><td data-label="Fit A (%)" class="num">${r.baseFit===null?"—":pct(r.baseFit)}</td><td data-label="Fit B (%)" class="num">${r.nextFit===null?"—":pct(r.nextFit)}</td><td data-label="Δ fit (percentage points)" class="num">${r.fitDelta===null?"—":`${r.fitDelta>=0?"+":""}${Math.round(r.fitDelta*100)}pp`}</td><td data-label="Decision A to B">${r.baseDecision===null||r.nextDecision===null?"—":`${esc(r.baseDecision.replaceAll("_"," "))} → ${esc(r.nextDecision.replaceAll("_"," "))}`}</td></tr>`).join("")}</tbody></table>`;
   $("#hypothesisGrid").innerHTML=state.shiftHypotheses.map(h=>`
     <article class="hypothesis-card">
       <div class="card-head"><h3>${esc(candidateById(activeRun(),h.candidateId)?.shortName||h.candidateId)}</h3><span class="pill ${h.direction==="raise"?"ok":"warn"}">${esc(h.direction)}</span></div>
@@ -1842,8 +1842,8 @@ function renderDecision(){
 }
 function renderTextEquivalent(){
   const run=activeRun();
-  const rows=run.candidates.map(c=>`<tr><td><strong>${esc(c.name)}</strong><br/><span class="micro">${esc(c.id)}</span></td><td>${esc(c.layers.framework)}</td><td>${esc(c.layers.styling)}</td><td>${esc(c.layers.components)}</td><td class="num">${pct(c.defaultLikelihood.estimate)}</td><td class="num">${pct(c.sixMonthFit.estimate)}</td><td class="num">${num(weightedFit(c),1)}</td><td>${esc(c.decisionState.replaceAll("_"," "))}</td></tr>`).join("");
-  $("#textEquivalent").innerHTML=`<table><thead><tr><th>Candidate</th><th>Framework</th><th>Styling</th><th>Components</th><th>Default</th><th>Six-month fit</th><th>Dimensional fit</th><th>Decision state</th></tr></thead><tbody>${rows}</tbody></table>`;
+  const rows=run.candidates.map(c=>`<tr data-label="Technology Fit candidates, run ${esc(run.id)}: ${esc(c.name)} (${esc(c.id)})"><td data-label="Candidate"><strong>${esc(c.name)}</strong><br/><span class="micro">${esc(c.id)}</span></td><td data-label="Framework">${esc(c.layers.framework)}</td><td data-label="Styling">${esc(c.layers.styling)}</td><td data-label="Components">${esc(c.layers.components)}</td><td data-label="Default likelihood (%)" class="num">${pct(c.defaultLikelihood.estimate)}</td><td data-label="Six-month fit (%)" class="num">${pct(c.sixMonthFit.estimate)}</td><td data-label="Dimensional fit" class="num">${num(weightedFit(c),1)}</td><td data-label="Decision state">${esc(c.decisionState.replaceAll("_"," "))}</td></tr>`).join("");
+  $("#textEquivalent").innerHTML=`<table data-label="Technology Fit candidate comparison"><thead><tr><th data-label="Candidate" scope="col">Candidate</th><th data-label="Framework" scope="col">Framework</th><th data-label="Styling" scope="col">Styling</th><th data-label="Components" scope="col">Components</th><th data-label="Default likelihood (%)" scope="col">Default</th><th data-label="Six-month fit (%)" scope="col">Six-month fit</th><th data-label="Dimensional fit" scope="col">Dimensional fit</th><th data-label="Decision state" scope="col">Decision state</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 function renderTwins(){
   renderTextEquivalent();

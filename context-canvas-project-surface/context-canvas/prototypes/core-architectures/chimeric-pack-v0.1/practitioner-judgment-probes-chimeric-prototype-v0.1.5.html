@@ -1359,20 +1359,20 @@ These public collaboration loops fit when the receiving work meets the stated co
   function renderTableEquivalent() {
     const probes = visibleProbes();
     const rows = probes.map((probe) => `
-      <tr data-probe-id="${escapeHtml(probe.id)}">
-        <td><button class="small" data-action="select-probe" data-probe-id="${escapeHtml(probe.id)}">Inspect</button></td>
-        <td><div class="cell-preview">${escapeHtml(probe.question)}</div><div class="cell-full">${escapeHtml(probe.question)}</div><button class="small" data-action="toggle-reveal">Show full text</button></td>
-        <td>${escapeHtml(probe.concern_family)}</td>
-        <td><span class="prob-pill">${Math.round((Number(probe.probability_estimate) || 0) * 100)}%</span><br><span class="tiny">${escapeHtml(probe.probability_of_what)}</span></td>
-        <td><span class="status-pill status-${escapeHtml(probe.technical_veracity_status)}">${escapeHtml(statusLabel(probe.technical_veracity_status))}</span></td>
-        <td><div class="cell-preview">${escapeHtml(probe.ai_instruction_yield)}</div><div class="cell-full">${escapeHtml(probe.ai_instruction_yield)}</div><button class="small" data-action="toggle-reveal">Show full text</button></td>
-        <td><span class="route-pill">${escapeHtml(probe.handoff || 'No route yet')}</span><div class="tiny">${escapeHtml(routeFamily(probe.handoff))}</div></td>
+      <tr data-label="Practitioner Judgment Probes: ${escapeHtml(probe.question)} (${escapeHtml(probe.id)})" data-probe-id="${escapeHtml(probe.id)}">
+        <td data-label="Inspect"><button class="small" data-action="select-probe" data-probe-id="${escapeHtml(probe.id)}">Inspect</button></td>
+        <td data-label="Probe"><div class="cell-preview">${escapeHtml(probe.question)}</div><div class="cell-full">${escapeHtml(probe.question)}</div><button class="small" data-action="toggle-reveal">Show full text</button></td>
+        <td data-label="Concern family">${escapeHtml(probe.concern_family)}</td>
+        <td data-label="Probability (%)"><span class="prob-pill">${Math.round((Number(probe.probability_estimate) || 0) * 100)}%</span><br><span class="tiny">${escapeHtml(probe.probability_of_what)}</span></td>
+        <td data-label="Veracity"><span class="status-pill status-${escapeHtml(probe.technical_veracity_status)}">${escapeHtml(statusLabel(probe.technical_veracity_status))}</span></td>
+        <td data-label="AI instruction yield"><div class="cell-preview">${escapeHtml(probe.ai_instruction_yield)}</div><div class="cell-full">${escapeHtml(probe.ai_instruction_yield)}</div><button class="small" data-action="toggle-reveal">Show full text</button></td>
+        <td data-label="Route"><span class="route-pill">${escapeHtml(probe.handoff || 'No route yet')}</span><div class="tiny">${escapeHtml(routeFamily(probe.handoff))}</div></td>
       </tr>
     `).join('');
     qs('#table-equivalent').innerHTML = `
-      <table>
-        <thead><tr><th>Inspect</th><th>Probe</th><th>Concern family</th><th>Probability</th><th>Veracity</th><th>AI instruction yield</th><th>Route</th></tr></thead>
-        <tbody>${rows || '<tr><td colspan="7">No probes visible in this focus view.</td></tr>'}</tbody>
+      <table data-label="Practitioner Judgment Probes">
+        <thead><tr><th data-label="Inspect" scope="col">Inspect</th><th data-label="Probe" scope="col">Probe</th><th data-label="Concern family" scope="col">Concern family</th><th data-label="Probability (%)" scope="col">Probability</th><th data-label="Veracity" scope="col">Veracity</th><th data-label="AI instruction yield" scope="col">AI instruction yield</th><th data-label="Route" scope="col">Route</th></tr></thead>
+        <tbody>${rows || '<tr data-label="Practitioner Judgment Probes: empty focus view"><td data-label="No visible probes" colspan="7">No probes visible in this focus view.</td></tr>'}</tbody>
       </table>
     `;
   }
@@ -1383,9 +1383,9 @@ These public collaboration loops fit when the receiving work meets the stated co
       const display = view.probe_order.indexOf(probe.id) + 1;
       const visible = !view.hidden_probe_ids.includes(probe.id);
       const visibleOrder = visible ? visibleProbes().findIndex((item) => item.id === probe.id) + 1 : 'hidden';
-      return `<tr><td class="mono">${escapeHtml(probe.id)}</td><td>${escapeHtml(probe.question.slice(0, 48))}${probe.question.length > 48 ? '…' : ''}</td><td>${display}</td><td>${visibleOrder}</td><td>${visible ? 'visible' : 'hidden'}</td></tr>`;
+      return `<tr data-label="Practitioner Judgment Probes identity registry: ${escapeHtml(probe.id)}"><td data-label="Probe ID" class="mono">${escapeHtml(probe.id)}</td><td data-label="Label">${escapeHtml(probe.question.slice(0, 48))}${probe.question.length > 48 ? '…' : ''}</td><td data-label="Display order">${display}</td><td data-label="Visible order">${visibleOrder}</td><td data-label="Visibility">${visible ? 'visible' : 'hidden'}</td></tr>`;
     }).join('');
-    qs('#identity-registry').innerHTML = `<table><thead><tr><th>Probe ID</th><th>Label</th><th>Display order</th><th>Visible order</th><th>Visibility</th></tr></thead><tbody>${rows}</tbody></table>`;
+    qs('#identity-registry').innerHTML = `<table data-label="Practitioner Judgment Probes identity registry"><thead><tr><th data-label="Probe ID" scope="col">Probe ID</th><th data-label="Label" scope="col">Label</th><th data-label="Display order" scope="col">Display order</th><th data-label="Visible order" scope="col">Visible order</th><th data-label="Visibility" scope="col">Visibility</th></tr></thead><tbody>${rows}</tbody></table>`;
   }
 
   function buildJsonExport() {

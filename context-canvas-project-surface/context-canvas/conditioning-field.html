@@ -1353,7 +1353,7 @@
         <details>
           <summary>Read the complete ladder as a semantic table</summary>
           <div class="table-wrap" role="region" tabindex="0" aria-label="Complete prompt ladder; scroll horizontally">
-            <table class="ladder-table">
+            <table class="ladder-table" data-label="Table 1. Complete semantic equivalent of the interactive prompt ladder">
               <caption>Table 1. Complete semantic equivalent of the interactive prompt ladder</caption>
               <colgroup>
                 <col class="ladder-rung-column">
@@ -1364,7 +1364,7 @@
                 <col>
               </colgroup>
               <thead>
-                <tr>
+                <tr data-label="Table 1. Complete semantic equivalent of the interactive prompt ladder: column headings">
                   <th scope="col" data-label="Rung">Rung</th>
                   <th scope="col" data-label="Form">Form</th>
                   <th scope="col" data-label="Full prompt">Full prompt</th>
@@ -1420,10 +1420,10 @@ Name the service owner who decides and the receiving delivery team who reviews t
         </div>
 
         <div class="table-wrap" role="region" tabindex="0" aria-label="Prompt conditions needing repair; scroll horizontally">
-          <table class="failure-table">
+          <table class="failure-table" data-label="Table 2. Prompt-side conditions needing repair and their positive replacement states">
             <caption>Table 2. Prompt-side conditions needing repair and their positive replacement states</caption>
             <thead>
-              <tr>
+              <tr data-label="Table 2. Prompt-side conditions needing repair and their positive replacement states: column headings">
                 <th scope="col" data-label="Condition needing repair">Condition needing repair</th>
                 <th scope="col" data-label="Collaboration effect">Collaboration effect</th>
                 <th scope="col" data-label="Positive replacement state">Positive replacement state</th>
@@ -1528,10 +1528,10 @@ Name the service owner who decides and the receiving delivery team who reviews t
         </div>
 
         <div class="table-wrap" role="region" tabindex="0" aria-label="Worked candidate field; scroll horizontally">
-          <table>
+          <table data-label="Table 3. Semantic equivalent of the worked candidate field">
             <caption>Table 3. Semantic equivalent of the worked candidate field</caption>
             <thead>
-              <tr>
+              <tr data-label="Table 3. Semantic equivalent of the worked candidate field: column headings">
                 <th scope="col" data-label="Candidate">Candidate</th>
                 <th scope="col" data-label="Test condition">Test condition</th>
                 <th scope="col" data-label="Key assumption">Key assumption</th>
@@ -1610,10 +1610,10 @@ Align it to the named standard in the supplied source packet. Label adaptations 
         <details>
           <summary>Read the human-reference check as a semantic table</summary>
           <div class="table-wrap" role="region" tabindex="0" aria-label="Human-reference checks; scroll horizontally">
-            <table>
+            <table data-label="Table 4. Human-reference checks for consequential artifact inputs">
               <caption>Table 4. Human-reference checks for consequential artifact inputs</caption>
               <thead>
-                <tr>
+                <tr data-label="Table 4. Human-reference checks for consequential artifact inputs: column headings">
                   <th scope="col" data-label="Check">Check</th>
                   <th scope="col" data-label="Question to ask">Question to ask</th>
                   <th scope="col" data-label="Resolved input condition">Resolved input condition</th>
@@ -1928,9 +1928,10 @@ Name the service owner who decides and the receiving delivery team who reviews t
         schemaSource: document.getElementById("conditioningFieldSchema")
       };
 
-      function createCell(tagName, text, scope) {
+      function createCell(tagName, text, scope, label) {
         const cell = document.createElement(tagName);
         cell.textContent = text;
+        cell.dataset.label = label;
         if (scope) cell.setAttribute("scope", scope);
         return cell;
       }
@@ -1939,13 +1940,14 @@ Name the service owner who decides and the receiving delivery team who reviews t
         const fragment = document.createDocumentFragment();
         rungs.forEach((rung) => {
           const row = document.createElement("tr");
+          row.dataset.label = `Table 1. Complete semantic equivalent of the interactive prompt ladder: Rung ${rung.number}`;
           row.append(
-            createCell("th", `Rung ${rung.number}`, "row"),
-            createCell("td", rung.name),
-            createCell("td", rung.prompt),
-            createCell("td", rung.strength),
-            createCell("td", rung.opening),
-            createCell("td", rung.verdict)
+            createCell("th", `Rung ${rung.number}`, "row", "Rung"),
+            createCell("td", rung.name, null, "Form"),
+            createCell("td", rung.prompt, null, "Full prompt"),
+            createCell("td", rung.strength, null, "What it does well"),
+            createCell("td", rung.opening, null, "What it leaves open"),
+            createCell("td", rung.verdict, null, "Verdict")
           );
           fragment.append(row);
         });
@@ -1956,9 +1958,11 @@ Name the service owner who decides and the receiving delivery team who reviews t
         const fragment = document.createDocumentFragment();
         failures.forEach((failure) => {
           const row = document.createElement("tr");
+          row.dataset.label = `Table 2. Prompt-side conditions needing repair and their positive replacement states: ${failure.name}`;
           row.dataset.failureId = failure.id;
           row.dataset.selected = "false";
           const actionCell = document.createElement("td");
+          actionCell.dataset.label = "Inspect";
           const button = document.createElement("button");
           button.type = "button";
           button.className = "row-button";
@@ -1969,10 +1973,10 @@ Name the service owner who decides and the receiving delivery team who reviews t
           button.textContent = "Inspect repair";
           actionCell.append(button);
           row.append(
-            createCell("th", failure.name, "row"),
-            createCell("td", failure.why),
-            createCell("td", failure.replacement),
-            createCell("td", failure.example),
+            createCell("th", failure.name, "row", "Condition needing repair"),
+            createCell("td", failure.why, null, "Collaboration effect"),
+            createCell("td", failure.replacement, null, "Positive replacement state"),
+            createCell("td", failure.example, null, "Concrete example"),
             actionCell
           );
           fragment.append(row);

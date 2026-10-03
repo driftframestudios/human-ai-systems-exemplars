@@ -349,7 +349,7 @@
         <span class="status-chip" data-status="ready_to_route">ready to route</span>
       </div>
       <div class="matrix-table-wrap" style="margin-top:12px;" tabindex="0" aria-label="Scrollable Software Architecture Views table">
-        <table id="attachmentTable">
+        <table data-label="Software Architecture Views attachments" id="attachmentTable">
           <thead></thead>
           <tbody></tbody>
         </table>
@@ -1086,22 +1086,22 @@ These public collaboration loops fit when the receiving work meets the stated co
 
     function renderTable() {
       const table = document.getElementById('attachmentTable');
-      table.querySelector('thead').innerHTML = `<tr><th>View</th><th>Attachment</th><th>Relationship</th><th>Status</th><th>Route</th><th>Controls</th></tr>`;
+      table.querySelector('thead').innerHTML = `<tr><th data-label="View" scope="col">View</th><th data-label="Attachment" scope="col">Attachment</th><th data-label="Relationship" scope="col">Relationship</th><th data-label="Status" scope="col">Status</th><th data-label="Route" scope="col">Route</th><th data-label="Controls" scope="col">Controls</th></tr>`;
       const rows = [];
       for (const view of visibleViews()) {
         const attachments = orderedAttachmentsForView(view.id);
         if (!attachments.length) {
-          rows.push(`<tr><td><span class="view-pill">${escapeHtml(view.label)}</span></td><td colspan="5"><span class="note">No visible attachments in this view.</span></td></tr>`);
+          rows.push(`<tr data-label="Software Architecture Views attachments: ${escapeHtml(view.label)} (${escapeHtml(view.id)})"><td data-label="View"><span class="view-pill">${escapeHtml(view.label)}</span></td><td data-label="No visible attachments" colspan="5"><span class="note">No visible attachments in this view.</span></td></tr>`);
         } else {
           for (const att of attachments) {
             const selected = activeView().selected_attachment_id === att.id;
-            rows.push(`<tr class="attachment-row ${selected ? 'selected' : ''}" data-attachment-id="${att.id}">
-              <td><span class="view-pill">${escapeHtml(view.label)}</span><div class="compact note">${escapeHtml(view.id)}</div></td>
-              <td>${previewBlock(att.label, 'label-' + att.id)}</td>
-              <td>${previewBlock(att.relationship || '', 'rel-' + att.id)}</td>
-              <td class="status-cell"><span class="status-chip" data-status="${att.status}">${escapeHtml((att.status || '').replace(/_/g,' '))}</span></td>
-              <td>${att.route ? `<span class="route-pill">${escapeHtml(att.route)}</span><div class="compact note">${escapeHtml(routeFamily(att.route))}</div>` : '<span class="note">No route</span>'}</td>
-              <td>
+            rows.push(`<tr data-label="Software Architecture Views attachments: ${escapeHtml(view.label)} / ${escapeHtml(att.label)} (${escapeHtml(att.id)})" class="attachment-row ${selected ? 'selected' : ''}" data-attachment-id="${att.id}">
+              <td data-label="View"><span class="view-pill">${escapeHtml(view.label)}</span><div class="compact note">${escapeHtml(view.id)}</div></td>
+              <td data-label="Attachment">${previewBlock(att.label, 'label-' + att.id)}</td>
+              <td data-label="Relationship">${previewBlock(att.relationship || '', 'rel-' + att.id)}</td>
+              <td data-label="Status" class="status-cell"><span class="status-chip" data-status="${att.status}">${escapeHtml((att.status || '').replace(/_/g,' '))}</span></td>
+              <td data-label="Route">${att.route ? `<span class="route-pill">${escapeHtml(att.route)}</span><div class="compact note">${escapeHtml(routeFamily(att.route))}</div>` : '<span class="note">No route</span>'}</td>
+              <td data-label="Controls">
                 <div class="controls">
                   <button class="small" data-action="select-attachment" data-id="${att.id}">Select</button>
                   <button class="small" data-action="toggle-attachment" data-id="${att.id}">Hide</button>
