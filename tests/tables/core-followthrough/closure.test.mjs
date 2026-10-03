@@ -182,6 +182,70 @@ for (const method of ["keyboard", "pointer"]) {
   });
 }
 
+for (const method of ["keyboard", "pointer"]) {
+  for (const remaining of [1, 2]) {
+    test(method + " continues with " + remaining + "px remaining until missing edges are observed", async () => {
+      const fixture = reachFixture({ max: 244 });
+      let advances = 0;
+      const advance = async () => {
+        fixture.state.left = ++advances === 1 ? fixture.state.max - remaining : fixture.state.max;
+        fixture.state.lastVisible = advances === 2;
+      };
+      const result = await traverseRightmost(fixture.read, advance, method);
+      assert.equal(result.standing, "pass");
+      assert.equal(result.inputSteps, 2, "near-end position alone cannot finish the first input");
+      assert.equal(advances, 2);
+      assert.equal(result.end.left, 244);
+      assert.deepEqual(result.edgeCoverage, [{
+        cell: 0, leftAt: { scrollLeft: 244 - remaining, inputSteps: 1 },
+        rightAt: { scrollLeft: 244, inputSteps: 2 },
+      }]);
+    });
+  }
+
+  test(method + " incomplete edges at the true end stop on observed lack of progress", async () => {
+    const fixture = reachFixture({ max: 244 });
+    let advances = 0;
+    const advance = async () => {
+      fixture.state.left = ++advances === 1 ? 242 : 244;
+      fixture.state.lastVisible = false;
+    };
+    const result = await traverseRightmost(fixture.read, advance, method);
+    assert.equal(result.standing, "review");
+    assert.equal(result.reason, "input did not advance the local scroll");
+    assert.equal(result.inputSteps, 3, "the end is not inferred before attempting further input");
+    assert.equal(result.end.left, 244);
+    assert.equal(result.edgeCoverage[0].rightAt, null);
+  });
+
+  test(method + " near-end progress remains subject to the bounded input budget", async () => {
+    const fixture = reachFixture({ max: 244 });
+    let advances = 0;
+    const result = await traverseRightmost(fixture.read, async () => {
+      fixture.state.left = ++advances === 1 ? 242 : 244;
+      fixture.state.lastVisible = advances === 2;
+    }, method, 1);
+    assert.equal(result.standing, "review");
+    assert.equal(result.reason, "bounded input budget exhausted");
+    assert.equal(result.inputSteps, 1);
+    assert.equal(advances, 1);
+    assert.equal(result.edgeCoverage[0].rightAt, null);
+  });
+
+  test(method + " observed edges can complete before unrelated trailing scroll space", async () => {
+    const fixture = reachFixture();
+    const result = await traverseRightmost(fixture.read, async () => {
+      await fixture.advance();
+      fixture.state.lastVisible = fixture.state.left >= 200;
+    }, method);
+    assert.equal(result.standing, "pass");
+    assert.equal(result.inputSteps, 5);
+    assert.equal(result.end.left, 200);
+    assert.equal(result.end.max, 240);
+    assert.equal(result.edgeCoverage[0].rightAt.scrollLeft, 200);
+  });
+}
+
 test("near-end starts cannot masquerade as end-to-end reach", async () => {
   const fixture = reachFixture({ left: 216 });
   const result = await traverseRightmost(fixture.read, fixture.advance, "keyboard");
