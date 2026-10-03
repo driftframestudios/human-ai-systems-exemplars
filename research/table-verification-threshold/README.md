@@ -188,3 +188,23 @@ separate evidence roles.
 estimates unset. `prototype-trial/prototype-suite-consideration.csv` records 42
 declared manifest entries representing 41 distinct source paths; the shared
 Threadkeeping Ledger entry appears in both Canvas and Narrative collections.
+
+
+## Focused epoch-record checks
+
+The active first repair epoch lives on `res/table-repair-epoch-01` in PR #327,
+targeting `research`. Its version-2 record separates the immutable entry from
+the current summary and preserves one append-only event ledger. Run only its
+record and synthetic eligibility fixtures with:
+
+```sh
+node --test research/table-verification-threshold/epochs/table-repair-01.test.mjs
+```
+
+This focused check covers historical/annotation preservation, event references,
+Wave 1/2 count reconciliation, fixture and stub separation, supplied diagnostic
+measurements, and eligible-window arithmetic. The epoch now records the parent's
+passing application/browser return; handoff exposure remains zero pending receiving
+acceptance. Closure/resume diagnostics retain descriptive standing, with paired
+replay (#330) and shadow prediction (#331) separately gated. The probability-model
+and Python-reference suites retain their existing commands.
