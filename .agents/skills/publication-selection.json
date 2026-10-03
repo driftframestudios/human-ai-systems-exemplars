@@ -87,6 +87,8 @@
       "publicationStanding": "public_ready",
       "sourceAvailability": "included",
       "dependencies": [
+        ".agents/skills/cost-and-ownership-analysis/references/python-boundaries-and-traversal-cost.md",
+        ".agents/skills/cost-and-ownership-analysis/references/ownership-preserving-reuse.md",
         ".agents/skills/practitioner-probe/SKILL.md",
         ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
         ".agents/skills/collaboration-accounting/SKILL.md"

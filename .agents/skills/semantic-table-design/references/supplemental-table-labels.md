@@ -219,7 +219,8 @@ record repeats table topic, row identity, field name and original value.
 
 **Rule:** treat an explicit `br` as a word boundary in derived label text. Keep
 ordinary inline spans transparent to word continuity. A label derived from
-`Name<br>identifier` reads `Name identifier`; `anti<em>body</em>` reads `antibody`.
+`Name`, a `br` element, and `identifier` reads `Name identifier`;
+`anti<em>body</em>` reads `antibody`.
 Apply the same rule to captions, column headers and row identities. Preserve
 authored markup and values through the source owner's patch or generator.
 
