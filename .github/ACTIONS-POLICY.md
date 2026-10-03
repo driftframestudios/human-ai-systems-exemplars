@@ -88,7 +88,7 @@ The Pages workflow receives an exact accepted source commit, reviewed `docs`
 commit, and `pages-vMAJOR.MINOR.PATCH` release tag through manual dispatch. One
 connected fifteen-minute standard-runner job verifies the source, projection,
 tag, and artifact, then conditionally uploads and deploys in the same job.
-The default `activate=false` keeps publication steps resting. Pages permissions
+The default `activate_deployment=false` keeps publication steps resting. Pages permissions
 are job-level, and the `schema-pages` concurrency group serializes runs with
 `cancel-in-progress: false`. PRs #308/#309 and the 2026-10-01 #63 receipt record
 the accepted tagged-release transition and its dated deployment observation.

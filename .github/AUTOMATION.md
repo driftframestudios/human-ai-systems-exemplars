@@ -18,7 +18,7 @@ below names every workflow; the following sections explain each receiving job.
 | --- | --- | --- | --- | --- |
 | `res-public-boundary-intake.yml` | Non-draft `main` PR; `ACTIONS_BUDGET_MAIN=true` | 2 minutes | Cancel superseded PR run | #63 inventory |
 | `schema-receiver-routes.yml` | Matching non-draft `main` PR or manual dispatch; `ACTIONS_BUDGET_MAIN=true` | 6 minutes | Cancel same PR/ref run | #18 schema contracts; #63 inventory |
-| `schema-pages.yml` | Manual exact source, projection, and release-tag selection; `activate=false` by default | 15 minutes | Serialize the Pages group; finish the current run | PRs #308 and #309 |
+| `schema-pages.yml` | Manual exact source, projection, and release-tag selection; `activate_deployment=false` by default | 15 minutes | Serialize the Pages group; finish the current run | PRs #308 and #309 |
 | `schema-delivery.yml` | Non-draft PR or push to budget-enabled `release`/`prod`; deployment also requires an active receiver | Contract 12; deployment 8 minutes | Cancel superseded contracts; serialize deployments by receiver | #18 schema delivery; #63 inventory |
 | `prototype-unit-tests.yml` | Confirmed manual suite; matching non-draft `main` PR only with `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` | 10 minutes | Cancel same PR/ref run, including another manual suite on that ref | PRs #97 and #287 |
 | `production-carrier-contracts.yml` | Matching `main` PR or manual dispatch | 10 minutes | Cancel same PR/ref run | #253 and PR #255 |
@@ -99,7 +99,7 @@ The workflow:
 7. proves the checksum-verified secret scanner before inspecting that exact
    artifact, including its required hidden files.
 
-The default `activate=false` dispatch ends after verification. Selecting
+The default `activate_deployment=false` dispatch ends after verification. Selecting
 activation admits upload and deployment steps in that same connected job.
 The `schema-pages` concurrency group serializes dispatches with
 `cancel-in-progress: false`, allowing the current run to finish. PR #308 owns
