@@ -1,0 +1,665 @@
+{
+  "schemaVersion": "2",
+  "epoch": "table-repair-01",
+  "standing": "descriptive-record-with-prospective-refinements",
+  "recordedOn": "2026-10-03",
+  "migration": {
+    "from": "unversioned-entry-record",
+    "historicalEntry": "The entire former root object is preserved here as immutable historical data; every original value and quoted string retains its entry meaning.",
+    "completedCampaigns": "historicalEntry.completedCampaigns is the empty snapshot at entry, before execution. Read currentSummary and the event ledger for subsequent observations.",
+    "estimation": "historicalEntry.estimation.posterior retains the original null. estimation below expresses the current zero-outcome posterior as the unchanged prior.",
+    "comparisonPolicy": "historicalEntry.comparisonPolicy remains the original declared policy. Prospective selection rules below refine evidence eligibility without rewriting that comparison.",
+    "consumers": "Version 2 readers use historicalEntry for entry state and currentSummary for recorded execution totals. Count execution records once; annotations and plans supply metadata."
+  },
+  "historicalEntry": {
+    "epoch": "table-repair-01",
+    "standing": "prospective-check-policy",
+    "applicationBranch": "codex/table-reading-repairs",
+    "applicationBase": "77589c5",
+    "researchBase": "938f03f",
+    "issues": [
+      315,
+      316,
+      317,
+      318,
+      319,
+      320,
+      321,
+      322
+    ],
+    "scope": "First coherent repair batch: Conditioning Field, Shared Surface Priority Map, and legacy investment comparison tables, with reusable source-label and all-column observation contracts.",
+    "entryEvidence": {
+      "completedDiscoveryPages": 297,
+      "historicalInterruptedPages": 2,
+      "completedParentChildCases": 9,
+      "projectorUnitTests": 4,
+      "applicationBrowserLaunchesThisEpoch": 0
+    },
+    "comparisonPolicy": {
+      "name": "same-family-check-after-each-source-or-harness-repair-opportunity",
+      "standing": "declared-counterfactual",
+      "rule": "Count a potential focused campaign after each distinct repair opportunity. Record bundled opportunities and actual campaigns separately. The counterfactual is a policy comparison, not observed human behavior or causal proof.",
+      "fullSweepRule": "A changed shared owner, omitted current family, or unexplained cross-family regression can reopen discovery. A local application or harness defect reopens its dependent cases.",
+      "mandatoryGates": [
+        "observer positive and negative fixtures",
+        "affected-family layout and behavior evidence",
+        "source/projection packaging",
+        "independent review",
+        "publication boundary"
+      ],
+      "checkpoint": "First family handoff or three coherent repair batches, whichever occurs first"
+    },
+    "estimation": {
+      "model": "Beta-Bernoulli late-defect indicator per completed handoff opportunity",
+      "priorAlpha": 1,
+      "priorBeta": 1,
+      "priorMean": 0.5,
+      "priorStanding": "illustrative and uncalibrated",
+      "exposureDefinition": "A completed family handoff followed by an independently observed review window",
+      "observedExposure": 0,
+      "posterior": null,
+      "rateOrDiffusionFit": null,
+      "reason": "Prospective application exposure begins with this epoch. Previous setup repairs are not family handoff failures. Exact finite-state research remains a sensitivity aid; measured transitions are required for empirical rate or diffusion claims."
+    },
+    "completedCampaigns": [],
+    "fullBrowserCampaignsAvoided": null,
+    "netSavings": null,
+    "nextDecision": "Run the fixture-gated affected-family campaign once; retain completed cases and classify each remaining condition before choosing the next focused observation."
+  },
+  "coordinates": {
+    "application": {
+      "branch": "codex/table-reading-repairs",
+      "pullRequest": 326,
+      "target": "main",
+      "revisionAtReentry": "38c13c65debc0898501cef9ac137f2bc0751567d",
+      "standing": "branch-head-at-reentry; historical campaign revisions remain unspecified"
+    },
+    "research": {
+      "branch": "res/table-repair-epoch-01",
+      "pullRequest": 327,
+      "target": "research",
+      "revisionAtReentry": "0f790deec2ec49e18ac309af54e472d17788db48"
+    },
+    "issues": {
+      "protocol": 320,
+      "deterministicSelection": 329,
+      "pairedReplayLater": 330,
+      "shadowPredictionLater": 331
+    },
+    "standing": "Re-entry coordinates dated 2026-10-03; the parent records the actual revision and manifest for each new invocation."
+  },
+  "eventLedger": {
+    "path": "table-repair-01-events.jsonl",
+    "categories": [
+      "harness-lifecycle",
+      "observation-definition",
+      "application-campaign",
+      "family-delivery"
+    ],
+    "rule": "One append-only ledger. The original 13 records retain their bytes and order. Dated retrospective annotations reference those event IDs; plans and annotations carry no execution counts.",
+    "historicalTiming": "Original occurrence times, source/runtime identities and pre-run predictions remain unspecified. recordedOn dates annotation work only.",
+    "causalStanding": "triggeredBy names a retrospectively supported dependency or a prospective plan trigger. Link standing distinguishes that interpretation from measured causal attribution.",
+    "recordTypes": [
+      "retrospective-annotation",
+      "plan",
+      "review",
+      "execution"
+    ],
+    "receivingEvidence": "Wave 1/2 events record the parent's supplied observations dated 2026-10-03. occurredOn supplies the reported day; exact occurrence timestamps, source/runtime identities, manifest locators and pre-execution prediction times remain unspecified. Append order records this return without inventing within-day timestamps. One subsequent scope-addition event records the supplied HTML-change resume under the same v3 definition. Its embedded request annotation classifies additional requested work separately from defects; the preceding 35 entries remain unchanged."
+  },
+  "units": {
+    "family": "A source-owned group of related tables and maintained projections with a shared visitor/acceptance contract. One family may contain several repair batches.",
+    "repairBatch": "One named defect or contract scope with pinned input and definition, declared acceptance cases and one receiving review. A batch may span families when their owners or dependencies require a coherent repair.",
+    "completedRepairBatch": "The declared acceptance cases and required gates have evidence at the pinned revision, findings have explicit dispositions, and the receiving human records acceptance.",
+    "campaign": "One logical invocation over a frozen ordered case inventory. Launches, retries, case attempts, completions, reuse and ancillary journeys are separate counts.",
+    "checkpoint": "First accepted family handoff or three accepted coherent repair batches, whichever occurs first. Three families is a separate future feasibility checkpoint; repeated widths and reruns retain their repair-cluster dependence."
+  },
+  "observationDefinitions": [
+    {
+      "version": "v1",
+      "standing": "historical-retrospective-label",
+      "scope": "table-observer",
+      "dimensions": [
+        "ordinary-word fragmentation",
+        "numeric fragmentation",
+        "page overflow"
+      ],
+      "boundary": "Geometry verdict; keyboard and other required dimensions retain their separate receiving evidence."
+    },
+    {
+      "version": "v2",
+      "standing": "historical-retrospective-label",
+      "scope": "table-observer",
+      "extends": "v1",
+      "triggeredBy": "independent-review-completion-boundaries",
+      "dimensions": [
+        "geometry",
+        "keyboard",
+        "clipping",
+        "observed state"
+      ],
+      "completionRequirements": [
+        "declared table population",
+        "required artifacts completed before reuse",
+        "executable helper dependency coverage"
+      ],
+      "boundary": "Expanded required-dimensions verdict. Subsequent dependency findings require the corrected identity in v3; v2 observations retain their original limits."
+    },
+    {
+      "version": "shared-material-v1",
+      "standing": "historical-retrospective-label",
+      "scope": "ancillary-material-behavior",
+      "dimensions": [
+        "intensity",
+        "asset links",
+        "focus",
+        "exchange",
+        "recovery"
+      ],
+      "boundary": "Two historical journeys retain their original scope and unmeasured page count. The later fresh v3 material return follows the corrected attribution dependency closure."
+    },
+    {
+      "version": "conditioning-control-v1",
+      "standing": "historical-retrospective-label",
+      "scope": "ancillary-control-discovery",
+      "dimensions": [
+        "native control inventory"
+      ]
+    },
+    {
+      "version": "conditioning-prompt-v1",
+      "standing": "historical-retrospective-label",
+      "scope": "ancillary-prompt-agreement",
+      "dimensions": [
+        "authored and selected runtime prompt agreement"
+      ],
+      "boundary": "The historical text-retention assertion retains its original scope. Fresh v3 material evidence separately covers exact Rung 05, prompt agreement, inspector visibility and lastAction."
+    },
+    {
+      "version": "v3",
+      "standing": "executed-parent-reported",
+      "scope": "corrected-evidence-identity-and-first-bounded-adapter",
+      "extends": "v2",
+      "triggeredBy": "planned-wave-1-2-2026-10-03",
+      "requirements": [
+        "Core material-behavior closure includes attribution.yml",
+        "Conditioning focused closure includes loaded canvas-shell.css and canvas-shell.js",
+        "Conditioning parity identifies exact Rung 05 and asserts inspector visibility plus corresponding state-contract transition",
+        "one bounded JavaScript adapter freezes requested cases, input/helper/definition/runtime/parameter identity and required artifact hashes",
+        "per-case completion and validated campaign-generation publication remain distinct"
+      ],
+      "disposition": "Records with incomplete dependency closure become ineligible for reuse under the corrected identity. Preserve them as historical observations and earn fresh dependent evidence; an uncertain boundary broadens the fitting case set.",
+      "tableDefinitionHash": "8121c0244dd024b89b5f7ba1fd7beae3350f7781d924760d8d39bbebba18209b",
+      "executionEvents": [
+        "wave12-table-v3-closure-2026-10-03",
+        "wave12-table-v3-unchanged-resume-2026-10-03",
+        "wave12-conditioning-material-2026-10-03",
+        "wave12-shared-material-2026-10-03",
+        "scope-plain-labels-v3-resume-2026-10-03"
+      ],
+      "evidenceBoundary": "Table closure and unchanged resume use the recorded table definition hash. Material checks retain their separately described assertions; their definition hashes were not supplied."
+    }
+  ],
+  "invalidationPolicy": {
+    "standing": "prospective-selection-rule",
+    "combination": "ordered-cumulative-union",
+    "rows": [
+      {
+        "order": 1,
+        "reason": "missing-or-incomplete-evidence",
+        "action": "Select each requested case with absent, interrupted or incomplete evidence."
+      },
+      {
+        "order": 2,
+        "reason": "source-or-projection-change",
+        "action": "Add cases dependent on changed source or packaged projections, including changes detected during execution."
+      },
+      {
+        "order": 3,
+        "reason": "helper-or-dependency-closure-change",
+        "action": "Add every dependent case; corrected omitted dependencies retire affected old identities from reuse."
+      },
+      {
+        "order": 4,
+        "reason": "observation-definition-change",
+        "action": "Add cases governed by the changed verdict, expected population or completion contract."
+      },
+      {
+        "order": 5,
+        "reason": "runtime-or-parameter-change",
+        "action": "Add cases whose browser/runtime, viewport, state, selection parameters or required environment changed."
+      },
+      {
+        "order": 6,
+        "reason": "required-artifact-change",
+        "action": "Add cases with missing, stale, changed or incomplete required artifacts or generation evidence."
+      },
+      {
+        "order": 7,
+        "reason": "uncertain-dependency-boundary",
+        "action": "Broaden to the affected family, or reopen discovery when shared ownership or omitted coverage makes that boundary uncertain."
+      }
+    ],
+    "reuse": "Evaluate every row and preserve all applicable reasons. Union selected IDs in frozen requested order. Reuse requires exact matching identity, complete evidence and matching required artifacts for every retained case.",
+    "authority": "Known gates remain deterministic. Campaign lifecycle state is recorded separately from cumulative invalidation reasons."
+  },
+  "handoffOutcomeContract": {
+    "standing": "prospective-eligibility-rule",
+    "unit": "One completed, independently ascertained window for one accepted family handoff.",
+    "handoff": "Record the accepted revision, family/repair cluster, evidence manifest, finding dispositions and human receiving review decision. Issue closure supplies coordination context; publication is required only when the receiving contract includes it.",
+    "window": "Before handoff, declare the window duration/end rule, severity threshold, ascertainment plan and independent reviewer. Start at actual acceptance; record the resulting start/end timestamps. Qualifying discoveries occur after start and through the declared end. Historical times remain unspecified.",
+    "qualifyingSeverities": [
+      "blocking",
+      "material"
+    ],
+    "severity": {
+      "blocking": "A defect affecting safety, accessibility, security/privacy, state integrity or the usability of a required visitor task that blocks acceptance.",
+      "material": "A defect in the accepted scope that changes the required behavior or evidence claim enough to require repair or revised acceptance.",
+      "minor": "An editorial or cosmetic issue that leaves the declared acceptance behavior intact; retain it as a finding outside this indicator."
+    },
+    "ascertainment": "An independent reviewer covers the declared acceptance cases and linked reports through the window end, records completion and adjudicates each finding against the accepted revision and severity rule. Known unresolved pre-handoff findings belong to handoff disposition; defects introduced by later source changes belong to their own repair episode.",
+    "censoring": "A started window whose follow-up ends early or remains in progress is censored. Missing duration, severity or ascertainment data is unmeasured. Both states retain outcome=null; complete observed zero requires the full declared window and completed ascertainment.",
+    "indicator": "Y=1 when at least one adjudicated qualifying late defect occurs in a completed eligible window; Y=0 when that complete observation establishes zero qualifying defects. Several qualifying defects in one window contribute one Bernoulli outcome.",
+    "separation": "Pre-handoff application gaps, harness repairs, selected/reused cases and demonstration runs describe mechanisms. Prospective next-campaign selection has its own exact-case agreement outcome."
+  },
+  "estimation": {
+    "model": "Beta-Bernoulli late-defect indicator per eligible completed handoff window",
+    "prior": {
+      "alpha": 1,
+      "beta": 1,
+      "mean": 0.5,
+      "standing": "illustrative-and-uncalibrated; uniform on the selected probability parameter"
+    },
+    "observedExposure": 0,
+    "qualifyingOutcomes": 0,
+    "observedZeroOutcomes": 0,
+    "posterior": {
+      "alpha": 1,
+      "beta": 1,
+      "mean": 0.5
+    },
+    "standing": "awaiting-exposure",
+    "updateRule": "For f qualifying outcomes among n completed eligible windows: Beta(a+f,b+n-f). One eligible observation updates the prior. With n=0 the posterior equals the prior.",
+    "windows": [],
+    "rateOrDiffusionFit": {
+      "value": null,
+      "standing": "unestimated",
+      "measurementRequirements": "Measured eligible durations, transitions and an identified model; any fit has a separate receiving decision."
+    },
+    "boundary": "Update, precision, calibration and adoption are distinct decisions. This refinement records eligibility and the unchanged prior; it fits no new model."
+  },
+  "currentSummary": {
+    "recordedOn": "2026-10-03",
+    "throughEvent": "scope-plain-labels-v3-resume-2026-10-03",
+    "historicalExecutionEvents": 13,
+    "browserLaunches": {
+      "value": 14,
+      "standing": "exact-recorded-count"
+    },
+    "tableObserverBrowserLaunches": {
+      "value": 8,
+      "standing": "exact-recorded-count"
+    },
+    "ancillaryBrowserLaunches": {
+      "value": 6,
+      "standing": "exact-recorded-count"
+    },
+    "tablePrototypeCaseAttempts": {
+      "value": 190,
+      "standing": "exact-recorded-count"
+    },
+    "explicitlyRecordedCompleteTableAttempts": {
+      "value": 162,
+      "standing": "exact-recorded-count"
+    },
+    "totalCompletedTableAttempts": {
+      "value": null,
+      "standing": "unmeasured",
+      "reason": "Historical explicit completions total 112; fresh v3 closure adds 38 and the user-scope resume adds 12. Some earlier attempts lack a separate completion count. Retained observations add no new attempts."
+    },
+    "uniqueTableCasesAcrossDefinitions": {
+      "value": null,
+      "standing": "unmeasured",
+      "reason": "Attempt and reuse totals span changed definitions and sources; a deduplicated inventory is required."
+    },
+    "knownAncillaryPageVisits": {
+      "value": 4,
+      "standing": "exact-recorded-count"
+    },
+    "sharedMaterialJourneys": {
+      "value": 4,
+      "standing": "exact-recorded-count"
+    },
+    "sharedMaterialPageVisits": {
+      "value": null,
+      "standing": "unmeasured",
+      "reason": "The two historical and two fresh Shared Surface journeys retain unmeasured page counts."
+    },
+    "totalPageVisits": {
+      "value": null,
+      "standing": "unmeasured",
+      "reason": "190 table attempts, four known ancillary visits and four Shared Surface journeys retain different units. Fresh v3 closure reports 47 document navigations and the user-scope resume reports 15; historical and other navigation coverage remains incomplete."
+    },
+    "completedHandoffs": {
+      "value": 0,
+      "standing": "exact-recorded-count"
+    },
+    "completedRepairBatches": {
+      "value": null,
+      "standing": "unmeasured",
+      "reason": "An accepted batch count awaits explicit receiving-review records."
+    },
+    "receivingStanding": "application-wave-passed; awaiting-accepted-receiving-handoff",
+    "boundary": "Cumulative counts combine the original ledger, supplied Wave 1/2 execution events and one new user-requested scope addition. asOfWave12Summary and wave12 preserve the earlier completed application phase. Reviews, annotations, retained observations and the stubbed launch retain separate accounting.",
+    "wave12": {
+      "recordedOn": "2026-10-03",
+      "standing": "parent-reported-wave-complete; receiving-handoff-pending",
+      "eventIds": [
+        "wave12-review-repairs-2026-10-03",
+        "wave12-screenshot-refinement-2026-10-03",
+        "wave12-source-review-clearance-2026-10-03",
+        "wave12-writer-interruption-review-2026-10-03",
+        "wave12-table-v3-closure-2026-10-03",
+        "wave12-table-v3-unchanged-resume-2026-10-03",
+        "wave12-conditioning-material-2026-10-03",
+        "wave12-shared-material-2026-10-03"
+      ],
+      "browserLaunches": {
+        "value": 3,
+        "standing": "exact-recorded-count"
+      },
+      "tablePrototypeCaseAttempts": {
+        "value": 38,
+        "standing": "exact-recorded-count"
+      },
+      "fixtureAttempts": {
+        "value": 1,
+        "standing": "exact-recorded-count"
+      },
+      "knownAncillaryPageVisits": {
+        "value": 1,
+        "standing": "exact-recorded-count"
+      },
+      "sharedMaterialJourneys": {
+        "value": 2,
+        "standing": "exact-recorded-count"
+      },
+      "sharedMaterialPageVisits": {
+        "value": null,
+        "standing": "unmeasured",
+        "reason": "Fresh Shared Surface journey page counts were not instrumented."
+      },
+      "tableDocumentNavigations": {
+        "value": 47,
+        "standing": "exact-recorded-count"
+      },
+      "unchangedResumeReusedCases": {
+        "value": 39,
+        "standing": "exact-recorded-count"
+      },
+      "stubbedLaunchCalls": {
+        "value": 1,
+        "standing": "exact-recorded-count"
+      }
+    },
+    "scopeAddition": {
+      "event": "scope-plain-labels-v3-resume-2026-10-03",
+      "standing": "parent-reported-user-scope-addition; receiving-handoff-pending",
+      "owner": "Investment Studio",
+      "authoredDataLabelAttributes": 18,
+      "newPrototypeCases": 12,
+      "reusedPrototypeCases": 26,
+      "reusedFixtureCases": 1,
+      "publishedPassingRecords": 39,
+      "browserLaunches": 1,
+      "actualDocumentNavigations": 15
+    }
+  },
+  "costAccounting": {
+    "standing": "descriptive-counts-with-unestimated-effects",
+    "supportedComparisons": [
+      {
+        "event": "shared-semantic-repair-resume",
+        "observedNewCases": 15,
+        "observedReusedCases": 23,
+        "declaredCompleteRerunCases": 38,
+        "selectedCaseDifference": 23,
+        "observedBrowserLaunches": 1,
+        "declaredCompleteRerunBrowserLaunches": 1,
+        "standing": "observed-selection-versus-declared-policy"
+      },
+      {
+        "event": "conditioning-source-resume",
+        "observedNewCases": 11,
+        "observedReusedCases": 27,
+        "declaredCompleteRerunCases": 38,
+        "selectedCaseDifference": 27,
+        "observedBrowserLaunches": 1,
+        "declaredCompleteRerunBrowserLaunches": 1,
+        "standing": "observed-selection-versus-declared-policy"
+      }
+    ],
+    "fullBrowserCampaignsAvoided": {
+      "value": null,
+      "standing": "unestimated",
+      "measurementRequirements": "Comparable repair opportunities under the original declared policy, including bundled opportunities and mandatory gates."
+    },
+    "netSavings": {
+      "value": null,
+      "standing": "unestimated",
+      "measurementRequirements": "A matched cost comparison including checkpoint setup, harness development, recovery and review."
+    },
+    "executionCost": {
+      "value": null,
+      "standing": "unestimated",
+      "measurementRequirements": "A comparative execution-cost estimate awaits Issue #330 matched replay. Supplied per-run diagnostic measurements are recorded separately in the wave execution events."
+    },
+    "humanEffort": {
+      "value": null,
+      "standing": "unestimated",
+      "measurementRequirements": "Separately observed human work and review time."
+    },
+    "decisionLatency": {
+      "value": null,
+      "standing": "unestimated",
+      "measurementRequirements": "Prospectively recorded decision opportunities and receiving times."
+    },
+    "counterfactualComparison": {
+      "value": null,
+      "standing": "unestimated",
+      "measurementRequirements": "Execute the paired policies in the later #330 study; historical case differences remain descriptive policy comparisons."
+    },
+    "measurementRequirements": "Keep launches, attempts, completions, unique cases, navigations, journeys, hashing/IO, stage duration and memory distinct. The parent exports supported measurements as exact, bounded or unmeasured. Demonstration resumes establish reuse mechanics.",
+    "diagnosticMeasurements": {
+      "standing": "descriptive-diagnostic-measurements",
+      "events": [
+        "wave12-table-v3-closure-2026-10-03",
+        "wave12-table-v3-unchanged-resume-2026-10-03",
+        "scope-plain-labels-v3-resume-2026-10-03"
+      ],
+      "units": "Stage execution, stage publication and hashing use milliseconds; elapsed uses seconds. Read and byte counters retain their supplied names and values.",
+      "comparisonBoundary": "Fresh closure, its immediate unchanged resume and the later user-scope resume describe their respective invocations. These are descriptive measurements rather than a paired benchmark, savings estimate, causal effect or calibrated cost forecast.",
+      "receivingDecision": "Issue #330 retains the separate paired-replay gate; Issue #331 retains its later shadow-prediction gate."
+    }
+  },
+  "prospectiveNextCampaign": {
+    "standing": "executed-parent-reported",
+    "owner": "parent application work under PR #326 / Issue #329",
+    "scope": "Approved Wave 1 repairs and Wave 2 first bounded JavaScript adapter completed the supplied source-review, closure/resume and material checks.",
+    "observationDefinition": "v3",
+    "predictionTarget": "deterministic-selected-case-set",
+    "beforeLaunch": [
+      "record actual source revision, definition, runtime and parameters",
+      "freeze ordered requested, selected, reusable and intentionally excluded case IDs",
+      "record cumulative invalidation reasons and expected case set before browser acquisition",
+      "record source/helper closure and required artifact identity"
+    ],
+    "recordedBeforeLaunchAt": null,
+    "sourceRevision": null,
+    "runtimeIdentity": null,
+    "expectedCaseIds": null,
+    "observedCaseIds": null,
+    "evidenceManifest": null,
+    "result": "pass",
+    "outcomeRule": "Compare the prospectively recorded selected case IDs with attempted/completed/reused IDs and all required verdicts. Missing identity or coverage yields incomplete; disagreement returns to the owning dependency/definition boundary. Agreement establishes deterministic selection only.",
+    "receivingDecision": "The bounded adapter and material checks passed. Accepted receiving handoff and an independently observed eligible window remain the next research-exposure boundary.",
+    "expectedCaseCount": 39,
+    "passedCaseCount": 39,
+    "tableDefinitionHash": "8121c0244dd024b89b5f7ba1fd7beae3350f7781d924760d8d39bbebba18209b",
+    "executionEvent": "wave12-table-v3-closure-2026-10-03",
+    "unchangedResumeEvent": "wave12-table-v3-unchanged-resume-2026-10-03",
+    "recordingStanding": "results-entered-after-parent-return; original pre-launch fields remain unspecified"
+  },
+  "ownership": {
+    "application": {
+      "role": "application implementer and evidence owner",
+      "receivers": [
+        "PR #326",
+        "Issue #319",
+        "Issue #329"
+      ],
+      "authority": "Source repairs, deterministic invalidation, required gates and exported execution evidence."
+    },
+    "research": {
+      "role": "research record and protocol owner",
+      "receivers": [
+        "PR #327",
+        "Issue #320"
+      ],
+      "authority": "Event annotation, eligibility, descriptive counts and explicitly qualified comparisons."
+    },
+    "review": {
+      "role": "independent reviewer and human receiving maintainer",
+      "humanReceiver": "driftframestudios",
+      "authority": "The human records acceptance of scope, revision, evidence and dispositions; automated pass results supply evidence for that decision."
+    }
+  },
+  "laterWork": [
+    {
+      "issue": 330,
+      "standing": "later-separate-study",
+      "subject": "Prospective paired replay; independently adjudicated fault corpus and matched execution costs have separate evidence roles."
+    },
+    {
+      "issue": 331,
+      "standing": "later-shadow-candidate",
+      "subject": "Predictions retain all required checks; eligible labels, grouped/temporal holdout and a reviewed risk/precision budget precede calibration or adoption."
+    }
+  ],
+  "nextDecision": "Record the human's accepted receiving handoff with revision, evidence manifest and dispositions, then declare and observe its eligible window. Wave 1/2 completion and the later user-requested plain-label scope addition retain their separate descriptive records; Issues #330 and #331 remain gated.",
+  "asOfWave12Summary": {
+    "recordedOn": "2026-10-03",
+    "throughEvent": "wave12-shared-material-2026-10-03",
+    "historicalExecutionEvents": 13,
+    "browserLaunches": {
+      "value": 13,
+      "standing": "exact-recorded-count"
+    },
+    "tableObserverBrowserLaunches": {
+      "value": 7,
+      "standing": "exact-recorded-count"
+    },
+    "ancillaryBrowserLaunches": {
+      "value": 6,
+      "standing": "exact-recorded-count"
+    },
+    "tablePrototypeCaseAttempts": {
+      "value": 178,
+      "standing": "exact-recorded-count"
+    },
+    "explicitlyRecordedCompleteTableAttempts": {
+      "value": 150,
+      "standing": "exact-recorded-count"
+    },
+    "totalCompletedTableAttempts": {
+      "value": null,
+      "standing": "unmeasured",
+      "reason": "Historical explicit completions total 112 and fresh v3 prototype completions add 38. Some earlier attempts lack a separate completion count; resumed evidence adds no new attempts."
+    },
+    "uniqueTableCasesAcrossDefinitions": {
+      "value": null,
+      "standing": "unmeasured",
+      "reason": "Attempt and reuse totals span changed definitions and sources; a deduplicated inventory is required."
+    },
+    "knownAncillaryPageVisits": {
+      "value": 4,
+      "standing": "exact-recorded-count"
+    },
+    "sharedMaterialJourneys": {
+      "value": 4,
+      "standing": "exact-recorded-count"
+    },
+    "sharedMaterialPageVisits": {
+      "value": null,
+      "standing": "unmeasured",
+      "reason": "The two historical and two fresh Shared Surface journeys retain unmeasured page counts."
+    },
+    "totalPageVisits": {
+      "value": null,
+      "standing": "unmeasured",
+      "reason": "178 table attempts, four known ancillary visits and four Shared Surface journeys have different units. The new table campaign reports 47 document navigations; historical and other navigation coverage remains incomplete."
+    },
+    "completedHandoffs": {
+      "value": 0,
+      "standing": "exact-recorded-count"
+    },
+    "completedRepairBatches": {
+      "value": null,
+      "standing": "unmeasured",
+      "reason": "An accepted batch count awaits explicit receiving-review records."
+    },
+    "receivingStanding": "application-wave-passed; awaiting-accepted-receiving-handoff",
+    "boundary": "Cumulative counts combine the original historical ledger with supplied Wave 1/2 execution events. Reviews, annotations, fixture reuse and a stubbed launch retain separate accounting.",
+    "wave12": {
+      "recordedOn": "2026-10-03",
+      "standing": "parent-reported-wave-complete; receiving-handoff-pending",
+      "eventIds": [
+        "wave12-review-repairs-2026-10-03",
+        "wave12-screenshot-refinement-2026-10-03",
+        "wave12-source-review-clearance-2026-10-03",
+        "wave12-writer-interruption-review-2026-10-03",
+        "wave12-table-v3-closure-2026-10-03",
+        "wave12-table-v3-unchanged-resume-2026-10-03",
+        "wave12-conditioning-material-2026-10-03",
+        "wave12-shared-material-2026-10-03"
+      ],
+      "browserLaunches": {
+        "value": 3,
+        "standing": "exact-recorded-count"
+      },
+      "tablePrototypeCaseAttempts": {
+        "value": 38,
+        "standing": "exact-recorded-count"
+      },
+      "fixtureAttempts": {
+        "value": 1,
+        "standing": "exact-recorded-count"
+      },
+      "knownAncillaryPageVisits": {
+        "value": 1,
+        "standing": "exact-recorded-count"
+      },
+      "sharedMaterialJourneys": {
+        "value": 2,
+        "standing": "exact-recorded-count"
+      },
+      "sharedMaterialPageVisits": {
+        "value": null,
+        "standing": "unmeasured",
+        "reason": "Fresh Shared Surface journey page counts were not instrumented."
+      },
+      "tableDocumentNavigations": {
+        "value": 47,
+        "standing": "exact-recorded-count"
+      },
+      "unchangedResumeReusedCases": {
+        "value": 39,
+        "standing": "exact-recorded-count"
+      },
+      "stubbedLaunchCalls": {
+        "value": 1,
+        "standing": "exact-recorded-count"
+      }
+    }
+  }
+}
