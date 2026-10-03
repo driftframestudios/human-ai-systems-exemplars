@@ -152,6 +152,7 @@
   .legend-row { display: flex; flex-wrap: wrap; gap: 8px; }
   .inspector-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr); gap: 14px; }
   @media (max-width: 900px) { .inspector-grid { grid-template-columns: 1fr; } }
+  .route-selection-label { margin: .35rem 0 .75rem; white-space: normal; overflow-wrap: anywhere; max-inline-size: 100%; }
   .mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; }
   .basis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
   .hardline-note { border-top: 4px solid #25231f; padding-top: 12px; margin-top: 12px; }
@@ -1287,6 +1288,62 @@ A compatible import becomes the accepted working state and regenerates this caps
     updateJsonLdScript();
   }
 
+  function renderAllPreservingControlFocus(control){
+    const inspectorKey = control && (['data-cell-basis','data-cell-asset','data-asset-stage'].find(name => control.hasAttribute(name)) ||
+      (/^(cell|asset)-(status|route)$/.test(control.getAttribute('id') || '') ? 'id' : null));
+    const inspectorKind = inspectorKey && (inspectorKey === 'id' ? control.getAttribute('id').split('-')[0] :
+      inspectorKey.startsWith('data-cell-') ? 'cell' : 'asset');
+    const key = control && control === document.activeElement &&
+      (['data-basis-toggle','data-move-surface','data-move-asset'].find(name => control.hasAttribute(name)) ||
+        (inspectorKind === selectedKind ? inspectorKey : null));
+    const identity = key && {key, value:control.getAttribute(key), direction:control.getAttribute('data-dir'),
+      kind:inspectorKind, selected:inspectorKind ? selectedId : null};
+    const focusBounds = element => {
+      const rect = element.getBoundingClientRect(), style = getComputedStyle(element);
+      const reserve = ['none','hidden'].includes(style.outlineStyle) ? 0 :
+        Math.max(0, (parseFloat(style.outlineWidth) || 0) + (parseFloat(style.outlineOffset) || 0));
+      return {top:rect.top-reserve, bottom:rect.bottom+reserve, left:rect.left-reserve, right:rect.right+reserve};
+    };
+    const viewport = document.documentElement;
+    const before = ['data-move-surface','data-move-asset'].includes(key) ? focusBounds(control) : null;
+    const wasInView = before && before.bottom > 0 && before.top < viewport.clientHeight &&
+      before.right > 0 && before.left < viewport.clientWidth;
+    renderAll();
+    if(!identity || (identity.kind && (selectedKind !== identity.kind || selectedId !== identity.selected))) return;
+    const matches = Array.from(document.querySelectorAll('[' + identity.key + ']')).filter(candidate =>
+      candidate.getAttribute(identity.key) === identity.value &&
+      candidate.getAttribute('data-dir') === identity.direction);
+    if(matches.length === 1 && !matches[0].disabled){
+      const target = matches[0];
+      target.focus({preventScroll:true});
+      if(wasInView && document.activeElement === target){
+        const after = focusBounds(target);
+        const delta = after.top < 0 ? after.top : after.bottom > viewport.clientHeight ? after.bottom-viewport.clientHeight : 0;
+        // Correct only this document's vertical viewport; keep the parent and horizontal position.
+        if(delta) window.scrollBy({top:delta, left:0, behavior:'instant'});
+      }
+    }
+  }
+
+  function inspectorRouteLabel(kind,value){
+    return '<p class="route-selection-label" id="' + kind + '-route-label">Current route: ' +
+      escapeHtml(value || 'No route selected') + '</p>';
+  }
+  function updateInspectorRouteReadout(){
+    const record = (selectedKind === 'asset' ? state.shared_assets : state.cells).find(item => item.id === selectedId);
+    const readout = document.getElementById(selectedKind + '-route-label');
+    if(record && readout) readout.textContent = 'Current route: ' + (record.handoff || 'No route selected');
+  }
+  function renderInspectorProjections(){
+    // Editors retain their DOM identity, so native forward/backward Tab can finish.
+    updateInspectorRouteReadout();
+    renderSvg();
+    renderTable();
+    renderIdentityRegistry();
+    renderAiPrompt();
+    updateJsonLdScript();
+  }
+
   function renderBasisToggles(){
     const v = activeView();
     const el = document.getElementById('basisToggles');
@@ -1300,7 +1357,7 @@ A compatible import becomes the accepted working state and regenerates this caps
         if(e.target.checked){ if(!v.active_intensity_basis_ids.includes(id)) v.active_intensity_basis_ids.push(id); }
         else { v.active_intensity_basis_ids = v.active_intensity_basis_ids.filter(x => x !== id); }
         if(!v.active_intensity_basis_ids.length){ v.active_intensity_basis_ids = [id]; e.target.checked = true; }
-        renderAll();
+        renderAllPreservingControlFocus(e.currentTarget);
       });
     });
   }
@@ -1355,7 +1412,7 @@ A compatible import becomes the accepted working state and regenerates this caps
     }).join('') : '<p class="tiny">No hidden surfaces.</p>');
     el.querySelectorAll('[data-surface-label]').forEach(input => input.addEventListener('blur', e => { const s = state.surfaces.find(x => x.id === e.target.dataset.surfaceLabel); if(s){ s.label = e.target.value.trim() || s.label; renderAll(); } }));
     el.querySelectorAll('[data-surface-type]').forEach(input => input.addEventListener('blur', e => { const s = state.surfaces.find(x => x.id === e.target.dataset.surfaceType); if(s){ s.surface_type = e.target.value.trim(); renderAll(); } }));
-    document.querySelectorAll('[data-move-surface]').forEach(btn => btn.addEventListener('click', e => moveItem('surface', e.target.dataset.moveSurface, Number(e.target.dataset.dir))));
+    document.querySelectorAll('[data-move-surface]').forEach(btn => btn.addEventListener('click', e => moveItem('surface', e.currentTarget.dataset.moveSurface, Number(e.currentTarget.dataset.dir), e.currentTarget)));
     document.querySelectorAll('[data-hide-surface]').forEach(btn => btn.addEventListener('click', e => hideItem('surface', e.target.dataset.hideSurface)));
     document.querySelectorAll('[data-show-surface]').forEach(btn => btn.addEventListener('click', e => showItem('surface', e.target.dataset.showSurface)));
     document.querySelectorAll('[data-remove-surface]').forEach(btn => btn.addEventListener('click', e => removeSurface(e.currentTarget.dataset.removeSurface,e.currentTarget)));
@@ -1386,13 +1443,13 @@ A compatible import becomes the accepted working state and regenerates this caps
     el.querySelectorAll('[data-asset-label]').forEach(input => input.addEventListener('blur', e => { const a = state.shared_assets.find(x => x.id === e.target.dataset.assetLabel); if(a){ a.label = e.target.value.trim() || a.label; renderAll(); } }));
     el.querySelectorAll('[data-asset-type]').forEach(input => input.addEventListener('blur', e => { const a = state.shared_assets.find(x => x.id === e.target.dataset.assetType); if(a){ a.asset_type = e.target.value.trim(); renderAll(); } }));
     document.querySelectorAll('[data-select-asset]').forEach(btn => btn.addEventListener('click', e => { selectedKind='asset'; selectedId=e.target.dataset.selectAsset; activeView().selected_shared_asset_id=selectedId; activeView().selected_cell_id=''; renderAll(); }));
-    document.querySelectorAll('[data-move-asset]').forEach(btn => btn.addEventListener('click', e => moveItem('asset', e.target.dataset.moveAsset, Number(e.target.dataset.dir))));
+    document.querySelectorAll('[data-move-asset]').forEach(btn => btn.addEventListener('click', e => moveItem('asset', e.currentTarget.dataset.moveAsset, Number(e.currentTarget.dataset.dir), e.currentTarget)));
     document.querySelectorAll('[data-hide-asset]').forEach(btn => btn.addEventListener('click', e => hideItem('asset', e.target.dataset.hideAsset)));
     document.querySelectorAll('[data-show-asset]').forEach(btn => btn.addEventListener('click', e => showItem('asset', e.target.dataset.showAsset)));
     document.querySelectorAll('[data-remove-asset]').forEach(btn => btn.addEventListener('click', e => removeAsset(e.currentTarget.dataset.removeAsset,e.currentTarget)));
   }
 
-  function moveItem(kind, id, dir){
+  function moveItem(kind, id, dir, control){
     const v = activeView();
     const key = kind === 'surface' ? 'surface_order' : 'shared_asset_order';
     const order = v[key];
@@ -1401,7 +1458,7 @@ A compatible import becomes the accepted working state and regenerates this caps
     const next = idx + dir;
     if(next < 0 || next >= order.length) return;
     [order[idx], order[next]] = [order[next], order[idx]];
-    renderAll();
+    renderAllPreservingControlFocus(control);
   }
   function hideItem(kind, id){
     const v = activeView();
@@ -1609,7 +1666,7 @@ A compatible import becomes the accepted working state and regenerates this caps
         '<div class="basis-grid">' + intensityDefs.map(b => '<label>' + escapeHtml(b.label) + '<select data-cell-basis="' + b.id + '">' + makeIntensityOptions(c.intensity_by_basis[b.id]) + '</select></label>').join('') + '</div>' +
         '<label for="cell-note">Cell note</label><textarea id="cell-note">' + escapeHtml(c.note) + '</textarea>' +
         '<label for="cell-status">Evidence status</label><select id="cell-status">' + makeStatusOptions(c.evidence_status) + '</select>' +
-        '<label for="cell-route">Handoff route</label><select id="cell-route">' + makeRouteOptions(c.handoff) + '</select>' +
+        '<label for="cell-route">Handoff route</label><select id="cell-route" aria-describedby="cell-route-label">' + makeRouteOptions(c.handoff) + '</select>' + inspectorRouteLabel('cell',c.handoff) +
         '<div id="cell-custom-route-wrap" style="display:' + (c.handoff && !routeRegistry.some(r => r.label === c.handoff) ? 'block':'none') + '"><label for="cell-custom-route">Custom route</label><input id="cell-custom-route" type="text" value="' + escapeHtml(c.handoff && !routeRegistry.some(r => r.label === c.handoff) ? c.handoff : '') + '"></div>' +
         '<label for="cell-reason">Route reason</label><textarea id="cell-reason">' + escapeHtml(c.reason) + '</textarea>' +
       '</div>' +
@@ -1624,23 +1681,23 @@ A compatible import becomes the accepted working state and regenerates this caps
         '<p class="tiny"><strong>Visible in focus view:</strong> ' + (isCellVisible(c) ? 'yes':'no') + '</p>' +
       '</div>' +
     '</div>';
-    el.querySelectorAll('[data-cell-basis]').forEach(sel => sel.addEventListener('change', e => { c.intensity_by_basis[e.target.dataset.cellBasis] = e.target.value; renderAll(); }));
+    el.querySelectorAll('[data-cell-basis]').forEach(sel => sel.addEventListener('change', e => { c.intensity_by_basis[e.target.dataset.cellBasis] = e.target.value; renderAllPreservingControlFocus(e.currentTarget); }));
     document.getElementById('cell-note').addEventListener('input', e => { c.note = e.target.value; });
-    document.getElementById('cell-note').addEventListener('blur', renderAll);
-    document.getElementById('cell-status').addEventListener('change', e => { c.evidence_status = e.target.value; renderAll(); });
+    document.getElementById('cell-note').addEventListener('blur', renderInspectorProjections);
+    document.getElementById('cell-status').addEventListener('change', e => { c.evidence_status = e.target.value; renderAllPreservingControlFocus(e.currentTarget); });
     document.getElementById('cell-route').addEventListener('change', e => {
-      if(e.target.value === '__custom__'){ document.getElementById('cell-custom-route-wrap').style.display = 'block'; c.handoff = document.getElementById('cell-custom-route').value.trim(); }
-      else { c.handoff = e.target.value; renderAll(); }
+      if(e.target.value === '__custom__'){ document.getElementById('cell-custom-route-wrap').style.display = 'block'; c.handoff = document.getElementById('cell-custom-route').value.trim(); updateInspectorRouteReadout(); }
+      else { c.handoff = e.target.value; renderAllPreservingControlFocus(e.currentTarget); }
     });
     const custom = document.getElementById('cell-custom-route');
-    if(custom){ custom.addEventListener('input', e => { c.handoff = e.target.value; }); custom.addEventListener('blur', renderAll); }
+    if(custom){ custom.addEventListener('input', e => { c.handoff = e.target.value; updateInspectorRouteReadout(); }); custom.addEventListener('blur', renderInspectorProjections); }
     document.getElementById('cell-reason').addEventListener('input', e => { c.reason = e.target.value; });
-    document.getElementById('cell-reason').addEventListener('blur', renderAll);
+    document.getElementById('cell-reason').addEventListener('blur', renderInspectorProjections);
     el.querySelectorAll('[data-cell-asset]').forEach(box => box.addEventListener('change', e => {
       const id = e.target.dataset.cellAsset;
       if(e.target.checked){ if(!c.linked_shared_asset_ids.includes(id)) c.linked_shared_asset_ids.push(id); }
       else c.linked_shared_asset_ids = c.linked_shared_asset_ids.filter(x => x !== id);
-      renderAll();
+      renderAllPreservingControlFocus(e.currentTarget);
     }));
   }
   function renderAssetInspector(el){
@@ -1657,7 +1714,7 @@ A compatible import becomes the accepted working state and regenerates this caps
         '<label for="asset-desc">Description</label><textarea id="asset-desc">' + escapeHtml(a.description || '') + '</textarea>' +
         '<label for="asset-status">Evidence status</label><select id="asset-status">' + makeStatusOptions(a.evidence_status || 'assumed') + '</select>' +
         '<label for="asset-owner">Owner or steward</label><input id="asset-owner" type="text" value="' + escapeHtml(a.owner_or_steward || '') + '">' +
-        '<label for="asset-route">Handoff route</label><select id="asset-route">' + makeRouteOptions(a.handoff || '') + '</select>' +
+        '<label for="asset-route">Handoff route</label><select id="asset-route" aria-describedby="asset-route-label">' + makeRouteOptions(a.handoff || '') + '</select>' + inspectorRouteLabel('asset',a.handoff) +
         '<div id="asset-custom-route-wrap" style="display:' + (a.handoff && !routeRegistry.some(r => r.label === a.handoff) ? 'block':'none') + '"><label for="asset-custom-route">Custom route</label><input id="asset-custom-route" type="text" value="' + escapeHtml(a.handoff && !routeRegistry.some(r => r.label === a.handoff) ? a.handoff : '') + '"></div>' +
         '<label for="asset-reason">Route reason</label><textarea id="asset-reason">' + escapeHtml(a.reason || '') + '</textarea>' +
         '<label for="asset-trigger">Review trigger</label><textarea id="asset-trigger">' + escapeHtml(a.review_trigger || '') + '</textarea>' +
@@ -1675,26 +1732,26 @@ A compatible import becomes the accepted working state and regenerates this caps
       '</div>' +
     '</div>';
     document.getElementById('asset-desc').addEventListener('input', e => { a.description = e.target.value; });
-    document.getElementById('asset-desc').addEventListener('blur', renderAll);
-    document.getElementById('asset-status').addEventListener('change', e => { a.evidence_status = e.target.value; renderAll(); });
+    document.getElementById('asset-desc').addEventListener('blur', renderInspectorProjections);
+    document.getElementById('asset-status').addEventListener('change', e => { a.evidence_status = e.target.value; renderAllPreservingControlFocus(e.currentTarget); });
     document.getElementById('asset-owner').addEventListener('input', e => { a.owner_or_steward = e.target.value; });
-    document.getElementById('asset-owner').addEventListener('blur', renderAll);
+    document.getElementById('asset-owner').addEventListener('blur', renderInspectorProjections);
     document.getElementById('asset-route').addEventListener('change', e => {
-      if(e.target.value === '__custom__'){ document.getElementById('asset-custom-route-wrap').style.display = 'block'; a.handoff = document.getElementById('asset-custom-route').value.trim(); }
-      else { a.handoff = e.target.value; renderAll(); }
+      if(e.target.value === '__custom__'){ document.getElementById('asset-custom-route-wrap').style.display = 'block'; a.handoff = document.getElementById('asset-custom-route').value.trim(); updateInspectorRouteReadout(); }
+      else { a.handoff = e.target.value; renderAllPreservingControlFocus(e.currentTarget); }
     });
     const custom = document.getElementById('asset-custom-route');
-    if(custom){ custom.addEventListener('input', e => { a.handoff = e.target.value; }); custom.addEventListener('blur', renderAll); }
+    if(custom){ custom.addEventListener('input', e => { a.handoff = e.target.value; updateInspectorRouteReadout(); }); custom.addEventListener('blur', renderInspectorProjections); }
     document.getElementById('asset-reason').addEventListener('input', e => { a.reason = e.target.value; });
-    document.getElementById('asset-reason').addEventListener('blur', renderAll);
+    document.getElementById('asset-reason').addEventListener('blur', renderInspectorProjections);
     document.getElementById('asset-trigger').addEventListener('input', e => { a.review_trigger = e.target.value; });
-    document.getElementById('asset-trigger').addEventListener('blur', renderAll);
+    document.getElementById('asset-trigger').addEventListener('blur', renderInspectorProjections);
     el.querySelectorAll('[data-asset-stage]').forEach(box => box.addEventListener('change', e => {
       const id = e.target.dataset.assetStage;
       a.supported_stage_ids = a.supported_stage_ids || [];
       if(e.target.checked){ if(!a.supported_stage_ids.includes(id)) a.supported_stage_ids.push(id); }
       else a.supported_stage_ids = a.supported_stage_ids.filter(x => x !== id);
-      renderAll();
+      renderAllPreservingControlFocus(e.currentTarget);
     }));
   }
   function isCellVisible(c){
