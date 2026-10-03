@@ -1,0 +1,119 @@
+{
+  "version": 1,
+  "standing": "hand-authored-oracle-awaiting-independent-adjudication",
+  "oracle": {
+    "id": "costs-390",
+    "signature": "definition-A/runtime-A",
+    "dependencies": {
+      "source.html": "source-A",
+      "helper.mjs": "helper-A",
+      "runtime": "runtime-A",
+      "capture.png": "image-A"
+    },
+    "result": {
+      "id": "costs-390",
+      "standing": "pass",
+      "assertions": {
+        "population": 6,
+        "keyboard": "pass",
+        "clipping": "pass"
+      },
+      "records": [
+        {
+          "topic": "Costs",
+          "identity": "Pilot",
+          "label": "USD",
+          "value": ""
+        },
+        {
+          "topic": "Costs",
+          "identity": "Pilot",
+          "label": "USD",
+          "value": "0"
+        },
+        {
+          "topic": "Costs",
+          "identity": "Pilot",
+          "label": "USD",
+          "value": "unavailable"
+        },
+        {
+          "topic": "Costs",
+          "identity": "Pilot",
+          "label": "USD",
+          "value": "invalid"
+        },
+        {
+          "topic": "Costs",
+          "identity": "Pilot",
+          "label": "USD",
+          "value": "inapplicable"
+        },
+        {
+          "topic": "Costs",
+          "identity": "Pilot",
+          "label": "USD",
+          "value": "qualified: 12 USD"
+        }
+      ]
+    }
+  },
+  "faults": [
+    {
+      "id": "source-change",
+      "mutation": "source",
+      "pipelineReuse": false,
+      "oracleFault": "dependency:source.html",
+      "consequence": "A changed cell owner requires fresh evidence."
+    },
+    {
+      "id": "helper-change",
+      "mutation": "helper",
+      "pipelineReuse": false,
+      "oracleFault": "definition-runtime",
+      "consequence": "Changed executable assertions require fresh evidence."
+    },
+    {
+      "id": "runtime-change",
+      "mutation": "runtime",
+      "pipelineReuse": false,
+      "oracleFault": "definition-runtime",
+      "consequence": "Changed runtime identity requires fresh evidence."
+    },
+    {
+      "id": "missing-artifact",
+      "mutation": "artifact",
+      "pipelineReuse": false,
+      "oracleFault": "dependency:capture.png",
+      "consequence": "A complete receiving record requires the screenshot bytes."
+    },
+    {
+      "id": "omitted-dependency",
+      "mutation": "omitted",
+      "pipelineReuse": true,
+      "oracleFault": "dependency:source.html",
+      "consequence": "Underdeclared cache dependencies can reuse stale cells; the independent oracle rejects the omitted owner."
+    },
+    {
+      "id": "state-contamination",
+      "mutation": "state",
+      "pipelineReuse": true,
+      "oracleFault": "material",
+      "consequence": "A stale selection changes extracted cells while standing remains pass; the independent oracle rejects it."
+    },
+    {
+      "id": "data-label-contamination",
+      "mutation": "label",
+      "pipelineReuse": true,
+      "oracleFault": "material",
+      "consequence": "A changed supplemental label changes standalone extracted meaning."
+    },
+    {
+      "id": "assertion-contamination",
+      "mutation": "assertion",
+      "pipelineReuse": true,
+      "oracleFault": "material",
+      "consequence": "A changed assertion result remains material even when overall standing says pass."
+    }
+  ]
+}

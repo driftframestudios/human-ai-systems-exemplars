@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "issue": 330,
+  "standing": "prospective-awaiting-independent-review",
+  "applicationRevision": "1b615bb6150c7aa6629d6ad0233895ba09fd1896",
+  "researchBase": "eb195762d206f65299cbcc91ed13c2fa1dbcb786",
+  "mode": "closure",
+  "family": "all",
+  "repetitions": 5,
+  "measuredBudgetMilliseconds": 900000,
+  "preparationBrowserBudgetMilliseconds": 180000,
+  "scenarios": [
+    {
+      "id": "unchanged",
+      "file": null,
+      "suffix": "",
+      "selectedFamilies": [],
+      "selectedFixture": false
+    },
+    {
+      "id": "family",
+      "file": "collaboration/cross-functional-investment-model-studio/index.html",
+      "suffix": "\n<!-- paired-replay-02: identity-only family perturbation -->\n",
+      "selectedFamilies": [
+        "investment"
+      ],
+      "selectedFixture": false
+    },
+    {
+      "id": "helper",
+      "file": "tools/evidence-campaign.mjs",
+      "suffix": "\n// paired-replay-02: identity-only shared definition perturbation.\n",
+      "selectedFamilies": [
+        "conditioning",
+        "shared",
+        "investment"
+      ],
+      "selectedFixture": true
+    }
+  ],
+  "expected": {
+    "population": 39,
+    "prototypeCases": 38,
+    "familyCases": {
+      "conditioning": 11,
+      "shared": 15,
+      "investment": 12
+    },
+    "measuredPairs": 15,
+    "measuredInvocations": 30,
+    "measuredBrowserLaunches": 25,
+    "measuredCaseAttempts": 840,
+    "measuredPrototypeAttempts": 820,
+    "measuredFixtureAttempts": 20,
+    "measuredDocumentNavigations": 1015,
+    "seedBrowserLaunches": 1,
+    "warmupBrowserLaunches": 1,
+    "totalPlannedBrowserLaunches": 27,
+    "totalPlannedCaseAttempts": 918,
+    "totalPlannedDocumentNavigations": 1109
+  },
+  "estimand": "Within-opportunity full minus selected child-process wall milliseconds, conditional on valid identical material evidence; checkpoint restoration and independent observation are separate costs.",
+  "aggregation": "Five paired differences per scenario, their arithmetic mean, median and complete min/max range; retain all ordered rows. No confidence interval or general productivity estimate.",
+  "normalization": "Retain expected order, observationVersion, every result field and screenshot hashes. Exclude only generation metadata/version, record version/signature, and dependency source/artifact location identities from the material signature. Independently validate dependency closure, source identity, runtime and artifact bytes.",
+  "decisionRule": "indeterminate on any defect, incomplete opportunity, budget stop, contention flag, or multiple measurement sessions; adopt when all five differences are positive in every scenario; retain when all five are nonpositive in every scenario; otherwise combine. Defer remains the reviewed pre-execution disposition.",
+  "reviewGate": "A parent-created approval binds the frozen bundle and environment, independent fault adjudication and permission to start seed/warmup/measurement.",
+  "revision": "review-02"
+}

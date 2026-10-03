@@ -5,10 +5,45 @@ import test from 'node:test';
 
 const record = JSON.parse(readFileSync(new URL('./table-repair-01.json', import.meta.url), 'utf8'));
 const ledgerText = readFileSync(new URL('./table-repair-01-events.jsonl', import.meta.url), 'utf8');
-const ledger = ledgerText.trimEnd().split('\n').map(line => JSON.parse(line));
+const allLedger = ledgerText.trimEnd().split('\n').map(line => JSON.parse(line));
+const legacyCutoff = 'scope-plain-labels-v3-resume-2026-10-03';
+const serviceCutoff = 'pr334-service-browser-passed-2026-10-03';
+const continuationCutoff = 'table-316-focus-diagnostic-02-adjudication-scope-2026-10-03';
+const ledger = throughEvent(allLedger, legacyCutoff);
 const history = ledger.filter(row => row.recordType === undefined);
 const annotations = ledger.filter(row => row.recordType === 'retrospective-annotation');
 const sha256 = value => createHash('sha256').update(value).digest('hex');
+// Count-only view of the 36-record epoch at research base eb195762; later prose is not backdated.
+const legacyCountRecord = { ...record, currentSummary: { ...record.currentSummary,
+  throughEvent: legacyCutoff,
+  browserLaunches: { value: 14, standing: 'exact-recorded-count' },
+  ancillaryBrowserLaunches: { value: 6, standing: 'exact-recorded-count' }
+} };
+
+function throughEvent(rows, event) {
+  const matches = rows.flatMap((row, index) => row.event === event ? [index] : []);
+  assert.equal(matches.length, 1, 'one named cutoff: ' + event);
+  return rows.slice(0, matches[0] + 1);
+}
+
+function validateGlobalReferences(rows) {
+  const ids = new Map();
+  for (const [index, row] of rows.entries()) {
+    assert.equal(typeof row.event, 'string', 'global event ID');
+    assert.ok(row.event.length > 0 && !ids.has(row.event), 'global unique event ID');
+    ids.set(row.event, index);
+  }
+  for (const [index, row] of rows.entries()) {
+    for (const field of ['triggeredBy', 'relatedEvents']) {
+      if (!Object.hasOwn(row, field)) continue;
+      assert.ok(Array.isArray(row[field]), 'global reference list');
+      for (const id of row[field]) {
+        assert.ok(ids.has(id), 'global existing reference: ' + id);
+        if (field === 'triggeredBy') assert.ok(ids.get(id) < index, 'global preceding reference: ' + id);
+      }
+    }
+  }
+}
 
 function validateLedger(epoch, rows) {
   const ids = new Map();
@@ -104,8 +139,8 @@ function validateCounts(epoch, rows) {
     ['browserLaunches', sumExplicit(counted, 'browserLaunches')],
     ['tableObserverBrowserLaunches', sumExplicit(counted.filter(row => tables.has(row.event)), 'browserLaunches')],
     ['ancillaryBrowserLaunches', sumExplicit(counted.filter(row => ancillary.has(row.event)), 'browserLaunches')],
-    ['tablePrototypeCaseAttempts', sumExplicit(counted, 'prototypeCases')],
-    ['explicitlyRecordedCompleteTableAttempts', sumExplicit(counted, 'completePrototypeCases')],
+    ['tablePrototypeCaseAttempts', sumExplicit(counted.filter(row => tables.has(row.event)), 'prototypeCases')],
+    ['explicitlyRecordedCompleteTableAttempts', sumExplicit(counted.filter(row => tables.has(row.event)), 'completePrototypeCases')],
     ['knownAncillaryPageVisits', sumExplicit(counted.filter(row => Number.isInteger(row.prototypePageCases)), 'prototypePageCases')],
     ['sharedMaterialJourneys', sumExplicit(counted, 'materialJourneys')]
   ]) assertMetric(summary[key], value, 'exact-recorded-count');
@@ -279,9 +314,9 @@ for (const [name, mutate, pattern] of [
 });
 
 test('recorded totals retain exact counts and explicit unmeasured quantities', () => {
-  validateCounts(record, ledger);
-  assert.deepEqual([record.currentSummary.browserLaunches.value, record.currentSummary.tablePrototypeCaseAttempts.value,
-    record.currentSummary.knownAncillaryPageVisits.value, record.currentSummary.sharedMaterialJourneys.value], [14, 190, 4, 4]);
+  validateCounts(legacyCountRecord, ledger);
+  assert.deepEqual([legacyCountRecord.currentSummary.browserLaunches.value, legacyCountRecord.currentSummary.tablePrototypeCaseAttempts.value,
+    legacyCountRecord.currentSummary.knownAncillaryPageVisits.value, legacyCountRecord.currentSummary.sharedMaterialJourneys.value], [14, 190, 4, 4]);
 });
 
 for (const [name, mutate] of [
@@ -291,7 +326,8 @@ for (const [name, mutate] of [
   ['incorrect attempt total', r => { r.currentSummary.tablePrototypeCaseAttempts.value = 179; }],
   ['inferred savings', r => { r.costAccounting.netSavings.value = 0; }]
 ]) test('rejects ' + name, () => {
-  const changed = structuredClone(record);
+  validateCounts(legacyCountRecord, ledger);
+  const changed = structuredClone(legacyCountRecord);
   mutate(changed);
   assert.throws(() => validateCounts(changed, ledger), assert.AssertionError);
 });
@@ -468,4 +504,203 @@ test('the complete earlier ledger and Wave 1/2 summary retain their as-of bytes 
   assert.equal(record.asOfWave12Summary.throughEvent, 'wave12-shared-material-2026-10-03');
   assert.deepEqual([record.asOfWave12Summary.browserLaunches.value,
     record.asOfWave12Summary.tablePrototypeCaseAttempts.value], [13, 178]);
+});
+
+function validateService(rows, epoch = record) {
+  const intake = throughEvent(rows, serviceCutoff).slice(36);
+  assert.deepEqual(intake.map(row => row.event), [
+    'pr334-retained-focused-checks-2026-10-03',
+    'pr334-service-browser-locator-fault-2026-10-03', serviceCutoff
+  ], 'three named Service intake records');
+  assert.deepEqual(intake.map(row => row.recordType), ['review', 'execution', 'execution']);
+  for (const row of intake) {
+    assert.equal(row.applicationReceipt.pullRequest, 334);
+    assert.equal(row.applicationReceipt.commit, 'fc874df');
+    assert.equal(row.standing, 'parent-reported-retained-observation');
+    for (const key of ['occurredAt', 'occurredOn', 'sourceRevision', 'runtimeIdentity', 'evidenceManifest',
+      'predictionBeforeExecution', 'durationSeconds', 'prospectiveProbability']) {
+      assert.equal(row[key], null, 'Service unknown remains null: ' + key);
+    }
+    assert.equal(row.lateDefectQualification.outcome, null);
+    assert.equal(row.lateDefectQualification.eligibleExposureMinutes, null);
+  }
+  assert.equal(Object.hasOwn(intake[0], 'browserLaunches'), false);
+  for (const row of intake.slice(1)) {
+    assert.equal(row.browserLaunches, 1);
+    assert.equal(row.costGroup, 'ancillary');
+    for (const key of ['observationDefinition', 'prototypeCases', 'completeCases', 'actualPageVisits', 'actualDocumentNavigations']) {
+      assert.equal(row[key], null, 'Service unknown remains null: ' + key);
+    }
+  }
+  assert.equal(intake[1].result, 'harness-locator-fault');
+  assert.equal(intake[2].result, 'pass');
+  assert.deepEqual(intake[2].declaredPaths, [{ owner: 'canonical', result: 'pass' }, { owner: 'Canvas', result: 'pass' }]);
+  assert.equal(intake[2].excludedDiagnostic.includedInThisDelta, false);
+  assert.equal(intake[2].excludedDiagnostic.reportedBrowserLaunches, 1);
+  assert.equal(intake[2].excludedDiagnostic.reportedPageVisits, 3);
+  for (const key of ['caseAttempts', 'durationSeconds']) {
+    assertMetric(epoch.currentSummary.pr334Receipt[key], null, 'unmeasured');
+  }
+}
+
+const campaignExpectations = [
+  ['pr334-core-visitor-closure', null, 67], ['pr334-focused-acceptance-3', null, 3],
+  ['pr334-core-visitor-closure-r2', null, 86], ['pr334-focused-acceptance-3-r2', 0, 3],
+  ['pr334-core-visitor-closure-r3', 1, 29], ['core-print-a3-337-338-r1', null, 3],
+  ['issue-338-a3-390-r2', 0, 1], ['table-316-focus-diagnostic-01', 1, 1],
+  ['table-316-focus-diagnostic-02', 0, 1]
+];
+
+function validateShadowContinuation(rows) {
+  const tail = throughEvent(rows, continuationCutoff).slice(39);
+  assert.equal(tail.length, 37, 'frozen shadow continuation length');
+  for (const row of tail) {
+    assert.equal(row.contract, 'campaign-yield-shadow/1', 'shadow contract');
+    assert.ok(['readiness', 'prediction', 'outcome', 'attempt'].includes(row.shadowKind), 'shadow record kind');
+    assert.ok(['plan', 'review', 'execution'].includes(row.recordType));
+    if (Object.hasOwn(row, 'countsAsBrowserExecution')) assert.equal(row.countsAsBrowserExecution, false);
+    if (row.shadowKind === 'attempt') assert.equal(row.likelihoodContribution, 0, 'attempt is not likelihood');
+    if (row.shadowKind === 'readiness') {
+      assert.equal(row.prospectiveProbability, null);
+      assert.equal(row.standing, 'readiness-only-not-counted-prediction');
+    }
+  }
+  const predictions = tail.filter(row => row.shadowKind === 'prediction');
+  const outcomes = tail.filter(row => row.shadowKind === 'outcome');
+  assert.deepEqual(predictions.map(row => row.campaign.id), campaignExpectations.map(row => row[0]), 'nine named forecasts');
+  assert.equal(outcomes.length, 9, 'nine terminal outcomes');
+  const cohorts = new Set();
+  let eligible = 0;
+  for (const [index, prediction] of predictions.entries()) {
+    const [campaign, value, attempts] = campaignExpectations[index];
+    const matches = outcomes.filter(row => row.observation.predictionEvent === prediction.event);
+    assert.equal(matches.length, 1, 'one outcome per prediction');
+    const result = matches[0];
+    const observation = result.observation;
+    assert.equal(prediction.event, 'shadow-' + campaign + '-prediction');
+    assert.equal(result.event, 'shadow-' + campaign + '-outcome');
+    assert.deepEqual(result.triggeredBy, [prediction.event]);
+    assert.equal(prediction.countsAsBrowserExecution, false);
+    assert.equal(result.countsAsBrowserExecution, false);
+    assert.equal(prediction.campaign.sourceFrozen, true);
+    assert.equal(prediction.readiness.action, 'run-required-closure');
+    assert.equal(prediction.campaign.repairCluster, 'pr334-current-table-wave');
+    assert.equal(prediction.campaign.caseIds.length, prediction.campaign.expectedCases);
+    assert.equal(new Set(prediction.campaign.caseIds).size, prediction.campaign.expectedCases);
+    assert.deepEqual(observation.identity, prediction.campaign.identity, 'prediction/outcome identity');
+    assert.equal(result.bundleSha256, prediction.bundleSha256, 'original outcome bundle');
+    assert.equal(result.eligibleLateDefectWindow, null, 'stored late-defect window remains null');
+    assert.equal(result.eligibleTimeExposureMinutes, null, 'stored time exposure remains null');
+    assert.equal(prediction.approval.bundleSha256, prediction.bundleSha256);
+    assert.ok(Date.parse(prediction.approval.reviewedAt) <= Date.parse(prediction.recordedAt));
+    assert.ok(Date.parse(prediction.recordedAt) < Date.parse(result.recordedAt));
+    assert.equal(result.outcome.value, value, 'frozen campaign outcome');
+    assert.equal(observation.metrics.caseAttempts, attempts);
+    assert.equal(observation.metrics.browserLaunches, 1);
+    const qualifying = observation.findings.filter(f => f.new && f.kind === 'application-consequential').map(f => f.id);
+    assert.deepEqual(result.outcome.qualifyingFindingIds, qualifying, 'preserve consequential observations');
+    if (value === null) {
+      assert.equal(observation.status, 'partial');
+      assert.equal(result.outcome.standing, 'indeterminate-or-censored');
+    } else {
+      assert.equal(result.outcome.standing, 'complete-adjudicated-campaign', 'complete outcome standing');
+      assert.equal(observation.status, 'complete');
+      assert.equal(observation.adjudication.status, 'complete');
+      assert.match(observation.manifestSha256, /^[a-f0-9]{64}$/);
+      assert.deepEqual(new Set(observation.completedCaseIds), new Set(prediction.campaign.caseIds));
+      assert.equal(observation.completedCaseIds.length, prediction.campaign.expectedCases);
+      assert.ok(Date.parse(prediction.recordedAt) < Date.parse(observation.startedAt));
+      assert.ok(Date.parse(observation.startedAt) <= Date.parse(observation.endedAt));
+      assert.equal(value, Number(qualifying.length > 0));
+    }
+    const first = !cohorts.has(prediction.campaign.cohort);
+    assert.equal(prediction.firstInCluster, first, 'one first campaign per cohort/cluster');
+    assert.equal(prediction.likelihoodEligibility, first ? 'await-complete-adjudicated-outcome' :
+      'supplemental-same-cluster; excluded-from-likelihood');
+    cohorts.add(prediction.campaign.cohort);
+    if (first && value !== null) eligible++;
+    const forecast = prediction.forecast;
+    assert.equal(forecast.eligibleCampaigns, 0);
+    assert.equal(forecast.events, 0);
+    assert.deepEqual(forecast.includedOutcomeEvents, []);
+    assert.deepEqual([forecast.prior.a, forecast.prior.b, forecast.posterior.a, forecast.posterior.b], [1, 1, 1, 1]);
+    assert.equal(forecast.probabilityAtLeastOneNewConsequentialFinding, 0.5);
+    assert.equal(forecast.sensitivity.length, 2);
+    for (const [i, point] of [0.25, 0.75].entries()) {
+      assert.ok(Math.abs(forecast.sensitivity[i].probability - point) < 1e-12);
+    }
+    assert.equal(forecast.empiricalEstimate.point, null);
+    assert.equal(forecast.calibration, 'absent');
+    for (const key of ['elapsedTimeForecast', 'lateDefectProbability', 'savingsEstimate']) assert.equal(forecast[key], null);
+  }
+  assert.deepEqual([...cohorts].sort(), ['core-visitor-closure-v1', 'shared-studio-acceptance-v1']);
+  assert.equal(eligible, 0, 'zero eligible likelihood contributions');
+  assert.deepEqual(outcomes.filter(row => row.outcome.value === null).flatMap(row => row.outcome.qualifyingFindingIds),
+    ['shared-inspector-blur-route-focus', 'shared-route-service-blueprint-clipping', 'hiring-print-word-fragmentation'],
+    'censoring preserves positive observations');
+  assert.equal(outcomes.reduce((n, row) => n + row.observation.metrics.caseAttempts, 0), 194);
+}
+
+test('the original 36 records stay byte-identical inside the explicitly bounded continuation', () => {
+  assert.equal(sha256(ledgerText.split('\n').slice(0, 36).join('\n') + '\n'),
+    '842cbd32ca460019a8aa7b59c5b9d6ba25deda4b7854a51353fc952e18772822');
+  assert.equal(allLedger.length, 76);
+  assert.equal(allLedger.at(-1).event, continuationCutoff);
+  validateGlobalReferences(allLedger);
+});
+
+test('Service receipts retain unknowns and reconcile only through their named cutoff', () => {
+  validateService(allLedger);
+  assert.equal(record.currentSummary.throughEvent, serviceCutoff);
+  const serviceRows = throughEvent(allLedger, serviceCutoff);
+  assert.equal(serviceRows.length, 39);
+  validateCounts(record, serviceRows);
+  assert.deepEqual([record.currentSummary.browserLaunches.value, record.currentSummary.tablePrototypeCaseAttempts.value,
+    record.currentSummary.knownAncillaryPageVisits.value, record.currentSummary.sharedMaterialJourneys.value], [16, 190, 4, 4]);
+});
+
+test('nine shadow pairs preserve censoring, positive observations and prior-only standing', () => validateShadowContinuation(allLedger));
+
+test('companion references may point forward without asserting causation', () => {
+  const changed = structuredClone(allLedger);
+  changed[39].relatedEvents = [continuationCutoff];
+  validateGlobalReferences(changed);
+});
+
+for (const key of ['caseAttempts', 'durationSeconds']) {
+  for (const [field, value] of [['value', 0], ['standing', 'exact-recorded-count']]) {
+    test('Service summary rejects changed ' + key + '.' + field, () => {
+      validateService(allLedger, record);
+      const changed = structuredClone(record);
+      changed.currentSummary.pr334Receipt[key][field] = value;
+      assert.throws(() => validateService(allLedger, changed), assert.AssertionError);
+    });
+  }
+}
+
+for (const [name, validate, mutate, pattern] of [
+  ['cross-boundary duplicate', validateGlobalReferences, rows => { rows.at(-1).event = rows[0].event; }, /global unique event ID/],
+  ['missing continuation reference', validateGlobalReferences, rows => { rows.at(-1).triggeredBy = ['missing']; }, /global existing reference/],
+  ['missing companion target', validateGlobalReferences, rows => { rows[39].relatedEvents = ['missing']; }, /global existing reference/],
+  ['forward continuation reference', validateGlobalReferences, rows => { rows[39].triggeredBy = [continuationCutoff]; }, /global preceding reference/],
+  ['missing named cutoff', validateService, rows => { rows[38].event = 'missing-service-cutoff'; }, /one named cutoff/],
+  ['Service attempts inferred as zero', validateService, rows => { rows[37].prototypeCases = 0; }, /Service unknown remains null/],
+  ['Service timing invented', validateService, rows => { rows[38].durationSeconds = 0; }, /Service unknown remains null/],
+  ['Service diagnostic counted again', validateService, rows => { rows[38].excludedDiagnostic.includedInThisDelta = true; }, /Expected values/],
+  ['unknown continuation contract', validateShadowContinuation, rows => { rows[39].contract = 'unknown'; }, /shadow contract/],
+  ['unknown continuation kind', validateShadowContinuation, rows => { rows[39].shadowKind = 'unknown'; }, /shadow record kind/],
+  ['censored outcome changed to zero', validateShadowContinuation, rows => { rows.find(r => r.event === 'shadow-pr334-core-visitor-closure-outcome').outcome.value = 0; }, /frozen campaign outcome/],
+  ['complete outcome labeled censored', validateShadowContinuation, rows => { rows.find(r => r.shadowKind === 'outcome' && r.outcome.value === 0).outcome.standing = 'indeterminate-or-censored'; }, /complete outcome standing/],
+  ['invented late-defect window', validateShadowContinuation, rows => { rows.find(r => r.shadowKind === 'outcome').eligibleLateDefectWindow = {}; }, /stored late-defect window remains null/],
+  ['unknown exposure changed to zero', validateShadowContinuation, rows => { rows.find(r => r.shadowKind === 'outcome').eligibleTimeExposureMinutes = 0; }, /stored time exposure remains null/],
+  ['censored finding erased', validateShadowContinuation, rows => { rows.find(r => r.event === 'shadow-pr334-focused-acceptance-3-outcome').outcome.qualifyingFindingIds = []; }, /preserve consequential observations/],
+  ['changed outcome identity', validateShadowContinuation, rows => { rows.find(r => r.shadowKind === 'outcome').observation.identity.sourceSha256 = '0'.repeat(64); }, /prediction\/outcome identity/],
+  ['supplement counted independently', validateShadowContinuation, rows => { rows.find(r => r.event === 'shadow-pr334-core-visitor-closure-r2-prediction').firstInCluster = true; }, /one first campaign per cohort/],
+  ['attempt counted as likelihood', validateShadowContinuation, rows => { rows.find(r => r.shadowKind === 'attempt').likelihoodContribution = 1; }, /attempt is not likelihood/],
+  ['lost prediction association', validateShadowContinuation, rows => { rows.find(r => r.shadowKind === 'outcome').observation.predictionEvent = 'missing'; }, /one outcome per prediction/]
+]) test('continuation rejects ' + name, () => {
+  validate(allLedger);
+  const changed = structuredClone(allLedger);
+  mutate(changed);
+  assert.throws(() => validate(changed), pattern);
 });

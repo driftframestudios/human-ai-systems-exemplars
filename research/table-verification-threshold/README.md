@@ -1,5 +1,22 @@
 # Protective verification windows: study v0.1
 
+## Current continuation: 2026-10-03
+
+The [current-wave feasibility disposition](epochs/current-wave-feasibility.md)
+records nine prospective campaign forecasts, their independently reviewed or
+censored terminal dispositions, and the limits of the resulting evidence. The
+first accepted family handoff has triggered #320's feasibility review. The
+readiness and accounting procedure is retained; effectiveness and calibration
+remain indeterminate. This continuation targets `research` from
+`res/330-paired-table-replay`, based on merged PR #327 at
+`eb195762d206f65299cbcc91ed13c2fa1dbcb786`.
+
+The [paired replay](paired-replay-02/README.md) remains unmeasured and separately
+gated. The [shadow protocol](shadow-campaign-protocol.md) retains its reviewed
+definition; the dated disposition supplies its subsequent operational history.
+The sections below preserve the initial study protocol and its original entry
+coordinates rather than replacing them with the latest application revision.
+
 ## Purpose and standing
 
 Help a collaboration distinguish a passing check from a coherent handoff, and
@@ -208,3 +225,11 @@ passing application/browser return; handoff exposure remains zero pending receiv
 acceptance. Closure/resume diagnostics retain descriptive standing, with paired
 replay (#330) and shadow prediction (#331) separately gated. The probability-model
 and Python-reference suites retain their existing commands.
+
+## Current-wave shadow campaign adapter
+
+[Prospective campaign observer](shadow-campaign-protocol.md) supplies the bounded
+research-only CLI, two-campaign input template and review gate for the current
+Core/visitor and Shared/Studio application closures. It reuses `model.mjs` and the
+existing epoch ledger; application checks retain authority and paired replay 02
+retains its separate frozen, held state.
