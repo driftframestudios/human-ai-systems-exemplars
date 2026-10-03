@@ -35,20 +35,24 @@ class UnsupportedCSS(PolicyError):
 WATCHED = frozenset({
     "min-width", "min-inline-size", "width", "inline-size", "overflow",
     "overflow-x", "overflow-y", "overflow-wrap", "word-wrap", "word-break", "all",
+    "display", "break-inside", "page-break-inside",
 })
-TABLE_SELECTORS = frozenset({"table", "th", "td", "tbody th", "tr>:nth-child(4)", ".table-wrap", "table code"})
+TABLE_SELECTORS = frozenset({"table", "th", "td", "tbody th", "tr>:nth-child(4)", ".table-wrap", "table code", ".skip-link", "tbody tr"})
 REQUIRED = {
     ("screen", "table", "min-width"): "96rem",
     ("screen", "th", "min-width"): "10rem",
     ("screen", "td", "min-width"): "10rem",
     ("screen", "tbody th", "min-width"): "16rem",
     ("screen", "tr>:nth-child(4)", "min-width"): "18rem",
-    **{("print", selector, "min-width"): "0" for selector in TABLE_SELECTORS - {".table-wrap", "table code"}},
+    **{("print", selector, "min-width"): "0" for selector in TABLE_SELECTORS - {".table-wrap", "table code", ".skip-link", "tbody tr"}},
     ("print", ".table-wrap", "overflow"): "visible",
     **{("print", selector, "overflow-wrap"): "normal" for selector in ("th", "td", "tr>:nth-child(4)")},
     **{("print", selector, "word-break"): "normal" for selector in ("th", "td", "tr>:nth-child(4)")},
     ("print", "table code", "overflow-wrap"): "anywhere",
     ("print", "table code", "word-break"): "normal",
+    ("print", ".skip-link", "display"): "none",
+    ("print", "tbody tr", "break-inside"): "avoid",
+    ("print", "tbody tr", "page-break-inside"): "avoid",
 }
 ALLOWED = {
     **REQUIRED,
@@ -307,7 +311,7 @@ def check_hiring_table_media(source):
 # Independent literal fixtures describe the source policy, not generated output
 # from ALLOWED/REQUIRED. subTest names keep each counterexample identifiable.
 SCREEN = "@media screen{table{min-width:96rem}th,td{min-width:10rem}tbody th{min-width:16rem}tr>:nth-child(4){min-width:18rem}}"
-PRINT_DECLARATIONS = ".table-wrap{overflow:visible}table,th,td,tbody th,tr>:nth-child(4){min-width:0}th,td,tr>:nth-child(4){overflow-wrap:normal;word-break:normal}table code{overflow-wrap:anywhere;word-break:normal}"
+PRINT_DECLARATIONS = ".table-wrap{overflow:visible}table,th,td,tbody th,tr>:nth-child(4){min-width:0}th,td,tr>:nth-child(4){overflow-wrap:normal;word-break:normal}table code{overflow-wrap:anywhere;word-break:normal}.skip-link{display:none}tbody tr{break-inside:avoid;page-break-inside:avoid}"
 PRINT = "@media print{" + PRINT_DECLARATIONS + "}"
 
 
@@ -317,7 +321,7 @@ def document(css):
 
 class HiringTableMediaContract(unittest.TestCase):
     def test_repository_source_satisfies_policy(self):
-        self.assertEqual(len(check_hiring_table_media(read_source(SOURCE))), 19)
+        self.assertEqual(len(check_hiring_table_media(read_source(SOURCE))), 22)
 
     def test_supported_source_variations(self):
         cases = {
@@ -340,7 +344,27 @@ class HiringTableMediaContract(unittest.TestCase):
         }
         for name, source in cases.items():
             with self.subTest(case=name):
-                self.assertEqual(len(check_hiring_table_media(source)), 19)
+                self.assertEqual(len(check_hiring_table_media(source)), 22)
+
+    def test_print_navigation_and_fitting_rows(self):
+        # The owned print declarations hide fixed navigation and request that
+        # fitting records retain their row identity on one page. Actual PDF
+        # pagination, including oversized rows, remains a browser observation.
+        navigation = ".skip-link{display:none}"
+        rows = "tbody tr{break-inside:avoid;page-break-inside:avoid}"
+        fixtures = {
+            "missing_navigation_policy": PRINT.replace(navigation, ""),
+            "navigation_only_commented": PRINT.replace(navigation, "/*" + navigation + "*/"),
+            "navigation_visible": PRINT.replace(navigation, ".skip-link{display:block}"),
+            "missing_row_policy": PRINT.replace(rows, ""),
+            "rows_may_split": PRINT.replace("{break-inside:avoid;", "{break-inside:auto;"),
+            "legacy_row_policy_allows_split": PRINT.replace("page-break-inside:avoid", "page-break-inside:auto"),
+            "navigation_only_on_screen": PRINT.replace(navigation, "") + "@media screen{" + navigation + "}",
+            "late_row_split_override": PRINT + "@media print{tbody tr{break-inside:auto}}",
+        }
+        for name, css in fixtures.items():
+            with self.subTest(name=name), self.assertRaises(PolicyError):
+                check_hiring_table_media(document(SCREEN + css))
 
     def test_print_word_and_identifier_boundaries(self):
         # Prose retains ordinary word boundaries; only technical code may wrap
