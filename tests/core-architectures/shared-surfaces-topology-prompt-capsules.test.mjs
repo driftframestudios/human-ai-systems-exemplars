@@ -33,7 +33,7 @@ const artifacts = [
     version: "0.1.4",
     currentFile: "shared-surface-priority-map-chimeric-prototype-v0.1.4.html",
     historicalFile: "shared-surface-priority-map-chimeric-prototype-v0.1.3.html",
-    currentDigest: "16357f7dec38f8368ad8bce9e93774b207044615d3d162d90587a654a5b6a3b7",
+    currentDigest: "ae9ab4546b60af13e7ed740d183d06198a2ff6c6b926d956f0dd76257a851600",
     historicalDigest: "06817b6fc7312c32f6c303b1ea562c43c2bf8436a6214b73e03e9b6cb14ec08a",
     stateContract: "shared-surface-priority-map-state.v0.1",
     apiName: "sharedSurfacePriorityMap",

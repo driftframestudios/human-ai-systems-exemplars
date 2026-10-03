@@ -8,6 +8,7 @@ import { createAggregatePackagePlan } from "./package-v1-iframe-routes.mjs";
 import { observeTableReading, observeControlReading, tableCaseVerdict } from "./table-reading-observer.mjs";
 import { atomicJson, digest, openCheckpoints, publishObservation } from "./observation-checkpoint.mjs";
 import { executionPlan, inputSnapshot, observationVersion, publishCampaign, publishScreenshot } from "./evidence-campaign.mjs";
+import { acceptancePlan, assertAcceptanceRecord, createDocumentAccounting, reportReceiver, runAcceptanceCases, runFocusedAcceptance } from "./table-focused-acceptance.mjs";
 
 export const harnessSources = [
   "tools/table-reading-contract.mjs", "tools/table-reading-observer.mjs", "tools/observation-checkpoint.mjs",
@@ -123,7 +124,9 @@ async function inspect(frame, family, keyboard = true, script = true) {
 }
 
 export async function runCampaign({ mode = "focused", familyId = "all", output = ".visual-runs/table-repairs/epoch-01", resume = false, caseId = null, planOnly = false } = {}) {
-  const campaign = executionPlan(families, { mode, familyId, caseId });
+  assert(mode !== "acceptance" || !resume, "Supplemental acceptance uses a fresh run; cached cases are not admitted");
+  const campaign = mode === "acceptance" ? acceptancePlan(families, { familyId, caseId }) : executionPlan(families, { mode, familyId, caseId });
+  const plannedCases = new Map(campaign.cases.map(item => [item.id, item]));
   if (planOnly) { console.log(JSON.stringify({ observationVersion, ...campaign })); return campaign; }
   const outputRoot = path.resolve(repositoryRoot, output);
   assert(outputRoot.startsWith(path.join(repositoryRoot, ".visual-runs") + path.sep), "Local artifacts remain in .visual-runs");
@@ -131,14 +134,17 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
   const checkpoints = await openCheckpoints(path.join(outputRoot, "checkpoints"));
   const packageFiles = new Map();
   const snapshot = inputSnapshot(repositoryRoot, packageFiles);
-  const definitionFiles = [...harnessSources, "attribution.yml", "package-lock.json"];
+  const definitionFiles = [...harnessSources, ...(mode === "acceptance" ? ["tools/table-focused-acceptance.mjs"] : []), "attribution.yml", "package-lock.json"];
   const definitionParts = await snapshot.fingerprints(definitionFiles);
   const executable = await fs.stat(chromium.executablePath());
   const definition = digest(JSON.stringify([observationVersion, definitionParts, process.version, process.platform, process.arch, executable.size, executable.mtimeMs]));
   const cases = [];
   const records = [];
   const stages = { executionMilliseconds: 0, publicationMilliseconds: 0 };
-  let navigations = 0;
+  const documentAccounting = createDocumentAccounting();
+  const observeDocument = async frame => documentAccounting.visit(frame,
+    await frame.evaluate(() => ({ protocol: location.protocol, timeOrigin: performance.timeOrigin })));
+  let stoppedAfterCase = null;
   let executionError = null;
   let completion = null;
   let browserLaunches = 0;
@@ -163,6 +169,7 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
   try {
     await atomicJson(path.join(outputRoot, "plan.json"), { observationVersion, definition, requested: campaign.expected, started });
     const executionStart = performance.now();
+    if (mode !== "acceptance") {
     const savedFixture = resume && await checkpoints.readRecord("observer-fixtures", definition, (deps) => snapshot.agrees(deps));
     if (savedFixture) { cases.push(savedFixture.result); records.push(savedFixture); reused += 1; }
     else {
@@ -172,15 +179,16 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
       await checkpoints.write(record.id, record.signature, record.dependencies, fixture);
       records.push(record);
     }
+    }
     if (campaign.cases.length) {
       server = await startStaticServer();
       const plan = await createAggregatePackagePlan();
       for (const [key, bytes] of plan.outputFiles) packageFiles.set(key, Buffer.from(bytes));
     }
-    const perform = async (family, width, { variant = "source", media = "screen", script = true, enlarged = false, parent = false } = {}) => {
-      const id = `${family.id}-${variant}-${width}-${media}-${script ? "script" : "static"}${enlarged ? "-text200" : ""}`;
+    const perform = async (family, width, { id: plannedId, journey = null, variant = "source", media = "screen", script = true, enlarged = false, parent = false } = {}) => {
+      const id = plannedId ?? `${family.id}-${variant}-${width}-${media}-${script ? "script" : "static"}${enlarged ? "-text200" : ""}`;
       if (caseId && id !== caseId) return;
-      const signature = digest(JSON.stringify([definition, family, width, variant, media, script, enlarged, parent]));
+      const signature = digest(JSON.stringify([definition, family, width, variant, media, script, enlarged, parent, journey]));
       const resourceHash = (key) => snapshot.hash(key);
       const saved = resume && await checkpoints.readRecord(id, signature, async (dependencies) => {
         if (!dependencies || !Object.keys(dependencies).length) return false;
@@ -188,21 +196,34 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
         return true;
       });
       if (saved) { cases.push(saved.result); records.push(saved); reused += 1; console.log(JSON.stringify({ case: id, standing: "reused", observation: saved.result.standing })); return; }
-      const owners = [family.source, parent ? family.parent : variant === "projection" ? family.projection : null].filter(Boolean);
+      const owners = [family.source, parent ? family.parent : variant === "projection" ? family.projection : null, journey === "studio-report" ? reportReceiver : null].filter(Boolean);
       const dependencies = { ...definitionParts, ...await snapshot.fingerprints(owners) };
       const context = await (await getBrowser()).newContext({ viewport: { width, height: 1000 }, javaScriptEnabled: script,
         reducedMotion: "reduce", forcedColors: media === "forced" ? "active" : "none" });
       const errors = [];
+      const screenshots = [];
+      if (mode === "acceptance") {
+        context.setDefaultTimeout(5000);
+        context.on("page", candidate => {
+          candidate.on("pageerror", error => errors.push(error.message));
+        });
+      }
       const page = await context.newPage();
-      page.on("pageerror", (error) => errors.push(error.message));
+      if (mode !== "acceptance") page.on("pageerror", (error) => errors.push(error.message));
+      const capture = async (label, target = page) => {
+        const screenshot = await publishScreenshot(outputRoot, await target.screenshot({ fullPage: false }));
+        const key = path.relative(repositoryRoot, screenshot.file);
+        dependencies[key] = screenshot.sha256;
+        screenshots.push({ label, path: key, sha256: screenshot.sha256 });
+      };
       await context.route("**/*", async (route) => {
         const url = new URL(route.request().url());
         if (url.origin === server.origin) {
           let key = decodeURIComponent(url.pathname).replace(/^\//u, "");
           if (key.endsWith("/")) key += "index.html";
           dependencies[key] = await resourceHash(key);
-          if (route.request().isNavigationRequest()) navigations += 1;
           const body = await snapshot.bytes(key);
+          if (body !== null && key.endsWith(".html") && route.request().isNavigationRequest()) documentAccounting.servedHtml();
           const types = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".webp": "image/webp", ".woff2": "font/woff2" };
           return route.fulfill({ status: body === null ? 404 : 200, body: body ?? "Missing local source", contentType: types[path.extname(key)] ?? "application/octet-stream" });
         }
@@ -211,7 +232,7 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
           if (key.endsWith("/")) key += "index.html";
           const bytes = packageFiles.get(key);
           dependencies[`package:${key}`] = bytes ? digest(bytes) : null;
-          if (route.request().isNavigationRequest()) navigations += 1;
+          if (bytes && key.endsWith(".html") && route.request().isNavigationRequest()) documentAccounting.servedHtml();
           if (bytes) return route.fulfill({ status: 200, body: bytes, contentType: key.endsWith(".html") ? "text/html" : key.endsWith(".js") ? "text/javascript" : key.endsWith(".css") ? "text/css" : key.endsWith(".json") ? "application/json" : "application/octet-stream" });
           errors.push("Declared package resource missing");
           return route.fulfill({ status: 404, body: "Missing local package asset" });
@@ -222,6 +243,7 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
         if (media === "print") await page.emulateMedia({ media: "print" });
         const response = await page.goto(`${server.origin}/${parent ? family.parent : variant === "projection" ? family.projection : family.source}`, { waitUntil: "load", timeout: 15000 });
         assert.equal(response?.status(), 200, "The declared local document returns HTTP 200");
+        await observeDocument(page.mainFrame());
         let frame = page.mainFrame();
         let geometry = null;
         if (parent) {
@@ -232,32 +254,50 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
           assert(frame, "Declared iframe has a browsing context");
           await frame.waitForLoadState("load");
           await frame.waitForSelector("body", { state: "attached" });
+          await observeDocument(frame);
           geometry = await element.evaluate((iframe) => ({ frameWidth: iframe.getBoundingClientRect().width,
             frameClient: iframe.clientWidth, parentContent: iframe.parentElement.clientWidth, outerWidth: innerWidth }));
         }
         if (enlarged) await frame.addStyleTag({ content: "html{font-size:200% !important}" });
-        const result = await inspect(frame, family, media !== "print", script);
-        const observation = { id, ...tableCaseVerdict(result, errors), errors, geometry, ...result };
+        if (geometry && mode === "acceptance") geometry.childViewport = await frame.evaluate(() => ({
+          width: innerWidth, clientWidth: document.documentElement.clientWidth, pageWidth: document.documentElement.scrollWidth,
+        }));
+        const result = journey ? await runFocusedAcceptance({ journey, frame, page, context, origin: server.origin, capture, observeDocument })
+          : await inspect(frame, family, media !== "print", script);
+        const observation = journey
+          ? { id, ...result, attempted: true, standing: errors.length ? "review" : result.standing, errors, geometry, width, variant, media, script, parent, screenshots }
+          : { id, ...tableCaseVerdict(result, errors), errors, geometry, ...result };
         const record = { id, signature, dependencies, result: observation };
         await publishObservation(checkpoints, record, async () => {
-          if (width === 390 && media === "screen" && script && !enlarged) {
+          if (!journey && width === 390 && media === "screen" && script && !enlarged) {
             const screenshot = await publishScreenshot(outputRoot, await page.screenshot({ fullPage: true }));
             dependencies[path.relative(repositoryRoot, screenshot.file)] = screenshot.sha256;
           }
+          if (journey) assertAcceptanceRecord(record, plannedCases.get(id));
           assert(await snapshot.agrees(dependencies, true), "Observed inputs and artifacts remain at their admitted identity");
         });
         records.push(record);
         await persist(observation);
+        return observation;
       } catch (error) {
-        await persist({ id, standing: "incomplete", error: error.message });
+        const result = { id, standing: "incomplete", attempted: true, error: error.message, screenshots };
+        await persist(result);
+        return result;
       } finally { await context.close(); }
     };
-    for (const { family, width, ...options } of campaign.cases) await perform(family, width, options);
+    if (mode === "acceptance") {
+      stoppedAfterCase = await runAcceptanceCases(campaign.cases,
+        ({ family, width, ...options }) => perform(family, width, options), persist);
+    } else {
+      for (const { family, width, ...options } of campaign.cases) await perform(family, width, options);
+    }
     stages.executionMilliseconds = performance.now() - executionStart;
     const publicationStart = performance.now();
     const currentPackage = records.some(({ dependencies }) => Object.keys(dependencies).some((key) => key.startsWith("package:")))
       ? (await createAggregatePackagePlan()).outputFiles : new Map();
-    completion = await publishCampaign(outputRoot, campaign.expected, records, async ({ dependencies }) => {
+    const validateRecord = async (record) => {
+      const { dependencies } = record;
+      if (mode === "acceptance") assertAcceptanceRecord(record, plannedCases.get(record.id));
       if (!await snapshot.agrees(dependencies, true)) return false;
       for (const [key, hash] of Object.entries(dependencies)) {
         if (key.startsWith("package:")) {
@@ -266,7 +306,14 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
         }
       }
       return true;
-    }, { definition, started, scope: { mode, familyId, caseId } });
+    };
+    if (records.length === campaign.expected.length) {
+      completion = await publishCampaign(outputRoot, campaign.expected, records, validateRecord,
+        { definition, started, scope: { mode, familyId, caseId } });
+    } else {
+      // Incomplete populations keep their checkpoints but never publish a full completion.
+      for (const record of records) assert(await validateRecord(record), "Completed case inputs and artifacts remain current");
+    }
     stages.publicationMilliseconds = performance.now() - publicationStart;
   } catch (error) {
     executionError = error.message;
@@ -274,8 +321,14 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
   } finally {
     if (browser) await browser.close();
     if (server) await server.close();
-    const summary = { observationVersion, definition, mode, familyId, caseId, expectedCases: campaign.expected.length, browserLaunches, documentNavigations: navigations,
-      completion, executionError, stages, hashing: snapshot.metrics, cases: cases.length, reused, newCases: cases.length - reused, elapsedSeconds: (Date.now() - started) / 1000,
+    const ended = Date.now();
+    const unrunCaseIds = cases.filter(item => item.attempted === false).map(item => item.id);
+    const summary = { observationVersion, definition, mode, familyId, caseId, expectedCases: campaign.expected.length,
+      browserLaunches, ...documentAccounting.snapshot(), startedAt: new Date(started).toISOString(), endedAt: new Date(ended).toISOString(),
+      stoppedAfterCase, populationComplete: records.length === campaign.expected.length,
+      attemptedCases: cases.length - unrunCaseIds.length, completedCases: records.length, unrunCaseIds,
+      completion, executionError, stages, hashing: snapshot.metrics, cases: cases.length, reused,
+      newCases: cases.length - unrunCaseIds.length - reused, elapsedSeconds: (ended - started) / 1000,
       pass: cases.filter((item) => item.standing === "pass").length,
       review: cases.filter((item) => item.standing === "review").length,
       incomplete: cases.filter((item) => item.standing === "incomplete").length };
