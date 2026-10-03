@@ -64,3 +64,36 @@ recovery. `--plan` prints the requested cases while browser execution remains id
 The [Python source-preservation contract](python-source-preservation.md) owns the
 projector's admitted HTML shape, bounded allocation, exact-byte edit and atomic
 publication behavior, together with its focused isolated-Python command.
+
+## Optional parser reference comparison
+
+`parser_reference_comparison.py` compares the current source-preserving projector
+with extraction-only lxml and html5lib references on bounded local fixtures.
+Run it when a parser adoption decision needs this evidence; it stays separate
+from routine browser or source acceptance.
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 UV_PYTHON_DOWNLOADS=never \
+uv run --no-cache --no-build --isolated --no-project \
+  --python 3.12 --managed-python \
+  --with lxml==6.1.3 --with html5lib==1.1 \
+  --with six==1.17.0 --with webencodings==0.5.1 \
+  -- python -m tests.tables.parser_reference_comparison
+```
+
+The #328 comparison retains the standard-library projector. Eight fixtures
+matched literal semantic expectations across all three parsers before and after
+projection; 197 outside-edit byte intervals, 189 edits and idempotence checks
+established the current patch route's preservation boundary. Both references
+recovered one omitted-end-tag fixture that the current route explicitly returns
+to its source owner. That tolerance is a different capability from preserving
+authored serialization.
+
+The comparison separates extraction timing, Python-traced peak allocation and
+process RSS high-water measurements. The current parser also performs lexical
+admission and digest work; these observations leave equivalent end-to-end
+projection throughput unspecified. Reference serialization remains outside this
+experiment. The fixture and worker budgets bound the local operation, and pinned
+reference packages live in isolated uv execution rather than prototype runtime
+dependencies. The receiving PR carries the source coordinate and normalized
+measurement result.
