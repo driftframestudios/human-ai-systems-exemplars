@@ -133,22 +133,28 @@ own observations.
 
 ## Repository receiving context
 
+The links in this section are optional repository implementation context. The
+portable method and its protected-value boundaries are complete in this package;
+repository tests and draft plans retain their own access, dependencies and
+publication standing. These links follow current `main`, so an execution return
+names the actual source revision used.
+
 The receiving review's literal inventory reported 18 decorative attributes in
 the investment studio: nine directional header labels and nine row separators.
 The repair changed only attributes and retained visible text. That bounded
 finding motivates component-specific wording; a fresh inventory owns any later
 population claim.
 
-[tests/tables/data-labels.test.mjs](../../../../tests/tables/data-labels.test.mjs)
+[tests/tables/data-labels.test.mjs](https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/tests/tables/data-labels.test.mjs)
 is the current guard for seven declared native HTML owners. Generator
 normalization and its fixtures remain with the generator owner. Material runtime
 labels retain user-data standing through their existing escapers. The native
 inventory, generator fixtures and runtime observations have distinct scopes;
 their current results belong to the receiving application return.
 
-The [Python source-preservation reference](../../../../tests/tables/python-source-preservation.md)
+The [Python source-preservation reference](https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/tests/tables/python-source-preservation.md)
 owns its API, grammar and focused command. The related
-[source-preserving transformation draft](../../../../planning/context-canvas/table-audit/skills/source-preserving-transformation/SKILL.md)
+[source-preserving transformation draft](https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/planning/context-canvas/table-audit/skills/source-preserving-transformation/SKILL.md)
 retains draft standing and its separate parser/publication decisions.
 
 Optional prose-tooling planning belongs to repository Issue 191 and its separate
