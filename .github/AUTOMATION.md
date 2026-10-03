@@ -30,7 +30,7 @@ and standing allocations. Live account settings, current variable values,
 remaining minutes, and current hosted durations are **unknown in this
 reconciliation**: source inspection supplied this receipt. A job timeout is a
 per-job ceiling, distinct from an approved cycle or month-level allocation.
-The production-carrier allocation has a named human receiver below.
+The human-approved production-carrier monthly allocation is recorded below.
 
 Preserve the 2026-08-28 run `33182993332` as a historical 4m24s observation of
 PR #95's then-selected contract. PR #97 subsequently restored the earlier
@@ -164,11 +164,11 @@ supplies the packaging implementation. The workflow uploads no artifact and
 uses no hosting credential. Its receipt establishes tests and archive
 formation, while #118 and #251 retain host activation and live acceptance.
 
-The human budget owner receives one remaining allocation question: identify
-the accepted allowance covering this lane, or approve an explicit allowance if
-the standing record leaves it open. The inventory records that allocation as
-unknown; its ten-minute timeout supplies the observed source ceiling. This
-documentation change adjusts no trigger, variable, or account setting. A later
+The human budget owner has approved **300 minutes per month** for this lane,
+adjustable through a later explicit budget decision. The allowance records
+human authorization; the ten-minute timeout remains a per-job bound. Current
+usage and remaining monthly allocation stay unknown in this source inventory.
+Workflow triggers, permissions, and activation remain unchanged. A later
 rest, removal, or trigger change needs the lane's receiver decision and a
 separate reviewed workflow change. A stopped contract can receive a corrected
 candidate or an explicitly selected manual rerun.
