@@ -19,7 +19,7 @@ const artifacts = [
     currentFile: "upstream-revision-loop-chimeric-prototype-v0.1.5.html",
     historicalFile: "upstream-revision-loop-chimeric-prototype-v0.1.4.html",
     historicalDigest: "1392f82acdcc98b5fbdbbede46e50365b0750d1a5fb60eefd8b09e2b4335bb7a",
-    currentDigest: "02b14b3ee4e4723ae086881927f40489e7f9d9b338b1e5a8fa6ea7841def66c2",
+    currentDigest: "1a2e88d9dfc5acabdb6dc95bff843eaa6d8667f413d289145ff6d3104dae5dec",
     stateContract: "upstream-revision-loop-state.v0.1",
     apiName: "upstreamRevisionLoop",
     promptId: "aiPromptOut",
@@ -36,7 +36,7 @@ const artifacts = [
     currentFile: "recovery-routing-atlas-chimeric-prototype-v0.1.5.html",
     historicalFile: "recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
     historicalDigest: "48633e6a5884800e66645d40c15b15b5991385188b9e39993f0f9bf11fe1b1d8",
-    currentDigest: "ecf8b904e4e8b5c2a0f530f3f39c2511be9da7d8d4240adad0b0b510e2395b21",
+    currentDigest: "f2c5b7bcaed41ce05053382fc87de25318982350a85c7db18cb91f8701130d9f",
     stateContract: "recovery-routing-atlas-state.v0.1",
     apiName: "recoveryRoutingAtlas",
     promptId: "promptBox",
@@ -176,5 +176,13 @@ test("Recovery Routing and Revision advances the current inventory as one family
   assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
   assert.match(currentInventory, /Upstream Revision Loop v0\.1\.5/u);
   assert.match(currentInventory, /Recovery Routing Atlas v0\.1\.5/u);
-  assert.match(currentInventory, /28 current\s+adoptions\. This completes the observed population/u);
+  const declared = currentInventory.match(/current population contains (\d+) source artifacts/u);
+  const adopted = currentInventory.match(/(\d+) current\s+adoptions\. This completes the observed population/u);
+  const heading = currentInventory.match(/## Current source artifacts[^\n\d]*(\d+)/u);
+  assert.ok(declared && adopted && heading, "the current population has a summary, heading and adoption statement");
+  const tableCount = [...currentInventory.matchAll(/^\|[^|]+\|\s*(\d+)\s*\|/gmu)]
+    .reduce((sum, match) => sum + Number(match[1]), 0);
+  assert.ok(tableCount > 0, "the current-artifact table supplies the counted population");
+  assert.deepEqual([Number(declared[1]), Number(adopted[1]), Number(heading[1])],
+    [tableCount, tableCount, tableCount], "current inventory counts agree with its source classes");
 });

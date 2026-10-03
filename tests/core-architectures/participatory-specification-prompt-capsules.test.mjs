@@ -26,7 +26,7 @@ const artifacts = [
     version: "0.1.4",
     currentFile: "participatory-design-kit-chimeric-prototype-v0.1.4.html",
     historicalFile: "participatory-design-kit-chimeric-prototype-v0.1.3.html",
-    currentDigest: "e86619691afe4a687bb22c6c474b3da38c55afec6a18de8a6ef1254fec3a7867",
+    currentDigest: "e588c55bdca7ff47e7265bd2f4b37f3ddd8511fc50c2d03d99b57db3a3c62a38",
     historicalDigest: "d8e9cc9d3e8c354000a48bd62e0b0a023f654596ea223f8acf860b0cd5e75e64",
     stateContract: "participatory-design-kit-state.v0.1",
     apiName: "participatoryDesignKit",
@@ -39,7 +39,7 @@ const artifacts = [
     version: "0.1.7",
     currentFile: "specification-by-example-chimeric-prototype-v0.1.7.html",
     historicalFile: "specification-by-example-chimeric-prototype-v0.1.6.html",
-    currentDigest: "339234e772497123c197835df595bf422d846b1ac08382a230146372f68bf109",
+    currentDigest: "a37df61e4992e23a91b566b504626cf459a2684840a9c136a922b2634c1c4e42",
     historicalDigest: "a548c7336ff93bd6b5d8030e99271798297c45078610fb4cb78363c0606d59ce",
     stateContract: "specification-by-example-state.v0.1",
     apiName: "specificationByExample",
@@ -165,5 +165,13 @@ test("Participatory Elicitation and Specification advances the current inventory
   assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
   assert.match(currentInventory, /Participatory Design Kit v0\.1\.4/u);
   assert.match(currentInventory, /Specification-by-Example v0\.1\.7/u);
-  assert.match(currentInventory, /28 current\s+adoptions\. This completes the observed population/u);
+  const declared = currentInventory.match(/current population contains (\d+) source artifacts/u);
+  const adopted = currentInventory.match(/(\d+) current\s+adoptions\. This completes the observed population/u);
+  const heading = currentInventory.match(/## Current source artifacts[^\n\d]*(\d+)/u);
+  assert.ok(declared && adopted && heading, "the current population has a summary, heading and adoption statement");
+  const tableCount = [...currentInventory.matchAll(/^\|[^|]+\|\s*(\d+)\s*\|/gmu)]
+    .reduce((sum, match) => sum + Number(match[1]), 0);
+  assert.ok(tableCount > 0, "the current-artifact table supplies the counted population");
+  assert.deepEqual([Number(declared[1]), Number(adopted[1]), Number(heading[1])],
+    [tableCount, tableCount, tableCount], "current inventory counts agree with its source classes");
 });

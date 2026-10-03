@@ -18,9 +18,9 @@ const manifestName = "core-architectures-chimeric-prototype-manifest-v0.1.json";
 const currentFile = "core-architecture-family-index-chimeric-prototype-v0.1.6.html";
 const historicalFile = "core-architecture-family-index-chimeric-prototype-v0.1.5.html";
 const currentDigests = {
-  canonical: "dd7c59f0be630395bac27d4414bff9d68cef31caa1d4bca174324481851af173",
-  context: "a2e9edb1e8dec009c53ed439a1254ea221de1c68a73ddf6f30f7f94c81cb814e",
-  narrative: "0316e31387359b43030ab232f9f1ac1d9ffdac7c06f6f3ccd5540e07cc483e9b",
+  canonical: "27e88170074498e609e01dfd2c240ad3eedc96d126ea01bcd58e058c690c1264",
+  context: "7b963ce14f42a91fb5d664b432b24c3447da58c1ed3114106d5b1abdb562f214",
+  narrative: "16fb306df3c7f72c77003755aa2e3a9019e6157fa6afa5d50001133883d0a994",
 };
 const historicalDigests = {
   canonical: "8796c2818aff5a5b2f18d4d4682a09b114419b259f0e83564d8773655ab07950",
@@ -277,7 +277,7 @@ test("Family Index current route provides exact Markdown download capability", a
   assert.equal(route.activation_standing, "parity_review");
 });
 
-test("Prompt Capsule inventory recognizes the complete 28-source adoption set", async () => {
+test("Prompt Capsule inventory recognizes the complete current adoption set", async () => {
   const [readme, inventory] = await Promise.all([
     readFile(resolve(repositoryRoot, "prompt-capsules/README.md"), "utf8"),
     readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8"),
@@ -290,9 +290,23 @@ test("Prompt Capsule inventory recognizes the complete 28-source adoption set", 
 
   for (const document of [readme, currentInventory]) {
     assert.match(document, /Core Architecture Family Index\s+v0\.1\.6/u);
-    assert.match(document, /28 (?:source artifacts|current)/u);
   }
   assert.match(currentInventory, /Visualization Fidelity Atlas[\s\S]*?implements `prompt-capsule\/0\.1\.0`/u);
-  assert.match(currentInventory, /28 current\s+adoptions\. This completes the observed population/u);
+  const declared = currentInventory.match(/current population contains (\d+) source artifacts/u);
+  const adopted = currentInventory.match(/(\d+) current\s+adoptions\. This completes the observed population/u);
+  const heading = currentInventory.match(/## Current source artifacts[^\n\d]*(\d+)/u);
+  assert.ok(declared && adopted && heading, "the current population has a summary, heading and adoption statement");
+  const tableCount = [...currentInventory.matchAll(/^\|[^|]+\|\s*(\d+)\s*\|/gmu)]
+    .reduce((sum, match) => sum + Number(match[1]), 0);
+  assert.ok(tableCount > 0, "the current-artifact table supplies the counted population");
+  assert.deepEqual([Number(declared[1]), Number(adopted[1]), Number(heading[1])],
+    [tableCount, tableCount, tableCount], "current inventory counts agree with its source classes");
+  const readmePopulation = readme.match(/all (\d+) source artifacts implement `prompt-capsule\/0\.1\.0`/u);
+  assert.ok(readmePopulation, "the README names its current adoption total");
+  assert.equal(Number(readmePopulation[1]), tableCount, "the README agrees with the current inventory");
+  for (const name of ["Open Lesson Field", "Cross-Functional Investment Model Studio", "Initiative Costing Calculator", "Visualization Fidelity Atlas"]) {
+    assert.ok(currentInventory.includes(`| ${name} | 1 |`), `${name} retains its standalone source membership`);
+    assert.ok(readme.includes(name), `${name} remains discoverable in the README`);
+  }
   assert.match(projectionInventory, /Core Architecture Family Index v0\.1\.5 and earlier[\s\S]*?remain comparison/u);
 });

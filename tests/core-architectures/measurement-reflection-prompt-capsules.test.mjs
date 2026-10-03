@@ -28,7 +28,7 @@ const artifacts = [
     version: "0.1.6",
     currentFile: "heart-chart-chimeric-prototype-v0.1.6.html",
     historicalFile: "heart-chart-chimeric-prototype-v0.1.5.html",
-    currentDigest: "426f8389626c80ea8cad890133f0ff551452c52d7fa1b79942bf0d4d7a959b22",
+    currentDigest: "4288e163b6af28f88689de41157ca97fabaf503652eb12cf7458b18ab90f648a",
     historicalDigest: "a4fecf35cb271d4b36ffd5a6eb22f9c3a6569b4e8551954cad0ffb47a7b87aba",
     stateContract: "heart-chart-state.v0.1",
     apiName: "heartChart",
@@ -48,7 +48,7 @@ const artifacts = [
     version: "0.1.5",
     currentFile: "plus-delta-chimeric-prototype-v0.1.5.html",
     historicalFile: "plus-delta-chimeric-prototype-v0.1.4.html",
-    currentDigest: "578953f291aa3dfcf5a7fe84c4e127b887c32c72e060484895e8dbebed60a727",
+    currentDigest: "7b1944959ef57e466914af2659862ba79141f083e6e6c98a824765fa93b10532",
     historicalDigest: "b1f828166d5fe62b122f5f3bb5eeca36759c5b4b4887875fab9d935520d2d5b6",
     stateContract: "plus-delta-state.v0.1",
     apiName: "plusDelta",
@@ -68,7 +68,7 @@ const artifacts = [
     version: "0.1.5",
     currentFile: "practitioner-judgment-probes-chimeric-prototype-v0.1.5.html",
     historicalFile: "practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
-    currentDigest: "ceb745b5b20c6ba707d7e5767401c8e1bc179aa8fc66f4a668c52907e8e69e0b",
+    currentDigest: "623db5de42ce4c28def93062593f68ee55ac7f4e3c9806daef9b9c818f7308a7",
     historicalDigest: "a15c72f198dacb942d3ca4553204afac69df326df9c70bb6c00f32cd3242fd0c",
     stateContract: "practitioner-judgment-probes-state.v0.1",
     apiName: "practitionerJudgmentProbes",
@@ -196,5 +196,13 @@ test("Measurement, Reflection, and Judgment advances the current inventory as on
   assert.match(currentInventory, /HEART Chart v0\.1\.6/u);
   assert.match(currentInventory, /Plus \/ Delta v0\.1\.5/u);
   assert.match(currentInventory, /Practitioner Judgment Probes v0\.1\.5/u);
-  assert.match(currentInventory, /28 current\s+adoptions\. This completes the observed population/u);
+  const declared = currentInventory.match(/current population contains (\d+) source artifacts/u);
+  const adopted = currentInventory.match(/(\d+) current\s+adoptions\. This completes the observed population/u);
+  const heading = currentInventory.match(/## Current source artifacts[^\n\d]*(\d+)/u);
+  assert.ok(declared && adopted && heading, "the current population has a summary, heading and adoption statement");
+  const tableCount = [...currentInventory.matchAll(/^\|[^|]+\|\s*(\d+)\s*\|/gmu)]
+    .reduce((sum, match) => sum + Number(match[1]), 0);
+  assert.ok(tableCount > 0, "the current-artifact table supplies the counted population");
+  assert.deepEqual([Number(declared[1]), Number(adopted[1]), Number(heading[1])],
+    [tableCount, tableCount, tableCount], "current inventory counts agree with its source classes");
 });
