@@ -75,7 +75,8 @@
       text-rendering: optimizeLegibility;
     }
     button, select { font: inherit; }
-    button:focus-visible, summary:focus-visible, a:focus-visible {
+    button:focus-visible, summary:focus-visible, a:focus-visible,
+    .table-wrap:focus-visible {
       outline: 3px solid var(--focus);
       outline-offset: 3px;
     }
@@ -437,7 +438,7 @@
           <button class="control secondary" type="button" id="download-svg">Download current SVG</button>
           <button class="control secondary" type="button" id="print-view">Print / save as PDF</button>
         </div>
-        <div class="table-wrap">
+        <div class="table-wrap" role="region" tabindex="0" aria-label="Atlas discrepancy register">
 <table data-label="Atlas discrepancy register: conditional research estimates, not outcome probabilities">
             <caption>Atlas discrepancy register. These are conditional research estimates—not probabilities of migration success, compliance, safety, effort, or schedule.</caption>
             <thead><tr><th data-label="Question" scope="col" id="atlas-discrepancy-0">Question</th><th data-label="H1 omitted control (%)" scope="col" id="atlas-discrepancy-1">H1 omitted control</th><th data-label="H2 unstable boundary (%)" scope="col" id="atlas-discrepancy-2">H2 unstable boundary</th><th data-label="H3 contextual evidence (%)" scope="col" id="atlas-discrepancy-3">H3 contextual evidence</th><th data-label="Benign (%)" scope="col" id="atlas-discrepancy-4">Benign</th><th data-label="Confidence / falsifier" scope="col" id="atlas-discrepancy-5">Confidence / falsifier</th></tr></thead>
@@ -449,7 +450,7 @@
 
     <details>
       <summary>Complete capability registry and protected semantics</summary>
-      <div class="table-wrap">
+      <div class="table-wrap" role="region" tabindex="0" aria-label="Capability and service-dependency registry">
 <table data-label="Original capability and service-dependency registry">
           <caption>Original capability and service-dependency registry. New research does not silently turn human work into software cubes.</caption>
           <thead><tr><th data-label="Capability" scope="col" id="atlas-capability-0">Capability</th><th data-label="Family" scope="col" id="atlas-capability-1">Family</th><th data-label="F0: Current authority" scope="col" id="atlas-capability-2">F0</th><th data-label="F1: Boundary identified" scope="col" id="atlas-capability-3">F1</th><th data-label="F2: Shadow / dual-run" scope="col" id="atlas-capability-4">F2</th><th data-label="F3: Validated authority" scope="col" id="atlas-capability-5">F3</th><th data-label="Evidence posture" scope="col" id="atlas-capability-6">Evidence posture</th></tr></thead>
@@ -460,7 +461,7 @@
 
     <details>
       <summary>Primary-source coverage ledger</summary>
-      <div class="table-wrap">
+      <div class="table-wrap" role="region" tabindex="0" aria-label="Primary-source coverage ledger">
 <table data-label="Selected primary and first-party source coverage; product-specific applicability remains separate">
           <caption>Selected primary and first-party sources used for the broadened content. Private-lineage rows show stable source keys; the authorized resolver retains exact coordinates. Product-specific applicability remains a separate internal evidence task.</caption>
           <thead><tr><th data-label="Source" scope="col" id="atlas-source-0">Source</th><th data-label="Role in analysis" scope="col" id="atlas-source-1">Role in analysis</th><th data-label="Boundary / failure state" scope="col" id="atlas-source-2">Boundary / failure state</th></tr></thead>

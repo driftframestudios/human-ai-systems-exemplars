@@ -22,8 +22,14 @@ const option = (name, fallback) => {
   assert(args[index + 1] && !args[index + 1].startsWith("--"), `${name} needs a value`);
   return args[index + 1];
 };
+const caseIds = [];
+for (let index = 0; index < args.length; index++) {
+  if (args[index] !== "--case") continue;
+  assert(args[index + 1] && !args[index + 1].startsWith("--"), "--case needs a value");
+  caseIds.push(args[++index]);
+}
 const cases = planCases({ family: option("--family", "all"), combined: args.includes("--combined"),
-  caseId: option("--case", null), fromCaseId: option("--from-case", null) });
+  caseIds: caseIds.length ? caseIds : null, fromCaseId: option("--from-case", null) });
 const plannedCases = new Map(cases.map(item => [item.id, item]));
 if (args.includes("--plan")) {
   console.log(JSON.stringify({ cases: cases.map(({ id }) => id), browserLaunches: 0, visits: 0 }));
@@ -183,13 +189,24 @@ async function run() {
           const text = await frame.locator("body").textContent();
           for (const word of ["Novartis", "biopharma", "interoperability"]) assert(text.includes(word));
         }
-        const keyboard = mode === "screen" && width === 390 && !nativeOnly ? await observeLocalReach(page, frame, tables) : [];
+        const keyboard = mode === "screen" && (width === 390 || (family.id === "a3" && width === 304)) && !nativeOnly ? await observeLocalReach(page, frame, tables) : [];
         const interactions = mode === "screen" && width === 390 ? await interact(frame, family) : null;
         const viewport = await frame.evaluate(() => ({ clientWidth: document.documentElement.clientWidth, pageWidth: document.documentElement.scrollWidth }));
         const measuredTables = stateCase && targeted.samples ? targeted.samples.flatMap(sample => sample.tables) : tables;
         const fragments = measuredTables.flatMap(table => table.fragments);
         const wordFragments = nativeOnly ? null : fragments.filter(fragment => fragment.kind === "word").length;
         const numericFragments = nativeOnly ? null : fragments.filter(fragment => fragment.kind === "numeric").length;
+        const observerLimitations = [];
+        if (family.id === "a3") {
+          const literal = "NIST SP 800-207 Zero Trust Architecture";
+          assert(native.some(table => table.rows.some(row => row.fields[0]?.value === literal)),
+            "A3 preserves its complete standards identifier");
+          const suffixFlags = fragments.filter(fragment => fragment.kind === "numeric" && fragment.token === "-207");
+          if (suffixFlags.length) observerLimitations.push({
+            id: "standards-identifier-numeric-fragment", literal, rawNumericSuffixFlags: suffixFlags.length,
+            limitation: "The numeric heuristic may flag the -207 suffix of this technical identifier. Raw counts and review standing remain unchanged; this note does not excuse other numeric fragments.",
+          });
+        }
         const reasons = [];
         if (states.some(table => table.disposition === "unobserved-hidden-state")) reasons.push("table-state-unobserved");
         if (print?.standing === "review") reasons.push("print-fit-review");
@@ -199,7 +216,7 @@ async function run() {
         const result = { id: item.id, family: family.id, kind: family.kind, standing: reasons.length ? "review" : "pass", reasons,
           browser: browser.version(), width, mode, variant, viewport, initialHidden: initial.filter(table => !table.visible).length,
           wordFragments, numericFragments, identifierFragments: fragments.filter(fragment => fragment.kind === "identifier-review").length,
-          tables, native, targeted, keyboard, interactions, errors, telemetry: null, externalSubstitutions: [],
+          tables, native, targeted, keyboard, interactions, observerLimitations, errors, telemetry: null, externalSubstitutions: [],
           screenshots: [], carrier, tableStates: states,
           geometry: nativeOnly ? "not-observed" : stateCase ? "named-table-state" : "all-declared-tables", accessibility, print,
           scriptlessRuntimeTables: mode === "static" && family.kind === "core" ? family.tables - family.staticTables : null };

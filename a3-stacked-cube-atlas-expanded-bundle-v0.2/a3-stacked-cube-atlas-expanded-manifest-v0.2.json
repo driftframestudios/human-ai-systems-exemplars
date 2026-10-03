@@ -45,8 +45,8 @@
       "path": "index.html",
       "media_type": "text/html",
       "role": "primary_prototype",
-      "bytes": 84154,
-      "sha256": "70df9f56c6f3c1cc28a9047296adf55c96f3e858caec9c19427832208de95fad"
+      "bytes": 84406,
+      "sha256": "ac2cff483e199ee132503ec5bd80f830c910702e686246564f00c70de376d1fb"
     },
     {
       "path": "model/a3-stacked-cube-canonical-v0.1.json",
