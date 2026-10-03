@@ -11,6 +11,7 @@ import { inputSnapshot, publishScreenshot } from "../../tools/evidence-campaign.
 import { withCampaignLock, fulfillCampaignRequest } from "./core-followthrough/runtime.mjs";
 import { publishPrintPDF, inspectPrintPDF } from "./core-followthrough/closure.mjs";
 import { printPDFOptions } from "./core-followthrough/contracts.mjs";
+import { assertPrintedSchema } from "./hiring-schema-print-contract.mjs";
 
 // PDF_PYTHON selects an existing interpreter with PyMuPDF; rendering uses Chromium.
 const python = process.env.PDF_PYTHON || "python3";
@@ -18,10 +19,9 @@ const execute = promisify(execFile);
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const output = path.join(root, ".visual-runs/hiring-schema-print");
 const source = "collaboration/hiring-surfaces-talent-agent-intake/index.html";
-const definitions = [source, "tests/tables/hiring-schema-print.browser.mjs", "tools/core-architecture-browser-helper.mjs", "tools/attribution-contract.mjs", "attribution.yml", "tools/observation-checkpoint.mjs", "tools/evidence-campaign.mjs", "tests/tables/core-followthrough/runtime.mjs", "tests/tables/core-followthrough/closure.mjs", "tests/tables/core-followthrough/contracts.mjs", "package-lock.json"];
+const definitions = [source, "tests/tables/hiring-schema-print.browser.mjs", "tests/tables/hiring-schema-print-contract.mjs", "tools/core-architecture-browser-helper.mjs", "tools/attribution-contract.mjs", "attribution.yml", "tools/observation-checkpoint.mjs", "tools/evidence-campaign.mjs", "tests/tables/core-followthrough/runtime.mjs", "tests/tables/core-followthrough/closure.mjs", "tests/tables/core-followthrough/contracts.mjs", "package-lock.json"];
 const print = { paper: "Letter", orientation: "landscape", marginInches: 0.5, preferCSSPageSize: true };
 const item = { id: "hiring-expanded-schema-letter-landscape", width: 1280, print };
-const compact = text => text.replace(/\s/gu, "");
 const extraction = `import fitz, json, sys
 with fitz.open(sys.argv[1]) as document:
     pages = [{"text": page.get_text(), "words": page.get_text("words")} for page in document]
@@ -64,21 +64,12 @@ await withCampaignLock(output, async resources => {
     const geometry = await inspectPrintPDF(pdf.file);
     assert(geometry.pages.every(value => value.widthPoints === 792 && value.heightPoints === 612), "existing Letter landscape geometry remains exact");
     const parsed = JSON.parse((await execute(python, ["-c", extraction, pdf.file], { timeout: 15000, maxBuffer: 2_000_000 })).stdout);
-    const pages = parsed.pages.map(value => compact(value.text));
-    const all = pages.join(""), expectedText = compact(expected), start = all.indexOf(expectedText);
-    assert(start >= 0, "every printed schema token appears in source order across intervening pages");
-    let offset = 0;
-    const schemaPages = [];
-    for (let index = 0; index < pages.length; index++) {
-      const end = offset + pages[index].length;
-      if (end > start && offset < start + expectedText.length) {
-        schemaPages.push(index + 1);
-        assert(parsed.pages[index].words.length > 0, "schema continuation page carries readable text");
-        for (const [left, top, right, bottom] of parsed.pages[index].words) {
+    const { schemaPages } = assertPrintedSchema(parsed.pages.map(value => value.text), expected);
+    for (const pageNumber of schemaPages) {
+        assert(parsed.pages[pageNumber - 1].words.length > 0, "schema continuation page carries readable text");
+        for (const [left, top, right, bottom] of parsed.pages[pageNumber - 1].words) {
           assert(left >= 35 && right <= 757 && top >= 35 && bottom <= 577, "schema-page text stays within half-inch paper margins");
         }
-      }
-      offset = end;
     }
     assert(schemaPages.length > 1, "complete schema continues across physical pages");
     await page.emulateMedia({ media: "screen" });
