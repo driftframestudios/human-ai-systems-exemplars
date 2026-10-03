@@ -15,11 +15,13 @@ export function assertPrintedSchema(pageTexts, expected) {
   const schema = JSON.parse(expected);
   assert(schema && typeof schema === "object" && !Array.isArray(schema)
     && Object.keys(schema)[0] === "$schema", "source schema starts with its dialect declaration");
-  const target = JSON.stringify(schema), text = pageTexts.join("\n"), anchor = '"$schema"';
-  const anchorStart = text.indexOf(anchor);
-  assert(anchorStart >= 0 && text.indexOf(anchor, anchorStart + anchor.length) < 0,
+  const target = JSON.stringify(schema), text = pageTexts.join("\n");
+  // The fixed dialect token admits the same extracted breaks as the comparison.
+  const anchors = text.matchAll(/"[\r\n]*\$[\r\n]*s[\r\n]*c[\r\n]*h[\r\n]*e[\r\n]*m[\r\n]*a[\r\n]*"/g);
+  const firstAnchor = anchors.next().value;
+  assert(firstAnchor && anchors.next().done,
     "printed report carries one schema dialect anchor");
-  let start = anchorStart - 1;
+  let start = firstAnchor.index - 1;
   while (start >= 0 && layoutSpace(text[start])) start--;
   assert.equal(text[start], "{", "printed schema begins with its object boundary");
   let cursor = start, quoted = false, escaped = false;
@@ -27,12 +29,24 @@ export function assertPrintedSchema(pageTexts, expected) {
     const wanted = target[index];
     if (!quoted) {
       while (layoutSpace(text[cursor])) cursor++;
+    } else if (!escaped && wanted === " ") {
+      let sourceEnd = index;
+      while (target[sourceEnd] === " ") sourceEnd++;
+      let literalSpaces = 0, wraps = 0, withinBreak = false;
+      while (text[cursor] === " " || text[cursor] === "\r" || text[cursor] === "\n") {
+        if (text[cursor] === " ") { literalSpaces++; withinBreak = false; }
+        else { if (!withinBreak) wraps++; withinBreak = true; }
+        cursor++;
+      }
+      // Each contiguous break group represents zero or one source space. This
+      // treats CRLF and a page separator beside a line ending as one boundary.
+      const sourceSpaces = sourceEnd - index;
+      assert(literalSpaces <= sourceSpaces && sourceSpaces <= literalSpaces + wraps,
+        `printed schema preserves source space count at character ${index}`);
+      index = sourceEnd - 1;
+      continue;
     } else {
-      let wrapped = false;
-      while (text[cursor] === "\n" || text[cursor] === "\r") { cursor++; wrapped = true; }
-      // A wrap can represent one word space; ordinary same-line spaces stay exact.
-      if (wrapped && !escaped && wanted === " " && text[cursor] !== " "
-          && target[index + 1] !== " " && text[cursor] === target[index + 1]) continue;
+      while (text[cursor] === "\n" || text[cursor] === "\r") cursor++;
     }
     assert.equal(text[cursor], wanted, `printed schema preserves source character ${index}`);
     cursor++;
