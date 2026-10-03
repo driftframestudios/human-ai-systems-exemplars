@@ -18,9 +18,9 @@ const manifestName = "core-architectures-chimeric-prototype-manifest-v0.1.json";
 const currentFile = "core-architecture-family-index-chimeric-prototype-v0.1.6.html";
 const historicalFile = "core-architecture-family-index-chimeric-prototype-v0.1.5.html";
 const currentDigests = {
-  canonical: "dd7c59f0be630395bac27d4414bff9d68cef31caa1d4bca174324481851af173",
-  context: "a2e9edb1e8dec009c53ed439a1254ea221de1c68a73ddf6f30f7f94c81cb814e",
-  narrative: "0316e31387359b43030ab232f9f1ac1d9ffdac7c06f6f3ccd5540e07cc483e9b",
+  canonical: "27e88170074498e609e01dfd2c240ad3eedc96d126ea01bcd58e058c690c1264",
+  context: "7b963ce14f42a91fb5d664b432b24c3447da58c1ed3114106d5b1abdb562f214",
+  narrative: "16fb306df3c7f72c77003755aa2e3a9019e6157fa6afa5d50001133883d0a994",
 };
 const historicalDigests = {
   canonical: "8796c2818aff5a5b2f18d4d4682a09b114419b259f0e83564d8773655ab07950",
