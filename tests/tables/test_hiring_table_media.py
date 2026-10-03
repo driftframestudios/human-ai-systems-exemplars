@@ -36,17 +36,19 @@ WATCHED = frozenset({
     "min-width", "min-inline-size", "width", "inline-size", "overflow",
     "overflow-x", "overflow-y", "overflow-wrap", "word-wrap", "word-break", "all",
 })
-TABLE_SELECTORS = frozenset({"table", "th", "td", "tbody th", "tr>:nth-child(4)", ".table-wrap"})
+TABLE_SELECTORS = frozenset({"table", "th", "td", "tbody th", "tr>:nth-child(4)", ".table-wrap", "table code"})
 REQUIRED = {
     ("screen", "table", "min-width"): "96rem",
     ("screen", "th", "min-width"): "10rem",
     ("screen", "td", "min-width"): "10rem",
     ("screen", "tbody th", "min-width"): "16rem",
     ("screen", "tr>:nth-child(4)", "min-width"): "18rem",
-    **{("print", selector, "min-width"): "0" for selector in TABLE_SELECTORS - {".table-wrap"}},
+    **{("print", selector, "min-width"): "0" for selector in TABLE_SELECTORS - {".table-wrap", "table code"}},
     ("print", ".table-wrap", "overflow"): "visible",
-    ("print", "th", "overflow-wrap"): "anywhere",
-    ("print", "td", "overflow-wrap"): "anywhere",
+    **{("print", selector, "overflow-wrap"): "normal" for selector in ("th", "td", "tr>:nth-child(4)")},
+    **{("print", selector, "word-break"): "normal" for selector in ("th", "td", "tr>:nth-child(4)")},
+    ("print", "table code", "overflow-wrap"): "anywhere",
+    ("print", "table code", "word-break"): "normal",
 }
 ALLOWED = {
     **REQUIRED,
@@ -305,7 +307,7 @@ def check_hiring_table_media(source):
 # Independent literal fixtures describe the source policy, not generated output
 # from ALLOWED/REQUIRED. subTest names keep each counterexample identifiable.
 SCREEN = "@media screen{table{min-width:96rem}th,td{min-width:10rem}tbody th{min-width:16rem}tr>:nth-child(4){min-width:18rem}}"
-PRINT_DECLARATIONS = ".table-wrap{overflow:visible}table,th,td,tbody th,tr>:nth-child(4){min-width:0}th,td{overflow-wrap:anywhere}"
+PRINT_DECLARATIONS = ".table-wrap{overflow:visible}table,th,td,tbody th,tr>:nth-child(4){min-width:0}th,td,tr>:nth-child(4){overflow-wrap:normal;word-break:normal}table code{overflow-wrap:anywhere;word-break:normal}"
 PRINT = "@media print{" + PRINT_DECLARATIONS + "}"
 
 
@@ -315,7 +317,7 @@ def document(css):
 
 class HiringTableMediaContract(unittest.TestCase):
     def test_repository_source_satisfies_policy(self):
-        self.assertEqual(len(check_hiring_table_media(read_source(SOURCE))), 13)
+        self.assertEqual(len(check_hiring_table_media(read_source(SOURCE))), 19)
 
     def test_supported_source_variations(self):
         cases = {
@@ -328,7 +330,7 @@ class HiringTableMediaContract(unittest.TestCase):
             "unrelated_inline_table_style": document(SCREEN + PRINT) + '<table style="color:black;padding:1rem"><tr><td style="text-align:left">Example</td></tr></table>',
             "commented_inline_policy": document(SCREEN + PRINT) + '<table style="/* min-width:100rem */ margin-top:1rem"></table>',
             "unrelated_selector": document(SCREEN + PRINT + '.note{width:20rem;overflow:hidden}'),
-            "mixed_selector_list": document(SCREEN + PRINT.replace("th,td{overflow-wrap", ".note,th,td{overflow-wrap")),
+            "mixed_selector_list": document(SCREEN + PRINT.replace("th,td,tr>:nth-child(4){overflow-wrap", ".note,th,td,tr>:nth-child(4){overflow-wrap")),
             "unrelated_inline_width": document(SCREEN + PRINT) + '<aside style="width:20rem;overflow:hidden"></aside>',
             "unrelated_conditional_rule": document(SCREEN + PRINT + '@supports(display:grid){.note{width:20rem}}'),
             "unrelated_nested_rule": document(SCREEN + PRINT + '.note{& a{width:20rem}}'),
@@ -338,7 +340,22 @@ class HiringTableMediaContract(unittest.TestCase):
         }
         for name, source in cases.items():
             with self.subTest(case=name):
-                self.assertEqual(len(check_hiring_table_media(source)), 13)
+                self.assertEqual(len(check_hiring_table_media(source)), 19)
+
+    def test_print_word_and_identifier_boundaries(self):
+        # Prose retains ordinary word boundaries; only technical code may wrap
+        # arbitrarily. The fourth-column screen policy must be reset in print.
+        fixtures = {
+            "ordinary_anywhere": PRINT.replace("overflow-wrap:normal", "overflow-wrap:anywhere"),
+            "ordinary_break_all": PRINT.replace("word-break:normal", "word-break:break-all", 1),
+            "artifact_column_still_anywhere": PRINT.replace("th,td,tr>:nth-child(4){overflow-wrap", "th,td{overflow-wrap"),
+            "identifier_wrapping_lost": PRINT.replace("table code{overflow-wrap:anywhere", "table code{overflow-wrap:normal"),
+            "identifier_policy_missing": PRINT.replace("table code{overflow-wrap:anywhere;word-break:normal}", ""),
+            "late_cell_fragmentation": PRINT + "@media print{td{overflow-wrap:anywhere}}",
+        }
+        for name, css in fixtures.items():
+            with self.subTest(name=name), self.assertRaises(PolicyError):
+                check_hiring_table_media(document(SCREEN + css))
 
     def test_policy_negative_fixtures(self):
         cases = {

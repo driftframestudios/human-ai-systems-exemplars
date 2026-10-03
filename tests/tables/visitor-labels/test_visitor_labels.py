@@ -63,6 +63,121 @@ class NativeInventory(HTMLParser):
             self.frames += 1
 
 
+class PromptConditionLabelContracts(unittest.TestCase):
+    """One separately owned iframe table, outside the 42-page visitor count."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.source = (
+            ROOT / "collaboration/about-prompt-conditions-explorer/index.html"
+        ).read_bytes().decode("utf-8")
+        cls.parsed = projection.parse_source(cls.source)
+        cls.topic = "Prompt-side conditions for a recoverable human\u2013AI handoff"
+        cls.fields = [
+            "Condition", "What the prompt carries", "Changed work",
+            "Named receiver", "Evidence boundary", "Deeper route",
+        ]
+
+    def test_complete_native_records_and_supplemental_meaning(self):
+        expected = [
+            ["Source diet",
+             "Named source, era, population, scope, evidence, and exclusions.",
+             "The response can return to each source and compare its standing.",
+             "Research or domain steward.",
+             "Provenance supports comparison; applicability and authority remain source-specific.",
+             "Collaboration Cycle"],
+            ["Desired state",
+             "A positive condition and the replacement behavior that makes a boundary actionable.",
+             "Review can test whether the proposed state is present and revise the route directly.",
+             "Product or practice owner.",
+             "A desired condition supplies an evaluable direction; local evidence establishes whether it was reached.",
+             "Hiring Surfaces"],
+            ["Role boundary",
+             "Register, task, decision standing, and people who retain accountable authority.",
+             "Persona shapes conduct while evidence continues to carry truth.",
+             "Accountable domain or business owner.",
+             "A simulated role supplies perspective and vocabulary; it does not inherit professional standing.",
+             "Core Architectures Index"],
+            ["Input sanitation",
+             "Quoted source, task instructions, tool output, and authority labels kept distinct.",
+             "Material remains usable without silently becoming instruction.",
+             "Security, privacy, or workflow steward.",
+             "Separation limits instruction confusion; named owners still review sensitive or high-consequence use.",
+             "Composable Site Readings & Debriefs"],
+            ["Working set",
+             "Objective, evidence, open conditions, output shape, decision horizon, and receiver.",
+             "The named receiver can inspect, compare, resume, and hand off the decision.",
+             "Workflow steward or next decision owner.",
+             "Compactness supports continuity when provenance and unresolved conditions remain attached.",
+             "Metadata Blocks"],
+        ]
+        self.assertEqual(len(self.parsed.tables), 1)
+        table = self.parsed.tables[0]
+        self.assertEqual(projection.text(table.caption), self.topic)
+        self.assertIsNone(table.element.attribute("data-label"))
+        self.assertEqual(len(table.rows), 6)
+        self.assertIsNone(table.rows[0].element.attribute("data-label"))
+        self.assertEqual([projection.text(c.text) for c in table.rows[0].cells], self.fields)
+        for cell, field in zip(table.rows[0].cells, self.fields, strict=True):
+            self.assertEqual((cell.tag, cell.attribute("scope")), ("th", "col"))
+            self.assertEqual(cell.attribute("data-label"), field)
+        for row, values in zip(table.rows[1:], expected, strict=True):
+            self.assertEqual([projection.text(c.text) for c in row.cells], values)
+            self.assertEqual(row.element.attribute("data-label"),
+                             self.topic + ": " + values[0])
+            self.assertEqual((row.cells[0].tag, row.cells[0].attribute("scope")),
+                             ("th", "row"))
+            self.assertTrue(all(cell.tag == "td" for cell in row.cells[1:]))
+            self.assertEqual([c.attribute("data-label") for c in row.cells], self.fields)
+        native = NativeInventory(self.source)
+        self.assertEqual(Counter(tag for tag, _ in native.elements),
+                         {"table": 1, "tr": 6, "th": 11, "td": 25})
+        labelled = Counter()
+        for tag, attributes in native.elements:
+            labels = [value for name, value in attributes if name == "data-label"]
+            self.assertLessEqual(len(labels), 1, tag)
+            if labels:
+                self.assertTrue(labels[0])
+                labelled[tag] += 1
+        self.assertEqual(labelled, {"tr": 5, "th": 11, "td": 25})
+
+    def test_exact_nonlabel_bytes_links_and_projector_idempotence(self):
+        table = self.parsed.tables[0]
+        elements = [table.element]
+        for row in table.rows:
+            elements.extend((row.element, *row.cells))
+        spans = sorted(
+            (element.start + attribute.start, element.start + attribute.end)
+            for element in elements for attribute in element.attributes
+            if attribute.name == "data-label"
+        )
+        self.assertEqual(len(spans), 41)
+        fragments = []
+        cursor = 0
+        for start, end in spans:
+            fragments.append(self.source[cursor:start])
+            cursor = end
+        fragments.append(self.source[cursor:])
+        original = "".join(fragments)
+        # The pre-label owner binds every visible byte, link, scope, style and script.
+        self.assertEqual(sha256(original.encode("utf-8")).hexdigest(),
+                         "487417f2ba56bf6f7b84fdcaa9bc84cc83a832909c37df2ffa0fb3a9468a21af")
+        projected, dispositions = projection.project(original)
+        self.assertEqual(dispositions, [{"topic": self.topic, "standing": "projected"}])
+        self.assertEqual(projected, self.source)
+        self.assertEqual(projection.project(projected)[0], projected)
+        for route in (
+            "cross-platform-collaboration-cycle.html",
+            "hiring-surfaces-talent-agent-intake.html",
+            "core-architectures-orientation-index.html",
+            "grammar-family.html", "metadata-blocks.html",
+        ):
+            self.assertIn(
+                'href="../../context-canvas-project-surface/context-canvas/' + route + '"',
+                original,
+            )
+
+
 class VisitorLabelContracts(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -431,7 +546,17 @@ class VisitorLabelContracts(unittest.TestCase):
                 values, ensure_ascii=False, separators=(",", ":")
             ).encode()).hexdigest()
             self.assertEqual(runtime_digest, fixture["runtime_value_sha256"])
-            self.assertEqual(fixture["full_text_parity"], "parent-review")
+            if fixture["function"] == "buildFailureTable":
+                self.assertEqual(fixture["text_differences"], [])
+                self.assertEqual(fixture["full_text_parity"], "pass")
+                self.assertEqual(runtime_digest, digest)
+            else:
+                self.assertEqual(fixture["full_text_parity"], "retained-literal-quotation")
+                self.assertEqual(len(fixture["text_differences"]), 1)
+                difference = fixture["text_differences"][0]
+                self.assertEqual((difference["row"], difference["column"]), (1, 5))
+                self.assertTrue(difference["native"].startswith("\u201cMe\u201d"))
+                self.assertTrue(difference["runtime"].startswith("\u2018Me\u2019"))
 
 
 if __name__ == "__main__":

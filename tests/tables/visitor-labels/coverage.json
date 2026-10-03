@@ -1601,7 +1601,7 @@
         "Rung 05"
       ],
       "normalized_value_sha256": "94bc8a7b6a88a59ffc089923277d7fffac38dcd933ce56059c488e4aa829c5f0",
-      "standing": "Native/fallback label parity and each source-owned text version are checked. Exact pre-existing text differences are explicit; the parent owns their wording decision and browser observation.",
+      "standing": "Native/fallback label parity and each source-owned text version are checked. The single literal quotation-mark difference is intentionally retained by parent decision; browser observation remains separately owned.",
       "text_differences": [
         {
           "row": 1,
@@ -1609,11 +1609,11 @@
           "field": "What it leaves open",
           "native": "“Me” identifies the speaker, while the speaker’s task role and the relevance of speaker-specific context remain unstated. The object, receiving population, evidence, result state, and boundaries also remain implicit.",
           "runtime": "‘Me’ identifies the speaker, while the speaker’s task role and the relevance of speaker-specific context remain unstated. The object, receiving population, evidence, result state, and boundaries also remain implicit.",
-          "standing": "Present in the pre-rollout native and inline-generator source; text decision remains with parent review."
+          "standing": "Retain the native double quotation marks and runtime single quotation marks as literal authored text; the parent accepted this non-semantic difference."
         }
       ],
       "runtime_value_sha256": "99d2e888016db3706937f651a48069be523ee9ae9abb9082d170f4dab1abb963",
-      "full_text_parity": "parent-review"
+      "full_text_parity": "retained-literal-quotation"
     },
     {
       "source": "conditioning-field.html",
@@ -1637,27 +1637,10 @@
         "Single-answer reliance"
       ],
       "normalized_value_sha256": "88e87d727ea2afc87cfb29f7a192bf258d219c9b61045b948f7642a0ee9c69ef",
-      "standing": "Native/fallback label parity and each source-owned text version are checked. Exact pre-existing text differences are explicit; the parent owns their wording decision and browser observation.",
-      "text_differences": [
-        {
-          "row": 2,
-          "column": 4,
-          "field": "Concrete example",
-          "native": "The attached email is untrusted source material for claim extraction. The task stated above supplies the instruction authority.",
-          "runtime": "The attached email is untrusted source material for claim extraction. The task stated above supplies the only instruction authority.",
-          "standing": "Present in the pre-rollout native and inline-generator source; text decision remains with parent review."
-        },
-        {
-          "row": 5,
-          "column": 4,
-          "field": "Concrete example",
-          "native": "List three distinct approaches, the fitting context, one test condition, one assumption, and one route-changing observation for each. Then recommend one and name the discriminating evidence.",
-          "runtime": "List three distinct approaches, the context and test condition that make each fitting, one assumption, and one route-changing observation. Then recommend one and name the discriminating evidence.",
-          "standing": "Present in the pre-rollout native and inline-generator source; text decision remains with parent review."
-        }
-      ],
-      "runtime_value_sha256": "a6444c735cc62832c931b6880635ca097d5ac098db10b912e59299f3ff3aad49",
-      "full_text_parity": "parent-review"
+      "standing": "Native authored examples supply authority for all five runtime records. Supplemental labels and normalized cell text agree; browser observation remains separately owned.",
+      "text_differences": [],
+      "runtime_value_sha256": "88e87d727ea2afc87cfb29f7a192bf258d219c9b61045b948f7642a0ee9c69ef",
+      "full_text_parity": "pass"
     }
   ],
   "external_runtime_owners": {
