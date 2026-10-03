@@ -72,6 +72,32 @@ class TransformationContract(unittest.TestCase):
                     self.assertIn('<td data-label="Date">2026-10-03</td>', output)
                     self.assertEqual(projection.project(output)[0], output)
 
+    def test_header_alternative_keeps_field_paths_in_visible_content(self):
+        for alternative in ("Principal design", "Research & review", "0"):
+            with self.subTest(alternative=alternative):
+                source = table(identity='Principal design<br><code>resume.experience[0]</code>')
+                source = source.replace('<th scope="row">', '<th scope="row" abbr="' + escape(alternative, quote=True) + '">')
+                output, _ = project(source)
+                self.assertIn('data-label="Costs &amp; evidence: ' + escape(alternative, quote=True) + '"', output)
+                self.assertIn('<code>resume.experience[0]</code>', output)
+                self.assertEqual(project(output)[0], output)
+
+    def test_empty_header_alternative_preserves_existing_identity(self):
+        for alternative in ("", " \t\n "):
+            with self.subTest(alternative=alternative):
+                source = table().replace('<th scope="row">', '<th scope="row" abbr="' + alternative + '">')
+                output, _ = project(source)
+                self.assertIn('data-label="Costs &amp; evidence: Pilot"', output)
+
+    def test_hiring_static_labels_keep_source_paths_as_values(self):
+        from pathlib import Path
+        source = (Path(__file__).resolve().parents[2] / 'collaboration/hiring-surfaces-talent-agent-intake/index.html').read_text(encoding='utf-8')
+        for identity in ("Principal design", "Principal engineering", "Design leadership"):
+            self.assertIn('<tr data-label="Representative relationship from each inspection scenario: ' + identity + '">', source)
+        self.assertIn('<code>resume.experience[0]</code>', source)
+        self.assertIn('<code>caseStudy.portfolio.investment</code>', source)
+        self.assertEqual(project(source)[0], source)
+
     def test_multiple_native_row_headers_form_the_row_identity(self):
         source = (
             '<table><caption>Ledger</caption><thead><tr>'

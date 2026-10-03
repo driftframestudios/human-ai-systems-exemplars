@@ -1,6 +1,6 @@
 ---
 name: cost-and-ownership-analysis
-description: Maps scoped functions to algorithmic cost, input boundaries, and mutation ownership. Applies when a review raises complexity, repeated preparation, parsing, regex or prototype-chain behavior, path handling, or state-aliasing concerns that should change an implementation decision.
+description: Maps scoped functions to algorithmic cost, input boundaries, and mutation ownership. Applies when a review raises complexity, helper reuse, repeated preparation, parsing, regex or prototype-chain behavior, path handling, or state-aliasing concerns that should change an implementation decision.
 ---
 
 # Cost and ownership analysis
@@ -17,6 +17,10 @@ description: Maps scoped functions to algorithmic cost, input boundaries, and mu
 ### Rule: Coverage has a coordinate
 
 Bind the inventory to the requested revision and pending changes. Identify callable definitions, callback multipliers, recursion, generated code, and excluded dependencies. Distinguish complete enumeration from complete closed-form cost resolution.
+### Rule: Reuse starts from the existing semantic owner
+
+Before implementation, identify the owner and helpers that predate the current change wave, then compare their contract with the receiving task. Reuse fitting behavior at the smallest compatible boundary while preserving independent expectations, invocation-local state, and the receiving owner's lifecycle and evidence obligations.
+
 ### Rule: Cost follows the whole receiving path
 
 State the variables, caps, expected lookup assumptions, worst-case or amortized model, and output size. Include repeated admission, key sorting, copying, serialization, projection, and derived-view preparation. Keep allocation volume distinct from peak live memory and garbage-collection pauses.
@@ -49,3 +53,5 @@ Lead with actionable findings and their smallest repairs, retain valid boundarie
 For engine claims, consult the runtime owner's current documentation. [V8 regex tier-up](https://v8.dev/blog/regexp-tier-up) explains why construction and native compilation differ. [OWASP prototype-pollution guidance](https://cheatsheetseries.owasp.org/cheatsheets/Prototype_Pollution_Prevention_Cheat_Sheet.html) supplies dictionary-boundary techniques; current source determines the specific mechanism and exposure.
 
 Load [Python boundaries and traversal cost](references/python-boundaries-and-traversal-cost.md) when Python representation, source editing, package boundaries, or generated tests change the analysis. Other runtimes retain their own representation and enforcement rules.
+
+Load [Ownership-preserving reuse](references/ownership-preserving-reuse.md) when choosing, extracting, or replacing a helper, parser, fixture, or preparation path. It supplies bounded owner discovery, contract comparison, and dependent-evidence invalidation.

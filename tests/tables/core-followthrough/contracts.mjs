@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import path from "node:path";
+import { isDeepStrictEqual } from "node:util";
 
 const commitEvents = Object.freeze({
   alignment: "input", context: "input", frv: "input", impact: "input",
@@ -39,6 +40,37 @@ export function bindScreenshot(record, screenshot, root) {
   record.result.screenshots.push({ file: screenshot.file, sha256: screenshot.sha256 });
 }
 
+export function printPDFOptions(spec) {
+  const margin = spec.marginInches + "in";
+  return { format: spec.paper, landscape: spec.orientation === "landscape",
+    printBackground: true, preferCSSPageSize: spec.preferCSSPageSize,
+    margin: { top: margin, bottom: margin, left: margin, right: margin } };
+}
+
+function printPageGeometryMatches(observed, spec) {
+  return observed && Number.isSafeInteger(observed.pageCount) && observed.pageCount > 0
+    && Array.isArray(observed.pages) && observed.pages.length === observed.pageCount
+    && observed.pages.every((page, index) => {
+      if (!page || page.number !== index + 1 || !Number.isFinite(page.widthPoints)
+          || !Number.isFinite(page.heightPoints) || !Number.isInteger(page.rotation)
+          || page.rotation % 90 !== 0) return false;
+      const rotated = Math.abs(page.rotation % 180) === 90;
+      const width = rotated ? page.heightPoints : page.widthPoints;
+      const height = rotated ? page.widthPoints : page.heightPoints;
+      return Math.abs(width - spec.pageWidthPoints) <= 0.1
+        && Math.abs(height - spec.pageHeightPoints) <= 0.1;
+    });
+}
+
+export function bindPrintPDF(record, pdf, root) {
+  const key = screenshotKey(root, pdf);
+  assert(key && key.endsWith(".pdf"), "Print PDF has a repository-local digest-bound path");
+  assert(record.result.print, "Print observation precedes its artifact");
+  assert(!Object.hasOwn(record.dependencies, key) || record.dependencies[key] === pdf.sha256);
+  record.dependencies[key] = pdf.sha256;
+  record.result.print.pdf = { file: pdf.file, sha256: pdf.sha256 };
+}
+
 const isRecord = value => value !== null && typeof value === "object" && !Array.isArray(value);
 
 export async function validateRecordArtifacts(record, plannedCase, root, snapshot) {
@@ -59,6 +91,7 @@ export async function validateRecordArtifacts(record, plannedCase, root, snapsho
       || !isRecord(record.dependencies)) return false;
   const requiredInputs = [
     family.source,
+    ...(family.inputs ?? []),
     ...(variant === "projection" ? [family.projection] : []),
     ...(variant === "parent" ? [family.parent] : []),
   ];
@@ -68,7 +101,7 @@ export async function validateRecordArtifacts(record, plannedCase, root, snapsho
       || !/^[a-f0-9]{64}$/u.test(record.dependencies[key]))) return false;
   const screenshots = result.screenshots;
   // Required evidence comes from the trusted plan, never from cached metadata.
-  const expected = mode === "screen" && width === 390 ? 1 : 0;
+  const expected = (mode === "screen" && width === 390) || plannedCase.print ? 1 : 0;
   if (!Array.isArray(screenshots) || screenshots.length !== expected) return false;
   const seen = new Set();
   for (const screenshot of screenshots) {
@@ -77,6 +110,19 @@ export async function validateRecordArtifacts(record, plannedCase, root, snapsho
         || record.dependencies[key] !== screenshot.sha256) return false;
     seen.add(key);
   }
-  // Re-read image bytes as well as source bytes, even after a warm snapshot.
+  if (plannedCase.print) {
+    const printed = result.print;
+    const spec = plannedCase.print;
+    if (!isRecord(printed)
+        || !["paper", "orientation", "marginInches", "contentWidth", "contentHeight",
+          "pageWidthPoints", "pageHeightPoints", "preferCSSPageSize"].every(field => printed[field] === spec[field])
+        || !isRecord(printed.geometry) || printed.geometry.viewport !== spec.contentWidth
+        || !isDeepStrictEqual(printed.pdfOptions, printPDFOptions(spec))
+        || !printPageGeometryMatches(printed.pageGeometry, spec)) return false;
+    const key = screenshotKey(root, printed.pdf);
+    if (!key || !key.endsWith(".pdf") || !Object.hasOwn(record.dependencies, key)
+        || record.dependencies[key] !== printed.pdf.sha256) return false;
+  }
+  // Re-read image/PDF bytes as well as source bytes, even after a warm snapshot.
   return snapshot.agrees(record.dependencies, true);
 }

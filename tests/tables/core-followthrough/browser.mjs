@@ -7,8 +7,12 @@ import { observeTableReading } from "../../../tools/table-reading-observer.mjs";
 import { atomicJson, digest, openCheckpoints, publishObservation } from "../../../tools/observation-checkpoint.mjs";
 import { inputSnapshot, publishCampaign, publishScreenshot } from "../../../tools/evidence-campaign.mjs";
 import { createAggregatePackagePlan } from "../../../tools/package-v1-iframe-routes.mjs";
+import { monitor, assertTelemetry } from "../../../tools/core-architecture-browser-helper.mjs";
+import { withCampaignLock, fulfillCampaignRequest } from "./runtime.mjs";
 import { planCases } from "./cases.mjs";
-import { bindScreenshot, commitCoreEdit, validateRecordArtifacts } from "./contracts.mjs";
+import { observeStrategyState, observeStrategyTables } from "./strategy-states.mjs";
+import { bindScreenshot, bindPrintPDF, printPDFOptions, commitCoreEdit, validateRecordArtifacts } from "./contracts.mjs";
+import { observeLocalReach, tableStateCoverage, observeCarrier, observeNativeCase, observeHiringAX, observeHiringPrint, publishPrintPDF, inspectPrintPDF } from "./closure.mjs";
 
 const root = fileURLToPath(new URL("../../../", import.meta.url));
 const args = process.argv.slice(2);
@@ -18,7 +22,8 @@ const option = (name, fallback) => {
   assert(args[index + 1] && !args[index + 1].startsWith("--"), `${name} needs a value`);
   return args[index + 1];
 };
-const cases = planCases({ family: option("--family", "all"), combined: args.includes("--combined"), caseId: option("--case", null) });
+const cases = planCases({ family: option("--family", "all"), combined: args.includes("--combined"),
+  caseId: option("--case", null), fromCaseId: option("--from-case", null) });
 const plannedCases = new Map(cases.map(item => [item.id, item]));
 if (args.includes("--plan")) {
   console.log(JSON.stringify({ cases: cases.map(({ id }) => id), browserLaunches: 0, visits: 0 }));
@@ -26,42 +31,8 @@ if (args.includes("--plan")) {
   await run();
 }
 
-async function keyboardReach(frame, tables) {
-  const results = [];
-  for (const table of tables.filter(item => item.visible && item.scroll?.overflow)) {
-    const handle = await frame.locator("table").nth(table.tableIndex).evaluateHandle(element => {
-      let owner = element.parentElement;
-      while (owner && !["auto", "scroll"].includes(getComputedStyle(owner).overflowX)) owner = owner.parentElement;
-      return owner;
-    });
-    const owner = handle.asElement();
-    try {
-      if (!table.scroll.focusable || !table.scroll.name) {
-        results.push({ tableIndex: table.tableIndex, standing: "review", reason: "unnamed or unfocusable scroll owner" });
-        continue;
-      }
-      await owner.evaluate(element => { element.scrollLeft = 0; element.focus(); });
-      await owner.press("ArrowRight");
-      await frame.waitForFunction(element => element.scrollLeft > 0, owner, { timeout: 2000 });
-      // Exercise the final keyboard segment as well as the start of the scroll.
-      await owner.evaluate(element => { element.scrollLeft = Math.max(0, element.scrollWidth - element.clientWidth - 24); });
-      await owner.press("ArrowRight");
-      await frame.waitForFunction(element => element.scrollWidth - element.clientWidth - element.scrollLeft < 2, owner, { timeout: 2000 });
-      results.push(await owner.evaluate((element, tableIndex) => {
-        const last = element.querySelector("table").rows[0].lastElementChild;
-        const focused = document.activeElement === element;
-        const finalColumnRight = last.getBoundingClientRect().right;
-        const ownerRight = element.getBoundingClientRect().right;
-        return { tableIndex, focused, finalColumnRight, ownerRight,
-          standing: focused && finalColumnRight <= ownerRight + 2 ? "pass" : "review" };
-      }, table.tableIndex));
-    } finally { await handle.dispose(); }
-  }
-  return results;
-}
-
-async function nativeRecords(frame) {
-  return frame.locator("table").evaluateAll(tables => tables.map(table => ({
+async function nativeRecords(frame, selector = "table") {
+  return frame.locator(selector).evaluateAll(tables => tables.map(table => ({
     caption: table.caption?.textContent.trim(),
     headers: [...table.querySelectorAll('thead th[scope="col"]')].map(cell => ({ text: cell.textContent.trim(), label: cell.dataset.label })),
     rows: [...table.tBodies].flatMap(body => [...body.rows]).map(row => ({
@@ -123,20 +94,17 @@ async function interact(frame, family) {
 async function run() {
   const output = path.resolve(root, option("--output", ".visual-runs/core-followthrough-20261003/closure"));
   assert(output.startsWith(path.join(root, ".visual-runs") + path.sep));
-  await fs.mkdir(output, { recursive: true });
-  const lock = await fs.open(path.join(output, "campaign.lock"), "wx");
-  await lock.close();
-  const store = await openCheckpoints(path.join(output, "checkpoints"));
-  const packageFiles = new Map();
-  const snapshot = inputSnapshot(root, packageFiles);
-  const definitionFiles = ["tests/tables/core-followthrough/browser.mjs", "tests/tables/core-followthrough/cases.mjs", "tests/tables/core-followthrough/contracts.mjs", "tools/table-reading-observer.mjs", "tools/observation-checkpoint.mjs", "tools/evidence-campaign.mjs", "package-lock.json"];
-  const definitionParts = await snapshot.fingerprints(definitionFiles);
-  const executable = await fs.stat(chromium.executablePath());
-  const definition = digest(JSON.stringify([definitionParts, process.version, process.platform, executable.size, executable.mtimeMs]));
-  const records = [];
-  const metrics = { browserLaunches: 0, visits: 0, navigationRequests: 0, reused: 0, completed: 0 };
-  let browser;
-  try {
+  await withCampaignLock(output, async resources => {
+    const store = await openCheckpoints(path.join(output, "checkpoints"));
+    const packageFiles = new Map();
+    const snapshot = inputSnapshot(root, packageFiles);
+    const definitionFiles = ["tests/tables/core-followthrough/browser.mjs", "tests/tables/core-followthrough/cases.mjs", "tests/tables/core-followthrough/contracts.mjs", "tests/tables/core-followthrough/closure.mjs", "tests/tables/core-followthrough/strategy-states.mjs", "tests/tables/core-followthrough/runtime.mjs", "tools/core-architecture-browser-helper.mjs", "tools/attribution-contract.mjs", "attribution.yml", "tools/table-reading-observer.mjs", "tools/observation-checkpoint.mjs", "tools/evidence-campaign.mjs", "package-lock.json"];
+    const definitionParts = await snapshot.fingerprints(definitionFiles);
+    const executable = await fs.stat(chromium.executablePath());
+    const definition = digest(JSON.stringify([definitionParts, process.version, process.platform, executable.size, executable.mtimeMs]));
+    const records = [];
+    const metrics = { browserLaunches: 0, visits: 0, navigationRequests: 0, reused: 0, completed: 0 };
+    let browser;
     if (cases.some(item => ["package", "parent"].includes(item.variant))) {
       for (const [key, value] of (await createAggregatePackagePlan()).outputFiles) packageFiles.set(key, Buffer.from(value));
     }
@@ -145,27 +113,17 @@ async function run() {
       const signature = digest(JSON.stringify([definition, item]));
       const cached = args.includes("--resume") && await store.readRecord(item.id, signature, deps => snapshot.agrees(deps));
       if (cached && await validateRecordArtifacts(cached, item, root, snapshot)) { records.push(cached); metrics.reused++; continue; }
-      if (!browser) { browser = await chromium.launch(); metrics.browserLaunches++; }
+      if (!browser) { browser = await chromium.launch(); resources.browser = browser; metrics.browserLaunches++; }
       const { family, width, mode, variant } = item;
       const context = await browser.newContext({ viewport: { width, height: 900 }, javaScriptEnabled: mode !== "static" });
       const page = await context.newPage();
       const errors = [];
-      const dependencies = { ...definitionParts, ...await snapshot.fingerprints([family.source, ...(variant === "projection" ? [family.projection] : []), ...(variant === "parent" ? [family.parent] : [])]) };
-      page.on("pageerror", error => errors.push(error.message));
-      await context.route("**/*", async route => {
-        const url = new URL(route.request().url());
-        let key;
-        if (url.hostname === "followthrough.test") key = decodeURIComponent(url.pathname).slice(1);
-        else if (url.hostname === "iframes.vik.guru" && ["package", "parent"].includes(variant)) key = "package:" + decodeURIComponent(url.pathname).replace(/^\/v1\//u, "");
-        else return route.fulfill({ status: 204, body: "" });
-        if (key.endsWith("/")) key += "index.html";
-        const bytes = await snapshot.bytes(key);
-        if (bytes === null) { errors.push("Missing local resource: " + key); return route.fulfill({ status: 404, body: "" }); }
-        dependencies[key] = await snapshot.hash(key);
-        if (route.request().isNavigationRequest()) metrics.navigationRequests++;
-        const types = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".webp": "image/webp", ".woff2": "font/woff2" };
-        return route.fulfill({ status: 200, body: bytes, contentType: types[path.extname(key)] || "application/octet-stream" });
-      });
+      const telemetry = monitor(page);
+      const externalSubstitutions = [];
+      const dependencies = { ...definitionParts, ...await snapshot.fingerprints([family.source, ...(family.inputs ?? []), ...(variant === "projection" ? [family.projection] : []), ...(variant === "parent" ? [family.parent] : [])]) };
+      await context.route("**/*", route => fulfillCampaignRequest(route, {
+        variant, snapshot, dependencies, metrics, errors, externalSubstitutions,
+      }));
       try {
         if (mode === "print") await page.emulateMedia({ media: "print" });
         if (mode === "forced") await page.emulateMedia({ forcedColors: "active" });
@@ -173,18 +131,24 @@ async function run() {
         await page.goto(url, { waitUntil: "load" });
         metrics.visits++;
         let frame = page;
+        let carrierFrame = null;
         if (variant === "parent") {
           const iframe = page.locator('iframe[src="' + family.alias + '"]');
+          carrierFrame = iframe;
           await iframe.scrollIntoViewIfNeeded();
           frame = await (await iframe.elementHandle()).contentFrame();
           await frame.waitForLoadState("load");
         }
         if (mode === "text200") await frame.addStyleTag({ content: "html { font-size: 200% !important; }" });
-        const initial = await frame.evaluate(observeTableReading);
-        await frame.locator("details").evaluateAll(elements => elements.forEach(element => { element.open = true; }));
-        const tables = await frame.evaluate(observeTableReading);
-        assert.equal(tables.length, mode === "static" && family.kind === "core" ? family.staticTables : family.tables, "declared table population");
-        const native = await nativeRecords(frame);
+        const carrier = await observeCarrier(page, frame, carrierFrame);
+        const nativeOnly = !!family.inspection;
+        const stateCase = !!family.state;
+        const initial = nativeOnly ? [] : stateCase ? await observeStrategyTables(frame, family.tableSelector) : await frame.evaluate(observeTableReading);
+        if (!nativeOnly && !stateCase) await frame.locator("details").evaluateAll(elements => elements.forEach(element => { element.open = true; }));
+        const tables = nativeOnly ? [] : stateCase ? initial : await frame.evaluate(observeTableReading);
+        if (!nativeOnly) assert.equal(tables.length, mode === "static" && family.kind === "core" ? family.staticTables : family.tables, "declared table population");
+        const states = tableStateCoverage(initial, tables);
+        const native = nativeOnly ? [] : await nativeRecords(frame, stateCase ? family.tableSelector : "table");
         if (family.kind === "core" && mode !== "static") {
           for (const table of native) {
             assert(table.caption && table.headers.length, "native caption and column headers");
@@ -201,7 +165,11 @@ async function run() {
             assert.deepEqual(row.fields.map(field => field.label), table.headers.map(header => header.label), "native/header/cell label parity");
           }
         }
-        let targeted = null;
+        let targeted = stateCase ? await observeStrategyState(page, frame, family)
+          : nativeOnly ? await observeNativeCase(frame === page ? page.mainFrame() : frame, family.inspection) : null;
+        const accessibility = family.id === "hiring" && variant === "source" && mode === "screen" && width === 390
+          ? await observeHiringAX(page.mainFrame()) : null;
+        const print = item.print ? await observeHiringPrint(frame, item.print) : null;
         if (family.id === "distributed") {
           targeted = await frame.locator("table.table--ledger tbody tr").evaluateAll(rows => rows.map(row => ({
             identityColumn: [...row.cells].findIndex(cell => cell.matches('th[scope="row"]')),
@@ -215,39 +183,55 @@ async function run() {
           const text = await frame.locator("body").textContent();
           for (const word of ["Novartis", "biopharma", "interoperability"]) assert(text.includes(word));
         }
-        const keyboard = mode === "screen" && width === 390 ? await keyboardReach(frame, tables) : [];
+        const keyboard = mode === "screen" && width === 390 && !nativeOnly ? await observeLocalReach(page, frame, tables) : [];
         const interactions = mode === "screen" && width === 390 ? await interact(frame, family) : null;
         const viewport = await frame.evaluate(() => ({ clientWidth: document.documentElement.clientWidth, pageWidth: document.documentElement.scrollWidth }));
-        const fragments = tables.flatMap(table => table.fragments);
-        const wordFragments = fragments.filter(fragment => fragment.kind === "word").length;
-        const numericFragments = fragments.filter(fragment => fragment.kind === "numeric").length;
+        const measuredTables = stateCase && targeted.samples ? targeted.samples.flatMap(sample => sample.tables) : tables;
+        const fragments = measuredTables.flatMap(table => table.fragments);
+        const wordFragments = nativeOnly ? null : fragments.filter(fragment => fragment.kind === "word").length;
+        const numericFragments = nativeOnly ? null : fragments.filter(fragment => fragment.kind === "numeric").length;
         const reasons = [];
+        if (states.some(table => table.disposition === "unobserved-hidden-state")) reasons.push("table-state-unobserved");
+        if (print?.standing === "review") reasons.push("print-fit-review");
         if (wordFragments || numericFragments) reasons.push("fragmentation-review");
         if (keyboard.some(value => value.standing !== "pass")) reasons.push("keyboard-review");
-        if (viewport.pageWidth > viewport.clientWidth + 1) reasons.push("page-overflow-review");
-        if (errors.length) reasons.push("runtime-resource-review");
+        if (!nativeOnly && viewport.pageWidth > viewport.clientWidth + 1) reasons.push("page-overflow-review");
         const result = { id: item.id, family: family.id, kind: family.kind, standing: reasons.length ? "review" : "pass", reasons,
           browser: browser.version(), width, mode, variant, viewport, initialHidden: initial.filter(table => !table.visible).length,
           wordFragments, numericFragments, identifierFragments: fragments.filter(fragment => fragment.kind === "identifier-review").length,
-          tables, native, targeted, keyboard, interactions, errors, screenshots: [] };
+          tables, native, targeted, keyboard, interactions, errors, telemetry: null, externalSubstitutions: [],
+          screenshots: [], carrier, tableStates: states,
+          geometry: nativeOnly ? "not-observed" : stateCase ? "named-table-state" : "all-declared-tables", accessibility, print,
+          scriptlessRuntimeTables: mode === "static" && family.kind === "core" ? family.tables - family.staticTables : null };
         const record = { id: item.id, signature, dependencies, result };
         await publishObservation(store, record, async () => {
-          if (width === 390 && mode === "screen") {
-            result.accessibility = await frame.locator("table").first().ariaSnapshot();
+          if ((width === 390 && mode === "screen") || item.print) {
+            const target = frame.locator(family.tableSelector || "table").first();
+            result.ariaSnapshot = await target.ariaSnapshot();
+            if (nativeOnly || item.print) await target.scrollIntoViewIfNeeded();
             bindScreenshot(record, await publishScreenshot(output, await page.screenshot()), root);
           }
+          if (item.print) {
+            result.print.pdfOptions = printPDFOptions(item.print);
+            const pdf = await publishPrintPDF(output, await page.pdf(result.print.pdfOptions));
+            bindPrintPDF(record, pdf, root);
+            result.print.pageGeometry = await inspectPrintPDF(pdf.file);
+          }
           assert(await validateRecordArtifacts(record, item, root, snapshot), "checkpoint case, sources and required image bytes agree");
+          // Validation has settled; the telemetry cutoff and receipt copies stay synchronous.
+          assert.equal(errors.length, 0, errors.join(" | "));
+          assertTelemetry(telemetry);
+          result.telemetry = structuredClone(telemetry);
+          result.externalSubstitutions = structuredClone(externalSubstitutions);
+          result.errors = [...errors];
         });
         records.push(record); metrics.completed++;
         await atomicJson(path.join(output, "attempt.json"), { ...metrics, lastCase: item.id });
         console.log(JSON.stringify({ case: item.id, standing: result.standing, wordFragments, numericFragments, pageOverflow: viewport.pageWidth - viewport.clientWidth }));
       } finally { await context.close(); }
     }
-    const completion = await publishCampaign(output, cases.map(({ id }) => id), records, record => validateRecordArtifacts(record, plannedCases.get(record.id), root, snapshot), { ...metrics, sourceBinding: "served input bytes and per-case dependency hashes including required screenshots", liveDelivery: "unobserved", printPagination: "unobserved" });
+    const completion = await publishCampaign(output, cases.map(({ id }) => id), records, record => validateRecordArtifacts(record, plannedCases.get(record.id), root, snapshot), { ...metrics, sourceBinding: "served input bytes and per-case dependency hashes including required screenshots", liveDelivery: "unobserved", telemetryScope: "console, page, request and response events through checkpoint; intentional external 204 substitutions are not live delivery", printPagination: "hiring PDF page count and physical page sizes observed; page-break quality and physical content margins unobserved" });
     await atomicJson(path.join(output, "summary.json"), { ...metrics, completion, cases: records.map(record => ({ id: record.id, standing: record.result.standing, reasons: record.result.reasons, wordFragments: record.result.wordFragments, numericFragments: record.result.numericFragments })) });
     console.log(JSON.stringify({ ...metrics, completion }));
-  } finally {
-    await browser?.close();
-    await fs.rm(path.join(output, "campaign.lock"), { force: true });
-  }
+  });
 }

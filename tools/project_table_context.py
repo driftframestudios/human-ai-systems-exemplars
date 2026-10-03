@@ -613,6 +613,16 @@ def _label_budget(parsed: ParsedAsset) -> _LabelBudget:
     return _LabelBudget(parsed.limits, len(parsed.source), _utf8_size(parsed.source))
 
 
+def _row_identity(cell: Element) -> str:
+    """Use an authored header alternative; keep literal cell content intact."""
+    abbreviation = cell.attribute("abbr") if cell.tag == "th" else None
+    if abbreviation is not None:
+        alternative = text((abbreviation,))
+        if alternative:
+            return alternative
+    return text(cell.text)
+
+
 def derive_labels(validated: ValidatedAsset) -> tuple[Label, ...]:
     proposals: list[tuple[Element, tuple[str, ...]]] = []
     budget = _label_budget(validated.parsed)
@@ -631,7 +641,7 @@ def derive_labels(validated: ValidatedAsset) -> tuple[Label, ...]:
             )
             identity_cells = row_headers or row.cells[:1]
             identity_parts = tuple(
-                part for cell in identity_cells for part in (": ", text(cell.text))
+                part for cell in identity_cells for part in (": ", _row_identity(cell))
             )
             add(row.element, (table.topic, *identity_parts))
             for cell, name in zip(row.cells, table.names, strict=True):

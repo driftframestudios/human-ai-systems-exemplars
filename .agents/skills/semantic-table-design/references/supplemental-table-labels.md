@@ -261,3 +261,31 @@ counterexamples whose declarations are comments, belong to another medium, or
 are superseded later. It establishes the declared source policy. The fitting
 browser comparison establishes rendered widths, wrapping, focus, and printable
 content at the named viewport or print configuration.
+
+## Separate record labels from technical field values
+
+A supplemental label describes the record or field that a reader is receiving.
+Inspect labels derived from mixed prose and code before publishing them: a row
+header can contain both a scenario name and a path such as
+`resume.experience[0]`, while the scenario name supplies the useful record label.
+Keep the exact path in its visible code/value carrier and structured source.
+A nonblank native `th` `abbr` can declare the concise header alternative; the
+source projector honors it when deriving row identity. Empty alternatives retain
+the full authored identity. Multiple row headers keep their separate components.
+
+Retain technical references in supplemental context when a named consumer uses
+them to distinguish actual bindings or records. Record that receiving purpose;
+source syntax alone supplies neither a parser contract nor evidence of ATS value.
+Distinguish JavaScript interpolation syntax in source from the resulting DOM
+attribute. Human-readable labels, native relationships, exact field values and
+stable machine identities have related but separate jobs.
+
+Check regeneration/idempotence, literal value preservation and a meaningful
+human label. A global dotted-string deletion rule would also remove legitimate
+names, units and identifiers, so wording changes remain with their semantic owner.
+The native alternative-header role is described in the
+[MDN table-header reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/th#abbr).
+
+A concise alternative still distinguishes each record. If one scenario gains
+several field rows, include the human-readable field purpose in its alternative
+rather than repeating the same scenario-only label for every record.
