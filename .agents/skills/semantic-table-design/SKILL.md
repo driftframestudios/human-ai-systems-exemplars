@@ -1,6 +1,6 @@
 ---
 name: semantic-table-design
-description: Designs readable native-semantic tables and context-complete extracted records. Applies when header relationships, row completeness, supplemental wording, comparison geometry, or partial-row ingestion changes a visitor or receiving-tool task.
+description: Designs readable native-semantic tables and context-complete extracted records. Applies when a new or revised table's header relationships, row completeness, supplemental wording, comparison geometry, or partial-row ingestion affects a visitor or receiving-tool task.
 ---
 
 # Semantic table design
@@ -8,7 +8,7 @@ description: Designs readable native-semantic tables and context-complete extrac
 ## Contract
 
 - **What:** A source-owned table contract that preserves the reader's operation, native header relationships, precise values and locally complete meaning across visual, interactive and extracted forms.
-- **When:** Header relationships, record completeness, comparison geometry or supplemental context changes a named reader or receiving-tool task. A small correction with established meaning and ownership can use direct reasoning.
+- **When:** A new table or a change to header relationships, record completeness, comparison geometry or supplemental context affects a named reader or receiving-tool task. A small correction with established meaning and ownership can use direct reasoning.
 - **Boundaries:** Authored semantics and the owning generator establish meaning; native HTML carries baseline relationships and custom attributes serve named receivers. Literal names, language, units and technical notation retain their identity. Geometry, extraction and source parity establish separate claims. Accessibility conformance, arbitrary model or ATS ingestion, parser adoption and publication retain their own evidence and authority.
 - **Result:** One bounded table-family disposition naming the reader operation, semantic and source owners, header relationships, field roles, supplemental context, scroll boundary, affected states, fitting observations and any unresolved interpretation.
 
@@ -40,7 +40,7 @@ values; a chart may accompany it for patterns. Ordering, grouping and selective
 emphasis support the named operation within the existing visual language. A
 conversion to cards preserves a comparison route when comparison remains a task.
 
-### Rule: Semantic ownership precedes editing
+### Rule: Semantic ownership includes creation and change
 
 The collaborator traces authored markup, shared semantic descriptors, generators,
 runtime data, styles, maintained projections and applicable export/print output.
@@ -48,6 +48,15 @@ A generated copy returns to its canonical owner. An authored patch preserves its
 unowned source. Historical copies retain their comparison role. One reviewed
 wording decision can serve several renderers without giving a display normalizer
 authority over every string they receive.
+
+A new table or visitor page enters the existing family's observation contract.
+Before authoring, identify its semantic owner, source inventory, label projector
+or renderer, and acceptance expectations. Register the new carrier where that
+existing contract requires membership, and use its declared table, header, row
+and cell context rules. Plausible hand-authored labels establish neither inventory
+coverage nor agreement with the owning projection. When the receiving system has
+no inventory or projector, define the bounded artifact contract directly; creating
+a new registry or harness needs its own demonstrated use.
 
 ### Rule: Header topology is explicit
 
@@ -123,7 +132,7 @@ requirement for every edit nor a substitute for semantic evidence.
 ## Operating sequence
 
 1. **Select the receiving operation:** Identify lookup, comparison, entry, reconciliation or detached-record use. Choose direct reasoning when the requested correction already has a clear owner and meaning.
-2. **Trace the source boundary:** Locate authored markup or the canonical renderer, runtime record, styles, maintained copies, and relevant report or print outputs. Identify the exact component the task authorizes changing.
+2. **Trace the source boundary:** Locate authored markup or the canonical renderer, runtime record, styles, maintained copies, and relevant report or print outputs. For a new page or table, discover and satisfy the existing family's source-registration, projection and coverage contract before treating the artifact as admitted. Identify the exact component the task authorizes creating or changing.
 3. **Map meaning before projection:** Trace representative cells to their row, column and group headers. Separate complete records, present blanks, absent fields, summaries and empty states. Preserve literal identifiers, names and units.
 4. **Choose the smallest repair:** Reuse existing table and scroll patterns. Add supplemental context only for its named consumer. Return unsupported topology or ambiguous wording to the semantic owner before transformation.
 5. **Observe the changed claim:** Select source, extraction, state, geometry or interaction evidence from the changed-boundary matrix. A matching pair of empty outputs needs an independent meaningful-record expectation. Preserve previous observations with their source and coverage limits.

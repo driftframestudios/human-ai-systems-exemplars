@@ -122,6 +122,7 @@ and exact literal values rather than requiring identical display strings.
 | Changed boundary | Smallest useful observation | Broader observation when warranted |
 | --- | --- | --- |
 | An authored supplemental label only | Native-attribute scope, the expected decoded label, unchanged visible/native content, unowned-byte preservation and applicable projection parity | Rendered checks when CSS-generated content, selectors, naming or interaction actually consumes that attribute. |
+| A new table or page entering an existing family | Required source-inventory membership, the owning projector or renderer's table/header/row/cell contract, and independently expected meaningful records | Fitting rendered checks for the new surface; existing family checks receive the new carrier through their declared registration boundary. |
 | A label normalizer or generator | Literal and entity forms, protected names/units, escaping, repeated application, output limits and affected generated records | Runtime or browser cases when the renderer changes behavior or exposes a new state. |
 | Native header topology or required fields | Record-shape and association fixtures, including group or empty-state boundaries | Relevant DOM/accessibility-structure and interaction observations; assistive-technology behavior has its own receiver. |
 | Width, wrapping, scrolling or parent composition | The affected column family at its measured constraint | Changed seams, keyboard reach, enlarged text, print or forced colors when the changed rules affect them. |
