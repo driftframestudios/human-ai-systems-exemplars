@@ -3,6 +3,31 @@
   "version": "1",
   "files": [
     {
+      "source_path": "context-canvas-project-surface/img/plot/table_verification_states.svg",
+      "projected_path": "img/plot/table_verification_states.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/readable-tables-reusable-evidence.html",
+      "projected_path": "readable-tables-reusable-evidence.html",
+      "media_type": "text/html"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/table-study.css",
+      "projected_path": "styles/routes/table-study.css",
+      "media_type": "text/css"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/table_reading_contract.svg",
+      "projected_path": "img/plot/table_reading_contract.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/table_study_observations.svg",
+      "projected_path": "img/plot/table_study_observations.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/404.html",
       "projected_path": "404.html",
       "media_type": "text/html"

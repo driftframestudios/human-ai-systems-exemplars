@@ -82,7 +82,7 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
   const cards = Array.from(html.matchAll(/<li id="(catalog-[^"]+)" class="project__media debrief-catalog__card"[^>]*>/gu))
     .map(match => ({ id: match[1], tag: match[0] }));
 
-  assert.equal(cards.length, 17);
+  assert.equal(cards.length, 18);
   for (const card of cards) {
     assert.ok(attribute(card.tag, "data-formats"), `${card.id} should declare a format`);
     assert.ok(attribute(card.tag, "data-topics"), `${card.id} should declare a topic or tool`);
@@ -108,7 +108,7 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
     new Map([
       ["case-brief", 16],
       ["full-debrief", 16],
-      ["article", 5],
+      ["article", 6],
     ]),
   );
   assert.deepEqual(
@@ -119,7 +119,7 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
   const caseBriefCards = cards.filter(card => values(card.tag, "data-formats").includes("case-brief"));
   const articleCards = cards.filter(card => values(card.tag, "data-formats").includes("article"));
   assert.equal(caseBriefCards.length, 12);
-  assert.equal(articleCards.length, 5);
+  assert.equal(articleCards.length, 6);
   for (const card of caseBriefCards) {
     assert.deepEqual(values(card.tag, "data-formats"), ["case-brief", "full-debrief"]);
     assert.ok(attribute(card.tag, "data-case-brief-routes"), `${card.id} should name its Full Debrief route`);
@@ -207,4 +207,22 @@ test("Every catalogued Full Debrief carries one complete Case Brief contract", a
     const destinationId = continuation[1].slice(1);
     assert.match(html, new RegExp(`\\bid="${destinationId}"`, "u"), `${route} continuation should resolve in the document`);
   }
+});
+
+test("the table research article is the final catalog entry with an ordinary reading route", async () => {
+  const html = await readCanvasFile("debriefs.html");
+  const cards = [...html.matchAll(/<li id="(catalog-[^"]+)" class="project__media debrief-catalog__card"[^>]*>/gu)];
+  const last = cards.at(-1);
+  assert.equal(last[1], "catalog-table-reading");
+  assert.deepEqual(values(last[0], "data-formats"), ["article"]);
+  assert.deepEqual(values(last[0], "data-topics"), ["research", "practice", "data-visualization", "ai-systems"]);
+  assert.equal(attribute(last[0], "data-case-brief-routes"), "");
+  const graph = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1]);
+  const list = graph["@graph"].find(item => item["@type"] === "ItemList");
+  assert.equal(list.numberOfItems, list.itemListElement.length);
+  assert.equal(list.itemListElement.at(-1).position, list.numberOfItems);
+  assert.ok(list.itemListElement.at(-1).url.endsWith("/readable-tables-reusable-evidence.html"));
+  const article = await readCanvasFile("readable-tables-reusable-evidence.html");
+  assert.match(article, /<h1\b[^>]*>Give the Comparison Room<\/h1>/u);
+  assert.match(html.slice(last.index), /href="readable-tables-reusable-evidence.html">Read the Article/u);
 });
