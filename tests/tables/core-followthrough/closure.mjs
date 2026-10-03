@@ -70,12 +70,10 @@ export async function traverseRightmost(read, advance, method, maxSteps = 256) {
       return finish("review", "document moved instead of remaining a local scroll", current, steps);
     if (method === "keyboard" && !current.focused)
       return finish("review", "scroll owner lost keyboard focus", current, steps);
-    if (current.max - current.left <= 2) {
-      const moved = current.left > start.left + 0.25;
-      const bothEdges = [...coverage.values()].every(cell => cell.leftAt !== null && cell.rightAt !== null);
-      return finish(moved && bothEdges ? "pass" : "review",
-        moved && bothEdges ? null : "not every rightmost cell exposed both edges during this journey", current, steps);
-    }
+    const moved = current.left > start.left + 0.25;
+    const bothEdges = [...coverage.values()].every(cell => cell.leftAt !== null && cell.rightAt !== null);
+    // Observed edges establish reach; a near-end coordinate cannot replace missing coverage.
+    if (moved && bothEdges) return finish("pass", null, current, steps);
     if (current.left <= previous.left + 0.25)
       return finish("review", "input did not advance the local scroll", current, steps);
     previous = current;
