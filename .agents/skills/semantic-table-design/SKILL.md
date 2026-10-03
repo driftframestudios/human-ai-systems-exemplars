@@ -32,6 +32,16 @@ description: Designs readable native-semantic tables and context-complete extrac
 
 ## Rules
 
+### Rule: Row changes retain family admission
+
+Table admission also covers adding, removing, or renaming rows within an
+existing table, including catalog rows. Reuse the declared projector and
+preserve inventory ownership. Reconcile affected labels, row identities,
+per-page counts, and aggregate totals against the combined receiving source,
+while retaining independently specified native-header and meaningful-row
+expectations. When another PR owns an affected inventory or assertion,
+identify that owner and include reconciliation in the integration handoff.
+
 ### Rule: The reader operation selects the representation
 
 Lookup, cross-row comparison, entry, reconciliation and evidence inspection have
