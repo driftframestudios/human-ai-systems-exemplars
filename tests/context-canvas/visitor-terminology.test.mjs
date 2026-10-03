@@ -29,6 +29,32 @@ const contextCoreManifestPath = resolve(
 
 const genericPersonLikeSystemRole = /\b(?:AI|artificial intelligence)[\s-]+(?:assistant|collaborator|companion|coworker|partner|teammate)s?\b/giu;
 
+const tableReadingRoute = "readable-tables-reusable-evidence.html";
+// Reviewed fragments name the space or latitude in view. Each occurrence
+// retains its own context even when an accepted title recurs in metadata.
+const tableReadingRoomContexts = [
+  ["comparison space", "Give the Comparison Room"],
+  ["display space", "That relationship deserves room, whether the table appears on a wide display"],
+  ["embedding space", "the child document could receive substantially less room than the surrounding browser window suggested"],
+  ["latitude", "review capacity and room to report a partial result"],
+].map(([sense, fragment]) => ({
+  sense,
+  fragment: fragment.toLowerCase(),
+  roomOffset: fragment.search(/\brooms?\b/iu),
+}));
+
+const catalogRoomContexts = [
+  ["article title", "Give the Comparison Room"],
+  ["comparison space", "a useful comparison needs room"],
+].map(([sense, fragment]) => ({
+  sense,
+  fragment: fragment.toLowerCase(),
+  roomOffset: fragment.search(/\brooms?\b/iu),
+}));
+
+const reportedConsequenceColumnHeader =
+  /<th scope="col"(?: data-label="Reported consequence")?>Reported consequence<\/th>/u;
+
 // Exceptions bind to exact dated evidence fragments, rather than exempting an
 // entire file or phrase. A new generic occurrence elsewhere in the same source
 // must therefore fail this contract.
@@ -158,6 +184,17 @@ function sourceBearingRoleException(path, source, match) {
   });
 }
 
+function classifyRoomUses(source, contexts = tableReadingRoomContexts) {
+  const text = source.replace(/\s+/gu, " ").toLowerCase();
+  return [...text.matchAll(/\brooms?\b/gu)].map(match => {
+    const context = contexts.find(({ fragment, roomOffset }) => {
+      const start = match.index - roomOffset;
+      return start >= 0 && text.startsWith(fragment, start);
+    });
+    return context?.sense ?? null;
+  });
+}
+
 test("About uses visitor-facing setting, role, and handoff language", async () => {
   const html = await readCanvasFile("index.html");
 
@@ -170,26 +207,97 @@ test("About uses visitor-facing setting, role, and handoff language", async () =
   assert.doesNotMatch(html, /\brooms?\b|\bviewlets?\b/iu);
 });
 
-test("remaining room language names a runtime, classroom, or cited-title sense", async () => {
+test("room language retains reviewed runtime, classroom, citation, space, and latitude contexts", async () => {
   assert.deepEqual(
     await topLevelHtmlFilesContaining(/\brooms?\b/iu),
     [
+      "debriefs.html",
       "grammar-family.html",
       "hiring-surfaces-talent-agent-intake.html",
       "prompt-side-conditions-practice.html",
+      tableReadingRoute,
     ],
   );
 
-  const [runtime, citation, classroom] = await Promise.all([
+  const [runtime, citation, classroom, tableReading, catalog] = await Promise.all([
     readCanvasFile("grammar-family.html"),
     readCanvasFile("hiring-surfaces-talent-agent-intake.html"),
     readCanvasFile("prompt-side-conditions-practice.html"),
+    readCanvasFile(tableReadingRoute),
+    readCanvasFile("debriefs.html"),
   ]);
   assert.match(runtime, /collaboration room or document/u);
   assert.match(runtime, /per-room coordination/u);
   assert.match(citation, /Pink Elephant[^<]+LLM’s Room/u);
   assert.match(classroom, /Room configuration:/u);
+
+  const senses = classifyRoomUses(tableReading);
+  assert.equal(senses.includes(null), false, "Each table-reading room use has a reviewed context");
+  assert.deepEqual(
+    [...new Set(senses)].sort(),
+    ["comparison space", "display space", "embedding space", "latitude"],
+    "The article retains the independently reviewed space and latitude meanings",
+  );
+
+  const catalogSenses = classifyRoomUses(catalog, catalogRoomContexts);
+  assert.equal(catalogSenses.includes(null), false, "Each catalog room use belongs to its reviewed article context");
+  assert.deepEqual(
+    [...new Set(catalogSenses)].sort(),
+    ["article title", "comparison space"],
+    "The catalog retains the accepted article title and its comparison-space description",
+  );
 });
+
+for (const { name, source, expected, contexts } of [
+  {
+    name: "repeated title and whitespace retain the reviewed comparison context",
+    source: "<title>Give the Comparison Room</title><h1>Give the\nComparison Room</h1>",
+    expected: ["comparison space", "comparison space"],
+  },
+  {
+    name: "reviewed space remains distinct from an added organizational shorthand",
+    source: "<p>That relationship deserves room, whether the table appears on a wide display.</p><p>The room decides the release.</p>",
+    expected: ["display space", null],
+  },
+  {
+    name: "a same-count wording replacement requires its own context review",
+    source: "<p>The room decides what the table should display.</p>",
+    expected: [null],
+  },
+  {
+    name: "an accepted latitude fragment covers only its own occurrence",
+    source: "<p>Review capacity and room to report a partial result matters. The room approves.</p>",
+    expected: ["latitude", null],
+  },
+  {
+    name: "word boundaries preserve unrelated vocabulary",
+    source: "<p>A classroom keeps a broom nearby.</p>",
+    expected: [],
+  },
+  {
+    name: "catalog title and space description retain occurrence-specific boundaries",
+    source: "<h2>Give the Comparison Room</h2><p>A useful comparison needs room.</p><p>The room decides the release.</p>",
+    expected: ["article title", "comparison space", null],
+    contexts: catalogRoomContexts,
+  },
+]) {
+  test(`table-reading room classification: ${name}`, () => {
+    assert.deepEqual(classifyRoomUses(source, contexts), expected);
+  });
+}
+
+for (const { name, source, expected } of [
+  { name: "native column header", source: '<th scope="col">Reported consequence</th>', expected: true },
+  { name: "labeled native column header", source: '<th scope="col" data-label="Reported consequence">Reported consequence</th>', expected: true },
+  { name: "row header retains its different role", source: '<th scope="row" data-label="Reported consequence">Reported consequence</th>', expected: false },
+  { name: "data cell retains its different role", source: '<td scope="col" data-label="Reported consequence">Reported consequence</td>', expected: false },
+  { name: "supplemental label leaves native scope unspecified", source: '<th data-label="Reported consequence">Reported consequence</th>', expected: false },
+  { name: "heading text carries the intended meaning", source: '<th scope="col" data-label="Reported consequence">Guaranteed outcome</th>', expected: false },
+]) {
+  test(`reported-consequence header contract: ${name}`, () => {
+    assert.equal(reportedConsequenceColumnHeader.test(source), expected);
+  });
+}
 
 test("viewlet remains specialist vocabulary outside the About route", async () => {
   assert.deepEqual(
@@ -284,7 +392,7 @@ test("curated visitor prose states findings directly while citations carry prove
     readCanvasFile("hiring-surfaces-talent-agent-intake.html"),
   ]);
   assert.match(about, /<title>Technology leadership portfolio \| Context Canvas<\/title>/u);
-  assert.match(about, /<th scope="col">Reported consequence<\/th>/u);
+  assert.match(about, reportedConsequenceColumnHeader);
   assert.match(fieldInspection, /Global invariants and candidate performance targets become testable against a bounded corpus/u);
   assert.match(hiring, /Vendor descriptions reviewed in public material from 2025–2026/u);
 });
