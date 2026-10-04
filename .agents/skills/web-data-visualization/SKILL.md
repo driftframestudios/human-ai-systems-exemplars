@@ -152,3 +152,31 @@ and retain meaning through the supported state and delivery modes. Evidence
 names the source and states covered. A new dataset, view, container, interaction,
 or receiving consumer reopens the corresponding boundary. Public-ready source
 and hosted publication remain separately governed states.
+
+## Conditional interpretation boundaries on web surfaces
+
+Use the foundation's [sparse-time and scale guide](../data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md)
+and [aggregation, distribution, and uncertainty guide](../data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md)
+when those meanings enter an editorial or scientific view. The renderer and
+library remain implementation choices; the same data contract applies to
+hand-authored SVG, generated static figures, and coordinated views.
+
+A filter, normalization, bin-width, or scale control changes an explicit piece
+of view state. Name whether the action highlights existing marks or changes the
+eligible population and denominator. Derive the chart, native table, caption,
+and export from the same accepted state. Keep bin edges and comparison domains
+stable when stability serves comparison; expose any intentional recomputation.
+Axes and legends receive the same updated mapping as the marks.
+
+Keep isolated observations, gaps, bounds, and uncertainty available through the
+visible surface and its persistent value companion. Clipping, aggregation, or
+level-of-detail reduction has a named meaning and a route to the retained data.
+A hidden mark, tooltip, or color distinction alone leaves that meaning fragile.
+When suppression applies, selected detail, totals, and downloads share its
+approved disclosure boundary.
+
+Choose focused behavior evidence from the changed contract: for example, a
+selection changing its denominator, a singleton beside a gap, or a scale toggle
+with a zero-valued record. A new statistical interpretation can be settled in
+source before browser work; a changed visual or interaction receives the
+smallest existing affected-view check.

@@ -100,18 +100,14 @@ its source or later re-entry condition.
 **Receiving question:** Which topics have broad source coverage and which have
 documented application within an approved public extract?
 
-The research example begins with an explicitly reviewed public extract from an
-internal research repository and asset pipeline. Public Registry pages and public
-papers may be cited; private page names, URLs, workspace identifiers, and revealing
-small-group details stay with their authorized source owner. Define unique papers,
-versions, topic memberships, encounters, and applications as different units.
-Declare inclusion, pagination, deduplication, date, and relevant exclusions.
-
-Search-result counts establish discovery, not a census. Current status supports
-current-status views; transition counts or time-to-use require a dated event
-history. A topic-use heatmap is one candidate after those meanings settle. An
-absent application record leaves application unspecified unless the recording
-contract supports evidence of absence.
+Apply the portable [public-extract and search-coverage admission](form-and-data-contract.md#public-extract-and-search-coverage-admission)
+contract to #360's proposed research example. Its source is an internal research
+repository and asset pipeline; the public citation boundary includes the
+Enterprise Human-AI Practitioner Registry and public papers. Admit the extract
+separately from the manufacturing examples. A topic-use heatmap becomes a
+candidate once the extract's topic coverage and documented-application meanings
+are settled. The coordinated Atlas can use the admitted manufacturing records
+while this gate remains open.
 
 **Observable result:** An approved extract yields a bounded visual contract and
 citations, or the gate stays open with the smallest missing authority/data input.

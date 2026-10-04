@@ -57,6 +57,40 @@ Reserved classes express contextual fit with written reasons. A donut, radial
 profile, or area-based diagram may serve a specialized low-precision task; an
 aligned companion keeps precise comparisons available when they matter.
 
+## Public-extract and search-coverage admission
+
+Public use begins with a source owner or permission that covers the proposed
+extract, fields, aggregation, and receiving use. Access to a workspace supplies
+retrieval capability; publication authority is a separate input. Carry approved
+public citations and meaningful source descriptions. Keep private locators,
+identifiers, and identifying combinations with the authorized source owner;
+consider small-group disclosure before releasing derived counts.
+
+Define what a counted item represents: a unique work, a version, a topic
+membership, a retrieval encounter, or a documented application. Choose an
+identity and deduplication rule appropriate to that unit. Overlapping memberships
+can exceed unique works; name each denominator accordingly. A source can be
+publicly readable while its workspace annotations retain a separate boundary.
+
+Describe the admitted collection, inclusion rule, retrieval date, query or
+enumeration method, pagination, deduplication, and material exclusions at the
+level needed to interpret the result. Search results establish discovery within
+their retrieval scope. A corpus-total claim requires a defined population and
+evidence of complete enumeration; exhausted search pagination alone can still
+reflect indexing, permission, ranking, or query limits. A bounded sample may
+support a useful view under its accurate scope label.
+
+Current status supports a current-status view. Transitions, elapsed time, or
+time-to-use require dated events with an understood observation window. An
+absent application record leaves application unspecified unless the recording
+contract and coverage establish that eligible applications would be recorded.
+
+**Admission result:** proceed with the approved, interpretable extract; narrow
+the view to what the available collection establishes; or hold that visual for
+one named permission or data input. Other admitted sources can proceed
+independently. Keep this decision in the receiving artifact rather than adding
+a parallel ledger by default.
+
 ## Counting, rates and reconciliation
 
 Define an eligible set `S`, an event rule `e`, and a denominator before drawing.

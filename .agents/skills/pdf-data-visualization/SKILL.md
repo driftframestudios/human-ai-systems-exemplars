@@ -134,3 +134,26 @@ The document receiver can place, read, cite, and reproduce the figure within the
 named constraints. Observations distinguish artifact generation, final placement,
 and accessible-document behavior. A new page size, font environment, renderer,
 data revision, or export purpose reopens the smallest affected boundary.
+
+## Conditional interpretation boundaries in fixed documents
+
+Load the foundation's [sparse-time and scale guide](../data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md)
+and [aggregation, distribution, and uncertainty guide](../data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md)
+for the conditions affecting the figure. Python and other reproducible tools
+can implement those decisions; a library default still needs the admitted data
+meaning and final placement context.
+
+Freeze the selected population, time window, units, bins, scale, weights, and
+interval definition for the document's figure. Put the consequential context in
+its caption or adjoining table so the interpretation survives extraction from
+the report. Replace interactive scale or subgroup choices with the smallest
+fixed comparison needed by the receiving reader. Keep visual reduction distinct
+from the source values available in the companion.
+
+At actual placement size, retain isolated points, gap boundaries, censoring
+marks, interval caps, ticks, and distinctions among overlapping distributions.
+Stroke weight and grayscale reproduction can affect these meanings as much as
+font size. Keep comparison panels together when separation would obscure their
+shared basis; repeat necessary legends and units where pages can circulate
+independently. Observe a rendered PDF when a real document exists, using the
+changed figure or page rather than repeating an unrelated browser campaign.

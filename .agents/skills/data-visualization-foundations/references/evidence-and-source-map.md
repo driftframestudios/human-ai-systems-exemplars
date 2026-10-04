@@ -46,6 +46,54 @@ label counts, mode memberships, and domain interpretation remain separate
 claims. Their repository source READMEs hold the dataset-specific license,
 derivation, and meaning contracts.
 
+## Sparse observations, scales, and display boundaries
+
+The following bounded spike extends the portable foundation. These sources
+inform conditional decisions in the
+[boundary guide](sparse-time-scales-and-form-boundaries.md); the guide's combined
+decision rules are a repository synthesis rather than a validated chart-ranking
+model.
+
+| Source and evidence standing | Material contribution | Receiving decision |
+| --- | --- | --- |
+| [ONS line-chart guidance](https://service-manual.ons.gov.uk/data-visualisation/chart-types/line-chart), official practice guidance | Markers expose irregular or sparse observations; gaps preserve missing intervals; steps represent held values. | Preserve observation support and choose the connection from the measured process. The source's small-count suggestion remains contextual. |
+| [NIST autocorrelation definition](https://www.itl.nist.gov/div898/handbook/eda/section3/eda35c.htm), statistical reference | The ordinary lag-index estimator assumes equally spaced observations. | Separate a valid irregular-time display from an admitted time-series model. |
+| [D3 line definition](https://d3js.org/d3-shape/line#_line_defined), official API contract | An undefined point ends a segment; a singleton segment may be invisible. | Represent missing positions explicitly and retain visible isolated observations. |
+| [D3 log](https://d3js.org/d3-scale/log) and [symlog](https://d3js.org/d3-scale/symlog), official API contracts | Log-domain restrictions and symlog's zero-admitting, configurable mapping are distinct. | Admit transformed domains explicitly; make changed near-zero semantics visible. |
+| [Coordinate systems and axes](https://clauswilke.com/dataviz/coordinate-systems-axes.html), author-written technical guidance | Log distances express multiplicative relationships; raw-value ticks differ from labels for already transformed data. | Name the reader's operation and preserve a recoverable value basis. |
+| [Exponential-growth graph experiment](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2023.1125810/full), empirical study | Description and prediction questions showed different scale-related error patterns in its student sample and hypothetical growth task. | Treat scale suitability as task- and audience-dependent; a label or tutorial alone supplies no universal comprehension guarantee. |
+| [Beyond Bar and Line Graphs](https://doi.org/10.1371/journal.pbio.1002128), review and worked examples | Summary statistics can conceal distributions and within-unit pairing in small-sample continuous data. | Retain raw observations or paired changes when those distinctions answer the question; categorical totals remain a different use of bars. |
+
+The public Registry's **D3.js - Enterprise Front-End Frameworks Practitioner
+Probes**, particularly its scale/axis distinction, supports keeping numeric
+mapping separate from rendered tick state. This is an implementation boundary,
+rather than a reason to add D3 as a dependency. Existing SVG probes and the web
+skill retain ownership of the coordinated-view implementation.
+
+## Aggregation, distribution, and uncertainty
+
+The [interpretation guide](aggregation-distribution-and-uncertainty.md) applies
+these sources conditionally. Its arithmetic counterexample demonstrates an
+aggregation mechanism; it supplies an authored example rather than a finding
+about any organization. Destination-specific applications remain in the three
+production skills.
+
+| Source and evidence standing | Material contribution | Receiving decision |
+| --- | --- | --- |
+| [ONS standardisation explanation](https://blog.ons.gov.uk/2023/01/19/age-standardising-data-what-does-this-mean-and-why-does-it-matter/), official practice guidance | Population composition changes the meaning of aggregate comparisons; standardised and observed measures serve different questions. | Preserve subgroup support and name any reference weights. The guide transfers this distinction to other domains conditionally. |
+| [NIST censoring](https://www.itl.nist.gov/div898/handbook/apr/section1/apr131.htm) and [distributional estimation](https://itl.nist.gov/div898/software/dataplot/refman1/auxillar/mle.htm), statistical references | Known bounded observations differ from units absent through truncation. | Preserve bound/direction and inclusion mechanism; use a fitted model only under its assumptions. |
+| [NIST histogram definition](https://www.itl.nist.gov/div898/handbook/eda/section3/eda33e.htm) and [Matplotlib normalization](https://matplotlib.org/stable/gallery/statistics/histogram_normalization.html), statistical and API references | Counts, proportions, and density have distinct normalization and units. | Keep bin width and count recoverable, especially with unequal bins or transformed coordinates. |
+| [Distribution displays](https://clauswilke.com/dataviz/histograms-density-plots.html), author-written technical guidance | Bin width and bandwidth change apparent structure; density estimates can extend beyond meaningful support. | Examine the parameter that could change the conclusion and retain a less modeled alternative. |
+| [Uncertainty displays](https://clauswilke.com/dataviz/visualizing-uncertainty.html), author-written technical guidance | Observation spread, estimate precision, and probability representations have different meanings. | Name interval type, target, and model; preserve the distinction across captions and exports. |
+| [NIST simultaneous comparisons](https://www.itl.nist.gov/div898/handbook/prc/section4/prc463.htm), statistical reference | Separate nominal intervals and simultaneous coverage are different contracts. | Match an inferential comparison family to its analysis; descriptive exploration remains available. |
+| [NIST outlier guidance](https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h.htm), statistical reference | An unusual observation can be an error, valid variation, or a consequential signal. | Resolve provenance before correction or exclusion; retain relevant tails in the visual account. |
+
+The public Registry's **Visual & Data Communication Stabilizers - Cognitive
+Moves for Visual Forms** provides the conceptual application: focused reader
+operations, visible transformations, recoverable values, and evidence-calibrated
+uncertainty. Its local CLEAR adaptation complements the separately cited
+practitioner source; each retains its own wording and standing.
+
 ## Public Registry and repository guidance
 
 - [Designing AI Skills as Situated Collaboration Affordances - Guidance for Notion Workspaces and Beyond](https://kindlight.systems/human-ai-collaboration-field-guide/designing-ai-skills-as-situated-collaboration-affordances-guidance-for-notion-workspaces-and-beyond) supplies one coherent job, fit, input/default/result, progressive disclosure, recovery, and material-use evaluation.

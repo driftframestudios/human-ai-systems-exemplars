@@ -127,3 +127,27 @@ The human can inspect the comparison, recover the key values and basis, and choo
 whether to continue. One successful conversation establishes that situated use.
 A later web, PDF, or public artifact receives its own delivery observations and
 authorization.
+
+## Conditional interpretation boundaries in conversation
+
+Load the foundation's [sparse-time and scale guide](../data-visualization-foundations/references/sparse-time-scales-and-form-boundaries.md)
+when a proposed trend, ratio, or line depends on sampling or transformed distance.
+Load its [aggregation, distribution, and uncertainty guide](../data-visualization-foundations/references/aggregation-distribution-and-uncertainty.md)
+when population mix, weighting, censoring, density, or a confidence claim could
+change the answer. Select the relevant section; a direct lookup can still use
+plain text.
+
+Give a provisional reading with the named counting unit, population, and scale.
+If an aggregate and a subgroup view disagree, explain their different questions
+and retain both only when that distinction changes the next decision. Present
+observations, derived estimates, and proposed hypotheses with distinct standing.
+A request for a smooth curve or ranked winners can receive a fitting simpler
+alternative with the reason stated plainly.
+
+Carry gaps, bound markers, interval meanings, and transformed-axis explanations
+in the visible message or caption, alongside recoverable values. For an
+ambiguous display choice, offer the smallest useful comparison and name what
+additional source evidence would settle it. A conversation figure remains an
+exploratory artifact until its receiving use and evidence support a stronger
+claim; that transition merits the relevant destination owner rather than a
+repeat of the entire workflow.

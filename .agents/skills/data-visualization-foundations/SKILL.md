@@ -37,6 +37,12 @@ such as "performance" becomes a question before it becomes a chart. Output can
 be a short paragraph and table; a new schema, scorecard, or ledger earns a separate
 receiving need.
 
+For a corpus-backed or public-extract view, admit the source before rendering:
+establish permission, counting unit, retrieval coverage, and the recording rule
+that gives absence its meaning. The portable
+[source-admission contract](references/form-and-data-contract.md#public-extract-and-search-coverage-admission)
+applies independently of a particular project or destination.
+
 ## Rules
 
 ### Rule: Records keep their meaning before marks acquire shape
@@ -85,6 +91,19 @@ explicit changed basis serves the task. Log scales, normalization, bin edges,
 smoothing, aggregation, sampling, and exclusions are visible decisions. Preserve
 time order and actual spacing where chronology matters. An identifier supplies
 identity; temporal interpretation requires a time field.
+
+Sparse observations retain visible support and gaps; a connecting line carries
+an explicit continuity assumption. Ratio-based readings can earn a log scale
+with an admitted domain and interpretable ticks. When several displays fit, name
+the fact that would favor one, then choose the smallest adequate view. Load the
+[boundary guide](references/sparse-time-scales-and-form-boundaries.md) when these
+decisions affect the reading.
+
+Aggregation, distribution, and inference carry their own admission conditions.
+Preserve subgroup composition, observational support, censoring, and uncertainty
+meaning when they change the comparison. Select the relevant condition from the
+[interpretation guide](references/aggregation-distribution-and-uncertainty.md);
+a simple descriptive display can remain simple.
 
 ### Rule: Emphasis explains an evidenced reading
 
@@ -162,7 +181,9 @@ and a text/table route instead of invented evidence.
 
 ## Conditional context
 
-- Load [form and data contract](references/form-and-data-contract.md) for chart-family selection, rates, uncertainty, dense matrices, or a transfer brief.
+- Load [form and data contract](references/form-and-data-contract.md) for source admission, search coverage, counting units, chart-family selection, rates, uncertainty, dense matrices, or a transfer brief.
+- Load [sparse time, scales, and form boundaries](references/sparse-time-scales-and-form-boundaries.md) for irregular observations, missing intervals, logarithmic transforms, or a consequential choice between plausible displays.
+- Load [aggregation, distribution, and uncertainty](references/aggregation-distribution-and-uncertainty.md) when population mix, weighting, censoring, binning, normalization, repeated observations, or inferential claims change the reading.
 - Load [evidence and source map](references/evidence-and-source-map.md) when making research-backed claims, adapting a practitioner rule, or extending the method.
 - Load [Atlas exercises](references/atlas-exercises.md) for #358/#360, gallery work, or the separately reviewed research extract. This task binding releases when those receiving decisions settle.
 
