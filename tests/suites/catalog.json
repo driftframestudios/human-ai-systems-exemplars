@@ -254,7 +254,8 @@
       "members": [
         "tests/investment-analysis/capsule.test.mjs",
         "tests/investment-analysis/core.test.mjs",
-        "tests/investment-analysis/projection.test.mjs"
+        "tests/investment-analysis/projection.test.mjs",
+        "tests/investment-analysis/browser-helper.test.mjs"
       ],
       "profile": "node-source",
       "command": {
