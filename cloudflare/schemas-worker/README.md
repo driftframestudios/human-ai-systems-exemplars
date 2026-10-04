@@ -3,7 +3,8 @@
 This Worker serves the repository's selected schema contracts through
 `schemas.vik.guru`. The fetch handler runs before its `ASSETS` binding and owns
 HTTPS redirects, exact-route lookup, response caching, CORS, and recovery.
-Production binding remains a separate operator action.
+The approved production deployment and both schema-host observations were
+recorded on 2026-10-01. Later production changes retain their operator decision.
 
 ## Established source and receiving files
 
@@ -121,6 +122,7 @@ The checked-in tests divide the evidence by the behavior they observe:
 - `test/receiver.test.mjs` exercises the production handler with an asset binding fixture: root routing, exact contract bytes and identities, canonical and asset routes, guide-relative catalog links, headers, conditional requests, missing resources, and supported methods.
 - `test/manifest-transition.test.mjs` loads the same handler in two isolated bundles. `/schemas/test.json` starts revalidatable, then becomes immutable when the next bundle lists it in `frozen`. Another JSON resource stays revalidatable. Production files retain their published bytes throughout this test.
 - `test/live-receiver.mjs` checks a running Worker against the prepared publication. It exercises every contract route, cache policy, ETag/304, HEAD, discovery alias, root, missing-route JSON response, and CORS policy.
+- `test/catalog-source-preservation.test.mjs` distinguishes exact catalog bytes from the narrowly observed edge addition, with counterexamples for authored-content changes, misplaced additions, altered edge code, and malformed metadata.
 - `test/catalog-browser.mjs` uses the repository's Playwright installation to check catalog links and horizontal containment at narrow and desktop widths with JavaScript unavailable. Screenshots stay in the ignored `.visual-runs/schema-worker/` directory.
 
 Run from this directory:
@@ -135,6 +137,29 @@ npm run test:browser -- https://schemas.vik.guru
 For a local HTTPS preview, pass its origin instead. Trust the preview certificate through `NODE_EXTRA_CA_CERTS` for the Node receiver check. The browser check accepts `--local-tls` exclusively for loopback previews. The local unit test covers HTTP-to-HTTPS redirection; the live command's optional `--http-origin` checks it on an HTTP listener.
 
 The handler redirects HTTP requests with status 308, including local HTTP requests. Use HTTPS to observe successful asset responses. Add a new frozen path through the publication preparation route and load a fresh Worker bundle to activate that cache policy. Frozen routes retain their published bytes; revised contracts receive a new versioned path.
+
+### Catalog source and edge observation
+
+The single root capture on 2026-10-04 UTC returned HTTP 200 HTML. All 8,116
+authored bytes remained in their original order, with one 938-byte script
+inserted immediately before the unique authored `</body>` boundary. The capture
+stays in ignored local evidence. Its observed script references the platform's
+challenge-detection route; that observation establishes a transformation shape
+rather than independent script provenance or runtime security.
+
+`test/catalog-source-preservation.mjs` accepts exact byte parity or that recorded
+addition. The entire added program is fingerprinted after replacing only its
+quoted 16-character lowercase-hex request value and canonical-base64 timestamp
+containing ten decimal digits. Every other added byte, the insertion position,
+and every authored byte remain exact. Authored text, links, styles, scripts,
+structured data, and whitespace therefore retain the same comparison boundary.
+
+The live check reports `exact-byte-parity` and `observed-edge-addition` separately.
+An unclassified addition or unexplained difference keeps the overall check
+unsuccessful while allowing the schema observations to execute first. A changed
+edge shape receives another bounded observation and review. Exact schema
+digests, canonical identities, conditional validators, and security settings
+retain their existing contracts.
 
 Conditional live checks use HTTP-standard weak ETag comparison: the quoted
 opaque value stays identical while either header may carry the `W/` marker.

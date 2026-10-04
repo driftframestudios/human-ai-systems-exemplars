@@ -36,10 +36,20 @@ Each contract keeps the `$id` declared inside its exact-version file. Most curre
 | Route | Current role | Source branch |
 |---|---|---|
 | `https://schemas.radiantnull.com/` | Current GitHub Pages mirror | reviewed `docs` projection; Actions delivery |
-| `https://schemas.vik.guru/` | Canonical identity base for most current families and intended first-party route | future `prod` delivery |
+| `https://schemas.vik.guru/` | Canonical identity base for most current families and active author-controlled schema receiver | reviewed `main` Worker; manifest-pinned schema source |
 | Repository source | Authored review and local collaboration | accepted working branch |
 
-As observed on 2026-09-04, the Radiant Null mirror serves the registry over HTTPS through the repository's verified GitHub Actions route. The Vik Guru hostname resolves and currently returns a service response rather than the registry homepage and contract routes. The mirror is therefore the dependable public retrieval route for this delivery phase.
+The 2026-10-01 delivery observations recorded both hosts serving the selected
+13-contract publication over HTTPS with accepted bytes and identities. The
+Radiant Null mirror uses the reviewed GitHub Pages release; the Vik Guru receiver
+uses `cloudflare/schemas-worker/`. The earlier 2026-09-04 inactive-author-host
+observation remains historical lineage in Issue #18.
+
+Pages retains its observed `max-age=600` policy. The Worker's manifest names
+23 immutable paths for 12 frozen contracts; the unversioned local-manifest
+schema and discovery resources revalidate. Each receiver keeps its own cache
+policy while preserving the same selected schema bytes. These are dated
+delivery observations rather than a continuous-availability guarantee.
 
 The active Pages workflow names an accepted `main` commit and a reviewed `docs` commit, rebuilds with the source toolchain, and requires complete path-and-byte agreement. Its default dispatch stops after verification; a deliberate deployment selection uploads and serves the verified artifact. The generated `docs` branch remains the reviewed projection and legacy recovery coordinate rather than an independent publication trigger.
 
@@ -145,8 +155,11 @@ paths receive reviewed additions. Updated visitor display names belong in the
 catalog. Recovery keeps every promised schema route; after adding contracts,
 prefer a forward repair over an older artifact that omits those routes.
 
-The author-host adapter uses the same selected contract payload. Its domain
-activation and observed cache/CORS behavior remain a separate release. Selected
+The accepted author-host Worker uses the same selected contract payload. Its
+approved deployment and cache/CORS observations remain a separate receipt in
+Issue #18 and PRs #311-#313. The catalog's observed edge addition is classified
+separately from exact schema-byte parity; the Worker README describes that
+source-preservation boundary and its focused check. Selected
 reviewed skill source copies are deliberate public artifacts; the complete
 operational directories retain their repository-only role. Both builders bind
 publication provenance to committed selected inputs. The workflow-owned verifier
