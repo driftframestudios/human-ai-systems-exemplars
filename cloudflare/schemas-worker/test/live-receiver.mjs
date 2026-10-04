@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { weakETagMatches } from "./http-validators.mjs";
+import { compareCatalogSource } from "./catalog-source-preservation.mjs";
 import manifest from "../public/publication-manifest.json" with { type: "json" };
 import catalog from "../public/schema-catalog.json" with { type: "json" };
 
@@ -30,7 +31,11 @@ if (httpOrigin) {
 const root = await get("/");
 assert.equal(root.status, 200, "direct catalog root");
 assert.equal(root.headers.get("Cache-Control"), policy("/"));
-assert.equal(await root.text(), await readFile(new URL("../public/index.html", import.meta.url), "utf8"));
+const catalogObservation = compareCatalogSource(
+  await readFile(new URL("../public/index.html", import.meta.url)),
+  Buffer.from(await root.arrayBuffer()),
+);
+console.log(`Catalog source observation: ${JSON.stringify(catalogObservation)}`);
 let routes = 0;
 for (const contract of catalog.contracts) {
   const canonical = `/${contract.path}`;
@@ -77,4 +82,8 @@ const options = await get("/", { method: "OPTIONS" });
 assert.equal(options.status, 204);
 assert.equal(options.headers.get("Access-Control-Allow-Methods"), "GET, HEAD, OPTIONS");
 assert.equal(options.headers.get("Cache-Control"), "no-store");
+assert(
+  catalogObservation.classification === "exact-byte-parity" || catalogObservation.classification === "observed-edge-addition",
+  `Catalog HTML requires exact source bytes or the recorded bounded edge addition: ${catalogObservation.classification}`,
+);
 console.log(`PASS: ${catalog.contracts.length} contracts, ${routes} schema routes, digests, identities, cache, ETag/304, HEAD, root, discovery, JSON 404 and CORS; HTTP redirect ${httpOrigin ? "checked" : "covered by unit test"}.`);
