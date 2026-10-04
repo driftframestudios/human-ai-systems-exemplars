@@ -3,6 +3,48 @@
 These operations protect local table meaning and reading geometry. Authored
 HTML and the owning generators remain the semantic authority.
 
+## Python component entry
+
+From the repository root, select one existing component or explicitly select
+`all` through the standard-library [component entry](run_components.py):
+
+- `parser`: [semantic table parser fixtures](prototype-labels/test_parser.py).
+- `hiring-table-media`: [hiring table/media source fixtures](test_hiring_table_media.py).
+- `table-context`: [source-preserving projector fixtures](test_table_context.py).
+- `visitor-labels`: [visitor-label inventory fixtures](visitor-labels/test_visitor_labels.py).
+- `all`: those four components, once each, in the order above.
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python -- python -m tests.tables.run_components table-context
+PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python -- python -m tests.tables.run_components all
+```
+
+The entry uses exact existing unittest discovery patterns and reports each
+selected component's discovered case count. Every selected component must be
+nonempty before any test body runs. Selection does import the selected modules;
+it is execution preparation, not a metadata-only planner. Missing or unknown
+selection, an unavailable discovery directory, or an empty component returns
+exit status `2`. Native assertion failures and discovered import errors return
+`1`. Native unittest success returns `0`; skipped cases remain explicitly
+reported and do not establish that their assertions executed.
+
+The entry's independent fixtures cover exact module/case identities, an
+unselected import trap, per-component empty discovery, failure propagation and
+native skip reporting:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python -- python -m unittest discover -s tests/tables -p test_component_entry.py -v
+```
+
+These entry fixtures are separate from `all`, which preserves the four existing
+components. Their original direct unittest commands remain compatible. A single
+focused module remains a complete route when it answers the question; this
+entry adds explicit selection, not new domain expectations. Browser geometry,
+the optional parser comparison below, and independently governed nested Python
+projects retain their existing owners and admission routes.
+
+## Existing browser and source routes
+
 ```sh
 PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python -- python -m unittest discover -s tests/tables -p test_table_context.py -v
 node tools/table-reading-contract.mjs --mode fixtures

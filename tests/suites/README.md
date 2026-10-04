@@ -58,6 +58,25 @@ come from actual runner evidence. Held local research and generated copies
 retain their named exclusions. Five nested Python projects plus a separate
 governance owner keep their runtime and workflow gates.
 
+## Python table components
+
+The [table component entry](../tables/README.md#python-component-entry) keeps
+four native unittest owners separately selectable. A catalog selection names
+its exact component command; the convenience route explicitly selects all four:
+
+```sh
+npm run test:tables:python
+npm run test:tables:python:entry
+```
+
+The first command runs the four existing components. The second runs only the
+new entry's independent fixtures. Discovery imports selected modules, while
+this catalog's plan-only command continues to read metadata alone. Native
+unittest skips remain visible; exit zero describes the runner's success
+semantics rather than proof that every selected assertion executed.
+The optional reference comparison and independently governed Python projects
+retain their separate commands and permissions.
+
 ## Compatibility and preparation
 
 Existing package scripts remain unchanged. A suite's `aliases` are related
