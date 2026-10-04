@@ -72,6 +72,52 @@ for (const width of [390, 768]) {
   });
 }
 
+test('a rejected export retains the accepted view and downloads before a successful retry', async t => {
+  const { page, telemetry, gallery } = await openGallery(t, 1440, true);
+  const population = gallery.locator('[data-gallery-controls] [name="population"]');
+  await expect(population).toBeVisible();
+  const snapshot = () => gallery.evaluate(root => {
+    const form = root.querySelector('[data-gallery-controls]');
+    return {
+      controls: ['population', 'view', 'speed', 'torque'].map(name => form.elements[name].value),
+      svg: root.querySelector('[data-gallery-svg]').innerHTML,
+      table: root.querySelector('[data-gallery-table]').innerHTML,
+      status: root.querySelector('[data-gallery-status]').textContent,
+      selection: root.querySelector('#atlas-gallery-selection').textContent,
+      hrefs: ['full', 'svg-download', 'json-download'].map(name => root.querySelector(`[data-gallery-${name}]`).href),
+    };
+  });
+  const accepted = await snapshot();
+  await page.evaluate(() => {
+    const create = URL.createObjectURL;
+    let calls = 0;
+    URL.createObjectURL = function (blob) {
+      if (++calls === 2) {
+        URL.createObjectURL = create;
+        throw new Error('Controlled gallery export failure');
+      }
+      return create.call(this, blob);
+    };
+  });
+  await population.selectOption('M');
+  await expect(population).toHaveValue('all');
+  await expect(gallery.locator('[data-gallery-error]')).toContainText('previous selection is still shown');
+  assert.deepEqual(await snapshot(), accepted);
+  const retainedDownload = page.waitForEvent('download');
+  await gallery.locator('[data-gallery-json-download]').click();
+  assert.deepEqual(JSON.parse(await readFile(await (await retainedDownload).path(), 'utf8')), JSON.parse(accepted.selection));
+  await population.selectOption('M');
+  await expect(population).toHaveValue('M');
+  await expect(gallery.locator('[data-gallery-error]')).toBeHidden();
+  const selected = JSON.parse(await gallery.locator('#atlas-gallery-selection').textContent());
+  assert.deepEqual(selected.selection, { population: 'M', view: 'rate', cell: 0 });
+  assert.equal(selected.values.rows[0].values[0], 2997);
+  const recoveredDownload = page.waitForEvent('download');
+  await gallery.locator('[data-gallery-json-download]').click();
+  assert.deepEqual(JSON.parse(await readFile(await (await recoveredDownload).path(), 'utf8')), selected);
+  assertTelemetry(telemetry);
+});
+
 test('selected population, cell, native values and actual downloads agree', async t => {
   const { page, telemetry, gallery } = await openGallery(t, 1440, true);
   const form = gallery.locator('[data-gallery-controls]');
