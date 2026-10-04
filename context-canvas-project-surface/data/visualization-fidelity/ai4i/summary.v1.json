@@ -1,0 +1,122 @@
+{
+  "id": "atlas-ai4i-maintenance-reference.v1",
+  "version": 1,
+  "source": {
+    "doi": "https://doi.org/10.24432/C5HS5C",
+    "sha256": "dc6630cd9b1f0f853922fad78a1b6436570d3f1ec863f1dd5c4340ac56bc8a8e",
+    "standing": "published-generated-records",
+    "license": "CC-BY-4.0"
+  },
+  "population": "Released AI4I 2020 records, grouped by the source Type field",
+  "denominator": "Records in the selected product type; each UDI contributes once",
+  "timeBasis": "The released table supplies record identifiers rather than observation timestamps",
+  "measures": {
+    "machineFailure": "Count of rows whose published Machine failure label is 1",
+    "anyModeFlag": "Count of rows carrying at least one of TWF, HDF, PWF, OSF or RNF",
+    "modeFlagTotal": "Sum of mode memberships; one record can contribute to several modes",
+    "multipleModeFlags": "Count of rows carrying at least two mode flags",
+    "rate": "100 times the selected count divided by population records; empty population is unavailable"
+  },
+  "populations": [
+    {
+      "type": "all",
+      "records": 10000,
+      "machineFailure": 339,
+      "anyModeFlag": 348,
+      "multipleModeFlags": 24,
+      "modeFlagTotal": 373,
+      "modes": {
+        "TWF": 46,
+        "HDF": 115,
+        "PWF": 95,
+        "OSF": 98,
+        "RNF": 19
+      },
+      "agreement": {
+        "neither": 9643,
+        "modeOnly": 18,
+        "labelOnly": 9,
+        "both": 330
+      },
+      "availability": "available",
+      "machineFailurePer100": 3.39,
+      "anyModeFlagPer100": 3.48,
+      "disagreements": 27
+    },
+    {
+      "type": "L",
+      "records": 6000,
+      "machineFailure": 235,
+      "anyModeFlag": 243,
+      "multipleModeFlags": 17,
+      "modeFlagTotal": 260,
+      "modes": {
+        "TWF": 25,
+        "HDF": 76,
+        "PWF": 59,
+        "OSF": 87,
+        "RNF": 13
+      },
+      "agreement": {
+        "neither": 5753,
+        "modeOnly": 12,
+        "labelOnly": 4,
+        "both": 231
+      },
+      "availability": "available",
+      "machineFailurePer100": 3.9166666666666665,
+      "anyModeFlagPer100": 4.05,
+      "disagreements": 16
+    },
+    {
+      "type": "M",
+      "records": 2997,
+      "machineFailure": 83,
+      "anyModeFlag": 81,
+      "multipleModeFlags": 6,
+      "modeFlagTotal": 87,
+      "modes": {
+        "TWF": 14,
+        "HDF": 31,
+        "PWF": 31,
+        "OSF": 9,
+        "RNF": 2
+      },
+      "agreement": {
+        "neither": 2912,
+        "modeOnly": 2,
+        "labelOnly": 4,
+        "both": 79
+      },
+      "availability": "available",
+      "machineFailurePer100": 2.7694361027694363,
+      "anyModeFlagPer100": 2.7027027027027026,
+      "disagreements": 6
+    },
+    {
+      "type": "H",
+      "records": 1003,
+      "machineFailure": 21,
+      "anyModeFlag": 24,
+      "multipleModeFlags": 1,
+      "modeFlagTotal": 26,
+      "modes": {
+        "TWF": 7,
+        "HDF": 8,
+        "PWF": 5,
+        "OSF": 2,
+        "RNF": 4
+      },
+      "agreement": {
+        "neither": 978,
+        "modeOnly": 4,
+        "labelOnly": 1,
+        "both": 20
+      },
+      "availability": "available",
+      "machineFailurePer100": 2.093718843469591,
+      "anyModeFlagPer100": 2.3928215353938187,
+      "disagreements": 5
+    }
+  ]
+}
