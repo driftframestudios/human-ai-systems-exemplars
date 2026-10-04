@@ -6,13 +6,14 @@ import { chromium } from "@playwright/test";
 import { startStaticServer, repositoryRoot } from "./core-architecture-browser-helper.mjs";
 import { createAggregatePackagePlan } from "./package-v1-iframe-routes.mjs";
 import { observeTableReading, observeControlReading, tableCaseVerdict } from "./table-reading-observer.mjs";
-import { atomicJson, digest, openCheckpoints, publishObservation } from "./observation-checkpoint.mjs";
+import { atomicJson, collectCleanupErrors, digest, openCheckpoints, publishObservation, withCheckpointLock } from "./observation-checkpoint.mjs";
 import { executionPlan, inputSnapshot, observationVersion, publishCampaign, publishScreenshot } from "./evidence-campaign.mjs";
 import { acceptancePlan, assertAcceptanceRecord, createDocumentAccounting, reportReceiver, runAcceptanceCases, runFocusedAcceptance } from "./table-focused-acceptance.mjs";
 
 export const harnessSources = [
   "tools/table-reading-contract.mjs", "tools/table-reading-observer.mjs", "tools/observation-checkpoint.mjs",
   "tools/evidence-campaign.mjs",
+  "tools/table-focused-acceptance.mjs",
   "tools/core-architecture-browser-helper.mjs", "tools/attribution-contract.mjs",
   "tools/package-v1-iframe-routes.mjs", "tools/iframe-route-package-engine.mjs",
   "tools/package-iframe-routes.mjs", "tools/package-canvas-iframe-routes.mjs",
@@ -123,18 +124,42 @@ async function inspect(frame, family, keyboard = true, script = true) {
       pageWidth: document.documentElement.scrollWidth })) };
 }
 
-export async function runCampaign({ mode = "focused", familyId = "all", output = ".visual-runs/table-repairs/epoch-01", resume = false, caseId = null, planOnly = false } = {}) {
+const errorText = error => error instanceof Error ? error.message : String(error);
+
+/** Finish owned artifacts and source validation before the final telemetry/cancellation gate. */
+export async function publishTableObservation(store, record, finishArtifacts, { signal } = {}) {
+  signal?.throwIfAborted();
+  await publishObservation(store, record, async () => {
+    await finishArtifacts();
+    signal?.throwIfAborted();
+    assert.equal(record.result.errors?.length ?? 0, 0, "Final case telemetry must be clear before publication");
+  });
+}
+
+/** Include dispatcher-reported attempts, excluding prior flags on reused observations. */
+export function invocationCounts(cases, attemptedCaseIds, reusedCaseIds, expectedCaseIds) {
+  const attempted = new Set(attemptedCaseIds);
+  for (const item of cases) {
+    if (item.attempted === true && !reusedCaseIds.has(item.id)) attempted.add(item.id);
+  }
+  const unrunCaseIds = expectedCaseIds.filter(id => !attempted.has(id) && !reusedCaseIds.has(id));
+  return { attemptedCases: attempted.size, newCases: attempted.size,
+    reused: reusedCaseIds.size, unrunCaseIds };
+}
+
+export async function runCampaign({ mode = "focused", familyId = "all", output = ".visual-runs/table-repairs/epoch-01", resume = false, caseId = null, planOnly = false, signal } = {}) {
   assert(mode !== "acceptance" || !resume, "Supplemental acceptance uses a fresh run; cached cases are not admitted");
   const campaign = mode === "acceptance" ? acceptancePlan(families, { familyId, caseId }) : executionPlan(families, { mode, familyId, caseId });
   const plannedCases = new Map(campaign.cases.map(item => [item.id, item]));
   if (planOnly) { console.log(JSON.stringify({ observationVersion, ...campaign })); return campaign; }
+  signal?.throwIfAborted();
   const outputRoot = path.resolve(repositoryRoot, output);
   assert(outputRoot.startsWith(path.join(repositoryRoot, ".visual-runs") + path.sep), "Local artifacts remain in .visual-runs");
   await fs.mkdir(outputRoot, { recursive: true });
   const checkpoints = await openCheckpoints(path.join(outputRoot, "checkpoints"));
   const packageFiles = new Map();
   const snapshot = inputSnapshot(repositoryRoot, packageFiles);
-  const definitionFiles = [...harnessSources, ...(mode === "acceptance" ? ["tools/table-focused-acceptance.mjs"] : []), "attribution.yml", "package-lock.json"];
+  const definitionFiles = [...harnessSources, "attribution.yml", "package-lock.json"];
   const definitionParts = await snapshot.fingerprints(definitionFiles);
   const executable = await fs.stat(chromium.executablePath());
   const definition = digest(JSON.stringify([observationVersion, definitionParts, process.version, process.platform, process.arch, executable.size, executable.mtimeMs]));
@@ -148,12 +173,12 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
   let executionError = null;
   let completion = null;
   let browserLaunches = 0;
-  let reused = 0;
+  const attemptedCaseIds = new Set();
+  const reusedCaseIds = new Set();
   const started = Date.now();
   const lockPath = path.join(outputRoot, "campaign.lock");
-  const lock = await fs.open(lockPath, "wx");
-  await lock.writeFile(JSON.stringify({ pid: process.pid, started, definition }) + "\n");
-  await lock.close();
+  signal?.throwIfAborted();
+  return withCheckpointLock(lockPath, { pid: process.pid, started, definition }, async () => {
   const persist = async (result) => {
     cases.push(result);
     await fs.appendFile(path.join(outputRoot, "cases.jsonl"), JSON.stringify(result) + "\n");
@@ -162,32 +187,48 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
   };
   let browser;
   const getBrowser = async () => {
+    signal?.throwIfAborted();
     if (!browser) { browser = await chromium.launch(); browserLaunches += 1; }
+    signal?.throwIfAborted();
     return browser;
   };
   let server;
+  let cleanupPromise;
+  const cleanup = () => cleanupPromise ??= collectCleanupErrors([
+    async () => { if (browser) await browser.close(); },
+    async () => { if (server) await server.close(); },
+  ]);
+  let summary;
   try {
+    signal?.throwIfAborted();
     await atomicJson(path.join(outputRoot, "plan.json"), { observationVersion, definition, requested: campaign.expected, started });
     const executionStart = performance.now();
     if (mode !== "acceptance") {
     const savedFixture = resume && await checkpoints.readRecord("observer-fixtures", definition, (deps) => snapshot.agrees(deps));
-    if (savedFixture) { cases.push(savedFixture.result); records.push(savedFixture); reused += 1; }
+    if (savedFixture) { cases.push(savedFixture.result); records.push(savedFixture); reusedCaseIds.add("observer-fixtures"); }
     else {
+      signal?.throwIfAborted();
+      attemptedCaseIds.add("observer-fixtures");
       const fixture = { id: "observer-fixtures", standing: "pass", result: await checkFixtures(await getBrowser()) };
       await persist(fixture);
       const record = { id: fixture.id, signature: definition, dependencies: definitionParts, result: fixture };
-      await checkpoints.write(record.id, record.signature, record.dependencies, fixture);
+      await publishTableObservation(checkpoints, record, async () => {
+        assert(await snapshot.agrees(record.dependencies, true), "Fixture inputs remain at their admitted identity");
+      }, { signal });
       records.push(record);
     }
     }
     if (campaign.cases.length) {
+      signal?.throwIfAborted();
       server = await startStaticServer();
+      signal?.throwIfAborted();
       const plan = await createAggregatePackagePlan();
       for (const [key, bytes] of plan.outputFiles) packageFiles.set(key, Buffer.from(bytes));
     }
     const perform = async (family, width, { id: plannedId, journey = null, variant = "source", media = "screen", script = true, enlarged = false, parent = false } = {}) => {
       const id = plannedId ?? `${family.id}-${variant}-${width}-${media}-${script ? "script" : "static"}${enlarged ? "-text200" : ""}`;
       if (caseId && id !== caseId) return;
+      signal?.throwIfAborted();
       const signature = digest(JSON.stringify([definition, family, width, variant, media, script, enlarged, parent, journey]));
       const resourceHash = (key) => snapshot.hash(key);
       const saved = resume && await checkpoints.readRecord(id, signature, async (dependencies) => {
@@ -195,13 +236,22 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
         for (const [key, hash] of Object.entries(dependencies)) if (await resourceHash(key) !== hash) return false;
         return true;
       });
-      if (saved) { cases.push(saved.result); records.push(saved); reused += 1; console.log(JSON.stringify({ case: id, standing: "reused", observation: saved.result.standing })); return; }
-      const owners = [family.source, parent ? family.parent : variant === "projection" ? family.projection : null, journey === "studio-report" ? reportReceiver : null].filter(Boolean);
-      const dependencies = { ...definitionParts, ...await snapshot.fingerprints(owners) };
-      const context = await (await getBrowser()).newContext({ viewport: { width, height: 1000 }, javaScriptEnabled: script,
-        reducedMotion: "reduce", forcedColors: media === "forced" ? "active" : "none" });
+      if (saved) { cases.push(saved.result); records.push(saved); reusedCaseIds.add(id); console.log(JSON.stringify({ case: id, standing: "reused", observation: saved.result.standing })); return; }
+      attemptedCaseIds.add(id);
       const errors = [];
       const screenshots = [];
+      let context, contextCloseAttempted = false;
+      const closeContext = async () => {
+        if (!context || contextCloseAttempted) return;
+        contextCloseAttempted = true;
+        await context.close();
+      };
+      try {
+      const owners = [family.source, parent ? family.parent : variant === "projection" ? family.projection : null, journey === "studio-report" ? reportReceiver : null].filter(Boolean);
+      const dependencies = { ...definitionParts, ...await snapshot.fingerprints(owners) };
+      context = await (await getBrowser()).newContext({ viewport: { width, height: 1000 }, javaScriptEnabled: script,
+        reducedMotion: "reduce", forcedColors: media === "forced" ? "active" : "none" });
+      signal?.throwIfAborted();
       if (mode === "acceptance") {
         context.setDefaultTimeout(5000);
         context.on("page", candidate => {
@@ -239,7 +289,6 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
         }
         return route.fulfill({ status: 204, body: "" });
       });
-      try {
         if (media === "print") await page.emulateMedia({ media: "print" });
         const response = await page.goto(`${server.origin}/${parent ? family.parent : variant === "projection" ? family.projection : family.source}`, { waitUntil: "load", timeout: 15000 });
         assert.equal(response?.status(), 200, "The declared local document returns HTTP 200");
@@ -268,30 +317,40 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
           ? { id, ...result, attempted: true, standing: errors.length ? "review" : result.standing, errors, geometry, width, variant, media, script, parent, screenshots }
           : { id, ...tableCaseVerdict(result, errors), errors, geometry, ...result };
         const record = { id, signature, dependencies, result: observation };
-        await publishObservation(checkpoints, record, async () => {
+        await publishTableObservation(checkpoints, record, async () => {
           if (!journey && width === 390 && media === "screen" && script && !enlarged) {
             const screenshot = await publishScreenshot(outputRoot, await page.screenshot({ fullPage: true }));
             dependencies[path.relative(repositoryRoot, screenshot.file)] = screenshot.sha256;
           }
+          await closeContext();
           if (journey) assertAcceptanceRecord(record, plannedCases.get(id));
           assert(await snapshot.agrees(dependencies, true), "Observed inputs and artifacts remain at their admitted identity");
-        });
+        }, { signal });
         records.push(record);
         await persist(observation);
         return observation;
       } catch (error) {
-        const result = { id, standing: "incomplete", attempted: true, error: error.message, screenshots };
+        const cleanupErrors = await collectCleanupErrors([closeContext]);
+        const result = { id, standing: "incomplete", attempted: true, error: errorText(error),
+          cleanupErrors: cleanupErrors.map(errorText), screenshots };
         await persist(result);
         return result;
-      } finally { await context.close(); }
+      }
     };
+    signal?.throwIfAborted();
     if (mode === "acceptance") {
       stoppedAfterCase = await runAcceptanceCases(campaign.cases,
         ({ family, width, ...options }) => perform(family, width, options), persist);
     } else {
-      for (const { family, width, ...options } of campaign.cases) await perform(family, width, options);
+      for (const { family, width, ...options } of campaign.cases) {
+        signal?.throwIfAborted();
+        await perform(family, width, options);
+      }
     }
     stages.executionMilliseconds = performance.now() - executionStart;
+    const cleanupErrors = await cleanup();
+    if (cleanupErrors.length) throw new AggregateError(cleanupErrors, "Campaign resource cleanup failed.");
+    signal?.throwIfAborted();
     const publicationStart = performance.now();
     const currentPackage = records.some(({ dependencies }) => Object.keys(dependencies).some((key) => key.startsWith("package:")))
       ? (await createAggregatePackagePlan()).outputFiles : new Map();
@@ -305,9 +364,13 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
           if (!bytes || digest(bytes) !== hash) return false;
         }
       }
+      signal?.throwIfAborted();
+      assert.equal(record.result.errors?.length ?? 0, 0, "Final campaign telemetry must be clear before publication");
       return true;
     };
+    signal?.throwIfAborted();
     if (records.length === campaign.expected.length) {
+      assert(!cases.some(item => item.standing === "incomplete"), "An incomplete attempt cannot publish a full completion");
       completion = await publishCampaign(outputRoot, campaign.expected, records, validateRecord,
         { definition, started, scope: { mode, familyId, caseId } });
     } else {
@@ -316,28 +379,35 @@ export async function runCampaign({ mode = "focused", familyId = "all", output =
     }
     stages.publicationMilliseconds = performance.now() - publicationStart;
   } catch (error) {
-    executionError = error.message;
+    executionError = errorText(error);
     process.exitCode = 1;
   } finally {
-    if (browser) await browser.close();
-    if (server) await server.close();
+    const cleanupErrors = await cleanup();
     const ended = Date.now();
-    const unrunCaseIds = cases.filter(item => item.attempted === false).map(item => item.id);
-    const summary = { observationVersion, definition, mode, familyId, caseId, expectedCases: campaign.expected.length,
+    const counts = invocationCounts(cases, attemptedCaseIds, reusedCaseIds, campaign.expected);
+    summary = { observationVersion, definition, mode, familyId, caseId, expectedCases: campaign.expected.length,
       browserLaunches, ...documentAccounting.snapshot(), startedAt: new Date(started).toISOString(), endedAt: new Date(ended).toISOString(),
       stoppedAfterCase, populationComplete: records.length === campaign.expected.length,
-      attemptedCases: cases.length - unrunCaseIds.length, completedCases: records.length, unrunCaseIds,
-      completion, executionError, stages, hashing: snapshot.metrics, cases: cases.length, reused,
-      newCases: cases.length - unrunCaseIds.length - reused, elapsedSeconds: (ended - started) / 1000,
+      ...counts, completedCases: records.length,
+      completion, executionError, cleanupErrors: cleanupErrors.map(errorText), cancelled: signal?.aborted ?? false,
+      stages, hashing: snapshot.metrics, cases: cases.length, elapsedSeconds: (ended - started) / 1000,
       pass: cases.filter((item) => item.standing === "pass").length,
       review: cases.filter((item) => item.standing === "review").length,
       incomplete: cases.filter((item) => item.standing === "incomplete").length };
-    await fs.writeFile(path.join(outputRoot, "summary.json"), JSON.stringify(summary, null, 2) + "\n");
-    await fs.appendFile(path.join(outputRoot, "attempts.jsonl"), JSON.stringify(summary) + "\n");
-    await fs.rm(lockPath);
+    const reportErrors = await collectCleanupErrors([
+      () => fs.writeFile(path.join(outputRoot, "summary.json"), JSON.stringify(summary, null, 2) + "\n"),
+      () => fs.appendFile(path.join(outputRoot, "attempts.jsonl"), JSON.stringify(summary) + "\n"),
+    ]);
+    if (reportErrors.length) {
+      summary.reportErrors = reportErrors.map(errorText);
+      for (const error of reportErrors) console.error(error);
+    }
     console.log(JSON.stringify(summary));
-    if (summary.executionError || !completion || summary.incomplete || (mode !== "discovery" && summary.review)) process.exitCode = 1;
+    if (summary.executionError || cleanupErrors.length || reportErrors.length || summary.cancelled
+        || !completion || summary.incomplete || (mode !== "discovery" && summary.review)) process.exitCode = 1;
   }
+  return summary;
+  });
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
@@ -349,5 +419,15 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
     assert(value && !value.startsWith("--"), `${name} requires a value`);
     return value;
   };
-  await runCampaign({ mode: option("--mode", "focused"), familyId: option("--family", "all"), output: option("--output", ".visual-runs/table-repairs/epoch-01"), resume: args.includes("--resume"), caseId: option("--case", null), planOnly: args.includes("--plan") });
+  const controller = new AbortController();
+  const interrupt = () => controller.abort(new Error("Campaign cancelled by SIGINT."));
+  const terminate = () => controller.abort(new Error("Campaign cancelled by SIGTERM."));
+  process.on("SIGINT", interrupt);
+  process.on("SIGTERM", terminate);
+  try {
+    await runCampaign({ mode: option("--mode", "focused"), familyId: option("--family", "all"), output: option("--output", ".visual-runs/table-repairs/epoch-01"), resume: args.includes("--resume"), caseId: option("--case", null), planOnly: args.includes("--plan"), signal: controller.signal });
+  } finally {
+    process.removeListener("SIGINT", interrupt);
+    process.removeListener("SIGTERM", terminate);
+  }
 }
