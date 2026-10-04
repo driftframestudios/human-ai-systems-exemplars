@@ -207,8 +207,8 @@ class VisitorLabelContracts(unittest.TestCase):
     def test_complete_inventory_and_owner_boundaries(self):
         expected = set(self.contract["pages"]) | set(self.contract["exclusions"])
         self.assertEqual({p.name for p in self.directory.glob("*.html")}, expected)
-        self.assertEqual(len(self.sources), 43)
-        self.assertEqual(sum(len(a.tables) for a in self.parsed.values()), 141)
+        self.assertEqual(len(self.sources), 44)
+        self.assertEqual(sum(len(a.tables) for a in self.parsed.values()), 143)
         self.assertEqual(sum(not a.tables for a in self.parsed.values()), 6)
         self.assertEqual(set(self.contract["exclusions"]), {
             "distributed-inspection-harness.html",
@@ -267,9 +267,9 @@ class VisitorLabelContracts(unittest.TestCase):
                     temporary = target.with_suffix(".tmp")
                     temporary.write_text(json.dumps(report, indent=2) + "\n")
                     temporary.replace(target)
-        self.assertEqual(dict(counts), {"table": 141, "tr": 916, "th": 1335, "td": 2322})
+        self.assertEqual(dict(counts), {"table": 143, "tr": 925, "th": 1349, "td": 2340})
         self.assertEqual(dict(dispositions), {
-            "simple": 137, "empty-register": 2,
+            "simple": 139, "empty-register": 2,
             "capital-summary": 1, "grouped-populations": 1,
         })
 
