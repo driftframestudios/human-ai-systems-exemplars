@@ -1529,6 +1529,38 @@
         },
         {
           "table": 6,
+          "topic": "Machine-failure frequency by product type: All product types; 10000 selected records. Rates are per 100 records.",
+          "shape": "simple",
+          "rows": 4,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 7,
+          "topic": "Machine-failure label counts by product type: All product types; 10000 selected records. Rates are per 100 records.",
+          "shape": "simple",
+          "rows": 4,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 8,
+          "topic": "Published Machine failure labels and the union of mode flags: All product types; 10000 records, 27 disagreements. Each record appears once.",
+          "shape": "simple",
+          "rows": 5,
+          "th": 10,
+          "td": 20
+        },
+        {
+          "table": 9,
+          "topic": "Machine-failure labels by speed and torque: All product types. 10000 records in 100 cells; 0 out-of-range records, including 0 failure labels. Bins include their lower edge; only the final bins include their upper edge. Out-of-range reasons may overlap: speed below 0, speed above 0, torque below 0, torque above 0.",
+          "shape": "simple",
+          "rows": 101,
+          "th": 105,
+          "td": 400
+        },
+        {
+          "table": 10,
           "topic": "The Atlas moves effort toward readable, inspectable evidence",
           "shape": "simple",
           "rows": 5,
@@ -1538,7 +1570,8 @@
       ],
       "external_scripts": [
         "visitor-boundary-contract.js",
-        "canvas-shell.js"
+        "canvas-shell.js",
+        "atlas-gallery.js"
       ],
       "embedded_documents": 2,
       "standing": "native labels complete",
@@ -1701,14 +1734,17 @@
     "about-media.js": "Media enhancement; no table generation found in the inventoried source.",
     "canvas-shell.js": "Navigation and footer enhancement; no table generation found in the inventoried source.",
     "debriefs-catalog.js": "Catalog cards and sections; no table generation found in the inventoried source.",
-    "visitor-boundary-contract.js": "Boundary constants; no table generation found in the inventoried source."
+    "visitor-boundary-contract.js": "Boundary constants; no table generation found in the inventoried source.",
+    "atlas-gallery.js": "Manufacturing gallery controller; creates the enhanced selected-view table at runtime. Its four authored fallback tables retain separate static inventory entries.",
+    "atlas-gallery-model.js": "Pure manufacturing view state and exact-value row derivation; no DOM mutation. Shared by the authored gallery projection and runtime controller.",
+    "atlas-gallery-table.js": "Shared native-table markup projection from captions, column headers and row identities; runtime-only enhancement stays outside static table totals and the two conditioning body fixtures."
   },
   "counts": {
     "owned_pages": 44,
-    "native_tables": 143,
-    "simple_tables": 139,
+    "native_tables": 147,
+    "simple_tables": 143,
     "explicit_tables": 4,
-    "native_labelled_elements": 4757,
+    "native_labelled_elements": 5450,
     "runtime_body_generators": 2
   },
   "rendering_affecting_native_additions": [],

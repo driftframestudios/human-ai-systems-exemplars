@@ -208,7 +208,7 @@ class VisitorLabelContracts(unittest.TestCase):
         expected = set(self.contract["pages"]) | set(self.contract["exclusions"])
         self.assertEqual({p.name for p in self.directory.glob("*.html")}, expected)
         self.assertEqual(len(self.sources), 44)
-        self.assertEqual(sum(len(a.tables) for a in self.parsed.values()), 143)
+        self.assertEqual(sum(len(a.tables) for a in self.parsed.values()), 147)
         self.assertEqual(sum(not a.tables for a in self.parsed.values()), 6)
         self.assertEqual(set(self.contract["exclusions"]), {
             "distributed-inspection-harness.html",
@@ -267,11 +267,100 @@ class VisitorLabelContracts(unittest.TestCase):
                     temporary = target.with_suffix(".tmp")
                     temporary.write_text(json.dumps(report, indent=2) + "\n")
                     temporary.replace(target)
-        self.assertEqual(dict(counts), {"table": 143, "tr": 925, "th": 1349, "td": 2340})
+        self.assertEqual(dict(counts), {"table": 147, "tr": 1039, "th": 1480, "td": 2784})
         self.assertEqual(dict(dispositions), {
-            "simple": 139, "empty-register": 2,
+            "simple": 143, "empty-register": 2,
             "capital-summary": 1, "grouped-populations": 1,
         })
+
+    def test_coverage_summary_matches_its_declared_tables(self):
+        tables = [table for page in self.contract["pages"].values()
+                  for table in page["tables"]]
+        counts = self.contract["counts"]
+        self.assertEqual(counts["owned_pages"], len(self.contract["pages"]))
+        self.assertEqual(counts["native_tables"], len(tables))
+        self.assertEqual(counts["simple_tables"], sum(t["shape"] == "simple" for t in tables))
+        self.assertEqual(counts["explicit_tables"], sum(t["shape"] != "simple" for t in tables))
+        self.assertEqual(counts["native_labelled_elements"],
+                         sum(1 + t["rows"] + t["th"] + t["td"] for t in tables))
+        self.assertEqual(counts["native_labelled_elements"], 5450)
+        self.assertEqual(counts["runtime_body_generators"], len(self.contract["runtime"]))
+
+    def _atlas_gallery_records(self, ordinal, fields, records):
+        table = self.table("visualization-fidelity-atlas.html", ordinal)
+        self.assertEqual(len(table.rows), records + 1)
+        self.assertEqual([projection.text(c.text) for c in table.rows[0].cells], fields)
+        for cell in table.rows[0].cells:
+            self.assertEqual((cell.tag, cell.attribute("scope")), ("th", "col"))
+        values = []
+        for row in table.rows[1:]:
+            self.assertEqual(len(row.cells), len(fields))
+            self.assertEqual((row.cells[0].tag, row.cells[0].attribute("scope")), ("th", "row"))
+            self.assertTrue(all(c.tag == "td" for c in row.cells[1:]))
+            self.assertEqual([c.attribute("data-label") for c in row.cells], fields)
+            values.append([projection.text(c.text) for c in row.cells])
+        return values
+
+    def test_atlas_gallery_population_and_reconciliation_baselines(self):
+        fields = ["Product type", "Recorded rows", "Machine-failure labels",
+                  "Machine-failure labels per 100 records", "Availability"]
+        expected = [("L", 6000, 235), ("M", 2997, 83), ("H", 1003, 21)]
+        for ordinal in (6, 7):
+            rows = self._atlas_gallery_records(ordinal, fields, 3)
+            for row, (kind, records, labels) in zip(rows, expected, strict=True):
+                with self.subTest(table=ordinal, population=kind):
+                    self.assertEqual(row[:3], ["Product type " + kind, str(records), str(labels)])
+                    self.assertAlmostEqual(float(row[3]), 100 * labels / records, places=12)
+                    self.assertEqual(row[4], "Available")
+        fields = ["Label / mode relationship", "Machine-failure label", "At least one mode flag",
+                  "Records", "Records per 100 selected records", "Availability"]
+        rows = self._atlas_gallery_records(8, fields, 4)
+        expected = [
+            ("Neither label nor mode flag", "0", "No", 9643),
+            ("Mode flag only", "0", "Yes", 18),
+            ("Machine-failure label only", "1", "No", 9),
+            ("Both label and mode flag", "1", "Yes", 330),
+        ]
+        for row, (name, label, flag, records) in zip(rows, expected, strict=True):
+            with self.subTest(relationship=name):
+                self.assertEqual(row[:4], [name, label, flag, str(records)])
+                self.assertAlmostEqual(float(row[4]), 100 * records / 10000, places=12)
+                self.assertEqual(row[5], "Available")
+
+    def test_atlas_gallery_conditions_keep_every_bin_and_its_support(self):
+        fields = ["Speed / torque bin", "Recorded rows", "Machine-failure labels",
+                  "Machine-failure labels per 100 records", "Availability"]
+        rows = self._atlas_gallery_records(9, fields, 100)
+        document = json.loads((ROOT / "context-canvas-project-surface/data/visualization-fidelity/"
+                               "ai4i/gallery.v1.json").read_text(encoding="utf-8"))
+        cells = document["heatmaps"]["all"]["cells"]
+        self.assertEqual(len(cells), 100)
+        records_total = labels_total = empty_bins = 0
+        for index, (row, cell) in enumerate(zip(rows, cells, strict=True)):
+            speed, torque = index % 10, index // 10
+            speed_end = "]" if speed == 9 else ")"
+            torque_end = "]" if torque == 9 else ")"
+            identity = (f"Speed [{1000 + 200 * speed}, {1200 + 200 * speed}{speed_end} rpm; "
+                        f"torque [{10 * torque}, {10 + 10 * torque}{torque_end} Nm")
+            with self.subTest(bin=index):
+                self.assertEqual(row[0], identity)
+                records, labels = int(row[1]), int(row[2])
+                self.assertEqual((records, labels), (cell["records"], cell["failures"]))
+                self.assertGreaterEqual(records, 0)
+                self.assertGreaterEqual(labels, 0)
+                self.assertLessEqual(labels, records)
+                if records:
+                    self.assertAlmostEqual(float(row[3]), 100 * labels / records, places=12)
+                    self.assertEqual(row[4], "Available")
+                else:
+                    self.assertEqual(row[3:], ["Unavailable", "No records"])
+                    empty_bins += 1
+                records_total += records
+                labels_total += labels
+        self.assertEqual((records_total, labels_total), (10000, 339))
+        self.assertGreater(empty_bins, 0)
+        outside = document["heatmaps"]["all"]["outOfRange"]
+        self.assertEqual((outside["records"], outside["failures"]), (0, 0))
 
     def test_empty_registers_are_status_rows(self):
         for name, topic, width in (

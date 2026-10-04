@@ -395,3 +395,41 @@
 @media screen {
   .atlas-reference .table-scroll table { min-width: 42rem; }
 }
+
+/* Coordinated Atlas gallery: native controls and locally scrollable SVGs.
+   Consumer: visualization-fidelity-atlas.html. Extends the existing flat
+   atlas-reference and table-scroll owners; other route figures stay unchanged. */
+.atlas-gallery .atlas-gallery-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1rem;
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--blueprint-ink);
+  background: var(--blueprint-cream);
+}
+.atlas-gallery .atlas-gallery-controls label { display: grid; gap: .4rem; }
+.atlas-gallery .atlas-gallery-controls select {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  min-block-size: 2.75rem;
+  padding: .5rem;
+  color: var(--blueprint-ink);
+  background: #fffcf5;
+  border: 1px solid currentColor;
+  font: inherit;
+}
+.atlas-gallery .story-visual { inline-size: 100%; margin-inline: 0; transform: none; }
+.atlas-gallery .atlas-gallery-figure svg,
+.atlas-gallery .atlas-gallery-figure img { display: block; inline-size: 100%; block-size: auto; }
+.atlas-gallery [hidden] { display: none !important; }
+@media screen {
+  .atlas-gallery .atlas-gallery-figure svg,
+  .atlas-gallery .atlas-gallery-figure img { min-inline-size: 60rem; }
+}
+@media print {
+  .atlas-gallery .atlas-gallery-controls,
+  .atlas-gallery [data-gallery-live] { display: none !important; }
+  .atlas-gallery .atlas-gallery-figure { break-inside: avoid; }
+  .atlas-gallery details::details-content { content-visibility: visible; }
+}
