@@ -65,13 +65,13 @@ test("file recovery separates exact decoded text from normalized draft and accep
     const context = { C, Object, Set, exchange, clear };
     const api = runInNewContext('(function () {\n' +
       'let interactionVersion = 0, fileRequest = 0, rejectedFileText = null, handler, message;\n' +
-      'let accepted = C.prepare(C.defaults()); const drafts = new Set(), EDITORS = [];\n' +
+      'let accepted = C.prepare(C.defaults()), serialized = accepted.serialized; const drafts = new Set(), EDITORS = [];\n' +
       'const ACTION = { CLEAR_RECOVERY: "clear-recovery" };\n' +
       'const host = { querySelector: selector => selector === "#analysis-exchange" ? exchange : clear,\n' +
       'addEventListener: (name, fn) => { handler = fn; } };\n' +
       'const status = text => { message = text; };\n' +
       'const revisionNeeded = (error, input) => { if (input) { drafts.add(input.id); input.setAttribute("aria-invalid", "true"); } status(error.message); };\n' +
-      'const accept = candidate => { accepted = C.prepare(candidate); interactionVersion++; return true; };\n' +
+      'const accept = candidate => { accepted = C.prepare(candidate); serialized = accepted.serialized; interactionVersion++; return true; };\n' +
       helpers + listener +
       '\nreturn { change: event => handler(event), importText, clear: clearRejectedFileDraft,\n' +
       'raw: () => rejectedFileText, accepted: () => accepted, message: () => message,\n' +
@@ -102,6 +102,7 @@ test("file recovery separates exact decoded text from normalized draft and accep
       assert.equal(f.api.accepted(), baseline);
       assert.ok(!f.api.message().includes(text));
       f.api.importText(C.serialize(C.defaults()));
+      assert.equal(f.exchange.value, f.api.accepted().serialized);
       assert.equal(f.api.raw(), null);
       assert.equal(f.clear.hidden, true);
       assert.equal(f.attributes["aria-invalid"], undefined);
@@ -113,6 +114,7 @@ test("file recovery separates exact decoded text from normalized draft and accep
     } else {
       assert.equal(f.api.raw(), null);
       assert.deepEqual(f.api.accepted().state.extensions, technical.extensions);
+      assert.equal(f.exchange.value, f.api.accepted().serialized);
     }
   }
   const f = fixture(), baseline = f.api.accepted();

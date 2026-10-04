@@ -266,7 +266,9 @@ test("investment file provenance recovery preserves accepted capsule and report 
           const fixed = "Source coefficients fixed; scenario inputs editable; coefficient overrides unsupported.";
           assert.ok(rows.every(row => row.includes(fixed)));
           assert.equal(rows.filter(row => row.includes("authored-unit-convention")).length, 1);
-          assert.equal(rows.filter(row => row.includes("authored-planning-heuristic")).length, 5);
+          assert.equal(rows.filter(row => row.includes("authored-planning-heuristic")).length, 3);
+          assert.equal(rows.filter(row => row.includes("illustrative-attention")).length, 1);
+          assert.equal(rows.filter(row => row.includes("presentation-rule")).length, 1);
           const popup = context.waitForEvent("page");
           await page.getByRole("button", { name: "Open report in a new tab", exact: true }).click();
           const report = await popup;

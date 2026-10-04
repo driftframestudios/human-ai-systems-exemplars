@@ -224,6 +224,7 @@
       inputKeys: Object.keys(C.FIELDS), editorKeys: EDITORS
     });
     const exchange = host.querySelector("#analysis-exchange");
+    exchange.value = serialized;
     exchange.removeAttribute("aria-invalid");
     drafts.delete(exchange.id);
     status("Imported state accepted. The contract, identities, and explicitly unavailable values are retained.");
