@@ -1,0 +1,2143 @@
+{
+  "schemaVersion": 1,
+  "sourceRevision": "main@e1f00de plus Issue #371 planner",
+  "countingUnit": "Distinct source files, not runtime test cases",
+  "profiles": [
+    {
+      "id": "node-source",
+      "runtime": "Node >=22 and root development dependencies",
+      "prerequisites": [
+        "Root npm dependencies installed; consult the owning suite for optional fixture tools."
+      ],
+      "effects": [
+        "Tests may create fixture-scoped files or subprocesses; planning reads metadata only."
+      ],
+      "artifacts": [
+        "Runner output; suite-owned fixture artifacts where declared."
+      ],
+      "timeout": "Existing runner and suite timeout policy."
+    },
+    {
+      "id": "browser",
+      "runtime": "Node >=22, repository Playwright and real Chromium",
+      "prerequisites": [
+        "Root npm dependencies and Playwright Chromium installed.",
+        "Existing harness prerequisites, source packages and explicit local execution authority."
+      ],
+      "effects": [
+        "Browser processes, local serving and harness-owned output; external resource policy remains harness-owned."
+      ],
+      "artifacts": [
+        "Harness-owned screenshots, downloads, telemetry or checkpoints."
+      ],
+      "timeout": "Existing browser harness timeout policy."
+    },
+    {
+      "id": "python-tables",
+      "runtime": "Isolated Python 3.12 through the existing uv route",
+      "prerequisites": [
+        "uv and managed Python 3.12 available; source-preservation checks retain their standard-library implementation."
+      ],
+      "effects": [
+        "Fixture files; PYTHONDONTWRITEBYTECODE=1 retains the source-tree policy."
+      ],
+      "artifacts": [
+        "unittest output; fixture-owned comparisons."
+      ],
+      "timeout": "Existing focused unittest invocation."
+    },
+    {
+      "id": "python-project",
+      "runtime": "Project-declared Python and installed project dependencies",
+      "prerequisites": [
+        "Read the project's pyproject and named workflow preparation.",
+        "ENABLE_GITHUB_ACTIONS, workflow_dispatch and confirmation govern hosted runs independently.",
+        "Database tests retain their own DSN, key, client and skip predicates."
+      ],
+      "effects": [
+        "Project fixtures; optional database integrations retain explicit configuration."
+      ],
+      "artifacts": [
+        "Project-owned unittest and validation results."
+      ],
+      "timeout": "Owning project and workflow policy."
+    },
+    {
+      "id": "carrier",
+      "runtime": "Node >=22 and the receiving carrier's declared tools",
+      "prerequisites": [
+        "Use current manifests and source-owned build/check modes.",
+        "A release, deployment or upload keeps its existing separate authorization."
+      ],
+      "effects": [
+        "Check/build fixtures or staged artifacts according to the named command."
+      ],
+      "artifacts": [
+        "Owner-defined source/package receipts."
+      ],
+      "timeout": "Existing carrier command policy."
+    },
+    {
+      "id": "live",
+      "runtime": "Owner-declared runtime and an explicitly chosen live receiver",
+      "prerequisites": [
+        "Explicit live observation authority and reviewed endpoint/policy inputs."
+      ],
+      "effects": [
+        "Live network requests when separately executed."
+      ],
+      "artifacts": [
+        "Sanitized receiver result; exact schema digests retain their owner."
+      ],
+      "timeout": "Live receiver policy; resolve the held route before execution."
+    },
+    {
+      "id": "research",
+      "runtime": "Isolated Python 3.12 and pinned comparison-only packages",
+      "prerequisites": [
+        "Opt-in research decision; uv preparation from tests/tables/README.md.",
+        "lxml 6.1.3, html5lib 1.1, six 1.17.0, webencodings 0.5.1 remain isolated."
+      ],
+      "effects": [
+        "Fixture subprocesses and bounded local measurement."
+      ],
+      "artifacts": [
+        "Opt-in parser comparison output; separate from routine acceptance."
+      ],
+      "timeout": "Existing experiment fixture and worker budgets."
+    }
+  ],
+  "suites": [
+    {
+      "id": "node.attribution",
+      "family": "attribution",
+      "kind": "node-test",
+      "members": [
+        "tests/attribution/governance.test.mjs",
+        "tests/attribution/visitor-boundary.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
+      "aliases": [
+        "test:attribution"
+      ]
+    },
+    {
+      "id": "node.context-canvas",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/ai-systems-principles.test.mjs",
+        "tests/context-canvas/benchmark-readings.test.mjs",
+        "tests/context-canvas/code-and-about-treatment.test.mjs",
+        "tests/context-canvas/contrast-treatment.test.mjs",
+        "tests/context-canvas/cornerstone-definitions.test.mjs",
+        "tests/context-canvas/debrief-reading-modes.test.mjs",
+        "tests/context-canvas/iframe-carriers.test.mjs",
+        "tests/context-canvas/investment-model-studio-prompt-capsule.test.mjs",
+        "tests/context-canvas/parent-link-behavior.test.mjs",
+        "tests/context-canvas/prototype-control-labels.test.mjs",
+        "tests/context-canvas/public-system-topology.test.mjs",
+        "tests/context-canvas/rail-label-failures.test.mjs",
+        "tests/context-canvas/rail-shell-source.test.mjs",
+        "tests/context-canvas/retained-exemplar-standing.test.mjs",
+        "tests/context-canvas/visitor-image-alternatives.test.mjs",
+        "tests/context-canvas/visitor-surface-attribution.test.mjs",
+        "tests/context-canvas/visitor-terminology.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
+      "aliases": [
+        "test:context-canvas"
+      ]
+    },
+    {
+      "id": "node.core-architectures",
+      "family": "core-architectures",
+      "kind": "node-test",
+      "members": [
+        "tests/core-architectures/family-index-prompt-capsule.test.mjs",
+        "tests/core-architectures/first-responsible-version-prompt-capsule.test.mjs",
+        "tests/core-architectures/measurement-reflection-prompt-capsules.test.mjs",
+        "tests/core-architectures/namespace-authority.test.mjs",
+        "tests/core-architectures/orientation-tracing-prompt-capsules.test.mjs",
+        "tests/core-architectures/participatory-specification-prompt-capsules.test.mjs",
+        "tests/core-architectures/pattern-fit-prompt-capsules.test.mjs",
+        "tests/core-architectures/recovery-routing-prompt-capsules.test.mjs",
+        "tests/core-architectures/service-blueprint-selection.test.mjs",
+        "tests/core-architectures/shared-surface-focus.test.mjs",
+        "tests/core-architectures/shared-surfaces-topology-prompt-capsules.test.mjs",
+        "tests/core-architectures/strategy-canvas-core.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
+      "aliases": [
+        "test:core-architectures"
+      ]
+    },
+    {
+      "id": "node.documentation",
+      "family": "documentation",
+      "kind": "node-test",
+      "members": [
+        "tests/documentation/readme-routes.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
+      "aliases": []
+    },
+    {
+      "id": "node.iframe-routes",
+      "family": "iframe-routes",
+      "kind": "node-test",
+      "members": [
+        "tests/iframe-routes/canvas-packager.test.mjs",
+        "tests/iframe-routes/live-verifier.test.mjs",
+        "tests/iframe-routes/navigation-projection.test.mjs",
+        "tests/iframe-routes/packager.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
+      "aliases": [
+        "test:iframe-routes"
+      ]
+    },
+    {
+      "id": "node.investment-analysis",
+      "family": "investment-analysis",
+      "kind": "node-test",
+      "members": [
+        "tests/investment-analysis/capsule.test.mjs",
+        "tests/investment-analysis/core.test.mjs",
+        "tests/investment-analysis/projection.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
+      "aliases": []
+    },
+    {
+      "id": "node.narrative-architectures",
+      "family": "narrative-architectures",
+      "kind": "node-test",
+      "members": [
+        "tests/narrative-architectures/schema-contracts.test.mjs",
+        "tests/narrative-architectures/strategy-canvas-v2-adapter.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
+      "aliases": [
+        "test:narrative-architectures"
+      ]
+    },
+    {
+      "id": "node.prod-deployment",
+      "family": "prod-deployment",
+      "kind": "node-test",
+      "members": [
+        "tests/prod-deployment/carrier-transfer.test.mjs",
+        "tests/prod-deployment/carrier.test.mjs",
+        "tests/prod-deployment/installer.test.mjs",
+        "tests/prod-deployment/primary-closure.test.mjs",
+        "tests/prod-deployment/projection.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
+      "aliases": [
+        "test:prod-deployment"
+      ]
+    },
+    {
+      "id": "node.public-references",
+      "family": "public-references",
+      "kind": "node-test",
+      "members": [
+        "tests/public-references/materializer.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
+      "aliases": [
+        "test:public-reference-materializer"
+      ]
+    },
+    {
+      "id": "node.schema-pages",
+      "family": "schema-pages",
+      "kind": "node-test",
+      "members": [
+        "tests/schema-pages/builder.test.mjs",
+        "tests/schema-pages/receiver.test.mjs",
+        "tests/schema-pages/site-release.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
+      "aliases": [
+        "test:schema-pages"
+      ]
+    },
+    {
+      "id": "node.security",
+      "family": "security",
+      "kind": "node-test",
+      "members": [
+        "tests/security/dependency-security.test.mjs",
+        "tests/security/secret-material.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
+      "aliases": [
+        "test:dependency-security",
+        "test:secret-material"
+      ]
+    },
+    {
+      "id": "node.tables",
+      "family": "tables",
+      "kind": "node-test",
+      "members": [
+        "tests/tables/checkpoint.test.mjs",
+        "tests/tables/core-followthrough/closure.test.mjs",
+        "tests/tables/core-followthrough/repair.test.mjs",
+        "tests/tables/core-followthrough/runtime.test.mjs",
+        "tests/tables/core-followthrough/source.test.mjs",
+        "tests/tables/core-followthrough/strategy-states.test.mjs",
+        "tests/tables/data-labels.test.mjs",
+        "tests/tables/focused-acceptance.test.mjs",
+        "tests/tables/hiring-schema-print-contract.test.mjs",
+        "tests/tables/pipeline.test.mjs",
+        "tests/tables/prototype-labels/canvas-route-labels.test.mjs",
+        "tests/tables/prototype-labels/initiative-costing-labels.test.mjs",
+        "tests/tables/prototype-labels/prototype-labels.test.mjs",
+        "tests/tables/prototype-labels/residual-owner-labels.test.mjs",
+        "tests/tables/verdict.test.mjs",
+        "tests/tables/visitor-labels/conditioning-runtime.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
+      "aliases": []
+    },
+    {
+      "id": "node.visualization-fidelity-atlas",
+      "family": "visualization-fidelity-atlas",
+      "kind": "node-test",
+      "members": [
+        "tests/visualization-fidelity-atlas/atlas-essay.test.mjs",
+        "tests/visualization-fidelity-atlas/atlas-gallery-model.test.mjs",
+        "tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs",
+        "tests/visualization-fidelity-atlas/atlas-gallery-table.test.mjs",
+        "tests/visualization-fidelity-atlas/atlas-maintenance-data.test.mjs",
+        "tests/visualization-fidelity-atlas/atlas-prompt-capsule.test.mjs",
+        "tests/visualization-fidelity-atlas/atlas-reference.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
+      "aliases": []
+    },
+    {
+      "id": "node.suite-planner",
+      "family": "test-planning",
+      "kind": "node-test",
+      "members": [
+        "tests/suites/planner.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/suites/README.md",
+      "scope": "Independent planner fixtures and source membership checks.",
+      "aliases": [
+        "test:suites:unit"
+      ]
+    },
+    {
+      "id": "browser.investment-analysis.browser",
+      "family": "investment-analysis",
+      "kind": "node-test",
+      "members": [
+        "tests/investment-analysis/browser.test.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "The complete existing module, including its owned media or export scenarios.",
+      "aliases": []
+    },
+    {
+      "id": "browser.investment-analysis.capsule.browser",
+      "family": "investment-analysis",
+      "kind": "node-test",
+      "members": [
+        "tests/investment-analysis/capsule.browser.test.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "The complete existing module, including its owned media or export scenarios.",
+      "aliases": []
+    },
+    {
+      "id": "browser.investment-analysis.presentation.browser",
+      "family": "investment-analysis",
+      "kind": "node-test",
+      "members": [
+        "tests/investment-analysis/presentation.browser.test.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "The complete existing module, including its owned media or export scenarios.",
+      "aliases": []
+    },
+    {
+      "id": "browser.visualization-fidelity-atlas.atlas-essay.browser",
+      "family": "visualization-fidelity-atlas",
+      "kind": "node-test",
+      "members": [
+        "tests/visualization-fidelity-atlas/atlas-essay.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "The complete existing module, including its owned media or export scenarios.",
+      "aliases": []
+    },
+    {
+      "id": "browser.visualization-fidelity-atlas.atlas-gallery.browser",
+      "family": "visualization-fidelity-atlas",
+      "kind": "node-test",
+      "members": [
+        "tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "The complete existing module, including its owned media or export scenarios.",
+      "aliases": []
+    },
+    {
+      "id": "browser.visualization-fidelity-atlas.atlas-reference.browser",
+      "family": "visualization-fidelity-atlas",
+      "kind": "node-test",
+      "members": [
+        "tests/visualization-fidelity-atlas/atlas-reference.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "The complete existing module, including its owned media or export scenarios.",
+      "aliases": []
+    },
+    {
+      "id": "browser.core-architectures.jobs-text",
+      "family": "core-architectures",
+      "kind": "node-script",
+      "members": [
+        "tests/core-architectures/jobs-text.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Existing standalone browser journey; exact states and cases remain with this entry.",
+      "aliases": []
+    },
+    {
+      "id": "browser.core-architectures.recovery-import",
+      "family": "core-architectures",
+      "kind": "node-script",
+      "members": [
+        "tests/core-architectures/recovery-import.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Existing standalone browser journey; exact states and cases remain with this entry.",
+      "aliases": []
+    },
+    {
+      "id": "browser.tables.conditioning",
+      "family": "tables",
+      "kind": "node-script",
+      "members": [
+        "tests/tables/conditioning.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/tables/README.md",
+      "scope": "Existing standalone browser journey; exact states and cases remain with this entry.",
+      "aliases": []
+    },
+    {
+      "id": "browser.tables.core-followthrough",
+      "family": "tables",
+      "kind": "node-script",
+      "members": [
+        "tests/tables/core-followthrough/browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/tables/README.md",
+      "scope": "Existing standalone browser journey; exact states and cases remain with this entry.",
+      "aliases": []
+    },
+    {
+      "id": "browser.tables.hiring-schema-print",
+      "family": "tables",
+      "kind": "node-script",
+      "members": [
+        "tests/tables/hiring-schema-print.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/tables/README.md",
+      "scope": "Existing standalone browser journey; exact states and cases remain with this entry.",
+      "aliases": []
+    },
+    {
+      "id": "python.tables.parser",
+      "family": "tables",
+      "kind": "python-unittest",
+      "members": [
+        "tests/tables/prototype-labels/test_parser.py"
+      ],
+      "profile": "python-tables",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "env",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "uv",
+          "run",
+          "--isolated",
+          "--no-project",
+          "--python",
+          "3.12",
+          "--managed-python",
+          "--",
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/tables/prototype-labels",
+          "-p",
+          "test_parser.py",
+          "-v"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/tables/README.md",
+      "scope": "The named Python module; source-preserving projection and semantic parsing retain separate assertions.",
+      "aliases": []
+    },
+    {
+      "id": "python.tables.hiring-table-media",
+      "family": "tables",
+      "kind": "python-unittest",
+      "members": [
+        "tests/tables/test_hiring_table_media.py"
+      ],
+      "profile": "python-tables",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "env",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "uv",
+          "run",
+          "--isolated",
+          "--no-project",
+          "--python",
+          "3.12",
+          "--managed-python",
+          "--",
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/tables",
+          "-p",
+          "test_hiring_table_media.py",
+          "-v"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/tables/README.md",
+      "scope": "The named Python module; source-preserving projection and semantic parsing retain separate assertions.",
+      "aliases": []
+    },
+    {
+      "id": "python.tables.table-context",
+      "family": "tables",
+      "kind": "python-unittest",
+      "members": [
+        "tests/tables/test_table_context.py"
+      ],
+      "profile": "python-tables",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "env",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "uv",
+          "run",
+          "--isolated",
+          "--no-project",
+          "--python",
+          "3.12",
+          "--managed-python",
+          "--",
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/tables",
+          "-p",
+          "test_table_context.py",
+          "-v"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/tables/README.md",
+      "scope": "The named Python module; source-preserving projection and semantic parsing retain separate assertions.",
+      "aliases": []
+    },
+    {
+      "id": "python.tables.visitor-labels",
+      "family": "tables",
+      "kind": "python-unittest",
+      "members": [
+        "tests/tables/visitor-labels/test_visitor_labels.py"
+      ],
+      "profile": "python-tables",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "env",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "uv",
+          "run",
+          "--isolated",
+          "--no-project",
+          "--python",
+          "3.12",
+          "--managed-python",
+          "--",
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/tables/visitor-labels",
+          "-p",
+          "test_visitor_labels.py",
+          "-v"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/tables/README.md",
+      "scope": "The named Python module; source-preserving projection and semantic parsing retain separate assertions.",
+      "aliases": []
+    },
+    {
+      "id": "browser.about-media-browser-contract",
+      "family": "browser-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/about-media-browser-contract.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/about-media-browser-contract.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/README.md",
+      "scope": "Complete existing harness; named family/state selectors remain entry-owned.",
+      "aliases": [
+        "test:about-media-browser"
+      ]
+    },
+    {
+      "id": "browser.canvas-iframe-route-browser-contract",
+      "family": "browser-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/canvas-iframe-route-browser-contract.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/canvas-iframe-route-browser-contract.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/README.md",
+      "scope": "Complete existing harness; named family/state selectors remain entry-owned. Prepare current iframe packages with npm run build:iframe-routes before this raw entry; test:canvas-iframe-routes retains that ordered step.",
+      "aliases": [
+        "test:canvas-iframe-routes"
+      ]
+    },
+    {
+      "id": "browser.context-canvas-medium-containment-contract",
+      "family": "browser-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/context-canvas-medium-containment-contract.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/context-canvas-medium-containment-contract.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/README.md",
+      "scope": "Complete existing harness; named family/state selectors remain entry-owned.",
+      "aliases": [
+        "test:context-canvas-medium-containment"
+      ]
+    },
+    {
+      "id": "browser.context-canvas-narrow-rail-contract",
+      "family": "browser-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/context-canvas-narrow-rail-contract.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/context-canvas-narrow-rail-contract.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/README.md",
+      "scope": "Complete existing harness; named family/state selectors remain entry-owned.",
+      "aliases": [
+        "test:context-canvas-narrow-rails"
+      ]
+    },
+    {
+      "id": "visual.context-canvas-visual-reference",
+      "family": "browser-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/context-canvas-visual-reference.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/context-canvas-visual-reference.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/README.md",
+      "scope": "Complete existing harness; named family/state selectors remain entry-owned.",
+      "aliases": [
+        "visual:context-canvas-reference"
+      ]
+    },
+    {
+      "id": "browser.core-decision-canvas-contract",
+      "family": "browser-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/core-decision-canvas-contract.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/core-decision-canvas-contract.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/README.md",
+      "scope": "Complete existing harness; named family/state selectors remain entry-owned.",
+      "aliases": [
+        "test:core-decision-canvases"
+      ]
+    },
+    {
+      "id": "browser.core-iframe-carrier-contract",
+      "family": "browser-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/core-iframe-carrier-contract.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/core-iframe-carrier-contract.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/README.md",
+      "scope": "Complete existing harness; named family/state selectors remain entry-owned.",
+      "aliases": [
+        "test:iframe-browser",
+        "test:iframe-carriers"
+      ]
+    },
+    {
+      "id": "browser.core-planning-instrument-contract",
+      "family": "browser-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/core-planning-instrument-contract.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/core-planning-instrument-contract.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/README.md",
+      "scope": "Complete existing harness; named family/state selectors remain entry-owned.",
+      "aliases": [
+        "test:core-planning-instruments"
+      ]
+    },
+    {
+      "id": "browser.core-reference-instrument-contract",
+      "family": "browser-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/core-reference-instrument-contract.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/core-reference-instrument-contract.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/README.md",
+      "scope": "Complete existing harness; named family/state selectors remain entry-owned.",
+      "aliases": [
+        "test:core-reference-instruments"
+      ]
+    },
+    {
+      "id": "browser.cross-prototype-exchange-contract",
+      "family": "browser-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/cross-prototype-exchange-contract.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/cross-prototype-exchange-contract.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/README.md",
+      "scope": "Complete existing harness; named family/state selectors remain entry-owned.",
+      "aliases": [
+        "test:prototype-exchanges"
+      ]
+    },
+    {
+      "id": "browser.initiative-costing-label-contract",
+      "family": "browser-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/initiative-costing-label-contract.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/initiative-costing-label-contract.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/README.md",
+      "scope": "Complete existing harness; named family/state selectors remain entry-owned.",
+      "aliases": [
+        "test:prototype-control-labels"
+      ]
+    },
+    {
+      "id": "browser.narrative-architecture-contract",
+      "family": "browser-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/narrative-architecture-contract.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/narrative-architecture-contract.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/README.md",
+      "scope": "Complete existing harness; named family/state selectors remain entry-owned.",
+      "aliases": [
+        "test:narrative-browser"
+      ]
+    },
+    {
+      "id": "browser.open-lesson-field-contract",
+      "family": "browser-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/open-lesson-field-contract.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/open-lesson-field-contract.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/README.md",
+      "scope": "Complete existing harness; named family/state selectors remain entry-owned.",
+      "aliases": [
+        "test:open-lesson-field"
+      ]
+    },
+    {
+      "id": "browser.strategy-canvas-contract",
+      "family": "browser-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/strategy-canvas-contract.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/strategy-canvas-contract.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/README.md",
+      "scope": "Complete existing harness; named family/state selectors remain entry-owned.",
+      "aliases": [
+        "test:strategy-canvas"
+      ]
+    },
+    {
+      "id": "browser.table-reading",
+      "family": "tables",
+      "kind": "node-script",
+      "members": [
+        "tools/table-reading-contract.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/table-reading-contract.mjs",
+          "--mode",
+          "focused",
+          "--family",
+          "conditioning"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/tables/PIPELINE.md",
+      "scope": "Representative conditioning-focused family. Use the existing --plan route for exact cases; other modes and families stay explicit.",
+      "aliases": []
+    },
+    {
+      "id": "visual.requested-surface",
+      "family": "visual-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/visual-check.mjs"
+      ],
+      "profile": "browser",
+      "command": null,
+      "owner": "tests/suites/README.md",
+      "scope": "Choose the receiving page, state and width through an existing visual alias.",
+      "aliases": [
+        "visual:check",
+        "visual:conditioning-field",
+        "visual:ai-systems-conditioning",
+        "visual:open-lesson-field",
+        "visual:prompt-side-practice",
+        "visual:initiative-costing",
+        "visual:rail-labels",
+        "visual:debriefs-rail",
+        "visual:strategy-canvas-canonical",
+        "visual:strategy-canvas-context"
+      ],
+      "hold": "Select a concrete page/selector and requested visual contract; use a listed existing visual alias."
+    },
+    {
+      "id": "worker.source",
+      "family": "schema-worker",
+      "kind": "node-test",
+      "members": [
+        "cloudflare/schemas-worker/test/catalog-source-preservation.test.mjs",
+        "cloudflare/schemas-worker/test/etag-comparison.test.mjs",
+        "cloudflare/schemas-worker/test/manifest-transition.test.mjs",
+        "cloudflare/schemas-worker/test/receiver.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": "cloudflare/schemas-worker",
+        "argv": [
+          "node",
+          "--test",
+          "test/catalog-source-preservation.test.mjs",
+          "test/etag-comparison.test.mjs",
+          "test/manifest-transition.test.mjs",
+          "test/receiver.test.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "cloudflare/schemas-worker/package.json",
+      "scope": "Four Worker test modules; package test compatibility remains available.",
+      "aliases": []
+    },
+    {
+      "id": "worker.browser",
+      "family": "schema-worker",
+      "kind": "node-script",
+      "members": [
+        "cloudflare/schemas-worker/test/catalog-browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": "cloudflare/schemas-worker",
+        "argv": [
+          "node",
+          "test/catalog-browser.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "cloudflare/schemas-worker/package.json",
+      "scope": "Worker catalog browser check. Independent Playwright installation remains a receiving dependency question.",
+      "aliases": []
+    },
+    {
+      "id": "worker.live",
+      "family": "schema-worker",
+      "kind": "node-script",
+      "members": [
+        "cloudflare/schemas-worker/test/live-receiver.mjs"
+      ],
+      "profile": "live",
+      "command": null,
+      "owner": "cloudflare/schemas-worker/package.json",
+      "scope": "Live receiver observations retain endpoint and policy admission.",
+      "aliases": [],
+      "hold": "Resolve the receiver endpoint and admission configuration through the Worker owner; retain npm run test:receiver."
+    },
+    {
+      "id": "python.lims-eln-enterprise-reference-v0.1",
+      "family": "nested-python",
+      "kind": "python-project",
+      "members": [
+        "lims-eln-enterprise-reference-v0.1/tests/test_database_contract.py",
+        "lims-eln-enterprise-reference-v0.1/tests/test_evidence_security_workflow.py",
+        "lims-eln-enterprise-reference-v0.1/tests/test_flyway_migrations.py",
+        "lims-eln-enterprise-reference-v0.1/tests/test_instrument_ports.py",
+        "lims-eln-enterprise-reference-v0.1/tests/test_lifecycle_custody.py",
+        "lims-eln-enterprise-reference-v0.1/tests/test_migration_operations.py",
+        "lims-eln-enterprise-reference-v0.1/tests/test_vendor_adapters.py"
+      ],
+      "profile": "python-project",
+      "command": {
+        "cwd": "lims-eln-enterprise-reference-v0.1",
+        "argv": [
+          "env",
+          "PYTHONPATH=src",
+          "python",
+          "scripts/validate_pack.py"
+        ],
+        "appendMembers": false
+      },
+      "owner": "lims-eln-enterprise-reference-v0.1/pyproject.toml",
+      "scope": "Retained project/workflow route. Install the owning project's declared dependencies and preserve its separate validation/conformance commands.",
+      "aliases": []
+    },
+    {
+      "id": "python.lims-eln-enterprise-implementation",
+      "family": "nested-python",
+      "kind": "python-project",
+      "members": [
+        "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_bounded_caller.py",
+        "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_branch_flow.py",
+        "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_custody_instrument.py",
+        "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_database_migrations.py",
+        "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_labkey_adapter.py",
+        "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_lifecycle.py",
+        "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_migration.py",
+        "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_observability_application.py",
+        "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_postgres_integration.py",
+        "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_runtime_configuration.py",
+        "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_security_acceptance.py",
+        "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_shared_contract_binding.py",
+        "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_sql_tenant_boundary.py",
+        "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_vendors.py",
+        "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_workbench_api.py",
+        "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_workbench_service.py"
+      ],
+      "profile": "python-project",
+      "command": {
+        "cwd": "lims-eln-functional-nucleus/lims-eln-enterprise-implementation",
+        "argv": [
+          "python",
+          "scripts/validate_repository.py"
+        ],
+        "appendMembers": false
+      },
+      "owner": "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/pyproject.toml",
+      "scope": "Retained project/workflow route. Database classes keep their runtime skip predicates. Install the owning project's declared dependencies and preserve its separate validation/conformance commands.",
+      "aliases": []
+    },
+    {
+      "id": "python.lims-eln-program-specification",
+      "family": "nested-python",
+      "kind": "python-project",
+      "members": [
+        "lims-eln-functional-nucleus/lims-eln-program-specification/tests/test_branch_flow.py",
+        "lims-eln-functional-nucleus/lims-eln-program-specification/tests/test_contract_models.py",
+        "lims-eln-functional-nucleus/lims-eln-program-specification/tests/test_contract_resources.py",
+        "lims-eln-functional-nucleus/lims-eln-program-specification/tests/test_language_policy.py",
+        "lims-eln-functional-nucleus/lims-eln-program-specification/tests/test_program.py"
+      ],
+      "profile": "python-project",
+      "command": {
+        "cwd": "lims-eln-functional-nucleus/lims-eln-program-specification",
+        "argv": [
+          "env",
+          "PYTHONPATH=src",
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-v"
+        ],
+        "appendMembers": false
+      },
+      "owner": "lims-eln-functional-nucleus/lims-eln-program-specification/pyproject.toml",
+      "scope": "Retained project/workflow route. Install the owning project's declared dependencies and preserve its separate validation/conformance commands.",
+      "aliases": []
+    },
+    {
+      "id": "python.lims-eln-simulated-final-state",
+      "family": "nested-python",
+      "kind": "python-project",
+      "members": [
+        "lims-eln-functional-nucleus/lims-eln-simulated-final-state/tests/test_branch_flow.py",
+        "lims-eln-functional-nucleus/lims-eln-simulated-final-state/tests/test_contract_v1.py",
+        "lims-eln-functional-nucleus/lims-eln-simulated-final-state/tests/test_simulation.py"
+      ],
+      "profile": "python-project",
+      "command": {
+        "cwd": "lims-eln-functional-nucleus/lims-eln-simulated-final-state",
+        "argv": [
+          "env",
+          "PYTHONPATH=src",
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-v"
+        ],
+        "appendMembers": false
+      },
+      "owner": "lims-eln-functional-nucleus/lims-eln-simulated-final-state/pyproject.toml",
+      "scope": "Retained project/workflow route. Install the owning project's declared dependencies and preserve its separate validation/conformance commands.",
+      "aliases": []
+    },
+    {
+      "id": "python.lims-eln-comparative-evidence",
+      "family": "nested-python",
+      "kind": "python-project",
+      "members": [
+        "lims-eln-functional-nucleus/lims-eln-comparative-evidence/tests/test_branch_flow.py",
+        "lims-eln-functional-nucleus/lims-eln-comparative-evidence/tests/test_comparative_evidence.py",
+        "lims-eln-functional-nucleus/lims-eln-comparative-evidence/tests/test_contract_v1.py"
+      ],
+      "profile": "python-project",
+      "command": {
+        "cwd": "lims-eln-functional-nucleus/lims-eln-comparative-evidence",
+        "argv": [
+          "env",
+          "PYTHONPATH=src",
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-v"
+        ],
+        "appendMembers": false
+      },
+      "owner": "lims-eln-functional-nucleus/lims-eln-comparative-evidence/pyproject.toml",
+      "scope": "Retained project/workflow route. Install the owning project's declared dependencies and preserve its separate validation/conformance commands.",
+      "aliases": []
+    },
+    {
+      "id": "python.site-reading-governance",
+      "family": "nested-python",
+      "kind": "python-project",
+      "members": [
+        "lims-eln-functional-nucleus/site-reading-governance/tests/test_check_branch_flow.py",
+        "lims-eln-functional-nucleus/site-reading-governance/tests/test_governance.py",
+        "lims-eln-functional-nucleus/site-reading-governance/tests/test_language_assurance.py"
+      ],
+      "profile": "python-project",
+      "command": {
+        "cwd": "lims-eln-functional-nucleus/site-reading-governance",
+        "argv": [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-v"
+        ],
+        "appendMembers": false
+      },
+      "owner": ".github/workflows/lims-eln-functional-nucleus.yml",
+      "scope": "Retained project/workflow route. Install the owning project's declared dependencies and preserve its separate validation/conformance commands.",
+      "aliases": []
+    },
+    {
+      "id": "carrier.iframe",
+      "family": "carrier",
+      "kind": "node-script",
+      "members": [
+        "tools/package-v1-iframe-routes.mjs"
+      ],
+      "profile": "carrier",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/package-v1-iframe-routes.mjs",
+          "--check"
+        ],
+        "appendMembers": false
+      },
+      "owner": "package.json",
+      "scope": "Existing check/verification mode. Staging, deployment and live authority remain separate.",
+      "aliases": [
+        "check:iframe-routes"
+      ]
+    },
+    {
+      "id": "carrier.production",
+      "family": "carrier",
+      "kind": "node-script",
+      "members": [
+        "tools/build-prod-projection.mjs"
+      ],
+      "profile": "carrier",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/build-prod-projection.mjs",
+          "--check"
+        ],
+        "appendMembers": false
+      },
+      "owner": "package.json",
+      "scope": "Existing check/verification mode. Staging, deployment and live authority remain separate.",
+      "aliases": [
+        "check:prod-projection"
+      ]
+    },
+    {
+      "id": "carrier.transfer",
+      "family": "carrier",
+      "kind": "node-script",
+      "members": [
+        "tools/package-prod-carrier-transfer.mjs"
+      ],
+      "profile": "carrier",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/package-prod-carrier-transfer.mjs",
+          "--verify"
+        ],
+        "appendMembers": false
+      },
+      "owner": "package.json",
+      "scope": "Existing check/verification mode. Staging, deployment and live authority remain separate.",
+      "aliases": [
+        "verify:prod-carrier-transfer"
+      ]
+    },
+    {
+      "id": "carrier.schemas",
+      "family": "carrier",
+      "kind": "node-script",
+      "members": [
+        "tools/check-schema-surface.mjs"
+      ],
+      "profile": "carrier",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/check-schema-surface.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "package.json",
+      "scope": "Existing check/verification mode. Staging, deployment and live authority remain separate.",
+      "aliases": [
+        "check:schemas"
+      ]
+    },
+    {
+      "id": "live.iframe",
+      "family": "live-receivers",
+      "kind": "node-script",
+      "members": [
+        "tools/verify-live-iframe-routes.mjs"
+      ],
+      "profile": "live",
+      "command": null,
+      "owner": "package.json",
+      "scope": "Existing receiver command remains available under its explicit admission.",
+      "aliases": [
+        "verify:iframe-routes:live"
+      ],
+      "hold": "Choose and authorize the receiving endpoint/policy through the existing verifier."
+    },
+    {
+      "id": "live.schema-pages",
+      "family": "live-receivers",
+      "kind": "node-script",
+      "members": [
+        "tools/verify-schema-pages-receiver.mjs"
+      ],
+      "profile": "live",
+      "command": null,
+      "owner": "package.json",
+      "scope": "Existing receiver command remains available under its explicit admission.",
+      "aliases": [
+        "check:schema-pages-receiver"
+      ],
+      "hold": "Choose and authorize the receiving endpoint/policy through the existing verifier."
+    },
+    {
+      "id": "research.parser-comparison",
+      "family": "tables",
+      "kind": "research-script",
+      "members": [
+        "tests/tables/parser_reference_comparison.py"
+      ],
+      "profile": "research",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "env",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "UV_PYTHON_DOWNLOADS=never",
+          "uv",
+          "run",
+          "--no-cache",
+          "--no-build",
+          "--isolated",
+          "--no-project",
+          "--python",
+          "3.12",
+          "--managed-python",
+          "--with",
+          "lxml==6.1.3",
+          "--with",
+          "html5lib==1.1",
+          "--with",
+          "six==1.17.0",
+          "--with",
+          "webencodings==0.5.1",
+          "--",
+          "python",
+          "-m",
+          "tests.tables.parser_reference_comparison"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/tables/README.md",
+      "scope": "Opt-in reference comparison; predictive scheduling remains on its separately governed research branch.",
+      "aliases": []
+    }
+  ],
+  "bundles": [
+    {
+      "id": "source-unit",
+      "description": "Root nonbrowser source/unit modules, Worker fixtures and focused Python tables. Named scripts remain metadata.",
+      "suites": [
+        "node.attribution",
+        "node.context-canvas",
+        "node.core-architectures",
+        "node.documentation",
+        "node.iframe-routes",
+        "node.investment-analysis",
+        "node.narrative-architectures",
+        "node.prod-deployment",
+        "node.public-references",
+        "node.schema-pages",
+        "node.security",
+        "node.tables",
+        "node.visualization-fidelity-atlas",
+        "node.suite-planner",
+        "python.tables.parser",
+        "python.tables.hiring-table-media",
+        "python.tables.table-context",
+        "python.tables.visitor-labels",
+        "worker.source"
+      ]
+    },
+    {
+      "id": "family-integration",
+      "description": "Whole existing integration families and independently governed Python project routes.",
+      "suites": [
+        "node.core-architectures",
+        "node.investment-analysis",
+        "node.narrative-architectures",
+        "node.tables",
+        "node.visualization-fidelity-atlas",
+        "worker.source",
+        "python.lims-eln-enterprise-reference-v0.1",
+        "python.lims-eln-enterprise-implementation",
+        "python.lims-eln-program-specification",
+        "python.lims-eln-simulated-final-state",
+        "python.lims-eln-comparative-evidence",
+        "python.site-reading-governance"
+      ]
+    },
+    {
+      "id": "focused-browser",
+      "description": "Existing browser entries with their full module/harness scope; requesting this bundle only lists them.",
+      "suites": [
+        "browser.investment-analysis.browser",
+        "browser.investment-analysis.capsule.browser",
+        "browser.investment-analysis.presentation.browser",
+        "browser.visualization-fidelity-atlas.atlas-essay.browser",
+        "browser.visualization-fidelity-atlas.atlas-gallery.browser",
+        "browser.visualization-fidelity-atlas.atlas-reference.browser",
+        "browser.core-architectures.jobs-text",
+        "browser.core-architectures.recovery-import",
+        "browser.tables.conditioning",
+        "browser.tables.core-followthrough",
+        "browser.tables.hiring-schema-print",
+        "browser.about-media-browser-contract",
+        "browser.canvas-iframe-route-browser-contract",
+        "browser.context-canvas-medium-containment-contract",
+        "browser.context-canvas-narrow-rail-contract",
+        "browser.core-decision-canvas-contract",
+        "browser.core-iframe-carrier-contract",
+        "browser.core-planning-instrument-contract",
+        "browser.core-reference-instrument-contract",
+        "browser.cross-prototype-exchange-contract",
+        "browser.initiative-costing-label-contract",
+        "browser.narrative-architecture-contract",
+        "browser.open-lesson-field-contract",
+        "browser.strategy-canvas-contract",
+        "browser.table-reading",
+        "worker.browser"
+      ]
+    },
+    {
+      "id": "visual-media",
+      "description": "Visual selection and existing print/media-owning modules; file selection retains the full file's scenarios.",
+      "suites": [
+        "browser.visualization-fidelity-atlas.atlas-essay.browser",
+        "browser.visualization-fidelity-atlas.atlas-gallery.browser",
+        "browser.tables.hiring-schema-print",
+        "visual.context-canvas-visual-reference",
+        "visual.requested-surface"
+      ]
+    },
+    {
+      "id": "carrier",
+      "description": "Existing source/package acceptance modules and explicit check-mode routes.",
+      "suites": [
+        "node.attribution",
+        "node.iframe-routes",
+        "node.prod-deployment",
+        "node.public-references",
+        "node.schema-pages",
+        "node.security",
+        "worker.source",
+        "carrier.iframe",
+        "carrier.production",
+        "carrier.transfer",
+        "carrier.schemas"
+      ]
+    },
+    {
+      "id": "live",
+      "description": "Receiver routes remain held pending explicit endpoint, policy and authority.",
+      "suites": [
+        "worker.live",
+        "live.iframe",
+        "live.schema-pages"
+      ]
+    },
+    {
+      "id": "research",
+      "description": "Optional parser comparison only; predictive-policy research stays separately governed.",
+      "suites": [
+        "research.parser-comparison"
+      ]
+    }
+  ],
+  "inventory": {
+    "baseline": {
+      "rootNodeTestNonbrowser": 75,
+      "rootNodeTestBrowser": 6,
+      "rootNodeTestTotal": 81,
+      "rootStandaloneBrowser": 5,
+      "rootJavascriptSupport": 6,
+      "rootPythonTests": 4,
+      "rootPythonSupportOrExperiment": 2,
+      "rootDocumentation": 4,
+      "rootInventory": 1,
+      "rootTrackedFilesTotal": 103
+    },
+    "baselineRootMembers": [
+      "tests/attribution/governance.test.mjs",
+      "tests/attribution/visitor-boundary.test.mjs",
+      "tests/context-canvas/ai-systems-principles.test.mjs",
+      "tests/context-canvas/benchmark-readings.test.mjs",
+      "tests/context-canvas/code-and-about-treatment.test.mjs",
+      "tests/context-canvas/contrast-treatment.test.mjs",
+      "tests/context-canvas/cornerstone-definitions.test.mjs",
+      "tests/context-canvas/debrief-reading-modes.test.mjs",
+      "tests/context-canvas/iframe-carriers.test.mjs",
+      "tests/context-canvas/investment-model-studio-prompt-capsule.test.mjs",
+      "tests/context-canvas/parent-link-behavior.test.mjs",
+      "tests/context-canvas/prototype-control-labels.test.mjs",
+      "tests/context-canvas/public-system-topology.test.mjs",
+      "tests/context-canvas/rail-label-failures.test.mjs",
+      "tests/context-canvas/rail-shell-source.test.mjs",
+      "tests/context-canvas/retained-exemplar-standing.test.mjs",
+      "tests/context-canvas/visitor-image-alternatives.test.mjs",
+      "tests/context-canvas/visitor-surface-attribution.test.mjs",
+      "tests/context-canvas/visitor-terminology.test.mjs",
+      "tests/core-architectures/family-index-prompt-capsule.test.mjs",
+      "tests/core-architectures/first-responsible-version-prompt-capsule.test.mjs",
+      "tests/core-architectures/measurement-reflection-prompt-capsules.test.mjs",
+      "tests/core-architectures/namespace-authority.test.mjs",
+      "tests/core-architectures/orientation-tracing-prompt-capsules.test.mjs",
+      "tests/core-architectures/participatory-specification-prompt-capsules.test.mjs",
+      "tests/core-architectures/pattern-fit-prompt-capsules.test.mjs",
+      "tests/core-architectures/recovery-routing-prompt-capsules.test.mjs",
+      "tests/core-architectures/service-blueprint-selection.test.mjs",
+      "tests/core-architectures/shared-surface-focus.test.mjs",
+      "tests/core-architectures/shared-surfaces-topology-prompt-capsules.test.mjs",
+      "tests/core-architectures/strategy-canvas-core.test.mjs",
+      "tests/documentation/readme-routes.test.mjs",
+      "tests/iframe-routes/canvas-packager.test.mjs",
+      "tests/iframe-routes/live-verifier.test.mjs",
+      "tests/iframe-routes/navigation-projection.test.mjs",
+      "tests/iframe-routes/packager.test.mjs",
+      "tests/investment-analysis/browser.test.mjs",
+      "tests/investment-analysis/capsule.browser.test.mjs",
+      "tests/investment-analysis/capsule.test.mjs",
+      "tests/investment-analysis/core.test.mjs",
+      "tests/investment-analysis/presentation.browser.test.mjs",
+      "tests/investment-analysis/projection.test.mjs",
+      "tests/narrative-architectures/schema-contracts.test.mjs",
+      "tests/narrative-architectures/strategy-canvas-v2-adapter.test.mjs",
+      "tests/prod-deployment/carrier-transfer.test.mjs",
+      "tests/prod-deployment/carrier.test.mjs",
+      "tests/prod-deployment/installer.test.mjs",
+      "tests/prod-deployment/primary-closure.test.mjs",
+      "tests/prod-deployment/projection.test.mjs",
+      "tests/public-references/materializer.test.mjs",
+      "tests/schema-pages/builder.test.mjs",
+      "tests/schema-pages/receiver.test.mjs",
+      "tests/schema-pages/site-release.test.mjs",
+      "tests/security/dependency-security.test.mjs",
+      "tests/security/secret-material.test.mjs",
+      "tests/tables/checkpoint.test.mjs",
+      "tests/tables/core-followthrough/closure.test.mjs",
+      "tests/tables/core-followthrough/repair.test.mjs",
+      "tests/tables/core-followthrough/runtime.test.mjs",
+      "tests/tables/core-followthrough/source.test.mjs",
+      "tests/tables/core-followthrough/strategy-states.test.mjs",
+      "tests/tables/data-labels.test.mjs",
+      "tests/tables/focused-acceptance.test.mjs",
+      "tests/tables/hiring-schema-print-contract.test.mjs",
+      "tests/tables/pipeline.test.mjs",
+      "tests/tables/prototype-labels/canvas-route-labels.test.mjs",
+      "tests/tables/prototype-labels/initiative-costing-labels.test.mjs",
+      "tests/tables/prototype-labels/prototype-labels.test.mjs",
+      "tests/tables/prototype-labels/residual-owner-labels.test.mjs",
+      "tests/tables/verdict.test.mjs",
+      "tests/tables/visitor-labels/conditioning-runtime.test.mjs",
+      "tests/visualization-fidelity-atlas/atlas-essay.browser.mjs",
+      "tests/visualization-fidelity-atlas/atlas-essay.test.mjs",
+      "tests/visualization-fidelity-atlas/atlas-gallery-model.test.mjs",
+      "tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs",
+      "tests/visualization-fidelity-atlas/atlas-gallery-table.test.mjs",
+      "tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs",
+      "tests/visualization-fidelity-atlas/atlas-maintenance-data.test.mjs",
+      "tests/visualization-fidelity-atlas/atlas-prompt-capsule.test.mjs",
+      "tests/visualization-fidelity-atlas/atlas-reference.browser.mjs",
+      "tests/visualization-fidelity-atlas/atlas-reference.test.mjs"
+    ],
+    "support": {
+      "javascriptSupport": [
+        "tests/tables/core-followthrough/cases.mjs",
+        "tests/tables/core-followthrough/closure.mjs",
+        "tests/tables/core-followthrough/contracts.mjs",
+        "tests/tables/core-followthrough/runtime.mjs",
+        "tests/tables/core-followthrough/strategy-states.mjs",
+        "tests/tables/hiring-schema-print-contract.mjs"
+      ],
+      "pythonTests": [
+        "tests/tables/prototype-labels/test_parser.py",
+        "tests/tables/test_hiring_table_media.py",
+        "tests/tables/test_table_context.py",
+        "tests/tables/visitor-labels/test_visitor_labels.py"
+      ],
+      "pythonSemanticObserver": [
+        "tests/tables/prototype-labels/parse-tables.py"
+      ],
+      "pythonOptInComparison": [
+        "tests/tables/parser_reference_comparison.py"
+      ],
+      "documentation": [
+        "tests/README.md",
+        "tests/tables/PIPELINE.md",
+        "tests/tables/README.md",
+        "tests/tables/python-source-preservation.md"
+      ],
+      "inventory": [
+        "tests/tables/visitor-labels/coverage.json"
+      ]
+    },
+    "workflowGates": {
+      "enterpriseOffline": {
+        "workflow": ".github/workflows/lims-eln-enterprise-reference.yml",
+        "event": "workflow_dispatch",
+        "variable": "ENABLE_GITHUB_ACTIONS",
+        "requiredVariableValue": "true",
+        "confirmRun": true,
+        "proofChoices": [
+          "offline",
+          "full"
+        ],
+        "ciPython": [
+          "3.12",
+          "3.13"
+        ]
+      },
+      "enterpriseDatabase": {
+        "workflow": ".github/workflows/lims-eln-enterprise-reference.yml",
+        "event": "workflow_dispatch",
+        "variable": "ENABLE_GITHUB_ACTIONS",
+        "requiredVariableValue": "true",
+        "confirmRun": true,
+        "proofChoices": [
+          "database",
+          "full"
+        ],
+        "postgresqlMajors": [
+          "16",
+          "18"
+        ],
+        "receiptRetentionOptIn": "retain_database_receipt"
+      },
+      "nucleus": {
+        "workflow": ".github/workflows/lims-eln-functional-nucleus.yml",
+        "event": "workflow_dispatch",
+        "variable": "ENABLE_GITHUB_ACTIONS",
+        "requiredVariableValue": "true",
+        "confirmRun": true,
+        "ciPython": "3.12"
+      },
+      "implementationPostgresClasses": {
+        "source": "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/tests/test_postgres_integration.py",
+        "mechanism": "two unittest.skipUnless class gates",
+        "requirementsRetained": [
+          "configured PostgreSQL DSNs",
+          "synthetic HMAC key",
+          "psql"
+        ],
+        "knownEnvironmentNames": [
+          "LIMS_TEST_POSTGRES_ADMIN_DSN",
+          "LIMS_TEST_POSTGRES_APP_DSN",
+          "LIMS_TEST_POSTGRES_OUTBOX_DSN",
+          "LIMS_TEST_POSTGRES_RECOVERY_DSN",
+          "LIMS_TEST_POSTGRES_MIGRATOR_DSN",
+          "LIMS_TEST_POSTGRES_UPGRADE_OUTBOX_DSN",
+          "LIMS_TEST_POSTGRES_UPGRADE_RECOVERY_DSN"
+        ],
+        "completePredicateRetained": false
+      }
+    },
+    "projectPreparation": {
+      "enterpriseOffline": "Install the reference project in its selected Python environment.",
+      "nucleusSharedContract": "Workflow installs the program-specification project unless proof is governance.",
+      "nucleusWorkbench": "Workflow installs enterprise-implementation[test] for workbench or full.",
+      "nucleusComparison": "Workflow installs comparative-evidence[validation] for comparison or full."
+    },
+    "workerSupport": [
+      "cloudflare/schemas-worker/test/catalog-source-preservation.mjs",
+      "cloudflare/schemas-worker/test/http-validators.mjs"
+    ],
+    "browserSupport": [
+      "tools/core-architecture-browser-helper.mjs",
+      "tools/table-reading-observer.mjs",
+      "tools/table-focused-acceptance.mjs"
+    ],
+    "evidenceSupport": [
+      "tools/evidence-campaign.mjs",
+      "tools/evidence-inputs.mjs",
+      "tools/observation-checkpoint.mjs"
+    ],
+    "projector": "tools/project_table_context.py",
+    "exclusions": [
+      "Held untracked Atlas research files are outside the accepted baseline.",
+      "Predictive and paired-replay research has separate branch and protocol owners under #320/#330/#331.",
+      "Generated copies are dependencies of their owning harness, rather than additional test modules.",
+      "Historical/ad-hoc tool use is outside the tracked-source census.",
+      "Deployment, installation, publication and DB rehearsal commands remain with their existing explicit receivers."
+    ],
+    "npmRunEdges": {
+      "test:canvas-iframe-routes": [
+        "build:iframe-routes"
+      ],
+      "test:iframe-browser": [
+        "test:canvas-iframe-routes"
+      ],
+      "test:core-browser": [
+        "test:core-decision-canvases",
+        "test:core-planning-instruments",
+        "test:core-reference-instruments",
+        "test:iframe-carriers"
+      ],
+      "test:prototype-units": [
+        "test:core-architectures",
+        "test:narrative-architectures"
+      ],
+      "dry-run:schema-delivery": [
+        "build:schema-delivery"
+      ],
+      "dry-run:schema-delivery:release": [
+        "build:schema-delivery"
+      ],
+      "deploy:schema-delivery:release": [
+        "build:schema-delivery"
+      ],
+      "deploy:schema-delivery:prod": [
+        "build:schema-delivery"
+      ],
+      "dry-run:context-canvas-field-pilot": [
+        "build:context-canvas-field-pilot"
+      ]
+    },
+    "sourceReachability": "Root npm-run edges are recorded; this catalog does not claim full JavaScript import/spawn reachability.",
+    "puppeteer": {
+      "trackedExecutablePaths": [],
+      "trackedExecutableSourceFilesScanned": 633,
+      "historicalUntrackedOrLocalUse": "unknown"
+    },
+    "baselineStandaloneBrowser": [
+      "tests/core-architectures/jobs-text.browser.mjs",
+      "tests/core-architectures/recovery-import.browser.mjs",
+      "tests/tables/conditioning.browser.mjs",
+      "tests/tables/core-followthrough/browser.mjs",
+      "tests/tables/hiring-schema-print.browser.mjs"
+    ],
+    "rootScriptSelection": {
+      "directNodeTestSelectors": {
+        "test:dependency-security": [
+          "tests/security/dependency-security.test.mjs"
+        ],
+        "test:public-reference-materializer": [
+          "tests/public-references/materializer.test.mjs"
+        ],
+        "test:context-canvas": [
+          "tests/context-canvas/*.test.mjs"
+        ],
+        "test:prototype-control-labels": [
+          "tests/context-canvas/prototype-control-labels.test.mjs"
+        ],
+        "test:attribution": [
+          "tests/attribution/*.test.mjs",
+          "tests/context-canvas/visitor-surface-attribution.test.mjs"
+        ],
+        "test:schema-pages": [
+          "tests/schema-pages/*.test.mjs"
+        ],
+        "test:iframe-routes": [
+          "tests/iframe-routes/*.test.mjs"
+        ],
+        "test:prod-deployment": [
+          "tests/prod-deployment/*.test.mjs"
+        ],
+        "test:secret-material": [
+          "tests/security/secret-material.test.mjs"
+        ],
+        "test:iframe-carriers": [
+          "tests/context-canvas/iframe-carriers.test.mjs"
+        ],
+        "test:core-architectures": [
+          "tests/core-architectures/*.test.mjs"
+        ],
+        "test:narrative-architectures": [
+          "tests/narrative-architectures/*.test.mjs"
+        ]
+      },
+      "directBrowserToolSelections": {
+        "test:open-lesson-field": [
+          "tools/open-lesson-field-contract.mjs"
+        ],
+        "test:context-canvas-medium-containment": [
+          "tools/context-canvas-medium-containment-contract.mjs"
+        ],
+        "test:context-canvas-narrow-rails": [
+          "tools/context-canvas-narrow-rail-contract.mjs"
+        ],
+        "test:prototype-control-labels": [
+          "tools/initiative-costing-label-contract.mjs"
+        ],
+        "test:about-media-browser": [
+          "tools/about-media-browser-contract.mjs"
+        ],
+        "test:canvas-iframe-routes": [
+          "tools/canvas-iframe-route-browser-contract.mjs"
+        ],
+        "test:iframe-browser": [
+          "tools/core-iframe-carrier-contract.mjs"
+        ],
+        "test:strategy-canvas": [
+          "tools/strategy-canvas-contract.mjs"
+        ],
+        "test:core-decision-canvases": [
+          "tools/core-decision-canvas-contract.mjs"
+        ],
+        "test:core-planning-instruments": [
+          "tools/core-planning-instrument-contract.mjs"
+        ],
+        "test:core-reference-instruments": [
+          "tools/core-reference-instrument-contract.mjs"
+        ],
+        "test:iframe-carriers": [
+          "tools/core-iframe-carrier-contract.mjs"
+        ],
+        "test:narrative-browser": [
+          "tools/narrative-architecture-contract.mjs"
+        ],
+        "test:prototype-exchanges": [
+          "tools/cross-prototype-exchange-contract.mjs"
+        ]
+      },
+      "orderedCompositeSteps": {
+        "test:prototype-control-labels": [
+          {
+            "kind": "nodeTest",
+            "selectors": [
+              "tests/context-canvas/prototype-control-labels.test.mjs"
+            ]
+          },
+          {
+            "kind": "node",
+            "entry": "tools/initiative-costing-label-contract.mjs"
+          }
+        ],
+        "test:canvas-iframe-routes": [
+          {
+            "kind": "npmRun",
+            "script": "build:iframe-routes"
+          },
+          {
+            "kind": "node",
+            "entry": "tools/canvas-iframe-route-browser-contract.mjs"
+          }
+        ],
+        "test:iframe-browser": [
+          {
+            "kind": "node",
+            "entry": "tools/core-iframe-carrier-contract.mjs"
+          },
+          {
+            "kind": "npmRun",
+            "script": "test:canvas-iframe-routes"
+          }
+        ],
+        "test:core-browser": [
+          {
+            "kind": "npmRun",
+            "script": "test:core-decision-canvases"
+          },
+          {
+            "kind": "npmRun",
+            "script": "test:core-planning-instruments"
+          },
+          {
+            "kind": "npmRun",
+            "script": "test:core-reference-instruments"
+          },
+          {
+            "kind": "npmRun",
+            "script": "test:iframe-carriers"
+          }
+        ],
+        "test:iframe-carriers": [
+          {
+            "kind": "nodeTest",
+            "selectors": [
+              "tests/context-canvas/iframe-carriers.test.mjs"
+            ]
+          },
+          {
+            "kind": "node",
+            "entry": "tools/core-iframe-carrier-contract.mjs"
+          }
+        ],
+        "test:prototype-units": [
+          {
+            "kind": "npmRun",
+            "script": "test:core-architectures"
+          },
+          {
+            "kind": "npmRun",
+            "script": "test:narrative-architectures"
+          }
+        ]
+      }
+    }
+  }
+}

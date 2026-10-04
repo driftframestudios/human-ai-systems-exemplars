@@ -1,4 +1,23 @@
-# Repository behavior checks
+# Repository checks
+
+## Repository-wide discovery
+
+Start with the [owned suite catalog and plan-only commands](suites/README.md).
+It maps Node source/unit and browser modules, Python table checks, nested
+projects, visual tools, carrier checks, live receivers and opt-in research.
+Existing commands and assertions remain with their source owners.
+
+```sh
+npm run test:suites:list
+node tools/test-suite-plan.mjs --suite node.visualization-fidelity-atlas --json
+node tools/test-suite-plan.mjs --suite python.tables.table-context --json
+```
+
+These invocations list metadata and prerequisites. Execution is a separate
+receiving action. Source-file counts remain distinct from runtime test cases.
+
+## Existing family check guide
+
 
 This directory exercises behavior owned by the Core Architecture and Narrative
 Architecture prototype families. The source artifact, its adjacent schema or

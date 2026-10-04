@@ -26,6 +26,10 @@ description: <Third-person capability statement>. Applies when <specific trigger
 - **Interactions:** <peer skill, conditional context, projection, or lens binding>
 - **Rest or release when:** <settlement, fold, dormancy, or retirement condition>
 
+## Inputs, defaults and output
+
+<Include this section when input or output ambiguity changes execution. Name the minimum useful inputs, safe defaults, missing-input response, and receiving artifact. Place branch-specific detail in a conditional reference.>
+
 ## Rules
 
 ### Rule: <invariant>
@@ -55,6 +59,10 @@ description: <Third-person capability statement>. Applies when <specific trigger
 ## Conditional context
 
 The skill loads [references/<topic>.md](references/<topic>.md) when <specific branch condition>.
+
+## Recovery and re-entry
+
+<Name the useful fallback, retained evidence or state, and event that reopens the task when these materially change recovery. Keep this section conditional on the skill's job.>
 
 ## Completion
 

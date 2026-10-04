@@ -53,6 +53,10 @@ Separate sampling, aggregation, and omitted records explicitly. Keep local
 scroll or larger inspection available when detail serves the question; shrinking
 all labels into a thumbnail sacrifices the very comparison being explored.
 
+### Rule: Python is a normal conversational rendering option
+
+Use an available Python environment when it provides the fitting transformation, geometry, composition, or export. A conversation can receive a sophisticated multi-panel figure or labeled relationship diagram directly as an image, together with its exact-value or relationship companion. Choose the renderer for the question and current permissions; web hosting and interactive applications remain separate destination choices. Keep source preparation, drawing, delivery, and cleanup explicit so another team can reproduce or adapt the result.
+
 ### Rule: Numeric geometry comes from the admitted values
 
 Use deterministic plotting or authored vector geometry for data-bearing marks.
@@ -116,6 +120,8 @@ reading; use a table, one panel, or a bounded source question. Re-enter when a
 new question or materially different dataset changes the decision.
 
 ## Conditional context
+
+- Load [Python figures in a conversation](references/python-session-rendering.md) when Python can carry a chart, composed comparison, or explanatory diagram. The reference includes preparation, Figure/Axes ownership, layout, semantic color, portable output, cleanup, and adaptable prompts. Numeric figures retain exact plotted values; conceptual diagrams retain a relationship list and text reading.
 
 - Load the foundation's [form guide](../data-visualization-foundations/references/form-and-data-contract.md) for ambiguous encodings or uncertainty.
 - Load its [evidence map](../data-visualization-foundations/references/evidence-and-source-map.md) when research claims or AI-reading assumptions matter.

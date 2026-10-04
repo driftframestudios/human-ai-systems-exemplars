@@ -82,6 +82,14 @@
       "dependencies": []
     },
     {
+      "name": "conversation-data-visualization",
+      "sourcePath": ".agents/skills/conversation-data-visualization/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "Dependency and source-package review remains pending; the empty dependency list records that pending review rather than verified closure. Hosted offering awaits a reviewed complete package and a new tagged public carrier."
+    },
+    {
       "name": "cost-and-ownership-analysis",
       "sourcePath": ".agents/skills/cost-and-ownership-analysis/SKILL.md",
       "publicationStanding": "public_ready",
@@ -91,8 +99,17 @@
         ".agents/skills/cost-and-ownership-analysis/references/ownership-preserving-reuse.md",
         ".agents/skills/practitioner-probe/SKILL.md",
         ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
-        ".agents/skills/collaboration-accounting/SKILL.md"
+        ".agents/skills/collaboration-accounting/SKILL.md",
+        ".agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md"
       ]
+    },
+    {
+      "name": "data-visualization-foundations",
+      "sourcePath": ".agents/skills/data-visualization-foundations/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "Dependency and source-package review remains pending; the empty dependency list records that pending review rather than verified closure. Hosted offering awaits a reviewed complete package and a new tagged public carrier."
     },
     {
       "name": "declarative-skill-authoring",
@@ -133,6 +150,14 @@
         ".agents/skills/locator-boundary-stewardship/references/issue-and-pull-request-practice.md",
         ".agents/skills/locator-boundary-stewardship/references/public-safe-threadkeeping.md"
       ]
+    },
+    {
+      "name": "pdf-data-visualization",
+      "sourcePath": ".agents/skills/pdf-data-visualization/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "Dependency and source-package review remains pending; the empty dependency list records that pending review rather than verified closure. Hosted offering awaits a reviewed complete package and a new tagged public carrier."
     },
     {
       "name": "practitioner-probe",
@@ -212,7 +237,9 @@
       "sourcePath": ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
       "publicationStanding": "public_ready",
       "sourceAvailability": "included",
-      "dependencies": []
+      "dependencies": [
+        ".agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md"
+      ]
     },
     {
       "name": "supportive-change-writing",
@@ -228,6 +255,14 @@
       "publicationStanding": "public_ready",
       "sourceAvailability": "included",
       "dependencies": []
+    },
+    {
+      "name": "web-data-visualization",
+      "sourcePath": ".agents/skills/web-data-visualization/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "Dependency and source-package review remains pending; the empty dependency list records that pending review rather than verified closure. Hosted offering awaits a reviewed complete package and a new tagged public carrier."
     }
   ]
 }
