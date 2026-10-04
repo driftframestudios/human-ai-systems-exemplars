@@ -48,6 +48,21 @@
       "media_type": "image/png"
     },
     {
+      "source_path": "context-canvas-project-surface/context-canvas/atlas-gallery-model.js",
+      "projected_path": "atlas-gallery-model.js",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/atlas-gallery-table.js",
+      "projected_path": "atlas-gallery-table.js",
+      "media_type": "text/javascript"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/atlas-gallery.js",
+      "projected_path": "atlas-gallery.js",
+      "media_type": "text/javascript"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/benchmark-orientation.html",
       "projected_path": "benchmark-orientation.html",
       "media_type": "text/html"
@@ -151,6 +166,41 @@
       "source_path": "context-canvas-project-surface/context-canvas/conditioning-field.html",
       "projected_path": "conditioning-field.html",
       "media_type": "text/html"
+    },
+    {
+      "source_path": "context-canvas-project-surface/data/visualization-fidelity/ai4i/README.md",
+      "projected_path": "data/visualization-fidelity/ai4i/README.md",
+      "media_type": "text/markdown"
+    },
+    {
+      "source_path": "context-canvas-project-surface/data/visualization-fidelity/ai4i/gallery.v1.json",
+      "projected_path": "data/visualization-fidelity/ai4i/gallery.v1.json",
+      "media_type": "application/json"
+    },
+    {
+      "source_path": "context-canvas-project-surface/data/visualization-fidelity/ai4i/summary.v1.json",
+      "projected_path": "data/visualization-fidelity/ai4i/summary.v1.json",
+      "media_type": "application/json"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_ai4i_conditions.svg",
+      "projected_path": "img/plot/atlas_ai4i_conditions.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_ai4i_count.svg",
+      "projected_path": "img/plot/atlas_ai4i_count.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_ai4i_rate.svg",
+      "projected_path": "img/plot/atlas_ai4i_rate.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_ai4i_reconciliation.svg",
+      "projected_path": "img/plot/atlas_ai4i_reconciliation.svg",
+      "media_type": "image/svg+xml"
     },
     {
       "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_atlas.svg",

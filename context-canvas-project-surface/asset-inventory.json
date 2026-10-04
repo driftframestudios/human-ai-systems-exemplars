@@ -742,6 +742,78 @@
         "profile": "secom-calendar-months-v1"
       },
       "recovery_condition": "Restore the digest-pinned label records and run node tools/build-atlas-reference.mjs --write before rebuilding the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_ai4i_rate.svg",
+      "semantic_key": "context-canvas.shared-plot.ai4i-rate",
+      "roles": [
+        {
+          "id": "product_type_frequency",
+          "visitor_job": "Compare published Machine failure labels per 100 records across product types while retaining each denominator.",
+          "accessibility_text_owner": "The SVG title and description and visible source strip, with the Atlas native table and caption."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/data/visualization-fidelity/ai4i/ai4i2020.csv",
+        "generator_path": "tools/atlas-gallery-model.mjs",
+        "profile": "ai4i-gallery-rate-v1"
+      },
+      "recovery_condition": "Restore the digest-pinned AI4I records and run node tools/atlas-gallery-model.mjs --write before rebuilding the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_ai4i_count.svg",
+      "semantic_key": "context-canvas.shared-plot.ai4i-count",
+      "roles": [
+        {
+          "id": "product_type_label_count",
+          "visitor_job": "Compare published Machine failure label counts across product types alongside their unequal record counts.",
+          "accessibility_text_owner": "The SVG title and description and visible source strip, with the Atlas native table and caption."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/data/visualization-fidelity/ai4i/ai4i2020.csv",
+        "generator_path": "tools/atlas-gallery-model.mjs",
+        "profile": "ai4i-gallery-count-v1"
+      },
+      "recovery_condition": "Restore the digest-pinned AI4I records and run node tools/atlas-gallery-model.mjs --write before rebuilding the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_ai4i_reconciliation.svg",
+      "semantic_key": "context-canvas.shared-plot.ai4i-reconciliation",
+      "roles": [
+        {
+          "id": "label_mode_reconciliation",
+          "visitor_job": "Account for every record across the four exclusive combinations of the published failure label and any mode flag.",
+          "accessibility_text_owner": "The SVG title and description and visible source strip, with the Atlas native table and caption."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/data/visualization-fidelity/ai4i/ai4i2020.csv",
+        "generator_path": "tools/atlas-gallery-model.mjs",
+        "profile": "ai4i-gallery-reconciliation-v1"
+      },
+      "recovery_condition": "Restore the digest-pinned AI4I records and run node tools/atlas-gallery-model.mjs --write before rebuilding the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_ai4i_conditions.svg",
+      "semantic_key": "context-canvas.shared-plot.ai4i-conditions",
+      "roles": [
+        {
+          "id": "speed_torque_conditions",
+          "visitor_job": "Compare failure-label rates across fixed speed and torque bins with support counts, unavailable cells, and out-of-range records retained.",
+          "accessibility_text_owner": "The SVG title and description and visible source strip, with the Atlas native table and caption."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/data/visualization-fidelity/ai4i/ai4i2020.csv",
+        "generator_path": "tools/atlas-gallery-model.mjs",
+        "profile": "ai4i-gallery-conditions-v1"
+      },
+      "recovery_condition": "Restore the digest-pinned AI4I records and run node tools/atlas-gallery-model.mjs --write before rebuilding the production projection."
     }
   ]
 }

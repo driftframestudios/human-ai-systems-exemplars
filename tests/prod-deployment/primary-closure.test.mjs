@@ -151,6 +151,51 @@ test("the production manifest carries the accepted 41-route primary collection a
   }
 });
 
+test("the manufacturing gallery carries its exact primary closure and generated image provenance", async () => {
+  const manifest = await loadPrimaryManifest();
+  const views = ["rate", "count", "reconciliation", "conditions"];
+  const expected = [
+    ...["atlas-gallery.js", "atlas-gallery-model.js", "atlas-gallery-table.js"].map((file) =>
+      [`${canvasRoot}/${file}`, file, "text/javascript"]),
+    ...[["gallery.v1.json", "application/json"], ["summary.v1.json", "application/json"],
+      ["README.md", "text/markdown"]].map(([file, mediaType]) =>
+      [`context-canvas-project-surface/data/visualization-fidelity/ai4i/${file}`,
+        `data/visualization-fidelity/ai4i/${file}`, mediaType]),
+    ...views.map((view) => [`context-canvas-project-surface/img/plot/atlas_ai4i_${view}.svg`,
+      `img/plot/atlas_ai4i_${view}.svg`, "image/svg+xml"]),
+  ];
+  for (const [source_path, projected_path, media_type] of expected) {
+    assert.deepEqual(manifest.files.filter((file) => file.source_path === source_path),
+      [{ source_path, projected_path, media_type }], source_path);
+    const status = await lstat(path.join(repositoryRoot, source_path));
+    assert.ok(status.isFile() && !status.isSymbolicLink(), source_path);
+  }
+  const inventory = validateAssetInventory(JSON.parse(await readFile(
+    path.join(repositoryRoot, "context-canvas-project-surface/asset-inventory.json"), "utf8",
+  )));
+  for (const view of views) {
+    const sourcePath = `context-canvas-project-surface/img/plot/atlas_ai4i_${view}.svg`;
+    const families = inventory.families.filter(({ selector }) => selector.prefix === undefined
+      ? selector.paths.includes(sourcePath) : sourcePath.startsWith(selector.prefix));
+    assert.deepEqual(families.map(({ id }) => id), ["context-canvas.shared-plot"]);
+    const overrides = inventory.overrides.filter(({ source_path }) => source_path === sourcePath);
+    assert.equal(overrides.length, 1, sourcePath);
+    assert.equal(overrides[0].semantic_key, `context-canvas.shared-plot.ai4i-${view}`);
+    assert.deepEqual(overrides[0].source_relationship, {
+      standing: "generated_derivative",
+      canonical_source_path: "context-canvas-project-surface/data/visualization-fidelity/ai4i/ai4i2020.csv",
+      generator_path: "tools/atlas-gallery-model.mjs",
+      profile: `ai4i-gallery-${view}-v1`,
+    });
+    assert.ok(overrides[0].roles.some(({ accessibility_text_owner }) =>
+      /svg title and description/i.test(accessibility_text_owner)));
+    const bytes = await readFile(path.join(repositoryRoot, sourcePath));
+    assert.equal(inspectImageDimensions(bytes, "image/svg+xml", sourcePath).standing, "available");
+    assert.match(bytes.toString("utf8"), /<title(?:\s|>)/i);
+    assert.match(bytes.toString("utf8"), /<desc(?:\s|>)/i);
+  }
+});
+
 test("the semantic inventory resolves every selected image without becoming a membership source", async () => {
   const configuration = JSON.parse(await readFile(
     path.join(repositoryRoot, "deployment/cpanel/production-projection.config.json"),
