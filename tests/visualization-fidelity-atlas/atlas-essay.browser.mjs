@@ -98,7 +98,11 @@ for (const width of [390, 1440]) {
         await region.scrollIntoViewIfNeeded();
         await region.focus();
         await expect(region).toBeFocused();
+        const regionBox = await region.boundingBox();
+        assert.ok(regionBox && regionBox.x >= -1 && regionBox.x + regionBox.width <= width + 1,
+          'The named table scroll region stays inside the viewport.');
         const maximum = await region.evaluate(node => node.scrollWidth - node.clientWidth);
+        if (width === 390) assert.ok(maximum > 1, 'Narrow tables retain readable columns through local scrolling.');
         if (maximum > 1) {
           await expect.poll(async () => {
             await region.press('ArrowRight');
@@ -110,6 +114,7 @@ for (const width of [390, 1440]) {
             return { right: last.right, boundary: owner.left + node.clientLeft + node.clientWidth };
           });
           assert.ok(end.right <= end.boundary + 2, 'The last column is reachable at the right edge.');
+          assert.ok(end.right <= width + 1, 'The reached last-column edge is visible within the viewport.');
           await expect.poll(async () => {
             await region.press('ArrowLeft');
             return region.evaluate(node => node.scrollLeft);
@@ -129,8 +134,12 @@ for (const width of [390, 1440]) {
         const image = link.locator('img');
         await image.scrollIntoViewIfNeeded();
         await expect.poll(() => image.evaluate(node => node.complete && node.naturalWidth > 0)).toBe(true);
-        const paint = await image.evaluate(node => ({ shadow: getComputedStyle(node).boxShadow, filter: getComputedStyle(node).filter }));
-        assert.deepEqual(paint, { shadow: 'none', filter: 'none' }, 'The article keeps image frames flat; the preserved original retains its authored interior.');
+        const paint = await image.evaluate(node => [node.closest('figure'), node.parentElement, node].map(owner => ({
+          shadow: getComputedStyle(owner).boxShadow,
+          filter: getComputedStyle(owner).filter,
+        })));
+        assert.deepEqual(paint, Array.from({ length: 3 }, () => ({ shadow: 'none', filter: 'none' })),
+          'The figure, linked wrapper, and image remain flat; the preserved original retains its authored interior.');
         await link.screenshot({ path: new URL(`${name}-figure-${i + 1}.png`, output).pathname });
         await link.focus();
         await expect(link).toBeFocused();
