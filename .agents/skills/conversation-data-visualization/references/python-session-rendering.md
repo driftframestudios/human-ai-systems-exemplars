@@ -16,12 +16,116 @@ offer the larger asset when dense detail matters. A request for a graphic
 authorizes that artifact within the current task, while package installation,
 external uploads, and hosted services follow the environment's permissions.
 
-A capable Python environment is a normal rendering option. Use the installed
-runtime and libraries first. In this repository, the Python execution skill
-owns isolated `uv` use; another team's existing environment may use a different
-manager. Declare additional dependencies only when their capability changes the
-result. An unavailable package can be met by an installed renderer or a precise
-plot specification with the exact-value companion.
+## Environment choice: isolated by default
+
+For conversational figures, choose the session's provisioned isolated Python
+runtime first. If it lacks a needed library, use an approved session-scoped
+environment. A repository's Matplotlib or Seaborn declaration is useful context;
+its presence alone leaves the session default unchanged. Keep the host's base
+installation, repository environment, dependency declarations, and lockfiles
+under their existing owners.
+
+Resolve the choice in this order: the current task's explicit preference, an
+applicable team or project instruction, then this portable default. Existing
+security, package-source, and installation permissions continue to govern every
+profile. Runtime selection describes dependency ownership; filesystem, network,
+and code-execution permissions remain separate controls.
+
+| Profile | Use when | Selection and evidence |
+| --- | --- | --- |
+| `session-isolated` (default) | Exploring or explaining data in conversation | Use the session-managed runtime or a dedicated environment with the smallest fitting approved dependencies. Repository versions are optional context. |
+| `session-repository-versions` | Reproducing a project's plotting behavior while keeping its environment untouched | Read the declared Python/library versions or reviewed lock export and resolve them in a separate session environment. Name the subset reproduced; matching Matplotlib and Seaborn alone establishes selected-version parity. |
+| `repository-isolated` | The human or applicable project guidance explicitly requests the project's environment | Use the existing isolated project runtime through its documented entry. Honor its lock and preparation policy. Route missing dependencies or synchronization changes through that owner before altering the environment. |
+
+Complete locked-environment reproduction additionally depends on transitive
+versions, markers, platform, native libraries, fonts, configuration, and data.
+When exact parity cannot be established, explain the material difference and
+offer the next source or environment choice. A strict reproduction request
+keeps its exact-parity claim unresolved until the required environment is
+available; an exploratory task can continue with a clearly named alternative.
+
+### A discoverable preference, rather than another configuration system
+
+A team can put this small declaration in its existing session instructions or
+repository guidance. It is a human/AI-readable instruction block; this skill
+supplies no automatic configuration loader.
+
+```text
+Conversation figure environment: session-isolated
+Version policy: session-supported; record versions when reproduction matters
+Repository environment: follow the selected profile and preparation policy
+Artifacts: the session's approved local output location
+Package installation: follow the current permission and package-source policy
+```
+
+Change the first line to `session-repository-versions` or
+`repository-isolated` when that is the desired standing preference. An exact
+version list or project environment entry can accompany that choice. Prefer
+one such declaration in the team's established instruction surface.
+
+For a human unfamiliar with Python environments, a concise first-use note for
+the default profile is enough: "Using an isolated session environment; the repository's plotting
+versions are available as an option." For an override, describe the selected profile instead. Continue without a
+blocking question when the choice is settled. Ask a focused
+question when a version-dependent behavior, local extension, reproduction
+requirement, or environment change would materially alter the result. Ordinary
+rendering needs neither an environment questionnaire nor repeated reminders.
+
+Useful task-level overrides include:
+
+- "Use the session's isolated plotting environment for this figure."
+- "Match the repository's Matplotlib and Seaborn versions in a separate environment."
+- "Use the project's documented isolated environment for this reproduction."
+
+### Runtime preparation and recovery
+
+Resolve the interpreter through the session's documented runtime entry before
+using a bare `python` command. Inspect or install packages only inside the
+selected environment. Reuse a suitable session environment for related figures
+when its declared versions still fit; a fresh environment per figure adds
+setup without changing the data question.
+
+With approved `uv` access, a task can use the following command shape. The caller
+supplies an existing session scratch directory, an absolute renderer path, and
+any renderer arguments. Python 3.12 is this example's declared choice, rather
+than a requirement imposed on every receiving team.
+
+```sh
+cd "$SESSION_SCRATCH"
+MPLCONFIGDIR="$SESSION_SCRATCH/matplotlib" \
+  uv run --isolated --no-project --python 3.12 --with matplotlib -- \
+  python -I -B "$FIGURE_SCRIPT"
+```
+
+`--isolated` and `--no-project` jointly keep environment selection separate from
+the repository; project discovery and active-environment reuse are different
+concerns. Configuration and package-index policy still need their approved
+source. Use `--no-config` only when intentionally replacing discovered uv
+configuration with an authorized explicit setup. Add Seaborn or pinned
+requirements when the requested figure needs them.
+
+Python's `-I` excludes ambient Python paths and user-site packages, including the
+script directory from the import search path. It suits a self-contained renderer;
+a renderer importing sibling or project modules needs an explicit reviewed
+import route. The scratch working directory and dedicated Matplotlib
+configuration location separate incidental plotting configuration. Deliberately
+requested project styles or fonts can be admitted as named inputs.
+
+Where uv is unavailable, a session-provided environment or dedicated `venv`
+with its own interpreter is a complete alternative. Keep installation within
+that environment and preserve organizational dependency-source policy.
+
+If a needed package, version, or runtime is unavailable, name that capability
+gap and choose an available fitting renderer or a precise figure specification
+with its value/relationship companion. A missing dependency earns a bounded
+environment repair, rather than a silent switch into the repository environment.
+
+Record the environment profile and actual Python/plotting-library versions
+when reproducibility or a reported defect makes them decision-relevant. Preserve
+the useful script, source values, and requested outputs; retire disposable
+session environments and caches through their owning session. Repository tests
+continue to use their source-owned runtime contracts independently of this
+conversational preference.
 
 ## Choose a tool for the operation
 
@@ -154,8 +258,8 @@ when detail exceeds the preview's reading capacity.
 **A multi-panel comparison**
 
 > Use the admitted records to compare event counts, exposure-adjusted rates,
-> and their uncertainty in aligned panels. Use Python in the current approved
-> environment. Keep denominators visible, color meanings consistent, and labels
+> and their uncertainty in aligned panels. Use the session's isolated Python
+> environment unless a task or team preference selects another profile. Keep denominators visible, color meanings consistent, and labels
 > readable in a chat preview. Return a local image, exact plotted values, the
 > source and transformation note, and a short account of what could change the
 > interpretation.
@@ -180,6 +284,13 @@ reasoning about design choices; they make no claim about private model
 reasoning or a team's authority to publish data.
 
 ## Sources and transfer boundary
+
+[uv's run options](https://docs.astral.sh/uv/reference/cli/#uv-run),
+[Python isolated mode](https://docs.python.org/3.12/using/cmdline.html#cmdoption-I),
+and [virtual environments](https://docs.python.org/3.12/library/venv.html)
+supply the environment mechanisms. The profile preference is this skill's
+application of those mechanisms to conversational rendering.
+
 
 The [Matplotlib quick start](https://matplotlib.org/stable/users/explain/quick_start.html)
 supports explicit Figure/Axes ownership. Its

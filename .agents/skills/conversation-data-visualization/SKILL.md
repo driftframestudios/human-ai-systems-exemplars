@@ -55,7 +55,20 @@ all labels into a thumbnail sacrifices the very comparison being explored.
 
 ### Rule: Python is a normal conversational rendering option
 
-Use an available Python environment when it provides the fitting transformation, geometry, composition, or export. A conversation can receive a sophisticated multi-panel figure or labeled relationship diagram directly as an image, together with its exact-value or relationship companion. Choose the renderer for the question and current permissions; web hosting and interactive applications remain separate destination choices. Keep source preparation, drawing, delivery, and cleanup explicit so another team can reproduce or adapt the result.
+Use an isolated session Python environment when it provides the fitting transformation, geometry, composition, or export. A conversation can receive a sophisticated multi-panel figure or labeled relationship diagram directly as an image, together with its exact-value or relationship companion. Choose the renderer for the question and current permissions; web hosting and interactive applications remain separate destination choices. Keep source preparation, drawing, delivery, and cleanup explicit so another team can reproduce or adapt the result.
+
+### Rule: Conversational Python uses a session-isolated default
+
+Use the session's isolated Python environment for conversational figures, even
+when the repository declares Matplotlib or Seaborn. An explicit task preference
+or applicable team/project instruction can select repository-version matching
+in a separate environment, or the project's documented isolated environment.
+Keep dependency installation, repository changes, and execution permissions
+with their existing owners. State the selected profile briefly when useful;
+ask only when the choice materially changes the figure or its reproducibility.
+The [Python reference](references/python-session-rendering.md#environment-choice-isolated-by-default)
+supplies the transferable preference block, command shapes, and recovery route.
+Repository tests retain their own runtime contract.
 
 ### Rule: Numeric geometry comes from the admitted values
 
