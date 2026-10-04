@@ -1228,6 +1228,28 @@
   const RESERVED_KEYS = new Set(["__proto__", "constructor", "prototype"]);
   const STAFFING_HOURS = Object.freeze({ hours: 1, sprints: 80, quarters: 520 });
   const COMPLEXITY_RATES = Object.freeze({ bounded: .08, connected: .16, frontier: .28 });
+  // These eight identities mirror the authored method records; titles and paths may change.
+  const METHOD_SOURCE_KEYS = Object.freeze(Object.fromEntries([
+    "activity-based", "benefit-realization-roi", "bottom-up-wbs", "executive-one-pager",
+    "probabilistic-p50-p80", "risk-register-contingency", "three-branch-tco", "whole-life-tco"
+  ].map(name => ["model/" + name + ".v0.1", "urn:source-key:investment-method:" + name])));
+  function methodSourceKey(id) { return Object.hasOwn(METHOD_SOURCE_KEYS, id) ? METHOD_SOURCE_KEYS[id] : null; }
+  const STAFFING_HEURISTICS = freezeTree([
+    { id:"time-basis", label:"Staffing time basis", rule:"One sprint is 80 hours; one quarter is 520 hours.", sourceBand:"authored-unit-convention" },
+    { id:"unknown-reserve", label:"Named-unknown reserve", rule:"Base cost times min(0.35, named unknowns times 0.025).", sourceBand:"authored-planning-heuristic" },
+    { id:"complexity-reserve", label:"Complexity reserve", rule:"Base cost times 0.08 bounded, 0.16 connected, or 0.28 frontier.", sourceBand:"authored-planning-heuristic" },
+    { id:"sigma-attention", label:"Sigma attention", rule:"Quality hours use 0.65 + sigma times 0.15; this is illustrative attention, not observed capability.", sourceBand:"illustrative-attention-heuristic" },
+    { id:"planning-spread", label:"Planning spread", rule:"Central cost plus/minus 0.07 + min(0.16, unknown rate times 0.45 + complexity rate times 0.2); not a percentile.", sourceBand:"authored-planning-heuristic" },
+    { id:"touchpoints", label:"Coordination touchpoints", rule:"max(0, people - 1) + enabled activity rows + enabled recovery rows + declared AI contribution rows; a count, not a cost multiplier.", sourceBand:"authored-presentation-rule" }
+  ].map(item => ({ ...item, sourceKey:"urn:source-key:investment-heuristic:" + item.id,
+    formulaVersion:FORMULA_VERSION, overrideStanding:"Source coefficients fixed; scenario inputs editable; coefficient overrides unsupported." })));
+  function staffingHeuristics() { return STAFFING_HEURISTICS.map(item => ({ ...item })); }
+  function receiptTimestamp(clock = () => new Date()) {
+    if (typeof clock !== "function") throw new TypeError("Supply a receipt clock returning a valid Date.");
+    const date = clock();
+    if (!(date instanceof Date) || !Number.isFinite(date.getTime())) throw new TypeError("Supply a receipt clock returning a valid Date.");
+    return date.toISOString();
+  }
   const DOMAINS = Object.freeze(["internal-investment", "customer-implementation", "commercial-cohort", "service-operational", "capital-allocation"]);
   const TYPES = Object.freeze(["input", "assumption", "calculation", "evidence", "decision"]);
   const PERIODS = Object.freeze(["month", "quarter", "year"]);
@@ -1359,6 +1381,131 @@
     const value = JSON.parse(text);
     jsonText(value);
     return value;
+  }
+  const LEGACY_SOURCE_FIELDS = Object.freeze([
+    ["sourceId"], ["sourceRecordId"], ["sourceUrl"], ["sourceTitle"], ["sourceRecordTitle"],
+    ["context", "sourceRecord", "id"], ["context", "sourceRecord", "url"], ["context", "sourceRecord", "title"],
+    ["evidence", "sourceRecordId"], ["evidence", "sourceUrl"], ["evidence", "sourceRecordTitle"]
+  ].map(Object.freeze));
+  const OPAQUE_SOURCE_ID = /^(?:[a-f0-9]{32}|[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})$/i;
+  function localIpv4Host(host) {
+    return /^(?:0|10|127)\./.test(host) || /^192\.168\./.test(host)
+      || /^172\.(?:1[6-9]|2[0-9]|3[01])\./.test(host);
+  }
+  function gatedSourceHost(host) {
+    // URL.hostname has already normalized dotted IPv4-mapped IPv6 to hextets.
+    const mapped = host.match(/^\[::ffff:([a-f0-9]{1,4}):([a-f0-9]{1,4})\]$/i);
+    const words = mapped ? mapped.slice(1).map(word => parseInt(word, 16)) : null;
+    const ipv4 = words ? [words[0] >>> 8, words[0] & 255, words[1] >>> 8, words[1] & 255].join(".") : host;
+    return /(?:^|\.)(?:notion\.so|notion\.site|app\.notion\.com|localhost|local|internal)$/.test(host)
+      || localIpv4Host(ipv4)
+      || /^\[(?:::1|f[cd][a-f0-9:]*|fe[89ab][a-f0-9:]*)\]$/i.test(host);
+  }
+  function provenanceProblem(value) {
+    if (value === null || value === "") return null;
+    if (typeof value !== "string") return "Supply a semantic key, public-reference text, or an explicit blank.";
+    const text = value.trim();
+    if (!text) return null;
+    if (OPAQUE_SOURCE_ID.test(text)
+      || /(?:^|[^\w.-])(?:[\w-]+\.)*(?:notion\.so|notion\.site|app\.notion\.com)(?=[:/\\\s]|$)/i.test(text)
+      || /^(?:\/(?:Users|home|private)(?:\/|$)|[a-z]:[\\/]|\\\\|(?:file|javascript|data|vbscript|smb):)/i.test(text)) {
+      return "Use an established semantic key in this provenance field; keep the exact gated source in the local recovery input.";
+    }
+    if (/^urn:/i.test(text)) {
+      if (!/^urn:[a-z0-9][a-z0-9:._/-]*$/i.test(text)) return "Use a complete semantic source key.";
+      if (text.startsWith("urn:source-key:investment-method:") && !Object.values(METHOD_SOURCE_KEYS).includes(text)) {
+        return "Use one of the established investment-method source keys or retain this source for explicit migration.";
+      }
+      return null;
+    }
+    if (/^https?:/i.test(text) && !/^https?:\/\/[^/\\\s<>"']+/i.test(text)) {
+      return "Supply complete HTTP(S) URL syntax, a semantic key, or a local source explanation.";
+    }
+    // This named-field syntax check performs no network access or disclosure adjudication.
+    for (const match of text.matchAll(/(?:\b[a-z][a-z0-9+.-]*:)?\/\/[^\s<>"']+/gi)) {
+      try {
+        const url = new URL(match[0]);
+        if (!/^https?:$/.test(url.protocol) || /\\/.test(match[0]) || url.username || url.password
+          || gatedSourceHost(url.hostname.toLowerCase().replace(/\.$/, ""))
+          || [...url.searchParams.keys()].some(key => /^(?:access_token|api_key|token|signature|x-amz-signature|x-goog-signature)$/i.test(key))) {
+          return "Use an uncredentialed public-reference URL or a semantic key; keep gated coordinates in the local recovery input.";
+        }
+      } catch { return "Supply complete HTTP(S) URL syntax, a semantic key, or a local source explanation."; }
+    }
+    return null;
+  }
+  function legacySourceEntries(snapshot) {
+    const entries = [];
+    for (const path of LEGACY_SOURCE_FIELDS) {
+      let owner = snapshot;
+      for (const segment of path.slice(0, -1)) owner = owner && typeof owner === "object" && Object.hasOwn(owner, segment) ? owner[segment] : null;
+      const name = path.at(-1);
+      if (owner && typeof owner === "object" && Object.hasOwn(owner, name)) entries.push({ owner, name, path:path.join(".") });
+    }
+    return entries;
+  }
+  function isLegacySelection(value) {
+    return value?.schemaVersion === "1.0.0" && value.view === "model-explorer" && typeof value.activeModelId === "string";
+  }
+  function isLegacyLeaveBehind(value) { return Boolean(value && Array.isArray(value.roles) && value.horizon && value.plan); }
+  function legacyCoordinate(value) {
+    if (typeof value !== "string") return false;
+    if (OPAQUE_SOURCE_ID.test(value.trim())) return true;
+    try { return /(?:^|\.)(?:notion\.so|notion\.site|app\.notion\.com)$/.test(new URL(value).hostname.toLowerCase().replace(/\.$/, "")); }
+    catch { return false; }
+  }
+  function declaredMethodSourceKey(value) {
+    if (typeof value !== "string") return null;
+    const text = value.trim();
+    return methodSourceKey(text) || (Object.values(METHOD_SOURCE_KEYS).includes(text) ? text : null);
+  }
+  function migrateLegacySources(raw) {
+    const snapshot = clone(raw), key = isLegacySelection(snapshot) ? methodSourceKey(snapshot.activeModelId) : null;
+    const entries = legacySourceEntries(snapshot);
+    // Compare every declared identity before URL migration can assign a source key.
+    for (const entry of entries) {
+      const declared = /title$/i.test(entry.name) ? null : declaredMethodSourceKey(entry.owner[entry.name]);
+      if (declared && declared !== key) {
+        throw new Error("Legacy provenance names a different method. Revise the original local input before accepting it.");
+      }
+    }
+    for (const entry of entries) {
+      const value = entry.owner[entry.name], isTitle = /title$/i.test(entry.name), isUrl = /url$/i.test(entry.name);
+      const alias = declaredMethodSourceKey(value);
+      if (!isTitle && alias) {
+        if (alias !== key) throw new Error("Legacy provenance names a different method. Revise the original local input before accepting it.");
+        entry.owner[entry.name] = key;
+      } else if (!isTitle && key && legacyCoordinate(value)) {
+        entry.owner[entry.name] = isUrl ? "" : key;
+        if (isUrl) snapshot.sourceRecordId = key;
+      }
+      const problem = provenanceProblem(entry.owner[entry.name]);
+      if (problem) throw new Error("legacy." + entry.path + ": " + problem);
+    }
+    return snapshot;
+  }
+  function migrateOwnedLegacyExtensions(state) {
+    for (const name of ["urn:investment:legacy-selection", "urn:investment:legacy-leave-behind"]) {
+      const entry = state.extensions?.[name], snapshot = entry?.snapshot;
+      if (isLegacySelection(snapshot) || isLegacyLeaveBehind(snapshot)) entry.snapshot = migrateLegacySources(snapshot);
+    }
+    return state;
+  }
+  function* validateProvenance(state) {
+    const entries = [
+      ["state.inputs.evidenceSource", state.inputs.evidenceSource],
+      ...state.serviceOutcomes.map((item, index) => ["state.serviceOutcomes[" + index + "].source", item.source])
+    ];
+    for (const name of ["urn:investment:legacy-selection", "urn:investment:legacy-leave-behind"]) {
+      const snapshot = state.extensions[name]?.snapshot;
+      if (isLegacySelection(snapshot) || isLegacyLeaveBehind(snapshot)) {
+        for (const entry of legacySourceEntries(snapshot)) entries.push(["state.extensions[" + name + "].snapshot." + entry.path, entry.owner[entry.name]]);
+      }
+    }
+    for (const [path, value] of entries) {
+      const problem = provenanceProblem(value);
+      if (problem) yield path + ": " + problem;
+    }
   }
   const cleanText = value => typeof value === "string" && value.trim().length > 0;
   function validDate(value) { if(typeof value!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(value))return false;const date=new Date(value+"T00:00:00Z");return Number.isFinite(date.getTime())&&date.toISOString().slice(0,10)===value; }
@@ -1557,7 +1704,7 @@
     const identityErrors = ["alternatives", "outcomes", "events"].map(name => validateIdentifiers(name, state[name])).filter(Boolean);
     const serviceOutcomeErrors = new Set(state.serviceOutcomes.map(item => item.name)).size === OUTCOMES.length
       ? [] : ["serviceOutcomes: preserve all nine distinct consequence dimensions."];
-    const diagnostics = [...identityErrors, ...serviceOutcomeErrors, ...validateEvents(state.events)];
+    const diagnostics = [...identityErrors, ...serviceOutcomeErrors, ...validateEvents(state.events), ...validateProvenance(state)];
     return { valid: diagnostics.length === 0, errors: diagnostics };
   }
   function validate(state) {
@@ -1637,7 +1784,7 @@
     if(problems.length)return {status:"unavailable",problems};
     const base=roleCost+activityCost+disruptionCost+qualityCost,unknownCost=base*unknownRate,complexityCost=base*complexityRate,central=base+unknownCost+complexityCost,spread=.07+Math.min(.16,unknownRate*.45+complexityRate*.2);
     if(!Number.isFinite(central))return {status:"invalid",problems:["The staffing result exceeds the supported numeric range."]};
-    return {status:"known",currency:STAFFING_CURRENCY,horizonHours,people,taskCount,activityHours,allocatedHours,qualityHours,qualityMultiplier,disruptionHours,roleCost,activityCost,qualityCost,disruptionCost,unknownCost,complexityCost,central,spread,low:central*(1-spread),high:central*(1+spread),unknownCount,unknownRate,complexityRate,unpricedWork:false,overlap,problems:[]};
+    return {status:"known",currency:STAFFING_CURRENCY,horizonHours,people,taskCount,activityHours,allocatedHours,qualityHours,qualityMultiplier,disruptionHours,roleCost,activityCost,qualityCost,disruptionCost,unknownCost,complexityCost,central,spread,low:central*(1-spread),high:central*(1+spread),unknownCount,unknownRate,complexityRate,unpricedWork:false,overlap,heuristics:staffingHeuristics(),problems:[]};
   }
   const FIELD_DOMAINS = Object.freeze({
     commercial: "commercial-cohort",
@@ -1930,19 +2077,19 @@
   }
   function migrate(raw) {
     jsonText(raw);
-    if(raw?.schemaVersion===VERSION)return clone(raw);
+    if(raw?.schemaVersion===VERSION)return migrateOwnedLegacyExtensions(clone(raw));
     if (raw?.schemaVersion === "0.1.0") {
       if (Object.hasOwn(raw, "serviceOutcomes")) throw new Error("Supply one versioned outcome field before importing this state.");
       const { clinical: serviceOutcomes, ...retained } = clone(raw);
-      return { ...retained, schemaVersion: VERSION, serviceOutcomes };
+      return migrateOwnedLegacyExtensions({ ...retained, schemaVersion: VERSION, serviceOutcomes });
     }
     const next=defaults();
-    if(raw?.schemaVersion==="1.0.0"&&raw.view==="model-explorer"&&typeof raw.activeModelId==="string") {
-      next.method=raw.activeModelId;next.extensions["urn:investment:legacy-selection"]={snapshot:clone(raw),standing:"Selection preserved; analytical scenario remains explicitly illustrative."};return next;
+    if(isLegacySelection(raw)) {
+      next.method=raw.activeModelId;next.extensions["urn:investment:legacy-selection"]={snapshot:migrateLegacySources(raw),standing:"Selection preserved; analytical scenario remains explicitly illustrative."};return next;
     }
-    if(raw&&Array.isArray(raw.roles)&&raw.horizon&&raw.plan) {
+    if(isLegacyLeaveBehind(raw)) {
       next.inputs.label=String(raw.plan);next.inputs.internalInvestment=null;next.origin="user-supplied";
-      next.extensions["urn:investment:legacy-leave-behind"]={snapshot:clone(raw),standing:"Historical display snapshot retained. Re-enter exact inputs before deriving investment amounts."};
+      next.extensions["urn:investment:legacy-leave-behind"]={snapshot:migrateLegacySources(raw),standing:"Historical display snapshot retained. Re-enter exact inputs before deriving investment amounts."};
       for(const [key,f] of Object.entries(FIELDS))if(f.type===FIELD_TYPE.NUMBER)next.inputs[key]=null;
       for(const a of next.alternatives)a.flows=a.flows.map(()=>null);
       for(const o of next.outcomes){o.probability=null;o.flows=o.flows.map(()=>null);}
@@ -1968,7 +2115,7 @@
     const result = calculateAccepted(state);
     return freezeTree({ state, result, serialized, fingerprint: fingerprintText(serialized) });
   }
-  return Object.freeze({VERSION,FORMULA_VERSION,FIELD_TYPE,STAFFING_CURRENCY,JSON_LIMITS,NUMERIC_TEXT_LIMIT,DOMAINS,TYPES,FIELDS,OUTCOMES,defaults,schema,validate,clone,numeric,known,unavailable,stable,fingerprint,npv,irr,payback,expectedNpv,staffing,calculate,migrate,parseJson,importState,serialize,prepare});
+  return Object.freeze({VERSION,FORMULA_VERSION,FIELD_TYPE,STAFFING_CURRENCY,JSON_LIMITS,NUMERIC_TEXT_LIMIT,METHOD_SOURCE_KEYS,methodSourceKey,staffingHeuristics,receiptTimestamp,DOMAINS,TYPES,FIELDS,OUTCOMES,defaults,schema,validate,clone,numeric,known,unavailable,stable,fingerprint,npv,irr,payback,expectedNpv,staffing,calculate,migrate,parseJson,importState,serialize,prepare});
 });
 </script>
 <!-- investment-analysis:core:end -->
@@ -4072,7 +4219,7 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
   if(!C||!host)return;
   const ACTION = Object.freeze({
     RESET: "reset", APPLY: "apply", EXPORT: "export", SCHEMA: "schema",
-    IMPORT_TEXT: "import-text", COPY: "copy", STAFFING: "staffing"
+    IMPORT_TEXT: "import-text", COPY: "copy", STAFFING: "staffing", CLEAR_RECOVERY: "clear-recovery"
   });
   const EDITORS = Object.freeze(["events", "alternatives", "outcomes", "serviceOutcomes"]);
   const methodHost = window.crossFunctionalInvestmentModelStudio;
@@ -4085,6 +4232,7 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
   let projection = Object.freeze({ contract: C.VERSION, fingerprint: identity, state, result });
   let interactionVersion = 0;
   let fileRequest = 0;
+  let rejectedFileText = null;
   const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const titles={orientation:"Orientation",commercial:"Commercial cohort",pricing:"Pricing and implementation",capital:"Cash flow and capacity",serviceOutcomes:"Service and operational context",decision:"Decision and reversible gate"};
   const domainLabel = domain => domain === 'service-operational' ? 'Service and operational value' : domain;
@@ -4115,7 +4263,7 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
       '<details><summary>'+heading('E','analysis-inspection-title','Inspect and carry the accepted account')+'</summary><p>The domain axis and record-type axis remain separate. Accountable people establish financial, service, and release decisions.</p><div data-records></div>'+
       '<p><a href="'+(methodHost?'#prompt-capsule-title':'#investment-capsule-title')+'">View the complete Prompt Capsule</a></p>'+
       '<label class="investment-editor" for="analysis-exchange"><strong>Portable state / schema output</strong><textarea id="analysis-exchange" rows="10" spellcheck="false"></textarea></label>'+
-      '<div class="investment-actions"><button type="button" data-action="'+ACTION.IMPORT_TEXT+'">Import pasted state</button><button type="button" data-action="'+ACTION.COPY+'">Select portable state for copying</button><button type="button" data-action="'+ACTION.SCHEMA+'">Inspect JSON Schema</button></div></details>'+
+      '<div class="investment-actions"><button type="button" data-action="'+ACTION.IMPORT_TEXT+'">Import pasted state</button><button type="button" data-action="'+ACTION.COPY+'">Select portable state for copying</button><button type="button" data-action="'+ACTION.SCHEMA+'">Inspect JSON Schema</button><button type="button" data-action="'+ACTION.CLEAR_RECOVERY+'" hidden>Clear rejected file draft</button></div></details>'+
       '<div class="investment-actions"><button type="button" data-action="'+ACTION.APPLY+'">Apply lifecycle, alternative, outcome, and service-outcome edits</button></div>';
     render();
   }
@@ -4271,10 +4419,31 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
     return true;
   }
 
+  function setRejectedFileText(text) {
+    rejectedFileText = text;
+    host.querySelector('[data-action="' + ACTION.CLEAR_RECOVERY + '"]').hidden = text === null;
+  }
+
+  function clearRejectedFileDraft() {
+    setRejectedFileText(null);
+    const exchange = host.querySelector("#analysis-exchange");
+    exchange.value = "";
+    exchange.removeAttribute("aria-invalid");
+    drafts.delete(exchange.id);
+    status("Rejected file draft cleared. Accepted state remains available.");
+  }
+
   function importText(text) {
-    return accept(C.importState(text), "Imported state accepted. The contract, identities, and explicitly unavailable values are retained.", {
+    const accepted = accept(C.importState(text), "Imported state accepted. The contract, identities, and explicitly unavailable values are retained.", {
       inputKeys: Object.keys(C.FIELDS), editorKeys: EDITORS
     });
+    const exchange = host.querySelector("#analysis-exchange");
+    exchange.value = serialized;
+    exchange.removeAttribute("aria-invalid");
+    drafts.delete(exchange.id);
+    status("Imported state accepted. The contract, identities, and explicitly unavailable values are retained.");
+    setRejectedFileText(null);
+    return accepted;
   }
 
   function exportText() {
@@ -4359,16 +4528,25 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
     const request = ++fileRequest;
     const version = interactionVersion;
     const file = input.files[0];
+    let text;
     try {
       if (file.size > C.JSON_LIMITS.bytes) throw new Error("Choose a state file of at most 1 MB in UTF-8.");
-      const text = await file.text();
+      text = await file.text();
       if (request !== fileRequest || version !== interactionVersion) {
         if (request === fileRequest) status("A newer interaction took priority. Select the file again when ready to replace accepted state.");
         return;
       }
       importText(text);
     } catch (error) {
-      if (request === fileRequest && version === interactionVersion) revisionNeeded(error);
+      if (request === fileRequest && version === interactionVersion) {
+        const exchange = host.querySelector("#analysis-exchange");
+        if (typeof text === "string") {
+          setRejectedFileText(text);
+          exchange.value = text;
+          exchange.closest("details").open = true;
+        }
+        revisionNeeded(error, typeof text === "string" ? exchange : undefined);
+      }
     } finally {
       if (request === fileRequest) input.value = "";
     }
@@ -4386,6 +4564,9 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
           accept(candidate, "Illustrative analysis restored.", { inputKeys: Object.keys(C.FIELDS), editorKeys: EDITORS });
           return;
         }
+        case ACTION.CLEAR_RECOVERY:
+          clearRejectedFileDraft();
+          return;
         case ACTION.APPLY:
           applyEditors();
           return;
@@ -4407,11 +4588,13 @@ Create year-indexed rows for implementation, recurring operation, maintenance, h
           useStaffing();
       }
     } catch (error) {
-      revisionNeeded(error);
+      revisionNeeded(error, action === ACTION.IMPORT_TEXT ? host.querySelector("#analysis-exchange") : undefined);
     }
   });
 
   window.investmentAnalysis = Object.freeze({
+    // Local recovery only: excluded from accepted state, capsules, reports, and diagnostics.
+    getRejectedFileText: () => rejectedFileText,
     getState: () => C.clone(state),
     getResult: () => C.clone(result),
     getProjection: () => C.clone(projection),

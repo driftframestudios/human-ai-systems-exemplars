@@ -8,13 +8,12 @@ import { chromium } from "@playwright/test";
 import { createCanvasPackagePlan } from "../../tools/package-canvas-iframe-routes.mjs";
 const root=fileURLToPath(new URL("../../",import.meta.url));
 const routes=["collaboration/initiative-costing-calculator/index.html","collaboration/cross-functional-investment-model-studio/index.html"];
-test("both instruments retain state, labels, focus, recovery and semantic parity", {timeout:120000}, async()=>{
-  const plan = await createCanvasPackagePlan();
+async function investmentServer(plan = null) {
   const packageIds = ["cross-functional-investment-studio", "cross-functional-investment-model-studio"];
   const server=http.createServer(async(req,res)=>{
     try{
       const pathname=decodeURIComponent(new URL(req.url,"http://localhost").pathname);
-      if (pathname.startsWith("/sandbox/")) {
+      if (plan && pathname.startsWith("/sandbox/")) {
         const id = pathname.slice("/sandbox/".length);
         const route = plan.contract.routes.find(route => route.id === id);
         if (!route || !packageIds.includes(id)) { res.writeHead(404); res.end(); return; }
@@ -22,7 +21,7 @@ test("both instruments retain state, labels, focus, recovery and semantic parity
         res.end('<!doctype html><title>Local receiver</title><iframe title="Investment instrument" sandbox="' + route.carrier_policy.sandbox_tokens.join(" ") + '" src="/packaged/' + id + '/index.html"></iframe>');
         return;
       }
-      if (pathname.startsWith("/packaged/")) {
+      if (plan && pathname.startsWith("/packaged/")) {
         const bytes = plan.outputFiles.get(pathname.slice("/packaged/".length));
         if (!bytes) { res.writeHead(404); res.end(); return; }
         res.setHeader("Content-Type", "text/html"); res.end(bytes); return;
@@ -35,6 +34,12 @@ test("both instruments retain state, labels, focus, recovery and semantic parity
     }catch{res.writeHead(404);res.end();}
   });
   await new Promise(resolve=>server.listen(0,"127.0.0.1",resolve));
+  return server;
+}
+test("both instruments retain state, labels, focus, recovery and semantic parity", {timeout:120000}, async()=>{
+  const plan = await createCanvasPackagePlan();
+  const packageIds = ["cross-functional-investment-studio", "cross-functional-investment-model-studio"];
+  const server = await investmentServer(plan);
   const origin="http://127.0.0.1:"+server.address().port;
   const browser=await chromium.launch({headless:true});
   await mkdir(path.join(root,".visual-runs/investment-analysis"),{recursive:true});
@@ -207,4 +212,102 @@ test("both instruments retain state, labels, focus, recovery and semantic parity
       await context.close();
     }
   }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
+});
+
+test("investment file provenance recovery preserves accepted capsule and report identities", { timeout: 60000 }, async () => {
+  const server = await investmentServer();
+  const origin = "http://127.0.0.1:" + server.address().port;
+  let browser;
+  try {
+    browser = await chromium.launch({ headless: true });
+    for (const [index, route] of routes.entries()) {
+      const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+      try {
+        const page = await context.newPage(), errors = [];
+        page.setDefaultTimeout(5000);
+        page.on("pageerror", error => errors.push(error.message));
+        await page.goto(origin + "/" + route);
+        await page.locator("[data-investment-analysis]:not([hidden])").waitFor();
+        const outputs = () => page.evaluate(() => {
+          const api = window.investmentAnalysis;
+          return { serialized: api.serialize(), fingerprint: api.fingerprint(),
+            capsule: api.promptCapsule(), report: api.captureReport() };
+        });
+        const carrier = () => index === 0 ? page.locator("#analysis-capsule").inputValue()
+          : page.locator("#promptCapsuleMarkdown").textContent();
+        const baseline = await outputs(), baselineCarrier = await carrier();
+        const rejected = JSON.parse(baseline.serialized);
+        rejected.inputs.label = "Local Unicode \u03a9 recovery";
+        rejected.inputs.evidenceSource = "https://notion.so/synthetic-rejected-record";
+        const raw = JSON.stringify(rejected, null, 2).replace(/\n/g, "\r\n");
+        const upload = () => page.locator("#analysis-import").setInputFiles({
+          name: "synthetic-provenance.json", mimeType: "application/json", buffer: Buffer.from(raw, "utf8")
+        });
+        await upload();
+        await page.waitForFunction(text => window.investmentAnalysis.getRejectedFileText() === text, raw);
+        const exchange = page.getByLabel("Portable state / schema output", { exact: true });
+        assert.equal(await exchange.inputValue(), raw.replace(/\r\n/g, "\n"));
+        assert.equal(await exchange.getAttribute("aria-invalid"), "true");
+        assert.equal(await exchange.evaluate(node => node.closest("details").open), true);
+        assert.equal(await page.getByRole("button", { name: "Clear rejected file draft", exact: true }).isVisible(), true);
+        const diagnostic = await page.locator("#analysis-status").textContent();
+        assert.match(diagnostic, /inputs\.evidenceSource/);
+        assert.ok(!diagnostic.includes(rejected.inputs.evidenceSource));
+        assert.deepEqual(await outputs(), baseline);
+        assert.equal(await carrier(), baselineCarrier);
+        assert.ok(!JSON.stringify(baseline).includes(rejected.inputs.evidenceSource));
+
+        if (index === 0) {
+          await page.locator("summary").filter({ hasText: /^Inspect source rules and override standing$/ }).click();
+          const rules = page.locator("#staffing-heuristics table");
+          assert.equal(await rules.isVisible(), true);
+          const rows = await rules.locator("tbody tr").allTextContents();
+          assert.equal(rows.length, 6);
+          const fixed = "Source coefficients fixed; scenario inputs editable; coefficient overrides unsupported.";
+          assert.ok(rows.every(row => row.includes(fixed)));
+          assert.equal(rows.filter(row => row.includes("authored-unit-convention")).length, 1);
+          assert.equal(rows.filter(row => row.includes("authored-planning-heuristic")).length, 3);
+          assert.equal(rows.filter(row => row.includes("illustrative-attention")).length, 1);
+          assert.equal(rows.filter(row => row.includes("presentation-rule")).length, 1);
+          const popup = context.waitForEvent("page");
+          await page.getByRole("button", { name: "Open report in a new tab", exact: true }).click();
+          const report = await popup;
+          await report.waitForLoadState("domcontentloaded");
+          const reportRows = await report.locator("table").filter({ hasText: fixed }).locator("tbody tr").allTextContents();
+          assert.deepEqual(reportRows, rows);
+          assert.equal(await report.locator(".investment-report").getAttribute("data-state-fingerprint"), baseline.fingerprint);
+          assert.ok(!(await report.locator("body").textContent()).includes(rejected.inputs.evidenceSource));
+          await report.close();
+        }
+
+        const corrected = { ...rejected, inputs: { ...rejected.inputs,
+          evidenceSource: "urn:source-key:investment-method:activity-based" } };
+        await exchange.fill(JSON.stringify(corrected, null, 2));
+        assert.equal(await page.evaluate(() => window.investmentAnalysis.getRejectedFileText()), raw);
+        await page.getByRole("button", { name: "Import pasted state", exact: true }).click();
+        const accepted = await outputs();
+        assert.deepEqual(JSON.parse(accepted.serialized), corrected);
+        assert.notEqual(accepted.fingerprint, baseline.fingerprint);
+        assert.equal(accepted.report.fingerprint, accepted.fingerprint);
+        assert.ok(accepted.capsule.includes(corrected.inputs.label));
+        assert.ok(accepted.report.html.includes(corrected.inputs.label));
+        assert.ok(!JSON.stringify(accepted).includes(rejected.inputs.evidenceSource));
+        assert.equal(await page.evaluate(() => window.investmentAnalysis.getRejectedFileText()), null);
+        assert.equal(await exchange.getAttribute("aria-invalid"), null);
+        assert.equal(await page.getByRole("button", { name: "Clear rejected file draft", exact: true }).count(), 0);
+        assert.notEqual(await carrier(), baselineCarrier);
+
+        await upload();
+        await page.waitForFunction(text => window.investmentAnalysis.getRejectedFileText() === text, raw);
+        await page.getByRole("button", { name: "Clear rejected file draft", exact: true }).click();
+        assert.equal(await page.evaluate(() => window.investmentAnalysis.getRejectedFileText()), null);
+        assert.equal(await exchange.inputValue(), "");
+        assert.deepEqual(await outputs(), accepted);
+        assert.deepEqual(errors, []);
+      } finally { await context.close(); }
+    }
+  } finally {
+    if (browser) await browser.close();
+    await new Promise(resolve => server.close(resolve));
+  }
 });

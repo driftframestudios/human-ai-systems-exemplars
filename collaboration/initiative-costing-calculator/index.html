@@ -243,6 +243,28 @@
   const RESERVED_KEYS = new Set(["__proto__", "constructor", "prototype"]);
   const STAFFING_HOURS = Object.freeze({ hours: 1, sprints: 80, quarters: 520 });
   const COMPLEXITY_RATES = Object.freeze({ bounded: .08, connected: .16, frontier: .28 });
+  // These eight identities mirror the authored method records; titles and paths may change.
+  const METHOD_SOURCE_KEYS = Object.freeze(Object.fromEntries([
+    "activity-based", "benefit-realization-roi", "bottom-up-wbs", "executive-one-pager",
+    "probabilistic-p50-p80", "risk-register-contingency", "three-branch-tco", "whole-life-tco"
+  ].map(name => ["model/" + name + ".v0.1", "urn:source-key:investment-method:" + name])));
+  function methodSourceKey(id) { return Object.hasOwn(METHOD_SOURCE_KEYS, id) ? METHOD_SOURCE_KEYS[id] : null; }
+  const STAFFING_HEURISTICS = freezeTree([
+    { id:"time-basis", label:"Staffing time basis", rule:"One sprint is 80 hours; one quarter is 520 hours.", sourceBand:"authored-unit-convention" },
+    { id:"unknown-reserve", label:"Named-unknown reserve", rule:"Base cost times min(0.35, named unknowns times 0.025).", sourceBand:"authored-planning-heuristic" },
+    { id:"complexity-reserve", label:"Complexity reserve", rule:"Base cost times 0.08 bounded, 0.16 connected, or 0.28 frontier.", sourceBand:"authored-planning-heuristic" },
+    { id:"sigma-attention", label:"Sigma attention", rule:"Quality hours use 0.65 + sigma times 0.15; this is illustrative attention, not observed capability.", sourceBand:"illustrative-attention-heuristic" },
+    { id:"planning-spread", label:"Planning spread", rule:"Central cost plus/minus 0.07 + min(0.16, unknown rate times 0.45 + complexity rate times 0.2); not a percentile.", sourceBand:"authored-planning-heuristic" },
+    { id:"touchpoints", label:"Coordination touchpoints", rule:"max(0, people - 1) + enabled activity rows + enabled recovery rows + declared AI contribution rows; a count, not a cost multiplier.", sourceBand:"authored-presentation-rule" }
+  ].map(item => ({ ...item, sourceKey:"urn:source-key:investment-heuristic:" + item.id,
+    formulaVersion:FORMULA_VERSION, overrideStanding:"Source coefficients fixed; scenario inputs editable; coefficient overrides unsupported." })));
+  function staffingHeuristics() { return STAFFING_HEURISTICS.map(item => ({ ...item })); }
+  function receiptTimestamp(clock = () => new Date()) {
+    if (typeof clock !== "function") throw new TypeError("Supply a receipt clock returning a valid Date.");
+    const date = clock();
+    if (!(date instanceof Date) || !Number.isFinite(date.getTime())) throw new TypeError("Supply a receipt clock returning a valid Date.");
+    return date.toISOString();
+  }
   const DOMAINS = Object.freeze(["internal-investment", "customer-implementation", "commercial-cohort", "service-operational", "capital-allocation"]);
   const TYPES = Object.freeze(["input", "assumption", "calculation", "evidence", "decision"]);
   const PERIODS = Object.freeze(["month", "quarter", "year"]);
@@ -374,6 +396,131 @@
     const value = JSON.parse(text);
     jsonText(value);
     return value;
+  }
+  const LEGACY_SOURCE_FIELDS = Object.freeze([
+    ["sourceId"], ["sourceRecordId"], ["sourceUrl"], ["sourceTitle"], ["sourceRecordTitle"],
+    ["context", "sourceRecord", "id"], ["context", "sourceRecord", "url"], ["context", "sourceRecord", "title"],
+    ["evidence", "sourceRecordId"], ["evidence", "sourceUrl"], ["evidence", "sourceRecordTitle"]
+  ].map(Object.freeze));
+  const OPAQUE_SOURCE_ID = /^(?:[a-f0-9]{32}|[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})$/i;
+  function localIpv4Host(host) {
+    return /^(?:0|10|127)\./.test(host) || /^192\.168\./.test(host)
+      || /^172\.(?:1[6-9]|2[0-9]|3[01])\./.test(host);
+  }
+  function gatedSourceHost(host) {
+    // URL.hostname has already normalized dotted IPv4-mapped IPv6 to hextets.
+    const mapped = host.match(/^\[::ffff:([a-f0-9]{1,4}):([a-f0-9]{1,4})\]$/i);
+    const words = mapped ? mapped.slice(1).map(word => parseInt(word, 16)) : null;
+    const ipv4 = words ? [words[0] >>> 8, words[0] & 255, words[1] >>> 8, words[1] & 255].join(".") : host;
+    return /(?:^|\.)(?:notion\.so|notion\.site|app\.notion\.com|localhost|local|internal)$/.test(host)
+      || localIpv4Host(ipv4)
+      || /^\[(?:::1|f[cd][a-f0-9:]*|fe[89ab][a-f0-9:]*)\]$/i.test(host);
+  }
+  function provenanceProblem(value) {
+    if (value === null || value === "") return null;
+    if (typeof value !== "string") return "Supply a semantic key, public-reference text, or an explicit blank.";
+    const text = value.trim();
+    if (!text) return null;
+    if (OPAQUE_SOURCE_ID.test(text)
+      || /(?:^|[^\w.-])(?:[\w-]+\.)*(?:notion\.so|notion\.site|app\.notion\.com)(?=[:/\\\s]|$)/i.test(text)
+      || /^(?:\/(?:Users|home|private)(?:\/|$)|[a-z]:[\\/]|\\\\|(?:file|javascript|data|vbscript|smb):)/i.test(text)) {
+      return "Use an established semantic key in this provenance field; keep the exact gated source in the local recovery input.";
+    }
+    if (/^urn:/i.test(text)) {
+      if (!/^urn:[a-z0-9][a-z0-9:._/-]*$/i.test(text)) return "Use a complete semantic source key.";
+      if (text.startsWith("urn:source-key:investment-method:") && !Object.values(METHOD_SOURCE_KEYS).includes(text)) {
+        return "Use one of the established investment-method source keys or retain this source for explicit migration.";
+      }
+      return null;
+    }
+    if (/^https?:/i.test(text) && !/^https?:\/\/[^/\\\s<>"']+/i.test(text)) {
+      return "Supply complete HTTP(S) URL syntax, a semantic key, or a local source explanation.";
+    }
+    // This named-field syntax check performs no network access or disclosure adjudication.
+    for (const match of text.matchAll(/(?:\b[a-z][a-z0-9+.-]*:)?\/\/[^\s<>"']+/gi)) {
+      try {
+        const url = new URL(match[0]);
+        if (!/^https?:$/.test(url.protocol) || /\\/.test(match[0]) || url.username || url.password
+          || gatedSourceHost(url.hostname.toLowerCase().replace(/\.$/, ""))
+          || [...url.searchParams.keys()].some(key => /^(?:access_token|api_key|token|signature|x-amz-signature|x-goog-signature)$/i.test(key))) {
+          return "Use an uncredentialed public-reference URL or a semantic key; keep gated coordinates in the local recovery input.";
+        }
+      } catch { return "Supply complete HTTP(S) URL syntax, a semantic key, or a local source explanation."; }
+    }
+    return null;
+  }
+  function legacySourceEntries(snapshot) {
+    const entries = [];
+    for (const path of LEGACY_SOURCE_FIELDS) {
+      let owner = snapshot;
+      for (const segment of path.slice(0, -1)) owner = owner && typeof owner === "object" && Object.hasOwn(owner, segment) ? owner[segment] : null;
+      const name = path.at(-1);
+      if (owner && typeof owner === "object" && Object.hasOwn(owner, name)) entries.push({ owner, name, path:path.join(".") });
+    }
+    return entries;
+  }
+  function isLegacySelection(value) {
+    return value?.schemaVersion === "1.0.0" && value.view === "model-explorer" && typeof value.activeModelId === "string";
+  }
+  function isLegacyLeaveBehind(value) { return Boolean(value && Array.isArray(value.roles) && value.horizon && value.plan); }
+  function legacyCoordinate(value) {
+    if (typeof value !== "string") return false;
+    if (OPAQUE_SOURCE_ID.test(value.trim())) return true;
+    try { return /(?:^|\.)(?:notion\.so|notion\.site|app\.notion\.com)$/.test(new URL(value).hostname.toLowerCase().replace(/\.$/, "")); }
+    catch { return false; }
+  }
+  function declaredMethodSourceKey(value) {
+    if (typeof value !== "string") return null;
+    const text = value.trim();
+    return methodSourceKey(text) || (Object.values(METHOD_SOURCE_KEYS).includes(text) ? text : null);
+  }
+  function migrateLegacySources(raw) {
+    const snapshot = clone(raw), key = isLegacySelection(snapshot) ? methodSourceKey(snapshot.activeModelId) : null;
+    const entries = legacySourceEntries(snapshot);
+    // Compare every declared identity before URL migration can assign a source key.
+    for (const entry of entries) {
+      const declared = /title$/i.test(entry.name) ? null : declaredMethodSourceKey(entry.owner[entry.name]);
+      if (declared && declared !== key) {
+        throw new Error("Legacy provenance names a different method. Revise the original local input before accepting it.");
+      }
+    }
+    for (const entry of entries) {
+      const value = entry.owner[entry.name], isTitle = /title$/i.test(entry.name), isUrl = /url$/i.test(entry.name);
+      const alias = declaredMethodSourceKey(value);
+      if (!isTitle && alias) {
+        if (alias !== key) throw new Error("Legacy provenance names a different method. Revise the original local input before accepting it.");
+        entry.owner[entry.name] = key;
+      } else if (!isTitle && key && legacyCoordinate(value)) {
+        entry.owner[entry.name] = isUrl ? "" : key;
+        if (isUrl) snapshot.sourceRecordId = key;
+      }
+      const problem = provenanceProblem(entry.owner[entry.name]);
+      if (problem) throw new Error("legacy." + entry.path + ": " + problem);
+    }
+    return snapshot;
+  }
+  function migrateOwnedLegacyExtensions(state) {
+    for (const name of ["urn:investment:legacy-selection", "urn:investment:legacy-leave-behind"]) {
+      const entry = state.extensions?.[name], snapshot = entry?.snapshot;
+      if (isLegacySelection(snapshot) || isLegacyLeaveBehind(snapshot)) entry.snapshot = migrateLegacySources(snapshot);
+    }
+    return state;
+  }
+  function* validateProvenance(state) {
+    const entries = [
+      ["state.inputs.evidenceSource", state.inputs.evidenceSource],
+      ...state.serviceOutcomes.map((item, index) => ["state.serviceOutcomes[" + index + "].source", item.source])
+    ];
+    for (const name of ["urn:investment:legacy-selection", "urn:investment:legacy-leave-behind"]) {
+      const snapshot = state.extensions[name]?.snapshot;
+      if (isLegacySelection(snapshot) || isLegacyLeaveBehind(snapshot)) {
+        for (const entry of legacySourceEntries(snapshot)) entries.push(["state.extensions[" + name + "].snapshot." + entry.path, entry.owner[entry.name]]);
+      }
+    }
+    for (const [path, value] of entries) {
+      const problem = provenanceProblem(value);
+      if (problem) yield path + ": " + problem;
+    }
   }
   const cleanText = value => typeof value === "string" && value.trim().length > 0;
   function validDate(value) { if(typeof value!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(value))return false;const date=new Date(value+"T00:00:00Z");return Number.isFinite(date.getTime())&&date.toISOString().slice(0,10)===value; }
@@ -572,7 +719,7 @@
     const identityErrors = ["alternatives", "outcomes", "events"].map(name => validateIdentifiers(name, state[name])).filter(Boolean);
     const serviceOutcomeErrors = new Set(state.serviceOutcomes.map(item => item.name)).size === OUTCOMES.length
       ? [] : ["serviceOutcomes: preserve all nine distinct consequence dimensions."];
-    const diagnostics = [...identityErrors, ...serviceOutcomeErrors, ...validateEvents(state.events)];
+    const diagnostics = [...identityErrors, ...serviceOutcomeErrors, ...validateEvents(state.events), ...validateProvenance(state)];
     return { valid: diagnostics.length === 0, errors: diagnostics };
   }
   function validate(state) {
@@ -652,7 +799,7 @@
     if(problems.length)return {status:"unavailable",problems};
     const base=roleCost+activityCost+disruptionCost+qualityCost,unknownCost=base*unknownRate,complexityCost=base*complexityRate,central=base+unknownCost+complexityCost,spread=.07+Math.min(.16,unknownRate*.45+complexityRate*.2);
     if(!Number.isFinite(central))return {status:"invalid",problems:["The staffing result exceeds the supported numeric range."]};
-    return {status:"known",currency:STAFFING_CURRENCY,horizonHours,people,taskCount,activityHours,allocatedHours,qualityHours,qualityMultiplier,disruptionHours,roleCost,activityCost,qualityCost,disruptionCost,unknownCost,complexityCost,central,spread,low:central*(1-spread),high:central*(1+spread),unknownCount,unknownRate,complexityRate,unpricedWork:false,overlap,problems:[]};
+    return {status:"known",currency:STAFFING_CURRENCY,horizonHours,people,taskCount,activityHours,allocatedHours,qualityHours,qualityMultiplier,disruptionHours,roleCost,activityCost,qualityCost,disruptionCost,unknownCost,complexityCost,central,spread,low:central*(1-spread),high:central*(1+spread),unknownCount,unknownRate,complexityRate,unpricedWork:false,overlap,heuristics:staffingHeuristics(),problems:[]};
   }
   const FIELD_DOMAINS = Object.freeze({
     commercial: "commercial-cohort",
@@ -945,19 +1092,19 @@
   }
   function migrate(raw) {
     jsonText(raw);
-    if(raw?.schemaVersion===VERSION)return clone(raw);
+    if(raw?.schemaVersion===VERSION)return migrateOwnedLegacyExtensions(clone(raw));
     if (raw?.schemaVersion === "0.1.0") {
       if (Object.hasOwn(raw, "serviceOutcomes")) throw new Error("Supply one versioned outcome field before importing this state.");
       const { clinical: serviceOutcomes, ...retained } = clone(raw);
-      return { ...retained, schemaVersion: VERSION, serviceOutcomes };
+      return migrateOwnedLegacyExtensions({ ...retained, schemaVersion: VERSION, serviceOutcomes });
     }
     const next=defaults();
-    if(raw?.schemaVersion==="1.0.0"&&raw.view==="model-explorer"&&typeof raw.activeModelId==="string") {
-      next.method=raw.activeModelId;next.extensions["urn:investment:legacy-selection"]={snapshot:clone(raw),standing:"Selection preserved; analytical scenario remains explicitly illustrative."};return next;
+    if(isLegacySelection(raw)) {
+      next.method=raw.activeModelId;next.extensions["urn:investment:legacy-selection"]={snapshot:migrateLegacySources(raw),standing:"Selection preserved; analytical scenario remains explicitly illustrative."};return next;
     }
-    if(raw&&Array.isArray(raw.roles)&&raw.horizon&&raw.plan) {
+    if(isLegacyLeaveBehind(raw)) {
       next.inputs.label=String(raw.plan);next.inputs.internalInvestment=null;next.origin="user-supplied";
-      next.extensions["urn:investment:legacy-leave-behind"]={snapshot:clone(raw),standing:"Historical display snapshot retained. Re-enter exact inputs before deriving investment amounts."};
+      next.extensions["urn:investment:legacy-leave-behind"]={snapshot:migrateLegacySources(raw),standing:"Historical display snapshot retained. Re-enter exact inputs before deriving investment amounts."};
       for(const [key,f] of Object.entries(FIELDS))if(f.type===FIELD_TYPE.NUMBER)next.inputs[key]=null;
       for(const a of next.alternatives)a.flows=a.flows.map(()=>null);
       for(const o of next.outcomes){o.probability=null;o.flows=o.flows.map(()=>null);}
@@ -983,7 +1130,7 @@
     const result = calculateAccepted(state);
     return freezeTree({ state, result, serialized, fingerprint: fingerprintText(serialized) });
   }
-  return Object.freeze({VERSION,FORMULA_VERSION,FIELD_TYPE,STAFFING_CURRENCY,JSON_LIMITS,NUMERIC_TEXT_LIMIT,DOMAINS,TYPES,FIELDS,OUTCOMES,defaults,schema,validate,clone,numeric,known,unavailable,stable,fingerprint,npv,irr,payback,expectedNpv,staffing,calculate,migrate,parseJson,importState,serialize,prepare});
+  return Object.freeze({VERSION,FORMULA_VERSION,FIELD_TYPE,STAFFING_CURRENCY,JSON_LIMITS,NUMERIC_TEXT_LIMIT,METHOD_SOURCE_KEYS,methodSourceKey,staffingHeuristics,receiptTimestamp,DOMAINS,TYPES,FIELDS,OUTCOMES,defaults,schema,validate,clone,numeric,known,unavailable,stable,fingerprint,npv,irr,payback,expectedNpv,staffing,calculate,migrate,parseJson,importState,serialize,prepare});
 });
 </script>
 <!-- investment-analysis:core:end -->
@@ -1714,7 +1861,7 @@ This packet carries the accepted analysis revision identified above. Pending edi
 </textarea></label>
 <div class="investment-actions" data-analysis-capsule-actions hidden><button type="button" data-capsule-action="copy">Copy Prompt Capsule</button><button type="button" data-capsule-action="download">Download Markdown</button></div>
 <p id="analysis-capsule-status" role="status">Plain Markdown describes the authored initial analysis. Select its text to copy it manually.</p>
-</details><section aria-labelledby="investment-overlap-title"><span class="section-label">10F · Reconcile staffing overlap</span><h3 id="investment-overlap-title">Staffing overlap policy</h3><p>Enter the share of each cost that is additional to allocated staffing. A share of 0 means that effort is already included; 100 means fully incremental. Reserve and spread remain separate planning heuristics.</p><div class="investment-fields">
+</details><section aria-labelledby="investment-overlap-title"><span class="section-label">10F · Reconcile staffing overlap</span><h3 id="investment-overlap-title">Staffing overlap policy</h3><details><summary>Inspect source rules and override standing</summary><p>Scenario inputs remain editable. Staffing coefficients retain their authored source rules; this instrument supports no coefficient overrides. These planning heuristics establish neither calibrated probabilities nor observed capability.</p><div id="staffing-heuristics"></div></details><p>Enter the share of each cost that is additional to allocated staffing. A share of 0 means that effort is already included; 100 means fully incremental. Reserve and spread remain separate planning heuristics.</p><div class="investment-fields">
 <label class="investment-field" for="overlap-activities">Additional activity share (%)<input id="overlap-activities" type="number" min="0" max="100" value="100"></label>
 <label class="investment-field" for="overlap-recovery">Additional recovery share (%)<input id="overlap-recovery" type="number" min="0" max="100" value="100"></label>
 <label class="investment-field" for="overlap-quality">Additional quality share (%)<input id="overlap-quality" type="number" min="0" max="100" value="100"></label>
@@ -1840,9 +1987,9 @@ This packet carries the accepted analysis revision identified above. Pending edi
   function horizonRender(){var svg=$('horizon-svg'),max=Math.max(1,Number($('horizon').value)||1),unit=$('unit').value,x0=225,x1=1155,w=x1-x0;function x(v){return x0+w*v;}var activeRoles=state.roles.filter(function(r){return r.enabled;}).slice(0,4),activities=state.activities.filter(function(a){return a.enabled;}).slice(0,3),disruptions=state.disruptions.filter(function(d){return d.enabled;}).slice(0,2);var rows=[],y=112;activeRoles.forEach(function(r,i){var start=Math.min(.18,i*.045),end=Math.min(.98,start+.38+(Number(r.c)||0)/180);rows.push({kind:'span',label:r.a+' × '+r.name,start:start,end:end,y:y,tag:(r.seniority||'STAFFED ROLE')+' · '+r.c+'% · '+(r.change||'CHANGE MAP OPEN')});y+=36;});activities.forEach(function(a,i){var start=.08+i*.25,end=Math.min(.94,start+.25);rows.push({kind:'milestone',label:a.name,start:start,end:end,y:y,tag:'ACTIVITY · '+a.a+' tasks'});y+=36;});disruptions.forEach(function(d,i){var start=.44+i*.22,end=Math.min(.93,start+.1+(Number(d.b)||0)/300);rows.push({kind:'look',label:d.name,start:start,end:end,y:y,tag:'LOOK HERE · '+d.a+' × '+d.b+'h recovery'});y+=36;});rows.push({kind:'handoff',label:'AI collaboration handoffs',points:[.22,.48,.76],y:y,tag:'◆ HUMAN RECEIVER NAMED'});y+=36;var top=state.allocations.map(function(v,i){return {v:v,n:changeComponents[i][0]};}).sort(function(a,b){return b.v-a.v;}).slice(0,state.framework==='dual'?8:3);rows.push({kind:state.framework==='dual'?'accelerators':'change',label:state.framework==='dual'?'Concurrent accelerators':'Change work',items:top,y:y,tag:state.framework==='dual'?'DUAL SYSTEM · 8 CONCURRENT':'ANALYTIC ALLOCATION'});y+=36;if($('quality-enabled').checked){rows.push({kind:'quality',label:'Quality collaboration',start:.06,end:.94,y:y,tag:'DEFAULT PHASE · '+$('quality-allocation').value+'%'});y+=36;}svg.setAttribute('viewBox','0 0 1200 '+Math.max(500,y+70));var out='<defs><pattern id="look-pattern" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#fae4b9"/><line x1="0" y1="0" x2="0" y2="10" stroke="#f5bf42" stroke-width="4"/></pattern></defs><rect width="1200" height="100%" fill="#0f2e61"/><text x="38" y="36" fill="#56d8c9" font-family="monospace" font-size="15" font-weight="800">'+escapeHtml(presets[state.preset].name.toUpperCase())+' · '+max+' '+unit.toUpperCase()+'</text><text x="38" y="64" fill="#d3e4f2" font-family="system-ui" font-size="14">Approximate coordination model · update the controls to recompose this planning horizon</text>';[0,.25,.5,.75,1].forEach(function(t){var tx=x(t);out+='<line x1="'+tx+'" y1="82" x2="'+tx+'" y2="'+(y+15)+'" stroke="#4d70aa" stroke-width="1"/><text x="'+tx+'" y="96" text-anchor="middle" fill="#d3e4f2" font-family="monospace" font-size="12">'+horizonLabel(max*t,max,unit)+'</text>';});rows.forEach(function(row){out+='<text x="38" y="'+(row.y+5)+'" fill="#f8f1d9" font-family="system-ui" font-size="14" font-weight="750">'+escapeHtml(row.label)+'</text><text x="1170" y="'+(row.y+5)+'" text-anchor="end" fill="#9eb5da" font-family="monospace" font-size="10">'+escapeHtml(row.tag)+'</text><line x1="'+x0+'" y1="'+row.y+'" x2="'+x1+'" y2="'+row.y+'" stroke="#35588e"/>';if(row.kind==='span'||row.kind==='milestone'){out+='<rect x="'+x(row.start)+'" y="'+(row.y-9)+'" width="'+(x(row.end)-x(row.start))+'" height="18" rx="4" fill="'+(row.kind==='span'?'#56d8c9':'#d3e4f2')+'" stroke="#fff"/>';if(row.kind==='milestone')out+='<path d="M '+x(row.end)+' '+(row.y-9)+' l 9 9 -9 9 -9-9 Z" fill="#f8f1d9" stroke="#213252"/>';}if(row.kind==='look')out+='<rect x="'+x(row.start)+'" y="'+(row.y-11)+'" width="'+(x(row.end)-x(row.start))+'" height="22" fill="url(#look-pattern)" stroke="#f8f1d9" stroke-width="2" stroke-dasharray="6 4"/><text x="'+(x(row.start)+8)+'" y="'+(row.y+4)+'" fill="#213252" font-family="monospace" font-size="10" font-weight="900">LOOK HERE</text>';if(row.kind==='handoff')row.points.forEach(function(point){out+='<path d="M '+x(point)+' '+(row.y-10)+' l 10 10 -10 10 -10-10 Z" fill="#f8f1d9" stroke="#56d8c9" stroke-width="3"/>';});if(row.kind==='change')row.items.forEach(function(item,i){var sx=.06+i*.31,ew=.21+(item.v/200);out+='<rect x="'+x(sx)+'" y="'+(row.y-9)+'" width="'+(w*ew)+'" height="18" rx="9" fill="#d3e4f2" stroke="#56d8c9"/><text x="'+(x(sx)+8)+'" y="'+(row.y+4)+'" fill="#213252" font-family="monospace" font-size="10" font-weight="800">'+escapeHtml(item.n)+' · '+item.v+'</text>';});if(row.kind==='accelerators')row.items.forEach(function(item,i){var px=.07+i*.12;out+='<path d="M '+x(px)+' '+(row.y-9)+' l 9 9 -9 9 -9-9 Z" fill="#d3e4f2" stroke="#56d8c9" stroke-width="2"/><text x="'+x(px)+'" y="'+(row.y-15)+'" text-anchor="middle" fill="#f8f1d9" font-family="monospace" font-size="8">'+(i+1)+'</text>';});if(row.kind==='quality'){out+='<rect x="'+x(row.start)+'" y="'+(row.y-12)+'" width="'+(x(row.end)-x(row.start))+'" height="24" fill="none" stroke="#f8f1d9" stroke-width="3" stroke-dasharray="3 5"/>';var enabled=state.quality.filter(Boolean).length;out+='<text x="'+x(.5)+'" y="'+(row.y+4)+'" text-anchor="middle" fill="#f8f1d9" font-family="monospace" font-size="11" font-weight="800">QUALITY COLLABORATION · '+enabled+' OF 10 CONCEPTS ACTIVE</text>';}});svg.innerHTML=out;$('horizon-caption').textContent='Planning horizon for '+presets[state.preset].name+': '+max+' '+unit+'. Spans are approximate; diamonds mark human-received AI handoffs or activity milestones, while hatched “Look here” windows preserve disruption and recovery attention.';}
   function applyLensToHorizon(){var svg=$('horizon-svg'),active=lenses[state.lens],ns='http://www.w3.org/2000/svg',title=document.createElementNS(ns,'title'),desc=document.createElementNS(ns,'desc');title.id='horizon-svg-title';title.textContent='Coordination horizon with '+active.name+' foregrounded';desc.id='horizon-svg-desc';desc.textContent='The same planning facts remain visible while '+active.name+' receives a low-opacity underlay. Role spans, activities, disruptions, AI handoffs, change work, and quality collaboration retain their labels.';svg.prepend(desc);svg.prepend(title);var targetText={change:['Change work','Concurrent accelerators'],look:state.lens==='people'?state.disruptions.filter(function(d){return d.enabled;}).slice(0,1).map(function(d){return d.name;}):state.disruptions.filter(function(d){return d.enabled;}).map(function(d){return d.name;}),milestone:state.activities.filter(function(a){return a.enabled;}).slice(0,1).map(function(a){return a.name;}),quality:['Quality collaboration'],span:state.roles.filter(function(r){return r.enabled;}).slice(0,1).map(function(r){return r.a+' × '+r.name;})}[active.kind]||[],firstForeground=svg.querySelector('text');Array.from(svg.querySelectorAll('text')).forEach(function(t){if(t.textContent.indexOf('DEFAULT PHASE ·')===0)t.textContent+=' · '+(Number($('sigma-target-input').value)||3).toFixed(1)+'σ ATTENTION';if(t.textContent==='◆ HUMAN RECEIVER NAMED')t.textContent='◆ '+new Set(state.aiReceivers).size+' HUMAN RECEIVER'+(new Set(state.aiReceivers).size===1?'':'S')+' NAMED';if(targetText.indexOf(t.textContent)>-1){t.setAttribute('fill','#56d8c9');t.setAttribute('font-size','17');var y=Number(t.getAttribute('y'))-5,underlay=document.createElementNS(ns,'line');underlay.setAttribute('x1','215');underlay.setAttribute('x2','1160');underlay.setAttribute('y1',y);underlay.setAttribute('y2',y);underlay.setAttribute('stroke','#56d8c9');underlay.setAttribute('stroke-width','24');underlay.setAttribute('stroke-opacity','.12');underlay.setAttribute('aria-hidden','true');svg.insertBefore(underlay,firstForeground);}});}
   function applyQualitySpanToHorizon(){if(!$('quality-enabled').checked)return;var svg=$('horizon-svg'),label=Array.from(svg.querySelectorAll('text')).find(function(t){return t.textContent==='Quality collaboration';});if(!label)return;var y=Number(label.getAttribute('y'))-5,phase=Array.from(svg.querySelectorAll('rect[fill="none"]')).find(function(r){return Number(r.getAttribute('y'))===y-12;});if(!phase)return;var share=Math.max(.12,Math.min(.88,(Number($('quality-allocation').value)||0)/100)),start=(1-share)/2;phase.setAttribute('x',225+930*start);phase.setAttribute('width',930*share);}
-  function leaveBehindSnapshot(){var calc=state.lastCalculation||{},model=frameworks[state.framework],activeRoles=state.roles.filter(function(r){return r.enabled;}),activeActivities=state.activities.filter(function(a){return a.enabled;}),activeDisruptions=state.disruptions.filter(function(d){return d.enabled;});return {generated:new Date().toISOString(),analysis:window.investmentAnalysis.captureReport(),calculationContract:InvestmentCore.VERSION,staffingSnapshot:staffingSnapshot(),plan:presets[state.preset].name,band:$('band').textContent,lens:lenses[state.lens].name,framework:model.name,horizon:{value:$('horizon').value,unit:$('unit').value,hours:calc.horizonHours||0,complexity:$('complexity').value,unknowns:$('unknowns').value,effects:'Duration and unit rescale the Coordination Horizon. Complexity and named unknowns change the planning reserve.'},goal:{ability:$('goal-ability').value,population:$('goal-population').value,signal:$('goal-signal').value,owner:$('goal-owner').value,review:$('goal-review').value,open:$('goal-open').value},costs:[['Allocated time',$('method-role').textContent],['Changed-work load',$('method-activity').textContent],['Quality collaboration',$('method-quality').textContent],['Recovery and reserve',$('method-recovery').textContent],['Planning band',$('method-band').textContent]],roles:activeRoles.map(function(r){return [r.name,r.a,r.b,r.c,r.fn,r.seniority,r.decision||'Advises',r.change,r.quality,r.ai];}),activities:activeActivities.map(function(a){return [a.name,a.a,a.b];}),disruptions:activeDisruptions.map(function(d){return [d.name,d.a,d.b];}),components:model.components.map(function(c,i){var s=state.frameworkStates[state.framework][i];return [c[0],s.status,s.mapped?'Mapped':'Outside current map'];}),allocations:changeComponents.map(function(c,i){return [c[0],state.allocations[i]+' parts'];}),quality:{enabled:$('quality-enabled').checked?'Included':'Deferred',allocation:$('quality-allocation').value+'%',rate:money(Number($('quality-rate').value)||0)+'/hr',sigma:(Number($('sigma-target-input').value)||3).toFixed(1)+'σ',multiplier:(calc.qualityMultiplier||0).toFixed(2)+'× planning multiplier',hours:Math.round(calc.qualityHours||0)+' quality-attention hours',concepts:qualityConcepts.filter(function(_,i){return state.quality[i];})},ai:aiContributions.map(function(n,i){return [n,state.aiReceivers[i]||'Named human reviewer'];}),learning:Array.from(document.querySelectorAll('#learning-list summary')).map(function(n){return n.textContent;}),boundaries:['This prospective USD model supports effort and investment planning. Ground each assumption in local evidence. Accountable people review pricing and expected outcomes, authorize budgets and staffing, and establish applicable rates.','Change-model correspondence and allocation organize planning attention. Use a separately reviewed method to rank options, establish an optimum, or forecast adoption.','Sigma uses a centered statistical attention model with a 0σ shift; the 1.5σ-shift convention belongs to a separate model. Use empirical evidence and qualified review to assess realized defects, capability, fitness for intended use, accessibility, security, and effects on people.','Named humans retain decision, hiring, quality, and exception authority.']};}
+  function leaveBehindSnapshot(clock){var calc=state.lastCalculation||{},model=frameworks[state.framework],activeRoles=state.roles.filter(function(r){return r.enabled;}),activeActivities=state.activities.filter(function(a){return a.enabled;}),activeDisruptions=state.disruptions.filter(function(d){return d.enabled;});return {generated:InvestmentCore.receiptTimestamp(clock),heuristics:InvestmentCore.staffingHeuristics(),analysis:window.investmentAnalysis.captureReport(),calculationContract:InvestmentCore.VERSION,staffingSnapshot:staffingSnapshot(),plan:presets[state.preset].name,band:$('band').textContent,lens:lenses[state.lens].name,framework:model.name,horizon:{value:$('horizon').value,unit:$('unit').value,hours:calc.horizonHours||0,complexity:$('complexity').value,unknowns:$('unknowns').value,effects:'Duration and unit rescale the Coordination Horizon. Complexity and named unknowns change the planning reserve.'},goal:{ability:$('goal-ability').value,population:$('goal-population').value,signal:$('goal-signal').value,owner:$('goal-owner').value,review:$('goal-review').value,open:$('goal-open').value},costs:[['Allocated time',$('method-role').textContent],['Changed-work load',$('method-activity').textContent],['Quality collaboration',$('method-quality').textContent],['Recovery and reserve',$('method-recovery').textContent],['Planning band',$('method-band').textContent]],roles:activeRoles.map(function(r){return [r.name,r.a,r.b,r.c,r.fn,r.seniority,r.decision||'Advises',r.change,r.quality,r.ai];}),activities:activeActivities.map(function(a){return [a.name,a.a,a.b];}),disruptions:activeDisruptions.map(function(d){return [d.name,d.a,d.b];}),components:model.components.map(function(c,i){var s=state.frameworkStates[state.framework][i];return [c[0],s.status,s.mapped?'Mapped':'Outside current map'];}),allocations:changeComponents.map(function(c,i){return [c[0],state.allocations[i]+' parts'];}),quality:{enabled:$('quality-enabled').checked?'Included':'Deferred',allocation:$('quality-allocation').value+'%',rate:money(Number($('quality-rate').value)||0)+'/hr',sigma:(Number($('sigma-target-input').value)||3).toFixed(1)+'σ',multiplier:(calc.qualityMultiplier||0).toFixed(2)+'× planning multiplier',hours:Math.round(calc.qualityHours||0)+' quality-attention hours',concepts:qualityConcepts.filter(function(_,i){return state.quality[i];})},ai:aiContributions.map(function(n,i){return [n,state.aiReceivers[i]||'Named human reviewer'];}),learning:Array.from(document.querySelectorAll('#learning-list summary')).map(function(n){return n.textContent;}),boundaries:['This prospective USD model supports effort and investment planning. Ground each assumption in local evidence. Accountable people review pricing and expected outcomes, authorize budgets and staffing, and establish applicable rates.','Change-model correspondence and allocation organize planning attention. Use a separately reviewed method to rank options, establish an optimum, or forecast adoption.','Sigma uses a centered statistical attention model with a 0σ shift; the 1.5σ-shift convention belongs to a separate model. Use empirical evidence and qualified review to assess realized defects, capability, fitness for intended use, accessibility, security, and effects on people.','Named humans retain decision, hiring, quality, and exception authority.']};}
   function reportTable(headers,rows,caption){var label=caption||(headers[0]||'Planning')+' table';return '<div class="table-wrap" tabindex="0" role="region" aria-label="'+escapeHtml(label)+'; scroll horizontally"><table><caption>'+escapeHtml(label)+'</caption><thead><tr>'+headers.map(function(h){return '<th scope="col" data-label="'+escapeHtml(h)+'">'+escapeHtml(h)+'</th>';}).join('')+'</tr></thead><tbody>'+rows.map(function(row){return '<tr data-label="'+escapeHtml(label+': '+row[0])+'">'+row.map(function(v,i){return '<'+(i?'td':'th')+(i?'':' scope="row"')+' data-label="'+escapeHtml(headers[i])+'">'+escapeHtml(v)+'</'+(i?'td':'th')+'>';}).join('')+'</tr>';}).join('')+'</tbody></table></div>';}
-  function leaveBehindHtml(s,downloadUrl){var download=downloadUrl?'<a class="download" download="initiative-investment-leave-behind.html" href="'+downloadUrl+'">Download HTML</a>':'';return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; img-src data:; base-uri \'none\'; form-action \'none\'">\x3cmeta name="author" content="\x56ikrant Varun Kudesia"><title>Initiative investment leave-behind</title><style>:root{--ink:#213252;--teal:#0b6663;--tiffany:#56d8c9;--paper:#fffdf7;--info:#d3e4f2}*{box-sizing:border-box}body{margin:0;background:#f1e9d2;color:var(--ink);font:15px/1.5 system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:32px}header{border:3px solid var(--ink);border-top:14px solid var(--tiffany);background:var(--paper);padding:24px}h1{margin:4px 0;font-size:clamp(32px,6vw,64px);line-height:1}.meta{font:700 12px monospace;text-transform:uppercase;color:var(--teal)}section{margin:20px 0;padding:20px;border:2px solid var(--ink);background:var(--paper)}h2{margin:0 0 12px;font-size:20px}dl{display:grid;grid-template-columns:minmax(150px,.45fr) 1fr;gap:8px 16px}dt{font-weight:800}dd{margin:0}.table-wrap{overflow:auto}.table-wrap:focus-visible{outline:4px solid var(--teal);outline-offset:2px}table{width:100%;border-collapse:collapse;min-width:640px}th,td{border:1px solid #71809b;padding:8px;text-align:left;vertical-align:top}thead th{background:var(--info)}.band{font-size:32px;font-weight:900}.download{display:inline-block;margin-top:16px;padding:10px 14px;border:2px solid var(--ink);background:var(--tiffany);color:var(--ink);font-weight:900;text-decoration:none}.print{padding:10px;background:var(--info);border-left:5px solid var(--teal)}ul{margin:8px 0}@media print{body{background:#fff}main{max-width:none;padding:0}.download,.print{display:none}section,header{break-inside:auto}.table-wrap{overflow:visible}table{min-width:0}tbody,tr,th,td{display:block;min-width:0}thead{display:none}tr{break-inside:avoid}td::before{content:attr(data-label) ": ";font-weight:800}}@media(max-width:600px){main{padding:12px}section,header{padding:12px}dl{grid-template-columns:1fr}dd{overflow-wrap:anywhere}}th,td{overflow-wrap:normal;word-break:normal;min-width:8rem}caption{text-align:left;font-weight:800}.table-wrap pre{white-space:pre-wrap}</style><style>'+s.analysis.styles+'</style></head><body><main><header><div class="meta">Cross-Functional Investment Studio · static leave-behind</div><h1>'+escapeHtml(s.plan)+'</h1><p class="band">'+escapeHtml(s.band)+'</p><p>Generated '+escapeHtml(s.generated)+' · '+escapeHtml(s.lens)+' lens · '+escapeHtml(s.framework)+'</p>'+download+'<p class="print"><strong>Print / Save PDF:</strong> use the browser print command for a clean PDF. This static page carries the exported snapshot; ongoing calculations remain in the source instrument.</p></header><section><h2>Planning read</h2><dl><dt>Estimation Horizon</dt><dd>'+escapeHtml(s.horizon.value+' '+s.horizon.unit+' · '+s.horizon.hours+' planning hours')+'</dd><dt>Complexity</dt><dd>'+escapeHtml(s.horizon.complexity)+'</dd><dt>Named unknowns</dt><dd>'+escapeHtml(s.horizon.unknowns)+'</dd><dt>Horizon effect</dt><dd>'+escapeHtml(s.horizon.effects)+'</dd></dl></section><section><h2>Goal and open conditions</h2><dl><dt>Changed ability</dt><dd>'+escapeHtml(s.goal.ability)+'</dd><dt>Affected population</dt><dd>'+escapeHtml(s.goal.population)+'</dd><dt>Observable signal</dt><dd>'+escapeHtml(s.goal.signal)+'</dd><dt>Decision owner</dt><dd>'+escapeHtml(s.goal.owner)+'</dd><dt>Review boundary</dt><dd>'+escapeHtml(s.goal.review)+'</dd><dt>Remains open</dt><dd>'+escapeHtml(s.goal.open)+'</dd></dl></section><section><h2>How the range is formed</h2>'+reportTable(['Method','Current amount / range'],s.costs)+'</section><section><h2>Roles, allocation, and staffed boundaries</h2>'+reportTable(['Role','People','Rate/hr','Allocation %','Function','Seniority','Decision','Change','Quality','AI contribution role'],s.roles)+'</section><section><h2>Activities and recovery</h2><h3>Activities</h3>'+reportTable(['Activity','Tasks','Hours/task'],s.activities)+'<h3>Disruptions and recovery</h3>'+reportTable(['Disruption','Events','Recovery hours'],s.disruptions)+'</section><section><h2>'+escapeHtml(s.framework)+' components</h2>'+reportTable(['Component','Planning state','Map'],s.components)+'<h3>Separate change-attention lens</h3>'+reportTable(['Component','Relative attention'],s.allocations)+'</section><section><h2>Quality collaboration</h2><dl><dt>Phase</dt><dd>'+escapeHtml(s.quality.enabled)+'</dd><dt>Allocation</dt><dd>'+escapeHtml(s.quality.allocation)+'</dd><dt>Independent review rate</dt><dd>'+escapeHtml(s.quality.rate)+'</dd><dt>Sigma posture</dt><dd>'+escapeHtml(s.quality.sigma)+'</dd><dt>Planning multiplier</dt><dd>'+escapeHtml(s.quality.multiplier)+'</dd><dt>Quality-attention hours</dt><dd>'+escapeHtml(s.quality.hours)+'</dd><dt>Named concepts</dt><dd>'+escapeHtml(s.quality.concepts.join('; '))+'</dd></dl></section><section><h2>Human review of AI contributions</h2>'+reportTable(['AI contribution','Named human receiver'],s.ai)+'</section><section><h2>Next-learning routes</h2><ul>'+s.learning.map(function(n){return '<li>'+escapeHtml(n)+'</li>';}).join('')+'</ul></section>'+s.analysis.html+'<section><h2>Decision responsibilities carried with the plan</h2><ul>'+s.boundaries.map(function(n){return '<li>'+escapeHtml(n)+'</li>';}).join('')+'</ul></section><footer><p>Copyright 2003-2026 \x56ikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p></footer></main></body></html>';}
+  function leaveBehindHtml(s,downloadUrl){var download=downloadUrl?'<a class="download" download="initiative-investment-leave-behind.html" href="'+downloadUrl+'">Download HTML</a>':'';return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; img-src data:; base-uri \'none\'; form-action \'none\'">\x3cmeta name="author" content="\x56ikrant Varun Kudesia"><title>Initiative investment leave-behind</title><style>:root{--ink:#213252;--teal:#0b6663;--tiffany:#56d8c9;--paper:#fffdf7;--info:#d3e4f2}*{box-sizing:border-box}body{margin:0;background:#f1e9d2;color:var(--ink);font:15px/1.5 system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:32px}header{border:3px solid var(--ink);border-top:14px solid var(--tiffany);background:var(--paper);padding:24px}h1{margin:4px 0;font-size:clamp(32px,6vw,64px);line-height:1}.meta{font:700 12px monospace;text-transform:uppercase;color:var(--teal)}section{margin:20px 0;padding:20px;border:2px solid var(--ink);background:var(--paper)}h2{margin:0 0 12px;font-size:20px}dl{display:grid;grid-template-columns:minmax(150px,.45fr) 1fr;gap:8px 16px}dt{font-weight:800}dd{margin:0}.table-wrap{overflow:auto}.table-wrap:focus-visible{outline:4px solid var(--teal);outline-offset:2px}table{width:100%;border-collapse:collapse;min-width:640px}th,td{border:1px solid #71809b;padding:8px;text-align:left;vertical-align:top}thead th{background:var(--info)}.band{font-size:32px;font-weight:900}.download{display:inline-block;margin-top:16px;padding:10px 14px;border:2px solid var(--ink);background:var(--tiffany);color:var(--ink);font-weight:900;text-decoration:none}.print{padding:10px;background:var(--info);border-left:5px solid var(--teal)}ul{margin:8px 0}@media print{body{background:#fff}main{max-width:none;padding:0}.download,.print{display:none}section,header{break-inside:auto}.table-wrap{overflow:visible}table{min-width:0}tbody,tr,th,td{display:block;min-width:0}thead{display:none}tr{break-inside:avoid}td::before{content:attr(data-label) ": ";font-weight:800}}@media(max-width:600px){main{padding:12px}section,header{padding:12px}dl{grid-template-columns:1fr}dd{overflow-wrap:anywhere}}th,td{overflow-wrap:normal;word-break:normal;min-width:8rem}caption{text-align:left;font-weight:800}.table-wrap pre{white-space:pre-wrap}</style><style>'+s.analysis.styles+'</style></head><body><main><header><div class="meta">Cross-Functional Investment Studio · static leave-behind</div><h1>'+escapeHtml(s.plan)+'</h1><p class="band">'+escapeHtml(s.band)+'</p><p>Generated '+escapeHtml(s.generated)+' · '+escapeHtml(s.lens)+' lens · '+escapeHtml(s.framework)+'</p>'+download+'<p class="print"><strong>Print / Save PDF:</strong> use the browser print command for a clean PDF. This static page carries the exported snapshot; ongoing calculations remain in the source instrument.</p></header><section><h2>Planning read</h2><dl><dt>Estimation Horizon</dt><dd>'+escapeHtml(s.horizon.value+' '+s.horizon.unit+' · '+s.horizon.hours+' planning hours')+'</dd><dt>Complexity</dt><dd>'+escapeHtml(s.horizon.complexity)+'</dd><dt>Named unknowns</dt><dd>'+escapeHtml(s.horizon.unknowns)+'</dd><dt>Horizon effect</dt><dd>'+escapeHtml(s.horizon.effects)+'</dd></dl></section><section><h2>Goal and open conditions</h2><dl><dt>Changed ability</dt><dd>'+escapeHtml(s.goal.ability)+'</dd><dt>Affected population</dt><dd>'+escapeHtml(s.goal.population)+'</dd><dt>Observable signal</dt><dd>'+escapeHtml(s.goal.signal)+'</dd><dt>Decision owner</dt><dd>'+escapeHtml(s.goal.owner)+'</dd><dt>Review boundary</dt><dd>'+escapeHtml(s.goal.review)+'</dd><dt>Remains open</dt><dd>'+escapeHtml(s.goal.open)+'</dd></dl></section><section><h2>How the range is formed</h2>'+reportTable(['Method','Current amount / range'],s.costs)+reportTable(['Rule','Source and standing','Override standing'],s.heuristics.map(function(h){return [h.label+': '+h.rule,h.sourceKey+'; '+h.sourceBand+'; formula '+h.formulaVersion,h.overrideStanding];}),'Staffing heuristic source and override standing')+'</section><section><h2>Roles, allocation, and staffed boundaries</h2>'+reportTable(['Role','People','Rate/hr','Allocation %','Function','Seniority','Decision','Change','Quality','AI contribution role'],s.roles)+'</section><section><h2>Activities and recovery</h2><h3>Activities</h3>'+reportTable(['Activity','Tasks','Hours/task'],s.activities)+'<h3>Disruptions and recovery</h3>'+reportTable(['Disruption','Events','Recovery hours'],s.disruptions)+'</section><section><h2>'+escapeHtml(s.framework)+' components</h2>'+reportTable(['Component','Planning state','Map'],s.components)+'<h3>Separate change-attention lens</h3>'+reportTable(['Component','Relative attention'],s.allocations)+'</section><section><h2>Quality collaboration</h2><dl><dt>Phase</dt><dd>'+escapeHtml(s.quality.enabled)+'</dd><dt>Allocation</dt><dd>'+escapeHtml(s.quality.allocation)+'</dd><dt>Independent review rate</dt><dd>'+escapeHtml(s.quality.rate)+'</dd><dt>Sigma posture</dt><dd>'+escapeHtml(s.quality.sigma)+'</dd><dt>Planning multiplier</dt><dd>'+escapeHtml(s.quality.multiplier)+'</dd><dt>Quality-attention hours</dt><dd>'+escapeHtml(s.quality.hours)+'</dd><dt>Named concepts</dt><dd>'+escapeHtml(s.quality.concepts.join('; '))+'</dd></dl></section><section><h2>Human review of AI contributions</h2>'+reportTable(['AI contribution','Named human receiver'],s.ai)+'</section><section><h2>Next-learning routes</h2><ul>'+s.learning.map(function(n){return '<li>'+escapeHtml(n)+'</li>';}).join('')+'</ul></section>'+s.analysis.html+'<section><h2>Decision responsibilities carried with the plan</h2><ul>'+s.boundaries.map(function(n){return '<li>'+escapeHtml(n)+'</li>';}).join('')+'</ul></section><footer><p>Copyright 2003-2026 \x56ikrant Varun Kudesia · Driftframe Studios, Limited Liability Company · Licensed under the Apache License, Version 2.0 (Apache-2.0).</p></footer></main></body></html>';}
   function openLeaveBehind(){var snapshot=leaveBehindSnapshot(),clean=leaveBehindHtml(snapshot,''),downloadUrl='data:text/html;charset=utf-8,'+encodeURIComponent(clean),view=leaveBehindHtml(snapshot,downloadUrl),url=URL.createObjectURL(new Blob([view],{type:'text/html'})),link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener noreferrer';link.click();$('live').textContent='Leave-behind opened in a new tab. It includes a Download HTML action and print-to-PDF guidance.';setTimeout(function(){URL.revokeObjectURL(url);},60000);}
   function enhanceHorizonJumplinks(){var svg=$('horizon-svg'),ns='http://www.w3.org/2000/svg',labels=Array.from(svg.querySelectorAll('text[x="38"]'));function centerY(node){if(node.tagName.toLowerCase()==='rect')return Number(node.getAttribute('y'))+Number(node.getAttribute('height'))/2;var match=(node.getAttribute('d')||'').match(/M\s+[\d.]+\s+([\d.]+)/);return match?Number(match[1])+10:0;}function lane(node){var y=centerY(node),best=null,distance=Infinity;labels.forEach(function(label){var gap=Math.abs(Number(label.getAttribute('y'))-5-y);if(gap<distance){best=label;distance=gap;}});return best?best.textContent:'';}function target(label){if(state.roles.some(function(r){return r.enabled&&label===r.a+' × '+r.name;}))return 'roles-title';if(state.activities.some(function(a){return a.enabled&&label===a.name;}))return 'activities-title';if(state.disruptions.some(function(d){return d.enabled&&label===d.name;}))return 'disruptions-title';if(label==='AI collaboration handoffs')return 'collaboration-title';if(label==='Change work'||label==='Concurrent accelerators')return 'allocation-title';if(label==='Quality collaboration')return 'quality-title';return '';}var sectionNames={'roles-title':'Roles and allocation','activities-title':'Activities and tasks','disruptions-title':'Disruptions and recovery','collaboration-title':'Human–AI collaboration map','allocation-title':'Change allocation','quality-title':'Quality collaboration'};Array.from(svg.querySelectorAll('rect,path')).forEach(function(mark){if(mark.closest('defs')||mark.closest('a'))return;var laneLabel=lane(mark),targetId=target(laneLabel);if(!targetId)return;var link=document.createElementNS(ns,'a'),title=document.createElementNS(ns,'title');link.setAttribute('href','#'+targetId);link.setAttribute('class','horizon-jump');link.setAttribute('aria-label',laneLabel+': go to '+sectionNames[targetId]);title.textContent=laneLabel+' — go to '+sectionNames[targetId];mark.parentNode.insertBefore(link,mark);link.appendChild(title);link.appendChild(mark);});}
   var baseHorizonRender=horizonRender;horizonRender=function(){baseHorizonRender();enhanceHorizonJumplinks();};
@@ -1939,6 +2086,7 @@ This packet carries the accepted analysis revision identified above. Pending edi
   }
   function staffingSnapshot(){return {horizon:$('horizon').value,unit:$('unit').value,roles:projectStaffingRows(state.roles),activities:projectStaffingRows(state.activities),disruptions:projectStaffingRows(state.disruptions),qualityEnabled:$('quality-enabled').checked,qualityAllocation:$('quality-allocation').value,qualityRate:$('quality-rate').value,sigma:$('sigma-target-input').value,unknowns:$('unknowns').value,complexity:$('complexity').value,overlap:{activities:$('overlap-activities').value===''?null:Number($('overlap-activities').value)/100,recovery:$('overlap-recovery').value===''?null:Number($('overlap-recovery').value)/100,quality:$('overlap-quality').value===''?null:Number($('overlap-quality').value)/100}};}
   window.investmentStaffing=Object.freeze({getState:function(){return InvestmentCore.clone(staffingSnapshot());},getResult:function(){return InvestmentCore.clone(state.lastCalculation);}});
+  $('staffing-heuristics').innerHTML=reportTable(['Rule','Source and standing','Override standing'],InvestmentCore.staffingHeuristics().map(function(h){return [h.label+': '+h.rule,h.sourceKey+'; '+h.sourceBand+'; formula '+h.formulaVersion,h.overrideStanding];}),'Staffing heuristic source and override standing');
   function calculate(){
     var calc=InvestmentCore.staffing(staffingSnapshot());state.lastCalculation=calc;
     if(calc.status!=='known'){
@@ -1987,7 +2135,7 @@ This packet carries the accepted analysis revision identified above. Pending edi
   if(!C||!host)return;
   const ACTION = Object.freeze({
     RESET: "reset", APPLY: "apply", EXPORT: "export", SCHEMA: "schema",
-    IMPORT_TEXT: "import-text", COPY: "copy", STAFFING: "staffing"
+    IMPORT_TEXT: "import-text", COPY: "copy", STAFFING: "staffing", CLEAR_RECOVERY: "clear-recovery"
   });
   const EDITORS = Object.freeze(["events", "alternatives", "outcomes", "serviceOutcomes"]);
   const methodHost = window.crossFunctionalInvestmentModelStudio;
@@ -2000,6 +2148,7 @@ This packet carries the accepted analysis revision identified above. Pending edi
   let projection = Object.freeze({ contract: C.VERSION, fingerprint: identity, state, result });
   let interactionVersion = 0;
   let fileRequest = 0;
+  let rejectedFileText = null;
   const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const titles={orientation:"Orientation",commercial:"Commercial cohort",pricing:"Pricing and implementation",capital:"Cash flow and capacity",serviceOutcomes:"Service and operational context",decision:"Decision and reversible gate"};
   const domainLabel = domain => domain === 'service-operational' ? 'Service and operational value' : domain;
@@ -2030,7 +2179,7 @@ This packet carries the accepted analysis revision identified above. Pending edi
       '<details><summary>'+heading('E','analysis-inspection-title','Inspect and carry the accepted account')+'</summary><p>The domain axis and record-type axis remain separate. Accountable people establish financial, service, and release decisions.</p><div data-records></div>'+
       '<p><a href="'+(methodHost?'#prompt-capsule-title':'#investment-capsule-title')+'">View the complete Prompt Capsule</a></p>'+
       '<label class="investment-editor" for="analysis-exchange"><strong>Portable state / schema output</strong><textarea id="analysis-exchange" rows="10" spellcheck="false"></textarea></label>'+
-      '<div class="investment-actions"><button type="button" data-action="'+ACTION.IMPORT_TEXT+'">Import pasted state</button><button type="button" data-action="'+ACTION.COPY+'">Select portable state for copying</button><button type="button" data-action="'+ACTION.SCHEMA+'">Inspect JSON Schema</button></div></details>'+
+      '<div class="investment-actions"><button type="button" data-action="'+ACTION.IMPORT_TEXT+'">Import pasted state</button><button type="button" data-action="'+ACTION.COPY+'">Select portable state for copying</button><button type="button" data-action="'+ACTION.SCHEMA+'">Inspect JSON Schema</button><button type="button" data-action="'+ACTION.CLEAR_RECOVERY+'" hidden>Clear rejected file draft</button></div></details>'+
       '<div class="investment-actions"><button type="button" data-action="'+ACTION.APPLY+'">Apply lifecycle, alternative, outcome, and service-outcome edits</button></div>';
     render();
   }
@@ -2186,10 +2335,31 @@ This packet carries the accepted analysis revision identified above. Pending edi
     return true;
   }
 
+  function setRejectedFileText(text) {
+    rejectedFileText = text;
+    host.querySelector('[data-action="' + ACTION.CLEAR_RECOVERY + '"]').hidden = text === null;
+  }
+
+  function clearRejectedFileDraft() {
+    setRejectedFileText(null);
+    const exchange = host.querySelector("#analysis-exchange");
+    exchange.value = "";
+    exchange.removeAttribute("aria-invalid");
+    drafts.delete(exchange.id);
+    status("Rejected file draft cleared. Accepted state remains available.");
+  }
+
   function importText(text) {
-    return accept(C.importState(text), "Imported state accepted. The contract, identities, and explicitly unavailable values are retained.", {
+    const accepted = accept(C.importState(text), "Imported state accepted. The contract, identities, and explicitly unavailable values are retained.", {
       inputKeys: Object.keys(C.FIELDS), editorKeys: EDITORS
     });
+    const exchange = host.querySelector("#analysis-exchange");
+    exchange.value = serialized;
+    exchange.removeAttribute("aria-invalid");
+    drafts.delete(exchange.id);
+    status("Imported state accepted. The contract, identities, and explicitly unavailable values are retained.");
+    setRejectedFileText(null);
+    return accepted;
   }
 
   function exportText() {
@@ -2274,16 +2444,25 @@ This packet carries the accepted analysis revision identified above. Pending edi
     const request = ++fileRequest;
     const version = interactionVersion;
     const file = input.files[0];
+    let text;
     try {
       if (file.size > C.JSON_LIMITS.bytes) throw new Error("Choose a state file of at most 1 MB in UTF-8.");
-      const text = await file.text();
+      text = await file.text();
       if (request !== fileRequest || version !== interactionVersion) {
         if (request === fileRequest) status("A newer interaction took priority. Select the file again when ready to replace accepted state.");
         return;
       }
       importText(text);
     } catch (error) {
-      if (request === fileRequest && version === interactionVersion) revisionNeeded(error);
+      if (request === fileRequest && version === interactionVersion) {
+        const exchange = host.querySelector("#analysis-exchange");
+        if (typeof text === "string") {
+          setRejectedFileText(text);
+          exchange.value = text;
+          exchange.closest("details").open = true;
+        }
+        revisionNeeded(error, typeof text === "string" ? exchange : undefined);
+      }
     } finally {
       if (request === fileRequest) input.value = "";
     }
@@ -2301,6 +2480,9 @@ This packet carries the accepted analysis revision identified above. Pending edi
           accept(candidate, "Illustrative analysis restored.", { inputKeys: Object.keys(C.FIELDS), editorKeys: EDITORS });
           return;
         }
+        case ACTION.CLEAR_RECOVERY:
+          clearRejectedFileDraft();
+          return;
         case ACTION.APPLY:
           applyEditors();
           return;
@@ -2322,11 +2504,13 @@ This packet carries the accepted analysis revision identified above. Pending edi
           useStaffing();
       }
     } catch (error) {
-      revisionNeeded(error);
+      revisionNeeded(error, action === ACTION.IMPORT_TEXT ? host.querySelector("#analysis-exchange") : undefined);
     }
   });
 
   window.investmentAnalysis = Object.freeze({
+    // Local recovery only: excluded from accepted state, capsules, reports, and diagnostics.
+    getRejectedFileText: () => rejectedFileText,
     getState: () => C.clone(state),
     getResult: () => C.clone(result),
     getProjection: () => C.clone(projection),
