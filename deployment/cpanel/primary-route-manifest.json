@@ -1008,6 +1008,11 @@
       "media_type": "image/svg+xml"
     },
     {
+      "source_path": "context-canvas-project-surface/img/plot/visualization_fidelity_original_exemplar.svg",
+      "projected_path": "img/plot/visualization_fidelity_original_exemplar.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
       "source_path": "context-canvas-project-surface/img/plot/visualization_fidelity_clean_exemplar.svg",
       "projected_path": "img/plot/visualization_fidelity_clean_exemplar.svg",
       "media_type": "image/svg+xml"
