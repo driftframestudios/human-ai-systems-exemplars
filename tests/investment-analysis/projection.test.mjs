@@ -44,6 +44,90 @@ test("published 0.2.0 schema bytes remain at their accepted identity",async()=>{
     assert.equal(createHash("sha256").update(await readFile(new URL(file,root))).digest("hex"),"5e755a73ac130b4da393602ad64d9471e7bddf332c8c3429e8a2c1411699f3a3");
   }
 });
+test("file recovery separates exact decoded text from normalized draft and accepted state", async () => {
+  const { createRequire } = await import("node:module");
+  const { runInNewContext } = await import("node:vm");
+  const C = createRequire(import.meta.url)("../../collaboration/investment-analysis/core.js");
+  const source = await readFile(new URL("collaboration/investment-analysis/studio.js", root), "utf8");
+  const helpers = source.slice(source.indexOf("  function setRejectedFileText("), source.indexOf("  function exportText("));
+  const listenerStart = source.indexOf('  host.addEventListener("change", async event => {');
+  const listener = source.slice(listenerStart, source.indexOf('  host.addEventListener("click",', listenerStart));
+  assert.ok(helpers.includes("setRejectedFileText(null)"));
+  assert.ok(listener.includes("request !== fileRequest || version !== interactionVersion"));
+  function fixture() {
+    const details = { open: false }, clear = { hidden: true }, attributes = {};
+    let value = "";
+    const exchange = { id: "analysis-exchange", closest: () => details,
+      setAttribute: (key, v) => { attributes[key] = v; },
+      removeAttribute: key => { delete attributes[key]; },
+      get value() { return value; },
+      set value(text) { value = String(text).replace(/\r\n?/g, "\n"); } };
+    const context = { C, Object, Set, exchange, clear };
+    const api = runInNewContext('(function () {\n' +
+      'let interactionVersion = 0, fileRequest = 0, rejectedFileText = null, handler, message;\n' +
+      'let accepted = C.prepare(C.defaults()); const drafts = new Set(), EDITORS = [];\n' +
+      'const ACTION = { CLEAR_RECOVERY: "clear-recovery" };\n' +
+      'const host = { querySelector: selector => selector === "#analysis-exchange" ? exchange : clear,\n' +
+      'addEventListener: (name, fn) => { handler = fn; } };\n' +
+      'const status = text => { message = text; };\n' +
+      'const revisionNeeded = (error, input) => { if (input) { drafts.add(input.id); input.setAttribute("aria-invalid", "true"); } status(error.message); };\n' +
+      'const accept = candidate => { accepted = C.prepare(candidate); interactionVersion++; return true; };\n' +
+      helpers + listener +
+      '\nreturn { change: event => handler(event), importText, clear: clearRejectedFileDraft,\n' +
+      'raw: () => rejectedFileText, accepted: () => accepted, message: () => message,\n' +
+      'interact: () => { interactionVersion++; } }; })()', context);
+    return { api, exchange, details, clear, attributes };
+  }
+  const gated = C.defaults();
+  gated.inputs.label = "Unicode \u03a9 draft";
+  gated.inputs.evidenceSource = "https://notion.so/synthetic-rejected-record";
+  const technical = C.defaults();
+  technical.extensions["urn:example:technical"] = { reference: gated.inputs.evidenceSource };
+  for (const [text, rejected] of [
+    ['{\r\n  "broken": "\u03a9"\r\n', true],
+    [JSON.stringify(gated, null, 2).replace(/\n/g, "\r\n"), true],
+    [JSON.stringify(technical, null, 2).replace(/\n/g, "\r\n"), false]
+  ]) {
+    const f = fixture(), baseline = f.api.accepted();
+    const input = { id: "analysis-import", dataset: {}, value: "file",
+      files: [{ size: Buffer.byteLength(text), text: async () => text }] };
+    await f.api.change({ target: input });
+    assert.equal(input.value, "");
+    if (rejected) {
+      assert.equal(f.api.raw(), text);
+      assert.equal(f.exchange.value, text.replace(/\r\n?/g, "\n"));
+      assert.equal(f.details.open, true);
+      assert.equal(f.clear.hidden, false);
+      assert.equal(f.attributes["aria-invalid"], "true");
+      assert.equal(f.api.accepted(), baseline);
+      assert.ok(!f.api.message().includes(text));
+      f.api.importText(C.serialize(C.defaults()));
+      assert.equal(f.api.raw(), null);
+      assert.equal(f.clear.hidden, true);
+      assert.equal(f.attributes["aria-invalid"], undefined);
+      await f.api.change({ target: input });
+      f.api.clear();
+      assert.equal(f.api.raw(), null);
+      assert.equal(f.exchange.value, "");
+      assert.equal(f.clear.hidden, true);
+    } else {
+      assert.equal(f.api.raw(), null);
+      assert.deepEqual(f.api.accepted().state.extensions, technical.extensions);
+    }
+  }
+  const f = fixture(), baseline = f.api.accepted();
+  let finish;
+  const pending = f.api.change({ target: { id: "analysis-import", dataset: {}, value: "file",
+    files: [{ size: 10, text: () => new Promise(resolve => { finish = resolve; }) }] } });
+  f.api.interact();
+  finish(JSON.stringify(gated));
+  await pending;
+  assert.equal(f.api.raw(), null);
+  assert.equal(f.api.accepted(), baseline);
+  assert.match(f.api.message(), /newer interaction/);
+});
+
+
 test("the real calculator receipt forwards its clock and carries heuristic standing",async()=>{
   const {runInNewContext}=await import("node:vm"), {default:C}=await import("../../collaboration/investment-analysis/core.js");
   const html=await readFile(new URL(INVESTMENT_HOSTS[0],root),"utf8");
@@ -60,28 +144,4 @@ test("the real calculator receipt forwards its clock and carries heuristic stand
   assert.equal(receipt.analysis.fingerprint,"accepted-example");
   assert.match(html,/id="staffing-heuristics"/);assert.match(html,/s\.heuristics\.map/);
 });
-for(const kind of ["malformed","gated","technical-extension"]){
-  test("source-owned file admission retains the correct local recovery for "+kind,async()=>{
-    const {runInNewContext}=await import("node:vm"),{default:C}=await import("../../collaboration/investment-analysis/core.js");
-    const ui=await readFile(new URL("collaboration/investment-analysis/studio.js",root),"utf8");
-    const start=ui.indexOf('  host.addEventListener("change", async event => {');
-    const end=ui.indexOf('  host.addEventListener("click", event => {',start);
-    assert.ok(start>=0&&end>start);
-    const next=C.defaults(),coordinate="https://"+"notion.so/"+"a".repeat(32);
-    if(kind==="gated")next.inputs.evidenceSource=coordinate;
-    if(kind==="technical-extension")next.extensions["urn:example:technical"]={source:coordinate};
-    const text=kind==="malformed"?' { "original":\r\n':JSON.stringify(next,null,2);
-    const details={open:false},exchange={id:"analysis-exchange",value:"previous local draft",closest:()=>details};
-    let handler,accepted=C.prepare(C.defaults()),errorInput;const before=accepted;
-    const host={addEventListener:(name,callback)=>{assert.equal(name,"change");handler=callback;},querySelector:()=>exchange};
-    runInNewContext(ui.slice(start,end),{host,C,fileRequest:0,interactionVersion:0,editInput:()=>{},status:()=>{},
-      importText:value=>{accepted=C.prepare(C.importState(value));},revisionNeeded:(error,input)=>{errorInput=input;}});
-    const input={dataset:{},id:"analysis-import",files:[{size:Buffer.byteLength(text),text:async()=>text}],value:"selected-file"};
-    await handler({target:input});assert.equal(input.value,"");
-    if(kind==="technical-extension"){
-      assert.deepEqual(accepted.state,next);assert.equal(exchange.value,"previous local draft");assert.equal(errorInput,undefined);
-    }else{
-      assert.equal(accepted,before);assert.equal(exchange.value,text);assert.equal(details.open,true);assert.equal(errorInput,exchange);
-    }
-  });
-}
+

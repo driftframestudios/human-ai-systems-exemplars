@@ -177,9 +177,17 @@
     ["evidence", "sourceRecordId"], ["evidence", "sourceUrl"], ["evidence", "sourceRecordTitle"]
   ].map(Object.freeze));
   const OPAQUE_SOURCE_ID = /^(?:[a-f0-9]{32}|[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})$/i;
+  function localIpv4Host(host) {
+    return /^(?:0|10|127)\./.test(host) || /^192\.168\./.test(host)
+      || /^172\.(?:1[6-9]|2[0-9]|3[01])\./.test(host);
+  }
   function gatedSourceHost(host) {
+    // URL.hostname has already normalized dotted IPv4-mapped IPv6 to hextets.
+    const mapped = host.match(/^\[::ffff:([a-f0-9]{1,4}):([a-f0-9]{1,4})\]$/i);
+    const words = mapped ? mapped.slice(1).map(word => parseInt(word, 16)) : null;
+    const ipv4 = words ? [words[0] >>> 8, words[0] & 255, words[1] >>> 8, words[1] & 255].join(".") : host;
     return /(?:^|\.)(?:notion\.so|notion\.site|app\.notion\.com|localhost|local|internal)$/.test(host)
-      || /^(?:0|10|127)\./.test(host) || /^192\.168\./.test(host) || /^172\.(?:1[6-9]|2[0-9]|3[01])\./.test(host)
+      || localIpv4Host(ipv4)
       || /^\[(?:::1|f[cd][a-f0-9:]*|fe[89ab][a-f0-9:]*)\]$/i.test(host);
   }
   function provenanceProblem(value) {
@@ -235,11 +243,24 @@
     try { return /(?:^|\.)(?:notion\.so|notion\.site|app\.notion\.com)$/.test(new URL(value).hostname.toLowerCase().replace(/\.$/, "")); }
     catch { return false; }
   }
+  function declaredMethodSourceKey(value) {
+    if (typeof value !== "string") return null;
+    const text = value.trim();
+    return methodSourceKey(text) || (Object.values(METHOD_SOURCE_KEYS).includes(text) ? text : null);
+  }
   function migrateLegacySources(raw) {
     const snapshot = clone(raw), key = isLegacySelection(snapshot) ? methodSourceKey(snapshot.activeModelId) : null;
-    for (const entry of legacySourceEntries(snapshot)) {
+    const entries = legacySourceEntries(snapshot);
+    // Compare every declared identity before URL migration can assign a source key.
+    for (const entry of entries) {
+      const declared = /title$/i.test(entry.name) ? null : declaredMethodSourceKey(entry.owner[entry.name]);
+      if (declared && declared !== key) {
+        throw new Error("Legacy provenance names a different method. Revise the original local input before accepting it.");
+      }
+    }
+    for (const entry of entries) {
       const value = entry.owner[entry.name], isTitle = /title$/i.test(entry.name), isUrl = /url$/i.test(entry.name);
-      const alias = typeof value === "string" ? methodSourceKey(value) : null;
+      const alias = declaredMethodSourceKey(value);
       if (!isTitle && alias) {
         if (alias !== key) throw new Error("Legacy provenance names a different method. Revise the original local input before accepting it.");
         entry.owner[entry.name] = key;

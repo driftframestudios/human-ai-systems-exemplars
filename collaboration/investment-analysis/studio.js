@@ -5,7 +5,7 @@
   if(!C||!host)return;
   const ACTION = Object.freeze({
     RESET: "reset", APPLY: "apply", EXPORT: "export", SCHEMA: "schema",
-    IMPORT_TEXT: "import-text", COPY: "copy", STAFFING: "staffing"
+    IMPORT_TEXT: "import-text", COPY: "copy", STAFFING: "staffing", CLEAR_RECOVERY: "clear-recovery"
   });
   const EDITORS = Object.freeze(["events", "alternatives", "outcomes", "serviceOutcomes"]);
   const methodHost = window.crossFunctionalInvestmentModelStudio;
@@ -18,6 +18,7 @@
   let projection = Object.freeze({ contract: C.VERSION, fingerprint: identity, state, result });
   let interactionVersion = 0;
   let fileRequest = 0;
+  let rejectedFileText = null;
   const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const titles={orientation:"Orientation",commercial:"Commercial cohort",pricing:"Pricing and implementation",capital:"Cash flow and capacity",serviceOutcomes:"Service and operational context",decision:"Decision and reversible gate"};
   const domainLabel = domain => domain === 'service-operational' ? 'Service and operational value' : domain;
@@ -48,7 +49,7 @@
       '<details><summary>'+heading('E','analysis-inspection-title','Inspect and carry the accepted account')+'</summary><p>The domain axis and record-type axis remain separate. Accountable people establish financial, service, and release decisions.</p><div data-records></div>'+
       '<p><a href="'+(methodHost?'#prompt-capsule-title':'#investment-capsule-title')+'">View the complete Prompt Capsule</a></p>'+
       '<label class="investment-editor" for="analysis-exchange"><strong>Portable state / schema output</strong><textarea id="analysis-exchange" rows="10" spellcheck="false"></textarea></label>'+
-      '<div class="investment-actions"><button type="button" data-action="'+ACTION.IMPORT_TEXT+'">Import pasted state</button><button type="button" data-action="'+ACTION.COPY+'">Select portable state for copying</button><button type="button" data-action="'+ACTION.SCHEMA+'">Inspect JSON Schema</button></div></details>'+
+      '<div class="investment-actions"><button type="button" data-action="'+ACTION.IMPORT_TEXT+'">Import pasted state</button><button type="button" data-action="'+ACTION.COPY+'">Select portable state for copying</button><button type="button" data-action="'+ACTION.SCHEMA+'">Inspect JSON Schema</button><button type="button" data-action="'+ACTION.CLEAR_RECOVERY+'" hidden>Clear rejected file draft</button></div></details>'+
       '<div class="investment-actions"><button type="button" data-action="'+ACTION.APPLY+'">Apply lifecycle, alternative, outcome, and service-outcome edits</button></div>';
     render();
   }
@@ -204,6 +205,20 @@
     return true;
   }
 
+  function setRejectedFileText(text) {
+    rejectedFileText = text;
+    host.querySelector('[data-action="' + ACTION.CLEAR_RECOVERY + '"]').hidden = text === null;
+  }
+
+  function clearRejectedFileDraft() {
+    setRejectedFileText(null);
+    const exchange = host.querySelector("#analysis-exchange");
+    exchange.value = "";
+    exchange.removeAttribute("aria-invalid");
+    drafts.delete(exchange.id);
+    status("Rejected file draft cleared. Accepted state remains available.");
+  }
+
   function importText(text) {
     const accepted = accept(C.importState(text), "Imported state accepted. The contract, identities, and explicitly unavailable values are retained.", {
       inputKeys: Object.keys(C.FIELDS), editorKeys: EDITORS
@@ -212,6 +227,7 @@
     exchange.removeAttribute("aria-invalid");
     drafts.delete(exchange.id);
     status("Imported state accepted. The contract, identities, and explicitly unavailable values are retained.");
+    setRejectedFileText(null);
     return accepted;
   }
 
@@ -310,6 +326,7 @@
       if (request === fileRequest && version === interactionVersion) {
         const exchange = host.querySelector("#analysis-exchange");
         if (typeof text === "string") {
+          setRejectedFileText(text);
           exchange.value = text;
           exchange.closest("details").open = true;
         }
@@ -332,6 +349,9 @@
           accept(candidate, "Illustrative analysis restored.", { inputKeys: Object.keys(C.FIELDS), editorKeys: EDITORS });
           return;
         }
+        case ACTION.CLEAR_RECOVERY:
+          clearRejectedFileDraft();
+          return;
         case ACTION.APPLY:
           applyEditors();
           return;
@@ -358,6 +378,8 @@
   });
 
   window.investmentAnalysis = Object.freeze({
+    // Local recovery only: excluded from accepted state, capsules, reports, and diagnostics.
+    getRejectedFileText: () => rejectedFileText,
     getState: () => C.clone(state),
     getResult: () => C.clone(result),
     getProjection: () => C.clone(projection),

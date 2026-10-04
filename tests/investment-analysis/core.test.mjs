@@ -60,6 +60,7 @@ test("hand-checkable NPV, conventional IRR, payback and guard states",()=>{
   assert.equal(C.irr([100,110]).status,"inapplicable");
   assert.equal(C.irr([-100,230,-132]).status,"ambiguous");
   assert.equal(C.irr([100,-110]).status,"inapplicable");
+  assert.equal(C.payback([0,10]).status,"inapplicable");
   assert.equal(C.payback([-100,20,20]).status,"unreached");
   assert.equal(C.payback([-100,60,60]).value,1+40/60);
   assert.equal(C.npv([-100,null,60],.1).status,"unavailable");
@@ -577,5 +578,59 @@ for (const source of ["Ordinary source explanation", "Protocol syntax example: h
     const state=fresh(); state.inputs.evidenceSource=source; state.serviceOutcomes[0].source=source;
     assert.equal(C.validate(state).valid,true);
     assert.deepEqual(C.importState(C.serialize(state)),state);
+  });
+}
+
+
+for (const representation of ["alias", "canonical"]) {
+  for (const matching of [true, false]) {
+    test("legacy method identity: " + representation + " / " + (matching ? "matching" : "conflicting"), () => {
+      const active = "model/activity-based.v0.1";
+      const declared = matching ? active : "model/whole-life-tco.v0.1";
+      const source = representation === "alias" ? declared : C.methodSourceKey(declared);
+      const legacy = { schemaVersion: "1.0.0", view: "model-explorer", activeModelId: active,
+        sourceRecordId: source, sourceUrl: "https://notion.so/synthetic-record",
+        context: { sourceRecord: { id: source } }, evidence: { sourceRecordId: source },
+        technical: { sourceRecordId: "urn:source-key:investment-method:whole-life-tco" } };
+      const original = JSON.stringify(legacy), accepted = C.prepare(fresh());
+      if (matching) {
+        const next = C.importState(original).extensions["urn:investment:legacy-selection"].snapshot;
+        assert.equal(next.sourceRecordId, C.methodSourceKey(active));
+        assert.equal(next.context.sourceRecord.id, C.methodSourceKey(active));
+        assert.equal(next.evidence.sourceRecordId, C.methodSourceKey(active));
+        assert.equal(next.sourceUrl, "");
+        assert.deepEqual(next.technical, legacy.technical);
+      } else {
+        assert.throws(() => C.importState(original), /different method/);
+        const current = fresh();
+        current.extensions["urn:investment:legacy-selection"] = { snapshot: legacy };
+        assert.throws(() => C.importState(JSON.stringify(current)), /different method/);
+      }
+      assert.equal(JSON.stringify(legacy), original);
+      assert.equal(C.serialize(accepted.state), accepted.serialized);
+    });
+  }
+}
+for (const [address, local] of [
+  ["::ffff:127.0.0.1", true], ["::ffff:7f00:1", true],
+  ["::ffff:10.1.2.3", true], ["::ffff:a01:203", true],
+  ["::ffff:192.168.1.2", true], ["::ffff:c0a8:102", true],
+  ["::ffff:172.16.0.1", true], ["::ffff:ac10:1", true],
+  ["::ffff:8.8.8.8", false], ["::ffff:808:808", false]
+]) {
+  test("mapped IPv4 provenance follows existing host policy: " + address, () => {
+    const source = "https://[" + address + "]/evidence";
+    for (const location of ["inputs", "serviceOutcomes"]) {
+      const state = fresh();
+      if (location === "inputs") state.inputs.evidenceSource = source;
+      else state.serviceOutcomes[0].source = source;
+      const original = JSON.stringify(state);
+      if (local) assert.throws(() => C.importState(original), /source|provenance|public|local/i);
+      else assert.equal(C.serialize(C.importState(original)), C.serialize(state));
+      assert.equal(JSON.stringify(state), original);
+    }
+    const unrelated = fresh();
+    unrelated.extensions["urn:example:technical"] = { endpoint: source };
+    assert.deepEqual(C.importState(C.serialize(unrelated)), unrelated);
   });
 }

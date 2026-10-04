@@ -200,3 +200,5 @@ The current capsule adoption inventory is
 Focused transfer evidence lives in `tests/investment-analysis/capsule.test.mjs`
 and `capsule.browser.test.mjs`, alongside existing state, presentation, and package
 contracts. Hosted iframe upload remains human-controlled.
+
+Rejected file recovery keeps the original decoded string, including Unicode and CRLF, in the shared UI closure. The editable textarea follows native newline normalization. The local `investmentAnalysis.getRejectedFileText()` reader exposes that recovery text separately from accepted state, Prompt Capsules, reports, and diagnostics. A successful import or **Clear rejected file draft** releases it; ordinary field edits and stale file reads preserve the accepted-state boundary. Recognized legacy method aliases and canonical source keys must identify the same method before migration. IPv4-mapped IPv6 provenance uses the existing local-IPv4 policy after URL normalization; this syntax policy performs no network lookup or SSRF assessment.
