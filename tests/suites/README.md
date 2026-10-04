@@ -50,6 +50,7 @@ case-name filtering nor an automatic sequence across all seven bundles.
 - [planner.test.mjs](planner.test.mjs) supplies independent fixtures for selection, gates, path/array admission, alias graphs, source membership and import inactivity.
 - Existing suite files and their nearest owners retain assertions, scenarios, dependencies, fixture preparation, artifact rules and recovery.
 - [Browser ownership](browser-ownership.md) maps retained transport owners and the bounded investment-capsule helper pilot.
+- [Evidence and receiving boundaries](evidence-boundaries.md) distinguish execution, reuse, acceptance, cleanup and hosted authority.
 - [Table pipeline](../tables/PIPELINE.md) retains source-bound case planning, material dependency closure and checkpoints.
 - [Python source preservation](../tables/python-source-preservation.md) retains byte-sensitive table projection and its isolated runtime.
 
@@ -140,10 +141,8 @@ Update exact memberships and prerequisites in the catalog, then use the focused
 fixtures before relying on a new plan. Existing commands and all CI settings
 remain intact.
 
-[#373](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/373)
-owns deeper Python-component integration;
-[#372](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/372)
-owns browser-helper convergence; and
-[#374](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/374)
-owns later evidence/CI alignment. This planner preserves those receiving
-boundaries while making their current routes discoverable.
+Use the [Python component entry](../tables/README.md#python-component-entry)
+for focused table checks, the [browser ownership map](browser-ownership.md)
+for helper reuse, and the [evidence boundary](evidence-boundaries.md) for
+interpreting new, reused, skipped or incomplete work. The planner preserves
+those source owners while making their current routes discoverable.

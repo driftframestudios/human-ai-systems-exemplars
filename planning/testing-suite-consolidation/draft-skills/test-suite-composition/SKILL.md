@@ -7,9 +7,10 @@ description: Composes owned checks into explicit, proportionate execution bundle
 
 ## Draft standing
 
-Draft candidate exercised through the bounded [Issue #371 application](../../exercises/issue-371.md), with wider family migrations retaining their own review. Existing
-commands remain authoritative until a receiving migration demonstrates
-membership parity and preserves its behavior and evidence boundaries.
+Draft candidate refined through the [selection exercise](../../exercises/issue-371.md),
+an owned Python component route, and the investment capsule browser-helper pilot. Retain
+draft standing for a future fresh-receiver application. Existing commands stay
+available; each family migration supplies its own membership and behavior evidence.
 
 ## Contract
 
@@ -117,6 +118,18 @@ security, accessibility, integrity, or publication checks.
 - **Given:** Python validates exact authored bytes while Chromium observes rendered table behavior.
 - **When:** The family receives a common bundle.
 - **Then:** The bundle keeps both runners and distinct failure meanings; parser success remains separate from scroll and focus evidence.
+
+### Scenario: Discovery has three different effects
+
+- **Given:** A catalog reads entry metadata, unittest discovery imports selected modules, and a runner executes discovered cases.
+- **When:** A collaborator selects a route.
+- **Then:** The plan names that route's actual effects. A metadata plan establishes selection; importing discovery establishes admitted case population; runner output establishes executed, failed or skipped outcomes.
+
+### Scenario: One command already serves the question
+
+- **Given:** One existing focused command observes the changed behavior with a sufficient independent oracle.
+- **When:** A repository-wide adapter is proposed for that single use.
+- **Then:** Retain the focused command. Add coordination only when another consequential receiver demonstrates the need.
 
 ### Scenario: A runner offers project selection
 

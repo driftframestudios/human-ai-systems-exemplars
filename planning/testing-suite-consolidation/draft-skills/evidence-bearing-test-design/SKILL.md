@@ -7,10 +7,11 @@ description: Designs a focused executable observation that distinguishes intende
 
 ## Draft standing
 
-Draft candidate with a bounded [Issue #371 application](../../exercises/issue-371.md).
-Existing domain contracts remain active owners. A reviewed natural use supplies
-the next promotion or revision decision; these examples describe intended
-behavior rather than executed coverage.
+Draft candidate refined through the [selection exercise](../../exercises/issue-371.md),
+Python component fixtures, and the investment capsule browser-helper pilot. Existing
+domain contracts remain active owners. Receiving PRs carry executed outcomes;
+these examples describe intended behavior. Retain draft standing for a future
+fresh-receiver application that can establish transfer usefulness.
 
 ## Contract
 
@@ -122,6 +123,18 @@ implementation or its accepted requirement changes.
 - **Given:** A controller has an accepted view and downloadable artifact.
 - **When:** Acquiring a candidate resource fails.
 - **Then:** The test observes retained accepted values and release of acquired candidates; partial DOM-publication rollback remains a separately named observation.
+
+### Scenario: Native success includes a skipped case
+
+- **Given:** A unittest process exits successfully and reports a selected case as skipped.
+- **When:** A receiving summary describes the result.
+- **Then:** The summary preserves the skip reason and executed population; process success establishes runner success, while the skipped assertion's behavior remains unspecified.
+
+### Scenario: A failure arrives during final validation
+
+- **Given:** Artifact validation can yield while browser telemetry continues to arrive.
+- **When:** A consequential console or network error arrives during validation.
+- **Then:** The final telemetry observation occurs after that validation and before accepted evidence is published. A source/unit fixture injects the error in that interval and independently observes the prior completion's exact identity. Other arrival phases keep their own observations.
 
 ## Conditional context
 

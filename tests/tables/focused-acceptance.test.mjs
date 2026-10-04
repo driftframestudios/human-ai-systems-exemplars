@@ -363,7 +363,7 @@ test("runtime owner wires case stopping, committed document observations and rea
   const journeys = await readFile(new URL("../../tools/table-focused-acceptance.mjs", import.meta.url), "utf8");
   assert.match(harness, /runAcceptanceCases\(campaign\.cases/);
   assert.match(harness, /if \(records\.length === campaign\.expected\.length\)/);
-  assert.match(harness, /unrunCaseIds = cases\.filter\(item => item\.attempted === false\)/);
+  assert.match(harness, /counts = invocationCounts\(cases, attemptedCaseIds, reusedCaseIds, campaign\.expected\)/);
   assert.match(harness, /const ended = Date\.now\(\)/);
   assert.match(harness, /endedAt: new Date\(ended\)\.toISOString\(\)/);
   assert.match(harness, /await observeDocument\(page\.mainFrame\(\)\)/);

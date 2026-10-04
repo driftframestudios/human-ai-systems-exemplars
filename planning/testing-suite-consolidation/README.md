@@ -186,15 +186,15 @@ reference. Preserve meaningful differences in length and layering.
 | Draft | [Evidence-bearing test design](draft-skills/evidence-bearing-test-design/SKILL.md) | Independent oracle, plausible fault, observation layer and explicit evidence limit. |
 | Draft | [Test-suite composition](draft-skills/test-suite-composition/SKILL.md) | Owned membership, selection, prerequisites, runner coordination and trustworthy reruns. |
 
-The existing declarative skill is the skill-writing owner. The two new drafts
-remain outside active skill routing until a reviewed natural use establishes
-their next disposition. Resource-fault guidance belongs with the existing
+The existing declarative skill is the skill-writing owner. The two testing drafts
+have reviewed local applications and remain outside active skill routing for
+a future fresh-receiver transfer exercise. Their current disposition is focused
+refinement; #58 remains the collection's receiving Issue. Resource-fault guidance belongs with the existing
 stateful skill instead of adding another overlapping portable skill.
 
-Publication selection previously listed 26 of the 30 active skills. Register
-the four visualization skills as repository-only, public-possible entries with
-dependency review explicitly pending. This corrects inventory while preserving
-the separately held tagged public-carrier decision. Newly linked public-ready
+Publication selection lists all 30 active skills. The four visualization skills
+remain repository-only, public-possible entries with dependency review pending.
+The separately held tagged public-carrier decision retains its existing owner. Newly linked public-ready
 references receive explicit dependency entries; publication execution retains
 its existing closure checks.
 
@@ -208,7 +208,9 @@ its existing closure checks.
 
 A completed source audit is an exercise of repository re-entry, ownership
 analysis and existing skill-authoring guidance. The newly drafted testing skills
-have a bounded Issue #371 application; its receiving PR/Issue carries execution evidence and the next disposition. Keep observations to the smallest result that
+have bounded planner, Python-entry, and browser-lifecycle applications. Their
+receiving PRs carry execution evidence; the refined drafts keep transfer claims
+open for a future fresh receiver. Keep observations to the smallest result that
 changes the artifact or its next disposition.
 
 ## Research and evidence boundaries
@@ -240,10 +242,23 @@ Practitioner Registry. The Python rendering reference cites its library
 capabilities directly; the visualization foundation retains perceptual evidence
 and interpretation guidance.
 
-## Next receiving decision
+## Repeat-use and expansion
 
-Review this chain, then begin #371 with a plan-only capability map that records
-existing command/argument vectors without executing them. Dispatch remains a
-separately authorized step. Keep family migrations separately reviewable. If a proposed
-bundle obscures an oracle or broadens a local run, retain its current command
-and revise only that selection boundary.
+Start with the [owned-suite map](../../tests/suites/README.md), then select the
+smallest route that answers the changed behavior. The Python table entry keeps
+four component identities; the browser pilot keeps domain assertions local;
+the evidence-boundary guide preserves owner standing and original scope.
+These are available compositions rather than a required full sequence.
+
+The two testing drafts now distinguish metadata discovery, importing discovery,
+native skip semantics, independent oracles, and final-validation telemetry.
+Their bounded local applications support these refinements. A fresh receiving
+team or materially different family can establish the next transfer signal.
+Use #58 for that disposition rather than creating a parallel result ledger.
+
+Keep application, browser, research, live, and publication choices separate.
+A new browser-family migration earns its own membership/fault exercise.
+A runner replacement, adaptive skip policy, hosted activation, or public skill
+carrier retains a separately reviewed adoption decision. If a route broadens
+a local run or hides an oracle, use the retained owned command and revise that
+selection boundary.
