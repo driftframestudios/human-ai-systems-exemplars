@@ -1602,6 +1602,33 @@
       "embedded_documents": 1,
       "standing": "native labels complete",
       "changed": true
+    },
+    "one-figure-several-readings.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Recorded SECOM line tests by observation window",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 2,
+          "topic": "What each receiving form makes available",
+          "shape": "simple",
+          "rows": 4,
+          "th": 6,
+          "td": 6
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
     }
   },
   "runtime": [
@@ -1677,11 +1704,11 @@
     "visitor-boundary-contract.js": "Boundary constants; no table generation found in the inventoried source."
   },
   "counts": {
-    "owned_pages": 43,
-    "native_tables": 141,
-    "simple_tables": 137,
+    "owned_pages": 44,
+    "native_tables": 143,
+    "simple_tables": 139,
     "explicit_tables": 4,
-    "native_labelled_elements": 4714,
+    "native_labelled_elements": 4757,
     "runtime_body_generators": 2
   },
   "rendering_affecting_native_additions": [],

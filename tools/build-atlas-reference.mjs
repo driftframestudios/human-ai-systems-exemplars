@@ -127,6 +127,7 @@ export function renderSection(groups) {
           <h3 class="txt-h4">The reference carries its context</h3>
           <p>The SVG includes the finding, units, date windows, counts and source credit as visible text. Its named groups describe the same subject in source form. The table supplies native row and column relationships, while the <a href="../data/visualization-fidelity/secom-monthly.json">derived JSON</a> retains counts and full-precision rates. A receiving interface determines whether an image, SVG source or extracted text reaches a reader or tool.</p>
           <p class="table-note"><strong>Source and method:</strong> <a href="https://doi.org/10.24432/C54305">McCann and Johnston (2008), SECOM, UCI Machine Learning Repository</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Monthly aggregation uses all 1,567 released label records, including 104 failures; rates are 100 times failed tests divided by recorded tests, displayed to one decimal. The source timestamps retain their stated civil-time precision. These are descriptive rates for the released records. Inference about broader production would require a sampling and process model. <a href="../data/visualization-fidelity/README.md">Read the derivation and source boundary.</a></p>
+          <p><a href="one-figure-several-readings.html">One Figure, Several Readings</a> examines the design choices and the different representations a receiving reader or tool may encounter.</p>
         </section>`;
 }
 
