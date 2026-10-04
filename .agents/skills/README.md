@@ -52,6 +52,29 @@ the smallest adequate route when no contract adds material value.
 | [`secret-boundary-inspection`](secret-boundary-inspection/SKILL.md) | Source, history, or an artifact approaches publication or delivery | Canary-proven scope evidence and a safe receipt or private finding route |
 | [`repository-attribution-stewardship`](repository-attribution-stewardship/SKILL.md) | Attribution, citation, contribution credit, or adaptation guidance changes | Aligned carrier roles and an evidence-calibrated governance return |
 
+## Visualization skill ladder
+
+These four draft contracts share one data-and-evidence foundation. Select the
+destination owner for the receiving artifact; the foundation supplies meaning
+and form-selection decisions. The ladder describes progressive disclosure and
+composition, rather than a requirement to activate four skills in sequence.
+
+| Skill | Receiving result |
+| --- | --- |
+| [data-visualization-foundations](data-visualization-foundations/SKILL.md) | A source-grounded visual contract independent of operator, tool, and destination. |
+| [conversation-data-visualization](conversation-data-visualization/SKILL.md) | A bounded exploratory figure and recoverable evidence in the current conversation. |
+| [web-data-visualization](web-data-visualization/SKILL.md) | A web figure or coordinated view integrated with the receiving surface's existing design and behavior. |
+| [pdf-data-visualization](pdf-data-visualization/SKILL.md) | A reproducible figure that remains readable and interpretable in its final PDF placement. |
+
+The foundation's [evidence map](data-visualization-foundations/references/evidence-and-source-map.md)
+preserves research, practitioner guidance, public Registry lineage, and their
+distinct warrants. [Atlas exercises](data-visualization-foundations/references/atlas-exercises.md)
+bind first use to Issues #358 and #360, with gallery and research-extract gates.
+Source authoring makes these methods available for cultivation. Hosted offering
+remains held for a new tag and complete public carrier. A future package includes
+the selected skill, its directly linked foundation and references, and the
+applicable shared source map; packaging proves that closure before publication.
+
 ## How the catalog evolves
 
 `collaboration-accounting` routes natural
