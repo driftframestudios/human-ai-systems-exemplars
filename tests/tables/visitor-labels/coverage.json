@@ -1521,11 +1521,11 @@
         },
         {
           "table": 5,
-          "topic": "Structured source table for the clean exemplar",
+          "topic": "Recorded SECOM line tests by observation window",
           "shape": "simple",
-          "rows": 7,
+          "rows": 5,
           "th": 8,
-          "td": 6
+          "td": 12
         },
         {
           "table": 6,
@@ -1681,7 +1681,7 @@
     "native_tables": 141,
     "simple_tables": 137,
     "explicit_tables": 4,
-    "native_labelled_elements": 4710,
+    "native_labelled_elements": 4714,
     "runtime_body_generators": 2
   },
   "rendering_affecting_native_additions": [],

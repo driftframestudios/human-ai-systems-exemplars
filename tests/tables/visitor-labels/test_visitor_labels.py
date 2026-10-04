@@ -267,7 +267,7 @@ class VisitorLabelContracts(unittest.TestCase):
                     temporary = target.with_suffix(".tmp")
                     temporary.write_text(json.dumps(report, indent=2) + "\n")
                     temporary.replace(target)
-        self.assertEqual(dict(counts), {"table": 141, "tr": 918, "th": 1335, "td": 2316})
+        self.assertEqual(dict(counts), {"table": 141, "tr": 916, "th": 1335, "td": 2322})
         self.assertEqual(dict(dispositions), {
             "simple": 137, "empty-register": 2,
             "capital-summary": 1, "grouped-populations": 1,

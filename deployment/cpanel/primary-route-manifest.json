@@ -3,31 +3,6 @@
   "version": "1",
   "files": [
     {
-      "source_path": "context-canvas-project-surface/img/plot/table_verification_states.svg",
-      "projected_path": "img/plot/table_verification_states.svg",
-      "media_type": "image/svg+xml"
-    },
-    {
-      "source_path": "context-canvas-project-surface/context-canvas/readable-tables-reusable-evidence.html",
-      "projected_path": "readable-tables-reusable-evidence.html",
-      "media_type": "text/html"
-    },
-    {
-      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/table-study.css",
-      "projected_path": "styles/routes/table-study.css",
-      "media_type": "text/css"
-    },
-    {
-      "source_path": "context-canvas-project-surface/img/plot/table_reading_contract.svg",
-      "projected_path": "img/plot/table_reading_contract.svg",
-      "media_type": "image/svg+xml"
-    },
-    {
-      "source_path": "context-canvas-project-surface/img/plot/table_study_observations.svg",
-      "projected_path": "img/plot/table_study_observations.svg",
-      "media_type": "image/svg+xml"
-    },
-    {
       "source_path": "context-canvas-project-surface/context-canvas/404.html",
       "projected_path": "404.html",
       "media_type": "text/html"
@@ -298,6 +273,16 @@
       "media_type": "text/html"
     },
     {
+      "source_path": "context-canvas-project-surface/data/visualization-fidelity/README.md",
+      "projected_path": "data/visualization-fidelity/README.md",
+      "media_type": "text/markdown"
+    },
+    {
+      "source_path": "context-canvas-project-surface/data/visualization-fidelity/secom-monthly.json",
+      "projected_path": "data/visualization-fidelity/secom-monthly.json",
+      "media_type": "application/json"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/debriefs-catalog.js",
       "projected_path": "debriefs-catalog.js",
       "media_type": "text/javascript"
@@ -513,21 +498,6 @@
       "media_type": "image/png"
     },
     {
-      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital.jpg",
-      "projected_path": "img/bgr/bgr_occipital.jpg",
-      "media_type": "image/jpeg"
-    },
-    {
-      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital415.jpg",
-      "projected_path": "img/bgr/bgr_occipital415.jpg",
-      "media_type": "image/jpeg"
-    },
-    {
-      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital770.jpg",
-      "projected_path": "img/bgr/bgr_occipital770.jpg",
-      "media_type": "image/jpeg"
-    },
-    {
       "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital_storyboard.jpg",
       "projected_path": "img/bgr/bgr_occipital_storyboard.jpg",
       "media_type": "image/jpeg"
@@ -555,6 +525,21 @@
     {
       "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital_whiteboarding770.jpg",
       "projected_path": "img/bgr/bgr_occipital_whiteboarding770.jpg",
+      "media_type": "image/jpeg"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital.jpg",
+      "projected_path": "img/bgr/bgr_occipital.jpg",
+      "media_type": "image/jpeg"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital415.jpg",
+      "projected_path": "img/bgr/bgr_occipital415.jpg",
+      "media_type": "image/jpeg"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/bgr/bgr_occipital770.jpg",
+      "projected_path": "img/bgr/bgr_occipital770.jpg",
       "media_type": "image/jpeg"
     },
     {
@@ -978,6 +963,21 @@
       "media_type": "image/webp"
     },
     {
+      "source_path": "context-canvas-project-surface/img/plot/table_reading_contract.svg",
+      "projected_path": "img/plot/table_reading_contract.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/table_study_observations.svg",
+      "projected_path": "img/plot/table_study_observations.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/plot/table_verification_states.svg",
+      "projected_path": "img/plot/table_verification_states.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
       "source_path": "context-canvas-project-surface/img/plot/talent_intake_retrieval_field.svg",
       "projected_path": "img/plot/talent_intake_retrieval_field.svg",
       "media_type": "image/svg+xml"
@@ -1308,6 +1308,11 @@
       "media_type": "text/html"
     },
     {
+      "source_path": "context-canvas-project-surface/context-canvas/readable-tables-reusable-evidence.html",
+      "projected_path": "readable-tables-reusable-evidence.html",
+      "media_type": "text/html"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/recoverable-enterprise-forms.html",
       "projected_path": "recoverable-enterprise-forms.html",
       "media_type": "text/html"
@@ -1400,6 +1405,11 @@
     {
       "source_path": "context-canvas-project-surface/context-canvas/styles/routes/hiring-surfaces.css",
       "projected_path": "styles/routes/hiring-surfaces.css",
+      "media_type": "text/css"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/routes/table-study.css",
+      "projected_path": "styles/routes/table-study.css",
       "media_type": "text/css"
     },
     {
