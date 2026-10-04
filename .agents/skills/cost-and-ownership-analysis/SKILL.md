@@ -36,6 +36,10 @@ Separate prototype-chain lookup from prototype mutation, regex source injection 
 ### Rule: Pure boundaries clarify ownership
 
 Prefer owned return values and explicit path-copy transitions. Keep invocation-local counters, indexes, and collectors when they preserve linear work. Detached results own their nested mutable values; immutable shared projections declare their reading contract. Rendering derives from accepted business state, while UI retention and I/O remain named adapters.
+### Rule: Owned snapshots follow a bounded projection
+
+Admit the canonical fields, collection lengths, variable-size values, and any declared extension envelope before copying. Retain those fields in owned mutable containers while leaving unrelated metadata outside the projection. A bounded core followed by a whole-input deep clone can still traverse unbounded surplus state; detachment and admission therefore retain separate checks.
+
 ### Rule: Preparation earns one authority
 
 Keep public admission gates and compose trusted private calculation from admitted values. Cache by a complete semantic identity or immutable revision, preserve caller-owned inputs, and invalidate every dependent view when that identity changes.

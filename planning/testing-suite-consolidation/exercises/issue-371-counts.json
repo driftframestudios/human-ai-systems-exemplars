@@ -1,0 +1,137 @@
+{
+  "sourceRevision": "main@e1f00de",
+  "countingUnit": "root source modules importing node:test",
+  "beforeMechanism": "Direct root-script selection",
+  "afterMechanism": "Catalog-listed baseline modules",
+  "before": 48,
+  "after": 81,
+  "baselineTotal": 81,
+  "newPlannerModules": 1,
+  "nonbrowser": 75,
+  "browser": 6,
+  "rows": [
+    {
+      "family": "attribution",
+      "before": 2,
+      "after": 2
+    },
+    {
+      "family": "context-canvas",
+      "before": 17,
+      "after": 17
+    },
+    {
+      "family": "core-architectures",
+      "before": 12,
+      "after": 12
+    },
+    {
+      "family": "documentation",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "family": "iframe-routes",
+      "before": 4,
+      "after": 4
+    },
+    {
+      "family": "investment-analysis",
+      "before": 0,
+      "after": 6
+    },
+    {
+      "family": "narrative-architectures",
+      "before": 2,
+      "after": 2
+    },
+    {
+      "family": "prod-deployment",
+      "before": 5,
+      "after": 5
+    },
+    {
+      "family": "public-references",
+      "before": 1,
+      "after": 1
+    },
+    {
+      "family": "schema-pages",
+      "before": 3,
+      "after": 3
+    },
+    {
+      "family": "security",
+      "before": 2,
+      "after": 2
+    },
+    {
+      "family": "tables",
+      "before": 0,
+      "after": 16
+    },
+    {
+      "family": "visualization-fidelity-atlas",
+      "before": 0,
+      "after": 10
+    }
+  ],
+  "bundles": [
+    {
+      "id": "source-unit",
+      "suites": 19
+    },
+    {
+      "id": "family-integration",
+      "suites": 12
+    },
+    {
+      "id": "focused-browser",
+      "suites": 26
+    },
+    {
+      "id": "visual-media",
+      "suites": 5
+    },
+    {
+      "id": "carrier",
+      "suites": 11
+    },
+    {
+      "id": "live",
+      "suites": 3
+    },
+    {
+      "id": "research",
+      "suites": 1
+    }
+  ],
+  "catalogSuites": 61,
+  "sourceGroups": [
+    {
+      "label": "Node source / unit / integration",
+      "count": 75
+    },
+    {
+      "label": "Node browser test modules",
+      "count": 6
+    },
+    {
+      "label": "Python table test modules",
+      "count": 4
+    },
+    {
+      "label": "Nested Python test modules",
+      "count": 37
+    },
+    {
+      "label": "Worker test modules",
+      "count": 4
+    },
+    {
+      "label": "Other browser entry scripts",
+      "count": 22
+    }
+  ],
+  "boundary": "Fixed baseline; discovery mechanisms differ. Counts are modules, not cases, pass results or behavioral coverage. The organization diagram is conceptual; no source files moved."
+}

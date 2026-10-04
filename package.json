@@ -77,7 +77,10 @@
     "visual:strategy-canvas-context": "node tools/visual-check.mjs context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html --name strategy-canvas-context --selector \"#strategy-field\" --http --wide",
     "build:context-canvas-field-pilot": "node cloudflare/context-canvas-field-pilot/build.mjs",
     "check:context-canvas-field-pilot": "node cloudflare/context-canvas-field-pilot/build.mjs --check",
-    "dry-run:context-canvas-field-pilot": "npm run build:context-canvas-field-pilot && wrangler deploy --dry-run --config cloudflare/context-canvas-field-pilot/wrangler.jsonc"
+    "dry-run:context-canvas-field-pilot": "npm run build:context-canvas-field-pilot && wrangler deploy --dry-run --config cloudflare/context-canvas-field-pilot/wrangler.jsonc",
+    "test:suites:list": "node tools/test-suite-plan.mjs --list",
+    "test:suites:plan": "node tools/test-suite-plan.mjs",
+    "test:suites:unit": "node --test tests/suites/planner.test.mjs"
   },
   "overrides": {
     "fast-uri": "4.1.5"

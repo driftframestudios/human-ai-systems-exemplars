@@ -54,7 +54,7 @@ A producer document establishes producer-schema validity. An adapter establishes
 
 ### Rule: Rejection preserves a working route
 
-An incompatible candidate commits atomically or remains outside the accepted model. The current working state stays operable, and visible recovery names the field, relationship, or source that can receive a revision.
+An admitted candidate commits atomically; an incompatible candidate remains outside the accepted model. The current working state stays operable, and visible recovery names the field, relationship, or source that can receive a revision.
 
 ### Rule: Identity and chronology are deliberate
 
@@ -93,6 +93,10 @@ Existing local commands remain the primary evidence route. A hosted run uses the
 - And source identity remains recoverable as lineage while receiver identity stays receiver-owned
 - And the compatible state reaches a usable rendered result
 - And the incompatible candidate leaves the accepted receiver state available with a direct revision route
+
+## Conditional context
+
+The skill loads [Owned state and resource faults](references/owned-state-and-resource-faults.md) when a journey owns snapshots, partial resource acquisition, publication failure, retry, or lifecycle cleanup. The reference supplies bounded ownership and failure-stage probes; the artifact retains its state, recovery, and completion contract.
 
 ## Completion
 

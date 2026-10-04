@@ -30,6 +30,12 @@ A skill offers a working method inside the current task horizon. Activation supp
 
 The core contract remains compact. When interpretation benefits, the body can name **Useful when**, **Poor fit when**, **Smallest useful dose**, **Foregrounds**, **May under-attend**, **Material result**, **Interactions**, and **Rest or release when**. These are optional semantic prompts rather than required frontmatter or a second schema.
 
+### Rule: Depth follows consequential decisions
+
+Comprehensive guidance makes the job, fit, applicable inputs, defaults, output, completion, and recovery legible. A concise core routes to conditional references when a branch needs worked examples, expert evidence, or a longer procedure. Match depth to uncertainty and consequence rather than a uniform word count. Preserve a near-miss or poor-fit example when it changes routing; leave unused ceremonial sections outside the contract.
+
+A fresh-context reader should be able to identify a fitting task, choose the smallest useful dose, locate needed context, and recognize completion or re-entry. Authored scenarios establish intended behavior; natural use and independent observations establish what the skill actually helped the receiver accomplish.
+
 ### Rule: Examples clarify branches
 
 A scenario appears only when it changes interpretation. The smallest sufficient set often contains one ordinary or consequential boundary scenario, and many skills need none. Each retained scenario carries initial context, event, and observable result in Given/When/Then form.
