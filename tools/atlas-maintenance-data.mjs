@@ -14,6 +14,9 @@ const MAX_SOURCE_CHARACTERS = 1_000_000;
 const DECIMAL = /^(?:0|[1-9]\d*)(?:\.\d+)?$/u;
 
 function numericField(value, { integer = false, positive = false } = {}) {
+  if (integer && !/^(?:0|[1-9]\d*)$/u.test(value)) {
+    throw new TypeError("Integer fields require an unsigned whole-number literal");
+  }
   if (!DECIMAL.test(value)) throw new TypeError('Invalid numeric field in maintenance record.');
   const number = Number(value);
   if (!Number.isFinite(number) || number > Number.MAX_SAFE_INTEGER || (integer && !Number.isSafeInteger(number)) || (positive && number <= 0)) {
@@ -77,13 +80,17 @@ function addRecord(population, record) {
   population.agreement[cell] += 1;
 }
 
-/** O(records) time, O(1) aggregate space; only newly allocated accumulators are mutated. */
+/** O(records) time and auxiliary space for identity tracking; O(1) aggregate space; only newly allocated accumulators are mutated. */
 export function summarizeMaintenance(records) {
   if (!Array.isArray(records) || records.length > MAX_RECORDS) throw new TypeError('Maintenance records must be a bounded array.');
   const populations = ['all', ...PRODUCT_TYPES].map(emptyPopulation);
   const byType = new Map(populations.map(population => [population.type, population]));
   const identities = new Set();
   for (const record of records) {
+    if (record === null || typeof record !== "object" ||
+        !["id", "type", "machineFailure", "modeFlags"].every(key => Object.hasOwn(record, key))) {
+      throw new TypeError("Each record supplies its own id, type, machineFailure, and modeFlags fields");
+    }
     if (!record || !Number.isSafeInteger(record.id) || record.id <= 0 || identities.has(record.id)
       || !PRODUCT_TYPES.includes(record.type) || ![0, 1].includes(record.machineFailure)
       || !record.modeFlags || MODE_KEYS.some(key => !Object.hasOwn(record.modeFlags, key) || ![0, 1].includes(record.modeFlags[key]))) {
@@ -106,8 +113,7 @@ export function summarizeMaintenance(records) {
 export function maintenanceDocument(records) {
   return {
     id: 'atlas-ai4i-maintenance-reference.v1', version: 1,
-    source: { doi: SOURCE_DOI, sha256: SOURCE_SHA256, standing: 'published-generated-records', license: 'CC-BY-4.0' },
-    population: 'Released AI4I 2020 records, grouped by the source Type field',
+    population: 'Supplied records grouped by the source Type field',
     denominator: 'Records in the selected product type; each UDI contributes once',
     timeBasis: 'The released table supplies record identifiers rather than observation timestamps',
     measures: {
@@ -126,7 +132,16 @@ export async function buildMaintenanceData({ check = false } = {}) {
   const root = new URL('../', import.meta.url);
   const source = await readFile(new URL(SOURCE_PATH, root));
   if (createHash('sha256').update(source).digest('hex') !== SOURCE_SHA256) throw new Error('Maintenance source differs from the admitted release.');
-  const document = maintenanceDocument(parseMaintenanceCsv(source.toString('utf8')));
+  const document = {
+    ...maintenanceDocument(parseMaintenanceCsv(source.toString('utf8'))),
+    source: {
+      doi: SOURCE_DOI,
+      sha256: SOURCE_SHA256,
+      standing: 'published-generated-records',
+      license: 'CC-BY-4.0',
+    },
+    population: 'Released AI4I 2020 records, grouped by the source Type field',
+  };
   const output = `${JSON.stringify(document, null, 2)}\n`;
   const destination = new URL(SUMMARY_PATH, root);
   if (check) {

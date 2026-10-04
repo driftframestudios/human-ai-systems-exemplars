@@ -1,12 +1,6 @@
 {
   "id": "atlas-ai4i-maintenance-reference.v1",
   "version": 1,
-  "source": {
-    "doi": "https://doi.org/10.24432/C5HS5C",
-    "sha256": "dc6630cd9b1f0f853922fad78a1b6436570d3f1ec863f1dd5c4340ac56bc8a8e",
-    "standing": "published-generated-records",
-    "license": "CC-BY-4.0"
-  },
   "population": "Released AI4I 2020 records, grouped by the source Type field",
   "denominator": "Records in the selected product type; each UDI contributes once",
   "timeBasis": "The released table supplies record identifiers rather than observation timestamps",
@@ -118,5 +112,11 @@
       "anyModeFlagPer100": 2.3928215353938187,
       "disagreements": 5
     }
-  ]
+  ],
+  "source": {
+    "doi": "https://doi.org/10.24432/C5HS5C",
+    "sha256": "dc6630cd9b1f0f853922fad78a1b6436570d3f1ec863f1dd5c4340ac56bc8a8e",
+    "standing": "published-generated-records",
+    "license": "CC-BY-4.0"
+  }
 }

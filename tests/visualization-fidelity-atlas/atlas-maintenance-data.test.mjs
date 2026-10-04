@@ -99,3 +99,31 @@ test('document JSON roundtrip keeps source identity and detached aggregates', ()
 test('committed summary is the exact digest-bound source derivation', async () => {
   assert.deepEqual(await buildMaintenanceData({ check: true }), { records: 10000, populations: 4, disagreements: 27 });
 });
+
+
+test('pure fixture documents keep verified-file provenance with the build boundary', () => {
+  const document = maintenanceDocument([]);
+  assert.equal(Object.hasOwn(document, 'source'), false);
+  assert.equal(document.population, 'Supplied records grouped by the source Type field');
+});
+
+for (const field of ['id', 'type', 'machineFailure', 'modeFlags', 'all']) {
+  test('aggregation requires owned consumed fields: ' + field, () => {
+    const owned = {
+      id: 1, type: 'L', machineFailure: 0,
+      modeFlags: { TWF: 0, HDF: 0, PWF: 0, OSF: 0, RNF: 0 },
+    };
+    const inherited = field === 'all' ? Object.create(owned) : Object.assign(Object.create({ [field]: owned[field] }), owned);
+    if (field !== 'all') delete inherited[field];
+    assert.throws(() => summarizeMaintenance([inherited]), /own id, type, machineFailure, and modeFlags/);
+  });
+}
+
+for (const [index, value] of [[0, '1.0000000000000001'], [5, '1500.0000000000001'], [7, '1.0000000000000001']]) {
+  test('integer CSV fields retain textual precision at column ' + index, () => {
+    const header = 'UDI,Product ID,Type,Air temperature [K],Process temperature [K],Rotational speed [rpm],Torque [Nm],Tool wear [min],Machine failure,TWF,HDF,PWF,OSF,RNF';
+    const record = ['1', 'L10001', 'L', '300.0', '310.0', '1500', '40.0', '0', '0', '0', '0', '0', '0', '0'];
+    record[index] = value;
+    assert.throws(() => parseMaintenanceCsv(header + '\n' + record.join(',') + '\n'), /whole-number literal/);
+  });
+}
