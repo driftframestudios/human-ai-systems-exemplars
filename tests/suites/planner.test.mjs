@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError } from '../../tools/test-suite-plan.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+const POST_BASELINE_NODE_MEMBERS = ['tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs'];
 const fixture = () => ({
   schemaVersion: 1, sourceRevision: 'fixture',
   profiles: [{id: 'local', runtime: 'Node', prerequisites: [], effects: [], artifacts: [], timeout: 'owner-defined'}],
@@ -127,14 +128,12 @@ test('plan-only CLI returns with source and alias sentinel markers untouched', a
 test('catalog preserves every exact baseline Node member and separates primary browser modules', async () => {
   const [catalog, baseline] = await Promise.all([catalogPromise, baselinePromise]);
   const all = createPlan(catalog, {suites: catalog.suites.filter(s => s.kind === 'node-test' && s.members.every(p => p.startsWith('tests/'))).map(s => s.id)});
-  assert.equal(all.suites.flatMap(s => s.members).length, 82);
-  assert.equal(all.suites.flatMap(s => s.members).filter(p => p === 'tests/suites/planner.test.mjs').length, 1);
-  const members = all.suites.flatMap(s => s.members).filter(p => p !== 'tests/suites/planner.test.mjs').sort();
-  assert.deepEqual(members, [...baseline.nonbrowser, ...baseline.browser].sort());
+  const members = all.suites.flatMap(s => s.members).sort();
+  assert.deepEqual(members, [...baseline.nonbrowser, ...baseline.browser, ...POST_BASELINE_NODE_MEMBERS].sort());
   assert.equal(baseline.nonbrowser.length, 75);
   assert.equal(baseline.browser.length, 6);
   const unitPlan = createPlan(catalog, {bundles: ['source-unit']});
-  const rootMembers = unitPlan.suites.flatMap(s => s.members).filter(p => p.startsWith('tests/') && p.endsWith('.mjs') && p !== 'tests/suites/planner.test.mjs');
+  const rootMembers = unitPlan.suites.flatMap(s => s.members).filter(p => p.startsWith('tests/') && p.endsWith('.mjs') && !POST_BASELINE_NODE_MEMBERS.includes(p));
   assert.deepEqual(rootMembers.sort(), [...baseline.nonbrowser].sort());
   for (const path of baseline.browser) assert.equal(rootMembers.includes(path), false);
 });

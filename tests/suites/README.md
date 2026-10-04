@@ -49,6 +49,7 @@ case-name filtering nor an automatic sequence across all seven bundles.
 - [test-suite-plan.mjs](../../tools/test-suite-plan.mjs) owns metadata admission, deterministic selection and presentation.
 - [planner.test.mjs](planner.test.mjs) supplies independent fixtures for selection, gates, path/array admission, alias graphs, source membership and import inactivity.
 - Existing suite files and their nearest owners retain assertions, scenarios, dependencies, fixture preparation, artifact rules and recovery.
+- [Browser ownership](browser-ownership.md) maps retained transport owners and the bounded investment-capsule helper pilot.
 - [Table pipeline](../tables/PIPELINE.md) retains source-bound case planning, material dependency closure and checkpoints.
 - [Python source preservation](../tables/python-source-preservation.md) retains byte-sensitive table projection and its isolated runtime.
 
@@ -76,6 +77,22 @@ unittest skips remain visible; exit zero describes the runner's success
 semantics rather than proof that every selected assertion executed.
 The optional reference comparison and independently governed Python projects
 retain their separate commands and permissions.
+
+## Browser-helper pilot
+
+The investment capsule browser entry reuses Core serving and four-channel
+telemetry through a family-local lifecycle adapter. Its native case keeps the
+existing scripted/scriptless, keyboard/focus, viewport and download assertions.
+
+```sh
+node --test tests/investment-analysis/browser-helper.test.mjs
+node --test tests/investment-analysis/capsule.browser.test.mjs
+```
+
+The first command exercises lifecycle faults with doubles; the second uses real
+Chromium. [Browser ownership](browser-ownership.md) describes the retained
+server/consumer dispositions and the Worker root-toolchain prerequisite.
+Other browser families keep their established routes and evidence contracts.
 
 ## Compatibility and preparation
 
