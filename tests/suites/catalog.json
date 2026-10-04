@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceRevision": "main@e1f00de plus Issue #371 planner",
+  "sourceRevision": "main@e1f00de baseline plus owned suite-routing additions",
   "countingUnit": "Distinct source files, not runtime test cases",
   "profiles": [
     {
@@ -709,19 +709,16 @@
           "--",
           "python",
           "-m",
-          "unittest",
-          "discover",
-          "-s",
-          "tests/tables/prototype-labels",
-          "-p",
-          "test_parser.py",
-          "-v"
+          "tests.tables.run_components",
+          "parser"
         ],
         "appendMembers": false
       },
       "owner": "tests/tables/README.md",
       "scope": "The named Python module; source-preserving projection and semantic parsing retain separate assertions.",
-      "aliases": []
+      "aliases": [
+        "test:tables:python"
+      ]
     },
     {
       "id": "python.tables.hiring-table-media",
@@ -746,19 +743,16 @@
           "--",
           "python",
           "-m",
-          "unittest",
-          "discover",
-          "-s",
-          "tests/tables",
-          "-p",
-          "test_hiring_table_media.py",
-          "-v"
+          "tests.tables.run_components",
+          "hiring-table-media"
         ],
         "appendMembers": false
       },
       "owner": "tests/tables/README.md",
       "scope": "The named Python module; source-preserving projection and semantic parsing retain separate assertions.",
-      "aliases": []
+      "aliases": [
+        "test:tables:python"
+      ]
     },
     {
       "id": "python.tables.table-context",
@@ -783,19 +777,16 @@
           "--",
           "python",
           "-m",
-          "unittest",
-          "discover",
-          "-s",
-          "tests/tables",
-          "-p",
-          "test_table_context.py",
-          "-v"
+          "tests.tables.run_components",
+          "table-context"
         ],
         "appendMembers": false
       },
       "owner": "tests/tables/README.md",
       "scope": "The named Python module; source-preserving projection and semantic parsing retain separate assertions.",
-      "aliases": []
+      "aliases": [
+        "test:tables:python"
+      ]
     },
     {
       "id": "python.tables.visitor-labels",
@@ -820,19 +811,55 @@
           "--",
           "python",
           "-m",
-          "unittest",
-          "discover",
-          "-s",
-          "tests/tables/visitor-labels",
-          "-p",
-          "test_visitor_labels.py",
-          "-v"
+          "tests.tables.run_components",
+          "visitor-labels"
         ],
         "appendMembers": false
       },
       "owner": "tests/tables/README.md",
       "scope": "The named Python module; source-preserving projection and semantic parsing retain separate assertions.",
-      "aliases": []
+      "aliases": [
+        "test:tables:python"
+      ]
+    },
+    {
+      "id": "python.tables.component-entry",
+      "family": "tables",
+      "kind": "python-unittest",
+      "members": [
+        "tests/tables/test_component_entry.py"
+      ],
+      "profile": "python-tables",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "env",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "uv",
+          "run",
+          "--isolated",
+          "--no-project",
+          "--python",
+          "3.12",
+          "--managed-python",
+          "--",
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/tables",
+          "-p",
+          "test_component_entry.py",
+          "-v"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/tables/README.md",
+      "scope": "Entry selection, explicit nonempty discovery, independent module identities and native failure/skip behavior; separate from the four application components.",
+      "aliases": [
+        "test:tables:python:entry"
+      ]
     },
     {
       "id": "browser.about-media-browser-contract",
@@ -1621,7 +1648,8 @@
         "python.tables.hiring-table-media",
         "python.tables.table-context",
         "python.tables.visitor-labels",
-        "worker.source"
+        "worker.source",
+        "python.tables.component-entry"
       ]
     },
     {

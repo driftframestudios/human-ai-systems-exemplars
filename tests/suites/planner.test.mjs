@@ -163,6 +163,7 @@ test('Python table membership stays explicit and distinct from nested project an
   const python = plan.suites.filter(s => s.kind === 'python-unittest');
   assert.deepEqual(python.flatMap(s => s.members).sort(), [
     'tests/tables/prototype-labels/test_parser.py',
+    'tests/tables/test_component_entry.py',
     'tests/tables/test_hiring_table_media.py',
     'tests/tables/test_table_context.py',
     'tests/tables/visitor-labels/test_visitor_labels.py',
@@ -245,4 +246,34 @@ test('consequential bundle routes retain independent literal expectations', asyn
   ]);
   assert.ok(createPlan(catalog, {bundles: ['focused-browser']}).suites.every(s => s.profile === 'browser' && !s.id.startsWith('visual.')));
   assert.ok(createPlan(catalog, {bundles: ['live']}).suites.every(s => s.routeStatus === 'held'));
+});
+
+for (const [id, selector, member] of [
+  ['python.tables.parser', 'parser', 'tests/tables/prototype-labels/test_parser.py'],
+  ['python.tables.hiring-table-media', 'hiring-table-media', 'tests/tables/test_hiring_table_media.py'],
+  ['python.tables.table-context', 'table-context', 'tests/tables/test_table_context.py'],
+  ['python.tables.visitor-labels', 'visitor-labels', 'tests/tables/visitor-labels/test_visitor_labels.py'],
+]) test('owned Python component route: ' + id, async () => {
+  const plan = createPlan(await catalogPromise, {suites: [id]});
+  assert.deepEqual(plan.suites[0].members, [member]);
+  assert.deepEqual(plan.suites[0].command, {
+    cwd: '.', argv: ['env', 'PYTHONDONTWRITEBYTECODE=1', 'uv', 'run', '--isolated',
+      '--no-project', '--python', '3.12', '--managed-python', '--', 'python',
+      '-m', 'tests.tables.run_components', selector],
+  });
+  assert.deepEqual(plan.suites[0].aliases, ['test:tables:python']);
+});
+
+test('Python entry fixtures have a separate route and all-component alias keeps its scope', async () => {
+  const catalog = await catalogPromise;
+  const plan = createPlan(catalog, {suites: ['python.tables.component-entry']});
+  assert.deepEqual(plan.suites[0].members, ['tests/tables/test_component_entry.py']);
+  assert.deepEqual(plan.suites[0].command.argv.slice(-8),
+    ['-m', 'unittest', 'discover', '-s', 'tests/tables', '-p', 'test_component_entry.py', '-v']);
+  assert.deepEqual(catalog.suites.filter(s => s.aliases.includes('test:tables:python')).map(s => s.id),
+    ['python.tables.parser', 'python.tables.hiring-table-media', 'python.tables.table-context', 'python.tables.visitor-labels']);
+  assert.deepEqual(plan.suites[0].aliases, ['test:tables:python:entry']);
+  const pkg = JSON.parse(await readFile(resolve(ROOT, 'package.json'), 'utf8'));
+  assert.equal(pkg.scripts['test:tables:python'],
+    'env PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python -- python -m tests.tables.run_components all');
 });
