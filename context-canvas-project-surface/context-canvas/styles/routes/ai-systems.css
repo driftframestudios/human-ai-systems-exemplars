@@ -378,3 +378,20 @@
         box-shadow: none;
     }
 }
+/* Flat reference comparison. Consumers: the Atlas static reference and its
+   companion article. Loaded after the route's image/card defaults; the scoped
+   treatment adapts Cobalt Operating Field without changing other consumers. */
+.ai-systems-page .atlas-reference .story-visual,
+.ai-systems-page .atlas-reference .story-visual__open,
+.ai-systems-page .atlas-reference .story-visual img {
+  box-shadow: none;
+  filter: none;
+}
+
+.ai-systems-page .atlas-reference .story-visual img {
+  background: #fffcf5;
+}
+
+@media screen {
+  .atlas-reference .table-scroll table { min-width: 42rem; }
+}

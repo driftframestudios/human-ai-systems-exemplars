@@ -1,0 +1,62 @@
+{
+  "source": {
+    "title": "SECOM",
+    "citation": "McCann, M. & Johnston, A. (2008). SECOM [Dataset]. UCI Machine Learning Repository.",
+    "url": "https://archive.ics.uci.edu/dataset/179/secom",
+    "doi": "https://doi.org/10.24432/C54305",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "labels": "https://archive.ics.uci.edu/ml/machine-learning-databases/secom/secom_labels.data"
+  },
+  "sourceSha256": "126884cf453705c9e61a903fe906f0665a3b45ce3639e621edc5c93c89627e03",
+  "sourceRows": 1567,
+  "failures": 104,
+  "measure": "failed tests per 100 recorded tests",
+  "timestampBasis": "Source civil time; timezone unspecified",
+  "derivation": "100 * failed / tested; calendar-month grouping; all released label rows retained",
+  "groups": [
+    {
+      "period": "2008-07",
+      "month": "July",
+      "year": 2008,
+      "firstDay": 19,
+      "lastDay": 31,
+      "tested": 63,
+      "failed": 14,
+      "ratePer100": 22.22222222222222,
+      "window": "July 19-31, 2008"
+    },
+    {
+      "period": "2008-08",
+      "month": "August",
+      "year": 2008,
+      "firstDay": 1,
+      "lastDay": 31,
+      "tested": 555,
+      "failed": 51,
+      "ratePer100": 9.18918918918919,
+      "window": "August 1-31, 2008"
+    },
+    {
+      "period": "2008-09",
+      "month": "September",
+      "year": 2008,
+      "firstDay": 1,
+      "lastDay": 30,
+      "tested": 590,
+      "failed": 17,
+      "ratePer100": 2.8813559322033897,
+      "window": "September 1-30, 2008"
+    },
+    {
+      "period": "2008-10",
+      "month": "October",
+      "year": 2008,
+      "firstDay": 1,
+      "lastDay": 17,
+      "tested": 359,
+      "failed": 22,
+      "ratePer100": 6.128133704735376,
+      "window": "October 1-17, 2008"
+    }
+  ]
+}
