@@ -52,14 +52,17 @@ baseline identity and the separately counted planner addition.
 SVG companion for each figure using Matplotlib's explicit Figure/Axes interface.
 
 ```sh
-python planning/testing-suite-consolidation/exercises/render_test_discovery.py \
+uv run --isolated --no-project --python 3.12 --with matplotlib -- \
+  python -I -B planning/testing-suite-consolidation/exercises/render_test_discovery.py \
   --data planning/testing-suite-consolidation/exercises/issue-371-counts.json \
   --output .visual-runs/testing-suite-consolidation
 ```
 
-Use the available approved Python environment with Matplotlib. The repository's
-uv execution skill remains the route for project-declared test environments;
-the conversational renderer can use an already provisioned artifact runtime.
+Use an isolated session environment with Matplotlib, as illustrated above, or
+an already provisioned isolated artifact runtime. The conversational Python
+reference owns the default and explicit repository-version/environment options.
+The repository's uv execution skill remains the separate route for
+project-declared test environments.
 Generated images stay in the ignored, cycle-scoped directory. The receiving
 conversation displays them alongside their scope and exact-value route.
 
