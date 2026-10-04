@@ -1624,6 +1624,26 @@
       "owner": "tests/tables/README.md",
       "scope": "Opt-in reference comparison; predictive scheduling remains on its separately governed research branch.",
       "aliases": []
+    },
+    {
+      "id": "browser.context-canvas.prompt-side-figure",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/prompt-side-figure.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "The Prompt-Side article's linked SVG overview, keyboard/pointer journey, static reading and print at narrow/desktop widths. Embedded instrument behavior retains its separate owner.",
+      "aliases": []
     }
   ],
   "bundles": [
@@ -1700,7 +1720,8 @@
         "browser.open-lesson-field-contract",
         "browser.strategy-canvas-contract",
         "browser.table-reading",
-        "worker.browser"
+        "worker.browser",
+        "browser.context-canvas.prompt-side-figure"
       ]
     },
     {
@@ -1711,7 +1732,8 @@
         "browser.visualization-fidelity-atlas.atlas-gallery.browser",
         "browser.tables.hiring-schema-print",
         "visual.context-canvas-visual-reference",
-        "visual.requested-surface"
+        "visual.requested-surface",
+        "browser.context-canvas.prompt-side-figure"
       ]
     },
     {

@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError } from '../../tools/test-suite-plan.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const POST_BASELINE_NODE_MEMBERS = ['tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs'];
+const POST_BASELINE_NODE_MEMBERS = ['tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs', 'tests/context-canvas/prompt-side-figure.browser.mjs'];
 const fixture = () => ({
   schemaVersion: 1, sourceRevision: 'fixture',
   profiles: [{id: 'local', runtime: 'Node', prerequisites: [], effects: [], artifacts: [], timeout: 'owner-defined'}],
@@ -237,6 +237,7 @@ test('consequential bundle routes retain independent literal expectations', asyn
     'browser.tables.hiring-schema-print',
     'visual.context-canvas-visual-reference',
     'visual.requested-surface',
+    'browser.context-canvas.prompt-side-figure',
   ]);
   assert.deepEqual(ids('carrier'), [
     'node.attribution', 'node.iframe-routes', 'node.prod-deployment',
@@ -275,4 +276,13 @@ test('Python entry fixtures have a separate route and all-component alias keeps 
   const pkg = JSON.parse(await readFile(resolve(ROOT, 'package.json'), 'utf8'));
   assert.equal(pkg.scripts['test:tables:python'],
     'env PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python -- python -m tests.tables.run_components all');
+});
+
+test('Prompt-Side figure keeps its browser observation separately selectable', async () => {
+  const catalog = await catalogPromise;
+  const plan = createPlan(catalog, {suites: ['browser.context-canvas.prompt-side-figure']});
+  assert.equal(plan.suites.length, 1);
+  assert.deepEqual(plan.suites[0].members, ['tests/context-canvas/prompt-side-figure.browser.mjs']);
+  assert.deepEqual(plan.suites[0].command.argv, ['node', '--test', 'tests/context-canvas/prompt-side-figure.browser.mjs']);
+  assert.equal(createPlan(catalog, {bundles: ['source-unit']}).suites.some(suite => suite.id === 'browser.context-canvas.prompt-side-figure'), false);
 });
