@@ -203,6 +203,11 @@
       "media_type": "image/svg+xml"
     },
     {
+      "source_path": "context-canvas-project-surface/img/plot/atlas_public_research.svg",
+      "projected_path": "img/plot/atlas_public_research.svg",
+      "media_type": "image/svg+xml"
+    },
+    {
       "source_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_atlas.svg",
       "projected_path": "context-canvas-project-surface/site-readings/ai-legible-viewlet-atlas/ai_legible_viewlet_atlas.svg",
       "media_type": "image/svg+xml"
@@ -326,6 +331,21 @@
       "source_path": "context-canvas-project-surface/data/visualization-fidelity/README.md",
       "projected_path": "data/visualization-fidelity/README.md",
       "media_type": "text/markdown"
+    },
+    {
+      "source_path": "context-canvas-project-surface/data/visualization-fidelity/research/README.md",
+      "projected_path": "data/visualization-fidelity/research/README.md",
+      "media_type": "text/markdown"
+    },
+    {
+      "source_path": "context-canvas-project-surface/data/visualization-fidelity/research/sources.v1.json",
+      "projected_path": "data/visualization-fidelity/research/sources.v1.json",
+      "media_type": "application/json"
+    },
+    {
+      "source_path": "context-canvas-project-surface/data/visualization-fidelity/research/summary.v1.json",
+      "projected_path": "data/visualization-fidelity/research/summary.v1.json",
+      "media_type": "application/json"
     },
     {
       "source_path": "context-canvas-project-surface/data/visualization-fidelity/secom-monthly.json",

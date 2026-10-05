@@ -208,7 +208,7 @@ class VisitorLabelContracts(unittest.TestCase):
         expected = set(self.contract["pages"]) | set(self.contract["exclusions"])
         self.assertEqual({p.name for p in self.directory.glob("*.html")}, expected)
         self.assertEqual(len(self.sources), 44)
-        self.assertEqual(sum(len(a.tables) for a in self.parsed.values()), 147)
+        self.assertEqual(sum(len(a.tables) for a in self.parsed.values()), 148)
         self.assertEqual(sum(not a.tables for a in self.parsed.values()), 6)
         self.assertEqual(set(self.contract["exclusions"]), {
             "distributed-inspection-harness.html",
@@ -267,9 +267,9 @@ class VisitorLabelContracts(unittest.TestCase):
                     temporary = target.with_suffix(".tmp")
                     temporary.write_text(json.dumps(report, indent=2) + "\n")
                     temporary.replace(target)
-        self.assertEqual(dict(counts), {"table": 147, "tr": 1039, "th": 1480, "td": 2784})
+        self.assertEqual(dict(counts), {"table": 148, "tr": 1046, "th": 1491, "td": 2808})
         self.assertEqual(dict(dispositions), {
-            "simple": 143, "empty-register": 2,
+            "simple": 144, "empty-register": 2,
             "capital-summary": 1, "grouped-populations": 1,
         })
 
@@ -283,7 +283,7 @@ class VisitorLabelContracts(unittest.TestCase):
         self.assertEqual(counts["explicit_tables"], sum(t["shape"] != "simple" for t in tables))
         self.assertEqual(counts["native_labelled_elements"],
                          sum(1 + t["rows"] + t["th"] + t["td"] for t in tables))
-        self.assertEqual(counts["native_labelled_elements"], 5450)
+        self.assertEqual(counts["native_labelled_elements"], 5493)
         self.assertEqual(counts["runtime_body_generators"], len(self.contract["runtime"]))
 
     def _atlas_gallery_records(self, ordinal, fields, records):
@@ -361,6 +361,45 @@ class VisitorLabelContracts(unittest.TestCase):
         self.assertGreater(empty_bins, 0)
         outside = document["heatmaps"]["all"]["outOfRange"]
         self.assertEqual((outside["records"], outside["failures"]), (0, 0))
+
+    def test_atlas_research_memberships_preserve_the_selected_work_count(self):
+        fields = ["Editorial topic", "Empirical study", "Technical guidance",
+                  "Practitioner source", "Works in topic"]
+        rows = self._atlas_gallery_records(10, fields, 6)
+        expected = [
+            ("comparison", "Comparison", [1, 1, 3, 5]),
+            ("interpretation", "Interpretation", [1, 2, 4, 7]),
+            ("distribution-and-uncertainty", "Distribution and uncertainty", [1, 1, 0, 2]),
+            ("accessibility", "Accessibility", [0, 1, 1, 2]),
+            ("web-delivery-and-state", "Web delivery and state", [0, 2, 0, 2]),
+            ("production-and-validation", "Production and validation", [0, 2, 1, 3]),
+        ]
+        directory = ROOT / "context-canvas-project-surface/data/visualization-fidelity/research"
+        records = json.loads((directory / "sources.v1.json").read_text(encoding="utf-8"))["records"]
+        summary = json.loads((directory / "summary.v1.json").read_text(encoding="utf-8"))
+        kinds = {"empirical-study": 2, "technical-guidance": 6, "practitioner-source": 5}
+        self.assertEqual(len(records), 13)
+        self.assertEqual(len({record["id"] for record in records}), 13)
+        self.assertEqual(sum(len(record["topics"]) for record in records), 21)
+        self.assertEqual(sum(len(record["topics"]) > 1 for record in records), 7)
+        self.assertEqual(dict(Counter(record["evidenceKind"] for record in records)), kinds)
+        self.assertEqual(summary["totals"], {
+            "works": 13, "topicMemberships": 21, "multiTopicWorks": 7, "byEvidenceKind": kinds,
+        })
+        for row, topic, (topic_id, label, counts) in zip(rows, summary["topics"], expected, strict=True):
+            with self.subTest(topic=topic_id):
+                self.assertEqual(row, [label, *map(str, counts)])
+                self.assertEqual(topic["id"], topic_id)
+                self.assertEqual(topic["works"], counts[3])
+                self.assertEqual(topic["byEvidenceKind"], dict(zip(kinds, counts[:3], strict=True)))
+                self.assertEqual(sum(counts[:3]), counts[3])
+        self.assertEqual(sum(int(row[-1]) for row in rows), 21)
+        native = NativeInventory(self.sources["visualization-fidelity-atlas.html"])
+        self.assertEqual(native.ids.count("research-gallery-title"), 1)
+        source_ids = [value for value in native.ids
+                      if value.startswith("research-") and value != "research-gallery-title"]
+        self.assertEqual(len(source_ids), 13)
+        self.assertEqual(set(source_ids), {"research-" + record["id"] for record in records})
 
     def test_empty_registers_are_status_rows(self):
         for name, topic, width in (
