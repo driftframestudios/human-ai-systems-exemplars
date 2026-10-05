@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError } from '../../tools/test-suite-plan.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const POST_BASELINE_NODE_MEMBERS = ['tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs', 'tests/context-canvas/prompt-side-figure.browser.mjs'];
+const POST_BASELINE_NODE_MEMBERS = ['tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs', 'tests/context-canvas/prompt-side-figure.browser.mjs', 'tests/visualization-fidelity-atlas/atlas-research-data.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-view.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research.browser.mjs'];
 const fixture = () => ({
   schemaVersion: 1, sourceRevision: 'fixture',
   profiles: [{id: 'local', runtime: 'Node', prerequisites: [], effects: [], artifacts: [], timeout: 'owner-defined'}],
@@ -238,6 +238,7 @@ test('consequential bundle routes retain independent literal expectations', asyn
     'visual.context-canvas-visual-reference',
     'visual.requested-surface',
     'browser.context-canvas.prompt-side-figure',
+    'browser.visualization-fidelity-atlas.atlas-research.browser',
   ]);
   assert.deepEqual(ids('carrier'), [
     'node.attribution', 'node.iframe-routes', 'node.prod-deployment',
@@ -285,4 +286,18 @@ test('Prompt-Side figure keeps its browser observation separately selectable', a
   assert.deepEqual(plan.suites[0].members, ['tests/context-canvas/prompt-side-figure.browser.mjs']);
   assert.deepEqual(plan.suites[0].command.argv, ['node', '--test', 'tests/context-canvas/prompt-side-figure.browser.mjs']);
   assert.equal(createPlan(catalog, {bundles: ['source-unit']}).suites.some(suite => suite.id === 'browser.context-canvas.prompt-side-figure'), false);
+});
+
+test('Atlas research keeps source contracts and rendered observations separately selectable', async () => {
+  const catalog = await catalogPromise;
+  const source = createPlan(catalog, {suites: ['node.visualization-fidelity-atlas']});
+  for (const member of [
+    'tests/visualization-fidelity-atlas/atlas-research-data.test.mjs',
+    'tests/visualization-fidelity-atlas/atlas-research-view.test.mjs',
+  ]) assert.ok(source.suites[0].members.includes(member));
+  const browser = createPlan(catalog, {suites: ['browser.visualization-fidelity-atlas.atlas-research.browser']});
+  assert.deepEqual(browser.suites[0].command.argv,
+    ['node', '--test', 'tests/visualization-fidelity-atlas/atlas-research.browser.mjs']);
+  assert.equal(createPlan(catalog, {bundles: ['source-unit']}).suites.some(
+    suite => suite.id === 'browser.visualization-fidelity-atlas.atlas-research.browser'), false);
 });

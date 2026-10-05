@@ -1561,6 +1561,14 @@
         },
         {
           "table": 10,
+          "topic": "Selected public works by topic and evidence kind",
+          "shape": "simple",
+          "rows": 7,
+          "th": 11,
+          "td": 24
+        },
+        {
+          "table": 11,
           "topic": "The Atlas moves effort toward readable, inspectable evidence",
           "shape": "simple",
           "rows": 5,
@@ -1741,10 +1749,10 @@
   },
   "counts": {
     "owned_pages": 44,
-    "native_tables": 147,
-    "simple_tables": 143,
+    "native_tables": 148,
+    "simple_tables": 144,
     "explicit_tables": 4,
-    "native_labelled_elements": 5450,
+    "native_labelled_elements": 5493,
     "runtime_body_generators": 2
   },
   "rendering_affecting_native_additions": [],

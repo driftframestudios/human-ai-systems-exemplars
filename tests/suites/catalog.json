@@ -435,7 +435,9 @@
         "tests/visualization-fidelity-atlas/atlas-gallery-table.test.mjs",
         "tests/visualization-fidelity-atlas/atlas-maintenance-data.test.mjs",
         "tests/visualization-fidelity-atlas/atlas-prompt-capsule.test.mjs",
-        "tests/visualization-fidelity-atlas/atlas-reference.test.mjs"
+        "tests/visualization-fidelity-atlas/atlas-reference.test.mjs",
+        "tests/visualization-fidelity-atlas/atlas-research-data.test.mjs",
+        "tests/visualization-fidelity-atlas/atlas-research-view.test.mjs"
       ],
       "profile": "node-source",
       "command": {
@@ -1644,6 +1646,26 @@
       "owner": "tests/README.md",
       "scope": "The Prompt-Side article's linked SVG overview, keyboard/pointer journey, static reading and print at narrow/desktop widths. Embedded instrument behavior retains its separate owner.",
       "aliases": []
+    },
+    {
+      "id": "browser.visualization-fidelity-atlas.atlas-research.browser",
+      "family": "visualization-fidelity-atlas",
+      "kind": "node-test",
+      "members": [
+        "tests/visualization-fidelity-atlas/atlas-research.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/data/visualization-fidelity/research/README.md",
+      "scope": "The research example's native table, linked SVG, source disclosure, keyboard scrolling and print reading at narrow and desktop widths; the separately owned instrument uses a local substitute.",
+      "aliases": []
     }
   ],
   "bundles": [
@@ -1721,7 +1743,8 @@
         "browser.strategy-canvas-contract",
         "browser.table-reading",
         "worker.browser",
-        "browser.context-canvas.prompt-side-figure"
+        "browser.context-canvas.prompt-side-figure",
+        "browser.visualization-fidelity-atlas.atlas-research.browser"
       ]
     },
     {
@@ -1733,7 +1756,8 @@
         "browser.tables.hiring-schema-print",
         "visual.context-canvas-visual-reference",
         "visual.requested-surface",
-        "browser.context-canvas.prompt-side-figure"
+        "browser.context-canvas.prompt-side-figure",
+        "browser.visualization-fidelity-atlas.atlas-research.browser"
       ]
     },
     {
