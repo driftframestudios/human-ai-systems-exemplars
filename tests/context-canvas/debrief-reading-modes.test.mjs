@@ -200,7 +200,7 @@ test("Every catalogued Full Debrief carries one complete Case Brief contract", a
     assert.ok(definitionList, `${route} should preserve the shared at-a-glance grid owner`);
     const labels = Array.from(definitionList[1].matchAll(/<dt>([^<]+)<\/dt>/gu), match => match[1]);
     assert.deepEqual(labels, expectedCaseBriefFields, `${route} should carry the six-field Case Brief contract`);
-    assert.match(section, /<p><strong>Evidence standing:<\/strong>[^<]+<\/p>/u, `${route} should state its evidence standing`);
+    assert.match(section, /<p><strong>Basis and limits:<\/strong>[^<]+<\/p>/u, `${route} should state its basis and limits`);
 
     const continuation = section.match(/<a\b[^>]*href="(#[^"]+)"[^>]*>\s*Read the Full Debrief[^<]*<\/a>/u);
     assert.ok(continuation, `${route} should continue into the Full Debrief`);
