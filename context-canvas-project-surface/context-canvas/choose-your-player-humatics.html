@@ -55,7 +55,7 @@
         "headline": "Choose Your Player",
         "alternativeHeadline": "From a Near-Miss Demonstration to a Shared Field-Operating Model (2018–2019)",
         "description": "Narrative, solution, and implementation architecture debrief on turning precision-location technology into a shared field-operating model.",
-        "dateModified": "2026-10-06",
+        "dateModified": "2026-09-29",
         "inLanguage": "en-US",
         "author": {
           "@type": "Organization",
@@ -103,8 +103,8 @@
         <p class="tag-line">From a near-miss demonstration to a shared field-operating model</p>
         <p class="debrief-lead">
           A precision-location platform could demonstrate compelling technology. Its operating model became legible when the
-          product also showed who planned a site, which Field Installation Engineer placed and calibrated its equipment, who
-          supported exceptions, who operated the live system, and which state each handoff had to preserve.
+          product also showed who planned a site, who installed and calibrated it, who supported exceptions, who operated the
+          live system, and which state each handoff had to preserve.
         </p>
       </header>
 
@@ -116,7 +116,7 @@
             <dl class="debrief-at-glance">
               <div>
                 <dt>Situation and stakes</dt>
-                <dd>During Humatics&rsquo;s $28 million Series A1 financing period, a precision-location platform could demonstrate compelling technology while its product story still needed to connect planning, field installation, calibration, support, and operation.</dd>
+                <dd>A precision-location platform could demonstrate compelling technology, yet the product also needed to show who planned, installed, calibrated, supported, and operated each site.</dd>
               </div>
               <div>
                 <dt>Scope and role</dt>
@@ -124,22 +124,22 @@
               </div>
               <div>
                 <dt>Core constraint</dt>
-                <dd>By roughly my third day at the agency, I was leading a client presentation built around tactical browser and interface work. The Humatics Project Manager looked past the polished screens and asked how the product would manage sites and distinct Field Installation Engineer views.</dd>
+                <dd>Demo polish and mediated field inquiry obscured the role, site-state, handoff, and offline-recovery model. The first presentation exposed that altitude mismatch.</dd>
               </div>
               <div>
                 <dt>Key decision</dt>
-                <dd>Create a five-panel welcome surface for project administration, planning, deployment, support, and operations, then connect those working postures through one site hierarchy and map-based field workflow.</dd>
+                <dd>Reframe the product around five working postures, one shared site hierarchy, recoverable offline work, and a map that acted as a field collaboration surface.</dd>
               </div>
               <div>
                 <dt>Outcome and evidence</dt>
-                <dd>Within two days, I turned the PM&rsquo;s question into a role-aware welcome surface, shared site hierarchy, geographic setup, and pin-linked field workflow. The second presentation earned design approval, restored trust, and moved the new model into engineering handoff.</dd>
+                <dd>The first presentation became a productive near-miss. Within two days, the team had reframed the product around the five postures, shared hierarchy, and field conditions.</dd>
               </div>
               <div>
                 <dt>Relevance now</dt>
                 <dd>The case shows how a technically complex product can become legible through role-specific entrances, shared objects, explicit handoffs, and honest recovery conditions.</dd>
               </div>
             </dl>
-            <p><strong>Evidence standing:</strong> I completed the two-day reframe, earned client approval, restored trust, and made the software experience and its field-operating model tangible during Humatics&rsquo;s $28 million Series A1 financing effort. Humatics&rsquo;s public announcement establishes the January 2019 date, amount, and round designation; the investment also reflected the company&rsquo;s technology, acquisitions, commercial progress, market timing, team, and investor judgment.</p>
+            <p><strong>Evidence standing:</strong> The historical practitioner account establishes the near-miss and two-day reframe. Public financing records establish timing and amounts; the prototypes remain product-legibility artifacts rather than proof of financing causality.</p>
             <p><a href="#track-index-title">Read the Full Debrief →</a></p>
             <aside class="debrief-quote debrief-quote--orientation" aria-label="Architectural reading">
               <p>The breakthrough was a shared entrance into the work: one site model, several working postures, and explicit recovery in the field.</p>
@@ -147,8 +147,8 @@
             </aside>
             <aside class="debrief-outcome-banner debrief-outcome-banner--successful" aria-label="Outcome state">
               <p class="debrief-outcome-banner__label">Outcome state</p>
-              <strong>Successful two-day reframe — the second presentation earned a green light, approved design specifications, and renewed trust.</strong>
-              <p>The team carried five working postures, a shared site model, and field conditions into engineering handoff; the receiving engineers could inspect the substantial change set through the live design library.</p>
+              <strong>Successful with a named near-miss — the first meeting did not land, and the product account changed altitude.</strong>
+              <p>Within two days the collaboration reframed the work around five postures, a shared site model, and field conditions. The prototypes are presented as trust and product-legibility artifacts, not as proof of financing causality.</p>
             </aside>
             <div class="movement-register" aria-label="Three source-native architecture movements">
               <article>
@@ -181,87 +181,58 @@
       <div class="content__container bg__adjust--tiffany debrief-track debrief-track--narrative">
         <div class="content content--editorial">
           <article class="prose-flow" aria-labelledby="narrative-architecture-title">
-            <p class="debrief-track-label"><span>Movement I</span><strong>Narrative Architecture · Evidence and Consequence</strong><small>Follow the near-miss, inquiry route, and changed product frame.</small></p>
+            <p class="debrief-track-label"><span>Movement I</span><strong>Narrative Architecture · Evidence and Consequence</strong><small>Follow the near-miss, inquiry route, and changed product account.</small></p>
             <h2 id="narrative-architecture-title" class="txt-h2 architecture-track-title">I. Narrative Architecture — Choose Your Player</h2>
 
             <h3 id="narrative-debrief-title" class="txt-h3 beat-title">I.a Debrief — A product story under pressure</h3>
             <p>
-              About a day after joining a roughly twenty-person agency, I was assigned to Humatics, a high-priority account with
-              trade-show demonstrations, a tight timeline, and a financing cycle in motion. By roughly my third day, I was expected
-              to lead a client presentation. The office itself felt like a 1990s hacker lab crossed with a startup: breadboards and
-              equipment, whiteboards and sticky notes, and a small R2-D2-shaped hospitality robot carrying drinks for visitors.
+              The engagement joined a small agency team with a Series A industrial technology company building submillimeter
+              positioning for ports, warehouses, factories, and construction sites. The product story carried hardware,
+              beacons, site configuration, robot zones, calibration, telemetry, and operating handoff. A polished screen could
+              show the ingredients while leaving the work itself difficult to enter.
             </p>
             <p>
-              The work I inherited was substantial and real. A responsive design library, beacon ranges, site maps, and drawer-based
-              controls were already connected to a robot demonstration rather than stopping at a clickable prototype. I began with
-              concrete browser concerns: a Mac-based team still had to support Windows and Internet Explorer, and the available
-              remote-device testing carried latency and unreliable sessions. The larger product story carried hardware, beacons,
-              site configuration, robot zones, calibration, telemetry, and operating handoff; it still needed one coherent entrance.
+              Public records establish the financing timeline and amounts. Participants attribute explanatory and
+              trust-building value to the working prototypes during the engagement; their account describes product
+              legibility and the working relationship.
             </p>
 
             <h3 id="narrative-bottleneck-title" class="txt-h3 beat-title">I.b The Bottleneck — The meeting changed the altitude</h3>
             <p>
-              I entered the first meeting with preliminary additions to polished screens and a reasonable expectation that the
-              presentation would land. Our agency group was small: a junior designer, a project manager, and me, newly arrived but
-              leading the presentation. I introduced what I understood, named where my understanding was still forming, and invited
-              the Humatics Project Manager to interrupt whenever the work departed from their expectations.
+              The first executive presentation nearly missed. A product manager asked the question that changed the frame:
+              “How do we manage the sites? And how do we manage the views between the different types of installers?” The
+              question defined two required structures at once: a stable hierarchy for client, site, installation, beacon, and
+              zone; and a legible way for collaborators to enter that hierarchy through their actual work.
             </p>
             <p>
-              The Humatics Project Manager looked away from the gradients and fades and asked, in substance, how the system would
-              manage sites and distinguish the views needed by Field Installation Engineers and Humatics personnel. I had a partial
-              answer, so I changed the meeting&rsquo;s working surface. I opened the PRD, showed the role and permission terms that my
-              local text analysis had surfaced, asked what the PM expected, and wrote GIVEN&ndash;WHEN&ndash;THEN statements as the answers
-              arrived. The junior designer whiteboarded emerging views; our project manager turned decisions into action items;
-              the team&rsquo;s phones lit up as the work entered the queue.
-            </p>
-            <p>
-              That recovery made listening visible and changed the altitude of the work. Tactical compatibility still mattered.
-              The governing questions were now user multiplicity, onboarding, client and site hierarchy, and the handoff between
-              Humatics specialists and customer teams. I had two days to turn those questions into a product model the client could inspect.
+              The agency cost model made the moment consequential. A multi-person team could consume meaningful budget in a
+              week, so a direction change needed to precipitate into something participants could inspect quickly. Within two days,
+              the work shifted from tactical polish to a connected product architecture.
             </p>
 
             <h4 id="field-inquiry-title" class="txt-h4 beat-title">I.b.i Field inquiry through an available route</h4>
             <p>
-              I asked how much direct access the team had received to Field Installation Engineers; the answer was none. I requested
-              time with them and explained the activities, intervals, and outputs involved. The Humatics Project Manager&rsquo;s hesitation
-              reflected a real operating cost: the company needed its engineers engineering. We agreed that I would supply tightly
-              scoped questions and the PM would conduct focused sessions, then bring the answers back to the agency team.
-            </p>
-            <p>
-              One question opened the physical work: “What are you actually doing when you install, physically?” Field Installation
-              Engineers described mounting beacons and transmitters from booms, cherry pickers, and tall scaffolding. They needed
-              site, placement, calibration, conversation, and exception information before the lift left the floor; juggling a
-              laptop and phone dozens of feet in the air was an unsafe and impractical fallback.
+              The PM carried the field inquiry, using concrete questions from design about where people stood, what they
+              carried, what they needed before climbing, and how a site behaved when connectivity dropped. The answers
+              described booms, cherry pickers, scaffolding,
+              calibration, embedded Windows and browser constraints, and a simple priority: put the useful information in reach
+              before the lift leaves the ground.
             </p>
             <aside class="interpretive-aside" aria-labelledby="field-learning-title">
               <h4 id="field-learning-title" class="txt-h4">A mediated route produced materially specific field constraints</h4>
               <p>
-                The negotiated research route respected Field Installation Engineer time and returned designable constraints.
-                It covered a focused slice of field work: people working at height needed site, placement, calibration,
-                conversation, and exception information before they climbed.
+                PM-mediated inquiry still changed the product because the questions reached the physical operating context and
+                returned as designable constraints. The route covered a focused slice of field work, and the learning was
+                materially specific.
               </p>
             </aside>
 
             <h3 id="narrative-intervention-title" class="txt-h3 beat-title">I.c The Intervention — Four connected moves</h3>
-            <p>
-              The two-day pivot displaced nearly complete agency line items while I carried other client work and the distributed
-              engineering team waited for approved designs. Geography still held open questions, and Windows / Internet Explorer
-              testing through remote devices was slow and unreliable. I concentrated the product story around onboarding and a
-              shared dashboard; a strong junior designer developed much of the geographic setup; together we extended an existing
-              pin pattern with conversation history and kept feedback visible inside the live design files.
-            </p>
-            <p>
-              <strong>Choose Your Player</strong> was the welcome surface that made the reframe tangible. Five high-energy,
-              anime-inspired horizontal panels represented project administration, planning, deployment, support, and operations.
-              Selecting a panel moved the others aside and revealed role-relevant onboarding or a resumable dashboard over the
-              same client, site, installation, beacon, and zone hierarchy. The illustration style set an expressive direction;
-              the interaction gave the client a concrete way to discuss people, work, and handoffs.
-            </p>
             <ol class="clean-list numbered-moves">
-              <li><strong>I read the PRD as a concern map.</strong> Repeated role, site, view, installation, support, and status language showed where the organization needed shared structure.</li>
-              <li><strong>I turned five roles into working postures.</strong> Project administration, planning, deployment, support, and operations became clear entrances into one product.</li>
-              <li><strong>I made the site hierarchy visible.</strong> Client, site, installation, beacon, and zone became stable shared objects rather than screen-specific labels.</li>
-              <li><strong>I let the map carry conversation.</strong> Pins, zones, coordinates, site evidence, and discussion moved toward one field surface that could survive handoff and reconnection.</li>
+              <li><strong>Read the PRD as a concern map.</strong> Repeated role, site, view, installation, support, and status language showed where the organization needed shared structure.</li>
+              <li><strong>Turn five roles into working postures.</strong> Project administration, planning, deployment, support, and operations became clear entrances into one product.</li>
+              <li><strong>Make the site hierarchy visible.</strong> Client, site, installation, beacon, and zone became stable shared objects rather than screen-specific labels.</li>
+              <li><strong>Let the map carry conversation.</strong> Pins, zones, coordinates, site evidence, and discussion moved toward one field surface that could survive handoff and reconnection.</li>
             </ol>
 
             <figure class="table-figure table-span-all">
@@ -309,22 +280,10 @@
 
             <h3 id="narrative-outcomes-title" class="txt-h3 beat-title">I.d Outcomes — A working prototype became a trust surface</h3>
             <p>
-              The second presentation opened with Choose Your Player. The Humatics Project Manager responded with visible excitement
-              to its energy, and I clarified that the literal anime artwork could evolve while the five-posture interaction carried
-              the product model. We followed a new Field Installation Engineer into the shared site hierarchy, then I handed the
-              presentation to the junior designer for geographic setup. We alternated between presenting the pin-linked conversation
-              pattern and recording client feedback directly in the design file.
-            </p>
-            <p>
-              The meeting produced a green light, approved design specifications, excitement, and renewed trust. Back at the agency,
-              we onboarded engineering to the change set; the live design library had given them an early view, and the scope still
-              prompted understandable apprehension. The team later separated address search from latitude-and-longitude entry, giving
-              irregular industrial and construction sites two explicit setup paths.
-            </p>
-            <p>
-              My product strategy and working prototypes contributed to Humatics&rsquo;s $28 million Series A1 financing effort by
-              making the software experience and its field-operating model tangible. Humatics&rsquo;s January 2019 announcement described
-              a broader company result shaped by its technology, acquisitions, commercial progress, market demand, team, and investors.
+              The welcome surface made the product easier to explain because it required participants to decide who was acting and
+              what they needed next. The site hierarchy and map work made the underlying product discussable across design,
+              product, engineering, field deployment, support, and customer operations. The remembered outcome was trust
+              earned through visible response: the team had heard the problem and could show a coherent route through it.
             </p>
 
             <h3 id="narrative-repeatability-title" class="txt-h3 beat-title">I.e Repeatability — Use the smallest interaction that reveals the operating model</h3>
@@ -336,8 +295,8 @@
             </ul>
             <aside class="debrief-evidence-boundary" aria-labelledby="humatics-narrative-evidence-title">
               <p class="debrief-evidence-boundary__label">Evidence Boundary</p>
-              <h3 id="humatics-narrative-evidence-title">The completed design work carries the contribution; Humatics&rsquo;s announcement carries the financing event.</h3>
-              <p>I recovered the first meeting, negotiated PM-mediated inquiry, completed the two-day reframe, earned client approval, and restored trust through working prototypes. Humatics&rsquo;s announcement records the January 7, 2019 date, $28 million amount, Series A1 designation, investors, acquisitions, and commercial context.</p>
+              <h3 id="humatics-narrative-evidence-title">The engagement account and public financing record remain separate evidence classes.</h3>
+              <p>Public records establish financing dates and amounts. Participants attribute explanatory and trust-building value to the prototypes and describe the two-day reframing; the page does not claim that a welcome screen or any single prototype caused a financing decision.</p>
             </aside>
           </article>
         </div>
@@ -351,9 +310,9 @@
 
             <h3 id="solution-debrief-title" class="txt-h3 beat-title">II.a Debrief — One product, several working entrances</h3>
             <p>
-              I turned five recurring roles into presentation postures: the work a person is trying to do now. Authenticated
-              identity, active tenant membership, and entitlements remain the access authority. This separation lets the
-              interface orient people while the permission system remains grounded in established access state.
+              The five players describe presentation posture: the work a collaborator is trying to do now. Authenticated
+              identity, active tenant membership, and entitlements remain the access authority. Separating those concerns lets
+              the interface orient people while the permission system remains grounded in established access state.
             </p>
             <div class="posture-cards table-span-all">
               <article><h4 class="txt-h4">Project administration</h4><p>Organize clients, sites, assignments, and the commercial frame.</p></article>
@@ -372,11 +331,6 @@
             </p>
 
             <h3 id="solution-intervention-title" class="txt-h3 beat-title">II.c The Intervention — Make the handoff part of the model</h3>
-            <p>
-              I connected player selection to one shared hierarchy for client, site, installation, beacon, and zone, then used
-              geography and pin-linked conversation to carry the work from planning through deployment, support, and customer
-              operation. Each view could answer a different task while the underlying site retained continuity.
-            </p>
             <figure class="story-visual table-span-all">
               <a class="story-visual__open" href="../img/plot/humatics_role_handoff_map.svg" aria-label="Open the Humatics role and handoff map at full size">
                 <img src="../img/plot/humatics_role_handoff_map.svg" width="1600" height="1200" loading="eager" alt="Five player postures sit above separate identity, tenant, entitlement, and presentation rails. One shared site-object model carries the handoff from Humatics specialists to customer technicians and names the cross-functional investment.">
@@ -461,8 +415,8 @@
             </figure>
             <aside class="debrief-evidence-boundary" aria-labelledby="humatics-solution-evidence-title">
               <p class="debrief-evidence-boundary__label">Evidence Boundary</p>
-              <h3 id="humatics-solution-evidence-title">The historical design establishes an operating model; current extensions make its contracts inspectable.</h3>
-              <p>I connected player postures, shared site objects, PM-mediated field inquiry, maps, and handoff concerns in the historical design. Posture-versus-authorization separation, coordinate authority, and the three-layer time contract are contemporary expressions. Historical production behavior requires dated repository or deployment evidence.</p>
+              <h3 id="humatics-solution-evidence-title">The operating model carries source-earned doctrine and a current explicit boundary.</h3>
+              <p>The engagement account supports player postures, shared site objects, field inquiry, maps, and handoff concerns. Separating posture from authorization, formalizing coordinate authority, and naming the three-layer time contract are current inspectable expressions; they do not retroactively prove the historical production system.</p>
             </aside>
           </article>
         </div>
@@ -471,13 +425,13 @@
       <div class="content__container bg__adjust--tiffany debrief-track debrief-track--implementation">
         <div class="content content--editorial">
           <article class="prose-flow" aria-labelledby="implementation-architecture-title">
-            <p class="debrief-track-label"><span>Movement III</span><strong>Implementation Architecture · State, Authority, and Recovery</strong><small>Keep historical reconstruction and current executable contracts in distinct evidence classes.</small></p>
+            <p class="debrief-track-label"><span>Movement III</span><strong>Implementation Architecture · State, Authority, and Recovery</strong><small>Place historical reconstruction beside current executable contracts without blending them.</small></p>
             <h2 id="implementation-architecture-title" class="txt-h2 architecture-track-title">III. Implementation Architecture — Then and Now</h2>
 
             <h3 id="implementation-debrief-title" class="txt-h3 beat-title">III.a Debrief — Contracts that persist across a changed stack</h3>
             <p>
-              I designed within a Windows, Internet Explorer, jQuery, SQL Server, WebSockets, local-server, connected-device,
-              and field-network environment.<sup><a href="#source-basis-title">source</a></sup> A contemporary architecture reading translates the recurring
+              A Windows, Internet Explorer, jQuery, SQL Server, WebSockets, local-server, connected-device, and field-network
+              environment provided the historical setting.<sup><a href="#source-basis-title">source</a></sup> A contemporary architecture reading translates the recurring
               operating concerns—role clarity, site truth, offline recovery, spatial collaboration, and bounded browser
               compute—into explicit state, command, and recovery contracts.
             </p>
@@ -582,7 +536,7 @@
               <p class="implementation-companion__eyebrow">Candidate artifact · document-evidence-extraction@0.1.0 · Python 3.12</p>
               <h4 id="document-evidence-workflow-title" class="txt-h4">Carry reviewed document evidence from capture to recoverable orientation</h4>
               <p>
-                A representative reconstruction based on the project conditions I observed keeps four stages inspectable: digest-bearing OCR
+                A participant-account-supported representative reconstruction keeps four stages inspectable: digest-bearing OCR
                 capture and review standing; stop-word normalization that retains negation; one corpus-wide TF-IDF fit with
                 deterministic ordering; and a seeded word-cloud orientation rendered through a staged, explicitly authorized
                 replacement path.
@@ -705,8 +659,8 @@ render = render_word_cloud(combined, staged / "word-cloud.png", seed=seed)</code
             </figure>
             <aside class="debrief-evidence-boundary" aria-labelledby="humatics-implementation-evidence-title">
               <p class="debrief-evidence-boundary__label">Evidence Boundary</p>
-              <h3 id="humatics-implementation-evidence-title">Contemporary contracts establish inspectable behavior; dated artifacts establish historical production reach.</h3>
-              <p>This reading makes state, geometry, offline, browser-compute, and artifact boundaries inspectable as design and implementation contracts. The document-evidence artifact establishes current behavior with a realistic synthetic fixture and a representative reconstruction of the project conditions I observed. Dated repositories or deployment artifacts establish historical production reach; physical-system safety and regulatory compliance depend on the installed system and jurisdiction.</p>
+              <h3 id="humatics-implementation-evidence-title">Contemporary contract expressions leave historical production claims in their proper evidence class.</h3>
+              <p>This reading makes state, geometry, offline, browser-compute, and artifact boundaries inspectable as design and implementation contracts. The document-evidence artifact establishes current behavior with a realistic synthetic fixture and participant-account-supported representative-reconstruction standing. Dated repositories or deployment artifacts remain the route for historical-production promotion; physical-system safety, regulatory compliance, ROI, and financing causality retain their own evidence routes.</p>
             </aside>
           </article>
         </div>
@@ -748,8 +702,8 @@ render = render_word_cloud(combined, staged / "word-cloud.png", seed=seed)</code
                       <td data-label="Receiving collaborator">Field engineering and customer operations</td>
                       <td data-label="Reconstruction question">Can a roadmap choice preserve one domain across planning, deployment, support, and operations?</td>
                     </tr>
-                    <tr data-label="Five populations reading the same site-operating model: Field Installation Engineers">
-                      <th scope="row" data-label="Population">Field Installation Engineers</th>
+                    <tr data-label="Five populations reading the same site-operating model: Field engineers and installers">
+                      <th scope="row" data-label="Population">Field engineers and installers</th>
                       <td data-label="Decision carried">What must be known before placement, calibration, and work at height?</td>
                       <td data-label="Shared objects">Frame · calibration · equipment · pin · exception</td>
                       <td data-label="Receiving collaborator">Support and customer technician</td>
@@ -784,8 +738,7 @@ render = render_word_cloud(combined, staged / "word-cloud.png", seed=seed)</code
               document-evidence extraction.
             </p>
             <ul class="source-basis">
-              <li>Read <a href="{{PUBLIC_URL_REGISTRY_CHOOSE_YOUR_PLAYER}}">Choose Your Player</a> for a debrief on five player postures, a shared-site contract, field operations, and the funding context that shaped the product.</li>
-              <li>Read <a href="https://www.prnewswire.com/news-releases/humatics-raises-28-million-in-series-a1-financing-to-meet-growing-demand-for-microlocation-300773642.html">Humatics&rsquo;s January 2019 announcement</a> for the company-named Series A1 round, amount, participating investors, acquisitions, and commercial context.</li>
+              <li>Read <a href="{{PUBLIC_URL_REGISTRY_CHOOSE_YOUR_PLAYER}}">Choose Your Player</a> for a debrief on five player postures, a shared-site contract, field operations, and the financing boundaries that shaped the product.</li>
               <li>Inspect <a href="https://kindlight.io/snippets/document-evidence-extraction/0.1.0/">Document evidence extraction 0.1.0</a> for the complete representative-reconstruction source, deterministic analysis route, current checks, and transfer boundary.</li>
             </ul>
           </section>

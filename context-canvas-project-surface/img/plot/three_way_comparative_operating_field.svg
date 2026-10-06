@@ -40,7 +40,7 @@
     <rect class="powder soft-outline" x="72" y="434" width="432" height="136" rx="11"/>
     <text class="micro" x="92" y="459">02 · DISAGREEMENT SURFACE</text>
     <text class="strong" x="92" y="488">Meeting</text>
-    <text class="body" x="92" y="513"><tspan x="92">The first presentation could not explain how sites,</tspan><tspan x="92" dy="20">Field Installation Engineer views, and handoff</tspan><tspan x="92" dy="20">fit together as one product.</tspan></text>
+    <text class="body" x="92" y="513"><tspan x="92">The first presentation could not explain how sites,</tspan><tspan x="92" dy="20">installer views, and responsibility handoff fit</tspan><tspan x="92" dy="20">together as one product.</tspan></text>
 
     <rect class="sea soft-outline" x="72" y="582" width="432" height="136" rx="11"/>
     <text class="micro" x="92" y="607">03 · DECISION + CHANGED WORK</text>
@@ -55,7 +55,7 @@
     <text class="return-label" x="92" y="932">QUESTION</text>
     <path class="deep" aria-hidden="true" d="M166 922h36v-7l18 13-18 13v-7h-36z"/>
     <text class="return-label" x="232" y="932">OPERATING MODEL</text>
-    <text class="body" x="92" y="961"><tspan x="92">Within two days, the site-and-field question</tspan><tspan x="92" dy="20">returned as an inspectable architecture.</tspan></text>
+    <text class="body" x="92" y="961"><tspan x="92">Within two days, the site-and-installer question</tspan><tspan x="92" dy="20">returned as an inspectable architecture.</tspan></text>
   </g>
 
   <g role="group" aria-labelledby="wtb-comparison-title">
