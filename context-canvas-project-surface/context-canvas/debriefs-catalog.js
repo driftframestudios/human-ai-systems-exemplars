@@ -245,21 +245,21 @@
         var section = parsed.querySelector("#case-brief[data-content-form='case-brief']");
         var orientation = section ? section.querySelector(":scope > h2 + p") : null;
         var fields = section ? section.querySelector(":scope > dl.debrief-at-glance") : null;
-        var evidence = section ? Array.prototype.find.call(section.querySelectorAll(":scope > p"), function (paragraph) {
+        var basis = section ? Array.prototype.find.call(section.querySelectorAll(":scope > p"), function (paragraph) {
           var label = paragraph.querySelector(":scope > strong:first-child");
-          return label && label.textContent.trim() === "Evidence standing:";
+          return label && label.textContent.trim() === "Basis and limits:";
         }) : null;
         var heading = parsed.querySelector("main h1, h1");
 
-        if (!section || !orientation || !fields || !evidence) {
-          throw new Error("Case Brief source is missing its orientation, fields, or evidence standing");
+        if (!section || !orientation || !fields || !basis) {
+          throw new Error("Case Brief source is missing its orientation, fields, or basis and limits");
         }
 
         return {
           title: normalizedText(heading) || "Case Brief",
           orientation: orientation,
           fields: fields,
-          evidence: evidence
+          basis: basis
         };
       }).catch(function (error) {
         caseBriefCache.delete(route);
@@ -321,7 +321,7 @@
       heading,
       cloneForCatalog(source.orientation, "debrief-preview-slug", route),
       cloneForCatalog(source.fields, "debrief-preview-facts", route),
-      cloneForCatalog(source.evidence, "debrief-preview-note", route)
+      cloneForCatalog(source.basis, "debrief-preview-note", route)
     );
     appendCaseBriefActions(article, route);
     return article;
@@ -344,7 +344,7 @@
     headingLink.textContent = routeLabel(card, route);
     heading.append(headingLink);
     note.className = "debrief-preview-note";
-    note.textContent = "The source page carries this complete Case Brief. Open the direct route to read its concise account and evidence standing.";
+    note.textContent = "The source page carries this complete Case Brief. Open the direct route to read its concise account, basis, and limits.";
     article.append(heading, note);
     appendCaseBriefActions(article, route);
     return article;
