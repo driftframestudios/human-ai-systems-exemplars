@@ -113,15 +113,15 @@
         <div class="content content--editorial">
           <section id="case-brief" data-content-form="case-brief" aria-labelledby="scan-layer-title">
             <h2 id="scan-layer-title" class="txt-h2">At a glance</h2>
-            <p>At Foundation Medicine, I served first as Senior Manager and Principal Designer, then as Product Designer and Software Engineer III, to give six groups one inspectable study-rule grammar; the shipped coordination surface later revealed a reusable transformation substrate.</p>
+            <p>At Foundation Medicine, I worked directly with directors and executives across scientific, business, and medical-affairs functions; biomarker and biometrics specialists; production engineering; and biomarker-repository operations. As Senior Manager and Principal Designer, then Product Designer and Software Engineer III, I helped six working groups turn their knowledge into one inspectable clinical-trial rule grammar; the shipped coordination surface later became the foundation for a repeatable transformation pathway.</p>
             <dl class="debrief-at-glance">
               <div>
                 <dt>Situation and stakes</dt>
-                <dd>Six groups needed one usable way to discuss partner studies, cohort logic, genomics inquiry, implementation state, and regulatory consequence without flattening their distinct knowledge.</dd>
+                <dd>Foundation Medicine&rsquo;s genomic-profiling products inform cancer-care and clinical-trial decisions. Six groups needed one usable way to translate partner data, biomarker criteria, cohort logic, implementation state, and regulatory consequence while retaining their distinct knowledge.</dd>
               </div>
               <div>
                 <dt>Scope and role</dt>
-                <dd>From 2019–2023, I worked first as Senior Manager and Principal Designer on Data Products, then as Product Designer and Software Engineer III in Computational Biology Engineering.</dd>
+                <dd>From 2019–2023, I worked directly with directors, opened the engagement, negotiated time with specialists carrying live work, and coordinated decisions across business units—first as Senior Manager and Principal Designer on Data Products, then as Product Designer and Software Engineer III in Computational Biology Engineering.</dd>
               </div>
               <div>
                 <dt>Core constraint</dt>
@@ -172,17 +172,31 @@
 
             <h3 id="solution-engagement-title" class="txt-h3 beat-title">§a Debrief — The Engagement and Its Stakes</h3>
             <p>
-              In Q2 2019, FMI’s Data Products Team asked me to completely reimagine its internal clinical trial coordination
-              software. As principal product designer, I carried an explicit cross-business-unit mandate: understand the work
-              wherever it lived, then create a surface capable of supporting a more automated future.<sup><a href="#source-solution">1</a></sup>
+              Foundation Medicine develops comprehensive genomic-profiling tests and genomic-data services for cancer care
+              and drug development. Physicians and care teams depend on its reports to understand tumor biology, consider
+              treatment options, and identify relevant clinical trials. Scientists and clinical teams depend on trustworthy
+              cohort logic; biopharma partners use the company&rsquo;s data and services to develop targeted medicines.<sup><a href="#source-fmi-company">7</a></sup>
             </p>
             <p>
-              Clinical trial coordination connected FMI’s tumor-profiling capability with biopharma partners seeking
-              molecularly precise cohorts. A broad trial could miss the subgroup whose molecular mechanism changed the
-              therapeutic response; the relevant signal might already exist in the variant database. Making that signal
-              findable, interpretable, and usable at the right point in trial planning was a software and operating-model
-              concern. Each record ultimately represented a person living with late-stage cancer, so cohort integrity and
-              timely discovery carried clinical consequence alongside commercial value.
+              The internal coordination product at the center of this Debrief translated partner data, biomarker criteria,
+              study requirements, and jurisdiction-specific reporting language into reviewable trial setups and molecular
+              cohorts. It connected FMI&rsquo;s tumor-profiling capability with biopharma partners seeking molecularly precise
+              populations. A broad trial could miss the subgroup whose molecular mechanism changed the therapeutic response;
+              the relevant signal might already exist in the variant database.
+            </p>
+            <p>
+              A sample could pass through nearly one hundred internal systems before a physician-facing report was ready.
+              Account Managers carried partner context; Data Managers translated formats and study rules; scientific,
+              biomarker, medical-affairs, repository, and engineering teams each held another part of the truth. Each row
+              ultimately represented a person living with late-stage cancer, so the integrity and timing of that chain mattered
+              to the people waiting to understand which options might still be available.
+            </p>
+            <p>
+              In Q2 2019, FMI&rsquo;s Data Products Team asked me to completely reimagine the software supporting that work.
+              I began with directors and executives to establish the engagement, identify the people closest to each decision,
+              and negotiate time with specialists already carrying consequential production work. As principal product designer,
+              I held an explicit cross-business-unit mandate: understand the work wherever it lived, then create a surface
+              capable of supporting a more automated future.<sup><a href="#source-solution">1</a></sup>
             </p>
             <aside class="interpretive-aside" aria-labelledby="regulatory-era-title">
               <h4 id="regulatory-era-title" class="txt-h4">The regulatory terrain was moving during the work</h4>
@@ -194,6 +208,12 @@
             </aside>
 
             <h3 id="solution-alignment-title" class="txt-h3 beat-title">§b The Bottleneck — Three Futures Needed One Shared Model</h3>
+            <p>
+              Standing research time was limited, and the groups entered the work with different authority, vocabulary, and
+              definitions of a useful product. I used visible, medium-fidelity candidate surfaces as working propositions:
+              concrete enough for people to imagine the finished system, and open enough for them to correct its objects,
+              sequence, and ownership while I edited in front of them.
+            </p>
             <p>
               The working groups held three materially different pictures of the future. One picture replaced the existing
               selector-heavy tool with a standalone product. Another placed the work inside a wider internal suite. A third
@@ -283,9 +303,10 @@
             <p>
               I built the intervention in three parts. First, I sent each group a five-prompt Alignment Worksheet before a
               joint session: who is acting today, what they want, which workflow they perform, why its consequence matters,
-              and which future state the group will create together. The session spent more than an hour on the first three
-              prompts. The worksheet did its job: incompatible assumptions became visible early enough for the group to turn
-              disagreement into design input.
+              and which future state the group will create together. I asked participants to complete the first four prompts
+              and reserved the final future-state prompt for the joint session. We spent more than an hour on the first three. I remember
+              that as success: disagreement was finally happening in front of a shared object instead of remaining hidden
+              inside separate meetings.
             </p>
             <p>
               Second, I brought three brand-aligned Core Architectures rather than a single proposed screen.
@@ -295,7 +316,14 @@
               architecture gave participants a concrete object to correct while preserving space for the operating model to emerge.
             </p>
             <p>
-              Third, I turned the boolean building blocks into the shared grammar. Data Managers could compose, branch, and move rule
+              I imported representative records into brand-aligned candidate screens and changed them during the sessions.
+              The fidelity surprised some participants at first; once I clarified that these were working surfaces rather than
+              settled decisions, people began pointing directly to what they expected to see, where it belonged, and which
+              relationships the interface still hid.
+            </p>
+            <p>
+              Third, I turned the boolean building blocks into the shared grammar. That model earned support because Data
+              Managers and the code-first Genomics Insights group could each recognize their own logic inside it. Data Managers could compose, branch, and move rule
               groups; copy a whole template between permitted projects; and see the partner-separation gate that prevented
               an inapplicable setup from seeding another engagement. Genomics specialists could use the same grammar over a
               related field set. Engineering could see form dispatches, rule paths, error states, roles, and extension points.
@@ -322,9 +350,12 @@
             <h3 id="solution-outcome-title" class="txt-h3 beat-title">§d The Outcome — Built in a Quarter, Reused Across Teams and Tools</h3>
             <p>
               Directors responded to my preliminary design by asking about training, onboarding, rollout sequence, parallel
-              operation, and cutover. I supplied complete screens, component states, rule branches, errors, and the
+              operation, and cutover. I remember thinking, &ldquo;I thought this was just the first draft.&rdquo; They were already
+              planning how to launch it. Their questions showed that the grammar was legible enough to become an operating
+              plan. I supplied complete screens, component states, rule branches, errors, and the
               partner-template gate so the build could expose the special cases that mattered. Engineering built the application
-              in one quarter, and the design remained stable through the build.<sup><a href="#source-solution">1</a></sup>
+              in one quarter, and the design remained stable through the build while I carried two other projects through a
+              team restructure and prepared to move into Computational Biology Engineering.<sup><a href="#source-solution">1</a></sup>
             </p>
             <p>
               The flow was legible because it rendered the logic chain directly. Engineering could see how forms dispatched,
@@ -533,21 +564,41 @@
       <div class="content__container bg__adjust--moccasin">
         <div class="content content--editorial">
           <aside class="prose-flow" aria-labelledby="snowflake-returned-title">
-            <h2 id="snowflake-returned-title" class="txt-h2 architecture-track-title">Snowflake, Returned — the phrase that reopened the architecture</h2>
+            <h2 id="snowflake-returned-title" class="txt-h2 architecture-track-title">Snowflake, Returned — the phrase that moved a stalled meeting</h2>
             <p>
-              In a Q2 2023 working call, proposals for variant-database changes kept meeting valid partner-specific
-              exceptions: naming conventions, units, identifier-sharing rules, and escalation paths. I reintroduced a phrase
-              that had shaped the 2019 brief: every partner interaction could mature beyond its own special snowflake. My
-              shorthand landed badly. The director closest to partner relationships defended the earned exceptions; engineering
-              directors named the accumulated manual adjustment as an unsustainable workload.<sup><a href="#source-snowflake">3</a></sup>
+              In a Q2 2023 working call, forthcoming variant-database changes met a long inventory of partner-specific
+              transformations. Account and Data Management colleagues described naming conventions, date formats, units,
+              identifiers, study rules, and escalation paths while participants kept asking what everyone else thought should
+              happen. The meeting was close to ending without a decision.<sup><a href="#source-snowflake">3</a></sup>
             </p>
             <p>
-              I listened, clarified the standardization concern, and changed the object of disagreement. Modern partners
-              increasingly had ETL engineering teams.
-              FMI could publish a structured incoming format, ask partners to map their fields upstream, and let middleware
-              address fields directly. Data Managers would retain review and exception judgment while shedding routine
-              mapping across variants such as <code>site_location</code>, <code>location_site</code>, and
-              <code>site_eval_location</code>.
+              Years earlier, the Director of Data Management had told me, &ldquo;Not every biopharma partner can be its own
+              special snowflake.&rdquo; I had carried the phrase as a concise description of the operating pressure. I repeated
+              it because I expected familiar shorthand to help the meeting move. In 2023, it sounded like a judgment on the
+              work the team had done to keep partner studies running.
+            </p>
+            <p>
+              The Director responded by naming the exceptions their team carried. Each one was real and hard-earned. I could
+              have reminded them that the phrase was originally theirs. I chose the work over the provenance of the phrase:
+              years had passed, their present responsibility was to protect partner relationships, and proving who remembered
+              a sentence would have made the meeting about memory instead of capacity.
+            </p>
+            <blockquote>
+              <p>&ldquo;I fully understand that your team moves mountains for our company. I am also here to protect you from partners whose own ETL engineers should be doing this transformation work. Your team should be able to focus on other things. I will get on the phone with them and make sure their ETL team gives us a common, reliable industry format. Walk me through the requirements you normally handle—and tell me what else you would rather do with that time.&rdquo;</p>
+              <footer>My response, reconstructed from memory and structure-faithful rather than verbatim<sup><a href="#source-snowflake">3</a></sup></footer>
+            </blockquote>
+            <p>
+              Across the call, engineers smiled quietly and took notes. They were hearing data contracts: field mappings
+              that belonged in JSON or XML, middleware, validation, and repeatable templates rather than in repeated mouse
+              work that converted a partner&rsquo;s date format by hand. Their response made the shared protection visible—Data
+              Management could recover time for exception judgment, and engineering could receive explicit inputs instead
+              of reverse-engineering cursor-driven procedures.
+            </p>
+            <p>
+              The uncomfortable sentence became the catalyst. As the Director walked me through the requirements, the
+              conversation returned to the Boolean rule builder already in production. A partner ETL team could supply a
+              common payload; middleware could populate the Boolean elements; Data Managers could review the result and
+              preserve the exceptions that genuinely required judgment.
             </p>
             <blockquote>
               <p>“Wait, so we could take the incoming data structure from the biopharma partner and it could auto-populate the view with all the boolean elements?”</p>
@@ -559,10 +610,15 @@
             </blockquote>
             <p class="cornerstone-consequence">Here, directors and Data Managers can act on a standardized partner payload while retained human corrections reveal which transformations are repeatable and which exceptions still need judgment.</p>
             <p>
-              The question revealed the durable architecture. Each card already behaved as a transformation rule. Each
+              By the end of the meeting, the Director&rsquo;s question revealed the durable architecture. Each card already behaved as a transformation rule. Each
               nested group already behaved as a parenthetical operation. The partner-copy gate already behaved as a
               downstream contract. A standardized partner payload could produce the initial rule state; the Data Manager’s
               final edits could become the signal that separates repeatable transformation from expert judgment.
+            </p>
+            <p>
+              The useful lesson was relational as well as architectural: busy people carry changing responsibilities, not
+              a transcript of every phrase they once used. Leadership in that meeting meant absorbing the social cost, repairing
+              the meaning, and helping both teams name the work they could hand back upstream.
             </p>
 
             <figure class="story-visual cobalt-operating-field__visual table-span-all">
@@ -774,6 +830,10 @@
                 <cite><a href="https://developer.adobe.com/indesign/uxp/resources/recipes/network/">Adobe UXP — Network requests</a></cite>
                 and <cite><a href="https://help.lucid.co/hc/en-us/articles/16390096079764-Add-and-customize-shapes-in-Lucidchart">Lucid — Add and customize shapes</a></cite>
                 — public implementation references for named platform capabilities.
+              </li>
+              <li>
+                <cite id="source-fmi-company"><a href="https://www.foundationmedicine.com/about">Foundation Medicine — Who We Are</a></cite>
+                — the company&rsquo;s public description of comprehensive genomic profiling, precision-medicine products, and its work with patients, clinicians, researchers, and biopharma teams.
               </li>
             </ol>
             <p class="table-note">
