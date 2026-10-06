@@ -6,6 +6,8 @@ import { dirname, join, relative, resolve } from "node:path";
 import test from "node:test";
 import Ajv2020 from "ajv/dist/2020.js";
 
+import { assertImmutableSkillCoordinate } from "../prompt-capsule-skill-coordinate.mjs";
+
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const prototypesRoot = resolve(
   repositoryRoot,
@@ -179,8 +181,7 @@ test("Narrative Capsule Composer publishes the shared Prompt Capsule exchange co
     [".agents/skills/bounded-support-routing/SKILL.md", "80dff2f88bc919500d9557a0ff67210e68cbdf1c69bbe63ac29b93662f9bd402"],
   ];
   for (const [path, expectedDigest] of skills) {
-    const source = await readFile(resolve(repositoryRoot, path));
-    assert.equal(createHash("sha256").update(source).digest("hex"), expectedDigest);
+    assertImmutableSkillCoordinate(revision, path, expectedDigest);
     assert.ok(html.includes(`path:"${path}"`));
     assert.ok(html.includes(`sha256:"${expectedDigest}"`));
   }
@@ -425,8 +426,7 @@ test("Semantic Sampling publishes its canonical state and Prompt Capsule coordin
     [".agents/skills/source-authority-mapping/SKILL.md", "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5"],
   ];
   for (const [path, expectedDigest] of skills) {
-    const source = await readFile(resolve(repositoryRoot, path));
-    assert.equal(createHash("sha256").update(source).digest("hex"), expectedDigest);
+    assertImmutableSkillCoordinate(revision, path, expectedDigest);
     assert.ok(html.includes(`path:"${path}"`));
     assert.ok(html.includes(`sha256:"${expectedDigest}"`));
   }
@@ -496,9 +496,7 @@ test("Technology Fit publishes the Narrative Prompt Capsule pilot and exact skil
     [".agents/skills/stateful-artifact-behavior-contracts/SKILL.md", "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a"]
   ];
   for (const [path, expectedDigest] of skills) {
-    const source = await readFile(resolve(repositoryRoot, path));
-    const actualDigest = createHash("sha256").update(source).digest("hex");
-    assert.equal(actualDigest, expectedDigest, `${path} should retain the capsule's exact source digest`);
+    assertImmutableSkillCoordinate(revision, path, expectedDigest);
     assert.ok(html.includes(`path:"${path}"`));
     assert.ok(html.includes(`sha256:"${expectedDigest}"`));
   }
@@ -548,8 +546,7 @@ test("Threadkeeping Ledger publishes its complete state through the shared Promp
     [".agents/skills/source-authority-mapping/SKILL.md", "706fdafe48f3b9d85533302a2cb6029aefea61364e818939ea152c0b79b386f5"],
   ];
   for (const [path, expectedDigest] of skills) {
-    const source = await readFile(resolve(repositoryRoot, path));
-    assert.equal(createHash("sha256").update(source).digest("hex"), expectedDigest);
+    assertImmutableSkillCoordinate(revision, path, expectedDigest);
     assert.ok(html.includes(`path:"${path}"`));
     assert.ok(html.includes(`sha256:"${expectedDigest}"`));
   }

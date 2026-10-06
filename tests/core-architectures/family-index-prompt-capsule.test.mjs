@@ -4,6 +4,8 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
 
+import { assertImmutableSkillCoordinate } from "../prompt-capsule-skill-coordinate.mjs";
+
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const coreRoot = resolve(repositoryRoot, "core-architectures-chimeric-prototype-current-pack-v0.1");
 const contextRoot = resolve(
@@ -247,7 +249,7 @@ test("Family Index publishes one complete no-JavaScript handoff and frozen sourc
   );
   assert.ok(canonical.includes(skillRevision));
   for (const [path, digest] of skillCoordinates) {
-    assert.equal(sha256(await readFile(resolve(repositoryRoot, path))), digest);
+    assertImmutableSkillCoordinate(skillRevision, path, digest);
     assert.ok(canonical.includes(path));
     assert.ok(canonical.includes(digest));
   }

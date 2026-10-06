@@ -49,8 +49,7 @@
             ]
           },
           "repository": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+            "$ref": "common.schema.json#/$defs/repositoryIdentity"
           },
           "authority": {
             "type": "string",

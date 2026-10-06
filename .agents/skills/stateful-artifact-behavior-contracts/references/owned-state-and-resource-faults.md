@@ -73,14 +73,17 @@ behavior's assertions.
 
 ## Exercise and transfer
 
-[PR #367's review and evidence](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/367)
-supplies the originating implementation example. Keep three observation layers
-distinct when transferring it: source inspection identifies declared projection
-and resource owners; focused fixtures can establish nested detachment, failure
-injection and repeated cleanup; real browser cases can establish retained
-downloads, visible controls and retry. The linked receipt owns the actual
-executed population. Partial DOM-publication rollback remains a separate fault
-phase requiring its own observation.
+The source-owned [Atlas gallery controller](../../../../context-canvas-project-surface/context-canvas/atlas-gallery.js),
+[focused state and resource checks](../../../../tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs),
+and [browser recovery journey](../../../../tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs)
+supply the originating implementation example and its public inspection route.
+Keep three observation layers distinct when transferring it: source inspection
+identifies declared projection and resource owners; focused fixtures can
+establish nested detachment, failure injection, and repeated cleanup; real
+browser cases can establish retained downloads, visible controls, and retry.
+Each new execution records its own observed population and result. Partial
+DOM-publication rollback remains a separate fault phase requiring its own
+observation.
 
 A new controller receives its own state and resource model; the example
 provides a probe vocabulary rather than blanket proof.

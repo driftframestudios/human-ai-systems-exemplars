@@ -113,11 +113,11 @@ test("Debriefs catalog and JSON-LD retain both benchmark readings", async () => 
   const jsonLd = firstJsonLd(html);
   const itemList = jsonLd["@graph"].find(item => item["@type"] === "ItemList");
   assert.ok(itemList);
-  assert.equal(itemList.numberOfItems, 22);
-  assert.equal(itemList.itemListElement.length, 22);
+  assert.equal(itemList.numberOfItems, 24);
+  assert.equal(itemList.itemListElement.length, 24);
   assert.deepEqual(
     itemList.itemListElement.map(item => item.position),
-    Array.from({ length: 22 }, (_, index) => index + 1),
+    Array.from({ length: 24 }, (_, index) => index + 1),
   );
 
   const itemUrls = itemList.itemListElement.map(item => item.url);
@@ -125,9 +125,9 @@ test("Debriefs catalog and JSON-LD retain both benchmark readings", async () => 
   assert.ok(itemUrls.some(url => url.endsWith("/maps-evaluations.html")));
 
   const cards = Array.from(html.matchAll(/<li id="catalog-[^"]+"[^>]*data-formats="[^"]+"[^>]*data-topics="[^"]+"/gu));
-  assert.equal(cards.length, 17);
-  assert.match(html, /Showing all 17 catalog entries\./u);
-  assert.match(html, /All 17 catalog entries are in view\./u);
+  assert.equal(cards.length, 19);
+  assert.match(html, /Showing all 19 catalog entries\./u);
+  assert.match(html, /All 19 catalog entries are in view\./u);
   assert.match(html, /id="catalog-benchmark-orientation"/u);
   assert.match(html, /id="catalog-maps-evaluations"/u);
 });

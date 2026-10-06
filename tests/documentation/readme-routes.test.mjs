@@ -40,6 +40,114 @@ test("reports missing targets and fragments as distinct route failures", async (
   assert.deepEqual(result.findings.map(({ kind }) => kind), ["missing-target", "missing-fragment"]);
 });
 
+test("accepts links served by a declared publication receiver and its runtime aliases", async () => {
+  const root = await fixture();
+  const sourceRoute = "source/family/0.2.0/README.md";
+  const publicRoot = "receiver/public";
+  const receiverRoute = "family/0.2.0/README.md";
+  const receiverAsset = "schemas/family/0.2.0/README.md";
+  const guide = [
+    "# Published guide",
+    "",
+    "[Schema](state.schema.json)",
+    "[Example](example.json)",
+    "[Catalog](../../schema-catalog.json)",
+  ].join("\n");
+
+  await mkdir(join(root, "source", "family", "0.2.0"), { recursive: true });
+  await mkdir(join(root, publicRoot, "schemas", "family", "0.2.0"), { recursive: true });
+  await writeFile(join(root, sourceRoute), guide);
+  await writeFile(join(root, publicRoot, receiverAsset), guide);
+  await writeFile(join(root, publicRoot, "schemas", "family", "0.2.0", "state.schema.json"), "{}\n");
+  await writeFile(join(root, publicRoot, "schemas", "family", "0.2.0", "example.json"), "{}\n");
+  await writeFile(join(root, publicRoot, "schema-catalog.json"), "{}\n");
+  await writeFile(join(root, publicRoot, "publication-manifest.json"), JSON.stringify({
+    routes: {
+      "/family/0.2.0/README.md": "/schemas/family/0.2.0/README.md",
+      "/family/0.2.0/state.schema.json": "/schemas/family/0.2.0/state.schema.json",
+      "/family/0.2.0/example.json": "/schemas/family/0.2.0/example.json",
+      "/schemas/schema-catalog.json": "/schema-catalog.json",
+    },
+  }));
+
+  const result = await checkReadmeRoutes(root, { publicationSurfaces: [{
+    manifest: `${publicRoot}/publication-manifest.json`,
+    publicRoot,
+    sourceRoutes: [{ source: sourceRoute, receiverPath: receiverRoute }],
+  }] });
+
+  assert.deepEqual(result.findings, []);
+  assert.equal(result.readmeCount, 2);
+  assert.equal(result.localLinkCount, 6);
+});
+
+test("requires an exact declared source receiver before using publication routes", async () => {
+  const root = await fixture();
+  const sourceRoute = "source/family/README.md";
+  const publicRoot = "receiver/public";
+  const guide = "# Published guide\n\n[Schema](state.schema.json)\n";
+
+  await mkdir(join(root, "source", "family"), { recursive: true });
+  await mkdir(join(root, publicRoot, "schemas", "family"), { recursive: true });
+  await writeFile(join(root, sourceRoute), guide);
+  await writeFile(join(root, publicRoot, "schemas", "family", "README.md"), guide);
+  await writeFile(join(root, publicRoot, "schemas", "family", "state.schema.json"), "{}\n");
+  await writeFile(join(root, publicRoot, "publication-manifest.json"), JSON.stringify({
+    routes: {
+      "/family/README.md": "/schemas/family/README.md",
+      "/family/state.schema.json": "/schemas/family/state.schema.json",
+    },
+  }));
+
+  const undeclared = await checkReadmeRoutes(root, { publicationSurfaces: [{
+    manifest: `${publicRoot}/publication-manifest.json`,
+    publicRoot,
+    sourceRoutes: [],
+  }] });
+  assert.deepEqual(undeclared.findings.map(({ kind, source }) => ({ kind, source })), [
+    { kind: "missing-target", source: sourceRoute },
+  ]);
+
+  await writeFile(join(root, publicRoot, "schemas", "family", "README.md"), "# Stale receiver\n");
+  const stale = await checkReadmeRoutes(root, { publicationSurfaces: [{
+    manifest: `${publicRoot}/publication-manifest.json`,
+    publicRoot,
+    sourceRoutes: [{ source: sourceRoute, receiverPath: "family/README.md" }],
+  }] });
+  assert.deepEqual(stale.findings.map(({ kind, source }) => ({ kind, source })), [
+    { kind: "missing-target", source: sourceRoute },
+  ]);
+});
+
+test("requires a runtime alias for a public copy whose relative target is virtual", async () => {
+  const root = await fixture();
+  const publicRoot = "receiver/public";
+  const manifestPath = join(root, publicRoot, "publication-manifest.json");
+  await mkdir(join(root, publicRoot, "schemas", "family", "0.2.0"), { recursive: true });
+  await writeFile(
+    join(root, publicRoot, "schemas", "family", "0.2.0", "README.md"),
+    "# Published guide\n\n[Catalog](../../schema-catalog.json)\n",
+  );
+  await writeFile(join(root, publicRoot, "schema-catalog.json"), "{}\n");
+  await writeFile(manifestPath, JSON.stringify({ routes: {} }));
+  const publicationSurfaces = [{
+    manifest: `${publicRoot}/publication-manifest.json`,
+    publicRoot,
+    sourceRoutes: [],
+  }];
+
+  const missingAlias = await checkReadmeRoutes(root, { publicationSurfaces });
+  assert.deepEqual(missingAlias.findings.map(({ kind, destination }) => ({ kind, destination })), [
+    { kind: "missing-target", destination: "../../schema-catalog.json" },
+  ]);
+
+  await writeFile(manifestPath, JSON.stringify({
+    routes: { "/schemas/schema-catalog.json": "/schema-catalog.json" },
+  }));
+  const declaredAlias = await checkReadmeRoutes(root, { publicationSurfaces });
+  assert.deepEqual(declaredAlias.findings, []);
+});
+
 test("does not create Markdown anchors from fenced examples", async () => {
   const root = await fixture();
   await writeFile(join(root, "README.md"), [

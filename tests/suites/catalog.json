@@ -48,9 +48,9 @@
     },
     {
       "id": "python-project",
-      "runtime": "Project-declared Python and installed project dependencies",
+      "runtime": "Managed Python 3.12 through isolated uv project routes",
       "prerequisites": [
-        "Read the project's pyproject and named workflow preparation.",
+        "uv and managed Python 3.12 available; buildable projects resolve their declared dependencies for the isolated run.",
         "ENABLE_GITHUB_ACTIONS, workflow_dispatch and confirmation govern hosted runs independently.",
         "Database tests retain their own DSN, key, client and skip predicates."
       ],
@@ -681,13 +681,28 @@
       "command": {
         "cwd": ".",
         "argv": [
-          "node"
+          "env",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "uv",
+          "run",
+          "--isolated",
+          "--no-project",
+          "--python",
+          "3.12",
+          "--managed-python",
+          "--with",
+          "pymupdf==1.26.5",
+          "--",
+          "node",
+          "tests/tables/hiring-schema-print.browser.mjs"
         ],
-        "appendMembers": true
+        "appendMembers": false
       },
       "owner": "tests/tables/README.md",
-      "scope": "Existing standalone browser journey; exact states and cases remain with this entry.",
-      "aliases": []
+      "scope": "Existing standalone browser journey through managed Python 3.12 and pinned PyMuPDF 1.26.5; exact states and cases remain with this entry.",
+      "aliases": [
+        "test:hiring-schema-print-browser"
+      ]
     },
     {
       "id": "python.tables.parser",
@@ -1257,17 +1272,11 @@
         "cloudflare/schemas-worker/test/catalog-browser.mjs"
       ],
       "profile": "browser",
-      "command": {
-        "cwd": "cloudflare/schemas-worker",
-        "argv": [
-          "node",
-          "test/catalog-browser.mjs"
-        ],
-        "appendMembers": false
-      },
+      "command": null,
       "owner": "cloudflare/schemas-worker/package.json",
-      "scope": "Worker catalog browser check. Independent Playwright installation remains a receiving dependency question.",
-      "aliases": []
+      "scope": "Worker catalog browser check against an explicitly selected HTTPS receiver. Independent Playwright installation remains a receiving dependency question.",
+      "aliases": [],
+      "hold": "Choose and authorize one HTTPS Worker receiver, then run npm run test:browser -- https://host from cloudflare/schemas-worker; use --local-tls only for loopback previews."
     },
     {
       "id": "worker.live",
@@ -1301,14 +1310,25 @@
         "cwd": "lims-eln-enterprise-reference-v0.1",
         "argv": [
           "env",
+          "PYTHONDONTWRITEBYTECODE=1",
           "PYTHONPATH=src",
+          "uv",
+          "run",
+          "--isolated",
+          "--no-project",
+          "--python",
+          "3.12",
+          "--managed-python",
+          "--with-editable",
+          ".",
+          "--",
           "python",
           "scripts/validate_pack.py"
         ],
         "appendMembers": false
       },
       "owner": "lims-eln-enterprise-reference-v0.1/pyproject.toml",
-      "scope": "Retained project/workflow route. Install the owning project's declared dependencies and preserve its separate validation/conformance commands.",
+      "scope": "Retained project/workflow route through an isolated editable install of the owning project; preserve its separate database validation and conformance commands.",
       "aliases": []
     },
     {
@@ -1337,13 +1357,27 @@
       "command": {
         "cwd": "lims-eln-functional-nucleus/lims-eln-enterprise-implementation",
         "argv": [
+          "env",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "uv",
+          "run",
+          "--isolated",
+          "--no-project",
+          "--python",
+          "3.12",
+          "--managed-python",
+          "--with-editable",
+          "../lims-eln-program-specification",
+          "--with-editable",
+          ".[test]",
+          "--",
           "python",
           "scripts/validate_repository.py"
         ],
         "appendMembers": false
       },
       "owner": "lims-eln-functional-nucleus/lims-eln-enterprise-implementation/pyproject.toml",
-      "scope": "Retained project/workflow route. Database classes keep their runtime skip predicates. Install the owning project's declared dependencies and preserve its separate validation/conformance commands.",
+      "scope": "Retained project/workflow route through isolated editable installs of the shared contract and test extra. Database classes keep their runtime skip predicates and separate admission.",
       "aliases": []
     },
     {
@@ -1362,7 +1396,18 @@
         "cwd": "lims-eln-functional-nucleus/lims-eln-program-specification",
         "argv": [
           "env",
+          "PYTHONDONTWRITEBYTECODE=1",
           "PYTHONPATH=src",
+          "uv",
+          "run",
+          "--isolated",
+          "--no-project",
+          "--python",
+          "3.12",
+          "--managed-python",
+          "--with-editable",
+          ".",
+          "--",
           "python",
           "-m",
           "unittest",
@@ -1374,7 +1419,7 @@
         "appendMembers": false
       },
       "owner": "lims-eln-functional-nucleus/lims-eln-program-specification/pyproject.toml",
-      "scope": "Retained project/workflow route. Install the owning project's declared dependencies and preserve its separate validation/conformance commands.",
+      "scope": "Retained project/workflow route through an isolated editable install of the owning project; preserve its separate generation and conformance commands.",
       "aliases": []
     },
     {
@@ -1391,7 +1436,18 @@
         "cwd": "lims-eln-functional-nucleus/lims-eln-simulated-final-state",
         "argv": [
           "env",
+          "PYTHONDONTWRITEBYTECODE=1",
           "PYTHONPATH=src",
+          "uv",
+          "run",
+          "--isolated",
+          "--no-project",
+          "--python",
+          "3.12",
+          "--managed-python",
+          "--with-editable",
+          "../lims-eln-program-specification",
+          "--",
           "python",
           "-m",
           "unittest",
@@ -1403,7 +1459,7 @@
         "appendMembers": false
       },
       "owner": "lims-eln-functional-nucleus/lims-eln-simulated-final-state/pyproject.toml",
-      "scope": "Retained project/workflow route. Install the owning project's declared dependencies and preserve its separate validation/conformance commands.",
+      "scope": "Retained simulation route through isolated managed Python 3.12 with the sibling shared-contract package installed; preserve its separate shared-contract conformance command.",
       "aliases": []
     },
     {
@@ -1420,7 +1476,20 @@
         "cwd": "lims-eln-functional-nucleus/lims-eln-comparative-evidence",
         "argv": [
           "env",
+          "PYTHONDONTWRITEBYTECODE=1",
           "PYTHONPATH=src",
+          "uv",
+          "run",
+          "--isolated",
+          "--no-project",
+          "--python",
+          "3.12",
+          "--managed-python",
+          "--with-editable",
+          "../lims-eln-program-specification",
+          "--with-editable",
+          ".[validation]",
+          "--",
           "python",
           "-m",
           "unittest",
@@ -1432,7 +1501,7 @@
         "appendMembers": false
       },
       "owner": "lims-eln-functional-nucleus/lims-eln-comparative-evidence/pyproject.toml",
-      "scope": "Retained project/workflow route. Install the owning project's declared dependencies and preserve its separate validation/conformance commands.",
+      "scope": "Retained project/workflow route through isolated editable installs of the sibling shared contract and the owning validation extra; preserve its separate shared-contract conformance command.",
       "aliases": []
     },
     {
@@ -1448,6 +1517,16 @@
       "command": {
         "cwd": "lims-eln-functional-nucleus/site-reading-governance",
         "argv": [
+          "env",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "uv",
+          "run",
+          "--isolated",
+          "--no-project",
+          "--python",
+          "3.12",
+          "--managed-python",
+          "--",
           "python",
           "-m",
           "unittest",
@@ -1459,7 +1538,7 @@
         "appendMembers": false
       },
       "owner": ".github/workflows/lims-eln-functional-nucleus.yml",
-      "scope": "Retained project/workflow route. Install the owning project's declared dependencies and preserve its separate validation/conformance commands.",
+      "scope": "Retained standard-library governance route through isolated managed Python 3.12; preserve its separate validators and language checks.",
       "aliases": []
     },
     {
@@ -1503,10 +1582,11 @@
         "appendMembers": false
       },
       "owner": "package.json",
-      "scope": "Existing check/verification mode. Staging, deployment and live authority remain separate.",
+      "scope": "Existing projection check against the authorized ignored .env.public receiver. Staging, deployment and live authority remain separate.",
       "aliases": [
         "check:prod-projection"
-      ]
+      ],
+      "hold": "Provide the authorized ignored .env.public receiver before running the production projection check."
     },
     {
       "id": "carrier.transfer",
@@ -1516,20 +1596,13 @@
         "tools/package-prod-carrier-transfer.mjs"
       ],
       "profile": "carrier",
-      "command": {
-        "cwd": ".",
-        "argv": [
-          "node",
-          "tools/package-prod-carrier-transfer.mjs",
-          "--verify"
-        ],
-        "appendMembers": false
-      },
+      "command": null,
       "owner": "package.json",
-      "scope": "Existing check/verification mode. Staging, deployment and live authority remain separate.",
+      "scope": "Transfer verification for one explicitly selected immutable production tag and its matching local receipt. Host activation remains separate.",
       "aliases": [
         "verify:prod-carrier-transfer"
-      ]
+      ],
+      "hold": "Select the annotated production-vMAJOR.MINOR.PATCH tag and matching --receipt FILE, then invoke verify:prod-carrier-transfer with both values."
     },
     {
       "id": "carrier.schemas",

@@ -878,7 +878,7 @@ async function exerciseInvestmentModelStudio(session) {
   const visiblePlain = await page.locator("#promptCapsuleMarkdown").textContent();
   assert.equal(initial.apiFrozen, true);
   assert.equal(initial.viewsFrozen, true);
-  assert.equal(initial.version, "0.1.0");
+  assert.equal(initial.version, "0.3.0");
   assert.equal(initial.stateSchemaVersion, "1.0.0");
   assert.equal(initial.contract, "prompt-capsule/0.1.0");
   assert.deepEqual(initial.views, ["plain", "skill-assisted"]);
@@ -1021,7 +1021,7 @@ async function exerciseInvestmentModelStudio(session) {
     reason: globalThis.crossFunctionalInvestmentModelStudio.getState().selectionReason,
     fingerprint: globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleFingerprint(),
   }));
-  assert.equal(sameModel.reason, "visitor-selected");
+  assert.equal(sameModel.reason, "initial", "Selecting the active model preserves the accepted state reason");
   assert.equal(sameModel.fingerprint, initial.fingerprint, "Selection modality stays outside the represented-state fingerprint");
 
   await page.locator('input[name="investment-model-prompt-view"][value="plain"]').focus();
@@ -1123,7 +1123,7 @@ async function exerciseInvestmentModelStudio(session) {
   ]);
   assert.equal(
     download.suggestedFilename(),
-    "cross-functional-investment-model-studio.whole-life-tco.prompt-capsule.r0.1.0.skill-assisted.md",
+    "cross-functional-investment-model-studio.whole-life-tco.prompt-capsule.r0.3.0.skill-assisted.md",
   );
   assert.equal(await download.failure(), null);
   assert.equal(await page.evaluate(() => globalThis.__investmentPromptDownloadType), "text/markdown;charset=utf-8");
@@ -2229,8 +2229,8 @@ const behaviorProfiles = new Map([
   }],
   ["cross-functional-investment-studio", {
     policy: {
-      sandbox_tokens: ["allow-popups", "allow-popups-to-escape-sandbox", "allow-scripts"],
-      permissions_policy: [],
+      sandbox_tokens: ["allow-downloads", "allow-popups", "allow-popups-to-escape-sandbox", "allow-scripts"],
+      permissions_policy: ["clipboard-write"],
     },
     exercise: exerciseInvestmentStudio,
   }],

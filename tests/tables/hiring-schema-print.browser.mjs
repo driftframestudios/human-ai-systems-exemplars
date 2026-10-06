@@ -13,8 +13,8 @@ import { publishPrintPDF, inspectPrintPDF } from "./core-followthrough/closure.m
 import { printPDFOptions } from "./core-followthrough/contracts.mjs";
 import { assertPrintedSchema } from "./hiring-schema-print-contract.mjs";
 
-// PDF_PYTHON selects an existing interpreter with PyMuPDF; rendering uses Chromium.
-const python = process.env.PDF_PYTHON || "python3";
+// The package and suite routes place managed Python 3.12 with pinned PyMuPDF on PATH.
+const python = "python";
 const execute = promisify(execFile);
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const output = path.join(root, ".visual-runs/hiring-schema-print");
@@ -22,19 +22,19 @@ const source = "collaboration/hiring-surfaces-talent-agent-intake/index.html";
 const definitions = [source, "tests/tables/hiring-schema-print.browser.mjs", "tests/tables/hiring-schema-print-contract.mjs", "tools/core-architecture-browser-helper.mjs", "tools/attribution-contract.mjs", "attribution.yml", "tools/observation-checkpoint.mjs", "tools/evidence-campaign.mjs", "tests/tables/core-followthrough/runtime.mjs", "tests/tables/core-followthrough/closure.mjs", "tests/tables/core-followthrough/contracts.mjs", "package-lock.json"];
 const print = { paper: "Letter", orientation: "landscape", marginInches: 0.5, preferCSSPageSize: true };
 const item = { id: "hiring-expanded-schema-letter-landscape", width: 1280, print };
-const extraction = `import fitz, json, sys
-with fitz.open(sys.argv[1]) as document:
+const extraction = `import json, pymupdf, sys
+with pymupdf.open(sys.argv[1]) as document:
     pages = [{"text": page.get_text(), "words": page.get_text("words")} for page in document]
 print(json.dumps({"pages": pages}))`;
 
 await withCampaignLock(output, async resources => {
   const snapshot = inputSnapshot(root), store = await openCheckpoints(path.join(output, "checkpoints"));
   const executable = await fs.stat(chromium.executablePath());
-  const pythonIdentity = (await execute(python, ["-c", "import fitz, sys; print(sys.version); print(fitz.VersionBind)"], { timeout: 10000 })).stdout.trim();
+  const pythonIdentity = (await execute(python, ["-c", "import pymupdf, sys; print(sys.version); print(pymupdf.VersionBind)"], { timeout: 10000 })).stdout.trim();
   const dependencies = { ...await snapshot.fingerprints(definitions) };
   const signature = digest(JSON.stringify([item, process.version, process.platform, executable.size, executable.mtimeMs, pythonIdentity, dependencies]));
   const cached = process.argv.includes("--resume") && await store.readRecord(item.id, signature, deps => snapshot.agrees(deps, true));
-  if (cached?.result.standing === "pass") { console.log(item.id + ": reused"); return; }
+  if (cached?.result?.standing === "pass") { console.log(item.id + ": reused"); return; }
   resources.browser = await chromium.launch();
   const context = await resources.browser.newContext({ viewport: { width: item.width, height: 900 } });
   const page = await context.newPage(), telemetry = monitor(page), errors = [], externalSubstitutions = [];

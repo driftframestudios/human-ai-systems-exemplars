@@ -82,6 +82,12 @@ const placements = new Map([
     text: "Outcomes are discovered through encounter; the artifact form follows the learning.",
     footer: "PODA operating principle",
   }],
+  ["readable-tables-reusable-evidence.html", {
+    sectionId: "process-model-title",
+    label: "Verification timing principle",
+    text: "Complete the fitting required checks after the last relevant change; use a focused observation when it can resolve a named uncertainty; and preserve the evidence that still answers its question. A probability can sharpen that discussion while the receiving people retain the decision.",
+    footer: "Verification timing principle",
+  }],
   ["registry-goal-fidelity-routing.html", {
     sectionId: "position-title",
     label: "Recovery and re-entry operating principle",
@@ -244,7 +250,7 @@ test("the operating-principle modifier has one family owner and route-local Hiri
   );
 });
 
-test("the visual reference includes all sixteen AI Systems routes", async () => {
+test("the visual reference includes all seventeen AI Systems routes", async () => {
   const source = await readFile(
     resolve(repositoryRoot, "tools/context-canvas-visual-reference.mjs"),
     "utf8",

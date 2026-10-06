@@ -51,9 +51,15 @@ node tools/table-reading-contract.mjs --mode fixtures
 node tools/table-reading-contract.mjs --mode focused --family conditioning
 node tools/table-reading-contract.mjs --mode closure --family all
 node --test tests/tables/*.test.mjs
+npm run test:hiring-schema-print-browser
 node tools/core-planning-instrument-contract.mjs --artifact sharedSurface --resume
 node tests/tables/conditioning.browser.mjs --resume
 ```
+
+The hiring-schema print route uses managed Python 3.12 with pinned
+`pymupdf==1.26.5` through `uv`, while the repository Playwright installation
+continues to own Chromium. It leaves host Python and its global packages
+unchanged.
 
 `project_table_context.py` derives supplemental labels for selected simple,
 captioned tables from authored native headers. `--check` compares the projection;

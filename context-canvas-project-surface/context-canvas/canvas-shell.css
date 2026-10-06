@@ -310,6 +310,7 @@ h2.super-footer__heading {
         block-size: 100%;
         display: grid;
         gap: 0;
+        grid-auto-rows: 1.5rem;
         inline-size: 1.75rem;
         overflow-y: auto;
         padding: .35rem 0;

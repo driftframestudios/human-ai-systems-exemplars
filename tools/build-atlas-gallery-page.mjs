@@ -68,7 +68,7 @@ export function renderGallerySection(document) {
           <div data-gallery-live hidden>
             <p class="table-note" data-gallery-status role="status" aria-live="polite"></p>
             <div class="table-scroll atlas-gallery-figure" role="region" tabindex="0" aria-label="Selected manufacturing figure" data-gallery-svg></div>
-            <p><a data-gallery-full target="_blank" rel="noopener">View selected figure at full size</a> · <a data-gallery-svg-download download="atlas-selection.svg">Download selected SVG</a> · <a data-gallery-json-download download="atlas-selection.json">Download selected values and context</a></p>
+            <p><a data-gallery-full>View selected figure at full size</a> · <a data-gallery-svg-download download="atlas-selection.svg">Download selected SVG</a> · <a data-gallery-json-download download="atlas-selection.json">Download selected values and context</a></p>
             <p data-gallery-explanation></p>
             <div class="table-scroll table-scroll--contained" role="region" tabindex="0" aria-label="Selected manufacturing exact values" data-gallery-table></div>
           </div>

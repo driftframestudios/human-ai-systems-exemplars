@@ -1,8 +1,9 @@
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
+
+import { assertImmutableSkillCoordinate } from "../prompt-capsule-skill-coordinate.mjs";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const atlasRoot = resolve(repositoryRoot, "visualization-fidelity-atlas-bundle-v0.1");
@@ -26,8 +27,6 @@ const loopCoordinates = [
   ["visitor-surface-change", "https://schemas.radiantnull.com/collaboration/#visitor-surface-change"],
   ["repository-reentry", "https://schemas.radiantnull.com/collaboration/#repository-reentry"],
 ];
-
-const sha256 = value => createHash("sha256").update(value).digest("hex");
 
 async function json(path) {
   return JSON.parse(await readFile(path, "utf8"));
@@ -150,7 +149,7 @@ test("Visualization Fidelity Atlas publishes one source-bound Prompt Capsule con
 
   assert.ok(source.includes(skillRevision));
   for (const [path, digest] of skillCoordinates) {
-    assert.equal(sha256(await readFile(resolve(repositoryRoot, path))), digest);
+    assertImmutableSkillCoordinate(skillRevision, path, digest);
     assert.ok(source.includes(path), `the Atlas source names ${path}`);
     assert.ok(source.includes(digest), `the Atlas source pins ${path}`);
   }

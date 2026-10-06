@@ -267,7 +267,7 @@ class VisitorLabelContracts(unittest.TestCase):
                     temporary = target.with_suffix(".tmp")
                     temporary.write_text(json.dumps(report, indent=2) + "\n")
                     temporary.replace(target)
-        self.assertEqual(dict(counts), {"table": 148, "tr": 1046, "th": 1491, "td": 2808})
+        self.assertEqual(dict(counts), {"table": 148, "tr": 1048, "th": 1493, "td": 2815})
         self.assertEqual(dict(dispositions), {
             "simple": 144, "empty-register": 2,
             "capital-summary": 1, "grouped-populations": 1,
@@ -283,7 +283,7 @@ class VisitorLabelContracts(unittest.TestCase):
         self.assertEqual(counts["explicit_tables"], sum(t["shape"] != "simple" for t in tables))
         self.assertEqual(counts["native_labelled_elements"],
                          sum(1 + t["rows"] + t["th"] + t["td"] for t in tables))
-        self.assertEqual(counts["native_labelled_elements"], 5493)
+        self.assertEqual(counts["native_labelled_elements"], 5504)
         self.assertEqual(counts["runtime_body_generators"], len(self.contract["runtime"]))
 
     def _atlas_gallery_records(self, ordinal, fields, records):
