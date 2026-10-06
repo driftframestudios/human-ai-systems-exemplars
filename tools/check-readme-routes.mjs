@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
 import { lstat, readdir, readFile, realpath, stat } from "node:fs/promises";
-import { dirname, extname, isAbsolute, join, relative, resolve, sep } from "node:path";
+import { dirname, extname, isAbsolute, join, posix, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
+
+import { schemaReceiverRoutes } from "./schema-receiver-routes.mjs";
+import { schemaCompanionRoutes } from "./schema-publication.mjs";
 
 const ignoredDirectories = new Set([
   ".git",
@@ -16,6 +19,14 @@ const ignoredDirectories = new Set([
   "node_modules",
   "playwright-report",
   "test-results",
+]);
+
+const defaultPublicationSurfaces = Object.freeze([
+  Object.freeze({
+    manifest: "cloudflare/schemas-worker/public/publication-manifest.json",
+    publicRoot: "cloudflare/schemas-worker/public",
+    sourceRoutes: Object.freeze([...schemaReceiverRoutes, ...schemaCompanionRoutes]),
+  }),
 ]);
 
 async function walkReadmes(root, current = root) {
@@ -346,6 +357,106 @@ function isWithin(root, target) {
   return route === "" || (route !== ".." && !route.startsWith(`..${sep}`) && !isAbsolute(route));
 }
 
+function repositoryRoute(root, path) {
+  if (typeof path !== "string" || path === "" || isAbsolute(path)) return null;
+  const target = resolve(root, path);
+  if (!isWithin(root, target)) return null;
+  return relative(root, target).split(sep).join("/");
+}
+
+function requestRoute(path) {
+  if (typeof path !== "string" || path === "" || path.includes("\\") || /[?#]/u.test(path)) return null;
+  const request = path.startsWith("/") ? path : `/${path}`;
+  return posix.normalize(request) === request ? request : null;
+}
+
+async function loadPublicationSurfaces(repositoryRoot, canonicalRepositoryRoot, declarations) {
+  const surfaces = [];
+  for (const declaration of declarations) {
+    const manifestRoute = repositoryRoute(repositoryRoot, declaration.manifest);
+    const publicRootRoute = repositoryRoute(repositoryRoot, declaration.publicRoot);
+    if (!manifestRoute || !publicRootRoute) continue;
+
+    const manifestPath = resolve(repositoryRoot, manifestRoute);
+    const publicRoot = resolve(repositoryRoot, publicRootRoute);
+    const [manifestState, publicRootState] = await Promise.all([
+      inspectContained(manifestPath, canonicalRepositoryRoot),
+      inspectContained(publicRoot, canonicalRepositoryRoot),
+    ]);
+    if (!manifestState.stat?.isFile() || !publicRootState.stat?.isDirectory()) continue;
+
+    const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+    const aliases = new Map();
+    for (const [request, asset] of Object.entries(manifest.routes ?? {})) {
+      const requestPath = requestRoute(request);
+      const assetPath = requestRoute(asset);
+      if (requestPath && assetPath) aliases.set(requestPath, assetPath);
+    }
+
+    const sourceRequests = new Map();
+    for (const route of declaration.sourceRoutes ?? []) {
+      const source = repositoryRoute(repositoryRoot, route.source);
+      const receiver = requestRoute(route.receiverPath);
+      if (!source || !receiver) continue;
+      const requests = sourceRequests.get(source) ?? [];
+      requests.push(receiver);
+      sourceRequests.set(source, requests);
+    }
+
+    surfaces.push({
+      aliases,
+      canonicalPublicRoot: await realpath(publicRoot),
+      publicRoot,
+      sourceRequests,
+    });
+  }
+  return surfaces;
+}
+
+async function publicationAsset(surface, request) {
+  const assetRequest = surface.aliases.get(request) ?? request;
+  const assetRoute = requestRoute(assetRequest);
+  if (!assetRoute) return null;
+  const targetPath = resolve(surface.publicRoot, assetRoute.slice(1));
+  if (!isWithin(surface.publicRoot, targetPath)) return null;
+  const targetState = await inspectContained(targetPath, surface.canonicalPublicRoot);
+  if (targetState.outside || !targetState.stat) return null;
+  return { targetPath, targetState };
+}
+
+async function publicationBases(repositoryRoot, sourcePath, source, surfaces) {
+  const sourceRoute = relative(repositoryRoot, sourcePath).split(sep).join("/");
+  const bases = [];
+  for (const surface of surfaces) {
+    // Files inside the public root use their runtime request path. Authored
+    // templates gain that context only through an exact, declared receiver.
+    if (isWithin(surface.publicRoot, sourcePath)) {
+      const assetRoute = relative(surface.publicRoot, sourcePath).split(sep).join("/");
+      const request = requestRoute(assetRoute);
+      if (request) bases.push({ request, surface });
+    }
+
+    for (const request of surface.sourceRequests.get(sourceRoute) ?? []) {
+      const receiver = await publicationAsset(surface, request);
+      if (!receiver?.targetState.stat?.isFile()) continue;
+      const receiverSource = await readFile(receiver.targetPath, "utf8");
+      if (receiverSource === source) bases.push({ request, surface });
+    }
+  }
+  return bases;
+}
+
+async function publicationTarget(bases, decodedPath) {
+  if (decodedPath.includes("\\")) return null;
+  for (const { request, surface } of bases) {
+    const targetRequest = requestRoute(posix.join(posix.dirname(request), decodedPath));
+    if (!targetRequest) continue;
+    const target = await publicationAsset(surface, targetRequest);
+    if (target) return target;
+  }
+  return null;
+}
+
 function splitDestination(destination) {
   const hashIndex = destination.indexOf("#");
   const queryIndex = destination.indexOf("?");
@@ -362,7 +473,7 @@ function isExternal(destination) {
   return /^(?:[a-z][a-z0-9+.-]*:|\/\/)/iu.test(destination);
 }
 
-export async function checkReadmeRoutes(root) {
+export async function checkReadmeRoutes(root, { publicationSurfaces = defaultPublicationSurfaces } = {}) {
   const repositoryRoot = resolve(root);
   const canonicalRepositoryRoot = await realpath(repositoryRoot);
   const readmes = await walkReadmes(repositoryRoot);
@@ -370,12 +481,19 @@ export async function checkReadmeRoutes(root) {
   let localLinkCount = 0;
   let fragmentCount = 0;
 
+  const publications = await loadPublicationSurfaces(
+    repositoryRoot,
+    canonicalRepositoryRoot,
+    publicationSurfaces,
+  );
+
   if (readmes.length === 0) {
     findings.push({ kind: "empty-corpus", source: ".", destination: "README*.md" });
   }
 
   for (const sourcePath of readmes) {
     const source = await readFile(sourcePath, "utf8");
+    const publishedBases = await publicationBases(repositoryRoot, sourcePath, source, publications);
     for (const destination of markdownLinks(source)) {
       if (isExternal(destination)) continue;
       localLinkCount += 1;
@@ -403,8 +521,13 @@ export async function checkReadmeRoutes(root) {
         continue;
       }
       if (!targetState.stat) {
-        findings.push({ kind: "missing-target", source: sourcePath, destination });
-        continue;
+        const publishedTarget = await publicationTarget(publishedBases, decodedPath);
+        if (!publishedTarget) {
+          findings.push({ kind: "missing-target", source: sourcePath, destination });
+          continue;
+        }
+        targetPath = publishedTarget.targetPath;
+        targetState = publishedTarget.targetState;
       }
 
       if (targetState.stat.isDirectory()) {

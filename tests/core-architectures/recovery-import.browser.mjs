@@ -47,7 +47,7 @@ await withCampaignLock(output, async resources => {
     }
     const signature = digest(JSON.stringify([item, runtime, dependencies]));
     const cached = process.argv.includes("--resume") && await store.readRecord(item.id, signature, deps => snapshot.agrees(deps, true));
-    if (cached?.result.standing === "pass") { results.push({ id: item.id, disposition: "reused" }); continue; }
+    if (cached?.result?.standing === "pass") { results.push({ id: item.id, disposition: "reused" }); continue; }
     resources.browser ??= await chromium.launch();
     const context = await resources.browser.newContext({ viewport: { width: item.width, height: 900 } });
     const page = await context.newPage(), telemetry = monitor(page), errors = [], externalSubstitutions = [];

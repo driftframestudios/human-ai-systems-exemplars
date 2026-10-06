@@ -128,7 +128,7 @@ test("both authored tables retain their native captions and matching column labe
 });
 
 test("styles, shared analysis/schema carriers and fixed row descriptors remain byte-identical", () => {
-  assert.equal(digest(protectedText(source)), "2e920d4a30f7f1e22081d3f9620d476dd3bdd7fc78db48503013e49afa43957e");
+  assert.equal(digest(protectedText(source)), "f2e3e68766f797111a8da5af03b2a5e013f1ef3dada8063fcea17ef6d9806da6");
 });
 
 for (const id of ["kotter", "npt", "rogers", "weick", "adkar", "dual"]) {

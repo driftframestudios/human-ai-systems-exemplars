@@ -662,9 +662,9 @@
           "table": 3,
           "topic": "Changed work, purchased ability, and sustained investment",
           "shape": "simple",
-          "rows": 7,
-          "th": 11,
-          "td": 24
+          "rows": 8,
+          "th": 12,
+          "td": 28
         },
         {
           "table": 4,
@@ -947,7 +947,7 @@
         },
         {
           "table": 3,
-          "topic": "Prompt-side conditions for a recoverable human–AI handoff",
+          "topic": "Prompt-side conditions for a recoverable human and AI handoff",
           "shape": "simple",
           "rows": 6,
           "th": 8,
@@ -1599,9 +1599,9 @@
           "table": 2,
           "topic": "What reportedly changed, and what the operating model still had to carry",
           "shape": "simple",
-          "rows": 5,
-          "th": 8,
-          "td": 12
+          "rows": 6,
+          "th": 9,
+          "td": 15
         },
         {
           "table": 3,
@@ -1752,7 +1752,7 @@
     "native_tables": 148,
     "simple_tables": 144,
     "explicit_tables": 4,
-    "native_labelled_elements": 5493,
+    "native_labelled_elements": 5504,
     "runtime_body_generators": 2
   },
   "rendering_affecting_native_additions": [],

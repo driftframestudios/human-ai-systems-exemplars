@@ -43,6 +43,11 @@ async function openPage(browser, origin, contextOptions = {}) {
     viewport: { width: 1440, height: 1000 },
     ...contextOptions,
   });
+  await context.route("https://iframes.vik.guru/**", route => route.fulfill({
+    status: 200,
+    contentType: "text/html",
+    body: "<!doctype html><title>Unobserved iframe carrier</title>",
+  }));
   const page = await context.newPage();
   page.setDefaultTimeout(5000);
   const telemetry = monitor(page);

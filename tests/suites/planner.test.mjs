@@ -279,6 +279,72 @@ test('Python entry fixtures have a separate route and all-component alias keeps 
     'env PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python -- python -m tests.tables.run_components all');
 });
 
+test('nested Python projects preserve host Python through managed isolated uv routes', async () => {
+  const catalog = await catalogPromise;
+  const ids = [
+    'python.lims-eln-enterprise-reference-v0.1',
+    'python.lims-eln-enterprise-implementation',
+    'python.lims-eln-program-specification',
+    'python.lims-eln-simulated-final-state',
+    'python.lims-eln-comparative-evidence',
+    'python.site-reading-governance',
+  ];
+  const plan = createPlan(catalog, {suites: ids});
+  assert.deepEqual(plan.suites.map(suite => suite.id), ids);
+  for (const suite of plan.suites) {
+    assert.ok(suite.command.argv.includes('PYTHONDONTWRITEBYTECODE=1'));
+    const uv = suite.command.argv.indexOf('uv');
+    assert.notEqual(uv, -1, `${suite.id} carries uv`);
+    assert.deepEqual(suite.command.argv.slice(uv, uv + 7), [
+      'uv', 'run', '--isolated', '--no-project', '--python', '3.12', '--managed-python',
+    ]);
+    assert.ok(suite.command.argv.includes('python'));
+  }
+  const simulated = plan.suites.find(suite => suite.id === 'python.lims-eln-simulated-final-state');
+  assert.deepEqual(
+    simulated.command.argv.slice(
+      simulated.command.argv.indexOf('--with-editable'),
+      simulated.command.argv.indexOf('--'),
+    ),
+    ['--with-editable', '../lims-eln-program-specification'],
+  );
+  const comparative = plan.suites.find(suite => suite.id === 'python.lims-eln-comparative-evidence');
+  assert.deepEqual(
+    comparative.command.argv.slice(
+      comparative.command.argv.indexOf('--with-editable'),
+      comparative.command.argv.indexOf('--'),
+    ),
+    ['--with-editable', '../lims-eln-program-specification', '--with-editable', '.[validation]'],
+  );
+});
+
+test('hiring print and receiver-dependent browser routes name their complete prerequisites', async () => {
+  const catalog = await catalogPromise;
+  const hiring = createPlan(catalog, {suites: ['browser.tables.hiring-schema-print']}).suites[0];
+  assert.deepEqual(hiring.command.argv, [
+    'env', 'PYTHONDONTWRITEBYTECODE=1', 'uv', 'run', '--isolated', '--no-project',
+    '--python', '3.12', '--managed-python', '--with', 'pymupdf==1.26.5', '--',
+    'node', 'tests/tables/hiring-schema-print.browser.mjs',
+  ]);
+  assert.deepEqual(hiring.aliases, ['test:hiring-schema-print-browser']);
+
+  const worker = createPlan(catalog, {suites: ['worker.browser']}).suites[0];
+  assert.equal(worker.routeStatus, 'held');
+  assert.equal(worker.command, null);
+  assert.match(worker.hold, /HTTPS Worker receiver/u);
+});
+
+test('carrier plans distinguish local checks from receiver and release inputs', async () => {
+  const plan = createPlan(await catalogPromise, {suites: ['carrier.iframe', 'carrier.production', 'carrier.transfer']});
+  const byId = new Map(plan.suites.map(suite => [suite.id, suite]));
+  assert.equal(byId.get('carrier.iframe').routeStatus, 'declared');
+  assert.equal(byId.get('carrier.production').routeStatus, 'held');
+  assert.match(byId.get('carrier.production').hold, /\.env\.public/u);
+  assert.equal(byId.get('carrier.transfer').routeStatus, 'held');
+  assert.equal(byId.get('carrier.transfer').command, null);
+  assert.match(byId.get('carrier.transfer').hold, /--receipt FILE/u);
+});
+
 test('Prompt-Side figure keeps its browser observation separately selectable', async () => {
   const catalog = await catalogPromise;
   const plan = createPlan(catalog, {suites: ['browser.context-canvas.prompt-side-figure']});

@@ -4,6 +4,8 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
 
+import { assertImmutableSkillCoordinate } from "../prompt-capsule-skill-coordinate.mjs";
+
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const coreRoot = resolve(repositoryRoot, "core-architectures-chimeric-prototype-current-pack-v0.1");
 const contextRoot = resolve(
@@ -161,7 +163,7 @@ for (const artifact of artifacts) {
     }
     for (const skillId of artifact.skills) {
       const [path, expectedDigest] = skills.get(skillId);
-      assert.equal(sha256(await readFile(resolve(repositoryRoot, path))), expectedDigest);
+      assertImmutableSkillCoordinate(skillRevision, path, expectedDigest);
       assert.ok(html.includes(path));
       assert.ok(html.includes(expectedDigest));
     }

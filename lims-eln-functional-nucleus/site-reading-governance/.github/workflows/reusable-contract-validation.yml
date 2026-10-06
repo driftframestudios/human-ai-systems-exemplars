@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       governance_repository:
-        description: Owner and repository for the governance package
+        description: Stable source key for the governance package
         required: true
         type: string
       governance_ref:
@@ -45,9 +45,16 @@ jobs:
           GOVERNANCE_REF: ${{ inputs.governance_ref }}
           APPROVED_GOVERNANCE_REPOSITORY: ${{ vars.GOVERNANCE_REPOSITORY }}
         run: |
-          if [[ -z "$APPROVED_GOVERNANCE_REPOSITORY" || \
-                "$GOVERNANCE_REPOSITORY" != "$APPROVED_GOVERNANCE_REPOSITORY" ]]; then
-            echo "Governance repository differs from the configured receiver."
+          case "$GOVERNANCE_REPOSITORY" in
+            urn:source-key:site-reading-governance)
+              ;;
+            *)
+              echo "Governance source key differs from the admitted package."
+              exit 2
+              ;;
+          esac
+          if [[ ! "$APPROVED_GOVERNANCE_REPOSITORY" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]; then
+            echo "Configured governance repository requires an owner/repository coordinate."
             exit 2
           fi
           if [[ ! "$GOVERNANCE_REF" =~ ^[0-9a-f]{40}$ || \
@@ -58,7 +65,7 @@ jobs:
       - name: Check out pinned governance source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          repository: ${{ inputs.governance_repository }}
+          repository: ${{ vars.GOVERNANCE_REPOSITORY }}
           ref: ${{ inputs.governance_ref }}
           token: ${{ secrets.governance_read_token }}
           path: governance

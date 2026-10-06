@@ -35,7 +35,10 @@ forms: inline and used reference links in ordinary, quoted, and list prose;
 ATX headings and explicit HTML identifiers; and fenced or inline code kept at
 rest. It rejects repository and symlink escapes, checks local targets and
 fragments, follows directory-to-README routes, and requires exact live-link
-membership for every active skill in the skill catalog:
+membership for every active skill in the skill catalog. A publication-template
+README can also resolve through an exact declared receiver and its checked-in
+runtime manifest; the target must remain a contained, present publication
+asset, and an undeclared, stale, or incomplete receiver still fails:
 
 ```sh
 npm run check:readme-routes

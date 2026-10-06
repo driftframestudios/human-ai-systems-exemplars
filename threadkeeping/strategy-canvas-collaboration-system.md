@@ -75,7 +75,7 @@ Receiving iframes begin with `allow-scripts`. A real in-frame report download ea
 
 ### Current v0.2.5 source receipt
 
-`npm run test:strategy-canvas` passes 47 of 47 browser contracts at `.visual-runs/2026-09-30T01-12-44-056Z-strategy-canvas-contract`. The current route includes a rendered forced-colors observation: an unselected SVG dimension label resolves to the system `Canvas` and `CanvasText` pair while the selected and focused label retains `Highlight`. The builder reproduces a 165,776-byte canonical distribution with SHA-256 `9e376ec39c2f0cf5dd1359b7332fade27257008a48db5ebfc63cf606af28fa56`. `npm run test:core-architectures` passes 76 of 76 checks, the four maintained consumer archives remain current, `npm run test:narrative-architectures` passes 28 of 28 checks, and `npm run test:iframe-routes` passes 32 of 32 checks.
+`npm run test:strategy-canvas` passes 47 of 47 browser contracts at `.visual-runs/2026-09-30T01-12-44-056Z-strategy-canvas-contract`. The current route includes a rendered forced-colors observation: an unselected SVG dimension label resolves to the system `Canvas` and `CanvasText` pair while the selected and focused label retains `Highlight`. The builder reproduces a 167,710-byte canonical distribution with SHA-256 `7695c331ff706108c7cd369c259d0b85feb2cf90ac1c94bf2472ebed0348154b`. `npm run test:core-architectures` passes 76 of 76 checks, the four maintained consumer archives remain current, `npm run test:narrative-architectures` passes 28 of 28 checks, and `npm run test:iframe-routes` passes 32 of 32 checks.
 
 [Issue #137](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/137) carries the moving cross-family package coordinate. This record establishes the source-owned Strategy Canvas identities and build; the existing deployment owners retain live delivery.
 
@@ -116,8 +116,8 @@ machine_node:
   verification:
     browser_contract: 47_of_47_pass
     canonical_distribution:
-      bytes: 165776
-      sha256: 9e376ec39c2f0cf5dd1359b7332fade27257008a48db5ebfc63cf606af28fa56
+      bytes: 167710
+      sha256: 7695c331ff706108c7cd369c259d0b85feb2cf90ac1c94bf2472ebed0348154b
     core_architectures: 76_of_76_pass
     consumer_archives: 4_of_4_deterministic_and_receipted
     context_manifests: 5_of_5_pass

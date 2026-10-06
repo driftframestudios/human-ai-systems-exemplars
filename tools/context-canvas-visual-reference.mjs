@@ -39,6 +39,7 @@ const FAMILIES = [
       "metadata-blocks.html",
       "planning-surface.html",
       "poda.html",
+      "readable-tables-reusable-evidence.html",
       "registry-goal-fidelity-routing.html",
       "resting-concepts.html",
       "shared-machinery.html",
