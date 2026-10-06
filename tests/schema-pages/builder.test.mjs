@@ -463,9 +463,13 @@ test("the public catalog contains exactly the public-ready allowlist", async () 
     .map((entry) => entry.name);
 
   assert.deepEqual(possibleNames, [
+    "conversation-data-visualization",
+    "data-visualization-foundations",
+    "pdf-data-visualization",
     "repository-collaboration-cycle",
     "repository-orientation-stewardship",
     "supportive-change-writing",
+    "web-data-visualization",
   ]);
   assert.equal(catalog.publicationStanding, "public_ready");
   assert.deepEqual(catalog.skills.map((entry) => entry.name), readyNames);

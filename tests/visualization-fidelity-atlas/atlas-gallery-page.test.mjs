@@ -279,9 +279,10 @@ test('four authored companions remain complete before enhancement', () => {
   assert.ok(html.includes('data-gallery-controls hidden'));
   assert.ok(html.includes('data-gallery-baseline open'));
   assert.ok(html.includes('Sparse cells retain their support counts'));
-  for (const name of ['Data visualization foundations', 'Conversation data visualization', 'Web data visualization', 'PDF data visualization']) {
-    assert.ok(html.includes(`<dt>${name}</dt>`));
-  }
+  const practiceList = html.match(/<dl class="debrief-at-glance ai-systems-scan">([\s\S]*?)<\/dl>/u)?.[1];
+  assert.ok(practiceList);
+  assert.equal((practiceList.match(/<dt>/gu) || []).length, 4);
+  assert.equal((practiceList.match(/<dd>/gu) || []).length, 4);
 });
 
 test('projection replacement preserves neighboring source and rejects ambiguous boundaries', () => {

@@ -238,7 +238,10 @@
       "publicationStanding": "public_ready",
       "sourceAvailability": "included",
       "dependencies": [
-        ".agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md"
+        ".agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
+        "context-canvas-project-surface/context-canvas/atlas-gallery.js",
+        "tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs",
+        "tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs"
       ]
     },
     {
