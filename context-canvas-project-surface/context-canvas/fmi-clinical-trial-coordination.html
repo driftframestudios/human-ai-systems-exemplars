@@ -133,14 +133,14 @@
               </div>
               <div>
                 <dt>Outcome and evidence</dt>
-                <dd>I designed the shared rule grammar and complete interaction states; engineering built the application in one quarter while the design remained stable. Four years later, the same grammar revealed an ETL-shaped reuse path.</dd>
+                <dd>I designed the shared rule grammar and complete interaction states; engineering built the application in one quarter while the design remained stable. Each Data Manager could set up three to five more cases per week, and measurable setup errors fell 50%.</dd>
               </div>
               <div>
                 <dt>Relevance now</dt>
                 <dd>The case connects participatory specification with executable data contracts: shared visual objects can carry meaning from inquiry into templates, mappings, and human-reviewed automation.</dd>
               </div>
             </dl>
-            <p><strong>Evidence standing:</strong> The shipped coordination surface and its later reuse establish the durable grammar. The 2023 work established a partner-fed proposal method; its numeric result remains undisclosed, and the partner-facing extension reached design and partial implementation.</p>
+            <p><strong>Evidence standing:</strong> Production use established the throughput gain, the measurable error reduction, and the durable grammar. The 2023 work established a partner-fed proposal method; its numeric result remains undisclosed, and the partner-facing extension reached design and partial implementation.</p>
             <p><a href="#solution-architecture-title">Read the Full Debrief →</a></p>
             <aside class="debrief-quote debrief-quote--orientation" aria-label="Architectural reading carried across the engagement">
               <p>The boolean building blocks were doing more than the interface was showing.</p>
@@ -329,8 +329,24 @@
             <p>
               The flow was legible because it rendered the logic chain directly. Engineering could see how forms dispatched,
               how states changed, where roles acted, and where new fields or rule types could extend the system. Data Managers
-              received a coordination surface that preserved their detailed knowledge in explicit structures. Genomics
-              Insights received a related investigation surface. Directors received an actionable rollout plan.
+              received a coordination surface that preserved their detailed knowledge in explicit structures. The
+              Biomarkers and Biometrics team received a related interface whose Boolean visual grammar echoed the scientific
+              query-building pattern in <a href="https://www.uniprot.org/help/text-search">UniProt&rsquo;s search system</a>;
+              training was reported as simple and direct. Directors received an actionable rollout plan.
+            </p>
+            <p>
+              In production, the system saved about ten minutes on each case setup through automated checks and setup controls,
+              including the partner-separation gate that kept one biopharma partner&rsquo;s data out of another partner&rsquo;s trial
+              configuration. Across the team&rsquo;s case volume, that recovered hundreds of production minutes. Each Data Manager could set up three to five additional cases
+              per week, and measurable setup errors fell 50%, primarily because the Boolean rule builder reduced most
+              setup errors. Some complex rule combinations and migrated data variants, including <code>egfr</code>
+              versus <code>EGFR</code>, still returned absent data; those intertwined logic and data-quality conditions made
+              the remaining error rate harder to attribute.
+            </p>
+            <p>
+              The templates also changed the partner conversation. Account Managers began using them with biopharma partners
+              to establish trial standards directly. Shared templates tightened the feedback loop, made partner-specific
+              decisions inspectable earlier, and increased trust in the setup process.
             </p>
             <p>
               A second outcome appeared in 2023. Once an incoming partner schema could populate the visible boolean elements,
@@ -609,9 +625,16 @@
                     <tr data-label="Changed work, purchased ability, and sustained investment: Boolean rule grammar">
                       <th scope="row" data-label="Architecture change">Boolean rule grammar</th>
                       <td data-label="Work before">Data Managers executed transformation logic through selectors and tacit conventions.</td>
-                      <td data-label="Work after">Cards, operators, nesting, state, and gates made the transformation explicit.</td>
-                      <td class="table-ability" data-label="Ability purchased">One inspectable grammar for human setup, engineering, and later automation.</td>
-                      <td data-label="Sustained investment">Rule ownership, test scenarios, change review, and partner separation.</td>
+                      <td data-label="Work after">Cards, operators, nesting, state, and gates made the transformation explicit and accelerated case setup.</td>
+                      <td class="table-ability" data-label="Ability purchased">Measurable throughput and error reduction through one inspectable grammar for setup, engineering, and later automation.</td>
+                      <td data-label="Sustained investment">Rule ownership, test scenarios, change review, partner separation, and normalization of migrated variants such as <code>egfr</code> and <code>EGFR</code>.</td>
+                    </tr>
+                    <tr data-label="Changed work, purchased ability, and sustained investment: Partner trial templates">
+                      <th scope="row" data-label="Architecture change">Partner trial templates</th>
+                      <td data-label="Work before">Account Managers translated partner expectations through separate handoffs before trial setup.</td>
+                      <td data-label="Work after">Account Managers and biopharma partners could establish trial standards together through a shared template.</td>
+                      <td class="table-ability" data-label="Ability purchased">A tighter feedback loop with earlier, inspectable partner decisions and greater trust in setup.</td>
+                      <td data-label="Sustained investment">Partner participation, template stewardship, and explicit ownership of partner-specific exceptions.</td>
                     </tr>
                     <tr data-label="Changed work, purchased ability, and sustained investment: Promotable research components">
                       <th scope="row" data-label="Architecture change">Promotable research components</th>
@@ -667,14 +690,14 @@
                     <tr data-label="Decisions, changed work, residual responsibility, and investment by population: Data Managers">
                       <th scope="row" data-label="Population">Data Managers</th>
                       <td data-label="Decision they carry">Whether partner fields, trial rules, and cohort definitions produce a usable study setup.</td>
-                      <td data-label="Work changed">Manual selector work and remembered mappings become structured rule review.</td>
-                      <td data-label="Responsibility that remains">Resolve true exceptions, validate partner meaning, and approve the ship-ready state.</td>
-                      <td data-label="Investment or signal that improves the decision">Initial-to-final rule diff, exception recurrence, and mapping provenance.</td>
+                      <td data-label="Work changed">Routine case setup becomes structured rule review; Data Managers direct their attention to the combinations and migrated variants that need expert judgment.</td>
+                      <td data-label="Responsibility that remains">Resolve complex rule combinations and migrated data variants, validate partner meaning, and approve the ship-ready state.</td>
+                      <td data-label="Investment or signal that improves the decision">Initial-to-final rule diff, exception recurrence, variant normalization, and mapping provenance.</td>
                     </tr>
                     <tr data-label="Decisions, changed work, residual responsibility, and investment by population: Account and partner operations">
                       <th scope="row" data-label="Population">Account and partner operations</th>
                       <td data-label="Decision they carry">Which partner difference protects a real obligation and which can enter a published contract.</td>
-                      <td data-label="Work changed">Relationship context becomes explicit scope and exception data.</td>
+                      <td data-label="Work changed">Account Managers use shared templates with biopharma partners to establish trial standards and resolve feedback earlier.</td>
                       <td data-label="Responsibility that remains">Carry relationship nuance, escalation, and negotiated operating commitments.</td>
                       <td data-label="Investment or signal that improves the decision">Exception class, partner readiness, and cost of repeated manual mediation.</td>
                     </tr>
