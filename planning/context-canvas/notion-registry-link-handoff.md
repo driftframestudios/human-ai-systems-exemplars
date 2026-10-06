@@ -96,7 +96,7 @@ The parent and children remain public-possible receiving areas. The semantic rec
 
 | Affinity | Direct Registry receiver | Local visitor surface |
 | --- | --- | --- |
-| `cc-site-reading-01` | **The Queue That Was Secretly a Status Machine** · `PUBLIC_URL_REGISTRY_THE_QUEUE_THAT_WAS_SECRETLY_A_STATUS_MACHINE` | `genomic-viewer-replatforming.html` |
+| `cc-site-reading-01` | **The Queue That Was Secretly a Status Machine** · `PUBLIC_URL_REGISTRY_SITE_READING_QUEUE_STATUS_MACHINE` | `genomic-viewer-replatforming.html` |
 | `cc-site-reading-02` | **The Boolean Building Blocks That Were Quietly an ETL Substrate** · `PUBLIC_URL_REGISTRY_THE_BOOLEAN_BUILDING_BLOCKS_THAT_WERE_QUIETLY_AN_ETL_SUBSTRATE` | `fmi-clinical-trial-coordination.html` |
 | `cc-site-reading-03` | **The Discrete Result That Kept Arriving as a PDF** · `PUBLIC_URL_REGISTRY_THE_DISCRETE_RESULT_THAT_KEPT_ARRIVING_AS_A_PDF` | `ehr-discrete-genomic-result.html` |
 | `cc-site-reading-04` | **Two Charts, One Result** · `PUBLIC_URL_REGISTRY_TWO_CHARTS_ONE_RESULT` | `ehr-two-charts-one-result.html` |
@@ -114,6 +114,13 @@ The parent and children remain public-possible receiving areas. The semantic rec
 | `cc-site-reading-16` | Field Watch practice + Generated Research synthesis | `prompt-side-conditions-practice.html` |
 | `cc-site-reading-17` | Shared family parent · resolver-open | `spatial-capture-collaborative-memory.html` |
 | `cc-site-reading-18` | Shared family parent · resolver-open | `exemplar-gallery-list.html` |
+
+The Genomic Viewer receiver keeps the Site Reading above as its page-level source. It uses
+`PUBLIC_URL_REGISTRY_CONTEXT_TREE` for the method companion and four claim-specific depth carriers only where their
+implementation beats are cited: `PUBLIC_URL_REGISTRY_QUEUE_INTEROP_BOTTLENECK`,
+`PUBLIC_URL_REGISTRY_QUEUE_PERMISSION_LEDGER`, `PUBLIC_URL_REGISTRY_QUEUE_DASHBOARD_OUTCOME`, and
+`PUBLIC_URL_REGISTRY_QUEUE_VERIFICATION_PORTFOLIO`. These depth carriers enrich one receiving identity and leave the
+visitor-surface identity count unchanged.
 
 This return raises the current visitor-facing identity count from 37 to 52 while preserving 93 occurrences. The added identities represent greater semantic precision rather than added source dependency. Stable affinity handles and private source keys continue to support later route changes.
 

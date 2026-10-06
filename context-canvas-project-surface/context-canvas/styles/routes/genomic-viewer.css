@@ -24,9 +24,7 @@
 }
 
 .genomic-viewer-hero {
-    background:
-        radial-gradient(circle at 12% 18%, rgba(255, 211, 208, .15) 0 .4rem, transparent .45rem),
-        linear-gradient(135deg, #141c5b 0%, #0f2147 66%, #1f2421 100%);
+    background: var(--genomic-ink);
     border-block-end: .6rem solid var(--genomic-rose);
 }
 
