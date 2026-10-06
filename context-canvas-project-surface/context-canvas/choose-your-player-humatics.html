@@ -55,6 +55,7 @@
         "headline": "Choose Your Player",
         "alternativeHeadline": "From a Near-Miss Demonstration to a Shared Field-Operating Model (2018–2019)",
         "description": "Narrative, solution, and implementation architecture debrief on turning precision-location technology into a shared field-operating model.",
+        "isBasedOn": "{{PUBLIC_URL_REGISTRY_CHOOSE_YOUR_PLAYER}}",
         "dateModified": "2026-10-06",
         "inLanguage": "en-US",
         "author": {
@@ -186,6 +187,20 @@
 
             <h3 id="narrative-debrief-title" class="txt-h3 beat-title">I.a Debrief — A product story under pressure</h3>
             <p>
+              Humatics builds microlocation technology: radio-based hardware and software that produce highly precise,
+              real-time position data for robots, tools, and other high-value equipment, then make that data available to
+              control systems for three-dimensional visibility and coordination.<sup><a href="#source-humatics-product">source</a></sup>
+              Manufacturing and customer-operations teams depend on that shared spatial picture as equipment moves from
+              setup into production.
+            </p>
+            <p>
+              That value depends on more than a precise reading. System integrators connect the location stream to robotics
+              and controls; Field Installation Engineers place and calibrate equipment at each site; support teams diagnose
+              exceptions; and operators need to understand what is live and what needs attention. The product experience had
+              to keep one site legible across those handoffs, so the people installing, supporting, and running the system
+              could work from the same operating picture.
+            </p>
+            <p>
               About a day after joining a roughly twenty-person agency, I was assigned to Humatics, a high-priority account with
               trade-show demonstrations, a tight timeline, and a financing cycle in motion. By roughly my third day, I was expected
               to lead a client presentation. The office itself felt like a 1990s hacker lab crossed with a startup: breadboards and
@@ -210,7 +225,7 @@
               The Humatics Project Manager looked away from the gradients and fades and asked, in substance, how the system would
               manage sites and distinguish the views needed by Field Installation Engineers and Humatics personnel. I had a partial
               answer, so I changed the meeting&rsquo;s working surface. I opened the PRD, showed the role and permission terms that my
-              local text analysis had surfaced, asked what the PM expected, and wrote GIVEN&ndash;WHEN&ndash;THEN statements as the answers
+              local text analysis had surfaced, asked what the PM expected, and wrote <a href="{{PUBLIC_URL_REGISTRY_SPECIFICATION_BY_EXAMPLE}}">GIVEN&ndash;WHEN&ndash;THEN statements</a> as the answers
               arrived. The junior designer whiteboarded emerging views; our project manager turned decisions into action items;
               the team&rsquo;s phones lit up as the work entered the queue.
             </p>
@@ -251,7 +266,7 @@
               pin pattern with conversation history and kept feedback visible inside the live design files.
             </p>
             <p>
-              <strong>Choose Your Player</strong> was the welcome surface that made the reframe tangible. Five high-energy,
+              <strong><a href="{{PUBLIC_URL_REGISTRY_CHOOSE_YOUR_PLAYER}}">Choose Your Player</a></strong> was the welcome surface that made the reframe tangible. Five high-energy,
               anime-inspired horizontal panels represented project administration, planning, deployment, support, and operations.
               Selecting a panel moved the others aside and revealed role-relevant onboarding or a resumable dashboard over the
               same client, site, installation, beacon, and zone hierarchy. The illustration style set an expressive direction;
@@ -304,7 +319,7 @@
                   </tbody>
                 </table>
               </div>
-              <figcaption class="table-note">The panel reconstructs the historical organizing language, its qualitative concentration, and the design move it informed.<sup><a href="#source-basis-title">source</a></sup></figcaption>
+              <figcaption class="table-note">The panel reconstructs the historical organizing language, its qualitative concentration, and the design move it informed.<sup><a href="#source-humatics-registry-account">source</a></sup></figcaption>
             </figure>
 
             <h3 id="narrative-outcomes-title" class="txt-h3 beat-title">I.d Outcomes — A working prototype became a trust surface</h3>
@@ -477,7 +492,7 @@
             <h3 id="implementation-debrief-title" class="txt-h3 beat-title">III.a Debrief — Contracts that persist across a changed stack</h3>
             <p>
               I designed within a Windows, Internet Explorer, jQuery, SQL Server, WebSockets, local-server, connected-device,
-              and field-network environment.<sup><a href="#source-basis-title">source</a></sup> A contemporary architecture reading translates the recurring
+              and field-network environment.<sup><a href="#source-humatics-registry-account">source</a></sup> A contemporary architecture reading translates the recurring
               operating concerns—role clarity, site truth, offline recovery, spatial collaboration, and bounded browser
               compute—into explicit state, command, and recovery contracts.
             </p>
@@ -779,15 +794,19 @@ render = render_word_cloud(combined, staged / "word-cloud.png", seed=seed)</code
           <section aria-labelledby="source-basis-title">
             <h2 id="source-basis-title" class="txt-h2">Source basis</h2>
             <p>
-              Use the 2018–2019 materials for engagement history and solution intent. The contemporary Implementation
-              Architecture sources support the contract expressions for telemetry, collaboration, spatial artifacts, and
-              document-evidence extraction.
+              Each source carries a distinct role. Humatics&rsquo;s product page establishes the company and microlocation-system
+              frame. The canonical Registry reading carries the engagement history, solution intent, and
+              contemporary architecture reading. The company-issued financing announcement establishes the public round details;
+              the Core Architecture page explains the example-based method; and the exact-version artifact carries runnable
+              implementation evidence.
             </p>
-            <ul class="source-basis">
-              <li>Read <a href="{{PUBLIC_URL_REGISTRY_CHOOSE_YOUR_PLAYER}}">Choose Your Player</a> for a debrief on five player postures, a shared-site contract, field operations, and the funding context that shaped the product.</li>
-              <li>Read <a href="https://www.prnewswire.com/news-releases/humatics-raises-28-million-in-series-a1-financing-to-meet-growing-demand-for-microlocation-300773642.html">Humatics&rsquo;s January 2019 announcement</a> for the company-named Series A1 round, amount, participating investors, acquisitions, and commercial context.</li>
-              <li>Inspect <a href="https://kindlight.io/snippets/document-evidence-extraction/0.1.0/">Document evidence extraction 0.1.0</a> for the complete representative-reconstruction source, deterministic analysis route, current checks, and transfer boundary.</li>
-            </ul>
+            <ol class="source-basis">
+              <li id="source-humatics-product">Read <a href="https://humatics.com/microlocation_solutions">Humatics&rsquo;s Microlocation Solutions</a> for the company&rsquo;s description of its radio-frequency system, the real-time position data it produces, and how control systems can use that data for three-dimensional visibility and coordination.</li>
+              <li id="source-humatics-registry-account">Read <a href="{{PUBLIC_URL_REGISTRY_CHOOSE_YOUR_PLAYER}}">Choose Your Player</a> for the canonical public Registry reading on the five player postures, shared-site contract, field operations, engagement history, and contemporary architecture reading.</li>
+              <li id="source-humatics-financing">Read <a href="https://www.prnewswire.com/news-releases/humatics-raises-28-million-in-series-a1-financing-to-meet-growing-demand-for-microlocation-300773642.html">Humatics&rsquo;s January 2019 announcement</a> for the company-named Series A1 round, amount, participating investors, acquisitions, and commercial context.</li>
+              <li id="source-specification-by-example">Read <a href="{{PUBLIC_URL_REGISTRY_SPECIFICATION_BY_EXAMPLE}}">Specification-by-Example</a> for the public Core Architecture that turns participant understanding into concrete scenarios, acceptance examples, executable checks, and revisable specifications.</li>
+              <li id="source-document-evidence-artifact">Inspect <a href="https://kindlight.io/snippets/document-evidence-extraction/0.1.0/">Document evidence extraction 0.1.0</a> for the complete representative-reconstruction source, deterministic analysis route, current checks, and transfer boundary.</li>
+            </ol>
           </section>
         </div>
       </div>
