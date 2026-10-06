@@ -14,7 +14,7 @@ export const comparativeColumns = [
 ];
 export const comparativeGroups = [
   { id: "humatics", native: "Humatics \u00b7 site and posture", label: "Humatics: site and posture",
-    populations: ["Product leadership", "Field engineers, installers, and customer operations", "Platform and data engineering"] },
+    populations: ["Product leadership", "Field Installation Engineers and customer operations", "Platform and data engineering"] },
   { id: "who-to-believe", native: "Who To Believe \u00b7 voice and trust", label: "Who To Believe: voice and trust",
     populations: ["Participants and influencers", "Review, privacy, and safety operations", "Platform, acquiring team, marketing, and executives"] },
   { id: "fmi", native: "FMI \u00b7 partner rule grammar", label: "FMI: partner rule grammar",
