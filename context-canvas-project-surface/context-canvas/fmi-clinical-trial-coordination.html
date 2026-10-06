@@ -54,7 +54,7 @@
         "headline": "The Boolean Building Blocks That Were Quietly an ETL Substrate",
         "alternativeHeadline": "Clinical Trial Coordination at Foundation Medicine (2019–2023)",
         "description": "A solution and implementation architecture debrief on clinical trial coordination at Foundation Medicine, where a shared Boolean rule grammar became a durable ETL substrate.",
-        "dateModified": "2026-09-29",
+        "dateModified": "2026-10-06",
         "inLanguage": "en-US",
         "author": {
           "@type": "Organization",
@@ -125,7 +125,7 @@
               </div>
               <div>
                 <dt>Core constraint</dt>
-                <dd>Each population held a different part of the rule system. A partner-specific screen or another manual mapping would preserve the handoffs instead of creating a shared, inspectable model.</dd>
+                <dd>Each population held a different part of the rule system. The product needed one shared, inspectable model that retained partner-specific meaning and clarified the handoffs.</dd>
               </div>
               <div>
                 <dt>Key decision</dt>
@@ -133,14 +133,14 @@
               </div>
               <div>
                 <dt>Outcome and evidence</dt>
-                <dd>Partial: the first coordination surface shipped, and the grammar persisted across teams and tools before revealing an ETL-shaped reuse path four years later.</dd>
+                <dd>I designed the shared rule grammar and complete interaction states; engineering built the application in one quarter while the design remained stable. Four years later, the same grammar revealed an ETL-shaped reuse path.</dd>
               </div>
               <div>
                 <dt>Relevance now</dt>
                 <dd>The case connects participatory specification with executable data contracts: shared visual objects can carry meaning from inquiry into templates, mappings, and human-reviewed automation.</dd>
               </div>
             </dl>
-            <p><strong>Evidence standing:</strong> The historical account establishes the shipped coordination surface and later grammar reuse. The auto-population result remains undisclosed, and the partner-facing extension remained unshipped.</p>
+            <p><strong>Evidence standing:</strong> The shipped coordination surface and its later reuse establish the durable grammar. The 2023 work established a partner-fed proposal method; its numeric result remains undisclosed, and the partner-facing extension reached design and partial implementation.</p>
             <p><a href="#solution-architecture-title">Read the Full Debrief →</a></p>
             <aside class="debrief-quote debrief-quote--orientation" aria-label="Architectural reading carried across the engagement">
               <p>The boolean building blocks were doing more than the interface was showing.</p>
@@ -148,8 +148,8 @@
             </aside>
             <aside class="debrief-outcome-banner debrief-outcome-banner--partial" aria-label="Outcome state">
               <p class="debrief-outcome-banner__label">Outcome state</p>
-              <strong>Partial — the coordination surface shipped and its grammar persisted beyond the original interface.</strong>
-              <p>The later partner-fed population method is visible, while its numeric result remains undisclosed and the partner-facing extension remains explicitly unshipped.</p>
+              <strong>Delivered foundation — the coordination surface shipped and its grammar persisted beyond the original interface.</strong>
+              <p>The later partner-fed population method reached a reviewable design. Its numeric result remains undisclosed, and the outward-facing extension reached partial implementation.</p>
             </aside>
           </section>
 
@@ -172,9 +172,9 @@
 
             <h3 id="solution-engagement-title" class="txt-h3 beat-title">§a Debrief — The Engagement and Its Stakes</h3>
             <p>
-              In Q2 2019, FMI’s Data Products Team commissioned a complete reimagining of its internal clinical trial
-              coordination software. The principal product-design role carried an explicit cross-business-unit mandate:
-              understand the work wherever it lived, then create a surface capable of supporting a more automated future.<sup><a href="#source-solution">1</a></sup>
+              In Q2 2019, FMI’s Data Products Team asked me to completely reimagine its internal clinical trial coordination
+              software. As principal product designer, I carried an explicit cross-business-unit mandate: understand the work
+              wherever it lived, then create a surface capable of supporting a more automated future.<sup><a href="#source-solution">1</a></sup>
             </p>
             <p>
               Clinical trial coordination connected FMI’s tumor-profiling capability with biopharma partners seeking
@@ -206,6 +206,12 @@
               held in memory, folder names carrying several overloaded fields, and careful cursor-driven mapping work that
               already behaved like a human-executed ETL pipeline. Conversations with code-first genomics specialists and
               the centralized engineering group added different definitions of useful precision and feasible ownership.
+            </p>
+            <p>
+              The people shaping the new product were also managing consequential biopharma work. Their time arrived in
+              fragments between partner commitments, study setup, genomics inquiry, and implementation. I placed asynchronous
+              prompts inside tools people already used, then spent scarce synchronous time changing visible artifacts with them.
+              Participation became part of the workday rather than another meeting series competing with it.
             </p>
 
             <figure class="table-figure table-figure--wide table-span-all">
@@ -275,20 +281,21 @@
 
             <h3 id="solution-intervention-title" class="txt-h3 beat-title">§c The Intervention — The Alignment Worksheet, the Core Architectures, and the Boolean Building Blocks</h3>
             <p>
-              The intervention combined three parts. First, each group received a five-prompt Alignment Worksheet before a
+              I built the intervention in three parts. First, I sent each group a five-prompt Alignment Worksheet before a
               joint session: who is acting today, what they want, which workflow they perform, why its consequence matters,
               and which future state the group will create together. The session spent more than an hour on the first three
-              prompts. That time exposed incompatible assumptions early enough for the group to turn them into design inputs.
+              prompts. The worksheet did its job: incompatible assumptions became visible early enough for the group to turn
+              disagreement into design input.
             </p>
             <p>
-              Second, the design team brought three brand-aligned Core Architectures rather than a single proposed screen.
+              Second, I brought three brand-aligned Core Architectures rather than a single proposed screen.
               A Gantt-style timeline exposed parallel work, geography, notification, role, and permission constraints. A
               card or masonry view decomposed familiar objects into attributes, relationships, states, and abilities that still needed to become visible.
               Boolean building blocks made chained logic visible through AND, OR, IF, and nested parenthetical groups. Each
               architecture gave participants a concrete object to correct while preserving space for the operating model to emerge.
             </p>
             <p>
-              The boolean building blocks became the shared grammar. Data Managers could compose, branch, and move rule
+              Third, I turned the boolean building blocks into the shared grammar. Data Managers could compose, branch, and move rule
               groups; copy a whole template between permitted projects; and see the partner-separation gate that prevented
               an inapplicable setup from seeding another engagement. Genomics specialists could use the same grammar over a
               related field set. Engineering could see form dispatches, rule paths, error states, roles, and extension points.
@@ -297,8 +304,8 @@
               <h4 id="gentle-refusal-title" class="txt-h4">A gentle refusal protected the future data model</h4>
               <p>
                 Data Managers asked for string parsing over folder names that combined partner, study, date range, and a
-                special flag. The design honored the need—fast identification and filtering—through separate structured
-                fields. This converted a fragile naming convention into explicit data the visible rule grammar could use.
+                special flag. I retained the actual need—fast identification and filtering—by separating those values into
+                structured fields. The visible rule grammar could then use explicit data instead of depending on one overloaded name.
               </p>
             </aside>
 
@@ -314,11 +321,10 @@
 
             <h3 id="solution-outcome-title" class="txt-h3 beat-title">§d The Outcome — Built in a Quarter, Reused Across Teams and Tools</h3>
             <p>
-              Directors responded to the preliminary design by asking about training, onboarding, rollout sequence, parallel
-              operation, and cutover. A clickable prototype would have hidden the special cases that mattered, so the design
-              handoff included complete screens, component states, rule branches, errors, and the partner-template gate.
-              The participant account reports that engineering built the application in one quarter, with the design
-              remaining stable through the build.<sup><a href="#source-solution">1</a></sup>
+              Directors responded to my preliminary design by asking about training, onboarding, rollout sequence, parallel
+              operation, and cutover. I supplied complete screens, component states, rule branches, errors, and the
+              partner-template gate so the build could expose the special cases that mattered. Engineering built the application
+              in one quarter, and the design remained stable through the build.<sup><a href="#source-solution">1</a></sup>
             </p>
             <p>
               The flow was legible because it rendered the logic chain directly. Engineering could see how forms dispatched,
@@ -330,7 +336,7 @@
               A second outcome appeared in 2023. Once an incoming partner schema could populate the visible boolean elements,
               the system could compare its initial rule state with the human-edited, ship-ready state. That diff identified
               the rules ready for repeatable automation and the locations where expert judgment continued to create value.
-              The numeric partner-specific diff remains undisclosed; the operating method is the material result.<sup><a href="#source-snowflake">3</a></sup>
+              The operating method is the material result; the numeric partner-specific diff remains undisclosed.<sup><a href="#source-snowflake">3</a></sup>
             </p>
 
             <h3 id="solution-repeatability-title" class="txt-h3 beat-title">§e Repeatability — Substrate Intent as a Portable Practice</h3>
@@ -344,8 +350,8 @@
             </ul>
             <aside class="debrief-evidence-boundary" aria-labelledby="fmi-ctc-solution-evidence-title">
               <p class="debrief-evidence-boundary__label">Evidence Boundary</p>
-              <h3 id="fmi-ctc-solution-evidence-title">The shipped grammar and participant account are distinct from the undisclosed automation result.</h3>
-              <p>The page supports the 2019 alignment work, visible boolean grammar, production adoption, and the 2023 recognition of an upstream partner contract through attributed material and named public context. Partner values, the numeric human-versus-automated diff, and any claim that the partner-facing extension shipped remain outside the account.</p>
+              <h3 id="fmi-ctc-solution-evidence-title">The shipped grammar and its 2023 return are established; automation magnitude has its own evidence route.</h3>
+              <p>Attributed project material supports the 2019 alignment work, visible boolean grammar, production adoption, and the 2023 recognition of an upstream partner contract. Partner values and the numeric human-versus-automated diff remain undisclosed. The partner-facing extension reached design and partial implementation, while the shipped coordination surface remains the delivered foundation.</p>
             </aside>
           </article>
         </div>
@@ -376,7 +382,7 @@
               and an empty string distinct, inspect
               <a href="https://kindlight.io/snippets/typed-absence-and-wire-shape/0.1.0/">Typed absence and wire shape 0.1.0</a>.
               The company-neutral adapter preserves each field’s assigned meaning before serialization and returns
-              field-specific error paths. This Debrief carries my lived historical and organizational account; the Gist
+              field-specific error paths. My work on the project supplies the historical and organizational context. The Gist
               Registry owns the independently authored example, its tests, version, and transfer boundary.
             </p>
             <p>
@@ -386,23 +392,23 @@
               artifact while preserving structured aggregation and access within existing tools.
             </p>
 
-            <h3 id="implementation-surfaces-title" class="txt-h3 beat-title">§b The Bottleneck — Available Research Channels Each Missed a Needed Capability</h3>
+            <h3 id="implementation-surfaces-title" class="txt-h3 beat-title">§b The Bottleneck — Research Channels Split the Needed Capabilities</h3>
             <p>
-              The research plan required two parallel threads. In the asynchronous thread, participants completed the
-              Alignment Worksheet between other responsibilities. In the synchronous thread, the principal designer met
+              I needed two parallel research threads. In the asynchronous thread, participants completed the
+              Alignment Worksheet between other responsibilities. In the synchronous thread, I met
               with the people each director identified as closest to the work and changed candidate views in response to
               what they described.
             </p>
             <p>
               The implementation needed policy fit, company-wide access, structured responses, machine-readable aggregation,
-              and an artifact participants could manipulate together. Each available channel lacked at least one of these
-              capabilities. The implementation question became specific: which minimal foundation could connect the available runtime, visual tools,
+              and an artifact participants could manipulate together. The available channels divided those capabilities
+              across separate surfaces. The implementation question became specific: which minimal foundation could connect the available runtime, visual tools,
               form controls, and durable storage while keeping the research components promotable into production?
             </p>
 
             <h3 id="implementation-substrate-title" class="txt-h3 beat-title">§c The Intervention — The Participatory-Design Substrate</h3>
             <p>
-              The Alignment Worksheet was authored as SVG containing XHTML form controls inside
+              I authored the Alignment Worksheet as SVG containing XHTML form controls inside
               <code>&lt;foreignObject&gt;</code>. The SVG could therefore carry real inputs, selects, and submission behavior
               inside the same visual artifact participants used to orient themselves. The form posted employee-referenced,
               non-patient worksheet submissions to an AWS DynamoDB-backed endpoint.<sup><a href="#source-implementation">2</a></sup>
@@ -414,7 +420,7 @@
               support the research artifact, then move into the production application with deliberate adaptation.
             </p>
             <p>
-              LucidChart custom shapes provided the company-wide delivery channel. The SVG artifacts became a shared shape
+              I used LucidChart custom shapes as the company-wide delivery channel. The SVG artifacts became a shared shape
               library that participants could place, annotate, and discuss inside an incumbent collaboration tool. A direct
               browser link let individuals complete the worksheet; LucidChart supported onboarding and shared correction.
               Research reached people where they already worked while returning structured submissions to one store.
@@ -470,24 +476,24 @@
 
             <h3 id="implementation-outcome-title" class="txt-h3 beat-title">§d The Outcome — Components Adopted Beyond the Brief</h3>
             <p>
-              The participant account describes high worksheet engagement because contribution fit inside a tool people
-              already had open. Other teams found the LucidChart shapes and reused them. Scientists and clinicians could
+              Worksheet participation stayed high because contribution fit inside a tool people already had open. Other teams
+              found the LucidChart shapes and reused them. Scientists and clinicians could
               work with the components through a familiar diagramming tool while design and engineering retained a
               modern component grammar underneath.<sup><a href="#source-implementation">2</a></sup>
             </p>
             <p>
               The components then moved beyond research. The production team could start from explicit states, dispatches,
-              error paths, and modular building blocks. The same account connects this readiness with a one-quarter build
-              that reached production while the design remained stable. The timing remains a direct participant account;
-              the repository of reusable components and the shipped rule grammar are the durable implementation claims.<sup><a href="#source-implementation">2</a></sup>
+              error paths, and modular building blocks. Engineering delivered the system in one quarter while the design
+              remained stable. The delivery timing is retrospective; the reusable components and shipped rule grammar are
+              the durable implementation claims.<sup><a href="#source-implementation">2</a></sup>
             </p>
             <p>
               By 2023, Adobe Firefly and the embedded InDesign AI beta compressed parts of the survey
               authoring loop from hand-built SVG and form wiring to prompt, review, adjustment, and LucidChart import.
-              A partner-facing extension for biopharma teams and Clinical Trial Coordinators was designed in part and
-              remained unshipped when the practitioner moved to the core genomics viewer. The extension clarifies the next
-              investment—partner contracts, de-identification, governed audit history, and adaptive-trial versioning—and
-              keeps that designed direction distinct from the delivered system.
+              I designed part of a partner-facing extension for biopharma teams and Clinical Trial Coordinators before moving
+              to the core genomics viewer. That work clarifies the next investment—partner contracts, de-identification,
+              governed audit history, and adaptive-trial versioning—while its design and partial implementation remain
+              distinct from the delivered coordination surface.
             </p>
 
             <h3 id="implementation-repeatability-title" class="txt-h3 beat-title">§e Repeatability — Deploy Where People Already Work</h3>
@@ -502,7 +508,7 @@
             <aside class="debrief-evidence-boundary" aria-labelledby="fmi-ctc-implementation-evidence-title">
               <p class="debrief-evidence-boundary__label">Evidence Boundary</p>
               <h3 id="fmi-ctc-implementation-evidence-title">Named technologies show how this implementation worked; transfer depends on local conditions.</h3>
-              <p>The participant account supports the SVG, XHTML control, Adobe UXP, Lucid shape, DynamoDB, and production-component path described here. A receiving organization must still establish browser support, access policy, regulated-record obligations, state-transition tests, security, and the current platform equivalents that fit its environment.</p>
+              <p>My project work used SVG, XHTML controls, Adobe UXP, Lucid shapes, DynamoDB, and the production-component path described here. A receiving organization establishes the browser support, access policy, regulated-record obligations, state-transition tests, security, and current platform equivalents that fit its environment.</p>
             </aside>
           </article>
         </div>
@@ -514,13 +520,14 @@
             <h2 id="snowflake-returned-title" class="txt-h2 architecture-track-title">Snowflake, Returned — the phrase that reopened the architecture</h2>
             <p>
               In a Q2 2023 working call, proposals for variant-database changes kept meeting valid partner-specific
-              exceptions: naming conventions, units, identifier-sharing rules, and escalation paths. The designer-engineer
-              reintroduced a phrase that had shaped the 2019 brief: every partner interaction could mature beyond its own
-              special snowflake. The director closest to partner relationships defended the earned exceptions; engineering
+              exceptions: naming conventions, units, identifier-sharing rules, and escalation paths. I reintroduced a phrase
+              that had shaped the 2019 brief: every partner interaction could mature beyond its own special snowflake. My
+              shorthand landed badly. The director closest to partner relationships defended the earned exceptions; engineering
               directors named the accumulated manual adjustment as an unsustainable workload.<sup><a href="#source-snowflake">3</a></sup>
             </p>
             <p>
-              The clarification changed the object of disagreement. Modern partners increasingly had ETL engineering teams.
+              I listened, clarified the standardization concern, and changed the object of disagreement. Modern partners
+              increasingly had ETL engineering teams.
               FMI could publish a structured incoming format, ask partners to map their fields upstream, and let middleware
               address fields directly. Data Managers would retain review and exception judgment while shedding routine
               mapping across variants such as <code>site_location</code>, <code>location_site</code>, and
@@ -747,10 +754,10 @@
               </li>
             </ol>
             <p class="table-note">
-              Historical architecture, delivery sequence, engagement response, and dialogue are participant accounts unless
-              a public source is named. Dialogue is reconstructed from memory and preserves structure rather than verbatim
-              wording. Internal collaborators remain role-described. Confidential partner values and the numeric human-versus-automated
-              diff remain undisclosed; the page preserves the operating method and the decisions it enables.
+              Historical architecture, delivery sequence, and engagement response are retrospective project evidence.
+              Dialogue is reconstructed from memory and preserves structure rather than verbatim wording. Internal collaborators
+              remain role-described. The page preserves the operating method and its decisions; confidential partner values and
+              the numeric human-versus-automated diff remain undisclosed.
             </p>
           </section>
         </div>
