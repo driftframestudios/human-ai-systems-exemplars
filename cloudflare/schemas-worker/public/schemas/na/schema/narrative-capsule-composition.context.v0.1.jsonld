@@ -1,0 +1,79 @@
+{
+  "@context": {
+    "na": "https://schemas.driftframestudios.org/na#",
+    "ca": "https://schemas.driftframestudios.org/ca#",
+    "schema": "https://schema.org/",
+    "id": "@id",
+    "type": "@type",
+    "name": "schema:name",
+    "description": "schema:description",
+    "CapsuleCompositionRecord": "na:CapsuleCompositionRecord",
+    "CapsuleSourceSelection": "na:CapsuleSourceSelection",
+    "CapsuleTargetBinding": "na:CapsuleTargetBinding",
+    "CapsuleCompositionGap": "na:CapsuleCompositionGap",
+    "AIContextProjection": "na:AIContextProjection",
+    "CoreArchitectureTargetPairSnapshot": "ca:CoreArchitectureTargetPairSnapshot",
+    "PromptSection": "na:PromptSection",
+    "sourceCapsuleVersionRef": {
+      "@id": "na:sourceCapsuleVersionRef",
+      "@type": "@id"
+    },
+    "compositionRef": {
+      "@id": "na:compositionRef",
+      "@type": "@id"
+    },
+    "targetPairRef": {
+      "@id": "na:targetPairRef",
+      "@type": "@id"
+    },
+    "targetProfileRef": {
+      "@id": "na:targetProfileRef",
+      "@type": "@id"
+    },
+    "sourceSelectionRef": {
+      "@id": "na:sourceSelectionRef",
+      "@type": "@id"
+    },
+    "targetBindingRef": {
+      "@id": "na:targetBindingRef",
+      "@type": "@id"
+    },
+    "gapRef": {
+      "@id": "na:gapRef",
+      "@type": "@id"
+    },
+    "aiContextProjectionRef": {
+      "@id": "na:aiContextProjectionRef",
+      "@type": "@id"
+    },
+    "boundaryManifestRef": {
+      "@id": "na:boundaryManifestRef",
+      "@type": "@id"
+    },
+    "projectionOfCapsuleVersionRef": {
+      "@id": "na:projectionOfCapsuleVersionRef",
+      "@type": "@id"
+    },
+    "includedModuleRef": {
+      "@id": "na:includedModuleRef",
+      "@type": "@id"
+    },
+    "withheldModuleRef": {
+      "@id": "na:withheldModuleRef",
+      "@type": "@id"
+    },
+    "coreArchitectureCardRef": {
+      "@id": "ca:coreArchitectureCardRef",
+      "@type": "@id"
+    },
+    "prototypeRef": "ca:prototypeRef",
+    "readerRef": "ca:readerRef",
+    "moduleKind": "na:moduleKind",
+    "compositionMode": "na:compositionMode",
+    "resultMode": "na:resultMode",
+    "promptRole": "na:promptRole",
+    "readinessState": "na:readinessState",
+    "valueOrigin": "ca:valueOrigin",
+    "reviewState": "ca:reviewState"
+  }
+}

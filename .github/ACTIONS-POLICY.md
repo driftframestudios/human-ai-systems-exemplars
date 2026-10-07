@@ -78,13 +78,24 @@ unknown in this source inventory. Workflow triggers, permissions, and activation
 remain unchanged.
 
 `release` and `prod` each retain the recorded approved 300-minute allocation
-per collaboration cycle. One shared schema-delivery workflow gives both branches a
-12-minute automatic contract and an eight-minute connected deployment ceiling.
-The contract stays with the established schema, Static Assets, Wrangler, and
-secret-material readers. Visual review, unit proof, scheduling, and broader
-package questions retain their own deliberately selected routes. Superseded
-contracts cancel; deployments serialize by receiver and finish their current
-upload.
+per collaboration cycle. One shared schema-delivery workflow gives both
+branches a 12-minute automatic contract. It installs the separate root and
+schema Worker locks, verifies schema identity and the checked-in Worker
+publication, runs Worker unit tests, dry-runs the bundle through the nested
+Wrangler CLI, and inspects the selected public artifact through the pinned
+secret-material reader. Visual review, live observation, scheduling, and
+broader package questions retain their own deliberately selected routes.
+Superseded contracts cancel.
+
+Only a successful `prod` push can enter the connected deployment job. Its
+eight-minute ceiling, single production concurrency group, branch-restricted
+`prod` environment, credential check, active-receiver condition, and repository
+variable `SCHEMA_WORKER_DEPENDENCY_GATE=open` keep the accepted
+`cloudflare/schemas-worker` bundle aligned with the existing Custom Domain. The
+dependency gate stays held until Issue #402 accepts a normally published
+Wrangler/Miniflare/Sharp closure or a separately reviewed fallback. The job
+finishes its current upload and records the preceding Worker version as the
+recovery route.
 
 The Pages workflow receives an exact accepted source commit, reviewed `docs`
 commit, and `pages-vMAJOR.MINOR.PATCH` release tag through manual dispatch. One
@@ -99,11 +110,13 @@ reaches `docs`; the documented `github-pages` environment admits both branches.
 The recorded legacy `docs:/` source remains the recovery route.
 Evidence budgets and deployment authority stay independent:
 the documented `DEPLOYMENT_ACTIVE_RECEIVERS=[]` posture lets release and
-production checks run while their Worker uploads rest. Naming a receiver admits its
-connected deployment only after the matching branch-restricted environment
-provides its account coordinate and least-privilege token. The repository's
-paid-overage boundary remains $0; a named human can return a receiver variable
-to its resting value when its allocation or useful receipt settles.
+production contracts run while the production upload rests. Naming `prod`
+and opening the dependency gate admit that connected deployment only after the
+branch-restricted environment provides its account coordinate and
+least-privilege token. Release remains a contract receiver and carries no route
+to the live Worker. The repository's paid-overage boundary remains $0; a named
+human can return the receiver or dependency variable to its resting value when
+its allocation or useful receipt settles.
 
 [AUTOMATION.md](AUTOMATION.md) inventories all eight workflows and their source
 owners. [ENVIRONMENTS.md](ENVIRONMENTS.md) retains environment and variable

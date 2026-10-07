@@ -80,7 +80,7 @@ attempted flags cannot become this invocation's new work. Launches, source
 hashing, observed documents, completed records and durations retain their
 existing independent measurements.
 
-## Hosted and live gates remain unchanged
+## Hosted and live gates stay explicit
 
 | Workflow | Existing receiving gate |
 | --- | --- |
@@ -89,7 +89,7 @@ existing independent measurements.
 | lims-eln-functional-nucleus.yml | Workflow dispatch, ENABLE_GITHUB_ACTIONS=true, confirmation and the selected bounded proof. |
 | res-public-boundary-intake.yml | Matching main PR, ACTIONS_BUDGET_MAIN=true and non-draft standing. |
 | schema-receiver-routes.yml | ACTIONS_BUDGET_MAIN=true plus dispatch or a non-draft matching main PR; the schema step remains advisory. |
-| schema-delivery.yml | Receiver-specific release/prod budgets admit contracts. Deployment additionally depends on the successful contract, push receiver and DEPLOYMENT_ACTIVE_RECEIVERS, with existing environment/credential gates. |
+| schema-delivery.yml | Receiver-specific release/prod budgets admit contracts over the accepted schema Worker publication. Deployment belongs only to a successful `prod` push with `prod` selected in `DEPLOYMENT_ACTIVE_RECEIVERS`, `SCHEMA_WORKER_DEPENDENCY_GATE=open` after Issue #402 or its accepted fallback, and the existing production environment and credential gates satisfied. |
 | schema-pages.yml | Explicit dispatch binds reviewed source/projection coordinates and release identity; verification and build remain connected, and upload/deploy require activate_deployment. |
 | production-carrier-contracts.yml | Existing dispatch or path-filtered matching main PR. Use this workflow's own trigger policy when considering an activation change. |
 

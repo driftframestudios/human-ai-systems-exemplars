@@ -33,7 +33,7 @@ The [implemented plan-only catalog](../../tests/suites/README.md) maps exact ent
 | Playwright | 28 direct consumers: 11 root test files, 16 tools, one Worker test executable | 16 consumers directly reuse the Core browser helper. |
 | Campaign/tooling | 53 tracked tool files; 19 named contract, helper, campaign or checkpoint owners | Tools outside `tests/` participate in acceptance. |
 | Python tables | Four `unittest` modules, a semantic parser and opt-in comparison, plus the projector in `tools/` | Byte preservation and semantic extraction have distinct owners. |
-| Schema Worker | Eight test-directory files: four Node suites, two helpers, one browser executable and one live receiver executable | Its own package commands and delivery contract remain visible. |
+| Schema Worker | Nine test-directory files: four Node suites, three helpers, one browser executable and one live receiver executable | Its own package commands and delivery contract remain visible. |
 | Nested Python applications | 37 test modules across five `pyproject` owners | All observed modules use `unittest`; no observed pytest imports. Database and application gates remain separate. |
 | CI | Eight workflows with distinct activation and budget boundaries | A local bundle is separate from permission to activate hosted execution. |
 | Puppeteer | Zero references in 633 tracked executable-language files, including HTML, and zero in eight workflows | This is the current scanned source result, rather than a claim about historical or untracked use. |

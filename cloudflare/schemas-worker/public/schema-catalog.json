@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1",
-  "sourceRevision": "c3dbb9860e77d001e6b1c6f09fd76529911b39a3",
+  "sourceRevision": "dc6b62c6e3f1e8748237fc767def75b32527140a",
   "deliveryBase": "https://schemas.vik.guru",
   "identityRole": "canonicalId identifies the contract; retrievalUrl downloads this site's copy.",
   "contracts": [
@@ -119,6 +119,42 @@
       "sourcePath": "context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json",
       "sha256": "819d3d376ed9c9414a36df9565ccb5c89e988cfdadd1b99c7c1fe4ee3c63b53d",
       "sizeBytes": 3294,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.driftframestudios.org/na/schema/narrative-capsule-composition.schema.v0.1.json",
+      "retrievalUrl": "https://schemas.vik.guru/na/schema/narrative-capsule-composition.schema.v0.1.json",
+      "path": "na/schema/narrative-capsule-composition.schema.v0.1.json",
+      "sourcePath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/narrative-capsule-composition.schema.v0.1.json",
+      "sha256": "7b90f096238f1cda8bbb6ef1d1ef74c5f213a5a84ad767b15fd61c877be9c3df",
+      "sizeBytes": 13429,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.driftframestudios.org/na/schema/narrative-sampling-tableau-state.schema.v0.1.json",
+      "retrievalUrl": "https://schemas.vik.guru/na/schema/narrative-sampling-tableau-state.schema.v0.1.json",
+      "path": "na/schema/narrative-sampling-tableau-state.schema.v0.1.json",
+      "sourcePath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/semantic-sampling-tableau/terminology-exploration/narrative-sampling-tableau-state.schema.v0.1.json",
+      "sha256": "f311a682f356d351ad690191f8943a556b349020d0e95c21832b7853bec936c4",
+      "sizeBytes": 23983,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.driftframestudios.org/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json",
+      "retrievalUrl": "https://schemas.vik.guru/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json",
+      "path": "na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json",
+      "sourcePath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/technology-fit-sampling-tableau-state.schema.v0.1.json",
+      "sha256": "636c62c98963a9d772ff1e10677177319b3e632cc1877ce0106d4a9b8a318858",
+      "sizeBytes": 22316,
+      "dependencyIdentities": []
+    },
+    {
+      "canonicalId": "https://schemas.driftframestudios.org/fg/schema/threadkeeping-ledger.schema.v0.1.json",
+      "retrievalUrl": "https://schemas.vik.guru/fg/schema/threadkeeping-ledger.schema.v0.1.json",
+      "path": "fg/schema/threadkeeping-ledger.schema.v0.1.json",
+      "sourcePath": "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger.schema.v0.1.json",
+      "sha256": "5bbd7261afb2540490822e5ae18f119e4d80bff2bffe0218471e65af62a27208",
+      "sizeBytes": 9519,
       "dependencyIdentities": []
     }
   ]
