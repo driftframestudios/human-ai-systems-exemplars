@@ -65,11 +65,14 @@ Return the selected tag, resolved carrier and source commits, reviewed tool
 commit, archive and receipt locations, and normalized verification result.
 Archive verification establishes payload identity. The operator's protected
 record and signed-out receiver checks establish activation and recovery.
-Issue #118 owns that host handoff; #251 owns its release-bound live assessment.
+Issue #118 preserves the completed `production-v0.2.0` transport and recovery
+handoff as historical release evidence; #251 owns that release's remaining live
+assessment. Publishing newer source requires a new accepted source/carrier pair,
+tag, and authorized handoff rather than reopening the immutable release.
 
 ## Current entry condition
 
-The tracked production configuration selects the accepted 40-page Context
+The tracked production configuration selects the accepted 41-route Context
 Canvas collection, its non-indexed `404.html`, and the complete local file
 closure those documents need. The four resting no-index exemplars stay outside
 this initial visitor collection. `primary-route-manifest.json` records every
@@ -84,6 +87,21 @@ selected source and its document-root destination explicitly.
   "primary_manifest": "deployment/cpanel/primary-route-manifest.json",
   "asset_inventory": "context-canvas-project-surface/asset-inventory.json",
   "iframe_origin_robots": "deployment/cpanel/iframe-origin-robots.txt",
+  "css_projection": {
+    "id": "prod-projection.css-profile.v1",
+    "profile": "about-conservative-v1",
+    "consumer": "context-canvas-project-surface/context-canvas/index.html",
+    "output_directory": "assets/css",
+    "tool": {
+      "name": "csso",
+      "version": "5.0.5",
+      "options": {
+        "restructure": false,
+        "forceMediaMerge": false,
+        "comments": false
+      }
+    }
+  },
   "publication": {
     "base_url": "https://vik.guru/",
     "source_root": "context-canvas-project-surface/context-canvas",
@@ -91,6 +109,35 @@ selected source and its document-root destination explicitly.
   }
 }
 ```
+
+`css_projection` is one bounded production distribution profile. It discovers
+About's stylesheet order from the tracked consumer rather than restating that
+order in configuration. Six contiguous enhanced owners become one file, the
+stylesheet inside `<noscript>` remains its own execution context, and the later
+`canvas-shell.css` link remains a separate file. Each generated filename carries
+its full SHA-256 digest beneath `assets/css/`; generated files never replace the
+readable repository owners.
+
+Before CSSO runs, repository-local CSS references resolve from each original
+source location to the generated output location. Query strings and fragments
+remain attached. Root-relative references stay root-relative after resolving
+inside `publication.source_root`; like relative references, they must be part
+of the selected carrier closure. External, `data:`, and fragment-only
+references remain in their authored reference class. Missing or escaping local
+references, runtime `@import`, composed `@charset` or `@namespace`, invalid CSS,
+string-form `image-set()` sources, ambiguous encoded local paths, a changed or
+ambiguous stylesheet loading graph, a tool or profile mismatch, and a
+portable-path collision stop projection formation. The loading-graph parser
+uses source spans and HTML data-state boundaries; comments and raw or inert
+regions cannot supply stylesheet owners.
+
+For the accepted source graph, an enhanced screen moves from seven stylesheet
+requests and 76,213 raw bytes to two requests and 55,120 raw bytes; the
+independently compressed sums move from 17,555 to 11,842 gzip-9 bytes and from
+14,736 to 10,465 Brotli-11 bytes. The scriptless path moves from eight requests
+and 76,621 raw bytes to three requests and 55,417 raw bytes; gzip-9 moves from
+17,758 to 11,987 bytes and Brotli-11 from 14,897 to 10,572 bytes. These are
+repository-side distribution observations, not deployed transfer claims.
 
 The primary manifest alone selects primary files and public paths.
 `asset-inventory.json` describes the images already selected by the primary and
@@ -151,6 +198,16 @@ and semantic key set, and rechecks the digest before returning the plan. It
 uses an empty process environment for this step, so the file is the complete
 receiver for a production projection.
 
+For the About CSS projection, the deployment manifest also records the exact
+profile, CSSO package/version/options, consumer and execution context, ordered
+source paths and source digests, full output digest, bytes, media type, and the
+readable-graph recovery route. The production HTML references only generated
+files present in the same output closure. Readable CSS files remain selected
+while adjacent routes consume them and provide immediate rollback: remove the
+`css_projection` property from tracked configuration and rebuild. Public source
+maps remain absent because repository source plus manifest lineage supplies the
+inspection path.
+
 Publication transforms then map the nested Context Canvas root to
 `https://vik.guru/`. Canonical, social, JSON-LD, sitemap, and local relative
 references follow their projected locations. Markdown links resolve through
@@ -172,6 +229,7 @@ complete iframe package have been regenerated together.
 
 ```sh
 npm run test:prod-deployment
+npm run test:prod-css-projection-browser
 npm run check:prod-projection
 npm run build:prod-projection
 npm run stage:prod-carrier
@@ -182,6 +240,11 @@ npm run verify:prod-carrier-transfer -- --tag production-v0.2.0 --receipt .cpane
 
 `check:prod-projection` writes and verifies the newly composed plan in
 temporary storage; it does not attest an existing carried artifact.
+`test:prod-css-projection-browser` compares the tracked readable graph with the
+generated graph across narrow, desktop, and wide enhanced, scriptless, print,
+forced-color, and reduced-motion states. It also exercises interaction,
+request-closure, and the expected CSP iframe-refusal boundary. The focused
+browser contract uses tracked bytes and does not require `.env.public`.
 `build:prod-projection` is the explicit mutation boundary and transactionally
 replaces only `.prod-projection-build/`. Both commands require the ignored
 `.env.public` receiver. A custom repository-owned fixture can be named with

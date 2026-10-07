@@ -16,10 +16,12 @@ import { promisify } from "node:util";
 
 import {
   checkProductionProjection,
+  createProductionCarrierPlan,
   createProductionProjectionPlan,
   inspectImageDimensions,
   loadProductionProjectionInputs,
   persistProductionProjection,
+  projectAboutCssProfile,
   readRepositorySourceSha,
   validateAssetInventory,
   validatePrimaryManifest,
@@ -33,6 +35,25 @@ const primaryManifestRelativePath =
   "deployment/cpanel/primary-route-manifest.json";
 const assetInventoryRelativePath =
   "deployment/cpanel/asset-inventory.json";
+const cssConsumerSourcePath =
+  "context-canvas-project-surface/context-canvas/index.html";
+const cssConsumerProjectedPath = "index.html";
+const cssConsumerSourceRoot =
+  "context-canvas-project-surface/context-canvas";
+const cssSourceRelativePaths = [
+  "styles/core/tokens.css",
+  "styles/core/foundation.css",
+  "styles/components/site-navigation.css",
+  "styles/components/tables.css",
+  "styles/components/route-card-grid.css",
+  "styles/routes/about.css",
+  "styles/routes/about-noscript.css",
+  "canvas-shell.css",
+];
+const cssSourcePaths = cssSourceRelativePaths.map(
+  (relativePath) =>
+    `context-canvas-project-surface/context-canvas/${relativePath}`,
+);
 
 async function git(root, args) {
   const { stdout = "" } = await execFileAsync("git", args, {
@@ -54,6 +75,104 @@ function primaryManifest(files) {
     version: "1",
     files,
   };
+}
+
+function cssProjectionConfiguration(overrides = {}) {
+  return {
+    id: "prod-projection.css-profile.v1",
+    profile: "about-conservative-v1",
+    consumer: "context-canvas-project-surface/context-canvas/index.html",
+    output_directory: "assets/css",
+    tool: {
+      name: "csso",
+      version: "5.0.5",
+      options: {
+        restructure: false,
+        forceMediaMerge: false,
+        comments: false,
+        ...(overrides.options ?? {}),
+      },
+      ...(overrides.tool ?? {}),
+    },
+    ...Object.fromEntries(
+      Object.entries(overrides).filter(([key]) => !["options", "tool"].includes(key)),
+    ),
+  };
+}
+
+function cssProjectionConsumerHtml(hrefs = cssSourceRelativePaths) {
+  const base = hrefs
+    .slice(0, 6)
+    .map((href) => `<link rel="stylesheet" href="${href}" media="all">`)
+    .join("\n");
+  return [
+    "<!doctype html>",
+    "<html>",
+    "<head>",
+    "<title>About fixture</title>",
+    base,
+    `<noscript><link rel="stylesheet" href="${hrefs[6]}" media="all"></noscript>`,
+    '<meta name="description" content="The loading contexts stay distinct.">',
+    `<link rel="stylesheet" href="${hrefs[7]}">`,
+    "</head>",
+    "<body><main>About fixture</main></body>",
+    "</html>",
+    "",
+  ].join("\n");
+}
+
+function cssProjectionFixture(options = {}) {
+  const sourceBytes = options.sourceBytes ?? cssSourcePaths.map(
+    (sourcePath, index) => Buffer.from(
+      `.fixture-${index + 1} { color: rgb(${index + 1}, 2, 3); }\n`,
+      "utf8",
+    ),
+  );
+  const consumerBytes = Buffer.from(
+    options.consumerHtml ?? cssProjectionConsumerHtml(),
+    "utf8",
+  );
+  const renderedConsumerBytes = Buffer.from(
+    options.renderedConsumerHtml ?? consumerBytes,
+  );
+  const cssSources = new Map(
+    cssSourcePaths.map((sourcePath, index) => [
+      sourcePath,
+      {
+        bytes: sourceBytes[index],
+        git_blob_id: (index + 1).toString(16).padStart(40, "0"),
+      },
+    ]),
+  );
+  const projectedPaths = new Map([
+    [cssConsumerSourcePath, cssConsumerProjectedPath],
+    ...cssSourcePaths.map((sourcePath, index) => [
+      sourcePath,
+      cssSourceRelativePaths[index],
+    ]),
+    ...(options.projectedAssets ?? []),
+  ]);
+  const consumer = {
+    source_path: cssConsumerSourcePath,
+    projected_path: cssConsumerProjectedPath,
+    bytes: consumerBytes,
+    git_blob_id: "f".repeat(40),
+  };
+  return {
+    consumer,
+    consumerSourceRoot: cssConsumerSourceRoot,
+    renderedConsumerBytes,
+    cssSources,
+    projectedPaths,
+    profile: cssProjectionConfiguration(),
+  };
+}
+
+function runCssProjection(fixture, overrides = {}) {
+  return projectAboutCssProfile({
+    ...fixture,
+    ...overrides,
+  });
 }
 
 function fixtureAssetInventory(selector, options = {}) {
@@ -495,6 +614,64 @@ async function enablePublicationFixture(fixture) {
   );
   fixture.sourceSha = await commitFixture(fixture.root, "Accept publication fixture");
   return { canvasRoot, destinations, publicConfiguration };
+}
+
+async function enableCssProjectionPlanFixture(fixture) {
+  const canvasRoot = "context-canvas-project-surface/context-canvas";
+  const files = new Map([
+    [cssConsumerSourcePath, Buffer.from(cssProjectionConsumerHtml(), "utf8")],
+    ...cssSourcePaths.map((sourcePath, index) => [
+      sourcePath,
+      Buffer.from(`.fixture-${index + 1} { color: rgb(${index + 1}, 2, 3); }\n`, "utf8"),
+    ]),
+  ]);
+  for (const [relativePath, bytes] of files) {
+    const filePath = path.join(fixture.root, ...relativePath.split("/"));
+    await mkdir(path.dirname(filePath), { recursive: true });
+    await writeFile(filePath, bytes);
+  }
+  await writeFile(
+    fixture.primaryManifestPath,
+    `${JSON.stringify(primaryManifest([
+      {
+        source_path: cssConsumerSourcePath,
+        projected_path: cssConsumerProjectedPath,
+        media_type: "text/html",
+      },
+      ...cssSourcePaths.map((sourcePath, index) => ({
+        source_path: sourcePath,
+        projected_path: cssSourceRelativePaths[index],
+        media_type: "text/css",
+      })),
+    ]))}\n`,
+    "utf8",
+  );
+  await writeFile(
+    fixture.configurationPath,
+    `${JSON.stringify({
+      id: "prod-projection.configuration.v1",
+      version: "1",
+      primary_manifest: primaryManifestRelativePath,
+      css_projection: cssProjectionConfiguration(),
+      publication: {
+        base_url: "https://vik.guru/",
+        source_root: canvasRoot,
+        public_reference_config: ".env.public",
+      },
+    })}\n`,
+    "utf8",
+  );
+  await writeFile(
+    path.join(fixture.root, ".gitignore"),
+    ".env.public\n.prod-projection-build/\n",
+    "utf8",
+  );
+  await writeFile(path.join(fixture.root, ".env.public"), "", "utf8");
+  fixture.sourceSha = await commitFixture(
+    fixture.root,
+    "Accept exact About CSS projection fixture",
+  );
+  return { files };
 }
 
 async function enableMarkdownFixture(fixture) {
@@ -2004,6 +2181,624 @@ test("fixture configuration and primary manifest load through the repository-own
     );
     assert.match(loaded.binding.configuration.git_blob_id, /^[a-f0-9]{40}$/);
     assert.match(loaded.binding.configuration.sha256, /^[a-f0-9]{64}$/);
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("the production CSS profile admits one exact tracked About configuration", async () => {
+  const fixture = await createFixtureRoot();
+  const valid = {
+    id: "prod-projection.configuration.v1",
+    version: "1",
+    primary_manifest: primaryManifestRelativePath,
+    css_projection: cssProjectionConfiguration(),
+    publication: {
+      base_url: "https://vik.guru/",
+      source_root: "context-canvas-project-surface/context-canvas",
+      public_reference_config: ".env.public",
+    },
+  };
+  const writeConfiguration = async (configuration, message) => {
+    await writeFile(
+      fixture.configurationPath,
+      `${JSON.stringify(configuration)}\n`,
+      "utf8",
+    );
+    fixture.sourceSha = await commitFixture(fixture.root, message);
+  };
+  try {
+    await writeConfiguration(valid, "Select exact production CSS profile");
+    const loaded = await loadProductionProjectionInputs(fixture.configurationPath, {
+      repositoryRoot: fixture.root,
+    });
+    assert.deepEqual(loaded.configuration.css_projection, valid.css_projection);
+
+    const invalidCases = [
+      ["unknown profile key", (value) => { value.unowned = true; }, /must contain exactly/],
+      ["profile identity", (value) => { value.id = "prod-projection.css-profile.v2"; }, /must use prod-projection\.css-profile\.v1/],
+      ["profile name", (value) => { value.profile = "about-fast-v1"; }, /profile about-conservative-v1/],
+      ["consumer kind", (value) => { value.consumer = "visitor/about.css"; }, /consumer must be an HTML file/],
+      ["output kind", (value) => { value.output_directory = "assets/css/file.css"; }, /must identify a directory/],
+      ["tool name", (value) => { value.tool.name = "other"; }, /tool must be csso 5\.0\.5/],
+      ["tool version", (value) => { value.tool.version = "5.0.4"; }, /tool must be csso 5\.0\.5/],
+      ["restructure option", (value) => { value.tool.options.restructure = true; }, /option restructure must be false/],
+      ["media merge option", (value) => { value.tool.options.forceMediaMerge = true; }, /option forceMediaMerge must be false/],
+      ["comment option", (value) => { value.tool.options.comments = true; }, /option comments must be false/],
+      ["unknown option", (value) => { value.tool.options.extra = false; }, /options must contain exactly/],
+    ];
+    for (const [label, mutate, expected] of invalidCases) {
+      const configuration = structuredClone(valid);
+      mutate(configuration.css_projection);
+      await writeConfiguration(configuration, `Reject CSS profile ${label}`);
+      await assert.rejects(
+        loadProductionProjectionInputs(fixture.configurationPath, {
+          repositoryRoot: fixture.root,
+        }),
+        expected,
+      );
+    }
+
+    const noPublication = structuredClone(valid);
+    delete noPublication.publication;
+    await writeConfiguration(noPublication, "Reject CSS profile without publication");
+    await assert.rejects(
+      loadProductionProjectionInputs(fixture.configurationPath, {
+        repositoryRoot: fixture.root,
+      }),
+      /CSS projection requires publication geometry/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("the About CSS projection preserves loading contexts, ordered lineage, and deterministic full-digest outputs", () => {
+  const fixture = cssProjectionFixture();
+  const first = runCssProjection(fixture);
+  const second = runCssProjection(fixture);
+
+  assert.deepEqual(
+    first.outputs.map(({ id }) => id),
+    ["about-document-base", "about-noscript", "about-document-shell"],
+  );
+  assert.deepEqual(
+    first.outputs.map(({ lineage }) => lineage.ordered_sources.map(
+      ({ source_path: sourcePath }) => sourcePath,
+    )),
+    [cssSourcePaths.slice(0, 6), [cssSourcePaths[6]], [cssSourcePaths[7]]],
+  );
+  assert.deepEqual(
+    first.outputs.map(({ lineage }) => lineage.execution_context),
+    [
+      { owner: "document", scripts: "any", media: "all", sequence: 1 },
+      { owner: "noscript", scripts: "unavailable", media: "all", sequence: 2 },
+      { owner: "document", scripts: "any", media: "all", sequence: 3 },
+    ],
+  );
+  for (const output of first.outputs) {
+    assert.match(output.projected_path, /^assets\/css\/[a-f0-9]{64}\.css$/);
+    assert.equal(output.lineage.kind, "css_projection");
+    assert.equal(output.lineage.profile, "about-conservative-v1");
+    assert.deepEqual(output.lineage.tool, fixture.profile.tool);
+    assert.equal(output.lineage.output.projected_path, output.projected_path);
+    assert.equal(output.lineage.output.bytes, output.bytes.byteLength);
+    assert.equal(output.lineage.output.sha256, sha256(output.bytes));
+    assert.equal(output.lineage.output.media_type, "text/css");
+    assert.match(output.lineage.recovery_condition, /Regenerate from the tracked consumer/);
+    assert.doesNotMatch(output.bytes.toString("utf8"), /sourceMappingURL/);
+  }
+  assert.deepEqual(first.input, {
+    id: "prod-projection.css-profile.v1",
+    profile: "about-conservative-v1",
+    consumer: {
+      source_path: cssConsumerSourcePath,
+      projected_path: cssConsumerProjectedPath,
+      git_blob_id: "f".repeat(40),
+      sha256: sha256(fixture.consumer.bytes),
+    },
+    output_directory: "assets/css",
+    tool: fixture.profile.tool,
+  });
+
+  const generatedHtml = first.consumer_bytes.toString("utf8");
+  assert.equal(generatedHtml.match(/rel="stylesheet"/g)?.length, 3);
+  assert.match(
+    generatedHtml,
+    new RegExp(`<noscript><link rel="stylesheet" href="${first.outputs[1].projected_path}" media="all"></noscript>`),
+  );
+  assert.doesNotMatch(generatedHtml, /styles\/(?:core|components|routes)\//);
+  for (const output of first.outputs) assert.ok(generatedHtml.includes(output.projected_path));
+  assert.ok(first.consumer_bytes.equals(second.consumer_bytes));
+  assert.deepEqual(
+    first.outputs.map(({ projected_path: projectedPath, bytes }) => [projectedPath, bytes]),
+    second.outputs.map(({ projected_path: projectedPath, bytes }) => [projectedPath, bytes]),
+  );
+});
+
+test("the About CSS projection rebases selected local URLs while preserving their reference classes", () => {
+  const sourceBytes = cssSourcePaths.map((sourcePath, index) => Buffer.from(
+    `.fixture-${index + 1} { color: rgb(${index + 1}, 2, 3); }\n`,
+    "utf8",
+  ));
+  sourceBytes[0] = Buffer.from([
+    '.tokens { background-image: url("../../media/grid.svg?rev=1#crop");',
+    'mask-image: url("#clip"); cursor: url("/root/cursor.svg"), auto;',
+    'border-image-source: url("https://assets.example.test/frame.svg");',
+    'list-style-image: url("//cdn.example.test/list.svg");',
+    'content: url("data:image/svg+xml,%3Csvg%3E%3C/svg%3E"); }',
+  ].join("\n"), "utf8");
+  sourceBytes[5] = Buffer.from(
+    '.about { src: url("../../../shared/type.woff2?#iefix"); }\n',
+    "utf8",
+  );
+  sourceBytes[7] = Buffer.from(
+    ".shell { background-image: url(img/photo.png); }\n",
+    "utf8",
+  );
+  const projectedAssets = [
+    ["context-canvas-project-surface/context-canvas/media/grid.svg", "media/grid.svg"],
+    ["context-canvas-project-surface/context-canvas/root/cursor.svg", "root/cursor.svg"],
+    ["context-canvas-project-surface/shared/type.woff2", "shared/type.woff2"],
+    ["context-canvas-project-surface/context-canvas/img/photo.png", "img/photo.png"],
+  ];
+  const fixture = cssProjectionFixture({ sourceBytes, projectedAssets });
+  const resolved = [];
+  const result = runCssProjection(fixture, {
+    onResolvedReference: (reference) => resolved.push(reference),
+  });
+  const generatedCss = result.outputs.map(({ bytes }) => bytes.toString("utf8")).join("\n");
+
+  assert.match(generatedCss, /\.\.\/\.\.\/media\/grid\.svg\?rev=1#crop/);
+  assert.match(generatedCss, /\.\.\/\.\.\/shared\/type\.woff2\?#iefix/);
+  assert.match(generatedCss, /\.\.\/\.\.\/img\/photo\.png/);
+  for (const preserved of [
+    "#clip",
+    "/root/cursor.svg",
+    "https://assets.example.test/frame.svg",
+    "//cdn.example.test/list.svg",
+    "data:image/svg+xml,%3Csvg%3E%3C/svg%3E",
+  ]) {
+    assert.ok(generatedCss.includes(preserved), `${preserved} remains unchanged`);
+  }
+  assert.deepEqual(resolved, [
+    {
+      consumer_path: cssSourcePaths[0],
+      target_path: "context-canvas-project-surface/context-canvas/media/grid.svg",
+    },
+    {
+      consumer_path: cssSourcePaths[0],
+      target_path: "context-canvas-project-surface/context-canvas/root/cursor.svg",
+    },
+    {
+      consumer_path: cssSourcePaths[5],
+      target_path: "context-canvas-project-surface/shared/type.woff2",
+    },
+    {
+      consumer_path: cssSourcePaths[7],
+      target_path: "context-canvas-project-surface/context-canvas/img/photo.png",
+    },
+  ]);
+});
+
+test("the About CSS projection rejects graph drift and unsupported loading attributes", () => {
+  const html = cssProjectionConsumerHtml();
+  const firstLink = `<link rel="stylesheet" href="${cssSourceRelativePaths[0]}" media="all">`;
+  const secondLink = `<link rel="stylesheet" href="${cssSourceRelativePaths[1]}" media="all">`;
+  const cases = [
+    [
+      "a boundary inside the six-owner run",
+      html.replace(`${firstLink}\n${secondLink}`, `${firstLink}\n<meta charset="utf-8">\n${secondLink}`),
+      /one contiguous loading run/,
+    ],
+    [
+      "a changed base media context",
+      html.replace('href="styles/core/tokens.css" media="all"', 'href="styles/core/tokens.css" media="print"'),
+      /must remain media=all/,
+    ],
+    [
+      "a loading attribute outside the admitted contract",
+      html.replace(firstLink, firstLink.replace(">", ' integrity="sha256-fixture">')),
+      /unsupported loading attribute integrity/,
+    ],
+    [
+      "an unquoted rel attribute",
+      html.replace('rel="stylesheet"', "rel=stylesheet"),
+      /stylesheet attribute rel must be quoted/,
+    ],
+    [
+      "an unquoted href attribute",
+      html.replace('href="styles\/core\/tokens.css"', "href=styles/core/tokens.css"),
+      /stylesheet attribute href must be quoted/,
+    ],
+    [
+      "an unquoted media attribute",
+      html.replace('media="all"', "media=all"),
+      /stylesheet attribute media must be quoted/,
+    ],
+    [
+      "an extra stylesheet owner",
+      html.replace("</head>", '<link rel="stylesheet" href="extra.css">\n</head>'),
+      /exact eight-owner About stylesheet graph/,
+    ],
+    [
+      "a reordered loading context",
+      html.replace(
+        `<link rel="stylesheet" href="${cssSourceRelativePaths[5]}" media="all">\n` +
+          `<noscript><link rel="stylesheet" href="${cssSourceRelativePaths[6]}" media="all"></noscript>`,
+        `<noscript><link rel="stylesheet" href="${cssSourceRelativePaths[6]}" media="all"></noscript>\n` +
+          `<link rel="stylesheet" href="${cssSourceRelativePaths[5]}" media="all">`,
+      ),
+      /base stylesheet owner 6 must remain media=all in the document context/,
+    ],
+    [
+      "a stylesheet link that exists only inside an HTML comment",
+      html.replace(
+        `<link rel="stylesheet" href="${cssSourceRelativePaths[7]}">`,
+        `<!-- <link rel="stylesheet" href="${cssSourceRelativePaths[7]}"> -->`,
+      ),
+      /exact eight-owner About stylesheet graph/,
+    ],
+    [
+      "a stylesheet link that exists only inside a raw-text element",
+      html.replace(
+        `<link rel="stylesheet" href="${cssSourceRelativePaths[7]}">`,
+        `<script type="application/json">"<link rel='stylesheet' href='${cssSourceRelativePaths[7]}'>"</script>`,
+      ),
+      /exact eight-owner About stylesheet graph/,
+    ],
+    [
+      "a stylesheet link that exists only inside inert template content",
+      html.replace(
+        `<link rel="stylesheet" href="${cssSourceRelativePaths[7]}">`,
+        `<template><link rel="stylesheet" href="${cssSourceRelativePaths[7]}"></template>`,
+      ),
+      /exact eight-owner About stylesheet graph/,
+    ],
+    [
+      "stylesheet-looking text inside another element attribute",
+      html.replace(
+        `<link rel="stylesheet" href="${cssSourceRelativePaths[7]}">`,
+        `<meta content='<link rel="stylesheet" href="${cssSourceRelativePaths[7]}">' >`,
+      ),
+      /exact eight-owner About stylesheet graph/,
+    ],
+    [
+      "raw-text marker strings inside ordinary attributes cannot hide an active owner",
+      html.replace(
+        "</head>",
+        '<meta content="<script>"><link rel="stylesheet" href="styles/core/tokens.css" media="all"><meta content="</script>"></head>',
+      ),
+      /exact eight-owner About stylesheet graph/,
+    ],
+    [
+      "a browser-recognized bang comment close cannot hide an active owner",
+      html.replace(
+        "</head>",
+        '<!-- fake --!><link rel="stylesheet" href="styles/core/tokens.css" media="all"> --></head>',
+      ),
+      /noncanonical HTML comment close/,
+    ],
+    [
+      "an abrupt empty comment close cannot hide an active owner",
+      html.replace(
+        "</head>",
+        '<!--><link rel="stylesheet" href="styles/core/tokens.css" media="all"> --></head>',
+      ),
+      /noncanonical HTML comment close/,
+    ],
+    [
+      "an invalid noscript end-tag boundary cannot change browser parsing",
+      html.replace("</noscript>", "</noscript=>"),
+      /unsupported HTML tag-name boundary/,
+    ],
+    [
+      "an entity-encoded stylesheet relation",
+      html.replace(
+        firstLink,
+        firstLink.replace("stylesheet", "style&#x73;heet"),
+      ),
+      /stylesheet rel must not contain HTML character references/,
+    ],
+    [
+      "an entity-encoded stylesheet path",
+      html.replace(
+        firstLink,
+        firstLink.replace("tokens.css", "tokens&#46;css"),
+      ),
+      /stylesheet href must not contain HTML character references/,
+    ],
+    [
+      "an entity-encoded stylesheet media value",
+      html.replace(
+        firstLink,
+        firstLink.replace('media="all"', 'media="a&#x6c;l"'),
+      ),
+      /stylesheet media must not contain HTML character references/,
+    ],
+    [
+      "a percent-encoded stylesheet pathname",
+      html.replace(
+        firstLink,
+        firstLink.replace("tokens.css", "%2e%2e/other.css"),
+      ),
+      /stylesheet href pathname .* must not contain percent encoding/,
+    ],
+    [
+      "a backslash stylesheet pathname",
+      html.replace(
+        firstLink,
+        firstLink.replace("tokens.css", String.raw`tokens\other.css`),
+      ),
+      /stylesheet href pathname .* must not contain backslashes/,
+    ],
+    [
+      "an active stylesheet owner outside the head graph",
+      html.replace(
+        "<body>",
+        '<body><link rel="stylesheet" href="styles/routes/body.css">',
+      ),
+      /active stylesheet owner outside its head graph/,
+    ],
+    [
+      "an active base element that changes link resolution",
+      html.replace("<title>", '<base href="/alternate/"><title>'),
+      /must not contain an active base element/,
+    ],
+    [
+      "an active head style owner outside the projected graph",
+      html.replace("</title>", "</title><style>.fixture{color:red}</style>"),
+      /must not contain an active head style owner/,
+    ],
+  ];
+  for (const [label, consumerHtml, expected] of cases) {
+    assert.throws(
+      () => runCssProjection(cssProjectionFixture({ consumerHtml })),
+      expected,
+      label,
+    );
+  }
+
+  const fixture = cssProjectionFixture();
+  const renderedConsumerHtml = html.replace(
+    `${firstLink}\n${secondLink}`,
+    `${firstLink}\n<meta charset="utf-8">\n${secondLink}`,
+  );
+  assert.throws(
+    () => runCssProjection(fixture, { renderedConsumerBytes: Buffer.from(renderedConsumerHtml) }),
+    /Rendered About consumer base stylesheet owners must remain one contiguous loading run/,
+  );
+
+  const inertMarkup = [
+    '<!-- <base href="/comment/"><style>.comment{}</style><link rel="stylesheet" href="comment.css"> -->',
+    '<script type="application/json">{"markers":["<!--","<template>","<base href=\'/script/\'>","<style>.script{}</style>","<link rel=\'stylesheet\' href=\'script.css\'>","</template>"]}</script>',
+    '<template><base href="/template/"><style>.template{}</style><link rel="stylesheet" href="template.css"></template>',
+  ].join("\n");
+  assert.doesNotThrow(() => runCssProjection(cssProjectionFixture({
+    consumerHtml: html.replace("</head>", `${inertMarkup}\n</head>`),
+  })));
+});
+
+test("the About CSS projection rejects unavailable dependencies, path escape, CSS import authority, and invalid CSS", () => {
+  const invalidCases = [
+    ["missing selected dependency", ".x{background:url(missing.png)}", /dependency is absent from its tracked selected closure/],
+    ["missing root-relative dependency", ".x{background:url(\/missing-root.png)}", /dependency is absent from its tracked selected closure/],
+    ["repository path escape", ".x{background:url(../../../../../outside.png)}", /URL escapes the repository/],
+    ["root-relative source-root escape", ".x{background:url(\/..\/outside.png)}", /root-relative URL escapes its source root/],
+    ["CSS import", '@import url("theme.css");', /rejects @import/],
+    ["CSS charset", '@charset "UTF-8"; .x{}', /rejects @charset/],
+    ["CSS namespace", '@namespace svg url("http://www.w3.org/2000/svg");', /rejects @namespace/],
+    ["escaped CSS import", '@\\69mport url("theme.css");', /escaped at-rule name/],
+    ["escaped CSS charset", '@\\63 harset "UTF-8"; .x{}', /escaped at-rule name/],
+    ["escaped CSS namespace", '@\\6e amespace svg url("http://www.w3.org/2000/svg");', /escaped at-rule name/],
+    ["escaped CSS URL function", '.x{background:u\\72l("missing.png")}', /escaped function name/],
+    ["string-form image-set source", '.x{background-image:image-set("img/a.png" 1x)}', /string-form image-set sources/],
+    ["string-form prefixed image-set source", '.x{background-image:-webkit-image-set("img/a.png" 1x)}', /string-form image-set sources/],
+    ["percent-encoded local URL pathname", '.x{background:url("%2e%2e/out.png")}', /local URL pathname .* must not contain percent encoding/],
+    ["backslash local URL pathname", String.raw`.x{background:url("img\\outside.png")}`, /local URL pathname .* must not contain backslashes/],
+    ["malformed container prelude", "@container canvas-reading (min-width: 80) {.x{display:grid}}", /unsupported raw CSS/],
+    ["invalid CSS", ".x{color:red", /could not parse|unbalanced syntax|unsupported raw CSS/],
+  ];
+  for (const [label, css, expected] of invalidCases) {
+    const fixture = cssProjectionFixture();
+    fixture.cssSources.set(cssSourcePaths[0], {
+      bytes: Buffer.from(css, "utf8"),
+      git_blob_id: "a".repeat(40),
+    });
+    assert.throws(() => runCssProjection(fixture), expected, label);
+  }
+
+  const ambiguousProjectedDependency = cssProjectionFixture();
+  const localAsset =
+    "context-canvas-project-surface/context-canvas/styles/core/img/a.png";
+  ambiguousProjectedDependency.projectedPaths.set(
+    localAsset,
+    "assets/%2e%2e/out.png",
+  );
+  ambiguousProjectedDependency.cssSources.set(cssSourcePaths[0], {
+    bytes: Buffer.from('.x{background:url("img/a.png")}\n', "utf8"),
+    git_blob_id: "b".repeat(40),
+  });
+  assert.throws(
+    () => runCssProjection(ambiguousProjectedDependency),
+    /projected dependency pathname .* must not contain percent encoding/,
+  );
+
+  const ambiguousProjectedStylesheet = cssProjectionFixture();
+  ambiguousProjectedStylesheet.projectedPaths.set(
+    cssSourcePaths[0],
+    "assets/%2e%2e/tokens.css",
+  );
+  assert.throws(
+    () => runCssProjection(ambiguousProjectedStylesheet),
+    /projected stylesheet pathname .* must not contain percent encoding/,
+  );
+
+  const missingSource = cssProjectionFixture();
+  missingSource.cssSources.delete(cssSourcePaths[3]);
+  assert.throws(
+    () => runCssProjection(missingSource),
+    /stylesheet is unavailable as tracked bytes/,
+  );
+  const unselectedSource = cssProjectionFixture();
+  unselectedSource.projectedPaths.delete(cssSourcePaths[3]);
+  assert.throws(
+    () => runCssProjection(unselectedSource),
+    /stylesheet is absent from its selected closure/,
+  );
+});
+
+test("the About CSS projection admits the bounded container-query form used by current source", () => {
+  const fixture = cssProjectionFixture();
+  fixture.cssSources.set(cssSourcePaths[1], {
+    bytes: Buffer.from(
+      "@container canvas-reading (min-width: 80rem) {.fixture{display:grid}}\n",
+      "utf8",
+    ),
+    git_blob_id: "c".repeat(40),
+  });
+  const result = runCssProjection(fixture);
+  assert.match(
+    result.outputs[0].bytes.toString("utf8"),
+    /@container canvas-reading \(min-width:\s*80rem\)\{\.fixture\{display:grid\}\}/,
+  );
+});
+
+test("a CSS source change changes only its owned projection path and lineage", () => {
+  const fixture = cssProjectionFixture();
+  const before = runCssProjection(fixture);
+  const original = fixture.cssSources.get(cssSourcePaths[2]);
+  fixture.cssSources.set(cssSourcePaths[2], {
+    ...original,
+    bytes: Buffer.from(".fixture-3 { color: rgb(90, 80, 70); }\n", "utf8"),
+    git_blob_id: "b".repeat(40),
+  });
+  const after = runCssProjection(fixture);
+
+  assert.notEqual(before.outputs[0].projected_path, after.outputs[0].projected_path);
+  assert.equal(before.outputs[1].projected_path, after.outputs[1].projected_path);
+  assert.equal(before.outputs[2].projected_path, after.outputs[2].projected_path);
+  assert.equal(
+    after.outputs[0].lineage.ordered_sources[2].sha256,
+    sha256(fixture.cssSources.get(cssSourcePaths[2]).bytes),
+  );
+  assert.equal(
+    after.outputs[0].lineage.ordered_sources[2].git_blob_id,
+    "b".repeat(40),
+  );
+});
+
+test("the production plan retains readable CSS authority while closing generated CSS outputs and preserving the installed build on profile failure", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const { files } = await enableCssProjectionPlanFixture(fixture);
+    const aggregatePlan = aggregateFixture();
+    const first = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan,
+    });
+    const second = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan,
+    });
+    const primaryOutputs = first.manifest.outputs.filter(
+      ({ surface }) => surface === "primary",
+    );
+    const generated = primaryOutputs.filter(
+      ({ source_path: sourcePath }) => sourcePath.startsWith("css-projection:"),
+    );
+
+    assert.equal(generated.length, 3);
+    assert.equal(first.manifest.surfaces.primary.files, files.size + generated.length);
+    assert.equal(
+      first.manifest.surfaces.primary.bytes,
+      primaryOutputs.reduce((total, { bytes }) => total + bytes, 0),
+    );
+    assert.deepEqual(first.manifest.inputs.css_projection, {
+      id: "prod-projection.css-profile.v1",
+      profile: "about-conservative-v1",
+      consumer: {
+        source_path: cssConsumerSourcePath,
+        projected_path: cssConsumerProjectedPath,
+        git_blob_id: first.manifest.inputs.css_projection.consumer.git_blob_id,
+        sha256: sha256(files.get(cssConsumerSourcePath)),
+      },
+      output_directory: "assets/css",
+      tool: cssProjectionConfiguration().tool,
+    });
+    assert.match(
+      first.manifest.inputs.css_projection.consumer.git_blob_id,
+      /^[a-f0-9]{40}$/,
+    );
+    for (const [sourcePath, sourceBytes] of files) {
+      const projectedPath = sourcePath === cssConsumerSourcePath
+        ? cssConsumerProjectedPath
+        : cssSourceRelativePaths[cssSourcePaths.indexOf(sourcePath)];
+      const outputBytes = first.outputFiles.get(`primary-public/${projectedPath}`);
+      assert.ok(outputBytes, `${projectedPath} remains in the primary projection`);
+      if (sourcePath !== cssConsumerSourcePath) {
+        assert.ok(outputBytes.equals(sourceBytes), `${sourcePath} remains readable authority`);
+      }
+    }
+    const generatedHtml = first.outputFiles
+      .get("primary-public/index.html")
+      .toString("utf8");
+    for (const output of generated) {
+      assert.ok(first.outputFiles.has(output.projected_path));
+      assert.ok(generatedHtml.includes(output.projected_path.replace("primary-public/", "")));
+      assert.equal(output.sha256, output.generation.output.sha256);
+      assert.equal(output.bytes, output.generation.output.bytes);
+      assert.equal(output.projected_path, `primary-public/${output.generation.output.projected_path}`);
+    }
+    const carrierIndexPaths = createProductionCarrierPlan(first).outputFiles
+      .get("deployment-files.tsv")
+      .toString("utf8")
+      .trimEnd()
+      .split("\n")
+      .slice(1)
+      .map((line) => line.split("\t")[3]);
+    for (const output of generated) {
+      assert.equal(
+        carrierIndexPaths.filter((projectedPath) =>
+          projectedPath === output.projected_path,
+        ).length,
+        1,
+        `${output.projected_path} appears exactly once in the carrier index`,
+      );
+    }
+    assert.deepEqual([...first.outputFiles.keys()], [...second.outputFiles.keys()]);
+    for (const [projectedPath, bytes] of first.outputFiles) {
+      assert.ok(bytes.equals(second.outputFiles.get(projectedPath)), `${projectedPath} is deterministic`);
+    }
+
+    await persistProductionProjection(first);
+    const installedManifest = await readFile(
+      path.join(first.outputRoot, "deployment-manifest.json"),
+      "utf8",
+    );
+    await writeFile(
+      path.join(fixture.root, ...cssSourcePaths[0].split("/")),
+      ".broken{color:red",
+      "utf8",
+    );
+    fixture.sourceSha = await commitFixture(fixture.root, "Introduce invalid CSS fixture");
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan,
+      }),
+      /could not parse|unbalanced syntax|unsupported raw CSS/,
+    );
+    assert.equal(
+      await readFile(path.join(first.outputRoot, "deployment-manifest.json"), "utf8"),
+      installedManifest,
+    );
   } finally {
     await rm(fixture.root, { recursive: true, force: true });
   }

@@ -53,6 +53,7 @@
     "test:schema-pages": "node --test tests/schema-pages/*.test.mjs",
     "test:iframe-routes": "node --test tests/iframe-routes/*.test.mjs",
     "test:prod-deployment": "node --test tests/prod-deployment/*.test.mjs",
+    "test:prod-css-projection-browser": "node tests/prod-deployment/about-css-projection.browser.mjs",
     "test:canvas-iframe-routes": "npm run build:iframe-routes && node tools/canvas-iframe-route-browser-contract.mjs",
     "test:iframe-browser": "node tools/core-iframe-carrier-contract.mjs && npm run test:canvas-iframe-routes",
     "test:iframe-ancestry-browser": "node tools/iframe-ancestry-browser-contract.mjs",
@@ -96,6 +97,7 @@
   "devDependencies": {
     "@playwright/test": "^1.62.1",
     "ajv": "^8.20.0",
+    "csso": "5.0.5",
     "wrangler": "4.145.0"
   }
 }
