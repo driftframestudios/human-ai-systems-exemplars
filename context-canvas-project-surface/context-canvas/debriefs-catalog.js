@@ -609,6 +609,11 @@
     var surfacesText = catalogFacts.length > 0 ? normalizedText(catalogFacts[0]) : "Primary visual and worked account";
     var usefulText = catalogFacts.length > 1 ? normalizedText(catalogFacts[1]) : (normalizedText(slug) || "Enterprise collaboration and implementation review");
     var imageAlt = image ? image.getAttribute("alt") : "";
+    var previewImageSrc = card.getAttribute("data-catalog-preview-src") || (image ? image.getAttribute("src") : "");
+    var previewImageSrcset = card.getAttribute("data-catalog-preview-srcset") || (image ? image.getAttribute("srcset") : "");
+    var previewImageSizes = card.getAttribute("data-catalog-preview-sizes") || (image ? image.getAttribute("sizes") : "");
+    var previewImageAlt = card.getAttribute("data-catalog-preview-alt") || imageAlt;
+    var previewImageCaption = card.getAttribute("data-catalog-preview-caption") || previewImageAlt;
     var routes = caseBriefRoutes(card);
     var fallbackLabel = normalizedText(title) || "Selected reading";
     var selectedRoute = routes.length > 0 ? routeSelection(card, target, routes, fallbackLabel) : {
@@ -633,11 +638,19 @@
     preview.querySelector("[data-preview-surfaces]").textContent = surfacesText;
     preview.querySelector("[data-preview-useful]").textContent = usefulText;
 
-    if (image) {
+    if (previewImageSrc) {
       var previewImage = preview.querySelector("[data-preview-image]");
-      previewImage.setAttribute("src", image.getAttribute("src"));
-      previewImage.setAttribute("alt", "");
-      preview.querySelector("[data-preview-caption]").textContent = imageAlt ? "Primary visual — " + imageAlt : "Primary visual from the selected reading.";
+      previewImage.removeAttribute("srcset");
+      previewImage.removeAttribute("sizes");
+      previewImage.setAttribute("src", previewImageSrc);
+      previewImage.setAttribute("alt", previewImageAlt);
+      if (previewImageSrcset) {
+        previewImage.setAttribute("srcset", previewImageSrcset);
+      }
+      if (previewImageSizes) {
+        previewImage.setAttribute("sizes", previewImageSizes);
+      }
+      preview.querySelector("[data-preview-caption]").textContent = previewImageCaption ? "Preview visual — " + previewImageCaption : "Preview visual from the selected reading.";
     }
 
     primaryLink.setAttribute("href", selectedRoute.route);

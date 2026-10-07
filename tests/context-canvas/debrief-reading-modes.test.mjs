@@ -183,12 +183,12 @@ test("Every catalogued Full Debrief carries one complete Case Brief contract", a
     const section = sections[0][2];
     assert.match(
       section,
-      new RegExp(`<h2\\b[^>]*id="${headingId}"[^>]*>\\s*At a glance\\s*<\\/h2>`, "u"),
+      new RegExp(`<h2\\b[^>]*id="${headingId}"[^>]*>\\s*At-a-Glance\\s*<\\/h2>`, "u"),
       `${route} should expose the shared visible heading`,
     );
 
     const orientation = section.match(
-      /<h2\b[^>]*>\s*At a glance\s*<\/h2>\s*<p(?:\s[^>]*)?>([\s\S]*?)<\/p>\s*<dl class="debrief-at-glance">/u,
+      /<h2\b[^>]*>\s*At-a-Glance\s*<\/h2>\s*<p(?:\s[^>]*)?>([\s\S]*?)<\/p>\s*<dl class="debrief-at-glance">/u,
     );
     assert.ok(orientation, `${route} should orient a cold reader before the six fields`);
     assert.ok(

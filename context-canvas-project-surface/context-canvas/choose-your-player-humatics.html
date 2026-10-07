@@ -112,7 +112,7 @@
       <div class="content__container">
         <div class="content content--editorial">
           <section id="case-brief" data-content-form="case-brief" aria-labelledby="at-a-glance-title">
-            <h2 id="at-a-glance-title" class="txt-h2">At a glance</h2>
+            <h2 id="at-a-glance-title" class="txt-h2">At-a-Glance</h2>
             <p>At Humatics, I served as Principal Product Designer and Lead to make a precision-location platform legible across planning, installation, calibration, support, and operation; the engagement established a five-posture, shared-site model after the first presentation exposed the gap.</p>
             <dl class="debrief-at-glance">
               <div>
@@ -389,7 +389,8 @@
             </p>
             <p>
               Comparable site and field views give Field Installation Engineers, calibrators, Site Administrators, product,
-              and engineering one shared object to correct. I put the design in view early so a person can point to a beacon,
+              and engineering one shared object to correct. These rapid prototypes are conversation instruments: I put the design
+              in view early so a person can point to a beacon,
               coordinate, source file, safety condition, or handoff, describe what would make field work easier and more
               dependable, and return to the version that incorporated the change. That visible revision path supports quick,
               thoughtful decisions across interruptions and role changes.
@@ -402,6 +403,11 @@
               </div>
               <figcaption class="table-note"><strong>Figure 1.</strong> The global site-management dashboard connects fleet-wide uptime, calibration, safety, and open field pins to individual project phases, owners, beacon counts, and recent events. It carries the Operations posture from portfolio awareness to the next site-level action.</figcaption>
             </figure>
+            <p>
+              The hub answered the Project Manager&rsquo;s need for one coherent view across Humatics teams, Field Installation
+              Engineers, and Site Administrators. Phase, owner, activity, and open field work sit together so a person can resume
+              an interrupted setup from the latest shared state and point directly to the item that needs another team&rsquo;s response.
+            </p>
 
             <h3 id="solution-bottleneck-title" class="txt-h3 beat-title">II.b The Bottleneck — Working posture and access authority require separate contracts</h3>
             <p>
@@ -443,9 +449,11 @@
             <h4 id="humatics-proxy-site-sequence-title" class="txt-h4">Working proxy system — locate the site, then inspect its local operating state</h4>
             <p>
               Figures 2 and 3 continue the same synthetic 2026 system from geographic setup into a site-local engineering
-              drawing. The first keeps address, latitude and longitude, footprint, entrance, and exclusion intent distinct;
-              the second makes each beacon&rsquo;s placement and current condition inspectable. The contract diagram that follows
-              names the calibration and safety authority those views require.
+              drawing. The geographic setup directly answers the Project Manager&rsquo;s question about where site definition begins;
+              its separate address, coordinates, footprint, entrance, and exclusion tools invite field teams to correct the
+              proposed authority and transform. The beacon list then asks which live position, zone, battery, signal, and mount
+              conditions should drive action. The contract diagram that follows names the calibration and safety authority those
+              views require.
             </p>
             <figure id="humatics-map-setup" class="story-visual debrief-proxy-figure table-span-all">
               <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Synthetic geographic site-setup map. Scroll horizontally to inspect the interface, or use the following link to open the original image.">
@@ -464,6 +472,11 @@
               </div>
               <figcaption class="table-note"><strong>Figure 3.</strong> The beacon workspace places a selected device&rsquo;s local position, mount height, battery, and signal beside the condition of 22 devices. Field placement and support can inspect the same site drawing.</figcaption>
             </figure>
+            <p>
+              Placing the selected beacon beside the full list makes live field state discussable at two scales. A Field
+              Installation Engineer can identify the physical device in question while support and engineering decide how
+              telemetry freshness, degraded signal, battery state, and concurrent updates should appear and recover.
+            </p>
             <figure class="story-visual table-span-all">
               <a class="story-visual__open" href="../img/plot/humatics_site_truth_and_time_map.svg" aria-label="Open the Humatics site truth and time map at full size">
                 <img src="../img/plot/humatics_site_truth_and_time_map.svg" width="1600" height="1200" loading="lazy" alt="A site-local engineering point passes through a calibrated transform into a derived geographic view. Authority fields and a three-event, three-layer time contract preserve provenance.">
@@ -686,7 +699,9 @@ render = render_word_cloud(combined, staged / "word-cloud.png", seed=seed)</code
               Figure 5 continues the same synthetic 2026 system into field coordination. A pin joins local geometry, dimensions,
               photographs, an unfinished checklist, and a cross-role conversation in one view. It makes the intended handoff
               visible; interruption, duplicate delivery, stale revision, and crew-change behavior remain implementation
-              contracts to exercise directly.
+              contracts to exercise directly. The pin and scrolling minimap are deliberate conversation prompts: field crews can
+              orient the issue in the larger site while Humatics teams and Site Administrators discuss responsive service against
+              the same location, photographs, measurements, and thread.
             </p>
             <figure id="humatics-site-conversation" class="story-visual debrief-proxy-figure table-span-all">
               <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Synthetic field pin and engineer-calibrator conversation. Scroll horizontally to inspect the interface, or use the following link to open the original image.">

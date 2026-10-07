@@ -116,7 +116,7 @@
       <div class="content__container">
         <div class="content content--editorial">
           <section id="case-brief" data-content-form="case-brief" aria-labelledby="at-a-glance-title">
-            <h2 id="at-a-glance-title" class="txt-h2">At a glance</h2>
+            <h2 id="at-a-glance-title" class="txt-h2">At-a-Glance</h2>
             <p>Within Foundation Medicine R&amp;D, I combined principal-level product design with full-stack implementation to keep case assignment, evidence review, and sign-off moving while one capability family transferred into a new platform and consequential legacy areas retained named ownership.</p>
             <dl class="debrief-at-glance">
               <div>
@@ -263,21 +263,13 @@
             <aside class="interpretive-aside" aria-labelledby="genomic-proxy-standing-title">
               <h4 id="genomic-proxy-standing-title" class="txt-h4">How to read the working interface views</h4>
               <p>
-                These figures show SoT Cartography—Source of Truth Cartography—a working, IP-free system I designed and built
-                in 2026 to help research teams visualize and organize complex workflows across domains. It accepts files and
-                data streams and turns them into source maps, flowcharts, and 3D axonometric process views. It also helps teams
-                follow who said what, where a decision lives, and which documents or data sources support it. These examples
-                use generalized workflows and synthetic content. My project materials support the 2019–2025 account and
-                outcomes; the cited public Registry readings document that retrospective. The figures are contemporary working
-                views that make those operating patterns inspectable. An open-source release is planned.
-                Figures 1–8 move from plate and permission state through validation, specimen work, connection health,
-                quality gates, the complete process, and report sign-out.
+                These figures show SoT Cartography—Source of Truth Cartography—a working, IP-free system I designed and built in 2026 to help research teams visualize and organize complex workflows across domains.
               </p>
               <p>
-                Comparable interface views give Curators, Pathologists, scientists, and engineers something concrete to review
-                together. I put the design in view early so each person can point to a case state, permission, failed dependency,
-                or release gate, name the mismatch in their own terms, and compare the revised version with the one they reviewed. Correction becomes
-                ordinary design work, and implementation stays aligned with the people carrying clinical consequence.
+                These rapid prototypes give Curators, Pathologists, scientists, and engineers concrete conversation instruments.
+                I put the design in view early so each person can point to a case state, permission, failed dependency, or release
+                gate, name the mismatch in their own terms, and compare the revised version with the one they reviewed. Correction
+                becomes ordinary design work, and implementation stays aligned with the people carrying clinical consequence.
               </p>
             </aside>
             <figure id="genomic-plate-operating-state" class="story-visual debrief-proxy-figure table-span-all">
@@ -301,6 +293,12 @@
                 qualified recovery from shared product state rather than a Slack-and-email reconstruction.
               </figcaption>
             </figure>
+            <p>
+              The plate view remained a desired engineering concept during the project. Here, it asks which plate-wide conditions
+              should reorganize individual work and makes consent state part of that discussion. A rescinded consent ring can
+              reveal the manual recovery path across downstream systems before another person has to reconstruct it through
+              Slack, email, and case-by-case reassignment.
+            </p>
           </section>
         </div>
       </div>
@@ -363,6 +361,11 @@
                 assignment rules can be reviewed before work is exposed or changed.
               </figcaption>
             </figure>
+            <p>
+              The access grid turns a broad permission conversation into component-level questions: which profiles reveal a tab,
+              expose a column, enable row or select-all actions, or authorize an API request? The interface can explain the grant;
+              server-side authorization remains the deciding control for every read and write.
+            </p>
 
             <figure class="story-visual table-span-all rose-editorial-visual">
               <a class="story-visual__open" href="../img/plot/genomic_viewer_strategy_canvas.svg" aria-label="Open the genomic viewer Strategy Canvas at full size">
@@ -523,6 +526,11 @@
                 The view connects a stack decision to the scientific work its typed contribution path must carry.
               </figcaption>
             </figure>
+            <p>
+              This corridor isolates the computational-biology portion served by the viewer so participants can correct its
+              boundaries, gates, and handoffs. Figure 7 later restores the complete accession-to-report process and keeps a local
+              implementation choice connected to the laboratory system it must support.
+            </p>
           </section>
         </div>
       </div>
@@ -649,6 +657,12 @@
                 Probe controls and banner or toast channels make the condition available for diagnosis and team notification.
               </figcaption>
             </figure>
+            <p>
+              The persistent COSMIC banner marks a dependency that continues to constrain work; transient toasts carry shorter
+              authentication and probe events. Showing both channels gives engineering and operations a concrete way to decide
+              which failures call for retry with backoff and jitter, which need durable escalation, and how WebSocket updates,
+              query fan-out, and concurrent case edits or reassignments should reconcile on another Curator&rsquo;s open screen.
+            </p>
 
             <figure class="story-visual table-span-all cobalt-operating-field__visual">
               <a class="story-visual__open" href="../img/plot/genomic_viewer_boundary_contract_map.svg" aria-label="Open the profile and permission boundary map at full size">
@@ -706,6 +720,12 @@
                 override authority, reviewer concordance, and e-signature completion remain visible.
               </figcaption>
             </figure>
+            <p>
+              Curators specifically asked to see the active environment because training, partner studies, validation, and
+              research carried different work. The proposed readiness percentage records another useful question: which steps
+              count, how should they be weighted, when should the value recalculate, and when could one number misstate a case?
+              Those semantics remained a post-MVP research and implementation decision.
+            </p>
 
             <figure class="story-visual table-span-all cobalt-operating-field__visual">
               <a class="story-visual__open" href="../img/plot/genomic_viewer_operating_surface_map.svg" aria-label="Open the genomic operating-surface map at full size">
@@ -779,6 +799,11 @@
                 a whole-system map for the transitions and dependencies its scenarios and tests must preserve.
               </figcaption>
             </figure>
+            <p>
+              The full corridor is an orientation and correction instrument: laboratory, computational, quality, and reporting
+              teams can point to the boundary where their account diverges, then revise the named transition while preserving
+              the surrounding process. It keeps the computational slice in Figure 3 proportional to the complete clinical workflow.
+            </p>
 
             <h4 id="industry-transfer-title" class="txt-h4">Where the decision contract transfers</h4>
             <p>
@@ -852,6 +877,12 @@
                 where qualified human judgment remains attached to report release.
               </figcaption>
             </figure>
+            <p>
+              The chain also gives Pathologists a place to show where work moves backward. A threshold-adjacent quality metric or
+              subtle sequencing artifact may return a case to curation or trigger re-sequencing, creating multiple records for one
+              patient. The prototype brings that loop into the conversation so repeat and re-sequenced records can stay distinct
+              from longitudinal assays through an explicit test-type model.
+            </p>
 
             <aside class="interpretive-aside table-span-all cobalt-operating-field__aside" aria-labelledby="competitive-frontier-title">
               <h4 id="competitive-frontier-title" class="txt-h4">Public product workflows leave specific operating questions open</h4>
