@@ -4,7 +4,7 @@ import { pathToFileURL } from 'node:url';
 
 export const SOURCE_PATH = 'context-canvas-project-surface/data/visualization-fidelity/research/sources.v1.json';
 export const SUMMARY_PATH = 'context-canvas-project-surface/data/visualization-fidelity/research/summary.v1.json';
-export const SOURCE_SHA256 = '9257572c61bf0c88622834fa1e4f33503b26b120fe93b6a0a1d2ca1f6fbf0dc7';
+export const SOURCE_SHA256 = 'f3f773b0c939d4c239379bbfd6275979df106da93d67de518e90737ea5d7df45';
 export const EVIDENCE_KINDS = Object.freeze(['empirical-study', 'technical-guidance', 'practitioner-source']);
 export const TOPIC_KEYS = Object.freeze([
   'comparison', 'interpretation', 'distribution-and-uncertainty',

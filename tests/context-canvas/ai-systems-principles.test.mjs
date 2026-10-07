@@ -39,7 +39,7 @@ const placements = new Map([
   ["concept-nursery.html", {
     sectionId: "lifecycle-title",
     label: "Concept Nursery boundary",
-    text: "Stage the page with a named destination; move it when its use settles; record the move so the next steward does not search twice.",
+    text: "Stage the page with a named destination; move it when its use settles; record the move so the next steward can resume from the current location.",
     footer: "Staging contract",
   }],
   ["core-architectures-orientation-index.html", {
@@ -105,7 +105,7 @@ const placements = new Map([
   ["resting-concepts.html", {
     sectionId: "architecture-title",
     label: "Resting Concepts boundary",
-    text: "Rest is a reversible state. The page remains findable, its reason remains interpretable, and its return does not depend on memory.",
+    text: "Rest is a reversible state. The page remains findable, its reason remains interpretable, and its return follows an observable condition recorded with the page.",
     footer: "Resting contract",
   }],
   ["shared-machinery.html", {

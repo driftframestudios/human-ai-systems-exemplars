@@ -26,7 +26,7 @@
     <text x="102" y="282" class="mono chip ink">START WITH THE STRAIN</text>
     <text x="102" y="306" class="sans card-copy ink">What needs to become visible?</text>
     <path d="M334 270H386V252L424 288L386 324V306H334Z" class="arrow" aria-hidden="true"/>
-    <text x="454" y="276" class="sans family-title ink">Name the missing cognitive move before choosing a canvas, workshop, prototype, or system form.</text>
+    <text x="454" y="276" class="sans family-title ink">Name the needed cognitive move before choosing a canvas, workshop, prototype, or system form.</text>
     <text x="454" y="309" class="sans card-copy body">Orientation · comparison · topology · elicitation · measurement · behavior protection · recovery</text>
   </g>
 

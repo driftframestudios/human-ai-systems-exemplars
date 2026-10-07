@@ -114,9 +114,10 @@ test('verified read-only projection retains the released 13 works, 21 membership
   assert.match(section, /The interpretation row contains 7 works, including 1 empirical study, 2 technical-guidance sources and 4 practitioner sources\./u);
   assert.match(section, /13 works have a recorded citation/u);
   assert.match(section, /Read these contributions together/u);
-  for (const output of [svg, section]) {
-    assert.match(output, /7 works belong to several topics; adding row totals counts memberships, not unique works\./u);
-  }
+  assert.match(svg, /7 works belong to several topics; adding row totals counts memberships, not unique works\./u);
+  assert.match(section, /7 works belong to several topics, so adding row totals counts memberships\./u);
+  assert.match(section, /The matrix and adjacent table preserve both membership and the 13-work total directly\./u);
+  assert.match(section, /shared source lineage; independent confirmation still requires a separate work\./u);
   assert.match(section, /<figure\b/u);
   assert.ok(section.includes('href="../img/plot/atlas_public_research.svg"'));
   assert.ok(section.includes('src="../img/plot/atlas_public_research.svg"'));

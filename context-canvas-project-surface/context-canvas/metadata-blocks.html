@@ -114,8 +114,8 @@
             <p class="debrief-lead">
               The metadata block says what an account claims. A small threadkeeping ledger records what the team has
               settled, what remains open, what was declined and why, and which move comes next. A visitor can use the pair
-              to re-enter from the current position rather than reconstructing it from transcripts. The ledger stays outside
-              the execution path and does not replace source documents, tests, schemas, decision records, or event logs.
+              to re-enter from the current position. The ledger serves continuity outside the execution path; source documents,
+              tests, schemas, decision records, and event logs retain their authority.
             </p>
             <figure class="table-figure table-figure--wide">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Threadkeeping position against current practice">
@@ -123,10 +123,10 @@
                   <caption>Where Threadkeeping lands against current practice</caption>
                   <thead><tr data-label="Where Threadkeeping lands against current practice: column headings"><th scope="col" data-label="What teams do today">What teams do today</th><th scope="col" data-label="What the evidence shows">What the evidence shows</th><th scope="col" data-label="What Threadkeeping does instead">What Threadkeeping does instead</th><th scope="col" data-label="Outcome and ability gained">Outcome and ability gained</th></tr></thead>
                   <tbody>
-                  <tr data-label="Where Threadkeeping lands against current practice: Use the transcript as the record"><th scope="row" data-label="What teams do today">Use the transcript as the record</th><td data-label="What the evidence shows">Reconstruction cost leaves most transcripts unread.</td><td data-label="What Threadkeeping does instead">Maintains a small standing object while work happens.</td><td data-label="Outcome and ability gained">The thread can be read in a minute rather than reconstructed over an hour.</td></tr>
+                  <tr data-label="Where Threadkeeping lands against current practice: Use the transcript as the record"><th scope="row" data-label="What teams do today">Use the transcript as the record</th><td data-label="What the evidence shows">Reconstruction cost leaves most transcripts unread.</td><td data-label="What Threadkeeping does instead">Maintains a small standing object while work happens.</td><td data-label="Outcome and ability gained">The standing thread supports a minute-scale read; transcript reconstruction can take an hour.</td></tr>
                   <tr data-label="Where Threadkeeping lands against current practice: Summarize at the end"><th scope="row" data-label="What teams do today">Summarize at the end</th><td data-label="What the evidence shows">End summaries preserve conclusions while dropping their basis.</td><td data-label="What Threadkeeping does instead">Keeps what was ruled out alongside what was decided.</td><td data-label="Outcome and ability gained">Rejected options stay rejected for a visible reason.</td></tr>
-                  <tr data-label="Where Threadkeeping lands against current practice: Trust a memory layer"><th scope="row" data-label="What teams do today">Trust a memory layer</th><td data-label="What the evidence shows">Flat notes do not preserve typed relations.</td><td data-label="What Threadkeeping does instead">Marks relations such as supports and supersedes explicitly.</td><td data-label="Outcome and ability gained">Later decisions can be traced to earlier ones.</td></tr>
-                  <tr data-label="Where Threadkeeping lands against current practice: Start each session from scratch"><th scope="row" data-label="What teams do today">Start each session from scratch</th><td data-label="What the evidence shows">A configured agent system can carry selected context during an active run, while stateless infrastructure does not preserve the work’s complete line across sessions.</td><td data-label="What Threadkeeping does instead">Provides the standing object as opening context.</td><td data-label="Outcome and ability gained">Re-entry begins from the current position rather than zero.</td></tr>
+                  <tr data-label="Where Threadkeeping lands against current practice: Trust a memory layer"><th scope="row" data-label="What teams do today">Trust a memory layer</th><td data-label="What the evidence shows">Flat notes leave typed relations implicit.</td><td data-label="What Threadkeeping does instead">Marks relations such as supports and supersedes explicitly.</td><td data-label="Outcome and ability gained">Later decisions can be traced to earlier ones.</td></tr>
+                  <tr data-label="Where Threadkeeping lands against current practice: Start each session from scratch"><th scope="row" data-label="What teams do today">Start each session from scratch</th><td data-label="What the evidence shows">A configured agent system can carry selected context during an active run; stateless infrastructure resets at the session boundary. An external artifact carries the selected decision line into the next session.</td><td data-label="What Threadkeeping does instead">Provides the standing object as opening context.</td><td data-label="Outcome and ability gained">Re-entry begins from the current position carried by the standing object.</td></tr>
                   <tr data-label="Where Threadkeeping lands against current practice: Treat continuity as a model capability"><th scope="row" data-label="What teams do today">Treat continuity as a model capability</th><td data-label="What the evidence shows">Larger models have shown greater identity drift in multi-turn interaction.</td><td data-label="What Threadkeeping does instead">Keeps continuity in an artifact outside the model.</td><td data-label="Outcome and ability gained">The working line depends less on any particular model.</td></tr>
                   </tbody>
                 </table>
@@ -135,10 +135,10 @@
 
             <div class="architecture-pair blueprint-pop-cards table-span-all" aria-label="Threadkeeping architecture beats">
               <article><p class="architecture-pair__label">Debrief</p><h3 class="txt-h3">Keep a lightweight memory surface beside the work</h3><p>Preserve decisions, rationale, open questions, and provisional status so the next pass can resume from shared ground.</p></article>
-              <article><p class="architecture-pair__label">The Snag</p><h3 class="txt-h3">Reasoning stays trapped in transient history</h3><p>Sessions span days and tools; a later reader sees conclusions without the basis, alternatives, or unresolved edge that produced them.</p></article>
-              <article><p class="architecture-pair__label">The Read</p><h3 class="txt-h3">Continuity is a distributed-cognition problem</h3><p>An external, inspectable surface can hold settled, provisional, declined, superseded, and open states without asking one participant to remember the whole thread.</p></article>
+              <article><p class="architecture-pair__label">The Snag</p><h3 class="txt-h3">Reasoning stays trapped in transient history</h3><p>Sessions span days and tools; a later reader sees conclusions while their basis, alternatives, and unresolved edge remain buried in the history.</p></article>
+              <article><p class="architecture-pair__label">The Read</p><h3 class="txt-h3">Continuity is a distributed-cognition problem</h3><p>An external, inspectable surface can distribute settled, provisional, declined, superseded, and open states across participants and sessions.</p></article>
               <article><p class="architecture-pair__label">The Move</p><h3 class="txt-h3">Record decisions, assumptions, open questions, and the next move</h3><p>Review the threadkeeper before a refactor or goal shift. Keep sources and rationale close enough that the entry can be checked.</p></article>
-              <article><p class="architecture-pair__label">The Cure</p><h3 class="txt-h3">Re-entry no longer requires reconstruction</h3><p>Rationale remains traceable, provisional material remains visibly provisional, and continuity outlives the current chat or tool.</p></article>
+              <article><p class="architecture-pair__label">The Cure</p><h3 class="txt-h3">Re-entry begins from recorded rationale</h3><p>Rationale remains traceable, provisional material remains visibly provisional, and continuity outlives the current chat or tool.</p></article>
               <article><p class="architecture-pair__label">The Guidance</p><h3 class="txt-h3">Maintain one current coordination object</h3><p>Use a ledger, journal, project note, or decision register that remains outside execution and names the live edge of the work.</p></article>
             </div>
 
@@ -146,9 +146,9 @@
               <h3 id="metadata-context-packet-title" class="txt-h3">Selected context, declared horizons, and meaningful human involvement</h3>
               <p>
                 In <a href="{{PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_FOR_RELIABLE_HUMAN_LLM_INTERACTION}}">Prompt-Side Conditions</a>,
-                context is a selected working set rather than everything available. The scan and ledger make that set
-                signal-dense, source-labeled, and decision-relevant; a saved prompt can point to the standing object instead
-                of restating the whole history. This is direct context engineering: preserve the working packet and its
+                context is a selected working set drawn from the available material. The scan and ledger make that set
+                signal-dense, source-labeled, and decision-relevant; a saved prompt can point to the standing object and
+                keep repeated history compact. This is direct context engineering: preserve the working packet and its
                 boundaries, then reload it deliberately (Liu et al., 2024 — Lost in the Middle).
               </p>
               <p>
@@ -162,13 +162,13 @@
               <p>
                 <a href="{{PUBLIC_URL_REGISTRY_VERBALIZED_SAMPLING}}">Verbalized Sampling</a>
                 can generate several plausible next routes before selection. The ledger then keeps both the chosen route and
-                material unselected alternatives with their reasons, rather than laundering a first answer into inevitability
+                material unselected alternatives with their reasons, making the selection deliberate and revisable
                 (Zhang et al., 2025 — Verbalized Sampling).
               </p>
             </aside>
 
             <h3 id="threadkeeping-prototype-title" class="txt-h3">Inspect the paired Threadkeeping Ledger</h3>
-            <p>The prototype turns the continuity contract into a small, maintainable surface: settled and open material, declined routes, statuses, sources, and the next move stay visible together. Use it as-is beside a collaboration; invert open items into the next research plan; adapt its status language for a regulated or domain-specific setting; extend it with organization-owned definitions; connect settled entries to source-document and artifact pipelines; or reload its bounded packet through a harness at each session boundary. It remains a continuity surface, never the execution source.</p>
+            <p>The prototype turns the continuity contract into a small, maintainable surface: settled and open material, declined routes, statuses, sources, and the next move stay visible together. Use it as-is beside a collaboration; invert open items into the next research plan; adapt its status language for a regulated or domain-specific setting; extend it with organization-owned definitions; connect settled entries to source-document and artifact pipelines; or reload its bounded packet through a harness at each session boundary. It serves continuity; source documents and executing systems retain their named roles.</p>
             <figure class="prototype-embed prototype-embed--blueprint table-span-all" aria-labelledby="threadkeeping-prototype-title">
               <iframe src="https://iframes.vik.guru/v1/canvas/threadkeeping-ledger/" title="Interactive Threadkeeping Ledger companion" loading="lazy" sandbox="allow-downloads allow-modals allow-popups allow-popups-to-escape-sandbox allow-scripts" allow="clipboard-write" referrerpolicy="no-referrer"></iframe>
               <figcaption class="table-note">Inspect a working continuity surface after reading its role and boundary. <span class="prototype-embed__action"><a href="prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html">Open the Threadkeeping Ledger in a full view</a></span></figcaption>
@@ -184,15 +184,16 @@
             <p class="architecture-pair__label">02 · Content scan layer</p>
             <h2 id="scan-contract-title" class="txt-h2 architecture-track-title">The scan states what the work claims about the world</h2>
             <p class="debrief-lead">
-              The visible layer compresses identity, population, change, result, disclosure, and vintage without
-              turning the reading into a dashboard. A missing baseline remains unstated rather than invented. Failure,
-              partial progress, a pivot, an abandoned route, and ongoing work remain available outcome states.
+              The visible layer compresses identity, population, change, result, disclosure, and vintage into a decision scan,
+              while the full account retains narrative depth. An unreported baseline remains explicitly unknown; a numeric
+              result appears when its baseline and method are available. Failure, partial progress, a pivot, an abandoned
+              route, and ongoing work remain available outcome states.
             </p>
             <figure class="story-visual cobalt-operating-field__visual table-span-all">
               <a class="story-visual__open" href="../img/plot/metadata_scan_contract.svg" aria-label="Open the metadata scan contract at full size">
                 <img src="../img/plot/metadata_scan_contract.svg" width="1600" height="1080" loading="eager" alt="Six cards show subject and era, participants and population, events and pivots, changed work and outcome, disclosure posture, and last reviewed with currentness, followed by a validation rail for the scan and conditional rules block.">
               </a>
-              <figcaption class="table-note">The six fields are a decision surface, not a substitute for the body. Each makes one boundary or consequence available before a reader commits to depth.</figcaption>
+              <figcaption class="table-note">The six fields are a decision surface that opens into the full body. Each makes one boundary or consequence available before a reader commits to depth.</figcaption>
             </figure>
 
             <figure class="table-figure table-figure--wide">
@@ -201,7 +202,7 @@
                   <caption>Required content and visitor use for the six-field scan</caption>
                   <thead><tr data-label="Required content and visitor use for the six-field scan: column headings"><th scope="col" data-label="Field">Field</th><th scope="col" data-label="Carries">Carries</th><th scope="col" data-label="Visitor-useful question">Visitor-useful question</th><th scope="col" data-label="Boundary">Boundary</th></tr></thead>
                   <tbody>
-                    <tr data-label="Required content and visitor use for the six-field scan: Subject + era/date/duration"><th scope="row" data-label="Field">Subject + era/date/duration</th><td data-label="Carries">Named subject, engagement or reference period, duration when known, and source precision.</td><td data-label="Visitor-useful question">What is this account about, and when did it apply?</td><td data-label="Boundary">Visible precision never exceeds the source.</td></tr>
+                    <tr data-label="Required content and visitor use for the six-field scan: Subject + era/date/duration"><th scope="row" data-label="Field">Subject + era/date/duration</th><td data-label="Carries">Named subject, engagement or reference period, duration when known, and source precision.</td><td data-label="Visitor-useful question">What is this account about, and when did it apply?</td><td data-label="Boundary">Visible precision stays within source precision.</td></tr>
                     <tr data-label="Required content and visitor use for the six-field scan: Participants + population"><th scope="row" data-label="Field">Participants + population</th><td data-label="Carries">Participating, affected, deciding, maintaining, and evaluating groups.</td><td data-label="Visitor-useful question">Whose work and consequence are represented?</td><td data-label="Boundary">Population counts carry attribution when known.</td></tr>
                     <tr data-label="Required content and visitor use for the six-field scan: Events + pivots"><th scope="row" data-label="Field">Events + pivots</th><td data-label="Carries">Acquisition, leadership change, scope cut, deadline compression, rule change, expansion, or another material event.</td><td data-label="Visitor-useful question">Which condition changed the route or interpretation?</td><td data-label="Boundary">An event appears because it changes the reading.</td></tr>
                     <tr data-label="Required content and visitor use for the six-field scan: Changed work + outcome"><th scope="row" data-label="Field">Changed work + outcome</th><td data-label="Carries">New ability, removed work, residual condition, baseline, method, and outcome state.</td><td data-label="Visitor-useful question">What became possible, unnecessary, or still open?</td><td data-label="Boundary">A numeric result carries a baseline and method.</td></tr>
@@ -222,14 +223,14 @@
             <h2 id="rules-title" class="txt-h2 architecture-track-title">Regulatory and standards detail appears when it changes accountability</h2>
             <p>
               The rules block identifies what the work was accountable to and which interfaces it had to conform to.
-              It appears only when the reading has a material regulatory or standards surface. Each framework remains
+              A material regulatory or standards surface activates it. Each framework remains
               bound to the era, jurisdiction, authority, applicability, and supporting source relevant to the account.
             </p>
             <div class="architecture-pair blueprint-pop-cards table-span-all">
               <article><p class="architecture-pair__label">Authority</p><h3 class="txt-h3">Name who issued or maintains the rule</h3><p>FDA, CMS, HHS OCR, ISO, HL7 International, or another source remains attached to the framework.</p></article>
               <article><p class="architecture-pair__label">Applicability</p><h3 class="txt-h3">State how the rule met the work</h3><p>In-scope, partial, out-of-scope, or aspirational coverage prevents association from impersonating obligation.</p></article>
               <article><p class="architecture-pair__label">Era + source</p><h3 class="txt-h3">Bind the claim to its time</h3><p>Edition, jurisdiction, source link, and applicable period travel with the framework.</p></article>
-              <article><p class="architecture-pair__label">Interface</p><h3 class="txt-h3">Name the required conformance target</h3><p>HL7 v2, FHIR R4, LOINC, ASTM, or an LIS–EHR boundary describes the wire; it is not a tool inventory.</p></article>
+              <article><p class="architecture-pair__label">Interface</p><h3 class="txt-h3">Name the required conformance target</h3><p>HL7 v2, FHIR R4, LOINC, ASTM, or an LIS–EHR boundary describes the wire; tool inventory remains a separate concern.</p></article>
             </div>
           </article>
 
@@ -243,11 +244,11 @@
                   <thead><tr data-label="Validation checks for scan and regulatory content: column headings"><th scope="col" data-label="Check">Check</th><th scope="col" data-label="Passing condition">Passing condition</th><th scope="col" data-label="Changed ability">Changed ability</th></tr></thead>
                   <tbody>
                     <tr data-label="Validation checks for scan and regulatory content: Presence"><th scope="row" data-label="Check">Presence</th><td data-label="Passing condition">Every visible field resolves; unknown material remains explicitly unknown.</td><td data-label="Changed ability">People and machine-reading systems can distinguish an absent claim from a negative claim.</td></tr>
-                    <tr data-label="Validation checks for scan and regulatory content: Vocabulary"><th scope="row" data-label="Check">Vocabulary</th><td data-label="Passing condition">Outcome, disclosure, event, and applicability values use the local controlled terms.</td><td data-label="Changed ability">Readings can be compared and queried without translating each one by hand.</td></tr>
+                    <tr data-label="Validation checks for scan and regulatory content: Vocabulary"><th scope="row" data-label="Check">Vocabulary</th><td data-label="Passing condition">Outcome, disclosure, event, and applicability values use the local controlled terms.</td><td data-label="Changed ability">Readings can be compared and queried through shared controlled terms.</td></tr>
                     <tr data-label="Validation checks for scan and regulatory content: Temporal precision"><th scope="row" data-label="Check">Temporal precision</th><td data-label="Passing condition">Dates, eras, and framework editions stay as precise as their sources.</td><td data-label="Changed ability">A reader can separate engagement history from a later reference.</td></tr>
-                    <tr data-label="Validation checks for scan and regulatory content: Outcome rigor"><th scope="row" data-label="Check">Outcome rigor</th><td data-label="Passing condition">Measured outcomes carry baseline, value, unit, method, and source; otherwise the result stays qualitative.</td><td data-label="Changed ability">Compression preserves the mechanism needed to interpret a result.</td></tr>
+                    <tr data-label="Validation checks for scan and regulatory content: Outcome rigor"><th scope="row" data-label="Check">Outcome rigor</th><td data-label="Passing condition">Measured outcomes carry baseline, value, unit, method, and source; qualitative results use an explicit outcome state.</td><td data-label="Changed ability">Compression preserves the mechanism needed to interpret a result.</td></tr>
                     <tr data-label="Validation checks for scan and regulatory content: Conditional rules"><th scope="row" data-label="Check">Conditional rules</th><td data-label="Passing condition">The rules block appears only when applicable, and every framework carries authority, era, jurisdiction, applicability, and source.</td><td data-label="Changed ability">Normative obligations remain distinct from adjacent standards or selected tools.</td></tr>
-                    <tr data-label="Validation checks for scan and regulatory content: Disclosure"><th scope="row" data-label="Check">Disclosure</th><td data-label="Passing condition">The shareability posture matches the actual content and its necessary omissions or transformations.</td><td data-label="Changed ability">The reading can travel without losing its privacy or attribution boundary.</td></tr>
+                    <tr data-label="Validation checks for scan and regulatory content: Disclosure"><th scope="row" data-label="Check">Disclosure</th><td data-label="Passing condition">The shareability posture matches the actual content and its necessary omissions or transformations.</td><td data-label="Changed ability">The reading can travel with its privacy and attribution boundary intact.</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -267,7 +268,7 @@
                   <thead><tr data-label="Work shifts, sustained stewardship, and material receipts: column headings"><th scope="col" data-label="Work shift">Work shift</th><th scope="col" data-label="Changed ability">Changed ability</th><th scope="col" data-label="Sustaining investment">Sustaining investment</th><th scope="col" data-label="Material receipt">Material receipt</th></tr></thead>
                   <tbody>
                     <tr data-label="Work shifts, sustained stewardship, and material receipts: Summary prose to six typed claims"><th scope="row" data-label="Work shift">Summary prose → six typed claims</th><td data-label="Changed ability">Readers can orient before opening the full narrative.</td><td data-label="Sustaining investment">Field stewardship and periodic review.</td><td data-label="Material receipt">Complete six-field scan with explicit unknowns.</td></tr>
-                    <tr data-label="Work shifts, sustained stewardship, and material receipts: Outcome assertion to baseline + method"><th scope="row" data-label="Work shift">Outcome assertion → baseline + method</th><td data-label="Changed ability">Evaluators can interpret magnitude without reconstructing the comparison.</td><td data-label="Sustaining investment">Metric definition, source retention, and outcome review.</td><td data-label="Material receipt">Baseline, method, unit, source, and outcome state.</td></tr>
+                    <tr data-label="Work shifts, sustained stewardship, and material receipts: Outcome assertion to baseline + method"><th scope="row" data-label="Work shift">Outcome assertion → baseline + method</th><td data-label="Changed ability">Evaluators can interpret magnitude from the documented comparison.</td><td data-label="Sustaining investment">Metric definition, source retention, and outcome review.</td><td data-label="Material receipt">Baseline, method, unit, source, and outcome state.</td></tr>
                     <tr data-label="Work shifts, sustained stewardship, and material receipts: Standards list to applicability contract"><th scope="row" data-label="Work shift">Standards list → applicability contract</th><td data-label="Changed ability">Teams can see which rule governed what, where, and when.</td><td data-label="Sustaining investment">Domain review, edition tracking, and source maintenance.</td><td data-label="Material receipt">Framework, authority, jurisdiction, applicability, era, and source.</td></tr>
                     <tr data-label="Work shifts, sustained stewardship, and material receipts: Generic shareability to explicit disclosure posture"><th scope="row" data-label="Work shift">Generic shareability → explicit disclosure posture</th><td data-label="Changed ability">A reading can move safely across audiences.</td><td data-label="Sustaining investment">Privacy, legal, source-owner, and editorial review where required.</td><td data-label="Material receipt">Disclosure state, transformation note, and last-reviewed date.</td></tr>
                   </tbody>

@@ -15,7 +15,7 @@
     <title id="metadata-header-title">The scan contract</title>
     <rect x="32" y="30" width="1536" height="154" rx="20" fill="#2855f3"/>
     <text x="72" y="72" class="mono eyebrow white">SITE READINGS + DEBRIEFS · CONTENT SCAN LAYER</text>
-    <text x="72" y="120" class="sans title white">Six fields make a reading scannable without flattening it.</text>
+    <text x="72" y="120" class="sans title white">Six fields make a reading scannable while preserving its depth.</text>
     <text x="72" y="154" class="sans lead white">Each field states a claim a visitor can inspect; the body carries the mechanism, nuance, and consequence.</text>
   </g>
 
@@ -84,7 +84,7 @@
     <rect x="48" y="742" width="1504" height="282" rx="20" fill="#153fbe"/>
     <text x="80" y="785" class="mono eyebrow white">STACKING + VALIDATION</text>
     <text x="80" y="822" class="sans card-title white">Name → scan → conditional rules → body</text>
-    <text x="80" y="853" class="sans card-copy white">The scan layer stays compact. Detail earns its place only where it changes interpretation or action.</text>
+    <text x="80" y="853" class="sans card-copy white">The scan layer stays compact. Detail earns its place where it changes interpretation or action.</text>
 
     <rect x="80" y="886" width="316" height="96" rx="12" fill="#fff5de" class="outline"/>
     <text x="102" y="918" class="mono chip ink">REQUIRED</text>
