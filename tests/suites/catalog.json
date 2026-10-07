@@ -154,6 +154,7 @@
         "tests/context-canvas/rail-label-failures.test.mjs",
         "tests/context-canvas/rail-shell-source.test.mjs",
         "tests/context-canvas/retained-exemplar-standing.test.mjs",
+        "tests/context-canvas/visual-reference-observations.test.mjs",
         "tests/context-canvas/visitor-image-alternatives.test.mjs",
         "tests/context-canvas/visitor-surface-attribution.test.mjs",
         "tests/context-canvas/visitor-terminology.test.mjs"
@@ -1061,6 +1062,28 @@
       ]
     },
     {
+      "id": "browser.iframe-ancestry-browser-contract",
+      "family": "browser-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/iframe-ancestry-browser-contract.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/iframe-ancestry-browser-contract.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/README.md",
+      "scope": "Deterministic Chromium fixture proving exact-parent frame-ancestors allow and loopback refusal behavior without contacting production.",
+      "aliases": [
+        "test:iframe-ancestry-browser"
+      ]
+    },
+    {
       "id": "browser.core-planning-instrument-contract",
       "family": "browser-tools",
       "kind": "node-script",
@@ -1676,6 +1699,22 @@
       ]
     },
     {
+      "id": "live.iframe-ancestry",
+      "family": "live-receivers",
+      "kind": "node-script",
+      "members": [
+        "tools/iframe-ancestry-browser-contract.mjs"
+      ],
+      "profile": "live",
+      "command": null,
+      "owner": "package.json",
+      "scope": "One fixed production child receives a direct policy preflight, a loopback-parent refusal, and an approved-production-parent positive control.",
+      "aliases": [
+        "verify:iframe-ancestry:live"
+      ],
+      "hold": "Run only as an authorized signed-out observation of the fixed vik.guru and iframes.vik.guru receivers."
+    },
+    {
       "id": "live.iframe",
       "family": "live-receivers",
       "kind": "node-script",
@@ -1857,6 +1896,7 @@
         "browser.context-canvas-narrow-rail-contract",
         "browser.core-decision-canvas-contract",
         "browser.core-iframe-carrier-contract",
+        "browser.iframe-ancestry-browser-contract",
         "browser.core-planning-instrument-contract",
         "browser.core-reference-instrument-contract",
         "browser.cross-prototype-exchange-contract",
@@ -1906,6 +1946,7 @@
       "description": "Receiver routes remain held pending explicit endpoint, policy and authority.",
       "suites": [
         "worker.live",
+        "live.iframe-ancestry",
         "live.iframe",
         "live.schema-pages"
       ]
@@ -2240,6 +2281,9 @@
         ],
         "test:iframe-browser": [
           "tools/core-iframe-carrier-contract.mjs"
+        ],
+        "test:iframe-ancestry-browser": [
+          "tools/iframe-ancestry-browser-contract.mjs"
         ],
         "test:strategy-canvas": [
           "tools/strategy-canvas-contract.mjs"

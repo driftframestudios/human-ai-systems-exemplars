@@ -75,6 +75,7 @@ npm run test:iframe-routes
 npm run check:iframe-routes
 npm run test:iframe-carriers
 npm run test:canvas-iframe-routes
+npm run test:iframe-ancestry-browser
 npm run test:iframe-browser
 ```
 
@@ -93,9 +94,25 @@ The Core carrier contract exercises its cross-origin route inside the declared
 sandbox. The Canvas route contract exercises all 15 generated documents inside
 their exact sandbox and Permissions Policy profiles, including package media,
 popup, clipboard, download, modal, print, scriptless, keyboard, request-closure,
-telemetry, and 320-pixel containment observations. `test:iframe-browser` runs
-both rendered delivery contracts. Live response headers, cache behavior, and
-deployed-parent behavior remain delivery activation checks.
+telemetry, and 320-pixel containment observations. The standalone
+`test:iframe-ancestry-browser` fixture proves Chromium allows the exact
+`https://vik.guru` parent and refuses a loopback parent when the same child
+response carries the production-shaped `frame-ancestors` directive; it does
+not claim that production served that header. The historical
+`test:iframe-browser` aggregate remains unchanged. Live activation pairs the
+complete response verifier with one focused parent/child observation:
+
+```sh
+npm run verify:iframe-routes:live
+npm run verify:iframe-routes:policy
+npm run verify:iframe-ancestry:live
+```
+
+The first two commands retain all-route byte and header coverage. The ancestry
+check uses the fixed PODA carrier for a representative HTTP 200 and exact-policy
+preflight, a loopback-parent refusal, and an approved-production-parent positive
+control. Cache behavior and the remaining deployed-parent observations stay
+with delivery activation.
 
 ## Context Canvas source, media, and visual reference
 
@@ -211,6 +228,7 @@ contracts remain available for behavior that requires a rendered page:
 npm run test:core-browser
 npm run test:canvas-iframe-routes
 npm run test:iframe-browser
+npm run test:iframe-ancestry-browser
 npm run test:core-decision-canvases
 npm run test:core-planning-instruments
 npm run test:core-reference-instruments

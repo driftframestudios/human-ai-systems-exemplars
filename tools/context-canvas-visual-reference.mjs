@@ -7,6 +7,11 @@ import { mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
 import { extname, relative, resolve } from "node:path";
 import { promisify } from "node:util";
 
+import {
+  classifyExpectedIframeRefusals,
+  formatVisualRequestFailure,
+} from "./context-canvas-visual-observation-contract.mjs";
+
 const execFileAsync = promisify(execFile);
 const CANVAS_DIRECTORY = "context-canvas-project-surface/context-canvas";
 const VIEWPORTS = [
@@ -301,6 +306,7 @@ async function captureViewport(browser, serverOrigin, runDirectory, routeMetadat
   const httpErrors = [];
   const pageErrors = [];
   const requestFailures = [];
+  const requestFailureDetails = [];
   page.on("console", (message) => {
     if (message.type() === "error") consoleErrors.push(message.text());
   });
@@ -311,7 +317,15 @@ async function captureViewport(browser, serverOrigin, runDirectory, routeMetadat
     }
   });
   page.on("requestfailed", (request) => {
-    requestFailures.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText || "failed"}`);
+    const failure = {
+      method: request.method(),
+      url: request.url(),
+      resourceType: request.resourceType(),
+      navigationRequest: request.isNavigationRequest(),
+      errorText: request.failure()?.errorText || "failed",
+    };
+    requestFailureDetails.push(failure);
+    requestFailures.push(formatVisualRequestFailure(failure));
   });
 
   const routeUrl = new URL(`${CANVAS_DIRECTORY}/${routeMetadata.route}`, `${serverOrigin}/`).href;
@@ -333,7 +347,8 @@ async function captureViewport(browser, serverOrigin, runDirectory, routeMetadat
       bodyTextLength: document.body.innerText.trim().length,
       clientWidth: document.documentElement.clientWidth,
       scrollWidth: document.documentElement.scrollWidth,
-      scrollHeight: document.documentElement.scrollHeight
+      scrollHeight: document.documentElement.scrollHeight,
+      iframeSources: [...document.querySelectorAll("iframe[src]")].map((iframe) => iframe.src),
     }));
     const screenshotStats = await stat(screenshotPath);
     return {
@@ -351,6 +366,8 @@ async function captureViewport(browser, serverOrigin, runDirectory, routeMetadat
       httpErrors,
       pageErrors,
       requestFailures,
+      requestFailureDetails,
+      parentOrigin: new URL(routeUrl).origin,
       settlement
     };
   } catch (error) {
@@ -365,7 +382,9 @@ async function captureViewport(browser, serverOrigin, runDirectory, routeMetadat
       consoleErrors,
       httpErrors,
       pageErrors,
-      requestFailures
+      requestFailures,
+      requestFailureDetails,
+      parentOrigin: new URL(routeUrl).origin,
     };
   } finally {
     await context.close();
@@ -431,7 +450,7 @@ function indexHtml(summary, runDirectory) {
   <header>
     <p>Local, cycle-scoped orientation</p>
     <h1>Context Canvas visual reference</h1>
-    <p>Phase <strong>${escapeHtml(summary.phase)}</strong> · source <code>${escapeHtml(summary.source.revision)}</code> · ${escapeHtml(summary.source.worktree)} worktree · ${summary.routeCount} routes · ${summary.captureCount} captures · ${(summary.totalBytes / 1024 / 1024).toFixed(2)} MiB</p>
+    <p>Phase <strong>${escapeHtml(summary.phase)}</strong> · source <code>${escapeHtml(summary.source.revision)}</code> · ${escapeHtml(summary.source.worktree)} worktree · ${summary.routeCount} routes · ${summary.captureCount} captures · ${summary.expectedRefusalCount} expected iframe refusals · ${summary.observationCount} observations · ${(summary.totalBytes / 1024 / 1024).toFixed(2)} MiB</p>
   </header>
   <nav aria-label="Reference families">${navigation}</nav>
   <main>${sections}</main>
@@ -503,17 +522,37 @@ async function main() {
     await server.close();
   }
 
+  for (const result of results) {
+    result.iframeRefusalClassification = classifyExpectedIframeRefusals({
+      parentOrigin: result.parentOrigin,
+      iframeSources: result.pageMetrics?.iframeSources,
+      consoleErrors: result.consoleErrors,
+      requestFailures: result.requestFailures,
+      requestFailureDetails: result.requestFailureDetails,
+    });
+  }
   const totalBytes = results.reduce((total, result) => total + (result.bytes || 0), 0);
   const captured = results.filter((result) => result.status === "captured");
   const errors = results.filter((result) => result.status === "error");
+  const expectedRefusalCount = results.reduce(
+    (total, result) => total + result.iframeRefusalClassification.expectedRefusals.length,
+    0,
+  );
   const observations = results.flatMap((result) => [
     ...(result.settlement?.traversalTruncated
       ? [`${result.route} · ${result.viewport.id}: page traversal reached its safety bound`]
       : []),
     ...result.httpErrors.map((error) => `${result.route} · ${result.viewport.id}: ${error}`),
-    ...result.consoleErrors.map((error) => `${result.route} · ${result.viewport.id}: console: ${error}`),
+    ...result.iframeRefusalClassification.policyObservations.map(
+      (observation) => `${result.route} · ${result.viewport.id}: policy: ${observation}`,
+    ),
+    ...result.iframeRefusalClassification.remainingConsoleErrors.map(
+      (error) => `${result.route} · ${result.viewport.id}: console: ${error}`,
+    ),
     ...result.pageErrors.map((error) => `${result.route} · ${result.viewport.id}: page: ${error}`),
-    ...result.requestFailures.map((error) => `${result.route} · ${result.viewport.id}: request: ${error}`)
+    ...result.iframeRefusalClassification.remainingRequestFailures.map(
+      (error) => `${result.route} · ${result.viewport.id}: request: ${error}`,
+    ),
   ]);
   const summary = {
     phase: options.phase,
@@ -526,6 +565,7 @@ async function main() {
     routeCount: routes.length,
     captureCount: captured.length,
     errorCount: errors.length,
+    expectedRefusalCount,
     observationCount: observations.length,
     totalBytes,
     routes,
@@ -534,7 +574,11 @@ async function main() {
   await writeFile(resolve(runDirectory, "summary.json"), `${JSON.stringify(summary, null, 2)}\n`);
   await writeFile(resolve(runDirectory, "index.html"), indexHtml(summary, runDirectory));
 
-  console.log(`Context Canvas reference: ${captured.length}/${results.length} captures · ${(totalBytes / 1024 / 1024).toFixed(2)} MiB · ${observations.length} observations`);
+  console.log(
+    `Context Canvas reference: ${captured.length}/${results.length} captures · ` +
+      `${(totalBytes / 1024 / 1024).toFixed(2)} MiB · ` +
+      `${expectedRefusalCount} expected iframe refusals · ${observations.length} observations`,
+  );
   console.log(`Index: ${resolve(runDirectory, "index.html")}`);
   for (const observation of observations) console.warn(`- ${observation}`);
   if (errors.length) {

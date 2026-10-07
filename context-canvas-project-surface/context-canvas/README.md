@@ -312,9 +312,13 @@ npm run visual:context-canvas-reference -- --phase after-about --family entry-an
 Each run requires all 46 current routes to have exactly one family, then records
 138 narrow, desktop, and wide full-page images, the source revision, route
 standing, browser observations, and a local route-group index under ignored
-`.visual-runs/context-canvas-reference/`. Capture success and observation review
-remain separate: inspect the generated `summary.json` before interpreting a
-passing exit status.
+`.visual-runs/context-canvas-reference/`. When the loopback runner requests a
+declared `iframes.vik.guru/v1/` carrier, one exact Chromium
+`ERR_BLOCKED_BY_RESPONSE` navigation plus its matching `frame-ancestors
+https://vik.guru` console message is recorded as an expected iframe refusal.
+Missing, unpaired, malformed-route, wrong-host, and differently caused failures
+remain observations. Capture success and observation review remain separate:
+inspect the generated `summary.json` before interpreting a passing exit status.
 
 ## Cloudflare proving surface
 

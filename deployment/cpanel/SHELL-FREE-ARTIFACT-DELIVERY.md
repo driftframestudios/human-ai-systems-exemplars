@@ -333,10 +333,15 @@ From a trusted checkout at the accepted release coordinate, run:
 ```sh
 npm run verify:iframe-routes:live
 npm run verify:iframe-routes:policy
+npm run verify:iframe-ancestry:live
 ```
 
-Then complete #251's primary manifest sweep, apex and `www` behavior, robots,
-sitemap, cache, policy, intentional 404, and parent-child viewport observations.
+The all-route commands establish bytes and response policy. The focused
+ancestry command uses the fixed PODA carrier to require a live HTTP 200 with
+the exact parent policy, refusal from a loopback parent, and successful loading
+from its `https://vik.guru` parent. Then complete #251's primary manifest sweep,
+apex and `www` behavior, robots, sitemap, cache, policy, intentional 404, and
+remaining parent-child viewport observations.
 
 The public-safe return names:
 

@@ -131,7 +131,10 @@ jobs:
               npm run test:iframe-routes
               npm run check:iframe-routes
               npm run test:core-architectures
-              if [[ "$INCLUDE_BROWSER" == "true" ]]; then npm run test:core-browser; fi
+              if [[ "$INCLUDE_BROWSER" == "true" ]]; then
+                npm run test:core-browser
+                npm run test:iframe-ancestry-browser
+              fi
               ;;
             iframe)
               npm run test:attribution
@@ -141,6 +144,7 @@ jobs:
                 npm run test:debrief-catalog-preview-browser
                 npm run test:prototype-control-labels
                 npm run test:iframe-browser
+                npm run test:iframe-ancestry-browser
               fi
               ;;
             narrative)
@@ -157,6 +161,7 @@ jobs:
                 npm run test:prototype-control-labels
                 npm run test:core-browser
                 npm run test:canvas-iframe-routes
+                npm run test:iframe-ancestry-browser
                 npm run test:narrative-browser
                 npm run test:prototype-exchanges
               fi
