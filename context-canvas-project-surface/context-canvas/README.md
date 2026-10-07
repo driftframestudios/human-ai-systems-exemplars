@@ -38,6 +38,16 @@ and iframe manifests continue to select membership; the generated deployment
 manifest joins each selected public projection back to one canonical source
 asset and exact source digest.
 
+The four Debrief working-system screenshot families retain their accepted,
+unsuffixed WebPs as full-size inspection targets. Run
+`npm run build:debrief-image-derivatives` after replacing an accepted source;
+the repository-owned generator uses `cwebp` to produce the `960w` and `1920w`
+responsive candidates declared in the pages and inventory. Review interface
+text and geometry in the regenerated candidates before rebuilding the
+production projection. Shared rules in [`expanded.css`](expanded.css) keep
+dense landscape interfaces on a keyboard-scrollable `56rem` inspection canvas
+with a `78rem` wide cap, while portrait views use the narrower `42rem` cap.
+
 The accepted Registry visual masters remain the source-level reference for
 dependency-free visitor SVGs: the
 [`question route map`](../img/plot/registry_question_route_map.svg),

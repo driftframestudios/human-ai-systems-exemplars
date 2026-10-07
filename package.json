@@ -8,6 +8,7 @@
     "check:readme-routes": "node tools/check-readme-routes.mjs",
     "playwright:install": "playwright install chromium",
     "build:public-references": "node tools/materialize-public-references.mjs",
+    "build:debrief-image-derivatives": "node tools/generate-debrief-image-derivatives.mjs",
     "build:iframe-routes": "node tools/package-v1-iframe-routes.mjs",
     "check:iframe-routes": "node tools/package-v1-iframe-routes.mjs --check",
     "verify:iframe-routes:live": "node tools/verify-live-iframe-routes.mjs",

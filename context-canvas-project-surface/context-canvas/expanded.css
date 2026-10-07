@@ -2999,6 +2999,50 @@ main [id] {
     text-decoration: none;
 }
 
+/*
+ * Dense reference-interface proxies keep a laptop-sized inspection canvas.
+ * Narrow readers receive a labelled, keyboard-scrollable region and the
+ * source-size link remains available for exact text inspection.
+ */
+.debrief-proxy-figure {
+    inline-size: min(92vw, 78rem);
+}
+
+.debrief-proxy-frame {
+    inline-size: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-gutter: stable;
+}
+
+.debrief-proxy-frame:focus-visible {
+    outline: .2rem solid currentColor;
+    outline-offset: .25rem;
+}
+
+.debrief-proxy-frame .story-visual__open {
+    inline-size: max(100%, 56rem);
+}
+
+.debrief-proxy-frame--portrait {
+    inline-size: min(100%, 42rem);
+    margin-inline: auto;
+}
+
+.debrief-proxy-frame--portrait .story-visual__open {
+    inline-size: 100%;
+}
+
+@media print {
+    .debrief-proxy-figure,
+    .debrief-proxy-frame,
+    .debrief-proxy-frame .story-visual__open {
+        inline-size: 100%;
+        min-inline-size: 0;
+        overflow: visible;
+    }
+}
+
 .cobalt-operating-field__visual img {
     background: var(--operating-field-cream, #fff5de);
     border: .125rem solid var(--operating-field-ink, #17345f);
