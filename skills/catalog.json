@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1",
   "repository": "human-ai-systems-exemplars",
-  "sourceRevision": "b23a1ec903771b5250b2e57ca12cf6f16f1f302e",
+  "sourceRevision": "dc6b62c6e3f1e8748237fc767def75b32527140a",
   "schemaRef": "https://schemas.vik.guru/collaboration-skills/0.1.0/collaboration-skill.schema.json",
   "schemaRefRole": "canonical_schema_identity",
   "schemaRetrievalUrl": "https://schemas.radiantnull.com/collaboration-skills/0.1.0/collaboration-skill.schema.json",
@@ -238,14 +238,14 @@
       "title": "Embedded prototype layout",
       "description": "Resolves prototype layout pressure at the actual parent and iframe boundary. Applies when a self-contained instrument works standalone but its embedded controls, tables, focus, shadows or onward route become difficult to use.",
       "useWhen": "An iframe behaves differently from its standalone child document, or parent composition changes the space available to that embedded document.",
-      "produces": "One source-owned repair or decision-ready disposition naming the parent viewport, content box, frame/client width, child viewport, affected behavior, smallest fitting layout change and evidence boundary. Each dimension is measured or explicitly unobserved with a request to its measurement owner.",
+      "produces": "One source-owned repair or decision-ready disposition naming the parent viewport, content box, frame/client width, child viewport, affected behavior, smallest fitting layout change and evidence boundary. The result records each measurement or names the unobserved dimension and asks its owner for the missing measurement.",
       "publicationStanding": "public_ready",
       "pagePath": "embedded-prototype-layout/",
       "projectionPath": "embedded-prototype-layout/projection.json",
       "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/embedded-prototype-layout/projection.json",
       "sourcePath": ".agents/skills/embedded-prototype-layout/SKILL.md",
       "sourceRoute": "source/.agents/skills/embedded-prototype-layout/SKILL.md",
-      "sourceSha256": "31b4c4856aa7b6445c65127c025f4130c8754b97fcd59311633b00a905721742",
+      "sourceSha256": "9f0131fb35b55f717ba4c5af4b1a958bf28a22d90e53a34ac0edfe9e5942ec2a",
       "dependencies": []
     },
     {

@@ -14,11 +14,11 @@
     "boundaries": [
       "The parent owns placement, reserved dimensions, title, embedding policy and full-view route. The child owns its internal document and controls. Packaging owns declared projection changes. Local canonical-child evidence, live hosted delivery, accessibility conformance and permission changes retain separate observations and authority."
     ],
-    "result": "One source-owned repair or decision-ready disposition naming the parent viewport, content box, frame/client width, child viewport, affected behavior, smallest fitting layout change and evidence boundary. Each dimension is measured or explicitly unobserved with a request to its measurement owner."
+    "result": "One source-owned repair or decision-ready disposition naming the parent viewport, content box, frame/client width, child viewport, affected behavior, smallest fitting layout change and evidence boundary. The result records each measurement or names the unobserved dimension and asks its owner for the missing measurement."
   },
   "receivingUse": {
     "job": "An iframe behaves differently from its standalone child document, or parent composition changes the space available to that embedded document.",
-    "materialResult": "One source-owned repair or decision-ready disposition naming the parent viewport, content box, frame/client width, child viewport, affected behavior, smallest fitting layout change and evidence boundary. Each dimension is measured or explicitly unobserved with a request to its measurement owner.",
+    "materialResult": "One source-owned repair or decision-ready disposition naming the parent viewport, content box, frame/client width, child viewport, affected behavior, smallest fitting layout change and evidence boundary. The result records each measurement or names the unobserved dimension and asks its owner for the missing measurement.",
     "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
   },
   "standing": {

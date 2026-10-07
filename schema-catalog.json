@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1",
-  "sourceRevision": "b23a1ec903771b5250b2e57ca12cf6f16f1f302e",
+  "sourceRevision": "dc6b62c6e3f1e8748237fc767def75b32527140a",
   "deliveryBase": "https://schemas.radiantnull.com",
   "identityRole": "canonicalId identifies the contract; retrievalUrl downloads this site's copy.",
   "contracts": [

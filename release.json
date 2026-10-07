@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1",
   "releaseTag": "pages-v0.2.0",
-  "sourceRevision": "b23a1ec903771b5250b2e57ca12cf6f16f1f302e",
+  "sourceRevision": "dc6b62c6e3f1e8748237fc767def75b32527140a",
   "deliveryBase": "https://schemas.radiantnull.com",
   "schemaCatalog": "schema-catalog.json",
   "skillCatalog": "skills/catalog.json"

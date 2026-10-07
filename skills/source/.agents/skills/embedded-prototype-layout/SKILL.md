@@ -10,7 +10,7 @@ description: Resolves prototype layout pressure at the actual parent and iframe 
 - **What:** A measured parent/child layout contract that keeps a compact preview useful for deciding whether to continue in a full view, while preserving the instrument's meaningful interactions and comparisons.
 - **When:** An iframe behaves differently from its standalone child document, or parent composition changes the space available to that embedded document.
 - **Boundaries:** The parent owns placement, reserved dimensions, title, embedding policy and full-view route. The child owns its internal document and controls. Packaging owns declared projection changes. Local canonical-child evidence, live hosted delivery, accessibility conformance and permission changes retain separate observations and authority.
-- **Result:** One source-owned repair or decision-ready disposition naming the parent viewport, content box, frame/client width, child viewport, affected behavior, smallest fitting layout change and evidence boundary. Each dimension is measured or explicitly unobserved with a request to its measurement owner.
+- **Result:** One source-owned repair or decision-ready disposition naming the parent viewport, content box, frame/client width, child viewport, affected behavior, smallest fitting layout change and evidence boundary. The result records each measurement or names the unobserved dimension and asks its owner for the missing measurement.
 
 ## Fit and attention
 
