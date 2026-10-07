@@ -251,7 +251,7 @@ The current ownership return is recorded in the CSS modularization plan: `expand
 8. **Normalization is uneven.** Physical and logical properties, old prefixes, `transition: all`, mixed naming dialects, and an undocumented elevation scale coexist.
 9. **Accessibility modes are present but fragmented.** Reduced motion, forced colors, and print are strong but repeated; some hover treatments lack matching focus behavior.
 10. **Inline CSS constrains future CSP and caching.** Self-contained prototypes may earn the exception; public pages should disclose or reduce it.
-11. **Generated minification still needs a publication owner.** The unused `min.css` compatibility alias has been retired; a future generated bundle should use a pinned profile, deterministic inputs, and a name that reflects immutable output rather than authored source.
+11. **Generated minification has a bounded publication owner.** The unused `min.css` compatibility alias has been retired. The cPanel assembler's `about-conservative-v1` profile reads tracked source owners, uses exact CSSO 5.0.5 with restructuring and forced media merging disabled, and names production-only outputs by their full SHA-256 digest. Readable modules remain the editing authority.
 12. **Exact duplicates and immediate conflicts remain.** Hiring rules, print rules, background utilities, and consecutive slug rules include redundant or unwinnable declarations.
 
 ### Target CSS source architecture
@@ -269,7 +269,23 @@ styles/
 
 `core/` can later gain token, foundation, layout, accessibility, and mode children when repeated files make that refinement easier to navigate. `components/` carries reusable shell and reading machinery; `contracts/` maps semantic tokens and composition grammar; `routes/` owns family expression; `legacy/` keeps supported rules whose ownership remains open.
 
-This is the authored collaboration surface. A small deterministic build emits one core bundle plus route-family bundles, and HTML loads those outputs directly. Runtime `@import` chains retain the blocking path and sit outside the first-paint target.
+This is the authored collaboration surface. The bounded About distribution
+pilot leaves this graph intact and changes only production-projected HTML. It
+combines the six contiguous enhanced owners, preserves the no-script boundary,
+and projects the later shell owner separately beneath `assets/css/`. Runtime
+`@import` chains remain outside the profile; local asset references resolve from
+each original owner before minification.
+
+The existing deployment manifest records the profile, CSSO version and options,
+ordered source paths and digests, execution context, generated path, full
+digest, bytes, media type, and recovery route. The profile emits no public
+source map. Removing its About consumer and rebuilding returns the readable
+unbundled production graph. Another family earns entry after deterministic,
+reference-closure, cascade, alternate-mode, delivery, and rollback observations
+settle for this canary. Before a second consumer enters, extract the pure
+profile parser, rebasing, and projection logic from the cPanel assembler into
+one focused source module; keep the assembler responsible for selection,
+transaction, manifest, and carrier orchestration.
 
 Tokens carry three levels:
 

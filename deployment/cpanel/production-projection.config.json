@@ -4,6 +4,21 @@
   "primary_manifest": "deployment/cpanel/primary-route-manifest.json",
   "asset_inventory": "context-canvas-project-surface/asset-inventory.json",
   "iframe_origin_robots": "deployment/cpanel/iframe-origin-robots.txt",
+  "css_projection": {
+    "id": "prod-projection.css-profile.v1",
+    "profile": "about-conservative-v1",
+    "consumer": "context-canvas-project-surface/context-canvas/index.html",
+    "output_directory": "assets/css",
+    "tool": {
+      "name": "csso",
+      "version": "5.0.5",
+      "options": {
+        "restructure": false,
+        "forceMediaMerge": false,
+        "comments": false
+      }
+    }
+  },
   "publication": {
     "base_url": "https://vik.guru/",
     "source_root": "context-canvas-project-surface/context-canvas",

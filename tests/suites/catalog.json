@@ -929,6 +929,28 @@
       ]
     },
     {
+      "id": "browser.prod-deployment.about-css-projection",
+      "family": "prod-deployment",
+      "kind": "node-script",
+      "members": [
+        "tests/prod-deployment/about-css-projection.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tests/prod-deployment/about-css-projection.browser.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "deployment/cpanel/README.md",
+      "scope": "Focused real-browser equivalence for the tracked About source CSS graph and its deterministic production-only CSS projection across responsive, scriptless, print, forced-color, reduced-motion, interaction, request-closure, containment, and telemetry states.",
+      "aliases": [
+        "test:prod-css-projection-browser"
+      ]
+    },
+    {
       "id": "browser.canvas-iframe-route-browser-contract",
       "family": "browser-tools",
       "kind": "node-script",
@@ -1891,6 +1913,7 @@
         "browser.tables.hiring-schema-print",
         "browser.about-media-browser-contract",
         "browser.context-canvas.debrief-catalog-preview",
+        "browser.prod-deployment.about-css-projection",
         "browser.canvas-iframe-route-browser-contract",
         "browser.context-canvas-medium-containment-contract",
         "browser.context-canvas-narrow-rail-contract",
@@ -2275,6 +2298,9 @@
         ],
         "test:about-media-browser": [
           "tools/about-media-browser-contract.mjs"
+        ],
+        "test:prod-css-projection-browser": [
+          "tests/prod-deployment/about-css-projection.browser.mjs"
         ],
         "test:canvas-iframe-routes": [
           "tools/canvas-iframe-route-browser-contract.mjs"
