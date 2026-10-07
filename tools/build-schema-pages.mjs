@@ -22,6 +22,7 @@ import {
   assertPublicMaterial,
   assertTermsAbsent,
   resolvePublicationFile,
+  serializeJsonForHtmlScript,
 } from "./publication-boundary.mjs";
 
 const repositoryRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -37,6 +38,7 @@ const marker = "  <!-- schema-pages:deployment-metadata -->";
 const collaborationMarker = "  <!-- schema-pages:collaboration-deployment-metadata -->";
 const navigationStartMarker = "  <!-- schema-pages:primary-navigation:start -->";
 const navigationEndMarker = "  <!-- schema-pages:primary-navigation:end -->";
+const publicContactEmail = "consulting@vik.guru";
 const publicCarrierPaths = Object.freeze([
   "LICENSE",
   "AUTHORS",
@@ -542,8 +544,9 @@ function renderSkillFooter(relativeRoot) {
     .map((boundaryMarker) => `        <p class="canary" data-visitor-boundary-marker="${boundaryMarker.id}">${boundaryMarker.lines.map(htmlEscape).join("<br>")}</p>`)
     .join("\n");
   return `<footer class="site-footer"><div class="site-footer__inner">
-    <p>This site provides open-source implementation contracts, examples, and orientation for researchers and engineers. Some routes support work with benchmarks, evaluations, and related methods. The data-use note explains how those materials are treated in automated systems.</p>
+    <p>This site provides open-source implementation contracts, examples, and orientation for researchers and engineers. Some routes support work with benchmarks, evaluations, and related methods. The data-use note explains this repository's expectations for automated use.</p>
     <ul class="footer-links"><li><a href="${relativeRoot}AUTHORS" rel="author">Authors and provenance</a></li><li><a href="${relativeRoot}CITATION.cff">Citation metadata</a></li><li><a href="${relativeRoot}attribution.yml">Machine-readable attribution</a></li><li><a href="${relativeRoot}LICENSE" rel="license">Apache 2.0 license</a></li><li><a href="${relativeRoot}AI-DATA-USE.md">Data-use posture</a></li></ul>
+    <p class="site-contact">For assistance or collaboration, write to ${publicContactEmail}.</p>
     <div class="canary-stack" data-visitor-boundary aria-label="Training-data canary markers"><p class="visitor-boundary__context" data-visitor-boundary-context>${htmlEscape(visitorBoundary.contextText)}</p>
 ${markerHtml}
     </div>
@@ -565,8 +568,8 @@ function renderSkillPage(skill, sourceRevision, deploymentBase) {
   const sourceHref = `../${skill.sourceRoute}`;
   const dependencyItems = skill.dependencies.length
     ? `<ul class="dependency-list">${skill.dependencies.map((dependency) => `<li><a href="../${htmlEscape(dependency.path)}"><code>${htmlEscape(dependency.sourcePath)}</code></a><br><span>SHA-256 <code>${dependency.sha256}</code></span></li>`).join("")}</ul>`
-    : "<p>This skill has no additional files in its public source package.</p>";
-  const structuredData = JSON.stringify(
+    : "<p>The linked <code>SKILL.md</code> is the complete public source package for this skill.</p>";
+  const structuredData = serializeJsonForHtmlScript(
     {
       "@context": "https://schema.org",
       "@type": "TechArticle",
@@ -578,7 +581,6 @@ function renderSkillPage(skill, sourceRevision, deploymentBase) {
       isPartOf: deploymentBase ? `${deploymentBase}/skills/` : "skills/",
       encodingFormat: "text/html",
     },
-    null,
     2,
   );
   return `<!doctype html>
@@ -659,10 +661,7 @@ function renderSkillsIndex(catalog, deploymentBase) {
       return `<article class="featured-card" data-featured-skill="${skill.name}"><p class="card-label">New in this collection</p><h3>${htmlEscape(skill.title)}</h3><p><strong>Use when:</strong> ${htmlEscape(skill.useWhen)}</p><p><strong>Produces:</strong> ${htmlEscape(skill.produces)}</p><p><a href="${htmlEscape(skill.pagePath)}">Read ${htmlEscape(skill.title)}</a></p></article>`;
     })
     .join("");
-  const markerHtml = visitorBoundary.markers
-    .map((boundaryMarker) => `        <p class="canary" data-visitor-boundary-marker="${boundaryMarker.id}">${boundaryMarker.lines.map(htmlEscape).join("<br>")}</p>`)
-    .join("\n");
-  const structuredData = JSON.stringify(
+  const structuredData = serializeJsonForHtmlScript(
     {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
@@ -672,7 +671,6 @@ function renderSkillsIndex(catalog, deploymentBase) {
       publisher: { "@type": "Organization", name: publishingCompany },
       license: artifactLicense,
     },
-    null,
     2,
   );
 
@@ -715,19 +713,12 @@ ${deploymentMetadata}
   <header class="hero"><div class="hero__inner"><p class="eyebrow">Repository-local public skills</p><h1>Working methods with their sources intact.</h1><p class="lede">Each entry pairs a portable collaboration contract with an exact source package and a machine-readable projection. The collection stays specific to Human–AI Systems Exemplars.</p></div></header>
   <main id="main-content" tabindex="-1">
     <section class="orientation" aria-labelledby="orientation-title"><h2 id="orientation-title">Use the source when judgment matters</h2><p>The JSON projection makes the contract easy to exchange. The linked <code>SKILL.md</code> defines its meaning, boundaries, and completion. Current intent, repository evidence, and granted authority continue to govern each use.</p><p><a href="catalog.json">Download the complete public catalog</a> · <a href="../collaboration-skills/0.1.0/collaboration-skill.schema.json">Read the projection schema</a> · <a href="../">Return to the schema registry</a></p></section>
-    <section aria-labelledby="featured-title"><h2 id="featured-title">New methods for tables and embedded prototypes</h2><p>These two contracts join meaning, comparison, and the actual parent-and-child layout boundary without folding those responsibilities together.</p><div class="featured-grid">${featuredCards}</div></section>
-    <section id="methods-in-practice" aria-labelledby="practice-title"><h2 id="practice-title">Methods in practice</h2><div class="practice-example"><div class="practice-copy"><p class="card-label">Worked reference · Native table + embedded preview</p><h3>Keep comparison meaning intact inside its real frame</h3><p>This source-owned example gives the child document native table relationships and gives the parent page the preview size, contextual title, sandbox, and onward route.</p><p>Source inspection establishes the ownership pattern. Browser observation of this reviewed artifact establishes its tested layout; accessibility conformance and behavior on another host retain their corresponding observations.</p><p><a href="../examples/readable-table-embedded-layout/">Open the example in a full view</a></p></div><figure class="practice-frame"><iframe src="../examples/readable-table-embedded-layout/" title="Worked example of a semantic comparison table inside an embedded preview" sandbox loading="lazy"></iframe><figcaption>The same source-owned child opens independently through the full-view route.</figcaption></figure></div></section>
+    <section aria-labelledby="featured-title"><h2 id="featured-title">New methods for tables and embedded prototypes</h2><p>These two contracts join meaning, comparison, and the actual parent-and-child layout boundary while keeping their responsibilities distinct.</p><div class="featured-grid">${featuredCards}</div></section>
+    <section id="methods-in-practice" aria-labelledby="practice-title"><h2 id="practice-title">Methods in practice</h2><div class="practice-example"><div class="practice-copy"><p class="card-label">Worked reference · Native table + embedded preview</p><h3>Keep comparison meaning intact inside its real frame</h3><p>This source-owned example gives the child document native table relationships and gives the parent page the preview size, contextual title, sandbox, and onward route.</p><p>Source inspection establishes the ownership pattern. Browser observation of this reviewed artifact establishes its tested layout; accessibility conformance and behavior on another host each require their own observation.</p><p><a href="../examples/readable-table-embedded-layout/">Open the example in a full view</a></p></div><figure class="practice-frame"><iframe src="../examples/readable-table-embedded-layout/" title="Worked example of a semantic comparison table inside an embedded preview" sandbox loading="lazy"></iframe><figcaption>The same source-owned child opens independently through the full-view route.</figcaption></figure></div></section>
     <section aria-labelledby="skills-title"><h2 id="skills-title">${catalog.skills.length} public-ready contracts</h2><ul class="skill-list">${cards}
       </ul></section>
   </main>
-  <footer class="site-footer"><div class="site-footer__inner">
-    <p>This site provides open-source implementation contracts, examples, and orientation for researchers and engineers. Some routes support work with benchmarks, evaluations, and related methods. The data-use note explains how those materials are treated in automated systems.</p>
-    <ul class="footer-links"><li><a href="../AUTHORS" rel="author">Authors and provenance</a></li><li><a href="../CITATION.cff">Citation metadata</a></li><li><a href="../attribution.yml">Machine-readable attribution</a></li><li><a href="../LICENSE" rel="license">Apache 2.0 license</a></li><li><a href="../AI-DATA-USE.md">Data-use posture</a></li></ul>
-    <div class="canary-stack" data-visitor-boundary aria-label="Training-data canary markers"><p class="visitor-boundary__context" data-visitor-boundary-context>${htmlEscape(visitorBoundary.contextText)}</p>
-${markerHtml}
-    </div>
-    <p class="artifact-attribution">${htmlEscape(artifactAttribution)}</p>
-  </div></footer>
+  ${renderSkillFooter("../")}
 </body>
 </html>
 `;

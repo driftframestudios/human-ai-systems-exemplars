@@ -36,6 +36,7 @@ import {
   assertPublicMaterial,
   assertTermsAbsent,
   resolvePublicationFile,
+  serializeJsonForHtmlScript,
 } from "../../tools/publication-boundary.mjs";
 import visitorBoundaryContract from "../../context-canvas-project-surface/context-canvas/visitor-boundary-contract.js";
 import {
@@ -59,6 +60,7 @@ const copiedCarriers = [
   "attribution.yml",
   "AI-DATA-USE.md",
 ];
+const publicContactEmail = "consulting@vik.guru";
 
 function occurrenceCount(source, value) {
   return source.split(value).length - 1;
@@ -96,6 +98,22 @@ function htmlEscape(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
 }
+
+test("inline JSON remains data inside an HTML script element", () => {
+  const value = {
+    title: "Close </script><script>window.injected = true</script>",
+    separators: "line\u2028paragraph\u2029end",
+  };
+  const serialized = serializeJsonForHtmlScript(value);
+
+  assert.equal(serialized.includes("</script>"), false);
+  assert.equal(serialized.includes("\u2028"), false);
+  assert.equal(serialized.includes("\u2029"), false);
+  assert.ok(serialized.includes("\\u003c/script>"));
+  assert.ok(serialized.includes("\\u2028"));
+  assert.ok(serialized.includes("\\u2029"));
+  assert.deepEqual(JSON.parse(serialized), value);
+});
 
 function assertPrimaryNavigation(source, expectedLinks, currentLabel) {
   const navigation = source.match(
@@ -559,6 +577,38 @@ test("the canary stack precedes the final visible attribution", async () => {
       .trim(),
     "",
   );
+});
+
+test("every human-facing page carries one plain-text assistance route in its footer", async () => {
+  const catalog = JSON.parse(
+    await readFile(resolve(skillsOutputRoot, "catalog.json"), "utf8"),
+  );
+  const htmlPaths = (await filesUnder(outputRoot))
+    .filter((filePath) => filePath.endsWith(".html"));
+
+  assert.equal(htmlPaths.length, catalog.skills.length + 4);
+  for (const filePath of htmlPaths) {
+    const label = relative(outputRoot, filePath).split(sep).join("/");
+    const html = await readFile(filePath, "utf8");
+    assert.equal(occurrenceCount(html, publicContactEmail), 1, label);
+    assert.equal(html.includes(`mailto:${publicContactEmail}`), false, label);
+
+    const contactPosition = html.indexOf(publicContactEmail);
+    const footerStart = html.lastIndexOf("<footer", contactPosition);
+    const footerEnd = html.indexOf("</footer>", contactPosition);
+    assert.ok(footerStart >= 0 && footerEnd > contactPosition, `${label} keeps contact in its footer`);
+
+    const footer = html.slice(footerStart, footerEnd + "</footer>".length);
+    const boundaryPosition = footer.indexOf("data-visitor-boundary");
+    const footerContactPosition = footer.indexOf(publicContactEmail);
+    const attributionPosition = footer.indexOf(artifactAttribution);
+    assert.ok(
+      footerContactPosition >= 0 &&
+        footerContactPosition < boundaryPosition &&
+        boundaryPosition < attributionPosition,
+      `${label} orders contact, visitor boundary, and final attribution`,
+    );
+  }
 });
 
 test("the private selection ledger classifies the complete repository skill family", async () => {
@@ -1087,6 +1137,8 @@ test("primary navigation and the featured example remain operable without script
           const receipt = await page.evaluate(() => {
             const navigation = document.querySelector('nav.site-nav[aria-label="Primary"]');
             const navigationRect = navigation?.getBoundingClientRect();
+            const contact = document.querySelector(".site-contact");
+            const contactRect = contact?.getBoundingClientRect();
             return {
               links: [...navigation.querySelectorAll("a")].map(link => ({
                 href: link.getAttribute("href"),
@@ -1094,6 +1146,9 @@ test("primary navigation and the featured example remain operable without script
               })),
               current: [...navigation.querySelectorAll('[aria-current="page"]')]
                 .map(link => link.textContent.trim()),
+              contactText: contact?.textContent.trim(),
+              contactLeft: contactRect?.left ?? -1,
+              contactRight: contactRect?.right ?? Number.POSITIVE_INFINITY,
               navigationLeft: navigationRect?.left ?? -1,
               navigationRight: navigationRect?.right ?? Number.POSITIVE_INFINITY,
               viewportWidth: document.documentElement.clientWidth,
@@ -1104,6 +1159,9 @@ test("primary navigation and the featured example remain operable without script
           assert.deepEqual(receipt.current, route.current ? [route.current] : []);
           assert.ok(receipt.navigationLeft >= -1, `${route.path} navigation clears the leading edge`);
           assert.ok(receipt.navigationRight <= receipt.viewportWidth + 1, `${route.path} navigation clears the trailing edge`);
+          assert.equal(receipt.contactText, `For assistance or collaboration, write to ${publicContactEmail}.`);
+          assert.ok(receipt.contactLeft >= -1, `${route.path} contact clears the leading edge`);
+          assert.ok(receipt.contactRight <= receipt.viewportWidth + 1, `${route.path} contact clears the trailing edge`);
           assert.ok(receipt.documentWidth <= receipt.viewportWidth + 1, `${route.path} stays horizontally contained at ${width}px`);
 
           await page.keyboard.press("Tab");
@@ -1145,10 +1203,12 @@ test("primary navigation and the featured example remain operable without script
           scrollWidth: document.documentElement.scrollWidth,
           columnHeaders: document.querySelectorAll('th[scope="col"]').length,
           rowHeaders: document.querySelectorAll('th[scope="row"]').length,
+          contactText: document.querySelector(".site-contact")?.textContent.trim(),
         }));
         assert.ok(exampleReceipt.scrollWidth <= exampleReceipt.clientWidth + 1, `the full-view example stays contained at ${width}px`);
         assert.equal(exampleReceipt.columnHeaders, 4);
         assert.equal(exampleReceipt.rowHeaders, 4);
+        assert.equal(exampleReceipt.contactText, `For assistance or collaboration, write to ${publicContactEmail}.`);
         const tableRegion = examplePage.locator('.table-scroll[role="region"]');
         await tableRegion.focus();
         assert.equal(await tableRegion.getAttribute("aria-labelledby"), "ownership-caption");
