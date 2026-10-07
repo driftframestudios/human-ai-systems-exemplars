@@ -121,7 +121,7 @@
             <dl class="debrief-at-glance">
               <div>
                 <dt>Situation and stakes</dt>
-                <dd>A researcher-built GWT viewer had become a consequential clinical-genomics operating surface. Case assignment, evidence review, and sign-off had to keep moving while the replacement took shape.</dd>
+                <dd>A researcher-built GWT viewer had become a consequential clinical-genomics application. Case assignment, evidence review, and sign-off had to keep moving while the replacement took shape.</dd>
               </div>
               <div>
                 <dt>Scope and role</dt>
@@ -137,14 +137,14 @@
               </div>
               <div>
                 <dt>Outcome and evidence</dt>
-                <dd>I designed and implemented new surfaces for specimen overview, variant detail, quality control, profiles, dashboards, search, notes, and shared components. Complex transformations, DTOs, database mediation, plugins, and portions of the underlying capability remained legacy-owned.</dd>
+                <dd>I designed and implemented new interfaces and views for specimen overview, variant detail, quality control, profiles, dashboards, search, notes, and shared components. Complex transformations, DTOs, database mediation, plugins, and portions of the underlying capability remained legacy-owned.</dd>
               </div>
               <div>
                 <dt>Relevance now</dt>
                 <dd>My profile and permission work gave qualified people the right work and supported later automatic assignment. My structured-note work also made human interventions countable across candidates for tiered automation.</dd>
               </div>
             </dl>
-            <p><strong>Basis and limits:</strong> I designed and implemented the delivered surfaces within a partial migration; complex transformations, DTOs, database mediation, plugins, and portions of the underlying capability remained legacy-owned. Costing requires current inputs, technology choices require current constraints, and AI-assisted delivery effects require separate measurement.</p>
+            <p><strong>Basis and limits:</strong> I designed and implemented the delivered interfaces and views within a partial migration; complex transformations, DTOs, database mediation, plugins, and portions of the underlying capability remained legacy-owned. Costing requires current inputs, technology choices require current constraints, and AI-assisted delivery effects require separate measurement.</p>
             <p><a href="#solution-architecture-title">Read the Full Debrief →</a></p>
           </section>
 
@@ -171,8 +171,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr data-label="How each Solution Architecture finding becomes an Implementation Architecture move: Diagnostic surface">
-                    <th scope="row" data-label="Shared concern">Diagnostic surface</th>
+                  <tr data-label="How each Solution Architecture finding becomes an Implementation Architecture move: Operational role">
+                    <th scope="row" data-label="Shared concern">Operational role</th>
                     <td data-label="Solution Architecture">A research tool becomes operational infrastructure.</td>
                     <td data-label="Implementation Architecture">The stack defines who can contribute and how behavior is shared.</td>
                     <td data-label="Enterprise consequence">Re-platforming changes the operating model as well as the screens.</td>
@@ -215,7 +215,7 @@
             <h2 id="solution-architecture-title" class="txt-h2 architecture-track-title">I. Solution Architecture</h2>
             <h3 id="solution-debrief-title" class="txt-h3 beat-title">§a Debrief — At the Desk Where a Research Tool Became Clinical Infrastructure</h3>
             <p>
-              The genomic viewer began as a research-built browser client and hardened into a mission-critical surface as
+              The genomic viewer began as a research-built browser client and hardened into a mission-critical application as
               acquisition, multi-protocol assays, methylation, longitudinal liquid biopsy, and automation expanded the work
               around it. Curators, Pathology, Translational Oncology, Computational Bioinformatics, and Medical Affairs
               depended on the viewer alongside IGV, LIMS/ELN, the analysis pipeline, and downstream transmission assets.<sup><a href="#source-solution-debrief">1</a></sup>
@@ -228,7 +228,7 @@
               investment would let them change safely.
             </p>
             <p>
-              I entered through a search redesign in Q1 2019 and later joined the full platform program inside Research &amp;
+              I redesigned search in Q1 2019 and later joined the full platform program inside Research &amp;
               Development's Computational Biology Engineering team. The work joined participant research, design, and deep
               Java implementation with a core delivery group and the wider 50-plus-engineer Computational Biology organization.
             </p>
@@ -281,7 +281,7 @@
           <section class="prose-flow" aria-labelledby="solution-intervention-title">
             <h3 id="solution-intervention-title" class="txt-h3 beat-title">§c The Intervention — Just Show It in the Interface</h3>
             <p>
-              Profiles and permissions became the First Responsible Version: the smallest surface able to align current
+              Profiles and permissions became the First Responsible Version: the smallest product change able to align current
               sign-off, visible studies, assignable cases, and permitted actions. This converted an abstract re-platforming into
               an operating contract with explicit requirements that could support deterministic routing later.<sup><a href="#source-solution-intervention">3</a></sup>
             </p>
@@ -336,7 +336,7 @@
                     <tr data-label="Strategy dimensions and qualitative 2026 assessment: Reduce"><th scope="row" data-label="Action">Reduce</th><td data-label="Source-named dimensions">Legacy coupling</td><td data-label="Decision meaning">Move bounded capability families while retained legacy ownership stays visible.</td></tr>
                     <tr data-label="Strategy dimensions and qualitative 2026 assessment: Preserve / make explicit"><th scope="row" data-label="Action">Preserve / make explicit</th><td data-label="Source-named dimensions">Clinical task continuity; validation evidence burden</td><td data-label="Decision meaning">Keep consequential work usable and name the acceptance condition, evidence, rollback, and owner for each move.</td></tr>
                     <tr data-label="Strategy dimensions and qualitative 2026 assessment: Raise"><th scope="row" data-label="Action">Raise</th><td data-label="Source-named dimensions">Identity fidelity; accessibility and cognitive load; staffing reach</td><td data-label="Decision meaning">Increase reference fidelity, inspection support, and a typed contribution path.</td></tr>
-                    <tr data-label="Strategy dimensions and qualitative 2026 assessment: Create"><th scope="row" data-label="Action">Create</th><td data-label="Source-named dimensions">Authorization explicitness; release independence; observability and recovery</td><td data-label="Decision meaning">Establish dependable operating abilities the legacy surface left implicit or coupled.</td></tr>
+                    <tr data-label="Strategy dimensions and qualitative 2026 assessment: Create"><th scope="row" data-label="Action">Create</th><td data-label="Source-named dimensions">Authorization explicitness; release independence; observability and recovery</td><td data-label="Decision meaning">Establish dependable operating abilities the legacy viewer left implicit or coupled.</td></tr>
                     <tr data-label="Strategy dimensions and qualitative 2026 assessment: Open question"><th scope="row" data-label="Action">Open question</th><td data-label="Source-named dimensions">Operating cost</td><td data-label="Decision meaning">Estimate migration, parallel operation, validation, support, and retirement separately.</td></tr>
                   </tbody>
                 </table>
@@ -353,7 +353,7 @@
             <h3 id="actor-context-board-title" class="txt-h3">Canonical Context Tree presentation — each group needs different context for the same case</h3>
             <p>
               Curation, Pathology, computational biology, automation, Quality, engineering, and partner-facing groups
-              each make a different decision about the same case from one operating surface. Use the group filters to compare the
+              each make a different decision about the same case in the same genomic viewer. Use the group filters to compare the
               context each group needs, the scenario that reveals operational state held outside the viewer, and the architecture
               component that carries the resulting contract.
             </p>
@@ -388,7 +388,7 @@
               usage breadth and causal magnitude require separate measurement.<sup><a href="#source-solution-outcome">4</a></sup>
             </p>
             <p>
-              Profile-scoped dashboards moved morning reconstruction into a shared surface. Structured notes recorded human
+              Profile-scoped dashboards moved morning reconstruction into a shared dashboard. Structured notes recorded human
               interventions across tiered automation candidates, making the remaining judgment work countable and reviewable.
               Those observations establish where people intervened and where routing could mature; comparative automation quality
               and patient outcomes require their own evidence. The dashboard also had a discoverability shortfall, so quiet use
@@ -408,7 +408,7 @@
               scenario-shaped specifications, and visible operational state let participating units inspect the work together.
               What changed was its expression—screens, services, components, and tests evolved as operating learning returned
               upstream. What travels is the method: the same Core Architectures supported the FMI LIMS/ELN re-platforming,
-              providing a second materially different receiving surface. People who carried the work began writing
+              providing a second materially different application setting. People who carried the work began writing
               specifications for its behavior.<sup><a href="#source-solution-repeatability">5</a></sup>
             </p>
             <ol class="debrief-sequence table-span-all">
@@ -435,8 +435,8 @@
               modes, super-header, and component library; the wider engineering group extended the same component foundation.<sup><a href="#source-implementation-debrief">6</a></sup>
             </p>
             <p>
-              Inside the R&amp;D Computational Biology Engineering team, my production work crossed the React and TypeScript
-              surface, GWT interoperability, Java services and DTOs, and database mediation. That staffing consequence made
+              Inside the R&amp;D Computational Biology Engineering team, I designed and implemented the React and TypeScript
+              interface layer, maintained GWT interoperability, and worked across Java services, DTOs, and database mediation. That staffing consequence made
               the stack an arrangement for shared work: runnable component states connected design, implementation, onboarding,
               and testing across the core group and a 50-plus-engineer organization.
             </p>
@@ -493,12 +493,12 @@
             <div class="architecture-pair table-span-all cobalt-operating-field-cards">
               <article>
                 <p class="architecture-pair__label">Conceptual appeal</p>
-                <h4 class="txt-h4">One fluid, global working surface</h4>
+                <h4 class="txt-h4">One fluid, global workbench</h4>
                 <p>Masonry made dense genomic work feel coherent and immediate.</p>
               </article>
               <article>
                 <p class="architecture-pair__label">Delivery consequence</p>
-                <h4 class="txt-h4">Bounded typed surfaces</h4>
+                <h4 class="txt-h4">Bounded typed interfaces</h4>
                 <p>Retiring the favored concept preserved migration credibility and reduced the number of coupled points of failure.</p>
               </article>
             </div>
@@ -567,7 +567,7 @@
             <p>
               The change gave each tracker job a fitting home: current reads in the service layer, transmission state in structured
               fields, intervention history in notes, and profile-scoped exceptions in the dashboard. The result preserved the
-              distinct work behind the tracker while retiring the spreadsheet as its shared operating surface.
+              distinct work behind the tracker while retiring the spreadsheet as its shared operating record.
             </p>
 
             <figure class="story-visual table-span-all cobalt-operating-field__visual">
@@ -575,8 +575,8 @@
                 <img src="../img/plot/genomic_viewer_operating_surface_map.svg" width="1600" height="1120" loading="lazy" alt="Morning SQL moves into profile-scoped dashboards and reports; queue ownership moves into modeled state and qualification rules; service updates, structured fields, and viewer note types collectively retire the macro Failure Tracker.">
               </a>
               <figcaption class="table-note">
-                Distinct implementation moves give the SQL ritual, human queue state, and Failure Tracker work fitting system
-                surfaces. Operational truth becomes current at the point of use.
+                Distinct implementation moves assign the SQL ritual, human queue state, and Failure Tracker work to fitting system
+                components. Operational truth becomes current at the point of use.
               </figcaption>
             </figure>
           </section>
@@ -617,7 +617,7 @@
               </article>
               <article>
                 <p class="repeatability-cards__label">Revision</p>
-                <h4 class="txt-h4">Returns downstream learning to the shared surface</h4>
+                <h4 class="txt-h4">Returns downstream learning to the shared specification</h4>
               </article>
             </div>
 
@@ -699,7 +699,7 @@
                 >
               </a>
               <figcaption class="table-note">
-                The workbench keeps case judgment, operating context, and service handoff in one reading surface. React and Java
+                The workbench keeps case judgment, operating context, and service handoff in one case-review interface. React and Java
                 services carry the interaction boundary; PostgreSQL carries current relational state; private Amazon S3 objects
                 carry versioned genomic artifacts; the transactional outbox, Amazon SQS, and recovery states carry recoverable movement. Investment
                 follows the boundary each population must keep dependable.
@@ -756,7 +756,7 @@
                       <th scope="row" data-label="Investment and capability">Advanced Search</th>
                       <td data-label="Prior work reduced or retired">Clipped result sets and local cohort workarounds.</td>
                       <td data-label="Receiving populations">Business units including groups finding patients for partner trials.</td>
-                      <td class="table-ability" data-label="Changed ability">One search surface becomes useful across organizational boundaries.</td>
+                      <td class="table-ability" data-label="Changed ability">One search interface becomes useful across organizational boundaries.</td>
                       <td data-label="Material investment lines">Development; integration; onboarding; support.</td>
                     </tr>
                     <tr data-label="What the re-platforming investment enabled: Typed components, stories, and tests">
@@ -783,7 +783,7 @@
           <section aria-labelledby="population-cartography-title">
             <h2 id="population-cartography-title" class="txt-h2 architecture-track-title">Population cartography — who receives the changed capability</h2>
             <p class="debrief-lead">
-              The same platform move changes different work for each population. This surface keeps each group's decision, receiving
+              The same platform move changes different work for each population. This table keeps each group's decision, receiving
               interface, and remaining responsibility together.
             </p>
             <figure class="table-figure table-figure--wide table-span-all">
@@ -795,7 +795,7 @@
                       <th scope="col" data-label="Population">Population</th>
                       <th scope="col" data-label="Prior work">Prior work</th>
                       <th scope="col" data-label="Changed work">Changed work</th>
-                      <th scope="col" data-label="Receiving surface">Receiving surface</th>
+                      <th scope="col" data-label="Receiving interface or artifact">Receiving interface or artifact</th>
                       <th scope="col" data-label="Remaining responsibility">Remaining responsibility</th>
                     </tr>
                   </thead>
@@ -804,49 +804,49 @@
                       <th scope="row" data-label="Population">Curators / CBO</th>
                       <td data-label="Prior work">Self-assignment, SQL checks, file hunting, and Slack recovery.</td>
                       <td data-label="Changed work">Profile-scoped queues, dashboard triage, visible references, and in-case collaboration.</td>
-                      <td data-label="Receiving surface">Profile arranger, dashboard, Floating Drawer, Collaboration.</td>
+                      <td data-label="Receiving interface or artifact">Profile arranger, dashboard, Floating Drawer, Collaboration.</td>
                       <td data-label="Remaining responsibility">Scientific judgment, sign-off, and consequential exception handling.</td>
                     </tr>
                     <tr data-label="Prior work, changed work, and remaining responsibility by population: Pathology">
                       <th scope="row" data-label="Population">Pathology</th>
                       <td data-label="Prior work">Open cases individually and reconcile evidence across views.</td>
                       <td data-label="Changed work">Read consistent identity, actionable variants, and QC state; reach IGV and COSMIC in context.</td>
-                      <td data-label="Receiving surface">Super-header, Summary and Digest, high-contrast mode.</td>
+                      <td data-label="Receiving interface or artifact">Super-header, Summary and Digest, high-contrast mode.</td>
                       <td data-label="Remaining responsibility">Diagnostic-consequence decisions and current qualification.</td>
                     </tr>
                     <tr data-label="Prior work, changed work, and remaining responsibility by population: Managers">
                       <th scope="row" data-label="Population">Managers</th>
                       <td data-label="Prior work">Coordinate sign-offs, trainees, and review eligibility manually.</td>
                       <td data-label="Changed work">Batch-manage granular capability profiles.</td>
-                      <td data-label="Receiving surface">Profile administration.</td>
+                      <td data-label="Receiving interface or artifact">Profile administration.</td>
                       <td data-label="Remaining responsibility">Keep qualifications and assignments current.</td>
                     </tr>
                     <tr data-label="Prior work, changed work, and remaining responsibility by population: Client Services">
                       <th scope="row" data-label="Population">Client Services</th>
                       <td data-label="Prior work">Traverse several systems to answer status and hold questions.</td>
                       <td data-label="Changed work">Read a comprehensible case digest.</td>
-                      <td data-label="Receiving surface">Summary and Digest.</td>
+                      <td data-label="Receiving interface or artifact">Summary and Digest.</td>
                       <td data-label="Remaining responsibility">Carry customer context and route scientific questions appropriately.</td>
                     </tr>
                     <tr data-label="Prior work, changed work, and remaining responsibility by population: QA and incoming managers">
                       <th scope="row" data-label="Population">QA and incoming managers</th>
                       <td data-label="Prior work">Reconstruct expected behavior from people and scattered documentation.</td>
                       <td data-label="Changed work">Extend scenarios that also serve as tests and component states.</td>
-                      <td data-label="Receiving surface">Specification-by-Example suite and Storybook.</td>
+                      <td data-label="Receiving interface or artifact">Specification-by-Example suite and Storybook.</td>
                       <td data-label="Remaining responsibility">Revise the upstream behavior when operating learning changes it.</td>
                     </tr>
                     <tr data-label="Prior work, changed work, and remaining responsibility by population: Engineers">
                       <th scope="row" data-label="Population">Engineers</th>
                       <td data-label="Prior work">Learn proprietary UI conventions before contributing.</td>
-                      <td data-label="Changed work">Enter through typed components, runnable stories, and shared test contracts.</td>
-                      <td data-label="Receiving surface">Component library and verification portfolio.</td>
+                      <td data-label="Changed work">Contribute through typed components, runnable stories, and shared test contracts.</td>
+                      <td data-label="Receiving interface or artifact">Component library and verification portfolio.</td>
                       <td data-label="Remaining responsibility">Preserve integration continuity and keep each retired integration boundary explicit.</td>
                     </tr>
                     <tr data-label="Prior work, changed work, and remaining responsibility by population: Sponsors and operations">
                       <th scope="row" data-label="Population">Sponsors and operations</th>
                       <td data-label="Prior work">Receive private emailed morning summaries.</td>
                       <td data-label="Changed work">Inspect shared, profile-scoped operating intelligence.</td>
-                      <td data-label="Receiving surface">Operations dashboard.</td>
+                      <td data-label="Receiving interface or artifact">Operations dashboard.</td>
                       <td data-label="Remaining responsibility">Fund remaining capability transfer and operational support.</td>
                     </tr>
                   </tbody>

@@ -35,6 +35,7 @@ the smallest adequate route when no contract adds material value.
 | [`cost-and-ownership-analysis`](cost-and-ownership-analysis/SKILL.md) | Function cost, input safety, or mutation ownership should change an implementation decision | Scoped cost expressions, explicit ownership, and proportionate repair evidence |
 | [`evidence-grounded-research-spike`](evidence-grounded-research-spike/SKILL.md) | Current expert evidence should change a repository decision | An evidence map, transfer limits, and decision delta |
 | [`supportive-change-writing`](supportive-change-writing/SKILL.md) | Human-facing prose or instructions change materially | Desired-state, negation-aware, evidence-calibrated language |
+| [`agency-and-action-writing`](agency-and-action-writing/SKILL.md) | Prose obscures who acted, what they did, what changed, or why it mattered | Direct, evidence-calibrated language with truthful agency and precise abstractions |
 | [`declarative-skill-authoring`](declarative-skill-authoring/SKILL.md) | A reusable collaboration affordance has earned a portable contract | A skill with explicit trigger, boundaries, rules, and completion |
 | [`collaboration-accounting`](collaboration-accounting/SKILL.md) | Material work changes the disposition of a skill or candidate | One create, revise, observe, settle, consolidate, or retire route |
 | [`collaboration-runbook-authoring`](collaboration-runbook-authoring/SKILL.md) | A settled multi-phase procedure needs re-entrant guidance | A versioned route with entry, authority, checks, recovery, and handback |

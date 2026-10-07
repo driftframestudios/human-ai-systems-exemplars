@@ -16,6 +16,14 @@
   ],
   "skills": [
     {
+      "name": "agency-and-action-writing",
+      "sourcePath": ".agents/skills/agency-and-action-writing/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "The initial repository exercise is complete. Public projection remains held until a source-package review and another natural use test the skill outside this Debrief language pass."
+    },
+    {
       "name": "audit-anthropomorphic-cues",
       "sourcePath": ".agents/skills/audit-anthropomorphic-cues/SKILL.md",
       "publicationStanding": "public_ready",
