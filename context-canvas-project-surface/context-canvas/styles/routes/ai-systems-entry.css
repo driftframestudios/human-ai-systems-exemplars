@@ -2,7 +2,7 @@
    Consumer: ai-systems.html only.
    Owns: entry-route bridges, live-lab summaries, Goal Fidelity table
    treatment, entry embeds, and their responsive and alternate modes.
-   Load order: expanded.css, styles/components/instrument-atlas.css,
+   Load order: shared core, expanded.css, styles/components/instrument-atlas.css,
    ai-systems.css, this entry bundle, then canvas-shell.css.
    Contract: ../../../../visual-fidelity-contracts/cobalt-operating-field.md.
    The family bundle supplies shared grammar; this entry retains authority

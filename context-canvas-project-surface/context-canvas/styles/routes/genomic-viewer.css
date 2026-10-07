@@ -2,7 +2,8 @@
    Consumer: genomic-viewer-replatforming.html under .genomic-viewer-page.
    Owns: warm solution fields, dark implementation fields,
    Context Tree and strategy treatments, route modes, and late cascade seams.
-   Load order: expanded.css, debrief-reading.css, this route, canvas-shell.css.
+   Load order: shared core, expanded.css, debrief-reading.css, this route,
+   canvas-shell.css.
    Contracts: ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md,
    ../../../../visual-fidelity-contracts/rose-quartz-editorial-field.md, and
    ../../../../visual-fidelity-contracts/cobalt-operating-field.md.

@@ -136,11 +136,13 @@
       "family": "context-canvas",
       "kind": "node-test",
       "members": [
+        "tests/context-canvas/about-first-paint-css.test.mjs",
         "tests/context-canvas/ai-systems-principles.test.mjs",
         "tests/context-canvas/benchmark-readings.test.mjs",
         "tests/context-canvas/code-and-about-treatment.test.mjs",
         "tests/context-canvas/contrast-treatment.test.mjs",
         "tests/context-canvas/cornerstone-definitions.test.mjs",
+        "tests/context-canvas/debrief-image-derivatives.test.mjs",
         "tests/context-canvas/debrief-reading-modes.test.mjs",
         "tests/context-canvas/iframe-carriers.test.mjs",
         "tests/context-canvas/investment-model-studio-prompt-capsule.test.mjs",

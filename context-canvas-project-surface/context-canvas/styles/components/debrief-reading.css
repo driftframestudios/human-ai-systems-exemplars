@@ -3,8 +3,9 @@
    using .track-index, .source-basis, or .debrief-quote--orientation.
    Owns: shared reading-route cards, source-basis lists, orientation-reading
    measure and placement, and print grouping.
-   Load order: expanded.css, this component, the relevant route bundle, then
-   canvas-shell.css; styles/contracts/debrief-composition.css may follow for composed readings.
+   Load order: shared core, expanded.css, this component, the relevant route
+   bundle, then canvas-shell.css; styles/contracts/debrief-composition.css may
+   follow for composed readings.
    Contract: ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md.
    The component keeps navigation and evidence orientation stable while each
    route retains authority over palette, rhythm, density, and composition. */

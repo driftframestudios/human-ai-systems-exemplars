@@ -24,6 +24,21 @@ const previewSources = new Map([
   ["catalog-accessible-forms", "../img/debriefs/recoverable-enterprise-forms/complete-form-reference.webp"],
 ]);
 
+const previewDimensions = new Map([
+  ["catalog-genomic-viewer", ["5120", "2708"]],
+  ["catalog-clinical-trial", ["5116", "2710"]],
+  ["catalog-ehr-integration", ["1600", "1120"]],
+  ["catalog-lims-eln", ["5114", "2710"]],
+  ["catalog-humatics", ["5110", "2708"]],
+  ["catalog-who-to-believe", ["1600", "1120"]],
+  ["catalog-field-inspection", ["1600", "1200"]],
+  ["catalog-distributed-inspection", ["1600", "1180"]],
+  ["catalog-three-way-return", ["1600", "1120"]],
+  ["catalog-structure-sensor", ["1440", "1080"]],
+  ["catalog-langwhich", ["1440", "882"]],
+  ["catalog-accessible-forms", ["700", "1250"]],
+]);
+
 function attribute(tag, name) {
   const match = tag.match(new RegExp(`\\b${name}="([^"]*)"`, "u"));
   return match ? match[1] : "";
@@ -45,11 +60,14 @@ test("Full Debrief catalog cards may declare distinct responsive preview visuals
     const upfrontSrc = block.match(/<img class="project__upfront" src="([^"]+)"/u)?.[1] ?? "";
     const previewSrc = attribute(openingTag, "data-catalog-preview-src");
     const previewSrcset = attribute(openingTag, "data-catalog-preview-srcset");
+    const [expectedWidth, expectedHeight] = previewDimensions.get(cardId);
 
     assert.equal(previewSrc, expectedSrc, `${cardId} should declare its chosen preview visual`);
     assert.notEqual(previewSrc, upfrontSrc, `${cardId} should preview a visual distinct from its catalog-card image`);
     assert.ok(attribute(openingTag, "data-catalog-preview-alt"), `${cardId} should describe its preview image`);
     assert.ok(attribute(openingTag, "data-catalog-preview-caption"), `${cardId} should explain the preview image`);
+    assert.equal(attribute(openingTag, "data-catalog-preview-width"), expectedWidth, `${cardId} should declare its preview width`);
+    assert.equal(attribute(openingTag, "data-catalog-preview-height"), expectedHeight, `${cardId} should declare its preview height`);
     await access(resolve(canvasRoot, previewSrc));
 
     for (const candidate of previewSrcset.split(/,\s*/u).filter(Boolean)) {
@@ -71,6 +89,7 @@ test("Full Debrief catalog cards may declare distinct responsive preview visuals
   }
 
   assert.match(html, /<figcaption data-preview-caption>Preview visual from the selected reading\.<\/figcaption>/u);
+  assert.match(html, /<img[^>]*width="1600"[^>]*height="1120"[^>]*data-preview-image>/u);
 });
 
 test("Catalog preview image selection falls back cleanly and clears stale responsive metadata", async () => {
@@ -79,9 +98,15 @@ test("Catalog preview image selection falls back cleanly and clears stale respon
   assert.match(script, /card\.getAttribute\("data-catalog-preview-src"\) \|\| \(image \? image\.getAttribute\("src"\) : ""\)/u);
   assert.match(script, /card\.getAttribute\("data-catalog-preview-srcset"\) \|\| \(image \? image\.getAttribute\("srcset"\) : ""\)/u);
   assert.match(script, /card\.getAttribute\("data-catalog-preview-sizes"\) \|\| \(image \? image\.getAttribute\("sizes"\) : ""\)/u);
+  assert.match(script, /card\.getAttribute\("data-catalog-preview-width"\) \|\| \(image \? image\.getAttribute\("width"\) : ""\)/u);
+  assert.match(script, /card\.getAttribute\("data-catalog-preview-height"\) \|\| \(image \? image\.getAttribute\("height"\) : ""\)/u);
   assert.match(script, /previewImage\.setAttribute\("alt", previewImageAlt\)/u);
   assert.match(script, /previewImage\.removeAttribute\("srcset"\)/u);
   assert.match(script, /previewImage\.removeAttribute\("sizes"\)/u);
+  assert.match(script, /previewImage\.removeAttribute\("width"\)/u);
+  assert.match(script, /previewImage\.removeAttribute\("height"\)/u);
+  assert.match(script, /previewImage\.setAttribute\("width", previewImageWidth\)/u);
+  assert.match(script, /previewImage\.setAttribute\("height", previewImageHeight\)/u);
   assert.match(script, /"Preview visual — " \+ previewImageCaption/u);
   assert.doesNotMatch(script, /"Primary visual — "/u);
 });

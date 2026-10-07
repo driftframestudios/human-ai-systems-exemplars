@@ -42,11 +42,20 @@ The four Debrief working-system screenshot families retain their accepted,
 unsuffixed WebPs as full-size inspection targets. Run
 `npm run build:debrief-image-derivatives` after replacing an accepted source;
 the repository-owned generator uses `cwebp` to produce the `960w` and `1920w`
-responsive candidates declared in the pages and inventory. Review interface
-text and geometry in the regenerated candidates before rebuilding the
-production projection. Shared rules in [`expanded.css`](expanded.css) keep
-dense landscape interfaces on a keyboard-scrollable `56rem` inspection canvas
-with a `78rem` wide cap, while portrait views use the narrower `42rem` cap.
+responsive candidates declared in the pages and inventory. It skips a
+candidate at or above the accepted source width, removes a previously generated
+candidate that has become ineligible, writes through a verified same-directory
+temporary file, and reports the active `cwebp` version without
+treating encoded bytes as stable across encoder releases. Run
+`npm run check:debrief-image-derivatives` to check candidate eligibility, exact
+dimensions, and preserved source aspect ratios without rewriting the tracked
+files. Source replacement becomes current by running the build command; the
+check avoids inferring content freshness from checkout timestamps or partial
+Git history. Review interface text and geometry in regenerated candidates
+before rebuilding the production projection. The extracted table component
+and remaining legacy rules keep dense landscape interfaces on a
+keyboard-scrollable `56rem` inspection canvas with a `78rem` wide cap, while
+portrait views use the narrower `42rem` cap.
 
 The accepted Registry visual masters remain the source-level reference for
 dependency-free visitor SVGs: the
@@ -87,15 +96,26 @@ Top-level routes usually present charset and viewport, compact page metadata, fi
 
 ## Stylesheet ownership
 
-`expanded.css` carries the shared foundation, reading layout, tables, reusable editorial components, and established route groups that still await a clearer source owner. Route-specific styles load after that foundation and before `canvas-shell.css` when their cascade depends on the shared layer.
+The shared core now has direct token and foundation owners. Site navigation,
+tables, and the demonstrated route-card grid have direct component owners.
+Routes that still need unresolved reading, editorial, or route terrain load
+`expanded.css` afterward as an explicit legacy remainder. Route-specific
+styles follow those shared owners and precede `canvas-shell.css` when their
+cascade depends on the shared layer. About is the first route whose complete
+first-paint graph leaves `expanded.css` behind.
 
 Current high-signal ownership:
 
 | Source | Direct consumer | Visual authority and seam |
 | --- | --- | --- |
-| [`expanded.css`](expanded.css) | Broad Context Canvas foundation | Shared reading, table, editorial, and route-card rules; named route extractions progressively reduce this surface. |
-| [`canvas-shell.css`](canvas-shell.css) | 43 direct consumers across 44 top-level routes; [`debriefs.html`](debriefs.html) currently demonstrates source-derived rail mode | Shared generated footer and page rail, loaded after foundation, component, and route CSS. `data-canvas-page-rail-source` exposes direct identified children as destinations while major-section discovery remains the fallback; route bundles retain palette, rhythm, density, and composition. |
-| [`styles/routes/about.css`](styles/routes/about.css) | [`index.html`](index.html) | About tokens and composition under the [paired-evidence ledger contract](../../visual-fidelity-contracts/tiffany-ledger-field.md) and [prompt-condition routing contract](../../visual-fidelity-contracts/tiffany-conditions-routing-field.md); shared route-card and table rules remain in `expanded.css`. |
+| [`styles/core/tokens.css`](styles/core/tokens.css) | 44 top-level routes | Stable palette and link roles, measures, spacing, and shared table dimensions; first source in the shared core graph. |
+| [`styles/core/foundation.css`](styles/core/foundation.css) | 44 top-level routes | Box sizing, document type, semantic normalization, links, lists, images, figures, the established type scale, and shared reading-container and prose-flow composition. |
+| [`styles/components/site-navigation.css`](styles/components/site-navigation.css) | 44 top-level routes | Shared three-destination navigation, page offset, route state, and canonical `5rem` in-page anchor clearance. |
+| [`styles/components/tables.css`](styles/components/tables.css) | 39 routes with semantic tables or shared table wrappers | Table structure, responsive containment, focus, state, forced-color, and print behavior. |
+| [`styles/components/route-card-grid.css`](styles/components/route-card-grid.css) | [`index.html`](index.html), [`prompt-side-conditions-practice.html`](prompt-side-conditions-practice.html) | Shared two-column route collection and its narrow and reduced-motion behavior. |
+| [`expanded.css`](expanded.css) | 43 top-level routes | Explicit legacy remainder for reading, editorial, and route terrain whose clearer owner is still being established through Issue #51. |
+| [`canvas-shell.css`](canvas-shell.css) | 45 top-level routes; [`debriefs.html`](debriefs.html) currently demonstrates source-derived rail mode | Shared generated footer and page rail, loaded after core, legacy where consumed, component, and route CSS. `data-canvas-page-rail-source` exposes direct identified children as destinations while major-section discovery remains the fallback; route bundles retain palette, rhythm, density, and composition. |
+| [`styles/routes/about.css`](styles/routes/about.css) | [`index.html`](index.html) | About tokens and composition under the [paired-evidence ledger contract](../../visual-fidelity-contracts/tiffany-ledger-field.md) and [prompt-condition routing contract](../../visual-fidelity-contracts/tiffany-conditions-routing-field.md); core, navigation, table, and route-card owners precede this route directly. |
 | [`styles/routes/about-noscript.css`](styles/routes/about-noscript.css) | [`index.html`](index.html) without scripting | Complete static folio and Prompt Conditions reading after the About route bundle. |
 | [`styles/routes/ai-systems.css`](styles/routes/ai-systems.css) | Sixteen pages carrying `.ai-systems-page` | Shared scan, content-region, card, reading-path, instrument, and orchestration styles. The [operating-map visual contract](../../visual-fidelity-contracts/cobalt-operating-field.md) keeps actors, decision context, service movement, recovery, and authority legible. |
 | [`styles/components/instrument-atlas.css`](styles/components/instrument-atlas.css) | [`ai-systems.html`](ai-systems.html), [`shared-machinery.html`](shared-machinery.html) | Reusable atlas table and prototype-card structure, loaded before the AI Systems route bundle. |
@@ -112,7 +132,15 @@ Current high-signal ownership:
 
 Existing companions such as `fmi-lims-eln-replatforming.css` remain focused on their named surfaces.
 
-Shared visitor links use four immutable light/dark unvisited/visited palette roles and two inherited active roles in `expanded.css`. A painted surface declares its background plus the complete active pair; a nested surface that changes the paint resets both active roles. Route owners can assign local active values when their art direction calls for a different audited foreground. The CSS-ownership skill's [surface color and state reference](../../.agents/skills/context-canvas-css-ownership/references/surface-color-and-state-roles.md) carries the state, print, forced-color, visited-privacy, and modern-CSS decision boundary.
+Shared visitor links use four immutable light/dark unvisited/visited palette
+roles in `styles/core/tokens.css` and consume their two inherited active roles
+through `styles/core/foundation.css`. A painted surface declares its background
+plus the complete active pair; a nested surface that changes the paint resets
+both active roles. Route owners can assign local active values when their art
+direction calls for a different audited foreground. The CSS-ownership skill's
+[surface color and state reference](../../.agents/skills/context-canvas-css-ownership/references/surface-color-and-state-roles.md)
+carries the state, print, forced-color, visited-privacy, and modern-CSS
+decision boundary.
 
 Use an existing semantic component when its visual role fits. Add a selector when the page demonstrates a material gap. Sustained prose uses the shared reading measures; tables, diagrams, ledgers, and direct-manipulation instruments retain local two-dimensional space when that space carries meaning.
 

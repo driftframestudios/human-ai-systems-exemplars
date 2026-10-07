@@ -251,7 +251,7 @@ The extraction prioritizes first-paint ownership and collaboration legibility ra
 8. **Normalization is uneven.** Physical and logical properties, old prefixes, `transition: all`, mixed naming dialects, and an undocumented elevation scale coexist.
 9. **Accessibility modes are present but fragmented.** Reduced motion, forced colors, and print are strong but repeated; some hover treatments lack matching focus behavior.
 10. **Inline CSS constrains future CSP and caching.** Self-contained prototypes may earn the exception; public pages should disclose or reduce it.
-11. **`min.css` is not minified.** It is a compatibility `@import`, which makes its name operationally misleading.
+11. **Generated minification still needs a publication owner.** The unused `min.css` compatibility alias has been retired; a future generated bundle should use a pinned profile, deterministic inputs, and a name that reflects immutable output rather than authored source.
 12. **Exact duplicates and immediate conflicts remain.** Hiring rules, print rules, background utilities, and consecutive slug rules include redundant or unwinnable declarations.
 
 ### Target CSS source architecture

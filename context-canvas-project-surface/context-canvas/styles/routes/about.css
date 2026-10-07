@@ -4,8 +4,8 @@
    progressive disclosure, and the Prompt Conditions explorer.
    Contracts: ../../../../visual-fidelity-contracts/tiffany-ledger-field.md
    and ../../../../visual-fidelity-contracts/tiffany-conditions-routing-field.md.
-   Shared seams: expanded.css owns the route-card grid and shared table rules;
-   canvas-shell.css follows this bundle in the document cascade.
+   Shared seams: core tokens and foundation precede the site-navigation, table,
+   and route-card components; canvas-shell.css follows this route bundle.
    Route-local composition, rhythm, and visual variation remain welcome when
    the About source and visitor purpose support them. */
 

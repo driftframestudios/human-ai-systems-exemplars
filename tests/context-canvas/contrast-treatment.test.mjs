@@ -186,8 +186,12 @@ function assertPairsMeet(colors, backgrounds, minimum, label) {
 }
 
 test("shared visitor-link roles meet their known light and dark fields", async () => {
-  const css = await readCanvasFile("expanded.css");
-  const rootRule = rulesFor(css, ":root")[0];
+  const [tokens, foundation, legacy] = await Promise.all([
+    readCanvasFile("styles/core/tokens.css"),
+    readCanvasFile("styles/core/foundation.css"),
+    readCanvasFile("expanded.css"),
+  ]);
+  const rootRule = rulesFor(tokens, ":root")[0];
   assert.ok(rootRule, "Expected an actual :root rule");
 
   const lightLinks = [
@@ -214,24 +218,25 @@ test("shared visitor-link roles meet their known light and dark fields", async (
   ], 4.5, "dark-field link palette");
 
   assert.ok(
-    rulesFor(css, "a").some(rule => declaration(rule, "color") === "var(--canvas-link-color)"),
+    rulesFor(foundation, "a").some(rule => declaration(rule, "color") === "var(--canvas-link-color)"),
     "base anchors consume the active unvisited role",
   );
   assert.ok(
-    rulesFor(css, "a:visited").some(rule => declaration(rule, "color") === "var(--canvas-link-visited-color)"),
+    rulesFor(foundation, "a:visited").some(rule => declaration(rule, "color") === "var(--canvas-link-visited-color)"),
     "visited anchors consume the active visited role",
   );
   assert.ok(
-    rulesFor(css, "a:is(:active, :hover)").some(
+    rulesFor(foundation, "a:is(:active, :hover)").some(
       rule => declaration(rule, "text-decoration-thickness") === ".14em",
     ),
     "hover and active states retain a non-color cue",
   );
-  assert.doesNotMatch(css, /--canvas-link(?:-inverse|-visited)?\s*:/u);
-  assert.doesNotMatch(css, /:is\(a,\s*a:visited\)/u);
-  assert.doesNotMatch(css, /filter:\s*(?:none|brightness\()/u);
+  const sharedCss = `${tokens}\n${foundation}\n${legacy}`;
+  assert.doesNotMatch(sharedCss, /--canvas-link(?:-inverse|-visited)?\s*:/u);
+  assert.doesNotMatch(sharedCss, /:is\(a,\s*a:visited\)/u);
+  assert.doesNotMatch(sharedCss, /filter:\s*(?:none|brightness\()/u);
   assert.doesNotMatch(
-    css,
+    sharedCss,
     /\.content__container\.bg__adjust--lightsalmon\s+a:hover\s*\{[^}]*color\s*:/u,
     "the salmon surface keeps the shared hover cue instead of reverting to white text",
   );
@@ -240,6 +245,7 @@ test("shared visitor-link roles meet their known light and dark fields", async (
 test("painted surface owners carry complete active link-role pairs", async () => {
   const sources = Object.fromEntries(await Promise.all([
     "expanded.css",
+    "styles/components/tables.css",
     "styles/routes/debriefs.css",
     "styles/contracts/debrief-composition.css",
     "field-inspection.css",
@@ -268,7 +274,7 @@ test("painted surface owners carry complete active link-role pairs", async () =>
   }
 
   const lightOwners = [
-    ["expanded.css", "table"],
+    ["styles/components/tables.css", "table"],
     ["expanded.css", ".cornerstone-definition"],
     ["expanded.css", ".interpretive-aside"],
     ["expanded.css", ".architecture-pair article"],
@@ -472,7 +478,7 @@ test("route-specific gradients, table roles, and compact rails retain their evid
   }
 
   assert.ok(
-    rulesFor(await readCanvasFile("expanded.css"), ".table-scroll > table > caption").some(
+    rulesFor(await readCanvasFile("styles/components/tables.css"), ".table-scroll > table > caption").some(
       rule => declaration(rule, "max-inline-size")
         === "calc(100vw - (2 * var(--canvas-page-gutter)))",
     ),

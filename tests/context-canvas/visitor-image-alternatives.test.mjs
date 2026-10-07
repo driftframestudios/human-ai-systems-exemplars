@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import { access, readFile, readdir } from "node:fs/promises";
-import { join, resolve } from "node:path";
+import { dirname, extname, join, resolve } from "node:path";
 import test from "node:test";
+
+import { inspectImageDimensions } from "../../tools/build-prod-projection.mjs";
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const canvasRoot = resolve(
@@ -81,6 +83,14 @@ function attribute(tag, name) {
   return tag.match(new RegExp(`\\b${escapedName}="([^"]*)"`, "u"))?.[1];
 }
 
+const rasterMediaTypes = new Map([
+  [".gif", "image/gif"],
+  [".jpeg", "image/jpeg"],
+  [".jpg", "image/jpeg"],
+  [".png", "image/png"],
+  [".webp", "image/webp"],
+]);
+
 async function parentRoutes() {
   return (await readdir(canvasRoot, { withFileTypes: true }))
     .filter(entry => entry.isFile() && entry.name.endsWith(".html"))
@@ -115,6 +125,38 @@ test("parent visitor images carry a legible text relationship", async () => {
     ["debriefs.html:../img/plot/genomic_viewer_boundary_contract_map.svg"],
     "Only the scripted debrief preview begins with an empty alternative",
   );
+});
+
+test("static top-level raster carriers declare byte-matched intrinsic geometry", async () => {
+  let rasterCount = 0;
+
+  for (const route of await parentRoutes()) {
+    const routePath = join(canvasRoot, route);
+    const html = withoutComments(await readFile(routePath, "utf8"));
+    for (const match of html.matchAll(/<img\b[^>]*>/gu)) {
+      const tag = match[0];
+      const src = attribute(tag, "src");
+      if (!src || /^(?:data:|https?:|\/\/)/iu.test(src)) continue;
+
+      const sourcePath = src.split(/[?#]/u)[0];
+      const mediaType = rasterMediaTypes.get(extname(sourcePath).toLowerCase());
+      if (!mediaType) continue;
+
+      const label = `${route}: ${src}`;
+      const width = Number(attribute(tag, "width"));
+      const height = Number(attribute(tag, "height"));
+      assert.ok(Number.isInteger(width) && width > 0, `${label} intrinsic width`);
+      assert.ok(Number.isInteger(height) && height > 0, `${label} intrinsic height`);
+
+      const bytes = await readFile(resolve(dirname(routePath), sourcePath));
+      const intrinsic = inspectImageDimensions(bytes, mediaType, label);
+      assert.equal(width, intrinsic.width, `${label} width matches source bytes`);
+      assert.equal(height, intrinsic.height, `${label} height matches source bytes`);
+      rasterCount += 1;
+    }
+  }
+
+  assert.ok(rasterCount > 0, "Expected top-level raster image carriers");
 });
 
 test("curated social previews describe the pictured subject", async () => {

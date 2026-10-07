@@ -4,8 +4,8 @@
    Consumer: debriefs.html (.debrief-catalog)
    Owns: the cobalt-and-cream catalog field, filters, Debrief-card badges and
    metadata, browse/preview layout, alternate modes, and print reading.
-   Load order: expanded.css, styles/components/debrief-reading.css, this route
-   bundle, then canvas-shell.css.
+   Load order: shared core, expanded.css, styles/components/debrief-reading.css,
+   this route bundle, then canvas-shell.css.
    Contract: ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md.
    The complete list remains in HTML; debriefs-catalog.js adds bounded reading
    modes, topic filters, and focus previews. Catalog rhythm, density, and visual experiments remain

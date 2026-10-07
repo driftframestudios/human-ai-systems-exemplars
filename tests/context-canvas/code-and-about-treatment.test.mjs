@@ -58,10 +58,13 @@ function sha256(bytes) {
 }
 
 test("shared inline code keeps a readable paper-and-ink treatment", async () => {
-  const css = await readCanvasFile("expanded.css");
-  const rootRule = cssRule(css, ":root");
-  const codeRule = cssRule(css, "code");
-  const blockCodeRule = cssRule(css, "pre > code");
+  const [tokens, legacy] = await Promise.all([
+    readCanvasFile("styles/core/tokens.css"),
+    readCanvasFile("expanded.css"),
+  ]);
+  const rootRule = cssRule(tokens, ":root");
+  const codeRule = cssRule(legacy, "code");
+  const blockCodeRule = cssRule(legacy, "pre > code");
 
   const ink = declarationValue(rootRule, "--canvas-ink");
   const paper = declarationValue(rootRule, "--canvas-paper-soft");

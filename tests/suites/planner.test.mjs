@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError } from '../../tools/test-suite-plan.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const POST_BASELINE_NODE_MEMBERS = ['tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs', 'tests/context-canvas/prompt-side-figure.browser.mjs', 'tests/visualization-fidelity-atlas/atlas-research-data.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-view.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research.browser.mjs'];
+const POST_BASELINE_NODE_MEMBERS = ['tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs', 'tests/context-canvas/about-first-paint-css.test.mjs', 'tests/context-canvas/debrief-image-derivatives.test.mjs', 'tests/context-canvas/prompt-side-figure.browser.mjs', 'tests/visualization-fidelity-atlas/atlas-research-data.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-view.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research.browser.mjs'];
 const fixture = () => ({
   schemaVersion: 1, sourceRevision: 'fixture',
   profiles: [{id: 'local', runtime: 'Node', prerequisites: [], effects: [], artifacts: [], timeout: 'owner-defined'}],
