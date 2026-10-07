@@ -63,5 +63,25 @@ export const schemaReceiverRoutes = Object.freeze([
     source: "context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json",
     id: "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json",
     receiverPath: "context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json"
+  },
+  {
+    source: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/narrative-capsule-composition.schema.v0.1.json",
+    id: "https://schemas.driftframestudios.org/na/schema/narrative-capsule-composition.schema.v0.1.json",
+    receiverPath: "na/schema/narrative-capsule-composition.schema.v0.1.json"
+  },
+  {
+    source: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/semantic-sampling-tableau/terminology-exploration/narrative-sampling-tableau-state.schema.v0.1.json",
+    id: "https://schemas.driftframestudios.org/na/schema/narrative-sampling-tableau-state.schema.v0.1.json",
+    receiverPath: "na/schema/narrative-sampling-tableau-state.schema.v0.1.json"
+  },
+  {
+    source: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/technology-fit-sampling-tableau-state.schema.v0.1.json",
+    id: "https://schemas.driftframestudios.org/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json",
+    receiverPath: "na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json"
+  },
+  {
+    source: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger.schema.v0.1.json",
+    id: "https://schemas.driftframestudios.org/fg/schema/threadkeeping-ledger.schema.v0.1.json",
+    receiverPath: "fg/schema/threadkeeping-ledger.schema.v0.1.json"
   }
 ]);

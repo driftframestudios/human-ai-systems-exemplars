@@ -6,6 +6,7 @@ const publicMaterialFindings = Object.freeze([
   { pattern: /::fragments/iu, label: "an internal fragments marker" },
   { pattern: /~loamthreads?/iu, label: "an internal loamthreads marker" },
   { pattern: /^::[a-z0-9_-]+::/imu, label: "an internal house-annotation marker" },
+  { pattern: /\bInternal\s+[—–:-]\s*/u, label: "an internal-only title marker" },
   { pattern: /\/Users\/[^/\s]+/u, label: "a user-specific filesystem path" },
   { pattern: /@driftframe\//iu, label: "an internal house locator" },
   { pattern: /source_band:\s*public_possible/iu, label: "a public-possible source band" },

@@ -38,6 +38,13 @@ const schemaPaths = {
   localManifest: resolve(prototypesRoot, "prototype-local-manifest.schema.json")
 };
 
+const contextPaths = {
+  composer: resolve(composerRoot, "narrative-capsule-composition.context.v0.1.jsonld"),
+  semantic: resolve(semanticRoot, "narrative-sampling-tableau.context.v0.1.jsonld"),
+  technology: resolve(technologyRoot, "technology-fit-sampling-tableau.context.v0.1.jsonld"),
+  threadkeeping: resolve(threadkeepingRoot, "threadkeeping-ledger.context.v0.1.jsonld")
+};
+
 const json = async (path) => JSON.parse(await readFile(path, "utf8"));
 const clone = (value) => JSON.parse(JSON.stringify(value));
 
@@ -86,6 +93,15 @@ function familyIndexSeed(source) {
   return JSON.parse(match[1]);
 }
 
+function embeddedJsonScript(source, id) {
+  const match = source.match(new RegExp(
+    `<script\\s+type=["']application/ld\\+json["']\\s+id=["']${id}["']>([\\s\\S]*?)<\\/script>`,
+    "u"
+  ));
+  assert.ok(match, `${id} remains available as an embedded JSON-LD script`);
+  return JSON.parse(match[1]);
+}
+
 test("current Narrative and local-manifest schemas compile in the named strict posture", async (t) => {
   for (const [name, path] of Object.entries(schemaPaths)) {
     await t.test(name, async () => {
@@ -93,6 +109,36 @@ test("current Narrative and local-manifest schemas compile in the named strict p
       assert.equal(typeof validate, "function");
     });
   }
+});
+
+test("standalone Narrative contexts retain their source-owned runtime projections", async () => {
+  const [contexts, composer, semantic, technology, threadkeeping] = await Promise.all([
+    Promise.all(Object.values(contextPaths).map(json)),
+    readFile(resolve(composerRoot, "narrative-capsules-chimeric-prototype-v0.1.html"), "utf8"),
+    readFile(resolve(semanticRoot, "narrative-sampling-tableau-chimeric-prototype-v0.1.html"), "utf8"),
+    readFile(resolve(technologyRoot, "technology-fit-sampling-tableau-chimeric-prototype-v0.2.html"), "utf8"),
+    readFile(resolve(threadkeepingRoot, "threadkeeping-ledger-chimeric-prototype-v0.1.html"), "utf8")
+  ]);
+  const [composerContext, semanticContext, technologyContext, threadkeepingContext] = contexts;
+
+  const embeddedComposer = embeddedJsonScript(composer, "jsonld-data")["@context"];
+  assert.ok(Object.keys(composerContext["@context"]).length > Object.keys(embeddedComposer).length);
+  for (const [term, definition] of Object.entries(embeddedComposer)) {
+    assert.deepEqual(definition, composerContext["@context"][term], term);
+  }
+
+  const semanticMatch = semantic.match(/^const CONTEXT=(.+);$/mu);
+  assert.ok(semanticMatch, "Semantic Sampling publishes its standalone context projection");
+  assert.deepEqual(JSON.parse(semanticMatch[1]), semanticContext);
+
+  const technologyMatch = technology.match(/^const JSONLD_CONTEXT=(.+);$/mu);
+  assert.ok(technologyMatch, "Technology Fit publishes its standalone context projection");
+  assert.deepEqual(JSON.parse(technologyMatch[1]), technologyContext["@context"]);
+
+  assert.deepEqual(
+    embeddedJsonScript(threadkeeping, "jsonldGraph")["@context"],
+    threadkeepingContext["@context"]
+  );
 });
 
 test("Narrative Capsule composition examples express accepted and rejected contracts", async () => {
