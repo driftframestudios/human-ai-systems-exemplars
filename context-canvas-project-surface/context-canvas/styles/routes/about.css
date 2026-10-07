@@ -186,11 +186,28 @@
     max-inline-size: 100%;
 }
 
+.about-hero__name {
+    min-inline-size: 0;
+}
+
 .about-hero h1 {
     font-size: clamp(3rem, 8vw, 7.5rem);
     letter-spacing: -.065em;
     line-height: .88;
     margin: 0;
+}
+
+.about-contact {
+    color: var(--about-ink-strong);
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: clamp(1.5rem, 4vw, 3.5rem);
+    font-style: normal;
+    font-weight: 750;
+    letter-spacing: -.045em;
+    line-height: 1;
+    margin: clamp(.75rem, 1.8vw, 1.4rem) 0 0;
+    max-inline-size: 100%;
+    overflow-wrap: anywhere;
 }
 
 .about-title__line {
@@ -244,6 +261,12 @@ p#on-dark-iron-ore {
 .about-static-equivalent {
     font-size: .82rem;
     margin-block: 0;
+}
+
+.about-boundary a {
+    font-weight: 800;
+    text-decoration-thickness: .12em;
+    text-underline-offset: .18em;
 }
 
 .about-portrait {
@@ -888,6 +911,10 @@ p#on-dark-iron-ore {
     .about-evidence-note {
         border: .125rem solid CanvasText;
     }
+
+    .about-contact {
+        color: CanvasText;
+    }
 }
 
 @media print {
@@ -912,6 +939,10 @@ p#on-dark-iron-ore {
     .about-page :is(h1, h2, h3, p, .about-kicker),
     .about-field--dark-iron-ore :is(h2, h3, p),
     .about-field--stakes :is(h2, h3, p) {
+        color: #000 !important;
+    }
+
+    .about-contact {
         color: #000 !important;
     }
 
