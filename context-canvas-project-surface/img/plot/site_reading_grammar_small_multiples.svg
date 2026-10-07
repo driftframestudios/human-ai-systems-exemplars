@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1160" role="img" aria-labelledby="grammar-title grammar-desc">
   <title id="grammar-title">Eight Site Reading and Debrief grammar specimens shown as small multiples</title>
-  <desc id="grammar-desc">Eight cards compare the opening, track arrangement, beat spine, time treatment, spillover, close, and authoring investment of teaching Site Reading and Debrief forms. The specimens teach structure; their example stories are not current project claims.</desc>
+  <desc id="grammar-desc">Eight cards compare the opening, track arrangement, beat spine, time treatment, spillover, close, and authoring investment of teaching Site Reading and Debrief forms. The specimens are historical teaching material; current project claims require their own sources.</desc>
   <defs>
     <pattern id="grammar-grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#2855f3" stroke-width="1" opacity="0.08"/></pattern>
     <style>
@@ -137,6 +137,6 @@
   <g role="group" aria-labelledby="grammar-footer-title">
     <title id="grammar-footer-title">Transfer boundary</title>
     <rect x="56" y="1040" width="1488" height="72" rx="16" fill="#153fbe"/>
-    <text x="80" y="1083" class="sans card-copy white">Transfer opening, track, beat spine, time treatment, spillover, and close. Keep each specimen’s example story outside current-work claims.</text>
+    <text x="80" y="1083" class="sans card-copy white">Transfer opening, track, beat spine, time treatment, spillover, and close. Current claims require their own sources.</text>
   </g>
 </svg>

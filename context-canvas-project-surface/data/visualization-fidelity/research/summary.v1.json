@@ -129,12 +129,12 @@
         }
       ],
       "evidenceKind": "empirical-study",
-      "evidenceStanding": "Controlled graph-design experiment; this extract inspected the conference abstract, not a fresh analysis of participant data.",
+      "evidenceStanding": "Controlled graph-design experiment; this extract inspected the conference abstract. It supports changes in subjective ratings and recall under the reported task conditions.",
       "topics": [
         "interpretation"
       ],
       "supportedConsequence": "Use selective emphasis for a stated reading; the study reports changes in subjective ratings and recalled highlighted patterns under its task conditions.",
-      "transferBoundary": "Recall and ratings do not establish general comprehension, correctness, trust, or a universal rule against shadows.",
+      "transferBoundary": "General comprehension, correctness, trust, and any universal rule about shadows remain unestablished.",
       "citationUse": "observed-in-skill-evidence-map",
       "realWorldApplication": "unspecified"
     },
@@ -159,7 +159,7 @@
         "distribution-and-uncertainty"
       ],
       "supportedConsequence": "Retain observations or paired changes when distribution and within-unit dependence matter; the same mean and error summary can conceal different data structures.",
-      "transferBoundary": "The reviewed publication sample is not this repository or workspace. Continuous-data summaries and categorical count bars have different meanings.",
+      "transferBoundary": "That publication sample is distinct from this repository and workspace. Continuous-data summaries and categorical count bars have different meanings.",
       "citationUse": "observed-in-skill-evidence-map",
       "realWorldApplication": "unspecified"
     },
@@ -184,7 +184,7 @@
         "production-and-validation"
       ],
       "supportedConsequence": "Separate the domain question, data/task abstraction, encoding/interaction, and algorithm; choose observations that address the level of the decision.",
-      "transferBoundary": "The framework structures validation; citing it does not validate an implementation or establish a measured usability outcome.",
+      "transferBoundary": "The framework structures validation; implementation validity and measured usability require observations of the receiving implementation.",
       "citationUse": "observed-in-skill-evidence-map",
       "realWorldApplication": "unspecified"
     },
@@ -208,7 +208,7 @@
         "accessibility"
       ],
       "supportedConsequence": "Pair a complex figure with concise identification and a recoverable account of its meaningful values and relationships, retaining useful table structure.",
-      "transferBoundary": "A text companion is one design measure; this citation is not evidence of complete accessibility or conformance.",
+      "transferBoundary": "A text companion is one design measure; complete accessibility and conformance require broader evaluation of the receiving experience.",
       "citationUse": "observed-in-skill-evidence-map",
       "realWorldApplication": "unspecified"
     },
@@ -227,12 +227,12 @@
         }
       ],
       "evidenceKind": "technical-guidance",
-      "evidenceStanding": "SVG specification provisions for document and image processing modes.",
+      "evidenceStanding": "SVG specification provisions define document and image processing modes.",
       "topics": [
         "web-delivery-and-state"
       ],
       "supportedConsequence": "Choose image delivery for static content and a separately governed document or inline representation when scripting or interaction is required.",
-      "transferBoundary": "A source file's capabilities do not establish the capabilities of every embedding mode or receiving interface.",
+      "transferBoundary": "Each embedding mode and receiving interface requires its own capability check.",
       "citationUse": "observed-in-skill-evidence-map",
       "realWorldApplication": "unspecified"
     },
@@ -261,7 +261,7 @@
         "web-delivery-and-state"
       ],
       "supportedConsequence": "Keep data-to-position mapping explicit and use stable keys for record-to-element correspondence when a view updates.",
-      "transferBoundary": "API mechanisms alone do not prove retained selection, keyboard behavior, or cross-view consistency; those remain implementation observations.",
+      "transferBoundary": "Retained selection, keyboard behavior, and cross-view consistency require observations of the receiving implementation.",
       "citationUse": "observed-in-skill-evidence-map",
       "realWorldApplication": "unspecified"
     },
@@ -285,7 +285,7 @@
         "production-and-validation"
       ],
       "supportedConsequence": "Specify the output format and resolution deliberately and account for backend-dependent metadata when handing off a figure.",
-      "transferBoundary": "Export options do not establish final-size legibility, embedded-font behavior, or the accessibility of a receiving PDF.",
+      "transferBoundary": "Final-size legibility, embedded-font behavior, and receiving-PDF accessibility require observations of the exported artifact.",
       "citationUse": "observed-in-skill-evidence-map",
       "realWorldApplication": "unspecified"
     },
@@ -310,7 +310,7 @@
         "distribution-and-uncertainty"
       ],
       "supportedConsequence": "Expose irregular observations with markers, preserve gaps for missing regular observations, and use steps for values held between discrete changes.",
-      "transferBoundary": "These are conditional display choices, not evidence that interpolation or a time-series model is justified for a particular dataset.",
+      "transferBoundary": "Interpolation and time-series modeling require dataset-specific justification.",
       "citationUse": "observed-in-skill-evidence-map",
       "realWorldApplication": "unspecified"
     },
@@ -335,7 +335,7 @@
         "interpretation"
       ],
       "supportedConsequence": "Choose additive or multiplicative distance to match the question; distinguish raw-value log-axis ticks from labels for already transformed values.",
-      "transferBoundary": "Coordinate examples supply design reasoning, not a universal audience-comprehension result. Ordinary log axes cannot represent zero.",
+      "transferBoundary": "Coordinate examples supply design reasoning; universal audience comprehension remains unestablished. Ordinary log axes require positive values.",
       "citationUse": "observed-in-skill-evidence-map",
       "realWorldApplication": "unspecified"
     },
@@ -359,7 +359,7 @@
         "comparison"
       ],
       "supportedConsequence": "Compare one measure with supplied reference values on a common scale; use zero-based bars or a point mark when a restricted range is necessary.",
-      "transferBoundary": "Targets and qualitative ranges require a domain definition; the specification does not supply them or establish a universal performance advantage.",
+      "transferBoundary": "Domain definitions supply targets and qualitative ranges; a universal performance advantage remains unestablished.",
       "citationUse": "observed-in-skill-evidence-map",
       "realWorldApplication": "unspecified"
     },
@@ -384,7 +384,7 @@
         "interpretation"
       ],
       "supportedConsequence": "Choose defaults that fit data and reading, including zero-based bars, point marks for restricted ranges, and subdued supporting guides.",
-      "transferBoundary": "These recommendations are practitioner reasoning, not an experimental ranking or a requirement to remove every axis or guide.",
+      "transferBoundary": "These recommendations carry practitioner reasoning; an experimental ranking or universal axis-and-guide rule would require separate evidence.",
       "citationUse": "observed-in-skill-evidence-map",
       "realWorldApplication": "unspecified"
     },
@@ -408,7 +408,7 @@
         "interpretation"
       ],
       "supportedConsequence": "Reduce distracting detail and use limited contrast to direct an explanatory reading while retaining comparison context.",
-      "transferBoundary": "This essay is not an additional empirical study; counting both works does not create independent corroboration.",
+      "transferBoundary": "The pair shares source lineage and contributes one line of empirical support; independent corroboration requires a separate work.",
       "citationUse": "observed-in-skill-evidence-map",
       "realWorldApplication": "unspecified"
     },
@@ -434,14 +434,14 @@
         "production-and-validation"
       ],
       "supportedConsequence": "Choose from the reader's operation, data shape, audience/stakes, uncertainty, and companion need; distinguish production commitment from evidence strength.",
-      "transferBoundary": "The Registry guidance and its synthetic examples establish a method, not dataset validity, empirical impact, or deployment. The public route was not independently rendered.",
+      "transferBoundary": "The Registry guidance and its synthetic examples establish a method. Dataset validity, empirical impact, and deployment require their own evidence; public-route rendering remains unchecked.",
       "citationUse": "observed-in-skill-evidence-map",
       "realWorldApplication": "unspecified"
     }
   ],
   "source": {
     "path": "context-canvas-project-surface/data/visualization-fidelity/research/sources.v1.json",
-    "sha256": "9257572c61bf0c88622834fa1e4f33503b26b120fe93b6a0a1d2ca1f6fbf0dc7",
+    "sha256": "f3f773b0c939d4c239379bbfd6275979df106da93d67de518e90737ea5d7df45",
     "standing": "byte-verified-public-editorial-extract",
     "selectedOn": "2026-10-04",
     "selection": {

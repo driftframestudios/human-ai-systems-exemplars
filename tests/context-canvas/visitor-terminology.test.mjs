@@ -66,6 +66,18 @@ const catalogRoomContexts = [
   roomOffset: fragment.search(/\brooms?\b/iu),
 }));
 
+const aiSystemsRoomContexts = [
+  ...[
+    '"name": "Give the Comparison Room"',
+    '"headline": "Give the Comparison Room"',
+    '<h2 id="table-reading-title" class="txt-h2">Give the Comparison Room</h2>',
+  ].map(fragment => ["linked article title", fragment]),
+].map(([sense, fragment]) => ({
+  sense,
+  fragment: fragment.toLowerCase(),
+  roomOffset: fragment.search(/\brooms?\b/iu),
+}));
+
 const reportedConsequenceColumnHeader =
   /<th scope="col"(?: data-label="Reported consequence")?>Reported consequence<\/th>/u;
 
@@ -225,6 +237,7 @@ test("room language retains reviewed runtime, classroom, citation, space, and la
   assert.deepEqual(
     await topLevelHtmlFilesContaining(/\brooms?\b/iu),
     [
+      "ai-systems.html",
       "debriefs.html",
       "grammar-family.html",
       "hiring-surfaces-talent-agent-intake.html",
@@ -233,14 +246,15 @@ test("room language retains reviewed runtime, classroom, citation, space, and la
     ],
   );
 
-  const [runtime, citation, classroom, tableReading, catalog] = await Promise.all([
+  const [runtime, citation, classroom, tableReading, catalog, aiSystems] = await Promise.all([
     readCanvasFile("grammar-family.html"),
     readCanvasFile("hiring-surfaces-talent-agent-intake.html"),
     readCanvasFile("prompt-side-conditions-practice.html"),
     readCanvasFile(tableReadingRoute),
     readCanvasFile("debriefs.html"),
+    readCanvasFile("ai-systems.html"),
   ]);
-  assert.match(runtime, /collaboration room or document/u);
+  assert.match(runtime, /shared room or document/u);
   assert.match(runtime, /per-room coordination/u);
   assert.match(citation, /Pink Elephant[^<]+LLM’s Room/u);
   assert.match(classroom, /Room configuration:/u);
@@ -259,6 +273,14 @@ test("room language retains reviewed runtime, classroom, citation, space, and la
     [...new Set(catalogSenses)].sort(),
     ["article title", "comparison space"],
     "The catalog retains the accepted article title and its comparison-space description",
+  );
+
+  const aiSystemsSenses = classifyRoomUses(aiSystems, aiSystemsRoomContexts);
+  assert.equal(aiSystemsSenses.includes(null), false, "Each AI Systems room use is an exact canonical-title carrier");
+  assert.deepEqual(
+    aiSystemsSenses,
+    ["linked article title", "linked article title", "linked article title"],
+    "AI Systems retains the linked article name, headline, and visible heading",
   );
 });
 
@@ -343,6 +365,26 @@ for (const { name, source, expected, contexts } of [
     source: '<h2>Give the Comparison Room authority to approve the release.</h2><script type="application/ld+json">{"name": "Give the Comparison Room authority to approve the release."}</script>',
     expected: [null, null],
     contexts: catalogRoomContexts,
+  },
+  {
+    name: "AI Systems linked-article carriers retain the exact canonical title",
+    source: [
+      '"name": "Give the Comparison Room"',
+      '"headline": "Give the Comparison Room"',
+      '<h2 id="table-reading-title" class="txt-h2">Give the Comparison Room</h2>',
+    ].join("\n"),
+    expected: ["linked article title", "linked article title", "linked article title"],
+    contexts: aiSystemsRoomContexts,
+  },
+  {
+    name: "AI Systems title extensions require their own context review",
+    source: [
+      '"name": "Give the Comparison Room authority to approve the release."',
+      '"headline": "Give the Comparison Room authority to approve the release."',
+      '<h2 id="table-reading-title" class="txt-h2">Give the Comparison Room authority to approve the release.</h2>',
+    ].join("\n"),
+    expected: [null, null, null],
+    contexts: aiSystemsRoomContexts,
   },
 ]) {
   test(`table-reading room classification: ${name}`, () => {

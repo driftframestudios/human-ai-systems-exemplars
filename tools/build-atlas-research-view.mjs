@@ -115,6 +115,12 @@ function sectionFrom(derived, provenance) {
   const citationText = provenance.verified
     ? `${counted(totals.works, 'work')} ${totals.works === 1 ? 'has' : 'have'} a recorded citation in the skill evidence map. That occurrence establishes a reference relationship.`
     : `${counted(totals.works, 'supplied work record')} ${totals.works === 1 ? 'declares' : 'declare'} a citation in the skill evidence map. These declarations do not verify citation occurrence or selection provenance.`;
+  const overlapText = provenance.verified && totals.multiTopicWorks
+    ? `${counted(totals.multiTopicWorks, 'work')} ${totals.multiTopicWorks === 1 ? 'belongs' : 'belong'} to several topics, so adding row totals counts memberships.`
+    : overlapNarrative(totals);
+  const preservationText = provenance.verified
+    ? `The matrix and adjacent table preserve both membership and the ${totals.works}-work total directly.`
+    : 'The table preserves the memberships directly.';
   const sources = records.map(record => `<li id="research-${escape(record.id)}">
     <h4 class="txt-h4"><a href="${escape(record.sourceUri)}">${escape(record.title)}</a></h4>
     <p class="table-note">${escape(record.creditedTo)}. ${escape(record.version)}. <strong>${escape(KIND_NAMES[record.evidenceKind])}.</strong> Topics: ${record.topics.map(topic => escape(TOPIC_NAMES[topic])).join('; ')}.</p>
@@ -134,8 +140,8 @@ function sectionFrom(derived, provenance) {
           </figure>` : ''}
           <div class="table-scroll table-figure--wide" role="region" tabindex="0" aria-label="Public research topic counts">${renderGalleryTable(tableFrom(derived, provenance))}</div>
           <h3 class="txt-h4">Membership carries a different meaning from use</h3>
-          <p>${escape(interpretationNarrative(topics))} When a commentary and the study it discusses are both included, they remain separate works with a shared intellectual relationship rather than additional independent confirmation.</p>
-          <p>${escape(citationText)} Evidence of application in a working organization would require a separate observation; application remains unspecified. ${escape(overlapNarrative(totals))} ${provenance.verified ? 'The matrix and adjacent table preserve' : 'The table preserves'} the memberships directly.</p>
+          <p>${escape(interpretationNarrative(topics))} When a commentary and the study it discusses are both included, they remain separate works with shared source lineage; independent confirmation still requires a separate work.</p>
+          <p>${escape(citationText)} Evidence of application in a working organization would require a separate observation; application remains unspecified. ${escape(overlapText)} ${escape(preservationText)}</p>
           ${provenance.verified ? `<p class="table-note"><a href="../data/visualization-fidelity/research/sources.v1.json">Selected source records</a> · <a href="../data/visualization-fidelity/research/summary.v1.json">Derived counts and memberships</a> · <a href="../data/visualization-fidelity/research/README.md">Counting and source-selection contract</a>. Each citation below carries its own version, inspected scope and supported design consequence.</p>` : '<p class="table-note">The table reports supplied topic memberships; selection provenance remains unspecified.</p>'}
           <details class="conditioning-static-equivalent">
             <summary>Sources, memberships and the decisions each can inform</summary>

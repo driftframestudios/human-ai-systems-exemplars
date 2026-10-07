@@ -31,6 +31,7 @@
       ["Prompt-Side Practice", "prompt-side-conditions-practice.html"],
       ["Benchmark Orientation", "benchmark-orientation.html"],
       ["MAPS Evaluations", "maps-evaluations.html"],
+      ["Give the Comparison Room", "readable-tables-reusable-evidence.html"],
       ["Hiring Surfaces", "hiring-surfaces-talent-agent-intake.html"]
     ],
     debriefs: [
