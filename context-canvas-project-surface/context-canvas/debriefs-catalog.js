@@ -612,6 +612,8 @@
     var previewImageSrc = card.getAttribute("data-catalog-preview-src") || (image ? image.getAttribute("src") : "");
     var previewImageSrcset = card.getAttribute("data-catalog-preview-srcset") || (image ? image.getAttribute("srcset") : "");
     var previewImageSizes = card.getAttribute("data-catalog-preview-sizes") || (image ? image.getAttribute("sizes") : "");
+    var previewImageWidth = card.getAttribute("data-catalog-preview-width") || (image ? image.getAttribute("width") : "");
+    var previewImageHeight = card.getAttribute("data-catalog-preview-height") || (image ? image.getAttribute("height") : "");
     var previewImageAlt = card.getAttribute("data-catalog-preview-alt") || imageAlt;
     var previewImageCaption = card.getAttribute("data-catalog-preview-caption") || previewImageAlt;
     var routes = caseBriefRoutes(card);
@@ -642,6 +644,8 @@
       var previewImage = preview.querySelector("[data-preview-image]");
       previewImage.removeAttribute("srcset");
       previewImage.removeAttribute("sizes");
+      previewImage.removeAttribute("width");
+      previewImage.removeAttribute("height");
       previewImage.setAttribute("src", previewImageSrc);
       previewImage.setAttribute("alt", previewImageAlt);
       if (previewImageSrcset) {
@@ -649,6 +653,10 @@
       }
       if (previewImageSizes) {
         previewImage.setAttribute("sizes", previewImageSizes);
+      }
+      if (previewImageWidth && previewImageHeight) {
+        previewImage.setAttribute("width", previewImageWidth);
+        previewImage.setAttribute("height", previewImageHeight);
       }
       preview.querySelector("[data-preview-caption]").textContent = previewImageCaption ? "Preview visual — " + previewImageCaption : "Preview visual from the selected reading.";
     }

@@ -36,7 +36,7 @@ export function expectedMediaTypeForPath(relativePath) {
   throw new Error(`No live iframe media-type contract for ${relativePath}.`);
 }
 
-function hasExactFrameAncestors(csp, origins) {
+export function hasExactFrameAncestors(csp, origins) {
   if (!csp) return false;
   const directive = csp
     .split(";")

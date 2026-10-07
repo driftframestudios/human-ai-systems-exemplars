@@ -192,6 +192,7 @@ cython_debug/
 # Local operating-system metadata
 .DS_Store
 .DStore
+*.textClipping
 
 # Local JavaScript tooling
 node_modules/

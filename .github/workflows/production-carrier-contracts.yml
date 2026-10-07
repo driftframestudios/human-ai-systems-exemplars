@@ -15,6 +15,7 @@ on:
       - "package.json"
       - "package-lock.json"
       - "deployment/cpanel/**"
+      - "context-canvas-project-surface/**"
       - "tests/prod-deployment/**"
       - "tools/build-prod-projection.mjs"
       - "tools/package-prod-carrier-transfer.mjs"

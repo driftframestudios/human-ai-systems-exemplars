@@ -2,9 +2,9 @@
    Consumers: benchmark-orientation.html and maps-evaluations.html.
    Owns: result-coordinate flow, reusable result profile, source-lane
    distinction, canary orientation, and narrow-screen/print behavior.
-   Load order: expanded.css, debrief-reading.css, ai-systems.css, this file,
-   then canvas-shell.css. Shared navigation and attribution remain outside
-   this route bundle. */
+   Load order: shared core, expanded.css, debrief-reading.css,
+   ai-systems.css, this file, then canvas-shell.css. Shared navigation and
+   attribution remain outside this route bundle. */
 
 .benchmark-reading-page {
     --benchmark-cobalt: #2855f3;

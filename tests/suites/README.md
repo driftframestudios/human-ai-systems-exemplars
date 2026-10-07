@@ -60,6 +60,10 @@ come from actual runner evidence. Held local research and generated copies
 retain their named exclusions. Five nested Python projects plus a separate
 governance owner keep their runtime and workflow gates.
 
+The carrier bundle includes the non-mutating Debrief derivative check as its
+own discoverable route. Check mode needs no encoder; the separately invoked
+build mode uses `cwebp` after an accepted full-size source changes.
+
 ## Python table components
 
 The [table component entry](../tables/README.md#python-component-entry) keeps

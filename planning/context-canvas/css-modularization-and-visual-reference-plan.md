@@ -3,8 +3,8 @@
 ```yaml
 planning_surface:
   id: "prototype-exemplars.context-canvas.css-and-visual-reference.v0.1"
-  as_of: "2026-08-25"
-  status: "active implementation; the visual cutoff is retained, the career/regulatory component has landed, and composed Debriefs have a contract owner"
+  as_of: "2026-10-07"
+  status: "active implementation; the visual cutoff is retained, About has a complete consumer-owned first-paint path, and expanded.css remains a named legacy remainder for adjacent routes"
   visual_reference_receiver: "all-page visual reference utility"
   css_modularization_receiver: "readable core and route-family source"
   debrief_badge_receiver: "Debriefs catalog component owner"
@@ -38,6 +38,27 @@ The first Wave 1 extraction gives About one AI-legible route bundle and keeps it
 The entry/catalog comparison completed 9 of 9 captures and the adjacent Prompt Conditions seam completed 6 of 6, both with zero browser observations. Shared-consumer images are byte-identical. About retains the baseline dimensions and composition; a small desktop and wide raster delta belongs to the embedded Interactive AI and ML method gallery rather than the page-owned CSS. The no-script route loads the relocated fallback and presents the complete static reading.
 
 That return is complete. The About extraction landed next, followed by the independently useful Shared Machinery and AI Systems family map.
+
+## Implementation return — About first-paint ownership
+
+About now loads an explicit, shallow source graph: `tokens.css → foundation.css → site-navigation.css → tables.css → route-card-grid.css → about.css → about-noscript.css → canvas-shell.css`. The static fallback remains media-gated beside the route owner. `expanded.css` is absent from the About document and retains the unresolved legacy terrain used by 43 adjacent routes.
+
+The extraction gives shared responsibilities one authored source rather than copying declarations into a route bundle:
+
+| Source | Responsibility | Direct consumers |
+| --- | --- | ---: |
+| `styles/core/tokens.css` | shared custom-property vocabulary | 44 |
+| `styles/core/foundation.css` | reset, base typography, reading primitives, responsive type scale | 44 |
+| `styles/components/site-navigation.css` | three-destination navigation, sticky placement, route state, anchor clearance | 44 |
+| `styles/components/tables.css` | complete semantic-table family with responsive, print, and forced-color states | 39 |
+| `styles/components/route-card-grid.css` | route-card layout and its responsive/reduced-motion states | 2 |
+| `expanded.css` | named legacy remainder | 43 |
+
+The current ordinary About path carries 75,986 raw bytes, 17,470 gzip-9 bytes, and 14,676 Brotli-11 bytes across seven authored first-paint files. The immediately preceding `expanded.css + about.css + canvas-shell.css` path carried 122,737 raw bytes, 24,514 gzip bytes, and 20,937 Brotli bytes. The route therefore removes 46,751 raw bytes (38.1%), 7,044 gzip bytes (28.7%), and 6,261 Brotli bytes (29.9%) while increasing the ordinary authored request boundary from three files to seven. A later deterministic production bundle can recover that request boundary after source ownership stabilizes; runtime imports and a second source tree remain outside the design.
+
+Computed-style and geometry comparison covers enhanced and no-script About at narrow (`390 × 844`), desktop (`1440 × 1000`), and wide (`2560 × 1440`) viewports, plus print, forced-colors, and reduced-motion states. All compared elements and document metrics match the pre-extraction source. Focused source checks keep the exact load order, the single-owner families, the canonical `5rem` in-page anchor clearance, and every legacy consumer's direct dependency graph visible.
+
+This tranche intentionally preserves the legacy deep-blue selector and other route behavior byte-for-byte. Selector repair belongs with an observed defect and its affected-family proof, rather than entering a first-paint ownership move implicitly.
 
 ## Implementation return — AI Systems family
 
@@ -112,18 +133,22 @@ The remaining `.debrief-sequence` rules stay in `expanded.css`. They form a two-
 
 ## Present CSS terrain
 
-The current source already contains a useful first seam:
+The table retains historical cutoffs and adds the current About-first-paint state so earlier receipts remain interpretable:
 
 | Measure | Observation |
 | --- | ---: |
-| Top-level Context Canvas HTML pages | 40 |
-| Pages that load `canvas-shell.css` | 39 |
-| Pages that load `expanded.css` | 38 |
+| Top-level Context Canvas HTML pages, current | 46 |
+| Pages that load `canvas-shell.css`, current | 45 |
+| Pages that load the shared core, current | 44 |
+| Pages that load `expanded.css`, current legacy remainder | 43 |
 | `expanded.css` baseline | 145,667 bytes · 6,373 lines |
 | `expanded.css` after the Genomic Viewer extraction | 74,085 bytes · 3,483 lines |
 | `expanded.css` after the career/regulatory component extraction on `51016ee` | 66,639 bytes · 3,118 lines |
 | `expanded.css` after the component and shared-reading extension | 66,154 bytes · 3,102 lines |
+| `expanded.css` after the About first-paint extraction, current | 47,404 bytes · 2,069 lines |
+| shared core and extracted About components, current | 22,940 bytes · 1,121 lines |
 | `styles/routes/about.css` | 36,568 bytes · 1,601 lines |
+| `styles/routes/about.css`, current | 40,854 bytes · 1,799 lines |
 | AI Systems family route, component, entry, and Hiring modules | 33,562 bytes · 1,188 lines |
 | Debriefs reading component, catalog route, and three-movement route | 21,001 bytes · 861 lines |
 | `styles/routes/genomic-viewer.css` | 11,214 bytes · 402 lines |
@@ -132,7 +157,7 @@ The current source already contains a useful first seam:
 | `expanded.css` baseline over gzip | 25,957 bytes |
 | `expanded.css` baseline over Brotli | 21,015 bytes |
 | `field-inspection.css` | 12,715 bytes · 421 lines |
-| `canvas-shell.css` | 10,493 bytes · 394 lines |
+| `canvas-shell.css`, current | 12,192 bytes · 463 lines |
 
 The transfer size is modest. The larger cost is architectural: most pages parse unrelated route-family rules, source order carries an implicit API, and collaborators search one long file whose name understates its responsibilities. File movement produces a first-paint gain only when HTML loads a small core and its relevant route bundle directly. A runtime `@import` chain retains the blocking dependency path and therefore sits outside the target.
 
@@ -162,16 +187,16 @@ This is change-modeling terrain rather than a mechanical file split. Consumer tr
 
 ### Capture every top-level page
 
-The general utility discovers every top-level `context-canvas/*.html` page. This is simpler and more durable than maintaining a representative allowlist. The current sitemap has 34 entries and therefore remains a publication surface rather than capture authority. Family metadata organizes capture, review, and the ignored local family index; every route follows the same execution path, and an unmatched future route appears under `unassigned` rather than disappearing.
+The general utility discovers every top-level `context-canvas/*.html` page. This is simpler and more durable than maintaining a representative allowlist. The current sitemap has 34 entries and therefore remains a publication surface rather than capture authority. Family metadata organizes capture, review, and the ignored local family index; every route follows the same execution path. Discovery now requires exactly one family assignment, so a new or duplicate route classification fails visibly instead of entering an ambiguous group.
 
 | Review family | Routes |
 | --- | --- |
 | Entry and catalog | `404.html`, `index.html`, `debriefs.html` |
-| AI Systems and instruments | `ai-systems.html`, `concept-nursery.html`, `core-architectures-orientation-index.html`, `cross-platform-collaboration-cycle.html`, `grammar-family.html`, `hiring-surfaces-talent-agent-intake.html`, `metadata-blocks.html`, `planning-surface.html`, `poda.html`, `registry-goal-fidelity-routing.html`, `resting-concepts.html`, `shared-machinery.html`, `visualization-fidelity-atlas.html` |
+| AI Systems and instruments | `ai-systems.html`, `benchmark-orientation.html`, `collaboration-skills.html`, `concept-nursery.html`, `core-architectures-orientation-index.html`, `cross-platform-collaboration-cycle.html`, `grammar-family.html`, `hiring-surfaces-talent-agent-intake.html`, `maps-evaluations.html`, `metadata-blocks.html`, `planning-surface.html`, `poda.html`, `readable-tables-reusable-evidence.html`, `registry-goal-fidelity-routing.html`, `resting-concepts.html`, `shared-machinery.html`, `visualization-fidelity-atlas.html` |
 | Prompt conditions | `conditioning-field.html`, `prompt-side-conditions-practice.html` |
-| Composed Debriefs | `choose-your-player-humatics.html`, `ehr-discrete-genomic-result.html`, `ehr-interface-engine-replatform.html`, `ehr-pgx-alert-failure.html`, `ehr-three-front-doors.html`, `ehr-two-charts-one-result.html`, `fmi-clinical-trial-coordination.html` |
-| Enterprise readings | `distributed-inspection-harness.html`, `field-inspection-harness-replatform.html`, `fmi-lims-eln-replatforming.html`, `genomic-viewer-replatforming.html`, `initiative-costing.html`, `narrative-execution-gap-research-atlas.html`, `three-way-comparative-return.html`, `who-to-believe-reviews-platform.html` |
-| Historical exemplars | `spatial-capture-collaborative-memory.html`, `exemplar-gallery-list.html`, `exemplar-ideal-debrief.html`, `exemplar-index-landing.html`, `exemplar-maximal-debrief.html`, `exemplar-maximal-information-radiator.html` |
+| Composed Debriefs | `choose-your-player-humatics.html`, `ehr-discrete-genomic-result.html`, `ehr-interface-engine-replatform.html`, `ehr-pgx-alert-failure.html`, `ehr-three-front-doors.html`, `ehr-two-charts-one-result.html`, `fmi-clinical-trial-coordination.html`, `multilingual-clinical-vocabulary-practice.html`, `recoverable-enterprise-forms.html`, `spatial-capture-collaborative-memory.html` |
+| Enterprise readings | `distributed-inspection-harness.html`, `field-inspection-harness-replatform.html`, `fmi-lims-eln-replatforming.html`, `genomic-viewer-replatforming.html`, `initiative-costing.html`, `narrative-execution-gap-research-atlas.html`, `one-figure-several-readings.html`, `three-way-comparative-return.html`, `who-to-believe-reviews-platform.html` |
+| Historical exemplars | `exemplar-gallery-list.html`, `exemplar-ideal-debrief.html`, `exemplar-index-landing.html`, `exemplar-maximal-debrief.html`, `exemplar-maximal-information-radiator.html` |
 
 The route catalog also names standing—primary, instrument, Debrief, exemplar, or recovery—so a collaborator can understand why a page exists without teaching the capture runner separate logic.
 
@@ -281,7 +306,7 @@ The repository remains implementation authority and can diverge usefully from ad
 - Preserve the established load order, narrow behavior, print, reduced motion, forced colors, and embedded-instrument boundaries.
 - Compare About at desktop, narrow, and wide; use the full catalog as the source-level reference for unexpected shared effects.
 
-About is the best first move after Field Inspection because it is large, visually distinctive, canonically tied to Tiffany contracts, and sufficiently scoped to produce meaningful first-paint relief.
+About was selected as the first move after Field Inspection because it is large, visually distinctive, canonically tied to Tiffany contracts, and sufficiently scoped to produce meaningful first-paint relief. Its completed return now supplies the shared-core pattern described above.
 
 ### Wave 2 — Shared Machinery and AI Systems
 

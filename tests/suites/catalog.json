@@ -136,20 +136,25 @@
       "family": "context-canvas",
       "kind": "node-test",
       "members": [
+        "tests/context-canvas/about-first-paint-css.test.mjs",
         "tests/context-canvas/ai-systems-principles.test.mjs",
         "tests/context-canvas/benchmark-readings.test.mjs",
         "tests/context-canvas/code-and-about-treatment.test.mjs",
         "tests/context-canvas/contrast-treatment.test.mjs",
         "tests/context-canvas/cornerstone-definitions.test.mjs",
+        "tests/context-canvas/debrief-catalog-preview-images.test.mjs",
+        "tests/context-canvas/debrief-image-derivatives.test.mjs",
         "tests/context-canvas/debrief-reading-modes.test.mjs",
         "tests/context-canvas/iframe-carriers.test.mjs",
         "tests/context-canvas/investment-model-studio-prompt-capsule.test.mjs",
+        "tests/context-canvas/lims-capability-transfer-model.test.mjs",
         "tests/context-canvas/parent-link-behavior.test.mjs",
         "tests/context-canvas/prototype-control-labels.test.mjs",
         "tests/context-canvas/public-system-topology.test.mjs",
         "tests/context-canvas/rail-label-failures.test.mjs",
         "tests/context-canvas/rail-shell-source.test.mjs",
         "tests/context-canvas/retained-exemplar-standing.test.mjs",
+        "tests/context-canvas/visual-reference-observations.test.mjs",
         "tests/context-canvas/visitor-image-alternatives.test.mjs",
         "tests/context-canvas/visitor-surface-attribution.test.mjs",
         "tests/context-canvas/visitor-terminology.test.mjs"
@@ -902,6 +907,28 @@
       ]
     },
     {
+      "id": "browser.context-canvas.debrief-catalog-preview",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/debrief-catalog-preview.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Rendered catalog preview replacement across responsive WebP, SVG fallback, and later WebP states at narrow and desktop widths.",
+      "aliases": [
+        "test:debrief-catalog-preview-browser"
+      ]
+    },
+    {
       "id": "browser.canvas-iframe-route-browser-contract",
       "family": "browser-tools",
       "kind": "node-script",
@@ -1032,6 +1059,28 @@
       "aliases": [
         "test:iframe-browser",
         "test:iframe-carriers"
+      ]
+    },
+    {
+      "id": "browser.iframe-ancestry-browser-contract",
+      "family": "browser-tools",
+      "kind": "node-script",
+      "members": [
+        "tools/iframe-ancestry-browser-contract.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/iframe-ancestry-browser-contract.mjs"
+        ],
+        "appendMembers": false
+      },
+      "owner": "tests/README.md",
+      "scope": "Deterministic Chromium fixture proving exact-parent frame-ancestors allow and loopback refusal behavior without contacting production.",
+      "aliases": [
+        "test:iframe-ancestry-browser"
       ]
     },
     {
@@ -1542,6 +1591,29 @@
       "aliases": []
     },
     {
+      "id": "carrier.debrief-image-derivatives",
+      "family": "carrier",
+      "kind": "node-script",
+      "members": [
+        "tools/generate-debrief-image-derivatives.mjs"
+      ],
+      "profile": "carrier",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "tools/generate-debrief-image-derivatives.mjs",
+          "--check"
+        ],
+        "appendMembers": false
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Tracked Debrief derivatives retain eligible widths, exact dimensions, and accepted-source aspect ratios; check mode leaves bytes unchanged.",
+      "aliases": [
+        "check:debrief-image-derivatives"
+      ]
+    },
+    {
       "id": "carrier.iframe",
       "family": "carrier",
       "kind": "node-script",
@@ -1625,6 +1697,22 @@
       "aliases": [
         "check:schemas"
       ]
+    },
+    {
+      "id": "live.iframe-ancestry",
+      "family": "live-receivers",
+      "kind": "node-script",
+      "members": [
+        "tools/iframe-ancestry-browser-contract.mjs"
+      ],
+      "profile": "live",
+      "command": null,
+      "owner": "package.json",
+      "scope": "One fixed production child receives a direct policy preflight, a loopback-parent refusal, and an approved-production-parent positive control.",
+      "aliases": [
+        "verify:iframe-ancestry:live"
+      ],
+      "hold": "Run only as an authorized signed-out observation of the fixed vik.guru and iframes.vik.guru receivers."
     },
     {
       "id": "live.iframe",
@@ -1802,11 +1890,13 @@
         "browser.tables.core-followthrough",
         "browser.tables.hiring-schema-print",
         "browser.about-media-browser-contract",
+        "browser.context-canvas.debrief-catalog-preview",
         "browser.canvas-iframe-route-browser-contract",
         "browser.context-canvas-medium-containment-contract",
         "browser.context-canvas-narrow-rail-contract",
         "browser.core-decision-canvas-contract",
         "browser.core-iframe-carrier-contract",
+        "browser.iframe-ancestry-browser-contract",
         "browser.core-planning-instrument-contract",
         "browser.core-reference-instrument-contract",
         "browser.cross-prototype-exchange-contract",
@@ -1844,6 +1934,7 @@
         "node.schema-pages",
         "node.security",
         "worker.source",
+        "carrier.debrief-image-derivatives",
         "carrier.iframe",
         "carrier.production",
         "carrier.transfer",
@@ -1855,6 +1946,7 @@
       "description": "Receiver routes remain held pending explicit endpoint, policy and authority.",
       "suites": [
         "worker.live",
+        "live.iframe-ancestry",
         "live.iframe",
         "live.schema-pages"
       ]
@@ -2189,6 +2281,9 @@
         ],
         "test:iframe-browser": [
           "tools/core-iframe-carrier-contract.mjs"
+        ],
+        "test:iframe-ancestry-browser": [
+          "tools/iframe-ancestry-browser-contract.mjs"
         ],
         "test:strategy-canvas": [
           "tools/strategy-canvas-contract.mjs"

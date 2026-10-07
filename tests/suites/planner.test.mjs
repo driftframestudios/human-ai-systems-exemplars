@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile, mkdtemp, mkdir, writeFile, rm, access } from 'node:fs/promises';
+import { readFile, mkdtemp, mkdir, writeFile, rm, access, readdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError } from '../../tools/test-suite-plan.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const POST_BASELINE_NODE_MEMBERS = ['tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs', 'tests/context-canvas/prompt-side-figure.browser.mjs', 'tests/visualization-fidelity-atlas/atlas-research-data.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-view.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research.browser.mjs'];
+const POST_BASELINE_NODE_MEMBERS = ['tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs', 'tests/context-canvas/about-first-paint-css.test.mjs', 'tests/context-canvas/debrief-catalog-preview-images.test.mjs', 'tests/context-canvas/debrief-catalog-preview.browser.mjs', 'tests/context-canvas/debrief-image-derivatives.test.mjs', 'tests/context-canvas/lims-capability-transfer-model.test.mjs', 'tests/context-canvas/prompt-side-figure.browser.mjs', 'tests/context-canvas/visual-reference-observations.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-data.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-view.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research.browser.mjs'];
 const fixture = () => ({
   schemaVersion: 1, sourceRevision: 'fixture',
   profiles: [{id: 'local', runtime: 'Node', prerequisites: [], effects: [], artifacts: [], timeout: 'owner-defined'}],
@@ -138,6 +138,16 @@ test('catalog preserves every exact baseline Node member and separates primary b
   for (const path of baseline.browser) assert.equal(rootMembers.includes(path), false);
 });
 
+test('Context Canvas source-suite membership follows every on-disk unit module', async () => {
+  const catalog = await catalogPromise;
+  const suite = catalog.suites.find(candidate => candidate.id === 'node.context-canvas');
+  const onDisk = (await readdir(resolve(ROOT, 'tests/context-canvas')))
+    .filter(path => path.endsWith('.test.mjs'))
+    .map(path => `tests/context-canvas/${path}`)
+    .sort();
+  assert.deepEqual([...suite.members].sort(), onDisk);
+});
+
 test('all seven bundles have explicit membership and every current source owner resolves', async () => {
   const catalog = await catalogPromise;
   assert.deepEqual(catalog.bundles.map(b => b.id), ['source-unit', 'family-integration', 'focused-browser', 'visual-media', 'carrier', 'live', 'research']);
@@ -229,7 +239,7 @@ test('text plans show both a known command and its hold reason', async () => {
 test('consequential bundle routes retain independent literal expectations', async () => {
   const catalog = await catalogPromise;
   const ids = bundle => createPlan(catalog, {bundles: [bundle]}).suites.map(s => s.id);
-  assert.deepEqual(ids('live'), ['worker.live', 'live.iframe', 'live.schema-pages']);
+  assert.deepEqual(ids('live'), ['worker.live', 'live.iframe-ancestry', 'live.iframe', 'live.schema-pages']);
   assert.deepEqual(ids('research'), ['research.parser-comparison']);
   assert.deepEqual(ids('visual-media'), [
     'browser.visualization-fidelity-atlas.atlas-essay.browser',
@@ -243,10 +253,19 @@ test('consequential bundle routes retain independent literal expectations', asyn
   assert.deepEqual(ids('carrier'), [
     'node.attribution', 'node.iframe-routes', 'node.prod-deployment',
     'node.public-references', 'node.schema-pages', 'node.security', 'worker.source',
-    'carrier.iframe', 'carrier.production', 'carrier.transfer', 'carrier.schemas',
+    'carrier.debrief-image-derivatives', 'carrier.iframe', 'carrier.production', 'carrier.transfer', 'carrier.schemas',
   ]);
   assert.ok(createPlan(catalog, {bundles: ['focused-browser']}).suites.every(s => s.profile === 'browser' && !s.id.startsWith('visual.')));
   assert.ok(createPlan(catalog, {bundles: ['live']}).suites.every(s => s.routeStatus === 'held'));
+});
+
+test('Debrief derivative carrier exposes its non-mutating check route', async () => {
+  const plan = createPlan(await catalogPromise, {suites: ['carrier.debrief-image-derivatives']});
+  assert.equal(plan.suites[0].routeStatus, 'declared');
+  assert.deepEqual(plan.suites[0].command, {
+    cwd: '.',
+    argv: ['node', 'tools/generate-debrief-image-derivatives.mjs', '--check'],
+  });
 });
 
 for (const [id, selector, member] of [

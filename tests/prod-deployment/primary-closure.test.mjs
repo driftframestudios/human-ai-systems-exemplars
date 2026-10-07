@@ -102,6 +102,30 @@ async function loadPrimaryManifest() {
   return validatePrimaryManifest(JSON.parse(source));
 }
 
+function quotedHtmlAttribute(tag, name) {
+  const match = new RegExp(`\\b${name}\\s*=\\s*(["'])(.*?)\\1`, "iu").exec(tag);
+  return match?.[2] ?? null;
+}
+
+function localStylesheetReferences(html) {
+  const references = [];
+  for (const match of html.matchAll(/<link\b[^>]*>/giu)) {
+    const tag = match[0];
+    const rel = quotedHtmlAttribute(tag, "rel");
+    const href = quotedHtmlAttribute(tag, "href");
+    if (
+      href === null ||
+      rel === null ||
+      !rel.split(/\s+/u).some((token) => token.toLowerCase() === "stylesheet") ||
+      /^(?:[a-z][a-z0-9+.-]*:|\/\/|\/|#|\{\{)/iu.test(href)
+    ) {
+      continue;
+    }
+    references.push(href.split(/[?#]/u, 1)[0]);
+  }
+  return references;
+}
+
 test("the production manifest carries the accepted 41-route primary collection and its explicit closure", async () => {
   const manifest = await loadPrimaryManifest();
   const projectedPaths = new Set(manifest.files.map(({ projected_path }) => projected_path));
@@ -148,6 +172,23 @@ test("the production manifest carries the accepted 41-route primary collection a
       path.join(repositoryRoot, ...file.source_path.split("/")),
     );
     assert.ok(status.isFile() && !status.isSymbolicLink(), file.source_path);
+  }
+});
+
+test("every local stylesheet linked by production-selected HTML belongs to the explicit closure", async () => {
+  const manifest = await loadPrimaryManifest();
+  const selectedSources = new Set(manifest.files.map(({ source_path }) => source_path));
+  for (const file of manifest.files.filter(({ media_type }) => media_type === "text/html")) {
+    const html = await readFile(path.join(repositoryRoot, file.source_path), "utf8");
+    for (const reference of localStylesheetReferences(html)) {
+      const sourcePath = path.posix.normalize(
+        path.posix.join(path.posix.dirname(file.source_path), reference),
+      );
+      assert.ok(
+        selectedSources.has(sourcePath),
+        `${file.source_path} links ${reference}; ${sourcePath} must belong to the production closure`,
+      );
+    }
   }
 });
 

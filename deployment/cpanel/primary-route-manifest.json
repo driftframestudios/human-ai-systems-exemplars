@@ -1803,8 +1803,33 @@
       "media_type": "text/css"
     },
     {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/components/route-card-grid.css",
+      "projected_path": "styles/components/route-card-grid.css",
+      "media_type": "text/css"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/components/site-navigation.css",
+      "projected_path": "styles/components/site-navigation.css",
+      "media_type": "text/css"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/components/tables.css",
+      "projected_path": "styles/components/tables.css",
+      "media_type": "text/css"
+    },
+    {
       "source_path": "context-canvas-project-surface/context-canvas/styles/contracts/debrief-composition.css",
       "projected_path": "styles/contracts/debrief-composition.css",
+      "media_type": "text/css"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/core/foundation.css",
+      "projected_path": "styles/core/foundation.css",
+      "media_type": "text/css"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/styles/core/tokens.css",
+      "projected_path": "styles/core/tokens.css",
       "media_type": "text/css"
     },
     {

@@ -296,6 +296,9 @@ test('authored page retains the exact generated gallery and existing style owner
   await buildGalleryPage({ check: true });
   const html = await readFile(new URL('../../context-canvas-project-surface/context-canvas/visualization-fidelity-atlas.html', import.meta.url), 'utf8');
   assert.deepEqual([...html.matchAll(/<link rel="stylesheet" href="([^"]+)"/gu)].map(match => match[1]),
-    ['expanded.css', 'styles/routes/ai-systems.css', 'canvas-shell.css']);
+    [
+      'styles/core/tokens.css', 'styles/core/foundation.css', 'styles/components/site-navigation.css',
+      'styles/components/tables.css', 'expanded.css', 'styles/routes/ai-systems.css', 'canvas-shell.css',
+    ]);
   assert.equal((html.match(/<iframe /gu) || []).length, 2);
 });

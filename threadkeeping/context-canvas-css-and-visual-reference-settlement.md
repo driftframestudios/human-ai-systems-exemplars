@@ -4,24 +4,35 @@
 threadkeeping:
   id: "context-canvas.css-and-visual-reference-settlement.v0.1"
   settled_on: "2026-08-23"
+  updated_on: "2026-10-07"
   planning_surface: "planning/context-canvas/css-modularization-and-visual-reference-plan.md"
   visual_reference_issue: work:context-visual-reference
   css_modularization_issue: work:context-css-modularization
   debrief_badge_issue: work:debrief-badge-height
-  next: "re-enter through a larger demonstrated shared-reading or composition family; retain the two-rule Debrief sequence seam until then"
+  next: "retain the About first-paint ownership graph; re-enter the 43-route legacy remainder through demonstrated consumer families and recover request boundaries only after those owners stabilize"
 ```
 
 ## Decision
 
-The Context Canvas is moving from one broad `expanded.css` responsibility field toward readable source modules, a small shared core, and route-family bundles. Field Inspection, About, Shared Machinery, AI Systems, Hiring, the first Debriefs tranche, Genomic Viewer, and the career/regulatory slide component supplied the initial structural seams. Fifteen routes now share the Debrief reading component, and seven composed Debriefs place their opt-in composition layer under a contract-specific source owner.
+The Context Canvas is moving from one broad `expanded.css` responsibility field toward readable source modules, a small shared core, and route-family bundles. Field Inspection, About, Shared Machinery, AI Systems, Hiring, the first Debriefs tranche, Genomic Viewer, and the career/regulatory slide component supplied the initial structural seams. Twenty routes now share the Debrief reading component, and ten composed Debriefs place their opt-in composition layer under a contract-specific source owner.
 
-The general utility now discovers all 40 top-level Context Canvas HTML files. The completed visual-reference cutoff remains the 39-page, 117-capture run described below; that receipt stays bound to its source revision. Family metadata supports navigation and filtering, while the existing focused checks continue to carry deeper interaction and alternate-mode questions when a concrete question forms.
+The general utility now discovers all 46 top-level Context Canvas HTML files and requires each route to belong to exactly one family. The completed visual-reference cutoff remains the 39-page, 117-capture run described below; that receipt stays bound to its source revision. Family metadata supports navigation and filtering, while the existing focused checks continue to carry deeper interaction and alternate-mode questions when a concrete question forms.
 
 The [focused plan](../planning/context-canvas/css-modularization-and-visual-reference-plan.md) receives three implementation outcomes:
 
 - the full-page visual-reference set;
 - modular CSS and route-family bundles; and
 - the Debriefs Reading types badge-height correction.
+
+## About first-paint ownership return
+
+About now owns a complete direct source graph and leaves `expanded.css` outside its first paint. Its order is `tokens.css → foundation.css → site-navigation.css → tables.css → route-card-grid.css → about.css → about-noscript.css → canvas-shell.css`; the no-script source remains media-gated. Forty-three adjacent routes continue to load the legacy remainder after their direct shared-core and component dependencies.
+
+The core separates tokens and foundation from demonstrated multi-consumer components. Foundation owns the responsive heading scale; navigation owns the three-destination shell, route state, and canonical `5rem` anchor clearance; tables and route cards carry their complete responsive, print, forced-color, and reduced-motion groups. Each declaration family has one authored owner, and the extraction retains the pre-existing cascade rather than introducing `@layer` alongside unlayered route inputs.
+
+The ordinary About path falls from 122,737 to 75,986 raw bytes, from 24,514 to 17,470 gzip-9 bytes, and from 20,937 to 14,676 Brotli-11 bytes. The separate authored request count moves from three to seven. This source-first tradeoff remains explicit: a stable deterministic production bundle may later collapse those requests without replacing readable source authority.
+
+Enhanced and no-script computed-style and geometry comparisons match at narrow, desktop, and wide viewports, as well as print, forced-colors, and reduced-motion states. Focused tests assert the exact About order, all 43 legacy consumer graphs, complete component opt-in, and single-owner boundaries. The legacy deep-blue selector remains unchanged in this tranche; a separate observed visual defect and affected-family proof can receive any selector repair.
 
 ## Why this shape fits
 

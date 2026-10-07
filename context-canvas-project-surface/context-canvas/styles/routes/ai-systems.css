@@ -3,9 +3,10 @@
    Owns: shared AI Systems tokens, scan/field/card/reading-path grammar,
    ten-instrument safeguards, multi-route tables and static equivalents, and
    the small Shared Machinery hub seam.
-   Load order: expanded.css, optional styles/components/instrument-atlas.css,
-   this family bundle, optional ai-systems-entry.css or hiring-surfaces.css,
-   then later page-local styles and canvas-shell.css.
+   Load order: shared core, expanded.css, optional
+   styles/components/instrument-atlas.css, this family bundle, optional
+   ai-systems-entry.css or hiring-surfaces.css, then later page-local styles
+   and canvas-shell.css.
    Contract: ../../../../visual-fidelity-contracts/cobalt-operating-field.md.
    Entry-only labs and Goal Fidelity tables belong to ai-systems-entry.css;
    Hiring density and late anchors belong to hiring-surfaces.css. Each route
