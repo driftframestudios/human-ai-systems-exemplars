@@ -3033,6 +3033,10 @@ main [id] {
     inline-size: 100%;
 }
 
+.debrief-proxy-figure .table-note strong {
+    color: inherit;
+}
+
 @media print {
     .debrief-proxy-figure,
     .debrief-proxy-frame,

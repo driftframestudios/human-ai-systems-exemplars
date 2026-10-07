@@ -147,13 +147,13 @@ test("former placeholder alternatives stay out of parent visitor surfaces", asyn
   assert.doesNotMatch(source, /role="img" aria-label="Decorative falling leaves"/u);
 });
 
-test("working Debrief proxy systems preserve standing, intrinsic size, responsive sources, and full-size inspection", async () => {
+test("working Debrief systems preserve standing, figure identity, responsive sources, and full-size inspection", async () => {
   for (const { route, directory } of debriefProxyContracts) {
     const html = withoutComments(await readFile(join(canvasRoot, route), "utf8"));
     assert.match(html, /working/iu, `${route}: working-system standing`);
     assert.match(html, /IP-free/iu, `${route}: IP-free standing`);
     assert.match(html, /2026/iu, `${route}: contemporary standing`);
-    assert.match(html, /proxy[ -]system/iu, `${route}: proxy-system standing`);
+    assert.match(html, /synthetic|generalized/iu, `${route}: public-safe content standing`);
     const figures = Array.from(html.matchAll(
       /<figure\b[^>]*class="[^"]*\bdebrief-proxy-figure\b[^"]*"[^>]*>([\s\S]*?)<\/figure>/gu,
     ), match => match[0]);
@@ -161,6 +161,20 @@ test("working Debrief proxy systems preserve standing, intrinsic size, responsiv
       .filter(name => name.endsWith(".webp") && !/-(?:960|1920)\.webp$/u.test(name))
       .sort();
     assert.equal(figures.length, originals.length, `${route}: every accepted source has one proxy figure`);
+
+    const figureIds = new Set();
+    for (const [index, figure] of figures.entries()) {
+      const figureTag = figure.match(/<figure\b[^>]*>/u)?.[0] ?? "";
+      const figureId = attribute(figureTag, "id");
+      assert.ok(figureId, `${route}: Figure ${index + 1} needs a stable semantic id`);
+      assert.ok(!figureIds.has(figureId), `${route}: ${figureId} must be unique`);
+      figureIds.add(figureId);
+      assert.match(
+        figure,
+        new RegExp(`<figcaption\\b[\\s\\S]*?<strong>\\s*Figure ${index + 1}\\.`, "u"),
+        `${route}: proxy figures need page-local sequential labels`,
+      );
+    }
 
     for (const filename of originals) {
       const basename = filename.replace(/\.webp$/u, "");

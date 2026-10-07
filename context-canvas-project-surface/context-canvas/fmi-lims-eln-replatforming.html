@@ -362,6 +362,21 @@
               The method was <strong>make things to learn</strong>. Research was time-boxed and breadth-over-depth,
               chasing the most dangerous assumptions and the absolute deal-breakers first.
             </p>
+            <p>
+              My first masonry view organized the laboratory around individual technologists, people, and teams. When I
+              placed it in front of scientists, molecular technologists, and assay-development specialists, the arrangement
+              obscured how they understood the work. I asked them to walk me through what felt incongruent and what they
+              expected to see. Their rota changed constantly: people took days off, teams trained across processes, and the
+              sequencers kept running. They needed the stable organizing units to be samples, plates, workflows, and continuous
+              processes, with staffing shown as a changing contributor.
+            </p>
+            <p>
+              I rebuilt the views around those durable objects and processes. <strong>The wrong design got me to the right
+              one</strong> because it made disagreement concrete early enough to use. Every design and engineering proposal is
+              an experiment: the practitioner is saying, “I believe this arrangement can produce a useful result.” The
+              working goal is a version people can point at, challenge, and reshape together. A reviewable version preserves
+              the correction and lets the next conversation begin from what the team learned.
+            </p>
             <h4 class="txt-h4">The engagement shape</h4>
             <ol class="debrief-sequence">
               <li>Identify working groups, process owners, subject-matter experts, physical lab spaces, and jurisdictions; stand up JIRA boards, epics, and communication cadences. The core lab group’s existing wiki supported an optional PODA, a Context Tree, and an alignment worksheet where those frames helped the work.</li>
@@ -588,11 +603,21 @@
               <p class="implementation-companion__eyebrow">How to read the interface views</p>
               <h4 id="lims-proxy-standing-title" class="txt-h4">Historical work, translated into a working reference system</h4>
               <p>
-                These figures are screenshots of working, IP-free 2026 proxy systems that I designed and constructed from
-                generalized industry scenarios and synthetic content. Dated project records establish the 2021–2022 work
-                and outcomes; the running software makes the resulting workflow, authority, state, and recovery contracts
-                inspectable while employer systems and data remain with their original setting. These screenshots describe
-                SoT Cartography&rsquo;s present working state; its open-source release remains a future step.
+                These figures show SoT Cartography—Source of Truth Cartography—a working, IP-free system I designed and built
+                in 2026 to help research teams visualize and organize complex workflows across domains. It accepts files and
+                data streams and turns them into source maps, flowcharts, and 3D axonometric process views. It also helps teams
+                follow who said what, where a decision lives, and which documents or data sources support it. These examples
+                use generalized workflows and synthetic content. My project materials support the 2021–2022 account and
+                outcomes; the cited public Registry reading documents that retrospective. The figures are contemporary working
+                views that make those operating patterns inspectable. An open-source release is planned.
+                Figures 1–6 move from environment posture and wet-lab work through source mapping, instruction and failure
+                analysis, and the complete laboratory process.
+              </p>
+              <p>
+                The comparable maps and working screens on this page extend that practice into the reference system. Scientists,
+                Quality Assurance, Automation Development, engineers, and business leaders can point to a shared object,
+                handoff, inherited rule, or failure state, add the missing context, and compare a later version with what they
+                asked for. Designing in the open makes early correction routine and keeps speed accountable to scientific work.
               </p>
             </aside>
             <figure id="lims-environment-posture" class="story-visual debrief-proxy-figure table-span-all">
@@ -611,9 +636,9 @@
                 </a>
               </div>
               <figcaption class="table-note">
-                <strong>Working IP-free proxy-system screenshot · 2026.</strong> Figure 1. Environment posture becomes part of the work: data class, write authority, residency, compute,
-                storage, encryption, and service level stay visible together. The selector turns “the stack” into specific
-                operating conditions that teams can compare before they configure or validate a pathway.
+                <strong>Figure 1. Infrastructure environment profile.</strong> The validation configuration places region, cloud account,
+                compute, storage, encryption, data class, write policy, co-signing, and service level together; a selector compares
+                DEV, RES, STG, VAL, and PROD. Teams can review operating posture before configuring or validating a pathway.
               </figcaption>
             </figure>
             <figure id="lims-wet-lab-corridor" class="story-visual debrief-proxy-figure table-span-all">
@@ -632,9 +657,9 @@
                 </a>
               </div>
               <figcaption class="table-note">
-                <strong>Working IP-free proxy-system screenshot · 2026.</strong> Figure 2. The wet-lab corridor gives the architecture a human scale. Accession, plate mapping, extraction,
-                quality review, library preparation, capture, and sequencing remain distinct handoffs, while the selected
-                plate view keeps controls and sample position available for inspection.
+                <strong>Figure 2. Wet-lab corridor.</strong> The axonometric lanes follow specimen accession and plate mapping through
+                extraction, quality control, library preparation, capture, sequencing, and run review. A selected 96-well plate
+                keeps controls and sample position attached to the handoff.
               </figcaption>
             </figure>
           </section>
@@ -742,9 +767,9 @@
                 </a>
               </div>
               <figcaption class="table-note">
-                <strong>Working IP-free proxy-system screenshot · 2026.</strong> Figure 3. Specimen accession anchors a map of data custody, scientific processing, review, and authority.
-                The same object language that helped six groups work together now exposes where lineage can break, where
-                environment and permission matter, and which boundary belongs in a build-or-buy comparison.
+                <strong>Figure 3. Specimen source cartography.</strong> Specimen accession anchors relationships among regional LIMS
+                instances, consent, identity, instruments, manifests, storage, compute, scientific review, reporting, audit,
+                and authorization. The map shows where custody, lineage, and ownership cross a build-or-buy boundary.
               </figcaption>
             </figure>
           </section>
@@ -778,9 +803,9 @@
                 </a>
               </div>
               <figcaption class="table-note">
-                <strong>Working IP-free proxy-system screenshot · 2026.</strong> Figure 4. The instruction ledger converts participatory findings and inherited rules into reviewable
-                scientific and operational constraints. Status, source, rationale, target architecture arc, and priority
-                keep a decision open to correction instead of letting it disappear into meeting notes.
+                <strong>Figure 4. Instruction ledger.</strong> Active and deferred scientific and operational rules carry an identifier,
+                source, rationale, priority, architecture arc, and defer or supersede controls. The ledger keeps participatory
+                findings and inherited constraints reviewable as implementation decisions change.
               </figcaption>
             </figure>
 
@@ -892,9 +917,9 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
                 </a>
               </div>
               <figcaption class="table-note">
-                <strong>Working IP-free proxy-system screenshot · 2026.</strong> Figure 5. Failure becomes a designed state with a named owner and recovery path. Persistent channel loss,
-                short-lived notifications, event history, retry posture, permission, and observability remain distinguishable,
-                preserving the failure register’s central promise inside the interface.
+                <strong>Figure 5. Error Lab.</strong> Selectable failures—source parsing, instruction conflict, hash mismatch, timeouts,
+                authorization, geometry, permissions, and rate limits—connect to severity, history, blocking state, and persistent
+                or transient notification channels. The failure register makes the condition visible and prepares the next action.
               </figcaption>
             </figure>
 
@@ -962,9 +987,9 @@ Now:  instrument → ASTM/vendor adapter → LIMS → lifecycle event</code></pr
                 </a>
               </div>
               <figcaption class="table-note">
-                <strong>Working IP-free proxy-system screenshot · 2026.</strong> Figure 6. The complete process atlas places wet-lab work, computation, scientific review, quality, release,
-                reporting, and exchange in one navigable corridor. Milestones, gates, dependencies, and handoffs show where
-                a configuration decision changes another team’s work and where recovery can return upstream.
+                <strong>Figure 6. Complete laboratory process atlas.</strong> Eleven lanes connect accession, laboratory preparation,
+                sequencing, analysis, scientific review, quality, release, reporting, and LIS/HL7/FHIR exchange. Gates,
+                dependencies, and handoffs show how one configuration decision changes another team&rsquo;s work and where recovery returns upstream.
               </figcaption>
             </figure>
 
