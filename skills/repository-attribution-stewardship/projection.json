@@ -5,7 +5,7 @@
   "name": "repository-attribution-stewardship",
   "description": "Distinguishes and aligns copyright-holder records, citation metadata, contribution credit, copy-local public notices, and bounded machine projections. Applies during repository attribution changes, fork or adaptation guidance, and cold-start attribution orientation. Legal interpretation and rights decisions remain with a named human receiver or qualified counsel.",
   "semanticAuthorityRef": "../source/.agents/skills/repository-attribution-stewardship/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/14",
+  "sourceRef": "../catalog.json#/skills/15",
   "contract": {
     "what": "A repository coordination method that gives every attribution need its fitting carrier, source authority, and proportionate check.",
     "when": [

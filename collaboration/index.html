@@ -96,6 +96,12 @@
 
     .skip-link { position: absolute; left: .75rem; top: .75rem; z-index: 4; padding: .65rem .85rem; color: var(--paper); background: var(--ink); transform: translateY(-180%); }
     .skip-link:focus { transform: translateY(0); }
+    .site-nav { color: var(--paper); background: var(--ink); }
+    .site-nav__inner { width: min(76rem, calc(100% - 2rem)); margin-inline: auto; }
+    .site-nav ul { display: flex; flex-wrap: wrap; gap: .25rem .55rem; margin: 0; padding: .55rem 0; list-style: none; }
+    .site-nav li { max-width: 100%; }
+    .site-nav a { display: block; border: 1px solid transparent; border-radius: 999px; color: inherit; padding: .4rem .7rem; }
+    .site-nav a[aria-current="page"] { border-color: currentColor; font-weight: 800; text-decoration: none; }
     .hero { background: var(--field); border-bottom: 1px solid var(--line); }
     .hero__inner, main, .site-footer__inner { width: min(76rem, calc(100% - 2rem)); margin-inline: auto; }
     .hero__inner { padding: clamp(3rem, 8vw, 6rem) 0 clamp(2.5rem, 6vw, 4.5rem); }
@@ -154,7 +160,7 @@
       .loop-grid, .horizon, .question-frame { grid-template-columns: 1fr; }
       .loop-card dl { grid-template-columns: 1fr; gap: .15rem; }
       .loop-card dd + dt { margin-top: .55rem; }
-      .hero__inner, main, .site-footer__inner { width: min(100% - 1.25rem, 76rem); }
+      .site-nav__inner, .hero__inner, main, .site-footer__inner { width: min(100% - 1.25rem, 76rem); }
     }
 
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
@@ -162,7 +168,7 @@
       .loop-card, .horizon-note, .horizon-stages > div, .inquiry, .question-frame div, .faq { border: 1px solid CanvasText; }
     }
     @media print {
-      .skip-link, .hero-nav, .footer-links { display: none; }
+      .skip-link, .site-nav, .hero-nav, .footer-links { display: none; }
       .loop-grid, .horizon, .question-frame { display: block; }
       .loop-card, .horizon-stages > div, .question-frame div, .faq { break-inside: avoid; margin-bottom: .75rem; }
       .faq > * { display: block; }
@@ -171,6 +177,9 @@
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to collaboration loops</a>
+  <!-- schema-pages:primary-navigation:start -->
+  <nav class="site-nav" aria-label="Primary"><div class="site-nav__inner"><ul><li><a href="../">Schema registry</a></li><li><a href="../skills/">Skills</a></li><li><a href="../collaboration/" aria-current="page">Collaboration guide</a></li></ul></div></nav>
+  <!-- schema-pages:primary-navigation:end -->
   <header class="hero">
     <div class="hero__inner">
       <p class="eyebrow"><a href="../index.html">Human–AI Systems Exemplars schema registry</a></p>
@@ -372,7 +381,7 @@
 
   <footer class="site-footer">
     <div class="site-footer__inner">
-      <p>This site provides open-source implementation contracts, examples, and orientation for researchers and engineers. Some routes support work with benchmarks, evaluations, and related methods. The data-use note explains how those materials are treated in automated systems.</p>
+      <p>This site provides open-source implementation contracts, examples, and orientation for researchers and engineers. Some routes support work with benchmarks, evaluations, and related methods. The data-use note explains this repository's expectations for automated use.</p>
       <ul class="footer-links">
         <li><a href="../AUTHORS" rel="author">Authors and provenance</a></li>
         <li><a href="../CITATION.cff">Citation metadata</a></li>
@@ -380,6 +389,8 @@
         <li><a href="../LICENSE" rel="license">Apache 2.0 license</a></li>
         <li><a href="../AI-DATA-USE.md">Data-use posture</a></li>
       </ul>
+
+      <p class="site-contact">For assistance or collaboration, write to consulting@vik.guru.</p>
 
       <div class="canary-stack" data-visitor-boundary aria-label="Training-data canary markers">
         <p class="visitor-boundary__context" data-visitor-boundary-context>The exact markers below help people preparing training data identify evaluation material and help evaluators investigate whether a model may have encountered it before.</p>

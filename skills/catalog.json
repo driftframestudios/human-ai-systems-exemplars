@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1",
   "repository": "human-ai-systems-exemplars",
-  "sourceRevision": "0fa2195072bc90117b4578d7fe7c62d62f865f73",
+  "sourceRevision": "dc6b62c6e3f1e8748237fc767def75b32527140a",
   "schemaRef": "https://schemas.vik.guru/collaboration-skills/0.1.0/collaboration-skill.schema.json",
   "schemaRefRole": "canonical_schema_identity",
   "schemaRetrievalUrl": "https://schemas.radiantnull.com/collaboration-skills/0.1.0/collaboration-skill.schema.json",
@@ -12,6 +12,8 @@
       "name": "audit-anthropomorphic-cues",
       "title": "Audit anthropomorphic cues",
       "description": "Audits bundled person-like cues in generative-system interfaces and work language, separating human-interpretation evidence, model-output hypotheses, local system functions, and accountable authority. Applies when names, pronouns, avatars, voice, emotional language, agency claims, role metaphors, or tool surfaces may change reliance, delegation, capability expectations, responsibility, or recovery.",
+      "useWhen": "Person-like or social cues may shape how people interpret a generative system, or when a terminology pass risks treating one phrase as the whole intervention.",
+      "produces": "A compact cue ledger plus retain, qualify, separate, disclose, test, or revise decisions that preserve useful warmth while making the acting system and accountable human recoverable.",
       "publicationStanding": "public_ready",
       "pagePath": "audit-anthropomorphic-cues/",
       "projectionPath": "audit-anthropomorphic-cues/projection.json",
@@ -25,6 +27,8 @@
       "name": "bounded-support-routing",
       "title": "Bounded support routing",
       "description": "Composes a finite support packet with an explicit action mode, observable return, and stopping event. Applies when a focused solution, implementation, or recovery route needs clear expectations, bounded attention, and a natural handback.",
+      "useWhen": "A collaborator needs a sharply bounded observation, repair, or recovery contribution while ownership of the wider undertaking stays with its named steward.",
+      "produces": "The receiver can identify the opportunity, focal surface, requested result, action mode, granted actions, held boundaries, expected observation, recovery and return route, and stop condition in one pass.",
       "publicationStanding": "public_ready",
       "pagePath": "bounded-support-routing/",
       "projectionPath": "bounded-support-routing/projection.json",
@@ -46,7 +50,7 @@
         {
           "sourcePath": ".github/workflows/prototype-unit-tests.yml",
           "path": "source/github/workflows/prototype-unit-tests.yml",
-          "sha256": "a3e6cacfb100b8c09abb692023722c2741f1b9d857c4d78618c0f68c040d296f"
+          "sha256": "95f5af91163b85fecab82d0712be498213d8853397f7a5101e60328ce7262008"
         }
       ]
     },
@@ -54,6 +58,8 @@
       "name": "collaboration-accounting",
       "title": "Collaboration accounting",
       "description": "Accounts for decision-changing collaboration observations and routes them into immediate skill creation, existing-skill revision, a named candidate, continued observation, settlement, or retirement. Applies when materially meaningful work exposes a reusable collaboration affordance, an upcoming skill receives new evidence, or skill recursion needs a release decision.",
+      "useWhen": "Material work reveals a reusable collaboration move, friction in an active skill, a promising skill billet, overlapping skill territory, or a repeated meta-level pass whose continuation needs justification.",
+      "produces": "One named route, the evidence that supports it, the smallest useful action, and a return condition that leaves the original work easy to resume.",
       "publicationStanding": "public_ready",
       "pagePath": "collaboration-accounting/",
       "projectionPath": "collaboration-accounting/projection.json",
@@ -78,6 +84,8 @@
       "name": "collaboration-runbook-authoring",
       "title": "Collaboration runbook authoring",
       "description": "Converts a settled, repeatable multi-phase collaboration route into a versioned AI-legible runbook with explicit entry, authority, checks, recovery, stop, and handback. Applies when a known procedure spans several source owners, Issues, or bounded support returns and the runbook plus its linked current owners should provide sufficient re-entry orientation.",
+      "useWhen": "The desired receiving state and phase sequence are sufficiently settled, several source or Issue owners participate, and a future AI collaborator should be able to enter, act, verify, recover, and return through the runbook and its linked current owners.",
+      "produces": "One public-possible or internal-only runbook makes the desired state, entry condition, source owners, action modes, ordered phases, evidence gates, recovery, stop condition, and safe handback legible in one pass.",
       "publicationStanding": "public_ready",
       "pagePath": "collaboration-runbook-authoring/",
       "projectionPath": "collaboration-runbook-authoring/projection.json",
@@ -91,13 +99,15 @@
       "name": "context-canvas-css-ownership",
       "title": "Context Canvas CSS ownership",
       "description": "Establishes legible Context Canvas CSS ownership. Applies when expanded.css, cascade diagnosis, selector or token migration, route bundles, first-paint work, or Visual Fidelity Contract mapping enters scope.",
+      "useWhen": "`expanded.css`, cascade behavior, selector naming, first paint, visual-contract mapping, or route-family bundles enter scope.",
+      "produces": "Findable ownership and proportionate evidence for the changed boundary, with reduced unrelated route CSS when reduction is an intended outcome.",
       "publicationStanding": "public_ready",
       "pagePath": "context-canvas-css-ownership/",
       "projectionPath": "context-canvas-css-ownership/projection.json",
       "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/context-canvas-css-ownership/projection.json",
       "sourcePath": ".agents/skills/context-canvas-css-ownership/SKILL.md",
       "sourceRoute": "source/.agents/skills/context-canvas-css-ownership/SKILL.md",
-      "sourceSha256": "03e8bbc4695aeec710a218b65a0212985662a34e0e3b4b24172c7945e37bf0b3",
+      "sourceSha256": "089d578df27a47ee4307770714621f078fa2decb4f9dec452bce4dc7e72b3250",
       "dependencies": [
         {
           "sourcePath": ".agents/skills/context-canvas-css-ownership/references/scenarios.md",
@@ -115,6 +125,8 @@
       "name": "context-canvas-surface-reading",
       "title": "Context Canvas surface reading",
       "description": "Reads a Context Canvas page or route family as a visitor surface and primary design input. Applies before assessment, planning, or material changes to a Canvas page, embedded instrument, or family relationship.",
+      "useWhen": "Assessment, planning, or material visitor-surface change begins.",
+      "produces": "Route standing, visitor ability, evidence boundary, runtime owners, visual fingerprint, and affected family.",
       "publicationStanding": "public_ready",
       "pagePath": "context-canvas-surface-reading/",
       "projectionPath": "context-canvas-surface-reading/projection.json",
@@ -128,6 +140,8 @@
       "name": "context-canvas-visual-verification",
       "title": "Context Canvas visual verification",
       "description": "Selects proportionate visual and browser evidence for Context Canvas visitor-surface changes. Applies when layout, CSS, responsive behavior, interaction state, print, forced colors, or a visible regression needs review.",
+      "useWhen": "A change can alter composition, responsive behavior, interaction state, alternate presentation, or a route's visible fingerprint.",
+      "produces": "The smallest fitting reference or focused check, an interpreted result, coverage and environment limits, and one next receiver.",
       "publicationStanding": "public_ready",
       "pagePath": "context-canvas-visual-verification/",
       "projectionPath": "context-canvas-visual-verification/projection.json",
@@ -141,6 +155,8 @@
       "name": "contextual-jargon-scan",
       "title": "Contextual jargon scan",
       "description": "Classifies potentially specialist or inside wording within a bounded corpus and revises replaceable shorthand into ordinary language. Applies when public, visitor-facing, or cross-team prose may rely on context its reader does not share, including an in-stride review of material already receiving substantive change.",
+      "useWhen": "A bounded public, visitor-facing, cross-team, or durable collaboration surface may carry terms whose meaning depends on local practice.",
+      "produces": "A scoped occurrence map with targeted revisions, intentional retentions, deferred receivers, and a verification signal tied to the changed prose.",
       "publicationStanding": "public_ready",
       "pagePath": "contextual-jargon-scan/",
       "projectionPath": "contextual-jargon-scan/projection.json",
@@ -153,15 +169,27 @@
     {
       "name": "cost-and-ownership-analysis",
       "title": "Cost and ownership analysis",
-      "description": "Maps scoped JavaScript functions to algorithmic cost, input boundaries, and mutation ownership. Applies when a review raises complexity, repeated preparation, regex or prototype-chain behavior, path handling, or state-aliasing concerns that should change an implementation decision.",
+      "description": "Maps scoped functions to algorithmic cost, input boundaries, and mutation ownership. Applies when a review raises complexity, helper reuse, repeated preparation, parsing, regex or prototype-chain behavior, path handling, or state-aliasing concerns that should change an implementation decision.",
+      "useWhen": "Complexity or resource use may change a design, a security-shaped concern needs a precise mechanism, or state crosses validation, computation, rendering, exchange, and filesystem boundaries. Ordinary edits use the smallest relevant call path; a complete function inventory follows the requested scope.",
+      "produces": "A scoped function inventory with interpreted bounds or explicit compositional costs, ownership and exposure findings, fitting repairs and acceptance evidence when authorized, and one clear receiving decision.",
       "publicationStanding": "public_ready",
       "pagePath": "cost-and-ownership-analysis/",
       "projectionPath": "cost-and-ownership-analysis/projection.json",
       "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/cost-and-ownership-analysis/projection.json",
       "sourcePath": ".agents/skills/cost-and-ownership-analysis/SKILL.md",
       "sourceRoute": "source/.agents/skills/cost-and-ownership-analysis/SKILL.md",
-      "sourceSha256": "618282d0f3bdc917d1ce1ab8d1173507ec3fb0f91601d005b105d4c3223c6c91",
+      "sourceSha256": "3f7ec3bbaa7902d3939a9a2cdf2e9c6b14c1dc1b51bd4aea36faac785ce331b9",
       "dependencies": [
+        {
+          "sourcePath": ".agents/skills/cost-and-ownership-analysis/references/python-boundaries-and-traversal-cost.md",
+          "path": "source/.agents/skills/cost-and-ownership-analysis/references/python-boundaries-and-traversal-cost.md",
+          "sha256": "ec7f4d6457fcb88eb407990ba7c26e39e1cb55d0668e81302e9b7a6f0b4d678f"
+        },
+        {
+          "sourcePath": ".agents/skills/cost-and-ownership-analysis/references/ownership-preserving-reuse.md",
+          "path": "source/.agents/skills/cost-and-ownership-analysis/references/ownership-preserving-reuse.md",
+          "sha256": "5ab5625b1de8e755fd325ca7b5eec54a365563f7755fa4fa6b95b17ec165db9e"
+        },
         {
           "sourcePath": ".agents/skills/practitioner-probe/SKILL.md",
           "path": "source/.agents/skills/practitioner-probe/SKILL.md",
@@ -170,12 +198,17 @@
         {
           "sourcePath": ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
           "path": "source/.agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
-          "sha256": "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a"
+          "sha256": "81ac465440bac0b45dc68533ca323f33c228e7fcfd09e4b73a76d77182038fb5"
         },
         {
           "sourcePath": ".agents/skills/collaboration-accounting/SKILL.md",
           "path": "source/.agents/skills/collaboration-accounting/SKILL.md",
           "sha256": "f081f046652c1b526f1f8f4ad70c42de6a25662bcabd359690e2b71448061089"
+        },
+        {
+          "sourcePath": ".agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
+          "path": "source/.agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
+          "sha256": "8968d26e8c0ec034722f622a3befad00af293df2bbf83de516168db831a466a9"
         }
       ]
     },
@@ -183,25 +216,44 @@
       "name": "declarative-skill-authoring",
       "title": "Declarative skill authoring",
       "description": "Authors or revises repository skills as declarative, transferable specifications. Applies when skill metadata, What/When/Boundaries contracts, Rule declarations, optional Given/When/Then examples, conditional context, or experiment-to-helper progression needs definition.",
+      "useWhen": "A recurring collaboration affordance deserves a new skill or an existing skill produces routing or workflow friction.",
+      "produces": "A conventional `SKILL.md` with declarative third-person metadata, clear completion, and proportionate progressive disclosure.",
       "publicationStanding": "public_ready",
       "pagePath": "declarative-skill-authoring/",
       "projectionPath": "declarative-skill-authoring/projection.json",
       "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/declarative-skill-authoring/projection.json",
       "sourcePath": ".agents/skills/declarative-skill-authoring/SKILL.md",
       "sourceRoute": "source/.agents/skills/declarative-skill-authoring/SKILL.md",
-      "sourceSha256": "153ea23114bd69f57403c548f884b5fede7f1c350d85ffadb0d4337b45ccccca",
+      "sourceSha256": "533354997bceb299a505e40d127a562f1af88eb2a094b6383126da4eef15c04c",
       "dependencies": [
         {
           "sourcePath": ".agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
           "path": "source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
-          "sha256": "04f598a568310f5a6381a3cbc93e3e51333857e9becb066ec8ecb2d9ff5d6843"
+          "sha256": "992f83c982feef2c1236297212dbca889f34785db4146db218724168711eabc2"
         }
       ]
+    },
+    {
+      "name": "embedded-prototype-layout",
+      "title": "Embedded prototype layout",
+      "description": "Resolves prototype layout pressure at the actual parent and iframe boundary. Applies when a self-contained instrument works standalone but its embedded controls, tables, focus, shadows or onward route become difficult to use.",
+      "useWhen": "An iframe behaves differently from its standalone child document, or parent composition changes the space available to that embedded document.",
+      "produces": "One source-owned repair or decision-ready disposition naming the parent viewport, content box, frame/client width, child viewport, affected behavior, smallest fitting layout change and evidence boundary. The result records each measurement or names the unobserved dimension and asks its owner for the missing measurement.",
+      "publicationStanding": "public_ready",
+      "pagePath": "embedded-prototype-layout/",
+      "projectionPath": "embedded-prototype-layout/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/embedded-prototype-layout/projection.json",
+      "sourcePath": ".agents/skills/embedded-prototype-layout/SKILL.md",
+      "sourceRoute": "source/.agents/skills/embedded-prototype-layout/SKILL.md",
+      "sourceSha256": "9f0131fb35b55f717ba4c5af4b1a958bf28a22d90e53a34ac0edfe9e5942ec2a",
+      "dependencies": []
     },
     {
       "name": "evidence-grounded-research-spike",
       "title": "Evidence-grounded research spike",
       "description": "Converts current expert writing, official documentation, standards, and practiced experience into a bounded repository decision. Applies when contemporary evidence should change a plan, instruction, architecture boundary, or collaboration method.",
+      "useWhen": "A technical or collaboration decision depends on contemporary external evidence.",
+      "produces": "Supported or bounded decision, remaining uncertainty, and a clear receiving surface.",
       "publicationStanding": "public_ready",
       "pagePath": "evidence-grounded-research-spike/",
       "projectionPath": "evidence-grounded-research-spike/projection.json",
@@ -215,6 +267,8 @@
       "name": "issue-chain-stewardship",
       "title": "Issue chain stewardship",
       "description": "Makes related repository issues legible as a revisable work route while each issue retains its own outcome, authority, and acceptance boundary. Applies when completion, evidence, or a human-held decision in one issue materially changes whether another issue can begin or settle.",
+      "useWhen": "Several issues form a decision-bearing sequence, branch, containment relationship, or return path that an individual issue cannot explain on its own.",
+      "produces": "A receiving collaborator can see why one issue is current, what each issue owns, what passes between them, which terrain runs in parallel, and which event releases the chain.",
       "publicationStanding": "public_ready",
       "pagePath": "issue-chain-stewardship/",
       "projectionPath": "issue-chain-stewardship/projection.json",
@@ -228,6 +282,8 @@
       "name": "locator-boundary-stewardship",
       "title": "Locator-boundary stewardship",
       "description": "Produces locator-safe public collaboration records while exact gated lineage remains recoverable through stable semantic keys and an authorized resolver. Applies when Issues, pull requests, Threadkeeping, handoffs, or public-history preparation cross publication boundaries.",
+      "useWhen": "A durable Issue, pull request, review, comment, commit message, Threadkeeping record, handoff, or public-history packet carries locators whose retrieval standing differs from the receiving surface.",
+      "produces": "A locator-safe public record with semantic receivers, stable source keys where needed, complete rationale, an explicit cutoff, and a workable re-entry route.",
       "publicationStanding": "public_ready",
       "pagePath": "locator-boundary-stewardship/",
       "projectionPath": "locator-boundary-stewardship/projection.json",
@@ -252,6 +308,8 @@
       "name": "practitioner-probe",
       "title": "Practitioner probe",
       "description": "Converts an ambiguous codebase concern, issue, or plausible-but-shallow implementation into a decision-changing technical probe. Applies when mechanism, affected actor, evidence, or instruction yield remains unclear.",
+      "useWhen": "Code appears plausible but shallow, a gap lacks mechanism, or an issue lacks decision-changing evidence.",
+      "produces": "Mechanism, observable evidence, gap utility, instruction yield, transfer boundary, and receiving route.",
       "publicationStanding": "public_ready",
       "pagePath": "practitioner-probe/",
       "projectionPath": "practitioner-probe/projection.json",
@@ -265,6 +323,8 @@
       "name": "repository-attribution-stewardship",
       "title": "Repository attribution stewardship",
       "description": "Distinguishes and aligns copyright-holder records, citation metadata, contribution credit, copy-local public notices, and bounded machine projections. Applies during repository attribution changes, fork or adaptation guidance, and cold-start attribution orientation. Legal interpretation and rights decisions remain with a named human receiver or qualified counsel.",
+      "useWhen": "Authorship, citation, contribution credit, public HTML attribution, machine-readable metadata, or adaptation lineage could be conflated.",
+      "produces": "A concise carrier map and the smallest repository change that keeps identity, credit, citation, licensing, and publication roles legible.",
       "publicationStanding": "public_ready",
       "pagePath": "repository-attribution-stewardship/",
       "projectionPath": "repository-attribution-stewardship/projection.json",
@@ -278,6 +338,8 @@
       "name": "repository-reentry",
       "title": "Repository re-entry",
       "description": "Reconstructs current truth across source, Git, GitHub, planning, and threadkeeping. Applies during resumed work, handoffs, status reconciliation, stale-plan review, and branch or pull-request re-entry.",
+      "useWhen": "Multi-cycle work resumes or repository records appear to disagree.",
+      "produces": "One source path, one live collaboration surface, and one bounded re-entry move.",
       "publicationStanding": "public_ready",
       "pagePath": "repository-reentry/",
       "projectionPath": "repository-reentry/projection.json",
@@ -291,6 +353,8 @@
       "name": "schema-contract-authoring",
       "title": "Schema contract authoring",
       "description": "Authors or revises repository schema families as bounded, legible contracts with distinct identity, authority, retrieval, examples, semantic context, dependency closure, and proportional material-use checks. Applies when a schema root, versioned contract, JSON-LD context, example family, publication route, or cross-repository schema projection enters scope.",
+      "useWhen": "A repository adds or revises a schema root, family version, semantic context, example set, publication route, or linked projection from another authority.",
+      "produces": "A versioned contract whose identity, source, retrieval paths, dependency closure, examples, and intended extension points are easy to find.",
       "publicationStanding": "public_ready",
       "pagePath": "schema-contract-authoring/",
       "projectionPath": "schema-contract-authoring/projection.json",
@@ -304,6 +368,8 @@
       "name": "secret-boundary-inspection",
       "title": "Secret-boundary inspection",
       "description": "Produces a canary-proven, scope-explicit secret-material observation for a repository, exact proposed index, locally available history, or named artifact. Applies before snapshot, publication, delivery, or receiving-repository handoffs where credential-shaped material could travel.",
+      "useWhen": "Source, an exact proposed index, locally available history, or a named generated artifact is preparing to cross a snapshot, publication, delivery, or repository-reception boundary.",
+      "produces": "The detector path proves itself before interpretation; each requested scope returns zero unresolved matches or enters a private response route; and the receipt names what was observed, what it establishes, and where its evidence stops.",
       "publicationStanding": "public_ready",
       "pagePath": "secret-boundary-inspection/",
       "projectionPath": "secret-boundary-inspection/projection.json",
@@ -335,9 +401,37 @@
       ]
     },
     {
+      "name": "semantic-table-design",
+      "title": "Semantic table design",
+      "description": "Designs readable native-semantic tables and context-complete extracted records. Applies when a new or revised table's header relationships, row completeness, supplemental wording, comparison geometry, or partial-row ingestion affects a visitor or receiving-tool task.",
+      "useWhen": "A new table or a change to header relationships, record completeness, comparison geometry or supplemental context affects a named reader or receiving-tool task. A small correction with established meaning and ownership can use direct reasoning.",
+      "produces": "One bounded table-family disposition naming the reader operation, semantic and source owners, header relationships, field roles, supplemental context, scroll boundary, affected states, fitting observations and any unresolved interpretation.",
+      "publicationStanding": "public_ready",
+      "pagePath": "semantic-table-design/",
+      "projectionPath": "semantic-table-design/projection.json",
+      "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/semantic-table-design/projection.json",
+      "sourcePath": ".agents/skills/semantic-table-design/SKILL.md",
+      "sourceRoute": "source/.agents/skills/semantic-table-design/SKILL.md",
+      "sourceSha256": "f8e2d4232577ec7b6f7eab91ca0f39c3431001cb1145af6c9f73b1bd1eb67bd4",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "path": "source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+          "sha256": "b411b1142813959af4831a2b7b9d85edbf8505e54b6f8b6c9ed148e3759ec37e"
+        },
+        {
+          "sourcePath": ".agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "path": "source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+          "sha256": "85e5bdc37f59151ea2e3f3d03c23a057234debc4987e111b9bc8c5732f745256"
+        }
+      ]
+    },
+    {
       "name": "source-authority-mapping",
       "title": "Source authority mapping",
       "description": "Traces a claim, artifact, or contract through semantic ownership, source location, projections, delivery routes, receiving use, and promotion. Applies when repositories, workspaces, mirrors, snapshots, or publication surfaces make authority and lineage difficult to distinguish.",
+      "useWhen": "Source, semantic ownership, schema or contract authority, publication, delivery, snapshotting, or downstream use could be mistaken for one another.",
+      "produces": "A concise lineage map that identifies the authoritative source, typed projections, current receiver, promotion boundary, and re-entry condition.",
       "publicationStanding": "public_ready",
       "pagePath": "source-authority-mapping/",
       "projectionPath": "source-authority-mapping/projection.json",
@@ -351,26 +445,51 @@
       "name": "stateful-artifact-behavior-contracts",
       "title": "Stateful artifact behavior contracts",
       "description": "Designs focused executable behavior contracts for stateful artifacts and prototypes. Applies when owned state crosses import, edit, rendered, export, machine-readable, or recovery boundaries and a consequential regression needs the smallest source-grounded observation.",
+      "useWhen": "An artifact imports, edits, derives, renders, serializes, re-imports, or recovers state across one or more human- and machine-readable surfaces.",
+      "produces": "Accepted state remains usable through its own exchange route, semantic twins agree, the minimum usable state stays explicit, and a rejected candidate leaves the accepted state available with a direct revision route.",
       "publicationStanding": "public_ready",
       "pagePath": "stateful-artifact-behavior-contracts/",
       "projectionPath": "stateful-artifact-behavior-contracts/projection.json",
       "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/stateful-artifact-behavior-contracts/projection.json",
       "sourcePath": ".agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
       "sourceRoute": "source/.agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
-      "sourceSha256": "596f139100a448139c7c4ceb2dc6d1b470dc86ff19df4ed68a9ac765005f576a",
-      "dependencies": []
+      "sourceSha256": "81ac465440bac0b45dc68533ca323f33c228e7fcfd09e4b73a76d77182038fb5",
+      "dependencies": [
+        {
+          "sourcePath": ".agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
+          "path": "source/.agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
+          "sha256": "8968d26e8c0ec034722f622a3befad00af293df2bbf83de516168db831a466a9"
+        },
+        {
+          "sourcePath": "context-canvas-project-surface/context-canvas/atlas-gallery.js",
+          "path": "source/context-canvas-project-surface/context-canvas/atlas-gallery.js",
+          "sha256": "1f353c93d47eff19a04fa179ef2c271959c94c4a9409c39ca47c05504e29e8a7"
+        },
+        {
+          "sourcePath": "tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs",
+          "path": "source/tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs",
+          "sha256": "0112e77e4e73710d8b1511193d9ef6d196d57af999860b843bcaf091a7c7a3ec"
+        },
+        {
+          "sourcePath": "tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs",
+          "path": "source/tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs",
+          "sha256": "93ff0569df00ba4f555116564c75ed16e7d7633960c50cf4c14053d4c202d7c9"
+        }
+      ]
     },
     {
       "name": "uv-backed-python-execution",
       "title": "uv-backed Python execution",
       "description": "Resolves and runs repository-declared Python checks through uv while preserving the host's base Python installation. Applies when a required Python version, existing uv lock, isolated dependency environment, or unwritable default uv cache must be reconciled before validation.",
+      "useWhen": "The repository authorizes `uv` and its Python requirement, lockfile, hosted workflow, existing environment, or local base interpreter leaves the validation runtime unclear.",
+      "produces": "The named check runs through an identified `uv` and Python combination; the return says whether dependencies came from a checked lockfile or were resolved for this run; tracked source remains legible; and any unresolved environment condition has one owner and a clear trigger for another attempt. This contract owns repository-declared Python checks. Conversation-only figures default to an isolated session runtime and can opt into repository-version matching or the documented project environment. Their rendering preference leaves the source-owned runtime, lock and evidence requirements for repository checks intact.",
       "publicationStanding": "public_ready",
       "pagePath": "uv-backed-python-execution/",
       "projectionPath": "uv-backed-python-execution/projection.json",
       "projectionRetrievalUrl": "https://schemas.radiantnull.com/skills/uv-backed-python-execution/projection.json",
       "sourcePath": ".agents/skills/uv-backed-python-execution/SKILL.md",
       "sourceRoute": "source/.agents/skills/uv-backed-python-execution/SKILL.md",
-      "sourceSha256": "e9d788cae6d2ceb1ed328f8c5ce70c0c34c18d1e0849b4804d89ade6ed42f414",
+      "sourceSha256": "53bded8c1986b748cf88ba5ca28b23c4595d28c062a50da761fdb80884e73511",
       "dependencies": []
     }
   ],
