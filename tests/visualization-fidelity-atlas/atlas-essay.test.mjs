@@ -20,7 +20,9 @@ test('essay composes the established Debrief navigation, reading, and footer own
   assert.match(html, /class="track-index"/u);
   assert.match(html, /class="prose-flow"/u);
   assert.deepEqual([...html.matchAll(/<link rel="stylesheet" href="([^"]+)"/gu)].map(match => match[1]), [
-    'expanded.css', 'styles/components/debrief-reading.css', 'canvas-shell.css', 'styles/contracts/debrief-composition.css',
+    'styles/core/tokens.css', 'styles/core/foundation.css', 'styles/components/site-navigation.css',
+    'styles/components/tables.css', 'expanded.css', 'styles/components/debrief-reading.css',
+    'canvas-shell.css', 'styles/contracts/debrief-composition.css',
   ]);
   const footer = html.slice(html.lastIndexOf('<footer'));
   assert.match(footer, /class="footer__container super-footer"/u);

@@ -705,9 +705,9 @@
           "table": 3,
           "topic": "How the initiative changed work, coordination, and investment",
           "shape": "simple",
-          "rows": 7,
-          "th": 9,
-          "td": 12
+          "rows": 8,
+          "th": 10,
+          "td": 14
         },
         {
           "table": 4,
@@ -1752,7 +1752,7 @@
     "native_tables": 148,
     "simple_tables": 144,
     "explicit_tables": 4,
-    "native_labelled_elements": 5504,
+    "native_labelled_elements": 5508,
     "runtime_body_generators": 2
   },
   "rendering_affecting_native_additions": [],
