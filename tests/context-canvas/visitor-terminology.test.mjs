@@ -263,7 +263,7 @@ test("room language retains reviewed runtime, classroom, citation, space, and la
   assert.equal(senses.includes(null), false, "Each table-reading room use has a reviewed context");
   assert.deepEqual(
     [...new Set(senses)].sort(),
-    ["comparison space", "display space", "embedding space", "latitude"],
+    ["comparison space", "embedding space", "latitude"],
     "The article retains the independently reviewed space and latitude meanings",
   );
 

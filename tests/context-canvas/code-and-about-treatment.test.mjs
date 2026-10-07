@@ -103,7 +103,9 @@ test("the About hero keeps its initial composition with a local identity lockup"
   ]);
   const heroRule = cssRule(css, ".about-hero");
   const identityRule = cssRule(css, ".about-hero__identity");
+  const nameRule = cssRule(css, ".about-hero__name");
   const headingRule = cssRule(css, ".about-hero h1");
+  const contactRule = cssRule(css, ".about-contact");
   const portraitRule = cssRule(css, ".about-portrait");
   const portraitImageRule = cssRule(css, ".about-portrait img");
 
@@ -120,7 +122,10 @@ test("the About hero keeps its initial composition with a local identity lockup"
     declarationValue(identityRule, "column-gap"),
     "clamp(1.6875rem, calc(2vw + .1875rem), 2.6875rem)",
   );
+  assert.equal(declarationValue(nameRule, "min-inline-size"), "0");
   assert.equal(declarationValue(headingRule, "margin"), "0");
+  assert.equal(declarationValue(contactRule, "font-size"), "clamp(1.5rem, 4vw, 3.5rem)");
+  assert.equal(declarationValue(contactRule, "overflow-wrap"), "anywhere");
   assert.equal(
     declarationValue(portraitRule, "inline-size"),
     "clamp(7.75rem, 11vw, 10rem)",
@@ -129,8 +134,10 @@ test("the About hero keeps its initial composition with a local identity lockup"
   assert.equal(declarationValue(portraitImageRule, "block-size"), "auto");
   assert.match(
     html,
-    /<div class="about-hero__identity"><h1 id="about-title"><span class="about-title__line">About<\/span> <span class="about-title__line about-title__line--name">Vikrant<\/span> <span class="about-title__line about-title__line--name">Kudesia<\/span><\/h1><figure class="about-portrait"><img src="portrait-of-vvk-technology-leader\.jpg" width="300" height="300" alt="Vikrant Kudesia, smiling\."/u,
+    /<div class="about-hero__identity"><div class="about-hero__name"><h1 id="about-title"><span class="about-title__line">About<\/span> <span class="about-title__line about-title__line--name">Vikrant<\/span> <span class="about-title__line about-title__line--name">Kudesia<\/span><\/h1><address class="about-contact">contact@vik\.guru<\/address><\/div><figure class="about-portrait"><img src="portrait-of-vvk-technology-leader\.jpg" width="300" height="300" alt="Vikrant Kudesia, smiling\."/u,
   );
+  assert.doesNotMatch(html, /mailto:/u);
+  assert.match(html, /<nav class="about-boundary" aria-label="Explore projects">[\s\S]*href="ai-systems\.html"[\s\S]*href="https:\/\/github\.com\/driftframestudios" rel="me"/u);
 });
 
 test("the About visual sequence begins as a still and loads motion after visitor action", async () => {

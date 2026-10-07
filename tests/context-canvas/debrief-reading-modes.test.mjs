@@ -234,6 +234,12 @@ test("the two table-reading articles retain ordinary routes and the Atlas readin
   assert.ok(list.itemListElement.at(-1).url.endsWith("/one-figure-several-readings.html"));
   const article = await readCanvasFile("readable-tables-reusable-evidence.html");
   assert.match(article, /<h1\b[^>]*>Give the Comparison Room<\/h1>/u);
+  assert.match(article, /estimate verification work at the beginning/u);
+  assert.match(article, /focused unit, integration, regression, or browser checks/u);
+  assert.match(article, /full suite belongs in the completion path/u);
+  assert.match(article, /Cartesian matrix can cross routes, viewports, states, input classes, and interactions/u);
+  assert.match(article, /SVG contributes a compact geometric oracle[\s\S]*painter’s order/u);
+  assert.match(article, /Playwright/u);
   const atlasReading = await readCanvasFile("one-figure-several-readings.html");
   assert.match(atlasReading, /<h1\b[^>]*>One Figure, Several Readings<\/h1>/u);
   assert.match(html.slice(last.index), /href="one-figure-several-readings.html">Read the Article/u);
