@@ -140,6 +140,50 @@ test("the About hero keeps its initial composition with a local identity lockup"
   assert.match(html, /<nav class="about-boundary" aria-label="Explore projects">[\s\S]*href="ai-systems\.html"[\s\S]*href="https:\/\/github\.com\/driftframestudios" rel="me"/u);
 });
 
+test("the About folios keep organization records inside progressive disclosure", async () => {
+  const [css, html] = await Promise.all([
+    readCanvasFile("styles/routes/about.css"),
+    readCanvasFile("index.html"),
+  ]);
+  const careerStart = html.indexOf('<article class="about-folio about-folio--career"');
+  const qualityStart = html.indexOf('<article class="about-folio about-folio--quality"');
+  const foliosEnd = html.indexOf('<section class="about-field about-field--dark-iron-ore"');
+  assert.ok(careerStart >= 0 && qualityStart > careerStart && foliosEnd > qualityStart);
+
+  const careerFolio = html.slice(careerStart, qualityStart);
+  const qualityFolio = html.slice(qualityStart, foliosEnd);
+  const careerDetailsStart = careerFolio.indexOf('<details class="about-folio-disclosure"');
+  const qualityDetailsStart = qualityFolio.indexOf('<details class="about-folio-disclosure"');
+  const careerDisclosure = careerFolio.slice(
+    careerDetailsStart,
+    careerFolio.indexOf("</details>", careerDetailsStart) + "</details>".length,
+  );
+  const qualityDisclosure = qualityFolio.slice(
+    qualityDetailsStart,
+    qualityFolio.indexOf("</details>", qualityDetailsStart) + "</details>".length,
+  );
+
+  assert.match(careerFolio, /data-source-id="career-role-1"><strong>Founder &amp; <abbr title="Chief Product and Technology Officer">CPTO<\/abbr> <span class="about-folio-role__organization">at Driftframe Studios, LLC<\/span><\/strong>/u);
+  assert.match(qualityFolio, /data-source-id="quality-role-1"><strong>Founder &amp; Director of Quality Engineering <span class="about-folio-role__organization">at Kindlight Charitable Trust Foundation<\/span><\/strong>/u);
+  assert.match(careerDisclosure, /^<details class="about-folio-disclosure"><summary>/u);
+  assert.match(qualityDisclosure, /^<details class="about-folio-disclosure"><summary>/u);
+  assert.doesNotMatch(careerDisclosure, /^<details[^>]*\sopen(?:\s|=|>)/u);
+  assert.doesNotMatch(qualityDisclosure, /^<details[^>]*\sopen(?:\s|=|>)/u);
+  assert.match(careerDisclosure, /Show 4 more career records/u);
+  assert.match(qualityDisclosure, /Show 5 more quality records/u);
+  assert.equal((careerDisclosure.match(/data-source-id="career-case-/gu) ?? []).length, 4);
+  assert.equal((qualityDisclosure.match(/data-source-id="quality-case-/gu) ?? []).length, 5);
+  assert.match(careerDisclosure, /data-source-id="career-case-6"[\s\S]*Founder &amp; <abbr title="Chief Product and Technology Officer">CPTO<\/abbr> at Driftframe Studios, LLC/u);
+  assert.match(qualityDisclosure, /data-source-id="quality-case-7"[\s\S]*Founder &amp; Director of Quality Engineering at Kindlight Charitable Trust Foundation/u);
+
+  const sourceIds = [...html.matchAll(/data-source-id="([^"]+)"/gu)].map(match => match[1]);
+  assert.equal(new Set(sourceIds).size, sourceIds.length, "Expected unique About source IDs");
+
+  const organizationRule = cssRule(css, ".about-folio-roles .about-folio-role__organization");
+  assert.equal(declarationValue(organizationRule, "display"), "block");
+  assert.equal(declarationValue(organizationRule, "font-size"), ".9em");
+});
+
 test("the About visual sequence begins as a still and loads motion after visitor action", async () => {
   const [css, html, script, gif, poster, source, generator] = await Promise.all([
     readCanvasFile("styles/routes/about.css"),

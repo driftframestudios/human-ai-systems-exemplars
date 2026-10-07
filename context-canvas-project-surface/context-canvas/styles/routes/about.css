@@ -1279,6 +1279,14 @@ p#on-dark-iron-ore {
     color: var(--about-ink-strong);
 }
 
+.about-folio-roles .about-folio-role__organization {
+    display: block;
+    font-size: .9em;
+    font-weight: 650;
+    line-height: 1.35;
+    margin-block-start: .12rem;
+}
+
 .about-folio-roles span {
     color: var(--about-muted);
 }
