@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { access, readFile, readdir } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import test from "node:test";
 
@@ -7,6 +7,10 @@ const repositoryRoot = resolve(import.meta.dirname, "../..");
 const canvasRoot = resolve(
   repositoryRoot,
   "context-canvas-project-surface/context-canvas",
+);
+const debriefImageRoot = resolve(
+  repositoryRoot,
+  "context-canvas-project-surface/img/debriefs",
 );
 
 const repeatedImageAlternatives = new Map([
@@ -49,6 +53,25 @@ const socialImageAlternatives = new Map([
   ["exemplar-maximal-information-radiator.html", "An abstract pink contour visualization radiates from a small central point."],
 ]);
 
+const debriefProxyContracts = [
+  {
+    route: "fmi-clinical-trial-coordination.html",
+    directory: "boolean-building-blocks",
+  },
+  {
+    route: "choose-your-player-humatics.html",
+    directory: "choose-your-player",
+  },
+  {
+    route: "genomic-viewer-replatforming.html",
+    directory: "queue-secretly-status-machine",
+  },
+  {
+    route: "fmi-lims-eln-replatforming.html",
+    directory: "sample-noone-could-find",
+  },
+];
+
 function withoutComments(source) {
   return source.replace(/<!--[\s\S]*?-->/gu, "");
 }
@@ -86,7 +109,7 @@ test("parent visitor images carry a legible text relationship", async () => {
     }
   }
 
-  assert.equal(imageCount, 173);
+  assert.equal(imageCount, 197);
   assert.deepEqual(
     emptyAlternatives,
     ["debriefs.html:../img/plot/genomic_viewer_boundary_contract_map.svg"],
@@ -122,4 +145,61 @@ test("former placeholder alternatives stay out of parent visitor surfaces", asyn
   assert.doesNotMatch(source, /alt="Forms upfront"/u);
   assert.doesNotMatch(source, /alt="Persona types"/u);
   assert.doesNotMatch(source, /role="img" aria-label="Decorative falling leaves"/u);
+});
+
+test("working Debrief proxy systems preserve standing, intrinsic size, responsive sources, and full-size inspection", async () => {
+  for (const { route, directory } of debriefProxyContracts) {
+    const html = withoutComments(await readFile(join(canvasRoot, route), "utf8"));
+    assert.match(html, /working/iu, `${route}: working-system standing`);
+    assert.match(html, /IP-free/iu, `${route}: IP-free standing`);
+    assert.match(html, /2026/iu, `${route}: contemporary standing`);
+    assert.match(html, /proxy[ -]system/iu, `${route}: proxy-system standing`);
+    const figures = Array.from(html.matchAll(
+      /<figure\b[^>]*class="[^"]*\bdebrief-proxy-figure\b[^"]*"[^>]*>([\s\S]*?)<\/figure>/gu,
+    ), match => match[0]);
+    const originals = (await readdir(join(debriefImageRoot, directory)))
+      .filter(name => name.endsWith(".webp") && !/-(?:960|1920)\.webp$/u.test(name))
+      .sort();
+    assert.equal(figures.length, originals.length, `${route}: every accepted source has one proxy figure`);
+
+    for (const filename of originals) {
+      const basename = filename.replace(/\.webp$/u, "");
+      const original = `../img/debriefs/${directory}/${basename}.webp`;
+      const figure = figures.find(candidate => candidate.includes(`href="${original}"`));
+      assert.ok(figure, `${route}: ${basename} needs a full-size source link`);
+      const frameTag = figure.match(/<div\b[^>]*class="[^"]*\bdebrief-proxy-frame\b[^"]*"[^>]*>/u)?.[0] ?? "";
+
+      const imageTag = figure.match(/<img\b[^>]*>/u)?.[0] ?? "";
+      const width = Number(attribute(imageTag, "width"));
+      const height = Number(attribute(imageTag, "height"));
+      assert.equal(attribute(imageTag, "src"), original, `${route}: ${basename} source`);
+      assert.ok(Number.isInteger(width) && width > 1920, `${route}: ${basename} intrinsic width`);
+      assert.ok(Number.isInteger(height) && height > 0, `${route}: ${basename} intrinsic height`);
+      assert.equal(
+        attribute(frameTag, "class")?.includes("debrief-proxy-frame--portrait"),
+        height > width,
+        `${route}: ${basename} portrait treatment`,
+      );
+      if (height > width) {
+        assert.equal(attribute(frameTag, "role"), undefined, `${route}: ${basename} fitted portrait role`);
+        assert.equal(attribute(frameTag, "tabindex"), undefined, `${route}: ${basename} fitted portrait focus`);
+      } else {
+        assert.equal(attribute(frameTag, "role"), "region", `${route}: ${basename} scroll-boundary role`);
+        assert.equal(attribute(frameTag, "tabindex"), "0", `${route}: ${basename} keyboard-scroll boundary`);
+        assert.ok(attribute(frameTag, "aria-label")?.length > 20, `${route}: ${basename} scroll-boundary name`);
+      }
+      assert.equal(attribute(imageTag, "loading"), "lazy", `${route}: ${basename} loading`);
+      assert.equal(attribute(imageTag, "decoding"), "async", `${route}: ${basename} decoding`);
+      assert.ok(attribute(imageTag, "alt")?.length > 40, `${route}: ${basename} needs a meaningful alternative`);
+      assert.ok(attribute(imageTag, "sizes"), `${route}: ${basename} sizes`);
+      assert.equal(
+        attribute(imageTag, "srcset"),
+        `${original.replace(/\.webp$/u, "-960.webp")} 960w, ${original.replace(/\.webp$/u, "-1920.webp")} 1920w, ${original} ${width}w`,
+        `${route}: ${basename} responsive source set`,
+      );
+      await access(join(debriefImageRoot, directory, `${basename}-960.webp`));
+      await access(join(debriefImageRoot, directory, `${basename}-1920.webp`));
+      assert.match(figure, /<figcaption\b[\s\S]{80,}?<\/figcaption>/iu, `${route}: ${basename} narrative caption`);
+    }
+  }
 });

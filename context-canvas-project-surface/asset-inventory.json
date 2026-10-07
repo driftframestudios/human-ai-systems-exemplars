@@ -212,6 +212,122 @@
       "semantic_authority_path": "context-canvas-project-surface/context-canvas/spatial-capture-collaborative-memory.html"
     },
     {
+      "id": "context-canvas.debrief-media.boolean-building-blocks",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/debriefs/boolean-building-blocks/"
+      },
+      "semantic_owner": "Clinical trial coordination Debrief",
+      "roles": [
+        {
+          "id": "working_reference_system_screenshot",
+          "visitor_job": "Show how clinical-trial rules, cohorts, consent, evidence review, and environment posture operate in a working, IP-free 2026 proxy system.",
+          "accessibility_text_owner": "The clinical trial coordination Debrief image alternatives, captions, and surrounding prose."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
+        "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, IP-free 2026 proxy system using synthetic data. The -960 and -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved."
+      },
+      "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-clinical-trial-coordination.html"
+    },
+    {
+      "id": "context-canvas.debrief-media.choose-your-player",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/debriefs/choose-your-player/"
+      },
+      "semantic_owner": "Choose Your Player Humatics Debrief",
+      "roles": [
+        {
+          "id": "working_reference_system_screenshot",
+          "visitor_job": "Show role posture, site setup, field state, spatial files, and pin-linked conversation in a working, company-neutral, IP-free 2026 proxy system.",
+          "accessibility_text_owner": "The Choose Your Player Humatics Debrief image alternatives, captions, and surrounding prose."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
+        "lineage_standing": "The unsuffixed WebPs are accepted screenshots of a working, company-neutral, IP-free 2026 proxy system using synthetic sites and values. The -960 and -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved."
+      },
+      "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html"
+    },
+    {
+      "id": "context-canvas.debrief-media.queue-secretly-status-machine",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/debriefs/queue-secretly-status-machine/"
+      },
+      "semantic_owner": "Genomic viewer replatforming Debrief",
+      "roles": [
+        {
+          "id": "working_reference_system_screenshot",
+          "visitor_job": "Show specimen state, authorization, quality gates, connection recovery, and reversible genomic work in working, IP-free 2026 SoT Cartography software.",
+          "accessibility_text_owner": "The genomic viewer replatforming Debrief image alternatives, captions, and surrounding prose."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
+        "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software using synthetic data. The -960 and -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is intended for a future open-source release; this inventory does not claim that release has occurred."
+      },
+      "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html"
+    },
+    {
+      "id": "context-canvas.debrief-media.sample-noone-could-find",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/debriefs/sample-noone-could-find/"
+      },
+      "semantic_owner": "LIMS and ELN replatforming Debrief",
+      "roles": [
+        {
+          "id": "working_reference_system_screenshot",
+          "visitor_job": "Show laboratory process corridors, source relationships, environment posture, instruction analysis, and failure recovery in working, IP-free 2026 SoT Cartography software.",
+          "accessibility_text_owner": "The LIMS and ELN replatforming Debrief image alternatives, captions, and surrounding prose."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
+        "lineage_standing": "The unsuffixed WebPs are accepted screenshots of working, IP-free 2026 SoT Cartography software using synthetic data. The -960 and -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. SoT Cartography is intended for a future open-source release; this inventory does not claim that release has occurred."
+      },
+      "recovery_condition": "Restore the accepted source screenshots, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html"
+    },
+    {
       "id": "context-canvas.document-head-icon",
       "selector": {
         "paths": [
