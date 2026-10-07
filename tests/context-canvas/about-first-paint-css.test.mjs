@@ -55,16 +55,12 @@ test("About has a complete named first-paint CSS path without the legacy sheet",
   ], "About stylesheet order");
   assert.equal(order.includes(owners.legacy), false, "About leaves the broad legacy sheet outside first paint");
 
-  const sharedBytes = (await Promise.all([
-    owners.tokens,
-    owners.foundation,
-    owners.navigation,
-    owners.tables,
-    owners.routeCards,
-  ].map(canvasFile))).reduce((total, source) => total + Buffer.byteLength(source), 0);
+  const ordinaryOwners = order.filter(owner => owner !== owners.aboutNoscript);
+  const ordinaryBytes = (await Promise.all(ordinaryOwners.map(canvasFile)))
+    .reduce((total, source) => total + Buffer.byteLength(source), 0);
   assert.ok(
-    sharedBytes < 69_685,
-    `About shared owners (${sharedBytes} bytes) stay below the recorded 69,685-byte legacy baseline`,
+    ordinaryBytes < 122_737,
+    `About's complete ordinary path (${ordinaryBytes} bytes) stays below the recorded 122,737-byte baseline`,
   );
 });
 

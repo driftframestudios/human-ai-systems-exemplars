@@ -42,8 +42,8 @@ on:
       - "attribution.yml"
       - "tests/attribution/**"
       - "tests/core-architectures/**"
-      - "tests/context-canvas/iframe-carriers.test.mjs"
-      - "tests/context-canvas/prototype-control-labels.test.mjs"
+      - "tests/context-canvas/**"
+      - "tests/suites/**"
       - "tests/iframe-routes/**"
       - "tests/narrative-architectures/**"
       - "tools/core-architecture-browser-helper.mjs"
@@ -53,12 +53,16 @@ on:
       - "tools/core-reference-instrument-contract.mjs"
       - "tools/canvas-iframe-route-browser-contract.mjs"
       - "tools/form-control-label-contract.mjs"
+      - "tools/generate-debrief-image-derivatives.mjs"
       - "tools/initiative-costing-label-contract.mjs"
       - "tools/iframe-route-package-engine.mjs"
       - "tools/materialize-public-references.mjs"
       - "tools/package-canvas-iframe-routes.mjs"
       - "tools/package-iframe-routes.mjs"
       - "tools/package-v1-iframe-routes.mjs"
+      - "tools/context-canvas-visual-reference.mjs"
+      - "tools/rail-label-failures.mjs"
+      - "tools/test-suite-plan.mjs"
       - "tools/verify-live-iframe-routes.mjs"
       - "tools/attribution-contract.mjs"
       - "tools/cross-prototype-exchange-contract.mjs"
@@ -67,9 +71,7 @@ on:
       - "iframe-route-families/**"
       - "participatory-design-kit-chimeric-prototype-set-v0.1/**"
       - "collaboration/**"
-      - "context-canvas-project-surface/**/*.html"
-      - "context-canvas-project-surface/**/*.js"
-      - "context-canvas-project-surface/**/*.mjs"
+      - "context-canvas-project-surface/**"
       - "visualization-fidelity-atlas-bundle-v0.1/**"
 
 permissions:
@@ -104,6 +106,13 @@ jobs:
       - name: Install the locked root toolchain
         run: npm ci --ignore-scripts
 
+      - name: Exercise Context Canvas source and inventory contracts
+        run: |
+          npm run test:context-canvas
+          npm run test:suites:unit
+          npm run visual:context-canvas-reference -- --list
+          npm run check:debrief-image-derivatives
+
       - name: Install Chromium for the selected rendered-page contracts
         if: ${{ github.event_name == 'pull_request' || inputs.include_browser }}
         run: npm exec -- playwright install --with-deps chromium
@@ -115,8 +124,6 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
-          node --test tests/context-canvas/iframe-carriers.test.mjs
 
           case "$SELECTED_SUITE" in
             core)
@@ -131,6 +138,7 @@ jobs:
               npm run test:iframe-routes
               npm run check:iframe-routes
               if [[ "$INCLUDE_BROWSER" == "true" ]]; then
+                npm run test:debrief-catalog-preview-browser
                 npm run test:prototype-control-labels
                 npm run test:iframe-browser
               fi
@@ -145,6 +153,7 @@ jobs:
               npm run check:iframe-routes
               npm run test:prototype-units
               if [[ "$INCLUDE_BROWSER" == "true" ]]; then
+                npm run test:debrief-catalog-preview-browser
                 npm run test:prototype-control-labels
                 npm run test:core-browser
                 npm run test:canvas-iframe-routes

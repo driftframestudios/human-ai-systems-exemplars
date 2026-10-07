@@ -34,6 +34,20 @@ Declaration parity establishes that moved behavior remains present. Computed own
 
 CSS filenames, selectors, tokens, and comments describe reusable visual or structural meaning. Content identity remains available in routes, titles, metadata, references, and visible prose.
 
+Comments name non-obvious ownership, load-order, cascade, fallback, or
+containment mechanics and leave self-evident declarations alone. They support
+AI and nonvisual code reading; semantic HTML, alternatives, labels, and
+document order remain the rendered accessibility owners.
+
+### Rule: Architecture views distinguish relationships and quantities
+
+A CSS architecture view labels stylesheet load order, semantic ownership,
+consumer membership, and generated delivery as distinct relationships.
+Before-and-after delivery views keep raw bytes, compressed bytes, and authored
+request counts separate and pair them with exact values and source coordinates.
+Diagrams improve re-entry; declaration parity, computed styles, and rendered
+observations retain behavioral authority.
+
 ### Rule: Comparison preserves composition
 
 Local initial-state images at `390 × 844`, `1440 × 1000`, and `2560 × 1440` remain available for comparison of hierarchy, composition, content presence, overflow, and responsive movement. [Context Canvas visual verification](../context-canvas-visual-verification/SKILL.md) selects the smallest fitting source or rendered observation, including consequential states, affected routes or families, and source-adjacent widths when a responsive seam changes. System-font and raster differences remain ordinary variation.

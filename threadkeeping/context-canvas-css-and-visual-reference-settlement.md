@@ -14,9 +14,9 @@ threadkeeping:
 
 ## Decision
 
-The Context Canvas is moving from one broad `expanded.css` responsibility field toward readable source modules, a small shared core, and route-family bundles. Field Inspection, About, Shared Machinery, AI Systems, Hiring, the first Debriefs tranche, Genomic Viewer, and the career/regulatory slide component supplied the initial structural seams. Fifteen routes now share the Debrief reading component, and seven composed Debriefs place their opt-in composition layer under a contract-specific source owner.
+The Context Canvas is moving from one broad `expanded.css` responsibility field toward readable source modules, a small shared core, and route-family bundles. Field Inspection, About, Shared Machinery, AI Systems, Hiring, the first Debriefs tranche, Genomic Viewer, and the career/regulatory slide component supplied the initial structural seams. Twenty routes now share the Debrief reading component, and ten composed Debriefs place their opt-in composition layer under a contract-specific source owner.
 
-The general utility now discovers all 40 top-level Context Canvas HTML files. The completed visual-reference cutoff remains the 39-page, 117-capture run described below; that receipt stays bound to its source revision. Family metadata supports navigation and filtering, while the existing focused checks continue to carry deeper interaction and alternate-mode questions when a concrete question forms.
+The general utility now discovers all 46 top-level Context Canvas HTML files and requires each route to belong to exactly one family. The completed visual-reference cutoff remains the 39-page, 117-capture run described below; that receipt stays bound to its source revision. Family metadata supports navigation and filtering, while the existing focused checks continue to carry deeper interaction and alternate-mode questions when a concrete question forms.
 
 The [focused plan](../planning/context-canvas/css-modularization-and-visual-reference-plan.md) receives three implementation outcomes:
 

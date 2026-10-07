@@ -276,6 +276,8 @@ Choose the existing check that answers the page question under review:
 
 ```bash
 npm run test:context-canvas
+npm run check:debrief-image-derivatives
+npm run test:debrief-catalog-preview-browser
 npm run test:context-canvas-narrow-rails
 npm run test:prototype-control-labels
 npm run visual:check -- path/to/page.html --selector "main"
@@ -307,7 +309,12 @@ npm run visual:context-canvas-reference -- --phase before
 npm run visual:context-canvas-reference -- --phase after-about --family entry-and-catalog
 ```
 
-Each run records narrow, desktop, and wide full-page images, the source revision, route standing, browser observations, and a local route-group index under ignored `.visual-runs/context-canvas-reference/`.
+Each run requires all 46 current routes to have exactly one family, then records
+138 narrow, desktop, and wide full-page images, the source revision, route
+standing, browser observations, and a local route-group index under ignored
+`.visual-runs/context-canvas-reference/`. Capture success and observation review
+remain separate: inspect the generated `summary.json` before interpreting a
+passing exit status.
 
 ## Cloudflare proving surface
 

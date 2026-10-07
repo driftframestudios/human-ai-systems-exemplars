@@ -187,16 +187,16 @@ This is change-modeling terrain rather than a mechanical file split. Consumer tr
 
 ### Capture every top-level page
 
-The general utility discovers every top-level `context-canvas/*.html` page. This is simpler and more durable than maintaining a representative allowlist. The current sitemap has 34 entries and therefore remains a publication surface rather than capture authority. Family metadata organizes capture, review, and the ignored local family index; every route follows the same execution path, and an unmatched future route appears under `unassigned` rather than disappearing.
+The general utility discovers every top-level `context-canvas/*.html` page. This is simpler and more durable than maintaining a representative allowlist. The current sitemap has 34 entries and therefore remains a publication surface rather than capture authority. Family metadata organizes capture, review, and the ignored local family index; every route follows the same execution path. Discovery now requires exactly one family assignment, so a new or duplicate route classification fails visibly instead of entering an ambiguous group.
 
 | Review family | Routes |
 | --- | --- |
 | Entry and catalog | `404.html`, `index.html`, `debriefs.html` |
-| AI Systems and instruments | `ai-systems.html`, `concept-nursery.html`, `core-architectures-orientation-index.html`, `cross-platform-collaboration-cycle.html`, `grammar-family.html`, `hiring-surfaces-talent-agent-intake.html`, `metadata-blocks.html`, `planning-surface.html`, `poda.html`, `registry-goal-fidelity-routing.html`, `resting-concepts.html`, `shared-machinery.html`, `visualization-fidelity-atlas.html` |
+| AI Systems and instruments | `ai-systems.html`, `benchmark-orientation.html`, `collaboration-skills.html`, `concept-nursery.html`, `core-architectures-orientation-index.html`, `cross-platform-collaboration-cycle.html`, `grammar-family.html`, `hiring-surfaces-talent-agent-intake.html`, `maps-evaluations.html`, `metadata-blocks.html`, `planning-surface.html`, `poda.html`, `readable-tables-reusable-evidence.html`, `registry-goal-fidelity-routing.html`, `resting-concepts.html`, `shared-machinery.html`, `visualization-fidelity-atlas.html` |
 | Prompt conditions | `conditioning-field.html`, `prompt-side-conditions-practice.html` |
-| Composed Debriefs | `choose-your-player-humatics.html`, `ehr-discrete-genomic-result.html`, `ehr-interface-engine-replatform.html`, `ehr-pgx-alert-failure.html`, `ehr-three-front-doors.html`, `ehr-two-charts-one-result.html`, `fmi-clinical-trial-coordination.html` |
-| Enterprise readings | `distributed-inspection-harness.html`, `field-inspection-harness-replatform.html`, `fmi-lims-eln-replatforming.html`, `genomic-viewer-replatforming.html`, `initiative-costing.html`, `narrative-execution-gap-research-atlas.html`, `three-way-comparative-return.html`, `who-to-believe-reviews-platform.html` |
-| Historical exemplars | `spatial-capture-collaborative-memory.html`, `exemplar-gallery-list.html`, `exemplar-ideal-debrief.html`, `exemplar-index-landing.html`, `exemplar-maximal-debrief.html`, `exemplar-maximal-information-radiator.html` |
+| Composed Debriefs | `choose-your-player-humatics.html`, `ehr-discrete-genomic-result.html`, `ehr-interface-engine-replatform.html`, `ehr-pgx-alert-failure.html`, `ehr-three-front-doors.html`, `ehr-two-charts-one-result.html`, `fmi-clinical-trial-coordination.html`, `multilingual-clinical-vocabulary-practice.html`, `recoverable-enterprise-forms.html`, `spatial-capture-collaborative-memory.html` |
+| Enterprise readings | `distributed-inspection-harness.html`, `field-inspection-harness-replatform.html`, `fmi-lims-eln-replatforming.html`, `genomic-viewer-replatforming.html`, `initiative-costing.html`, `narrative-execution-gap-research-atlas.html`, `one-figure-several-readings.html`, `three-way-comparative-return.html`, `who-to-believe-reviews-platform.html` |
+| Historical exemplars | `exemplar-gallery-list.html`, `exemplar-ideal-debrief.html`, `exemplar-index-landing.html`, `exemplar-maximal-debrief.html`, `exemplar-maximal-information-radiator.html` |
 
 The route catalog also names standing—primary, instrument, Debrief, exemplar, or recovery—so a collaborator can understand why a page exists without teaching the capture runner separate logic.
 
@@ -306,7 +306,7 @@ The repository remains implementation authority and can diverge usefully from ad
 - Preserve the established load order, narrow behavior, print, reduced motion, forced colors, and embedded-instrument boundaries.
 - Compare About at desktop, narrow, and wide; use the full catalog as the source-level reference for unexpected shared effects.
 
-About is the best first move after Field Inspection because it is large, visually distinctive, canonically tied to Tiffany contracts, and sufficiently scoped to produce meaningful first-paint relief.
+About was selected as the first move after Field Inspection because it is large, visually distinctive, canonically tied to Tiffany contracts, and sufficiently scoped to produce meaningful first-paint relief. Its completed return now supplies the shared-core pattern described above.
 
 ### Wave 2 — Shared Machinery and AI Systems
 

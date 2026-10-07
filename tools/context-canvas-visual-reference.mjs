@@ -80,6 +80,7 @@ const FAMILIES = [
       "genomic-viewer-replatforming.html",
       "initiative-costing.html",
       "narrative-execution-gap-research-atlas.html",
+      "one-figure-several-readings.html",
       "three-way-comparative-return.html",
       "who-to-believe-reviews-platform.html"
     ]
@@ -147,12 +148,18 @@ function parseArgs(argv) {
 }
 
 function metadataFor(route) {
-  const family = FAMILIES.find((candidate) => candidate.routes.includes(route));
+  const matches = FAMILIES.filter((candidate) => candidate.routes.includes(route));
+  if (matches.length !== 1) {
+    throw new Error(
+      `${route} must belong to exactly one visual-reference family; found ${matches.length}`,
+    );
+  }
+  const family = matches[0];
   return {
     route,
-    family: family?.id || "unassigned",
-    familyTitle: family?.title || "Unassigned",
-    standing: STANDING_OVERRIDES.get(route) || family?.standing || "unassigned"
+    family: family.id,
+    familyTitle: family.title,
+    standing: STANDING_OVERRIDES.get(route) || family.standing
   };
 }
 
@@ -447,7 +454,7 @@ async function main() {
     return;
   }
 
-  const knownFamilies = new Set([...FAMILIES.map((family) => family.id), "unassigned"]);
+  const knownFamilies = new Set(FAMILIES.map((family) => family.id));
   if (options.family !== "all" && !knownFamilies.has(options.family)) {
     throw new Error(`Unknown family: ${options.family}. Available: ${[...knownFamilies].join(", ")}`);
   }

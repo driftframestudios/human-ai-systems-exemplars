@@ -187,11 +187,6 @@ ul {
 
 @media screen and (max-width: 770px) {
     .project--slug {
-        font-size: .5em;
-        letter-spacing: .02em;
-    }
-
-    .project--slug {
         font-size: .7em;
         letter-spacing: .03em;
     }
@@ -448,6 +443,8 @@ abbr {
     .prose-flow {
         column-count: 2;
         column-gap: var(--canvas-column-gap);
+        /* The solid rule keeps the column boundary when color-mix is unavailable. */
+        column-rule: 1px solid var(--canvas-rule);
         column-rule: 1px solid color-mix(in srgb, var(--canvas-rule) 58%, transparent);
         orphans: 3;
         widows: 3;

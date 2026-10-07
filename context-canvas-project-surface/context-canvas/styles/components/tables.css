@@ -30,6 +30,8 @@
     -webkit-overflow-scrolling: touch;
     inline-size: 100%;
     overflow-x: auto;
+    /* Physical fallback precedes the writing-mode-aware containment rule. */
+    overscroll-behavior-x: contain;
     overscroll-behavior-inline: contain;
     scrollbar-color: var(--canvas-rule-strong) transparent;
     scrollbar-gutter: stable;
@@ -185,6 +187,7 @@ table [data-type="number"],
 }
 
 .table--matrix tr > * + * {
+    border-inline-start: 1px solid var(--canvas-rule);
     border-inline-start: 1px solid color-mix(in srgb, var(--canvas-rule) 72%, transparent);
 }
 
@@ -241,6 +244,7 @@ table [data-type="number"],
 }
 
 .table--striped.table--matrix tbody tr:nth-child(even) > :first-child {
+    background: var(--canvas-paper-soft);
     background: color-mix(in srgb, var(--canvas-paper) 93%, var(--canvas-field));
 }
 

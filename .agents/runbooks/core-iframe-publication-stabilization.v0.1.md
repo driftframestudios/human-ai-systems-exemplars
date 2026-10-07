@@ -238,13 +238,16 @@ configured destinations; run it only when the current packet explicitly grants
 those values and output.
 
 ```sh
+npm run check:debrief-image-derivatives
 npm run test:prod-deployment
 npm run check:prod-projection
 npm run build:prod-projection
 npm run security:secrets:artifact -- .prod-projection-build
 ```
 
-The test establishes source-owned behavior with repository fixtures. The check
+The derivative check establishes eligible widths, exact dimensions, and
+accepted-source aspect ratios without rewriting tracked media. The production
+test establishes source-owned behavior with repository fixtures. The check
 composes the authorized configuration in temporary storage. The build writes
 the same plan to the ignored local projection, and the artifact scan inspects
 that exact output.
@@ -254,9 +257,10 @@ establish deterministic primary and iframe cPanel closures for the accepted
 source and exact aggregate package. They do not establish cPanel document-root
 identity, host access, deployment, or public availability.
 
-**Recovery and stop:** A missing dependency, output collision, path escape,
-private locator, placeholder publication URL, undeclared asset, package digest
-mismatch, or document-root ambiguity returns to #118 or #88. Preserve source
+**Recovery and stop:** An ineligible or malformed derivative, missing
+dependency, output collision, path escape, private locator, placeholder
+publication URL, undeclared asset, package digest mismatch, or document-root
+ambiguity returns to the owning image source, #118, or #88. Preserve source
 compatibility, repair the owning source or assembler, and rebuild both closures
 from one accepted coordinate.
 
