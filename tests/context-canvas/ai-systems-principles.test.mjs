@@ -8,6 +8,14 @@ const canvasRoot = resolve(
   repositoryRoot,
   "context-canvas-project-surface/context-canvas",
 );
+const aiSystemsCollectionId =
+  "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/ai-systems.html#collection";
+const humanAuthor = { "@type": "Person", name: "Vikrant Varun Kudesia" };
+const publishingCompany = {
+  "@type": "Organization",
+  name: "Driftframe Studios, Limited Liability Company",
+  url: "https://github.com/driftframestudios/human-ai-systems-exemplars",
+};
 
 const placements = new Map([
   ["ai-systems.html", {
@@ -25,13 +33,13 @@ const placements = new Map([
   ["collaboration-skills.html", {
     sectionId: "receipt-title",
     label: "First-use boundary",
-    text: "A skill offers a working method. The receiving collaboration decides whether the method fits, what authority it carries, and what material result counts.",
+    text: "A skill offers a working method. The receiving team decides whether the method fits, which authority applies, and what material result counts.",
     footer: "First-use boundary",
   }],
   ["concept-nursery.html", {
     sectionId: "lifecycle-title",
     label: "Concept Nursery boundary",
-    text: "Stage the page with a named destination; move it when its use settles; record the move so the next collaborator does not search twice.",
+    text: "Stage the page with a named destination; move it when its use settles; record the move so the next steward does not search twice.",
     footer: "Staging contract",
   }],
   ["core-architectures-orientation-index.html", {
@@ -130,6 +138,14 @@ function operatingPrinciples(source) {
   return [...source.matchAll(
     /<aside class="debrief-quote debrief-quote--operating-principle" aria-label="([^"]+)">([\s\S]*?)<\/aside>/gu,
   )];
+}
+
+function pageJsonLd(source) {
+  const payload = source.match(
+    /<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/u,
+  )?.[1];
+  assert.ok(payload, "missing JSON-LD payload");
+  return JSON.parse(payload);
 }
 
 function labelledOwner(source, sectionId) {
@@ -262,4 +278,49 @@ test("the visual reference includes all seventeen AI Systems routes", async () =
     .map((match) => match[1])
     .sort();
   assert.deepEqual(routes, [...placements.keys()].sort());
+});
+
+test("the AI Systems shelf exposes the complete family", async () => {
+  const source = await canvasFile("canvas-shell.js");
+  const aiShelf = source.match(
+    /\bai:\s*\[([\s\S]*?)\n\s*\],\n\s*debriefs:/u,
+  )?.[1] ?? "";
+
+  for (const route of placements.keys()) {
+    assert.match(aiShelf, new RegExp(`"${route.replaceAll(".", "\\.")}"`, "u"), route);
+  }
+});
+
+test("the AI Systems family identifies human authorship, publication, and collection ancestry", async () => {
+  for (const route of placements.keys()) {
+    const source = await canvasFile(route);
+    const metadata = pageJsonLd(source);
+
+    assert.deepEqual(metadata.author, humanAuthor, `${route}: author`);
+    assert.deepEqual(metadata.publisher, publishingCompany, `${route}: publisher`);
+    assert.match(metadata.dateModified, /^\d{4}-\d{2}-\d{2}$/u, `${route}: dateModified`);
+
+    if (route === "ai-systems.html") {
+      assert.equal(metadata["@id"], aiSystemsCollectionId, route);
+      assert.match(
+        source,
+        /class="anchor_ai_systems" aria-current="page">AI Systems<\/a>/u,
+        route,
+      );
+      continue;
+    }
+
+    const parents = Array.isArray(metadata.isPartOf)
+      ? metadata.isPartOf
+      : [metadata.isPartOf];
+    assert.ok(
+      parents.some((parent) => parent?.["@id"] === aiSystemsCollectionId),
+      `${route}: AI Systems collection ancestry`,
+    );
+    assert.match(
+      source,
+      /class="anchor_ai_systems" aria-current="location">AI Systems<\/a>/u,
+      route,
+    );
+  }
 });

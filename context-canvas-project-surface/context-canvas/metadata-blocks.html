@@ -36,17 +36,18 @@
       {
         "@context": "https://schema.org",
         "@type": "TechArticle",
+        "@id": "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/metadata-blocks.html#article",
         "headline": "Spec — Metadata Blocks for Site Readings & Debriefs (Scan Block v2 + Regulatory / Standards Block)",
         "description": "A six-field scan contract plus a conditional regulatory and standards block for Site Readings and Debriefs.",
         "url": "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/metadata-blocks.html",
         "datePublished": "2026-08-15",
-        "dateModified": "2026-08-25",
+        "dateModified": "2026-10-06",
         "inLanguage": "en-US",
-        "author": {"@type": "Organization", "name": "Driftframe Studios"},
-        "publisher": {"@type": "Organization", "name": "Driftframe Studios", "url": "https://github.com/driftframestudios/human-ai-systems-exemplars"},
+        "author": {"@type": "Person", "name": "Vikrant Varun Kudesia"},
+        "publisher": {"@type": "Organization", "name": "Driftframe Studios, Limited Liability Company", "url": "https://github.com/driftframestudios/human-ai-systems-exemplars"},
         "image": "https://schemas.radiantnull.com/context-canvas-project-surface/img/plot/metadata_scan_contract.svg",
         "about": ["Site Reading metadata", "Scan Block", "regulatory standards", "disclosure", "source precision", "content validation"],
-        "isPartOf": {"@type": "WebSite", "name": "Context Canvas Project Surface", "url": "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/"}
+        "isPartOf": {"@type": "CollectionPage", "@id": "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/ai-systems.html#collection", "name": "AI Systems — Goal-Faithful Collaboration", "url": "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/ai-systems.html"}
       }
     </script>
 </head>
@@ -56,7 +57,7 @@
       <nav aria-label="Primary">
         <ul class="nav__container">
           <li><a href="index.html" class="anchor_index">About</a></li>
-          <li><a href="ai-systems.html" class="anchor_ai_systems" aria-current="page">AI Systems</a></li>
+          <li><a href="ai-systems.html" class="anchor_ai_systems" aria-current="location">AI Systems</a></li>
           <li><a href="debriefs.html" class="anchor_debriefs">Debriefs</a></li>
         </ul>
       </nav>
@@ -111,7 +112,7 @@
             <p class="architecture-pair__label">01 · Continuity companion</p>
             <h2 id="threadkeeping-title" class="txt-h2 architecture-track-title">Threadkeeping carries the scan across the boundary where the session ends</h2>
             <p class="debrief-lead">
-              The metadata block says what an account claims. A small threadkeeping ledger says what the collaboration has
+              The metadata block says what an account claims. A small threadkeeping ledger records what the team has
               settled, what remains open, what was declined and why, and which move comes next. A visitor can use the pair
               to re-enter from the current position rather than reconstructing it from transcripts. The ledger stays outside
               the execution path and does not replace source documents, tests, schemas, decision records, or event logs.
@@ -125,8 +126,8 @@
                   <tr data-label="Where Threadkeeping lands against current practice: Use the transcript as the record"><th scope="row" data-label="What teams do today">Use the transcript as the record</th><td data-label="What the evidence shows">Reconstruction cost leaves most transcripts unread.</td><td data-label="What Threadkeeping does instead">Maintains a small standing object while work happens.</td><td data-label="Outcome and ability gained">The thread can be read in a minute rather than reconstructed over an hour.</td></tr>
                   <tr data-label="Where Threadkeeping lands against current practice: Summarize at the end"><th scope="row" data-label="What teams do today">Summarize at the end</th><td data-label="What the evidence shows">End summaries preserve conclusions while dropping their basis.</td><td data-label="What Threadkeeping does instead">Keeps what was ruled out alongside what was decided.</td><td data-label="Outcome and ability gained">Rejected options stay rejected for a visible reason.</td></tr>
                   <tr data-label="Where Threadkeeping lands against current practice: Trust a memory layer"><th scope="row" data-label="What teams do today">Trust a memory layer</th><td data-label="What the evidence shows">Flat notes do not preserve typed relations.</td><td data-label="What Threadkeeping does instead">Marks relations such as supports and supersedes explicitly.</td><td data-label="Outcome and ability gained">Later decisions can be traced to earlier ones.</td></tr>
-                  <tr data-label="Where Threadkeeping lands against current practice: Start each session from scratch"><th scope="row" data-label="What teams do today">Start each session from scratch</th><td data-label="What the evidence shows">Agents can maintain context, but stateless infrastructure is not built to hold the work’s whole line.</td><td data-label="What Threadkeeping does instead">Hands the standing object forward as opening context.</td><td data-label="Outcome and ability gained">Re-entry begins from the current position rather than zero.</td></tr>
-                  <tr data-label="Where Threadkeeping lands against current practice: Treat continuity as a model capability"><th scope="row" data-label="What teams do today">Treat continuity as a model capability</th><td data-label="What the evidence shows">Larger models have shown greater identity drift in multi-turn interaction.</td><td data-label="What Threadkeeping does instead">Keeps continuity in an artifact outside the model.</td><td data-label="Outcome and ability gained">The collaboration’s line is less dependent on a particular model.</td></tr>
+                  <tr data-label="Where Threadkeeping lands against current practice: Start each session from scratch"><th scope="row" data-label="What teams do today">Start each session from scratch</th><td data-label="What the evidence shows">A configured agent system can carry selected context during an active run, while stateless infrastructure does not preserve the work’s complete line across sessions.</td><td data-label="What Threadkeeping does instead">Provides the standing object as opening context.</td><td data-label="Outcome and ability gained">Re-entry begins from the current position rather than zero.</td></tr>
+                  <tr data-label="Where Threadkeeping lands against current practice: Treat continuity as a model capability"><th scope="row" data-label="What teams do today">Treat continuity as a model capability</th><td data-label="What the evidence shows">Larger models have shown greater identity drift in multi-turn interaction.</td><td data-label="What Threadkeeping does instead">Keeps continuity in an artifact outside the model.</td><td data-label="Outcome and ability gained">The working line depends less on any particular model.</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -134,7 +135,7 @@
 
             <div class="architecture-pair blueprint-pop-cards table-span-all" aria-label="Threadkeeping architecture beats">
               <article><p class="architecture-pair__label">Debrief</p><h3 class="txt-h3">Keep a lightweight memory surface beside the work</h3><p>Preserve decisions, rationale, open questions, and provisional status so the next pass can resume from shared ground.</p></article>
-              <article><p class="architecture-pair__label">The Snag</p><h3 class="txt-h3">Reasoning stays trapped in transient history</h3><p>Sessions span days and tools; a later collaborator sees conclusions without the basis, alternatives, or unresolved edge that produced them.</p></article>
+              <article><p class="architecture-pair__label">The Snag</p><h3 class="txt-h3">Reasoning stays trapped in transient history</h3><p>Sessions span days and tools; a later reader sees conclusions without the basis, alternatives, or unresolved edge that produced them.</p></article>
               <article><p class="architecture-pair__label">The Read</p><h3 class="txt-h3">Continuity is a distributed-cognition problem</h3><p>An external, inspectable surface can hold settled, provisional, declined, superseded, and open states without asking one participant to remember the whole thread.</p></article>
               <article><p class="architecture-pair__label">The Move</p><h3 class="txt-h3">Record decisions, assumptions, open questions, and the next move</h3><p>Review the threadkeeper before a refactor or goal shift. Keep sources and rationale close enough that the entry can be checked.</p></article>
               <article><p class="architecture-pair__label">The Cure</p><h3 class="txt-h3">Re-entry no longer requires reconstruction</h3><p>Rationale remains traceable, provisional material remains visibly provisional, and continuity outlives the current chat or tool.</p></article>
