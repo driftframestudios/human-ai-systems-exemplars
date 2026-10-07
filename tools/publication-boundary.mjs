@@ -93,6 +93,13 @@ export function assertTermsAbsent(source, terms, sourcePath = "public material")
   }
 }
 
+export function serializeJsonForHtmlScript(value, space = 2) {
+  return JSON.stringify(value, null, space)
+    .replaceAll("<", "\\u003c")
+    .replaceAll("\u2028", "\\u2028")
+    .replaceAll("\u2029", "\\u2029");
+}
+
 export async function assertExactFileInventory(root, expectedRelativePaths) {
   const expected = [...new Set(expectedRelativePaths)].sort();
   boundaryRequirement(
