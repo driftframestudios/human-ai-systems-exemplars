@@ -3,11 +3,11 @@
   "id": "https://schemas.vik.guru/skills/cost-and-ownership-analysis/projection.json",
   "kind": "portable_skill_contract",
   "name": "cost-and-ownership-analysis",
-  "description": "Maps scoped JavaScript functions to algorithmic cost, input boundaries, and mutation ownership. Applies when a review raises complexity, repeated preparation, regex or prototype-chain behavior, path handling, or state-aliasing concerns that should change an implementation decision.",
+  "description": "Maps scoped functions to algorithmic cost, input boundaries, and mutation ownership. Applies when a review raises complexity, helper reuse, repeated preparation, parsing, regex or prototype-chain behavior, path handling, or state-aliasing concerns that should change an implementation decision.",
   "semanticAuthorityRef": "../source/.agents/skills/cost-and-ownership-analysis/SKILL.md",
   "sourceRef": "../catalog.json#/skills/8",
   "contract": {
-    "what": "A source-grounded account of scoped JavaScript function cost, input boundaries, and mutation ownership, followed by the smallest authorized repair and its decision-changing evidence.",
+    "what": "A source-grounded account of scoped function cost, input boundaries, and mutation ownership, followed by the smallest authorized repair and its decision-changing evidence.",
     "when": [
       "Complexity or resource use may change a design, a security-shaped concern needs a precise mechanism, or state crosses validation, computation, rendering, exchange, and filesystem boundaries. Ordinary edits use the smallest relevant call path; a complete function inventory follows the requested scope."
     ],

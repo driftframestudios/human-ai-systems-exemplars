@@ -5,7 +5,7 @@
   "name": "secret-boundary-inspection",
   "description": "Produces a canary-proven, scope-explicit secret-material observation for a repository, exact proposed index, locally available history, or named artifact. Applies before snapshot, publication, delivery, or receiving-repository handoffs where credential-shaped material could travel.",
   "semanticAuthorityRef": "../source/.agents/skills/secret-boundary-inspection/SKILL.md",
-  "sourceRef": "../catalog.json#/skills/17",
+  "sourceRef": "../catalog.json#/skills/18",
   "contract": {
     "what": "A repository-grounded method for proving the selected detector path with a fresh synthetic canary, observing one named material scope, and returning a safe, bounded receipt or finding response.",
     "when": [

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/embedded-prototype-layout/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "embedded-prototype-layout",
+  "description": "Resolves prototype layout pressure at the actual parent and iframe boundary. Applies when a self-contained instrument works standalone but its embedded controls, tables, focus, shadows or onward route become difficult to use.",
+  "semanticAuthorityRef": "../source/.agents/skills/embedded-prototype-layout/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/10",
+  "contract": {
+    "what": "A measured parent/child layout contract that keeps a compact preview useful for deciding whether to continue in a full view, while preserving the instrument's meaningful interactions and comparisons.",
+    "when": [
+      "An iframe behaves differently from its standalone child document, or parent composition changes the space available to that embedded document."
+    ],
+    "boundaries": [
+      "The parent owns placement, reserved dimensions, title, embedding policy and full-view route. The child owns its internal document and controls. Packaging owns declared projection changes. Local canonical-child evidence, live hosted delivery, accessibility conformance and permission changes retain separate observations and authority."
+    ],
+    "result": "One source-owned repair or decision-ready disposition naming the parent viewport, content box, frame/client width, child viewport, affected behavior, smallest fitting layout change and evidence boundary. Each dimension is measured or explicitly unobserved with a request to its measurement owner."
+  },
+  "receivingUse": {
+    "job": "An iframe behaves differently from its standalone child document, or parent composition changes the space available to that embedded document.",
+    "materialResult": "One source-owned repair or decision-ready disposition naming the parent viewport, content box, frame/client width, child viewport, affected behavior, smallest fitting layout change and evidence boundary. Each dimension is measured or explicitly unobserved with a request to its measurement owner.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/embedded-prototype-layout/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}
