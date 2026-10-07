@@ -1074,6 +1074,23 @@ p#on-dark-iron-ore {
     text-transform: uppercase;
 }
 
+.about-folio-eyebrow--capability {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem .55rem;
+}
+
+.about-folio__head .about-folio-badge {
+    background: var(--about-cobalt);
+    border: .0625rem solid var(--about-ink);
+    border-radius: .22rem;
+    color: #fff;
+    display: inline-block;
+    padding: .18rem .38rem;
+    white-space: nowrap;
+}
+
 .about-folio--quality .about-folio-eyebrow {
     color: var(--about-deep-teal);
 }
@@ -1446,7 +1463,7 @@ p#on-dark-iron-ore {
 }
 
 @media (forced-colors: active) {
-    .about-page :is(.about-folio, .about-folio-lifecycle, .about-folio-ledger, .about-folio-fact, .about-folio-case, .about-folio-applicability li) {
+    .about-page :is(.about-folio, .about-folio-lifecycle, .about-folio-ledger, .about-folio-fact, .about-folio-case, .about-folio-applicability li, .about-folio-badge) {
         background: Canvas !important;
         border-color: CanvasText;
         box-shadow: none;
@@ -1470,7 +1487,8 @@ p#on-dark-iron-ore {
     .about-folio-fact,
     .about-folio-case,
     .about-folio-applicability li,
-    .about-folio-thread {
+    .about-folio-thread,
+    .about-folio-badge {
         background: #fff !important;
         box-shadow: none !important;
         color: #000 !important;
