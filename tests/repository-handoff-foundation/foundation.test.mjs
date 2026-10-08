@@ -25,6 +25,8 @@ import {
   FoundationError,
   admitFoundation,
   assertPortableTargetPath,
+  assertSourceReceivedProfileClosure,
+  assertTechnologyProfileSemanticClosure,
   checkFoundation,
   createFoundationPlan,
   verifyFoundation,
@@ -144,7 +146,7 @@ function entryByKey(result, key) {
   return entry;
 }
 
-test("the bundle check runs with only Node and the copied phase-one files", async (t) => {
+test("the bundle check runs with only Node and the copied working-bundle files", async (t) => {
   const isolatedRoot = await temporaryDirectory(t, "repository-handoff-isolated-");
   const isolatedTool = path.join(isolatedRoot, "tools/repository-handoff-foundation.mjs");
   await mkdir(path.dirname(isolatedTool), { recursive: true });
@@ -166,15 +168,13 @@ test("the bundle check runs with only Node and the copied phase-one files", asyn
   assert.equal(result.ok, true);
   assert.equal(result.mode, "check");
   assert.equal(result.execution, "read_only");
+  assert.equal(result.schemaVersion, "0.2");
   assert.equal(result.profileKey, "source-awaiting");
 });
 
 test("the dependency-free copied-bundle check rejects tampered schema authorities", async (t) => {
-  for (const schemaPath of [
-    "schema/foundation-manifest.schema.v0.1.json",
-    "schema/foundation-profile.schema.v0.1.json",
-    "schema/issue-route-seed.schema.v0.1.json",
-  ]) {
+  const manifest = await readJson(path.join(BUNDLE_ROOT, "foundation.manifest.json"));
+  for (const schemaPath of manifest.schemas.map((schema) => schema.sourcePath)) {
     await t.test(schemaPath, async (t) => {
       const isolatedRoot = await temporaryDirectory(t, "repository-handoff-schema-integrity-");
       const isolatedTool = path.join(isolatedRoot, "tools/repository-handoff-foundation.mjs");
@@ -205,28 +205,159 @@ test("the dependency-free copied-bundle check rejects tampered schema authoritie
 test("all artifact-local schemas compile under Ajv 2020 and accept their authorities", async () => {
   const documents = [
     {
-      name: "foundation manifest",
+      name: "foundation manifest v0.1",
       schema: "schema/foundation-manifest.schema.v0.1.json",
+    },
+    {
+      name: "foundation manifest v0.2",
+      schema: "schema/foundation-manifest.schema.v0.2.json",
       instance: "foundation.manifest.json",
     },
     {
-      name: "foundation profile",
+      name: "foundation profile v0.1",
       schema: "schema/foundation-profile.schema.v0.1.json",
       instance: "profiles/source-awaiting.profile.json",
+    },
+    {
+      name: "foundation profile v0.2",
+      schema: "schema/foundation-profile.schema.v0.2.json",
+      instance: "examples/illustrative-source-received.profile.example.json",
     },
     {
       name: "Issue route seed",
       schema: "schema/issue-route-seed.schema.v0.1.json",
       instance: "issue-route/source-awaiting.seed.example.json",
     },
+    {
+      name: "technology profile",
+      schema: "schema/technology-profile.schema.v0.1.json",
+      instance: "examples/illustrative-source-received.technology-profile.example.json",
+    },
+    {
+      name: "local materialization receipt",
+      schema: "schema/local-materialization-receipt.schema.v0.1.json",
+    },
   ];
   const ajv = new Ajv2020({ strict: true, allErrors: true, validateFormats: false });
 
   for (const document of documents) {
     const validate = ajv.compile(await readJson(path.join(BUNDLE_ROOT, document.schema)));
+    if (!document.instance) continue;
     const valid = validate(await readJson(path.join(BUNDLE_ROOT, document.instance)));
     assert.equal(valid, true, `${document.name}: ${JSON.stringify(validate.errors)}`);
   }
+});
+
+test("the illustrative source-received profile binds exact observed-source authorities", async () => {
+  const manifestBytes = await readFile(path.join(BUNDLE_ROOT, "foundation.manifest.json"));
+  const baseProfilePath = path.join(BUNDLE_ROOT, "profiles/source-awaiting.profile.json");
+  const profilePath = path.join(BUNDLE_ROOT, "examples/illustrative-source-received.profile.example.json");
+  const technologyPath = path.join(
+    BUNDLE_ROOT,
+    "examples/illustrative-source-received.technology-profile.example.json",
+  );
+  const profile = await readJson(profilePath);
+  const baseProfile = await readJson(baseProfilePath);
+  const technologyProfile = await readJson(technologyPath);
+  assert.equal(profile.sourceStanding, "source_received");
+  assert.equal(profile.foundationManifest.sha256, sha256Bytes(manifestBytes));
+  assert.equal(profile.baseProfile.key, baseProfile.key);
+  assert.equal(profile.baseProfile.sha256, sha256Bytes(await readFile(baseProfilePath)));
+  assert.deepEqual(profile.selectedModules, baseProfile.selectedModules);
+  assert.deepEqual(profile.selectedEntryKeys, baseProfile.selectedEntryKeys);
+  assert.deepEqual(profile.selectedIssueSeedKeys, baseProfile.selectedIssueSeedKeys);
+  assert.equal(profile.technologyProfile.sha256, sha256Bytes(await readFile(technologyPath)));
+  assert.equal(profile.technologyProfile.key, technologyProfile.key);
+  assert.equal(profile.technologyProfile.version, technologyProfile.version);
+  assert.deepEqual(
+    assertSourceReceivedProfileClosure(profile, baseProfile),
+    {
+      baseProfileKey: "source-awaiting",
+      selectedModules: 4,
+      selectedEntries: 7,
+      selectedIssueSeeds: 1,
+    },
+  );
+
+  const ajv = new Ajv2020({ strict: true, allErrors: true, validateFormats: false });
+  const validateProfile = ajv.compile(await readJson(
+    path.join(BUNDLE_ROOT, "schema/foundation-profile.schema.v0.2.json"),
+  ));
+  const validateTechnology = ajv.compile(await readJson(
+    path.join(BUNDLE_ROOT, "schema/technology-profile.schema.v0.1.json"),
+  ));
+  const missingTechnology = structuredClone(profile);
+  delete missingTechnology.technologyProfile;
+  assert.equal(validateProfile(missingTechnology), false);
+  const awaitingWithTechnology = structuredClone(profile);
+  awaitingWithTechnology.sourceStanding = "source_awaiting";
+  assert.equal(validateProfile(awaitingWithTechnology), false);
+  const invalidSemver = structuredClone(profile);
+  invalidSemver.version = "1.0.0-01";
+  assert.equal(validateProfile(invalidSemver), false);
+
+  assert.equal(
+    technologyProfile.source.digest.value,
+    sha256Bytes(Buffer.from(technologyProfile.source.digest.procedureInput, "utf8")),
+  );
+  assert.deepEqual(
+    assertTechnologyProfileSemanticClosure(technologyProfile),
+    { evidence: 1, facts: 4, coverage: 5, unresolved: 1 },
+  );
+
+  const unknownEvidence = structuredClone(technologyProfile);
+  unknownEvidence.observations.manifests[0].evidenceRefs[0] = "unknown-evidence";
+  assert.throws(
+    () => assertTechnologyProfileSemanticClosure(unknownEvidence),
+    foundationError("unknown_evidence_reference"),
+  );
+  const unknownFact = structuredClone(technologyProfile);
+  unknownFact.coverage[0].factKeys[0] = "unknown-fact";
+  assert.throws(
+    () => assertTechnologyProfileSemanticClosure(unknownFact),
+    foundationError("unknown_fact_reference"),
+  );
+  const duplicateFact = structuredClone(technologyProfile);
+  duplicateFact.observations.manifests[0].key = duplicateFact.observations.sourceLayout.editableSource[0].key;
+  assert.throws(
+    () => assertTechnologyProfileSemanticClosure(duplicateFact),
+    foundationError("duplicate_key"),
+  );
+  const crossAreaFact = structuredClone(technologyProfile);
+  crossAreaFact.coverage[1].factKeys[0] = "fixture-home-route";
+  assert.throws(
+    () => assertTechnologyProfileSemanticClosure(crossAreaFact),
+    foundationError("fact_area_mismatch"),
+  );
+  const divergentSelection = structuredClone(profile);
+  divergentSelection.selectedEntryKeys[0] = "unrelated.entry";
+  assert.throws(
+    () => assertSourceReceivedProfileClosure(divergentSelection, baseProfile),
+    foundationError("derived_profile_selection"),
+  );
+  const mismatchedGitRevision = structuredClone(technologyProfile);
+  mismatchedGitRevision.source.revision = { kind: "git_commit", value: "a".repeat(40) };
+  mismatchedGitRevision.source.digest = {
+    algorithm: "sha256",
+    scope: "git_tree",
+    procedure: "git_ls_tree_full_z_sha256_v1",
+    procedureInput: "b".repeat(40),
+    value: "c".repeat(64),
+  };
+  assert.throws(
+    () => assertTechnologyProfileSemanticClosure(mismatchedGitRevision),
+    foundationError("source_digest_revision"),
+  );
+
+  const credentialShapedObservation = structuredClone(technologyProfile);
+  credentialShapedObservation.observations.environmentVariables = [{
+    key: "example-api-token",
+    name: "EXAMPLE_API_TOKEN",
+    standing: "declared_required",
+    evidenceRefs: ["fixture-declaration"],
+    value: "credential-shaped-material",
+  }];
+  assert.equal(validateTechnology(credentialShapedObservation), false);
 });
 
 test("a clean receiving tree produces a deterministic create-only plan without mutation", async (t) => {
@@ -408,6 +539,14 @@ test("target inspection refuses symbolic-link components and special files", asy
 });
 
 test("manifest admission rejects unsafe and case-colliding target paths", async (t) => {
+  await t.test("manifest patch versions use canonical SemVer integers", async (t) => {
+    const bundleRoot = await copyBundle(t);
+    await mutateManifest(bundleRoot, (manifest) => {
+      manifest.version = "0.1.01";
+    });
+    await assert.rejects(admitFoundation({ bundleRoot }), foundationError("version"));
+  });
+
   await t.test("parent traversal", async (t) => {
     const bundleRoot = await copyBundle(t);
     await mutateManifest(bundleRoot, (manifest) => {
@@ -478,7 +617,7 @@ test("profile admission bounds declared fan-out before allocating profile fixtur
 test("portable-path schema and runtime admission agree on boundary examples", async () => {
   const Ajv2020 = (await import("ajv/dist/2020.js")).default;
   const manifestSchema = await readJson(
-    path.join(BUNDLE_ROOT, "schema/foundation-manifest.schema.v0.1.json"),
+    path.join(BUNDLE_ROOT, "schema/foundation-manifest.schema.v0.2.json"),
   );
   const ajv = new Ajv2020({ allErrors: true, strict: true });
   ajv.addSchema(manifestSchema);
@@ -624,6 +763,8 @@ test("JSON authorities and YAML readability projections retain exact bytes", asy
   for (const [jsonPath, yamlPath] of [
     ["profiles/source-awaiting.profile.json", "profiles/source-awaiting.profile.yaml"],
     ["issue-route/source-awaiting.seed.example.json", "issue-route/source-awaiting.seed.example.yaml"],
+    ["examples/illustrative-source-received.profile.example.json", "examples/illustrative-source-received.profile.example.yaml"],
+    ["examples/illustrative-source-received.technology-profile.example.json", "examples/illustrative-source-received.technology-profile.example.yaml"],
   ]) {
     assert.deepEqual(
       await readFile(path.join(BUNDLE_ROOT, jsonPath)),

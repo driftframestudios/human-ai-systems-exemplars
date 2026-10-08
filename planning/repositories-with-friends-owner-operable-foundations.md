@@ -60,15 +60,17 @@ observed handoff:
 | [#417 — Exercise the repository handoff foundation through the Context Canvas transfer](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/417) | The task-bound exercise, reusable-artifact feedback, and skill disposition | The transferred repository completes one ordinary post-transfer Issue-to-change cycle and returns decision-changing friction |
 
 Issue #416 has settled the first working skill and runbook. The current front
-is #415: its phase-one source-awaiting bundle now defines the portable
-manifest, explicit profile and Issue-seed selection, dependency-free
-admission, deterministic read-only planning, and owner-preserving verification
-boundary. This phase gives a receiving repository an inspectable foundation
-before its application stack is known; it leaves installation, live Issue
-materialization, received-source profiling, and the handoff receipt to the
-next #415 phases. #417 then binds the accepted artifacts to the live receiving
-repository. This is a revisable work route. It expresses work relations rather
-than a maturity score, and live GitHub state continues to lead on re-entry.
+is #415. Its accepted source-awaiting bundle defines the portable manifest,
+explicit profile and Issue-seed selection, dependency-free admission,
+deterministic planning, and owner-preserving verification boundary. The next
+working phase adds a plan-confirmed create-only installer, deterministic local
+receipt, and source-received technology-profile contracts. Together, these
+phases give a receiving repository an inspectable, locally materializable
+foundation while received source continues to determine the application
+stack. The two-pass Issue materializer remains the next #415 receiver. #417
+then binds the accepted artifacts to the live receiving repository. This is a
+revisable work route. It expresses work relations rather than a maturity score,
+and live GitHub state continues to lead on re-entry.
 
 ### Context Canvas direct-transfer sequence
 
@@ -135,11 +137,11 @@ by its source and owner decisions.
 
 ## Event-triggered context routing
 
-Repository guidance is most useful near a decision. The foundation should
-surface a small context cue when an observable event changes the next action,
+Repository guidance is most useful near a decision. The foundation surfaces a
+small context cue when an observable event changes the next action,
 then return to the live owner:
 
-| Repository event | Context to surface | Decision it should support |
+| Repository event | Context to surface | Decision it supports |
 | --- | --- | --- |
 | A request arrives before a receiving Issue exists, or changes the current chain | Issue-writing capsule and current Issue relations | Create or revise one outcome-bearing Issue and name its next receiver |
 | Acceptance evidence satisfies an Issue or reveals a separate outcome | Acceptance criteria, current evidence, and open boundary | Prepare closure or form one distinct follow-on Issue |
@@ -209,9 +211,9 @@ mechanics and real turn savings.
 A fitting npm carrier can use the platform's conventional initializer mapping:
 `npm init @radiantnull/repository-foundation@<version>` resolves to a scoped
 `@radiantnull/create-repository-foundation` package. Its plan/apply/verify
-route should preserve owner-edited files, keep lifecycle scripts as an
-explicit decision, and offer advisory findings. An accepted receiving Issue
-authorizes any dependency-version change.
+route preserves owner-edited files, keeps lifecycle scripts as an explicit
+decision, and offers advisory findings. An accepted receiving Issue authorizes
+any dependency-version change.
 
 ### 2. [Decision Operations Workbench — Issue #419](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/419)
 
@@ -219,15 +221,16 @@ A separate repository program could serve executives, project managers, and
 other decision owners who need forecasting, data analysis, scenario records,
 and continual handoffs from technical colleagues. Its Python environment can
 travel through `uv`, with starter Issues that connect evidence, assumptions,
-decision rights, and revisable forecasts. This is a distinct product that
-should form from a real receiving use. The colleague's site repository keeps
-its direct showcase purpose.
+decision rights, and revisable forecasts. This distinct product forms from a
+real receiving use. The colleague's site repository keeps
+its direct showcase purpose. The first named use determines the workbench's
+data model, interface, and evidence route.
 
 ### 3. [RadiantNull Discovery Anchor — Issue #420](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/420)
 
 A small public repository could provide a stable discovery root for published
 skills, foundation releases, compatibility notes, and authoritative source
-routes. It should stay quiet by default: versioned source repositories retain
+routes. It stays quiet by default: versioned source repositories retain
 semantic authority, while the anchor helps collaborators find the current
 owner and fitting release. Formation waits for settled publication identity
 and a clear relationship with `schemas.radiantnull.com`.
@@ -238,7 +241,7 @@ One self-contained Human–AI Systems Exemplar could become a compact repository
 seed with its own visitor surface, collaboration vocabulary, Issue route, and
 small dependency foundation. The Cross-Functional Investment Studio is a
 strong first candidate because its rail, editable model, and decision-bearing
-handoff already form a coherent experience. This concept should follow #417:
+handoff already form a coherent experience. This concept follows #417:
 it can become the second materially different receiver whose use shows whether
 the handoff skill is ready for `stable` standing.
 
@@ -275,11 +278,13 @@ own evidence and receiving use.
 
 1. Read live Issues #415 and #417 and name any difference from this account;
    use closed Issue #416 as the accepted skill-and-runbook input.
-2. Continue #415 from the source-awaiting bundle into a local apply or install
-   route with source-received and technology-profile contracts. Preserve the
-   incoming application's runtime and dependency direction, and give every
-   mutation a plan, recovery coordinate, and explicit authority boundary.
-3. Add the Issue materializer only after the local file route is recoverable.
+2. Complete review and delivery of #415's plan-confirmed create-only installer,
+   deterministic local receipt, and source-received technology-profile
+   contracts. Preserve the incoming application's runtime and dependency
+   direction, and give every mutation a plan, recovery coordinate, and
+   explicit authority boundary.
+3. Add the Issue materializer after the local file route has an accepted
+   recovery boundary.
    Use the declared seed as bootstrap and recovery input while live owner-edited
    Issues remain current authority.
 4. In `context-canvas`, resume at Issue #1 until source intake passes to the

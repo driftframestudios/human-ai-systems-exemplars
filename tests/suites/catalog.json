@@ -351,7 +351,8 @@
       "family": "repository-handoff-foundation",
       "kind": "node-test",
       "members": [
-        "tests/repository-handoff-foundation/foundation.test.mjs"
+        "tests/repository-handoff-foundation/foundation.test.mjs",
+        "tests/repository-handoff-foundation/install.test.mjs"
       ],
       "profile": "node-source",
       "command": {
@@ -363,7 +364,7 @@
         "appendMembers": true
       },
       "owner": "tests/README.md",
-      "scope": "Ajv 2020 schema compilation plus dependency-free admission, read-only target comparison, owner-preserving collisions, filesystem boundaries, Issue-route closure and exact projections for the phase-one foundation bundle.",
+      "scope": "Ajv 2020 schema compilation plus dependency-free admission, plan-confirmed create-only installation, deterministic receipts, owner-preserving collisions, filesystem and rollback boundaries, Issue-route closure and exact projections for the working foundation bundle.",
       "aliases": [
         "test:repository-handoff-foundation"
       ]
@@ -2271,7 +2272,8 @@
           "tests/public-references/materializer.test.mjs"
         ],
         "test:repository-handoff-foundation": [
-          "tests/repository-handoff-foundation/foundation.test.mjs"
+          "tests/repository-handoff-foundation/foundation.test.mjs",
+          "tests/repository-handoff-foundation/install.test.mjs"
         ],
         "test:context-canvas": [
           "tests/context-canvas/*.test.mjs"
