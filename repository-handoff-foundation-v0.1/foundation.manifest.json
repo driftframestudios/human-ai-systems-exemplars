@@ -3,7 +3,7 @@
   "schemaVersion": "0.2",
   "artifactType": "repository_handoff_foundation_manifest",
   "key": "repository-handoff-foundation-v0.1",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "defaultProfileKey": "source-awaiting",
   "schemas": [
     {
@@ -35,6 +35,18 @@
       "sourcePath": "schema/issue-route-seed.schema.v0.1.json",
       "id": "urn:repository-handoff-foundation:schema:issue-route-seed:v0.1",
       "sha256": "cfc9a70461a52386085acf66656a8a103600ebfb75948c05b819d1bd7da8fe9b"
+    },
+    {
+      "key": "issue-route-bindings",
+      "sourcePath": "schema/issue-route-bindings.schema.v0.1.json",
+      "id": "urn:repository-handoff-foundation:schema:issue-route-bindings:v0.1",
+      "sha256": "e92a82089a436c34c899ef69a93bceb7960a095b5c8b826165841c51dca9e3f5"
+    },
+    {
+      "key": "issue-route-materialization-receipt",
+      "sourcePath": "schema/issue-route-materialization-receipt.schema.v0.1.json",
+      "id": "urn:repository-handoff-foundation:schema:issue-route-materialization-receipt:v0.1",
+      "sha256": "24bb9c37403b2a0208b9d82f8d87b6ed46bad30d056279e163bccbdd36a10f5e"
     },
     {
       "key": "technology-profile",

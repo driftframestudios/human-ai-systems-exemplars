@@ -1,0 +1,374 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:repository-handoff-foundation:schema:issue-route-materialization-receipt:v0.1",
+  "title": "Repository handoff Issue route materialization receipt v0.1",
+  "description": "A deterministic receipt that records one admitted Issue route seed, any operator-supplied bindings, and the complete bindings resolved from the exact GitHub repository resources materialized or reconciled during an authorized run.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "artifactType",
+    "schemaAuthority",
+    "materializerVersion",
+    "routeKey",
+    "seedSha256",
+    "admittedBindingsSha256",
+    "resolvedBindingsSha256",
+    "confirmedPlanSha256",
+    "verifiedPlanSha256",
+    "repository",
+    "bootstrapFrontKey",
+    "labels",
+    "milestones",
+    "issues",
+    "operationBoundary",
+    "recovery",
+    "coverageBoundary",
+    "nextOwnerAction"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "urn:repository-handoff-foundation:schema:issue-route-materialization-receipt:v0.1"
+    },
+    "schemaVersion": {
+      "const": "0.1"
+    },
+    "artifactType": {
+      "const": "repository_handoff_issue_route_materialization_receipt"
+    },
+    "schemaAuthority": {
+      "$ref": "#/$defs/schemaAuthority"
+    },
+    "materializerVersion": {
+      "description": "The canonical semantic version of the Issue route materializer that produced this receipt.",
+      "$ref": "#/$defs/semanticVersion"
+    },
+    "routeKey": {
+      "description": "The semantic key of the admitted Issue route seed materialized by this run.",
+      "$ref": "#/$defs/stableKey"
+    },
+    "seedSha256": {
+      "description": "The SHA-256 of the exact admitted Issue route seed bytes.",
+      "$ref": "#/$defs/sha256"
+    },
+    "admittedBindingsSha256": {
+      "description": "The SHA-256 of the canonical operator-supplied bindings document admitted for this run, or null when the operator supplied no bindings document.",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/sha256"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "resolvedBindingsSha256": {
+      "description": "The SHA-256 of the canonical complete bindings document resolved from this receipt's GitHub resource coordinates.",
+      "$ref": "#/$defs/sha256"
+    },
+    "confirmedPlanSha256": {
+      "description": "The exact operator-confirmed plan digest that authorized apply, or null when the receipt is a read-only verification projection.",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/planSha256"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "verifiedPlanSha256": {
+      "description": "The digest of the final live-state plan whose semantic coordinates and postconditions produced this receipt.",
+      "$ref": "#/$defs/planSha256"
+    },
+    "repository": {
+      "$ref": "#/$defs/repositoryIdentity"
+    },
+    "bootstrapFrontKey": {
+      "description": "The semantic key of the seed's initial Issue; the same key resolves through the issues map. Live Issues own later traversal state.",
+      "$ref": "#/$defs/stableKey"
+    },
+    "labels": {
+      "$ref": "#/$defs/materializedLabels"
+    },
+    "milestones": {
+      "$ref": "#/$defs/materializedMilestones"
+    },
+    "issues": {
+      "$ref": "#/$defs/materializedIssues"
+    },
+    "operationBoundary": {
+      "$ref": "#/$defs/operationBoundary"
+    },
+    "recovery": {
+      "$ref": "#/$defs/recovery"
+    },
+    "coverageBoundary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "pattern": "^\\S(?:[\\s\\S]*\\S)?$"
+    },
+    "nextOwnerAction": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "pattern": "^\\S(?:[\\s\\S]*\\S)?$"
+    }
+  },
+  "$defs": {
+    "stableKey": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+    },
+    "semanticVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-((?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "planSha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "immutableId": {
+      "type": "integer",
+      "description": "The immutable positive integer GitHub database identity for this resource.",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "repositoryFullName": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 140,
+      "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?/(?!\\.{1,2}$)[A-Za-z0-9._-]{1,100}$"
+    },
+    "schemaAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "sha256"
+      ],
+      "properties": {
+        "id": {
+          "const": "urn:repository-handoff-foundation:schema:issue-route-materialization-receipt:v0.1"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "repositoryIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "immutableId",
+        "fullName"
+      ],
+      "properties": {
+        "immutableId": {
+          "$ref": "#/$defs/immutableId"
+        },
+        "fullName": {
+          "$ref": "#/$defs/repositoryFullName"
+        }
+      }
+    },
+    "materializedLabel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "immutableId",
+        "name"
+      ],
+      "properties": {
+        "immutableId": {
+          "$ref": "#/$defs/immutableId"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50,
+          "pattern": "^\\S(?:[\\s\\S]*\\S)?$"
+        }
+      }
+    },
+    "materializedMilestone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "immutableId",
+        "number",
+        "title"
+      ],
+      "properties": {
+        "immutableId": {
+          "$ref": "#/$defs/immutableId"
+        },
+        "number": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^\\S(?:[\\s\\S]*\\S)?$"
+        }
+      }
+    },
+    "materializedIssue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "immutableId",
+        "number",
+        "title"
+      ],
+      "properties": {
+        "immutableId": {
+          "$ref": "#/$defs/immutableId"
+        },
+        "number": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^\\S(?:[\\s\\S]*\\S)?$"
+        }
+      }
+    },
+    "materializedLabels": {
+      "type": "object",
+      "description": "Each property name is one seed label semantic key and each value is its immutable GitHub identity plus observed name.",
+      "minProperties": 1,
+      "maxProperties": 64,
+      "patternProperties": {
+        "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$": {
+          "$ref": "#/$defs/materializedLabel"
+        }
+      },
+      "additionalProperties": false
+    },
+    "materializedMilestones": {
+      "type": "object",
+      "description": "Each property name is one seed milestone semantic key and each value is its immutable GitHub identity, repository-local number, and observed title.",
+      "minProperties": 1,
+      "maxProperties": 32,
+      "patternProperties": {
+        "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$": {
+          "$ref": "#/$defs/materializedMilestone"
+        }
+      },
+      "additionalProperties": false
+    },
+    "materializedIssues": {
+      "type": "object",
+      "description": "Each property name is one seed Issue semantic key and each value is its immutable GitHub identity, repository-local number, and observed title.",
+      "minProperties": 2,
+      "maxProperties": 128,
+      "patternProperties": {
+        "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$": {
+          "$ref": "#/$defs/materializedIssue"
+        }
+      },
+      "additionalProperties": false
+    },
+    "operationBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mutationPolicy",
+        "existingResourcePolicy",
+        "linkResolution",
+        "applyCoordinationPrecondition",
+        "liveIssueAuthorityAfterMaterialization",
+        "gitRepositoryContentMutation",
+        "githubRepositorySettingsMutation",
+        "localReceiptMutation"
+      ],
+      "properties": {
+        "mutationPolicy": {
+          "const": "create_missing_resources_and_finalize_pending_issues"
+        },
+        "existingResourcePolicy": {
+          "const": "preserve_and_report"
+        },
+        "linkResolution": {
+          "const": "two_pass"
+        },
+        "applyCoordinationPrecondition": {
+          "description": "An operator-held precondition for this run; the receipt records the declaration and does not prove exclusive GitHub execution.",
+          "const": "one_active_coordinator_per_repository_route"
+        },
+        "liveIssueAuthorityAfterMaterialization": {
+          "const": true
+        },
+        "gitRepositoryContentMutation": {
+          "const": "none"
+        },
+        "githubRepositorySettingsMutation": {
+          "const": "none"
+        },
+        "localReceiptMutation": {
+          "const": "create_only"
+        }
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strategy",
+        "knownGoodCoordinate",
+        "rule"
+      ],
+      "properties": {
+        "strategy": {
+          "const": "seed_bindings_and_live_state_reconciliation"
+        },
+        "knownGoodCoordinate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "routeKey",
+            "seedSha256",
+            "resolvedBindingsSha256",
+            "repositoryImmutableId"
+          ],
+          "properties": {
+            "routeKey": {
+              "$ref": "#/$defs/stableKey"
+            },
+            "seedSha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "resolvedBindingsSha256": {
+              "description": "The SHA-256 of the canonical complete bindings document resolved at this known-good coordinate.",
+              "$ref": "#/$defs/sha256"
+            },
+            "repositoryImmutableId": {
+              "$ref": "#/$defs/immutableId"
+            }
+          }
+        },
+        "rule": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "pattern": "^\\S(?:[\\s\\S]*\\S)?$"
+        }
+      }
+    }
+  }
+}

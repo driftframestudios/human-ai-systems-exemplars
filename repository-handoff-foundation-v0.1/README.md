@@ -9,6 +9,10 @@ The bundle stays intentionally small. It carries four modules—orientation,
 Concept Nursery, threadkeeping, and references—plus a source-awaiting profile
 and a two-Issue semantic route. A plan-confirmed, create-only installer can
 place absent foundation files while receiving-owner content remains current.
+A separate plan-confirmed materializer can create the route's missing GitHub
+labels, milestones, and Issues, resolve their repository-local links, and
+record the resulting coordinates while preserving owner work observed before
+finalization.
 Received source supplies the runtime, package manager, lockfile, routes,
 visual direction, and application behavior.
 
@@ -46,6 +50,9 @@ npm run check:repository-handoff-foundation
 npm run plan:repository-handoff-foundation -- --target /path/to/receiving-repository
 npm run apply:repository-handoff-foundation -- --target /path/to/receiving-repository --confirm-plan sha256:<digest-from-plan>
 npm run verify:repository-handoff-foundation -- --target /path/to/receiving-repository
+npm run plan:repository-handoff-issue-route -- --repo OWNER/REPOSITORY
+npm run apply:repository-handoff-issue-route -- --repo OWNER/REPOSITORY --confirm-repository OWNER/REPOSITORY --confirm-plan sha256:<digest-from-plan> --receipt-out /existing/local/directory/issue-route-receipt.json
+npm run verify:repository-handoff-issue-route -- --repo OWNER/REPOSITORY --receipt /path/to/accepted-issue-route-receipt.json
 ```
 
 `check` admits the bundle and verifies its schema identities and bytes,
@@ -71,6 +78,58 @@ for review. The deterministic receipt lives at
 filesystem paths; Git, GitHub, network, Issue, account, and publication state
 remain with their existing owners.
 
+The Issue-route commands address GitHub state separately. `plan` reads the
+bounded label, milestone, and Issue collections, including closed items, and
+filters pull requests from the shared Issues endpoint. It also renders every
+eventual request with maximum-width Issue numbers and checks its field and
+reserved-marker boundaries before apply. `apply` requires the exact canonical
+repository name, operator-confirmed plan digest, and an unused receipt path.
+Apply relies on an operator-held precondition: one active coordinator works on
+the repository route during the run. The receipt records that precondition;
+the materializer does not acquire a shared GitHub lock. It sends mutations
+serially with a pause between writes, creates missing labels and milestones,
+and creates each missing Issue with a recognizable pending body. After GitHub
+supplies Issue numbers, it requires each pending Issue's
+identity, title, body, active label set, and milestone to match before it writes
+the resolved body. An observed repository-owner edit remains intact. An
+operator can restore the exact generated pending state for automatic
+finalization or reconcile the edited Issue outside this apply. Automatic apply
+resumes only after a fresh plan observes the exact generated pending state.
+GitHub supplies platform identities; the admitted seed supplies the initial
+route; accepted live Issues supply current owner-authored work.
+
+The materializer treats titles as orientation rather than identity. A title
+match becomes a review suggestion. An accepted receipt, a semantic marker, or
+an explicitly supplied binding identifies a live resource; disagreement among
+those sources holds the run before another mutation. A final receipt records
+the operator-confirmed plan, the verified live-state plan, immutable repository
+and resource identities, the seed digest, an optional operator-supplied binding
+digest, the resolved full-coordinate binding digest, the bootstrap Issue, the
+coverage boundary, and the next owner action. The receipt parent directory
+must already exist, and the output path must be unused. Before GitHub mutation,
+the writer proves that the resolved directory supports create-only files,
+durable file and directory writes, and same-directory hard links. It rejects
+symbolic-link and special-file targets, synchronizes the receipt and its
+directory entry, and creates the receipt once through a bounded no-follow
+route.
+
+The command follows GitHub's [REST guidance for serial
+requests](https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2026-03-10)
+and uses the documented [Issues](https://docs.github.com/en/rest/issues/issues),
+[labels](https://docs.github.com/en/rest/issues/labels), and
+[milestones](https://docs.github.com/en/rest/issues/milestones) resources. A
+read-only plan needs repository metadata and Issue visibility; apply needs
+Issue write permission for the named repository. Use an authenticated `gh`
+session with push access so GitHub assigns the seeded labels and milestone to
+new Issues. GitHub can silently omit those fields at lower access; the
+materializer detects the incomplete pending state and stops before any resolved
+body update. An archived matching label causes the materializer to hold the
+route because GitHub keeps that label outside Issue assignment. A network or
+API failure stops the current run. The next run
+reads live state and produces a fresh plan; the operator decides whether that
+plan should continue. A held `verify` result exits unsuccessfully so automation
+cannot treat an unresolved route as complete.
+
 Receipt dispositions express stable ownership policy rather than a transient
 byte comparison. `exact_source` identifies generator-owned bytes;
 `receiving_owner_current` identifies content whose receiving owner may revise.
@@ -95,6 +154,8 @@ repository-handoff-foundation-v0.1/
 │   ├── foundation-manifest.schema.v0.2.json
 │   ├── foundation-profile.schema.v0.1.json
 │   ├── foundation-profile.schema.v0.2.json
+│   ├── issue-route-bindings.schema.v0.1.json
+│   ├── issue-route-materialization-receipt.schema.v0.1.json
 │   ├── issue-route-seed.schema.v0.1.json
 │   ├── local-materialization-receipt.schema.v0.1.json
 │   └── technology-profile.schema.v0.1.json
@@ -230,15 +291,63 @@ Typed relation closure is explicit:
   Issue-shaped next receiver resolves through a stable key in the seed.
 
 The separate Markdown body sources carry the owner-readable outcome and work.
-Their SHA-256 digests bind the seed to the exact reviewed bodies. Structured
+Their SHA-256 digests bind the seed to the exact admitted bodies. Structured
 acceptance, authority, relations, and next receivers remain available for a
 materializer and for owner-readable rendering.
 
 Materialization uses two passes so every new Issue can receive its live number
-before cross-links are rendered. After verified materialization, live GitHub
-Issues become current authority. Repeat runs preserve live owner edits and
-report semantic differences; the seed remains bootstrap, comparison, and
-recovery input.
+before cross-links are rendered. During that short interval, the materializer
+recognizes the complete generated pending state as eligible for automatic
+finalization. The coordinator waits before the final read, then checks the
+Issue identity, title, body, active label set, and milestone immediately before
+PATCH. GitHub REST conditional requests do not cover this unsafe method, so an
+edit committed after that final read can be overwritten by the PATCH. Keep one
+coordinator active and leave the generated pending Issues quiet during this
+short finalization interval. Any edit observed before the final read stays in
+place and holds the route for reconciliation. The final full replan verifies
+the state GitHub returns before receipt creation; it cannot recover content a
+nonconditional PATCH already replaced. After the materializer verifies the
+completed route and writes the receipt, live GitHub Issues become current
+authority. Repeat runs preserve observed owner edits and report semantic
+differences; the seed remains bootstrap, comparison, and recovery input.
+
+The binding schema supports an explicit, operator-supplied identity map when a
+pre-existing repository has matching resources without semantic markers.
+Bindings may cover a subset of seed keys. The final receipt covers every seed
+label, milestone, and Issue exactly once. Both contracts use semantic-keyed
+maps so a collaborator can compare meaning independently of collection order.
+`bootstrapFrontKey` names where the seeded route begins; live Issues own later
+status and traversal.
+
+A binding document names the exact seed and repository before mapping any
+operator-confirmed pre-existing coordinates:
+
+```json
+{
+  "$schema": "urn:repository-handoff-foundation:schema:issue-route-bindings:v0.1",
+  "schemaVersion": "0.1",
+  "artifactType": "repository_handoff_issue_route_bindings",
+  "routeKey": "source-awaiting-owner-operable-route",
+  "seedSha256": "6fd76d35d5275f238e8581682d5d0c9626abf1e7e4fd420603255c4639847823",
+  "repository": {
+    "immutableId": 123456789,
+    "fullName": "OWNER/REPOSITORY"
+  },
+  "labels": {},
+  "milestones": {},
+  "issues": {
+    "source-intake": {
+      "immutableId": 987654321,
+      "number": 1,
+      "title": "Receive and characterize the actual site source"
+    }
+  }
+}
+```
+
+Review the file, then pass it with `--bindings /path/to/bindings.json`. The plan
+compares its immutable identities with semantic markers and any accepted
+receipt before it proposes a write.
 
 ## Delivery forms
 
@@ -268,12 +377,17 @@ source, target, mode, and derivation note.
 A successful structural check establishes the digest-bound schema bytes and
 identities, keys, references, bounded source reads, cooperative local-tree
 observations, exact projections, and digests it exercised. It leaves
-application behavior open for the received
-source and its fitting checks. Focused temporary-repository tests establish
-create-only installation, collision preservation, stale-plan refusal,
-deterministic receipts, and identity-guarded rollback for the exercised local
-states. A live, explicitly authorized GitHub exercise can establish Issue
-materialization and preservation against the platform at that time.
+application behavior open for the received source and its fitting checks.
+Focused temporary-repository tests establish create-only installation,
+collision preservation, stale-plan refusal, deterministic receipts, and
+identity-guarded rollback for the exercised local states. In-memory GitHub
+adapter tests establish the two-pass request sequence, identity reconciliation,
+owner-edit preservation after live Issues become current authority, bounded
+pagination, pull-request filtering, archived-label and dropped-metadata holds,
+rendered-request preflight, stale-plan refusal, failed-verification signaling,
+and create-only receipt paths for the exercised cases. A live, explicitly
+authorized GitHub exercise can establish current platform behavior and
+preservation at that time.
 
 When a target already exists, preserve it and return the collision to its
 receiving owner. When source or profile facts change, retain the last verified

@@ -62,15 +62,19 @@ observed handoff:
 Issue #416 has settled the first working skill and runbook. The current front
 is #415. Its accepted source-awaiting bundle defines the portable manifest,
 explicit profile and Issue-seed selection, dependency-free admission,
-deterministic planning, and owner-preserving verification boundary. The next
-working phase adds a plan-confirmed create-only installer, deterministic local
-receipt, and source-received technology-profile contracts. Together, these
-phases give a receiving repository an inspectable, locally materializable
-foundation while received source continues to determine the application
-stack. The two-pass Issue materializer remains the next #415 receiver. #417
-then binds the accepted artifacts to the live receiving repository. This is a
-revisable work route. It expresses work relations rather than a maturity score,
-and live GitHub state continues to lead on re-entry.
+deterministic planning, owner-preserving verification, a plan-confirmed
+create-only local installer, deterministic local receipt, and source-received
+technology-profile contracts. The current #415 phase adds the separate
+GitHub Issue-route materializer: it inventories bounded live resource
+collections, preflights every rendered request,
+creates missing route members, resolves links in two passes, preserves owner
+work observed before finalization, and records a deterministic route receipt.
+Together, these phases give a receiving repository an inspectable, locally
+materializable foundation whose application stack still comes from received
+source. #417 receives the accepted bundle and Issue materializer for the first
+explicitly authorized live exercise. This is a revisable work route. It
+expresses work relations rather than a maturity score, and live GitHub state
+continues to lead on re-entry.
 
 ### Context Canvas direct-transfer sequence
 

@@ -51,10 +51,11 @@ focused fixture or a maintained parser boundary before the contract claims it.
 
 ## Repository handoff foundation
 
-The portable foundation validator and local installer stay dependency-free.
-Their focused source contract pairs an isolated Node-only check with Ajv 2020
-validation of the manifest, profile, technology-profile, local-receipt, and
-Issue-seed schemas:
+The portable foundation validator, local installer, and GitHub Issue-route
+materializer stay dependency-free. Their focused source contract pairs
+isolated Node-only checks with Ajv 2020 validation of the manifest, profile,
+technology-profile, local-receipt, Issue-seed, binding, and Issue-route receipt
+schemas:
 
 ```sh
 npm run test:repository-handoff-foundation
@@ -63,16 +64,22 @@ npm run check:repository-handoff-foundation
 
 The suite copies the bundle into temporary directories and exercises clean,
 matching, owner-edited, missing, tampered, symbolic-link, special-file,
-resource-bound, mutated-manifest, concurrent projection, clean apply,
-plan-drift, collision, receipt, and rollback states. A passing result
+resource-bound, mutated-manifest, concurrent projection, clean local and Issue
+route apply, plan-drift, collision, receipt, and rollback states. The Issue
+route fixtures also exercise bounded pagination, pull-request filtering,
+case-folded and archived-label identity, two-pass links, dropped metadata,
+owner-edited live Issues, rendered-request admission, explicit apply
+confirmation, stale-plan refusal, failed-verification signaling, and
+create-only receipt targets. A passing result
 establishes digest-bound schema identity, schema conformance, deterministic
 planning and verification, plan-confirmed create-only installation, bounded
 source admission, portable target admission, fixed Issue-relation semantics,
-ownership-stable receipt re-entry, source-digest procedure identity,
-technology-profile evidence, fact-area, and base-selection closure, and exact JSON/YAML projection
-bytes for the checked-in working bundle. Live
-Issue materialization, received application behavior, and owner acceptance
-retain their separately authorized routes.
+ownership-stable receipt re-entry, two-pass Issue-route behavior against an
+in-memory GitHub adapter, source-digest procedure identity, technology-profile
+evidence, fact-area and base-selection closure, and exact JSON/YAML projection
+bytes for the checked-in working bundle. A separately authorized live GitHub
+exercise can establish current platform behavior; received application
+behavior and owner acceptance retain their named evidence routes.
 
 ## Public-reference materialization
 
