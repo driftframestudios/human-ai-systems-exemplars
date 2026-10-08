@@ -128,11 +128,23 @@ contract and its attribution tests.
 `public-iframe-route-manifest-v1.json` binds the pack hub, 21 current Core
 prototypes, and one supplemental Context Canvas instrument to 23 exact aliases
 beneath `https://iframes.vik.guru/v1/core/`.
-It keeps four relations separate: authored source identity, transferable route
-projection, per-route activation standing, and live delivery. Forming the
-package does not activate a route. Supplemental delivery membership identifies
-the source owner explicitly; it does not add the Conditioning Field to the
-21-member Core Architecture source manifest.
+It keeps five relations separate: authored source identity, transferable route
+projection, receiving-expression standing, package-publication eligibility,
+and live delivery. `receiver_standing` records whether a receiving Context
+Canvas expression is byte-identical, context-adapted, or held in reserve;
+package membership comes from the declared route population instead.
+`activation_standing` is the package-publication gate. Every route in the
+current 23-route population is `eligible` and is emitted. Package validation
+rejects a declared route with any other standing. A future hold therefore
+requires an explicit contract revision that removes the route from the emitted
+population until its blocking owner resolves the hold. Actionable copy, parity,
+provenance, navigation, and reader-job reviews remain with their owning Issues
+rather than becoming alternate publication states. Forming the package
+establishes upload-ready bytes; live delivery begins with the human-controlled
+upload and its direct-route and real-parent verification.
+Supplemental delivery membership identifies the source owner explicitly; it
+does not add the Conditioning Field to the 21-member Core Architecture source
+manifest.
 
 The same manifest carries each route's minimal carrier policy. The scriptless
 pack hub uses an empty sandbox. A prototype with executable behavior grants
@@ -145,7 +157,7 @@ ordinary inline notice, input, or two-step confirmation instead of native
 browser dialogs, so no route retains a held capability. An `eligible` route is
 invalid when any hold remains. The policy vocabulary stays intentionally
 narrow: a newly observed capability returns to source review and an explicit
-contract revision before activation.
+contract revision before publication eligibility is restored.
 
 Build the ignored, dependency-free projection:
 
@@ -192,11 +204,11 @@ adapted receiver.
 The source scan covers resource-bearing markup, CSS and SVG dependency graphs,
 and selected JavaScript network primitives. It does not claim to prove every
 dynamic browser request. A browser request graph and the intended delivery
-policy remain required activation evidence for every selected route.
+policy remain required live-delivery evidence for every selected route.
 
 The optional Strategy Canvas v0.1.1 compatibility alias remains resting and is
 not generated. Upload, Cloudflare configuration, neighboring-path behavior,
-receiver repointing, and public activation remain later review steps.
+receiver repointing, and live delivery remain later review steps.
 
 ## Direct checks
 

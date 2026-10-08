@@ -303,7 +303,7 @@
           <label class="prompt-view-option"><input type="radio" name="ai-blueprint-prompt-view" value="plain" data-prompt-view checked> Plain</label>
           <label class="prompt-view-option"><input type="radio" name="ai-blueprint-prompt-view" value="skill-assisted" data-prompt-view> Skill-assisted</label>
         </div></fieldset>
-        <p class="small muted" id="promptViewDescription">Plain Markdown carries the complete topology context without asking the receiver to load a repository skill.</p>
+        <p class="small muted" id="promptViewDescription">Plain Markdown is a self-contained handoff with the complete topology context.</p>
         <p class="prompt-status small" id="promptCapsuleStatus" role="status" aria-live="polite" aria-atomic="true"></p>
         <noscript><p class="notice">The complete default plain Markdown remains available below. Interactive editing, view selection, copying, and downloading become available when JavaScript runs.</p></noscript>
         <pre id="promptOut" data-prompt-view-active="plain" aria-labelledby="promptHeading" aria-describedby="promptViewDescription" tabindex="0"># Prompt Capsule: AI Systems Service Blueprint
@@ -1464,7 +1464,7 @@ These public collaboration loops fit when the receiving work meets the stated co
     const json=JSON.stringify(buildExport(),null,2); const jsonld=JSON.stringify(buildJsonLd(),null,2); const prompt=promptCapsuleMarkdown(promptCapsuleView);
     document.getElementById('jsonOut').value=json; document.getElementById('jsonLdOut').value=jsonld; document.getElementById('promptOut').textContent=prompt; document.getElementById('promptOut').dataset.promptViewActive=promptCapsuleView; document.getElementById('jsonLdScript').textContent=jsonld;
     document.querySelectorAll('[data-prompt-view]').forEach(control=>{control.checked=control.value===promptCapsuleView;});
-    document.getElementById('promptViewDescription').textContent=promptCapsuleView==='skill-assisted'?'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented topology and fingerprint remain the same.':'Plain Markdown carries the complete topology context without asking the receiver to load a repository skill.';
+    document.getElementById('promptViewDescription').textContent=promptCapsuleView==='skill-assisted'?'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented topology and fingerprint remain the same.':'Plain Markdown is a self-contained handoff with the complete topology context.';
   }
   function renderAll(){ normalize(); renderControls(); renderSvg(); renderTable(); renderInspector(); renderComponents(); renderIdentity(); renderExports(); }
   function selectCell(id){ activeView().selected_cell_id=id; renderAll(); }

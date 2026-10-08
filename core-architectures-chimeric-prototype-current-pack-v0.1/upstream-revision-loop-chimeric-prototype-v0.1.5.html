@@ -343,7 +343,7 @@
               <label class="prompt-view-option"><input type="radio" name="prompt-capsule-view" value="skill-assisted" data-prompt-view /> Skill-assisted</label>
             </div>
           </fieldset>
-          <p class="note" id="promptViewDescription">Plain Markdown carries the complete revision context without asking the receiver to load a repository skill.</p>
+          <p class="note" id="promptViewDescription">Plain Markdown is a self-contained handoff with the complete revision context.</p>
           <p class="prompt-status" id="promptCapsuleStatus" role="status" aria-live="polite" aria-atomic="true"></p>
           <noscript><p class="note">The complete default plain Markdown remains available below. Interactive editing, view selection, copying, and downloading become available when JavaScript runs.</p></noscript>
           <pre id="aiPromptOut" data-prompt-view-active="plain" aria-labelledby="prompt-heading" aria-describedby="promptViewDescription" tabindex="0"># Prompt Capsule: Upstream Revision Loop
@@ -1237,7 +1237,7 @@ These public collaboration loops fit only when the receiving work meets the stat
       });
       document.getElementById('promptViewDescription').textContent = promptCapsuleView === 'skill-assisted'
         ? 'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented revision state and fingerprint remain the same.'
-        : 'Plain Markdown carries the complete revision context without asking the receiver to load a repository skill.';
+        : 'Plain Markdown is a self-contained handoff with the complete revision context.';
     }
 
     function renderAll() { normalizeView(); renderEditor(); renderSVG(); renderTable(); renderInspector(); renderIdentityRegistry(); renderExports(); document.getElementById('interactionNotice').textContent=interactionMessage; }

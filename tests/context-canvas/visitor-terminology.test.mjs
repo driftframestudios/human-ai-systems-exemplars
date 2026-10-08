@@ -81,53 +81,7 @@ const aiSystemsRoomContexts = [
 const reportedConsequenceColumnHeader =
   /<th scope="col"(?: data-label="Reported consequence")?>Reported consequence<\/th>/u;
 
-// Exceptions bind to exact dated evidence fragments, rather than exempting an
-// entire file or phrase. A new generic occurrence elsewhere in the same source
-// must therefore fail this contract.
-const threadkeepingSourcePath =
-  "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html";
-const sourceBearingRoleLanguageAllowlist = [
-  {
-    path: threadkeepingSourcePath,
-    fragment: "Recorded by: human collaborator + AI collaborator; recorded at `2026-06-20T12:00:00Z`;",
-  },
-  {
-    path: threadkeepingSourcePath,
-    fragment: "Recorded by: human collaborator + AI collaborator; recorded at `2026-06-20T12:05:00Z`;",
-  },
-  {
-    path: threadkeepingSourcePath,
-    fragment: "Recorded by: human collaborator + AI collaborator; recorded at `2026-06-20T12:15:00Z`;",
-  },
-  {
-    path: threadkeepingSourcePath,
-    fragment: "Recorded by: AI collaborator; recorded at `2026-06-20T12:20:00Z`;",
-  },
-  {
-    path: threadkeepingSourcePath,
-    fragment: "Recorded by: human collaborator + AI collaborator; recorded at `2026-06-20T12:25:00Z`;",
-  },
-  {
-    path: threadkeepingSourcePath,
-    fragment: '\"recordedBy\": \"human collaborator + AI collaborator\", \"recordedAt\": \"2026-06-20T12:00:00Z\"',
-  },
-  {
-    path: threadkeepingSourcePath,
-    fragment: '\"recordedBy\": \"human collaborator + AI collaborator\", \"recordedAt\": \"2026-06-20T12:05:00Z\"',
-  },
-  {
-    path: threadkeepingSourcePath,
-    fragment: '\"recordedBy\": \"human collaborator + AI collaborator\", \"recordedAt\": \"2026-06-20T12:15:00Z\"',
-  },
-  {
-    path: threadkeepingSourcePath,
-    fragment: '\"recordedBy\": \"AI collaborator\", \"recordedAt\": \"2026-06-20T12:20:00Z\"',
-  },
-  {
-    path: threadkeepingSourcePath,
-    fragment: '\"recordedBy\": \"human collaborator + AI collaborator\", \"recordedAt\": \"2026-06-20T12:25:00Z\"',
-  },
-];
+const sourceBearingRoleLanguageAllowlist = [];
 
 async function readCanvasFile(path) {
   return readFile(resolve(canvasRoot, path), "utf8");

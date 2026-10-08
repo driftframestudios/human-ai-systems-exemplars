@@ -472,7 +472,11 @@ const licensePattern = new RegExp(
   "gi",
 );
 
-function assertAttributionProjection(html, route, expectedDecoration) {
+export function assertCanvasPublicAttribution(
+  html,
+  route,
+  expectedDecoration,
+) {
   const authorCount = [...html.matchAll(authorPattern)].length;
   const licenseCount = [...html.matchAll(licensePattern)].length;
   const boundaryCount = occurrenceCount(html, "data-visitor-boundary aria-label=");
@@ -506,7 +510,7 @@ function assertAttributionProjection(html, route, expectedDecoration) {
   }
 }
 
-function decorateProjection(html, route) {
+export function decorateCanvasPublicDocument(html, route) {
   if (
     /<meta\b[^>]*\bname=["']author["']/i.test(html) ||
     /<link\b[^>]*\brel=["']license["']/i.test(html) ||
@@ -539,7 +543,7 @@ ${visitorBoundaryMarkup()}
     `Canvas route ${route.id} closing body`,
     true,
   );
-  assertAttributionProjection(projected, route, 1);
+  assertCanvasPublicAttribution(projected, route, 1);
   return projected;
 }
 
@@ -591,9 +595,9 @@ export function deriveCanvasProjection(html, route) {
     });
   }
   if (["decorated_copy", "decorated_rewrite"].includes(route.projection_kind)) {
-    projected = decorateProjection(projected, route);
+    projected = decorateCanvasPublicDocument(projected, route);
   } else {
-    assertAttributionProjection(projected, route, 0);
+    assertCanvasPublicAttribution(projected, route, 0);
   }
   const exitProjection = projectIframeExitLinks(projected);
   projected = exitProjection.html;

@@ -34,7 +34,7 @@
       "version": "0.1.5",
       "status": "current",
       "exists": true,
-      "size_bytes": 112676,
+      "size_bytes": 112706,
       "previous": [
         "poda-chimeric-prototype-v0.1.html",
         "poda-chimeric-prototype-v0.1.1.html",
@@ -53,7 +53,7 @@
       "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 107937,
+      "size_bytes": 107867,
       "previous": [
         "alignment-worksheet-chimeric-prototype-v0.1.html",
         "alignment-worksheet-chimeric-prototype-v0.1.1.html",
@@ -136,7 +136,7 @@
       "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 95265,
+      "size_bytes": 95205,
       "previous": [
         "first-responsible-version-matrix-chimeric-prototype-v0.1.html",
         "first-responsible-version-matrix-chimeric-prototype-v0.1.1.html",
@@ -154,7 +154,7 @@
       "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 179533,
+      "size_bytes": 181144,
       "previous": [
         "shared-surface-priority-map-chimeric-prototype-v0.1.html",
         "shared-surface-priority-map-chimeric-prototype-v0.1.1.html",
@@ -181,7 +181,7 @@
         "service-design-blueprint-chimeric-prototype-v0.2.5.html"
       ],
       "exists": true,
-      "size_bytes": 187044
+      "size_bytes": 186984
     },
     {
       "id": "ai-systems-service-blueprint",
@@ -193,7 +193,7 @@
       "version": "0.1.5",
       "status": "current",
       "exists": true,
-      "size_bytes": 128369,
+      "size_bytes": 128309,
       "previous": [
         "ai-systems-service-blueprint-chimeric-prototype-v0.1.html",
         "ai-systems-service-blueprint-chimeric-prototype-v0.1.1.html",
@@ -212,7 +212,7 @@
       "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 121650,
+      "size_bytes": 121590,
       "previous": [
         "software-architecture-views-chimeric-prototype-v0.1.html",
         "software-architecture-views-chimeric-prototype-v0.1.1.html",
@@ -230,7 +230,7 @@
       "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 120707,
+      "size_bytes": 120647,
       "previous": [
         "participatory-design-kit-chimeric-prototype-v0.1.html",
         "participatory-design-kit-chimeric-prototype-v0.1.1.html",
@@ -257,7 +257,7 @@
         "specification-by-example-chimeric-prototype-v0.1.6.html"
       ],
       "exists": true,
-      "size_bytes": 108157
+      "size_bytes": 108097
     },
     {
       "id": "heart-chart",
@@ -277,7 +277,7 @@
         "heart-chart-chimeric-prototype-v0.1.5.html"
       ],
       "exists": true,
-      "size_bytes": 101549
+      "size_bytes": 101835
     },
     {
       "id": "plus-delta",
@@ -289,7 +289,7 @@
       "version": "0.1.5",
       "status": "current",
       "exists": true,
-      "size_bytes": 86142,
+      "size_bytes": 86241,
       "previous": [
         "plus-delta-chimeric-prototype-v0.1.html",
         "plus-delta-chimeric-prototype-v0.1.1.html",
@@ -383,7 +383,7 @@
       "version": "0.1.5",
       "status": "current",
       "exists": true,
-      "size_bytes": 95604,
+      "size_bytes": 95544,
       "previous": [
         "upstream-revision-loop-chimeric-prototype-v0.1.html",
         "upstream-revision-loop-chimeric-prototype-v0.1.1.html",
@@ -402,7 +402,7 @@
       "version": "0.1.5",
       "status": "current",
       "exists": true,
-      "size_bytes": 121860,
+      "size_bytes": 122132,
       "previous": [
         "recovery-routing-atlas-chimeric-prototype-v0.1.html",
         "recovery-routing-atlas-chimeric-prototype-v0.1.1.html",

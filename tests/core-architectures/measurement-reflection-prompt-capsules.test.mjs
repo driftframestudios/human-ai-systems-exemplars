@@ -30,7 +30,7 @@ const artifacts = [
     version: "0.1.6",
     currentFile: "heart-chart-chimeric-prototype-v0.1.6.html",
     historicalFile: "heart-chart-chimeric-prototype-v0.1.5.html",
-    currentDigest: "4288e163b6af28f88689de41157ca97fabaf503652eb12cf7458b18ab90f648a",
+    currentDigest: "edd876b3ce9b3b445a090b833889ad05f44b8d812716113b1de503f29e394841",
     historicalDigest: "a4fecf35cb271d4b36ffd5a6eb22f9c3a6569b4e8551954cad0ffb47a7b87aba",
     stateContract: "heart-chart-state.v0.1",
     apiName: "heartChart",
@@ -50,7 +50,7 @@ const artifacts = [
     version: "0.1.5",
     currentFile: "plus-delta-chimeric-prototype-v0.1.5.html",
     historicalFile: "plus-delta-chimeric-prototype-v0.1.4.html",
-    currentDigest: "7b1944959ef57e466914af2659862ba79141f083e6e6c98a824765fa93b10532",
+    currentDigest: "03720635728e8708d6c3bb7a97539290bc2e2da804d554b78902c6c90f3b5553",
     historicalDigest: "b1f828166d5fe62b122f5f3bb5eeca36759c5b4b4887875fab9d935520d2d5b6",
     stateContract: "plus-delta-state.v0.1",
     apiName: "plusDelta",
@@ -149,6 +149,16 @@ for (const artifact of artifacts) {
     assert.match(html, /<noscript>[\s\S]*?complete (?:default )?[Pp]lain Markdown remains available/u);
     assert.match(html, new RegExp(`window\\.${artifact.apiName}\\s*=\\s*Object\\.freeze\\(`, "u"));
     assert.ok(html.includes(skillRevision));
+    if (artifact.id === "heart-chart") {
+      assert.match(html, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?html \{ scroll-behavior: auto; \}/u);
+      assert.match(html, /matchMedia\?\.\('\(prefers-reduced-motion: reduce\)'\)[\s\S]*?reducedMotion\?'auto':'smooth'/u);
+    }
+    if (artifact.id === "plus-delta") {
+      assert.match(html, /@media \(prefers-reduced-motion: reduce\)\{\.svg-cell\{transition:none\}\}/u);
+      const reviewTrigger = "Review when a named signal confirms the current observation or shows what to revise.";
+      assert.equal(html.split(reviewTrigger).length - 1, 3, "all Plus / Delta creation and recovery defaults share the approved review trigger");
+      assert.doesNotMatch(html, /Review when a named evidence signal can confirm or revise this observation\./u);
+    }
 
     const orderedSections = [
       "## Purpose and target",

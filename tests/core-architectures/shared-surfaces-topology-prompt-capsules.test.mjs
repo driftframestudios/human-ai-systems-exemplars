@@ -35,8 +35,8 @@ const artifacts = [
     version: "0.1.4",
     currentFile: "shared-surface-priority-map-chimeric-prototype-v0.1.4.html",
     historicalFile: "shared-surface-priority-map-chimeric-prototype-v0.1.3.html",
-    currentDigest: "76d89a37b9506aca6c0ff194f513589161033fd25e790501010ec721e9f80cf8",
-    historicalDigest: "06817b6fc7312c32f6c303b1ea562c43c2bf8436a6214b73e03e9b6cb14ec08a",
+    currentDigest: "1b9b716fdc04fae93194219a890bb82ff96fe9b922ada75d887607eddff91d2f",
+    historicalDigest: "eaabb4b4fdd0e8950f83b819b085a8f2e2f30c07020336cb2d35bc11c3ac844f",
     stateContract: "shared-surface-priority-map-state.v0.1",
     apiName: "sharedSurfacePriorityMap",
     promptId: "aiPrompt",
@@ -44,7 +44,7 @@ const artifacts = [
     skills: ["source-authority-mapping", "context-canvas-surface-reading", "stateful-artifact-behavior-contracts"],
     directCarriers: ["context-canvas-project-surface/context-canvas/concept-nursery.html"],
     receiverStanding: "context_adapted",
-    activationStanding: "provenance_review",
+    activationStanding: "eligible",
     materialPhrases: ["Every accepted stage, surface, priority cell, shared asset, and focus view", "asset-claim-source-map"],
   },
   {
@@ -54,7 +54,7 @@ const artifacts = [
     version: "0.2.6",
     currentFile: "service-design-blueprint-chimeric-prototype-v0.2.6.html",
     historicalFile: "service-design-blueprint-chimeric-prototype-v0.2.5.html",
-    currentDigest: "f5bf7d064b9adc734b82eb964124f284171eae6d7a200e98ccad70892c4c13b7",
+    currentDigest: "bdb1a46d62917e3ad217a273df492e378a96465c1f99dafd977b776af8fc6012",
     historicalDigest: "55ca3885f661c5a69258d8b82fc72f07b7274cfd94a970f11c5ce387daff1268",
     stateContract: "service-design-blueprint-state.v0.2",
     apiName: "serviceDesignBlueprint",
@@ -66,7 +66,7 @@ const artifacts = [
       "context-canvas-project-surface/context-canvas/ai-systems.html",
     ],
     receiverStanding: "context_adapted",
-    activationStanding: "visitor_copy_review",
+    activationStanding: "eligible",
     materialPhrases: ["Every accepted stage, lane, cell, shared asset, and focus view", "asset-claim-source-map"],
   },
   {
@@ -76,7 +76,7 @@ const artifacts = [
     version: "0.1.5",
     currentFile: "ai-systems-service-blueprint-chimeric-prototype-v0.1.5.html",
     historicalFile: "ai-systems-service-blueprint-chimeric-prototype-v0.1.4.html",
-    currentDigest: "d1f57a302b5736842123288473f8733a1e057be8a0e5f0fc99754706473d7b23",
+    currentDigest: "938433bc7167ecd83bf92836f84ab7683163f01908397fe0ddcfdf11aa37eeb0",
     historicalDigest: "f7918b9f31de120dbfc1031cd80df874e71a0d2a3b767e2972cc2c6c722e072a",
     stateContract: "ai-systems-service-blueprint-state.v0.1",
     apiName: "aiSystemsServiceBlueprint",
@@ -85,7 +85,7 @@ const artifacts = [
     skills: ["source-authority-mapping", "stateful-artifact-behavior-contracts", "schema-contract-authoring"],
     directCarriers: ["context-canvas-project-surface/context-canvas/ai-systems.html"],
     receiverStanding: "reserve",
-    activationStanding: "navigation_observation",
+    activationStanding: "eligible",
     materialPhrases: ["Every accepted stage, layer, cell, component, and focus view", "component-evidence-summary-orchestrator"],
   },
   {
@@ -95,7 +95,7 @@ const artifacts = [
     version: "0.1.4",
     currentFile: "software-architecture-views-chimeric-prototype-v0.1.4.html",
     historicalFile: "software-architecture-views-chimeric-prototype-v0.1.3.html",
-    currentDigest: "111c00a6c3acb658d88da506249783c2dc122654457829178ef52e18979c706e",
+    currentDigest: "ae639340af83d5522352854d1133ce1dace48934ba38e474b9c38bfd0120fb38",
     historicalDigest: "c1fdce7212aa0995cd5e862b9cee00baad5ddfd1b199ca4f3f063488c81ebe0c",
     stateContract: "software-architecture-views-state.v0.1",
     apiName: "softwareArchitectureViews",
@@ -104,7 +104,7 @@ const artifacts = [
     skills: ["source-authority-mapping", "stateful-artifact-behavior-contracts", "schema-contract-authoring"],
     directCarriers: [],
     receiverStanding: "reserve",
-    activationStanding: "reader_job_required",
+    activationStanding: "eligible",
     materialPhrases: ["Every accepted architecture view, attachment, and focus view", "att-review-state-service"],
   },
 ];
@@ -245,6 +245,29 @@ for (const artifact of artifacts) {
     for (const carrier of directCarriers) assert.ok(carrier.includes(artifact.currentFile));
   });
 }
+
+test("Shared Surface Priority Map history carries aligned Tyler Tate provenance", async () => {
+  const articleUrl = "http://tylertate.com/blog/ux/2012/02/21/cross-channel-ia-blueprint.html";
+  const diagramUrl = "http://tylertate.com/resources/images/2012-02-21/cross-channel-blueprint.png";
+  const licenseUrl = "https://creativecommons.org/licenses/by/3.0/";
+
+  for (const version of ["0.1.1", "0.1.2", "0.1.3", "0.1.4"]) {
+    const file = `shared-surface-priority-map-chimeric-prototype-v${version}.html`;
+    const [source, projection] = await Promise.all([
+      readFile(resolve(coreRoot, file), "utf8"),
+      readFile(resolve(contextRoot, file), "utf8"),
+    ]);
+
+    assert.equal(projection, source, `${file} keeps one provenance-bearing source across both owners`);
+    for (const coordinate of [articleUrl, diagramUrl, licenseUrl]) assert.ok(source.includes(coordinate));
+    for (const field of ["article_title", "diagram_url", "isBasedOn", "creditText", "schema:Article", "schema:ImageObject"]) {
+      assert.ok(source.includes(field), `${file} carries ${field} in its model or JSON-LD mapping`);
+    }
+    assert.doesNotMatch(source, /not verified in this session|uploaded in-session reference image/u);
+    assert.match(source, /Creative Commons Attribution 3\.0 Unported License/u);
+    assert.match(source, /adapts that visual grammar/u);
+  }
+});
 
 test("Shared Surfaces and Topology advances the current inventory as one complete family", async () => {
   const inventory = await readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8");

@@ -69,7 +69,7 @@
       "method": "strategyCanvas",
       "sourceClaim": "This static representation adapts the Strategy Canvas developed by W. Chan Kim and Renée Mauborgne.",
       "adaptationClaim": "It maps the ten dimensions named in the research-to-architecture trace.",
-      "boundaryClaim": "The action groupings are an inspectable 2026 local synthesis. Scores recorded at the time, observed outcomes, and the costing model remain separate evidence routes."
+      "boundaryClaim": "The action groupings are an inspectable 2026 local synthesis. Scores recorded at the time and observed outcomes remain distinct from this synthesis; the costing model needs its own current inputs."
     },
     "initiativeCosting": {
       "receivers": [

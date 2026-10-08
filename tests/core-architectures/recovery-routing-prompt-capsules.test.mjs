@@ -21,7 +21,7 @@ const artifacts = [
     currentFile: "upstream-revision-loop-chimeric-prototype-v0.1.5.html",
     historicalFile: "upstream-revision-loop-chimeric-prototype-v0.1.4.html",
     historicalDigest: "1392f82acdcc98b5fbdbbede46e50365b0750d1a5fb60eefd8b09e2b4335bb7a",
-    currentDigest: "1a2e88d9dfc5acabdb6dc95bff843eaa6d8667f413d289145ff6d3104dae5dec",
+    currentDigest: "af79684032787d47655c8e01a162f1a34f405848f8d63b34502f93c4ffaa8d36",
     stateContract: "upstream-revision-loop-state.v0.1",
     apiName: "upstreamRevisionLoop",
     promptId: "aiPromptOut",
@@ -38,7 +38,7 @@ const artifacts = [
     currentFile: "recovery-routing-atlas-chimeric-prototype-v0.1.5.html",
     historicalFile: "recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
     historicalDigest: "48633e6a5884800e66645d40c15b15b5991385188b9e39993f0f9bf11fe1b1d8",
-    currentDigest: "f2c5b7bcaed41ce05053382fc87de25318982350a85c7db18cb91f8701130d9f",
+    currentDigest: "f6888b815a0f16afcad45c5eb933c49eb86c269ecffbb6fc44364303d6576fe2",
     stateContract: "recovery-routing-atlas-state.v0.1",
     apiName: "recoveryRoutingAtlas",
     promptId: "promptBox",
@@ -135,6 +135,11 @@ for (const artifact of artifacts) {
         19,
         "the script-free Recovery Routing capsule carries all 19 geometries",
       );
+      assert.match(html, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?html \{ scroll-behavior: auto; \}/u);
+      assert.match(html, /els\.atlasSvg\.setAttribute\('viewBox', `0 0 \$\{w\} \$\{h\}`\);/u);
+      assert.match(html, /The prototype’s diagrams and interface are local expressions of that recovery-routing model\./u);
+      assert.match(html, /directs each strain cue toward a named restored state\./u);
+      assert.doesNotMatch(html, /No external visual reference is used in this prototype\./u);
     }
     assert.ok(
       orderedSections.every((section, index) => index === 0 || plain.indexOf(orderedSections[index - 1]) < plain.indexOf(section)),
