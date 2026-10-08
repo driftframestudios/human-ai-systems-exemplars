@@ -1,28 +1,52 @@
 {
-  "$schema": "./schema/foundation-manifest.schema.v0.1.json",
-  "schemaVersion": "0.1",
+  "$schema": "./schema/foundation-manifest.schema.v0.2.json",
+  "schemaVersion": "0.2",
   "artifactType": "repository_handoff_foundation_manifest",
   "key": "repository-handoff-foundation-v0.1",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "defaultProfileKey": "source-awaiting",
   "schemas": [
     {
-      "key": "foundation-manifest",
+      "key": "foundation-manifest-v0.1",
       "sourcePath": "schema/foundation-manifest.schema.v0.1.json",
       "id": "urn:repository-handoff-foundation:schema:foundation-manifest:v0.1",
       "sha256": "6e2d40396fd1a8c6a69fa662d0640256f7435f7faab90700a751a2b232768232"
     },
     {
-      "key": "foundation-profile",
+      "key": "foundation-manifest",
+      "sourcePath": "schema/foundation-manifest.schema.v0.2.json",
+      "id": "urn:repository-handoff-foundation:schema:foundation-manifest:v0.2",
+      "sha256": "c422fcf5d263da2824280faf7da86edd145041fc313e5d809106bc1b4772eb78"
+    },
+    {
+      "key": "foundation-profile-v0.1",
       "sourcePath": "schema/foundation-profile.schema.v0.1.json",
       "id": "urn:repository-handoff-foundation:schema:foundation-profile:v0.1",
       "sha256": "c64eeabec548d1bd20e6ea6c231970445a91bf96a18c143f797108b17f3a067b"
+    },
+    {
+      "key": "foundation-profile",
+      "sourcePath": "schema/foundation-profile.schema.v0.2.json",
+      "id": "urn:repository-handoff-foundation:schema:foundation-profile:v0.2",
+      "sha256": "ab0a699984d7fa5e866e21b7fa10fc98e09eaefaf49f1821641b3ecafef642f3"
     },
     {
       "key": "issue-route-seed",
       "sourcePath": "schema/issue-route-seed.schema.v0.1.json",
       "id": "urn:repository-handoff-foundation:schema:issue-route-seed:v0.1",
       "sha256": "cfc9a70461a52386085acf66656a8a103600ebfb75948c05b819d1bd7da8fe9b"
+    },
+    {
+      "key": "technology-profile",
+      "sourcePath": "schema/technology-profile.schema.v0.1.json",
+      "id": "urn:repository-handoff-foundation:schema:technology-profile:v0.1",
+      "sha256": "38db714f885d55269ec4b0a3677ca0152457ac28b928e2d841ec99e54e14bd48"
+    },
+    {
+      "key": "local-materialization-receipt",
+      "sourcePath": "schema/local-materialization-receipt.schema.v0.1.json",
+      "id": "urn:repository-handoff-foundation:schema:local-materialization-receipt:v0.1",
+      "sha256": "4bfb54734966053c59bcf976850b7e8e5812dbee67df0e76381a4deb01a3fbf5"
     }
   ],
   "modules": [

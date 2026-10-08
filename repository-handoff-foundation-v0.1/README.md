@@ -1,18 +1,19 @@
 # Repository Handoff Foundation v0.1
 
-This phase-one bundle gives a clean repository a source-neutral landing frame:
+This working bundle gives a clean repository a source-neutral landing frame:
 a future owner and authorized AI collaborator can orient, keep one current
 Issue visible, receive actual site source, and reconcile the next foundation
 move from repository-held context.
 
-The bundle is intentionally small. It carries four modules—orientation,
+The bundle stays intentionally small. It carries four modules—orientation,
 Concept Nursery, threadkeeping, and references—plus a source-awaiting profile
-and a two-Issue semantic route. It adds no application packages. Received
-source supplies the runtime, package manager, lockfile, routes, visual
-direction, and application behavior.
+and a two-Issue semantic route. A plan-confirmed, create-only installer can
+place absent foundation files while receiving-owner content remains current.
+Received source supplies the runtime, package manager, lockfile, routes,
+visual direction, and application behavior.
 
-Status: `working`. The first live receiving exercise can revise this contract
-before a later version claims broader fit.
+Status: `working`. Evidence from the first live receiving exercise can guide a
+revision before a later version claims broader fit.
 
 ## Start with the three authorities
 
@@ -28,18 +29,22 @@ the JSON bytes. JSON is a valid YAML 1.2 representation, so this arrangement
 keeps one parseable content identity and avoids a second normalization rule.
 
 The artifact-local schemas live in [`schema/`](schema/). Their URN identifiers
-name these exact v0.1 contracts while repository-relative paths provide local
-retrieval. They validate this bundle and remain outside any wider published
-schema cohort until a separate receiving use establishes that route.
+name each exact contract version while repository-relative paths provide local
+retrieval. The v0.2 foundation-profile contract binds a received-source
+profile to its exact manifest and technology observation record. The local
+materialization receipt records the installer boundary. These schemas remain
+artifact-local until a separate receiving use establishes a wider publication
+route.
 
-## Read-only phase-one commands
+## Inspect, apply, and verify
 
-From this source repository, the dependency-free command supports three
-read-only modes:
+From this source repository, the dependency-free command supports read-only
+inspection plus one explicitly confirmed local write mode:
 
 ```sh
 npm run check:repository-handoff-foundation
 npm run plan:repository-handoff-foundation -- --target /path/to/receiving-repository
+npm run apply:repository-handoff-foundation -- --target /path/to/receiving-repository --confirm-plan sha256:<digest-from-plan>
 npm run verify:repository-handoff-foundation -- --target /path/to/receiving-repository
 ```
 
@@ -47,15 +52,37 @@ npm run verify:repository-handoff-foundation -- --target /path/to/receiving-repo
 internal references, source digests, relation closure, and exact projections.
 `plan` compares the selected
 profile with a destination and reports creation candidates, compatible files,
-preserved collisions, and invalid filesystem entries. `verify` applies the
-declared target-file policies to an already prepared destination. Add
+preserved collisions, invalid filesystem entries, apply eligibility, and a
+path-neutral plan digest. `apply` requires that exact digest and creates only
+the selected files that remain absent after the target-local lock is acquired.
+`verify` applies the declared target-file policies to an already prepared
+destination. Add
 `--profile source-awaiting` to select the default explicitly, or `--json` for
 machine-readable output. Machine-readable results include both the manifest
 and selected-profile SHA-256 coordinates.
 
-Phase one keeps destination and GitHub state unchanged. A later explicitly
-authorized installer or Issue materializer can consume the admitted plan and
-seed after its own write and recovery contract is accepted.
+Receiving-owner differences remain intact and appear in the result. The
+installer admits every selected path before creation; an invalid path or an
+exact-byte generator collision holds the complete apply for review. After a
+caught failure, the installer rolls back files and directories whose
+transaction identity still matches and preserves edited or ambiguous state
+for review. The deterministic receipt lives at
+`.repository-handoff/foundation-receipt.json`. Local apply changes selected
+filesystem paths; Git, GitHub, network, Issue, account, and publication state
+remain with their existing owners.
+
+Receipt dispositions express stable ownership policy rather than a transient
+byte comparison. `exact_source` identifies generator-owned bytes;
+`receiving_owner_current` identifies content whose receiving owner may revise.
+The plan and apply result report the observed create, exact, or preserved state
+for the current run.
+
+The target-local lock serializes cooperating apply processes. A caught failure
+releases its unchanged lock through the guarded rollback route. A process exit
+can leave the lock as a visible recovery signal: confirm the prior apply has
+stopped, inspect the target and receipt state, remove
+`.repository-handoff/.apply.lock`, and create a fresh plan before applying
+again.
 
 ## Bundle map
 
@@ -65,8 +92,17 @@ repository-handoff-foundation-v0.1/
 ├── foundation.manifest.json
 ├── schema/
 │   ├── foundation-manifest.schema.v0.1.json
+│   ├── foundation-manifest.schema.v0.2.json
 │   ├── foundation-profile.schema.v0.1.json
-│   └── issue-route-seed.schema.v0.1.json
+│   ├── foundation-profile.schema.v0.2.json
+│   ├── issue-route-seed.schema.v0.1.json
+│   ├── local-materialization-receipt.schema.v0.1.json
+│   └── technology-profile.schema.v0.1.json
+├── examples/
+│   ├── illustrative-source-received.profile.example.json
+│   ├── illustrative-source-received.profile.example.yaml
+│   ├── illustrative-source-received.technology-profile.example.json
+│   └── illustrative-source-received.technology-profile.example.yaml
 ├── profiles/
 │   ├── source-awaiting.profile.json
 │   └── source-awaiting.profile.yaml
@@ -118,11 +154,13 @@ proposed action before any copy occurs.
 | `exact_bytes` | The target is a regular file and its SHA-256 equals the declared source digest. |
 | `present_regular_file` | The target is a regular file. Its content may reflect later receiving-owner edits. |
 
-During a read-only observation of a cooperative local tree, path components
-seen as symbolic links and targets seen as special filesystem entries stay
-outside the plan. The tool reports those boundary findings and leaves them
-unchanged. A future writer needs a stronger descriptor-relative or staged-tree
-boundary before an apply mode can earn a place here.
+During plan, apply, and verify in a cooperative local tree, symbolic-link path
+components and special filesystem targets become explicit boundary findings.
+Apply uses exclusive, no-follow file creation and revalidates the confirmed
+plan beneath a target-local lock. Node's portable filesystem API lacks
+descriptor-relative traversal for every ancestor, so a process with concurrent
+write access remains an external trust boundary; the installer reports
+detected drift and preserves ambiguous state for review.
 
 ## Source-awaiting profile
 
@@ -132,7 +170,7 @@ The source-awaiting profile selects all seven entries across the four modules:
 - **Concept Nursery** gives useful possibilities a resting place with a return
   signal rather than turning them into implied commitments.
 - **Threadkeeping** preserves settled rationale, evidence limits, recovery,
-  and exact re-entry without duplicating live Issue status.
+  and exact re-entry while live Issues remain the status authority.
 - **References** separates public-safe material from an ignored local lane and
   keeps provenance, receiving use, and source authority visible.
 
@@ -141,6 +179,35 @@ credentials and account settings, transfer acceptance, publication and
 domains, license and attribution carriers, and destructive recovery with
 their named human owners. Each held decision names the useful preparation that
 can continue and the observable event that releases the next step.
+
+## Source-received contract family
+
+The v0.2 profile schema distinguishes the source-awaiting and source-received
+states structurally. A source-awaiting profile carries the neutral capability
+selection. A derived source-received profile binds the exact base capability
+profile, foundation manifest, and technology profile whose facts resolve to
+evidence from a named source coordinate. Stack fields remain optional: source
+evidence determines which runtimes, package managers, routes, services,
+commands, and delivery facts enter the record.
+
+The examples in [`examples/`](examples/) use an explicitly illustrative
+fixture identity. They demonstrate base-profile, manifest, and
+technology-profile binding; semantic closure among facts and evidence;
+area-aligned coverage; exact base-profile selection; coverage states;
+unresolved questions; environment-name handling; and exact JSON/YAML
+projection. The current installer selects the manifest-declared
+source-awaiting profile. A technical collaborator creates a derived
+source-received record from the accepted source coordinate, and a later
+reconciliation route can promote that record into a selectable runtime
+profile.
+
+Every source digest names a versioned byte procedure. `raw_bytes_sha256_v1`
+hashes exact file bytes. `git_ls_tree_full_z_sha256_v1` hashes the exact stdout
+bytes from `git ls-tree -r -z --full-tree <revision>`.
+`portable_path_digest_manifest_sha256_v1` hashes an exact UTF-8 manifest whose
+NFC portable paths are sorted by UTF-8 byte order and serialized as
+`path`, NUL, decimal byte length, NUL, lowercase SHA-256, LF.
+`utf8_label_sha256_v1` hashes the exact UTF-8 bytes of its declared label.
 
 ## Issue route
 
@@ -179,7 +246,8 @@ recovery input.
   history. Compare the seed with that live graph, preserve the live graph as
   authority, and reconcile settings before and after the human-held transfer.
 - **Template creation:** reproduce selected files, then materialize the Issue
-  route because repository templates do not supply a new live Issue graph.
+  route because the new repository receives files while its live Issue graph
+  forms separately.
 - **Fresh repository or clone:** install the selected entries into absent
   destinations, review every collision, then materialize the Issue route.
 
@@ -201,10 +269,11 @@ A successful structural check establishes the digest-bound schema bytes and
 identities, keys, references, bounded source reads, cooperative local-tree
 observations, exact projections, and digests it exercised. It leaves
 application behavior open for the received
-source and its fitting checks. A later disposable-repository exercise can
-establish install behavior. A live, explicitly authorized GitHub exercise can
-establish Issue materialization and preservation against the platform at that
-time.
+source and its fitting checks. Focused temporary-repository tests establish
+create-only installation, collision preservation, stale-plan refusal,
+deterministic receipts, and identity-guarded rollback for the exercised local
+states. A live, explicitly authorized GitHub exercise can establish Issue
+materialization and preservation against the platform at that time.
 
 When a target already exists, preserve it and return the collision to its
 receiving owner. When source or profile facts change, retain the last verified

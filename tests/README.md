@@ -51,9 +51,10 @@ focused fixture or a maintained parser boundary before the contract claims it.
 
 ## Repository handoff foundation
 
-The portable phase-one validator stays dependency-free. Its focused source
-contract pairs an isolated Node-only check with Ajv 2020 validation of the
-manifest, profile, and Issue-seed schemas:
+The portable foundation validator and local installer stay dependency-free.
+Their focused source contract pairs an isolated Node-only check with Ajv 2020
+validation of the manifest, profile, technology-profile, local-receipt, and
+Issue-seed schemas:
 
 ```sh
 npm run test:repository-handoff-foundation
@@ -62,13 +63,16 @@ npm run check:repository-handoff-foundation
 
 The suite copies the bundle into temporary directories and exercises clean,
 matching, owner-edited, missing, tampered, symbolic-link, special-file,
-resource-bound, mutated-manifest, and concurrent projection states. A passing
-result establishes digest-bound schema identity, schema conformance,
-deterministic read-only planning and verification, bounded source admission,
-portable target admission, fixed Issue-relation semantics, and exact
-JSON/YAML projection bytes for the checked-in phase-one bundle. Installation,
-live Issue materialization, received application behavior, and owner
-acceptance retain their separately authorized routes.
+resource-bound, mutated-manifest, concurrent projection, clean apply,
+plan-drift, collision, receipt, and rollback states. A passing result
+establishes digest-bound schema identity, schema conformance, deterministic
+planning and verification, plan-confirmed create-only installation, bounded
+source admission, portable target admission, fixed Issue-relation semantics,
+ownership-stable receipt re-entry, source-digest procedure identity,
+technology-profile evidence, fact-area, and base-selection closure, and exact JSON/YAML projection
+bytes for the checked-in working bundle. Live
+Issue materialization, received application behavior, and owner acceptance
+retain their separately authorized routes.
 
 ## Public-reference materialization
 
