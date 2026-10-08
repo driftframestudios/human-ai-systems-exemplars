@@ -8,9 +8,9 @@
   "foundationManifest": {
     "artifactType": "repository_handoff_foundation_manifest",
     "key": "repository-handoff-foundation-v0.1",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "sourcePath": "foundation.manifest.json",
-    "sha256": "7cf2ffeab37766dc3c2dff707d6d329510375d170fa537e8f10e8d2eeb86575b"
+    "sha256": "59f2ab840fb38f358f1889eeae52ed898a273d71bf0ff68d17735a5debecbd2e"
   },
   "baseProfile": {
     "key": "source-awaiting",

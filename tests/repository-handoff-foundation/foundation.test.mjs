@@ -229,6 +229,14 @@ test("all artifact-local schemas compile under Ajv 2020 and accept their authori
       instance: "issue-route/source-awaiting.seed.example.json",
     },
     {
+      name: "Issue route bindings",
+      schema: "schema/issue-route-bindings.schema.v0.1.json",
+    },
+    {
+      name: "Issue route materialization receipt",
+      schema: "schema/issue-route-materialization-receipt.schema.v0.1.json",
+    },
+    {
       name: "technology profile",
       schema: "schema/technology-profile.schema.v0.1.json",
       instance: "examples/illustrative-source-received.technology-profile.example.json",
