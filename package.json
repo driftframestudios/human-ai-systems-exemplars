@@ -6,6 +6,10 @@
   },
   "scripts": {
     "check:readme-routes": "node tools/check-readme-routes.mjs",
+    "check:repository-handoff-foundation": "node tools/repository-handoff-foundation.mjs",
+    "plan:repository-handoff-foundation": "node tools/repository-handoff-foundation.mjs --plan",
+    "verify:repository-handoff-foundation": "node tools/repository-handoff-foundation.mjs --verify",
+    "test:repository-handoff-foundation": "node --test tests/repository-handoff-foundation/foundation.test.mjs",
     "playwright:install": "playwright install chromium",
     "build:public-references": "node tools/materialize-public-references.mjs",
     "build:debrief-image-derivatives": "node tools/generate-debrief-image-derivatives.mjs",

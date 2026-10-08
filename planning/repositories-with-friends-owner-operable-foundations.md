@@ -59,11 +59,16 @@ observed handoff:
 | [#415 — Assemble a source-neutral repository handoff foundation and portable Issue route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/415) | The versioned file bundle, source intake, Issue seed and materializer, validator, receipts, and optional Registry routing | A clean receiving repository can install or reconcile the foundation while incoming source retains its structure and dependency direction |
 | [#417 — Exercise the repository handoff foundation through the Context Canvas transfer](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/417) | The task-bound exercise, reusable-artifact feedback, and skill disposition | The transferred repository completes one ordinary post-transfer Issue-to-change cycle and returns decision-changing friction |
 
-At this plan's formation, the current front is #416; live GitHub state leads
-on re-entry. #415 can assemble the package against the accepted contract while
-the first working skill and runbook receive review. #417 binds both artifacts
-to the live receiving repository. This is a revisable work route. It expresses
-work relations rather than a maturity score.
+Issue #416 has settled the first working skill and runbook. The current front
+is #415: its phase-one source-awaiting bundle now defines the portable
+manifest, explicit profile and Issue-seed selection, dependency-free
+admission, deterministic read-only planning, and owner-preserving verification
+boundary. This phase gives a receiving repository an inspectable foundation
+before its application stack is known; it leaves installation, live Issue
+materialization, received-source profiling, and the handoff receipt to the
+next #415 phases. #417 then binds the accepted artifacts to the live receiving
+repository. This is a revisable work route. It expresses work relations rather
+than a maturity score, and live GitHub state continues to lead on re-entry.
 
 ### Context Canvas direct-transfer sequence
 
@@ -268,13 +273,19 @@ own evidence and receiving use.
 
 ## Re-entry
 
-1. Read live Issues #416, #415, and #417 and name any difference from this
-   prospective account.
-2. Continue the current front through the smallest accepted source change.
-3. In `context-canvas`, resume at Issue #1 until source intake passes to the
+1. Read live Issues #415 and #417 and name any difference from this account;
+   use closed Issue #416 as the accepted skill-and-runbook input.
+2. Continue #415 from the source-awaiting bundle into a local apply or install
+   route with source-received and technology-profile contracts. Preserve the
+   incoming application's runtime and dependency direction, and give every
+   mutation a plan, recovery coordinate, and explicit authority boundary.
+3. Add the Issue materializer only after the local file route is recoverable.
+   Use the declared seed as bootstrap and recovery input while live owner-edited
+   Issues remain current authority.
+4. In `context-canvas`, resume at Issue #1 until source intake passes to the
    pre-transfer Issues #2–#8; Issue #9 then receives the transfer.
-4. After transfer, observe one Issues #10–#16 collaboration cycle and return
+5. After transfer, observe one Issues #10–#16 collaboration cycle and return
    only decision-changing friction to #417.
-5. Revisit a Milestone 27 concept when its named trigger has formed; until
+6. Revisit a Milestone 27 concept when its named trigger has formed; until
    then, keep its Issue as a visible future receiver and preserve the current
    handoff's small foundation.
