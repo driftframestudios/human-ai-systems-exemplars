@@ -59,20 +59,21 @@ observed handoff:
 | [#415 — Assemble a source-neutral repository handoff foundation and portable Issue route](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/415) | The versioned file bundle, source intake, Issue seed and materializer, validator, receipts, and optional Registry routing | A clean receiving repository can install or reconcile the foundation while incoming source retains its structure and dependency direction |
 | [#417 — Exercise the repository handoff foundation through the Context Canvas transfer](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/417) | The task-bound exercise, reusable-artifact feedback, and skill disposition | The transferred repository completes one ordinary post-transfer Issue-to-change cycle and returns decision-changing friction |
 
-Issue #416 has settled the first working skill and runbook. The current front
-is #415. Its accepted source-awaiting bundle defines the portable manifest,
-explicit profile and Issue-seed selection, dependency-free admission,
-deterministic planning, owner-preserving verification, a plan-confirmed
-create-only local installer, deterministic local receipt, and source-received
-technology-profile contracts. The current #415 phase adds the separate
-GitHub Issue-route materializer: it inventories bounded live resource
-collections, preflights every rendered request,
-creates missing route members, resolves links in two passes, preserves owner
-work observed before finalization, and records a deterministic route receipt.
-Together, these phases give a receiving repository an inspectable, locally
-materializable foundation whose application stack still comes from received
-source. #417 receives the accepted bundle and Issue materializer for the first
-explicitly authorized live exercise. This is a revisable work route. It
+Issues #415 and #416 have settled the first working skill, runbook, versioned
+foundation, local installer, and GitHub Issue-route materializer. Issue #417 is
+the current front. Its first Context Canvas comparison found a coherent
+source-awaiting repository with a richer 19-Issue route already in use. The
+local v0.1.2 plan preserves six receiving-owner carriers and proposes one
+nested local-reference sentinel. The target root ignore rule already keeps
+`references/local/` outside the tracked repository, so the accepted Preserve
+existing classification leaves that sentinel unmaterialized. The Issue-route
+v0.1.0 plan is mechanically complete but would create a parallel two-Issue
+bootstrap. The same classification keeps the live Issue graph current and
+records both plans as adoption evidence. The skill and runbook now apply that
+receiving-fit judgment: an absent route can materialize, a one-to-one match can
+bind, and an equivalent carrier or richer graph can remain current. The source
+owner can route the actual Site source or export through the target's Issue #1.
+This is a revisable work route. It
 expresses work relations rather than a maturity score, and live GitHub state
 continues to lead on re-entry.
 
@@ -280,21 +281,18 @@ own evidence and receiving use.
 
 ## Re-entry
 
-1. Read live Issues #415 and #417 and name any difference from this account;
-   use closed Issue #416 as the accepted skill-and-runbook input.
-2. Complete review and delivery of #415's plan-confirmed create-only installer,
-   deterministic local receipt, and source-received technology-profile
-   contracts. Preserve the incoming application's runtime and dependency
-   direction, and give every mutation a plan, recovery coordinate, and
-   explicit authority boundary.
-3. Add the Issue materializer after the local file route has an accepted
-   recovery boundary.
-   Use the declared seed as bootstrap and recovery input while live owner-edited
-   Issues remain current authority.
-4. In `context-canvas`, resume at Issue #1 until source intake passes to the
+1. Read live HASE Issue #417 and Context Canvas Issue #1, and name any
+   difference from this account. Use closed Issues #415 and #416 as the
+   accepted foundation, materializer, skill, and runbook inputs.
+2. Re-run the local or Issue-route plan when the target state or accepted
+   bundle changes. Keep the accepted Preserve existing classification while
+   the receiving-owner carriers and richer live Issue graph provide the
+   intended abilities.
+3. In `context-canvas`, resume at Issue #1 when the source owner supplies the
+   current Site source or export. Let source intake pass to the
    pre-transfer Issues #2–#8; Issue #9 then receives the transfer.
-5. After transfer, observe one Issues #10–#16 collaboration cycle and return
+4. After transfer, observe one Issues #10–#16 collaboration cycle and return
    only decision-changing friction to #417.
-6. Revisit a Milestone 27 concept when its named trigger has formed; until
+5. Revisit a Milestone 27 concept when its named trigger has formed; until
    then, keep its Issue as a visible future receiver and preserve the current
    handoff's small foundation.

@@ -1,6 +1,6 @@
 ---
 title: Site repository build and handoff
-version: 0.1.0
+version: 0.1.1
 status: working
 audience: ai_collaborators
 source_band: public_possible
@@ -183,7 +183,11 @@ Use the versioned foundation manifest to select the smallest fitting set:
 
 Record each selected module, destination path, activation condition, and
 collision behavior. Keep the source-awaiting profile independent of
-application packages.
+application packages. Before applying the plan, distinguish a missing
+capability from behavior that a receiving-owner file already supplies.
+Mechanical eligibility establishes that the installer can create the path;
+the active Issue defines the receiving outcome and acceptance that make the
+addition useful.
 
 **Checkpoint:** The foundation validator establishes the declared files,
 links, and structural relationships it inspects. It leaves application
@@ -233,19 +237,31 @@ or account owner. Continue the parts of intake that remain observable.
 `implementation_authorized` for live Issue writes when explicitly granted.
 
 1. Compare the semantic Issue seed with the destination repository.
-2. Produce a dry-run plan naming labels, milestone, Issues, relations,
-   acceptance, authority, and next receivers.
-3. Apply the plan through stable semantic keys.
-4. Resolve live Issue numbers and cross-links in a second pass.
-5. Verify the resulting graph and write a receipt from semantic keys to live
+2. Classify the destination route as one of four states: needs a bootstrap;
+   offers an exact one-to-one binding; already has an established bespoke
+   graph; or awaits its owner's identity decision.
+3. Produce a dry-run plan naming labels, milestones, Issues, relations,
+   acceptance, authority, next receivers, mechanical actions, and blockers.
+4. Record the reviewed adoption classification for each planned resource:
+   Materialize, Bind, Preserve existing, or Hold.
+5. For Bind, provide the reviewed one-to-one bindings and create a fresh plan.
+   For Materialize, confirm the exact plan. Preserve existing and Hold retain
+   the current live state.
+6. Apply the confirmed plan only where its addition or reconciliation gives
+   the receiving repository a named useful ability.
+7. Resolve newly created Issue numbers and cross-links in a second pass.
+8. Verify the resulting graph and write a receipt from semantic keys to live
    coordinates and seed digest.
-6. Preserve owner-edited live Issues on later runs; report drift for reviewed
+9. Preserve owner-edited live Issues on later runs; report drift for reviewed
    reconciliation.
 
 For repository transfer, the already-live Issue graph remains authority and
 the seed becomes a comparison and recovery input. For template or fresh-
 repository routes, the destination graph becomes authority after verified
-materialization.
+materialization. A richer established graph can complete this phase through a
+grounded Preserve existing classification: the live route stays current, and
+the dry-run comparison records how that route provides clearer orientation
+than a parallel bootstrap.
 
 **Checkpoint:** A receiving collaborator can identify the current front,
 related work, acceptance, held decisions, and next receiver from
@@ -486,8 +502,10 @@ public return carries the bounded condition and continuation.
 | Shared worktree carries unrelated or ownership-unclear changes | Preserve it; use a separately authorized worktree or return the overlap and release event |
 | Site source remains unavailable | Complete only the source-awaiting profile and keep source intake current |
 | Incoming source conflicts with foundation files | Preserve both inputs, write a collision plan, and let the source-intake Issue choose the relationship |
+| A receiving-owner carrier already supplies the planned foundation behavior | Preserve that carrier, record the behavioral equivalence, and treat strict portable-profile conformance as a separate receiving decision |
 | Destination technology differs from an assumed stack | Replace the assumption with the observed technology profile and select source-native checks |
 | Issue seed differs from owner-edited live Issues | Keep live Issues current, show the semantic-key comparison, and review the specific drift |
+| A bespoke live Issue graph already provides a clearer continuation than the bootstrap seed | Preserve the live graph and keep the dry-run as adoption evidence; a later plan can materialize an unserved resource or bind an exact one-to-one match |
 | Required GitHub state is inaccessible | Mark it `unverified` and route the exact read or action to an authorized account owner |
 | Secret-shaped material appears | Keep details with the private finding owner, repair the source boundary, and return a sanitized condition |
 | Transfer remains pending or fails | Retain the preparing owner and last verified coordinate; name the platform condition and retry event |
