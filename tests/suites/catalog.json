@@ -347,6 +347,28 @@
       ]
     },
     {
+      "id": "node.repository-handoff-foundation",
+      "family": "repository-handoff-foundation",
+      "kind": "node-test",
+      "members": [
+        "tests/repository-handoff-foundation/foundation.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Ajv 2020 schema compilation plus dependency-free admission, read-only target comparison, owner-preserving collisions, filesystem boundaries, Issue-route closure and exact projections for the phase-one foundation bundle.",
+      "aliases": [
+        "test:repository-handoff-foundation"
+      ]
+    },
+    {
       "id": "node.schema-pages",
       "family": "schema-pages",
       "kind": "node-test",
@@ -1865,6 +1887,7 @@
         "node.narrative-architectures",
         "node.prod-deployment",
         "node.public-references",
+        "node.repository-handoff-foundation",
         "node.schema-pages",
         "node.security",
         "node.tables",
@@ -1954,6 +1977,7 @@
         "node.iframe-routes",
         "node.prod-deployment",
         "node.public-references",
+        "node.repository-handoff-foundation",
         "node.schema-pages",
         "node.security",
         "worker.source",
@@ -2245,6 +2269,9 @@
         ],
         "test:public-reference-materializer": [
           "tests/public-references/materializer.test.mjs"
+        ],
+        "test:repository-handoff-foundation": [
+          "tests/repository-handoff-foundation/foundation.test.mjs"
         ],
         "test:context-canvas": [
           "tests/context-canvas/*.test.mjs"

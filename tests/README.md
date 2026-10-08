@@ -49,6 +49,27 @@ quality, external URLs, release standing, and human interpretation to their
 own sources and reviewers. A materially new Markdown form enters with its own
 focused fixture or a maintained parser boundary before the contract claims it.
 
+## Repository handoff foundation
+
+The portable phase-one validator stays dependency-free. Its focused source
+contract pairs an isolated Node-only check with Ajv 2020 validation of the
+manifest, profile, and Issue-seed schemas:
+
+```sh
+npm run test:repository-handoff-foundation
+npm run check:repository-handoff-foundation
+```
+
+The suite copies the bundle into temporary directories and exercises clean,
+matching, owner-edited, missing, tampered, symbolic-link, special-file,
+resource-bound, mutated-manifest, and concurrent projection states. A passing
+result establishes digest-bound schema identity, schema conformance,
+deterministic read-only planning and verification, bounded source admission,
+portable target admission, fixed Issue-relation semantics, and exact
+JSON/YAML projection bytes for the checked-in phase-one bundle. Installation,
+live Issue materialization, received application behavior, and owner
+acceptance retain their separately authorized routes.
+
 ## Public-reference materialization
 
 Public-reference materialization has a separate dependency-free contract

@@ -1,0 +1,160 @@
+{
+  "$schema": "./schema/foundation-manifest.schema.v0.1.json",
+  "schemaVersion": "0.1",
+  "artifactType": "repository_handoff_foundation_manifest",
+  "key": "repository-handoff-foundation-v0.1",
+  "version": "0.1.0",
+  "defaultProfileKey": "source-awaiting",
+  "schemas": [
+    {
+      "key": "foundation-manifest",
+      "sourcePath": "schema/foundation-manifest.schema.v0.1.json",
+      "id": "urn:repository-handoff-foundation:schema:foundation-manifest:v0.1",
+      "sha256": "6e2d40396fd1a8c6a69fa662d0640256f7435f7faab90700a751a2b232768232"
+    },
+    {
+      "key": "foundation-profile",
+      "sourcePath": "schema/foundation-profile.schema.v0.1.json",
+      "id": "urn:repository-handoff-foundation:schema:foundation-profile:v0.1",
+      "sha256": "c64eeabec548d1bd20e6ea6c231970445a91bf96a18c143f797108b17f3a067b"
+    },
+    {
+      "key": "issue-route-seed",
+      "sourcePath": "schema/issue-route-seed.schema.v0.1.json",
+      "id": "urn:repository-handoff-foundation:schema:issue-route-seed:v0.1",
+      "sha256": "cfc9a70461a52386085acf66656a8a103600ebfb75948c05b819d1bd7da8fe9b"
+    }
+  ],
+  "modules": [
+    {
+      "key": "orientation",
+      "title": "Repository orientation",
+      "description": "A root README and collaboration ground for entering through current source, one live Issue, explicit authority, and proportionate evidence."
+    },
+    {
+      "key": "concept-nursery",
+      "title": "Concept Nursery",
+      "description": "A resting place for useful possibilities with present evidence, an open decision, a return signal, and a possible receiver."
+    },
+    {
+      "key": "threadkeeping",
+      "title": "Threadkeeping",
+      "description": "A durable rationale and re-entry route that stays distinct from live work state and current source behavior."
+    },
+    {
+      "key": "references",
+      "title": "Reference intake",
+      "description": "Public-safe and access-controlled reference lanes with provenance, receiving use, evidence limits, and source authority."
+    }
+  ],
+  "entries": [
+    {
+      "key": "orientation.readme",
+      "moduleKey": "orientation",
+      "sourcePath": "modules/orientation/README.md",
+      "targetPath": "README.md",
+      "profiles": [
+        "source-awaiting"
+      ],
+      "activationCondition": "The destination needs a source-neutral root orientation for a future owner and authorized AI collaborator.",
+      "ownership": "receiving_owner",
+      "collisionPolicy": "preserve_and_report",
+      "verificationPolicy": "present_regular_file",
+      "sha256": "307d95f9e9b00103acf5afb1bb44d13352c41da3ca314f1720c55aaddb90f6f9"
+    },
+    {
+      "key": "orientation.agents",
+      "moduleKey": "orientation",
+      "sourcePath": "modules/orientation/AGENTS.md",
+      "targetPath": "AGENTS.md",
+      "profiles": [
+        "source-awaiting"
+      ],
+      "activationCondition": "The destination will use repository-held collaboration guidance before the site stack is known.",
+      "ownership": "receiving_owner",
+      "collisionPolicy": "preserve_and_report",
+      "verificationPolicy": "present_regular_file",
+      "sha256": "7af6becc472d97a7feb7314eb08e65f7b869f612524c7d0c8972ced0fe692a91"
+    },
+    {
+      "key": "concept-nursery.readme",
+      "moduleKey": "concept-nursery",
+      "sourcePath": "modules/concept-nursery/README.md",
+      "targetPath": "planning/concept-nursery/README.md",
+      "profiles": [
+        "source-awaiting"
+      ],
+      "activationCondition": "Useful possibilities need a resting route separate from active Issues and accepted source changes.",
+      "ownership": "receiving_owner",
+      "collisionPolicy": "preserve_and_report",
+      "verificationPolicy": "present_regular_file",
+      "sha256": "8a72ade27644a2f46bc048f3e8041d5fcab76861cc7a2cb2f01504f98005df42"
+    },
+    {
+      "key": "threadkeeping.readme",
+      "moduleKey": "threadkeeping",
+      "sourcePath": "modules/threadkeeping/README.md",
+      "targetPath": "threadkeeping/README.md",
+      "profiles": [
+        "source-awaiting"
+      ],
+      "activationCondition": "Settled rationale, evidence limits, recovery coordinates, and exact re-entry need a durable owner.",
+      "ownership": "receiving_owner",
+      "collisionPolicy": "preserve_and_report",
+      "verificationPolicy": "present_regular_file",
+      "sha256": "5d953c558df2b9abbc0d051e463c4733657175e33888d49444781b120357b63b"
+    },
+    {
+      "key": "references.readme",
+      "moduleKey": "references",
+      "sourcePath": "modules/references/README.md",
+      "targetPath": "references/README.md",
+      "profiles": [
+        "source-awaiting"
+      ],
+      "activationCondition": "Supplied material needs explicit provenance, access boundaries, receiving use, and source authority.",
+      "ownership": "receiving_owner",
+      "collisionPolicy": "preserve_and_report",
+      "verificationPolicy": "present_regular_file",
+      "sha256": "e63e926d38b0b1ecdd6f87f5eeb3e0ca5a144a1b5b0a330f2887cb6219b60743"
+    },
+    {
+      "key": "references.public-readme",
+      "moduleKey": "references",
+      "sourcePath": "modules/references/public/README.md",
+      "targetPath": "references/public/README.md",
+      "profiles": [
+        "source-awaiting"
+      ],
+      "activationCondition": "Public-safe references need a repository-visible intake lane.",
+      "ownership": "receiving_owner",
+      "collisionPolicy": "preserve_and_report",
+      "verificationPolicy": "present_regular_file",
+      "sha256": "9c1961b491bd20f78efcf696933e5f8e71ffb56821f2e41e62503f16a5660307"
+    },
+    {
+      "key": "references.local-ignore",
+      "moduleKey": "references",
+      "sourcePath": "modules/references/local/.gitignore",
+      "targetPath": "references/local/.gitignore",
+      "profiles": [
+        "source-awaiting"
+      ],
+      "activationCondition": "Access-controlled working references need a local lane whose contents stay outside Git history.",
+      "ownership": "foundation_generator",
+      "collisionPolicy": "create_if_absent",
+      "verificationPolicy": "exact_bytes",
+      "sha256": "240a3e0d37d2e86b614063f5347eb02d4f99ca6c254de6b82871ff8d95532a7d"
+    }
+  ],
+  "issueSeeds": [
+    {
+      "key": "source-awaiting-owner-operable-route",
+      "sourcePath": "issue-route/source-awaiting.seed.example.json",
+      "profiles": [
+        "source-awaiting"
+      ],
+      "sha256": "6fd76d35d5275f238e8581682d5d0c9626abf1e7e4fd420603255c4639847823"
+    }
+  ]
+}
