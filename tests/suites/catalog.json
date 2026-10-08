@@ -2177,7 +2177,8 @@
     },
     "workerSupport": [
       "cloudflare/schemas-worker/test/catalog-source-preservation.mjs",
-      "cloudflare/schemas-worker/test/http-validators.mjs"
+      "cloudflare/schemas-worker/test/http-validators.mjs",
+      "cloudflare/schemas-worker/test/publication-contract.mjs"
     ],
     "browserSupport": [
       "tools/core-architecture-browser-helper.mjs",
@@ -2218,12 +2219,6 @@
         "build:schema-delivery"
       ],
       "dry-run:schema-delivery:release": [
-        "build:schema-delivery"
-      ],
-      "deploy:schema-delivery:release": [
-        "build:schema-delivery"
-      ],
-      "deploy:schema-delivery:prod": [
         "build:schema-delivery"
       ],
       "dry-run:context-canvas-field-pilot": [

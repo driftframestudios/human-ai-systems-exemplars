@@ -1,8 +1,8 @@
 # Environment receivers
 
-GitHub environments name durable receiving contexts. Repository variables stop
-runner acquisition before evidence work begins. These are related controls with
-different jobs:
+GitHub environments name durable receiving contexts. Repository variables admit
+runners or a specific deployment job before its work begins. These are related
+controls with different jobs:
 
 - `ACTIONS_BUDGET_<RECEIVER>` decides whether a workflow for that receiver may
   acquire a GitHub-hosted runner.
@@ -14,6 +14,12 @@ different jobs:
   manual dispatch remains available.
 - `DEPLOYMENT_ACTIVE_RECEIVERS` is a JSON list of receivers currently allowed to
   publish or deploy. Its resting value is `[]`.
+- `SCHEMA_WORKER_DEPENDENCY_GATE` is the repository-level production dependency
+  prerequisite. Its resting, held state is unset or any value other than
+  `open`. Set it to `open` only after Issue #402 accepts a normally published
+  Wrangler/Miniflare/Sharp closure or a separately reviewed fallback. This gate
+  applies only to the `prod` deployment job and grants no runner or deployment
+  authority by itself.
 - a job references its GitHub environment with `deployment: false` when it needs
   environment-scoped configuration while deployment history stays reserved for
   publishing work.
@@ -28,8 +34,8 @@ The current budget posture is:
 | `dev` | `false` | Sustained feature integration at rest |
 | `docs` | `false` | Metered evidence at rest; reviewed Pages projection continues |
 | `stg` | `false` | Candidate serving and Worker pilots at rest |
-| `release` | `true` · 300 minutes | Automatic schema contract; connected un-routed release Worker deployment |
-| `prod` | `true` · 300 minutes | Automatic schema contract; protected production deployment receiver |
+| `release` | `true` · 300 minutes | Automatic schema Worker contract; deployment remains at rest |
+| `prod` | `true` · 300 minutes | Automatic schema Worker contract; protected production deployment when the receiver and dependency gates are open |
 
 The named long-lived environments accept deployment configuration only from
 their matching branches. `res/*` uses the `research` configuration after a
@@ -39,13 +45,16 @@ recovery branch.
 
 Environment-level variables arrive after a job starts, so they fit runtime
 configuration. Repository-level budget values provide the pre-run spend gate
-and keep resting receivers from acquiring a runner.
+and keep resting receivers from acquiring a runner. The repository-level schema
+dependency gate is narrower: contracts continue to run while a held gate keeps
+the production deployment job from starting.
 
 The release and production allocation markers describe the current approved
 collaboration pool; GitHub remains the billing record. Their shared workflow
-has a twelve-minute contract ceiling and an eight-minute deployment ceiling.
-The normal path uses substantially less; a profile threshold notification can
-return either budget switch to `false`.
+has a twelve-minute contract ceiling for both receiver branches. Only `prod`
+admits the separate eight-minute deployment job. The normal path uses
+substantially less; a profile threshold notification can return either budget
+switch to `false`.
 
 ## Public-reference configuration at rest
 
@@ -90,19 +99,20 @@ GitHub environment that needs them:
   variables;
 - a least-privilege Cloudflare API token becomes an environment secret;
 - `dev` or `stg` credentials reach preview resources only;
-- `release` credentials support an accepted upload to the named, un-routed
-  Wrangler environment after a passing contract;
+- `release` runs contract evidence without Cloudflare deployment credentials;
 - `prod` credentials reach the production resource only after the protected
-  branch transition and environment approval.
+  branch transition, active-receiver selection, dependency-gate opening, and
+  environment approval.
 
-The asset-only Worker operates entirely from public static assets. Each
-connected deployment uses the non-sensitive `CLOUDFLARE_ACCOUNT_ID` variable
-and a least-privilege `CLOUDFLARE_API_TOKEN` secret from its matching GitHub
-environment. Secret values remain in that receiver and enter only the
-credential-confirmation and deployment steps. Evidence-budget activation and
-deployment activation are independent decisions; a receipt budget carries
-evidence authority while the receiver list carries upload or publication
-authority.
+The manifest-driven schema Worker publishes checked-in public artifacts. Each
+connected production deployment uses the non-sensitive
+`CLOUDFLARE_ACCOUNT_ID` variable and a least-privilege
+`CLOUDFLARE_API_TOKEN` secret from the `prod` GitHub environment. Secret values
+remain in that receiver and enter only the credential-confirmation and
+deployment steps. Evidence-budget activation, production-receiver activation,
+and dependency clearance are independent decisions: a receipt budget carries
+evidence authority, the receiver list carries publication authority, and the
+dependency gate records the separately accepted toolchain posture.
 
 Credential values live exclusively in GitHub environment settings and briefly
 enter process memory for those two steps. Repository files, generated assets,
@@ -115,9 +125,10 @@ The `prod` branch supplies the source approval boundary: one approving
 pull-request review, stale-approval dismissal, and administrator inclusion. Its
 GitHub environment accepts deployment only from the exact `prod` branch. Before
 connected production activation, that environment receives its named human
-reviewer and the selected administrator-bypass posture. Release deployment is
-automatic after its contract and activation switch; production deployment
-retains both source review and a separately accepted environment handoff.
+reviewer and the selected administrator-bypass posture. `release` provides
+contract evidence only and creates no live route. Production deployment retains
+source review, active-receiver selection, the held dependency gate, and a
+separately accepted environment handoff.
 
 ## Sources
 

@@ -44,6 +44,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          fetch-tags: true
           persist-credentials: false
 
       - name: Use the reviewed Node runtime
@@ -51,35 +52,40 @@ jobs:
         with:
           node-version: "22"
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            cloudflare/schemas-worker/package-lock.json
 
-      - name: Install the locked release toolchain
+      - name: Install the locked root toolchain
         run: npm ci --ignore-scripts --no-audit --no-fund
 
-      - name: Check schema identities and delivery bytes
-        run: |
-          npm run check:schemas
-          npm run build:schema-delivery
-          npm run check:schema-delivery
+      - name: Install the locked schema Worker toolchain
+        working-directory: cloudflare/schemas-worker
+        run: npm ci --ignore-scripts --no-audit --no-fund
 
-      - name: Dry-run the receiving Cloudflare environment
-        shell: bash
+      - name: Check schema identities
+        run: npm run check:schemas
+
+      - name: Check the accepted schema Worker publication
+        working-directory: cloudflare/schemas-worker
+        run: |
+          npm run check:publication
+          npm test
+
+      - name: Dry-run the schema Worker bundle
+        working-directory: cloudflare/schemas-worker
         env:
           WRANGLER_LOG_PATH: ${{ runner.temp }}/wrangler-logs
-        run: |
-          set -euo pipefail
-          case "$RECEIVER" in
-            release) npm run dry-run:schema-delivery:release ;;
-            prod) npm run dry-run:schema-delivery ;;
-            *) echo "Choose the release or prod receiver."; exit 2 ;;
-          esac
+        run: npm exec -- wrangler deploy --dry-run
 
       - name: Prepare the pinned secret-material reader
         run: npm run security:secrets:install
 
-      - name: Prove and read the secret-material boundary
+      - name: Prove and inspect the selected public artifact
         run: |
           npm run test:secret-material
-          npm run security:secrets
+          npm run security:secrets:canary
+          npm run security:secrets:artifact -- cloudflare/schemas-worker/public
 
       - name: Record the bounded contract receipt
         if: always()
@@ -95,30 +101,34 @@ jobs:
             else
               echo "- Approved cycle allocation: \`${PROD_BUDGET_MINUTES:-unset} minutes\`"
             fi
-            echo "- Contract: schema identity, exact delivery bytes, Wrangler dry run, and secret-material boundary"
-            echo "- Deployment authority: independently selected through \`DEPLOYMENT_ACTIVE_RECEIVERS\`"
+            echo "- Contract: schema identity, exact Worker publication, Worker unit tests, Wrangler dry run, and selected-artifact secret boundary"
+            echo "- Deployment authority: a successful \`prod\` push with \`DEPLOYMENT_ACTIVE_RECEIVERS\` and \`SCHEMA_WORKER_DEPENDENCY_GATE=open\`"
           } >> "$GITHUB_STEP_SUMMARY"
 
   deploy:
-    name: Deploy schema receiver
+    name: Deploy production schema Worker
     needs: contract
     if: >-
       github.event_name == 'push' &&
-      contains(fromJSON(vars.DEPLOYMENT_ACTIVE_RECEIVERS || '[]'), github.ref_name)
+      github.ref_name == 'prod' &&
+      contains(fromJSON(vars.DEPLOYMENT_ACTIVE_RECEIVERS || '[]'), 'prod') &&
+      vars.SCHEMA_WORKER_DEPENDENCY_GATE == 'open'
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     concurrency:
-      group: schema-delivery-deploy-${{ github.ref_name }}
+      group: schema-delivery-deploy-prod
       cancel-in-progress: false
     environment:
-      name: ${{ github.ref_name }}
+      name: prod
     env:
-      RECEIVER: ${{ github.ref_name }}
+      RECEIVER: prod
 
     steps:
       - name: Receive the accepted branch coordinate
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          fetch-depth: 0
+          fetch-tags: true
           persist-credentials: false
 
       - name: Use the reviewed Node runtime
@@ -126,40 +136,34 @@ jobs:
         with:
           node-version: "22"
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            cloudflare/schemas-worker/package-lock.json
 
-      - name: Install the locked deployment toolchain
+      - name: Install the locked root toolchain
         run: npm ci --ignore-scripts --no-audit --no-fund
 
-      - name: Confirm the credential receiver
-        shell: bash
-        env:
-          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: |
-          set -euo pipefail
-          if [[ -z "${CLOUDFLARE_ACCOUNT_ID:-}" || -z "${CLOUDFLARE_API_TOKEN:-}" ]]; then
-            echo "The $RECEIVER environment is ready for its Cloudflare account coordinate and API token."
-            exit 2
-          fi
+      - name: Install the locked schema Worker toolchain
+        working-directory: cloudflare/schemas-worker
+        run: npm ci --ignore-scripts --no-audit --no-fund
 
-      - name: Rebuild and verify the accepted asset closure
-        run: |
-          npm run build:schema-delivery
-          npm run check:schema-delivery
+      - name: Verify the accepted schema Worker publication
+        working-directory: cloudflare/schemas-worker
+        run: npm run check:publication
 
-      - name: Deploy the selected schema receiver
-        shell: bash
+      - name: Deploy the accepted schema Worker
+        working-directory: cloudflare/schemas-worker
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           WRANGLER_LOG_PATH: ${{ runner.temp }}/wrangler-logs
         run: |
           set -euo pipefail
-          case "$RECEIVER" in
-            release) npm run deploy:schema-delivery:release -- --message "$GITHUB_REPOSITORY@$GITHUB_SHA" ;;
-            prod) npm run deploy:schema-delivery:prod -- --message "$GITHUB_REPOSITORY@$GITHUB_SHA" ;;
-            *) echo "Choose the release or prod receiver."; exit 2 ;;
-          esac
+          if [[ -z "${CLOUDFLARE_ACCOUNT_ID:-}" || -z "${CLOUDFLARE_API_TOKEN:-}" ]]; then
+            echo "The $RECEIVER environment is ready for its Cloudflare account coordinate and API token."
+            exit 2
+          fi
+          exec ./node_modules/.bin/wrangler deploy --strict --message "$GITHUB_REPOSITORY@$GITHUB_SHA"
 
       - name: Record the deployment receipt
         shell: bash
@@ -169,6 +173,7 @@ jobs:
             echo
             echo "- Receiver: \`$RECEIVER\`"
             echo "- Repository coordinate: \`$GITHUB_SHA\`"
-            echo "- Wrangler configuration: \`cloudflare/schema-delivery/wrangler.jsonc\`"
+            echo "- Wrangler configuration: \`cloudflare/schemas-worker/wrangler.jsonc\`"
+            echo "- Dependency gate: \`SCHEMA_WORKER_DEPENDENCY_GATE=open\`"
             echo "- Recovery: use the preceding Cloudflare Worker version named in deployment history"
           } >> "$GITHUB_STEP_SUMMARY"

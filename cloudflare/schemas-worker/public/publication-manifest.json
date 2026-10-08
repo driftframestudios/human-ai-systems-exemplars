@@ -1,6 +1,12 @@
 {
-  "schemaVersion": "1",
-  "sourceRevision": "c3dbb9860e77d001e6b1c6f09fd76529911b39a3",
+  "schemaVersion": "2",
+  "sourceRevision": "dc6b62c6e3f1e8748237fc767def75b32527140a",
+  "peerRelease": {
+    "releaseTag": "pages-v0.2.0",
+    "tagObject": "9165a4af5c0de7d5e81eb2c86ec7cc83d2af5b76",
+    "projectionRevision": "bf257f6674e88945ed143c95f010b8e827066ade",
+    "closureSha256": "f25cf5b3b6681c67fddc81a82f5c0ba3bb49c3766d0a79df92fa3b1bbe26cf61"
+  },
   "frozen": [
     "/a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json",
     "/a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json",
@@ -10,7 +16,11 @@
     "/collaboration-skills/0.1.0/collaboration-skill.schema.json",
     "/context-canvas/1.0.0/context-canvas.schema.json",
     "/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+    "/fg/schema/threadkeeping-ledger.schema.v0.1.json",
     "/investment-analysis/0.2.0/state.schema.json",
+    "/na/schema/narrative-capsule-composition.schema.v0.1.json",
+    "/na/schema/narrative-sampling-tableau-state.schema.v0.1.json",
+    "/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json",
     "/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
     "/schemas/a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json",
     "/schemas/a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json",
@@ -21,7 +31,11 @@
     "/schemas/collaboration-skills/0.1.0/collaboration-skill.schema.json",
     "/schemas/context-canvas/1.0.0/context-canvas.schema.json",
     "/schemas/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+    "/schemas/fg/schema/threadkeeping-ledger.schema.v0.1.json",
     "/schemas/investment-analysis/0.2.0/state.schema.json",
+    "/schemas/na/schema/narrative-capsule-composition.schema.v0.1.json",
+    "/schemas/na/schema/narrative-sampling-tableau-state.schema.v0.1.json",
+    "/schemas/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json",
     "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
     "/schemas/visualization/visualization-fidelity-atlas.schema.v0.1.json",
     "/visualization/visualization-fidelity-atlas.schema.v0.1.json"
@@ -40,11 +54,749 @@
     "/visualization/visualization-fidelity-atlas.schema.v0.1.json": "/schemas/visualization/visualization-fidelity-atlas.schema.v0.1.json",
     "/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json": "/schemas/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
     "/context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json": "/schemas/context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json",
+    "/na/schema/narrative-capsule-composition.schema.v0.1.json": "/schemas/na/schema/narrative-capsule-composition.schema.v0.1.json",
+    "/na/schema/narrative-sampling-tableau-state.schema.v0.1.json": "/schemas/na/schema/narrative-sampling-tableau-state.schema.v0.1.json",
+    "/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json": "/schemas/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json",
+    "/fg/schema/threadkeeping-ledger.schema.v0.1.json": "/schemas/fg/schema/threadkeeping-ledger.schema.v0.1.json",
     "/prototype-exemplars/1.0.0/prototype-exemplars.example.json": "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.example.json",
     "/context-canvas/1.0.0/context-canvas.context.jsonld": "/schemas/context-canvas/1.0.0/context-canvas.context.jsonld",
     "/investment-analysis/0.2.0/example.json": "/schemas/investment-analysis/0.2.0/example.json",
     "/investment-analysis/0.2.0/README.md": "/schemas/investment-analysis/0.2.0/README.md",
+    "/a3-stacked-cube-atlas-expanded/0.2/a3-stacked-cube.context.jsonld": "/schemas/a3-stacked-cube-atlas-expanded/0.2/a3-stacked-cube.context.jsonld",
+    "/schemas/a3-stacked-cube-visual-system.context.v0.1.jsonld": "/schemas/a3-stacked-cube-visual-system.context.v0.1.jsonld",
+    "/visualization/visualization-fidelity-atlas.context.v0.1.jsonld": "/schemas/visualization/visualization-fidelity-atlas.context.v0.1.jsonld",
+    "/narrative-threadkeeping/0.1/README.md": "/schemas/narrative-threadkeeping/0.1/README.md",
+    "/na/schema/narrative-capsule-composition.context.v0.1.jsonld": "/schemas/na/schema/narrative-capsule-composition.context.v0.1.jsonld",
+    "/na/schema/narrative-capsule-composition.example.public.v0.1.json": "/schemas/na/schema/narrative-capsule-composition.example.public.v0.1.json",
+    "/na/schema/narrative-sampling-tableau.context.v0.1.jsonld": "/schemas/na/schema/narrative-sampling-tableau.context.v0.1.jsonld",
+    "/na/schema/narrative-sampling-tableau-state.example.public.v0.1.json": "/schemas/na/schema/narrative-sampling-tableau-state.example.public.v0.1.json",
+    "/na/schema/technology-fit-sampling-tableau.context.v0.1.jsonld": "/schemas/na/schema/technology-fit-sampling-tableau.context.v0.1.jsonld",
+    "/na/schema/technology-fit-sampling-tableau-state.example.public.v0.1.json": "/schemas/na/schema/technology-fit-sampling-tableau-state.example.public.v0.1.json",
+    "/fg/schema/threadkeeping-ledger.context.v0.1.jsonld": "/schemas/fg/schema/threadkeeping-ledger.context.v0.1.jsonld",
+    "/fg/schema/threadkeeping-ledger.example.public.v0.1.json": "/schemas/fg/schema/threadkeeping-ledger.example.public.v0.1.json",
     "/schemas/schema-catalog.json": "/schema-catalog.json"
+  },
+  "resources": {
+    "/": {
+      "asset": "/index.html",
+      "contentType": "text/html; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/investment-analysis/0.2.0/state.schema.json": {
+      "asset": "/schemas/investment-analysis/0.2.0/state.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json": {
+      "asset": "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/context-canvas/1.0.0/context-canvas.schema.json": {
+      "asset": "/schemas/context-canvas/1.0.0/context-canvas.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/collaboration-skills/0.1.0/collaboration-skill.schema.json": {
+      "asset": "/schemas/collaboration-skills/0.1.0/collaboration-skill.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/collaboration-skills/0.1.0/collaboration-account.schema.json": {
+      "asset": "/schemas/collaboration-skills/0.1.0/collaboration-account.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json": {
+      "asset": "/schemas/a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json": {
+      "asset": "/schemas/a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/a3-stacked-cube-atlas-expanded/0.2/source-registry.schema.json": {
+      "asset": "/schemas/a3-stacked-cube-atlas-expanded/0.2/source-registry.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json": {
+      "asset": "/schemas/a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/a3-stacked-cube-state-v0.1.json": {
+      "asset": "/schemas/a3-stacked-cube-state-v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/visualization/visualization-fidelity-atlas.schema.v0.1.json": {
+      "asset": "/schemas/visualization/visualization-fidelity-atlas.schema.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json": {
+      "asset": "/schemas/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json": {
+      "asset": "/schemas/context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/na/schema/narrative-capsule-composition.schema.v0.1.json": {
+      "asset": "/schemas/na/schema/narrative-capsule-composition.schema.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/na/schema/narrative-sampling-tableau-state.schema.v0.1.json": {
+      "asset": "/schemas/na/schema/narrative-sampling-tableau-state.schema.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json": {
+      "asset": "/schemas/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/fg/schema/threadkeeping-ledger.schema.v0.1.json": {
+      "asset": "/schemas/fg/schema/threadkeeping-ledger.schema.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.example.json": {
+      "asset": "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.example.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/context-canvas/1.0.0/context-canvas.context.jsonld": {
+      "asset": "/schemas/context-canvas/1.0.0/context-canvas.context.jsonld",
+      "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/investment-analysis/0.2.0/example.json": {
+      "asset": "/schemas/investment-analysis/0.2.0/example.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/investment-analysis/0.2.0/README.md": {
+      "asset": "/schemas/investment-analysis/0.2.0/README.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/a3-stacked-cube-atlas-expanded/0.2/a3-stacked-cube.context.jsonld": {
+      "asset": "/schemas/a3-stacked-cube-atlas-expanded/0.2/a3-stacked-cube.context.jsonld",
+      "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/a3-stacked-cube-visual-system.context.v0.1.jsonld": {
+      "asset": "/schemas/a3-stacked-cube-visual-system.context.v0.1.jsonld",
+      "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/visualization/visualization-fidelity-atlas.context.v0.1.jsonld": {
+      "asset": "/schemas/visualization/visualization-fidelity-atlas.context.v0.1.jsonld",
+      "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/narrative-threadkeeping/0.1/README.md": {
+      "asset": "/schemas/narrative-threadkeeping/0.1/README.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/na/schema/narrative-capsule-composition.context.v0.1.jsonld": {
+      "asset": "/schemas/na/schema/narrative-capsule-composition.context.v0.1.jsonld",
+      "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/na/schema/narrative-capsule-composition.example.public.v0.1.json": {
+      "asset": "/schemas/na/schema/narrative-capsule-composition.example.public.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/na/schema/narrative-sampling-tableau.context.v0.1.jsonld": {
+      "asset": "/schemas/na/schema/narrative-sampling-tableau.context.v0.1.jsonld",
+      "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/na/schema/narrative-sampling-tableau-state.example.public.v0.1.json": {
+      "asset": "/schemas/na/schema/narrative-sampling-tableau-state.example.public.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/na/schema/technology-fit-sampling-tableau.context.v0.1.jsonld": {
+      "asset": "/schemas/na/schema/technology-fit-sampling-tableau.context.v0.1.jsonld",
+      "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/na/schema/technology-fit-sampling-tableau-state.example.public.v0.1.json": {
+      "asset": "/schemas/na/schema/technology-fit-sampling-tableau-state.example.public.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/fg/schema/threadkeeping-ledger.context.v0.1.jsonld": {
+      "asset": "/schemas/fg/schema/threadkeeping-ledger.context.v0.1.jsonld",
+      "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/fg/schema/threadkeeping-ledger.example.public.v0.1.json": {
+      "asset": "/schemas/fg/schema/threadkeeping-ledger.example.public.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/LICENSE": {
+      "asset": "/LICENSE",
+      "contentType": "text/plain; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/AUTHORS": {
+      "asset": "/AUTHORS",
+      "contentType": "text/plain; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/CITATION.cff": {
+      "asset": "/CITATION.cff",
+      "contentType": "application/yaml; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/attribution.yml": {
+      "asset": "/attribution.yml",
+      "contentType": "application/yaml; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/AI-DATA-USE.md": {
+      "asset": "/AI-DATA-USE.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/catalog.json": {
+      "asset": "/skills/catalog.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/audit-anthropomorphic-cues/projection.json": {
+      "asset": "/skills/audit-anthropomorphic-cues/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/bounded-support-routing/projection.json": {
+      "asset": "/skills/bounded-support-routing/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/collaboration-accounting/projection.json": {
+      "asset": "/skills/collaboration-accounting/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/collaboration-runbook-authoring/projection.json": {
+      "asset": "/skills/collaboration-runbook-authoring/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/context-canvas-css-ownership/projection.json": {
+      "asset": "/skills/context-canvas-css-ownership/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/context-canvas-surface-reading/projection.json": {
+      "asset": "/skills/context-canvas-surface-reading/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/context-canvas-visual-verification/projection.json": {
+      "asset": "/skills/context-canvas-visual-verification/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/contextual-jargon-scan/projection.json": {
+      "asset": "/skills/contextual-jargon-scan/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/cost-and-ownership-analysis/projection.json": {
+      "asset": "/skills/cost-and-ownership-analysis/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/declarative-skill-authoring/projection.json": {
+      "asset": "/skills/declarative-skill-authoring/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/embedded-prototype-layout/projection.json": {
+      "asset": "/skills/embedded-prototype-layout/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/evidence-grounded-research-spike/projection.json": {
+      "asset": "/skills/evidence-grounded-research-spike/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/issue-chain-stewardship/projection.json": {
+      "asset": "/skills/issue-chain-stewardship/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/locator-boundary-stewardship/projection.json": {
+      "asset": "/skills/locator-boundary-stewardship/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/practitioner-probe/projection.json": {
+      "asset": "/skills/practitioner-probe/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/repository-attribution-stewardship/projection.json": {
+      "asset": "/skills/repository-attribution-stewardship/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/repository-reentry/projection.json": {
+      "asset": "/skills/repository-reentry/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/schema-contract-authoring/projection.json": {
+      "asset": "/skills/schema-contract-authoring/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/secret-boundary-inspection/projection.json": {
+      "asset": "/skills/secret-boundary-inspection/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/semantic-table-design/projection.json": {
+      "asset": "/skills/semantic-table-design/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source-authority-mapping/projection.json": {
+      "asset": "/skills/source-authority-mapping/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/stateful-artifact-behavior-contracts/projection.json": {
+      "asset": "/skills/stateful-artifact-behavior-contracts/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/uv-backed-python-execution/projection.json": {
+      "asset": "/skills/uv-backed-python-execution/projection.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/audit-anthropomorphic-cues/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/audit-anthropomorphic-cues/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/bounded-support-routing/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/bounded-support-routing/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/collaboration-accounting/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/collaboration-accounting/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/collaboration-runbook-authoring/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/collaboration-runbook-authoring/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/context-canvas-css-ownership/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/context-canvas-css-ownership/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/context-canvas-surface-reading/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/context-canvas-surface-reading/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/context-canvas-visual-verification/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/context-canvas-visual-verification/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/contextual-jargon-scan/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/contextual-jargon-scan/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/cost-and-ownership-analysis/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/cost-and-ownership-analysis/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/declarative-skill-authoring/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/declarative-skill-authoring/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/embedded-prototype-layout/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/embedded-prototype-layout/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/evidence-grounded-research-spike/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/evidence-grounded-research-spike/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/issue-chain-stewardship/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/issue-chain-stewardship/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/locator-boundary-stewardship/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/locator-boundary-stewardship/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/practitioner-probe/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/practitioner-probe/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/repository-attribution-stewardship/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/repository-attribution-stewardship/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/repository-reentry/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/repository-reentry/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/schema-contract-authoring/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/schema-contract-authoring/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/secret-boundary-inspection/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/secret-boundary-inspection/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/semantic-table-design/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/semantic-table-design/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/source-authority-mapping/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/source-authority-mapping/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/stateful-artifact-behavior-contracts/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/uv-backed-python-execution/SKILL.md": {
+      "asset": "/skills/source/.agents/skills/uv-backed-python-execution/SKILL.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/bounded-support-routing/references/github-issue-label-routing.md": {
+      "asset": "/skills/source/.agents/skills/bounded-support-routing/references/github-issue-label-routing.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/bounded-support-routing/references/openai-codex-spark.md": {
+      "asset": "/skills/source/.agents/skills/bounded-support-routing/references/openai-codex-spark.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/github/workflows/prototype-unit-tests.yml": {
+      "asset": "/skills/source/github/workflows/prototype-unit-tests.yml",
+      "contentType": "application/yaml; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/collaboration-accounting/references/candidacy-and-routing.md": {
+      "asset": "/skills/source/.agents/skills/collaboration-accounting/references/candidacy-and-routing.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/collaboration-accounting/references/task-bound-skill-projections.md": {
+      "asset": "/skills/source/.agents/skills/collaboration-accounting/references/task-bound-skill-projections.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/context-canvas-css-ownership/references/scenarios.md": {
+      "asset": "/skills/source/.agents/skills/context-canvas-css-ownership/references/scenarios.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/context-canvas-css-ownership/references/surface-color-and-state-roles.md": {
+      "asset": "/skills/source/.agents/skills/context-canvas-css-ownership/references/surface-color-and-state-roles.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/cost-and-ownership-analysis/references/python-boundaries-and-traversal-cost.md": {
+      "asset": "/skills/source/.agents/skills/cost-and-ownership-analysis/references/python-boundaries-and-traversal-cost.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/cost-and-ownership-analysis/references/ownership-preserving-reuse.md": {
+      "asset": "/skills/source/.agents/skills/cost-and-ownership-analysis/references/ownership-preserving-reuse.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md": {
+      "asset": "/skills/source/.agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md": {
+      "asset": "/skills/source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/locator-boundary-stewardship/references/issue-and-pull-request-practice.md": {
+      "asset": "/skills/source/.agents/skills/locator-boundary-stewardship/references/issue-and-pull-request-practice.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/locator-boundary-stewardship/references/public-safe-threadkeeping.md": {
+      "asset": "/skills/source/.agents/skills/locator-boundary-stewardship/references/public-safe-threadkeeping.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/secret-boundary-inspection/references/embedded-metadata-publication-boundary.md": {
+      "asset": "/skills/source/.agents/skills/secret-boundary-inspection/references/embedded-metadata-publication-boundary.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/threadkeeping/repository-secret-material-boundary.md": {
+      "asset": "/skills/source/threadkeeping/repository-secret-material-boundary.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/threadkeeping/context-canvas-public-reference-materialization.md": {
+      "asset": "/skills/source/threadkeeping/context-canvas-public-reference-materialization.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md": {
+      "asset": "/skills/source/threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md": {
+      "asset": "/skills/source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md": {
+      "asset": "/skills/source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/context-canvas-project-surface/context-canvas/atlas-gallery.js": {
+      "asset": "/skills/source/context-canvas-project-surface/context-canvas/atlas-gallery.js",
+      "contentType": "text/javascript; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs": {
+      "asset": "/skills/source/tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs",
+      "contentType": "text/javascript; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs": {
+      "asset": "/skills/source/tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs",
+      "contentType": "text/javascript; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/skills/source/threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md": {
+      "asset": "/skills/source/threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/index.html": {
+      "asset": "/index.html",
+      "contentType": "text/html; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schema-catalog.json": {
+      "asset": "/schema-catalog.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/investment-analysis/0.2.0/state.schema.json": {
+      "asset": "/schemas/investment-analysis/0.2.0/state.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/prototype-exemplars/1.0.0/prototype-exemplars.schema.json": {
+      "asset": "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/context-canvas/1.0.0/context-canvas.schema.json": {
+      "asset": "/schemas/context-canvas/1.0.0/context-canvas.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/collaboration-skills/0.1.0/collaboration-skill.schema.json": {
+      "asset": "/schemas/collaboration-skills/0.1.0/collaboration-skill.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/collaboration-skills/0.1.0/collaboration-account.schema.json": {
+      "asset": "/schemas/collaboration-skills/0.1.0/collaboration-account.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json": {
+      "asset": "/schemas/a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json": {
+      "asset": "/schemas/a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/a3-stacked-cube-atlas-expanded/0.2/source-registry.schema.json": {
+      "asset": "/schemas/a3-stacked-cube-atlas-expanded/0.2/source-registry.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json": {
+      "asset": "/schemas/a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/visualization/visualization-fidelity-atlas.schema.v0.1.json": {
+      "asset": "/schemas/visualization/visualization-fidelity-atlas.schema.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json": {
+      "asset": "/schemas/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json": {
+      "asset": "/schemas/context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/na/schema/narrative-capsule-composition.schema.v0.1.json": {
+      "asset": "/schemas/na/schema/narrative-capsule-composition.schema.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/na/schema/narrative-sampling-tableau-state.schema.v0.1.json": {
+      "asset": "/schemas/na/schema/narrative-sampling-tableau-state.schema.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json": {
+      "asset": "/schemas/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/fg/schema/threadkeeping-ledger.schema.v0.1.json": {
+      "asset": "/schemas/fg/schema/threadkeeping-ledger.schema.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "immutable"
+    },
+    "/prototype-exemplars/1.0.0/prototype-exemplars.example.json": {
+      "asset": "/schemas/prototype-exemplars/1.0.0/prototype-exemplars.example.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/context-canvas/1.0.0/context-canvas.context.jsonld": {
+      "asset": "/schemas/context-canvas/1.0.0/context-canvas.context.jsonld",
+      "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/investment-analysis/0.2.0/example.json": {
+      "asset": "/schemas/investment-analysis/0.2.0/example.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/investment-analysis/0.2.0/README.md": {
+      "asset": "/schemas/investment-analysis/0.2.0/README.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/a3-stacked-cube-atlas-expanded/0.2/a3-stacked-cube.context.jsonld": {
+      "asset": "/schemas/a3-stacked-cube-atlas-expanded/0.2/a3-stacked-cube.context.jsonld",
+      "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/visualization/visualization-fidelity-atlas.context.v0.1.jsonld": {
+      "asset": "/schemas/visualization/visualization-fidelity-atlas.context.v0.1.jsonld",
+      "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/narrative-threadkeeping/0.1/README.md": {
+      "asset": "/schemas/narrative-threadkeeping/0.1/README.md",
+      "contentType": "text/markdown; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/na/schema/narrative-capsule-composition.context.v0.1.jsonld": {
+      "asset": "/schemas/na/schema/narrative-capsule-composition.context.v0.1.jsonld",
+      "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/na/schema/narrative-capsule-composition.example.public.v0.1.json": {
+      "asset": "/schemas/na/schema/narrative-capsule-composition.example.public.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/na/schema/narrative-sampling-tableau.context.v0.1.jsonld": {
+      "asset": "/schemas/na/schema/narrative-sampling-tableau.context.v0.1.jsonld",
+      "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/na/schema/narrative-sampling-tableau-state.example.public.v0.1.json": {
+      "asset": "/schemas/na/schema/narrative-sampling-tableau-state.example.public.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/na/schema/technology-fit-sampling-tableau.context.v0.1.jsonld": {
+      "asset": "/schemas/na/schema/technology-fit-sampling-tableau.context.v0.1.jsonld",
+      "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/na/schema/technology-fit-sampling-tableau-state.example.public.v0.1.json": {
+      "asset": "/schemas/na/schema/technology-fit-sampling-tableau-state.example.public.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/fg/schema/threadkeeping-ledger.context.v0.1.jsonld": {
+      "asset": "/schemas/fg/schema/threadkeeping-ledger.context.v0.1.jsonld",
+      "contentType": "application/ld+json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/fg/schema/threadkeeping-ledger.example.public.v0.1.json": {
+      "asset": "/schemas/fg/schema/threadkeeping-ledger.example.public.v0.1.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/schemas/schema-catalog.json": {
+      "asset": "/schema-catalog.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    },
+    "/publication-manifest.json": {
+      "asset": "/publication-manifest.json",
+      "contentType": "application/json; charset=utf-8",
+      "cache": "revalidate"
+    }
   },
   "headers": {
     "Access-Control-Allow-Origin": "*",
@@ -55,5 +807,118 @@
     "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
     "Access-Control-Allow-Headers": "If-None-Match, If-Modified-Since",
     "Access-Control-Expose-Headers": "ETag"
-  }
+  },
+  "inventory": [
+    "AI-DATA-USE.md",
+    "attribution.yml",
+    "AUTHORS",
+    "CITATION.cff",
+    "index.html",
+    "LICENSE",
+    "publication-manifest.json",
+    "schema-catalog.json",
+    "schemas/a3-stacked-cube-atlas-expanded/0.2/a3-stacked-cube.context.jsonld",
+    "schemas/a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json",
+    "schemas/a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json",
+    "schemas/a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json",
+    "schemas/a3-stacked-cube-atlas-expanded/0.2/source-registry.schema.json",
+    "schemas/a3-stacked-cube-state-v0.1.json",
+    "schemas/a3-stacked-cube-visual-system.context.v0.1.jsonld",
+    "schemas/collaboration-skills/0.1.0/collaboration-account.schema.json",
+    "schemas/collaboration-skills/0.1.0/collaboration-skill.schema.json",
+    "schemas/context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json",
+    "schemas/context-canvas/1.0.0/context-canvas.context.jsonld",
+    "schemas/context-canvas/1.0.0/context-canvas.schema.json",
+    "schemas/core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json",
+    "schemas/fg/schema/threadkeeping-ledger.context.v0.1.jsonld",
+    "schemas/fg/schema/threadkeeping-ledger.example.public.v0.1.json",
+    "schemas/fg/schema/threadkeeping-ledger.schema.v0.1.json",
+    "schemas/investment-analysis/0.2.0/example.json",
+    "schemas/investment-analysis/0.2.0/README.md",
+    "schemas/investment-analysis/0.2.0/state.schema.json",
+    "schemas/na/schema/narrative-capsule-composition.context.v0.1.jsonld",
+    "schemas/na/schema/narrative-capsule-composition.example.public.v0.1.json",
+    "schemas/na/schema/narrative-capsule-composition.schema.v0.1.json",
+    "schemas/na/schema/narrative-sampling-tableau-state.example.public.v0.1.json",
+    "schemas/na/schema/narrative-sampling-tableau-state.schema.v0.1.json",
+    "schemas/na/schema/narrative-sampling-tableau.context.v0.1.jsonld",
+    "schemas/na/schema/technology-fit-sampling-tableau-state.example.public.v0.1.json",
+    "schemas/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json",
+    "schemas/na/schema/technology-fit-sampling-tableau.context.v0.1.jsonld",
+    "schemas/narrative-threadkeeping/0.1/README.md",
+    "schemas/prototype-exemplars/1.0.0/prototype-exemplars.example.json",
+    "schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
+    "schemas/visualization/visualization-fidelity-atlas.context.v0.1.jsonld",
+    "schemas/visualization/visualization-fidelity-atlas.schema.v0.1.json",
+    "skills/audit-anthropomorphic-cues/projection.json",
+    "skills/bounded-support-routing/projection.json",
+    "skills/catalog.json",
+    "skills/collaboration-accounting/projection.json",
+    "skills/collaboration-runbook-authoring/projection.json",
+    "skills/context-canvas-css-ownership/projection.json",
+    "skills/context-canvas-surface-reading/projection.json",
+    "skills/context-canvas-visual-verification/projection.json",
+    "skills/contextual-jargon-scan/projection.json",
+    "skills/cost-and-ownership-analysis/projection.json",
+    "skills/declarative-skill-authoring/projection.json",
+    "skills/embedded-prototype-layout/projection.json",
+    "skills/evidence-grounded-research-spike/projection.json",
+    "skills/issue-chain-stewardship/projection.json",
+    "skills/locator-boundary-stewardship/projection.json",
+    "skills/practitioner-probe/projection.json",
+    "skills/repository-attribution-stewardship/projection.json",
+    "skills/repository-reentry/projection.json",
+    "skills/schema-contract-authoring/projection.json",
+    "skills/secret-boundary-inspection/projection.json",
+    "skills/semantic-table-design/projection.json",
+    "skills/source-authority-mapping/projection.json",
+    "skills/source/.agents/skills/audit-anthropomorphic-cues/SKILL.md",
+    "skills/source/.agents/skills/bounded-support-routing/references/github-issue-label-routing.md",
+    "skills/source/.agents/skills/bounded-support-routing/references/openai-codex-spark.md",
+    "skills/source/.agents/skills/bounded-support-routing/SKILL.md",
+    "skills/source/.agents/skills/collaboration-accounting/references/candidacy-and-routing.md",
+    "skills/source/.agents/skills/collaboration-accounting/references/task-bound-skill-projections.md",
+    "skills/source/.agents/skills/collaboration-accounting/SKILL.md",
+    "skills/source/.agents/skills/collaboration-runbook-authoring/SKILL.md",
+    "skills/source/.agents/skills/context-canvas-css-ownership/references/scenarios.md",
+    "skills/source/.agents/skills/context-canvas-css-ownership/references/surface-color-and-state-roles.md",
+    "skills/source/.agents/skills/context-canvas-css-ownership/SKILL.md",
+    "skills/source/.agents/skills/context-canvas-surface-reading/SKILL.md",
+    "skills/source/.agents/skills/context-canvas-visual-verification/SKILL.md",
+    "skills/source/.agents/skills/contextual-jargon-scan/SKILL.md",
+    "skills/source/.agents/skills/cost-and-ownership-analysis/references/ownership-preserving-reuse.md",
+    "skills/source/.agents/skills/cost-and-ownership-analysis/references/python-boundaries-and-traversal-cost.md",
+    "skills/source/.agents/skills/cost-and-ownership-analysis/SKILL.md",
+    "skills/source/.agents/skills/declarative-skill-authoring/references/authoring-pattern.md",
+    "skills/source/.agents/skills/declarative-skill-authoring/SKILL.md",
+    "skills/source/.agents/skills/embedded-prototype-layout/SKILL.md",
+    "skills/source/.agents/skills/evidence-grounded-research-spike/SKILL.md",
+    "skills/source/.agents/skills/issue-chain-stewardship/SKILL.md",
+    "skills/source/.agents/skills/locator-boundary-stewardship/references/issue-and-pull-request-practice.md",
+    "skills/source/.agents/skills/locator-boundary-stewardship/references/public-safe-threadkeeping.md",
+    "skills/source/.agents/skills/locator-boundary-stewardship/SKILL.md",
+    "skills/source/.agents/skills/practitioner-probe/SKILL.md",
+    "skills/source/.agents/skills/repository-attribution-stewardship/SKILL.md",
+    "skills/source/.agents/skills/repository-reentry/SKILL.md",
+    "skills/source/.agents/skills/schema-contract-authoring/SKILL.md",
+    "skills/source/.agents/skills/secret-boundary-inspection/references/embedded-metadata-publication-boundary.md",
+    "skills/source/.agents/skills/secret-boundary-inspection/SKILL.md",
+    "skills/source/.agents/skills/semantic-table-design/references/supplemental-table-labels.md",
+    "skills/source/.agents/skills/semantic-table-design/references/table-design-contract.v0.1.md",
+    "skills/source/.agents/skills/semantic-table-design/SKILL.md",
+    "skills/source/.agents/skills/source-authority-mapping/SKILL.md",
+    "skills/source/.agents/skills/stateful-artifact-behavior-contracts/references/owned-state-and-resource-faults.md",
+    "skills/source/.agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
+    "skills/source/.agents/skills/uv-backed-python-execution/SKILL.md",
+    "skills/source/context-canvas-project-surface/context-canvas/atlas-gallery.js",
+    "skills/source/github/workflows/prototype-unit-tests.yml",
+    "skills/source/tests/visualization-fidelity-atlas/atlas-gallery-page.test.mjs",
+    "skills/source/tests/visualization-fidelity-atlas/atlas-gallery.browser.mjs",
+    "skills/source/threadkeeping/collaboration-accounts/2026-08-24-source-authority-mapping.md",
+    "skills/source/threadkeeping/collaboration-accounts/2026-08-26-secret-boundary-inspection.md",
+    "skills/source/threadkeeping/context-canvas-public-reference-materialization.md",
+    "skills/source/threadkeeping/repository-secret-material-boundary.md",
+    "skills/stateful-artifact-behavior-contracts/projection.json",
+    "skills/uv-backed-python-execution/projection.json"
+  ]
 }

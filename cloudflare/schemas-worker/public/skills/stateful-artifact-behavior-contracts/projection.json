@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/stateful-artifact-behavior-contracts/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "stateful-artifact-behavior-contracts",
+  "description": "Designs focused executable behavior contracts for stateful artifacts and prototypes. Applies when owned state crosses import, edit, rendered, export, machine-readable, or recovery boundaries and a consequential regression needs the smallest source-grounded observation.",
+  "semanticAuthorityRef": "../source/.agents/skills/stateful-artifact-behavior-contracts/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/21",
+  "contract": {
+    "what": "A source-grounded method for selecting and exercising the smallest behavior contract that protects a stateful artifact through its consequential exchange route.",
+    "when": [
+      "An artifact imports, edits, derives, renders, serializes, re-imports, or recovers state across one or more human- and machine-readable surfaces."
+    ],
+    "boundaries": [
+      "The artifact, its adjacent schema, and its declared source owners retain semantic authority. This skill selects observable behavior and a fitting test layer; it supplies neither product meaning nor broader mutation authority. Static presentation and isolated pure logic proceed through their direct owners. A cross-artifact path keeps each independently owned unit, schema boundary, serialized translation, and artifact identity distinct."
+    ],
+    "result": "Accepted state remains usable through its own exchange route, semantic twins agree, the minimum usable state stays explicit, and a rejected candidate leaves the accepted state available with a direct revision route."
+  },
+  "receivingUse": {
+    "job": "An artifact imports, edits, derives, renders, serializes, re-imports, or recovers state across one or more human- and machine-readable surfaces.",
+    "materialResult": "Accepted state remains usable through its own exchange route, semantic twins agree, the minimum usable state stays explicit, and a rejected candidate leaves the accepted state available with a direct revision route.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/stateful-artifact-behavior-contracts/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

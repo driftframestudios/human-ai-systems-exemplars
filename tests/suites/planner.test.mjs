@@ -161,8 +161,17 @@ test('all seven bundles have explicit membership and every current source owner 
 
 test('existing package aliases retain their exact source through the compatibility route', async () => {
   const [pkg, baseline] = await Promise.all([readFile(resolve(ROOT, 'package.json'), 'utf8').then(JSON.parse), baselinePromise]);
+  // Accepted owner migration: Worker deployment now belongs to cloudflare/schemas-worker.
+  // Keep the immutable historical baseline intact while excluding only the two retired root aliases.
+  const retiredDeploymentAliases = new Set(['deploy:schema-delivery:release', 'deploy:schema-delivery:prod']);
   for (const name of ['test:prototype-units', 'test:attribution', 'test:canvas-iframe-routes', 'visual:check']) assert.equal(typeof baseline.compatibilityScripts[name], 'string', name);
-  for (const [name, value] of Object.entries(baseline.compatibilityScripts)) assert.equal(pkg.scripts[name], value, name);
+  for (const name of retiredDeploymentAliases) {
+    assert.equal(typeof baseline.compatibilityScripts[name], 'string', `historical baseline: ${name}`);
+    assert.equal(pkg.scripts[name], undefined, `retired root alias: ${name}`);
+  }
+  for (const [name, value] of Object.entries(baseline.compatibilityScripts)) {
+    if (!retiredDeploymentAliases.has(name)) assert.equal(pkg.scripts[name], value, name);
+  }
   const aliases = [...new Set((await catalogPromise).suites.flatMap(s => s.aliases))];
   assert.ok(traceAliases(pkg.scripts, aliases, (await catalogPromise).inventory.npmRunEdges).length > 0);
 });

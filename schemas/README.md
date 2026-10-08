@@ -49,15 +49,15 @@ Radiant Null mirror uses the reviewed GitHub Pages release; the Vik Guru receive
 uses `cloudflare/schemas-worker/`. The earlier 2026-09-04 inactive-author-host
 observation remains historical lineage in Issue #18.
 
-The current source selection adds four exact-version Narrative Architecture and
-Threadkeeping contracts, bringing the prepared source cohort to 17 contracts.
-Their public availability and response behavior begin with the successor Pages
-and Worker publication cycles. Seven JSON-LD contexts, four examples, and one
-cohort orientation travel as revalidating companions and stay outside the
-contract count.
+The `pages-v0.2.0` selection adds four exact-version Narrative Architecture and
+Threadkeeping contracts, bringing the released Pages cohort and prepared
+successor Worker cohort to 17 contracts. Seven JSON-LD contexts, four examples,
+and one cohort orientation travel as revalidating companions and stay outside
+the contract count. The Worker cohort receives a production observation after
+its independently gated activation.
 
 Pages retains its observed `max-age=600` policy. The Worker's manifest names
-23 immutable paths for 12 frozen contracts; the unversioned local-manifest
+31 immutable paths for 16 frozen contracts; the unversioned local-manifest
 schema and discovery resources revalidate. Each receiver keeps its own cache
 policy while preserving the same selected schema bytes. These are dated
 delivery observations rather than a continuous-availability guarantee.

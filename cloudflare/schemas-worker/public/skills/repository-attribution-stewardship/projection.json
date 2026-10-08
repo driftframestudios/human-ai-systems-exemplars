@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/repository-attribution-stewardship/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "repository-attribution-stewardship",
+  "description": "Distinguishes and aligns copyright-holder records, citation metadata, contribution credit, copy-local public notices, and bounded machine projections. Applies during repository attribution changes, fork or adaptation guidance, and cold-start attribution orientation. Legal interpretation and rights decisions remain with a named human receiver or qualified counsel.",
+  "semanticAuthorityRef": "../source/.agents/skills/repository-attribution-stewardship/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/15",
+  "contract": {
+    "what": "A repository coordination method that gives every attribution need its fitting carrier, source authority, and proportionate check.",
+    "when": [
+      "Authorship, citation, contribution credit, public HTML attribution, machine-readable metadata, or adaptation lineage could be conflated."
+    ],
+    "boundaries": [
+      "Exact legal text, governed identity values, and accepted notices retain source fidelity. Legal interpretation, ownership and rights determinations, `NOTICE`, CLAs, transfer, and enforcement choices stay with the named human receiver or qualified counsel. The skill records and implements a settled decision within the authority granted by the task."
+    ],
+    "result": "A concise carrier map and the smallest repository change that keeps identity, credit, citation, licensing, and publication roles legible."
+  },
+  "receivingUse": {
+    "job": "Authorship, citation, contribution credit, public HTML attribution, machine-readable metadata, or adaptation lineage could be conflated.",
+    "materialResult": "A concise carrier map and the smallest repository change that keeps identity, credit, citation, licensing, and publication roles legible.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/repository-attribution-stewardship/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

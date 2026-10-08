@@ -19,7 +19,7 @@ below names every workflow; the following sections explain each receiving job.
 | `res-public-boundary-intake.yml` | Non-draft `main` PR; `ACTIONS_BUDGET_MAIN=true` | 2 minutes | Cancel superseded PR run | #63 inventory |
 | `schema-receiver-routes.yml` | Matching non-draft `main` PR or manual dispatch; `ACTIONS_BUDGET_MAIN=true` | 6 minutes | Cancel same PR/ref run | #18 schema contracts; #63 inventory |
 | `schema-pages.yml` | Manual exact source, projection, and release-tag selection; `activate_deployment=false` by default | 15 minutes | Serialize the Pages group; finish the current run | PRs #308 and #309 |
-| `schema-delivery.yml` | Non-draft PR or push to budget-enabled `release`/`prod`; deployment also requires an active receiver | Contract 12; deployment 8 minutes | Cancel superseded contracts; serialize deployments by receiver | #18 schema delivery; #63 inventory |
+| `schema-delivery.yml` | Non-draft PR or push to budget-enabled `release`/`prod`; only an accepted `prod` push can deploy, with the receiver and dependency gate open | Contract 12; production deployment 8 minutes | Cancel superseded contracts; serialize the production deployment | #18, #402, and #406 schema delivery; #63 inventory |
 | `prototype-unit-tests.yml` | Confirmed manual suite; matching non-draft `main` PR only with `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` | 10 minutes | Cancel same PR/ref run, including another manual suite on that ref | PRs #97 and #287 |
 | `production-carrier-contracts.yml` | Matching `main` PR or manual dispatch | 10 minutes | Cancel same PR/ref run | #253 and PR #255 |
 | `lims-eln-functional-nucleus.yml` | Manual selected proof; `ENABLE_GITHUB_ACTIONS=true` and `confirm_run` | 30 minutes | Cancel same workflow/ref run | #63 proof inventory |
@@ -125,25 +125,35 @@ live settings and delivery are separate observations from this inventory.
 
 `schema-delivery.yml` receives every non-draft pull request into and every push
 to `release` or `prod` while that receiver's approved budget is active. One
-read-only contract job installs the locked toolchain, checks the mapped schema
-surface, verifies the explicit Static Assets closure, dry-runs the matching
-Wrangler environment, proves the pinned secret-material reader with a fresh
-canary, and observes the candidate tree and locally available history.
+read-only contract job checks out complete history and tags, installs the root
+and schema Worker toolchains from their separate locks, checks the mapped schema
+surface, verifies the checked-in manifest-driven publication, runs the Worker
+unit tests, and dry-runs the Worker bundle through its nested Wrangler CLI. The
+pinned secret-material reader proves its fresh canary before inspecting the
+selected `cloudflare/schemas-worker/public` artifact.
 
 The contract has a twelve-minute ceiling and cancels superseded candidates.
-The connected deployment has an eight-minute ceiling and serializes by
-receiver. A release push targets an un-routed named Wrangler environment. A
-production push targets the top-level Worker through the exact-branch `prod`
-GitHub environment and its accepted human handoff. Both deployment jobs also
-require their name in
-`DEPLOYMENT_ACTIVE_RECEIVERS`. The documented resting value is `[]`; preserve
-that activation posture and the recorded 300-minute allocation for each branch
-per collaboration cycle. Current live variable values and remaining allocation
-require their own account observation.
+The `Schema delivery contract` job name remains the required status context for
+both protected branches. Release provides the complete contract observation;
+deployment belongs only to a successful `prod` push. That production job has
+an eight-minute ceiling, serializes in one production group, uses the
+branch-restricted `prod` GitHub environment, and also requires `prod` in
+`DEPLOYMENT_ACTIVE_RECEIVERS` plus the repository variable
+`SCHEMA_WORKER_DEPENDENCY_GATE=open`. The receiver's documented resting value is
+`[]`, and the dependency gate stays held until Issue #402 accepts an ordinary
+published Wrangler/Miniflare/Sharp closure or a separately reviewed fallback.
+Preserve that activation posture and the recorded 300-minute allocation for
+each branch per collaboration cycle. Current live variable values and remaining
+allocation require their own account observation.
 
 The workflow uses GitHub-owned checkout and Node setup actions at the reviewed
-full commit SHAs, then calls the repository's locked Wrangler CLI directly.
-Environment-scoped Cloudflare credentials enter only the deployment job.
+full commit SHAs. Root commands retain repository-wide checks, while
+`cloudflare/schemas-worker/` supplies the publication, tests, deployment
+configuration, and locked Wrangler CLI for `schemas.vik.guru`.
+Environment-scoped Cloudflare credentials enter only the production deployment
+job. The earlier asset-only adapter retains its shared source inputs and local
+build or dry-run checks; it no longer owns a root deployment command or this
+production workflow.
 
 ## Production-carrier contract
 
@@ -294,8 +304,9 @@ after the downstream pull-request cadence has an accepted job and budget.
 Hosted visual checks, resolver inspection, broader history operations, and
 general recurring CI retain their local, manual, or dormant routes. The named
 schema delivery is the current Cloudflare exception, bounded by its two branch
-receivers, budgets, credentials, and deployment switch. The effective action
-allow list, immutable revisions, and billing posture live in
+contract receivers and one production branch, environment, credential,
+dependency gate, and deployment switch. The effective action allow list,
+immutable revisions, and billing posture live in
 [ACTIONS-POLICY.md](ACTIONS-POLICY.md).
 
 Issue #63 receives inventory reconciliation. Each later workflow or matrix

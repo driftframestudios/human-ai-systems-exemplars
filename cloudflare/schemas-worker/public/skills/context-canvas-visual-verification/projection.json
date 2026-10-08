@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/context-canvas-visual-verification/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "context-canvas-visual-verification",
+  "description": "Selects proportionate visual and browser evidence for Context Canvas visitor-surface changes. Applies when layout, CSS, responsive behavior, interaction state, print, forced colors, or a visible regression needs review.",
+  "semanticAuthorityRef": "../source/.agents/skills/context-canvas-visual-verification/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/6",
+  "contract": {
+    "what": "A source-bound visual and browser observation that answers one Context Canvas visitor-surface question.",
+    "when": [
+      "A change can alter composition, responsive behavior, interaction state, alternate presentation, or a route's visible fingerprint."
+    ],
+    "boundaries": [
+      "Authored source and accepted contracts own intended behavior. Screenshots support comparison rather than pixel approval. Initial-state sweeps leave interaction behavior open. Prototype and iframe-document interiors retain their separate owners."
+    ],
+    "result": "The smallest fitting reference or focused check, an interpreted result, coverage and environment limits, and one next receiver."
+  },
+  "receivingUse": {
+    "job": "A change can alter composition, responsive behavior, interaction state, alternate presentation, or a route's visible fingerprint.",
+    "materialResult": "The smallest fitting reference or focused check, an interpreted result, coverage and environment limits, and one next receiver.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/context-canvas-visual-verification/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

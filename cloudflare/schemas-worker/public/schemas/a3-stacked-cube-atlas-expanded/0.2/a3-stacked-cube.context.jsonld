@@ -1,0 +1,100 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "a3": "https://schemas.radiantnull.com/ns/a3#",
+    "schema": "https://schema.org/",
+    "prov": "http://www.w3.org/ns/prov#",
+    "id": "@id",
+    "type": "@type",
+    "artifact_id": "schema:identifier",
+    "schema_version": "schema:version",
+    "version": "schema:version",
+    "as_of": {
+      "@id": "schema:dateModified",
+      "@type": "http://www.w3.org/2001/XMLSchema#date"
+    },
+    "asOf": {
+      "@id": "schema:dateModified",
+      "@type": "http://www.w3.org/2001/XMLSchema#date"
+    },
+    "extends": "a3:extends",
+    "protected_semantics": "a3:protectedSemantic",
+    "scope_statement": "a3:scopeStatement",
+    "lenses": {
+      "@id": "a3:lens",
+      "@container": "@set"
+    },
+    "frames": {
+      "@id": "a3:frame",
+      "@container": "@set"
+    },
+    "capabilities": {
+      "@id": "a3:capability",
+      "@container": "@set"
+    },
+    "assurance_gates": {
+      "@id": "a3:assuranceGate",
+      "@container": "@set"
+    },
+    "assuranceGates": {
+      "@id": "a3:assuranceGate",
+      "@container": "@set"
+    },
+    "migration_gates": {
+      "@id": "a3:migrationGate",
+      "@container": "@set"
+    },
+    "migrationGates": {
+      "@id": "a3:migrationGate",
+      "@container": "@set"
+    },
+    "runtime_semantics": "a3:runtimeSemantics",
+    "runtimeItems": {
+      "@id": "a3:runtimeItem",
+      "@container": "@set"
+    },
+    "evidence_classes": {
+      "@id": "a3:evidenceClass",
+      "@container": "@set"
+    },
+    "discrepancy_register": {
+      "@id": "a3:discrepancy",
+      "@container": "@set"
+    },
+    "discrepancies": {
+      "@id": "a3:discrepancy",
+      "@container": "@set"
+    },
+    "design_decisions": {
+      "@id": "a3:designDecision",
+      "@container": "@set"
+    },
+    "sources": {
+      "@id": "prov:hadPrimarySource",
+      "@container": "@set"
+    },
+    "source_ids": {
+      "@id": "prov:hadPrimarySource",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "title": "schema:name",
+    "label": "schema:name",
+    "note": "schema:description",
+    "summary": "schema:description",
+    "role": "a3:evidenceRole",
+    "boundary": "a3:evidenceBoundary",
+    "url": {
+      "@id": "schema:url",
+      "@type": "@id"
+    },
+    "status": "schema:status",
+    "falsifier": "a3:falsifier",
+    "human_authority": "a3:humanAuthority",
+    "evidence": "a3:evidenceStatement",
+    "states": {
+      "@id": "a3:authorityState",
+      "@container": "@list"
+    }
+  }
+}
