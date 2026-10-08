@@ -667,6 +667,7 @@ test("the public catalog contains exactly the public-ready allowlist", async () 
     "data-visualization-foundations",
     "pdf-data-visualization",
     "repository-collaboration-cycle",
+    "repository-handoff-readiness",
     "repository-orientation-stewardship",
     "supportive-change-writing",
     "web-data-visualization",

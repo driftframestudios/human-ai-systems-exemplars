@@ -32,6 +32,7 @@ The on-demand workflows live in `.agents/skills/`:
 - `repository-reentry` reconstructs current truth across branches, plans, ledgers, issues, and pull requests.
 - `repository-collaboration-cycle` carries an authorized task from re-entry through route selection, conditional environment preparation, source-owned execution, proportionate evidence, delivery, and exact continuation.
 - `repository-orientation-stewardship` reconciles a root and its nested README graph into source-aware first-receipt, repeat-use, and re-entry routes.
+- `repository-handoff-readiness` prepares an owner-operable repository route through source-responsive capability profiles, a live Issue current front, explicit account boundaries, and one post-handoff collaboration observation.
 - `uv-backed-python-execution` runs repository-declared Python checks through a lock-aware or isolated `uv` environment while preserving the host Python installation.
 - `context-canvas-surface-reading` maps a page as visitor surface and design input.
 - `context-canvas-css-ownership` guides CSS ownership, extraction, selector migration, and visual comparison.
