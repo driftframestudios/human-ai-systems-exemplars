@@ -550,6 +550,7 @@ test("Technology Fit publishes the Narrative Prompt Capsule pilot and exact skil
 
 test("Threadkeeping Ledger material state has a meaningful identity boundary", async () => {
   const validate = await compile(schemaPaths.threadkeeping);
+  const schema = await json(schemaPaths.threadkeeping);
   const valid = await threadkeepingExample();
   const invalid = clone(valid);
   delete invalid.artifactIdentity;
@@ -565,6 +566,14 @@ test("Threadkeeping Ledger material state has a meaningful identity boundary", a
   literal.threadkeeper.entries[0].title = "A quoted \"title\" with <literal> markup";
   literal.threadkeeper.entries[0].summary = "Literal collaborator text stays intact: 'single', \"double\", <angle>, and & ampersand.";
   assert.equal(validate(literal), true, JSON.stringify(validate.errors, null, 2));
+
+  assert.deepEqual(
+    schema.$defs.ContextContinuityAssessment.properties.assessorType.enum,
+    ["human", "ai_collaborator", "mechanical", "mixed"],
+    "the published v0.1 machine enum remains byte-stable",
+  );
+  assert.ok(valid.threadkeeper.entries.some(({ recordedBy }) => recordedBy === "AI system"));
+  assert.ok(valid.threadkeeper.entries.some(({ recordedBy }) => recordedBy.includes("AI-system assistance")));
 });
 
 test("Threadkeeping Ledger publishes its complete state through the shared Prompt Capsule contract", async () => {
@@ -583,6 +592,13 @@ test("Threadkeeping Ledger publishes its complete state through the shared Promp
   assert.match(html, /https:\/\/schemas\.radiantnull\.com\/collaboration\/#repository-reentry/u);
   assert.match(html, /window\.threadkeepingLedger=Object\.freeze\(/u);
   assert.match(html, /Every ledger entry, next candidate, continuity assessment, relationship field, recovery field, and source note contributes/u);
+  assert.match(html, /id="entryDeleteConfirmation"[^>]+role="group"[^>]+hidden/u);
+  assert.match(html, /id="candidateDeleteConfirmation"[^>]+role="group"[^>]+hidden/u);
+  assert.match(html, /id="ledgerActionStatus" role="status" aria-live="polite"/u);
+  assert.doesNotMatch(html, /\bconfirm\s*\(/u);
+  assert.match(html, /<option value="ai_collaborator">AI system<\/option>/u);
+  assert.doesNotMatch(html, />AI collaborator</u);
+  assert.match(html, /Human-AI Collaboration Field Guide/u);
 
   const revision = "b8b305c78b82a288ae2aca9574bb86d7d3d574d9";
   assert.match(html, new RegExp(`const PROMPT_CAPSULE_SKILL_REVISION="${revision}";`, "u"));

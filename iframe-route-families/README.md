@@ -25,6 +25,19 @@ Generated output rests beneath
 replaceable, ignored build material: change a tracked source or manifest and
 run the command again instead of editing a generated route.
 
+The focused route tests also compare authored and projected SVG semantics. The
+browser media contract forms a temporary aggregate package and reads every
+route under reduced motion, print, forced colors, and a 200% fixed/sticky-focus
+stress:
+
+```sh
+npm run test:iframe-routes
+npm run test:iframe-visual-media-browser
+```
+
+These checks inspect computed SVG names, view boxes, bounds, instance IDs, and
+text equivalents. They leave the persistent upload directory unchanged.
+
 ## Compare a hosted closure
 
 After an authorized receiver uploads the complete closure, compare the live

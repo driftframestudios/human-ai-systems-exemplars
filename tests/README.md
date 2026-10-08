@@ -75,6 +75,7 @@ npm run test:iframe-routes
 npm run check:iframe-routes
 npm run test:iframe-carriers
 npm run test:canvas-iframe-routes
+npm run test:iframe-visual-media-browser
 npm run test:iframe-ancestry-browser
 npm run test:iframe-browser
 ```
@@ -95,12 +96,18 @@ sandbox. The Canvas route contract exercises all 15 generated documents inside
 their exact sandbox and Permissions Policy profiles, including package media,
 popup, clipboard, download, modal, print, scriptless, keyboard, request-closure,
 telemetry, and 320-pixel containment observations. The standalone
+visual-media contract forms a temporary 38-route package and reads each route
+under reduced motion, print, forced colors, and 200% fixed/sticky-focus stress.
+It also checks computed SVG names, view boxes, rendered bounds, instance IDs,
+and text equivalents; the source suite compares authored and projected SVG
+semantic markers and exact package-local SVG bytes. The standalone
 `test:iframe-ancestry-browser` fixture proves Chromium allows the exact
 `https://vik.guru` parent and refuses a loopback parent when the same child
 response carries the production-shaped `frame-ancestors` directive; it does
-not claim that production served that header. The historical
-`test:iframe-browser` aggregate remains unchanged. Live activation pairs the
-complete response verifier with one focused parent/child observation:
+not claim that production served that header. `test:iframe-browser` composes
+the Core carrier, Canvas route, and complete visual-media contracts. Live
+activation pairs the complete response verifier with one focused parent/child
+observation:
 
 ```sh
 npm run verify:iframe-routes:live

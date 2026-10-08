@@ -11,8 +11,8 @@
     "public_decoration": "A generated public projection carries centralized author metadata, the Apache-2.0 license relation, ordinary-language visitor-boundary context followed by the exact stacked markers, and the copy-local attribution notice. The semantic source stays unchanged.",
     "navigation_posture": "Declared repository-local onward links first resolve to the primary visitor surface. The generated iframe projection then opens every user-activated exit in a separate top-level tab with a severed opener; fragment links, downloads, and canonical source behavior remain unchanged.",
     "package_file_allowlist": "Every non-inline resource is copied from an explicitly declared regular repository file to an explicitly declared route-local target with a content type.",
-    "static_scan_boundary": "Markup, CSS, and selected JavaScript network primitives are checked during packaging. Browser request-graph, interaction, containment, and delivery-policy checks remain release gates.",
-    "activation_owner": "Issue #137 and human review",
+    "static_scan_boundary": "Markup, CSS, and selected JavaScript network primitives are checked during packaging. Browser request-graph, interaction, containment, and delivery-policy checks remain live-delivery verification gates.",
+    "activation_owner": "Issue #72 package upload receipt and Issue #102 live parent verification",
     "neighboring_path_posture": "unmatched"
   },
   "carrier_contract": {
@@ -432,7 +432,6 @@
       "carrier_policy": {
         "sandbox_tokens": [
           "allow-downloads",
-          "allow-modals",
           "allow-popups",
           "allow-popups-to-escape-sandbox",
           "allow-scripts"

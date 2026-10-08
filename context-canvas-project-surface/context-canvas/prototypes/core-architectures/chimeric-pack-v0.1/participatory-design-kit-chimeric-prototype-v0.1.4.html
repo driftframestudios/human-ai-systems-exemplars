@@ -303,7 +303,7 @@
         <label class="prompt-view-option"><input type="radio" name="prompt-capsule-view" value="skill-assisted" data-prompt-view /> Skill-assisted</label>
       </div>
     </fieldset>
-    <p class="caption" id="prompt-view-description">Plain Markdown carries the complete participatory context without asking the receiver to load a repository skill.</p>
+    <p class="caption" id="prompt-view-description">Plain Markdown is a self-contained handoff with the complete participatory context.</p>
     <p class="prompt-status" id="prompt-capsule-status" role="status" aria-live="polite" aria-atomic="true"></p>
     <noscript><p class="note">The complete default plain Markdown remains available below. Interactive editing, view selection, copying, and downloading become available when JavaScript runs.</p></noscript>
     <pre id="ai-prompt" data-prompt-view-active="plain" aria-labelledby="prompt-heading" aria-describedby="prompt-view-description" tabindex="0"># Prompt Capsule: Participatory Design Kit
@@ -1218,7 +1218,7 @@ function renderExports(){ const obj=exportObject(); const json=JSON.stringify(ob
   document.querySelectorAll('[data-prompt-view]').forEach(control=>{control.checked=control.value===promptCapsuleView;});
   document.getElementById('prompt-view-description').textContent=promptCapsuleView==='skill-assisted'
     ? 'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented participatory state and fingerprint remain the same.'
-    : 'Plain Markdown carries the complete participatory context without asking the receiver to load a repository skill.';
+    : 'Plain Markdown is a self-contained handoff with the complete participatory context.';
   const v=activeView(); document.getElementById('identity-registry').textContent=JSON.stringify({phases:data.phases.map(p=>({id:p.id,label:p.label,canonical_order:p.canonical_order,visible:visiblePhases().some(x=>x.id===p.id)})), lanes:data.lanes.map(l=>({id:l.id,label:l.label,canonical_order:l.canonical_order,display_order:v.lane_order.indexOf(l.id)+1,visible:visibleLanes().some(x=>x.id===l.id)})), gantt_items:data.gantt_items.map(i=>({id:i.id,lane_id:i.lane_id,start_phase_id:i.start_phase_id,end_phase_id:i.end_phase_id,visible:visibleItems().some(x=>x.id===i.id)})), view_state:data.view_state},null,2);
 }
 function renderPassive(){ renderSvg(); renderInspector(); renderExports(); renderFocusControls(); }

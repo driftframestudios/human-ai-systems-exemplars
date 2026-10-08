@@ -339,7 +339,7 @@
 - Capsule: `alignment-worksheet/current-premise-chain`
 - Source: `alignment-worksheet@0.1.4`
 - State: `alignment-worksheet-state.v0.1` · revision `0\.1\.4`
-- Fingerprint: `fnv1a32-utf8:2aee2b44`
+- Fingerprint: `fnv1a32-utf8:3bd993b4`
 - View: `plain`
 
 ## Purpose and target
@@ -442,7 +442,7 @@ Use this Alignment Worksheet to keep the present world, restored world, and broa
 ### Option: Reviewer confidence through provenance visibility — option\-reviewer\-provenance
 
 - Probability: 78%
-- Probability of what: P\(usefulness for routing into Service\-design Blueprint and Specification\-by\-Example without immediate reframing\)
+- Probability of what: P\(usefulness for routing into Service\-design Blueprint and Specification\-by\-Example in its current frame\)
 - Most uncertain blank: Broad approach (broad\_approach).
 - Status: assumed
 - Restored state: source boundaries and reviewer confidence become inspectable
@@ -509,7 +509,7 @@ Completed six blanks:
 
 Completed six blanks:
 - Identified group (identified\_group): review teams are using AI\-generated evidence summaries during variant review
-- Desired outcome (desired\_outcome): use generated support without confusing suggestion, source evidence, and accepted interpretation
+- Desired outcome (desired\_outcome): use generated support while keeping suggestion, source evidence, and accepted interpretation distinct
 - Current path (current\_path): read generated summaries alongside source evidence and manual review notes
 - Change reason (change\_reason): summary\-level confidence is insufficient when claim\-level support varies
 - Restored state (restored\_state): AI\-generated claims, source support, unsupported\-claim routing, and human confirmation are visible at the claim level
@@ -518,11 +518,11 @@ Completed six blanks:
 ## Inverse-state pass
 
 - Observed strain state: Reviewers receive AI\-generated summaries, but still ask where statements came from and which parts have been human\-confirmed\.
-- Restored-state gap: AI\-generated boundaries and source provenance are not yet visible enough\.
-- Approach gap: The approach included summaries but did not yet include source\-boundary display or human\-confirmation behavior\.
+- Restored-state gap: AI\-generated boundaries and source provenance need claim\-level visibility\.
+- Approach gap: The approach needs source\-boundary display and human\-confirmation behavior alongside summaries\.
 - Change-reason gap: The reason for change emphasized speed more than trust, provenance, and review confidence\.
 - Current-path gap: The current review path across notes, pipeline outputs, and AI summaries was underdescribed\.
-- Desired-outcome gap: The desired outcome should include responsible interpretation, not only faster review\.
+- Desired-outcome gap: The desired outcome should include responsible interpretation alongside review speed\.
 - Identified-group gap: Molecular pathologists and bioinformatics analysts may need separate worksheet versions\.
 - Recovery route: Context Tree, Specification\-by\-Example, HEART Chart
 
@@ -556,7 +556,7 @@ These public collaboration loops fit when the receiving work meets the stated co
 - Which blank carries the most uncertainty?
 - What is the probability of what?
 - Which adjacent artifact should tune the probability target?
-- If the restored state has not become available yet, which blank needs revision?
+- Which blank needs revision to bring the restored state into reach?
 
 ### Replacement-state guidance
 
@@ -729,7 +729,7 @@ These public collaboration loops fit when the receiving work meets the stated co
       canonical_order: index + 1
     })),
     options: [
-      makeOption('option-reviewer-provenance','Reviewer confidence through provenance visibility',78,'P(usefulness for routing into Service-design Blueprint and Specification-by-Example without immediate reframing)','broad_approach','Service-design Blueprint','Provenance and source-boundary surfaces need layered service topology and behavior examples.',{
+      makeOption('option-reviewer-provenance','Reviewer confidence through provenance visibility',78,'P(usefulness for routing into Service-design Blueprint and Specification-by-Example in its current frame)','broad_approach','Service-design Blueprint','Provenance and source-boundary surfaces need layered service topology and behavior examples.',{
         identified_group:'molecular pathologists are reviewing AI-supported variant evidence',
         desired_outcome:'distinguish source-supported claims from generated suggestions and human-confirmed interpretation',
         current_path:'move between pipeline outputs, evidence sources, notes, and generated summary text',
@@ -755,7 +755,7 @@ These public collaboration loops fit when the receiving work meets the stated co
       }, 'metadata readiness becomes protected behavior and architecture evidence'),
       makeOption('option-ai-boundary','AI boundary clarity through human confirmation',74,'P(usefulness for routing into AI Systems Service Blueprint, Specification-by-Example, and HEART Chart)','restored_state','AI Systems Service Blueprint','Visible AI behavior needs runtime, knowledge, evaluation, and human review boundary placement.',{
         identified_group:'review teams are using AI-generated evidence summaries during variant review',
-        desired_outcome:'use generated support without confusing suggestion, source evidence, and accepted interpretation',
+        desired_outcome:'use generated support while keeping suggestion, source evidence, and accepted interpretation distinct',
         current_path:'read generated summaries alongside source evidence and manual review notes',
         change_reason:'summary-level confidence is insufficient when claim-level support varies',
         restored_state:'AI-generated claims, source support, unsupported-claim routing, and human confirmation are visible at the claim level',
@@ -764,11 +764,11 @@ These public collaboration loops fit when the receiving work meets the stated co
     ],
     inverse_state: {
       observed_strain_state: 'Reviewers receive AI-generated summaries, but still ask where statements came from and which parts have been human-confirmed.',
-      restored_state_gap: 'AI-generated boundaries and source provenance are not yet visible enough.',
-      approach_gap: 'The approach included summaries but did not yet include source-boundary display or human-confirmation behavior.',
+      restored_state_gap: 'AI-generated boundaries and source provenance need claim-level visibility.',
+      approach_gap: 'The approach needs source-boundary display and human-confirmation behavior alongside summaries.',
       change_reason_gap: 'The reason for change emphasized speed more than trust, provenance, and review confidence.',
       current_path_gap: 'The current review path across notes, pipeline outputs, and AI summaries was underdescribed.',
-      desired_outcome_gap: 'The desired outcome should include responsible interpretation, not only faster review.',
+      desired_outcome_gap: 'The desired outcome should include responsible interpretation alongside review speed.',
       identified_group_gap: 'Molecular pathologists and bioinformatics analysts may need separate worksheet versions.',
       recovery_route: 'Context Tree, Specification-by-Example, HEART Chart'
     },
@@ -789,7 +789,7 @@ These public collaboration loops fit when the receiving work meets the stated co
         'Which blank carries the most uncertainty?',
         'What is the probability of what?',
         'Which adjacent artifact should tune the probability target?',
-        'If the restored state has not become available yet, which blank needs revision?'
+      'Which blank needs revision to bring the restored state into reach?'
       ],
       replacement_state_guidance: [
         { common_phrase: 'This is unacceptable because…', stronger_phrase: 'The current path asks for change because…' },
@@ -1201,7 +1201,7 @@ These public collaboration loops fit when the receiving work meets the stated co
     if (addOptionLock) return;
     addOptionLock = true;
     const id = uid('option');
-    const opt = makeOption(id, 'New premise option', 50, 'P(this option is useful enough to route into the next Core Architecture without immediate reframing)', 'identified_group', 'Impact Map', 'This option needs actor-impact-discoverable tracing.', {...DEFAULT_BLANK_TEXT}, 'a clearer premise chain becomes available for routing');
+    const opt = makeOption(id, 'New premise option', 50, 'P(this option is useful enough to route into the next Core Architecture in its current frame)', 'identified_group', 'Impact Map', 'This option needs actor-impact-discoverable tracing.', {...DEFAULT_BLANK_TEXT}, 'a clearer premise chain becomes available for routing');
     opt.canonical_order = app.options.length + 1;
     app.options.push(opt);
     app.view_state.views.forEach(view=>{if(!view.option_order.includes(id))view.option_order.push(id)}); getView().selected_option_id = id;

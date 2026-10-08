@@ -689,7 +689,7 @@ These public collaboration loops fit only when the receiving work meets the stat
                 <label><input type="radio" name="prompt-capsule-view" value="skill-assisted" data-prompt-view /> Skill-assisted</label>
               </div>
             </fieldset>
-            <p class="sc-help" id="prompt-view-description" data-sc-role="prompt-view-description">Plain Markdown carries the complete working context without asking the receiver to load a repository skill.</p>
+            <p class="sc-help" id="prompt-view-description" data-sc-role="prompt-view-description">Plain Markdown is a self-contained handoff with the complete working context.</p>
             <pre class="sc-code" data-sc-role="prompt" data-prompt-view="plain" aria-labelledby="prompt-capsule-heading" aria-describedby="prompt-view-description" tabindex="0"></pre>
           </div>
         </div>
@@ -2495,7 +2495,7 @@ These public collaboration loops fit only when the receiving work meets the stat
       if (promptDescription) {
         promptDescription.textContent = promptCapsuleView === 'skill-assisted'
           ? 'Skill-assisted Markdown adds exact public repository skill paths and their immutable revision. The Strategy Canvas state and fingerprint remain the same.'
-          : 'Plain Markdown carries the complete working context without asking the receiver to load a repository skill.';
+          : 'Plain Markdown is a self-contained handoff with the complete working context.';
       }
       if (validation) {
         const result = core.validateState(state);

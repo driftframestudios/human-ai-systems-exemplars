@@ -358,6 +358,11 @@
     .related-loops summary:focus-visible,
     .related-loops a:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
     [hidden] { display: none !important; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      button, .button-like { transition: none; }
+      button:hover { transform: none; }
+    }
     .note {
       border-left: 4px solid var(--accent-2);
       background:#fff4df;
@@ -1139,7 +1144,7 @@ These public collaboration loops fit only when the receiving work meets the stat
     <section class="panel">
       <h2>Source Note</h2>
       <p>This artifact is based on the Core Architectures recovery-routing layer: Recovery and Failure Geometries help identify which Solution, Bridge, or Implementation Architecture is useful in an unfavorable or strained situation. The local adaptation uses <strong>Recovery Routing Atlas</strong> as the operating name, <strong>strain cue</strong> as everyday language, and <strong>Failure Geometry</strong> as durable atlas language.</p>
-      <p>No external visual reference is used in this prototype. Artifact-facing content avoids custom annotation language and preserves negation-aware, replacement-state phrasing.</p>
+      <p>The prototype’s diagrams and interface are local expressions of that recovery-routing model. Artifact-facing content uses ordinary field names and directs each strain cue toward a named restored state.</p>
     </section>
 
     <p class="footer-note">Recovery Routing Atlas v0.1.5 · single-file chimeric prototype · HTML + SVG + JSON + JSON-LD + Prompt Capsule Markdown · hiding narrows focus while source content remains available.</p>
@@ -1633,6 +1638,7 @@ These public collaboration loops fit only when the receiving work meets the stat
       }).join('');
       els.atlasSvg.setAttribute('width', w);
       els.atlasSvg.setAttribute('height', h);
+      els.atlasSvg.setAttribute('viewBox', `0 0 ${w} ${h}`);
       els.atlasSvg.innerHTML = `<rect x="0" y="0" width="${w}" height="${h}" rx="18" fill="#fffaf2" />
         ${labels.map((label, i) => `<text x="${xPositions[i]+12}" y="34" font-size="12" font-weight="800" letter-spacing="1" fill="#715a3e">${escapeHtml(label.toUpperCase())}</text>`).join('')}
         <line x1="20" y1="50" x2="${w-20}" y2="50" stroke="#bcae9e" stroke-width="1" />

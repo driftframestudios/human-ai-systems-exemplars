@@ -34,7 +34,7 @@
       "version": "0.1.5",
       "status": "current",
       "exists": true,
-      "size_bytes": 112716,
+      "size_bytes": 112746,
       "previous": [
         "poda-chimeric-prototype-v0.1.html",
         "poda-chimeric-prototype-v0.1.1.html",
@@ -53,7 +53,7 @@
       "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 107937,
+      "size_bytes": 107867,
       "previous": [
         "alignment-worksheet-chimeric-prototype-v0.1.html",
         "alignment-worksheet-chimeric-prototype-v0.1.1.html",
@@ -125,8 +125,8 @@
       "evidence": "strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json",
       "expression": "canonical",
       "exists": true,
-      "size_bytes": 167710,
-      "sha256": "7695c331ff706108c7cd369c259d0b85feb2cf90ac1c94bf2472ebed0348154b"
+      "size_bytes": 167650,
+      "sha256": "bfabfe3c7d11a493d6fd6a193609c4683571655ac8bd6da168947ea7d579d040"
     },
     {
       "id": "first-responsible-version-matrix",
@@ -138,7 +138,7 @@
       "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 95265,
+      "size_bytes": 95205,
       "previous": [
         "first-responsible-version-matrix-chimeric-prototype-v0.1.html",
         "first-responsible-version-matrix-chimeric-prototype-v0.1.1.html",
@@ -156,7 +156,7 @@
       "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 179533,
+      "size_bytes": 181144,
       "previous": [
         "shared-surface-priority-map-chimeric-prototype-v0.1.html",
         "shared-surface-priority-map-chimeric-prototype-v0.1.1.html",
@@ -183,7 +183,7 @@
         "service-design-blueprint-chimeric-prototype-v0.2.5.html"
       ],
       "exists": true,
-      "size_bytes": 187044
+      "size_bytes": 186984
     },
     {
       "id": "ai-systems-service-blueprint",
@@ -195,7 +195,7 @@
       "version": "0.1.5",
       "status": "current",
       "exists": true,
-      "size_bytes": 128369,
+      "size_bytes": 128309,
       "previous": [
         "ai-systems-service-blueprint-chimeric-prototype-v0.1.html",
         "ai-systems-service-blueprint-chimeric-prototype-v0.1.1.html",
@@ -214,7 +214,7 @@
       "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 121650,
+      "size_bytes": 121590,
       "previous": [
         "software-architecture-views-chimeric-prototype-v0.1.html",
         "software-architecture-views-chimeric-prototype-v0.1.1.html",
@@ -232,7 +232,7 @@
       "version": "0.1.4",
       "status": "current",
       "exists": true,
-      "size_bytes": 120707,
+      "size_bytes": 120647,
       "previous": [
         "participatory-design-kit-chimeric-prototype-v0.1.html",
         "participatory-design-kit-chimeric-prototype-v0.1.1.html",
@@ -259,7 +259,7 @@
         "specification-by-example-chimeric-prototype-v0.1.6.html"
       ],
       "exists": true,
-      "size_bytes": 108157
+      "size_bytes": 108097
     },
     {
       "id": "heart-chart",
@@ -279,7 +279,7 @@
         "heart-chart-chimeric-prototype-v0.1.5.html"
       ],
       "exists": true,
-      "size_bytes": 101549
+      "size_bytes": 101835
     },
     {
       "id": "plus-delta",
@@ -291,7 +291,7 @@
       "version": "0.1.5",
       "status": "current",
       "exists": true,
-      "size_bytes": 86142,
+      "size_bytes": 86241,
       "previous": [
         "plus-delta-chimeric-prototype-v0.1.html",
         "plus-delta-chimeric-prototype-v0.1.1.html",
@@ -385,7 +385,7 @@
       "version": "0.1.5",
       "status": "current",
       "exists": true,
-      "size_bytes": 95604,
+      "size_bytes": 95544,
       "previous": [
         "upstream-revision-loop-chimeric-prototype-v0.1.html",
         "upstream-revision-loop-chimeric-prototype-v0.1.1.html",
@@ -404,7 +404,7 @@
       "version": "0.1.5",
       "status": "current",
       "exists": true,
-      "size_bytes": 121860,
+      "size_bytes": 122132,
       "previous": [
         "recovery-routing-atlas-chimeric-prototype-v0.1.html",
         "recovery-routing-atlas-chimeric-prototype-v0.1.1.html",

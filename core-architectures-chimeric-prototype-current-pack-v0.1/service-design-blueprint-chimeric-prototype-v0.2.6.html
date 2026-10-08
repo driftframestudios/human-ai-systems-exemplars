@@ -354,7 +354,7 @@
         <label class="prompt-view-option"><input type="radio" name="service-blueprint-prompt-view" value="skill-assisted" data-prompt-view /> Skill-assisted</label>
       </div>
     </fieldset>
-    <p class="small-note" id="promptViewDescription">Plain Markdown carries the complete service-topology context without asking the receiver to load a repository skill.</p>
+    <p class="small-note" id="promptViewDescription">Plain Markdown is a self-contained handoff with the complete service-topology context.</p>
     <p class="prompt-status" id="promptCapsuleStatus" role="status" aria-live="polite" aria-atomic="true"></p>
     <noscript><p class="focus-note">The complete default plain Markdown remains available below. Interactive editing, view selection, copying, and downloading become available when JavaScript runs.</p></noscript>
     <pre id="promptOut" class="prompt-box" data-prompt-view-active="plain" aria-labelledby="promptCapsuleHeading" aria-describedby="promptViewDescription" tabindex="0"># Prompt Capsule: Service-design Blueprint
@@ -2410,7 +2410,7 @@ function updateExportsOnly() {
   document.querySelectorAll('[data-prompt-view]').forEach(control => { control.checked = control.value === promptCapsuleView; });
   document.getElementById('promptViewDescription').textContent = promptCapsuleView === 'skill-assisted'
     ? 'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented service topology and fingerprint remain the same.'
-    : 'Plain Markdown carries the complete service-topology context without asking the receiver to load a repository skill.';
+    : 'Plain Markdown is a self-contained handoff with the complete service-topology context.';
 }
 
 function renderPanels() {

@@ -287,8 +287,8 @@
         <div class="panel soft">
           <h3>Source Note</h3>
           <p><strong>Local architecture:</strong> Cross-channel Blueprint: Shared Surface Priority Map.</p>
-          <p><strong>Visual reference:</strong> A reference image titled <em>Cross-Channel Blueprint</em> by Tyler Tate, licensed under Creative Commons Attribution 3.0 Unported, was provided in-session and used as a visual precedent for heatmap layout and shared-assets-below-the-line structure. Original source URL was not verified in this session.</p>
-          <p><strong>Adaptation note:</strong> This prototype adapts the reference layout into a Core Architecture chimeric artifact with stable IDs, view state, multiple intensity bases, SVG, JSON, JSON-LD, semantic locality, and AI collaboration context.</p>
+          <p><strong>Visual reference:</strong> Tyler Tate’s article <a href="http://tylertate.com/blog/ux/2012/02/21/cross-channel-ia-blueprint.html"><cite>Cross-Channel Blueprints: A tool for modern IA</cite></a> and its <a href="http://tylertate.com/resources/images/2012-02-21/cross-channel-blueprint.png"><cite>Cross-Channel Blueprint</cite> diagram</a> provide the visual precedent for the task-by-channel matrix, prioritized cells, and shared components below the line. Tate released the diagram under the <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
+          <p><strong>Adaptation note:</strong> This prototype adapts that visual grammar into a Core Architecture chimeric artifact with stable IDs, view state, multiple intensity bases, SVG, JSON, JSON-LD, semantic locality, and AI-system context.</p>
         </div>
         <div class="panel soft">
           <h3>Semantic Locality</h3>
@@ -503,12 +503,14 @@
         local_architecture: 'Cross-channel Blueprint: Shared Surface Priority Map',
         visual_reference: {
           title: 'Cross-Channel Blueprint',
+          article_title: 'Cross-Channel Blueprints: A tool for modern IA',
           creator: 'Tyler Tate',
           license: 'Creative Commons Attribution 3.0 Unported License',
           license_url: 'https://creativecommons.org/licenses/by/3.0/',
-          source_url: 'not verified in this session',
-          source: 'uploaded in-session reference image',
-          adaptation_note: 'Used as a visual reference for heatmap layout and shared-assets-below-the-line structure. The prototype adapts this into a Core Architectures chimeric artifact with stable IDs, view state, SVG, JSON, JSON-LD, semantic locality, and AI collaboration context.'
+          source_url: 'http://tylertate.com/blog/ux/2012/02/21/cross-channel-ia-blueprint.html',
+          diagram_url: 'http://tylertate.com/resources/images/2012-02-21/cross-channel-blueprint.png',
+          source: 'Tyler Tate article and primary diagram',
+          adaptation_note: 'Uses the task-by-channel matrix, prioritized cells, and shared-components-below-the-line structure as visual precedent. This prototype adapts that visual grammar into a Core Architectures chimeric artifact with stable IDs, view state, SVG, JSON, JSON-LD, semantic locality, and AI-system context.'
         }
       }
     };
@@ -1122,13 +1124,19 @@
   function makeJsonLd(){
     const data = exportData();
     const v = activeView();
+    const reference = data.source_note.visual_reference;
+    const articleUrl = reference.source_url;
+    const diagramUrl = reference.diagram_url;
     const ctx = {
-      ca: 'https://example.org/core-architectures#', schema:'https://schema.org/', id:'@id', type:'@type', name:'schema:name', description:'schema:description', text:'schema:text',
+      ca: 'https://example.org/core-architectures#', schema:'https://schema.org/', id:'@id', type:'@type', name:'schema:name', description:'schema:description', text:'schema:text', creator:'schema:creator', creditText:'schema:creditText',
+      url:{'@id':'schema:url','@type':'@id'}, image:{'@id':'schema:image','@type':'@id'}, license:{'@id':'schema:license','@type':'@id'}, isBasedOn:{'@id':'schema:isBasedOn','@type':'@id'}, isPartOf:{'@id':'schema:isPartOf','@type':'@id'},
       CrossChannelBlueprint:'ca:CrossChannelBlueprint', SharedSurfacePriorityMap:'ca:SharedSurfacePriorityMap', Stage:'ca:Stage', Surface:'ca:Surface', HeatmapCell:'ca:HeatmapCell', SharedAsset:'ca:SharedAsset', ViewConfiguration:'ca:ViewConfiguration', HandoffRoute:'ca:HandoffRoute',
       hasStage:{'@id':'ca:hasStage','@type':'@id'}, hasSurface:{'@id':'ca:hasSurface','@type':'@id'}, hasCell:{'@id':'ca:hasCell','@type':'@id'}, hasSharedAsset:{'@id':'ca:hasSharedAsset','@type':'@id'}, activeView:{'@id':'ca:activeView','@type':'@id'}, belongsToSurface:{'@id':'ca:belongsToSurface','@type':'@id'}, belongsToStage:{'@id':'ca:belongsToStage','@type':'@id'}, linkedSharedAsset:{'@id':'ca:linkedSharedAsset','@type':'@id'}, supportsStage:{'@id':'ca:supportsStage','@type':'@id'}, handsTo:{'@id':'ca:handsTo','@type':'@id'}
     };
     const graph = [];
-    graph.push({ id:'#'+data.artifact_identity.id, type:['ca:CoreArchitectureArtifact','ca:CrossChannelBlueprint','ca:SharedSurfacePriorityMap','schema:CreativeWork'], name:data.artifact_identity.display_name, description:data.artifact_identity.subtitle, 'ca:version':data.artifact_identity.version, 'ca:family':data.artifact_identity.family, 'ca:placement':data.artifact_identity.placement, 'ca:primaryCognitiveMove':data.artifact_identity.primary_cognitive_move, hasStage:state.stages.map(s=>'#'+s.id), hasSurface:state.surfaces.map(s=>'#'+s.id), hasCell:state.cells.map(c=>'#'+c.id), hasSharedAsset:state.shared_assets.map(a=>'#'+a.id), activeView:'#'+v.id });
+    graph.push({ id:'#'+data.artifact_identity.id, type:['ca:CoreArchitectureArtifact','ca:CrossChannelBlueprint','ca:SharedSurfacePriorityMap','schema:CreativeWork'], name:data.artifact_identity.display_name, description:data.artifact_identity.subtitle, 'ca:version':data.artifact_identity.version, 'ca:family':data.artifact_identity.family, 'ca:placement':data.artifact_identity.placement, 'ca:primaryCognitiveMove':data.artifact_identity.primary_cognitive_move, isBasedOn:articleUrl, creditText:reference.adaptation_note, hasStage:state.stages.map(s=>'#'+s.id), hasSurface:state.surfaces.map(s=>'#'+s.id), hasCell:state.cells.map(c=>'#'+c.id), hasSharedAsset:state.shared_assets.map(a=>'#'+a.id), activeView:'#'+v.id });
+    graph.push({ id:articleUrl, type:['schema:Article','schema:CreativeWork'], name:reference.article_title, creator:reference.creator, url:articleUrl, image:diagramUrl });
+    graph.push({ id:diagramUrl, type:['schema:ImageObject','schema:CreativeWork'], name:reference.title, creator:reference.creator, license:reference.license_url, isPartOf:articleUrl });
     graph.push({ id:'#'+v.id, type:'ca:ViewConfiguration', name:v.name, 'ca:stageOrder':v.stage_order.map(id=>'#'+id), 'ca:hiddenStage':v.hidden_stage_ids.map(id=>'#'+id), 'ca:surfaceOrder':v.surface_order.map(id=>'#'+id), 'ca:hiddenSurface':v.hidden_surface_ids.map(id=>'#'+id), 'ca:sharedAssetOrder':v.shared_asset_order.map(id=>'#'+id), 'ca:hiddenSharedAsset':v.hidden_shared_asset_ids.map(id=>'#'+id), 'ca:activeIntensityBasis':v.active_intensity_basis_ids });
     state.stages.forEach((s,i) => graph.push({ id:'#'+s.id, type:'ca:Stage', name:s.label, 'ca:canonicalOrder':s.canonical_order, 'ca:displayOrder':v.stage_order.indexOf(s.id)+1, 'ca:visibleInActiveView':!v.hidden_stage_ids.includes(s.id), 'ca:canReorder':false }));
     state.surfaces.forEach(s => graph.push({ id:'#'+s.id, type:'ca:Surface', name:s.label, 'ca:surfaceType':s.surface_type, 'ca:canonicalOrder':s.canonical_order, 'ca:displayOrder':v.surface_order.indexOf(s.id)+1, 'ca:visibleInActiveView':!v.hidden_surface_ids.includes(s.id) }));

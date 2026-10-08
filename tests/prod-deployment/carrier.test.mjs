@@ -146,6 +146,7 @@ function aggregateFixture(options = {}) {
       [
         "canvas",
         {
+          contract: { routes: [] },
           receipt: {
             package_contract: { primary_routes: 1 },
             routes: [{ projection_file: "demo/index.html", static_resource_closure: {} }],

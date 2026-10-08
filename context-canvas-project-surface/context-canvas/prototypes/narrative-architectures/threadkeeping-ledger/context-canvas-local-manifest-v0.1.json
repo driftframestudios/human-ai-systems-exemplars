@@ -22,7 +22,7 @@
   },
   "integrity": {
     "algorithm": "sha256",
-    "entryFile": "fa8d46db15e86472e564c24b74ef6c952104bb97d14d5fa964dfd24c9783d58d"
+    "entryFile": "0be37ce3ac59d32871462640736db2d2e9d8830e814b1eed45518b841e7bbb67"
   },
   "canonicalStatus": "context_canvas_owned_projection",
   "sourcePath": ".",
@@ -30,7 +30,8 @@
   "entryFile": "threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html",
   "sourceManifest": "threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-manifest-v0.1.json",
   "localAdaptations": [
-    "Public example records use portable collaborator roles while exact private lineage remains in the authorized resolver.",
+    "Public example records distinguish human collaborators, AI systems, and AI-system assistance while exact private lineage remains in the authorized resolver.",
+    "Entry and next-candidate deletion use inline confirmation with keyboard focus recovery.",
     "Prompt Capsule 0.1.0 projects the complete accepted ledger into plain and skill-assisted GitHub Flavored Markdown with one state-only fingerprint, a related re-entry loop, and exact visible, copy, download, and API bytes."
   ],
   "divergence": {

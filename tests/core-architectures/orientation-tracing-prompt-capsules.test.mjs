@@ -35,8 +35,8 @@ const artifacts = [
     version: "0.1.5",
     currentFile: "poda-chimeric-prototype-v0.1.5.html",
     historicalFile: "poda-chimeric-prototype-v0.1.4.html",
-    currentDigest: "a9a7f0fed49710eabbd5848ccb99e20e6149fa8fd3715df353d90bbbac6e4757",
-    contextDigest: "f93f2f734e3f49d93e7f4f58ea1a30ac8a363f181636e1ef87016d9e866a4f4b",
+    currentDigest: "a325354f7fdb0fd7f96c1272631b98e07686c4cfaa95bef4fd12ff1a13d6288f",
+    contextDigest: "fdddd19c630b66d05c5f7c2d593a7c423e49cd681648df6822056ee88a92bc98",
     historicalDigest: "adf425f5e7b0f22fe03c9df58c874b2f995457de933e9dc777fb8ef5bfd46704",
     historicalContextDigest: "cffd9df254680e13de1d6609c518926f6b8fc80dff56c972ea796fa896b4fe26",
     stateContract: "poda-state.v0.1",
@@ -46,7 +46,7 @@ const artifacts = [
     skills: ["supportive-change-writing", "source-authority-mapping", "stateful-artifact-behavior-contracts"],
     directCarriers: ["context-canvas-project-surface/context-canvas/poda.html"],
     receiverStanding: "context_adapted",
-    activationStanding: "parity_review",
+    activationStanding: "eligible",
     adaptation: {
       canonical: "../context-canvas-project-surface/context-canvas/poda.html",
       context: "../../../poda.html",
@@ -64,7 +64,7 @@ const artifacts = [
     version: "0.1.4",
     currentFile: "alignment-worksheet-chimeric-prototype-v0.1.4.html",
     historicalFile: "alignment-worksheet-chimeric-prototype-v0.1.3.html",
-    currentDigest: "29ee4ed8647fe86aa0dbde013955a88fdb8473d660ad27e2a8aa3a5bf62ddd58",
+    currentDigest: "6c9ae958983899a288c0fbf2eaa869688f29b74fbf7b44364ebc1c76bd1d9805",
     historicalDigest: "d95b9dea95e92ab24baf3c286e8ac15d3166056d06b9ee4293b34a99f0400c23",
     stateContract: "alignment-worksheet-state.v0.1",
     apiName: "alignmentWorksheet",
@@ -73,7 +73,7 @@ const artifacts = [
     skills: ["supportive-change-writing", "practitioner-probe", "stateful-artifact-behavior-contracts"],
     directCarriers: ["context-canvas-project-surface/context-canvas/ai-systems.html"],
     receiverStanding: "reserve",
-    activationStanding: "reader_job_required",
+    activationStanding: "eligible",
     completeness(plain) {
       assert.equal([...plain.matchAll(/^### \d\. /gmu)].length, 6);
       assert.equal([...plain.matchAll(/^### Option:/gmu)].length, 4);
@@ -97,7 +97,7 @@ const artifacts = [
     skills: ["source-authority-mapping", "context-canvas-surface-reading", "stateful-artifact-behavior-contracts"],
     directCarriers: [],
     receiverStanding: "reserve",
-    activationStanding: "reader_job_required",
+    activationStanding: "eligible",
     completeness(plain) {
       assert.equal([...plain.matchAll(/^## Actor:/gmu)].length, 4);
       assert.equal([...plain.matchAll(/^### Impact /gmu)].length, 4);
@@ -124,7 +124,7 @@ const artifacts = [
       "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
     ],
     receiverStanding: "reserve",
-    activationStanding: "reader_job_required",
+    activationStanding: "eligible",
     completeness(plain) {
       assert.equal([...plain.matchAll(/^- `group-/gmu)].length, 5);
       assert.equal([...plain.matchAll(/^- `row-/gmu)].length, 5);

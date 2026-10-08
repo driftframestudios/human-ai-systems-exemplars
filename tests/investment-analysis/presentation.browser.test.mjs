@@ -162,7 +162,7 @@ test("investment chapters retain readable, navigable, source-grounded screen and
         assert.match(await page.getByRole("complementary", { name: "Planning model boundary", exact: true }).textContent(), /Ground each assumption in local evidence/);
         assert.match(await page.getByRole("complementary", { name: "Planning model boundary", exact: true }).textContent(), /Accountable people review pricing and expected outcomes, authorize budgets and staffing/);
         assert.equal(await page.locator('.page-nav a[href="#investment-analysis-title"]').count(), 1);
-        await page.getByRole("button", { name: "Direct receipts", exact: true }).click();
+        await page.getByRole("button", { name: "Source-linked readouts", exact: true }).click();
         const receipt = page.locator("#analysis-direct-receipts").getByRole("link", { name: "Cohort, pricing, and implementation", exact: true });
         await receipt.focus();
         await page.keyboard.press("Enter");
@@ -443,7 +443,7 @@ test("investment chapters retain readable, navigable, source-grounded screen and
     await about.goto(origin + "/context-canvas-project-surface/context-canvas/index.html");
     const frame = about.frameLocator('iframe[title="Interactive Cross-Functional Investment Studio"]');
     await frame.locator("[data-investment-analysis]:not([hidden])").waitFor();
-    await frame.getByRole("button", { name: "Direct receipts", exact: true }).click();
+    await frame.getByRole("button", { name: "Source-linked readouts", exact: true }).click();
     await frame.locator("#analysis-direct-receipts").getByRole("link", { name: "Decision owner, gate, and revisit", exact: true }).click();
     await frame.locator("#analysis-owner").waitFor({ state: "visible" });
     assert.equal(await frame.locator("#analysis-owner").isVisible(), true);

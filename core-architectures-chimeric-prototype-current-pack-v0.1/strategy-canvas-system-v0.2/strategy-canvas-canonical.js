@@ -591,7 +591,7 @@
       if (promptDescription) {
         promptDescription.textContent = promptCapsuleView === 'skill-assisted'
           ? 'Skill-assisted Markdown adds exact public repository skill paths and their immutable revision. The Strategy Canvas state and fingerprint remain the same.'
-          : 'Plain Markdown carries the complete working context without asking the receiver to load a repository skill.';
+          : 'Plain Markdown is a self-contained handoff with the complete working context.';
       }
       if (validation) {
         const result = core.validateState(state);

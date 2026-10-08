@@ -340,6 +340,11 @@
       .hero-grid, .grid-2, .grid-3, .inspector-grid { grid-template-columns: 1fr; }
       header.hero { padding-top: 28px; }
     }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      button, .button-like { transition: none; }
+      button:active { transform: none; }
+    }
 
   .artifact-attribution {
     position: static;
@@ -1484,7 +1489,7 @@ These public collaboration loops fit when the receiving work meets the stated co
 
   function labelFor(f){ return ({goal:'Goal',signal:'Signal',metric:'Metric',interpretation:'Interpretation',tolerance:'Tolerance',counter_signal:'Counter-signal',qualitative_companion:'Qualitative companion',reason:'Route reason'}[f] || f); }
   function short(s,n){ s=String(s||''); return s.length>n ? s.slice(0,n-1)+'…' : s; }
-  function selectRow(id){ activeView().selected_row_id = id; renderSvg(); renderInspector(); renderExports(); document.getElementById('inspector-title').scrollIntoView({block:'start', behavior:'smooth'}); }
+  function selectRow(id){ activeView().selected_row_id = id; renderSvg(); renderInspector(); renderExports(); const reducedMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches; document.getElementById('inspector-title').scrollIntoView({block:'start', behavior:reducedMotion?'auto':'smooth'}); }
   function updateRow(id, field, value){
     const r = data.rows.find(x=>x.id===id); if(!r) return;
     if (field === 'handoff') {

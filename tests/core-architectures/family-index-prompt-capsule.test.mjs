@@ -276,7 +276,7 @@ test("Family Index current route provides exact Markdown download capability", a
     held_capabilities: [],
   });
   assert.equal(route.receiver_standing, "context_adapted");
-  assert.equal(route.activation_standing, "parity_review");
+  assert.equal(route.activation_standing, "eligible");
 });
 
 test("Prompt Capsule inventory recognizes the complete current adoption set", async () => {

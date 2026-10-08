@@ -219,6 +219,15 @@ rows record their source digest and projected digest; unchanged files retain
 byte-preserved standing. The ignored `.public-reference-build/` directory is
 not an input.
 
+When a selected primary HTML file is also owned by the Canvas iframe route
+manifest, the assembler applies that manifest's shared public metadata at the
+publication boundary. The full view and its iframe projection therefore carry
+one author declaration, one Apache-2.0 relation, one visitor-boundary context
+and canary stack, and one copy-local attribution notice. Sources that already
+carry the complete bundle, such as Threadkeeping Ledger, retain their authored
+copy without a duplicate. The Canvas route manifest remains the selection
+authority; the production configuration adds no parallel decoration list.
+
 The assembler also keeps the Core vocabulary decision at its current owner.
 If a selected primary file or the accepted iframe package still carries the
 placeholder Core authority, assembly stops at Issue #110. Continue after that

@@ -80,6 +80,11 @@ test("the route plan preserves the Core population and adds one supplemental ins
   assert.equal(firstPlan.receipt.package_contract.compatibility_aliases_generated, false);
   assert.equal(firstPlan.receipt.package_contract.live_cloudflare_mutation, false);
   assert.equal(firstPlan.receipt.package_contract.neighboring_path_posture, "unmatched");
+  assert.equal(firstPlan.receipt.routes.length, firstPlan.contract.routes.length);
+  for (const route of firstPlan.receipt.routes) {
+    assert.equal(route.activation_standing, "eligible", `${route.id} is publication eligible`);
+    assert.equal(route.activation_eligible, true, `${route.id} is emitted as eligible`);
+  }
   assert.deepEqual(
     [...firstPlan.outputFiles.keys()].sort(),
     [...secondPlan.outputFiles.keys()].sort(),
@@ -466,7 +471,7 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   await writePackagePlan(plan, temporaryRoot);
   const verification = await verifyPackagePlan(plan, temporaryRoot);
 
-  assert.deepEqual(verification, { files: 27, bytes: 2782034 });
+  assert.deepEqual(verification, { files: 27, bytes: 2783721 });
   await writeFile(path.join(temporaryRoot, "unexpected.txt"), "outside the plan\n");
   await assert.rejects(
     verifyPackagePlan(plan, temporaryRoot),
@@ -474,7 +479,7 @@ test("a materialized plan has the exact allowlist and expected bytes", async (t)
   );
 });
 
-test("route validation rejects alias and source-identity drift", async () => {
+test("route validation rejects publication, alias, and source-identity drift", async () => {
   const { contract, sourceManifest } = await loadManifests();
   assert.equal(validateRouteContract(contract, sourceManifest), true);
 
@@ -528,6 +533,14 @@ test("route validation rejects alias and source-identity drift", async () => {
     /supported standing values/,
   );
 
+  const publicationExcludedRoute = structuredClone(contract);
+  publicationExcludedRoute.routes.find(({ id }) => id === "alignment-worksheet")
+    .activation_standing = "reader_job_required";
+  assert.throws(
+    () => validateRouteContract(publicationExcludedRoute, sourceManifest),
+    /alignment-worksheet cannot be emitted because activation standing "reader_job_required" excludes package publication/,
+  );
+
   const missingCarrierPolicy = structuredClone(contract);
   delete missingCarrierPolicy.routes[0].carrier_policy;
   assert.throws(
@@ -557,7 +570,7 @@ test("route validation rejects alias and source-identity drift", async () => {
   eligibleAlignment.carrier_policy.held_capabilities.push("native-modals");
   assert.throws(
     () => validateRouteContract(eligibleWithHeldCapability, sourceManifest),
-    /must resolve every held capability before activation/,
+    /must resolve every held capability before packaging/,
   );
 
   const supplementalSourceRootDrift = structuredClone(contract);

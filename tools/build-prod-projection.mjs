@@ -26,6 +26,10 @@ import {
 } from "./iframe-route-package-engine.mjs";
 import { createAggregatePackagePlan } from "./package-v1-iframe-routes.mjs";
 import {
+  assertCanvasPublicAttribution,
+  decorateCanvasPublicDocument,
+} from "./package-canvas-iframe-routes.mjs";
+import {
   inspectProfessionalProfileScript,
   inspectPublicReferenceHtml,
   materializeProfessionalProfileScript,
@@ -1932,6 +1936,28 @@ function assertResolvedPrimaryBytes(bytes, sourcePath) {
   ) {
     fail(`Primary projection source retains an unresolved public URL token: ${sourcePath}.`);
   }
+}
+
+function canvasRouteForPrimarySource(aggregatePlan, sourcePath) {
+  const routes = aggregatePlan.familyPlans.get("canvas")?.contract?.routes;
+  if (!Array.isArray(routes)) {
+    fail("Production projection requires the Canvas route contract from its aggregate plan.");
+  }
+  return routes.find((route) => route.source_file === sourcePath) ?? null;
+}
+
+function decorateCanvasPrimaryProjection(bytes, file, aggregatePlan) {
+  if (path.posix.extname(file.source_path).toLowerCase() !== ".html") {
+    return bytes;
+  }
+  const route = canvasRouteForPrimarySource(aggregatePlan, file.source_path);
+  if (route === null) return bytes;
+  const html = bytes.toString("utf8");
+  if (["decorated_copy", "decorated_rewrite"].includes(route.projection_kind)) {
+    return Buffer.from(decorateCanvasPublicDocument(html, route), "utf8");
+  }
+  assertCanvasPublicAttribution(html, route, 0);
+  return bytes;
 }
 
 function hasUnsettledProductionAuthority(bytes) {
@@ -3995,6 +4021,7 @@ export async function createProductionProjectionPlan(options = {}) {
           absoluteProjectionUrls,
           noteResolvedReference,
         );
+    bytes = decorateCanvasPrimaryProjection(bytes, file, aggregatePlan);
     if (file.source_path === selection.configuration.css_projection?.consumer) {
       cssProjectionPlan = projectAboutCssProfile({
         consumer: {

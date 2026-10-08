@@ -14,6 +14,12 @@ import path from "node:path";
 import test from "node:test";
 import { promisify } from "node:util";
 
+import visitorBoundaryContract from "../../context-canvas-project-surface/context-canvas/visitor-boundary-contract.js";
+import {
+  artifactAttribution,
+  artifactAuthor,
+  artifactLicense,
+} from "../../tools/attribution-contract.mjs";
 import {
   checkProductionProjection,
   createProductionCarrierPlan,
@@ -54,6 +60,10 @@ const cssSourcePaths = cssSourceRelativePaths.map(
   (relativePath) =>
     `context-canvas-project-surface/context-canvas/${relativePath}`,
 );
+
+function occurrenceCount(source, value) {
+  return source.split(value).length - 1;
+}
 
 async function git(root, args) {
   const { stdout = "" } = await execFileAsync("git", args, {
@@ -324,6 +334,9 @@ function aggregateFixture(options = {}) {
       [
         "canvas",
         {
+          contract: {
+            routes: options.canvasRoutes ?? [],
+          },
           receipt: {
             package_contract: { primary_routes: 1 },
             routes: [
@@ -857,6 +870,54 @@ test("the production plan deterministically combines an explicit primary closure
         !file.includes(".iframe-route-build") && !file.includes("context-canvas-project-surface/context-canvas"),
       ),
     );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("selected Canvas full views receive the shared public metadata at the primary boundary", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const source = [
+      "<!doctype html>",
+      "<html>",
+      "<head><title>Canvas full view</title></head>",
+      "<body><main>Standalone working view</main></body>",
+      "</html>",
+      "",
+    ].join("\n");
+    await writeFile(path.join(fixture.root, "visitor/index.html"), source, "utf8");
+    fixture.sourceSha = await commitFixture(
+      fixture.root,
+      "Accept Canvas full-view fixture",
+    );
+    const aggregatePlan = aggregateFixture({
+      canvasRoutes: [
+        {
+          id: "demo",
+          source_file: "visitor/index.html",
+          projection_kind: "decorated_copy",
+        },
+      ],
+    });
+    const plan = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan,
+    });
+    const html = plan.outputFiles
+      .get("primary-public/index.html")
+      .toString("utf8");
+
+    assert.equal(occurrenceCount(html, `<meta name="author" content="${artifactAuthor}">`), 1);
+    assert.equal(occurrenceCount(html, `<link rel="license" href="${artifactLicense}">`), 1);
+    assert.equal(occurrenceCount(html, artifactAttribution), 1);
+    assert.equal(occurrenceCount(html, visitorBoundaryContract.contextText), 1);
+    assert.equal(occurrenceCount(html, "data-visitor-boundary aria-label="), 1);
+    for (const marker of visitorBoundaryContract.markers) {
+      for (const line of marker.lines) assert.equal(occurrenceCount(html, line), 1);
+    }
   } finally {
     await rm(fixture.root, { recursive: true, force: true });
   }

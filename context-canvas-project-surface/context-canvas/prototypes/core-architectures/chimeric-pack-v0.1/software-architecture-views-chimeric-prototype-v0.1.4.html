@@ -401,7 +401,7 @@
             <li data-related-loop-id="visitor-surface-change"><a href="https://schemas.radiantnull.com/collaboration/#visitor-surface-change">Change a visitor surface with fitting visual evidence</a><p><strong>Fit condition:</strong> Use when an attachment becomes a visitor-visible architecture change that needs focused browser evidence.</p></li>
           </ul></details>
           <fieldset class="prompt-view-control" data-prompt-view-control hidden><legend>Markdown view</legend><div class="prompt-view-options"><label class="prompt-view-option"><input type="radio" name="software-views-prompt-view" value="plain" data-prompt-view checked> Plain</label><label class="prompt-view-option"><input type="radio" name="software-views-prompt-view" value="skill-assisted" data-prompt-view> Skill-assisted</label></div></fieldset>
-          <p class="note" id="promptViewDescription">Plain Markdown carries the complete architecture context without asking the receiver to load a repository skill.</p><p class="prompt-status note" id="promptCapsuleStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+          <p class="note" id="promptViewDescription">Plain Markdown is a self-contained handoff with the complete architecture context.</p><p class="prompt-status note" id="promptCapsuleStatus" role="status" aria-live="polite" aria-atomic="true"></p>
           <noscript><p class="quick-card">The complete default plain Markdown remains available below. Interactive editing, view selection, copying, and downloading become available when JavaScript runs.</p></noscript>
           <pre id="aiPrompt" data-prompt-view-active="plain" aria-labelledby="io-heading" aria-describedby="promptViewDescription" tabindex="0"># Prompt Capsule: Software Architecture Views
 
@@ -1205,7 +1205,7 @@ These public collaboration loops fit when the receiving work meets the stated co
       document.getElementById('jsonld').textContent = JSON.stringify(jsonLd, null, 2);
       const prompt=document.getElementById('aiPrompt');prompt.textContent=promptCapsuleMarkdown(promptCapsuleView);prompt.dataset.promptViewActive=promptCapsuleView;
       document.querySelectorAll('[data-prompt-view]').forEach(control=>{control.checked=control.value===promptCapsuleView;});
-      document.getElementById('promptViewDescription').textContent=promptCapsuleView==='skill-assisted'?'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented attachment map and fingerprint remain the same.':'Plain Markdown carries the complete architecture context without asking the receiver to load a repository skill.';
+      document.getElementById('promptViewDescription').textContent=promptCapsuleView==='skill-assisted'?'Skill-assisted Markdown adds exact public repository skill paths, an immutable source revision, and SHA-256 coordinates. The represented attachment map and fingerprint remain the same.':'Plain Markdown is a self-contained handoff with the complete architecture context.';
     }
 
     const ROOT_EXPORT_KEYS=new Set(['artifact_identity','quick_use','modeled_element','software_architecture_views','view_state','route_registry','status_vocabulary','semantic_locality','recovery_calibration']);
