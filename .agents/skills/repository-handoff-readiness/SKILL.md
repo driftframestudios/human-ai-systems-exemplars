@@ -182,9 +182,17 @@ addition before authorizing a write:
 - **Hold:** identity, semantic fit, or authority needs a named owner decision.
 
 A reported apply eligibility establishes the tool's mechanical preconditions;
-the collaborator names the receiving improvement before authorizing a write.
+the collaborator names the receiving improvement, and the current task grant
+or named owner supplies write authority.
 One-to-many or differently partitioned Issue routes retain their live
 structure; a binding remains one-to-one and semantically exact.
+
+The local installer and GitHub Issue materializer each execute one exact
+confirmed plan as a unit. Supply exact bindings before creating a fresh plan.
+For Preserve existing or Hold, revise the selected profile, seed, or bindings,
+or retain the plan as comparison evidence. A plan becomes apply-ready when
+every proposed mutation is classified Materialize. The confirmed plan remains
+the unit of mutation throughout apply and verification.
 
 ### Rule: The Issue route prepares ownership
 
@@ -258,7 +266,8 @@ mechanics demonstrate material savings or protect a consequential boundary.
    the five additive profiles and record only decision-changing gaps.
 4. **Classify adoption fit:** Mark each proposed foundation or Issue-route
    addition as materialize, bind, preserve existing, or hold. Name the useful
-   receiving change before apply.
+   receiving change before apply, and create a fresh whole plan after changing
+   a profile, seed, or binding.
 5. **Make the Issue route legible:** Identify the current front, typed
    relations, acceptance evidence, next receiver, and release event.
 6. **Receive source when available:** Let observed technology and behavior

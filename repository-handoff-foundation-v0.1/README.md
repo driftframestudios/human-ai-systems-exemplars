@@ -92,6 +92,12 @@ improves the collaboration route:
 | A richer live Issue graph already supplies the current front and continuation | Preserve the graph and retain the dry run as adoption evidence |
 | Identity, fit, or authority remains unclear | Hold the write and route the named question to its owner |
 
+Both apply commands execute the exact confirmed plan as a unit. Supply an
+exact one-to-one binding before creating a fresh GitHub plan. For Preserve
+existing or Hold, revise the selected profile, seed, or bindings, or retain the
+plan as a read-only comparison. A plan becomes apply-ready when every proposed
+mutation is classified Materialize.
+
 `applyEligible` establishes the local installer's mechanical preconditions.
 For GitHub state, a plan with an empty `blockers` collection establishes a
 mechanically complete route proposal. The receiving owner makes the

@@ -245,10 +245,11 @@ or account owner. Continue the parts of intake that remain observable.
 4. Record the reviewed adoption classification for each planned resource:
    Materialize, Bind, Preserve existing, or Hold.
 5. For Bind, provide the reviewed one-to-one bindings and create a fresh plan.
-   For Materialize, confirm the exact plan. Preserve existing and Hold retain
-   the current live state.
-6. Apply the confirmed plan only where its addition or reconciliation gives
-   the receiving repository a named useful ability.
+   For Preserve existing or Hold, revise the selected profile, seed, or
+   bindings, or retain the plan as a read-only comparison.
+6. Treat the exact fresh plan as the unit of mutation. It becomes apply-ready
+   when every proposed mutation is classified Materialize and gives the
+   receiving repository a named useful ability.
 7. Resolve newly created Issue numbers and cross-links in a second pass.
 8. Verify the resulting graph and write a receipt from semantic keys to live
    coordinates and seed digest.
@@ -506,6 +507,7 @@ public return carries the bounded condition and continuation.
 | Destination technology differs from an assumed stack | Replace the assumption with the observed technology profile and select source-native checks |
 | Issue seed differs from owner-edited live Issues | Keep live Issues current, show the semantic-key comparison, and review the specific drift |
 | A bespoke live Issue graph already provides a clearer continuation than the bootstrap seed | Preserve the live graph and keep the dry-run as adoption evidence; a later plan can materialize an unserved resource or bind an exact one-to-one match |
+| One exact plan mixes Materialize with Preserve existing or Hold classifications | Revise the selected profile, seed, or bindings and create a fresh plan; each apply-ready plan contains only proposed mutations classified Materialize |
 | Required GitHub state is inaccessible | Mark it `unverified` and route the exact read or action to an authorized account owner |
 | Secret-shaped material appears | Keep details with the private finding owner, repair the source boundary, and return a sanitized condition |
 | Transfer remains pending or fails | Retain the preparing owner and last verified coordinate; name the platform condition and retry event |
