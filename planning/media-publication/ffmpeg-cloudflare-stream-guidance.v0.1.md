@@ -26,7 +26,7 @@ packaging and cache owner. Local FFmpeg work therefore prepares one high-quality
 upload master for the selected Stream route.
 
 A self-hosted HLS/CMAF branch remains available for a future receiver with a
-demonstrated need. That branch brings a dedicated ladder, aligned random-access
+demonstrated need. The self-hosted branch brings a dedicated ladder, aligned random-access
 points, segment and manifest validation, MIME configuration, cache policy,
 atomic publication, and player observations. The first Context Canvas video
 tranche uses the smaller Stream-owned route.
@@ -40,7 +40,7 @@ tranche uses the smaller Stream-owned route.
 | Frame rate | Preserve the recorded frame rate | Current Stream guidance requests source-rate upload; forced 24 fps can add cadence defects |
 | Geometry | Preserve display aspect ratio, square pixels, even output dimensions, and source-or-smaller resolution | Stable geometry, encoder compatibility, and source-derived detail |
 | Audio | AAC-LC, mono or stereo; preserve a suitable 44.1 kHz or 48 kHz source, with 48 kHz as the new-master default when resampling is required | The repository working profile accepts both common source rates; predictable channel and sample-rate handling aids validation |
-| Random access | Preserve source-appropriate on-demand keyframe structure and verify seeking | Current Stream pages differ: the FAQ recommends closed GOP for newly produced uploads, while the upload overview marks it as required only for live. Fixed `-g 96` only matches four seconds at 24 fps. |
+| Random access | Preserve source-appropriate on-demand keyframe structure and verify seeking | Current Stream pages differ: the FAQ recommends closed GOP for newly produced uploads, while the upload overview marks closed GOP as required only for live. Fixed `-g 96` only matches four seconds at 24 fps. |
 | Metadata | Explicit stream selection, reviewed public metadata allowlist, selected chapters only, and post-encode format-aware inspection | Public bytes carry intended media and reviewed public metadata |
 | Accessibility | Reviewed WebVTT captions, a nearby descriptive transcript, a meaningful poster, visitor controls, and stable dimensions | Audio, speech, meaningful sound, and meaningful visuals remain available across access needs |
 
@@ -185,7 +185,7 @@ acceptance claim.
 3. Inspect streams and select the smallest fitting encode profile.
 4. Encode to a temporary path. The authorized source owner retains the private
    original; the public repository receives the reviewed master selected for
-   its visitor job.
+   the visitor job.
 5. Verify decoding, geometry, frame rate, audio, synchronization, metadata,
    visual quality, and digest.
 6. Add the accepted master, poster, captions, and transcript through the
@@ -199,7 +199,7 @@ acceptance claim.
    authorized human operator uploads reviewed WebVTT captions; the
    collaboration inspects the Stream-generated thumbnail, HLS, and DASH
    results. Bind the reviewed repository poster through the Stream player's
-   `poster` option and verify that exact public URL; the generated thumbnail
+   `poster` option and verify the exact public URL; the generated thumbnail
    remains the platform fallback.
 10. Embed the Stream player with a descriptive title, stable aspect ratio,
     visitor controls, `loading="lazy"` for a below-fold placement, and the
@@ -225,7 +225,7 @@ and picture-in-picture remain separately selectable. A restrictive iframe
 sandbox starts from the smallest Stream-compatible set established by a focused
 browser check rather than from a generic embed snippet. The source-owned CSP
 admits the exact Stream account host through `frame-src` for the built-in
-player; an own-player branch admits only its selected manifest, media, and
+player; an own-player branch admits only the selected manifest, media, and
 image hosts through the matching `connect-src`, `media-src`, and `img-src`
 directives.
 
@@ -233,7 +233,7 @@ directives.
 
 The assessed source remains authorized task-context material. Each row names
 the distinctive claim or pattern so a cold-start collaborator can understand
-the resulting disposition from this public-possible guidance alone.
+the resulting disposition from the public-possible guidance alone.
 
 | Draft claim or pattern | Current disposition |
 | --- | --- |

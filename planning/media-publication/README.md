@@ -41,13 +41,13 @@ runbook catalogs through the existing selection process.
 
 ## Language posture
 
-This planning area follows the repository's
+The media-publication planning area follows the repository's
 [supportive-change-writing collection](../../supportive-change-writing-exemplars-bundle-v0.1/README.md),
 [agency-and-action writing collection](../../agency-and-action-writing-exemplars-bundle-v0.1/README.md),
 and [Semantic Attractor Design guidance](../../supportive-change-writing-exemplars-bundle-v0.1/guidance/semantic-attractor-design.v0.1.md).
 Desired states, direct actors, observable completion, and a calm recovery route
 lead each contract. Precise security, privacy, rights, and evidence boundaries
-retain their load-bearing polarity and name the authorized destination beside
+retain load-bearing polarity and name the authorized destination beside
 the boundary.
 
 ## Boundary
@@ -55,4 +55,4 @@ the boundary.
 The planning area contains guidance and candidate contracts. Named Issues own
 implementation; the human author selects public activation; production assets,
 media uploads, publication rights, and protected Cloudflare coordinates remain
-with their established source and platform owners.
+with established source and platform owners.

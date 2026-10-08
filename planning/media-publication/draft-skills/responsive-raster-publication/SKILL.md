@@ -47,7 +47,7 @@ comparison. A `width=auto` canary uses delegated viewport-width and DPR hints,
 then Cloudflare's documented user-agent fallback; the result approximates a
 viewport class rather than measuring the image's actual CSS slot. Bounded
 breakpoints, transformation cardinality, cache behavior, and source-owned
-fallbacks remain part of that comparison.
+fallbacks remain part of the edge comparison.
 
 ### Rule: Semantics travel from the source owner
 
@@ -59,8 +59,8 @@ the semantic asset inventory.
 
 The exact candidate closure receives a canary-proven credential scan, a
 format-aware metadata observation, and a human rights/consent decision. Each
-boundary returns its own scope, disposition, and unresolved findings while the
-other claims retain their fitting owners.
+boundary returns an independent scope, disposition, and unresolved findings;
+the adjacent claims retain fitting owners.
 
 ## Operating sequence
 

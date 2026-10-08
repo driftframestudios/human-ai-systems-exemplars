@@ -33,7 +33,7 @@ boundary.
    guidance for each format.
 2. **Bind publication scope.** Name the exact selected closure and receiver.
    Private originals remain with the authorized source owner; public source
-   receives the reviewed derivative selected for its visitor job.
+   receives the reviewed derivative selected for the visitor job.
 3. **Observe credential-shaped material.** Invoke
    `secret-boundary-inspection` with a fresh canary and the exact tree, index,
    history, or artifact scope required by the handoff.
