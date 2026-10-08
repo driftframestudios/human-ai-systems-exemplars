@@ -163,6 +163,37 @@ determine their sequence and importance in each repository.
 Live GitHub Issues become current authority after materialization. The seed
 stays a bootstrap, comparison, and recovery input.
 
+### Rule: Adoption fit precedes materialization
+
+A dry-run plan reports path and platform-resource state. Compare that plan
+with the active Issue and receiving repository context to decide whether each
+mechanically available change improves the route. Classify every planned
+addition before authorizing a write:
+
+- **Materialize:** the selected foundation or seed supplies a useful file or
+  Issue-route owner that is absent from the repository.
+- **Bind:** one live resource already performs the seeded job, and an explicit
+  one-to-one semantic binding identifies it while retaining the live route's
+  meaning.
+- **Preserve existing:** a receiving-owner file provides the same behavior
+  through another carrier, or a richer live Issue graph already gives the
+  owner a clear continuation. Keep that receiving-owner file or live Issue
+  graph current, and use the plan as comparison evidence.
+- **Hold:** identity, semantic fit, or authority needs a named owner decision.
+
+A reported apply eligibility establishes the tool's mechanical preconditions;
+the collaborator names the receiving improvement, and the current task grant
+or named owner supplies write authority.
+One-to-many or differently partitioned Issue routes retain their live
+structure; a binding remains one-to-one and semantically exact.
+
+The local installer and GitHub Issue materializer each execute one exact
+confirmed plan as a unit. Supply exact bindings before creating a fresh plan.
+For Preserve existing or Hold, revise the selected profile, seed, or bindings,
+or retain the plan as comparison evidence. A plan becomes apply-ready when
+every proposed mutation is classified Materialize. The confirmed plan remains
+the unit of mutation throughout apply and verification.
+
 ### Rule: The Issue route prepares ownership
 
 Give the repository one visible current front, typed relations, acceptance
@@ -233,20 +264,24 @@ mechanics demonstrate material savings or protect a consequential boundary.
    human-held decisions.
 3. **Select the smallest profile set:** Compare the current repository with
    the five additive profiles and record only decision-changing gaps.
-4. **Make the Issue route legible:** Identify the current front, typed
+4. **Classify adoption fit:** Mark each proposed foundation or Issue-route
+   addition as materialize, bind, preserve existing, or hold. Name the useful
+   receiving change before apply, and create a fresh whole plan after changing
+   a profile, seed, or binding.
+5. **Make the Issue route legible:** Identify the current front, typed
    relations, acceptance evidence, next receiver, and release event.
-5. **Receive source when available:** Let observed technology and behavior
+6. **Receive source when available:** Let observed technology and behavior
    choose application dependencies, checks, and build paths.
-6. **Prepare the foundation:** Add or reconcile the selected files, templates,
+7. **Prepare the foundation:** Add or reconcile the selected files, templates,
    profiles, checks, and receipts through their source owners.
-7. **Prepare the handoff:** Inspect source and account boundaries, attribution,
+8. **Prepare the handoff:** Inspect source and account boundaries, attribution,
    privacy, secrets, recovery, platform settings, and the exact next owner
    action.
-8. **Carry the authorized delivery form:** Stop at every human-held boundary;
+9. **Carry the authorized delivery form:** Stop at every human-held boundary;
    resume when its named owner supplies the decision or action.
-9. **Observe continuing ownership:** Verify the receiving owner can find the
+10. **Observe continuing ownership:** Verify the receiving owner can find the
    current front and complete one ordinary Issue-to-change cycle.
-10. **Return decision-changing evidence:** Revise the portable skill, runbook,
+11. **Return decision-changing evidence:** Revise the portable skill, runbook,
     or foundation only where receiving use changed a decision. Let other
     observations rest with their current owners.
 
@@ -275,6 +310,18 @@ mechanics demonstrate material savings or protect a consequential boundary.
 - And they carry the first substantial change and private release
 - And their completed cycle or precise blocker returns evidence to the
   reusable handoff artifacts
+
+### Scenario: An established route already supplies the bootstrap's intended ability
+
+- Given a receiving repository already carries a legible, owner-authored Issue
+  graph with a current front and next receivers
+- And the portable seed describes a smaller or differently partitioned route
+- When the collaborator creates a dry-run comparison
+- Then the live graph remains authority
+- And the plan records the semantic difference as adoption evidence
+- And the collaborator records Preserve existing and keeps that graph current
+- And a later observed unserved ability or exact one-to-one match can select
+  Materialize or Bind through a new plan
 
 ## Recovery and re-entry
 

@@ -78,6 +78,33 @@ for review. The deterministic receipt lives at
 filesystem paths; Git, GitHub, network, Issue, account, and publication state
 remain with their existing owners.
 
+### Classify adoption fit before apply
+
+The local and GitHub plans report what their bounded mechanisms can create,
+preserve, bind, or hold. The receiving owner decides which planned addition
+improves the collaboration route:
+
+| Observed receiving state | Adoption classification |
+| --- | --- |
+| The planned file is absent and supplies a useful capability, or no live Issue route performs the seed's job | Materialize the selected module or seed after exact plan confirmation |
+| One live resource already performs the semantic job | Supply an explicit reviewed binding, then plan again |
+| A receiving-owner carrier supplies equivalent behavior | Preserve that carrier and record the equivalence; portable-profile conformance remains a separate decision |
+| A richer live Issue graph already supplies the current front and continuation | Preserve the graph and retain the dry run as adoption evidence |
+| Identity, fit, or authority remains unclear | Hold the write and route the named question to its owner |
+
+Both apply commands execute the exact confirmed plan as a unit. Supply an
+exact one-to-one binding before creating a fresh GitHub plan. For Preserve
+existing or Hold, revise the selected profile, seed, or bindings, or retain the
+plan as a read-only comparison. A plan becomes apply-ready when every proposed
+mutation is classified Materialize.
+
+`applyEligible` establishes the local installer's mechanical preconditions.
+For GitHub state, a plan with an empty `blockers` collection establishes a
+mechanically complete route proposal. The receiving owner makes the
+receiving-fit decision. An accepted Preserve existing classification is a
+complete comparison result when existing owners already provide the intended
+ability.
+
 The Issue-route commands address GitHub state separately. `plan` reads the
 bounded label, milestone, and Issue collections, including closed items, and
 filters pull requests from the shared Issues endpoint. It also renders every
