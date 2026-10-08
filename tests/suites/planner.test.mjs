@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError } from '../../tools/test-suite-plan.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const POST_BASELINE_NODE_MEMBERS = ['tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs', 'tests/context-canvas/about-first-paint-css.test.mjs', 'tests/context-canvas/debrief-catalog-preview-images.test.mjs', 'tests/context-canvas/debrief-catalog-preview.browser.mjs', 'tests/context-canvas/debrief-image-derivatives.test.mjs', 'tests/context-canvas/lims-capability-transfer-model.test.mjs', 'tests/context-canvas/prompt-side-figure.browser.mjs', 'tests/context-canvas/visual-reference-observations.test.mjs', 'tests/repository-handoff-foundation/foundation.test.mjs', 'tests/repository-handoff-foundation/install.test.mjs', 'tests/repository-handoff-foundation/issue-route-materializer.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-data.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-view.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research.browser.mjs'];
+const POST_BASELINE_NODE_MEMBERS = ['tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs', 'tests/context-canvas/about-first-paint-css.test.mjs', 'tests/context-canvas/debrief-catalog-preview-images.test.mjs', 'tests/context-canvas/debrief-catalog-preview.browser.mjs', 'tests/context-canvas/debrief-image-derivatives.test.mjs', 'tests/context-canvas/lims-capability-transfer-model.test.mjs', 'tests/context-canvas/prompt-side-figure.browser.mjs', 'tests/context-canvas/visual-reference-observations.test.mjs', 'tests/media-publication/prepare-r2-progressive-video.test.mjs', 'tests/media-publication/r2-video-worker.test.mjs', 'tests/media-publication/verify-r2-video-route.test.mjs', 'tests/repository-handoff-foundation/foundation.test.mjs', 'tests/repository-handoff-foundation/install.test.mjs', 'tests/repository-handoff-foundation/issue-route-materializer.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-data.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-view.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research.browser.mjs'];
 const POST_BASELINE_COMPATIBILITY_SCRIPTS = {
   'test:iframe-browser': 'node tools/core-iframe-carrier-contract.mjs && npm run test:canvas-iframe-routes && npm run test:iframe-visual-media-browser',
 };
@@ -253,7 +253,7 @@ test('text plans show both a known command and its hold reason', async () => {
 test('consequential bundle routes retain independent literal expectations', async () => {
   const catalog = await catalogPromise;
   const ids = bundle => createPlan(catalog, {bundles: [bundle]}).suites.map(s => s.id);
-  assert.deepEqual(ids('live'), ['worker.live', 'live.iframe-ancestry', 'live.iframe', 'live.schema-pages']);
+  assert.deepEqual(ids('live'), ['worker.live', 'live.iframe-ancestry', 'live.iframe', 'live.r2-video', 'live.schema-pages']);
   assert.deepEqual(ids('research'), ['research.parser-comparison']);
   assert.deepEqual(ids('visual-media'), [
     'browser.visualization-fidelity-atlas.atlas-essay.browser',
@@ -265,9 +265,10 @@ test('consequential bundle routes retain independent literal expectations', asyn
     'browser.visualization-fidelity-atlas.atlas-research.browser',
   ]);
   assert.deepEqual(ids('carrier'), [
-    'node.attribution', 'node.iframe-routes', 'node.prod-deployment',
-    'node.public-references', 'node.repository-handoff-foundation', 'node.schema-pages', 'node.security', 'worker.source',
-    'carrier.debrief-image-derivatives', 'carrier.iframe', 'carrier.production', 'carrier.transfer', 'carrier.schemas',
+    'node.attribution', 'node.iframe-routes', 'node.prod-deployment', 'node.public-references',
+    'node.repository-handoff-foundation', 'node.schema-pages', 'node.security', 'node.media-publication', 'worker.source',
+    'carrier.debrief-image-derivatives', 'carrier.iframe', 'carrier.production', 'carrier.transfer',
+    'carrier.r2-video-delivery', 'carrier.schemas',
   ]);
   assert.ok(createPlan(catalog, {bundles: ['focused-browser']}).suites.every(s => s.profile === 'browser' && !s.id.startsWith('visual.')));
   assert.ok(createPlan(catalog, {bundles: ['live']}).suites.every(s => s.routeStatus === 'held'));

@@ -12,32 +12,50 @@ the selected delivery service retain existing ownership.
   repository markup owns the image slot.
 - Cloudflare image transformation remains a bounded comparison route for an
   unchanged-URL job with a measured benefit.
-- Cloudflare Stream is the preferred receiver for selected public video.
-  FFmpeg prepares one inspected upload master; Stream performs transcoding,
-  adaptive-bitrate packaging, storage, and delivery.
+- R2 Standard stores the first selected public videos. A narrowly routed
+  Worker serves versioned objects governed by a no-overwrite publication
+  policy through `https://vik.guru/v1-cdn/video/`
+  with Cloudflare Workers Caching, while native HTML supplies accessible,
+  visitor-initiated progressive playback.
+- Cloudflare Stream remains the future adaptive receiver. The accepted R2
+  master, semantic identity, poster, captions, transcript, and recovery
+  coordinate form the migration packet.
 - Credential-shaped material, embedded metadata, visible content, rights, and
   consent remain distinct publication decisions with fitting observations.
 
 ## Working surfaces
 
 - [FFmpeg and Cloudflare Stream guidance](ffmpeg-cloudflare-stream-guidance.v0.1.md)
-  — corrected source preparation, audio, metadata, accessibility, upload, and
-  playback guidance for the first two candidate videos.
+  — retained adaptive-delivery guidance for a later Stream migration.
+- [R2 progressive-video guidance](cloudflare-r2-progressive-video-guidance.v0.1.md)
+  — the current same-origin CDN route, source preparation, accessible native
+  playback, Workers Caching, R2 storage, and live acceptance contract.
 - [Media publication preflight](runbooks/media-publication-preflight.v0.1.md)
   — a draft re-entrant route for image and video handoffs.
 - [Responsive raster publication draft skill](draft-skills/responsive-raster-publication/SKILL.md)
   — a candidate contract distilled from Issue #286.
 - [Cloudflare Stream video publication draft skill](draft-skills/cloudflare-stream-video-publication/SKILL.md)
-  — a candidate contract for the video analog to Issue #286.
+  — a candidate adapter for the later adaptive-delivery migration.
+- [Accessible video publication draft skill](draft-skills/accessible-video-publication/SKILL.md)
+  — the provider-neutral source, accessibility, and page contract.
+- [Cloudflare R2 progressive-video delivery draft skill](draft-skills/cloudflare-r2-progressive-video-delivery/SKILL.md)
+  — the current storage, route, cache, and receiver adapter.
+- [R2 progressive-video publication runbook](runbooks/r2-progressive-video-publication.v0.1.md)
+  — the re-entrant preparation, activation, observation, and recovery route.
+- [Impact Map progressive-video preparation exercise](exercises/impact-map-r2-progressive-preflight.v0.1.md)
+  — the first two-file exercise of the local preparation, metadata, Fast
+  Start, semantic-preservation, and packet-preservation contracts.
 
 ## Cultivation path
 
-Both skills remain planning candidates until a real asset family exercises
-the complete path. The first image exercise can use a bounded Issue #286
-tranche. The first video exercise can use the two human-selected source files
-after source inspection and encoding. Material friction returns to the draft;
-stable, repeated decisions can then move into the public repository skill and
-runbook catalogs through the existing selection process.
+The skills remain planning candidates while real asset families exercise the
+complete paths. The first image exercise can use a bounded Issue #286 tranche.
+The first video exercise used the two selected Impact Map files and accepted a
+lossless Fast Start remux for both. The exercise record returns one useful
+refinement to the helper and names the remaining publication decisions.
+Material friction continues to return to the drafts; stable, repeated
+decisions can then move into the public repository skill and runbook catalogs
+through the existing selection process.
 
 ## Language posture
 
@@ -56,3 +74,13 @@ The planning area contains guidance and candidate contracts. Named Issues own
 implementation; the human author selects public activation; production assets,
 media uploads, publication rights, and protected Cloudflare coordinates remain
 with established source and platform owners.
+
+Cloudflare's current self-serve CDN terms distinguish video hosted by a
+Cloudflare service from video fetched from an ordinary external origin. R2
+therefore owns the production video bytes for this route. Current R2 and
+Workers included allowances can make a small publication invoice-free, while
+aggregate account use remains inside both allowances. Workers Caching counts
+hits and misses as requests; cache hits skip Worker execution and the R2 read.
+R2 currently charges no data-transfer egress for direct or Worker-mediated
+delivery. Subscription, usage, pricing, and limits remain activation-time
+observations rather than durable promises.

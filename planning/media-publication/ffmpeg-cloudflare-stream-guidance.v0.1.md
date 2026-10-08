@@ -9,6 +9,14 @@ task_type: media_publication_guidance
 
 # FFmpeg source preparation and Cloudflare Stream publication
 
+## Sequence standing
+
+The selected first public route uses an accepted progressive MP4 from R2 behind
+the same-origin `/v1-cdn/video/` Worker. This document remains the adaptive
+delivery guide for a later Cloudflare Stream migration. The accepted semantic
+identity, ingest master, poster, captions, transcript, accessibility decisions,
+and R2 rollback family enter that migration together.
+
 ## Intended result
 
 One exact source produces one inspected, metadata-bounded MP4 upload master.
@@ -28,8 +36,33 @@ upload master for the selected Stream route.
 A self-hosted HLS/CMAF branch remains available for a future receiver with a
 demonstrated need. The self-hosted branch brings a dedicated ladder, aligned random-access
 points, segment and manifest validation, MIME configuration, cache policy,
-atomic publication, and player observations. The first Context Canvas video
-tranche uses the smaller Stream-owned route.
+atomic publication, and player observations. The later Stream migration uses
+the smaller Stream-owned adaptive route after a measured playback, traffic,
+device, or access need earns it.
+
+## Copy-remux branch
+
+An already compatible H.264/AAC source keeps its elementary streams. The copy
+remux selects the intended first video and optional first audio stream, applies
+the reviewed metadata and chapter policy, and writes Fast Start:
+
+```sh
+ffmpeg -hide_banner -nostdin \
+  -i "<SOURCE_MEDIA>" \
+  -map 0:v:0 \
+  -map '0:a:0?' \
+  -map_metadata -1 \
+  -map_metadata:s -1 \
+  -map_chapters -1 \
+  -c copy \
+  -movflags +faststart \
+  "<TEMPORARY_OUTPUT>.mp4"
+```
+
+Verify strict decode, duration, selected streams, `moov` before `mdat`, and
+matching video/audio packet hashes before promotion. FFmpeg may write a
+structural muxer `encoder` tag even when authored metadata is cleared. Record
+that structural tag separately from the reviewed authored-metadata allowlist.
 
 ## Current Cloudflare Stream ingest profile
 
@@ -182,8 +215,9 @@ acceptance claim.
    and human activation owner.
 2. Run the repository secret-material inspection and the distinct format-aware
    metadata observation on the source candidate.
-3. Inspect streams and select the smallest fitting encode profile.
-4. Encode to a temporary path. The authorized source owner retains the private
+3. Inspect streams and select a copy remux when existing streams fit; otherwise
+   select the smallest fitting encode profile.
+4. Remux or encode to a temporary path. The authorized source owner retains the private
    original; the public repository receives the reviewed master selected for
    the visitor job.
 5. Verify decoding, geometry, frame rate, audio, synchronization, metadata,
