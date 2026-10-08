@@ -190,6 +190,14 @@
       "publicationNote": "Promote after its runbook family has a public-ready source package with public retrieval targets."
     },
     {
+      "name": "repository-handoff-readiness",
+      "sourcePath": ".agents/skills/repository-handoff-readiness/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "The repository inventory retains this working skill. A source-package review after the first Context Canvas receiving exercise will decide whether its planning link belongs in a public projection."
+    },
+    {
       "name": "repository-orientation-stewardship",
       "sourcePath": ".agents/skills/repository-orientation-stewardship/SKILL.md",
       "publicationStanding": "public_possible",

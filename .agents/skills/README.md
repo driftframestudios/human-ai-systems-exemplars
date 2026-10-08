@@ -15,6 +15,7 @@ the smallest adequate route when no contract adds material value.
 | [`repository-reentry`](repository-reentry/SKILL.md) | Work resumes across source, Git, GitHub, planning, or threadkeeping | Reconciled current truth and one bounded next move |
 | [`repository-collaboration-cycle`](repository-collaboration-cycle/SKILL.md) | An authorized task should move from re-entry through delivery | A receiver-ready change, finding, or held route with exact continuation |
 | [`repository-orientation-stewardship`](repository-orientation-stewardship/SKILL.md) | A root and its nested README routes need one layered first-receipt, repeat-use, and re-entry path | A source-aware orientation graph with practical proof and return routes |
+| [`repository-handoff-readiness`](repository-handoff-readiness/SKILL.md) | A repository should become continuable by another owner and authorized AI collaborator | A source-responsive foundation route, current Issue, held decisions, and one next owner action |
 | [`uv-backed-python-execution`](uv-backed-python-execution/SKILL.md) | A Python check needs the repository's declared interpreter or isolated dependencies | The named check with runtime coordinates and an evidence boundary |
 
 ### Read and verify visitor surfaces
