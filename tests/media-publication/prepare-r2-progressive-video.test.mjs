@@ -216,7 +216,10 @@ test("builds deterministic explicit maps, metadata removal, faststart, and stric
     encode[encode.indexOf("-bsf:v") + 1],
     "h264_metadata=video_full_range_flag=0",
   );
-  assert.match(encode[encode.indexOf("-vf") + 1], /force_divisible_by=2/u);
+  assert.equal(
+    encode[encode.indexOf("-vf") + 1],
+    "scale=w='max(2,trunc(min(min(1920,iw),min(1080,ih)*dar)/2)*2)':h='max(2,trunc(min(min(1080,ih),min(1920,iw)/dar)/2)*2)',setsar=1",
+  );
 
   const decode = buildStrictDecodeArguments("candidate.mp4");
   assert.ok(decode.includes("-xerror"));
@@ -760,4 +763,62 @@ test("encodes an ordinary synthetic conversion while preserving declared color a
     passed: null,
     streams: [],
   });
+});
+
+test("encodes anamorphic input to square pixels while preserving displayed geometry", async (context) => {
+  const availability = spawnSync("ffmpeg", ["-version"], { encoding: "utf8" });
+  if (availability.error || availability.status !== 0) {
+    requireMediaFixtureOrSkip(context, "ffmpeg is unavailable");
+    return;
+  }
+  const directory = await mkdtemp(join(tmpdir(), "r2-progressive-anamorphic-test-"));
+  context.after(() => rm(directory, { recursive: true, force: true }));
+  const sourcePath = join(directory, "anamorphic-source.mkv");
+  const outputPath = join(directory, "accepted-output.mp4");
+  const generated = spawnSync(
+    "ffmpeg",
+    [
+      "-hide_banner",
+      "-nostdin",
+      "-v",
+      "error",
+      "-f",
+      "lavfi",
+      "-i",
+      "testsrc2=size=720x480:rate=24:duration=0.25",
+      "-vf",
+      "setsar=4/3",
+      "-c:v",
+      "libx264",
+      "-pix_fmt",
+      "yuv420p",
+      sourcePath,
+    ],
+    { encoding: "utf8" },
+  );
+  if (generated.error || generated.status !== 0) {
+    requireMediaFixtureOrSkip(
+      context,
+      "the installed ffmpeg cannot create the anamorphic encode fixture",
+    );
+    return;
+  }
+
+  const result = await prepareR2ProgressiveVideo({
+    sourcePath,
+    outputPath,
+    metadataScanner: async () => ({
+      status: "clean",
+      findingCount: 0,
+      version: "test-double",
+      canaryPassed: true,
+    }),
+  });
+  assert.equal(result.ok, true);
+  assert.equal(result.strategy, "encode");
+  assert.equal(result.output.technical.video.width, 720);
+  assert.equal(result.output.technical.video.height, 360);
+  assert.equal(result.output.technical.video.sampleAspectRatio, "1:1");
+  assert.equal(result.semanticPreservation.checks.displayAspectRatio.passed, true);
+  assert.equal(result.semanticPreservation.checks.selectedGeometry.passed, true);
 });

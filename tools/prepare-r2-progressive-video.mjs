@@ -302,7 +302,10 @@ export function buildEncodeArguments({
   const argumentsList = [
     ...commonMuxArguments(sourcePath),
     "-vf",
-    "scale=w='min(1920,iw)':h='min(1080,ih)':force_original_aspect_ratio=decrease:force_divisible_by=2:reset_sar=1",
+    // FFmpeg 6.1 predates scale=reset_sar. Derive both dimensions from the
+    // displayed aspect ratio before assigning square pixels so anamorphic
+    // sources retain their displayed geometry across supported toolchains.
+    "scale=w='max(2,trunc(min(min(1920,iw),min(1080,ih)*dar)/2)*2)':h='max(2,trunc(min(min(1080,ih),min(1920,iw)/dar)/2)*2)',setsar=1",
     "-c:v",
     "libx264",
     "-profile:v",

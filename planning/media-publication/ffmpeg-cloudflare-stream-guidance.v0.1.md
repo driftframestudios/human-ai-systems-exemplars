@@ -137,7 +137,7 @@ ffmpeg -hide_banner -nostdin \
   -map '0:a:0?' \
   -map_metadata -1 \
   -map_chapters -1 \
-  -vf "scale=w='min(<MAX_WIDTH>,iw)':h='min(<MAX_HEIGHT>,ih)':force_original_aspect_ratio=decrease:force_divisible_by=2:reset_sar=1" \
+  -vf "scale=w='max(2,trunc(min(min(<MAX_WIDTH>,iw),min(<MAX_HEIGHT>,ih)*dar)/2)*2)':h='max(2,trunc(min(min(<MAX_HEIGHT>,ih),min(<MAX_WIDTH>,iw)/dar)/2)*2)',setsar=1" \
   -c:v libx264 \
   -profile:v high \
   -pix_fmt yuv420p \
