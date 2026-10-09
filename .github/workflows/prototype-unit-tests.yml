@@ -201,6 +201,11 @@ jobs:
       - name: Install the locked root toolchain
         run: npm ci --ignore-scripts
 
+      - name: Install the Ubuntu media receiver
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends ffmpeg
+
       - name: Confirm the media toolchain and exercise both preparation strategies
         env:
           MEDIA_TEST_REQUIRE_FFMPEG: "true"
