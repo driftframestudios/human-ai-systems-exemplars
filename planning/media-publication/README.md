@@ -37,22 +37,36 @@ the selected delivery service retain existing ownership.
 - [Cloudflare Stream video publication draft skill](draft-skills/cloudflare-stream-video-publication/SKILL.md)
   — a candidate adapter for the later adaptive-delivery migration.
 - [Accessible video publication draft skill](draft-skills/accessible-video-publication/SKILL.md)
-  — the provider-neutral source, accessibility, and page contract.
+  — the provider-neutral source, accepted-byte poster, accessibility, visual
+  sequence, visitor-frame, and page contract.
 - [Cloudflare R2 progressive-video delivery draft skill](draft-skills/cloudflare-r2-progressive-video-delivery/SKILL.md)
   — the current storage, route, cache, and receiver adapter.
+- [Bounded video-publication manifest](video-publication-manifest.v0.1.json)
+  — semantic identity, accepted carriers, poster lineage, visitor receiver,
+  accessibility standing, delivery adapter, and open release states for each
+  exercised family.
 - [R2 progressive-video publication runbook](runbooks/r2-progressive-video-publication.v0.1.md)
   — the re-entrant preparation, activation, observation, and recovery route.
+- [Issue #430](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/430)
+  — the current transport and accessible-publication coordination surface for
+  the first R2 video family.
 - [Impact Map progressive-video preparation exercise](exercises/impact-map-r2-progressive-preflight.v0.1.md)
   — the first two-file exercise of the local preparation, metadata, Fast
   Start, semantic-preservation, and packet-preservation contracts.
+- [Choose Your Player native-video receiver exercise](exercises/choose-your-player-native-video-receiver.v0.1.md)
+  — the first accepted R2 family, accepted-byte poster, silent visual sequence,
+  and Context Canvas visitor-frame exercise.
 
 ## Cultivation path
 
 The skills remain planning candidates while real asset families exercise the
 complete paths. The first image exercise can use a bounded Issue #286 tranche.
-The first video exercise used the two selected Impact Map files and accepted a
-lossless Fast Start remux for both. The exercise record returns one useful
-refinement to the helper and names the remaining publication decisions.
+The first video-preparation exercise used the two selected Impact Map files and
+accepted a lossless Fast Start remux for both. The Choose Your Player exercise
+then selected a poster from accepted bytes, described a verified silent
+sequence, and formed the first native Context Canvas receiver. These exercises
+return concrete refinements to the candidate skills and keep remaining page
+release decisions visible.
 Material friction continues to return to the drafts; stable, repeated
 decisions can then move into the public repository skill and runbook catalogs
 through the existing selection process.

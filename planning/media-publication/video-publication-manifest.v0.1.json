@@ -1,0 +1,102 @@
+{
+  "id": "media-publication.video-families.v0.1",
+  "version": "0.1.0",
+  "standing": "bounded_publication_descriptor",
+  "public_origin": "https://vik.guru",
+  "route_prefix": "/v1-cdn/video/",
+  "families": [
+    {
+      "semantic_id": "choose-your-player",
+      "asset_version": "v0.1.0",
+      "semantic_owner": "Choose Your Player Humatics Debrief",
+      "visitor_page": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
+      "visitor_placement": "after #case-brief and before the architecture navigation",
+      "source": {
+        "standing": "human_selected_accepted_master",
+        "repository_coordinate": null,
+        "coordinate_standing": "externally_held_master_digest_bound_to_accepted_public_carrier",
+        "sha256": "2779052c3ae4db7b2b66739e50d58957784c56f16682acd95cfc1ac476e79d71"
+      },
+      "carriers": {
+        "movie": {
+          "public_path": "/v1-cdn/video/choose-your-player/v0.1.0/movie.mp4",
+          "object_key": "v1/video/choose-your-player/v0.1.0/movie.mp4",
+          "media_type": "video/mp4",
+          "sha256": "2779052c3ae4db7b2b66739e50d58957784c56f16682acd95cfc1ac476e79d71",
+          "bytes": 3751656,
+          "duration_seconds": 21.533333,
+          "width": 1920,
+          "height": 1012,
+          "frame_rate": "30/1",
+          "audio_standing": "verified_silent"
+        },
+        "poster": {
+          "public_path": "/v1-cdn/video/choose-your-player/v0.1.0/poster.webp",
+          "object_key": "v1/video/choose-your-player/v0.1.0/poster.webp",
+          "media_type": "image/webp",
+          "sha256": "cd8def7074d974a9e8b50cb8920dd584e1395307ffc5a057d11f718b67f9f336",
+          "bytes": 74832,
+          "width": 1920,
+          "height": 1012,
+          "source_master_sha256": "2779052c3ae4db7b2b66739e50d58957784c56f16682acd95cfc1ac476e79d71",
+          "timestamp_seconds": 0.5,
+          "derivation": {
+            "frame_decoder": "FFmpeg 9.0.2",
+            "image_encoder": "cwebp 1.6.0",
+            "settings": {
+              "quality": 82,
+              "metadata": "none"
+            }
+          },
+          "selection_reason": "The stable opening state presents all four proxy role cards and the shared site context before visitor playback.",
+          "review": {
+            "standing": "candidate_pending_human_page_release",
+            "review_owner": "human_publication_owner",
+            "selected_by": "human-directed repository collaboration",
+            "visible_content_standing": "reviewed_working_proxy_frame",
+            "rights_standing": "inherits_accepted_master_review",
+            "evidence": "planning/media-publication/exercises/choose-your-player-native-video-receiver.v0.1.md"
+          }
+        }
+      },
+      "accessibility": {
+        "branch": "verified_silent_visual_sequence",
+        "accessible_name": "Choose Your Player working proxy walkthrough",
+        "standing_text_id": "working-proxy-walkthrough-standing",
+        "figure_caption_id": "choose-your-player-interface-caption",
+        "visual_sequence_id": "choose-your-player-interface-transcript",
+        "visual_sequence_relationship": "aria-details",
+        "captions_standing": "not_applicable_verified_silent_source",
+        "meaningful_visual_information": "nearby_visible_ordered_sequence"
+      },
+      "delivery": {
+        "adapter": "cloudflare_r2_progressive_video",
+        "page_relationship": "same_origin",
+        "future_adapter": "cloudflare_stream",
+        "recovery": "Restore the preceding visitor-page pointer while the versioned R2 family remains retained."
+      },
+      "release": {
+        "transport": {
+          "standing": "accepted",
+          "observed_on": "2026-10-09",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/choose-your-player-native-video-receiver.v0.1.md",
+          "receiver": "live_same_origin_cloudflare_worker_route",
+          "verifier": "npm run verify:r2-video:live"
+        },
+        "visitor_source": "candidate",
+        "local_browser": {
+          "standing": "observed",
+          "observed_on": "2026-10-09",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/choose-your-player-native-video-receiver.v0.1.md",
+          "receiver": "ephemeral_same_origin_loopback_with_exact_accepted_bytes",
+          "rerunnable_repository_check": "pending"
+        },
+        "deployed_page": "pending",
+        "physical_safari_ios": "pending",
+        "human_page_release": "pending"
+      }
+    }
+  ]
+}

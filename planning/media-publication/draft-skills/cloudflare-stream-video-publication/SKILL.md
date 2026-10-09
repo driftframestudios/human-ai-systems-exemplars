@@ -19,10 +19,9 @@ description: Migrates an accepted accessible video package to human-authorized a
   semantic asset identity, accessibility companions, visitor markup, and
   public-route checks.
 - **Result:** A source-revision-bound MP4 master with a digest; a scope-bound
-  credential result and named format/tool metadata disposition; reviewed
-  captions, transcript, and poster;
-  an accepted Stream identity and origin policy; and signed-out playback and
-  recovery evidence.
+  credential result and named format/tool metadata disposition; a reviewed
+  poster and source-fitting accessibility companions; an accepted Stream
+  identity and origin policy; and signed-out playback and recovery evidence.
 
 ## Rules
 
@@ -56,9 +55,11 @@ timecode, artwork, attachments, subtitles, and container residue.
 
 ### Rule: Accessibility companions belong to the source
 
-Reviewed WebVTT captions and a nearby descriptive transcript carry speech,
-meaningful sound, and meaningful visual information. A poster and stable
-intrinsic geometry support comprehension before playback.
+For audio-bearing media, reviewed WebVTT captions and a nearby descriptive
+transcript carry speech, meaningful sound, and meaningful visual information.
+Verified silent video carries explicit silent-source standing and a visible
+ordered visual sequence. A poster and stable intrinsic geometry support
+comprehension before playback.
 
 ### Rule: Browser capability follows selected behavior
 
@@ -82,18 +83,20 @@ selected behavior. Dynamic manifests remain direct Stream resources.
 5. Verify strict zero-error decode, duration, synchronization, geometry, frame rate,
    video/audio profile, metadata disposition, visual quality, audio clarity,
    and digest.
-6. Bind the accepted master, reviewed primary poster, captions, transcript,
-   semantic video descriptor, and prior-receiver recovery coordinate through
-   the source owners, including an R2 family when one exists.
+6. Bind the accepted master, reviewed primary poster, selected accessibility
+   branch, semantic video descriptor, and prior-receiver recovery coordinate
+   through the source owners, including an R2 family when one exists.
 7. The human Cloudflare operator selects the access/origin policy, uploads the
-   accepted master, and adds reviewed captions.
+   accepted master, and adds reviewed captions when the selected accessibility
+   branch includes them.
 8. Stream processes the upload. The collaboration accepts the full adaptive set
    at `readyToStream: true`, `status.state: ready`, and
    `status.pctComplete: 100`, then inspects playback and poster behavior.
 9. Embed with a title, stable geometry, controls, fitting lazy loading, direct
    manifests, and the smallest tested capability set.
-10. Observe signed-out playback, keyboard operation, captions, transcript,
-    seeking, audio, narrow/wide containment, interruption, and recovery.
+10. Observe signed-out playback, keyboard operation, seeking, narrow/wide
+    containment, interruption, recovery, and the applicable audio-bearing or
+    verified-silent accessibility branch.
 11. Return a public-safe coordinate, preserve the prior receiver through the
     observation window, and retain private diagnostics, tokens, source paths,
     and metadata values with authorized owners.

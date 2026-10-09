@@ -137,17 +137,21 @@ export function normalizedCacheStatus(value) {
   return RECOGNIZED_CACHE_STATUSES.has(normalized) ? normalized : "UNRECOGNIZED";
 }
 
-function commonHeaderObservation(headers, expectedMediaType) {
-  const contentType = normalizedContentType(headers.get("content-type"));
-  const expectedContentType = normalizedContentType(expectedMediaType);
-  const mediaType = normalizedMediaType(contentType);
-  const cache = observeCachePolicy(headers.get("cache-control"));
-  const hardening = {
+function hardeningHeaderObservation(headers) {
+  return {
     nosniff: headers.get("x-content-type-options")?.trim().toLowerCase() === "nosniff",
     noReferrer: headers.get("referrer-policy")?.trim().toLowerCase() === "no-referrer",
     sameOriginResourcePolicy:
       headers.get("cross-origin-resource-policy")?.trim().toLowerCase() === "same-origin",
   };
+}
+
+function commonHeaderObservation(headers, expectedMediaType) {
+  const contentType = normalizedContentType(headers.get("content-type"));
+  const expectedContentType = normalizedContentType(expectedMediaType);
+  const mediaType = normalizedMediaType(contentType);
+  const cache = observeCachePolicy(headers.get("cache-control"));
+  const hardening = hardeningHeaderObservation(headers);
   return {
     mediaType,
     contentType,
@@ -588,6 +592,139 @@ async function inspectUnsatisfiableRange({
   return observation;
 }
 
+function failedNotModifiedObservation(overrides = {}) {
+  return {
+    requestAttempted: true,
+    status: null,
+    statusPass: false,
+    requestError: true,
+    failureStage: "request",
+    failureKind: "transport",
+    bodyNotExposed: false,
+    contentEncodingAbsent: false,
+    contentLength: null,
+    contentLengthAbsentOrMatchesHead: false,
+    contentType: null,
+    contentTypeAbsentOrMatchesHead: false,
+    acceptRangesBytes: false,
+    etagPresent: false,
+    etagStrongQuoted: false,
+    etagMatchesHead: false,
+    cache: {
+      present: false,
+      public: false,
+      immutable: false,
+      maxAgeSeconds: null,
+      exactPolicy: false,
+    },
+    cachePolicyPass: false,
+    cacheStatus: null,
+    hardening: {
+      nosniff: false,
+      noReferrer: false,
+      sameOriginResourcePolicy: false,
+    },
+    hardeningPass: false,
+    ok: false,
+    ...overrides,
+  };
+}
+
+function skippedNotModifiedObservation(failureKind = "head-or-range-prerequisite") {
+  return failedNotModifiedObservation({
+    requestAttempted: false,
+    requestError: false,
+    failureStage: "prerequisite",
+    failureKind,
+  });
+}
+
+async function inspectNotModified({
+  url,
+  headEtag,
+  headContentLength,
+  headContentType,
+  fetchImplementation,
+  timeoutMs,
+}) {
+  if (!isStrongQuotedEtag(headEtag)) {
+    return skippedNotModifiedObservation("strong-etag-prerequisite");
+  }
+  const { response, requestError, requestFailureKind } = await request(
+    fetchImplementation,
+    url,
+    {
+      method: "GET",
+      headers: {
+        "if-none-match": headEtag,
+        "accept-encoding": "identity",
+        "user-agent": "human-ai-systems-exemplars-r2-video-verifier/1",
+      },
+    },
+    timeoutMs,
+  );
+  if (requestError) {
+    return failedNotModifiedObservation({ failureKind: requestFailureKind });
+  }
+
+  const status = safeStatus(response);
+  const responseEtag = response.headers.get("etag");
+  const contentLengthHeader = response.headers.get("content-length");
+  const contentLength = contentLengthHeader === null
+    ? null
+    : integerHeader(contentLengthHeader);
+  const contentTypeHeader = response.headers.get("content-type");
+  const contentType = normalizedContentType(contentTypeHeader);
+  const cache = observeCachePolicy(response.headers.get("cache-control"));
+  const hardening = hardeningHeaderObservation(response.headers);
+  const observation = {
+    requestAttempted: true,
+    status,
+    statusPass: status === 304,
+    requestError: false,
+    failureStage: null,
+    failureKind: null,
+    // Fetch normalizes 304 responses. This records its observable body state,
+    // rather than claiming inspection of raw response octets on the wire.
+    bodyNotExposed: response.body === null,
+    contentEncodingAbsent: !response.headers.has("content-encoding"),
+    contentLength,
+    contentLengthAbsentOrMatchesHead: (
+      contentLengthHeader === null
+      || contentLength === headContentLength
+    ),
+    contentType,
+    contentTypeAbsentOrMatchesHead: (
+      contentTypeHeader === null
+      || contentType === headContentType
+    ),
+    // Warm-cache 304s may omit Accept-Ranges, which the 304 contract does not require.
+    acceptRangesBytes:
+      response.headers.get("accept-ranges")?.trim().toLowerCase() === "bytes",
+    etagPresent: responseEtag !== null,
+    etagStrongQuoted: isStrongQuotedEtag(responseEtag),
+    etagMatchesHead: responseEtag === headEtag,
+    cache,
+    cachePolicyPass: cachePolicyPass(cache),
+    cacheStatus: normalizedCacheStatus(response.headers.get("cf-cache-status")),
+    hardening,
+    hardeningPass: Object.values(hardening).every(Boolean),
+  };
+  observation.ok = (
+    observation.statusPass
+    && observation.bodyNotExposed
+    && observation.contentEncodingAbsent
+    && observation.contentLengthAbsentOrMatchesHead
+    && observation.contentTypeAbsentOrMatchesHead
+    && observation.etagStrongQuoted
+    && observation.etagMatchesHead
+    && observation.cachePolicyPass
+    && observation.hardeningPass
+  );
+  await cancelBody(response);
+  return observation;
+}
+
 async function digestBody(response, maximumBytes) {
   return consumeBoundedBody(response, maximumBytes, { digest: true });
 }
@@ -913,6 +1050,9 @@ function failureCodes(video, companions) {
   if (!video.unsatisfiableRange.ok && video.unsatisfiableRange.requestAttempted) {
     failures.push({ resource: "video", check: "unsatisfiable-range-contract" });
   }
+  if (!video.notModified.ok && video.notModified.requestAttempted) {
+    failures.push({ resource: "video", check: "not-modified-contract" });
+  }
   if (
     !video.digest.ok
     && video.digest.requested
@@ -1053,6 +1193,7 @@ export async function verifyR2VideoRoute({
   let headResult;
   let range;
   let unsatisfiableRange;
+  let notModified;
   let digest;
 
   if (observationOrder === "cold-range-first") {
@@ -1115,10 +1256,18 @@ export async function verifyR2VideoRoute({
 
   const canInspectRemainingVideo = headResult.observation.ok && range.ok;
   if (canInspectRemainingVideo) {
-    [unsatisfiableRange, digest] = await Promise.all([
+    [unsatisfiableRange, notModified, digest] = await Promise.all([
       inspectUnsatisfiableRange({
         url: video,
         totalBytes: headResult.observation.contentLength,
+        fetchImplementation,
+        timeoutMs,
+      }),
+      inspectNotModified({
+        url: video,
+        headEtag: headResult.etag,
+        headContentLength: headResult.observation.contentLength,
+        headContentType: headResult.observation.contentType,
         fetchImplementation,
         timeoutMs,
       }),
@@ -1135,6 +1284,7 @@ export async function verifyR2VideoRoute({
     ]);
   } else {
     unsatisfiableRange = skippedUnsatisfiableRangeObservation();
+    notModified = skippedNotModifiedObservation();
     digest = skippedDigestObservation(digestRequested, "head-or-range-prerequisite");
   }
 
@@ -1175,6 +1325,7 @@ export async function verifyR2VideoRoute({
     head: headResult.observation,
     range,
     unsatisfiableRange,
+    notModified,
     digest,
   };
   const videoPass = Object.values(videoResult).every(({ ok }) => ok);

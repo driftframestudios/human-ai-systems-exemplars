@@ -28,6 +28,7 @@ The [Context Canvas schema v1](../../schemas/context-canvas/1.0.0/README.md) sup
 | Local development | Serve the repository root, then open `/context-canvas-project-surface/context-canvas/`. |
 | Primary production | The production assembler maps this visitor root into generated `primary-public/`, where this directory's `index.html` becomes `/index.html` at the intended `https://vik.guru/` origin. |
 | Hosted iframes | Manifest-selected instruments use the separate `https://iframes.vik.guru/v1/core/.../` and `/v1/canvas/.../` families. Current live acceptance remains with Issues [#72](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/72) and [#102](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/102). |
+| Progressive video | Selected native-video carriers resolve through the same-origin `https://vik.guru/v1-cdn/video/` Worker route. The [bounded video-publication manifest](../../planning/media-publication/video-publication-manifest.v0.1.json) records accepted public identities and open page-release states while R2 retains the media bytes. |
 | Full-view and collaboration routes | The generated primary file tree carries selected `/prototypes/.../` and `/collaboration/.../` files. Adjacent full-view links use those primary-site routes rather than opening the primary site inside an iframe. |
 | Schemas | A schema's `$id` remains its semantic identity. `schemas.radiantnull.com` is observed retrieval; Issue #406 owns the gated successor publication and exact-version live check at `schemas.vik.guru`. |
 
@@ -57,6 +58,17 @@ and remaining legacy rules keep dense landscape interfaces on a
 keyboard-scrollable `56rem` inspection canvas with a `78rem` wide cap, while
 portrait views use the narrower `42rem` cap.
 
+The first native Debrief video appears in
+[`choose-your-player-humatics.html`](choose-your-player-humatics.html) after
+At-a-Glance and before the architecture navigation. Its accepted R2 MP4 and
+poster remain external to the image-only asset inventory. The page owns the
+media's semantic standing, accessible name, visible silent-sequence
+description, fallback link, and responsive frame; the media-publication
+manifest owns the compact carrier and release-state descriptor. The
+[`accessible-video-publication` candidate](../../planning/media-publication/draft-skills/accessible-video-publication/SKILL.md)
+and its [first receiver exercise](../../planning/media-publication/exercises/choose-your-player-native-video-receiver.v0.1.md)
+preserve the reusable preparation and placement decisions.
+
 The accepted Registry visual masters remain the source-level reference for
 dependency-free visitor SVGs: the
 [`question route map`](../img/plot/registry_question_route_map.svg),
@@ -75,6 +87,7 @@ extends the same selected `img/plot/` family.
 - `visitor-boundary-contract.js` carries the ordinary-language context and exact ordered canary definition used to verify each source-authored visitor boundary.
 - `canvas-shell.js` progressively installs the route shelf, section rail, and shared footer, then preserves the verified visitor boundary immediately before attribution. Ordinary links and authored page content remain the durable path.
 - `about-media.js` keeps the About visual sequence on its authored poster until a visitor requests motion, returns after one complete cycle, and keeps the still reading active for reduced-motion and print presentations.
+- Native Debrief video uses visitor controls, metadata preload, intrinsic geometry, a reviewed poster, and a visible transcript or silent visual sequence. The selected page owns its reading coordinate and final release; the same-origin R2 Worker owns passive carrier delivery.
 - Prototype scripts own local interaction state. Sandboxed iframes declare the capabilities each instrument actually uses. Their Core and Canvas route families remain separate inside the aggregate `/v1/` delivery package.
 - Human stewards retain authority over identity, source use, sensitive material, publication, and consequential decisions. Automated checks report observable behavior and leave those decisions visible.
 
