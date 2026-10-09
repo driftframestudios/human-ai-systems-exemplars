@@ -1,6 +1,9 @@
 const CACHE_CONTROL = "public, max-age=31536000, immutable";
+const MAX_CACHEABLE_OBJECT_BYTES = 512_000_000;
+const MAX_COMPANION_OBJECT_BYTES = 32 * 1024 * 1024;
 const MAX_PUBLIC_PATH_LENGTH = 512;
 const PUBLIC_PREFIX = "/v1-cdn/video/";
+const PUBLIC_HOSTNAME = "vik.guru";
 const STORAGE_PREFIX = "v1/video/";
 
 const SEMANTIC_ID = "[a-z0-9]+(?:-[a-z0-9]+)*";
@@ -18,13 +21,29 @@ const CONTENT_TYPES = new Map([
   ["poster.png", "image/png"],
 ]);
 
-const ERRORS = new Map([
-  [400, "Invalid request\n"],
-  [404, "Media not found\n"],
-  [405, "Method not allowed\n"],
-  [502, "Media metadata invalid\n"],
-  [503, "Media unavailable\n"],
+const FAILURE_RESPONSES = Object.freeze({
+  invalidRequest: { status: 400, body: "Invalid request\n" },
+  notFound: { status: 404, body: "Media not found\n" },
+  methodNotAllowed: { status: 405, body: "Method not allowed\n", allow: "GET, HEAD" },
+  routeConfiguration: { status: 500, body: "Media route configuration invalid\n" },
+  responseConstruction: { status: 500, body: "Media response unavailable\n" },
+  metadataInvalid: { status: 502, body: "Media metadata invalid\n" },
+  dependencyUnavailable: {
+    status: 503,
+    body: "Media storage temporarily unavailable\n",
+    retryAfter: "5",
+  },
+});
+const FORWARDED_READ_HEADERS = Object.freeze([
+  "If-None-Match",
+  "If-Range",
+  "Range",
 ]);
+const UNSUPPORTED_READ_PRECONDITIONS = Object.freeze([
+  "If-Match",
+  "If-Unmodified-Since",
+]);
+const RETRYABLE_R2_CODES = new Set([10001, 10043, 10054, 10058]);
 
 function hardenedHeaders(initial) {
   const headers = new Headers(initial);
@@ -34,14 +53,17 @@ function hardenedHeaders(initial) {
   return headers;
 }
 
-function errorResponse(method, status) {
-  const body = ERRORS.get(status) ?? ERRORS.get(503);
+function errorResponse(method, kind) {
+  const failure = FAILURE_RESPONSES[kind];
+  if (failure === undefined) throw new TypeError("unknown media failure response kind");
+  const { status, body } = failure;
   const headers = hardenedHeaders({
     "Cache-Control": "no-store",
     "Content-Length": String(body.length),
     "Content-Type": "text/plain; charset=utf-8",
   });
-  if (status === 405) headers.set("Allow", "GET, HEAD");
+  if (failure.allow) headers.set("Allow", failure.allow);
+  if (failure.retryAfter) headers.set("Retry-After", failure.retryAfter);
   return new Response(method === "HEAD" ? null : body, { status, headers });
 }
 
@@ -55,6 +77,25 @@ function redirectResponse(url) {
       Location: url.href,
     }),
   });
+}
+
+function canonicalCachedRequest(request, url) {
+  const headers = new Headers();
+  for (const name of FORWARDED_READ_HEADERS) {
+    const value = request.headers?.get?.(name);
+    if (value !== null && value !== undefined) headers.set(name, value);
+  }
+  return new Request(url.href, { method: request.method, headers });
+}
+
+function acceptedReadConditions(request) {
+  const supportedPreconditions = UNSUPPORTED_READ_PRECONDITIONS.every((name) => (
+    request.headers?.has?.(name) !== true
+  ));
+  const ifNoneMatch = request.headers?.get?.("If-None-Match") ?? null;
+  const validValidator = ifNoneMatch === null
+    || parseEntityTagCondition(ifNoneMatch) !== null;
+  return supportedPreconditions && validValidator;
 }
 
 function rawRequestTarget(urlText) {
@@ -85,18 +126,26 @@ function hasAmbiguousPath(rawPath, normalizedPath) {
 
 function mediaRoute(pathname) {
   const match = PUBLIC_PATH.exec(pathname);
-  if (!match) return null;
+  if (match === null) return null;
 
   const [, semanticId, version, carrier] = match;
   const contentType = CONTENT_TYPES.get(carrier) ?? "text/vtt; charset=utf-8";
   return {
     contentType,
     key: `${STORAGE_PREFIX}${semanticId}/${version}/${carrier}`,
+    maximumBytes: carrier === "movie.mp4"
+      ? MAX_CACHEABLE_OBJECT_BYTES
+      : MAX_COMPANION_OBJECT_BYTES,
   };
 }
 
-function validObjectMetadata(object, expectedContentType, requireBody) {
-  if (!object || !Number.isSafeInteger(object.size) || object.size <= 0) return false;
+function validObjectMetadata(object, expectedContentType, maximumBytes, requireBody) {
+  if (
+    !object
+    || !Number.isSafeInteger(object.size)
+    || object.size <= 0
+    || object.size > maximumBytes
+  ) return false;
   if (typeof object.httpEtag !== "string" || object.httpEtag.length > 256) return false;
   if (!STRONG_ETAG.test(object.httpEtag)) return false;
   if (object.httpMetadata?.contentType !== expectedContentType) return false;
@@ -104,12 +153,70 @@ function validObjectMetadata(object, expectedContentType, requireBody) {
   return !requireBody || typeof object.body?.pipeTo === "function";
 }
 
+function parseEntityTagCondition(value) {
+  const source = value.trim();
+  if (source === "*") return { any: true, tags: [] };
+  const tags = [];
+  let index = 0;
+  const skipWhitespace = () => {
+    while (source[index] === " " || source[index] === "\t") index += 1;
+  };
+  while (index < source.length) {
+    skipWhitespace();
+    if (index === source.length) break;
+    if (source[index] === ",") {
+      index += 1;
+      continue;
+    }
+    let weak = false;
+    if (source.slice(index, index + 2) === "W/") {
+      weak = true;
+      index += 2;
+    }
+    if (source[index] !== '"') return null;
+    index += 1;
+    const opaqueStart = index;
+    while (index < source.length && source[index] !== '"') {
+      const code = source.charCodeAt(index);
+      if (code < 0x21 || code === 0x7f) return null;
+      index += 1;
+    }
+    if (source[index] !== '"') return null;
+    tags.push({ opaque: source.slice(opaqueStart, index), weak });
+    index += 1;
+    skipWhitespace();
+    if (index === source.length) break;
+    if (source[index] !== ",") return null;
+    index += 1;
+  }
+  return tags.length > 0 ? { any: false, tags } : null;
+}
+
+function conditionalDisposition(request, etag) {
+  const opaque = etag.slice(1, -1);
+  const ifNoneMatchValue = request.headers.get("if-none-match");
+  if (ifNoneMatchValue !== null) {
+    const condition = parseEntityTagCondition(ifNoneMatchValue);
+    if (condition === null) return "invalidRequest";
+    const matches = condition.any
+      || condition.tags.some((candidate) => candidate.opaque === opaque);
+    if (matches) return "notModified";
+  }
+  return null;
+}
+
+function r2FailureKind(error) {
+  const match = /\((\d{5,6})\)\s*$/u.exec(String(error?.message ?? ""));
+  const code = match ? Number(match[1]) : null;
+  return RETRYABLE_R2_CODES.has(code) ? "dependencyUnavailable" : "routeConfiguration";
+}
+
 async function discardBody(object) {
   if (typeof object?.body?.cancel !== "function") return;
   try {
     await object.body.cancel();
   } catch {
-    // The bounded metadata error remains the public result.
+    // The selected bounded failure remains the public result.
   }
 }
 
@@ -123,52 +230,126 @@ function objectResponse(method, object, contentType) {
   });
   if (method === "HEAD") return new Response(null, { status: 200, headers });
 
-  let body = object.body;
   if (typeof globalThis.FixedLengthStream === "function") {
     const fixed = new globalThis.FixedLengthStream(object.size);
+    const response = new Response(fixed.readable, { status: 200, headers });
     object.body.pipeTo(fixed.writable).catch(() => {
       // Aborting the fixed-length stream also aborts the response body.
     });
-    body = fixed.readable;
+    return response;
   }
-  return new Response(body, { status: 200, headers });
+  return new Response(object.body, { status: 200, headers });
+}
+
+function notModifiedResponse(object) {
+  return new Response(null, {
+    status: 304,
+    headers: hardenedHeaders({
+      "Accept-Ranges": "bytes",
+      "Cache-Control": CACHE_CONTROL,
+      ETag: object.httpEtag,
+    }),
+  });
+}
+
+export async function fetchCachedMediaObject(request, env) {
+  const method = request.method;
+  if (method !== "GET" && method !== "HEAD") {
+    return errorResponse(method, "methodNotAllowed");
+  }
+  if (!acceptedReadConditions(request)) {
+    return errorResponse(method, "invalidRequest");
+  }
+  const url = new URL(request.url);
+  const route = mediaRoute(url.pathname);
+  if (route === null) return errorResponse(method, "routeConfiguration");
+
+  const bucket = env?.MEDIA_BUCKET;
+  const operation = method === "HEAD" ? "head" : "get";
+  if (typeof bucket?.[operation] !== "function") {
+    return errorResponse(method, "routeConfiguration");
+  }
+
+  let object;
+  try {
+    object = await bucket[operation](route.key);
+  } catch (error) {
+    return errorResponse(method, r2FailureKind(error));
+  }
+
+  if (object === null) return errorResponse(method, "notFound");
+  if (!validObjectMetadata(
+    object,
+    route.contentType,
+    route.maximumBytes,
+    method === "GET",
+  )) {
+    await discardBody(object);
+    return errorResponse(method, "metadataInvalid");
+  }
+  const disposition = conditionalDisposition(request, object.httpEtag);
+  if (disposition !== null) {
+    await discardBody(object);
+    return disposition === "notModified"
+      ? notModifiedResponse(object)
+      : errorResponse(method, disposition);
+  }
+  try {
+    return objectResponse(method, object, route.contentType);
+  } catch {
+    await discardBody(object);
+    return errorResponse(method, "responseConstruction");
+  }
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, _env, ctx) {
     const method = request.method;
     const target = rawRequestTarget(request.url);
     let url;
     try {
       url = new URL(request.url);
     } catch {
-      return errorResponse(method, 400);
+      return errorResponse(method, "invalidRequest");
     }
 
-    if (!target || target.hasQuery || target.hasFragment || hasAmbiguousPath(target.path, url.pathname)) {
-      return errorResponse(method, 400);
+    if (
+      target === null
+      || target.hasQuery
+      || target.hasFragment
+      || hasAmbiguousPath(target.path, url.pathname)
+    ) {
+      return errorResponse(method, "invalidRequest");
     }
-    if (method !== "GET" && method !== "HEAD") return errorResponse(method, 405);
+    if (method !== "GET" && method !== "HEAD") {
+      return errorResponse(method, "methodNotAllowed");
+    }
+    if (!acceptedReadConditions(request)) {
+      return errorResponse(method, "invalidRequest");
+    }
 
-    const route = mediaRoute(url.pathname);
-    if (!route) return errorResponse(method, 404);
-    if (url.protocol === "http:") return redirectResponse(url);
-    if (url.protocol !== "https:") return errorResponse(method, 400);
+    const acceptedRoute = mediaRoute(url.pathname);
+    if (acceptedRoute === null) return errorResponse(method, "notFound");
+    if (url.hostname !== PUBLIC_HOSTNAME) return errorResponse(method, "invalidRequest");
+    if (url.protocol === "http:") {
+      url.port = "";
+      return redirectResponse(url);
+    }
+    if (url.protocol !== "https:" || url.port !== "") {
+      return errorResponse(method, "invalidRequest");
+    }
 
-    let object;
+    const cachedEntrypoint = ctx?.exports?.CachedMediaObject;
+    if (typeof cachedEntrypoint?.fetch !== "function") {
+      return errorResponse(method, "routeConfiguration");
+    }
     try {
-      object = method === "HEAD"
-        ? await env.MEDIA_BUCKET.head(route.key)
-        : await env.MEDIA_BUCKET.get(route.key);
+      const response = await cachedEntrypoint.fetch(canonicalCachedRequest(request, url));
+      return response instanceof Response
+        ? response
+        : errorResponse(method, "routeConfiguration");
     } catch {
-      return errorResponse(method, 503);
+      return errorResponse(method, "routeConfiguration");
     }
-
-    if (!object) return errorResponse(method, 404);
-    if (!validObjectMetadata(object, route.contentType, method === "GET")) {
-      await discardBody(object);
-      return errorResponse(method, 502);
-    }
-    return objectResponse(method, object, route.contentType);
   },
 };

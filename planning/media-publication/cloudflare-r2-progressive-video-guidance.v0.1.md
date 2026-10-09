@@ -40,12 +40,15 @@ price promise. Activation rechecks subscription standing, current limits,
 billing ownership, and expected traffic.
 
 Workers Caching charges every cache hit, miss, and bypass at the standard
-Workers request rate. A hit skips Worker execution and the R2 read; a miss runs
-the Worker and performs the R2 read. R2 currently charges no data-transfer
-egress for direct delivery, including delivery through a Worker, while a
-connected metered service can still charge. An invoice-free small publication
-therefore depends on aggregate account usage remaining inside both Workers and
-R2 included allowances.
+Workers request rate, including cached `ctx.exports` loopback invocations. In
+this gateway topology, each public request runs the uncached gateway and then
+consults the named cached entrypoint. A hit skips the named entrypoint's code
+and R2 read; the gateway has already run. Capacity and cost planning therefore
+budget both the public gateway invocation and the cached loopback invocation.
+R2 currently charges no data-transfer egress for direct delivery, including
+delivery through a Worker, while a connected metered service can still charge.
+An invoice-free small publication depends on aggregate account usage remaining
+inside both Workers and R2 included allowances.
 
 The established public alias remains on the primary domain. A direct R2 custom
 domain would remove Worker code, while introducing a second browser origin and
@@ -130,7 +133,10 @@ changed output receives a new versioned path.
 HDR, interlacing, rotation-dependent display, variable cadence with
 consequential timing, multiple audio programs, multichannel audio, embedded
 subtitles, data streams, and attachments return to a source-specific decision.
-That return preserves meaning that an automatic normalization could erase.
+Unobservable duration, cadence, or geometry also returns for explicit source
+inspection because every actionable strategy must satisfy the later semantic
+comparison. That return preserves meaning that an automatic normalization
+could erase.
 
 The two current Impact Map candidates already fit the copy-remux branch. Both
 strict-decode successfully; both use H.264 High, `yuv420p`, 1920×1080 at 30
@@ -141,32 +147,56 @@ Fast Start and reviewed metadata disposition are the remaining byte-level jobs.
 
 Three independent observations lead publication:
 
-- the repository's canary-proven secret scanner reads extracted metadata
-  values through a redacted boundary;
+- the repository's canary-proven secret scanner receives extracted metadata
+  values through standard input inside the authorized local process boundary
+  and returns only a redacted report;
 - `ffprobe` and a format-aware reader inspect QuickTime/container tags, XMP,
   location, author, device, dates, comments, artwork, chapters, attachments,
   subtitles, timed metadata, and source-path residue; and
 - the human publication owner decides visible-content suitability, rights,
   attribution, named organizations, likeness, and consent.
 
-Public receipts record inspected classes, tool coverage, counts, disposition,
-and digests. Raw metadata values remain inside the authorized local review.
+Public receipts record inspected classes, allowlisted structural keys, hashed
+custom-key identities, tool coverage, counts, disposition, and digests. Raw
+metadata keys and values remain inside the authorized local review.
 FFmpeg may add a structural muxer `encoder` tag during a copy remux. The receipt
 therefore distinguishes reviewed authored tags from documented structural
 container tags instead of claiming an empty metadata set.
 
+Hashing and the bounded FFmpeg/FFprobe children honor the helper's interruption
+signal directly. The canary-proven metadata scanner owns its 180-second process
+timeout; an interruption observed while that scanner runs takes effect at the
+next checkpoint, before semantic validation or atomic promotion. The selected
+output cannot be promoted after the helper observes an interruption.
+
 ## Worker and CDN behavior
 
-The Worker reads a dedicated R2 binding and returns a complete `200` response
-with exact `Content-Type`, `Content-Length`, quoted R2 `ETag`, `Accept-Ranges`,
-and immutable cache policy. Current Workers Caching removes a valid incoming
-`Range` header before invoking the Worker, stores the complete response, and
-returns the requested slice as `206`. This route collapses concurrent cold
-requests and lets later range requests bypass Worker execution.
+The default entrypoint is an uncached gateway. It validates the raw request
+target, method, canonical host, scheme, port, and carrier grammar on every
+request, then forwards one canonical request to a named cached entrypoint.
+This placement matters because Workers Caching runs before an entrypoint and
+its key includes the entrypoint and path while omitting the request host. The
+gateway therefore carries all host- and protocol-sensitive decisions before
+the cache. Its canonical request retains only the accepted method, URL,
+`Range`, `If-Range`, and `If-None-Match`. This keeps caller-specific,
+cache-bypass, and unsupported condition headers away from the shared public
+media cache. On a cold handler read, `If-None-Match` evaluates against the
+strong stored R2 ETag and can return `304`. Workers Caching owns warm-hit
+validators, `If-Range`, and range slicing. `If-Match` and
+`If-Unmodified-Since` stop before cache dispatch and object access because
+Cloudflare's documented warm-hit condition handling does not include them.
 
-The Worker itself therefore avoids partial-response assembly. A live canary
-must establish this platform behavior because local Worker unit tests exercise
-the handler without the surrounding cache layer.
+The named cached entrypoint reads a dedicated R2 binding and returns a complete
+`200` response with exact `Content-Type`, `Content-Length`, quoted R2 `ETag`,
+`Accept-Ranges`, and immutable cache policy. Current Workers Caching removes a
+valid incoming `Range` header before invoking the named entrypoint, stores the
+complete response, and returns the requested slice as `206`. This route
+collapses concurrent cold requests and lets later range requests bypass the R2
+read.
+
+The Worker code therefore keeps partial-response assembly outside its path. A
+live canary must establish this platform behavior because local Worker unit
+tests exercise the gateway and handler without the surrounding cache layer.
 
 At a cold edge, Workers Caching converts `HEAD` to an internal `GET` and can
 fill the complete asset. The first public `HEAD` can therefore incur a full R2
@@ -182,11 +212,16 @@ Both `workers.dev` and Worker Version URLs are explicitly disabled.
 The exact primary-domain route remains the only public Worker ingress carrying
 the R2 binding and response contract.
 
-Self-serve Cloudflare plans currently cache files up to 512 MB. A small range
-request does not raise that complete-object ceiling. Versioned objects use
+Self-serve Cloudflare plans currently cache files up to 512 MB. This contract
+interprets that published decimal unit as 512,000,000 bytes. Preparation,
+Worker admission, and live verification apply that complete-object ceiling; a
+small range request does not raise it. Versioned objects use
 `Cache-Control: public, max-age=31536000, immutable`; missing paths, invalid
-paths, method errors, and binding failures use `no-store`. R2, Wrangler, and
+paths, method errors, unsupported preconditions, and binding failures use `no-store`.
+R2, Wrangler, and
 the S3-compatible API remain upload mechanisms; the browser route is read-only.
+Poster and WebVTT companions use the narrower 32 MiB (33,554,432-byte)
+admission boundary implemented by both the Worker and live verifier.
 
 Activation sets the exact route to **Fail closed**. If the Free-plan daily
 allowance is exhausted, Cloudflare then returns Error 1027 instead of bypassing
@@ -263,32 +298,31 @@ language value in `srclang`.
 
 ## Exact remote upload shapes
 
-Wrangler v4 requires `--remote` for account-owned R2 operations. The selected
-carrier determines the exact stored media type; stored content encoding stays
-unset because the Worker rejects an encoded object.
+The R2 S3-compatible API supports conditional `PutObject`. Use
+`If-None-Match: *` so the first accepted write commits the versioned key and a
+later write receives `412 Precondition Failed`. The selected carrier determines
+the exact stored media type; stored content encoding stays unset because the
+Worker rejects an encoded object. Keep the endpoint and credential profile in
+the authorized operator boundary.
 
 ```sh
-npx wrangler r2 object put \
-  "vik-guru-video-carriers/v1/video/<id>/<version>/movie.mp4" \
-  --remote --storage-class Standard --content-type "video/mp4" \
-  --file "<accepted-master.mp4>"
-
-npx wrangler r2 object put \
-  "vik-guru-video-carriers/v1/video/<id>/<version>/poster.webp" \
-  --remote --storage-class Standard --content-type "image/webp" \
-  --file "<accepted-poster.webp>"
-
-npx wrangler r2 object put \
-  "vik-guru-video-carriers/v1/video/<id>/<version>/captions.en.vtt" \
-  --remote --storage-class Standard --content-type "text/vtt; charset=utf-8" \
-  --file "<accepted-captions.en.vtt>"
+aws s3api put-object \
+  --endpoint-url "https://<account-id>.r2.cloudflarestorage.com" \
+  --profile <protected-r2-profile> \
+  --bucket "vik-guru-video-carriers" \
+  --key "v1/video/<id>/<version>/<carrier>" \
+  --body "<accepted-file>" \
+  --content-type "<exact-media-type>" \
+  --cache-control "public, max-age=31536000, immutable" \
+  --if-none-match "*"
 ```
 
 Download each remote object to a fresh local path with `npx wrangler r2 object get
 <bucket>/<key> --remote --file <path>`, then compare byte count and SHA-256
-against the accepted packet. Wrangler currently supports one object per upload
-and files up to 315 MB; a selected larger or bulk family uses a reviewed
-Rclone or S3-compatible transfer route.
+against the accepted packet. An unknown outcome first retrieves the target:
+matching bytes complete the operation, a missing key permits the same
+conditional write, and different bytes block replacement and move the candidate
+to a new version after review.
 
 ## Upload packet
 
@@ -342,8 +376,9 @@ separate from the current image-only asset inventory.
 - the downloaded object digest matches the accepted packet;
 - repeated requests record observed `CF-Cache-Status` without treating one
   edge `HIT` as a global invariant;
-- missing, neighboring, query-bearing, and unsupported paths remain outside
-  the public grammar; and
+- a separate bounded `HEAD` observation confirms missing, neighboring,
+  query-bearing, and unsupported paths receive the documented `400` or `404`
+  response with `no-store` and hardening headers; and
 - a disposable withdrawal exercise confirms that a removed object plus a
   fully deployed new Worker version makes the preceding public family
   unavailable without a zone-cache purge.
@@ -379,11 +414,15 @@ and R2 rollback while replacing only the delivery adapter and player.
 - [Cloudflare explanation of CDN-hosted R2 video](https://blog.cloudflare.com/updated-tos/)
 - [R2 pricing](https://developers.cloudflare.com/r2/pricing/)
 - [R2 Workers API](https://developers.cloudflare.com/r2/api/workers/workers-api-reference/)
+- [R2 S3 API compatibility and conditional operations](https://developers.cloudflare.com/r2/api/s3/api/)
+- [R2 error codes](https://developers.cloudflare.com/r2/api/error-codes/)
 - [R2 public buckets and development URLs](https://developers.cloudflare.com/r2/buckets/public-buckets/)
 - [R2 platform limits](https://developers.cloudflare.com/r2/platform/limits/)
 - [R2 upload routes](https://developers.cloudflare.com/r2/objects/upload-objects/)
 - [R2 Wrangler commands](https://developers.cloudflare.com/r2/reference/wrangler-commands/)
 - [Workers Caching and range behavior](https://developers.cloudflare.com/workers/cache/configuration/)
+- [Workers Caching gateway pattern](https://developers.cloudflare.com/workers/cache/examples/)
+- [Workers Cache key composition](https://developers.cloudflare.com/workers/cache/cache-keys/)
 - [Workers Cache request accounting](https://developers.cloudflare.com/workers/cache/)
 - [Workers Cache purge and invalidation](https://developers.cloudflare.com/workers/cache/purge/)
 - [Workers Cache keys across deployments](https://developers.cloudflare.com/workers/cache/cache-keys/#invalidating-cache-across-deployments)

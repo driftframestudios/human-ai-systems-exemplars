@@ -38,12 +38,22 @@ and ends at an observed native player or a clearly bounded handoff.
    consequential variable cadence, multiple audio programs, multichannel
    audio, meaningful embedded subtitles, data, and attachments through an
    explicit source-specific branch.
-4. Select an unused versioned destination and write a temporary sibling
-   output. Accept the output after strict decode, Fast Start, stream, duration,
-   geometry, cadence, audio, metadata, digest, and perceptual checks pass. The
-   helper promotes verified bytes atomically and preserves an existing target.
-5. For a copy remux, compare video and audio packet hashes before atomic
-   promotion.
+4. Select an unused versioned destination. The helper writes a temporary
+   sibling, completes strict decode, Fast Start, stream, observable duration and
+   cadence, selected scaling geometry, audio, metadata, digest, and
+   cacheable-size checks, and then promotes those verified local bytes
+   atomically while preserving an existing target. A copy remux also compares
+   video and audio packet hashes before promotion.
+5. Review the promoted local master perceptually against the source. Accept it
+   for the upload packet after the intended motion, sound, language, timing,
+   and visual meaning are confirmed.
+
+Hashing and the bounded FFmpeg/FFprobe children honor the helper's interruption
+signal directly. The metadata scanner owns its 180-second process timeout; an
+interruption observed during that bounded scan takes effect at the next
+checkpoint, before semantic validation or atomic promotion. Resume by
+inspecting the exact selected output and any named temporary sibling according
+to **Calm recovery**.
 
 Illustrative commands use the repository helper rather than a hand-maintained
 FFmpeg loop:
@@ -56,6 +66,9 @@ npm run media:video:prepare -- \
   --semantic-id <semantic-id> \
   --asset-version v0.1.0
 npm run media:video:verify -- --source <accepted-master.mp4>
+npm run media:video:verify -- \
+  --source <accepted-master.mp4> \
+  --against <source.mp4>
 ```
 
 ## Accessibility companions
@@ -85,22 +98,41 @@ Record exact media type, `Cache-Control: public, max-age=31536000, immutable`,
 byte count, SHA-256, and source coordinate for every selected object. A changed
 byte or metadata set receives a new asset version. The current image-only
 asset inventory continues to own raster selection; the video packet remains a
-separate, compact descriptor.
+separate, compact descriptor. Keep the video at or below 512 MB (512,000,000
+bytes) and each poster or WebVTT companion at or below 32 MiB (33,554,432
+bytes), matching Worker admission and live verification.
 
-Wrangler v4 remote writes use an explicit target, storage class, type, and
-file. Leave content encoding unset:
+Use the R2 S3-compatible API's conditional `PutObject` operation. The
+`If-None-Match: *` precondition makes the unused versioned key an enforced
+commit boundary rather than a naming convention. Keep the endpoint and
+credential profile inside the authorized operator boundary, set exact HTTP
+metadata, and leave content encoding unset:
 
 ```sh
-npx wrangler r2 object put \
-  "vik-guru-video-carriers/v1/video/<id>/<version>/movie.mp4" \
-  --remote --storage-class Standard --content-type "video/mp4" \
-  --file "<accepted-master.mp4>"
+aws s3api put-object \
+  --endpoint-url "https://<account-id>.r2.cloudflarestorage.com" \
+  --profile <protected-r2-profile> \
+  --bucket "vik-guru-video-carriers" \
+  --key "v1/video/<id>/<version>/movie.mp4" \
+  --body "<accepted-master.mp4>" \
+  --content-type "video/mp4" \
+  --cache-control "public, max-age=31536000, immutable" \
+  --if-none-match "*"
 ```
 
-Use the same shape with `image/webp`, `image/jpeg`, `image/png`, or
-`text/vtt; charset=utf-8` for the finite companion carriers. Download each
-accepted key with `npx wrangler r2 object get <bucket>/<key> --remote --file
-<fresh-path>` and compare its byte count and SHA-256 with the packet.
+Use the same shape with `image/webp`, `image/avif`, `image/jpeg`, `image/png`, or
+`text/vtt; charset=utf-8` for the finite companion carriers. A `412` means the
+key already exists; inspect those existing bytes instead of replacing them.
+Download each accepted key with `npx wrangler r2 object get
+<bucket>/<key> --remote --file <fresh-path>` and compare its byte count and
+SHA-256 with the packet.
+
+An interrupted or unknown upload outcome enters through observation: retrieve
+the exact key first. Matching size and digest establish that the conditional
+write committed. A missing key permits the same conditional operation to run
+again. Different bytes preserve the existing key, block activation, and route
+the candidate to a new semantic version after review. This sequence prevents a
+blind retry from replacing an accepted object.
 
 ### Optional direct-object observation
 
@@ -149,9 +181,17 @@ The human Cloudflare operator:
 8. preserves the preceding Worker version and page pointer as recovery
    coordinates.
 
-The route package lives in `cloudflare/r2-video-delivery/`. Wrangler dry-run
-and unit tests establish source behavior. Live cache and range behavior begins
-only after the route is attached to the Cloudflare zone.
+The route package lives in `cloudflare/r2-video-delivery/`. Wrangler configures
+the default gateway entrypoint as uncached and the named media-object entrypoint
+as cached. The gateway validates and canonicalizes every public request before
+the named entrypoint can consult its shared path cache. The canonical request
+preserves `Range`, `If-Range`, and `If-None-Match` while leaving caller-specific
+and cache-bypass headers outside the shared cache. The cold handler evaluates
+`If-None-Match`; Workers Caching owns warm-hit validators, `If-Range`, and range
+slicing. `If-Match` and `If-Unmodified-Since` stop before cache dispatch and
+object access. Wrangler dry-run and unit tests
+establish that source topology. Live cache and range behavior begins after the
+route is attached to the Cloudflare zone.
 
 After the human authorizes activation, use the repository-pinned Wrangler:
 
@@ -171,23 +211,65 @@ URL state, and begin the fresh-version observations below.
 npm run verify:r2-video:live -- \
   --video https://vik.guru/v1-cdn/video/<id>/<version>/movie.mp4 \
   --captions https://vik.guru/v1-cdn/video/<id>/<version>/captions.en.vtt \
+  --captions-sha256 <accepted-caption-sha256> \
+  --captions-size <accepted-caption-bytes> \
+  --descriptions https://vik.guru/v1-cdn/video/<id>/<version>/descriptions.en.vtt \
+  --descriptions-sha256 <accepted-description-sha256> \
+  --descriptions-size <accepted-description-bytes> \
   --poster https://vik.guru/v1-cdn/video/<id>/<version>/poster.webp \
+  --poster-sha256 <accepted-poster-sha256> \
+  --poster-size <accepted-poster-bytes> \
   --sha256 <accepted-video-sha256> \
   --size <accepted-video-bytes>
 ```
+
+For the second fresh version, make the byte-range request the first public
+video request:
+
+```sh
+npm run verify:r2-video:live -- \
+  --video https://vik.guru/v1-cdn/video/<id>/<fresh-version>/movie.mp4 \
+  --cold-range-first \
+  --sha256 <accepted-video-sha256> \
+  --size <accepted-video-bytes>
+```
+
+The verifier above owns the positive object, range, cache, and companion
+contract. Observe the production route boundary separately with `HEAD` so the
+expected failure remains body-free and inspectable:
+
+```sh
+curl --silent --show-error --head \
+  'https://vik.guru/v1-cdn/video/<id>/<version>/movie.mp4?route-probe=1'
+curl --silent --show-error --head \
+  'https://vik.guru/v1-cdn/video/<id>/<version>/movie.webm'
+curl --silent --show-error --head \
+  'https://vik.guru/v1-cdn/video/<id>/<version>/'
+curl --silent --show-error --head \
+  'https://vik.guru/v1-cdn/video/<confirmed-unused-id>/<confirmed-unused-version>/movie.mp4'
+```
+
+The query-bearing request returns bounded `400`; the unsupported carrier,
+neighboring path, and confirmed-absent valid object return bounded `404`.
+Each response carries `Cache-Control: no-store`, `X-Content-Type-Options:
+nosniff`, `Referrer-Policy: no-referrer`, and
+`Cross-Origin-Resource-Policy: same-origin`. Record normalized status and
+header results. Keep generated request identifiers, provider diagnostics, and
+account coordinates inside the authorized operator boundary.
 
 Accept:
 
 - one fresh version receives `HEAD`, complete `GET`, digest comparison, and
   repeated cache observations;
-- a second fresh version establishes the cold-range path, followed by
-  complete-object verification;
+- a second fresh version establishes the cold-range path with an initial
+  `Cf-Cache-Status: MISS`, followed by complete-object verification;
 - exact types, size, strong validator, immutable policy, `nosniff`, and
   `Accept-Ranges`;
 - matching complete-object digest;
 - exact `bytes=0-1` partial response and correct unsatisfiable-range behavior;
 - cache observations whose meaning stays limited to the observed edge;
-- exact positive routes and bounded neighboring-path failures; and
+- exact positive routes from the verifier and bounded route failures from the
+  separate boundary observation; and
 - companion types and public retrieval.
 
 At a cold Workers Cache edge, Cloudflare converts `HEAD` to an internal `GET`
@@ -205,7 +287,14 @@ layout stability, and recovery.
 ## Calm recovery
 
 - A local preparation failure leaves the source and preceding accepted master
-  unchanged.
+  unchanged. When an output is present after an interrupted or unknown prior
+  outcome, verify it against the source. An exact valid output is the durable
+  checkpoint; a mismatch remains in place for diagnosis and moves repaired
+  bytes to a new version. A stale hidden temporary sibling receives inspection
+  and exact-path removal before a fresh preparation run.
+- A completed atomic promotion remains a successful commit when temporary-link
+  cleanup needs attention; the receipt names that cleanup disposition without
+  recasting the accepted output as a failed preparation.
 - An upload mismatch leaves page markup on the preceding family and sends the
   candidate to a new versioned key after repair.
 - An ordinary Worker-code or live-route regression with still-approved media
@@ -214,6 +303,11 @@ layout stability, and recovery.
   accepted R2 family remains available for focused diagnosis.
 - A usage, billing, or service-fit change preserves the package for direct
   Stream migration or another explicitly selected receiver.
+
+After an interrupted deployment, read the active Worker deployment and exact
+route before choosing deploy, rollback, or no action. After an interrupted
+`r2.dev` observation, read its current state first and disable an enabled
+development URL. These state reads keep repeated operator actions idempotent.
 
 Before first activation, exercise an emergency withdrawal with a disposable
 family. Remove its visitor reference, remove or quarantine its R2 object,

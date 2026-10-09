@@ -1,10 +1,10 @@
-name: Prototype and iframe contracts
+name: Prototype, iframe, and media contracts
 
 on:
   workflow_dispatch:
     inputs:
       suite:
-        description: Prototype family to exercise
+        description: Contract family to exercise
         required: true
         default: all
         type: choice
@@ -12,6 +12,7 @@ on:
           - all
           - core
           - iframe
+          - media
           - narrative
       confirm_run:
         description: Acquire a standard runner for this selected suite
@@ -46,6 +47,10 @@ on:
       - "tests/suites/**"
       - "tests/iframe-routes/**"
       - "tests/narrative-architectures/**"
+      - "tests/media-publication/**"
+      - "tools/prepare-r2-progressive-video.mjs"
+      - "tools/verify-r2-video-route.mjs"
+      - "cloudflare/r2-video-delivery/**"
       - "tools/core-architecture-browser-helper.mjs"
       - "tools/core-decision-canvas-contract.mjs"
       - "tools/core-iframe-carrier-contract.mjs"
@@ -85,7 +90,7 @@ jobs:
   prototype-units:
     name: Selected prototype or iframe contract
     if: >-
-      (github.event_name == 'workflow_dispatch' && inputs.confirm_run) ||
+      (github.event_name == 'workflow_dispatch' && inputs.confirm_run && inputs.suite != 'media') ||
       (github.event_name == 'pull_request' &&
        github.event.pull_request.draft == false &&
        vars.PROTOTYPE_UNIT_TESTS_AUTOMATIC == 'true')
@@ -171,3 +176,38 @@ jobs:
               exit 2
               ;;
           esac
+
+  media-publication:
+    name: Media preparation and delivery contracts
+    if: >-
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'workflow_dispatch' &&
+       inputs.confirm_run &&
+       (inputs.suite == 'all' || inputs.suite == 'media'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out the candidate source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Use the reviewed Node runtime
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: "22"
+
+      - name: Install the locked root toolchain
+        run: npm ci --ignore-scripts
+
+      - name: Confirm the media toolchain and exercise both preparation strategies
+        env:
+          MEDIA_TEST_REQUIRE_FFMPEG: "true"
+        run: |
+          ffmpeg -version
+          ffprobe -version
+          npm run test:media-publication
+
+      - name: Compile the exact Worker package without activation
+        run: npm run dry-run:r2-video-delivery

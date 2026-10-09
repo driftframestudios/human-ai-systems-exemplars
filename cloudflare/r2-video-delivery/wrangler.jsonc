@@ -2,11 +2,21 @@
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "r2-video-delivery",
   "compatibility_date": "2026-10-08",
-  "main": "src/index.js",
+  "main": "src/entrypoints.js",
   "preview_urls": false,
   "cache": {
     "enabled": true,
     "cross_version_cache": false
+  },
+  "exports": {
+    "default": {
+      "type": "worker",
+      "cache": { "enabled": false }
+    },
+    "CachedMediaObject": {
+      "type": "worker",
+      "cache": { "enabled": true }
+    }
   },
   "r2_buckets": [
     {

@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test, { after } from "node:test";
-import worker from "../../cloudflare/r2-video-delivery/src/index.js";
+import worker, {
+  fetchCachedMediaObject,
+} from "../../cloudflare/r2-video-delivery/src/index.js";
 
-const ORIGIN = "https://media.example";
+const ORIGIN = "https://vik.guru";
 const IMMUTABLE = "public, max-age=31536000, immutable";
 const SAMPLE_PATH = "/v1-cdn/video/impact-map-narrative/v1.2.3/movie.mp4";
 const originalFixedLengthStream = globalThis.FixedLengthStream;
@@ -56,12 +58,16 @@ function environment({ contentType = "video/mp4", object, throwError = false } =
       MEDIA_BUCKET: {
         async get(...args) {
           calls.push({ args, operation: "get" });
-          if (throwError) throw new Error("private R2 diagnostic");
+          if (throwError) {
+            throw throwError instanceof Error ? throwError : new Error("private R2 diagnostic");
+          }
           return makeObject();
         },
         async head(...args) {
           calls.push({ args, operation: "head" });
-          if (throwError) throw new Error("private R2 diagnostic");
+          if (throwError) {
+            throw throwError instanceof Error ? throwError : new Error("private R2 diagnostic");
+          }
           const value = makeObject();
           if (!value) return value;
           const { body: _body, ...metadata } = value;
@@ -76,8 +82,24 @@ function request(path = SAMPLE_PATH, options = {}) {
   return new Request(new URL(path, ORIGIN), options);
 }
 
+function gatewayContext(setup, fetchImplementation = null) {
+  return {
+    exports: {
+      CachedMediaObject: {
+        fetch: fetchImplementation ?? ((forwarded) => (
+          fetchCachedMediaObject(forwarded, setup.env)
+        )),
+      },
+    },
+  };
+}
+
 async function invoke(path = SAMPLE_PATH, options = {}, setup = environment()) {
-  const response = await worker.fetch(request(path, options), setup.env);
+  const response = await worker.fetch(
+    request(path, options),
+    setup.env,
+    gatewayContext(setup),
+  );
   return { response, setup };
 }
 
@@ -105,10 +127,14 @@ test("Wrangler binds one private R2 bucket to the exact cached production route"
     "utf8",
   );
   const config = JSON.parse(source);
-  assert.equal(config.main, "src/index.js");
+  assert.equal(config.main, "src/entrypoints.js");
   assert.equal(config.workers_dev, false);
   assert.equal(config.preview_urls, false);
   assert.deepEqual(config.cache, { enabled: true, cross_version_cache: false });
+  assert.deepEqual(config.exports, {
+    default: { type: "worker", cache: { enabled: false } },
+    CachedMediaObject: { type: "worker", cache: { enabled: true } },
+  });
   assert.deepEqual(config.routes, [{ pattern: "vik.guru/v1-cdn/video/*", zone_name: "vik.guru" }]);
   assert.deepEqual(config.r2_buckets, [{
     binding: "MEDIA_BUCKET",
@@ -167,6 +193,35 @@ test("HEAD reads only R2 metadata and preserves the full-representation headers"
   assert.equal(await response.text(), "");
 });
 
+test("the published 512 MB boundary is inclusive for metadata-only admission", async () => {
+  const setup = environment({
+    object: r2Object("video/mp4", undefined, { size: 512_000_000 }),
+  });
+  const { response } = await invoke(SAMPLE_PATH, { method: "HEAD" }, setup);
+
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("Content-Length"), "512000000");
+  assert.equal(await response.text(), "");
+});
+
+test("companion admission shares the verifier's 32 MiB boundary", async () => {
+  for (const [size, status] of [
+    [32 * 1024 * 1024, 200],
+    [32 * 1024 * 1024 + 1, 502],
+  ]) {
+    const setup = environment({
+      object: r2Object("text/vtt; charset=utf-8", undefined, { size }),
+    });
+    const { response } = await invoke(
+      "/v1-cdn/video/impact-map-narrative/v1.2.3/captions.en.vtt",
+      { method: "HEAD" },
+      setup,
+    );
+    assert.equal(response.status, status);
+    if (status === 200) assert.equal(response.headers.get("Content-Length"), String(size));
+  }
+});
+
 test("the Worker returns a complete 200 when invoked with Range and leaves slicing to Workers Caching", async () => {
   const bytes = new TextEncoder().encode("complete-media-body");
   const setup = environment({ object: r2Object("video/mp4", bytes) });
@@ -186,11 +241,133 @@ test("the Worker returns a complete 200 when invoked with Range and leaves slici
   });
 });
 
+test("the uncached gateway forwards one canonical request to the cached media entrypoint", async () => {
+  const setup = environment();
+  let forwarded;
+  const response = await worker.fetch(
+    request(SAMPLE_PATH, {
+      headers: {
+        Authorization: "Bearer private-value",
+        Cookie: "private=value",
+        "If-Modified-Since": "Wed, 21 Oct 2015 07:28:00 GMT",
+        "If-None-Match": '"cached-etag"',
+        "If-Range": '"range-etag"',
+        Range: "bytes=0-1",
+        "X-Forwarded-Host": "alternate.example",
+      },
+    }),
+    setup.env,
+    gatewayContext(setup, async (candidate) => {
+      forwarded = candidate;
+      return fetchCachedMediaObject(candidate, setup.env);
+    }),
+  );
+
+  assert.equal(response.status, 200);
+  assert.equal(forwarded.url, `${ORIGIN}${SAMPLE_PATH}`);
+  assert.equal(forwarded.method, "GET");
+  assert.deepEqual([...forwarded.headers], [
+    ["if-none-match", '"cached-etag"'],
+    ["if-range", '"range-etag"'],
+    ["range", "bytes=0-1"],
+  ]);
+  await response.arrayBuffer();
+});
+
+test("If-None-Match selects explicit complete and not-modified outcomes", async () => {
+  const cases = [
+    [{ "If-None-Match": '"8e0a1b2c3d4e5f"' }, 304],
+    [{ "If-None-Match": 'W/"8e0a1b2c3d4e5f"' }, 304],
+    [{ "If-None-Match": ', "8e0a1b2c3d4e5f", ,' }, 304],
+    [{ "If-None-Match": "*" }, 304],
+    [{ "If-None-Match": '"other"' }, 200],
+  ];
+
+  for (const [headers, status] of cases) {
+    let cancellationCount = 0;
+    const bytes = new TextEncoder().encode("conditional-media-body");
+    const body = new ReadableStream({
+      start(controller) {
+        controller.enqueue(bytes);
+        controller.close();
+      },
+      cancel() {
+        cancellationCount += 1;
+      },
+    });
+    const setup = environment({
+      object: r2Object("video/mp4", bytes, { body }),
+    });
+    const { response } = await invoke(SAMPLE_PATH, { headers }, setup);
+
+    assert.equal(response.status, status, JSON.stringify(headers));
+    if (status === 200) {
+      assert.deepEqual(Buffer.from(await response.arrayBuffer()), Buffer.from(bytes));
+      assert.equal(cancellationCount, 0);
+    } else if (status === 304) {
+      assert.equal(response.headers.get("Cache-Control"), IMMUTABLE);
+      assert.equal(response.headers.get("ETag"), '"8e0a1b2c3d4e5f"');
+      assertHardened(response, "not modified");
+      assert.equal(await response.text(), "");
+      assert.equal(cancellationCount, 1);
+    } else {
+      await assertNoStoreError(response, status);
+      assert.equal(cancellationCount, 1);
+    }
+  }
+});
+
+test("unsupported or malformed read conditions stop before cache dispatch and object access", async () => {
+  for (const headers of [
+    { "If-Match": '"8e0a1b2c3d4e5f"' },
+    { "If-Unmodified-Since": "Wed, 21 Oct 2015 07:28:00 GMT" },
+    { "If-None-Match": 'W/"unterminated' },
+  ]) {
+    const setup = environment();
+    let dispatchCount = 0;
+    const response = await worker.fetch(
+      request(SAMPLE_PATH, { headers }),
+      setup.env,
+      gatewayContext(setup, async () => {
+        dispatchCount += 1;
+        return new Response();
+      }),
+    );
+
+    await assertNoStoreError(response, 400);
+    assert.equal(dispatchCount, 0);
+    assert.deepEqual(setup.calls, []);
+
+    const directResponse = await fetchCachedMediaObject(
+      request(SAMPLE_PATH, { headers }),
+      setup.env,
+    );
+    await assertNoStoreError(directResponse, 400);
+    assert.deepEqual(setup.calls, []);
+  }
+});
+
+test("a HEAD validator can return not-modified from metadata alone", async () => {
+  const setup = environment();
+  const { response } = await invoke(SAMPLE_PATH, {
+    method: "HEAD",
+    headers: { "If-None-Match": '"8e0a1b2c3d4e5f"' },
+  }, setup);
+
+  assert.equal(response.status, 304);
+  assert.equal(await response.text(), "");
+  assert.deepEqual(setup.calls, [{
+    args: ["v1/video/impact-map-narrative/v1.2.3/movie.mp4"],
+    operation: "head",
+  }]);
+});
+
 test("HTTP redirects only an otherwise valid read route and never reaches R2", async () => {
   const setup = environment();
   const response = await worker.fetch(
     new Request(`http://vik.guru${SAMPLE_PATH}`, { method: "GET" }),
     setup.env,
+    gatewayContext(setup),
   );
 
   assert.equal(response.status, 308);
@@ -198,6 +375,30 @@ test("HTTP redirects only an otherwise valid read route and never reaches R2", a
   assert.equal(response.headers.get("Cache-Control"), "no-store");
   assert.equal(response.headers.get("Content-Length"), "0");
   assertHardened(response, "HTTPS redirect");
+  assert.deepEqual(setup.calls, []);
+});
+
+test("HTTP alternate ports canonicalize to HTTPS while foreign hosts and HTTPS alternate ports stop", async () => {
+  const setup = environment();
+  const redirected = await worker.fetch({
+    method: "GET",
+    url: `http://vik.guru:8080${SAMPLE_PATH}`,
+  }, setup.env, gatewayContext(setup));
+  assert.equal(redirected.status, 308);
+  assert.equal(redirected.headers.get("Location"), `https://vik.guru${SAMPLE_PATH}`);
+
+  for (const url of [
+    `https://vik.guru:8443${SAMPLE_PATH}`,
+    `https://media.example${SAMPLE_PATH}`,
+    `ftp://vik.guru${SAMPLE_PATH}`,
+  ]) {
+    const response = await worker.fetch(
+      { method: "GET", url },
+      setup.env,
+      gatewayContext(setup),
+    );
+    await assertNoStoreError(response, 400);
+  }
   assert.deepEqual(setup.calls, []);
 });
 
@@ -239,7 +440,7 @@ test("queries, encodings, and ambiguous request targets are rejected before R2",
     const response = await worker.fetch({
       method: "GET",
       url: `${ORIGIN}${rawPath}`,
-    }, setup.env);
+    }, setup.env, gatewayContext(setup));
     await assertNoStoreError(response, 400);
     assert.deepEqual(setup.calls, [], rawPath);
   }
@@ -249,7 +450,7 @@ test("queries, encodings, and ambiguous request targets are rejected before R2",
   const oversizedResponse = await worker.fetch({
     method: "GET",
     url: `${ORIGIN}${oversizedPath}`,
-  }, oversizedSetup.env);
+  }, oversizedSetup.env, gatewayContext(oversizedSetup));
   await assertNoStoreError(oversizedResponse, 400);
   assert.deepEqual(oversizedSetup.calls, []);
 });
@@ -280,16 +481,16 @@ test("nearby but non-grammar paths are bounded 404 responses without an object l
   }
 });
 
-test("missing objects, R2 failures, and invalid stored metadata stay bounded and no-store", async () => {
+test("missing objects and invalid stored metadata stay bounded and no-store", async () => {
   for (const [setup, status] of [
     [environment({ object: null }), 404],
-    [environment({ throwError: true }), 503],
     [environment({ object: r2Object("application/octet-stream") }), 502],
     [environment({ object: r2Object("video/mp4", undefined, { httpMetadata: {} }) }), 502],
     [environment({ object: r2Object("video/mp4", undefined, { httpEtag: 'W/"weak"' }) }), 502],
     [environment({ object: r2Object("video/mp4", undefined, { httpEtag: "unquoted" }) }), 502],
     [environment({ object: r2Object("video/mp4", undefined, { size: -1 }) }), 502],
     [environment({ object: r2Object("video/mp4", undefined, { size: 0 }) }), 502],
+    [environment({ object: r2Object("video/mp4", undefined, { size: 512_000_001 }) }), 502],
     [environment({ object: r2Object("video/mp4", undefined, { body: null }) }), 502],
     [environment({ object: r2Object("video/mp4", undefined, {
       httpMetadata: { contentEncoding: "gzip", contentType: "video/mp4" },
@@ -298,6 +499,68 @@ test("missing objects, R2 failures, and invalid stored metadata stay bounded and
     const { response } = await invoke(SAMPLE_PATH, {}, setup);
     await assertNoStoreError(response, status);
     assert.equal(setup.calls.length, 1);
+  }
+});
+
+test("R2 configuration and retryable service failures receive distinct bounded responses", async () => {
+  for (const [setup, status] of [
+    [{ env: {}, calls: [] }, 500],
+    [{ env: { MEDIA_BUCKET: {} }, calls: [] }, 500],
+    [environment({ throwError: new Error("get: internal error (10001)") }), 503],
+    [environment({ throwError: new Error("get: service unavailable (10043)") }), 503],
+    [environment({ throwError: new Error("get: client disconnect (10054)") }), 503],
+    [environment({ throwError: new Error("get: too many requests (10058)") }), 503],
+    [environment({ throwError: new Error("get: bucket absent (10006)") }), 500],
+    [environment({ throwError: new Error("private R2 diagnostic") }), 500],
+  ]) {
+    const { response } = await invoke(SAMPLE_PATH, {}, setup);
+    await assertNoStoreError(response, status);
+    assert.equal(response.headers.get("Retry-After"), status === 503 ? "5" : null);
+  }
+});
+
+test("gateway dispatch failures remain bounded configuration errors", async () => {
+  const setup = environment();
+  for (const ctx of [
+    {},
+    { exports: { CachedMediaObject: {} } },
+    gatewayContext(setup, async () => null),
+    gatewayContext(setup, async () => { throw new Error("private gateway diagnostic"); }),
+  ]) {
+    const response = await worker.fetch(request(), setup.env, ctx);
+    await assertNoStoreError(response, 500);
+  }
+  assert.deepEqual(setup.calls, []);
+});
+
+test("metadata rejection and response-construction failure cancel an unowned GET body", async () => {
+  for (const constructionFailure of [false, true]) {
+    let cancellationCount = 0;
+    const body = new ReadableStream({
+      cancel() {
+        cancellationCount += 1;
+      },
+    });
+    const object = r2Object("video/mp4", undefined, {
+      body,
+      ...(constructionFailure ? {} : { size: 0 }),
+    });
+    const setup = environment({ object });
+    const previous = globalThis.FixedLengthStream;
+    if (constructionFailure) {
+      globalThis.FixedLengthStream = class {
+        constructor() {
+          throw new Error("private response-construction diagnostic");
+        }
+      };
+    }
+    try {
+      const { response } = await invoke(SAMPLE_PATH, {}, setup);
+      await assertNoStoreError(response, constructionFailure ? 500 : 502);
+      assert.equal(cancellationCount, 1);
+    } finally {
+      globalThis.FixedLengthStream = previous;
+    }
   }
 });
 

@@ -197,9 +197,12 @@ npm run media:video:verify -- --source <master.mp4>
 ```
 
 The local tests exercise preparation routing, strict decode, Fast Start,
-copy-remux packet identity, sanitized metadata reporting, the finite public
-path grammar, exact R2 key mapping, response metadata, bounded failures, and
-the live verifier with synthetic responses. The Wrangler dry run establishes
+copy-remux packet identity, selected scaling geometry, sanitized metadata
+reporting, atomic promotion and cleanup disposition, the finite public path
+grammar, exact R2 key mapping, typed response failures, stream ownership,
+bounded reads, and both head-first and cold-range-first live verification.
+The required CI receiver proves both real FFmpeg preparation branches and the
+synthetic failure contracts. The Wrangler dry run establishes
 that the selected source bundles against the declared R2 binding and route; it
 does not create a bucket, upload bytes, attach the route, or observe the edge.
 
@@ -210,14 +213,24 @@ live check:
 npm run verify:r2-video:live -- \
   --video https://vik.guru/v1-cdn/video/<id>/<version>/movie.mp4 \
   --captions https://vik.guru/v1-cdn/video/<id>/<version>/captions.en.vtt \
+  --captions-sha256 <accepted-caption-sha256> \
+  --captions-size <accepted-caption-bytes> \
+  --descriptions https://vik.guru/v1-cdn/video/<id>/<version>/descriptions.en.vtt \
+  --descriptions-sha256 <accepted-description-sha256> \
+  --descriptions-size <accepted-description-bytes> \
   --poster https://vik.guru/v1-cdn/video/<id>/<version>/poster.webp \
+  --poster-sha256 <accepted-poster-sha256> \
+  --poster-size <accepted-poster-bytes> \
   --sha256 <accepted-video-sha256> \
   --size <accepted-video-bytes>
 ```
 
-That command observes one named public receiver: complete metadata, strong
+Add `--cold-range-first` only for the second fresh-version canary. That command
+requires `Cf-Cache-Status: MISS` on the initial `bytes=0-1` response before it
+continues, then observes one named public receiver: complete metadata, strong
 validator, immutable policy, hardening, cached range behavior, bounded full
-digest, and optional companion media types. Its sanitized JSON omits URLs,
+digest, and optional companion transport and byte identity. Companion content
+validity remains a separately named review. Its sanitized JSON omits URLs,
 validator values, response bodies, exception details, and protected platform
 coordinates. Signed-out browser playback, captions, transcript, rights, and
 human release acceptance retain their separate owners.

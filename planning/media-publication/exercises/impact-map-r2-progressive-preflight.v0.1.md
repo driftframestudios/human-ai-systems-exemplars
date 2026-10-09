@@ -52,8 +52,9 @@ preserving the selected encoded video and audio payloads.
 
 ## Metadata boundary
 
-The public receipt records metadata keys, classes, tool coverage, and counts.
-Source values stayed inside the local scanner boundary. Betterleaks reported a
+The public receipt records allowlisted structural keys, hashed custom-key
+identities, classes, tool coverage, and counts. Source keys and values stayed
+inside the local scanner boundary. Betterleaks reported a
 clean, canary-proven result for the extracted standard metadata values.
 FFprobe covered container, stream, chapter, and standard-tag fields.
 

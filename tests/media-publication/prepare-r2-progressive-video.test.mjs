@@ -7,6 +7,7 @@ import {
   readFile,
   rm,
   stat,
+  truncate,
   writeFile,
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -21,14 +22,18 @@ import {
   comparePreparedMedia,
   comparePacketHashes,
   inspectR2ProgressiveVideo,
+  MediaPreparationError,
+  mediaCliFailureMessage,
   metadataValuePayload,
   parseMp4TopLevelBoxes,
   parsePrepareCliArguments,
   prepareR2ProgressiveVideo,
+  runMediaCommand,
   scanMetadataWithBetterleaks,
   selectPreparationStrategy,
   summarizeMetadata,
   verifyFastStartBoxes,
+  verifyR2ProgressiveVideo,
 } from "../../tools/prepare-r2-progressive-video.mjs";
 
 function fittingProbe() {
@@ -88,6 +93,11 @@ function box(type, payload = Buffer.alloc(0), { extended = false } = {}) {
   return Buffer.concat([header, payload]);
 }
 
+function requireMediaFixtureOrSkip(context, message) {
+  if (process.env.MEDIA_TEST_REQUIRE_FFMPEG === "true") assert.fail(message);
+  context.skip(message);
+}
+
 test("selects copy-remux only for the already fitting first video and optional audio", () => {
   assert.deepEqual(selectPreparationStrategy(fittingProbe()), {
     strategy: "copy-remux",
@@ -138,6 +148,15 @@ test("selects copy-remux only for the already fitting first video and optional a
 
 test("holds source conditions that need an explicit media decision", () => {
   const cases = [
+    ["missing duration", (probe) => {
+      delete probe.format.duration;
+      delete probe.streams[0].duration;
+    }, "duration-unconfirmed"],
+    ["missing cadence", (probe) => {
+      delete probe.streams[0].avg_frame_rate;
+      delete probe.streams[0].r_frame_rate;
+    }, "frame-rate-unconfirmed"],
+    ["missing geometry", (probe) => { delete probe.streams[0].width; }, "geometry-unconfirmed"],
     ["multiple audio", (probe) => probe.streams.push(clone(probe.streams[1])), "multiple-audio-streams"],
     ["subtitles", (probe) => probe.streams.push({ codec_type: "subtitle" }), "subtitle-streams-present"],
     ["data", (probe) => probe.streams.push({ codec_type: "data" }), "data-streams-present"],
@@ -216,7 +235,7 @@ test("builds deterministic explicit maps, metadata removal, faststart, and stric
   );
 });
 
-test("metadata receipts expose keys, classes, and coverage without raw values", async () => {
+test("metadata receipts expose structural keys, hashed custom identities, classes, and coverage", async () => {
   const probe = fittingProbe();
   const rawSensitiveValue = "metadata-value-must-remain-inside-the-scanner-boundary";
   probe.format.tags.comment = rawSensitiveValue;
@@ -227,12 +246,13 @@ test("metadata receipts expose keys, classes, and coverage without raw values", 
   const serialized = JSON.stringify(report);
 
   assert.equal(report.rawValuesReported, false);
-  assert.ok(report.format.keys.includes("comment"));
+  assert.ok(report.format.keys.some((key) => /^custom-key-[a-f0-9]{12}$/u.test(key)));
   assert.ok(report.format.classes.includes("descriptive"));
   assert.ok(report.streams[0].classes.includes("location"));
   assert.equal(report.structuralMuxerEncoderTag.classification, "tool-generated-structural-tag");
   assert.doesNotMatch(serialized, new RegExp(rawSensitiveValue, "u"));
   assert.doesNotMatch(serialized, /12\.3456/u);
+  assert.doesNotMatch(serialized, /"comment"/u);
 
   let scannerInput = null;
   let suppressionInspected = false;
@@ -316,6 +336,154 @@ test("compares duration, cadence, geometry, color, and selected audio intent", (
   assert.equal(rejected.checks.cadence.passed, false);
   assert.equal(rejected.checks.declaredColor.passed, false);
   assert.equal(rejected.checks.synchronization.passed, false);
+
+  const destructiveResolutionLoss = clone(source);
+  destructiveResolutionLoss.streams[0].width = 16;
+  destructiveResolutionLoss.streams[0].height = 9;
+  const resolutionRejected = comparePreparedMedia(source, destructiveResolutionLoss);
+  assert.equal(resolutionRejected.passed, false);
+  assert.equal(resolutionRejected.checks.selectedGeometry.passed, false);
+
+  const oversizedSource = clone(source);
+  oversizedSource.streams[0].width = 3_840;
+  oversizedSource.streams[0].height = 2_160;
+  const boundedOutput = clone(source);
+  assert.equal(comparePreparedMedia(oversizedSource, boundedOutput).checks.selectedGeometry.passed, true);
+
+  const portraitSource = clone(source);
+  portraitSource.streams[0].width = 1_080;
+  portraitSource.streams[0].height = 1_920;
+  const portraitOutput = clone(source);
+  portraitOutput.streams[0].width = 608;
+  portraitOutput.streams[0].height = 1_080;
+  assert.equal(comparePreparedMedia(portraitSource, portraitOutput).checks.selectedGeometry.passed, true);
+
+  const oddSource = clone(source);
+  oddSource.streams[0].width = 321;
+  oddSource.streams[0].height = 241;
+  const evenOutput = clone(source);
+  evenOutput.streams[0].width = 320;
+  evenOutput.streams[0].height = 240;
+  assert.equal(comparePreparedMedia(oddSource, evenOutput).checks.selectedGeometry.passed, true);
+});
+
+test("bounds local media subprocess output and supports an explicit interruption signal", async () => {
+  await assert.rejects(
+    runMediaCommand(
+      process.execPath,
+      ["-e", "process.stdout.write('x'.repeat(65536)); setInterval(() => {}, 1000)"],
+      { maxOutputBytes: 10, terminationGraceMs: 10 },
+    ),
+    (error) => error?.code === "MEDIA_TOOL_OUTPUT_BOUNDARY",
+  );
+
+  const controller = new AbortController();
+  const interrupted = runMediaCommand(
+    process.execPath,
+    ["-e", "setInterval(() => {}, 1000)"],
+    { signal: controller.signal, terminationGraceMs: 10 },
+  );
+  controller.abort();
+  await assert.rejects(interrupted, (error) => error?.code === "MEDIA_TOOL_INTERRUPTED");
+});
+
+test("CLI failures preserve the primary cause and name incomplete temporary cleanup", () => {
+  const error = new MediaPreparationError(
+    "MEDIA_OUTPUT_SEMANTICS",
+    "the prepared output did not preserve the selected media intent",
+  );
+  error.temporaryCleanup = {
+    complete: false,
+    recovery: "inspect-and-remove-the-exact-temporary-sibling",
+  };
+
+  const message = mediaCliFailureMessage(error);
+  assert.match(message, /^MEDIA_OUTPUT_SEMANTICS:/u);
+  assert.match(message, /MEDIA_TEMPORARY_CLEANUP_INCOMPLETE/u);
+  assert.doesNotMatch(message, /\/private\/|private cleanup diagnostic/u);
+});
+
+test("holds an interrupted inspection before local tools or promotion work can begin", async (context) => {
+  const directory = await mkdtemp(join(tmpdir(), "r2-progressive-interrupted-test-"));
+  context.after(() => rm(directory, { recursive: true, force: true }));
+  const sourcePath = join(directory, "source.mp4");
+  await writeFile(sourcePath, "synthetic-media-bytes");
+  const controller = new AbortController();
+  controller.abort();
+  let commandCalls = 0;
+
+  await assert.rejects(
+    inspectR2ProgressiveVideo({
+      sourcePath,
+      signal: controller.signal,
+      commandRunner: async () => {
+        commandCalls += 1;
+        return { code: 0, signal: null, stdout: "{}", stderr: "" };
+      },
+    }),
+    (error) => error?.code === "MEDIA_TOOL_INTERRUPTED",
+  );
+  assert.equal(commandCalls, 0);
+});
+
+test("a cooperative metadata scan interruption stops before later validation", async (context) => {
+  const directory = await mkdtemp(join(tmpdir(), "r2-progressive-scan-interrupted-test-"));
+  context.after(() => rm(directory, { recursive: true, force: true }));
+  const sourcePath = join(directory, "source.mp4");
+  await writeFile(sourcePath, "synthetic-media-bytes");
+  const controller = new AbortController();
+  let scannerStarted;
+  const scannerReady = new Promise((resolvePromise) => {
+    scannerStarted = resolvePromise;
+  });
+
+  const inspection = inspectR2ProgressiveVideo({
+    sourcePath,
+    signal: controller.signal,
+    commandRunner: async (binary) => ({
+      code: 0,
+      signal: null,
+      stdout: binary === "ffprobe" ? JSON.stringify(fittingProbe()) : "",
+      stderr: "",
+    }),
+    metadataScanner: async (_probe, { signal }) => {
+      scannerStarted();
+      await new Promise((resolvePromise) => {
+        signal.addEventListener("abort", resolvePromise, { once: true });
+      });
+      return {
+        status: "clean",
+        findingCount: 0,
+        version: "test-double",
+        canaryPassed: true,
+      };
+    },
+  });
+
+  await scannerReady;
+  controller.abort();
+  await assert.rejects(inspection, (error) => error?.code === "MEDIA_TOOL_INTERRUPTED");
+});
+
+test("holds an oversized prepared candidate before probe or decode work", async (context) => {
+  const directory = await mkdtemp(join(tmpdir(), "r2-progressive-size-boundary-test-"));
+  context.after(() => rm(directory, { recursive: true, force: true }));
+  const mediaPath = join(directory, "oversized.mp4");
+  await writeFile(mediaPath, "");
+  await truncate(mediaPath, 512_000_001);
+  let commandCalls = 0;
+
+  await assert.rejects(
+    verifyR2ProgressiveVideo({
+      mediaPath,
+      commandRunner: async () => {
+        commandCalls += 1;
+        return { code: 0, signal: null, stdout: "{}", stderr: "" };
+      },
+    }),
+    (error) => error?.code === "MEDIA_OUTPUT_SIZE",
+  );
+  assert.equal(commandCalls, 0);
 });
 
 test("parses the inspect, prepare, and source-bound verify CLI shapes", () => {
@@ -367,7 +535,7 @@ test("parses the inspect, prepare, and source-bound verify CLI shapes", () => {
 test("copy-remuxes a synthetic fitting source atomically and verifies packet identity", async (context) => {
   const availability = spawnSync("ffmpeg", ["-version"], { encoding: "utf8" });
   if (availability.error || availability.status !== 0) {
-    context.skip("ffmpeg is unavailable");
+    requireMediaFixtureOrSkip(context, "ffmpeg is unavailable");
     return;
   }
   const directory = await mkdtemp(join(tmpdir(), "r2-progressive-video-test-"));
@@ -416,7 +584,10 @@ test("copy-remuxes a synthetic fitting source atomically and verifies packet ide
     { encoding: "utf8" },
   );
   if (generated.error || generated.status !== 0) {
-    context.skip("the installed ffmpeg cannot create the H.264/AAC synthetic fixture");
+    requireMediaFixtureOrSkip(
+      context,
+      "the installed ffmpeg cannot create the H.264/AAC synthetic fixture",
+    );
     return;
   }
   const previousOutput = Buffer.from("previous incomplete output");
@@ -442,6 +613,7 @@ test("copy-remuxes a synthetic fitting source atomically and verifies packet ide
   assert.equal(result.packetPreservation.passed, true);
   assert.equal(result.semanticPreservation.passed, true);
   assert.equal(result.output.fastStart.moovBeforeMdat, true);
+  assert.deepEqual(result.temporaryCleanup, { complete: true, recovery: null });
   assert.match(result.output.digest.sha256, /^[a-f0-9]{64}$/u);
   assert.equal(result.output.digest.sizeBytes, (await stat(outputPath)).size);
   assert.notDeepEqual(await readFile(outputPath), previousOutput);
@@ -463,18 +635,43 @@ test("copy-remuxes a synthetic fitting source atomically and verifies packet ide
       sourcePath: outputPath,
       metadataScanner: async () => ({ status: "clean" }),
     }),
-    /MEDIA_METADATA_SCAN_FAILED/u,
+    (error) => error?.code === "MEDIA_METADATA_SCAN_CONTRACT",
   );
   assert.equal(
     createHash("sha256").update(await readFile(outputPath)).digest("hex"),
     result.output.digest.sha256,
   );
+
+  const verification = await verifyR2ProgressiveVideo({
+    mediaPath: outputPath,
+    sourcePath,
+    metadataScanner,
+  });
+  assert.equal(verification.ok, true);
+  assert.equal(verification.semanticPreservation.passed, true);
+  assert.equal(verification.packetPreservation.passed, true);
+
+  const cleanupWarningPath = join(directory, "accepted-with-cleanup-warning.mp4");
+  const cleanupWarning = await prepareR2ProgressiveVideo({
+    sourcePath,
+    outputPath: cleanupWarningPath,
+    metadataScanner,
+    temporaryRemover: async () => {
+      throw new Error("private cleanup diagnostic");
+    },
+  });
+  assert.equal(cleanupWarning.ok, true);
+  assert.deepEqual(cleanupWarning.temporaryCleanup, {
+    complete: false,
+    recovery: "inspect-and-remove-the-exact-temporary-sibling",
+  });
+  assert.equal((await stat(cleanupWarningPath)).isFile(), true);
 });
 
 test("encodes an ordinary synthetic conversion while preserving declared color and timing", async (context) => {
   const availability = spawnSync("ffmpeg", ["-version"], { encoding: "utf8" });
   if (availability.error || availability.status !== 0) {
-    context.skip("ffmpeg is unavailable");
+    requireMediaFixtureOrSkip(context, "ffmpeg is unavailable");
     return;
   }
   const directory = await mkdtemp(join(tmpdir(), "r2-progressive-encode-test-"));
@@ -516,7 +713,10 @@ test("encodes an ordinary synthetic conversion while preserving declared color a
     { encoding: "utf8" },
   );
   if (generated.error || generated.status !== 0) {
-    context.skip("the installed ffmpeg cannot create the encode-branch fixture");
+    requireMediaFixtureOrSkip(
+      context,
+      "the installed ffmpeg cannot create the encode-branch fixture",
+    );
     return;
   }
 
@@ -538,6 +738,24 @@ test("encodes an ordinary synthetic conversion while preserving declared color a
   assert.equal(result.output.technical.audio.codec, "aac");
   assert.equal(result.output.technical.audio.sampleRate, 48_000);
   assert.deepEqual(result.packetPreservation, {
+    applicable: false,
+    passed: null,
+    streams: [],
+  });
+
+  const verification = await verifyR2ProgressiveVideo({
+    mediaPath: outputPath,
+    sourcePath,
+    metadataScanner: async () => ({
+      status: "clean",
+      findingCount: 0,
+      version: "test-double",
+      canaryPassed: true,
+    }),
+  });
+  assert.equal(verification.ok, true);
+  assert.equal(verification.semanticPreservation.passed, true);
+  assert.deepEqual(verification.packetPreservation, {
     applicable: false,
     passed: null,
     streams: [],

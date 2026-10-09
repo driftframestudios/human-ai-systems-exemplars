@@ -8,23 +8,50 @@ letters followed by optional lowercase alphanumeric subtags.
 The only carriers are `movie.mp4`, raster `poster` files, and language-specific
 `captions` or `descriptions` WebVTT files.
 
-The Worker returns complete `200` responses and pipes each R2 body through a
-Workers `FixedLengthStream` so the stored object size remains the response's
-exact `Content-Length`. [Workers Caching][cache] is enabled in Wrangler and
-owns edge storage and range slicing; the handler does not assemble `206`
-responses. Stored R2 `Content-Type` metadata must exactly match the carrier
-before bytes are served. The publication policy treats every accepted key as
-immutable, so changed bytes or metadata require a new versioned key.
+The uncached default entrypoint validates the raw target, method, host, scheme,
+port, and finite carrier grammar on every request. It then constructs one
+canonical request containing only the accepted method, URL, `Range`,
+`If-Range`, and `If-None-Match` and forwards it to the named `CachedMediaObject`
+entrypoint.
+[Workers Caching][cache] applies only to that named entrypoint, so a cached
+response cannot bypass gateway validation even though the Workers Cache key
+omits the request host. This follows Cloudflare's documented [gateway
+pattern][cache-gateway].
+
+The cached entrypoint returns complete `200` responses and pipes each R2 body
+through a Workers `FixedLengthStream` so the stored object size remains the
+response's exact `Content-Length`. Workers Caching owns edge storage and range
+slicing; partial-response assembly stays outside the handler. Stored R2
+`Content-Type` metadata must exactly match the carrier before bytes are served.
+The publication policy treats every accepted key as immutable, so changed
+bytes or metadata require a new versioned key.
 
 ## Behavior boundary
 
 - `GET` and `HEAD` are the complete read interface.
-- An otherwise valid HTTP request redirects to HTTPS before object access.
+- Wrangler disables caching on the default gateway and enables it on the named
+  media-object entrypoint. The gateway strips caller-specific and cache-bypass
+  headers while preserving `Range`, `If-Range`, and `If-None-Match`.
+- An otherwise valid HTTP request on the canonical host redirects to canonical
+  HTTPS before object access. Foreign hosts and alternate HTTPS ports stop
+  before object access.
 - The path parser rejects queries, encoded paths, ambiguous separators, dot
   paths, and oversized request paths before R2 lookup.
 - Stored content type must match the finite carrier grammar, and stored content
   encoding must be absent.
-- Generic `no-store` responses contain no object, route, or provider detail.
+- `If-None-Match` evaluates against the strong stored R2 ETag on a cold handler
+  read and can return `304`. Workers Caching owns warm-hit validators and
+  `If-Range` alongside its range handling. `If-Match` and
+  `If-Unmodified-Since` stop before cache dispatch and object access because
+  Cloudflare's documented warm-hit condition handling does not include them.
+- Configuration faults return bounded `500`, invalid stored metadata returns
+  bounded `502`, and documented retryable R2 service faults return bounded
+  `503`; every failure remains `no-store` and omits object, route, and provider
+  detail.
+- Objects above the current 512 MB (512,000,000-byte) cacheable-object boundary
+  stop before body transfer.
+- Poster and WebVTT companions use a narrower 32 MiB (33,554,432-byte)
+  admission boundary shared by the Worker and live verifier.
 - Successful and error responses carry `nosniff`, same-origin CORP, and a
   no-referrer policy.
 - `workers.dev` and Worker Version URLs remain disabled. Browser
@@ -80,17 +107,21 @@ administrative endpoint.
 The project-level preparation, upload, activation, live-observation, and
 recovery sequence lives in the [R2 progressive-video runbook][runbook].
 
-Official references: [R2 bindings and object metadata][r2], [Workers Caching
+Official references: [R2 bindings and object metadata][r2], [R2 failure
+codes][r2-errors], [R2 S3 conditional operations][r2-s3], [Workers Caching
 configuration and range behavior][cache], [fixed-length Worker responses][response],
 [R2 public development URLs][public], [Worker limits and fail mode][limits],
 [Worker Version URLs][previews], and [Worker route configuration][routes].
 
 [cache]: https://developers.cloudflare.com/workers/cache/configuration/
+[cache-gateway]: https://developers.cloudflare.com/workers/cache/examples/
 [cache-purge]: https://developers.cloudflare.com/workers/cache/purge/
 [limits]: https://developers.cloudflare.com/workers/platform/limits/
 [public]: https://developers.cloudflare.com/r2/buckets/public-buckets/
 [previews]: https://developers.cloudflare.com/workers/versions-and-deployments/version-urls/
 [r2]: https://developers.cloudflare.com/r2/api/workers/workers-api-reference/
+[r2-errors]: https://developers.cloudflare.com/r2/api/error-codes/
+[r2-s3]: https://developers.cloudflare.com/r2/api/s3/api/
 [response]: https://developers.cloudflare.com/workers/runtime-apis/response/#set-the-content-length-header
 [routes]: https://developers.cloudflare.com/workers/configuration/routing/routes/
 [runbook]: ../../planning/media-publication/runbooks/r2-progressive-video-publication.v0.1.md

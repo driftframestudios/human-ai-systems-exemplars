@@ -49,16 +49,27 @@ language value in the page's `srclang`.
 
 ### Rule: Complete Worker responses enable cached ranges
 
-Return one complete `200` object with exact type, length, strong quoted R2
-ETag, `Accept-Ranges`, immutable cache policy, and public hardening headers.
-Workers Caching owns edge storage and range slicing. The Worker keeps partial
-response assembly outside its code path.
+Place an uncached default gateway before a named cached media entrypoint. The
+gateway validates host, scheme, port, method, raw path, query standing, and
+carrier grammar on every request, then forwards a canonical public request with
+only `Range`, `If-Range`, and `If-None-Match`. Caller-specific and cache-bypass
+headers stay outside the shared cache. Evaluate `If-None-Match` against the
+strong stored R2 ETag on a cold handler read; let Workers Caching own warm-hit
+validators, `If-Range`, and range slicing. Stop `If-Match` and
+`If-Unmodified-Since` before cache dispatch and object access because Workers
+Caching documents a narrower warm-hit condition set.
+This preserves request-sensitive decisions because Workers Cache keys omit the
+host. Return one complete `200` object from the named entrypoint with exact
+type, length, strong quoted R2 ETag, `Accept-Ranges`, immutable cache policy,
+and public hardening headers. Workers Caching owns edge storage and range
+slicing. Partial-response assembly stays outside the Worker code path.
 
 ### Rule: Versioned objects move forward
 
-Write a new versioned key for changed bytes or HTTP metadata. Retain the prior
-page pointer and accepted object family through the observation window.
-Overwrites and deletes require an explicit cache and recovery decision.
+Write a new versioned key for changed bytes or HTTP metadata. Use a conditional
+write whose absent-key precondition makes replacement impossible. Retain the
+prior page pointer and accepted object family through the observation window.
+Deletes require an explicit cache and recovery decision.
 
 ### Rule: Same-origin native playback minimizes capabilities
 
@@ -87,8 +98,8 @@ access-control behavior.
    authority with the human operator.
 3. Reserve a unique semantic ID and asset version; verify object keys and
    media types before upload.
-4. Upload accepted master and companions with exact HTTP metadata and compare
-   uploaded size and digest with the packet.
+4. Upload accepted master and companions with exact HTTP metadata and an
+   absent-key precondition. Compare uploaded size and digest with the packet.
 5. Build and dry-run the narrow Worker; keep account IDs and credentials in
    the protected platform store.
 6. Confirm the bucket has no custom domain or CORS policy, any temporary
@@ -98,9 +109,10 @@ access-control behavior.
    neighboring controls rather than Workers Cache purge controls.
 7. Activate the exact selected route through the human-owned Cloudflare
    workflow and set its route mode to Fail closed.
-8. Use fresh versioned objects to observe cold `HEAD`, complete `GET`, valid
-   and unsatisfiable ranges, validators,
-   types, cache policy, hardening, missing paths, and neighboring paths.
+8. Use one fresh version for `HEAD`, complete `GET`, validators, and digest.
+   Use a second fresh version whose first public video request is the valid
+   range canary, then observe the complete object and unsatisfiable range.
+   Bind every selected companion to its expected size and digest.
 9. Activate native visitor markup independently from object upload.
 10. Observe signed-out Chromium, Firefox, and consequential Safari/iOS
    playback, keyboard operation, captions, transcript, interruption, layout,
@@ -120,12 +132,18 @@ remains read-only.
 
 - Missing subscription or billing authority completes local preparation and
   holds upload and activation.
-- An object above the current self-serve 512 MB cache ceiling returns to size
-  reduction, Stream, or an explicitly selected higher service tier.
+- An object above the current self-serve 512 MB (512,000,000-byte) cache
+  ceiling returns to size reduction, Stream, or an explicitly selected higher
+  service tier.
+- A poster or WebVTT companion above the selected 32 MiB (33,554,432-byte)
+  boundary returns to companion preparation before upload.
 - Gated media returns to a named authorization design; CORS does not provide
   access control.
 - A digest, type, cache, or range mismatch receives a new versioned object
   after repair.
+- An interrupted or unknown write first reads the exact key. Matching bytes
+  complete the operation, a missing key permits the same conditional write,
+  and different bytes preserve the key while a new version is selected.
 - A useful direct-object check may use a short-lived human-enabled `r2.dev`
   endpoint; rate limits and missing edge controls keep it outside production
   standing.

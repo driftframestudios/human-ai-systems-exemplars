@@ -79,8 +79,11 @@ Cloudflare's current self-serve CDN terms distinguish video hosted by a
 Cloudflare service from video fetched from an ordinary external origin. R2
 therefore owns the production video bytes for this route. Current R2 and
 Workers included allowances can make a small publication invoice-free, while
-aggregate account use remains inside both allowances. Workers Caching counts
-hits and misses as requests; cache hits skip Worker execution and the R2 read.
-R2 currently charges no data-transfer egress for direct or Worker-mediated
-delivery. Subscription, usage, pricing, and limits remain activation-time
-observations rather than durable promises.
+aggregate account use remains inside both allowances. The uncached gateway
+runs for each public request, then a cached `ctx.exports` invocation consults
+the media entrypoint. Cloudflare charges cached loopback hits and misses at the
+standard Workers request rate; a hit skips the named entrypoint's code and R2
+read while preserving gateway validation. R2 currently charges no
+data-transfer egress for direct or Worker-mediated delivery. Subscription,
+usage, pricing, and limits remain activation-time observations rather than
+durable promises.

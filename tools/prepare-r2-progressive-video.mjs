@@ -16,6 +16,7 @@ import {
 
 const REPOSITORY_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const BETTERLEAKS_CONFIG_PATH = join(REPOSITORY_ROOT, ".betterleaks.toml");
+const MAX_CACHEABLE_OBJECT_BYTES = 512_000_000;
 const MAX_PROCESS_OUTPUT_BYTES = 128 * 1024 * 1024;
 const MAX_WIDTH = 1_920;
 const MAX_HEIGHT = 1_080;
@@ -31,6 +32,10 @@ const STRUCTURAL_STREAM_TAGS = new Set([
   "language",
   "vendor_id",
 ]);
+const PUBLIC_METADATA_KEYS = new Set([
+  ...STRUCTURAL_FORMAT_TAGS,
+  ...STRUCTURAL_STREAM_TAGS,
+]);
 const SAFE_TOKEN = /^[A-Za-z0-9][A-Za-z0-9 ._:+,/()-]{0,127}$/u;
 
 export class MediaPreparationError extends Error {
@@ -45,11 +50,10 @@ function mediaError(code, message, cause) {
   return new MediaPreparationError(code, message, cause ? { cause } : undefined);
 }
 
-function appendBounded(chunks, chunk, state, child) {
+function appendBounded(chunks, chunk, state) {
   state.bytes += chunk.byteLength;
   if (state.bytes > state.maximum) {
     state.exceeded = true;
-    child.kill();
     return;
   }
   chunks.push(chunk);
@@ -58,33 +62,116 @@ function appendBounded(chunks, chunk, state, child) {
 export function runMediaCommand(
   binary,
   argumentsList,
-  { cwd = REPOSITORY_ROOT, input, maxOutputBytes = MAX_PROCESS_OUTPUT_BYTES } = {},
+  {
+    cwd = REPOSITORY_ROOT,
+    input,
+    maxOutputBytes = MAX_PROCESS_OUTPUT_BYTES,
+    signal = null,
+    terminationGraceMs = 2_000,
+  } = {},
 ) {
   return new Promise((resolvePromise, rejectPromise) => {
-    const child = spawn(binary, argumentsList, {
-      cwd,
-      env: process.env,
-      stdio: ["pipe", "pipe", "pipe"],
-      windowsHide: true,
-    });
+    if (signal?.aborted) {
+      rejectPromise(mediaError("MEDIA_TOOL_INTERRUPTED", "local media work was interrupted"));
+      return;
+    }
+    let child;
+    try {
+      child = spawn(binary, argumentsList, {
+        cwd,
+        env: process.env,
+        stdio: ["pipe", "pipe", "pipe"],
+        windowsHide: true,
+      });
+    } catch (error) {
+      rejectPromise(mediaError(
+        "MEDIA_TOOL_UNAVAILABLE",
+        "a required local media executable could not start",
+        error,
+      ));
+      return;
+    }
     const stdout = [];
     const stderr = [];
-    const state = { bytes: 0, exceeded: false, maximum: maxOutputBytes };
+    const state = {
+      bytes: 0,
+      exceeded: false,
+      inputError: null,
+      interrupted: false,
+      maximum: maxOutputBytes,
+      terminationRequested: false,
+    };
+    let settled = false;
+    let terminationTimer = null;
+
+    const settle = (operation, value) => {
+      if (settled) return;
+      settled = true;
+      if (terminationTimer !== null) clearTimeout(terminationTimer);
+      signal?.removeEventListener("abort", interrupt);
+      operation(value);
+    };
+    const terminate = () => {
+      if (state.terminationRequested) return;
+      state.terminationRequested = true;
+      child.kill("SIGTERM");
+      terminationTimer = setTimeout(() => child.kill("SIGKILL"), terminationGraceMs);
+      terminationTimer.unref?.();
+    };
+    const interrupt = () => {
+      if (state.terminationRequested) return;
+      state.interrupted = true;
+      terminate();
+    };
+    signal?.addEventListener("abort", interrupt, { once: true });
+    if (signal?.aborted) interrupt();
 
     child.once("error", (error) => {
-      rejectPromise(
+      settle(
+        rejectPromise,
         mediaError(
-          "MEDIA_TOOL_UNAVAILABLE",
-          "a required local media executable could not start",
+          state.interrupted ? "MEDIA_TOOL_INTERRUPTED" : "MEDIA_TOOL_UNAVAILABLE",
+          state.interrupted
+            ? "local media work was interrupted"
+            : "a required local media executable could not start",
           error,
         ),
       );
     });
-    child.stdout.on("data", (chunk) => appendBounded(stdout, chunk, state, child));
-    child.stderr.on("data", (chunk) => appendBounded(stderr, chunk, state, child));
+    const append = (chunks, chunk) => {
+      const alreadyExceeded = state.exceeded;
+      appendBounded(chunks, chunk, state);
+      if (!alreadyExceeded && state.exceeded) terminate();
+    };
+    child.stdout.on("data", (chunk) => append(stdout, chunk));
+    child.stderr.on("data", (chunk) => append(stderr, chunk));
+    child.stdin.on("error", (error) => {
+      if (error?.code === "EPIPE") return;
+      state.inputError = error;
+      terminate();
+    });
     child.once("close", (code, signal) => {
+      if (state.interrupted) {
+        settle(
+          rejectPromise,
+          mediaError("MEDIA_TOOL_INTERRUPTED", "local media work was interrupted"),
+        );
+        return;
+      }
+      if (state.inputError) {
+        settle(
+          rejectPromise,
+          mediaError(
+            "MEDIA_TOOL_INPUT",
+            "local media input could not be delivered",
+            state.inputError,
+          ),
+        );
+        return;
+      }
       if (state.exceeded) {
-        rejectPromise(
+        settle(
+          rejectPromise,
           mediaError(
             "MEDIA_TOOL_OUTPUT_BOUNDARY",
             "a local media tool exceeded the bounded diagnostic capture",
@@ -92,7 +179,7 @@ export function runMediaCommand(
         );
         return;
       }
-      resolvePromise({
+      settle(resolvePromise, {
         code,
         signal,
         stdout: Buffer.concat(stdout).toString("utf8"),
@@ -424,7 +511,15 @@ export function selectPreparationStrategy(probe) {
     }
     if (hasVariableFrameRate(video)) holds.push("variable-frame-rate");
     const frameRate = sourceFrameRate(video);
-    if (frameRate !== null && frameRate > 90) holds.push("frame-rate-above-90");
+    if (frameRate === null || frameRate <= 0) holds.push("frame-rate-unconfirmed");
+    else if (frameRate > 90) holds.push("frame-rate-above-90");
+    const duration = observedDuration(probe, video);
+    if (duration === null || duration <= 0) holds.push("duration-unconfirmed");
+    const width = safeInteger(video.width);
+    const height = safeInteger(video.height);
+    if (width === null || width < 1 || height === null || height < 1) {
+      holds.push("geometry-unconfirmed");
+    }
   }
 
   if (audio) {
@@ -482,9 +577,8 @@ export function selectPreparationStrategy(probe) {
 function sanitizeTagKey(key) {
   if (typeof key !== "string") return "nonstandard-key";
   const normalized = key.normalize("NFKC").trim().toLowerCase();
-  return /^[a-z0-9][a-z0-9_.:-]{0,63}$/u.test(normalized)
-    ? normalized
-    : `nonstandard-key-${createHash("sha256").update(key).digest("hex").slice(0, 12)}`;
+  if (PUBLIC_METADATA_KEYS.has(normalized)) return normalized;
+  return `custom-key-${createHash("sha256").update(normalized || key).digest("hex").slice(0, 12)}`;
 }
 
 function tagClass(key) {
@@ -589,14 +683,20 @@ export async function scanMetadataWithBetterleaks(
     suppressionInspector = assertSingleSuppressionSurface,
     repositoryRoot = REPOSITORY_ROOT,
     configPath = BETTERLEAKS_CONFIG_PATH,
+    signal = null,
   } = {},
 ) {
+  assertOperationActive(signal);
   await suppressionInspector(repositoryRoot);
-  const installation = await installVerifier({ repositoryRoot });
+  assertOperationActive(signal);
+  const installation = await installVerifier({ repositoryRoot, signal });
+  assertOperationActive(signal);
   const canary = await canaryRunner({
     binaryPath: installation.binaryPath,
     configPath,
+    signal,
   });
+  assertOperationActive(signal);
   if (canary?.detected !== true || canary?.redacted !== true) {
     throw mediaError(
       "MEDIA_METADATA_SCANNER_CANARY",
@@ -609,8 +709,10 @@ export async function scanMetadataWithBetterleaks(
     cwd: repositoryRoot,
     scannerArguments: ["stdin"],
     input: metadataValuePayload(probe),
+    signal,
     scope: "media metadata standard-input scan",
   });
+  assertOperationActive(signal);
   return {
     status: result.findings.length === 0 ? "clean" : "findings",
     findingCount: result.findings.length,
@@ -714,6 +816,20 @@ function approximatelyEqual(left, right, tolerance) {
   return left !== null && right !== null && Math.abs(left - right) <= tolerance;
 }
 
+function expectedPreparedGeometry(video) {
+  const width = safeInteger(video?.width);
+  const height = safeInteger(video?.height);
+  const aspect = displayAspectRatio(video);
+  if (!width || !height || aspect === null || aspect <= 0) return null;
+  const boxWidth = Math.min(width, MAX_WIDTH);
+  const boxHeight = Math.min(height, MAX_HEIGHT);
+  const boxAspect = boxWidth / boxHeight;
+  const unconstrainedWidth = boxAspect > aspect ? boxHeight * aspect : boxWidth;
+  const unconstrainedHeight = boxAspect > aspect ? boxHeight : boxWidth / aspect;
+  const even = (value) => Math.max(2, Math.floor(value / 2) * 2);
+  return { width: even(unconstrainedWidth), height: even(unconstrainedHeight) };
+}
+
 export function comparePreparedMedia(sourceProbe, outputProbe) {
   const source = streamGroups(sourceProbe);
   const output = streamGroups(outputProbe);
@@ -738,6 +854,7 @@ export function comparePreparedMedia(sourceProbe, outputProbe) {
   const sourceHeight = safeInteger(sourceVideo?.height);
   const outputWidth = safeInteger(outputVideo?.width);
   const outputHeight = safeInteger(outputVideo?.height);
+  const expectedGeometry = expectedPreparedGeometry(sourceVideo);
   const audioPresenceMatches = Boolean(sourceAudio) === Boolean(outputAudio);
   const expectedAudioRate = sourceAudio
     ? [44_100, 48_000].includes(safeInteger(sourceAudio.sample_rate))
@@ -773,18 +890,19 @@ export function comparePreparedMedia(sourceProbe, outputProbe) {
         && Math.abs(sourceAspect - outputAspect) <= Math.max(0.001, sourceAspect * 0.005)
       ),
     },
-    sourceOrSmallerGeometry: {
+    selectedGeometry: {
       sourceWidth,
       sourceHeight,
+      expectedWidth: expectedGeometry?.width ?? null,
+      expectedHeight: expectedGeometry?.height ?? null,
       outputWidth,
       outputHeight,
       passed: (
-        sourceWidth !== null
-        && sourceHeight !== null
+        expectedGeometry !== null
         && outputWidth !== null
         && outputHeight !== null
-        && outputWidth <= sourceWidth
-        && outputHeight <= sourceHeight
+        && Math.abs(outputWidth - expectedGeometry.width) <= 2
+        && Math.abs(outputHeight - expectedGeometry.height) <= 2
       ),
     },
     audio: {
@@ -865,13 +983,45 @@ export function comparePreparedMedia(sourceProbe, outputProbe) {
   };
 }
 
-async function sha256File(filePath) {
+function assertOperationActive(signal) {
+  if (signal?.aborted) {
+    throw mediaError(
+      "MEDIA_TOOL_INTERRUPTED",
+      "local media inspection or preparation was interrupted",
+    );
+  }
+}
+
+function assertCacheableOutputSize(sizeBytes) {
+  if (sizeBytes > MAX_CACHEABLE_OBJECT_BYTES) {
+    throw mediaError(
+      "MEDIA_OUTPUT_SIZE",
+      "the prepared output exceeds the current cacheable-object size boundary",
+    );
+  }
+}
+
+async function sha256File(filePath, { signal = null } = {}) {
+  assertOperationActive(signal);
   const hash = createHash("sha256");
   let sizeBytes = 0;
-  for await (const chunk of createReadStream(filePath)) {
-    hash.update(chunk);
-    sizeBytes += chunk.byteLength;
+  try {
+    for await (const chunk of createReadStream(filePath, signal ? { signal } : undefined)) {
+      assertOperationActive(signal);
+      hash.update(chunk);
+      sizeBytes += chunk.byteLength;
+    }
+  } catch (error) {
+    if (signal?.aborted || error?.name === "AbortError") {
+      throw mediaError(
+        "MEDIA_TOOL_INTERRUPTED",
+        "local media inspection or preparation was interrupted",
+        error,
+      );
+    }
+    throw error;
   }
+  assertOperationActive(signal);
   return { sha256: hash.digest("hex"), sizeBytes };
 }
 
@@ -906,11 +1056,14 @@ async function assertUnusedOutput(outputPath) {
   }
   throw mediaError(
     "MEDIA_OUTPUT_EXISTS",
-    "the selected output already exists; choose a new versioned destination",
+    "the selected output already exists; verify it against the source after an interrupted or unknown prior outcome, and choose a new version only when verification fails",
   );
 }
 
-async function promotePreparedOutput(temporaryPath, outputPath) {
+async function promotePreparedOutput(temporaryPath, outputPath, { signal = null } = {}) {
+  // This is the local commit boundary: an observed interruption before this
+  // point leaves the selected output absent, while the hard-link itself is atomic.
+  assertOperationActive(signal);
   try {
     // The sibling hard-link creation is atomic and fails rather than replacing
     // a destination that appeared after the earlier availability check.
@@ -919,7 +1072,7 @@ async function promotePreparedOutput(temporaryPath, outputPath) {
     if (error?.code === "EEXIST") {
       throw mediaError(
         "MEDIA_OUTPUT_EXISTS",
-        "the selected output already exists; choose a new versioned destination",
+        "the selected output already exists; verify it against the source after an interrupted or unknown prior outcome, and choose a new version only when verification fails",
         error,
       );
     }
@@ -931,7 +1084,8 @@ async function promotePreparedOutput(temporaryPath, outputPath) {
   }
 }
 
-async function assertSourceUnchanged(sourcePath, identity, digest) {
+async function assertSourceUnchanged(sourcePath, identity, digest, { signal = null } = {}) {
+  assertOperationActive(signal);
   const currentIdentity = await assertRegularSource(sourcePath);
   const identityMatches = (
     currentIdentity.device === identity.device
@@ -939,7 +1093,7 @@ async function assertSourceUnchanged(sourcePath, identity, digest) {
     && currentIdentity.size === identity.size
     && currentIdentity.modifiedMilliseconds === identity.modifiedMilliseconds
   );
-  const currentDigest = await sha256File(sourcePath);
+  const currentDigest = await sha256File(sourcePath, { signal });
   if (
     !identityMatches
     || currentDigest.sizeBytes !== digest.sizeBytes
@@ -1160,29 +1314,40 @@ async function inspectRaw(
     ffmpegBinary,
     ffprobeBinary,
     metadataScanner,
+    maximumSizeBytes = null,
+    signal = null,
   },
 ) {
+  assertOperationActive(signal);
   const identity = await assertRegularSource(sourcePath);
-  const digest = await sha256File(sourcePath);
+  if (maximumSizeBytes !== null && identity.size > maximumSizeBytes) {
+    assertCacheableOutputSize(identity.size);
+  }
+  const digest = await sha256File(sourcePath, { signal });
   const probe = await probeMedia(sourcePath, { ffprobeBinary, commandRunner });
+  assertOperationActive(signal);
   await strictDecode(sourcePath, { ffmpegBinary, commandRunner });
+  assertOperationActive(signal);
   let metadataScan;
   try {
-    metadataScan = sanitizedMetadataScan(await metadataScanner(probe));
+    metadataScan = sanitizedMetadataScan(await metadataScanner(probe, { signal }));
   } catch (error) {
+    if (signal?.aborted) assertOperationActive(signal);
+    if (error instanceof MediaPreparationError) throw error;
     throw mediaError(
       "MEDIA_METADATA_SCAN_FAILED",
       "the metadata secret-material inspection did not complete",
       error,
     );
   }
+  assertOperationActive(signal);
   if (metadataScan.status !== "clean") {
     throw mediaError(
       "MEDIA_METADATA_SECRET_CANDIDATES",
       `the metadata inspection found ${metadataScan.findingCount} secret-shaped candidate${metadataScan.findingCount === 1 ? "" : "s"}`,
     );
   }
-  await assertSourceUnchanged(sourcePath, identity, digest);
+  await assertSourceUnchanged(sourcePath, identity, digest, { signal });
   const metadata = summarizeMetadata(probe, { metadataScan });
   return {
     probe,
@@ -1200,10 +1365,15 @@ async function inspectRaw(
 
 function mediaOptions(options = {}) {
   return {
-    commandRunner: options.commandRunner ?? runMediaCommand,
+    commandRunner: options.commandRunner
+      ?? ((binary, argumentsList) => runMediaCommand(binary, argumentsList, {
+        signal: options.signal ?? null,
+      })),
     ffmpegBinary: options.ffmpegBinary ?? "ffmpeg",
     ffprobeBinary: options.ffprobeBinary ?? "ffprobe",
     metadataScanner: options.metadataScanner ?? scanMetadataWithBetterleaks,
+    signal: options.signal ?? null,
+    temporaryRemover: options.temporaryRemover ?? rm,
   };
 }
 
@@ -1220,7 +1390,7 @@ export async function inspectR2ProgressiveVideo({ sourcePath, ...options } = {})
   };
 }
 
-async function runFfmpeg(argumentsList, { ffmpegBinary, commandRunner }) {
+async function runFfmpeg(argumentsList, { ffmpegBinary, commandRunner, signal }) {
   let result;
   try {
     result = await commandRunner(ffmpegBinary, argumentsList);
@@ -1231,6 +1401,7 @@ async function runFfmpeg(argumentsList, { ffmpegBinary, commandRunner }) {
   if (result.signal || result.code !== 0) {
     throw mediaError("MEDIA_PREPARATION_FAILED", "FFmpeg preparation did not complete");
   }
+  assertOperationActive(signal);
 }
 
 async function verifyPacketPreservation(sourcePath, outputPath, hasAudio, options) {
@@ -1241,6 +1412,7 @@ async function verifyPacketPreservation(sourcePath, outputPath, hasAudio, option
       packetReport(sourcePath, stream, options),
       packetReport(outputPath, stream, options),
     ]);
+    assertOperationActive(options.signal);
     const hashesPassed = comparePacketHashes(sourcePackets.hashes, outputPackets.hashes);
     const timingPassed = comparePacketTiming(sourcePackets.timing, outputPackets.timing);
     const passed = hashesPassed && timingPassed;
@@ -1262,14 +1434,23 @@ async function verifyPacketPreservation(sourcePath, outputPath, hasAudio, option
 }
 
 async function verifyPreparedFile(outputPath, options) {
+  assertOperationActive(options.signal);
+  const identity = await assertRegularSource(outputPath);
+  assertCacheableOutputSize(identity.size);
   const probe = await probeMedia(outputPath, options);
+  assertOperationActive(options.signal);
   await strictDecode(outputPath, options);
+  assertOperationActive(options.signal);
   const metadata = summarizeMetadata(probe);
   assertPreparedProbe(probe, metadata);
   const boxes = await readMp4TopLevelBoxes(outputPath);
+  assertOperationActive(options.signal);
   const fastStart = verifyFastStartBoxes(boxes);
-  const digest = await sha256File(outputPath);
+  const digest = await sha256File(outputPath, { signal: options.signal });
+  assertCacheableOutputSize(digest.sizeBytes);
+  await assertSourceUnchanged(outputPath, identity, digest, options);
   return {
+    identity,
     probe,
     report: {
       digest,
@@ -1345,6 +1526,8 @@ export async function prepareR2ProgressiveVideo({
       videoColor: groups.video[0],
     });
 
+  let result = null;
+  let primaryError = null;
   try {
     await runFfmpeg(argumentsList, options);
     const output = await verifyPreparedFile(temporaryPath, options);
@@ -1358,9 +1541,10 @@ export async function prepareR2ProgressiveVideo({
     const packetPreservation = strategy === "copy-remux"
       ? await verifyPacketPreservation(sourcePath, temporaryPath, Boolean(audio), options)
       : { applicable: false, passed: null, streams: [] };
-    await assertSourceUnchanged(sourcePath, source.identity, source.report.digest);
-    await promotePreparedOutput(temporaryPath, outputPath);
-    return {
+    await assertSourceUnchanged(sourcePath, source.identity, source.report.digest, options);
+    await assertSourceUnchanged(temporaryPath, output.identity, output.report.digest, options);
+    await promotePreparedOutput(temporaryPath, outputPath, options);
+    result = {
       schema: "r2-progressive-video-preparation/v1",
       operation: "prepare",
       ok: true,
@@ -1372,9 +1556,25 @@ export async function prepareR2ProgressiveVideo({
       atomicPromotion: true,
       publicationIdentity: semanticId === null ? null : { semanticId, assetVersion },
     };
-  } finally {
-    await rm(temporaryPath, { force: true });
+  } catch (error) {
+    primaryError = error;
   }
+
+  let cleanupComplete = true;
+  try {
+    await options.temporaryRemover(temporaryPath, { force: true });
+  } catch {
+    cleanupComplete = false;
+  }
+  const cleanup = {
+    complete: cleanupComplete,
+    recovery: cleanupComplete ? null : "inspect-and-remove-the-exact-temporary-sibling",
+  };
+  if (primaryError) {
+    primaryError.temporaryCleanup = cleanup;
+    throw primaryError;
+  }
+  return { ...result, temporaryCleanup: cleanup };
 }
 
 export async function verifyR2ProgressiveVideo({
@@ -1386,18 +1586,24 @@ export async function verifyR2ProgressiveVideo({
     throw mediaError("MEDIA_VERIFY_ARGUMENT", "verify requires one prepared MP4 file");
   }
   const options = mediaOptions(providedOptions);
-  const inspected = await inspectRaw(mediaPath, options);
+  const inspected = await inspectRaw(mediaPath, {
+    ...options,
+    maximumSizeBytes: MAX_CACHEABLE_OBJECT_BYTES,
+  });
   const boxes = await readMp4TopLevelBoxes(mediaPath);
+  assertOperationActive(options.signal);
   const fastStart = verifyFastStartBoxes(boxes);
   assertPreparedProbe(inspected.probe, inspected.report.metadata);
   let packetPreservation = { applicable: false, passed: null, streams: [] };
   let semanticPreservation = { applicable: false, passed: null, checks: {} };
   if (sourcePath !== null) {
     const sourceIdentity = await assertRegularSource(sourcePath);
-    const sourceDigest = await sha256File(sourcePath);
+    const sourceDigest = await sha256File(sourcePath, { signal: options.signal });
     const sourceProbe = await probeMedia(sourcePath, options);
+    assertOperationActive(options.signal);
     await strictDecode(sourcePath, options);
-    await assertSourceUnchanged(sourcePath, sourceIdentity, sourceDigest);
+    assertOperationActive(options.signal);
+    await assertSourceUnchanged(sourcePath, sourceIdentity, sourceDigest, options);
     semanticPreservation = {
       applicable: true,
       ...comparePreparedMedia(sourceProbe, inspected.probe),
@@ -1416,7 +1622,9 @@ export async function verifyR2ProgressiveVideo({
         options,
       );
     }
+    await assertSourceUnchanged(sourcePath, sourceIdentity, sourceDigest, options);
   }
+  await assertSourceUnchanged(mediaPath, inspected.identity, inspected.report.digest, options);
   return {
     schema: "r2-progressive-video-preparation/v1",
     operation: "verify",
@@ -1511,6 +1719,20 @@ function usage() {
   ].join("\n");
 }
 
+export function mediaCliFailureMessage(error) {
+  const lines = [
+    error instanceof MediaPreparationError
+      ? error.message
+      : "MEDIA_PREPARATION_UNEXPECTED: media preparation did not complete",
+  ];
+  if (error?.temporaryCleanup?.complete === false) {
+    lines.push(
+      "MEDIA_TEMPORARY_CLEANUP_INCOMPLETE: inspect and remove the exact hidden temporary sibling before retrying",
+    );
+  }
+  return `${lines.join("\n")}\n`;
+}
+
 async function main() {
   const options = parsePrepareCliArguments(process.argv.slice(2));
   if (options.operation === "help") {
@@ -1523,16 +1745,13 @@ async function main() {
       ? await prepareR2ProgressiveVideo(options)
       : await verifyR2ProgressiveVideo(options);
   process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+  if (result.ok !== true) process.exitCode = 1;
 }
 
 const invokedPath = process.argv[1] ? resolve(process.argv[1]) : "";
 if (invokedPath === fileURLToPath(import.meta.url)) {
   main().catch((error) => {
-    if (error instanceof MediaPreparationError) {
-      process.stderr.write(`${error.message}\n`);
-    } else {
-      process.stderr.write("MEDIA_PREPARATION_UNEXPECTED: media preparation did not complete\n");
-    }
+    process.stderr.write(mediaCliFailureMessage(error));
     process.exitCode = 1;
   });
 }
