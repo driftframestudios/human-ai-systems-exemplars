@@ -185,8 +185,10 @@ observations before interpreting the run.
 
 ## Media preparation and R2 video delivery
 
-The media-publication suite keeps source preparation, Worker behavior, and a
-live edge observation as three distinct receivers:
+The media-publication suite keeps source preparation, the bounded video-family
+descriptor, Worker behavior, and a live edge observation as distinct
+receivers. The Context Canvas source suite separately binds the selected native
+player, poster, visible sequence, and insertion coordinate to its visitor page:
 
 ```sh
 npm run test:media-publication
@@ -194,20 +196,32 @@ npm run dry-run:r2-video-delivery
 npm run media:video:inspect -- --source <source.mp4>
 npm run media:video:prepare -- --source <source.mp4> --output <master.mp4>
 npm run media:video:verify -- --source <master.mp4>
+npm run test:context-canvas
 ```
 
 The local tests exercise preparation routing, strict decode, Fast Start,
 copy-remux packet identity, selected scaling geometry, sanitized metadata
 reporting, atomic promotion and cleanup disposition, the finite public path
 grammar, exact R2 key mapping, typed response failures, stream ownership,
-bounded reads, and both head-first and cold-range-first live verification.
+bounded reads, accepted movie-to-poster lineage, visitor-receiver binding, and
+both head-first and cold-range-first live verification.
 The required CI receiver proves both real FFmpeg preparation branches and the
 synthetic failure contracts. The Wrangler dry run establishes
 that the selected source bundles against the declared R2 binding and route; it
 does not create a bucket, upload bytes, attach the route, or observe the edge.
 
-After human-owned R2 upload and route activation, use the explicitly admitted
+After human-owned R2 upload and route activation, begin with the transport-only
 live check:
+
+```sh
+npm run verify:r2-video:live -- \
+  --video https://vik.guru/v1-cdn/video/<id>/<version>/movie.mp4 \
+  --sha256 <accepted-video-sha256> \
+  --size <accepted-video-bytes>
+```
+
+After the companion carriers are accepted, extend the same check with their
+exact identities:
 
 ```sh
 npm run verify:r2-video:live -- \

@@ -14,16 +14,16 @@ task_type: media_publication_guidance
 The selected first public route uses an accepted progressive MP4 from R2 behind
 the same-origin `/v1-cdn/video/` Worker. This document remains the adaptive
 delivery guide for a later Cloudflare Stream migration. The accepted semantic
-identity, ingest master, poster, captions, transcript, accessibility decisions,
-and R2 rollback family enter that migration together.
+identity, ingest master, poster, selected accessibility companions, and R2
+rollback family enter that migration together.
 
 ## Intended result
 
 One exact source produces one inspected, metadata-bounded MP4 upload master.
 Cloudflare Stream receives the upload master and produces adaptive HLS and DASH
-delivery. The visitor route supplies controls, captions, a descriptive
-transcript, a poster, a stable layout box, and the smallest tested browser
-capability set.
+delivery. The visitor route supplies controls, a poster, a stable layout box,
+the source-fitting caption-and-transcript or silent-sequence branch, and the
+smallest tested browser capability set.
 
 ## Delivery decision
 
@@ -75,7 +75,7 @@ that structural tag separately from the reviewed authored-metadata allowlist.
 | Audio | AAC-LC, mono or stereo; preserve a suitable 44.1 kHz or 48 kHz source, with 48 kHz as the new-master default when resampling is required | The repository working profile accepts both common source rates; predictable channel and sample-rate handling aids validation |
 | Random access | Preserve source-appropriate on-demand keyframe structure and verify seeking | Current Stream pages differ: the FAQ recommends closed GOP for newly produced uploads, while the upload overview marks closed GOP as required only for live. Fixed `-g 96` only matches four seconds at 24 fps. |
 | Metadata | Explicit stream selection, reviewed public metadata allowlist, selected chapters only, and post-encode format-aware inspection | Public bytes carry intended media and reviewed public metadata |
-| Accessibility | Reviewed WebVTT captions, a nearby descriptive transcript, a meaningful poster, visitor controls, and stable dimensions | Audio, speech, meaningful sound, and meaningful visuals remain available across access needs |
+| Accessibility | A meaningful poster, visitor controls, stable dimensions, and either reviewed WebVTT captions plus a nearby descriptive transcript or explicit silent standing plus a visible ordered visual sequence | Audio, speech, meaningful sound, and meaningful visuals remain available across access needs |
 
 Cloudflare currently recommends H.264 video, AAC audio, an MP4 container,
 progressive scan, Fast Start, mono or stereo audio, and source-rate upload for
@@ -222,16 +222,16 @@ acceptance claim.
    the visitor job.
 5. Verify decoding, geometry, frame rate, audio, synchronization, metadata,
    visual quality, and digest.
-6. Add the accepted master, poster, captions, and transcript through the
-   repository's semantic asset and production-selection owners.
+6. Add the accepted master, poster, and selected accessibility companions
+   through the repository's semantic asset and production-selection owners.
 7. Upload the accepted master to Cloudflare Stream through an authorized human
    operator. API tokens remain in the protected platform store.
 8. The authorized human operator sets the selected access posture and exact
    allowed playback origins.
 9. Wait for `readyToStream: true`, `status.state: ready`, and
    `status.pctComplete: 100` before accepting the complete adaptive set. The
-   authorized human operator uploads reviewed WebVTT captions; the
-   collaboration inspects the Stream-generated thumbnail, HLS, and DASH
+   authorized human operator uploads reviewed WebVTT captions when selected.
+   The collaboration inspects the Stream-generated thumbnail, HLS, and DASH
    results. Bind the reviewed repository poster through the Stream player's
    `poster` option and verify the exact public URL; the generated thumbnail
    remains the platform fallback.
@@ -242,9 +242,10 @@ acceptance claim.
     of dynamic manifests; repository artifacts carry the stable semantic and
     recovery coordinates.
 12. Observe signed-out playback at representative narrow, tablet, desktop, and
-    wide viewports; include keyboard operation, captions, transcript access,
-    poster behavior, audio, seeking, fullscreen when selected, reduced-motion
-    posture, network interruption, and recovery.
+    wide viewports; include keyboard operation, poster behavior, seeking,
+    fullscreen when selected, reduced-motion posture, network interruption,
+    recovery, and the applicable audio-bearing or verified-silent
+    accessibility branch.
 13. Record a public-safe receipt with source revision, public asset identity,
     accepted digest, accessibility carriers, route result, and evidence limits.
 
@@ -303,7 +304,7 @@ the resulting disposition from the public-possible guidance alone.
 ## Re-entry
 
 The first two candidate videos reopen the guidance with exact source probes,
-selected visitor placements, captions and transcript standing, and actual
+selected visitor placements, source-fitting accessibility standing, and actual
 output observations. The first exercise remains command-guided;
 decision-changing friction observed across repeated use can earn a public
 helper.

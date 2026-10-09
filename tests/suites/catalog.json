@@ -157,7 +157,8 @@
         "tests/context-canvas/visual-reference-observations.test.mjs",
         "tests/context-canvas/visitor-image-alternatives.test.mjs",
         "tests/context-canvas/visitor-surface-attribution.test.mjs",
-        "tests/context-canvas/visitor-terminology.test.mjs"
+        "tests/context-canvas/visitor-terminology.test.mjs",
+        "tests/context-canvas/visitor-video-contract.test.mjs"
       ],
       "profile": "node-source",
       "command": {
@@ -488,6 +489,7 @@
       "members": [
         "tests/media-publication/prepare-r2-progressive-video.test.mjs",
         "tests/media-publication/r2-video-worker.test.mjs",
+        "tests/media-publication/video-publication-manifest.test.mjs",
         "tests/media-publication/verify-r2-video-route.test.mjs"
       ],
       "profile": "node-source",

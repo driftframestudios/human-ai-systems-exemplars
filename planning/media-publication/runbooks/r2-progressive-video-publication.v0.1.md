@@ -73,15 +73,22 @@ npm run media:video:verify -- \
 
 ## Accessibility companions
 
-1. Select or generate a meaningful poster through the responsive-raster
-   owner.
-2. Review WebVTT cue timing, order, language, speech, and meaningful sound.
-3. Place a descriptive transcript in readable visitor-page HTML and include
-   meaningful visual information.
+1. Derive poster candidates from the digest-bound accepted master through
+   `accessible-video-publication`. Responsive-raster tooling may encode and
+   inspect the selected still while the video packet retains its master,
+   timestamp, settings, geometry, and digest lineage.
+2. For audio-bearing media, review WebVTT cue timing, order, language, speech,
+   and meaningful sound, then place a descriptive transcript in readable
+   visitor-page HTML.
+3. For verified silent video, record the silent-source standing, keep an empty
+   captions carrier outside the family, and write a visible ordered sequence
+   of meaningful visual changes.
 4. Decide whether audio description, a timed descriptions track, or a
    conforming media alternative carries remaining visual meaning.
-5. Review the page's accessible name, explanatory prose, intrinsic geometry,
-   keyboard route, visitor-controlled playback, and fallback download.
+5. Review the page's accessible name, concise description relationships,
+   separately navigable transcript or visual sequence, explanatory prose,
+   intrinsic geometry, keyboard route, visitor-controlled playback, and
+   fallback download.
 
 ## Object plan
 
@@ -90,17 +97,24 @@ Form a finite packet before upload:
 ```text
 v1/video/<semantic-id>/<asset-version>/movie.mp4
 v1/video/<semantic-id>/<asset-version>/poster.webp
-v1/video/<semantic-id>/<asset-version>/captions.en.vtt
+v1/video/<semantic-id>/<asset-version>/captions.en.vtt      # when selected
 v1/video/<semantic-id>/<asset-version>/descriptions.en.vtt  # when selected
 ```
 
 Record exact media type, `Cache-Control: public, max-age=31536000, immutable`,
 byte count, SHA-256, and source coordinate for every selected object. A changed
 byte or metadata set receives a new asset version. The current image-only
-asset inventory continues to own raster selection; the video packet remains a
-separate, compact descriptor. Keep the video at or below 512 MB (512,000,000
+asset inventory remains separate from this poster lineage; the video packet is
+its own compact descriptor. Keep the video at or below 512 MB (512,000,000
 bytes) and each poster or WebVTT companion at or below 32 MiB (33,554,432
 bytes), matching Worker admission and live verification.
+
+An object written beneath the active `v1/video/` prefix becomes publicly
+reachable through the Worker route. Before that write, the human activation
+owner confirms the media's rights, consent, visible-content review, attribution,
+public-candidate role, public access posture, release owner, and authority to
+publish the bytes. Companion, receiving-page, and browser-acceptance fields may
+remain explicitly open for the transport-only checkpoint below.
 
 Use the R2 S3-compatible API's conditional `PutObject` operation. The
 `If-None-Match: *` precondition makes the unused versioned key an enforced
@@ -207,6 +221,18 @@ URL state, and begin the fresh-version observations below.
 
 ## Live receiver observation
 
+Begin the transport-only observation with the canonical MP4:
+
+```sh
+npm run verify:r2-video:live -- \
+  --video https://vik.guru/v1-cdn/video/<id>/<version>/movie.mp4 \
+  --sha256 <accepted-video-sha256> \
+  --size <accepted-video-bytes>
+```
+
+After the companion carriers are accepted, extend the same observation with
+their exact identities:
+
 ```sh
 npm run verify:r2-video:live -- \
   --video https://vik.guru/v1-cdn/video/<id>/<version>/movie.mp4 \
@@ -234,9 +260,15 @@ npm run verify:r2-video:live -- \
   --size <accepted-video-bytes>
 ```
 
-The verifier above owns the positive object, range, cache, and companion
-contract. Observe the production route boundary separately with `HEAD` so the
-expected failure remains body-free and inspectable:
+The verifier owns the positive object, range, conditional revalidation, cache,
+and any supplied companion contract. It sends the strong validator observed
+from `HEAD` through `If-None-Match` and requires a `304` with no
+Fetch-exposed body, the matching validator, exact immutable cache policy, and
+public hardening headers. It also requires an absent `Content-Encoding` header and an
+absent or `HEAD`-matching `Content-Length` and `Content-Type` on the `304`.
+`Accept-Ranges` remains a `HEAD` and complete `GET` contract; the cache-generated
+`206` and `304` may omit it. Observe the production route boundary separately
+with `HEAD` so the expected failure remains body-free and inspectable:
 
 ```sh
 curl --silent --show-error --head \
@@ -264,13 +296,16 @@ Accept:
 - a second fresh version establishes the cold-range path with an initial
   `Cf-Cache-Status: MISS`, followed by complete-object verification;
 - exact types, size, strong validator, immutable policy, `nosniff`, and
-  `Accept-Ranges`;
+  `Accept-Ranges` on `HEAD` and complete `GET`;
+- a matching `If-None-Match` request returns `304` with no Fetch-exposed body,
+  the strong validator, immutable cache policy, absent `Content-Encoding`,
+  absent or `HEAD`-matching `Content-Length` and `Content-Type`, and hardening
+  headers;
 - matching complete-object digest;
 - exact `bytes=0-1` partial response and correct unsatisfiable-range behavior;
 - cache observations whose meaning stays limited to the observed edge;
 - exact positive routes from the verifier and bounded route failures from the
-  separate boundary observation; and
-- companion types and public retrieval.
+  separate boundary observation.
 
 At a cold Workers Cache edge, Cloudflare converts `HEAD` to an internal `GET`
 and can fill the complete asset. Treat the first `HEAD` as a potential full R2
@@ -278,11 +313,63 @@ read. The direct Worker unit test of `MEDIA_BUCKET.head()` establishes handler
 behavior outside that edge-cache conversion rather than predicting the cold
 production request path.
 
-Then exercise signed-out native playback in Chromium, Firefox, and a
-consequential Safari/iOS receiver at representative narrow, tablet, desktop,
-and wide viewports. Observe controls, keyboard use, poster, caption selection,
-transcript access, seek, volume, audio, focus, interruption, orientation,
-layout stability, and recovery.
+Before taking the transport-only checkpoint, load the canonical MP4 directly
+in a signed-out native player in the selected automated browser engines.
+Confirm that metadata loads and that play and seek behavior preserve the
+accepted duration and geometry. Keep this standalone transport observation
+distinct from the later receiving-page accessibility and layout exercise.
+
+Exercise withdrawal with a disposable family before first visitor-page
+activation. Remove its visitor reference, remove or quarantine its R2 object,
+deploy a new Worker version to 100 percent traffic, keep `workers.dev` and
+Version URLs disabled, and verify that the former public route fails. Retain
+the preceding version for diagnosis without routing traffic back to it.
+Quarantine moves the family outside the served `v1/video/` prefix or into a
+separate private bucket; an in-place label inside the served prefix does not
+change public reachability.
+
+Workers Caching is separate from the zone cache: dashboard, zone API, and
+Terraform purges do not remove its entries. The configured
+`cross_version_cache: false` gives each full deployment an isolated cold cache.
+A future `ctx.cache.purge()` route requires a human-authorized private
+invocation design. The public media route exposes read behavior only.
+
+### Transport-only checkpoint
+
+The operator may pause the publication workflow at a resumable transport-only
+checkpoint after:
+
+- canonical stored metadata and a fresh downloaded digest match the accepted
+  master;
+- the bucket and route retain the selected private-bucket, same-origin, and
+  Fail-closed state;
+- `HEAD`, complete `GET`, byte-range `206`, a `304` with no Fetch-exposed body,
+  absent `Content-Encoding`, and absent or `HEAD`-matching `Content-Length` and
+  `Content-Type`, unsatisfiable `416`, exact representation headers, hardening,
+  bounded route failures, and edge-cache observations pass;
+- a signed-out standalone native player loads, seeks, and plays in the selected
+  automated browser engines; and
+- the disposable withdrawal and recovery exercise passes.
+
+The versioned Worker object URL is publicly reachable at this checkpoint.
+Complete visitor-page publication additionally requires the selected poster,
+caption or silent-source standing, transcript or visual description,
+visitor-page placement, CSP, page-level accessibility, physical Safari/iOS
+observation, and human release. Record those boundaries and any incomplete
+companion, receiving-page, or browser-acceptance fields in the receiving Issue,
+then resume with the companions and selected visitor page.
+
+Resume companion and visitor-page acceptance with the selected poster,
+captions or explicit silent-source standing, transcript or visual description,
+public retrieval, page placement, and page-level accessibility contract.
+
+For full visitor-page acceptance, exercise signed-out native playback in
+Chromium, Firefox, and a consequential Safari/iOS receiver at representative
+narrow, tablet, desktop, and wide viewports. Observe controls, keyboard use,
+poster, seek, focus, interruption, orientation, layout stability, recovery,
+and the source's selected accessibility branch: caption selection, transcript,
+volume, and audio for audio-bearing media; or explicit silent standing and the
+visible ordered sequence for verified silent video.
 
 ## Calm recovery
 
@@ -309,21 +396,6 @@ route before choosing deploy, rollback, or no action. After an interrupted
 `r2.dev` observation, read its current state first and disable an enabled
 development URL. These state reads keep repeated operator actions idempotent.
 
-Before first activation, exercise an emergency withdrawal with a disposable
-family. Remove its visitor reference, remove or quarantine its R2 object,
-deploy a new Worker version to 100 percent traffic, keep `workers.dev` and
-Version URLs disabled, and verify that the former public route fails. Retain
-the preceding version for diagnosis without routing traffic back to it.
-Quarantine moves the family outside the served `v1/video/` prefix or into a
-separate private bucket; an in-place label inside the served prefix does not
-change public reachability.
-
-Workers Caching is separate from the zone cache: dashboard, zone API, and
-Terraform purges do not remove its entries. The configured
-`cross_version_cache: false` gives each full deployment an isolated cold cache.
-A future `ctx.cache.purge()` route requires a human-authorized private
-invocation design. The public media route exposes read behavior only.
-
 ## Return
 
 Return only public-safe material:
@@ -344,4 +416,5 @@ The run completes when accepted source and companion packets, R2 objects,
 Worker route, CDN/range behavior, native player, accessibility carriers,
 signed-out browsers, and recovery all agree. A local-only run completes as a
 bounded preparation handoff when platform or human activation authority is the
-remaining step.
+remaining step. A live transport-only run pauses as the bounded checkpoint
+named above; it resumes before visitor-page activation.

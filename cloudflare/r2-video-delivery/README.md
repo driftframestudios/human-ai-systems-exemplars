@@ -93,16 +93,39 @@ Worker, cache, WAF, or access-control behavior. Production pages use the
 same-origin Worker route; the operator disables the development URL after any
 use and leaves that hostname unaliased.
 
-Before activation, exercise withdrawal with a disposable object family. Remove
-the visitor reference, remove or quarantine the R2 object, deploy a fresh
-Worker version to 100 percent traffic, keep `workers.dev` and Version URLs
-disabled, and confirm that the old public route fails. With
-`cross_version_cache: false`, the new deployment starts from an isolated cold
-cache. The recovery owner retains the withdrawn Worker version without routing
-traffic back to it. Cloudflare's [zone-level dashboard and API purge do not
-clear Workers Caching][cache-purge]; a future `ctx.cache.purge()` route enters only with a
-human-authorized private invocation design. This package exposes no public
-administrative endpoint.
+Before first visitor-page activation, exercise withdrawal with a disposable
+object family. Remove its visitor reference, remove or quarantine the R2
+object, deploy a fresh Worker version to 100 percent traffic, keep
+`workers.dev` and Version URLs disabled, and confirm that the old public route
+fails. With `cross_version_cache: false`, the new deployment starts from an
+isolated cold cache. The recovery owner retains the withdrawn Worker version
+without routing traffic back to it. Cloudflare's [zone-level dashboard and API
+purge do not clear Workers Caching][cache-purge]; a future `ctx.cache.purge()`
+route enters only with a human-authorized private invocation design. This
+package exposes no public administrative endpoint.
+
+## Transport-only checkpoint
+
+The operator may pause the publication workflow at a resumable transport-only
+checkpoint after:
+
+- canonical stored metadata and a fresh downloaded digest match the accepted
+  master;
+- the bucket and route retain the selected private-bucket, same-origin, and
+  Fail-closed state;
+- `HEAD`, complete `GET`, byte-range `206`, a `304` with no Fetch-exposed body,
+  absent `Content-Encoding`, and absent or `HEAD`-matching `Content-Length` and
+  `Content-Type`, unsatisfiable `416`, exact representation headers, hardening,
+  bounded route failures, and edge-cache observations pass;
+- a signed-out standalone native player loads, seeks, and plays in the selected
+  automated browser engines; and
+- the disposable withdrawal and recovery exercise passes.
+
+The versioned Worker object URL is publicly reachable at this checkpoint.
+Complete visitor-page publication additionally requires the selected poster,
+caption or silent-source standing, transcript or visual description,
+visitor-page markup, CSP, page-level accessibility, physical Safari/iOS
+observation, and human release.
 
 The project-level preparation, upload, activation, live-observation, and
 recovery sequence lives in the [R2 progressive-video runbook][runbook].

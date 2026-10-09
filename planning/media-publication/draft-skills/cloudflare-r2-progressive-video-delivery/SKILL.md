@@ -41,11 +41,12 @@ Select one public prefix and publish only:
 ```
 
 Map that route to one versioned object prefix in a dedicated bucket. Accepted
-carriers are the MP4 master, raster poster, captions, and optional timed descriptions.
-Readable transcript HTML stays with the visitor page. Query variants,
-ambiguous encoding, neighboring paths, and active media types remain outside
-the route. A bounded lowercase filename token maps to a human-reviewed BCP 47
-language value in the page's `srclang`.
+carriers are the MP4 master, raster poster, and the WebVTT captions or timed
+descriptions selected for that source. Readable transcript or silent visual
+sequence HTML stays with the visitor page. Query variants, ambiguous encoding,
+neighboring paths, and active media types remain outside the route. A bounded
+lowercase filename token maps to a human-reviewed BCP 47 language value in the
+page's `srclang`.
 
 ### Rule: Complete Worker responses enable cached ranges
 
@@ -73,12 +74,14 @@ Deletes require an explicit cache and recovery decision.
 
 ### Rule: Same-origin native playback minimizes capabilities
 
-Use native HTML controls, a same-origin MP4 and VTT route, visitor-initiated
-playback, stable geometry, poster, captions, nearby transcript, and fallback
-download. This branch uses the browser's native player and keeps the capability
-set to same-origin MP4/VTT, controls, poster, transcript, and fallback download.
-Player libraries, iframe capabilities, cross-origin grants, autoplay, and
-adaptive manifests enter with a selected behavior.
+Use native HTML controls, a same-origin MP4 and any selected VTT carriers,
+visitor-initiated playback, stable geometry, poster, the applicable accessible
+companions, and a fallback download. Audio-bearing media carries reviewed
+captions for speech and meaningful sound plus a nearby transcript. Verified
+silent video carries explicit silent standing and a visible ordered visual
+sequence while leaving an empty captions carrier outside the family. Player
+libraries, iframe capabilities, cross-origin grants, autoplay, and adaptive
+manifests enter with a selected behavior.
 
 ### Rule: Development exposure stays temporary and distinct
 
@@ -115,8 +118,8 @@ access-control behavior.
    Bind every selected companion to its expected size and digest.
 9. Activate native visitor markup independently from object upload.
 10. Observe signed-out Chromium, Firefox, and consequential Safari/iOS
-   playback, keyboard operation, captions, transcript, interruption, layout,
-   and recovery.
+   playback, keyboard operation, the applicable caption-and-transcript or
+   silent-sequence branch, interruption, layout, and recovery.
 11. Return public-safe coordinates and retain protected platform diagnostics
     with the operator.
 
@@ -147,8 +150,10 @@ remains read-only.
 - A useful direct-object check may use a short-lived human-enabled `r2.dev`
   endpoint; rate limits and missing edge controls keep it outside production
   standing.
-- Incomplete captions, transcript, poster, or visual-description standing
-  holds page activation while the accepted master remains recoverable.
+- Incomplete poster or accessibility-companion standing holds page activation
+  while the accepted master remains recoverable. The applicable branch is
+  captions plus transcript for audio-bearing media, or explicit silent-source
+  standing plus a visible visual sequence for verified silent video.
 
 ## Conditional context
 
@@ -163,6 +168,7 @@ receiver behavior changes.
 
 The candidate settles after repeated source-to-public exercises confirm the
 same route grammar, preparation handoff, range/cache behavior, accessibility
-companions, browser acceptance, human activation boundary, and recovery path.
+companions selected for each source, browser acceptance, human activation
+boundary, and recovery path.
 Only then does the existing public skill-selection process receive a promotion
 candidate.

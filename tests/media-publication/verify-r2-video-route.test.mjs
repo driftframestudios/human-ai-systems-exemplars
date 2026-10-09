@@ -40,8 +40,21 @@ function immutableHeaders({
   };
 }
 
+function notModifiedHeaders({ extra = {} } = {}) {
+  return {
+    "cache-control": "public, max-age=31536000, immutable",
+    etag,
+    "cf-cache-status": "HIT",
+    "cross-origin-resource-policy": "same-origin",
+    "referrer-policy": "no-referrer",
+    "x-content-type-options": "nosniff",
+    ...extra,
+  };
+}
+
 function passingFetch({
   mutateRangeHeaders,
+  mutateNotModifiedHeaders,
   captionsType = "text/vtt; charset=utf-8",
   throwFor = null,
 } = {}) {
@@ -72,6 +85,11 @@ function passingFetch({
           extra: { "accept-ranges": "bytes" },
         }),
       });
+    }
+    if (requestHeaders.get("if-none-match") === etag) {
+      const headers = notModifiedHeaders();
+      mutateNotModifiedHeaders?.(headers);
+      return new Response(null, { status: 304, headers });
     }
     if (requestHeaders.get("range") === "bytes=0-1") {
       const headers = immutableHeaders({
@@ -145,6 +163,16 @@ test("accepts exact video, captions, descriptions, and poster byte contracts", a
   assert.equal(result.video.range.contentEncodingAbsent, true);
   assert.equal(result.video.unsatisfiableRange.status, 416);
   assert.equal(result.video.unsatisfiableRange.contentRangeExact, true);
+  assert.equal(result.video.notModified.status, 304);
+  assert.equal(result.video.notModified.bodyNotExposed, true);
+  assert.equal(result.video.notModified.contentEncodingAbsent, true);
+  assert.equal(result.video.notModified.contentLengthAbsentOrMatchesHead, true);
+  assert.equal(result.video.notModified.contentTypeAbsentOrMatchesHead, true);
+  assert.equal(result.video.notModified.etagMatchesHead, true);
+  assert.equal(result.video.notModified.cachePolicyPass, true);
+  assert.equal(result.video.notModified.hardeningPass, true);
+  assert.equal(result.video.notModified.acceptRangesBytes, false);
+  assert.equal(result.video.notModified.ok, true);
   assert.equal(result.video.digest.observedSha256, expectedSha256);
   assert.equal(result.companions.captions.mediaTypeMatches, true);
   assert.equal(result.companions.poster.mediaTypeMatches, true);
@@ -162,6 +190,195 @@ test("accepts exact video, captions, descriptions, and poster byte contracts", a
   assert.doesNotMatch(json, /public-video/u);
   assert.doesNotMatch(json, /strong-r2-etag/u);
   assert.doesNotMatch(json, /synthetic public MP4/u);
+});
+
+test("sends the verified strong ETag and observes a bodyless Fetch response", async () => {
+  const conditionalValidators = [];
+  const fetchImplementation = async (url, options) => {
+    const requestHeaders = new Headers(options.headers);
+    if (requestHeaders.has("if-none-match")) {
+      conditionalValidators.push(requestHeaders.get("if-none-match"));
+    }
+    return passingFetch()(url, options);
+  };
+
+  const result = await verifyR2VideoRoute({ videoUrl, fetchImplementation });
+
+  assert.equal(result.ok, true);
+  assert.deepEqual(conditionalValidators, [etag]);
+  assert.equal(result.video.notModified.statusPass, true);
+  assert.equal(result.video.notModified.bodyNotExposed, true);
+  assert.equal(result.video.notModified.contentEncodingAbsent, true);
+  assert.equal(result.video.notModified.contentLengthAbsentOrMatchesHead, true);
+  assert.equal(result.video.notModified.contentTypeAbsentOrMatchesHead, true);
+  assert.equal(result.video.notModified.etagStrongQuoted, true);
+  assert.equal(result.video.notModified.etagMatchesHead, true);
+  assert.equal(result.video.notModified.cache.exactPolicy, true);
+  assert.equal(result.video.notModified.hardening.nosniff, true);
+  assert.equal(result.video.notModified.hardening.noReferrer, true);
+  assert.equal(result.video.notModified.hardening.sameOriginResourcePolicy, true);
+});
+
+test("does not require Accept-Ranges on a Fetch-observable 304", async () => {
+  const result = await verifyR2VideoRoute({
+    videoUrl,
+    fetchImplementation: passingFetch(),
+  });
+
+  assert.equal(result.video.notModified.acceptRangesBytes, false);
+  assert.equal(result.video.notModified.ok, true);
+  assert.equal(result.ok, true);
+});
+
+test("accepts matching representation metadata when a 304 supplies it", async () => {
+  const result = await verifyR2VideoRoute({
+    videoUrl,
+    fetchImplementation: passingFetch({
+      mutateNotModifiedHeaders: (headers) => {
+        headers["content-length"] = String(videoBytes.length);
+        headers["content-type"] = "video/mp4";
+      },
+    }),
+  });
+
+  assert.equal(result.video.notModified.contentLength, videoBytes.length);
+  assert.equal(result.video.notModified.contentLengthAbsentOrMatchesHead, true);
+  assert.equal(result.video.notModified.contentType, "video/mp4");
+  assert.equal(result.video.notModified.contentTypeAbsentOrMatchesHead, true);
+  assert.equal(result.video.notModified.ok, true);
+  assert.equal(result.ok, true);
+});
+
+test("requires a 304 whose response adapter exposes no body", async (context) => {
+  await context.test("complete response", async () => {
+    const fetchImplementation = async (url, options) => {
+      if (new Headers(options.headers).has("if-none-match")) {
+        return new Response(videoBytes, {
+          status: 200,
+          headers: notModifiedHeaders(),
+        });
+      }
+      return passingFetch()(url, options);
+    };
+    const result = await verifyR2VideoRoute({ videoUrl, fetchImplementation });
+
+    assert.equal(result.video.notModified.statusPass, false);
+    assert.equal(result.video.notModified.bodyNotExposed, false);
+    assert.deepEqual(result.failures, [
+      { resource: "video", check: "not-modified-contract" },
+    ]);
+  });
+
+  await context.test("custom response adapter that exposes a 304 body", async () => {
+    let cancellationCount = 0;
+    const fetchImplementation = async (url, options) => {
+      if (new Headers(options.headers).has("if-none-match")) {
+        return {
+          status: 304,
+          headers: new Headers(notModifiedHeaders()),
+          body: new ReadableStream({
+            start(controller) {
+              controller.enqueue(videoBytes);
+            },
+            cancel() {
+              cancellationCount += 1;
+            },
+          }),
+        };
+      }
+      return passingFetch()(url, options);
+    };
+    const result = await verifyR2VideoRoute({ videoUrl, fetchImplementation });
+
+    assert.equal(result.video.notModified.statusPass, true);
+    assert.equal(result.video.notModified.bodyNotExposed, false);
+    assert.equal(cancellationCount, 1);
+    assert.deepEqual(result.failures, [
+      { resource: "video", check: "not-modified-contract" },
+    ]);
+  });
+});
+
+test("requires the 304 validator, exact cache policy, and selected hardening headers", async (context) => {
+  const cases = [
+    {
+      name: "matching ETag",
+      mutate(headers) { headers.etag = '"different-private-etag"'; },
+      assertFailure(observation) { assert.equal(observation.etagMatchesHead, false); },
+    },
+    {
+      name: "exact immutable cache policy",
+      mutate(headers) { headers["cache-control"] = "public, max-age=31536000"; },
+      assertFailure(observation) { assert.equal(observation.cachePolicyPass, false); },
+    },
+    {
+      name: "absent Content-Encoding",
+      mutate(headers) { headers["content-encoding"] = "gzip"; },
+      assertFailure(observation) { assert.equal(observation.contentEncodingAbsent, false); },
+    },
+    {
+      name: "absent or HEAD-matching Content-Length",
+      mutate(headers) { headers["content-length"] = String(videoBytes.length + 1); },
+      assertFailure(observation) {
+        assert.equal(observation.contentLengthAbsentOrMatchesHead, false);
+      },
+    },
+    {
+      name: "absent or HEAD-matching Content-Type",
+      mutate(headers) { headers["content-type"] = "image/webp"; },
+      assertFailure(observation) {
+        assert.equal(observation.contentTypeAbsentOrMatchesHead, false);
+      },
+    },
+    ...[
+      ["nosniff", "x-content-type-options"],
+      ["no-referrer", "referrer-policy"],
+      ["same-origin resource policy", "cross-origin-resource-policy"],
+    ].map(([name, header]) => ({
+      name,
+      mutate(headers) { delete headers[header]; },
+      assertFailure(observation) { assert.equal(observation.hardeningPass, false); },
+    })),
+  ];
+
+  for (const testCase of cases) {
+    await context.test(testCase.name, async () => {
+      const result = await verifyR2VideoRoute({
+        videoUrl,
+        fetchImplementation: passingFetch({
+          mutateNotModifiedHeaders: testCase.mutate,
+        }),
+      });
+
+      assert.equal(result.video.notModified.statusPass, true);
+      testCase.assertFailure(result.video.notModified);
+      assert.equal(result.video.notModified.ok, false);
+      assert.deepEqual(result.failures, [
+        { resource: "video", check: "not-modified-contract" },
+      ]);
+      const json = JSON.stringify(result);
+      assert.doesNotMatch(json, /strong-r2-etag/u);
+      assert.doesNotMatch(json, /different-private-etag/u);
+    });
+  }
+});
+
+test("sanitizes a conditional request failure without exposing its ETag", async () => {
+  const fetchImplementation = async (url, options) => {
+    if (new Headers(options.headers).has("if-none-match")) {
+      throw new Error("strong-r2-etag private conditional diagnostic");
+    }
+    return passingFetch()(url, options);
+  };
+  const result = await verifyR2VideoRoute({ videoUrl, fetchImplementation });
+
+  assert.equal(result.video.notModified.requestAttempted, true);
+  assert.equal(result.video.notModified.requestError, true);
+  assert.equal(result.video.notModified.failureKind, "transport");
+  assert.deepEqual(result.failures, [
+    { resource: "video", check: "not-modified-contract" },
+  ]);
+  assert.doesNotMatch(JSON.stringify(result), /strong-r2-etag/u);
 });
 
 test("requires an exact unencoded bytes=0-1 edge response", async () => {
@@ -325,6 +542,7 @@ test("an unaccepted HEAD gates dependent video requests and returns one causal f
   assert.deepEqual(requests, ["HEAD"]);
   assert.equal(result.video.range.requestAttempted, false);
   assert.equal(result.video.unsatisfiableRange.requestAttempted, false);
+  assert.equal(result.video.notModified.requestAttempted, false);
   assert.equal(result.video.digest.requestAttempted, false);
   assert.deepEqual(result.failures, [{ resource: "video", check: "head-contract" }]);
 });
@@ -469,6 +687,7 @@ test("enforces the optional full-download byte boundary before issuing the downl
     { method: "HEAD", range: null },
     { method: "GET", range: "bytes=0-1" },
     { method: "GET", range: `bytes=${videoBytes.length}-` },
+    { method: "GET", range: null },
   ]);
   assert.deepEqual(result.failures, [{ resource: "video", check: "download-digest" }]);
 });
@@ -551,13 +770,13 @@ test("sanitizes request failures and never returns URLs or exception details", a
   assert.doesNotMatch(json, /\.vtt/u);
 });
 
-test("head, range, and digest observations retain one complete schema across outcomes", async () => {
+test("video observations retain one complete schema across outcomes", async () => {
   const accepted = await verifyR2VideoRoute({ videoUrl, fetchImplementation: passingFetch() });
   const failed = await verifyR2VideoRoute({
     videoUrl,
     fetchImplementation: async () => { throw new Error("private diagnostic"); },
   });
-  for (const key of ["head", "range", "digest"]) {
+  for (const key of ["head", "range", "notModified", "digest"]) {
     assert.deepEqual(
       Object.keys(failed.video[key]).sort(),
       Object.keys(accepted.video[key]).sort(),

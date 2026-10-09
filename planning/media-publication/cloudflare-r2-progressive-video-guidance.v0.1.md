@@ -249,13 +249,13 @@ remains under the served prefix does not change reachability.
 
 With `cross_version_cache: false`, the fresh deployment starts from an
 isolated cold cache. Exercise that path with a disposable object family before
-first activation. A future `ctx.cache.purge()` integration enters only with a
-human-authorized private invocation design; the public media grammar contains
-no administrative endpoint.
+first visitor-page activation. A future `ctx.cache.purge()` integration enters
+only with a human-authorized private invocation design; the public media grammar
+contains no administrative endpoint.
 
 ## Native visitor contract
 
-The first page uses native HTML and keeps the dependency-free runtime:
+A captioned native receiver can use dependency-free HTML:
 
 ```html
 <video
@@ -287,6 +287,12 @@ dimensions lead. Captions carry speech and meaningful sound. The transcript
 carries meaningful sound and visual information. Audio description or a
 conforming media alternative receives an explicit decision when visuals carry
 meaning unavailable through the soundtrack.
+
+A verified silent source records that standing, leaves an empty captions track
+outside the page and object family, and places a concise ordered visual
+sequence in ordinary reading order. Concise standing and caption text may
+participate in `aria-describedby`; a structured transcript or visual sequence
+may use `aria-details` while remaining independently navigable.
 
 Multiple MP4 `<source>` elements with the same media type do not form adaptive
 bitrate delivery. The first supported source wins. HLS/DASH and a script player
@@ -333,8 +339,9 @@ Each selected family carries:
 - accepted MP4 digest, bytes, duration, streams, geometry, cadence, audio, and
   copy-remux packet hashes or encode rationale;
 - metadata-tool coverage and reviewed disposition;
-- poster, captions, description track when selected, and transcript
-  coordinates with digests;
+- poster plus the selected accessibility branch: captions, description track,
+  and transcript coordinates when applicable, or explicit silent standing and
+  a visible visual-sequence coordinate;
 - exact R2 keys, media types, cache policy, and retained source; and
 - activation owner, recovery pointer, and future Stream migration trigger.
 
@@ -353,8 +360,9 @@ separate from the current image-only asset inventory.
 - copy-remux packet hashes match;
 - authored metadata matches the allowlist and structural tags are documented;
 - output remains below the selected receiver limit;
-- captions parse in cue order and transcript coverage receives human review;
-  and
+- captions parse in cue order and transcript coverage receives human review
+  when the source carries audio; verified silent sources instead carry stream
+  evidence and a reviewed visible visual sequence; and
 - the accepted digest and byte count bind the upload packet.
 
 ### Live HTTP
@@ -370,6 +378,11 @@ separate from the current image-only asset inventory.
   complete-object verification;
 - `HEAD` and complete `GET` return the declared size, type, validator, cache
   policy, and hardening headers;
+- a request carrying the observed strong validator through `If-None-Match`
+  returns `304` with no Fetch-exposed body, the matching validator, exact
+  immutable cache policy, absent `Content-Encoding`, absent or `HEAD`-matching
+  `Content-Length` and `Content-Type`, and hardening headers; `Accept-Ranges` is
+  not required on that `304`;
 - `Range: bytes=0-1` returns `206`, `Content-Length: 2`, and the exact
   `Content-Range` without response content encoding;
 - an unsatisfiable range returns `416` with `Content-Range: bytes */<size>`;
@@ -383,12 +396,36 @@ separate from the current image-only asset inventory.
   fully deployed new Worker version makes the preceding public family
   unavailable without a zone-cache purge.
 
+### Transport-only checkpoint
+
+The operator may pause the publication workflow at a resumable transport-only
+checkpoint after:
+
+- canonical stored metadata and a fresh downloaded digest match the accepted
+  master;
+- the bucket and route retain the selected private-bucket, same-origin, and
+  Fail-closed state;
+- `HEAD`, complete `GET`, byte-range `206`, a `304` with no Fetch-exposed body,
+  absent `Content-Encoding`, and absent or `HEAD`-matching `Content-Length` and
+  `Content-Type`, unsatisfiable `416`, exact representation headers, hardening,
+  bounded route failures, and edge-cache observations pass;
+- a signed-out standalone native player loads, seeks, and plays in the selected
+  automated browser engines; and
+- the disposable withdrawal and recovery exercise passes.
+
+The versioned Worker object URL is publicly reachable at this checkpoint.
+Complete visitor-page publication additionally requires the selected poster,
+caption or silent-source standing, transcript or visual description,
+visitor-page placement, CSP, page-level accessibility, physical Safari/iOS
+observation, and human release. Record those open boundaries with the receiving
+Issue and resume with the selected companion and visitor-page contract.
+
 ### Browser and accessibility
 
 - signed-out Chromium, Firefox, and consequential Safari/iOS observations
-  cover poster, controls, play/pause, keyboard seek, volume, captions,
-  transcript, audio, focus, narrow/wide containment, interruption, and
-  recovery;
+  cover poster, controls, play/pause, keyboard seek, focus, narrow/wide
+  containment, interruption, recovery, and the applicable audio-bearing or
+  verified-silent accessibility branch;
 - page CSP admits the same-origin media route;
 - meaningful playback begins through visitor action; and
 - the prior page pointer can be restored independently from retained R2

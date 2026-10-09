@@ -1851,7 +1851,7 @@ h1.txt-h1.txt__adjust--cream.h1-spaced.h1-hero {
     transform: translateX(-50%);
 }
 
-.story-visual img {
+.story-visual :is(img, video) {
     background: #f8f1e2;
     border: 1px solid var(--canvas-rule-strong);
     display: block;

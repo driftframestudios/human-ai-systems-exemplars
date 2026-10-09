@@ -51,8 +51,10 @@ Cloudflare Stream boundary.
    current native-video route. Use the Stream adapter when adaptive delivery
    has a selected visitor and account job.
 8. **Verify the candidate.** Inspect exact bytes, digest, dimensions, media
-   type, decode behavior, semantic text alternative, caption/transcript, and
-   selected production inclusion.
+   type, decode behavior, semantic text alternative, selected production
+   inclusion, and the applicable accessibility branch: captions plus
+   transcript for audio-bearing media, or explicit silent-source standing plus
+   a visible visual sequence for verified silent video.
 9. **Activate through the receiver.** A human operator uploads or deploys the
    reviewed candidate. Protected credentials and account coordinates remain in
    the platform store.
