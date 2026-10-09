@@ -183,6 +183,58 @@ route to belong to exactly one family. Its standing three-viewport campaign is
 review `summary.json` for console, HTTP, page, request, and traversal
 observations before interpreting the run.
 
+## Media preparation and R2 video delivery
+
+The media-publication suite keeps source preparation, Worker behavior, and a
+live edge observation as three distinct receivers:
+
+```sh
+npm run test:media-publication
+npm run dry-run:r2-video-delivery
+npm run media:video:inspect -- --source <source.mp4>
+npm run media:video:prepare -- --source <source.mp4> --output <master.mp4>
+npm run media:video:verify -- --source <master.mp4>
+```
+
+The local tests exercise preparation routing, strict decode, Fast Start,
+copy-remux packet identity, selected scaling geometry, sanitized metadata
+reporting, atomic promotion and cleanup disposition, the finite public path
+grammar, exact R2 key mapping, typed response failures, stream ownership,
+bounded reads, and both head-first and cold-range-first live verification.
+The required CI receiver proves both real FFmpeg preparation branches and the
+synthetic failure contracts. The Wrangler dry run establishes
+that the selected source bundles against the declared R2 binding and route; it
+does not create a bucket, upload bytes, attach the route, or observe the edge.
+
+After human-owned R2 upload and route activation, use the explicitly admitted
+live check:
+
+```sh
+npm run verify:r2-video:live -- \
+  --video https://vik.guru/v1-cdn/video/<id>/<version>/movie.mp4 \
+  --captions https://vik.guru/v1-cdn/video/<id>/<version>/captions.en.vtt \
+  --captions-sha256 <accepted-caption-sha256> \
+  --captions-size <accepted-caption-bytes> \
+  --descriptions https://vik.guru/v1-cdn/video/<id>/<version>/descriptions.en.vtt \
+  --descriptions-sha256 <accepted-description-sha256> \
+  --descriptions-size <accepted-description-bytes> \
+  --poster https://vik.guru/v1-cdn/video/<id>/<version>/poster.webp \
+  --poster-sha256 <accepted-poster-sha256> \
+  --poster-size <accepted-poster-bytes> \
+  --sha256 <accepted-video-sha256> \
+  --size <accepted-video-bytes>
+```
+
+Add `--cold-range-first` only for the second fresh-version canary. That command
+requires `Cf-Cache-Status: MISS` on the initial `bytes=0-1` response before it
+continues, then observes one named public receiver: complete metadata, strong
+validator, immutable policy, hardening, cached range behavior, bounded full
+digest, and optional companion transport and byte identity. Companion content
+validity remains a separately named review. Its sanitized JSON omits URLs,
+validator values, response bodies, exception details, and protected platform
+coordinates. Signed-out browser playback, captions, transcript, rights, and
+human release acceptance retain their separate owners.
+
 ## Production assembly and cPanel carrier
 
 Production assembly and the cPanel carrier have their own repository-level

@@ -1,17 +1,18 @@
 ---
 name: cloudflare-stream-video-publication
-description: Prepares and verifies accessible on-demand video for human-authorized publication through Cloudflare Stream. Applies when a public visitor route selects video and needs FFmpeg source preparation, metadata boundaries, captions, playback policy, and signed-out verification.
+description: Migrates an accepted accessible video package to human-authorized adaptive delivery through Cloudflare Stream. Applies when measured playback, traffic, device, or access needs earn Stream transcoding, HLS/DASH delivery, player policy, and signed-out verification.
 ---
 
 # Cloudflare Stream video publication
 
 ## Contract
 
-- **What:** One inspected upload master, accessible companion set, Stream
-  receiver configuration, minimal embed capability posture, and public playback
-  observation.
-- **When:** A Context Canvas or related public visitor route selects an
-  on-demand video for Cloudflare Stream delivery.
+- **What:** One accepted ingest master and accessible companion set receive
+  Stream configuration, minimal player capability posture, adaptive playback,
+  and public observation.
+- **When:** A Context Canvas or related public visitor route has earned
+  adaptive delivery through measured playback, traffic, device, or access
+  needs. The prior receiver remains available as rollback when one exists.
 - **Boundaries:** The human author selects visible content, rights, activation,
   access policy, and protected Cloudflare operations. Cloudflare Stream owns
   adaptive transcoding and manifests. The repository owns source preparation,
@@ -27,7 +28,9 @@ description: Prepares and verifies accessible on-demand video for human-authoriz
 
 ### Rule: One upload master enters Stream
 
-FFmpeg produces one high-quality H.264/AAC MP4 upload master. Stream produces
+The accepted source package supplies one high-quality H.264/AAC MP4 ingest
+master. An already compatible source may arrive through a copy remux; an
+earned encode may arrive through the source-preparation owner. Stream produces
 adaptive HLS and DASH delivery. Local multivariant packaging enters only under
 a separately selected self-hosted receiver.
 
@@ -71,15 +74,17 @@ selected behavior. Dynamic manifests remain direct Stream resources.
    chapters, metadata, decode health, and accessibility needs.
 3. Run the repository secret-material check and distinct embedded-metadata
    observation.
-4. Select the smallest fitting FFmpeg profile and encode to a temporary path.
+4. Reuse the accepted ingest master. If source changes reopen preparation,
+   select the smallest fitting copy-remux or encode profile and write to a
+   temporary path.
    HDR-to-SDR delivery, frame rates above Stream's 90 fps ceiling, variable
    cadence, and multichannel audio receive explicit public-output branches.
 5. Verify strict zero-error decode, duration, synchronization, geometry, frame rate,
    video/audio profile, metadata disposition, visual quality, audio clarity,
    and digest.
-6. Add the accepted master, reviewed primary poster, captions, transcript,
-   semantic inventory record, and production selection through the source
-   owners.
+6. Bind the accepted master, reviewed primary poster, captions, transcript,
+   semantic video descriptor, and prior-receiver recovery coordinate through
+   the source owners, including an R2 family when one exists.
 7. The human Cloudflare operator selects the access/origin policy, uploads the
    accepted master, and adds reviewed captions.
 8. Stream processes the upload. The collaboration accepts the full adaptive set
@@ -89,15 +94,16 @@ selected behavior. Dynamic manifests remain direct Stream resources.
    manifests, and the smallest tested capability set.
 10. Observe signed-out playback, keyboard operation, captions, transcript,
     seeking, audio, narrow/wide containment, interruption, and recovery.
-11. Return a public-safe coordinate and retain private diagnostics, tokens,
-    source paths, and metadata values with authorized owners.
+11. Return a public-safe coordinate, preserve the prior receiver through the
+    observation window, and retain private diagnostics, tokens, source paths,
+    and metadata values with authorized owners.
 
 ## Conditional context
 
 Load
 [`ffmpeg-cloudflare-stream-guidance.v0.1.md`](../../ffmpeg-cloudflare-stream-guidance.v0.1.md)
-for the first exercise and whenever source cadence, multiple tracks, audio,
-metadata, or player capability changes the encode or publication route.
+for a Stream migration and whenever source cadence, multiple tracks, audio,
+metadata, access posture, or player capability changes the route.
 
 ## Completion
 

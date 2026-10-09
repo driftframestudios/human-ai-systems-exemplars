@@ -482,6 +482,30 @@
       "aliases": []
     },
     {
+      "id": "node.media-publication",
+      "family": "media-publication",
+      "kind": "node-test",
+      "members": [
+        "tests/media-publication/prepare-r2-progressive-video.test.mjs",
+        "tests/media-publication/r2-video-worker.test.mjs",
+        "tests/media-publication/verify-r2-video-route.test.mjs"
+      ],
+      "profile": "node-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "tests/README.md",
+      "scope": "Source preparation, R2 Worker, and sanitized live-verifier contracts; a real edge and human publication decision retain separate receivers.",
+      "aliases": [
+        "test:media-publication"
+      ]
+    },
+    {
       "id": "node.suite-planner",
       "family": "test-planning",
       "kind": "node-test",
@@ -1723,6 +1747,30 @@
       "hold": "Select the annotated production-vMAJOR.MINOR.PATCH tag and matching --receipt FILE, then invoke verify:prod-carrier-transfer with both values."
     },
     {
+      "id": "carrier.r2-video-delivery",
+      "family": "carrier",
+      "kind": "node-script",
+      "members": [
+        "cloudflare/r2-video-delivery/src/index.js",
+        "cloudflare/r2-video-delivery/wrangler.jsonc"
+      ],
+      "profile": "carrier",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "npm",
+          "run",
+          "dry-run:r2-video-delivery"
+        ],
+        "appendMembers": false
+      },
+      "owner": "cloudflare/r2-video-delivery/README.md",
+      "scope": "Source bundle and binding dry run for the exact R2 media route. Bucket creation, upload, route activation, and public observation remain separate.",
+      "aliases": [
+        "dry-run:r2-video-delivery"
+      ]
+    },
+    {
       "id": "carrier.schemas",
       "family": "carrier",
       "kind": "node-script",
@@ -1775,6 +1823,22 @@
         "verify:iframe-routes:live"
       ],
       "hold": "Choose and authorize the receiving endpoint/policy through the existing verifier."
+    },
+    {
+      "id": "live.r2-video",
+      "family": "live-receivers",
+      "kind": "node-script",
+      "members": [
+        "tools/verify-r2-video-route.mjs"
+      ],
+      "profile": "live",
+      "command": null,
+      "owner": "tests/README.md",
+      "scope": "One selected versioned video family receives bounded HEAD, range, digest, cache, hardening, and companion observations.",
+      "aliases": [
+        "verify:r2-video:live"
+      ],
+      "hold": "Choose and authorize one versioned vik.guru video route with its accepted size and SHA-256 after R2 upload and Worker activation."
     },
     {
       "id": "live.schema-pages",
@@ -1886,6 +1950,7 @@
         "node.documentation",
         "node.iframe-routes",
         "node.investment-analysis",
+        "node.media-publication",
         "node.narrative-architectures",
         "node.prod-deployment",
         "node.public-references",
@@ -1977,6 +2042,7 @@
       "suites": [
         "node.attribution",
         "node.iframe-routes",
+        "node.media-publication",
         "node.prod-deployment",
         "node.public-references",
         "node.repository-handoff-foundation",
@@ -1986,6 +2052,7 @@
         "carrier.debrief-image-derivatives",
         "carrier.iframe",
         "carrier.production",
+        "carrier.r2-video-delivery",
         "carrier.transfer",
         "carrier.schemas"
       ]
@@ -1997,6 +2064,7 @@
         "worker.live",
         "live.iframe-ancestry",
         "live.iframe",
+        "live.r2-video",
         "live.schema-pages"
       ]
     },

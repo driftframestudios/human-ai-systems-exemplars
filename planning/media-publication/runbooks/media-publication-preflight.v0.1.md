@@ -12,8 +12,8 @@ task_type: operational_collaboration
 ## Use
 
 Use the draft runbook when a selected image or video approaches a repository,
-production-carrier, iframe-package, Cloudflare Images, or Cloudflare Stream
-boundary.
+production-carrier, iframe-package, Cloudflare Images, R2-backed CDN, or
+Cloudflare Stream boundary.
 
 ## Entry packet
 
@@ -21,7 +21,8 @@ boundary.
 - intended visitor route and asset role;
 - named GitHub Issue and human activation owner;
 - rights, attribution, visible-content, and consent standing;
-- expected delivery owner and stable public path or Stream identity;
+- expected delivery owner and stable public path, R2 family, or Stream
+  identity;
 - accessibility carriers; and
 - recovery source.
 
@@ -44,18 +45,21 @@ boundary.
 5. **Decide visible-content standing.** Route likeness, organization names,
    third-party material, license, rights, and consent to the human owner.
 6. **Prepare through the source owner.** Use the responsive-raster draft for a
-   browser-selected image family or the Stream-video draft for public video.
-   Preserve aspect ratio, accessibility, and source/derivative lineage.
-7. **Verify the candidate.** Inspect exact bytes, digest, dimensions, media
+   browser-selected image family or `accessible-video-publication` for public
+   video. Preserve aspect ratio, accessibility, and source/derivative lineage.
+7. **Select one delivery adapter.** Use the R2 progressive adapter for the
+   current native-video route. Use the Stream adapter when adaptive delivery
+   has a selected visitor and account job.
+8. **Verify the candidate.** Inspect exact bytes, digest, dimensions, media
    type, decode behavior, semantic text alternative, caption/transcript, and
    selected production inclusion.
-8. **Activate through the receiver.** A human operator uploads or deploys the
+9. **Activate through the receiver.** A human operator uploads or deploys the
    reviewed candidate. Protected credentials and account coordinates remain in
    the platform store.
-9. **Observe the public route.** Check signed-out delivery, narrow and wide
+10. **Observe the public route.** Check signed-out delivery, narrow and wide
    layout, keyboard use, fallbacks, cache and content type, accessibility
    carriers, CSP and browser capabilities, and recovery behavior.
-10. **Return a bounded result.** Record public-safe identities and aggregate
+11. **Return a bounded result.** Record public-safe identities and aggregate
     outcomes. Authorized owners retain raw metadata, tokens, account
     identifiers, diagnostics, and private source locations.
 
@@ -71,8 +75,9 @@ boundary.
 
 ## Completion
 
-The preflight completes when the exact public candidate has scope-bound zero
-unresolved credential findings, a named format/tool metadata disposition,
-accepted visible-content and rights standing, source-owned accessibility
-carriers, verified bytes and behavior, a named activation decision, a
-signed-out route result, and a recoverable source.
+The preflight completes when the canary-proven credential scan records an
+accepted result for the exact named scope and routes every unresolved finding
+to its named receiver. A named format/tool metadata disposition, accepted
+visible-content and rights standing, source-owned accessibility carriers,
+verified bytes and behavior, a named activation decision, a signed-out route
+result, and a recoverable source complete the remaining contract.

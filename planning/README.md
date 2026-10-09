@@ -23,7 +23,7 @@ The planning surface references source material instead of becoming a second cop
 
 - [Cross-repository LIMS/ELN functional nucleus](functional-nucleus-assessment-horizon.md)
 - [Context Canvas — principal engineering and publication](context-canvas/README.md) — includes the approved contrast architecture, visual-consistency milestone, and skill-cultivation continuations.
-- [Media publication](media-publication/README.md) — source-owned responsive raster delivery, FFmpeg preparation for Cloudflare Stream, metadata boundaries, and draft image/video publication skills and runbook.
+- [Media publication](media-publication/README.md) — source-owned responsive raster delivery, accessible R2-backed progressive video through the same-origin Cloudflare CDN route, a retained Stream migration path, metadata boundaries, and draft publication skills and runbooks.
 - [Core and Narrative unit-test collaboration](unit-testing/README.md) — source-owned expectations, direct Node/Ajv seams, current contract findings, Practitioner Registry and external research, focused browser behavior, milestones, and purposeful holds.
 - [Repository skill architecture and research spike](repository-skill-architecture.md)
 - [Repository collaboration cycle — docket and tranche architecture](repository-collaboration-cycle-options.md) — the selected cold-session launcher, full-cycle runbook, conditional domain overlays, capacity-aware bounded-support branch, environment preparation, and first exercise route.
