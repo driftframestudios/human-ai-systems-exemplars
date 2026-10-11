@@ -41,6 +41,13 @@ const primaryManifestRelativePath =
   "deployment/cpanel/primary-route-manifest.json";
 const assetInventoryRelativePath =
   "deployment/cpanel/asset-inventory.json";
+const registryBindingRelativePath =
+  "deployment/public-references/context-canvas-registry-bindings.v1.json";
+const registryDataUseRelativePath =
+  "deployment/public-references/registry-atlas-data-use.txt";
+const registryDataUseBytes = await readFile(
+  new URL("../../deployment/public-references/registry-atlas-data-use.txt", import.meta.url),
+);
 const cssConsumerSourcePath =
   "context-canvas-project-surface/context-canvas/index.html";
 const cssConsumerProjectedPath = "index.html";
@@ -475,7 +482,7 @@ async function enableAssetInventoryFixture(fixture) {
   return { sourcePath, projectedPath, bytes };
 }
 
-async function enablePublicationFixture(fixture) {
+async function enableLegacyPublicationFixture(fixture) {
   const canvasRoot = "context-canvas-project-surface/context-canvas";
   const projectRoot = "context-canvas-project-surface";
   const profileKey = "PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE";
@@ -627,6 +634,93 @@ async function enablePublicationFixture(fixture) {
   );
   fixture.sourceSha = await commitFixture(fixture.root, "Accept publication fixture");
   return { canvasRoot, destinations, publicConfiguration };
+}
+
+async function enableTrackedRegistryPublicationFixture(fixture) {
+  const publication = await enableLegacyPublicationFixture(fixture);
+  const profileKey = "PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE";
+  const registryKey = "PUBLIC_URL_REGISTRY_PRACTITIONER_PROBES";
+  const registryUrl =
+    "https://kindlight.systems/human-ai-collaboration-field-guide/practitioner-probes";
+  const externalConfiguration =
+    `${profileKey}=${publication.destinations[profileKey]}\n`;
+  const binding = {
+    $schema: "./context-canvas-registry-bindings.schema.json",
+    id: "context-canvas.registry-public-reference-bindings.v1",
+    version: "1",
+    atlas: {
+      reference_version: "0.2.1",
+      guide_version: 5,
+      data_schema_version: "0.1.0",
+      snapshot_date: "2026-10-07",
+      accepted_at: "2026-10-11",
+      archive_sha256: "1".repeat(64),
+      registry_atlas_sha256: "2".repeat(64),
+      manifest_sha256: "3".repeat(64),
+      current_route_map_sha256: "4".repeat(64),
+      public_root: "https://kindlight.systems/",
+      license: "Apache-2.0",
+      content_role: "reference_data",
+      action_authority: "current_human_request_and_repository_owned_tools",
+      data_use_notice: registryDataUseRelativePath,
+      data_use_sha256: sha256(registryDataUseBytes),
+      benchmark_scope: "all_atlas_records_and_resources",
+    },
+    bindings: [
+      {
+        token: registryKey,
+        atlas_record_key: "registry:collaboration/practitioner-probes",
+        expected_public_title: "Practitioner Probes",
+        expected_family: "Collaboration Field Guide",
+        expected_resource_role: "Practice or method",
+        expected_reader_job: "Use",
+        expected_source_lifecycle: "Current",
+        expected_route_state: "Identity verified",
+        url: registryUrl,
+        selection_basis: "The selected page answers the authored reader job.",
+      },
+    ],
+  };
+  const bindingBytes = Buffer.from(`${JSON.stringify(binding, null, 2)}\n`, "utf8");
+  const coordinationRoot = path.join(fixture.root, "deployment/public-references");
+  await mkdir(coordinationRoot, { recursive: true });
+  await writeFile(
+    path.join(fixture.root, ".env.public"),
+    externalConfiguration,
+    "utf8",
+  );
+  await writeFile(
+    path.join(fixture.root, registryBindingRelativePath),
+    bindingBytes,
+  );
+  await writeFile(
+    path.join(coordinationRoot, "context-canvas-registry-bindings.schema.json"),
+    "{}\n",
+    "utf8",
+  );
+  await writeFile(
+    path.join(fixture.root, registryDataUseRelativePath),
+    registryDataUseBytes,
+  );
+  fixture.sourceSha = await commitFixture(
+    fixture.root,
+    "Accept tracked Registry publication fixture",
+  );
+  return {
+    ...publication,
+    destinations: {
+      ...publication.destinations,
+      [registryKey]: registryUrl,
+    },
+    bindingBytes,
+    externalConfiguration,
+    profileKey,
+    registryKey,
+  };
+}
+
+async function enablePublicationFixture(fixture) {
+  return enableTrackedRegistryPublicationFixture(fixture);
 }
 
 async function enableCssProjectionPlanFixture(fixture) {
@@ -1583,7 +1677,7 @@ test("asset inventory grammar and image headers keep semantic and physical facts
 test("publication projection materializes one digest-bound receiver and rewrites flattened route geometry", async () => {
   const fixture = await createFixtureRoot();
   try {
-    const publication = await enablePublicationFixture(fixture);
+    const publication = await enableTrackedRegistryPublicationFixture(fixture);
     const aggregatePlan = aggregateFixture();
     const first = await createProductionProjectionPlan({
       repositoryRoot: fixture.root,
@@ -1670,10 +1764,13 @@ test("publication projection materializes one digest-bound receiver and rewrites
       "PUBLIC_URL_REGISTRY_PRACTITIONER_PROBES",
     ]);
     assert.equal(
-      publicReferenceInput.configuration_sha256,
-      sha256(Buffer.from(publication.publicConfiguration)),
+      publicReferenceInput.external_configuration.configuration_sha256,
+      sha256(Buffer.from(publication.externalConfiguration)),
     );
-    assert.equal(publicReferenceInput.source_relationship, "external_digest_bound_input");
+    assert.equal(
+      publicReferenceInput.source_relationship,
+      "tracked_registry_binding_with_external_digest_bound_input",
+    );
     assert.deepEqual(first.manifest.inputs.iframe_origin_robots, {
       source_path: "deployment/cpanel/iframe-origin-robots.txt",
       git_blob_id: await git(
@@ -1701,6 +1798,121 @@ test("publication projection materializes one digest-bound receiver and rewrites
         aggregatePlan,
       }),
       /requires the ignored \.env\.public receiver/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("tracked Registry binding owns Registry routes while external configuration owns the profile", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    const publication = await enableTrackedRegistryPublicationFixture(fixture);
+    const plan = await createProductionProjectionPlan({
+      repositoryRoot: fixture.root,
+      sourceSha: fixture.sourceSha,
+      configurationPath: fixture.configurationPath,
+      aggregatePlan: aggregateFixture(),
+    });
+    const html = plan.outputFiles.get("primary-public/index.html").toString("utf8");
+    const script = plan.outputFiles
+      .get("primary-public/canvas-shell.js")
+      .toString("utf8");
+    assert.match(html, new RegExp(publication.destinations[publication.registryKey]));
+    assert.match(script, new RegExp(publication.destinations[publication.profileKey]));
+
+    const input = plan.manifest.inputs.public_references;
+    assert.equal(
+      input.source_relationship,
+      "tracked_registry_binding_with_external_digest_bound_input",
+    );
+    assert.deepEqual(input.keys, [publication.profileKey, publication.registryKey]);
+    assert.deepEqual(input.tracked_registry.keys, [publication.registryKey]);
+    assert.deepEqual(input.tracked_registry.binding, {
+      source_path: registryBindingRelativePath,
+      git_blob_id: await git(fixture.root, [
+        "rev-parse",
+        `HEAD:${registryBindingRelativePath}`,
+      ]),
+      sha256: sha256(publication.bindingBytes),
+      id: "context-canvas.registry-public-reference-bindings.v1",
+      version: "1",
+      binding_count: 1,
+    });
+    assert.deepEqual(input.tracked_registry.data_use, {
+      source_path: registryDataUseRelativePath,
+      git_blob_id: await git(fixture.root, [
+        "rev-parse",
+        `HEAD:${registryDataUseRelativePath}`,
+      ]),
+      sha256: sha256(registryDataUseBytes),
+      bytes: registryDataUseBytes.length,
+    });
+    assert.deepEqual(input.tracked_registry.atlas_receipt, {
+      reference_version: "0.2.1",
+      guide_version: 5,
+      data_schema_version: "0.1.0",
+      snapshot_date: "2026-10-07",
+      accepted_at: "2026-10-11",
+      archive_sha256: "1".repeat(64),
+      registry_atlas_sha256: "2".repeat(64),
+      manifest_sha256: "3".repeat(64),
+      current_route_map_sha256: "4".repeat(64),
+      license: "Apache-2.0",
+      content_role: "reference_data",
+      action_authority: "current_human_request_and_repository_owned_tools",
+      data_use_notice: registryDataUseRelativePath,
+      data_use_sha256: sha256(registryDataUseBytes),
+      benchmark_scope: "all_atlas_records_and_resources",
+    });
+    assert.deepEqual(input.external_configuration, {
+      source_relationship: "external_digest_bound_input",
+      configuration_path: ".env.public",
+      configuration_sha256: sha256(Buffer.from(publication.externalConfiguration)),
+      keys: [publication.profileKey],
+    });
+
+    const serializedManifest = JSON.stringify(plan.manifest);
+    assert.doesNotMatch(serializedManifest, /kindlight\.systems/);
+    assert.doesNotMatch(serializedManifest, /practitioner-probes/);
+    assert.equal(
+      [...plan.outputFiles.keys()].some((outputPath) =>
+        outputPath.includes("deployment/public-references"),
+      ),
+      false,
+    );
+
+    await writeFile(
+      path.join(fixture.root, ".env.public"),
+      `${publication.externalConfiguration}${publication.registryKey}=https://kindlight.systems/alternate\n`,
+      "utf8",
+    );
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /tracked Registry binding owns PUBLIC_URL_REGISTRY_PRACTITIONER_PROBES/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("publication projection requires the tracked Registry binding whenever Registry tokens exist", async () => {
+  const fixture = await createFixtureRoot();
+  try {
+    await enableLegacyPublicationFixture(fixture);
+    await assert.rejects(
+      createProductionProjectionPlan({
+        repositoryRoot: fixture.root,
+        sourceSha: fixture.sourceSha,
+        configurationPath: fixture.configurationPath,
+        aggregatePlan: aggregateFixture(),
+      }),
+      /Production Registry tokens require the tracked binding/,
     );
   } finally {
     await rm(fixture.root, { recursive: true, force: true });
@@ -2118,14 +2330,20 @@ test("unsettled Core authority pauses both primary and iframe production selecti
 
   const materializedFixture = await createFixtureRoot();
   try {
-    const publication = await enablePublicationFixture(materializedFixture);
+    const publication = await enableTrackedRegistryPublicationFixture(materializedFixture);
+    const sourcePath = path.join(
+      materializedFixture.root,
+      publication.canvasRoot,
+      "index.html",
+    );
     await writeFile(
-      path.join(materializedFixture.root, ".env.public"),
-      publication.publicConfiguration.replace(
-        publication.destinations.PUBLIC_URL_REGISTRY_PRACTITIONER_PROBES,
-        "https://example.org/core-architectures/",
-      ),
+      sourcePath,
+      `${await readFile(sourcePath, "utf8")}\n<script>const unsettled = "https://example.org/core-architectures/";</script>\n`,
       "utf8",
+    );
+    materializedFixture.sourceSha = await commitFixture(
+      materializedFixture.root,
+      "Add unsettled materialized authority",
     );
     await assert.rejects(
       createProductionProjectionPlan({
@@ -3171,6 +3389,13 @@ test("primary selection rejects path escape, repository-only roots, nonportable 
   assert.throws(
     () => validatePrimaryManifest(primaryManifest([{ ...file, source_path: "tools/index.html" }])),
     /repository-only root tools/,
+  );
+  assert.throws(
+    () => validatePrimaryManifest(primaryManifest([{
+      ...file,
+      source_path: registryBindingRelativePath,
+    }])),
+    /repository-only coordination root deployment\/public-references/,
   );
   for (const sourcePath of [".ENV/private.html", ".GIT/config.html", ".AgEnTs/guide.html"]) {
     assert.throws(

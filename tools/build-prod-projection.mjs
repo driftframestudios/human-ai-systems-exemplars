@@ -34,8 +34,15 @@ import {
   inspectPublicReferenceHtml,
   materializeProfessionalProfileScript,
   materializePublicReferenceHtml,
+  PUBLIC_REFERENCE_NAMESPACE,
   resolvePublicReferenceDestinations,
 } from "./materialize-public-references.mjs";
+import {
+  DEFAULT_REGISTRY_REFERENCE_BINDING_PATH,
+  REGISTRY_ATLAS_DATA_USE_NOTICE,
+  parseRegistryReferenceBinding,
+  verifyRegistryAtlasDataUse,
+} from "./registry-reference-contract.mjs";
 
 const execFileAsync = promisify(execFile);
 const toolPath = fileURLToPath(import.meta.url);
@@ -64,6 +71,13 @@ const carrierIndexRelativePath = `${carrierRelativeRoot}/deployment-files.tsv`;
 const deploymentFileIndexHeader =
   "deployment_manifest_sha256\tsource_sha\tsurface\tprojected_path\tbytes\tsha256\tmedia_type\n";
 const productionPublicReferenceConfig = ".env.public";
+const productionRegistryReferenceBinding = path
+  .relative(repositoryRoot, DEFAULT_REGISTRY_REFERENCE_BINDING_PATH)
+  .split(path.sep)
+  .join(path.posix.sep);
+const productionPublicReferenceCoordinationRoot =
+  path.posix.dirname(productionRegistryReferenceBinding);
+const productionRegistryDataUseNotice = REGISTRY_ATLAS_DATA_USE_NOTICE;
 const legacyPublicationOrigin = "https://schemas.radiantnull.com/";
 const contextCoreManifestPath =
   "context-canvas-project-surface/context-canvas/prototypes/core-architectures/chimeric-pack-v0.1/core-architectures-chimeric-prototype-manifest-v0.1.json";
@@ -88,7 +102,10 @@ const excludedPrimaryRoots = new Set([
   "tools",
 ]);
 
-const excludedRepositoryPrefixes = [carrierRelativeRoot];
+const excludedRepositoryPrefixes = [
+  carrierRelativeRoot,
+  productionPublicReferenceCoordinationRoot,
+];
 const excludedReferenceRoots = new Set([
   ".git",
   ".iframe-route-build",
@@ -224,7 +241,10 @@ function assertRepositoryInputPath(sourcePath, label) {
   for (const excludedPrefix of excludedRepositoryPrefixes) {
     const prefixKey = portablePathKey(excludedPrefix);
     if (portableKey === prefixKey || portableKey.startsWith(`${prefixKey}/`)) {
-      fail(`${label} stays outside generated carrier root ${excludedPrefix}.`);
+      const standing = excludedPrefix === carrierRelativeRoot
+        ? "generated carrier root"
+        : "repository-only coordination root";
+      fail(`${label} stays outside ${standing} ${excludedPrefix}.`);
     }
   }
   return safePath;
@@ -251,7 +271,10 @@ function assertRepositoryReferencePath(sourcePath, label) {
   for (const excludedPrefix of excludedRepositoryPrefixes) {
     const prefixKey = portablePathKey(excludedPrefix);
     if (portableKey === prefixKey || portableKey.startsWith(`${prefixKey}/`)) {
-      fail(`${label} stays outside generated carrier root ${excludedPrefix}.`);
+      const standing = excludedPrefix === carrierRelativeRoot
+        ? "generated carrier root"
+        : "repository-only coordination root";
+      fail(`${label} stays outside ${standing} ${excludedPrefix}.`);
     }
   }
   return safePath;
@@ -3754,6 +3777,7 @@ async function loadPublicationInput(
   publication,
   primaryInputs,
   trackedBlobs,
+  trackedInputs,
 ) {
   const configPath = path.resolve(root, productionPublicReferenceConfig);
   if (trackedBlobs.has(productionPublicReferenceConfig)) {
@@ -3789,17 +3813,125 @@ async function loadPublicationInput(
     }
     for (const key of inspection?.keys ?? []) keys.add(key);
   }
+  const sortedKeys = [...keys].sort(compareUtf8Paths);
+  const registryKeys = sortedKeys.filter((key) =>
+    key.startsWith(PUBLIC_REFERENCE_NAMESPACE),
+  );
+  const externalKeys = sortedKeys.filter((key) =>
+    !key.startsWith(PUBLIC_REFERENCE_NAMESPACE),
+  );
+  const hasTrackedRegistryBinding = trackedBlobs.has(
+    productionRegistryReferenceBinding,
+  );
+
+  if (!hasTrackedRegistryBinding) {
+    if (registryKeys.length > 0) {
+      fail(
+        `Production Registry tokens require the tracked binding: ` +
+        `${productionRegistryReferenceBinding}.`,
+      );
+    }
+    const destinations = await resolvePublicReferenceDestinations(keys, {
+      configurationSource: configurationBytes.toString("utf8"),
+      environment: {},
+    });
+    return {
+      destinations,
+      input: {
+        source_relationship: "external_digest_bound_input",
+        configuration_path: productionPublicReferenceConfig,
+        configuration_sha256: sha256(configurationBytes),
+        keys: sortedKeys,
+      },
+      state: {
+        path: configPath,
+        sha256: sha256(configurationBytes),
+      },
+    };
+  }
+
+  if (trackedBlobs.get(productionRegistryReferenceBinding)?.mode !== "100644") {
+    fail(
+      `Production Registry binding must be a tracked non-executable blob: ` +
+      `${productionRegistryReferenceBinding}.`,
+    );
+  }
+  const bindingInput = await readTrackedRepositoryInput(
+    root,
+    trackedBlobs,
+    productionRegistryReferenceBinding,
+    "Production Registry binding",
+  );
+  const registryReference = parseRegistryReferenceBinding(bindingInput.bytes, {
+    requiredKeys: registryKeys,
+  });
+  trackedInputs.set(productionRegistryReferenceBinding, bindingInput);
+  if (trackedBlobs.get(productionRegistryDataUseNotice)?.mode !== "100644") {
+    fail(
+      `Production Registry DATA-USE notice must be a tracked non-executable blob: ` +
+      `${productionRegistryDataUseNotice}.`,
+    );
+  }
+  const dataUseInput = await readTrackedRepositoryInput(
+    root,
+    trackedBlobs,
+    productionRegistryDataUseNotice,
+    "Production Registry DATA-USE notice",
+  );
+  const dataUseReceipt = verifyRegistryAtlasDataUse(dataUseInput.bytes);
+  trackedInputs.set(productionRegistryDataUseNotice, dataUseInput);
   const destinations = await resolvePublicReferenceDestinations(keys, {
     configurationSource: configurationBytes.toString("utf8"),
     environment: {},
+    registryDestinations: registryReference.destinations,
   });
+  const atlas = registryReference.receipt.atlas;
   return {
     destinations,
     input: {
-      source_relationship: "external_digest_bound_input",
-      configuration_path: productionPublicReferenceConfig,
-      configuration_sha256: sha256(configurationBytes),
-      keys: [...keys].sort(),
+      source_relationship:
+        "tracked_registry_binding_with_external_digest_bound_input",
+      keys: sortedKeys,
+      tracked_registry: {
+        keys: registryKeys,
+        binding: {
+          source_path: productionRegistryReferenceBinding,
+          git_blob_id: bindingInput.object,
+          sha256: registryReference.receipt.bindingSha256,
+          id: registryReference.receipt.id,
+          version: registryReference.receipt.version,
+          binding_count: registryReference.receipt.bindingCount,
+        },
+        data_use: {
+          source_path: productionRegistryDataUseNotice,
+          git_blob_id: dataUseInput.object,
+          sha256: dataUseReceipt.sha256,
+          bytes: dataUseReceipt.bytes,
+        },
+        atlas_receipt: {
+          reference_version: atlas.referenceVersion,
+          guide_version: atlas.guideVersion,
+          data_schema_version: atlas.dataSchemaVersion,
+          snapshot_date: atlas.snapshotDate,
+          accepted_at: atlas.acceptedAt,
+          archive_sha256: atlas.archiveSha256,
+          registry_atlas_sha256: atlas.registryAtlasSha256,
+          manifest_sha256: atlas.manifestSha256,
+          current_route_map_sha256: atlas.currentRouteMapSha256,
+          license: atlas.license,
+          content_role: atlas.contentRole,
+          action_authority: atlas.actionAuthority,
+          data_use_notice: atlas.dataUseNotice,
+          data_use_sha256: atlas.dataUseSha256,
+          benchmark_scope: atlas.benchmarkScope,
+        },
+      },
+      external_configuration: {
+        source_relationship: "external_digest_bound_input",
+        configuration_path: productionPublicReferenceConfig,
+        configuration_sha256: sha256(configurationBytes),
+        keys: externalKeys,
+      },
     },
     state: {
       path: configPath,
@@ -3969,6 +4101,7 @@ export async function createProductionProjectionPlan(options = {}) {
         selection.configuration.publication,
         primaryInputs,
         trackedBlobs,
+        trackedInputs,
       );
   const aggregatePlan = assertAggregatePlan(
     options.aggregatePlan ?? await createAggregatePackagePlan(),

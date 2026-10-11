@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "context-canvas-registry-bindings.schema.json",
+  "title": "Context Canvas Registry public-reference bindings",
+  "description": "A bounded, reviewed projection from authored Context Canvas semantic tokens to exact current Registry records and public routes. Atlas prose remains inert reference data and carries no action authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "id", "version", "atlas", "bindings"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "./context-canvas-registry-bindings.schema.json"
+    },
+    "id": {
+      "type": "string",
+      "const": "context-canvas.registry-public-reference-bindings.v1"
+    },
+    "version": {
+      "type": "string",
+      "const": "1"
+    },
+    "atlas": {
+      "$ref": "#/$defs/atlasReceipt"
+    },
+    "bindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/binding"
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "nonemptyText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[^\\u0000-\\u001F\\u007F]+$"
+    },
+    "atlasReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference_version",
+        "guide_version",
+        "data_schema_version",
+        "snapshot_date",
+        "accepted_at",
+        "archive_sha256",
+        "registry_atlas_sha256",
+        "manifest_sha256",
+        "current_route_map_sha256",
+        "public_root",
+        "license",
+        "content_role",
+        "action_authority",
+        "data_use_notice",
+        "data_use_sha256",
+        "benchmark_scope"
+      ],
+      "properties": {
+        "reference_version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+        },
+        "guide_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "data_schema_version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+        },
+        "snapshot_date": {
+          "$ref": "#/$defs/date"
+        },
+        "accepted_at": {
+          "$ref": "#/$defs/date"
+        },
+        "archive_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "registry_atlas_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "current_route_map_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "public_root": {
+          "type": "string",
+          "const": "https://kindlight.systems/"
+        },
+        "license": {
+          "type": "string",
+          "const": "Apache-2.0"
+        },
+        "content_role": {
+          "type": "string",
+          "const": "reference_data"
+        },
+        "action_authority": {
+          "type": "string",
+          "const": "current_human_request_and_repository_owned_tools"
+        },
+        "data_use_notice": {
+          "type": "string",
+          "const": "deployment/public-references/registry-atlas-data-use.txt"
+        },
+        "data_use_sha256": {
+          "type": "string",
+          "const": "71ca36c88846940b837772dd1541c74a3f609438bfc915e3e52ac5cbe07aea67"
+        },
+        "benchmark_scope": {
+          "type": "string",
+          "const": "all_atlas_records_and_resources"
+        }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "token",
+        "atlas_record_key",
+        "expected_public_title",
+        "expected_family",
+        "expected_resource_role",
+        "expected_reader_job",
+        "expected_source_lifecycle",
+        "expected_route_state",
+        "url",
+        "selection_basis"
+      ],
+      "properties": {
+        "token": {
+          "type": "string",
+          "pattern": "^PUBLIC_URL_REGISTRY_[A-Z0-9]+(?:_[A-Z0-9]+)*$"
+        },
+        "atlas_record_key": {
+          "type": "string",
+          "pattern": "^registry:[a-z0-9]+(?:[a-z0-9-]*[a-z0-9])?(?:/[a-z0-9]+(?:[a-z0-9-]*[a-z0-9])?)*$"
+        },
+        "expected_public_title": {
+          "$ref": "#/$defs/nonemptyText"
+        },
+        "expected_family": {
+          "$ref": "#/$defs/nonemptyText"
+        },
+        "expected_resource_role": {
+          "$ref": "#/$defs/nonemptyText"
+        },
+        "expected_reader_job": {
+          "$ref": "#/$defs/nonemptyText"
+        },
+        "expected_source_lifecycle": {
+          "type": "string",
+          "const": "Current"
+        },
+        "expected_route_state": {
+          "type": "string",
+          "const": "Identity verified"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://kindlight\\.systems(?:/[^?#]*)?$"
+        },
+        "selection_basis": {
+          "$ref": "#/$defs/selectionText"
+        }
+      }
+    },
+    "selectionText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^[^\\u0000-\\u001F\\u007F]+$"
+    }
+  }
+}

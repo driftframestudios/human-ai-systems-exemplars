@@ -42,6 +42,14 @@
       ]
     },
     {
+      "name": "citation-atlas-selection",
+      "sourcePath": ".agents/skills/citation-atlas-selection/SKILL.md",
+      "publicationStanding": "public_possible",
+      "sourceAvailability": "repository_only",
+      "dependencies": [],
+      "publicationNote": "The first natural exercise establishes deterministic selection against one accepted Atlas snapshot. Public promotion remains held until an independent receiving use and source-package review test the helper's data-shape transfer beyond that initial Atlas and declare scripts/lookup.py in the complete public source package."
+    },
+    {
       "name": "collaboration-accounting",
       "sourcePath": ".agents/skills/collaboration-accounting/SKILL.md",
       "publicationStanding": "public_ready",

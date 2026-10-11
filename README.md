@@ -432,9 +432,11 @@ boundary.
 Authored Context Canvas source uses stable `PUBLIC_URL_REGISTRY_*` semantic
 keys for public-possible Registry destinations and carries no direct Notion
 page coordinate. The shared footer uses the separate
-`PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE` key. Human-reviewed HTTPS values enter
-through ignored `.env.public`; the source keeps a useful availability state
-before configuration.
+`PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE` key. A tracked, reviewed
+[Registry binding](deployment/public-references/README.md) resolves every
+Registry key to one exact current Atlas identity and public route. Ignored
+`.env.public` supplies only the separately approved professional-profile
+destination; the source keeps a useful availability state before a build.
 
 ```sh
 npm run build:public-references
@@ -443,8 +445,10 @@ npm run test:public-reference-materializer
 
 The [materializer](tools/materialize-public-references.mjs) owns substitution,
 carrier agreement, containment, and recoverable generation beneath ignored
-`.public-reference-build/`. Human review owns Registry ancestry, content
-standing, audience, signed-out reachability, and publication approval. The
+`.public-reference-build/`. The binding contract owns exact key coverage,
+normalized route admission, and a receipt for the accepted Atlas observation.
+Human review owns Registry ancestry, content standing, audience, signed-out
+reachability, and publication approval. The
 [Context Canvas orientation](context-canvas-project-surface/context-canvas/README.md#materialize-approved-public-references),
 [Registry handoff](planning/context-canvas/notion-registry-link-handoff.md), and
 [durable account](threadkeeping/context-canvas-public-reference-materialization.md)

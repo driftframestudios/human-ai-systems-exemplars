@@ -78,8 +78,10 @@ git diff --name-only origin/prod^1 origin/prod
 The final command should list only paths beneath
 `deployment/cpanel/carrier/`. The release operator also repeats
 `npm run check:prod-carrier` at exact `R` with the accepted private
-`.env.public` receiver. That file stays on its authorized release workstation;
-the cPanel installer reads the already-built carrier.
+`.env.public` receiver for the professional-profile destination. Registry
+routes come from the tracked binding at the accepted source coordinate. The
+private receiver stays on its authorized release workstation; the cPanel
+installer reads the already-built carrier.
 
 Complete #250's tag decision or explicitly reconfirm exact `R` immediately
 before the first deployment. A moving `prod` branch requires a fresh coordinate

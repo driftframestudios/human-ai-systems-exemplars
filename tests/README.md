@@ -95,8 +95,12 @@ That suite uses synthetic destinations and temporary directories. It exercises
 context-aware anchor and JSON-LD substitution, configuration failures,
 source/output separation, retained-generation recovery, and the current
 Context Canvas source without retaining or reporting configured destinations.
-The repository case discovers its keys and occurrences from source; migration
-counts remain a historical observation rather than a release threshold.
+The Registry contract cases additionally enforce the tracked binding's exact
+shape, accepted Atlas identity, normalized public host, current lifecycle,
+identity-verified route state, deterministic ordering, inert prose boundary,
+and exact source-discovered token coverage. The repository case discovers its
+keys and occurrences from source; migration counts remain a historical
+observation rather than a release threshold.
 
 ## Public iframe route packaging
 
