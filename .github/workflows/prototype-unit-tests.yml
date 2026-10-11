@@ -21,7 +21,7 @@ on:
         default: false
         type: boolean
       include_browser:
-        description: Exercise the selected rendered-page contracts with Chromium
+        description: Exercise selected rendered-page contracts with Chromium and their named engine checks
         required: true
         default: false
         type: boolean
@@ -169,6 +169,10 @@ jobs:
         if: ${{ github.event_name == 'pull_request' || inputs.include_browser }}
         run: npm exec -- playwright install --with-deps chromium
 
+      - name: Install WebKit for the Context Canvas image-delivery contract
+        if: ${{ github.event_name == 'pull_request' || (inputs.include_browser && inputs.suite == 'all') }}
+        run: npm exec -- playwright install --with-deps webkit
+
       - name: Exercise the selected source contracts
         env:
           SELECTED_SUITE: ${{ inputs.suite || 'all' }}
@@ -210,6 +214,7 @@ jobs:
               npm run test:prototype-units
               if [[ "$INCLUDE_BROWSER" == "true" ]]; then
                 npm run test:debrief-catalog-preview-browser
+                npm run test:context-canvas-image-delivery-browser
                 npm run test:who-to-believe-system-graph-browser
                 npm run test:prototype-control-labels
                 npm run test:core-browser

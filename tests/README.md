@@ -185,6 +185,7 @@ separable:
 npm run test:context-canvas
 npm run check:debrief-image-derivatives
 npm run test:debrief-catalog-preview-browser
+npm run test:context-canvas-image-delivery-browser
 npm run test:who-to-believe-system-graph
 npm run test:who-to-believe-system-graph-browser
 npm run test:video-receivers-browser
@@ -201,6 +202,14 @@ accepted source replacement. The catalog-preview browser contract proves that
 responsive WebP metadata, SVG fallback metadata, captions, alternatives, and
 intrinsic geometry replace one another without stale attributes or horizontal
 overflow.
+
+The image-delivery browser contract serves the complete repository tree over
+loopback HTTP. Chromium and Playwright WebKit each scroll every authored image
+on About, AI Systems, and Debriefs into range and require a same-origin 2xx
+`image/*` response with non-zero natural dimensions. Existing source and
+production-closure tests retain file identity, signature, manifest, and copied-
+tree ownership. Application-specific physical-browser observations remain a
+separate receiver when local sandbox policy is the question.
 
 The Who To Believe graph source contract admits its finite node, edge, state,
 and concern vocabulary before rendering. Its focused unit route covers
