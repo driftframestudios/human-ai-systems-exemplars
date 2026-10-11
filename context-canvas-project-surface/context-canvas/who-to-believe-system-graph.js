@@ -1,3 +1,12 @@
+(function (root, factory) {
+  "use strict";
+
+  const graph = factory();
+  if (typeof module === "object" && module.exports) module.exports = graph;
+  root.ContextCanvasWhoToBelieveSystemGraph = graph;
+}(typeof globalThis === "object" ? globalThis : this, function () {
+"use strict";
+
 const MODES = new Set(["symfony", "spring"]);
 const STATUSES = new Set(["ok", "strained", "broken"]);
 const DIMENSIONS = new Set(["abuse", "misfit", "core", "forecast"]);
@@ -52,7 +61,7 @@ function freezeGraph(model) {
  * Admit one finite graph contract before any interactive view uses it.
  * The visitor receives the complete static reading when admission reports errors.
  */
-export function validateSystemGraphContract(input) {
+function validateSystemGraphContract(input) {
   const errors = [];
   const add = message => {
     if (errors.length < 50) errors.push(message);
@@ -204,7 +213,7 @@ function nodeMatches(node, dimension) {
 }
 
 /** Return the fewest-edge directed route; declared edge order resolves ties. */
-export function findShortestRoute(model, startId, endId, dimension = "all") {
+function findShortestRoute(model, startId, endId, dimension = "all") {
   const nodeById = new Map(model.nodes.map(node => [node.id, node]));
   if (!nodeById.has(startId) || !nodeById.has(endId)) return null;
   if (!nodeMatches(nodeById.get(startId), dimension) || !nodeMatches(nodeById.get(endId), dimension)) return null;
@@ -245,7 +254,7 @@ export function findShortestRoute(model, startId, endId, dimension = "all") {
   return null;
 }
 
-export function initialSystemGraphState(model) {
+function initialSystemGraphState(model) {
   const endpoints = model.defaults.routes[model.defaults.dimension];
   const route = findShortestRoute(model, endpoints.start, endpoints.end, model.defaults.dimension);
   return Object.freeze({
@@ -272,7 +281,7 @@ function tracedState(model, state, announcement, unavailableAnnouncement = "Choo
 }
 
 /** One closed transition vocabulary feeds keyboard, pointer, and touch interaction. */
-export function transitionSystemGraph(model, state, action) {
+function transitionSystemGraph(model, state, action) {
   if (!action || !ACTIONS.has(action.type)) return state;
   switch (action.type) {
     case "SET_MODE":
@@ -563,7 +572,7 @@ function focusSelected(root, selectedNodeId) {
   selected.scrollIntoView({ block: "nearest", inline: "nearest" });
 }
 
-export function mountSystemGraph(root, document = globalThis.document, browser = globalThis) {
+function mountSystemGraph(root, document = globalThis.document, browser = globalThis) {
   if (!root || !document) return null;
   if (mountedGraphs.has(root)) return mountedGraphs.get(root);
 
@@ -769,3 +778,12 @@ if (typeof document !== "undefined") {
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start, { once: true });
   else start();
 }
+
+return Object.freeze({
+  findShortestRoute,
+  initialSystemGraphState,
+  mountSystemGraph,
+  transitionSystemGraph,
+  validateSystemGraphContract,
+});
+}));

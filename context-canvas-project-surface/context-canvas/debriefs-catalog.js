@@ -609,11 +609,12 @@
     var surfacesText = catalogFacts.length > 0 ? normalizedText(catalogFacts[0]) : "Primary visual and worked account";
     var usefulText = catalogFacts.length > 1 ? normalizedText(catalogFacts[1]) : (normalizedText(slug) || "Enterprise collaboration and implementation review");
     var imageAlt = image ? image.getAttribute("alt") : "";
-    var previewImageSrc = card.getAttribute("data-catalog-preview-src") || (image ? image.getAttribute("src") : "");
-    var previewImageSrcset = card.getAttribute("data-catalog-preview-srcset") || (image ? image.getAttribute("srcset") : "");
-    var previewImageSizes = card.getAttribute("data-catalog-preview-sizes") || (image ? image.getAttribute("sizes") : "");
-    var previewImageWidth = card.getAttribute("data-catalog-preview-width") || (image ? image.getAttribute("width") : "");
-    var previewImageHeight = card.getAttribute("data-catalog-preview-height") || (image ? image.getAttribute("height") : "");
+    var hasPreviewImage = card.hasAttribute("data-catalog-preview-src");
+    var previewImageSrc = hasPreviewImage ? card.getAttribute("data-catalog-preview-src") : (image ? image.getAttribute("src") : "");
+    var previewImageSrcset = hasPreviewImage ? card.getAttribute("data-catalog-preview-srcset") : (image ? image.getAttribute("srcset") : "");
+    var previewImageSizes = hasPreviewImage ? card.getAttribute("data-catalog-preview-sizes") : (image ? image.getAttribute("sizes") : "");
+    var previewImageWidth = hasPreviewImage ? card.getAttribute("data-catalog-preview-width") : (image ? image.getAttribute("width") : "");
+    var previewImageHeight = hasPreviewImage ? card.getAttribute("data-catalog-preview-height") : (image ? image.getAttribute("height") : "");
     var previewImageAlt = card.getAttribute("data-catalog-preview-alt") || imageAlt;
     var previewImageCaption = card.getAttribute("data-catalog-preview-caption") || previewImageAlt;
     var routes = caseBriefRoutes(card);

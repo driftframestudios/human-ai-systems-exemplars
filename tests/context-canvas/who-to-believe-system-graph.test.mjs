@@ -3,12 +3,14 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
 
-import {
+import graphApi from "../../context-canvas-project-surface/context-canvas/who-to-believe-system-graph.js";
+
+const {
   findShortestRoute,
   initialSystemGraphState,
   transitionSystemGraph,
   validateSystemGraphContract,
-} from "../../context-canvas-project-surface/context-canvas/who-to-believe-system-graph.js";
+} = graphApi;
 
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const pagePath = resolve(

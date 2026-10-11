@@ -37,7 +37,10 @@ async function focusPreview(page, cardSelector) {
     const previewFigure = previewImage?.closest("figure");
     const figureBox = previewFigure?.getBoundingClientRect();
     const attr = (node, name) => node?.getAttribute(name) || "";
-    const preferred = name => attr(card, `data-catalog-preview-${name}`) || attr(primaryImage, name);
+    const hasPreviewImage = card?.hasAttribute("data-catalog-preview-src");
+    const preferred = name => hasPreviewImage
+      ? attr(card, `data-catalog-preview-${name}`)
+      : attr(primaryImage, name);
     const expectedAlt = preferred("alt");
     const expectedCaption = attr(card, "data-catalog-preview-caption") || expectedAlt;
 
@@ -92,6 +95,14 @@ for (const width of [390, 1440]) {
     assert.ok(responsive.actual.srcset, "the WebP preview exposes responsive candidates");
     assert.ok(responsive.actual.sizes, "the WebP preview exposes its rendered-size hint");
 
+    const whoToBelieve = await focusPreview(page, "#catalog-who-to-believe");
+    assert.deepEqual(whoToBelieve.actual, whoToBelieve.expected);
+    assert.match(whoToBelieve.actual.src, /who_to_believe_influence_map\.svg$/u);
+    assert.equal(whoToBelieve.actual.srcset, "", "the SVG preview clears the prior responsive candidates");
+    assert.equal(whoToBelieve.actual.sizes, "", "the SVG preview clears the prior rendered-size hint");
+    assert.equal(whoToBelieve.actual.width, "1600");
+    assert.equal(whoToBelieve.actual.height, "1180");
+
     const fallback = await focusPreview(page, "#catalog-table-reading");
     assert.deepEqual(fallback.actual, fallback.expected);
     assert.equal(fallback.actual.srcset, "", "the SVG fallback clears the prior srcset");
@@ -104,7 +115,7 @@ for (const width of [390, 1440]) {
     assert.ok(restored.actual.srcset, "a later WebP preview restores responsive candidates");
     assert.ok(restored.actual.width && restored.actual.height, "a later WebP preview restores intrinsic geometry");
 
-    for (const state of [responsive, fallback, restored]) {
+    for (const state of [responsive, whoToBelieve, fallback, restored]) {
       assert.ok(state.geometry.figureLeft >= -1, "the preview stays inside the leading viewport edge");
       assert.ok(
         state.geometry.figureRight <= state.geometry.viewportWidth + 1,

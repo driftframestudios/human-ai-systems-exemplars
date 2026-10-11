@@ -91,7 +91,7 @@ does not claim a new audit or execution of all their assertions.
 | --- | --- |
 | `tools/about-media-browser-contract.mjs` | About-media behavior and its own observations. |
 | `tests/context-canvas/video-receivers.browser.mjs` | Native-video receiver containment, passive poster requests, and accessible relationships across the selected Debrief and AI Systems pages. |
-| `tests/context-canvas/who-to-believe-system-graph.browser.mjs` | Who To Believe finite graph admission, native controls, directed routes, focus and status, viewport containment, forced colors, reduced motion, print, and scriptless recovery. |
+| `tests/context-canvas/who-to-believe-system-graph.browser.mjs` | Who To Believe finite graph admission, direct local-file initialization, native controls, directed routes, focus and status, viewport containment, forced colors, reduced motion, print, and scriptless recovery. |
 | `tools/canvas-iframe-route-browser-contract.mjs` | Iframe route and carrier behavior. |
 | `tools/core-decision-canvas-contract.mjs` | Decision-canvas family assertions and artifacts. |
 | `tools/core-iframe-carrier-contract.mjs` | Core carrier assertions and delivery roots. |
