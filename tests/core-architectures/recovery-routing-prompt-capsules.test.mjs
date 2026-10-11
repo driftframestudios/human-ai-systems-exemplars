@@ -38,7 +38,7 @@ const artifacts = [
     currentFile: "recovery-routing-atlas-chimeric-prototype-v0.1.5.html",
     historicalFile: "recovery-routing-atlas-chimeric-prototype-v0.1.4.html",
     historicalDigest: "48633e6a5884800e66645d40c15b15b5991385188b9e39993f0f9bf11fe1b1d8",
-    currentDigest: "f6888b815a0f16afcad45c5eb933c49eb86c269ecffbb6fc44364303d6576fe2",
+    currentDigest: "0c3bdc319ce5b8e830d8c1328c7ea3bedc246a3f407d6db7f9c64f60cd8d8475",
     stateContract: "recovery-routing-atlas-state.v0.1",
     apiName: "recoveryRoutingAtlas",
     promptId: "promptBox",
