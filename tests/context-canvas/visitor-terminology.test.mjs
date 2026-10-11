@@ -81,7 +81,28 @@ const aiSystemsRoomContexts = [
 const reportedConsequenceColumnHeader =
   /<th scope="col"(?: data-label="Reported consequence")?>Reported consequence<\/th>/u;
 
-const sourceBearingRoleLanguageAllowlist = [];
+// The Review Routing graph retains this exact source node label across its
+// machine-readable contract and equivalent semantic reading. Each bounded
+// carrier earns an independent occurrence so new generic role language still
+// receives the corpus-wide review below.
+const sourceBearingRoleLanguageAllowlist = [
+  {
+    path: "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
+    fragment: "<strong>AI assistant.</strong> Symfony PHP monolith",
+  },
+  {
+    path: "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
+    fragment: "Member web front end → AI assistant. Symfony PHP monolith",
+  },
+  {
+    path: "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
+    fragment: "Eligibility rules → AI assistant. Symfony PHP monolith",
+  },
+  {
+    path: "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
+    fragment: '\"id\":\"assistant\",\"label\":\"AI assistant\",\"col\":3',
+  },
+];
 
 async function readCanvasFile(path) {
   return readFile(resolve(canvasRoot, path), "utf8");
