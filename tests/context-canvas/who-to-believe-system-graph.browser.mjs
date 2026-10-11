@@ -307,7 +307,7 @@ test("narrow neighbor traversal preserves page position and reveals the focused 
   await page.goto(`${server.origin}${route}`, { waitUntil: "load" });
   const graph = await waitForGraph(page);
   const connection = graph.getByRole("button", {
-    name: "Outgoing connection to Eligibility rules via dual-write. Degraded.",
+    name: "Outgoing connection to Eligibility rules via scheduled synchronization. Degraded.",
   });
   await connection.scrollIntoViewIfNeeded();
 

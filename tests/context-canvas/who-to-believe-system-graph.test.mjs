@@ -18,7 +18,7 @@ const pagePath = resolve(
   repositoryRoot,
   "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
 );
-const sourceDerivedContractSha256 = "35b2b9722b6b9ce4ae36da8e08d470f2ced9736b7e7cc83be291239cd51b55bf";
+const reviewedContractSha256 = "55eaccf5386f2ca5ac38f97fc028b154ab6cf5de465e3ce4698d4af1b4e5b806";
 
 async function sourceContract() {
   const html = await readFile(pagePath, "utf8");
@@ -27,9 +27,11 @@ async function sourceContract() {
   return JSON.parse(match[1]);
 }
 
-function normalizeSourceDerivedContract(contract) {
-  // The digest owns source-derived meaning; schema version and edge IDs remain
-  // local carrier metadata governed by admission and identity tests.
+function normalizeReviewedContract(contract) {
+  // The digest owns the reviewed technical meaning and source-derived topology.
+  // Schema version and edge IDs remain local carrier metadata governed by
+  // admission and identity tests. Copy or data corrections update this digest
+  // deliberately after the static and interactive forms agree.
   return {
     columns: contract.columns,
     dimensions: contract.dimensions.map(({ id, label, color }) => ({ id, label, color })),
@@ -72,10 +74,10 @@ test("the accepted system graph admits and freezes one finite contract", async (
   assert.equal("routes" in admission.model.defaults, false, "route defaults stay outside the original graph state model");
 });
 
-test("the accepted contract retains the exact source-derived graph data and topology", async () => {
-  const normalized = normalizeSourceDerivedContract(await sourceContract());
+test("the accepted contract retains reviewed technical data and exact source topology", async () => {
+  const normalized = normalizeReviewedContract(await sourceContract());
   const digest = createHash("sha256").update(JSON.stringify(normalized)).digest("hex");
-  assert.equal(digest, sourceDerivedContractSha256);
+  assert.equal(digest, reviewedContractSha256);
 });
 
 test("contract admission reports materially related faults together", async () => {
