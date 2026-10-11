@@ -81,22 +81,44 @@ bytes for the checked-in working bundle. A separately authorized live GitHub
 exercise can establish current platform behavior; received application
 behavior and owner acceptance retain their named evidence routes.
 
-## Public-reference materialization
+## Public-reference materialization and Citation Atlas selection
 
-Public-reference materialization has a separate dependency-free contract
-because it protects a build boundary rather than Core or Narrative prototype
-behavior:
+Public-reference materialization and Citation Atlas selection have separate
+dependency-free contracts because they protect a build boundary and a public
+source-selection boundary rather than Core or Narrative prototype behavior:
 
 ```sh
+npm run test:public-reference-contracts
+npm run test:public-references
+npm run test:citation-atlas-selection
 npm run test:public-reference-materializer
 ```
 
-That suite uses synthetic destinations and temporary directories. It exercises
-context-aware anchor and JSON-LD substitution, configuration failures,
-source/output separation, retained-generation recovery, and the current
-Context Canvas source without retaining or reporting configured destinations.
-The repository case discovers its keys and occurrences from source; migration
-counts remain a historical observation rather than a release threshold.
+The aggregate contract route runs both focused families and confirms their
+suite-catalog reachability. The complete Node route runs the materializer,
+Registry binding, and synthetic live-route verifier modules. These checks use synthetic destinations,
+stubbed HTTP responses, and temporary directories. They exercise context-aware
+anchor and JSON-LD substitution, configuration failures, source/output
+separation, retained-generation recovery, bounded response handling, exact
+route and title identity, and the current Context Canvas source without
+retaining or reporting configured destinations. The focused
+`test:public-reference-materializer` compatibility route remains available for
+the materializer module alone.
+
+The Registry contract cases enforce the tracked binding's exact shape,
+accepted Atlas identity, normalized public host, current lifecycle,
+identity-verified route state, deterministic ordering, inert prose boundary,
+and exact source-discovered token coverage. The repository case discovers its
+keys and occurrences from source; migration counts remain a historical
+observation rather than a release threshold.
+
+The Python route exercises the portable Citation Atlas helper through its
+public CLI. Synthetic Atlas records cover strict UTF-8 JSON, lifecycle and
+canonical selection, complete-token search, deterministic output, bounded
+failure envelopes, source digests, and public-route admission. Both focused
+routes remain offline. The separately authorized
+`verify:registry-public-references` command owns current signed-out network
+observation.
 
 ## Public iframe route packaging
 

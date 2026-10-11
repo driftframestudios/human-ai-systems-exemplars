@@ -23,6 +23,7 @@ These notes remain provisional field evidence. Repeated use can earn a skill rev
 - [Repository orientation stewardship formation](2026-09-30-repository-orientation-stewardship.md) — a seven-repository README-graph audit, the distinct first-receipt/repeat-use/re-entry job, the `create_now` route, and the first human-readable skill catalog.
 
 - [Cost and ownership analysis formation](2026-10-01-cost-and-ownership-analysis.md): function-cost coverage, ownership repairs, and the public skill review boundary.
+- [Citation Atlas selection formation](2026-10-11-citation-atlas-selection.md) — exact offline selection from an external public Atlas, a bounded repository binding, and the `create_now` route for a portable operator-neutral lookup skill.
 
 ## Return condition
 

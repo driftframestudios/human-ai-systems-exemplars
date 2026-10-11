@@ -192,11 +192,14 @@ The referenced manifest uses one explicit entry for every primary output:
 ```
 
 The assembler reads selected files from regular Git blobs at the accepted
-source coordinate. It resolves Registry and professional-profile tokens from
-the ignored `.env.public` receiver in memory, records that receiver's digest
-and semantic key set, and rechecks the digest before returning the plan. It
-uses an empty process environment for this step, so the file is the complete
-receiver for a production projection.
+source coordinate. It resolves Registry tokens through the tracked, reviewed
+binding in [`deployment/public-references/`](../public-references/README.md)
+and resolves the professional-profile token from ignored `.env.public` in
+memory. The plan records the tracked binding and accepted Atlas receipt plus
+the external receiver's digest and non-Registry key set, then rechecks both
+inputs before returning. It uses an empty process environment for this step,
+so `.env.public` is the complete external receiver for a production
+projection. Registry overrides in that receiver fail closed.
 
 For the About CSS projection, the deployment manifest also records the exact
 profile, CSSO package/version/options, consumer and execution context, ordered
@@ -256,7 +259,8 @@ request-closure, and the expected CSP iframe-refusal boundary. The focused
 browser contract uses tracked bytes and does not require `.env.public`.
 `build:prod-projection` is the explicit mutation boundary and transactionally
 replaces only `.prod-projection-build/`. Both commands require the ignored
-`.env.public` receiver. A custom repository-owned fixture can be named with
+`.env.public` receiver for the professional-profile destination; Registry
+routes come from tracked input. A custom repository-owned fixture can be named with
 `-- --config path/to/config.json`.
 
 `stage:prod-carrier` transactionally replaces only the tracked carrier root.

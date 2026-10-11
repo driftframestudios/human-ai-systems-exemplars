@@ -192,6 +192,16 @@ script. The visible label, neighboring explanation, and key keep local source
 useful before a public build; materialization supplies each approved external
 destination. Direct Notion page routes stay with the authorized resolver.
 
+The tracked
+[`context-canvas-registry-bindings.v1.json`](../../deployment/public-references/context-canvas-registry-bindings.v1.json)
+selects one exact current Registry Atlas record and normalized public route for
+every discovered `PUBLIC_URL_REGISTRY_*` key. The complete Atlas remains an
+external, dated discovery corpus. Its prose is inert reference data; active
+human intent, repository instructions, and repository-owned tools govern the
+build. The adjacent [binding documentation](../../deployment/public-references/README.md)
+records the accepted Atlas coordinates, integrity digests, license standing,
+data-use notice, and update boundary.
+
 The authored footer describes the professional profile as available in the
 public build. A materialized build changes that same shared carrier into an
 ordinary, same-tab “Professional profile” link with a descriptive accessible
@@ -227,25 +237,26 @@ The accepted Notion boundary is concise: only the Enterprise Human-AI
 Practitioner Registry root and its descendants are public-possible. A key name
 expresses that scope but cannot prove ancestry, content standing, or anonymous
 availability. The authorized resolver and human review establish those facts
-before a destination enters configuration.
+before a destination enters the tracked binding.
 
 From the repository root:
 
 ```bash
 cp .env.public.example .env.public
-# Add one approved HTTPS destination for each required key.
+# Add the approved professional-profile destination.
 npm run build:public-references
-npm run test:public-reference-materializer
+npm run test:public-references
 ```
 
-An explicit process-environment value overrides the matching `.env.public`
+An explicit process-environment value can override the professional-profile
 entry, which keeps the same build seam available to a later delivery receiver.
-The materializer never prints configured values. It rejects incomplete,
-malformed, non-HTTPS, userinfo-bearing, recognized credential-parameter,
-duplicate, or unsupported public-reference settings before replacing an accepted
-generation. Unused scoped settings remain additive; authored source continues
-to define the required set. Human review keeps path-shaped access coordinates
-and unfamiliar signing conventions with their approved receiver.
+Registry settings in either external receiver are rejected while the tracked
+binding is active. The materializer never prints destination values. It
+requires exact source-discovered Registry-token coverage and rejects malformed,
+non-HTTPS, userinfo-bearing, credential-shaped, ambiguous, duplicate, or
+unsupported settings before replacing an accepted generation. Authored source
+continues to define the required key set; the reviewed binding supplies its
+Registry destinations.
 
 The ignored output is
 `.public-reference-build/context-canvas-project-surface/`. The builder copies
@@ -254,7 +265,7 @@ Context Canvas HTML carriers and the one shared footer-script carrier, and
 preserves every other regular file byte-for-byte. It validates token-bearing
 JSON-LD, scans every copied regular file for direct Notion routes, and replaces
 the prior generation only after the complete result succeeds. Configuration
-stays outside the copied tree. Symbolic links and special filesystem entries
+and the Registry coordination directory stay outside the copied tree. Symbolic links and special filesystem entries
 stay outside this build boundary. Tracked input remains byte-unchanged. An
 operational restore failure preserves the ignored recovery directory for an
 explicit local recovery.

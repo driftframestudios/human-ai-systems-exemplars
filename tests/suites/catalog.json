@@ -47,6 +47,20 @@
       "timeout": "Existing focused unittest invocation."
     },
     {
+      "id": "python-source",
+      "runtime": "Python 3.12 and the standard library",
+      "prerequisites": [
+        "Python 3.12 is available; the selected helper and behavior tests remain dependency-free."
+      ],
+      "effects": [
+        "Temporary fixture files and subprocesses; PYTHONDONTWRITEBYTECODE=1 retains the source-tree policy."
+      ],
+      "artifacts": [
+        "unittest output; temporary fixture-owned comparisons."
+      ],
+      "timeout": "Existing focused unittest invocation."
+    },
+    {
       "id": "python-project",
       "runtime": "Managed Python 3.12 through isolated uv project routes",
       "prerequisites": [
@@ -331,7 +345,9 @@
       "family": "public-references",
       "kind": "node-test",
       "members": [
-        "tests/public-references/materializer.test.mjs"
+        "tests/public-references/live-route-verifier.test.mjs",
+        "tests/public-references/materializer.test.mjs",
+        "tests/public-references/registry-reference-contract.test.mjs"
       ],
       "profile": "node-source",
       "command": {
@@ -345,7 +361,7 @@
       "owner": "tests/README.md",
       "scope": "Source, unit and owned integration cases in these exact modules; runtime test names remain runner-owned.",
       "aliases": [
-        "test:public-reference-materializer"
+        "test:public-references"
       ]
     },
     {
@@ -758,6 +774,33 @@
       "scope": "Existing standalone browser journey through managed Python 3.12 and pinned PyMuPDF 1.26.5; exact states and cases remain with this entry.",
       "aliases": [
         "test:hiring-schema-print-browser"
+      ]
+    },
+    {
+      "id": "python.citation-atlas-selection",
+      "family": "public-references",
+      "kind": "python-unittest",
+      "members": [
+        "tests/skills/citation_atlas_selection_test.py"
+      ],
+      "profile": "python-source",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "env",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "python3",
+          "-m",
+          "unittest",
+          "-v",
+          "tests.skills.citation_atlas_selection_test"
+        ],
+        "appendMembers": false
+      },
+      "owner": ".agents/skills/citation-atlas-selection/SKILL.md",
+      "scope": "Dependency-free CLI behavior over synthetic Atlas records, including strict input, deterministic selection, current lifecycle, public-route admission, bounded failures, and source identity.",
+      "aliases": [
+        "test:citation-atlas-selection"
       ]
     },
     {
@@ -1967,7 +2010,7 @@
   "bundles": [
     {
       "id": "source-unit",
-      "description": "Root nonbrowser source/unit modules, Worker fixtures and focused Python tables. Named scripts remain metadata.",
+      "description": "Root nonbrowser source/unit modules, Worker fixtures, and focused dependency-free Python checks. Named scripts remain metadata.",
       "suites": [
         "node.attribution",
         "node.context-canvas",
@@ -1985,6 +2028,7 @@
         "node.tables",
         "node.visualization-fidelity-atlas",
         "node.suite-planner",
+        "python.citation-atlas-selection",
         "python.tables.parser",
         "python.tables.hiring-table-media",
         "python.tables.table-context",
@@ -2319,6 +2363,11 @@
       "Deployment, installation, publication and DB rehearsal commands remain with their existing explicit receivers."
     ],
     "npmRunEdges": {
+      "test:public-reference-contracts": [
+        "test:public-references",
+        "test:citation-atlas-selection",
+        "test:suites:unit"
+      ],
       "test:canvas-iframe-routes": [
         "build:iframe-routes"
       ],
@@ -2365,6 +2414,11 @@
         ],
         "test:public-reference-materializer": [
           "tests/public-references/materializer.test.mjs"
+        ],
+        "test:public-references": [
+          "tests/public-references/materializer.test.mjs",
+          "tests/public-references/registry-reference-contract.test.mjs",
+          "tests/public-references/live-route-verifier.test.mjs"
         ],
         "test:repository-handoff-foundation": [
           "tests/repository-handoff-foundation/foundation.test.mjs",

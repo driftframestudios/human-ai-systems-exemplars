@@ -663,6 +663,7 @@ test("the public catalog contains exactly the public-ready allowlist", async () 
 
   assert.deepEqual(possibleNames, [
     "agency-and-action-writing",
+    "citation-atlas-selection",
     "conversation-data-visualization",
     "data-visualization-foundations",
     "pdf-data-visualization",
