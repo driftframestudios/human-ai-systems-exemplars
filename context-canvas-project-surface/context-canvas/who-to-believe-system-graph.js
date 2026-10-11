@@ -263,8 +263,8 @@ function initialSystemGraphState(model) {
 /** One finite transition vocabulary feeds pointer, keyboard, and touch input. */
 function transitionSystemGraph(model, state, action) {
   if (!action || !ACTIONS.has(action.type)) return state;
-  // The admitted model and closed vocabularies own semantic-twin wording;
-  // callers request transitions without supplying visitor-facing authority.
+  // The admitted model and closed vocabularies retain visitor-facing wording
+  // authority while callers supply transition requests.
   switch (action.type) {
     case "SET_MODE":
       if (!MODES.has(action.value) || action.value === state.mode) return state;
@@ -435,7 +435,7 @@ function isolateMountDom(root, mountId) {
   }
 
   // Required names also recover when repaired markup supplies the semantic
-  // element without recreating its former ID.
+  // element using its replacement or generated ID.
   const graphTitle = root.querySelector("[data-graph-title]");
   if (graphTitle) {
     if (!graphTitle.id) graphTitle.id = `wtb-system-graph-title-${mountId}`;

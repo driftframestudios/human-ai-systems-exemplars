@@ -209,6 +209,28 @@ test("Every catalogued Full Debrief carries one complete Case Brief contract", a
   }
 });
 
+test("Who To Believe keeps rounded outcome figures anchored to contemporaneous telemetry notes", async () => {
+  const html = await readCanvasFile("who-to-believe-reviews-platform.html");
+  const caseBriefStart = html.indexOf('<section id="case-brief"');
+  const caseBriefEnd = html.indexOf("</section>", caseBriefStart);
+  const outcomesStart = html.indexOf('<h3 id="solution-outcomes-title"');
+  const outcomesEnd = html.indexOf('<h3 id="solution-repeatability-title"', outcomesStart);
+
+  assert.ok(caseBriefStart >= 0 && caseBriefEnd > caseBriefStart, "Expected the Who To Believe Case Brief");
+  assert.ok(outcomesStart >= 0 && outcomesEnd > outcomesStart, "Expected the Who To Believe outcomes section");
+
+  const caseBrief = html.slice(caseBriefStart, caseBriefEnd);
+  const outcomes = html.slice(outcomesStart, outcomesEnd);
+
+  assert.match(caseBrief, /These rounded percentages come from contemporaneous notes taken from system telemetry/u);
+  assert.match(outcomes, /Contemporaneous notes from system telemetry record the checkpoint/u);
+  assert.match(outcomes, /Original denominators and event definitions would reconstruct the rate/u);
+  assert.match(outcomes, /causal attribution would require the original experiment or a defensible observational design/u);
+  assert.match(outcomes, /Contemporaneous telemetry notes record both checkpoints/u);
+  assert.match(outcomes, /Contemporaneous notes from system telemetry record both directions/u);
+  assert.doesNotMatch(`${caseBrief}\n${outcomes}`, /(?:My (?:approximate|directional) recollection|I (?:recall|remember))/u);
+});
+
 test("the two table-reading articles retain ordinary routes and the Atlas reading closes the catalog", async () => {
   const html = await readCanvasFile("debriefs.html");
   const cards = [...html.matchAll(/<li id="(catalog-[^"]+)" class="project__media debrief-catalog__card"[^>]*>/gu)];
