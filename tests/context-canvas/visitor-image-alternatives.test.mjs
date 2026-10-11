@@ -72,6 +72,10 @@ const debriefProxyContracts = [
     route: "fmi-lims-eln-replatforming.html",
     directory: "sample-noone-could-find",
   },
+  {
+    route: "who-to-believe-reviews-platform.html",
+    directory: "who-to-believe",
+  },
 ];
 
 function withoutComments(source) {
@@ -119,12 +123,45 @@ test("parent visitor images carry a legible text relationship", async () => {
     }
   }
 
-  assert.equal(imageCount, 197);
+  assert.equal(imageCount, 203);
   assert.deepEqual(
     emptyAlternatives,
     ["debriefs.html:../img/plot/genomic_viewer_boundary_contract_map.svg"],
     "Only the scripted debrief preview begins with an empty alternative",
   );
+});
+
+test("Who To Believe figures preserve the intended narrative sequence", async () => {
+  const html = withoutComments(await readFile(
+    join(canvasRoot, "who-to-believe-reviews-platform.html"),
+    "utf8",
+  ));
+  const orderedLandmarks = [
+    'id="solution-debrief-title"',
+    'id="wtb-figure-member-experience-before"',
+    'id="solution-bottleneck-title"',
+    'id="wtb-figure-service-model-before"',
+    'id="solution-intervention-title"',
+    'id="wtb-figure-concept-matrix"',
+    'id="wtb-figure-member-experience-redesigned"',
+    'id="wtb-figure-service-model-after"',
+    'id="solution-outcomes-title"',
+    'id="implementation-bottleneck-title"',
+    'id="wtb-figure-dual-stack-system"',
+    'id="implementation-intervention-title"',
+  ];
+  const positions = orderedLandmarks.map(landmark => {
+    const position = html.indexOf(landmark);
+    assert.notEqual(position, -1, `Missing narrative landmark ${landmark}`);
+    return position;
+  });
+
+  for (let index = 1; index < positions.length; index += 1) {
+    assert.ok(
+      positions[index] > positions[index - 1],
+      `${orderedLandmarks[index]} follows ${orderedLandmarks[index - 1]}`,
+    );
+  }
 });
 
 test("static top-level raster carriers declare byte-matched intrinsic geometry", async () => {

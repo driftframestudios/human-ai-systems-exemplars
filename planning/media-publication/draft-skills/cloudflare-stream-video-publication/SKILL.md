@@ -10,9 +10,9 @@ description: Migrates an accepted accessible video package to human-authorized a
 - **What:** One accepted ingest master and accessible companion set receive
   Stream configuration, minimal player capability posture, adaptive playback,
   and public observation.
-- **When:** A Context Canvas or related public visitor route has earned
-  adaptive delivery through measured playback, traffic, device, or access
-  needs. The prior receiver remains available as rollback when one exists.
+- **When:** A public visitor route has earned adaptive delivery through
+  measured playback, traffic, device, or access needs. The prior receiver
+  remains available as rollback when one exists.
 - **Boundaries:** The human author selects visible content, rights, activation,
   access policy, and protected Cloudflare operations. Cloudflare Stream owns
   adaptive transcoding and manifests. The repository owns source preparation,
@@ -103,9 +103,8 @@ selected behavior. Dynamic manifests remain direct Stream resources.
 
 ## Conditional context
 
-Load
-[`ffmpeg-cloudflare-stream-guidance.v0.1.md`](../../ffmpeg-cloudflare-stream-guidance.v0.1.md)
-for a Stream migration and whenever source cadence, multiple tracks, audio,
+Consult current provider documentation and the receiving project's runbook for
+a Stream migration and whenever source cadence, multiple tracks, audio,
 metadata, access posture, or player capability changes the route.
 
 ## Completion

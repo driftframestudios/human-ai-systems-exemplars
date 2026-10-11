@@ -131,13 +131,11 @@ These scenarios specify intended boundaries. A passing local fixture establishes
 the exact case exercised; broader vocabulary and receiver behavior retain their
 own observations.
 
-## Repository receiving context
+## Receiving-task observation
 
-The links in this section are optional repository implementation context. The
-portable method and its protected-value boundaries are complete in this package;
-repository tests and draft plans retain their own access, dependencies and
-publication standing. These links follow current `main`, so an execution return
-names the actual source revision used.
+The portable method and its protected-value boundaries are complete in this
+package. Receiving-task tests and draft plans retain their own access,
+dependencies, publication standing, and exact source revision.
 
 The receiving review's literal inventory reported 18 decorative attributes in
 the investment studio: nine directional header labels and nine row separators.
@@ -145,25 +143,26 @@ The repair changed only attributes and retained visible text. That bounded
 finding motivates component-specific wording; a fresh inventory owns any later
 population claim.
 
-[tests/tables/data-labels.test.mjs](https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/tests/tables/data-labels.test.mjs)
-is the current guard for seven declared native HTML owners. Generator
-normalization and its fixtures remain with the generator owner. Material runtime
-labels retain user-data standing through their existing escapers. The native
-inventory, generator fixtures and runtime observations have distinct scopes;
-their current results belong to the receiving application return.
+The receiving task's native-table fixture guarded seven declared HTML owners.
+Generator normalization and its fixtures remained with the generator owner.
+Material runtime labels retained user-data standing through their existing
+escapers. The native inventory, generator fixtures, and runtime observations
+had distinct scopes; their results belonged to the receiving application
+return.
 
-The [Python source-preservation reference](https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/tests/tables/python-source-preservation.md)
-owns its API, grammar and focused command. The related
-[source-preserving transformation draft](https://github.com/driftframestudios/human-ai-systems-exemplars/blob/main/planning/context-canvas/table-audit/skills/source-preserving-transformation/SKILL.md)
-retains draft standing and its separate parser/publication decisions.
+A separate source-preservation reference owned its API, grammar, and focused
+command. Its source-preserving transformation draft retained draft standing and
+separate parser and publication decisions. These task-local owners remain
+useful implementation context while the transferable table contract stands on
+its own.
 
-Optional prose-tooling planning belongs to repository Issue 191 and its separate
-pilot pull request. Any Vale attribute coverage needs a pinned-version check of
-markup selection, explicit selectors where appropriate, and focused rule
-fixtures. The table-label projector and native fixtures retain deterministic
-ownership. Advisory prose findings invite human interpretation; negation meaning
-and neutral-referent resolution retain their own semantic review. This optional
-context adds no installation, CI dependency or mandatory lint step.
+An optional prose-tooling pilot remained a separate receiving task. Any Vale
+attribute coverage needs a pinned-version check of markup selection, explicit
+selectors where appropriate, and focused rule fixtures. The table-label
+projector and native fixtures retain deterministic ownership. Advisory prose
+findings invite human interpretation; negation meaning and neutral-referent
+resolution retain their own semantic review. The pilot adds no installation,
+CI dependency, or mandatory lint step to this contract.
 
 ## Evidence classes and release
 

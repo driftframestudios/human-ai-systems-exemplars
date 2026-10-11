@@ -59,6 +59,7 @@
     "test:context-canvas-narrow-rails": "node tools/context-canvas-narrow-rail-contract.mjs",
     "test:prototype-control-labels": "node --test tests/context-canvas/prototype-control-labels.test.mjs && node tools/initiative-costing-label-contract.mjs",
     "test:about-media-browser": "node tools/about-media-browser-contract.mjs",
+    "test:video-receivers-browser": "node --test tests/context-canvas/video-receivers.browser.mjs",
     "test:debrief-catalog-preview-browser": "node --test tests/context-canvas/debrief-catalog-preview.browser.mjs",
     "test:hiring-schema-print-browser": "env PYTHONDONTWRITEBYTECODE=1 uv run --isolated --no-project --python 3.12 --managed-python --with pymupdf==1.26.5 -- node tests/tables/hiring-schema-print.browser.mjs",
     "test:attribution": "node --test tests/attribution/*.test.mjs tests/context-canvas/visitor-surface-attribution.test.mjs",

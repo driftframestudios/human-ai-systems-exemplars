@@ -39,7 +39,7 @@ and iframe manifests continue to select membership; the generated deployment
 manifest joins each selected public projection back to one canonical source
 asset and exact source digest.
 
-The four Debrief working-system screenshot families retain their accepted,
+The five Debrief working-system and visual-comparison families retain their accepted,
 unsuffixed WebPs as full-size inspection targets. Run
 `npm run build:debrief-image-derivatives` after replacing an accepted source;
 the repository-owned generator uses `cwebp` to produce the `960w` and `1920w`
@@ -291,6 +291,7 @@ Choose the existing check that answers the page question under review:
 npm run test:context-canvas
 npm run check:debrief-image-derivatives
 npm run test:debrief-catalog-preview-browser
+npm run test:video-receivers-browser
 npm run test:context-canvas-narrow-rails
 npm run test:prototype-control-labels
 npm run visual:check -- path/to/page.html --selector "main"
@@ -303,6 +304,9 @@ The Context Canvas source suite protects source-authored visitor metadata,
 shared rail ownership, and the About-page identity seam. The narrow-rail
 contract is the lightweight all-route check for generated rail disclosure,
 clipping, scroll reachability, the 56rem seam, forced colors, and print. The
+native-video receiver contract observes the selected Debrief and AI Systems
+frames at narrow, medium, and wide widths with passive local carrier fixtures;
+live delivery and deployed playback remain separate release observations. The
 prototype-control-label contract checks the Cross-Functional Investment
 Studio at 1280, 701, 700, 390, and 320 CSS pixels, including generated rows and
 rerenders; the Canvas and Core iframe browser contracts apply the corresponding

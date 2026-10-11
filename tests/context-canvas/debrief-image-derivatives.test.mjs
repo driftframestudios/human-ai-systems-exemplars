@@ -29,6 +29,10 @@ const derivativeFixture = join(
   fixtureRoot,
   "clinical-trial-biomarkers-investigation-960.webp",
 );
+const whoToBelieveFixtureRoot = join(
+  repositoryRoot,
+  "context-canvas-project-surface/img/debriefs/who-to-believe",
+);
 
 test("Debrief derivative plan retains source ratio and excludes upscaling", () => {
   assert.deepEqual(
@@ -62,7 +66,7 @@ test("tracked Debrief derivatives preserve exact dimensions and source ratio", a
 
   const beforeCheck = await readFile(derivativeFixture);
   assert.deepEqual(await processDerivativeFamilies({ check: true }), {
-    processed: 48,
+    processed: 60,
     skipped: 0,
     removed: 0,
   });
@@ -71,6 +75,33 @@ test("tracked Debrief derivatives preserve exact dimensions and source ratio", a
     beforeCheck,
     "Check mode leaves accepted derivative bytes unchanged",
   );
+});
+
+test("Who To Believe comparison images carry both responsive widths", async () => {
+  const family = new Map([
+    ["cpg-pharma-dual-stack-system-graph", [[3_330, 2_030], [960, 586], [1_920, 1_171]]],
+    ["cpg-pharma-member-experience-before", [[3_972, 2_554], [960, 618], [1_920, 1_235]]],
+    ["cpg-pharma-member-experience-redesigned", [[2_874, 3_931], [960, 1_314], [1_920, 2_627]]],
+    ["cpg-pharma-redesign-concept-matrix", [[3_394, 2_474], [960, 700], [1_920, 1_400]]],
+    ["cpg-pharma-review-service-model-after", [[4_980, 2_280], [960, 440], [1_920, 880]]],
+    ["cpg-pharma-review-service-model-before", [[4_988, 1_814], [960, 350], [1_920, 699]]],
+  ]);
+
+  for (const [basename, expectedDimensions] of family) {
+    const paths = [
+      `${basename}.webp`,
+      `${basename}-960.webp`,
+      `${basename}-1920.webp`,
+    ];
+    for (const [index, filename] of paths.entries()) {
+      const [width, height] = expectedDimensions[index];
+      assert.deepEqual(
+        await readWebpDimensions(join(whoToBelieveFixtureRoot, filename)),
+        { width, height },
+        filename,
+      );
+    }
+  }
 });
 
 test("ineligible candidates are reported by checks and removed by builds", async (context) => {

@@ -328,6 +328,35 @@
       "semantic_authority_path": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html"
     },
     {
+      "id": "context-canvas.debrief-media.who-to-believe",
+      "selector": {
+        "prefix": "context-canvas-project-surface/img/debriefs/who-to-believe/"
+      },
+      "semantic_owner": "Who To Believe reviews-platform Debrief",
+      "roles": [
+        {
+          "id": "debrief_visual_comparison",
+          "visitor_job": "Compare the member experience, redesign concepts, service model, and dual-stack system relationships that shaped a pharma-adjacent reviews platform.",
+          "accessibility_text_owner": "The Who To Believe reviews-platform Debrief image alternatives, captions, and surrounding prose."
+        }
+      ],
+      "build_consumers": [
+        "production_projection",
+        "public_reference_materializer"
+      ],
+      "public_path_standing": {
+        "standing": "source_root_relative_path_preserved",
+        "source_root": "context-canvas-project-surface"
+      },
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
+        "lineage_standing": "The unsuffixed WebPs are accepted full-size comparison images for the Debrief. The -960 and -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved."
+      },
+      "recovery_condition": "Restore the accepted full-size comparison images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
+      "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html"
+    },
+    {
       "id": "context-canvas.document-head-icon",
       "selector": {
         "paths": [

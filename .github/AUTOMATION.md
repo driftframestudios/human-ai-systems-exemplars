@@ -3,7 +3,7 @@
 The repository carries eight workflows: two bounded automatic `main` receipts,
 one production-carrier contract, one standing documentation publication path,
 one connected release-and-production schema path, one configurable prototype
-receiver, and two explicitly dispatched proof paths. Every external action
+and media receiver, and two explicitly dispatched proof paths. Every external action
 reference uses a reviewed full-length commit SHA. Local commands remain the
 immediate edit loop.
 
@@ -20,7 +20,7 @@ below names every workflow; the following sections explain each receiving job.
 | `schema-receiver-routes.yml` | Matching non-draft `main` PR or manual dispatch; `ACTIONS_BUDGET_MAIN=true` | 6 minutes | Cancel same PR/ref run | #18 schema contracts; #63 inventory |
 | `schema-pages.yml` | Manual exact source, projection, and release-tag selection; `activate_deployment=false` by default | 15 minutes | Serialize the Pages group; finish the current run | PRs #308 and #309 |
 | `schema-delivery.yml` | Non-draft PR or push to budget-enabled `release`/`prod`; only an accepted `prod` push can deploy, with the receiver and dependency gate open | Contract 12; production deployment 8 minutes | Cancel superseded contracts; serialize the production deployment | #18, #402, and #406 schema delivery; #63 inventory |
-| `prototype-unit-tests.yml` | Confirmed manual suite; matching non-draft `main` PR only with `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` | 10 minutes | Cancel same PR/ref run, including another manual suite on that ref | PRs #97 and #287 |
+| `prototype-unit-tests.yml` | Confirmed manual suite; matching non-draft `main` PRs always receive the media job while `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` also admits the prototype job | 10 minutes per job | Cancel same PR/ref run, including another manual suite on that ref | PRs #97 and #287; Issues #430, #433, and #434 |
 | `production-carrier-contracts.yml` | Matching `main` PR or manual dispatch | 10 minutes | Cancel same PR/ref run | #253 and PR #255 |
 | `lims-eln-functional-nucleus.yml` | Manual selected proof; `ENABLE_GITHUB_ACTIONS=true` and `confirm_run` | 30 minutes | Cancel same workflow/ref run | #63 proof inventory |
 | `lims-eln-enterprise-reference.yml` | Manual offline, database, or full proof; `ENABLE_GITHUB_ACTIONS=true` and `confirm_run` | Offline 15; database 30 minutes per matrix job | Separate dispatches remain independent | #63 proof inventory |
@@ -226,32 +226,36 @@ own the complete public asset closure, reviewed environment configuration,
 budget gate, and delivery receipt. The current local route keeps those inputs
 ready for that connected receiver.
 
-## Core, iframe, and Narrative prototype path
+## Core, iframe, Narrative, and media paths
 
-`prototype-unit-tests.yml` gives the Core, iframe, and Narrative contracts one
-approved standard-runner receiver. A manual dispatch selects `core`, `iframe`,
-`narrative`, or `all` and requires `confirm_run`. `include_browser=true` adds
-the fitting Chromium contract to that selected family. The workflow installs
-the locked root toolchain with lifecycle scripts at rest, then calls the same
-family commands documented for local use.
+`prototype-unit-tests.yml` gives Core, iframe, Narrative, and media contracts
+approved standard-runner receivers. A manual dispatch selects `core`, `iframe`,
+`narrative`, `media`, or `all` and requires `confirm_run`.
+`include_browser=true` adds the fitting Chromium contract to a selected
+prototype family. The media selection exercises its own browser contract as
+part of that receiving job.
 
-Matching non-draft pull requests into `main` can run the complete unit baseline
-when `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true`. The unset or `false` value keeps
-automatic execution at rest while manual selection remains available. An
-active pull-request receiver includes the selected rendered contracts so its
-result covers direct and browser-owned behavior. Path filters cover the source
-families, iframe and carrier owners, collaboration and Context Canvas sources,
-attribution, focused tests and tools, root package and lock files, and workflow.
-The workflow file owns the exact filter list. One read-only job, one standard
-Linux runner, superseded-run cancellation, and a ten-minute ceiling keep the
-receiver proportional to the protected behavior.
+Matching non-draft pull requests into `main` run the media-publication job for
+matching paths. `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` also admits the complete
+prototype-unit baseline; the unset or `false` value keeps that second job at
+rest while manual selection remains available. Both jobs install the locked
+root toolchain with lifecycle scripts at rest. The media job additionally
+installs Chromium and FFmpeg, exercises preparation and delivery contracts,
+observes the native-video receivers, and dry-runs the Worker package. Path
+filters cover the source families, iframe and carrier owners, collaboration
+and Context Canvas sources, media planning contracts, attribution, focused
+tests and tools, root package and lock files, and the workflow. The workflow
+file owns the exact filter list. Two read-only jobs, standard Linux runners,
+superseded-run cancellation, and a ten-minute ceiling per job keep the receiver
+proportional to the protected behavior.
 
 | Selection | Source contract | Additional browser work when selected |
 | --- | --- | --- |
 | `core` | Attribution, iframe package, and Core units | Core browser contract |
 | `iframe` | Attribution and iframe package contracts | Prototype control labels and iframe browser contract |
 | `narrative` | Narrative units | Narrative browser contract |
-| `all` | Attribution, iframe package, and combined prototype units | Control labels, Core, Canvas, Narrative, and prototype exchange contracts |
+| `media` | Media preparation, manifest, delivery, and Worker contracts | Native-video receiver contract at narrow, medium, and wide viewports |
+| `all` | Attribution, iframe package, combined prototype units, and media contracts | Control labels, Core, Canvas, Narrative, prototype exchange, and native-video receiver contracts |
 
 The shared iframe-carrier source contract precedes the selection. PR #287 added
 the focused label-retention contract to the existing browser lanes. The
@@ -273,6 +277,9 @@ npm run test:narrative-architectures
 npm run test:narrative-browser
 npm run test:prototype-units
 npm run test:prototype-exchanges
+npm run test:media-publication
+npm run test:video-receivers-browser
+npm run dry-run:r2-video-delivery
 ```
 
 ## LIMS/ELN proof paths

@@ -277,4 +277,24 @@ test("the bounded video manifest binds each carrier to one semantic family and v
   assert.equal(current.release.deployed_page, "pending");
   assert.equal(current.release.physical_safari_ios, "pending");
   assert.equal(current.release.human_page_release, "pending");
+
+  const batchFamilies = manifest.families.filter(
+    (family) => family.semantic_id !== "choose-your-player",
+  );
+  assert.equal(batchFamilies.length, 11);
+  for (const family of batchFamilies) {
+    assert.equal(family.release.local_browser.standing, "observed");
+    assert.equal(family.release.local_browser.observed_on, "2026-10-10");
+    assert.equal(
+      family.release.local_browser.receiver,
+      "deterministic_passive_poster_fixture_across_narrow_medium_wide_viewports",
+    );
+    assert.equal(
+      family.release.local_browser.rerunnable_repository_check,
+      "npm run test:video-receivers-browser",
+    );
+    assert.equal(family.release.deployed_page, "pending");
+    assert.equal(family.release.physical_safari_ios, "pending");
+    assert.equal(family.release.human_page_release, "pending");
+  }
 });

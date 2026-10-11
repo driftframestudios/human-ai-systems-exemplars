@@ -48,6 +48,7 @@ on:
       - "tests/iframe-routes/**"
       - "tests/narrative-architectures/**"
       - "tests/media-publication/**"
+      - "planning/media-publication/**"
       - "tools/prepare-r2-progressive-video.mjs"
       - "tools/verify-r2-video-route.mjs"
       - "cloudflare/r2-video-delivery/**"
@@ -201,6 +202,9 @@ jobs:
       - name: Install the locked root toolchain
         run: npm ci --ignore-scripts
 
+      - name: Install Chromium for native video receiver checks
+        run: npm exec -- playwright install --with-deps chromium
+
       - name: Install the Ubuntu media receiver
         run: |
           sudo apt-get update
@@ -213,6 +217,7 @@ jobs:
           ffmpeg -version
           ffprobe -version
           npm run test:media-publication
+          npm run test:video-receivers-browser
 
       - name: Compile the exact Worker package without activation
         run: npm run dry-run:r2-video-delivery

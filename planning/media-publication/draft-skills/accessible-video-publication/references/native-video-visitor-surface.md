@@ -113,16 +113,16 @@ The native progressive receiver ordinarily includes:
   preload="metadata"
   width="1920"
   height="1080"
-  poster="/v1-cdn/video/example/v0.1.0/poster.webp"
+  poster="/<media-prefix>/<semantic-id>/<asset-version>/poster.webp"
   aria-label="Example working-proxy walkthrough"
   aria-describedby="video-standing video-caption"
   aria-details="video-sequence"
 >
   <source
-    src="/v1-cdn/video/example/v0.1.0/movie.mp4"
+    src="/<media-prefix>/<semantic-id>/<asset-version>/movie.mp4"
     type="video/mp4"
   >
-  <p><a href="/v1-cdn/video/example/v0.1.0/movie.mp4">Open the MP4 directly</a>.</p>
+  <p><a href="/<media-prefix>/<semantic-id>/<asset-version>/movie.mp4">Open the MP4 directly</a>.</p>
 </video>
 ```
 

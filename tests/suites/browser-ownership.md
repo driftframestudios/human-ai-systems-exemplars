@@ -84,12 +84,13 @@ their separate owners.
 
 ## Existing direct Core consumers
 
-These 16 entries retain their imports and case ownership. This disposition
+These 17 entries retain their imports and case ownership. This disposition
 does not claim a new audit or execution of all their assertions.
 
 | Entry | Retained receiving responsibility |
 | --- | --- |
 | `tools/about-media-browser-contract.mjs` | About-media behavior and its own observations. |
+| `tests/context-canvas/video-receivers.browser.mjs` | Native-video receiver containment, passive poster requests, and accessible relationships across the selected Debrief and AI Systems pages. |
 | `tools/canvas-iframe-route-browser-contract.mjs` | Iframe route and carrier behavior. |
 | `tools/core-decision-canvas-contract.mjs` | Decision-canvas family assertions and artifacts. |
 | `tools/core-iframe-carrier-contract.mjs` | Core carrier assertions and delivery roots. |

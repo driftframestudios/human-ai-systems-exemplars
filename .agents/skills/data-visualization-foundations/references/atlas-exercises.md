@@ -1,29 +1,25 @@
 # First-use exercises for coordinated Atlas views
 
-This is conditional task context for Issues
-[#358](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/358)
-and [#360](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/360).
-The portable contracts remain the four `SKILL.md` files. Exercise descriptions
-are prospective unless a receiving PR or Issue records the actual observation.
-They are neither executable tests nor claims that a figure has already rendered.
+This is conditional task context for a bounded coordinated-view initiative. The
+portable contracts remain the four `SKILL.md` files. Exercise descriptions are
+prospective until a receiving change record captures the actual observation.
+They are neither executable tests nor claims that a figure has already
+rendered.
 
 ## Current source basis
 
-The admitted AI4I source and pure derivation arrived through
-[#365](https://github.com/driftframestudios/human-ai-systems-exemplars/pull/365).
-The released generated dataset contains 10,000 records, 339 machine-failure
-labels, 348 records with at least one mode flag, 373 mode memberships, 24 records
-with multiple flags, and 27 target/flag-union disagreements. L/M/H are source
-product-quality variants, not sites. UDI carries record identity, not elapsed
-time. The [source contract](../../../../context-canvas-project-surface/data/visualization-fidelity/ai4i/README.md)
-and its pinned derivation are the current owners; future exercises resolve
-current source rather than silently inheriting stale counts.
+An admitted AI4I source and its pure derivation produced 10,000 records, 339
+machine-failure labels, 348 records with at least one mode flag, 373 mode
+memberships, 24 records with multiple flags, and 27 target/flag-union
+disagreements. L/M/H are source product-quality variants rather than sites. UDI
+carries record identity rather than elapsed time. The receiving task's source
+contract and pinned derivation own these counts; future exercises resolve the
+current source before carrying the figures forward.
 
-The [SECOM source](../../../../context-canvas-project-surface/data/visualization-fidelity/README.md)
-supplies a separate four-window count/rate example. Multiple datasets can occupy
-different parts of a reading sequence while each panel keeps its own population,
-measure, time basis, and source. Cross-panel numerical comparison requires those
-definitions to agree.
+An admitted SECOM source supplies a separate four-window count/rate example.
+Multiple datasets can occupy different parts of a reading sequence while each
+panel keeps its own population, measure, time basis, and source. Cross-panel
+numerical comparison requires those definitions to agree.
 
 ## A. Conversation and source-contract exercise
 
@@ -39,8 +35,8 @@ dashboard merely to exercise every form.
 
 **Observable result:** The selected reading keeps record counts, labels, and
 memberships distinct; denominators and source standing remain available. Record
-the decision-changing effect or lack of effect in the receiving PR. Source
-arithmetic evidence from #365 remains distinct from rendered-view evidence.
+the decision-changing effect or lack of effect in the receiving change record.
+Source-derivation evidence remains distinct from rendered-view evidence.
 
 ## B. Coordinated web-view exercise
 
@@ -101,9 +97,9 @@ its source or later re-entry condition.
 documented application within an approved public extract?
 
 Apply the portable [public-extract and search-coverage admission](form-and-data-contract.md#public-extract-and-search-coverage-admission)
-contract to #360's proposed research example. Its source is an internal research
-repository and asset pipeline; the public citation boundary includes the
-Enterprise Human-AI Practitioner Registry and public papers. Admit the extract
+contract to a proposed research example. Its source is an access-controlled
+research collection and asset pipeline; the public citation boundary includes
+an approved public source registry and public papers. Admit the extract
 separately from the manufacturing examples. A topic-use heatmap becomes a
 candidate once the extract's topic coverage and documented-application meanings
 are settled. The coordinated Atlas can use the admitted manufacturing records

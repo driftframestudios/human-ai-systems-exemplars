@@ -185,7 +185,9 @@ and a text/table route instead of invented evidence.
 - Load [sparse time, scales, and form boundaries](references/sparse-time-scales-and-form-boundaries.md) for irregular observations, missing intervals, logarithmic transforms, or a consequential choice between plausible displays.
 - Load [aggregation, distribution, and uncertainty](references/aggregation-distribution-and-uncertainty.md) when population mix, weighting, censoring, binning, normalization, repeated observations, or inferential claims change the reading.
 - Load [evidence and source map](references/evidence-and-source-map.md) when making research-backed claims, adapting a practitioner rule, or extending the method.
-- Load [Atlas exercises](references/atlas-exercises.md) for #358/#360, gallery work, or the separately reviewed research extract. This task binding releases when those receiving decisions settle.
+- Load [Atlas exercises](references/atlas-exercises.md) for a coordinated Atlas
+  view, gallery work, or a separately reviewed research extract. This task
+  binding releases when those receiving decisions settle.
 
 ## Completion and re-entry
 

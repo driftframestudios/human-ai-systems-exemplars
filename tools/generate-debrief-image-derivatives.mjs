@@ -19,6 +19,7 @@ const families = [
   "choose-your-player",
   "queue-secretly-status-machine",
   "sample-noone-could-find",
+  "who-to-believe",
 ];
 const widths = [960, 1920];
 

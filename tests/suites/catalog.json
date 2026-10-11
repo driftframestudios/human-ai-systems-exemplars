@@ -145,6 +145,7 @@
         "tests/context-canvas/debrief-catalog-preview-images.test.mjs",
         "tests/context-canvas/debrief-image-derivatives.test.mjs",
         "tests/context-canvas/debrief-reading-modes.test.mjs",
+        "tests/context-canvas/debrief-video-receivers.test.mjs",
         "tests/context-canvas/iframe-carriers.test.mjs",
         "tests/context-canvas/investment-model-studio-prompt-capsule.test.mjs",
         "tests/context-canvas/lims-capability-transfer-model.test.mjs",
@@ -976,6 +977,28 @@
       "scope": "Rendered catalog preview replacement across responsive WebP, SVG fallback, and later WebP states at narrow and desktop widths.",
       "aliases": [
         "test:debrief-catalog-preview-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.video-receivers",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/video-receivers.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "planning/media-publication/README.md",
+      "scope": "Deterministic passive-poster observation of all selected native-video receivers at narrow, medium, and wide viewports, including containment, controls, accessible relationships, visible sequences, and poster-first requests.",
+      "aliases": [
+        "test:video-receivers-browser"
       ]
     },
     {
@@ -2005,6 +2028,7 @@
         "browser.tables.hiring-schema-print",
         "browser.about-media-browser-contract",
         "browser.context-canvas.debrief-catalog-preview",
+        "browser.context-canvas.video-receivers",
         "browser.prod-deployment.about-css-projection",
         "browser.canvas-iframe-route-browser-contract",
         "browser.context-canvas-medium-containment-contract",

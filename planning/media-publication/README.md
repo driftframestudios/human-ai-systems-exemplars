@@ -40,7 +40,8 @@ the selected delivery service retain existing ownership.
   — the provider-neutral source, accepted-byte poster, accessibility, visual
   sequence, visitor-frame, and page contract.
 - [Cloudflare R2 progressive-video delivery draft skill](draft-skills/cloudflare-r2-progressive-video-delivery/SKILL.md)
-  — the current storage, route, cache, and receiver adapter.
+  — the current storage, route, cache, and receiver adapter, with a conditional
+  multi-family branch for member-level checkpoints and recovery.
 - [Bounded video-publication manifest](video-publication-manifest.v0.1.json)
   — semantic identity, accepted carriers, poster lineage, visitor receiver,
   accessibility standing, delivery adapter, and open release states for each
@@ -50,12 +51,23 @@ the selected delivery service retain existing ownership.
 - [Issue #430](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/430)
   — the current transport and accessible-publication coordination surface for
   the first R2 video family.
+- [Issue #433](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/433)
+  — the first multi-family preparation and R2 publication exercise, including
+  the selected single-writer or conditional create route and public-safe batch
+  return.
+- [Issue #434](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/434)
+  — semantic placement of the reviewed video and raster families in their
+  Debrief and AI Systems receivers.
 - [Impact Map progressive-video preparation exercise](exercises/impact-map-r2-progressive-preflight.v0.1.md)
   — the first two-file exercise of the local preparation, metadata, Fast
   Start, semantic-preservation, and packet-preservation contracts.
 - [Choose Your Player native-video receiver exercise](exercises/choose-your-player-native-video-receiver.v0.1.md)
   — the first accepted R2 family, accepted-byte poster, silent visual sequence,
   and Context Canvas visitor-frame exercise.
+- [R2 multi-family progressive-video batch exercise](exercises/r2-multi-family-video-batch-v0.1.md)
+  — eleven independently resumable movie/poster families, one explicit timing
+  decision, serialized Wrangler publication, exact remote comparison, and live
+  same-origin transport acceptance.
 
 ## Cultivation path
 
@@ -66,7 +78,10 @@ accepted a lossless Fast Start remux for both. The Choose Your Player exercise
 then selected a poster from accepted bytes, described a verified silent
 sequence, and formed the first native Context Canvas receiver. These exercises
 return concrete refinements to the candidate skills and keep remaining page
-release decisions visible.
+release decisions visible. The first multi-family exercise keeps preparation
+and page acceptance with each family while the R2 adapter coordinates
+member-level upload, verification, interruption recovery, and a bounded public
+return.
 Material friction continues to return to the drafts; stable, repeated
 decisions can then move into the public repository skill and runbook catalogs
 through the existing selection process.
