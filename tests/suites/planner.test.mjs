@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError } from '../../tools/test-suite-plan.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const POST_BASELINE_NODE_MEMBERS = ['tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs', 'tests/context-canvas/about-first-paint-css.test.mjs', 'tests/context-canvas/debrief-catalog-preview-images.test.mjs', 'tests/context-canvas/debrief-catalog-preview.browser.mjs', 'tests/context-canvas/debrief-image-derivatives.test.mjs', 'tests/context-canvas/debrief-video-receivers.test.mjs', 'tests/context-canvas/lims-capability-transfer-model.test.mjs', 'tests/context-canvas/prompt-side-figure.browser.mjs', 'tests/context-canvas/video-receivers.browser.mjs', 'tests/context-canvas/visual-reference-observations.test.mjs', 'tests/context-canvas/visitor-video-contract.test.mjs', 'tests/media-publication/prepare-r2-progressive-video.test.mjs', 'tests/media-publication/r2-video-worker.test.mjs', 'tests/media-publication/video-publication-manifest.test.mjs', 'tests/media-publication/verify-r2-video-route.test.mjs', 'tests/repository-handoff-foundation/foundation.test.mjs', 'tests/repository-handoff-foundation/install.test.mjs', 'tests/repository-handoff-foundation/issue-route-materializer.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-data.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-view.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research.browser.mjs'];
+const POST_BASELINE_NODE_MEMBERS = ['tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs', 'tests/context-canvas/about-first-paint-css.test.mjs', 'tests/context-canvas/debrief-catalog-preview-images.test.mjs', 'tests/context-canvas/debrief-catalog-preview.browser.mjs', 'tests/context-canvas/debrief-image-derivatives.test.mjs', 'tests/context-canvas/debrief-video-receivers.test.mjs', 'tests/context-canvas/lims-capability-transfer-model.test.mjs', 'tests/context-canvas/prompt-side-figure.browser.mjs', 'tests/context-canvas/video-receivers.browser.mjs', 'tests/context-canvas/visual-reference-observations.test.mjs', 'tests/context-canvas/visitor-video-contract.test.mjs', 'tests/media-publication/prepare-r2-progressive-video.test.mjs', 'tests/media-publication/r2-video-worker.test.mjs', 'tests/media-publication/video-publication-manifest.test.mjs', 'tests/media-publication/verify-r2-video-route.test.mjs', 'tests/public-references/live-route-verifier.test.mjs', 'tests/public-references/registry-reference-contract.test.mjs', 'tests/repository-handoff-foundation/foundation.test.mjs', 'tests/repository-handoff-foundation/install.test.mjs', 'tests/repository-handoff-foundation/issue-route-materializer.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-data.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-view.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research.browser.mjs'];
 const POST_BASELINE_COMPATIBILITY_SCRIPTS = {
   'test:iframe-browser': 'node tools/core-iframe-carrier-contract.mjs && npm run test:canvas-iframe-routes && npm run test:iframe-visual-media-browser',
 };
@@ -183,7 +183,7 @@ test('existing package aliases retain their exact source through the compatibili
 
 test('Python table membership stays explicit and distinct from nested project and browser routes', async () => {
   const plan = createPlan(await catalogPromise, {bundles: ['source-unit']});
-  const python = plan.suites.filter(s => s.kind === 'python-unittest');
+  const python = plan.suites.filter(s => s.kind === 'python-unittest' && s.family === 'tables');
   assert.deepEqual(python.flatMap(s => s.members).sort(), [
     'tests/tables/prototype-labels/test_parser.py',
     'tests/tables/test_component_entry.py',
@@ -192,6 +192,42 @@ test('Python table membership stays explicit and distinct from nested project an
     'tests/tables/visitor-labels/test_visitor_labels.py',
   ]);
   assert.equal(plan.suites.some(s => s.kind === 'python-project'), false);
+});
+
+test('public-reference source routes include every Node contract and the portable Atlas selection check', async () => {
+  const catalog = await catalogPromise;
+  const plan = createPlan(catalog, {suites: ['node.public-references', 'python.citation-atlas-selection']});
+  const byId = new Map(plan.suites.map(suite => [suite.id, suite]));
+  assert.deepEqual(byId.get('node.public-references').members, [
+    'tests/public-references/live-route-verifier.test.mjs',
+    'tests/public-references/materializer.test.mjs',
+    'tests/public-references/registry-reference-contract.test.mjs',
+  ]);
+  assert.deepEqual(byId.get('node.public-references').aliases, ['test:public-references']);
+  assert.deepEqual(byId.get('python.citation-atlas-selection').members, [
+    'tests/skills/citation_atlas_selection_test.py',
+  ]);
+  assert.deepEqual(byId.get('python.citation-atlas-selection').command, {
+    cwd: '.',
+    argv: [
+      'env', 'PYTHONDONTWRITEBYTECODE=1', 'python3', '-m', 'unittest', '-v',
+      'tests.skills.citation_atlas_selection_test',
+    ],
+  });
+  assert.deepEqual(byId.get('python.citation-atlas-selection').aliases, [
+    'test:citation-atlas-selection',
+  ]);
+  assert.deepEqual(catalog.inventory.npmRunEdges['test:public-reference-contracts'], [
+    'test:public-references',
+    'test:citation-atlas-selection',
+    'test:suites:unit',
+  ]);
+  assert.equal(
+    createPlan(catalog, {bundles: ['source-unit']}).suites.some(
+      suite => suite.id === 'python.citation-atlas-selection',
+    ),
+    true,
+  );
 });
 
 test('known commands retain held gates and each planned profile has independent mutable arrays', () => {

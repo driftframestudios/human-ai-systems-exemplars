@@ -21,6 +21,7 @@ import {
   inspectPublicReferenceSource,
   isPublicReferencePathWithin,
   materializePublicReferences,
+  resolvePublicReferenceDestinations,
 } from "../../tools/materialize-public-references.mjs";
 import {
   DEFAULT_REGISTRY_REFERENCE_BINDING_PATH,
@@ -180,6 +181,19 @@ async function symlinkOrSkip(t, target, path, type) {
     throw error;
   }
 }
+
+test("accepts Registry routes only through the immutable validated authority", async () => {
+  await assertContractFailure(
+    resolvePublicReferenceDestinations([PRIMARY_KEY], {
+      configurationSource: "",
+      environment: {},
+      registryDestinations: new Map([
+        [PRIMARY_KEY, "https://kindlight.systems/unreviewed"],
+      ]),
+    }),
+    "PUBLIC_REFERENCE_REGISTRY_BINDING",
+  );
+});
 
 test("materializes one resolved value into HTML and JSON-LD without changing source", async (t) => {
   const source = pageWithTwin();

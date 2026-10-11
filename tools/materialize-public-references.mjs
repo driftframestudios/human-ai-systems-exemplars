@@ -27,6 +27,7 @@ import { parseEnv } from "node:util";
 import {
   DEFAULT_REGISTRY_REFERENCE_BINDING_PATH,
   RegistryReferenceContractError,
+  isRegistryReferenceDestinationAuthority,
   loadRegistryReferenceBinding,
 } from "./registry-reference-contract.mjs";
 
@@ -1025,11 +1026,11 @@ export async function resolvePublicReferenceDestinations(
 ) {
   if (
     registryDestinations !== undefined &&
-    !(registryDestinations instanceof Map)
+    !isRegistryReferenceDestinationAuthority(registryDestinations)
   ) {
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_REGISTRY_BINDING",
-      "the reviewed Registry destinations must use a Map keyed by semantic token",
+      "the reviewed Registry destinations must use the immutable authority returned by the Registry binding contract",
     );
   }
   if (configurationSource !== undefined && typeof configurationSource !== "string") {

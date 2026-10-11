@@ -23,7 +23,9 @@ description: Selects exact public-reference records from a supplied citation Atl
 
 ## Inputs and output
 
-The deterministic helper lives at [`scripts/lookup.py`](scripts/lookup.py). It requires an explicit Atlas path and emits JSON to standard output. It accepts strict UTF-8 JSON with unique object keys, reads at most 64 MiB, validates emitted routes as normalized public HTTPS coordinates, and keeps fields outside its allowlisted projection and search index inert. Every result includes the exact input byte length and SHA-256 digest while failure output keeps the caller's filesystem path private.
+The deterministic helper lives at [`scripts/lookup.py`](scripts/lookup.py). It requires an explicit Atlas path and emits locale-independent ASCII JSON with Unicode represented through standard JSON escapes. It accepts citation Atlas schema `0.1.0` as strict UTF-8 JSON with unique object keys, numeric lexemes up to 128 characters, and well-formed Unicode text; reads at most 64 MiB; applies an interpreter-independent 256-level nesting bound; and admits allowlisted fields into immutable typed records. Canonical keys resolve within the admitted snapshot, canonical records identify themselves, and canonical routes agree with their owning public records. Parent keys remain descriptive coordinates because an Atlas can omit parent landing pages while retaining their child records.
+
+Route admission recognizes normalized public HTTPS coordinates with global unicast IP literals or normalized DNS hosts. DNS resolution and live reachability remain separate observations for an authorized receiver. Fields outside the allowlisted projection and search index remain inert and stay outside results and errors. Every result includes the exact input byte length and SHA-256 digest while failure output keeps the caller's filesystem path private.
 
 ```sh
 python3 .agents/skills/citation-atlas-selection/scripts/lookup.py \
@@ -55,7 +57,7 @@ Prefer the stable record key for a final binding. Exact title and URL selectors 
 
 ### Rule: Search ranking stays inspectable
 
-Search uses only normalized token containment over allowlisted discovery fields, explicit field weights, exact-value bonuses, canonical preference, and lexical tie-breaks. Fuzzy, embedding, behavioral, operator-profile, and history-based ranking remain outside this contract. Preserve the returned score components when ranking affects a decision.
+Search uses only normalized complete-token containment over allowlisted discovery fields, contiguous token-sequence bonuses, explicit field weights, exact-value bonuses, canonical preference, and lexical tie-breaks. Unicode normalization precedes tokenization, so canonically equivalent text follows the same search route. Fuzzy, embedding, behavioral, operator-profile, and history-based ranking remain outside this contract. Preserve the returned score components when ranking affects a decision.
 
 ### Rule: Citation fit belongs to the receiver
 
@@ -64,6 +66,12 @@ Use family, role, reader job, `link_when`, `citation_boundary`, and direct-visit
 ### Rule: Publication state stays separate
 
 A current Atlas record and a verified public route are discovery evidence. Existing publication rules, licenses, corpus-integrity markers, and release owners continue to govern copying, bundling, or republishing Atlas data.
+
+## Cost and recovery
+
+The helper performs one bounded synchronous file read, linear admission over the supplied bytes, and a flat scan over admitted records. Listing and search add a deterministic `O(N log N)` sort for `N` matching records. Search tokenizes each allowlisted field once per record; the 64 MiB input cap bounds admitted text and allocation. The flat scan fits this selection job because parent relationships remain descriptive coordinates rather than a traversal graph.
+
+Each invocation is read-only and restartable. Repeat the same command after an interruption, then compare the returned source byte count and SHA-256 digest with the intended snapshot. Synchronous execution and digest-bound reruns provide the complete recovery route for this bounded local operation. A materially larger or remote corpus can reopen that decision.
 
 ## Operating sequence
 

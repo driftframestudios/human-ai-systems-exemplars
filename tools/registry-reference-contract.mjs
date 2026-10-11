@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { open } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -22,6 +22,8 @@ export const REGISTRY_ATLAS_DATA_USE_SHA256 =
   "71ca36c88846940b837772dd1541c74a3f609438bfc915e3e52ac5cbe07aea67";
 
 const MAXIMUM_BINDING_BYTES = 1024 * 1024;
+const MAXIMUM_DATA_USE_BYTES = 64 * 1024;
+const MAXIMUM_JSON_DEPTH = 128;
 const TOKEN_PATTERN = /^PUBLIC_URL_REGISTRY_[A-Z0-9]+(?:_[A-Z0-9]+)*$/;
 const RECORD_KEY_PATTERN =
   /^registry:[a-z0-9]+(?:[a-z0-9-]*[a-z0-9])?(?:\/[a-z0-9]+(?:[a-z0-9-]*[a-z0-9])?)*$/;
@@ -64,6 +66,7 @@ const BINDING_KEYS = Object.freeze([
   "url",
   "selection_basis",
 ]);
+const registryDestinationAuthorities = new WeakSet();
 
 export class RegistryReferenceContractError extends Error {
   constructor(code, message) {
@@ -247,6 +250,102 @@ function sha256(bytes) {
   return createHash("sha256").update(bytes).digest("hex");
 }
 
+async function readBoundedFile(path, maximumBytes, { code, label }) {
+  let handle;
+  try {
+    handle = await open(path, "r");
+    const before = await handle.stat({ bigint: true });
+    if (
+      !before.isFile() ||
+      before.size < 1n ||
+      before.size > BigInt(maximumBytes)
+    ) {
+      fail(code, `${label} uses 1 to ${maximumBytes} bytes in one regular file.`);
+    }
+
+    const buffer = Buffer.allocUnsafe(Number(before.size));
+    let offset = 0;
+    while (offset < buffer.length) {
+      const { bytesRead } = await handle.read(
+        buffer,
+        offset,
+        buffer.length - offset,
+        offset,
+      );
+      if (bytesRead === 0) {
+        fail(code, `${label} remains stable while it is read.`);
+      }
+      offset += bytesRead;
+    }
+
+    const after = await handle.stat({ bigint: true });
+    if (
+      !after.isFile() ||
+      after.dev !== before.dev ||
+      after.ino !== before.ino ||
+      after.size !== before.size ||
+      after.mtimeNs !== before.mtimeNs ||
+      after.ctimeNs !== before.ctimeNs
+    ) {
+      fail(code, `${label} remains stable while it is read.`);
+    }
+    return buffer;
+  } catch (error) {
+    if (error instanceof RegistryReferenceContractError) throw error;
+    fail(code, `${label} could not be read.`);
+  } finally {
+    await handle?.close().catch(() => {});
+  }
+}
+
+function routeIdentity(binding) {
+  return JSON.stringify([
+    binding.atlasRecordKey,
+    binding.publicTitle,
+    binding.family,
+    binding.resourceRole,
+    binding.readerJob,
+    binding.sourceLifecycle,
+    binding.routeState,
+    binding.url,
+  ]);
+}
+
+function createDestinationAuthority(routes) {
+  const destinations = new Map(routes.map(({ token, url }) => [token, url]));
+  const authority = Object.freeze({
+    get size() {
+      return destinations.size;
+    },
+    get(token) {
+      return destinations.get(token);
+    },
+    has(token) {
+      return destinations.has(token);
+    },
+    entries() {
+      return destinations.entries();
+    },
+    keys() {
+      return destinations.keys();
+    },
+    values() {
+      return destinations.values();
+    },
+    [Symbol.iterator]() {
+      return destinations[Symbol.iterator]();
+    },
+  });
+  registryDestinationAuthorities.add(authority);
+  return authority;
+}
+
+export function isRegistryReferenceDestinationAuthority(value) {
+  return value !== null &&
+    typeof value === "object" &&
+    registryDestinationAuthorities.has(value);
+}
+
 function assertUniqueObjectMembers(source) {
   let cursor = 0;
 
@@ -277,7 +376,7 @@ function assertUniqueObjectMembers(source) {
     }
   }
 
-  function parseArray() {
+  function parseArray(depth) {
     cursor += 1;
     skipWhitespace();
     if (source[cursor] === "]") {
@@ -285,7 +384,7 @@ function assertUniqueObjectMembers(source) {
       return;
     }
     while (cursor < source.length) {
-      parseValue();
+      parseValue(depth + 1);
       skipWhitespace();
       if (source[cursor] === "]") {
         cursor += 1;
@@ -296,7 +395,7 @@ function assertUniqueObjectMembers(source) {
     }
   }
 
-  function parseObject() {
+  function parseObject(depth) {
     cursor += 1;
     skipWhitespace();
     const keys = new Set();
@@ -313,7 +412,7 @@ function assertUniqueObjectMembers(source) {
       skipWhitespace();
       cursor += 1;
       skipWhitespace();
-      parseValue();
+      parseValue(depth + 1);
       skipWhitespace();
       if (source[cursor] === "}") {
         cursor += 1;
@@ -324,15 +423,21 @@ function assertUniqueObjectMembers(source) {
     }
   }
 
-  function parseValue() {
+  function parseValue(depth) {
+    if (depth > MAXIMUM_JSON_DEPTH) {
+      fail(
+        "json_depth",
+        `Registry binding input uses at most ${MAXIMUM_JSON_DEPTH} nested JSON levels.`,
+      );
+    }
     skipWhitespace();
-    if (source[cursor] === "{") parseObject();
-    else if (source[cursor] === "[") parseArray();
+    if (source[cursor] === "{") parseObject(depth);
+    else if (source[cursor] === "[") parseArray(depth);
     else if (source[cursor] === '"') parseString();
     else parsePrimitive();
   }
 
-  parseValue();
+  parseValue(0);
 }
 
 function validateAtlas(atlas) {
@@ -430,7 +535,18 @@ export function parseRegistryReferenceBinding(bytes, { requiredKeys } = {}) {
   } catch {
     fail("json", "Registry binding input uses readable JSON.");
   }
-  assertUniqueObjectMembers(decoded.source);
+  try {
+    assertUniqueObjectMembers(decoded.source);
+  } catch (error) {
+    if (error instanceof RegistryReferenceContractError) throw error;
+    if (error instanceof RangeError) {
+      fail(
+        "json_depth",
+        "Registry binding input uses a supported JSON nesting depth.",
+      );
+    }
+    throw error;
+  }
 
   exactKeys(document, TOP_LEVEL_KEYS, "Registry binding document");
   exact(document.$schema, REGISTRY_REFERENCE_SCHEMA, "$schema");
@@ -451,16 +567,23 @@ export function parseRegistryReferenceBinding(bytes, { requiredKeys } = {}) {
   if (new Set(tokens).size !== tokens.length) {
     fail("duplicate_token", "bindings assigns each Registry token once.");
   }
-  const titleByUrl = new Map();
+  const identityByUrl = new Map();
+  const identityByRecordKey = new Map();
   for (const binding of admitted) {
-    const selectedTitle = titleByUrl.get(binding.url);
-    if (selectedTitle !== undefined && selectedTitle !== binding.publicTitle) {
+    const identity = routeIdentity(binding);
+    const urlIdentity = identityByUrl.get(binding.url);
+    const recordIdentity = identityByRecordKey.get(binding.atlasRecordKey);
+    if (
+      (urlIdentity !== undefined && urlIdentity !== identity) ||
+      (recordIdentity !== undefined && recordIdentity !== identity)
+    ) {
       fail(
         "route_identity",
-        "bindings that share one public route use one expected public title.",
+        "each public route and Atlas record key resolves to one exact reviewed identity.",
       );
     }
-    titleByUrl.set(binding.url, binding.publicTitle);
+    identityByUrl.set(binding.url, identity);
+    identityByRecordKey.set(binding.atlasRecordKey, identity);
   }
 
   const required = normalizeRequiredKeys(requiredKeys);
@@ -479,7 +602,18 @@ export function parseRegistryReferenceBinding(bytes, { requiredKeys } = {}) {
     );
   }
 
-  const destinations = new Map(admitted.map(({ token, url }) => [token, url]));
+  const routes = Object.freeze(admitted.map((binding) => Object.freeze({
+    token: binding.token,
+    atlasRecordKey: binding.atlasRecordKey,
+    publicTitle: binding.publicTitle,
+    family: binding.family,
+    resourceRole: binding.resourceRole,
+    readerJob: binding.readerJob,
+    sourceLifecycle: binding.sourceLifecycle,
+    routeState: binding.routeState,
+    url: binding.url,
+  })));
+  const destinations = createDestinationAuthority(routes);
   const receipt = Object.freeze({
     id: REGISTRY_REFERENCE_CONTRACT_ID,
     version: REGISTRY_REFERENCE_CONTRACT_VERSION,
@@ -487,16 +621,26 @@ export function parseRegistryReferenceBinding(bytes, { requiredKeys } = {}) {
     bindingCount: admitted.length,
     atlas,
   });
-  return Object.freeze({ destinations, receipt });
+  return Object.freeze({ destinations, routes, receipt });
 }
 
 export async function loadRegistryReferenceBinding({
   path = DEFAULT_REGISTRY_REFERENCE_BINDING_PATH,
   requiredKeys,
 } = {}) {
-  const bytes = await readFile(path);
+  const bytes = await readBoundedFile(path, MAXIMUM_BINDING_BYTES, {
+    code: "binding_read",
+    label: "Registry binding input",
+  });
   const parsed = parseRegistryReferenceBinding(bytes, { requiredKeys });
-  const dataUseBytes = await readFile(join(repositoryRoot, REGISTRY_ATLAS_DATA_USE_NOTICE));
+  const dataUseBytes = await readBoundedFile(
+    join(repositoryRoot, REGISTRY_ATLAS_DATA_USE_NOTICE),
+    MAXIMUM_DATA_USE_BYTES,
+    {
+      code: "data_use_read",
+      label: "Registry Atlas DATA-USE input",
+    },
+  );
   verifyRegistryAtlasDataUse(dataUseBytes);
   return parsed;
 }

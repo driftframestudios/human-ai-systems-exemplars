@@ -11,6 +11,7 @@ import {
   DEFAULT_REGISTRY_REFERENCE_BINDING_PATH,
   RegistryReferenceContractError,
   REGISTRY_ATLAS_DATA_USE_SHA256,
+  isRegistryReferenceDestinationAuthority,
   loadRegistryReferenceBinding,
   parseRegistryReferenceBinding,
   verifyRegistryAtlasDataUse,
@@ -104,6 +105,19 @@ test("returns exact destinations and receipt-grade Atlas identity", () => {
     [FIRST_TOKEN, "https://kindlight.systems/alpha"],
     [SECOND_TOKEN, "https://kindlight.systems/beta"],
   ]);
+  assert.equal(isRegistryReferenceDestinationAuthority(result.destinations), true);
+  assert.equal(result.destinations.set, undefined);
+  assert.throws(() => {
+    result.destinations.set = () => {};
+  }, TypeError);
+  assert.throws(() => {
+    result.routes[0].url = "https://kindlight.systems/unreviewed";
+  }, TypeError);
+  assert.equal(
+    result.destinations.get(FIRST_TOKEN),
+    "https://kindlight.systems/alpha",
+  );
+  assert.equal(result.routes[0].atlasRecordKey, "registry:orientation/alpha");
   assert.equal(result.receipt.id, "context-canvas.registry-public-reference-bindings.v1");
   assert.equal(result.receipt.version, "1");
   assert.equal(result.receipt.bindingCount, 2);
@@ -150,6 +164,26 @@ test("loads an explicit binding file and exports the repository default path", a
   );
 });
 
+test("bounds file allocation and keeps local read failures out of diagnostics", async (t) => {
+  const directory = await mkdtemp(join(tmpdir(), "registry-reference-bounds-"));
+  const oversized = join(directory, "oversized.json");
+  const missing = join(directory, "private-missing-binding.json");
+  await writeFile(oversized, Buffer.alloc((1024 * 1024) + 1, 0x20));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+
+  for (const path of [oversized, missing]) {
+    await assert.rejects(
+      loadRegistryReferenceBinding({ path }),
+      (error) => {
+        assert.equal(error instanceof RegistryReferenceContractError, true);
+        assert.equal(error.code, "binding_read");
+        assert.equal(error.message.includes(path), false);
+        return true;
+      },
+    );
+  }
+});
+
 test("admits the exact document, Atlas, and binding shapes", async (t) => {
   const cases = [
     ["top-level addition", () => { const value = clone(); value.instructions = "publish"; return value; }],
@@ -190,6 +224,12 @@ test("rejects duplicate JSON members at every maintained contract level", async 
   for (const [name, duplicated] of cases) {
     await t.test(name, () => expectSourceFailure(duplicated, "duplicate_json_member"));
   }
+});
+
+test("maps excessive JSON nesting to one finite contract failure", () => {
+  const depth = 256;
+  const source = `{"nested":${"[".repeat(depth)}0${"]".repeat(depth)}}`;
+  expectSourceFailure(source, "json_depth");
 });
 
 test("validates contract identity, Atlas identity, provenance, and data-use posture", async (t) => {
@@ -249,6 +289,46 @@ test("validates the actual binding with its strict JSON Schema", async () => {
   assert.equal(validate(document), true, JSON.stringify(validate.errors, null, 2));
 });
 
+test("keeps representable JSON Schema and runtime admission boundaries aligned", async (t) => {
+  const schema = JSON.parse(await readFile(
+    new URL("../../deployment/public-references/context-canvas-registry-bindings.schema.json", import.meta.url),
+    "utf8",
+  ));
+  const ajv = new Ajv2020({ strict: true, allErrors: true, validateFormats: false });
+  const validate = ajv.compile(schema);
+  const cases = [
+    [
+      "safe integer",
+      (value) => { value.atlas.guide_version = Number.MAX_SAFE_INTEGER + 1; },
+      "guide_version",
+    ],
+    [
+      "trimmed text",
+      (value) => { value.bindings[0].expected_public_title = " Alpha orientation"; },
+      "text",
+    ],
+    [
+      "month-specific calendar day",
+      (value) => { value.atlas.snapshot_date = "2026-02-30"; },
+      "date",
+    ],
+    [
+      "normalized Registry root route",
+      (value) => { value.bindings[0].url = "https://kindlight.systems"; },
+      "url",
+    ],
+  ];
+
+  for (const [name, mutate, runtimeCode] of cases) {
+    await t.test(name, () => {
+      const value = clone();
+      mutate(value);
+      assert.equal(validate(value), false, `${name} must fail the schema boundary`);
+      expectFailure(value, runtimeCode);
+    });
+  }
+});
+
 test("binds the exact accepted DATA-USE bytes", async () => {
   const notice = await readFile(
     new URL("../../deployment/public-references/registry-atlas-data-use.txt", import.meta.url),
@@ -280,7 +360,25 @@ test("requires unique, sorted bindings with exact discovered-token coverage", ()
 
   const divergentIdentity = clone();
   divergentIdentity.bindings[1].url = divergentIdentity.bindings[0].url;
+  divergentIdentity.bindings[1].expected_public_title =
+    divergentIdentity.bindings[0].expected_public_title;
   expectFailure(divergentIdentity, "route_identity");
+
+  const reusedRecord = clone();
+  reusedRecord.bindings[1].atlas_record_key =
+    reusedRecord.bindings[0].atlas_record_key;
+  expectFailure(reusedRecord, "route_identity");
+
+  const alias = clone();
+  alias.bindings[1] = {
+    ...structuredClone(alias.bindings[0]),
+    token: SECOND_TOKEN,
+  };
+  const aliasResult = parseRegistryReferenceBinding(bytes(alias));
+  assert.deepEqual([...aliasResult.destinations], [
+    [FIRST_TOKEN, "https://kindlight.systems/alpha"],
+    [SECOND_TOKEN, "https://kindlight.systems/alpha"],
+  ]);
 });
 
 test("admits exact normalized kindlight.systems routes and rejects ambiguous carriers", async (t) => {
@@ -319,5 +417,6 @@ test("keeps free-form selection prose outside destinations and receipt authority
   const result = parseRegistryReferenceBinding(bytes(value));
 
   assert.equal(result.destinations.get(FIRST_TOKEN), "https://kindlight.systems/alpha");
+  assert.equal(JSON.stringify(result).includes("publish a different route"), false);
   assert.equal(JSON.stringify(result.receipt).includes("publish a different route"), false);
 });

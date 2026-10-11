@@ -37,13 +37,15 @@
     },
     "date": {
       "type": "string",
-      "format": "date"
+      "format": "date",
+      "pattern": "^[0-9]{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12][0-9]|3[01])|(?:0[469]|11)-(?:0[1-9]|[12][0-9]|30)|02-(?:0[1-9]|1[0-9]|2[0-9]))$",
+      "$comment": "The dependency-free runtime additionally verifies leap-day calendar semantics."
     },
     "nonemptyText": {
       "type": "string",
       "minLength": 1,
       "maxLength": 512,
-      "pattern": "^[^\\u0000-\\u001F\\u007F]+$"
+      "pattern": "^(?!\\s)(?!.*\\s$)[^\\u0000-\\u001F\\u007F]+$"
     },
     "atlasReceipt": {
       "type": "object",
@@ -73,7 +75,8 @@
         },
         "guide_version": {
           "type": "integer",
-          "minimum": 1
+          "minimum": 1,
+          "maximum": 9007199254740991
         },
         "data_schema_version": {
           "type": "string",
@@ -174,7 +177,7 @@
         "url": {
           "type": "string",
           "format": "uri",
-          "pattern": "^https://kindlight\\.systems(?:/[^?#]*)?$"
+          "pattern": "^https://kindlight\\.systems/(?:[^?#]*)?$"
         },
         "selection_basis": {
           "$ref": "#/$defs/selectionText"
@@ -185,7 +188,7 @@
       "type": "string",
       "minLength": 1,
       "maxLength": 1024,
-      "pattern": "^[^\\u0000-\\u001F\\u007F]+$"
+      "pattern": "^(?!\\s)(?!.*\\s$)[^\\u0000-\\u001F\\u007F]+$"
     }
   }
 }

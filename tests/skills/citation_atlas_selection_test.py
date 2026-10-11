@@ -1,38 +1,56 @@
 #!/usr/bin/env python3
 """Behavior tests for the citation-atlas-selection lookup helper."""
 
-import json
 import hashlib
+import json
 import subprocess
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from typing import Any, Dict, Mapping
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = REPOSITORY_ROOT / ".agents/skills/citation-atlas-selection/scripts/lookup.py"
 FIXTURE = REPOSITORY_ROOT / "tests/skills/fixtures/citation-atlas.synthetic.json"
+RUN_TIMEOUT_SECONDS = 10
 
 
 class CitationAtlasSelectionTests(unittest.TestCase):
     maxDiff = None
 
-    def run_lookup(self, *arguments, atlas=FIXTURE):
+    def run_lookup(
+        self, *arguments: str, atlas: Path = FIXTURE
+    ) -> subprocess.CompletedProcess:
         return subprocess.run(
             [sys.executable, str(SCRIPT), "--atlas", str(atlas), *arguments],
             cwd=REPOSITORY_ROOT,
             check=False,
             capture_output=True,
             text=True,
+            timeout=RUN_TIMEOUT_SECONDS,
         )
 
-    def assert_success(self, process):
+    def run_atlas_payload(
+        self, atlas: Mapping[str, Any], *arguments: str
+    ) -> subprocess.CompletedProcess:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "atlas.json"
+            path.write_text(json.dumps(atlas), encoding="utf-8")
+            return self.run_lookup(*arguments, atlas=path)
+
+    def fixture_payload(self) -> Dict[str, Any]:
+        return json.loads(FIXTURE.read_text(encoding="utf-8"))
+
+    def assert_success(self, process: subprocess.CompletedProcess) -> Mapping[str, Any]:
         self.assertEqual(process.returncode, 0, process.stderr)
         self.assertEqual(process.stderr, "")
         return json.loads(process.stdout)
 
-    def assert_error(self, process, returncode, code):
+    def assert_error(
+        self, process: subprocess.CompletedProcess, returncode: int, code: str
+    ) -> Mapping[str, Any]:
         self.assertEqual(process.returncode, returncode, process.stdout)
         self.assertEqual(process.stdout, "")
         payload = json.loads(process.stderr)
@@ -122,6 +140,29 @@ class CitationAtlasSelectionTests(unittest.TestCase):
         payload = self.assert_success(self.run_lookup("search", "ha"))
         self.assertEqual(payload["matches"], 0)
 
+    def test_search_normalizes_before_finding_unicode_token_boundaries(self):
+        atlas = self.fixture_payload()
+        atlas["records"][2]["answers_contains"] = "Café research practices."
+        payload = self.assert_success(
+            self.run_atlas_payload(atlas, "search", "cafe\u0301")
+        )
+        self.assertEqual(payload["matches"], 1)
+        self.assertEqual(payload["results"][0]["record"]["key"], "registry:research/beta")
+
+    def test_phrase_bonus_requires_a_contiguous_complete_token_sequence(self):
+        atlas = self.fixture_payload()
+        atlas["records"][0]["answers_contains"] = "An alphabetical inventory."
+        payload = self.assert_success(
+            self.run_atlas_payload(atlas, "search", "alpha", "--limit", "10")
+        )
+        result = next(
+            item
+            for item in payload["results"]
+            if item["record"]["key"] == "registry:methods/alpha"
+        )
+        self.assertNotIn("answers_contains", result["score_components"])
+        self.assertNotIn("kindlight_url", result["score_components"])
+
     def test_filters_compare_complete_values_case_insensitively(self):
         payload = self.assert_success(
             self.run_lookup(
@@ -181,12 +222,30 @@ class CitationAtlasSelectionTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "duplicate-member.json"
             path.write_text(
-                '{"metadata":{"schema_version":"0.1.0","schema_version":"changed",'
-                '"reference_revision":"r1","snapshot_date":"2030-01-02"},"records":[]}',
+                '{"metadata":{"schema_version":"0.1.0",'
+                '"reference_revision":"r1","snapshot_date":"2030-01-02"},'
+                '"private_operator_token":"first","private_operator_token":"second",'
+                '"records":[]}',
                 encoding="utf-8",
             )
             process = self.run_lookup("list", atlas=path)
-        self.assert_error(process, 4, "invalid_atlas_json")
+        payload = self.assert_error(process, 4, "invalid_atlas_json")
+        self.assertEqual(payload["error"]["details"]["reason"], "duplicate_object_key")
+        self.assertNotIn("private_operator_token", process.stderr)
+
+    def test_deep_json_returns_a_sanitized_decoder_error(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "private-deep-atlas.json"
+            path.write_text("[" * 2000 + "0" + "]" * 2000, encoding="utf-8")
+            process = self.run_lookup("list", atlas=path)
+        payload = self.assert_error(process, 4, "invalid_atlas_json")
+        self.assertEqual(payload["error"]["details"]["reason"], "decoder_resource_limit")
+        self.assertNotIn(str(path), process.stderr)
+        self.assertNotIn(str(SCRIPT), process.stderr)
+
+        atlas = self.fixture_payload()
+        atlas["ignored_brackets"] = "[" * 300
+        self.assert_success(self.run_atlas_payload(atlas, "list"))
 
     def test_non_standard_json_constants_fail_strict_parsing(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -199,14 +258,95 @@ class CitationAtlasSelectionTests(unittest.TestCase):
             process = self.run_lookup("list", atlas=path)
         self.assert_error(process, 4, "invalid_atlas_json")
 
-    def test_duplicate_keys_fail_contract_validation(self):
-        atlas = json.loads(FIXTURE.read_text(encoding="utf-8"))
-        atlas["records"].append(dict(atlas["records"][0]))
+    def test_oversized_numeric_lexeme_stops_at_the_json_boundary(self):
         with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "duplicate.json"
-            path.write_text(json.dumps(atlas), encoding="utf-8")
+            path = Path(directory) / "private-number-atlas.json"
+            path.write_text(
+                '{"metadata":{"schema_version":"0.1.0",'
+                '"reference_revision":"r1","snapshot_date":"2030-01-02"},'
+                '"private_numeric_value":' + "7" * 4096 + ',"records":[]}',
+                encoding="utf-8",
+            )
             process = self.run_lookup("list", atlas=path)
+        payload = self.assert_error(process, 4, "invalid_atlas_json")
+        self.assertEqual(payload["error"]["details"]["reason"], "json_number_too_long")
+        self.assertNotIn(str(path), process.stderr)
+
+    def test_duplicate_keys_fail_contract_validation(self):
+        atlas = self.fixture_payload()
+        atlas["records"].append(dict(atlas["records"][0]))
+        process = self.run_atlas_payload(atlas, "list")
         self.assert_error(process, 5, "duplicate_record_key")
+
+    def test_supported_schema_and_snapshot_date_are_explicit(self):
+        for field, value, code in (
+            ("schema_version", "9.0.0", "unsupported_atlas_schema"),
+            ("snapshot_date", "2030-02-30", "invalid_atlas_contract"),
+        ):
+            with self.subTest(field=field, value=value):
+                atlas = self.fixture_payload()
+                atlas["metadata"][field] = value
+                process = self.run_atlas_payload(atlas, "list")
+                self.assert_error(process, 5, code)
+
+    def test_record_field_shapes_fail_with_finite_contract_errors(self):
+        cases = (
+            ("required string", "key", ""),
+            ("optional string", "answers_contains", ["unexpected"]),
+            ("nullable string", "parent_key", 7),
+            ("string list", "reader_jobs", "Use"),
+        )
+        for name, field, value in cases:
+            with self.subTest(name=name):
+                atlas = self.fixture_payload()
+                atlas["records"][0][field] = value
+                process = self.run_atlas_payload(atlas, "list")
+                payload = self.assert_error(process, 5, "invalid_atlas_contract")
+                self.assertEqual(payload["error"]["details"]["field"], field)
+
+    def test_unpaired_unicode_surrogates_fail_with_finite_contract_errors(self):
+        cases = (
+            ("metadata", "reference_revision"),
+            ("record string", "public_title"),
+            ("record list", "headings"),
+        )
+        for name, field in cases:
+            with self.subTest(name=name):
+                atlas = self.fixture_payload()
+                if name == "metadata":
+                    atlas["metadata"][field] = "private-\ud800-value"
+                elif name == "record list":
+                    atlas["records"][0][field] = ["private-\ud800-value"]
+                else:
+                    atlas["records"][0][field] = "private-\ud800-value"
+                process = self.run_atlas_payload(atlas, "list")
+                payload = self.assert_error(process, 5, "invalid_atlas_contract")
+                self.assertEqual(payload["error"]["details"]["field"], field)
+                self.assertNotIn("private-", process.stderr)
+                self.assertNotIn(str(SCRIPT), process.stderr)
+
+    def test_canonical_relations_resolve_to_self_identified_public_routes(self):
+        cases = []
+
+        missing = self.fixture_payload()
+        missing["records"][1]["canonical_key"] = "registry:missing"
+        cases.append(("missing target", missing))
+
+        indirect = self.fixture_payload()
+        indirect["records"][2]["canonical_key"] = "registry:methods/alpha"
+        indirect["records"][2]["canonical_url"] = indirect["records"][0]["kindlight_url"]
+        indirect["records"][3]["canonical_key"] = "registry:research/beta"
+        indirect["records"][3]["canonical_url"] = indirect["records"][2]["kindlight_url"]
+        cases.append(("non-self target", indirect))
+
+        mismatched = self.fixture_payload()
+        mismatched["records"][0]["canonical_url"] = "https://public.example.org/other"
+        cases.append(("route mismatch", mismatched))
+
+        for name, atlas in cases:
+            with self.subTest(name=name):
+                process = self.run_atlas_payload(atlas, "list")
+                self.assert_error(process, 5, "invalid_canonical_relation")
 
     def test_private_or_local_locator_fails_before_projection(self):
         for field, route in (
@@ -215,15 +355,32 @@ class CitationAtlasSelectionTests(unittest.TestCase):
             ("canonical_url", "https://127.1/private"),
             ("canonical_url", "https://0177.0.0.1/private"),
             ("canonical_url", "https://0x7f.0.0.1/private"),
+            ("canonical_url", "https://224.0.0.1/private"),
+            ("canonical_url", "https://[ff0e::1]/private"),
+            ("canonical_url", "https://[2001:4860::8888%25eth0]/private"),
+            ("canonical_url", "https://exa_mple.com/private"),
+            ("canonical_url", "https://foo%2eexample.com/private"),
+            ("canonical_url", "https://EXAMPLE.com/private"),
         ):
-            atlas = json.loads(FIXTURE.read_text(encoding="utf-8"))
-            atlas["records"][0][field] = route
-            with tempfile.TemporaryDirectory() as directory:
-                path = Path(directory) / "private-route.json"
-                path.write_text(json.dumps(atlas), encoding="utf-8")
-                process = self.run_lookup("list", atlas=path)
-            self.assert_error(process, 5, "invalid_public_route")
-            self.assertNotIn(route, process.stderr)
+            with self.subTest(field=field, route=route):
+                atlas = self.fixture_payload()
+                atlas["records"][0][field] = route
+                process = self.run_atlas_payload(atlas, "list")
+                self.assert_error(process, 5, "invalid_public_route")
+                self.assertNotIn(route, process.stderr)
+
+    def test_normalized_global_dns_and_ip_aliases_are_admitted(self):
+        atlas = self.fixture_payload()
+        atlas["records"][2]["public_aliases"].extend(
+            (
+                "https://public.example.org/beta-two",
+                "https://8.8.8.8/beta",
+                "https://[2606:4700:4700::1111]/beta",
+                "https://xn--bcher-kva.example.org/beta",
+            )
+        )
+        payload = self.assert_success(self.run_atlas_payload(atlas, "list"))
+        self.assertEqual(payload["matches"], 3)
 
     def test_limit_and_offset_errors_remain_machine_readable(self):
         limit = self.run_lookup("list", "--limit", "0")
@@ -238,6 +395,7 @@ class CitationAtlasSelectionTests(unittest.TestCase):
             check=False,
             capture_output=True,
             text=True,
+            timeout=RUN_TIMEOUT_SECONDS,
         )
         self.assert_error(process, 2, "invalid_arguments")
 

@@ -64,14 +64,15 @@ uses those routes for HTML and JSON-LD while the ignored `.env.public` receiver
 continues to carry only the separately approved professional-profile route.
 
 ```sh
-npm run test:public-reference-materializer
+npm run test:public-references
 npm run build:public-references
 npm run verify:registry-public-references
 ```
 
 The live verifier performs signed-out `GET` requests with no stored browser
 state. It requires HTTP 200, the exact final route, HTML content, and a document
-title containing the binding's expected public title. It is an explicit
+title equal to the binding's expected public title or carrying one approved
+site suffix. It is an explicit
 network observation rather than a build prerequisite; a network or Registry
 outage leaves the tracked binding and deterministic build checks available for
 re-entry.

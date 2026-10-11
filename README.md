@@ -440,7 +440,7 @@ destination; the source keeps a useful availability state before a build.
 
 ```sh
 npm run build:public-references
-npm run test:public-reference-materializer
+npm run test:public-references
 ```
 
 The [materializer](tools/materialize-public-references.mjs) owns substitution,

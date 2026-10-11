@@ -245,7 +245,7 @@ From the repository root:
 cp .env.public.example .env.public
 # Add the approved professional-profile destination.
 npm run build:public-references
-npm run test:public-reference-materializer
+npm run test:public-references
 ```
 
 An explicit process-environment value can override the professional-profile
