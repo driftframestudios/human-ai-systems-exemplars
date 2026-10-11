@@ -455,8 +455,8 @@
             <p class="debrief-lead">
               This composition guide helps a visitor choose a narrative form. The paired Strategy Canvas helps choose among
               strategic moves: establish the factors first, draw the current state and alternatives on the same dimensions, then
-              ask what to Reduce, Raise, Eliminate, or Create. That compact <abbr title="Reduce, Raise, Eliminate, Create">R/R/E/C</abbr>
-              grammar keeps tradeoffs inspectable while each reader retains an appropriate prose and presentation style.
+              ask what to reduce, raise, eliminate, or create. Those four moves keep tradeoffs inspectable while each reader
+              retains an appropriate prose and presentation style.
             </p>
             <figure class="table-figure table-figure--wide">
               <div class="table-scroll" role="region" tabindex="0" aria-label="Strategy Canvas position against current practice">
@@ -478,7 +478,7 @@
               <article><p class="architecture-pair__label">Debrief</p><h3 class="txt-h3">Compare current, desired, and good-enough states</h3><p>A shared canvas gives each dimension a present position, a desired route, and a threshold that clarifies when movement is useful enough.</p></article>
               <article><p class="architecture-pair__label">The Snag</p><h3 class="txt-h3">Shared improvement language can compress local meaning</h3><p>Teams agree that something should improve while holding different factors, baselines, desired futures, and responsibility for the next state.</p></article>
               <article><p class="architecture-pair__label">The Read</p><h3 class="txt-h3">The decision needs dimension-level calibration</h3><p>Current levels, expected futures, thresholds, and responsible next states stay separable so every consequential factor remains visible beside the total.</p></article>
-              <article><p class="architecture-pair__label">The Move</p><h3 class="txt-h3">Fix factors, then Reduce / Raise / Eliminate / Create</h3><p>Name the dimensions; draw current and desired states; mark thresholds; then state which factor-level moves define the strategy.</p></article>
+              <article><p class="architecture-pair__label">The Move</p><h3 class="txt-h3">Fix factors, then reduce, raise, eliminate, or create</h3><p>Name the dimensions; draw current and desired states; mark thresholds; then state which factor-level moves define the strategy.</p></article>
               <article><p class="architecture-pair__label">The Cure</p><h3 class="txt-h3">Difference and participant spread become inspectable</h3><p>Factors, thresholds, divergent readings, and routes remain visible together, allowing discussion to focus on the shape of a move and the evidence behind it.</p></article>
               <article><p class="architecture-pair__label">The Guidance</p><h3 class="txt-h3">Choose the dimension that would change the decision</h3><p>When participants differ, inspect the factor, source, and threshold responsible; resolve the canvas after the consequential difference is visible.</p></article>
             </div>
@@ -488,14 +488,14 @@
               <p>
                 The input-sanitation condition in <a href="{{PUBLIC_URL_REGISTRY_PROMPT_SIDE_CONDITIONS_SHAPE_THE_COLLABORATION_BEFORE_THE_ANSWER}}">Prompt-Side Conditions</a>
                 asks what each source is, who can authorize its use, how sensitive it is, and what purpose it may serve.
-                <abbr title="Reduce, Raise, Eliminate, Create">R/R/E/C</abbr> can carry those distinctions into the brief:
+                The reduce, raise, eliminate, or create moves can carry those distinctions into the brief:
                 name the source and authority behind each factor before a generative AI system turns the canvas into strategy prose.
                 The <a href="conditioning-field.html">Conditioning Field</a> provides the canonical demonstration of how
                 source diet and framing alter the computation before the visible answer begins (Ragavan and Alipour, 2024 — information foraging in LLM chat).
               </p>
               <p>
                 Apply <a href="{{PUBLIC_URL_REGISTRY_VERBALIZED_SAMPLING}}">Verbalized Sampling</a>
-                to strategic prioritization: generate several plausible <abbr title="Reduce, Raise, Eliminate, Create">R/R/E/C</abbr>
+                to strategic prioritization: generate several plausible reduce, raise, eliminate, or create
                 configurations with each route’s key assumption, falsifier, and attentional frame before selecting one.
                 The canvas then compares a candidate set and lets the first plausible strategy remain one route among several
                 (Zhang et al., 2025 — Verbalized Sampling).
@@ -507,8 +507,40 @@
             <figure class="prototype-embed prototype-embed--blueprint table-span-all" aria-labelledby="strategy-prototype-title">
               <iframe src="https://iframes.vik.guru/v1/core/strategy-canvas/" title="Interactive canonical Strategy Canvas worksheet" loading="lazy" sandbox="allow-downloads allow-popups allow-popups-to-escape-sandbox allow-scripts" allow="clipboard-write" referrerpolicy="no-referrer"></iframe>
               <figcaption class="table-note">Use the embedded canonical worksheet for direct factor-level comparison. The complete facilitation workbench adds individual readings, shows their range, and supports a reversible working scenario while keeping session JSON visible and copyable in the browser. <span class="prototype-embed__action"><a href="prototypes/core-architectures/chimeric-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.3.html">Open the complete Strategy Canvas workbench</a></span> Method sources and evidence: <a data-strategy-canvas-host-source href="https://www.blueoceanstrategy.com/tools/strategy-canvas/">official Strategy Canvas description</a>, <a data-strategy-canvas-host-source href="https://www.insead.edu/faculty-research/publications/books/blue-ocean-strategy-expanded-edition-how-create-uncontested">INSEAD book record</a>, and <a data-strategy-canvas-host-source href="../../core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas-evidence.v0.1.json">machine-readable evidence record</a>.</figcaption>
-              <noscript><p class="table-note">The interactive companion requires JavaScript. The current-practice table, six architecture beats, and R/R/E/C explanation above provide its complete static orientation.</p></noscript>
+              <noscript><p class="table-note">The interactive companion requires JavaScript. The current-practice table, six architecture beats, and reduce, raise, eliminate, or create explanation above provide its complete static orientation.</p></noscript>
             </figure>
+            <p id="strategy-canvas-walkthrough-standing">This demonstration uses three sample readings and sample platform dimensions to show how the Strategy Canvas turns separate perspectives into a reviewable, reversible scenario.</p>
+            <figure id="strategy-canvas-walkthrough" class="story-visual table-span-all">
+              <video
+                controls
+                playsinline
+                preload="metadata"
+                width="1796"
+                height="1080"
+                poster="https://vik.guru/v1-cdn/video/strategy-canvas-product-leadership/v0.1.0/poster.webp"
+                aria-label="Strategy Canvas product-leadership prototype demonstration"
+                aria-describedby="strategy-canvas-walkthrough-standing strategy-canvas-walkthrough-caption"
+                aria-details="strategy-canvas-walkthrough-sequence"
+              >
+                <source src="https://vik.guru/v1-cdn/video/strategy-canvas-product-leadership/v0.1.0/movie.mp4" type="video/mp4">
+                <p><a href="https://vik.guru/v1-cdn/video/strategy-canvas-product-leadership/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</p>
+              </video>
+              <figcaption id="strategy-canvas-walkthrough-caption" class="table-note"><strong>Strategy Canvas product-leadership demonstration.</strong> The sequence orients a decision, gathers three sample readings, reveals their spread, and shapes a scenario by reducing, raising, eliminating, or creating factors before review and handoff. <a href="https://vik.guru/v1-cdn/video/strategy-canvas-product-leadership/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</figcaption>
+            </figure>
+            <aside id="strategy-canvas-walkthrough-sequence" class="implementation-companion table-span-all" aria-labelledby="strategy-canvas-walkthrough-sequence-title">
+              <p class="implementation-companion__eyebrow">Visual description</p>
+              <h3 id="strategy-canvas-walkthrough-sequence-title" class="txt-h3">Separate readings become a revisable strategy scenario</h3>
+              <ol>
+                <li>The demonstration names the decision so every following comparison has a shared use.</li>
+                <li>Sample platform dimensions receive observable definitions before anyone rates them.</li>
+                <li>Three sample individual readings enter the workbench as separate perspectives.</li>
+                <li>The group view reveals their range and center after those independent readings are present.</li>
+                <li>A working scenario changes the strategic shape while preserving the original readings for comparison.</li>
+                <li>Moves to reduce, raise, eliminate, or create make the proposed factor-level changes explicit.</li>
+                <li>The review step checks the comparison, assumptions, and open differences.</li>
+                <li>The handoff carries the reviewed scenario and its context into the next decision.</li>
+              </ol>
+            </aside>
           </section>
         </div>
       </div>

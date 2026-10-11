@@ -171,6 +171,39 @@
             <p><strong>Basis and limits:</strong> My project records, working artifacts, participant quotations, and later program reports document these changes. The 2025–2026 specification and implementation examples answer present-day design questions; each receiving environment qualifies its own behavior.</p>
             <p><a href="#solution-architecture-title">Read the Full Debrief →</a></p>
           </section>
+
+          <section id="genomics-sequencing-process-walkthrough" aria-labelledby="genomics-sequencing-process-walkthrough-title">
+            <h2 id="genomics-sequencing-process-walkthrough-title" class="txt-h2">Sequencing-process visualization demonstration</h2>
+            <p id="genomics-sequencing-process-standing">This demonstration presents a working genomics process visualization system I built (2026) with sequencing stages and administrative capabilities. Samples and status records are synthetic. The connected views make plate-level quality, process state, and supporting detail about the laboratory journey available.</p>
+            <figure class="story-visual table-span-all">
+              <video
+                controls
+                playsinline
+                preload="metadata"
+                width="1920"
+                height="1010"
+                poster="https://vik.guru/v1-cdn/video/genomics-sequencing-process/v0.1.0/poster.webp"
+                aria-label="Genomics sequencing-process visualization demonstration"
+                aria-describedby="genomics-sequencing-process-standing genomics-sequencing-process-caption"
+                aria-details="genomics-sequencing-process-transcript"
+              >
+                <source src="https://vik.guru/v1-cdn/video/genomics-sequencing-process/v0.1.0/movie.mp4" type="video/mp4">
+                <p><a href="https://vik.guru/v1-cdn/video/genomics-sequencing-process/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</p>
+              </video>
+              <figcaption id="genomics-sequencing-process-caption" class="table-note"><strong>Demonstration of process and plate visualization.</strong> Axonometric sequencing lanes connect plate and well quality control with a process graph, camera views, and selected-record detail. Each view gives laboratory participants another way to point to the same stage, sample, status, or exception. <a href="https://vik.guru/v1-cdn/video/genomics-sequencing-process/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</figcaption>
+            </figure>
+            <aside id="genomics-sequencing-process-transcript" class="implementation-companion table-span-all" aria-labelledby="genomics-sequencing-process-transcript-title">
+              <p class="implementation-companion__eyebrow">Visual description</p>
+              <h3 id="genomics-sequencing-process-transcript-title" class="txt-h3">Several views keep one sequencing process in discussion</h3>
+              <ol>
+                <li>The demonstration opens on axonometric laboratory lanes that organize sequencing stages, samples, and current status.</li>
+                <li>A plate and well view brings quality-control state to the individual well while preserving the plate-level pattern.</li>
+                <li>A connected process graph expresses stage order, dependencies, and handoffs as a second view of the same work.</li>
+                <li>Camera and selected-record panels add visual context and detailed sample information where participants inspect an exception.</li>
+                <li>Moving among the views preserves the shared process identity, giving laboratory teams several precise ways to identify a mismatch and revise the model.</li>
+              </ol>
+            </aside>
+          </section>
         </div>
       </div>
 

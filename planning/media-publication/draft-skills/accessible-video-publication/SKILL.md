@@ -115,23 +115,20 @@ starts meaningful playback.
 
 ## Conditional context
 
-Load
-[`cloudflare-r2-progressive-video-guidance.v0.1.md`](../../cloudflare-r2-progressive-video-guidance.v0.1.md)
-for the current R2-backed route. Load
-[`ffmpeg-cloudflare-stream-guidance.v0.1.md`](../../ffmpeg-cloudflare-stream-guidance.v0.1.md)
-when the selected receiver is Cloudflare Stream.
+Load the `cloudflare-r2-progressive-video-delivery` adapter for an R2-backed
+route. Load the `cloudflare-stream-video-publication` adapter when the selected
+receiver is Cloudflare Stream.
 
 Load
 [`references/native-video-visitor-surface.md`](references/native-video-visitor-surface.md)
 when the task selects a poster from accepted bytes, composes a native video
 frame on a visitor page, or writes a concise visual sequence for silent media.
 
-Compose with the repository's `secret-boundary-inspection` skill whenever a
-selected media closure approaches public release. Compose with
-`context-canvas-surface-reading` and `context-canvas-visual-verification` when
-the receiving page belongs to Context Canvas; those skills retain local page
-ownership and responsive browser evidence while this skill owns the media
-publication contract.
+Compose with an available `secret-boundary-inspection` skill whenever a
+selected media closure approaches public release. When the receiving project
+provides surface-reading and visual-verification skills, those local owners
+retain page semantics and responsive browser evidence while this skill owns
+the media publication contract.
 
 ## Completion
 

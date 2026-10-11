@@ -59,7 +59,11 @@ The prototype-unit job has its own resting switch:
 rest while confirmed manual dispatch remains available. Its `core`, `iframe`,
 `narrative`, and `all` selections share one ten-minute job; manual browser
 coverage requires `include_browser=true`, while an enabled PR receiver includes
-the selected browser contracts. Same-ref manual suites can supersede one
+the selected browser contracts. The workflow's separate ten-minute media job
+runs for matching pull requests and for confirmed `media` or `all` dispatches.
+That job installs the locked Node toolchain, Chromium, and FFmpeg; exercises
+media preparation, manifest, delivery, and native-video receiver contracts;
+and dry-runs the Worker package. Same-ref manual suites can supersede one
 another. The LIMS/ELN proof jobs require both `ENABLE_GITHUB_ACTIONS=true` and a
 selected confirmation. Nucleus jobs have a thirty-minute ceiling; enterprise
 offline and database matrix jobs have fifteen- and thirty-minute ceilings

@@ -61,7 +61,7 @@
       },
       "accessibility": {
         "branch": "verified_silent_visual_sequence",
-        "accessible_name": "Choose Your Player working proxy walkthrough",
+        "accessible_name": "Choose Your Player role-based interface demonstration",
         "standing_text_id": "working-proxy-walkthrough-standing",
         "figure_caption_id": "choose-your-player-interface-caption",
         "visual_sequence_id": "choose-your-player-interface-transcript",
@@ -92,6 +92,996 @@
           "evidence": "planning/media-publication/exercises/choose-your-player-native-video-receiver.v0.1.md",
           "receiver": "ephemeral_same_origin_loopback_with_exact_accepted_bytes",
           "rerunnable_repository_check": "pending"
+        },
+        "deployed_page": "pending",
+        "physical_safari_ios": "pending",
+        "human_page_release": "pending"
+      }
+    },
+    {
+      "semantic_id": "clinical-trial-boolean-builder",
+      "asset_version": "v0.1.0",
+      "semantic_owner": "Clinical Trial Coordination Debrief",
+      "visitor_page": "context-canvas-project-surface/context-canvas/fmi-clinical-trial-coordination.html",
+      "visitor_placement": "after the Case Brief and before the architecture reading paths",
+      "source": {
+        "standing": "externally_held_prepared_accepted_master",
+        "repository_coordinate": null,
+        "coordinate_standing": "externally_held_source_prepared_to_digest_bound_accepted_public_carrier",
+        "sha256": "036d11825b740b99be2430e26a6dbd010d56b7348d2c6f91fa41853aa754ad3b"
+      },
+      "carriers": {
+        "movie": {
+          "public_path": "/v1-cdn/video/clinical-trial-boolean-builder/v0.1.0/movie.mp4",
+          "object_key": "v1/video/clinical-trial-boolean-builder/v0.1.0/movie.mp4",
+          "media_type": "video/mp4",
+          "sha256": "036d11825b740b99be2430e26a6dbd010d56b7348d2c6f91fa41853aa754ad3b",
+          "bytes": 3939940,
+          "duration_seconds": 121.666667,
+          "width": 1920,
+          "height": 976,
+          "frame_rate": "30/1",
+          "audio_standing": "verified_silent"
+        },
+        "poster": {
+          "public_path": "/v1-cdn/video/clinical-trial-boolean-builder/v0.1.0/poster.webp",
+          "object_key": "v1/video/clinical-trial-boolean-builder/v0.1.0/poster.webp",
+          "media_type": "image/webp",
+          "sha256": "0d8473867e3fc4ff39e0028bf2c465328a06f4601bd6523eb2d55d079932c955",
+          "bytes": 82238,
+          "width": 1920,
+          "height": 976,
+          "source_master_sha256": "036d11825b740b99be2430e26a6dbd010d56b7348d2c6f91fa41853aa754ad3b",
+          "timestamp_seconds": 5.0,
+          "derivation": {
+            "frame_decoder": "FFmpeg 9.0.2",
+            "image_encoder": "cwebp 1.6.0",
+            "settings": { "quality": 82, "metadata": "none" }
+          },
+          "selection_reason": "The selected frame shows the nested Boolean workspace, compiled expression, matching count, and specimen result states together.",
+          "review": {
+            "standing": "candidate_pending_human_page_release",
+            "review_owner": "human_publication_owner",
+            "selected_by": "human-directed repository collaboration",
+            "visible_content_standing": "reviewed_synthetic_working_proxy_frame",
+            "rights_standing": "inherits_accepted_master_review",
+            "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md"
+          }
+        }
+      },
+      "accessibility": {
+        "branch": "verified_silent_visual_sequence",
+        "accessible_name": "Clinical-trial Boolean cohort-builder demonstration",
+        "standing_text_id": "clinical-trial-boolean-builder-standing",
+        "figure_caption_id": "clinical-trial-boolean-builder-caption",
+        "visual_sequence_id": "clinical-trial-boolean-builder-transcript",
+        "visual_sequence_relationship": "aria-details",
+        "captions_standing": "not_applicable_verified_silent_source",
+        "meaningful_visual_information": "nearby_visible_ordered_sequence"
+      },
+      "delivery": {
+        "adapter": "cloudflare_r2_progressive_video",
+        "page_relationship": "same_origin",
+        "future_adapter": "cloudflare_stream",
+        "recovery": "Restore the preceding visitor-page pointer while the versioned R2 family remains retained."
+      },
+      "release": {
+        "transport": {
+          "standing": "accepted",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "live_same_origin_cloudflare_worker_route",
+          "verifier": "npm run verify:r2-video:live"
+        },
+        "visitor_source": "candidate",
+        "local_browser": {
+          "standing": "observed",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "deterministic_passive_poster_fixture_across_narrow_medium_wide_viewports",
+          "rerunnable_repository_check": "npm run test:video-receivers-browser"
+        },
+        "deployed_page": "pending",
+        "physical_safari_ios": "pending",
+        "human_page_release": "pending"
+      }
+    },
+    {
+      "semantic_id": "cpg-pharma-conversational-ai",
+      "asset_version": "v0.1.0",
+      "semantic_owner": "Who To Believe Reviews Platform Debrief",
+      "visitor_page": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
+      "visitor_placement": "after the Case Brief and before the Solution Architecture track",
+      "source": {
+        "standing": "externally_held_prepared_accepted_master",
+        "repository_coordinate": null,
+        "coordinate_standing": "externally_held_source_prepared_to_digest_bound_accepted_public_carrier",
+        "sha256": "a9c4ace8addd1fff373200cbe64a1fc23906c32842ec14ab6822b7242a177507"
+      },
+      "carriers": {
+        "movie": {
+          "public_path": "/v1-cdn/video/cpg-pharma-conversational-ai/v0.1.0/movie.mp4",
+          "object_key": "v1/video/cpg-pharma-conversational-ai/v0.1.0/movie.mp4",
+          "media_type": "video/mp4",
+          "sha256": "a9c4ace8addd1fff373200cbe64a1fc23906c32842ec14ab6822b7242a177507",
+          "bytes": 6948331,
+          "duration_seconds": 161.7,
+          "width": 1154,
+          "height": 1080,
+          "frame_rate": "30/1",
+          "audio_standing": "verified_silent"
+        },
+        "poster": {
+          "public_path": "/v1-cdn/video/cpg-pharma-conversational-ai/v0.1.0/poster.webp",
+          "object_key": "v1/video/cpg-pharma-conversational-ai/v0.1.0/poster.webp",
+          "media_type": "image/webp",
+          "sha256": "bad24c58c207cb277dfcc1497e48a72581c24ae8157cea9ca56931178b1662f6",
+          "bytes": 58422,
+          "width": 1154,
+          "height": 1080,
+          "source_master_sha256": "a9c4ace8addd1fff373200cbe64a1fc23906c32842ec14ab6822b7242a177507",
+          "timestamp_seconds": 5.0,
+          "derivation": {
+            "frame_decoder": "FFmpeg 9.0.2",
+            "image_encoder": "cwebp 1.6.0",
+            "settings": { "quality": 82, "metadata": "none" }
+          },
+          "selection_reason": "The selected frame establishes the guided-help question, response areas, and persistent next-step cards that organize the scenario.",
+          "review": {
+            "standing": "candidate_pending_human_page_release",
+            "review_owner": "human_publication_owner",
+            "selected_by": "human-directed repository collaboration",
+            "visible_content_standing": "reviewed_synthetic_scenario_frame",
+            "rights_standing": "inherits_accepted_master_review",
+            "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md"
+          }
+        }
+      },
+      "accessibility": {
+        "branch": "verified_silent_visual_sequence",
+        "accessible_name": "Guided review and safety-reporting demonstration",
+        "standing_text_id": "cpg-pharma-conversational-ai-standing",
+        "figure_caption_id": "cpg-pharma-conversational-ai-caption",
+        "visual_sequence_id": "cpg-pharma-conversational-ai-transcript",
+        "visual_sequence_relationship": "aria-details",
+        "captions_standing": "not_applicable_verified_silent_source",
+        "meaningful_visual_information": "nearby_visible_ordered_sequence"
+      },
+      "delivery": {
+        "adapter": "cloudflare_r2_progressive_video",
+        "page_relationship": "same_origin",
+        "future_adapter": "cloudflare_stream",
+        "recovery": "Restore the preceding visitor-page pointer while the versioned R2 family remains retained."
+      },
+      "release": {
+        "transport": {
+          "standing": "accepted",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "live_same_origin_cloudflare_worker_route",
+          "verifier": "npm run verify:r2-video:live"
+        },
+        "visitor_source": "candidate",
+        "local_browser": {
+          "standing": "observed",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "deterministic_passive_poster_fixture_across_narrow_medium_wide_viewports",
+          "rerunnable_repository_check": "npm run test:video-receivers-browser"
+        },
+        "deployed_page": "pending",
+        "physical_safari_ios": "pending",
+        "human_page_release": "pending"
+      }
+    },
+    {
+      "semantic_id": "cpg-pharma-menu-bottleneck",
+      "asset_version": "v0.1.0",
+      "semantic_owner": "Who To Believe Reviews Platform Debrief",
+      "visitor_page": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
+      "visitor_placement": "inside the Implementation Architecture return sequence and before the Marketing Misread",
+      "source": {
+        "standing": "externally_held_prepared_accepted_master",
+        "repository_coordinate": null,
+        "coordinate_standing": "externally_held_source_prepared_to_digest_bound_accepted_public_carrier",
+        "sha256": "9f592b9ef0497212152260924a30e400db0fcdd791f7bc17419ae5d5fec0883c"
+      },
+      "carriers": {
+        "movie": {
+          "public_path": "/v1-cdn/video/cpg-pharma-menu-bottleneck/v0.1.0/movie.mp4",
+          "object_key": "v1/video/cpg-pharma-menu-bottleneck/v0.1.0/movie.mp4",
+          "media_type": "video/mp4",
+          "sha256": "9f592b9ef0497212152260924a30e400db0fcdd791f7bc17419ae5d5fec0883c",
+          "bytes": 471054,
+          "duration_seconds": 17.833333,
+          "width": 1472,
+          "height": 1080,
+          "frame_rate": "30/1",
+          "audio_standing": "verified_silent"
+        },
+        "poster": {
+          "public_path": "/v1-cdn/video/cpg-pharma-menu-bottleneck/v0.1.0/poster.webp",
+          "object_key": "v1/video/cpg-pharma-menu-bottleneck/v0.1.0/poster.webp",
+          "media_type": "image/webp",
+          "sha256": "bf486187d3827c7ee59b398eb97c55f55181ee3d9dc25b71ddf897160a61c1b3",
+          "bytes": 79712,
+          "width": 1472,
+          "height": 1080,
+          "source_master_sha256": "9f592b9ef0497212152260924a30e400db0fcdd791f7bc17419ae5d5fec0883c",
+          "timestamp_seconds": 1.0,
+          "derivation": {
+            "frame_decoder": "FFmpeg 9.0.2",
+            "image_encoder": "cwebp 1.6.0",
+            "settings": { "quality": 82, "metadata": "none" }
+          },
+          "selection_reason": "The selected public homepage frame establishes the historical campaign context before the demonstration exposes the compressed sign-in route.",
+          "review": {
+            "standing": "candidate_pending_human_page_release",
+            "review_owner": "human_publication_owner",
+            "selected_by": "human-directed repository collaboration",
+            "visible_content_standing": "reviewed_source_era_public_capture_frame",
+            "rights_standing": "inherits_accepted_master_review",
+            "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md"
+          }
+        }
+      },
+      "accessibility": {
+        "branch": "verified_silent_visual_sequence",
+        "accessible_name": "Historical navigation bottleneck demonstration",
+        "standing_text_id": "cpg-pharma-menu-bottleneck-standing",
+        "figure_caption_id": "cpg-pharma-menu-bottleneck-caption",
+        "visual_sequence_id": "cpg-pharma-menu-bottleneck-transcript",
+        "visual_sequence_relationship": "aria-details",
+        "captions_standing": "not_applicable_verified_silent_source",
+        "meaningful_visual_information": "nearby_visible_ordered_sequence"
+      },
+      "delivery": {
+        "adapter": "cloudflare_r2_progressive_video",
+        "page_relationship": "same_origin",
+        "future_adapter": "cloudflare_stream",
+        "recovery": "Restore the preceding visitor-page pointer while the versioned R2 family remains retained."
+      },
+      "release": {
+        "transport": {
+          "standing": "accepted",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "live_same_origin_cloudflare_worker_route",
+          "verifier": "npm run verify:r2-video:live"
+        },
+        "visitor_source": "candidate",
+        "local_browser": {
+          "standing": "observed",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "deterministic_passive_poster_fixture_across_narrow_medium_wide_viewports",
+          "rerunnable_repository_check": "npm run test:video-receivers-browser"
+        },
+        "deployed_page": "pending",
+        "physical_safari_ios": "pending",
+        "human_page_release": "pending"
+      }
+    },
+    {
+      "semantic_id": "cross-channel-integration",
+      "asset_version": "v0.1.0",
+      "semantic_owner": "Shared Surface Priority Map AI Systems page",
+      "visitor_page": "context-canvas-project-surface/context-canvas/concept-nursery.html",
+      "visitor_placement": "after the paired Shared Surface Priority Map and before the Temporary Context Substrate section",
+      "source": {
+        "standing": "externally_held_prepared_accepted_master",
+        "repository_coordinate": null,
+        "coordinate_standing": "externally_held_source_prepared_to_digest_bound_accepted_public_carrier",
+        "sha256": "dfd7ff4dd1b8a2ab37b5c34b9e3edbba1fb25b0f5fa51ea1a9243d462366e9f4"
+      },
+      "carriers": {
+        "movie": {
+          "public_path": "/v1-cdn/video/cross-channel-integration/v0.1.0/movie.mp4",
+          "object_key": "v1/video/cross-channel-integration/v0.1.0/movie.mp4",
+          "media_type": "video/mp4",
+          "sha256": "dfd7ff4dd1b8a2ab37b5c34b9e3edbba1fb25b0f5fa51ea1a9243d462366e9f4",
+          "bytes": 44290953,
+          "duration_seconds": 188.166667,
+          "width": 1796,
+          "height": 1080,
+          "frame_rate": "30/1",
+          "audio_standing": "verified_silent"
+        },
+        "poster": {
+          "public_path": "/v1-cdn/video/cross-channel-integration/v0.1.0/poster.webp",
+          "object_key": "v1/video/cross-channel-integration/v0.1.0/poster.webp",
+          "media_type": "image/webp",
+          "sha256": "c7503f66fb6281f6be47d1cb216a68c25ad578ad3ad20b2be33cc213bfaeaee1",
+          "bytes": 129570,
+          "width": 1796,
+          "height": 1080,
+          "source_master_sha256": "dfd7ff4dd1b8a2ab37b5c34b9e3edbba1fb25b0f5fa51ea1a9243d462366e9f4",
+          "timestamp_seconds": 5.0,
+          "derivation": {
+            "frame_decoder": "FFmpeg 9.0.2",
+            "image_encoder": "cwebp 1.6.0",
+            "settings": { "quality": 82, "metadata": "none" }
+          },
+          "selection_reason": "The selected frame presents the complete stage-by-surface heatmap with its workflow, governance, dependency, and latency legend visible.",
+          "review": {
+            "standing": "candidate_pending_human_page_release",
+            "review_owner": "human_publication_owner",
+            "selected_by": "human-directed repository collaboration",
+            "visible_content_standing": "reviewed_illustrative_prototype_frame",
+            "rights_standing": "inherits_accepted_master_review",
+            "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md"
+          }
+        }
+      },
+      "accessibility": {
+        "branch": "verified_silent_visual_sequence",
+        "accessible_name": "Shared Surface Priority Map prototype demonstration",
+        "standing_text_id": "shared-surface-walkthrough-standing",
+        "figure_caption_id": "shared-surface-walkthrough-caption",
+        "visual_sequence_id": "shared-surface-walkthrough-sequence",
+        "visual_sequence_relationship": "aria-details",
+        "captions_standing": "not_applicable_verified_silent_source",
+        "meaningful_visual_information": "nearby_visible_ordered_sequence"
+      },
+      "delivery": {
+        "adapter": "cloudflare_r2_progressive_video",
+        "page_relationship": "same_origin",
+        "future_adapter": "cloudflare_stream",
+        "recovery": "Restore the preceding visitor-page pointer while the versioned R2 family remains retained."
+      },
+      "release": {
+        "transport": {
+          "standing": "accepted",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "live_same_origin_cloudflare_worker_route",
+          "verifier": "npm run verify:r2-video:live"
+        },
+        "visitor_source": "candidate",
+        "local_browser": {
+          "standing": "observed",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "deterministic_passive_poster_fixture_across_narrow_medium_wide_viewports",
+          "rerunnable_repository_check": "npm run test:video-receivers-browser"
+        },
+        "deployed_page": "pending",
+        "physical_safari_ios": "pending",
+        "human_page_release": "pending"
+      }
+    },
+    {
+      "semantic_id": "genomics-permissions",
+      "asset_version": "v0.1.0",
+      "semantic_owner": "Genomic Viewer Re-platforming Debrief",
+      "visitor_page": "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html",
+      "visitor_placement": "inside Implementation Architecture after the permissions discussion and before the connection-health figure",
+      "source": {
+        "standing": "externally_held_prepared_accepted_master",
+        "repository_coordinate": null,
+        "coordinate_standing": "externally_held_source_prepared_to_digest_bound_accepted_public_carrier",
+        "sha256": "9daec3f9e7981b4c15d33f40cba1fd6551520317e4380d221c62f82ffc34eb80"
+      },
+      "carriers": {
+        "movie": {
+          "public_path": "/v1-cdn/video/genomics-permissions/v0.1.0/movie.mp4",
+          "object_key": "v1/video/genomics-permissions/v0.1.0/movie.mp4",
+          "media_type": "video/mp4",
+          "sha256": "9daec3f9e7981b4c15d33f40cba1fd6551520317e4380d221c62f82ffc34eb80",
+          "bytes": 1530666,
+          "duration_seconds": 83.133333,
+          "width": 1920,
+          "height": 1010,
+          "frame_rate": "30/1",
+          "audio_standing": "verified_silent"
+        },
+        "poster": {
+          "public_path": "/v1-cdn/video/genomics-permissions/v0.1.0/poster.webp",
+          "object_key": "v1/video/genomics-permissions/v0.1.0/poster.webp",
+          "media_type": "image/webp",
+          "sha256": "3ed70c753deaffbcf5be05c61c9e33cabd3f5293f4a51275276ab79537a4bb85",
+          "bytes": 37156,
+          "width": 1920,
+          "height": 1010,
+          "source_master_sha256": "9daec3f9e7981b4c15d33f40cba1fd6551520317e4380d221c62f82ffc34eb80",
+          "timestamp_seconds": 5.0,
+          "derivation": {
+            "frame_decoder": "FFmpeg 9.0.2",
+            "image_encoder": "cwebp 1.6.0",
+            "settings": { "quality": 82, "metadata": "none" }
+          },
+          "selection_reason": "The selected frame presents the regional access grid and its read-and-write grant pattern before the sequence enters settings and failure states.",
+          "review": {
+            "standing": "candidate_pending_human_page_release",
+            "review_owner": "human_publication_owner",
+            "selected_by": "human-directed repository collaboration",
+            "visible_content_standing": "reviewed_synthetic_working_proxy_frame",
+            "rights_standing": "inherits_accepted_master_review",
+            "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md"
+          }
+        }
+      },
+      "accessibility": {
+        "branch": "verified_silent_visual_sequence",
+        "accessible_name": "Genomics permissions and failure-state demonstration",
+        "standing_text_id": "genomics-permissions-standing",
+        "figure_caption_id": "genomics-permissions-caption",
+        "visual_sequence_id": "genomics-permissions-transcript",
+        "visual_sequence_relationship": "aria-details",
+        "captions_standing": "not_applicable_verified_silent_source",
+        "meaningful_visual_information": "nearby_visible_ordered_sequence"
+      },
+      "delivery": {
+        "adapter": "cloudflare_r2_progressive_video",
+        "page_relationship": "same_origin",
+        "future_adapter": "cloudflare_stream",
+        "recovery": "Restore the preceding visitor-page pointer while the versioned R2 family remains retained."
+      },
+      "release": {
+        "transport": {
+          "standing": "accepted",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "live_same_origin_cloudflare_worker_route",
+          "verifier": "npm run verify:r2-video:live"
+        },
+        "visitor_source": "candidate",
+        "local_browser": {
+          "standing": "observed",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "deterministic_passive_poster_fixture_across_narrow_medium_wide_viewports",
+          "rerunnable_repository_check": "npm run test:video-receivers-browser"
+        },
+        "deployed_page": "pending",
+        "physical_safari_ios": "pending",
+        "human_page_release": "pending"
+      }
+    },
+    {
+      "semantic_id": "genomics-responsive-interface",
+      "asset_version": "v0.1.0",
+      "semantic_owner": "Genomic Viewer Re-platforming Debrief",
+      "visitor_page": "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html",
+      "visitor_placement": "inside Implementation Architecture after the software-and-social-systems quote and before the validation-lanes figure",
+      "source": {
+        "standing": "externally_held_prepared_accepted_master",
+        "repository_coordinate": null,
+        "coordinate_standing": "externally_held_source_prepared_to_digest_bound_accepted_public_carrier",
+        "sha256": "9b82cb12f06556c50889b98f3a4d05bb9f295e6a8adab7bc3e01f02653df6111"
+      },
+      "carriers": {
+        "movie": {
+          "public_path": "/v1-cdn/video/genomics-responsive-interface/v0.1.0/movie.mp4",
+          "object_key": "v1/video/genomics-responsive-interface/v0.1.0/movie.mp4",
+          "media_type": "video/mp4",
+          "sha256": "9b82cb12f06556c50889b98f3a4d05bb9f295e6a8adab7bc3e01f02653df6111",
+          "bytes": 9435056,
+          "duration_seconds": 68.533333,
+          "width": 1920,
+          "height": 980,
+          "frame_rate": "30/1",
+          "audio_standing": "verified_silent"
+        },
+        "poster": {
+          "public_path": "/v1-cdn/video/genomics-responsive-interface/v0.1.0/poster.webp",
+          "object_key": "v1/video/genomics-responsive-interface/v0.1.0/poster.webp",
+          "media_type": "image/webp",
+          "sha256": "c32a11494cd1de3a59db36959aa77dd3d32ac09211714113e632d241d211b765",
+          "bytes": 73268,
+          "width": 1920,
+          "height": 980,
+          "source_master_sha256": "9b82cb12f06556c50889b98f3a4d05bb9f295e6a8adab7bc3e01f02653df6111",
+          "timestamp_seconds": 5.0,
+          "derivation": {
+            "frame_decoder": "FFmpeg 9.0.2",
+            "image_encoder": "cwebp 1.6.0",
+            "settings": { "quality": 82, "metadata": "none" }
+          },
+          "selection_reason": "The selected opening frame makes the adjustable viewport boundary visible beside the reflowed Cohort Builder, establishing the resizing method before the demonstration compares wide and narrow arrangements.",
+          "review": {
+            "standing": "candidate_pending_human_page_release",
+            "review_owner": "human_publication_owner",
+            "selected_by": "human-directed repository collaboration",
+            "visible_content_standing": "reviewed_synthetic_working_proxy_frame",
+            "rights_standing": "inherits_accepted_master_review",
+            "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md"
+          }
+        }
+      },
+      "accessibility": {
+        "branch": "verified_silent_visual_sequence",
+        "accessible_name": "Genomics responsive-interface demonstration",
+        "standing_text_id": "genomics-responsive-interface-standing",
+        "figure_caption_id": "genomics-responsive-interface-caption",
+        "visual_sequence_id": "genomics-responsive-interface-transcript",
+        "visual_sequence_relationship": "aria-details",
+        "captions_standing": "not_applicable_verified_silent_source",
+        "meaningful_visual_information": "nearby_visible_ordered_sequence"
+      },
+      "delivery": {
+        "adapter": "cloudflare_r2_progressive_video",
+        "page_relationship": "same_origin",
+        "future_adapter": "cloudflare_stream",
+        "recovery": "Restore the preceding visitor-page pointer while the versioned R2 family remains retained."
+      },
+      "release": {
+        "transport": {
+          "standing": "accepted",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "live_same_origin_cloudflare_worker_route",
+          "verifier": "npm run verify:r2-video:live"
+        },
+        "visitor_source": "candidate",
+        "local_browser": {
+          "standing": "observed",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "deterministic_passive_poster_fixture_across_narrow_medium_wide_viewports",
+          "rerunnable_repository_check": "npm run test:video-receivers-browser"
+        },
+        "deployed_page": "pending",
+        "physical_safari_ios": "pending",
+        "human_page_release": "pending"
+      }
+    },
+    {
+      "semantic_id": "genomics-sequencing-process",
+      "asset_version": "v0.1.0",
+      "semantic_owner": "LIMS and ELN Re-platforming Debrief",
+      "visitor_page": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
+      "visitor_placement": "after the Case Brief and before the Solution Architecture track",
+      "source": {
+        "standing": "externally_held_prepared_accepted_master",
+        "repository_coordinate": null,
+        "coordinate_standing": "externally_held_source_prepared_to_digest_bound_accepted_public_carrier",
+        "sha256": "53e63e3f8c2d91002f863fca155303ad3fa6ea540507784b04b93d8a2a663ddf"
+      },
+      "carriers": {
+        "movie": {
+          "public_path": "/v1-cdn/video/genomics-sequencing-process/v0.1.0/movie.mp4",
+          "object_key": "v1/video/genomics-sequencing-process/v0.1.0/movie.mp4",
+          "media_type": "video/mp4",
+          "sha256": "53e63e3f8c2d91002f863fca155303ad3fa6ea540507784b04b93d8a2a663ddf",
+          "bytes": 22976172,
+          "duration_seconds": 121.666667,
+          "width": 1920,
+          "height": 1010,
+          "frame_rate": "30/1",
+          "audio_standing": "verified_silent"
+        },
+        "poster": {
+          "public_path": "/v1-cdn/video/genomics-sequencing-process/v0.1.0/poster.webp",
+          "object_key": "v1/video/genomics-sequencing-process/v0.1.0/poster.webp",
+          "media_type": "image/webp",
+          "sha256": "4109270c75d784c7680a9cd19f7de1b8ec535fce2aeb8643ac75a06a65038133",
+          "bytes": 162086,
+          "width": 1920,
+          "height": 1010,
+          "source_master_sha256": "53e63e3f8c2d91002f863fca155303ad3fa6ea540507784b04b93d8a2a663ddf",
+          "timestamp_seconds": 5.0,
+          "derivation": {
+            "frame_decoder": "FFmpeg 9.0.2",
+            "image_encoder": "cwebp 1.6.0",
+            "settings": { "quality": 82, "metadata": "none" }
+          },
+          "selection_reason": "The selected frame presents the axonometric sequencing lanes and their stage, sample, status, and exception markers as one laboratory-process overview.",
+          "review": {
+            "standing": "candidate_pending_human_page_release",
+            "review_owner": "human_publication_owner",
+            "selected_by": "human-directed repository collaboration",
+            "visible_content_standing": "reviewed_synthetic_working_proxy_frame",
+            "rights_standing": "inherits_accepted_master_review",
+            "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md"
+          }
+        }
+      },
+      "accessibility": {
+        "branch": "verified_silent_visual_sequence",
+        "accessible_name": "Genomics sequencing-process visualization demonstration",
+        "standing_text_id": "genomics-sequencing-process-standing",
+        "figure_caption_id": "genomics-sequencing-process-caption",
+        "visual_sequence_id": "genomics-sequencing-process-transcript",
+        "visual_sequence_relationship": "aria-details",
+        "captions_standing": "not_applicable_verified_silent_source",
+        "meaningful_visual_information": "nearby_visible_ordered_sequence"
+      },
+      "delivery": {
+        "adapter": "cloudflare_r2_progressive_video",
+        "page_relationship": "same_origin",
+        "future_adapter": "cloudflare_stream",
+        "recovery": "Restore the preceding visitor-page pointer while the versioned R2 family remains retained."
+      },
+      "release": {
+        "transport": {
+          "standing": "accepted",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "live_same_origin_cloudflare_worker_route",
+          "verifier": "npm run verify:r2-video:live"
+        },
+        "visitor_source": "candidate",
+        "local_browser": {
+          "standing": "observed",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "deterministic_passive_poster_fixture_across_narrow_medium_wide_viewports",
+          "rerunnable_repository_check": "npm run test:video-receivers-browser"
+        },
+        "deployed_page": "pending",
+        "physical_safari_ios": "pending",
+        "human_page_release": "pending"
+      }
+    },
+    {
+      "semantic_id": "genomics-specimen-qa-biomarker",
+      "asset_version": "v0.1.0",
+      "semantic_owner": "Genomic Viewer Re-platforming Debrief",
+      "visitor_page": "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html",
+      "visitor_placement": "after the Case Brief and before the architecture navigation",
+      "source": {
+        "standing": "externally_held_prepared_accepted_master",
+        "repository_coordinate": null,
+        "coordinate_standing": "externally_held_source_prepared_to_digest_bound_accepted_public_carrier",
+        "sha256": "4c6c223ceb21bec494e3621fc94141fd06925b2a97d621b905807c9b837da4bc"
+      },
+      "carriers": {
+        "movie": {
+          "public_path": "/v1-cdn/video/genomics-specimen-qa-biomarker/v0.1.0/movie.mp4",
+          "object_key": "v1/video/genomics-specimen-qa-biomarker/v0.1.0/movie.mp4",
+          "media_type": "video/mp4",
+          "sha256": "4c6c223ceb21bec494e3621fc94141fd06925b2a97d621b905807c9b837da4bc",
+          "bytes": 2944214,
+          "duration_seconds": 65.966667,
+          "width": 1920,
+          "height": 1010,
+          "frame_rate": "30/1",
+          "audio_standing": "verified_silent"
+        },
+        "poster": {
+          "public_path": "/v1-cdn/video/genomics-specimen-qa-biomarker/v0.1.0/poster.webp",
+          "object_key": "v1/video/genomics-specimen-qa-biomarker/v0.1.0/poster.webp",
+          "media_type": "image/webp",
+          "sha256": "e7faa4f86f29f2a04c0fb83b5188bd049af5bcfcde3726abf4e140dab1ca7b87",
+          "bytes": 47182,
+          "width": 1920,
+          "height": 1010,
+          "source_master_sha256": "4c6c223ceb21bec494e3621fc94141fd06925b2a97d621b905807c9b837da4bc",
+          "timestamp_seconds": 33.0,
+          "derivation": {
+            "frame_decoder": "FFmpeg 9.0.2",
+            "image_encoder": "cwebp 1.6.0",
+            "settings": { "quality": 82, "metadata": "none" }
+          },
+          "selection_reason": "The selected frame shows specimen, quality, actionability, and operating-state views together at a meaningful mid-sequence transition.",
+          "review": {
+            "standing": "candidate_pending_human_page_release",
+            "review_owner": "human_publication_owner",
+            "selected_by": "human-directed repository collaboration",
+            "visible_content_standing": "reviewed_synthetic_working_proxy_frame",
+            "rights_standing": "inherits_accepted_master_review",
+            "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md"
+          }
+        }
+      },
+      "accessibility": {
+        "branch": "verified_silent_visual_sequence",
+        "accessible_name": "Genomics specimen, quality, and biomarker demonstration",
+        "standing_text_id": "genomics-specimen-qa-biomarker-standing",
+        "figure_caption_id": "genomics-specimen-qa-biomarker-caption",
+        "visual_sequence_id": "genomics-specimen-qa-biomarker-transcript",
+        "visual_sequence_relationship": "aria-details",
+        "captions_standing": "not_applicable_verified_silent_source",
+        "meaningful_visual_information": "nearby_visible_ordered_sequence"
+      },
+      "delivery": {
+        "adapter": "cloudflare_r2_progressive_video",
+        "page_relationship": "same_origin",
+        "future_adapter": "cloudflare_stream",
+        "recovery": "Restore the preceding visitor-page pointer while the versioned R2 family remains retained."
+      },
+      "release": {
+        "transport": {
+          "standing": "accepted",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "live_same_origin_cloudflare_worker_route",
+          "verifier": "npm run verify:r2-video:live"
+        },
+        "visitor_source": "candidate",
+        "local_browser": {
+          "standing": "observed",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "deterministic_passive_poster_fixture_across_narrow_medium_wide_viewports",
+          "rerunnable_repository_check": "npm run test:video-receivers-browser"
+        },
+        "deployed_page": "pending",
+        "physical_safari_ios": "pending",
+        "human_page_release": "pending"
+      }
+    },
+    {
+      "semantic_id": "poda-cpg-pharma",
+      "asset_version": "v0.1.0",
+      "semantic_owner": "PODA AI Systems page",
+      "visitor_page": "context-canvas-project-surface/context-canvas/poda.html",
+      "visitor_placement": "after the paired PODA companion and before the Organizational Negotiation section",
+      "source": {
+        "standing": "externally_held_prepared_accepted_master",
+        "repository_coordinate": null,
+        "coordinate_standing": "externally_held_source_prepared_to_digest_bound_accepted_public_carrier",
+        "sha256": "d0e95e77bf85f6c8f4fb6c54bc60d37f209a2e88ae91bbf24d2180896e7cca43"
+      },
+      "carriers": {
+        "movie": {
+          "public_path": "/v1-cdn/video/poda-cpg-pharma/v0.1.0/movie.mp4",
+          "object_key": "v1/video/poda-cpg-pharma/v0.1.0/movie.mp4",
+          "media_type": "video/mp4",
+          "sha256": "d0e95e77bf85f6c8f4fb6c54bc60d37f209a2e88ae91bbf24d2180896e7cca43",
+          "bytes": 39779005,
+          "duration_seconds": 425.3,
+          "width": 1796,
+          "height": 1080,
+          "frame_rate": "30/1",
+          "audio_standing": "verified_silent"
+        },
+        "poster": {
+          "public_path": "/v1-cdn/video/poda-cpg-pharma/v0.1.0/poster.webp",
+          "object_key": "v1/video/poda-cpg-pharma/v0.1.0/poster.webp",
+          "media_type": "image/webp",
+          "sha256": "b2044a5541b8a36f3c3b2b14ff3dd046998f6ef294de7b3fa3a4f7030fb5554b",
+          "bytes": 81298,
+          "width": 1796,
+          "height": 1080,
+          "source_master_sha256": "d0e95e77bf85f6c8f4fb6c54bc60d37f209a2e88ae91bbf24d2180896e7cca43",
+          "timestamp_seconds": 5.0,
+          "derivation": {
+            "frame_decoder": "FFmpeg 9.0.2",
+            "image_encoder": "cwebp 1.6.0",
+            "settings": { "quality": 82, "metadata": "none" }
+          },
+          "selection_reason": "The selected frame presents the PODA controls and four semantic zones together before the demonstration adds and revises the illustrative records.",
+          "review": {
+            "standing": "candidate_pending_human_page_release",
+            "review_owner": "human_publication_owner",
+            "selected_by": "human-directed repository collaboration",
+            "visible_content_standing": "reviewed_illustrative_prototype_frame",
+            "rights_standing": "inherits_accepted_master_review",
+            "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md"
+          }
+        }
+      },
+      "accessibility": {
+        "branch": "verified_silent_visual_sequence",
+        "accessible_name": "PODA review-safety prototype demonstration",
+        "standing_text_id": "poda-walkthrough-standing",
+        "figure_caption_id": "poda-walkthrough-caption",
+        "visual_sequence_id": "poda-walkthrough-sequence",
+        "visual_sequence_relationship": "aria-details",
+        "captions_standing": "not_applicable_verified_silent_source",
+        "meaningful_visual_information": "nearby_visible_ordered_sequence"
+      },
+      "delivery": {
+        "adapter": "cloudflare_r2_progressive_video",
+        "page_relationship": "same_origin",
+        "future_adapter": "cloudflare_stream",
+        "recovery": "Restore the preceding visitor-page pointer while the versioned R2 family remains retained."
+      },
+      "release": {
+        "transport": {
+          "standing": "accepted",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "live_same_origin_cloudflare_worker_route",
+          "verifier": "npm run verify:r2-video:live"
+        },
+        "visitor_source": "candidate",
+        "local_browser": {
+          "standing": "observed",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "deterministic_passive_poster_fixture_across_narrow_medium_wide_viewports",
+          "rerunnable_repository_check": "npm run test:video-receivers-browser"
+        },
+        "deployed_page": "pending",
+        "physical_safari_ios": "pending",
+        "human_page_release": "pending"
+      }
+    },
+    {
+      "semantic_id": "strategy-canvas-product-leadership",
+      "asset_version": "v0.1.0",
+      "semantic_owner": "Strategy Canvas AI Systems page",
+      "visitor_page": "context-canvas-project-surface/context-canvas/grammar-family.html",
+      "visitor_placement": "after the paired Strategy Canvas and before the Eight-form View section",
+      "source": {
+        "standing": "externally_held_prepared_accepted_master",
+        "repository_coordinate": null,
+        "coordinate_standing": "externally_held_source_prepared_to_digest_bound_accepted_public_carrier",
+        "sha256": "fbc7dc14713f998fef06da8b12626a03196ba3d0abc110f22ddc213d2146ae7e"
+      },
+      "carriers": {
+        "movie": {
+          "public_path": "/v1-cdn/video/strategy-canvas-product-leadership/v0.1.0/movie.mp4",
+          "object_key": "v1/video/strategy-canvas-product-leadership/v0.1.0/movie.mp4",
+          "media_type": "video/mp4",
+          "sha256": "fbc7dc14713f998fef06da8b12626a03196ba3d0abc110f22ddc213d2146ae7e",
+          "bytes": 26054108,
+          "duration_seconds": 354.566667,
+          "width": 1796,
+          "height": 1080,
+          "frame_rate": "30/1",
+          "audio_standing": "verified_silent"
+        },
+        "poster": {
+          "public_path": "/v1-cdn/video/strategy-canvas-product-leadership/v0.1.0/poster.webp",
+          "object_key": "v1/video/strategy-canvas-product-leadership/v0.1.0/poster.webp",
+          "media_type": "image/webp",
+          "sha256": "3d3482edca79da39a419ea549b9051dc77dce769ea5a6d87b3ff9886d178bb9e",
+          "bytes": 137392,
+          "width": 1796,
+          "height": 1080,
+          "source_master_sha256": "fbc7dc14713f998fef06da8b12626a03196ba3d0abc110f22ddc213d2146ae7e",
+          "timestamp_seconds": 177.0,
+          "derivation": {
+            "frame_decoder": "FFmpeg 9.0.2",
+            "image_encoder": "cwebp 1.6.0",
+            "settings": { "quality": 82, "metadata": "none" }
+          },
+          "selection_reason": "The selected mid-sequence frame shows the shared factor comparison, separate readings, and decision controls after the workbench has meaningful state.",
+          "review": {
+            "standing": "candidate_pending_human_page_release",
+            "review_owner": "human_publication_owner",
+            "selected_by": "human-directed repository collaboration",
+            "visible_content_standing": "reviewed_illustrative_prototype_frame",
+            "rights_standing": "inherits_accepted_master_review",
+            "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md"
+          }
+        }
+      },
+      "accessibility": {
+        "branch": "verified_silent_visual_sequence",
+        "accessible_name": "Strategy Canvas product-leadership prototype demonstration",
+        "standing_text_id": "strategy-canvas-walkthrough-standing",
+        "figure_caption_id": "strategy-canvas-walkthrough-caption",
+        "visual_sequence_id": "strategy-canvas-walkthrough-sequence",
+        "visual_sequence_relationship": "aria-details",
+        "captions_standing": "not_applicable_verified_silent_source",
+        "meaningful_visual_information": "nearby_visible_ordered_sequence"
+      },
+      "delivery": {
+        "adapter": "cloudflare_r2_progressive_video",
+        "page_relationship": "same_origin",
+        "future_adapter": "cloudflare_stream",
+        "recovery": "Restore the preceding visitor-page pointer while the versioned R2 family remains retained."
+      },
+      "release": {
+        "transport": {
+          "standing": "accepted",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "live_same_origin_cloudflare_worker_route",
+          "verifier": "npm run verify:r2-video:live"
+        },
+        "visitor_source": "candidate",
+        "local_browser": {
+          "standing": "observed",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "deterministic_passive_poster_fixture_across_narrow_medium_wide_viewports",
+          "rerunnable_repository_check": "npm run test:video-receivers-browser"
+        },
+        "deployed_page": "pending",
+        "physical_safari_ios": "pending",
+        "human_page_release": "pending"
+      }
+    },
+    {
+      "semantic_id": "threadkeeping-cpg-pharma",
+      "asset_version": "v0.1.0",
+      "semantic_owner": "Threadkeeping AI Systems page",
+      "visitor_page": "context-canvas-project-surface/context-canvas/metadata-blocks.html",
+      "visitor_placement": "after the paired Threadkeeping Ledger and before the Content Scan Layer section",
+      "source": {
+        "standing": "externally_held_prepared_accepted_master",
+        "repository_coordinate": null,
+        "coordinate_standing": "externally_held_source_prepared_to_digest_bound_accepted_public_carrier",
+        "sha256": "3227648cf675aa6bfb345b23c676babf3229df53088bcf704366e653ceb94aae"
+      },
+      "carriers": {
+        "movie": {
+          "public_path": "/v1-cdn/video/threadkeeping-cpg-pharma/v0.1.0/movie.mp4",
+          "object_key": "v1/video/threadkeeping-cpg-pharma/v0.1.0/movie.mp4",
+          "media_type": "video/mp4",
+          "sha256": "3227648cf675aa6bfb345b23c676babf3229df53088bcf704366e653ceb94aae",
+          "bytes": 22039412,
+          "duration_seconds": 239.4,
+          "width": 1796,
+          "height": 1080,
+          "frame_rate": "30/1",
+          "audio_standing": "verified_silent"
+        },
+        "poster": {
+          "public_path": "/v1-cdn/video/threadkeeping-cpg-pharma/v0.1.0/poster.webp",
+          "object_key": "v1/video/threadkeeping-cpg-pharma/v0.1.0/poster.webp",
+          "media_type": "image/webp",
+          "sha256": "e828e1b15d6aa827f03e6af0ea567348c3d0a595a7d4daee84b446f1b9ca1940",
+          "bytes": 116440,
+          "width": 1796,
+          "height": 1080,
+          "source_master_sha256": "3227648cf675aa6bfb345b23c676babf3229df53088bcf704366e653ceb94aae",
+          "timestamp_seconds": 5.0,
+          "derivation": {
+            "frame_decoder": "FFmpeg 9.0.2",
+            "image_encoder": "cwebp 1.6.0",
+            "settings": { "quality": 82, "metadata": "none" }
+          },
+          "selection_reason": "The selected frame presents the Now–Next–Later ledger, current-context field, and coordination-horizon cards before the handoff sequence begins.",
+          "review": {
+            "standing": "candidate_pending_human_page_release",
+            "review_owner": "human_publication_owner",
+            "selected_by": "human-directed repository collaboration",
+            "visible_content_standing": "reviewed_illustrative_prototype_frame",
+            "rights_standing": "inherits_accepted_master_review",
+            "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md"
+          }
+        }
+      },
+      "accessibility": {
+        "branch": "verified_silent_visual_sequence",
+        "accessible_name": "Threadkeeping review-platform prototype demonstration",
+        "standing_text_id": "threadkeeping-walkthrough-standing",
+        "figure_caption_id": "threadkeeping-walkthrough-caption",
+        "visual_sequence_id": "threadkeeping-walkthrough-sequence",
+        "visual_sequence_relationship": "aria-details",
+        "captions_standing": "not_applicable_verified_silent_source",
+        "meaningful_visual_information": "nearby_visible_ordered_sequence"
+      },
+      "delivery": {
+        "adapter": "cloudflare_r2_progressive_video",
+        "page_relationship": "same_origin",
+        "future_adapter": "cloudflare_stream",
+        "recovery": "Restore the preceding visitor-page pointer while the versioned R2 family remains retained."
+      },
+      "release": {
+        "transport": {
+          "standing": "accepted",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "live_same_origin_cloudflare_worker_route",
+          "verifier": "npm run verify:r2-video:live"
+        },
+        "visitor_source": "candidate",
+        "local_browser": {
+          "standing": "observed",
+          "observed_on": "2026-10-10",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/r2-multi-family-video-batch-v0.1.md",
+          "receiver": "deterministic_passive_poster_fixture_across_narrow_medium_wide_viewports",
+          "rerunnable_repository_check": "npm run test:video-receivers-browser"
         },
         "deployed_page": "pending",
         "physical_safari_ios": "pending",

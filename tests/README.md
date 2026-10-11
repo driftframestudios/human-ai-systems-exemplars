@@ -163,6 +163,7 @@ separable:
 npm run test:context-canvas
 npm run check:debrief-image-derivatives
 npm run test:debrief-catalog-preview-browser
+npm run test:video-receivers-browser
 npm run test:about-media-browser
 npm run test:context-canvas-medium-containment
 npm run test:context-canvas-narrow-rails
@@ -176,6 +177,13 @@ accepted source replacement. The catalog-preview browser contract proves that
 responsive WebP metadata, SVG fallback metadata, captions, alternatives, and
 intrinsic geometry replace one another without stale attributes or horizontal
 overflow.
+
+The native-video receiver browser contract uses passive local carrier fixtures
+to inspect every selected Debrief and AI Systems receiver at 390, 1024, and
+1440 CSS pixels. It covers poster-first requests, native controls, accessible
+relationships, visible visual sequences, and page containment. Live route
+verification and deployed playback retain their separate transport and release
+owners.
 
 The complete visual runner discovers every top-level route and requires each
 route to belong to exactly one family. Its standing three-viewport campaign is

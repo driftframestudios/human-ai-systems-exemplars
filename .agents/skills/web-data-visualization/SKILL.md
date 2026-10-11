@@ -143,7 +143,9 @@ while a separately named interaction or performance experiment remains gated.
 
 - Load [SVG and coordinated views](references/svg-and-coordinated-views.md) for SVG delivery, multiview state, dense matrices, export, or Probe application.
 - Load the foundation's [evidence map](../data-visualization-foundations/references/evidence-and-source-map.md) for research-backed design claims and current technical anchors.
-- Load [Atlas exercises](../data-visualization-foundations/references/atlas-exercises.md) during #358/#360 and the related gallery/public-extract gates.
+- Load [Atlas exercises](../data-visualization-foundations/references/atlas-exercises.md)
+  during a coordinated Atlas view and its related gallery or public-extract
+  gates.
 
 ## Completion and re-entry
 

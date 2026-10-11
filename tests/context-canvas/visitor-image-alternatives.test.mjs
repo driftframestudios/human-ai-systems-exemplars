@@ -59,18 +59,27 @@ const debriefProxyContracts = [
   {
     route: "fmi-clinical-trial-coordination.html",
     directory: "boolean-building-blocks",
+    publicSafePatterns: [/synthetic, de-identified specimen scenarios/iu],
   },
   {
     route: "choose-your-player-humatics.html",
     directory: "choose-your-player",
+    publicSafePatterns: [/company-neutral, IP-free 2026 interface/iu, /synthetic/iu],
   },
   {
     route: "genomic-viewer-replatforming.html",
     directory: "queue-secretly-status-machine",
+    publicSafePatterns: [/original code and synthetic\s+specimen/iu],
   },
   {
     route: "fmi-lims-eln-replatforming.html",
     directory: "sample-noone-could-find",
+    publicSafePatterns: [/generalized workflows and\s+synthetic content/iu],
+  },
+  {
+    route: "who-to-believe-reviews-platform.html",
+    directory: "who-to-believe",
+    publicSafePatterns: [/fictional\s+content/iu],
   },
 ];
 
@@ -119,12 +128,47 @@ test("parent visitor images carry a legible text relationship", async () => {
     }
   }
 
-  assert.equal(imageCount, 197);
+  assert.equal(imageCount, 203);
   assert.deepEqual(
     emptyAlternatives,
     ["debriefs.html:../img/plot/genomic_viewer_boundary_contract_map.svg"],
     "Only the scripted debrief preview begins with an empty alternative",
   );
+});
+
+test("Who To Believe figures preserve the intended narrative sequence", async () => {
+  const html = withoutComments(await readFile(
+    join(canvasRoot, "who-to-believe-reviews-platform.html"),
+    "utf8",
+  ));
+  const orderedLandmarks = [
+    'id="case-brief"',
+    'id="wtb-figure-member-experience-redesigned"',
+    'id="cpg-pharma-conversational-ai-walkthrough"',
+    'id="solution-debrief-title"',
+    'id="wtb-figure-member-experience-before"',
+    'id="solution-bottleneck-title"',
+    'id="wtb-figure-service-model-before"',
+    'id="solution-intervention-title"',
+    'id="wtb-figure-concept-matrix"',
+    'id="wtb-figure-service-model-after"',
+    'id="solution-outcomes-title"',
+    'id="implementation-bottleneck-title"',
+    'id="wtb-figure-dual-stack-system"',
+    'id="implementation-intervention-title"',
+  ];
+  const positions = orderedLandmarks.map(landmark => {
+    const position = html.indexOf(landmark);
+    assert.notEqual(position, -1, `Missing narrative landmark ${landmark}`);
+    return position;
+  });
+
+  for (let index = 1; index < positions.length; index += 1) {
+    assert.ok(
+      positions[index] > positions[index - 1],
+      `${orderedLandmarks[index]} follows ${orderedLandmarks[index - 1]}`,
+    );
+  }
 });
 
 test("static top-level raster carriers declare byte-matched intrinsic geometry", async () => {
@@ -190,12 +234,13 @@ test("former placeholder alternatives stay out of parent visitor surfaces", asyn
 });
 
 test("working Debrief systems preserve standing, figure identity, responsive sources, and full-size inspection", async () => {
-  for (const { route, directory } of debriefProxyContracts) {
+  for (const { route, directory, publicSafePatterns } of debriefProxyContracts) {
     const html = withoutComments(await readFile(join(canvasRoot, route), "utf8"));
     assert.match(html, /working/iu, `${route}: working-system standing`);
-    assert.match(html, /IP-free/iu, `${route}: IP-free standing`);
     assert.match(html, /2026/iu, `${route}: contemporary standing`);
-    assert.match(html, /synthetic|generalized/iu, `${route}: public-safe content standing`);
+    for (const pattern of publicSafePatterns) {
+      assert.match(html, pattern, `${route}: route-specific public-safe content standing`);
+    }
     const figures = Array.from(html.matchAll(
       /<figure\b[^>]*class="[^"]*\bdebrief-proxy-figure\b[^"]*"[^>]*>([\s\S]*?)<\/figure>/gu,
     ), match => match[0]);

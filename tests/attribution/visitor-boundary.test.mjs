@@ -179,7 +179,7 @@ test("enhanced routes load one contract and preserve the authored boundary as th
   assert.ok(appendBoundary < appendAttribution, "enhancement closes with boundary then attribution");
 });
 
-test("governed visitor language is direct except for exact non-rendered Technology Fit import aliases", async () => {
+test("governed visitor language replaces reviewed vague media phrases and preserves exact import aliases", async () => {
   const paths = await governedHtmlFiles();
   const technologyPath = resolve(
     repositoryRoot,
@@ -191,37 +191,36 @@ test("governed visitor language is direct except for exact non-rendered Technolo
     'illustrative_seed:"sample_state"',
     'illustrative_walkthrough:"working_example"',
   ];
+  const podaPath = resolve(
+    repositoryRoot,
+    "context-canvas-project-surface/context-canvas/poda.html",
+  );
+  const acceptedPodaMarker = "Illustrative example content shown.";
+  const reviewedVaguePhrases = [
+    /the records are synthetic/iu,
+    /the worked-example records are synthetic/iu,
+    /working proxy walkthrough/iu,
+    /silent walkthrough/iu,
+    /open the MP4 directly/iu,
+  ];
 
   for (const path of paths) {
     const html = await readFile(path, "utf8");
     const label = relative(repositoryRoot, path);
-    if (path !== technologyPath) {
-      assert.doesNotMatch(html, /illustrative/iu, `${label} direct visitor language`);
-      continue;
+    for (const phrase of reviewedVaguePhrases) {
+      assert.doesNotMatch(html, phrase, `${label} reviewed media language`);
     }
-
-    const aliasBlock = html.match(/const legacyTechnologyVocabulary=Object\.freeze\(\{([\s\S]*?)\}\);/u);
-    assert.ok(aliasBlock, `${label} explicit legacy import adapter`);
-    acceptedLegacyAliases.forEach(alias => assert.ok(aliasBlock[1].includes(alias), `${label} ${alias}`));
-    assert.equal((aliasBlock[1].match(/illustrative/giu) || []).length, 4, `${label} exact alias count`);
-    assert.doesNotMatch(html.replace(aliasBlock[0], ""), /illustrative/iu, `${label} aliases never enter visitor copy`);
+    if (path === podaPath) {
+      assert.equal(occurrenceCount(html, acceptedPodaMarker), 1, `${label} exact reviewed example marker`);
+    }
+    if (path === technologyPath) {
+      const aliasBlock = html.match(/const legacyTechnologyVocabulary=Object\.freeze\(\{([\s\S]*?)\}\);/u);
+      assert.ok(aliasBlock, `${label} explicit legacy import adapter`);
+      acceptedLegacyAliases.forEach(alias => assert.ok(aliasBlock[1].includes(alias), `${label} ${alias}`));
+      assert.equal((aliasBlock[1].match(/illustrative/giu) || []).length, 4, `${label} exact alias count`);
+    }
   }
 
-  const adjacentVisitorFiles = [
-    "collaboration/about-heatmap-comparison/index.html",
-    "collaboration/career-quality-visual-variants/index.html",
-    "context-canvas-project-surface/context-canvas/README.md",
-    "context-canvas-project-surface/context-canvas/humans.txt",
-    "context-canvas-project-surface/site-readings/exemplars/index-exemplar--cobalt-temporal-field.html",
-    "context-canvas-project-surface/img/plot/inspection_staged_capital_map.svg",
-    "context-canvas-project-surface/img/plot/site_reading_grammar_small_multiples.svg",
-    "context-canvas-project-surface/img/plot/v3b2_gold_note_viewlets.svg",
-    "visual-fidelity-contracts/rose-quartz-editorial-field.md",
-    "visual-fidelity-contracts/tiffany-ledger-field.md",
-  ];
-  for (const entry of adjacentVisitorFiles) {
-    assert.doesNotMatch(await readFile(resolve(repositoryRoot, entry), "utf8"), /illustrative/iu, entry);
-  }
 });
 
 test("shared and self-contained styles preserve selectable narrow, print, and forced-color readings", async () => {

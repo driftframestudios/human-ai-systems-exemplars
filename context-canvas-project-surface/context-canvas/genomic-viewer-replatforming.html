@@ -150,6 +150,49 @@
             </dl>
             <p><strong>Basis and limits:</strong> I designed and implemented the delivered interfaces and views within a partial migration; complex transformations, DTOs, database mediation, plugins, and portions of the underlying capability remained legacy-owned. Costing requires current inputs, technology choices require current constraints, and AI-assisted delivery effects require separate measurement.</p>
             <p><a href="#solution-architecture-title">Read the Full Debrief →</a></p>
+            <aside class="interpretive-aside" aria-labelledby="genomic-proxy-standing-title">
+              <h3 id="genomic-proxy-standing-title" class="txt-h3">How to read the interface views</h3>
+              <p>
+                I designed and built the working interfaces shown in this Debrief in 2026 from original code and synthetic
+                specimen, biomarker, quality, infrastructure, role, and workflow records. The videos and screenshots act as
+                rapid prototypes: Curators, Pathologists, scientists, and engineers can point to a case state, permission,
+                failed dependency, or release gate, describe a mismatch in their own terms, and compare the revision with the
+                version they reviewed.
+              </p>
+            </aside>
+          </section>
+
+          <section id="genomics-specimen-qa-biomarker-walkthrough" aria-labelledby="genomics-specimen-qa-biomarker-walkthrough-title">
+            <h2 id="genomics-specimen-qa-biomarker-walkthrough-title" class="txt-h2">Specimen-to-biomarker demonstration</h2>
+            <p id="genomics-specimen-qa-biomarker-standing">The demonstration follows one specimen from its overview through quality gates, biomarker review, instruction state, and readiness checks.</p>
+            <figure class="story-visual table-span-all">
+              <video
+                controls
+                playsinline
+                preload="metadata"
+                width="1920"
+                height="1010"
+                poster="https://vik.guru/v1-cdn/video/genomics-specimen-qa-biomarker/v0.1.0/poster.webp"
+                aria-label="Genomics specimen, quality, and biomarker demonstration"
+                aria-describedby="genomics-specimen-qa-biomarker-standing genomics-specimen-qa-biomarker-caption"
+                aria-details="genomics-specimen-qa-biomarker-transcript"
+              >
+                <source src="https://vik.guru/v1-cdn/video/genomics-specimen-qa-biomarker/v0.1.0/movie.mp4" type="video/mp4">
+                <p><a href="https://vik.guru/v1-cdn/video/genomics-specimen-qa-biomarker/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</p>
+              </video>
+              <figcaption id="genomics-specimen-qa-biomarker-caption" class="table-note"><strong>Demonstration of specimen, quality, and biomarker review.</strong> Specimen cards lead through four quality-control gates into biomarker actionability, instruction state, and readiness checks. The sequence shows how overview, scientific review, and operating state remain connected across a case. <a href="https://vik.guru/v1-cdn/video/genomics-specimen-qa-biomarker/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</figcaption>
+            </figure>
+            <aside id="genomics-specimen-qa-biomarker-transcript" class="implementation-companion table-span-all" aria-labelledby="genomics-specimen-qa-biomarker-transcript-title">
+              <p class="implementation-companion__eyebrow">Visual description</p>
+              <h3 id="genomics-specimen-qa-biomarker-transcript-title" class="txt-h3">A specimen record stays connected to quality, actionability, and readiness</h3>
+              <ol>
+                <li>The demonstration opens in a Specimen Register whose cards place specimen identity, priority, quality, and workflow state in one scan.</li>
+                <li>Four quality-control gates follow the specimen through wet lab, sequencing, secondary analysis, and sign-out.</li>
+                <li>Biomarker actionability cards connect variants and evidence to review status and possible therapeutic relevance.</li>
+                <li>An Instruction Ledger makes the active instruction, version, and state available for inspection beside the work it shapes.</li>
+                <li>Next Arc readiness and validation checks bring infrastructure and release conditions into the same case-level reading.</li>
+              </ol>
+            </aside>
           </section>
 
           <nav aria-labelledby="track-index-title">
@@ -264,21 +307,9 @@
               distinctions inside labels that looked descriptive. A correct sequencing address depended on a manually maintained
               German-team process. Morning SQL and a macro-based Failure Tracker recovered states the viewer could have carried directly.
             </p>
-            <aside class="interpretive-aside" aria-labelledby="genomic-proxy-standing-title">
-              <h4 id="genomic-proxy-standing-title" class="txt-h4">How to read the working interface views</h4>
-              <p>
-                These figures show SoT Cartography—Source of Truth Cartography—a working, IP-free system I designed and built in 2026 to help research teams visualize and organize complex workflows across domains.
-              </p>
-              <p>
-                These rapid prototypes give Curators, Pathologists, scientists, and engineers concrete conversation instruments.
-                I put the design in view early so each person can point to a case state, permission, failed dependency, or release
-                gate, name the mismatch in their own terms, and compare the revised version with the one they reviewed. Correction
-                becomes ordinary design work, and implementation stays aligned with the people carrying clinical consequence.
-              </p>
-            </aside>
             <figure id="genomic-plate-operating-state" class="story-visual debrief-proxy-figure table-span-all">
-              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable working 2026 proxy-system screenshot of a genomic plate and its visible operating state">
-                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-plate-viewer.webp" aria-label="Open the working 2026 genomic plate proxy-system screenshot at full size">
+              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable genomic plate view with visible operating state">
+                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-plate-viewer.webp" aria-label="Open the genomic plate view at full size">
                   <img
                     src="../img/debriefs/queue-secretly-status-machine/genomics-plate-viewer.webp"
                     srcset="../img/debriefs/queue-secretly-status-machine/genomics-plate-viewer-960.webp 960w, ../img/debriefs/queue-secretly-status-machine/genomics-plate-viewer-1920.webp 1920w, ../img/debriefs/queue-secretly-status-machine/genomics-plate-viewer.webp 5120w"
@@ -345,8 +376,8 @@
             </div>
 
             <figure id="genomic-permission-profile" class="story-visual debrief-proxy-figure table-span-all">
-              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable working 2026 proxy-system screenshot of a profile-scoped genomic access grid">
-                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-permission-profile.webp" aria-label="Open the working 2026 genomic permission-profile proxy-system screenshot at full size">
+              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable profile-scoped genomic access grid">
+                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-permission-profile.webp" aria-label="Open the genomic permission-profile view at full size">
                   <img
                     src="../img/debriefs/queue-secretly-status-machine/genomics-permission-profile.webp"
                     srcset="../img/debriefs/queue-secretly-status-machine/genomics-permission-profile-960.webp 960w, ../img/debriefs/queue-secretly-status-machine/genomics-permission-profile-1920.webp 1920w, ../img/debriefs/queue-secretly-status-machine/genomics-permission-profile.webp 3790w"
@@ -509,9 +540,38 @@
               <p>The stack an organization uses, develops and maintains dictates who they can hire.</p>
               <cite>Implementation Architecture source</cite>
             </blockquote>
+            <h4 id="genomics-responsive-interface-walkthrough-title" class="txt-h4">Responsive-interface demonstration</h4>
+            <p id="genomics-responsive-interface-standing">The opening frame shows the adjustable viewport boundary: the interface occupies the left side, and the dark field to its right is the remaining resize canvas. Three connected interfaces reflow across wide and narrow viewports while their controls, status cues, and record details remain available.</p>
+            <figure id="genomics-responsive-interface-walkthrough" class="story-visual table-span-all">
+              <video
+                controls
+                playsinline
+                preload="metadata"
+                width="1920"
+                height="980"
+                poster="https://vik.guru/v1-cdn/video/genomics-responsive-interface/v0.1.0/poster.webp"
+                aria-label="Genomics responsive-interface demonstration"
+                aria-describedby="genomics-responsive-interface-standing genomics-responsive-interface-caption"
+                aria-details="genomics-responsive-interface-transcript"
+              >
+                <source src="https://vik.guru/v1-cdn/video/genomics-responsive-interface/v0.1.0/movie.mp4" type="video/mp4">
+                <p><a href="https://vik.guru/v1-cdn/video/genomics-responsive-interface/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</p>
+              </video>
+              <figcaption id="genomics-responsive-interface-caption" class="table-note"><strong>Demonstration of responsive genomic workspaces.</strong> Cohort Builder, Next Arc Packet, and Specimen Register move from wide multi-column layouts into narrow stacked readings while controls, status, and selected-record detail remain available. <a href="https://vik.guru/v1-cdn/video/genomics-responsive-interface/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</figcaption>
+            </figure>
+            <aside id="genomics-responsive-interface-transcript" class="implementation-companion table-span-all" aria-labelledby="genomics-responsive-interface-transcript-title">
+              <p class="implementation-companion__eyebrow">Visual description</p>
+              <h4 id="genomics-responsive-interface-transcript-title" class="txt-h4">Three dense workspaces retain their meaning as the viewport narrows</h4>
+              <ol>
+                <li>The Cohort Builder begins in a wide, multi-column layout that keeps rule controls, cohort status, and result context in view.</li>
+                <li>The viewport narrows and the same controls and status cues move into a stacked reading order.</li>
+                <li>The Next Arc Packet repeats the wide-to-narrow transition while retaining readiness, validation, and record detail.</li>
+                <li>The Specimen Register completes the demonstration by reflowing specimen cards and controls into a narrow layout that preserves each record&rsquo;s identity and state.</li>
+              </ol>
+            </aside>
             <figure id="genomic-validation-lanes" class="story-visual debrief-proxy-figure table-span-all">
-              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable working 2026 proxy-system screenshot of genomic engineering processes in a validation environment">
-                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes.webp" aria-label="Open the working 2026 computational-biology engineering-process proxy-system screenshot at full size">
+              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable genomic engineering-process view in a validation environment">
+                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes.webp" aria-label="Open the computational-biology engineering-process view at full size">
                   <img
                     src="../img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes.webp"
                     srcset="../img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes-960.webp 960w, ../img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes-1920.webp 1920w, ../img/debriefs/queue-secretly-status-machine/genomics-computational-biology-engineering-processes.webp 4786w"
@@ -549,8 +609,8 @@
               was widely loved, yet its global mounting and validation demands weakened the migration.<sup><a href="#source-implementation-bottleneck">7</a></sup>
             </p>
             <figure id="genomic-specimen-masonry" class="story-visual debrief-proxy-figure table-span-all">
-              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable working 2026 proxy-system screenshot of a genomic specimen masonry interface">
-                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-specimen-masonry.webp" aria-label="Open the working 2026 genomic specimen-masonry proxy-system screenshot at full size">
+              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable genomic specimen-masonry interface">
+                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-specimen-masonry.webp" aria-label="Open the genomic specimen-masonry view at full size">
                   <img
                     src="../img/debriefs/queue-secretly-status-machine/genomics-specimen-masonry.webp"
                     srcset="../img/debriefs/queue-secretly-status-machine/genomics-specimen-masonry-960.webp 960w, ../img/debriefs/queue-secretly-status-machine/genomics-specimen-masonry-1920.webp 1920w, ../img/debriefs/queue-secretly-status-machine/genomics-specimen-masonry.webp 3788w"
@@ -640,9 +700,40 @@
               state inspectable, and the component library gave each bounded move a shared implementation language.
             </p>
 
+            <h4 id="genomics-permissions-walkthrough-title" class="txt-h4">Permissions and failure-state demonstration</h4>
+            <p id="genomics-permissions-standing">The demonstration connects regional access rules with connection settings, interface preferences, and observable failure behavior.</p>
+            <figure id="genomics-permissions-walkthrough" class="story-visual table-span-all">
+              <video
+                controls
+                playsinline
+                preload="metadata"
+                width="1920"
+                height="1010"
+                poster="https://vik.guru/v1-cdn/video/genomics-permissions/v0.1.0/poster.webp"
+                aria-label="Genomics permissions and failure-state demonstration"
+                aria-describedby="genomics-permissions-standing genomics-permissions-caption"
+                aria-details="genomics-permissions-transcript"
+              >
+                <source src="https://vik.guru/v1-cdn/video/genomics-permissions/v0.1.0/movie.mp4" type="video/mp4">
+                <p><a href="https://vik.guru/v1-cdn/video/genomics-permissions/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</p>
+              </video>
+              <figcaption id="genomics-permissions-caption" class="table-note"><strong>Demonstration of permissions and failure states.</strong> A regional access grid connects read and write grants to specimen and sequencing views; connection settings, preferences, and an Error Lab then make permission, timeout, connection, and validation failures observable. <a href="https://vik.guru/v1-cdn/video/genomics-permissions/v0.1.0/movie.mp4">Open movie video file (MP4)</a>.</figcaption>
+            </figure>
+            <aside id="genomics-permissions-transcript" class="implementation-companion table-span-all" aria-labelledby="genomics-permissions-transcript-title">
+              <p class="implementation-companion__eyebrow">Visual description</p>
+              <h4 id="genomics-permissions-transcript-title" class="txt-h4">Regional grants lead into settings and observable failures</h4>
+              <ol>
+                <li>The demonstration opens on a regional Population Access Grid whose cells express read and write grants across specimen views and sequencing data.</li>
+                <li>Connection settings identify the active service address and the configuration state shown in the interface.</li>
+                <li>Interface preferences show how display and notification choices remain distinct from the authorization rule.</li>
+                <li>The Notifications and Error Lab area triggers synthetic connection, permission, timeout, and validation failures.</li>
+                <li>Banners, toasts, and log rows express each failure through persistent, transient, and historical channels that support diagnosis and recovery.</li>
+              </ol>
+            </aside>
+
             <figure id="genomic-connection-health" class="story-visual debrief-proxy-figure table-span-all">
-              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable working 2026 proxy-system screenshot of genomic connection health and diagnostic states">
-                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-connections-connection-status.webp" aria-label="Open the working 2026 genomic connection-status proxy-system screenshot at full size">
+              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable genomic connection-health and diagnostic-state view">
+                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-connections-connection-status.webp" aria-label="Open the genomic connection-status view at full size">
                   <img
                     src="../img/debriefs/queue-secretly-status-machine/genomics-connections-connection-status.webp"
                     srcset="../img/debriefs/queue-secretly-status-machine/genomics-connections-connection-status-960.webp 960w, ../img/debriefs/queue-secretly-status-machine/genomics-connections-connection-status-1920.webp 1920w, ../img/debriefs/queue-secretly-status-machine/genomics-connections-connection-status.webp 5116w"
@@ -704,8 +795,8 @@
             </p>
 
             <figure id="genomic-quality-release-gates" class="story-visual debrief-proxy-figure table-span-all">
-              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable working 2026 proxy-system screenshot of genomic quality-control and release gates">
-                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-quality-control-workflow.webp" aria-label="Open the working 2026 genomic quality-control workflow proxy-system screenshot at full size">
+              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable genomic quality-control and release-gate view">
+                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-quality-control-workflow.webp" aria-label="Open the genomic quality-control workflow view at full size">
                   <img
                     src="../img/debriefs/queue-secretly-status-machine/genomics-quality-control-workflow.webp"
                     srcset="../img/debriefs/queue-secretly-status-machine/genomics-quality-control-workflow-960.webp 960w, ../img/debriefs/queue-secretly-status-machine/genomics-quality-control-workflow-1920.webp 1920w, ../img/debriefs/queue-secretly-status-machine/genomics-quality-control-workflow.webp 3786w"
@@ -783,8 +874,8 @@
             </div>
 
             <figure id="genomic-process-atlas" class="story-visual debrief-proxy-figure table-span-all">
-              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable working 2026 proxy-system screenshot of the complete genomic process corridor">
-                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-axonometric-process-viewer.webp" aria-label="Open the working 2026 genomic process-corridor proxy-system screenshot at full size">
+              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable complete genomic process corridor">
+                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-axonometric-process-viewer.webp" aria-label="Open the genomic process-corridor view at full size">
                   <img
                     src="../img/debriefs/queue-secretly-status-machine/genomics-axonometric-process-viewer.webp"
                     srcset="../img/debriefs/queue-secretly-status-machine/genomics-axonometric-process-viewer-960.webp 960w, ../img/debriefs/queue-secretly-status-machine/genomics-axonometric-process-viewer-1920.webp 1920w, ../img/debriefs/queue-secretly-status-machine/genomics-axonometric-process-viewer.webp 5120w"
@@ -861,8 +952,8 @@
             </figure>
 
             <figure id="genomic-reporting-signoff" class="story-visual debrief-proxy-figure table-span-all">
-              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable working 2026 proxy-system screenshot of genomic reporting and sign-off state">
-                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-axonometric-reporting-closeup.webp" aria-label="Open the working 2026 genomic reporting and sign-off proxy-system screenshot at full size">
+              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable genomic reporting and sign-off view">
+                <a class="story-visual__open" href="../img/debriefs/queue-secretly-status-machine/genomics-axonometric-reporting-closeup.webp" aria-label="Open the genomic reporting and sign-off view at full size">
                   <img
                     src="../img/debriefs/queue-secretly-status-machine/genomics-axonometric-reporting-closeup.webp"
                     srcset="../img/debriefs/queue-secretly-status-machine/genomics-axonometric-reporting-closeup-960.webp 960w, ../img/debriefs/queue-secretly-status-machine/genomics-axonometric-reporting-closeup-1920.webp 1920w, ../img/debriefs/queue-secretly-status-machine/genomics-axonometric-reporting-closeup.webp 5108w"

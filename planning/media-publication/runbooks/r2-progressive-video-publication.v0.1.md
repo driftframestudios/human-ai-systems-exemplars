@@ -116,17 +116,18 @@ public-candidate role, public access posture, release owner, and authority to
 publish the bytes. Companion, receiving-page, and browser-acceptance fields may
 remain explicitly open for the transport-only checkpoint below.
 
-Use the R2 S3-compatible API's conditional `PutObject` operation. The
-`If-None-Match: *` precondition makes the unused versioned key an enforced
-commit boundary rather than a naming convention. Keep the endpoint and
-credential profile inside the authorized operator boundary, set exact HTTP
-metadata, and leave content encoding unset:
+Choose one write mode for the publication window. The R2 S3-compatible API's
+conditional `PutObject` operation is the enforced create-only route. Its
+`If-None-Match: *` precondition makes the unused versioned key a commit
+boundary rather than a naming convention. Keep the endpoint and credential
+profile inside the authorized operator boundary, set exact HTTP metadata, and
+leave content encoding unset:
 
 ```sh
 aws s3api put-object \
   --endpoint-url "https://<account-id>.r2.cloudflarestorage.com" \
   --profile <protected-r2-profile> \
-  --bucket "vik-guru-video-carriers" \
+  --bucket "<bucket>" \
   --key "v1/video/<id>/<version>/movie.mp4" \
   --body "<accepted-master.mp4>" \
   --content-type "video/mp4" \
@@ -141,12 +142,76 @@ Download each accepted key with `npx wrangler r2 object get
 <bucket>/<key> --remote --file <fresh-path>` and compare its byte count and
 SHA-256 with the packet.
 
+The repository-pinned Wrangler `r2 object put` command currently exposes exact
+content metadata and remote upload while omitting an absent-key precondition.
+For a human-approved single-writer window, confirm each versioned key through
+an authenticated remote read, serialize writes, and retrieve each object into
+a fresh target for digest comparison:
+
+```sh
+env WRANGLER_WRITE_LOGS=false npx wrangler r2 object get \
+  "<bucket>/v1/video/<id>/<version>/movie.mp4" \
+  --remote \
+  --file <fresh-preflight-path>
+
+env WRANGLER_WRITE_LOGS=false npx wrangler r2 object put \
+  "<bucket>/v1/video/<id>/<version>/movie.mp4" \
+  --remote \
+  --file <accepted-master.mp4> \
+  --content-type "video/mp4" \
+  --cache-control "public, max-age=31536000, immutable" \
+  --storage-class Standard
+
+env WRANGLER_WRITE_LOGS=false npx wrangler r2 object get \
+  "<bucket>/v1/video/<id>/<version>/movie.mp4" \
+  --remote \
+  --file <fresh-verification-path>
+```
+
+An authenticated object-absence result permits the upload. Any authentication,
+network, or provider error holds the write for diagnosis. An existing object
+receives size, digest, and metadata comparison; matching bytes complete the
+member, while different bytes preserve the key and move the candidate to a new
+reviewed version. The remote read and Wrangler upload are separate operations,
+so this route depends on the named single-writer boundary. A window with
+concurrent publishers uses conditional S3-compatible writes.
+
 An interrupted or unknown upload outcome enters through observation: retrieve
 the exact key first. Matching size and digest establish that the conditional
-write committed. A missing key permits the same conditional operation to run
-again. Different bytes preserve the existing key, block activation, and route
-the candidate to a new semantic version after review. This sequence prevents a
-blind retry from replacing an accepted object.
+or coordinated write committed. A missing key permits the selected create
+route to run again. Different bytes preserve the existing key, block
+activation, and route the candidate to a new semantic version after review.
+This sequence keeps an accepted object stable while making interruption
+recovery explicit.
+
+### Multi-family publication window
+
+A batch begins with completed per-family packets from
+`accessible-video-publication`; the batch coordinates delivery rather than
+reclassifying source, rights, accessibility, poster, or visitor-page standing.
+Record a finite roster of semantic IDs, versions, carrier roles, media types,
+sizes, digests, and activation owners before the first write.
+
+Local preparation can run concurrently. Remote mutation follows the selected
+write mode: the Wrangler route uses one serial writer, while conditional
+S3-compatible writes may use bounded concurrency after packet review. Each
+object is one atomic R2 write. A family and batch contain multiple objects and
+therefore settle member by member. Keep the preceding visitor pointer active
+until all required members of a family pass fresh retrieval and receiver
+checks.
+
+Use the member states `prepared`, `absent`, `stored_unverified`, `verified`, and
+`conflict` in the receiving Issue or existing publication manifest. After an
+interruption, retrieve the exact key before replaying a command. Matching bytes
+advance the member to `verified`; absence returns to the selected create route;
+a mismatch enters `conflict` and receives a new reviewed version. This compact
+progress view supports resume without creating another authority record.
+
+Public returns carry semantic IDs and versions, carrier types, byte counts,
+digests, normalized member counts, selected write mode, public routes, and
+normalized receiver outcomes. Private source paths, storage and account
+coordinates, raw metadata, command transcripts, request IDs, and provider
+diagnostics stay with the authorized operator.
 
 ### Optional direct-object observation
 
@@ -163,10 +228,10 @@ authorized operator boundary:
 
 ```sh
 npx wrangler whoami
-npx wrangler r2 bucket dev-url get vik-guru-video-carriers
-npx wrangler r2 bucket dev-url enable vik-guru-video-carriers
-npx wrangler r2 bucket dev-url disable vik-guru-video-carriers
-npx wrangler r2 bucket dev-url get vik-guru-video-carriers
+npx wrangler r2 bucket dev-url get "<bucket>"
+npx wrangler r2 bucket dev-url enable "<bucket>"
+npx wrangler r2 bucket dev-url disable "<bucket>"
+npx wrangler r2 bucket dev-url get "<bucket>"
 ```
 
 The final status observation confirms the development URL is disabled. Public
@@ -384,6 +449,9 @@ visible ordered sequence for verified silent video.
   recasting the accepted output as a failed preparation.
 - An upload mismatch leaves page markup on the preceding family and sends the
   candidate to a new versioned key after repair.
+- A batch interruption leaves verified members accepted and starts remaining
+  members from exact remote observation. An independently held family leaves
+  other accepted families available for their own release decisions.
 - An ordinary Worker-code or live-route regression with still-approved media
   restores the preceding Worker version.
 - A page-level playback problem restores the preceding page pointer while the
@@ -406,9 +474,9 @@ Return only public-safe material:
 - companion standing;
 - public routes and normalized HTTP/browser outcomes;
 - exact unresolved boundary, if present; and
-- source-visible bucket name and recovery coordinate when useful. Account
-  identifiers, credentials, raw upload receipts, metadata values, and provider
-  diagnostics stay with the authorized operator.
+- the public recovery standing when useful. Storage and account coordinates,
+  credentials, raw upload receipts, private paths, metadata values, and
+  provider diagnostics stay with the authorized operator.
 
 ## Completion
 

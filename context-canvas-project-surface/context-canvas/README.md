@@ -39,7 +39,7 @@ and iframe manifests continue to select membership; the generated deployment
 manifest joins each selected public projection back to one canonical source
 asset and exact source digest.
 
-The four Debrief working-system screenshot families retain their accepted,
+The five Debrief working-system and visual-comparison families retain their accepted,
 unsuffixed WebPs as full-size inspection targets. Run
 `npm run build:debrief-image-derivatives` after replacing an accepted source;
 the repository-owned generator uses `cwebp` to produce the `960w` and `1920w`
@@ -62,7 +62,7 @@ The first native Debrief video appears in
 [`choose-your-player-humatics.html`](choose-your-player-humatics.html) after
 At-a-Glance and before the architecture navigation. Its accepted R2 MP4 and
 poster remain external to the image-only asset inventory. The page owns the
-media's semantic standing, accessible name, visible silent-sequence
+media's semantic standing, accessible name, visible video-only sequence
 description, fallback link, and responsive frame; the media-publication
 manifest owns the compact carrier and release-state descriptor. The
 [`accessible-video-publication` candidate](../../planning/media-publication/draft-skills/accessible-video-publication/SKILL.md)
@@ -87,7 +87,7 @@ extends the same selected `img/plot/` family.
 - `visitor-boundary-contract.js` carries the ordinary-language context and exact ordered canary definition used to verify each source-authored visitor boundary.
 - `canvas-shell.js` progressively installs the route shelf, section rail, and shared footer, then preserves the verified visitor boundary immediately before attribution. Ordinary links and authored page content remain the durable path.
 - `about-media.js` keeps the About visual sequence on its authored poster until a visitor requests motion, returns after one complete cycle, and keeps the still reading active for reduced-motion and print presentations.
-- Native Debrief video uses visitor controls, metadata preload, intrinsic geometry, a reviewed poster, and a visible transcript or silent visual sequence. The selected page owns its reading coordinate and final release; the same-origin R2 Worker owns passive carrier delivery.
+- Native Debrief video uses visitor controls, metadata preload, intrinsic geometry, a reviewed poster, and a visible transcript or video-only visual sequence. The selected page owns its reading coordinate and final release; the same-origin R2 Worker owns passive carrier delivery.
 - Prototype scripts own local interaction state. Sandboxed iframes declare the capabilities each instrument actually uses. Their Core and Canvas route families remain separate inside the aggregate `/v1/` delivery package.
 - Human stewards retain authority over identity, source use, sensitive material, publication, and consequential decisions. Automated checks report observable behavior and leave those decisions visible.
 
@@ -215,7 +215,7 @@ hosted projection uses scripts and projected popup exits, while its adjacent
 full view remains the ordinary `conditioning-field.html` link. The About
 cartography remains a recorded embedded-document exception with five labelled
 separate-tab links. The current Debriefs catalog now carries a dedicated
-recoverable-enterprise-forms route. Four source-era example cards preserve
+recoverable-enterprise-forms route. Four historical example cards preserve
 their recorded preparation state instead of acquiring a retrospective link.
 
 The dependency-free materializer retains a tested hosted-iframe twin seam for
@@ -291,6 +291,7 @@ Choose the existing check that answers the page question under review:
 npm run test:context-canvas
 npm run check:debrief-image-derivatives
 npm run test:debrief-catalog-preview-browser
+npm run test:video-receivers-browser
 npm run test:context-canvas-narrow-rails
 npm run test:prototype-control-labels
 npm run visual:check -- path/to/page.html --selector "main"
@@ -303,6 +304,9 @@ The Context Canvas source suite protects source-authored visitor metadata,
 shared rail ownership, and the About-page identity seam. The narrow-rail
 contract is the lightweight all-route check for generated rail disclosure,
 clipping, scroll reachability, the 56rem seam, forced colors, and print. The
+native-video receiver contract observes the selected Debrief and AI Systems
+frames at narrow, medium, and wide widths with passive local carrier fixtures;
+live delivery and deployed playback remain separate release observations. The
 prototype-control-label contract checks the Cross-Functional Investment
 Studio at 1280, 701, 700, 390, and 320 CSS pixels, including generated rows and
 rerenders; the Canvas and Core iframe browser contracts apply the corresponding

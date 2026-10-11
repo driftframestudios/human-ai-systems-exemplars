@@ -1,6 +1,6 @@
 ---
 name: cloudflare-r2-progressive-video-delivery
-description: Publishes reviewed progressive video packages from R2 through a narrowly routed same-origin Cloudflare Worker and CDN cache. Applies when a versioned public video needs R2 object metadata, exact route grammar, immutable caching, range verification, native playback, and a later Stream migration seam.
+description: Publishes one or a finite batch of reviewed progressive video packages from R2 through a narrowly routed same-origin Cloudflare Worker and CDN cache. Applies when versioned public video needs R2 object metadata, exact route grammar, immutable caching, range verification, native playback, resumable member-level delivery, and a later Stream migration seam.
 ---
 
 # Cloudflare R2 progressive-video delivery
@@ -9,7 +9,8 @@ description: Publishes reviewed progressive video packages from R2 through a nar
 
 - **What:** A reviewed video package receives versioned R2 keys, an exact
   same-origin Worker route, immutable Workers Caching, native playback, and
-  live receiver observations.
+  live receiver observations. A finite batch coordinates independently
+  accepted packages without taking ownership of their preparation decisions.
 - **When:** A selected public video needs progressive delivery through a
   human-approved same-origin host and versioned route namespace while adaptive
   Stream delivery remains a later option.
@@ -27,10 +28,10 @@ description: Publishes reviewed progressive video packages from R2 through a nar
 
 ### Rule: Cloudflare-hosted bytes enter the CDN
 
-Use R2 Standard for production video bytes. The orange-cloud cPanel origin
-retains source or recovery standing rather than CDN video ownership. Recheck
-current Cloudflare terms, plan limits, R2 subscription, Workers allowance, and
-billing authority at activation.
+Use R2 Standard for production video bytes. The application origin retains
+source or recovery standing while R2 and the Worker own the selected delivery
+path. Recheck current Cloudflare terms, plan limits, R2 subscription, Workers
+allowance, and billing authority at activation.
 
 ### Rule: One exact grammar exposes passive carriers
 
@@ -67,10 +68,14 @@ slicing. Partial-response assembly stays outside the Worker code path.
 
 ### Rule: Versioned objects move forward
 
-Write a new versioned key for changed bytes or HTTP metadata. Use a conditional
-write whose absent-key precondition makes replacement impossible. Retain the
-prior page pointer and accepted object family through the observation window.
-Deletes require an explicit cache and recovery decision.
+Write a new versioned key for changed bytes or HTTP metadata. A conditional
+S3-compatible write with an absent-key precondition supplies the atomic
+create-only route. When the selected Wrangler command lacks that precondition,
+use one named writer, confirmed-unused versioned keys, serialized writes, and
+fresh readback verification; this coordination route leaves concurrent
+publication to the conditional operation. Retain the prior page pointer and
+accepted object family through the observation window. Deletes require an
+explicit cache and recovery decision.
 
 ### Rule: Same-origin native playback minimizes capabilities
 
@@ -101,8 +106,9 @@ access-control behavior.
    authority with the human operator.
 3. Reserve a unique semantic ID and asset version; verify object keys and
    media types before upload.
-4. Upload accepted master and companions with exact HTTP metadata and an
-   absent-key precondition. Compare uploaded size and digest with the packet.
+4. Select the conditional S3-compatible route or the documented Wrangler
+   single-writer route. Upload accepted master and companions with exact HTTP
+   metadata, then compare a fresh retrieval's size and digest with the packet.
 5. Build and dry-run the narrow Worker; keep account IDs and credentials in
    the protected platform store.
 6. Confirm the bucket has no custom domain or CORS policy, any temporary
@@ -122,6 +128,12 @@ access-control behavior.
    silent-sequence branch, interruption, layout, and recovery.
 11. Return public-safe coordinates and retain protected platform diagnostics
     with the operator.
+
+For a multi-family window, keep `accessible-video-publication` as the owner of
+each family packet and load the batch reference below. The batch layer records
+member-level progress and resumes from remote observation; it does not merge
+rights, accessibility, semantic placement, or activation decisions across
+families.
 
 Before the first release, exercise withdrawal with a disposable family:
 remove its visitor reference, remove or quarantine the R2 object, deploy a new
@@ -145,8 +157,8 @@ remains read-only.
 - A digest, type, cache, or range mismatch receives a new versioned object
   after repair.
 - An interrupted or unknown write first reads the exact key. Matching bytes
-  complete the operation, a missing key permits the same conditional write,
-  and different bytes preserve the key while a new version is selected.
+  complete the operation, a missing key permits the selected create route, and
+  different bytes preserve the key while a new version is selected.
 - A useful direct-object check may use a short-lived human-enabled `r2.dev`
   endpoint; rate limits and missing edge controls keep it outside production
   standing.
@@ -158,11 +170,11 @@ remains read-only.
 ## Conditional context
 
 Load
-[`cloudflare-r2-progressive-video-guidance.v0.1.md`](../../cloudflare-r2-progressive-video-guidance.v0.1.md)
-and
-[`r2-progressive-video-publication.v0.1.md`](../../runbooks/r2-progressive-video-publication.v0.1.md)
-for the first exercise and whenever route, cache, source, accessibility, or
-receiver behavior changes.
+[`references/batch-object-publication.md`](references/batch-object-publication.md)
+when two or more completed family packets share one publication window or an
+interrupted batch needs member-level recovery. Consult current provider
+documentation and the receiving project's runbook whenever route, cache,
+source, accessibility, or receiver behavior changes.
 
 ## Completion
 

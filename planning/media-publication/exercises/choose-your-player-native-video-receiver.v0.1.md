@@ -13,7 +13,7 @@ task_type: skill_exercise
 
 This exercise applies the `accessible-video-publication` candidate to the
 first accepted R2 video family and its Context Canvas receiver. It tests poster
-selection from accepted bytes, semantic placement under At-a-Glance, silent
+selection from accepted bytes, semantic placement under At-a-Glance, a visible
 sequence description, exact public-carrier binding, and focused page
 acceptance. Cloudflare R2 and the Worker own transport; the Debrief owns visitor
 meaning and reading order.
@@ -32,8 +32,8 @@ standing while the authorized owner retains the private source coordinate.
 
 The 21.533333-second master contains one 1920 × 1012 H.264 High-profile
 `yuv420p` stream at 30 fps and zero audio streams. The visible page therefore
-states that the walkthrough is silent, supplies a nearby ordered visual
-sequence, and keeps the captions carrier out of this family.
+records the zero-audio stream standing in the manifest and supplies a nearby
+ordered visual sequence on the page.
 
 ## Poster selection
 
@@ -55,14 +55,14 @@ The authored receiver is
 `context-canvas-project-surface/context-canvas/choose-your-player-humatics.html`.
 One top-level section follows the complete At-a-Glance Case Brief and precedes
 the architecture navigation. This coordinate keeps the six-field Case Brief
-intact while making the walkthrough available before the longer reading.
+intact while making the demonstration available before the longer reading.
 
 The native player carries controls, `playsinline`, metadata preload, intrinsic
 geometry, the reviewed poster, a typed MP4 source, a concise accessible name,
 concise standing and caption relationships, a separately navigable ordered
 sequence associated through `aria-details`, and a direct fallback link.
-Visible prose identifies the media as a silent, company-neutral, IP-free 2026
-working proxy. The visual sequence explains:
+Visible prose identifies what the 2026 proxy demonstrates and why it belongs
+in the Debrief. The visual sequence explains:
 
 1. four proxy role cards and their distinct starting responsibilities;
 2. Field Installation Engineer selection and the short transition;
@@ -106,10 +106,10 @@ remain with the delivery owner.
 
 - A meaningful poster requires semantic review; the first decodable frame is
   only a candidate.
-- A silent master needs explicit stream evidence and human standing. The useful
+- A video-only master needs explicit stream evidence and human standing. The useful
   companion is a visible visual sequence rather than an empty captions file.
 - Visitor placement can disturb an established figure series, generated rail,
-  or catalog parser. An unnumbered walkthrough identity preserves the existing
+  or catalog parser. An unnumbered demonstration identity preserves the existing
   Figures 1–5 sequence.
 - Transport acceptance establishes exact public bytes and HTTP behavior. The
   receiving page separately establishes placement, accessible naming, CSP and
