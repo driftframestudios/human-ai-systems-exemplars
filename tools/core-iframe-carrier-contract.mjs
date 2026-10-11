@@ -8,8 +8,8 @@ import { join, relative } from "node:path";
 import { chromium } from "@playwright/test";
 
 import {
+  PUBLIC_AUTHOR_PROFILE_KEY,
   PUBLIC_IFRAME_NAMESPACE,
-  PUBLIC_REFERENCE_NAMESPACE,
   inspectPublicReferenceSource,
   materializePublicReferences,
 } from "./materialize-public-references.mjs";
@@ -30,6 +30,10 @@ import {
 } from "./form-control-label-contract.mjs";
 
 const contextCanvasDirectory = "context-canvas";
+const videoPublicationManifestPath = join(
+  repositoryRoot,
+  "planning/media-publication/video-publication-manifest.v0.1.json",
+);
 const expectedCarrierRouteCounts = [
   ["conditioning-field", 1],
   ["core-architecture-family-index", 1],
@@ -48,6 +52,9 @@ const strategySourceUrls = new Set([
 ]);
 
 function configuredDestination(key) {
+  if (key === PUBLIC_AUTHOR_PROFILE_KEY) {
+    return "https://profile.example/author";
+  }
   if (key.startsWith(PUBLIC_IFRAME_NAMESPACE)) {
     const [family, ...route] = key
       .slice(PUBLIC_IFRAME_NAMESPACE.length)
@@ -55,10 +62,58 @@ function configuredDestination(key) {
       .split("_");
     return `https://iframes.vik.guru/v1/${family}/${route.join("-")}/`;
   }
-  return `https://registry.example/readings/${key
-    .slice(PUBLIC_REFERENCE_NAMESPACE.length)
-    .toLowerCase()
-    .replaceAll("_", "-")}`;
+  throw new Error(`Iframe carrier contract has no external fixture for ${key}.`);
+}
+
+function publicMediaFixtures(manifest) {
+  const fixtures = new Map();
+  for (const family of manifest.families) {
+    const visitorRoot = "context-canvas-project-surface/";
+    assert.ok(
+      family.visitor_page.startsWith(visitorRoot),
+      `${family.semantic_id} has a Context Canvas visitor-page coordinate`,
+    );
+    const pagePath = `/${family.visitor_page.slice(visitorRoot.length)}`;
+    for (const carrier of Object.values(family.carriers)) {
+      const url = new URL(carrier.public_path, manifest.public_origin).href;
+      assert.equal(
+        fixtures.has(url),
+        false,
+        `video publication manifest keeps one fixture owner for ${url}`,
+      );
+      fixtures.set(url, {
+        mediaType: carrier.media_type,
+        pagePath,
+      });
+    }
+  }
+  return fixtures;
+}
+
+function mediaResourceType(mediaType) {
+  if (mediaType.startsWith("image/")) return "image";
+  if (mediaType.startsWith("video/") || mediaType.startsWith("audio/")) {
+    return "media";
+  }
+  if (mediaType === "text/vtt") return "texttrack";
+  throw new Error(`Iframe carrier contract needs a browser fixture for ${mediaType}.`);
+}
+
+function mediaFixtureResponse(mediaType) {
+  if (mediaType.startsWith("image/")) {
+    return {
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9"><rect width="16" height="9" fill="#f8f1e2"/></svg>',
+    };
+  }
+  if (mediaType.startsWith("video/")) {
+    return { contentType: mediaType, body: "" };
+  }
+  if (mediaType === "text/vtt") {
+    return { contentType: mediaType, body: "WEBVTT\n\n" };
+  }
+  mediaResourceType(mediaType);
+  throw new Error(`Iframe carrier contract needs response bytes for ${mediaType}.`);
 }
 
 function attributeValue(tag, name) {
@@ -661,15 +716,26 @@ async function run() {
     const contextFileById = new Map(
       contextManifest.prototypes.map((entry) => [entry.id, entry.file]),
     );
+    const videoPublicationManifest = JSON.parse(
+      await readFile(videoPublicationManifestPath, "utf8"),
+    );
+    const mediaFixturesByPublicUrl = publicMediaFixtures(videoPublicationManifest);
     const inventory = await inspectPublicReferenceSource();
-    const environment = Object.fromEntries(
-      [...inventory.keys].map((key) => [key, configuredDestination(key)]),
+    // The tracked Registry binding owns Registry routes. This fixture supplies
+    // only the external values needed to exercise the isolated browser carrier.
+    const externalEnvironment = Object.fromEntries(
+      [...inventory.keys]
+        .filter(
+          (key) => key === PUBLIC_AUTHOR_PROFILE_KEY ||
+            key.startsWith(PUBLIC_IFRAME_NAMESPACE),
+        )
+        .map((key) => [key, configuredDestination(key)]),
     );
     await materializePublicReferences({
       outputRoot,
       outputBoundaryRoot: temporaryRoot,
       configPath: join(temporaryRoot, "no-config-file"),
-      environment,
+      environment: externalEnvironment,
     });
 
     const generatedPages = await readdir(join(outputRoot, contextCanvasDirectory));
@@ -831,6 +897,21 @@ async function run() {
         });
         return;
       }
+      const mediaFixture = mediaFixturesByPublicUrl.get(request.url());
+      // Pages may pair an iframe with reviewed native media. Admit only exact
+      // manifest carriers in their declared browser resource class.
+      if (
+        mediaFixture &&
+        request.method() === "GET" &&
+        request.resourceType() === mediaResourceType(mediaFixture.mediaType)
+      ) {
+        await route.fulfill({
+          status: 200,
+          headers: { "cache-control": "no-store" },
+          ...mediaFixtureResponse(mediaFixture.mediaType),
+        });
+        return;
+      }
       await route.abort("blockedbyclient");
     });
 
@@ -964,6 +1045,20 @@ async function run() {
           .evaluateAll((elements) => elements.map((element) => element.src)));
         for (const request of outsideRequests) {
           assert.equal(request.method, "GET", `${pagePath} uses read-only hosted requests`);
+          const mediaFixture = mediaFixturesByPublicUrl.get(request.url);
+          if (mediaFixture) {
+            assert.equal(
+              mediaFixture.pagePath,
+              pagePath,
+              `${pagePath} requests only its declared public media (${request.url})`,
+            );
+            assert.equal(
+              request.resourceType,
+              mediaResourceType(mediaFixture.mediaType),
+              `${request.url} uses its declared browser resource class`,
+            );
+            continue;
+          }
           assert.equal(
             hostedFilesByPublicUrl.has(request.url),
             true,
