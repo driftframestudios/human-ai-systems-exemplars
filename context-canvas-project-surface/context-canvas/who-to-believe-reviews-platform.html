@@ -134,9 +134,134 @@
       }
       .wtb-method-activity ol { display: grid; gap: .65rem; padding-inline-start: 1.25rem; }
       .wtb-method-activity code { overflow-wrap: anywhere; white-space: normal; }
+      .wtb-system-graph {
+        --graph-paper: #fff8e8;
+        --graph-blush: #fdebe9;
+        --graph-cobalt: #2440d8;
+        --graph-chartreuse: #eef23d;
+        --graph-coral: #e95f4f;
+        --graph-ink: #17345f;
+        --graph-rule: #6e8fbe;
+        background: var(--graph-paper);
+        border: .125rem solid var(--graph-rule);
+        border-radius: 1rem;
+        box-shadow: .55rem .55rem 0 #07101d;
+        color: var(--graph-ink);
+        overflow: hidden;
+      }
+      .wtb-implementation-track .wtb-system-graph :is(p, li, h4, h5, legend, label, summary) { color: var(--graph-ink); }
+      .wtb-system-graph__header,
+      .wtb-system-graph__controls,
+      .wtb-system-graph__detail-grid,
+      .wtb-system-graph__reading { padding: 1rem clamp(.85rem, 2.3vw, 1.5rem); }
+      .wtb-system-graph__header { background: var(--graph-blush); border-block-end: .125rem solid var(--graph-cobalt); }
+      .wtb-implementation-track .wtb-system-graph .wtb-system-graph__eyebrow { color: var(--graph-cobalt); font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+      .wtb-system-graph__controls { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .wtb-system-graph__controls fieldset { border: 0; margin: 0; min-inline-size: 0; padding: 0; }
+      .wtb-system-graph__controls legend { font-weight: 800; margin-block-end: .5rem; }
+      .wtb-system-graph__choice-row { display: flex; flex-wrap: wrap; gap: .45rem; }
+      .wtb-system-graph__choice { position: relative; }
+      .wtb-system-graph__choice input { block-size: 1px; inline-size: 1px; opacity: 0; position: absolute; }
+      .wtb-system-graph__choice span,
+      .wtb-system-graph button,
+      .wtb-system-graph select {
+        border: .125rem solid var(--graph-cobalt);
+        border-radius: .35rem;
+        color: var(--graph-ink);
+        font: inherit;
+        min-block-size: 2.75rem;
+      }
+      .wtb-system-graph__choice span { align-items: center; background: #fff; cursor: pointer; display: inline-flex; font-weight: 700; padding: .45rem .7rem; }
+      .wtb-system-graph__choice input:checked + span { background: var(--graph-cobalt); color: #fff; }
+      .wtb-system-graph__choice input:focus-visible + span,
+      .wtb-system-graph :is(button, select, summary):focus-visible { outline: .2rem solid var(--graph-coral); outline-offset: .16rem; }
+      .wtb-system-graph__route-form { align-items: end; display: grid; gap: .65rem; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto auto; }
+      .wtb-system-graph__route-form label { display: grid; font-weight: 700; gap: .25rem; }
+      .wtb-system-graph select { background: #fff; inline-size: 100%; padding: .45rem .55rem; }
+      .wtb-system-graph button { background: #fff; cursor: pointer; font-weight: 750; padding: .45rem .72rem; }
+      .wtb-system-graph button:hover { background: #eef3ff; }
+      .wtb-system-graph button:disabled { cursor: default; opacity: .48; }
+      .wtb-system-graph__trace { background: var(--graph-chartreuse) !important; }
+      .wtb-system-graph__summary { font-size: .88rem; grid-column: 1 / -1; margin: 0; }
+      .wtb-system-graph__status { background: #edf3fb; border-block: .0625rem solid var(--graph-rule); font-weight: 700; margin: 0; min-block-size: 2.9rem; padding: .7rem clamp(.85rem, 2.3vw, 1.5rem); }
+      .wtb-system-graph__canvas-scroll { overflow-x: auto; padding: 1rem; }
+      .wtb-system-graph__node-field { min-block-size: 37rem; min-inline-size: 56rem; position: relative; }
+      .wtb-system-graph__edge-layer { block-size: 100%; inline-size: 100%; inset: 0; overflow: visible; pointer-events: none; position: absolute; z-index: 0; }
+      .wtb-system-graph__edge { fill: none; opacity: .22; stroke: var(--graph-rule); stroke-width: 2; vector-effect: non-scaling-stroke; }
+      .wtb-system-graph__edge[data-in-concern="true"] { opacity: .58; }
+      .wtb-system-graph__edge[data-status="strained"] { stroke: #8a6b00; stroke-dasharray: 6 4; }
+      .wtb-system-graph__edge[data-status="broken"] { stroke: var(--graph-coral); stroke-dasharray: 2 5; }
+      .wtb-system-graph__edge[data-in-route="true"] { opacity: 1; stroke: var(--graph-cobalt); stroke-width: 4; }
+      .wtb-system-graph__arrow { fill: context-stroke; }
+      .wtb-system-graph__node-grid { display: grid; gap: .75rem 4.25rem; grid-template-columns: repeat(4, minmax(9.5rem, 1fr)); grid-template-rows: repeat(6, minmax(4.85rem, auto)); position: relative; z-index: 1; }
+      .wtb-system-graph__node { align-content: center; background: #fff; border-color: var(--graph-rule) !important; box-shadow: .24rem .24rem 0 rgba(23, 52, 95, .2); display: grid; gap: .18rem; grid-column: var(--node-column); grid-row: var(--node-row); min-inline-size: 0; text-align: start; }
+      .wtb-system-graph__node[data-in-concern="false"] {
+        background: #f3f0e8;
+        border-style: dashed;
+        box-shadow: none;
+      }
+      .wtb-system-graph__node[data-status="ok"] { border-inline-start: .45rem solid #6b7f1e !important; }
+      .wtb-system-graph__node[data-status="strained"] { border-inline-start: .45rem solid #c39b00 !important; }
+      .wtb-system-graph__node[data-status="broken"] { border-inline-start: .45rem solid var(--graph-coral) !important; }
+      .wtb-system-graph__node[data-in-route="true"] { box-shadow: 0 0 0 .17rem var(--graph-chartreuse), .24rem .24rem 0 rgba(23, 52, 95, .2); opacity: 1; }
+      .wtb-system-graph__node[aria-pressed="true"] { background: var(--graph-cobalt); color: #fff; }
+      .wtb-system-graph__node-label { font-size: .92rem; font-weight: 800; }
+      .wtb-system-graph__node-state { font-size: .73rem; }
+      .wtb-system-graph__column-headings { display: grid; gap: 4.25rem; grid-template-columns: repeat(4, minmax(9.5rem, 1fr)); margin-block-end: .65rem; min-inline-size: 56rem; padding-inline: 1rem; }
+      .wtb-system-graph__column-headings span { color: var(--graph-cobalt); font-size: .78rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+      .wtb-system-graph__detail-grid { background: var(--graph-blush); border-block-start: .125rem solid var(--graph-cobalt); display: grid; gap: 1rem; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); }
+      .wtb-system-graph__detail { border-inline-start: .35rem solid var(--graph-chartreuse); padding-inline-start: .85rem; }
+      .wtb-system-graph__detail h5 { margin-block: 0 .4rem; }
+      .wtb-system-graph__detail dl { display: grid; gap: .35rem; grid-template-columns: auto minmax(0, 1fr); margin: 0; }
+      .wtb-system-graph__detail dt { font-weight: 800; }
+      .wtb-system-graph__detail dd { margin: 0; overflow-wrap: anywhere; }
+      .wtb-system-graph__detail [data-status="broken"] { color: #a6291d; font-weight: 800; }
+      .wtb-system-graph__detail [data-status="strained"] { color: #725800; font-weight: 800; }
+      .wtb-system-graph__neighbors { display: flex; flex-wrap: wrap; gap: .35rem; grid-column: 1 / -1; }
+      .wtb-system-graph__neighbor { min-block-size: 2.25rem !important; padding: .28rem .5rem !important; }
+      .wtb-system-graph__route-panel h5 { margin-block-start: 0; }
+      .wtb-system-graph__route-list { display: flex; flex-wrap: wrap; gap: .25rem; list-style: none; margin: 0; padding: 0; }
+      .wtb-system-graph__route-list li { align-items: center; display: flex; }
+      .wtb-system-graph__route-list li[aria-current="step"] button { background: var(--graph-chartreuse); }
+      .wtb-system-graph__route-node { min-block-size: 2.25rem !important; padding: .28rem .5rem !important; }
+      .wtb-system-graph__route-movement { display: flex; gap: .45rem; margin-block-start: .75rem; }
+      .wtb-system-graph__reading { border-block-start: .0625rem solid var(--graph-rule); }
+      .wtb-system-graph__reading summary { cursor: pointer; font-weight: 800; min-block-size: 2.75rem; padding-block: .55rem; }
+      .wtb-system-graph__reading-columns { display: grid; gap: .8rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .wtb-system-graph__reading h5 { margin-block: .5rem .25rem; }
+      .wtb-system-graph__reading ul { margin: 0; padding-inline-start: 1.1rem; }
+      .wtb-system-graph__edge-reading { columns: 2 18rem; }
+      .wtb-system-graph__error { background: #fff1ef; border: .125rem solid var(--graph-coral); color: #722116 !important; font-weight: 750; margin: 1rem; padding: .75rem; }
       @media screen and (max-width: 42rem) {
         .wtb-context-embed iframe { block-size: 46rem; }
         .wtb-context-actions { display: grid; }
+        .wtb-system-graph__controls,
+        .wtb-system-graph__detail-grid,
+        .wtb-system-graph__reading-columns { grid-template-columns: 1fr; }
+        .wtb-system-graph__route-form { align-items: stretch; grid-template-columns: 1fr; }
+        .wtb-system-graph__edge-reading { columns: 1; }
+      }
+      @media (forced-colors: active) {
+        .wtb-system-graph,
+        .wtb-system-graph__header,
+        .wtb-system-graph__detail-grid,
+        .wtb-system-graph__status { forced-color-adjust: auto; }
+        .wtb-system-graph__edge { stroke: CanvasText; }
+        .wtb-system-graph__edge[data-in-route="true"] { stroke-width: 5; }
+        .wtb-system-graph__choice input:checked + span,
+        .wtb-system-graph__node[aria-pressed="true"],
+        .wtb-system-graph__route-list li[aria-current="step"] button {
+          background: Highlight;
+          border-color: Highlight;
+          color: HighlightText;
+          forced-color-adjust: none;
+          outline: .2rem solid Highlight;
+          outline-offset: .16rem;
+        }
+        .wtb-system-graph__node[data-in-route="true"] { outline: .2rem solid Highlight; outline-offset: .16rem; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .wtb-system-graph * { scroll-behavior: auto !important; transition: none !important; }
       }
       @media print {
         .wtb-context-embed iframe { display: none; }
@@ -149,11 +274,17 @@
         .wtb-orientation-field .debrief-quote--orientation :is(cite, footer) { color: #000; }
         .wtb-implementation-track :is(p, li, .architecture-track-title, .beat-title) { color: #000; }
         .wtb-trust-aside, .wtb-implementation-track :is(.implementation-moves article, .implementation-companion) { box-shadow: none; }
+        .wtb-system-graph { border: .0625rem solid #000; box-shadow: none; color: #000; }
+        .wtb-system-graph [data-graph-enhancement] { display: none !important; }
+        .wtb-system-graph__reading:not([open]) > :not(summary) { display: block; }
+        .wtb-system-graph__reading { border: 0; }
+        .wtb-system-graph__reading > :not(summary) { display: block !important; }
       }
     </style>
     <link rel="stylesheet" href="canvas-shell.css">
   <script src="visitor-boundary-contract.js" defer></script>
   <script src="canvas-shell.js" defer></script>
+  <script type="module" src="who-to-believe-system-graph.js"></script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -163,7 +294,7 @@
         "headline": "Who To Believe",
         "alternativeHeadline": "Reweighting Influence on a Pharma-Adjacent CPG Reviews Platform (2017–2020)",
         "description": "A solution and implementation architecture debrief on BzzAgent review operations, dunnhumby customer data science, and Tesco-scale trust and privacy practice.",
-        "dateModified": "2026-10-06",
+        "dateModified": "2026-10-11",
         "inLanguage": "en-US",
         "isBasedOn": "{{PUBLIC_URL_REGISTRY_WHO_TO_BELIEVE}}",
         "author": {
@@ -680,25 +811,223 @@
 
             <p>
               I mapped those four concerns onto the dual-stack system as sources, services, models, connections, and
-              operating states. The original interactive graph let engineers select a capability, move forward and backward
-              through its transfer states, and test alternate routes across the two stacks. Walking those routes together
-              turned a visually coherent data model into a practical conversation about engineering effort, participant
-              experience, service reliability, and business effect. Teams could compare where a capability entered, what
-              carried it, and who experienced the consequence before changing code or migration state.
+              operating states. Engineers could select a concern, compare the Symfony and partial-Spring states, and walk a
+              declared directed route. Trying another route made the architecture discussable: where a capability
+              entered, what carried it, where the connection strained, and who experienced the consequence before code or
+              migration state changed.
             </p>
-            <figure id="wtb-figure-dual-stack-system" class="debrief-proxy-figure story-visual table-span-all cobalt-operating-field__visual">
-              <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable dual-stack system graph showing sources, services, models, and connection health">
-                <a class="story-visual__open" href="../img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph.webp" aria-label="Open the dual-stack system graph reconstruction at full size">
-                  <img src="../img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph.webp" srcset="../img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph-960.webp 960w, ../img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph-1920.webp 1920w, ../img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph.webp 3330w" sizes="(min-width: 64rem) min(92vw, 78rem), 56rem" width="3330" height="2030" loading="lazy" decoding="async" alt="Dual-stack system graph with Symfony and partial Spring views, capability filters, data sources, services, graph models, and working, degraded, or breaking connection states.">
-                </a>
+            <figure id="wtb-figure-dual-stack-system" class="table-span-all">
+              <div class="wtb-system-graph" data-wtb-system-graph data-contract-id="wtb-system-graph-contract">
+                <header class="wtb-system-graph__header">
+                  <p class="wtb-system-graph__eyebrow">Interactive system graph · 22 nodes · 26 directed connections</p>
+                  <h4 id="wtb-system-graph-title" class="txt-h4">Trace how a capability moves through the dual-stack platform.</h4>
+                  <p>Choose an architecture state and concern, then trace any declared route. Working, strained, and breaking remain visible as words, border treatments, and connection patterns.</p>
+                </header>
+                <p class="wtb-system-graph__error" data-graph-error hidden></p>
+                <div data-graph-enhancement hidden>
+                  <div class="wtb-system-graph__controls" aria-labelledby="wtb-system-graph-title">
+                    <fieldset>
+                      <legend>Architecture state</legend>
+                      <div class="wtb-system-graph__choice-row">
+                        <label class="wtb-system-graph__choice"><input type="radio" name="wtb-system-mode" value="symfony" data-label="Symfony"><span>Symfony</span></label>
+                        <label class="wtb-system-graph__choice"><input type="radio" name="wtb-system-mode" value="spring" data-label="Partial Spring"><span>Partial Spring</span></label>
+                      </div>
+                    </fieldset>
+                    <fieldset>
+                      <legend>Concern in view</legend>
+                      <div class="wtb-system-graph__choice-row">
+                        <label class="wtb-system-graph__choice"><input type="radio" name="wtb-system-dimension" value="all" data-label="All relationships"><span>All</span></label>
+                        <label class="wtb-system-graph__choice"><input type="radio" name="wtb-system-dimension" value="abuse" data-label="Multiple-account abuse"><span>Multiple-account abuse</span></label>
+                        <label class="wtb-system-graph__choice"><input type="radio" name="wtb-system-dimension" value="misfit" data-label="Campaign fit"><span>Campaign fit</span></label>
+                        <label class="wtb-system-graph__choice"><input type="radio" name="wtb-system-dimension" value="core" data-label="Core operations"><span>Core operations</span></label>
+                        <label class="wtb-system-graph__choice"><input type="radio" name="wtb-system-dimension" value="forecast" data-label="Forecasting"><span>Forecasting</span></label>
+                      </div>
+                    </fieldset>
+                    <div class="wtb-system-graph__route-form" aria-label="Trace a directed route">
+                      <label>Route start<select data-route-start></select></label>
+                      <label>Route destination<select data-route-end></select></label>
+                      <button class="wtb-system-graph__trace" type="button" data-trace-route>Trace route</button>
+                      <button type="button" data-reset-graph>Reset</button>
+                    </div>
+                    <p class="wtb-system-graph__summary" data-status-summary></p>
+                  </div>
+                  <p class="wtb-system-graph__status" role="status" aria-live="polite" aria-atomic="true" data-graph-status></p>
+                  <div class="wtb-system-graph__canvas-scroll" role="region" tabindex="0" aria-label="Scrollable system graph with four columns">
+                    <div class="wtb-system-graph__column-headings" aria-hidden="true"><span>Data sources</span><span>Services</span><span>Graph &amp; models</span><span>Consumers</span></div>
+                    <div class="wtb-system-graph__node-field" data-node-field>
+                      <svg class="wtb-system-graph__edge-layer" data-edge-layer aria-hidden="true" focusable="false"></svg>
+                      <div class="wtb-system-graph__node-grid" data-node-grid></div>
+                    </div>
+                  </div>
+                  <div class="wtb-system-graph__detail-grid">
+                    <article class="wtb-system-graph__detail" aria-labelledby="wtb-system-detail-title">
+                      <h5 id="wtb-system-detail-title" class="txt-h4" data-detail-title>Selected node</h5>
+                      <dl>
+                        <dt>Layer</dt><dd data-detail-column></dd>
+                        <dt>Implementation</dt><dd data-detail-stack></dd>
+                        <dt>State</dt><dd data-detail-status></dd>
+                        <dt>What it means</dt><dd data-detail-note></dd>
+                        <dt>Concerns</dt><dd data-detail-concerns></dd>
+                      </dl>
+                      <div class="wtb-system-graph__neighbors" data-detail-neighbors aria-label="Directly connected nodes"></div>
+                    </article>
+                    <nav class="wtb-system-graph__route-panel" aria-label="Current graph route">
+                      <h5 class="txt-h4">Current route</h5>
+                      <ol class="wtb-system-graph__route-list" data-route-list></ol>
+                      <div class="wtb-system-graph__route-movement">
+                        <button type="button" data-route-previous>Previous step</button>
+                        <button type="button" data-route-next>Next step</button>
+                      </div>
+                    </nav>
+                  </div>
+                </div>
+                <details class="wtb-system-graph__reading" open>
+                  <summary>Read the complete topology and both architecture states</summary>
+                  <p>The semantic reading carries every node and directed connection independently of the interactive view. Each node names the implementation, state, and practical consequence in both comparison states.</p>
+                  <div class="wtb-system-graph__reading-columns">
+                    <section aria-labelledby="wtb-reading-sources"><h5 id="wtb-reading-sources">Data sources</h5><ul>
+                      <li><strong>Member accounts.</strong> Symfony: Symfony 3.4, Doctrine, and MySQL; working; one users table lacked a unique-phone constraint. Partial Spring: MySQL remained the system of record; strained; Spring read through a sync job.</li>
+                      <li><strong>Device &amp; IP signals.</strong> Symfony: rotating Apache logs; breaking; signals were unavailable per account after 14 days. Partial Spring: Spring collector and Kafka; working; fingerprint events streamed per session.</li>
+                      <li><strong>Shipping addresses.</strong> Symfony: free-text MySQL fields; strained; variations such as “Apt 4” and “#4” escaped matching. Partial Spring: postal normalization; working; addresses normalized by country before comparison.</li>
+                      <li><strong>Household profile.</strong> Symfony: forms and EAV tables; strained; edits replaced history. Partial Spring: MySQL and PostgreSQL dual-write; breaking; age changes could remain stale for 24 hours.</li>
+                      <li><strong>Receipt images.</strong> Symfony: synchronous OCR in the controller; breaking; 30-second requests could fail silently. Partial Spring: queued OCR with image hashing; working.</li>
+                      <li><strong>Surveys &amp; reviews.</strong> Symfony and partial Spring: Symfony bundle and MySQL; working; answers still lacked a durable campaign relationship.</li>
+                    </ul></section>
+                    <section aria-labelledby="wtb-reading-services"><h5 id="wtb-reading-services">Services</h5><ul>
+                      <li><strong>Auth &amp; sessions.</strong> Symfony: FOSUserBundle; working. Partial Spring: Spring Security with a Symfony bridge; strained because two stores left logout propagation incomplete.</li>
+                      <li><strong>Campaign management.</strong> Symfony and partial Spring: SonataAdmin; working; campaign criteria remained free text.</li>
+                      <li><strong>Eligibility rules.</strong> Symfony: nightly SQL cron; strained. Partial Spring: Drools; strained because correct rules received stale household inputs.</li>
+                      <li><strong>Kit fulfillment.</strong> Symfony and partial Spring: CSV-to-SFTP handoff; strained; holds could arrive outside the export window.</li>
+                      <li><strong>Adverse event intake.</strong> Symfony: reports mixed into reviews; breaking. Partial Spring: structured MedDRA-coded service; working with 24-hour routing.</li>
+                      <li><strong>Member web front end.</strong> Symfony: Twig and jQuery; breaking desktop navigation. Partial Spring: the React assistant worked inside the same strained legacy navigation.</li>
+                    </ul></section>
+                    <section aria-labelledby="wtb-reading-models"><h5 id="wtb-reading-models">Graph and models</h5><ul>
+                      <li><strong>Identity graph.</strong> Symfony: weekly spreadsheet review; breaking because links appeared after shipment. Partial Spring: Neo4j entity resolution; working across device, address, receipt, and phone signals.</li>
+                      <li><strong>Risk scoring.</strong> Symfony: manual flags; breaking. Partial Spring: a gradient-boosted service scored in real time; strained by stale household features.</li>
+                      <li><strong>Profile change monitor.</strong> Symfony: unavailable; breaking. Partial Spring: Kafka Streams; strained when MySQL-only edits escaped the stream.</li>
+                      <li><strong>Data warehouse.</strong> Symfony: nightly MySQL dump to Redshift; strained by the batch window. Partial Spring: Kafka to Snowflake plus the nightly dump; strained when pipelines disagreed on member counts.</li>
+                      <li><strong>Prophet forecasting.</strong> Symfony: Python cron over CSV; strained by duplicate-account demand. Partial Spring: Python over Snowflake; strained because inflated history remained in training data.</li>
+                    </ul></section>
+                    <section aria-labelledby="wtb-reading-consumers"><h5 id="wtb-reading-consumers">Consumers</h5><ul>
+                      <li><strong>Member-guidance assistant.</strong> Symfony: unavailable; breaking. Partial Spring: retrieval over campaigns and FAQs; working; cards appeared from member context.</li>
+                      <li><strong>Trust &amp; Safety queue.</strong> Symfony: shared-inbox triage; breaking. Partial Spring: case management; working across holds, verification, and appeal.</li>
+                      <li><strong>Campaign operations.</strong> Symfony: spreadsheets; strained by old forecasts. Partial Spring: dashboards; working with country-level forecast ranges.</li>
+                      <li><strong>Brand partner portal.</strong> Symfony: PDF reports; strained by duplicate reach. Partial Spring: PDF plus API; strained when the two projections differed.</li>
+                      <li><strong>Brand pharmacovigilance.</strong> Symfony: disconnected; breaking with reporting deadlines at risk. Partial Spring: E2B R3 export; working within 24 hours.</li>
+                    </ul></section>
+                  </div>
+                  <h5>Declared directed connections</h5>
+                  <ol class="wtb-system-graph__edge-reading">
+                    <li>Member accounts → Auth &amp; sessions. Symfony: working; Partial Spring: strained.</li>
+                    <li>Member accounts → Identity graph via sync job. Symfony: breaking; Partial Spring: strained.</li>
+                    <li>Device &amp; IP signals → Identity graph. Symfony: breaking; Partial Spring: working.</li>
+                    <li>Shipping addresses → Identity graph. Symfony: strained; Partial Spring: working.</li>
+                    <li>Shipping addresses → Kit fulfillment. Symfony: working; Partial Spring: working.</li>
+                    <li>Household profile → Eligibility rules via dual-write. Symfony: strained; Partial Spring: breaking.</li>
+                    <li>Household profile → Profile change monitor. Symfony: breaking; Partial Spring: breaking.</li>
+                    <li>Receipt images → Identity graph via image hash. Symfony: breaking; Partial Spring: working.</li>
+                    <li>Receipt images → Data warehouse. Symfony: strained; Partial Spring: working.</li>
+                    <li>Surveys &amp; reviews → Eligibility rules. Symfony: working; Partial Spring: working.</li>
+                    <li>Surveys &amp; reviews → Adverse event intake via AE detection. Symfony: breaking; Partial Spring: working.</li>
+                    <li>Campaign management → Eligibility rules. Symfony: working; Partial Spring: working.</li>
+                    <li>Eligibility rules → Risk scoring. Symfony: breaking; Partial Spring: strained.</li>
+                    <li>Identity graph → Risk scoring. Symfony: breaking; Partial Spring: working.</li>
+                    <li>Profile change monitor → Risk scoring. Symfony: breaking; Partial Spring: strained.</li>
+                    <li>Risk scoring → Kit fulfillment via hold. Symfony: breaking; Partial Spring: breaking.</li>
+                    <li>Risk scoring → Trust &amp; Safety queue. Symfony: breaking; Partial Spring: working.</li>
+                    <li>Risk scoring → Data warehouse. Symfony: breaking; Partial Spring: working.</li>
+                    <li>Data warehouse → Prophet forecasting. Symfony: strained; Partial Spring: strained.</li>
+                    <li>Prophet forecasting → Campaign operations. Symfony: strained; Partial Spring: working.</li>
+                    <li>Prophet forecasting → Brand partner portal. Symfony: strained; Partial Spring: strained.</li>
+                    <li>Adverse event intake → Brand pharmacovigilance. Symfony: breaking; Partial Spring: working.</li>
+                    <li>Member web front end → Member-guidance assistant. Symfony: breaking; Partial Spring: working.</li>
+                    <li>Eligibility rules → Member-guidance assistant. Symfony: breaking; Partial Spring: strained.</li>
+                    <li>Campaign management → Campaign operations. Symfony: working; Partial Spring: working.</li>
+                    <li>Kit fulfillment → Campaign operations. Symfony: strained; Partial Spring: strained.</li>
+                  </ol>
+                </details>
               </div>
               <figcaption class="table-note">
-                <strong>Figure 6. Dual-stack system graph.</strong> Member accounts, device and address signals, household
-                profiles, receipts, surveys, campaign services, fulfillment, risk scoring, and forecasting appear with their
-                connection health. The original controls let engineers move forward and backward or select alternate
-                capability-transfer routes. This shared view connected a visible failure to source or service ownership and
-                supported direct discussion of the effect on engineering work, participant tasks, and business outcomes.
+                <strong>Figure 6. Dual-stack system graph.</strong> The controls use the graph as a conversation instrument:
+                compare the two architecture states, isolate a concern, trace the fewest-edge declared route, and inspect the
+                implementation consequence at each step. The complete topology and both architecture readings remain available
+                below the interactive view. <a href="visualization-fidelity-atlas.html#technical-example-title">See the visual fidelity contract used on this technical diagram.</a>
               </figcaption>
+              <script type="application/json" id="wtb-system-graph-contract">
+                {
+                  "schemaVersion": "1.0.0",
+                  "columns": ["Data sources", "Services", "Graph & models", "Consumers"],
+                  "dimensions": [
+                    {"id": "abuse", "label": "Multiple-account abuse"},
+                    {"id": "misfit", "label": "Campaign fit"},
+                    {"id": "core", "label": "Core operations"},
+                    {"id": "forecast", "label": "Forecasting"}
+                  ],
+                  "defaults": {
+                    "mode": "spring",
+                    "dimension": "all",
+                    "routes": {
+                      "all": {"start": "accounts", "end": "tsqueue"},
+                      "abuse": {"start": "accounts", "end": "tsqueue"},
+                      "misfit": {"start": "household", "end": "assistant"},
+                      "core": {"start": "addresses", "end": "campaignops"},
+                      "forecast": {"start": "warehouse", "end": "brand"}
+                    }
+                  },
+                  "nodes": [
+                    {"id":"accounts","label":"Member accounts","col":0,"row":0,"dims":["abuse","core"],"stack":{"symfony":"Symfony 3.4 · Doctrine · MySQL","spring":"Symfony 3.4 · MySQL system of record"},"status":{"symfony":"ok","spring":"strained"},"note":{"symfony":"One users table; no unique phone constraint.","spring":"Symfony retained ownership; Spring read through a sync job."}},
+                    {"id":"devices","label":"Device & IP signals","col":0,"row":1,"dims":["abuse"],"stack":{"symfony":"Apache access logs","spring":"Spring collector · Kafka"},"status":{"symfony":"broken","spring":"ok"},"note":{"symfony":"Signals were unavailable per account; logs rotated after 14 days.","spring":"Fingerprint events streamed per session."}},
+                    {"id":"addresses","label":"Shipping addresses","col":0,"row":2,"dims":["abuse","core","misfit"],"stack":{"symfony":"MySQL free-text fields","spring":"Address service · postal normalization"},"status":{"symfony":"strained","spring":"ok"},"note":{"symfony":"Variations such as Apt 4 and #4 escaped matching.","spring":"Addresses normalized by country before comparison."}},
+                    {"id":"household","label":"Household profile","col":0,"row":3,"dims":["misfit"],"stack":{"symfony":"Symfony forms · EAV tables","spring":"MySQL + PostgreSQL dual-write"},"status":{"symfony":"strained","spring":"broken"},"note":{"symfony":"Edits replaced history.","spring":"Age changes could remain stale for 24 hours."}},
+                    {"id":"receipts","label":"Receipt images","col":0,"row":4,"dims":["abuse","core"],"stack":{"symfony":"Synchronous OCR in controller","spring":"Spring receipt service · queued OCR"},"status":{"symfony":"broken","spring":"ok"},"note":{"symfony":"Thirty-second requests could fail silently.","spring":"Queued OCR reused image hashes."}},
+                    {"id":"surveys","label":"Surveys & reviews","col":0,"row":5,"dims":["misfit","core"],"stack":{"symfony":"Symfony bundle · MySQL","spring":"Symfony bundle · MySQL"},"status":{"symfony":"ok","spring":"ok"},"note":{"symfony":"Answers lacked a durable campaign relationship.","spring":"The stable service remained in place."}},
+                    {"id":"auth","label":"Auth & sessions","col":1,"row":0,"dims":["core","abuse"],"stack":{"symfony":"FOSUserBundle","spring":"Spring Security + Symfony session bridge"},"status":{"symfony":"ok","spring":"strained"},"note":{"symfony":"Email and password supported the session.","spring":"Two stores left logout propagation incomplete."}},
+                    {"id":"campaigns","label":"Campaign management","col":1,"row":1,"dims":["core","misfit"],"stack":{"symfony":"SonataAdmin","spring":"SonataAdmin"},"status":{"symfony":"ok","spring":"ok"},"note":{"symfony":"Criteria remained free text per campaign.","spring":"The stable service remained in place."}},
+                    {"id":"eligibility","label":"Eligibility rules","col":1,"row":2,"dims":["misfit"],"stack":{"symfony":"SQL queries in nightly cron","spring":"Spring rules engine · Drools"},"status":{"symfony":"strained","spring":"strained"},"note":{"symfony":"Profile edits entered the next nightly run.","spring":"Correct rules received stale household inputs."}},
+                    {"id":"fulfillment","label":"Kit fulfillment","col":1,"row":3,"dims":["core"],"stack":{"symfony":"CSV to 3PL via SFTP","spring":"CSV to 3PL via SFTP"},"status":{"symfony":"strained","spring":"strained"},"note":{"symfony":"Holds arrived after export.","spring":"Risk holds could arrive outside the export window."}},
+                    {"id":"safety","label":"Adverse event intake","col":1,"row":4,"dims":["core"],"stack":{"symfony":"Reports mixed into reviews","spring":"Spring AE service · MedDRA coding"},"status":{"symfony":"broken","spring":"ok"},"note":{"symfony":"Reports remained inside review prose.","spring":"Structured cases routed to brand safety within 24 hours."}},
+                    {"id":"frontend","label":"Member web front end","col":1,"row":5,"dims":["core"],"stack":{"symfony":"Twig · jQuery 1.x","spring":"Twig · jQuery 1.x · embedded React assistant"},"status":{"symfony":"broken","spring":"strained"},"note":{"symfony":"Desktop navigation failed; members used footer links.","spring":"The assistant worked inside the same strained navigation."}},
+                    {"id":"graph","label":"Identity graph","col":2,"row":0,"dims":["abuse"],"stack":{"symfony":"Weekly spreadsheet review","spring":"Neo4j · entity resolution"},"status":{"symfony":"broken","spring":"ok"},"note":{"symfony":"Links appeared after kits shipped.","spring":"Device, address, receipt, and phone signals resolved entities."}},
+                    {"id":"risk","label":"Risk scoring","col":2,"row":1,"dims":["abuse","misfit"],"stack":{"symfony":"Manual flags","spring":"Gradient-boosted Spring service"},"status":{"symfony":"broken","spring":"strained"},"note":{"symfony":"The system carried no score.","spring":"Real-time scores inherited stale household features."}},
+                    {"id":"velocity","label":"Profile change monitor","col":2,"row":2,"dims":["misfit"],"stack":{"symfony":"Unavailable","spring":"Kafka Streams"},"status":{"symfony":"broken","spring":"strained"},"note":{"symfony":"The system retained no history for comparison.","spring":"MySQL-only edits escaped the stream."}},
+                    {"id":"warehouse","label":"Data warehouse","col":2,"row":3,"dims":["forecast","core"],"stack":{"symfony":"Nightly MySQL dump · Redshift","spring":"Kafka to Snowflake + nightly dump"},"status":{"symfony":"strained","spring":"strained"},"note":{"symfony":"Large dumps exceeded the batch window.","spring":"Two pipelines disagreed on member counts."}},
+                    {"id":"prophet","label":"Prophet forecasting","col":2,"row":4,"dims":["forecast"],"stack":{"symfony":"Python cron over CSV","spring":"Python service over Snowflake"},"status":{"symfony":"strained","spring":"strained"},"note":{"symfony":"Duplicate accounts appeared as demand.","spring":"Inflated history remained in training data."}},
+                    {"id":"assistant","label":"Member-guidance assistant","col":3,"row":0,"dims":["core","misfit"],"stack":{"symfony":"Unavailable","spring":"LLM + retrieval over campaigns and FAQs"},"status":{"symfony":"broken","spring":"ok"},"note":{"symfony":"The state carried no assistant.","spring":"Member context selected survey and form cards."}},
+                    {"id":"tsqueue","label":"Trust & Safety queue","col":3,"row":1,"dims":["abuse","misfit"],"stack":{"symfony":"Shared inbox","spring":"Case management"},"status":{"symfony":"broken","spring":"ok"},"note":{"symfony":"Email triage remained unstructured.","spring":"Holds, verification, and appeal shared one case state."}},
+                    {"id":"campaignops","label":"Campaign operations","col":3,"row":2,"dims":["core","forecast"],"stack":{"symfony":"Spreadsheets","spring":"Dashboards"},"status":{"symfony":"strained","spring":"ok"},"note":{"symfony":"Kit counts used the prior year's forecast.","spring":"Country-level Prophet ranges guided planning."}},
+                    {"id":"brand","label":"Brand partner portal","col":3,"row":3,"dims":["core","forecast"],"stack":{"symfony":"PDF reports","spring":"PDF reports + API"},"status":{"symfony":"strained","spring":"strained"},"note":{"symfony":"Reach included duplicate accounts.","spring":"PDF and API projections differed."}},
+                    {"id":"pv","label":"Brand pharmacovigilance","col":3,"row":4,"dims":["core"],"stack":{"symfony":"Disconnected","spring":"E2B R3 case export"},"status":{"symfony":"broken","spring":"ok"},"note":{"symfony":"Reporting deadlines remained exposed.","spring":"Cases reached the brand within 24 hours."}}
+                  ],
+                  "edges": [
+                    {"id":"accounts-auth","from":"accounts","to":"auth","status":{"symfony":"ok","spring":"strained"}},
+                    {"id":"accounts-graph","from":"accounts","to":"graph","label":"sync job","status":{"symfony":"broken","spring":"strained"}},
+                    {"id":"devices-graph","from":"devices","to":"graph","status":{"symfony":"broken","spring":"ok"}},
+                    {"id":"addresses-graph","from":"addresses","to":"graph","status":{"symfony":"strained","spring":"ok"}},
+                    {"id":"addresses-fulfillment","from":"addresses","to":"fulfillment","status":{"symfony":"ok","spring":"ok"}},
+                    {"id":"household-eligibility","from":"household","to":"eligibility","label":"dual-write","status":{"symfony":"strained","spring":"broken"}},
+                    {"id":"household-velocity","from":"household","to":"velocity","status":{"symfony":"broken","spring":"broken"}},
+                    {"id":"receipts-graph","from":"receipts","to":"graph","label":"image hash","status":{"symfony":"broken","spring":"ok"}},
+                    {"id":"receipts-warehouse","from":"receipts","to":"warehouse","status":{"symfony":"strained","spring":"ok"}},
+                    {"id":"surveys-eligibility","from":"surveys","to":"eligibility","status":{"symfony":"ok","spring":"ok"}},
+                    {"id":"surveys-safety","from":"surveys","to":"safety","label":"AE detection","status":{"symfony":"broken","spring":"ok"}},
+                    {"id":"campaigns-eligibility","from":"campaigns","to":"eligibility","status":{"symfony":"ok","spring":"ok"}},
+                    {"id":"eligibility-risk","from":"eligibility","to":"risk","status":{"symfony":"broken","spring":"strained"}},
+                    {"id":"graph-risk","from":"graph","to":"risk","status":{"symfony":"broken","spring":"ok"}},
+                    {"id":"velocity-risk","from":"velocity","to":"risk","status":{"symfony":"broken","spring":"strained"}},
+                    {"id":"risk-fulfillment","from":"risk","to":"fulfillment","label":"hold","status":{"symfony":"broken","spring":"broken"}},
+                    {"id":"risk-tsqueue","from":"risk","to":"tsqueue","status":{"symfony":"broken","spring":"ok"}},
+                    {"id":"risk-warehouse","from":"risk","to":"warehouse","status":{"symfony":"broken","spring":"ok"}},
+                    {"id":"warehouse-prophet","from":"warehouse","to":"prophet","status":{"symfony":"strained","spring":"strained"}},
+                    {"id":"prophet-campaignops","from":"prophet","to":"campaignops","status":{"symfony":"strained","spring":"ok"}},
+                    {"id":"prophet-brand","from":"prophet","to":"brand","status":{"symfony":"strained","spring":"strained"}},
+                    {"id":"safety-pv","from":"safety","to":"pv","status":{"symfony":"broken","spring":"ok"}},
+                    {"id":"frontend-assistant","from":"frontend","to":"assistant","status":{"symfony":"broken","spring":"ok"}},
+                    {"id":"eligibility-assistant","from":"eligibility","to":"assistant","status":{"symfony":"broken","spring":"strained"}},
+                    {"id":"campaigns-campaignops","from":"campaigns","to":"campaignops","status":{"symfony":"ok","spring":"ok"}},
+                    {"id":"fulfillment-campaignops","from":"fulfillment","to":"campaignops","status":{"symfony":"strained","spring":"strained"}}
+                  ]
+                }
+              </script>
             </figure>
 
             <figure class="story-visual table-span-all">

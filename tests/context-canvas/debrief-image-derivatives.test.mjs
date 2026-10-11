@@ -66,8 +66,8 @@ test("tracked Debrief derivatives preserve exact dimensions and source ratio", a
 
   const beforeCheck = await readFile(derivativeFixture);
   assert.deepEqual(await processDerivativeFamilies({ check: true }), {
-    processed: 60,
-    skipped: 0,
+    processed: 61,
+    skipped: 1,
     removed: 0,
   });
   assert.deepEqual(
@@ -102,6 +102,22 @@ test("Who To Believe comparison images carry both responsive widths", async () =
       );
     }
   }
+});
+
+test("Who To Believe catalog orientation image carries its eligible responsive width", async () => {
+  assert.deepEqual(
+    await readWebpDimensions(join(whoToBelieveFixtureRoot, "who-to-believe-upfront.webp")),
+    { width: 1_728, height: 2_356 },
+  );
+  assert.deepEqual(
+    await readWebpDimensions(join(whoToBelieveFixtureRoot, "who-to-believe-upfront-960.webp")),
+    { width: 960, height: 1_309 },
+  );
+  await assert.rejects(
+    readWebpDimensions(join(whoToBelieveFixtureRoot, "who-to-believe-upfront-1920.webp")),
+    /ENOENT/u,
+    "The derivative family excludes upscaling above the accepted source width",
+  );
 });
 
 test("ineligible candidates are reported by checks and removed by builds", async (context) => {

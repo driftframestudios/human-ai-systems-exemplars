@@ -15,7 +15,7 @@ const previewSources = new Map([
   ["catalog-ehr-integration", "../img/plot/ehr_discrete_result_contract_map.svg"],
   ["catalog-lims-eln", "../img/debriefs/sample-noone-could-find/lims-eln-process-mapping.webp"],
   ["catalog-humatics", "../img/debriefs/choose-your-player/robotics-map-setup.webp"],
-  ["catalog-who-to-believe", "../img/plot/who_to_believe_method_compass.svg"],
+  ["catalog-who-to-believe", "../img/debriefs/who-to-believe/who-to-believe-upfront.webp"],
   ["catalog-field-inspection", "../img/plot/inspection_platform_operating_map.svg"],
   ["catalog-distributed-inspection", "../img/plot/distributed_inspection_ten_beat_arc.svg"],
   ["catalog-three-way-return", "../img/plot/three_way_return_motion.svg"],
@@ -30,7 +30,7 @@ const previewDimensions = new Map([
   ["catalog-ehr-integration", ["1600", "1120"]],
   ["catalog-lims-eln", ["5114", "2710"]],
   ["catalog-humatics", ["5110", "2708"]],
-  ["catalog-who-to-believe", ["1600", "1120"]],
+  ["catalog-who-to-believe", ["1728", "2356"]],
   ["catalog-field-inspection", ["1600", "1200"]],
   ["catalog-distributed-inspection", ["1600", "1180"]],
   ["catalog-three-way-return", ["1600", "1120"]],
@@ -51,7 +51,7 @@ function cardBlock(html, cardId) {
   return html.slice(start, nextCard === -1 ? html.length : nextCard);
 }
 
-test("Full Debrief catalog cards may declare distinct responsive preview visuals", async () => {
+test("Full Debrief catalog cards declare reviewed responsive preview visuals", async () => {
   const html = await readFile(resolve(canvasRoot, "debriefs.html"), "utf8");
 
   for (const [cardId, expectedSrc] of previewSources) {
@@ -63,7 +63,11 @@ test("Full Debrief catalog cards may declare distinct responsive preview visuals
     const [expectedWidth, expectedHeight] = previewDimensions.get(cardId);
 
     assert.equal(previewSrc, expectedSrc, `${cardId} should declare its chosen preview visual`);
-    assert.notEqual(previewSrc, upfrontSrc, `${cardId} should preview a visual distinct from its catalog-card image`);
+    if (cardId === "catalog-who-to-believe") {
+      assert.equal(previewSrc, upfrontSrc, `${cardId} should carry the accepted image through both preview coordinates`);
+    } else {
+      assert.notEqual(previewSrc, upfrontSrc, `${cardId} should preview a visual distinct from its catalog-card image`);
+    }
     assert.ok(attribute(openingTag, "data-catalog-preview-alt"), `${cardId} should describe its preview image`);
     assert.ok(attribute(openingTag, "data-catalog-preview-caption"), `${cardId} should explain the preview image`);
     assert.equal(attribute(openingTag, "data-catalog-preview-width"), expectedWidth, `${cardId} should declare its preview width`);

@@ -80,6 +80,10 @@ const debriefProxyContracts = [
     route: "who-to-believe-reviews-platform.html",
     directory: "who-to-believe",
     publicSafePatterns: [/fictional\s+content/iu],
+    alternateReceivers: [
+      "cpg-pharma-dual-stack-system-graph.webp",
+      "who-to-believe-upfront.webp",
+    ],
   },
 ];
 
@@ -234,7 +238,7 @@ test("former placeholder alternatives stay out of parent visitor surfaces", asyn
 });
 
 test("working Debrief systems preserve standing, figure identity, responsive sources, and full-size inspection", async () => {
-  for (const { route, directory, publicSafePatterns } of debriefProxyContracts) {
+  for (const { route, directory, publicSafePatterns, alternateReceivers = [] } of debriefProxyContracts) {
     const html = withoutComments(await readFile(join(canvasRoot, route), "utf8"));
     assert.match(html, /working/iu, `${route}: working-system standing`);
     assert.match(html, /2026/iu, `${route}: contemporary standing`);
@@ -246,6 +250,7 @@ test("working Debrief systems preserve standing, figure identity, responsive sou
     ), match => match[0]);
     const originals = (await readdir(join(debriefImageRoot, directory)))
       .filter(name => name.endsWith(".webp") && !/-(?:960|1920)\.webp$/u.test(name))
+      .filter(name => !alternateReceivers.includes(name))
       .sort();
     assert.equal(figures.length, originals.length, `${route}: every accepted source has one proxy figure`);
 
@@ -303,4 +308,42 @@ test("working Debrief systems preserve standing, figure identity, responsive sou
       assert.match(figure, /<figcaption\b[\s\S]{80,}?<\/figcaption>/iu, `${route}: ${basename} narrative caption`);
     }
   }
+});
+
+test("Who To Believe routes its graph exemplar and catalog orientation image to their current owners", async () => {
+  const [debrief, catalog, atlas, inventory] = await Promise.all([
+    readFile(join(canvasRoot, "who-to-believe-reviews-platform.html"), "utf8"),
+    readFile(join(canvasRoot, "debriefs.html"), "utf8"),
+    readFile(join(canvasRoot, "visualization-fidelity-atlas.html"), "utf8"),
+    readFile(join(repositoryRoot, "context-canvas-project-surface/asset-inventory.json"), "utf8").then(JSON.parse),
+  ]);
+
+  assert.match(debrief, /id="wtb-figure-dual-stack-system"[\s\S]*?data-wtb-system-graph/u);
+  assert.doesNotMatch(debrief, /<img[^>]+cpg-pharma-dual-stack-system-graph/u);
+  assert.match(atlas, /<img[^>]+cpg-pharma-dual-stack-system-graph\.webp/u);
+  assert.match(atlas, /cpg-pharma-dual-stack-system-graph-960\.webp 960w/u);
+  assert.match(atlas, /cpg-pharma-dual-stack-system-graph-1920\.webp 1920w/u);
+  assert.match(catalog, /<img class="project__upfront"[^>]+who-to-believe-upfront\.webp/u);
+  assert.match(catalog, /who-to-believe-upfront-960\.webp 960w/u);
+  assert.match(catalog, /id="catalog-who-to-believe"[^>]+data-catalog-preview-src="\.\.\/img\/debriefs\/who-to-believe\/who-to-believe-upfront\.webp"/u);
+
+  const expectedRoles = new Map([
+    ["who-to-believe-upfront.webp", "catalog_orientation"],
+    ["who-to-believe-upfront-960.webp", "catalog_orientation"],
+    ["cpg-pharma-dual-stack-system-graph.webp", "visual_fidelity_technical_example"],
+    ["cpg-pharma-dual-stack-system-graph-960.webp", "visual_fidelity_technical_example"],
+    ["cpg-pharma-dual-stack-system-graph-1920.webp", "visual_fidelity_technical_example"],
+  ]);
+  for (const [basename, expectedRole] of expectedRoles) {
+    const sourcePath = `context-canvas-project-surface/img/debriefs/who-to-believe/${basename}`;
+    const override = inventory.overrides.find(entry => entry.source_path === sourcePath);
+    assert.ok(override, `${basename} should carry an asset-specific semantic override`);
+    assert.deepEqual(override.roles.map(role => role.id), [expectedRole], `${basename} semantic role`);
+  }
+
+  await Promise.all([
+    access(join(debriefImageRoot, "who-to-believe/cpg-pharma-dual-stack-system-graph.webp")),
+    access(join(debriefImageRoot, "who-to-believe/who-to-believe-upfront.webp")),
+    access(join(debriefImageRoot, "who-to-believe/who-to-believe-upfront-960.webp")),
+  ]);
 });
