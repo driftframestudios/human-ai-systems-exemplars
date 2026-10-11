@@ -133,7 +133,7 @@
       "roles": [
         {
           "id": "debrief_source_artifact",
-          "visitor_job": "Keep source-era research, prototype, and learner-situation evidence readable beside the contemporary Debrief.",
+          "visitor_job": "Keep historical research, prototype, and learner-situation evidence readable beside the contemporary Debrief.",
           "accessibility_text_owner": "The multilingual clinical vocabulary Debrief image alternative and surrounding caption."
         }
       ],
@@ -148,7 +148,7 @@
       "source_relationship": {
         "standing": "accepted_generated_asset",
         "provenance_owner_path": "context-canvas-project-surface/context-canvas/multilingual-clinical-vocabulary-practice.html",
-        "lineage_standing": "The accepted WebP deliveries were generated in September 2026 from the retained source-era JPG and PNG masters plus the reviewed learner-situation PNG renderings. Full-view and responsive thumbnail names preserve each source relationship; a repository-owned generator is not recorded."
+        "lineage_standing": "The accepted WebP deliveries were generated in September 2026 from the retained historical JPG and PNG masters plus the reviewed learner-situation PNG renderings. Full-view and responsive thumbnail names preserve each source relationship; a repository-owned generator is not recorded."
       },
       "recovery_condition": "Regenerate the reviewed WebP deliveries from their retained source masters, compare their visible text and photographs, and rebuild the production projection.",
       "semantic_authority_path": "context-canvas-project-surface/context-canvas/multilingual-clinical-vocabulary-practice.html"
@@ -162,7 +162,7 @@
       "roles": [
         {
           "id": "debrief_visual_evidence",
-          "visitor_job": "Keep the source-era form references and contemporary PAN explanation readable beside the form-contract Debrief.",
+          "visitor_job": "Keep the historical form references and contemporary PAN explanation readable beside the form-contract Debrief.",
           "accessibility_text_owner": "The recoverable enterprise forms Debrief image alternatives, captions, and the PAN SVG title and description."
         }
       ],
@@ -191,7 +191,7 @@
       "roles": [
         {
           "id": "debrief_source_artifact",
-          "visitor_job": "Keep the source-era discovery field and film-production storyboard readable beside the spatial-capture Debrief.",
+          "visitor_job": "Keep the historical discovery field and film-production storyboard readable beside the spatial-capture Debrief.",
           "accessibility_text_owner": "The spatial-capture Debrief image alternatives and surrounding captions."
         }
       ],

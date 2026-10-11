@@ -15,7 +15,7 @@ const receivers = [
     family: "clinical-trial-boolean-builder",
     width: "1920",
     height: "976",
-    accessibleName: "Clinical-trial Boolean cohort builder walkthrough",
+    accessibleName: "Clinical-trial Boolean cohort-builder demonstration",
     standingId: "clinical-trial-boolean-builder-standing",
     captionId: "clinical-trial-boolean-builder-caption",
     transcriptId: "clinical-trial-boolean-builder-transcript",
@@ -27,7 +27,7 @@ const receivers = [
     family: "genomics-sequencing-process",
     width: "1920",
     height: "1010",
-    accessibleName: "Genomics sequencing-process walkthrough",
+    accessibleName: "Genomics sequencing-process visualization demonstration",
     standingId: "genomics-sequencing-process-standing",
     captionId: "genomics-sequencing-process-caption",
     transcriptId: "genomics-sequencing-process-transcript",
@@ -39,7 +39,7 @@ const receivers = [
     family: "genomics-specimen-qa-biomarker",
     width: "1920",
     height: "1010",
-    accessibleName: "Genomics specimen, quality, and biomarker walkthrough",
+    accessibleName: "Genomics specimen, quality, and biomarker demonstration",
     standingId: "genomics-specimen-qa-biomarker-standing",
     captionId: "genomics-specimen-qa-biomarker-caption",
     transcriptId: "genomics-specimen-qa-biomarker-transcript",
@@ -51,7 +51,7 @@ const receivers = [
     family: "genomics-responsive-interface",
     width: "1920",
     height: "980",
-    accessibleName: "Genomics responsive-interface walkthrough",
+    accessibleName: "Genomics responsive-interface demonstration",
     standingId: "genomics-responsive-interface-standing",
     captionId: "genomics-responsive-interface-caption",
     transcriptId: "genomics-responsive-interface-transcript",
@@ -63,7 +63,7 @@ const receivers = [
     family: "genomics-permissions",
     width: "1920",
     height: "1010",
-    accessibleName: "Genomics permissions and failure-state walkthrough",
+    accessibleName: "Genomics permissions and failure-state demonstration",
     standingId: "genomics-permissions-standing",
     captionId: "genomics-permissions-caption",
     transcriptId: "genomics-permissions-transcript",
@@ -81,7 +81,7 @@ function escapeRegularExpression(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
 }
 
-test("five Debrief receivers present accepted silent walkthroughs at their reading coordinates", async () => {
+test("five Debrief receivers present accepted demonstrations at their reading coordinates", async () => {
   const pages = new Map();
   for (const receiver of receivers) {
     if (!pages.has(receiver.page)) {
@@ -127,7 +127,7 @@ test("five Debrief receivers present accepted silent walkthroughs at their readi
     );
     assert.match(
       video,
-      new RegExp(`<p><a href="${escapeRegularExpression(movieUrl)}">Open the `, "u"),
+      new RegExp(`<p><a href="${escapeRegularExpression(movieUrl)}">Open movie video file \\(MP4\\)`, "u"),
     );
 
     const standingIndex = html.indexOf(`id="${receiver.standingId}"`);
@@ -146,10 +146,10 @@ test("five Debrief receivers present accepted silent walkthroughs at their readi
       ),
     )?.[0];
     assert.ok(transcript, `${receiver.family} keeps the visual description in an aside`);
-    assert.match(transcript, /Visual description · silent walkthrough/u);
+    assert.match(transcript, /Visual description/u);
     assert.ok(
       (transcript.match(/<li>/gu) ?? []).length >= 4,
-      `${receiver.family} describes the ordered silent sequence`,
+      `${receiver.family} describes the ordered visual sequence`,
     );
 
     const beforeIndex = html.indexOf(receiver.before);

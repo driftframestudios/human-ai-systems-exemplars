@@ -24,7 +24,7 @@ receivers.
 
 ## Accepted carrier families
 
-Every family uses `v0.1.0`, a silent H.264 High-profile `yuv420p` movie with
+Every family uses `v0.1.0`, a video-only H.264 High-profile `yuv420p` movie with
 square pixels and MP4 Fast Start, and a WebP poster derived from the accepted
 movie bytes. All carrier routes share this shape:
 
@@ -88,7 +88,7 @@ raw headers, response bodies, account details, and local coordinates.
 
 ## Visitor handoff
 
-Every source is silent, so each receiving page owns a visible ordered sequence
+Every source has zero audio streams, so each receiving page owns a visible ordered sequence
 instead of an empty captions file. The receiving page also owns the media's
 plain-language standing, semantic placement, caption, accessible name, native
 controls, responsive containment, and direct-open fallback.
@@ -97,15 +97,15 @@ A deterministic Playwright contract exercises all eleven receivers at 390,
 1024, and 1440 CSS pixels. A passive poster fixture keeps the check independent
 of public-network state while it observes the requested poster route, native
 controls, intrinsic geometry, accessible relationships, visible sequence, and
-page-level containment. The first run found one walkthrough nested inside a
-two-column reading flow; making that complete walkthrough span the reading
+page-level containment. The first run found one demonstration nested inside a
+two-column reading flow; making that complete demonstration span the reading
 columns restored containment. Exact accepted-byte playback remains a separate
 deployed-page and physical-device receiver.
 
-The historical menu-bottleneck capture remains distinct from the 2026 working
-proxy families. Its page-level standing identifies it as a source-era public
-website capture used to make the navigation bottleneck visible; the recording
-enters no member credentials and exposes no member record.
+The historical menu-bottleneck capture remains distinct from the 2026 proxy
+families. Its page-level standing identifies it as a historical public-website
+capture used to make the navigation bottleneck visible. The sequence stays on
+public pages and ends when the Member Sign In page appears.
 
 ## Decision-changing observations
 

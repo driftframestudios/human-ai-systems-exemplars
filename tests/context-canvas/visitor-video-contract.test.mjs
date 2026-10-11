@@ -23,7 +23,7 @@ const whoToBelieveVideoReceivers = [
     family: "cpg-pharma-conversational-ai",
     width: "1154",
     height: "1080",
-    accessibleName: "Guided review and safety-reporting scenario walkthrough",
+    accessibleName: "Guided review and safety-reporting demonstration",
     standingId: "cpg-pharma-conversational-ai-standing",
     captionId: "cpg-pharma-conversational-ai-caption",
     transcriptId: "cpg-pharma-conversational-ai-transcript",
@@ -34,7 +34,7 @@ const whoToBelieveVideoReceivers = [
     family: "cpg-pharma-menu-bottleneck",
     width: "1472",
     height: "1080",
-    accessibleName: "Source-era navigation bottleneck walkthrough",
+    accessibleName: "Historical navigation bottleneck demonstration",
     standingId: "cpg-pharma-menu-bottleneck-standing",
     captionId: "cpg-pharma-menu-bottleneck-caption",
     transcriptId: "cpg-pharma-menu-bottleneck-transcript",
@@ -46,7 +46,7 @@ const coreArchitectureReceivers = [
   {
     page: "concept-nursery.html",
     family: "cross-channel-integration",
-    label: "Shared Surface Priority Map prototype walkthrough",
+    label: "Shared Surface Priority Map prototype demonstration",
     describedBy: "shared-surface-walkthrough-standing shared-surface-walkthrough-caption",
     details: "shared-surface-walkthrough-sequence",
     anchor: "https://iframes.vik.guru/v1/core/cross-channel-blueprint/",
@@ -56,7 +56,7 @@ const coreArchitectureReceivers = [
   {
     page: "poda.html",
     family: "poda-cpg-pharma",
-    label: "PODA review-safety prototype walkthrough",
+    label: "PODA review-safety prototype demonstration",
     describedBy: "poda-walkthrough-standing poda-walkthrough-caption",
     details: "poda-walkthrough-sequence",
     anchor: "https://iframes.vik.guru/v1/core/poda/",
@@ -66,7 +66,7 @@ const coreArchitectureReceivers = [
   {
     page: "grammar-family.html",
     family: "strategy-canvas-product-leadership",
-    label: "Strategy Canvas product-leadership prototype walkthrough",
+    label: "Strategy Canvas product-leadership prototype demonstration",
     describedBy: "strategy-canvas-walkthrough-standing strategy-canvas-walkthrough-caption",
     details: "strategy-canvas-walkthrough-sequence",
     anchor: "https://iframes.vik.guru/v1/core/strategy-canvas/",
@@ -76,7 +76,7 @@ const coreArchitectureReceivers = [
   {
     page: "metadata-blocks.html",
     family: "threadkeeping-cpg-pharma",
-    label: "Threadkeeping review-platform prototype walkthrough",
+    label: "Threadkeeping review-platform prototype demonstration",
     describedBy: "threadkeeping-walkthrough-standing threadkeeping-walkthrough-caption",
     details: "threadkeeping-walkthrough-sequence",
     anchor: "https://iframes.vik.guru/v1/canvas/threadkeeping-ledger/",
@@ -98,14 +98,14 @@ test("Choose Your Player presents one bounded progressive-video source receiver"
   const videos = Array.from(html.matchAll(/<video\b[^>]*>[\s\S]*?<\/video>/gu));
   assert.equal(videos.length, 1, "The Debrief carries one selected video receiver");
   const video = videos[0]?.[0];
-  assert.ok(video, "The Humatics Debrief needs its accepted walkthrough video");
+  assert.ok(video, "The Humatics Debrief needs its accepted demonstration video");
 
   const caseBriefEnd = html.indexOf("</section>", html.indexOf('id="case-brief"'));
-  const walkthroughStart = html.indexOf('<section id="working-proxy-walkthrough"');
+  const demonstrationStart = html.indexOf('<section id="working-proxy-walkthrough"');
   const architectureNav = html.indexOf('<nav aria-labelledby="track-index-title">');
-  assert.ok(caseBriefEnd >= 0 && walkthroughStart >= 0 && architectureNav >= 0);
-  assert.ok(caseBriefEnd < walkthroughStart, "The walkthrough follows the complete Case Brief");
-  assert.ok(walkthroughStart < architectureNav, "The walkthrough precedes architecture navigation");
+  assert.ok(caseBriefEnd >= 0 && demonstrationStart >= 0 && architectureNav >= 0);
+  assert.ok(caseBriefEnd < demonstrationStart, "The demonstration follows the complete Case Brief");
+  assert.ok(demonstrationStart < architectureNav, "The demonstration precedes architecture navigation");
 
   const openingTag = video.match(/<video\b[^>]*>/u)?.[0] ?? "";
   assert.match(openingTag, /\scontrols(?:\s|>)/u);
@@ -117,7 +117,7 @@ test("Choose Your Player presents one bounded progressive-video source receiver"
     attribute(openingTag, "poster"),
     "https://vik.guru/v1-cdn/video/choose-your-player/v0.1.0/poster.webp",
   );
-  assert.equal(attribute(openingTag, "aria-label"), "Choose Your Player working proxy walkthrough");
+  assert.equal(attribute(openingTag, "aria-label"), "Choose Your Player role-based interface demonstration");
   assert.equal(
     attribute(openingTag, "aria-describedby"),
     "working-proxy-walkthrough-standing choose-your-player-interface-caption",
@@ -129,10 +129,10 @@ test("Choose Your Player presents one bounded progressive-video source receiver"
     video,
     new RegExp(`<source\\s+src="${videoUrl.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&")}"\\s+type="video/mp4">`, "u"),
   );
-  assert.match(video, /Open the Choose Your Player interface walkthrough/u);
+  assert.match(video, /Open movie video file \(MP4\)/u);
   assert.match(html, /id="choose-your-player-interface-caption"/u);
   assert.match(html, /id="choose-your-player-interface-transcript"/u);
-  assert.match(html, /<strong>Working proxy walkthrough\.<\/strong>/u);
+  assert.match(html, /<strong>Choose Your Player role-based interface demonstration\.<\/strong>/u);
   for (const number of [1, 2, 3, 4, 5]) {
     assert.equal(
       (html.match(new RegExp(`<strong>Figure ${number}\\.<\\/strong>`, "gu")) ?? []).length,
@@ -140,9 +140,9 @@ test("Choose Your Player presents one bounded progressive-video source receiver"
       `The established Figure ${number} identity remains unique`,
     );
   }
-  assert.match(html, /silent, company-neutral, IP-free 2026 working proxy/u);
-  assert.match(html, /Visual description · silent walkthrough/u);
-  assert.match(html, /Four proxy role cards lead into one shared site model/u);
+  assert.match(html, /company-neutral, IP-free 2026 interface is a contemporary expression/u);
+  assert.match(html, /Visual description/u);
+  assert.match(html, /Four role cards lead into one shared site model/u);
   assert.match(html, /authenticated identity, active tenant membership, and entitlements govern access/u);
   assert.match(html, /Field Installation Engineer/u);
   assert.match(html, /Computer Vision Calibrator/u);
@@ -156,7 +156,7 @@ test("Who To Believe presents two bounded video receivers at their reading coord
   const videos = Array.from(html.matchAll(/<video\b[^>]*>[\s\S]*?<\/video>/gu)).map(
     match => match[0],
   );
-  assert.equal(videos.length, 2, "The Debrief carries its two selected walkthroughs");
+  assert.equal(videos.length, 2, "The Debrief carries its two selected demonstrations");
 
   for (const receiver of whoToBelieveVideoReceivers) {
     const movieUrl = `https://vik.guru/v1-cdn/video/${receiver.family}/v0.1.0/movie.mp4`;
@@ -201,7 +201,7 @@ test("Who To Believe presents two bounded video receivers at their reading coord
       new RegExp(`<aside\\s+id="${receiver.transcriptId}"[\\s\\S]*?<\\/aside>`, "u"),
     )?.[0];
     assert.ok(transcript, `${receiver.family} keeps its visual sequence in an aside`);
-    assert.match(transcript, /Visual description · silent walkthrough/u);
+    assert.match(transcript, /Visual description/u);
     assert.ok(
       (transcript.match(/<li>/gu) ?? []).length >= 4,
       `${receiver.family} describes at least four ordered moments`,
@@ -216,28 +216,27 @@ test("Who To Believe presents two bounded video receivers at their reading coord
     );
   }
 
-  assert.match(html, /scenario-based 2026 proxy uses fictional company, product, and account details/u);
+  assert.match(html, /2026 demonstration uses fictional company, product, and account details/u);
   assert.match(html, /guided product review/u);
   assert.match(html, /Receipt upload, capture, and matching/u);
   assert.match(html, /Product qualification checks profile and address information/u);
   assert.match(html, /Side-effect reporting asks the participant/u);
   assert.match(html, /Persistent next-step cards/u);
 
-  const sourceEraSection = html.match(
+  const historicalSection = html.match(
     /<section id="cpg-pharma-menu-bottleneck-walkthrough"[\s\S]*?<\/section>/u,
   )?.[0] ?? "";
-  assert.match(sourceEraSection, /source-era public website capture preserves the navigation bottleneck/u);
-  assert.match(sourceEraSection, /sequence stays within public pages/u);
-  assert.match(sourceEraSection, /every account field untouched/u);
-  assert.match(sourceEraSection, /public campaign homepage/u);
-  assert.match(sourceEraSection, /dense, compressed navigation menu/u);
-  assert.match(sourceEraSection, /sequence ends as the Member Sign In page appears; every account field remains untouched/u);
+  assert.match(historicalSection, /public website recording shows a desktop page loading a compact hamburger menu/u);
+  assert.match(historicalSection, /recording ends at the sign-in screen before any account information is entered/u);
+  assert.match(historicalSection, /campaign homepage/u);
+  assert.match(historicalSection, /dense, compressed navigation menu/u);
+  assert.match(historicalSection, /Member Sign In page appears, completing the route/u);
   assert.doesNotMatch(
-    sourceEraSection,
+    historicalSection,
     /\bno (?:member account|credentials)\b/iu,
     "The public-page scope carries the boundary through its accepted path",
   );
-  assert.doesNotMatch(sourceEraSection, /\b(?:IP-free|working proxy|2026 proxy)\b/iu);
+  assert.doesNotMatch(historicalSection, /\b(?:IP-free|working proxy|2026 proxy)\b/iu);
 
   for (const number of [1, 2, 3, 4, 5, 6]) {
     assert.equal(
@@ -247,13 +246,13 @@ test("Who To Believe presents two bounded video receivers at their reading coord
     );
   }
   assert.equal(
-    (html.match(/<strong>(?:Scenario|Source-era) walkthrough\.<\/strong>/gu) ?? []).length,
+    (html.match(/<strong>(?:Guided review and safety-reporting|Historical navigation bottleneck) demonstration\.<\/strong>/gu) ?? []).length,
     2,
-    "Both video captions remain unnumbered walkthroughs",
+    "Both video captions remain unnumbered demonstrations",
   );
 });
 
-test("Core Architecture readings place bounded silent walkthroughs beside their instruments", async (t) => {
+test("Core Architecture readings place bounded demonstrations beside their instruments", async (t) => {
   for (const receiver of coreArchitectureReceivers) {
     await t.test(receiver.page, async () => {
       const html = await readFile(resolve(repositoryRoot, "context-canvas-project-surface/context-canvas", receiver.page), "utf8");
@@ -279,12 +278,12 @@ test("Core Architecture readings place bounded silent walkthroughs beside their 
       const anchorIndex = html.indexOf(receiver.anchor);
       const videoIndex = html.indexOf(matchingVideo);
       const nextIndex = html.indexOf(receiver.next, videoIndex);
-      assert.ok(anchorIndex >= 0 && videoIndex > anchorIndex, `${receiver.page} places the walkthrough after the paired prototype`);
-      assert.ok(nextIndex > videoIndex, `${receiver.page} keeps the walkthrough before the next instrument`);
+      assert.ok(anchorIndex >= 0 && videoIndex > anchorIndex, `${receiver.page} places the demonstration after the paired prototype`);
+      assert.ok(nextIndex > videoIndex, `${receiver.page} keeps the demonstration before the next instrument`);
       assert.match(html, new RegExp(`id="${receiver.details}"[\\s\\S]*?<ol>[\\s\\S]*?<\\/ol>`, "u"));
       assert.match(html, new RegExp(receiver.sequenceTitle.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&"), "u"));
-      assert.match(html, /Visual description · silent walkthrough/u);
-      assert.match(html, /<strong>Prototype walkthrough\.<\/strong>/u);
+      assert.match(html, /Visual description/u);
+      assert.match(html, /Open movie video file \(MP4\)/u);
     });
   }
 });

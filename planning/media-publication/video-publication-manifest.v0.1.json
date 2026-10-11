@@ -61,7 +61,7 @@
       },
       "accessibility": {
         "branch": "verified_silent_visual_sequence",
-        "accessible_name": "Choose Your Player working proxy walkthrough",
+        "accessible_name": "Choose Your Player role-based interface demonstration",
         "standing_text_id": "working-proxy-walkthrough-standing",
         "figure_caption_id": "choose-your-player-interface-caption",
         "visual_sequence_id": "choose-your-player-interface-transcript",
@@ -151,7 +151,7 @@
       },
       "accessibility": {
         "branch": "verified_silent_visual_sequence",
-        "accessible_name": "Clinical-trial Boolean cohort builder walkthrough",
+        "accessible_name": "Clinical-trial Boolean cohort-builder demonstration",
         "standing_text_id": "clinical-trial-boolean-builder-standing",
         "figure_caption_id": "clinical-trial-boolean-builder-caption",
         "visual_sequence_id": "clinical-trial-boolean-builder-transcript",
@@ -241,7 +241,7 @@
       },
       "accessibility": {
         "branch": "verified_silent_visual_sequence",
-        "accessible_name": "Guided review and safety-reporting scenario walkthrough",
+        "accessible_name": "Guided review and safety-reporting demonstration",
         "standing_text_id": "cpg-pharma-conversational-ai-standing",
         "figure_caption_id": "cpg-pharma-conversational-ai-caption",
         "visual_sequence_id": "cpg-pharma-conversational-ai-transcript",
@@ -318,7 +318,7 @@
             "image_encoder": "cwebp 1.6.0",
             "settings": { "quality": 82, "metadata": "none" }
           },
-          "selection_reason": "The selected public homepage frame establishes the source-era campaign context before the walkthrough exposes the compressed sign-in route.",
+          "selection_reason": "The selected public homepage frame establishes the historical campaign context before the demonstration exposes the compressed sign-in route.",
           "review": {
             "standing": "candidate_pending_human_page_release",
             "review_owner": "human_publication_owner",
@@ -331,7 +331,7 @@
       },
       "accessibility": {
         "branch": "verified_silent_visual_sequence",
-        "accessible_name": "Source-era navigation bottleneck walkthrough",
+        "accessible_name": "Historical navigation bottleneck demonstration",
         "standing_text_id": "cpg-pharma-menu-bottleneck-standing",
         "figure_caption_id": "cpg-pharma-menu-bottleneck-caption",
         "visual_sequence_id": "cpg-pharma-menu-bottleneck-transcript",
@@ -421,7 +421,7 @@
       },
       "accessibility": {
         "branch": "verified_silent_visual_sequence",
-        "accessible_name": "Shared Surface Priority Map prototype walkthrough",
+        "accessible_name": "Shared Surface Priority Map prototype demonstration",
         "standing_text_id": "shared-surface-walkthrough-standing",
         "figure_caption_id": "shared-surface-walkthrough-caption",
         "visual_sequence_id": "shared-surface-walkthrough-sequence",
@@ -511,7 +511,7 @@
       },
       "accessibility": {
         "branch": "verified_silent_visual_sequence",
-        "accessible_name": "Genomics permissions and failure-state walkthrough",
+        "accessible_name": "Genomics permissions and failure-state demonstration",
         "standing_text_id": "genomics-permissions-standing",
         "figure_caption_id": "genomics-permissions-caption",
         "visual_sequence_id": "genomics-permissions-transcript",
@@ -588,7 +588,7 @@
             "image_encoder": "cwebp 1.6.0",
             "settings": { "quality": 82, "metadata": "none" }
           },
-          "selection_reason": "The selected opening frame makes the adjustable viewport boundary visible beside the reflowed Cohort Builder, establishing the resizing method before the walkthrough compares wide and narrow arrangements.",
+          "selection_reason": "The selected opening frame makes the adjustable viewport boundary visible beside the reflowed Cohort Builder, establishing the resizing method before the demonstration compares wide and narrow arrangements.",
           "review": {
             "standing": "candidate_pending_human_page_release",
             "review_owner": "human_publication_owner",
@@ -601,7 +601,7 @@
       },
       "accessibility": {
         "branch": "verified_silent_visual_sequence",
-        "accessible_name": "Genomics responsive-interface walkthrough",
+        "accessible_name": "Genomics responsive-interface demonstration",
         "standing_text_id": "genomics-responsive-interface-standing",
         "figure_caption_id": "genomics-responsive-interface-caption",
         "visual_sequence_id": "genomics-responsive-interface-transcript",
@@ -691,7 +691,7 @@
       },
       "accessibility": {
         "branch": "verified_silent_visual_sequence",
-        "accessible_name": "Genomics sequencing-process walkthrough",
+        "accessible_name": "Genomics sequencing-process visualization demonstration",
         "standing_text_id": "genomics-sequencing-process-standing",
         "figure_caption_id": "genomics-sequencing-process-caption",
         "visual_sequence_id": "genomics-sequencing-process-transcript",
@@ -781,7 +781,7 @@
       },
       "accessibility": {
         "branch": "verified_silent_visual_sequence",
-        "accessible_name": "Genomics specimen, quality, and biomarker walkthrough",
+        "accessible_name": "Genomics specimen, quality, and biomarker demonstration",
         "standing_text_id": "genomics-specimen-qa-biomarker-standing",
         "figure_caption_id": "genomics-specimen-qa-biomarker-caption",
         "visual_sequence_id": "genomics-specimen-qa-biomarker-transcript",
@@ -858,7 +858,7 @@
             "image_encoder": "cwebp 1.6.0",
             "settings": { "quality": 82, "metadata": "none" }
           },
-          "selection_reason": "The selected frame presents the PODA controls and four semantic zones together before the walkthrough adds and revises the illustrative records.",
+          "selection_reason": "The selected frame presents the PODA controls and four semantic zones together before the demonstration adds and revises the illustrative records.",
           "review": {
             "standing": "candidate_pending_human_page_release",
             "review_owner": "human_publication_owner",
@@ -871,7 +871,7 @@
       },
       "accessibility": {
         "branch": "verified_silent_visual_sequence",
-        "accessible_name": "PODA review-safety prototype walkthrough",
+        "accessible_name": "PODA review-safety prototype demonstration",
         "standing_text_id": "poda-walkthrough-standing",
         "figure_caption_id": "poda-walkthrough-caption",
         "visual_sequence_id": "poda-walkthrough-sequence",
@@ -961,7 +961,7 @@
       },
       "accessibility": {
         "branch": "verified_silent_visual_sequence",
-        "accessible_name": "Strategy Canvas product-leadership prototype walkthrough",
+        "accessible_name": "Strategy Canvas product-leadership prototype demonstration",
         "standing_text_id": "strategy-canvas-walkthrough-standing",
         "figure_caption_id": "strategy-canvas-walkthrough-caption",
         "visual_sequence_id": "strategy-canvas-walkthrough-sequence",
@@ -1051,7 +1051,7 @@
       },
       "accessibility": {
         "branch": "verified_silent_visual_sequence",
-        "accessible_name": "Threadkeeping review-platform prototype walkthrough",
+        "accessible_name": "Threadkeeping review-platform prototype demonstration",
         "standing_text_id": "threadkeeping-walkthrough-standing",
         "figure_caption_id": "threadkeeping-walkthrough-caption",
         "visual_sequence_id": "threadkeeping-walkthrough-sequence",

@@ -3,14 +3,15 @@
 ## Purpose and standard boundary
 
 This branch serves a named local extractor, serializer or presentation consumer.
-`data-label` is an application-specific custom attribute. HTML permits its use
-but defines neither a universal table-label vocabulary nor an ASCII-only value
-contract. The repository's plain-word convention is a contextual design choice.
+`data-label` is an application-specific custom attribute. HTML defines the
+custom-data mechanism; each application defines its table-label vocabulary and
+value contract. The repository's plain-word convention is a contextual design choice.
 [WHATWG: Custom data attributes](https://html.spec.whatwg.org/multipage/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes)
 supplies the platform boundary.
 
 Meaning needed by readers remains visible and available through native table
-relationships. Custom metadata is not an accessible-name replacement. MDN
+relationships. Custom metadata serves the named application consumer while
+native relationships continue to provide accessible meaning. MDN
 describes `dataset`/CSS access and cautions that assistive technology and search
 indexing may omit these values. [MDN: Using data attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/How_to/Use_data_attributes)
 is explanatory documentation; arbitrary AI or ATS ingestion remains a separate
@@ -32,8 +33,8 @@ supplemental meaning after its native and source owners are known.
 | Status and qualification | Is the value zero, absent, reserved, uncertain or conditional? | Its source-defined status, scope limit, uncertainty or relevant footnote. |
 | Lineage or state | Which source revision, selection or evidence does interpretation require? | Only the version/state/source relationship used by this receiver. |
 
-This is a selection aid, not a required seven-field schema or an instruction to
-copy the entire page into every cell. A row-level topic and identity can accompany
+Use this as a selection aid: each receiver chooses the fields that preserve the
+meaning it consumes. A row-level topic and identity can accompany
 field-level labels in the receiving serializer. Where an individual cell is the
 actual transfer unit, its required context needs a corresponding carrier.
 
@@ -43,17 +44,17 @@ The semantic owner classifies the component before normalizing it:
 
 | Component or signal | Meaning-preserving action | Boundary |
 | --- | --- | --- |
-| Known directional shorthand in an authored descriptor | Express the reviewed relationship in ordinary words, such as `Inputs to outputs`. | An arrow can mean direction, implication, transformation or a domain operator; the glyph alone does not choose the wording. |
-| A decorative separator between authored topic components | Use the approved colon or ordinary hyphen while retaining the components. | A separator inside a name, identifier or technical unit remains literal unless its owner explicitly changes it. |
+| Known directional shorthand in an authored descriptor | Express the reviewed relationship in ordinary words, such as `Inputs to outputs`. | The semantic owner chooses among direction, implication, transformation, or a domain operation. |
+| A decorative separator between authored topic components | Use the approved colon or ordinary hyphen while retaining the components. | A separator inside a name, identifier, or technical unit retains its literal identity until its owner explicitly changes it. |
 | An accented name, another writing system or user-entered field label | Preserve the supplied Unicode text and existing output escaping. | General stripping, transliteration and global punctuation replacement belong to a different editing request. |
-| A technical symbol, sign, exponent or unit | Preserve its identity or use an explicit domain-approved equivalent. | Meaningful notation is not decoration merely because it is non-ASCII. |
-| An ambiguous abbreviation or repeated heading | Resolve it with the source owner or carry the disambiguating context. | A guessed expansion can introduce meaning that the source never supplied. |
+| A technical symbol, sign, exponent or unit | Preserve its identity or use an explicit domain-approved equivalent. | Meaningful notation remains protected across writing systems and character sets. |
+| An ambiguous abbreviation or repeated heading | Resolve it with the source owner or carry the disambiguating context. | A guessed expansion can introduce meaning absent from the source. |
 | Whitespace or a character-reference spelling | Compare decoded semantic values under the declared normalization. | Authored byte preservation and semantic equality have separate oracles. |
 
 An accepted vocabulary mapping belongs to the semantic descriptor or its
 normalizer. It has a bounded vocabulary or explicit input grammar and fixtures
 for its protected cases. Adding a new symbol to a replacement list requires its
-meaning and owner; repeated sightings alone supply no editing authority.
+meaning and owner; those two conditions establish editing authority.
 
 ## Source, generator and runtime boundaries
 
@@ -64,18 +65,17 @@ meaning and owner; repeated sightings alone supply no editing authority.
 5. Projection and replay compare the accepted semantic mapping, exact protected values and preserved unowned source. A later projector that restores decorative display wording disagrees with that accepted supplemental mapping.
 
 A literal ampersand, quote or markup-shaped value stays data through the existing
-escaper. Entity decoding for a semantic comparison is not permission to decode
-user strings repeatedly or insert raw HTML. Unicode normalization likewise needs
-an explicit receiving contract; plain-word wording does not imply changes to the
+escaper. Keep entity decoding inside the declared semantic comparison and keep
+user strings on their existing escaped-data route. Apply Unicode normalization
+through an explicit receiving contract; the plain-word convention preserves the
 code points of a person's name.
 
-Native-attribute inventory respects the parser's source context. A string
-containing `<table>` or `data-label` inside a script, comment, template or
-example is a candidate for classification, not automatically a native table
-attribute. Generated markup returns to its actual generator. A source-preserving
-transformer admits a supported raw-text grammar before selecting edits; an
-unsupported self-closing raw-text token can return a domain outcome without
-interpreting its body as ordinary table source.
+Native-attribute inventory respects the parser's source context. Classify a
+string containing `<table>` or `data-label` inside a script, comment, template,
+or example before treating it as a native table attribute. Generated markup
+returns to its actual generator. A source-preserving transformer admits a
+supported raw-text grammar before selecting edits; an unsupported self-closing
+raw-text token returns a domain outcome and preserves its body as raw text.
 
 ## Bounded derivation and publication
 
@@ -90,8 +90,8 @@ Source scanners account for bytes or characters copied as well as cursor
 movement. Attribute-like quoted text retains literal content. Budget rejection
 and unsupported structure keep the complete asset with its source owner; an
 admitted asset's publication follows its existing digest/span, containment,
-changed-source and atomicity contract. A label wording request supplies no new
-parser, filesystem or deployment authority.
+changed-source and atomicity contract. Existing owners retain parser, filesystem,
+and deployment authority throughout a label wording request.
 
 ## Fitting observations
 
@@ -107,13 +107,13 @@ parser, filesystem or deployment authority.
 A source-only metadata repair can finish with fitting source, extraction and
 projection evidence when its receiving contract permits. Runtime-generated,
 input-dependent and browser-consumed labels have their own coverage. Existing
-checkpoint identities still govern reuse; a new metadata claim does not turn
-stale source-bound evidence into a current observation.
+checkpoint identities govern reuse; refresh source-bound observation before
+treating a new metadata claim as current.
 
 ## Decisive scenarios
 
 The JSON notation below denotes decoded Unicode strings. The escapes make code
-points explicit; they do not prescribe replacement of displayed text.
+points explicit; the displayed-text owner continues to govern presentation.
 
 ### Scenario: An accented name accompanies directional shorthand
 
@@ -161,16 +161,17 @@ attribute coverage needs a pinned-version check of markup selection, explicit
 selectors where appropriate, and focused rule fixtures. The table-label
 projector and native fixtures retain deterministic ownership. Advisory prose
 findings invite human interpretation; negation meaning and neutral-referent
-resolution retain their own semantic review. The pilot adds no installation,
-CI dependency, or mandatory lint step to this contract.
+resolution retain their own semantic review. This contract stays portable and
+dependency-free. A separately selected receiving task can introduce installation,
+CI dependencies, or a mandatory lint step when those affordances fit its scope.
 
 ## Evidence classes and release
 
 WHATWG supplies the custom-attribute platform contract. MDN supplies explanatory
 access and interoperability guidance. The
 [WAI two-header tutorial](https://www.w3.org/WAI/tutorials/tables/two-headers/)
-supports native relationship design. None of these sources imposes this
-repository's plain-word vocabulary or demonstrates arbitrary model ingestion.
+supports native relationship design. The repository owns its plain-word
+vocabulary, and empirical receiver observations own any model-ingestion claim.
 
 This branch completes when the consumer, semantic mapping, protected literal
 components, owning renderer and fitting observations are explicit. An ambiguous
@@ -186,8 +187,9 @@ whitespace or an arrow that supplies spacing during normalization. Looking at
 both kinds of boundary in the same traversal makes repeated normalization stable. Unicode-escaped examples `N\u00B7m` and `Pa\u00B7s` retain the dot;
 a whitespace-delimited topic separator receives ordinary punctuation. The same
 rule applies across text-fragment boundaries and after HTML entity decoding.
-This prevents a presentation cleanup from changing the field's unit. Ambiguous
-technical notation receives source-owner judgment rather than character deletion.
+This preserves the field's unit during a presentation cleanup. Ambiguous
+technical notation receives source-owner judgment and remains unchanged until
+that judgment supplies an approved equivalent.
 
 A composed vocabulary rule checks interaction as well as isolated substitutions.
 For example, `"A\u2192\u00B7 B"` becomes `A to: B` in one normalization, while
@@ -195,8 +197,7 @@ For example, `"A\u2192\u00B7 B"` becomes `A to: B` in one normalization, while
 already normalized text establish separate properties; a receiving API names
 which properties it promises. Fragment splits, newly introduced whitespace,
 protected units and bounded output each receive a fitting fixture. A finite
-composition grammar can exercise these interactions without repeated repair
-passes or an unbounded convergence loop in production.
+composition grammar exercises these interactions in one bounded production pass.
 
 ## Native identity before positional convenience
 
@@ -205,7 +206,7 @@ identifying native header appears in a later column.
 
 **Rule:** derive row identity from `th scope="row"` wherever it occurs. Preserve
 multiple scoped headers in source order when they jointly identify a record.
-Use positional fallback only where the source supplies no native row header;
+When position is the row's only declared identity, use positional fallback;
 retain an explicitly blank header as blank and retain zero as a value. Complex
 spans and grouped headers keep an explicit semantic owner and mapping.
 
@@ -281,7 +282,8 @@ the full authored identity. Multiple row headers keep their separate components.
 
 Retain technical references in supplemental context when a named consumer uses
 them to distinguish actual bindings or records. Record that receiving purpose;
-source syntax alone supplies neither a parser contract nor evidence of ATS value.
+a declared parser contract and receiver observation establish the corresponding
+syntax and ATS claims.
 Distinguish JavaScript interpolation syntax in source from the resulting DOM
 attribute. Human-readable labels, native relationships, exact field values and
 stable machine identities have related but separate jobs.

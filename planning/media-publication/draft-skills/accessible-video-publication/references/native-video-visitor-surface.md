@@ -67,16 +67,17 @@ The poster record includes:
 ## Write a concise visual sequence
 
 Classify the streams first. A zero-audio probe plus human review establishes a
-silent source. Record that standing directly. The page then carries a visible
-ordered sequence of meaningful changes and leaves the captions track absent.
+video-only source. Record the exact zero-audio standing in the publication
+manifest. The page then carries a visible ordered sequence of meaningful
+changes; captions serve sources whose audio conveys speech or meaningful sound.
 An audio-bearing source instead receives reviewed captions for speech and
 meaningful sound plus a descriptive transcript that carries consequential
 visual information.
 
-For a silent sequence, write three to seven ordered steps. Each step names the
+For a video-only sequence, write three to seven ordered steps. Each step names the
 actor or object, the action or state change, and the consequence a visitor
 needs to understand. Include interface text only when it changes meaning.
-Preserve the distinction among a contemporary proxy, source-era interface,
+Preserve the distinction among a contemporary proxy, historical interface,
 reconstruction, demonstration, and production record. The sequence describes
 the useful progression rather than every cursor move, animation, or frame.
 
@@ -88,7 +89,7 @@ A compact pattern is:
 4. A shared or downstream view carries the handoff or consequence.
 5. The closing state shows the resulting boundary, decision, or recovery path.
 
-Use a visible heading such as **Visual description · silent walkthrough** and
+Use the visible heading **Visual description** and
 place the sequence in a stable, separately navigable element. Keep the video's
 `aria-describedby` relationship concise by pointing it to standing or caption
 text. The structured sequence may be associated through `aria-details`, while
@@ -101,7 +102,7 @@ needs synchronized access to essential time-based meaning during playback.
 Name the exact insertion coordinate before editing—for example, after an
 At-a-Glance section and before architecture navigation. Read the complete page
 and inspect generated headings, rails, catalogs, and figure numbering. A video
-walkthrough can carry an unnumbered identity when joining an established
+demonstration can carry an unnumbered identity when joining an established
 numbered figure series would otherwise shift every later reference.
 
 The native progressive receiver ordinarily includes:
@@ -114,7 +115,7 @@ The native progressive receiver ordinarily includes:
   width="1920"
   height="1080"
   poster="/<media-prefix>/<semantic-id>/<asset-version>/poster.webp"
-  aria-label="Example working-proxy walkthrough"
+  aria-label="Example interface demonstration"
   aria-describedby="video-standing video-caption"
   aria-details="video-sequence"
 >
@@ -122,7 +123,7 @@ The native progressive receiver ordinarily includes:
     src="/<media-prefix>/<semantic-id>/<asset-version>/movie.mp4"
     type="video/mp4"
   >
-  <p><a href="/<media-prefix>/<semantic-id>/<asset-version>/movie.mp4">Open the MP4 directly</a>.</p>
+  <p><a href="/<media-prefix>/<semantic-id>/<asset-version>/movie.mp4">Open movie video file (MP4)</a>.</p>
 </video>
 ```
 
