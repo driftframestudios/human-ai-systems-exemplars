@@ -151,7 +151,7 @@
         --graph-core: #8a8f2a;
         --graph-forecast: #7c3d9b;
         /* Source accents carry fills, strokes, and dots; companion inks keep
-           small status text readable without changing that visual grammar. */
+           small status text readable while preserving that visual grammar. */
         --graph-dark-ink: #07101d;
         --graph-degraded-ink: #725800;
         --graph-coral-ink: #98261c;
@@ -417,7 +417,7 @@
         <div class="content content--editorial">
           <section id="case-brief" data-content-form="case-brief" aria-labelledby="at-a-glance-title">
             <h2 id="at-a-glance-title" class="txt-h2">At-a-Glance</h2>
-            <p>At BzzAgent, dunnhumby&rsquo;s social-marketing and advocacy company within Tesco, I helped move a review platform from response volume toward trusted relationships and inspectable campaign decisions. I returned after acquisition to diagnose a navigation failure rooted in unresolved ownership between two application and schema-management paths.</p>
+            <p>At BzzAgent, dunnhumby&rsquo;s social-marketing and advocacy company within Tesco, I helped move a review platform from response volume toward trusted relationships and inspectable campaign decisions. I returned after acquisition to diagnose a navigation failure rooted in divided ownership between two application and schema-management paths.</p>
             <dl class="debrief-at-glance">
               <div>
                 <dt>Situation and stakes</dt>
@@ -556,10 +556,11 @@
             <aside class="interpretive-aside" aria-labelledby="regulated-boundary-title">
               <h4 id="regulated-boundary-title" class="txt-h4">The safety boundary stays explicit</h4>
               <p>
-                Participants could submit product experiences that might require safety follow-up. Those reports became
-                potential safety reports rather than validated adverse-reaction cases. The accountable sponsor,
-                manufacturer, or marketing-authorization holder retained case validation, follow-up, coding, reportability
-                assessment, and regulatory submission. Product, privacy, security, safety, and domain specialists designed
+                Participants could submit product experiences that might require safety follow-up. At intake, the platform
+                treated those submissions as potential safety reports for validation. The accountable sponsor, manufacturer,
+                or marketing-authorization holder determined whether a report met the criteria for a valid individual case
+                safety report and retained follow-up, coding, reportability assessment, and regulatory submission. Product,
+                privacy, security, safety, and domain specialists designed
                 the lawful processing, retention, regional handling, and handoff behavior.<sup><a href="#source-ema-gvp-module-vi" aria-label="Source: EMA good pharmacovigilance practices Module VI">source</a></sup>
                 <sup><a href="#source-ich-e2b-r3" aria-label="Source: ICH E2B R3 individual case safety report specification">source</a></sup>
               </p>
@@ -684,7 +685,7 @@
             <ol class="clean-list numbered-moves">
               <li><strong>Direct partnership with the mid-tier voice.</strong> I helped establish direct working relationships in which contributors received the product, schedule, brand guidance, and on-site support needed for each campaign. Targeted messages named the contributor and channel, recognizing each person&rsquo;s established work.</li>
               <li><strong>Three tiers of voice.</strong> Direct partnership, survey participation, and bulk response received different compensation, support, submission methods, and review criteria.</li>
-              <li><strong>A guardian layer for roster legitimacy.</strong> Timestamped transition flags sent specific profile histories to reviewers; reviewers decided what each change meant. It was a discriminator, not a guillotine.</li>
+              <li><strong>A focused review layer for roster legitimacy.</strong> Timestamped transition flags narrowed a large roster to specific profile histories; reviewers interpreted each change, made the decision, and preserved an appeal route.</li>
               <li><strong>Privacy and disclosure practice strengthened client trust.</strong> Purpose-specific processing, disclosure support, and regional handling became part of the product relationship.</li>
             </ol>
             <p>
@@ -788,7 +789,7 @@
                   referrerpolicy="no-referrer"
                   loading="lazy"></iframe>
                 <figcaption class="table-note">
-                  Choose a population and comparison view to inspect role context, service handoffs, and unresolved questions.
+                  Choose a population and comparison view to inspect role context, service handoffs, and open questions.
                   The taller viewing frame carries the first Role context cards into the initial view; the complete
                   role–context matrix remains available inside the prototype.
                 </figcaption>
@@ -838,7 +839,7 @@
                     </tr>
                     <tr data-label="What changed, how I know, and what remained: Total logins fell while activity per session increased">
                       <th scope="row" data-label="Observed direction">Total logins fell while activity per session increased</th>
-                      <td data-label="How I know">Contemporaneous notes from system telemetry record both directions; the surviving notes do not preserve the activity-event definition.</td>
+                      <td data-label="How I know">Contemporaneous notes from system telemetry record both directions; reconstructing the measure requires the original activity-event definition.</td>
                       <td data-label="Organizational meaning">Each session carried more recorded activity; page- or path-level events and cohort data would help distinguish interface effects from campaign or population changes.</td>
                       <td data-label="Condition that remained">Later implementations still had to preserve household and campaign context.</td>
                     </tr>
@@ -874,7 +875,7 @@
               JPA with Hibernate as the persistence provider and Flyway for schema migrations on the US database, React and
               React Native clients, Redis-backed browser-session state, stateless JWT authentication for service calls,
               a large constellation of cron jobs, and a single in-house batch-compute machine called Thunderball. Thunderball
-              was a physical box under a colleague&rsquo;s desk; nobody on the team remembered why it had that name. It scored
+              was a physical box under a colleague&rsquo;s desk; the reason for the name had faded from team memory. It scored
               transitions in batches and returned ambiguous cases to the review queue. The UK database remained Symfony-only;
               Symfony/Doctrine and Spring Data JPA/Hibernate both wrote the US database. Doctrine&rsquo;s schema diff and Flyway&rsquo;s
               migration history then carried competing accounts of its structure.
@@ -895,20 +896,21 @@
             </ul>
 
             <p>
-              I argued against letting Doctrine-driven schema updates from the Symfony application and Flyway migrations
-              shipped with the Spring services alter the same US schema. I lost that architecture argument. Doctrine
-              generated changes by comparing entity mappings with the live schema; Flyway applied ordered migrations
-              recorded in its schema-history table. With both paths able to write, each release required manual
-              reconciliation, and documentation could not reliably prevent drift. The planned phased migration began to
+              I argued for one authoritative schema-change mechanism for the US database. I lost that architecture argument,
+              and the organization kept both paths active. Doctrine generated changes by comparing entity mappings with the
+              live schema; Flyway applied ordered migrations recorded in its schema-history table. Each release therefore
+              depended on manual reconciliation to align entity mappings, live schema, and migration history. Documentation
+              captured intent; the nightly comparison exposed divergence among them. The planned phased migration began to
               feel closer to a spiral off a cliff.<sup><a href="#source-doctrine-schema-tool" aria-label="Source: Doctrine ORM schema tooling">source</a></sup>
               <sup><a href="#source-flyway-schema-history" aria-label="Source: Flyway schema history table">source</a></sup>
             </p>
             <p>
-              The deadline changed the emotional temperature: GDPR was the foreground, and leadership understood failure as
-              a threat to the UK market—borderline panic and, by borderline panic, pure panic. During the data inventory,
+              The deadline changed the emotional temperature: GDPR was the foreground, and leadership saw timely readiness
+              as a condition of continued UK market access—borderline panic and, by borderline panic, pure panic. During the data inventory,
               I found a legacy Facebook authorization whose requested social-graph permissions exceeded the product&rsquo;s
               declared purpose. My contemporaneous review recorded location information beyond the participant&rsquo;s own
-              profile; the surviving account does not establish the exact API version or permission path. The March 2018
+              profile and established the purpose mismatch. Identifying the exact API version and permission path would
+              require the original authorization record. The March 2018
               Cambridge Analytica revelations changed how those cheap permissions were understood;
               the useful target became purpose-specific collection and a traceable decision about every regional data flow.
             </p>
@@ -924,7 +926,7 @@
               Figure 6 is a 2026 technical reconstruction. The historical account supplies the regional databases,
               Doctrine/Flyway ownership conflict, cron backlog, batch scoring, phased migration, and navigation failure.
               Kafka, Snowflake, Neo4j, Prophet, the retrieval assistant, MedDRA coding, and E2B (R3) export are present-day
-              proxy choices that make the same responsibilities and failure modes inspectable. Working, Degraded, and
+              proxy choices that make the same responsibilities, strain points, and recovery needs inspectable. Working, Degraded, and
               Breaking describe capability availability within the scenario; validation, assurance, and technology maturity
               require their own evidence.
             </p>
@@ -976,26 +978,26 @@
                   <p>This text alternative lists every node and directed connection independently of the interactive graph. Each entry names the implementation, state, and practical consequence in both comparison states.</p>
                   <div class="wtb-system-graph__reading-columns">
                     <section aria-labelledby="wtb-reading-sources"><h5 id="wtb-reading-sources">Data sources</h5><ul>
-                      <li><strong>Member accounts.</strong> Symfony PHP monolith — Symfony 3.4 · Doctrine · MySQL; Working; Single users table; phone values are not normalized or verified for account linking. Partial Spring Boot migration — Symfony 3.4 · MySQL (system of record); Degraded; Still owned by Symfony; Spring reads through a sync job.</li>
-                      <li><strong>Device &amp; IP signals.</strong> Symfony PHP monolith — Apache access logs; Breaking; Raw logs exist without durable account association and rotate after 14 days. Partial Spring Boot migration — Spring Boot collector · Kafka; Working; Fingerprint events streamed per session.</li>
+                      <li><strong>Member accounts.</strong> Symfony PHP monolith — Symfony 3.4 · Doctrine · MySQL; Working; Single users table; account linking receives raw, user-submitted phone values. Partial Spring Boot migration — Symfony 3.4 · MySQL (system of record); Degraded; Still owned by Symfony; Spring reads through a sync job.</li>
+                      <li><strong>Device &amp; IP signals.</strong> Symfony PHP monolith — Apache access logs; Breaking; Raw logs rotate after 14 days and remain separate from durable account identities. Partial Spring Boot migration — Spring Boot collector · Kafka; Working; Fingerprint events streamed per session.</li>
                       <li><strong>Shipping addresses.</strong> Symfony PHP monolith — MySQL free-text fields; Degraded; Duplicates missed: “Apt 4” vs “#4”. Partial Spring Boot migration — Address service · postal normalization; Working; Normalized addresses generate candidate household links; shared addresses still require contextual review.</li>
-                      <li><strong>Household profile.</strong> Symfony PHP monolith — Symfony forms · EAV tables; Degraded; This implementation retains current values only; updates replace prior values and leave no change log. Partial Spring Boot migration — Scheduled MySQL-to-PostgreSQL synchronization; Breaking; Spring can receive household changes up to 24 hours late.</li>
+                      <li><strong>Household profile.</strong> Symfony PHP monolith — Symfony forms · EAV tables; Degraded; Updates overwrite prior values; the current value is the sole retained state. Partial Spring Boot migration — Scheduled MySQL-to-PostgreSQL synchronization; Breaking; Spring can receive household changes up to 24 hours late.</li>
                       <li><strong>Receipt images.</strong> Symfony PHP monolith — Synchronous OCR call in controller; Breaking; Requests time out at 30 s; uploads fail silently. Partial Spring Boot migration — Spring receipt service · async OCR; Working; Queued OCR with image hash for reuse detection.</li>
-                      <li><strong>Surveys &amp; reviews.</strong> Symfony PHP monolith — Symfony bundle · MySQL; Working; Stable, but answers not linked to campaigns. Partial Spring Boot migration — Symfony bundle · MySQL; Working; Not yet migrated.</li>
+                      <li><strong>Surveys &amp; reviews.</strong> Symfony PHP monolith — Symfony bundle · MySQL; Working; Answers persist as stable records separate from campaign context. Partial Spring Boot migration — Symfony bundle · MySQL; Working; Symfony continues to carry this capability.</li>
                     </ul></section>
                     <section aria-labelledby="wtb-reading-services"><h5 id="wtb-reading-services">Services</h5><ul>
-                      <li><strong>Auth &amp; sessions.</strong> Symfony PHP monolith — FOSUserBundle; Working; Email + password only. Partial Spring Boot migration — Spring Security + Symfony session bridge; Degraded; Two session stores; logouts don't propagate.</li>
+                      <li><strong>Auth &amp; sessions.</strong> Symfony PHP monolith — FOSUserBundle; Working; Email and password are the sole sign-in method. Partial Spring Boot migration — Spring Security + Symfony session bridge; Degraded; A logout ends one session while its counterpart remains active.</li>
                       <li><strong>Campaign management.</strong> Symfony PHP monolith — Symfony admin (SonataAdmin); Working; Criteria entered as free text per campaign. Partial Spring Boot migration — Symfony admin (SonataAdmin); Working; Unchanged.</li>
                       <li><strong>Eligibility rules.</strong> Symfony PHP monolith — SQL queries in cron; Degraded; Profile edits take effect in the next nightly eligibility run. Partial Spring Boot migration — Spring rules engine (Drools); Degraded; Configured rules execute as written, while stale household inputs still yield stale decisions.</li>
-                      <li><strong>Kit fulfillment.</strong> Symfony PHP monolith — CSV export to 3PL via SFTP; Degraded; Holds can't be applied after export. Partial Spring Boot migration — CSV export to 3PL via SFTP; Degraded; Holds from risk scoring arrive after the export window.</li>
-                      <li><strong>Adverse event intake.</strong> Symfony PHP monolith — None (mixed into reviews); Breaking; No structured intake; reports buried in reviews. Partial Spring Boot migration — Spring AE service · MedDRA coding; Working; Proxy service target: structured reports reach brand safety within 24 hours.</li>
-                      <li><strong>Member web front end.</strong> Symfony PHP monolith — Twig + jQuery 1.x; Breaking; Desktop menu script fails; members use footer links. Partial Spring Boot migration — Twig + jQuery 1.x (React assistant embedded); Degraded; Assistant works; legacy menu still broken.</li>
+                      <li><strong>Kit fulfillment.</strong> Symfony PHP monolith — CSV export to 3PL via SFTP; Degraded; The exported fulfillment list stays active when later holds arrive. Partial Spring Boot migration — CSV export to 3PL via SFTP; Degraded; Holds from risk scoring arrive after the export window.</li>
+                      <li><strong>Adverse event intake.</strong> Symfony PHP monolith — Reviews (mixed product and safety content); Breaking; Potential safety reports entered as review prose and required manual discovery. Partial Spring Boot migration — Spring AE service · MedDRA coding; Working; Proxy service target: structured reports reach brand safety within 24 hours.</li>
+                      <li><strong>Member web front end.</strong> Symfony PHP monolith — Twig + jQuery 1.x; Breaking; Desktop navigation disappears intermittently; members recover through footer links. Partial Spring Boot migration — Twig + jQuery 1.x (React assistant embedded); Degraded; Assistant works; legacy navigation remains intermittent.</li>
                     </ul></section>
                     <section aria-labelledby="wtb-reading-models"><h5 id="wtb-reading-models">Graph and models</h5><ul>
                       <li><strong>Identity graph.</strong> Symfony PHP monolith — Weekly spreadsheet review; Breaking; Links found after kits ship. Partial Spring Boot migration — Neo4j · entity resolution; Working; Device, address, receipt, and verified-phone evidence generates candidate account relationships for review.</li>
-                      <li><strong>Risk scoring.</strong> Symfony PHP monolith — Manual flags; Breaking; No score. Partial Spring Boot migration — Spring service · gradient-boosted model; Degraded; A low-latency triage score still relies on potentially stale household features.</li>
-                      <li><strong>Profile change monitor.</strong> Symfony PHP monolith — Not available; Breaking; No history to compare against. Partial Spring Boot migration — Kafka Streams; Degraded; Misses edits written only to MySQL.</li>
-                      <li><strong>Data warehouse.</strong> Symfony PHP monolith — Nightly MySQL-to-Redshift batch extract and load; Degraded; Fails when the batch exceeds its window. Partial Spring Boot migration — Streaming pipeline to Snowflake plus nightly batch reconciliation; Degraded; Two pipelines disagree on member counts.</li>
+                      <li><strong>Risk scoring.</strong> Symfony PHP monolith — Manual flags; Breaking; Reviewers use manual flags as the risk indicator. Partial Spring Boot migration — Spring service · gradient-boosted model; Degraded; A low-latency triage score still relies on potentially stale household features.</li>
+                      <li><strong>Profile change monitor.</strong> Symfony PHP monolith — Current-state profile store; Breaking; Each review begins from one current-state snapshot. Partial Spring Boot migration — Kafka Streams; Degraded; Kafka Streams receives stream events; MySQL-only edits remain outside its input.</li>
+                      <li><strong>Data warehouse.</strong> Symfony PHP monolith — Nightly MySQL-to-Redshift batch extract and load; Degraded; Oversized batches overrun the available window. Partial Spring Boot migration — Streaming pipeline to Snowflake plus nightly batch reconciliation; Degraded; Two pipelines disagree on member counts.</li>
                       <li><strong>Prophet forecasting.</strong> Symfony PHP monolith — Python cron on CSV export; Degraded; Forecasts include duplicate accounts as real demand. Partial Spring Boot migration — Python service reading Snowflake; Degraded; Better inputs; still trained on inflated history.</li>
                     </ul></section>
                     <section aria-labelledby="wtb-reading-consumers"><h5 id="wtb-reading-consumers">Consumers</h5><ul>
@@ -1059,22 +1061,22 @@
                     "selectedNode": "household"
                   },
                   "nodes": [
-                    {"id":"accounts","label":"Member accounts","col":0,"row":0,"dims":["abuse","core"],"stack":{"symfony":"Symfony 3.4 · Doctrine · MySQL","spring":"Symfony 3.4 · MySQL (system of record)"},"status":{"symfony":"ok","spring":"strained"},"note":{"symfony":"Single users table; phone values are not normalized or verified for account linking.","spring":"Still owned by Symfony; Spring reads through a sync job."}},
-                    {"id":"devices","label":"Device & IP signals","col":0,"row":1,"dims":["abuse"],"stack":{"symfony":"Apache access logs","spring":"Spring Boot collector · Kafka"},"status":{"symfony":"broken","spring":"ok"},"note":{"symfony":"Raw logs exist without durable account association and rotate after 14 days.","spring":"Fingerprint events streamed per session."}},
+                    {"id":"accounts","label":"Member accounts","col":0,"row":0,"dims":["abuse","core"],"stack":{"symfony":"Symfony 3.4 · Doctrine · MySQL","spring":"Symfony 3.4 · MySQL (system of record)"},"status":{"symfony":"ok","spring":"strained"},"note":{"symfony":"Single users table; account linking receives raw, user-submitted phone values.","spring":"Still owned by Symfony; Spring reads through a sync job."}},
+                    {"id":"devices","label":"Device & IP signals","col":0,"row":1,"dims":["abuse"],"stack":{"symfony":"Apache access logs","spring":"Spring Boot collector · Kafka"},"status":{"symfony":"broken","spring":"ok"},"note":{"symfony":"Raw logs rotate after 14 days and remain separate from durable account identities.","spring":"Fingerprint events streamed per session."}},
                     {"id":"addresses","label":"Shipping addresses","col":0,"row":2,"dims":["abuse","core","misfit"],"stack":{"symfony":"MySQL free-text fields","spring":"Address service · postal normalization"},"status":{"symfony":"strained","spring":"ok"},"note":{"symfony":"Duplicates missed: “Apt 4” vs “#4”.","spring":"Normalized addresses generate candidate household links; shared addresses still require contextual review."}},
-                    {"id":"household","label":"Household profile","col":0,"row":3,"dims":["misfit"],"stack":{"symfony":"Symfony forms · EAV tables","spring":"Scheduled MySQL-to-PostgreSQL synchronization"},"status":{"symfony":"strained","spring":"broken"},"note":{"symfony":"This implementation retains current values only; updates replace prior values and leave no change log.","spring":"Spring can receive household changes up to 24 hours late."}},
+                    {"id":"household","label":"Household profile","col":0,"row":3,"dims":["misfit"],"stack":{"symfony":"Symfony forms · EAV tables","spring":"Scheduled MySQL-to-PostgreSQL synchronization"},"status":{"symfony":"strained","spring":"broken"},"note":{"symfony":"Updates overwrite prior values; the current value is the sole retained state.","spring":"Spring can receive household changes up to 24 hours late."}},
                     {"id":"receipts","label":"Receipt images","col":0,"row":4,"dims":["abuse","core"],"stack":{"symfony":"Synchronous OCR call in controller","spring":"Spring receipt service · async OCR"},"status":{"symfony":"broken","spring":"ok"},"note":{"symfony":"Requests time out at 30 s; uploads fail silently.","spring":"Queued OCR with image hash for reuse detection."}},
-                    {"id":"surveys","label":"Surveys & reviews","col":0,"row":5,"dims":["misfit","core"],"stack":{"symfony":"Symfony bundle · MySQL","spring":"Symfony bundle · MySQL"},"status":{"symfony":"ok","spring":"ok"},"note":{"symfony":"Stable, but answers not linked to campaigns.","spring":"Not yet migrated."}},
-                    {"id":"auth","label":"Auth & sessions","col":1,"row":0,"dims":["core","abuse"],"stack":{"symfony":"FOSUserBundle","spring":"Spring Security + Symfony session bridge"},"status":{"symfony":"ok","spring":"strained"},"note":{"symfony":"Email + password only.","spring":"Two session stores; logouts don't propagate."}},
+                    {"id":"surveys","label":"Surveys & reviews","col":0,"row":5,"dims":["misfit","core"],"stack":{"symfony":"Symfony bundle · MySQL","spring":"Symfony bundle · MySQL"},"status":{"symfony":"ok","spring":"ok"},"note":{"symfony":"Answers persist as stable records separate from campaign context.","spring":"Symfony continues to carry this capability."}},
+                    {"id":"auth","label":"Auth & sessions","col":1,"row":0,"dims":["core","abuse"],"stack":{"symfony":"FOSUserBundle","spring":"Spring Security + Symfony session bridge"},"status":{"symfony":"ok","spring":"strained"},"note":{"symfony":"Email and password are the sole sign-in method.","spring":"A logout ends one session while its counterpart remains active."}},
                     {"id":"campaigns","label":"Campaign management","col":1,"row":1,"dims":["core","misfit"],"stack":{"symfony":"Symfony admin (SonataAdmin)","spring":"Symfony admin (SonataAdmin)"},"status":{"symfony":"ok","spring":"ok"},"note":{"symfony":"Criteria entered as free text per campaign.","spring":"Unchanged."}},
                     {"id":"eligibility","label":"Eligibility rules","col":1,"row":2,"dims":["misfit"],"stack":{"symfony":"SQL queries in cron","spring":"Spring rules engine (Drools)"},"status":{"symfony":"strained","spring":"strained"},"note":{"symfony":"Profile edits take effect in the next nightly eligibility run.","spring":"Configured rules execute as written, while stale household inputs still yield stale decisions."}},
-                    {"id":"fulfillment","label":"Kit fulfillment","col":1,"row":3,"dims":["core"],"stack":{"symfony":"CSV export to 3PL via SFTP","spring":"CSV export to 3PL via SFTP"},"status":{"symfony":"strained","spring":"strained"},"note":{"symfony":"Holds can't be applied after export.","spring":"Holds from risk scoring arrive after the export window."}},
-                    {"id":"safety","label":"Adverse event intake","col":1,"row":4,"dims":["core"],"stack":{"symfony":"None (mixed into reviews)","spring":"Spring AE service · MedDRA coding"},"status":{"symfony":"broken","spring":"ok"},"note":{"symfony":"No structured intake; reports buried in reviews.","spring":"Proxy service target: structured reports reach brand safety within 24 hours."}},
-                    {"id":"frontend","label":"Member web front end","col":1,"row":5,"dims":["core"],"stack":{"symfony":"Twig + jQuery 1.x","spring":"Twig + jQuery 1.x (React assistant embedded)"},"status":{"symfony":"broken","spring":"strained"},"note":{"symfony":"Desktop menu script fails; members use footer links.","spring":"Assistant works; legacy menu still broken."}},
+                    {"id":"fulfillment","label":"Kit fulfillment","col":1,"row":3,"dims":["core"],"stack":{"symfony":"CSV export to 3PL via SFTP","spring":"CSV export to 3PL via SFTP"},"status":{"symfony":"strained","spring":"strained"},"note":{"symfony":"The exported fulfillment list stays active when later holds arrive.","spring":"Holds from risk scoring arrive after the export window."}},
+                    {"id":"safety","label":"Adverse event intake","col":1,"row":4,"dims":["core"],"stack":{"symfony":"Reviews (mixed product and safety content)","spring":"Spring AE service · MedDRA coding"},"status":{"symfony":"broken","spring":"ok"},"note":{"symfony":"Potential safety reports entered as review prose and required manual discovery.","spring":"Proxy service target: structured reports reach brand safety within 24 hours."}},
+                    {"id":"frontend","label":"Member web front end","col":1,"row":5,"dims":["core"],"stack":{"symfony":"Twig + jQuery 1.x","spring":"Twig + jQuery 1.x (React assistant embedded)"},"status":{"symfony":"broken","spring":"strained"},"note":{"symfony":"Desktop navigation disappears intermittently; members recover through footer links.","spring":"Assistant works; legacy navigation remains intermittent."}},
                     {"id":"graph","label":"Identity graph","col":2,"row":0,"dims":["abuse"],"stack":{"symfony":"Weekly spreadsheet review","spring":"Neo4j · entity resolution"},"status":{"symfony":"broken","spring":"ok"},"note":{"symfony":"Links found after kits ship.","spring":"Device, address, receipt, and verified-phone evidence generates candidate account relationships for review."}},
-                    {"id":"risk","label":"Risk scoring","col":2,"row":1,"dims":["abuse","misfit"],"stack":{"symfony":"Manual flags","spring":"Spring service · gradient-boosted model"},"status":{"symfony":"broken","spring":"strained"},"note":{"symfony":"No score.","spring":"A low-latency triage score still relies on potentially stale household features."}},
-                    {"id":"velocity","label":"Profile change monitor","col":2,"row":2,"dims":["misfit"],"stack":{"symfony":"Not available","spring":"Kafka Streams"},"status":{"symfony":"broken","spring":"strained"},"note":{"symfony":"No history to compare against.","spring":"Misses edits written only to MySQL."}},
-                    {"id":"warehouse","label":"Data warehouse","col":2,"row":3,"dims":["forecast","core"],"stack":{"symfony":"Nightly MySQL-to-Redshift batch extract and load","spring":"Streaming pipeline to Snowflake plus nightly batch reconciliation"},"status":{"symfony":"strained","spring":"strained"},"note":{"symfony":"Fails when the batch exceeds its window.","spring":"Two pipelines disagree on member counts."}},
+                    {"id":"risk","label":"Risk scoring","col":2,"row":1,"dims":["abuse","misfit"],"stack":{"symfony":"Manual flags","spring":"Spring service · gradient-boosted model"},"status":{"symfony":"broken","spring":"strained"},"note":{"symfony":"Reviewers use manual flags as the risk indicator.","spring":"A low-latency triage score still relies on potentially stale household features."}},
+                    {"id":"velocity","label":"Profile change monitor","col":2,"row":2,"dims":["misfit"],"stack":{"symfony":"Current-state profile store","spring":"Kafka Streams"},"status":{"symfony":"broken","spring":"strained"},"note":{"symfony":"Each review begins from one current-state snapshot.","spring":"Kafka Streams receives stream events; MySQL-only edits remain outside its input."}},
+                    {"id":"warehouse","label":"Data warehouse","col":2,"row":3,"dims":["forecast","core"],"stack":{"symfony":"Nightly MySQL-to-Redshift batch extract and load","spring":"Streaming pipeline to Snowflake plus nightly batch reconciliation"},"status":{"symfony":"strained","spring":"strained"},"note":{"symfony":"Oversized batches overrun the available window.","spring":"Two pipelines disagree on member counts."}},
                     {"id":"prophet","label":"Prophet forecasting","col":2,"row":4,"dims":["forecast"],"stack":{"symfony":"Python cron on CSV export","spring":"Python service reading Snowflake"},"status":{"symfony":"strained","spring":"strained"},"note":{"symfony":"Forecasts include duplicate accounts as real demand.","spring":"Better inputs; still trained on inflated history."}},
                     {"id":"assistant","label":"AI assistant","col":3,"row":0,"dims":["core","misfit"],"stack":{"symfony":"Not available","spring":"LLM + retrieval over campaigns & FAQs"},"status":{"symfony":"broken","spring":"ok"},"note":{"symfony":"—","spring":"Shows survey and form cards by member context."}},
                     {"id":"tsqueue","label":"Trust & Safety queue","col":3,"row":1,"dims":["abuse","misfit"],"stack":{"symfony":"Shared inbox","spring":"Case management tool"},"status":{"symfony":"broken","spring":"ok"},"note":{"symfony":"Unstructured email triage.","spring":"Holds, verifications, appeals tracked."}},
@@ -1153,11 +1155,11 @@
             </p>
 
             <figure class="story-visual table-span-all">
-              <img src="../img/plot/who_to_believe_return_map.svg" width="1600" height="1180" loading="lazy" alt="A platform-return map places schema contention, reconciliation, later adapters, a phantom navigation symptom, heatmap evidence, recordings, and email recovery in sequence while marking the exact trigger unresolved.">
+              <img src="../img/plot/who_to_believe_return_map.svg" width="1600" height="1180" loading="lazy" alt="A platform-return map places schema contention, reconciliation, later adapters, a phantom navigation symptom, heatmap evidence, recordings, and email recovery in sequence while marking the exact trigger as an open question.">
               <figcaption class="table-note">
                 The nightly comparison showed engineers and compliance where the two schema-management paths disagreed.
                 People who worked on the system remember the exact post-acquisition trigger differently, but both accounts
-                trace the navigation failure to unresolved cross-stack ownership.
+                locate the underlying risk in divided ownership across the two application stacks.
               </figcaption>
             </figure>
 
@@ -1166,7 +1168,7 @@
               <article aria-labelledby="move-api-title">
                 <p class="implementation-companion__eyebrow">§c.1 · API contract for web and on-location mobile use</p>
                 <h4 id="move-api-title" class="txt-h4">One service contract across web and mobile contexts</h4>
-                <p>I helped define resource boundaries, versioning, pagination, idempotency, token refresh, and offline state so web and mobile clients could share one service contract. Push invitations, receipt scanning, and native video capture could then support on-location work without relying on server-rendered templates.</p>
+                <p>I helped define resource boundaries, versioning, pagination, idempotency, token refresh, and offline state so web and mobile clients could share one service contract. Push invitations, receipt scanning, and native video capture could then support on-location work through API-backed web and native clients.</p>
               </article>
               <article aria-labelledby="move-guardian-title">
                 <p class="implementation-companion__eyebrow">§c.2 · Household-integrity decisioning</p>
@@ -1181,7 +1183,7 @@
                   <strong>Contextual verification</strong>
                   <span>High-consequence protection</span>
                 </div>
-                <p>Login stayed primary and visible; capture actions lived beside the task; verification increased with consequence rather than appearing as ambient burden.</p>
+                <p>Login stayed primary and visible; capture actions lived beside the task; verification scaled with the consequence of each action.</p>
               </article>
               <article aria-labelledby="move-purpose-title">
                 <p class="implementation-companion__eyebrow">§c.4 · Purpose, regional handling, and incident routing</p>
@@ -1279,12 +1281,12 @@
               full navigation should have been; about three consenting recordings showed why.
             </p>
             <p>
-              Surviving accounts preserve two hypotheses rather than a confirmed root cause. One recalls a cross-stack
+              Surviving accounts preserve two plausible hypotheses and leave the exact root cause open. One recalls a cross-stack
               authentication and server-response-composition failure involving Symfony and Spring. Another recalls a
               post-acquisition adapter selecting a deprecated render path for particular request states. Shared-table writes
-              and ORM differences describe background coupling; neither surviving account preserves the request trace,
-              cache key, configuration value, or branch that produced the menu. I therefore treat unresolved ownership as
-              the risk condition and the specific trigger as unknown.
+              and ORM differences describe background coupling. Identifying the specific trigger would require the request
+              trace, cache key, configuration value, or branch that produced the menu. I therefore carry divided ownership
+              as the established risk condition and the trigger as an open question.
             </p>
 
             <section id="cpg-pharma-menu-bottleneck-walkthrough" class="table-span-all" aria-labelledby="cpg-pharma-menu-bottleneck-walkthrough-title">
@@ -1323,9 +1325,9 @@
             <p>
               Marketing saw unusually strong email reopens and click-throughs. Heatmaps, support language, and about three
               diagnostic recordings indicated that at least part of the repeat-open and click activity reflected recovery:
-              people reopened messages because their links reached pages the site navigation did not reliably expose. Email-
-              open telemetry is noisy, so the evidence supports a product-recovery contribution rather than assigning the
-              entire channel metric to one cause. Push notifications bypassed the same failure. The organization had adapted
+              people reopened messages because email links reached pages more reliably than site navigation. Email-open
+              telemetry is noisy, so the evidence supports product recovery as one contributor; estimating its share requires
+              stronger causal design. Push notifications supplied another route around the same failure. The organization had adapted
               around a bug before anyone had named it.
             </p>
 
@@ -1506,7 +1508,7 @@
                       <td data-label="Decision they carry">What must be stabilized, retired, or rebuilt before feature velocity resumes.</td>
                       <td data-label="Work changed">The acquiring team maps the system from its code, scheduled jobs, adapters, and observed data paths.</td>
                       <td data-label="Investment or operating load">Characterization time and deferred feature delivery.</td>
-                      <td data-label="Information that improves the decision">Observed runtime behavior, data and control paths, and named unresolved ownership conflicts.</td>
+                      <td data-label="Information that improves the decision">Observed runtime behavior, data and control paths, and named ownership conflicts.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -1545,9 +1547,10 @@
             <p class="table-note">
               I describe historical implementation details from direct experience; contemporaneous project notes carry the
               rounded telemetry outcomes, and estimates remain labeled where they appear. The post-acquisition navigation
-              return preserves two convergent accounts because the exact trigger remains unresolved. I use the information-
-              foraging and Verbalized Sampling papers as present-day interpretive lenses; they do not establish facts about
-              the historical system. Figure 6 combines observed historical constraints with named 2026 proxy choices.
+              return preserves two convergent accounts; identifying the exact trigger would require the original request
+              trace. I use the information-foraging and Verbalized Sampling papers as present-day interpretive lenses.
+              Direct experience, contemporaneous notes, and period sources establish the historical account. Figure 6
+              combines observed historical constraints with named 2026 proxy choices.
             </p>
           </section>
         </div>

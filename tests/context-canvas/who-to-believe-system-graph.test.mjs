@@ -18,7 +18,7 @@ const pagePath = resolve(
   repositoryRoot,
   "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
 );
-const reviewedContractSha256 = "55eaccf5386f2ca5ac38f97fc028b154ab6cf5de465e3ce4698d4af1b4e5b806";
+const reviewedContractSha256 = "0fede43c88eed960a4e2149f06817c0f835300669ec2a04a180d6950516f9899";
 
 async function sourceContract() {
   const html = await readFile(pagePath, "utf8");
