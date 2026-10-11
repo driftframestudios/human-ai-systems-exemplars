@@ -104,6 +104,14 @@
     .route-pill { border-radius: 5px; padding: 8px; white-space: normal; align-items: flex-start; }
     .prob-pill { font-weight: 700; background: #efe7d6; }
     .family-pill { max-width: 100%; background: #edf1ec; white-space: normal; overflow-wrap: anywhere; }
+    @media (max-width: 520px) {
+      .pill, .status-pill, .route-pill, .prob-pill, .family-pill {
+        max-width: 100%;
+        min-width: 0;
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+    }
     .status-verified { background: #e4efe5; border-color: #b8d2bd; }
     .status-source_supported { background: #e5f0ec; border-color: #b7d5c8; }
     .status-source_specific { background: #e2edf4; border-color: #b6ccdb; }
