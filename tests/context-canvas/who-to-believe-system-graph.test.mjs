@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
@@ -6,7 +7,7 @@ import test from "node:test";
 import graphApi from "../../context-canvas-project-surface/context-canvas/who-to-believe-system-graph.js";
 
 const {
-  findShortestRoute,
+  countStatuses,
   initialSystemGraphState,
   transitionSystemGraph,
   validateSystemGraphContract,
@@ -17,6 +18,7 @@ const pagePath = resolve(
   repositoryRoot,
   "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
 );
+const sourceDerivedContractSha256 = "35b2b9722b6b9ce4ae36da8e08d470f2ced9736b7e7cc83be291239cd51b55bf";
 
 async function sourceContract() {
   const html = await readFile(pagePath, "utf8");
@@ -25,13 +27,55 @@ async function sourceContract() {
   return JSON.parse(match[1]);
 }
 
-test("the accepted system graph admits one finite contract", async () => {
-  const admission = validateSystemGraphContract(await sourceContract());
+function normalizeSourceDerivedContract(contract) {
+  // The digest owns source-derived meaning; schema version and edge IDs remain
+  // local carrier metadata governed by admission and identity tests.
+  return {
+    columns: contract.columns,
+    dimensions: contract.dimensions.map(({ id, label, color }) => ({ id, label, color })),
+    nodes: contract.nodes.map(({ id, label, col, row, dims, stack, status, note }) => ({
+      id,
+      label,
+      col,
+      row,
+      dims,
+      stack,
+      status,
+      note,
+    })),
+    edges: contract.edges.map(({ from, to, label = "", status }) => ({ from, to, label, status })),
+    defaults: contract.defaults,
+  };
+}
+
+test("the accepted system graph admits and freezes one finite contract", async () => {
+  const fixture = await sourceContract();
+  const admission = validateSystemGraphContract(fixture);
   assert.equal(admission.ok, true, admission.errors.join("\n"));
   assert.equal(admission.model.nodes.length, 22);
   assert.equal(admission.model.edges.length, 26);
   assert.equal(Object.isFrozen(admission.model), true);
+  assert.equal(Object.isFrozen(admission.model.dimensions[0]), true);
+  assert.deepEqual(admission.model.dimensions[0], {
+    id: "abuse",
+    label: "Multi-account abuse",
+    color: "#f45d4c",
+  });
   assert.equal(Object.isFrozen(admission.model.nodes[0].status), true);
+  assert.equal(Object.isFrozen(admission.model.edges[0].status), true);
+  assert.deepEqual(admission.model.defaults, {
+    mode: "symfony",
+    dimension: "all",
+    selectedNode: "household",
+  });
+  assert.equal(Object.isFrozen(admission.model.defaults), true);
+  assert.equal("routes" in admission.model.defaults, false, "route defaults stay outside the original graph state model");
+});
+
+test("the accepted contract retains the exact source-derived graph data and topology", async () => {
+  const normalized = normalizeSourceDerivedContract(await sourceContract());
+  const digest = createHash("sha256").update(JSON.stringify(normalized)).digest("hex");
+  assert.equal(digest, sourceDerivedContractSha256);
 });
 
 test("contract admission reports materially related faults together", async () => {
@@ -39,8 +83,10 @@ test("contract admission reports materially related faults together", async () =
   fixture.nodes[1].id = fixture.nodes[0].id;
   fixture.nodes[2].status.spring = "mysterious";
   fixture.nodes[3].dims.push("unknown-concern");
+  fixture.dimensions[0].color = "url(javascript:alert(1))";
   fixture.edges[0].to = "missing-node";
-  fixture.defaults.routes.all.end = "missing-node";
+  fixture.nodes.find(node => node.id === "household").id = "household-renamed";
+  fixture.defaults.selectedNode = "household-renamed";
 
   const admission = validateSystemGraphContract(fixture);
   assert.equal(admission.ok, false);
@@ -48,98 +94,140 @@ test("contract admission reports materially related faults together", async () =
   assert.match(admission.errors.join("\n"), /duplicates accounts/u);
   assert.match(admission.errors.join("\n"), /outside the declared vocabulary/u);
   assert.match(admission.errors.join("\n"), /unknown concern/u);
+  assert.match(admission.errors.join("\n"), /six-digit hexadecimal color/u);
   assert.match(admission.errors.join("\n"), /unknown node missing-node/u);
-  assert.match(admission.errors.join("\n"), /defaults\.routes\.all/u);
+  assert.match(admission.errors.join("\n"), /initial household selection/u);
+  assert.match(admission.errors.join("\n"), /defaults\.selectedNode must be household/u);
 });
 
-test("declared concern routes remain deterministic and directed", async () => {
-  const { model } = validateSystemGraphContract(await sourceContract());
-
-  assert.deepEqual(findShortestRoute(model, "accounts", "tsqueue", "abuse"), {
-    nodes: ["accounts", "graph", "risk", "tsqueue"],
-    edges: ["accounts-graph", "graph-risk", "risk-tsqueue"],
-  });
-  assert.deepEqual(findShortestRoute(model, "household", "assistant", "misfit"), {
-    nodes: ["household", "eligibility", "assistant"],
-    edges: ["household-eligibility", "eligibility-assistant"],
-  });
-  assert.deepEqual(findShortestRoute(model, "addresses", "campaignops", "core"), {
-    nodes: ["addresses", "fulfillment", "campaignops"],
-    edges: ["addresses-fulfillment", "fulfillment-campaignops"],
-  });
-  assert.deepEqual(findShortestRoute(model, "warehouse", "brand", "forecast"), {
-    nodes: ["warehouse", "prophet", "brand"],
-    edges: ["warehouse-prophet", "prophet-brand"],
-  });
-  assert.equal(findShortestRoute(model, "tsqueue", "accounts", "abuse"), null);
-  assert.equal(findShortestRoute(model, "accounts", "brand", "forecast"), null);
-});
-
-test("contract admission requires reachable default routes", async () => {
+test("contract admission keeps every node inside the fixed graph viewBox", async () => {
   const fixture = await sourceContract();
-  fixture.edges = fixture.edges.filter(edge => edge.id !== "prophet-brand");
+  fixture.nodes[0].row = 6;
 
   const admission = validateSystemGraphContract(fixture);
   assert.equal(admission.ok, false);
-  assert.match(admission.errors.join("\n"), /defaults\.routes\.forecast.*reachable directed route/u);
+  assert.match(admission.errors.join("\n"), /row must be an integer from 0 through 5/u);
 });
 
-test("declared edge order resolves equal-length routes", async () => {
+test("contract admission rejects duplicate directed relationships", async () => {
   const fixture = await sourceContract();
-  fixture.edges.push(
-    { id: "accounts-risk", from: "accounts", to: "risk", status: { symfony: "broken", spring: "strained" } },
-    { id: "graph-tsqueue", from: "graph", to: "tsqueue", status: { symfony: "broken", spring: "ok" } },
-  );
-  const { model } = validateSystemGraphContract(fixture);
-  assert.deepEqual(findShortestRoute(model, "accounts", "tsqueue", "abuse"), {
-    nodes: ["accounts", "graph", "tsqueue"],
-    edges: ["accounts-graph", "graph-tsqueue"],
+  fixture.edges.push({
+    ...fixture.edges[0],
+    id: "accounts-auth-copy",
+    status: { ...fixture.edges[0].status },
+  });
+
+  const admission = validateSystemGraphContract(fixture);
+  assert.equal(admission.ok, false);
+  assert.match(admission.errors.join("\n"), /duplicates directed relationship accounts → auth/u);
+});
+
+test("initial state reproduces the original Review Routing graph", async () => {
+  const { model } = validateSystemGraphContract(await sourceContract());
+  assert.deepEqual(initialSystemGraphState(model), {
+    mode: "symfony",
+    dimension: "all",
+    selectedNodeId: "household",
+    announcement: "The system graph is ready. Household profile is selected.",
   });
 });
 
-test("the closed transition vocabulary preserves one coherent state", async () => {
+test("the finite transition vocabulary changes only mode, dimension, or selection", async () => {
   const { model } = validateSystemGraphContract(await sourceContract());
   const initial = initialSystemGraphState(model);
-  const unchanged = transitionSystemGraph(model, initial, { type: "UNKNOWN" });
-  assert.equal(unchanged, initial);
 
-  const forecast = transitionSystemGraph(model, initial, {
+  assert.equal(transitionSystemGraph(model, initial, { type: "UNKNOWN" }), initial);
+  assert.equal(transitionSystemGraph(model, initial, { type: "SET_MODE", value: "symfony" }), initial);
+  assert.equal(transitionSystemGraph(model, initial, { type: "SET_DIMENSION", value: "unknown" }), initial);
+  assert.equal(transitionSystemGraph(model, initial, { type: "SELECT_NODE", value: "missing" }), initial);
+
+  const spring = transitionSystemGraph(model, initial, {
+    type: "SET_MODE",
+    value: "spring",
+    label: "Partial Spring Boot migration",
+  });
+  assert.deepEqual(spring, {
+    mode: "spring",
+    dimension: "all",
+    selectedNodeId: "household",
+    announcement: "Architecture state changed to Partial Spring Boot migration.",
+  });
+
+  const abuse = transitionSystemGraph(model, spring, {
     type: "SET_DIMENSION",
-    value: "forecast",
-    label: "Forecasting",
+    value: "abuse",
+    label: "Multi-account abuse",
   });
-  assert.equal(forecast.startId, "warehouse");
-  assert.equal(forecast.endId, "brand");
-  assert.deepEqual(forecast.route.nodes, ["warehouse", "prophet", "brand"]);
+  assert.equal(abuse.dimension, "abuse");
+  assert.equal(abuse.selectedNodeId, "household", "dimension filters preserve the original selection model");
+  assert.equal(abuse.announcement, "Concern changed to Multi-account abuse.");
 
-  const next = transitionSystemGraph(model, forecast, {
-    type: "STEP_ROUTE",
-    delta: 1,
-    label: "Prophet forecasting",
+  const selected = transitionSystemGraph(model, abuse, {
+    type: "SELECT_NODE",
+    value: "risk",
+    label: "Risk scoring",
   });
-  assert.equal(next.routeIndex, 1);
-  assert.equal(next.selectedNodeId, "prophet");
+  assert.equal(selected.selectedNodeId, "risk");
+  assert.equal(selected.announcement, "Risk scoring selected.");
+  assert.equal(Object.isFrozen(selected), true);
 
-  const reset = transitionSystemGraph(model, next, { type: "RESET" });
+  const reset = transitionSystemGraph(model, selected, { type: "RESET" });
   assert.deepEqual(reset, initial);
+  assert.equal(transitionSystemGraph(model, initial, { type: "RESET" }), initial);
+});
 
-  const reachable = transitionSystemGraph(model, initial, {
-    type: "TRACE_ROUTE",
-    startLabel: "Member accounts",
-    endLabel: "Trust & Safety queue",
-  });
-  assert.match(reachable.announcement, /Route traced from Member accounts/u);
+test("transition announcements retain canonical admitted labels", async () => {
+  const { model } = validateSystemGraphContract(await sourceContract());
+  const initial = initialSystemGraphState(model);
 
-  const unavailableStart = transitionSystemGraph(model, initial, { type: "SET_START", value: "pv" });
-  const unavailableEnd = transitionSystemGraph(model, unavailableStart, { type: "SET_END", value: "accounts" });
-  const unavailable = transitionSystemGraph(model, unavailableEnd, {
-    type: "TRACE_ROUTE",
-    startLabel: "Brand pharmacovigilance",
-    endLabel: "Member accounts",
+  const spring = transitionSystemGraph(model, initial, {
+    type: "SET_MODE",
+    value: "spring",
+    label: "Unrelated architecture label",
   });
-  assert.equal(unavailable.route, null);
-  assert.match(unavailable.announcement, /Choose another endpoint or concern/u);
-  assert.match(unavailable.announcement, /no declared directed route from Brand pharmacovigilance to Member accounts/u);
+  assert.equal(spring.announcement, "Architecture state changed to Partial Spring Boot migration.");
+
+  const abuse = transitionSystemGraph(model, spring, {
+    type: "SET_DIMENSION",
+    value: "abuse",
+    label: "Unrelated concern label",
+  });
+  assert.equal(abuse.announcement, "Concern changed to Multi-account abuse.");
+
+  const selected = transitionSystemGraph(model, abuse, {
+    type: "SELECT_NODE",
+    value: "risk",
+    label: "Unrelated node label",
+  });
+  assert.equal(selected.announcement, "Risk scoring selected.");
+
+  const allDimensions = transitionSystemGraph(model, selected, {
+    type: "SET_DIMENSION",
+    value: "all",
+  });
+  assert.equal(allDimensions.announcement, "Concern changed to All dimensions.");
+
+  assert.equal(
+    transitionSystemGraph(model, initial, {
+      type: "SET_MODE",
+      value: "symfony",
+      label: "Caller text cannot replace the canonical label",
+    }),
+    initial,
+    "same-state requests remain inert even when a caller supplies alternate prose",
+  );
+  assert.equal(
+    transitionSystemGraph(model, initial, { type: "SET_MODE", value: "missing" }),
+    initial,
+    "a missing mode remains outside the closed transition vocabulary",
+  );
+});
+
+test("status counts span all 22 nodes in either architecture state", async () => {
+  const { model } = validateSystemGraphContract(await sourceContract());
+  assert.deepEqual(countStatuses(model, "symfony"), { ok: 4, strained: 8, broken: 10 });
+  assert.deepEqual(countStatuses(model, "spring"), { ok: 11, strained: 10, broken: 1 });
+  assert.equal(countStatuses(model, "unknown"), null);
 });
 
 test("the static reading carries every accepted node and edge", async () => {
@@ -147,19 +235,24 @@ test("the static reading carries every accepted node and edge", async () => {
   const reading = html.match(/<details class="wtb-system-graph__reading"[\s\S]*?<\/details>/u)?.[0] ?? "";
   assert.ok(reading);
   const normalizedReading = reading.replaceAll("&amp;", "&");
+  const statusWords = { ok: "Working", strained: "Degraded", broken: "Breaking" };
+  const sentence = value => /[.!?]$/u.test(value) ? value : `${value}.`;
   for (const node of source.nodes) {
-    assert.ok(normalizedReading.includes(node.label), `Static reading should include ${node.label}`);
-    const escapedLabel = node.label.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
-    const nodeReading = normalizedReading.match(new RegExp(`<li><strong>${escapedLabel}\\.<\\/strong>([\\s\\S]*?)<\\/li>`, "u"))?.[1] ?? "";
-    assert.match(nodeReading, /Symfony/iu, `${node.label} should preserve its Symfony state`);
-    assert.match(nodeReading, /partial Spring/iu, `${node.label} should preserve its partial-Spring state`);
+    const completeReading = [
+      `<li><strong>${node.label}.</strong>`,
+      `Symfony PHP monolith — ${node.stack.symfony}; ${statusWords[node.status.symfony]}; ${sentence(node.note.symfony)}`,
+      `Partial Spring Boot migration — ${node.stack.spring}; ${statusWords[node.status.spring]}; ${sentence(node.note.spring)}</li>`,
+    ].join(" ");
+    assert.ok(
+      normalizedReading.includes(completeReading),
+      `Static reading should preserve the complete two-state reading for ${node.label}`,
+    );
   }
-  const statusWords = { ok: "working", strained: "strained", broken: "breaking" };
   for (const edge of source.edges) {
     const from = source.nodes.find(node => node.id === edge.from).label;
     const to = source.nodes.find(node => node.id === edge.to).label;
     const relationship = `${from} → ${to}${edge.label ? ` via ${edge.label}` : ""}`;
-    const completeReading = `${relationship}. Symfony: ${statusWords[edge.status.symfony]}; Partial Spring: ${statusWords[edge.status.spring]}.`;
+    const completeReading = `${relationship}. Symfony PHP monolith: ${statusWords[edge.status.symfony]}; Partial Spring Boot migration: ${statusWords[edge.status.spring]}.`;
     assert.ok(normalizedReading.includes(completeReading), `Static reading should include both states for ${relationship}`);
   }
 });

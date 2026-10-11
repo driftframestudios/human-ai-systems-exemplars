@@ -87,7 +87,7 @@ extends the same selected `img/plot/` family.
 - `visitor-boundary-contract.js` carries the ordinary-language context and exact ordered canary definition used to verify each source-authored visitor boundary.
 - `canvas-shell.js` progressively installs the route shelf, section rail, and shared footer, then preserves the verified visitor boundary immediately before attribution. Ordinary links and authored page content remain the durable path.
 - `about-media.js` keeps the About visual sequence on its authored poster until a visitor requests motion, returns after one complete cycle, and keeps the still reading active for reduced-motion and print presentations.
-- `who-to-believe-system-graph.js` admits one finite, page-local graph contract, then coordinates architecture comparison, concern emphasis, node detail, and deterministic directed-route traversal. Its frozen classic-script/CommonJS API keeps the same controller available to direct local inspection and focused tests. Native controls own input semantics; the adjacent HTML reading carries every node and connection through scriptless, print, and recovery states.
+- `who-to-believe-system-graph.js` admits one finite, page-local graph contract, then coordinates architecture comparison, concern emphasis, direct node selection, and incoming or outgoing neighbor traversal. Its frozen classic-script/CommonJS API keeps the same controller available to direct local inspection and focused tests. Native controls own input semantics; the adjacent HTML reading carries every node and connection through scriptless, print, and recovery states.
 - Native Debrief video uses visitor controls, metadata preload, intrinsic geometry, a reviewed poster, and a visible transcript or video-only visual sequence. The selected page owns its reading coordinate and final release; the same-origin R2 Worker owns passive carrier delivery.
 - Prototype scripts own local interaction state. Sandboxed iframes declare the capabilities each instrument actually uses. Their Core and Canvas route families remain separate inside the aggregate `/v1/` delivery package.
 - Human stewards retain authority over identity, source use, sensitive material, publication, and consequential decisions. Automated checks report observable behavior and leave those decisions visible.
@@ -303,6 +303,7 @@ Choose the existing check that answers the page question under review:
 npm run test:context-canvas
 npm run check:debrief-image-derivatives
 npm run test:debrief-catalog-preview-browser
+npm run test:who-to-believe-system-graph-browser
 npm run test:video-receivers-browser
 npm run test:context-canvas-narrow-rails
 npm run test:prototype-control-labels

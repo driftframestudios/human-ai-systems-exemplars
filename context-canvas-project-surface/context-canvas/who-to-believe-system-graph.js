@@ -8,18 +8,53 @@
 "use strict";
 
 const MODES = new Set(["symfony", "spring"]);
+const MODE_LABELS = Object.freeze({
+  symfony: "Symfony PHP monolith",
+  spring: "Partial Spring Boot migration",
+});
 const STATUSES = new Set(["ok", "strained", "broken"]);
 const DIMENSIONS = new Set(["abuse", "misfit", "core", "forecast"]);
-const ACTIONS = new Set([
-  "SET_MODE",
-  "SET_DIMENSION",
-  "SET_START",
-  "SET_END",
-  "TRACE_ROUTE",
-  "SELECT_NODE",
-  "STEP_ROUTE",
-  "RESET",
+const ACTIONS = new Set(["SET_MODE", "SET_DIMENSION", "SELECT_NODE", "RESET"]);
+const MODE_CONTROL_SELECTOR = "[data-graph-mode-control]";
+const DIMENSION_CONTROL_SELECTOR = "[data-graph-dimension-control]";
+const INITIAL_STATE = Object.freeze({
+  mode: "symfony",
+  dimension: "all",
+  selectedNodeId: "household",
+  announcement: "The system graph is ready. Household profile is selected.",
+});
+
+// These coordinates and dimensions are the original Review Routing graph's
+// presentation contract. CSS owns color and emphasis; SVG owns geometry.
+const COLUMN_X = Object.freeze([130, 420, 710, 1000]);
+const ROW_START = 110;
+const ROW_GAP = 82;
+const ROW_Y = row => ROW_START + row * ROW_GAP;
+const NODE_WIDTH = 190;
+const NODE_HEIGHT = 52;
+const VIEWBOX_WIDTH = 1130;
+const VIEWBOX_HEIGHT = 600;
+// Admission follows the owned geometry so every accepted node remains visible.
+const MAX_RENDERABLE_ROW = Math.floor((VIEWBOX_HEIGHT - NODE_HEIGHT / 2 - ROW_START) / ROW_GAP);
+
+const TOKEN_IDREF_ATTRIBUTES = Object.freeze([
+  "aria-controls",
+  "aria-describedby",
+  "aria-details",
+  "aria-errormessage",
+  "aria-flowto",
+  "aria-labelledby",
+  "aria-owns",
+  "headers",
 ]);
+const SINGLE_IDREF_ATTRIBUTES = Object.freeze([
+  "aria-activedescendant",
+  "for",
+  "form",
+  "list",
+  "popovertarget",
+]);
+const FRAGMENT_REFERENCE_ATTRIBUTES = Object.freeze(["href", "xlink:href"]);
 
 const mountedGraphs = new WeakMap();
 let mountSequence = 0;
@@ -32,11 +67,19 @@ function integer(value) {
   return Number.isInteger(value) ? value : Number.NaN;
 }
 
-function freezeRecord(record) {
-  return Object.freeze({ ...record });
+function nodeFitsViewBox(col, row) {
+  const x = COLUMN_X[col];
+  const y = ROW_Y(row);
+  return Number.isFinite(x)
+    && Number.isFinite(y)
+    && x - NODE_WIDTH / 2 >= 0
+    && x + NODE_WIDTH / 2 <= VIEWBOX_WIDTH
+    && y - NODE_HEIGHT / 2 >= 0
+    && y + NODE_HEIGHT / 2 <= VIEWBOX_HEIGHT;
 }
 
 function freezeGraph(model) {
+  for (const dimension of model.dimensions) Object.freeze(dimension);
   for (const node of model.nodes) {
     Object.freeze(node.dims);
     Object.freeze(node.stack);
@@ -52,14 +95,13 @@ function freezeGraph(model) {
   Object.freeze(model.dimensions);
   Object.freeze(model.nodes);
   Object.freeze(model.edges);
-  Object.freeze(model.defaults.routes);
   Object.freeze(model.defaults);
   return Object.freeze(model);
 }
 
 /**
- * Admit one finite graph contract before any interactive view uses it.
- * The visitor receives the complete static reading when admission reports errors.
+ * Admit the finite graph contract before the interactive view uses any value.
+ * Admission keeps the static reading available whenever data is incomplete.
  */
 function validateSystemGraphContract(input) {
   const errors = [];
@@ -72,10 +114,10 @@ function validateSystemGraphContract(input) {
   }
 
   if (input.schemaVersion !== "1.0.0") add("schemaVersion must be 1.0.0.");
-  if (!Array.isArray(input.columns) || input.columns.length !== 4) {
+  if (!Array.isArray(input.columns) || input.columns.length !== COLUMN_X.length) {
     add("columns must contain the four declared graph columns.");
   }
-  if (!Array.isArray(input.dimensions) || input.dimensions.length !== 4) {
+  if (!Array.isArray(input.dimensions) || input.dimensions.length !== DIMENSIONS.size) {
     add("dimensions must contain the four declared concern lenses.");
   }
   if (!Array.isArray(input.nodes) || input.nodes.length === 0) add("nodes must be a populated array.");
@@ -88,16 +130,19 @@ function validateSystemGraphContract(input) {
     if (columnLabels.has(label)) add(`columns[${index}] duplicates ${label}.`);
     if (label) columnLabels.add(label);
   }
+
   const dimensions = [];
   const dimensionIds = new Set();
-  for (const [index, dimension] of (Array.isArray(input.dimensions) ? input.dimensions : []).entries()) {
-    const id = text(dimension?.id);
-    const label = text(dimension?.label);
+  for (const [index, candidate] of (Array.isArray(input.dimensions) ? input.dimensions : []).entries()) {
+    const id = text(candidate?.id);
+    const label = text(candidate?.label);
+    const color = text(candidate?.color);
     if (!DIMENSIONS.has(id)) add(`dimensions[${index}].id is outside the declared vocabulary.`);
     if (dimensionIds.has(id)) add(`dimensions[${index}].id duplicates ${id}.`);
     if (!label) add(`dimensions[${index}].label must be present.`);
+    if (!/^#[0-9a-f]{6}$/iu.test(color)) add(`dimensions[${index}].color must be a six-digit hexadecimal color.`);
     if (id) dimensionIds.add(id);
-    dimensions.push(freezeRecord({ id, label }));
+    dimensions.push({ id, label, color });
   }
 
   const nodes = [];
@@ -114,14 +159,20 @@ function validateSystemGraphContract(input) {
     if (nodeIds.has(id)) add(`nodes[${index}].id duplicates ${id}.`);
     if (!label) add(`nodes[${index}].label must be present.`);
     if (!Number.isInteger(col) || col < 0 || col >= columns.length) add(`nodes[${index}].col must identify a declared column.`);
-    if (!Number.isInteger(row) || row < 0 || row > 20) add(`nodes[${index}].row must be an integer from 0 through 20.`);
+    if (!Number.isInteger(row) || row < 0 || row > MAX_RENDERABLE_ROW) {
+      add(`nodes[${index}].row must be an integer from 0 through ${MAX_RENDERABLE_ROW} so the complete node fits the graph viewBox.`);
+    } else if (Number.isInteger(col) && col >= 0 && col < columns.length && !nodeFitsViewBox(col, row)) {
+      add(`nodes[${index}] must place the complete node within the graph viewBox.`);
+    }
     const position = `${col}:${row}`;
     if (Number.isInteger(col) && Number.isInteger(row) && nodePositions.has(position)) {
       add(`nodes[${index}] duplicates graph position ${position}.`);
     }
     if (dims.length === 0) add(`nodes[${index}].dims must name at least one concern.`);
     if (new Set(dims).size !== dims.length) add(`nodes[${index}].dims contains a duplicate concern.`);
-    for (const dim of dims) if (!DIMENSIONS.has(dim)) add(`nodes[${index}].dims includes unknown concern ${dim || "(empty)"}.`);
+    for (const dimension of dims) {
+      if (!DIMENSIONS.has(dimension)) add(`nodes[${index}].dims includes unknown concern ${dimension || "(empty)"}.`);
+    }
 
     const stack = {};
     const status = {};
@@ -142,6 +193,8 @@ function validateSystemGraphContract(input) {
 
   const edges = [];
   const edgeIds = new Set();
+  // One directed pair owns one visible lane in this simple graph renderer.
+  const directedRelationships = new Set();
   for (const [index, candidate] of (Array.isArray(input.edges) ? input.edges : []).entries()) {
     const id = text(candidate?.id);
     const from = text(candidate?.from);
@@ -152,197 +205,120 @@ function validateSystemGraphContract(input) {
     if (!nodeIds.has(from)) add(`edges[${index}].from references unknown node ${from || "(empty)"}.`);
     if (!nodeIds.has(to)) add(`edges[${index}].to references unknown node ${to || "(empty)"}.`);
     if (from && from === to) add(`edges[${index}] must connect two distinct nodes.`);
+    const relationship = `${from}\u0000${to}`;
+    if (from && to && directedRelationships.has(relationship)) {
+      add(`edges[${index}] duplicates directed relationship ${from} → ${to}.`);
+    }
     const status = {};
     for (const mode of MODES) {
       status[mode] = text(candidate?.status?.[mode]);
       if (!STATUSES.has(status[mode])) add(`edges[${index}].status.${mode} is outside the declared vocabulary.`);
     }
     if (id) edgeIds.add(id);
+    if (from && to) directedRelationships.add(relationship);
     edges.push({ id, from, to, label, status });
   }
 
   const defaultMode = text(input.defaults?.mode);
   const defaultDimension = text(input.defaults?.dimension);
-  const routes = input.defaults?.routes && typeof input.defaults.routes === "object"
-    ? { ...input.defaults.routes }
-    : {};
-  if (!MODES.has(defaultMode)) add("defaults.mode must name a declared comparison state.");
-  if (defaultDimension !== "all" && !DIMENSIONS.has(defaultDimension)) add("defaults.dimension must be all or a declared concern.");
-  for (const dimension of ["all", ...DIMENSIONS]) {
-    const route = routes[dimension];
-    if (
-      !route
-      || !nodeIds.has(text(route.start))
-      || !nodeIds.has(text(route.end))
-      || text(route.start) === text(route.end)
-    ) {
-      add(`defaults.routes.${dimension} must identify two declared nodes.`);
-    } else {
-      routes[dimension] = freezeRecord({ start: text(route.start), end: text(route.end) });
-    }
+  const defaultSelection = text(input.defaults?.selectedNode);
+  if (defaultMode !== INITIAL_STATE.mode) add(`defaults.mode must be ${INITIAL_STATE.mode}.`);
+  if (defaultDimension !== INITIAL_STATE.dimension) add(`defaults.dimension must be ${INITIAL_STATE.dimension}.`);
+  if (defaultSelection !== INITIAL_STATE.selectedNodeId) {
+    add(`defaults.selectedNode must be ${INITIAL_STATE.selectedNodeId}.`);
   }
-
-  if (errors.length === 0) {
-    for (const dimension of ["all", ...DIMENSIONS]) {
-      const route = routes[dimension];
-      if (!findShortestRoute({ nodes, edges }, route.start, route.end, dimension)) {
-        add(`defaults.routes.${dimension} must identify a reachable directed route within its concern.`);
-      }
-    }
-  }
-
+  if (!nodeIds.has(INITIAL_STATE.selectedNodeId)) add(`nodes must include the initial ${INITIAL_STATE.selectedNodeId} selection.`);
   if (errors.length > 0) return { ok: false, errors };
 
-  const model = freezeGraph({
-    schemaVersion: input.schemaVersion,
-    columns,
-    dimensions,
-    nodes,
-    edges,
-    defaults: {
-      mode: defaultMode,
-      dimension: defaultDimension,
-      routes,
-    },
-  });
-  return { ok: true, errors: [], model };
+  return {
+    ok: true,
+    errors: [],
+    model: freezeGraph({
+      schemaVersion: input.schemaVersion,
+      columns,
+      dimensions,
+      nodes,
+      edges,
+      defaults: {
+        mode: defaultMode,
+        dimension: defaultDimension,
+        selectedNode: defaultSelection,
+      },
+    }),
+  };
+}
+
+function initialSystemGraphState(model) {
+  if (
+    model?.defaults?.mode !== INITIAL_STATE.mode
+    || model.defaults.dimension !== INITIAL_STATE.dimension
+    || model.defaults.selectedNode !== INITIAL_STATE.selectedNodeId
+    || !model.nodes?.some(node => node.id === INITIAL_STATE.selectedNodeId)
+  ) {
+    throw new TypeError("The admitted graph must include its initial household selection.");
+  }
+  return Object.freeze({ ...INITIAL_STATE });
+}
+
+/** One finite transition vocabulary feeds pointer, keyboard, and touch input. */
+function transitionSystemGraph(model, state, action) {
+  if (!action || !ACTIONS.has(action.type)) return state;
+  // The admitted model and closed vocabularies own semantic-twin wording;
+  // callers request transitions without supplying visitor-facing authority.
+  switch (action.type) {
+    case "SET_MODE":
+      if (!MODES.has(action.value) || action.value === state.mode) return state;
+      return Object.freeze({
+        ...state,
+        mode: action.value,
+        announcement: `Architecture state changed to ${MODE_LABELS[action.value]}.`,
+      });
+    case "SET_DIMENSION": {
+      const dimension = action.value === "all" || DIMENSIONS.has(action.value) ? action.value : null;
+      if (!dimension || dimension === state.dimension) return state;
+      const dimensionLabel = dimension === "all"
+        ? "All dimensions"
+        : model.dimensions.find(candidate => candidate.id === dimension)?.label;
+      if (!dimensionLabel) return state;
+      return Object.freeze({
+        ...state,
+        dimension,
+        announcement: `Concern changed to ${dimensionLabel}.`,
+      });
+    }
+    case "SELECT_NODE": {
+      const node = model.nodes.find(candidate => candidate.id === action.value);
+      if (!node || node.id === state.selectedNodeId) return state;
+      return Object.freeze({
+        ...state,
+        selectedNodeId: node.id,
+        announcement: `${node.label} selected.`,
+      });
+    }
+    case "RESET":
+      return state.mode === INITIAL_STATE.mode
+        && state.dimension === INITIAL_STATE.dimension
+        && state.selectedNodeId === INITIAL_STATE.selectedNodeId
+        ? state
+        : initialSystemGraphState(model);
+    default:
+      return state;
+  }
 }
 
 function nodeMatches(node, dimension) {
   return dimension === "all" || node.dims.includes(dimension);
 }
 
-/** Return the fewest-edge directed route; declared edge order resolves ties. */
-function findShortestRoute(model, startId, endId, dimension = "all") {
-  const nodeById = new Map(model.nodes.map(node => [node.id, node]));
-  if (!nodeById.has(startId) || !nodeById.has(endId)) return null;
-  if (!nodeMatches(nodeById.get(startId), dimension) || !nodeMatches(nodeById.get(endId), dimension)) return null;
-  if (startId === endId) return { nodes: [startId], edges: [] };
-
-  const outgoing = new Map();
-  for (const edge of model.edges) {
-    if (!nodeMatches(nodeById.get(edge.from), dimension) || !nodeMatches(nodeById.get(edge.to), dimension)) continue;
-    const group = outgoing.get(edge.from) ?? [];
-    group.push(edge);
-    outgoing.set(edge.from, group);
-  }
-
-  const queue = [startId];
-  const visited = new Set(queue);
-  const previous = new Map();
-  for (let cursor = 0; cursor < queue.length; cursor += 1) {
-    const current = queue[cursor];
-    for (const edge of outgoing.get(current) ?? []) {
-      if (visited.has(edge.to)) continue;
-      visited.add(edge.to);
-      previous.set(edge.to, { node: current, edge: edge.id });
-      if (edge.to === endId) {
-        const nodes = [endId];
-        const edges = [];
-        let step = endId;
-        while (step !== startId) {
-          const relation = previous.get(step);
-          edges.unshift(relation.edge);
-          nodes.unshift(relation.node);
-          step = relation.node;
-        }
-        return { nodes, edges };
-      }
-      queue.push(edge.to);
-    }
-  }
-  return null;
+function countStatuses(model, mode) {
+  if (!MODES.has(mode)) return null;
+  const counts = { ok: 0, strained: 0, broken: 0 };
+  for (const node of model.nodes) counts[node.status[mode]] += 1;
+  return Object.freeze(counts);
 }
 
-function initialSystemGraphState(model) {
-  const endpoints = model.defaults.routes[model.defaults.dimension];
-  const route = findShortestRoute(model, endpoints.start, endpoints.end, model.defaults.dimension);
-  return Object.freeze({
-    mode: model.defaults.mode,
-    dimension: model.defaults.dimension,
-    startId: endpoints.start,
-    endId: endpoints.end,
-    route,
-    routeIndex: 0,
-    selectedNodeId: route?.nodes[0] ?? endpoints.start,
-    announcement: "The system graph is ready.",
-  });
-}
-
-function tracedState(model, state, announcement, unavailableAnnouncement = "Choose another endpoint or concern. The current selection has no declared directed route.") {
-  const route = findShortestRoute(model, state.startId, state.endId, state.dimension);
-  return Object.freeze({
-    ...state,
-    route,
-    routeIndex: 0,
-    selectedNodeId: route?.nodes[0] ?? state.startId,
-    announcement: route ? announcement : unavailableAnnouncement,
-  });
-}
-
-/** One closed transition vocabulary feeds keyboard, pointer, and touch interaction. */
-function transitionSystemGraph(model, state, action) {
-  if (!action || !ACTIONS.has(action.type)) return state;
-  switch (action.type) {
-    case "SET_MODE":
-      return MODES.has(action.value)
-        ? Object.freeze({ ...state, mode: action.value, announcement: `Comparison changed to ${action.label || action.value}.` })
-        : state;
-    case "SET_DIMENSION": {
-      const dimension = action.value === "all" || DIMENSIONS.has(action.value) ? action.value : null;
-      if (!dimension) return state;
-      const endpoints = model.defaults.routes[dimension];
-      return tracedState(model, {
-        ...state,
-        dimension,
-        startId: endpoints.start,
-        endId: endpoints.end,
-      }, `Concern changed to ${action.label || dimension}. A fitting route is ready.`);
-    }
-    case "SET_START":
-      return model.nodes.some(node => node.id === action.value && nodeMatches(node, state.dimension))
-        ? Object.freeze({ ...state, startId: action.value, route: null, routeIndex: 0, selectedNodeId: action.value, announcement: "Route start changed. Trace the route to compare its path." })
-        : state;
-    case "SET_END":
-      return model.nodes.some(node => node.id === action.value && nodeMatches(node, state.dimension))
-        ? Object.freeze({ ...state, endId: action.value, route: null, routeIndex: 0, announcement: "Route destination changed. Trace the route to compare its path." })
-        : state;
-    case "TRACE_ROUTE":
-      return tracedState(
-        model,
-        state,
-        `Route traced from ${action.startLabel || state.startId} to ${action.endLabel || state.endId}.`,
-        `Choose another endpoint or concern. The current selection has no declared directed route from ${action.startLabel || state.startId} to ${action.endLabel || state.endId}.`,
-      );
-    case "SELECT_NODE":
-      if (!model.nodes.some(node => node.id === action.value)) return state;
-      return Object.freeze({
-        ...state,
-        selectedNodeId: action.value,
-        routeIndex: state.route?.nodes.includes(action.value)
-          ? state.route.nodes.indexOf(action.value)
-          : state.routeIndex,
-        announcement: `${action.label || action.value} selected.`,
-      });
-    case "STEP_ROUTE": {
-      if (!state.route) return state;
-      const routeIndex = Math.min(
-        Math.max(state.routeIndex + Number(action.delta || 0), 0),
-        state.route.nodes.length - 1,
-      );
-      const selectedNodeId = state.route.nodes[routeIndex];
-      return Object.freeze({
-        ...state,
-        routeIndex,
-        selectedNodeId,
-        announcement: `Route step ${routeIndex + 1} of ${state.route.nodes.length}: ${action.label || selectedNodeId}.`,
-      });
-    }
-    case "RESET":
-      return initialSystemGraphState(model);
-    default:
-      return state;
-  }
+function statusLabel(status) {
+  return { ok: "Working", strained: "Degraded", broken: "Breaking" }[status] ?? "Unknown";
 }
 
 function element(document, name, className, content) {
@@ -352,8 +328,10 @@ function element(document, name, className, content) {
   return node;
 }
 
-function statusLabel(status) {
-  return { ok: "Working", strained: "Strained", broken: "Breaking" }[status] ?? "Unknown";
+function svgElement(document, name, attributes = {}) {
+  const node = document.createElementNS("http://www.w3.org/2000/svg", name);
+  for (const [key, value] of Object.entries(attributes)) node.setAttribute(key, String(value));
+  return node;
 }
 
 function parseContract(root, document) {
@@ -370,35 +348,27 @@ function parseContract(root, document) {
 function inspectMountDom(root) {
   const errors = [];
   const required = [
+    ["[data-graph-title]", "graph title"],
     ["[data-graph-error]", "fallback message"],
     ["[data-graph-enhancement]", "enhancement region"],
-    ["[data-node-field]", "node field"],
-    ["[data-node-grid]", "node grid"],
-    ["[data-edge-layer]", "edge layer"],
-    ["[data-route-start]", "route-start control"],
-    ["[data-route-end]", "route-destination control"],
-    ["[data-trace-route]", "route action"],
-    ["[data-reset-graph]", "reset action"],
-    ["[data-graph-status]", "live status"],
-    ["[data-status-summary]", "status summary"],
-    ["[data-route-list]", "route reading"],
-    ["[data-route-previous]", "previous-route action"],
-    ["[data-route-next]", "next-route action"],
-    ["[data-detail-title]", "detail title"],
-    ["[data-detail-column]", "detail column"],
-    ["[data-detail-stack]", "detail implementation"],
+    ["[data-status-summary]", "status legend"],
+    ["[data-graph-svg]", "graph canvas"],
+    ["[data-detail-panel]", "selected-node panel"],
     ["[data-detail-status]", "detail status"],
+    ["[data-detail-title]", "detail title"],
+    ["[data-detail-stack]", "detail implementation"],
     ["[data-detail-note]", "detail consequence"],
+    ["[data-detail-neighbors]", "detail connections"],
     ["[data-detail-concerns]", "detail concerns"],
-    ["[data-detail-neighbors]", "detail neighbors"],
+    ["[data-graph-status]", "live status"],
     [".wtb-system-graph__reading", "semantic reading"],
   ];
   for (const [selector, label] of required) {
     if (root.querySelectorAll(selector).length !== 1) errors.push(`The graph requires one ${label} (${selector}).`);
   }
 
-  const modeControls = Array.from(root.querySelectorAll('[name="wtb-system-mode"]'));
-  const dimensionControls = Array.from(root.querySelectorAll('[name="wtb-system-dimension"]'));
+  const modeControls = Array.from(root.querySelectorAll(MODE_CONTROL_SELECTOR));
+  const dimensionControls = Array.from(root.querySelectorAll(DIMENSION_CONTROL_SELECTOR));
   const modeValues = new Set(modeControls.map(control => control.value));
   const dimensionValues = new Set(dimensionControls.map(control => control.value));
   if (
@@ -421,20 +391,88 @@ function inspectMountDom(root) {
   return errors;
 }
 
+function isolateMountDom(root, mountId) {
+  const modeControls = Array.from(root.querySelectorAll(MODE_CONTROL_SELECTOR));
+  const dimensionControls = Array.from(root.querySelectorAll(DIMENSION_CONTROL_SELECTOR));
+  for (const control of modeControls) control.name = `wtb-system-mode-${mountId}`;
+  for (const control of dimensionControls) control.name = `wtb-system-dimension-${mountId}`;
+
+  // A cloned graph keeps every accessible relationship local while the
+  // sibling JSON contract retains its page-level identity.
+  const identifiedElements = [root, ...root.querySelectorAll("[id]")]
+    .filter(element => element.hasAttribute("id"));
+  const isolatedIds = new Map();
+  for (const element of identifiedElements) {
+    const currentId = element.id;
+    if (!currentId) continue;
+    const isolatedId = `${currentId}-${mountId}`;
+    isolatedIds.set(currentId, isolatedId);
+    element.id = isolatedId;
+  }
+
+  const allElements = [root, ...root.querySelectorAll("*")];
+  for (const element of allElements) {
+    for (const attribute of TOKEN_IDREF_ATTRIBUTES) {
+      const current = element.getAttribute(attribute);
+      if (!current) continue;
+      const isolated = current
+        .trim()
+        .split(/\s+/u)
+        .map(id => isolatedIds.get(id) ?? id)
+        .join(" ");
+      element.setAttribute(attribute, isolated);
+    }
+    for (const attribute of SINGLE_IDREF_ATTRIBUTES) {
+      const current = element.getAttribute(attribute);
+      if (current && isolatedIds.has(current)) element.setAttribute(attribute, isolatedIds.get(current));
+    }
+    for (const attribute of FRAGMENT_REFERENCE_ATTRIBUTES) {
+      const current = element.getAttribute(attribute);
+      if (!current?.startsWith("#")) continue;
+      const targetId = current.slice(1);
+      if (isolatedIds.has(targetId)) element.setAttribute(attribute, `#${isolatedIds.get(targetId)}`);
+    }
+  }
+
+  // Required names also recover when repaired markup supplies the semantic
+  // element without recreating its former ID.
+  const graphTitle = root.querySelector("[data-graph-title]");
+  if (graphTitle) {
+    if (!graphTitle.id) graphTitle.id = `wtb-system-graph-title-${mountId}`;
+    root.setAttribute("aria-labelledby", graphTitle.id);
+  } else {
+    root.removeAttribute("aria-labelledby");
+  }
+
+  const detailPanel = root.querySelector("[data-detail-panel]");
+  const detailTitle = root.querySelector("[data-detail-title]");
+  if (detailPanel && detailTitle) {
+    if (!detailTitle.id) detailTitle.id = `wtb-system-detail-title-${mountId}`;
+    detailPanel.setAttribute("aria-labelledby", detailTitle.id);
+  } else {
+    detailPanel?.removeAttribute("aria-labelledby");
+  }
+
+  return { dimensionControls, modeControls };
+}
+
 function fallbackController(root, errors, error, enhancement, browser) {
   if (error) {
     error.hidden = false;
-    error.textContent = "The complete system reading is ready below. The interactive controls need a repaired data or page structure before they can start.";
+    error.textContent = "The complete system reading is ready below. The interactive view needs a repaired data or page structure before it can start.";
   }
   if (enhancement) enhancement.hidden = true;
   const reading = root.querySelector(".wtb-system-graph__reading");
   if (reading) reading.open = true;
   root.dataset.graphState = "fallback";
   browser.console?.error?.(`Who To Believe system graph startup reported validation errors:\n${errors.join("\n")}`);
+  let destroyed = false;
   const controller = Object.freeze({
     ok: false,
-    errors,
+    errors: Object.freeze([...errors]),
     destroy() {
+      if (destroyed) return;
+      destroyed = true;
       mountedGraphs.delete(root);
     },
   });
@@ -442,324 +480,354 @@ function fallbackController(root, errors, error, enhancement, browser) {
   return controller;
 }
 
-function replaceOptions(select, model, dimension, selectedId, document) {
+function renderLegend(container, counts, document) {
   const fragment = document.createDocumentFragment();
+  for (const status of STATUSES) {
+    const item = element(document, "span", "wtb-system-graph__legend-item");
+    item.dataset.status = status;
+    const swatch = element(document, "span", "wtb-system-graph__legend-swatch");
+    swatch.dataset.status = status;
+    swatch.setAttribute("aria-hidden", "true");
+    item.append(swatch, `${statusLabel(status)} · ${counts[status]}`);
+    fragment.append(item);
+  }
+  container.replaceChildren(fragment);
+}
+
+function graphPosition(model) {
+  return new Map(model.nodes.map(node => [node.id, {
+    x: COLUMN_X[node.col],
+    y: ROW_Y(node.row),
+  }]));
+}
+
+function renderGraph(svg, model, state, document, hatchId) {
+  const positions = graphPosition(model);
+  const nodeById = new Map(model.nodes.map(node => [node.id, node]));
+  const dimensionById = new Map(model.dimensions.map(dimension => [dimension.id, dimension]));
+  const connected = new Set(
+    model.edges
+      .filter(edge => edge.from === state.selectedNodeId || edge.to === state.selectedNodeId)
+      .flatMap(edge => [edge.from, edge.to]),
+  );
+  const fragment = document.createDocumentFragment();
+
+  const defs = svgElement(document, "defs");
+  const pattern = svgElement(document, "pattern", {
+    id: hatchId,
+    width: 6,
+    height: 6,
+    patternUnits: "userSpaceOnUse",
+    patternTransform: "rotate(45)",
+  });
+  const hatch = svgElement(document, "line", { x1: 0, y1: 0, x2: 0, y2: 6, "stroke-width": 2 });
+  hatch.classList.add("wtb-system-graph__hatch-line");
+  pattern.append(hatch);
+  defs.append(pattern);
+  fragment.append(defs);
+
   for (const [columnIndex, column] of model.columns.entries()) {
-    const group = document.createElement("optgroup");
-    group.label = column;
-    for (const node of model.nodes.filter(candidate => candidate.col === columnIndex)) {
-      const option = document.createElement("option");
-      option.value = node.id;
-      option.textContent = node.label;
-      option.disabled = !nodeMatches(node, dimension);
-      option.selected = node.id === selectedId;
-      group.append(option);
+    const heading = svgElement(document, "text", {
+      x: COLUMN_X[columnIndex],
+      y: 50,
+      "text-anchor": "middle",
+    });
+    heading.classList.add("wtb-system-graph__column-label");
+    heading.textContent = column.toUpperCase();
+    fragment.append(heading);
+  }
+
+  for (const edge of model.edges) {
+    const from = positions.get(edge.from);
+    const to = positions.get(edge.to);
+    const fromNode = nodeById.get(edge.from);
+    const toNode = nodeById.get(edge.to);
+    const selected = edge.from === state.selectedNodeId || edge.to === state.selectedNodeId;
+    const inDimension = nodeMatches(fromNode, state.dimension) && nodeMatches(toNode, state.dimension);
+    const x1 = from.x + NODE_WIDTH / 2;
+    const x2 = to.x - NODE_WIDTH / 2;
+    const sameColumn = from.x === to.x;
+    const pathData = sameColumn
+      ? `M${from.x + NODE_WIDTH / 2} ${from.y} C${from.x + NODE_WIDTH / 2 + 50} ${from.y} ${to.x + NODE_WIDTH / 2 + 50} ${to.y} ${to.x + NODE_WIDTH / 2} ${to.y}`
+      : `M${x1} ${from.y} C${(x1 + x2) / 2} ${from.y} ${(x1 + x2) / 2} ${to.y} ${x2} ${to.y}`;
+    const group = svgElement(document, "g");
+    group.classList.add("wtb-system-graph__edge-group");
+    group.dataset.edgeId = edge.id;
+    group.dataset.status = edge.status[state.mode];
+    group.dataset.selected = String(selected);
+    group.dataset.inDimension = String(inDimension);
+    const path = svgElement(document, "path", { d: pathData });
+    path.classList.add("wtb-system-graph__edge");
+    path.dataset.edgeId = edge.id;
+    path.dataset.status = edge.status[state.mode];
+    path.dataset.selected = String(selected);
+    path.dataset.inDimension = String(inDimension);
+    group.append(path);
+    if (edge.label && selected) {
+      const label = svgElement(document, "text", {
+        x: (x1 + x2) / 2,
+        y: (from.y + to.y) / 2 - 6,
+        "text-anchor": "middle",
+      });
+      label.classList.add("wtb-system-graph__edge-label");
+      label.dataset.status = edge.status[state.mode];
+      label.textContent = edge.label;
+      group.append(label);
     }
     fragment.append(group);
   }
-  select.replaceChildren(fragment);
-}
 
-function graphStatusSummary(model, state) {
-  const eligible = model.nodes.filter(node => nodeMatches(node, state.dimension));
-  const counts = { ok: 0, strained: 0, broken: 0 };
-  for (const node of eligible) counts[node.status[state.mode]] += 1;
-  return `${eligible.length} in view · ${counts.ok} working · ${counts.strained} strained · ${counts.broken} breaking`;
-}
-
-function renderRouteList(list, model, state, document) {
-  const nodeById = new Map(model.nodes.map(node => [node.id, node]));
-  if (!state.route) {
-    const item = element(document, "li", "wtb-system-graph__route-empty", "This concern has no declared directed route between the selected endpoints. Choose another endpoint or concern.");
-    list.replaceChildren(item);
-    return;
-  }
-  const fragment = document.createDocumentFragment();
-  for (const [index, nodeId] of state.route.nodes.entries()) {
-    const item = element(document, "li", "");
-    if (index === state.routeIndex) item.setAttribute("aria-current", "step");
-    const button = element(document, "button", "wtb-system-graph__route-node", nodeById.get(nodeId).label);
-    button.type = "button";
-    button.dataset.nodeId = nodeId;
-    item.append(button);
-    if (index < state.route.edges.length) {
-      const edge = model.edges.find(candidate => candidate.id === state.route.edges[index]);
-      const relation = edge.label ? ` — ${edge.label} → ` : " → ";
-      item.append(element(document, "span", "wtb-system-graph__route-relation", relation));
-    }
-    fragment.append(item);
-  }
-  list.replaceChildren(fragment);
-}
-
-function createNodeButtons(root, model, document) {
-  const grid = root.querySelector("[data-node-grid]");
-  const fragment = document.createDocumentFragment();
   for (const node of model.nodes) {
-    const button = element(document, "button", "wtb-system-graph__node");
-    button.type = "button";
-    button.dataset.nodeId = node.id;
-    button.style.setProperty("--node-column", String(node.col + 1));
-    button.style.setProperty("--node-row", String(node.row + 1));
-    const label = element(document, "span", "wtb-system-graph__node-label", node.label);
-    const state = element(document, "span", "wtb-system-graph__node-state");
-    state.dataset.nodeState = "";
-    button.append(label, state);
-    fragment.append(button);
+    const position = positions.get(node.id);
+    const status = node.status[state.mode];
+    const selected = node.id === state.selectedNodeId;
+    const inDimension = nodeMatches(node, state.dimension);
+    const nodeGroup = svgElement(document, "g", {
+      role: "button",
+      tabindex: 0,
+      "aria-pressed": String(selected),
+      "aria-label": `${node.label}. ${statusLabel(status)}. ${node.stack[state.mode]}.`,
+    });
+    nodeGroup.classList.add("wtb-system-graph__node");
+    nodeGroup.dataset.nodeId = node.id;
+    nodeGroup.dataset.status = status;
+    nodeGroup.dataset.selected = String(selected);
+    nodeGroup.dataset.connected = String(connected.has(node.id));
+    nodeGroup.dataset.inDimension = String(inDimension);
+
+    if (status === "broken") {
+      const base = svgElement(document, "rect", {
+        x: position.x - NODE_WIDTH / 2,
+        y: position.y - NODE_HEIGHT / 2,
+        width: NODE_WIDTH,
+        height: NODE_HEIGHT,
+      });
+      base.classList.add("wtb-system-graph__node-broken-base");
+      nodeGroup.append(base);
+    }
+
+    const frame = svgElement(document, "rect", {
+      x: position.x - NODE_WIDTH / 2,
+      y: position.y - NODE_HEIGHT / 2,
+      width: NODE_WIDTH,
+      height: NODE_HEIGHT,
+    });
+    frame.classList.add("wtb-system-graph__node-frame");
+    frame.dataset.status = status;
+    frame.dataset.selected = String(selected);
+    if (status === "broken") frame.style.setProperty("--graph-node-fill", `url(#${hatchId})`);
+    nodeGroup.append(frame);
+
+    if (status === "broken") {
+      const band = svgElement(document, "rect", {
+        x: position.x - NODE_WIDTH / 2 + 6,
+        y: position.y - 11,
+        width: NODE_WIDTH - 12,
+        height: 22,
+      });
+      band.classList.add("wtb-system-graph__node-label-band");
+      nodeGroup.append(band);
+    }
+
+    const label = svgElement(document, "text", {
+      x: position.x,
+      y: position.y + 4,
+      "text-anchor": "middle",
+    });
+    label.classList.add("wtb-system-graph__node-label");
+    label.dataset.status = status;
+    label.dataset.selected = String(selected);
+    label.textContent = node.label;
+    nodeGroup.append(label);
+
+    for (const [index, dimension] of node.dims.entries()) {
+      const dot = svgElement(document, "circle", {
+        cx: position.x + NODE_WIDTH / 2 - 8 - index * 9,
+        cy: position.y - NODE_HEIGHT / 2 + 8,
+        r: 3,
+      });
+      dot.classList.add("wtb-system-graph__node-dot");
+      dot.dataset.dimension = dimension;
+      dot.setAttribute("fill", dimensionById.get(dimension).color);
+      nodeGroup.append(dot);
+    }
+    fragment.append(nodeGroup);
   }
-  grid.replaceChildren(fragment);
+
+  svg.setAttribute("viewBox", `0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`);
+  svg.replaceChildren(fragment);
 }
 
-function drawEdges(root, model, state, browser, markerId) {
-  const field = root.querySelector("[data-node-field]");
-  const svg = root.querySelector("[data-edge-layer]");
-  if (!field || !svg) return;
-  const fieldBox = field.getBoundingClientRect();
-  if (fieldBox.width === 0 || fieldBox.height === 0) return;
-  svg.setAttribute("viewBox", `0 0 ${fieldBox.width} ${fieldBox.height}`);
-  svg.replaceChildren();
-
-  const document = root.ownerDocument;
-  const namespace = "http://www.w3.org/2000/svg";
-  const defs = document.createElementNS(namespace, "defs");
-  const marker = document.createElementNS(namespace, "marker");
-  marker.setAttribute("id", markerId);
-  marker.setAttribute("viewBox", "0 0 10 10");
-  marker.setAttribute("refX", "8");
-  marker.setAttribute("refY", "5");
-  marker.setAttribute("markerWidth", "6");
-  marker.setAttribute("markerHeight", "6");
-  marker.setAttribute("orient", "auto-start-reverse");
-  const arrow = document.createElementNS(namespace, "path");
-  arrow.setAttribute("d", "M 0 0 L 10 5 L 0 10 z");
-  arrow.setAttribute("class", "wtb-system-graph__arrow");
-  marker.append(arrow);
-  defs.append(marker);
-  svg.append(defs);
-
+function renderDetails(elements, model, state, document) {
   const nodeById = new Map(model.nodes.map(node => [node.id, node]));
-  const routeEdges = new Set(state.route?.edges ?? []);
-  for (const edge of model.edges) {
-    const from = root.querySelector(`.wtb-system-graph__node[data-node-id="${edge.from}"]`);
-    const to = root.querySelector(`.wtb-system-graph__node[data-node-id="${edge.to}"]`);
-    if (!from || !to) continue;
-    const fromBox = from.getBoundingClientRect();
-    const toBox = to.getBoundingClientRect();
-    const x1 = fromBox.right - fieldBox.left;
-    const y1 = fromBox.top + fromBox.height / 2 - fieldBox.top;
-    const x2 = toBox.left - fieldBox.left;
-    const y2 = toBox.top + toBox.height / 2 - fieldBox.top;
-    const bend = Math.max(24, (x2 - x1) * 0.45);
-    const path = document.createElementNS(namespace, "path");
-    path.setAttribute("d", `M ${x1} ${y1} C ${x1 + bend} ${y1}, ${x2 - bend} ${y2}, ${x2} ${y2}`);
-    path.setAttribute("marker-end", `url(#${markerId})`);
-    path.dataset.status = edge.status[state.mode];
-    path.dataset.inConcern = String(
-      nodeMatches(nodeById.get(edge.from), state.dimension)
-      && nodeMatches(nodeById.get(edge.to), state.dimension),
-    );
-    path.dataset.inRoute = String(routeEdges.has(edge.id));
-    path.classList.add("wtb-system-graph__edge");
-    svg.append(path);
+  const dimensionById = new Map(model.dimensions.map(dimension => [dimension.id, dimension]));
+  const selected = nodeById.get(state.selectedNodeId);
+  const status = selected.status[state.mode];
+
+  elements.panel.dataset.status = status;
+  elements.status.textContent = statusLabel(status).toUpperCase();
+  elements.status.dataset.status = status;
+  elements.title.textContent = selected.label;
+  elements.stack.textContent = selected.stack[state.mode];
+  elements.note.textContent = selected.note[state.mode];
+
+  const concernFragment = document.createDocumentFragment();
+  for (const dimension of selected.dims) {
+    const tag = element(document, "span", "wtb-system-graph__tag", dimensionById.get(dimension).label);
+    tag.dataset.dimension = dimension;
+    tag.style.setProperty("--tag-color", dimensionById.get(dimension).color);
+    concernFragment.append(tag);
   }
-  void browser;
+  elements.concerns.replaceChildren(concernFragment);
+
+  const neighborFragment = document.createDocumentFragment();
+  for (const edge of model.edges.filter(candidate => candidate.from === selected.id || candidate.to === selected.id)) {
+    const outbound = edge.from === selected.id;
+    const other = nodeById.get(outbound ? edge.to : edge.from);
+    const edgeState = statusLabel(edge.status[state.mode]);
+    const directionLabel = outbound ? "Outgoing connection to" : "Incoming connection from";
+    const viaLabel = edge.label ? ` via ${edge.label}` : "";
+    const button = element(document, "button", "wtb-system-graph__neighbor");
+    button.type = "button";
+    button.dataset.nodeId = other.id;
+    button.dataset.status = edge.status[state.mode];
+    button.setAttribute(
+      "aria-label",
+      `${directionLabel} ${other.label}${viaLabel}. ${edgeState}.`,
+    );
+    const relation = element(document, "span", "wtb-system-graph__neighbor-node", `${outbound ? "→" : "←"} ${other.label}`);
+    const relationStatus = element(document, "span", "wtb-system-graph__neighbor-status", edgeState);
+    button.append(relation, relationStatus);
+    neighborFragment.append(button);
+  }
+  elements.neighbors.replaceChildren(neighborFragment);
 }
 
 function focusSelected(root, selectedNodeId) {
   const selected = root.querySelector(`.wtb-system-graph__node[data-node-id="${selectedNodeId}"]`);
-  if (!selected) return;
+  const scroller = root.querySelector(".wtb-system-graph__canvas-scroll");
+  if (!selected || !scroller) return;
+
   selected.focus({ preventScroll: true });
-  selected.scrollIntoView({ block: "nearest", inline: "nearest" });
+  const selectedBox = selected.getBoundingClientRect();
+  const scrollerBox = scroller.getBoundingClientRect();
+  const visibleLeft = scrollerBox.left + scroller.clientLeft;
+  const visibleRight = visibleLeft + scroller.clientWidth;
+  if (selectedBox.left < visibleLeft) {
+    scroller.scrollLeft -= visibleLeft - selectedBox.left;
+  } else if (selectedBox.right > visibleRight) {
+    scroller.scrollLeft += selectedBox.right - visibleRight;
+  }
 }
 
 function mountSystemGraph(root, document = globalThis.document, browser = globalThis) {
   if (!root || !document) return null;
   if (mountedGraphs.has(root)) return mountedGraphs.get(root);
 
+  const mountId = ++mountSequence;
+  const isolatedControls = isolateMountDom(root, mountId);
+
   const admission = parseContract(root, document);
   const error = root.querySelector("[data-graph-error]");
   const enhancement = root.querySelector("[data-graph-enhancement]");
-  if (!admission.ok) {
-    return fallbackController(root, admission.errors, error, enhancement, browser);
-  }
+  if (!admission.ok) return fallbackController(root, admission.errors, error, enhancement, browser);
+
   const mountErrors = inspectMountDom(root);
-  if (mountErrors.length > 0) {
-    return fallbackController(root, mountErrors, error, enhancement, browser);
-  }
+  if (mountErrors.length > 0) return fallbackController(root, mountErrors, error, enhancement, browser);
 
   const model = admission.model;
   let state = initialSystemGraphState(model);
-  const modeControls = Array.from(root.querySelectorAll('[name="wtb-system-mode"]'));
-  const dimensionControls = Array.from(root.querySelectorAll('[name="wtb-system-dimension"]'));
-  const startSelect = root.querySelector("[data-route-start]");
-  const endSelect = root.querySelector("[data-route-end]");
-  const status = root.querySelector("[data-graph-status]");
+  let destroyed = false;
+  const modeControls = isolatedControls.modeControls;
+  const dimensionControls = isolatedControls.dimensionControls;
   const summary = root.querySelector("[data-status-summary]");
-  const routeList = root.querySelector("[data-route-list]");
-  const previousButton = root.querySelector("[data-route-previous]");
-  const nextButton = root.querySelector("[data-route-next]");
-  const detailTitle = root.querySelector("[data-detail-title]");
-  const detailColumn = root.querySelector("[data-detail-column]");
-  const detailStack = root.querySelector("[data-detail-stack]");
-  const detailStatus = root.querySelector("[data-detail-status]");
-  const detailNote = root.querySelector("[data-detail-note]");
-  const detailConcerns = root.querySelector("[data-detail-concerns]");
-  const detailNeighbors = root.querySelector("[data-detail-neighbors]");
+  const svg = root.querySelector("[data-graph-svg]");
+  const liveStatus = root.querySelector("[data-graph-status]");
   const reading = root.querySelector(".wtb-system-graph__reading");
-  const markerId = `wtb-system-arrow-${++mountSequence}`;
-  const nodeById = new Map(model.nodes.map(node => [node.id, node]));
-  const dimensionById = new Map(model.dimensions.map(dimension => [dimension.id, dimension]));
-  let drawRequest = 0;
-  let cancelDrawRequest = () => {};
+  const hatchId = `wtb-system-hatch-${mountId}`;
+  const details = {
+    panel: root.querySelector("[data-detail-panel]"),
+    status: root.querySelector("[data-detail-status]"),
+    title: root.querySelector("[data-detail-title]"),
+    stack: root.querySelector("[data-detail-stack]"),
+    note: root.querySelector("[data-detail-note]"),
+    neighbors: root.querySelector("[data-detail-neighbors]"),
+    concerns: root.querySelector("[data-detail-concerns]"),
+  };
 
-  createNodeButtons(root, model, document);
   root.dataset.graphState = "enhanced";
-  if (enhancement) enhancement.hidden = false;
-  if (error) {
-    error.hidden = true;
-    error.textContent = "";
-  }
+  enhancement.hidden = false;
+  error.hidden = true;
+  error.textContent = "";
   reading.open = false;
-
-  const scheduleEdges = () => {
-    if (drawRequest) cancelDrawRequest(drawRequest);
-    const usesAnimationFrame = typeof browser.requestAnimationFrame === "function";
-    const request = usesAnimationFrame
-      ? callback => browser.requestAnimationFrame(callback)
-      : callback => browser.setTimeout(callback, 0);
-    cancelDrawRequest = usesAnimationFrame
-      ? requestId => browser.cancelAnimationFrame(requestId)
-      : requestId => browser.clearTimeout(requestId);
-    drawRequest = request(() => {
-      drawRequest = 0;
-      drawEdges(root, model, state, browser, markerId);
-    });
-  };
-
-  const renderDetails = () => {
-    const node = nodeById.get(state.selectedNodeId);
-    if (!node) return;
-    detailTitle.textContent = node.label;
-    detailColumn.textContent = model.columns[node.col];
-    detailStack.textContent = node.stack[state.mode];
-    detailStatus.textContent = statusLabel(node.status[state.mode]);
-    detailStatus.dataset.status = node.status[state.mode];
-    detailNote.textContent = node.note[state.mode];
-    detailConcerns.textContent = node.dims.map(dim => dimensionById.get(dim).label).join(" · ");
-
-    const relations = [
-      ...model.edges.filter(edge => edge.to === node.id).map(edge => ({ direction: "From", id: edge.from })),
-      ...model.edges.filter(edge => edge.from === node.id).map(edge => ({ direction: "To", id: edge.to })),
-    ];
-    const fragment = document.createDocumentFragment();
-    for (const relation of relations) {
-      const button = element(document, "button", "wtb-system-graph__neighbor", `${relation.direction} ${nodeById.get(relation.id).label}`);
-      button.type = "button";
-      button.dataset.nodeId = relation.id;
-      fragment.append(button);
-    }
-    if (relations.length === 0) fragment.append(element(document, "span", "", "No declared neighboring node."));
-    detailNeighbors.replaceChildren(fragment);
-  };
 
   const render = () => {
     for (const control of modeControls) control.checked = control.value === state.mode;
     for (const control of dimensionControls) control.checked = control.value === state.dimension;
-    replaceOptions(startSelect, model, state.dimension, state.startId, document);
-    replaceOptions(endSelect, model, state.dimension, state.endId, document);
-
-    for (const button of root.querySelectorAll("[data-node-id]")) {
-      const node = nodeById.get(button.dataset.nodeId);
-      if (!node || !button.classList.contains("wtb-system-graph__node")) continue;
-      const nodeStatus = node.status[state.mode];
-      const inConcern = nodeMatches(node, state.dimension);
-      button.dataset.status = nodeStatus;
-      button.dataset.inConcern = String(inConcern);
-      button.dataset.inRoute = String(state.route?.nodes.includes(node.id) ?? false);
-      button.setAttribute("aria-pressed", String(node.id === state.selectedNodeId));
-      if (state.route?.nodes[state.routeIndex] === node.id) button.setAttribute("aria-current", "step");
-      else button.removeAttribute("aria-current");
-      const concernState = inConcern ? "" : " Outside the current concern.";
-      button.setAttribute("aria-label", `${node.label}. ${statusLabel(nodeStatus)} in ${state.mode === "symfony" ? "Symfony" : "partial Spring"}.${concernState}`);
-      button.querySelector("[data-node-state]").textContent = `${statusLabel(nodeStatus)}${inConcern ? "" : " · Outside concern"}`;
-    }
-
-    renderDetails();
-    renderRouteList(routeList, model, state, document);
-    previousButton.disabled = !state.route || state.routeIndex <= 0;
-    nextButton.disabled = !state.route || state.routeIndex >= state.route.nodes.length - 1;
-    summary.textContent = graphStatusSummary(model, state);
-    status.textContent = state.announcement;
-    scheduleEdges();
+    renderLegend(summary, countStatuses(model, state.mode), document);
+    renderGraph(svg, model, state, document, hatchId);
+    renderDetails(details, model, state, document);
+    liveStatus.textContent = state.announcement;
   };
 
   const apply = (action, { focus = false } = {}) => {
+    if (destroyed) return state;
     const next = transitionSystemGraph(model, state, action);
-    if (next === state) return;
+    if (next === state) return state;
     state = next;
     render();
     if (focus) focusSelected(root, state.selectedNodeId);
+    return state;
   };
 
   const onChange = event => {
-    if (event.target.matches('[name="wtb-system-mode"]')) {
-      apply({ type: "SET_MODE", value: event.target.value, label: event.target.dataset.label });
-    } else if (event.target.matches('[name="wtb-system-dimension"]')) {
-      apply({ type: "SET_DIMENSION", value: event.target.value, label: event.target.dataset.label });
-    } else if (event.target === startSelect) {
-      apply({ type: "SET_START", value: event.target.value });
-    } else if (event.target === endSelect) {
-      apply({ type: "SET_END", value: event.target.value });
+    if (!event.target || typeof event.target.matches !== "function") return;
+    if (event.target.matches(MODE_CONTROL_SELECTOR)) {
+      apply({ type: "SET_MODE", value: event.target.value });
+    } else if (event.target.matches(DIMENSION_CONTROL_SELECTOR)) {
+      apply({ type: "SET_DIMENSION", value: event.target.value });
     }
   };
 
+  const selectFromTarget = target => {
+    if (!target || typeof target.closest !== "function") return false;
+    const nodeControl = target.closest("[data-node-id]");
+    if (!nodeControl || !root.contains(nodeControl)) return false;
+    const node = model.nodes.find(candidate => candidate.id === nodeControl.dataset.nodeId);
+    if (!node) return false;
+    apply({ type: "SELECT_NODE", value: node.id }, { focus: true });
+    return true;
+  };
+
   const onClick = event => {
-    const nodeButton = event.target.closest("[data-node-id]");
-    if (nodeButton && root.contains(nodeButton)) {
-      const node = nodeById.get(nodeButton.dataset.nodeId);
-      if (!node) return;
-      const movesFocus = nodeButton.classList.contains("wtb-system-graph__route-node")
-        || nodeButton.classList.contains("wtb-system-graph__neighbor");
-      apply({ type: "SELECT_NODE", value: node.id, label: node.label }, { focus: movesFocus });
-      return;
-    }
-    if (event.target.closest("[data-trace-route]")) {
-      apply({
-        type: "TRACE_ROUTE",
-        startLabel: nodeById.get(state.startId).label,
-        endLabel: nodeById.get(state.endId).label,
-      }, { focus: true });
-    } else if (event.target.closest("[data-route-previous]")) {
-      const nextId = state.route?.nodes[Math.max(0, state.routeIndex - 1)];
-      apply({ type: "STEP_ROUTE", delta: -1, label: nodeById.get(nextId)?.label }, { focus: true });
-    } else if (event.target.closest("[data-route-next]")) {
-      const nextId = state.route?.nodes[Math.min((state.route?.nodes.length ?? 1) - 1, state.routeIndex + 1)];
-      apply({ type: "STEP_ROUTE", delta: 1, label: nodeById.get(nextId)?.label }, { focus: true });
-    } else if (event.target.closest("[data-reset-graph]")) {
-      apply({ type: "RESET" }, { focus: true });
-    }
+    selectFromTarget(event.target);
+  };
+
+  const onKeydown = event => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    if (!event.target || typeof event.target.closest !== "function") return;
+    const nodeControl = event.target.closest(".wtb-system-graph__node[data-node-id]");
+    if (!nodeControl || !root.contains(nodeControl)) return;
+    event.preventDefault();
+    selectFromTarget(nodeControl);
   };
 
   root.addEventListener("change", onChange);
   root.addEventListener("click", onClick);
-  const resizeObserver = browser.ResizeObserver
-    ? new browser.ResizeObserver(scheduleEdges)
-    : null;
-  if (resizeObserver) resizeObserver.observe(root.querySelector("[data-node-field]"));
-  else browser.addEventListener?.("resize", scheduleEdges);
-
+  root.addEventListener("keydown", onKeydown);
   render();
+
   const controller = Object.freeze({
     ok: true,
     model,
     getState: () => state,
     dispatch: action => apply(action),
     destroy() {
+      if (destroyed) return;
+      destroyed = true;
       root.removeEventListener("change", onChange);
       root.removeEventListener("click", onClick);
-      resizeObserver?.disconnect();
-      browser.removeEventListener?.("resize", scheduleEdges);
-      if (drawRequest) cancelDrawRequest(drawRequest);
+      root.removeEventListener("keydown", onKeydown);
       enhancement.hidden = true;
       reading.open = true;
       root.dataset.graphState = "static";
@@ -780,7 +848,7 @@ if (typeof document !== "undefined") {
 }
 
 return Object.freeze({
-  findShortestRoute,
+  countStatuses,
   initialSystemGraphState,
   mountSystemGraph,
   transitionSystemGraph,

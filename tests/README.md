@@ -204,15 +204,18 @@ overflow.
 
 The Who To Believe graph source contract admits its finite node, edge, state,
 and concern vocabulary before rendering. Its focused unit route covers
-aggregated contract faults, deterministic breadth-first traversal, directed and
-unreachable paths, equal-length tie resolution, the closed transition
-vocabulary, and parity with the adjacent semantic reading. The browser route
+aggregated contract faults, renderable geometry, simple directed-relation
+identity, canonical announcements, the closed transition vocabulary, and
+parity with the source-derived digest and adjacent semantic reading. Runtime
+admission owns safe structure; the digest owns exact source-derived content.
+The browser route
 checks classic-script initialization through direct local-file inspection,
-native controls, node detail, route movement, focus, live status, local
-horizontal containment, reduced motion, forced colors, scriptless recovery,
-and print at the four accepted viewports. Passing results describe the checked
-contract and Chromium behavior; receiving browsers and later graph data retain
-their own observation route.
+mount-local identity, malformed-data fallback and repaired remount, native
+controls, node detail, direct node and neighbor selection, focus, live status,
+local horizontal containment, reduced motion, forced colors, scriptless
+recovery, and print at the four accepted viewports. Passing results describe
+the checked contract and Chromium behavior; receiving browsers and later graph
+data retain their own observation route.
 
 The native-video receiver browser contract uses passive local carrier fixtures
 to inspect every selected Debrief and AI Systems receiver at 390, 1024, and

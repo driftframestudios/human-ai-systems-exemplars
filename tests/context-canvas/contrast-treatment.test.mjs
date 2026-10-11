@@ -496,3 +496,70 @@ test("route-specific gradients, table roles, and compact rails retain their evid
     "WTB context actions inherit screen and print roles from their painted owner",
   );
 });
+
+test("the Who To Believe graph separates source colors from readable text roles", async () => {
+  const source = await readCanvasFile("who-to-believe-reviews-platform.html");
+  const owner = rulesFor(source, ".wtb-system-graph")[0];
+  assert.ok(owner, "Expected the graph to own its color roles");
+
+  const canvas = hexDeclaration(owner, "--graph-canvas");
+  const coral = hexDeclaration(owner, "--graph-coral");
+  const core = hexDeclaration(owner, "--graph-core");
+  const degraded = hexDeclaration(owner, "--graph-degraded");
+  const darkInk = hexDeclaration(owner, "--graph-dark-ink");
+  const degradedInk = hexDeclaration(owner, "--graph-degraded-ink");
+  const coralInk = hexDeclaration(owner, "--graph-coral-ink");
+  const coreInk = hexDeclaration(owner, "--graph-core-ink");
+
+  assert.deepEqual(
+    { coral, core, degraded },
+    { coral: "#f45d4c", core: "#8a8f2a", degraded: "#d9a400" },
+    "source-authentic accent colors remain available to fills, strokes, and dots",
+  );
+  assertPairsMeet([darkInk], [coral, core], 4.5, "checked concern and broken detail text");
+  assertPairsMeet([degradedInk, coralInk], [canvas], 4.5, "strained and broken edge labels");
+  assertPairsMeet([coralInk, coreInk], ["#ffffff"], 4.5, "concern tags");
+
+  assert.ok(
+    rulesFor(
+      source,
+      '.wtb-system-graph__choice--dimension input:is([value="abuse"], [value="core"]):checked + span',
+    ).some(rule => declaration(rule, "color") === "var(--graph-dark-ink)"),
+    "the checked coral and core controls consume the shared dark-ink role",
+  );
+  assert.ok(
+    rulesFor(
+      source,
+      '.wtb-system-graph__choice--dimension input:is([value="abuse"], [value="core"]):checked + span',
+    ).some(rule => (
+      rule.atRules.includes("@media (forced-colors: active)")
+      && declaration(rule, "color") === "HighlightText"
+    )),
+    "forced colors replace the companion ink with the visitor-selected highlight text",
+  );
+  assert.ok(
+    rulesFor(source, '.wtb-system-graph__edge-label[data-status="strained"]')
+      .some(rule => declaration(rule, "fill") === "var(--graph-degraded-ink)"),
+    "strained edge labels consume the degraded text role",
+  );
+  assert.ok(
+    rulesFor(source, '.wtb-system-graph__edge-label[data-status="broken"]')
+      .some(rule => declaration(rule, "fill") === "var(--graph-coral-ink)"),
+    "broken edge labels consume the coral text role",
+  );
+  assert.ok(
+    rulesFor(source, '.wtb-system-graph__detail-panel[data-status="broken"]')
+      .some(rule => declaration(rule, "color") === "var(--graph-dark-ink)"),
+    "the broken detail panel consumes the dark-ink role",
+  );
+  assert.ok(
+    rulesFor(source, '.wtb-system-graph__tag[data-dimension="abuse"]')
+      .some(rule => declaration(rule, "color") === "var(--graph-coral-ink) !important"),
+    "the abuse tag consumes the coral text role",
+  );
+  assert.ok(
+    rulesFor(source, '.wtb-system-graph__tag[data-dimension="core"]')
+      .some(rule => declaration(rule, "color") === "var(--graph-core-ink) !important"),
+    "the core tag consumes the core text role",
+  );
+});
