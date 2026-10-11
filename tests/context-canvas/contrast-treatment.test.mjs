@@ -495,6 +495,20 @@ test("route-specific gradients, table roles, and compact rails retain their evid
     /\.wtb-context-actions a\s*\{[^}]*color:/gu,
     "WTB context actions inherit screen and print roles from their painted owner",
   );
+  assert.ok(
+    rulesFor(
+      whoToBelieve,
+      ".wtb-implementation-track :is(p, li, .architecture-track-title, .beat-title, .txt-h4)",
+    ).some(rule => declaration(rule, "color") === "#edf3fb"),
+    "WTB level-four headings receive a readable foreground on the dark implementation field",
+  );
+  assert.ok(
+    rulesFor(
+      whoToBelieve,
+      ".wtb-implementation-track :is(p, li, .architecture-track-title, .beat-title, .txt-h4)",
+    ).some(rule => isPrintRule(rule) && declaration(rule, "color") === "#000"),
+    "WTB level-four headings return to dark ink when print removes the dark field",
+  );
 });
 
 test("the Who To Believe graph separates source colors from readable text roles", async () => {

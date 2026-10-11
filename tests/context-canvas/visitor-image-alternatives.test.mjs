@@ -156,6 +156,7 @@ test("Who To Believe figures preserve the intended narrative sequence", async ()
     'id="solution-intervention-title"',
     'id="wtb-figure-concept-matrix"',
     'id="wtb-figure-service-model-after"',
+    'id="context-tree-title"',
     'id="solution-outcomes-title"',
     'id="implementation-bottleneck-title"',
     'id="wtb-figure-dual-stack-system"',

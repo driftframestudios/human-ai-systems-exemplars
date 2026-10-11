@@ -63,13 +63,19 @@
         border-inline-start-color: #6adfd0;
         color: var(--canvas-ink-strong);
       }
+      .wtb-orientation-field--embedded {
+        border: .125rem solid #7ba0d5;
+        box-shadow: .55rem .55rem 0 #07101d;
+        margin-block: 2.5rem;
+        padding: clamp(1.25rem, 3vw, 2.5rem);
+      }
       .wtb-context-embed {
         border: .125rem solid #7ba0d5;
         border-radius: .8rem;
         box-shadow: .55rem .55rem 0 #07101d;
         overflow: hidden;
       }
-      .wtb-context-embed iframe { block-size: clamp(42rem, 78vh, 62rem); border: 0; }
+      .wtb-context-embed iframe { block-size: clamp(58rem, calc(78vh + 16rem), 78rem); border: 0; }
       .wtb-context-embed figcaption { color: #d8e4f2; padding: .8rem 1rem 1rem; }
       .wtb-context-actions { display: flex; flex-wrap: wrap; gap: .65rem 1.25rem; margin-block-start: .9rem; }
       .wtb-context-actions a { font-weight: 700; }
@@ -104,7 +110,7 @@
           #111c2d;
         color: #fff8e8;
       }
-      .wtb-implementation-track :is(p, li, .architecture-track-title, .beat-title) { color: #edf3fb; }
+      .wtb-implementation-track :is(p, li, .architecture-track-title, .beat-title, .txt-h4) { color: #edf3fb; }
       .wtb-implementation-track .architecture-track-title { border-block-end-color: #ff806f; }
       .wtb-implementation-track :is(.implementation-moves article, .implementation-companion) {
         --canvas-link-color: var(--canvas-link-on-light);
@@ -284,7 +290,7 @@
       .wtb-system-graph__edge-reading { columns: 2 18rem; }
       .wtb-system-graph__error { background: #fff1ef; border: .125rem solid var(--graph-coral); color: #722116 !important; font-weight: 750; margin-block-end: 1rem; padding: .75rem; }
       @media screen and (max-width: 42rem) {
-        .wtb-context-embed iframe { block-size: 46rem; }
+        .wtb-context-embed iframe { block-size: 76rem; }
         .wtb-context-actions { display: grid; }
         .wtb-system-graph__reading-columns { grid-template-columns: 1fr; }
         .wtb-system-graph__edge-reading { columns: 1; }
@@ -328,7 +334,7 @@
           color: #000;
         }
         .wtb-orientation-field .debrief-quote--orientation :is(cite, footer) { color: #000; }
-        .wtb-implementation-track :is(p, li, .architecture-track-title, .beat-title) { color: #000; }
+        .wtb-implementation-track :is(p, li, .architecture-track-title, .beat-title, .txt-h4) { color: #000; }
         .wtb-trust-aside, .wtb-implementation-track :is(.implementation-moves article, .implementation-companion) { box-shadow: none; }
         .wtb-system-graph { border: .0625rem solid #000; box-shadow: none; color: #000; }
         .wtb-system-graph [data-graph-enhancement] { display: none !important; }
@@ -398,92 +404,51 @@
       <header class="non-index-hero__container debrief-hero">
         <p class="debrief-kicker">Solution Architecture · Implementation Architecture · 2017–2020 + the return</p>
         <h1 class="txt-h1 h1-spaced h1-hero">Who To Believe</h1>
-        <p class="tag-line">Reweighting influence across product, data authority, and human review</p>
+        <p class="tag-line">Reweighting whose voices shaped campaigns, customer science, and client trust</p>
         <p class="debrief-lead">
-          The work began at BzzAgent, dunnhumby&rsquo;s social-marketing and advocacy company within the Tesco group. BzzAgent&rsquo;s
-          campaign and review operations fed dunnhumby&rsquo;s wider customer-data-science practice and, through it, Tesco&rsquo;s
-          understanding of customers. Millions of responses made the harder question consequential: whose contributions
-          should influence decisions, which household transitions needed context, and where did human judgment belong?
+          At BzzAgent—dunnhumby&rsquo;s social-marketing and advocacy company within Tesco—I shaped product strategy and
+          experience design for a review and campaign platform whose customer signals flowed into dunnhumby and Tesco.
+          Millions of responses made one question more important than scale: whose experience should shape the campaign,
+          the product, and the client&rsquo;s trust?
         </p>
       </header>
-
-      <div class="content__container wtb-orientation-field">
-        <div class="content content--editorial">
-          <section aria-labelledby="context-tree-title">
-            <p class="debrief-kicker">Orientation field · Context Tree</p>
-            <h2 id="context-tree-title" class="txt-h2">Read the populations before reading the score.</h2>
-            <p class="debrief-lead">
-              The same roster signal supports different questions for a participant, reviewer, product team, engineer,
-              privacy or safety owner, and client; a generative AI system used for candidate generation needs a bounded input
-              and output route. This WTB-specific Context Tree keeps each population’s decision, evidence need, uncertainty,
-              and handoff local while preserving the shared system.
-            </p>
-            <aside class="debrief-quote debrief-quote--orientation" aria-label="Architectural reading from the post-acquisition return">
-              <p>A successful channel metric can be the shadow cast by a broken product route.</p>
-              <footer>Architectural reading from the post-acquisition return</footer>
-            </aside>
-            <figure class="prototype-embed wtb-context-embed">
-              <iframe
-                title="Interactive Who To Believe Context Tree"
-                src="https://iframes.vik.guru/v1/canvas/who-to-believe-context-tree/"
-                sandbox="allow-scripts"
-                referrerpolicy="no-referrer"
-                loading="eager"></iframe>
-              <figcaption class="table-note">
-                Use the lens and population controls to compare role context, service handoffs, and context still to
-                surface. The complete role–context matrix remains available inside the prototype.
-              </figcaption>
-            </figure>
-            <div class="wtb-context-actions">
-              <a href="../../collaboration/context-tree-visual-variants/who-to-believe-presentation.html">Open the WTB Context Tree</a>
-              <a href="prototypes/core-architectures/chimeric-pack-v0.1/context-tree-chimeric-prototype-v0.1.7.html">Open the canonical editable Context Tree</a>
-            </div>
-            <p class="source-vintage">
-              This embedded prototype adapts the canonical Context Tree to the populations and boundaries named in the
-              WTB Site Reading. Its AI-collaboration row is my present-day interpretive extension, distinct from the
-              2017–2020 production system.
-            </p>
-          </section>
-        </div>
-      </div>
 
       <div class="content__container">
         <div class="content content--editorial">
           <section id="case-brief" data-content-form="case-brief" aria-labelledby="at-a-glance-title">
             <h2 id="at-a-glance-title" class="txt-h2">At-a-Glance</h2>
-            <p>At BzzAgent, I worked in product strategy and design as part of dunnhumby, Tesco&rsquo;s customer-data-science subsidiary, then returned after acquisition for stabilization consulting; the work connected review operations to customer data science while trust and mobile capabilities shipped.</p>
+            <p>At BzzAgent, dunnhumby&rsquo;s social-marketing and advocacy company within Tesco, I helped move a review platform from response volume toward trusted relationships and inspectable campaign decisions. I returned after acquisition to diagnose a navigation failure rooted in unresolved ownership between two application and schema-management paths.</p>
             <dl class="debrief-at-glance">
               <div>
                 <dt>Situation and stakes</dt>
-                <dd>BzzAgent&rsquo;s review and campaign operations supplied signals to dunnhumby&rsquo;s customer-data-science practice and Tesco&rsquo;s wider customer understanding. The platform needed to distinguish contribution quality from volume while preserving consent, household context, and consequential human judgment.</dd>
+                <dd>BzzAgent connected people with products, surveys, reviews, and campaigns. Those interactions supplied customer signals to dunnhumby&rsquo;s data-science practice and Tesco&rsquo;s wider customer understanding, so contribution quality, consent, household context, and consequential human judgment all mattered.</dd>
               </div>
               <div>
                 <dt>Scope and role</dt>
-                <dd>I worked in product strategy and product design at BzzAgent within dunnhumby, then a Tesco subsidiary, and returned after ownership changed for stabilization consulting across product, engineering, privacy, safety, marketing, operations, and leadership.</dd>
+                <dd>I worked in product strategy and experience design across product, engineering, campaign operations, privacy, safety, marketing, and leadership, then returned after ownership changed as a stabilization consultant.</dd>
               </div>
               <div>
                 <dt>Core constraint</dt>
-                <dd>Roster legitimacy, contribution quality, changing household context, and review need required more context than a single response count could carry. Acquisition also left two data models competing for operating authority.</dd>
+                <dd>Influencers already managed campaigns as paid work, while ordinary marriages, roommates, and caregiving changes could resemble campaign manipulation in the data. Acquisition also left two application and schema-management paths with write authority over one US database.</dd>
               </div>
               <div>
                 <dt>Key decision</dt>
-                <dd>Introduce three voice tiers, model transitions as a graph, focus human review where context warranted it, build mobile field capability, and treat reconciliation as operating architecture.</dd>
+                <dd>Create three relationship tiers, score household transitions to focus human review, place mobile actions beside the task, and use nightly reconciliation while the database still had two writers.</dd>
               </div>
               <div>
                 <dt>Outcome and evidence</dt>
-                <dd>My work helped ship mobile and trust capabilities. I recall new signups rising about 20%; multiple-account abuse logins falling about 10% and then about 50% by year end; and fewer total logins carrying more activity per session. dunnhumby also used my GDPR and data-inventory materials as a company-wide example of how to do the work. Dual-stack contention persisted.</dd>
+                <dd>Contemporaneous telemetry notes record new signups rising about 20%; multiple-account-abuse logins falling about 10% initially and about 50% by year end; and fewer total logins alongside more activity per session. dunnhumby used my GDPR and data-inventory materials as a company-wide example. The competing write paths persisted.</dd>
               </div>
               <div>
                 <dt>Relevance now</dt>
-                <dd>The case offers a pattern for trust-sensitive ranking, inspectable human review, purpose-aware consent, and post-acquisition stabilization while treating a convenient metric as one input to the decision.</dd>
+                <dd>The case shows how weighted signals can stay connected to human interpretation and appeal, while platform ownership determines whether an interaction remains stable through later change.</dd>
               </div>
             </dl>
-            <p><strong>Basis and limits:</strong> I remember the outcome figures approximately. They establish direction; causal attribution remains shared. Public company records document the organizational context, and the linked Registry reading documents the engagement history.</p>
+            <p><strong>Basis and limits:</strong> These rounded percentages come from contemporaneous notes taken from system telemetry. The surviving notes establish the checkpoints. Original denominators and event definitions would reconstruct the rates; causal attribution would require the original experiment or a defensible observational design. Public company records establish the organizational context, and the linked Registry reading documents the engagement history.</p>
             <p>
-              Six numbered interface reconstructions in this Debrief show work I designed and built in 2026 with fictional
-              content. They make historical relationships and present-day scenarios concrete enough to inspect and discuss.
-              The page identifies reconstructed content directly; recalled outcomes, project records, and citations document
-              the engagement history.
+              Six numbered figures show a working, IP-free 2026 proxy system I designed and built with fictional content.
+              The figures make historical relationships and present-day scenarios concrete enough to inspect and discuss;
+              direct experience, contemporaneous notes, project records, and citations document the engagement history.
             </p>
             <p><a href="#solution-architecture-title">Read the Full Debrief →</a></p>
           </section>
@@ -500,6 +465,14 @@
               blurry receipts.
             </figcaption>
           </figure>
+          <p class="source-vintage">
+            Figure 1 shows a real, working website I designed and built in 2026 as an IP-free proxy for the work in this
+            Debrief. I used Codex, Claude Code, and Qwen with my kindlight.systems architecture to supply working code and
+            design guidance to Figma Make. Engineering and design can therefore work in different applications while
+            carrying the same product grammar at comparable fidelity. See the
+            <a href="{{PUBLIC_URL_REGISTRY_SOFT_COLOR_BLOCKING_VISUAL_FIDELITY_CONTRACT}}">Soft Color Blocking Visual Fidelity Contract and interactive design library</a>,
+            and <a href="{{PUBLIC_URL_REGISTRY_VISUAL_FIDELITY_PRACTITIONER_PROBES_LAYERED_JUDGMENT_EVIDENCE}}">AI-legible guidance for scaling visual contracts beyond a design library</a>.
+          </p>
 
           <section id="cpg-pharma-conversational-ai-walkthrough" aria-labelledby="cpg-pharma-conversational-ai-walkthrough-title">
             <h2 id="cpg-pharma-conversational-ai-walkthrough-title" class="txt-h2">Guided review and safety-reporting demonstration</h2>
@@ -550,17 +523,17 @@
             </p>
             <p>
               BzzAgent connected brands with people who tried products, shared feedback, completed surveys, and published
-              reviews, photographs, videos, and conversations. That review operation supplied customer signals to dunnhumby
-              and Tesco rather than ending at campaign fulfillment.<sup><a href="#source-tesco-product-exhibit" aria-label="Source: Tesco BzzAgent product exhibit">source</a></sup>
+              reviews, photographs, videos, and conversations. Each campaign met an immediate client need and supplied
+              customer signals to dunnhumby and Tesco.<sup><a href="#source-tesco-product-exhibit" aria-label="Source: Tesco BzzAgent product exhibit">source</a></sup>
               Participants relied on fair opportunities and contextual judgment; shoppers relied on honest disclosure;
               brand, campaign, and data-science teams relied on credible contributions; and privacy and safety teams relied
               on enough context to route consequential signals responsibly.
             </p>
             <p>
-              Audience procurement at specificity was the deeper product. Reviews were one output of a system joining
-              participants, campaigns, products, household context, customer science, and client decisions. My product
-              strategy and design work focused on preserving that specificity while strengthening participant dignity,
-              regional purpose, and client trust.
+              The deeper product was finding and supporting the exact people a client needed to hear from—audience
+              procurement at specificity. Reviews were one result of a system joining participants, campaigns, products,
+              household context, customer science, and client decisions. My product strategy and design work preserved that
+              specificity while strengthening participant dignity, regional purpose, and client trust.
             </p>
             <p>
               I reconstructed the earlier member-facing entry state. Putting the campaign promise, navigation, explanation,
@@ -590,23 +563,27 @@
 
             <h3 id="solution-bottleneck-title" class="txt-h3 beat-title">I.b The Bottleneck — Who To Believe</h3>
             <p>
-              The platform had abundant feedback. Product value concentrated in the contributors whose authentic communities,
-              sustained participation, and lived context could improve research and market decisions. Mid-range influencers
-              carried that value, but their participation required a different exchange: direct relationship, product fit,
-              field support, and attention to their own channels.
+              The platform already had feedback at enormous scale. Mid-range influencers brought the authentic communities
+              and lived context that could improve research and market decisions, but another generic survey held little
+              value for them. Some kept their own spreadsheets of campaigns, products, deadlines, and promised payments.
+              They were influencers, and any conversation competed with work they could invoice; some asked for thousands
+              of dollars just to get on a call. Yet a product that genuinely fit the story they told on their channels could
+              bring them happily into a survey. The product needed a relationship model; a louder form would have repeated
+              the mismatch.
             </p>
             <p>
-              Campaign-misfit behavior created a second decision surface. Some participants changed household or therapy
-              attributes to qualify for high-value campaigns. The same patterns could also describe marriage, roommates,
-              caregiving, or other legitimate life changes. The business needed roster integrity and the participant needed
-              contextual judgment.
+              The people changing profiles were real participants living through changing household circumstances. Some
+              altered household or therapy details to qualify for high-value campaigns; marriage, roommates, caregiving,
+              and other ordinary changes could produce the same data shape. The company needed campaign integrity, and
+              participants needed a person able to interpret context.
             </p>
 
             <p>
               I traced the same tension through the complete member journey. The service model placed survey discovery,
               receipt review, household changes, side-effect reporting, support, and rebate status on one timeline. Product,
               operations, safety, and engineering teams could point to the exact handoff where time, context, or ownership
-              fell away and explain what a reliable service response required.
+              fell away and explain what a reliable service response required. Figure 3 turns spreadsheet-carried campaign
+              work and participant workarounds into a shared object the team could challenge.
             </p>
             <figure id="wtb-figure-service-model-before" class="debrief-proxy-figure story-visual table-span-all cobalt-operating-field__visual">
               <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable current-state member review service model with delays and repeat work">
@@ -664,7 +641,7 @@
                       <th scope="row" data-label="Barrier">Cross-territory source weighting</th>
                       <td data-label="Why it resisted adoption">Regional stores, access rules, campaign populations, consent states, and policy contexts made a single undifferentiated trust score misleading.</td>
                       <td data-label="Context needed for a fair decision">Region, policy and model version, observation window, source class, denominator, and declared data movement.</td>
-                      <td class="table-ability" data-label="Operating response">One evidence contract with region- and purpose-aware handling; cohort scorecards retain their slices and denominators.</td>
+                      <td class="table-ability" data-label="Operating response">One decision contract with region- and purpose-aware handling; cohort scorecards retain their slices and denominators.</td>
                     </tr>
                     <tr data-label="Five adoption barriers the reweighting scheme had to make operable: Incumbent resistance to reweighting">
                       <th scope="row" data-label="Barrier">Incumbent resistance to reweighting</th>
@@ -684,10 +661,9 @@
 
             <h3 id="solution-intervention-title" class="txt-h3 beat-title">I.c The Intervention</h3>
             <p>
-              I compared seven redesign concepts against nine member and operating needs before choosing a direction. The
-              matrix made the tradeoffs discussable: each team could challenge the rating for survey discovery, receipt
-              capture, side-effect reporting, navigation, campaign fit, abuse resistance, localization, accessibility, or
-              brand trust and show what evidence would change it.
+              I put seven redesign concepts beside nine member and operating needs, then asked product, engineering, review,
+              privacy, and safety colleagues to challenge each rating. Figure 4 turned preference into a shared review:
+              show me which task fails, and show me what would change your mind.
             </p>
             <figure id="wtb-figure-concept-matrix" class="debrief-proxy-figure story-visual table-span-all cobalt-operating-field__visual">
               <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable matrix comparing seven redesign concepts across nine member and operating needs">
@@ -703,11 +679,16 @@
               </figcaption>
             </figure>
             <ol class="clean-list numbered-moves">
-              <li><strong>Direct partnership with the mid-tier voice.</strong> Product, schedule, brand guidance, and field support moved into a relationship the contributor could use.</li>
+              <li><strong>Direct partnership with the mid-tier voice.</strong> Product, schedule, brand guidance, and field support moved into a relationship the contributor could use. Targeted messages named the contributor and channel, recognizing each person&rsquo;s established work.</li>
               <li><strong>Three tiers of voice.</strong> Direct partnership, survey participation, and bulk response received distinct transaction models and signal expectations.</li>
-              <li><strong>A guardian layer for roster legitimacy.</strong> Attribute transitions focused human attention on cases whose context materially changed the decision.</li>
+              <li><strong>A guardian layer for roster legitimacy.</strong> Attribute transitions chose what a person should inspect; the reviewer decided what the transition meant. It was a discriminator, not a guillotine.</li>
               <li><strong>Regulatory positioning as commercial posture.</strong> Purpose-specific processing, disclosure support, and regional handling became part of client trust.</li>
             </ol>
+            <p>
+              Staff began joining top-tier contributors at shoots with product, disclosure guidance, schedules, and
+              partner-specific constraints—sometimes no food, dogs, or children in the frame. The relationship became
+              richer and more bespoke as its capacity limit became visible.
+            </p>
             <p>
               That privacy work traveled beyond the BzzAgent product. dunnhumby used my GDPR and data-inventory
               materials as a company-wide example of how to do the work, turning a local inventory into a shared reference
@@ -719,15 +700,17 @@
               <figcaption class="table-note">
                 The operating model reweights influence twice: the participation tier changes the transaction, and the
                 transition graph changes where human attention is spent. Contextual review protects legitimate household
-                changes while concentrating operating cost on ambiguous cases.
+                changes while concentrating operating cost on ambiguous cases. Roughly 250 reviewers and about two extra
+                hours per reviewed case supplied the capacity that kept a score from becoming a verdict; the reconstructed
+                operating-cost range is approximately $1.3–2.1M.
               </figcaption>
             </figure>
 
             <aside class="interpretive-aside wtb-trust-aside table-span-all" aria-labelledby="information-scent-title">
-              <h4 id="information-scent-title" class="txt-h4">Trust can substitute for visible information scent.</h4>
+              <h4 id="information-scent-title" class="txt-h4">A trusted voice can hide the cues people use to decide where to look.</h4>
               <p>
-                Ragavan and Alipour’s 2024 information-foraging account of LLM chat describes a setting where trust in a
-                familiar voice can replace the proximal cues people normally use to decide where to look next. The WTB
+                Ragavan and Alipour’s 2024 information-foraging account calls those proximal cues <em>information scent</em>.
+                In LLM chat, trust in a familiar voice can replace cues people normally use to decide where to look next. The WTB
                 correspondence is structural: a roster score can hide candidate explanations in the same way a fluent answer
                 can hide candidate answers. A visible reason, source class, alternative, reviewer, and appeal route give the
                 person somewhere to navigate besides the score.
@@ -753,18 +736,19 @@
                 <img src="../img/plot/v3b2_gold_note_viewlets.svg" width="1600" height="1060" loading="lazy" alt="A detached hold score gives way to gold-note viewlets carrying provenance, candidate explanations, accountable review and appeal, and quality-learning evidence through one service route.">
               </a>
               <figcaption class="table-note">
-                Gold-note viewlets keep source, alternatives, standing, and recovery together. The displayed probabilities
+                These decision cards—called gold-note viewlets in the underlying method—keep source, alternatives, standing,
+                and recovery together. The displayed probabilities
                 are explicitly uncalibrated planning priors for inspecting the decision frame; the outcome tables carry the
                 historical results.
               </figcaption>
             </figure>
 
             <p>
-              I examined the service model against the interface choices with the engineers before the team decided on
-              outcomes so the resulting design was both feasible as well as flexible. The redesigned journey joins
-              eligibility, identity, receipt guidance, contextual risk review, participant appeal, and the
-              pharmacovigilance handoff. Reading the before and after models together gave each team a precise place to
-              confirm the changed responsibility and identify the next mismatch.
+              Before choosing the redesign, I reviewed the service model with engineers against each interface concept.
+              Together we identified which choices were feasible, which responsibilities moved across teams, and where the
+              design needed flexibility. Figure 5 joins eligibility, identity, receipt guidance, contextual risk review,
+              participant appeal, and the pharmacovigilance handoff so each team can confirm its changed responsibility and
+              point to the next mismatch.
             </p>
             <figure id="wtb-figure-service-model-after" class="debrief-proxy-figure story-visual table-span-all cobalt-operating-field__visual">
               <div class="debrief-proxy-frame" role="region" tabindex="0" aria-label="Scrollable redesigned member review service model with trust and safety pathways">
@@ -778,6 +762,43 @@
                 safety and pharmacovigilance pathways show who receives each signal and how feedback returns to the system.
               </figcaption>
             </figure>
+
+            <section class="wtb-orientation-field wtb-orientation-field--embedded table-span-all" aria-labelledby="context-tree-title">
+              <p class="debrief-kicker">Orientation field · Context Tree</p>
+              <h3 id="context-tree-title" class="txt-h2">Read who carries each consequence before reading the score.</h3>
+              <p class="debrief-lead">
+                One roster signal changes a participant&rsquo;s opportunity, a reviewer&rsquo;s decision, a product team&rsquo;s
+                priorities, an engineer&rsquo;s service boundary, a privacy or safety owner&rsquo;s handoff, and a client&rsquo;s trust.
+                The WTB Context Tree keeps each population&rsquo;s decision, information need, uncertainty, and receiving route
+                local while preserving the shared system.
+              </p>
+              <aside class="debrief-quote debrief-quote--orientation" aria-label="Architectural reading from the post-acquisition return">
+                <p>A successful channel metric can be the shadow cast by a broken product route.</p>
+                <footer>Architectural reading from the post-acquisition return</footer>
+              </aside>
+              <figure class="prototype-embed wtb-context-embed">
+                <iframe
+                  title="Interactive Who To Believe Context Tree"
+                  src="https://iframes.vik.guru/v1/canvas/who-to-believe-context-tree/"
+                  sandbox="allow-scripts"
+                  referrerpolicy="no-referrer"
+                  loading="lazy"></iframe>
+                <figcaption class="table-note">
+                  Use the lens and population controls to compare role context, service handoffs, and unresolved context.
+                  The taller viewing frame carries the first Role context cards into the initial view; the complete
+                  role–context matrix remains available inside the prototype.
+                </figcaption>
+              </figure>
+              <div class="wtb-context-actions">
+                <a href="../../collaboration/context-tree-visual-variants/who-to-believe-presentation.html">Open the WTB Context Tree</a>
+                <a href="prototypes/core-architectures/chimeric-pack-v0.1/context-tree-chimeric-prototype-v0.1.7.html">Open the canonical editable Context Tree</a>
+              </div>
+              <p class="source-vintage">
+                This embedded prototype adapts the canonical Context Tree to the populations and boundaries named in the
+                public Registry account. Its AI-system row is my present-day interpretive extension, distinct from the 2017–2020
+                production system.
+              </p>
+            </section>
 
             <h3 id="solution-outcomes-title" class="txt-h3 beat-title">I.d Outcomes</h3>
             <figure class="table-figure table-figure--wide table-span-all">
@@ -801,26 +822,26 @@
                     </tr>
                     <tr data-label="What changed, how I know, and what remained: New signups increased approximately 20%">
                       <th scope="row" data-label="Observed direction">New signups increased approximately 20%</th>
-                      <td data-label="How I know">My approximate recollection; the denominator and my causal share remain open.</td>
-                      <td data-label="Enterprise reading">The rise is consistent with stronger contributor reach; causal attribution remains open.</td>
+                      <td data-label="How I know">Contemporaneous notes from system telemetry record the checkpoint. Original denominators and event definitions would reconstruct the rate; causal attribution would require the original experiment or a defensible observational design.</td>
+                      <td data-label="Enterprise reading">The rise accompanied stronger contributor reach; the notes establish the movement while causal attribution stays shared.</td>
                       <td data-label="Condition that remained">Growth still depended on participant fit and campaign exchange.</td>
                     </tr>
                     <tr data-label="What changed, how I know, and what remained: Multiple-account abuse logins fell approximately 10%, then about 50% by year end">
                       <th scope="row" data-label="Observed direction">Multiple-account abuse logins fell approximately 10%, then about 50% by year end</th>
-                      <td data-label="How I know">My approximate recollection; the two checkpoints show direction rather than a continuous trend line or my isolated causal share.</td>
-                      <td data-label="Enterprise reading">The sequence is consistent with staged review and intervention.</td>
+                      <td data-label="How I know">Contemporaneous telemetry notes record both checkpoints. They establish the direction and staged change; a continuous trend line would require the original dataset.</td>
+                      <td data-label="Enterprise reading">The sequence accompanied staged review and intervention.</td>
                       <td data-label="Condition that remained">Marriage and roommate patterns still required contextual judgment.</td>
                     </tr>
                     <tr data-label="What changed, how I know, and what remained: Total logins fell while activity per session increased">
                       <th scope="row" data-label="Observed direction">Total logins fell while activity per session increased</th>
-                      <td data-label="How I know">My directional recollection.</td>
-                      <td data-label="Enterprise reading">The pattern is consistent with more useful work happening inside each session; route-level instrumentation would separate that effect from cohort or campaign changes.</td>
+                      <td data-label="How I know">Contemporaneous notes from system telemetry record both directions.</td>
+                      <td data-label="Enterprise reading">Each session carried more recorded activity; route-level and cohort data would help distinguish interface effects from campaign or population changes.</td>
                       <td data-label="Condition that remained">Architecture still had to preserve those contexts through later change.</td>
                     </tr>
                     <tr data-label="What changed, how I know, and what remained: The review tier absorbed ambiguous cases">
                       <th scope="row" data-label="Observed direction">The review tier absorbed ambiguous cases</th>
                       <td data-label="How I know">Operating reconstruction: roughly 250 reviewers, an estimated two additional hours per reviewed case, and approximately $1.3–2.1M in review economics.</td>
-                      <td data-label="Enterprise reading">Machine classification concentrated human-review capacity on a smaller, higher-value decision surface.</td>
+                      <td data-label="Enterprise reading">Machine classification concentrated human-review capacity on a smaller, higher-value set of decisions.</td>
                       <td data-label="Condition that remained">The unit economics depended on campaign value supporting that review capacity.</td>
                     </tr>
                   </tbody>
@@ -831,7 +852,7 @@
             <h3 id="solution-repeatability-title" class="txt-h3 beat-title">I.e Repeatability</h3>
             <ul>
               <li><strong>Reweight whose feedback counts:</strong> identify the contributor tier the product wants to sustain, then redesign the exchange around that tier.</li>
-              <li><strong>Let high-value participation invert into the field:</strong> direct partnership may move staff toward contributors instead of scaling through forms.</li>
+              <li><strong>Meet high-value contributors in their working context:</strong> direct partnership may take staff to shoots and contributor channels as the relationship becomes more bespoke.</li>
               <li><strong>Make roster legitimacy a client-facing ability:</strong> show how contextual review protects both campaign fit and legitimate participants.</li>
               <li><strong>Diagnose patterns by the problem they solve:</strong> bind controls to the task context that makes them useful.</li>
             </ul>
@@ -847,14 +868,16 @@
             <p>
               BzzAgent&rsquo;s platform joined two regional databases, a Symfony and Doctrine estate, a Spring and Hibernate service
               layer introduced on the US database, React and React Native clients, Redis-backed sessions, JWT services,
-              a large constellation of cron jobs, and a single in-house batch-compute machine called Thunderball. The UK
-              database remained Symfony-only; the US database became the contested source of schema truth because Doctrine and Flyway
-              carried different accounts of its structure.
+              a large constellation of cron jobs, and a single in-house batch-compute machine called Thunderball. Thunderball
+              was a physical box under a colleague&rsquo;s desk; nobody on the team remembered why it had that name. It scored
+              transitions in batches and returned ambiguous cases to the review queue. The UK database remained Symfony-only;
+              the US database became the contested source of schema truth because Doctrine schema tooling and the
+              Spring/Flyway migration path carried different accounts of its structure.
             </p>
             <p>
               The B2B platform carried campaign telemetry, partner portals, and post-market-surveillance signals. This made
               mobile capability, roster decisions, purpose state, incident routing, and migration behavior parts of one
-              implementation story rather than independent feature streams.
+              implementation story with shared consequences.
             </p>
 
             <h3 id="implementation-bottleneck-title" class="txt-h3 beat-title">II.b The Bottleneck</h3>
@@ -862,8 +885,24 @@
               <li><strong>Field capability:</strong> receipt scanning, video capture, push recruitment, and offline survey work needed an API and mobile client boundary.</li>
               <li><strong>Attention at scale:</strong> millions of participants needed a discriminator that could focus a finite human-review tier.</li>
               <li><strong>Purpose state:</strong> special-category data, regional access, withdrawal, endorsement, and safety handoff needed explicit lifecycle behavior.</li>
-              <li><strong>Migration ownership:</strong> two ORMs writing the same US schema needed a daily, human-readable reconciliation signal.</li>
+              <li><strong>Migration ownership:</strong> competing schema-authority paths writing the same US schema needed a daily, human-readable reconciliation signal.</li>
             </ul>
+
+            <p>
+              I argued that Doctrine schema tooling and the Spring/Flyway migration path sharing write authority over one US
+              database would create correctness faults documentation could never fully catch. I lost that architecture
+              argument. Doctrine treated the live database as truth; Flyway treated migration history as truth. Both paths
+              wrote. Every change acquired a manual comparison, and the planned phased migration began to feel closer to a
+              spiral off a cliff.
+            </p>
+            <p>
+              The deadline changed the emotional temperature: GDPR was the foreground, and leadership understood failure as
+              a threat to the UK market—borderline panic and, by borderline panic, pure panic. At the same time, an era-typical
+              Facebook authorization could expose the locations of a participant&rsquo;s friends&rsquo; friends even though the
+              product&rsquo;s declared purpose stopped at the participant&rsquo;s own information. Cambridge Analytica changed the
+              meaning of those cheap permissions;
+              the useful target became purpose-specific collection and a traceable decision about every regional data flow.
+            </p>
 
             <p>
               I mapped those four concerns onto the dual-stack system as sources, services, models, connections, and
@@ -1088,13 +1127,14 @@
             <h4 id="implementation-barriers-title" class="txt-h4 beat-title">II.b.i Barriers to Adoption</h4>
             <p>
               A planned Spring expansion to the UK and retirement of Symfony lost momentum inside the cron-migration backlog.
-              Thunderball constrained graph processing to batches. Manual right-to-erasure work carried continuing operating
-              cost. Each cloud-facing decision arrived with a cost-per-call shadow. Most consequentially, Doctrine treated
-              the live database as truth while Flyway treated migration history as truth; both wrote the US database.
+              Migrating each scheduled job became its own small project, and the queue kept growing. Thunderball kept graph
+              processing on a batch cadence. People carried right-to-erasure requests through a manual workflow. Each
+              cloud-facing decision arrived with a cost-per-call shadow. Doctrine schema tooling and the Spring/Flyway path
+              continued writing competing accounts of the US database.
             </p>
 
             <figure class="story-visual table-span-all">
-              <img src="../img/plot/who_to_believe_return_map.svg" width="1600" height="1180" loading="lazy" alt="Dual ORM contention on the US database flows through reconciliation and later adapters to a phantom navigation path, which heatmap analysis and recordings trace back to the architectural cause.">
+              <img src="../img/plot/who_to_believe_return_map.svg" width="1600" height="1180" loading="lazy" alt="Competing schema-authority paths on the US database flow through reconciliation and later adapters to a phantom navigation path, which heatmap analysis and recordings trace back to the architectural cause.">
               <figcaption class="table-note">
                 The reconciliation service made the lived system inspectable while the dual-writer condition persisted.
                 After acquisition, a deprecated render path became active again; source accounts differ on the exact
@@ -1137,7 +1177,7 @@
               <article aria-labelledby="move-reconciliation-title">
                 <p class="implementation-companion__eyebrow">§c.6 · Migration ownership and reconciliation signals</p>
                 <h4 id="move-reconciliation-title" class="txt-h4">A nightly diff translated two schema realities</h4>
-                <p>A small staging script compared Doctrine introspection with Flyway history, highlighted protected-field divergence, and emitted a human-readable report. It later became a service, UI, Slack integration, and standard multi-database pattern.</p>
+                <p>An engineer wrote the smallest useful bridge in two evenings. A staging cron compared Doctrine&rsquo;s account with Flyway&rsquo;s, raised an alert around protected fields, and linked to a Jira item that planned its replacement. Two weeks before the GDPR deadline, compliance found it in an unrelated Slack thread. A <code>--report</code> option turned the temporary script into a document people could use; the July audit passed, and the bridge later became a service, UI, Slack integration, and standard multi-database pattern.</p>
               </article>
             </div>
 
@@ -1202,22 +1242,27 @@
 
             <h4 id="stabilization-title" class="txt-h4 beat-title">II.d.1 Post-Acquisition Stabilization</h4>
             <p>
-              Feature delivery paused while the acquiring organization learned what the system actually did. Code became the
-              primary map; characterization tests traced pivotal signal paths; runtime behavior was compared with diagrams.
-              The biomedical-engineering question — what is signal, what is noise, where is the loop broken? — became a
-              practical diagnostic for the inherited system.
+              When the acquiring organization called me back, I helped the team pause feature delivery long enough to map
+              what the inherited system actually did. We read the code as the current system map, traced pivotal signal
+              paths with characterization tests, and compared runtime behavior with the diagrams. The biomedical-engineering
+              question—what is signal, what is noise, where is the loop broken?—became a practical diagnostic for the
+              inherited system.
             </p>
 
             <h4 id="return-title" class="txt-h4 beat-title">II.d.2 The Return — When the Hamburger Came Back</h4>
             <p>
-              The redesigned desktop experience was supposed to render the full navigation, yet some requests returned the
-              compact hamburger menu intended for a different context. Two workspace accounts preserve different plausible
-              triggers. One points to Symfony fragments, Spring authentication, and shared-table writes; another points to
-              post-acquisition ETL and adapters reactivating a deprecated render path under particular load and state
-              conditions. Differences in Symfony/Doctrine and Spring Boot/Hibernate/JPA response assembly—including security
-              context, lazy loading, cache-key generation, and public-versus-authenticated hydration—could alter the delivered
-              navigation state. Both accounts locate the visible symptom in unresolved cross-stack ownership rather than in
-              the navigation component alone.
+              When I came back, the styling was new and the hamburger was back. Nobody on the new team had designed it.
+              Support language sounded evasive only because the control itself flickered: “the menu thing,” “the icon that
+              wasn&rsquo;t there,” “I clicked but nothing happened.” A click heatmap showed activity in the empty space where
+              full navigation should have been; about three consenting recordings showed why.
+            </p>
+            <p>
+              The surviving accounts disagree on the exact trigger. One points to Symfony fragments, Spring authentication,
+              and shared-table writes; another points to post-acquisition ETL and adapters reactivating a deprecated render
+              path under particular load and state conditions. Differences in Symfony/Doctrine and Spring Boot/Hibernate/JPA
+              response assembly—including security context, lazy loading, cache-key generation, and public-versus-authenticated
+              hydration—could alter the delivered navigation state. Both accounts locate the visible symptom in unresolved
+              cross-stack ownership. The precise trigger remains open.
             </p>
 
             <section id="cpg-pharma-menu-bottleneck-walkthrough" class="table-span-all" aria-labelledby="cpg-pharma-menu-bottleneck-walkthrough-title">
@@ -1254,10 +1299,9 @@
 
             <h4 id="marketing-misread-title" class="txt-h4 beat-title">II.d.3 The Marketing Misread</h4>
             <p>
-              Email reopens and click-throughs looked unusually strong. The more useful reading was infrastructural: people
-              were returning to working links in email footers because the product’s navigation path was unreliable. Push
-              notifications also delivered direct routes that bypassed the same gap. A successful channel metric was partly
-              measuring recovery from a broken navigation route.
+              Marketing saw unusually strong email reopens and click-throughs. The metric was measuring a workaround: people
+              reopened messages because footer links reached pages the site navigation could not reliably reach. Push
+              notifications bypassed the same failure. The organization had adapted around a bug before anyone had named it.
             </p>
 
             <h4 id="return-proves-title" class="txt-h4 beat-title">II.d.4 What the Return Proves</h4>
@@ -1336,7 +1380,7 @@
                   <tbody>
                     <tr data-label="Local conditions and the replacement architecture another team can carry: A large population with costly ambiguous cases">
                       <th scope="row" data-label="Local condition">A large population with costly ambiguous cases</th>
-                      <td data-label="Transferable requirement">A classification surface that preserves reason, review, and appeal.</td>
+                      <td data-label="Transferable requirement">A classification mechanism that preserves reason, review, and appeal.</td>
                       <td data-label="Useful practice">Model transitions; send consequential ambiguity to people.</td>
                     </tr>
                     <tr data-label="Local conditions and the replacement architecture another team can carry: Multiple clients need the same domain behavior">
@@ -1453,22 +1497,22 @@
             <p>
               Each source carries a distinct role. Tesco and dunnhumby establish the company lineage, customer-science
               practice, and historical BzzAgent product. The linked Registry reading documents my work, lived decisions,
-              and outcome recollections. The FTC source establishes the period-applicable endorsement context; the two research
+              and telemetry-note outcomes. The FTC source establishes the period-applicable endorsement context; the two research
               papers remain later interpretive lenses.
             </p>
             <ol class="source-list">
               <li id="source-tesco-bzzagent">Read <a href="https://www.tescoplc.com/tesco-plc-first-quarter-management-statement/">Tesco PLC&rsquo;s 2011 first-quarter management statement</a> for dunnhumby&rsquo;s place in Tesco&rsquo;s marketing-services business and its acquisition of BzzAgent to extend client services into social media.</li>
               <li id="source-tesco-product-exhibit">Read <a href="https://www.tescoplc.com/media/4xdhvz0f/investor_and_analyst_innovation_exhibition_content.pdf">Tesco PLC&rsquo;s 2012 innovation exhibition</a> for BzzAgent&rsquo;s company-issued description as dunnhumby&rsquo;s social-marketing arm, its participant model, and its use of household insight for targeting and measurement.</li>
               <li id="source-dunnhumby-backgrounder">Read <a href="https://www.dunnhumby.com/sites/default/files/filepicker/1/dunnhumby_CorporateBackgrounder_June2015.pdf">dunnhumby&rsquo;s 2015 corporate backgrounder</a> for its Tesco ownership, customer-science model, and inclusion of BzzAgent among its social-marketing and advocacy capabilities.</li>
-              <li id="source-wtb-registry-account">Read <a href="{{PUBLIC_URL_REGISTRY_WHO_TO_BELIEVE}}">Who To Believe</a> for the fuller public account of the engagement, trust decisions, migration, and outcome recollections.</li>
+              <li id="source-wtb-registry-account">Read <a href="{{PUBLIC_URL_REGISTRY_WHO_TO_BELIEVE}}">Who To Believe</a> for the fuller public account of the engagement, trust decisions, migration, and telemetry-note outcomes.</li>
               <li id="source-ftc-endorsement-guides">Read the <a href="https://www.ftc.gov/news-events/news/press-releases/2009/10/ftc-publishes-final-guides-governing-endorsements-testimonials">Federal Trade Commission&rsquo;s 2009 Endorsement Guides announcement</a> for the period-applicable disclosure context around material connections and free products.</li>
               <li id="source-information-foraging"><a href="https://arxiv.org/abs/2406.04452">Ragavan and Alipour (2024), Revisiting Human Information Foraging: Adaptations for LLM-based Chatbots</a></li>
               <li id="source-verbalized-sampling"><a href="https://arxiv.org/abs/2510.01171">Zhang et al. (2025), Verbalized Sampling: How to Mitigate Mode Collapse and Unlock LLM Diversity</a></li>
             </ol>
             <p class="table-note">
-              I describe historical implementation details and outcomes from direct experience unless a dated source is named; estimates
-              remain labeled where they appear. The post-acquisition navigation return preserves two convergent accounts because
-              the exact trigger remains unresolved. The information-foraging
+              I describe historical implementation details from direct experience; contemporaneous project notes carry the
+              rounded telemetry outcomes, and estimates remain labeled where they appear. The post-acquisition navigation
+              return preserves two convergent accounts because the exact trigger remains unresolved. The information-foraging
               and Verbalized Sampling research is interpretive correspondence rather than evidence about the historical system.
             </p>
           </section>
