@@ -184,6 +184,24 @@ http://127.0.0.1:8000/context-canvas-project-surface/context-canvas/
 
 Serving the repository root preserves the relative paths used by shared images, collaboration instruments, and copied prototype systems.
 
+Use that loopback route for local browser acceptance. Direct `file://` behavior
+remains browser-policy-specific when a document reaches sibling assets or
+scripts. Keep the top-level page and its local resources on that one loopback
+origin. Loading an HTTPS parent while an asset resolves to the HTTP loopback
+origin creates mixed content and exercises a different browser-security
+boundary. The image-delivery contract scrolls every authored image on About, AI
+Systems, and Debriefs into range, then requires a successful `image/*` response
+and non-zero intrinsic dimensions in Chromium and Playwright WebKit:
+
+```bash
+npm run playwright:install:visitor-images
+npm run test:context-canvas-image-delivery-browser
+```
+
+Playwright WebKit supplies the engine-level Safari-family observation. A
+physical Apple Safari build and other macOS browsers remain distinct receiving
+applications when a report depends on application sandbox policy.
+
 ## Materialize approved public references
 
 Authored Context Canvas sources carry stable public-reference keys. Registry

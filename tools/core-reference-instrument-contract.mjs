@@ -1570,6 +1570,48 @@ async function recoveryAtlasPath(browser, origin, route) {
     await context.close();
   }
 
+  const noticeTimerContext = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  try {
+    const noticeTimerPage = await noticeTimerContext.newPage();
+    await noticeTimerPage.clock.install({ time: new Date("2026-01-01T00:00:00Z") });
+    await noticeTimerPage.goto(`${origin}/${route}`, { waitUntil: "domcontentloaded" });
+    await noticeTimerPage.clock.pauseAt(await noticeTimerPage.evaluate(() => Date.now()));
+    await revealControl(noticeTimerPage, "#importText");
+
+    const notice = noticeTimerPage.locator("#importNotice");
+    const submitImport = candidate => noticeTimerPage.evaluate(value => {
+      document.querySelector("#importText").value = JSON.stringify(value);
+      document.querySelector("#importBtn").click();
+    }, candidate);
+    assert.deepEqual(await notice.evaluate(element => ({
+      atomic: element.getAttribute("aria-atomic"),
+      live: element.getAttribute("aria-live"),
+      role: element.getAttribute("role"),
+    })), {
+      atomic: "true",
+      live: "polite",
+      role: "status",
+    });
+
+    const accepted = await noticeTimerPage.evaluate(() => window.recoveryRoutingAtlas.getState());
+    await submitImport(accepted);
+    await assertVisibleNotice(noticeTimerPage, "#importNotice", /updated|imported/i);
+
+    await noticeTimerPage.clock.runFor(4500);
+    const rejected = structuredClone(accepted);
+    rejected.geometries = [null];
+    await submitImport(rejected);
+    await assertVisibleNotice(noticeTimerPage, "#importNotice", /working recovery routing atlas retained|working state retained/i);
+
+    await noticeTimerPage.clock.runFor(1001);
+    await assertVisibleNotice(noticeTimerPage, "#importNotice", /working recovery routing atlas retained|working state retained/i);
+
+    await noticeTimerPage.clock.runFor(4499);
+    assert.equal(await notice.evaluate(element => element.hidden), true, "#importNotice should hide on the latest notice deadline");
+  } finally {
+    await noticeTimerContext.close();
+  }
+
   const stateBoundaryContext = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   try {
     const stateBoundaryPage = await stateBoundaryContext.newPage();

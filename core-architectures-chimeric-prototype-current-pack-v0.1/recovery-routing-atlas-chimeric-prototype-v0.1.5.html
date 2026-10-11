@@ -1085,7 +1085,7 @@ These public collaboration loops fit only when the receiving work meets the stat
               <button type="button" id="importBtn">Import pasted JSON</button>
               <input id="fileInput" type="file" accept="application/json,.json" />
             </div>
-            <div id="importNotice" class="note" hidden></div>
+            <div id="importNotice" class="note" role="status" aria-live="polite" aria-atomic="true" hidden></div>
           </details>
         </section>
       </section>
@@ -1276,6 +1276,7 @@ These public collaboration loops fit only when the receiving work meets the stat
 
     let pendingRemovalId = '';
     let interactionMessage = '';
+    let importNoticeTimer = null;
 
     const els = {
       geometryList: document.getElementById('geometryList'),
@@ -2189,9 +2190,13 @@ These public collaboration loops fit only when the receiving work meets the stat
     }
 
     function showImportNotice(message) {
+      if (importNoticeTimer !== null) clearTimeout(importNoticeTimer);
       els.importNotice.hidden = false;
       els.importNotice.textContent = message;
-      setTimeout(() => { els.importNotice.hidden = true; }, 5500);
+      importNoticeTimer = setTimeout(() => {
+        els.importNotice.hidden = true;
+        importNoticeTimer = null;
+      }, 5500);
     }
 
     document.getElementById('addGeometryBtn').addEventListener('click', addGeometry);

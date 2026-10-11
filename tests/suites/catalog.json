@@ -19,9 +19,9 @@
     },
     {
       "id": "browser",
-      "runtime": "Node >=22, repository Playwright and real Chromium",
+      "runtime": "Node >=22, repository Playwright, real Chromium, and suite-selected Playwright WebKit",
       "prerequisites": [
-        "Root npm dependencies and Playwright Chromium installed.",
+        "Root npm dependencies and the browser engines named by the selected suite installed.",
         "Existing harness prerequisites, source packages and explicit local execution authority."
       ],
       "effects": [
@@ -1021,6 +1021,28 @@
       "scope": "Rendered catalog preview replacement across responsive WebP, SVG fallback, and later WebP states at narrow and desktop widths.",
       "aliases": [
         "test:debrief-catalog-preview-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.visitor-image-delivery",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/visitor-image-delivery.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Loopback delivery of every authored image on About, AI Systems, and Debriefs in Chromium and Playwright WebKit, including browser-selected currentSrc, lazy-image reachability, 2xx image media responses, and non-zero intrinsic dimensions.",
+      "aliases": [
+        "test:context-canvas-image-delivery-browser"
       ]
     },
     {
@@ -2095,6 +2117,7 @@
         "browser.tables.hiring-schema-print",
         "browser.about-media-browser-contract",
         "browser.context-canvas.debrief-catalog-preview",
+        "browser.context-canvas.visitor-image-delivery",
         "browser.context-canvas.video-receivers",
         "browser.context-canvas.who-to-believe-system-graph",
         "browser.prod-deployment.about-css-projection",

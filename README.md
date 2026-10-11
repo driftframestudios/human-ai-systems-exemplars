@@ -102,6 +102,19 @@ npm ci --ignore-scripts
 npm run playwright:install
 ```
 
+Loopback HTTP is the accepted local browser receiver. Browser policies for
+direct `file://` documents vary, especially when a page reaches a sibling
+image tree or JavaScript dependency. Open the top-level page and its local
+assets from the same loopback origin; an HTTPS parent that reaches an HTTP
+loopback resource creates a mixed-content request. The focused image-delivery
+check exercises the complete About, AI Systems, and Debriefs image population
+in Chromium and Playwright WebKit:
+
+```sh
+npm run playwright:install:visitor-images
+npm run test:context-canvas-image-delivery-browser
+```
+
 The first command keeps dependency resolution separate from lifecycle-script
 execution. In the current [lockfile](package-lock.json), `esbuild` and
 `workerd` declare steps that select and verify platform binaries, while two

@@ -70,7 +70,7 @@ const artifacts = [
     version: "0.1.5",
     currentFile: "practitioner-judgment-probes-chimeric-prototype-v0.1.5.html",
     historicalFile: "practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
-    currentDigest: "623db5de42ce4c28def93062593f68ee55ac7f4e3c9806daef9b9c818f7308a7",
+    currentDigest: "b4f4a62b3246368ce423ee86aec092774bf0621f3e9890dd22b8522d6b81ec5d",
     historicalDigest: "a15c72f198dacb942d3ca4553204afac69df326df9c70bb6c00f32cd3242fd0c",
     stateContract: "practitioner-judgment-probes-state.v0.1",
     apiName: "practitionerJudgmentProbes",
