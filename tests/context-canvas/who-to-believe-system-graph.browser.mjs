@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import { after, before, test } from "node:test";
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 import { chromium } from "@playwright/test";
 
@@ -10,7 +12,11 @@ import {
 } from "../../tools/core-architecture-browser-helper.mjs";
 
 const route = "/context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html";
-const moduleRoute = "/context-canvas-project-surface/context-canvas/who-to-believe-system-graph.js";
+const repositoryRoot = resolve(import.meta.dirname, "../..");
+const pagePath = resolve(
+  repositoryRoot,
+  "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
+);
 let browser;
 let server;
 
@@ -155,6 +161,44 @@ for (const width of [390, 768, 1024, 1440]) {
   });
 }
 
+test("the system graph initializes during direct local-file inspection", async t => {
+  const context = await browser.newContext({ viewport: { width: 1024, height: 1000 } });
+  t.after(() => context.close());
+  await context.route("https://vik.guru/v1-cdn/video/**", route => route.fulfill({ status: 200, body: "" }));
+  await context.route("https://iframes.vik.guru/**", route => route.fulfill({
+    status: 200,
+    contentType: "text/html",
+    body: "<!doctype html><title>Bounded iframe fixture</title>",
+  }));
+
+  const page = await context.newPage();
+  const parsedScripts = [];
+  const graphRequestFailures = [];
+  const cdp = await context.newCDPSession(page);
+  await cdp.send("Debugger.enable");
+  cdp.on("Debugger.scriptParsed", event => parsedScripts.push(event.url));
+  page.on("requestfailed", request => {
+    if (request.url().endsWith("/who-to-believe-system-graph.js")) {
+      graphRequestFailures.push(request.failure()?.errorText || "unknown failure");
+    }
+  });
+
+  await page.goto(pathToFileURL(pagePath).href, { waitUntil: "load" });
+  await page.waitForFunction(() => document.querySelector("[data-wtb-system-graph]")?.dataset.graphState === "enhanced");
+  await page.waitForFunction(() => document.querySelectorAll("[data-edge-layer] .wtb-system-graph__edge").length === 26);
+
+  const graph = page.locator("[data-wtb-system-graph]");
+  assert.equal(await graph.locator(".wtb-system-graph__node").count(), 22);
+  assert.equal(await graph.locator("[data-graph-enhancement]").isVisible(), true);
+  assert.equal(await graph.locator(".wtb-system-graph__reading").getAttribute("open"), null);
+  assert.equal(await page.evaluate(() => Object.isFrozen(globalThis.ContextCanvasWhoToBelieveSystemGraph)), true);
+  assert.ok(
+    parsedScripts.some(url => url.endsWith("/who-to-believe-system-graph.js")),
+    "Chromium should parse the graph controller during direct-file inspection",
+  );
+  assert.deepEqual(graphRequestFailures, []);
+});
+
 test("the complete graph reading remains available without JavaScript", async t => {
   const context = await browser.newContext({
     viewport: { width: 390, height: 1000 },
@@ -166,7 +210,7 @@ test("the complete graph reading remains available without JavaScript", async t 
 
   const graph = page.locator("[data-wtb-system-graph]");
   assert.equal(await graph.locator("[data-graph-enhancement]").isVisible(), false);
-  assert.equal(await graph.locator(".wtb-system-graph__reading").getAttribute("open"), "");
+  assert.equal(await graph.locator(".wtb-system-graph__reading").getAttribute("open"), null);
   const reading = await graph.locator(".wtb-system-graph__reading").textContent();
   assert.match(reading, /Member accounts/u);
   assert.match(reading, /Brand pharmacovigilance/u);
@@ -186,8 +230,8 @@ test("mount recovery keeps the semantic fallback and supports a repaired remount
   await page.goto(`${server.origin}${route}`, { waitUntil: "load" });
   await page.waitForFunction(() => document.querySelector("[data-wtb-system-graph]")?.dataset.graphState === "enhanced");
 
-  const receipt = await page.evaluate(async moduleUrl => {
-    const { mountSystemGraph } = await import(moduleUrl);
+  const receipt = await page.evaluate(() => {
+    const { mountSystemGraph } = globalThis.ContextCanvasWhoToBelieveSystemGraph;
     const original = document.querySelector("[data-wtb-system-graph]");
     const first = mountSystemGraph(original);
     first.destroy();
@@ -226,7 +270,7 @@ test("mount recovery keeps the semantic fallback and supports a repaired remount
       fallback: fallbackReceipt,
       repaired: repairedReceipt,
     };
-  }, `${server.origin}${moduleRoute}`);
+  });
 
   assert.equal(receipt.remounted, true);
   const { readingText, ...fallbackState } = receipt.fallback;

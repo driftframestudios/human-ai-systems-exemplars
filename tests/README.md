@@ -207,7 +207,8 @@ and concern vocabulary before rendering. Its focused unit route covers
 aggregated contract faults, deterministic breadth-first traversal, directed and
 unreachable paths, equal-length tie resolution, the closed transition
 vocabulary, and parity with the adjacent semantic reading. The browser route
-checks native controls, node detail, route movement, focus, live status, local
+checks classic-script initialization through direct local-file inspection,
+native controls, node detail, route movement, focus, live status, local
 horizontal containment, reduced motion, forced colors, scriptless recovery,
 and print at the four accepted viewports. Passing results describe the checked
 contract and Chromium behavior; receiving browsers and later graph data retain

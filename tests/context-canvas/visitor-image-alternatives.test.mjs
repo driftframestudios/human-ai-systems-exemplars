@@ -325,7 +325,7 @@ test("Who To Believe routes its graph exemplar and catalog orientation image to 
   assert.match(atlas, /cpg-pharma-dual-stack-system-graph-1920\.webp 1920w/u);
   assert.match(catalog, /<img class="project__upfront"[^>]+who-to-believe-upfront\.webp/u);
   assert.match(catalog, /who-to-believe-upfront-960\.webp 960w/u);
-  assert.match(catalog, /id="catalog-who-to-believe"[^>]+data-catalog-preview-src="\.\.\/img\/debriefs\/who-to-believe\/who-to-believe-upfront\.webp"/u);
+  assert.match(catalog, /id="catalog-who-to-believe"[^>]+data-catalog-preview-src="\.\.\/img\/plot\/who_to_believe_influence_map\.svg"/u);
 
   const expectedRoles = new Map([
     ["who-to-believe-upfront.webp", "catalog_orientation"],

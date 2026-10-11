@@ -15,7 +15,7 @@ const previewSources = new Map([
   ["catalog-ehr-integration", "../img/plot/ehr_discrete_result_contract_map.svg"],
   ["catalog-lims-eln", "../img/debriefs/sample-noone-could-find/lims-eln-process-mapping.webp"],
   ["catalog-humatics", "../img/debriefs/choose-your-player/robotics-map-setup.webp"],
-  ["catalog-who-to-believe", "../img/debriefs/who-to-believe/who-to-believe-upfront.webp"],
+  ["catalog-who-to-believe", "../img/plot/who_to_believe_influence_map.svg"],
   ["catalog-field-inspection", "../img/plot/inspection_platform_operating_map.svg"],
   ["catalog-distributed-inspection", "../img/plot/distributed_inspection_ten_beat_arc.svg"],
   ["catalog-three-way-return", "../img/plot/three_way_return_motion.svg"],
@@ -30,7 +30,7 @@ const previewDimensions = new Map([
   ["catalog-ehr-integration", ["1600", "1120"]],
   ["catalog-lims-eln", ["5114", "2710"]],
   ["catalog-humatics", ["5110", "2708"]],
-  ["catalog-who-to-believe", ["1728", "2356"]],
+  ["catalog-who-to-believe", ["1600", "1180"]],
   ["catalog-field-inspection", ["1600", "1200"]],
   ["catalog-distributed-inspection", ["1600", "1180"]],
   ["catalog-three-way-return", ["1600", "1120"]],
@@ -63,11 +63,7 @@ test("Full Debrief catalog cards declare reviewed responsive preview visuals", a
     const [expectedWidth, expectedHeight] = previewDimensions.get(cardId);
 
     assert.equal(previewSrc, expectedSrc, `${cardId} should declare its chosen preview visual`);
-    if (cardId === "catalog-who-to-believe") {
-      assert.equal(previewSrc, upfrontSrc, `${cardId} should carry the accepted image through both preview coordinates`);
-    } else {
-      assert.notEqual(previewSrc, upfrontSrc, `${cardId} should preview a visual distinct from its catalog-card image`);
-    }
+    assert.notEqual(previewSrc, upfrontSrc, `${cardId} should preview a visual distinct from its catalog-card image`);
     assert.ok(attribute(openingTag, "data-catalog-preview-alt"), `${cardId} should describe its preview image`);
     assert.ok(attribute(openingTag, "data-catalog-preview-caption"), `${cardId} should explain the preview image`);
     assert.equal(attribute(openingTag, "data-catalog-preview-width"), expectedWidth, `${cardId} should declare its preview width`);
@@ -99,11 +95,14 @@ test("Full Debrief catalog cards declare reviewed responsive preview visuals", a
 test("Catalog preview image selection falls back cleanly and clears stale responsive metadata", async () => {
   const script = await readFile(resolve(canvasRoot, "debriefs-catalog.js"), "utf8");
 
-  assert.match(script, /card\.getAttribute\("data-catalog-preview-src"\) \|\| \(image \? image\.getAttribute\("src"\) : ""\)/u);
-  assert.match(script, /card\.getAttribute\("data-catalog-preview-srcset"\) \|\| \(image \? image\.getAttribute\("srcset"\) : ""\)/u);
-  assert.match(script, /card\.getAttribute\("data-catalog-preview-sizes"\) \|\| \(image \? image\.getAttribute\("sizes"\) : ""\)/u);
-  assert.match(script, /card\.getAttribute\("data-catalog-preview-width"\) \|\| \(image \? image\.getAttribute\("width"\) : ""\)/u);
-  assert.match(script, /card\.getAttribute\("data-catalog-preview-height"\) \|\| \(image \? image\.getAttribute\("height"\) : ""\)/u);
+  assert.match(script, /var hasPreviewImage = card\.hasAttribute\("data-catalog-preview-src"\)/u);
+  for (const attributeName of ["src", "srcset", "sizes", "width", "height"]) {
+    assert.match(
+      script,
+      new RegExp(`hasPreviewImage \\? card\\.getAttribute\\("data-catalog-preview-${attributeName}"\\) : \\(image \\? image\\.getAttribute\\("${attributeName}"\\) : ""\\)`, "u"),
+      `an explicit preview source should own ${attributeName} without inheriting primary-image metadata`,
+    );
+  }
   assert.match(script, /previewImage\.setAttribute\("alt", previewImageAlt\)/u);
   assert.match(script, /previewImage\.removeAttribute\("srcset"\)/u);
   assert.match(script, /previewImage\.removeAttribute\("sizes"\)/u);
