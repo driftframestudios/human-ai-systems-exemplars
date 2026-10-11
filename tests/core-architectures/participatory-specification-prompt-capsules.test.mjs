@@ -41,7 +41,7 @@ const artifacts = [
     version: "0.1.7",
     currentFile: "specification-by-example-chimeric-prototype-v0.1.7.html",
     historicalFile: "specification-by-example-chimeric-prototype-v0.1.6.html",
-    currentDigest: "fb5afdf6a546a6b151f996a4809ce865aa646ed8550d0b6d8d37247f25e8b0ec",
+    currentDigest: "9e89a38ddc9baec44ba21235703b5fb30cc88a49769dc8b188d919adeebdf071",
     historicalDigest: "a548c7336ff93bd6b5d8030e99271798297c45078610fb4cb78363c0606d59ce",
     stateContract: "specification-by-example-state.v0.1",
     apiName: "specificationByExample",
