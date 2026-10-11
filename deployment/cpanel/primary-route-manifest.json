@@ -1178,6 +1178,16 @@
       "media_type": "image/webp"
     },
     {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/who-to-believe-upfront-960.webp",
+      "projected_path": "img/debriefs/who-to-believe/who-to-believe-upfront-960.webp",
+      "media_type": "image/webp"
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/who-to-believe-upfront.webp",
+      "projected_path": "img/debriefs/who-to-believe/who-to-believe-upfront.webp",
+      "media_type": "image/webp"
+    },
+    {
       "source_path": "context-canvas-project-surface/img/media/impact-map-style-cycle-calm.gif",
       "projected_path": "img/media/impact-map-style-cycle-calm.gif",
       "media_type": "image/gif"
@@ -1996,6 +2006,11 @@
       "source_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
       "projected_path": "who-to-believe-reviews-platform.html",
       "media_type": "text/html"
+    },
+    {
+      "source_path": "context-canvas-project-surface/context-canvas/who-to-believe-system-graph.js",
+      "projected_path": "who-to-believe-system-graph.js",
+      "media_type": "text/javascript"
     }
   ]
 }

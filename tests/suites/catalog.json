@@ -173,7 +173,8 @@
         "tests/context-canvas/visitor-image-alternatives.test.mjs",
         "tests/context-canvas/visitor-surface-attribution.test.mjs",
         "tests/context-canvas/visitor-terminology.test.mjs",
-        "tests/context-canvas/visitor-video-contract.test.mjs"
+        "tests/context-canvas/visitor-video-contract.test.mjs",
+        "tests/context-canvas/who-to-believe-system-graph.test.mjs"
       ],
       "profile": "node-source",
       "command": {
@@ -1042,6 +1043,28 @@
       "scope": "Deterministic passive-poster observation of all selected native-video receivers at narrow, medium, and wide viewports, including containment, controls, accessible relationships, visible sequences, and poster-first requests.",
       "aliases": [
         "test:video-receivers-browser"
+      ]
+    },
+    {
+      "id": "browser.context-canvas.who-to-believe-system-graph",
+      "family": "context-canvas",
+      "kind": "node-test",
+      "members": [
+        "tests/context-canvas/who-to-believe-system-graph.browser.mjs"
+      ],
+      "profile": "browser",
+      "command": {
+        "cwd": ".",
+        "argv": [
+          "node",
+          "--test"
+        ],
+        "appendMembers": true
+      },
+      "owner": "context-canvas-project-surface/context-canvas/README.md",
+      "scope": "Rendered dual-stack graph admission, native controls, directed-route traversal, focus and status, four-width containment, forced colors, reduced motion, print, and scriptless reading.",
+      "aliases": [
+        "test:who-to-believe-system-graph-browser"
       ]
     },
     {
@@ -2073,6 +2096,7 @@
         "browser.about-media-browser-contract",
         "browser.context-canvas.debrief-catalog-preview",
         "browser.context-canvas.video-receivers",
+        "browser.context-canvas.who-to-believe-system-graph",
         "browser.prod-deployment.about-css-projection",
         "browser.canvas-iframe-route-browser-contract",
         "browser.context-canvas-medium-containment-contract",

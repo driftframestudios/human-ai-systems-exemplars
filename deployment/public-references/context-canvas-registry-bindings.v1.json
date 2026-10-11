@@ -742,6 +742,18 @@
       "selection_basis": "Exact current Atlas record selected for the authored reader job."
     },
     {
+      "token": "PUBLIC_URL_REGISTRY_SOFT_COLOR_BLOCKING_VISUAL_FIDELITY_CONTRACT",
+      "atlas_record_key": "registry:visual-fidelity/soft-color-blocking-visual-fidelity-contract",
+      "expected_public_title": "Soft Color Blocking — Visual Fidelity Contract",
+      "expected_family": "Visual Fidelity Contracts",
+      "expected_resource_role": "Technical depth",
+      "expected_reader_job": "Use",
+      "expected_source_lifecycle": "Current",
+      "expected_route_state": "Identity verified",
+      "url": "https://kindlight.systems/visual-fidelity-contracts/soft-color-blocking-visual-fidelity-contract",
+      "selection_basis": "Exact current Atlas record selected for the authored reader job."
+    },
+    {
       "token": "PUBLIC_URL_REGISTRY_SPECIFICATION_BY_EXAMPLE",
       "atlas_record_key": "registry:core/specification-by-example--core-architectures-orientation-index",
       "expected_public_title": "Specification-by-Example",
@@ -919,6 +931,18 @@
       "expected_source_lifecycle": "Current",
       "expected_route_state": "Identity verified",
       "url": "https://kindlight.systems/human-ai-collaboration-field-guide/visual-data-communication-stabilizers-cognitive-moves-for-visual-forms",
+      "selection_basis": "Exact current Atlas record selected for the authored reader job."
+    },
+    {
+      "token": "PUBLIC_URL_REGISTRY_VISUAL_FIDELITY_PRACTITIONER_PROBES_LAYERED_JUDGMENT_EVIDENCE",
+      "atlas_record_key": "registry:visual-fidelity/visual-fidelity-practitioner-probes-layered-judgment-evidence",
+      "expected_public_title": "Visual Fidelity Practitioner Probes — Layered Judgment & Evidence",
+      "expected_family": "Visual Fidelity Contracts",
+      "expected_resource_role": "Collection entrance",
+      "expected_reader_job": "Enter",
+      "expected_source_lifecycle": "Current",
+      "expected_route_state": "Identity verified",
+      "url": "https://kindlight.systems/visual-fidelity-contracts/visual-fidelity-practitioner-probes-layered-judgment-evidence",
       "selection_basis": "Exact current Atlas record selected for the authored reader job."
     },
     {

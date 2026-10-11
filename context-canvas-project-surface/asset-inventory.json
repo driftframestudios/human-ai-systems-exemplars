@@ -332,11 +332,11 @@
       "selector": {
         "prefix": "context-canvas-project-surface/img/debriefs/who-to-believe/"
       },
-      "semantic_owner": "Who To Believe reviews-platform Debrief",
+      "semantic_owner": "Who To Believe Debrief media family; referring HTML owns each asset's specific use",
       "roles": [
         {
           "id": "debrief_visual_comparison",
-          "visitor_job": "Compare the member experience, redesign concepts, service model, and dual-stack system relationships that shaped a pharma-adjacent reviews platform.",
+          "visitor_job": "Compare the member experience, redesign concepts, and service model that shaped a pharma-adjacent reviews platform.",
           "accessibility_text_owner": "The Who To Believe reviews-platform Debrief image alternatives, captions, and surrounding prose."
         }
       ],
@@ -351,9 +351,9 @@
       "source_relationship": {
         "standing": "accepted_generated_asset",
         "provenance_owner_path": "tools/generate-debrief-image-derivatives.mjs",
-        "lineage_standing": "The unsuffixed WebPs are accepted full-size comparison images for the Debrief. The -960 and -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved."
+        "lineage_standing": "The unsuffixed WebPs are accepted full-size Debrief images. The -960 and eligible -1920 WebPs are responsive derivatives generated with libwebp cwebp at quality 82, method 6, sharp YUV, metadata removed, and source aspect ratio preserved. Asset-specific catalog and technical-example uses carry explicit overrides."
       },
-      "recovery_condition": "Restore the accepted full-size comparison images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry, and rebuild the production projection.",
+      "recovery_condition": "Restore the accepted full-size Debrief images, run npm run build:debrief-image-derivatives, compare visible interface text and geometry in Who To Believe, and rebuild the production projection.",
       "semantic_authority_path": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html"
     },
     {
@@ -693,6 +693,94 @@
     }
   ],
   "overrides": [
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/who-to-believe-upfront.webp",
+      "semantic_key": "context-canvas.debrief-media.who-to-believe.catalog-orientation.full",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Preview the participant journey, assistance model, guided review sequence, and next-step states before opening the Who To Believe Debrief.",
+          "accessibility_text_owner": "The Who To Believe card in the Debrief catalog."
+        }
+      ],
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/debriefs.html",
+        "lineage_standing": "The accepted 1728 by 2356 WebP is the curated full-size catalog-orientation image. Its inspected bytes carry no WebP metadata features."
+      },
+      "recovery_condition": "Restore the accepted full-size catalog image, inspect its dimensions and metadata, regenerate the responsive derivative, compare the Debrief catalog card, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/who-to-believe-upfront-960.webp",
+      "semantic_key": "context-canvas.debrief-media.who-to-believe.catalog-orientation.width-960",
+      "roles": [
+        {
+          "id": "catalog_orientation",
+          "visitor_job": "Preview the participant journey, assistance model, guided review sequence, and next-step states before opening the Who To Believe Debrief.",
+          "accessibility_text_owner": "The Who To Believe card in the Debrief catalog."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/who-to-believe-upfront.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-webp-width-960-q82-method6-sharp-yuv-metadata-none"
+      },
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the Debrief catalog card at narrow and wide viewports, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph.webp",
+      "semantic_key": "context-canvas.debrief-media.who-to-believe.soft-color-system-graph.full",
+      "roles": [
+        {
+          "id": "visual_fidelity_technical_example",
+          "visitor_job": "Inspect soft color blocking applied to a technical system graph while labels and line treatments preserve architecture and connection state.",
+          "accessibility_text_owner": "The technical-example section of the Visual Fidelity Atlas."
+        }
+      ],
+      "source_relationship": {
+        "standing": "accepted_generated_asset",
+        "provenance_owner_path": "context-canvas-project-surface/context-canvas/visualization-fidelity-atlas.html",
+        "lineage_standing": "The accepted full-size WebP preserves the former static system graph as a soft-color-blocking technical-diagram example."
+      },
+      "recovery_condition": "Restore the accepted full-size graph image, compare its labels and connection states in the Visual Fidelity Atlas, regenerate its responsive derivatives, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph-960.webp",
+      "semantic_key": "context-canvas.debrief-media.who-to-believe.soft-color-system-graph.width-960",
+      "roles": [
+        {
+          "id": "visual_fidelity_technical_example",
+          "visitor_job": "Inspect soft color blocking applied to a technical system graph while labels and line treatments preserve architecture and connection state.",
+          "accessibility_text_owner": "The technical-example section of the Visual Fidelity Atlas."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-webp-width-960-q82-method6-sharp-yuv-metadata-none"
+      },
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the technical example at narrow viewports, and rebuild the production projection."
+    },
+    {
+      "source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph-1920.webp",
+      "semantic_key": "context-canvas.debrief-media.who-to-believe.soft-color-system-graph.width-1920",
+      "roles": [
+        {
+          "id": "visual_fidelity_technical_example",
+          "visitor_job": "Inspect soft color blocking applied to a technical system graph while labels and line treatments preserve architecture and connection state.",
+          "accessibility_text_owner": "The technical-example section of the Visual Fidelity Atlas."
+        }
+      ],
+      "source_relationship": {
+        "standing": "generated_derivative",
+        "canonical_source_path": "context-canvas-project-surface/img/debriefs/who-to-believe/cpg-pharma-dual-stack-system-graph.webp",
+        "generator_path": "tools/generate-debrief-image-derivatives.mjs",
+        "profile": "debrief-webp-width-1920-q82-method6-sharp-yuv-metadata-none"
+      },
+      "recovery_condition": "Run npm run build:debrief-image-derivatives, compare the technical example at wide viewports, and rebuild the production projection."
+    },
     {
       "source_path": "context-canvas-project-surface/img/debriefs/recoverable-enterprise-forms/pan-identifier-validation-flow.svg",
       "semantic_key": "context-canvas.debrief-media.recoverable-enterprise-forms.pan-identifier-validation-flow",

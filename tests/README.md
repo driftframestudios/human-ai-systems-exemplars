@@ -185,6 +185,8 @@ separable:
 npm run test:context-canvas
 npm run check:debrief-image-derivatives
 npm run test:debrief-catalog-preview-browser
+npm run test:who-to-believe-system-graph
+npm run test:who-to-believe-system-graph-browser
 npm run test:video-receivers-browser
 npm run test:about-media-browser
 npm run test:context-canvas-medium-containment
@@ -199,6 +201,17 @@ accepted source replacement. The catalog-preview browser contract proves that
 responsive WebP metadata, SVG fallback metadata, captions, alternatives, and
 intrinsic geometry replace one another without stale attributes or horizontal
 overflow.
+
+The Who To Believe graph source contract admits its finite node, edge, state,
+and concern vocabulary before rendering. Its focused unit route covers
+aggregated contract faults, deterministic breadth-first traversal, directed and
+unreachable paths, equal-length tie resolution, the closed transition
+vocabulary, and parity with the adjacent semantic reading. The browser route
+checks native controls, node detail, route movement, focus, live status, local
+horizontal containment, reduced motion, forced colors, scriptless recovery,
+and print at the four accepted viewports. Passing results describe the checked
+contract and Chromium behavior; receiving browsers and later graph data retain
+their own observation route.
 
 The native-video receiver browser contract uses passive local carrier fixtures
 to inspect every selected Debrief and AI Systems receiver at 390, 1024, and
