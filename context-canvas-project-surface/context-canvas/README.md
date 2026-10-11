@@ -303,6 +303,7 @@ Choose the existing check that answers the page question under review:
 npm run test:context-canvas
 npm run check:debrief-image-derivatives
 npm run test:debrief-catalog-preview-browser
+npm run test:who-to-believe-system-graph-browser
 npm run test:video-receivers-browser
 npm run test:context-canvas-narrow-rails
 npm run test:prototype-control-labels

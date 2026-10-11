@@ -445,9 +445,11 @@ test("two mounted graphs retain independent controls, state, and accessible name
     const { mountSystemGraph } = globalThis.ContextCanvasWhoToBelieveSystemGraph;
     const original = document.querySelector("[data-wtb-system-graph]");
     const originalController = mountSystemGraph(original);
+    const repeatedOriginalController = mountSystemGraph(original);
     const clone = original.cloneNode(true);
     clone.removeAttribute("data-graph-state");
     const cloneController = mountSystemGraph(clone);
+    const repeatedCloneController = mountSystemGraph(clone);
     document.body.append(clone);
     clone.querySelector('[data-graph-mode-control][value="spring"]').click();
 
@@ -465,12 +467,33 @@ test("two mounted graphs retain independent controls, state, and accessible name
         modeNames: [...new Set(Array.from(root.querySelectorAll("[data-graph-mode-control]"), control => control.name))],
       };
     };
+
+    // Mount-local relations let cloned instruments coexist without document-wide ID collisions.
+    const mountedRoots = [original, clone];
+    const internalIds = mountedRoots.flatMap(root => Array.from(root.querySelectorAll("[id]"), element => element.id));
+    const duplicateInternalIds = internalIds.filter((id, index) => internalIds.indexOf(id) !== index);
+    const unresolvedLocalIdRefs = mountedRoots.flatMap((root, rootIndex) => {
+      const localIds = new Set(Array.from(root.querySelectorAll("[id]"), element => element.id));
+      return Array.from(root.querySelectorAll("[aria-labelledby], [aria-describedby]")).flatMap(element => (
+        ["aria-labelledby", "aria-describedby"].flatMap(attribute => {
+          const references = (element.getAttribute(attribute) || "").trim().split(/\s+/u).filter(Boolean);
+          return references
+            .filter(id => !localIds.has(id))
+            .map(id => ({ attribute, id, rootIndex }));
+        })
+      ));
+    });
     const result = {
       clone: describe(clone),
       cloneState: cloneController.getState().mode,
+      duplicateInternalIds,
       original: describe(original),
       originalState: originalController.getState().mode,
+      repeatedCloneMountReturnedSameController: repeatedCloneController === cloneController,
+      repeatedOriginalMountReturnedSameController: repeatedOriginalController === originalController,
+      unresolvedLocalIdRefs,
     };
+    cloneController.destroy();
     cloneController.destroy();
     clone.remove();
     return result;
@@ -480,6 +503,8 @@ test("two mounted graphs retain independent controls, state, and accessible name
   assert.equal(receipt.originalState, "symfony");
   assert.equal(receipt.clone.checkedMode, "spring");
   assert.equal(receipt.cloneState, "spring");
+  assert.equal(receipt.repeatedOriginalMountReturnedSameController, true);
+  assert.equal(receipt.repeatedCloneMountReturnedSameController, true);
   assert.equal(receipt.original.modeNames.length, 1);
   assert.equal(receipt.clone.modeNames.length, 1);
   assert.notEqual(receipt.original.modeNames[0], receipt.clone.modeNames[0]);
@@ -492,6 +517,8 @@ test("two mounted graphs retain independent controls, state, and accessible name
   assert.equal(receipt.original.detailTitleOwned, true);
   assert.equal(receipt.clone.detailTitleOwned, true);
   assert.notEqual(receipt.original.detailTitleId, receipt.clone.detailTitleId);
+  assert.deepEqual(receipt.duplicateInternalIds, []);
+  assert.deepEqual(receipt.unresolvedLocalIdRefs, []);
   assertTelemetry(telemetry);
 });
 
@@ -509,13 +536,16 @@ test("mount recovery keeps the semantic fallback and supports a repaired remount
     const original = document.querySelector("[data-wtb-system-graph]");
     const first = mountSystemGraph(original);
     first.destroy();
+    first.destroy();
     const remounted = mountSystemGraph(original);
+    const repeatedRemount = mountSystemGraph(original);
 
     const clone = original.cloneNode(true);
     clone.removeAttribute("data-graph-state");
     clone.querySelector("[data-detail-title]").remove();
     document.body.append(clone);
     const fallback = mountSystemGraph(clone);
+    const repeatedFallback = mountSystemGraph(clone);
     const fallbackReceipt = {
       ok: fallback.ok,
       state: clone.dataset.graphState,
@@ -525,24 +555,44 @@ test("mount recovery keeps the semantic fallback and supports a repaired remount
       readingText: clone.querySelector(".wtb-system-graph__reading").textContent,
     };
     fallback.destroy();
+    fallback.destroy();
 
     const repairedTitle = document.createElement("h5");
     repairedTitle.className = "wtb-system-graph__detail-title";
     repairedTitle.dataset.detailTitle = "";
     clone.querySelector("[data-detail-panel]").prepend(repairedTitle);
     const repaired = mountSystemGraph(clone);
+    const repeatedRepaired = mountSystemGraph(clone);
+    clone.querySelector('[data-graph-mode-control][value="spring"]').click();
+    const repairedDetailTitleId = clone.querySelector("[data-detail-panel]").getAttribute("aria-labelledby");
     const repairedReceipt = {
       ok: repaired.ok,
       state: clone.dataset.graphState,
+      mode: repaired.getState().mode,
+      announcement: clone.querySelector("[data-graph-status]").textContent,
+      detailTitleOwned: clone.querySelector(`[id="${repairedDetailTitleId}"]`) !== null,
       enhancementHidden: clone.querySelector("[data-graph-enhancement]").hidden,
       readingOpen: clone.querySelector(".wtb-system-graph__reading").open,
+      repeatedMountReturnedSameController: repeatedRepaired === repaired,
     };
     repaired.destroy();
+    repaired.destroy();
+    const fresh = mountSystemGraph(clone);
+    const freshReceipt = {
+      controllerChanged: fresh !== repaired,
+      mode: fresh.getState().mode,
+      ok: fresh.ok,
+    };
+    fresh.destroy();
     clone.remove();
+    remounted.destroy();
+    remounted.destroy();
 
     return {
-      remounted: remounted !== first && remounted.ok,
+      remounted: remounted !== first && remounted.ok && repeatedRemount === remounted,
       fallback: fallbackReceipt,
+      fallbackMountWasStable: repeatedFallback === fallback,
+      fresh: freshReceipt,
       repaired: repairedReceipt,
     };
   });
@@ -557,15 +607,143 @@ test("mount recovery keeps the semantic fallback and supports a repaired remount
     errorText: "The complete system reading is ready below. The interactive view needs a repaired data or page structure before it can start.",
   });
   assert.match(readingText, /Member accounts/u);
+  assert.equal(receipt.fallbackMountWasStable, true);
   assert.deepEqual(receipt.repaired, {
     ok: true,
     state: "enhanced",
+    mode: "spring",
+    announcement: "Architecture state changed to Partial Spring Boot migration.",
+    detailTitleOwned: true,
     enhancementHidden: false,
     readingOpen: false,
+    repeatedMountReturnedSameController: true,
+  });
+  assert.deepEqual(receipt.fresh, {
+    controllerChanged: true,
+    mode: "symfony",
+    ok: true,
   });
   assert.deepEqual(telemetry.consoleErrors, [
     "Who To Believe system graph startup reported validation errors:\nThe graph requires one detail title ([data-detail-title]).",
   ]);
+  assertTelemetry({ ...telemetry, consoleErrors: [] });
+});
+
+test("invalid graph JSON and geometry remain in the complete reading until repaired", async t => {
+  const context = await browser.newContext({ viewport: { width: 1024, height: 1000 } });
+  t.after(() => context.close());
+  await containExternalCarriers(context);
+  const page = await context.newPage();
+  const telemetry = monitor(page);
+  await page.goto(`${server.origin}${route}`, { waitUntil: "load" });
+  await waitForGraph(page);
+
+  const receipts = await page.evaluate(() => {
+    const { mountSystemGraph } = globalThis.ContextCanvasWhoToBelieveSystemGraph;
+    const original = document.querySelector("[data-wtb-system-graph]");
+    const source = document.getElementById(original.getAttribute("data-contract-id"));
+    const acceptedText = source.textContent;
+
+    // A private data block rejects one mount while the page's accepted source stays intact for repair.
+    const exercise = (suffix, rejectedText) => {
+      const contract = document.createElement("script");
+      contract.type = "application/json";
+      contract.id = `wtb-system-graph-contract-${suffix}`;
+      contract.textContent = rejectedText;
+      document.body.append(contract);
+
+      const clone = original.cloneNode(true);
+      clone.removeAttribute("data-graph-state");
+      clone.setAttribute("data-contract-id", contract.id);
+      document.body.append(clone);
+
+      const fallback = mountSystemGraph(clone);
+      const repeatedFallback = mountSystemGraph(clone);
+      const fallbackReceipt = {
+        errors: Array.isArray(fallback.errors) ? [...fallback.errors] : [],
+        enhancementHidden: clone.querySelector("[data-graph-enhancement]").hidden,
+        errorText: clone.querySelector("[data-graph-error]").textContent,
+        ok: fallback.ok,
+        readingOpen: clone.querySelector(".wtb-system-graph__reading").open,
+        repeatedMountReturnedSameController: repeatedFallback === fallback,
+        state: clone.dataset.graphState,
+      };
+      fallback.destroy();
+      fallback.destroy();
+
+      contract.textContent = acceptedText;
+      const repaired = mountSystemGraph(clone);
+      const repeatedRepaired = mountSystemGraph(clone);
+      clone.querySelector('[data-graph-mode-control][value="spring"]').click();
+      const repairedReceipt = {
+        announcement: clone.querySelector("[data-graph-status]").textContent,
+        controllerChanged: repaired !== fallback,
+        mode: repaired.getState().mode,
+        ok: repaired.ok,
+        repeatedMountReturnedSameController: repeatedRepaired === repaired,
+        state: clone.dataset.graphState,
+      };
+      repaired.destroy();
+      repaired.destroy();
+
+      const fresh = mountSystemGraph(clone);
+      const freshReceipt = {
+        controllerChanged: fresh !== repaired,
+        mode: fresh.getState().mode,
+        ok: fresh.ok,
+      };
+      fresh.destroy();
+      clone.remove();
+      contract.remove();
+      return { fallback: fallbackReceipt, fresh: freshReceipt, repaired: repairedReceipt };
+    };
+
+    const invalidGeometry = JSON.parse(acceptedText);
+    invalidGeometry.nodes[0].row = 6;
+    return {
+      geometry: exercise("invalid-geometry", JSON.stringify(invalidGeometry)),
+      json: exercise("invalid-json", "{"),
+    };
+  });
+
+  for (const receipt of [receipts.geometry, receipts.json]) {
+    assert.deepEqual(
+      {
+        enhancementHidden: receipt.fallback.enhancementHidden,
+        errorText: receipt.fallback.errorText,
+        ok: receipt.fallback.ok,
+        readingOpen: receipt.fallback.readingOpen,
+        repeatedMountReturnedSameController: receipt.fallback.repeatedMountReturnedSameController,
+        state: receipt.fallback.state,
+      },
+      {
+        enhancementHidden: true,
+        errorText: "The complete system reading is ready below. The interactive view needs a repaired data or page structure before it can start.",
+        ok: false,
+        readingOpen: true,
+        repeatedMountReturnedSameController: true,
+        state: "fallback",
+      },
+    );
+    assert.deepEqual(receipt.repaired, {
+      announcement: "Architecture state changed to Partial Spring Boot migration.",
+      controllerChanged: true,
+      mode: "spring",
+      ok: true,
+      repeatedMountReturnedSameController: true,
+      state: "enhanced",
+    });
+    assert.deepEqual(receipt.fresh, {
+      controllerChanged: true,
+      mode: "symfony",
+      ok: true,
+    });
+  }
+  assert.ok(receipts.geometry.fallback.errors.some(error => /nodes\[0\]\.row/u.test(error)));
+  assert.ok(receipts.json.fallback.errors.some(error => /invalid JSON/u.test(error)));
+  assert.equal(telemetry.consoleErrors.length, 2);
+  assert.ok(telemetry.consoleErrors.some(error => /nodes\[0\]\.row/u.test(error)));
+  assert.ok(telemetry.consoleErrors.some(error => /invalid JSON/u.test(error)));
   assertTelemetry({ ...telemetry, consoleErrors: [] });
 });
 

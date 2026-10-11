@@ -8,6 +8,10 @@
 "use strict";
 
 const MODES = new Set(["symfony", "spring"]);
+const MODE_LABELS = Object.freeze({
+  symfony: "Symfony PHP monolith",
+  spring: "Partial Spring Boot migration",
+});
 const STATUSES = new Set(["ok", "strained", "broken"]);
 const DIMENSIONS = new Set(["abuse", "misfit", "core", "forecast"]);
 const ACTIONS = new Set(["SET_MODE", "SET_DIMENSION", "SELECT_NODE", "RESET"]);
@@ -23,11 +27,34 @@ const INITIAL_STATE = Object.freeze({
 // These coordinates and dimensions are the original Review Routing graph's
 // presentation contract. CSS owns color and emphasis; SVG owns geometry.
 const COLUMN_X = Object.freeze([130, 420, 710, 1000]);
-const ROW_Y = row => 110 + row * 82;
+const ROW_START = 110;
+const ROW_GAP = 82;
+const ROW_Y = row => ROW_START + row * ROW_GAP;
 const NODE_WIDTH = 190;
 const NODE_HEIGHT = 52;
 const VIEWBOX_WIDTH = 1130;
 const VIEWBOX_HEIGHT = 600;
+// Admission follows the owned geometry so every accepted node remains visible.
+const MAX_RENDERABLE_ROW = Math.floor((VIEWBOX_HEIGHT - NODE_HEIGHT / 2 - ROW_START) / ROW_GAP);
+
+const TOKEN_IDREF_ATTRIBUTES = Object.freeze([
+  "aria-controls",
+  "aria-describedby",
+  "aria-details",
+  "aria-errormessage",
+  "aria-flowto",
+  "aria-labelledby",
+  "aria-owns",
+  "headers",
+]);
+const SINGLE_IDREF_ATTRIBUTES = Object.freeze([
+  "aria-activedescendant",
+  "for",
+  "form",
+  "list",
+  "popovertarget",
+]);
+const FRAGMENT_REFERENCE_ATTRIBUTES = Object.freeze(["href", "xlink:href"]);
 
 const mountedGraphs = new WeakMap();
 let mountSequence = 0;
@@ -38,6 +65,17 @@ function text(value) {
 
 function integer(value) {
   return Number.isInteger(value) ? value : Number.NaN;
+}
+
+function nodeFitsViewBox(col, row) {
+  const x = COLUMN_X[col];
+  const y = ROW_Y(row);
+  return Number.isFinite(x)
+    && Number.isFinite(y)
+    && x - NODE_WIDTH / 2 >= 0
+    && x + NODE_WIDTH / 2 <= VIEWBOX_WIDTH
+    && y - NODE_HEIGHT / 2 >= 0
+    && y + NODE_HEIGHT / 2 <= VIEWBOX_HEIGHT;
 }
 
 function freezeGraph(model) {
@@ -121,7 +159,11 @@ function validateSystemGraphContract(input) {
     if (nodeIds.has(id)) add(`nodes[${index}].id duplicates ${id}.`);
     if (!label) add(`nodes[${index}].label must be present.`);
     if (!Number.isInteger(col) || col < 0 || col >= columns.length) add(`nodes[${index}].col must identify a declared column.`);
-    if (!Number.isInteger(row) || row < 0 || row > 20) add(`nodes[${index}].row must be an integer from 0 through 20.`);
+    if (!Number.isInteger(row) || row < 0 || row > MAX_RENDERABLE_ROW) {
+      add(`nodes[${index}].row must be an integer from 0 through ${MAX_RENDERABLE_ROW} so the complete node fits the graph viewBox.`);
+    } else if (Number.isInteger(col) && col >= 0 && col < columns.length && !nodeFitsViewBox(col, row)) {
+      add(`nodes[${index}] must place the complete node within the graph viewBox.`);
+    }
     const position = `${col}:${row}`;
     if (Number.isInteger(col) && Number.isInteger(row) && nodePositions.has(position)) {
       add(`nodes[${index}] duplicates graph position ${position}.`);
@@ -151,6 +193,8 @@ function validateSystemGraphContract(input) {
 
   const edges = [];
   const edgeIds = new Set();
+  // One directed pair owns one visible lane in this simple graph renderer.
+  const directedRelationships = new Set();
   for (const [index, candidate] of (Array.isArray(input.edges) ? input.edges : []).entries()) {
     const id = text(candidate?.id);
     const from = text(candidate?.from);
@@ -161,12 +205,17 @@ function validateSystemGraphContract(input) {
     if (!nodeIds.has(from)) add(`edges[${index}].from references unknown node ${from || "(empty)"}.`);
     if (!nodeIds.has(to)) add(`edges[${index}].to references unknown node ${to || "(empty)"}.`);
     if (from && from === to) add(`edges[${index}] must connect two distinct nodes.`);
+    const relationship = `${from}\u0000${to}`;
+    if (from && to && directedRelationships.has(relationship)) {
+      add(`edges[${index}] duplicates directed relationship ${from} → ${to}.`);
+    }
     const status = {};
     for (const mode of MODES) {
       status[mode] = text(candidate?.status?.[mode]);
       if (!STATUSES.has(status[mode])) add(`edges[${index}].status.${mode} is outside the declared vocabulary.`);
     }
     if (id) edgeIds.add(id);
+    if (from && to) directedRelationships.add(relationship);
     edges.push({ id, from, to, label, status });
   }
 
@@ -214,21 +263,27 @@ function initialSystemGraphState(model) {
 /** One finite transition vocabulary feeds pointer, keyboard, and touch input. */
 function transitionSystemGraph(model, state, action) {
   if (!action || !ACTIONS.has(action.type)) return state;
+  // The admitted model and closed vocabularies own semantic-twin wording;
+  // callers request transitions without supplying visitor-facing authority.
   switch (action.type) {
     case "SET_MODE":
       if (!MODES.has(action.value) || action.value === state.mode) return state;
       return Object.freeze({
         ...state,
         mode: action.value,
-        announcement: `Architecture state changed to ${action.label || action.value}.`,
+        announcement: `Architecture state changed to ${MODE_LABELS[action.value]}.`,
       });
     case "SET_DIMENSION": {
       const dimension = action.value === "all" || DIMENSIONS.has(action.value) ? action.value : null;
       if (!dimension || dimension === state.dimension) return state;
+      const dimensionLabel = dimension === "all"
+        ? "All dimensions"
+        : model.dimensions.find(candidate => candidate.id === dimension)?.label;
+      if (!dimensionLabel) return state;
       return Object.freeze({
         ...state,
         dimension,
-        announcement: `Concern changed to ${action.label || dimension}.`,
+        announcement: `Concern changed to ${dimensionLabel}.`,
       });
     }
     case "SELECT_NODE": {
@@ -237,7 +292,7 @@ function transitionSystemGraph(model, state, action) {
       return Object.freeze({
         ...state,
         selectedNodeId: node.id,
-        announcement: `${action.label || node.label} selected.`,
+        announcement: `${node.label} selected.`,
       });
     }
     case "RESET":
@@ -342,9 +397,48 @@ function isolateMountDom(root, mountId) {
   for (const control of modeControls) control.name = `wtb-system-mode-${mountId}`;
   for (const control of dimensionControls) control.name = `wtb-system-dimension-${mountId}`;
 
+  // A cloned graph keeps every accessible relationship local while the
+  // sibling JSON contract retains its page-level identity.
+  const identifiedElements = [root, ...root.querySelectorAll("[id]")]
+    .filter(element => element.hasAttribute("id"));
+  const isolatedIds = new Map();
+  for (const element of identifiedElements) {
+    const currentId = element.id;
+    if (!currentId) continue;
+    const isolatedId = `${currentId}-${mountId}`;
+    isolatedIds.set(currentId, isolatedId);
+    element.id = isolatedId;
+  }
+
+  const allElements = [root, ...root.querySelectorAll("*")];
+  for (const element of allElements) {
+    for (const attribute of TOKEN_IDREF_ATTRIBUTES) {
+      const current = element.getAttribute(attribute);
+      if (!current) continue;
+      const isolated = current
+        .trim()
+        .split(/\s+/u)
+        .map(id => isolatedIds.get(id) ?? id)
+        .join(" ");
+      element.setAttribute(attribute, isolated);
+    }
+    for (const attribute of SINGLE_IDREF_ATTRIBUTES) {
+      const current = element.getAttribute(attribute);
+      if (current && isolatedIds.has(current)) element.setAttribute(attribute, isolatedIds.get(current));
+    }
+    for (const attribute of FRAGMENT_REFERENCE_ATTRIBUTES) {
+      const current = element.getAttribute(attribute);
+      if (!current?.startsWith("#")) continue;
+      const targetId = current.slice(1);
+      if (isolatedIds.has(targetId)) element.setAttribute(attribute, `#${isolatedIds.get(targetId)}`);
+    }
+  }
+
+  // Required names also recover when repaired markup supplies the semantic
+  // element without recreating its former ID.
   const graphTitle = root.querySelector("[data-graph-title]");
   if (graphTitle) {
-    graphTitle.id = `wtb-system-graph-title-${mountId}`;
+    if (!graphTitle.id) graphTitle.id = `wtb-system-graph-title-${mountId}`;
     root.setAttribute("aria-labelledby", graphTitle.id);
   } else {
     root.removeAttribute("aria-labelledby");
@@ -353,7 +447,7 @@ function isolateMountDom(root, mountId) {
   const detailPanel = root.querySelector("[data-detail-panel]");
   const detailTitle = root.querySelector("[data-detail-title]");
   if (detailPanel && detailTitle) {
-    detailTitle.id = `wtb-system-detail-title-${mountId}`;
+    if (!detailTitle.id) detailTitle.id = `wtb-system-detail-title-${mountId}`;
     detailPanel.setAttribute("aria-labelledby", detailTitle.id);
   } else {
     detailPanel?.removeAttribute("aria-labelledby");
@@ -689,9 +783,9 @@ function mountSystemGraph(root, document = globalThis.document, browser = global
   const onChange = event => {
     if (!event.target || typeof event.target.matches !== "function") return;
     if (event.target.matches(MODE_CONTROL_SELECTOR)) {
-      apply({ type: "SET_MODE", value: event.target.value, label: event.target.dataset.label });
+      apply({ type: "SET_MODE", value: event.target.value });
     } else if (event.target.matches(DIMENSION_CONTROL_SELECTOR)) {
-      apply({ type: "SET_DIMENSION", value: event.target.value, label: event.target.dataset.label });
+      apply({ type: "SET_DIMENSION", value: event.target.value });
     }
   };
 
@@ -701,7 +795,7 @@ function mountSystemGraph(root, document = globalThis.document, browser = global
     if (!nodeControl || !root.contains(nodeControl)) return false;
     const node = model.nodes.find(candidate => candidate.id === nodeControl.dataset.nodeId);
     if (!node) return false;
-    apply({ type: "SELECT_NODE", value: node.id, label: node.label }, { focus: true });
+    apply({ type: "SELECT_NODE", value: node.id }, { focus: true });
     return true;
   };
 

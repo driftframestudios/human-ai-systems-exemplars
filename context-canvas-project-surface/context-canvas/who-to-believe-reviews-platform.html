@@ -144,6 +144,12 @@
         --graph-broken-paper: #ffe4de;
         --graph-core: #8a8f2a;
         --graph-forecast: #7c3d9b;
+        /* Source accents carry fills, strokes, and dots; companion inks keep
+           small status text readable without changing that visual grammar. */
+        --graph-dark-ink: #07101d;
+        --graph-degraded-ink: #725800;
+        --graph-coral-ink: #98261c;
+        --graph-core-ink: #5e610e;
         background: var(--graph-paper);
         color: var(--graph-cobalt);
         font-family: "Inter", system-ui, sans-serif;
@@ -186,6 +192,7 @@
         padding: .25rem .75rem;
       }
       .wtb-system-graph__choice--dimension input:checked + span { background: var(--choice-color); color: #fff; }
+      .wtb-system-graph__choice--dimension input:is([value="abuse"], [value="core"]):checked + span { color: var(--graph-dark-ink); }
       .wtb-system-graph__choice input:focus-visible + span,
       .wtb-system-graph :is(button, summary):focus-visible { outline: .2rem solid var(--graph-coral); outline-offset: .16rem; }
       .wtb-system-graph__legend { display: flex; flex-wrap: wrap; font-size: .75rem; font-weight: 600; gap: .75rem; }
@@ -206,8 +213,8 @@
       .wtb-system-graph__edge[data-status="broken"] { stroke: var(--graph-coral); stroke-dasharray: 6 5; }
       .wtb-system-graph__edge[data-selected="true"] { stroke-width: 3.5; }
       .wtb-system-graph__edge-label { fill: var(--graph-cobalt); font-size: .625rem; font-weight: 700; pointer-events: none; }
-      .wtb-system-graph__edge-label[data-status="strained"] { fill: var(--graph-degraded); }
-      .wtb-system-graph__edge-label[data-status="broken"] { fill: var(--graph-coral); }
+      .wtb-system-graph__edge-label[data-status="strained"] { fill: var(--graph-degraded-ink); }
+      .wtb-system-graph__edge-label[data-status="broken"] { fill: var(--graph-coral-ink); }
       .wtb-system-graph__column-label { fill: var(--graph-cobalt); font-size: .6875rem; font-weight: 700; letter-spacing: .14em; pointer-events: none; text-transform: uppercase; }
       .wtb-system-graph__node { cursor: pointer; opacity: .75; }
       .wtb-system-graph__node[data-connected="true"],
@@ -234,7 +241,7 @@
       .wtb-system-graph__detail-panel > * { margin-block: 0; }
       .wtb-system-graph__detail-panel > * + * { margin-block-start: .75rem; }
       .wtb-system-graph__detail-panel[data-status="strained"] { background: var(--graph-yellow); color: var(--graph-cobalt); }
-      .wtb-system-graph__detail-panel[data-status="broken"] { background: var(--graph-coral); color: #fff; }
+      .wtb-system-graph__detail-panel[data-status="broken"] { background: var(--graph-coral); color: var(--graph-dark-ink); }
       .wtb-implementation-track .wtb-system-graph__detail-panel :is(p, h5, button, span) { color: inherit; }
       .wtb-system-graph__detail-status,
       .wtb-system-graph__connections-label { font-size: .6875rem; font-weight: 700; letter-spacing: .14em; margin: 0; text-transform: uppercase; }
@@ -265,9 +272,9 @@
       .wtb-system-graph__neighbor-status { font-weight: 700; }
       .wtb-system-graph__tags { display: flex; flex-wrap: wrap; gap: .25rem; padding-block-start: .25rem; }
       .wtb-system-graph__tag { background: #fff; font-size: .6875rem; font-weight: 700; padding: .125rem .5rem; }
-      .wtb-system-graph__tag[data-dimension="abuse"] { color: var(--graph-coral) !important; }
+      .wtb-system-graph__tag[data-dimension="abuse"] { color: var(--graph-coral-ink) !important; }
       .wtb-system-graph__tag[data-dimension="misfit"] { color: var(--graph-cobalt) !important; }
-      .wtb-system-graph__tag[data-dimension="core"] { color: var(--graph-core) !important; }
+      .wtb-system-graph__tag[data-dimension="core"] { color: var(--graph-core-ink) !important; }
       .wtb-system-graph__tag[data-dimension="forecast"] { color: var(--graph-forecast) !important; }
       .wtb-system-graph__reading { border-block-start: .0625rem solid var(--graph-cobalt); margin-block-start: 1rem; padding-block-start: .5rem; }
       .wtb-system-graph__reading summary { cursor: pointer; font-weight: 800; min-block-size: 2.75rem; padding-block: .55rem; }
@@ -297,7 +304,8 @@
         .wtb-system-graph__detail-panel { forced-color-adjust: auto; }
         .wtb-system-graph__edge { stroke: CanvasText; }
         .wtb-system-graph__canvas-scroll:focus-visible { outline-color: Highlight; }
-        .wtb-system-graph__choice input:checked + span {
+        .wtb-system-graph__choice input:checked + span,
+        .wtb-system-graph__choice--dimension input:is([value="abuse"], [value="core"]):checked + span {
           background: Highlight;
           border-color: Highlight;
           color: HighlightText;
@@ -873,8 +881,8 @@
                     <fieldset class="wtb-system-graph__controls">
                       <legend class="wtb-system-graph__sr-only">Architecture state</legend>
                       <div class="wtb-system-graph__mode-row">
-                        <label class="wtb-system-graph__choice"><input type="radio" name="wtb-system-mode" value="symfony" data-graph-mode-control data-label="Symfony PHP monolith"><span>Symfony PHP monolith</span></label>
-                        <label class="wtb-system-graph__choice"><input type="radio" name="wtb-system-mode" value="spring" data-graph-mode-control data-label="Partial Spring Boot migration"><span>Partial Spring Boot migration</span></label>
+                        <label class="wtb-system-graph__choice"><input type="radio" name="wtb-system-mode" value="symfony" data-graph-mode-control><span>Symfony PHP monolith</span></label>
+                        <label class="wtb-system-graph__choice"><input type="radio" name="wtb-system-mode" value="spring" data-graph-mode-control><span>Partial Spring Boot migration</span></label>
                       </div>
                     </fieldset>
                     <div class="wtb-system-graph__legend" data-status-summary aria-label="Architecture status counts"></div>
@@ -882,11 +890,11 @@
                   <fieldset class="wtb-system-graph__controls">
                     <legend class="wtb-system-graph__sr-only">Concern in view</legend>
                     <div class="wtb-system-graph__dimension-row">
-                      <label class="wtb-system-graph__choice wtb-system-graph__choice--dimension" style="--choice-color: #1a3fd8;"><input type="radio" name="wtb-system-dimension" value="all" data-graph-dimension-control data-label="All dimensions"><span>All dimensions</span></label>
-                      <label class="wtb-system-graph__choice wtb-system-graph__choice--dimension" style="--choice-color: #f45d4c;"><input type="radio" name="wtb-system-dimension" value="abuse" data-graph-dimension-control data-label="Multi-account abuse"><span>Multi-account abuse</span></label>
-                      <label class="wtb-system-graph__choice wtb-system-graph__choice--dimension" style="--choice-color: #1a3fd8;"><input type="radio" name="wtb-system-dimension" value="misfit" data-graph-dimension-control data-label="Campaign misfit"><span>Campaign misfit</span></label>
-                      <label class="wtb-system-graph__choice wtb-system-graph__choice--dimension" style="--choice-color: #8a8f2a;"><input type="radio" name="wtb-system-dimension" value="core" data-graph-dimension-control data-label="Core operations"><span>Core operations</span></label>
-                      <label class="wtb-system-graph__choice wtb-system-graph__choice--dimension" style="--choice-color: #7c3d9b;"><input type="radio" name="wtb-system-dimension" value="forecast" data-graph-dimension-control data-label="Forecasting"><span>Forecasting</span></label>
+                      <label class="wtb-system-graph__choice wtb-system-graph__choice--dimension" style="--choice-color: #1a3fd8;"><input type="radio" name="wtb-system-dimension" value="all" data-graph-dimension-control><span>All dimensions</span></label>
+                      <label class="wtb-system-graph__choice wtb-system-graph__choice--dimension" style="--choice-color: #f45d4c;"><input type="radio" name="wtb-system-dimension" value="abuse" data-graph-dimension-control><span>Multi-account abuse</span></label>
+                      <label class="wtb-system-graph__choice wtb-system-graph__choice--dimension" style="--choice-color: #1a3fd8;"><input type="radio" name="wtb-system-dimension" value="misfit" data-graph-dimension-control><span>Campaign misfit</span></label>
+                      <label class="wtb-system-graph__choice wtb-system-graph__choice--dimension" style="--choice-color: #8a8f2a;"><input type="radio" name="wtb-system-dimension" value="core" data-graph-dimension-control><span>Core operations</span></label>
+                      <label class="wtb-system-graph__choice wtb-system-graph__choice--dimension" style="--choice-color: #7c3d9b;"><input type="radio" name="wtb-system-dimension" value="forecast" data-graph-dimension-control><span>Forecasting</span></label>
                     </div>
                   </fieldset>
                   <p class="wtb-system-graph__sr-only" role="status" aria-live="polite" aria-atomic="true" data-graph-status></p>

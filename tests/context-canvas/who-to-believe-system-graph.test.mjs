@@ -28,6 +28,8 @@ async function sourceContract() {
 }
 
 function normalizeSourceDerivedContract(contract) {
+  // The digest owns source-derived meaning; schema version and edge IDs remain
+  // local carrier metadata governed by admission and identity tests.
   return {
     columns: contract.columns,
     dimensions: contract.dimensions.map(({ id, label, color }) => ({ id, label, color })),
@@ -98,6 +100,28 @@ test("contract admission reports materially related faults together", async () =
   assert.match(admission.errors.join("\n"), /defaults\.selectedNode must be household/u);
 });
 
+test("contract admission keeps every node inside the fixed graph viewBox", async () => {
+  const fixture = await sourceContract();
+  fixture.nodes[0].row = 6;
+
+  const admission = validateSystemGraphContract(fixture);
+  assert.equal(admission.ok, false);
+  assert.match(admission.errors.join("\n"), /row must be an integer from 0 through 5/u);
+});
+
+test("contract admission rejects duplicate directed relationships", async () => {
+  const fixture = await sourceContract();
+  fixture.edges.push({
+    ...fixture.edges[0],
+    id: "accounts-auth-copy",
+    status: { ...fixture.edges[0].status },
+  });
+
+  const admission = validateSystemGraphContract(fixture);
+  assert.equal(admission.ok, false);
+  assert.match(admission.errors.join("\n"), /duplicates directed relationship accounts → auth/u);
+});
+
 test("initial state reproduces the original Review Routing graph", async () => {
   const { model } = validateSystemGraphContract(await sourceContract());
   assert.deepEqual(initialSystemGraphState(model), {
@@ -150,6 +174,53 @@ test("the finite transition vocabulary changes only mode, dimension, or selectio
   const reset = transitionSystemGraph(model, selected, { type: "RESET" });
   assert.deepEqual(reset, initial);
   assert.equal(transitionSystemGraph(model, initial, { type: "RESET" }), initial);
+});
+
+test("transition announcements retain canonical admitted labels", async () => {
+  const { model } = validateSystemGraphContract(await sourceContract());
+  const initial = initialSystemGraphState(model);
+
+  const spring = transitionSystemGraph(model, initial, {
+    type: "SET_MODE",
+    value: "spring",
+    label: "Unrelated architecture label",
+  });
+  assert.equal(spring.announcement, "Architecture state changed to Partial Spring Boot migration.");
+
+  const abuse = transitionSystemGraph(model, spring, {
+    type: "SET_DIMENSION",
+    value: "abuse",
+    label: "Unrelated concern label",
+  });
+  assert.equal(abuse.announcement, "Concern changed to Multi-account abuse.");
+
+  const selected = transitionSystemGraph(model, abuse, {
+    type: "SELECT_NODE",
+    value: "risk",
+    label: "Unrelated node label",
+  });
+  assert.equal(selected.announcement, "Risk scoring selected.");
+
+  const allDimensions = transitionSystemGraph(model, selected, {
+    type: "SET_DIMENSION",
+    value: "all",
+  });
+  assert.equal(allDimensions.announcement, "Concern changed to All dimensions.");
+
+  assert.equal(
+    transitionSystemGraph(model, initial, {
+      type: "SET_MODE",
+      value: "symfony",
+      label: "Caller text cannot replace the canonical label",
+    }),
+    initial,
+    "same-state requests remain inert even when a caller supplies alternate prose",
+  );
+  assert.equal(
+    transitionSystemGraph(model, initial, { type: "SET_MODE", value: "missing" }),
+    initial,
+    "a missing mode remains outside the closed transition vocabulary",
+  );
 });
 
 test("status counts span all 22 nodes in either architecture state", async () => {
