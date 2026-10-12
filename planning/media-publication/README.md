@@ -68,6 +68,10 @@ the selected delivery service retain existing ownership.
   — eleven independently resumable movie/poster families, one explicit timing
   decision, serialized Wrangler publication, exact remote comparison, and live
   same-origin transport acceptance.
+- [About problem-to-system sequence R2 exercise](exercises/about-problem-to-system-sequence-r2-publication.v0.1.md)
+  — one repository-generated, plate-first movie/poster family, a high-density
+  local poster, a bounded GIF recovery carrier, native visitor controls, and
+  exact live Worker acceptance.
 
 ## Cultivation path
 
@@ -85,6 +89,10 @@ return.
 Material friction continues to return to the drafts; stable, repeated
 decisions can then move into the public repository skill and runbook catalogs
 through the existing selection process.
+The About sequence additionally exercises one source manifest across a local
+poster, a bounded GIF, and a versioned progressive-video receiver. This keeps
+the visual story reproducible while each carrier serves its own loading and
+accessibility role.
 
 ## Language posture
 

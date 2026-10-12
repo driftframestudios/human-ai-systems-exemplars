@@ -1073,15 +1073,15 @@
       "roles": [
         {
           "id": "visitor_controlled_motion",
-          "visitor_job": "Move through eleven alternating problem-shaping and working-system views after a visitor requests the sequence.",
-          "accessibility_text_owner": "The About HTML image alternative, caption, and motion control."
+          "visitor_job": "Provide a local, visitor-selected route through eleven alternating problem, solution, and implementation views.",
+          "accessibility_text_owner": "The About HTML video name, caption, visible visual description, and fallback link."
         }
       ],
       "source_relationship": {
         "standing": "generated_derivative",
         "canonical_source_path": "collaboration/impact-map-visual-variants/movie/about-style-cycle-sequence.json",
         "generator_path": "collaboration/impact-map-visual-variants/movie/render_about_style_cycle_gif.py",
-        "profile": "640x360-eleven-frame-16.4-second-one-shot-assembly-relay"
+        "profile": "960x540-56-color-per-frame-eleven-view-16.4-second-one-shot-assembly-relay"
       },
       "recovery_condition": "Run the named build script from the repository root and review the complete About sequence. Run the capture script first only when intentionally refreshing a repository-rendered source frame."
     },
@@ -1091,15 +1091,15 @@
       "roles": [
         {
           "id": "still_first_view",
-          "visitor_job": "Provide the calm first view and durable fallback for the About visual sequence.",
-          "accessibility_text_owner": "The About HTML image alternative and caption."
+          "visitor_job": "Open on the finished genomics plate interface and provide the durable local poster for the About visual sequence.",
+          "accessibility_text_owner": "The About HTML video name, caption, and visible visual description."
         }
       ],
       "source_relationship": {
         "standing": "generated_derivative",
         "canonical_source_path": "collaboration/impact-map-visual-variants/movie/about-style-cycle-sequence.json",
         "generator_path": "collaboration/impact-map-visual-variants/movie/render_about_style_cycle_gif.py",
-        "profile": "640x360-poda-first-frame-progressive-jpeg"
+        "profile": "1280x720-plate-first-frame-progressive-jpeg"
       },
       "recovery_condition": "Run the named build script from the repository root and review the About still. Run the capture script first only when intentionally refreshing a repository-rendered source frame."
     },

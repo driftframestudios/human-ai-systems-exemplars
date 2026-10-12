@@ -187,7 +187,7 @@ test("the About folios keep organization records inside progressive disclosure",
   assert.equal(declarationValue(organizationRule, "font-size"), ".9em");
 });
 
-test("the About visual sequence begins as a still and loads motion after visitor action", async () => {
+test("the About visual sequence begins on a local poster and leaves native playback to the visitor", async () => {
   const [css, html, script, gif, poster, manifestSource, captureScript, generator] = await Promise.all([
     readCanvasFile("styles/routes/about.css"),
     readCanvasFile("index.html"),
@@ -223,39 +223,84 @@ test("the About visual sequence begins as a still and loads motion after visitor
   const figureStart = section.indexOf('<figure class="about-media"');
   const firstProse = section.indexOf("<p>Twenty years");
   assert.ok(headingEnd < figureStart && figureStart < firstProse);
+  const videoTag = section.match(/<video class="about-media__video"[^>]+>/u)?.[0];
+  assert.ok(videoTag, "Expected one native About video receiver");
+  assert.match(videoTag, /data-about-media-video/u);
+  assert.match(
+    videoTag,
+    /data-video-poster="https:\/\/vik\.guru\/v1-cdn\/video\/about-problem-to-system-sequence\/v0\.1\.0\/poster\.webp"/u,
+  );
+  assert.match(videoTag, /\scontrols(?:\s|>)/u);
+  assert.match(videoTag, /\splaysinline(?:\s|>)/u);
+  assert.match(videoTag, /preload="none"/u);
+  assert.match(videoTag, /width="1280" height="720"/u);
+  assert.match(videoTag, /poster="\.\.\/img\/media\/impact-map-style-cycle-poster\.jpg"/u);
+  assert.match(videoTag, /aria-describedby="about-media-caption"/u);
+  assert.match(videoTag, /aria-details="about-media-sequence"/u);
+  assert.doesNotMatch(videoTag, /\sautoplay(?:\s|=|>)/u);
   assert.match(
     section,
-    /src="\.\.\/img\/media\/impact-map-style-cycle-poster\.jpg"[^>]+data-motion-src="\.\.\/img\/media\/impact-map-style-cycle-calm\.gif"[^>]+data-motion-duration-ms="\d+"[^>]+width="640" height="360"/u,
+    /<source src="https:\/\/vik\.guru\/v1-cdn\/video\/about-problem-to-system-sequence\/v0\.1\.0\/movie\.mp4" type="video\/mp4">/u,
   );
   assert.match(
     section,
-    /alt="Problem-shaping maps alternate with working genomics, review, and clinical-trial system views\."/u,
+    /<a href="\.\.\/img\/media\/impact-map-style-cycle-calm\.gif">Open the local GIF fallback<\/a>/u,
   );
   assert.match(
     section,
-    /Problem-shaping artifacts alternate with working system examples, showing how a shared frame becomes something a team can inspect, test, and improve\./u,
+    /A finished genomics plate view opens the sequence\./u,
   );
   assert.match(
     section,
-    /<button class="about-media__toggle" data-about-media-toggle type="button" aria-pressed="false" hidden>/u,
+    /<aside class="about-media-sequence" id="about-media-sequence" aria-labelledby="about-media-sequence-title">/u,
   );
+  assert.equal((section.match(/<li>/gu) ?? []).length, 5);
 
   assert.equal(gif.subarray(0, 6).toString("ascii"), "GIF89a");
-  assert.equal(gif.readUInt16LE(6), 640);
-  assert.equal(gif.readUInt16LE(8), 360);
-  assert.ok(gif.byteLength < 1_000_000, "Expected the landing GIF to remain below 1 MB");
+  assert.equal(gif.readUInt16LE(6), 960);
+  assert.equal(gif.readUInt16LE(8), 540);
+  assert.ok(
+    gif.byteLength < 2_500_000,
+    "Expected the higher-fidelity fallback GIF to remain below 2.5 MB",
+  );
   assert.equal(gif.includes(Buffer.from("NETSCAPE2.0", "ascii")), false);
   assert.equal(
     sha256(gif),
-    "8f45300fd2776eabd7130f6b64ca6683fdf1d42be0591a4829edeead36467fd2",
+    "04ac68986df269c6f3f19a34d1c40c3dbdd6c5151e84db459a5beea5feb90f59",
   );
   assert.equal(
     sha256(poster),
-    "b84c3aa7cdfba477907c1c0f78fe2b61ac365db0408127b78736dc6338dcefe4",
+    "4520e4909b9490d1c9f580f90cdee979bdeb6bddf212a8cb2d475e7c609d4790",
   );
 
   const manifest = JSON.parse(manifestSource);
-  assert.equal(manifest.version, "0.2.0");
+  assert.equal(manifest.version, "0.4.0");
+  assert.deepEqual(
+    manifest.output,
+    {
+      width: 960,
+      height: 540,
+      hold_ms: 1200,
+      transition_frame_ms: 160,
+      palette_colors: 56,
+      palette_strategy: "per_frame",
+      dither: "none",
+    },
+  );
+  assert.deepEqual(
+    manifest.progressive_video,
+    {
+      width: 1280,
+      height: 720,
+      frames_per_second: 25,
+      codec: "libx264",
+      preset: "slow",
+      crf: 16,
+      pixel_format: "yuv420p",
+      audio: false,
+      fast_start: true,
+    },
+  );
   assert.equal(manifest.transition.id, "assembly_relay");
   assert.deepEqual(manifest.transition.progress, [0.38, 0.72]);
   assert.deepEqual(manifest.transition.colors, ["#2456f5", "#ecff3f", "#fbf8f1"]);
@@ -263,17 +308,33 @@ test("the About visual sequence begins as a still and loads motion after visitor
   assert.deepEqual(
     manifest.frames.map(frame => frame.id),
     [
-      "poda-investment-flow",
       "genomics-plate-viewer",
-      "impact-branch-cobalt-drafting",
-      "who-to-believe-system-graph",
+      "poda-investment-flow",
+      "cpg-member-experience-redesigned",
       "context-board-pop-drafting",
+      "who-to-believe-system-graph",
+      "impact-branch-cobalt-drafting",
       "genomics-axonometric-process-viewer",
       "context-assembly-ledger-quintile",
-      "cpg-member-experience-redesigned",
-      "context-shared-cobalt-drafting",
       "clinical-trial-tumor-board-cohort",
+      "context-shared-cobalt-drafting",
       "impact-narrative-pop-quintile",
+    ],
+  );
+  assert.deepEqual(
+    manifest.frames.map(frame => frame.stage),
+    [
+      "implementation",
+      "problem",
+      "solution",
+      "problem",
+      "implementation",
+      "solution",
+      "implementation",
+      "problem",
+      "solution",
+      "problem",
+      "solution",
     ],
   );
   assert.ok(
@@ -291,7 +352,6 @@ test("the About visual sequence begins as a still and loads motion after visitor
       * manifest.output.transition_frame_ms)
   );
   assert.equal(authoredDuration, 16_400);
-  assert.match(section, new RegExp(`data-motion-duration-ms="${authoredDuration}"`, "u"));
   assert.match(captureScript, /startStaticServer/u);
   assert.match(captureScript, /document\.fonts\?\.ready/u);
   assert.match(captureScript, /about-style-cycle-source-frames/u);
@@ -301,20 +361,32 @@ test("the About visual sequence begins as a still and loads motion after visitor
   assert.match(generator, /def assembly_relay\(/u);
   assert.match(generator, /expected_digest/u);
   assert.match(generator, /reverse=bool\(index % 2\)/u);
+  assert.match(generator, /def encode_progressive_video\(/u);
+  assert.match(generator, /subsampling=0/u);
+  assert.match(generator, /Encode every requested carrier before promoting any destination/u);
+  assert.match(generator, /frames_per_second/u);
+  assert.match(generator, /whole progressive-video frames/u);
 
-  assert.match(script, /button\.hidden = reducedMotion\.matches \|\| printMedia\.matches/u);
-  assert.match(script, /button\.addEventListener\("click"/u);
+  assert.match(script, /root\.querySelector\("\[data-about-media-video\]"\)/u);
+  assert.match(script, /video\?\.querySelector\("source"\)/u);
+  assert.match(script, /root\.querySelector\("\[data-about-media-status\]"\)/u);
   assert.match(script, /prefers-reduced-motion: reduce/u);
   assert.match(script, /window\.matchMedia\("print"\)/u);
-  assert.match(script, /window\.setTimeout\(\(\) => setMotionState\(false\), motionDuration\)/u);
+  assert.match(script, /root\.dataset\.motionPreference/u);
+  assert.match(script, /video\.addEventListener\("error"/u);
+  assert.match(script, /source\.addEventListener\("error"/u);
+  assert.match(script, /video\.addEventListener\("loadedmetadata"/u);
+  assert.match(script, /if \(!video\.paused\) video\.pause\(\)/u);
   assert.match(script, /window\.addEventListener\("beforeprint"/u);
   assert.match(script, /document\.addEventListener\("visibilitychange"/u);
 
   assert.match(css, /\.about-media\s*\{[^}]*inline-size:\s*min\(100%, 40rem\)/su);
   assert.match(css, /\.about-media__frame\s*\{[^}]*aspect-ratio:\s*16 \/ 9/su);
-  assert.match(css, /\.about-media__toggle\[hidden\]\s*\{[^}]*display:\s*none/su);
+  assert.match(css, /\.about-media__video\s*\{[^}]*object-fit:\s*cover/su);
+  assert.match(css, /\.about-media__status\[hidden\]\s*\{[^}]*display:\s*none/su);
+  assert.match(css, /\.about-media-sequence\s*\{[^}]*border-inline-start:/su);
   assert.match(css, /@media \(forced-colors: active\)[\s\S]*?\.about-media/su);
-  assert.match(css, /@media print[\s\S]*?\.about-media__toggle\s*\{[^}]*display:\s*none/su);
+  assert.match(css, /@media print[\s\S]*?\.about-media-sequence/su);
 });
 
 test("the About prose and role table state action and consequence directly", async () => {
