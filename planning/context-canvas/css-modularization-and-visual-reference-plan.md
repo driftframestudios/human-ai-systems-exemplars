@@ -196,7 +196,12 @@ The general utility discovers every top-level `context-canvas/*.html` page. This
 | Prompt conditions | `conditioning-field.html`, `prompt-side-conditions-practice.html` |
 | Composed Debriefs | `choose-your-player-humatics.html`, `ehr-discrete-genomic-result.html`, `ehr-interface-engine-replatform.html`, `ehr-pgx-alert-failure.html`, `ehr-three-front-doors.html`, `ehr-two-charts-one-result.html`, `fmi-clinical-trial-coordination.html`, `multilingual-clinical-vocabulary-practice.html`, `recoverable-enterprise-forms.html`, `spatial-capture-collaborative-memory.html` |
 | Enterprise readings | `distributed-inspection-harness.html`, `field-inspection-harness-replatform.html`, `fmi-lims-eln-replatforming.html`, `genomic-viewer-replatforming.html`, `initiative-costing.html`, `narrative-execution-gap-research-atlas.html`, `one-figure-several-readings.html`, `three-way-comparative-return.html`, `who-to-believe-reviews-platform.html` |
-| Historical exemplars | `exemplar-gallery-list.html`, `exemplar-ideal-debrief.html`, `exemplar-index-landing.html`, `exemplar-maximal-debrief.html`, `exemplar-maximal-information-radiator.html` |
+| Historical exemplars | `exemplar-index-landing.html` |
+
+Issue #88 retired four duplicate source-era exemplar documents and their legacy
+Occipital preview from the current source tree. Git history retains the earlier
+surfaces; current visual-reference runs exercise the single anonymous-composite
+landing that still carries an active maintenance contract.
 
 The route catalog also names standing—primary, instrument, Debrief, exemplar, or recovery—so a collaborator can understand why a page exists without teaching the capture runner separate logic.
 

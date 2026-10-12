@@ -83,10 +83,10 @@ source, docs, tag, activation, and signed-out receipt.
 
 ## Current entry condition
 
-The tracked production configuration selects the accepted 41-route Context
+The tracked production configuration selects the accepted 40-route Context
 Canvas collection, its non-indexed `404.html`, and the complete local file
-closure those documents need. The four resting no-index exemplars stay outside
-this initial visitor collection. `primary-route-manifest.json` records every
+closure those documents need. The retained anonymous-composite landing stays
+outside this initial visitor collection. `primary-route-manifest.json` records every
 selected source and its document-root destination explicitly.
 
 `production-projection.config.json` has this shape:

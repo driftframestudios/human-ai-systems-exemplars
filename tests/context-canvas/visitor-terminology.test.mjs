@@ -406,14 +406,11 @@ test("viewlet remains specialist vocabulary outside the About route", async () =
   assert.match(gallery, /class="viewlet-rack"/u);
 });
 
-test("Debrief role fields distinguish autobiographical work from teaching reconstruction", async () => {
+test("Debrief role fields use direct autobiographical attribution", async () => {
   assert.deepEqual(
     await topLevelHtmlFilesContaining(/\b(?:Narrator(?: role| posture)?|[Tt]he author)\b/u),
-    [
-      "exemplar-ideal-debrief.html",
-      "exemplar-maximal-debrief.html",
-    ],
-    "Only the explicitly labeled legacy example text retains a generic author",
+    [],
+    "Current visitor pages use direct role and authorship language",
   );
 
   const compactSource = await readFile(compactCaseBriefSourcePath, "utf8");

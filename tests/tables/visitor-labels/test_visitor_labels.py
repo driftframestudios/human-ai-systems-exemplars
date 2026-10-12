@@ -207,9 +207,9 @@ class VisitorLabelContracts(unittest.TestCase):
     def test_complete_inventory_and_owner_boundaries(self):
         expected = set(self.contract["pages"]) | set(self.contract["exclusions"])
         self.assertEqual({p.name for p in self.directory.glob("*.html")}, expected)
-        self.assertEqual(len(self.sources), 44)
-        self.assertEqual(sum(len(a.tables) for a in self.parsed.values()), 148)
-        self.assertEqual(sum(not a.tables for a in self.parsed.values()), 6)
+        self.assertEqual(len(self.sources), 40)
+        self.assertEqual(sum(len(a.tables) for a in self.parsed.values()), 147)
+        self.assertEqual(sum(not a.tables for a in self.parsed.values()), 3)
         self.assertEqual(set(self.contract["exclusions"]), {
             "distributed-inspection-harness.html",
             "narrative-execution-gap-research-atlas.html",
@@ -267,9 +267,9 @@ class VisitorLabelContracts(unittest.TestCase):
                     temporary = target.with_suffix(".tmp")
                     temporary.write_text(json.dumps(report, indent=2) + "\n")
                     temporary.replace(target)
-        self.assertEqual(dict(counts), {"table": 148, "tr": 1050, "th": 1495, "td": 2820})
+        self.assertEqual(dict(counts), {"table": 147, "tr": 1046, "th": 1488, "td": 2811})
         self.assertEqual(dict(dispositions), {
-            "simple": 144, "empty-register": 2,
+            "simple": 143, "empty-register": 2,
             "capital-summary": 1, "grouped-populations": 1,
         })
 
@@ -283,7 +283,7 @@ class VisitorLabelContracts(unittest.TestCase):
         self.assertEqual(counts["explicit_tables"], sum(t["shape"] != "simple" for t in tables))
         self.assertEqual(counts["native_labelled_elements"],
                          sum(1 + t["rows"] + t["th"] + t["td"] for t in tables))
-        self.assertEqual(counts["native_labelled_elements"], 5513)
+        self.assertEqual(counts["native_labelled_elements"], 5492)
         self.assertEqual(counts["runtime_body_generators"], len(self.contract["runtime"]))
 
     def _atlas_gallery_records(self, ordinal, fields, records):

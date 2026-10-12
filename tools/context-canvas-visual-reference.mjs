@@ -95,11 +95,7 @@ const FAMILIES = [
     title: "Historical exemplars",
     standing: "exemplar",
     routes: [
-      "exemplar-gallery-list.html",
-      "exemplar-ideal-debrief.html",
-      "exemplar-index-landing.html",
-      "exemplar-maximal-debrief.html",
-      "exemplar-maximal-information-radiator.html"
+      "exemplar-index-landing.html"
     ]
   }
 ];

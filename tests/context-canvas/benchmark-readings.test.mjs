@@ -113,11 +113,11 @@ test("Debriefs catalog and JSON-LD retain both benchmark readings", async () => 
   const jsonLd = firstJsonLd(html);
   const itemList = jsonLd["@graph"].find(item => item["@type"] === "ItemList");
   assert.ok(itemList);
-  assert.equal(itemList.numberOfItems, 24);
-  assert.equal(itemList.itemListElement.length, 24);
+  assert.equal(itemList.numberOfItems, 23);
+  assert.equal(itemList.itemListElement.length, 23);
   assert.deepEqual(
     itemList.itemListElement.map(item => item.position),
-    Array.from({ length: 24 }, (_, index) => index + 1),
+    Array.from({ length: 23 }, (_, index) => index + 1),
   );
 
   const itemUrls = itemList.itemListElement.map(item => item.url);
