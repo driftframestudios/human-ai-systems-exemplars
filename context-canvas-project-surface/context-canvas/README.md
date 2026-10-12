@@ -43,26 +43,39 @@ asset and exact source digest.
 
 [`debriefs.html`](debriefs.html) keeps each catalog route and each source-owned
 Case Brief distinct. Catalog Overview leads to the fragment-free Full Debrief.
-Case Brief mode projects the source page's orientation, ordered six-field scan,
-basis and limits, and concise related-media index directly into the catalog;
-its actions then open either the source `#case-brief` or the complete Debrief.
-The source Case Brief carries the same six fields followed by linked Solution
-and Implementation track scans that account for every primary beat. A reading
-whose architecture uses another truthful pair, such as Comparison and Return,
-names that pair directly.
+Case Brief mode projects the canonical compact source's orientation, ordered
+six-field scan,
+basis and limits, concise related-media index, and two independently operable
+quick scans directly into the catalog. Each quick scan begins collapsed and
+uses its truthful track names, including Comparison and Return where those
+names describe the reading more accurately than Solution and Implementation.
+One fragment-free action continues into the Full Debrief. The complete reading
+therefore begins with its own narrative rather than repeating the compact
+catalog account.
 
-HTML owns the complete source reading. Run `npm run build:debrief-case-briefs`
-after changing a source Case Brief. The dependency-free materializer validates
-all declared routes, ordered six-field scans, basis-and-limits paragraphs,
-and related-media links, then refreshes one bounded template block in
+The bounded
+[`debrief-case-briefs.source.html`](../data/debrief-case-briefs.source.html)
+file owns all compact accounts. Run `npm run build:debrief-case-briefs` after
+changing that source. The dependency-free materializer validates all declared
+routes, ordered six-field scans, paired track disclosures, basis-and-limits
+paragraphs, related-media links, and their source-fragment destinations, then
+refreshes one bounded template block in
 `debriefs.html`; `npm run check:debrief-case-briefs` confirms exact parity.
+The generated carrier qualifies each source-local fragment with its Debrief
+route, so those destinations remain correct before JavaScript enhancement.
+Each Full Debrief retains one empty `#case-brief` compatibility target for
+previously published coordinates; the central source remains the sole owner of
+compact-account content.
 `debriefs-catalog.js` reveals that authored projection as a bounded enhancement,
 so local file inspection and HTTP delivery use the same source-derived scan.
-The focused browser contract checks the six-field order, related media, grouped
-EHR behavior, accurate status counts, repeated mode changes, and both reading
-actions across the narrow, responsive-seam, and desktop widths. It also opens
-the same page directly from the local filesystem so this bounded projection
-stays independent of sibling-page requests.
+The focused browser contract checks all sixteen compact accounts, thirty-two
+independent disclosure controls, closed initial state, state-aware labels,
+related media, grouped EHR behavior, accurate status counts, repeated mode
+changes, and the complete-reading action across narrow, responsive-seam, and
+desktop widths. Forced-colors and print checks preserve the controls and their
+complete reading. Chromium and WebKit also open the page directly from the
+local filesystem so this bounded projection stays independent of sibling-page
+requests.
 
 The five Debrief working-system and visual-comparison families retain their accepted,
 unsuffixed WebPs as full-size inspection targets. Catalog-specific canonical

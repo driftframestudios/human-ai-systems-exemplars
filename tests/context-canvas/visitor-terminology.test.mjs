@@ -8,6 +8,10 @@ const canvasRoot = resolve(
   repositoryRoot,
   "context-canvas-project-surface/context-canvas",
 );
+const compactCaseBriefSourcePath = resolve(
+  repositoryRoot,
+  "context-canvas-project-surface/data/debrief-case-briefs.source.html",
+);
 const primaryManifestPath = resolve(
   repositoryRoot,
   "deployment/cpanel/primary-route-manifest.json",
@@ -106,6 +110,14 @@ const sourceBearingRoleLanguageAllowlist = [
 
 async function readCanvasFile(path) {
   return readFile(resolve(canvasRoot, path), "utf8");
+}
+
+function compactAccountByRoute(source, route) {
+  const startToken = `<article data-case-brief-source="${route}">`;
+  const start = source.indexOf(startToken);
+  if (start === -1) return "";
+  const next = source.indexOf("<article data-case-brief-source=", start + startToken.length);
+  return source.slice(start, next === -1 ? source.length : next);
 }
 
 async function topLevelHtmlFilesContaining(pattern) {
@@ -404,6 +416,7 @@ test("Debrief role fields distinguish autobiographical work from teaching recons
     "Only the explicitly labeled legacy example text retains a generic author",
   );
 
+  const compactSource = await readFile(compactCaseBriefSourcePath, "utf8");
   const routes = [
     "choose-your-player-humatics.html",
     "fmi-clinical-trial-coordination.html",
@@ -413,7 +426,8 @@ test("Debrief role fields distinguish autobiographical work from teaching recons
     "who-to-believe-reviews-platform.html",
   ];
   for (const route of routes) {
-    const html = await readCanvasFile(route);
+    const html = compactAccountByRoute(compactSource, route);
+    assert.ok(html, `${route} should have one compact account`);
     assert.match(
       html,
       /<dt>Scope and role<\/dt>\s*<dd>[\s\S]*?\bI (?:worked|served)\b[\s\S]*?<\/dd>/u,
@@ -429,10 +443,11 @@ test("Debrief role fields distinguish autobiographical work from teaching recons
     "ehr-two-charts-one-result.html",
   ];
   for (const route of scenarioRoutes) {
-    const html = await readCanvasFile(route);
+    const html = compactAccountByRoute(compactSource, route);
+    assert.ok(html, `${route} should have one compact account`);
     assert.match(
       html,
-      /<dt>Scope and role<\/dt><dd>This principal-level teaching reconstruction reads/u,
+      /<dt>Scope and role<\/dt>\s*<dd>This principal-level teaching reconstruction reads/u,
       route,
     );
   }
@@ -444,7 +459,10 @@ test("Debrief role fields distinguish autobiographical work from teaching recons
   ]);
   assert.match(aiSystems, /I design, build, test, and publish the open-source methods, software, and multi-agent collaboration environments shown here/u);
   assert.match(hiring, /hiring research with inspectable work in open-source software, multi-agent orchestration environments, and decision-making surfaces/u);
-  assert.match(threeWay, /I worked across design, product strategy, and engineering/u);
+  assert.match(
+    compactAccountByRoute(compactSource, "three-way-comparative-return.html"),
+    /I worked across design, product strategy, and engineering/u,
+  );
 
   for (const html of [aiSystems, hiring, threeWay, ...await Promise.all(scenarioRoutes.map(readCanvasFile))]) {
     assert.doesNotMatch(html, /Registry steward|systems practitioner|substrate builder|principal product designer and engineer/u);

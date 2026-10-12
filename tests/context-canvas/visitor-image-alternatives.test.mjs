@@ -144,7 +144,6 @@ test("Who To Believe figures preserve the intended narrative sequence", async ()
     "utf8",
   ));
   const orderedLandmarks = [
-    'id="case-brief"',
     'id="wtb-figure-member-experience-redesigned"',
     'id="cpg-pharma-conversational-ai-walkthrough"',
     'id="solution-debrief-title"',

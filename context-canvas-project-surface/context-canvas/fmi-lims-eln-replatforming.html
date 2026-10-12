@@ -126,7 +126,7 @@
       <nav class="fmi-reading-rail" data-canvas-page-rail aria-label="On this FMI LIMS and ELN reading">
         <p class="fmi-reading-rail__label">On this reading</p>
         <ol>
-          <li><a href="#case-brief" aria-label="At-a-Glance"><span class="fmi-reading-rail__tick" aria-hidden="true"></span><span class="fmi-reading-rail__text">At-a-Glance</span></a></li>
+          <li><a href="#genomics-sequencing-process-walkthrough" aria-label="Demonstration"><span class="fmi-reading-rail__tick" aria-hidden="true"></span><span class="fmi-reading-rail__text">Demonstration</span></a></li>
           <li><a href="#solution-architecture-title" aria-label="Solution"><span class="fmi-reading-rail__tick" aria-hidden="true"></span><span class="fmi-reading-rail__text">Solution</span></a></li>
           <li><a href="#shared-grammar-title" aria-label="Shared grammar"><span class="fmi-reading-rail__tick" aria-hidden="true"></span><span class="fmi-reading-rail__text">Shared grammar</span></a></li>
           <li><a href="#solution-outcomes-title" aria-label="Outcome"><span class="fmi-reading-rail__tick" aria-hidden="true"></span><span class="fmi-reading-rail__text">Outcome</span></a></li>
@@ -140,69 +140,7 @@
 
       <div class="content__container bg__adjust--soft-apricot fmi-solution-field fmi-solution-field--orientation">
         <div class="content content--editorial">
-          <section id="case-brief" data-content-form="case-brief" aria-labelledby="at-a-glance-title">
-            <h2 id="at-a-glance-title" class="txt-h2">At-a-Glance</h2>
-            <p>At Foundation Medicine, I served as Senior Manager and Principal Product Designer and led research and product design that made shared laboratory objects, failure paths, and build-or-buy choices explicit. My work informed vendor selection; the program completed production authority transfer a couple of business quarters later.</p>
-            <dl class="debrief-at-glance">
-              <div>
-                <dt>Situation and stakes</dt>
-                <dd>A build-or-buy decision followed a prior big-bang rollback. Hundreds of lab personnel needed reliable answers about sample location, status, connected work, provenance, and approval.</dd>
-              </div>
-              <div>
-                <dt>Scope and role</dt>
-                <dd>During the 2021–2022 engagement, I served as Senior Manager and Principal Product Designer, led two Value Streams, and worked with a three-person leadership team and six-plus working groups drawing from eight-plus teams; participatory reach accumulated to roughly n≈70–100+ across sessions.</dd>
-              </div>
-              <div>
-                <dt>Core constraint</dt>
-                <dd>Vendor-feature comparison fragmented shared objects, workflow states, instruments, sites, and approval pathways. The collaboration also needed a medium familiar enough for lab teams to revise together.</dd>
-              </div>
-              <div>
-                <dt>Key decision</dt>
-                <dd>Reduce the full-suite ambition to a pilot, use an Excel-aligned PowerPoint language, and name shared objects and approval pathways before comparing vendors or implementation paths.</dd>
-              </div>
-              <div>
-                <dt>Outcome and evidence</dt>
-                <dd>All candidate vendors were rated with the System Usability Scale and a weighted evaluation matrix. A vendor was selected, and the new LIMS/ELN assumed production authority a couple of business quarters later. My prototypes also made the scale of a bespoke build legible to engineers at the beginning of the decision.</dd>
-              </div>
-              <div>
-                <dt>Relevance now</dt>
-                <dd>Teams can reuse participatory specifications across vendor demonstrations, cost comparison, automation, acceptance tests, and reversible migration.</dd>
-              </div>
-            </dl>
-            <p><strong>Basis and limits:</strong> My project records, working artifacts, participant quotations, and later program reports document these changes. The 2025–2026 specification and implementation examples answer present-day design questions; each receiving environment qualifies its own behavior.</p>
-            <div class="debrief-case-brief__tracks" data-case-brief-detail aria-labelledby="case-brief-tracks-title">
-              <h3 id="case-brief-tracks-title" class="txt-h3">Solution and implementation quick scan</h3>
-              <article class="debrief-case-brief__track" data-case-brief-track="solution" aria-labelledby="case-brief-solution-track-title">
-                <h4 id="case-brief-solution-track-title" class="txt-h4">Solution Architecture</h4>
-                <ol>
-                  <li><strong><a href="#solution-debrief-title">Debrief.</a></strong> As Senior Manager and Principal Product Designer, I joined a build-or-buy re-platforming effort after a failed big-bang refresh had returned the laboratories to their legacy LIMS; hundreds of practitioners needed specimen identity, custody, state, review, and scientific meaning to remain coherent across sites and shifts.</li>
-                  <li><strong><a href="#shared-grammar-title">Bottleneck.</a></strong> Six-plus groups and eight-plus teams had forked their own models of samples, plates, reagents, runs, and sign-offs, while email, Slack, tickets, memory, and separate systems carried the handoffs and failure recovery.</li>
-                  <li><strong><a href="#solution-intervention-title">Intervention.</a></strong> I used working prototypes, shared-object definitions, a first-class failure register, scenario specifications, and a deeply worked pilot to make disagreement inexpensive and turn participant corrections into vendor demonstrations, acceptance criteria, and automation tests.</li>
-                  <li><strong><a href="#solution-outcomes-title">Outcome.</a></strong> Every candidate vendor received a System Usability Scale rating and weighted evaluation, one vendor was selected, and the new LIMS/ELN assumed production authority a couple of business quarters later; the prototypes also revealed the scope of a bespoke build before commitment.</li>
-                  <li><strong><a href="#solution-repeatability-title">Repeatability.</a></strong> Teams can name shared objects and failures first, design in the open, adapt the carrier to the audience, translate scenarios into tests, and cost migration, validation, training, recovery, and operating change as part of the platform decision.</li>
-                </ol>
-              </article>
-              <article class="debrief-case-brief__track" data-case-brief-track="implementation" aria-labelledby="case-brief-implementation-track-title">
-                <h4 id="case-brief-implementation-track-title" class="txt-h4">Implementation Architecture</h4>
-                <ol>
-                  <li><strong><a href="#implementation-debrief-title">Debrief.</a></strong> I compare the 2021–2022 client/server LIMS, ELN, EBR, Sample Monitor, file-processing, on-premises, AWS, batch, and file-drop estate with a distinct 2025–2026 lifecycle-centered reference architecture that retains the shared-object grammar.</li>
-                  <li><strong><a href="#implementation-bottleneck-title">Bottleneck.</a></strong> Private data models split sample findability, sign-off history, movement, skips, recovery latency, verification, and deletion across systems; a slow EBR screen connected interface performance directly to rescanning, thawing reagents, and recoverable lab work.</li>
-                  <li><strong><a href="#implementation-intervention-title">Intervention.</a></strong> The reference architecture canonicalizes shared objects, models lifecycle state, makes custody changes transactional, captures instrument data at the source, records attributable review meaning, and carries executable scenarios through vendor, migration, failure, and acceptance boundaries.</li>
-                  <li><strong><a href="#implementation-outcome-title">Outcome.</a></strong> The historical production transfer remains distinct from the contemporary reference: the current program constellation, contracts, carriers, and nine runnable samples make system fit, recovery, authority, and investment inspectable while configured environments retain their own qualification work.</li>
-                  <li><strong><a href="#implementation-repeatability-title">Repeatability.</a></strong> Canonical objects, explicit state machines, recoverable operations, source capture, attributable review, executable scenarios, and up-front migration and validation costs travel; vendor maturity, infrastructure, organizational history, and regulated use remain local conditions.</li>
-                </ol>
-              </article>
-            </div>
-            <div class="debrief-case-brief__media" data-case-brief-media>
-              <h4 class="txt-h4">Related figures and media</h4>
-              <ul>
-                <li><strong>Movie — <a href="#genomics-sequencing-process-walkthrough-title">Sequencing-process visualization demonstration.</a></strong> Axonometric sequencing lanes connect plate and well quality control with a process graph, camera views, and selected-record detail.</li>
-                <li><strong>Figure — <a href="#lims-source-cartography">Specimen source cartography.</a></strong> Specimen accession anchors regional LIMS, consent, identity, instruments, manifests, storage, compute, review, reporting, audit, and authorization relationships.</li>
-                <li><strong>Figure — <a href="#lims-full-process-atlas">Complete laboratory process atlas.</a></strong> Eleven lanes connect accession, laboratory preparation, sequencing, analysis, scientific review, quality, release, reporting, and clinical exchange through explicit gates and handoffs.</li>
-              </ul>
-            </div>
-            <p><a href="#solution-architecture-title">Read the Full Debrief →</a></p>
-          </section>
+          <span id="case-brief" aria-hidden="true"></span>
 
           <section id="genomics-sequencing-process-walkthrough" aria-labelledby="genomics-sequencing-process-walkthrough-title">
             <h2 id="genomics-sequencing-process-walkthrough-title" class="txt-h2">Sequencing-process visualization demonstration</h2>

@@ -208,12 +208,6 @@
     return card.getAttribute(attribute).split(/\s+/).filter(Boolean);
   }
 
-  function rewriteFragmentLinks(node, route) {
-    Array.prototype.forEach.call(node.querySelectorAll("a[href^='#']"), function (link) {
-      link.setAttribute("href", route + link.getAttribute("href"));
-    });
-  }
-
   function caseBriefRoutes(card) {
     return card.hasAttribute("data-case-brief-routes") ? cardValues(card, "data-case-brief-routes") : [];
   }
@@ -234,13 +228,91 @@
     var orientation = content.querySelector(".debrief-preview-slug");
     var fields = content.querySelector(".debrief-preview-facts");
     var basis = content.querySelector(".debrief-preview-note");
+    var trackContainers = content.querySelectorAll("[data-case-brief-detail]");
     var media = content.querySelector(".debrief-card__case-brief-media[data-case-brief-media]");
 
-    if (!title || !orientation || !fields || fields.children.length !== 6 || !basis || !media) {
+    if (
+      !title
+      || !orientation
+      || !fields
+      || fields.children.length !== 6
+      || !basis
+      || trackContainers.length !== 1
+      || !media
+    ) {
       return null;
     }
 
-    rewriteFragmentLinks(content, route);
+    var trackContainer = trackContainers[0];
+    // Admit the complete group as one ordered contract. A source may add one
+    // concise orientation paragraph between the heading and disclosure pair;
+    // every other child shape keeps the ordinary catalog card in view.
+    var trackChildren = Array.prototype.slice.call(trackContainer.children);
+    var trackHeading = trackChildren[0];
+    var trackIntro = trackChildren[1]
+      && trackChildren[1].matches("p.debrief-case-brief__track-intro")
+      ? trackChildren[1]
+      : null;
+    var disclosures = trackChildren.slice(trackIntro ? 2 : 1);
+    var allDisclosures = trackContainer.querySelectorAll("details");
+    var nestedDisclosures = trackContainer.querySelectorAll(
+      "details.debrief-case-brief__track--disclosure[data-case-brief-track]"
+    );
+    var trackNames = disclosures.map(function (disclosure) {
+      return disclosure.getAttribute("data-case-brief-track") || "";
+    });
+    var completeDisclosures = disclosures.every(function (disclosure) {
+      var summary = disclosure.firstElementChild;
+      var trackList = summary ? summary.nextElementSibling : null;
+      var trackTitle = summary
+        ? summary.querySelector(":scope > .debrief-case-brief__track-title")
+        : null;
+      var trackState = summary
+        ? summary.querySelector(":scope > .debrief-case-brief__track-state[aria-hidden='true']")
+        : null;
+      var stateExpand = trackState
+        ? trackState.querySelector(":scope > .debrief-case-brief__track-state--expand")
+        : null;
+      var stateCollapse = trackState
+        ? trackState.querySelector(":scope > .debrief-case-brief__track-state--collapse")
+        : null;
+      return disclosure.children.length === 2
+        && !disclosure.hasAttribute("open")
+        && !disclosure.hasAttribute("name")
+        && summary
+        && summary.matches("summary.debrief-case-brief__track-summary")
+        && summary.children.length === 2
+        && trackTitle
+        && normalizedText(trackTitle)
+        && trackState
+        && trackState.children.length === 2
+        && stateExpand
+        && stateCollapse
+        && normalizedText(stateExpand) === "Expand"
+        && normalizedText(stateCollapse) === "Collapse"
+        && trackList
+        && trackList.matches("ol")
+        && trackList.children.length > 0
+        && Array.prototype.every.call(trackList.children, function (item) { return item.matches("li"); });
+    });
+
+    if (
+      (trackChildren.length !== 3 && trackChildren.length !== 4)
+      || !trackHeading
+      || !trackHeading.matches("h4.debrief-case-brief__track-group-title")
+      || !normalizedText(trackHeading)
+      || (trackChildren.length === 4 && !trackIntro)
+      || (trackIntro && !normalizedText(trackIntro))
+      || disclosures.length !== 2
+      || allDisclosures.length !== 2
+      || nestedDisclosures.length !== 2
+      || new Set(trackNames).size !== 2
+      || trackNames.some(function (name) { return !/^[a-z][a-z0-9-]*$/.test(name); })
+      || !completeDisclosures
+    ) {
+      return null;
+    }
+
     return { title: title, content: content };
   }
 
@@ -279,10 +351,7 @@
   function appendCaseBriefActions(article, route) {
     var actions = document.createElement("div");
     actions.className = "debrief-preview-actions";
-    actions.append(
-      createActionLink("debrief-preview-link", route + "#case-brief", "Read the Easy-to-Scan Case Brief"),
-      createActionLink("debrief-preview-secondary-link", route, "Read the Full Debrief")
-    );
+    actions.append(createActionLink("debrief-preview-link", route, "Read the Full Debrief"));
     article.append(actions);
   }
 

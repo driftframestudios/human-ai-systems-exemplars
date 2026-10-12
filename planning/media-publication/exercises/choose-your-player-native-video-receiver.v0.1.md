@@ -13,9 +13,10 @@ task_type: skill_exercise
 
 This exercise applies the `accessible-video-publication` candidate to the
 first accepted R2 video family and its Context Canvas receiver. It tests poster
-selection from accepted bytes, semantic placement under At-a-Glance, a visible
-sequence description, exact public-carrier binding, and focused page
-acceptance. Cloudflare R2 and the Worker own transport; the Debrief owns visitor
+selection from accepted bytes, semantic placement in the named demonstration
+section before architecture navigation, a visible sequence description, exact
+public-carrier binding, and focused page acceptance. Cloudflare R2 and the
+Worker own transport; the Debrief owns visitor
 meaning and reading order.
 
 ## Accepted family
@@ -53,9 +54,10 @@ candidate; the human publication owner retains final visual and page release.
 
 The authored receiver is
 `context-canvas-project-surface/context-canvas/choose-your-player-humatics.html`.
-One top-level section follows the complete At-a-Glance Case Brief and precedes
-the architecture navigation. This coordinate keeps the six-field Case Brief
-intact while making the demonstration available before the longer reading.
+One top-level `#working-proxy-walkthrough` section precedes the
+`#track-index-title` architecture navigation. This coordinate makes the
+demonstration available before the longer reading while keeping its standing,
+caption, and visual sequence together in one named section.
 
 The native player carries controls, `playsinline`, metadata preload, intrinsic
 geometry, the reviewed poster, a typed MP4 source, a concise accessible name,
