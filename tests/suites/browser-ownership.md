@@ -90,7 +90,7 @@ does not claim a new audit or execution of all their assertions.
 | Entry | Retained receiving responsibility |
 | --- | --- |
 | `tools/about-media-browser-contract.mjs` | About-media behavior and its own observations. |
-| `tests/context-canvas/visitor-image-delivery.browser.mjs` | Loopback delivery of every About, AI Systems, and Debriefs image in Chromium and Playwright WebKit, including browser-selected sources, image media types, lazy-image reachability, and intrinsic dimensions. |
+| `tests/context-canvas/visitor-image-delivery.browser.mjs` | Loopback delivery of every About, AI Systems, and Debriefs `img[src]` receiver in Chromium and Playwright WebKit, including browser-selected sources, image media types, route-appropriate eager or lazy loading, and intrinsic dimensions. The focused About media contract owns its native-video poster. |
 | `tests/context-canvas/video-receivers.browser.mjs` | Native-video receiver containment, passive poster requests, and accessible relationships across the selected Debrief and AI Systems pages. |
 | `tests/context-canvas/who-to-believe-system-graph.browser.mjs` | Who To Believe source-authentic graph admission, malformed-data fallback and repaired remount, mount-local identity, direct local-file initialization, architecture comparison, concern emphasis, direct node and incoming/outgoing-neighbor traversal, focus and status, the 75rem reading-container seam observed at the current 1280-pixel viewport boundary, viewport containment, forced colors, reduced motion, print, and scriptless recovery. |
 | `tools/canvas-iframe-route-browser-contract.mjs` | Iframe route and carrier behavior. |

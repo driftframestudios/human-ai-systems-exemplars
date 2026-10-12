@@ -7,9 +7,9 @@ import { startStaticServer } from "../../tools/core-architecture-browser-helper.
 
 const visitorRoot = "/context-canvas-project-surface/context-canvas/";
 const routes = [
-  { label: "About", path: "index.html", imageCount: 2 },
-  { label: "AI Systems", path: "ai-systems.html", imageCount: 13 },
-  { label: "Debriefs", path: "debriefs.html", imageCount: 20 },
+  { label: "About", path: "index.html", imageCount: 1, expectsLazyImage: false },
+  { label: "AI Systems", path: "ai-systems.html", imageCount: 13, expectsLazyImage: true },
+  { label: "Debriefs", path: "debriefs.html", imageCount: 20, expectsLazyImage: true },
 ];
 const engines = [
   { label: "Chromium", browserType: chromium },
@@ -109,10 +109,19 @@ async function observeRoute(browser, route) {
         `${route.label} ${resolved.pathname} returns an image media type`,
       );
     }
-    assert.ok(
-      observations.some(observation => observation.loading === "lazy"),
-      `${route.label} retains a lazy image that resolves after entering range`,
-    );
+    const lazyImageCount = observations.filter(observation => observation.loading === "lazy").length;
+    if (route.expectsLazyImage) {
+      assert.ok(
+        lazyImageCount > 0,
+        `${route.label} retains a lazy image that resolves after entering range`,
+      );
+    } else {
+      assert.equal(
+        lazyImageCount,
+        0,
+        `${route.label} keeps its sole above-the-fold image eager; the native-video poster has a focused contract`,
+      );
+    }
 
     return observations;
   } finally {
