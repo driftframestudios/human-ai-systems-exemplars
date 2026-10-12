@@ -24,6 +24,13 @@ import {
 import { fileURLToPath } from "node:url";
 import { parseEnv } from "node:util";
 
+import {
+  DEFAULT_REGISTRY_REFERENCE_BINDING_PATH,
+  RegistryReferenceContractError,
+  isRegistryReferenceDestinationAuthority,
+  loadRegistryReferenceBinding,
+} from "./registry-reference-contract.mjs";
+
 const REPOSITORY_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 export const PUBLIC_REFERENCE_SOURCE = join(
@@ -51,7 +58,7 @@ export const PUBLIC_AUTHOR_PROFILE_KEY =
   "PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE";
 
 const OUTPUT_MARKER = ".public-reference-materialization.json";
-const OUTPUT_FORMAT = 1;
+const OUTPUT_FORMAT = 2;
 const PUBLIC_REFERENCE_NAMESPACES = [
   PUBLIC_REFERENCE_NAMESPACE,
   PUBLIC_IFRAME_NAMESPACE,
@@ -1014,8 +1021,18 @@ export async function resolvePublicReferenceDestinations(
     configPath = PUBLIC_REFERENCE_CONFIG,
     environment = process.env,
     configurationSource,
+    registryDestinations,
   } = {},
 ) {
+  if (
+    registryDestinations !== undefined &&
+    !isRegistryReferenceDestinationAuthority(registryDestinations)
+  ) {
+    throw new PublicReferenceContractError(
+      "PUBLIC_REFERENCE_REGISTRY_BINDING",
+      "the reviewed Registry destinations must use the immutable authority returned by the Registry binding contract",
+    );
+  }
   if (configurationSource !== undefined && typeof configurationSource !== "string") {
     throw new PublicReferenceContractError(
       "PUBLIC_REFERENCE_CONFIG_SOURCE",
@@ -1071,10 +1088,30 @@ export async function resolvePublicReferenceDestinations(
     );
   }
 
+  if (registryDestinations !== undefined) {
+    const registryOverrides = new Set(
+      [...assignmentInfo.assignments, ...Object.keys(environment)]
+        .filter((key) => key.startsWith(PUBLIC_REFERENCE_NAMESPACE)),
+    );
+    if (registryOverrides.size > 0) {
+      throw new PublicReferenceContractError(
+        "PUBLIC_REFERENCE_REGISTRY_OVERRIDE",
+        `the tracked Registry binding owns ${[...registryOverrides].sort().join(", ")}; remove these settings from the external receiver`,
+      );
+    }
+  }
+
   const resolved = new Map();
   for (const key of [...keys].sort()) {
+    const usesRegistryBinding =
+      registryDestinations !== undefined &&
+      key.startsWith(PUBLIC_REFERENCE_NAMESPACE);
     const processValue = Object.hasOwn(environment, key) ? environment[key] : undefined;
-    const value = processValue === undefined ? fileValues[key] : processValue;
+    const value = usesRegistryBinding
+      ? registryDestinations.get(key)
+      : processValue === undefined
+        ? fileValues[key]
+        : processValue;
     resolved.set(
       key,
       key.startsWith(PUBLIC_IFRAME_NAMESPACE)
@@ -1477,6 +1514,7 @@ export async function materializePublicReferences({
   const stagedOutput = join(stagingRoot, "generation");
   let preserveStaging = false;
   let inventory;
+  let registryReference = null;
 
   try {
     await cp(source, stagedOutput, {
@@ -1489,9 +1527,23 @@ export async function materializePublicReferences({
 
     const stagedHtmlRoot = join(stagedOutput, relative(source, html));
     inventory = await inventoryTree(stagedOutput, stagedHtmlRoot);
+    const usesRepositoryRegistryBinding = source === resolve(PUBLIC_REFERENCE_SOURCE);
+    if (usesRepositoryRegistryBinding) {
+      const registryKeys = [...inventory.keys]
+        .filter((key) => key.startsWith(PUBLIC_REFERENCE_NAMESPACE))
+        .sort();
+      registryReference = await loadRegistryReferenceBinding({
+        path: DEFAULT_REGISTRY_REFERENCE_BINDING_PATH,
+        requiredKeys: registryKeys,
+      });
+    }
     const destinations = await resolvePublicReferenceDestinations(
       inventory.keys,
-      { configPath: config, environment },
+      {
+        configPath: config,
+        environment,
+        registryDestinations: registryReference?.destinations,
+      },
     );
     const routeProfiles = await loadIframeRouteProfiles(
       carrierManifest,
@@ -1529,6 +1581,15 @@ export async function materializePublicReferences({
           format: OUTPUT_FORMAT,
           builder: "tools/materialize-public-references.mjs",
           source: "context-canvas-project-surface",
+          ...(registryReference === null
+            ? {}
+            : {
+                registry_reference: {
+                  binding_path:
+                    "deployment/public-references/context-canvas-registry-bindings.v1.json",
+                  ...registryReference.receipt,
+                },
+              }),
         },
         null,
         2,
@@ -1539,6 +1600,12 @@ export async function materializePublicReferences({
     await publishGeneration(stagedOutput, output, stagingRoot, publishRename);
   } catch (error) {
     preserveStaging = error?.preserveStaging === true;
+    if (error instanceof RegistryReferenceContractError) {
+      throw new PublicReferenceContractError(
+        "PUBLIC_REFERENCE_REGISTRY_BINDING",
+        error.message,
+      );
+    }
     if (
       error instanceof PublicReferenceContractError ||
       error instanceof PublicReferenceOperationalError
@@ -1576,6 +1643,7 @@ export async function materializePublicReferences({
     iframeCount: inventory.iframeCount,
     jsonLdCount: inventory.jsonLdCount,
     keys: [...inventory.keys].sort(),
+    registryReference: registryReference?.receipt ?? null,
   };
 }
 
@@ -1586,8 +1654,9 @@ Usage:
   node tools/materialize-public-references.mjs
 
 Inputs:
-  .env.public                 optional ignored file
-  PUBLIC_URL_REGISTRY_*       process values override matching file values
+  deployment/public-references/context-canvas-registry-bindings.v1.json
+                              tracked reviewed Registry destinations
+  .env.public                 optional ignored file for the profile route
   PUBLIC_URL_IFRAME_*         approved iframes.vik.guru/v1/ route values
   PUBLIC_URL_AUTHOR_PROFESSIONAL_PROFILE
                               approved professional-profile destination

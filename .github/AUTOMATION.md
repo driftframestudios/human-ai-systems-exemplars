@@ -1,10 +1,42 @@
 # Bounded hosted automation
 
-The repository carries two bounded automatic `main` receipts, one standing
-documentation publication path, one connected release-and-production schema
-path, one configurable prototype-unit receiver, and two explicitly dispatched
-proof paths. Every external action reference uses a reviewed full-length commit
-SHA. Local commands remain the immediate edit loop.
+The repository carries eight workflows: two bounded automatic `main` receipts,
+one production-carrier contract, one standing documentation publication path,
+one connected release-and-production schema path, one configurable prototype
+and media receiver, and two explicitly dispatched proof paths. Every external action
+reference uses a reviewed full-length commit SHA. Local commands remain the
+immediate edit loop.
+
+## Inventory coordinate and evidence boundary
+
+This source inventory was reconciled on 2026-10-03 against
+`3355430196a8732cf8b5a2e3d90cb6cc38dbe11c` for Issue #63. Workflow files own exact
+triggers, path filters, arguments, job permissions, and action pins. The table
+below names every workflow; the following sections explain each receiving job.
+
+| Workflow in `.github/workflows/` | Trigger and activation | Job ceiling | Superseded-run behavior | Related receiver record |
+| --- | --- | --- | --- | --- |
+| `res-public-boundary-intake.yml` | Non-draft `main` PR; `ACTIONS_BUDGET_MAIN=true` | 2 minutes | Cancel superseded PR run | #63 inventory |
+| `schema-receiver-routes.yml` | Matching non-draft `main` PR or manual dispatch; `ACTIONS_BUDGET_MAIN=true` | 6 minutes | Cancel same PR/ref run | #18 schema contracts; #63 inventory |
+| `schema-pages.yml` | Manual exact source, projection, and release-tag selection; `activate_deployment=false` by default | 15 minutes | Serialize the Pages group; finish the current run | PRs #308 and #309 |
+| `schema-delivery.yml` | Non-draft PR or push to budget-enabled `release`/`prod`; only an accepted `prod` push can deploy, with the receiver and dependency gate open | Contract 12; production deployment 8 minutes | Cancel superseded contracts; serialize the production deployment | #18, #402, and #406 schema delivery; #63 inventory |
+| `prototype-unit-tests.yml` | Confirmed manual suite; matching non-draft `main` PRs always receive the media job while `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` also admits the prototype job | 10 minutes per job | Cancel same PR/ref run, including another manual suite on that ref | PRs #97 and #287; Issues #430, #433, and #434 |
+| `production-carrier-contracts.yml` | Matching `main` PR or manual dispatch with an explicit production tag | 10 minutes | Cancel same PR/ref run | #464 current release; #253 and PR #255 implementation precedent |
+| `lims-eln-functional-nucleus.yml` | Manual selected proof; `ENABLE_GITHUB_ACTIONS=true` and `confirm_run` | 30 minutes | Cancel same workflow/ref run | #63 proof inventory |
+| `lims-eln-enterprise-reference.yml` | Manual offline, database, or full proof; `ENABLE_GITHUB_ACTIONS=true` and `confirm_run` | Offline 15; database 30 minutes per matrix job | Separate dispatches remain independent | #63 proof inventory |
+
+The policy and environment documents retain their dated settings observations
+and standing allocations. Live account settings, current variable values,
+remaining minutes, and current hosted durations are **unknown in this
+reconciliation**: source inspection supplied this receipt. A job timeout is a
+per-job ceiling, distinct from an approved cycle or month-level allocation.
+The human-approved production-carrier monthly allocation is recorded below.
+
+Preserve the 2026-08-28 run `33182993332` as a historical 4m24s observation of
+PR #95's then-selected contract. PR #97 subsequently restored the earlier
+hosted suite boundary. That duration describes the earlier run, rather than
+the current suite. The same-date cancellation observation remains useful:
+different manual suite selections on one ref can supersede one another.
 
 ## Main public-boundary receipt
 
@@ -27,12 +59,13 @@ retained source because the successor intake already owns this receiving job.
 ## Schema receiver route receipt
 
 `schema-receiver-routes.yml` receives matching non-draft pull requests into
-`main` while `ACTIONS_BUDGET_MAIN=true`. It runs the existing schema-surface
-check and Pages build through one explicit map from repository files to durable
-schema identities and receiver paths. The build copies each mapped schema into
-the projection and confirms byte equality. This keeps a schema's semantic
-identity distinct from its source revision and its current retrieval or
-publication receiver.
+`main` while `ACTIONS_BUDGET_MAIN=true`. Its advisory step runs exactly
+`npm run check:schemas && npm run test:schema-pages` after installing the locked
+Node 22 toolchain. Those commands exercise the schema surface and Pages
+contracts through the repository's source-to-receiver map. This keeps a
+schema's semantic identity distinct from its source revision and its current
+retrieval or publication receiver. The publication workflow owns the selected
+release build and deployment evidence.
 
 The receipt is advisory: a finding appears in the run summary while the job
 keeps the pull request available for collaboration. Manual dispatch uses the
@@ -42,8 +75,12 @@ ceiling, and full-length action pins.
 ## Schema publication
 
 `schema-pages.yml` is the manual source-to-receiver verification and publication
-path. One dispatch names an exact accepted source commit and an exact reviewed
-`docs` commit. The read-only verification job:
+path. One dispatch names an exact accepted source commit, an exact reviewed
+`docs` commit, and a `pages-vMAJOR.MINOR.PATCH` release tag. One connected
+standard-runner `publish` job has a fifteen-minute ceiling and uses the
+`github-pages` environment. Its job-level permissions are `contents: read`,
+`pages: write`, and `id-token: write`, including verification-only dispatches.
+The workflow:
 
 1. runs from the accepted `main` workflow definition and requires both
    coordinates as full lowercase Git SHAs;
@@ -55,17 +92,18 @@ path. One dispatch names an exact accepted source commit and an exact reviewed
 4. checks the schema and Pages behavior;
 5. requires the source CNAME to agree with the active Pages host and rebuilds
    from the Pages-reported HTTPS base URL;
-6. confirms the projection worktree remains unchanged, then compares complete
-   file membership and bytes with the named `docs` commit;
+6. confirms the projection worktree remains unchanged, then uses the
+   workflow-owned release verifier to bind the selected tag, source, projection,
+   complete file membership, and bytes;
    and
 7. proves the checksum-verified secret scanner before inspecting that exact
    artifact, including its required hidden files.
 
-The default dispatch ends after verification. Selecting deployment uploads the
-verified artifact and gives a separate `github-pages` environment job the
-minimal `pages: write` and `id-token: write` permissions needed by GitHub's
-official Pages actions. This keeps publication selection separate from source
-and projection agreement.
+The default `activate_deployment=false` dispatch ends after verification. Selecting
+activation admits upload and deployment steps in that same connected job.
+The `schema-pages` concurrency group serializes dispatches with
+`cancel-in-progress: false`, allowing the current run to finish. PR #308 owns
+the accepted release transition; PR #309 supplied its reviewed projection.
 
 Each hosted verification pair begins with an accepted `main` commit and the
 reviewed `docs` projection built from it. The `github-pages` environment keeps
@@ -74,36 +112,81 @@ Pages now uses the Actions delivery route: each deployment names both immutable
 commits, rebuilds from source, and requires complete file membership and byte
 equality before upload.
 
-Pages settings remain the custom-domain authority. The current collaboration
-family is `schemas.radiantnull.com`; `schemas.vik.guru` remains the later
-staging, release, and production family described in
-[ENVIRONMENTS.md](ENVIRONMENTS.md). The current live site is deployed by that
-verified workflow. The recorded `docs:/` source setting remains the recovery
-coordinate: restore legacy mode, verify the accepted `docs` bytes at the
-ordinary domain, and only then return the environment allowlist to its prior
-state when recovery requires it.
+Pages settings remain the custom-domain authority. The recorded Pages family
+is `schemas.radiantnull.com`; Issue #406 owns current schema-publication and
+Worker parity. The accepted current Pages coordinate is `pages-v0.2.0`, whose
+annotated tag targets docs commit `bf257f6674e8` and records source commit
+`dc6b62c`; the earlier `pages-v0.1.0` observation remains historical evidence.
+The recorded `docs:/` source setting remains the recovery coordinate: an
+authorized recovery can restore legacy mode, verify the accepted `docs` bytes,
+and return the environment allowlist to its prior state when needed. Current
+live settings and delivery are separate observations from this inventory.
 
 ## Release and production schema delivery
 
 `schema-delivery.yml` receives every non-draft pull request into and every push
 to `release` or `prod` while that receiver's approved budget is active. One
-read-only contract job installs the locked toolchain, checks the mapped schema
-surface, verifies the explicit Static Assets closure, dry-runs the matching
-Wrangler environment, proves the pinned secret-material reader with a fresh
-canary, and observes the candidate tree and locally available history.
+read-only contract job checks out complete history and tags, installs the root
+and schema Worker toolchains from their separate locks, observes the installed
+Wrangler dependency path, checks the mapped schema surface, verifies the
+checked-in accepted publication independently from later source drift, runs the
+Worker unit tests, and dry-runs the Worker bundle through its nested Wrangler CLI. The
+pinned secret-material reader proves its fresh canary before inspecting the
+selected `cloudflare/schemas-worker/public` artifact.
 
 The contract has a twelve-minute ceiling and cancels superseded candidates.
-The connected deployment has an eight-minute ceiling and serializes by
-receiver. A release push targets an un-routed named Wrangler environment. A
-production push targets the top-level Worker through the exact-branch `prod`
-GitHub environment and its accepted human handoff. Both deployment jobs also
-require their name in
-`DEPLOYMENT_ACTIVE_RECEIVERS`; the current empty list keeps uploads resting
-while automatic contracts begin using their approved 300-minute allocations.
+The `Schema delivery contract` job name remains the required status context for
+both protected branches. Release provides the complete contract observation;
+deployment belongs only to a successful `prod` push. That production job has
+an eight-minute ceiling, serializes in one production group, uses the
+branch-restricted `prod` GitHub environment, and also requires `prod` in
+`DEPLOYMENT_ACTIVE_RECEIVERS` plus the repository variable
+`SCHEMA_WORKER_DEPENDENCY_GATE=open`. The receiver's documented resting value is
+`[]`. The reviewed Wrangler `4.149.0` / Miniflare / Sharp `0.35.5` locks satisfy
+the dependency floor owned by Issue #402; the dependency gate remains a separate
+human-held activation control. Preserve that activation posture and the recorded 300-minute allocation for
+each branch per collaboration cycle. Current live variable values and remaining
+allocation require their own account observation.
 
 The workflow uses GitHub-owned checkout and Node setup actions at the reviewed
-full commit SHAs, then calls the repository's locked Wrangler CLI directly.
-Environment-scoped Cloudflare credentials enter only the deployment job.
+full commit SHAs. Root commands retain repository-wide checks, while
+`cloudflare/schemas-worker/` supplies the publication, tests, deployment
+configuration, and locked Wrangler CLI for `schemas.vik.guru`.
+Environment-scoped Cloudflare credentials enter only the production deployment
+job. The earlier asset-only adapter retains its shared source inputs and local
+build or dry-run checks; it no longer owns a root deployment command or this
+production workflow.
+
+## Production-carrier contract
+
+`production-carrier-contracts.yml` is the source-owned CI lane accepted in
+PR #255 for historical Issue #253. Its matching `main` pull-request paths cover
+the workflow, root package and lock files, production and public-reference
+inputs, Context Canvas and iframe source families, `deployment/cpanel/**`,
+`tests/prod-deployment/**`, and the complete `tools/**` implementation seam.
+Manual dispatch requires one explicit annotated `production-vMAJOR.MINOR.PATCH`
+tag. The declared trigger includes draft PRs; this lane has no budget-variable
+condition or deployment authority.
+
+One read-only Ubuntu 24.04 job uses pinned checkout and Node setup actions,
+Node 22, the locked toolchain, and a ten-minute ceiling. It runs
+`npm run test:prod-deployment`, forms the selected transfer envelope, verifies
+its receipt against that explicit tag, and exercises the ZIP with `unzip -t`.
+Pull requests use immutable `production-v0.2.0` as a historical regression
+fixture; a manual run uses its required selected tag. The immutable tag is the
+payload input; the candidate checkout supplies the packaging implementation.
+The workflow uploads no artifact and uses no hosting credential. Issue #464
+owns current host activation and live acceptance; #118 and #251 retain only
+their historical `production-v0.2.0` standing.
+
+The human budget owner has approved **300 minutes per month** for this lane,
+adjustable through a later explicit budget decision. The allowance records
+human authorization; the ten-minute timeout remains a per-job bound. Current
+usage and remaining monthly allocation stay unknown in this source inventory.
+Workflow triggers, permissions, and activation remain unchanged. A later
+rest, removal, or trigger change needs the lane's receiver decision and a
+separate reviewed workflow change. A stopped contract can receive a corrected
+candidate or an explicitly selected manual rerun.
 
 ## Secret-material inspection posture
 
@@ -148,34 +231,60 @@ own the complete public asset closure, reviewed environment configuration,
 budget gate, and delivery receipt. The current local route keeps those inputs
 ready for that connected receiver.
 
-## Core and Narrative prototype-unit path
+## Core, iframe, Narrative, and media paths
 
-`prototype-unit-tests.yml` gives the Core and Narrative strengthening route one
-approved standard-runner receiver. A manual dispatch selects `core`,
-`narrative`, or `all` and requires `confirm_run`. `include_browser=true` adds
-the fitting Chromium contract to that selected family. The workflow installs
-the locked root toolchain with lifecycle scripts at rest, then calls the same
-family commands documented for local use.
+`prototype-unit-tests.yml` gives Core, iframe, Narrative, and media contracts
+approved standard-runner receivers. A manual dispatch selects `core`, `iframe`,
+`narrative`, `media`, or `all` and requires `confirm_run`.
+`include_browser=true` adds the fitting Chromium contract to a selected
+prototype family. The media selection exercises its own browser contract as
+part of that receiving job.
 
-Matching non-draft pull requests into `main` can run the complete unit baseline
-when `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true`. The unset or `false` value keeps
-automatic execution at rest while manual selection remains available. An
-active pull-request receiver includes the two rendered family contracts so its
-result covers direct and browser-owned behavior. Path filters cover the two
-source families, their tests and browser contracts, package lock,
-cross-prototype exchange tool, and workflow. One read-only job, one standard
-Linux runner, superseded-run cancellation, and a ten-minute ceiling keep the
-receiver proportional to the protected behavior.
+Matching non-draft pull requests into `main` run the media-publication job for
+matching paths. `PROTOTYPE_UNIT_TESTS_AUTOMATIC=true` also admits the complete
+prototype-unit baseline; the unset or `false` value keeps that second job at
+rest while manual selection remains available. Both jobs install the locked
+root toolchain with lifecycle scripts at rest. The media job additionally
+installs Chromium and FFmpeg, exercises preparation and delivery contracts,
+observes the native-video receivers, and dry-runs the Worker package. Path
+filters cover the source families, iframe and carrier owners, collaboration
+and Context Canvas sources, media planning contracts, attribution, focused
+tests and tools, root package and lock files, and the workflow. The workflow
+file owns the exact filter list. Two read-only jobs, standard Linux runners,
+superseded-run cancellation, and a ten-minute ceiling per job keep the receiver
+proportional to the protected behavior.
+
+| Selection | Source contract | Additional browser work when selected |
+| --- | --- | --- |
+| `core` | Attribution, iframe package, and Core units | Core browser contract |
+| `iframe` | Attribution and iframe package contracts | Prototype control labels and iframe browser contract |
+| `narrative` | Narrative units | Narrative browser contract |
+| `media` | Media preparation, manifest, delivery, and Worker contracts | Native-video receiver contract at narrow, medium, and wide viewports |
+| `all` | Attribution, iframe package, combined prototype units, and media contracts | Control labels, Core, Canvas, Narrative, prototype exchange, and native-video receiver contracts |
+
+The shared iframe-carrier source contract precedes the selection. PR #287 added
+the focused label-retention contract to the existing browser lanes. The
+standalone Strategy Canvas command remains independently available following
+PR #97; the historical #95 run retains its earlier coverage. For independent
+manual receipts on one ref, let the selected suite finish before dispatching
+another; a future concurrent-suite requirement receives its own decision.
 
 Local commands keep the focused route close to the source:
 
 ```sh
 npm run test:core-architectures
 npm run test:core-browser
+npm run test:iframe-routes
+npm run check:iframe-routes
+npm run test:prototype-control-labels
+npm run test:iframe-browser
 npm run test:narrative-architectures
 npm run test:narrative-browser
 npm run test:prototype-units
 npm run test:prototype-exchanges
+npm run test:media-publication
+npm run test:video-receivers-browser
+npm run dry-run:r2-video-delivery
 ```
 
 ## LIMS/ELN proof paths
@@ -183,13 +292,20 @@ npm run test:prototype-exchanges
 Two manual workflows preserve reviewed remote proofs for an allocated dispatch:
 
 - **LIMS and ELN enterprise reference proof** covers the reference pack and its
-  PostgreSQL rehearsal.
+  PostgreSQL rehearsal. Its offline Python 3.12/3.13 jobs each have a
+  fifteen-minute ceiling; its pinned PostgreSQL 16/18 database jobs each have a
+  thirty-minute ceiling. Separate dispatches remain independent because this
+  workflow declares no concurrency group.
 - **LIMS and ELN functional nucleus proof** covers one selected nucleus member
-  or the five-member integrated proof on Python 3.12.
+  or the five-member integrated proof on Python 3.12, through one thirty-minute
+  job with same-ref cancellation.
 
-Each requires `ENABLE_GITHUB_ACTIONS=true` and an explicit `confirm_run`
-selection. Selected reference-database artifacts expire after one day. After a
-receipt is read, the variable can return to `false`.
+Each uses read-only repository authority, pinned GitHub-owned actions, and
+requires `ENABLE_GITHUB_ACTIONS=true` plus explicit `confirm_run`. Reference
+database credentials belong to the local proof fixture. Selected database
+artifacts expire after one day. The authorized receiver can return the variable
+to `false` after the allocated proof settles; current live values and remaining
+proof allocation are outside this source-only receipt.
 
 ## Resting routes
 
@@ -200,6 +316,12 @@ after the downstream pull-request cadence has an accepted job and budget.
 Hosted visual checks, resolver inspection, broader history operations, and
 general recurring CI retain their local, manual, or dormant routes. The named
 schema delivery is the current Cloudflare exception, bounded by its two branch
-receivers, budgets, credentials, and deployment switch. The effective action
-allow list, immutable revisions, and billing posture live in
+contract receivers and one production branch, environment, credential,
+dependency gate, and deployment switch. The effective action allow list,
+immutable revisions, and billing posture live in
 [ACTIONS-POLICY.md](ACTIONS-POLICY.md).
+
+Issue #63 receives inventory reconciliation. Each later workflow or matrix
+addition starts with a material receiving job and an explicit budget decision.
+Record month-level allocation when activation changes; retain dated durations
+and scope instead of inferring them from job ceilings or older suite receipts.

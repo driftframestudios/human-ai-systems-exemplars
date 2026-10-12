@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/uv-backed-python-execution/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "uv-backed-python-execution",
+  "description": "Resolves and runs repository-declared Python checks through uv while preserving the host's base Python installation. Applies when a required Python version, existing uv lock, isolated dependency environment, or unwritable default uv cache must be reconciled before validation.",
+  "semanticAuthorityRef": "../source/.agents/skills/uv-backed-python-execution/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/22",
+  "contract": {
+    "what": "A repository-directed way to select a compatible Python interpreter through `uv`, prepare dependencies according to the repository's lockfile, run one named check, and report the environment coordinates that affect the result.",
+    "when": [
+      "The repository authorizes `uv` and its Python requirement, lockfile, hosted workflow, existing environment, or local base interpreter leaves the validation runtime unclear."
+    ],
+    "boundaries": [
+      "Current task authority and repository declarations govern the run. The host Python installation and global packages remain unchanged. Dependency upgrades, lock creation, project-metadata edits, and toolchain conversion belong to separately authorized work. A prepared environment and a passing repository check are distinct observations."
+    ],
+    "result": "The named check runs through an identified `uv` and Python combination; the return says whether dependencies came from a checked lockfile or were resolved for this run; tracked source remains legible; and any unresolved environment condition has one owner and a clear trigger for another attempt. This contract owns repository-declared Python checks. Conversation-only figures default to an isolated session runtime and can opt into repository-version matching or the documented project environment. Their rendering preference leaves the source-owned runtime, lock and evidence requirements for repository checks intact."
+  },
+  "receivingUse": {
+    "job": "The repository authorizes `uv` and its Python requirement, lockfile, hosted workflow, existing environment, or local base interpreter leaves the validation runtime unclear.",
+    "materialResult": "The named check runs through an identified `uv` and Python combination; the return says whether dependencies came from a checked lockfile or were resolved for this run; tracked source remains legible; and any unresolved environment condition has one owner and a clear trigger for another attempt. This contract owns repository-declared Python checks. Conversation-only figures default to an isolated session runtime and can opt into repository-version matching or the documented project environment. Their rendering preference leaves the source-owned runtime, lock and evidence requirements for repository checks intact.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/uv-backed-python-execution/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

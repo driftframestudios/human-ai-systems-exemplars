@@ -1,60 +1,8 @@
 @charset "UTF-8";
 
-/*
- * Context Canvas foundations
- *
- * The established palette remains intact. These tokens name the layout and
- * information-display roles that recur across About, AI Systems, and Debriefs.
- */
-
-:root {
-    --canvas-ink: #333;
-    --canvas-ink-strong: #1a1a2e;
-    --canvas-ink-muted: #666;
-    --canvas-info: #92d1c0;
-    --canvas-night: #000;
-    --canvas-on-night: #fff;
-    --canvas-paper: #fafafa;
-    --canvas-paper-soft: #f5f5f5;
-    --canvas-field: #4db8b3;
-    --canvas-accent: #ff7a97;
-    --canvas-footer: #2a312d;
-    --canvas-rule: #c9c9c9;
-    --canvas-cream: #f1e9d2;
-    --canvas-rule-strong: #767676;
-    --canvas-row-tint: rgba(77, 184, 179, .07);
-    --canvas-selection: #fff2b3;
-    --canvas-tiffany:#56d8c9;
-    --canvas-tiffany-ice: #E6F5F5;
-    --canvas-lucky-lobster: #d13a1f;
-    --canvas-sea-glass: #dbf0f0;
-    --canvas-warning: #9a4f00;
-    --canvas-cobalt: #2855f3;
-    /* Palette roles stay fixed; painted surfaces override both active roles. */
-    --canvas-link-on-light: #003f5a;
-    --canvas-link-visited-on-light: #6c0051;
-    --canvas-link-on-dark: #f2ff67;
-    --canvas-link-visited-on-dark: #feeae9;
-    --canvas-link-color: var(--canvas-link-on-light);
-    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
-    --canvas-rose-pink: #feedf1;
-    --canvas-cool-blue: #e9f0ff;
-    --canvas-mint-green: #e6f5f1;
-    --canvas-soft-apricot: #fff3e8;
-    --canvas-pale-lavendar: #f3efff;
-    --canvas-reading-measure: 66ch;
-    --canvas-lead-measure: 58ch;
-    --canvas-heading-measure: 32ch;
-    --canvas-editorial-measure: 96rem;
-    --canvas-wide-measure: 144rem;
-    --canvas-page-gutter: clamp(1.25rem, 3vw, 4rem);
-    --canvas-column-gap: clamp(3rem, 4vw, 5.5rem);
-    --canvas-section-space: clamp(2rem, 4vw, 4rem);
-    --canvas-table-cell-block: .7rem;
-    --canvas-table-cell-inline: .85rem;
-    --canvas-table-cell-compact: .45rem;
-
-}
+/* Shared Context Canvas tokens and document foundations now live under
+   styles/core/. This file retains route and legacy responsibilities whose
+   clearer owner is still being established through Issue #51. */
 
 /* ===========================================================================
 
@@ -116,20 +64,9 @@
 
    =========================================================================== */
 
-*,
-:after,
-:before {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
 .clearfix:after,
 .media-reverse:after,
 .media:after,
-.nav__container:after,
 .row:after {
     clear: both;
     content: "";
@@ -153,21 +90,6 @@
 
    =========================================================================== */
 
-body,
-html {
-    background-color: var(--canvas-night);
-    color: var(--canvas-ink);
-    font-family: 'Arial Nova', 'Helvetica Neue', sans-serif;
-    font-size: 100%;
-    font-weight: 400;
-    height: 100%;
-    line-height: 1.4;
-    -moz-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%;
-    text-rendering: optimizeLegibility;
-}
-
 /* ===========================================================================
 
         ^typographical and selection elements
@@ -175,74 +97,12 @@ html {
 
    =========================================================================== */
 
-::-moz-selection {
-    background: var(--canvas-accent);
-    color: #000;
-    text-shadow: none
-}
-
-::selection {
-    background: var(--canvas-accent);
-    color: #000;
-    text-shadow: none
-}
-
-/* may want to declare font weight with headings, so browsers don't auto bold*/
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: Futura, Arial, "Helvetica Neue", Helvetica, sans-serif;
-    color: #333;
-}
-
-h1 small,
-h2 small,
-h3 small,
-h4 small,
-h5 small,
-h6 small,
-li small,
-p small {
-    font-family: Futura, Arial, "Helvetica Neue", Helvetica, sans-serif;
-    display: inline-block;
-    margin: 0
-}
-
-p {
-    margin-top: -1px;
-}
-
-p:last-child {
-    margin-bottom: 0
-}
-
-a {
-    background: 0 0;
-    color: var(--canvas-link-color)
-}
-
-a:visited {
-    color: var(--canvas-link-visited-color)
-}
-
-a:is(:active, :hover) {
-    text-decoration-thickness: .14em
-}
-
 .salmoned {
     color: #ff7a97
 }
 
 .tiffany {
     color: #4db8b3
-}
-
-a:focus,
-a:visited:focus {
-    outline: thin dotted
 }
 
 q {
@@ -373,32 +233,6 @@ pre {
     fill: none
 }
 
-ol,
-ul {
-    padding-left: 24px
-}
-
-ol {
-    list-style: decimal;
-    font-family: Futura, arial, sans-serif;
-    font-weight: 400;
-    font-size: .85em;
-}
-
-ol>:last-child,
-ul>:last-child {
-    margin-bottom: 0
-}
-
-nav li {
-    margin: 0 0 8px
-}
-
-img {
-    color: #ff99ac;
-    max-width: 100%
-}
-
 ul.tag-line {
     list-style-type: square;
     font-size: .9em;
@@ -406,10 +240,6 @@ ul.tag-line {
 
 ul.tag-line ul {
     list-style-type: upper-roman;
-}
-
-svg:not(:root) {
-    overflow: hidden
 }
 
 hr {
@@ -601,199 +431,6 @@ p+hr,
     text-align: right
 }
 
-.tag-line,
-.project--slug {
-    font-family: monospace, serif;
-    letter-spacing: .02em;
-    font-size: 1.2em;
-    font-weight: 400;
-}
-
-.project--slug {
-    letter-spacing: .02em;
-    line-height: 1.125em;
-    font-family: Futura, Arial, "Helvetica Neue", Helvetica, sans-serif;
-}
-
-.project--lead {
-    letter-spacing: .02em;
-    line-height: 1em;
-    font-weight: 400;
-    font-family: Futura, Arial, "Helvetica Neue", Helvetica, sans-serif;
-}
-
-.bluff {
-    font-family: Futura, Arial, "Helvetica Neue", Helvetica, sans-serif;
-    font-weight: 500;
-}
-
-@media screen and (max-width:770px) {
-    .project--slug {
-        letter-spacing: .02em;
-        font-size: .5em;
-    }
-    .project--slug {
-        letter-spacing: .03em;
-        font-size: .7em;
-    }
-    .tag-line,
-    .project--slug {
-        padding-bottom: 8px;
-    }
-}
-
-/* root elements */
-
-blockquote,
-body,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-html,
-pre {
-    margin: 0;
-    padding: 0
-}
-
-/* set a max-width of 100% for img and other replaced elements */
-img {
-    border: 0;
-    outline: 0
-}
-
-a:active,
-a:hover,
-a:visited:active,
-a:visited:hover {
-    outline: 0
-}
-
-
-/* ^jump nav */
-nav ol,
-nav ul {
-    list-style: none;
-    padding: 0
-}
-
-ol,
-ul {
-    margin: 0 0 16px
-}
-
-.h1-spaced {
-    /*letter-spacing: .06em*/
-}
-
-.h1-hero {
-    color: #fff;
-}
-
-@media screen and (max-width:770px) {
-    .h1-spaced,
-    .tag-line {
-        letter-spacing: .05em
-    }
-}
-
-.txt-h1,
-.txt-large,
-h1 {
-    line-height: 1;
-    /*color: #fff;*/
-    font-weight: 700;
-}
-
-.txt-large {
-    font-size: 3.5em;
-    font-weight: 300
-}
-
-.txt-medium {
-    font-size: 2.5em;
-    font-weight: 700;
-    margin-bottom: .75em;
-    opacity: 0.8;
-}
-
-.txt-h1,
-h1 {
-    font-size: 3.125em;
-    font-weight: 300
-}
-
-.txt-h2,
-h2 {
-    font-size: 2.5em;
-    font-weight: 500
-}
-
-.txt-h3,
-h3 {
-    font-size: 1.42em;
-    font-weight: 700
-}
-
-.txt-h4,
-h4 {
-    font-size: 1.20em;
-    font-weight: 300
-}
-
-.txt-h5,
-h5 {
-    font-size: 1.125em;
-    font-weight: 300
-}
-
-.txt-h6,
-blockquote,
-h6 {
-    font-size: 1.05em;
-    font-weight: 300
-}
-
-.txt-base {
-    font-size: 1.425em;
-    font-weight: 300
-}
-
-.txt-small,
-small,
-sub,
-sup {
-    font-size: .875em;
-    font-weight: 300
-}
-
-.txt-tiny {
-    font-size: .9rem;
-    font-weight: 400
-}
-
-.slug {
-    font-size: .75em;
-    font-weight: 500
-}
-
-.bold,
-b,
-cite,
-strong {
-    font-weight: 600
-}
-
-blockquote,
-dfn,
-em,
-i,
-img {
-    font-style: italic
-}
-
 em {
     font-weight: 500;
 }
@@ -812,18 +449,6 @@ em {
 dfn[title] {
     border-bottom: 1px dotted #ccc;
     cursor: help
-}
-
-article,
-aside,
-canvas,
-footer,
-header,
-main,
-nav,
-section,
-small {
-    display: block
 }
 
 aside {
@@ -847,49 +472,6 @@ section>p:last-of-type {
     overflow: hidden!important;
     position: absolute!important;
     width: 1px!important
-}
-
-.nav__container a {
-    display: block;
-    padding: 14px;
-    border-right: 1px solid #999;
-    font-size: 1em;
-    font-weight: 700
-}
-
-.nav__container>li {
-    margin-bottom: 0
-}
-
-/* So divider doesn't show up on the last menu item */
-.nav__container li:last-child a {
-    border-right: 0
-}
-
-.nav__container {
-    margin: 0;
-    text-align: center
-}
-
-.nav__container>li {
-    float: left;
-    width: 33%
-}
-
-blockquote,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-kbd,
-li,
-nav ol,
-nav ul,
-samp,
-small {
-    margin-bottom: 16px
 }
 
 .header__container {
@@ -1119,18 +701,6 @@ small {
     z-index: 2
 }
 
-figure {
-    margin-block-start: 0;
-    margin-block-end: 0;
-    margin-inline-start: 0;
-    margin-inline-end: 0;
-    width: 100%;
-}
-
-figcaption {
-    padding: 32px 0 24px 0;
-}
-
 /*@media screen and (max-width:770px) {*/
 /*    .hero__container {*/
 /*        margin-top: 32px;*/
@@ -1206,11 +776,6 @@ figcaption {
         font-size: 2.25em;
         line-height: 2.7em;
     }
-    .h1-spaced,
-    .tag-line {
-        letter-spacing: .05em;
-        font-size: 1em
-    }
 }
 
 .index-page .header__container,
@@ -1225,677 +790,6 @@ figcaption {
         ^navigation elements
 
    =========================================================================== */
-
-/* in the event I don't want full-screen landings */
-.page__container {
-    padding-top: 5%;
-    margin-bottom: 5%;
-}
-
-@media screen and (max-width:770px) {
-    .txt-h1, h1 {
-        font-size: 2.35em
-    }
-}
-
-@media screen and (max-width: 500px) {
-    .page__container {
-        padding-top: 10%
-    }
-    .txt-h1 {
-        font-size: 1.65em;
-        line-height: 1.3em
-    }
-}
-
-.nav__top--sticky {
-    height: auto;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    background: var(--canvas-night);
-    z-index: 31
-}
-
-.nav__top--sticky li {
-    margin: 0
-}
-
-.nav__top--sticky a {
-    color: var(--canvas-on-night);
-    position: relative;
-    text-decoration: none
-}
-
-.about .anchor_ai_systems,
-.index-page .anchor_index,
-.nav__top--sticky a:active,
-.nav__top--sticky a:hover,
-.projects .anchor_core_architectures,
-.blog .anchor_debriefs {
-    background: rgba(0, 0, 0, .6);
-    border-bottom-color: #000; /* version b*/
-    color: var(--canvas-accent);
-    text-decoration: none
-}
-
-.content {
-    container-name: canvas-reading;
-    container-type: inline-size;
-    inline-size: min(100%, var(--canvas-reading-measure));
-    margin: 0 auto;
-    max-width: none;
-    padding: 32px
-}
-
-.content>:last-child {
-    margin-bottom: 0
-}
-
-@media screen and (max-width:770px) {
-    .content {
-        padding: 28px 20px
-    }
-}
-
-@media screen and (min-width:1200px) {
-    .content {
-        inline-size: min(100%, var(--canvas-reading-measure));
-        padding: 56px 40px
-    }
-}
-
-.content--reading {
-    inline-size: min(100%, var(--canvas-reading-measure));
-}
-
-.content--editorial {
-    inline-size: min(100%, var(--canvas-editorial-measure));
-}
-
-.content--wide {
-    inline-size: min(100%, var(--canvas-wide-measure));
-}
-
-.content--full-bleed {
-    inline-size: 100%;
-    padding-inline: 0;
-}
-
-/*
- * Wide fields carry comparisons, diagrams, and collaborative instruments.
- * Prose inside them returns to a stable reading measure so adjacent lines
- * remain within a comfortable visual span.
- */
-.content :where(p, li, dd, figcaption, blockquote, summary) {
-    max-inline-size: min(100%, var(--canvas-reading-measure));
-}
-
-.content :where(h1, h2, h3, h4):not(.architecture-track-title) {
-    max-inline-size: min(100%, var(--canvas-heading-measure));
-    text-wrap: balance;
-}
-
-.content :where(.debrief-lead, .tag-line) {
-    max-inline-size: min(100%, var(--canvas-lead-measure));
-}
-
-/*
- * Large collaboration displays carry prose as an editorial spread. The
- * container threshold expresses the actual room required by two readable
- * columns; the viewport query unlocks that room without changing smaller
- * layouts.
- */
-.prose-flow > .debrief-lead {
-    break-inside: avoid;
-}
-
-@media screen and (min-width: 120rem) {
-    .content.content--editorial,
-    .content.content--wide,
-    .content.content--full-bleed {
-        inline-size: min(100%, var(--canvas-editorial-measure));
-        padding: clamp(3.5rem, 4vw, 6rem) var(--canvas-page-gutter);
-    }
-
-    .content.content--wide {
-        inline-size: min(100%, var(--canvas-wide-measure));
-    }
-
-    .content.content--full-bleed {
-        inline-size: 100%;
-    }
-}
-
-@container canvas-reading (min-width: 80rem) {
-    .prose-flow {
-        column-count: 2;
-        column-gap: var(--canvas-column-gap);
-        column-rule: 1px solid color-mix(in srgb, var(--canvas-rule) 58%, transparent);
-        orphans: 3;
-        widows: 3;
-    }
-
-    .prose-flow > :is(h1, h2, .table-figure, .table-span-all, figure, .career-slide, .clean-list, .embed-slot, pre) {
-        column-span: all;
-    }
-
-    .prose-flow :is(h1, h2, blockquote, figure, pre, table) {
-        break-inside: avoid;
-    }
-
-    .prose-flow :is(h3, h4) {
-        break-after: avoid;
-    }
-
-    .prose-flow li {
-        break-inside: avoid;
-    }
-
-    .prose-flow .table-figure--column {
-        column-span: none;
-    }
-}
-
-@supports not (container-type: inline-size) {
-    @media screen and (min-width: 120rem) {
-        .prose-flow {
-            column-count: 2;
-            column-gap: var(--canvas-column-gap);
-            column-rule: 1px solid var(--canvas-rule);
-            orphans: 3;
-            widows: 3;
-        }
-
-        .prose-flow > :is(h1, h2, .table-figure, .table-span-all, figure, .career-slide, .clean-list, .embed-slot, pre) {
-            column-span: all;
-        }
-
-        .prose-flow :is(h1, h2, blockquote, figure, pre, table, li) {
-            break-inside: avoid;
-        }
-
-        .prose-flow :is(h3, h4) {
-            break-after: avoid;
-        }
-    }
-}
-
-/* ===========================================================================
-
-        ^tables and tabular readings
-
-   The baseline favors exact lookup and comparison: whitespace carries most
-   of the separation, rules remain quiet, and emphasis is reserved for a
-   declared state or comparison anchor.
-
-   =========================================================================== */
-
-.table-figure {
-    color: var(--canvas-ink);
-    margin: var(--canvas-section-space) 0;
-    max-inline-size: 100%;
-}
-
-.table-figure--wide {
-    inline-size: min(92vw, var(--canvas-editorial-measure));
-    margin-inline: 50%;
-    max-inline-size: none;
-    transform: translateX(-50%);
-}
-
-@media screen and (max-width: 64rem) {
-    .table-figure--wide {
-        inline-size: 100%;
-        margin-inline: 0;
-        transform: none;
-    }
-}
-
-.table-scroll {
-    -webkit-overflow-scrolling: touch;
-    inline-size: 100%;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    scrollbar-color: var(--canvas-rule-strong) transparent;
-    scrollbar-gutter: stable;
-}
-
-.table-scroll:focus-visible {
-    border-radius: .125rem;
-    box-shadow: 0 0 0 .375rem var(--canvas-paper);
-    outline: .1875rem solid var(--canvas-ink-strong);
-    outline-offset: .1875rem;
-}
-
-.table-scroll--contained {
-    max-block-size: min(70vh, 48rem);
-    overflow: auto;
-}
-
-table {
-    --canvas-link-color: var(--canvas-link-on-light);
-    --canvas-link-visited-color: var(--canvas-link-visited-on-light);
-    background: var(--canvas-paper);
-    border-collapse: separate;
-    border-spacing: 0;
-    color: var(--canvas-ink);
-    font-size: 1rem;
-    inline-size: 100%;
-    line-height: 1.45;
-}
-
-caption {
-    caption-side: top;
-    color: var(--canvas-ink-strong);
-    font-size: clamp(1.125rem, 1rem + .4vw, 1.5rem);
-    font-weight: 700;
-    line-height: 1.25;
-
-    max-inline-size: var(--canvas-reading-measure);
-    padding-block-end: .8rem;
-    text-align: start;
-}
-
-@media screen and (max-width: 40rem) {
-    .table-scroll > table > caption {
-        inline-size: min(var(--canvas-reading-measure), calc(100vw - (2 * var(--canvas-page-gutter))));
-        max-inline-size: calc(100vw - (2 * var(--canvas-page-gutter)));
-    }
-}
-
-
-
-th,
-td {
-    padding: var(--canvas-table-cell-block) var(--canvas-table-cell-inline);
-    text-align: start;
-    vertical-align: top;
-}
-
-thead th {
-    border-block-end: .125rem solid var(--canvas-rule-strong);
-    color: var(--canvas-ink-strong);
-    font-size: .875rem;
-    font-weight: 700;
-    letter-spacing: .0125em;
-    padding-block-start: .4rem;
-    vertical-align: bottom;
-}
-
-tbody th[scope="row"] {
-    color: var(--canvas-ink-strong);
-    font-weight: 650;
-}
-
-tbody tr > * {
-    border-block-end: 1px solid var(--canvas-rule);
-}
-
-tbody tr:last-child > * {
-    border-block-end: 0;
-}
-
-tfoot > tr:first-child > * {
-    border-block-start: .125rem solid var(--canvas-rule-strong);
-    font-weight: 700;
-}
-
-.table-note {
-    border-block-start: 1px solid var(--canvas-rule);
-    color: var(--canvas-ink);
-    font-size: .875rem;
-    line-height: 1.45;
-    margin-block-start: 1rem;
-    max-inline-size: var(--canvas-reading-measure);
-    padding-block-start: .65rem;
-}
-
-.table-figure--wide .table-note {
-    max-inline-size: min(100%, var(--canvas-reading-measure));
-}
-
-.table-note strong,
-.table-source,
-.table-caveat {
-    color: var(--canvas-ink-strong);
-    font-weight: 650;
-}
-
-.table-source {
-    display: block;
-    margin-block-start: .35rem;
-}
-
-.table-caveat {
-    display: block;
-    font-weight: 400;
-}
-
-.table-number,
-table [data-type="number"],
-.table--numeric :is(th, td):not(:first-child) {
-    font-variant-numeric: lining-nums tabular-nums;
-    text-align: end;
-    white-space: nowrap;
-}
-
-.table-value--unavailable,
-.table-value--not-applicable,
-.table-value--not-measured {
-    color: var(--canvas-ink-muted);
-    font-style: italic;
-    white-space: normal;
-}
-
-.table--reading,
-.table--comparison {
-    min-inline-size: 52rem;
-}
-
-.table--comparison tbody th {
-    inline-size: 19%;
-    min-inline-size: 11.5rem;
-}
-
-.table--comparison .table-ability {
-    color: var(--canvas-ink-strong);
-    font-weight: 600;
-}
-
-.table--matrix {
-    min-inline-size: 64rem;
-}
-
-.table-scroll--contained .table--matrix thead th {
-    background: var(--canvas-paper);
-    /*position: sticky;*/
-    top: 0;
-    z-index: 3;
-}
-
-.table--matrix tr > * + * {
-    border-inline-start: 1px solid color-mix(in srgb, var(--canvas-rule) 72%, transparent);
-}
-
-.table-group-start {
-    border-inline-start: .125rem solid var(--canvas-rule-strong);
-}
-
-.table--matrix tr > :first-child {
-    background: var(--canvas-paper-soft); /* Important: Must be opaque so text behind it is masked */
-    inset-inline-start: 0;
-    min-inline-size: 2rem;
-    max-inline-size: 16rem;
-    position: relative;
-    /*position: sticky;*/
-    z-index: 2;
-}
-
-.table--matrix thead tr > :first-child {
-    z-index: 4;
-}
-
-.table--matrix tr > :first-child::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: -5px;
-    bottom: 0;
-    width: 5px;
-    pointer-events: none;
-    box-shadow: inset 8px 0 8px -8px rgba(0, 0, 0, 0.25);
-}
-
-.table--ledger {
-    min-inline-size: 56rem;
-}
-
-.table--ledger tbody th {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-size: .825rem;
-    letter-spacing: .01em;
-}
-
-.table--compact th,
-.table--compact td {
-    padding-block: var(--canvas-table-cell-compact);
-}
-
-.table--comfortable th,
-.table--comfortable td {
-    padding-block: 1rem;
-}
-
-.table--striped tbody tr:nth-child(even) > * {
-    background: var(--canvas-row-tint);
-}
-
-.table--striped.table--matrix tbody tr:nth-child(even) > :first-child {
-    background: color-mix(in srgb, var(--canvas-paper) 93%, var(--canvas-field));
-}
-
-.table-status {
-    border: 1px solid var(--canvas-rule-strong);
-    border-inline-start-width: .3rem;
-    display: inline-block;
-    font-size: .75rem;
-    font-weight: 700;
-    letter-spacing: .025em;
-    line-height: 1.2;
-    padding: .25rem .42rem;
-}
-
-.table-status[data-state="established"],
-.table-status[data-state="known"] {
-    border-inline-start-color: var(--canvas-field);
-}
-
-.table-status[data-state="working"],
-.table-status[data-state="assumed"] {
-    border-inline-start-color: #d4af37;
-}
-
-.table-status[data-state="attention"],
-.table-status[data-state="needs-to-surface"] {
-    border-inline-start-color: var(--canvas-accent);
-}
-
-.table-status[data-state="competing"],
-.table-status[data-state="disputed"] {
-    border-inline-start-color: var(--canvas-warning);
-}
-
-.table-sort {
-    align-items: end;
-    background: transparent;
-    border: 0;
-    color: inherit;
-    cursor: pointer;
-    display: grid;
-    font: inherit;
-    gap: .5rem;
-    grid-template-columns: minmax(0, 1fr) auto;
-    inline-size: 100%;
-    letter-spacing: inherit;
-    padding: 0;
-    text-align: inherit;
-    text-transform: inherit;
-}
-
-.table-sort:hover {
-    background: var(--canvas-row-tint);
-}
-
-.table-sort:focus-visible {
-    box-shadow: 0 0 0 .2rem var(--canvas-paper);
-    outline: .16rem solid var(--canvas-ink-strong);
-    outline-offset: .16rem;
-}
-
-th[aria-sort="ascending"] .table-sort::after {
-    content: "\2191";
-}
-
-th[aria-sort="descending"] .table-sort::after {
-    content: "\2193";
-}
-
-tbody tr[aria-selected="true"] > * {
-    background: var(--canvas-selection);
-    box-shadow: inset 0 .125rem 0 var(--canvas-ink-strong), inset 0 -.125rem 0 var(--canvas-ink-strong);
-}
-
-td details {
-    margin: 0;
-}
-
-td details > summary {
-    color: var(--canvas-ink-strong);
-    cursor: pointer;
-    font-weight: 650;
-}
-
-@media (forced-colors: active) {
-    .table-scroll:focus-visible,
-    .table-sort:focus-visible {
-        box-shadow: none;
-        outline-color: Highlight;
-    }
-
-    .table-status,
-    tbody tr[aria-selected="true"] > * {
-        border-color: CanvasText;
-    }
-}
-
-@media print {
-    .table-figure--wide {
-        inline-size: 100%;
-        margin-inline: 0;
-        max-inline-size: 100%;
-        transform: none;
-    }
-
-    .table-scroll {
-        overflow: visible;
-    }
-
-    table {
-        background: #fff;
-        font-size: 9pt;
-    }
-
-    .table--reading,
-    .table--comparison,
-    .table--matrix,
-    .table--ledger {
-        min-inline-size: 0;
-    }
-
-    thead {
-        display: table-header-group;
-    }
-
-    tr,
-    th,
-    td {
-        break-inside: avoid;
-    }
-
-    .table--matrix :is(thead th, tr > :first-child) {
-        position: static;
-    }
-}
-
-/* Context Canvas shell ---------------------------------------------------- */
-
-:is(
-    .interpretive-aside,
-    .discovery-aside,
-    .discovery-callout,
-    .callout-block,
-    .implementation-companion,
-    .story-visual,
-    figure
-    ) {
-    break-inside: avoid;
-}
-
-:is(.table-scroll, .table-shell, .about-table-wrap, .framework-table-wrap) table {
-    border-collapse: separate;
-    border-spacing: 0;
-}
-
-:is(.table-scroll, .table-shell, .about-table-wrap, .framework-table-wrap) tr > :first-child {
-    background: var(--canvas-info, #92d1c0);
-    color: var(--canvas-ink-strong, #1a1a2e);
-    box-shadow: .125rem 0 .25rem rgb(23 52 95 / .08);
-    inset-inline-start: 0;
-    /*position: sticky;*/
-    z-index: 1;
-}
-
-:is(.table-scroll, .table-shell, .about-table-wrap, .framework-table-wrap) thead tr > :first-child {
-    background: var(--canvas-info, #92d1c0);
-    z-index: 2;
-}
-
-/* Shared Context Canvas route-card grid ----------------------------------
-   About and Prompt-Side Conditions both use this structural component.
-   Route-owned tokens supply its visual treatment where they are present. */
-
-.about-route-grid {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    margin-block-start: 2rem;
-}
-
-.about-route-grid a,
-.about-route-grid a:visited {
-    background: var(--about-paper);
-    border: .125rem solid var(--about-cobalt);
-    border-radius: .55rem;
-    box-shadow: .55rem .55rem 0 var(--about-cobalt);
-    color: var(--about-ink);
-    display: grid;
-    gap: .55rem;
-    grid-template-columns: 1.6rem 1fr;
-    padding: 1rem;
-    /*text-decoration: none;*/ /* purposefully commented out*/
-}
-
-.about-route-grid svg {
-    inline-size: 1.4rem;
-}
-
-.about-route-grid strong,
-.about-route-grid span {
-    grid-column: 2;
-}
-
-.about-route-grid span {
-    color: var(--about-muted);
-    font-size: .82rem;
-}
-
-.about-route-grid a:hover {
-    translate: -.2rem -.2rem;
-}
-
-@media screen and (max-width: 48rem) {
-    .about-route-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .about-route-grid a:hover {
-        translate: 0;
-    }
-}
 
 /* Shared Machinery legacy route shell. No current top-level page consumes
    these selectors; keep them here until a visitor surface earns migration. */
@@ -2133,24 +1027,6 @@ td details > summary {
     background: var(--about-deep-forest-charcoal);
     box-shadow: 0 0 10px rgba(0, 0, 0, .5);
     color: var(--canvas-cream)
-}
-
-body {
-    font-size: 120%
-}
-
-@media screen and (max-width:770px) {
-    body {
-        font-size: 78%
-    }
-    li,
-    p {
-        font-size: 120%
-    }
-    pre {
-        font-size: 125%;
-        line-height: 1.3
-    }
 }
 
 .img__anchor:hover .project__upfront {
@@ -2493,12 +1369,6 @@ h1.txt-h1.txt__adjust--cream.h1-spaced.h1-hero {
     z-index: 1;
 }
 
-/* Abbreviations */
-abbr {
-    text-decoration: underline dotted #ff7a97;
-    cursor: help;
-}
-
 /* ===========================================================================
 
         ^debrief precipitation surfaces
@@ -2658,10 +1528,6 @@ abbr {
     border-block-end: .22rem solid var(--canvas-ink-strong);
     margin-block-end: clamp(1.75rem, 4vw, 3.25rem);
     padding-block-end: .65rem;
-}
-
-main [id] {
-    scroll-margin-block-start: 5rem;
 }
 
 .numbered-moves {
@@ -2985,7 +1851,7 @@ main [id] {
     transform: translateX(-50%);
 }
 
-.story-visual img {
+.story-visual :is(img, video) {
     background: #f8f1e2;
     border: 1px solid var(--canvas-rule-strong);
     display: block;
@@ -2997,6 +1863,54 @@ main [id] {
     color: inherit;
     display: block;
     text-decoration: none;
+}
+
+/*
+ * Dense reference-interface proxies keep a laptop-sized inspection canvas.
+ * Narrow readers receive a labelled, keyboard-scrollable region and the
+ * source-size link remains available for exact text inspection.
+ */
+.debrief-proxy-figure {
+    inline-size: min(92vw, 78rem);
+}
+
+.debrief-proxy-frame {
+    inline-size: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-gutter: stable;
+}
+
+.debrief-proxy-frame:focus-visible {
+    outline: .2rem solid currentColor;
+    outline-offset: .25rem;
+}
+
+.debrief-proxy-frame .story-visual__open {
+    inline-size: max(100%, 56rem);
+}
+
+.debrief-proxy-frame--portrait {
+    inline-size: min(100%, 42rem);
+    margin-inline: auto;
+}
+
+.debrief-proxy-frame--portrait .story-visual__open {
+    inline-size: 100%;
+}
+
+.debrief-proxy-figure .table-note strong {
+    color: inherit;
+}
+
+@media print {
+    .debrief-proxy-figure,
+    .debrief-proxy-frame,
+    .debrief-proxy-frame .story-visual__open {
+        inline-size: 100%;
+        min-inline-size: 0;
+        overflow: visible;
+    }
 }
 
 .cobalt-operating-field__visual img {

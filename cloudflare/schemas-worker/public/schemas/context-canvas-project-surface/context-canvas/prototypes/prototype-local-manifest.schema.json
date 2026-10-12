@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json",
+  "title": "Context Canvas Local Prototype Manifest",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "version",
+    "created",
+    "pathContract",
+    "canonicalStatus",
+    "publicationPosture",
+    "sourcePath",
+    "localPath",
+    "entryFile",
+    "sourceManifest",
+    "localAdaptations",
+    "divergence",
+    "archive",
+    "integrity",
+    "usedByPages"
+  ],
+  "anyOf": [
+    {
+      "properties": {"sourceRevision": {}},
+      "required": ["sourceRevision"]
+    },
+    {
+      "properties": {"sourceAuthority": {}},
+      "required": ["sourceAuthority"]
+    }
+  ],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "title": {"type": "string", "minLength": 1},
+    "version": {"type": "string", "minLength": 1},
+    "created": {"type": "string", "format": "date"},
+    "sourceRevision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sourceAuthority": {
+      "type": "object",
+      "required": ["contractOwner", "implementationOwner", "relationship"],
+      "additionalProperties": false,
+      "properties": {
+        "contractOwner": {"type": "string", "minLength": 1},
+        "implementationOwner": {"type": "string", "minLength": 1},
+        "relationship": {"type": "string", "minLength": 1}
+      }
+    },
+    "pathContract": {
+      "type": "object",
+      "required": ["sourcePath", "localPath", "entryFile", "sourceManifest", "usedByPages"],
+      "additionalProperties": false,
+      "properties": {
+        "sourcePath": {"const": "manifest-directory"},
+        "localPath": {"const": "repository-root"},
+        "entryFile": {"const": "localPath"},
+        "sourceManifest": {"const": "localPath"},
+        "usedByPages": {"const": "manifest-directory"}
+      }
+    },
+    "canonicalStatus": {"type": "string", "minLength": 1},
+    "publicationPosture": {"enum": ["internal-reference-only", "repository-local-experimental-projection", "visitor-linked-through-receiving-pages"]},
+    "sourcePath": {"type": "string", "minLength": 1},
+    "localPath": {"type": "string", "minLength": 1},
+    "entryFile": {"type": "string", "minLength": 1},
+    "sourceManifest": {"type": "string", "minLength": 1},
+    "localAdaptations": {"type": "array", "items": {"type": "string"}},
+    "divergence": {
+      "type": "object",
+      "required": ["status", "changedPaths"],
+      "properties": {
+        "status": {"type": "string", "minLength": 1},
+        "changedPaths": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "archive": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": {"enum": ["not-applicable", "source-snapshot-current", "source-snapshot-stale", "source-snapshot-unverified", "rebuilt-local-snapshot"]},
+        "path": {"type": "string"}
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "required": ["algorithm", "entryFile"],
+      "properties": {
+        "algorithm": {"const": "sha256"},
+        "entryFile": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "usedByPages": {"type": "array", "items": {"type": "string"}}
+  }
+}

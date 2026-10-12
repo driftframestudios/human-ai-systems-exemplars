@@ -4,7 +4,7 @@
    Owns: split accent-and-content geometry, stat cards, content sections,
    component-width stacking, viewport fallback, entrance motion, and the
    reduced-motion response.
-   Load order: expanded.css, this component, then canvas-shell.css.
+   Load order: shared core, expanded.css, this component, then canvas-shell.css.
    Contract relationship: the source-established split-to-stack composition
    works within the shared Context Canvas reading measure. Receiving routes
    retain authority over surrounding prose, identity, rhythm, and extension. */

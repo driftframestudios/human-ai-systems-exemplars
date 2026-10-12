@@ -3,8 +3,9 @@
    using .track-index, .source-basis, or .debrief-quote--orientation.
    Owns: shared reading-route cards, source-basis lists, orientation-reading
    measure and placement, and print grouping.
-   Load order: expanded.css, this component, the relevant route bundle, then
-   canvas-shell.css; styles/contracts/debrief-composition.css may follow for composed readings.
+   Load order: shared core, expanded.css, this component, the relevant route
+   bundle, then canvas-shell.css; styles/contracts/debrief-composition.css may
+   follow for composed readings.
    Contract: ../../../../visual-fidelity-contracts/dual-track-debrief-composition.md.
    The component keeps navigation and evidence orientation stable while each
    route retains authority over palette, rhythm, density, and composition. */
@@ -56,8 +57,152 @@
     max-inline-size: var(--canvas-reading-measure);
 }
 
+/* data/debrief-case-briefs.source.html owns this quick-scan layer. Its catalog
+   projection presents both canonical tracks as independent native disclosures;
+   Full Debrief routes keep their longer reading structure separate. */
+.debrief-case-brief__tracks {
+    border-block-start: 1px solid var(--canvas-rule);
+    display: grid;
+    gap: 1rem;
+    margin-block-start: 1.5rem;
+    padding-block-start: 1.25rem;
+}
+
+.debrief-case-brief__tracks > .txt-h3,
+.debrief-case-brief__tracks > .txt-h4,
+.debrief-case-brief__track-group-title,
+.debrief-case-brief__track-intro {
+    grid-column: 1 / -1;
+}
+
+.debrief-case-brief__tracks > .txt-h3,
+.debrief-case-brief__tracks > .txt-h4,
+.debrief-case-brief__track-group-title {
+    margin-block: 0;
+}
+
+.debrief-case-brief__track-intro {
+    margin: -.25rem 0 0;
+    max-inline-size: var(--canvas-reading-measure);
+}
+
+.debrief-case-brief__track {
+    background: color-mix(in srgb, var(--canvas-field) 18%, var(--canvas-paper) 82%);
+    border: 1px solid var(--canvas-rule);
+    border-block-start: .25rem solid var(--canvas-accent);
+    min-inline-size: 0;
+    padding: 1rem;
+}
+
+details.debrief-case-brief__track--disclosure {
+    overflow-wrap: anywhere;
+    padding: 0;
+}
+
+details.debrief-case-brief__track--disclosure > summary {
+    color: var(--canvas-ink-strong);
+    cursor: pointer;
+    font-weight: 700;
+    min-block-size: 2.75rem;
+    padding: .75rem 1rem;
+}
+
+details.debrief-case-brief__track--disclosure > summary::marker {
+    color: currentColor;
+}
+
+details.debrief-case-brief__track--disclosure > summary:focus-visible {
+    outline: .2rem solid var(--canvas-accent);
+    outline-offset: .15rem;
+}
+
+.debrief-case-brief__track-title {
+    margin-inline-end: .45rem;
+}
+
+.debrief-case-brief__track-state {
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: .72em;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.debrief-case-brief__track-state--collapse,
+details.debrief-case-brief__track--disclosure[open] .debrief-case-brief__track-state--expand {
+    display: none;
+}
+
+details.debrief-case-brief__track--disclosure[open] .debrief-case-brief__track-state--collapse {
+    display: inline;
+}
+
+details.debrief-case-brief__track--disclosure[open] > summary {
+    border-block-end: 1px solid var(--canvas-rule);
+}
+
+details.debrief-case-brief__track--disclosure > ol {
+    padding: 1rem 1rem 1rem 2.35rem;
+}
+
+.debrief-case-brief__track > .txt-h4 {
+    margin-block: 0 .75rem;
+}
+
+.debrief-case-brief__track > ol,
+.debrief-case-brief__track-list {
+    display: grid;
+    gap: .75rem;
+    margin: 0;
+    padding-inline-start: 1.35rem;
+}
+
+.debrief-case-brief__track > ol li,
+.debrief-case-brief__track-list li {
+    padding-inline-start: .2rem;
+}
+
+@media screen and (min-width: 46.0625rem) {
+    .debrief-case-brief__tracks {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 @media print {
     .track-index {
         break-inside: avoid;
+    }
+
+    .debrief-case-brief__tracks {
+        display: block;
+    }
+
+    .debrief-case-brief__track {
+        break-inside: avoid;
+        margin-block-start: 1rem;
+    }
+
+    details.debrief-case-brief__track--disclosure {
+        break-inside: auto;
+    }
+
+    details.debrief-case-brief__track--disclosure:not([open]) > :not(summary) {
+        display: block !important;
+    }
+
+    details.debrief-case-brief__track--disclosure > summary {
+        border-block-end: 1px solid #000;
+        color: #000;
+        cursor: default;
+        display: block;
+    }
+
+    details.debrief-case-brief__track--disclosure > ol li {
+        break-inside: avoid;
+    }
+
+    .debrief-case-brief__track-state {
+        display: none !important;
     }
 }

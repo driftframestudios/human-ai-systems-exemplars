@@ -1,0 +1,125 @@
+{
+  "@context": {
+    "na": "https://schemas.driftframestudios.org/na#",
+    "ca": "https://schemas.driftframestudios.org/ca#",
+    "ra": "https://schemas.driftframestudios.org/ra#",
+    "pp": "https://schemas.driftframestudios.org/pp#",
+    "is": "https://schemas.driftframestudios.org/is#",
+    "schema": "https://schema.org/",
+    "id": "@id",
+    "type": "@type",
+    "name": "schema:name",
+    "description": "schema:description",
+    "NarrativeSamplingSurface": "na:NarrativeSamplingSurface",
+    "VerbalizedSamplingSystem": "na:VerbalizedSamplingSystem",
+    "VerbalizedSamplingSnapshot": "na:VerbalizedSamplingSnapshot",
+    "ProbabilityOutcomeDefinition": "na:ProbabilityOutcomeDefinition",
+    "SamplingConditionProfile": "na:SamplingConditionProfile",
+    "SamplingPromptCapsule": "na:SamplingPromptCapsule",
+    "SamplingRun": "na:SamplingRun",
+    "PossibilitySet": "na:PossibilitySet",
+    "PossibilitySetVersion": "na:PossibilitySetVersion",
+    "PossibilityCandidate": "na:PossibilityCandidate",
+    "ProbabilityEstimate": "na:ProbabilityEstimate",
+    "DimensionDefinition": "na:DimensionDefinition",
+    "CandidateDimensionAssessment": "na:CandidateDimensionAssessment",
+    "DimensionalFitAssessment": "na:DimensionalFitAssessment",
+    "StatisticalFitAssessment": "na:StatisticalFitAssessment",
+    "MultiplicityCoverageAssessment": "na:MultiplicityCoverageAssessment",
+    "SamplingVariant": "na:SamplingVariant",
+    "SamplingComparison": "na:SamplingComparison",
+    "ProbabilityShiftHypothesis": "na:ProbabilityShiftHypothesis",
+    "MethodologicalGap": "na:MethodologicalGap",
+    "SamplingDecisionRecord": "na:SamplingDecisionRecord",
+    "SamplingRouteRecord": "na:SamplingRouteRecord",
+    "SamplingReceipt": "na:SamplingReceipt",
+    "SamplingReturnRecord": "na:SamplingReturnRecord",
+    "CoreArchitectureCard": "ca:CoreArchitectureCard",
+    "ArchitectureFamily": "ca:ArchitectureFamily",
+    "ResearchAtlas": "ra:ResearchAtlas",
+    "PractitionerJudgmentProbe": "pp:PractitionerJudgmentProbe",
+    "TerminologicalRegistry": "is:TerminologicalRegistry",
+    "samplingSystemRef": {
+      "@id": "na:samplingSystemRef",
+      "@type": "@id"
+    },
+    "samplingSnapshotRef": {
+      "@id": "na:samplingSnapshotRef",
+      "@type": "@id"
+    },
+    "outcomeDefinitionRef": {
+      "@id": "na:outcomeDefinitionRef",
+      "@type": "@id"
+    },
+    "conditionProfileRef": {
+      "@id": "na:conditionProfileRef",
+      "@type": "@id"
+    },
+    "promptCapsuleRef": {
+      "@id": "na:promptCapsuleRef",
+      "@type": "@id"
+    },
+    "samplingRunRef": {
+      "@id": "na:samplingRunRef",
+      "@type": "@id"
+    },
+    "possibilitySetRef": {
+      "@id": "na:possibilitySetRef",
+      "@type": "@id"
+    },
+    "possibilityCandidateRef": {
+      "@id": "na:possibilityCandidateRef",
+      "@type": "@id"
+    },
+    "dimensionRef": {
+      "@id": "na:dimensionRef",
+      "@type": "@id"
+    },
+    "gapRef": {
+      "@id": "na:gapRef",
+      "@type": "@id"
+    },
+    "comparisonRef": {
+      "@id": "na:comparisonRef",
+      "@type": "@id"
+    },
+    "decisionRecordRef": {
+      "@id": "na:decisionRecordRef",
+      "@type": "@id"
+    },
+    "routeTargetRef": {
+      "@id": "na:routeTargetRef",
+      "@type": "@id"
+    },
+    "coreArchitectureCardRef": {
+      "@id": "ca:coreArchitectureCardRef",
+      "@type": "@id"
+    },
+    "architectureFamilyRef": {
+      "@id": "ca:architectureFamilyRef",
+      "@type": "@id"
+    },
+    "candidateSetSemantics": "na:candidateSetSemantics",
+    "estimate": "na:estimate",
+    "estimateKind": "na:estimateKind",
+    "measurementStatus": "na:measurementStatus",
+    "calibrationState": "na:calibrationState",
+    "confidence": "na:confidence",
+    "otherOrTailMass": "na:otherOrTailMass",
+    "probabilityRole": "na:probabilityRole",
+    "decisionState": "na:decisionState",
+    "gapType": "na:gapType",
+    "gapUtility": "na:gapUtility",
+    "currentHandling": "na:currentHandling",
+    "expectedDirection": "na:expectedDirection",
+    "causalStatus": "na:causalStatus",
+    "solutionOrigin": "ca:solutionOrigin",
+    "implementationOrigin": "ca:implementationOrigin",
+    "recoveryOrigin": "ca:recoveryOrigin",
+    "sourceBand": "ca:sourceBand",
+    "sourceOfTruthBand": "ca:sourceOfTruthBand",
+    "publicationStatus": "ca:publicationStatus",
+    "valueOrigin": "ca:valueOrigin",
+    "reviewState": "ca:reviewState"
+  }
+}

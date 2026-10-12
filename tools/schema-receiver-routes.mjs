@@ -1,5 +1,10 @@
 export const schemaReceiverRoutes = Object.freeze([
   {
+    source: "collaboration/investment-analysis/state.schema.json",
+    id: "https://schemas.vik.guru/investment-analysis/0.2.0/state.schema.json",
+    receiverPath: "investment-analysis/0.2.0/state.schema.json"
+  },
+  {
     source: "schemas/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
     id: "https://schemas.vik.guru/prototype-exemplars/1.0.0/prototype-exemplars.schema.json",
     receiverPath: "prototype-exemplars/1.0.0/prototype-exemplars.schema.json"
@@ -58,5 +63,25 @@ export const schemaReceiverRoutes = Object.freeze([
     source: "context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json",
     id: "https://schemas.radiantnull.com/context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json",
     receiverPath: "context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json"
+  },
+  {
+    source: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/narrative-capsule-composition.schema.v0.1.json",
+    id: "https://schemas.driftframestudios.org/na/schema/narrative-capsule-composition.schema.v0.1.json",
+    receiverPath: "na/schema/narrative-capsule-composition.schema.v0.1.json"
+  },
+  {
+    source: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/semantic-sampling-tableau/terminology-exploration/narrative-sampling-tableau-state.schema.v0.1.json",
+    id: "https://schemas.driftframestudios.org/na/schema/narrative-sampling-tableau-state.schema.v0.1.json",
+    receiverPath: "na/schema/narrative-sampling-tableau-state.schema.v0.1.json"
+  },
+  {
+    source: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/technology-fit-sampling-tableau-state.schema.v0.1.json",
+    id: "https://schemas.driftframestudios.org/na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json",
+    receiverPath: "na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json"
+  },
+  {
+    source: "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger.schema.v0.1.json",
+    id: "https://schemas.driftframestudios.org/fg/schema/threadkeeping-ledger.schema.v0.1.json",
+    receiverPath: "fg/schema/threadkeeping-ledger.schema.v0.1.json"
   }
 ]);

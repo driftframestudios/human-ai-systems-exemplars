@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" role="img" aria-labelledby="capital-map-title capital-map-desc">
   <title id="capital-map-title">Staged capital map for the field inspection harness</title>
-  <desc id="capital-map-desc">A prospective planning map separates four capital stages: operating baseline and architecture, a dealer bridge with Clappia retained, a native offline field application, and production hardening. It shows a full planning envelope of 95 to 167 thousand US dollars, a Year 1 envelope of 125 to 230 thousand, a separate reserve near 15 percent, and a near-20-thousand opening that buys a bounded baseline or bridge slice while later platform envelopes remain visible.</desc>
+  <desc id="capital-map-desc">A current planning map separates four capital stages: operating baseline and architecture, a dealer bridge with Clappia retained, a native offline field application, and production hardening. It shows a full planning envelope of 95 to 167 thousand US dollars, a Year 1 envelope of 125 to 230 thousand, a separate reserve near 15 percent, and a near-20-thousand opening that buys a bounded baseline or bridge slice while later platform envelopes remain visible.</desc>
   <defs>
     <pattern id="capital-grid" width="28" height="28" patternUnits="userSpaceOnUse">
       <path d="M28 0H0V28" fill="none" stroke="#2855f3" stroke-width="1" opacity="0.08"/>
@@ -32,12 +32,12 @@
 
   <g class="sans">
     <text x="72" y="88" class="title ink">Staged capital: buy the baseline, continuity, field reliability, then scale</text>
-    <text x="72" y="124" class="subtitle muted">Prospective planning bands separate the first useful tranche from the full field-operating platform and its Year 1 ownership.</text>
-    <g transform="translate(1306 64)" aria-label="Prospective planning status">
+    <text x="72" y="124" class="subtitle muted">Current planning bands separate the first useful tranche from the full field-operating platform and its Year 1 ownership.</text>
+    <g transform="translate(1306 64)" aria-label="Current planning status">
       <rect x="7" y="7" width="222" height="62" rx="16" fill="#17345f" aria-hidden="true"/>
       <rect width="222" height="62" rx="16" fill="#d9efea" stroke="#17345f" stroke-width="2"/>
-      <text x="111" y="26" text-anchor="middle" class="eyebrow sea">PROSPECTIVE BANDS</text>
-      <text x="111" y="48" text-anchor="middle" class="tiny muted">PROSPECTIVE PLANNING BANDS</text>
+      <text x="111" y="26" text-anchor="middle" class="eyebrow sea">CURRENT BANDS</text>
+      <text x="111" y="48" text-anchor="middle" class="tiny muted">CURRENT PLANNING BANDS</text>
     </g>
 
     <g role="group" aria-labelledby="capital-envelopes-title">

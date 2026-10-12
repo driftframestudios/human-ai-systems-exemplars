@@ -1,0 +1,1726 @@
+{
+  "version": 1,
+  "root": "context-canvas-project-surface/context-canvas",
+  "policy": "Native table topics, column-heading rows, record identities, and every th/td carry supplemental labels. Captions, native headers, literal values, and source generators retain semantic authority.",
+  "exclusions": {
+    "distributed-inspection-harness.html": "parent-owned top-level HTML",
+    "narrative-execution-gap-research-atlas.html": "parent-owned top-level HTML"
+  },
+  "nested_owners": "All prototypes/ and iframe documents remain with their canonical generator, packaging, and parent owners. The hiring collaboration instrument is parent-owned.",
+  "geometry_receiver": "Parent combined-source browser campaign; metadata consumers are a separate observation.",
+  "pages": {
+    "404.html": {
+      "tables": [],
+      "external_scripts": [],
+      "embedded_documents": 0,
+      "standing": "no native tables or owned table generators",
+      "changed": false
+    },
+    "ai-systems.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Four introductory instruments routed by cognitive move, use, changed ability, and Evidence Boundary",
+          "shape": "simple",
+          "rows": 5,
+          "th": 9,
+          "td": 16
+        },
+        {
+          "table": 2,
+          "topic": "Eight conditions to inspect beside an AI collaboration instrument",
+          "shape": "simple",
+          "rows": 9,
+          "th": 11,
+          "td": 16
+        },
+        {
+          "table": 3,
+          "topic": "Nine Registry readings organized by cognitive move, use, changed ability, and Evidence Boundary",
+          "shape": "simple",
+          "rows": 10,
+          "th": 14,
+          "td": 36
+        },
+        {
+          "table": 4,
+          "topic": "Thirteen constraints translated into decision use and inspectable receipts",
+          "shape": "simple",
+          "rows": 14,
+          "th": 16,
+          "td": 26
+        },
+        {
+          "table": 5,
+          "topic": "Investment shifts from artifact volume toward decision quality and operating continuity",
+          "shape": "simple",
+          "rows": 8,
+          "th": 11,
+          "td": 21
+        },
+        {
+          "table": 6,
+          "topic": "Each population receives the view required for its decision and authority",
+          "shape": "simple",
+          "rows": 9,
+          "th": 12,
+          "td": 24
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 2,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "benchmark-orientation.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Three grader families and the conditions they can carry",
+          "shape": "simple",
+          "rows": 4,
+          "th": 7,
+          "td": 9
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "choose-your-player-humatics.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "The PRD terms that pulled the product toward a role and site architecture",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 2,
+          "topic": "Where each function invested, and what the shared model protected",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 3,
+          "topic": "What the historical work established, and what the current implementation examples make inspectable",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 4,
+          "topic": "When another team can carry these moves",
+          "shape": "simple",
+          "rows": 6,
+          "th": 8,
+          "td": 10
+        },
+        {
+          "table": 5,
+          "topic": "Five populations reading the same site-operating model",
+          "shape": "simple",
+          "rows": 6,
+          "th": 10,
+          "td": 20
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "collaboration-skills.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Four forms and their collaboration boundaries",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 2,
+          "topic": "Public-ready portable skill contracts and the results they receive",
+          "shape": "simple",
+          "rows": 24,
+          "th": 26,
+          "td": 46
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "concept-nursery.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Six moves and their collaboration receipts",
+          "shape": "simple",
+          "rows": 7,
+          "th": 9,
+          "td": 12
+        },
+        {
+          "table": 2,
+          "topic": "Where Shared Surface Priority Map lands against current practice",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 3,
+          "topic": "Concept Nursery register",
+          "shape": "empty-register",
+          "rows": 2,
+          "th": 4,
+          "td": 1
+        },
+        {
+          "table": 4,
+          "topic": "How the Nursery changes collaboration before final placement",
+          "shape": "simple",
+          "rows": 7,
+          "th": 10,
+          "td": 18
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 1,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "conditioning-field.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Table 1. Complete semantic equivalent of the interactive prompt ladder",
+          "shape": "simple",
+          "rows": 6,
+          "th": 11,
+          "td": 25
+        },
+        {
+          "table": 2,
+          "topic": "Table 2. Prompt-side conditions needing repair and their positive replacement states",
+          "shape": "simple",
+          "rows": 6,
+          "th": 10,
+          "td": 20
+        },
+        {
+          "table": 3,
+          "topic": "Table 3. Semantic equivalent of the worked candidate field",
+          "shape": "simple",
+          "rows": 4,
+          "th": 7,
+          "td": 9
+        },
+        {
+          "table": 4,
+          "topic": "Table 4. Human-reference checks for consequential artifact inputs",
+          "shape": "simple",
+          "rows": 6,
+          "th": 8,
+          "td": 10
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "core-architectures-orientation-index.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Family, member architectures, entry question, and common landmark",
+          "shape": "simple",
+          "rows": 8,
+          "th": 11,
+          "td": 21
+        },
+        {
+          "table": 2,
+          "topic": "Where HEART Chart lands against current practice",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 3,
+          "topic": "Example strain-to-architecture routes",
+          "shape": "simple",
+          "rows": 7,
+          "th": 10,
+          "td": 18
+        },
+        {
+          "table": 4,
+          "topic": "Work shifts, capabilities, sustaining investment, and receipts",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 5,
+          "topic": "Population- and system-specific views, contributions, and evaluation questions",
+          "shape": "simple",
+          "rows": 7,
+          "th": 10,
+          "td": 18
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 2,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "cross-platform-collaboration-cycle.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Current specification habits and the concrete-example position",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 2,
+          "topic": "One complete turn and its durable receipt",
+          "shape": "simple",
+          "rows": 8,
+          "th": 11,
+          "td": 21
+        },
+        {
+          "table": 3,
+          "topic": "What each surface preserves and where durable meaning lives",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 4,
+          "topic": "Receiving conditions and minimum useful handoff",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 5,
+          "topic": "Investment moves from handoff narration toward durable resumption",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 2,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "debriefs.html": {
+      "tables": [],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js",
+        "debriefs-catalog.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "no native tables or owned table generators",
+      "changed": false
+    },
+    "ehr-discrete-genomic-result.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "The implementation separates carrier, identity, clinical landing, and recovery",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 2,
+          "topic": "The result becomes useful when the surrounding operating work changes with it",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "ehr-interface-engine-replatform.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Each channel earns promotion through observable equivalence and recoverable operation",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 2,
+          "topic": "The migration converts hidden operating knowledge into a shared recovery system",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "ehr-pgx-alert-failure.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Delivery and adoption are separate contracts with different owners and failure states",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 2,
+          "topic": "The durable intervention is an alert-stewardship operating model",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "ehr-three-front-doors.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Every front door receives the same clinical contract and its own operational controls",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 2,
+          "topic": "Portfolio scale depends on shared capability and explicit local stewardship",
+          "shape": "simple",
+          "rows": 7,
+          "th": 10,
+          "td": 18
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "ehr-two-charts-one-result.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Shared clinical meaning stays central while target responsibilities remain local",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 2,
+          "topic": "The pivot changes ownership as well as system shape",
+          "shape": "simple",
+          "rows": 7,
+          "th": 10,
+          "td": 18
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "exemplar-index-landing.html": {
+      "tables": [],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "no native tables or owned table generators",
+      "changed": false
+    },
+    "field-inspection-harness-replatform.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "The five-station field pipeline and its durable handoff",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 2,
+          "topic": "Target components, their system responsibility, and the boundary each preserves",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 3,
+          "topic": "Per-entity resolution keeps the conflict as small as the decision",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 4,
+          "topic": "Current staged-capital bands and the operating result each tranche buys",
+          "shape": "capital-summary",
+          "rows": 7,
+          "th": 11,
+          "td": 22
+        },
+        {
+          "table": 5,
+          "topic": "The production build and the first operating year answer different investment questions",
+          "shape": "simple",
+          "rows": 4,
+          "th": 7,
+          "td": 9
+        },
+        {
+          "table": 6,
+          "topic": "Executive release conditions preserve optionality when proof is incomplete",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 7,
+          "topic": "The same state carries a named authority, bounded proof, and recoverable next action",
+          "shape": "simple",
+          "rows": 7,
+          "th": 11,
+          "td": 24
+        },
+        {
+          "table": 8,
+          "topic": "Decisions, changed abilities, and absorbed work by population",
+          "shape": "simple",
+          "rows": 8,
+          "th": 12,
+          "td": 28
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "fmi-clinical-trial-coordination.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Six groups brought distinct operational knowledge into one shared coordination model",
+          "shape": "simple",
+          "rows": 7,
+          "th": 10,
+          "td": 18
+        },
+        {
+          "table": 2,
+          "topic": "Each implementation piece carried a distinct responsibility",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 3,
+          "topic": "Changed work, purchased ability, and sustained investment",
+          "shape": "simple",
+          "rows": 8,
+          "th": 12,
+          "td": 28
+        },
+        {
+          "table": 4,
+          "topic": "Decisions, changed work, residual responsibility, and investment by population",
+          "shape": "simple",
+          "rows": 9,
+          "th": 13,
+          "td": 32
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "fmi-lims-eln-replatforming.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Where each group created, transformed, inspected, or approved the shared objects",
+          "shape": "simple",
+          "rows": 7,
+          "th": 12,
+          "td": 30
+        },
+        {
+          "table": 2,
+          "topic": "Each failure names a replacement requirement",
+          "shape": "simple",
+          "rows": 10,
+          "th": 11,
+          "td": 9
+        },
+        {
+          "table": 3,
+          "topic": "How the initiative changed work, coordination, and investment",
+          "shape": "simple",
+          "rows": 8,
+          "th": 10,
+          "td": 14
+        },
+        {
+          "table": 4,
+          "topic": "HEART measurement candidates for the re-platforming work",
+          "shape": "simple",
+          "rows": 4,
+          "th": 7,
+          "td": 9
+        },
+        {
+          "table": 5,
+          "topic": "Where each fork moved work, risk, and cost",
+          "shape": "simple",
+          "rows": 8,
+          "th": 12,
+          "td": 28
+        },
+        {
+          "table": 6,
+          "topic": "What the constellation makes inspectable for enterprise evaluation",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 7,
+          "topic": "What each population must be able to perceive before a platform claim becomes decision-grade",
+          "shape": "simple",
+          "rows": 5,
+          "th": 9,
+          "td": 16
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 2,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "genomic-viewer-replatforming.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "How each Solution Architecture finding becomes an Implementation Architecture move",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 2,
+          "topic": "Strategy dimensions and qualitative 2026 assessment",
+          "shape": "simple",
+          "rows": 6,
+          "th": 8,
+          "td": 10
+        },
+        {
+          "table": 3,
+          "topic": "Industry disagreements translated into inspectable component behavior",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 4,
+          "topic": "What the re-platforming investment enabled",
+          "shape": "simple",
+          "rows": 6,
+          "th": 10,
+          "td": 20
+        },
+        {
+          "table": 5,
+          "topic": "Prior work, changed work, and remaining responsibility by population",
+          "shape": "simple",
+          "rows": 8,
+          "th": 12,
+          "td": 28
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 1,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "grammar-family.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "From stable vocabulary to visitor-owned runtime",
+          "shape": "simple",
+          "rows": 10,
+          "th": 13,
+          "td": 27
+        },
+        {
+          "table": 2,
+          "topic": "How Strategy Canvas compares with current practice",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 3,
+          "topic": "Opening, track, beat spine, time treatment, depth or spillover, and close",
+          "shape": "simple",
+          "rows": 9,
+          "th": 15,
+          "td": 48
+        },
+        {
+          "table": 4,
+          "topic": "Authoring investment labels, abilities purchased, and release receipts",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 5,
+          "topic": "Population- and system-specific composition needs and authoring consequences",
+          "shape": "simple",
+          "rows": 7,
+          "th": 10,
+          "td": 18
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 1,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "hiring-surfaces-talent-agent-intake.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "External vocabulary, receiving audience, and decision emphasis by tier",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 2,
+          "topic": "Vendor descriptions reviewed in public material from 2025–2026",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 3,
+          "topic": "Mechanism-attached evidence, authority, and operating response",
+          "shape": "simple",
+          "rows": 8,
+          "th": 11,
+          "td": 21
+        },
+        {
+          "table": 4,
+          "topic": "How the first surface and the depth layer divide their work",
+          "shape": "simple",
+          "rows": 7,
+          "th": 10,
+          "td": 18
+        },
+        {
+          "table": 5,
+          "topic": "Instruction forms and the selection state each one supplies",
+          "shape": "simple",
+          "rows": 4,
+          "th": 7,
+          "td": 9
+        },
+        {
+          "table": 6,
+          "topic": "Targeted displacement in the Hiring Surfaces matched pair",
+          "shape": "simple",
+          "rows": 5,
+          "th": 9,
+          "td": 16
+        },
+        {
+          "table": 7,
+          "topic": "Work shifts, changed abilities, sustaining investment, and material receipts",
+          "shape": "simple",
+          "rows": 8,
+          "th": 11,
+          "td": 21
+        },
+        {
+          "table": 8,
+          "topic": "Population- and system-specific views, decisions, operations, authority boundaries, and evaluative questions",
+          "shape": "simple",
+          "rows": 13,
+          "th": 16,
+          "td": 36
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 1,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "index.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Cross-Functional Investment Studio: static counterpart to the editable analysis",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 2,
+          "topic": "I’ve worked as…",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 3,
+          "topic": "Prompt-side conditions for a recoverable human and AI handoff",
+          "shape": "simple",
+          "rows": 6,
+          "th": 8,
+          "td": 10
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js",
+        "about-media.js"
+      ],
+      "embedded_documents": 4,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "initiative-costing.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Choose a costing method by the decision it must make legible",
+          "shape": "simple",
+          "rows": 9,
+          "th": 12,
+          "td": 24
+        },
+        {
+          "table": 2,
+          "topic": "The minimum anatomy of a decision-bearing cost figure",
+          "shape": "simple",
+          "rows": 11,
+          "th": 13,
+          "td": 20
+        },
+        {
+          "table": 3,
+          "topic": "Field Inspection Harness re-platform - ongoing staged-capital reading",
+          "shape": "simple",
+          "rows": 7,
+          "th": 11,
+          "td": 24
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 1,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "maps-evaluations.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "What the public 2023 ARA record supports",
+          "shape": "simple",
+          "rows": 6,
+          "th": 8,
+          "td": 10
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "metadata-blocks.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Where Threadkeeping lands against current practice",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 2,
+          "topic": "Required content and visitor use for the six-field scan",
+          "shape": "simple",
+          "rows": 7,
+          "th": 10,
+          "td": 18
+        },
+        {
+          "table": 3,
+          "topic": "Validation checks for scan and regulatory content",
+          "shape": "simple",
+          "rows": 7,
+          "th": 9,
+          "td": 12
+        },
+        {
+          "table": 4,
+          "topic": "Work shifts, sustained stewardship, and material receipts",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 5,
+          "topic": "Population- and system-specific views, contributions, and authority boundaries",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 1,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "multilingual-clinical-vocabulary-practice.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Shared objects keep learner choice connected to meaning and continuity",
+          "shape": "simple",
+          "rows": 6,
+          "th": 8,
+          "td": 10
+        },
+        {
+          "table": 2,
+          "topic": "The central relationship changes from system-directed switching to learner-owned projection",
+          "shape": "simple",
+          "rows": 6,
+          "th": 7,
+          "td": 5
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "planning-surface.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Current service-planning habits and the layered-topology position",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 2,
+          "topic": "Three decisions that make later reading work navigable",
+          "shape": "simple",
+          "rows": 4,
+          "th": 7,
+          "td": 9
+        },
+        {
+          "table": 3,
+          "topic": "Default area levels and the job each one performs",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 4,
+          "topic": "How the planning surface changes enterprise collaboration",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 5,
+          "topic": "Maintenance that keeps the area useful",
+          "shape": "simple",
+          "rows": 7,
+          "th": 10,
+          "td": 18
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 1,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "poda.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Where PODA lands against current practice",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 2,
+          "topic": "Conditions that make a PODA ready to carry forward",
+          "shape": "simple",
+          "rows": 6,
+          "th": 8,
+          "td": 10
+        },
+        {
+          "table": 3,
+          "topic": "From an unframed request to a sustained organizational ability",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 4,
+          "topic": "Population- and system-specific uses of the shared PODA frame",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 1,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "prompt-side-conditions-practice.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Table 1: Open Lesson Field stages and observable prompt-capsule changes",
+          "shape": "simple",
+          "rows": 8,
+          "th": 10,
+          "td": 14
+        },
+        {
+          "table": 2,
+          "topic": "Table 2: Nine sanitation moves and the condition each one creates",
+          "shape": "simple",
+          "rows": 10,
+          "th": 12,
+          "td": 18
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 1,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "readable-tables-reusable-evidence.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Choose the observation that can answer the changed question",
+          "shape": "simple",
+          "rows": 5,
+          "th": 7,
+          "td": 8
+        },
+        {
+          "table": 2,
+          "topic": "Research snapshot: nine recorded terminal dispositions as of 3 October 2026",
+          "shape": "simple",
+          "rows": 4,
+          "th": 6,
+          "td": 6
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "recoverable-enterprise-forms.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Each visible state carries an owner, meaning, and fitting continuation",
+          "shape": "simple",
+          "rows": 7,
+          "th": 9,
+          "td": 12
+        },
+        {
+          "table": 2,
+          "topic": "The original semantic questions continue across a larger service field",
+          "shape": "simple",
+          "rows": 6,
+          "th": 7,
+          "td": 5
+        },
+        {
+          "table": 3,
+          "topic": "The form contract makes each group’s responsibility inspectable",
+          "shape": "simple",
+          "rows": 7,
+          "th": 9,
+          "td": 12
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "registry-goal-fidelity-routing.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Three continuation practices and the state each carries forward",
+          "shape": "simple",
+          "rows": 4,
+          "th": 7,
+          "td": 9
+        },
+        {
+          "table": 2,
+          "topic": "Five-stage recovery route with received state and exit condition",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 3,
+          "topic": "Recovery terrain, destination, repair, and received state",
+          "shape": "simple",
+          "rows": 6,
+          "th": 10,
+          "td": 20
+        },
+        {
+          "table": 4,
+          "topic": "Three scenarios expressed as complete recovery contracts",
+          "shape": "simple",
+          "rows": 4,
+          "th": 10,
+          "td": 18
+        },
+        {
+          "table": 5,
+          "topic": "Recovery stewardship, changed ability, and accountable receipt",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 1,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "resting-concepts.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Current handling of inactive pages and the recoverable-rest position",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 2,
+          "topic": "Seven moves and the information each one preserves",
+          "shape": "simple",
+          "rows": 8,
+          "th": 10,
+          "td": 14
+        },
+        {
+          "table": 3,
+          "topic": "Resting Concepts register",
+          "shape": "empty-register",
+          "rows": 2,
+          "th": 3,
+          "td": 1
+        },
+        {
+          "table": 4,
+          "topic": "How a recoverable resting place changes collaboration",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "shared-machinery.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Ten instruments routed by cognitive move, use, changed ability, and Evidence Boundary",
+          "shape": "simple",
+          "rows": 11,
+          "th": 15,
+          "td": 40
+        },
+        {
+          "table": 2,
+          "topic": "Ten instruments connected to their durable object, changed ability, and sustaining investment",
+          "shape": "simple",
+          "rows": 11,
+          "th": 15,
+          "td": 40
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "spatial-capture-collaborative-memory.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Every layer keeps one decision-useful relationship coherent",
+          "shape": "simple",
+          "rows": 6,
+          "th": 8,
+          "td": 10
+        },
+        {
+          "table": 2,
+          "topic": "Collaborative memory becomes useful through role-specific review and sustained support",
+          "shape": "simple",
+          "rows": 6,
+          "th": 8,
+          "td": 10
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "three-way-comparative-return.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Five comparative axes, using each case’s own vocabulary",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 2,
+          "topic": "Changed work, durable ability, sustained investment, and residual responsibility",
+          "shape": "simple",
+          "rows": 4,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 3,
+          "topic": "Competition includes other providers, internal development, and continuing the current workflow",
+          "shape": "simple",
+          "rows": 4,
+          "th": 7,
+          "td": 9
+        },
+        {
+          "table": 4,
+          "topic": "Current catalog context for the FMI comparison; product descriptions establish offering scope",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 5,
+          "topic": "Demonstrated mechanisms, portfolio contributions, material limits, and next tests",
+          "shape": "simple",
+          "rows": 4,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 6,
+          "topic": "Decisions, changed work, operating load, and signals across nine populations",
+          "shape": "grouped-populations",
+          "rows": 10,
+          "th": 9,
+          "td": 45
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "visualization-fidelity-atlas.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Current visualization habits and the operating position introduced by the Atlas",
+          "shape": "simple",
+          "rows": 7,
+          "th": 10,
+          "td": 18
+        },
+        {
+          "table": 2,
+          "topic": "Five inputs that determine the selection reason",
+          "shape": "simple",
+          "rows": 6,
+          "th": 8,
+          "td": 10
+        },
+        {
+          "table": 3,
+          "topic": "Source-native tier names and minimum deliverables",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 4,
+          "topic": "Recommended forms, conditional routes, and the reason each mapping holds",
+          "shape": "simple",
+          "rows": 11,
+          "th": 14,
+          "td": 30
+        },
+        {
+          "table": 5,
+          "topic": "Recorded SECOM line tests by observation window",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 6,
+          "topic": "Machine-failure frequency by product type: All product types; 10000 selected records. Rates are per 100 records.",
+          "shape": "simple",
+          "rows": 4,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 7,
+          "topic": "Machine-failure label counts by product type: All product types; 10000 selected records. Rates are per 100 records.",
+          "shape": "simple",
+          "rows": 4,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 8,
+          "topic": "Published Machine failure labels and the union of mode flags: All product types; 10000 records, 27 disagreements. Each record appears once.",
+          "shape": "simple",
+          "rows": 5,
+          "th": 10,
+          "td": 20
+        },
+        {
+          "table": 9,
+          "topic": "Machine-failure labels by speed and torque: All product types. 10000 records in 100 cells; 0 out-of-range records, including 0 failure labels. Bins include their lower edge; only the final bins include their upper edge. Out-of-range reasons may overlap: speed below 0, speed above 0, torque below 0, torque above 0.",
+          "shape": "simple",
+          "rows": 101,
+          "th": 105,
+          "td": 400
+        },
+        {
+          "table": 10,
+          "topic": "Selected public works by topic and evidence kind",
+          "shape": "simple",
+          "rows": 7,
+          "th": 11,
+          "td": 24
+        },
+        {
+          "table": 11,
+          "topic": "The Atlas moves effort toward readable, inspectable evidence",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js",
+        "atlas-gallery.js"
+      ],
+      "embedded_documents": 2,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "who-to-believe-reviews-platform.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Five adoption barriers the reweighting scheme had to make operable",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 2,
+          "topic": "What changed, how I know, and what remained",
+          "shape": "simple",
+          "rows": 6,
+          "th": 9,
+          "td": 15
+        },
+        {
+          "table": 3,
+          "topic": "How purpose, region, safety, and erasure changed product behavior",
+          "shape": "simple",
+          "rows": 5,
+          "th": 9,
+          "td": 16
+        },
+        {
+          "table": 4,
+          "topic": "How each implemented change affected work, investment, and enterprise consequence",
+          "shape": "simple",
+          "rows": 7,
+          "th": 10,
+          "td": 18
+        },
+        {
+          "table": 5,
+          "topic": "Conditions, requirements, and practices another team can reuse",
+          "shape": "simple",
+          "rows": 6,
+          "th": 8,
+          "td": 10
+        },
+        {
+          "table": 6,
+          "topic": "Decisions, changed work, investment, and useful information by population",
+          "shape": "simple",
+          "rows": 8,
+          "th": 12,
+          "td": 28
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js",
+        "who-to-believe-system-graph.js"
+      ],
+      "embedded_documents": 1,
+      "standing": "native labels complete",
+      "changed": true
+    },
+    "one-figure-several-readings.html": {
+      "tables": [
+        {
+          "table": 1,
+          "topic": "Recorded SECOM line tests by observation window",
+          "shape": "simple",
+          "rows": 5,
+          "th": 8,
+          "td": 12
+        },
+        {
+          "table": 2,
+          "topic": "What each receiving form makes available",
+          "shape": "simple",
+          "rows": 4,
+          "th": 6,
+          "td": 6
+        }
+      ],
+      "external_scripts": [
+        "visitor-boundary-contract.js",
+        "canvas-shell.js"
+      ],
+      "embedded_documents": 0,
+      "standing": "native labels complete",
+      "changed": true
+    }
+  },
+  "runtime": [
+    {
+      "source": "conditioning-field.html",
+      "function": "buildSemanticLadder",
+      "body": "ladderTableBody",
+      "table": 1,
+      "topic": "Table 1. Complete semantic equivalent of the interactive prompt ladder",
+      "fields": [
+        "Rung",
+        "Form",
+        "Full prompt",
+        "What it does well",
+        "What it leaves open",
+        "Verdict"
+      ],
+      "records": 5,
+      "identities": [
+        "Rung 01",
+        "Rung 02",
+        "Rung 03",
+        "Rung 04",
+        "Rung 05"
+      ],
+      "normalized_value_sha256": "94bc8a7b6a88a59ffc089923277d7fffac38dcd933ce56059c488e4aa829c5f0",
+      "standing": "Native/fallback label parity and each source-owned text version are checked. The single literal quotation-mark difference is intentionally retained by parent decision; browser observation remains separately owned.",
+      "text_differences": [
+        {
+          "row": 1,
+          "column": 5,
+          "field": "What it leaves open",
+          "native": "“Me” identifies the speaker, while the speaker’s task role and the relevance of speaker-specific context remain unstated. The object, receiving population, evidence, result state, and boundaries also remain implicit.",
+          "runtime": "‘Me’ identifies the speaker, while the speaker’s task role and the relevance of speaker-specific context remain unstated. The object, receiving population, evidence, result state, and boundaries also remain implicit.",
+          "standing": "Retain the native double quotation marks and runtime single quotation marks as literal authored text; the parent accepted this non-semantic difference."
+        }
+      ],
+      "runtime_value_sha256": "99d2e888016db3706937f651a48069be523ee9ae9abb9082d170f4dab1abb963",
+      "full_text_parity": "retained-literal-quotation"
+    },
+    {
+      "source": "conditioning-field.html",
+      "function": "buildFailureTable",
+      "body": "failureTableBody",
+      "table": 2,
+      "topic": "Table 2. Prompt-side conditions needing repair and their positive replacement states",
+      "fields": [
+        "Condition needing repair",
+        "Collaboration effect",
+        "Positive replacement state",
+        "Concrete example",
+        "Inspect"
+      ],
+      "records": 5,
+      "identities": [
+        "Prohibition-only constraint",
+        "Source text treated as authority",
+        "Context accumulation",
+        "Persona used as evidence",
+        "Single-answer reliance"
+      ],
+      "normalized_value_sha256": "88e87d727ea2afc87cfb29f7a192bf258d219c9b61045b948f7642a0ee9c69ef",
+      "standing": "Native authored examples supply authority for all five runtime records. Supplemental labels and normalized cell text agree; browser observation remains separately owned.",
+      "text_differences": [],
+      "runtime_value_sha256": "88e87d727ea2afc87cfb29f7a192bf258d219c9b61045b948f7642a0ee9c69ef",
+      "full_text_parity": "pass"
+    }
+  ],
+  "external_runtime_owners": {
+    "about-media.js": "Media enhancement; no table generation found in the inventoried source.",
+    "canvas-shell.js": "Navigation and footer enhancement; no table generation found in the inventoried source.",
+    "debriefs-catalog.js": "Catalog cards and sections; no table generation found in the inventoried source.",
+    "visitor-boundary-contract.js": "Boundary constants; no table generation found in the inventoried source.",
+    "atlas-gallery.js": "Manufacturing gallery controller; creates the enhanced selected-view table at runtime. Its four authored fallback tables retain separate static inventory entries.",
+    "atlas-gallery-model.js": "Pure manufacturing view state and exact-value row derivation; no DOM mutation. Shared by the authored gallery projection and runtime controller.",
+    "atlas-gallery-table.js": "Shared native-table markup projection from captions, column headers and row identities; runtime-only enhancement stays outside static table totals and the two conditioning body fixtures."
+  },
+  "counts": {
+    "owned_pages": 40,
+    "native_tables": 147,
+    "simple_tables": 143,
+    "explicit_tables": 4,
+    "native_labelled_elements": 5492,
+    "runtime_body_generators": 2
+  },
+  "rendering_affecting_native_additions": [],
+  "native_association_repairs": [
+    {
+      "source": "three-way-comparative-return.html",
+      "table": 6,
+      "id_attributes": 9,
+      "headers_attributes": 48,
+      "meaning": "Each population cell explicitly names its own case-group header and column header. Existing tags, captions, scopes, spans, and row bodies remain source-owned and byte-preserved.",
+      "observation": "Native association fixtures; parent may sample accessible associations in the final combined campaign."
+    }
+  ],
+  "special_meaning": {
+    "empty-register": "One spanning status cell preserves (none yet); it is not a fabricated record.",
+    "capital-summary": "Full build envelope spans the first three columns; its USD band and qualification stay in columns four and five.",
+    "grouped-populations": "Each of the three case vocabularies qualifies exactly three population records; column and group associations are explicit."
+  }
+}

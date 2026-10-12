@@ -1,6 +1,6 @@
 ---
 name: supportive-change-writing
-description: Shapes repository prose, plans, issues, READMEs, instructions, and change explanations in a negation-aware, warm, evidence-calibrated register. Applies during material revision of human-facing language.
+description: Shapes repository prose, plans, issues, READMEs, instructions, and change explanations in a negation-aware, warm, evidence-calibrated register. Classifies the job of a negation before revising it and validates consequential instruction changes in their receiving context. Applies during material revision of human-facing language.
 ---
 
 # Supportive change writing
@@ -10,7 +10,7 @@ description: Shapes repository prose, plans, issues, READMEs, instructions, and 
 - **What:** Declarative prose that makes the desired state, authority, evidence, and next move easy to identify.
 - **When:** A README, plan, issue, instruction, or change explanation receives material language work.
 - **Boundaries:** Source titles, quoted data, code identifiers, accessibility text, and governed language retain exact fidelity.
-- **Result:** Warm, direct, adult-to-adult writing with calibrated claims and a bounded revisable close.
+- **Result:** Warm, direct, adult-to-adult writing with calibrated claims, local boundaries, and a bounded revisable close.
 
 ## Conditional context
 
@@ -20,7 +20,7 @@ Substantial prose work begins with the register index:
 
 A directly linked tone-goal file supplies more specific register when the receiving surface calls for it.
 
-Load `../../../field-guide/src/semantic-attractors/Output Guidance Documentation — Semantic Attractor Design — Negation-Aware Instructions.md` when authored guidance, prompts, or instructions contain prohibitions, double negation, or recurring failure tokens; when a load-bearing boundary needs an affirmative replacement; when definitional or epistemic negation carries meaning; when a test, metric, pass state, absent assertion, or other signal needs its affirmative evidence boundary stated; when emoji, comments, docstrings, assertions, or identifiers communicate semantic guidance; or when observed output reproduces a concept that an instruction intended to suppress.
+Load `../../../field-guide/src/semantic-attractors/Output Guidance Documentation — Semantic Attractor Design — Negation-Aware Instructions.md` when authored guidance, prompts, or instructions contain prohibitions, double negation, or recurring failure tokens; when a load-bearing boundary needs an affirmative replacement; when definitional or epistemic negation carries meaning; when a test, metric, pass state, absent assertion, or other signal needs its affirmative evidence boundary stated; when emoji, comments, docstrings, assertions, or identifiers communicate semantic guidance; or when observed output reproduces a concept that an instruction intended to suppress. Use its ladder as a fitted authoring heuristic. Training-time, prompt-level, lexical, multilingual, embedding, and mechanistic evidence remain distinct, and the receiving task decides whether a consequential rewrite helps.
 
 ## Rules
 
@@ -28,13 +28,21 @@ Load `../../../field-guide/src/semantic-attractors/Output Guidance Documentation
 
 The first sentence names the state, ability, or relationship being created. Direct verbs and concrete nouns keep the intended pattern semantically prominent.
 
+### Rule: Classify before rewriting
+
+Identify whether a negation is a generative prohibition, hard safety/privacy/legal/compatibility boundary, definitional or epistemic qualifier, executable assertion, or source quotation. Revise generative prohibitions toward a direct target when the meaning survives. Preserve exact boundaries, executable semantics, and source fidelity.
+
 ### Rule: Boundaries carry a replacement
 
-Load-bearing safety, privacy, scope, or compatibility boundaries pair with the affirmative behavior that preserves agency and usefulness.
+Load-bearing safety, privacy, legal, scope, or compatibility boundaries pair with the affirmative behavior that preserves agency and usefulness. Keep the exclusion beside the claim or action it governs so partial context retains their relation.
 
 ### Rule: Constitutive language carries the semantic center
 
-A wholly positive constitutive predicate leads when available. A familiar lexicalized antonym supplies the next stable form. Explicit negation remains intact for hard boundaries, definitional terms, epistemic humility, and paired catalogs, with the desired state or replacement behavior adjacent.
+A wholly positive constitutive predicate leads when it supplies the clearest generative target. A familiar lexicalized antonym remains a valid compact form. Explicit negation remains intact for hard boundaries, definitional terms, epistemic humility, paired catalogs, source language, and executable conditions, with the desired state or replacement behavior adjacent. These forms are fitted choices rather than a universal performance ranking.
+
+### Rule: Consequential rewrites meet the receiver
+
+Validate a consequential polarity rewrite with the model, retrieval system, training process, interface, or runtime check that will receive it. Record the relevant configuration and representative observation. A stable style change needs only proportionate human review.
 
 ### Rule: Claims retain their evidence class
 
@@ -71,4 +79,4 @@ And the transfer boundary remains visible beside the recommendation
 
 ## Completion
 
-The prose is ready when the desired state leads, every retained negation carries material meaning or sits beside its affirmative replacement, and the responsible actor, evidence boundary, and next revisable move remain clear in one reading. The final polarity pass includes headings, bullets, table cells, and code-layer guidance.
+The prose is ready when the desired state leads, each negation has been classified, every retained negation carries material meaning or sits beside its affirmative replacement, and the responsible actor, evidence boundary, and next revisable move remain clear in one reading. Consequential instruction changes include a fitting receiving-task observation. The final polarity pass includes headings, bullets, table cells, and code-layer guidance.

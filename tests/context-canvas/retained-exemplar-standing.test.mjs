@@ -9,14 +9,6 @@ const contextRoot = resolve(
   "context-canvas-project-surface/context-canvas"
 );
 
-const sourceEraRoutes = [
-  "exemplar-brief-exploration.html",
-  "exemplar-gallery-list.html",
-  "exemplar-ideal-debrief.html",
-  "exemplar-maximal-debrief.html",
-  "exemplar-maximal-information-radiator.html"
-];
-
 async function jsonLd(route) {
   const source = await readFile(resolve(contextRoot, route), "utf8");
   const match = source.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u);
@@ -29,18 +21,6 @@ function webpage(graph, route) {
   assert.ok(node, `${route} should carry one page node`);
   return node;
 }
-
-test("retained non-profile exemplars state observed source-era standing", async () => {
-  for (const route of sourceEraRoutes) {
-    const node = webpage(await jsonLd(route), route);
-    assert.equal(node["cc:standing"]["cc:claimStatus"], "observed", route);
-    assert.equal(
-      node["cc:standing"]["cc:evidenceClass"],
-      "retained_source_era_surface",
-      route
-    );
-  }
-});
 
 test("the retained landing identifies its anonymous composite profile without a person claim", async () => {
   const route = "exemplar-index-landing.html";
@@ -55,4 +35,21 @@ test("the retained landing identifies its anonymous composite profile without a 
   );
   assert.equal(node.mainEntity["@id"], subjectId);
   assert.ok(graph["@graph"].some(item => item["@id"] === subjectId));
+});
+
+test("retired source-era exemplars and their preview asset stay absent", async () => {
+  const retired = [
+    "occipital.png",
+    "exemplar-gallery-list.html",
+    "exemplar-ideal-debrief.html",
+    "exemplar-maximal-debrief.html",
+    "exemplar-maximal-information-radiator.html",
+  ];
+  for (const entry of retired) {
+    await assert.rejects(
+      readFile(resolve(contextRoot, entry)),
+      error => error?.code === "ENOENT",
+      `${entry} should remain retired`,
+    );
+  }
 });

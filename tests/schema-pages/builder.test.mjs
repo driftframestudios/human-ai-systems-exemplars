@@ -18,6 +18,7 @@ import { dirname, relative, resolve, sep } from "node:path";
 import { before, test } from "node:test";
 
 import Ajv2020 from "ajv/dist/2020.js";
+import { chromium } from "@playwright/test";
 
 import {
   artifactAuthor,
@@ -27,12 +28,22 @@ import {
 } from "../../tools/attribution-contract.mjs";
 import { schemaReceiverRoutes } from "../../tools/schema-receiver-routes.mjs";
 import {
+  assertPublicationReceiverPaths,
+  schemaCompanionRoutes,
+} from "../../tools/schema-publication.mjs";
+import {
   assertExactFileInventory,
   assertPublicMaterial,
   assertTermsAbsent,
   resolvePublicationFile,
+  serializeJsonForHtmlScript,
 } from "../../tools/publication-boundary.mjs";
 import visitorBoundaryContract from "../../context-canvas-project-surface/context-canvas/visitor-boundary-contract.js";
+import {
+  assertTelemetry,
+  monitor,
+  startStaticServer,
+} from "../../tools/core-architecture-browser-helper.mjs";
 
 const run = promisify(execFile);
 const repositoryRoot = resolve(import.meta.dirname, "../..");
@@ -49,6 +60,7 @@ const copiedCarriers = [
   "attribution.yml",
   "AI-DATA-USE.md",
 ];
+const publicContactEmail = "consulting@vik.guru";
 
 function occurrenceCount(source, value) {
   return source.split(value).length - 1;
@@ -85,6 +97,39 @@ function htmlEscape(value) {
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
+}
+
+test("inline JSON remains data inside an HTML script element", () => {
+  const value = {
+    title: "Close </script><script>window.injected = true</script>",
+    separators: "line\u2028paragraph\u2029end",
+  };
+  const serialized = serializeJsonForHtmlScript(value);
+
+  assert.equal(serialized.includes("</script>"), false);
+  assert.equal(serialized.includes("\u2028"), false);
+  assert.equal(serialized.includes("\u2029"), false);
+  assert.ok(serialized.includes("\\u003c/script>"));
+  assert.ok(serialized.includes("\\u2028"));
+  assert.ok(serialized.includes("\\u2029"));
+  assert.deepEqual(JSON.parse(serialized), value);
+});
+
+function assertPrimaryNavigation(source, expectedLinks, currentLabel) {
+  const navigation = source.match(
+    /<nav class="site-nav" aria-label="Primary">[\s\S]*?<\/nav>/u,
+  )?.[0];
+  assert.ok(navigation, "the page exposes primary navigation");
+  const links = [...navigation.matchAll(/<a href="([^"]+)"([^>]*)>([^<]+)<\/a>/gu)]
+    .map((match) => ({ href: match[1], attributes: match[2], label: match[3] }));
+  assert.deepEqual(
+    links.map(({ href, label }) => ({ href, label })),
+    expectedLinks,
+  );
+  assert.deepEqual(
+    links.filter(({ attributes }) => attributes.includes('aria-current="page"')).map(({ label }) => label),
+    [currentLabel],
+  );
 }
 
 function parseSkillSource(source) {
@@ -173,6 +218,25 @@ test("the built registry resolves current authorship, license, and deployment me
   assert.ok(html.includes(`<meta name="twitter:url" content="${deploymentBase}/">`));
   assert.ok(!html.includes("schema-pages:deployment-metadata"));
   assert.ok(html.includes("<h1>Specifications people and software can read together.</h1>"));
+  assert.ok(html.includes('<h2 id="methods-title">Portable working methods</h2>'));
+  assertPrimaryNavigation(html, [
+    { href: "./", label: "Schema registry" },
+    { href: "skills/", label: "Skills" },
+    { href: "collaboration/", label: "Collaboration guide" },
+  ], "Schema registry");
+  assert.ok(html.includes('class="skip-link" href="#main-content"'));
+  assert.ok(html.includes('<main id="main-content" tabindex="-1">'));
+  for (const route of [
+    "skills/audit-anthropomorphic-cues/",
+    "skills/source-authority-mapping/",
+    "skills/evidence-grounded-research-spike/",
+    "skills/embedded-prototype-layout/",
+    "skills/semantic-table-design/",
+    "skills/",
+  ]) {
+    assert.ok(html.includes(`href="${route}"`), `${route} is prominent on the registry entry surface`);
+  }
+  assert.ok(html.includes('href="examples/readable-table-embedded-layout/"'));
 
   const structuredDataSource = html.match(
     /<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/u,
@@ -197,9 +261,124 @@ test("every declared receiver is discoverable and byte-identical to its source",
   }
 });
 
+test("every selected companion is byte-identical, public-safe, and available at its receiver path", async () => {
+  const allReceiverPaths = [
+    ...schemaReceiverRoutes.map(({ receiverPath }) => receiverPath),
+    ...schemaCompanionRoutes.map(({ receiverPath }) => receiverPath),
+  ];
+  assert.equal(new Set(allReceiverPaths).size, allReceiverPaths.length);
+
+  for (const route of schemaCompanionRoutes) {
+    const [sourceBytes, receiverBytes] = await Promise.all([
+      readFile(resolve(repositoryRoot, route.source)),
+      readFile(resolve(outputRoot, route.receiverPath)),
+    ]);
+    assert.deepEqual(receiverBytes, sourceBytes, route.receiverPath);
+    assert.doesNotThrow(() => assertPublicMaterial(sourceBytes, route.source));
+    if (/\.json(?:ld)?$/u.test(route.receiverPath)) {
+      assert.doesNotThrow(() => JSON.parse(sourceBytes.toString("utf8")), route.receiverPath);
+    }
+  }
+});
+
+test("the public Narrative and Threadkeeping examples exercise their selected contracts", async () => {
+  const cases = [
+    {
+      schemaPath: "na/schema/narrative-capsule-composition.schema.v0.1.json",
+      examplePath: "na/schema/narrative-capsule-composition.example.public.v0.1.json",
+      missingProperty: "id",
+    },
+    {
+      schemaPath: "na/schema/narrative-sampling-tableau-state.schema.v0.1.json",
+      examplePath: "na/schema/narrative-sampling-tableau-state.example.public.v0.1.json",
+      missingProperty: "id",
+    },
+    {
+      schemaPath: "na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json",
+      examplePath: "na/schema/technology-fit-sampling-tableau-state.example.public.v0.1.json",
+      missingProperty: "id",
+    },
+    {
+      schemaPath: "fg/schema/threadkeeping-ledger.schema.v0.1.json",
+      examplePath: "fg/schema/threadkeeping-ledger.example.public.v0.1.json",
+      missingProperty: "artifactIdentity",
+    },
+  ];
+  for (const entry of cases) {
+    const [schemaSource, exampleSource] = await Promise.all([
+      readFile(resolve(outputRoot, entry.schemaPath), "utf8"),
+      readFile(resolve(outputRoot, entry.examplePath), "utf8"),
+    ]);
+    const validate = new Ajv2020({
+      strict: true,
+      allErrors: true,
+      validateFormats: false,
+      useDefaults: false,
+      removeAdditional: false,
+      coerceTypes: false,
+    }).compile(JSON.parse(schemaSource));
+    const example = JSON.parse(exampleSource);
+    assert.equal(validate(example), true, JSON.stringify(validate.errors, null, 2));
+    assert.doesNotThrow(() => assertTermsAbsent(exampleSource, [
+      "/Users/",
+      "file:",
+      "private_working",
+      "AI collaborator",
+      "human_ai_collaborative",
+      "@driftframe/",
+      "~loamthread",
+      "notion.so",
+      "notion.site",
+    ], entry.examplePath));
+
+    const invalid = structuredClone(example);
+    delete invalid[entry.missingProperty];
+    assert.equal(validate(invalid), false, `${entry.examplePath} retains its required-field boundary`);
+    assert.ok(validate.errors.some(({ keyword, params }) =>
+      keyword === "required" && params.missingProperty === entry.missingProperty));
+  }
+
+  const semantic = JSON.parse(await readFile(
+    resolve(outputRoot, "na/schema/narrative-sampling-tableau-state.example.public.v0.1.json"),
+    "utf8",
+  ));
+  assert.equal(semantic.surface.publicationStatus, "public_safe_example");
+  assert.equal(semantic.surface.reviewState, "public_reviewed");
+  assert.equal(semantic.boundary.visibility, "public_safe");
+  assert.equal(semantic.boundary.privateLocatorsIncluded, false);
+  assert.equal(semantic.boundary.unreviewedInferenceIncludedInPublic, false);
+  assert.equal(semantic.boundary.sourceLocalAnnotationIncludedInPublic, false);
+});
+
 test("the generated artifact carries the reviewed custom domain", async () => {
   const customDomain = (await readFile(resolve(outputRoot, "CNAME"), "utf8")).trim();
   assert.equal(customDomain, new URL(deploymentBase).hostname);
+});
+
+test("schema discovery separates frozen identity, host retrieval, and accepted source", async () => {
+  const catalog = JSON.parse(await readFile(resolve(outputRoot, "schema-catalog.json"), "utf8"));
+  const release = JSON.parse(await readFile(resolve(outputRoot, "release.json"), "utf8"));
+  const skills = JSON.parse(await readFile(resolve(skillsOutputRoot, "catalog.json"), "utf8"));
+  assert.equal(catalog.sourceRevision, release.sourceRevision);
+  assert.equal(release.sourceRevision, skills.sourceRevision);
+  assert.equal(catalog.contracts.length, schemaReceiverRoutes.length);
+  for (const contract of catalog.contracts) {
+    const bytes = await readFile(resolve(outputRoot, contract.path));
+    assert.equal(contract.canonicalId, JSON.parse(bytes).$id);
+    assert.equal(contract.retrievalUrl, `${deploymentBase}/${contract.path}`);
+    assert.equal(contract.sha256, sha256(bytes));
+    assert.equal(contract.sizeBytes, bytes.length);
+    assert.ok(contract.dependencyIdentities.every((id) => catalog.contracts.some((entry) => entry.canonicalId === id)));
+  }
+  const investment = catalog.contracts.find((entry) => entry.path === "investment-analysis/0.2.0/state.schema.json");
+  assert.ok(investment);
+  const schema = JSON.parse(await readFile(resolve(outputRoot, investment.path), "utf8"));
+  const example = JSON.parse(await readFile(resolve(outputRoot, "investment-analysis/0.2.0/example.json"), "utf8"));
+  const validate = new Ajv2020({ strict: true, validateFormats: false }).compile(schema);
+  assert.equal(validate(example), true, JSON.stringify(validate.errors));
+  assert.equal(skills.schemaRefRole, "canonical_schema_identity");
+  assert.equal(skills.schemaRetrievalUrl, `${deploymentBase}/collaboration-skills/0.1.0/collaboration-skill.schema.json`);
+  for (const skill of skills.skills) assert.equal(skill.projectionRetrievalUrl, `${deploymentBase}/skills/${skill.projectionPath}`);
 });
 
 test("every relative homepage link resolves inside the built artifact", async () => {
@@ -217,12 +396,35 @@ test("every relative homepage link resolves inside the built artifact", async ()
   }
 });
 
+test("the methods-in-practice example stays source-owned and semantically complete", async () => {
+  const [source, projected, skillsIndex] = await Promise.all([
+    readFile(resolve(repositoryRoot, "schemas/examples/readable-table-embedded-layout/index.html")),
+    readFile(resolve(outputRoot, "examples/readable-table-embedded-layout/index.html")),
+    readFile(resolve(skillsOutputRoot, "index.html"), "utf8"),
+  ]);
+  assert.deepEqual(projected, source);
+  const html = projected.toString("utf8");
+  assert.ok(html.includes('<caption id="ownership-caption">'));
+  assert.equal(occurrenceCount(html, '<th scope="col">'), 4);
+  assert.equal(occurrenceCount(html, '<th scope="row">'), 4);
+  assert.ok(html.includes('role="region" aria-labelledby="ownership-caption" tabindex="0"'));
+  assert.equal(occurrenceCount(html, "<script"), 0);
+  assert.ok(skillsIndex.includes(
+    '<iframe src="../examples/readable-table-embedded-layout/" title="Worked example of a semantic comparison table inside an embedded preview" sandbox loading="lazy"></iframe>',
+  ));
+});
+
 test("the collaboration guide carries finite loops, public sources, and matching FAQs", async () => {
   const guidePath = resolve(outputRoot, "collaboration/index.html");
   const html = await readFile(guidePath, "utf8");
 
   assert.ok(html.includes(`<link rel="canonical" href="${deploymentBase}/collaboration/">`));
   assert.ok(html.includes('href="../index.html"'));
+  assertPrimaryNavigation(html, [
+    { href: "../", label: "Schema registry" },
+    { href: "../skills/", label: "Skills" },
+    { href: "../collaboration/", label: "Collaboration guide" },
+  ], "Collaboration guide");
 
   for (const loopId of [
     "skill-from-receiving-use",
@@ -377,6 +579,38 @@ test("the canary stack precedes the final visible attribution", async () => {
   );
 });
 
+test("every human-facing page carries one plain-text assistance route in its footer", async () => {
+  const catalog = JSON.parse(
+    await readFile(resolve(skillsOutputRoot, "catalog.json"), "utf8"),
+  );
+  const htmlPaths = (await filesUnder(outputRoot))
+    .filter((filePath) => filePath.endsWith(".html"));
+
+  assert.equal(htmlPaths.length, catalog.skills.length + 4);
+  for (const filePath of htmlPaths) {
+    const label = relative(outputRoot, filePath).split(sep).join("/");
+    const html = await readFile(filePath, "utf8");
+    assert.equal(occurrenceCount(html, publicContactEmail), 1, label);
+    assert.equal(html.includes(`mailto:${publicContactEmail}`), false, label);
+
+    const contactPosition = html.indexOf(publicContactEmail);
+    const footerStart = html.lastIndexOf("<footer", contactPosition);
+    const footerEnd = html.indexOf("</footer>", contactPosition);
+    assert.ok(footerStart >= 0 && footerEnd > contactPosition, `${label} keeps contact in its footer`);
+
+    const footer = html.slice(footerStart, footerEnd + "</footer>".length);
+    const boundaryPosition = footer.indexOf("data-visitor-boundary");
+    const footerContactPosition = footer.indexOf(publicContactEmail);
+    const attributionPosition = footer.indexOf(artifactAttribution);
+    assert.ok(
+      footerContactPosition >= 0 &&
+        footerContactPosition < boundaryPosition &&
+        boundaryPosition < attributionPosition,
+      `${label} orders contact, visitor boundary, and final attribution`,
+    );
+  }
+});
+
 test("the private selection ledger classifies the complete repository skill family", async () => {
   const selection = JSON.parse(await readFile(selectionPath, "utf8"));
   const sourceNames = (await readdir(resolve(repositoryRoot, ".agents/skills"), {
@@ -428,23 +662,43 @@ test("the public catalog contains exactly the public-ready allowlist", async () 
     .map((entry) => entry.name);
 
   assert.deepEqual(possibleNames, [
+    "agency-and-action-writing",
+    "citation-atlas-selection",
+    "conversation-data-visualization",
+    "data-visualization-foundations",
+    "pdf-data-visualization",
     "repository-collaboration-cycle",
+    "repository-handoff-readiness",
+    "repository-orientation-stewardship",
     "supportive-change-writing",
+    "web-data-visualization",
   ]);
   assert.equal(catalog.publicationStanding, "public_ready");
   assert.deepEqual(catalog.skills.map((entry) => entry.name), readyNames);
   assert.equal(catalog.skills.length, readyNames.length);
   for (const skill of catalog.skills) {
+    const semanticSource = await readFile(resolve(repositoryRoot, skill.sourcePath), "utf8");
+    const parsed = parseSkillSource(semanticSource);
+    assert.equal(skill.useWhen, parsed.contract.when[0]);
+    assert.equal(skill.produces, parsed.contract.result);
     const card = index.match(
       new RegExp(`data-skill-name="${skill.name}"[\\s\\S]*?<\\/li>`, "u"),
     )?.[0];
     assert.ok(card, `${skill.name} has one catalog card`);
     assert.ok(card.includes(`<strong>Read this skill</strong>`));
+    assert.ok(card.includes(`<p data-use-when><strong>Use when:</strong> ${htmlEscape(skill.useWhen)}</p>`));
+    assert.ok(card.includes(`<p data-produces><strong>Produces:</strong> ${htmlEscape(skill.produces)}</p>`));
     assert.ok(
       card.indexOf(`href="${skill.pagePath}"`) < card.indexOf(`href="${skill.projectionPath}"`),
       `${skill.name} makes the readable route its primary action`,
     );
   }
+  for (const featuredName of ["embedded-prototype-layout", "semantic-table-design"]) {
+    assert.equal(occurrenceCount(index, `data-featured-skill="${featuredName}"`), 1);
+  }
+  assert.ok(index.includes('id="methods-in-practice"'));
+  assert.ok(index.includes('src="../examples/readable-table-embedded-layout/"'));
+  assert.ok(index.includes('href="../examples/readable-table-embedded-layout/"'));
   for (const possibleName of possibleNames) {
     assert.ok(!JSON.stringify(catalog).includes(possibleName));
     assert.ok(!index.includes(possibleName));
@@ -652,6 +906,14 @@ test("each public skill has a readable, revision-bound route with its complete s
     assert.ok(page.includes("Open exact Markdown"), `${skill.name} leads with its exact Markdown source`);
     assert.ok(page.includes(`<h1>${htmlEscape(skill.title)}</h1>`));
     assert.ok(page.includes(htmlEscape(source)), `${skill.name} renders its complete source`);
+    assert.ok(page.includes(`<p data-contract-result>${htmlEscape(skill.produces)}</p>`));
+    assertPrimaryNavigation(page, [
+      { href: "../../", label: "Schema registry" },
+      { href: "../../skills/", label: "Skills" },
+      { href: "../../collaboration/", label: "Collaboration guide" },
+    ], "Skills");
+    assert.ok(page.includes('class="skip-link" href="#main-content"'));
+    assert.ok(page.includes('<main id="main-content" tabindex="-1">'));
     assert.ok(
       page.includes('<pre class="skill-source" role="region" aria-labelledby="source-title" tabindex="0">'),
       `${skill.name} gives keyboard users a named scrolling source region`,
@@ -719,6 +981,33 @@ test("publication paths remain physically inside their source repository", async
   }
 });
 
+test("schema payload routes preserve generator-owned outputs and normalized identities", () => {
+  assert.doesNotThrow(() => assertPublicationReceiverPaths([
+    { receiverPath: "na/schema/public-example.json" },
+  ]));
+  for (const receiverPath of [
+    "index.html",
+    "release.json/child",
+    "skills/example.json",
+    "./index.html",
+    "na//schema.json",
+    "na/schema/../index.html",
+  ]) {
+    assert.throws(
+      () => assertPublicationReceiverPaths([{ receiverPath }]),
+      /Publication receiver paths must be unique repository-relative paths/u,
+      receiverPath,
+    );
+  }
+  assert.throws(
+    () => assertPublicationReceiverPaths([
+      { receiverPath: "na/schema/example.json" },
+      { receiverPath: "na/schema/example.json" },
+    ]),
+    /Publication receiver paths must be unique repository-relative paths/u,
+  );
+});
+
 test("public-material inspection identifies source-owned adaptation needs", () => {
   const privateShapes = [
     "https://example.notion.site/field-guide",
@@ -731,6 +1020,7 @@ test("public-material inspection identifies source-owned adaptation needs", () =
     "https://github.com/driftframestudios/human-ai-systems-exemplars/issues/1",
     "https://github.com/driftframestudios/human-ai-systems-exemplars/pull/1",
     "https://github.com/driftframestudios/gist-registry/issues/1",
+    "Internal — private source",
   ];
   privateShapes.forEach((source) => {
     assert.throws(() => assertPublicMaterial(source, "fixture.md"), /fixture\.md contains/u);
@@ -763,6 +1053,13 @@ test("exact artifact inventory identifies an unselected emitted file", async () 
 
 test("the public skills page preserves authorship, canary order, and final attribution", async () => {
   const html = await readFile(resolve(skillsOutputRoot, "index.html"), "utf8");
+  assertPrimaryNavigation(html, [
+    { href: "../", label: "Schema registry" },
+    { href: "../skills/", label: "Skills" },
+    { href: "../collaboration/", label: "Collaboration guide" },
+  ], "Skills");
+  assert.ok(html.includes('class="skip-link" href="#main-content"'));
+  assert.ok(html.includes('<main id="main-content" tabindex="-1">'));
   assert.equal(
     occurrenceCount(html, `<meta name="author" content="${artifactAuthor}">`),
     1,
@@ -781,6 +1078,155 @@ test("the public skills page preserves authorship, canary order, and final attri
     html.slice(attributionPosition + artifactAttribution.length).replace(/<[^>]+>/gu, "").trim(),
     "",
   );
+});
+
+test("primary navigation and the featured example remain operable without scripting", async () => {
+  const browser = await chromium.launch({ headless: true });
+  let server;
+  const routes = [
+    {
+      path: "/",
+      current: "Schema registry",
+      links: [
+        { href: "./", label: "Schema registry" },
+        { href: "skills/", label: "Skills" },
+        { href: "collaboration/", label: "Collaboration guide" },
+      ],
+    },
+    {
+      path: "/skills/",
+      current: "Skills",
+      links: [
+        { href: "../", label: "Schema registry" },
+        { href: "../skills/", label: "Skills" },
+        { href: "../collaboration/", label: "Collaboration guide" },
+      ],
+    },
+    {
+      path: "/skills/embedded-prototype-layout/",
+      current: "Skills",
+      links: [
+        { href: "../../", label: "Schema registry" },
+        { href: "../../skills/", label: "Skills" },
+        { href: "../../collaboration/", label: "Collaboration guide" },
+      ],
+    },
+    {
+      path: "/collaboration/",
+      current: "Collaboration guide",
+      links: [
+        { href: "../", label: "Schema registry" },
+        { href: "../skills/", label: "Skills" },
+        { href: "../collaboration/", label: "Collaboration guide" },
+      ],
+    },
+  ];
+
+  try {
+    server = await startStaticServer(outputRoot);
+    for (const width of [390, 1280]) {
+      const context = await browser.newContext({
+        viewport: { width, height: 900 },
+        javaScriptEnabled: false,
+        reducedMotion: "reduce",
+      });
+      try {
+        for (const route of routes) {
+          const page = await context.newPage();
+          const telemetry = monitor(page);
+          await page.goto(`${server.origin}${route.path}`, { waitUntil: "load" });
+
+          const receipt = await page.evaluate(() => {
+            const navigation = document.querySelector('nav.site-nav[aria-label="Primary"]');
+            const navigationRect = navigation?.getBoundingClientRect();
+            const contact = document.querySelector(".site-contact");
+            const contactRect = contact?.getBoundingClientRect();
+            return {
+              links: [...navigation.querySelectorAll("a")].map(link => ({
+                href: link.getAttribute("href"),
+                label: link.textContent.trim(),
+              })),
+              current: [...navigation.querySelectorAll('[aria-current="page"]')]
+                .map(link => link.textContent.trim()),
+              contactText: contact?.textContent.trim(),
+              contactLeft: contactRect?.left ?? -1,
+              contactRight: contactRect?.right ?? Number.POSITIVE_INFINITY,
+              navigationLeft: navigationRect?.left ?? -1,
+              navigationRight: navigationRect?.right ?? Number.POSITIVE_INFINITY,
+              viewportWidth: document.documentElement.clientWidth,
+              documentWidth: document.documentElement.scrollWidth,
+            };
+          });
+          assert.deepEqual(receipt.links, route.links, `${route.path} keeps the shared route at ${width}px`);
+          assert.deepEqual(receipt.current, route.current ? [route.current] : []);
+          assert.ok(receipt.navigationLeft >= -1, `${route.path} navigation clears the leading edge`);
+          assert.ok(receipt.navigationRight <= receipt.viewportWidth + 1, `${route.path} navigation clears the trailing edge`);
+          assert.equal(receipt.contactText, `For assistance or collaboration, write to ${publicContactEmail}.`);
+          assert.ok(receipt.contactLeft >= -1, `${route.path} contact clears the leading edge`);
+          assert.ok(receipt.contactRight <= receipt.viewportWidth + 1, `${route.path} contact clears the trailing edge`);
+          assert.ok(receipt.documentWidth <= receipt.viewportWidth + 1, `${route.path} stays horizontally contained at ${width}px`);
+
+          await page.keyboard.press("Tab");
+          assert.equal(await page.locator(":focus").getAttribute("class"), "skip-link");
+          assert.ok((await page.locator(":focus").boundingBox()).y >= 0, `${route.path} reveals its skip link`);
+          for (const link of route.links) {
+            await page.keyboard.press("Tab");
+            const focused = page.locator(":focus");
+            assert.equal((await focused.textContent()).trim(), link.label);
+            const focusStyle = await focused.evaluate(element => {
+              const style = getComputedStyle(element);
+              return { outlineStyle: style.outlineStyle, outlineWidth: parseFloat(style.outlineWidth) };
+            });
+            assert.notEqual(focusStyle.outlineStyle, "none", `${route.path} ${link.label} has a visible focus style`);
+            assert.ok(focusStyle.outlineWidth > 0, `${route.path} ${link.label} has a visible focus width`);
+          }
+
+          if (route.path === "/skills/") {
+            const frame = page.frameLocator('iframe[title="Worked example of a semantic comparison table inside an embedded preview"]');
+            await frame.locator("table").waitFor({ state: "visible" });
+            assert.equal(await frame.locator('th[scope="col"]').count(), 4);
+            assert.equal(await frame.locator('th[scope="row"]').count(), 4);
+            const frameReceipt = await frame.locator("html").evaluate(element => ({
+              clientWidth: element.clientWidth,
+              scrollWidth: element.scrollWidth,
+            }));
+            assert.ok(frameReceipt.scrollWidth <= frameReceipt.clientWidth + 1, "the child document keeps wide comparison inside its local scroll owner");
+          }
+
+          assertTelemetry(telemetry);
+          await page.close();
+        }
+
+        const examplePage = await context.newPage();
+        const exampleTelemetry = monitor(examplePage);
+        await examplePage.goto(`${server.origin}/examples/readable-table-embedded-layout/`, { waitUntil: "load" });
+        const exampleReceipt = await examplePage.evaluate(() => ({
+          clientWidth: document.documentElement.clientWidth,
+          scrollWidth: document.documentElement.scrollWidth,
+          columnHeaders: document.querySelectorAll('th[scope="col"]').length,
+          rowHeaders: document.querySelectorAll('th[scope="row"]').length,
+          contactText: document.querySelector(".site-contact")?.textContent.trim(),
+        }));
+        assert.ok(exampleReceipt.scrollWidth <= exampleReceipt.clientWidth + 1, `the full-view example stays contained at ${width}px`);
+        assert.equal(exampleReceipt.columnHeaders, 4);
+        assert.equal(exampleReceipt.rowHeaders, 4);
+        assert.equal(exampleReceipt.contactText, `For assistance or collaboration, write to ${publicContactEmail}.`);
+        const tableRegion = examplePage.locator('.table-scroll[role="region"]');
+        await tableRegion.focus();
+        assert.equal(await tableRegion.getAttribute("aria-labelledby"), "ownership-caption");
+        assertTelemetry(exampleTelemetry);
+        await examplePage.close();
+      } finally {
+        await context.close();
+      }
+    }
+  } finally {
+    try {
+      if (server) await server.close();
+    } finally {
+      await browser.close();
+    }
+  }
 });
 
 test("the public skills build is deterministic for unchanged sources", async () => {

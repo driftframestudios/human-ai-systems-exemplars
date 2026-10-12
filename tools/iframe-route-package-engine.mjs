@@ -617,8 +617,8 @@ export function scanPackageClosure(
   const queue = [...reachable];
   let inlineReferences = root.inline_references;
 
-  while (queue.length) {
-    const target = queue.shift();
+  for (let cursor = 0; cursor < queue.length; cursor++) {
+    const target = queue[cursor];
     const reading = packageReadings.get(target);
     if (!reading) fail(`${label} has no package reading for ${target}.`);
     const contentType = reading.contentType.toLowerCase();
@@ -664,74 +664,35 @@ export function scanPackageClosure(
   };
 }
 
-export function navigationObservation(
-  html,
-  routeRelativeDirectory,
-  expectedOutputPaths,
-  basePath,
-  options = {},
-) {
-  let packagedLinks = 0;
-  let fragmentLinks = 0;
-  let externalLinks = 0;
+function resolveNavigationTarget(rawPath, routeDirectory, basePath) {
+  let decodedPath;
+  try { decodedPath = decodeURIComponent(rawPath); }
+  catch { return { target: "invalid-percent-encoding", resolved: false }; }
+  const absolute = decodedPath.startsWith("/");
+  if (absolute && !decodedPath.startsWith(basePath)) fail("Route navigation escapes " + basePath + ": " + rawPath + ".");
+  const normalizedPath = absolute ? decodedPath.slice(basePath.length)
+    : path.posix.normalize(path.posix.join(routeDirectory, decodedPath || "."));
+  if (normalizedPath === ".." || normalizedPath.startsWith("../")) fail("Route navigation escapes " + basePath + ": " + rawPath + ".");
+  const relativePath = normalizedPath === "." ? "" : normalizedPath;
+  const target = decodedPath.endsWith("/") || relativePath === "" ? path.posix.join(relativePath, "index.html") : relativePath;
+  return { target: target.replace(/^\.\//, ""), resolved: true };
+}
+export function navigationObservation(html, routeRelativeDirectory, expectedOutputPaths, basePath, options = {}) {
+  let packagedLinks = 0, fragmentLinks = 0, externalLinks = 0;
   const unresolved = new Map();
-
   for (const href of extractNavigationAnchorHrefs(html, options)) {
-    if (!href || href.startsWith("#")) {
-      fragmentLinks += 1;
-      continue;
-    }
-    if (href.startsWith("//") || /^[a-z][a-z0-9+.-]*:/i.test(href)) {
-      externalLinks += 1;
-      continue;
-    }
-
+    if (!href || href.startsWith("#")) { fragmentLinks++; continue; }
+    if (href.startsWith("//") || /^[a-z][a-z0-9+.-]*:/i.test(href)) { externalLinks++; continue; }
     const rawPath = href.split(/[?#]/, 1)[0];
-    let decodedPath;
-    try {
-      decodedPath = decodeURIComponent(rawPath);
-    } catch {
-      unresolved.set(href, "invalid-percent-encoding");
-      continue;
-    }
-
-    let projectedTarget;
-    if (decodedPath.startsWith("/")) {
-      if (!decodedPath.startsWith(basePath)) {
-        fail(`Route navigation escapes ${basePath}: ${href}.`);
-      }
-      projectedTarget = decodedPath.slice(basePath.length);
-    } else {
-      projectedTarget = path.posix.normalize(
-        path.posix.join(routeRelativeDirectory, decodedPath || "."),
-      );
-    }
-    if (projectedTarget === ".." || projectedTarget.startsWith("../")) {
-      fail(`Route navigation escapes ${basePath}: ${href}.`);
-    }
-    if (projectedTarget === ".") projectedTarget = "";
-    if (decodedPath.endsWith("/") || projectedTarget === "") {
-      projectedTarget = path.posix.join(projectedTarget, "index.html");
-    }
-    projectedTarget = projectedTarget.replace(/^\.\//, "");
-
-    if (expectedOutputPaths.has(projectedTarget)) {
-      packagedLinks += 1;
-    } else {
-      unresolved.set(href, projectedTarget);
-    }
+    const observation = resolveNavigationTarget(rawPath, routeRelativeDirectory, basePath);
+    if (observation.resolved && expectedOutputPaths.has(observation.target)) packagedLinks++;
+    else unresolved.set(href, observation.target);
   }
-
-  const exitObservation = observeIframeExitLinks(html);
-
   return {
-    packaged_links: packagedLinks,
-    fragment_links: fragmentLinks,
-    external_links: externalLinks,
-    ...exitObservation,
-    unresolved_local_links: [...unresolved.entries()]
-      .map(([href, projected_target]) => ({ href, projected_target }))
-      .sort((left, right) => compareCodeUnits(left.href, right.href)),
+    packaged_links: packagedLinks, fragment_links: fragmentLinks, external_links: externalLinks,
+    ...observeIframeExitLinks(html),
+    unresolved_local_links: [...unresolved.entries()].map(([href, projected_target]) => ({ href, projected_target }))
+      .sort((left, right) => compareCodeUnits(left.href, right.href))
   };
 }
 
@@ -763,29 +724,21 @@ export async function assertRegularFileWithin(root, filePath, label) {
 }
 
 export async function listRegularFiles(directory, relativeDirectory = "") {
-  if (relativeDirectory === "") {
-    const rootStatus = await lstat(directory);
-    if (rootStatus.isSymbolicLink() || !rootStatus.isDirectory()) {
-      fail(`Generated iframe package root must be a regular directory: ${directory}.`);
-    }
-  }
-  const entries = await readdir(path.join(directory, relativeDirectory), { withFileTypes: true });
+  const rootStatus = await lstat(directory);
+  if (rootStatus.isSymbolicLink() || !rootStatus.isDirectory()) fail("Generated iframe package root must be a regular directory: " + directory + ".");
   const files = [];
-  for (const entry of entries) {
-    const relativePath = path.posix.join(relativeDirectory, entry.name);
-    if (entry.isSymbolicLink()) {
-      fail(`Generated iframe package contains a symbolic link: ${relativePath}.`);
+  async function visit(relative) {
+    const entries = await readdir(path.join(directory, relative), { withFileTypes: true });
+    for (const entry of entries) {
+      const relativePath = path.posix.join(relative, entry.name);
+      if (entry.isSymbolicLink()) fail("Generated iframe package contains a symbolic link: " + relativePath + ".");
+      if (entry.isDirectory()) { await visit(relativePath); continue; }
+      if (!entry.isFile()) fail("Generated iframe package contains a non-file entry: " + relativePath + ".");
+      files.push(relativePath);
     }
-    if (entry.isDirectory()) {
-      files.push(...await listRegularFiles(directory, relativePath));
-      continue;
-    }
-    if (!entry.isFile()) {
-      fail(`Generated iframe package contains a non-file entry: ${relativePath}.`);
-    }
-    files.push(relativePath);
   }
-  return files.sort();
+  await visit(relativeDirectory);
+  return files.sort(compareCodeUnits);
 }
 
 export function assertPackageOutputPath(relativePath) {
@@ -820,13 +773,26 @@ function packageOutputPath(outputRoot, relativePath) {
   return resolvedOutput;
 }
 
+async function ensureOutputDirectory(root, relativeDirectory) {
+  let directory = root;
+  for (const segment of relativeDirectory.split(path.sep).filter(part => part && part !== ".")) {
+    directory = path.join(directory, segment);
+    try { await mkdir(directory); }
+    catch (error) { if (error.code !== "EEXIST") throw error; }
+    const status = await lstat(directory);
+    if (status.isSymbolicLink() || !status.isDirectory()) fail("Use a regular directory inside the owned output root: " + directory + ".");
+  }
+}
 export async function writePackagePlan(plan, outputRoot) {
-  const entries = [...plan.outputFiles.entries()]
-    .map(([relativePath, bytes]) => [assertPackageOutputPath(relativePath), bytes])
+  const entries = [...plan.outputFiles.entries()].map(([relativePath, bytes]) => [assertPackageOutputPath(relativePath), bytes])
     .sort(([left], [right]) => compareCodeUnits(left, right));
+  await mkdir(outputRoot, { recursive: true });
+  const rootStatus = await lstat(outputRoot);
+  if (rootStatus.isSymbolicLink() || !rootStatus.isDirectory()) fail("Use a regular directory as the owned output root: " + outputRoot + ".");
+  const canonicalRoot = await realpath(outputRoot);
   for (const [relativePath, bytes] of entries) {
-    const outputPath = packageOutputPath(outputRoot, relativePath);
-    await mkdir(path.dirname(outputPath), { recursive: true });
+    const outputPath = packageOutputPath(canonicalRoot, relativePath);
+    await ensureOutputDirectory(canonicalRoot, path.dirname(relativePath));
     await writeFile(outputPath, bytes, { flag: "wx" });
   }
 }
@@ -836,8 +802,9 @@ export async function verifyPackagePlan(plan, outputRoot) {
     .map(assertPackageOutputPath)
     .sort(compareCodeUnits);
   const actualFiles = await listRegularFiles(outputRoot);
-  const missing = expectedFiles.filter((file) => !actualFiles.includes(file));
-  const extra = actualFiles.filter((file) => !expectedFiles.includes(file));
+  const expected = new Set(expectedFiles), actual = new Set(actualFiles);
+  const missing = expectedFiles.filter(file => !actual.has(file));
+  const extra = actualFiles.filter(file => !expected.has(file));
   if (missing.length || extra.length) {
     fail([
       "Generated iframe package differs from its exact allowlist.",

@@ -15,10 +15,15 @@ import {
 
 const artifactNames = {
   impact: "impact-map-chimeric-prototype-v0.1.5.html",
-  service: "service-design-blueprint-chimeric-prototype-v0.2.5.html",
+  service: "service-design-blueprint-chimeric-prototype-v0.2.6.html",
   heart: "heart-chart-chimeric-prototype-v0.1.6.html",
-  specification: "specification-by-example-chimeric-prototype-v0.1.6.html"
+  specification: "specification-by-example-chimeric-prototype-v0.1.7.html"
 };
+const args = process.argv.slice(2);
+if (args.length && (args.length !== 2 || args[0] !== "--artifact" || !Object.hasOwn(artifactNames, args[1]))) {
+  throw new Error("Usage: node tools/core-decision-canvas-contract.mjs [--artifact impact|service|heart|specification]");
+}
+const selectedArtifact = args[1] || null;
 const checks = [];
 const failures = [];
 
@@ -319,6 +324,168 @@ async function impactPath(browser, origin, route) {
   await assertNoScriptPromptCapsule(browser, origin, route, "#promptOut", initialCapsule.plain);
 }
 
+async function exerciseServiceNameSync(page) {
+  const read = () => page.evaluate(() => {
+    const api = window.serviceDesignBlueprint;
+    const input = document.getElementById("artifactName");
+    const table = document.getElementById("serviceTable");
+    return {
+      state: api.getState(),
+      fingerprint: api.promptCapsuleFingerprint(),
+      markdown: api.promptCapsule(),
+      caption: table.caption.textContent,
+      labels: [...table.querySelectorAll("tbody tr[data-label]")].map(row => row.dataset.label),
+      cellIds: [...table.querySelectorAll('[data-action="select-cell"]')].map(cell => cell.dataset.id),
+      focused: document.activeElement === input,
+      caret: [input.selectionStart, input.selectionEnd],
+      injected: Boolean(table.querySelector("probe")),
+    };
+  });
+  const baseline = await read();
+  const input = page.locator("#artifactName");
+  const originalName = await input.inputValue();
+  for (const name of ['Renamed "<probe>& Service', originalName]) {
+    await input.fill(name);
+    const receipt = await read();
+    const expected = structuredClone(baseline.state);
+    expected.artifact_identity.display_name = name;
+    const caption = "Service blueprint: " + name + ". Visible stages and layers";
+    assert.deepEqual(receipt.state, expected, "Rename changes only the artifact name");
+    assert.equal(receipt.caption, caption);
+    assert.deepEqual(receipt.labels, baseline.labels.map(label => caption + label.slice(baseline.caption.length)));
+    assert.deepEqual(receipt.cellIds, baseline.cellIds);
+    assert.equal(receipt.focused, true, "The name input keeps focus without an unrelated action");
+    assert.deepEqual(receipt.caret, [name.length, name.length]);
+    assert.equal(receipt.injected, false, "Markup-shaped names remain literal table context");
+    if (name === originalName) {
+      assert.equal(receipt.fingerprint, baseline.fingerprint);
+      assert.equal(receipt.markdown, baseline.markdown);
+    } else {
+      assert.notEqual(receipt.fingerprint, baseline.fingerprint);
+      assert.notEqual(receipt.markdown, baseline.markdown);
+    }
+  }
+}
+
+async function exerciseServiceCellSelection(page, initial) {
+  const blueprint = initial.service_blueprint;
+  const cells = blueprint.cells.slice(0, 3);
+  const baseline = await page.evaluate(() => ({
+    fingerprint: window.serviceDesignBlueprint.promptCapsuleFingerprint(),
+    markdown: window.serviceDesignBlueprint.promptCapsule(),
+  }));
+  assert.equal(await page.locator("#blueprintSvg").getAttribute("role"), "group");
+  assert.equal(await page.locator("#blueprintSvg [role=button]").count(), blueprint.cells.length);
+  assert.equal(await page.locator("#serviceTable tbody th[scope=row]").count(), blueprint.layers.length);
+  assert.equal(await page.locator("#serviceTable thead th[scope=col]").count(), blueprint.stages.length + 1);
+  assert.match(await page.locator("#serviceTable caption").textContent(), /Service blueprint:/u);
+  assert.equal(await page.locator("#serviceTable tbody tr[data-label]").count(), blueprint.layers.length);
+  await page.evaluate(() => {
+    globalThis.__serviceScrollIntoView = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = function(options) {
+      globalThis.__serviceScroll = { id: this.id, options };
+      return globalThis.__serviceScrollIntoView.call(this, options);
+    };
+  });
+  const svgCell = cell => page.locator('#blueprintSvg [data-action="select-cell"][data-id="' + cell.id + '"]');
+  const tableCell = cell => page.locator('#serviceTable [data-action="select-cell"][data-id="' + cell.id + '"]');
+  const assertSelection = async (cell, behavior) => {
+    await page.waitForFunction(() => {
+      const bounds = document.getElementById("cellText").getBoundingClientRect();
+      return bounds.top >= 0 && bounds.bottom <= innerHeight;
+    });
+    const receipt = await page.evaluate(() => {
+      const api = window.serviceDesignBlueprint;
+      return {
+        state: api.getState(),
+        fingerprint: api.promptCapsuleFingerprint(),
+        markdown: api.promptCapsule(),
+        focused: document.activeElement.id,
+        editorCell: document.getElementById("cellText").dataset.cellId,
+        scroll: globalThis.__serviceScroll,
+      };
+    });
+    const expected = structuredClone(initial);
+    const view = expected.view_state.views.find(item => item.id === expected.view_state.active_view_id);
+    view.selected_cell_id = cell.id;
+    view.selected_asset_id = "";
+    assert.deepEqual(receipt.state, expected, "Selection changes only the active view's selected IDs");
+    assert.equal(receipt.editorCell, cell.id);
+    assert.equal(receipt.focused, "cellText");
+    assert.equal(await page.locator("#cellText").inputValue(), cell.text);
+    assert.deepEqual({ fingerprint: receipt.fingerprint, markdown: receipt.markdown }, baseline);
+    assert.deepEqual(receipt.scroll, { id: "cellText", options: { behavior, block: "center", inline: "nearest" } });
+    const stage = blueprint.stages.find(item => item.id === cell.stage_id);
+    const layer = blueprint.layers.find(item => item.id === cell.layer_id);
+    for (const control of [svgCell(cell), tableCell(cell)]) {
+      assert.equal(await control.getAttribute("aria-pressed"), "true");
+      assert.equal(await control.getAttribute("aria-controls"), "cellInspector");
+      const name = await control.getAttribute("aria-label");
+      assert.ok(name.includes(stage.label) && name.includes(layer.label) && name.includes(cell.id));
+    }
+    assert.equal(await page.locator('[data-action="select-cell"][aria-pressed="true"]').count(), 2);
+  };
+  try {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await svgCell(cells[0]).locator("rect").click({ position: { x: 6, y: 6 } });
+    await assertSelection(cells[0], "smooth");
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await svgCell(cells[1]).locator("text").first().click();
+    await assertSelection(cells[1], "instant");
+    await svgCell(cells[2]).locator("[data-cell-status]").click();
+    await assertSelection(cells[2], "instant");
+    await svgCell(cells[0]).focus();
+    await svgCell(cells[0]).press("Enter");
+    await assertSelection(cells[0], "instant");
+    await svgCell(cells[1]).focus();
+    await svgCell(cells[1]).press("Space");
+    await assertSelection(cells[1], "instant");
+    await tableCell(cells[2]).click();
+    await assertSelection(cells[2], "instant");
+    await tableCell(cells[0]).focus();
+    await tableCell(cells[0]).press("Enter");
+    await assertSelection(cells[0], "instant");
+    await tableCell(cells[1]).focus();
+    await tableCell(cells[1]).press("Space");
+    await assertSelection(cells[1], "instant");
+
+    const status = await page.locator("#cellStatus").inputValue();
+    await page.locator("#cellStatus").focus();
+    await page.locator("#cellStatus").selectOption(status === "known" ? "assumed" : "known");
+    assert.equal(await page.evaluate(() => document.activeElement.id), "cellStatus");
+    await page.locator("#cellStatus").selectOption(status);
+    const originalText = await page.locator("#cellText").inputValue();
+    await page.locator("#cellText").fill("An edit keeps the next field reachable.");
+    await page.keyboard.press("Tab");
+    assert.equal(await page.evaluate(() => document.activeElement.id), "cellStatus", "Leaving the text editor preserves the next field");
+    await page.locator("#cellText").fill(originalText);
+    await page.locator("#cellText").blur();
+
+    const assetCandidate = page.locator('#cellInspector [data-field="asset-link"]:not(:checked)').first();
+    const assetId = await assetCandidate.getAttribute("data-id");
+    assert(assetId, "The selected asset has a stable identity");
+    const asset = page.locator('#cellInspector [data-field="asset-link"][data-id="' + assetId + '"]');
+    const checked = await asset.isChecked();
+    await asset.focus();
+    await asset.setChecked(!checked);
+    assert.equal(await asset.isChecked(), !checked, "The same asset receives the checkbox edit");
+    assert.equal(await page.evaluate(() => document.activeElement.dataset.id), assetId);
+    await asset.setChecked(checked);
+    assert.deepEqual(await page.evaluate(() => window.serviceDesignBlueprint.getState().service_blueprint), blueprint);
+    assert.deepEqual(await page.evaluate(() => ({
+      fingerprint: window.serviceDesignBlueprint.promptCapsuleFingerprint(),
+      markdown: window.serviceDesignBlueprint.promptCapsule(),
+    })), baseline);
+  } finally {
+    await page.evaluate(() => {
+      Element.prototype.scrollIntoView = globalThis.__serviceScrollIntoView;
+      delete globalThis.__serviceScrollIntoView;
+      delete globalThis.__serviceScroll;
+    });
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+  }
+}
+
 async function servicePath(browser, origin, route) {
   const { context, page, telemetry } = await openFresh(browser, origin, route, { captureClipboard: true });
   let initialPrompt;
@@ -336,12 +503,12 @@ async function servicePath(browser, origin, route) {
       apiName: "serviceDesignBlueprint",
       copySelector: "#copyPrompt",
       downloadSelector: "#downloadPrompt",
-      filename: "service-design-blueprint.prompt-capsule.r0.2.5.skill-assisted.md",
+      filename: "service-design-blueprint.prompt-capsule.r0.2.6.skill-assisted.md",
       loopIds: ["visitor-surface-change", "repository-reentry"],
       promptSelector: "#promptOut",
       stateContract: "service-design-blueprint-state.v0.2",
       title: "Service-design Blueprint",
-      version: "0.2.5",
+      version: "0.2.6",
     });
     assert.equal(initialPrompt.projection.stages.length, blueprint.stages.length, "the capsule represents every stage");
     assert.equal(initialPrompt.projection.layers.length, blueprint.layers.length, "the capsule represents every service lane");
@@ -349,11 +516,13 @@ async function servicePath(browser, origin, route) {
     assert.equal(initialPrompt.projection.sharedAssets.length, blueprint.shared_assets.length, "the capsule represents every shared asset");
     assert.equal(initialPrompt.projection.views.length, initial.view_state.views.length, "the capsule represents every accepted focus view");
     await assertPromptCapsuleKeyOrderStability(page, "serviceDesignBlueprint");
+    await exerciseServiceNameSync(page);
+    await exerciseServiceCellSelection(page, await textJson(page, "#jsonOut"));
 
     const cellId = initial.view_state.views[0].selected_cell_id;
     assert.ok(blueprint.cells.some(cell => cell.id === cellId), "The initial focus view should select a current stage × layer cell");
     const selectionProbeId = blueprint.cells.find(cell => cell.id !== cellId).id;
-    await page.locator(`[data-action="select-cell"][data-id="${selectionProbeId}"]`).click();
+    await page.locator(`#serviceTable [data-action="select-cell"][data-id="${selectionProbeId}"]`).click();
     assert.deepEqual(await page.evaluate(() => ({
       fingerprint: window.serviceDesignBlueprint.promptCapsuleFingerprint(),
       markdown: window.serviceDesignBlueprint.promptCapsule(),
@@ -365,7 +534,7 @@ async function servicePath(browser, origin, route) {
     assert.equal(expanded.service_blueprint.cells.length, expanded.service_blueprint.stages.length * expanded.service_blueprint.layers.length, "Adding a stage and layer should complete their cell intersections");
 
     const literal = "Visible <img src=x onerror=globalThis.__coreProbe=1> service consequence";
-    await page.locator(`[data-action="select-cell"][data-id="${cellId}"]`).click();
+    await page.locator(`#serviceTable [data-action="select-cell"][data-id="${cellId}"]`).click();
     const beforeLiteralFingerprint = await page.evaluate(() => window.serviceDesignBlueprint.promptCapsuleFingerprint());
     await page.locator("#cellText").fill(literal);
     await page.locator("#cellText").blur();
@@ -377,7 +546,7 @@ async function servicePath(browser, origin, route) {
       const asset = edited.service_blueprint.shared_assets.find(candidate => candidate.id === assetId);
       assert.ok(asset?.supported_cell_ids.includes(cellId), `${assetId} should derive its linked cell`);
     }
-    assert.match(await page.locator(`[data-action="select-cell"][data-id="${cellId}"] .cell-preview`).textContent(), /Visible <img/);
+    assert.match(await page.locator(`#serviceTable [data-action="select-cell"][data-id="${cellId}"] .cell-preview`).textContent(), /Visible <img/);
     assert.equal(await page.evaluate(() => globalThis.__coreProbe), undefined);
     const afterLiteralPrompt = await page.evaluate(() => ({
       fingerprint: window.serviceDesignBlueprint.promptCapsuleFingerprint(),
@@ -399,7 +568,7 @@ async function servicePath(browser, origin, route) {
     assert.match(await page.locator("#importNotice").textContent(), /Service-design Blueprint imported/);
 
     const sentinel = "Service recovery sentinel";
-    await page.locator(`[data-action="select-cell"][data-id="${cellId}"]`).click();
+    await page.locator(`#serviceTable [data-action="select-cell"][data-id="${cellId}"]`).click();
     await page.locator("#cellText").fill(sentinel);
     await page.locator("#cellText").blur();
     const invalid = structuredClone(await textJson(page, "#jsonOut"));
@@ -844,7 +1013,7 @@ async function specificationPath(browser, origin, route) {
     assert.equal(apiInitial.frozen, true);
     assert.deepEqual(
       [apiInitial.version, apiInitial.contract, apiInitial.stateContract, apiInitial.view],
-      ["0.1.6", "prompt-capsule/0.1.0", "specification-by-example-state.v0.1", "plain"],
+      ["0.1.7", "prompt-capsule/0.1.0", "specification-by-example-state.v0.1", "plain"],
     );
     assert.equal(apiInitial.plain, apiInitial.explicitPlain);
     assert.equal(apiInitial.visible, apiInitial.plain);
@@ -927,7 +1096,7 @@ async function specificationPath(browser, origin, route) {
     const downloadPromise = page.waitForEvent("download");
     await page.locator("#downloadPromptBtn").click();
     const download = await downloadPromise;
-    assert.equal(download.suggestedFilename(), "specification-by-example.prompt-capsule.r0.1.6.skill-assisted.md");
+    assert.equal(download.suggestedFilename(), "specification-by-example.prompt-capsule.r0.1.7.skill-assisted.md");
     assert.equal(await page.evaluate(() => globalThis.__promptDownloadType), "text/markdown;charset=utf-8");
     const stream = await download.createReadStream();
     const chunks = [];
@@ -1055,10 +1224,10 @@ const server = await startStaticServer();
 const browser = await chromium.launch({ headless: true });
 try {
   for (const projection of projections) {
-    await verify(`${projection.label} · Impact Map hierarchy, capsule, exchange, literal text, and recovery`, () => impactPath(browser, server.origin, `${projection.root}/${artifactNames.impact}`));
-    await verify(`${projection.label} · Service Blueprint cells, assets, focus, exchange, and recovery`, () => servicePath(browser, server.origin, `${projection.root}/${artifactNames.service}`));
-    await verify(`${projection.label} · HEART rows, order, focus, exchange, and recovery`, () => heartPath(browser, server.origin, `${projection.root}/${artifactNames.heart}`));
-    await verify(`${projection.label} · Specification rules, scenarios, order, exchange, and recovery`, () => specificationPath(browser, server.origin, `${projection.root}/${artifactNames.specification}`));
+    if (!selectedArtifact || selectedArtifact === "impact") await verify(`${projection.label} · Impact Map hierarchy, capsule, exchange, literal text, and recovery`, () => impactPath(browser, server.origin, `${projection.root}/${artifactNames.impact}`));
+    if (!selectedArtifact || selectedArtifact === "service") await verify(`${projection.label} · Service Blueprint cells, assets, focus, exchange, and recovery`, () => servicePath(browser, server.origin, `${projection.root}/${artifactNames.service}`));
+    if (!selectedArtifact || selectedArtifact === "heart") await verify(`${projection.label} · HEART rows, order, focus, exchange, and recovery`, () => heartPath(browser, server.origin, `${projection.root}/${artifactNames.heart}`));
+    if (!selectedArtifact || selectedArtifact === "specification") await verify(`${projection.label} · Specification rules, scenarios, order, exchange, and recovery`, () => specificationPath(browser, server.origin, `${projection.root}/${artifactNames.specification}`));
   }
 } finally {
   await browser.close();

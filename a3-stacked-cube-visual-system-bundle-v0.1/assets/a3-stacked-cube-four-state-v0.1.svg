@@ -1,15 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1360 660" role="img" aria-labelledby="four-state-title four-state-desc" style="color:#eef7ff">
       <defs>
-      <marker id="a3-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-        <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"></path>
-      </marker>
       <pattern id="a3-hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
         <rect width="9" height="9" fill="#164f78"></rect>
         <line x1="0" y1="0" x2="0" y2="9" stroke="#65ccda" stroke-width="2"></line>
       </pattern>
     </defs>
-      <title id="four-state-title">A3 four-state authority reference strip</title>
-      <desc id="four-state-desc">Current authority, identified seam with no move, shadow dual-run with legacy authority, and validated selective transfer with rollback.</desc>
+      <title id="four-state-title">Evidence-Guided Capability Transfer Model — four-state reference strip</title>
+      <desc id="four-state-desc">Current authority, an identified boundary with no move, shadow dual-run with legacy authority, and validated selective transfer with rollback. Curator participation advances from workflow evidence to design review, training, and procedure-supported use.</desc>
       <style>
         text{font-family:Inter,system-ui,sans-serif;font-size:15px;fill:#eef7ff}
         .a3-strong{font-weight:600}.a3-secondary{fill:#b7d2e8}
@@ -20,128 +17,138 @@
         .state-shadow .a3-front,.state-shadow .a3-top,.state-shadow .a3-side{fill:url(#a3-hatch);stroke:#65ccda}
         .state-new .a3-front,.state-new .a3-top,.state-new .a3-side{fill:#2f78b7;stroke:#9adce4;stroke-width:2}
         .a3-gate{fill:#0f3d66;stroke:#65ccda;stroke-width:2}
+        .a3-fallback rect{fill:#213e5a;stroke:#a8bfd2;stroke-width:2;stroke-dasharray:7 5}
         .a3-human{fill:#163756;stroke:#91b7d6}
-        .a3-route{fill:none;stroke:#eef7ff;stroke-width:2;marker-end:url(#a3-arrow)}
-        .a3-route.secondary{stroke:#b7d2e8;stroke-dasharray:7 7}
+        .a3-route{fill:currentColor;color:#eef7ff}
+        .a3-route.secondary{color:#b7d2e8}
       </style>
       <rect width="1360" height="660" fill="#062c56"></rect>
-      <g>
+      <g id="four-state-f0" data-phase="F0" role="group" aria-label="1 · Current authority">
+        <title>1 · Current authority</title>
         <rect x="7" y="7" width="326" height="646" rx="8" fill="#082f57" stroke="#7aa6c9"></rect>
         <text x="22" y="40" class="a3-strong"><tspan x="22" dy="0">1 · CURRENT AUTHORITY</tspan></text>
         <text x="22" y="82" class="a3-secondary"><tspan x="22" dy="0">Most work stays legacy or human.</tspan><tspan x="22" dy="1.25em">Unknown coupling remains visible.</tspan></text>
         <text x="22" y="168" class="a3-strong"><tspan x="22" dy="0">LEGACY</tspan></text>
-        <text x="180" y="168" class="a3-strong"><tspan x="180" dy="0">CONTRACT / NEW</tspan></text><g class="a3-cube state-legacy" data-cube-id="CAP-SEARCH"
-      role="button" tabindex="0" aria-label="Search; Legacy authority">
+        <text x="180" y="168" class="a3-strong"><tspan x="180" dy="0">BOUNDARY / NEW</tspan></text><g class="a3-cube state-legacy" data-cube-id="CAP-SEARCH"
+      role="group" aria-label="Search; Legacy authority">
       <title>Standard and advanced search — Legacy authority</title>
-      <polygon class="a3-top" points="22,195 31,186 163,186 154,195"></polygon>
-      <polygon class="a3-side" points="154,195 163,186 163,231 154,240"></polygon>
+      <polygon class="a3-top" points="22,195 32,185 164,185 154,195"></polygon>
+      <polygon class="a3-side" points="154,195 164,185 164,230 154,240"></polygon>
       <rect class="a3-front" x="22" y="195" width="132" height="45" rx="5"></rect>
       <text x="34" y="217" class="a3-strong"><tspan x="34" dy="0">Search</tspan></text>
     </g><g class="a3-cube state-legacy" data-cube-id="CAP-SPECIMEN"
-      role="button" tabindex="0" aria-label="Specimen overview; Legacy authority">
+      role="group" aria-label="Specimen overview; Legacy authority">
       <title>Specimen details and overview — Legacy authority</title>
-      <polygon class="a3-top" points="22,257 31,248 163,248 154,257"></polygon>
-      <polygon class="a3-side" points="154,257 163,248 163,293 154,302"></polygon>
+      <polygon class="a3-top" points="22,257 32,247 164,247 154,257"></polygon>
+      <polygon class="a3-side" points="154,257 164,247 164,292 154,302"></polygon>
       <rect class="a3-front" x="22" y="257" width="132" height="45" rx="5"></rect>
       <text x="34" y="279" class="a3-strong"><tspan x="34" dy="0">Specimen overview</tspan></text>
     </g><g class="a3-cube state-legacy" data-cube-id="CAP-OP-ASSIGN"
-      role="button" tabindex="0" aria-label="Operational / assignment; Legacy authority">
+      role="group" aria-label="Operational / assignment; Legacy authority">
       <title>Profiles, permissions &amp; case assignment — Legacy authority</title>
-      <polygon class="a3-top" points="22,325 31,316 163,316 154,325"></polygon>
-      <polygon class="a3-side" points="154,325 163,316 163,361 154,370"></polygon>
+      <polygon class="a3-top" points="22,325 32,315 164,315 154,325"></polygon>
+      <polygon class="a3-side" points="154,325 164,315 164,360 154,370"></polygon>
       <rect class="a3-front" x="22" y="325" width="132" height="45" rx="5"></rect>
       <text x="34" y="347" class="a3-strong"><tspan x="34" dy="0">Operational /</tspan><tspan x="34" dy="1.25em">assignment</tspan></text>
-    </g><text x="180" y="238" class="a3-secondary"><tspan x="180" dy="0">No verified seam</tspan></text><rect class="a3-human" x="22" y="520" width="296" height="96" rx="6"></rect><text x="36" y="550" class="a3-strong"><tspan x="36" dy="0">HUMAN WORKFLOW AUTHORITY</tspan></text><text x="36" y="588" class="a3-secondary"><tspan x="36" dy="0">Actor and workflow surface; not a</tspan><tspan x="36" dy="1.25em">software cube.</tspan></text></g><g>
+    </g><text x="180" y="238" class="a3-secondary"><tspan x="180" dy="0">No verified boundary</tspan></text><rect class="a3-human" x="22" y="520" width="296" height="96" rx="6"></rect><text x="36" y="550" class="a3-strong"><tspan x="36" dy="0">HUMAN WORKFLOW AUTHORITY</tspan></text><text x="36" y="584" class="a3-secondary"><tspan x="36" dy="0">Curators surface workflow needs and</tspan><tspan x="36" dy="1.25em">operational evidence.</tspan></text></g><g id="four-state-f1" data-phase="F1" role="group" aria-label="2 · Boundary identified">
+        <title>2 · Boundary identified</title>
         <rect x="347" y="7" width="326" height="646" rx="8" fill="#082f57" stroke="#7aa6c9"></rect>
-        <text x="362" y="40" class="a3-strong"><tspan x="362" dy="0">2 · SEAM IDENTIFIED</tspan></text>
-        <text x="362" y="82" class="a3-secondary"><tspan x="362" dy="0">The seam is bounded. No execution or</tspan><tspan x="362" dy="1.25em">decision authority moves.</tspan></text>
+        <text x="362" y="40" class="a3-strong"><tspan x="362" dy="0">2 · BOUNDARY IDENTIFIED</tspan></text>
+        <text x="362" y="82" class="a3-secondary"><tspan x="362" dy="0">The boundary is defined. No execution</tspan><tspan x="362" dy="1.25em">or decision authority moves.</tspan></text>
         <text x="362" y="168" class="a3-strong"><tspan x="362" dy="0">LEGACY</tspan></text>
-        <text x="520" y="168" class="a3-strong"><tspan x="520" dy="0">CONTRACT / NEW</tspan></text><g class="a3-cube state-legacy" data-cube-id="CAP-SEARCH"
-      role="button" tabindex="0" aria-label="Search; Legacy authority">
+        <text x="520" y="168" class="a3-strong"><tspan x="520" dy="0">BOUNDARY / NEW</tspan></text><g class="a3-cube state-legacy" data-cube-id="CAP-SEARCH"
+      role="group" aria-label="Search; Legacy authority">
       <title>Standard and advanced search — Legacy authority</title>
-      <polygon class="a3-top" points="362,195 371,186 503,186 494,195"></polygon>
-      <polygon class="a3-side" points="494,195 503,186 503,231 494,240"></polygon>
+      <polygon class="a3-top" points="362,195 372,185 504,185 494,195"></polygon>
+      <polygon class="a3-side" points="494,195 504,185 504,230 494,240"></polygon>
       <rect class="a3-front" x="362" y="195" width="132" height="45" rx="5"></rect>
       <text x="374" y="217" class="a3-strong"><tspan x="374" dy="0">Search</tspan></text>
     </g><g class="a3-cube state-retained_legacy" data-cube-id="CAP-SPECIMEN"
-      role="button" tabindex="0" aria-label="Specimen overview; Retained legacy">
+      role="group" aria-label="Specimen overview; Retained legacy">
       <title>Specimen details and overview — Retained legacy</title>
-      <polygon class="a3-top" points="362,257 371,248 503,248 494,257"></polygon>
-      <polygon class="a3-side" points="494,257 503,248 503,293 494,302"></polygon>
+      <polygon class="a3-top" points="362,257 372,247 504,247 494,257"></polygon>
+      <polygon class="a3-side" points="494,257 504,247 504,292 494,302"></polygon>
       <rect class="a3-front" x="362" y="257" width="132" height="45" rx="5"></rect>
       <text x="374" y="279" class="a3-strong"><tspan x="374" dy="0">Specimen overview</tspan></text>
     </g><g class="a3-cube state-legacy" data-cube-id="CAP-OP-ASSIGN"
-      role="button" tabindex="0" aria-label="Operational / assignment; Legacy authority">
+      role="group" aria-label="Operational / assignment; Legacy authority">
       <title>Profiles, permissions &amp; case assignment — Legacy authority</title>
-      <polygon class="a3-top" points="362,325 371,316 503,316 494,325"></polygon>
-      <polygon class="a3-side" points="494,325 503,316 503,361 494,370"></polygon>
+      <polygon class="a3-top" points="362,325 372,315 504,315 494,325"></polygon>
+      <polygon class="a3-side" points="494,325 504,315 504,360 494,370"></polygon>
       <rect class="a3-front" x="362" y="325" width="132" height="45" rx="5"></rect>
       <text x="374" y="347" class="a3-strong"><tspan x="374" dy="0">Operational /</tspan><tspan x="374" dy="1.25em">assignment</tspan></text>
     </g><g class="a3-cube state-seam" data-cube-id="CAP-OP-ASSIGN"
-      role="button" tabindex="0" aria-label="Operational / assignment; Seam identified">
-      <title>Profiles, permissions &amp; case assignment — Seam identified</title>
-      <polygon class="a3-top" points="520,195 529,186 661,186 652,195"></polygon>
-      <polygon class="a3-side" points="652,195 661,186 661,231 652,240"></polygon>
+      role="group" aria-label="Operational / assignment; Boundary identified">
+      <title>Profiles, permissions &amp; case assignment — Boundary identified</title>
+      <polygon class="a3-top" points="520,195 530,185 662,185 652,195"></polygon>
+      <polygon class="a3-side" points="652,195 662,185 662,230 652,240"></polygon>
       <rect class="a3-front" x="520" y="195" width="132" height="45" rx="5"></rect>
       <text x="532" y="217" class="a3-strong"><tspan x="532" dy="0">Operational /</tspan><tspan x="532" dy="1.25em">assignment</tspan></text>
-    </g><rect class="a3-gate" x="520" y="325" width="132" height="84" rx="6"></rect><text x="532" y="353" class="a3-strong"><tspan x="532" dy="0">CONTRACT</tspan></text><text x="532" y="381" class="a3-secondary"><tspan x="532" dy="0">No move yet</tspan></text><rect class="a3-human" x="362" y="520" width="296" height="96" rx="6"></rect><text x="376" y="550" class="a3-strong"><tspan x="376" dy="0">HUMAN WORKFLOW AUTHORITY</tspan></text><text x="376" y="588" class="a3-secondary"><tspan x="376" dy="0">Actor and workflow surface; not a</tspan><tspan x="376" dy="1.25em">software cube.</tspan></text></g><g>
+    </g><rect class="a3-gate" x="520" y="325" width="132" height="84" rx="6"></rect><text x="532" y="353" class="a3-strong"><tspan x="532" dy="0">BOUNDARY</tspan></text><text x="532" y="381" class="a3-secondary"><tspan x="532" dy="0">No move yet</tspan></text><rect class="a3-human" x="362" y="520" width="296" height="96" rx="6"></rect><text x="376" y="550" class="a3-strong"><tspan x="376" dy="0">HUMAN WORKFLOW AUTHORITY</tspan></text><text x="376" y="584" class="a3-secondary"><tspan x="376" dy="0">Curators shape the design in review</tspan><tspan x="376" dy="1.25em">and sprint-close presentations.</tspan></text></g><g id="four-state-f2" data-phase="F2" role="group" aria-label="3 · Shadow / dual-run">
+        <title>3 · Shadow / dual-run</title>
         <rect x="687" y="7" width="326" height="646" rx="8" fill="#082f57" stroke="#7aa6c9"></rect>
         <text x="702" y="40" class="a3-strong"><tspan x="702" dy="0">3 · SHADOW / DUAL-RUN</tspan></text>
         <text x="702" y="82" class="a3-secondary"><tspan x="702" dy="0">Shadow traffic collects evidence.</tspan><tspan x="702" dy="1.25em">Legacy remains authoritative.</tspan></text>
         <text x="702" y="168" class="a3-strong"><tspan x="702" dy="0">LEGACY</tspan></text>
-        <text x="860" y="168" class="a3-strong"><tspan x="860" dy="0">CONTRACT / NEW</tspan></text><g class="a3-cube state-legacy" data-cube-id="CAP-SEARCH"
-      role="button" tabindex="0" aria-label="Search; Legacy authority">
+        <text x="860" y="168" class="a3-strong"><tspan x="860" dy="0">BOUNDARY / NEW</tspan></text><g class="a3-cube state-legacy" data-cube-id="CAP-SEARCH"
+      role="group" aria-label="Search; Legacy authority">
       <title>Standard and advanced search — Legacy authority</title>
-      <polygon class="a3-top" points="702,195 711,186 843,186 834,195"></polygon>
-      <polygon class="a3-side" points="834,195 843,186 843,231 834,240"></polygon>
+      <polygon class="a3-top" points="702,195 712,185 844,185 834,195"></polygon>
+      <polygon class="a3-side" points="834,195 844,185 844,230 834,240"></polygon>
       <rect class="a3-front" x="702" y="195" width="132" height="45" rx="5"></rect>
       <text x="714" y="217" class="a3-strong"><tspan x="714" dy="0">Search</tspan></text>
     </g><g class="a3-cube state-retained_legacy" data-cube-id="CAP-SPECIMEN"
-      role="button" tabindex="0" aria-label="Specimen overview; Retained legacy">
+      role="group" aria-label="Specimen overview; Retained legacy">
       <title>Specimen details and overview — Retained legacy</title>
-      <polygon class="a3-top" points="702,257 711,248 843,248 834,257"></polygon>
-      <polygon class="a3-side" points="834,257 843,248 843,293 834,302"></polygon>
+      <polygon class="a3-top" points="702,257 712,247 844,247 834,257"></polygon>
+      <polygon class="a3-side" points="834,257 844,247 844,292 834,302"></polygon>
       <rect class="a3-front" x="702" y="257" width="132" height="45" rx="5"></rect>
       <text x="714" y="279" class="a3-strong"><tspan x="714" dy="0">Specimen overview</tspan></text>
     </g><g class="a3-cube state-legacy" data-cube-id="CAP-OP-ASSIGN"
-      role="button" tabindex="0" aria-label="Operational / assignment; Legacy authority">
+      role="group" aria-label="Operational / assignment; Legacy authority">
       <title>Profiles, permissions &amp; case assignment — Legacy authority</title>
-      <polygon class="a3-top" points="702,325 711,316 843,316 834,325"></polygon>
-      <polygon class="a3-side" points="834,325 843,316 843,361 834,370"></polygon>
+      <polygon class="a3-top" points="702,325 712,315 844,315 834,325"></polygon>
+      <polygon class="a3-side" points="834,325 844,315 844,360 834,370"></polygon>
       <rect class="a3-front" x="702" y="325" width="132" height="45" rx="5"></rect>
       <text x="714" y="347" class="a3-strong"><tspan x="714" dy="0">Operational /</tspan><tspan x="714" dy="1.25em">assignment</tspan></text>
     </g><g class="a3-cube state-shadow" data-cube-id="CAP-OP-ASSIGN"
-      role="button" tabindex="0" aria-label="Operational / assignment; Shadow / dual-run">
+      role="group" aria-label="Operational / assignment; Shadow / dual-run">
       <title>Profiles, permissions &amp; case assignment — Shadow / dual-run</title>
-      <polygon class="a3-top" points="860,195 869,186 1001,186 992,195"></polygon>
-      <polygon class="a3-side" points="992,195 1001,186 1001,231 992,240"></polygon>
+      <polygon class="a3-top" points="860,195 870,185 1002,185 992,195"></polygon>
+      <polygon class="a3-side" points="992,195 1002,185 1002,230 992,240"></polygon>
       <rect class="a3-front" x="860" y="195" width="132" height="45" rx="5"></rect>
       <text x="872" y="217" class="a3-strong"><tspan x="872" dy="0">Operational /</tspan><tspan x="872" dy="1.25em">assignment</tspan></text>
-    </g><rect class="a3-gate" x="860" y="325" width="132" height="84" rx="6"></rect><text x="872" y="353" class="a3-strong"><tspan x="872" dy="0">EVIDENCE GATE</tspan></text><text x="872" y="381" class="a3-secondary"><tspan x="872" dy="0">dual-run</tspan></text><rect class="a3-human" x="702" y="520" width="296" height="96" rx="6"></rect><text x="716" y="550" class="a3-strong"><tspan x="716" dy="0">HUMAN WORKFLOW AUTHORITY</tspan></text><text x="716" y="588" class="a3-secondary"><tspan x="716" dy="0">Actor and workflow surface; not a</tspan><tspan x="716" dy="1.25em">software cube.</tspan></text></g><g>
+    </g><rect class="a3-gate" x="860" y="325" width="132" height="84" rx="6"></rect><text x="872" y="353" class="a3-strong"><tspan x="872" dy="0">EVIDENCE GATE</tspan></text><text x="872" y="381" class="a3-secondary"><tspan x="872" dy="0">dual-run</tspan></text><rect class="a3-human" x="702" y="520" width="296" height="96" rx="6"></rect><text x="716" y="550" class="a3-strong"><tspan x="716" dy="0">HUMAN WORKFLOW AUTHORITY</tspan></text><text x="716" y="584" class="a3-secondary"><tspan x="716" dy="0">Curators train while QA validates and</tspan><tspan x="716" dy="1.25em">SOP sections are drafted.</tspan></text></g><g id="four-state-f3" data-phase="F3" role="group" aria-label="4 · Validated authority">
+        <title>4 · Validated authority</title>
         <rect x="1027" y="7" width="326" height="646" rx="8" fill="#082f57" stroke="#7aa6c9"></rect>
         <text x="1042" y="40" class="a3-strong"><tspan x="1042" dy="0">4 · VALIDATED AUTHORITY</tspan></text>
-        <text x="1042" y="82" class="a3-secondary"><tspan x="1042" dy="0">Only the validated capability</tspan><tspan x="1042" dy="1.25em">transfers. Retained work and rollb…</tspan></text>
+        <text x="1042" y="82" class="a3-secondary"><tspan x="1042" dy="0">Validated capability transfers.</tspan><tspan x="1042" dy="1.25em">Retained work and rollback remain.</tspan></text>
         <text x="1042" y="168" class="a3-strong"><tspan x="1042" dy="0">LEGACY</tspan></text>
-        <text x="1200" y="168" class="a3-strong"><tspan x="1200" dy="0">CONTRACT / NEW</tspan></text><g class="a3-cube state-legacy" data-cube-id="CAP-SEARCH"
-      role="button" tabindex="0" aria-label="Search; Legacy authority">
+        <text x="1200" y="168" class="a3-strong"><tspan x="1200" dy="0">BOUNDARY / NEW</tspan></text><g class="a3-cube state-legacy" data-cube-id="CAP-SEARCH"
+      role="group" aria-label="Search; Legacy authority">
       <title>Standard and advanced search — Legacy authority</title>
-      <polygon class="a3-top" points="1042,195 1051,186 1183,186 1174,195"></polygon>
-      <polygon class="a3-side" points="1174,195 1183,186 1183,231 1174,240"></polygon>
+      <polygon class="a3-top" points="1042,195 1052,185 1184,185 1174,195"></polygon>
+      <polygon class="a3-side" points="1174,195 1184,185 1184,230 1174,240"></polygon>
       <rect class="a3-front" x="1042" y="195" width="132" height="45" rx="5"></rect>
       <text x="1054" y="217" class="a3-strong"><tspan x="1054" dy="0">Search</tspan></text>
     </g><g class="a3-cube state-retained_legacy" data-cube-id="CAP-SPECIMEN"
-      role="button" tabindex="0" aria-label="Specimen overview; Retained legacy">
+      role="group" aria-label="Specimen overview; Retained legacy">
       <title>Specimen details and overview — Retained legacy</title>
-      <polygon class="a3-top" points="1042,257 1051,248 1183,248 1174,257"></polygon>
-      <polygon class="a3-side" points="1174,257 1183,248 1183,293 1174,302"></polygon>
+      <polygon class="a3-top" points="1042,257 1052,247 1184,247 1174,257"></polygon>
+      <polygon class="a3-side" points="1174,257 1184,247 1184,292 1174,302"></polygon>
       <rect class="a3-front" x="1042" y="257" width="132" height="45" rx="5"></rect>
       <text x="1054" y="279" class="a3-strong"><tspan x="1054" dy="0">Specimen overview</tspan></text>
+    </g><g class="a3-fallback" role="group" aria-label="Fallback route; prior implementation retained for recovery">
+      <title>Fallback route — prior implementation retained for recovery</title>
+      <rect x="1042" y="325" width="132" height="84" rx="6"></rect>
+      <text x="1054" y="351" class="a3-strong"><tspan x="1054" dy="0">FALLBACK ROUTE</tspan></text>
+      <text x="1054" y="375" class="a3-secondary"><tspan x="1054" dy="0">Prior route</tspan><tspan x="1054" dy="1.25em">retained</tspan></text>
     </g><g class="a3-cube state-new" data-cube-id="CAP-OP-ASSIGN"
-      role="button" tabindex="0" aria-label="Operational / assignment; New authority">
+      role="group" aria-label="Operational / assignment; New authority">
       <title>Profiles, permissions &amp; case assignment — New authority</title>
-      <polygon class="a3-top" points="1200,195 1209,186 1341,186 1332,195"></polygon>
-      <polygon class="a3-side" points="1332,195 1341,186 1341,231 1332,240"></polygon>
+      <polygon class="a3-top" points="1200,195 1210,185 1342,185 1332,195"></polygon>
+      <polygon class="a3-side" points="1332,195 1342,185 1342,230 1332,240"></polygon>
       <rect class="a3-front" x="1200" y="195" width="132" height="45" rx="5"></rect>
       <text x="1212" y="217" class="a3-strong"><tspan x="1212" dy="0">Operational /</tspan><tspan x="1212" dy="1.25em">assignment</tspan></text>
-    </g><rect class="a3-gate" x="1200" y="325" width="132" height="84" rx="6"></rect><text x="1212" y="353" class="a3-strong"><tspan x="1212" dy="0">GATE PASSED</tspan></text><text x="1212" y="381" class="a3-secondary"><tspan x="1212" dy="0">rollback stays</tspan></text><path class="a3-route secondary" d="M 1200 274 C 1168 290, 1168 349, 1165 349"></path><rect class="a3-human" x="1042" y="520" width="296" height="96" rx="6"></rect><text x="1056" y="550" class="a3-strong"><tspan x="1056" dy="0">HUMAN WORKFLOW AUTHORITY</tspan></text><text x="1056" y="588" class="a3-secondary"><tspan x="1056" dy="0">Actor and workflow surface; not a</tspan><tspan x="1056" dy="1.25em">software cube.</tspan></text></g>
+    </g><rect class="a3-gate" x="1200" y="325" width="132" height="84" rx="6"></rect><text x="1212" y="353" class="a3-strong"><tspan x="1212" dy="0">GATE PASSED</tspan></text><text x="1212" y="381" class="a3-secondary"><tspan x="1212" dy="0">rollback stays</tspan></text><path class="a3-route secondary" d="M 1206.2 259.1 L 1180.8 307.4 L 1176.8 305.4 L 1177.0 319.0 L 1188.3 311.4 L 1184.4 309.3 L 1209.8 260.9 Z" aria-hidden="true"></path><rect class="a3-human" x="1042" y="520" width="296" height="96" rx="6"></rect><text x="1056" y="550" class="a3-strong"><tspan x="1056" dy="0">HUMAN WORKFLOW AUTHORITY</tspan></text><text x="1056" y="584" class="a3-secondary"><tspan x="1056" dy="0">Curators use launched portions under</tspan><tspan x="1056" dy="1.25em">approved SOPs; rollback remains.</tspan></text></g>
     </svg>

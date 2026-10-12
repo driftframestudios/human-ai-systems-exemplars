@@ -4,6 +4,7 @@ import { lstat, readFile, readdir } from "node:fs/promises";
 import { relative, resolve, sep } from "node:path";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
+import { verifyPagesReleaseTag } from "./schema-site-release.mjs";
 
 const execFileAsync = promisify(execFile);
 const repositoryRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -181,6 +182,17 @@ export async function verifySchemaPagesReceiver({
 }
 
 const modulePath = fileURLToPath(import.meta.url);
+export async function verifySchemaSiteRelease(options) {
+  const result = await verifySchemaPagesReceiver(options);
+  const release = JSON.parse(await readFile(resolve(options.artifactRoot, "release.json"), "utf8"));
+  requirement(release.releaseTag === options.releaseTag && release.sourceRevision === options.sourceRevision,
+    "release.json must identify the requested site tag and source revision");
+  await verifyPagesReleaseTag({ root: options.projectionRoot, releaseTag: options.releaseTag,
+    sourceRevision: options.sourceRevision, projectionRevision: options.projectionRevision,
+    closureDigest: result.closureDigest });
+  return result;
+}
+
 if (process.argv[1] && resolve(process.argv[1]) === modulePath) {
   const options = parseArguments(process.argv.slice(2));
   const sourceRevision = options["source-revision"];
@@ -188,14 +200,17 @@ if (process.argv[1] && resolve(process.argv[1]) === modulePath) {
   const projectionRevision = options["projection-revision"];
   const projectionBranch = options["projection-branch"];
   const projectionRoot = resolve(repositoryRoot, options["projection-root"]);
-  const result = await verifySchemaPagesReceiver({
-    sourceRoot: repositoryRoot,
+  const sourceRoot = resolve(repositoryRoot, options["source-root"] ?? ".");
+  const verify = options["release-tag"] ? verifySchemaSiteRelease : verifySchemaPagesReceiver;
+  const result = await verify({
+    sourceRoot,
     sourceRevision,
     sourceBranch,
-    artifactRoot: resolve(repositoryRoot, ".schema-pages"),
+    artifactRoot: resolve(sourceRoot, ".schema-pages"),
     projectionRoot,
     projectionRevision,
     projectionBranch,
+    releaseTag: options["release-tag"],
   });
 
   console.log(`Schema Pages source revision: ${sourceRevision}`);

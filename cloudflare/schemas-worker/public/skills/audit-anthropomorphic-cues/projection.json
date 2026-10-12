@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/audit-anthropomorphic-cues/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "audit-anthropomorphic-cues",
+  "description": "Audits bundled person-like cues in generative-system interfaces and work language, separating human-interpretation evidence, model-output hypotheses, local system functions, and accountable authority. Applies when names, pronouns, avatars, voice, emotional language, agency claims, role metaphors, or tool surfaces may change reliance, delegation, capability expectations, responsibility, or recovery.",
+  "semanticAuthorityRef": "../source/.agents/skills/audit-anthropomorphic-cues/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/0",
+  "contract": {
+    "what": "A cue-bundle audit that makes relational value, technical referents, evidence standing, authority implications, and the smallest useful change visible together.",
+    "when": [
+      "Person-like or social cues may shape how people interpret a generative system, or when a terminology pass risks treating one phrase as the whole intervention."
+    ],
+    "boundaries": [
+      "The audit diagnoses and recommends within the current task. Source owners retain quoted, cited, participant-supplied, historical, legal, public-name, and compatibility-contract language. Named people and institutions retain interface, publication, access, consequential interpretation, and accountability decisions."
+    ],
+    "result": "A compact cue ledger plus retain, qualify, separate, disclose, test, or revise decisions that preserve useful warmth while making the acting system and accountable human recoverable."
+  },
+  "receivingUse": {
+    "job": "Person-like or social cues may shape how people interpret a generative system, or when a terminology pass risks treating one phrase as the whole intervention.",
+    "materialResult": "A compact cue ledger plus retain, qualify, separate, disclose, test, or revise decisions that preserve useful warmth while making the acting system and accountable human recoverable.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/audit-anthropomorphic-cues/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

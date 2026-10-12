@@ -7,7 +7,7 @@ another so a collaborator can follow behavior across repository boundaries.
 
 The standalone repositories remain the source histories for releases, issues,
 and durable ownership. This directory is a provenance-recorded exact-head
-snapshot inside `prototype-exemplars`: it is the place to encounter the whole
+snapshot inside `human-ai-systems-exemplars`: it is the place to encounter the whole
 system, exercise a cross-repository slice, and shape an intentional change
 before reconciling that change with the owning repositories.
 
@@ -42,6 +42,22 @@ The governance schema and the constellation release carry different meanings.
 Schema `2.0.1` versions the shared governance grammar. Nucleus `0.3.1` aligns
 the four program repositories on Control Plane Profile `0.3.0` while each
 repository retains its own release authority.
+
+### Read captured member documentation as snapshot evidence
+
+The five linked member READMEs describe the exact source revisions recorded in
+the manifest and copy receipt. They are useful for reproducing this integrated
+encounter; the corresponding standalone repository README and live GitHub work
+remain the collaboration truth after the capture date. Scan aids belong in
+this parent orientation unless a later snapshot regeneration explicitly
+updates captured bytes.
+
+For infrastructure questions, the captured Enterprise
+[`infra/README.md`](lims-eln-enterprise-implementation/infra/README.md) explains
+the local Compose production-shape and the Terraform evidence baseline. Use
+Compose for the repository's synthetic local proof; use the Terraform route to
+inspect architecture and recovery posture. The standalone Enterprise source
+owns current prerequisites, checks, and adoption decisions.
 
 ## One useful vertical slice
 
@@ -132,7 +148,7 @@ contribution guidance, governance records, release role documents, fixtures,
 and dormant `.github` references. Nested Git databases, local environments,
 package/build products, bytecode, test caches, and editor metadata stay outside
 the encounter. Nested `.github` directories remain source-repository context;
-workflows rooted at `prototype-exemplars/.github/workflows` form this
+workflows rooted at `human-ai-systems-exemplars/.github/workflows` form this
 repository's runnable set. The enclosing repository carries two manual-gated
 LIMS/ELN workflow definitions, including a bounded functional-nucleus proof.
 Dependabot scheduling rests in `.github/dependabot.manual.yml`, a reviewed

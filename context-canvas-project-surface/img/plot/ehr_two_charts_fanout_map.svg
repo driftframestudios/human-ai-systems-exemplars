@@ -51,8 +51,9 @@
     <rect class="card pale" x="476" y="326" width="302" height="116" rx="11"/>
     <text class="eyebrow" x="496" y="351">SHARED MEANING</text>
     <text class="card-title" x="496" y="378">Order + report + coded findings</text>
-    <text class="body" x="496" y="404">LOINC-coded clinical truth has one</text>
-    <text class="body" x="496" y="424">versioned internal representation.</text>
+    <text class="body" x="496" y="396">LOINC names observations;</text>
+    <text class="body" x="496" y="416">separate codes carry genomic values.</text>
+    <text class="body" x="496" y="436">One versioned model joins them.</text>
 
     <rect class="card sea" x="476" y="458" width="302" height="108" rx="11"/>
     <text class="eyebrow" x="496" y="483">ATTACHED MATCH EVIDENCE</text>

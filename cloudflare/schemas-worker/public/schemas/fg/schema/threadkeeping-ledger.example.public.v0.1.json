@@ -1,0 +1,107 @@
+{
+  "artifactIdentity": {
+    "id": "fg:threadkeeping-ledger/public-example-v0.1",
+    "type": [
+      "ThreadkeepingLedger",
+      "PublicExample"
+    ],
+    "displayName": "Threadkeeping Ledger public example",
+    "version": "0.1",
+    "package": "driftframe-field-guide",
+    "status": "public_safe_example",
+    "sourceBand": [
+      "author_created",
+      "schema_validated"
+    ]
+  },
+  "quickUse": {
+    "useWhen": "A team needs durable rationale and one prepared continuation across work sessions.",
+    "restores": "The settled decision, next candidate, and continuity state required for re-entry."
+  },
+  "threadkeeper": {
+    "id": "fg:threadkeeper/schema-publication-example",
+    "type": "Threadkeeper",
+    "title": "Schema publication threadkeeper",
+    "centralContract": "Carry reviewed schema bytes from their source owner to a public receiver while preserving version identity and a reversible handoff.",
+    "sourceBand": [
+      "repository_source",
+      "reviewed_change"
+    ],
+    "sourceOfTruthBand": [
+      "source_schema",
+      "reviewed_pull_request"
+    ],
+    "publicationStatus": "public_safe_example",
+    "entries": [
+      {
+        "id": "tk-entry-001",
+        "type": "ThreadkeeperEntry",
+        "entryType": "decision",
+        "title": "Freeze the accepted v0.1 schema bytes",
+        "summary": "The reviewed source revision fixes the bytes that each receiver publishes for the v0.1 route.",
+        "rationale": "Exact byte identity lets teams compare the repository source, Pages projection, and Worker response without redefining the contract.",
+        "status": "stable_for_now",
+        "horizonPosition": "now",
+        "sourceBand": [
+          "repository_source"
+        ],
+        "sourceOfTruthBand": [
+          "source_schema",
+          "reviewed_pull_request"
+        ],
+        "accessConfidence": "repository_confirmed",
+        "publicationStatus": "public_safe_example",
+        "recordedBy": "human steward",
+        "asOf": "2026-10-07",
+        "reviewTrigger": "Review when the contract needs a semantic change; publish that change at a new versioned route.",
+        "sourceRefs": [],
+        "evidenceRefs": [],
+        "openQuestionRefs": [],
+        "nextCandidateRefs": [
+          "next-001"
+        ],
+        "reentryPoint": "fg:schema-publication/source-review"
+      }
+    ],
+    "nextCandidates": [
+      {
+        "id": "next-001",
+        "type": "NextCandidate",
+        "title": "Promote the reviewed bytes to the public receiver",
+        "reason": "The source revision and receiver route are ready for a release-bound publication step.",
+        "candidateType": "release",
+        "readinessState": "ready_after_source_review",
+        "horizonPosition": "next",
+        "inheritsFrom": [
+          "tk-entry-001"
+        ],
+        "requiredInputs": [
+          "Reviewed source revision",
+          "Receiver route manifest"
+        ],
+        "blockedBy": [
+          "Source pull request approval"
+        ],
+        "preferred": true,
+        "reviewRequired": true,
+        "createdAt": "2026-10-07"
+      }
+    ],
+    "continuityAssessments": [
+      {
+        "id": "continuity-001",
+        "type": "ContextContinuityAssessment",
+        "assessorType": "human",
+        "band": "breathable",
+        "basis": "The source contract, publication route, decision rationale, and next receiver remain explicit.",
+        "atRiskElements": [
+          "The public receiver becomes available after source review and publication complete."
+        ],
+        "observedLoss": "",
+        "recommendedMove": "Continue from the reviewed source revision.",
+        "reviewState": "human_confirmed",
+        "asOf": "2026-10-07"
+      }
+    ]
+  }
+}

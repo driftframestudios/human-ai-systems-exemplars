@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:repository-handoff-foundation:schema:foundation-profile:v0.1",
+  "title": "Repository handoff foundation profile v0.1",
+  "description": "A selected foundation capability set with explicit human-held decisions and an exact-byte readable projection.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "artifactType",
+    "key",
+    "title",
+    "foundationManifest",
+    "sourceStanding",
+    "selectedModules",
+    "selectedEntryKeys",
+    "selectedIssueSeedKeys",
+    "heldDecisions",
+    "nextOwnerAction",
+    "projection"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../schema/foundation-profile.schema.v0.1.json"
+    },
+    "schemaVersion": {
+      "const": "0.1"
+    },
+    "artifactType": {
+      "const": "repository_handoff_foundation_profile"
+    },
+    "key": {
+      "$ref": "#/$defs/stableKey"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "foundationManifest": {
+      "$ref": "#/$defs/portablePath"
+    },
+    "sourceStanding": {
+      "enum": [
+        "source_awaiting",
+        "source_received"
+      ]
+    },
+    "selectedModules": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/stableKey"
+      }
+    },
+    "selectedEntryKeys": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 512,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/stableKey"
+      }
+    },
+    "selectedIssueSeedKeys": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/stableKey"
+      }
+    },
+    "heldDecisions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {
+        "$ref": "#/$defs/heldDecision"
+      }
+    },
+    "nextOwnerAction": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "projection": {
+      "$ref": "#/$defs/projection"
+    }
+  },
+  "$defs": {
+    "stableKey": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+    },
+    "portablePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^(?![^/]{256})(?!.*\\/[^/]{256})(?!.*(?:^|\\/)(?:\\.|\\.\\.)(?:\\/|$))(?!.*(?:^|\\/)(?:[Cc][Oo][Nn]|[Pp][Rr][Nn]|[Aa][Uu][Xx]|[Nn][Uu][Ll]|[Cc][Oo][Mm][1-9]|[Ll][Pp][Tt][1-9])(?:\\.[^/]*)?(?:\\/|$))(?!.*\\.(?:\\/|$))[A-Za-z0-9._-]+(?:\\/[A-Za-z0-9._-]+)*$"
+    },
+    "heldDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "owner",
+        "state",
+        "decision",
+        "availableRoute",
+        "releaseEvent"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "owner": {
+          "$ref": "#/$defs/stableKey"
+        },
+        "state": {
+          "const": "held"
+        },
+        "decision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "availableRoute": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "releaseEvent": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      }
+    },
+    "projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority",
+        "jsonSource",
+        "yamlTarget",
+        "mode",
+        "derivationNote"
+      ],
+      "properties": {
+        "authority": {
+          "const": "json"
+        },
+        "jsonSource": {
+          "$ref": "#/$defs/portablePath"
+        },
+        "yamlTarget": {
+          "$ref": "#/$defs/portablePath"
+        },
+        "mode": {
+          "const": "exact_json_bytes"
+        },
+        "derivationNote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      }
+    }
+  }
+}

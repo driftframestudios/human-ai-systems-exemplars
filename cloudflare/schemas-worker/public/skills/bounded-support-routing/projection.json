@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "https://schemas.vik.guru/skills/bounded-support-routing/projection.json",
+  "kind": "portable_skill_contract",
+  "name": "bounded-support-routing",
+  "description": "Composes a finite support packet with an explicit action mode, observable return, and stopping event. Applies when a focused solution, implementation, or recovery route needs clear expectations, bounded attention, and a natural handback.",
+  "semanticAuthorityRef": "../source/.agents/skills/bounded-support-routing/SKILL.md",
+  "sourceRef": "../catalog.json#/skills/1",
+  "contract": {
+    "what": "A compact support packet that carries one opportunity through a named focal surface to an observable result and return.",
+    "when": [
+      "A collaborator needs a sharply bounded observation, repair, or recovery contribution while ownership of the wider undertaking stays with its named steward."
+    ],
+    "boundaries": [
+      "Current intent, repository ground, source evidence, and granted tool authority govern the work. Route and skill labels aid navigation; they carry no execution, mutation, publication, merge, or deployment authority. The no-skill/direct-reasoning route remains available when it can produce the same result with less structure."
+    ],
+    "result": "The receiver can identify the opportunity, focal surface, requested result, action mode, granted actions, held boundaries, expected observation, recovery and return route, and stop condition in one pass."
+  },
+  "receivingUse": {
+    "job": "A collaborator needs a sharply bounded observation, repair, or recovery contribution while ownership of the wider undertaking stays with its named steward.",
+    "materialResult": "The receiver can identify the opportunity, focal surface, requested result, action mode, granted actions, held boundaries, expected observation, recovery and return route, and stop condition in one pass.",
+    "completion": "The receiving collaborator can locate the semantic source, work within its boundaries, and recognize the material result."
+  },
+  "standing": {
+    "routingStatus": "routable",
+    "contractVersionStatus": "draft",
+    "evidenceMaturity": "Repository-maintained portable contract with source-specific, revisable material-use evidence.",
+    "wakeTrigger": "Material use, human correction, receiving-artifact behavior, or independent evidence changes this route."
+  },
+  "evidence": {
+    "band": "source_supported",
+    "sourceRefs": [
+      "../source/.agents/skills/bounded-support-routing/SKILL.md"
+    ]
+  },
+  "transferBoundary": "This projection carries repository-local instruction yield. Current intent, repository evidence, and granted tool authority govern each activation."
+}

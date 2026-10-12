@@ -4,6 +4,8 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
 
+import { assertImmutableSkillCoordinate } from "../prompt-capsule-skill-coordinate.mjs";
+
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const coreRoot = resolve(repositoryRoot, "core-architectures-chimeric-prototype-current-pack-v0.1");
 const contextRoot = resolve(
@@ -28,7 +30,7 @@ const artifacts = [
     version: "0.1.6",
     currentFile: "heart-chart-chimeric-prototype-v0.1.6.html",
     historicalFile: "heart-chart-chimeric-prototype-v0.1.5.html",
-    currentDigest: "426f8389626c80ea8cad890133f0ff551452c52d7fa1b79942bf0d4d7a959b22",
+    currentDigest: "edd876b3ce9b3b445a090b833889ad05f44b8d812716113b1de503f29e394841",
     historicalDigest: "a4fecf35cb271d4b36ffd5a6eb22f9c3a6569b4e8551954cad0ffb47a7b87aba",
     stateContract: "heart-chart-state.v0.1",
     apiName: "heartChart",
@@ -45,11 +47,11 @@ const artifacts = [
   {
     id: "plus-delta",
     name: "Plus / Delta",
-    version: "0.1.4",
-    currentFile: "plus-delta-chimeric-prototype-v0.1.4.html",
-    historicalFile: "plus-delta-chimeric-prototype-v0.1.3.html",
-    currentDigest: "b1f828166d5fe62b122f5f3bb5eeca36759c5b4b4887875fab9d935520d2d5b6",
-    historicalDigest: "6e0574e69d339be3ae1e4d03fb3c2ae535230505e232c09ab8aa704353dad14a",
+    version: "0.1.5",
+    currentFile: "plus-delta-chimeric-prototype-v0.1.5.html",
+    historicalFile: "plus-delta-chimeric-prototype-v0.1.4.html",
+    currentDigest: "03720635728e8708d6c3bb7a97539290bc2e2da804d554b78902c6c90f3b5553",
+    historicalDigest: "b1f828166d5fe62b122f5f3bb5eeca36759c5b4b4887875fab9d935520d2d5b6",
     stateContract: "plus-delta-state.v0.1",
     apiName: "plusDelta",
     promptId: "aiPrompt",
@@ -65,11 +67,11 @@ const artifacts = [
   {
     id: "practitioner-judgment-probes",
     name: "Practitioner Judgment Probes",
-    version: "0.1.4",
-    currentFile: "practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
-    historicalFile: "practitioner-judgment-probes-chimeric-prototype-v0.1.3.html",
-    currentDigest: "a15c72f198dacb942d3ca4553204afac69df326df9c70bb6c00f32cd3242fd0c",
-    historicalDigest: "d50cfcde73b418a4e2f932a9c1e3a02344afb9ddaccf2cb42ca1e1b1bac51136",
+    version: "0.1.5",
+    currentFile: "practitioner-judgment-probes-chimeric-prototype-v0.1.5.html",
+    historicalFile: "practitioner-judgment-probes-chimeric-prototype-v0.1.4.html",
+    currentDigest: "b4f4a62b3246368ce423ee86aec092774bf0621f3e9890dd22b8522d6b81ec5d",
+    historicalDigest: "a15c72f198dacb942d3ca4553204afac69df326df9c70bb6c00f32cd3242fd0c",
     stateContract: "practitioner-judgment-probes-state.v0.1",
     apiName: "practitionerJudgmentProbes",
     promptId: "ai-prompt",
@@ -147,6 +149,16 @@ for (const artifact of artifacts) {
     assert.match(html, /<noscript>[\s\S]*?complete (?:default )?[Pp]lain Markdown remains available/u);
     assert.match(html, new RegExp(`window\\.${artifact.apiName}\\s*=\\s*Object\\.freeze\\(`, "u"));
     assert.ok(html.includes(skillRevision));
+    if (artifact.id === "heart-chart") {
+      assert.match(html, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?html \{ scroll-behavior: auto; \}/u);
+      assert.match(html, /matchMedia\?\.\('\(prefers-reduced-motion: reduce\)'\)[\s\S]*?reducedMotion\?'auto':'smooth'/u);
+    }
+    if (artifact.id === "plus-delta") {
+      assert.match(html, /@media \(prefers-reduced-motion: reduce\)\{\.svg-cell\{transition:none\}\}/u);
+      const reviewTrigger = "Review when a named signal confirms the current observation or shows what to revise.";
+      assert.equal(html.split(reviewTrigger).length - 1, 3, "all Plus / Delta creation and recovery defaults share the approved review trigger");
+      assert.doesNotMatch(html, /Review when a named evidence signal can confirm or revise this observation\./u);
+    }
 
     const orderedSections = [
       "## Purpose and target",
@@ -170,7 +182,7 @@ for (const artifact of artifacts) {
     }
     for (const skillId of artifact.skills) {
       const [path, expectedDigest] = skills.get(skillId);
-      assert.equal(sha256(await readFile(resolve(repositoryRoot, path))), expectedDigest);
+      assertImmutableSkillCoordinate(skillRevision, path, expectedDigest);
       assert.ok(html.includes(path));
       assert.ok(html.includes(expectedDigest));
     }
@@ -191,8 +203,18 @@ for (const artifact of artifacts) {
 
 test("Measurement, Reflection, and Judgment advances the current inventory as one family", async () => {
   const inventory = await readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8");
-  assert.match(inventory, /HEART Chart v0\.1\.6/u);
-  assert.match(inventory, /Plus \/ Delta v0\.1\.4/u);
-  assert.match(inventory, /Practitioner Judgment Probes v0\.1\.4/u);
-  assert.match(inventory, /28 current\s+adoptions\. This completes the observed population/u);
+  const currentInventory = inventory.split("\n## Projections, receivers, and recovery inputs\n", 1)[0];
+  assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
+  assert.match(currentInventory, /HEART Chart v0\.1\.6/u);
+  assert.match(currentInventory, /Plus \/ Delta v0\.1\.5/u);
+  assert.match(currentInventory, /Practitioner Judgment Probes v0\.1\.5/u);
+  const declared = currentInventory.match(/current population contains (\d+) source artifacts/u);
+  const adopted = currentInventory.match(/(\d+) current\s+adoptions\. This completes the observed population/u);
+  const heading = currentInventory.match(/## Current source artifacts[^\n\d]*(\d+)/u);
+  assert.ok(declared && adopted && heading, "the current population has a summary, heading and adoption statement");
+  const tableCount = [...currentInventory.matchAll(/^\|[^|]+\|\s*(\d+)\s*\|/gmu)]
+    .reduce((sum, match) => sum + Number(match[1]), 0);
+  assert.ok(tableCount > 0, "the current-artifact table supplies the counted population");
+  assert.deepEqual([Number(declared[1]), Number(adopted[1]), Number(heading[1])],
+    [tableCount, tableCount, tableCount], "current inventory counts agree with its source classes");
 });

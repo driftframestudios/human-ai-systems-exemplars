@@ -1,4 +1,4 @@
-/* Canonical Strategy Canvas controller v0.2.4 — safe DOM rendering over StrategyCanvasCore. */
+/* Canonical Strategy Canvas controller v0.2.5 — safe DOM rendering over StrategyCanvasCore. */
 (function exposeStrategyCanvasCanonical(global) {
   'use strict';
 
@@ -424,17 +424,17 @@
     function renderScoreMatrix(state) {
       const container = find('score-matrix');
       if (!container) return;
-      const table = element('table', { className: 'sc-score-table' });
+      const table = element('table', { className: 'sc-score-table', 'aria-label': 'Strategy Canvas score matrix', 'data-label': 'Strategy Canvas score matrix' });
       const head = element('thead');
       const headerRow = element('tr');
       ['Dimension', 'Current', 'Good enough', 'Desired', 'Consequence weight'].forEach((label, index) => {
-        headerRow.append(element('th', { scope: 'col', text: label, id: index ? undefined : 'sc-dimension-column' }));
+        headerRow.append(element('th', { scope: 'col', 'data-label': label, text: label, id: index ? undefined : 'sc-dimension-column' }));
       });
       head.append(headerRow);
       const body = element('tbody');
       core.selectors.orderedDimensions(state).forEach((dimension) => {
-        const row = element('tr', { 'data-selected': state.view.selectedDimensionId === dimension.id });
-        const dimensionHead = element('th', { scope: 'row' });
+        const row = element('tr', { 'data-label': `Strategy Canvas score matrix: ${dimension.label} (${dimension.id})`, 'data-selected': state.view.selectedDimensionId === dimension.id });
+        const dimensionHead = element('th', { scope: 'row', 'data-label': 'Dimension' });
         dimensionHead.append(
           element('button', {
             type: 'button',
@@ -448,8 +448,8 @@
           element('div', { className: 'sc-help', text: dimension.definition })
         );
         row.append(dimensionHead);
-        core.series.forEach((series) => row.append(element('td', {}, scoreControl(state, dimension, series))));
-        const weightCell = element('td');
+        core.series.forEach((series) => row.append(element('td', { 'data-label': SERIES_LABELS[series] }, scoreControl(state, dimension, series))));
+        const weightCell = element('td', { 'data-label': 'Consequence weight (0 to 5)' });
         const weightInput = element('input', {
           type: 'number', min: 0, max: 5, step: 1, value: dimension.consequenceWeight,
           'data-dimension-field': 'consequenceWeight',
@@ -521,15 +521,15 @@
     function renderTextEquivalent(state) {
       const container = find('text-equivalent');
       if (!container) return;
-      const table = element('table', { className: 'sc-score-table' });
+      const table = element('table', { className: 'sc-score-table', 'aria-label': 'Strategy Canvas text equivalent', 'data-label': 'Strategy Canvas text equivalent' });
       const head = element('thead');
       const headerRow = element('tr');
-      ['Dimension and anchors', 'Current', 'Good enough', 'Desired', 'Action', 'Evidence basis'].forEach((label) => headerRow.append(element('th', { scope: 'col', text: label })));
+      ['Dimension and anchors', 'Current', 'Good enough', 'Desired', 'Action', 'Evidence basis'].forEach((label) => headerRow.append(element('th', { scope: 'col', 'data-label': label, text: label })));
       head.append(headerRow);
       const body = element('tbody');
       core.selectors.orderedDimensions(state).forEach((dimension) => {
-        const row = element('tr');
-        const dimensionCell = element('th', { scope: 'row' });
+        const row = element('tr', { 'data-label': `Strategy Canvas text equivalent: ${dimension.label} (${dimension.id})` });
+        const dimensionCell = element('th', { scope: 'row', 'data-label': 'Dimension and anchors' });
         dimensionCell.append(
           element('strong', { text: dimension.label }),
           element('p', { text: dimension.definition }),
@@ -537,11 +537,11 @@
         );
         row.append(
           dimensionCell,
-          element('td', { text: dimension.scores.current }),
-          element('td', { text: dimension.scores.goodEnough }),
-          element('td', { text: dimension.scores.desired }),
-          element('td', { text: ACTION_LABELS[dimension.action] }),
-          element('td', { text: dimension.evidenceBasis || 'Open for the next review.' })
+          element('td', { 'data-label': 'Current', text: dimension.scores.current }),
+          element('td', { 'data-label': 'Good enough', text: dimension.scores.goodEnough }),
+          element('td', { 'data-label': 'Desired', text: dimension.scores.desired }),
+          element('td', { 'data-label': 'Action', text: ACTION_LABELS[dimension.action] }),
+          element('td', { 'data-label': 'Evidence basis', text: dimension.evidenceBasis || 'Open for the next review.' })
         );
         body.append(row);
       });
@@ -591,7 +591,7 @@
       if (promptDescription) {
         promptDescription.textContent = promptCapsuleView === 'skill-assisted'
           ? 'Skill-assisted Markdown adds exact public repository skill paths and their immutable revision. The Strategy Canvas state and fingerprint remain the same.'
-          : 'Plain Markdown carries the complete working context without asking the receiver to load a repository skill.';
+          : 'Plain Markdown is a self-contained handoff with the complete working context.';
       }
       if (validation) {
         const result = core.validateState(state);
@@ -861,7 +861,7 @@
     root.dataset.scEnhancementState = 'mounted';
 
     return Object.freeze({
-      version: '0.2.4',
+      version: '0.2.5',
       schemaVersion: core.schemaVersion,
       getState: () => core.clone(store.getState()),
       getValidation: () => core.validateState(store.getState()),
@@ -874,5 +874,5 @@
     });
   }
 
-  global.StrategyCanvasCanonical = Object.freeze({ version: '0.2.4', mount });
+  global.StrategyCanvasCanonical = Object.freeze({ version: '0.2.5', mount });
 })(typeof window !== 'undefined' ? window : globalThis);

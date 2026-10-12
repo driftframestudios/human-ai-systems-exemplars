@@ -19,9 +19,9 @@ The visitor-facing comparison remains in the prototype. Collaboration state, ope
 ### Retained from the current surface
 
 - Semantic section, aside, heading, list, print, and forced-color behavior.
-- “Roles that cross the seams.”
-- “Quality collaboration, not a late proof ritual.”
-- Abnormal states as written `Look here` cues.
+- Roles connecting strategy, design, engineering, and quality.
+- Quality work that begins during framing and continues through implementation, release, recovery, and learning.
+- Attention cues for abnormal or high-consequence states, including in-interface notifications and API-triggered Slack or Teams messages when the receiving workflow supports them.
 - Explicit human authority and regulatory applicability boundaries.
 - Distinct quality, accessibility, privacy, observability, recovery, release, and learning work.
 
@@ -116,6 +116,7 @@ These sources support the Twin Operating Folios composition and abbreviation tre
 - 2026-08-17 — Selected Twin Operating Folios for production. It keeps Career and Quality simultaneously visible, preserves equal semantic standing, makes static facts unmistakably non-interactive, and retains the strongest executive scan without sacrificing mechanism and boundary detail.
 - 2026-08-17 — Preserved all five treatments as a reusable comparison artifact. Future surfaces may borrow their cognitive moves and layout mechanics while regenerating source vocabulary and evidence for the receiving context.
 - 2026-08-17 — Integrated Twin Operating Folios directly into About with 16 decorative Lucide-style fact marks, precise abbreviation expansions, 37 stable source-record identifiers, a shared five-stage operating seam, and no new production JavaScript or iframe.
+- 2026-10-06 — Refined the shared record after the Debriefs matured: action and consequence now lead, multiple-account abuse names the reported 10% login reduction, the Humatics receipt uses the verified Series A1 designation, and attention cues name concrete interface and messaging routes. The EHR token and public-key timing remains exact in both carriers.
 
 ## Prototype receipt
 
@@ -134,9 +135,9 @@ These sources support the Twin Operating Folios composition and abbreviation tre
 
 ## Collaboration edge
 
-Current: Twin Operating Folios are integrated on the production About page with meaningful fact icons, quality abbreviation expansions, and full responsive/accessibility verification.
+Current: Twin Operating Folios are integrated on the production About page with meaningful fact icons, quality abbreviation expansions, direct action-and-consequence language, and full responsive/accessibility verification.
 
-Next: publish the focused pull request and retain the comparison as a reference for later Context Canvas surfaces.
+Next: review the focused refinement and retain the comparison as a reference for later Context Canvas surfaces.
 
 ```yaml
 comparison_ledger:
@@ -196,6 +197,6 @@ comparison_ledger:
       - "Career and Quality remain visible without a toggle or hierarchy"
 
   collaboration_edge:
-    current: "Twin Operating Folios are integrated and release-verified on the production About page."
-    next: "Publish the focused pull request and retain the comparison for future reuse."
+    current: "Twin Operating Folios are integrated and release-verified on the production About page with the refined shared record."
+    next: "Review the focused refinement and retain the comparison for future reuse."
 ```

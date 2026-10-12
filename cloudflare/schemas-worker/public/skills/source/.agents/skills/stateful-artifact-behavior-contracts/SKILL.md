@@ -1,0 +1,103 @@
+---
+name: stateful-artifact-behavior-contracts
+description: Designs focused executable behavior contracts for stateful artifacts and prototypes. Applies when owned state crosses import, edit, rendered, export, machine-readable, or recovery boundaries and a consequential regression needs the smallest source-grounded observation.
+---
+
+# Stateful artifact behavior contracts
+
+## Contract
+
+- **What:** A source-grounded method for selecting and exercising the smallest behavior contract that protects a stateful artifact through its consequential exchange route.
+- **When:** An artifact imports, edits, derives, renders, serializes, re-imports, or recovers state across one or more human- and machine-readable surfaces.
+- **Boundaries:** The artifact, its adjacent schema, and its declared source owners retain semantic authority. This skill selects observable behavior and a fitting test layer; it supplies neither product meaning nor broader mutation authority. Static presentation and isolated pure logic proceed through their direct owners. A cross-artifact path keeps each independently owned unit, schema boundary, serialized translation, and artifact identity distinct.
+- **Result:** Accepted state remains usable through its own exchange route, semantic twins agree, the minimum usable state stays explicit, and a rejected candidate leaves the accepted state available with a direct revision route.
+
+## Fit and attention
+
+- **Useful when:** State passes through forms, controls, reducers, adapters, imports, exports, JSON-LD, prompt projections, successor records, or recovery paths.
+- **Poor fit when:** A pure function already has a direct unit boundary, a static page needs visual comparison, or the requested result is an inventory of fields rather than consequential behavior.
+- **Smallest useful dose:** One material compatible path, plus one incompatible path when the artifact owns a rejection or recovery boundary.
+- **Foregrounds:** Self-roundtrip validity, stable identity and focus, minimum usable state, semantic-twin agreement, detached exchange state, and retained-state recovery.
+- **May under-attend:** Visual composition, performance, accessibility semantics, and cross-system protocol policy; those concerns keep their own evidence and receiving workflows.
+- **Interactions:** `source-authority-mapping` resolves ownership across producers and receivers. `practitioner-probe` clarifies an ambiguous mechanism. Desired-state writing shapes visible recovery. `collaboration-accounting` receives material defects, near misses, and release evidence.
+- **Rest or release when:** The consequential behavior is already protected by a smaller existing contract, the exchange route leaves active use, or maintenance shows that the test duplicates another owner without finding distinct defects.
+
+## Rules
+
+### Rule: Source owners supply meaning
+
+Runtime source, adjacent schemas, declared examples, and the nearest ownership guidance define valid state and transitions. A test encodes a selected consequence of those meanings. Existing output remains an observation until an owner establishes it as intended behavior.
+
+### Rule: Stabilization precedes persistence
+
+A fail-first example can expose either a source defect or an absent protection. When source behavior conflicts with its owning contract, the source receives the smallest fitting repair before the corrected behavior becomes a durable expectation.
+
+### Rule: The smallest meaningful layer carries the check
+
+Pure transformations and schema boundaries use direct tests. Visitor-owned interactions, browser serialization, focus, visibility, and recovery use the existing focused browser harness. A broader layer enters only when the smaller layer cannot observe the consequential effect.
+
+### Rule: Accepted state traverses its own route
+
+A valid authored or edited state can export, re-import, and preserve stable identity, meaningful selection or focus, and declared extension data. Exported state remains detached from the working model so later mutation has one clear authority.
+
+### Rule: Minimum usable state remains explicit
+
+The contract identifies the smallest state that remains usable for the artifact's purpose. Removal, normalization, aggregation, and successor transitions preserve that minimum or produce the artifact's named held-open state.
+
+### Rule: Semantic twins agree
+
+Visible controls, summaries, machine-readable projections, prompt capsules, JSON-LD graphs, and successor records agree on the fields and relationships they share. Each twin can carry additional owned detail while common meaning remains synchronized.
+
+### Rule: Cross-owner exchange preserves independent contracts
+
+A producer document establishes producer-schema validity. An adapter establishes recognition and intentional translation. A receiver export establishes receiver-schema validity and receiver-owned behavior. Source identity remains recoverable as lineage while receiver identity stays receiver-owned. When existing family harnesses have different owners, one focused orchestration journey carries boundary-only assertions and leaves each family suite as the owner of its internal behavior.
+
+### Rule: Rejection preserves a working route
+
+An admitted candidate commits atomically; an incompatible candidate remains outside the accepted model. The current working state stays operable, and visible recovery names the field, relationship, or source that can receive a revision.
+
+### Rule: Identity and chronology are deliberate
+
+Generated identity remains collision-safe for its actual creation cadence. A receiving artifact preserves its own identity while source identity remains recoverable through an explicit lineage or migration receipt. Ordered state uses the artifact's declared chronology and tie rule. References resolve to distinct owned records or remain explicitly held for a named receiver.
+
+When several working states can share source identity and revision, the lineage receipt includes a named content fingerprint or the exact source snapshot. The receiver can then distinguish exchanged states while semantic identity remains with the source owner.
+
+### Rule: Automation follows a receiver
+
+Existing local commands remain the primary evidence route. A hosted run uses the repository's configurable receiver when the named change benefits from it, then returns to its resting posture after the receipt settles.
+
+## Operating sequence
+
+1. **Map the owned exchange:** Identify each semantic owner, source state, independently governed schema boundary, transformation, visible and machine twin, serialized boundary, minimum usable state, identity lineage, and recovery route.
+2. **Select a consequential journey:** Choose the smallest compatible path that can reveal a material defect. Add one incompatible path when rejection behavior belongs to the artifact.
+3. **Place the observation:** Use a direct unit or schema test for isolated logic and a family-owned browser harness for rendered behavior within one owner. Use one dedicated orchestration journey for a serialized exchange across independent owners, retaining only boundary assertions there.
+4. **Resolve fail-first evidence:** Distinguish source defect from missing protection and name the fitting repair owner. An implementation pass repairs the owning source when its contract calls for change and retains expectations that describe the corrected behavior. A read-only pass stops with the predicted failure, observable evidence, and owner route.
+5. **Exercise agreement:** Assert the accepted state, self-roundtrip, minimum usable state, semantic twins, detached export, identity or chronology rule, and retained-state recovery that the journey actually crosses.
+6. **Close proportionally:** Run the focused local commands, use independent review when the path crosses several owners, name defects found and the remaining boundary, and return attention to the receiving artifact.
+
+## Representative scenarios
+
+### Scenario: An artifact re-enters through its own export
+
+- Given an authored state has a stable identity, usable focus, and machine-readable twin
+- When a material edit is exported and imported into a fresh working state
+- Then the edit, identity, usable focus, and shared semantic fields survive
+- And later mutation of the exported document leaves the working model unchanged
+
+### Scenario: Independent prototypes exchange serialized state
+
+- Given a producer and receiver own different units
+- And an adapter owns the translation at their serialized boundary
+- When one compatible and one structurally incompatible exchange are exercised
+- Then producer, adapter, and receiver assertions stay with their respective owners
+- And source identity remains recoverable as lineage while receiver identity stays receiver-owned
+- And the compatible state reaches a usable rendered result
+- And the incompatible candidate leaves the accepted receiver state available with a direct revision route
+
+## Conditional context
+
+The skill loads [Owned state and resource faults](references/owned-state-and-resource-faults.md) when a journey owns snapshots, partial resource acquisition, publication failure, retry, or lifecycle cleanup. The reference supplies bounded ownership and failure-stage probes; the artifact retains its state, recovery, and completion contract.
+
+## Completion
+
+The behavior-contract pass completes when the selected journey protects a consequential owned behavior at the smallest fitting layer, accepted and rejected paths leave state intelligible, duplicate assertions remain consolidated, and one material outside signal is available for continued use, revision, rest, or retirement through collaboration accounting.

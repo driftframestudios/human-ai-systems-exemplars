@@ -4,6 +4,8 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
 
+import { assertImmutableSkillCoordinate } from "../prompt-capsule-skill-coordinate.mjs";
+
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const coreRoot = resolve(repositoryRoot, "core-architectures-chimeric-prototype-current-pack-v0.1");
 const contextRoot = resolve(
@@ -30,13 +32,13 @@ const artifacts = [
   {
     id: "poda",
     name: "PODA",
-    version: "0.1.4",
-    currentFile: "poda-chimeric-prototype-v0.1.4.html",
-    historicalFile: "poda-chimeric-prototype-v0.1.3.html",
-    currentDigest: "adf425f5e7b0f22fe03c9df58c874b2f995457de933e9dc777fb8ef5bfd46704",
-    contextDigest: "cffd9df254680e13de1d6609c518926f6b8fc80dff56c972ea796fa896b4fe26",
-    historicalDigest: "75127797592b85c7f22608d92ae6482b6073c523879d621a3e33c133cecbac5b",
-    historicalContextDigest: "bcc33fdf78718abc54f65477672d164a1962cdf9f588480763b6e69c3ad7d2f9",
+    version: "0.1.5",
+    currentFile: "poda-chimeric-prototype-v0.1.5.html",
+    historicalFile: "poda-chimeric-prototype-v0.1.4.html",
+    currentDigest: "2f7e09dbf18059644b10c77f31b167b2c85ea0716afc897d6c7429525512e261",
+    contextDigest: "cb97e9b5e7c05d5cca0ce339b754a7bb4a6c66652c8b201199f5841af0e0252e",
+    historicalDigest: "adf425f5e7b0f22fe03c9df58c874b2f995457de933e9dc777fb8ef5bfd46704",
+    historicalContextDigest: "cffd9df254680e13de1d6609c518926f6b8fc80dff56c972ea796fa896b4fe26",
     stateContract: "poda-state.v0.1",
     apiName: "poda",
     promptId: "aiPrompt",
@@ -44,7 +46,7 @@ const artifacts = [
     skills: ["supportive-change-writing", "source-authority-mapping", "stateful-artifact-behavior-contracts"],
     directCarriers: ["context-canvas-project-surface/context-canvas/poda.html"],
     receiverStanding: "context_adapted",
-    activationStanding: "parity_review",
+    activationStanding: "eligible",
     adaptation: {
       canonical: "../context-canvas-project-surface/context-canvas/poda.html",
       context: "../../../poda.html",
@@ -62,7 +64,7 @@ const artifacts = [
     version: "0.1.4",
     currentFile: "alignment-worksheet-chimeric-prototype-v0.1.4.html",
     historicalFile: "alignment-worksheet-chimeric-prototype-v0.1.3.html",
-    currentDigest: "86995621536d1d69f74fe6b828e6c5108fe84d4fabbd486f18504e6051465a45",
+    currentDigest: "6c9ae958983899a288c0fbf2eaa869688f29b74fbf7b44364ebc1c76bd1d9805",
     historicalDigest: "d95b9dea95e92ab24baf3c286e8ac15d3166056d06b9ee4293b34a99f0400c23",
     stateContract: "alignment-worksheet-state.v0.1",
     apiName: "alignmentWorksheet",
@@ -71,7 +73,7 @@ const artifacts = [
     skills: ["supportive-change-writing", "practitioner-probe", "stateful-artifact-behavior-contracts"],
     directCarriers: ["context-canvas-project-surface/context-canvas/ai-systems.html"],
     receiverStanding: "reserve",
-    activationStanding: "reader_job_required",
+    activationStanding: "eligible",
     completeness(plain) {
       assert.equal([...plain.matchAll(/^### \d\. /gmu)].length, 6);
       assert.equal([...plain.matchAll(/^### Option:/gmu)].length, 4);
@@ -86,7 +88,7 @@ const artifacts = [
     version: "0.1.5",
     currentFile: "impact-map-chimeric-prototype-v0.1.5.html",
     historicalFile: "impact-map-chimeric-prototype-v0.1.4.html",
-    currentDigest: "f6bbc1177942fac7d9dcf1220ed26bc30f7e2bc6e3ea2416f89b2e52be8b102a",
+    currentDigest: "5841ac539623bba1a9688ba036bf9aca11f154b1ab8e9fc11da38412cf0f61d8",
     historicalDigest: "f4d87c54b4113c15076c0dd2e7516859beccf225d354a1723f16c1c4abd31797",
     stateContract: "impact-map-state.v0.1",
     apiName: "impactMap",
@@ -95,7 +97,7 @@ const artifacts = [
     skills: ["source-authority-mapping", "context-canvas-surface-reading", "stateful-artifact-behavior-contracts"],
     directCarriers: [],
     receiverStanding: "reserve",
-    activationStanding: "reader_job_required",
+    activationStanding: "eligible",
     completeness(plain) {
       assert.equal([...plain.matchAll(/^## Actor:/gmu)].length, 4);
       assert.equal([...plain.matchAll(/^### Impact /gmu)].length, 4);
@@ -110,7 +112,7 @@ const artifacts = [
     version: "0.1.7",
     currentFile: "context-tree-chimeric-prototype-v0.1.7.html",
     historicalFile: "context-tree-chimeric-prototype-v0.1.6.html",
-    currentDigest: "193ad86f568669909802f9e304119f2ecf4a04e20b60798bf0a78ab178d5e805",
+    currentDigest: "5bde5711a902673686104681b9852447a78431b45f75c1ae58109943a48a2fc1",
     historicalDigest: "c9b4474b0f8b514fd73363e5b5133cf4222e39973b1e7cf32ff640ed9603d7f7",
     stateContract: "context-tree-state.v0.1",
     apiName: "contextTree",
@@ -122,7 +124,7 @@ const artifacts = [
       "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
     ],
     receiverStanding: "reserve",
-    activationStanding: "reader_job_required",
+    activationStanding: "eligible",
     completeness(plain) {
       assert.equal([...plain.matchAll(/^- `group-/gmu)].length, 5);
       assert.equal([...plain.matchAll(/^- `row-/gmu)].length, 5);
@@ -262,7 +264,7 @@ for (const artifact of artifacts) {
     }
     for (const skillId of artifact.skills) {
       const [path, expectedDigest] = skills.get(skillId);
-      assert.equal(sha256(await readFile(resolve(repositoryRoot, path))), expectedDigest);
+      assertImmutableSkillCoordinate(skillRevision, path, expectedDigest);
       assert.ok(html.includes(path));
       assert.ok(html.includes(expectedDigest));
     }
@@ -286,7 +288,7 @@ for (const artifact of artifacts) {
     const [targetRegistry, narrativeComposer, familyCompanion, ...directCarriers] = await Promise.all([
       json(resolve(narrativeRoot, "core-architecture-target-pair-registry.v0.1.json")),
       readFile(resolve(narrativeRoot, "narrative-capsules-chimeric-prototype-v0.1.html"), "utf8"),
-      readFile(resolve(narrativeRoot, "companions/core-architecture-family-index-chimeric-prototype-v0.1.5.html"), "utf8"),
+      readFile(resolve(narrativeRoot, "companions/core-architecture-family-index-chimeric-prototype-v0.1.6.html"), "utf8"),
       ...artifact.directCarriers.map(path => readFile(resolve(repositoryRoot, path), "utf8")),
     ]);
     const card = targetRegistry.cards.find(({ id }) => id === artifact.id);
@@ -301,9 +303,19 @@ for (const artifact of artifacts) {
 
 test("Orientation and Tracing advances the current inventory as one complete family", async () => {
   const inventory = await readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8");
-  for (const phrase of ["PODA v0.1.4", "Alignment Worksheet v0.1.4", "Impact Map v0.1.5", "Context Tree v0.1.7"]) {
-    assert.match(inventory, new RegExp(phrase.replaceAll(".", "\\."), "u"));
+  const currentInventory = inventory.split("\n## Projections, receivers, and recovery inputs\n", 1)[0];
+  assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
+  for (const phrase of ["PODA v0.1.5", "Alignment Worksheet v0.1.4", "Impact Map v0.1.5", "Context Tree v0.1.7"]) {
+    assert.match(currentInventory, new RegExp(phrase.replaceAll(".", "\\."), "u"));
   }
-  assert.match(inventory, /28 current\s+adoptions\. This completes the observed population/u);
-  assert.match(inventory, /family members, which complete the current Orientation and Tracing[\s\S]*?famil(?:y|ies)/u);
+  const declared = currentInventory.match(/current population contains (\d+) source artifacts/u);
+  const adopted = currentInventory.match(/(\d+) current\s+adoptions\. This completes the observed population/u);
+  const heading = currentInventory.match(/## Current source artifacts[^\n\d]*(\d+)/u);
+  assert.ok(declared && adopted && heading, "the current population has a summary, heading and adoption statement");
+  const tableCount = [...currentInventory.matchAll(/^\|[^|]+\|\s*(\d+)\s*\|/gmu)]
+    .reduce((sum, match) => sum + Number(match[1]), 0);
+  assert.ok(tableCount > 0, "the current-artifact table supplies the counted population");
+  assert.deepEqual([Number(declared[1]), Number(adopted[1]), Number(heading[1])],
+    [tableCount, tableCount, tableCount], "current inventory counts agree with its source classes");
+  assert.match(currentInventory, /family members, which complete the current Orientation and Tracing[\s\S]*?famil(?:y|ies)/u);
 });

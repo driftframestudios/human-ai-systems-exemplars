@@ -4,8 +4,8 @@
    progressive disclosure, and the Prompt Conditions explorer.
    Contracts: ../../../../visual-fidelity-contracts/tiffany-ledger-field.md
    and ../../../../visual-fidelity-contracts/tiffany-conditions-routing-field.md.
-   Shared seams: expanded.css owns the route-card grid and shared table rules;
-   canvas-shell.css follows this bundle in the document cascade.
+   Shared seams: core tokens and foundation precede the site-navigation, table,
+   and route-card components; canvas-shell.css follows this route bundle.
    Route-local composition, rhythm, and visual variation remain welcome when
    the About source and visitor purpose support them. */
 
@@ -186,11 +186,28 @@
     max-inline-size: 100%;
 }
 
+.about-hero__name {
+    min-inline-size: 0;
+}
+
 .about-hero h1 {
     font-size: clamp(3rem, 8vw, 7.5rem);
     letter-spacing: -.065em;
     line-height: .88;
     margin: 0;
+}
+
+.about-contact {
+    color: var(--about-ink-strong);
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: clamp(1.5rem, 4vw, 3.5rem);
+    font-style: normal;
+    font-weight: 750;
+    letter-spacing: -.045em;
+    line-height: 1;
+    margin: clamp(.75rem, 1.8vw, 1.4rem) 0 0;
+    max-inline-size: 100%;
+    overflow-wrap: anywhere;
 }
 
 .about-title__line {
@@ -244,6 +261,12 @@ p#on-dark-iron-ore {
 .about-static-equivalent {
     font-size: .82rem;
     margin-block: 0;
+}
+
+.about-boundary a {
+    font-weight: 800;
+    text-decoration-thickness: .12em;
+    text-underline-offset: .18em;
 }
 
 .about-portrait {
@@ -381,7 +404,7 @@ p#on-dark-iron-ore {
     color: var(--about-ink-strong);
 }
 
-/* About · visitor-controlled visual treatment loop ---------------------- */
+/* About · visitor-controlled problem-to-system sequence ------------------ */
 
 .about-media {
     background: var(--about-paper);
@@ -398,7 +421,7 @@ p#on-dark-iron-ore {
     overflow: hidden;
 }
 
-.about-media__image {
+.about-media__video {
     block-size: 100%;
     display: block;
     inline-size: 100%;
@@ -406,71 +429,86 @@ p#on-dark-iron-ore {
 }
 
 .about-media figcaption {
-    align-items: center;
     border-block-start: .1rem solid var(--about-ink);
     color: var(--about-ink-strong);
     display: grid;
     font-size: .86rem;
-    gap: .85rem;
-    grid-template-columns: minmax(0, 1fr) auto;
+    gap: .45rem;
     line-height: 1.45;
     padding: .8rem 1rem;
 }
 
-.about-media__toggle {
-    align-items: center;
-    appearance: none;
-    background: var(--about-ink-strong);
-    border: .125rem solid var(--about-ink-strong);
-    color: #fff;
-    cursor: pointer;
-    display: inline-flex;
-    font: 800 .78rem/1.2 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-    justify-content: center;
-    min-block-size: 2.75rem;
-    padding: .65rem .85rem;
+.about-media__fallback,
+.about-media__status {
+    font: 700 .76rem/1.4 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
-.about-media__toggle[hidden] {
+.about-media__status[hidden] {
     display: none;
 }
 
-.about-media__toggle:hover,
-.about-media__toggle[aria-pressed="true"] {
-    background: var(--about-cobalt);
+.about-media__fallback a {
+    text-underline-offset: .2em;
 }
 
-.about-media__toggle:focus-visible {
-    outline: .25rem solid var(--about-cobalt);
+.about-media__status {
+    border-inline-start: .2rem solid var(--about-coral);
+    color: var(--about-ink-strong);
+    padding-inline-start: .65rem;
+}
+
+.about-media-sequence {
+    background: var(--about-unbleached-paper);
+    border-inline-start: .25rem solid var(--about-cobalt);
+    inline-size: min(100%, 40rem);
+    margin: -1.5rem 0 clamp(1.5rem, 4vw, 3rem);
+    padding: .75rem 1rem .85rem;
+}
+
+.about-media-sequence summary {
+    color: var(--about-ink-strong);
+    cursor: pointer;
+    font: 800 .78rem/1.3 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    letter-spacing: .08em;
+    padding-block: .15rem;
+    text-transform: uppercase;
+}
+
+.about-media-sequence[open] summary {
+    margin-block-end: .55rem;
+}
+
+.about-media-sequence summary:focus-visible {
+    outline: .2rem solid var(--about-cobalt);
     outline-offset: .2rem;
+}
+
+.about-media-sequence ol {
+    color: var(--about-ink-strong);
+    display: grid;
+    font-size: .83rem;
+    gap: .35rem;
+    line-height: 1.45;
+    margin: 0;
+    padding-inline-start: 1.25rem;
 }
 
 @media screen and (max-width: 34rem) {
     .about-media {
         box-shadow: .3rem .3rem 0 var(--about-ink);
     }
-
-    .about-media figcaption {
-        grid-template-columns: 1fr;
-    }
-
-    .about-media__toggle {
-        inline-size: 100%;
-    }
 }
 
 @media (forced-colors: active) {
     .about-media,
-    .about-media figcaption {
+    .about-media figcaption,
+    .about-media-sequence {
         border-color: CanvasText;
         box-shadow: none;
     }
 
-    .about-media__toggle {
-        background: ButtonFace;
-        border-color: ButtonText;
-        color: ButtonText;
-        forced-color-adjust: auto;
+    .about-media__status {
+        border-color: CanvasText;
     }
 }
 
@@ -487,8 +525,31 @@ p#on-dark-iron-ore {
         color: #000;
     }
 
-    .about-media__toggle {
+    .about-media-sequence {
+        background: #fff;
+        border-color: #000;
+        color: #000;
+    }
+
+    .about-media-sequence summary,
+    .about-media-sequence ol {
+        color: #000;
+    }
+
+    .about-media-sequence summary {
+        cursor: default;
+        display: block;
+        list-style: none;
+    }
+
+    .about-media-sequence summary::marker,
+    .about-media-sequence summary::-webkit-details-marker {
+        content: "";
         display: none;
+    }
+
+    .about-media-sequence:not([open]) > :not(summary) {
+        display: grid !important;
     }
 }
 
@@ -888,6 +949,10 @@ p#on-dark-iron-ore {
     .about-evidence-note {
         border: .125rem solid CanvasText;
     }
+
+    .about-contact {
+        color: CanvasText;
+    }
 }
 
 @media print {
@@ -912,6 +977,10 @@ p#on-dark-iron-ore {
     .about-page :is(h1, h2, h3, p, .about-kicker),
     .about-field--dark-iron-ore :is(h2, h3, p),
     .about-field--stakes :is(h2, h3, p) {
+        color: #000 !important;
+    }
+
+    .about-contact {
         color: #000 !important;
     }
 
@@ -1074,6 +1143,23 @@ p#on-dark-iron-ore {
     text-transform: uppercase;
 }
 
+.about-folio-eyebrow--capability {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem .55rem;
+}
+
+.about-folio__head .about-folio-badge {
+    background: var(--about-cobalt);
+    border: .0625rem solid var(--about-ink);
+    border-radius: .22rem;
+    color: #fff;
+    display: inline-block;
+    padding: .18rem .38rem;
+    white-space: nowrap;
+}
+
 .about-folio--quality .about-folio-eyebrow {
     color: var(--about-deep-teal);
 }
@@ -1229,6 +1315,14 @@ p#on-dark-iron-ore {
 
 .about-folio-roles strong {
     color: var(--about-ink-strong);
+}
+
+.about-folio-roles .about-folio-role__organization {
+    display: block;
+    font-size: .9em;
+    font-weight: 650;
+    line-height: 1.35;
+    margin-block-start: .12rem;
 }
 
 .about-folio-roles span {
@@ -1446,7 +1540,7 @@ p#on-dark-iron-ore {
 }
 
 @media (forced-colors: active) {
-    .about-page :is(.about-folio, .about-folio-lifecycle, .about-folio-ledger, .about-folio-fact, .about-folio-case, .about-folio-applicability li) {
+    .about-page :is(.about-folio, .about-folio-lifecycle, .about-folio-ledger, .about-folio-fact, .about-folio-case, .about-folio-applicability li, .about-folio-badge) {
         background: Canvas !important;
         border-color: CanvasText;
         box-shadow: none;
@@ -1470,7 +1564,8 @@ p#on-dark-iron-ore {
     .about-folio-fact,
     .about-folio-case,
     .about-folio-applicability li,
-    .about-folio-thread {
+    .about-folio-thread,
+    .about-folio-badge {
         background: #fff !important;
         box-shadow: none !important;
         color: #000 !important;

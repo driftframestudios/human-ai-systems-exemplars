@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vik.guru/a3-stacked-cube-atlas-expanded/0.2/source-registry.schema.json",
+  "title": "A3 expanded source registry",
+  "type": "object",
+  "required": ["$schema", "schema_version", "as_of", "artifact_id", "extracted_from", "sources"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schema_version": { "const": "0.2.0" },
+    "as_of": { "type": "string", "format": "date" },
+    "artifact_id": { "const": "A3-CUBE-EXPANDED" },
+    "extracted_from": { "type": "string", "minLength": 1 },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "url", "role", "boundary"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^SRC-[A-Z0-9]+(?:-[A-Z0-9]+)*$" },
+          "title": { "type": "string", "minLength": 1 },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public source URI or stable source-key URN."
+          },
+          "role": { "type": "string", "minLength": 1 },
+          "boundary": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

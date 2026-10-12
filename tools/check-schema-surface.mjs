@@ -34,6 +34,38 @@ const paths = {
   ],
   collaborationAccountExample:
     "schemas/collaboration-skills/0.1.0/examples/collaboration-account.example.json",
+  narrativeCapsuleSchema:
+    "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/narrative-capsule-composition.schema.v0.1.json",
+  narrativeCapsuleExample:
+    "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/narrative-capsule-composition.example.valid.v0.1.json",
+  narrativeCapsulePublicExample:
+    "schemas/narrative-threadkeeping/0.1/examples/narrative-capsule-composition.public.example.v0.1.json",
+  narrativeCapsuleContext:
+    "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/narrative-capsule-composition.context.v0.1.jsonld",
+  narrativeSamplingSchema:
+    "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/semantic-sampling-tableau/terminology-exploration/narrative-sampling-tableau-state.schema.v0.1.json",
+  narrativeSamplingMaterial:
+    "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/semantic-sampling-tableau/terminology-exploration/conation-motion-naming-sampling.example.v0.1.json",
+  narrativeSamplingPublicExample:
+    "schemas/narrative-threadkeeping/0.1/examples/narrative-sampling-tableau.public.example.v0.1.json",
+  narrativeSamplingContext:
+    "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/semantic-sampling-tableau/terminology-exploration/narrative-sampling-tableau.context.v0.1.jsonld",
+  technologyFitSchema:
+    "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/technology-fit-sampling-tableau-state.schema.v0.1.json",
+  technologyFitExample:
+    "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/front-end-stack-selection.example.v0.1.json",
+  technologyFitPublicExample:
+    "schemas/narrative-threadkeeping/0.1/examples/technology-fit-sampling-tableau.public.example.v0.1.json",
+  technologyFitContext:
+    "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/technology-fit-sampling-tableau/technology-fit-sampling-tableau.context.v0.1.jsonld",
+  threadkeepingSchema:
+    "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger.schema.v0.1.json",
+  threadkeepingPrototype:
+    "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger-chimeric-prototype-v0.1.html",
+  threadkeepingPublicExample:
+    "schemas/narrative-threadkeeping/0.1/examples/threadkeeping-ledger.public.example.v0.1.json",
+  threadkeepingContext:
+    "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/threadkeeping-ledger/threadkeeping-ledger-chimeric-prototype-bundle-v0.1/threadkeeping-ledger.context.v0.1.jsonld",
   supportiveSchema: "supportive-change-writing-exemplars-bundle-v0.1/schema/collection-manifest.schema.v0.1.json",
   supportiveInstance: "supportive-change-writing-exemplars-bundle-v0.1/manifest.json"
 };
@@ -45,6 +77,15 @@ async function readJson(relativePath) {
   } catch (error) {
     throw new Error(`${relativePath} is not valid JSON: ${error.message}`);
   }
+}
+
+async function readThreadkeepingMaterial() {
+  const source = await readFile(path.join(repositoryRoot, paths.threadkeepingPrototype), "utf8");
+  const match = source.match(/^const INITIAL = (.+);$/mu);
+  if (!match) {
+    throw new Error(`${paths.threadkeepingPrototype} should expose one adjacent INITIAL ledger.`);
+  }
+  return JSON.parse(match[1]);
 }
 
 function assertExact(label, actual, expected) {
@@ -244,6 +285,39 @@ function assertInvalid(label, validate, instance) {
   }
 }
 
+function assertOwnedJsonLdContext(label, document) {
+  const context = document?.["@context"];
+  if (!context || typeof context !== "object" || Array.isArray(context)) {
+    throw new Error(`${label} should contain one object-valued @context.`);
+  }
+  const allowedBases = new Set([
+    "https://schema.org/",
+    "https://schemas.driftframestudios.org/na#",
+    "https://schemas.driftframestudios.org/ca#",
+    "https://schemas.driftframestudios.org/ra#",
+    "https://schemas.driftframestudios.org/pp#",
+    "https://schemas.driftframestudios.org/is#",
+    "https://schemas.driftframestudios.org/fg#"
+  ]);
+  const prefixes = new Map(
+    Object.entries(context).filter(([, value]) => typeof value === "string" && allowedBases.has(value))
+  );
+  for (const [term, definition] of Object.entries(context)) {
+    const target = typeof definition === "string" ? definition : definition?.["@id"];
+    if (target === "@id" || target === "@type" || allowedBases.has(target)) continue;
+    if (typeof target !== "string") {
+      throw new Error(`${label} term ${term} should declare a string target.`);
+    }
+    const compact = target.match(/^([a-z][a-z0-9_-]*):(.+)$/iu);
+    if (!compact || !prefixes.has(compact[1])) {
+      throw new Error(`${label} term ${term} should resolve through an owned context prefix: ${target}`);
+    }
+    if (definition && typeof definition === "object" && definition["@type"] !== "@id") {
+      throw new Error(`${label} object term ${term} should identify an IRI-valued relationship.`);
+    }
+  }
+}
+
 const strictAjv = new Ajv2020({
   strict: true,
   allErrors: true,
@@ -257,12 +331,20 @@ const repositorySchema = await readJson(paths.repositorySchema);
 const contextSchema = await readJson(paths.contextSchema);
 const collaborationSkillSchema = await readJson(paths.collaborationSkillSchema);
 const collaborationAccountSchema = await readJson(paths.collaborationAccountSchema);
+const narrativeCapsuleSchema = await readJson(paths.narrativeCapsuleSchema);
+const narrativeSamplingSchema = await readJson(paths.narrativeSamplingSchema);
+const technologyFitSchema = await readJson(paths.technologyFitSchema);
+const threadkeepingSchema = await readJson(paths.threadkeepingSchema);
 
 for (const [label, schema] of [
   [paths.repositorySchema, repositorySchema],
   [paths.contextSchema, contextSchema],
   [paths.collaborationSkillSchema, collaborationSkillSchema],
-  [paths.collaborationAccountSchema, collaborationAccountSchema]
+  [paths.collaborationAccountSchema, collaborationAccountSchema],
+  [paths.narrativeCapsuleSchema, narrativeCapsuleSchema],
+  [paths.narrativeSamplingSchema, narrativeSamplingSchema],
+  [paths.technologyFitSchema, technologyFitSchema],
+  [paths.threadkeepingSchema, threadkeepingSchema]
 ]) {
   const externalRefs = findExternalRefs(schema);
   if (externalRefs.length > 0) {
@@ -277,11 +359,29 @@ const validateRepository = strictAjv.compile(repositorySchema);
 const validateContext = strictAjv.compile(contextSchema);
 const validateCollaborationSkill = strictAjv.compile(collaborationSkillSchema);
 const validateCollaborationAccount = strictAjv.compile(collaborationAccountSchema);
+const validateNarrativeCapsule = strictAjv.compile(narrativeCapsuleSchema);
+const validateNarrativeSampling = strictAjv.compile(narrativeSamplingSchema);
+const validateTechnologyFit = strictAjv.compile(technologyFitSchema);
+const validateThreadkeeping = strictAjv.compile(threadkeepingSchema);
 
 const repositoryExample = await readJson(paths.repositoryExample);
 const contextExamples = await Promise.all(paths.contextExamples.map(readJson));
 const collaborationSkillExamples = await Promise.all(paths.collaborationSkillExamples.map(readJson));
 const collaborationAccountExample = await readJson(paths.collaborationAccountExample);
+const narrativeCapsuleExample = await readJson(paths.narrativeCapsuleExample);
+const narrativeCapsulePublicExample = await readJson(paths.narrativeCapsulePublicExample);
+const narrativeSamplingMaterial = await readJson(paths.narrativeSamplingMaterial);
+const narrativeSamplingPublicExample = await readJson(paths.narrativeSamplingPublicExample);
+const technologyFitExample = await readJson(paths.technologyFitExample);
+const technologyFitPublicExample = await readJson(paths.technologyFitPublicExample);
+const threadkeepingMaterial = await readThreadkeepingMaterial();
+const threadkeepingPublicExample = await readJson(paths.threadkeepingPublicExample);
+const narrativeContexts = await Promise.all([
+  paths.narrativeCapsuleContext,
+  paths.narrativeSamplingContext,
+  paths.technologyFitContext,
+  paths.threadkeepingContext
+].map(async (contextPath) => [contextPath, await readJson(contextPath)]));
 const [canonicalCoreManifest, contextCoreManifest, strategyCanvasEvidence] = await Promise.all([
   readJson(paths.canonicalCoreManifest),
   readJson(paths.contextCoreManifest),
@@ -309,6 +409,15 @@ paths.collaborationSkillExamples.forEach((examplePath, index) => {
   assertValid(examplePath, validateCollaborationSkill, collaborationSkillExamples[index]);
 });
 assertValid(paths.collaborationAccountExample, validateCollaborationAccount, collaborationAccountExample);
+assertValid(paths.narrativeCapsuleExample, validateNarrativeCapsule, narrativeCapsuleExample);
+assertValid(paths.narrativeCapsulePublicExample, validateNarrativeCapsule, narrativeCapsulePublicExample);
+assertValid(paths.narrativeSamplingMaterial, validateNarrativeSampling, narrativeSamplingMaterial);
+assertValid(paths.narrativeSamplingPublicExample, validateNarrativeSampling, narrativeSamplingPublicExample);
+assertValid(paths.technologyFitExample, validateTechnologyFit, technologyFitExample);
+assertValid(paths.technologyFitPublicExample, validateTechnologyFit, technologyFitPublicExample);
+assertValid(paths.threadkeepingPrototype, validateThreadkeeping, threadkeepingMaterial);
+assertValid(paths.threadkeepingPublicExample, validateThreadkeeping, threadkeepingPublicExample);
+narrativeContexts.forEach(([contextPath, context]) => assertOwnedJsonLdContext(contextPath, context));
 
 for (const [examplePath, example] of [
   ...paths.collaborationSkillExamples.map((examplePath, index) => [examplePath, collaborationSkillExamples[index]]),
@@ -368,6 +477,26 @@ const missingIdentity = structuredClone(contextExamples[1]);
 delete missingIdentity.id;
 assertInvalid("required Context Canvas identity boundary", validateContext, missingIdentity);
 
+for (const [label, validate, instance, requiredProperty] of [
+  ["Narrative Capsule Composition", validateNarrativeCapsule, narrativeCapsulePublicExample, "id"],
+  ["Narrative Sampling Tableau", validateNarrativeSampling, narrativeSamplingPublicExample, "id"],
+  ["Technology Fit Sampling Tableau", validateTechnologyFit, technologyFitPublicExample, "id"],
+  ["Threadkeeping Ledger", validateThreadkeeping, threadkeepingPublicExample, "artifactIdentity"]
+]) {
+  const missingRequired = structuredClone(instance);
+  delete missingRequired[requiredProperty];
+  assertInvalid(`${label} required-field boundary`, validate, missingRequired);
+
+  const additiveExtension = structuredClone(instance);
+  additiveExtension["urn:driftframe:public-compatible-probe"] = {
+    observation: "An additive property remains available at this open object boundary."
+  };
+  assertValid(`${label} additive compatibility boundary`, validate, additiveExtension);
+  if (!("urn:driftframe:public-compatible-probe" in additiveExtension)) {
+    throw new Error(`${label} validation should preserve additive properties.`);
+  }
+}
+
 const supportiveSchema = await readJson(paths.supportiveSchema);
 const supportiveInstance = await readJson(paths.supportiveInstance);
 const validateSupportive = strictAjv.compile(supportiveSchema);
@@ -412,5 +541,5 @@ if (limsResult.status !== 0) {
 }
 
 console.log(
-  `Schema surface check passed: 4 strict schemas, 7 representative schema instances, 1 Supportive instance, 1 LIMS/ELN instance, 1 Strategy Canvas cross-owner coordinate, 9 boundary probes, and ${schemaReceiverRoutes.length} receiver identities.`
+  `Schema surface check passed: 8 strict schemas, 15 representative schema instances, 1 Supportive instance, 1 LIMS/ELN instance, 1 Strategy Canvas cross-owner coordinate, 17 boundary probes, and ${schemaReceiverRoutes.length} receiver identities.`
 );

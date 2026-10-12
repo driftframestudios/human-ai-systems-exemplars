@@ -64,7 +64,7 @@ When a path, source claim, or shared selector strains:
 
 - **Landed:** dependency-free page shell across the visitor set; native authored jump links; three-column super footer; prose measure and table containment; filterable Debriefs catalog with semantic GET controls and URL restoration; About orientation; linked Prompt-Side cartography; AI method shelf; Initiative Costing page rail and Strategy Canvas treatment.
 - **Interaction decision:** ordinary anchors own navigation and focus. Viewport observation may add a visual in-view state but never invent IDs, intercept the first tap, or rewrite fragment truth.
-- **Catalog decision:** the current collection is small enough for filtering without pagination. Four drafting-era exemplar routes remain in the repository but are `noindex` and absent from the visitor footer and sitemap until restored; the Brief Exploration exemplar was cleaned and remains available.
+- **Catalog decision at this recorded wave:** the collection was small enough for filtering without pagination. Four drafting-era exemplar routes remained in the repository under `noindex`; the supersession note below records their later retirement. The Brief Exploration exemplar was cleaned and remained available.
 
 ### Wave 3 — source-native instruments and Debriefs
 
@@ -78,7 +78,14 @@ When a path, source claim, or shared selector strains:
 - **Method shelf:** selected leaf viewlets form written signal → inspection → receiver rails. Authored method diagrams use the positive cue `ANOMALY · LOOK HERE`, retain evidence and receiver labels, and freeze attention motion when reduced motion is requested.
 - **Order-sensitive practice:** long-context and LLM-evaluator research is carried adjacent to the shelf. Station order names function; consequential comparisons rotate candidate order and remain human-owned.
 - **Verification:** HTML/JSON-LD, local routes, authored fragments, iframe isolation, table semantics, SVG XML and accessibility, JavaScript syntax, responsive containment at 390/1440/2560, print/forced-colors/reduced-motion source contracts, and clean diffs form the release gate.
-- **Release result:** 34 canonical public routes pass the final responsive and semantic crawl; 13 contract SVGs pass XML, integrated-arrow, local-title, and native-containment checks; the sitemap, structured metadata, scripts, local routes, and changed-file whitespace are clean. Four drafting-era exemplars remain recoverable in the repository while resting outside the public route set under `noindex, follow`.
+- **Release result at this recorded wave:** 34 canonical public routes passed the final responsive and semantic crawl; 13 contract SVGs passed XML, integrated-arrow, local-title, and native-containment checks; the sitemap, structured metadata, scripts, local routes, and changed-file whitespace were clean. Four drafting-era exemplars remained recoverable in the repository while resting outside the public route set under `noindex, follow`.
+
+> Supersession · 2026-10-12: Issue #88 retired the gallery, ideal,
+> maximal, and maximal-information-radiator exemplars plus `occipital.png`
+> from current source. Git history remains the recovery route.
+> `exemplar-index-landing.html` is the single retained anonymous-composite
+> exemplar. The frozen machine node below continues to describe its named
+> base revision.
 
 ## Machine Node
 
@@ -109,7 +116,7 @@ machine_node:
     comparison_order_posture: rotate_and_inspect_before_human_decision
     public_legacy_exemplars:
       available:
-        - exemplar-brief-exploration.html
+        - spatial-capture-collaborative-memory.html
         - exemplar-gallery-list.html
       resting_until_restored:
         - exemplar-ideal-debrief.html

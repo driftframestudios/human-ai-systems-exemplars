@@ -29,7 +29,9 @@ The Canvas upload root is
 the deterministic aggregate receipt are generated in the same staged `v1`
 replacement. Use `npm run check:iframe-routes` to verify a temporary clean
 generation without retaining output, and `npm run test:iframe-routes` for the
-focused package contracts.
+focused package contracts. Use `npm run test:iframe-visual-media-browser` for
+the complete Core-and-Canvas reduced-motion, print, forced-colors, computed
+SVG, and zoomed fixed/sticky-focus reading.
 
 The generated `index.html` files are projections. Preserve the repository
 sources, retain ordinary adjacent full-view links on the primary visitor

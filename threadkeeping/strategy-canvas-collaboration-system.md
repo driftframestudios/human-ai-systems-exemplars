@@ -73,11 +73,11 @@ Receiving iframes begin with `allow-scripts`. A real in-frame report download ea
 - Root and Context Narrative Composer, Semantic Sampling, and Technology Fit archives rebuild deterministically; their embedded manifests and portable routes resolve against the packaged members.
 - The Context prototype-manifest validator passes all five mirrored collections.
 
-### Current v0.2.4 source receipt
+### Current v0.2.5 source receipt
 
-`npm run test:strategy-canvas` passes 43 of 43 browser contracts at `.visual-runs/2026-09-08T11-31-45-032Z-strategy-canvas-contract`. The current route includes a rendered forced-colors observation: an unselected SVG dimension label resolves to the system `Canvas` and `CanvasText` pair while the selected and focused label retains `Highlight`. The builder reproduces a 165,694-byte canonical distribution with SHA-256 `60fc6669b54adff4f609f4c48322548d44abc4875f5a2412030eb2c619f4c8b4`. `npm run test:core-architectures` passes 75 of 75 checks, the four maintained consumer archives remain current, `npm run test:narrative-architectures` passes 28 of 28 checks, and `npm run test:iframe-routes` passes 32 of 32 checks.
+`npm run test:strategy-canvas` passes 47 of 47 browser contracts for the current source set at `.visual-runs/2026-10-08T01-01-03-767Z-strategy-canvas-contract`. The current route includes a rendered forced-colors observation: an unselected SVG dimension label resolves to the system `Canvas` and `CanvasText` pair while the selected and focused label retains `Highlight`. The builder reproduces a 167,650-byte canonical distribution with SHA-256 `bfabfe3c7d11a493d6fd6a193609c4683571655ac8bd6da168947ea7d579d040`. `npm run test:core-architectures` passes 132 of 132 checks, the four maintained consumer archives remain current, `npm run test:narrative-architectures` passes 29 of 29 checks, and `npm run test:iframe-routes` passes 39 of 39 checks. The aggregate check covers 38 routes, 68 files, and 4,852,568 bytes.
 
-[Issue #137](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/137) carries the moving cross-family package coordinate. This record establishes the source-owned Strategy Canvas identities and build; the existing deployment owners retain live delivery.
+[Issue #72](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/72) receives the final cross-family upload coordinate, and [Issue #102](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/102) receives signed-out route and real-parent verification. Closed Issue #137 preserves the historical route-family introduction. This record establishes the source-owned Strategy Canvas identities and build; the deployment receivers retain live delivery.
 
 ### Historical acceptance receipt · v0.2.0 foundation
 
@@ -85,9 +85,9 @@ The 2026-08-22 acceptance run passed 36 of 36 browser contracts at `.visual-runs
 
 ## Collaboration edge
 
-Current: the canonical v0.2.4 source, generated distribution, source manifest, Context v0.2.2 workbench, schema/core, Narrative source projection, canonical portable companion, research spine, deterministic consumer archives, and local iframe package agree at their named coordinates. The evidence registry names each material representation and derives current canonical, Context, and iframe coordinates from their owning manifests. The v0.1.1 routes remain accessible compatibility entries.
+Current: the canonical v0.2.5 source, generated distribution, source manifest, Context v0.2.3 workbench, schema/core, Narrative source projection, canonical portable companion, research spine, deterministic consumer archives, and local iframe package agree at their named coordinates. The evidence registry names each material representation and derives current canonical, Context, and iframe coordinates from their owning manifests. The v0.1.1 routes remain accessible compatibility entries.
 
-Next: review and merge the source-identity reconciliation, then let Issue #137 receive the accepted cross-family package coordinate and Issue #190 receive the exact live Strategy Canvas route observation. Physical touch-hardware and assistive-technology receipts remain nominated field-validation work alongside that delivery review.
+Next: merge the settled source preflight, then let Issue #72 receive the accepted cross-family upload coordinate and Issue #102 receive the signed-out route and real-parent observation. Issue #190 can retain any narrower live Strategy Canvas observation. Physical touch-hardware and assistive-technology receipts remain nominated field-validation work alongside that delivery review.
 
 ```yaml
 machine_node:
@@ -96,7 +96,7 @@ machine_node:
   branch: source-key:strategy-canvas-collaboration-system
   semantic_contract: strategy-canvas/2.0
   context_extension_namespace: extensions.contextCanvas
-  state: source_identity_reconciliation_ready_for_review
+  state: current_source_verified_package_pending_upload
   expressions:
     canonical: plain_extensible_instructional_worksheet
     context_canvas: present_tense_collaboration_workbench
@@ -112,18 +112,19 @@ machine_node:
     network_policy: local_only
     aggregate_membership: excluded
     packet_scope: reviewed_and_explicitly_selected
-  next_route: review_merge_package_receive_live_verify
+  next_route: merge_receive_upload_and_live_verify
   verification:
-    browser_contract: 43_of_43_pass
+    browser_contract: 47_of_47_pass
     canonical_distribution:
-      bytes: 165694
-      sha256: 60fc6669b54adff4f609f4c48322548d44abc4875f5a2412030eb2c619f4c8b4
-    core_architectures: 75_of_75_pass
+      bytes: 167650
+      sha256: bfabfe3c7d11a493d6fd6a193609c4683571655ac8bd6da168947ea7d579d040
+    core_architectures: 132_of_132_pass
     consumer_archives: 4_of_4_deterministic_and_receipted
     context_manifests: 5_of_5_pass
-    narrative_architectures: 28_of_28_pass
-    iframe_routes: 32_of_32_pass
-    cross_family_package_authority: issue_137
+    narrative_architectures: 29_of_29_pass
+    iframe_routes: 39_of_39_pass
+    cross_family_package_receiver: issue_72
+    live_delivery_receiver: issue_102
   open_condition:
     - collect touch_hardware and actual_browser_assistive_technology_zoom receipts as field_validation
 ```
