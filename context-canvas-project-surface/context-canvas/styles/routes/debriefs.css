@@ -514,6 +514,23 @@
     padding: .75rem;
 }
 
+.debrief-card__case-brief .debrief-case-brief__tracks {
+    margin-block-start: 1rem;
+}
+
+.debrief-card__case-brief details.debrief-case-brief__track--disclosure {
+    background: var(--debrief-panel);
+    border-color: rgba(40, 85, 243, .34);
+}
+
+.debrief-card__case-brief details.debrief-case-brief__track--disclosure > summary {
+    color: var(--debrief-ink);
+}
+
+.debrief-card__case-brief details.debrief-case-brief__track--disclosure > summary:focus-visible {
+    outline-color: var(--debrief-cobalt);
+}
+
 .debrief-card__case-brief .debrief-preview-secondary-link {
     color: var(--debrief-cobalt-deep);
 }
@@ -841,6 +858,8 @@
     .debrief-card__case-brief,
     .debrief-card__case-brief .debrief-preview-facts,
     .debrief-card__case-brief .debrief-preview-facts > div,
+    .debrief-card__case-brief details.debrief-case-brief__track--disclosure,
+    .debrief-card__case-brief details.debrief-case-brief__track--disclosure > summary,
     .debrief-card__full-index,
     .debrief-preview-link,
     .debrief-preview-secondary-link {
@@ -863,6 +882,10 @@
 
     .debrief-card__case-brief .debrief-preview-facts > div {
         border: 1px solid CanvasText;
+    }
+
+    .debrief-card__case-brief details.debrief-case-brief__track--disclosure > summary:focus-visible {
+        outline-color: Highlight;
     }
 
     .debrief-card__types li,
@@ -910,13 +933,24 @@
         margin-bottom: 1rem;
     }
 
+    .debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card.project__media[data-case-brief-state="loaded"] {
+        break-inside: auto;
+    }
+
     .debrief-card__case-brief,
     .debrief-card__full-index {
         background: #fff;
         border-color: #000;
-        break-inside: avoid;
         box-shadow: none;
         color: #000;
+    }
+
+    .debrief-card__case-brief {
+        break-inside: auto;
+    }
+
+    .debrief-card__full-index {
+        break-inside: avoid;
     }
 
     .debrief-card__case-brief .debrief-preview-facts,
@@ -927,6 +961,13 @@
 
     .debrief-card__case-brief .debrief-preview-facts > div {
         border: 1px solid #000;
+    }
+
+    .debrief-card__case-brief details.debrief-case-brief__track--disclosure,
+    .debrief-card__case-brief details.debrief-case-brief__track--disclosure > summary {
+        background: #fff;
+        border-color: #000;
+        color: #000;
     }
 
     .debrief-card__case-brief .debrief-preview-slug,

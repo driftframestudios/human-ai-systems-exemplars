@@ -10,7 +10,7 @@
       "asset_version": "v0.1.0",
       "semantic_owner": "Choose Your Player Humatics Debrief",
       "visitor_page": "context-canvas-project-surface/context-canvas/choose-your-player-humatics.html",
-      "visitor_placement": "after #case-brief and before the architecture navigation",
+      "visitor_placement": "inside #working-proxy-walkthrough and before #track-index-title",
       "source": {
         "standing": "human_selected_accepted_master",
         "repository_coordinate": null,
@@ -103,7 +103,7 @@
       "asset_version": "v0.1.0",
       "semantic_owner": "Clinical Trial Coordination Debrief",
       "visitor_page": "context-canvas-project-surface/context-canvas/fmi-clinical-trial-coordination.html",
-      "visitor_placement": "after the Case Brief and before the architecture reading paths",
+      "visitor_placement": "inside #clinical-trial-boolean-builder-walkthrough and before #solution-architecture-title",
       "source": {
         "standing": "externally_held_prepared_accepted_master",
         "repository_coordinate": null,
@@ -193,7 +193,7 @@
       "asset_version": "v0.1.0",
       "semantic_owner": "Who To Believe Reviews Platform Debrief",
       "visitor_page": "context-canvas-project-surface/context-canvas/who-to-believe-reviews-platform.html",
-      "visitor_placement": "after the Case Brief and before the Solution Architecture track",
+      "visitor_placement": "inside #cpg-pharma-conversational-ai-walkthrough, after #wtb-figure-member-experience-redesigned and before #solution-architecture-title",
       "source": {
         "standing": "externally_held_prepared_accepted_master",
         "repository_coordinate": null,
@@ -643,7 +643,7 @@
       "asset_version": "v0.1.0",
       "semantic_owner": "LIMS and ELN Re-platforming Debrief",
       "visitor_page": "context-canvas-project-surface/context-canvas/fmi-lims-eln-replatforming.html",
-      "visitor_placement": "after the Case Brief and before the Solution Architecture track",
+      "visitor_placement": "inside #genomics-sequencing-process-walkthrough and before #solution-architecture-title",
       "source": {
         "standing": "externally_held_prepared_accepted_master",
         "repository_coordinate": null,
@@ -733,7 +733,7 @@
       "asset_version": "v0.1.0",
       "semantic_owner": "Genomic Viewer Re-platforming Debrief",
       "visitor_page": "context-canvas-project-surface/context-canvas/genomic-viewer-replatforming.html",
-      "visitor_placement": "after the Case Brief and before the architecture navigation",
+      "visitor_placement": "inside #genomics-specimen-qa-biomarker-walkthrough, after #genomic-proxy-standing-title and before #track-index-title",
       "source": {
         "standing": "externally_held_prepared_accepted_master",
         "repository_coordinate": null,

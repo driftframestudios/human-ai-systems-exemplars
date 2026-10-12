@@ -1019,7 +1019,7 @@
         "appendMembers": true
       },
       "owner": "context-canvas-project-surface/context-canvas/README.md",
-      "scope": "Rendered catalog preview replacement plus Case Brief projection, responsive geometry, fallback, and direct-file behavior in Chromium and Playwright WebKit.",
+      "scope": "Rendered catalog preview replacement plus sixteen Case Brief projections, thirty-two independent collapsed track disclosures, state-aware labels, responsive geometry, atomic fallback, forced-colors and print presentation, and HTTP/direct-file behavior in Chromium and Playwright WebKit.",
       "aliases": [
         "test:debrief-catalog-preview-browser"
       ]
@@ -1815,7 +1815,7 @@
         "appendMembers": false
       },
       "owner": "context-canvas-project-surface/context-canvas/README.md",
-      "scope": "Source-owned Case Brief routes materialize into one deterministic same-document projection; check mode verifies route order, semantic shape, safe source entries, and exact generated parity.",
+      "scope": "One bounded compact-account source materializes into deterministic same-document Case Brief projections; check mode verifies declared route order, six-field and paired-track shape, route-qualified source fragments, safe source admission, and exact generated parity.",
       "aliases": [
         "check:debrief-case-briefs"
       ]

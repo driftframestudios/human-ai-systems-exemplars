@@ -27,7 +27,7 @@ const whoToBelieveVideoReceivers = [
     standingId: "cpg-pharma-conversational-ai-standing",
     captionId: "cpg-pharma-conversational-ai-caption",
     transcriptId: "cpg-pharma-conversational-ai-transcript",
-    before: 'id="case-brief"',
+    before: 'id="wtb-figure-member-experience-redesigned"',
     after: 'id="solution-architecture-title"',
   },
   {
@@ -100,11 +100,11 @@ test("Choose Your Player presents one bounded progressive-video source receiver"
   const video = videos[0]?.[0];
   assert.ok(video, "The Humatics Debrief needs its accepted demonstration video");
 
-  const caseBriefEnd = html.indexOf("</section>", html.indexOf('id="case-brief"'));
+  const orientationStart = html.indexOf('class="debrief-quote debrief-quote--orientation"');
   const demonstrationStart = html.indexOf('<section id="working-proxy-walkthrough"');
   const architectureNav = html.indexOf('<nav aria-labelledby="track-index-title">');
-  assert.ok(caseBriefEnd >= 0 && demonstrationStart >= 0 && architectureNav >= 0);
-  assert.ok(caseBriefEnd < demonstrationStart, "The demonstration follows the complete Case Brief");
+  assert.ok(orientationStart >= 0 && demonstrationStart >= 0 && architectureNav >= 0);
+  assert.ok(orientationStart < demonstrationStart, "The demonstration follows the opening architectural reading");
   assert.ok(demonstrationStart < architectureNav, "The demonstration precedes architecture navigation");
 
   const openingTag = video.match(/<video\b[^>]*>/u)?.[0] ?? "";

@@ -19,7 +19,7 @@ const receivers = [
     standingId: "clinical-trial-boolean-builder-standing",
     captionId: "clinical-trial-boolean-builder-caption",
     transcriptId: "clinical-trial-boolean-builder-transcript",
-    before: 'id="case-brief"',
+    before: 'id="clinical-trial-boolean-builder-walkthrough-title"',
     after: '<nav class="debrief-reading-path"',
   },
   {
@@ -31,7 +31,7 @@ const receivers = [
     standingId: "genomics-sequencing-process-standing",
     captionId: "genomics-sequencing-process-caption",
     transcriptId: "genomics-sequencing-process-transcript",
-    before: 'id="case-brief"',
+    before: 'id="genomics-sequencing-process-walkthrough-title"',
     after: 'id="solution-architecture-title"',
   },
   {
@@ -43,7 +43,7 @@ const receivers = [
     standingId: "genomics-specimen-qa-biomarker-standing",
     captionId: "genomics-specimen-qa-biomarker-caption",
     transcriptId: "genomics-specimen-qa-biomarker-transcript",
-    before: 'id="case-brief"',
+    before: 'id="genomics-specimen-qa-biomarker-walkthrough-title"',
     after: '<nav aria-labelledby="track-index-title">',
   },
   {

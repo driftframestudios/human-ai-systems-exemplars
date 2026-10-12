@@ -8,6 +8,10 @@ const canvasRoot = resolve(
   repositoryRoot,
   "context-canvas-project-surface/context-canvas",
 );
+const compactSourcePath = resolve(
+  repositoryRoot,
+  "context-canvas-project-surface/data/debrief-case-briefs.source.html",
+);
 
 const expectedCaseBriefFields = [
   "Situation and stakes",
@@ -106,6 +110,27 @@ function caseBriefProjections(html) {
   }));
 }
 
+function caseBriefSources(html) {
+  const starts = [...html.matchAll(
+    /<article\b(?=[^>]*\bdata-case-brief-source="([^"]+)")[^>]*>/gu,
+  )];
+  return starts.map((match, index) => ({
+    route: match[1],
+    html: html.slice(match.index, starts[index + 1]?.index ?? html.length),
+  }));
+}
+
+function caseBriefTracks(html, element = "article") {
+  return Array.from(html.matchAll(new RegExp(
+    `<${element}\\b(?=[^>]*\\bdata-case-brief-track="([^"]+)")[^>]*>([\\s\\S]*?)<\\/${element}>`,
+    "gu",
+  )), match => ({
+    kind: match[1],
+    tag: match[0].slice(0, match[0].indexOf(">") + 1),
+    html: match[2],
+  }));
+}
+
 function projectionMediaLinks(html) {
   const media = html.match(
     /<div\b(?=[^>]*\bdata-case-brief-media\b)[^>]*>([\s\S]*?)<\/div>/u,
@@ -189,7 +214,6 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
   ), match => match[1]).sort();
   assert.deepEqual(ehrSeriesLinks, ehrRoutes, "Each EHR series route should open its complete Full Debrief");
 
-  assert.doesNotMatch(html, /href="[^"]+#case-brief"/u);
   const eras = Array.from(html.matchAll(
     /<p class="debrief-card__era" aria-label="[^"]+">([^<]+)<\/p>/gu,
   ), match => match[1].trim());
@@ -210,6 +234,11 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
   );
 
   assert.doesNotMatch(html, /Executive Summar(?:y|ies)/u);
+  assert.match(
+    html,
+    /every complete account remains available through an ordinary Full Debrief link\. The small catalog enhancement presents the scanning-friendly Case Brief mode when scripts run\./u,
+    "The no-script path should lead with the ordinary complete-reading route and describe the bounded enhancement accurately",
+  );
   assert.match(script, /"executive-summary": \{ kind: "format", value: "case-brief" \}/u);
   assert.match(script, /legacyOrMode/u);
   assert.match(script, /unknownLegacyTypes/u);
@@ -217,16 +246,18 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
   assert.match(script, /function ensureCaseBriefDisplay\(card\)/u);
   assert.match(script, /function caseBriefProjection\(route\)/u);
   assert.match(script, /document\.importNode\(template\.content, true\)/u);
+  assert.match(script, /trackHeading\.matches\("h4\.debrief-case-brief__track-group-title"\)/u);
+  assert.match(script, /trackChildren\[1\]\.matches\("p\.debrief-case-brief__track-intro"\)/u);
+  assert.match(script, /var disclosures = trackChildren\.slice\(trackIntro \? 2 : 1\)/u);
   assert.match(script, /function createCaseBriefArticle\(card, route, projection, index\)/u);
   assert.match(script, /existing\.setAttribute\("data-card-full-index", ""\)/u);
-  assert.match(script, /rewriteFragmentLinks\(content, route\)/u);
+  assert.doesNotMatch(script, /rewriteFragmentLinks/u, "The authored projection should already carry route-qualified fragments");
   assert.doesNotMatch(script, /createCaseBriefFallback/u);
   assert.doesNotMatch(script, /source page carries this complete Case Brief/iu);
-  assert.doesNotMatch(script, /source\.detail/u, "The catalog should leave the deeper track digest on the source page");
   assert.doesNotMatch(script, /\b(?:window\.)?fetch\s*\(/u, "Case Brief mode should read the authored projection without a network request");
   assert.doesNotMatch(script, /\bDOMParser\b/u, "Case Brief mode should clone authored DOM rather than parse fetched pages");
   assert.doesNotMatch(script, /\bcaseBriefCache\b|function\s+loadCaseBrief\b|function\s+parseCaseBriefSource\b/u);
-  assert.match(script, /route \+ "#case-brief", "Read the Easy-to-Scan Case Brief"/u);
+  assert.doesNotMatch(script, /Read the Easy-to-Scan Case Brief|route \+ "#case-brief"/u);
   assert.match(script, /route, "Read the Full Debrief"/u);
   assert.match(html, /data-preview-link[^>]*>[\s\S]*?Read the Full Debrief/u);
   assert.doesNotMatch(html, /data-preview-case-brief-content/u);
@@ -246,60 +277,81 @@ test("Debrief catalog gives Case Briefs a true display mode and retains every di
       expectedCaseBriefFields,
       `${projection.route} should carry the ordered six-field scanning contract`,
     );
+    assert.match(
+      projection.html,
+      /<h4 class="txt-h4 debrief-case-brief__track-group-title">(?:Solution and implementation|Comparison and return) quick scan<\/h4>/u,
+      `${projection.route} should begin its track group with the admitted heading`,
+    );
+    const trackIntros = Array.from(projection.html.matchAll(
+      /<p class="debrief-case-brief__track-intro">([\s\S]*?)<\/p>/gu,
+    ));
+    if (projection.route === "choose-your-player-humatics.html") {
+      assert.equal(trackIntros.length, 1, "the Humatics compact account should retain its narrative-track orientation");
+      assert.match(
+        trackIntros[0][1],
+        /href="choose-your-player-humatics\.html#narrative-architecture-title"/u,
+        "the Humatics introduction should qualify its source-local narrative route",
+      );
+      assert.match(trackIntros[0][1], /client meeting, field inquiry, and two-day reframe/u);
+    } else {
+      assert.equal(trackIntros.length, 0, `${projection.route} should add no unowned track introduction`);
+    }
+    const tracks = caseBriefTracks(projection.html, "details");
+    const expectedTrackKinds = projection.route === "three-way-comparative-return.html"
+      ? ["comparative", "return"]
+      : ["solution", "implementation"];
+    assert.deepEqual(tracks.map(track => track.kind), expectedTrackKinds, `${projection.route} should carry its truthful paired scan`);
+    for (const track of tracks) {
+      assert.doesNotMatch(track.tag, /\sopen(?:\s|=|>)/u, `${projection.route} ${track.kind} quick scan should begin collapsed`);
+      assert.match(track.html, /class="debrief-case-brief__track-title"/u);
+      assert.match(track.html, /class="debrief-case-brief__track-state"[^>]*aria-hidden="true"/u);
+      assert.match(track.html, /class="debrief-case-brief__track-state--expand"[^>]*>Expand</u);
+      assert.match(track.html, /class="debrief-case-brief__track-state--collapse"[^>]*>Collapse</u);
+      assert.match(track.html, /<ol\b/u, `${projection.route} ${track.kind} quick scan should retain its ordered story beats`);
+    }
     const mediaLinks = projectionMediaLinks(projection.html);
     assert.ok(mediaLinks.length >= 1, `${projection.route} should carry at least one related-media route`);
     assert.ok(
       mediaLinks.every(href => href.startsWith(`${projection.route}#`)),
-      `${projection.route} template should qualify every source-local related-media fragment`,
+      `${projection.route} template should qualify source-local fragments for the no-JavaScript carrier`,
     );
   }
 });
 
-test("Every catalogued Full Debrief carries one complete Case Brief contract", async () => {
-  const catalog = await readCanvasFile("debriefs.html");
+test("The bounded compact-account source owns every catalogued Case Brief", async () => {
+  const [catalog, compactSource] = await Promise.all([
+    readCanvasFile("debriefs.html"),
+    readFile(compactSourcePath, "utf8"),
+  ]);
   const caseBriefRoutes = Array.from(catalog.matchAll(/\bdata-case-brief-routes="([^"]+)"/gu))
     .flatMap(match => match[1].split(/\s+/u));
   const uniqueRoutes = [...new Set(caseBriefRoutes)];
+  const sources = new Map(caseBriefSources(compactSource).map(source => [source.route, source.html]));
   const projections = new Map(
     caseBriefProjections(catalog).map(projection => [projection.route, projection.html]),
   );
 
   assert.equal(caseBriefRoutes.length, 16);
   assert.equal(uniqueRoutes.length, 16);
+  assert.equal(sources.size, 16);
+  assert.deepEqual([...sources.keys()].sort(), uniqueRoutes.slice().sort());
 
   for (const route of uniqueRoutes) {
     const html = await readCanvasFile(route);
+    const source = sources.get(route);
     const projection = projections.get(route);
+    assert.ok(source, `${route} should have one compact-account source`);
     assert.ok(projection, `${route} should have one static catalog projection`);
-    assert.match(
-      html,
-      /<link rel="stylesheet" href="styles\/components\/debrief-reading\.css">/u,
-      `${route} should load the shared owner for its Case Brief track and media styles`,
-    );
-    const sections = Array.from(html.matchAll(
-      /<section\b(?=[^>]*\bid="case-brief")(?=[^>]*\bdata-content-form="case-brief")(?=[^>]*\baria-labelledby="([^"]+)")[^>]*>([\s\S]*?)<\/section>/gu,
-    ));
-    assert.equal(sections.length, 1, `${route} should carry one Case Brief section`);
-
-    const headingId = sections[0][1];
-    const section = sections[0][2];
-    assert.match(
-      section,
-      new RegExp(`<h2\\b[^>]*id="${headingId}"[^>]*>\\s*At-a-Glance\\s*<\\/h2>`, "u"),
-      `${route} should expose the shared visible heading`,
-    );
-
-    const orientation = section.match(
-      /<h2\b[^>]*>\s*At-a-Glance\s*<\/h2>\s*<p(?:\s[^>]*)?>([\s\S]*?)<\/p>\s*<dl class="debrief-at-glance">/u,
-    );
+    assert.match(source, /<h2\b[^>]*\bdata-case-brief-title\b/u, `${route} should name its compact account`);
+    const orientation = source.match(/<p\b[^>]*\bdata-case-brief-orientation\b[^>]*>([\s\S]*?)<\/p>/u);
     assert.ok(orientation, `${route} should orient a cold reader before the six fields`);
     assert.ok(
       orientation[1].replace(/<[^>]+>/gu, "").replace(/\s+/gu, " ").trim().length >= 40,
       `${route} should provide a meaningful Case Brief orientation`,
     );
 
-    const definitionList = section.match(/<dl class="debrief-at-glance">([\s\S]*?)<\/dl>/u);
-    assert.ok(definitionList, `${route} should preserve the shared at-a-glance grid owner`);
+    const definitionList = source.match(/<dl\b[^>]*\bdata-case-brief-fields\b[^>]*>([\s\S]*?)<\/dl>/u);
+    assert.ok(definitionList, `${route} should preserve the six-field compact account`);
     const labels = Array.from(definitionList[1].matchAll(/<dt>([^<]+)<\/dt>/gu), match => match[1]);
     assert.deepEqual(labels, expectedCaseBriefFields, `${route} should carry the six-field Case Brief contract`);
     assert.deepEqual(
@@ -307,28 +359,38 @@ test("Every catalogued Full Debrief carries one complete Case Brief contract", a
       definitionPairs(definitionList[0]),
       `${route} catalog projection should preserve the source-owned six-field wording`,
     );
-    assert.match(section, /<p><strong>Basis and limits:<\/strong>[^<]+<\/p>/u, `${route} should state its basis and limits`);
+    assert.match(source, /<p\b[^>]*\bdata-case-brief-basis\b[^>]*><strong>Basis and limits:<\/strong>/u, `${route} should state its basis and limits`);
 
-    const detailStart = section.indexOf('data-case-brief-detail');
-    const basisStart = section.indexOf("<strong>Basis and limits:</strong>");
-    const continuationStart = section.indexOf("Read the Full Debrief");
+    const detailStart = source.indexOf("data-case-brief-detail");
+    const basisStart = source.indexOf("data-case-brief-basis");
     assert.ok(detailStart > basisStart, `${route} should place the track digest after its evidence boundary`);
-    assert.ok(continuationStart > detailStart, `${route} should place the Full Debrief continuation after the digest`);
-    assert.match(
-      section,
-      /<div\b(?=[^>]*\bdata-case-brief-detail\b)[^>]*>[\s\S]*?<\/article>\s*<\/div>\s*<div\b(?=[^>]*\bdata-case-brief-media\b)[^>]*>/u,
-      `${route} should keep the concise media index beside, rather than inside, the source-page track digest`,
-    );
 
-    const tracks = Array.from(section.matchAll(
-      /<article\b(?=[^>]*\bclass="[^"]*\bdebrief-case-brief__track\b[^"]*")(?=[^>]*\bdata-case-brief-track="([^"]+)")[^>]*>([\s\S]*?)<\/article>/gu,
-    ), match => ({ kind: match[1], html: match[2] }));
+    const sourceTrackIntro = source.match(/<p\b[^>]*\bdata-case-brief-tracks-intro\b[^>]*>([\s\S]*?)<\/p>/u);
+    const projectedTrackIntro = projection.match(/<p class="debrief-case-brief__track-intro">([\s\S]*?)<\/p>/u);
+    if (route === "choose-your-player-humatics.html") {
+      assert.ok(sourceTrackIntro, `${route} should retain the source-owned Narrative Architecture orientation`);
+      assert.ok(projectedTrackIntro, `${route} should project the Narrative Architecture orientation`);
+      assert.match(sourceTrackIntro[1], /href="#narrative-architecture-title"/u);
+      assert.match(projectedTrackIntro[1], new RegExp(`href="${route}#narrative-architecture-title"`, "u"));
+      assert.equal(
+        normalizeVisibleText(projectedTrackIntro[1]),
+        normalizeVisibleText(sourceTrackIntro[1]),
+        `${route} projection should preserve its source-owned track orientation`,
+      );
+    } else {
+      assert.equal(sourceTrackIntro, null, `${route} should add a track introduction only when the compact account needs one`);
+      assert.equal(projectedTrackIntro, null, `${route} projection should add a track introduction only when its source owns one`);
+    }
+
+    const tracks = caseBriefTracks(source);
+    const projectedTracks = caseBriefTracks(projection, "details");
     const expectedTrackKinds = route === "three-way-comparative-return.html"
       ? ["comparative", "return"]
       : ["solution", "implementation"];
     assert.deepEqual(tracks.map(track => track.kind), expectedTrackKinds, `${route} should expose its truthful paired scan`);
+    assert.deepEqual(projectedTracks.map(track => track.kind), expectedTrackKinds, `${route} projection should preserve its truthful paired scan`);
 
-    for (const track of tracks) {
+    for (const [trackIndex, track] of tracks.entries()) {
       const links = Array.from(track.html.matchAll(/<li\b[^>]*>[\s\S]*?<a\b[^>]*href="#([^"]+)"/gu), match => match[1]);
       const expectedCount = route === "three-way-comparative-return.html"
         ? (track.kind === "comparative" ? 5 : 3)
@@ -337,11 +399,22 @@ test("Every catalogued Full Debrief carries one complete Case Brief contract", a
       for (const id of links) {
         assert.match(html, new RegExp(`\\bid="${id}"`, "u"), `${route} should resolve ${track.kind} scan link #${id}`);
       }
+      const projectedLinks = Array.from(projectedTracks[trackIndex].html.matchAll(
+        /<li\b[^>]*>[\s\S]*?<a\b[^>]*href="([^"]+)"/gu,
+      ), match => match[1]);
+      assert.deepEqual(
+        projectedLinks,
+        links.map(id => `${route}#${id}`),
+        `${route} ${track.kind} catalog disclosure should qualify every source-local fragment`,
+      );
+      assert.deepEqual(
+        normalizeVisibleText(projectedTracks[trackIndex].html.replace(/Expand|Collapse/gu, "")),
+        normalizeVisibleText(track.html),
+        `${route} ${track.kind} catalog disclosure should preserve its source-owned quick scan`,
+      );
     }
 
-    const media = section.match(
-      /<div class="debrief-case-brief__media" data-case-brief-media>([\s\S]*?)<\/div>/u,
-    );
+    const media = source.match(/<div\b[^>]*\bdata-case-brief-media\b[^>]*>([\s\S]*?)<\/div>/u);
     assert.ok(media, `${route} should carry one reviewed related-media index`);
     const mediaLinks = Array.from(media[1].matchAll(/<li\b[^>]*>[\s\S]*?<a\b[^>]*href="#([^"]+)"/gu), match => match[1]);
     assert.ok(mediaLinks.length >= 1 && mediaLinks.length <= 3, `${route} should keep its related-media index concise`);
@@ -354,25 +427,45 @@ test("Every catalogued Full Debrief carries one complete Case Brief contract", a
       mediaLinks.map(id => `${route}#${id}`),
       `${route} catalog projection should preserve and qualify the reviewed related-media index`,
     );
+    assert.doesNotMatch(source, /Read the (?:Easy-to-Scan Case Brief|Full Debrief)/u);
 
-    const continuation = section.match(/<a\b[^>]*href="(#[^"]+)"[^>]*>\s*Read the Full Debrief[^<]*<\/a>/u);
-    assert.ok(continuation, `${route} should continue into the Full Debrief`);
-    const destinationId = continuation[1].slice(1);
-    assert.match(html, new RegExp(`\\bid="${destinationId}"`, "u"), `${route} continuation should resolve in the document`);
+    assert.equal(
+      Array.from(html.matchAll(/\bid="case-brief"/gu)).length,
+      1,
+      `${route} should retain exactly one published-coordinate compatibility target`,
+    );
+    assert.match(
+      html,
+      /<span id="case-brief" aria-hidden="true"><\/span>/u,
+      `${route} compatibility target should remain empty and hidden from the accessibility tree`,
+    );
+    assert.doesNotMatch(html, /\bdata-content-form="case-brief"|\bdata-case-brief-(?:detail|media|track)\b/u, `${route} should begin with its complete narrative rather than repeat the compact account`);
+    assert.doesNotMatch(
+      html,
+      /class="[^"]*\bdebrief-case-brief__media\b|\bdata-case-brief-media\b/u,
+      `${route} should leave the legacy compact-account media carrier in the catalog projection`,
+    );
+    assert.doesNotMatch(
+      html,
+      new RegExp(`<a\\b[^>]*href="${route}"[^>]*>(?:(?!<\\/a>)[\\s\\S])*?Read the Full Debrief(?:(?!<\\/a>)[\\s\\S])*?<\\/a>`, "u"),
+      `${route} should leave its self-referential Full Debrief action in the catalog projection`,
+    );
   }
 });
 
 test("Who To Believe keeps rounded outcome figures anchored to contemporaneous telemetry notes", async () => {
-  const html = await readCanvasFile("who-to-believe-reviews-platform.html");
-  const caseBriefStart = html.indexOf('<section id="case-brief"');
-  const caseBriefEnd = html.indexOf("</section>", caseBriefStart);
+  const [html, compactSource] = await Promise.all([
+    readCanvasFile("who-to-believe-reviews-platform.html"),
+    readFile(compactSourcePath, "utf8"),
+  ]);
+  const caseBrief = caseBriefSources(compactSource)
+    .find(source => source.route === "who-to-believe-reviews-platform.html")?.html || "";
   const outcomesStart = html.indexOf('<h3 id="solution-outcomes-title"');
   const outcomesEnd = html.indexOf('<h3 id="solution-repeatability-title"', outcomesStart);
 
-  assert.ok(caseBriefStart >= 0 && caseBriefEnd > caseBriefStart, "Expected the Who To Believe Case Brief");
+  assert.ok(caseBrief, "Expected the Who To Believe compact account");
   assert.ok(outcomesStart >= 0 && outcomesEnd > outcomesStart, "Expected the Who To Believe outcomes section");
 
-  const caseBrief = html.slice(caseBriefStart, caseBriefEnd);
   const outcomes = html.slice(outcomesStart, outcomesEnd);
 
   assert.match(caseBrief, /These rounded percentages come from contemporaneous notes taken from system telemetry/u);

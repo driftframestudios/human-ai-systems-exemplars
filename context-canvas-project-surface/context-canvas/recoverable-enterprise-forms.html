@@ -116,60 +116,17 @@
 
       <div class="content__container">
         <div class="content content--editorial">
-          <section id="case-brief" data-content-form="case-brief" aria-labelledby="scan-title">
-            <h2 id="scan-title" class="txt-h2">At-a-Glance</h2>
-            <p>During a Fresh Tilled Soil apprenticeship, I focused on front-end architecture and translated an account-and-payment screenshot into a semantic form. This reading carries that foundation into recovery, replay, support, and service continuity.</p>
-            <dl class="debrief-at-glance">
-              <div><dt>Situation and stakes</dt><dd>An enterprise form asks an institution to act—create an account, accept an application or payment, record consent, correct information, or continue interrupted work.</dd></div>
-              <div><dt>Scope and role</dt><dd>In Q2 2016, I focused on front-end architecture in the Fresh Tilled Soil apprenticeship cohort with support from a senior engineering mentor. The current reading adds accessibility, payment, security, and service recovery.</dd></div>
-              <div><dt>Core constraint</dt><dd>A screenshot could show placement while leaving meaning, validation authority, interruption recovery, provider behavior, and the institution’s durable response unspecified.</dd></div>
-              <div><dt>Key decision</dt><dd>Turn the screenshot into a semantic specification: native HTML as the stable core, shared issue identity across layers, an authoritative submission command, and a durable receipt.</dd></div>
-              <div><dt>Outcome and evidence</dt><dd>Partial: I implemented the semantic HTML substrate in 2016. The current design extends it into a reviewable architecture for recovery, replay, support, and service continuity; receiving services still need to verify operating outcomes.</dd></div>
-              <div><dt>Relevance now</dt><dd>Teams can use accessible semantics and progressive enhancement to keep people, browsers, services, payment providers, support teams, and AI systems aligned on one recoverable contract.</dd></div>
-            </dl>
-            <p><strong>Basis and limits:</strong> My Q2 2016 project documents the screenshot-to-semantic-form decision, and current standards support the architectural patterns. Each receiving service must verify conversion, assistive-technology behavior, provider boundaries, support continuity, security, and payment outcomes.</p>
-            <div class="debrief-case-brief__tracks" data-case-brief-detail aria-labelledby="case-brief-tracks-title">
-              <h3 id="case-brief-tracks-title" class="txt-h3">Solution and implementation quick scan</h3>
-              <article class="debrief-case-brief__track" data-case-brief-track="solution" aria-labelledby="case-brief-solution-track-title">
-                <h4 id="case-brief-solution-track-title" class="txt-h4">Solution Architecture</h4>
-                <ol>
-                  <li><strong><a href="#solution-debrief-title">Debrief.</a></strong> I translated a static account-and-payment screenshot into semantic HTML, exposing labels, groups, input types, and submission behavior as an institutional contract whose response people can understand and continue.</li>
-                  <li><strong><a href="#solution-bottleneck-title">Bottleneck.</a></strong> A page can look complete while browser, service, provider, analytics, and support layers carry different portions of purpose, state, recovery, and receipt; behavioral fidelity coordinates those layers around one request.</li>
-                  <li><strong><a href="#solution-intervention-title">Intervention.</a></strong> The team names one interaction contract across meaning, state, validation and recovery, submission and receipt, external boundaries, and verification so each layer has a clear authority and observation.</li>
-                  <li><strong><a href="#solution-outcome-title">Outcome.</a></strong> Native semantics preserve meaning through enhancement, stable operation identities let equivalent replay return the prior receipt while preserving one effect, and durable receipts let people and support teams continue from the same accepted, rejected, review, or unresolved state.</li>
-                  <li><strong><a href="#solution-repeatability-title">Repeatability.</a></strong> A shared platform packages contract-bearing primitives, content, schemas, examples, provider profiles, observation, and migration while each receiving service retains its domain meaning, policy, population needs, and outcome measures.</li>
-                </ol>
-              </article>
-              <article class="debrief-case-brief__track" data-case-brief-track="implementation" aria-labelledby="case-brief-implementation-track-title">
-                <h4 id="case-brief-implementation-track-title" class="txt-h4">Implementation Architecture</h4>
-                <ol>
-                  <li><strong><a href="#implementation-debrief-title">Debrief.</a></strong> HTML preserves form ownership, labels, groups, input purpose, focus, serialization, and submission while progressive layers add capability; text semantics and a validated provider boundary keep payment identifiers precise and minimize sensitive-data reach.</li>
-                  <li><strong><a href="#implementation-bottleneck-title">Bottleneck.</a></strong> Shared field and issue identities keep browser constraints, client rules, service schemas, domain policy, provider decisions, and support exceptions distinct while presenting one meaningful state and continuation.</li>
-                  <li><strong><a href="#implementation-intervention-title">Intervention.</a></strong> A canonical registry plus typed command and receipt carries operation identity, authority, schema, issues, outcome, resume route, and support reference; equivalent replay returns the stored receipt.</li>
-                  <li><strong><a href="#implementation-outcome-title">Outcome.</a></strong> Stable operation and resource references preserve valid work and meaningful state across timeout, renewed authentication, mobile interruption, provider callback, and support handoff.</li>
-                  <li><strong><a href="#implementation-repeatability-title">Repeatability.</a></strong> Versioned patterns join semantics, contracts, failure exercises, assistive-technology review, privacy, provider reconciliation, and migration; incidents and support learning return to the contract that can absorb them.</li>
-                </ol>
-              </article>
-            </div>
-            <div class="debrief-case-brief__media" data-case-brief-media>
-              <h4 class="txt-h4">Related figures and media</h4>
-              <ul>
-                <li><strong>Figure — <a href="#recoverable-forms-complete-reference">Complete source-era form challenge.</a></strong> The visible sequence and states supplied a starting point; implementation exposed the semantic and behavioral specification beneath them.</li>
-                <li><strong>Diagram — <a href="#recoverable-form-contract">Recoverable form contract.</a></strong> Human purpose travels through semantic controls, understandable state, typed recovery, service and provider boundaries, a durable receipt, and support.</li>
-                <li><strong>Diagram — <a href="#pan-validation-flow">Payment-account validation flow.</a></strong> The sequence separates candidate-network matching, checksum consistency, provider tokenization, and issuer authorization.</li>
-              </ul>
-            </div>
-            <p><a href="#solution-title">Read the Full Debrief →</a></p>
-            <aside class="debrief-quote debrief-quote--orientation" aria-label="Central architectural reading">
-              <p>A screenshot can show where controls sit. The contract explains what they mean, which system can accept them, how a person can recover, and what receipt lets everyone continue from the same state.</p>
-              <footer>Central architectural reading</footer>
-            </aside>
-            <aside class="debrief-outcome-banner debrief-outcome-banner--partial" aria-label="Outcome state">
-              <p class="debrief-outcome-banner__label">Outcome state</p>
-              <strong>Partial — the semantic substrate is established; the contemporary architecture extends it through recovery, replay, and service continuity.</strong>
-              <p>The receiving service verifies browser and assistive-technology behavior, provider boundaries, security posture, support continuity, and user outcomes.</p>
-            </aside>
-          </section>
+          <span id="case-brief" aria-hidden="true"></span>
+
+          <aside class="debrief-quote debrief-quote--orientation" aria-label="Central architectural reading">
+            <p>A screenshot can show where controls sit. The contract explains what they mean, which system can accept them, how a person can recover, and what receipt lets everyone continue from the same state.</p>
+            <footer>Central architectural reading</footer>
+          </aside>
+          <aside class="debrief-outcome-banner debrief-outcome-banner--partial" aria-label="Outcome state">
+            <p class="debrief-outcome-banner__label">Outcome state</p>
+            <strong>Partial — the semantic substrate is established; the contemporary architecture extends it through recovery, replay, and service continuity.</strong>
+            <p>The receiving service verifies browser and assistive-technology behavior, provider boundaries, security posture, support continuity, and user outcomes.</p>
+          </aside>
 
           <nav class="debrief-reading-path" aria-label="Architecture reading paths">
             <ol>

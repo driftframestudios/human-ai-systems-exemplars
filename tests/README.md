@@ -199,7 +199,9 @@ npm run visual:context-canvas-reference -- --phase <name>
 
 The Debrief catalog browser contract uses Chromium and Playwright WebKit. The
 Case Brief carrier check is dependency-free and verifies that every generated
-same-document scan remains current with its source-owned Debrief section.
+same-document scan remains current with the bounded compact-account source,
+including its six-field story contract, paired quick scans, related media,
+route-qualified source fragments, and fragment-free Full Debrief action.
 
 The derivative check requires no encoder and leaves bytes unchanged; it
 verifies named source profiles, eligible widths, exact dimensions,
@@ -213,11 +215,15 @@ profiles add a `480w` candidate for their smaller receiver geometry. The
 catalog-preview browser contract proves that
 responsive WebP metadata, SVG fallback metadata, captions, alternatives, and
 intrinsic geometry replace one another without stale attributes or horizontal
-overflow. The same focused route selects Case Brief mode at `390px` and
-`1440px`, then verifies all sixteen source-owned scans, their stable six-field
-order and related media, the five-route EHR group's atomic replacement and
-recovery behavior, accurate displayed-route counts, and a delayed request that
-settles after the visitor returns to Catalog Overview.
+overflow. The same focused route selects Case Brief mode across narrow,
+responsive-seam, and desktop widths, then verifies all sixteen source-owned
+scans, their stable six-field order, thirty-two independently operable track
+disclosures, collapsed initial states, state-aware labels, related media, one
+complete-reading action, the five-route EHR group's atomic replacement and
+recovery behavior, and accurate displayed-route counts. Chromium and WebKit
+exercise the same disclosure contract over HTTP and direct-file viewing;
+forced-colors and print checks preserve focus, boundaries, and complete printed
+content.
 
 The image-delivery browser contract serves the complete repository tree over
 loopback HTTP. Chromium and Playwright WebKit each scroll every authored image
