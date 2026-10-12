@@ -1,0 +1,75 @@
+{
+  "@context": {
+    "viz": "https://schemas.radiantnull.com/visualization#",
+    "ca": "https://schemas.driftframestudios.org/ca#",
+    "schema": "https://schema.org/",
+    "id": "@id",
+    "type": "@type",
+    "name": "schema:name",
+    "description": "schema:description",
+    "VisualizationFidelityAtlas": "viz:VisualizationFidelityAtlas",
+    "DataPrimitive": "viz:DataPrimitive",
+    "DataShape": "viz:DataShape",
+    "CognitiveMove": "viz:CognitiveMove",
+    "VisualForm": "viz:VisualForm",
+    "VisualRecommendation": "viz:VisualRecommendation",
+    "VisualizationExemplar": "viz:VisualizationExemplar",
+    "CitationAnchor": "viz:CitationAnchor",
+    "VisualizationFidelityReview": "viz:VisualizationFidelityReview",
+    "ViewState": "viz:ViewState",
+    "hasPrimitive": {
+      "@id": "viz:hasPrimitive",
+      "@type": "@id"
+    },
+    "hasDataShape": {
+      "@id": "viz:hasDataShape",
+      "@type": "@id"
+    },
+    "supportsCognitiveMove": {
+      "@id": "viz:supportsCognitiveMove",
+      "@type": "@id"
+    },
+    "recommendsVisualForm": {
+      "@id": "viz:recommendsVisualForm",
+      "@type": "@id"
+    },
+    "hasExemplar": {
+      "@id": "viz:hasExemplar",
+      "@type": "@id"
+    },
+    "hasCitation": {
+      "@id": "viz:hasCitation",
+      "@type": "@id"
+    },
+    "hasViewState": {
+      "@id": "viz:hasViewState",
+      "@type": "@id"
+    },
+    "selectedCognitiveMove": {
+      "@id": "viz:selectedCognitiveMove",
+      "@type": "@id"
+    },
+    "selectedDataShape": {
+      "@id": "viz:selectedDataShape",
+      "@type": "@id"
+    },
+    "selectedVisualForm": {
+      "@id": "viz:selectedVisualForm",
+      "@type": "@id"
+    },
+    "selectedExemplar": {
+      "@id": "viz:selectedExemplar",
+      "@type": "@id"
+    },
+    "audienceContext": "viz:audienceContext",
+    "uncertaintyRequired": "viz:uncertaintyRequired",
+    "aiIngestion": "viz:aiIngestion",
+    "showReserved": "viz:showReserved",
+    "fidelityScore": "viz:fidelityScore",
+    "accessibilityScore": "viz:accessibilityScore",
+    "aiReadinessScore": "viz:aiReadinessScore",
+    "sourceBand": "ca:sourceBand",
+    "semanticLocality": "ca:semanticLocality",
+    "aiPromptCapsule": "ca:aiPromptCapsule"
+  }
+}

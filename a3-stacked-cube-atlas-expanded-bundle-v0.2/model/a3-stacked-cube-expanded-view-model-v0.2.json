@@ -14,8 +14,8 @@
     },
     {
       "id": "F1",
-      "label": "Seam identified",
-      "note": "The operational and assignment seam is bounded. Dependencies, evidence, and rollback are named before routing changes."
+      "label": "Boundary identified",
+      "note": "The operational and assignment boundary is defined. Dependencies, evidence, and rollback are named before routing changes."
     },
     {
       "id": "F2",
@@ -369,7 +369,7 @@
   "migrationGates": [
     {
       "id": "G0",
-      "label": "Seam readiness",
+      "label": "Boundary readiness",
       "status": "PARTIAL HISTORICAL EVIDENCE",
       "summary": "Stable identity; routable interception or abstraction; owner and dependency map; known system of record.",
       "sources": [
@@ -448,7 +448,7 @@
       "id": "RT-ROUTER",
       "label": "Interception router / abstraction",
       "status": "Candidate control",
-      "summary": "A routable seam or branch-by-abstraction boundary separates candidate behavior without asserting that the domain is already separable.",
+      "summary": "A routable interception or branch-by-abstraction boundary separates candidate behavior without asserting that the domain is already separable.",
       "boundary": "Proxy, ACL, bottleneck, and unclear-domain risks remain.",
       "sources": [
         "SRC-AWS-STRANGLER",
@@ -592,7 +592,7 @@
   "sources": [
     {
       "id": "SRC-A3",
-      "title": "A3 · Appendix — Stacked Cube Model",
+      "title": "Evidence-Guided Capability Transfer Model",
       "url": "urn:source-key:SRC-A3",
       "role": "Protected historical and semantic baseline.",
       "boundary": "Internal source assertion; operational evidence still required for new claims."
@@ -720,14 +720,14 @@
       "id": "SRC-AWS-STRANGLER",
       "title": "AWS Strangler Fig Pattern",
       "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/strangler-fig.html",
-      "role": "Proxy and anti-corruption seam with risks and limitations.",
+      "role": "Proxy and anti-corruption boundary with risks and limitations.",
       "boundary": "Implementation choice and domain boundary remain product-specific."
     },
     {
       "id": "SRC-FOWLER-ABSTRACTION",
       "title": "Fowler — Branch by Abstraction",
       "url": "https://martinfowler.com/bliki/BranchByAbstraction.html",
-      "role": "Inner seam, coexisting implementations, feature-flagged switching.",
+      "role": "Inner boundary, coexisting implementations, feature-flagged switching.",
       "boundary": "Requires a viable abstraction; not always available."
     },
     {

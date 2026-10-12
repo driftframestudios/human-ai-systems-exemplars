@@ -14,19 +14,79 @@ assembler reads iframe bytes from `createAggregatePackagePlan()` instead of
 walking the ignored `.iframe-route-build/` directory.
 
 cPanel receives the same projection through the tracked, generated
-`deployment/cpanel/carrier/` closure. The deployment manifest binds an accepted
-source commit `S`; a following carrier-only release commit `R` transports those
-bytes. Verification requires `R^1 = S`, an `S..R` diff confined to the carrier
-root, and exact agreement among the manifest, the Bash-readable index, and
-every carried file. This two-coordinate form avoids asking a commit to contain
-its own identifier.
+`deployment/cpanel/carrier/` closure. A shell-capable account can receive it
+through cPanel's managed Git deployment; a shell-free account can receive a
+verified archive through the artifact-delivery route. The deployment manifest
+binds an accepted source commit `S`; a following carrier-only release commit
+`R` transports those bytes. Verification requires `R^1 = S`, an `S..R` diff
+confined to the carrier root, and exact agreement among the manifest, the
+Bash-readable index, and every carried file. This two-coordinate form avoids
+asking a commit to contain its own identifier.
+
+## Quick entry: prepare a shell-free cPanel carrier
+
+Start with the receiving job and one approved production coordinate. An AI
+collaborator can prepare the local transfer envelope; the authorized host
+operator owns staging, root placement, and recovery.
+
+| Receiving job | Source of payload bytes | Route |
+| --- | --- | --- |
+| Package an existing release | The selected annotated `production-v*` tag | Use a clean checkout of an explicitly selected, reviewed packaging-tool commit, then form and verify the envelope below. |
+| Publish newer source | A newly accepted source and carrier pair | Follow [the accepted release sequence](#accepted-release-sequence), establish `R^1 = S` and a carrier-only diff, then select a new annotated production tag and package it. |
+
+The operator selects `PRODUCTION_TAG`; example tags elsewhere in this directory
+identify historical releases. Preserve existing tags when source or payload
+changes. The packager reads committed carrier blobs from the selected tag and
+records the packaging-tool revision separately. Packaging an existing carrier
+uses its committed public bytes; private `.env.public` configuration belongs to
+the new-projection build route.
+
+With the repository's declared Node runtime and dependencies available:
+
+```sh
+: "${PRODUCTION_TAG:?Set the approved annotated production-v* tag}"
+git fetch --tags origin
+git rev-parse "${PRODUCTION_TAG}^{commit}"
+npm run build:prod-carrier-transfer -- --tag "$PRODUCTION_TAG"
+npm run verify:prod-carrier-transfer -- \
+  --tag "$PRODUCTION_TAG" \
+  --receipt ".cpanel-transfer/$PRODUCTION_TAG/hase-$PRODUCTION_TAG.receipt.json"
+```
+
+Keep the locally generated receipt as the trust anchor. The
+[shell-free artifact guide](SHELL-FREE-ARTIFACT-DELIVERY.md) owns the complete
+formation, fresh-output retry, upload/download comparison, root-relationship,
+and recovery instructions. It also explains verification of the downloaded ZIP
+against the local receipt and explicit tag before extraction. The host receives
+the verified artifact through authenticated File Manager; repository history
+and packaging tools remain in the trusted release environment.
+
+Return the selected tag, resolved carrier and source commits, reviewed tool
+commit, archive and receipt locations, and normalized verification result.
+Archive verification establishes payload identity. The operator's protected
+record and signed-out receiver checks establish activation and recovery.
+Issue #118 preserves the completed `production-v0.2.0` transport and recovery
+handoff as historical release evidence; #251 owns that release's remaining live
+assessment. Publishing newer source requires a new accepted source/carrier pair,
+tag, and authorized handoff rather than reopening the immutable release.
+Issue
+[#464](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/464)
+owns the current `stable-core-v0.3.0` and `production-v0.3.0` formation,
+activation, acceptance, and recovery sequence.
+
+The next tagged GitHub Pages projection follows the cPanel release by default.
+The current visitor carrier has no runtime dependency on a newer Pages
+artifact, while `pages-v0.2.0` remains the accepted schema and skill
+publication coordinate. Issue #406 completes that accepted Worker parity
+before protected production promotion; a later Pages release receives its own
+source, docs, tag, activation, and signed-out receipt.
 
 ## Current entry condition
 
-The tracked production configuration selects the accepted 37-page Context
+The tracked production configuration selects the accepted 40-route Context
 Canvas collection, its non-indexed `404.html`, and the complete local file
-closure those documents need. The four resting no-index exemplars stay outside
-this initial visitor collection. `primary-route-manifest.json` records every
+closure those documents need. The retained anonymous-composite landing stays
+outside this initial visitor collection. `primary-route-manifest.json` records every
 selected source and its document-root destination explicitly.
 
 `production-projection.config.json` has this shape:
@@ -38,6 +98,21 @@ selected source and its document-root destination explicitly.
   "primary_manifest": "deployment/cpanel/primary-route-manifest.json",
   "asset_inventory": "context-canvas-project-surface/asset-inventory.json",
   "iframe_origin_robots": "deployment/cpanel/iframe-origin-robots.txt",
+  "css_projection": {
+    "id": "prod-projection.css-profile.v1",
+    "profile": "about-conservative-v1",
+    "consumer": "context-canvas-project-surface/context-canvas/index.html",
+    "output_directory": "assets/css",
+    "tool": {
+      "name": "csso",
+      "version": "5.0.5",
+      "options": {
+        "restructure": false,
+        "forceMediaMerge": false,
+        "comments": false
+      }
+    }
+  },
   "publication": {
     "base_url": "https://vik.guru/",
     "source_root": "context-canvas-project-surface/context-canvas",
@@ -45,6 +120,37 @@ selected source and its document-root destination explicitly.
   }
 }
 ```
+
+`css_projection` is one bounded production distribution profile. It discovers
+About's stylesheet order from the tracked consumer rather than restating that
+order in configuration. Six contiguous enhanced owners become one file, the
+stylesheet inside `<noscript>` remains its own execution context, and the later
+`canvas-shell.css` link remains a separate file. Each generated filename carries
+its full SHA-256 digest beneath `assets/css/`; generated files never replace the
+readable repository owners.
+
+Before CSSO runs, repository-local CSS references resolve from each original
+source location to the generated output location. Query strings and fragments
+remain attached. Root-relative references stay root-relative after resolving
+inside `publication.source_root`; like relative references, they must be part
+of the selected carrier closure. External, `data:`, and fragment-only
+references remain in their authored reference class. Missing or escaping local
+references, runtime `@import`, composed `@charset` or `@namespace`, invalid CSS,
+string-form `image-set()` sources, ambiguous encoded local paths, a changed or
+ambiguous stylesheet loading graph, a tool or profile mismatch, and a
+portable-path collision stop projection formation. The loading-graph parser
+uses source spans and HTML data-state boundaries; comments and raw or inert
+regions cannot supply stylesheet owners.
+
+For the current source graph, an enhanced screen moves from seven stylesheet
+requests and 77,081 raw bytes to two requests and 55,814 raw bytes; the
+independently compressed sums move from 17,674 to 11,914 gzip-9 bytes and from
+14,823 to 10,536 Brotli-11 bytes. The scriptless path moves from eight requests
+and 77,489 raw bytes to three requests and 56,111 raw bytes; gzip-9 moves from
+17,877 to 12,059 bytes and Brotli-11 from 14,984 to 10,643 bytes. These are
+repository-side distribution observations. The final carrier manifest binds
+the generated filenames and digests; deployed transfer claims begin with the
+signed-out receiver observation.
 
 The primary manifest alone selects primary files and public paths.
 `asset-inventory.json` describes the images already selected by the primary and
@@ -99,11 +205,24 @@ The referenced manifest uses one explicit entry for every primary output:
 ```
 
 The assembler reads selected files from regular Git blobs at the accepted
-source coordinate. It resolves Registry and professional-profile tokens from
-the ignored `.env.public` receiver in memory, records that receiver's digest
-and semantic key set, and rechecks the digest before returning the plan. It
-uses an empty process environment for this step, so the file is the complete
-receiver for a production projection.
+source coordinate. It resolves Registry tokens through the tracked, reviewed
+binding in [`deployment/public-references/`](../public-references/README.md)
+and resolves the professional-profile token from ignored `.env.public` in
+memory. The plan records the tracked binding and accepted Atlas receipt plus
+the external receiver's digest and non-Registry key set, then rechecks both
+inputs before returning. It uses an empty process environment for this step,
+so `.env.public` is the complete external receiver for a production
+projection. Registry overrides in that receiver fail closed.
+
+For the About CSS projection, the deployment manifest also records the exact
+profile, CSSO package/version/options, consumer and execution context, ordered
+source paths and source digests, full output digest, bytes, media type, and the
+readable-graph recovery route. The production HTML references only generated
+files present in the same output closure. Readable CSS files remain selected
+while adjacent routes consume them and provide immediate rollback: remove the
+`css_projection` property from tracked configuration and rebuild. Public source
+maps remain absent because repository source plus manifest lineage supplies the
+inspection path.
 
 Publication transforms then map the nested Context Canvas root to
 `https://vik.guru/`. Canonical, social, JSON-LD, sitemap, and local relative
@@ -116,6 +235,15 @@ rows record their source digest and projected digest; unchanged files retain
 byte-preserved standing. The ignored `.public-reference-build/` directory is
 not an input.
 
+When a selected primary HTML file is also owned by the Canvas iframe route
+manifest, the assembler applies that manifest's shared public metadata at the
+publication boundary. The full view and its iframe projection therefore carry
+one author declaration, one Apache-2.0 relation, one visitor-boundary context
+and canary stack, and one copy-local attribution notice. Sources that already
+carry the complete bundle, such as Threadkeeping Ledger, retain their authored
+copy without a duplicate. The Canvas route manifest remains the selection
+authority; the production configuration adds no parallel decoration list.
+
 The assembler also keeps the Core vocabulary decision at its current owner.
 If a selected primary file or the accepted iframe package still carries the
 placeholder Core authority, assembly stops at Issue #110. Continue after that
@@ -126,23 +254,38 @@ complete iframe package have been regenerated together.
 
 ```sh
 npm run test:prod-deployment
+npm run test:prod-css-projection-browser
 npm run check:prod-projection
 npm run build:prod-projection
 npm run stage:prod-carrier
 npm run check:prod-carrier
+: "${PRODUCTION_TAG:?Set the approved annotated production-v* tag}"
+npm run build:prod-carrier-transfer -- --tag "$PRODUCTION_TAG"
+npm run verify:prod-carrier-transfer -- --tag "$PRODUCTION_TAG" --receipt ".cpanel-transfer/$PRODUCTION_TAG/hase-$PRODUCTION_TAG.receipt.json"
 ```
 
 `check:prod-projection` writes and verifies the newly composed plan in
 temporary storage; it does not attest an existing carried artifact.
+`test:prod-css-projection-browser` compares the tracked readable graph with the
+generated graph across narrow, desktop, and wide enhanced, scriptless, print,
+forced-color, and reduced-motion states. It also exercises interaction,
+request-closure, and the expected CSP iframe-refusal boundary. The focused
+browser contract uses tracked bytes and does not require `.env.public`.
 `build:prod-projection` is the explicit mutation boundary and transactionally
 replaces only `.prod-projection-build/`. Both commands require the ignored
-`.env.public` receiver. A custom repository-owned fixture can be named with
+`.env.public` receiver for the professional-profile destination; Registry
+routes come from tracked input. A custom repository-owned fixture can be named with
 `-- --config path/to/config.json`.
 
 `stage:prod-carrier` transactionally replaces only the tracked carrier root.
 It may be repeated while that root is the worktree's only open change.
 `check:prod-carrier` runs after the carrier is committed and proves the source,
 release, diff, manifest, index, and file closure without activating a host.
+The transfer builder reads that closure from an annotated production tag and,
+by default, writes a deterministic ZIP plus external receipt beneath ignored
+`.cpanel-transfer/`. The verifier reopens the archive, enforces portable regular
+files and explicit size/count bounds, and compares every carried byte with the
+tag before any host activation.
 
 ## Accepted release sequence
 
@@ -156,12 +299,31 @@ release, diff, manifest, index, and file closure without activating a host.
 4. Merge the carrier pull request only while `prod` still names `S`. The
    repository's ordinary reviewed merge form is valid because the resulting
    `R` keeps `S` as its first parent and changes only the carrier root.
-5. Check the exact merged `R`, then let cPanel perform **Update from Remote**
-   followed by **Deploy HEAD Commit**.
+5. Check the exact merged `R`, then select the host-supported receiver:
+   - a shell-capable cPanel account performs **Update from Remote** followed by
+     **Deploy HEAD Commit**; or
+   - a shell-free cPanel account runs the repository-owned transfer-envelope
+     builder and verifier, stages both outputs privately, and follows the
+     ordered cutover and recovery contract.
 
 If `prod` advances before step 4, begin again from the new accepted source and
 regenerate the carrier. Updating the older carrier branch would weaken the
 `R^1 = S` relationship that makes the handoff inspectable.
+
+The human-operated [pull-model enrollment and first cutover](FIRST-CUTOVER.md)
+owns a shell-capable managed clone. [Shell-free cPanel artifact
+delivery](SHELL-FREE-ARTIFACT-DELIVERY.md) owns File Manager staging, the first
+manual pilot, later manual Actions packaging, conditional FTPS, and the PHP
+finalizer boundary. An accepted production tag supplies immutable payload
+identity in both routes; only the pull route keeps a managed checkout attached
+to `prod`.
+
+An authorized iframe-only upload can use the complete generated
+`.iframe-route-build/iframes.vik.guru/v1/` directory as the interim `/v1/`
+unit. The accepted full iframe-origin closure at `R` is
+`deployment/cpanel/carrier/iframe-public/`; it also carries the root
+`robots.txt`. The first-cutover guide keeps the manual upload, host response
+policy, and later two-root cPanel acceptance distinct.
 
 The top-level `.cpanel.yml` delegates to one repository-relative Bash script.
 Real document roots, state paths, and first-cutover allowances live in a
@@ -207,6 +369,12 @@ route observations remain with their separately authorized receiver.
 
 ## cPanel references
 
+- [First pull-model enrollment and cutover](FIRST-CUTOVER.md)
+- [Shell-free artifact delivery and first cutover](SHELL-FREE-ARTIFACT-DELIVERY.md)
+- [Set up access to private repositories](https://docs.cpanel.net/knowledge-base/web-services/guide-to-git-set-up-access-to-private-repositories/)
+- [Set up Git deployment](https://docs.cpanel.net/knowledge-base/web-services/guide-to-git-set-up-deployment/)
 - [Guide to Git Deployment](https://docs.cpanel.net/knowledge-base/web-services/guide-to-git-deployment/)
 - [Git Version Control](https://docs.cpanel.net/cpanel/files/git-version-control/)
 - [Git advanced configuration and troubleshooting](https://docs.cpanel.net/knowledge-base/web-services/guide-to-git-advanced-configuration-and-troubleshooting/)
+- [Git UI timeout advisory](https://support.cpanel.net/hc/en-us/articles/4418071248791-Git-Repositories-may-timeout-when-cloned-or-updated-via-cPanel-s-Git-Version-Control-Feature)
+- [GitHub deploy keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys)

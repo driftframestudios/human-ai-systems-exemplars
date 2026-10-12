@@ -1,6 +1,6 @@
-# A3 Stacked Cube Visual System Bundle v0.1
+# Evidence-Guided Capability Transfer Model Bundle v0.1
 
-This self-contained exemplar turns the A3 strangler-fig model into an interactive authority storyboard and two static SVG readings. It keeps migration claims bounded: a cube is a software capability or service dependency, position shows current authority, and a transfer occurs only through a named seam, evidence gate, and rollback route.
+This self-contained exemplar presents the A3 source model as an interactive capability-transfer storyboard and two static SVG readings. It keeps migration claims bounded: a cube is a software capability or service dependency, position shows current authority, and a transfer occurs only through a named boundary, evidence gate, and rollback route.
 
 ## Open the prototype
 
@@ -15,7 +15,7 @@ Open `a3-stacked-cube-visual-system-chimeric-prototype-v0.1.html` in a current b
 - `assets/a3-stacked-cube-triptych-v0.1.svg` — three-panel storyboard leaf.
 - `assets/a3-stacked-cube-four-state-v0.1.svg` — complete F0–F3 reference strip.
 - `PROVENANCE.md` — living source resolution, repository precedents, grammar, and revision links; it remains outside the sealed byte inventory so an exact successor revision can settle after the baseline exists.
-- `a3-stacked-cube-validation-report-v0.1.json` — machine-readable receipt for the 2026-07-27 bundle revision.
+- `a3-stacked-cube-validation-report-v0.1.json` — machine-readable receipt for the 2026-09-30 bundle revision.
 - `a3-stacked-cube-visual-system-manifest-v0.1.json` — publication paths, roles, and the sealed artifact byte and SHA-256 inventory.
 
 ## Semantic invariants
@@ -32,6 +32,6 @@ The v0.1 `source_revision` object keeps its original property names for wire com
 
 ## Validation
 
-The included receipt records the 2026-07-27 JSON, schema, stable-ID, parity, SVG, accessibility-metadata, and runtime-dependency observations. The manifest records that receipt as prior evidence and marks the 2026-08-25 source-lineage revision `awaiting_human_cue`. This revision refreshes the sealed artifact inventory and receives the repository public-boundary receipt. `PROVENANCE.md` remains revision-bound documentation, allowing the successor snapshot to add exact source links after its baseline commit exists. A later human-cued package or browser pass can issue a current execution receipt.
+The included receipt records the 2026-09-30 JSON, schema, stable-ID, parity, generated-SVG geometry, accessibility-metadata, and four-width browser observations. The manifest preserves the earlier 2026-07-27 receipt as prior evidence and seals the current artifact inventory. `PROVENANCE.md` remains revision-bound documentation outside that byte inventory.
 
 The schema describes the canonical v0.1 state and retains compatibility with the earlier source-identifier shape. It corrects earlier shape assumptions about human workflows, typed connectors, view state, and capability kinds while preserving the example’s semantics.

@@ -16,7 +16,6 @@ const STANDARD_ANCHOR = "conditioning-field.html";
 const LONG_STANDARD_ANCHOR = "ai-systems.html";
 const SOURCE_ANCHOR = "debriefs.html";
 const CUSTOM_ANCHOR = "fmi-lims-eln-replatforming.html";
-const RESTING_ANCHOR = "exemplar-maximal-information-radiator.html";
 const SHELL_OPTIONAL_ROUTES = new Map([
   ["404.html", "The standalone not-found document keeps its authored recovery surface without generated site chrome."]
 ]);
@@ -295,8 +294,7 @@ function requireCategoryAnchors(accounting, failures) {
     [STANDARD_ANCHOR, "standard"],
     [LONG_STANDARD_ANCHOR, "standard"],
     [SOURCE_ANCHOR, "source"],
-    [CUSTOM_ANCHOR, "custom"],
-    [RESTING_ANCHOR, "none"]
+    [CUSTOM_ANCHOR, "custom"]
   ];
   for (const [route, category] of anchors) {
     if (accounting.categoryByRoute.get(route) !== category) {

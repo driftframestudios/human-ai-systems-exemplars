@@ -1,0 +1,72 @@
+{
+  "$schema": "../schema/foundation-profile.schema.v0.2.json",
+  "schemaVersion": "0.2",
+  "artifactType": "repository_handoff_foundation_profile",
+  "key": "illustrative-source-received",
+  "version": "0.2.0",
+  "title": "Illustrative source-received owner-operable foundation",
+  "foundationManifest": {
+    "artifactType": "repository_handoff_foundation_manifest",
+    "key": "repository-handoff-foundation-v0.1",
+    "version": "0.1.2",
+    "sourcePath": "foundation.manifest.json",
+    "sha256": "59f2ab840fb38f358f1889eeae52ed898a273d71bf0ff68d17735a5debecbd2e"
+  },
+  "baseProfile": {
+    "key": "source-awaiting",
+    "sourcePath": "profiles/source-awaiting.profile.json",
+    "sha256": "315736ddff42baff093c78d5ba68a41d6a9f904f620ddc358027af779c33abb6"
+  },
+  "sourceStanding": "source_received",
+  "technologyProfile": {
+    "artifactType": "repository_handoff_technology_profile",
+    "key": "illustrative-received-site",
+    "version": "0.1.0",
+    "sourcePath": "examples/illustrative-source-received.technology-profile.example.json",
+    "sha256": "040507f451c048f3b1a844414cb38f15d48f86641e78c745c88c8641e3ee8534"
+  },
+  "selectedModules": [
+    "orientation",
+    "concept-nursery",
+    "threadkeeping",
+    "references"
+  ],
+  "selectedEntryKeys": [
+    "orientation.readme",
+    "orientation.agents",
+    "concept-nursery.readme",
+    "threadkeeping.readme",
+    "references.readme",
+    "references.public-readme",
+    "references.local-ignore"
+  ],
+  "selectedIssueSeedKeys": [
+    "source-awaiting-owner-operable-route"
+  ],
+  "heldDecisions": [
+    {
+      "key": "credentials-and-account-settings",
+      "owner": "account-owner",
+      "state": "held",
+      "decision": "Supply credentials and approve account-level settings through the authorized platform route.",
+      "availableRoute": "Record declared environment names and the exact owner action while values stay in their authorized systems.",
+      "releaseEvent": "The account owner completes or explicitly authorizes the named settings action."
+    },
+    {
+      "key": "publication-and-domains",
+      "owner": "receiving-owner",
+      "state": "held",
+      "decision": "Choose publication timing, hosting, visibility, and domain configuration.",
+      "availableRoute": "Keep the received source locally inspectable and prepare source-grounded delivery options.",
+      "releaseEvent": "The receiving owner selects a publication route and grants its preparation or activation."
+    }
+  ],
+  "nextOwnerAction": "Record observations from the accepted source coordinate in a receiving technology profile, then review and accept the exact create-only materialization plan.",
+  "projection": {
+    "authority": "json",
+    "jsonSource": "examples/illustrative-source-received.profile.example.json",
+    "yamlTarget": "examples/illustrative-source-received.profile.example.yaml",
+    "mode": "exact_json_bytes",
+    "derivationNote": "The YAML companion is a byte-for-byte copy of this authoritative JSON example; JSON syntax is valid YAML 1.2."
+  }
+}

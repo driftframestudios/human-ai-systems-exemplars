@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1180" role="img" aria-labelledby="return-title return-desc">
   <title id="return-title">Who To Believe platform return and durable UX diagnostic</title>
-  <desc id="return-desc">An implementation-and-recovery map shows Symfony and Doctrine plus Spring, Hibernate, and Flyway writing to the United States database, a Symfony-only United Kingdom database, a reconciliation service, later adapter and ETL layers, a phantom hamburger symptom, heatmap and recording diagnosis, email as a navigation workaround, and the durable UX diagnostic that survived the implementation.</desc>
+  <desc id="return-desc">An implementation-and-recovery map shows Symfony with Doctrine ORM and Spring Data JPA with Hibernate ORM writing to the United States database, Doctrine schema diff and Flyway migration history describing schema state, a Symfony-only United Kingdom database, a reconciliation report, later adapter and ETL layers, a phantom hamburger symptom, heatmap and recording diagnosis, email as a navigation workaround, and the durable UX diagnostic that survived the implementation.</desc>
   <defs>
     <clipPath id="return-frame-clip">
       <rect x="18" y="18" width="1564" height="1144" rx="28"/>
@@ -45,7 +45,7 @@
   <text class="title" x="50" y="101">Persistence compromise and navigation return expose what diagnostics can outlive</text>
   <text class="subtitle" x="50" y="132">The reconciliation service kept regional work moving. Later adapters, a phantom menu, and user recovery behavior created a second diagnostic problem.</text>
 
-  <text class="eyebrow" x="50" y="170">2017–2020 · TWO REGIONS, THREE PERSISTENCE DIALECTS, ONE INTENDED CONVERGENCE</text>
+  <text class="eyebrow" x="50" y="170">2017–2020 · TWO APPLICATION PATHS, DIVIDED SCHEMA-CHANGE OWNERSHIP</text>
 
   <g aria-label="United States dual-writer estate">
     <rect class="paper-blue" x="50" y="188" width="980" height="374" rx="22"/>
@@ -60,8 +60,8 @@
 
     <rect class="cobalt-soft" x="78" y="408" width="266" height="124" rx="16"/>
     <text class="micro" x="98" y="436">WRITER B · LAYERED IN 2018</text>
-    <text class="stack" x="98" y="467">Spring + JPA</text>
-    <text class="stack" x="98" y="494">Hibernate + Flyway</text>
+    <text class="stack" x="98" y="467">Spring Data JPA</text>
+    <text class="stack" x="98" y="494">Hibernate ORM</text>
     <text class="small" x="98" y="516">Flyway tracks the Spring migration line.</text>
 
     <!-- Two integrated arrows terminate cleanly at the database cylinder. -->
@@ -85,8 +85,8 @@
     <text class="body" x="794" y="391">
       <tspan x="794">Compare Doctrine schema</tspan>
       <tspan x="794" dy="21">with Flyway history;</tspan>
-      <tspan x="794" dy="21">emit idempotent fixes</tspan>
-      <tspan x="794" dy="21">and a drift report.</tspan>
+      <tspan x="794" dy="21">emit a drift report;</tspan>
+      <tspan x="794" dy="21">link planned fixes.</tspan>
     </text>
     <rect class="rose" x="772" y="486" width="230" height="46" rx="12"/>
     <text class="micro" x="792" y="505">COST OF COEXISTENCE</text>
@@ -145,8 +145,8 @@
     <rect class="cobalt-soft" x="350" y="768" width="212" height="112" rx="16"/>
     <text class="micro" x="370" y="795">02 · NEW LAYERS</text>
     <text class="card-title" x="370" y="828">Adapters + ETL</text>
-    <text class="body" x="370" y="854">Map data and navigation</text>
-    <text class="body" x="370" y="875">into the enclosing product</text>
+    <text class="body" x="370" y="854">Request/render adapters</text>
+    <text class="body" x="370" y="875">Product-data ETL</text>
 
     <path class="arrow" d="M562 818 H602 V808 L624 824 L602 840 V830 H562 Z"/>
     <rect class="warm" x="624" y="768" width="232" height="112" rx="16"/>

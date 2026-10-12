@@ -65,14 +65,7 @@ const expectedReceiverStandings = new Set([
   "context_adapted",
   "reserve",
 ]);
-const expectedActivationStandings = new Set([
-  "eligible",
-  "navigation_observation",
-  "parity_review",
-  "provenance_review",
-  "reader_job_required",
-  "visitor_copy_review",
-]);
+const expectedActivationStandings = new Set(["eligible"]);
 const supportedSandboxTokens = new Set([
   "allow-downloads",
   "allow-popups",
@@ -381,6 +374,16 @@ export function validateRouteContract(contract, sourceManifest) {
     "unmatched",
     "Neighboring path posture",
   );
+  assertExactString(
+    contract.projection_contract.receiver_standing_posture,
+    "Receiver standing describes the route's relationship to a receiving Context Canvas expression; it does not determine package membership.",
+    "Receiver standing posture",
+  );
+  assertExactString(
+    contract.projection_contract.activation_standing_posture,
+    "Every route declared in routes is eligible for package publication. Actionable copy, parity, provenance, navigation, and reader-job reviews stay with their owning Issues; package eligibility does not assert live delivery.",
+    "Activation standing posture",
+  );
 
   if (!isObject(contract.carrier_contract)) {
     fail("carrier_contract must be an object.");
@@ -408,7 +411,7 @@ export function validateRouteContract(contract, sourceManifest) {
   );
   assertExactString(
     contract.carrier_contract.held_capability_posture,
-    "Every current route resolves source-visible capability holds before iframe packaging; an eligible route cannot retain a hold.",
+    "Every current route resolves source-visible capability holds before iframe packaging; a publication-eligible route cannot retain a hold.",
     "Carrier held-capability posture",
   );
   assertExactString(
@@ -510,8 +513,11 @@ export function validateRouteContract(contract, sourceManifest) {
     if (!expectedReceiverStandings.has(route.receiver_standing)) {
       fail(`Route ${route.id} has unsupported receiver standing ${route.receiver_standing}.`);
     }
-    if (!expectedActivationStandings.has(route.activation_standing)) {
-      fail(`Route ${route.id} has unsupported activation standing ${route.activation_standing}.`);
+    if (route.activation_standing !== "eligible") {
+      fail(
+        `Route ${route.id} cannot be emitted because activation standing ` +
+        `${JSON.stringify(route.activation_standing)} excludes package publication.`,
+      );
     }
     if (!isObject(route.carrier_policy)) {
       fail(`Route ${route.id} must carry a carrier_policy object.`);
@@ -542,7 +548,7 @@ export function validateRouteContract(contract, sourceManifest) {
       route.carrier_policy.held_capabilities.length > 0
     ) {
       fail(
-        `Eligible route ${route.id} must resolve every held capability before activation.`,
+        `Publication-eligible route ${route.id} must resolve every held capability before packaging.`,
       );
     }
 
@@ -626,11 +632,11 @@ export function validateRouteContract(contract, sourceManifest) {
       if (route.public_alias !== contract.base_path) {
         fail("The hub route must occupy the exact base path.");
       }
-      if (route.source_file !== "core-architectures-chimeric-prototype-pack-index-v0.1.3.html") {
+      if (route.source_file !== "core-architectures-chimeric-prototype-pack-index-v0.1.4.html") {
         fail("The hub route must name the current Core pack index.");
       }
-      if (route.source_version !== "0.1.3") {
-        fail("The hub route must name source version 0.1.3.");
+      if (route.source_version !== "0.1.4") {
+        fail("The hub route must name source version 0.1.4.");
       }
     } else if (route.kind === "prototype") {
       if (route.source_root !== undefined || route.projection !== undefined) {

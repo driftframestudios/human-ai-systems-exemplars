@@ -10,7 +10,7 @@ the artifact itself supplies runtime behavior.
 
 - `core-architectures-chimeric-prototype-manifest-v0.1.json` names the current
   pack entries, versions, paths, and material byte or digest receipts.
-- `core-architectures-chimeric-prototype-pack-index-v0.1.3.html` provides the
+- `core-architectures-chimeric-prototype-pack-index-v0.1.4.html` provides the
   human-facing pack route.
 - `strategy-canvas-system-v0.2/` owns the shared Strategy Canvas schema,
   validator, state engine, canonical source, and build contract.
@@ -30,7 +30,7 @@ Artifact variation is part of the family: route-specific layout, color,
 density, interaction, and evidence posture remain available while stable IDs,
 current versions, and declared source relationships keep the pack legible.
 
-PODA v0.1.4, Alignment Worksheet v0.1.4, Impact Map v0.1.5, and Context Tree
+PODA v0.1.5, Alignment Worksheet v0.1.4, Impact Map v0.1.5, and Context Tree
 v0.1.7 complete the current Orientation and Tracing family’s Prompt Capsule
 adoption. PODA carries the purpose-to-activity orientation and its accepted
 handoffs. Alignment Worksheet carries forward and backward premises together
@@ -41,7 +41,7 @@ remain presentation state. Each artifact supplies plain and skill-assisted
 Markdown, one view-independent represented-state fingerprint, fitting public
 collaboration loops, and a complete plain reading when JavaScript is absent.
 
-Strategy Canvas v0.2.4 and First Responsible Version Matrix v0.1.4 complete
+Strategy Canvas v0.2.5 and First Responsible Version Matrix v0.1.4 complete
 the current Comparison and Threshold family’s Prompt Capsule adoption. Each
 derives complete plain and skill-assisted Markdown from its own accepted state,
 keeps one view-independent state fingerprint, points to fitting public
@@ -50,8 +50,8 @@ JavaScript. The matrix retains its threshold cards, focus view, routes, and
 recovery semantics as authority; the Markdown is a portable handoff from that
 state.
 
-Shared Surface Priority Map v0.1.4, Service-design Blueprint v0.2.5, AI
-Systems Service Blueprint v0.1.4, and Software Architecture Views v0.1.4
+Shared Surface Priority Map v0.1.4, Service-design Blueprint v0.2.6, AI
+Systems Service Blueprint v0.1.5, and Software Architecture Views v0.1.4
 complete the current Shared Surfaces and Topology family’s Prompt Capsule
 adoption. The map carries every stage, surface, priority cell with its channel
 intensities, and shared asset. The service blueprint carries every stage, lane, cell, and
@@ -61,16 +61,16 @@ views carry every view and attachment for the modeled element. Their Markdown
 views retain the complete represented state while transient focus and
 selection stay with the interactive artifact.
 
-Upstream Revision Loop v0.1.4 and Recovery Routing Atlas v0.1.4 complete the
+Upstream Revision Loop v0.1.5 and Recovery Routing Atlas v0.1.5 complete the
 current Recovery Routing and Revision family’s Prompt Capsule adoption. The
 loop carries downstream observations back to a named prior artifact and
 revision target. The atlas carries every recovery geometry—including entries
-hidden in the active focus view—so a receiving collaborator can distinguish a
+hidden in the active focus view—so a receiver can distinguish a
 strain cue, restored condition, fitting route, and evidence worth preserving.
 Both Markdown views retain that complete represented state while selection and
 other interface-only details stay local to the artifact.
 
-Participatory Design Kit v0.1.4 and Specification-by-Example v0.1.6 complete
+Participatory Design Kit v0.1.4 and Specification-by-Example v0.1.7 complete
 the current Participatory Elicitation and Specification family’s Prompt
 Capsule adoption. The kit carries the complete workflow arrangement, activity
 materials, and example fragments that make participant knowledge actionable.
@@ -78,8 +78,8 @@ The specification carries every rule and Given / When / Then scenario that
 turns shared understanding into observable behavior. Both handoffs retain the
 full represented state while interface focus stays with the working artifact.
 
-Pattern–Problem Surface Matrix v0.1.4, Jobs-to-be-Done Treemap v0.1.4, and
-Unit-test-first Design v0.1.4 complete the current Pattern Fit and Behavior
+Pattern–Problem Surface Matrix v0.1.5, Jobs-to-be-Done Treemap v0.1.4, and
+Unit-test-first Design v0.1.5 complete the current Pattern Fit and Behavior
 Protection family’s Prompt Capsule adoption. The matrix carries all 48
 pattern-to-population relationships. The treemap carries each job’s purpose,
 weight, evidence, route, and review trigger. Unit-test-first Design carries
@@ -87,8 +87,8 @@ each protected behavior from its source and preconditions through its expected
 results and platform-independent test target. Their Markdown views retain the
 complete represented state while selection remains with the working artifact.
 
-HEART Chart v0.1.6, Plus / Delta v0.1.4, and Practitioner Judgment Probes
-v0.1.4 complete the current Measurement, Reflection, and Judgment family’s
+HEART Chart v0.1.6, Plus / Delta v0.1.5, and Practitioner Judgment Probes
+v0.1.5 complete the current Measurement, Reflection, and Judgment family’s
 Prompt Capsule adoption. The HEART handoff connects every goal to its signal,
 metric, interpretation, tolerance, counter-signal, and qualitative evidence.
 Plus / Delta carries each working condition or change need with the people,
@@ -109,7 +109,7 @@ publication.
 
 Strategy Canvas is maintained through its canonical template and stylesheet;
 the generated current distribution inherits the contract. The current canonical
-visitor set covers Strategy Canvas v0.2.4. The resting v0.1.1 compatibility route is
+visitor set covers Strategy Canvas v0.2.5. The resting v0.1.1 compatibility route is
 generated from its system-local source, including a location-correct link and
 the same attribution contract. Its Context Canvas workbench retains its
 adapted document and style owners. The repository-root `LICENSE` remains the
@@ -128,11 +128,23 @@ contract and its attribution tests.
 `public-iframe-route-manifest-v1.json` binds the pack hub, 21 current Core
 prototypes, and one supplemental Context Canvas instrument to 23 exact aliases
 beneath `https://iframes.vik.guru/v1/core/`.
-It keeps four relations separate: authored source identity, transferable route
-projection, per-route activation standing, and live delivery. Forming the
-package does not activate a route. Supplemental delivery membership identifies
-the source owner explicitly; it does not add the Conditioning Field to the
-21-member Core Architecture source manifest.
+It keeps five relations separate: authored source identity, transferable route
+projection, receiving-expression standing, package-publication eligibility,
+and live delivery. `receiver_standing` records whether a receiving Context
+Canvas expression is byte-identical, context-adapted, or held in reserve;
+package membership comes from the declared route population instead.
+`activation_standing` is the package-publication gate. Every route in the
+current 23-route population is `eligible` and is emitted. Package validation
+rejects a declared route with any other standing. A future hold therefore
+requires an explicit contract revision that removes the route from the emitted
+population until its blocking owner resolves the hold. Actionable copy, parity,
+provenance, navigation, and reader-job reviews remain with their owning Issues
+rather than becoming alternate publication states. Forming the package
+establishes upload-ready bytes; live delivery begins with the human-controlled
+upload and its direct-route and real-parent verification.
+Supplemental delivery membership identifies the source owner explicitly; it
+does not add the Conditioning Field to the 21-member Core Architecture source
+manifest.
 
 The same manifest carries each route's minimal carrier policy. The scriptless
 pack hub uses an empty sandbox. A prototype with executable behavior grants
@@ -145,7 +157,7 @@ ordinary inline notice, input, or two-step confirmation instead of native
 browser dialogs, so no route retains a held capability. An `eligible` route is
 invalid when any hold remains. The policy vocabulary stays intentionally
 narrow: a newly observed capability returns to source review and an explicit
-contract revision before activation.
+contract revision before publication eligibility is restored.
 
 Build the ignored, dependency-free projection:
 
@@ -192,11 +204,11 @@ adapted receiver.
 The source scan covers resource-bearing markup, CSS and SVG dependency graphs,
 and selected JavaScript network primitives. It does not claim to prove every
 dynamic browser request. A browser request graph and the intended delivery
-policy remain required activation evidence for every selected route.
+policy remain required live-delivery evidence for every selected route.
 
 The optional Strategy Canvas v0.1.1 compatibility alias remains resting and is
 not generated. Upload, Cloudflare configuration, neighboring-path behavior,
-receiver repointing, and public activation remain later review steps.
+receiver repointing, and live delivery remain later review steps.
 
 ## Direct checks
 

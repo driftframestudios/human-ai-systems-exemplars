@@ -1,6 +1,6 @@
-# A3 Stacked-Cube Atlas Expanded Bundle v0.2
+# Evidence-Guided Capability Transfer Atlas Bundle v0.2
 
-This folder packages one semantic prototype: the Deep Research Atlas expansion of the A3 Strangler-Fig stacked-cube model. It preserves the four-frame authority story from v0.1 while adding assurance, runtime/data, recovery/retirement, and evidence-provenance lenses.
+This folder packages one semantic prototype: the Deep Research Atlas expansion of the Evidence-Guided Capability Transfer Model. It preserves the four-frame authority story from v0.1 while adding assurance, runtime/data, recovery/retirement, and evidence-provenance lenses.
 
 ## Open and embed
 
@@ -21,7 +21,7 @@ Open `index.html` directly in a modern browser. The lens and frame controls are 
 | `research/research-plan-v0.2.md` | Research questions, method, and completion gate |
 | `schema/*.schema.json` | Draft 2020-12 schemas for the delta, view model, source registry, and coverage ledger |
 | `schema/a3-stacked-cube.context.jsonld` | Optional JSON-LD semantic context |
-| `validation/validation-report.json` | Portable receipt for the 2026-07-27 bundle revision |
+| `validation/validation-report.json` | Portable receipt for the 2026-09-30 bundle revision |
 | `a3-stacked-cube-atlas-expanded-manifest-v0.2.json` | Publication paths, roles, byte counts, and SHA-256 inventory |
 
 ## Authoritative model
@@ -36,6 +36,6 @@ Every `source_ids` reference in the packaged delta resolves against `research/so
 
 `SRC-A3` and `SRC-ATLAS` carry private lineage through stable `urn:source-key:` identifiers. The v0.1 baseline copy also carries explicit `source_key` while retaining its original wire fields. The expanded prototype renders private-lineage records as semantic source labels, while genuinely public evidence remains linked. The authorized resolver retains the exact gated coordinates.
 
-The included validation report retains its 2026-07-27 execution scope. The manifest records that report as prior evidence and marks the 2026-08-25 source-lineage revision `awaiting_human_cue`. This revision refreshes the existing byte-and-hash inventory and receives the repository public-boundary receipt. A later human-cued package or browser pass can issue a current execution receipt.
+The included validation report records the 2026-09-30 model-parity and four-width browser pass. The manifest preserves the earlier 2026-07-27 receipt as prior evidence and refreshes the current byte-and-hash inventory.
 
 The external research supplies evidence categories and architecture distinctions, not product-specific proof. Intended use, regulatory applicability, runtime topology, and operational gate status remain conditional or `UNKNOWN` where the record does not resolve them.

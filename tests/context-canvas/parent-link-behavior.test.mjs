@@ -49,32 +49,40 @@ test("the About cartography retains its recorded embedded-document exception", a
   }
 });
 
-test("Accessible Forms remains truthful catalog content until its reading is ready", async () => {
-  const owners = [
-    "debriefs.html",
-    "exemplar-gallery-list.html",
-    "exemplar-ideal-debrief.html",
-    "exemplar-maximal-debrief.html",
-    "exemplar-maximal-information-radiator.html",
-  ];
-  let cards = 0;
+test("the current Debrief catalog links the Forms Debrief", async () => {
+  const currentHeading = "<h2 class=\"txt-h2\">The Form Is a Contract</h2>";
+  const html = await readFile(join(canvasRoot, "debriefs.html"), "utf8");
+  const currentHeadingIndex = html.indexOf(currentHeading);
+  assert.ok(currentHeadingIndex >= 0, "debriefs.html names the Forms Debrief");
+  const currentCard = html.slice(currentHeadingIndex, currentHeadingIndex + 5000);
+  assert.match(currentCard, /href="recoverable-enterprise-forms\.html"/u);
+  assert.doesNotMatch(currentCard, /Dedicated reading in preparation\./u);
+});
 
-  for (const owner of owners) {
-    const html = await readFile(join(canvasRoot, owner), "utf8");
-    const heading = "<h2 class=\"txt-h2\">The Architecture of Accessible Forms</h2>";
-    let headingIndex = html.indexOf(heading);
-    while (headingIndex !== -1) {
-      const cardStart = html.lastIndexOf("<li", headingIndex);
-      const pendingIndex = html.indexOf("Dedicated reading in preparation.</span>", headingIndex);
-      assert.ok(cardStart >= 0 && pendingIndex >= 0, `${owner} keeps a complete pending card`);
-      const card = html.slice(cardStart, pendingIndex + "Dedicated reading in preparation.</span>".length);
-      cards += 1;
-      assert.doesNotMatch(card, /<a\b/iu, `${owner} keeps the pending card non-linking`);
-      headingIndex = html.indexOf(heading, pendingIndex);
-    }
+test("the current Debrief routes expose truthful navigation and progressive enhancement", async () => {
+  const currentRoutes = [
+    "spatial-capture-collaborative-memory.html",
+    "multilingual-clinical-vocabulary-practice.html",
+    "recoverable-enterprise-forms.html",
+  ];
+  for (const route of currentRoutes) {
+    const html = await readFile(join(canvasRoot, route), "utf8");
+    assert.doesNotMatch(
+      html,
+      /href="debriefs\.html"[^>]*aria-current="page"/u,
+      `${route} does not identify the catalog route as the current page`,
+    );
   }
 
-  assert.equal(cards, 6, "the primary catalog and retained exemplars agree on six cards");
+  const [catalog, enhancement] = await Promise.all([
+    readFile(join(canvasRoot, "debriefs.html"), "utf8"),
+    readFile(join(canvasRoot, "debriefs-catalog.js"), "utf8"),
+  ]);
+  assert.match(catalog, /<a class="skip-link" href="#main-content">/u);
+  assert.match(catalog, /<nav aria-label="Primary">/u);
+  assert.match(catalog, /<main id="main-content"[^>]*tabindex="-1">/u);
+  assert.match(catalog, /data-debrief-preview hidden>/u);
+  assert.match(enhancement, /preview\.hidden = false;\s*setSelections/u);
 });
 
 test("the shared parent footer emits standard links", async () => {

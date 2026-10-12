@@ -1,29 +1,29 @@
 # Internal — Semantic Attractor Design — Negation-Aware Instructions
 
-> A prohibition can quietly summon the very concept it names. Shape the desired state directly, and let the wanted behavior become the attractor.
+> A prohibition can foreground the very concept it names. Shape the desired state directly when that preserves the rule, and keep exact boundaries local to the action they govern.
 > 
 
 <aside>
 
-The core craft move: describe the desired state directly. It holds under repetition, stays legible to the model reading it, and applies to prose, emojis, and code comments alike.
+The core craft move: classify the job of the negation, then describe the desired state directly where the meaning survives. This is a fitted authoring heuristic for prompts, guidance, emoji-led callouts, and code comments—not a claim that every model or task processes negation in one way.
 
 </aside>
 
 ## Quick use
 
-Describing the desired state directly is the highest-leverage phrasing move on this guide: it makes instructions hold under repetition, keeps them legible to the AI reading them, and keeps the humans in the loop calmer. Reach for it whenever a rule is tempted into a prohibition.
+Describing the desired state directly is the highest-leverage phrasing move on this guide. It gives a generating system an explicit target and gives a human reader a calmer success condition. Begin by identifying what the negation is doing; a rewrite earns its place only when it preserves the rule.
 
 ### Use this when
 
-Writing guidance, prompts, or instructions for an AI collaborator — especially safety, tone, or quality rules that invite phrasing as a prohibition. The same move governs emoji polarity (✅/❌) and the code layer.
+Writing guidance, prompts, or instructions for an AI system — especially tone, quality, and generative rules that invite phrasing as a prohibition. The same review applies to emoji polarity (✅/❌) and the code layer. Legal, safety, privacy, epistemic, definitional, and compatibility boundaries retain their exact meaning.
 
 ### This restores
 
-A calm, affirmative semantic field: the interaction holds a clear sense of what to move *toward*, and a collaborator has a target to climb toward rather than a hazard to avoid.
+A calm, affirmative semantic field with exact local boundaries: the interaction holds a clear sense of what to move *toward*, and the receiving system can find the constraint beside the action it governs.
 
 ### Good next question
 
-"What is the desired end state here, and how would a collaborator verify it?"
+"What job is this negation doing, what desired state can sit beside it, and what receiving-task observation would establish that the rewrite works?"
 
 **Hands to** Core Principles · Welcome Mat Patterns · Failure Geometries.
 
@@ -33,29 +33,29 @@ Prohibitions stack up; the model keeps producing the forbidden concept; tone dri
 
 ## Debrief
 
-A prohibition keeps summoning the concept it names; describing the desired state directly turns guidance into a reliable, AI-legible attractor — and there is a graded ladder for doing it well.
+A prohibition can leave the unwanted concept prominent; describing the desired state directly creates a clearer generative target. A fitted three-rung ladder helps authors compare forms, while the receiving task decides which form works.
 
 ### The snag
 
-A rule lands as a prohibition ("do not be punitive," "avoid non-determinism"), and the unwanted concept keeps surfacing anyway.
+A generative rule lands as a prohibition ("do not be punitive," "avoid non-determinism"), and the unwanted concept keeps surfacing in observed output.
 
 ### The read
 
-Negation stays weakly represented at both training and inference time — stating a prohibited concept can activate it, and embeddings often blur the "not." This is a faultless gap: a model rarely detects itself doing it.
+Research shows several distinct negation effects rather than one universal model deficit. Negated-prompt benchmarks expose failures in some tasks and model families; training-time work shows that distant disclaimers can be learned differently from locally negated claims; embedding studies find task-specific similarity problems; multilingual and mechanistic work shows that scale, language, explicitness, architecture, and late-layer behavior all change the result. This is a faultless system gap when it appears, and it is an empirical question in the receiving task.
 
 ### The move
 
-Rewrite toward the desired state: name what the interaction should feel like, preserve, and optimize for, and leave a collaborator able to verify it. Then climb the strength ladder — lexicalize the negation, or better, restate it as a wholly positive constitutive predicate. Reserve explicit negation for hard safety and privacy edges, always paired with a replacement state.
+Classify before rewriting. Preserve exact boundaries and quoted material. For a generative prohibition, name what the interaction should feel like, preserve, and optimize for. Keep any retained negation local to the claim or action it governs, pair a hard boundary with the permitted replacement behavior, and validate the result with the receiving model, task, or interface.
 
 ### The cure
 
-Guidance becomes a positive-state attractor — reliable under repetition, legible to AI, and calmer for the humans in the loop.
+Guidance becomes a positive-state attractor with local boundaries and an observable fit check. The result is easier to inspect, revise, and carry across systems without claiming universal reliability.
 
 ---
 
 # The guidance
 
-Shape desired semantic fields directly — it is the move the rest of this page makes precise.
+Shape desired semantic fields directly after identifying the work each negation performs.
 
 When writing guidance for AI systems, prefer positive-state attractors:
 
@@ -65,70 +65,89 @@ When writing guidance for AI systems, prefer positive-state attractors:
 - what should remain stable under repeated use?
 - what should a collaborator be able to verify?
 
-Negation still earns its place at hard safety and privacy edges — and even there, a constitutive form (*"credentials stay server-side"*) is stronger than a bare prohibition; reserve explicit negation for the irreducible edge, always paired with its replacement state.
+Negation retains its place at hard safety, privacy, legal, compatibility, definitional, and epistemic edges. Pair the exact boundary with an affirmative operating state—for example, *"credentials stay server-side; client output never contains a credential."* Keep the two clauses adjacent so retrieval or chunking preserves their relation.
 
-What follows turns this into something teachable and verifiable: a three-rung strength ladder, the forms worth preserving when a negation carries the meaning, and direct treatment for the emoji and code layers — each with a worked example a collaborator can climb toward.
+What follows turns this into something teachable and testable: classification before rewrite, semantic locality, a fitted three-rung ladder, forms worth preserving, and receiving-task validation across prose, emoji-led callouts, and code.
+
+## Classify before rewriting
+
+| Negation job | Default treatment | Fit check |
+| --- | --- | --- |
+| Generative or tone prohibition | Lead with the desired state; retain a contrast only when it helps diagnosis. | Does the receiving output produce the desired behavior across representative cases? |
+| Hard safety, privacy, legal, or compatibility boundary | Preserve the exact exclusion and place the permitted behavior beside it. | Can a reviewer identify both the forbidden state and the safe route in one reading? |
+| Definitional or epistemic negation | Preserve the term or uncertainty boundary; anchor it with the positive claim it qualifies. | Does the rewrite retain the same entailment and claim limit? |
+| Test assertion or absent-state check | Preserve executable semantics; explain the positive invariant nearby when useful. | Does the check still reject the same failure state? |
+| Quoted, cited, source, or corpus language | Preserve verbatim. Treat the negation as data. | Does the carrier retain source fidelity? |
+
+## Keep the boundary local
+
+Semantic locality means that a constraint appears in the same sentence, bullet, table row, or compact block as the claim or action it governs. Training-time evidence shows a consequential distinction between distant annotations that label a claim false and negation expressed locally inside the claim. That result does not prove a universal prompt rule; it does support keeping qualifications close enough to survive chunking, retrieval, and partial context.
 
 ---
 
-# Patterns — Fragile → Stronger
+# Patterns — Higher burden → clearer target
 
-Each "stronger" form climbs the strength ladder below: lexicalize the negation, or better, restate it as a wholly positive constitutive predicate.
+These rewrites reduce interpretation burden for generative guidance. They are candidates to test, not semantic substitutions to apply mechanically.
 
 ```yaml
 rewrite_patterns:
-  - fragile: "Do not make the interaction punitive."
-    stronger: "The interaction should feel safe, revisable, collaborative, patient, and curiosity-centered."
+  - higher_burden: "Do not make the interaction punitive."
+    clearer_target: "The interaction should feel safe, revisable, collaborative, patient, and curiosity-centered."
 
-  - fragile: "Avoid non-determinism."
-    stronger: "APIs should be idempotent, replay-safe, and predictable under repeated calls."
+  - higher_burden: "Avoid non-determinism."
+    clearer_target: "APIs should be idempotent, replay-safe, and predictable under repeated calls."
 
-  - fragile: "Do not overwhelm the user."
-    stronger: "The interface should reveal complexity progressively and preserve cognitive breathability."
+  - higher_burden: "Do not overwhelm the user."
+    clearer_target: "The interface should reveal complexity progressively and preserve cognitive breathability."
 
-  - fragile: "Don't fail to preserve context across a long session."
-    stronger: "Context is preserved across the whole session, and each turn can verify it remains intact."
+  - higher_burden: "Don't fail to preserve context across a long session."
+    clearer_target: "Context is preserved across the whole session, and each turn can verify it remains intact."
 ```
 
 ---
 
-# The strength ladder — three rungs
+# The fitted strength ladder — three rungs
 
-The fragile → stronger rewrites above climb a single gradient. Naming the rungs makes the gradient teachable and gives a collaborator a clear target to climb toward. Each rung is more reliable than the one below it because each removes more of the negation an AI has to resolve at inference time.
+The patterns above move from a prohibition toward a directly stated target. Naming the rungs makes this authoring gradient teachable. The ordering expresses expected clarity for generative instructions; it is not a universal ranking of linguistic competence, retrieval quality, safety, or model reliability.
 
-- **Rung 1 — negation operator + positive token** (weakest). A free-standing negator carries the meaning: *"Governance is not separable," "do not be punitive."* The operator (`not`, `avoid`, `never`) is often processed more like a content word than a logical one, so its scope resolves unreliably; meanwhile the positive token it points at (*separable*, *punitive*) stays active in the field. Pairing the prohibition with a replacement state — the move named in the patterns above — is a real improvement, because it supplies the desired attractor, yet the negator and the unwanted token are both still present.
-- **Rung 2 — lexicalized antonym** (stronger). The negation is baked into a single word: *"Governance is inseparable," "the API is idempotent and stable."* Affixal/lexicalized negation is largely resolved in the lexicon rather than composed from a fragile scope operator at inference, and the phrasing is affirmative in polarity, so there is no "not" to drop and no forbidden token left sitting in the field.
-- **Rung 3 — wholly positive constitutive predicate** (strongest). No negative morphology at all: *"Governance and UX are one system," "the API returns the same result on every replay."* The sentence states what *is*, constitutively, so there is nothing to negate, no scope to lose, and no rebound token. This is the form the patterns above already reach for, and the form to prefer whenever a constitutive restatement is available.
+- **Rung 1 — negation operator + positive token.** A free-standing negator carries the meaning: *"Governance is not separable," "do not be punitive."* This form can be exact and necessary, yet a generative rule still needs the reader or model to infer the replacement behavior.
+- **Rung 2 — familiar lexicalized antonym.** The contrast is expressed compactly: *"Governance is inseparable," "the API is deterministic."* Modern English LLMs can often recognize affixal negation reliably, although tokenization and task design affect results. This rung can reduce surface complexity; it does not automatically outperform every explicit negation.
+- **Rung 3 — wholly positive constitutive predicate.** The sentence states the operating condition: *"Governance and UX are one system," "the API returns the same result on every replay."* For generative guidance, this form usually provides the most concrete target and the clearest verification route.
 
-| Rung | Form | Example | Why it ranks here |
+| Rung | Form | Example | Working fit |
 | --- | --- | --- | --- |
-| 1 (weakest) | Negation operator + positive token | *"Governance is not separable"* | Operator scope resolves unevenly; the forbidden token stays active. |
-| 2 (stronger) | Lexicalized antonym | *"Governance is inseparable"* | Negation resolved in the lexicon; affirmative polarity, nothing to drop. |
-| 3 (strongest) | Wholly positive constitutive predicate | *"Governance and UX are one system"* | Nothing to negate, no scope to lose, no token to rebound. |
+| 1 | Negation operator + positive token | *"Governance is not separable"* | Preserve when the exclusion is exact; add the replacement state for generative work. |
+| 2 | Familiar lexicalized antonym | *"Governance is inseparable"* | Compact when the word is conventional and its meaning is stable. |
+| 3 | Wholly positive constitutive predicate | *"Governance and UX are one system"* | Names the target state and supplies a direct verification route. |
 
-## Why the rungs hold (mechanism, briefly)
+## Why the ladder is useful—and bounded
 
-Three converging effects explain the order:
+The ladder synthesizes evidence from different tasks into an authoring heuristic:
 
-- **Scope fragility** — `not` and other operators resolve unreliably, and the problem multiplies when negation meets quantifiers or other operators (`negation-scope-ambiguities`).
-- **Ironic rebound** — naming a forbidden positive token raises its activation rather than lowering it; circuit-level work traces this to mid-layer heads that amplify the very token early layers tried to suppress. *"Not separable"* keeps *separable* on the table; *"inseparable"* never utters it (`ironic-rebound-llms`, `thought-suppression-ironic-process`).
-- **Lexical absorption** — affixal negation is largely handled at the lexical level, with minimal performance cost, which is why Rung 2 outperforms Rung 1 (`affixal-negation-llms`).
+- **Prompt-level evaluation.** Negated prompts produced substantial performance gaps and inverse scaling in one nine-task study across the tested model families (`negation-llms-not-naysayers`). This supports testing direct target statements; it does not establish that every larger or newer model handles negation worse.
+- **Training-time learning.** Models learned claims from documents whose distant annotations said the claims were false, while locally negated claims largely mitigated the measured effect in the main setup (`negation-neglect`). Training-time belief acquisition and in-context instruction following remain distinct settings.
+- **Lexical processing.** Modern English LLMs reliably recognized affixal negation overall in a dedicated study, despite tokenization mismatches (`affixal-negation-llms`). This supports familiar antonyms as legitimate language, not a universal Rung-2-over-Rung-1 performance claim.
+- **Multilingual and scaling variation.** Paired multilingual NLI work found that larger tested models handled negation better, with language, premise length, and explicitness affecting robustness (`negation-pink-elephant-multilingual`).
+- **Mechanistic variation.** Work on Mistral-7B and Llama-3.1-8B found internal components that processed negation correctly alongside late-layer attention shortcuts that promoted wrong answers; both suppressive and constructive mechanisms appeared (`negation-mechanisms-zhou`). Internal representation and final output can therefore diverge.
+- **Embedding and retrieval variation.** Some embedding evaluations find negated and affirmative text too similar. Apply retrieval-specific checks before treating an instruction-writing improvement as a retrieval improvement (`negation-awareness-embeddings`).
+
+The practical synthesis is modest: direct target states reduce the amount a generating system must infer, local boundaries preserve their relation to the governed claim, and representative receiving-task checks decide fit.
 
 ## A note on the framing of "is"
 
-The lift from *"not separable"* to *"inseparable"* is real, but the active ingredient is **not the word *is** *—* "is separable" *and* "is inseparable" *share the copula and mean opposites. Two mechanisms do the work: lexicalization (the negation is resolved once, in the lexicon, as one stable embedding with its own entailments) and affirmative polarity (a positive assertion has no scope to drop and triggers no negation-induced forgetting). The copula is the* vehicle* for the affirmative restatement, not the cause of the gain. A constitutive predication is entailment-rich and inference-stable; a denial is something a model can locally forget. The intuition — constitutive predication beats denial — is sound; Rung 3 is simply its fullest form.
+The word *is* provides no special protection. *"Is separable"* and *"is inseparable"* share the same copula and mean different things. The benefit of a constitutive predicate is practical: it names the state to generate and observe. Treat that as an authoring affordance, then verify the receiving behavior.
 
-## Three caveats that keep the rule strong
+## Three caveats that keep the heuristic fitted
 
-- **Tokenization** — the Rung-2 benefit depends on the antonym tokenizing as a stable unit. Common forms (*inseparable, unstable, independent*) are safe; rare or coined affix forms (*"non-deprecatable," "un-composable"*) fragment into subwords and lose the advantage. Prefer established antonyms (`affixal-negation-llms`).
-- **Fossilized antonyms** — some affixed forms have drifted from compositional meaning: *invaluable* means *very valuable*, *inflammable* means *flammable*, *priceless* is not "without price." Reach for a true compositional antonym instead.
-- **Antonym proximity in embeddings** — antonyms can sit close together in vector space, so the gain is mainly a **generation and instruction** win, with **retrieval** gains less assured; embeddings can still blur the contrast (`negation-awareness-embeddings`).
+- **Tokenization** — affixal negation can cross token boundaries, and tokenization quality does not map cleanly to negation sensitivity. Prefer established words over coined forms such as *"non-deprecatable"*, then test the actual receiver (`affixal-negation-llms`).
+- **Lexicalized exceptions** — affixed forms do not always compose predictably: *invaluable* means *very valuable*, *inflammable* means *flammable*, and *priceless* often means *beyond price*. Prefer a familiar term whose meaning is stable for the audience.
+- **Task transfer** — prompt following, finetuning, text embedding, multilingual NLI, and mechanistic probes measure different behaviors. Carry a result across these settings only as a hypothesis with a receiving-task check.
 
 ## Double negation
 
-A doubled negation — *"not unimportant," "don't fail to preserve context"* — forces a model to resolve two scopes and two rebound tokens at once, and is the most fragile form of all. It is the clearest argument for Rung 3: the clean repair is almost always a wholly positive constitutive restatement — *"context is preserved," "this matters"* — rather than a careful double negative. Litotes (affirmation-by-denial, *"not unhelpful"*) belongs to the same family and carries the same fragility.
+A doubled negation—*"not unimportant," "don't fail to preserve context"*—usually adds interpretation work without adding a useful boundary. For operational guidance, test the direct form first: *"this matters," "preserve context."* Preserve litotes, quotations, and other rhetorical forms when their voice or source fidelity matters.
 
-Two boundaries keep the ladder honest: the climb is for guidance and tone, and it leaves the **load-bearing negations** named below intact, while **hard safety and privacy edges** keep their explicit negation, always paired with a replacement state.
+Two boundaries keep the ladder honest: it fits authored generative guidance, and it leaves the **load-bearing negations** named below intact. Hard boundaries keep their explicit exclusion and place the allowed behavior beside it.
 
 ---
 
@@ -136,17 +155,18 @@ Two boundaries keep the ladder honest: the climb is for guidance and tone, and i
 
 Some negations are load-bearing: the prohibition is the concept itself, not a stylistic choice. "Non-demographic," "unspecified rather than inferred," and "not a substitute for X" lose meaning when flattened into a bare affirmative. Preserve these forms, and lower neglect risk by stating the positive anchor first and the boundary second.
 
-Three load-bearing forms recur:
+Four load-bearing forms recur:
 
 - Definitional negation — the term is a "non-X" (non-demographic, non-blocking). Keep the negation, and lead with the positive anchor that the term modifies.
 - Epistemic-humility negation — "left unspecified rather than inferred" marks a deliberate boundary on the claims made. Keep this form intact.
+- Hard policy boundary — "credentials never enter client output" names a forbidden state whose omission would weaken the rule. Place the allowed route beside it: "credentials stay server-side."
 - Paired catalog — anti-pattern lists stay legible when each entry sits beside the desired pattern that replaces it. Pair the columns, and state the pairing so chunked retrieval keeps the "instead of" attached.
 
 ## Scope note
 
 This terrain was written for guidance and instructions. In expository or research prose, the treatment stays lighter: keep each prohibition beside its replacement and lead each section with the desired state, rather than rewriting analysis into imperatives.
 
-A coverage principle keeps this from becoming a catalog: name the *class* to preserve, not every case. Quoted, cited, and verbatim material — dialogue, transcripts, corpus samples, and the fragile examples on this page — stays exactly as written, because there a negation is data rather than authored guidance. A capable collaborator generalizes from that one statement, so the explicit words are spent where self-detection is hardest — on negation neglect, a faultless gap — and competence is trusted for the rest.
+A coverage principle keeps this from becoming a catalog: name the *class* to preserve, not every case. Quoted, cited, and verbatim material—dialogue, transcripts, corpus samples, and the higher-burden examples on this page—stays exactly as written, because there a negation is data rather than authored guidance. Classification keeps the pass focused on authored instructions whose receiving behavior can improve.
 
 ---
 
@@ -162,26 +182,38 @@ Constitutive silence carries an unspecified state. An absent assertion, uncalled
 
 This form preserves epistemic restraint while keeping the evidence-bearing state as the semantic attractor.
 
+## Receiving-task validation
+
+A polarity rewrite remains a hypothesis until the receiving task shows its effect. Select the smallest observation that matches the risk:
+
+- For a prompt or instruction, run representative positive, edge, and adversarial cases against the intended model configuration.
+- For retrieval, compare whether affirmative, negated, and contrastive queries return the intended records.
+- For training material, keep qualifiers local to the claims they govern and inspect downstream belief or behavior rather than relying on the document label alone.
+- For a human-facing interface, confirm that people can identify the desired state, the exact boundary, and the available next action in one reading.
+- For code, preserve executable assertions and test the actual invariant. A prose preference never overrides runtime semantics.
+
+Record the model or system, task, examples, and observed difference when the rewrite carries consequential behavior. A stable style preference needs only a proportionate review.
+
 ---
 
 # Emojis and the code layer
 
-The ladder governs more than prose. Two surfaces carry negation in their own ways, and each earns explicit treatment.
+The same classification applies beyond prose. Two surfaces carry polarity in their own ways, and each earns explicit treatment.
 
 ## Emoji polarity
 
-An emoji can act as a negation operator. ❌ marks a prohibition as surely as the word *avoid*, and a lone ❌ leaves the forbidden concept active in the field much as a bare *not* does. Read ✅ and ❌ as polarity markers: lead with ✅ on the desired state, and where a boundary matters, pair ❌ with the replacement it points toward rather than letting it stand alone. Often the strongest mark is none at all — a constitutive sentence asks for no checkmark.
+An emoji can visually foreground polarity. A lone ❌ makes the rejected concept prominent while leaving the replacement implicit. Lead with the desired state in words; where a boundary matters, place the exact exclusion and the replacement beside each other. Often the clearest mark is none at all—a constitutive sentence can carry the meaning without a banner.
 
 ## Code comments and identifiers (a separate layer)
 
-Comments, docstrings, and identifiers address the code and parser layer, which carries a training distribution of its own: years of forum and repository code dense with emphatic `DO NOT`, `# never`, `assert not`, and ❌ / ✅ banners. That layer can retain negation habits after the prose has already climbed the ladder, so it earns direct specification of its own:
+Comments, docstrings, identifiers, and assertions serve different readers. Comments can name the desired invariant; executable checks retain the exact boolean semantics the program requires:
 
 - Phrase comments as the desired state — `// keep this idempotent` over `// don't make this stateful`.
-- Name invariants positively — `assert response.is_stable` over `assert not response.is_flaky`.
-- Reserve `DO NOT` banners for genuine safety, with the replacement beside them — `# SAFETY: keys stay server-side (the key is never inlined)`.
+- Prefer a positive predicate when it truthfully names the same invariant—`assert response.is_stable` over a newly invented negative alias. Preserve `assert not value` when that is the direct executable condition.
+- Use emphatic boundary comments for genuine safety, with the replacement beside them—`# SAFETY: keys stay server-side; client output never contains a key`.
 - Let identifiers carry affirmative polarity — `preserveContext` over `dontDropContext`.
 
-A worked example carries the rule into the code layer more durably than prose alone — an actual code block tends to hold the posture longer, and holds it best when prose and code travel together. The `GUARD` / `TARGET` / `CONTRAST` scaffolding below names the desired state for generation and keeps the fragile form visible only as diagnostic material:
+A worked example makes the intended code posture concrete. The `GUARD` / `TARGET` / `CONTRAST` scaffolding below names the desired state for generation and keeps the higher-burden form visible as diagnostic material:
 
 ```tsx
 /* =============================================================
@@ -194,8 +226,8 @@ A worked example carries the rule into the code layer more durably than prose al
    turn can verify the context still holds before it replies.
 
    CONTRAST (diagnostic — do not emit as guidance):
-   "// don't lose the session context" names the failure, leaves
-   "lose context" active in the field, and offers nothing to build toward.
+   "// don't lose the session context" names the failure but leaves
+   the intended preservation behavior implicit.
    ============================================================= */
 
 export function preserveSessionContext(
@@ -225,29 +257,36 @@ The full `GUARD` / `TARGET` / `CONTRAST` pattern is worked out across the front-
 "@id": @driftframe/field-guide#semantic-attractor-design
 type: CollaborationPattern
 name: Semantic Attractor Design
-version: "2026.06"
-last_stabilized: 2026-06-10
+version: "2026.10"
+last_stabilized: 2026-10-06
 section:
   name: "Semantic Attractor Design"
   core_directive: "describe the desired state directly"
   preferred_instruction_style:
+    - classification_before_rewrite
     - positive_state_framing
     - replacement_state_guidance
+    - semantic_locality
     - verifiable_success_criteria
     - affirmative_evidence_boundaries
+    - receiving_task_validation
   negation_policy:
-    use_negation_for: ["hard safety boundaries", "privacy exclusions"]
-    pair_with: "desired replacement behavior"
-    preserve_when_load_bearing: ["definitional non-X terms", "epistemic-humility scoping", "paired anti-pattern catalogs"]
+    classify_as: ["generative prohibition", "hard boundary", "definitional or epistemic qualifier", "executable assertion", "source material"]
+    use_negation_for: ["hard safety boundaries", "privacy exclusions", "legal and compatibility constraints", "exact executable conditions"]
+    pair_with: "desired or permitted replacement behavior"
+    keep_local_to: "the claim, action, or state the negation governs"
+    preserve_when_load_bearing: ["definitional non-X terms", "epistemic-humility scoping", "hard policy boundaries", "paired anti-pattern catalogs"]
     applies_to: ["prose", "emoji polarity (✅/❌)", "code comments & identifiers"]
     preserve_verbatim: "quoted, cited, and verbatim material is data rather than authored guidance — preserve as-is"
-    coverage_principle: "name the class to preserve, not every case; spend explicit words on negation neglect (a faultless gap) and trust model competence elsewhere"
+    coverage_principle: "name the class to preserve, then revise only where the negation's job and receiving behavior remain legible"
     strength_ladder:
-      - { rung: 1, form: negation_operator_plus_positive_token, example: "Governance is not separable", reliability: weakest }
-      - { rung: 2, form: lexicalized_antonym, example: "Governance is inseparable", reliability: stronger }
-      - { rung: 3, form: wholly_positive_constitutive_predicate, example: "Governance and UX are one system", reliability: strongest }
-    ladder_caveats: ["prefer common antonyms (tokenization)", "use true compositional antonyms over fossilized forms", "antonym embedding proximity favors generation over retrieval"]
-    double_negation: "most fragile; repair to a wholly positive constitutive predicate"
+      scope: "fitted authoring heuristic for generative guidance; not a universal model-performance ranking"
+      rungs:
+        - { rung: 1, form: negation_operator_plus_positive_token, example: "Governance is not separable", fit: "exact boundary; pair with target state" }
+        - { rung: 2, form: familiar_lexicalized_antonym, example: "Governance is inseparable", fit: "compact conventional contrast" }
+        - { rung: 3, form: wholly_positive_constitutive_predicate, example: "Governance and UX are one system", fit: "direct generative and verification target" }
+    ladder_caveats: ["task families measure different behavior", "prefer established words over coined affixes", "account for lexicalized exceptions", "validate on the receiving model or system"]
+    double_negation: "usually higher interpretation burden in operational guidance; preserve when voice, source fidelity, or exact meaning requires it"
 references:
   - { ref: "@driftframe/field-guide#core-principles", name: Core Principles }
   - { ref: "@driftframe/field-guide#welcome-mat-patterns", name: Welcome Mat Patterns }
@@ -259,6 +298,7 @@ research:
   - { id: negation-hallucinations-varshney, name: negation-triggered hallucination }
   - { id: negation-benchmark-not-a-dataset, name: not-a-dataset negation benchmark }
   - { id: negation-pink-elephant-multilingual, name: pink elephant multilingual negation }
+  - { id: negation-mechanisms-zhou, name: suppressive and constructive negation mechanisms }
   - { id: negation-awareness-embeddings, name: negation awareness in embeddings }
   - { id: negation-induced-forgetting, name: negation-induced forgetting }
   - { id: affixal-negation-llms, name: affixal negation (lexicalization) }
@@ -269,51 +309,66 @@ research:
 
 ---
 
-# Research Anchors
+# Research anchors
 
-Full citations live in the canonical Field Guide Research Registry; this page references registry rows so the bibliographic detail stays in one place.
+Full citations live in the canonical Field Guide Research Registry. This page names the evidence class beside each row so findings from one setting do not silently become claims about another.
 
 ## Negation Neglect (training-time)
 
-Models can fail to robustly learn negated claims during training, sometimes retaining the underlying claim more strongly than its negation.
+Finetuning experiments found that models could learn a claim as true when surrounding annotations repeatedly said it was false. In the main tested setup, phrasing the negation locally inside the claim largely mitigated the effect. This evidence concerns training-time belief acquisition; it does not by itself establish prompt-following behavior.
 
-- `negation-neglect` — training-time negation neglect
+- `negation-neglect` — [Mayne et al., training-time negation neglect and semantic locality](https://arxiv.org/abs/2605.13829)
 
 ## Negation at the Prompt Level
 
-Negation failure spans both training time and inference time. Stating a prohibited concept can activate it in generation, so prompt-level phrasing matters as much as training data.
+Prompt-level studies show meaningful failures on specific negated instructions, factual probes, and reasoning benchmarks. One negated-prompt suite found inverse scaling across its tested families. Treat model, task, prompt form, and evaluation as part of the result.
 
-- `negation-llms-not-naysayers` — LLMs as naysayers (negation benchmarks)
-- `negation-probes-kassner-schutze` — negation probing (Kassner & Schütze)
+- `negation-llms-not-naysayers` — [Jang et al., negated-prompt benchmarks](https://proceedings.mlr.press/v203/jang23a.html)
+- `negation-probes-kassner-schutze` — [Kassner & Schütze, negation probing](https://aclanthology.org/2020.acl-main.698/)
 - `negation-hallucinations-varshney` — negation-triggered hallucination (Varshney)
 - `negation-benchmark-not-a-dataset` — "not a dataset" negation benchmark
-- `negation-pink-elephant-multilingual` — "pink elephant" multilingual negation
+
+## Multilingual and scaling variation
+
+Paired multilingual NLI work found a different size trend: larger tested models handled negation better, while language, premise length, and explicitness affected robustness. The contrast with the negated-prompt study makes model family, language, task, and evaluation part of the result rather than background detail.
+
+- `negation-pink-elephant-multilingual` — [Vrabcová et al., multilingual paired NLI, scaling, language, premise length, and explicitness](https://arxiv.org/abs/2503.22395)
+
+## Lexical and affixal negation
+
+Modern English LLMs can, on the whole, recognize affixal negation reliably even when tokenizer boundaries are morphologically imperfect. This finding supports the legitimate use of familiar antonyms. It does not establish a universal ordering in which affixal wording always outperforms free-standing negation.
+
+- `affixal-negation-llms` — [Truong et al., affixal negation and subword-tokenization sensitivity](https://aclanthology.org/2024.naacl-long.284/)
+
+## Mechanistic evidence
+
+Mechanistic work on two open-weight models found that correct internal negation-processing components can coexist with late-layer attention behavior that promotes simple wrong-answer shortcuts. The models used both suppressive and constructive mechanisms, with constructive representation more prominent in the tested settings. This evidence explains a bounded model family and task; it does not authorize a universal circuit claim.
+
+- `negation-mechanisms-zhou` — [Zhou et al., suppressive and constructive mechanisms; late-layer shortcut behavior](https://proceedings.mlr.press/v306/zhou26bq.html)
+- `ironic-rebound-llms` — emerging transformer evidence on ironic negation under tested cognitive-load conditions
+- `thought-suppression-ironic-process` — human ironic-process theory; cognitive analogy rather than an LLM mechanism proof
 
 ## Negation Awareness in Embeddings & Memory
 
-Embedding systems can treat negated and non-negated text as overly similar, and negation can impair what is later recalled.
+Some embedding and memory studies find that negated and non-negated text remain overly similar or that negation changes later recall. These results motivate retrieval- and memory-specific checks; they do not directly rank instruction wording.
 
 - `negation-awareness-embeddings` — negation awareness in text embeddings
 - `negation-induced-forgetting` — negation-induced forgetting
 
-## The strength ladder, rebound & scope
+## Scope and composition
 
-Why lexicalized antonyms and wholly positive predicates outperform free-standing negation, and where the gains break down.
+Negation scope becomes harder to interpret alongside quantifiers and other operators. For operational guidance, a direct target state often reduces composition work. The receiving task still decides whether the rewrite improves behavior.
 
-- `affixal-negation-llms` — affixal negation resolved at the lexical level (Rung 2 > Rung 1)
-- `ironic-rebound-llms` — ironic rebound: naming a forbidden token raises its activation
-- `thought-suppression-ironic-process` — Wegner's white-bear effect, the cognitive analog
-- `negation-scope-ambiguities` — negation × quantifier scope resolves unreliably
+- `negation-scope-ambiguities` — negation × quantifier combinations can admit competing scope readings
 
-### Design consequence (borrowed from the Research Registry)
+### Design consequence
 
-- Models under-weight negation — state the desired action directly (`negation-neglect`, training-time).
-- Prompt-level evidence agrees: LLMs stay insensitive to negation and reason unreliably under it (`negation-llms-not-naysayers`).
-- Instruction-tuned models hallucinate heavily on negation tasks (`negation-hallucinations-varshney`).
-- Text embeddings under-represent negation, so semantic similarity can quietly blur "not" (`negation-awareness-embeddings`).
-- Processing a negation can impair later memory for the affirmed link (`negation-induced-forgetting`).
-- Climb the strength ladder: prefer a lexicalized antonym over free-standing negation, and a wholly positive constitutive predicate over both.
-- Net move: describe desired behavior directly, use replacement-state framing, and rely on affirmative phrasing rather than negation alone.
+- Classify the negation by its job before rewriting it.
+- State the desired behavior directly when the same rule survives the rewrite.
+- Keep qualifiers and exclusions local to the claims or actions they govern.
+- Pair a hard boundary with the permitted replacement behavior.
+- Preserve quotations, definitions, epistemic limits, and executable conditions.
+- Validate consequential rewrites on the receiving model, retrieval system, training process, interface, or runtime check.
 
 ---
 
@@ -323,16 +378,18 @@ The salient vocabulary this page relies on; full definitions and instruction-eng
 
 | Term | In one line |
 | --- | --- |
-| Negation operator | A free-standing *not / avoid / never*; the weakest rung, its scope resolving unevenly. |
-| Lexicalized antonym | Negation folded into one word (*inseparable*); the middle rung. |
-| Constitutive predicate | A wholly positive statement of what *is*; the strongest rung. |
-| Polarity | Affirmative versus negative; affirmative polarity leaves no scope to drop. |
+| Negation operator | A free-standing *not / avoid / never*; exact for many boundaries, with additional interpretation work in generative guidance. |
+| Lexicalized antonym | A conventional word carrying contrast (*inseparable*); compact when its meaning is stable. |
+| Constitutive predicate | A wholly positive statement of the operating state; often the clearest generative target. |
+| Polarity | The affirmative or negative form of an expression; one feature among task, locality, language, and model behavior. |
 | Litotes | Affirmation by denial (*not unhelpful*); a mild double negative. |
-| Double negation | Two stacked negations; the most fragile form. |
-| Ironic rebound | Naming a forbidden token raises its activation — the white-bear effect. |
+| Double negation | Two stacked negations; usually higher interpretation burden in operational guidance. |
+| Ironic rebound | A tested condition in which negated content becomes more behaviorally prominent; bounded evidence, not a universal response. |
 | Negation scope | The span a negation governs; ambiguous alongside quantifiers. |
-| Fossilized antonym | An affix drifted from its meaning (*invaluable*); reach for a true compositional antonym instead. |
+| Lexicalized exception | An affixed form whose familiar meaning does not follow a simple negative-prefix rule; use the stable audience meaning. |
 | Materially meaningful negation | A negation whose prohibition is the concept itself; preserved intact. |
+| Semantic locality | Placement of a qualifier beside the claim or action it governs. |
+| Receiving-task validation | A fitting observation of the model, system, interface, or runtime that will consume the guidance. |
 
 ---
 
@@ -341,14 +398,19 @@ The salient vocabulary this page relies on; full definitions and instruction-eng
 ```yaml
 ecosystem_inheritance:
   inherits:
+    - classification_before_rewrite
     - positive_state_guidance
     - replacement_state_framing
     - semantic_locality
+    - receiving_task_validation
     - deployment_ethics_awareness
 
   supported_by:
     - Negation Neglect (training-time)
     - Negation at the Prompt Level
+    - Lexical and Affixal Negation
+    - Multilingual and Scaling Variation
+    - Mechanistic Evidence
     - Negation Awareness in Embeddings
 
   interoperates_with:
@@ -363,7 +425,7 @@ ecosystem_inheritance:
 
 This terrain has ecosystem-wide deployment implications.
 
-Positive-state semantic framing can influence:
+Positive-state semantic framing can support:
 
 - educational environments
 - operational calm
@@ -371,12 +433,14 @@ Positive-state semantic framing can influence:
 - error recovery posture
 - uncertainty survivability
 
-Negation-heavy interaction surfaces may unintentionally:
+In a receiving context, dense or distant prohibitions may:
 
 - intensify panic
-- activate unwanted semantic fields
+- leave the desired behavior implicit
 - increase cognitive friction
-- reduce revision safety
+- make recovery and revision harder to identify
+
+These are design hypotheses rather than universal cognitive effects. Representative receiving-task observations establish whether a consequential rewrite helps.
 
 ---
 

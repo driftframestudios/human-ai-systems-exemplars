@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="pgx-title pgx-desc">
   <title id="pgx-title">The alert was correct and the intervention still failed</title>
-  <desc id="pgx-desc">A technically conformant pharmacogenomics decision-support path moves from an Epic medication-prescribe action through CDS Hooks to an interruptive card and SMART on FHIR detail. A second rail shows the scarce clinician attention budget, habitual override, failed adoption, and lower-interruption order-set and pharmacist receiving surfaces. The investment band names the governance and cross-functional work required before build.</desc>
+  <desc id="pgx-desc">A source-period pharmacogenomics decision-support path moves from an Epic medication-prescribe action through CDS Hooks 1.x to an interruptive card and SMART on FHIR detail. A second rail shows the scarce clinician attention budget, habitual override, failed adoption, and lower-interruption order-set and pharmacist receiving surfaces. The investment band names the governance and cross-functional work required before build.</desc>
 
   <defs>
     <pattern id="pgx-grid" width="32" height="32" patternUnits="userSpaceOnUse">
@@ -62,7 +62,7 @@
     <rect class="chip" x="232" y="210" width="184" height="34" rx="17"/>
     <text class="chip-text" x="254" y="232">SMART on FHIR</text>
     <rect class="chip" x="430" y="210" width="160" height="34" rx="17"/>
-    <text class="chip-text" x="452" y="232">CDS Hooks v2</text>
+    <text class="chip-text" x="452" y="232">CDS Hooks 1.x</text>
     <rect class="chip sea" x="604" y="210" width="210" height="34" rx="17"/>
     <text class="chip-text" x="626" y="232">Conformance · passed</text>
     <rect class="chip blush" x="828" y="210" width="190" height="34" rx="17"/>

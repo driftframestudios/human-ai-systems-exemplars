@@ -31,12 +31,17 @@ The on-demand workflows live in `.agents/skills/`:
 
 - `repository-reentry` reconstructs current truth across branches, plans, ledgers, issues, and pull requests.
 - `repository-collaboration-cycle` carries an authorized task from re-entry through route selection, conditional environment preparation, source-owned execution, proportionate evidence, delivery, and exact continuation.
+- `repository-orientation-stewardship` reconciles a root and its nested README graph into source-aware first-receipt, repeat-use, and re-entry routes.
+- `repository-handoff-readiness` prepares an owner-operable repository route through source-responsive capability profiles, a live Issue current front, explicit account boundaries, and one post-handoff collaboration observation.
 - `uv-backed-python-execution` runs repository-declared Python checks through a lock-aware or isolated `uv` environment while preserving the host Python installation.
 - `context-canvas-surface-reading` maps a page as visitor surface and design input.
 - `context-canvas-css-ownership` guides CSS ownership, extraction, selector migration, and visual comparison.
 - `context-canvas-visual-verification` selects proportionate initial-state, focused interaction, alternate-media, viewport, and cross-engine evidence for a visitor-surface change.
 - `practitioner-probe` turns an ambiguous technical concern into a decision-changing question and observation.
+- `cost-and-ownership-analysis` maps scoped function cost, input boundaries, and mutation ownership to proportionate repairs and evidence.
 - `supportive-change-writing` shapes repository prose and instruction surfaces.
+- `agency-and-action-writing` restores truthful actors, actual actions, concrete objects, and material consequences when prose hides them while preserving flexible voice and precise abstractions.
+- `audit-anthropomorphic-cues` inspects bundled person-like cues, separates human effects from system-output hypotheses, and restores precise technical and authority referents before interface language changes.
 - `contextual-jargon-scan` classifies potentially inside wording within a bounded corpus and revises only shorthand whose meaning becomes clearer in ordinary language.
 - `evidence-grounded-research-spike` converts current external evidence into a bounded repository decision.
 - `declarative-skill-authoring` creates and revises transferable skills through contracts, rules, sparse behavior examples, and conditional context.

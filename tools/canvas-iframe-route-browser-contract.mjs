@@ -19,6 +19,12 @@ import {
   monitor,
   startStaticServer,
 } from "./core-architecture-browser-helper.mjs";
+import {
+  assertFormControlLabelRetention,
+  assertInvestmentStudioRowLabels,
+  observeFormControlLabels,
+  observeInvestmentStudioRowLabels,
+} from "./form-control-label-contract.mjs";
 
 const toolPath = fileURLToPath(import.meta.url);
 const repositoryRoot = path.resolve(path.dirname(toolPath), "..");
@@ -34,6 +40,9 @@ const canvasOutputRoot = path.join(iframeHostRoot, "v1/canvas");
 const routeReceiptPath = path.join(canvasOutputRoot, "route-manifest.json");
 const viewports = Object.freeze([
   { id: "desktop", width: 1280, height: 1000 },
+  { id: "compact", width: 800, height: 900 },
+  { id: "small", width: 480, height: 900 },
+  { id: "mobile", width: 390, height: 900 },
   { id: "narrow", width: 320, height: 900 },
 ]);
 
@@ -422,6 +431,7 @@ async function assertAttribution(page, route) {
 
 async function assertContained(session, stateLabel) {
   const { carrier, carrierPage, page, route } = session;
+  const labelObservations = [];
   for (const viewport of viewports) {
     await carrierPage.setViewportSize({ width: viewport.width, height: viewport.height });
     await carrierPage.evaluate(() => new Promise((resolve) => {
@@ -466,7 +476,14 @@ async function assertContained(session, stateLabel) {
       `${route.id} ${stateLabel} attribution contains its ${viewport.id} width ` +
         `(${observed.footerScrollWidth}/${observed.footerClientWidth})`,
     );
+    labelObservations.push(
+      await observeFormControlLabels(page.locator("html"), viewport.width),
+    );
   }
+  assertFormControlLabelRetention(
+    labelObservations,
+    `${route.id} ${stateLabel}`,
+  );
   await carrierPage.setViewportSize({
     width: viewports[0].width,
     height: viewports[0].height,
@@ -598,6 +615,40 @@ async function exerciseTalent(session) {
 
 async function exerciseInvestmentStudio(session) {
   const { carrierPage, page } = session;
+  for (const width of [1280, 701, 700, 390, 320]) {
+    await carrierPage.setViewportSize({ width, height: 900 });
+    await carrierPage.evaluate(() => new Promise((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(resolve));
+    }));
+    assertInvestmentStudioRowLabels(
+      await observeInvestmentStudioRowLabels(page),
+      width,
+      "generated Cross-Functional Investment Studio",
+    );
+  }
+
+  await carrierPage.setViewportSize({ width: 390, height: 900 });
+  await page.locator('[data-add="activity"]').click();
+  assertInvestmentStudioRowLabels(
+    await observeInvestmentStudioRowLabels(page),
+    390,
+    "generated Cross-Functional Investment Studio after adding an activity",
+  );
+  await page.locator('[data-preset="1"]').click();
+  assertInvestmentStudioRowLabels(
+    await observeInvestmentStudioRowLabels(page),
+    390,
+    "generated Cross-Functional Investment Studio after changing the plan",
+  );
+  const activityName = page.locator('.activity-row input[data-field="name"]').first();
+  await activityName.fill("Accessible planning activity");
+  assert.match(
+    await page.locator('.activity-row input[data-field="a"]').first().getAttribute("aria-label"),
+    /Accessible planning activity/u,
+    "generated activity controls retain contextual programmatic labels after renaming",
+  );
+
+  await carrierPage.setViewportSize({ width: viewports[0].width, height: viewports[0].height });
   const before = (await page.locator("#band").textContent())?.trim();
   await page.locator("#horizon").fill("7");
   await page.locator("#horizon").dispatchEvent("change");
@@ -827,7 +878,7 @@ async function exerciseInvestmentModelStudio(session) {
   const visiblePlain = await page.locator("#promptCapsuleMarkdown").textContent();
   assert.equal(initial.apiFrozen, true);
   assert.equal(initial.viewsFrozen, true);
-  assert.equal(initial.version, "0.1.0");
+  assert.equal(initial.version, "0.3.0");
   assert.equal(initial.stateSchemaVersion, "1.0.0");
   assert.equal(initial.contract, "prompt-capsule/0.1.0");
   assert.deepEqual(initial.views, ["plain", "skill-assisted"]);
@@ -970,7 +1021,7 @@ async function exerciseInvestmentModelStudio(session) {
     reason: globalThis.crossFunctionalInvestmentModelStudio.getState().selectionReason,
     fingerprint: globalThis.crossFunctionalInvestmentModelStudio.promptCapsuleFingerprint(),
   }));
-  assert.equal(sameModel.reason, "visitor-selected");
+  assert.equal(sameModel.reason, "initial", "Selecting the active model preserves the accepted state reason");
   assert.equal(sameModel.fingerprint, initial.fingerprint, "Selection modality stays outside the represented-state fingerprint");
 
   await page.locator('input[name="investment-model-prompt-view"][value="plain"]').focus();
@@ -1072,7 +1123,7 @@ async function exerciseInvestmentModelStudio(session) {
   ]);
   assert.equal(
     download.suggestedFilename(),
-    "cross-functional-investment-model-studio.whole-life-tco.prompt-capsule.r0.1.0.skill-assisted.md",
+    "cross-functional-investment-model-studio.whole-life-tco.prompt-capsule.r0.3.0.skill-assisted.md",
   );
   assert.equal(await download.failure(), null);
   assert.equal(await page.evaluate(() => globalThis.__investmentPromptDownloadType), "text/markdown;charset=utf-8");
@@ -1141,15 +1192,143 @@ async function exerciseThreadkeeping({ carrierPage, page }) {
     "Threadkeeping download contains the ledger document",
   );
 
-  await page.locator("#ledgerBody [data-select-entry]").first().click();
-  let modalObserved = false;
-  carrierPage.once("dialog", async (dialog) => {
-    modalObserved = true;
-    assert.equal(dialog.type(), "confirm");
+  let nativeModalObserved = false;
+  const nativeModalListener = async (dialog) => {
+    nativeModalObserved = true;
     await dialog.dismiss();
+  };
+  carrierPage.on("dialog", nativeModalListener);
+
+  const candidateBefore = await page.evaluate(() => {
+    const state = globalThis.threadkeepingLedger.getState();
+    const candidate = state.threadkeeper.nextCandidates[0];
+    return {
+      count: state.threadkeeper.nextCandidates.length,
+      id: candidate.id,
+      title: candidate.title,
+      referencedBy: state.threadkeeper.entries.filter((entry) =>
+        entry.nextCandidateRefs.includes(candidate.id)).length,
+    };
   });
+  assert.ok(
+    candidateBefore.referencedBy > 0,
+    "Threadkeeping deletion coverage begins with a referenced next candidate",
+  );
+  await page.locator(`[data-edit-candidate="${candidateBefore.id}"]`).first().click();
+  await page.locator("#deleteCandidateBtn").click();
+  assert.equal(await page.locator("#candidateDeleteConfirmation").isVisible(), true);
+  assert.equal(await page.locator("#deleteCandidateBtn").getAttribute("aria-expanded"), "true");
+  assert.equal(
+    await page.locator("#cancelDeleteCandidateBtn").evaluate((element) => document.activeElement === element),
+    true,
+    "Threadkeeping places keyboard focus on the safe candidate-deletion action",
+  );
+  await page.locator("#cancelDeleteCandidateBtn").click();
+  assert.equal(await page.locator("#candidateDeleteConfirmation").isHidden(), true);
+  assert.equal(
+    await page.locator("#deleteCandidateBtn").evaluate((element) => document.activeElement === element),
+    true,
+    "Cancelling candidate deletion restores focus to its trigger",
+  );
+  assert.equal(
+    await page.evaluate(() => globalThis.threadkeepingLedger.getState().threadkeeper.nextCandidates.length),
+    candidateBefore.count,
+    "Cancelling keeps the next candidate",
+  );
+  await page.locator("#deleteCandidateBtn").click();
+  await page.locator("#confirmDeleteCandidateBtn").click();
+  await page.locator("#candidateDialog").waitFor({ state: "hidden" });
+  const candidateAfter = await page.evaluate((deletedId) => {
+    const state = globalThis.threadkeepingLedger.getState();
+    return {
+      count: state.threadkeeper.nextCandidates.length,
+      retainedDeletedId: state.threadkeeper.nextCandidates.some((item) => item.id === deletedId),
+      retainedReferences: state.threadkeeper.entries.some((entry) => entry.nextCandidateRefs.includes(deletedId)),
+    };
+  }, candidateBefore.id);
+  assert.equal(candidateAfter.count, candidateBefore.count - 1);
+  assert.equal(candidateAfter.retainedDeletedId, false);
+  assert.equal(candidateAfter.retainedReferences, false);
+  assert.match(await page.locator("#ledgerActionStatus").textContent(), /Next candidate .* deleted/u);
+  assert.equal(
+    await page.evaluate(() => Boolean(document.activeElement?.matches('[data-edit-candidate], #addCandidateBtn'))),
+    true,
+    "Candidate deletion restores focus to the next recoverable action",
+  );
+
+  const referencedEntryId = await page.evaluate(() => {
+    const state = globalThis.threadkeepingLedger.getState();
+    return state.threadkeeper.entries.find((candidate) =>
+      state.threadkeeper.entries.some((entry) =>
+        entry.supersedes === candidate.id || entry.supersededBy === candidate.id) ||
+      state.threadkeeper.nextCandidates.some((nextCandidate) =>
+        nextCandidate.inheritsFrom.includes(candidate.id)))?.id ?? "";
+  });
+  assert.ok(referencedEntryId, "Threadkeeping retains a referenced entry after candidate deletion");
+  await page.locator(`#ledgerBody [data-select-entry="${referencedEntryId}"]`).click();
+  const entryBefore = await page.evaluate(() => {
+    const state = globalThis.threadkeepingLedger.getState();
+    const id = state.viewState.selectedEntryId;
+    return {
+      count: state.threadkeeper.entries.length,
+      id,
+      referenceCount:
+        state.threadkeeper.entries.filter((entry) =>
+          entry.supersedes === id || entry.supersededBy === id).length +
+        state.threadkeeper.nextCandidates.filter((candidate) =>
+          candidate.inheritsFrom.includes(id)).length,
+      title: state.threadkeeper.entries.find((entry) => entry.id === id).title,
+    };
+  });
+  assert.ok(
+    entryBefore.referenceCount > 0,
+    "Threadkeeping entry-deletion coverage begins with a referenced entry",
+  );
   await page.locator("#deleteEntryBtn").click();
-  assert.equal(modalObserved, true, "Threadkeeping exposes its deliberate-delete modal");
+  assert.equal(await page.locator("#entryDeleteConfirmation").isVisible(), true);
+  assert.equal(await page.locator("#deleteEntryBtn").getAttribute("aria-expanded"), "true");
+  assert.equal(
+    await page.locator("#cancelDeleteEntryBtn").evaluate((element) => document.activeElement === element),
+    true,
+    "Threadkeeping places keyboard focus on the safe entry-deletion action",
+  );
+  await page.locator("#cancelDeleteEntryBtn").click();
+  assert.equal(await page.locator("#entryDeleteConfirmation").isHidden(), true);
+  assert.equal(
+    await page.locator("#deleteEntryBtn").evaluate((element) => document.activeElement === element),
+    true,
+    "Cancelling entry deletion restores focus to its trigger",
+  );
+  assert.equal(
+    await page.evaluate(() => globalThis.threadkeepingLedger.getState().threadkeeper.entries.length),
+    entryBefore.count,
+    "Cancelling keeps the selected entry",
+  );
+  await page.locator("#deleteEntryBtn").click();
+  await page.locator("#confirmDeleteEntryBtn").click();
+  const entryAfter = await page.evaluate((deletedId) => {
+    const state = globalThis.threadkeepingLedger.getState();
+    return {
+      count: state.threadkeeper.entries.length,
+      retainedDeletedId: state.threadkeeper.entries.some((entry) => entry.id === deletedId),
+      retainedReferences:
+        state.threadkeeper.entries.some((entry) =>
+          entry.supersedes === deletedId || entry.supersededBy === deletedId) ||
+        state.threadkeeper.nextCandidates.some((candidate) =>
+          candidate.inheritsFrom.includes(deletedId)),
+    };
+  }, entryBefore.id);
+  assert.equal(entryAfter.count, entryBefore.count - 1);
+  assert.equal(entryAfter.retainedDeletedId, false);
+  assert.equal(entryAfter.retainedReferences, false);
+  assert.match(await page.locator("#ledgerActionStatus").textContent(), /Entry .* deleted/u);
+  assert.equal(
+    await page.locator("#selectedInspector [data-entry-field]").first().evaluate((element) => document.activeElement === element),
+    true,
+    "Entry deletion restores focus inside the next selected record",
+  );
+  assert.equal(nativeModalObserved, false, "Threadkeeping completes deletion recovery without a native confirm dialog");
+  carrierPage.off("dialog", nativeModalListener);
 }
 
 async function exerciseOpenLesson({ carrierPage, page }) {
@@ -2178,8 +2357,8 @@ const behaviorProfiles = new Map([
   }],
   ["cross-functional-investment-studio", {
     policy: {
-      sandbox_tokens: ["allow-popups", "allow-popups-to-escape-sandbox", "allow-scripts"],
-      permissions_policy: [],
+      sandbox_tokens: ["allow-downloads", "allow-popups", "allow-popups-to-escape-sandbox", "allow-scripts"],
+      permissions_policy: ["clipboard-write"],
     },
     exercise: exerciseInvestmentStudio,
   }],
@@ -2210,7 +2389,7 @@ const behaviorProfiles = new Map([
   }],
   ["threadkeeping-ledger", {
     policy: {
-      sandbox_tokens: ["allow-downloads", "allow-modals", "allow-popups", "allow-popups-to-escape-sandbox", "allow-scripts"],
+      sandbox_tokens: ["allow-downloads", "allow-popups", "allow-popups-to-escape-sandbox", "allow-scripts"],
       permissions_policy: ["clipboard-write"],
     },
     exercise: exerciseThreadkeeping,

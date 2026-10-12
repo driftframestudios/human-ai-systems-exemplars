@@ -1,9 +1,9 @@
 {
   "id": "a3-stacked-cube-visual-system.manifest.v0.1",
-  "title": "A3 Stacked Cube Visual System Bundle",
+  "title": "Evidence-Guided Capability Transfer Model Bundle",
   "version": "0.1.0",
   "status": "source_lineage_candidate",
-  "generated_on": "2026-08-25",
+  "generated_on": "2026-09-30",
   "canonical_type": "authority_storyboard_visual_system",
   "entrypoint": "a3-stacked-cube-visual-system-chimeric-prototype-v0.1.html",
   "files": {
@@ -33,50 +33,50 @@
       "path": "a3-stacked-cube-validation-report-v0.1.json",
       "media_type": "application/json",
       "role": "validation_receipt",
-      "bytes": 3352,
-      "sha256": "b5f90adeef5a0feea75870b5928722e0e30c4345b522ed6b627ebce03fa8de78"
+      "bytes": 4263,
+      "sha256": "569e70d4547f81d06312f4edcd6f4b6a57d9eb3a90cde2d500d96065aa142702"
     },
     {
       "path": "a3-stacked-cube-visual-system-chimeric-prototype-v0.1.html",
       "media_type": "text/html",
       "role": "primary_prototype",
-      "bytes": 58389,
-      "sha256": "cdd63ab0d4c3fe35bd1a57769246c7902924ce88aad3eaaeb90a33770d127679"
+      "bytes": 61721,
+      "sha256": "0f7ba9be965e47829315cb68cadd8a9413110085c3102c6fb9974efadc435825"
     },
     {
       "path": "assets/a3-stacked-cube-four-state-v0.1.svg",
       "media_type": "image/svg+xml",
       "role": "static_visual_derivative",
-      "bytes": 15088,
-      "sha256": "84d0464c5d3213074b1ecb235868f21ab8cb3ceb36d37f765a6f38617dd1f6bb"
+      "bytes": 16073,
+      "sha256": "ef2ef17eb6d667da22de165c464393c8465fbbc48820b0f31f90783cec477249"
     },
     {
       "path": "assets/a3-stacked-cube-triptych-v0.1.svg",
       "media_type": "image/svg+xml",
       "role": "static_visual_derivative",
-      "bytes": 13701,
-      "sha256": "f754d021313c18d923b472c8cea4cee8db832b17e1e0ec6384cf4fdbcad60020"
+      "bytes": 14576,
+      "sha256": "11d3267d31a730dc7a5826ef977d09d9d74f356e91364ad4f0e434acf0d42788"
     },
     {
       "path": "data/a3-stacked-cube-canonical-v0.1.json",
       "media_type": "application/json",
       "role": "canonical_model",
-      "bytes": 24124,
-      "sha256": "c95bb72e83689bc3c9365895d7c4d56f2b6baffe0cad4c6bb8da2e61a393d319"
+      "bytes": 24161,
+      "sha256": "e08830a22b99dd7e57bbeaa4ea709a31455631f7bc5f26bd7d05edef8a1d7cbb"
     },
     {
       "path": "README.md",
       "media_type": "text/markdown",
       "role": "human_readme",
-      "bytes": 3694,
-      "sha256": "e7b66c0eeb8e9c10c3e28c28eeb582f1223647b235c8c071bf0040aa475e03af"
+      "bytes": 3471,
+      "sha256": "d804e348490fbc2cfa9cbbb9bdf0b5bc267e70386bb75c2251cdb5ae3b400d4f"
     },
     {
       "path": "schema/a3-stacked-cube-state-schema-v0.1.json",
       "media_type": "application/schema+json",
       "role": "canonical_schema",
-      "bytes": 13212,
-      "sha256": "29412224ba56ec6f4289821bf34d44acedc56c9ae9eee76ae33cb7e276e24426"
+      "bytes": 13261,
+      "sha256": "e1555111794c1c2ef590449ed8efb931f76898730aac2049d3d284a7c79d3b6d"
     },
     {
       "path": "schema/a3-stacked-cube-visual-system.context.v0.1.jsonld",
@@ -88,8 +88,8 @@
   ],
   "validation": {
     "report": "a3-stacked-cube-validation-report-v0.1.json",
-    "result": "awaiting_human_cue",
-    "scope": "2026-08-25 source-lineage revision",
+    "result": "pass",
+    "scope": "2026-09-30 accessible naming, generated-SVG geometry, and browser-runtime revision",
     "prior_receipt": {
       "report": "a3-stacked-cube-validation-report-v0.1.json",
       "result": "pass",
@@ -99,7 +99,7 @@
   },
   "notes": [
     "Primary HTML is a direct single-file artifact with no executable remote dependency.",
-    "Static SVG derivatives share the protected F0–F3 authority semantics.",
-    "The 2026-08-25 manifest refresh covers locator-safe source identifiers and the sealed artifact byte/hash inventory; revision-bound PROVENANCE.md remains outside that inventory, and the validation report retains its 2026-07-27 execution scope."
+    "Static SVG derivatives share the protected F0–F3 authority semantics and are regenerated from the primary prototype.",
+    "The 2026-09-30 manifest refresh records the public Evidence-Guided Capability Transfer Model name, accessible boundary language, proportional cube geometry, integrated directional arrows, and the sealed artifact byte/hash inventory; revision-bound PROVENANCE.md remains outside that inventory."
   ]
 }

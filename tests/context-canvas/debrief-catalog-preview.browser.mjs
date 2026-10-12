@@ -1,0 +1,787 @@
+import assert from "node:assert/strict";
+import { resolve } from "node:path";
+import { after, before, test } from "node:test";
+import { pathToFileURL } from "node:url";
+
+import { chromium, webkit } from "@playwright/test";
+
+import {
+  assertTelemetry,
+  monitor,
+  startStaticServer,
+} from "../../tools/core-architecture-browser-helper.mjs";
+
+const route = "/context-canvas-project-surface/context-canvas/debriefs.html";
+const localRoute = resolve(
+  import.meta.dirname,
+  "../../context-canvas-project-surface/context-canvas/debriefs.html",
+);
+const expectedCaseBriefFields = [
+  "Situation and stakes",
+  "Scope and role",
+  "Core constraint",
+  "Key decision",
+  "Outcome and evidence",
+  "Relevance now",
+];
+const expectedEhrRoutes = [
+  "ehr-discrete-genomic-result.html",
+  "ehr-two-charts-one-result.html",
+  "ehr-three-front-doors.html",
+  "ehr-pgx-alert-failure.html",
+  "ehr-interface-engine-replatform.html",
+];
+let browser;
+let server;
+
+before(async () => {
+  server = await startStaticServer();
+  browser = await chromium.launch({ headless: true });
+});
+
+after(async () => {
+  try {
+    await browser?.close();
+  } finally {
+    await server?.close();
+  }
+});
+
+async function settlePreviewImage(page) {
+  const image = page.locator("[data-preview-image]");
+
+  // Let the browser finish its responsive-candidate selection before the next
+  // synthetic focus transition. Real request failures remain visible to the
+  // shared telemetry instead of being conflated with a test-created abort.
+  await page.waitForFunction(() => (
+    document.querySelector("[data-preview-image]")?.complete === true
+  ), undefined, { timeout: 5000 });
+  const loaded = await image.evaluate(node => ({
+    currentSrc: node.currentSrc || node.src,
+    naturalWidth: node.naturalWidth,
+  }));
+  assert.ok(loaded.naturalWidth > 0, `catalog preview should load: ${loaded.currentSrc}`);
+  await image.evaluate(node => node.decode());
+}
+
+async function focusPreview(page, cardSelector) {
+  await page.locator(`${cardSelector} a[href]`).first().focus();
+  await page.locator("[data-preview-entry]").waitFor({ state: "visible" });
+  await settlePreviewImage(page);
+
+  return page.evaluate(selector => {
+    const card = document.querySelector(selector);
+    const primaryImage = card?.querySelector(".project__upfront");
+    const previewImage = document.querySelector("[data-preview-image]");
+    const previewFigure = previewImage?.closest("figure");
+    const figureBox = previewFigure?.getBoundingClientRect();
+    const attr = (node, name) => node?.getAttribute(name) || "";
+    const hasPreviewImage = card?.hasAttribute("data-catalog-preview-src");
+    const preferred = name => hasPreviewImage
+      ? attr(card, `data-catalog-preview-${name}`)
+      : attr(primaryImage, name);
+    const expectedAlt = preferred("alt");
+    const expectedCaption = attr(card, "data-catalog-preview-caption") || expectedAlt;
+
+    return {
+      expected: {
+        src: preferred("src"),
+        srcset: preferred("srcset"),
+        sizes: preferred("sizes"),
+        width: preferred("width"),
+        height: preferred("height"),
+        alt: expectedAlt,
+        caption: `Preview visual — ${expectedCaption}`,
+        linkLabel: card?.getAttribute("data-formats") === "article"
+          ? "Open the Article"
+          : "Read the Full Debrief",
+      },
+      actual: {
+        src: attr(previewImage, "src"),
+        srcset: attr(previewImage, "srcset"),
+        sizes: attr(previewImage, "sizes"),
+        width: attr(previewImage, "width"),
+        height: attr(previewImage, "height"),
+        alt: attr(previewImage, "alt"),
+        caption: document.querySelector("[data-preview-caption]")?.textContent.trim() || "",
+        linkLabel: document.querySelector("[data-preview-link-label]")?.textContent.trim() || "",
+      },
+      geometry: {
+        figureLeft: figureBox?.left ?? -1,
+        figureRight: figureBox?.right ?? Number.POSITIVE_INFINITY,
+        viewportWidth: document.documentElement.clientWidth,
+        documentWidth: document.documentElement.scrollWidth,
+      },
+    };
+  }, cardSelector);
+}
+
+async function chooseCaseBriefMode(page) {
+  await page.locator('input[data-filter][value="case-brief"]').check();
+}
+
+async function waitForCaseBriefProjection(page) {
+  await page.waitForFunction(() => (
+    document.querySelectorAll(
+      '[data-debrief-list] > [data-formats~="case-brief"]:not([hidden]) [data-card-case-briefs] > .debrief-card__case-brief',
+    ).length === 16
+  ));
+}
+
+async function inspectCaseBriefProjection(page) {
+  return page.evaluate(() => {
+    const cards = [...document.querySelectorAll(
+      '[data-debrief-list] > [data-formats~="case-brief"]:not([hidden])',
+    )];
+    const articles = cards.flatMap(card => [...card.querySelectorAll(
+      ":scope > [data-card-case-briefs] > .debrief-card__case-brief",
+    )]);
+
+    return {
+      visibleCards: cards.length,
+      articles: articles.map(article => {
+        const fieldLabels = [...article.querySelectorAll(".debrief-preview-facts dt")]
+          .map(label => label.textContent.trim());
+        const actions = [...article.querySelectorAll(".debrief-preview-actions a")]
+          .map(link => ({ label: link.textContent.trim(), href: link.getAttribute("href") }));
+        const media = article.querySelector("[data-case-brief-media]");
+        const trackIntro = article.querySelector(
+          ":scope > [data-case-brief-detail] > .debrief-case-brief__track-intro",
+        );
+        const disclosures = [...article.querySelectorAll("details[data-case-brief-track]")]
+          .map(details => ({
+            kind: details.getAttribute("data-case-brief-track"),
+            open: details.open,
+            summaryText: details.querySelector(":scope > summary")?.innerText.replace(/\s+/gu, " ").trim() || "",
+            title: details.querySelector(".debrief-case-brief__track-title")?.textContent.trim() || "",
+            expandVisible: (() => {
+              const node = details.querySelector(".debrief-case-brief__track-state--expand");
+              return Boolean(node && getComputedStyle(node).display !== "none");
+            })(),
+            collapseVisible: (() => {
+              const node = details.querySelector(".debrief-case-brief__track-state--collapse");
+              return Boolean(node && getComputedStyle(node).display !== "none");
+            })(),
+            itemCount: details.querySelectorAll(":scope > ol > li, :scope > .debrief-case-brief__track-body > ol > li").length,
+          }));
+        return {
+          route: article.getAttribute("data-case-brief-route"),
+          fieldLabels,
+          actions,
+          disclosures,
+          trackIntro: trackIntro ? {
+            text: trackIntro.textContent.replace(/\s+/gu, " ").trim(),
+            links: [...trackIntro.querySelectorAll("a[href]")]
+              .map(link => link.getAttribute("href")),
+            gridColumn: [
+              getComputedStyle(trackIntro).gridColumnStart,
+              getComputedStyle(trackIntro).gridColumnEnd,
+            ],
+          } : null,
+          mediaItems: media?.querySelectorAll("li").length || 0,
+          mediaLinks: [...(media?.querySelectorAll("a[href]") || [])]
+            .map(link => link.getAttribute("href")),
+        };
+      }),
+      disclosureCount: document.querySelectorAll(
+        "[data-card-case-briefs] details[data-case-brief-track]",
+      ).length,
+      genericFallbackCount: [...document.querySelectorAll("[data-card-case-briefs]")]
+        .filter(panel => /source page carries|open the direct route/iu.test(panel.textContent)).length,
+      linkedHeadingCount: articles.filter(article => (
+        article.querySelector(":scope > .debrief-card__case-brief-title > a[href]")
+      )).length,
+      eras: cards.map(card => {
+        const era = card.querySelector(":scope > .debrief-card__heading .debrief-card__era");
+        const eraBox = era?.getBoundingClientRect();
+        const badges = [...card.querySelectorAll(
+          ":scope > .debrief-card__types > li, :scope > .debrief-card__topics > li",
+        )];
+        const intersects = box => Boolean(eraBox && !(
+          eraBox.right <= box.left
+          || eraBox.left >= box.right
+          || eraBox.bottom <= box.top
+          || eraBox.top >= box.bottom
+        ));
+        return {
+          card: card.id,
+          text: era?.textContent.trim() || "",
+          visible: Boolean(
+            era
+            && eraBox?.width
+            && eraBox?.height
+            && getComputedStyle(era).visibility !== "hidden"
+            && getComputedStyle(era).display !== "none"
+          ),
+          overlaps: badges
+            .map(badge => ({ text: badge.textContent.trim(), box: badge.getBoundingClientRect() }))
+            .filter(item => intersects(item.box))
+            .map(item => item.text),
+        };
+      }),
+    };
+  });
+}
+
+async function exerciseIndependentDisclosures(page, articleSelector) {
+  const article = page.locator(articleSelector);
+  const disclosures = article.locator("details[data-case-brief-track]");
+  assert.equal(await disclosures.count(), 2, `${articleSelector} should expose two quick scans`);
+
+  const first = disclosures.nth(0);
+  const second = disclosures.nth(1);
+  const firstSummary = first.locator(":scope > summary");
+  const secondSummary = second.locator(":scope > summary");
+  const visibleState = async details => details.evaluate(node => ({
+    expand: getComputedStyle(node.querySelector(".debrief-case-brief__track-state--expand")).display !== "none",
+    collapse: getComputedStyle(node.querySelector(".debrief-case-brief__track-state--collapse")).display !== "none",
+  }));
+  assert.equal(await first.evaluate(node => node.open), false);
+  assert.equal(await second.evaluate(node => node.open), false);
+  assert.deepEqual(await visibleState(first), { expand: true, collapse: false });
+
+  await firstSummary.focus();
+  await firstSummary.press("Tab");
+  await page.keyboard.press("Shift+Tab");
+  assert.equal(
+    await firstSummary.evaluate(node => document.activeElement === node),
+    true,
+    `${articleSelector} first quick scan should receive keyboard focus`,
+  );
+  const target = await firstSummary.boundingBox();
+  assert.ok(target && target.height >= 44, `${articleSelector} first quick scan should retain a touch-sized target`);
+  const focus = await firstSummary.evaluate(node => {
+    const style = getComputedStyle(node);
+    return { style: style.outlineStyle, width: Number.parseFloat(style.outlineWidth) };
+  });
+  assert.notEqual(focus.style, "none", `${articleSelector} first quick scan should show keyboard focus`);
+  assert.ok(focus.width >= 2, `${articleSelector} first quick scan should use a visible focus outline`);
+
+  await firstSummary.press("Enter");
+  assert.equal(await first.evaluate(node => node.open), true);
+  assert.equal(await second.evaluate(node => node.open), false);
+  assert.deepEqual(await visibleState(first), { expand: false, collapse: true });
+
+  await secondSummary.click();
+  assert.equal(await first.evaluate(node => node.open), true, `${articleSelector} disclosures should remain independent`);
+  assert.equal(await second.evaluate(node => node.open), true, `${articleSelector} second disclosure should open independently`);
+
+  await firstSummary.click();
+  assert.equal(await first.evaluate(node => node.open), false);
+  assert.equal(await second.evaluate(node => node.open), true, `${articleSelector} closing one disclosure should preserve the other`);
+  assert.deepEqual(await visibleState(first), { expand: true, collapse: false });
+}
+
+for (const width of [390, 1440]) {
+  test(`catalog preview replaces responsive metadata cleanly at ${width}px`, async t => {
+    const context = await browser.newContext({
+      viewport: { width, height: 1000 },
+      reducedMotion: "reduce",
+    });
+    t.after(() => context.close());
+    const page = await context.newPage();
+    page.setDefaultTimeout(5000);
+    const telemetry = monitor(page);
+
+    await page.goto(`${server.origin}${route}`, { waitUntil: "load" });
+
+    const responsive = await focusPreview(page, "#catalog-genomic-viewer");
+    assert.deepEqual(responsive.actual, responsive.expected);
+    assert.ok(responsive.actual.srcset, "the WebP preview exposes responsive candidates");
+    assert.ok(responsive.actual.sizes, "the WebP preview exposes its rendered-size hint");
+
+    const whoToBelieve = await focusPreview(page, "#catalog-who-to-believe");
+    assert.deepEqual(whoToBelieve.actual, whoToBelieve.expected);
+    assert.match(whoToBelieve.actual.src, /who_to_believe_influence_map\.svg$/u);
+    assert.equal(whoToBelieve.actual.srcset, "", "the SVG preview clears the prior responsive candidates");
+    assert.equal(whoToBelieve.actual.sizes, "", "the SVG preview clears the prior rendered-size hint");
+    assert.equal(whoToBelieve.actual.width, "1600");
+    assert.equal(whoToBelieve.actual.height, "1180");
+
+    const fallback = await focusPreview(page, "#catalog-table-reading");
+    assert.deepEqual(fallback.actual, fallback.expected);
+    assert.equal(fallback.actual.srcset, "", "the SVG fallback clears the prior srcset");
+    assert.equal(fallback.actual.sizes, "", "the SVG fallback clears the prior sizes hint");
+    assert.equal(fallback.actual.width, "", "the fallback clears an inapplicable prior width");
+    assert.equal(fallback.actual.height, "", "the fallback clears an inapplicable prior height");
+
+    const restored = await focusPreview(page, "#catalog-lims-eln");
+    assert.deepEqual(restored.actual, restored.expected);
+    assert.ok(restored.actual.srcset, "a later WebP preview restores responsive candidates");
+    assert.ok(restored.actual.width && restored.actual.height, "a later WebP preview restores intrinsic geometry");
+
+    for (const state of [responsive, whoToBelieve, fallback, restored]) {
+      assert.ok(state.geometry.figureLeft >= -1, "the preview stays inside the leading viewport edge");
+      assert.ok(
+        state.geometry.figureRight <= state.geometry.viewportWidth + 1,
+        "the preview stays inside the trailing viewport edge",
+      );
+      assert.ok(
+        state.geometry.documentWidth <= state.geometry.viewportWidth + 1,
+        "preview replacement introduces no document-level horizontal overflow",
+      );
+    }
+
+    assertTelemetry(telemetry);
+  });
+}
+
+for (const width of [320, 390, 736, 737, 768, 1024, 1440]) {
+  test(`Case Brief mode reveals static source-owned scans with stable badge geometry at ${width}px`, async t => {
+    const context = await browser.newContext({
+      viewport: { width, height: 1000 },
+      reducedMotion: "reduce",
+    });
+    t.after(() => context.close());
+    const page = await context.newPage();
+    page.setDefaultTimeout(7000);
+    const telemetry = monitor(page);
+    await page.goto(`${server.origin}${route}`, { waitUntil: "load" });
+    await chooseCaseBriefMode(page);
+    await waitForCaseBriefProjection(page);
+
+    const projection = await inspectCaseBriefProjection(page);
+    assert.equal(projection.visibleCards, 12);
+    assert.equal(projection.articles.length, 16);
+    assert.equal(projection.disclosureCount, 32, "each compact account should expose two independent quick scans");
+    assert.equal(projection.genericFallbackCount, 0, "the catalog synthesizes no generic brief fallback");
+    assert.equal(projection.linkedHeadingCount, 0, "explicit actions own the two destinations without a duplicate title link");
+
+    for (const article of projection.articles) {
+      assert.deepEqual(
+        article.fieldLabels,
+        expectedCaseBriefFields,
+        `${article.route} should project the ordered six-field scan`,
+      );
+      assert.ok(article.mediaItems >= 1, `${article.route} should project at least one related figure or medium`);
+      assert.equal(
+        article.mediaLinks.length,
+        article.mediaItems,
+        `${article.route} related-media entries should retain inspectable links`,
+      );
+      assert.ok(
+        article.mediaLinks.every(href => href.startsWith(`${article.route}#`)),
+        `${article.route} should qualify each source-local related-media fragment after cloning`,
+      );
+      assert.equal(article.disclosures.length, 2, `${article.route} should project its paired quick scans`);
+      assert.ok(
+        article.disclosures.every(disclosure => disclosure.open === false),
+        `${article.route} quick scans should begin collapsed`,
+      );
+      assert.ok(
+        article.disclosures.every(disclosure => disclosure.title && disclosure.expandVisible && !disclosure.collapseVisible),
+        `${article.route} quick scans should name the action available in their closed state`,
+      );
+      assert.ok(
+        article.disclosures.every(disclosure => disclosure.summaryText.toLowerCase() === `${disclosure.title} expand`.toLowerCase()),
+        `${article.route} closed quick scans should state the named track before the available action`,
+      );
+      assert.ok(
+        article.disclosures.every(disclosure => disclosure.itemCount >= 3),
+        `${article.route} quick scans should preserve their source-owned ordered content`,
+      );
+      assert.deepEqual(
+        article.actions,
+        [{ label: "Read the Full Debrief", href: article.route }],
+        `${article.route} should continue into its fragment-free complete reading`,
+      );
+      if (article.route === "choose-your-player-humatics.html") {
+        assert.match(
+          article.trackIntro?.text || "",
+          /client meeting, field inquiry, and two-day reframe/u,
+          `${article.route} should retain its source-owned narrative orientation`,
+        );
+        assert.deepEqual(
+          article.trackIntro?.links,
+          ["choose-your-player-humatics.html#narrative-architecture-title"],
+          `${article.route} should qualify its narrative-track link for HTTP and direct-file viewing`,
+        );
+        assert.deepEqual(
+          article.trackIntro?.gridColumn,
+          ["1", "-1"],
+          `${article.route} should keep its introduction above both independent quick scans`,
+        );
+      } else {
+        assert.equal(article.trackIntro, null, `${article.route} should add no unowned track introduction`);
+      }
+    }
+
+    assert.equal(projection.eras.length, 12);
+    for (const era of projection.eras) {
+      assert.ok(era.text, `${era.card} should name its era in Case Brief mode`);
+      assert.equal(era.visible, true, `${era.card} should keep its era visible in Case Brief mode`);
+      assert.deepEqual(
+        era.overlaps,
+        [],
+        `${era.card} era should remain clear of format, topic, and tool badges at ${width}px`,
+      );
+    }
+
+    const ehrRoutes = projection.articles
+      .filter(article => expectedEhrRoutes.includes(article.route))
+      .map(article => article.route)
+      .sort();
+    assert.deepEqual(ehrRoutes, expectedEhrRoutes.slice().sort(), "the EHR series remains five distinct Case Brief panels");
+
+    if (width === 390 || width === 1440) {
+      await exerciseIndependentDisclosures(
+        page,
+        '[data-card-case-briefs] > .debrief-card__case-brief[data-case-brief-route="genomic-viewer-replatforming.html"]',
+      );
+      await page.locator(
+        '[data-case-brief-route="genomic-viewer-replatforming.html"] details[data-case-brief-track="implementation"]',
+      ).evaluate(node => node.setAttribute("data-test-cycle-identity", "retained-open-disclosure"));
+    }
+
+    await page.locator('input[data-filter][value="catalog"]').check();
+    await chooseCaseBriefMode(page);
+    await page.locator('input[data-filter][value="catalog"]').check();
+    await chooseCaseBriefMode(page);
+    const repeated = await inspectCaseBriefProjection(page);
+    assert.equal(repeated.articles.length, 16, "repeated mode changes should clone each projection once");
+    assert.equal(new Set(repeated.articles.map(article => article.route)).size, 16);
+    if (width === 390 || width === 1440) {
+      const retained = page.locator(
+        '[data-case-brief-route="genomic-viewer-replatforming.html"] details[data-case-brief-track="implementation"]',
+      );
+      assert.equal(await retained.count(), 1, "mode cycling should retain one implementation disclosure");
+      assert.equal(await retained.evaluate(node => node.open), true, "mode cycling should preserve the visitor's open disclosure state");
+      assert.equal(
+        await retained.getAttribute("data-test-cycle-identity"),
+        "retained-open-disclosure",
+        "mode cycling should reuse the established projection DOM rather than replace it",
+      );
+      await retained.evaluate(node => node.removeAttribute("data-test-cycle-identity"));
+    }
+
+    assert.match(await page.locator("[data-filter-status]").textContent(), /^Showing 16 Case Briefs across 12 catalog cases/u);
+    assertTelemetry(telemetry);
+  });
+}
+
+test("the Humatics quick-scan introduction carries visitors to its qualified narrative track", async t => {
+  const context = await browser.newContext({
+    viewport: { width: 736, height: 1000 },
+    reducedMotion: "reduce",
+  });
+  t.after(() => context.close());
+  const page = await context.newPage();
+  page.setDefaultTimeout(7000);
+  const telemetry = monitor(page);
+
+  await page.goto(`${server.origin}${route}`, { waitUntil: "load" });
+  await chooseCaseBriefMode(page);
+  await waitForCaseBriefProjection(page);
+
+  const link = page.locator(
+    '[data-case-brief-route="choose-your-player-humatics.html"] .debrief-case-brief__track-intro a',
+  );
+  assert.equal(await link.count(), 1);
+  assert.equal(
+    await link.getAttribute("href"),
+    "choose-your-player-humatics.html#narrative-architecture-title",
+  );
+  assertTelemetry(telemetry);
+  await link.click();
+  await page.waitForURL(/choose-your-player-humatics\.html#narrative-architecture-title$/u);
+  assert.equal(await page.locator("#narrative-architecture-title").count(), 1);
+});
+
+test("an unknown track-group child rejects one projection as an atomic fallback", async t => {
+  const context = await browser.newContext({
+    viewport: { width: 736, height: 1000 },
+    reducedMotion: "reduce",
+  });
+  t.after(() => context.close());
+  const page = await context.newPage();
+  page.setDefaultTimeout(7000);
+  const telemetry = monitor(page);
+
+  await page.route(`**${route}`, async intercepted => {
+    const response = await intercepted.fetch();
+    const body = await response.text();
+    const malformed = body.replace(
+      /(<template\b(?=[^>]*\bdata-case-brief-projection="choose-your-player-humatics\.html")[^>]*>[\s\S]*?<h4 class="txt-h4 debrief-case-brief__track-group-title">[^<]+<\/h4>)/u,
+      '$1\n      <div data-unexpected-track-child="">Unowned projection content</div>',
+    );
+    assert.notEqual(malformed, body, "the fixture should alter the intended Humatics projection");
+    await intercepted.fulfill({ response, body: malformed });
+  });
+
+  await page.goto(`${server.origin}${route}`, { waitUntil: "load" });
+  await chooseCaseBriefMode(page);
+  await page.waitForFunction(() => (
+    document.querySelectorAll(
+      '[data-debrief-list] > [data-formats~="case-brief"]:not([hidden]) [data-card-case-briefs] > .debrief-card__case-brief',
+    ).length === 15
+  ));
+
+  const projection = await inspectCaseBriefProjection(page);
+  assert.equal(projection.articles.length, 15);
+  assert.equal(
+    projection.articles.some(article => article.route === "choose-your-player-humatics.html"),
+    false,
+    "the malformed source should contribute no partial Humatics projection",
+  );
+  const fallback = await page.locator("#catalog-humatics").evaluate(card => ({
+    ordinaryImageVisible: getComputedStyle(card.querySelector(".project__media--container")).display !== "none",
+    ordinaryTextVisible: getComputedStyle(card.querySelector(".project__media--text")).display !== "none",
+    compactHidden: card.querySelector("[data-card-case-briefs]")?.hidden,
+    compactArticles: card.querySelectorAll("[data-card-case-briefs] > .debrief-card__case-brief").length,
+  }));
+  assert.deepEqual(fallback, {
+    ordinaryImageVisible: true,
+    ordinaryTextVisible: true,
+    compactHidden: true,
+    compactArticles: 0,
+  });
+  assertTelemetry(telemetry);
+});
+
+test("a missing EHR projection retains its complete ordinary card as one atomic fallback", async t => {
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 1000 },
+    reducedMotion: "reduce",
+  });
+  t.after(() => context.close());
+  const page = await context.newPage();
+  page.setDefaultTimeout(7000);
+  const telemetry = monitor(page);
+
+  await page.route(`**${route}`, async intercepted => {
+    const response = await intercepted.fetch();
+    const body = await response.text();
+    const withoutProjection = body.replace(
+      /\s*<template\b(?=[^>]*\bdata-case-brief-projection="ehr-interface-engine-replatform\.html")[^>]*>[\s\S]*?<\/template>/u,
+      "",
+    );
+    assert.notEqual(withoutProjection, body, "the fixture should remove the intended EHR projection");
+    await intercepted.fulfill({ response, body: withoutProjection });
+  });
+  await page.goto(`${server.origin}${route}`, { waitUntil: "load" });
+  await chooseCaseBriefMode(page);
+  await page.waitForFunction(() => (
+    document.querySelectorAll(
+      '[data-debrief-list] > [data-formats~="case-brief"]:not([hidden]) [data-card-case-briefs] > .debrief-card__case-brief',
+    ).length === 11
+  ));
+
+  const projection = await inspectCaseBriefProjection(page);
+  assert.equal(projection.visibleCards, 12);
+  assert.equal(projection.articles.length, 11, "the five-route EHR card remains atomic when one source fails");
+  assert.equal(projection.disclosureCount, 22, "the eleven retained compact accounts should keep both quick scans");
+  assert.equal(projection.genericFallbackCount, 0);
+  assert.equal(projection.linkedHeadingCount, 0);
+  const failedEra = projection.eras.find(era => era.card === "catalog-ehr-integration");
+  assert.ok(failedEra?.visible, "the fallback EHR card should retain its era orientation");
+  assert.deepEqual(failedEra?.overlaps, [], "the fallback era should remain clear of its visible badges at 390px");
+  assert.equal(projection.articles.some(article => expectedEhrRoutes.includes(article.route)), false);
+
+  const failedCard = await page.locator("#catalog-ehr-integration").evaluate(card => {
+    const fullRoute = card.querySelector(":scope > .txt-right a");
+    const compact = card.querySelector("[data-card-case-briefs]");
+    return {
+      ordinaryImageVisible: getComputedStyle(card.querySelector(".project__media--container")).display !== "none",
+      ordinaryTextVisible: getComputedStyle(card.querySelector(".project__media--text")).display !== "none",
+      compactHidden: compact?.hidden,
+      compactArticles: compact?.querySelectorAll(".debrief-card__case-brief").length,
+      fullRouteLabel: fullRoute?.textContent.replace(/\s+/g, " ").trim(),
+      fullRouteHref: fullRoute?.getAttribute("href"),
+    };
+  });
+  assert.deepEqual(failedCard, {
+    ordinaryImageVisible: true,
+    ordinaryTextVisible: true,
+    compactHidden: true,
+    compactArticles: 0,
+    fullRouteLabel: "Read the Full Debrief for the first EHR Integration Series reading...",
+    fullRouteHref: "ehr-discrete-genomic-result.html",
+  });
+  assert.equal(
+    (await page.locator("[data-filter-status]").textContent()).trim(),
+    "11 of 16 Case Briefs are displayed in the catalog. 5 Full Debrief routes remain available in their catalog cards.",
+  );
+
+  assertTelemetry(telemetry);
+});
+
+test("Case Brief mode reads every static scan from file URLs without request failures", async t => {
+  const context = await browser.newContext({
+    viewport: { width: 736, height: 1000 },
+    reducedMotion: "reduce",
+  });
+  t.after(() => context.close());
+  const page = await context.newPage();
+  page.setDefaultTimeout(7000);
+  const pageErrors = [];
+  const requestFailures = [];
+  page.on("pageerror", error => pageErrors.push(error.message));
+  page.on("requestfailed", request => requestFailures.push(
+    `${request.url()} :: ${request.failure()?.errorText || "request failed"}`,
+  ));
+
+  await page.goto(pathToFileURL(localRoute).href, { waitUntil: "load" });
+  await chooseCaseBriefMode(page);
+  await waitForCaseBriefProjection(page);
+
+  const projection = await inspectCaseBriefProjection(page);
+  assert.equal(projection.visibleCards, 12);
+  assert.equal(projection.articles.length, 16);
+  assert.equal(projection.disclosureCount, 32);
+  await exerciseIndependentDisclosures(
+    page,
+    '[data-card-case-briefs] > .debrief-card__case-brief[data-case-brief-route="genomic-viewer-replatforming.html"]',
+  );
+  assert.deepEqual(pageErrors, []);
+  assert.deepEqual(requestFailures, []);
+});
+
+test("WebKit preserves the Case Brief contract over HTTP and direct-file viewing", async t => {
+  const webkitBrowser = await webkit.launch({ headless: true });
+  t.after(() => webkitBrowser.close());
+  const context = await webkitBrowser.newContext({
+    viewport: { width: 736, height: 1000 },
+    reducedMotion: "reduce",
+  });
+  t.after(() => context.close());
+
+  for (const [destination, directFile] of [
+    [`${server.origin}${route}`, false],
+    [pathToFileURL(localRoute).href, true],
+  ]) {
+    const page = await context.newPage();
+    page.setDefaultTimeout(7000);
+    const pageErrors = [];
+    const requestFailures = [];
+    page.on("pageerror", error => pageErrors.push(error.message));
+    page.on("requestfailed", request => requestFailures.push(
+      `${request.url()} :: ${request.failure()?.errorText || "request failed"}`,
+    ));
+
+    await page.goto(destination, { waitUntil: "load" });
+    await chooseCaseBriefMode(page);
+    await waitForCaseBriefProjection(page);
+
+    const projection = await inspectCaseBriefProjection(page);
+    assert.equal(projection.visibleCards, 12);
+    assert.equal(projection.articles.length, 16);
+    assert.equal(projection.disclosureCount, 32);
+    assert.ok(projection.eras.every(era => era.visible && era.overlaps.length === 0));
+    await exerciseIndependentDisclosures(
+      page,
+      '[data-card-case-briefs] > .debrief-card__case-brief[data-case-brief-route="genomic-viewer-replatforming.html"]',
+    );
+    assert.deepEqual(pageErrors, []);
+    assert.deepEqual(
+      requestFailures.filter(message => /\.html\b/iu.test(message)),
+      [],
+      "WebKit should make no sibling-page request for a Case Brief projection",
+    );
+    if (directFile) {
+      assert.ok(
+        requestFailures.every(message => /manifest\.json/iu.test(message)),
+        requestFailures.join(" | "),
+      );
+    } else {
+      assert.deepEqual(requestFailures, []);
+    }
+    await page.close();
+  }
+});
+
+test("forced colors preserve quick-scan boundaries, focus, and independent state", async t => {
+  const context = await browser.newContext({
+    viewport: { width: 1024, height: 1000 },
+    forcedColors: "active",
+    reducedMotion: "reduce",
+  });
+  t.after(() => context.close());
+  const page = await context.newPage();
+  page.setDefaultTimeout(7000);
+  const telemetry = monitor(page);
+
+  await page.goto(`${server.origin}${route}`, { waitUntil: "load" });
+  await chooseCaseBriefMode(page);
+  await waitForCaseBriefProjection(page);
+  const first = page.locator('details[data-case-brief-track="solution"]').first();
+  const summary = first.locator(":scope > summary");
+  await summary.focus();
+  await summary.press("Tab");
+  await page.keyboard.press("Shift+Tab");
+  assert.equal(await summary.evaluate(node => document.activeElement === node), true);
+  const presentation = await summary.evaluate(node => {
+    const summaryStyle = getComputedStyle(node);
+    const detailsStyle = getComputedStyle(node.parentElement);
+    return {
+      detailsBorderStyle: detailsStyle.borderTopStyle,
+      detailsBorderWidth: Number.parseFloat(detailsStyle.borderTopWidth),
+      outlineStyle: summaryStyle.outlineStyle,
+      outlineWidth: Number.parseFloat(summaryStyle.outlineWidth),
+    };
+  });
+  assert.notEqual(presentation.detailsBorderStyle, "none");
+  assert.ok(presentation.detailsBorderWidth >= 1);
+  assert.notEqual(presentation.outlineStyle, "none");
+  assert.ok(presentation.outlineWidth >= 2);
+  await summary.press("Enter");
+  assert.equal(await first.evaluate(node => node.open), true);
+  assert.deepEqual(await first.evaluate(node => ({
+    expand: getComputedStyle(node.querySelector(".debrief-case-brief__track-state--expand")).display !== "none",
+    collapse: getComputedStyle(node.querySelector(".debrief-case-brief__track-state--collapse")).display !== "none",
+  })), { expand: false, collapse: true });
+  assertTelemetry(telemetry);
+});
+
+test("print reveals every quick-scan body from the collapsed screen state", async t => {
+  const context = await browser.newContext({
+    viewport: { width: 1024, height: 1000 },
+    reducedMotion: "reduce",
+  });
+  t.after(() => context.close());
+  const page = await context.newPage();
+  page.setDefaultTimeout(7000);
+  const telemetry = monitor(page);
+
+  await page.goto(`${server.origin}${route}`, { waitUntil: "load" });
+  await chooseCaseBriefMode(page);
+  await waitForCaseBriefProjection(page);
+  assert.equal(await page.locator("details[data-case-brief-track][open]").count(), 0);
+  await page.emulateMedia({ media: "print" });
+  const printState = await page.locator("details[data-case-brief-track]").evaluateAll(disclosures => disclosures.map(details => {
+    const bodies = [...details.children].filter(child => child.tagName !== "SUMMARY");
+    return {
+      open: details.open,
+      visibleBodies: bodies.filter(body => getComputedStyle(body).display !== "none" && body.getClientRects().length > 0).length,
+    };
+  }));
+  assert.equal(printState.length, 32);
+  assert.ok(printState.every(state => state.open === false), "print should preserve the visitor's disclosure state");
+  assert.ok(printState.every(state => state.visibleBodies >= 1), "print should reveal every quick-scan body");
+  assertTelemetry(telemetry);
+});
+
+test("the Full Debrief index names every EHR reading from its route-specific navigation", async t => {
+  const context = await browser.newContext({
+    viewport: { width: 1440, height: 1000 },
+    reducedMotion: "reduce",
+  });
+  t.after(() => context.close());
+  const page = await context.newPage();
+  page.setDefaultTimeout(7000);
+  const telemetry = monitor(page);
+
+  await page.goto(`${server.origin}${route}`, { waitUntil: "load" });
+  await page.locator('input[data-filter][value="full-debrief"]').check();
+
+  const labels = await page.locator("#catalog-ehr-integration [data-card-full-index] a").evaluateAll(links => (
+    links.map(link => link.textContent.replace(/\s+/g, " ").trim())
+  ));
+  assert.deepEqual(labels, [
+    "SR1 · Partial The Discrete Result That Kept Arriving as a PDF",
+    "SR2 · Pivoted Two Charts, One Result",
+    "SR3 · Successful Three Front Doors",
+    "SR4 · Failed The Alert Nobody Clicked",
+    "SR5 · Partial Re-platforming the Backbone",
+  ]);
+  assertTelemetry(telemetry);
+});

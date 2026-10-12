@@ -1,8 +1,8 @@
-# A3 Stacked Cube Model — Atlas Research Plan (v0.2)
+# Evidence-Guided Capability Transfer Atlas — Research Plan (v0.2)
 
 **AS-OF:** 2026-07-24  
 **Method authority:** Deep Research Atlas — Self-Contained Payload (v1.2)  
-**Protected baseline:** A3 Stacked Cube Visual System v0.1  
+**Protected baseline:** Evidence-Guided Capability Transfer Model v0.1
 **Target artifact:** one self-contained HTML document with inline SVG, CSS, JavaScript, evidence notes, and accessible text equivalents
 
 ## Research objective
@@ -15,17 +15,17 @@ These remain unchanged unless direct evidence falsifies them:
 
 1. A cube is a bounded software capability or service dependency, not a team, screen, or human activity.
 2. Position encodes current execution or decision authority only.
-3. Migration is a reversible routing and authority change through an explicit seam, validation gate, and rollback route.
+3. Migration is a reversible routing and authority change through an explicit boundary, validation gate, and rollback route.
 4. Visible gaps imply verified separability.
 5. Human work remains a separate ribbon unless a bounded software capability is separately evidenced.
 6. UNKNOWN remains visible and durable.
-7. The four original authority frames remain the historical spine: current authority, seam identified, shadow/dual-run, validated authority.
+7. The four original authority frames remain the historical spine: current authority, boundary identified, shadow/dual-run, validated authority.
 
 ## Research questions
 
 1. Which assurance obligations must be visible before a regulated capability can cross an authority gate?
 2. Which runtime and data-flow relationships are semantically distinct enough to deserve typed connectors?
-3. What evidence distinguishes a candidate seam from an authority transfer?
+3. What evidence distinguishes a candidate boundary from an authority transfer?
 4. Which signals support stabilization after cutover, and which additional evidence is needed before legacy retirement?
 5. Which decisions remain explicitly human, legacy-authoritative, or unknown?
 6. What provenance and confidence distinctions let a collaborator separate fact, corroborated inference, single-source claim, estimate, and unresolved question?
@@ -36,7 +36,7 @@ These remain unchanged unless direct evidence falsifies them:
 
 | Tranche | Role | Preferred sources |
 |---|---|---|
-| Existing A3 record | Historical truth and protected semantics | A3 Notion source, canonical v0.1 registry, repository prototypes |
+| Existing capability-transfer record | Historical truth and protected semantics | Source record, canonical v0.1 registry, repository prototypes |
 | Regulated-software assurance | Validation, traceability, records, security, human responsibility | Current FDA, eCFR, NIST, and W3C primary sources |
 | Migration and runtime patterns | Routing, mirroring, compatibility, observability, rollback, retirement | First-party cloud/platform documentation, primary pattern descriptions, open specifications |
 | Accessibility and provenance | Inspectable diagram behavior and evidence lineage | W3C standards and guidance |
@@ -93,4 +93,3 @@ An addition enters the expanded diagram only when it:
 - Keyboard-operable native controls, visible focus, text equivalent, and reduced-motion support.
 - No fabricated figures, probabilities, compliance claims, or source quotations.
 - Coverage ledger records all attempted sources, depth, role, citations, and failures.
-

@@ -1501,7 +1501,7 @@
             <article id="spec-secr-001" class="capability-card capability-card--operation">
               <span class="stable-id">SPEC-SECR-001</span>
               <h3>Workload-bound configuration and secret lifecycle</h3>
-              <p>Operators rotate credentials and change non-secret configuration through governed runtime stores while evidence surfaces retain references or redacted metadata.</p>
+              <p>Operators rotate credentials and change non-secret configuration through governed runtime stores while audit events and credential-rotation records retain references or redacted metadata.</p>
               <span class="tier-label">Reversible operation</span>
             </article>
           </li>
@@ -1516,8 +1516,8 @@
           <li>
             <article id="spec-call-001" class="capability-card capability-card--authority">
               <span class="stable-id">SPEC-CALL-001</span>
-              <h3>Bounded automation caller</h3>
-              <p>A human, service, workflow, or AI caller selects a released operation while the service establishes identity, authority, scope, effect, evidence, and recovery.</p>
+              <h3>Bounded tool-operation caller</h3>
+              <p>A person, service, workflow, or bounded generative AI tool caller selects a released operation while the service establishes identity, authority, scope, effect, evidence, and recovery.</p>
               <span class="tier-label">Accountable effect</span>
             </article>
           </li>
@@ -1537,7 +1537,7 @@
         </header>
 
         <div class="table-shell">
-          <table aria-describedby="scenario-intro">
+          <table data-label="Representative scenarios, recovery paths, and accountable roles" aria-describedby="scenario-intro">
             <caption>Representative scenarios, recovery paths, and accountable roles</caption>
             <colgroup>
               <col style="width: 22%">
@@ -1547,15 +1547,15 @@
             </colgroup>
             <thead>
               <tr>
-                <th scope="col">Scenario</th>
-                <th scope="col">Shared-object connection</th>
-                <th scope="col">Failure and recovery</th>
-                <th scope="col">Accountable roles</th>
+                <th data-label="Scenario" scope="col">Scenario</th>
+                <th data-label="Shared-object connection" scope="col">Shared-object connection</th>
+                <th data-label="Failure and recovery" scope="col">Failure and recovery</th>
+                <th data-label="Accountable roles" scope="col">Accountable roles</th>
               </tr>
             </thead>
             <tbody>
-              <tr id="scn-life-001">
-                <th scope="row"><span class="scenario-id">SCN-LIFE-001</span>Released result correction preserves the original</th>
+              <tr data-label="Representative scenarios, recovery paths, and accountable roles: SCN-LIFE-001 Released result correction preserves the original" id="scn-life-001">
+                <th data-label="Scenario" scope="row"><span class="scenario-id">SCN-LIFE-001</span>Released result correction preserves the original</th>
                 <td data-label="Shared-object connection">Result, review, revision, and sign-off.</td>
                 <td data-label="Failure and recovery">A missing reason or reviewer authority routes the correction to accountable review with the original evidence intact.</td>
                 <td data-label="Accountable roles">
@@ -1565,8 +1565,8 @@
                   </ul>
                 </td>
               </tr>
-              <tr id="scn-cust-001">
-                <th scope="row"><span class="scenario-id">SCN-CUST-001</span>Concurrent custody transfer reloads current position</th>
+              <tr data-label="Representative scenarios, recovery paths, and accountable roles: SCN-CUST-001 Concurrent custody transfer reloads current position" id="scn-cust-001">
+                <th data-label="Scenario" scope="row"><span class="scenario-id">SCN-CUST-001</span>Concurrent custody transfer reloads current position</th>
                 <td data-label="Shared-object connection">Specimen location, custody, and versioned state.</td>
                 <td data-label="Failure and recovery">Competing transfers at the same revision reload current custody and construct a new attributable transfer.</td>
                 <td data-label="Accountable roles">
@@ -1575,8 +1575,8 @@
                   </ul>
                 </td>
               </tr>
-              <tr id="scn-inst-001">
-                <th scope="row"><span class="scenario-id">SCN-INST-001</span>Partial instrument artifact enters quarantine</th>
+              <tr data-label="Representative scenarios, recovery paths, and accountable roles: SCN-INST-001 Partial instrument artifact enters quarantine" id="scn-inst-001">
+                <th data-label="Scenario" scope="row"><span class="scenario-id">SCN-INST-001</span>Partial instrument artifact enters quarantine</th>
                 <td data-label="Shared-object connection">Instrument ingress, artifact identity, raw bytes, digest, and disposition.</td>
                 <td data-label="Failure and recovery">Divergent or replayed bytes enter quarantine; recovery requests a complete transfer and reconciles against the preserved receipt.</td>
                 <td data-label="Accountable roles">
@@ -1586,8 +1586,8 @@
                   </ul>
                 </td>
               </tr>
-              <tr id="scn-idem-001">
-                <th scope="row"><span class="scenario-id">SCN-IDEM-001</span>Ambiguous vendor write reconciles before resubmission</th>
+              <tr data-label="Representative scenarios, recovery paths, and accountable roles: SCN-IDEM-001 Ambiguous vendor write reconciles before resubmission" id="scn-idem-001">
+                <th data-label="Scenario" scope="row"><span class="scenario-id">SCN-IDEM-001</span>Ambiguous vendor write reconciles before resubmission</th>
                 <td data-label="Shared-object connection">Stable request identity and one scientific effect.</td>
                 <td data-label="Failure and recovery">Reused identity with changed content preserves both digests for review; an ambiguous timeout resolves through readback before retry.</td>
                 <td data-label="Accountable roles">
@@ -1597,8 +1597,8 @@
                   </ul>
                 </td>
               </tr>
-              <tr id="scn-migr-001">
-                <th scope="row"><span class="scenario-id">SCN-MIGR-001</span>Representative migration preserves meaning</th>
+              <tr data-label="Representative scenarios, recovery paths, and accountable roles: SCN-MIGR-001 Representative migration preserves meaning" id="scn-migr-001">
+                <th data-label="Scenario" scope="row"><span class="scenario-id">SCN-MIGR-001</span>Representative migration preserves meaning</th>
                 <td data-label="Shared-object connection">Identity, content, relationships, audit, signatures, and artifacts.</td>
                 <td data-label="Failure and recovery">A divergent attachment digest or signature relationship closes the cutover gate and resumes from the last accepted checkpoint.</td>
                 <td data-label="Accountable roles">
@@ -1609,8 +1609,8 @@
                   </ul>
                 </td>
               </tr>
-              <tr id="scn-acpt-001">
-                <th scope="row"><span class="scenario-id">SCN-ACPT-001</span>Accountable release records distinct decisions</th>
+              <tr data-label="Representative scenarios, recovery paths, and accountable roles: SCN-ACPT-001 Accountable release records distinct decisions" id="scn-acpt-001">
+                <th data-label="Scenario" scope="row"><span class="scenario-id">SCN-ACPT-001</span>Accountable release records distinct decisions</th>
                 <td data-label="Shared-object connection">Review and sign-off across the complete shared-object evidence bundle.</td>
                 <td data-label="Failure and recovery">A pending domain preserves qualification-ready state and routes the open decision to its named owner.</td>
                 <td data-label="Accountable roles">

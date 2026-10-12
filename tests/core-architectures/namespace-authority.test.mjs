@@ -72,12 +72,12 @@ test("manifest-current Core JSON-LD uses the approved semantic identifiers", asy
     if (entry.id === "strategy-canvas") {
       assert.deepEqual(
         [entry.file, entry.version],
-        ["strategy-canvas-chimeric-prototype-v0.2.4.html", "0.2.4"],
+        ["strategy-canvas-chimeric-prototype-v0.2.5.html", "0.2.5"],
         "Strategy Canvas canonical current identity",
       );
       assert.deepEqual(
         [contextEntry.file, contextEntry.version],
-        ["strategy-canvas-chimeric-prototype-v0.2.2.html", "0.2.2"],
+        ["strategy-canvas-chimeric-prototype-v0.2.3.html", "0.2.3"],
         "Strategy Canvas maintained Context identity",
       );
     } else {
@@ -158,11 +158,11 @@ test("current canonical and Context projections retain their declared relationsh
   }
 
   assert.ok(
-    declaredAdaptations.has("poda-chimeric-prototype-v0.1.4.html"),
+    declaredAdaptations.has("poda-chimeric-prototype-v0.1.5.html"),
     "PODA retains its Context navigation adaptation",
   );
   assert.ok(
-    declaredAdaptations.has("core-architecture-family-index-chimeric-prototype-v0.1.5.html"),
+    declaredAdaptations.has("core-architecture-family-index-chimeric-prototype-v0.1.6.html"),
     "the family index retains its Context navigation adaptation",
   );
 });
@@ -174,26 +174,15 @@ test("semantic-identifier successors retain the established iframe request closu
   ]);
   const sourceEntries = currentById(sourceManifest);
   const acceptedCapabilityAdditions = new Map([
-    ["poda", ["file-download"]],
     ["alignment-worksheet", ["file-download"]],
     ["impact-map", ["file-download"]],
     ["context-tree", ["file-download"]],
     ["cross-channel-blueprint", ["file-download"]],
-    ["service-design-blueprint", ["file-download"]],
-    ["ai-systems-service-blueprint", ["clipboard-write", "file-download"]],
     ["software-architecture-views", ["file-download"]],
     ["first-responsible-version-matrix", ["file-download"]],
-    ["upstream-revision-loop", ["file-download"]],
-    ["recovery-routing-atlas", ["file-download"]],
     ["participatory-design-kit", ["file-download"]],
-    ["specification-by-example", ["file-download"]],
-    ["pattern-problem-surface-matrix", ["file-download"]],
     ["jobs-to-be-done-treemap", ["file-download"]],
-    ["unit-test-first-design", ["file-download"]],
     ["heart-chart", ["file-download"]],
-    ["plus-delta", ["file-download"]],
-    ["practitioner-judgment-probes", ["file-download"]],
-    ["core-architecture-family-index", ["file-download"]],
   ]);
 
   for (const entry of sourceManifest.prototypes) {
@@ -236,12 +225,12 @@ test("semantic-identifier successors retain the established iframe request closu
   const hubRoute = routeManifest.routes.find(({ id }) => id === "core-architectures-pack");
   assert.deepEqual(
     [hubRoute.source_file, hubRoute.source_version],
-    ["core-architectures-chimeric-prototype-pack-index-v0.1.3.html", "0.1.3"],
+    ["core-architectures-chimeric-prototype-pack-index-v0.1.4.html", "0.1.4"],
   );
   const [hub, priorHub] = await Promise.all([
     readFile(path.join(coreRoot, hubRoute.source_file), "utf8"),
     readFile(
-      path.join(coreRoot, "core-architectures-chimeric-prototype-pack-index-v0.1.2.html"),
+      path.join(coreRoot, "core-architectures-chimeric-prototype-pack-index-v0.1.3.html"),
       "utf8",
     ),
   ]);

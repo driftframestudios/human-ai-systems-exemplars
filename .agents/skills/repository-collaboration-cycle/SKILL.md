@@ -33,6 +33,10 @@ Each candidate enters one route: direct action, primary collaboration with bound
 
 Inspect the lockfile, scripts, installed dependencies, browser runtime, and existing local tools first. Install locked dependencies when the selected check requires them and the task permits installation. Install a named browser runtime when rendered evidence is part of acceptance. Record environment changes that could affect behavior, disk use, or reproducibility.
 
+### Rule: Dependency repairs preserve two evidence claims
+
+Dependency findings group by the direct dependency or lockfile edge that can repair them. The selected release follows the repository's engine and pinning contract; current maintainer advisories establish affected and fixed versions. A regenerated lockfile and clean install establish reproducibility. The audit establishes the known-advisory state, while focused consumer checks establish behavior after the upgrade. Browser bundles, local development services, build tools, and hosted code retain their distinct exposure boundaries. A clear audit leaves unobserved runtime and security claims open for their fitting evidence.
+
 ### Rule: Support capacity is a conditional receiver state
 
 Available capacity can receive one bounded packet with an action mode, observable return, and stop condition. While capacity rests, the primary route remains active. A still-useful packet can rest as `awaiting_capacity` on the active Issue or named access-controlled task; activation refreshes the source revision, Issue acceptance boundary, and continuing need before action.

@@ -8,18 +8,29 @@ folder_contract:
   refactor_pass: "DCP-010-semantic-attractor-language-stabilization"
 ```
 
-This Field Guide section holds language patterns that help AI and human
-collaborators preserve the desired state under repeated use.
+This Field Guide section holds language patterns that help human collaborators
+and AI systems preserve the desired state under repeated use.
 
 ## Working Rule
 
-Write guidance as a positive, verifiable target state:
+Classify the job of a negation, then write guidance toward a positive,
+verifiable target state where the meaning survives:
 
 - Name the desired behavior directly.
-- Pair hard safety and privacy boundaries with the replacement state.
+- Keep qualifiers local to the claim or action they govern.
+- Pair hard safety, privacy, legal, and compatibility boundaries with the
+  permitted replacement state.
 - Keep load-bearing negation where it defines the concept, then anchor it with
   the positive state first.
-- Phrase code comments, identifiers, and assertions as stable invariants.
+- Preserve quotations and executable assertions exactly when fidelity or
+  runtime semantics require them.
+- Validate consequential rewrites with the model, retrieval system, training
+  process, interface, or runtime that receives them.
+
+The three-rung ladder in the source guidance is a fitted authoring heuristic
+for generative instructions. Training-time, prompt-level, lexical,
+multilingual, embedding, and mechanistic studies measure different behavior;
+the receiving task decides whether a rewrite improves fit.
 
 ## Local Pattern
 

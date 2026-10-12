@@ -2,8 +2,8 @@
    Consumer: hiring-surfaces-talent-agent-intake.html only.
    Owns: the two-reader palette, hiring fields and tables, responsive modes,
    print treatment, and the late anchors that preserve local relationships.
-   Load order: expanded.css, ai-systems.css, this Hiring bundle, then
-   page-local styles and canvas-shell.css.
+   Load order: shared core, expanded.css, ai-systems.css, this Hiring bundle,
+   then page-local styles and canvas-shell.css.
    Contract: ../../../../visual-fidelity-contracts/cobalt-operating-field.md.
    The family bundle supplies shared grammar; Hiring retains authority over
    its color relationships, rhythm, density, and new route experiments. */

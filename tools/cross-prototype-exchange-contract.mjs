@@ -14,7 +14,7 @@ import {
   startStaticServer
 } from "./core-architecture-browser-helper.mjs";
 
-const coreRoute = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.4.html";
+const coreRoute = "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-chimeric-prototype-v0.2.5.html";
 const composerRoute = "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer/narrative-capsules-chimeric-prototype-v0.1.html";
 const coreSchemaPath = resolve(
   repositoryRoot,

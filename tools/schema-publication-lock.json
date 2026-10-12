@@ -1,0 +1,19 @@
+{
+  "investment-analysis/0.2.0/state.schema.json": "5e755a73ac130b4da393602ad64d9471e7bddf332c8c3429e8a2c1411699f3a3",
+  "prototype-exemplars/1.0.0/prototype-exemplars.schema.json": "42910b5238a62c666cf5fcdbdc5a364b64d7c5301d959ac9bdaea11c8743ccf2",
+  "context-canvas/1.0.0/context-canvas.schema.json": "008f0180477814f25fc657f9695668aa4286085ae781ab36650d8830da82c08a",
+  "collaboration-skills/0.1.0/collaboration-skill.schema.json": "cb44d6db5e0320062fb3fe1b0b63354d0e17dff3f2cb096ccf9616db6259fdc0",
+  "collaboration-skills/0.1.0/collaboration-account.schema.json": "99153a7f803c2431f922790df65ff4dc7d9215a7c3c79d2d36b36bebd113b039",
+  "a3-stacked-cube-atlas-expanded/0.2/expanded-delta.schema.json": "76552eb1f00056f9ae574fca5273f92bd1f0e3389f5f0c7d3cdca63729c355d1",
+  "a3-stacked-cube-atlas-expanded/0.2/expanded-view-model.schema.json": "a61e277fb2bf153117622bcb61d471531508ca45dad23a83f8f43c270a3d1ac1",
+  "a3-stacked-cube-atlas-expanded/0.2/source-registry.schema.json": "e5961a3c74fe5d304162e576ef5d3f4182eb8d90dc43dbec13956d3c5221fc9e",
+  "a3-stacked-cube-atlas-expanded/0.2/coverage-ledger.schema.json": "02dba1dd1e225c3f2e25dfd39cf8ccf5153e7000595dd9062ff14b2e8aafd230",
+  "schemas/a3-stacked-cube-state-v0.1.json": "29412224ba56ec6f4289821bf34d44acedc56c9ae9eee76ae33cb7e276e24426",
+  "visualization/visualization-fidelity-atlas.schema.v0.1.json": "9cc827bf3357a601335af6ef1dce61e2b62dfa69e0c88215dbdd61e360a64ed3",
+  "core-architectures-chimeric-prototype-current-pack-v0.1/strategy-canvas-system-v0.2/strategy-canvas.schema.json": "8fc5d394a0edeb4578d9e5203323ec2572cea2673e525e5c083e2fdf51c5c41c",
+  "context-canvas-project-surface/context-canvas/prototypes/prototype-local-manifest.schema.json": "819d3d376ed9c9414a36df9565ccb5c89e988cfdadd1b99c7c1fe4ee3c63b53d",
+  "na/schema/narrative-capsule-composition.schema.v0.1.json": "7b90f096238f1cda8bbb6ef1d1ef74c5f213a5a84ad767b15fd61c877be9c3df",
+  "na/schema/narrative-sampling-tableau-state.schema.v0.1.json": "f311a682f356d351ad690191f8943a556b349020d0e95c21832b7853bec936c4",
+  "na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json": "636c62c98963a9d772ff1e10677177319b3e632cc1877ce0106d4a9b8a318858",
+  "fg/schema/threadkeeping-ledger.schema.v0.1.json": "5bbd7261afb2540490822e5ae18f119e4d80bff2bffe0218471e65af62a27208"
+}

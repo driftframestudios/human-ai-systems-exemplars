@@ -4,6 +4,8 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
 
+import { assertImmutableSkillCoordinate } from "../prompt-capsule-skill-coordinate.mjs";
+
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const coreRoot = resolve(repositoryRoot, "core-architectures-chimeric-prototype-current-pack-v0.1");
 const contextRoot = resolve(
@@ -26,7 +28,7 @@ const artifacts = [
     version: "0.1.4",
     currentFile: "participatory-design-kit-chimeric-prototype-v0.1.4.html",
     historicalFile: "participatory-design-kit-chimeric-prototype-v0.1.3.html",
-    currentDigest: "e86619691afe4a687bb22c6c474b3da38c55afec6a18de8a6ef1254fec3a7867",
+    currentDigest: "4fe6880e6df17c4897fe24cfbe65341215b28c207571e08743125b9502d6493d",
     historicalDigest: "d8e9cc9d3e8c354000a48bd62e0b0a023f654596ea223f8acf860b0cd5e75e64",
     stateContract: "participatory-design-kit-state.v0.1",
     apiName: "participatoryDesignKit",
@@ -36,11 +38,11 @@ const artifacts = [
   {
     id: "specification-by-example",
     name: "Specification-by-Example",
-    version: "0.1.6",
-    currentFile: "specification-by-example-chimeric-prototype-v0.1.6.html",
-    historicalFile: "specification-by-example-chimeric-prototype-v0.1.5.html",
-    currentDigest: "a548c7336ff93bd6b5d8030e99271798297c45078610fb4cb78363c0606d59ce",
-    historicalDigest: "0bea8fabc2d06a05117b8289e01d3931e928262c8db6af01fd9c5563d0a9359f",
+    version: "0.1.7",
+    currentFile: "specification-by-example-chimeric-prototype-v0.1.7.html",
+    historicalFile: "specification-by-example-chimeric-prototype-v0.1.6.html",
+    currentDigest: "9e89a38ddc9baec44ba21235703b5fb30cc88a49769dc8b188d919adeebdf071",
+    historicalDigest: "a548c7336ff93bd6b5d8030e99271798297c45078610fb4cb78363c0606d59ce",
     stateContract: "specification-by-example-state.v0.1",
     apiName: "specificationByExample",
     promptId: "aiPrompt",
@@ -139,8 +141,7 @@ for (const artifact of artifacts) {
       assert.match(loopRegistry, new RegExp(`id="${loopId}"`, "u"));
     }
     for (const [path, expectedDigest] of sharedSkills) {
-      const source = await readFile(resolve(repositoryRoot, path));
-      assert.equal(sha256(source), expectedDigest);
+      assertImmutableSkillCoordinate(skillRevision, path, expectedDigest);
       assert.ok(html.includes(`path:'${path}'`) || html.includes(`path: '${path}'`));
       assert.ok(html.includes(`sha256:'${expectedDigest}'`) || html.includes(`sha256: '${expectedDigest}'`));
     }
@@ -161,7 +162,17 @@ for (const artifact of artifacts) {
 
 test("Participatory Elicitation and Specification advances the current inventory as one family", async () => {
   const inventory = await readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8");
-  assert.match(inventory, /Participatory Design Kit v0\.1\.4/u);
-  assert.match(inventory, /Specification-by-Example v0\.1\.6/u);
-  assert.match(inventory, /28 current\s+adoptions\. This completes the observed population/u);
+  const currentInventory = inventory.split("\n## Projections, receivers, and recovery inputs\n", 1)[0];
+  assert.notEqual(currentInventory, inventory, "the inventory keeps its current/projection boundary");
+  assert.match(currentInventory, /Participatory Design Kit v0\.1\.4/u);
+  assert.match(currentInventory, /Specification-by-Example v0\.1\.7/u);
+  const declared = currentInventory.match(/current population contains (\d+) source artifacts/u);
+  const adopted = currentInventory.match(/(\d+) current\s+adoptions\. This completes the observed population/u);
+  const heading = currentInventory.match(/## Current source artifacts[^\n\d]*(\d+)/u);
+  assert.ok(declared && adopted && heading, "the current population has a summary, heading and adoption statement");
+  const tableCount = [...currentInventory.matchAll(/^\|[^|]+\|\s*(\d+)\s*\|/gmu)]
+    .reduce((sum, match) => sum + Number(match[1]), 0);
+  assert.ok(tableCount > 0, "the current-artifact table supplies the counted population");
+  assert.deepEqual([Number(declared[1]), Number(adopted[1]), Number(heading[1])],
+    [tableCount, tableCount, tableCount], "current inventory counts agree with its source classes");
 });

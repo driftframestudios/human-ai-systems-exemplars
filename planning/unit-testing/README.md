@@ -12,6 +12,8 @@ Accepted source: `main@87db858`, 2026-08-26
 
 Research branch reading: `research@ad8c97f`, 2026-08-25
 
+Repository-wide continuation: [test architecture and evidence coherence](../testing-suite-consolidation/README.md) extends this dated family baseline with explicit cross-runner discovery and phased bundles. This file retains its accepted Core/Narrative scope.
+
 ## Desired state
 
 A collaborator can change a consequential Core or Narrative behavior and run a

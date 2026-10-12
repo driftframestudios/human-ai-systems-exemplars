@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="840" viewBox="0 0 1440 840" role="img" aria-labelledby="title desc">
+  <title id="title">Nine recorded dispositions, with estimation still open</title>
+  <desc id="desc">The recorded tranche contains four censored or null dispositions, three scoped-zero dispositions and two positive dispositions, from nine prospective forecasts. Each square is one disposition. Both model cohorts have zero eligible likelihood contributions. These counts describe records, not independent defect rates or browser-run savings.</desc>
+  <defs><pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M0 10L10 0" stroke="#17345f" stroke-opacity=".35" stroke-width="2"/></pattern></defs>
+  <style>
+    text { fill: #17345f; font-family: Futura, 'Trebuchet MS', sans-serif; }
+    .title { font-size: 40px; font-weight: 700; }
+    .heading { font-size: 27px; font-weight: 700; }
+    .body { font-size: 23px; }
+    .label { font: 700 18px 'Courier New', monospace; letter-spacing: 1px; }
+    .count { font: 700 32px 'Courier New', monospace; }
+  </style>
+  <rect width="1440" height="840" rx="28" fill="#fffdf8"/>
+  <text x="52" y="63" class="label">RESEARCH SNAPSHOT / 03 OCTOBER 2026</text>
+  <text x="52" y="121" class="title">Recording worked. Effectiveness remains an open question.</text>
+  <text x="52" y="164" class="body">Nine prospective forecasts, nine terminal dispositions. One square represents one record.</text>
+  <g role="group" aria-labelledby="observed-title">
+    <title id="observed-title">Recorded dispositions</title>
+    <rect x="52" y="207" width="856" height="489" rx="17" fill="#fff5de" stroke="#17345f" stroke-width="2"/>
+    <text x="80" y="258" class="label">OBSERVED RECORD COUNTS</text>
+    <text x="80" y="322" class="heading">Censored / null</text>
+    <g stroke="#17345f" stroke-width="2"><rect x="438" y="289" width="52" height="52" fill="url(#hatch)"/><rect x="504" y="289" width="52" height="52" fill="url(#hatch)"/><rect x="570" y="289" width="52" height="52" fill="url(#hatch)"/><rect x="636" y="289" width="52" height="52" fill="url(#hatch)"/></g>
+    <text x="753" y="324" class="count">4</text>
+    <text x="80" y="417" class="heading">Scoped zero</text>
+    <g stroke="#17345f" stroke-width="2" fill="#d9efea"><rect x="438" y="384" width="52" height="52"/><rect x="504" y="384" width="52" height="52"/><rect x="570" y="384" width="52" height="52"/></g>
+    <text x="753" y="419" class="count">3</text>
+    <text x="80" y="512" class="heading">Positive</text>
+    <g stroke="#17345f" stroke-width="2" fill="#cfe7f7"><rect x="438" y="479" width="52" height="52"/><rect x="504" y="479" width="52" height="52"/></g>
+    <text x="753" y="514" class="count">2</text>
+    <path d="M80 558H876" stroke="#17345f"/>
+    <text x="80" y="599" class="body">Censored runs may still retain observed positive findings.</text>
+    <text x="80" y="636" class="body">A scoped zero describes its completed observation window.</text>
+    <text x="80" y="673" class="body">Repeated campaigns retain their shared-cluster relationship.</text>
+  </g>
+  <g role="group" aria-labelledby="estimate-title">
+    <title id="estimate-title">Estimation boundary</title>
+    <rect x="942" y="207" width="446" height="489" rx="17" fill="#e7efff" stroke="#17345f" stroke-width="2"/>
+    <text x="970" y="258" class="label">MODEL UPDATE</text>
+  <text x="970" y="329" class="count"><tspan x="970">0 eligible</tspan><tspan x="970" dy="36">contributions</tspan></text>
+    <text x="970" y="407" class="body">Both cohorts retain their prior.</text>
+    <text x="970" y="451" class="heading">0.5 is prior-only.</text>
+    <text x="970" y="492" class="body">Sensitivity: 0.25 and 0.75.</text>
+    <path d="M970 515H1360" stroke="#17345f"/>
+    <text x="970" y="559" class="body">Calibration, net savings and</text>
+    <text x="970" y="593" class="body">better scheduling await</text>
+    <text x="970" y="627" class="body">a fitting comparison.</text>
+  </g>
+  <text x="52" y="751" class="body">Unit: terminal disposition. Population: the recorded local tranche, with censoring and dependent continuations.</text>
+  <text x="52" y="790" class="body">Source and exact text equivalent accompany the diagram. Category color expresses meaning, not performance.</text>
+</svg>

@@ -9,7 +9,7 @@
 
   <div class="viz-controls" id="a3-inline-frames" aria-label="Historical authority frame">
     <button type="button" class="btn btn-primary" data-a3-frame="F0" aria-pressed="true">1 · Current</button>
-    <button type="button" class="btn" data-a3-frame="F1" aria-pressed="false">2 · Seam</button>
+    <button type="button" class="btn" data-a3-frame="F1" aria-pressed="false">2 · Boundary</button>
     <button type="button" class="btn" data-a3-frame="F2" aria-pressed="false">3 · Shadow</button>
     <button type="button" class="btn" data-a3-frame="F3" aria-pressed="false">4 · Validated</button>
   </div>
@@ -22,7 +22,7 @@
 
   <div class="viz-row a3-inline-legend" aria-label="State legend">
     <span><i class="a3-inline-swatch a3-inline-legacy" aria-hidden="true"></i>Legacy</span>
-    <span><i class="a3-inline-swatch a3-inline-seam" aria-hidden="true"></i>Seam / conditional</span>
+    <span><i class="a3-inline-swatch a3-inline-seam" aria-hidden="true"></i>Boundary / conditional</span>
     <span><i class="a3-inline-swatch a3-inline-shadow" aria-hidden="true"></i>Shadow</span>
     <span><i class="a3-inline-swatch a3-inline-new" aria-hidden="true"></i>New authority</span>
     <span><i class="a3-inline-swatch a3-inline-retained" aria-hidden="true"></i>Retained</span>
@@ -210,7 +210,7 @@
 
   const frames = [
     { id: "F0", label: "Current authority", note: "Most bounded software remains legacy-authoritative; human work and unknown coupling stay visible." },
-    { id: "F1", label: "Seam identified", note: "A candidate boundary is named, but execution and decision authority have not moved." },
+    { id: "F1", label: "Boundary identified", note: "A candidate boundary is named, but execution and decision authority have not moved." },
     { id: "F2", label: "Shadow / dual-run", note: "Representative traffic may be mirrored for evidence while the legacy result remains authoritative." },
     { id: "F3", label: "Validated authority", note: "Only the evidenced operational capability changes authority; retained work and rollback remain visible." }
   ];
@@ -219,7 +219,7 @@
     authority: {
       label: "Authority topology",
       note: "Position means current execution or decision authority only.",
-      detail: "The original four-frame A3 history remains the protected spine."
+      detail: "The original four-frame history remains the protected spine."
     },
     assurance: {
       label: "Assurance gates",
@@ -254,7 +254,7 @@
   ];
 
   const readinessGates = [
-    ["G0", "Seam", "PARTIAL"],
+    ["G0", "Boundary", "PARTIAL"],
     ["G1", "Data", "UNKNOWN"],
     ["G2", "Contract", "UNKNOWN"],
     ["G3", "Runtime", "UNKNOWN"],
@@ -370,7 +370,7 @@
       <rect x="262" y="8" width="236" height="350" rx="10" class="a3-zone"></rect>
       <rect x="516" y="8" width="236" height="350" rx="10" class="a3-zone"></rect>
       <text x="24" y="34" class="a3-strong">LEGACY</text>
-      <text x="278" y="34" class="a3-strong">SEAM / CONTRACT</text>
+      <text x="278" y="34" class="a3-strong">TRANSFER BOUNDARY</text>
       <text x="532" y="34" class="a3-strong">NEW AUTHORITY</text>`;
 
     [
@@ -386,11 +386,11 @@
     output += box(24, 322, 204, 26, "a3-unknown", "UNKNOWN / unbounded", "", 22);
 
     if (activeFrame === "F0") {
-      output += box(278, 142, 204, 72, "a3-unknown", "No verified seam", "No transfer", 22);
+      output += box(278, 142, 204, 72, "a3-unknown", "No verified boundary", "No transfer", 22);
       output += wrap("Operational / assignment remains legacy-authoritative.", 532, 150, 22, "a3-secondary", 18, 3);
     }
     if (activeFrame === "F1") {
-      output += box(278, 64, 204, 56, "a3-seam", "Operational / assignment", "candidate seam", 22);
+      output += box(278, 64, 204, 56, "a3-seam", "Operational / assignment", "candidate boundary", 22);
       output += box(278, 158, 204, 126, "a3-seam", "Evidence gate", "identity · dependencies · parity · audit · rollback · human review", 22);
       output += wrap("No authority transfer", 532, 150, 22, "a3-secondary", 18, 2);
     }
@@ -466,7 +466,7 @@
       <rect x="8" y="8" width="744" height="52" rx="8" class="a3-seam"></rect>
       <text x="24" y="39" class="a3-strong">COHORT / PROMOTION / ROLLBACK CONTROL PLANE</text>
       ${box(16, 96, 108, 68, "a3-zone", "Caller", "request", 12)}
-      ${box(168, 88, 132, 84, activeFrame === "F0" ? "a3-unknown" : "a3-seam", "Interception seam", activeFrame === "F0" ? "not established" : "router / abstraction", 14)}
+      ${box(168, 88, 132, 84, activeFrame === "F0" ? "a3-unknown" : "a3-seam", "Interception boundary", activeFrame === "F0" ? "not established" : "router / abstraction", 14)}
       ${box(350, 74, 160, 72, activeFrame === "F3" ? "a3-retained" : "a3-legacy", "Legacy implementation", activeFrame === "F3" ? "fallback retained" : "authoritative", 18)}
       ${box(350, 176, 160, 72, activeFrame === "F0" ? "a3-unknown" : activeFrame === "F1" ? "a3-seam" : activeFrame === "F2" ? "a3-shadow" : "a3-new", "Target implementation", activeFrame === "F2" ? "mirror response discarded" : activeFrame === "F3" ? "bounded authority" : "candidate", 18)}
       ${box(550, 112, 114, 92, "a3-evidence", "Contract + response", "declared · verified · compared", 13)}
@@ -604,7 +604,7 @@
       const frame = frames.find(item => item.id === activeFrame);
       const candidateState = {
         F0: ["Legacy", "a3-legacy"],
-        F1: ["Seam only · no move", "a3-seam"],
+        F1: ["Boundary only · no move", "a3-seam"],
         F2: ["Shadow · legacy authoritative", "a3-shadow"],
         F3: ["Validated bounded authority", "a3-new"]
       }[activeFrame];
@@ -637,7 +637,7 @@
         lenses.runtime.note,
         [
           { title: "Cohort / promotion / rollback", subtitle: "temporary control plane", className: "a3-seam" },
-          { title: "Interception seam", subtitle: activeFrame === "F0" ? "not established" : "router / abstraction", className: activeFrame === "F0" ? "a3-unknown" : "a3-seam" },
+          { title: "Interception boundary", subtitle: activeFrame === "F0" ? "not established" : "router / abstraction", className: activeFrame === "F0" ? "a3-unknown" : "a3-seam" },
           { title: "Legacy result authority", subtitle: activeFrame === "F3" ? "fallback retained" : "authoritative", className: activeFrame === "F3" ? "a3-retained" : "a3-legacy" },
           { title: "Target implementation", subtitle: activeFrame === "F2" ? "non-authoritative mirror" : activeFrame === "F3" ? "bounded authority" : "candidate", className: activeFrame === "F2" ? "a3-shadow" : activeFrame === "F3" ? "a3-new" : "a3-unknown" },
           { title: "Data / record transition", subtitle: "UNKNOWN · not asserted", className: "a3-unknown" },
@@ -684,7 +684,7 @@
       return `${lens.label}, ${frames.find(item => item.id === activeFrame).label}. Request routing, result authority, per-request authorization, contract and response comparison, record authority, data transition, provenance, and fallback are shown as distinct relations. Data movement is not asserted.`;
     }
     if (activeLens === "recovery") {
-      return "Readiness gates G0 through G6 cover seam, data, contract, runtime, security, authority transfer, and retirement. Post-transfer states distinguish monitoring, rollback holding, controlled stop, and retired-but-readable preservation. Safe-to-delete is not implied.";
+      return "Readiness gates G0 through G6 cover boundary, data, contract, runtime, security, authority transfer, and retirement. Post-transfer states distinguish monitoring, rollback holding, controlled stop, and retired-but-readable preservation. Safe-to-delete is not implied.";
     }
     return "Evidence provenance runs from source through classified claim, candidate element, inclusion decision, and derived artifact. Three stacked distributions show competing explanations for potential diagram gaps and include a benign alternative. They do not estimate migration success or compliance.";
   }

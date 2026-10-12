@@ -82,6 +82,30 @@ browser contract also checks each source's complete no-JavaScript Markdown,
 state-only fingerprint, additive skill view, exact copy/download bytes, and
 recovery after a rejected import.
 
+## Public schema retrieval
+
+The public schema selection preserves each source-adjacent v0.1 contract and
+its established `schemas.driftframestudios.org` canonical identity. Equivalent
+copies use the same receiver pathname on the Radiant Null Pages site and the
+Vik Guru Worker:
+
+| Contract | Receiver path | Companion state |
+| --- | --- | --- |
+| Narrative Capsule Composition | `na/schema/narrative-capsule-composition.schema.v0.1.json` | standalone context and public-safe composition adaptation |
+| Narrative Sampling Tableau state | `na/schema/narrative-sampling-tableau-state.schema.v0.1.json` | standalone context and reviewed public-safe adaptation |
+| Technology Fit Sampling Tableau state | `na/schema/technology-fit-sampling-tableau-state.schema.v0.1.json` | standalone context and public-safe stack-selection adaptation |
+| Threadkeeping Ledger | `fg/schema/threadkeeping-ledger.schema.v0.1.json` | standalone context and compact public-safe continuity example |
+
+The exact schema bytes become immutable at publication. Contexts, examples,
+and family orientation remain revalidating companions. All four schemas use
+Draft 2020-12 with local fragment references, so each schema file carries its
+complete dependency closure. The repository revision establishes the accepted
+source; the two receiving hosts establish their own delivery observations.
+
+The source family retains its material runtime fixtures. All four public-safe
+companion examples adapt state for open retrieval while preserving the original
+local fixtures and their prototype parity checks.
+
 ## Relationship contract
 
 - Source packages own reusable meanings and package-level vocabulary.

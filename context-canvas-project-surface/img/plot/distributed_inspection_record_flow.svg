@@ -35,9 +35,9 @@
   <g class="sans">
     <text id="diagram-heading" x="72" y="91" class="title ink">The inspection record carries field work into downstream decisions</text>
     <text x="72" y="126" class="subtitle muted">A stable record identity preserves human judgment, offline durability, media provenance, and downstream use.</text>
-    <g transform="translate(1316 67)" aria-label="Prospective teaching status">
+    <g transform="translate(1316 67)" aria-label="Proposed teaching status">
       <rect width="212" height="58" rx="16" fill="#e6f4f1" stroke="#2f6668" stroke-width="2"/>
-      <text x="106" y="24" text-anchor="middle" class="eyebrow sea">PROSPECTIVE DESIGN</text>
+      <text x="106" y="24" text-anchor="middle" class="eyebrow sea">PROPOSED DESIGN</text>
       <text x="106" y="45" text-anchor="middle" class="tiny muted">TEACHING EXEMPLAR · v0.1</text>
     </g>
 
@@ -93,7 +93,7 @@
         <rect class="card" x="566" y="292" width="396" height="92" rx="16"/>
         <text x="588" y="323" class="eyebrow sea">INGEST</text>
         <text x="588" y="354" class="card-title ink">Validate + acknowledge</text>
-        <text x="588" y="375" class="small muted">Record identity makes retries idempotent.</text>
+        <text x="588" y="375" class="small muted">Identity + server de-duplication converge retries.</text>
       </g>
       <path class="arrow-sea" d="M760 384H768V403H778L764 421L750 403H760Z"/>
 

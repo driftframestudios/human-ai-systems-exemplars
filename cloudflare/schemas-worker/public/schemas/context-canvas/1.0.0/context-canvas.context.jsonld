@@ -1,0 +1,104 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@protected": true,
+    "schema": "https://schema.org/",
+    "cc": "https://schemas.vik.guru/context-canvas/1.0.0/context-canvas.context.jsonld#",
+    "id": "@id",
+    "kind": "cc:artifactKind",
+    "name": "schema:name",
+    "description": "schema:description",
+    "schemaVersion": "schema:version",
+    "experienceIntent": "cc:experienceIntent",
+    "desiredState": "cc:desiredState",
+    "useConditions": "cc:useCondition",
+    "primaryCognitiveMove": "cc:primaryCognitiveMove",
+    "intendedReaders": "schema:audience",
+    "recognitionSignals": "cc:recognitionSignal",
+    "boundaries": "cc:boundary",
+    "preservedQualities": "cc:preservedQuality",
+    "expectation": "cc:expectation",
+    "readerCanExpect": "cc:readerCanExpect",
+    "revisionCues": "cc:revisionCue",
+    "firstUsePrior": "cc:firstUsePrior",
+    "probabilityOf": "cc:probabilityOf",
+    "solution": "cc:solutionProbability",
+    "implementation": "cc:implementationProbability",
+    "recovery": "cc:recoveryProbability",
+    "basis": "cc:basis",
+    "reviewTrigger": "cc:reviewTrigger",
+    "focalization": "cc:focalization",
+    "lensRef": {
+      "@id": "cc:lensRef",
+      "@type": "@id"
+    },
+    "vantage": "cc:vantage",
+    "foregrounds": "cc:foregrounds",
+    "holdsAside": "cc:holdsAside",
+    "useCondition": "cc:useCondition",
+    "handoffRef": {
+      "@id": "cc:handoffRef",
+      "@type": "@id"
+    },
+    "opportunity": "cc:opportunity",
+    "availableMoves": "cc:availableMove",
+    "enablingConditions": "cc:enablingCondition",
+    "handoffRefs": {
+      "@id": "cc:handoffRef",
+      "@type": "@id"
+    },
+    "standing": "cc:standing",
+    "claimStatus": "cc:claimStatus",
+    "evidenceClass": "cc:evidenceClass",
+    "sourceRefs": "cc:sourceRef",
+    "currentness": "cc:currentness",
+    "state": "cc:state",
+    "asOf": "cc:asOf",
+    "reviewState": "cc:reviewState",
+    "visibility": "cc:visibility",
+    "lifecycleStatus": "cc:lifecycleStatus",
+    "authority": "cc:authority",
+    "humanMeaningAuthorityRef": {
+      "@id": "cc:humanMeaningAuthorityRef",
+      "@type": "@id"
+    },
+    "schemaAuthorityRef": {
+      "@id": "cc:schemaAuthorityRef",
+      "@type": "@id"
+    },
+    "contentAuthorityRef": "cc:contentAuthorityRef",
+    "decisionAuthorityRole": "cc:decisionAuthorityRole",
+    "automationRole": "cc:automationRole",
+    "scope": "cc:scope",
+    "representations": "cc:representation",
+    "locator": {
+      "@id": "cc:locator",
+      "@type": "@id"
+    },
+    "mediaType": "schema:encodingFormat",
+    "status": "cc:status",
+    "sourceRef": "cc:sourceRef",
+    "branch": "cc:branch",
+    "environment": "cc:environment",
+    "revision": "schema:version",
+    "relations": "cc:relation",
+    "type": "cc:type",
+    "targetRef": {
+      "@id": "cc:targetRef",
+      "@type": "@id"
+    },
+    "note": "schema:description",
+    "contractRefs": "cc:contractRef",
+    "ref": "cc:ref",
+    "application": "cc:application",
+    "recoveryRoutes": "cc:recoveryRoute",
+    "strainCue": "cc:strainCue",
+    "smallestUsefulMove": "cc:smallestUsefulMove",
+    "receivingSurfaceRef": "cc:receivingSurfaceRef",
+    "revisitCondition": "cc:revisitCondition",
+    "extensions": {
+      "@id": "cc:extensions",
+      "@type": "@json"
+    }
+  }
+}

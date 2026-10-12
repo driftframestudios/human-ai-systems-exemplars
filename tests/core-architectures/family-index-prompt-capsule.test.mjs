@@ -4,6 +4,8 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import test from "node:test";
 
+import { assertImmutableSkillCoordinate } from "../prompt-capsule-skill-coordinate.mjs";
+
 const repositoryRoot = resolve(import.meta.dirname, "../..");
 const coreRoot = resolve(repositoryRoot, "core-architectures-chimeric-prototype-current-pack-v0.1");
 const contextRoot = resolve(
@@ -15,17 +17,17 @@ const narrativeRoot = resolve(
   "context-canvas-project-surface/context-canvas/prototypes/narrative-architectures/narrative-capsule-composer",
 );
 const manifestName = "core-architectures-chimeric-prototype-manifest-v0.1.json";
-const currentFile = "core-architecture-family-index-chimeric-prototype-v0.1.5.html";
-const historicalFile = "core-architecture-family-index-chimeric-prototype-v0.1.4.html";
+const currentFile = "core-architecture-family-index-chimeric-prototype-v0.1.6.html";
+const historicalFile = "core-architecture-family-index-chimeric-prototype-v0.1.5.html";
 const currentDigests = {
+  canonical: "27e88170074498e609e01dfd2c240ad3eedc96d126ea01bcd58e058c690c1264",
+  context: "7b963ce14f42a91fb5d664b432b24c3447da58c1ed3114106d5b1abdb562f214",
+  narrative: "16fb306df3c7f72c77003755aa2e3a9019e6157fa6afa5d50001133883d0a994",
+};
+const historicalDigests = {
   canonical: "8796c2818aff5a5b2f18d4d4682a09b114419b259f0e83564d8773655ab07950",
   context: "0ddb68d1e0b343d75b121a67133b7dc6428d8de778c3b7fef8c5c0e7a5c023f9",
   narrative: "48257f53e593cd7fcd57ec5c1e5dcd6ae0b889c6fb0170b3920851cd6a3e8ee5",
-};
-const historicalDigests = {
-  canonical: "75d8a7ad80e692134d4b3c2712cd88a55f88e92ab882f16ecd909593a870bfff",
-  context: "3f29219e5cb13c0367a5c1fb29533fc8e81870c6acefa60351889c0ecc59531a",
-  narrative: "ee0455d1bfd2f2439ad297cbd3470b002bd8a4a5a6c36488553b0421721111eb",
 };
 const skillRevision = "17560183cc066196233173aa8cc030ee25fbd517";
 const skillCoordinates = [
@@ -54,13 +56,13 @@ const contextReplacements = [
     2,
   ],
   [
-    "strategy-canvas-chimeric-prototype-v0.2.4.html",
-    "strategy-canvas-chimeric-prototype-v0.2.2.html",
+    "strategy-canvas-chimeric-prototype-v0.2.5.html",
+    "strategy-canvas-chimeric-prototype-v0.2.3.html",
     2,
   ],
   [
-    "fnv1a32-utf8:1c27034b",
-    "fnv1a32-utf8:6eb6a8f3",
+    "fnv1a32-utf8:cb6ac5b4",
+    "fnv1a32-utf8:a7d1a2b2",
     1,
   ],
 ];
@@ -104,7 +106,7 @@ function authoredFingerprint(markdown) {
   return match[1];
 }
 
-test("Family Index v0.1.5 retains its three declared projections and immutable v0.1.4 history", async () => {
+test("Family Index v0.1.6 retains its three declared projections and immutable v0.1.5 history", async () => {
   const paths = {
     canonical: resolve(coreRoot, currentFile),
     context: resolve(contextRoot, currentFile),
@@ -128,8 +130,8 @@ test("Family Index v0.1.5 retains its three declared projections and immutable v
   const coreEntry = coreManifest.prototypes.find(({ id }) => id === "core-architecture-family-index");
   const contextEntry = contextManifest.prototypes.find(({ id }) => id === "core-architecture-family-index");
 
-  assert.deepEqual([coreEntry.file, coreEntry.version], [currentFile, "0.1.5"]);
-  assert.deepEqual([contextEntry.file, contextEntry.version], [currentFile, "0.1.5"]);
+  assert.deepEqual([coreEntry.file, coreEntry.version], [currentFile, "0.1.6"]);
+  assert.deepEqual([contextEntry.file, contextEntry.version], [currentFile, "0.1.6"]);
   assert.equal(coreEntry.previous.at(-1), historicalFile);
   assert.equal(contextEntry.previous.at(-1), historicalFile);
   assert.equal(coreEntry.size_bytes, currentByKind.canonical.byteLength);
@@ -176,15 +178,15 @@ test("Family Index publishes one complete no-JavaScript handoff and frozen sourc
 
   assert.notEqual(contextPlain, plain, "the Context handoff represents its accepted Strategy Canvas adaptation");
   assert.equal(narrativePlain, contextPlain, "the Narrative route adaptation sits outside the authored handoff");
-  assert.equal(authoredFingerprint(plain), "fnv1a32-utf8:1c27034b");
-  assert.equal(authoredFingerprint(contextPlain), "fnv1a32-utf8:6eb6a8f3");
+  assert.equal(authoredFingerprint(plain), "fnv1a32-utf8:cb6ac5b4");
+  assert.equal(authoredFingerprint(contextPlain), "fnv1a32-utf8:a7d1a2b2");
   assert.equal(authoredFingerprint(narrativePlain), authoredFingerprint(contextPlain));
   assert.match(canonical, /<noscript><p class="notice">The complete default plain Markdown remains available below\./u);
   assert.match(canonical, /<fieldset[^>]+data-prompt-view-control[^>]+hidden>/u);
   assert.match(canonical, /data-prompt-actions[^>]+hidden/u);
   assert.match(canonical, /PROMPT_CAPSULE_CONTRACT\s*=\s*'prompt-capsule\/0\.1\.0'/u);
   assert.match(canonical, /PROMPT_CAPSULE_STATE_CONTRACT\s*=\s*'core-architecture-family-index-state\.v0\.1'/u);
-  assert.match(canonical, /PROMPT_CAPSULE_SOURCE_VERSION\s*=\s*'0\.1\.5'/u);
+  assert.match(canonical, /PROMPT_CAPSULE_SOURCE_VERSION\s*=\s*'0\.1\.6'/u);
   assert.match(canonical, /window\.coreArchitectureFamilyIndex\s*=\s*Object\.freeze\(\{/u);
   for (const member of [
     "getState",
@@ -212,7 +214,7 @@ test("Family Index publishes one complete no-JavaScript handoff and frozen sourc
     preceding = position;
   }
   assert.match(plain, /^# Prompt Capsule: Core Architecture Family Index\n/u);
-  assert.match(plain, /- Source: `core-architecture-family-index@0\.1\.5`/u);
+  assert.match(plain, /- Source: `core-architecture-family-index@0\.1\.6`/u);
   assert.match(plain, /- View: `plain`/u);
   assert.doesNotMatch(plain, /## Skill assistance/u);
   assert.deepEqual(
@@ -242,12 +244,12 @@ test("Family Index publishes one complete no-JavaScript handoff and frozen sourc
     [
       "Anchored dimension matrix / collaborative profile field",
       "The group needs interpretable dimensions, sealed readings, visible spread, reversible scenarios, and a reviewable handoff.",
-      "strategy-canvas-chimeric-prototype-v0.2.2.html",
+      "strategy-canvas-chimeric-prototype-v0.2.3.html",
     ],
   );
   assert.ok(canonical.includes(skillRevision));
   for (const [path, digest] of skillCoordinates) {
-    assert.equal(sha256(await readFile(resolve(repositoryRoot, path))), digest);
+    assertImmutableSkillCoordinate(skillRevision, path, digest);
     assert.ok(canonical.includes(path));
     assert.ok(canonical.includes(digest));
   }
@@ -262,7 +264,7 @@ test("Family Index current route provides exact Markdown download capability", a
   const routeManifest = await json(resolve(coreRoot, "public-iframe-route-manifest-v1.json"));
   const route = routeManifest.routes.find(({ id }) => id === "core-architecture-family-index");
 
-  assert.deepEqual([route.source_file, route.source_version], [currentFile, "0.1.5"]);
+  assert.deepEqual([route.source_file, route.source_version], [currentFile, "0.1.6"]);
   assert.deepEqual(route.carrier_policy, {
     sandbox_tokens: [
       "allow-downloads",
@@ -274,20 +276,39 @@ test("Family Index current route provides exact Markdown download capability", a
     held_capabilities: [],
   });
   assert.equal(route.receiver_standing, "context_adapted");
-  assert.equal(route.activation_standing, "parity_review");
+  assert.equal(route.activation_standing, "eligible");
 });
 
-test("Prompt Capsule inventory recognizes the complete 28-source adoption set", async () => {
+test("Prompt Capsule inventory recognizes the complete current adoption set", async () => {
   const [readme, inventory] = await Promise.all([
     readFile(resolve(repositoryRoot, "prompt-capsules/README.md"), "utf8"),
     readFile(resolve(repositoryRoot, "prompt-capsules/prompt-capsule-inventory.v0.1.0.md"), "utf8"),
   ]);
+  const inventoryBoundary = "\n## Projections, receivers, and recovery inputs\n";
+  const boundaryIndex = inventory.indexOf(inventoryBoundary);
+  assert.notEqual(boundaryIndex, -1, "the inventory keeps its current/projection boundary");
+  const currentInventory = inventory.slice(0, boundaryIndex);
+  const projectionInventory = inventory.slice(boundaryIndex);
 
-  for (const document of [readme, inventory]) {
-    assert.match(document, /Core Architecture Family Index\s+v0\.1\.5/u);
-    assert.match(document, /28 (?:source artifacts|current)/u);
+  for (const document of [readme, currentInventory]) {
+    assert.match(document, /Core Architecture Family Index\s+v0\.1\.6/u);
   }
-  assert.match(inventory, /Visualization Fidelity Atlas[\s\S]*?implements `prompt-capsule\/0\.1\.0`/u);
-  assert.match(inventory, /28 current\s+adoptions\. This completes the observed population/u);
-  assert.match(inventory, /Core Architecture Family Index v0\.1\.4[\s\S]*?remain comparison/u);
+  assert.match(currentInventory, /Visualization Fidelity Atlas[\s\S]*?implements `prompt-capsule\/0\.1\.0`/u);
+  const declared = currentInventory.match(/current population contains (\d+) source artifacts/u);
+  const adopted = currentInventory.match(/(\d+) current\s+adoptions\. This completes the observed population/u);
+  const heading = currentInventory.match(/## Current source artifacts[^\n\d]*(\d+)/u);
+  assert.ok(declared && adopted && heading, "the current population has a summary, heading and adoption statement");
+  const tableCount = [...currentInventory.matchAll(/^\|[^|]+\|\s*(\d+)\s*\|/gmu)]
+    .reduce((sum, match) => sum + Number(match[1]), 0);
+  assert.ok(tableCount > 0, "the current-artifact table supplies the counted population");
+  assert.deepEqual([Number(declared[1]), Number(adopted[1]), Number(heading[1])],
+    [tableCount, tableCount, tableCount], "current inventory counts agree with its source classes");
+  const readmePopulation = readme.match(/all (\d+) source artifacts implement `prompt-capsule\/0\.1\.0`/u);
+  assert.ok(readmePopulation, "the README names its current adoption total");
+  assert.equal(Number(readmePopulation[1]), tableCount, "the README agrees with the current inventory");
+  for (const name of ["Open Lesson Field", "Cross-Functional Investment Model Studio", "Initiative Costing Calculator", "Visualization Fidelity Atlas"]) {
+    assert.ok(currentInventory.includes(`| ${name} | 1 |`), `${name} retains its standalone source membership`);
+    assert.ok(readme.includes(name), `${name} remains discoverable in the README`);
+  }
+  assert.match(projectionInventory, /Core Architecture Family Index v0\.1\.5 and earlier[\s\S]*?remain comparison/u);
 });
