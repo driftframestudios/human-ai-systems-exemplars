@@ -13,7 +13,7 @@ bounded extract of already-public citations and public Registry guidance.
 ## Selection and source standing
 
 The candidate route was the visualization skills' public
-[evidence and source map](../../../../.agents/skills/data-visualization-foundations/references/evidence-and-source-map.md),
+`evidence-and-source-map.md` reference,
 which also indexes the Atlas bibliography. Each selected work has its public
 source route, version or inspected living edition, inspection date and scope,
 source credit, evidence standing, supported consequence, and transfer boundary.
@@ -70,7 +70,7 @@ categories in ordinary language while preserving the ids and counting rule.
 
 ## API and ownership
 
-The source owner is [atlas-research-data.mjs](../../../../tools/atlas-research-data.mjs).
+The source owner is `tools/atlas-research-data.mjs`.
 It exports `SOURCE_PATH`, `SUMMARY_PATH`, `SOURCE_SHA256`, `EVIDENCE_KINDS`,
 `TOPIC_KEYS`, and these functions:
 
@@ -148,7 +148,7 @@ record and evidence kinds, exact source routes, detached ownership, and
 byte-bound derivation. These checks establish the data contract, not rendered
 legibility, accessibility, or real-world use.
 
-The [view owner](../../../../tools/build-atlas-research-view.mjs) derives the
+The `tools/build-atlas-research-view.mjs` view owner derives the
 [standalone SVG](../../../img/plot/atlas_public_research.svg), exact table, and
 source dispositions in the
 [Atlas research example](../../../context-canvas/visualization-fidelity-atlas.html#research-gallery-title).
@@ -157,8 +157,8 @@ figure, table, disclosure, and navigation styles. Pure fixture renderers retain
 source-neutral wording; only the verified-file route includes released assets
 and selection provenance.
 
-The [suite catalog](../../../../tests/suites/catalog.json) keeps the data/view
-contracts in `node.visualization-fidelity-atlas` and the rendered observation in
+The repository suite catalog keeps the data/view contracts in
+`node.visualization-fidelity-atlas` and the rendered observation in
 `browser.visualization-fidelity-atlas.atlas-research.browser`. The Python
 `visitor-labels` component owns table inventory and projector agreement.
 The focused browser route is:
