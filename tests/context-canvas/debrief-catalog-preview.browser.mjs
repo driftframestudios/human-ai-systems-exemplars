@@ -47,9 +47,27 @@ after(async () => {
   }
 });
 
+async function settlePreviewImage(page) {
+  const image = page.locator("[data-preview-image]");
+
+  // Let the browser finish its responsive-candidate selection before the next
+  // synthetic focus transition. Real request failures remain visible to the
+  // shared telemetry instead of being conflated with a test-created abort.
+  await page.waitForFunction(() => (
+    document.querySelector("[data-preview-image]")?.complete === true
+  ), undefined, { timeout: 5000 });
+  const loaded = await image.evaluate(node => ({
+    currentSrc: node.currentSrc || node.src,
+    naturalWidth: node.naturalWidth,
+  }));
+  assert.ok(loaded.naturalWidth > 0, `catalog preview should load: ${loaded.currentSrc}`);
+  await image.evaluate(node => node.decode());
+}
+
 async function focusPreview(page, cardSelector) {
   await page.locator(`${cardSelector} a[href]`).first().focus();
   await page.locator("[data-preview-entry]").waitFor({ state: "visible" });
+  await settlePreviewImage(page);
 
   return page.evaluate(selector => {
     const card = document.querySelector(selector);
