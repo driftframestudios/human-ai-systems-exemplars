@@ -6,7 +6,6 @@ on:
       production_tag:
         description: Annotated production-vMAJOR.MINOR.PATCH tag to package and verify
         required: true
-        default: production-v0.2.0
         type: string
   pull_request:
     branches:
@@ -22,6 +21,7 @@ on:
       - "package-lock.json"
       - "AUTHORS"
       - "LICENSE"
+      - "a3-stacked-cube-visual-system-bundle-v0.1/**"
       - "attribution.yml"
       - "collaboration/**"
       - "core-architectures-chimeric-prototype-current-pack-v0.1/**"
@@ -29,6 +29,7 @@ on:
       - "deployment/public-references/**"
       - "context-canvas-project-surface/**"
       - "iframe-route-families/**"
+      - "lims-eln-enterprise-reference-v0.1/**"
       - "participatory-design-kit-chimeric-prototype-set-v0.1/**"
       - "schemas/**"
       - "tests/prod-deployment/**"
@@ -50,7 +51,7 @@ jobs:
     env:
       # Pull requests retain the immutable v0.2 fixture. Manual dispatches
       # exercise the explicitly selected accepted production tag.
-      PRODUCTION_TAG: ${{ inputs.production_tag || 'production-v0.2.0' }}
+      PRODUCTION_TAG: ${{ github.event_name == 'pull_request' && 'production-v0.2.0' || inputs.production_tag }}
 
     steps:
       - name: Check out the candidate source
