@@ -941,9 +941,9 @@
           "table": 2,
           "topic": "I’ve worked as…",
           "shape": "simple",
-          "rows": 4,
-          "th": 7,
-          "td": 9
+          "rows": 5,
+          "th": 8,
+          "td": 12
         },
         {
           "table": 3,
@@ -1753,7 +1753,7 @@
     "native_tables": 148,
     "simple_tables": 144,
     "explicit_tables": 4,
-    "native_labelled_elements": 5508,
+    "native_labelled_elements": 5513,
     "runtime_body_generators": 2
   },
   "rendering_affecting_native_additions": [],

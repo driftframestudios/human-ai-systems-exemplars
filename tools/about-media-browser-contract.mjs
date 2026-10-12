@@ -38,6 +38,59 @@ async function waitForSource(page, filename, timeout = 5000) {
   );
 }
 
+async function authoredMotionDuration(page) {
+  const duration = await page.locator("[data-about-media-image]").evaluate(image => (
+    Number.parseInt(image.dataset.motionDurationMs || "", 10)
+  ));
+  assert.ok(Number.isInteger(duration) && duration > 0, "motion duration stays a positive integer");
+  return duration;
+}
+
+async function captionLayout(page) {
+  return page.evaluate(() => {
+    const caption = document.querySelector("[data-about-media] figcaption");
+    const copy = caption?.querySelector("span");
+    const button = caption?.querySelector("[data-about-media-toggle]");
+    const serialize = element => {
+      const rect = element?.getBoundingClientRect();
+      return rect ? {
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        left: rect.left,
+        width: rect.width,
+        height: rect.height,
+      } : null;
+    };
+    return {
+      caption: serialize(caption),
+      copy: serialize(copy),
+      button: serialize(button),
+    };
+  });
+}
+
+function assertWideCaptionLayout(layout) {
+  const { caption, copy, button } = layout;
+  const tolerance = 1;
+
+  assert.ok(caption && copy && button, "wide media exposes its caption, copy, and control");
+  assert.ok(copy.width > 0 && copy.height > 0, "wide caption copy has a rendered box");
+  assert.ok(button.width > 0 && button.height > 0, "wide caption control has a rendered box");
+
+  for (const [label, box] of [["copy", copy], ["control", button]]) {
+    assert.ok(box.left >= caption.left - tolerance, `wide caption ${label} stays inside the left edge`);
+    assert.ok(box.right <= caption.right + tolerance, `wide caption ${label} stays inside the right edge`);
+    assert.ok(box.top >= caption.top - tolerance, `wide caption ${label} stays inside the top edge`);
+    assert.ok(box.bottom <= caption.bottom + tolerance, `wide caption ${label} stays inside the bottom edge`);
+  }
+
+  assert.ok(
+    copy.right + tolerance < button.left,
+    "wide caption copy and control preserve a visible, non-overlapping gap",
+  );
+}
+
 async function openPage(browser, origin, contextOptions = {}) {
   const context = await browser.newContext({
     viewport: { width: 1440, height: 1000 },
@@ -72,6 +125,7 @@ try {
     pressed: "false",
     hidden: false,
   });
+  assertWideCaptionLayout(await captionLayout(normal.page));
   assert.equal(normal.motionRequests.length, 0, "motion stays outside the initial load");
 
   await button.focus();
@@ -87,7 +141,8 @@ try {
   await normal.page.waitForFunction(() => !document.querySelector("[data-about-media-toggle]")?.hidden);
   await button.click();
   await waitForSource(normal.page, motionName);
-  await waitForSource(normal.page, stillName, 12_000);
+  const motionDuration = await authoredMotionDuration(normal.page);
+  await waitForSource(normal.page, stillName, motionDuration + 2_000);
   assert.deepEqual(await mediaState(normal.page), {
     source: `../img/media/${stillName}`,
     label: "Play visual sequence",
@@ -161,7 +216,7 @@ try {
 
   console.log(
     "About media browser contract passed: initial still, keyboard activation, "
-    + "print reset, one-cycle reset, reduced-motion still, narrow containment, "
+    + "wide caption containment, print reset, one-cycle reset, reduced-motion still, narrow containment, "
     + "and forced-color presentation.",
   );
 } finally {

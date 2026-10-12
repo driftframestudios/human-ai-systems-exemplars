@@ -74,7 +74,7 @@
       "roles": [
         {
           "id": "visitor_controlled_visual_sequence",
-          "visitor_job": "Show one planning map through several calm visual treatments after a visitor requests motion.",
+          "visitor_job": "Alternate problem-shaping artifacts with working system examples after a visitor requests motion.",
           "accessibility_text_owner": "The About HTML image alternative, caption, and motion control."
         }
       ],
@@ -89,7 +89,7 @@
       "source_relationship": {
         "standing": "canonical_authored_asset"
       },
-      "recovery_condition": "Regenerate the accepted derivatives from their verified source film and rebuild the production projection.",
+      "recovery_condition": "Regenerate the accepted derivatives from the digest-verified source frames and versioned sequence manifest, then rebuild the production projection. Refresh the repository-rendered frames only after an intentional source-page change.",
       "semantic_authority_path": "context-canvas-project-surface/context-canvas/index.html"
     },
     {
@@ -1073,17 +1073,17 @@
       "roles": [
         {
           "id": "visitor_controlled_motion",
-          "visitor_job": "Move calmly among four visual treatments after a visitor requests the sequence.",
+          "visitor_job": "Move through eleven alternating problem-shaping and working-system views after a visitor requests the sequence.",
           "accessibility_text_owner": "The About HTML image alternative, caption, and motion control."
         }
       ],
       "source_relationship": {
         "standing": "generated_derivative",
-        "canonical_source_path": "collaboration/impact-map-visual-variants/movie/impact-map-style-cycle-movie.mp4",
+        "canonical_source_path": "collaboration/impact-map-visual-variants/movie/about-style-cycle-sequence.json",
         "generator_path": "collaboration/impact-map-visual-variants/movie/render_about_style_cycle_gif.py",
-        "profile": "640x360-four-keyframe-ten-second-calm-loop"
+        "profile": "640x360-eleven-frame-16.4-second-one-shot-assembly-relay"
       },
-      "recovery_condition": "Run the named generator against its digest-verified source film, then rebuild and review the About sequence."
+      "recovery_condition": "Run the named build script from the repository root and review the complete About sequence. Run the capture script first only when intentionally refreshing a repository-rendered source frame."
     },
     {
       "source_path": "context-canvas-project-surface/img/media/impact-map-style-cycle-poster.jpg",
@@ -1097,11 +1097,11 @@
       ],
       "source_relationship": {
         "standing": "generated_derivative",
-        "canonical_source_path": "collaboration/impact-map-visual-variants/movie/impact-map-style-cycle-movie.mp4",
+        "canonical_source_path": "collaboration/impact-map-visual-variants/movie/about-style-cycle-sequence.json",
         "generator_path": "collaboration/impact-map-visual-variants/movie/render_about_style_cycle_gif.py",
-        "profile": "640x360-first-keyframe-progressive-jpeg"
+        "profile": "640x360-poda-first-frame-progressive-jpeg"
       },
-      "recovery_condition": "Run the named generator against its digest-verified source film, then rebuild and review the About still."
+      "recovery_condition": "Run the named build script from the repository root and review the About still. Run the capture script first only when intentionally refreshing a repository-rendered source frame."
     },
     {
       "source_path": "context-canvas-project-surface/img/plot/visualization_fidelity_clean_exemplar.svg",

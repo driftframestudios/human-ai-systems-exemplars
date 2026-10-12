@@ -552,6 +552,12 @@ async function interactionReceipt(page, { mediaToggle }) {
     const toggle = page.locator("[data-about-media-toggle]");
     await toggle.waitFor({ state: "visible" });
     await toggle.click();
+    await page.waitForFunction(() => {
+      const image = document.querySelector("[data-about-media-image]");
+      return image?.getAttribute("src")?.endsWith("impact-map-style-cycle-calm.gif")
+        && image.complete
+        && image.naturalWidth > 0;
+    });
     media = await page.evaluate(() => ({
       pressed: document.querySelector("[data-about-media-toggle]")?.getAttribute("aria-pressed") ?? "",
       source: document.querySelector("[data-about-media-image]")?.getAttribute("src")?.split("/").at(-1) ?? "",

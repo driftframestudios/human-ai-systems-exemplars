@@ -188,7 +188,7 @@ test("the About folios keep organization records inside progressive disclosure",
 });
 
 test("the About visual sequence begins as a still and loads motion after visitor action", async () => {
-  const [css, html, script, gif, poster, source, generator] = await Promise.all([
+  const [css, html, script, gif, poster, manifestSource, captureScript, generator] = await Promise.all([
     readCanvasFile("styles/routes/about.css"),
     readCanvasFile("index.html"),
     readCanvasFile("about-media.js"),
@@ -202,8 +202,12 @@ test("the About visual sequence begins as a still and loads motion after visitor
     )),
     readFile(resolve(
       repositoryRoot,
-      "collaboration/impact-map-visual-variants/movie/impact-map-style-cycle-movie.mp4",
-    )),
+      "collaboration/impact-map-visual-variants/movie/about-style-cycle-sequence.json",
+    ), "utf8"),
+    readFile(resolve(
+      repositoryRoot,
+      "collaboration/impact-map-visual-variants/movie/capture_about_style_cycle_sources.mjs",
+    ), "utf8"),
     readFile(resolve(
       repositoryRoot,
       "collaboration/impact-map-visual-variants/movie/render_about_style_cycle_gif.py",
@@ -221,7 +225,15 @@ test("the About visual sequence begins as a still and loads motion after visitor
   assert.ok(headingEnd < figureStart && figureStart < firstProse);
   assert.match(
     section,
-    /src="\.\.\/img\/media\/impact-map-style-cycle-poster\.jpg"[^>]+data-motion-src="\.\.\/img\/media\/impact-map-style-cycle-calm\.gif"[^>]+data-motion-duration-ms="10000"[^>]+width="640" height="360"/u,
+    /src="\.\.\/img\/media\/impact-map-style-cycle-poster\.jpg"[^>]+data-motion-src="\.\.\/img\/media\/impact-map-style-cycle-calm\.gif"[^>]+data-motion-duration-ms="\d+"[^>]+width="640" height="360"/u,
+  );
+  assert.match(
+    section,
+    /alt="Problem-shaping maps alternate with working genomics, review, and clinical-trial system views\."/u,
+  );
+  assert.match(
+    section,
+    /Problem-shaping artifacts alternate with working system examples, showing how a shared frame becomes something a team can inspect, test, and improve\./u,
   );
   assert.match(
     section,
@@ -235,20 +247,60 @@ test("the About visual sequence begins as a still and loads motion after visitor
   assert.equal(gif.includes(Buffer.from("NETSCAPE2.0", "ascii")), false);
   assert.equal(
     sha256(gif),
-    "3cc27eda90c11583c30ca5a6a163be6a6799e97133a1785235657cf2ec79f514",
+    "8f45300fd2776eabd7130f6b64ca6683fdf1d42be0591a4829edeead36467fd2",
   );
   assert.equal(
     sha256(poster),
-    "d616089f5e36b6616b6a989c0d3105340b25a23b0651270313146b5ec1b660fa",
+    "b84c3aa7cdfba477907c1c0f78fe2b61ac365db0408127b78736dc6338dcefe4",
   );
-  assert.equal(
-    sha256(source),
-    "d839f2872c5bb88ddfb9483b1c58e484d4c4db374a918bfec217031453eba0dd",
+
+  const manifest = JSON.parse(manifestSource);
+  assert.equal(manifest.version, "0.2.0");
+  assert.equal(manifest.transition.id, "assembly_relay");
+  assert.deepEqual(manifest.transition.progress, [0.38, 0.72]);
+  assert.deepEqual(manifest.transition.colors, ["#2456f5", "#ecff3f", "#fbf8f1"]);
+  assert.equal(manifest.frames.length, 11);
+  assert.deepEqual(
+    manifest.frames.map(frame => frame.id),
+    [
+      "poda-investment-flow",
+      "genomics-plate-viewer",
+      "impact-branch-cobalt-drafting",
+      "who-to-believe-system-graph",
+      "context-board-pop-drafting",
+      "genomics-axonometric-process-viewer",
+      "context-assembly-ledger-quintile",
+      "cpg-member-experience-redesigned",
+      "context-shared-cobalt-drafting",
+      "clinical-trial-tumor-board-cohort",
+      "impact-narrative-pop-quintile",
+    ],
   );
-  assert.match(
-    generator,
-    /SOURCE_SHA256 = "d839f2872c5bb88ddfb9483b1c58e484d4c4db374a918bfec217031453eba0dd"/u,
+  assert.ok(
+    manifest.frames.every(frame => /^[0-9a-f]{64}$/u.test(frame.sha256)),
+    "Each accepted source frame carries a SHA-256 digest",
   );
+  assert.ok(
+    manifest.frames.every(frame => !frame.source_path.includes(".about-style-cycle-build")),
+    "The build reads accepted, repository-owned source frames",
+  );
+  const authoredDuration = (
+    (manifest.frames.length * manifest.output.hold_ms)
+    + ((manifest.frames.length - 1)
+      * manifest.transition.progress.length
+      * manifest.output.transition_frame_ms)
+  );
+  assert.equal(authoredDuration, 16_400);
+  assert.match(section, new RegExp(`data-motion-duration-ms="${authoredDuration}"`, "u"));
+  assert.match(captureScript, /startStaticServer/u);
+  assert.match(captureScript, /document\.fonts\?\.ready/u);
+  assert.match(captureScript, /about-style-cycle-source-frames/u);
+  assert.match(captureScript, /sha256/u);
+  assert.match(captureScript, /#impact-map/u);
+  assert.match(captureScript, /#visual-surface/u);
+  assert.match(generator, /def assembly_relay\(/u);
+  assert.match(generator, /expected_digest/u);
+  assert.match(generator, /reverse=bool\(index % 2\)/u);
 
   assert.match(script, /button\.hidden = reducedMotion\.matches \|\| printMedia\.matches/u);
   assert.match(script, /button\.addEventListener\("click"/u);
@@ -263,4 +315,33 @@ test("the About visual sequence begins as a still and loads motion after visitor
   assert.match(css, /\.about-media__toggle\[hidden\]\s*\{[^}]*display:\s*none/su);
   assert.match(css, /@media \(forced-colors: active\)[\s\S]*?\.about-media/su);
   assert.match(css, /@media print[\s\S]*?\.about-media__toggle\s*\{[^}]*display:\s*none/su);
+});
+
+test("the About prose and role table state action and consequence directly", async () => {
+  const html = await readCanvasFile("index.html");
+  assert.match(
+    html,
+    /Twenty years of shipping products into regulated, high-stakes, frequently changing environments have shaped how I work: find what is actually being measured, distinguish signal from noise, repair the control loop, and equip the team to do the same\./u,
+  );
+  assert.match(
+    html,
+    /<strong>The people who understand both the biology and the computation can explain what a system is doing - more than merely what it promises\.<\/strong>/u,
+  );
+  assert.match(
+    html,
+    /A boarding pass that fails to load at the gate and a bill-payment path buried in ambiguous links are all too common occurrences\./u,
+  );
+
+  const table = html.match(
+    /<table class="about-role-table" data-label="I’ve worked as…">[\s\S]*?<\/table>/u,
+  )?.[0];
+  assert.ok(table, "Expected the About role table");
+  const newestRow = table.match(
+    /<tbody>(<tr data-label="I’ve worked as…: Designer and Engineer">[\s\S]*?<\/tr>)/u,
+  )?.[1];
+  assert.ok(newestRow, "Expected the 2022–2025 work to be the first body row");
+  assert.match(newestRow, /<th scope="row" data-label="Role in the situation">Designer and Engineer<\/th>/u);
+  assert.match(newestRow, /<td data-label="Changed work">Fully redesigned an <abbr[^>]+>FDA<\/abbr>-approved clinical-genomics medical device/u);
+  assert.match(newestRow, /<td data-label="Reported consequence">Eliminated an entire category of assignment errors,[\s\S]*saved about 25 minutes per person/u);
+  assert.match(newestRow, /<td data-label="Context">Genomics · 2022–2025<\/td>/u);
 });
