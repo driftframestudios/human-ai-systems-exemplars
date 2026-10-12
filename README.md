@@ -603,7 +603,6 @@ secret-boundary work.
 | `.prod-projection-build/` | Deterministic local primary and iframe production projection |
 | `.schema-pages/` | Current local schema publication build |
 | `.schema_pages/` | Ignored alternate spelling; the current builder leaves it at rest |
-| `cloudflare/context-canvas-field-pilot/dist/` | Bounded local Static Assets pilot closure |
 | `playwright-report/` / `test-results/` | Browser-run reports and results |
 | `.env` / `.env.public` | Local configuration values |
 
@@ -617,8 +616,11 @@ accepted `prod` source coordinate so cPanel's Git pull can receive the exact
 reviewed projection; it remains excluded from authored production inputs.
 The [first-cutover guide](deployment/cpanel/FIRST-CUTOVER.md) gives the human
 operator the SSH enrollment, managed-clone, private-configuration, backup,
-deployment, recovery, and signed-out verification route while Issue #118 owns
-the current release identity and host acceptance.
+deployment, recovery, and signed-out verification route. Issue
+[#464](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/464)
+owns the current `v0.3.0` source, carrier, tag, activation, and host-acceptance
+sequence. Issue #118 preserves the implemented `production-v0.2.0` projection
+contract as historical precedent.
 
 The three Strategy Canvas receiving archives are the deliberate exception:
 their builder generates deterministic ZIP files that remain tracked as

@@ -9,14 +9,14 @@ immutable, prebuilt transfer envelope—an archive plus its external receipt;
 signed-out observations establish the bytes and response behavior visitors
 receive.
 
-[Issue #253](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/253)
-owns the shell-free adapter and its acceptance. Issue
-[#118](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/118)
-remains the production activation owner, and
-[#251](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/251)
-receives the fixed-coordinate live assessment.
+[Issue #464](https://github.com/driftframestudios/human-ai-systems-exemplars/issues/464)
+owns the current production source, carrier, tag, shell-free activation, live
+assessment, and recovery sequence. Issues #118, #250, #251, and #253 preserve
+the accepted `production-v0.2.0` implementation and receipt as historical
+precedent. The reusable procedure below always begins with one explicitly
+selected annotated `production-vMAJOR.MINOR.PATCH` tag.
 
-## Current decision
+## Reusable route and historical worked decision
 
 cPanel uses the term **push deployment** for a developer who pushes Git commits
 over SSH into a cPanel-managed repository. That feature still needs shell
@@ -26,7 +26,8 @@ deployment application rather than cPanel Git push deployment.
 The current GoDaddy account has a provider-confirmed shell boundary. The
 selected sequence is therefore:
 
-1. preserve `production-v0.2.0` as the immutable payload identity;
+1. select one human-approved annotated `production-v*` tag as the immutable
+   payload identity;
 2. form and verify one carrier archive in the trusted release environment;
 3. use cPanel File Manager for the first staged, recoverable cutover;
 4. retain manual GitHub Actions packaging as the next automation increment;
@@ -44,19 +45,21 @@ public deployment endpoint for the first pilot.
 | Layer | Current owner | Meaning |
 | --- | --- | --- |
 | Authored source | `main` | Collaboration truth and maintained implementation |
-| Stable comparison | `stable-core-v0.2.0` | Accepted stable-core coordinate `A` |
+| Stable comparison | Selected annotated `stable-core-v*` tag | Accepted stable-core coordinate `A` |
 | Release integration | `release` | Reviewed source, evidence, and artifact-builder contract accepted for production promotion |
-| Production carrier | `production-v0.2.0` on `prod` | Exact deployable carrier `R`; its manifest identifies source `S` |
+| Production carrier | Selected annotated `production-v*` tag on `prod` | Exact deployable carrier `R`; its manifest identifies source `S` |
 | Transfer envelope | Archive receipt | One archive formation bound to the payload and committed packaging tool |
 | Delivery attempt | Protected operator record | One upload, staging, activation, or recovery attempt |
-| Live state | #251 signed-out observation | Bytes, media types, response policy, redirects, cache behavior, and parent-child behavior visitors receive |
+| Live state | Current production Issue signed-out observation | Bytes, media types, response policy, redirects, cache behavior, and parent-child behavior visitors receive |
 
 A human-approved deployment packet and Issue receipt authorize the first
 pilot. Manual workflow dispatch is the future automated-transport authorization
 event. The immutable tag and digests identify the payload. An additional moving
 `deploy` branch would duplicate `prod` without strengthening either identity.
 
-The accepted current coordinates are:
+The accepted `production-v0.2.0` worked coordinates below are immutable
+historical evidence. A later release takes its exact coordinates from its
+current production Issue:
 
 ```text
 A  stable-core-v0.2.0
@@ -160,7 +163,7 @@ the protected operator record.
 Leave both public roots unchanged until the release archive has been formed,
 uploaded, extracted, and inspected in private staging.
 
-## Form the current release archive
+## Form the selected release archive
 
 Run this phase from a dedicated clean worktree at the reviewed transfer-tool
 revision. The immutable production tag remains the payload input; the worktree
@@ -172,8 +175,9 @@ carrier rather than reconstructing it.
 git fetch --prune --tags origin
 git worktree add ../hase-transfer-tool REVIEWED_TOOL_REVISION
 cd ../hase-transfer-tool
-git rev-parse production-v0.2.0^{} production-v0.2.0^{}^1
-git diff --no-renames --name-only production-v0.2.0^{}^1 production-v0.2.0^{}
+: "${PRODUCTION_TAG:?Set the approved annotated production-v* tag}"
+git rev-parse "${PRODUCTION_TAG}^{}" "${PRODUCTION_TAG}^{}^1"
+git diff --no-renames --name-only "${PRODUCTION_TAG}^{}^1" "${PRODUCTION_TAG}^{}"
 npm ci --ignore-scripts
 npm run test:prod-deployment
 ```
@@ -187,10 +191,10 @@ the immutable payload coordinate.
 Form the transfer envelope directly from the annotated production tag:
 
 ```sh
-npm run build:prod-carrier-transfer -- --tag production-v0.2.0
+npm run build:prod-carrier-transfer -- --tag "$PRODUCTION_TAG"
 npm run verify:prod-carrier-transfer -- \
-  --tag production-v0.2.0 \
-  --receipt .cpanel-transfer/production-v0.2.0/hase-production-v0.2.0.receipt.json
+  --tag "$PRODUCTION_TAG" \
+  --receipt ".cpanel-transfer/$PRODUCTION_TAG/hase-$PRODUCTION_TAG.receipt.json"
 ```
 
 The dependency-free helper reads carrier blobs from the annotated tag rather
@@ -207,7 +211,7 @@ retry into a fresh empty directory selected with `--output`.
 The carrier directory inside the archive should contain exactly:
 
 ```text
-hase-production-v0.2.0/
+hase-<PRODUCTION_TAG>/
   deployment-files.tsv
   deployment-manifest.json
   iframe-public/
@@ -217,10 +221,10 @@ hase-production-v0.2.0/
 The receipt binds the production tag object, exact `R` and `S`, relationship,
 manifest and index digests, carrier counts, archive digest and size, and the
 packaging-tool revision and file digest. It is a transfer record, not a new
-release identity: a tooling-only change preserves `production-v0.2.0`, while a
-change to carrier bytes or their source relationship requires a new accepted
-carrier and tag. Keep the receipt beside the archive through staging and retain
-its public-safe fields with the release handback.
+release identity: a tooling-only change preserves the selected production tag,
+while a change to carrier bytes or their source relationship requires a new
+accepted carrier and tag. Keep the receipt beside the archive through staging
+and retain its public-safe fields with the release handback.
 
 If the Betterleaks helper is already installed and verified, observe the exact
 carrier before transfer:
@@ -237,8 +241,9 @@ archive integrity and live-host evidence.
 
 1. Open **cPanel → Files → File Manager** and navigate to the private staging
    directory recorded earlier.
-2. Select **Upload**, choose both `hase-production-v0.2.0.zip` and
-   `hase-production-v0.2.0.receipt.json`, and wait for both complete upload
+2. Select **Upload**, choose both `hase-<PRODUCTION_TAG>.zip` and
+   `hase-<PRODUCTION_TAG>.receipt.json`, substituting the selected tag value,
+   and wait for both complete upload
    results.
 3. Compare the displayed archive size with the protected release receipt.
 4. Select the staged ZIP and choose **Download**. On the trusted release
@@ -248,7 +253,8 @@ archive integrity and live-host evidence.
    the round trip observes the complete uploaded archive before extraction.
 5. Select the archive and choose **Extract** into a fresh, release-specific
    staging directory.
-6. Navigate to the extracted `hase-production-v0.2.0/` directory and confirm
+6. Navigate to the extracted `hase-<PRODUCTION_TAG>/` directory, substituting
+   the selected tag value, and confirm
    the names above. Confirm that `deployment-manifest.json` and
    `deployment-files.tsv` are regular files and that both public directories
    are present.
@@ -258,7 +264,7 @@ archive integrity and live-host evidence.
 The upload/download verification round trip establishes the staged archive bytes;
 File Manager name and shape observations provide a bounded extraction check.
 The current interface does not establish every extracted file's SHA-256. The
-trusted pre-upload carrier check and #251's complete signed-out byte comparison
+trusted pre-upload carrier check and #464's complete signed-out byte comparison
 bracket that gap.
 
 ## Activate the two roots
@@ -339,7 +345,7 @@ npm run verify:iframe-ancestry:live
 The all-route commands establish bytes and response policy. The focused
 ancestry command uses the fixed PODA carrier to require a live HTTP 200 with
 the exact parent policy, refusal from a loopback parent, and successful loading
-from its `https://vik.guru` parent. Then complete #251's primary manifest sweep,
+from its `https://vik.guru` parent. Then complete #464's primary manifest sweep,
 apex and `www` behavior, robots, sitemap, cache, policy, intentional 404, and
 remaining parent-child viewport observations.
 
@@ -406,8 +412,8 @@ distinct event.
 `npm run check:prod-carrier` reconstructs the projection and therefore needs
 the accepted private `.env.public` input. The release environment runs that
 check before production promotion. The Actions transport receiver should
-verify the already-built carrier without receiving that private input; #253's
-self-contained verifier owns this separation.
+verify the already-built carrier without receiving that private input; the
+repository-owned self-contained verifier preserves this separation.
 
 When FTPS earns activation:
 
