@@ -1087,6 +1087,99 @@
         "physical_safari_ios": "pending",
         "human_page_release": "pending"
       }
+    },
+    {
+      "semantic_id": "about-problem-to-system-sequence",
+      "asset_version": "v0.1.0",
+      "semantic_owner": "Context Canvas About page",
+      "visitor_page": "context-canvas-project-surface/context-canvas/index.html",
+      "visitor_placement": "inside the Background section before the career and quality operating folios",
+      "source": {
+        "standing": "repository_generated_accepted_master",
+        "repository_coordinate": "collaboration/impact-map-visual-variants/movie/about-style-cycle-sequence.json",
+        "repository_coordinate_standing": "generation_recipe; the adjacent sha256 binds the accepted generated movie bytes",
+        "sha256": "c212723c571e33a765c22c8afecbb3847322c72b6dc4dcf96eabd9e1b101d90f"
+      },
+      "carriers": {
+        "movie": {
+          "public_path": "/v1-cdn/video/about-problem-to-system-sequence/v0.1.0/movie.mp4",
+          "object_key": "v1/video/about-problem-to-system-sequence/v0.1.0/movie.mp4",
+          "media_type": "video/mp4",
+          "sha256": "c212723c571e33a765c22c8afecbb3847322c72b6dc4dcf96eabd9e1b101d90f",
+          "bytes": 1496567,
+          "duration_seconds": 16.4,
+          "width": 1280,
+          "height": 720,
+          "frame_rate": "25/1",
+          "audio_standing": "verified_silent"
+        },
+        "poster": {
+          "public_path": "/v1-cdn/video/about-problem-to-system-sequence/v0.1.0/poster.webp",
+          "object_key": "v1/video/about-problem-to-system-sequence/v0.1.0/poster.webp",
+          "media_type": "image/webp",
+          "sha256": "479ff28efa549d5d40b326f9232cbcfe4298bdf0eef6ec54831c362a0a41bd3a",
+          "bytes": 51668,
+          "width": 1280,
+          "height": 720,
+          "source_master_sha256": "c212723c571e33a765c22c8afecbb3847322c72b6dc4dcf96eabd9e1b101d90f",
+          "timestamp_seconds": 0.0,
+          "derivation": {
+            "frame_decoder": "FFmpeg 9.0.2",
+            "image_encoder": "cwebp 1.6.0",
+            "settings": {
+              "quality": 90,
+              "metadata": "none"
+            }
+          },
+          "selection_reason": "The opening plate view presents a polished working interface before the sequence revisits its problem and solution spaces.",
+          "review": {
+            "standing": "candidate_pending_human_page_release",
+            "review_owner": "human_publication_owner",
+            "selected_by": "human-directed repository collaboration",
+            "visible_content_standing": "reviewed_repository_generated_sequence_frame",
+            "rights_standing": "inherits_repository_source_review_and_approved_publication",
+            "evidence": "planning/media-publication/exercises/about-problem-to-system-sequence-r2-publication.v0.1.md"
+          }
+        }
+      },
+      "accessibility": {
+        "branch": "verified_silent_visual_sequence",
+        "accessible_name": "Problem, solution, and implementation views move between shared questions and working systems",
+        "standing_text_id": "about-media-standing",
+        "figure_caption_id": "about-media-caption",
+        "visual_sequence_id": "about-media-sequence",
+        "visual_sequence_relationship": "aria-details",
+        "captions_standing": "not_applicable_verified_silent_source",
+        "meaningful_visual_information": "nearby_visible_ordered_sequence"
+      },
+      "delivery": {
+        "adapter": "cloudflare_r2_progressive_video",
+        "page_relationship": "same_origin",
+        "future_adapter": "cloudflare_stream",
+        "recovery": "Keep the local poster and one-shot GIF available while the immutable versioned R2 family remains retained."
+      },
+      "release": {
+        "transport": {
+          "standing": "accepted",
+          "observed_on": "2026-10-12",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/about-problem-to-system-sequence-r2-publication.v0.1.md",
+          "receiver": "live_same_origin_cloudflare_worker_route_with_exact_movie_and_poster_acceptance",
+          "verifier": "npm run verify:r2-video:live"
+        },
+        "visitor_source": "candidate",
+        "local_browser": {
+          "standing": "observed",
+          "observed_on": "2026-10-12",
+          "observation_owner": "human-directed repository collaboration",
+          "evidence": "planning/media-publication/exercises/about-problem-to-system-sequence-r2-publication.v0.1.md",
+          "receiver": "cross_engine_structural_receiver_with_local_poster_and_real_source_failure_recovery; loopback playback remains outside the same-origin production boundary",
+          "rerunnable_repository_check": "npm run test:about-media-browser"
+        },
+        "deployed_page": "pending",
+        "physical_safari_ios": "pending",
+        "human_page_release": "pending"
+      }
     }
   ]
 }

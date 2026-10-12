@@ -513,7 +513,7 @@ function assertTelemetry(telemetry, parentOrigin, label) {
   return classified.expectedRefusals.map(observation => observation.url).sort();
 }
 
-async function interactionReceipt(page, { mediaToggle }) {
+async function interactionReceipt(page) {
   const primaryLink = page.locator('nav[aria-label="Primary"] a').nth(1);
   await primaryLink.focus();
   const focused = await primaryLink.evaluate(element => {
@@ -547,18 +547,21 @@ async function interactionReceipt(page, { mediaToggle }) {
     };
   });
 
-  let media = null;
-  if (mediaToggle) {
-    const toggle = page.locator("[data-about-media-toggle]");
-    await toggle.waitFor({ state: "visible" });
-    await toggle.click();
-    media = await page.evaluate(() => ({
-      pressed: document.querySelector("[data-about-media-toggle]")?.getAttribute("aria-pressed") ?? "",
-      source: document.querySelector("[data-about-media-image]")?.getAttribute("src")?.split("/").at(-1) ?? "",
-      label: document.querySelector("[data-about-media-toggle-label]")?.textContent?.trim() ?? "",
-    }));
-    await toggle.click();
-  }
+  const media = await page.evaluate(() => {
+    const video = document.querySelector("[data-about-media-video]");
+    const source = video?.querySelector("source");
+    const fallback = document.querySelector(".about-media__fallback a");
+    return {
+      controls: Boolean(video?.controls),
+      playsInline: Boolean(video?.playsInline),
+      preload: video?.getAttribute("preload") ?? "",
+      paused: Boolean(video?.paused),
+      source: source?.getAttribute("src") ?? "",
+      poster: video?.getAttribute("poster")?.split("/").at(-1) ?? "",
+      fallback: fallback?.getAttribute("href")?.split("/").at(-1) ?? "",
+      visualDescriptionItems: document.querySelectorAll("#about-media-sequence li").length,
+    };
+  });
   return { focused, disclosure: disclosureReceipt, media };
 }
 
@@ -659,8 +662,8 @@ async function runScenario(browser, server, projection, viewport, mode) {
       mode.reducedMotion === "no-preference"
     ) {
       const [sourceInteractions, projectedInteractions] = await Promise.all([
-        interactionReceipt(sourcePage, { mediaToggle: true }),
-        interactionReceipt(projectedPage, { mediaToggle: true }),
+        interactionReceipt(sourcePage),
+        interactionReceipt(projectedPage),
       ]);
       assert.equal(
         sourceInteractions.focused.active,
@@ -670,16 +673,21 @@ async function runScenario(browser, server, projection, viewport, mode) {
       assert.deepEqual(
         sourceInteractions.media,
         {
-          pressed: "true",
-          source: "impact-map-style-cycle-calm.gif",
-          label: "Show still image",
+          controls: true,
+          playsInline: true,
+          preload: "none",
+          paused: true,
+          source: "https://vik.guru/v1-cdn/video/about-problem-to-system-sequence/v0.1.0/movie.mp4",
+          poster: "impact-map-style-cycle-poster.jpg",
+          fallback: "impact-map-style-cycle-calm.gif",
+          visualDescriptionItems: 5,
         },
-        `${label}: the source progressive-media control enters its active state`,
+        `${label}: the source native-video receiver preserves visitor control and recovery`,
       );
       assert.deepEqual(
         projectedInteractions,
         sourceInteractions,
-        `${label}: navigation focus, disclosure, and progressive media controls remain equivalent`,
+        `${label}: navigation focus, disclosure, and native media remain equivalent`,
       );
     }
 

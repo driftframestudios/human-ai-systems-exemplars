@@ -205,6 +205,8 @@ yarn-error.log*
 
 # Local rendered-page verification artifacts
 .visual-runs/
+.about-style-cycle-build/
+.about-style-cycle-stage-*/
 playwright-report/
 test-results/
 

@@ -278,8 +278,40 @@ test("the bounded video manifest binds each carrier to one semantic family and v
   assert.equal(current.release.physical_safari_ios, "pending");
   assert.equal(current.release.human_page_release, "pending");
 
+  const aboutSequence = manifest.families.find(
+    (family) => (
+      family.semantic_id === "about-problem-to-system-sequence"
+      && family.asset_version === "v0.1.0"
+    ),
+  );
+  assert.ok(aboutSequence, "the plate-first About sequence has one versioned R2 family");
+  assert.equal(
+    aboutSequence.source.repository_coordinate,
+    "collaboration/impact-map-visual-variants/movie/about-style-cycle-sequence.json",
+  );
+  assert.equal(aboutSequence.carriers.movie.width, 1280);
+  assert.equal(aboutSequence.carriers.movie.height, 720);
+  assert.equal(aboutSequence.carriers.movie.frame_rate, "25/1");
+  assert.equal(aboutSequence.carriers.movie.duration_seconds, 16.4);
+  assert.equal(aboutSequence.carriers.movie.audio_standing, "verified_silent");
+  assert.equal(aboutSequence.carriers.poster.timestamp_seconds, 0);
+  assert.equal(aboutSequence.accessibility.branch, "verified_silent_visual_sequence");
+  assert.equal(aboutSequence.release.transport.standing, "accepted");
+  assert.equal(aboutSequence.release.transport.observed_on, "2026-10-12");
+  assert.equal(aboutSequence.release.local_browser.standing, "observed");
+  assert.equal(
+    aboutSequence.release.local_browser.rerunnable_repository_check,
+    "npm run test:about-media-browser",
+  );
+  assert.equal(aboutSequence.release.deployed_page, "pending");
+  assert.equal(aboutSequence.release.physical_safari_ios, "pending");
+  assert.equal(aboutSequence.release.human_page_release, "pending");
+
   const batchFamilies = manifest.families.filter(
-    (family) => family.semantic_id !== "choose-your-player",
+    (family) => ![
+      "choose-your-player",
+      "about-problem-to-system-sequence",
+    ].includes(family.semantic_id),
   );
   assert.equal(batchFamilies.length, 11);
   for (const family of batchFamilies) {

@@ -130,7 +130,9 @@ test("parent visitor images carry a legible text relationship", async () => {
     }
   }
 
-  assert.equal(imageCount, 202);
+  // About now uses one native-video receiver; its poster, name, and visible
+  // sequence description are exercised by the focused About media contract.
+  assert.equal(imageCount, 201);
   assert.deepEqual(
     emptyAlternatives,
     ["debriefs.html:../img/plot/genomic_viewer_boundary_contract_map.svg"],

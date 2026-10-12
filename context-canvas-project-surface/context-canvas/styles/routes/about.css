@@ -404,7 +404,7 @@ p#on-dark-iron-ore {
     color: var(--about-ink-strong);
 }
 
-/* About · visitor-controlled visual treatment loop ---------------------- */
+/* About · visitor-controlled problem-to-system sequence ------------------ */
 
 .about-media {
     background: var(--about-paper);
@@ -421,7 +421,7 @@ p#on-dark-iron-ore {
     overflow: hidden;
 }
 
-.about-media__image {
+.about-media__video {
     block-size: 100%;
     display: block;
     inline-size: 100%;
@@ -429,71 +429,76 @@ p#on-dark-iron-ore {
 }
 
 .about-media figcaption {
-    align-items: center;
     border-block-start: .1rem solid var(--about-ink);
     color: var(--about-ink-strong);
     display: grid;
     font-size: .86rem;
-    gap: .85rem;
-    grid-template-columns: minmax(0, 1fr) auto;
+    gap: .45rem;
     line-height: 1.45;
     padding: .8rem 1rem;
 }
 
-.about-media__toggle {
-    align-items: center;
-    appearance: none;
-    background: var(--about-ink-strong);
-    border: .125rem solid var(--about-ink-strong);
-    color: #fff;
-    cursor: pointer;
-    display: inline-flex;
-    font: 800 .78rem/1.2 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-    justify-content: center;
-    min-block-size: 2.75rem;
-    padding: .65rem .85rem;
+.about-media__fallback,
+.about-media__status {
+    font: 700 .76rem/1.4 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
-.about-media__toggle[hidden] {
+.about-media__status[hidden] {
     display: none;
 }
 
-.about-media__toggle:hover,
-.about-media__toggle[aria-pressed="true"] {
-    background: var(--about-cobalt);
+.about-media__fallback a {
+    text-underline-offset: .2em;
 }
 
-.about-media__toggle:focus-visible {
-    outline: .25rem solid var(--about-cobalt);
-    outline-offset: .2rem;
+.about-media__status {
+    border-inline-start: .2rem solid var(--about-coral);
+    color: var(--about-ink-strong);
+    padding-inline-start: .65rem;
+}
+
+.about-media-sequence {
+    background: var(--about-unbleached-paper);
+    border-inline-start: .25rem solid var(--about-cobalt);
+    inline-size: min(100%, 40rem);
+    margin: -1.5rem 0 clamp(1.5rem, 4vw, 3rem);
+    padding: .75rem 1rem .85rem;
+}
+
+.about-media-sequence h3 {
+    color: var(--about-ink-strong);
+    font: 800 .78rem/1.3 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    letter-spacing: .08em;
+    margin: 0 0 .55rem;
+    text-transform: uppercase;
+}
+
+.about-media-sequence ol {
+    color: var(--about-ink-strong);
+    display: grid;
+    font-size: .83rem;
+    gap: .35rem;
+    line-height: 1.45;
+    margin: 0;
+    padding-inline-start: 1.25rem;
 }
 
 @media screen and (max-width: 34rem) {
     .about-media {
         box-shadow: .3rem .3rem 0 var(--about-ink);
     }
-
-    .about-media figcaption {
-        grid-template-columns: 1fr;
-    }
-
-    .about-media__toggle {
-        inline-size: 100%;
-    }
 }
 
 @media (forced-colors: active) {
     .about-media,
-    .about-media figcaption {
+    .about-media figcaption,
+    .about-media-sequence {
         border-color: CanvasText;
         box-shadow: none;
     }
 
-    .about-media__toggle {
-        background: ButtonFace;
-        border-color: ButtonText;
-        color: ButtonText;
-        forced-color-adjust: auto;
+    .about-media__status {
+        border-color: CanvasText;
     }
 }
 
@@ -510,8 +515,15 @@ p#on-dark-iron-ore {
         color: #000;
     }
 
-    .about-media__toggle {
-        display: none;
+    .about-media-sequence {
+        background: #fff;
+        border-color: #000;
+        color: #000;
+    }
+
+    .about-media-sequence h3,
+    .about-media-sequence ol {
+        color: #000;
     }
 }
 

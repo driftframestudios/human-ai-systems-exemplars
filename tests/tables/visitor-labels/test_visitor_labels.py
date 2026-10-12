@@ -267,7 +267,7 @@ class VisitorLabelContracts(unittest.TestCase):
                     temporary = target.with_suffix(".tmp")
                     temporary.write_text(json.dumps(report, indent=2) + "\n")
                     temporary.replace(target)
-        self.assertEqual(dict(counts), {"table": 148, "tr": 1049, "th": 1494, "td": 2817})
+        self.assertEqual(dict(counts), {"table": 148, "tr": 1050, "th": 1495, "td": 2820})
         self.assertEqual(dict(dispositions), {
             "simple": 144, "empty-register": 2,
             "capital-summary": 1, "grouped-populations": 1,
@@ -283,7 +283,7 @@ class VisitorLabelContracts(unittest.TestCase):
         self.assertEqual(counts["explicit_tables"], sum(t["shape"] != "simple" for t in tables))
         self.assertEqual(counts["native_labelled_elements"],
                          sum(1 + t["rows"] + t["th"] + t["td"] for t in tables))
-        self.assertEqual(counts["native_labelled_elements"], 5508)
+        self.assertEqual(counts["native_labelled_elements"], 5513)
         self.assertEqual(counts["runtime_body_generators"], len(self.contract["runtime"]))
 
     def _atlas_gallery_records(self, ordinal, fields, records):
@@ -655,6 +655,34 @@ class VisitorLabelContracts(unittest.TestCase):
         self.assertEqual(projection.text(row.cells[0].text), "Prompt craft \u2192 configured-system design")
         self.assertTrue(row.element.attribute("data-label").endswith(
             ": Prompt craft to configured-system design"))
+
+    def test_about_role_table_keeps_the_newest_work_machine_legible(self):
+        table = self.table("index.html", 2)
+        fields = [
+            "Role in the situation",
+            "Changed work",
+            "Reported consequence",
+            "Context",
+        ]
+        self.assertEqual([projection.text(cell.text) for cell in table.rows[0].cells], fields)
+        self.assertEqual(len(table.rows), 5)
+
+        newest = table.rows[1]
+        self.assertEqual(
+            [projection.text(cell.text) for cell in newest.cells],
+            [
+                "Designer and Engineer",
+                "Fully redesigned an FDA-approved clinical-genomics medical device and implemented production code that helped teams deliver treatment-decision insights for people with cancer.",
+                "Eliminated an entire category of assignment errors, retired a brittle failure-tracking spreadsheet, and saved about 25 minutes per person when querying statistics and sample state.",
+                "Genomics · 2022–2025",
+            ],
+        )
+        self.assertEqual(newest.element.attribute("data-label"),
+                         "I’ve worked as…: Designer and Engineer")
+        self.assertEqual((newest.cells[0].tag, newest.cells[0].attribute("scope")),
+                         ("th", "row"))
+        self.assertTrue(all(cell.tag == "td" for cell in newest.cells[1:]))
+        self.assertEqual([cell.attribute("data-label") for cell in newest.cells], fields)
 
     def test_runtime_fixtures_match_the_native_counterparts(self):
         self.assertEqual(len(self.contract["runtime"]), 2)
