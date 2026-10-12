@@ -51,13 +51,18 @@ and Implementation track scans that account for every primary beat. A reading
 whose architecture uses another truthful pair, such as Comparison and Return,
 names that pair directly.
 
-HTML owns the complete source reading. `debriefs-catalog.js` adds the catalog
-projection as a bounded enhancement. A successful grouped load replaces one
-ordinary catalog card atomically; a source-load failure keeps that ordinary
-card and its Full Debrief route available. The focused browser contract checks
-the six-field order, related media, grouped EHR behavior, accurate status
-counts, delayed mode changes, and both reading actions at narrow and desktop
-widths.
+HTML owns the complete source reading. Run `npm run build:debrief-case-briefs`
+after changing a source Case Brief. The dependency-free materializer validates
+all declared routes, ordered six-field scans, basis-and-limits paragraphs,
+and related-media links, then refreshes one bounded template block in
+`debriefs.html`; `npm run check:debrief-case-briefs` confirms exact parity.
+`debriefs-catalog.js` reveals that authored projection as a bounded enhancement,
+so local file inspection and HTTP delivery use the same source-derived scan.
+The focused browser contract checks the six-field order, related media, grouped
+EHR behavior, accurate status counts, repeated mode changes, and both reading
+actions across the narrow, responsive-seam, and desktop widths. It also opens
+the same page directly from the local filesystem so this bounded projection
+stays independent of sibling-page requests.
 
 The five Debrief working-system and visual-comparison families retain their accepted,
 unsuffixed WebPs as full-size inspection targets. Catalog-specific canonical
@@ -193,7 +198,7 @@ From the repository root, use Node 22 or newer:
 
 ```bash
 npm ci --ignore-scripts
-npm run playwright:install
+npm run playwright:install:visitor-images
 python3 -m http.server 8000
 ```
 
@@ -346,6 +351,7 @@ Choose the existing check that answers the page question under review:
 
 ```bash
 npm run test:context-canvas
+npm run check:debrief-case-briefs
 npm run check:debrief-image-derivatives
 npm run test:debrief-catalog-preview-browser
 npm run test:who-to-believe-system-graph-browser

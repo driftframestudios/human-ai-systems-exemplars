@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { admitCatalog, createPlan, parseArgs, traceAliases, main, CatalogError } from '../../tools/test-suite-plan.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const POST_BASELINE_NODE_MEMBERS = ['tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs', 'tests/context-canvas/about-first-paint-css.test.mjs', 'tests/context-canvas/debrief-catalog-preview-images.test.mjs', 'tests/context-canvas/debrief-catalog-preview.browser.mjs', 'tests/context-canvas/debrief-image-derivatives.test.mjs', 'tests/context-canvas/debrief-video-receivers.test.mjs', 'tests/context-canvas/lims-capability-transfer-model.test.mjs', 'tests/context-canvas/prompt-side-figure.browser.mjs', 'tests/context-canvas/video-receivers.browser.mjs', 'tests/context-canvas/visual-reference-observations.test.mjs', 'tests/context-canvas/visitor-image-delivery.browser.mjs', 'tests/context-canvas/visitor-video-contract.test.mjs', 'tests/context-canvas/who-to-believe-system-graph.browser.mjs', 'tests/context-canvas/who-to-believe-system-graph.test.mjs', 'tests/media-publication/prepare-r2-progressive-video.test.mjs', 'tests/media-publication/r2-video-worker.test.mjs', 'tests/media-publication/video-publication-manifest.test.mjs', 'tests/media-publication/verify-r2-video-route.test.mjs', 'tests/public-references/live-route-verifier.test.mjs', 'tests/public-references/registry-reference-contract.test.mjs', 'tests/repository-handoff-foundation/foundation.test.mjs', 'tests/repository-handoff-foundation/install.test.mjs', 'tests/repository-handoff-foundation/issue-route-materializer.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-data.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-view.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research.browser.mjs'];
+const POST_BASELINE_NODE_MEMBERS = ['tests/suites/planner.test.mjs', 'tests/investment-analysis/browser-helper.test.mjs', 'tests/context-canvas/about-first-paint-css.test.mjs', 'tests/context-canvas/debrief-case-brief-materializer.test.mjs', 'tests/context-canvas/debrief-catalog-preview-images.test.mjs', 'tests/context-canvas/debrief-catalog-preview.browser.mjs', 'tests/context-canvas/debrief-image-derivatives.test.mjs', 'tests/context-canvas/debrief-video-receivers.test.mjs', 'tests/context-canvas/lims-capability-transfer-model.test.mjs', 'tests/context-canvas/prompt-side-figure.browser.mjs', 'tests/context-canvas/video-receivers.browser.mjs', 'tests/context-canvas/visual-reference-observations.test.mjs', 'tests/context-canvas/visitor-image-delivery.browser.mjs', 'tests/context-canvas/visitor-video-contract.test.mjs', 'tests/context-canvas/who-to-believe-system-graph.browser.mjs', 'tests/context-canvas/who-to-believe-system-graph.test.mjs', 'tests/media-publication/prepare-r2-progressive-video.test.mjs', 'tests/media-publication/r2-video-worker.test.mjs', 'tests/media-publication/video-publication-manifest.test.mjs', 'tests/media-publication/verify-r2-video-route.test.mjs', 'tests/public-references/live-route-verifier.test.mjs', 'tests/public-references/registry-reference-contract.test.mjs', 'tests/repository-handoff-foundation/foundation.test.mjs', 'tests/repository-handoff-foundation/install.test.mjs', 'tests/repository-handoff-foundation/issue-route-materializer.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-data.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research-view.test.mjs', 'tests/visualization-fidelity-atlas/atlas-research.browser.mjs'];
 const POST_BASELINE_COMPATIBILITY_SCRIPTS = {
   'test:iframe-browser': 'node tools/core-iframe-carrier-contract.mjs && npm run test:canvas-iframe-routes && npm run test:iframe-visual-media-browser',
 };
@@ -303,7 +303,7 @@ test('consequential bundle routes retain independent literal expectations', asyn
   assert.deepEqual(ids('carrier'), [
     'node.attribution', 'node.iframe-routes', 'node.prod-deployment', 'node.public-references',
     'node.repository-handoff-foundation', 'node.schema-pages', 'node.security', 'node.media-publication', 'worker.source',
-    'carrier.debrief-image-derivatives', 'carrier.iframe', 'carrier.production', 'carrier.transfer',
+    'carrier.debrief-image-derivatives', 'carrier.debrief-case-briefs', 'carrier.iframe', 'carrier.production', 'carrier.transfer',
     'carrier.r2-video-delivery', 'carrier.schemas',
   ]);
   assert.ok(createPlan(catalog, {bundles: ['focused-browser']}).suites.every(s => s.profile === 'browser' && !s.id.startsWith('visual.')));
@@ -316,6 +316,15 @@ test('Debrief derivative carrier exposes its non-mutating check route', async ()
   assert.deepEqual(plan.suites[0].command, {
     cwd: '.',
     argv: ['node', 'tools/generate-debrief-image-derivatives.mjs', '--check'],
+  });
+});
+
+test('Debrief Case Brief carrier exposes its non-mutating parity route', async () => {
+  const plan = createPlan(await catalogPromise, {suites: ['carrier.debrief-case-briefs']});
+  assert.equal(plan.suites[0].routeStatus, 'declared');
+  assert.deepEqual(plan.suites[0].command, {
+    cwd: '.',
+    argv: ['node', 'tools/materialize-debrief-case-briefs.mjs', '--check'],
   });
 });
 

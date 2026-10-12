@@ -333,6 +333,7 @@
     display: grid;
     gap: .5rem 1rem;
     grid-template-columns: minmax(0, 1fr) auto;
+    margin-block-end: .5rem;
 }
 
 .debrief-card__heading > .txt-h2 {
@@ -361,7 +362,7 @@
 }
 
 .debrief-card__types {
-    margin: -.2rem 0 .4rem;
+    margin: 0 0 .4rem;
 }
 
 .debrief-card__topics {
@@ -443,7 +444,6 @@
 }
 
 .debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-state="loaded"] > .debrief-card__types,
-.debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-state="loaded"] > .debrief-card__heading .debrief-card__era,
 .debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-state="loaded"] > .debrief-card__catalog-meta,
 .debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-state="loaded"] > .project__media--container,
 .debrief-catalog[data-reading-mode="case-brief"] .debrief-catalog__card[data-case-brief-state="loaded"] > .project__media--text,
@@ -503,6 +503,17 @@
     color: var(--debrief-cobalt-deep);
 }
 
+.debrief-card__case-brief .debrief-preview-facts {
+    background: rgba(40, 85, 243, .28);
+    border: 1px solid rgba(40, 85, 243, .28);
+    gap: 1px;
+}
+
+.debrief-card__case-brief .debrief-preview-facts > div {
+    background: var(--debrief-panel);
+    padding: .75rem;
+}
+
 .debrief-card__case-brief .debrief-preview-secondary-link {
     color: var(--debrief-cobalt-deep);
 }
@@ -515,14 +526,6 @@
     align-items: center;
     flex-direction: row;
     flex-wrap: wrap;
-}
-
-.debrief-card__case-brief-loading {
-    background: var(--debrief-sea);
-    border-left: .35rem solid var(--debrief-cobalt);
-    color: var(--debrief-ink);
-    margin: 0;
-    padding: 1rem;
 }
 
 .debrief-card__full-index {
@@ -787,12 +790,13 @@
     }
 
     .debrief-card__heading {
+        gap: .65rem;
         grid-template-columns: minmax(0, 1fr);
     }
 
     .debrief-card__era {
         justify-self: start;
-        margin-block: -.1rem .15rem;
+        margin: 0;
     }
 }
 
@@ -835,7 +839,8 @@
     .debrief-zero-results,
     .debrief-zero-results button,
     .debrief-card__case-brief,
-    .debrief-card__case-brief-loading,
+    .debrief-card__case-brief .debrief-preview-facts,
+    .debrief-card__case-brief .debrief-preview-facts > div,
     .debrief-card__full-index,
     .debrief-preview-link,
     .debrief-preview-secondary-link {
@@ -854,6 +859,10 @@
     .debrief-filter input {
         accent-color: Highlight;
         forced-color-adjust: none;
+    }
+
+    .debrief-card__case-brief .debrief-preview-facts > div {
+        border: 1px solid CanvasText;
     }
 
     .debrief-card__types li,
@@ -908,6 +917,16 @@
         break-inside: avoid;
         box-shadow: none;
         color: #000;
+    }
+
+    .debrief-card__case-brief .debrief-preview-facts,
+    .debrief-card__case-brief .debrief-preview-facts > div {
+        background: #fff;
+        border-color: #000;
+    }
+
+    .debrief-card__case-brief .debrief-preview-facts > div {
+        border: 1px solid #000;
     }
 
     .debrief-card__case-brief .debrief-preview-slug,

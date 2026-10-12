@@ -182,6 +182,8 @@ focused interaction checks, and the complete resting-state reference
 separable:
 
 ```sh
+npm run playwright:install:visitor-images
+npm run check:debrief-case-briefs
 npm run test:context-canvas
 npm run check:debrief-image-derivatives
 npm run test:debrief-catalog-preview-browser
@@ -194,6 +196,10 @@ npm run test:context-canvas-medium-containment
 npm run test:context-canvas-narrow-rails
 npm run visual:context-canvas-reference -- --phase <name>
 ```
+
+The Debrief catalog browser contract uses Chromium and Playwright WebKit. The
+Case Brief carrier check is dependency-free and verifies that every generated
+same-document scan remains current with its source-owned Debrief section.
 
 The derivative check requires no encoder and leaves bytes unchanged; it
 verifies named source profiles, eligible widths, exact dimensions,

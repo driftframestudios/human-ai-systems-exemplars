@@ -17,6 +17,8 @@
     "playwright:install": "playwright install chromium",
     "playwright:install:visitor-images": "playwright install chromium webkit",
     "build:public-references": "node tools/materialize-public-references.mjs",
+    "build:debrief-case-briefs": "node tools/materialize-debrief-case-briefs.mjs",
+    "check:debrief-case-briefs": "node tools/materialize-debrief-case-briefs.mjs --check",
     "build:debrief-image-derivatives": "node tools/generate-debrief-image-derivatives.mjs",
     "check:debrief-image-derivatives": "node tools/generate-debrief-image-derivatives.mjs --check",
     "media:video:inspect": "node tools/prepare-r2-progressive-video.mjs inspect",

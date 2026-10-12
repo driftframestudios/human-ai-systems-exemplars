@@ -24,9 +24,6 @@
   var previewCardId = "";
   var previewRoute = "";
   var previewRouteLabel = "";
-  var caseBriefDisplayRequestId = 0;
-  var caseBriefCache = new Map();
-  var caseBriefLoads = new WeakMap();
   var activeSelection = { format: ["catalog"], topic: [] };
   var legacyOrActive = false;
   var labels = { format: {}, topic: {} };
@@ -221,56 +218,30 @@
     return card.hasAttribute("data-case-brief-routes") ? cardValues(card, "data-case-brief-routes") : [];
   }
 
-  function cloneForCatalog(node, className, route) {
-    var clone = document.importNode(node, true);
-    clone.className = className;
-    clone.removeAttribute("id");
-    clone.removeAttribute("aria-labelledby");
-    Array.prototype.forEach.call(clone.querySelectorAll("[id]"), function (identified) {
-      identified.removeAttribute("id");
+  function caseBriefProjection(route) {
+    // Source-checked templates keep the scan available from HTTP and direct-file viewing alike.
+    var matches = Array.prototype.filter.call(document.querySelectorAll("template[data-case-brief-projection]"), function (template) {
+      return template.getAttribute("data-case-brief-projection") === route;
     });
-    rewriteFragmentLinks(clone, route);
-    return clone;
-  }
 
-  function loadCaseBrief(route) {
-    if (!caseBriefCache.has(route)) {
-      var request = window.fetch(route, { credentials: "same-origin" }).then(function (response) {
-        if (!response.ok) {
-          throw new Error("Case Brief source returned " + response.status);
-        }
-        return response.text();
-      }).then(function (source) {
-        var parsed = new DOMParser().parseFromString(source, "text/html");
-        var section = parsed.querySelector("#case-brief[data-content-form='case-brief']");
-        var orientation = section ? section.querySelector(":scope > h2 + p") : null;
-        var fields = section ? section.querySelector(":scope > dl.debrief-at-glance") : null;
-        var media = section ? section.querySelector(":scope > [data-case-brief-media]") : null;
-        var basis = section ? Array.prototype.find.call(section.querySelectorAll(":scope > p"), function (paragraph) {
-          var label = paragraph.querySelector(":scope > strong:first-child");
-          return label && label.textContent.trim() === "Basis and limits:";
-        }) : null;
-        var heading = parsed.querySelector("main h1, h1");
-
-        if (!section || !orientation || !fields || !basis || !media) {
-          throw new Error("Case Brief source is missing its orientation, fields, media index, or basis and limits");
-        }
-
-        return {
-          title: normalizedText(heading) || "Case Brief",
-          orientation: orientation,
-          fields: fields,
-          media: media,
-          basis: basis
-        };
-      }).catch(function (error) {
-        caseBriefCache.delete(route);
-        throw error;
-      });
-      caseBriefCache.set(route, request);
+    if (matches.length !== 1) {
+      return null;
     }
 
-    return caseBriefCache.get(route);
+    var template = matches[0];
+    var content = document.importNode(template.content, true);
+    var title = template.getAttribute("data-case-brief-title");
+    var orientation = content.querySelector(".debrief-preview-slug");
+    var fields = content.querySelector(".debrief-preview-facts");
+    var basis = content.querySelector(".debrief-preview-note");
+    var media = content.querySelector(".debrief-card__case-brief-media[data-case-brief-media]");
+
+    if (!title || !orientation || !fields || fields.children.length !== 6 || !basis || !media) {
+      return null;
+    }
+
+    rewriteFragmentLinks(content, route);
+    return { title: title, content: content };
   }
 
   function routeLabel(card, route) {
@@ -309,13 +280,13 @@
     var actions = document.createElement("div");
     actions.className = "debrief-preview-actions";
     actions.append(
-      createActionLink("debrief-preview-link", route + "#case-brief", "Open the Case Brief"),
+      createActionLink("debrief-preview-link", route + "#case-brief", "Read the Easy-to-Scan Case Brief"),
       createActionLink("debrief-preview-secondary-link", route, "Read the Full Debrief")
     );
     article.append(actions);
   }
 
-  function createCaseBriefArticle(card, route, source, index) {
+  function createCaseBriefArticle(card, route, projection, index) {
     var article = document.createElement("article");
     var heading = document.createElement("h3");
     var headingId = card.id + "-case-brief-" + (index + 1);
@@ -325,14 +296,8 @@
     article.setAttribute("aria-labelledby", headingId);
     heading.className = "txt-h3 debrief-card__case-brief-title";
     heading.id = headingId;
-    heading.textContent = source.title;
-    article.append(
-      heading,
-      cloneForCatalog(source.orientation, "debrief-preview-slug", route),
-      cloneForCatalog(source.fields, "debrief-preview-facts", route),
-      cloneForCatalog(source.basis, "debrief-preview-note", route),
-      cloneForCatalog(source.media, "debrief-card__case-brief-media", route)
-    );
+    heading.textContent = projection.title;
+    article.append(heading, projection.content);
     appendCaseBriefActions(article, route);
     return article;
   }
@@ -349,52 +314,32 @@
     if (existing.getAttribute("data-case-brief-complete") === "true") {
       existing.hidden = currentMode() !== "case-brief" || card.hidden;
       card.setAttribute("data-case-brief-state", "loaded");
-      return Promise.resolve({ routes: caseBriefRoutes(card).length, displayed: caseBriefRoutes(card).length, failures: 0 });
-    }
-    if (caseBriefLoads.has(card)) {
-      existing.hidden = true;
-      return caseBriefLoads.get(card);
+      return { routes: caseBriefRoutes(card).length, displayed: caseBriefRoutes(card).length, failures: 0 };
     }
 
     var routes = caseBriefRoutes(card);
-    var loading = document.createElement("p");
-    loading.className = "debrief-card__case-brief-loading";
-    loading.textContent = routes.length === 1 ? "Loading the source-owned Case Brief…" : "Loading " + routes.length + " source-owned Case Briefs…";
-    existing.replaceChildren(loading);
-    existing.hidden = true;
-    card.removeAttribute("data-case-brief-state");
-    existing.setAttribute("aria-busy", "true");
+    var projections = routes.map(caseBriefProjection);
+    var failures = projections.filter(function (projection) {
+      return projection === null;
+    }).length;
+
+    existing.replaceChildren();
     existing.setAttribute("data-case-brief-count", String(routes.length));
+    existing.setAttribute("data-case-brief-complete", failures === 0 ? "true" : "false");
 
-    var request = Promise.all(routes.map(function (route) {
-      return loadCaseBrief(route).then(function (source) {
-        return { route: route, source: source, failed: false };
-      }).catch(function () {
-        return { route: route, source: null, failed: true };
+    // A grouped catalog card changes presentation only after every named route is ready.
+    if (failures === 0) {
+      routes.forEach(function (route, index) {
+        existing.append(createCaseBriefArticle(card, route, projections[index], index));
       });
-    })).then(function (results) {
-      var failures = results.filter(function (result) {
-        return result.failed;
-      }).length;
-      existing.replaceChildren();
-      if (failures === 0) {
-        results.forEach(function (result, index) {
-          existing.append(createCaseBriefArticle(card, result.route, result.source, index));
-        });
-        existing.hidden = currentMode() !== "case-brief" || card.hidden;
-        card.setAttribute("data-case-brief-state", "loaded");
-      } else {
-        existing.hidden = true;
-        card.removeAttribute("data-case-brief-state");
-      }
-      existing.setAttribute("aria-busy", "false");
-      existing.setAttribute("data-case-brief-complete", failures === 0 ? "true" : "false");
-      caseBriefLoads.delete(card);
-      return { routes: routes.length, displayed: failures === 0 ? routes.length : 0, failures: failures };
-    });
+      existing.hidden = currentMode() !== "case-brief" || card.hidden;
+      card.setAttribute("data-case-brief-state", "loaded");
+    } else {
+      existing.hidden = true;
+      card.removeAttribute("data-case-brief-state");
+    }
 
-    caseBriefLoads.set(card, request);
-    return request;
+    return { routes: routes.length, displayed: failures === 0 ? routes.length : 0, failures: failures };
   }
 
   function ensureFullDebriefIndex(card) {
@@ -481,36 +426,28 @@
     return "Showing all " + cards.length + " catalog entries. Catalog overview is active.";
   }
 
-  function showCaseBriefCatalog(visibleCards, requestId) {
+  function showCaseBriefCatalog(visibleCards) {
     var expectedRoutes = routeCount(visibleCards);
-    list.setAttribute("aria-busy", "true");
-    status.textContent = statusForMode("case-brief", visibleCards) + " Source-owned brief content is loading.";
+    var results = visibleCards.map(ensureCaseBriefDisplay);
+    var displayedRoutes = results.reduce(function (count, result) {
+      return count + result.displayed;
+    }, 0);
+    var withheldRoutes = expectedRoutes - displayedRoutes;
 
-    Promise.all(visibleCards.map(ensureCaseBriefDisplay)).then(function (results) {
-      if (requestId !== caseBriefDisplayRequestId || currentMode() !== "case-brief") {
-        return;
-      }
-      var displayedRoutes = results.reduce(function (count, result) {
-        return count + result.displayed;
-      }, 0);
-      var withheldRoutes = expectedRoutes - displayedRoutes;
-      list.setAttribute("aria-busy", "false");
-      if (withheldRoutes === 0) {
-        status.textContent = statusForMode("case-brief", visibleCards);
-      } else {
-        var availableMessage = withheldRoutes === 1
-          ? "One Full Debrief route remains available in its catalog card."
-          : withheldRoutes + " Full Debrief routes remain available in their catalog cards.";
-        status.textContent = displayedRoutes + " of " + expectedRoutes + " Case Briefs are displayed in the catalog. " + availableMessage;
-      }
-      list.dispatchEvent(new CustomEvent("canvas:page-rail-source-change", { bubbles: true }));
-    });
+    list.setAttribute("aria-busy", "false");
+    if (withheldRoutes === 0) {
+      status.textContent = statusForMode("case-brief", visibleCards);
+    } else {
+      var availableMessage = withheldRoutes === 1
+        ? "One Full Debrief route remains available in its catalog card."
+        : withheldRoutes + " Full Debrief routes remain available in their catalog cards.";
+      status.textContent = displayedRoutes + " of " + expectedRoutes + " Case Briefs are displayed in the catalog. " + availableMessage;
+    }
+    list.dispatchEvent(new CustomEvent("canvas:page-rail-source-change", { bubbles: true }));
   }
 
   function applyFilters(historyMode) {
     var visibleCards = [];
-    var modeRequestId = ++caseBriefDisplayRequestId;
-
     activeSelection = readSelections();
     var mode = currentMode();
     var displayMode = legacyOrActive ? "catalog" : mode;
@@ -545,7 +482,7 @@
     if (displayMode === "case-brief" && visibleCards.length > 0) {
       removePreviewState();
       preview.hidden = true;
-      showCaseBriefCatalog(visibleCards, modeRequestId);
+      showCaseBriefCatalog(visibleCards);
     } else {
       list.setAttribute("aria-busy", "false");
       preview.hidden = false;
